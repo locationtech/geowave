@@ -1,3 +1,5 @@
+(Source code will be uploaded Monday June 9th). Just getting the licensing and credits in place. 
+
 GeoWave is a multi-dimensional indexing layer that can be added on top of any sorted key-value store.  Think of it this way: GeoWave does for Accumulo what PostGIS does for PostgreSQL.  
 
 
