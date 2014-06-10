@@ -1,0 +1,32 @@
+package mil.nga.giat.geowave.store.data.field;
+
+import mil.nga.giat.geowave.index.ByteArrayId;
+import mil.nga.giat.geowave.index.StringUtils;
+
+/**
+ * Basic implementation of a visibility handler where the decision of visibility
+ * is not determined on a per field or even per row basis, but rather a single
+ * visibility is globally assigned for every field written.
+ * 
+ * @param <RowType>
+ * @param <FieldType>
+ */
+public class GlobalVisibilityHandler<RowType, FieldType> implements
+		FieldVisibilityHandler<RowType, FieldType>
+{
+	private final String globalVisibility;
+
+	public GlobalVisibilityHandler(
+			final String globalVisibility ) {
+		this.globalVisibility = globalVisibility;
+	}
+
+	@Override
+	public byte[] getVisibility(
+			final RowType rowValue,
+			final ByteArrayId fieldId,
+			final FieldType fieldValue ) {
+		return StringUtils.stringToBinary(globalVisibility);
+	}
+
+}

@@ -1,0 +1,60 @@
+<assembly>
+	<id>bin</id>
+	<formats>
+		<format>zip</format>
+		<format>tar.gz</format>
+	</formats>
+	<fileSets>
+		<fileSet>
+			<directory>${project.basedir}</directory>
+			<outputDirectory>/</outputDirectory>
+			<includes>
+				<include>README*</include>
+				<include>LICENSE*</include>
+				<include>NOTICE*</include>
+			</includes>
+		</fileSet>
+		<fileSet>
+			<directory>${project.build.directory}/site</directory>
+			<outputDirectory>docs</outputDirectory>
+		</fileSet>
+	</fileSets>
+	<dependencySets>
+		<dependencySet>
+			<useProjectArtifact>true</useProjectArtifact>
+			<outputDirectory>/</outputDirectory>
+			<scope>runtime</scope>
+
+			<excludes>
+				<exclude>*:pom:*</exclude>
+				<exclude>log4j:log4j</exclude>
+				<exclude>commons-codec:commons-codec</exclude>
+				<!-- even though guava should exist in geoserver's classpath it is version 
+					11.0.1 and is missing the necessary BaseEncoding class <exclude>com.google.guava:guava</exclude> -->
+
+				<!-- even though commons-lang should exist in geoserver's classpath it 
+					is version 2.1 which is missing necessary classes, <exclude>*:commons-lang:*</exclude> -->
+
+				<!-- and commons-lang3 is also necessary due to different classes <exclude>org.apache.commons:commons-lang3</exclude> -->
+				<exclude>tomcat:*</exclude>
+				<exclude>*:servlet*:*</exclude>
+				<exclude>*:jsp*:*</exclude>
+				<exclude>*:jetty*:*</exclude>
+				<exclude>*:commons-httpclient:*</exclude>
+				<exclude>*:maven*:*</exclude>
+				<exclude>*:httpclient:*</exclude>
+				<exclude>*:httpcore:*</exclude>
+				<exclude>*:commons-logging:*</exclude>
+				<exclude>*:commons-io:*</exclude>
+				<exclude>*:jts:*</exclude>
+				<exclude>*:stax*:*</exclude>
+				<exclude>*:activation:*</exclude>
+				<exclude>*:servlet-api:*</exclude>
+				<exclude>*:*:jsr305</exclude>
+				<exclude>commons-beanutils</exclude>
+				<exclude>commons-digester</exclude>
+				<exclude>commons-collections</exclude>
+			</excludes>
+		</dependencySet>
+	</dependencySets>
+</assembly>
