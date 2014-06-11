@@ -242,10 +242,11 @@
 											<exclude>*:activation:*</exclude>
 											<exclude>*:servlet-api:*</exclude>
 											<exclude>*:*:jsr305</exclude>
-											<exclude>org.springframework.security:spring-security-crypto</exclude>
-											<exclude>org.springframework.security:spring-security-core</exclude>
+											<exclude>org.springframework.security:*</exclude>
+											<exclude>org.geoserver:*</exclude>
 											<exclude>xpp3:xpp3_min</exclude>
-											<exclude>xpp3:xp3</exclude>
+											<exclude>xpp3:xpp3</exclude>
+											<exclude>org.apache.xmlgraphics:batik-ext</exclude>
 											<exclude>commons-beanutils</exclude>
 											<exclude>commons-digester</exclude>
 											<exclude>commons-collections</exclude>
