@@ -1,0 +1,85 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>geowave-parent</artifactId>
+		<groupId>mil.nga.giat</groupId>
+		<relativePath></relativePath>
+		<version>0.8.0-SNAPSHOT</version>
+	</parent>
+	<properties>
+		<!-- Set these properties to connect to a remote Accumulo cluster for testing, 
+			otherwise the test will run a mini accumulo cluster using a temp directory -->
+		<zookeeperUrl></zookeeperUrl>
+		<instance></instance>
+		<username></username>
+		<password></password>
+	</properties>
+	<artifactId>geowave-test</artifactId>
+	<name>geowave-test</name>
+	<description>A module for integration and functional tests of GeoWave</description>
+	<dependencies>
+		<dependency>
+			<groupId>mil.nga.giat</groupId>
+			<artifactId>geowave-ingest</artifactId>
+			<version>0.8.0-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.4</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.accumulo</groupId>
+			<artifactId>accumulo-minicluster</artifactId>
+			<version>1.5.0</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.hadoop</groupId>
+			<artifactId>hadoop-hdfs</artifactId>
+			<version>2.0.0-cdh4.5.0</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<executions>
+					<execution>
+						<configuration>
+							<systemPropertyVariables>
+								<zookeeperUrl>${zookeeperUrl}</zookeeperUrl>
+								<instance>${instance}</instance>
+								<username>${username}</username>
+								<password>${password}</password>
+							</systemPropertyVariables>
+							<!-- Sonar currently just supports surefire so "trick" Sonar into 
+								thinking they are surefire reports -->
+							<reportsDirectory>${sonar.surefire.reportsPath}</reportsDirectory>
+							<argLine>${test.args} ${jacoco.failsafe.argLine}</argLine>
+							<runOrder>reversealphabetical</runOrder>
+						</configuration>
+						<goals>
+							<goal>integration-test</goal>
+							<goal>verify</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>com.google.guava</groupId>
+				<artifactId>guava</artifactId>
+				<version>14.0-rc1</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+</project>
