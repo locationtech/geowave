@@ -39,24 +39,31 @@ public class VectorFileIngest extends
 			CommandLine line = parser.parse(
 					options,
 					args);
-			VectorFileIngest ingester = createVectorFileIngest(line);
+					VectorFileIngest ingester = createVectorFileIngest(line);
 			ingester.ingest();
 		}
 		catch (MissingOptionException e) {
-			System.out.println("Missing required parameters: ");
+			boolean printedMParams = false;
 			for (Object o : e.getMissingOptions()){
 				if (o instanceof OptionGroup) {
+					System.out.println("Missing any one of the following parameters: ");
 					OptionGroup og = (OptionGroup)o;
 					for (Object o2 : og.getOptions()){
 						Option opt = (Option)o2;
 						System.out.println(String.format("  -%s,--%s:  %s", opt.getOpt(), opt.getLongOpt(), opt.getDescription()));
 					}
+				} else if (o instanceof String){
+					if (!printedMParams){
+						System.out.println("Missing the following parameters: ");
+						printedMParams = true;
+					}
+					String optname = (String)o;
+					Option opt = options.getOption(optname);
+					System.out.println(String.format("  -%s,--%s:  %s", opt.getOpt(), opt.getLongOpt(), opt.getDescription()));
 				}
 			}
 			HelpFormatter fmt = new HelpFormatter();
 			fmt.printHelp("java -jar geowave-ingest-geotools-datastore <options....>", options);
-			
-			
 		}
 		catch (ParseException e) {
 			LOGGER.warn(
