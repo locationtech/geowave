@@ -68,7 +68,7 @@
 									<transformer
 										implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
 										<manifestEntries>
-											<Main-Class>mil.nga.giat.geowave.ingest.VectorFileInjest</Main-Class>
+											<Main-Class>mil.nga.giat.geowave.ingest.VectorFileIngest</Main-Class>
 										</manifestEntries>
 									</transformer>
 									<createDependencyReducedPom>false</createDependencyReducedPom>
