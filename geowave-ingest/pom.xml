@@ -71,7 +71,6 @@
 										</manifestEntries>
 									</transformer>
 									</transformers>
-								
 									<createDependencyReducedPom>false</createDependencyReducedPom>
 									<minimizeJar>false</minimizeJar>
 									<finalName>${project.build.finalName}-geotools-datastore</finalName>
