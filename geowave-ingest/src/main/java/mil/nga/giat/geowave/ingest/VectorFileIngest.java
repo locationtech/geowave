@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import mil.nga.giat.geowave.accumulo.BasicAccumuloOperations;
@@ -15,6 +16,8 @@ import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.MissingOptionException;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionGroup;
 import org.apache.commons.cli.Options;
@@ -39,6 +42,22 @@ public class VectorFileIngest extends
 			VectorFileIngest ingester = createVectorFileIngest(line);
 			ingester.ingest();
 		}
+		catch (MissingOptionException e) {
+			System.out.println("Missing required parameters: ");
+			for (Object o : e.getMissingOptions()){
+				if (o instanceof OptionGroup) {
+					OptionGroup og = (OptionGroup)o;
+					for (Object o2 : og.getOptions()){
+						Option opt = (Option)o2;
+						System.out.println(String.format("  -%s,--%s:  %s", opt.getOpt(), opt.getLongOpt(), opt.getDescription()));
+					}
+				}
+			}
+			HelpFormatter fmt = new HelpFormatter();
+			fmt.printHelp("java -jar geowave-ingest-geotools-datastore <options....>", options);
+			
+			
+		}
 		catch (ParseException e) {
 			LOGGER.warn(
 					"Unable to parse arguments",
@@ -54,6 +73,7 @@ public class VectorFileIngest extends
 					"Invalid URL for vector resource",
 					e);
 		}
+		
 	}
 
 	private final URL ingestResource;
