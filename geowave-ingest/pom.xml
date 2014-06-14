@@ -95,7 +95,6 @@
 				<version>${avro.version}</version>
 				<executions>
 					<execution>
-						<id>schemas></id>
 						<phase>generate-sources</phase>
 						<goals>
 							<goal>schema</goal>

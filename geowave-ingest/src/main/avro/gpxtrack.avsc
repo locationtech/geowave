@@ -1,0 +1,46 @@
+{
+	"type" : "record",
+	"name" : "GPXTrack",
+	"namespace" : "mil.nga.giat.geowave.ingest.mapreduce.gpx",
+		"fields" : [{
+				"name" : "trackid",
+				"type" : "long",
+				"doc"  : "unique id for track"
+			},{
+				"name" : "timestamp",
+				"type" : "string",
+				"doc"  : "timestamp from metadata directory"
+			},{
+				"name" : "gpxfile",
+				"type" : "bytes",
+				"doc"  : "Original GPX file"
+			},{
+				"name" : "points",
+				"type" : "long",
+				"doc"  : "number of points from metadata"
+			},{
+				"name" : "visibility",
+				"type" : "string",
+				"doc"  : "visibility setting data was uploaded as from metadata"
+			},{
+				"name" : "user",
+				"type" : "string",
+				"doc"  : "user who uploaded the file from metadata"
+			},{
+				"name" : "userid",
+				"type" : "long",
+				"doc"  : "id of user who uploaded the data from metadata"
+			},{
+				"name" : "description",
+				"type" : "string",
+				"doc"  : "description from metadata"
+			},{
+				"name" : "tags",
+				"type": {
+					"type":"array",
+					"items":"string"
+				}
+			}
+		],
+	"doc:" : "Stores GPX Track files, and, if available metadata blobs per OSM practice"
+}

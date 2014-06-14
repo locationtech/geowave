@@ -1,12 +1,32 @@
 package mil.nga.giat.geowave.ingest.mapreduce;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.file.Files;
+import java.io.InputStream;
+import java.nio.ByteBuffer;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.accumulo.start.classloader.vfs.providers.HdfsFileSystem;
+import javax.xml.stream.XMLEventReader;
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.events.Attribute;
+import javax.xml.stream.events.StartElement;
+import javax.xml.stream.events.XMLEvent;
+
+import mil.nga.giat.geowave.ingest.mapreduce.gpx.GPXTrack;
+
+import org.apache.avro.file.CodecFactory;
+import org.apache.avro.file.DataFileWriter;
+import org.apache.avro.generic.GenericDatumWriter;
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -15,12 +35,12 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.FSDataOutputStream;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.io.BytesWritable;
-import org.apache.hadoop.io.SequenceFile;
-import org.apache.hadoop.io.Text;
 import org.apache.log4j.Logger;
 
 /***
@@ -35,6 +55,7 @@ public class StageToHDFS {
 
 	private final static Logger log = Logger.getLogger(StageToHDFS.class);
 	private final static CommandLineParser parser = new BasicParser();
+	public final static String TAG_SEPARATOR = " ||| ";
 
 
 	public static void main( final String[] args ) {
@@ -53,7 +74,7 @@ public class StageToHDFS {
 
 			if (o.getOpt().equals("h")) {
 				final HelpFormatter formatter = new HelpFormatter();
-				formatter.printHelp("4676 Ingester", options);
+				formatter.printHelp("GPX Ingester", options);
 				System.exit(0);
 			}
 
@@ -83,21 +104,136 @@ public class StageToHDFS {
 		conf.set("fs.default.name", "hdfs://" + line.getOptionValue("hdfs"));
 		conf.set("fs.hdfs.impl", org.apache.hadoop.hdfs.DistributedFileSystem.class.getName());
 
-		stageToHadoop(line.getOptionValue("inputPath"), line.getOptionValue("destination"), extensions, conf);
+		try {
+			stageToHadoop(line.getOptionValue("inputPath"), line.getOptionValue("destination"), extensions, conf);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (XMLStreamException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	}
+	
+	private static Map<Long, GPXTrack> parseMetadata(File metadataFile) throws FileNotFoundException, XMLStreamException{
+		Map<Long, GPXTrack> metadata = new HashMap<Long, GPXTrack>();
+		final XMLInputFactory inputFactory = XMLInputFactory.newInstance();
+		XMLEventReader eventReader = null;
+		InputStream in = null;
+		in = new BufferedInputStream(new FileInputStream(metadataFile));
+		eventReader = inputFactory.createXMLEventReader(in);
+		while (eventReader.hasNext()){
+			XMLEvent event = eventReader.nextEvent();
+			if (event.isStartElement()){
+				StartElement node = event.asStartElement();
+				switch (node.getName().getLocalPart()){
+					case "gpxFile" : {
+						GPXTrack gt = new GPXTrack();
+						node = event.asStartElement();
+						final Iterator<Attribute> attributes = node.getAttributes();
+						while (attributes.hasNext()) {
+							final Attribute a = attributes.next();
+							switch (a.getName().getLocalPart()){
+								case "id" : {
+									gt.setTrackid(Long.parseLong(a.getValue()));
+									break;
+								}
+								case "timestamp" : {
+									gt.setTimestamp(a.getValue());
+									break;
+								}
+								case "points" : {
+									gt.setPoints(Long.parseLong(a.getValue()));
+									break;
+								}
+								case "visibility" : {
+									gt.setVisibility(a.getValue());
+									break;
+								}
+								case "uid" : {
+									gt.setUserid(Long.parseLong(a.getValue()));
+									break;
+								}
+								case "user" : {
+									gt.setUser(a.getValue());
+									break;
+								}
+								
+							}
+						}
+						while (!(event.isEndElement() && event.asEndElement().getName().getLocalPart().equals("gpxFile"))){
+							if (event.isStartElement()){
+								node = event.asStartElement();
+								switch (node.getName().getLocalPart()){
+									case "description" : {
+										event = eventReader.nextEvent();
+										if (event.isCharacters()){
+											gt.setDescription(event.asCharacters().getData());
+										}
+										break;
+									}
+									case "tags" : {
+										List<CharSequence> tags = new ArrayList<CharSequence>();
+										while (!(event.isEndElement() && event.asEndElement().getName().getLocalPart().equals("tags"))){
+											if (event.isStartElement()){
+												node = event.asStartElement();
+												if (node.getName().getLocalPart().equals("tag")){
+													event = eventReader.nextEvent();
+													if (event.isCharacters()){
+														tags.add(event.asCharacters().getData());
+													}
+												}
+											}
+											event = eventReader.nextEvent();
+										}
+										gt.setTags(tags);
+										break;
+									}
+									
+								}
+							}
+							event = eventReader.nextEvent();
+						}
+						metadata.put(gt.getTrackid(), gt);
+						break;
+					}
+					
+				}
+			}
+		}
+		return metadata;
+	}
 
-	private static void stageToHadoop( final String localBaseDirectory, final String sequenceFilePath, final String[] extensions, final Configuration conf ) {
+	private static void stageToHadoop( final String localBaseDirectory, final String sequenceFilePath, final String[] extensions, final Configuration conf ) throws FileNotFoundException, XMLStreamException {
 		final Path path = new Path(sequenceFilePath);
-		final Text key = new Text();
-		final BytesWritable value = new BytesWritable();
-		SequenceFile.Writer writer = null;
-
-		Path hdfsBaseDirectory = new Path(sequenceFilePath).getParent();
 		
+
+		Map<Long, GPXTrack> metadata = null;
+		
+		File f = new File(localBaseDirectory + "/metadata.xml");
+		if (!f.exists()){
+			log.warn("No metadata file found - looked at: " + f.getAbsolutePath()) ;
+			log.warn("No metadata will be loaded");
+		} else {
+			System.out.println("Parsing metdata file");
+			long time = System.currentTimeMillis();
+			metadata = parseMetadata(f);
+			time = System.currentTimeMillis() - time;
+			final String timespan = String.format("%d min, %d sec", TimeUnit.MILLISECONDS.toMinutes(time), TimeUnit.MILLISECONDS.toSeconds(time) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(time)));
+			System.out.println("Metadata parsed in in " + timespan + " for " + metadata.size() + " tracks" );
+		}
+			
+		
+		
+		DataFileWriter<GPXTrack> dfw = new DataFileWriter<GPXTrack>(new GenericDatumWriter<GPXTrack>());
+		dfw.setCodec(CodecFactory.snappyCodec());
+		
+		Path hdfsBaseDirectory = new Path(sequenceFilePath).getParent();
+		FileSystem fs = null;
 		
 		try {
-			FileSystem fs = FileSystem.get(conf);
+			fs = FileSystem.get(conf);
 			if (!fs.exists(hdfsBaseDirectory)){
 				fs.mkdirs(hdfsBaseDirectory);
 			}
@@ -114,33 +250,54 @@ public class StageToHDFS {
 		int percent = 0;
 		int fileCount = 0;
 		
+		FSDataOutputStream out = null;
 		
-
 		try {
-			writer = SequenceFile.createWriter(conf, SequenceFile.Writer.file(path), SequenceFile.Writer.keyClass(key.getClass()), SequenceFile.Writer.valueClass(value.getClass()));
+			out = fs.create(path);
+			dfw.create(GPXTrack.getClassSchema(), out);
 
-		} catch (final Exception ex) {
-			System.out.println("Unable to create sequence file writer");
+		} catch (final IOException ex) {
+			System.out.println("Unable to create output stream");
 			log.fatal(ex.getLocalizedMessage());
 			System.exit(1);
 		}
 
 		long time = System.currentTimeMillis();
-
-		for (final File f : files) {
-			key.set(f.getAbsolutePath().toString());
-			byte[] bytes = null;
+		
+		long lastfreevalue = -1;
+		
+		
+		for (final File gpx : files) {
+			GPXTrack track = null;
+			
 			try {
-				bytes = Files.readAllBytes(f.toPath());
-			} catch (final IOException e) {
-				System.out.println("Unable to read file: " + f.getAbsolutePath());
-				log.error(e.getLocalizedMessage());
-				System.exit(3);
+				long id = Long.parseLong(FilenameUtils.removeExtension(gpx.getName()));
+				track = metadata.get(id);
+				if (track == null){
+					track = new GPXTrack();
+					track.setTrackid(lastfreevalue);
+					lastfreevalue--;
+				}
+			} catch (NumberFormatException ex){
+				track = new GPXTrack();
+				track.setTrackid(lastfreevalue);
+				lastfreevalue--;
 			}
-
-			value.set(bytes, 0, bytes.length);
+			
+			byte[] bb = null;
 			try {
-				writer.append(key, value);
+				bb = IOUtils.toByteArray(gpx.toURI());
+			} catch (IOException ex) {
+				System.out.println("Unable to read local file: " + gpx.getAbsolutePath());
+				log.fatal(ex.getLocalizedMessage());
+				System.exit(1);
+			}
+						
+			ByteBuffer bbuf = ByteBuffer.wrap(bb);
+			track.setGpxfile(bbuf);
+			
+			try {
+				dfw.append(track);
 			} catch (final IOException e) {
 				System.out.println("Unable to write to hdfs");
 				e.printStackTrace();
@@ -156,13 +313,13 @@ public class StageToHDFS {
 		}
 
 		try {
-			writer.close();
+			dfw.close();
 		} catch (final IOException e) {
 			System.out.println("Unable to close wrtier");
 			e.printStackTrace();
 			System.exit(5);
 		}
-
+		
 		time = System.currentTimeMillis() - time;
 		final String timespan = String.format("%d min, %d sec", TimeUnit.MILLISECONDS.toMinutes(time), TimeUnit.MILLISECONDS.toSeconds(time) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(time)));
 		System.out.println("Success, data transfered in " + timespan + " to " + conf.get("fs.default.name") + sequenceFilePath);
