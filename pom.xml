@@ -25,14 +25,15 @@
 		<geotools.version>11.0</geotools.version>
 		<geoserver.version>2.5</geoserver.version>
 		<accumulo.version>1.5.0</accumulo.version>
+		<!-- 
 		<hadoop.version>2.0.0-cdh4.5.0</hadoop.version> 
 		<hadoop.version.mr>2.0.0-mr1-cdh4.5.0</hadoop.version.mr> 
-		
+		 -->
 		<!-- 
-		Testing out MR2/Yarn
+		Testing out MR2/Yarn -->
 		<hadoop.version>2.3.0-cdh5.0.1</hadoop.version> 
-		<hadoop.version.mr>2.3.0-cdh5.0.1</hadoop.version.mr> 
-		--> 
+		<hadoop.version.mr>2.3.0-mr1-cdh5.0.1</hadoop.version.mr> 
+		
 				
 		<geotools.scope>compile</geotools.scope>
 		<accumulo.scope>compile</accumulo.scope>
