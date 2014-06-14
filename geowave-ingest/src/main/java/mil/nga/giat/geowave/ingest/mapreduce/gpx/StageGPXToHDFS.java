@@ -13,6 +13,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -65,6 +67,10 @@ public class StageGPXToHDFS {
 	private int fileCount = 0;
 	private long lastfreevalue = -1l;
 	private long time;
+	private static final DateFormat TIME_FORMAT_MILISEC = new SimpleDateFormat(
+			"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+	private static final DateFormat TIME_FORMAT_SEC = new SimpleDateFormat(
+			"yyyy-MM-dd'T'HH:mm:ss'Z'");
 
 
 	public static void main( final String[] args ) {
@@ -148,7 +154,16 @@ public class StageGPXToHDFS {
 									break;
 								}
 								case "timestamp" : {
-									gt.setTimestamp(a.getValue());
+									try {
+										gt.setTimestamp(TIME_FORMAT_SEC.parse(a.getValue()).getTime());
+										
+									} catch (Exception t){
+										try {
+											gt.setTimestamp(TIME_FORMAT_MILISEC.parse(a.getValue()).getTime());	
+										}catch (Exception t2){
+											
+										}
+									}
 									break;
 								}
 								case "points" : {
@@ -270,6 +285,7 @@ public class StageGPXToHDFS {
 			System.exit(1);
 		}
 		time = System.currentTimeMillis();
+		System.out.println("Starting to walk files under: " + localBaseDirectory);
 		try {
 			Files.walkFileTree(Paths.get(localBaseDirectory), new FileExtensionVisitor(extensions){
 				@Override
@@ -309,8 +325,7 @@ public class StageGPXToHDFS {
 					}
 								
 					
-					byte[] data = Files.readAllBytes(gpx.toPath());
-					track.setGpxfile(new String(data, StandardCharsets.UTF_8));
+					track.setGpxfile(ByteBuffer.wrap(Files.readAllBytes(gpx.toPath())));
 					
 					try {
 						dfw.append(track);
@@ -325,7 +340,7 @@ public class StageGPXToHDFS {
 						long time2 = System.currentTimeMillis() - time;
 						final String timespan = String.format("%d min, %d sec", TimeUnit.MILLISECONDS.toMinutes(time2), TimeUnit.MILLISECONDS.toSeconds(time2) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(time2)));
 						String out = "\r" + fileCount + " files processed in " + timespan; 
-						System.out.print(out.getBytes());
+						System.out.print(out);
 					}
 					
 					return FileVisitResult.CONTINUE;
@@ -342,7 +357,7 @@ public class StageGPXToHDFS {
 			e.printStackTrace();
 			System.exit(5);
 		}
-		
+		System.out.println("Files processed: " + fileCount);
 		time = System.currentTimeMillis() - time;
 		final String timespan = String.format("%d min, %d sec", TimeUnit.MILLISECONDS.toMinutes(time), TimeUnit.MILLISECONDS.toSeconds(time) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(time)));
 		System.out.println("Success, data transfered in " + timespan + " to " + conf.get("fs.default.name") + sequenceFilePath);

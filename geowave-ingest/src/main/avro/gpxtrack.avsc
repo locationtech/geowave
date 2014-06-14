@@ -8,11 +8,11 @@
 				"doc"  : "unique id for track"
 			},{
 				"name" : "timestamp",
-				"type" : ["string", "null"],
+				"type" : ["long", "null"],
 				"doc"  : "timestamp from metadata directory"
 			},{
 				"name" : "gpxfile",
-				"type" : "string",
+				"type" : "bytes",
 				"doc"  : "Original GPX file"
 			},{
 				"name" : "points",
