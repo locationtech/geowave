@@ -15,7 +15,6 @@ import mil.nga.giat.geowave.store.index.Index;
 import mil.nga.giat.geowave.store.index.IndexStore;
 import mil.nga.giat.geowave.store.index.IndexType;
 
-import org.apache.avro.mapred.AvroRecordReader;
 import org.apache.avro.mapreduce.AvroJob;
 import org.apache.avro.mapreduce.AvroKeyInputFormat;
 import org.apache.hadoop.conf.Configuration;
@@ -57,11 +56,11 @@ public class GPXJobRunner extends Configured implements Tool {
 		}
 
 		conf.set("inputDirectory", otherArgs[0]);
-		conf.set("zookeepers", otherArgs[3]);
-		conf.set("accumuloInstance", otherArgs[4]);
-		conf.set("accumuloUser", otherArgs[5]);
-		conf.set("accumuloPass", otherArgs[6]);
-		conf.set("geowaveNamespace", otherArgs[7]);
+		conf.set("zookeepers", otherArgs[1]);
+		conf.set("accumuloInstance", otherArgs[2]);
+		conf.set("accumuloUser", otherArgs[3]);
+		conf.set("accumuloPass", otherArgs[4]);
+		conf.set("geowaveNamespace", otherArgs[5]);
 
 		final Job job = new Job(conf, String.format(JOB_NAME, conf.get("inputDirectory"), conf.get("geowaveNamespace")));
 
