@@ -283,12 +283,15 @@ public class StageGPXToHDFS {
 			}
 			
 			byte[] bb = null;
+			InputStream is = new FileInputStream(gpx);
 			try {
-				bb = IOUtils.toByteArray(gpx.toURI());
+				bb = IOUtils.toByteArray(is);
 			} catch (IOException ex) {
 				System.out.println("Unable to read local file: " + gpx.getAbsolutePath());
 				log.fatal(ex.getLocalizedMessage());
 				System.exit(1);
+			} finally {
+				IOUtils.closeQuietly(is);
 			}
 						
 			ByteBuffer bbuf = ByteBuffer.wrap(bb);
