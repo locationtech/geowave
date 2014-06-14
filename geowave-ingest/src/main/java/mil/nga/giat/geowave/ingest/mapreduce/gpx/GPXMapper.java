@@ -239,7 +239,7 @@ public class GPXMapper extends Mapper<AvroKey<GPXTrack>, NullWritable, ByteArray
 			}
 		}
 
-		
+		try {
 		trackBuilder.set("geometry", GeometryUtils.GEOMETRY_FACTORY.createLineString(coordinateSequence.toArray(new Coordinate[coordinateSequence.size()])));
 		trackBuilder.set("StartTimeStamp", new Date(minTime));
 		trackBuilder.set("EndTimeStamp", new Date(maxTime));
@@ -258,6 +258,10 @@ public class GPXMapper extends Mapper<AvroKey<GPXTrack>, NullWritable, ByteArray
 		}
 		
 		context.write(trackKey, trackBuilder.buildFeature(gpxTrack.getTrackid().toString()));
+		} catch (IllegalArgumentException e){
+			log.warn("Track: " + gpxTrack.getTrackid()+ " only had 1 point", e);
+			
+		}
 			
 
 	}
