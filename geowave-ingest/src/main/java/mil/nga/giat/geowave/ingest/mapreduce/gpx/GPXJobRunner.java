@@ -55,6 +55,7 @@ public class GPXJobRunner extends Configured implements Tool {
 			return 2;
 		}
 
+
 		conf.set("inputDirectory", otherArgs[0]);
 		conf.set("zookeepers", otherArgs[1]);
 		conf.set("accumuloInstance", otherArgs[2]);
@@ -85,17 +86,17 @@ public class GPXJobRunner extends Configured implements Tool {
 		job.setNumReduceTasks(0);
 
 		// set accumulo operations
-		GeoWaveOutputFormat.setAccumuloOperationsInfo(job, otherArgs[3], // zookeepers
-				otherArgs[4], // accumuloInstance
-				otherArgs[5], // accumuloUser
-				otherArgs[6], // accumuloPass
-				otherArgs[7]); // geowaveNamespace
+		GeoWaveOutputFormat.setAccumuloOperationsInfo(job, otherArgs[1], // zookeepers
+				otherArgs[2], // accumuloInstance
+				otherArgs[3], // accumuloUser
+				otherArgs[4], // accumuloPass
+				otherArgs[5]); // geowaveNamespace
 
-		final AccumuloOperations operations = new BasicAccumuloOperations(otherArgs[3], // zookeepers
-		otherArgs[4], // accumuloInstance
-		otherArgs[5], // accumuloUser
-		otherArgs[6], // accumuloPass
-		otherArgs[7]); // geowaveNamespace
+		final AccumuloOperations operations = new BasicAccumuloOperations(otherArgs[1], // zookeepers
+		otherArgs[2], // accumuloInstance
+		otherArgs[3], // accumuloUser
+		otherArgs[4], // accumuloPass
+		otherArgs[5]); // geowaveNamespace
 
 		final AdapterStore adapterStore = new AccumuloAdapterStore(operations);
 		final IndexStore indexStore = new AccumuloIndexStore(operations);
