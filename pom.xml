@@ -34,7 +34,8 @@
 		<hadoop.version>2.3.0-cdh5.0.1</hadoop.version> 
 		<hadoop.version.mr>2.3.0-mr1-cdh5.0.1</hadoop.version.mr> 
 		
-				
+		<avro.version>1.7.6</avro.version>
+		<commons.cli.version>1.2</commons.cli.version>
 		<geotools.scope>compile</geotools.scope>
 		<accumulo.scope>compile</accumulo.scope>
 		<hadoop.scope>compile</hadoop.scope>
