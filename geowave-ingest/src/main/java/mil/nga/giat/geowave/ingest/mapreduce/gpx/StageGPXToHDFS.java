@@ -1,4 +1,4 @@
-package mil.nga.giat.geowave.ingest.mapreduce;
+package mil.nga.giat.geowave.ingest.mapreduce.gpx;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -21,8 +21,6 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.Attribute;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
-
-import mil.nga.giat.geowave.ingest.mapreduce.gpx.GPXTrack;
 
 import org.apache.avro.file.CodecFactory;
 import org.apache.avro.file.DataFileWriter;
@@ -51,9 +49,9 @@ import org.apache.log4j.Logger;
  * The extension search is recursive, and will identify all files under the
  * directory matching the supplied criteria
  */
-public class StageToHDFS {
+public class StageGPXToHDFS {
 
-	private final static Logger log = Logger.getLogger(StageToHDFS.class);
+	private final static Logger log = Logger.getLogger(StageGPXToHDFS.class);
 	private final static CommandLineParser parser = new BasicParser();
 	public final static String TAG_SEPARATOR = " ||| ";
 
@@ -87,7 +85,7 @@ public class StageToHDFS {
 		if (matchedOptions != (options.getOptions().size() - 1)) {
 			System.out.println("Error, all required options were not provided");
 			final HelpFormatter formatter = new HelpFormatter();
-			formatter.printHelp("4676 Ingester", options);
+			formatter.printHelp("GPX Ingester", options);
 			System.exit(0);
 			System.exit(-2);
 		}
@@ -328,7 +326,7 @@ public class StageToHDFS {
 	private static Options getOptions() {
 		final Options options = new Options();
 		options.addOption("hdfs", "hdfs", true, "HDFS hostname and port in the format hostname:port");
-		options.addOption("i", "inputPath", true, "base directory to read 4676 xml files from");
+		options.addOption("i", "inputPath", true, "base directory to read GPX xml files from");
 		options.addOption("d", "destination", true, "fully qualified sequence file in hdfs");
 		options.addOption("x", "extension", true, "file extension to move to hdfs");
 		options.addOption("h", "help", false, "Display help");
