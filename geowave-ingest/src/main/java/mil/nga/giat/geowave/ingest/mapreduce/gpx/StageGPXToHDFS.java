@@ -7,6 +7,11 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -21,6 +26,8 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.Attribute;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
+
+import mil.nga.giat.geowave.ingest.FileExtensionVisitor;
 
 import org.apache.avro.file.CodecFactory;
 import org.apache.avro.file.DataFileWriter;
@@ -54,6 +61,9 @@ public class StageGPXToHDFS {
 	private final static Logger log = Logger.getLogger(StageGPXToHDFS.class);
 	private final static CommandLineParser parser = new BasicParser();
 	public final static String TAG_SEPARATOR = " ||| ";
+	private int fileCount = 0;
+	private long lastfreevalue = -1l;
+	private long time;
 
 
 	public static void main( final String[] args ) {
@@ -101,9 +111,9 @@ public class StageGPXToHDFS {
 
 		conf.set("fs.default.name", "hdfs://" + line.getOptionValue("hdfs"));
 		conf.set("fs.hdfs.impl", org.apache.hadoop.hdfs.DistributedFileSystem.class.getName());
-
+		StageGPXToHDFS sgpx = new StageGPXToHDFS();
 		try {
-			stageToHadoop(line.getOptionValue("inputPath"), line.getOptionValue("destination"), extensions, conf);
+			sgpx.stageToHadoop(line.getOptionValue("inputPath"), line.getOptionValue("destination"), extensions, conf);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -114,8 +124,7 @@ public class StageGPXToHDFS {
 
 	}
 	
-	private static Map<Long, GPXTrack> parseMetadata(File metadataFile) throws FileNotFoundException, XMLStreamException{
-		Map<Long, GPXTrack> metadata = new HashMap<Long, GPXTrack>();
+	private  Map<Long, GPXTrack> parseMetadata(File metadataFile, Map<Long, GPXTrack> metadata) throws FileNotFoundException, XMLStreamException{
 		final XMLInputFactory inputFactory = XMLInputFactory.newInstance();
 		XMLEventReader eventReader = null;
 		InputStream in = null;
@@ -203,11 +212,13 @@ public class StageGPXToHDFS {
 		return metadata;
 	}
 
-	private static void stageToHadoop( final String localBaseDirectory, final String sequenceFilePath, final String[] extensions, final Configuration conf ) throws FileNotFoundException, XMLStreamException {
+	
+	
+	private  void stageToHadoop( final String localBaseDirectory, final String sequenceFilePath, final String[] extensions, final Configuration conf ) throws FileNotFoundException, XMLStreamException {
 		final Path path = new Path(sequenceFilePath);
 		
 
-		Map<Long, GPXTrack> metadata = null;
+		final Map<Long, GPXTrack> metadata = new HashMap<Long, GPXTrack>();
 		
 		File f = new File(localBaseDirectory + "/metadata.xml");
 		if (!f.exists()){
@@ -216,7 +227,7 @@ public class StageGPXToHDFS {
 		} else {
 			System.out.println("Parsing metdata file");
 			long time = System.currentTimeMillis();
-			metadata = parseMetadata(f);
+			parseMetadata(f, metadata);
 			time = System.currentTimeMillis() - time;
 			final String timespan = String.format("%d min, %d sec", TimeUnit.MILLISECONDS.toMinutes(time), TimeUnit.MILLISECONDS.toSeconds(time) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(time)));
 			System.out.println("Metadata parsed in in " + timespan + " for " + metadata.size() + " tracks" );
@@ -224,7 +235,7 @@ public class StageGPXToHDFS {
 			
 		
 		
-		DataFileWriter<GPXTrack> dfw = new DataFileWriter<GPXTrack>(new GenericDatumWriter<GPXTrack>());
+		final DataFileWriter<GPXTrack> dfw = new DataFileWriter<GPXTrack>(new GenericDatumWriter<GPXTrack>());
 		dfw.setCodec(CodecFactory.snappyCodec());
 		
 		Path hdfsBaseDirectory = new Path(sequenceFilePath).getParent();
@@ -242,13 +253,10 @@ public class StageGPXToHDFS {
 		}
 		
 		
-		System.out.println("Building list of all files to ingest");
-		final Collection<File> files = FileUtils.listFiles(new File(localBaseDirectory), extensions, true);
-		System.out.println("List built, found " + files.size() + "files");
-
-		int percent = 0;
-		int fileCount = 0;
-		
+		//System.out.println("Building list of all files to ingest");
+		//final Collection<File> files = FileUtils.listFiles(new File(localBaseDirectory + "/"),"" )
+		//System.out.println("List built, found " + files.size() + " files");
+				
 		FSDataOutputStream out = null;
 		
 		try {
@@ -260,58 +268,69 @@ public class StageGPXToHDFS {
 			log.fatal(ex.getLocalizedMessage());
 			System.exit(1);
 		}
+		time = System.currentTimeMillis();
+		try {
+			Files.walkFileTree(Paths.get(localBaseDirectory), new FileExtensionVisitor(extensions){
+				@Override
+				public FileVisitResult visitFile( java.nio.file.Path path, BasicFileAttributes bfa )
+						throws IOException {
+					
+					GPXTrack track = null;
+					File gpx = path.toFile();
+					if (!pattern.matcher(gpx.getName()).matches()){
+						return FileVisitResult.CONTINUE;
+					}
+					
+					try {
+						long id = Long.parseLong(FilenameUtils.removeExtension(gpx.getName()));
+						track = metadata.get(id);
+						if (track == null){
+							track = new GPXTrack();
+							track.setTrackid(lastfreevalue);
+							lastfreevalue--;
+						}
+					} catch (NumberFormatException ex){
+						track = new GPXTrack();
+						track.setTrackid(lastfreevalue);
+						lastfreevalue--;
+					}
+					
+					byte[] bb = null;
+					InputStream is = new FileInputStream(gpx);
+					try {
+						bb = IOUtils.toByteArray(is);
+					} catch (IOException ex) {
+						System.out.println("Unable to read local file: " + gpx.getAbsolutePath());
+						log.fatal(ex.getLocalizedMessage());
+						System.exit(1);
+					} finally {
+						IOUtils.closeQuietly(is);
+					}
+								
+					ByteBuffer bbuf = ByteBuffer.wrap(bb);
+					track.setGpxfile(bbuf);
+					
+					try {
+						dfw.append(track);
+					} catch (final IOException e) {
+						System.out.println("Unable to write to hdfs");
+						e.printStackTrace();
+						System.exit(4);
+					}
 
-		long time = System.currentTimeMillis();
-		
-		long lastfreevalue = -1;
-		
-		
-		for (final File gpx : files) {
-			GPXTrack track = null;
-			
-			try {
-				long id = Long.parseLong(FilenameUtils.removeExtension(gpx.getName()));
-				track = metadata.get(id);
-				if (track == null){
-					track = new GPXTrack();
-					track.setTrackid(lastfreevalue);
-					lastfreevalue--;
+					fileCount++;
+					if (fileCount % 100 == 0){
+						long time2 = System.currentTimeMillis() - time;
+						final String timespan = String.format("%d min, %d sec", TimeUnit.MILLISECONDS.toMinutes(time2), TimeUnit.MILLISECONDS.toSeconds(time2) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(time2)));
+						String data = "\r" + fileCount + " files processed in " + timespan; 
+						System.out.write(data.getBytes());
+					}
+					
+					return FileVisitResult.CONTINUE;
 				}
-			} catch (NumberFormatException ex){
-				track = new GPXTrack();
-				track.setTrackid(lastfreevalue);
-				lastfreevalue--;
-			}
-			
-			byte[] bb = null;
-			InputStream is = new FileInputStream(gpx);
-			try {
-				bb = IOUtils.toByteArray(is);
-			} catch (IOException ex) {
-				System.out.println("Unable to read local file: " + gpx.getAbsolutePath());
-				log.fatal(ex.getLocalizedMessage());
-				System.exit(1);
-			} finally {
-				IOUtils.closeQuietly(is);
-			}
-						
-			ByteBuffer bbuf = ByteBuffer.wrap(bb);
-			track.setGpxfile(bbuf);
-			
-			try {
-				dfw.append(track);
-			} catch (final IOException e) {
-				System.out.println("Unable to write to hdfs");
-				e.printStackTrace();
-				System.exit(4);
-			}
-
-			fileCount++;
-			final int newPercent = Math.round((fileCount * 100.0f) / files.size());
-			if (newPercent != percent) {
-				System.out.println(newPercent + "% done");
-				percent = newPercent;
-			}
+			});
+		} catch (IOException e1) {
+			log.error(e1);
 		}
 
 		try {
