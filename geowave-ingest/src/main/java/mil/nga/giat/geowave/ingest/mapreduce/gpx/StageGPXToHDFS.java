@@ -329,6 +329,8 @@ public class StageGPXToHDFS {
 					
 					try {
 						dfw.append(track);
+						metadata.remove(track.getTrackid());
+						track = null;
 					} catch (final IOException e) {
 						System.out.println("Unable to write to hdfs");
 						e.printStackTrace();
