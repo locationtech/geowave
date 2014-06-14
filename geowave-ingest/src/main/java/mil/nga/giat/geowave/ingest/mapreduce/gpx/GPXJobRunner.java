@@ -149,7 +149,7 @@ public class GPXJobRunner extends Configured implements Tool {
 	static SimpleFeatureType createGPXPointDataType() {
 
 		final SimpleFeatureTypeBuilder simpleFeatureTypeBuilder = new SimpleFeatureTypeBuilder();
-		simpleFeatureTypeBuilder.setName(GPX_TRACK_FEATURE);
+		simpleFeatureTypeBuilder.setName(GPX_POINT_FEATURE);
 
 		final AttributeTypeBuilder attributeTypeBuilder = new AttributeTypeBuilder();
 
@@ -166,7 +166,7 @@ public class GPXJobRunner extends Configured implements Tool {
 	static SimpleFeatureType createGPXWaypointDataType() {
 
 		final SimpleFeatureTypeBuilder simpleFeatureTypeBuilder = new SimpleFeatureTypeBuilder();
-		simpleFeatureTypeBuilder.setName(GPX_TRACK_FEATURE);
+		simpleFeatureTypeBuilder.setName(GPX_WAYPOINT_FEATURE);
 
 		final AttributeTypeBuilder attributeTypeBuilder = new AttributeTypeBuilder();
 
