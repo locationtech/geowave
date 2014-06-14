@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -307,8 +308,9 @@ public class StageGPXToHDFS {
 						IOUtils.closeQuietly(is);
 					}
 								
-					ByteBuffer bbuf = ByteBuffer.wrap(bb);
-					track.setGpxfile(bbuf);
+					
+					byte[] data = Files.readAllBytes(gpx.toPath());
+					track.setGpxfile(new String(data, StandardCharsets.UTF_8));
 					
 					try {
 						dfw.append(track);
@@ -322,8 +324,8 @@ public class StageGPXToHDFS {
 					if (fileCount % 100 == 0){
 						long time2 = System.currentTimeMillis() - time;
 						final String timespan = String.format("%d min, %d sec", TimeUnit.MILLISECONDS.toMinutes(time2), TimeUnit.MILLISECONDS.toSeconds(time2) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(time2)));
-						String data = "\r" + fileCount + " files processed in " + timespan; 
-						System.out.write(data.getBytes());
+						String out = "\r" + fileCount + " files processed in " + timespan; 
+						System.out.print(out.getBytes());
 					}
 					
 					return FileVisitResult.CONTINUE;

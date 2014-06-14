@@ -7,14 +7,14 @@ package mil.nga.giat.geowave.ingest.mapreduce.gpx;
 @SuppressWarnings("all")
 @org.apache.avro.specific.AvroGenerated
 public class GPXTrack extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
-  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"GPXTrack\",\"namespace\":\"mil.nga.giat.geowave.ingest.mapreduce.gpx\",\"fields\":[{\"name\":\"trackid\",\"type\":[\"long\",\"null\"],\"doc\":\"unique id for track\"},{\"name\":\"timestamp\",\"type\":[\"string\",\"null\"],\"doc\":\"timestamp from metadata directory\"},{\"name\":\"gpxfile\",\"type\":\"bytes\",\"doc\":\"Original GPX file\"},{\"name\":\"points\",\"type\":[\"long\",\"null\"],\"doc\":\"number of points from metadata\"},{\"name\":\"visibility\",\"type\":[\"string\",\"null\"],\"doc\":\"visibility setting data was uploaded as from metadata\"},{\"name\":\"user\",\"type\":[\"string\",\"null\"],\"doc\":\"user who uploaded the file from metadata\"},{\"name\":\"userid\",\"type\":[\"long\",\"null\"],\"doc\":\"id of user who uploaded the data from metadata\"},{\"name\":\"description\",\"type\":[\"string\",\"null\"],\"doc\":\"description from metadata\"},{\"name\":\"tags\",\"type\":[\"null\",{\"type\":\"array\",\"items\":\"string\"}],\"default\":\"null\"}],\"doc:\":\"Stores GPX Track files, and, if available metadata blobs per OSM practice\"}");
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"GPXTrack\",\"namespace\":\"mil.nga.giat.geowave.ingest.mapreduce.gpx\",\"fields\":[{\"name\":\"trackid\",\"type\":[\"long\",\"null\"],\"doc\":\"unique id for track\"},{\"name\":\"timestamp\",\"type\":[\"string\",\"null\"],\"doc\":\"timestamp from metadata directory\"},{\"name\":\"gpxfile\",\"type\":\"string\",\"doc\":\"Original GPX file\"},{\"name\":\"points\",\"type\":[\"long\",\"null\"],\"doc\":\"number of points from metadata\"},{\"name\":\"visibility\",\"type\":[\"string\",\"null\"],\"doc\":\"visibility setting data was uploaded as from metadata\"},{\"name\":\"user\",\"type\":[\"string\",\"null\"],\"doc\":\"user who uploaded the file from metadata\"},{\"name\":\"userid\",\"type\":[\"long\",\"null\"],\"doc\":\"id of user who uploaded the data from metadata\"},{\"name\":\"description\",\"type\":[\"string\",\"null\"],\"doc\":\"description from metadata\"},{\"name\":\"tags\",\"type\":[\"null\",{\"type\":\"array\",\"items\":\"string\"}],\"default\":\"null\"}],\"doc:\":\"Stores GPX Track files, and, if available metadata blobs per OSM practice\"}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
   /** unique id for track */
   @Deprecated public java.lang.Long trackid;
   /** timestamp from metadata directory */
   @Deprecated public java.lang.CharSequence timestamp;
   /** Original GPX file */
-  @Deprecated public java.nio.ByteBuffer gpxfile;
+  @Deprecated public java.lang.CharSequence gpxfile;
   /** number of points from metadata */
   @Deprecated public java.lang.Long points;
   /** visibility setting data was uploaded as from metadata */
@@ -37,7 +37,7 @@ public class GPXTrack extends org.apache.avro.specific.SpecificRecordBase implem
   /**
    * All-args constructor.
    */
-  public GPXTrack(java.lang.Long trackid, java.lang.CharSequence timestamp, java.nio.ByteBuffer gpxfile, java.lang.Long points, java.lang.CharSequence visibility, java.lang.CharSequence user, java.lang.Long userid, java.lang.CharSequence description, java.util.List<java.lang.CharSequence> tags) {
+  public GPXTrack(java.lang.Long trackid, java.lang.CharSequence timestamp, java.lang.CharSequence gpxfile, java.lang.Long points, java.lang.CharSequence visibility, java.lang.CharSequence user, java.lang.Long userid, java.lang.CharSequence description, java.util.List<java.lang.CharSequence> tags) {
     this.trackid = trackid;
     this.timestamp = timestamp;
     this.gpxfile = gpxfile;
@@ -71,7 +71,7 @@ public class GPXTrack extends org.apache.avro.specific.SpecificRecordBase implem
     switch (field$) {
     case 0: trackid = (java.lang.Long)value$; break;
     case 1: timestamp = (java.lang.CharSequence)value$; break;
-    case 2: gpxfile = (java.nio.ByteBuffer)value$; break;
+    case 2: gpxfile = (java.lang.CharSequence)value$; break;
     case 3: points = (java.lang.Long)value$; break;
     case 4: visibility = (java.lang.CharSequence)value$; break;
     case 5: user = (java.lang.CharSequence)value$; break;
@@ -115,7 +115,7 @@ public class GPXTrack extends org.apache.avro.specific.SpecificRecordBase implem
   /**
    * Gets the value of the 'gpxfile' field.
    * Original GPX file   */
-  public java.nio.ByteBuffer getGpxfile() {
+  public java.lang.CharSequence getGpxfile() {
     return gpxfile;
   }
 
@@ -123,7 +123,7 @@ public class GPXTrack extends org.apache.avro.specific.SpecificRecordBase implem
    * Sets the value of the 'gpxfile' field.
    * Original GPX file   * @param value the value to set.
    */
-  public void setGpxfile(java.nio.ByteBuffer value) {
+  public void setGpxfile(java.lang.CharSequence value) {
     this.gpxfile = value;
   }
 
@@ -240,7 +240,7 @@ public class GPXTrack extends org.apache.avro.specific.SpecificRecordBase implem
 
     private java.lang.Long trackid;
     private java.lang.CharSequence timestamp;
-    private java.nio.ByteBuffer gpxfile;
+    private java.lang.CharSequence gpxfile;
     private java.lang.Long points;
     private java.lang.CharSequence visibility;
     private java.lang.CharSequence user;
@@ -386,12 +386,12 @@ public class GPXTrack extends org.apache.avro.specific.SpecificRecordBase implem
     }
 
     /** Gets the value of the 'gpxfile' field */
-    public java.nio.ByteBuffer getGpxfile() {
+    public java.lang.CharSequence getGpxfile() {
       return gpxfile;
     }
     
     /** Sets the value of the 'gpxfile' field */
-    public mil.nga.giat.geowave.ingest.mapreduce.gpx.GPXTrack.Builder setGpxfile(java.nio.ByteBuffer value) {
+    public mil.nga.giat.geowave.ingest.mapreduce.gpx.GPXTrack.Builder setGpxfile(java.lang.CharSequence value) {
       validate(fields()[2], value);
       this.gpxfile = value;
       fieldSetFlags()[2] = true;
@@ -566,7 +566,7 @@ public class GPXTrack extends org.apache.avro.specific.SpecificRecordBase implem
         GPXTrack record = new GPXTrack();
         record.trackid = fieldSetFlags()[0] ? this.trackid : (java.lang.Long) defaultValue(fields()[0]);
         record.timestamp = fieldSetFlags()[1] ? this.timestamp : (java.lang.CharSequence) defaultValue(fields()[1]);
-        record.gpxfile = fieldSetFlags()[2] ? this.gpxfile : (java.nio.ByteBuffer) defaultValue(fields()[2]);
+        record.gpxfile = fieldSetFlags()[2] ? this.gpxfile : (java.lang.CharSequence) defaultValue(fields()[2]);
         record.points = fieldSetFlags()[3] ? this.points : (java.lang.Long) defaultValue(fields()[3]);
         record.visibility = fieldSetFlags()[4] ? this.visibility : (java.lang.CharSequence) defaultValue(fields()[4]);
         record.user = fieldSetFlags()[5] ? this.user : (java.lang.CharSequence) defaultValue(fields()[5]);

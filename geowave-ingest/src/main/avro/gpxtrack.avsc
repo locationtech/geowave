@@ -12,7 +12,7 @@
 				"doc"  : "timestamp from metadata directory"
 			},{
 				"name" : "gpxfile",
-				"type" : "bytes",
+				"type" : "string",
 				"doc"  : "Original GPX file"
 			},{
 				"name" : "points",
