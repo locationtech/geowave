@@ -242,8 +242,9 @@ public class StageGPXToHDFS {
 		}
 		
 		
-		
+		System.out.println("Building list of all files to ingest");
 		final Collection<File> files = FileUtils.listFiles(new File(localBaseDirectory), extensions, true);
+		System.out.println("List built, found " + files.size() + "files");
 
 		int percent = 0;
 		int fileCount = 0;

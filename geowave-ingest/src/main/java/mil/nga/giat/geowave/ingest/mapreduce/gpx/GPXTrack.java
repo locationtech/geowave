@@ -7,22 +7,22 @@ package mil.nga.giat.geowave.ingest.mapreduce.gpx;
 @SuppressWarnings("all")
 @org.apache.avro.specific.AvroGenerated
 public class GPXTrack extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
-  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"GPXTrack\",\"namespace\":\"mil.nga.giat.geowave.ingest.mapreduce.gpx\",\"fields\":[{\"name\":\"trackid\",\"type\":\"long\",\"doc\":\"unique id for track\"},{\"name\":\"timestamp\",\"type\":\"string\",\"doc\":\"timestamp from metadata directory\"},{\"name\":\"gpxfile\",\"type\":\"bytes\",\"doc\":\"Original GPX file\"},{\"name\":\"points\",\"type\":\"long\",\"doc\":\"number of points from metadata\"},{\"name\":\"visibility\",\"type\":\"string\",\"doc\":\"visibility setting data was uploaded as from metadata\"},{\"name\":\"user\",\"type\":\"string\",\"doc\":\"user who uploaded the file from metadata\"},{\"name\":\"userid\",\"type\":\"long\",\"doc\":\"id of user who uploaded the data from metadata\"},{\"name\":\"description\",\"type\":\"string\",\"doc\":\"description from metadata\"},{\"name\":\"tags\",\"type\":{\"type\":\"array\",\"items\":\"string\"}}],\"doc:\":\"Stores GPX Track files, and, if available metadata blobs per OSM practice\"}");
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"GPXTrack\",\"namespace\":\"mil.nga.giat.geowave.ingest.mapreduce.gpx\",\"fields\":[{\"name\":\"trackid\",\"type\":[\"long\",\"null\"],\"doc\":\"unique id for track\"},{\"name\":\"timestamp\",\"type\":[\"string\",\"null\"],\"doc\":\"timestamp from metadata directory\"},{\"name\":\"gpxfile\",\"type\":\"bytes\",\"doc\":\"Original GPX file\"},{\"name\":\"points\",\"type\":[\"long\",\"null\"],\"doc\":\"number of points from metadata\"},{\"name\":\"visibility\",\"type\":[\"string\",\"null\"],\"doc\":\"visibility setting data was uploaded as from metadata\"},{\"name\":\"user\",\"type\":[\"string\",\"null\"],\"doc\":\"user who uploaded the file from metadata\"},{\"name\":\"userid\",\"type\":[\"long\",\"null\"],\"doc\":\"id of user who uploaded the data from metadata\"},{\"name\":\"description\",\"type\":[\"string\",\"null\"],\"doc\":\"description from metadata\"},{\"name\":\"tags\",\"type\":[\"null\",{\"type\":\"array\",\"items\":\"string\"}],\"default\":\"null\"}],\"doc:\":\"Stores GPX Track files, and, if available metadata blobs per OSM practice\"}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
   /** unique id for track */
-  @Deprecated public long trackid;
+  @Deprecated public java.lang.Long trackid;
   /** timestamp from metadata directory */
   @Deprecated public java.lang.CharSequence timestamp;
   /** Original GPX file */
   @Deprecated public java.nio.ByteBuffer gpxfile;
   /** number of points from metadata */
-  @Deprecated public long points;
+  @Deprecated public java.lang.Long points;
   /** visibility setting data was uploaded as from metadata */
   @Deprecated public java.lang.CharSequence visibility;
   /** user who uploaded the file from metadata */
   @Deprecated public java.lang.CharSequence user;
   /** id of user who uploaded the data from metadata */
-  @Deprecated public long userid;
+  @Deprecated public java.lang.Long userid;
   /** description from metadata */
   @Deprecated public java.lang.CharSequence description;
   @Deprecated public java.util.List<java.lang.CharSequence> tags;
@@ -238,13 +238,13 @@ public class GPXTrack extends org.apache.avro.specific.SpecificRecordBase implem
   public static class Builder extends org.apache.avro.specific.SpecificRecordBuilderBase<GPXTrack>
     implements org.apache.avro.data.RecordBuilder<GPXTrack> {
 
-    private long trackid;
+    private java.lang.Long trackid;
     private java.lang.CharSequence timestamp;
     private java.nio.ByteBuffer gpxfile;
-    private long points;
+    private java.lang.Long points;
     private java.lang.CharSequence visibility;
     private java.lang.CharSequence user;
-    private long userid;
+    private java.lang.Long userid;
     private java.lang.CharSequence description;
     private java.util.List<java.lang.CharSequence> tags;
 
@@ -341,7 +341,7 @@ public class GPXTrack extends org.apache.avro.specific.SpecificRecordBase implem
     }
     
     /** Sets the value of the 'trackid' field */
-    public mil.nga.giat.geowave.ingest.mapreduce.gpx.GPXTrack.Builder setTrackid(long value) {
+    public mil.nga.giat.geowave.ingest.mapreduce.gpx.GPXTrack.Builder setTrackid(java.lang.Long value) {
       validate(fields()[0], value);
       this.trackid = value;
       fieldSetFlags()[0] = true;
@@ -355,6 +355,7 @@ public class GPXTrack extends org.apache.avro.specific.SpecificRecordBase implem
     
     /** Clears the value of the 'trackid' field */
     public mil.nga.giat.geowave.ingest.mapreduce.gpx.GPXTrack.Builder clearTrackid() {
+      trackid = null;
       fieldSetFlags()[0] = false;
       return this;
     }
@@ -415,7 +416,7 @@ public class GPXTrack extends org.apache.avro.specific.SpecificRecordBase implem
     }
     
     /** Sets the value of the 'points' field */
-    public mil.nga.giat.geowave.ingest.mapreduce.gpx.GPXTrack.Builder setPoints(long value) {
+    public mil.nga.giat.geowave.ingest.mapreduce.gpx.GPXTrack.Builder setPoints(java.lang.Long value) {
       validate(fields()[3], value);
       this.points = value;
       fieldSetFlags()[3] = true;
@@ -429,6 +430,7 @@ public class GPXTrack extends org.apache.avro.specific.SpecificRecordBase implem
     
     /** Clears the value of the 'points' field */
     public mil.nga.giat.geowave.ingest.mapreduce.gpx.GPXTrack.Builder clearPoints() {
+      points = null;
       fieldSetFlags()[3] = false;
       return this;
     }
@@ -489,7 +491,7 @@ public class GPXTrack extends org.apache.avro.specific.SpecificRecordBase implem
     }
     
     /** Sets the value of the 'userid' field */
-    public mil.nga.giat.geowave.ingest.mapreduce.gpx.GPXTrack.Builder setUserid(long value) {
+    public mil.nga.giat.geowave.ingest.mapreduce.gpx.GPXTrack.Builder setUserid(java.lang.Long value) {
       validate(fields()[6], value);
       this.userid = value;
       fieldSetFlags()[6] = true;
@@ -503,6 +505,7 @@ public class GPXTrack extends org.apache.avro.specific.SpecificRecordBase implem
     
     /** Clears the value of the 'userid' field */
     public mil.nga.giat.geowave.ingest.mapreduce.gpx.GPXTrack.Builder clearUserid() {
+      userid = null;
       fieldSetFlags()[6] = false;
       return this;
     }
