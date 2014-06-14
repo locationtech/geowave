@@ -63,13 +63,12 @@ public class StageGPXToHDFS {
 
 	private final static Logger log = Logger.getLogger(StageGPXToHDFS.class);
 	private final static CommandLineParser parser = new BasicParser();
-	public final static String TAG_SEPARATOR = " ||| ";
 	private int fileCount = 0;
 	private long lastfreevalue = -1l;
 	private long time;
-	private static final DateFormat TIME_FORMAT_MILISEC = new SimpleDateFormat(
+	public static final DateFormat TIME_FORMAT_MILISEC = new SimpleDateFormat(
 			"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-	private static final DateFormat TIME_FORMAT_SEC = new SimpleDateFormat(
+	public static final DateFormat TIME_FORMAT_SEC = new SimpleDateFormat(
 			"yyyy-MM-dd'T'HH:mm:ss'Z'");
 
 

@@ -15,11 +15,13 @@ import mil.nga.giat.geowave.store.index.Index;
 import mil.nga.giat.geowave.store.index.IndexStore;
 import mil.nga.giat.geowave.store.index.IndexType;
 
+import org.apache.avro.mapred.AvroRecordReader;
+import org.apache.avro.mapreduce.AvroJob;
+import org.apache.avro.mapreduce.AvroKeyInputFormat;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
-import org.apache.hadoop.mapreduce.lib.input.SequenceFileInputFormat;
 import org.apache.hadoop.util.GenericOptionsParser;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
@@ -35,6 +37,7 @@ public class GPXJobRunner extends Configured implements Tool {
 	static String JOB_NAME = "GPX Ingest from %s to namespace %s";
 	static String GPX_POINT_FEATURE = "gpxpoint";
 	static String GPX_TRACK_FEATURE = "gpxtrack";
+	static String GPX_WAYPOINT_FEATURE = "gpxwaypoint";
 
 	public static void main( final String[] args )
 			throws Exception {
@@ -64,10 +67,14 @@ public class GPXJobRunner extends Configured implements Tool {
 
 		job.setJarByClass(GPXJobRunner.class);
 		job.setMapperClass(GPXMapper.class);
-		// job.setReducerClass(IngestReducer.class);
 
 		FileInputFormat.setInputPaths(job, conf.get("inputDirectory"));
-		job.setInputFormatClass(SequenceFileInputFormat.class);
+
+		job.setInputFormatClass(AvroKeyInputFormat.class);
+		AvroJob.setInputKeySchema(job, GPXTrack.getClassSchema());
+		
+			
+		
 
 		// set mappper output info
 		job.setMapOutputKeyClass(ByteArrayId.class);
@@ -75,23 +82,21 @@ public class GPXJobRunner extends Configured implements Tool {
 
 		// set geowave output format
 		job.setOutputFormatClass(GeoWaveOutputFormat.class);
-		
+
 		job.setNumReduceTasks(0);
 
 		// set accumulo operations
-		GeoWaveOutputFormat.setAccumuloOperationsInfo(job, 
-				otherArgs[3], // zookeepers
+		GeoWaveOutputFormat.setAccumuloOperationsInfo(job, otherArgs[3], // zookeepers
 				otherArgs[4], // accumuloInstance
 				otherArgs[5], // accumuloUser
 				otherArgs[6], // accumuloPass
 				otherArgs[7]); // geowaveNamespace
 
-		final AccumuloOperations operations = new BasicAccumuloOperations(
-				otherArgs[3], // zookeepers
-				otherArgs[4], // accumuloInstance
-				otherArgs[5], // accumuloUser
-				otherArgs[6], // accumuloPass
-				otherArgs[7]); // geowaveNamespace
+		final AccumuloOperations operations = new BasicAccumuloOperations(otherArgs[3], // zookeepers
+		otherArgs[4], // accumuloInstance
+		otherArgs[5], // accumuloUser
+		otherArgs[6], // accumuloPass
+		otherArgs[7]); // geowaveNamespace
 
 		final AdapterStore adapterStore = new AccumuloAdapterStore(operations);
 		final IndexStore indexStore = new AccumuloIndexStore(operations);
@@ -99,48 +104,23 @@ public class GPXJobRunner extends Configured implements Tool {
 		final Index index = IndexType.SPATIAL.createDefaultIndex();
 		final DataAdapter<SimpleFeature> pointAdapter = new FeatureDataAdapter(createGPXPointDataType());
 		final DataAdapter<SimpleFeature> trackAdapter = new FeatureDataAdapter(createGPXTrackDataType());
+		final DataAdapter<SimpleFeature> waypointAdapter = new FeatureDataAdapter(createGPXWaypointDataType());
 
 		adapterStore.addAdapter(pointAdapter);
 		adapterStore.addAdapter(trackAdapter);
+		adapterStore.addAdapter(waypointAdapter);
 
 		indexStore.addIndex(index);
 
 		// add data adapters
 		GeoWaveOutputFormat.addDataAdapter(job, pointAdapter);
 		GeoWaveOutputFormat.addDataAdapter(job, trackAdapter);
+		GeoWaveOutputFormat.addDataAdapter(job, waypointAdapter);
 
 		// set index
 		GeoWaveOutputFormat.setIndex(job, index);
 
 		return job.waitForCompletion(true) ? 0 : -1;
-	}
-	
-	
-
-
-	static SimpleFeatureType createGPXPointDataType() {
-
-		final SimpleFeatureTypeBuilder simpleFeatureTypeBuilder = new SimpleFeatureTypeBuilder();
-		simpleFeatureTypeBuilder.setName(GPX_POINT_FEATURE);
-
-		final AttributeTypeBuilder attributeTypeBuilder = new AttributeTypeBuilder();
-
-		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(Geometry.class).buildDescriptor("geometry"));
-
-		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(Date.class).buildDescriptor("StartTimeStamp"));
-		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(Date.class).buildDescriptor("EndTimeStamp"));
-		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(Long.class).buildDescriptor("Duration"));
-		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(Long.class).buildDescriptor("NumberPoints"));
-		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(String.class).buildDescriptor("TrackId"));
-		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(Long.class).buildDescriptor("Points"));
-		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(String.class).buildDescriptor("Name"));
-		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(Long.class).buildDescriptor("Uid"));
-		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(String.class).buildDescriptor("User"));
-		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(String.class).buildDescriptor("Description"));
-		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(String.class).buildDescriptor("Tags"));
-
-		return simpleFeatureTypeBuilder.buildFeatureType();
-
 	}
 
 	static SimpleFeatureType createGPXTrackDataType() {
@@ -150,26 +130,57 @@ public class GPXJobRunner extends Configured implements Tool {
 
 		final AttributeTypeBuilder attributeTypeBuilder = new AttributeTypeBuilder();
 
-		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(Geometry.class).buildDescriptor("geometry"));
-		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(String.class).buildDescriptor("Mission"));
-		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(String.class).buildDescriptor("TrackNumber"));
-		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(String.class).buildDescriptor("TrackUUID"));
-		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(String.class).buildDescriptor("TrackItemUUID"));
-		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(String.class).buildDescriptor("MotionEvent"));
-		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(Date.class).buildDescriptor("StartTime"));
-		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(Date.class).buildDescriptor("EndTime"));
-		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(String.class).buildDescriptor("Classification"));
-		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(Double.class).buildDescriptor("Latitude"));
-		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(Double.class).buildDescriptor("Longitude"));
-		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(Double.class).buildDescriptor("Elevation"));
-		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(Integer.class).buildDescriptor("FrameNumber"));
-		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(Integer.class).buildDescriptor("PixelRow"));
-		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(Integer.class).buildDescriptor("PixelColumn"));
-		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(String.class).buildDescriptor("ImageChip"));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(Geometry.class).nillable(true).buildDescriptor("geometry"));
+
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(Date.class).nillable(true).buildDescriptor("StartTimeStamp"));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(Date.class).nillable(true).buildDescriptor("EndTimeStamp"));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(Long.class).nillable(true).buildDescriptor("Duration"));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(Long.class).nillable(true).buildDescriptor("NumberPoints"));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(String.class).nillable(true).buildDescriptor("TrackId"));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(Long.class).nillable(true).buildDescriptor("UserId"));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(String.class).nillable(true).buildDescriptor("User"));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(String.class).nillable(true).buildDescriptor("Description"));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(String.class).nillable(true).buildDescriptor("Tags"));
 
 		return simpleFeatureTypeBuilder.buildFeatureType();
 
 	}
 
+	static SimpleFeatureType createGPXPointDataType() {
+
+		final SimpleFeatureTypeBuilder simpleFeatureTypeBuilder = new SimpleFeatureTypeBuilder();
+		simpleFeatureTypeBuilder.setName(GPX_TRACK_FEATURE);
+
+		final AttributeTypeBuilder attributeTypeBuilder = new AttributeTypeBuilder();
+
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(Geometry.class).nillable(true).buildDescriptor("geometry"));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(Double.class).nillable(true).buildDescriptor("Latitude"));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(Double.class).nillable(true).buildDescriptor("Longitude"));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(Double.class).nillable(true).buildDescriptor("Elevation"));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(Date.class).nillable(true).buildDescriptor("Timestamp"));
+
+		return simpleFeatureTypeBuilder.buildFeatureType();
+
+	}
 	
+	static SimpleFeatureType createGPXWaypointDataType() {
+
+		final SimpleFeatureTypeBuilder simpleFeatureTypeBuilder = new SimpleFeatureTypeBuilder();
+		simpleFeatureTypeBuilder.setName(GPX_TRACK_FEATURE);
+
+		final AttributeTypeBuilder attributeTypeBuilder = new AttributeTypeBuilder();
+
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(Geometry.class).nillable(true).buildDescriptor("geometry"));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(Double.class).nillable(true).buildDescriptor("Latitude"));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(Double.class).nillable(true).buildDescriptor("Longitude"));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(Double.class).nillable(true).buildDescriptor("Elevation"));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(String.class).nillable(true).buildDescriptor("Name"));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(String.class).nillable(true).buildDescriptor("Comment"));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(String.class).nillable(true).buildDescriptor("Description"));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(String.class).nillable(true).buildDescriptor("Symbol"));
+
+		return simpleFeatureTypeBuilder.buildFeatureType();
+
+	}
+
 }
