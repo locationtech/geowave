@@ -359,10 +359,11 @@ public class StageGPXToHDFS {
 			e.printStackTrace();
 			System.exit(5);
 		}
-		System.out.println("Files processed: " + fileCount);
+		
+		System.out.println("\r\n");
 		time = System.currentTimeMillis() - time;
 		final String timespan = String.format("%d min, %d sec", TimeUnit.MILLISECONDS.toMinutes(time), TimeUnit.MILLISECONDS.toSeconds(time) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(time)));
-		System.out.println("Success, data transfered in " + timespan + " to " + conf.get("fs.default.name") + sequenceFilePath);
+		System.out.println("Success, " + fileCount + " files transfered in " + timespan + " from '" + localBaseDirectory + "' to '" + conf.get("fs.defaultFS") + sequenceFilePath + "'");
 	}
 
 	private static Options getOptions() {
