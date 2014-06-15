@@ -63,6 +63,7 @@ public class GPXMapper extends Mapper<AvroKey<GPXTrack>, NullWritable, ByteArray
 			processTrack(key.datum(), context);
 		} catch (final XMLStreamException e) {
 			log.error("Couldn't process file for track: " + key.datum().getTrackid(), e);
+			e.printStackTrace();
 		}
 	}
 
@@ -80,7 +81,7 @@ public class GPXMapper extends Mapper<AvroKey<GPXTrack>, NullWritable, ByteArray
 		Double lat = null;
 		Double lon = null;
 		Long minTime = gpxTrack.getTimestamp();
-		long maxTime = gpxTrack.getTimestamp();
+		Long maxTime = gpxTrack.getTimestamp();
 		long trackPoint = 0;
 		final List<Coordinate> coordinateSequence = new ArrayList<Coordinate>();
 		String name = null;
@@ -220,7 +221,10 @@ public class GPXMapper extends Mapper<AvroKey<GPXTrack>, NullWritable, ByteArray
 								pointBuilder.set("Latitude", lat);
 								pointBuilder.set("Longitude", lon);
 								pointBuilder.set("Elevation", elevation);
-								pointBuilder.set("Timestamp", new Date(timestamp));
+								if (timestamp != null)
+									pointBuilder.set("Timestamp", new Date(timestamp));
+								else
+									pointBuilder.set("Timestamp", null);
 
 								context.write(pointKey, pointBuilder.buildFeature(gpxTrack.getTrackid().toString() + "_" + trackPoint));
 
@@ -247,9 +251,16 @@ public class GPXMapper extends Mapper<AvroKey<GPXTrack>, NullWritable, ByteArray
 
 		try {
 			trackBuilder.set("geometry", GeometryUtils.GEOMETRY_FACTORY.createLineString(coordinateSequence.toArray(new Coordinate[coordinateSequence.size()])));
-			trackBuilder.set("StartTimeStamp", new Date(minTime));
-			trackBuilder.set("EndTimeStamp", new Date(maxTime));
-			trackBuilder.set("Duration", maxTime - minTime);
+			if (minTime != null && maxTime != null){
+				trackBuilder.set("StartTimeStamp", new Date(minTime));
+				trackBuilder.set("EndTimeStamp", new Date(maxTime));
+				trackBuilder.set("Duration", maxTime - minTime);
+			} else {
+				trackBuilder.set("StartTimeStamp", null);
+				trackBuilder.set("EndTimeStamp", null);
+				trackBuilder.set("Duration", null);
+			}
+				
 			trackBuilder.set("NumberPoints", trackPoint);
 			trackBuilder.set("TrackId", gpxTrack.getTrackid().toString());
 			trackBuilder.set("UserId", gpxTrack.getUserid());
