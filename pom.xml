@@ -178,6 +178,7 @@
 		<module>geowave-gt</module>
 		<module>geowave-ingest</module>
 		<module>geowave-analytics</module>
+		<module>geowave-test</module>
 	</modules>
 
 	<repositories>
