@@ -4,7 +4,7 @@
 	<parent>
 		<artifactId>geowave-parent</artifactId>
 		<groupId>mil.nga.giat</groupId>
-		<relativePath></relativePath>
+		<relativePath>../</relativePath>
 		<version>0.8.0-SNAPSHOT</version>
 	</parent>
 	<properties>
