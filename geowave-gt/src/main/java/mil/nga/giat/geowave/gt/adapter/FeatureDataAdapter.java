@@ -4,10 +4,12 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
+import mil.nga.giat.geowave.gt.datastore.GeoWaveGTDataStore;
 import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.index.StringUtils;
 import mil.nga.giat.geowave.store.TimeUtils;
 import mil.nga.giat.geowave.store.adapter.AbstractDataAdapter;
+import mil.nga.giat.geowave.store.adapter.AdapterPersistenceEncoding;
 import mil.nga.giat.geowave.store.adapter.IndexFieldHandler;
 import mil.nga.giat.geowave.store.adapter.NativeFieldHandler;
 import mil.nga.giat.geowave.store.adapter.NativeFieldHandler.RowBuilder;
@@ -16,16 +18,26 @@ import mil.nga.giat.geowave.store.data.field.FieldReader;
 import mil.nga.giat.geowave.store.data.field.FieldUtils;
 import mil.nga.giat.geowave.store.data.field.FieldVisibilityHandler;
 import mil.nga.giat.geowave.store.data.field.FieldWriter;
+import mil.nga.giat.geowave.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.store.index.CommonIndexValue;
 
 import org.apache.log4j.Logger;
 import org.geotools.data.DataUtilities;
 import org.geotools.feature.SchemaException;
+import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
+import org.geotools.geometry.jts.JTS;
+import org.geotools.referencing.CRS;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.AttributeDescriptor;
+import org.opengis.geometry.MismatchedDimensionException;
+import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.operation.MathTransform;
+import org.opengis.referencing.operation.TransformException;
+
+import com.vividsolutions.jts.geom.Geometry;
 
 /**
  * This data adapter will handle all reading/writing concerns for storing and
@@ -45,7 +57,15 @@ public class FeatureDataAdapter extends
 		AbstractDataAdapter<SimpleFeature>
 {
 	private final static Logger LOGGER = Logger.getLogger(FeatureDataAdapter.class);
-	private SimpleFeatureType type;
+	// the original coordinate system will always be represented internally by
+	// the persisted type
+	private SimpleFeatureType persistedType;
+
+	// externally the reprojected type will always be advertised because all
+	// features will be reprojected to EPSG:4326 and the advertised feature type
+	// from the data adapter should match in CRS
+	private SimpleFeatureType reprojectedType;
+	private MathTransform transform;
 
 	protected FeatureDataAdapter() {}
 
@@ -82,8 +102,34 @@ public class FeatureDataAdapter extends
 				customIndexHandlers,
 				new ArrayList<NativeFieldHandler<SimpleFeature, Object>>(),
 				type);
-		this.type = type;
+		setFeatureType(type);
 		this.fieldVisiblityHandler = fieldVisiblityHandler;
+	}
+
+	private void setFeatureType(
+			final SimpleFeatureType type ) {
+		persistedType = type;
+		if (!GeoWaveGTDataStore.DEFAULT_CRS.equals(type.getCoordinateReferenceSystem())) {
+			reprojectedType = SimpleFeatureTypeBuilder.retype(
+					type,
+					GeoWaveGTDataStore.DEFAULT_CRS);
+			if (type.getCoordinateReferenceSystem() != null) {
+				try {
+					transform = CRS.findMathTransform(
+							type.getCoordinateReferenceSystem(),
+							GeoWaveGTDataStore.DEFAULT_CRS,
+							true);
+				}
+				catch (final FactoryException e) {
+					LOGGER.warn(
+							"Unable to create coordinate reference system transform",
+							e);
+				}
+			}
+		}
+		else {
+			reprojectedType = persistedType;
+		}
 	}
 
 	private static List<NativeFieldHandler<SimpleFeature, Object>> typeToFieldHandlers(
@@ -157,30 +203,22 @@ public class FeatureDataAdapter extends
 			return defaultHandlers;
 		}
 		LOGGER.warn("Simple Feature Type could not be used for handling the indexed data");
-		return super.getDefaultTypeMatchingHandlers(type);
+		return super.getDefaultTypeMatchingHandlers(reprojectedType);
 	}
 
 	public void setNamespace(
 			final String namespaceURI ) {
 		final SimpleFeatureTypeBuilder builder = new SimpleFeatureTypeBuilder();
-		builder.init(type);
+		builder.init(reprojectedType);
 		builder.setNamespaceURI(namespaceURI);
-		type = builder.buildFeatureType();
-	}
-
-	public void setCRS(
-			final CoordinateReferenceSystem crs ) {
-		final SimpleFeatureTypeBuilder builder = new SimpleFeatureTypeBuilder();
-		builder.init(type);
-		builder.setCRS(crs);
-		type = builder.buildFeatureType();
+		reprojectedType = builder.buildFeatureType();
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public FieldReader<Object> getReader(
 			final ByteArrayId fieldId ) {
-		final AttributeDescriptor descriptor = type.getDescriptor(StringUtils.stringFromBinary(fieldId.getBytes()));
+		final AttributeDescriptor descriptor = reprojectedType.getDescriptor(StringUtils.stringFromBinary(fieldId.getBytes()));
 		final Class<?> bindingClass = descriptor.getType().getBinding();
 		return (FieldReader<Object>) FieldUtils.getDefaultReaderForClass(bindingClass);
 	}
@@ -189,7 +227,7 @@ public class FeatureDataAdapter extends
 	@Override
 	public FieldWriter<SimpleFeature, Object> getWriter(
 			final ByteArrayId fieldId ) {
-		final AttributeDescriptor descriptor = type.getDescriptor(StringUtils.stringFromBinary(fieldId.getBytes()));
+		final AttributeDescriptor descriptor = reprojectedType.getDescriptor(StringUtils.stringFromBinary(fieldId.getBytes()));
 		final Class<?> bindingClass = descriptor.getType().getBinding();
 		FieldWriter<SimpleFeature, Object> retVal;
 		if (fieldVisiblityHandler != null) {
@@ -206,10 +244,10 @@ public class FeatureDataAdapter extends
 	@Override
 	protected byte[] defaultTypeDataToBinary() {
 		// serialize the feature type
-		final String encodedType = DataUtilities.encodeType(type);
-		final String typeName = type.getTypeName();
+		final String encodedType = DataUtilities.encodeType(persistedType);
+		final String typeName = persistedType.getTypeName();
 		final byte[] typeNameBytes = StringUtils.stringToBinary(typeName);
-		final String namespace = type.getName().getNamespaceURI();
+		final String namespace = persistedType.getName().getNamespaceURI();
 		byte[] namespaceBytes;
 		if (namespace != null) {
 			namespaceBytes = StringUtils.stringToBinary(namespace);
@@ -244,11 +282,12 @@ public class FeatureDataAdapter extends
 
 		final String encodedType = StringUtils.stringFromBinary(encodedTypeBytes);
 		try {
-			type = DataUtilities.createType(
+			setFeatureType(DataUtilities.createType(
 					namespace,
 					typeName,
-					encodedType);
-			return type;
+					encodedType));
+			// advertise the reprojected type externally
+			return reprojectedType;
 		}
 		catch (final SchemaException e) {
 			LOGGER.error(
@@ -261,13 +300,13 @@ public class FeatureDataAdapter extends
 	@Override
 	public ByteArrayId getAdapterId() {
 		return new ByteArrayId(
-				StringUtils.stringToBinary(type.getTypeName()));
+				StringUtils.stringToBinary(reprojectedType.getTypeName()));
 	}
 
 	@Override
 	public boolean isSupported(
 			final SimpleFeature entry ) {
-		return type.getName().getURI().equals(
+		return reprojectedType.getName().getURI().equals(
 				entry.getType().getName().getURI());
 	}
 
@@ -281,10 +320,68 @@ public class FeatureDataAdapter extends
 	@Override
 	protected RowBuilder<SimpleFeature, Object> newBuilder() {
 		return new FeatureRowBuilder(
-				type);
+				reprojectedType);
 	}
 
 	public SimpleFeatureType getType() {
-		return type;
+		return reprojectedType;
+	}
+
+	@Override
+	public AdapterPersistenceEncoding encode(
+			final SimpleFeature entry,
+			final CommonIndexModel indexModel ) {
+		// if the feature is in a different coordinate reference system than
+		// EPSG:4326, transform the geometry
+		final CoordinateReferenceSystem crs = entry.getFeatureType().getCoordinateReferenceSystem();
+		SimpleFeature defaultCRSEntry = entry;
+
+		if (!GeoWaveGTDataStore.DEFAULT_CRS.equals(crs)) {
+			MathTransform featureTransform = null;
+			if ((persistedType.getCoordinateReferenceSystem() != null) && persistedType.getCoordinateReferenceSystem().equals(
+					crs) && (transform != null)) {
+				// we can use the transform we have already calculated for this
+				// feature
+				featureTransform = transform;
+			}
+			else if (crs != null) {
+				// this feature differs from the persisted type in CRS,
+				// calculate the transform
+				try {
+					featureTransform = CRS.findMathTransform(
+							crs,
+							GeoWaveGTDataStore.DEFAULT_CRS,
+							true);
+				}
+				catch (final FactoryException e) {
+					LOGGER.warn(
+							"Unable to find transform to EPSG:4326, the feature geometry will remain in its original CRS",
+							e);
+				}
+			}
+			if (featureTransform != null) {
+				try {
+					// what should we do besides log a message when an entry
+					// can't be transformed to EPSG:4326 for some reason?
+					// this will clone the feature and retype it to EPSG:4326
+					defaultCRSEntry = SimpleFeatureBuilder.retype(
+							entry,
+							reprojectedType);
+					// this will transform the geometry
+					defaultCRSEntry.setDefaultGeometry(JTS.transform(
+							(Geometry) entry.getDefaultGeometry(),
+							featureTransform));
+				}
+				catch (MismatchedDimensionException | TransformException e) {
+					LOGGER.warn(
+							"Unable to perform transform to EPSG:4326, the feature geometry will remain in its original CRS",
+							e);
+				}
+			}
+		}
+
+		return super.encode(
+				defaultCRSEntry,
+				indexModel);
 	}
 }
