@@ -46,15 +46,23 @@ public class UnboundedHilbertSFCOperations implements
 					2,
 					20)).toBigInteger();
 	protected BigDecimal[] binsPerDimension;
+	protected BigInteger minHilbertValue;
+	protected BigInteger maxHilbertValue;
 
 	@Override
 	public void init(
 			final SFCDimensionDefinition[] dimensionDefs ) {
 		binsPerDimension = new BigDecimal[dimensionDefs.length];
+		int totalPrecision = 0;
 		for (int d = 0; d < dimensionDefs.length; d++) {
 			final SFCDimensionDefinition dimension = dimensionDefs[d];
 			binsPerDimension[d] = TWO.pow(dimension.getBitsOfPrecision());
+			totalPrecision += dimension.getBitsOfPrecision();
 		}
+		minHilbertValue = BigInteger.ZERO;
+		maxHilbertValue = TWO.pow(
+				totalPrecision).subtract(
+				BigDecimal.ONE).toBigInteger();
 	}
 
 	@Override
@@ -247,16 +255,26 @@ public class UnboundedHilbertSFCOperations implements
 		}
 		for (int i = 0; i < hilbertRanges.size(); i++) {
 			final FilteredIndexRange<BigIntegerRange, BigIntegerRange> range = hilbertRanges.get(i);
-
+			// sanity check that values fit within the expected range
+			// it seems that uzaygezen can produce a value at 2^totalPrecision
+			// rather than 2^totalPrecision - 1
+			final BigInteger startValue = clamp(
+					minHilbertValue,
+					maxHilbertValue,
+					range.getIndexRange().getStart());
+			final BigInteger endValue = clamp(
+					minHilbertValue,
+					maxHilbertValue,
+					range.getIndexRange().getEnd());
 			// make sure its padded if necessary
 			final byte[] start = HilbertSFC.fitExpectedByteCount(
 					expectedByteCount,
-					range.getIndexRange().getStart().toByteArray());
+					startValue.toByteArray());
 
 			// make sure its padded if necessary
 			final byte[] end = HilbertSFC.fitExpectedByteCount(
 					expectedByteCount,
-					range.getIndexRange().getEnd().toByteArray());
+					endValue.toByteArray());
 			sfcRanges[i] = new ByteArrayRange(
 					new ByteArrayId(
 							start),
@@ -268,6 +286,15 @@ public class UnboundedHilbertSFCOperations implements
 				sfcRanges);
 
 		return rangeDecomposition;
+	}
+
+	private static BigInteger clamp(
+			final BigInteger minValue,
+			final BigInteger maxValue,
+			final BigInteger value ) {
+		return value.max(
+				minValue).min(
+				maxValue);
 	}
 
 	/***

@@ -215,7 +215,10 @@ public class TieredSFCIndexStrategy implements
 			// we need to increment the bits by the number of bits per SFC ID
 			// (if the bits is not divisible by 8, the byte primitive used will
 			// have padded bits)
-			final int increment = (orderedSfcs[tier].getBitsOfPrecision() % 8) + 1;
+
+			final int increment = (int) Math.pow(
+					2,
+					getNumPaddedBitsInByte(orderedSfcs[tier].getBitsOfPrecision()));
 			retVal.add(new ByteArrayId(
 					ByteArrayUtils.combineArrays(
 							tierAndBinId,
@@ -230,7 +233,7 @@ public class TieredSFCIndexStrategy implements
 						// the increment caused an overflow which shouldn't
 						// ever happen assuming the start row ID is less
 						// than the end row ID
-						LOGGER.warn("Row IDs overflowed when ingesting data; start of range decomposition must be less than or equal to end of range. This may be ");
+						LOGGER.warn("Row IDs overflowed when ingesting data; start of range decomposition must be less than or equal to end of range. This may be because the start of the decomposed range is higher than the end of the range.");;
 						overflow = true;
 						break;
 					}
@@ -249,6 +252,15 @@ public class TieredSFCIndexStrategy implements
 			}
 		}
 		return retVal;
+	}
+
+	private static int getNumPaddedBitsInByte(
+			final int bitsOfPrecision ) {
+		int paddedBits = bitsOfPrecision % 8;
+		if (paddedBits > 0) {
+			paddedBits = 8 - paddedBits;
+		}
+		return paddedBits;
 	}
 
 	@Override

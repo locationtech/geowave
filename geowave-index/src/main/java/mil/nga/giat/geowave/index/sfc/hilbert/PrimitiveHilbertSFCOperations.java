@@ -47,16 +47,25 @@ public class PrimitiveHilbertSFCOperations implements
 			20);
 	protected long[] binsPerDimension;
 
+	protected long minHilbertValue;
+	protected long maxHilbertValue;
+
 	@Override
 	public void init(
 			final SFCDimensionDefinition[] dimensionDefs ) {
 		binsPerDimension = new long[dimensionDefs.length];
+		int totalPrecision = 0;
 		for (int d = 0; d < dimensionDefs.length; d++) {
 			final SFCDimensionDefinition dimension = dimensionDefs[d];
 			binsPerDimension[d] = (long) Math.pow(
 					2,
 					dimension.getBitsOfPrecision());
+			totalPrecision += dimension.getBitsOfPrecision();
 		}
+		minHilbertValue = 0;
+		maxHilbertValue = (long) (Math.pow(
+				2,
+				totalPrecision) - 1);
 	}
 
 	@Override
@@ -238,20 +247,30 @@ public class PrimitiveHilbertSFCOperations implements
 		}
 		for (int i = 0; i < hilbertRanges.size(); i++) {
 			final FilteredIndexRange<LongRange, LongRange> range = hilbertRanges.get(i);
-
+			// sanity check that values fit within the expected range
+			// it seems that uzaygezen can produce a value at 2^totalPrecision
+			// rather than 2^totalPrecision - 1
+			final long startValue = clamp(
+					minHilbertValue,
+					maxHilbertValue,
+					range.getIndexRange().getStart());
+			final long endValue = clamp(
+					minHilbertValue,
+					maxHilbertValue,
+					range.getIndexRange().getEnd());
 			// make sure its padded if necessary
 			final byte[] start = HilbertSFC.fitExpectedByteCount(
 					expectedByteCount,
 					ByteBuffer.allocate(
 							8).putLong(
-							range.getIndexRange().getStart()).array());
+							startValue).array());
 
 			// make sure its padded if necessary
 			final byte[] end = HilbertSFC.fitExpectedByteCount(
 					expectedByteCount,
 					ByteBuffer.allocate(
 							8).putLong(
-							range.getIndexRange().getEnd()).array());
+							endValue).array());
 			sfcRanges[i] = new ByteArrayRange(
 					new ByteArrayId(
 							start),
@@ -263,6 +282,17 @@ public class PrimitiveHilbertSFCOperations implements
 				sfcRanges);
 
 		return rangeDecomposition;
+	}
+
+	private static long clamp(
+			final long min,
+			final long max,
+			final long value ) {
+		return Math.max(
+				Math.min(
+						value,
+						max),
+				0);
 	}
 
 	/***
