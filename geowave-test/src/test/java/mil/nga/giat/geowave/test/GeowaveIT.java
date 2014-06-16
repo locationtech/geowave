@@ -56,47 +56,30 @@ import com.google.common.io.Files;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.Point;
 
-public class GeowaveIT {
+public class GeowaveIT
+{
 	private final static Logger LOGGER = Logger.getLogger(GeowaveIT.class);
 	private static final String TEST_RESOURCE_PACKAGE = "mil/nga/giat/geowave/test/";
-	private static final String TEST_DATA_ZIP_RESOURCE_PATH = TEST_RESOURCE_PACKAGE
-			+ "test-cases.zip";
+	private static final String TEST_DATA_ZIP_RESOURCE_PATH = TEST_RESOURCE_PACKAGE + "test-cases.zip";
 	private static final String TEST_CASE_BASE = "data/";
-	private static final String TEST_FILTER_PACKAGE = TEST_CASE_BASE
-			+ "filter/";
-	private static final String HAIL_TEST_CASE_PACKAGE = TEST_CASE_BASE
-			+ "hail_test_case/";
-	private static final String HAIL_SHAPEFILE_FILE = HAIL_TEST_CASE_PACKAGE
-			+ "hail.shp";
-	private static final String HAIL_EXPECTED_BOX_FILTER_RESULTS_FILE = HAIL_TEST_CASE_PACKAGE
-			+ "hail-box-filter.shp";
-	private static final String HAIL_EXPECTED_POLYGON_FILTER_RESULTS_FILE = HAIL_TEST_CASE_PACKAGE
-			+ "hail-polygon-filter.shp";
-	private static final String HAIL_EXPECTED_BOX_TEMPORAL_FILTER_RESULTS_FILE = HAIL_TEST_CASE_PACKAGE
-			+ "hail-box-temporal-filter.shp";
-	private static final String HAIL_EXPECTED_POLYGON_TEMPORAL_FILTER_RESULTS_FILE = HAIL_TEST_CASE_PACKAGE
-			+ "hail-polygon-temporal-filter.shp";
-	private static final String TORNADO_TRACKS_TEST_CASE_PACKAGE = TEST_CASE_BASE
-			+ "tornado_tracks_test_case/";
-	private static final String TORNADO_TRACKS_SHAPEFILE_FILE = TORNADO_TRACKS_TEST_CASE_PACKAGE
-			+ "tornado_tracks.shp";
-	private static final String TORNADO_TRACKS_EXPECTED_BOX_FILTER_RESULTS_FILE = TORNADO_TRACKS_TEST_CASE_PACKAGE
-			+ "tornado_tracks-box-filter.shp";
-	private static final String TORNADO_TRACKS_EXPECTED_POLYGON_FILTER_RESULTS_FILE = TORNADO_TRACKS_TEST_CASE_PACKAGE
-			+ "tornado_tracks-polygon-filter.shp";
-	private static final String TORNADO_TRACKS_EXPECTED_BOX_TEMPORAL_FILTER_RESULTS_FILE = TORNADO_TRACKS_TEST_CASE_PACKAGE
-			+ "tornado_tracks-box-temporal-filter.shp";
-	private static final String TORNADO_TRACKS_EXPECTED_POLYGON_TEMPORAL_FILTER_RESULTS_FILE = TORNADO_TRACKS_TEST_CASE_PACKAGE
-			+ "tornado_tracks-polygon-temporal-filter.shp";
+	private static final String TEST_FILTER_PACKAGE = TEST_CASE_BASE + "filter/";
+	private static final String HAIL_TEST_CASE_PACKAGE = TEST_CASE_BASE + "hail_test_case/";
+	private static final String HAIL_SHAPEFILE_FILE = HAIL_TEST_CASE_PACKAGE + "hail.shp";
+	private static final String HAIL_EXPECTED_BOX_FILTER_RESULTS_FILE = HAIL_TEST_CASE_PACKAGE + "hail-box-filter.shp";
+	private static final String HAIL_EXPECTED_POLYGON_FILTER_RESULTS_FILE = HAIL_TEST_CASE_PACKAGE + "hail-polygon-filter.shp";
+	private static final String HAIL_EXPECTED_BOX_TEMPORAL_FILTER_RESULTS_FILE = HAIL_TEST_CASE_PACKAGE + "hail-box-temporal-filter.shp";
+	private static final String HAIL_EXPECTED_POLYGON_TEMPORAL_FILTER_RESULTS_FILE = HAIL_TEST_CASE_PACKAGE + "hail-polygon-temporal-filter.shp";
+	private static final String TORNADO_TRACKS_TEST_CASE_PACKAGE = TEST_CASE_BASE + "tornado_tracks_test_case/";
+	private static final String TORNADO_TRACKS_SHAPEFILE_FILE = TORNADO_TRACKS_TEST_CASE_PACKAGE + "tornado_tracks.shp";
+	private static final String TORNADO_TRACKS_EXPECTED_BOX_FILTER_RESULTS_FILE = TORNADO_TRACKS_TEST_CASE_PACKAGE + "tornado_tracks-box-filter.shp";
+	private static final String TORNADO_TRACKS_EXPECTED_POLYGON_FILTER_RESULTS_FILE = TORNADO_TRACKS_TEST_CASE_PACKAGE + "tornado_tracks-polygon-filter.shp";
+	private static final String TORNADO_TRACKS_EXPECTED_BOX_TEMPORAL_FILTER_RESULTS_FILE = TORNADO_TRACKS_TEST_CASE_PACKAGE + "tornado_tracks-box-temporal-filter.shp";
+	private static final String TORNADO_TRACKS_EXPECTED_POLYGON_TEMPORAL_FILTER_RESULTS_FILE = TORNADO_TRACKS_TEST_CASE_PACKAGE + "tornado_tracks-polygon-temporal-filter.shp";
 
-	private static final String TEST_BOX_FILTER_FILE = TEST_FILTER_PACKAGE
-			+ "Box-Filter.shp";
-	private static final String TEST_POLYGON_FILTER_FILE = TEST_FILTER_PACKAGE
-			+ "Polygon-Filter.shp";
-	private static final String TEST_BOX_TEMPORAL_FILTER_FILE = TEST_FILTER_PACKAGE
-			+ "Box-Temporal-Filter.shp";
-	private static final String TEST_POLYGON_TEMPORAL_FILTER_FILE = TEST_FILTER_PACKAGE
-			+ "Polygon-Temporal-Filter.shp";
+	private static final String TEST_BOX_FILTER_FILE = TEST_FILTER_PACKAGE + "Box-Filter.shp";
+	private static final String TEST_POLYGON_FILTER_FILE = TEST_FILTER_PACKAGE + "Polygon-Filter.shp";
+	private static final String TEST_BOX_TEMPORAL_FILTER_FILE = TEST_FILTER_PACKAGE + "Box-Temporal-Filter.shp";
+	private static final String TEST_POLYGON_TEMPORAL_FILTER_FILE = TEST_FILTER_PACKAGE + "Polygon-Temporal-Filter.shp";
 	private static final String TEST_FILTER_START_TIME_ATTRIBUTE_NAME = "StartTime";
 	private static final String TEST_FILTER_END_TIME_ATTRIBUTE_NAME = "EndTime";
 	private static final String TEST_NAMESPACE = "mil_nga_giat_geowave_test_GeoWaveIT";
@@ -114,76 +97,88 @@ public class GeowaveIT {
 	public void testIngestAndQuerySpatialPointsAndLines() {
 		final Index spatialIndex = IndexType.SPATIAL.createDefaultIndex();
 		// ingest both lines and points
-		testIngest(IndexType.SPATIAL, HAIL_SHAPEFILE_FILE);
-		testIngest(IndexType.SPATIAL, TORNADO_TRACKS_SHAPEFILE_FILE);
+		testIngest(
+				IndexType.SPATIAL,
+				HAIL_SHAPEFILE_FILE);
+		testIngest(
+				IndexType.SPATIAL,
+				TORNADO_TRACKS_SHAPEFILE_FILE);
 
 		try {
 			testQuery(
-					new File(TEST_BOX_FILTER_FILE).toURI().toURL(),
+					new File(
+							TEST_BOX_FILTER_FILE).toURI().toURL(),
 					new URL[] {
-							new File(HAIL_EXPECTED_BOX_FILTER_RESULTS_FILE)
-									.toURI().toURL(),
-							new File(
-									TORNADO_TRACKS_EXPECTED_BOX_FILTER_RESULTS_FILE)
-									.toURI().toURL() }, spatialIndex);
-		} catch (final Exception e) {
+						new File(
+								HAIL_EXPECTED_BOX_FILTER_RESULTS_FILE).toURI().toURL(),
+						new File(
+								TORNADO_TRACKS_EXPECTED_BOX_FILTER_RESULTS_FILE).toURI().toURL()
+					},
+					spatialIndex);
+		}
+		catch (final Exception e) {
 			e.printStackTrace();
 			accumuloOperations.deleteAll();
-			Assert.fail("Error occurred while testing a bounding box query of spatial index: '"
-					+ e.getLocalizedMessage() + "'");
+			Assert.fail("Error occurred while testing a bounding box query of spatial index: '" + e.getLocalizedMessage() + "'");
 		}
 		try {
 			testQuery(
-					new File(TEST_POLYGON_FILTER_FILE).toURI().toURL(),
+					new File(
+							TEST_POLYGON_FILTER_FILE).toURI().toURL(),
 					new URL[] {
-							new File(HAIL_EXPECTED_POLYGON_FILTER_RESULTS_FILE)
-									.toURI().toURL(),
-							new File(
-									TORNADO_TRACKS_EXPECTED_POLYGON_FILTER_RESULTS_FILE)
-									.toURI().toURL() }, spatialIndex);
-		} catch (final Exception e) {
+						new File(
+								HAIL_EXPECTED_POLYGON_FILTER_RESULTS_FILE).toURI().toURL(),
+						new File(
+								TORNADO_TRACKS_EXPECTED_POLYGON_FILTER_RESULTS_FILE).toURI().toURL()
+					},
+					spatialIndex);
+		}
+		catch (final Exception e) {
 			e.printStackTrace();
 			accumuloOperations.deleteAll();
-			Assert.fail("Error occurred while testing a polygon query of spatial index: '"
-					+ e.getLocalizedMessage() + "'");
+			Assert.fail("Error occurred while testing a polygon query of spatial index: '" + e.getLocalizedMessage() + "'");
 		}
 	}
 
 	@Test
 	public void testIngestAndQuerySpatialTemporalPointsAndLines() {
 		// ingest both lines and points
-		testIngest(IndexType.SPATIAL_TEMPORAL, HAIL_SHAPEFILE_FILE);
-		testIngest(IndexType.SPATIAL_TEMPORAL, TORNADO_TRACKS_SHAPEFILE_FILE);
+		testIngest(
+				IndexType.SPATIAL_TEMPORAL,
+				HAIL_SHAPEFILE_FILE);
+		testIngest(
+				IndexType.SPATIAL_TEMPORAL,
+				TORNADO_TRACKS_SHAPEFILE_FILE);
 		try {
 			testQuery(
-					new File(TEST_BOX_TEMPORAL_FILTER_FILE).toURI().toURL(),
+					new File(
+							TEST_BOX_TEMPORAL_FILTER_FILE).toURI().toURL(),
 					new URL[] {
-							new File(
-									HAIL_EXPECTED_BOX_TEMPORAL_FILTER_RESULTS_FILE)
-									.toURI().toURL(),
-							new File(
-									TORNADO_TRACKS_EXPECTED_BOX_TEMPORAL_FILTER_RESULTS_FILE)
-									.toURI().toURL() });
-		} catch (final Exception e) {
+						new File(
+								HAIL_EXPECTED_BOX_TEMPORAL_FILTER_RESULTS_FILE).toURI().toURL(),
+						new File(
+								TORNADO_TRACKS_EXPECTED_BOX_TEMPORAL_FILTER_RESULTS_FILE).toURI().toURL()
+					});
+		}
+		catch (final Exception e) {
 			e.printStackTrace();
 			accumuloOperations.deleteAll();
-			Assert.fail("Error occurred while testing a bounding box and time range query of spatial temporal index: '"
-					+ e.getLocalizedMessage() + "'");
+			Assert.fail("Error occurred while testing a bounding box and time range query of spatial temporal index: '" + e.getLocalizedMessage() + "'");
 		}
 		try {
 			testQuery(
-					new File(TEST_POLYGON_TEMPORAL_FILTER_FILE).toURI().toURL(),
+					new File(
+							TEST_POLYGON_TEMPORAL_FILTER_FILE).toURI().toURL(),
 					new URL[] {
-							new File(
-									HAIL_EXPECTED_POLYGON_TEMPORAL_FILTER_RESULTS_FILE)
-									.toURI().toURL(),
-							new File(
-									TORNADO_TRACKS_EXPECTED_POLYGON_TEMPORAL_FILTER_RESULTS_FILE)
-									.toURI().toURL() });
-		} catch (final Exception e) {
+						new File(
+								HAIL_EXPECTED_POLYGON_TEMPORAL_FILTER_RESULTS_FILE).toURI().toURL(),
+						new File(
+								TORNADO_TRACKS_EXPECTED_POLYGON_TEMPORAL_FILTER_RESULTS_FILE).toURI().toURL()
+					});
+		}
+		catch (final Exception e) {
 			accumuloOperations.deleteAll();
-			Assert.fail("Error occurred while testing a polygon and time range query of spatial temporal index: '"
-					+ e.getLocalizedMessage() + "'");
+			Assert.fail("Error occurred while testing a polygon and time range query of spatial temporal index: '" + e.getLocalizedMessage() + "'");
 		}
 	}
 
@@ -192,57 +187,69 @@ public class GeowaveIT {
 		TimeZone.setDefault(TimeZone.getTimeZone("GMT"));
 		unZipFile(
 				GeowaveIT.class.getClassLoader().getResourceAsStream(
-						TEST_DATA_ZIP_RESOURCE_PATH), TEST_CASE_BASE);
+						TEST_DATA_ZIP_RESOURCE_PATH),
+				TEST_CASE_BASE);
 
 		zookeeper = System.getProperty("zookeeperUrl");
 		accumuloInstance = System.getProperty("instance");
 		accumuloUser = System.getProperty("username");
 		accumuloPassword = System.getProperty("password");
-		if (!isSet(zookeeper) || !isSet(accumuloInstance)
-				|| !isSet(accumuloUser) || !isSet(accumuloPassword)) {
+		if (!isSet(zookeeper) || !isSet(accumuloInstance) || !isSet(accumuloUser) || !isSet(accumuloPassword)) {
 			try {
 				tempDir = Files.createTempDir();
 				tempDir.deleteOnExit();
 				final MiniAccumuloConfig config = new MiniAccumuloConfig(
-						tempDir, DEFAULT_MINI_ACCUMULO_PASSWORD);
+						tempDir,
+						DEFAULT_MINI_ACCUMULO_PASSWORD);
 				config.setNumTservers(4);
-				miniAccumulo = new MiniAccumuloCluster(config);
+				miniAccumulo = new MiniAccumuloCluster(
+						config);
 				miniAccumulo.start();
 				zookeeper = miniAccumulo.getZooKeepers();
 				accumuloInstance = miniAccumulo.getInstanceName();
 				accumuloUser = "root";
 				accumuloPassword = DEFAULT_MINI_ACCUMULO_PASSWORD;
-			} catch (IOException | InterruptedException e) {
-				LOGGER.warn("Unable to start mini accumulo instance", e);
-				LOGGER.info("Check '" + tempDir.getAbsolutePath()
-						+ File.separator + "logs' for more info");
+			}
+			catch (IOException | InterruptedException e) {
+				LOGGER.warn(
+						"Unable to start mini accumulo instance",
+						e);
+				LOGGER.info("Check '" + tempDir.getAbsolutePath() + File.separator + "logs' for more info");
 				if (SystemUtils.IS_OS_WINDOWS) {
 					LOGGER.warn("For windows, make sure that Cygwin is installed and set a CYGPATH environment variable to %CYGWIN_HOME%/bin/cygpath to successfully run a mini accumulo cluster");
 				}
-				Assert.fail("Unable to start mini accumulo instance: '"
-						+ e.getLocalizedMessage() + "'");
+				Assert.fail("Unable to start mini accumulo instance: '" + e.getLocalizedMessage() + "'");
 			}
 		}
 		try {
-			accumuloOperations = new BasicAccumuloOperations(zookeeper,
-					accumuloInstance, accumuloUser, accumuloPassword,
+			accumuloOperations = new BasicAccumuloOperations(
+					zookeeper,
+					accumuloInstance,
+					accumuloUser,
+					accumuloPassword,
 					TEST_NAMESPACE);
-		} catch (AccumuloException | AccumuloSecurityException e) {
-			LOGGER.warn("Unable to connect to Accumulo", e);
-			Assert.fail("Could not connect to Accumulo instance: '"
-					+ e.getLocalizedMessage() + "'");
+		}
+		catch (AccumuloException | AccumuloSecurityException e) {
+			LOGGER.warn(
+					"Unable to connect to Accumulo",
+					e);
+			Assert.fail("Could not connect to Accumulo instance: '" + e.getLocalizedMessage() + "'");
 		}
 	}
 
 	@AfterClass
 	public static void cleanup() {
-		Assert.assertTrue("Index not deleted successfully",
+		Assert.assertTrue(
+				"Index not deleted successfully",
 				accumuloOperations.deleteAll());
 		if (miniAccumulo != null) {
 			try {
 				miniAccumulo.stop();
-			} catch (IOException | InterruptedException e) {
-				LOGGER.warn("Unable to stop mini accumulo instance", e);
+			}
+			catch (IOException | InterruptedException e) {
+				LOGGER.warn(
+						"Unable to stop mini accumulo instance",
+						e);
 			}
 			try {
 				// sleep because mini accumulo processes still have a hold on
@@ -250,77 +257,83 @@ public class GeowaveIT {
 				// completely stopped
 				Thread.sleep(1000);
 				FileUtils.deleteDirectory(tempDir);
-			} catch (final IOException | InterruptedException e) {
+			}
+			catch (final IOException | InterruptedException e) {
 				LOGGER.warn(
-						"Unable to delete mini Accumulo temporary directory", e);
+						"Unable to delete mini Accumulo temporary directory",
+						e);
 			}
 		}
 	}
 
-	private void testIngest(final IndexType indexType, final String filePath) {
+	private void testIngest(
+			final IndexType indexType,
+			final String filePath ) {
 		final Options options = VectorFileIngest.getCommandLineOptions();
 
 		final CommandLineParser parser = new BasicParser();
 
-		final String[] args = StringUtils.split("-f "
-				+ filePath
-				+ " -z "
-				+ zookeeper
-				+ " -i "
-				+ accumuloInstance
-				+ " -u "
-				+ accumuloUser
-				+ " -p "
-				+ accumuloPassword
-				+ " -n "
-				+ TEST_NAMESPACE
-				+ " -t "
-				+ (indexType.equals(IndexType.SPATIAL) ? "spatial"
-						: "spatial-temporal"), ' ');
+		final String[] args = StringUtils.split(
+				"-f " + filePath + " -z " + zookeeper + " -i " + accumuloInstance + " -u " + accumuloUser + " -p " + accumuloPassword + " -n " + TEST_NAMESPACE + " -t " + (indexType.equals(IndexType.SPATIAL) ? "spatial" : "spatial-temporal"),
+				' ');
 
 		try {
-			final CommandLine line = parser.parse(options, args);
+			final CommandLine line = parser.parse(
+					options,
+					args);
 
-			final VectorFileIngest ingester = VectorFileIngest
-					.createVectorFileIngest(line);
+			final VectorFileIngest ingester = VectorFileIngest.createVectorFileIngest(line);
 			Assert.assertTrue(ingester.ingest());
-		} catch (MalformedURLException | ParseException | AccumuloException
-				| AccumuloSecurityException e) {
+		}
+		catch (MalformedURLException | ParseException | AccumuloException | AccumuloSecurityException e) {
 			e.printStackTrace();
 			accumuloOperations.deleteAll();
 			Assert.fail("unable to ingest resource");
 		}
 	}
 
-	private static boolean isSet(final String str) {
+	private static boolean isSet(
+			final String str ) {
 		return (str != null) && !str.isEmpty();
 	}
 
-	private void testQuery(final URL savedFilterResource,
-			final URL[] expectedResultsResources) throws Exception {
+	private void testQuery(
+			final URL savedFilterResource,
+			final URL[] expectedResultsResources )
+			throws Exception {
 		// test the query with an unspecified index
-		testQuery(savedFilterResource, expectedResultsResources, null);
+		testQuery(
+				savedFilterResource,
+				expectedResultsResources,
+				null);
 	}
 
-	private void testQuery(final URL savedFilterResource,
-			final URL[] expectedResultsResources, final Index index)
+	private void testQuery(
+			final URL savedFilterResource,
+			final URL[] expectedResultsResources,
+			final Index index )
 			throws Exception {
 		final mil.nga.giat.geowave.store.DataStore geowaveStore = new AccumuloDataStore(
-				new AccumuloIndexStore(accumuloOperations),
-				new AccumuloAdapterStore(accumuloOperations),
+				new AccumuloIndexStore(
+						accumuloOperations),
+				new AccumuloAdapterStore(
+						accumuloOperations),
 				accumuloOperations);
 		final Map<String, Object> map = new HashMap<String, Object>();
 		DataStore dataStore = null;
-		map.put("url", savedFilterResource);
+		map.put(
+				"url",
+				savedFilterResource);
 		final SimpleFeature savedFilter;
 		try {
 			dataStore = DataStoreFinder.getDataStore(map);
 
 			// just grab the first feature and use it as a filter
-			savedFilter = dataStore
-					.getFeatureSource(dataStore.getNames().get(0))
-					.getFeatures().features().next();
-		} finally {
+			savedFilter = dataStore.getFeatureSource(
+					dataStore.getNames().get(
+							0)).getFeatures().features().next();
+		}
+		finally {
 			dataStore.dispose();
 		}
 		// this file is the filtered dataset (using the previous file as a
@@ -328,32 +341,35 @@ public class GeowaveIT {
 		final Set<Long> hashedCentroids = new HashSet<Long>();
 		int expectedResultCount = 0;
 		for (final URL expectedResultsResource : expectedResultsResources) {
-			map.put("url", expectedResultsResource);
+			map.put(
+					"url",
+					expectedResultsResource);
 			try {
 				dataStore = DataStoreFinder.getDataStore(map);
-				final SimpleFeatureCollection expectedResults = dataStore
-						.getFeatureSource(dataStore.getNames().get(0))
-						.getFeatures();
+				final SimpleFeatureCollection expectedResults = dataStore.getFeatureSource(
+						dataStore.getNames().get(
+								0)).getFeatures();
 
 				expectedResultCount += expectedResults.size();
 				// unwrap the expected results into a set of features IDs so its
 				// easy to
 				// check against
-				final SimpleFeatureIterator featureIterator = expectedResults
-						.features();
+				final SimpleFeatureIterator featureIterator = expectedResults.features();
 				while (featureIterator.hasNext()) {
-					hashedCentroids.add(hashCentroid((Geometry) featureIterator
-							.next().getDefaultGeometry()));
+					hashedCentroids.add(hashCentroid((Geometry) featureIterator.next().getDefaultGeometry()));
 				}
-			} finally {
+			}
+			finally {
 				dataStore.dispose();
 			}
 		}
 		final Iterator<?> actualResults;
 		if (index == null) {
 			actualResults = geowaveStore.query(savedFilterToQuery(savedFilter));
-		} else {
-			actualResults = geowaveStore.query(index,
+		}
+		else {
+			actualResults = geowaveStore.query(
+					index,
 					savedFilterToQuery(savedFilter));
 		}
 		int totalResults = 0;
@@ -361,36 +377,35 @@ public class GeowaveIT {
 			final Object obj = actualResults.next();
 			if (obj instanceof SimpleFeature) {
 				final SimpleFeature result = (SimpleFeature) obj;
-				Assert.assertTrue("Actual result '" + result.toString()
-						+ "' not found in expected result set", hashedCentroids
-						.contains(hashCentroid((Geometry) result
-								.getDefaultGeometry())));
+				Assert.assertTrue(
+						"Actual result '" + result.toString() + "' not found in expected result set",
+						hashedCentroids.contains(hashCentroid((Geometry) result.getDefaultGeometry())));
 				totalResults++;
-			} else {
+			}
+			else {
 				accumuloOperations.deleteAll();
-				Assert.fail("Actual result '" + obj.toString()
-						+ "' is not of type Simple Feature.");
+				Assert.fail("Actual result '" + obj.toString() + "' is not of type Simple Feature.");
 			}
 		}
 		if (expectedResultCount != totalResults) {
 			accumuloOperations.deleteAll();
 		}
-		Assert.assertEquals(expectedResultCount, totalResults);
+		Assert.assertEquals(
+				expectedResultCount,
+				totalResults);
 	}
 
-	private long hashCentroid(final Geometry geometry) {
+	private long hashCentroid(
+			final Geometry geometry ) {
 		final Point centroid = geometry.getCentroid();
-		return Double.doubleToLongBits(centroid.getX())
-				+ Double.doubleToLongBits(centroid.getY() * 31);
+		return Double.doubleToLongBits(centroid.getX()) + Double.doubleToLongBits(centroid.getY() * 31);
 	}
 
-	private Query savedFilterToQuery(final SimpleFeature savedFilter) {
-		final Geometry filterGeometry = (Geometry) savedFilter
-				.getDefaultGeometry();
-		final Object startObj = savedFilter
-				.getAttribute(TEST_FILTER_START_TIME_ATTRIBUTE_NAME);
-		final Object endObj = savedFilter
-				.getAttribute(TEST_FILTER_END_TIME_ATTRIBUTE_NAME);
+	private Query savedFilterToQuery(
+			final SimpleFeature savedFilter ) {
+		final Geometry filterGeometry = (Geometry) savedFilter.getDefaultGeometry();
+		final Object startObj = savedFilter.getAttribute(TEST_FILTER_START_TIME_ATTRIBUTE_NAME);
+		final Object endObj = savedFilter.getAttribute(TEST_FILTER_END_TIME_ATTRIBUTE_NAME);
 
 		if ((startObj != null) && (endObj != null)) {
 			// if we can resolve start and end times, make it a spatial temporal
@@ -398,21 +413,26 @@ public class GeowaveIT {
 			Date startDate = null, endDate = null;
 			if (startObj instanceof Calendar) {
 				startDate = ((Calendar) startObj).getTime();
-			} else if (startObj instanceof Date) {
+			}
+			else if (startObj instanceof Date) {
 				startDate = (Date) startObj;
 			}
 			if (endObj instanceof Calendar) {
 				endDate = ((Calendar) endObj).getTime();
-			} else if (startObj instanceof Date) {
+			}
+			else if (startObj instanceof Date) {
 				endDate = (Date) endObj;
 			}
 			if ((startDate != null) && (endDate != null)) {
-				return new SpatialTemporalQuery(startDate, endDate,
+				return new SpatialTemporalQuery(
+						startDate,
+						endDate,
 						filterGeometry);
 			}
 		}
 		// otherwise just return a spatial query
-		return new SpatialQuery(filterGeometry);
+		return new SpatialQuery(
+				filterGeometry);
 	}
 
 	/**
@@ -425,21 +445,24 @@ public class GeowaveIT {
 	 * @param output
 	 *            zip file output folder
 	 */
-	private static void unZipFile(final InputStream zipStream,
-			final String outputFolder) {
+	private static void unZipFile(
+			final InputStream zipStream,
+			final String outputFolder ) {
 
 		final byte[] buffer = new byte[1024];
 
 		try {
 
 			// create output directory is not exists
-			final File folder = new File(outputFolder);
+			final File folder = new File(
+					outputFolder);
 			if (!folder.exists()) {
 				folder.mkdir();
 			}
 
 			// get the zip file content
-			final ZipInputStream zis = new ZipInputStream(zipStream);
+			final ZipInputStream zis = new ZipInputStream(
+					zipStream);
 			// get the zipped file list entry
 			ZipEntry ze = zis.getNextEntry();
 
@@ -449,25 +472,31 @@ public class GeowaveIT {
 					continue;
 				}
 				final String fileName = ze.getName();
-				final File newFile = new File(outputFolder + File.separator
-						+ fileName);
+				final File newFile = new File(
+						outputFolder + File.separator + fileName);
 				if (newFile.exists()) {
 					if (newFile.length() == ze.getSize()) {
 						ze = zis.getNextEntry();
 						continue;
-					} else {
+					}
+					else {
 						newFile.delete();
 					}
 				}
 
 				// create all non exists folders
-				new File(newFile.getParent()).mkdirs();
+				new File(
+						newFile.getParent()).mkdirs();
 
-				final FileOutputStream fos = new FileOutputStream(newFile);
+				final FileOutputStream fos = new FileOutputStream(
+						newFile);
 
 				int len;
 				while ((len = zis.read(buffer)) > 0) {
-					fos.write(buffer, 0, len);
+					fos.write(
+							buffer,
+							0,
+							len);
 				}
 
 				fos.close();
@@ -476,10 +505,12 @@ public class GeowaveIT {
 
 			zis.closeEntry();
 			zis.close();
-		} catch (final IOException e) {
-			LOGGER.warn("Unable to extract test data", e);
-			Assert.fail("Unable to extract test data: '"
-					+ e.getLocalizedMessage() + "'");
+		}
+		catch (final IOException e) {
+			LOGGER.warn(
+					"Unable to extract test data",
+					e);
+			Assert.fail("Unable to extract test data: '" + e.getLocalizedMessage() + "'");
 		}
 	}
 }
