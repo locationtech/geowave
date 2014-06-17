@@ -43,43 +43,47 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-failsafe-plugin</artifactId>
-				<executions>
-					<execution>
-						<configuration>
-							<systemPropertyVariables>
-								<zookeeperUrl>${zookeeperUrl}</zookeeperUrl>
-								<instance>${instance}</instance>
-								<username>${username}</username>
-								<password>${password}</password>
-							</systemPropertyVariables>
-							<!-- Sonar currently just supports surefire so "trick" Sonar into 
-								thinking they are surefire reports -->
-							<reportsDirectory>${sonar.surefire.reportsPath}</reportsDirectory>
-							<argLine>${test.args} ${jacoco.failsafe.argLine}</argLine>
-							<runOrder>reversealphabetical</runOrder>
-						</configuration>
-						<goals>
-							<goal>integration-test</goal>
-							<goal>verify</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
-	</build>
-
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>com.google.guava</groupId>
-				<artifactId>guava</artifactId>
-				<version>14.0-rc1</version>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
+	<profiles>
+		<profile>
+			<id>integration-test</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-failsafe-plugin</artifactId>
+						<executions>
+							<execution>
+								<configuration>
+									<systemPropertyVariables>
+										<zookeeperUrl>${zookeeperUrl}</zookeeperUrl>
+										<instance>${instance}</instance>
+										<username>${username}</username>
+										<password>${password}</password>
+									</systemPropertyVariables>
+									<!-- Sonar currently just supports surefire so "trick" Sonar into 
+										thinking they are surefire reports -->
+									<reportsDirectory>${sonar.surefire.reportsPath}</reportsDirectory>
+									<argLine>${test.args} ${jacoco.failsafe.argLine}</argLine>
+									<runOrder>reversealphabetical</runOrder>
+								</configuration>
+								<goals>
+									<goal>integration-test</goal>
+									<goal>verify</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+			<dependencyManagement>
+				<dependencies>
+					<dependency>
+						<groupId>com.google.guava</groupId>
+						<artifactId>guava</artifactId>
+						<version>14.0-rc1</version>
+					</dependency>
+				</dependencies>
+			</dependencyManagement>
+		</profile>
+	</profiles>
 </project>
