@@ -13,6 +13,7 @@ import mil.nga.giat.geowave.store.query.BasicQuery.Constraints;
 
 import org.apache.log4j.Logger;
 
+import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Envelope;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
@@ -162,7 +163,8 @@ public class GeometryUtils
 	 */
 	public static byte[] geometryToBinary(
 			final Geometry geometry ) {
-		return new WKBWriter().write(geometry);
+		int outDim = (Double.isNaN(geometry.getCoordinate().getOrdinate(Coordinate.Z))) ? 2 : 3;
+		return new WKBWriter(outDim).write(geometry);
 	}
 
 	/**
