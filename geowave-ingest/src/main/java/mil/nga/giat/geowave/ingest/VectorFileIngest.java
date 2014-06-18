@@ -286,19 +286,25 @@ public class VectorFileIngest extends
 		return success;
 	}
 
-	private boolean ingestUrl(
-			URL url )
+	private boolean ingestUrl( URL url )
 			throws IOException {
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put(
-				"url",
-				url);
-		DataStore dataStore = DataStoreFinder.getDataStore(map);
-		if (dataStore != null) {
-			return ingestDataStore(dataStore);
+		map.put("url", url);
+		boolean ret = false;
+		DataStore dataStore = null;
+		try {
+			 dataStore = DataStoreFinder.getDataStore(map);
+			if (dataStore != null) {
+				ret = ingestDataStore(dataStore);
+			}
+		} catch (Exception ex) {
+			LOGGER.error("Error ingesting: " + url.toString(), ex);
+		} finally {
+			if (dataStore != null){
+				dataStore.dispose();
+			}
 		}
-		LOGGER.warn("Feature not found associated with URL '" + url + "'");
-		return false;
+		return ret;
 	}
 
 }

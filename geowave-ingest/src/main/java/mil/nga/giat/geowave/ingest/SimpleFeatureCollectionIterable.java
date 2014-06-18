@@ -31,10 +31,15 @@ public class SimpleFeatureCollectionIterable implements
 
 		@Override
 		public void remove() {}
+		
+		public void close() {
+			featureIterator.close();
+		}
 
 	}
 
 	private final SimpleFeatureCollection featureCollection;
+	private InternalIterator iter;
 
 	public SimpleFeatureCollectionIterable(
 			SimpleFeatureCollection featureCollection ) {
@@ -42,10 +47,16 @@ public class SimpleFeatureCollectionIterable implements
 	}
 
 	@Override
-	public Iterator<SimpleFeature> iterator() {
-		return new InternalIterator(
-				featureCollection.features());
-		// TODO these feature collection iterators are never closed
+	public InternalIterator iterator() {
+		if (iter == null)
+			iter =  new InternalIterator(featureCollection.features());
+		return iter;
+	}
+	
+	public void close(){
+		if (iter != null){
+			iter.close();
+		}
 	}
 
 }
