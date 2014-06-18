@@ -43,9 +43,6 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-	<profiles>
-		<profile>
-			<id>integration-test</id>
 			<build>
 				<plugins>
 					<plugin>
@@ -84,6 +81,4 @@
 					</dependency>
 				</dependencies>
 			</dependencyManagement>
-		</profile>
-	</profiles>
 </project>

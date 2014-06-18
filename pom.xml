@@ -72,7 +72,7 @@
 											jacoco-maven-plugin
 										</artifactId>
 										<versionRange>
-											[0.6.3.201306030806,)
+											[0.7.1.201405082137,)
 										</versionRange>
 										<goals>
 											<goal>prepare-agent</goal>
@@ -94,7 +94,7 @@
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>0.6.3.201306030806</version>
+				<version>0.7.1.201405082137</version>
 				<configuration>
 					<includes>
 						<include>mil/nga/giat/geowave**</include>
