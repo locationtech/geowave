@@ -367,8 +367,8 @@ public class GeowaveIT
 				}
 			}
 			finally {
-				dataStore.dispose();
 				featureIterator.close();
+				dataStore.dispose();
 			}
 		}
 		final CloseableIterator<?> actualResults;
