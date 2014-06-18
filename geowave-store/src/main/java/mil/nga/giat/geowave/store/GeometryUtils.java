@@ -163,8 +163,10 @@ public class GeometryUtils
 	 */
 	public static byte[] geometryToBinary(
 			final Geometry geometry ) {
-		int outDim = (Double.isNaN(geometry.getCoordinate().getOrdinate(Coordinate.Z))) ? 2 : 3;
-		return new WKBWriter(outDim).write(geometry);
+		int outDim = (Double.isNaN(geometry.getCoordinate().getOrdinate(
+				Coordinate.Z))) ? 2 : 3;
+		return new WKBWriter(
+				outDim).write(geometry);
 	}
 
 	/**
