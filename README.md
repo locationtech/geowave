@@ -40,15 +40,10 @@ MapReduce 1 with the new API (org.apache.hadoop.mapreduce.*) is used.  Testing i
 
 ### Building: Maven!
 
-There is one dependency - [uzaygezen](https://code.google.com/p/uzaygezen/) (a compact hilbert space filling curve implementation in java) - which is not in maven central.   So let's install that locally first:
-
-    $ svn checkout http://uzaygezen.googlecode.com/svn/tags/uzaygezen-0.2/ uzaygezen-read-only
-	$ cd uzaygezen-read-only && mvn install
-
-Next, since GeoWave itself isn't currently in maven central we will build and install a local copy
+Since GeoWave isn't currently in maven central we will build and install a local copy
 
 	$ git clone git@github.com:ngageoint/geowave.git
-	$ cd geowave && mvn install
+	$ cd geowave && mvn install 
 
 If everything worked as expected you should see something like
 
