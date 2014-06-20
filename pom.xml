@@ -21,7 +21,6 @@
 	
 
 	<properties>
-		<geowave.version>0.8.0-SNAPSHOT</geowave.version>
 		<geotools.version>11.0</geotools.version>
 		<geoserver.version>2.5</geoserver.version>
 		<accumulo.version>1.5.0</accumulo.version>
