@@ -23,6 +23,7 @@ import mil.nga.giat.geowave.accumulo.AccumuloIndexStore;
 import mil.nga.giat.geowave.accumulo.AccumuloOperations;
 import mil.nga.giat.geowave.accumulo.BasicAccumuloOperations;
 import mil.nga.giat.geowave.ingest.VectorFileIngest;
+import mil.nga.giat.geowave.store.CloseableIterator;
 import mil.nga.giat.geowave.store.index.Index;
 import mil.nga.giat.geowave.store.index.IndexType;
 import mil.nga.giat.geowave.store.query.Query;
@@ -325,25 +326,31 @@ public class GeowaveIT
 				"url",
 				savedFilterResource);
 		final SimpleFeature savedFilter;
+		SimpleFeatureIterator sfi = null;
 		try {
 			dataStore = DataStoreFinder.getDataStore(map);
+			
 
 			// just grab the first feature and use it as a filter
-			savedFilter = dataStore.getFeatureSource(
+			sfi = dataStore.getFeatureSource(
 					dataStore.getNames().get(
-							0)).getFeatures().features().next();
+							0)).getFeatures().features();
+			savedFilter = sfi.next();
+			
 		}
 		finally {
+			if (sfi != null)
+				sfi.close();
 			dataStore.dispose();
+			
 		}
 		// this file is the filtered dataset (using the previous file as a
 		// filter) so use it to ensure the query worked
 		final Set<Long> hashedCentroids = new HashSet<Long>();
 		int expectedResultCount = 0;
 		for (final URL expectedResultsResource : expectedResultsResources) {
-			map.put(
-					"url",
-					expectedResultsResource);
+			map.put("url",	expectedResultsResource);
+			SimpleFeatureIterator featureIterator = null;
 			try {
 				dataStore = DataStoreFinder.getDataStore(map);
 				final SimpleFeatureCollection expectedResults = dataStore.getFeatureSource(
@@ -354,16 +361,17 @@ public class GeowaveIT
 				// unwrap the expected results into a set of features IDs so its
 				// easy to
 				// check against
-				final SimpleFeatureIterator featureIterator = expectedResults.features();
+				featureIterator = expectedResults.features();
 				while (featureIterator.hasNext()) {
 					hashedCentroids.add(hashCentroid((Geometry) featureIterator.next().getDefaultGeometry()));
 				}
 			}
 			finally {
+				featureIterator.close();
 				dataStore.dispose();
 			}
 		}
-		final Iterator<?> actualResults;
+		final CloseableIterator<?> actualResults;
 		if (index == null) {
 			actualResults = geowaveStore.query(savedFilterToQuery(savedFilter));
 		}
@@ -393,6 +401,7 @@ public class GeowaveIT
 		Assert.assertEquals(
 				expectedResultCount,
 				totalResults);
+		actualResults.close();
 	}
 
 	private long hashCentroid(

@@ -17,6 +17,7 @@ import org.geotools.data.DataStore;
 import org.geotools.data.simple.SimpleFeatureCollection;
 import org.geotools.data.simple.SimpleFeatureSource;
 import org.opengis.feature.simple.SimpleFeature;
+import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.Name;
 
 abstract public class AbstractGeotoolsIngest
@@ -54,19 +55,22 @@ abstract public class AbstractGeotoolsIngest
 		for (Name name : names) {
 			SimpleFeatureSource source = dataStore.getFeatureSource(name);
 			SimpleFeatureCollection featureCollection = source.getFeatures();
+			SimpleFeatureCollectionIterable iter = new SimpleFeatureCollectionIterable(featureCollection);
 			try {
 				geowaveDataStore.ingest(
 						new FeatureDataAdapter(
 								featureCollection.getSchema()),
 						indexType.createDefaultIndex(),
-						new SimpleFeatureCollectionIterable(
-								featureCollection).iterator());
+						iter.iterator());
 
 			}
 			catch (Exception e) {
 				LOGGER.error(
 						"Unable to ingest data source for feature name '" + name + "'",
 						e);
+			} finally {
+				iter.close();
+				
 			}
 		}
 		return success;
