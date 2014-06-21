@@ -10,7 +10,7 @@ public class MainCommandLineOptions
 {
 	private final static Logger LOGGER = Logger.getLogger(MainCommandLineOptions.class);
 
-	private static enum Operation {
+	public static enum Operation {
 		LOCAL_INGEST,
 		STAGE_TO_HDFS,
 		INGEST_FROM_HDFS,
