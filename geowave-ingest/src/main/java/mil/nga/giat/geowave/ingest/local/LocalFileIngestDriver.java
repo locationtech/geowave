@@ -14,6 +14,7 @@ import mil.nga.giat.geowave.ingest.AccumuloCommandLineOptions;
 import mil.nga.giat.geowave.ingest.GeoWaveData;
 import mil.nga.giat.geowave.ingest.IngestRunData;
 import mil.nga.giat.geowave.ingest.IngestTypePluginProviderSpi;
+import mil.nga.giat.geowave.ingest.MainCommandLineOptions.Operation;
 import mil.nga.giat.geowave.store.DataStore;
 import mil.nga.giat.geowave.store.IndexWriter;
 import mil.nga.giat.geowave.store.adapter.WritableDataAdapter;
@@ -22,6 +23,7 @@ import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
 import org.apache.log4j.Logger;
 
 public class LocalFileIngestDriver extends
@@ -31,16 +33,25 @@ public class LocalFileIngestDriver extends
 	protected AccumuloCommandLineOptions accumulo;
 	protected IndexWriter indexWriter;
 
+	public LocalFileIngestDriver(
+			final Operation operation ) {
+		super(
+				operation);
+	}
+
 	@Override
 	public void parseOptions(
-			final CommandLine commandLine ) {
+			final CommandLine commandLine )
+			throws ParseException {
 		accumulo = AccumuloCommandLineOptions.parseOptions(commandLine);
+		super.parseOptions(commandLine);
 	}
 
 	@Override
 	public void applyOptions(
 			final Options allOptions ) {
 		AccumuloCommandLineOptions.applyOptions(allOptions);
+		super.applyOptions(allOptions);
 	}
 
 	@Override

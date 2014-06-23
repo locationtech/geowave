@@ -7,11 +7,13 @@ import java.util.List;
 import java.util.Map;
 
 import mil.nga.giat.geowave.ingest.IngestTypePluginProviderSpi;
+import mil.nga.giat.geowave.ingest.MainCommandLineOptions.Operation;
 import mil.nga.giat.geowave.ingest.local.AbstractLocalFileDriver;
 
 import org.apache.avro.file.DataFileWriter;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
@@ -23,16 +25,25 @@ public class StageToHdfsDriver extends
 	private final static Logger LOGGER = Logger.getLogger(StageToHdfsDriver.class);
 	private HdfsCommandLineOptions hdfsOptions;
 
+	public StageToHdfsDriver(
+			final Operation operation ) {
+		super(
+				operation);
+	}
+
 	@Override
 	public void parseOptions(
-			final CommandLine commandLine ) {
+			final CommandLine commandLine )
+			throws ParseException {
 		hdfsOptions = HdfsCommandLineOptions.parseOptions(commandLine);
+		super.parseOptions(commandLine);
 	}
 
 	@Override
 	public void applyOptions(
 			final Options allOptions ) {
 		HdfsCommandLineOptions.applyOptions(allOptions);
+		super.applyOptions(allOptions);
 	}
 
 	@Override

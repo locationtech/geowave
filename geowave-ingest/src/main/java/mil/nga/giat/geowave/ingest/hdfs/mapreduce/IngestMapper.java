@@ -39,7 +39,7 @@ public class IngestMapper extends
 			context.write(
 					d.getAdapter(
 							adapterStore).getAdapterId(),
-					value);
+					d.getData());
 		}
 	}
 

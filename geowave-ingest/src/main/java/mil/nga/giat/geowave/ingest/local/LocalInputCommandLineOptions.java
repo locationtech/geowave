@@ -3,6 +3,7 @@ package mil.nga.giat.geowave.ingest.local;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
 import org.apache.log4j.Logger;
 
 public class LocalInputCommandLineOptions
@@ -27,10 +28,15 @@ public class LocalInputCommandLineOptions
 	}
 
 	public static LocalInputCommandLineOptions parseOptions(
-			final CommandLine commandLine ) {
+			final CommandLine commandLine )
+			throws ParseException {
 		String value = null;
 		if (commandLine.hasOption("b")) {
 			value = commandLine.getOptionValue("b");
+		}
+		else {
+			throw new ParseException(
+					"Unable to ingest data, input file or base directory not specified");
 		}
 		String[] extensions = null;
 
@@ -57,13 +63,13 @@ public class LocalInputCommandLineOptions
 		allOptions.addOption(new Option(
 				"b",
 				"base",
-				false,
+				true,
 				"Base input file or directory to crawl with one of the supported ingest types"));
 
 		allOptions.addOption(
 				"x",
 				"extension",
-				false,
-				"individual or comma-delimited set of file extensions to accept");
+				true,
+				"individual or comma-delimited set of file extensions to accept (optional)");
 	}
 }

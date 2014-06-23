@@ -74,7 +74,8 @@ public class AccumuloDataStore implements
 			final Index index ) {
 		return new AccumuloIndexWriter(
 				index,
-				accumuloOperations);
+				accumuloOperations,
+				this);
 	}
 
 	@Override
@@ -104,14 +105,14 @@ public class AccumuloDataStore implements
 		return new ArrayList<ByteArrayId>();
 	}
 
-	private synchronized void store(
+	protected synchronized void store(
 			final DataAdapter<?> adapter ) {
 		if (!adapterStore.adapterExists(adapter.getAdapterId())) {
 			adapterStore.addAdapter(adapter);
 		}
 	}
 
-	private synchronized void store(
+	protected synchronized void store(
 			final Index index ) {
 		if (!indexStore.indexExists(index.getId())) {
 			indexStore.addIndex(index);

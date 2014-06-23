@@ -25,7 +25,7 @@ public class IngestWithMapperJobRunner extends
 		Configured implements
 		Tool
 {
-	private static String JOB_NAME = "%s Ingest from %s to namespace %s (map only)";
+	private static String JOB_NAME = "%s ingest from %s to namespace %s (map only)";
 	private final AccumuloCommandLineOptions accumuloOptions;
 	private final Path inputFile;
 	private final String typeName;
@@ -78,7 +78,7 @@ public class IngestWithMapperJobRunner extends
 		AvroJob.setInputKeySchema(
 				job,
 				plugin.getAvroSchemaForHdfsType());
-		FileInputFormat.setInputPaths(
+		AvroKeyInputFormat.setInputPaths(
 				job,
 				inputFile);
 

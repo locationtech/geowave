@@ -9,10 +9,12 @@ import java.util.concurrent.TimeUnit;
 import mil.nga.giat.geowave.ingest.AbstractCommandLineDriver;
 import mil.nga.giat.geowave.ingest.AccumuloCommandLineOptions;
 import mil.nga.giat.geowave.ingest.IngestTypePluginProviderSpi;
+import mil.nga.giat.geowave.ingest.MainCommandLineOptions.Operation;
 import mil.nga.giat.geowave.ingest.hdfs.HdfsCommandLineOptions;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
@@ -28,6 +30,12 @@ public class IngestFromHdfsDriver extends
 	private HdfsCommandLineOptions hdfsOptions;
 	private AccumuloCommandLineOptions accumuloOptions;
 	private static ExecutorService singletonExecutor;
+
+	public IngestFromHdfsDriver(
+			final Operation operation ) {
+		super(
+				operation);
+	}
 
 	private static synchronized ExecutorService getSingletonExecutorService() {
 		if (singletonExecutor == null) {
@@ -48,7 +56,7 @@ public class IngestFromHdfsDriver extends
 				"fs.hdfs.impl",
 				org.apache.hadoop.hdfs.DistributedFileSystem.class.getName());
 		final Path hdfsBaseDirectory = new Path(
-				hdfsOptions.getBasePath());
+				"hdfs://" + hdfsOptions.getHdfsHostPort() + "/" + hdfsOptions.getBasePath());
 		try {
 			final FileSystem fs = FileSystem.get(conf);
 			if (!fs.exists(hdfsBaseDirectory)) {
@@ -193,7 +201,8 @@ public class IngestFromHdfsDriver extends
 
 	@Override
 	public void parseOptions(
-			final CommandLine commandLine ) {
+			final CommandLine commandLine )
+			throws ParseException {
 		accumuloOptions = AccumuloCommandLineOptions.parseOptions(commandLine);
 		hdfsOptions = HdfsCommandLineOptions.parseOptions(commandLine);
 	}

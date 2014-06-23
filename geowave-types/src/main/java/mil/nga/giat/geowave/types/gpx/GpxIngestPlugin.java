@@ -94,7 +94,8 @@ public class GpxIngestPlugin implements
 	@Override
 	public String[] getFileExtensionFilters() {
 		return new String[] {
-			"xml"
+			"xml",
+			"gpx"
 		};
 	}
 
@@ -215,7 +216,8 @@ public class GpxIngestPlugin implements
 
 	@Override
 	public IngestWithMapper<GpxTrack, SimpleFeature> ingestWithMapper() {
-		return new IngestGpxTrackFromHdfs();
+		return new IngestGpxTrackFromHdfs(
+				this);
 	}
 
 	@Override
@@ -387,10 +389,10 @@ public class GpxIngestPlugin implements
 											}
 
 											if (timestamp != null) {
-												if (timestamp < minTime) {
+												if ((minTime == null) || (timestamp < minTime)) {
 													minTime = timestamp;
 												}
-												if (timestamp > maxTime) {
+												if ((maxTime == null) || (timestamp > maxTime)) {
 													maxTime = timestamp;
 												}
 											}
@@ -468,26 +470,39 @@ public class GpxIngestPlugin implements
 			trackBuilder.set(
 					"geometry",
 					GeometryUtils.GEOMETRY_FACTORY.createLineString(coordinateSequence.toArray(new Coordinate[coordinateSequence.size()])));
-			if ((minTime != null) && (maxTime != null)) {
+			boolean setDuration = true;
+			if (minTime != null) {
 				trackBuilder.set(
 						"StartTimeStamp",
 						new Date(
 								minTime));
+			}
+			else {
+				setDuration = false;
+
+				trackBuilder.set(
+						"StartTimeStamp",
+						null);
+			}
+			if (maxTime != null) {
 				trackBuilder.set(
 						"EndTimeStamp",
 						new Date(
 								maxTime));
+			}
+			else {
+				setDuration = false;
+
+				trackBuilder.set(
+						"EndTimeStamp",
+						null);
+			}
+			if (setDuration) {
 				trackBuilder.set(
 						"Duration",
 						maxTime - minTime);
 			}
 			else {
-				trackBuilder.set(
-						"StartTimeStamp",
-						null);
-				trackBuilder.set(
-						"EndTimeStamp",
-						null);
 				trackBuilder.set(
 						"Duration",
 						null);
@@ -536,21 +551,33 @@ public class GpxIngestPlugin implements
 		return featureData;
 	}
 
-	private class IngestGpxTrackFromHdfs implements
+	public static class IngestGpxTrackFromHdfs implements
 			IngestWithMapper<GpxTrack, SimpleFeature>
 	{
+		private final GpxIngestPlugin parentPlugin;
+
+		public IngestGpxTrackFromHdfs() {
+			this(
+					new GpxIngestPlugin());
+			// this constructor will be used when deserialized
+		}
+
+		public IngestGpxTrackFromHdfs(
+				final GpxIngestPlugin parentPlugin ) {
+			this.parentPlugin = parentPlugin;
+		}
 
 		@Override
 		public WritableDataAdapter<SimpleFeature>[] getDataAdapters(
 				final String globalVisibility ) {
-			return getDataAdapters(globalVisibility);
+			return parentPlugin.getDataAdapters(globalVisibility);
 		}
 
 		@Override
 		public Iterable<GeoWaveData<SimpleFeature>> toGeoWaveData(
 				final GpxTrack input,
 				final String globalVisibility ) {
-			return toGeoWaveDataInternal(
+			return parentPlugin.toGeoWaveDataInternal(
 					input,
 					globalVisibility);
 		}

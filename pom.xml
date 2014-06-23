@@ -179,6 +179,7 @@
 		<module>geowave-accumulo</module>
 		<module>geowave-gt</module>
 		<module>geowave-ingest</module>
+		<module>geowave-types</module>
 		<module>geowave-analytics</module>
 	</modules>
 

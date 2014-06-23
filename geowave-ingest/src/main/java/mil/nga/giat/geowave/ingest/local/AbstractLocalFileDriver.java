@@ -7,9 +7,11 @@ import java.nio.file.Paths;
 import java.util.Map;
 
 import mil.nga.giat.geowave.ingest.AbstractCommandLineDriver;
+import mil.nga.giat.geowave.ingest.MainCommandLineOptions.Operation;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
 import org.apache.log4j.Logger;
 
 abstract public class AbstractLocalFileDriver<P extends LocalPluginBase, R> extends
@@ -18,8 +20,10 @@ abstract public class AbstractLocalFileDriver<P extends LocalPluginBase, R> exte
 	private final static Logger LOGGER = Logger.getLogger(AbstractLocalFileDriver.class);
 	protected LocalInputCommandLineOptions localInput;
 
-	public AbstractLocalFileDriver() {
-		super();
+	public AbstractLocalFileDriver(
+			final Operation operation ) {
+		super(
+				operation);
 	}
 
 	protected void processInput(
@@ -37,8 +41,10 @@ abstract public class AbstractLocalFileDriver<P extends LocalPluginBase, R> exte
 			throw new IllegalArgumentException(
 					localInput.getInput() + " does not exist");
 		}
+		final File base = f.isDirectory() ? f : f.getParentFile();
+
 		for (final LocalPluginBase localPlugin : localPlugins.values()) {
-			localPlugin.init(f);
+			localPlugin.init(base);
 		}
 		Files.walkFileTree(
 				Paths.get(localInput.getInput()),
@@ -57,7 +63,8 @@ abstract public class AbstractLocalFileDriver<P extends LocalPluginBase, R> exte
 
 	@Override
 	public void parseOptions(
-			final CommandLine commandLine ) {
+			final CommandLine commandLine )
+			throws ParseException {
 		localInput = LocalInputCommandLineOptions.parseOptions(commandLine);
 	}
 
