@@ -1,2 +1,3 @@
 pygments: true
 github: [Repository metadata]
+markdown: kramdown
