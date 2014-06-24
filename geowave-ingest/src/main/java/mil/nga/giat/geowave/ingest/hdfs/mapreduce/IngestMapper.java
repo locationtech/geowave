@@ -6,10 +6,7 @@ import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.index.ByteArrayUtils;
 import mil.nga.giat.geowave.index.PersistenceUtils;
 import mil.nga.giat.geowave.ingest.GeoWaveData;
-import mil.nga.giat.geowave.store.adapter.AdapterStore;
 
-import org.apache.accumulo.core.client.AccumuloException;
-import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.apache.avro.mapred.AvroKey;
 import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.mapreduce.Mapper;
@@ -23,7 +20,7 @@ public class IngestMapper extends
 	public static final String GLOBAL_VISIBILITY_KEY = "GLOBAL_VISIBILITY";
 	private IngestWithMapper ingestWithMapper;
 	private String globalVisibility;
-	private AdapterStore adapterStore;
+	private ByteArrayId primaryIndexId;
 
 	@Override
 	protected void map(
@@ -34,12 +31,12 @@ public class IngestMapper extends
 			InterruptedException {
 		final Iterable<GeoWaveData> data = ingestWithMapper.toGeoWaveData(
 				key.datum(),
+				primaryIndexId,
 				globalVisibility);
 		for (final GeoWaveData d : data) {
 			context.write(
-					d.getAdapter(
-							adapterStore).getAdapterId(),
-					d.getData());
+					d.getKey(),
+					d.getValue());
 		}
 	}
 
@@ -49,17 +46,6 @@ public class IngestMapper extends
 			throws IOException,
 			InterruptedException {
 		super.setup(context);
-		try {
-			adapterStore = GeoWaveOutputFormat.getDataAdapterStore(
-					context,
-					GeoWaveOutputFormat.getAccumuloOperations(context));
-		}
-		catch (AccumuloException | AccumuloSecurityException e) {
-			LOGGER.warn(
-					"Unable to connect to Accumulo",
-					e);
-		}
-
 		try {
 			final String ingestWithMapperStr = context.getConfiguration().get(
 					INGEST_WITH_MAPPER_KEY);

@@ -7,9 +7,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.ingest.GeoWaveData;
 import mil.nga.giat.geowave.ingest.local.LocalFileIngestPlugin;
 import mil.nga.giat.geowave.store.adapter.WritableDataAdapter;
+import mil.nga.giat.geowave.store.index.Index;
+import mil.nga.giat.geowave.store.index.IndexType;
 
 import org.apache.log4j.Logger;
 import org.geotools.data.DataStore;
@@ -25,6 +28,15 @@ public class GeoToolsDataStoreIngestPlugin implements
 		LocalFileIngestPlugin<SimpleFeature>
 {
 	private final static Logger LOGGER = Logger.getLogger(GeoToolsDataStoreIngestPlugin.class);
+
+	private final Index[] supportedIndices;
+
+	public GeoToolsDataStoreIngestPlugin() {
+		supportedIndices = new Index[] {
+			IndexType.SPATIAL.createDefaultIndex(),
+			IndexType.SPATIAL_TEMPORAL.createDefaultIndex()
+		};
+	}
 
 	@Override
 	public String[] getFileExtensionFilters() {
@@ -56,13 +68,15 @@ public class GeoToolsDataStoreIngestPlugin implements
 	}
 
 	@Override
-	public WritableDataAdapter<SimpleFeature>[] getDataAdapters(String globalVisibility) {
+	public WritableDataAdapter<SimpleFeature>[] getDataAdapters(
+			final String globalVisibility ) {
 		return new WritableDataAdapter[] {};
 	}
 
 	@Override
 	public Iterable<GeoWaveData<SimpleFeature>> toGeoWaveData(
 			final File input,
+			final ByteArrayId primaryIndexId,
 			final String visibility ) {
 		DataStore dataStore = null;
 		List<Name> names = null;
@@ -90,6 +104,7 @@ public class GeoToolsDataStoreIngestPlugin implements
 				final SimpleFeatureCollection featureCollection = source.getFeatures();
 				featureCollectionIterables.add(new SimpleFeatureCollectionIterable(
 						featureCollection,
+						primaryIndexId,
 						visibility));
 			}
 			catch (final Exception e) {
@@ -99,5 +114,10 @@ public class GeoToolsDataStoreIngestPlugin implements
 			}
 		}
 		return Iterables.concat(featureCollectionIterables);
+	}
+
+	@Override
+	public Index[] getSupportedIndices() {
+		return supportedIndices;
 	}
 }

@@ -213,7 +213,7 @@ public class GeoWaveConfiguratorBase
 				getConfiguration(context));
 	}
 
-	public static void setIndex(
+	public static void addIndex(
 			final Class<?> implementingClass,
 			final Job job,
 			final Index index ) {
@@ -221,17 +221,20 @@ public class GeoWaveConfiguratorBase
 			job.getConfiguration().set(
 					enumToConfKey(
 							implementingClass,
-							GeoWaveMetaStore.INDEX),
+							GeoWaveMetaStore.INDEX,
+							StringUtils.stringFromBinary(index.getId().getBytes())),
 					ByteArrayUtils.byteArrayToString(PersistenceUtils.toBinary(index)));
 		}
 	}
 
 	public static Index getIndex(
 			final Class<?> implementingClass,
-			final JobContext context ) {
+			final JobContext context,
+			final ByteArrayId indexId ) {
 		return getIndexInternal(
 				implementingClass,
-				getConfiguration(context));
+				getConfiguration(context),
+				indexId);
 	}
 
 	public static void addDataAdapter(
@@ -277,10 +280,12 @@ public class GeoWaveConfiguratorBase
 
 	private static Index getIndexInternal(
 			final Class<?> implementingClass,
-			final Configuration configuration ) {
+			final Configuration configuration,
+			final ByteArrayId indexId ) {
 		final String input = configuration.get(enumToConfKey(
 				implementingClass,
-				GeoWaveMetaStore.INDEX));
+				GeoWaveMetaStore.INDEX,
+				StringUtils.stringFromBinary(indexId.getBytes())));
 		if (input != null) {
 			final byte[] indexBytes = ByteArrayUtils.byteArrayFromString(input);
 			return PersistenceUtils.fromBinary(

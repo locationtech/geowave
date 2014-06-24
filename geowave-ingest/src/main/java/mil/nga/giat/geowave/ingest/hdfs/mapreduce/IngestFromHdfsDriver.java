@@ -6,11 +6,13 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import mil.nga.giat.geowave.index.StringUtils;
 import mil.nga.giat.geowave.ingest.AbstractCommandLineDriver;
 import mil.nga.giat.geowave.ingest.AccumuloCommandLineOptions;
 import mil.nga.giat.geowave.ingest.IngestTypePluginProviderSpi;
 import mil.nga.giat.geowave.ingest.MainCommandLineOptions.Operation;
 import mil.nga.giat.geowave.ingest.hdfs.HdfsCommandLineOptions;
+import mil.nga.giat.geowave.store.index.Index;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Options;
@@ -85,6 +87,20 @@ public class IngestFromHdfsDriver extends
 
 					if (ingestFromHdfsPlugin == null) {
 						LOGGER.warn("Plugin provider for ingest type '" + pluginProvider.getIngestTypeName() + "' does not support ingest from HDFS");
+						continue;
+					}
+					final Index[] supportedIndices = ingestFromHdfsPlugin.getSupportedIndices();
+					final Index selectedIndex = accumuloOptions.getPrimaryIndex();
+					boolean indexSupported = false;
+					for (final Index i : supportedIndices) {
+						if (i.getId().equals(
+								selectedIndex.getId())) {
+							indexSupported = true;
+							break;
+						}
+					}
+					if (!indexSupported) {
+						LOGGER.warn("HDFS file ingest plugin for ingest type '" + pluginProvider.getIngestTypeName() + "' does not support index '" + StringUtils.stringFromBinary(selectedIndex.getId().getBytes()) + "'");
 						continue;
 					}
 				}

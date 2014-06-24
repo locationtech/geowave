@@ -25,6 +25,7 @@ public class AccumuloCommandLineOptions
 	private final boolean clearNamespace;
 	private final IndexType type;
 	private final AccumuloOperations operations;
+	private final Index primaryIndex;
 
 	public AccumuloCommandLineOptions(
 			final String zookeepers,
@@ -51,6 +52,8 @@ public class AccumuloCommandLineOptions
 				user,
 				password,
 				namespace);
+
+		primaryIndex = type.createDefaultIndex();
 		if (clearNamespace) {
 			LOGGER.info("deleting all tables prefixed by '" + namespace + "'");
 			operations.deleteAll();
@@ -89,8 +92,8 @@ public class AccumuloCommandLineOptions
 		return clearNamespace;
 	}
 
-	public Index getIndex() {
-		return type.createDefaultIndex();
+	public Index getPrimaryIndex() {
+		return primaryIndex;
 	}
 
 	public AccumuloOperations getAccumuloOperations() {

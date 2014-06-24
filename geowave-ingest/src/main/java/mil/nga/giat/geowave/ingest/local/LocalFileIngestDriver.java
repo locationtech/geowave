@@ -10,6 +10,7 @@ import java.util.Map;
 
 import mil.nga.giat.geowave.accumulo.AccumuloDataStore;
 import mil.nga.giat.geowave.accumulo.AccumuloOperations;
+import mil.nga.giat.geowave.index.StringUtils;
 import mil.nga.giat.geowave.ingest.AccumuloCommandLineOptions;
 import mil.nga.giat.geowave.ingest.GeoWaveData;
 import mil.nga.giat.geowave.ingest.IngestRunData;
@@ -18,6 +19,7 @@ import mil.nga.giat.geowave.ingest.MainCommandLineOptions.Operation;
 import mil.nga.giat.geowave.store.DataStore;
 import mil.nga.giat.geowave.store.IndexWriter;
 import mil.nga.giat.geowave.store.adapter.WritableDataAdapter;
+import mil.nga.giat.geowave.store.index.Index;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Options;
@@ -76,6 +78,20 @@ public class LocalFileIngestDriver extends
 						e);
 				continue;
 			}
+			final Index[] supportedIndices = localFileIngestPlugin.getSupportedIndices();
+			final Index selectedIndex = accumulo.getPrimaryIndex();
+			boolean indexSupported = false;
+			for (final Index i : supportedIndices) {
+				if (i.getId().equals(
+						selectedIndex.getId())) {
+					indexSupported = true;
+					break;
+				}
+			}
+			if (!indexSupported) {
+				LOGGER.warn("Local file ingest plugin for ingest type '" + pluginProvider.getIngestTypeName() + "' does not support index '" + StringUtils.stringFromBinary(selectedIndex.getId().getBytes()) + "'");
+				continue;
+			}
 			localFileIngestPlugins.put(
 					pluginProvider.getIngestTypeName(),
 					localFileIngestPlugin);
@@ -91,7 +107,7 @@ public class LocalFileIngestDriver extends
 				operations);
 		indexWriter = null;
 		try {
-			indexWriter = dataStore.createIndexWriter(accumulo.getIndex());
+			indexWriter = dataStore.createIndexWriter(accumulo.getPrimaryIndex());
 			processInput(
 					localFileIngestPlugins,
 					new IngestRunData(
@@ -118,16 +134,17 @@ public class LocalFileIngestDriver extends
 			final IngestRunData ingestRunData ) {
 		final Iterable<GeoWaveData<?>> geowaveDataIt = plugin.toGeoWaveData(
 				file,
+				accumulo.getPrimaryIndex().getId(),
 				accumulo.getVisibility());
 		for (final GeoWaveData<?> geowaveData : geowaveDataIt) {
 			final WritableDataAdapter adapter = ingestRunData.getDataAdapter(geowaveData);
 			if (adapter == null) {
-				LOGGER.warn("Adapter not found for " + geowaveData.getData());
+				LOGGER.warn("Adapter not found for " + geowaveData.getValue());
 				continue;
 			}
 			indexWriter.write(
 					adapter,
-					geowaveData.getData());
+					geowaveData.getValue());
 		}
 
 	}

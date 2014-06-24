@@ -1,6 +1,8 @@
 package mil.nga.giat.geowave.ingest.hdfs.mapreduce;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import mil.nga.giat.geowave.accumulo.AccumuloDataStore;
 import mil.nga.giat.geowave.accumulo.AccumuloOperations;
@@ -12,7 +14,7 @@ import mil.nga.giat.geowave.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.store.index.Index;
-import mil.nga.giat.geowave.store.index.MemoryIndexStore;
+import mil.nga.giat.geowave.store.index.IndexStore;
 
 import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
@@ -28,14 +30,14 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 public class GeoWaveOutputFormat extends
-		OutputFormat<ByteArrayId, Object>
+		OutputFormat<GeoWaveIngestKey, Object>
 {
 
 	private static final Class<?> CLASS = GeoWaveOutputFormat.class;
 	protected static final Logger LOGGER = Logger.getLogger(CLASS);
 
 	@Override
-	public RecordWriter<ByteArrayId, Object> getRecordWriter(
+	public RecordWriter<GeoWaveIngestKey, Object> getRecordWriter(
 			final TaskAttemptContext context )
 			throws IOException,
 			InterruptedException {
@@ -44,10 +46,13 @@ public class GeoWaveOutputFormat extends
 			final AdapterStore adapterStore = getDataAdapterStore(
 					context,
 					accumuloOperations);
+			final IndexStore indexStore = getIndexStore(
+					context,
+					accumuloOperations);
 			return new GeoWaveRecordWriter(
 					context,
 					accumuloOperations,
-					getIndex(context),
+					indexStore,
 					adapterStore);
 		}
 		catch (final Exception e) {
@@ -86,11 +91,6 @@ public class GeoWaveOutputFormat extends
 			throw new IOException(
 					e);
 		}
-		if (getIndex(context) == null) {
-			LOGGER.warn("GeoWave index is missing from job context");
-			throw new IOException(
-					"GeoWave index is missing from job context");
-		}
 	}
 
 	@Override
@@ -106,15 +106,17 @@ public class GeoWaveOutputFormat extends
 	 * write to Accumulo.
 	 */
 	protected class GeoWaveRecordWriter extends
-			RecordWriter<ByteArrayId, Object>
+			RecordWriter<GeoWaveIngestKey, Object>
 	{
-		private final IndexWriter indexWriter;
+		private final Map<ByteArrayId, IndexWriter> indexWriterCache = new HashMap<ByteArrayId, IndexWriter>();
 		private final AdapterStore adapterStore;
+		private final IndexStore indexStore;
+		private final DataStore dataStore;
 
 		protected GeoWaveRecordWriter(
 				final TaskAttemptContext context,
 				final AccumuloOperations accumuloOperations,
-				final Index index,
+				final IndexStore indexStore,
 				final AdapterStore adapterStore )
 				throws AccumuloException,
 				AccumuloSecurityException,
@@ -123,15 +125,12 @@ public class GeoWaveOutputFormat extends
 			if (l != null) {
 				LOGGER.setLevel(getLogLevel(context));
 			}
-			final DataStore dataStore = new AccumuloDataStore(
-					new MemoryIndexStore(
-							new Index[] {
-								index
-							}),
+			dataStore = new AccumuloDataStore(
+					indexStore,
 					adapterStore,
 					accumuloOperations);
 			this.adapterStore = adapterStore;
-			indexWriter = dataStore.createIndexWriter(index);
+			this.indexStore = indexStore;
 		}
 
 		/**
@@ -142,18 +141,43 @@ public class GeoWaveOutputFormat extends
 		 */
 		@Override
 		public void write(
-				final ByteArrayId adapterId,
+				final GeoWaveIngestKey ingestKey,
 				final Object object )
 				throws IOException {
-			final DataAdapter<?> adapter = adapterStore.getAdapter(adapterId);
+			final DataAdapter<?> adapter = adapterStore.getAdapter(ingestKey.getAdapterId());
 			if (adapter instanceof WritableDataAdapter) {
-				indexWriter.write(
-						(WritableDataAdapter) adapter,
-						object);
+				final IndexWriter indexWriter = getIndexWriter(ingestKey.getIndexId());
+				if (indexWriter != null) {
+					indexWriter.write(
+							(WritableDataAdapter) adapter,
+							object);
+				}
+				else {
+					LOGGER.warn("Cannot write to index '" + StringUtils.stringFromBinary(ingestKey.getAdapterId().getBytes()) + "'");
+				}
 			}
 			else {
-				LOGGER.warn("Adapter '" + StringUtils.stringFromBinary(adapterId.getBytes()) + "' is not writable");
+				LOGGER.warn("Adapter '" + StringUtils.stringFromBinary(ingestKey.getAdapterId().getBytes()) + "' is not writable");
 			}
+		}
+
+		private synchronized IndexWriter getIndexWriter(
+				final ByteArrayId indexId ) {
+			if (!indexWriterCache.containsKey(indexId)) {
+				final Index index = indexStore.getIndex(indexId);
+				IndexWriter writer = null;
+				if (index != null) {
+					writer = dataStore.createIndexWriter(index);
+				}
+				else {
+					LOGGER.warn("Index '" + StringUtils.stringFromBinary(indexId.getBytes()) + "' does not exist");
+				}
+				indexWriterCache.put(
+						indexId,
+						writer);
+				return writer;
+			}
+			return indexWriterCache.get(indexId);
 		}
 
 		@Override
@@ -161,7 +185,9 @@ public class GeoWaveOutputFormat extends
 				final TaskAttemptContext attempt )
 				throws IOException,
 				InterruptedException {
-			indexWriter.close();
+			for (final IndexWriter indexWriter : indexWriterCache.values()) {
+				indexWriter.close();
+			}
 		}
 	}
 
@@ -301,11 +327,21 @@ public class GeoWaveOutputFormat extends
 				accumuloOperations);
 	}
 
+	public static IndexStore getIndexStore(
+			final JobContext context,
+			final AccumuloOperations accumuloOperations ) {
+		return new JobContextIndexStore(
+				context,
+				accumuloOperations);
+	}
+
 	protected static Index getIndex(
-			final JobContext context ) {
+			final JobContext context,
+			final ByteArrayId indexId ) {
 		return GeoWaveConfiguratorBase.getIndex(
 				CLASS,
-				context);
+				context,
+				indexId);
 	}
 
 	protected static DataAdapter<?> getDataAdapter(
@@ -326,10 +362,10 @@ public class GeoWaveOutputFormat extends
 				adapter);
 	}
 
-	public static void setIndex(
+	public static void addIndex(
 			final Job job,
 			final Index index ) {
-		GeoWaveConfiguratorBase.setIndex(
+		GeoWaveConfiguratorBase.addIndex(
 				CLASS,
 				job,
 				index);

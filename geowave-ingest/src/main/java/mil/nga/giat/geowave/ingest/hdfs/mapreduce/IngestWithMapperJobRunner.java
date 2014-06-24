@@ -78,7 +78,7 @@ public class IngestWithMapperJobRunner extends
 		AvroJob.setInputKeySchema(
 				job,
 				plugin.getAvroSchemaForHdfsType());
-		AvroKeyInputFormat.setInputPaths(
+		FileInputFormat.setInputPaths(
 				job,
 				inputFile);
 
@@ -115,11 +115,11 @@ public class IngestWithMapperJobRunner extends
 					job,
 					dataAdapter);
 		}
-		final Index index = accumuloOptions.getIndex();
+		final Index index = accumuloOptions.getPrimaryIndex();
 		indexStore.addIndex(index);
 
 		// set index
-		GeoWaveOutputFormat.setIndex(
+		GeoWaveOutputFormat.addIndex(
 				job,
 				index);
 

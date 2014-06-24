@@ -3,6 +3,7 @@ package mil.nga.giat.geowave.types.geotools;
 import java.util.Iterator;
 
 import mil.nga.giat.geowave.gt.adapter.FeatureDataAdapter;
+import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.ingest.GeoWaveData;
 import mil.nga.giat.geowave.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.store.data.field.GlobalVisibilityHandler;
@@ -33,6 +34,7 @@ public class SimpleFeatureCollectionIterable implements
 		public GeoWaveData<SimpleFeature> next() {
 			return new GeoWaveData<SimpleFeature>(
 					dataAdapter,
+					primaryIndexId,
 					featureIterator.next());
 		}
 
@@ -42,10 +44,12 @@ public class SimpleFeatureCollectionIterable implements
 	}
 
 	private final SimpleFeatureCollection featureCollection;
+	private final ByteArrayId primaryIndexId;
 	private final WritableDataAdapter<SimpleFeature> dataAdapter;
 
 	public SimpleFeatureCollectionIterable(
 			final SimpleFeatureCollection featureCollection,
+			final ByteArrayId primaryIndexId,
 			final String visibility ) {
 		this.featureCollection = featureCollection;
 		if ((visibility == null) || visibility.isEmpty()) {
@@ -58,6 +62,7 @@ public class SimpleFeatureCollectionIterable implements
 					new GlobalVisibilityHandler(
 							visibility));
 		}
+		this.primaryIndexId = primaryIndexId;
 	}
 
 	@Override

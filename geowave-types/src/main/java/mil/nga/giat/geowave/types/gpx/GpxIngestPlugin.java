@@ -34,6 +34,8 @@ import mil.nga.giat.geowave.store.GeometryUtils;
 import mil.nga.giat.geowave.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.store.data.field.FieldVisibilityHandler;
 import mil.nga.giat.geowave.store.data.field.GlobalVisibilityHandler;
+import mil.nga.giat.geowave.store.index.Index;
+import mil.nga.giat.geowave.store.index.IndexType;
 
 import org.apache.avro.Schema;
 import org.apache.commons.io.FilenameUtils;
@@ -70,6 +72,8 @@ public class GpxIngestPlugin implements
 	private final ByteArrayId waypointKey;
 	private final ByteArrayId trackKey;
 
+	private final Index[] supportedIndices;
+
 	public GpxIngestPlugin() {
 
 		pointType = GpxUtils.createGPXPointDataType();
@@ -88,6 +92,10 @@ public class GpxIngestPlugin implements
 				waypointType);
 		trackBuilder = new SimpleFeatureBuilder(
 				trackType);
+		supportedIndices = new Index[] {
+			IndexType.SPATIAL.createDefaultIndex(),
+			IndexType.SPATIAL_TEMPORAL.createDefaultIndex()
+		};
 
 	}
 
@@ -138,6 +146,11 @@ public class GpxIngestPlugin implements
 	}
 
 	@Override
+	public Index[] getSupportedIndices() {
+		return supportedIndices;
+	}
+
+	@Override
 	public WritableDataAdapter<SimpleFeature>[] getDataAdapters(
 			final String globalVisibility ) {
 		final FieldVisibilityHandler<SimpleFeature, Object> fieldVisiblityHandler = ((globalVisibility != null) && !globalVisibility.isEmpty()) ? new GlobalVisibilityHandler<SimpleFeature, Object>(
@@ -158,12 +171,14 @@ public class GpxIngestPlugin implements
 	@Override
 	public Iterable<GeoWaveData<SimpleFeature>> toGeoWaveData(
 			final File input,
+			final ByteArrayId primaryIndexId,
 			final String globalVisibility ) {
 		final GpxTrack[] gpxTracks = toHdfsObjects(input);
 		final List<Iterable<GeoWaveData<SimpleFeature>>> allData = new ArrayList<Iterable<GeoWaveData<SimpleFeature>>>();
 		for (final GpxTrack track : gpxTracks) {
 			final Iterable<GeoWaveData<SimpleFeature>> geowaveData = toGeoWaveDataInternal(
 					track,
+					primaryIndexId,
 					globalVisibility);
 			allData.add(geowaveData);
 		}
@@ -229,6 +244,7 @@ public class GpxIngestPlugin implements
 
 	private Iterable<GeoWaveData<SimpleFeature>> toGeoWaveDataInternal(
 			final GpxTrack gpxTrack,
+			final ByteArrayId primaryIndexId,
 			final String globalVisibility ) {
 		final XMLInputFactory inputFactory = XMLInputFactory.newInstance();
 		XMLEventReader eventReader = null;
@@ -335,6 +351,7 @@ public class GpxIngestPlugin implements
 										sym);
 								featureData.add(new GeoWaveData<SimpleFeature>(
 										waypointKey,
+										primaryIndexId,
 										waypointBuilder.buildFeature(name + gpxTrack.getTrackid() + "_" + lat.hashCode() + "_" + lon.hashCode())));
 								trackPoint++;
 								lat = null;
@@ -434,6 +451,7 @@ public class GpxIngestPlugin implements
 
 								featureData.add(new GeoWaveData<SimpleFeature>(
 										pointKey,
+										primaryIndexId,
 										pointBuilder.buildFeature(gpxTrack.getTrackid().toString() + "_" + trackPoint)));
 
 								lat = null;
@@ -540,6 +558,7 @@ public class GpxIngestPlugin implements
 
 			featureData.add(new GeoWaveData<SimpleFeature>(
 					trackKey,
+					primaryIndexId,
 					trackBuilder.buildFeature(gpxTrack.getTrackid().toString())));
 		}
 		catch (final IllegalArgumentException e) {
@@ -576,9 +595,11 @@ public class GpxIngestPlugin implements
 		@Override
 		public Iterable<GeoWaveData<SimpleFeature>> toGeoWaveData(
 				final GpxTrack input,
+				final ByteArrayId primaryIndexId,
 				final String globalVisibility ) {
 			return parentPlugin.toGeoWaveDataInternal(
 					input,
+					primaryIndexId,
 					globalVisibility);
 		}
 
