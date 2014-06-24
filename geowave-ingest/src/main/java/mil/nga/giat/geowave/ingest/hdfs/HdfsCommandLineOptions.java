@@ -22,11 +22,9 @@ public class HdfsCommandLineOptions
 			final Options allOptions ) {
 		allOptions.addOption(
 				"hdfs",
-				"hdfs",
 				true,
 				"HDFS hostname and port in the format hostname:port");
 		allOptions.addOption(
-				"hdfsbase",
 				"hdfsbase",
 				true,
 				"fully qualified path to the base directory in hdfs");

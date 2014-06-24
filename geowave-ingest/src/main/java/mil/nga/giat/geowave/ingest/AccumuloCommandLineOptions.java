@@ -24,6 +24,7 @@ public class AccumuloCommandLineOptions
 	private final String visibility;
 	private final boolean clearNamespace;
 	private final IndexType type;
+	private final AccumuloOperations operations;
 
 	public AccumuloCommandLineOptions(
 			final String zookeepers,
@@ -33,7 +34,9 @@ public class AccumuloCommandLineOptions
 			final String namespace,
 			final String visibility,
 			final boolean clearNamespace,
-			final IndexType type ) {
+			final IndexType type )
+			throws AccumuloException,
+			AccumuloSecurityException {
 		this.zookeepers = zookeepers;
 		this.instanceId = instanceId;
 		this.user = user;
@@ -42,6 +45,16 @@ public class AccumuloCommandLineOptions
 		this.visibility = visibility;
 		this.clearNamespace = clearNamespace;
 		this.type = type;
+		operations = new BasicAccumuloOperations(
+				zookeepers,
+				instanceId,
+				user,
+				password,
+				namespace);
+		if (clearNamespace) {
+			LOGGER.info("deleting all tables prefixed by '" + namespace + "'");
+			operations.deleteAll();
+		}
 	}
 
 	public String getZookeepers() {
@@ -80,15 +93,8 @@ public class AccumuloCommandLineOptions
 		return type.createDefaultIndex();
 	}
 
-	public AccumuloOperations getAccumuloOperations()
-			throws AccumuloException,
-			AccumuloSecurityException {
-		return new BasicAccumuloOperations(
-				zookeepers,
-				instanceId,
-				user,
-				password,
-				namespace);
+	public AccumuloOperations getAccumuloOperations() {
+		return operations;
 	}
 
 	public static AccumuloCommandLineOptions parseOptions(
@@ -137,15 +143,23 @@ public class AccumuloCommandLineOptions
 			throw new ParseException(
 					"Required option is missing");
 		}
-		return new AccumuloCommandLineOptions(
-				zookeepers,
-				instanceId,
-				user,
-				password,
-				namespace,
-				visibility,
-				clearNamespace,
-				type);
+		try {
+			return new AccumuloCommandLineOptions(
+					zookeepers,
+					instanceId,
+					user,
+					password,
+					namespace,
+					visibility,
+					clearNamespace,
+					type);
+		}
+		catch (AccumuloException | AccumuloSecurityException e) {
+			LOGGER.fatal(
+					"Unable to connect to Accumulo with the specified options",
+					e);
+		}
+		return null;
 	}
 
 	public static void applyOptions(

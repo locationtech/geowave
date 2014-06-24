@@ -29,6 +29,7 @@ public class IngestFromHdfsDriver extends
 	private final static int DAYS_TO_AWAIT_COMPLETION = 999;
 	private HdfsCommandLineOptions hdfsOptions;
 	private AccumuloCommandLineOptions accumuloOptions;
+	private MapReduceCommandLineOptions mapReduceOptions;
 	private static ExecutorService singletonExecutor;
 
 	public IngestFromHdfsDriver(
@@ -55,8 +56,11 @@ public class IngestFromHdfsDriver extends
 		conf.set(
 				"fs.hdfs.impl",
 				org.apache.hadoop.hdfs.DistributedFileSystem.class.getName());
+		conf.set(
+				"mapred.job.tracker",
+				mapReduceOptions.getJobTrackerHostPort());
 		final Path hdfsBaseDirectory = new Path(
-				"hdfs://" + hdfsOptions.getHdfsHostPort() + "/" + hdfsOptions.getBasePath());
+				hdfsOptions.getBasePath());
 		try {
 			final FileSystem fs = FileSystem.get(conf);
 			if (!fs.exists(hdfsBaseDirectory)) {
@@ -128,7 +132,8 @@ public class IngestFromHdfsDriver extends
 								inputFile,
 								pluginProvider.getIngestTypeName(),
 								ingestFromHdfsPlugin,
-								ingestWithMapper);
+								ingestWithMapper,
+								conf);
 					}
 					catch (final Exception e) {
 						LOGGER.warn(
@@ -167,9 +172,9 @@ public class IngestFromHdfsDriver extends
 			final Path inputFile,
 			final String typeName,
 			final IngestFromHdfsPlugin plugin,
-			final IngestWithMapper mapperIngest )
+			final IngestWithMapper mapperIngest,
+			final Configuration conf )
 			throws Exception {
-		final Configuration conf = new Configuration();
 		final IngestWithMapperJobRunner jobRunner = new IngestWithMapperJobRunner(
 				accumuloOptions,
 				inputFile,
@@ -205,6 +210,7 @@ public class IngestFromHdfsDriver extends
 			throws ParseException {
 		accumuloOptions = AccumuloCommandLineOptions.parseOptions(commandLine);
 		hdfsOptions = HdfsCommandLineOptions.parseOptions(commandLine);
+		mapReduceOptions = MapReduceCommandLineOptions.parseOptions(commandLine);
 	}
 
 	@Override
@@ -212,5 +218,6 @@ public class IngestFromHdfsDriver extends
 			final Options allOptions ) {
 		AccumuloCommandLineOptions.applyOptions(allOptions);
 		HdfsCommandLineOptions.applyOptions(allOptions);
+		MapReduceCommandLineOptions.applyOptions(allOptions);
 	}
 }
