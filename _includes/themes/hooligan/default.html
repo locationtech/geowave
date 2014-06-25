@@ -48,7 +48,7 @@
 
             <div class="nav-collapse">
               <ul class="nav">
-                {% assign pages_list = site.pages %}
+                {% assign pages_list = site.pages | sort:"name" %}
                 {% assign group = 'navigation' %} 
                 {% include JB/pages_list %}
               </ul>
