@@ -1,5 +1,4 @@
 GEM
-  remote: https://rubygems.org/
   specs:
     RedCloth (4.2.9)
     activesupport (4.1.1)
@@ -45,8 +44,6 @@ GEM
       redcarpet (~> 2.3.0)
       safe_yaml (~> 1.0)
       toml (~> 0.1.0)
-    jekyll-markdown-block (1.0.0)
-      jekyll (~> 1.0)
     jekyll-mentions (0.0.6)
       html-pipeline (~> 1.5.0)
       jekyll (~> 1.4)
@@ -96,4 +93,3 @@ PLATFORMS
 
 DEPENDENCIES
   github-pages
-  jekyll-markdown-block

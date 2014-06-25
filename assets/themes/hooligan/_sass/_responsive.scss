@@ -1,0 +1,14 @@
+/* Responsive Overrides */
+@media (max-width: 767px) {
+	body {
+		padding-right: 0px;
+		padding-left: 0px;
+	}
+
+	div.container {
+		padding: 0px 20px;
+		div.page-header {
+			@include border-radius(0);
+		}
+	}
+}

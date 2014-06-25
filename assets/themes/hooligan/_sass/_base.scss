@@ -1,0 +1,299 @@
+@import url(http://fonts.googleapis.com/css?family=Advent+Pro);
+@import url(http://fonts.googleapis.com/css?family=Oxygen);
+
+/* Theme Vars */
+$link-color: #4cb4e8;
+
+/* Compass Vars */
+$default-box-shadow-color: #000;
+$default-box-shadow-v-offset: 1px;
+$default-box-shadow-blur: 1px;
+
+/* Override some defaults */
+html, body {
+	background-color: #2a2a2a;
+	background: url(../images/bgs/body.png) repeat ;
+}
+
+body {
+	color:#bbb;
+	text-shadow:1px 1px 1px #000;
+	height:100%; 
+	font-family: 'Oxygen', sans-serif;
+	font-size: 14px;
+}
+
+h1,h2,h3,h4,h5,h6 {
+	margin:0;
+	font-weight:normal;
+	color:#999;
+	text-rendering:optimizelegibility;
+	font-family: 'Advent Pro', sans-serif;
+	/*font-family: 'Pontano Sans', sans-serif;*/
+}
+
+a {
+	color:$link-color;
+	&:hover {
+		color: lighten($link-color, 30);
+		text-decoration:none;
+	}
+	@include transition(all 0.3s);
+}
+
+h1 small, h2 small, h3 small, h4 small, h5 small, h6 small {
+	font-weight:normal;
+	color:#999999;
+}
+
+h1, h2 {
+	margin: 0 0 15px;
+}
+
+h1 {
+	font-size:40px;
+}
+
+h2 {
+	font-size: 30px;
+}
+
+pre, code {
+	color:#ccc;
+}
+
+pre > code {
+	/* Reset box-shadow for pygments */
+	background:none;
+	box-shadow:none;
+	-moz-box-shadow: none;
+		-webkit-box-shadow: none;
+		-o-box-shadow: none;
+}
+
+hr {
+	border:none;
+	background:rgba(0,0,0,0.7);
+	height:1px;
+}
+
+/* Layout */
+.navbar {
+	margin-bottom: 0;
+	div.navbar-inner {
+		@include border-radius(0);
+		a.brand {
+			padding:10px 20px;
+		}
+		ul.nav:first-child {
+			li {
+				a {
+					padding:12px 10px 8px;
+				}
+			}
+		}
+	}
+}
+
+
+.container > footer {
+	margin-top: 20px;
+	clear:both;
+}
+.container > footer p {
+	text-align: center; /* center align it with the container */
+}
+
+
+
+/* Content */
+.content {
+	img {
+		box-shadow: 0 2px 5px rgba(0, 0, 0, 0.8);
+	}
+	/* when there's no page-header */
+	&.no-header {
+		padding-top:40px;
+	}
+
+	/* Wide column content */
+	div.row {
+		div.span8 {
+			> img {
+				display:block;
+				margin: 10px auto;
+			}
+		}
+		div.span4 {
+			h4 {
+				margin-top:10px;
+				&:first {margin-top: 0}
+			}
+		}
+	}
+	p {
+		padding-bottom:15px;
+		line-height:25px;
+		margin:0;
+	}
+}
+
+/* Page header tweaks */
+.page-header {
+	@include box-shadow(
+		 rgba(255, 255, 255, 0.1) 0 1px 0, 
+		 rgba(0, 0, 0, 0.8) 0 1px 7px 0px inset
+	);
+	background: #202020;
+	background-color: rgba(0, 0, 0, 0.3);
+	border:none;
+	padding: 20px 20px 10px;
+	margin: 0px -20px 20px;
+	z-index: 0;
+	@include border-bottom-left-radius;
+	@include border-bottom-right-radius;
+	h1 {
+		color:#eee;
+		margin-bottom:0;
+	}
+}
+
+.topbar .btn {
+	border: 0;
+}
+
+/* Pagination */
+div.pagination {
+	li {
+		a { 
+			@include box-shadow;
+			// background: rgba(0, 0, 0, 0.8);
+		}
+	}
+}
+
+/* Buttons */
+a.btn, a.btn.disabled {
+	color:rgba(255, 255, 255, 0.7);
+	text-shadow: 1px 1px 2px #000;
+	background:rgba(0,0,0, 0.2);
+	border:none;
+		-moz-box-shadow: rgba(255, 255, 255, 0.1) 0 1px 0, rgba(0, 0, 0, 0.8) 0 1px 7px 0px inset;
+		-webkit-box-shadow: 
+			rgba(0, 0, 0, 0.8) 0 1px 0, 
+			rgba(255, 255, 255, 0.5) 0 1px 1px 0px inset;
+	-o-box-shadow: rgba(255, 255, 255, 0.1) 0 1px 0, rgba(0, 0, 0, 0.8) 0 1px 7px 0px inset;
+
+	&:hover {
+		background:rgba(255,255,255, 0.05);
+	}
+	&.disabled {
+		color:rgba(255,255,255, 0.3);
+	}
+}
+
+/* Tags */
+.tag_box {
+	list-style:none;
+	margin:0;
+	padding:5px 0 ;
+	overflow:hidden;
+	&.inline {
+		li {
+			float:left;
+		}
+	}
+	li {
+		line-height:28px;
+	}
+	a {
+		&.active {
+			background:#57A957;
+			border:1px solid #4C964D;
+			color:#FFF;
+		}
+		span{
+			vertical-align:super;
+			font-size:0.8em;
+		}
+	}
+}
+
+.tag_box.inline a,
+.tag_box a {
+	padding: 3px 6px;
+	margin: 2px;
+	background: rgba(255, 255, 255, 0.20);
+	color:white;
+	border-radius: 3px;
+	text-decoration:none;
+		-moz-box-shadow: rgba(255, 255, 255, 0.1) 0 1px 0, rgba(0, 0, 0, 0.8) 0 1px 7px 0px inset;
+		-webkit-box-shadow: 
+			rgba(0, 0, 0, 0.8) 0 1px 0, 
+			rgba(255, 255, 255, 0.5) 0 1px 1px 0px inset;
+	-o-box-shadow: rgba(255, 255, 255, 0.1) 0 1px 0, rgba(0, 0, 0, 0.8) 0 1px 7px 0px inset;
+	&:hover {
+		background: rgba(255, 255, 255, 0.30);
+	}
+}
+
+/* Page-specific */
+div.content {
+	div#page-index {
+		padding-top:30px !important;
+	}
+}
+
+/* Zocial Overrides */
+.navbar a.zocial {
+	padding-left:0 !important;
+	padding-right:0 !important;
+}
+
+.zocial.googleplus:focus,
+.zocial.googleplus:hover {
+	color:#e01d30 !important;
+}
+
+.zocial.twitter:focus,
+.zocial.twitter:hover {
+	color:#46c0fb !important;
+}
+
+.zocial.linkedin:focus,
+.zocial.linkedin:hover {
+	color:#50a1cb !important;
+}
+
+.zocial.rss:focus,
+.zocial.rss:hover {
+	color:#fb9d3a !important;
+}
+
+/* Sticky footer */
+$footerHeight: 75px;
+
+//Page full height
+html, body {
+	height: 100%;
+}
+
+#page-wrap {
+	min-height: 100%;
+	height: auto !important;
+	height: 100%;
+	// Negative indent footer by it's height
+	margin-bottom: -($footerHeight);
+	margin-left: 0;
+	margin-right: 0;
+	margin-top: 0;
+}
+
+//footer fixed height
+.footer-push,
+footer {
+	height: $footerHeight;
+	max-height: $footerHeight;
+	overflow: hidden;
+}
+

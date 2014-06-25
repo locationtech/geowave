@@ -1,178 +1,215 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset='utf-8'>
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
-    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
-    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
 
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>
+      
+        GeoWave - 
+      
+      GeoWave
+    </title>
+    
+    <meta name="author" content="Chris Bennight">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- HTML5 shim, for IE6-8 support of HTML elements -->
     <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
 
-    <title>Geowave by ngageoint</title>
+    <link href="/assets/themes/hooligan/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/assets/themes/hooligan/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="/assets/themes/hooligan/css-social-buttons/css/zocial.stripped.css">
+    <link href="/assets/themes/hooligan/css/pygments.css" rel="stylesheet" type="text/css" media="all">
+    <link href="/assets/themes/hooligan/css/darkstrap.css" rel="stylesheet" type="text/css" media="all">
+    <link href="/assets/themes/hooligan/css/style.css?body=1" rel="stylesheet" type="text/css" media="all">
+
+    <!-- fav and touch icons -->
+    <!-- Update these with your own images
+      <link rel="shortcut icon" href="images/favicon.ico">
+      <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+      <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+      <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+    -->
   </head>
 
   <body>
-    <header>
-      <div class="inner">
-        <h1>Geowave</h1>
-        <h2>GeoWave provides geospatial and temporal indexing on top of Accumulo</h2>
-        <a href="https://github.com/ngageoint/geowave" class="button"><small>View project on</small>GitHub</a>
+    <div id="page-wrap">
+      <div class="navbar">
+        <div class="navbar-inner">
+          <div class="container">
+            <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </a>
+
+            <a class="brand" href="/">GeoWave</a>
+
+            <div class="nav-collapse">
+              <ul class="nav">
+                
+                 
+                
+
+
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/installation.html">Installation</a></li>
+      	
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/building.html">Building</a></li>
+      	
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/examples.html">Examples</a></li>
+      	
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/documentation.html">Documentation</a></li>
+      	
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/screenshots.html">Screenshots</a></li>
+      	
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/releasenotes.html">Release Notes</a></li>
+      	
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/FAQ.html">FAQ</a></li>
+      	
+      
+    
+  
+
+
+
+              </ul>
+              <ul class="nav pull-right social visible-desktop">
+                <li>
+                  <a href="https://github.com/ngageoint/geowave/zipball/master" class="zocial secondary">Zip </a>
+                </li>
+                <li>
+                  <a href="https://github.com/ngageoint/geowave/tarball/master" class="zocial primary">Tarball </a>
+                </li>
+                <li class="divider-vertical"></li>
+                
+                <li>
+                  <a href="https://www.github.com/ngageoint/geowave" class="zocial primary" target="_blank">
+                    GeoWave Source
+                  </a>
+                </li>
+                
+              </ul>
+            </div>
+          </div>
+        </div>
       </div>
-    </header>
 
-    <div id="content-wrapper">
-      <div class="inner clearfix">
-        <section id="main-content">
-          <h1>
-<a name="geowave-080" class="anchor" href="#geowave-080"><span class="octicon octicon-link"></span></a>GeoWave 0.8.0</h1>
+      <div class="container">
+        <div class="content">
+          
+<div class="page-header-wrapper">
+	<div class="page-header">
+  		<h1>GeoWave  <small>Geospatial indexing and analysis in accumulo</small></h1>
+  	</div>
+</div>
 
-<h2>
-<a name="about" class="anchor" href="#about"><span class="octicon octicon-link"></span></a>About</h2>
+<div class="row">
+  <div class="span12">
+    
+<h1 id="geowave">Geowave</h1>
+
+<h2 id="about">About</h2>
 
 <p>GeoWave is an open source set of software that:</p>
 
 <ul>
-<li>Adds multi-dimensional indexing capability to <a href="http://projects.apache.org/projects/accumulo.html">Apache Accumulo</a> </li>
-<li>Adds support for geographic objects and geospatial operators to <a href="http://projects.apache.org/projects/accumulo.html">Apache Accumulo</a> </li>
-<li>Contains a <a href="http://geoserver.org/">GeoServer</a> plugin to allow geospatial data in Accumulo to be shared and visualized via OGC standard services</li>
-<li>Provides Map-Reduce input and output formats for distributed processing and analysis of geospatial data</li>
-</ul><p>Basically, GeoWave attempts to do for Accumulo as PostGIS does for PostgreSQL.  </p>
+  <li>Adds multi-dimensional indexing capability to <a href="http://projects.apache.org/projects/accumulo.html">Apache Accumulo</a> </li>
+  <li>Adds support for geographic objects and geospatial operators to <a href="http://projects.apache.org/projects/accumulo.html">Apache Accumulo</a> </li>
+  <li>Contains a <a href="http://geoserver.org/">GeoServer</a> plugin to allow geospatial data in Accumulo to be shared and visualized via OGC standard services</li>
+  <li>Provides Map-Reduce input and output formats for distributed processing and analysis of geospatial data</li>
+</ul>
 
-<h2>
-<a name="origin" class="anchor" href="#origin"><span class="octicon octicon-link"></span></a>Origin</h2>
+<p>Basically, GeoWave attempts to do for Accumulo as PostGIS does for PostgreSQL.</p>
 
-<p>GeoWave was developed at the National Geospatial-Intelligence Agency (NGA) in collaboration with <a href="http://www.radiantblue.com/">RadiantBlue Technologies</a> and <a href="http://www.boozallen.com/">Booz Allen Hamilton</a>.  The government has <a href="https://github.com/ngageoint/geowave/blob/master/NOTICE">"unlimited rights"</a> and is releasing this software to increase the impact of government investments by providing developers with the opportunity to take things in new directions. The software use, modification, and distribution rights are stipulated within the <a href="http://www.apache.org/licenses/LICENSE-2.0.html">Apache 2.0</a> license.  </p>
+<h2 id="origin">Origin</h2>
 
-<h2>
-<a name="pull-requests" class="anchor" href="#pull-requests"><span class="octicon octicon-link"></span></a>Pull Requests</h2>
+<p>GeoWave was developed at the National Geospatial-Intelligence Agency (NGA) in collaboration with <a href="http://www.radiantblue.com/">RadiantBlue Technologies</a> and <a href="http://www.boozallen.com/">Booz Allen Hamilton</a>.  The government has <a href="https://github.com/ngageoint/geowave/blob/master/NOTICE">“unlimited rights”</a> and is releasing this software to increase the impact of government investments by providing developers with the opportunity to take things in new directions. The software use, modification, and distribution rights are stipulated within the <a href="http://www.apache.org/licenses/LICENSE-2.0.html">Apache 2.0</a> license.  </p>
+
+<h2 id="pull-requests">Pull Requests</h2>
 
 <p>All pull request contributions to this project will be released under the Apache 2.0 license.  </p>
 
-<p>Software source code previously released under an open source license and then modified by NGA staff is considered a "joint work" (see <em>17 USC  101</em>); it is partially copyrighted, partially public domain, and as a whole is protected by the copyrights of the non-government authors and must be released according to the terms of the original open source license.</p>
+<p>Software source code previously released under an open source license and then modified by NGA staff is considered a “joint work” (see <em>17 USC 101</em>);  it is partially copyrighted, partially public domain, and as a whole is protected by the copyrights of the non-government authors and must be released according to the terms of the original open source license.</p>
 
-<h2>
-<a name="ultra-quickstart" class="anchor" href="#ultra-quickstart"><span class="octicon octicon-link"></span></a>
-<em>Ultra</em> Quickstart</h2>
 
-<h3>
-<a name="dependencies-software-and-versions" class="anchor" href="#dependencies-software-and-versions"><span class="octicon octicon-link"></span></a>Dependencies: Software and Versions</h3>
+  </div>
+</div>
 
-<p>This <em>ultra</em> quickstart assumes you have <a href="http://maven.apache.org/">Apache Maven</a>, <a href="http://git-scm.com/">Git</a>, and <a href="http://www.oracle.com/technetwork/java/javase/downloads/index.html">Java</a> (&gt;= 1.7) installed on your system and on the path.  </p>
 
-<p>To view the data (via standard <a href="http://www.opengeospatial.org/">OGC</a> services) a <a href="http://geoserver.org/">GeoServer</a> instance &gt;= 2.5 is required due to <a href="http://jira.codehaus.org/browse/GEOT-4587">GEOT-4587</a>.<br><a href="http://geoserver.org/">GeoServer</a> 2.5 with <a href="http://www.geotools.org/">Geotools</a> 11.0 the most tested version.</p>
+        </div>
+      </div> <!-- /container -->
 
-<p><a href="http://projects.apache.org/projects/accumulo.html">Apache Accumulo</a> version 1.5 or greater is required.  1.5.0, 1.5.1, and 1.6.0 have all been tested. </p>
+      <div class="footer-push"></div>
+    </div><!--/.page-wrap -->
 
-<p><a href="http://hadoop.apache.org/">Apache Hadoop</a> versions 1.x and 2.x <em>should</em> all work.  The software has specifically been run on <a href="http://cloudera.com/content/cloudera/en/home.html">Cloudera</a> CDH4 and <a href="http://hortonworks.com/hdp/">Hortonworks Data Platform</a> 2.1.   </p>
-
-<p>MapReduce 1 with the new API (org.apache.hadoop.mapreduce.*) is used.  Testing is underway against YARN / MR2 and seems to be positive, but well, it's still underway.  </p>
-
-<p><a href="http://download.java.net/media/jai/builds/release/1_1_3/">Java Advanced Imaging</a> and <a href="http://download.java.net/media/jai-imageio/builds/release/1.1/">Java Image I/O</a> are also both required to be installed on the GeoServer instance(s) <em>as well</em> as on the Accumulo nodes.  The Accumulo support is only required for certain functions (distributed rendering) - so this may be skipped in some cases.</p>
-
-<h3>
-<a name="building-maven" class="anchor" href="#building-maven"><span class="octicon octicon-link"></span></a>Building: Maven!</h3>
-
-<p>Since GeoWave isn't currently in maven central we will build and install a local copy</p>
-
-<pre><code>$ git clone git@github.com:ngageoint/geowave.git
-$ cd geowave &amp;&amp; mvn install 
-</code></pre>
-
-<p>If everything worked as expected you should see something like</p>
-
-<pre><code>[INFO] ------------------------------------------------------------------------
-[INFO] Reactor Summary:
-[INFO]
-[INFO] geowave-parent .................................... SUCCESS [1.132s]
-[INFO] geowave-index ..................................... SUCCESS [6.559s]
-[INFO] geowave-store ..................................... SUCCESS [2.046s]
-[INFO] geowave-accumulo .................................. SUCCESS [4.402s]
-[INFO] geowave-gt ........................................ SUCCESS [5.056s]
-[INFO] geowave-ingest .................................... SUCCESS [2.847s]
-[INFO] geowave-analytics ................................. SUCCESS [4.749s]
-[INFO] geowave-test ...................................... SUCCESS [2.158s]
-[INFO] ------------------------------------------------------------------------
-[INFO] BUILD SUCCESS
-[INFO] ------------------------------------------------------------------------
-[INFO] Total time: 29.270s
-[INFO] Finished at: Mon Jun 09 21:22:16 EDT 2014
-[INFO] Final Memory: 80M/382M
-[INFO] ------------------------------------------------------------------------
-</code></pre>
-
-<h3>
-<a name="deploy-geoserver" class="anchor" href="#deploy-geoserver"><span class="octicon octicon-link"></span></a>Deploy: GeoServer</h3>
-
-<p>First we need to build the geoserver plugin - from the geowave root directory:</p>
-
-<pre><code>$ cd geowave-gt
-$ mvn package -Pgeotools-container-singlejar
-</code></pre>
-
-<p>let's assume you have geoserver deployed in a tomcat container in /opt/tomcat</p>
-
-<pre><code>$ cp target/geowave-gt-0.7.0-geoserver-singlejar.jar /opt/tomcat/webapps/geoserver/WEB-INF/lib/
-</code></pre>
-
-<p>and re-start tomcat</p>
-
-<h3>
-<a name="deploy-accumulo" class="anchor" href="#deploy-accumulo"><span class="octicon octicon-link"></span></a>Deploy: Accumulo</h3>
-
-<p>This should be very familiar by now; from the geowave root directory:</p>
-
-<pre><code>$ cd geowave-gt
-$ mvn package -Paccumulo-container-singlejar
-</code></pre>
-
-<p>This distributable needs to be in the Accumulo classpath on every tablet server.  Accumulo (in 1.5) leverages the Apache VFSClassloader to provide an easy way to do this in one shot - load dependencies out of HDFS.  Unfortunately we have a current bug (<strong>GEOWAVE-28</strong>) where the hdfs URI breaks some SPI injection fixes we have in place.  So until this is addressed you need to distribute this jar (<em>geowave-gt-0.7.0-accumulo-singlejar.jar</em>) to each tabled server, on the accumulo classpath ( $ACCUMULO_HOME/lib/ext/  is the default choice ).  </p>
-
-<h3>
-<a name="geowave-system-integration-test" class="anchor" href="#geowave-system-integration-test"><span class="octicon octicon-link"></span></a>GeoWave System Integration Test</h3>
-
-<p>The geowave-test module will run end-to-end integration testing on either a configured Accumulo instance or a temporary MiniAccumuloCluster.  It will ingest both point and line features spatially and temporally from shapefiles and test that spatial and spatial-temporal queries match expected results.</p>
-
-<p>A specific Accumulo instance can be configured either directly within this pom.xml or as Java options -DzookeeperUrl=&lt;zookeeperUrl&gt; -Dinstance=&lt;instance&gt; -Dusername=&lt;username&gt; -Dpassword=&lt;password&gt;</p>
-
-<p>If any of these configuration parameters are left unspecified the default integration test will use a MiniAccumuloCluster created within a temporary directory.  For this to work on Windows, make sure Cygwin is installed and a "CYGPATH" environment variable must reference the &lt;CYGWIN_HOME&gt;/bin/cygpath.exe file.  </p>
-
-<h3>
-<a name="ingest-data" class="anchor" href="#ingest-data"><span class="octicon octicon-link"></span></a>Ingest Data</h3>
-
-<p><em>Coming Soon! With useful details!</em></p>
-
-<p>(basically see  geowave-ingest::mil.nga.giat.geowave.ingest.VectorFileIngest for an example that can ingest any geotools supported format) </p>
-
-<h3>
-<a name="view-in-geoserver" class="anchor" href="#view-in-geoserver"><span class="octicon octicon-link"></span></a>View in GeoServer</h3>
-
-<p><em>Coming Soon! With screenshots as well!</em></p>
-
-<p>(basically add a GeoWave data store through the add datastore menu and configure the layer like normal)</p>
-        </section>
-
-        <aside id="sidebar">
-          <a href="https://github.com/ngageoint/geowave/zipball/master" class="button">
-            <small>Download</small>
-            .zip file
-          </a>
-          <a href="https://github.com/ngageoint/geowave/tarball/master" class="button">
-            <small>Download</small>
-            .tar.gz file
-          </a>
-
-          <p class="repo-owner"><a href="https://github.com/ngageoint/geowave"></a> is maintained by <a href="https://github.com/ngageoint">ngageoint</a>.</p>
-
-          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
-        </aside>
+    <footer>
+      <br/><br/>
+      <div class="attribution">
+        <p>Layout from <a href="http://jekyllbootstrap.com" target="_blank" title="The Definitive Jekyll Blogging Framework">Jekyll Bootstrap</a>
+          and <a href="http://github.com/dhulihan/hooligan" target="_blank">The Hooligan Theme</a>
+        </p>
       </div>
-    </div>
+    </footer>
 
-  
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="/assets/themes/hooligan/js/jquery.min.js"><\/script>')</script>
+    <script src="/assets/themes/hooligan/bootstrap/js/bootstrap.min.js"></script>
+
+    
   </body>
 </html>
+
