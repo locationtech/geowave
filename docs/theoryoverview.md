@@ -10,13 +10,13 @@ The core of the issue is that we need to represent multi-dimensional data (could
 
 What we want is a property that ensures values close in n-dimensional space are still close in 1-dimensional space.   There are a few reasons for this – but primarily it’s so we can represent a n-dimensional range selector(bbox typically – but can be abstracted to a hyper-rectangle) as a smaller number of highly contiguous 1d ranges.   
 
-![Z-Curve: 2D -> 1D](/docs/figures/sfc1.png)
+![Z-Curve: 2D -> 1D](figures/sfc1.png)
 
 *Figure: Z-Order curve based dimensional decomposition*
 
 Fortunately there is already a type of transform that describes this operation in mathematics – it’s called a   “Space Filling Curve” – or SFC for short.   Different space filling curves have different properties  - what they all do is take a n-dimensional space and describe a set of steps to trace all points in a single sequence.  
 
-![Various space filling curves](/docs/figures/curves.png)
+![Various space filling curves](figures/curves.png)
 
 *Figure: Haverkort, Walderveen Locality and Bounding-Box Qualifty of Two-Dimensional Space-Filling Curves 2008 arXiv:0806.4787v2*
 
@@ -33,7 +33,7 @@ This is sometimes implemented in base 10 instead of base 2.    This implementati
 ### Hilbert SFC
 The Hilbert curve is a bit more complex to work with than the Z-curve – both when calculating and when performing a decomposition – hence it is less commonly used.   Nevertheless it is popular in other areas in computer science where multiple variables  need to be set in a linear order – process scheduling for one.   A simplistic view of a standard projections of the earth mapped to a Hilbert curve would look something like this – with 4 bits of cardinality per dimension (how many buckets we have)
 
-![Hilbert SFC](/docs/figures/hilbert1.png)
+![Hilbert SFC](figures/hilbert1.png)
 
 *Figure: Hilbert space filling curve superimposed over a projection of the earth*
 
