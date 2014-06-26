@@ -7,29 +7,29 @@
     <h4>Scope</h4>
     <ul>
       <li class="{% if page.title == "Welcome" %}current{% endif %}">
-        <a href="{{ BASE_PATH }}/docs/welcome.html">Welcome</a>
+        <a href="{{ BASE_PATH }}docs/welcome.html">Welcome</a>
       </li>
       <li class="{% if page.title == "Theory Overview" %}current{% endif %}">
-        <a href="{{ site.url }}/docs/theoryoverview.html">Theory Overview</a>
+        <a href="{{ BASE_PATH }}docs/theoryoverview.html">Theory Overview</a>
       </li>
       <li class="{% if page.title == "Theory Decomposition" %}current{% endif %}">
-        <a href="{{ site.url }}/docs/decomposition.html">Theory Decomposition</a>
+        <a href="{{ BASE_PATH }}docs/decomposition.html">Theory Decomposition</a>
       </li>
     </ul>
 
     <h4>Architecture</h4>
     <ul>
       <li class="{% if page.title == "Architecture Overview" %}current{% endif %}">
-        <a href="{{ site.url }}/docs/architectureoverview.html">Overview</a>
+        <a href="{{ BASE_PATH }}docs/architectureoverview.html">Overview</a>
       </li>
       <li class="{% if page.title == "Indexes" %}current{% endif %}">
-        <a href="{{ site.url }}/docs/indexes.html">Indexes</a>
+        <a href="{{ BASE_PATH }}docs/indexes.html">Indexes</a>
       </li>
       <li class="{% if page.title == "Adapters" %}current{% endif %}">
-        <a href="{{ site.url }}/docs/adapters.html">Adapters</a>
+        <a href="{{ BASE_PATH }}docs/adapters.html">Adapters</a>
       </li>
       <li class="{% if page.title == "Accumulo Persistence" %}current{% endif %}">
-        <a href="{{ site.url }}/docs/accumulo.html">Accumulo Persistence</a>
+        <a href="{{ BASE_PATH }}docs/accumulo.html">Accumulo Persistence</a>
       </li>
     </ul>
 
@@ -37,22 +37,22 @@
     <h4>Ingest</h4>
     <ul>
         <li class="{% if page.title == "Ingest Overview" %}current{% endif %}">
-            <a href="{{ site.url }}/docs/ingestoverview.html">Overview</a>
+            <a href="{{ BASE_PATH }}docs/ingestoverview.html">Overview</a>
         </li>
         <li class="{% if page.title == "Ingest Plugins" %}current{% endif %}">
-          <a href="{{ site.url }}/docs/ingestplugins.html">Plugins</a>
+          <a href="{{ BASE_PATH }}docs/ingestplugins.html">Plugins</a>
         </li>
         <li class="{% if page.title == "Ingest Standalone" %}current{% endif %}">
-            <a href="{{ site.url }}/docs/ingeststandalone.html">Standalone</a>
+            <a href="{{ BASE_PATH }}docs/ingeststandalone.html">Standalone</a>
         </li>
         <li class="{% if page.title == "MR OutputFormat" %}current{% endif %}">
-            <a href="{{ site.url }}/docs/mroutputformat.html">Map Reduce OutputFormat</a>
+            <a href="{{ BASE_PATH }}docs/mroutputformat.html">Map Reduce OutputFormat</a>
         </li>
         <li class="{% if page.title == "Supported Types" %}current{% endif %}">
-            <a href="{{ site.url }}/docs/supportedtypes.html">Supported Types</a>
+            <a href="{{ BASE_PATH }}docs/supportedtypes.html">Supported Types</a>
         </li>
         <li class="{% if page.title == "Examples" %}current{% endif %}">
-            <a href="{{ site.url }}/docs/ingestexamples.html">Examples</a>
+            <a href="{{ BASE_PATH }}docs/ingestexamples.html">Examples</a>
         </li>
         <li>...</li>
     </ul>
@@ -60,16 +60,16 @@
     <h4>Query</h4>
     <ul>
       <li class="{% if page.title == "Query Overview" %}current{% endif %}">
-        <a href="{{ site.url }}/docs/queryoverview.html">Overview</a>
+        <a href="{{ BASE_PATH }}docs/queryoverview.html">Overview</a>
       </li>
       <li class="{% if page.title == "Iterators" %}current{% endif %}">
-        <a href="{{ site.url }}/docs/queryiterators.html">Iterators</a>
+        <a href="{{ BASE_PATH }}docs/queryiterators.html">Iterators</a>
       </li>
       <li class="{% if page.title == "CQL" %}current{% endif %}">
-        <a href="{{ site.url }}/docs/cql.html">CQL</a>
+        <a href="{{ BASE_PATH }}docs/cql.html">CQL</a>
       </li>
       <li class="{% if page.title == "MR InputFormat" %}current{% endif %}">
-        <a href="{{ site.url }}/docs/mrinputformat.html">Map Reduce InputFormat</a>
+        <a href="{{ BASE_PATH }}docs/mrinputformat.html">Map Reduce InputFormat</a>
       </li>
       <li>...</li>
     </ul>
@@ -77,10 +77,10 @@
     <h4>Analytics</h4>
     <ul>
       <li class="{% if page.title == "Kernel Density" %}current{% endif %}">
-        <a href="{{ site.url }}/docs/kerneldensity.html">Kernel Density</a>
+        <a href="{{ BASE_PATH }}docs/kerneldensity.html">Kernel Density</a>
       </li>
       <li class="{% if page.title == "Kmeans Clustering" %}current{% endif %}">
-        <a href="{{ site.url }}/docs/kmeansclustering.html">K-Means clustering</a>
+        <a href="{{ BASE_PATH }}docs/kmeansclustering.html">K-Means clustering</a>
       </li>
       <li>...</li>
     </ul>
@@ -88,13 +88,13 @@
     <h4>Examples</h4>
     <ul>
       <li class="{% if page.title == "Shapefile" %}current{% endif %}">
-        <a href="{{ site.url }}/docs/shapefile.html">Shapefile</a>
+        <a href="{{ BASE_PATH }}docs/shapefile.html">Shapefile</a>
       </li>
       <li class="{% if page.title == "OSMGPX" %}current{% endif %}">
-        <a href="{{ site.url }}/docs/osmgpx.html">OSM GPX Data</a>
+        <a href="{{ BASE_PATH }}docs/osmgpx.html">OSM GPX Data</a>
       </li>
       <li class="{% if page.title == "OSM Feature" %}current{% endif %}">
-        <a href="{{ site.url }}/docs/osmfeature.html">OSM Feature Data</a>
+        <a href="{{ BASE_PATH }}docs/osmfeature.html">OSM Feature Data</a>
       </li>
       <li>...</li>
     </ul>
@@ -102,7 +102,7 @@
     <h4>Tuning</h4>
     <ul>
       <li class="{% if page.title == "Index Tuning" %}current{% endif %}">
-        <a href="{{ site.url }}/docs/indextuning.html">Index Tuning</a>
+        <a href="{{ BASE_PATH }}docs/indextuning.html">Index Tuning</a>
       </li>
       <li>...</li>
     </ul>
