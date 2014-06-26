@@ -9,7 +9,7 @@ title: Theory Decomposition
 Core to the concept of SFC based indexing is range decomposition.   This is when we take a range described in multiple dimensions and turn it into a series of 1d ranges.   
 
 
-![Hilbert Decomposition 1](/docs/figures/hilbertdecomp1.png)
+![Hilbert Decomposition 1](figures/hilbertdecomp1.png)
 
 *Figure: Hilbert Ranges*
 
