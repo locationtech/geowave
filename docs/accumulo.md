@@ -5,7 +5,7 @@ title: Accumulo Persistence
 
 # Accumulo Key Structure
 
-![accumulo Data Schema](/docs/figures/accumulo.png)
+![accumulo Data Schema](figures/accumulo.png)
 
 
 The above diagram describes the default structure of entries in the Accumulo data store.  The index ID comes directly from the tiered space filling curve implementation.  We do not impose a requirement that data IDs are globally unique but they should be unique for the adapter.  Therefore, the pairing of Adapter ID and Data ID define a unique identifier for a data element.  The lengths are stored within the row ID as 4 byte integers - this enables fully reading the row ID because these IDs can be of variable length.  The number of duplicates is stored within the row ID as well to inform the de-duplication filter whether this element needs to be temporarily stored to ensure no duplicates are sent to the caller.

@@ -6,7 +6,7 @@ title: Ingest Overview
 # Ingest
 
 
-![Ingest Architecture](/docs/figures/ingestoverview1.png)
+![Ingest Architecture](figures/ingestoverview1.png)
 
 In addition to the raw data to ingest, the ingest process requires an adapter to translate the native data into a format that can be persisted into the data store.  Also, the ingest process requires an Index which is a definition of all the configured parameters that defines how data translates to row IDs (how it is indexed) and what common fields need to be maintained within the table to be used by fine-grained and secondary filters.
 

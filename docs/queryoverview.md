@@ -6,7 +6,7 @@ title: Query Overview
 # Query Overview
 
 
-![Query Architecture](/docs/figures/queryoverview1.png)
+![Query Architecture](figures/queryoverview1.png)
 
 A query in GeoWave currently consists of a set of ranges on the dimensions of the primary index.  Up to 3 dimensions (plus temporal optionally) can take advantage of any complex OGC geometry for the query window.  For dimensions of 4 or greater the query can only be a set of ranges on each dimension (i.e. hyper-rectangle, etc.).
 

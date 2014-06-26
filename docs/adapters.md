@@ -11,7 +11,7 @@ In the Adapter persistence table a pointer to the java class (expected to be on 
 
 # Feature Serialization
 
-![Feature Serialization](/docs/figures/serialization1.png)
+![Feature Serialization](/figures/serialization1.png)
 
 
 GeoWave allows the user to create their own data adapters - these not only determine how the data is actually stored (serialization/deserialization), but also contain a hierarchy of attribute types. The reason for this hierarchy has to do with extensibility vs. optimization.   A data adapter could theoretically take a dependency on ffmpeg, store the feature as metadata in a video stream, and persist that value to the database.  All questions of sanity of this solution aside, there are some additional specific issues with the way fine grain filtering is done - specifically due to the iterators.  Iterators are part of the Accumulo extensibility module and allow for arbitrary code to be plugged in directly at the tablet server level into the core accumulo kernel.   With more code in the iterators there is both a greater chance of crashing (and taking down a tablet server - and possibly an accumulo instance), greater use of memory (memory used by the iterator / class loader isn't available for caching, etc., and a greater O&M debt - the iterators have to be distributed to each client out of band - and require impersonating the accumulo user (possibly root).   

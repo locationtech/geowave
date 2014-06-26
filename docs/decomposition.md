@@ -22,7 +22,7 @@ It should be noted that sometimes more simplistic algorithms will not fully deco
 
 At some point : with high precision high dimensionality curves : the number of possible unit cells can become to large too deal with : in this case GeoWaves optimizes this by treating the curve as a "lower cardinality" curve than it actually is : so the unit cell size might not be 1, but instead 64, 128, 1024, etc.   This allows the user to still achieve high precision when selection windows are small, but not spend an inordinate amount of time fully decomposing for large selection windows.   
 
-![Hilbert Decomposition 2](/docs/figures/hilbertdecomp2.png)
+![Hilbert Decomposition 2](figures/hilbertdecomp2.png)
 
 
 Consider a region query asking for all data from:
@@ -41,13 +41,13 @@ This query range is shown at left by a blue bounding box.
  * We didn't bother decomposing regions which didn't overlap the original search criteria.
  
 
-![Hilbert Decomposition 3](/docs/figures/hilbertdecomp3.png)
+![Hilbert Decomposition 3](figures/hilbertdecomp3.png)
 
 Here we see the query range fully decomposed into the underlying "quads".
 Note that in some instances we were able to stop decomposing when the query window fully contained the quad (segment 3 and segment 8)
 
 
-![Hilbert Decomposition 4](/docs/figures/hilbertdecomp4.png)
+![Hilbert Decomposition 4](figures/hilbertdecomp4.png)
 
 Now we have fully transitioned to the 1d number line from the previous set of quads.  We ahve also rolled together regions which are contiguous.
 
