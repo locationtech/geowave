@@ -1,5 +1,5 @@
 ---
-layout: page
+layout: docs
 title: Documentation
 header: Documentation
 group: navigation
