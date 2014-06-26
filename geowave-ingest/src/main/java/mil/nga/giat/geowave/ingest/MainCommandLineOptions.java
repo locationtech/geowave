@@ -1,5 +1,9 @@
 package mil.nga.giat.geowave.ingest;
 
+import mil.nga.giat.geowave.ingest.hdfs.StageToHdfsDriver;
+import mil.nga.giat.geowave.ingest.hdfs.mapreduce.IngestFromHdfsDriver;
+import mil.nga.giat.geowave.ingest.local.LocalFileIngestDriver;
+
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionGroup;
@@ -13,25 +17,42 @@ public class MainCommandLineOptions
 	public static enum Operation {
 		LOCAL_INGEST(
 				"localingest",
-				"ingest supported files in local file system directly, without using HDFS"),
+				"ingest supported files in local file system directly, without using HDFS",
+				new LocalFileIngestDriver(
+						"localingest")),
 		STAGE_TO_HDFS(
 				"hdfsstage",
-				"stage supported files in local file system to HDFS"),
+				"stage supported files in local file system to HDFS",
+				new StageToHdfsDriver(
+						"hdfsstage")),
 		INGEST_FROM_HDFS(
 				"poststage",
-				"ingest supported files that already exist in HDFS"),
+				"ingest supported files that already exist in HDFS",
+				new IngestFromHdfsDriver(
+						"poststage")),
 		LOCAL_TO_HDFS_INGEST(
 				"hdfsingest",
-				"copy supported files from local file system to HDFS and ingest from HDFS");
+				"copy supported files from local file system to HDFS and ingest from HDFS",
+				new MultiStageCommandLineDriver(
+						"hdfsingest",
+						new AbstractCommandLineDriver[] {
+							new StageToHdfsDriver(
+									"hdfsingest"),
+							new IngestFromHdfsDriver(
+									"hdfsingest")
+						}));
 
 		private final String commandlineOptionValue;
 		private final String description;
+		private final AbstractCommandLineDriver driver;
 
 		private Operation(
 				final String commandlineOptionValue,
-				final String description ) {
+				final String description,
+				final AbstractCommandLineDriver driver ) {
 			this.commandlineOptionValue = commandlineOptionValue;
 			this.description = description;
+			this.driver = driver;
 		}
 
 		public String getCommandlineOptionValue() {
@@ -42,6 +63,9 @@ public class MainCommandLineOptions
 			return description;
 		}
 
+		public AbstractCommandLineDriver getDriver() {
+			return driver;
+		}
 	}
 
 	private final Operation operation;

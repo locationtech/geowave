@@ -9,8 +9,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.ServiceLoader;
 
-import mil.nga.giat.geowave.ingest.MainCommandLineOptions.Operation;
-
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.HelpFormatter;
@@ -24,10 +22,10 @@ abstract public class AbstractCommandLineDriver
 {
 	private final static Logger LOGGER = Logger.getLogger(AbstractCommandLineDriver.class);
 	final protected Map<String, IngestTypePluginProviderSpi<?, ?>> pluginProviderRegistry;
-	final private Operation operation;
+	private final String operation;
 
 	public AbstractCommandLineDriver(
-			final Operation operation ) {
+			final String operation ) {
 		super();
 		pluginProviderRegistry = new HashMap<String, IngestTypePluginProviderSpi<?, ?>>();
 		this.operation = operation;
@@ -174,10 +172,10 @@ abstract public class AbstractCommandLineDriver
 
 	private static void printHelp(
 			final Options options,
-			final Operation operation ) {
+			final String operation ) {
 		final HelpFormatter formatter = new HelpFormatter();
 		formatter.printHelp(
-				"-" + operation.getCommandlineOptionValue() + " <options>",
+				"-" + operation + " <options>",
 				"\nOptions:",
 				options,
 				"");

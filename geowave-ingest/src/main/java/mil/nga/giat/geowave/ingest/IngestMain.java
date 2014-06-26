@@ -1,10 +1,5 @@
 package mil.nga.giat.geowave.ingest;
 
-import mil.nga.giat.geowave.ingest.MainCommandLineOptions.Operation;
-import mil.nga.giat.geowave.ingest.hdfs.StageToHdfsDriver;
-import mil.nga.giat.geowave.ingest.hdfs.mapreduce.IngestFromHdfsDriver;
-import mil.nga.giat.geowave.ingest.local.LocalFileIngestDriver;
-
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.HelpFormatter;
@@ -47,29 +42,8 @@ public class IngestMain
 					operations,
 					operationsArgs);
 			final MainCommandLineOptions operationOption = MainCommandLineOptions.parseOptions(operationCommandLine);
-			switch (operationOption.getOperation()) {
-				case LOCAL_INGEST:
-					final LocalFileIngestDriver localIngest = new LocalFileIngestDriver(
-							operationOption.getOperation());
-					localIngest.run(optionsArgs);
-					break;
-				case LOCAL_TO_HDFS_INGEST:
-				case STAGE_TO_HDFS:
-					final StageToHdfsDriver stage = new StageToHdfsDriver(
-							operationOption.getOperation());
-					stage.run(optionsArgs);
-					if (operationOption.getOperation().equals(
-							Operation.STAGE_TO_HDFS)) {
-						// if its local to HDFS ingest continue on to the ingest
-						break;
-					}
-				case INGEST_FROM_HDFS:
-					final IngestFromHdfsDriver hdfsIngest = new IngestFromHdfsDriver(
-							operationOption.getOperation());
-					hdfsIngest.run(optionsArgs);
-					break;
-
-			}
+			operationOption.getOperation().getDriver().run(
+					optionsArgs);
 		}
 		catch (final ParseException e) {
 			LOGGER.fatal(

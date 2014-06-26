@@ -1,6 +1,9 @@
 package mil.nga.giat.geowave.ingest.hdfs.mapreduce;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import mil.nga.giat.geowave.accumulo.AccumuloOperations;
 import mil.nga.giat.geowave.accumulo.BasicAccumuloOperations;
@@ -278,6 +281,34 @@ public class GeoWaveConfiguratorBase
 		return null;
 	}
 
+	public static DataAdapter<?>[] getDataAdapters(
+			final Class<?> implementingClass,
+			final JobContext context ) {
+		return getDataAdaptersInternal(
+				implementingClass,
+				getConfiguration(context));
+	}
+
+	private static DataAdapter<?>[] getDataAdaptersInternal(
+			final Class<?> implementingClass,
+			final Configuration configuration ) {
+		final Map<String, String> input = configuration.getValByRegex(enumToConfKey(
+				implementingClass,
+				GeoWaveMetaStore.DATA_ADAPTER) + "*");
+		if (input != null) {
+			final List<DataAdapter<?>> adapters = new ArrayList<DataAdapter<?>>(
+					input.size());
+			for (final String dataAdapterStr : input.values()) {
+				final byte[] dataAdapterBytes = ByteArrayUtils.byteArrayFromString(dataAdapterStr);
+				adapters.add(PersistenceUtils.fromBinary(
+						dataAdapterBytes,
+						DataAdapter.class));
+			}
+			return adapters.toArray(new DataAdapter[] {});
+		}
+		return new DataAdapter[] {};
+	}
+
 	private static Index getIndexInternal(
 			final Class<?> implementingClass,
 			final Configuration configuration,
@@ -293,6 +324,34 @@ public class GeoWaveConfiguratorBase
 					Index.class);
 		}
 		return null;
+	}
+
+	public static Index[] getIndices(
+			final Class<?> implementingClass,
+			final JobContext context ) {
+		return getIndicesInternal(
+				implementingClass,
+				getConfiguration(context));
+	}
+
+	private static Index[] getIndicesInternal(
+			final Class<?> implementingClass,
+			final Configuration configuration ) {
+		final Map<String, String> input = configuration.getValByRegex(enumToConfKey(
+				implementingClass,
+				GeoWaveMetaStore.INDEX) + "*");
+		if (input != null) {
+			final List<Index> indices = new ArrayList<Index>(
+					input.size());
+			for (final String indexStr : input.values()) {
+				final byte[] indexBytes = ByteArrayUtils.byteArrayFromString(indexStr);
+				indices.add(PersistenceUtils.fromBinary(
+						indexBytes,
+						Index.class));
+			}
+			return indices.toArray(new Index[] {});
+		}
+		return new Index[] {};
 	}
 
 	private static String getTableNamespaceInternal(

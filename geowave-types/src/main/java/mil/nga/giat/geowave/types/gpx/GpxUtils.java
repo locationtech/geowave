@@ -4,7 +4,9 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -14,23 +16,38 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.xml.XMLConstants;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.Attribute;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
+import javax.xml.transform.Source;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
+import javax.xml.validation.Validator;
 
 import org.apache.log4j.Logger;
 import org.geotools.feature.AttributeTypeBuilder;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.opengis.feature.simple.SimpleFeatureType;
+import org.xml.sax.SAXException;
 
 import com.vividsolutions.jts.geom.Geometry;
 
 public class GpxUtils
 {
 	private final static Logger LOGGER = Logger.getLogger(GpxUtils.class);
+	private static final String SCHEMA_RESOURCE_PACKAGE = "mil/nga/giat/geowave/types/gpx/";
+	private static final String SCHEMA_GPX_1_0_LOCATION = SCHEMA_RESOURCE_PACKAGE + "gpx-1_0.xsd";
+	private static final String SCHEMA_GPX_1_1_LOCATION = SCHEMA_RESOURCE_PACKAGE + "gpx-1_1.xsd";
+
+	private static final URL SCHEMA_GPX_1_0_URL = ClassLoader.getSystemResource(SCHEMA_GPX_1_0_LOCATION);
+	private static final URL SCHEMA_GPX_1_1_URL = ClassLoader.getSystemResource(SCHEMA_GPX_1_1_LOCATION);
+	private static final Validator SCHEMA_GPX_1_0_VALIDATOR = getSchemaValidator(SCHEMA_GPX_1_0_URL);
+	private static final Validator SCHEMA_GPX_1_1_VALIDATOR = getSchemaValidator(SCHEMA_GPX_1_1_URL);
 	public static final DateFormat TIME_FORMAT_MILLIS = new SimpleDateFormat(
 			"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 	public static final DateFormat TIME_FORMAT_SECONDS = new SimpleDateFormat(
@@ -280,5 +297,49 @@ public class GpxUtils
 
 		return simpleFeatureTypeBuilder.buildFeatureType();
 
+	}
+
+	private static Validator getSchemaValidator(
+			final URL schemaUrl ) {
+		final SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+		Schema schema;
+		try {
+			schema = schemaFactory.newSchema(schemaUrl);
+
+			return schema.newValidator();
+		}
+		catch (final SAXException e) {
+			LOGGER.warn(
+					"Unable to read schema '" + schemaUrl.toString() + "'",
+					e);
+		}
+		return null;
+	}
+
+	public static boolean validateGpx(
+			final File gpxDocument )
+			throws SAXException,
+			IOException {
+		final Source xmlFile = new StreamSource(
+				gpxDocument);
+		try {
+			SCHEMA_GPX_1_1_VALIDATOR.validate(xmlFile);
+			return true;
+		}
+		catch (final SAXException e) {
+			LOGGER.info(
+					"XML file '" + "' failed GPX 1.1 validation",
+					e);
+			try {
+				SCHEMA_GPX_1_0_VALIDATOR.validate(xmlFile);
+				return true;
+			}
+			catch (final SAXException e2) {
+				LOGGER.info(
+						"XML file '" + "' failed GPX 1.0 validation",
+						e2);
+			}
+			return false;
+		}
 	}
 }

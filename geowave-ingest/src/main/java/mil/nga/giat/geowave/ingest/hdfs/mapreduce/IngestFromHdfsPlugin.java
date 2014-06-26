@@ -13,5 +13,7 @@ public interface IngestFromHdfsPlugin<I, O> extends
 	public IngestWithReducer<I, ?, ?, O> ingestWithReducer();
 
 	public Index[] getSupportedIndices();
+	
+	public Index[] getRequiredIndices();
 
 }

@@ -10,7 +10,6 @@ import mil.nga.giat.geowave.index.StringUtils;
 import mil.nga.giat.geowave.ingest.AbstractCommandLineDriver;
 import mil.nga.giat.geowave.ingest.AccumuloCommandLineOptions;
 import mil.nga.giat.geowave.ingest.IngestTypePluginProviderSpi;
-import mil.nga.giat.geowave.ingest.MainCommandLineOptions.Operation;
 import mil.nga.giat.geowave.ingest.hdfs.HdfsCommandLineOptions;
 import mil.nga.giat.geowave.store.index.Index;
 
@@ -35,7 +34,7 @@ public class IngestFromHdfsDriver extends
 	private static ExecutorService singletonExecutor;
 
 	public IngestFromHdfsDriver(
-			final Operation operation ) {
+			final String operation ) {
 		super(
 				operation);
 	}
@@ -138,22 +137,35 @@ public class IngestFromHdfsDriver extends
 					}
 				}
 
+				AbstractMapReduceIngest jobRunner = null;
 				if (ingestWithReducer != null) {
-					// TODO implement ingest with reducer
+					jobRunner = new IngestWithReducerJobRunner(
+							accumuloOptions,
+							inputFile,
+							pluginProvider.getIngestTypeName(),
+							ingestFromHdfsPlugin,
+							ingestWithReducer);
+
 				}
 				else if (ingestWithMapper != null) {
+					jobRunner = new IngestWithMapperJobRunner(
+							accumuloOptions,
+							inputFile,
+							pluginProvider.getIngestTypeName(),
+							ingestFromHdfsPlugin,
+							ingestWithMapper);
+
+				}
+				if (jobRunner != null) {
 					try {
-						runMapper(
-								args,
-								inputFile,
-								pluginProvider.getIngestTypeName(),
-								ingestFromHdfsPlugin,
-								ingestWithMapper,
-								conf);
+						runJob(
+								conf,
+								jobRunner,
+								args);
 					}
 					catch (final Exception e) {
 						LOGGER.warn(
-								"Error running mapper ingest job",
+								"Error running ingest job",
 								e);
 					}
 				}
@@ -183,20 +195,11 @@ public class IngestFromHdfsDriver extends
 		}
 	}
 
-	private void runMapper(
-			final String[] args,
-			final Path inputFile,
-			final String typeName,
-			final IngestFromHdfsPlugin plugin,
-			final IngestWithMapper mapperIngest,
-			final Configuration conf )
+	private void runJob(
+			final Configuration conf,
+			final AbstractMapReduceIngest jobRunner,
+			final String[] args )
 			throws Exception {
-		final IngestWithMapperJobRunner jobRunner = new IngestWithMapperJobRunner(
-				accumuloOptions,
-				inputFile,
-				typeName,
-				plugin,
-				mapperIngest);
 		final ExecutorService executorService = getSingletonExecutorService();
 		executorService.execute(new Runnable() {
 

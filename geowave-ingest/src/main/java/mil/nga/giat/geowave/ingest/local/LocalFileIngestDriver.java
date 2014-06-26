@@ -15,7 +15,6 @@ import mil.nga.giat.geowave.ingest.AccumuloCommandLineOptions;
 import mil.nga.giat.geowave.ingest.GeoWaveData;
 import mil.nga.giat.geowave.ingest.IngestRunData;
 import mil.nga.giat.geowave.ingest.IngestTypePluginProviderSpi;
-import mil.nga.giat.geowave.ingest.MainCommandLineOptions.Operation;
 import mil.nga.giat.geowave.store.DataStore;
 import mil.nga.giat.geowave.store.IndexWriter;
 import mil.nga.giat.geowave.store.adapter.WritableDataAdapter;
@@ -34,7 +33,7 @@ public class LocalFileIngestDriver extends
 	protected IndexWriter indexWriter;
 
 	public LocalFileIngestDriver(
-			final Operation operation ) {
+			final String operation ) {
 		super(
 				operation);
 	}

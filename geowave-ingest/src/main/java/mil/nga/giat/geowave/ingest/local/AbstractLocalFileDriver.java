@@ -7,7 +7,6 @@ import java.nio.file.Paths;
 import java.util.Map;
 
 import mil.nga.giat.geowave.ingest.AbstractCommandLineDriver;
-import mil.nga.giat.geowave.ingest.MainCommandLineOptions.Operation;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Options;
@@ -21,7 +20,7 @@ abstract public class AbstractLocalFileDriver<P extends LocalPluginBase, R> exte
 	protected LocalInputCommandLineOptions localInput;
 
 	public AbstractLocalFileDriver(
-			final Operation operation ) {
+			final String operation ) {
 		super(
 				operation);
 	}

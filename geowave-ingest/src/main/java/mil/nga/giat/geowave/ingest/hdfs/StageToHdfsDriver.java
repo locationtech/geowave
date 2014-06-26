@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 
 import mil.nga.giat.geowave.ingest.IngestTypePluginProviderSpi;
-import mil.nga.giat.geowave.ingest.MainCommandLineOptions.Operation;
 import mil.nga.giat.geowave.ingest.local.AbstractLocalFileDriver;
 
 import org.apache.avro.file.DataFileWriter;
@@ -26,7 +25,7 @@ public class StageToHdfsDriver extends
 	private HdfsCommandLineOptions hdfsOptions;
 
 	public StageToHdfsDriver(
-			final Operation operation ) {
+			final String operation ) {
 		super(
 				operation);
 	}

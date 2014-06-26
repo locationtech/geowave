@@ -15,8 +15,8 @@ import mil.nga.giat.geowave.index.StringUtils;
 public class Index implements
 		Persistable
 {
-	private NumericIndexStrategy indexStrategy;
-	private CommonIndexModel indexModel;
+	protected NumericIndexStrategy indexStrategy;
+	protected CommonIndexModel indexModel;
 
 	protected Index() {}
 

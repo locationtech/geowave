@@ -44,6 +44,7 @@ import org.apache.log4j.Logger;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
+import org.xml.sax.SAXException;
 
 import com.google.common.collect.Iterables;
 import com.vividsolutions.jts.geom.Coordinate;
@@ -140,9 +141,22 @@ public class GpxIngestPlugin implements
 	@Override
 	public boolean supportsFile(
 			final File file ) {
-		// TODO: consider a quick peek at the file to ensure it seems to match
-		// the GPX schema
-		return true;
+		// if its a gpx extension assume it is supported
+		if (file.getName().toLowerCase().endsWith(
+				"gpx")) {
+			return true;
+		}
+		// otherwise take a quick peek at the file to ensure it matches the GPX
+		// schema
+		try {
+			return GpxUtils.validateGpx(file);
+		}
+		catch (SAXException | IOException e) {
+			LOGGER.warn(
+					"Unable to read file:" + file.getAbsolutePath(),
+					e);
+		}
+		return false;
 	}
 
 	@Override
@@ -568,6 +582,11 @@ public class GpxIngestPlugin implements
 
 		}
 		return featureData;
+	}
+
+	@Override
+	public Index[] getRequiredIndices() {
+		return new Index[] {};
 	}
 
 	public static class IngestGpxTrackFromHdfs implements

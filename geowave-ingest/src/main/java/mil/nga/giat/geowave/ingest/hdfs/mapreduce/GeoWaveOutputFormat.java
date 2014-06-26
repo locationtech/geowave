@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import mil.nga.giat.geowave.accumulo.AccumuloAdapterStore;
 import mil.nga.giat.geowave.accumulo.AccumuloDataStore;
+import mil.nga.giat.geowave.accumulo.AccumuloIndexStore;
 import mil.nga.giat.geowave.accumulo.AccumuloOperations;
 import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.index.StringUtils;
@@ -43,17 +45,33 @@ public class GeoWaveOutputFormat extends
 			InterruptedException {
 		try {
 			final AccumuloOperations accumuloOperations = getAccumuloOperations(context);
-			final AdapterStore adapterStore = getDataAdapterStore(
+			final AdapterStore accumuloAdapterStore = new AccumuloAdapterStore(
+					accumuloOperations);
+			final DataAdapter<?>[] adapters = getDataAdapters(context);
+			for (final DataAdapter<?> a : adapters) {
+				if (!accumuloAdapterStore.adapterExists(a.getAdapterId())) {
+					accumuloAdapterStore.addAdapter(a);
+				}
+			}
+			final IndexStore accumuloIndexStore = new AccumuloIndexStore(
+					accumuloOperations);
+			final Index[] indices = getIndices(context);
+			for (final Index i : indices) {
+				if (!accumuloIndexStore.indexExists(i.getId())) {
+					accumuloIndexStore.addIndex(i);
+				}
+			}
+			final AdapterStore jobContextAdapterStore = getDataAdapterStore(
 					context,
 					accumuloOperations);
-			final IndexStore indexStore = getIndexStore(
+			final IndexStore jobContextIndexStore = getIndexStore(
 					context,
 					accumuloOperations);
 			return new GeoWaveRecordWriter(
 					context,
 					accumuloOperations,
-					indexStore,
-					adapterStore);
+					jobContextIndexStore,
+					jobContextAdapterStore);
 		}
 		catch (final Exception e) {
 			throw new IOException(
@@ -344,6 +362,13 @@ public class GeoWaveOutputFormat extends
 				indexId);
 	}
 
+	protected static Index[] getIndices(
+			final JobContext context ) {
+		return GeoWaveConfiguratorBase.getIndices(
+				CLASS,
+				context);
+	}
+
 	protected static DataAdapter<?> getDataAdapter(
 			final JobContext context,
 			final ByteArrayId adapterId ) {
@@ -351,6 +376,13 @@ public class GeoWaveOutputFormat extends
 				CLASS,
 				context,
 				adapterId);
+	}
+
+	protected static DataAdapter<?>[] getDataAdapters(
+			final JobContext context ) {
+		return GeoWaveConfiguratorBase.getDataAdapters(
+				CLASS,
+				context);
 	}
 
 	public static void addDataAdapter(
