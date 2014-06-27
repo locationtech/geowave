@@ -21,16 +21,12 @@ abstract public class AbstractStageFileToHdfs implements
 	@Override
 	public HdfsFile[] toHdfsObjects(
 			final File f ) {
-		byte[] fileBinary;
 		try {
 			// TODO: consider a streaming mechanism in case a single file is too
 			// large
-			fileBinary = Files.readAllBytes(f.toPath());
-			final ByteBuffer buffer = ByteBuffer.allocate(fileBinary.length);
-			buffer.put(fileBinary);
 			return new HdfsFile[] {
 				new HdfsFile(
-						buffer,
+						ByteBuffer.wrap(Files.readAllBytes(f.toPath())),
 						f.getAbsolutePath())
 			};
 		}
