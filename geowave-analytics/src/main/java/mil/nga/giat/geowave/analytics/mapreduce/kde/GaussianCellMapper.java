@@ -137,7 +137,7 @@ public class GaussianCellMapper extends
 				pt = ((Geometry) geomObj).getCentroid();
 			}
 		}
-		if (pt == null) {
+		if (pt == null || pt.isEmpty()) {
 			return;
 		}
 		for (int level = maxLevel; level >= minLevel; level--) {
