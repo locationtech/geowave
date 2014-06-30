@@ -1,8 +1,9 @@
 package mil.nga.giat.geowave.ingest.hdfs.mapreduce;
 
 import org.apache.hadoop.io.Writable;
+import org.apache.hadoop.io.WritableComparable;
 
-public class IntermediateData<K extends Writable, V extends Writable>
+public class IntermediateData<K extends WritableComparable<?>, V extends Writable>
 {
 	private final K key;
 	private final V value;

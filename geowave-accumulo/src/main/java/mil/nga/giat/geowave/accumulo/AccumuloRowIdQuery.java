@@ -4,15 +4,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import mil.nga.giat.geowave.accumulo.CloseableIteratorWrapper.ScannerClosableWrapper;
 import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.index.ByteArrayRange;
-import mil.nga.giat.geowave.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.store.index.Index;
 
-import org.apache.accumulo.core.client.IteratorSetting;
-import org.apache.accumulo.core.client.ScannerBase;
-import org.apache.accumulo.core.iterators.user.WholeRowIterator;
 import org.apache.log4j.Logger;
 
 /**
@@ -20,34 +15,36 @@ import org.apache.log4j.Logger;
  * 
  */
 public class AccumuloRowIdQuery extends
-		AccumuloQuery
+		AbstractAccumuloRowQuery<Object>
 {
 	private final static Logger LOGGER = Logger.getLogger(AccumuloRowIdQuery.class);
-	private final ByteArrayId rowId;
 
 	public AccumuloRowIdQuery(
 			final Index index,
-			final ByteArrayId rowId ) {
+			final ByteArrayId row ) {
 		super(
-				index);
-		this.rowId = rowId;
+				index,
+				row);
 	}
 
-	public Object query(
-			final AccumuloOperations accumuloOperations,
-			final AdapterStore adapterStore ) {
-		final ScannerBase scanner = getScanner(
-				accumuloOperations,
-				1);
-		addScanIteratorSettings(scanner);
-		final CloseableIteratorWrapper<Object> it = new CloseableIteratorWrapper<Object>(
-				new ScannerClosableWrapper(
-						scanner),
-				new EntryIteratorWrapper(
-						adapterStore,
-						index,
-						scanner.iterator(),
-						null));
+	@Override
+	protected List<ByteArrayRange> getRanges() {
+		final List<ByteArrayRange> ranges = new ArrayList<ByteArrayRange>();
+		ranges.add(new ByteArrayRange(
+				row,
+				row));
+		return ranges;
+	}
+
+	@Override
+	protected Integer getScannerLimit() {
+		return 1;
+	}
+
+	@Override
+	protected Object queryResultFromIterator(
+			final CloseableIteratorWrapper<?> it ) {
+
 		Object retVal = null;
 		if (it.hasNext()) {
 			retVal = it.next();
@@ -61,24 +58,5 @@ public class AccumuloRowIdQuery extends
 					e);
 		}
 		return retVal;
-	}
-
-	protected void addScanIteratorSettings(
-			final ScannerBase scanner ) {
-		// we have to at least use a whole row iterator
-		final IteratorSetting iteratorSettings = new IteratorSetting(
-				QueryFilterIterator.WHOLE_ROW_ITERATOR_PRIORITY,
-				QueryFilterIterator.WHOLE_ROW_ITERATOR_NAME,
-				WholeRowIterator.class);
-		scanner.addScanIterator(iteratorSettings);
-	}
-
-	@Override
-	protected List<ByteArrayRange> getRanges() {
-		final List<ByteArrayRange> ranges = new ArrayList<ByteArrayRange>();
-		ranges.add(new ByteArrayRange(
-				rowId,
-				rowId));
-		return ranges;
 	}
 }

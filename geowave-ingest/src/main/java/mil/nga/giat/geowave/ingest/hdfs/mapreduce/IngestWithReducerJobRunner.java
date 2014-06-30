@@ -1,9 +1,9 @@
 package mil.nga.giat.geowave.ingest.hdfs.mapreduce;
 
 import mil.nga.giat.geowave.ingest.AccumuloCommandLineOptions;
+import mil.nga.giat.geowave.store.filter.GenericTypeResolver;
 
 import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.mapreduce.Job;
 
 public class IngestWithReducerJobRunner extends
@@ -32,10 +32,12 @@ public class IngestWithReducerJobRunner extends
 	protected void setupMapper(
 			final Job job ) {
 		job.setMapperClass(IntermediateMapper.class);
-
+		final Class<?>[] genericClasses = GenericTypeResolver.resolveTypeArguments(
+				ingestPlugin.getClass(),
+				IngestWithReducer.class);
 		// set mapper output info
-		job.setMapOutputKeyClass(Writable.class);
-		job.setMapOutputValueClass(Writable.class);
+		job.setMapOutputKeyClass(genericClasses[1]);
+		job.setMapOutputValueClass(genericClasses[2]);
 	}
 
 	@Override

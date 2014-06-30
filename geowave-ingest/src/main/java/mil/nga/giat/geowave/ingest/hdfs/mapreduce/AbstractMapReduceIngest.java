@@ -26,11 +26,11 @@ abstract public class AbstractMapReduceIngest<T extends Persistable & DataAdapte
 	public static final String GLOBAL_VISIBILITY_KEY = "GLOBAL_VISIBILITY";
 	public static final String PRIMARY_INDEX_ID_KEY = "PRIMARY_INDEX_ID";
 	private static String JOB_NAME = "%s ingest from %s to namespace %s (%s)";
-	private final AccumuloCommandLineOptions accumuloOptions;
-	private final Path inputFile;
-	private final String typeName;
-	private final IngestFromHdfsPlugin parentPlugin;
-	private final T ingestPlugin;
+	protected final AccumuloCommandLineOptions accumuloOptions;
+	protected final Path inputFile;
+	protected final String typeName;
+	protected final IngestFromHdfsPlugin parentPlugin;
+	protected final T ingestPlugin;
 
 	public AbstractMapReduceIngest(
 			final AccumuloCommandLineOptions accumuloOptions,

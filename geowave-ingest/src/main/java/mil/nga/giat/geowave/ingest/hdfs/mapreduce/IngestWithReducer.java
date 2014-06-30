@@ -6,8 +6,9 @@ import mil.nga.giat.geowave.ingest.DataAdapterProvider;
 import mil.nga.giat.geowave.ingest.GeoWaveData;
 
 import org.apache.hadoop.io.Writable;
+import org.apache.hadoop.io.WritableComparable;
 
-public interface IngestWithReducer<I, K extends Writable, V extends Writable, O> extends
+public interface IngestWithReducer<I, K extends WritableComparable<?>, V extends Writable, O> extends
 		DataAdapterProvider<O>,
 		Persistable
 {

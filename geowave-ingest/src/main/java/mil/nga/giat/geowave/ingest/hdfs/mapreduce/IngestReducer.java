@@ -8,10 +8,11 @@ import mil.nga.giat.geowave.index.PersistenceUtils;
 import mil.nga.giat.geowave.ingest.GeoWaveData;
 
 import org.apache.hadoop.io.Writable;
+import org.apache.hadoop.io.WritableComparable;
 import org.apache.hadoop.mapreduce.Reducer;
 
 public class IngestReducer extends
-		Reducer<Writable, Writable, GeoWaveIngestKey, Object>
+		Reducer<WritableComparable<?>, Writable, GeoWaveIngestKey, Object>
 {
 	private IngestWithReducer ingestWithReducer;
 	private String globalVisibility;
@@ -19,7 +20,7 @@ public class IngestReducer extends
 
 	@Override
 	protected void reduce(
-			final Writable key,
+			final WritableComparable<?> key,
 			final Iterable<Writable> values,
 			final Context context )
 			throws IOException,
