@@ -1,0 +1,9 @@
+language: java
+jdk:
+  - oraclejdk7
+env:
+  global:
+  - secure: "TosKDl5mnt8UKeyWDg65i6cWENR7EorQbFPSvZ5ZfQfAaDAOeIN2OA/zxtRMELeYM82+n+GGXQOt0qPiYqyRlufYJJSUnWiwvI5gm3a8+f58atcU2R2bF9jd81bsL9jCS+JCQxAmzh8FCO6t7DJ4OdoMyMaIR7XjlSlsIJ97dd8="
+install: "mvn clean install javadoc:aggregate"
+after_success:
+- .utility/push-javadoc-to-gh-pages.sh
