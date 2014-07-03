@@ -212,10 +212,6 @@ public class TieredSFCIndexStrategy implements
 			final byte[] currentRowId = Arrays.copyOf(
 					range.getStart().getBytes(),
 					range.getStart().getBytes().length);
-			// we need to increment the bits by the number of bits per SFC ID
-			// (if the bits is not divisible by 8, the byte primitive used will
-			// have padded bits)
-			final int increment = (orderedSfcs[tier].getBitsOfPrecision() % 8) + 1;
 			retVal.add(new ByteArrayId(
 					ByteArrayUtils.combineArrays(
 							tierAndBinId,
@@ -224,27 +220,20 @@ public class TieredSFCIndexStrategy implements
 					currentRowId,
 					range.getEnd().getBytes())) {
 				// increment until we reach the end row ID
-				boolean overflow = false;
-				for (int i = 0; i < increment; i++) {
-					if (!ByteArrayUtils.increment(currentRowId)) {
-						// the increment caused an overflow which shouldn't
-						// ever happen assuming the start row ID is less
-						// than the end row ID
-						LOGGER.warn("Row IDs overflowed when ingesting data; start of range decomposition must be less than or equal to end of range. This may be ");
-						overflow = true;
-						break;
-					}
-					if (Arrays.equals(
-							currentRowId,
-							range.getEnd().getBytes())) {
-						break;
-					}
-				}
+				boolean overflow = !ByteArrayUtils.increment(currentRowId);
 				if (!overflow) {
 					retVal.add(new ByteArrayId(
 							ByteArrayUtils.combineArrays(
 									tierAndBinId,
 									currentRowId)));
+				}
+				else {
+					// the increment caused an overflow which shouldn't
+					// ever happen assuming the start row ID is less
+					// than the end row ID
+					LOGGER.warn("Row IDs overflowed when ingesting data; start of range decomposition must be less than or equal to end of range. This may be because the start of the decomposed range is higher than the end of the range.");
+					overflow = true;
+					break;
 				}
 			}
 		}

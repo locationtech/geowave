@@ -181,6 +181,7 @@
 		<module>geowave-ingest</module>
 		<module>geowave-types</module>
 		<module>geowave-analytics</module>
+		<module>geowave-test</module>
 	</modules>
 
 	<repositories>

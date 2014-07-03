@@ -256,7 +256,6 @@ public class GeoWaveGTDataStore implements
 			featureAdapter = (FeatureDataAdapter) adapter;
 		}
 		featureAdapter.setNamespace(null);
-		featureAdapter.setCRS(DEFAULT_CRS);
 		return featureAdapter;
 	}
 
