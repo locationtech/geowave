@@ -6,34 +6,31 @@
 	<version>0.8.0-SNAPSHOT</version>
 	<name>geowave-parent</name>
 	<packaging>pom</packaging>
-	<description>Geowave adds spatio-tempral indexing to accumulo through geotools and geoserver</description>
+	<description>Geowave adds spatio-temporal indexing to accumulo through geotools and geoserver</description>
 	<url>https://github.com/ngageoint/geowave</url>
 	<licenses>
 		<license>
-	    	<name>The Apache Software License, Version 2.0</name>
-      		<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-      	</license>
-   </licenses>
+			<name>The Apache Software License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+		</license>
+	</licenses>
 	<scm>
 		<url>https://github.com/ngageoint/geowave.git</url>
 		<connection>scm:git:git@github.com:ngageoint/geowave.git</connection>
 	</scm>
-	
+
 
 	<properties>
 		<geowave.version>0.8.0-SNAPSHOT</geowave.version>
 		<geotools.version>11.0</geotools.version>
 		<geoserver.version>2.5</geoserver.version>
 		<accumulo.version>1.5.0</accumulo.version>
-		<hadoop.version>2.0.0-cdh4.5.0</hadoop.version> 
-		<hadoop.version.mr>2.0.0-mr1-cdh4.5.0</hadoop.version.mr> 
-		
-		<!-- 
-		Testing out MR2/Yarn
-		<hadoop.version>2.3.0-cdh5.0.1</hadoop.version> 
-		<hadoop.version.mr>2.3.0-cdh5.0.1</hadoop.version.mr> 
-		--> 
-				
+		<hadoop.version>2.0.0-cdh4.5.0</hadoop.version>
+		<hadoop.version.mr>2.0.0-mr1-cdh4.5.0</hadoop.version.mr>
+
+		<!-- Testing out MR2/Yarn <hadoop.version>2.3.0-cdh5.0.1</hadoop.version> 
+			<hadoop.version.mr>2.3.0-cdh5.0.1</hadoop.version.mr> -->
+
 		<geotools.scope>compile</geotools.scope>
 		<accumulo.scope>compile</accumulo.scope>
 		<hadoop.scope>compile</hadoop.scope>
@@ -48,10 +45,10 @@
 		<sonar.failsafe.reportsPath>${project.build.directory}/failsafe-reports</sonar.failsafe.reportsPath>
 		<sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
 		<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
-		
+
 		<!-- need to use a 64-bit JVM for tests -->
 		<!-- Remove the MaxPermSize for Java8 -->
-		<test.args>-Xms256m -Xmx6144m -XX:MaxPermSize=512m</test.args> 
+		<test.args>-Xms256m -Xmx6144m -XX:MaxPermSize=512m</test.args>
 	</properties>
 	<build>
 		<pluginManagement>
@@ -168,6 +165,53 @@
 						<exclude>**IT.java</exclude>
 					</excludes>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.9.1</version>
+				<executions>
+					<execution>
+						<id>aggregate</id>
+						<goals>
+							<goal>aggregate</goal>
+						</goals>
+						<phase>site</phase>
+						<configuration>
+							<sourceFileIncludes>
+								<include>**.java</include>
+							</sourceFileIncludes>
+							<windowtitle>GeoWave ${project.version}</windowtitle>
+							<doctitle>GeoWave ${project.version}</doctitle>
+							<groups>
+								<group>
+									<title>Analytics</title>
+									<packages>mil.nga.giat.geowave.analytics*</packages>
+								</group>
+								<group>
+									<title>GeoTools Storage</title>
+									<packages>mil.nga.giat.geowave.gt*</packages>
+								</group>
+								<group>
+									<title>Storage</title>
+									<packages>mil.nga.giat.geowave.accumulo*:mil.nga.giat.geowave.store*</packages>
+								</group>
+								<group>
+									<title>Indexing</title>
+									<packages>mil.nga.giat.geowave.index*</packages>
+								</group>
+								<group>
+									<title>Ingest Framework</title>
+									<packages>mil.nga.giat.geowave.ingest*</packages>
+								</group>
+								<group>
+									<title>Base Ingest Types</title>
+									<packages>mil.nga.giat.geowave.types*</packages>
+								</group>
+							</groups>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
