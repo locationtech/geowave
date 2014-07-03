@@ -57,9 +57,9 @@ abstract public class AccumuloQuery
 							r.getStart().getBytes())));
 				}
 				else {
-					((Scanner) scanner).setRange(byteArrayRangeToAccumuloRange(r));
+					((Scanner) scanner).setRange(AccumuloUtils.byteArrayRangeToAccumuloRange(r));
 				}
-				if (limit != null && limit > 0 && limit < ((Scanner) scanner).getBatchSize()){
+				if ((limit != null) && (limit > 0) && (limit < ((Scanner) scanner).getBatchSize())) {
 					((Scanner) scanner).setBatchSize(limit);
 				}
 			}
@@ -85,21 +85,4 @@ abstract public class AccumuloQuery
 		}
 		return scanner;
 	}
-
-	protected static Range byteArrayRangeToAccumuloRange(
-			final ByteArrayRange byteArrayRange ) {
-		final Text start = new Text(
-				byteArrayRange.getStart().getBytes());
-		final Text end = new Text(
-				byteArrayRange.getEnd().getBytes());
-		if (start.compareTo(end) > 0) {
-			return null;
-		}
-		return new Range(
-				new Text(
-						byteArrayRange.getStart().getBytes()),
-				Range.followingPrefix(new Text(
-						byteArrayRange.getEnd().getBytes())));
-	}
-
 }

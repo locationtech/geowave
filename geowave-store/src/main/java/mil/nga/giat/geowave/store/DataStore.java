@@ -104,7 +104,7 @@ public interface DataStore
 	 * @param index
 	 *            The index to search for the entry.
 	 * @param rowId
-	 *            The row ID to use as the query.
+	 *            The full row ID to use as the query.
 	 * 
 	 * @return The entry that was ingested with the given row ID. This row ID is
 	 *         the one assigned to the entry on ingest into the given index.
@@ -114,6 +114,22 @@ public interface DataStore
 	public <T> T getEntry(
 			final Index index,
 			final ByteArrayId rowId );
+
+	/**
+	 * Returns all data with the given row ID prefix stored in the given index
+	 * 
+	 * @param index
+	 *            The index to search for the entry.
+	 * @param rowPrefix
+	 *            A prefix for the row ID to use as the query.
+	 * 
+	 * @return All entries that were ingested with a row ID that is prefixed by
+	 *         the given rowPrefix. The "row ID" is the one assigned to the
+	 *         entry on ingest into the given index.
+	 */
+	public <T> CloseableIterator<T> getEntriesByPrefix(
+			final Index index,
+			final ByteArrayId rowPrefix );
 
 	/**
 	 * Returns all data in this data store that matches the query parameter and

@@ -74,7 +74,8 @@ public class AccumuloDataStore implements
 			final Index index ) {
 		return new AccumuloIndexWriter(
 				index,
-				accumuloOperations);
+				accumuloOperations,
+				this);
 	}
 
 	@Override
@@ -104,14 +105,14 @@ public class AccumuloDataStore implements
 		return new ArrayList<ByteArrayId>();
 	}
 
-	private synchronized void store(
+	protected synchronized void store(
 			final DataAdapter<?> adapter ) {
 		if (!adapterStore.adapterExists(adapter.getAdapterId())) {
 			adapterStore.addAdapter(adapter);
 		}
 	}
 
-	private synchronized void store(
+	protected synchronized void store(
 			final Index index ) {
 		if (!indexStore.indexExists(index.getId())) {
 			indexStore.addIndex(index);
@@ -281,39 +282,19 @@ public class AccumuloDataStore implements
 				Iterators.concat(results.iterator()));
 	}
 
-	public static class RowElements
-	{
-		public final byte[] indexId;
-		public final byte[] dataId;
-		public final byte[] adapterId;
-		public final int numberOfDuplicates;
-
-		public RowElements(
-				final byte[] indexId,
-				final byte[] dataId,
-				final byte[] adapterId,
-				final int numberOfDuplicates ) {
-			this.indexId = indexId;
-			this.dataId = dataId;
-			this.adapterId = adapterId;
-			this.numberOfDuplicates = numberOfDuplicates;
-		}
-
-	}
-
-	protected static byte[] getRow(
-			final RowElements rowElements ) {
-		final ByteBuffer buf = ByteBuffer.allocate(12 + rowElements.dataId.length + rowElements.adapterId.length + rowElements.indexId.length);
-		buf.put(rowElements.indexId);
-		buf.put(rowElements.adapterId);
-		buf.put(rowElements.dataId);
-		buf.putInt(rowElements.adapterId.length);
-		buf.putInt(rowElements.dataId.length);
-		buf.putInt(rowElements.numberOfDuplicates);
+	protected static byte[] getRowIdBytes(
+			final AccumuloRowId rowElements ) {
+		final ByteBuffer buf = ByteBuffer.allocate(12 + rowElements.getDataId().length + rowElements.getAdapterId().length + rowElements.getIndexId().length);
+		buf.put(rowElements.getIndexId());
+		buf.put(rowElements.getAdapterId());
+		buf.put(rowElements.getDataId());
+		buf.putInt(rowElements.getAdapterId().length);
+		buf.putInt(rowElements.getDataId().length);
+		buf.putInt(rowElements.getNumberOfDuplicates());
 		return buf.array();
 	}
 
-	public static RowElements getElements(
+	protected static AccumuloRowId getRowIdObject(
 			final byte[] row ) {
 		final byte[] metadata = Arrays.copyOfRange(
 				row,
@@ -334,7 +315,7 @@ public class AccumuloDataStore implements
 		buf.get(indexId);
 		buf.get(adapterId);
 		buf.get(dataId);
-		return new RowElements(
+		return new AccumuloRowId(
 				indexId,
 				dataId,
 				adapterId,
@@ -349,6 +330,18 @@ public class AccumuloDataStore implements
 				index,
 				rowId);
 		return (T) q.query(
+				accumuloOperations,
+				adapterStore);
+	}
+
+	@Override
+	public CloseableIterator<?> getEntriesByPrefix(
+			final Index index,
+			final ByteArrayId rowPrefix ) {
+		final AccumuloRowPrefixQuery q = new AccumuloRowPrefixQuery(
+				index,
+				rowPrefix);
+		return q.query(
 				accumuloOperations,
 				adapterStore);
 	}

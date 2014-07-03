@@ -1,10 +1,8 @@
 package mil.nga.giat.geowave.store.index;
 
 import mil.nga.giat.geowave.index.Persistable;
-import mil.nga.giat.geowave.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.store.data.DataReader;
 import mil.nga.giat.geowave.store.data.DataWriter;
-import mil.nga.giat.geowave.store.data.PersistenceEncoding;
 import mil.nga.giat.geowave.store.dimension.DimensionField;
 
 /**
@@ -17,9 +15,6 @@ public interface CommonIndexModel extends
 		DataWriter<Object, CommonIndexValue>,
 		Persistable
 {
-	public MultiDimensionalNumericData getNumericData(
-			PersistenceEncoding persistenceData );
-
 	public DimensionField<? extends CommonIndexValue>[] getDimensions();
 
 	public String getId();

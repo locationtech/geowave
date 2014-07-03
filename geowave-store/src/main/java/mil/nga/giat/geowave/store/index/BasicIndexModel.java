@@ -10,8 +10,6 @@ import java.util.Map;
 import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.index.PersistenceUtils;
 import mil.nga.giat.geowave.index.StringUtils;
-import mil.nga.giat.geowave.index.sfc.data.MultiDimensionalNumericData;
-import mil.nga.giat.geowave.store.data.PersistenceEncoding;
 import mil.nga.giat.geowave.store.data.field.FieldReader;
 import mil.nga.giat.geowave.store.data.field.FieldWriter;
 import mil.nga.giat.geowave.store.dimension.DimensionField;
@@ -72,12 +70,6 @@ public class BasicIndexModel implements
 			return (FieldReader<CommonIndexValue>) dimension.getReader();
 		}
 		return null;
-	}
-
-	@Override
-	public MultiDimensionalNumericData getNumericData(
-			final PersistenceEncoding persistenceData ) {
-		return persistenceData.getNumericData(dimensions);
 	}
 
 	@Override

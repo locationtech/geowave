@@ -23,13 +23,16 @@ public class AccumuloIndexWriter implements
 	private final static Logger LOGGER = Logger.getLogger(AccumuloIndexWriter.class);
 	private final Index index;
 	private final AccumuloOperations accumuloOperations;
+	protected final AccumuloDataStore dataStore;
 	private Writer writer;
 
 	public AccumuloIndexWriter(
 			final Index index,
-			final AccumuloOperations accumuloOperations ) {
+			final AccumuloOperations accumuloOperations,
+			final AccumuloDataStore dataStore ) {
 		this.index = index;
 		this.accumuloOperations = accumuloOperations;
+		this.dataStore = dataStore;
 	}
 
 	private synchronized void ensureOpen() {
@@ -56,6 +59,8 @@ public class AccumuloIndexWriter implements
 	public <T> List<ByteArrayId> write(
 			final WritableDataAdapter<T> writableAdapter,
 			final T entry ) {
+		dataStore.store(writableAdapter);
+		dataStore.store(index);
 		synchronized (this) {
 			ensureOpen();
 			return AccumuloUtils.write(

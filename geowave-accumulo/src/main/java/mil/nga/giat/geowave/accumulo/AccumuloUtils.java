@@ -44,6 +44,24 @@ public class AccumuloUtils
 {
 	private final static Logger LOGGER = Logger.getLogger(AccumuloUtils.class);
 
+	public static Range byteArrayRangeToAccumuloRange(
+			final ByteArrayRange byteArrayRange ) {
+		final Text start = new Text(
+				byteArrayRange.getStart().getBytes());
+		final Text end = new Text(
+				byteArrayRange.getEnd().getBytes());
+		if (start.compareTo(end) > 0) {
+			return null;
+		}
+		return new Range(
+				new Text(
+						byteArrayRange.getStart().getBytes()),
+				true,
+				Range.followingPrefix(new Text(
+						byteArrayRange.getEnd().getBytes())),
+				false);
+	}
+
 	public static TreeSet<Range> byteArrayRangesToAccumuloRanges(
 			final List<ByteArrayRange> byteArrayRanges ) {
 		if (byteArrayRanges == null) {
@@ -53,18 +71,11 @@ public class AccumuloUtils
 		}
 		final TreeSet<Range> accumuloRanges = new TreeSet<Range>();
 		for (final ByteArrayRange byteArrayRange : byteArrayRanges) {
-			final Text start = new Text(
-					byteArrayRange.getStart().getBytes());
-			final Text end = new Text(
-					byteArrayRange.getEnd().getBytes());
-			if (start.compareTo(end) > 0) {
+			final Range range = byteArrayRangeToAccumuloRange(byteArrayRange);
+			if (range == null) {
 				continue;
 			}
-			accumuloRanges.add(new Range(
-					new Text(
-							byteArrayRange.getStart().getBytes()),
-					Range.followingPrefix(new Text(
-							byteArrayRange.getEnd().getBytes()))));
+			accumuloRanges.add(range);
 		}
 		return accumuloRanges;
 	}
