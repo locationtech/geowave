@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Calendar;
 import java.util.Date;
@@ -22,7 +21,7 @@ import mil.nga.giat.geowave.accumulo.AccumuloDataStore;
 import mil.nga.giat.geowave.accumulo.AccumuloIndexStore;
 import mil.nga.giat.geowave.accumulo.AccumuloOperations;
 import mil.nga.giat.geowave.accumulo.BasicAccumuloOperations;
-import mil.nga.giat.geowave.ingest.VectorFileIngest;
+import mil.nga.giat.geowave.ingest.IngestMain;
 import mil.nga.giat.geowave.store.index.Index;
 import mil.nga.giat.geowave.store.index.IndexType;
 import mil.nga.giat.geowave.store.query.Query;
@@ -33,11 +32,6 @@ import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.apache.accumulo.minicluster.MiniAccumuloCluster;
 import org.apache.accumulo.minicluster.MiniAccumuloConfig;
-import org.apache.commons.cli.BasicParser;
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.Options;
-import org.apache.commons.cli.ParseException;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.SystemUtils;
@@ -269,27 +263,13 @@ public class GeowaveIT
 	private void testIngest(
 			final IndexType indexType,
 			final String filePath ) {
-		final Options options = VectorFileIngest.getCommandLineOptions();
-
-		final CommandLineParser parser = new BasicParser();
-
+		// ingest a shapefile (geotools type) directly into GeoWave using the
+		// ingest framework's main method and pre-defined commandline arguments
 		final String[] args = StringUtils.split(
-				"-f " + filePath + " -z " + zookeeper + " -i " + accumuloInstance + " -u " + accumuloUser + " -p " + accumuloPassword + " -n " + TEST_NAMESPACE + " -t " + (indexType.equals(IndexType.SPATIAL) ? "spatial" : "spatial-temporal"),
+				"-localingest -t geotools -b " + filePath + " -z " + zookeeper + " -i " + accumuloInstance + " -u " + accumuloUser + " -p " + accumuloPassword + " -n " + TEST_NAMESPACE + " -index " + (indexType.equals(IndexType.SPATIAL) ? "spatial" : "spatial-temporal"),
 				' ');
 
-		try {
-			final CommandLine line = parser.parse(
-					options,
-					args);
-
-			final VectorFileIngest ingester = VectorFileIngest.createVectorFileIngest(line);
-			Assert.assertTrue(ingester.ingest());
-		}
-		catch (MalformedURLException | ParseException | AccumuloException | AccumuloSecurityException e) {
-			e.printStackTrace();
-			accumuloOperations.deleteAll();
-			Assert.fail("unable to ingest resource");
-		}
+		IngestMain.main(args);
 	}
 
 	private static boolean isSet(

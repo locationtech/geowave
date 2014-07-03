@@ -6,7 +6,6 @@
 		<artifactId>geowave-parent</artifactId>
 		<version>0.8.0-SNAPSHOT</version>
 	</parent>
-	<groupId>geowave-types</groupId>
 	<artifactId>geowave-types</artifactId>
 	<dependencies>
 		<dependency>
