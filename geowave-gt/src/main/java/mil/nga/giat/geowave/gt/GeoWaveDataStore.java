@@ -9,6 +9,7 @@ import java.util.List;
 
 import mil.nga.giat.geowave.accumulo.AccumuloDataStore;
 import mil.nga.giat.geowave.accumulo.AccumuloOperations;
+import mil.nga.giat.geowave.accumulo.AccumuloOptions;
 import mil.nga.giat.geowave.accumulo.CloseableIteratorWrapper;
 import mil.nga.giat.geowave.gt.adapter.FeatureDataAdapter;
 import mil.nga.giat.geowave.index.ByteArrayId;
@@ -49,9 +50,29 @@ public class GeoWaveDataStore extends
 	}
 
 	public GeoWaveDataStore(
+			final IndexStore indexStore,
+			final AdapterStore adapterStore,
+			final AccumuloOperations accumuloOperations,
+			final AccumuloOptions accumuloOptions ) {
+		super(
+				indexStore,
+				adapterStore,
+				accumuloOperations,
+				accumuloOptions);
+	}
+
+	public GeoWaveDataStore(
 			final AccumuloOperations accumuloOperations ) {
 		super(
 				accumuloOperations);
+	}
+
+	public GeoWaveDataStore(
+			final AccumuloOperations accumuloOperations,
+			final AccumuloOptions accumuloOptions ) {
+		super(
+				accumuloOperations,
+				accumuloOptions);
 	}
 
 	public CloseableIterator<SimpleFeature> query(
