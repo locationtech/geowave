@@ -6,6 +6,13 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.log4j.Logger;
 
+/**
+ * This class encapsulates all of the options and parsed values specific to
+ * directing the ingestion framework to a local file system. The user must set
+ * an input file or directory and can set a list of extensions to narrow the
+ * ingestion to. The process will recurse a directory and filter by the
+ * extensions if provided.
+ */
 public class LocalInputCommandLineOptions
 {
 	private final static Logger LOGGER = Logger.getLogger(LocalInputCommandLineOptions.class);

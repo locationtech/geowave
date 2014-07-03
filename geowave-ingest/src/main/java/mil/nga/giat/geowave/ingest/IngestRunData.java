@@ -7,6 +7,10 @@ import mil.nga.giat.geowave.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.store.adapter.MemoryAdapterStore;
 import mil.nga.giat.geowave.store.adapter.WritableDataAdapter;
 
+/**
+ * A class to hold intermediate run data that must be used throughout the life
+ * of an ingest process.
+ */
 public class IngestRunData
 {
 	private final IndexWriter indexWriter;

@@ -24,6 +24,13 @@ import org.opengis.feature.type.Name;
 
 import com.google.common.collect.Iterables;
 
+/**
+ * This plugin is used for ingesting any GeoTools supported file data store from
+ * a local file system directly into GeoWave as GeoTools' SimpleFeatures. It
+ * supports the default configuration of spatial and spatial-temporal indices
+ * and does NOT currently support the capability to stage intermediate data to
+ * HDFS to be ingested using a map-reduce job.
+ */
 public class GeoToolsDataStoreIngestPlugin implements
 		LocalFileIngestPlugin<SimpleFeature>
 {

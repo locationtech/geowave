@@ -8,6 +8,10 @@ import java.nio.file.Files;
 import org.apache.avro.Schema;
 import org.apache.log4j.Logger;
 
+/**
+ * This class can be sub-classed as a general-purpose recipe for parallelizing
+ * ingestion of files by directly staging the binary of the file to HDFS.
+ */
 abstract public class AbstractStageFileToHdfs implements
 		StageToHdfsPlugin<HdfsFile>
 {

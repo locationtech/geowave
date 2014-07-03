@@ -22,6 +22,10 @@ import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.util.ToolRunner;
 import org.apache.log4j.Logger;
 
+/**
+ * This class actually executes the ingestion of intermediate data into GeoWave
+ * that had been staged in HDFS.
+ */
 public class IngestFromHdfsDriver extends
 		AbstractCommandLineDriver
 {

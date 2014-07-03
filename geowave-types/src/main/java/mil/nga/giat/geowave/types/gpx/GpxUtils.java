@@ -37,6 +37,10 @@ import org.xml.sax.SAXException;
 
 import com.vividsolutions.jts.geom.Geometry;
 
+/**
+ * This is a convenience class for performing common GPX static utility methods
+ * such as schema validation, file parsing, and SimpleFeatureType definition.
+ */
 public class GpxUtils
 {
 	private final static Logger LOGGER = Logger.getLogger(GpxUtils.class);

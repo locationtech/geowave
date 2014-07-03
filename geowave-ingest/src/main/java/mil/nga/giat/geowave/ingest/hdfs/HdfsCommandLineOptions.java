@@ -5,6 +5,10 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.log4j.Logger;
 
+/**
+ * This class encapsulates the command-line options and parsed values specific
+ * to staging intermediate data to HDFS.
+ */
 public class HdfsCommandLineOptions
 {
 	private final static Logger LOGGER = Logger.getLogger(HdfsCommandLineOptions.class);

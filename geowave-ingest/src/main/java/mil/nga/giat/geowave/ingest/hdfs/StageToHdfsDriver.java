@@ -18,6 +18,10 @@ import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.log4j.Logger;
 
+/**
+ * This class actually executes the staging of data to HDFS based on the
+ * available type plugin providers that are discovered through SPI.
+ */
 public class StageToHdfsDriver extends
 		AbstractLocalFileDriver<StageToHdfsPlugin<?>, StageRunData>
 {

@@ -31,6 +31,10 @@ import org.apache.hadoop.mapreduce.lib.output.NullOutputFormat;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
+/**
+ * This output format is the preferred mechanism for writing data to GeoWave
+ * within a map-reduce job.
+ */
 public class GeoWaveOutputFormat extends
 		OutputFormat<GeoWaveIngestKey, Object>
 {

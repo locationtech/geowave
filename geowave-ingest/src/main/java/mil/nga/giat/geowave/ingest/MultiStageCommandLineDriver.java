@@ -6,6 +6,11 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
+/**
+ * This command-line driver wraps a list of ordered stages as drivers and
+ * executes them in order. For example, it is used by the HDFS ingest process to
+ * first stage intermediate data to HDFS and then to ingest it.
+ */
 public class MultiStageCommandLineDriver extends
 		AbstractCommandLineDriver
 {

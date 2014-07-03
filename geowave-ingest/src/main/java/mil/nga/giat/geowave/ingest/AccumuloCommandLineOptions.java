@@ -13,6 +13,13 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.log4j.Logger;
 
+/**
+ * This class encapsulates all of the options and parsed values specific to
+ * setting up GeoWave to appropriately connect to Accumulo. This class also can
+ * perform the function of clearing data for a namespace if that option is
+ * activated.
+ * 
+ */
 public class AccumuloCommandLineOptions
 {
 	private final static Logger LOGGER = Logger.getLogger(AccumuloCommandLineOptions.class);
@@ -54,9 +61,20 @@ public class AccumuloCommandLineOptions
 				namespace);
 
 		primaryIndex = type.createDefaultIndex();
+
 		if (clearNamespace) {
+			clearNamespace();
+		}
+	}
+
+	protected void clearNamespace() {
+		// don't delete all tables in the case that no namespace is given
+		if ((namespace != null) && !namespace.isEmpty()) {
 			LOGGER.info("deleting all tables prefixed by '" + namespace + "'");
 			operations.deleteAll();
+		}
+		else {
+			LOGGER.error("cannot clear a namespace if no namespace is provided");
 		}
 	}
 

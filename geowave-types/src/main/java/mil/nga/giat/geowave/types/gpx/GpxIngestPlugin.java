@@ -49,6 +49,16 @@ import org.xml.sax.SAXException;
 import com.google.common.collect.Iterables;
 import com.vividsolutions.jts.geom.Coordinate;
 
+/**
+ * This plugin is used for ingesting any GPX formatted data from a local file
+ * system into GeoWave as GeoTools' SimpleFeatures. It supports the default
+ * configuration of spatial and spatial-temporal indices and it will support
+ * wither directly ingesting GPX data from a local file system to GeoWave or to
+ * stage the data in an intermediate format in HDFS and then to ingest it into
+ * GeoWave using a map-reduce job. It supports OSM metadata.xml files if the
+ * file is directly in the root base directory that is passed in command-line to
+ * the ingest framework.
+ */
 public class GpxIngestPlugin implements
 		LocalFileIngestPlugin<SimpleFeature>,
 		IngestFromHdfsPlugin<GpxTrack, SimpleFeature>,

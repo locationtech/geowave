@@ -12,6 +12,10 @@ import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.log4j.Logger;
 
+/**
+ * A class to hold intermediate stage data that must be used throughout the life
+ * of the HDFS stage process.
+ */
 public class StageRunData
 {
 	private final static Logger LOGGER = Logger.getLogger(StageRunData.class);

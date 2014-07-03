@@ -10,11 +10,24 @@ import org.apache.commons.cli.OptionGroup;
 import org.apache.commons.cli.Options;
 import org.apache.log4j.Logger;
 
-public class MainCommandLineOptions
+/**
+ * This class encapsulates the option for selecting the operation and parses the
+ * value.
+ */
+public class OperationCommandLineOptions
 {
-	private final static Logger LOGGER = Logger.getLogger(MainCommandLineOptions.class);
+	private final static Logger LOGGER = Logger.getLogger(OperationCommandLineOptions.class);
 
+	/**
+	 * This enumeration identifies the set of operations supported and which
+	 * driver to execute based on the operation selected.
+	 */
 	public static enum Operation {
+		CLEAR_NAMESPACE(
+				"clear",
+				"clear ALL data from a GeoWave namespace, this actually deletes Accumulo tables prefixed by the given namespace",
+				new ClearNamespaceDriver(
+						"clear")),
 		LOCAL_INGEST(
 				"localingest",
 				"ingest supported files in local file system directly, without using HDFS",
@@ -70,7 +83,7 @@ public class MainCommandLineOptions
 
 	private final Operation operation;
 
-	public MainCommandLineOptions(
+	public OperationCommandLineOptions(
 			final Operation operation ) {
 		this.operation = operation;
 	}
@@ -79,7 +92,7 @@ public class MainCommandLineOptions
 		return operation;
 	}
 
-	public static MainCommandLineOptions parseOptions(
+	public static OperationCommandLineOptions parseOptions(
 			final CommandLine commandLine )
 			throws IllegalArgumentException {
 		Operation operation = null;
@@ -108,7 +121,7 @@ public class MainCommandLineOptions
 			throw new IllegalArgumentException(
 					"Operation not set.  One of " + str.toString() + " must be provided");
 		}
-		return new MainCommandLineOptions(
+		return new OperationCommandLineOptions(
 				operation);
 	}
 

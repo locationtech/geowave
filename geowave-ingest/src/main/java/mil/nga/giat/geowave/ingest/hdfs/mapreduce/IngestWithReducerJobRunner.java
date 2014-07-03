@@ -6,6 +6,10 @@ import mil.nga.giat.geowave.store.filter.GenericTypeResolver;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.mapreduce.Job;
 
+/**
+ * This class will run the ingestion process by using a mapper to aggregate key
+ * value pairs and a reducer to ingest data into GeoWave.
+ */
 public class IngestWithReducerJobRunner extends
 		AbstractMapReduceIngest<IngestWithReducer>
 {
@@ -31,7 +35,7 @@ public class IngestWithReducerJobRunner extends
 	@Override
 	protected void setupMapper(
 			final Job job ) {
-		job.setMapperClass(IntermediateMapper.class);
+		job.setMapperClass(IntermediateKeyValueMapper.class);
 		final Class<?>[] genericClasses = GenericTypeResolver.resolveTypeArguments(
 				ingestPlugin.getClass(),
 				IngestWithReducer.class);

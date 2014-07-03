@@ -11,6 +11,9 @@ import org.apache.avro.mapred.AvroKey;
 import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.mapreduce.Mapper;
 
+/**
+ * This class is the map-reduce mapper for ingestion with the mapper only.
+ */
 public class IngestMapper extends
 		Mapper<AvroKey, NullWritable, GeoWaveIngestKey, Object>
 {

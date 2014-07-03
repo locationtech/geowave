@@ -11,8 +11,12 @@ import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.io.WritableComparable;
 import org.apache.hadoop.mapreduce.Mapper;
 
-public class IntermediateMapper extends
-		Mapper<AvroKey, NullWritable, Writable, Writable>
+/**
+ * This class is the mapper used when aggregating key value pairs from
+ * intermediate data to be ingested into GeoWave using a reducer.
+ */
+public class IntermediateKeyValueMapper extends
+		Mapper<AvroKey, NullWritable, WritableComparable<?>, Writable>
 {
 	private IngestWithReducer ingestWithReducer;
 
@@ -23,8 +27,8 @@ public class IntermediateMapper extends
 			final org.apache.hadoop.mapreduce.Mapper.Context context )
 			throws IOException,
 			InterruptedException {
-		final Iterable<IntermediateData<WritableComparable<?>, Writable>> data = ingestWithReducer.toIntermediateMapReduceData(key.datum());
-		for (final IntermediateData<WritableComparable<?>, Writable> d : data) {
+		final Iterable<KeyValueData<WritableComparable<?>, Writable>> data = ingestWithReducer.toIntermediateMapReduceData(key.datum());
+		for (final KeyValueData<WritableComparable<?>, Writable> d : data) {
 			context.write(
 					d.getKey(),
 					d.getValue());

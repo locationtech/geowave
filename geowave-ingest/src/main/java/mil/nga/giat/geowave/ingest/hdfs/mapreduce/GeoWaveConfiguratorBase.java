@@ -22,6 +22,9 @@ import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.JobContext;
 import org.apache.log4j.Logger;
 
+/**
+ * This class forms the basis for GeoWave input and output format configuration.
+ */
 public class GeoWaveConfiguratorBase
 {
 	protected static final Logger LOGGER = Logger.getLogger(GeoWaveConfiguratorBase.class);

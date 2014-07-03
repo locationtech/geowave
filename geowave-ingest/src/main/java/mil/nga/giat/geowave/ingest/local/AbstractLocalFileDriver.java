@@ -13,6 +13,18 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.log4j.Logger;
 
+/**
+ * This class can be sub-classed to handle recursing over a local directory
+ * structure and passing along the plugin specific handling of any supported
+ * file for a discovered plugin.
+ * 
+ * @param <P>
+ *            The type of the plugin this driver supports.
+ * @param <R>
+ *            The type for intermediate data that can be used throughout the
+ *            life of the process and is passed along for each call to process a
+ *            file.
+ */
 abstract public class AbstractLocalFileDriver<P extends LocalPluginBase, R> extends
 		AbstractCommandLineDriver
 {

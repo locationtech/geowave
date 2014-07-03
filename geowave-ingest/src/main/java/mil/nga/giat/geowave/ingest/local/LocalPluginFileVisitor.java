@@ -16,6 +16,17 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.log4j.Logger;
 
+/**
+ * This class is used by any local file driver to recurse a directory of files.
+ * It will provide the plugin with any supported file with the appropriate
+ * extension within a directory structure.
+ * 
+ * @param <P>
+ *            the type of the plugin
+ * @param <R>
+ *            the type for intermediate data that can be used throughout the
+ *            life of the file recursion
+ */
 public class LocalPluginFileVisitor<P extends LocalPluginBase, R> implements
 		FileVisitor<Path>
 {

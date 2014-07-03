@@ -18,6 +18,13 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.log4j.Logger;
 
+/**
+ * This implements a generic command-line driven utility for discovering a set
+ * of ingest type plugins and using them to drive an ingestion process. The
+ * class is sub-classed to perform the specific ingestion required based on the
+ * operation set by the user.
+ * 
+ */
 abstract public class AbstractCommandLineDriver
 {
 	private final static Logger LOGGER = Logger.getLogger(AbstractCommandLineDriver.class);

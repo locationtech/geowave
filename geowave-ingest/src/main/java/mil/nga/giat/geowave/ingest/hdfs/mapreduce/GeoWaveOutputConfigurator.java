@@ -4,6 +4,9 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.JobContext;
 
+/**
+ * This class defines the configuration for GeoWave output format.
+ */
 public class GeoWaveOutputConfigurator extends
 		GeoWaveConfiguratorBase
 {

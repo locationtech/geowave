@@ -8,6 +8,12 @@ import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.Parser;
 import org.apache.log4j.Logger;
 
+/**
+ * This is the primary entry point for ingest. When run it will expect an
+ * operation is specified, and will use the appropriate command-line driver for
+ * the chosen operation.
+ * 
+ */
 public class IngestMain
 {
 	private final static Logger LOGGER = Logger.getLogger(IngestMain.class);
@@ -15,7 +21,7 @@ public class IngestMain
 	public static void main(
 			final String[] args ) {
 		final Options operations = new Options();
-		MainCommandLineOptions.applyOptions(operations);
+		OperationCommandLineOptions.applyOptions(operations);
 		if (args.length < 1) {
 			final HelpFormatter help = new HelpFormatter();
 			help.printHelp(
@@ -41,7 +47,7 @@ public class IngestMain
 			operationCommandLine = parser.parse(
 					operations,
 					operationsArgs);
-			final MainCommandLineOptions operationOption = MainCommandLineOptions.parseOptions(operationCommandLine);
+			final OperationCommandLineOptions operationOption = OperationCommandLineOptions.parseOptions(operationCommandLine);
 			operationOption.getOperation().getDriver().run(
 					optionsArgs);
 		}

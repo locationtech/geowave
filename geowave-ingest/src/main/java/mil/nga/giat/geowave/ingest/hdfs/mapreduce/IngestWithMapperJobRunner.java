@@ -5,6 +5,9 @@ import mil.nga.giat.geowave.ingest.AccumuloCommandLineOptions;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.mapreduce.Job;
 
+/**
+ * This will run the mapper only ingest process.
+ */
 public class IngestWithMapperJobRunner extends
 		AbstractMapReduceIngest<IngestWithMapper>
 {

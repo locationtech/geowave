@@ -12,6 +12,11 @@ import mil.nga.giat.geowave.store.index.IndexStore;
 
 import org.apache.hadoop.mapreduce.JobContext;
 
+/**
+ * This class implements an index store by first checking the job context for an
+ * index and keeping a local cache of indices that have been discovered. It will
+ * check the metadata store if it cannot find an index in the job context.
+ */
 public class JobContextIndexStore implements
 		IndexStore
 {

@@ -7,6 +7,12 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.log4j.Logger;
 
+/**
+ * This class encapsulates all of the options and parsed values specific to
+ * setting up the GeoWave ingestion framework to run on hadoop map-reduce.
+ * Currently the only required parameter is the host name and port for the
+ * hadoop job tracker.
+ */
 public class MapReduceCommandLineOptions
 {
 	private final static Logger LOGGER = Logger.getLogger(HdfsCommandLineOptions.class);

@@ -7,6 +7,11 @@ import mil.nga.giat.geowave.ingest.local.LocalFileIngestPlugin;
 
 import org.opengis.feature.simple.SimpleFeature;
 
+/**
+ * This represents an ingest type plugin provider for GeoTools data stores. It
+ * currently only supports ingesting data directly from a local file system into
+ * GeoWave.
+ */
 public class GeoToolsDataStoreIngestType implements
 		IngestTypePluginProviderSpi<Object, SimpleFeature>
 {

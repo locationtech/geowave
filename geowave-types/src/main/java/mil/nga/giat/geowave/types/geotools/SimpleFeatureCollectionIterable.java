@@ -12,6 +12,10 @@ import org.geotools.data.simple.SimpleFeatureCollection;
 import org.geotools.data.simple.SimpleFeatureIterator;
 import org.opengis.feature.simple.SimpleFeature;
 
+/**
+ * This is a wrapper for a GeoTools SimpleFeatureCollection as a convenience to
+ * ingest it into GeoWave by translating it to a collection of GeoWaveData
+ */
 public class SimpleFeatureCollectionIterable implements
 		Iterable<GeoWaveData<SimpleFeature>>
 {

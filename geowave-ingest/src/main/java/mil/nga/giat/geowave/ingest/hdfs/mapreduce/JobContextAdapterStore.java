@@ -12,6 +12,12 @@ import mil.nga.giat.geowave.store.adapter.DataAdapter;
 
 import org.apache.hadoop.mapreduce.JobContext;
 
+/**
+ * This class implements an adapter store by first checking the job context for
+ * an adapter and keeping a local cache of adapters that have been discovered.
+ * It will check the metadata store if it cannot find an adapter in the job
+ * context.
+ */
 public class JobContextAdapterStore implements
 		AdapterStore
 {
