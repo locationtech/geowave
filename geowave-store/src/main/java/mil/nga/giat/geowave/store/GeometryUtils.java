@@ -13,12 +13,14 @@ import mil.nga.giat.geowave.store.query.BasicQuery.Constraints;
 
 import org.apache.log4j.Logger;
 
+import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Envelope;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.io.ParseException;
 import com.vividsolutions.jts.io.WKBReader;
 import com.vividsolutions.jts.io.WKBWriter;
+
 
 /**
  * This class contains a set of Geometry utility methods that are generally
@@ -28,6 +30,8 @@ public class GeometryUtils
 {
 	public static final GeometryFactory GEOMETRY_FACTORY = new GeometryFactory();
 	private final static Logger LOGGER = Logger.getLogger(GeometryUtils.class);
+	private static final int DEFAULT_DIMENSIONALITY = 2;
+
 
 	/**
 	 * This utility method will convert a JTS geometry to contraints that can be
@@ -162,7 +166,14 @@ public class GeometryUtils
 	 */
 	public static byte[] geometryToBinary(
 			final Geometry geometry ) {
-		return new WKBWriter().write(geometry);
+		
+		int dimensions = DEFAULT_DIMENSIONALITY;
+	    
+		if (!geometry.isEmpty()){
+			dimensions  = Double.isNaN(geometry.getCoordinate().getOrdinate(Coordinate.Z)) ? 2 : 3;
+		}
+
+		return new WKBWriter(dimensions).write(geometry);
 	}
 
 	/**
