@@ -47,10 +47,14 @@ public class LocalPluginFileVisitor<P extends LocalPluginBase, R> implements
 					localPluginBase.getFileExtensionFilters(),
 					userExtensions);
 			if ((combinedExtensions != null) && (combinedExtensions.length > 0)) {
+				final String[] lowerCaseExtensions = new String[combinedExtensions.length];
+				for (int i = 0; i < combinedExtensions.length; i++) {
+					lowerCaseExtensions[i] = combinedExtensions[i].toLowerCase();
+				}
 				final String extStr = String.format(
 						"([^\\s]+(\\.(?i)(%s))$)",
 						StringUtils.join(
-								localPluginBase.getFileExtensionFilters(),
+								lowerCaseExtensions,
 								"|"));
 				pattern = Pattern.compile(extStr);
 			}
@@ -64,7 +68,7 @@ public class LocalPluginFileVisitor<P extends LocalPluginBase, R> implements
 		public boolean supportsFile(
 				final File file ) {
 			if ((pattern != null) && !pattern.matcher(
-					file.getName()).matches()) {
+					file.getName().toLowerCase()).matches()) {
 				return false;
 			}
 			else if (!localPluginBase.supportsFile(file)) {

@@ -10,6 +10,7 @@ import java.util.Map;
 import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.ingest.GeoWaveData;
 import mil.nga.giat.geowave.ingest.local.LocalFileIngestPlugin;
+import mil.nga.giat.geowave.store.CloseableIterator;
 import mil.nga.giat.geowave.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.store.index.Index;
 import mil.nga.giat.geowave.store.index.IndexType;
@@ -21,8 +22,6 @@ import org.geotools.data.simple.SimpleFeatureCollection;
 import org.geotools.data.simple.SimpleFeatureSource;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.type.Name;
-
-import com.google.common.collect.Iterables;
 
 /**
  * This plugin is used for ingesting any GeoTools supported file data store from
@@ -81,7 +80,7 @@ public class GeoToolsDataStoreIngestPlugin implements
 	}
 
 	@Override
-	public Iterable<GeoWaveData<SimpleFeature>> toGeoWaveData(
+	public CloseableIterator<GeoWaveData<SimpleFeature>> toGeoWaveData(
 			final File input,
 			final ByteArrayId primaryIndexId,
 			final String visibility ) {
@@ -104,15 +103,12 @@ public class GeoToolsDataStoreIngestPlugin implements
 		if ((dataStore == null) || (names == null)) {
 			return null;
 		}
-		final List<SimpleFeatureCollectionIterable> featureCollectionIterables = new ArrayList<SimpleFeatureCollectionIterable>();
+		final List<SimpleFeatureCollection> featureCollections = new ArrayList<SimpleFeatureCollection>();
 		for (final Name name : names) {
 			try {
 				final SimpleFeatureSource source = dataStore.getFeatureSource(name);
 				final SimpleFeatureCollection featureCollection = source.getFeatures();
-				featureCollectionIterables.add(new SimpleFeatureCollectionIterable(
-						featureCollection,
-						primaryIndexId,
-						visibility));
+				featureCollections.add(featureCollection);
 			}
 			catch (final Exception e) {
 				LOGGER.error(
@@ -120,7 +116,11 @@ public class GeoToolsDataStoreIngestPlugin implements
 						e);
 			}
 		}
-		return Iterables.concat(featureCollectionIterables);
+		return new SimpleFeatureGeoWaveWrapper(
+				featureCollections,
+				primaryIndexId,
+				visibility,
+				dataStore);
 	}
 
 	@Override

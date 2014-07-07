@@ -15,6 +15,7 @@ import mil.nga.giat.geowave.ingest.AccumuloCommandLineOptions;
 import mil.nga.giat.geowave.ingest.GeoWaveData;
 import mil.nga.giat.geowave.ingest.IngestRunData;
 import mil.nga.giat.geowave.ingest.IngestTypePluginProviderSpi;
+import mil.nga.giat.geowave.store.CloseableIterator;
 import mil.nga.giat.geowave.store.DataStore;
 import mil.nga.giat.geowave.store.IndexWriter;
 import mil.nga.giat.geowave.store.adapter.WritableDataAdapter;
@@ -34,7 +35,6 @@ public class LocalFileIngestDriver extends
 {
 	private final static Logger LOGGER = Logger.getLogger(LocalFileIngestDriver.class);
 	protected AccumuloCommandLineOptions accumulo;
-	protected IndexWriter indexWriter;
 
 	public LocalFileIngestDriver(
 			final String operation ) {
@@ -108,9 +108,7 @@ public class LocalFileIngestDriver extends
 		}
 		final DataStore dataStore = new AccumuloDataStore(
 				operations);
-		indexWriter = null;
-		try {
-			indexWriter = dataStore.createIndexWriter(accumulo.getPrimaryIndex());
+		try (IndexWriter indexWriter = dataStore.createIndexWriter(accumulo.getPrimaryIndex())) {
 			processInput(
 					localFileIngestPlugins,
 					new IngestRunData(
@@ -122,11 +120,6 @@ public class LocalFileIngestDriver extends
 					"Unexpected I/O exception when reading input files",
 					e);
 		}
-		finally {
-			if (indexWriter != null) {
-				indexWriter.close();
-			}
-		}
 	}
 
 	@Override
@@ -134,20 +127,24 @@ public class LocalFileIngestDriver extends
 			final File file,
 			final String typeName,
 			final LocalFileIngestPlugin plugin,
-			final IngestRunData ingestRunData ) {
-		final Iterable<GeoWaveData<?>> geowaveDataIt = plugin.toGeoWaveData(
+			final IngestRunData ingestRunData )
+			throws IOException {
+		// final Iterable<GeoWaveData<?>> ;
+		try (CloseableIterator<GeoWaveData<?>> geowaveDataIt = plugin.toGeoWaveData(
 				file,
 				accumulo.getPrimaryIndex().getId(),
-				accumulo.getVisibility());
-		for (final GeoWaveData<?> geowaveData : geowaveDataIt) {
-			final WritableDataAdapter adapter = ingestRunData.getDataAdapter(geowaveData);
-			if (adapter == null) {
-				LOGGER.warn("Adapter not found for " + geowaveData.getValue());
-				continue;
+				accumulo.getVisibility())) {
+			while (geowaveDataIt.hasNext()) {
+				final GeoWaveData<?> geowaveData = geowaveDataIt.next();
+				final WritableDataAdapter adapter = ingestRunData.getDataAdapter(geowaveData);
+				if (adapter == null) {
+					LOGGER.warn("Adapter not found for " + geowaveData.getValue());
+					continue;
+				}
+				ingestRunData.getIndexWriter().write(
+						adapter,
+						geowaveData.getValue());
 			}
-			indexWriter.write(
-					adapter,
-					geowaveData.getValue());
 		}
 
 	}
