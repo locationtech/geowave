@@ -203,7 +203,14 @@ abstract public class AbstractAccumuloPersistence<T extends Persistable>
 
 			try {
 				final Iterator<Entry<Key, Value>> it = scanner.iterator();
-				return it.hasNext();
+				if (it.hasNext()) {
+					// may as well cache the result
+					return (entryToValue(it.next()) != null);
+				}
+				else {
+					return false;
+				}
+
 			}
 			finally {
 				scanner.close();

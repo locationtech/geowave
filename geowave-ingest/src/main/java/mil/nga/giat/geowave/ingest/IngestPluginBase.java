@@ -1,6 +1,7 @@
 package mil.nga.giat.geowave.ingest;
 
 import mil.nga.giat.geowave.index.ByteArrayId;
+import mil.nga.giat.geowave.store.CloseableIterator;
 
 /**
  * An interface required for ingest plugins to implement a conversion from an
@@ -33,7 +34,7 @@ public interface IngestPluginBase<I, O> extends
 	 *            DataAdapterProvider.getDataAdapters()
 	 * @return The objects that can be directly ingested into GeoWave
 	 */
-	public Iterable<GeoWaveData<O>> toGeoWaveData(
+	public CloseableIterator<GeoWaveData<O>> toGeoWaveData(
 			I input,
 			ByteArrayId primaryIndexId,
 			String globalVisibility );

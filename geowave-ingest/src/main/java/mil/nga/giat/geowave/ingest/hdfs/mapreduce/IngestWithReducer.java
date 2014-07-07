@@ -4,6 +4,7 @@ import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.index.Persistable;
 import mil.nga.giat.geowave.ingest.DataAdapterProvider;
 import mil.nga.giat.geowave.ingest.GeoWaveData;
+import mil.nga.giat.geowave.store.CloseableIterator;
 
 import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.io.WritableComparable;
@@ -34,10 +35,10 @@ public interface IngestWithReducer<I, K extends WritableComparable<?>, V extends
 		DataAdapterProvider<O>,
 		Persistable
 {
-	public Iterable<KeyValueData<K, V>> toIntermediateMapReduceData(
+	public CloseableIterator<KeyValueData<K, V>> toIntermediateMapReduceData(
 			I input );
 
-	public Iterable<GeoWaveData<O>> toGeoWaveData(
+	public CloseableIterator<GeoWaveData<O>> toGeoWaveData(
 			K key,
 			ByteArrayId primaryIndexId,
 			String globalVisibility,

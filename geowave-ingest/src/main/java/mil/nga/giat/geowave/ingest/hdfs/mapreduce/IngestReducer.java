@@ -6,6 +6,7 @@ import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.index.ByteArrayUtils;
 import mil.nga.giat.geowave.index.PersistenceUtils;
 import mil.nga.giat.geowave.ingest.GeoWaveData;
+import mil.nga.giat.geowave.store.CloseableIterator;
 
 import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.io.WritableComparable;
@@ -29,15 +30,17 @@ public class IngestReducer extends
 			final Context context )
 			throws IOException,
 			InterruptedException {
-		final Iterable<GeoWaveData> data = ingestWithReducer.toGeoWaveData(
+		try (CloseableIterator<GeoWaveData> data = ingestWithReducer.toGeoWaveData(
 				key,
 				primaryIndexId,
 				globalVisibility,
-				values);
-		for (final GeoWaveData d : data) {
-			context.write(
-					d.getKey(),
-					d.getValue());
+				values)) {
+			while (data.hasNext()) {
+				final GeoWaveData d = data.next();
+				context.write(
+						d.getKey(),
+						d.getValue());
+			}
 		}
 	}
 

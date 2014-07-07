@@ -6,11 +6,9 @@ import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.apache.accumulo.core.client.BatchScanner;
 import org.apache.accumulo.core.client.Connector;
-import org.apache.accumulo.core.client.Instance;
 import org.apache.accumulo.core.client.Scanner;
 import org.apache.accumulo.core.client.TableExistsException;
 import org.apache.accumulo.core.client.TableNotFoundException;
-import org.apache.accumulo.core.client.ZooKeeperInstance;
 import org.apache.accumulo.core.security.Authorizations;
 import org.apache.log4j.Logger;
 
@@ -71,10 +69,9 @@ public class BasicAccumuloOperations implements
 				null,
 				tableNamespace);
 
-		final Instance inst = new ZooKeeperInstance(
+		connector = ConnectorPool.getInstance().getConnector(
+				zookeeperUrl,
 				instanceName,
-				zookeeperUrl);
-		connector = inst.getConnector(
 				userName,
 				password);
 	}
@@ -259,9 +256,10 @@ public class BasicAccumuloOperations implements
 
 	@Override
 	public boolean tableExists(
-			String tableName ) {
+			final String tableName ) {
 		final String qName = getQualifiedTableName(tableName);
-		return connector.tableOperations().exists(qName);
+		return connector.tableOperations().exists(
+				qName);
 	}
 
 	@Override

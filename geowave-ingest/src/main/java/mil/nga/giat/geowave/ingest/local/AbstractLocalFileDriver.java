@@ -70,7 +70,8 @@ abstract public class AbstractLocalFileDriver<P extends LocalPluginBase, R> exte
 			final File file,
 			String typeName,
 			P plugin,
-			R runData );
+			R runData )
+			throws IOException;
 
 	@Override
 	public void parseOptions(
