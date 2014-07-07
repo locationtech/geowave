@@ -28,6 +28,7 @@ import org.apache.accumulo.core.iterators.SortedKeyValueIterator;
 import org.apache.accumulo.core.iterators.user.WholeRowIterator;
 import org.apache.commons.vfs2.FileObject;
 import org.apache.commons.vfs2.impl.VFSClassLoader;
+import org.apache.hadoop.fs.FsUrlStreamHandlerFactory;
 import org.apache.hadoop.io.Text;
 import org.apache.log4j.Logger;
 import org.geotools.factory.GeoTools;
@@ -60,6 +61,10 @@ public class CqlQueryFilterIterator extends
 	private FeatureDataAdapter dataAdapter;
 	private DistributableQueryFilter geowaveFilter;
 	private Filter gtFilter;
+
+	static {
+		URL.setURLStreamHandlerFactory(new FsUrlStreamHandlerFactory());
+	}
 
 	@Override
 	protected boolean filter(
