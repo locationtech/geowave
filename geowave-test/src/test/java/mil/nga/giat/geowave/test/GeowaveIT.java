@@ -108,7 +108,8 @@ public class GeowaveIT
 						new File(
 								TORNADO_TRACKS_EXPECTED_BOX_FILTER_RESULTS_FILE).toURI().toURL()
 					},
-					spatialIndex);
+					spatialIndex,
+					"bounding box constraint");
 		}
 		catch (final Exception e) {
 			e.printStackTrace();
@@ -125,7 +126,8 @@ public class GeowaveIT
 						new File(
 								TORNADO_TRACKS_EXPECTED_POLYGON_FILTER_RESULTS_FILE).toURI().toURL()
 					},
-					spatialIndex);
+					spatialIndex,
+					"polygon constaint only");
 		}
 		catch (final Exception e) {
 			e.printStackTrace();
@@ -152,7 +154,8 @@ public class GeowaveIT
 								HAIL_EXPECTED_BOX_TEMPORAL_FILTER_RESULTS_FILE).toURI().toURL(),
 						new File(
 								TORNADO_TRACKS_EXPECTED_BOX_TEMPORAL_FILTER_RESULTS_FILE).toURI().toURL()
-					});
+					},
+					"bounding box and time range");
 		}
 		catch (final Exception e) {
 			e.printStackTrace();
@@ -168,7 +171,8 @@ public class GeowaveIT
 								HAIL_EXPECTED_POLYGON_TEMPORAL_FILTER_RESULTS_FILE).toURI().toURL(),
 						new File(
 								TORNADO_TRACKS_EXPECTED_POLYGON_TEMPORAL_FILTER_RESULTS_FILE).toURI().toURL()
-					});
+					},
+					"polygon constraint and time range");
 		}
 		catch (final Exception e) {
 			accumuloOperations.deleteAll();
@@ -265,6 +269,7 @@ public class GeowaveIT
 			final String filePath ) {
 		// ingest a shapefile (geotools type) directly into GeoWave using the
 		// ingest framework's main method and pre-defined commandline arguments
+		LOGGER.info("ingesting " + filePath);
 		final String[] args = StringUtils.split(
 				"-localingest -t geotools -b " + filePath + " -z " + zookeeper + " -i " + accumuloInstance + " -u " + accumuloUser + " -p " + accumuloPassword + " -n " + TEST_NAMESPACE + " -index " + (indexType.equals(IndexType.SPATIAL) ? "spatial" : "spatial-temporal"),
 				' ');
@@ -279,20 +284,24 @@ public class GeowaveIT
 
 	private void testQuery(
 			final URL savedFilterResource,
-			final URL[] expectedResultsResources )
+			final URL[] expectedResultsResources,
+			final String queryDescription )
 			throws Exception {
 		// test the query with an unspecified index
 		testQuery(
 				savedFilterResource,
 				expectedResultsResources,
-				null);
+				null,
+				queryDescription);
 	}
 
 	private void testQuery(
 			final URL savedFilterResource,
 			final URL[] expectedResultsResources,
-			final Index index )
+			final Index index,
+			final String queryDescription )
 			throws Exception {
+		LOGGER.info("querying " + queryDescription);
 		final mil.nga.giat.geowave.store.DataStore geowaveStore = new AccumuloDataStore(
 				new AccumuloIndexStore(
 						accumuloOperations),
