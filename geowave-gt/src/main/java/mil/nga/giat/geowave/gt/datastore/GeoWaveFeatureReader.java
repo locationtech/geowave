@@ -90,16 +90,20 @@ public class GeoWaveFeatureReader implements
 	}
 
 	public CloseableIterator<SimpleFeature> getAllData(
+			final Filter filter,
 			final Integer limit ) {
 		if ((limit != null) && (limit >= 0)) {
 			return dataStore.query(
 					adapter,
 					null,
+					filter,
 					limit);
 		}
 		return dataStore.query(
 				adapter,
-				null);
+				(mil.nga.giat.geowave.store.query.Query) null,
+				filter,
+				(Integer) null);
 	}
 
 	public CloseableIterator<SimpleFeature> renderData(
@@ -120,7 +124,8 @@ public class GeoWaveFeatureReader implements
 			final int height,
 			final double pixelSize,
 			final Filter filter,
-			final ReferencedEnvelope envelope ) {
+			final ReferencedEnvelope envelope,
+			final Integer limit ) {
 		return dataStore.query(
 				adapter,
 				new SpatialQuery(
@@ -129,7 +134,8 @@ public class GeoWaveFeatureReader implements
 				height,
 				pixelSize,
 				filter,
-				envelope);
+				envelope,
+				limit);
 	}
 
 	public CloseableIterator<SimpleFeature> getData(
@@ -146,6 +152,26 @@ public class GeoWaveFeatureReader implements
 				adapter,
 				new SpatialQuery(
 						jtsBounds));
+	}
+
+	public CloseableIterator<SimpleFeature> getData(
+			final Geometry jtsBounds,
+			final Filter filter,
+			final Integer limit ) {
+		if ((limit != null) && (limit >= 0)) {
+			return dataStore.query(
+					adapter,
+					new SpatialQuery(
+							jtsBounds),
+					filter,
+					limit);
+		}
+		return dataStore.query(
+				adapter,
+				new SpatialQuery(
+						jtsBounds),
+				filter,
+				(Integer) null);
 	}
 
 	@SuppressWarnings("unchecked")

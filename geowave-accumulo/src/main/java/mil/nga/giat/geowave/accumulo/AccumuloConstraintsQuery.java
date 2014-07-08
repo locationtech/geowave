@@ -125,7 +125,7 @@ public class AccumuloConstraintsQuery extends
 		}
 	}
 
-	public CloseableIterator<Object> query(
+	public CloseableIterator<?> query(
 			final AccumuloOperations accumuloOperations,
 			final AdapterStore adapterStore,
 			final Integer limit ) {
@@ -133,7 +133,7 @@ public class AccumuloConstraintsQuery extends
 				accumuloOperations,
 				limit);
 		addScanIteratorSettings(scanner);
-		Iterator<Object> it = new EntryIteratorWrapper(
+		Iterator it = new EntryIteratorWrapper(
 				adapterStore,
 				index,
 				scanner.iterator(),
@@ -144,7 +144,7 @@ public class AccumuloConstraintsQuery extends
 					it,
 					limit);
 		}
-		return new CloseableIteratorWrapper<Object>(
+		return new CloseableIteratorWrapper(
 				new ScannerClosableWrapper(
 						scanner),
 				it);
