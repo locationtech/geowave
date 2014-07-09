@@ -102,6 +102,7 @@ public class AccumuloDataStore implements
 		return new AccumuloIndexWriter(
 				index,
 				accumuloOperations,
+				accumuloOptions,
 				this);
 	}
 

@@ -8,6 +8,8 @@ import mil.nga.giat.geowave.store.IndexWriter;
 import mil.nga.giat.geowave.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.store.index.Index;
 
+import org.apache.accumulo.core.client.AccumuloException;
+import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.apache.accumulo.core.client.TableNotFoundException;
 import org.apache.log4j.Logger;
 
@@ -23,6 +25,7 @@ public class AccumuloIndexWriter implements
 	private final static Logger LOGGER = Logger.getLogger(AccumuloIndexWriter.class);
 	private final Index index;
 	private final AccumuloOperations accumuloOperations;
+	private final AccumuloOptions accumuloOptions;
 	protected final AccumuloDataStore dataStore;
 	private Writer writer;
 
@@ -32,6 +35,18 @@ public class AccumuloIndexWriter implements
 			final AccumuloDataStore dataStore ) {
 		this.index = index;
 		this.accumuloOperations = accumuloOperations;
+		this.dataStore = dataStore;
+		this.accumuloOptions = new AccumuloOptions();
+	}
+
+	public AccumuloIndexWriter(
+			final Index index,
+			final AccumuloOperations accumuloOperations,
+			final AccumuloOptions accumuloOptions,
+			final AccumuloDataStore dataStore ) {
+		this.index = index;
+		this.accumuloOperations = accumuloOperations;
+		this.accumuloOptions = accumuloOptions;
 		this.dataStore = dataStore;
 	}
 
@@ -59,8 +74,28 @@ public class AccumuloIndexWriter implements
 	public <T> List<ByteArrayId> write(
 			final WritableDataAdapter<T> writableAdapter,
 			final T entry ) {
+
+		final String tableName = StringUtils.stringFromBinary(index.getId().getBytes());
+		final byte[] adapterId = writableAdapter.getAdapterId().getBytes();
+
 		dataStore.store(writableAdapter);
 		dataStore.store(index);
+
+		try {
+			if (accumuloOptions.isUseLocalityGroups() && !accumuloOperations.localityGroupExists(
+					tableName,
+					adapterId)) {
+				accumuloOperations.addLocalityGroup(
+						tableName,
+						adapterId);
+			}
+		}
+		catch (AccumuloException | TableNotFoundException | AccumuloSecurityException e) {
+			LOGGER.error(
+					"Unable to determine existence of locality group [" + writableAdapter.getAdapterId() + "]",
+					e);
+		}
+
 		synchronized (this) {
 			ensureOpen();
 			return AccumuloUtils.write(
