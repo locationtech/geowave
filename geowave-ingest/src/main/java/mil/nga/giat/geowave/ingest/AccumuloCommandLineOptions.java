@@ -31,7 +31,7 @@ public class AccumuloCommandLineOptions
 	private final String visibility;
 	private final boolean clearNamespace;
 	private final IndexType type;
-	private final AccumuloOperations operations;
+	private AccumuloOperations operations;
 	private final Index primaryIndex;
 
 	public AccumuloCommandLineOptions(
@@ -53,12 +53,6 @@ public class AccumuloCommandLineOptions
 		this.visibility = visibility;
 		this.clearNamespace = clearNamespace;
 		this.type = type;
-		operations = new BasicAccumuloOperations(
-				zookeepers,
-				instanceId,
-				user,
-				password,
-				namespace);
 
 		primaryIndex = type.createDefaultIndex();
 
@@ -67,11 +61,13 @@ public class AccumuloCommandLineOptions
 		}
 	}
 
-	protected void clearNamespace() {
+	protected void clearNamespace()
+			throws AccumuloException,
+			AccumuloSecurityException {
 		// don't delete all tables in the case that no namespace is given
 		if ((namespace != null) && !namespace.isEmpty()) {
 			LOGGER.info("deleting all tables prefixed by '" + namespace + "'");
-			operations.deleteAll();
+			getAccumuloOperations().deleteAll();
 		}
 		else {
 			LOGGER.error("cannot clear a namespace if no namespace is provided");
@@ -114,7 +110,17 @@ public class AccumuloCommandLineOptions
 		return primaryIndex;
 	}
 
-	public AccumuloOperations getAccumuloOperations() {
+	public synchronized AccumuloOperations getAccumuloOperations()
+			throws AccumuloException,
+			AccumuloSecurityException {
+		if (operations == null) {
+			operations = new BasicAccumuloOperations(
+					zookeepers,
+					instanceId,
+					user,
+					password,
+					namespace);
+		}
 		return operations;
 	}
 

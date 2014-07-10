@@ -4,9 +4,12 @@ import java.util.List;
 
 import mil.nga.giat.geowave.store.IndexWriter;
 
+import org.apache.accumulo.core.client.AccumuloException;
+import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import org.apache.log4j.Logger;
 
 /**
  * This simply executes an operation to clear a given namespace. It will delete
@@ -15,6 +18,7 @@ import org.apache.commons.cli.ParseException;
 public class ClearNamespaceDriver extends
 		AbstractCommandLineDriver
 {
+	private final static Logger LOGGER = Logger.getLogger(ClearNamespaceDriver.class);
 	protected AccumuloCommandLineOptions accumulo;
 	protected IndexWriter indexWriter;
 
@@ -44,7 +48,14 @@ public class ClearNamespaceDriver extends
 		// just check if the flag to clear namespaces is set, and even if it is
 		// not, clear it, but only if a namespace is provided
 		if (!accumulo.isClearNamespace()) {
-			accumulo.clearNamespace();
+			try {
+				accumulo.clearNamespace();
+			}
+			catch (AccumuloException | AccumuloSecurityException e) {
+				LOGGER.fatal(
+						"Unable to connect to Accumulo with the specified options",
+						e);
+			}
 		}
 	}
 }

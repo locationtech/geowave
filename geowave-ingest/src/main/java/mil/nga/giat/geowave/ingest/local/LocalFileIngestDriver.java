@@ -21,6 +21,8 @@ import mil.nga.giat.geowave.store.IndexWriter;
 import mil.nga.giat.geowave.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.store.index.Index;
 
+import org.apache.accumulo.core.client.AccumuloException;
+import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
@@ -101,7 +103,17 @@ public class LocalFileIngestDriver extends
 			adapters.addAll(Arrays.asList(localFileIngestPlugin.getDataAdapters(accumulo.getVisibility())));
 		}
 
-		final AccumuloOperations operations = accumulo.getAccumuloOperations();
+		AccumuloOperations operations;
+		try {
+			operations = accumulo.getAccumuloOperations();
+
+		}
+		catch (AccumuloException | AccumuloSecurityException e) {
+			LOGGER.fatal(
+					"Unable to connect to Accumulo with the specified options",
+					e);
+			return;
+		}
 		if (localFileIngestPlugins.isEmpty()) {
 			LOGGER.fatal("There were no local file ingest type plugin providers found");
 			return;
