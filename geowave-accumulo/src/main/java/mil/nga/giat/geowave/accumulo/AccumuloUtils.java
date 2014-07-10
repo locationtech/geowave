@@ -162,6 +162,10 @@ public class AccumuloUtils
 
 			if (adapter == null) {
 				adapter = (DataAdapter<T>) adapterStore.getAdapter(adapterId);
+				if (adapter == null) {
+					LOGGER.error("DataAdapter does not exist");
+					return null;
+				}
 			}
 			if (!adapterMatchVerified) {
 				if (!adapterId.equals(adapter.getAdapterId())) {

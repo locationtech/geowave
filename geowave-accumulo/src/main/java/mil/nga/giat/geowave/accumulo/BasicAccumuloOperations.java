@@ -1,6 +1,11 @@
 package mil.nga.giat.geowave.accumulo;
 
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import java.util.SortedSet;
+
+import mil.nga.giat.geowave.index.StringUtils;
 
 import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
@@ -10,6 +15,7 @@ import org.apache.accumulo.core.client.Scanner;
 import org.apache.accumulo.core.client.TableExistsException;
 import org.apache.accumulo.core.client.TableNotFoundException;
 import org.apache.accumulo.core.security.Authorizations;
+import org.apache.hadoop.io.Text;
 import org.apache.log4j.Logger;
 
 /**
@@ -168,8 +174,18 @@ public class BasicAccumuloOperations implements
 	public Writer createWriter(
 			final String tableName )
 			throws TableNotFoundException {
+		return createWriter(
+				tableName,
+				true);
+	}
+
+	@Override
+	public Writer createWriter(
+			final String tableName,
+			final boolean createTable )
+			throws TableNotFoundException {
 		final String qName = getQualifiedTableName(tableName);
-		if (!connector.tableOperations().exists(
+		if (createTable && !connector.tableOperations().exists(
 				qName)) {
 			try {
 				connector.tableOperations().create(
@@ -260,6 +276,48 @@ public class BasicAccumuloOperations implements
 		final String qName = getQualifiedTableName(tableName);
 		return connector.tableOperations().exists(
 				qName);
+	}
+
+	@Override
+	public boolean localityGroupExists(
+			final String tableName,
+			final byte[] localityGroup )
+			throws AccumuloException,
+			TableNotFoundException {
+		final String qName = getQualifiedTableName(tableName);
+		return connector.tableOperations().exists(
+				qName) && connector.tableOperations().getLocalityGroups(
+				qName).keySet().contains(
+				StringUtils.stringFromBinary(localityGroup));
+	}
+
+	@Override
+	public void addLocalityGroup(
+			final String tableName,
+			final byte[] localityGroup )
+			throws AccumuloException,
+			TableNotFoundException,
+			AccumuloSecurityException {
+		final String qName = getQualifiedTableName(tableName);
+
+		if (connector.tableOperations().exists(
+				qName)) {
+			final Map<String, Set<Text>> localityGroups = connector.tableOperations().getLocalityGroups(
+					qName);
+
+			final Set<Text> groupSet = new HashSet<Text>();
+
+			groupSet.add(new Text(
+					localityGroup));
+
+			localityGroups.put(
+					StringUtils.stringFromBinary(localityGroup),
+					groupSet);
+
+			connector.tableOperations().setLocalityGroups(
+					qName,
+					localityGroups);
+		}
 	}
 
 	@Override

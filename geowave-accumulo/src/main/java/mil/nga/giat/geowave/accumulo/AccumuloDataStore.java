@@ -23,6 +23,8 @@ import mil.nga.giat.geowave.store.index.Index;
 import mil.nga.giat.geowave.store.index.IndexStore;
 import mil.nga.giat.geowave.store.query.Query;
 
+import org.apache.accumulo.core.client.AccumuloException;
+import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.apache.accumulo.core.client.TableNotFoundException;
 import org.apache.accumulo.core.data.Mutation;
 import org.apache.log4j.Logger;
@@ -49,6 +51,7 @@ public class AccumuloDataStore implements
 	protected final IndexStore indexStore;
 	protected final AdapterStore adapterStore;
 	protected final AccumuloOperations accumuloOperations;
+	protected final AccumuloOptions accumuloOptions;
 
 	public AccumuloDataStore(
 			final AccumuloOperations accumuloOperations ) {
@@ -61,12 +64,36 @@ public class AccumuloDataStore implements
 	}
 
 	public AccumuloDataStore(
+			final AccumuloOperations accumuloOperations,
+			final AccumuloOptions accumuloOptions ) {
+		this(
+				new AccumuloIndexStore(
+						accumuloOperations),
+				new AccumuloAdapterStore(
+						accumuloOperations),
+				accumuloOperations,
+				accumuloOptions);
+	}
+
+	public AccumuloDataStore(
 			final IndexStore indexStore,
 			final AdapterStore adapterStore,
 			final AccumuloOperations accumuloOperations ) {
 		this.indexStore = indexStore;
 		this.adapterStore = adapterStore;
 		this.accumuloOperations = accumuloOperations;
+		accumuloOptions = new AccumuloOptions();
+	}
+
+	public AccumuloDataStore(
+			final IndexStore indexStore,
+			final AdapterStore adapterStore,
+			final AccumuloOperations accumuloOperations,
+			final AccumuloOptions accumuloOptions ) {
+		this.indexStore = indexStore;
+		this.adapterStore = adapterStore;
+		this.accumuloOperations = accumuloOperations;
+		this.accumuloOptions = accumuloOptions;
 	}
 
 	@Override
@@ -75,6 +102,7 @@ public class AccumuloDataStore implements
 		return new AccumuloIndexWriter(
 				index,
 				accumuloOperations,
+				accumuloOptions,
 				this);
 	}
 
@@ -85,9 +113,24 @@ public class AccumuloDataStore implements
 			final T entry ) {
 		store(writableAdapter);
 		store(index);
+
 		Writer writer;
 		try {
-			writer = accumuloOperations.createWriter(StringUtils.stringFromBinary(index.getId().getBytes()));
+			final String tableName = StringUtils.stringFromBinary(index.getId().getBytes());
+			final byte[] adapterId = writableAdapter.getAdapterId().getBytes();
+
+			writer = accumuloOperations.createWriter(
+					tableName,
+					accumuloOptions.isCreateIndex());
+
+			if (accumuloOptions.isUseLocalityGroups() && !accumuloOperations.localityGroupExists(
+					tableName,
+					adapterId)) {
+				accumuloOperations.addLocalityGroup(
+						tableName,
+						adapterId);
+			}
+
 			final List<ByteArrayId> rowIds = AccumuloUtils.write(
 					writableAdapter,
 					index,
@@ -97,7 +140,7 @@ public class AccumuloDataStore implements
 			writer.close();
 			return rowIds;
 		}
-		catch (final TableNotFoundException e) {
+		catch (final TableNotFoundException | AccumuloException | AccumuloSecurityException e) {
 			LOGGER.error(
 					"Unable to ingest data entry",
 					e);
@@ -107,14 +150,14 @@ public class AccumuloDataStore implements
 
 	protected synchronized void store(
 			final DataAdapter<?> adapter ) {
-		if (!adapterStore.adapterExists(adapter.getAdapterId())) {
+		if (accumuloOptions.isPersistAdapter() && !adapterStore.adapterExists(adapter.getAdapterId())) {
 			adapterStore.addAdapter(adapter);
 		}
 	}
 
 	protected synchronized void store(
 			final Index index ) {
-		if (!indexStore.indexExists(index.getId())) {
+		if (accumuloOptions.isPersistIndex() && !indexStore.indexExists(index.getId())) {
 			indexStore.addIndex(index);
 		}
 	}
@@ -141,7 +184,20 @@ public class AccumuloDataStore implements
 			store(dataWriter);
 			store(index);
 
-			final mil.nga.giat.geowave.accumulo.Writer writer = accumuloOperations.createWriter(StringUtils.stringFromBinary(index.getId().getBytes()));
+			final String tableName = StringUtils.stringFromBinary(index.getId().getBytes());
+			final byte[] adapterId = dataWriter.getAdapterId().getBytes();
+
+			final mil.nga.giat.geowave.accumulo.Writer writer = accumuloOperations.createWriter(
+					StringUtils.stringFromBinary(index.getId().getBytes()),
+					accumuloOptions.isCreateIndex());
+
+			if (accumuloOptions.isUseLocalityGroups() && !accumuloOperations.localityGroupExists(
+					tableName,
+					adapterId)) {
+				accumuloOperations.addLocalityGroup(
+						tableName,
+						adapterId);
+			}
 
 			writer.write(new Iterable<Mutation>() {
 				@Override
@@ -164,7 +220,7 @@ public class AccumuloDataStore implements
 			});
 			writer.close();
 		}
-		catch (final TableNotFoundException e) {
+		catch (final TableNotFoundException | AccumuloException | AccumuloSecurityException e) {
 			LOGGER.error(
 					"Unable to ingest data entries",
 					e);
@@ -197,7 +253,7 @@ public class AccumuloDataStore implements
 			final DataAdapter<T> adapter,
 			final Query query,
 			final Integer limit ) {
-		if (!adapterStore.adapterExists(adapter.getAdapterId())) {
+		if (accumuloOptions.isPersistAdapter() && !adapterStore.adapterExists(adapter.getAdapterId())) {
 			adapterStore.addAdapter(adapter);
 		}
 		return ((CloseableIterator<T>) query(
@@ -439,7 +495,7 @@ public class AccumuloDataStore implements
 			throw new IllegalArgumentException(
 					"Index does not support the query");
 		}
-		if (!adapterStore.adapterExists(adapter.getAdapterId())) {
+		if (accumuloOptions.isPersistAdapter() && !adapterStore.adapterExists(adapter.getAdapterId())) {
 			adapterStore.addAdapter(adapter);
 		}
 
