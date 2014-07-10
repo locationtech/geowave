@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import mil.nga.giat.geowave.index.ByteArrayUtils;
 import mil.nga.giat.geowave.index.PersistenceUtils;
+import mil.nga.giat.geowave.store.CloseableIterator;
 
 import org.apache.avro.mapred.AvroKey;
 import org.apache.hadoop.io.NullWritable;
@@ -27,11 +28,13 @@ public class IntermediateKeyValueMapper extends
 			final org.apache.hadoop.mapreduce.Mapper.Context context )
 			throws IOException,
 			InterruptedException {
-		final Iterable<KeyValueData<WritableComparable<?>, Writable>> data = ingestWithReducer.toIntermediateMapReduceData(key.datum());
-		for (final KeyValueData<WritableComparable<?>, Writable> d : data) {
-			context.write(
-					d.getKey(),
-					d.getValue());
+		try (CloseableIterator<KeyValueData<WritableComparable<?>, Writable>> data = ingestWithReducer.toIntermediateMapReduceData(key.datum())) {
+			while (data.hasNext()) {
+				final KeyValueData<WritableComparable<?>, Writable> d = data.next();
+				context.write(
+						d.getKey(),
+						d.getValue());
+			}
 		}
 	}
 

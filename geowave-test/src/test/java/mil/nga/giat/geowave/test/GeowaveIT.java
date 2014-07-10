@@ -109,7 +109,7 @@ public class GeowaveIT
 								TORNADO_TRACKS_EXPECTED_BOX_FILTER_RESULTS_FILE).toURI().toURL()
 					},
 					spatialIndex,
-					"bounding box constraint");
+					"bounding box constraint only");
 		}
 		catch (final Exception e) {
 			e.printStackTrace();
@@ -127,7 +127,7 @@ public class GeowaveIT
 								TORNADO_TRACKS_EXPECTED_POLYGON_FILTER_RESULTS_FILE).toURI().toURL()
 					},
 					spatialIndex,
-					"polygon constaint only");
+					"polygon constraint only");
 		}
 		catch (final Exception e) {
 			e.printStackTrace();
@@ -266,14 +266,13 @@ public class GeowaveIT
 
 	private void testIngest(
 			final IndexType indexType,
-			final String filePath ) {
+			final String ingestFilePath ) {
 		// ingest a shapefile (geotools type) directly into GeoWave using the
 		// ingest framework's main method and pre-defined commandline arguments
-		LOGGER.info("ingesting " + filePath);
+		LOGGER.warn("Ingesting '" + ingestFilePath + "' - this may take several minutes...");
 		final String[] args = StringUtils.split(
-				"-localingest -t geotools -b " + filePath + " -z " + zookeeper + " -i " + accumuloInstance + " -u " + accumuloUser + " -p " + accumuloPassword + " -n " + TEST_NAMESPACE + " -index " + (indexType.equals(IndexType.SPATIAL) ? "spatial" : "spatial-temporal"),
+				"-localingest -t geotools -b " + ingestFilePath + " -z " + zookeeper + " -i " + accumuloInstance + " -u " + accumuloUser + " -p " + accumuloPassword + " -n " + TEST_NAMESPACE + " -index " + (indexType.equals(IndexType.SPATIAL) ? "spatial" : "spatial-temporal"),
 				' ');
-
 		IngestMain.main(args);
 	}
 
@@ -302,6 +301,7 @@ public class GeowaveIT
 			final String queryDescription )
 			throws Exception {
 		LOGGER.info("querying " + queryDescription);
+		System.out.println("querying " + queryDescription);
 		final mil.nga.giat.geowave.store.DataStore geowaveStore = new AccumuloDataStore(
 				new AccumuloIndexStore(
 						accumuloOperations),

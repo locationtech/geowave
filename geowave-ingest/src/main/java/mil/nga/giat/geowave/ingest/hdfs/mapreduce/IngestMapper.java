@@ -6,6 +6,7 @@ import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.index.ByteArrayUtils;
 import mil.nga.giat.geowave.index.PersistenceUtils;
 import mil.nga.giat.geowave.ingest.GeoWaveData;
+import mil.nga.giat.geowave.store.CloseableIterator;
 
 import org.apache.avro.mapred.AvroKey;
 import org.apache.hadoop.io.NullWritable;
@@ -28,14 +29,16 @@ public class IngestMapper extends
 			final org.apache.hadoop.mapreduce.Mapper.Context context )
 			throws IOException,
 			InterruptedException {
-		final Iterable<GeoWaveData> data = ingestWithMapper.toGeoWaveData(
+		try (CloseableIterator<GeoWaveData> data = ingestWithMapper.toGeoWaveData(
 				key.datum(),
 				primaryIndexId,
-				globalVisibility);
-		for (final GeoWaveData d : data) {
-			context.write(
-					d.getKey(),
-					d.getValue());
+				globalVisibility)) {
+			while (data.hasNext()) {
+				final GeoWaveData d = data.next();
+				context.write(
+						d.getKey(),
+						d.getValue());
+			}
 		}
 	}
 

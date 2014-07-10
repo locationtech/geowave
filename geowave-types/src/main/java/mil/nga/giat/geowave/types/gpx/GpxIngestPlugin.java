@@ -30,6 +30,7 @@ import mil.nga.giat.geowave.ingest.hdfs.mapreduce.IngestFromHdfsPlugin;
 import mil.nga.giat.geowave.ingest.hdfs.mapreduce.IngestWithMapper;
 import mil.nga.giat.geowave.ingest.hdfs.mapreduce.IngestWithReducer;
 import mil.nga.giat.geowave.ingest.local.LocalFileIngestPlugin;
+import mil.nga.giat.geowave.store.CloseableIterator;
 import mil.nga.giat.geowave.store.GeometryUtils;
 import mil.nga.giat.geowave.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.store.data.field.FieldVisibilityHandler;
@@ -46,7 +47,7 @@ import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.xml.sax.SAXException;
 
-import com.google.common.collect.Iterables;
+import com.google.common.collect.Iterators;
 import com.vividsolutions.jts.geom.Coordinate;
 
 /**
@@ -193,20 +194,21 @@ public class GpxIngestPlugin implements
 	}
 
 	@Override
-	public Iterable<GeoWaveData<SimpleFeature>> toGeoWaveData(
+	public CloseableIterator<GeoWaveData<SimpleFeature>> toGeoWaveData(
 			final File input,
 			final ByteArrayId primaryIndexId,
 			final String globalVisibility ) {
 		final GpxTrack[] gpxTracks = toHdfsObjects(input);
-		final List<Iterable<GeoWaveData<SimpleFeature>>> allData = new ArrayList<Iterable<GeoWaveData<SimpleFeature>>>();
+		final List<CloseableIterator<GeoWaveData<SimpleFeature>>> allData = new ArrayList<CloseableIterator<GeoWaveData<SimpleFeature>>>();
 		for (final GpxTrack track : gpxTracks) {
-			final Iterable<GeoWaveData<SimpleFeature>> geowaveData = toGeoWaveDataInternal(
+			final CloseableIterator<GeoWaveData<SimpleFeature>> geowaveData = toGeoWaveDataInternal(
 					track,
 					primaryIndexId,
 					globalVisibility);
 			allData.add(geowaveData);
 		}
-		return Iterables.concat(allData);
+		return new CloseableIterator.Wrapper<GeoWaveData<SimpleFeature>>(
+				Iterators.concat(allData.iterator()));
 	}
 
 	@Override
@@ -266,7 +268,7 @@ public class GpxIngestPlugin implements
 				"GPX tracks cannot be ingested with a reducer");
 	}
 
-	private Iterable<GeoWaveData<SimpleFeature>> toGeoWaveDataInternal(
+	private CloseableIterator<GeoWaveData<SimpleFeature>> toGeoWaveDataInternal(
 			final GpxTrack gpxTrack,
 			final ByteArrayId primaryIndexId,
 			final String globalVisibility ) {
@@ -591,7 +593,8 @@ public class GpxIngestPlugin implements
 					e);
 
 		}
-		return featureData;
+		return new CloseableIterator.Wrapper<GeoWaveData<SimpleFeature>>(
+				featureData.iterator());
 	}
 
 	@Override
@@ -622,7 +625,7 @@ public class GpxIngestPlugin implements
 		}
 
 		@Override
-		public Iterable<GeoWaveData<SimpleFeature>> toGeoWaveData(
+		public CloseableIterator<GeoWaveData<SimpleFeature>> toGeoWaveData(
 				final GpxTrack input,
 				final ByteArrayId primaryIndexId,
 				final String globalVisibility ) {
