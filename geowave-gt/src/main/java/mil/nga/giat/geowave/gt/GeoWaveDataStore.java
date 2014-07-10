@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
+import mil.nga.giat.geowave.accumulo.AccumuloConstraintsQuery;
 import mil.nga.giat.geowave.accumulo.AccumuloDataStore;
 import mil.nga.giat.geowave.accumulo.AccumuloOperations;
 import mil.nga.giat.geowave.accumulo.AccumuloOptions;
@@ -73,6 +74,68 @@ public class GeoWaveDataStore extends
 		super(
 				accumuloOperations,
 				accumuloOptions);
+	}
+
+	@SuppressWarnings("unchecked")
+	public CloseableIterator<SimpleFeature> query(
+			final FeatureDataAdapter adapter,
+			final Query query,
+			final Filter filter,
+			final Integer limit ) {
+		if (!adapterStore.adapterExists(adapter.getAdapterId())) {
+			adapterStore.addAdapter(adapter);
+		}
+		final List<ByteArrayId> adapterIds = Arrays.asList(new ByteArrayId[] {
+			adapter.getAdapterId()
+		});
+		final AdapterStore adapterStore = new MemoryAdapterStore(
+				new DataAdapter[] {
+					adapter
+				});
+		// query the indices that are supported for this query object, and these
+		// data adapter Ids
+		final Iterator<Index> indices = indexStore.getIndices();
+		final List<CloseableIterator<SimpleFeature>> results = new ArrayList<CloseableIterator<SimpleFeature>>();
+		while (indices.hasNext()) {
+			final Index index = indices.next();
+			final AccumuloConstraintsQuery accumuloQuery;
+			if (query == null) {
+				accumuloQuery = new AccumuloCqlConstraintsQuery(
+						adapterIds,
+						index,
+						filter,
+						adapter);
+			}
+			else if (query.isSupported(index)) {
+				// construct the query
+				accumuloQuery = new AccumuloCqlConstraintsQuery(
+						adapterIds,
+						index,
+						query.getIndexConstraints(index.getIndexStrategy()),
+						query.createFilters(index.getIndexModel()),
+						filter,
+						adapter);
+			}
+			else {
+				continue;
+			}
+			results.add((CloseableIterator<SimpleFeature>) accumuloQuery.query(
+					accumuloOperations,
+					adapterStore,
+					limit));
+		}
+		// concatenate iterators
+		return new CloseableIteratorWrapper<SimpleFeature>(
+				new Closeable() {
+					@Override
+					public void close()
+							throws IOException {
+						for (final CloseableIterator<?> result : results) {
+							result.close();
+						}
+					}
+				},
+				Iterators.concat(results.iterator()));
 	}
 
 	public CloseableIterator<SimpleFeature> query(
@@ -144,7 +207,8 @@ public class GeoWaveDataStore extends
 			final int height,
 			final double pixelSize,
 			final Filter filter,
-			final ReferencedEnvelope envelope ) {
+			final ReferencedEnvelope envelope,
+			final Integer limit ) {
 		// query the indices that are supported for this query object, and these
 		// data adapter Ids
 		final Iterator<Index> indices = indexStore.getIndices();
@@ -184,12 +248,13 @@ public class GeoWaveDataStore extends
 			else {
 				continue;
 			}
-			results.add(accumuloQuery.queryDecimate(
+			results.add((CloseableIterator<SimpleFeature>) accumuloQuery.query(
 					accumuloOperations,
 					new MemoryAdapterStore(
 							new DataAdapter[] {
 								adapter
-							})));
+							}),
+					limit));
 		}
 		// concatenate iterators
 		return new CloseableIteratorWrapper<SimpleFeature>(

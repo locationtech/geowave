@@ -185,7 +185,9 @@ public class GeoWaveFeatureCollection extends
 			}
 			if (jtsBounds == null) {
 				// get all of the data (yikes)
-				featureCursor = reader.getAllData(limit);
+				featureCursor = reader.getAllData(
+						query == null ? null : query.getFilter(),
+						limit);
 			}
 			else if (isDistributedRenderQuery()) {
 				featureCursor = reader.renderData(
@@ -218,7 +220,8 @@ public class GeoWaveFeatureCollection extends
 								DecimationProcess.OUTPUT_HEIGHT),
 						pixelSize,
 						query.getFilter(),
-						argOutputEnv);
+						argOutputEnv,
+						limit);
 
 			}
 			else if (getStatsQueryName() != null) {
@@ -233,6 +236,7 @@ public class GeoWaveFeatureCollection extends
 				// get the data within the bounding box
 				featureCursor = reader.getData(
 						jtsBounds,
+						query == null ? null : query.getFilter(),
 						limit);
 			}
 		}

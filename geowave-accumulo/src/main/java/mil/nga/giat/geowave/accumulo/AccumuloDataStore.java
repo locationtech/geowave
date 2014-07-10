@@ -245,7 +245,8 @@ public class AccumuloDataStore implements
 		return query(
 				adapter,
 				query,
-				limit);
+				new Integer(
+						limit));
 	}
 
 	@SuppressWarnings("unchecked")
