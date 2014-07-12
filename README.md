@@ -2,6 +2,8 @@
 ## About  
 
 <img align="left" src="https://travis-ci.org/ngageoint/geowave.svg?branch=master"/>
+<br/>
+
 
 GeoWave is an open source set of software that:
 	
