@@ -1,6 +1,7 @@
-# GeoWave 0.8.0
-
+# GeoWave 0.8.0	
 ## About  
+
+<img align="left" src="https://travis-ci.org/ngageoint/geowave.svg?branch=master"/>
 
 GeoWave is an open source set of software that:
 	
