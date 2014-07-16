@@ -170,6 +170,7 @@ public class TdriveIngestPlugin implements
 					td.setLongitude(Double.parseDouble(vals[2]));
 					td.setLattitude(Double.parseDouble(vals[3]));
 					td.setPointinstance(pointInstance);
+					pts.add(td);
 					pointInstance++;
 				}
 			} catch (IOException e) {

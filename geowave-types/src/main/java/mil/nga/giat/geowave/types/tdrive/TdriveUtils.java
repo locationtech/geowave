@@ -48,10 +48,8 @@ public class TdriveUtils
 {
 	private final static Logger LOGGER = Logger.getLogger(TdriveUtils.class);
 	
-	public static final DateFormat TIME_FORMAT_MILLIS = new SimpleDateFormat(
-			"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 	public static final DateFormat TIME_FORMAT_SECONDS = new SimpleDateFormat(
-			"yyyy-MM-dd'T'HH:mm:ss'Z'");
+			"yyyy-MM-dd HH:mm:ss");
 	public static String TDRIVE_POINT_FEATURE = "tdrivepoint";
 
 
@@ -98,13 +96,16 @@ public class TdriveUtils
 		Scanner scanner = null;
 		try {
 			scanner = new Scanner(file);
-			String line = scanner.nextLine();
-			return line.split(",").length == 4; 
-		} catch (FileNotFoundException e) {
+			if (scanner.hasNextLine()){
+				String line = scanner.nextLine();
+				return line.split(",").length == 4;
+			} 
+		} catch (Exception e) {
 			Log.warn("Error validating file: " + file.getName(),e);
 			return false;
 		} finally {
 			IOUtils.closeQuietly(scanner);
 		}
+		return false;
 	}
 }
