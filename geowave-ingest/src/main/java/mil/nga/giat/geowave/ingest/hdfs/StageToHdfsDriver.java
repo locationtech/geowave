@@ -102,7 +102,7 @@ public class StageToHdfsDriver extends
 		}
 		final Configuration conf = new Configuration();
 		conf.set(
-				"fs.default.name",
+				"fs.defaultFS",
 				"hdfs://" + hdfsOptions.getHdfsHostPort());
 		conf.set(
 				"fs.hdfs.impl",
