@@ -17,8 +17,10 @@ Microsoft research has made available a trajectory data set that contains the GP
 There are approximately 15 million points in this data set.
 
 ### T-drive at city scale
+<p align="center">
 <img align="center" src="https://ngageoint.github.io/geowave/assets/images/t-drive-points-1.jpg" alt="T-drive points at city scale"><br/><br/>
 <img align="center" src="https://ngageoint.github.io/geowave/assets/images/t-drive-density-1.jpg" alt="T-drive density at city scale">
+</p>
 
 Above is the t-drive data set displaying both the raw points, as well as the results of a Geowave kernel density analytic.  The data corresponds to Mapbox zoom level 12.  
 
