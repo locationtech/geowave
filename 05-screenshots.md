@@ -20,20 +20,20 @@ Microsoft research has made available a trajectory data set that contains the GP
 There are approximately 15 million points in this data set.
 
 ### T-drive at city scale
-![T-drive points at city scale](https://ngageoint.github.io/geowave/assets/images/t-drive-points-1.jpg)
-![T-drive density at city scale](https://ngageoint.github.io/geowave/assets/images/t-drive-density-1.jpg)
+<img align="center" src="https://ngageoint.github.io/geowave/assets/images/t-drive-points-1.jpg" alt="T-drive points at city scale"><br/>
+<img align="center" src="https://ngageoint.github.io/geowave/assets/images/t-drive-density-1.jpg" alt="T-drive density at city scale">
 
 Above is the t-drive data set displaying both the raw points, as well as the results of a Geowave kernel density analytic.  The data corresponds to Mapbox zoom level 12.  
 
 ### T-drive at block scale
-![T-drive points at block scale](https://ngageoint.github.io/geowave/assets/images/t-drive-points-2.jpg)
-![T-drive density at block scale](https://ngageoint.github.io/geowave/assets/images/t-drive-density-2.jpg)
+<img align="center" src="https://ngageoint.github.io/geowave/assets/images/t-drive-points-2.jpg" alt="T-drive points at block scale"><br/>
+<img align="center" src="https://ngageoint.github.io/geowave/assets/images/t-drive-density-2.jpg" alt="T-drive density at block scale">
 
 This data set corresponds to a Mapbox zoom level of 15
 
 ### T-drive at house scale
-![T-drive points at house scale](https://ngageoint.github.io/geowave/assets/images/t-drive-points-3.jpg)
-![T-drive density at house scale](https://ngageoint.github.io/geowave/assets/images/t-drive-density-3.jpg)
+<img align="center" src="https://ngageoint.github.io/geowave/assets/images/t-drive-points-3.jpg" alt="T-drive points at building scale"><br/>
+<img align="center" src="https://ngageoint.github.io/geowave/assets/images/t-drive-density-3.jpg" alt="T-drive density at building scale">
 
 This data set corresponds to a Mapbox zoom level of 17
 
