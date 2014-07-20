@@ -8,31 +8,28 @@ permalink: "screenshots.html"
 {% include JB/setup %}
 
 
-# Screenshots
----
-
 Screenshots below are of data loaded from the various attributed data sets into a Geowave instance, processed (in some cases) by a Geowave analytic process, and rendered by Geoserver.  The background images are from Mapbox and are &copy;Mapbox as well as &copy;OpenStreeMap for the cartographic information.
 
 
-
-## Microsoft Research T-drive
+# Microsoft Research T-drive
+---
 Microsoft research has made available a trajectory data set that contains the GPS coordinates of 10,357 taxis in Beijing, China and surrounding areas over a one week period.
 There are approximately 15 million points in this data set.
 
 ### T-drive at city scale
-<img align="center" src="https://ngageoint.github.io/geowave/assets/images/t-drive-points-1.jpg" alt="T-drive points at city scale"><br/>
+<img align="center" src="https://ngageoint.github.io/geowave/assets/images/t-drive-points-1.jpg" alt="T-drive points at city scale"><br/><br/>
 <img align="center" src="https://ngageoint.github.io/geowave/assets/images/t-drive-density-1.jpg" alt="T-drive density at city scale">
 
 Above is the t-drive data set displaying both the raw points, as well as the results of a Geowave kernel density analytic.  The data corresponds to Mapbox zoom level 12.  
 
 ### T-drive at block scale
-<img align="center" src="https://ngageoint.github.io/geowave/assets/images/t-drive-points-2.jpg" alt="T-drive points at block scale"><br/>
+<img align="center" src="https://ngageoint.github.io/geowave/assets/images/t-drive-points-2.jpg" alt="T-drive points at block scale"><br/><br/>
 <img align="center" src="https://ngageoint.github.io/geowave/assets/images/t-drive-density-2.jpg" alt="T-drive density at block scale">
 
 This data set corresponds to a Mapbox zoom level of 15
 
 ### T-drive at house scale
-<img align="center" src="https://ngageoint.github.io/geowave/assets/images/t-drive-points-3.jpg" alt="T-drive points at building scale"><br/>
+<img align="center" src="https://ngageoint.github.io/geowave/assets/images/t-drive-points-3.jpg" alt="T-drive points at building scale"><br/><br/>
 <img align="center" src="https://ngageoint.github.io/geowave/assets/images/t-drive-density-3.jpg" alt="T-drive density at building scale">
 
 This data set corresponds to a Mapbox zoom level of 17
