@@ -22,7 +22,7 @@ See [GeoWave io page](http://ngageoint.github.io/geowave/) for more detailed doc
 	<img align="center" src="https://ngageoint.github.io/geowave/assets/images/t-drive-points-1.jpg" alt="T-drive points at city scale"><br/><br/>
 	<img align="center" src="https://ngageoint.github.io/geowave/assets/images/t-drive-density-1.jpg" alt="T-drive density at city scale">
 </p>
-The backgrounds above are &copy;Mapbox and &copy;OpenStreeMap.
+The backgrounds above are &copy;Mapbox and &copy;OpenStreetMap.
 
 See [Screenshots](https://ngageoint.github.io/geowave/screenshots.html) for more information.
 
