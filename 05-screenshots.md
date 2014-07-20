@@ -18,22 +18,24 @@ There are approximately 15 million points in this data set.
 
 ### T-drive at city scale
 <p align="center">
-<img align="center" src="https://ngageoint.github.io/geowave/assets/images/t-drive-points-1.jpg" alt="T-drive points at city scale"><br/><br/>
-<img align="center" src="https://ngageoint.github.io/geowave/assets/images/t-drive-density-1.jpg" alt="T-drive density at city scale">
+	<img align="center" src="https://ngageoint.github.io/geowave/assets/images/t-drive-points-1.jpg" alt="T-drive points at city scale"><br/><br/>
+	<img align="center" src="https://ngageoint.github.io/geowave/assets/images/t-drive-density-1.jpg" alt="T-drive density at city scale">
 </p>
 
 Above is the t-drive data set displaying both the raw points, as well as the results of a Geowave kernel density analytic.  The data corresponds to Mapbox zoom level 12.  
 
 ### T-drive at block scale
-<img align="center" src="https://ngageoint.github.io/geowave/assets/images/t-drive-points-2.jpg" alt="T-drive points at block scale"><br/><br/>
-<img align="center" src="https://ngageoint.github.io/geowave/assets/images/t-drive-density-2.jpg" alt="T-drive density at block scale">
-
+<p align="center">
+	<img align="center" src="https://ngageoint.github.io/geowave/assets/images/t-drive-points-2.jpg" alt="T-drive points at block scale"><br/><br/>
+	<img align="center" src="https://ngageoint.github.io/geowave/assets/images/t-drive-density-2.jpg" alt="T-drive density at block scale">
+</p>
 This data set corresponds to a Mapbox zoom level of 15
 
 ### T-drive at house scale
-<img align="center" src="https://ngageoint.github.io/geowave/assets/images/t-drive-points-3.jpg" alt="T-drive points at building scale"><br/><br/>
-<img align="center" src="https://ngageoint.github.io/geowave/assets/images/t-drive-density-3.jpg" alt="T-drive density at building scale">
-
+<p align="center">
+	<img align="center" src="https://ngageoint.github.io/geowave/assets/images/t-drive-points-3.jpg" alt="T-drive points at building scale"><br/><br/>
+	<img align="center" src="https://ngageoint.github.io/geowave/assets/images/t-drive-density-3.jpg" alt="T-drive density at building scale">
+</p>
 This data set corresponds to a Mapbox zoom level of 17
 
 <div class="note info">
