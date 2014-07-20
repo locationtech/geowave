@@ -8,7 +8,8 @@ permalink: "screenshots.html"
 {% include JB/setup %}
 
 
-Screenshots below are of data loaded from the various attributed data sets into a Geowave instance, processed (in some cases) by a Geowave analytic process, and rendered by Geoserver.  The background images are from Mapbox and are &copy;Mapbox as well as &copy;OpenStreeMap for the cartographic information.
+Screenshots below are of data loaded from the various attributed data sets into a Geowave instance, processed (in some cases) by a Geowave analytic process, and rendered by Geoserver.  <br/>
+The background images are from Mapbox and are &copy;Mapbox as well as &copy;OpenStreeMap for the cartographic information.
 
 
 # Microsoft Research T-drive
@@ -42,8 +43,8 @@ This data set corresponds to a Mapbox zoom level of 17
   <h5>T-Drive: More Info</h5>
   <p>
 	More information on this data set is available at: <br/>
-	<a href="http://research.microsoft.com/apps/pubs/?id=152883">Microsoft Research T-drive page</a><br/><br/>
-	or in the following papers:
+	<a href="http://research.microsoft.com/apps/pubs/?id=152883" target="_blank">Microsoft Research T-drive page</a><br/><br/>
+	or in the following papers:<br/>
 	[1] Jing Yuan, Yu Zheng, Xing Xie, and Guangzhong Sun. Driving with knowledge from the physical world. <i>In The 17th ACM SIGKDD international conference on Knowledge Discovery and Data mining</i>, KDD'11, New York, NY, USA, 2011. ACM.<br/>
 	[2] Jing Yuan, Yu Zheng, Chengyang Zhang, Wenlei Xie, Xing Xie, Guangzhong Sun, and Yan Huang. T-drive: driving directions based on taxi trajectories. <i>In Proceedings of the 18th SIGSPATIAL International Conference on Advances in Geographic Information Systems</i>, GIS '10, pages 99-108, New York, NY, USA,2010. ACM.
   </p>
