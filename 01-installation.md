@@ -38,13 +38,17 @@ This should be very familiar by now; from the geowave root directory:
 
 This distributable needs to be in the Accumulo classpath on every tablet server.  
 
+There are (with Accumulo 1.5.x or greater) two out of the box ways of doing this:
+1. Copy the jar into the $ACCUMULO_HOME/lib/ext/
+2. Copy the jar into a HDFS directory that has been registered in the $ACCUMULO_HOME/conf/accumulo-site.xml file under general.vfs.classpaths.   See [ACCUMULO-708](https://issues.apache.org/jira/browse/ACCUMULO-708) for more information.
 
-<div class="note warning">
-  <h5>HDFS classloader</h5>
+
+<div class="note note">
+  <h5>Dependency versions</h5>
   <p>
-  	Accumulo (in 1.5) leverages the Apache VFSClassloader to provide an easy way to do this in one shot - load dependencies out of HDFS.  <br/>
-  	Unfortunately we have a current bug <a href="https://github.com/ngageoint/geowave/issues/10">(GEOWAVE-10)</a> where the hdfs URI breaks some SPI injection fixes we have in place.  So until this is addressed you need to distribute this jar (*geowave-gt-0.7.0-accumulo-singlejar.jar*) to each tabled server, on the accumulo classpath ( $ACCUMULO_HOME/lib/ext/  is the default choice ).  
-
+    It was mentioned above, but just to emphasize:<br/>
+  	GeoWave is currently (as of v 0.7) built against Accumulo 1.5.0, Geoserver 2.5.0, and Geotools 11.0.<br/>
+	If this doesn't match the enviornment you are deploying to be sure to change these values in the parent pom.xml, located in the root of the GeoWave project.
   </p>
 </div>
 
