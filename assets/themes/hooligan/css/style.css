@@ -1,5 +1,5 @@
 @import url(https://fonts.googleapis.com/css?family=Roboto Slab);
-@import url(https://fonts.googleapis.com/css?family=Oxygen);
+@import url(https://fonts.googleapis.com/css?family=Roboto);
 /* Partials */
 /* Theme Vars */
 /* Compass Vars */
@@ -15,7 +15,7 @@ body {
   color: #bbb;
   text-shadow: 1px 1px 1px #000;
   height: 100%;
-  font-family: 'Oxygen', sans-serif;
+  font-family: 'Roboto', sans-serif;
   font-size: 14px;
 }
 
