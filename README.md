@@ -102,7 +102,9 @@ This should be very familiar by now; from the geowave root directory:
     $ cd geowave-gt
     $ mvn package -Paccumulo-container-singlejar
 
-This distributable needs to be in the Accumulo classpath on every tablet server.  Accumulo (in 1.5) leverages the Apache VFSClassloader to provide an easy way to do this in one shot - load dependencies out of HDFS.  Unfortunately we have a current bug (**GEOWAVE-28**) where the hdfs URI breaks some SPI injection fixes we have in place.  So until this is addressed you need to distribute this jar (*geowave-gt-0.7.0-accumulo-singlejar.jar*) to each tabled server, on the accumulo classpath ( $ACCUMULO_HOME/lib/ext/  is the default choice ).  
+This distributable needs to be in the Accumulo classpath on every tablet server.
+
+See: [Installtion Page](https://ngageoint.github.io/geowave//installation.html) for more information about deployment.
 
 ### GeoWave System Integration Test
 
