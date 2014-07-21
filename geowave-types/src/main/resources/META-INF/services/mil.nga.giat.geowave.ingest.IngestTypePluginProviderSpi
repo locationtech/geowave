@@ -1,2 +1,3 @@
 mil.nga.giat.geowave.types.geotools.GeoToolsDataStoreIngestType
 mil.nga.giat.geowave.types.gpx.GpxIngestType
+mil.nga.giat.geowave.types.tdrive.TdriveIngestType

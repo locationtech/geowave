@@ -1,1 +1,5 @@
 src/main/java/mil/nga/giat/geowave/types/gpx/GpxTrack.java
+
+src/main/java/mil/nga/giat/geowave/types/tdrive/TdrivePoint.java
+
+

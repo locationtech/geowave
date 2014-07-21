@@ -74,13 +74,13 @@
 									<pluginExecutionFilter>
 										<groupId>org.apache.avro</groupId>
 										<artifactId>avro-maven-plugin</artifactId>
-										<versionRange>[1.7.0,)</versionRange>
+										<versionRange>[1.7.6,)</versionRange>
 										<goals>
 											<goal>schema</goal>
 										</goals>
 									</pluginExecutionFilter>
 									<action>
-										<ignore />
+										<execute />
 									</action>
 								</pluginExecution>
 							</pluginExecutions>
