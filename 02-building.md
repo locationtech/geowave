@@ -68,4 +68,9 @@ You should see something that looks similar to:
 	[INFO] ------------------------------------------------------------------------
 
 
-
+<div class="note note">
+  <h5>Eclipse and Avro generated files</h5>
+  <p>
+	There are Avro generated sources in the geowave-types project and geowave-ingest.  They can be created by running "mvn generate-sources" (and are compiled as part of the standard maven lifecycle normally).  Unfortunately, I can't seem to make eclipse run this portion of the lifecycle on import with the M2E plugin.   On first import simply type "mvn generate-sources" at the command line and then refresh your eclipse project.
+  </p>
+</div>
