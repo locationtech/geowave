@@ -1,4 +1,4 @@
-package mil.nga.giat.geowave.types.tdrive;
+package mil.nga.giat.geowave.types.geolife;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.text.ParseException;
@@ -28,6 +29,7 @@ import mil.nga.giat.geowave.gt.adapter.FeatureDataAdapter;
 import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.index.StringUtils;
 import mil.nga.giat.geowave.ingest.GeoWaveData;
+import mil.nga.giat.geowave.ingest.hdfs.HdfsFile;
 import mil.nga.giat.geowave.ingest.hdfs.StageToHdfsPlugin;
 import mil.nga.giat.geowave.ingest.hdfs.mapreduce.IngestFromHdfsPlugin;
 import mil.nga.giat.geowave.ingest.hdfs.mapreduce.IngestWithMapper;
@@ -40,6 +42,8 @@ import mil.nga.giat.geowave.store.data.field.FieldVisibilityHandler;
 import mil.nga.giat.geowave.store.data.field.GlobalVisibilityHandler;
 import mil.nga.giat.geowave.store.index.Index;
 import mil.nga.giat.geowave.store.index.IndexType;
+import mil.nga.giat.geowave.types.tdrive.TdrivePoint;
+import mil.nga.giat.geowave.types.tdrive.TdriveUtils;
 
 import org.apache.avro.Schema;
 import org.apache.commons.io.FilenameUtils;
@@ -57,30 +61,40 @@ import com.vividsolutions.jts.geom.Coordinate;
 
 /*
  */
-public class TdriveIngestPlugin implements
+public class GeoLifeIngestPlugin implements
 		LocalFileIngestPlugin<SimpleFeature>,
-		IngestFromHdfsPlugin<TdrivePoint, SimpleFeature>,
-		StageToHdfsPlugin<TdrivePoint>
+		IngestFromHdfsPlugin<HdfsFile, SimpleFeature>,
+		StageToHdfsPlugin<HdfsFile>
 {
 
-	private final static Logger LOGGER = Logger.getLogger(TdriveIngestPlugin.class);
+	private final static Logger LOGGER = Logger.getLogger(GeoLifeIngestPlugin.class);
 
-	private static long currentFreeTrackId = 0;
-
-	private final SimpleFeatureBuilder tdrivepointBuilder;
-	private final SimpleFeatureType tdrivepointType;
+	
+	private final SimpleFeatureBuilder geolifePointBuilder;
+	private final SimpleFeatureType geolifePointType;
+	
+	private final SimpleFeatureBuilder geolifeTrackBuilder;
+	private final SimpleFeatureType geolifeTrackType;
 	
 	private final ByteArrayId pointKey;
+	private final ByteArrayId trackKey;
 
 	private final Index[] supportedIndices;
 
-	public TdriveIngestPlugin() {
+	public GeoLifeIngestPlugin() {
 
-		tdrivepointType = TdriveUtils.createTdrivePointDataType();
-
+		geolifePointType = GeoLifeUtils.createGeoLifePointDataType();
 		pointKey = new ByteArrayId(
-				StringUtils.stringToBinary(TdriveUtils.TDRIVE_POINT_FEATURE));
-		tdrivepointBuilder = new SimpleFeatureBuilder(tdrivepointType);
+				StringUtils.stringToBinary(GeoLifeUtils.GEOLIFE_POINT_FEATURE));
+		geolifePointBuilder = new SimpleFeatureBuilder(geolifePointType);
+		
+		
+		geolifeTrackType = GeoLifeUtils.createGeoLifeTrackDataType();
+		trackKey = new ByteArrayId(
+				StringUtils.stringToBinary(GeoLifeUtils.GEOLIFE_TRACK_FEATURE));
+		geolifeTrackBuilder = new SimpleFeatureBuilder(geolifeTrackType);
+
+		
 		supportedIndices = new Index[] {
 			IndexType.SPATIAL.createDefaultIndex(),
 			IndexType.SPATIAL_TEMPORAL.createDefaultIndex()
@@ -91,7 +105,7 @@ public class TdriveIngestPlugin implements
 	@Override
 	public String[] getFileExtensionFilters() {
 		return new String[] {
-			"csv"
+			"plt"
 		};
 	}
 
@@ -102,7 +116,7 @@ public class TdriveIngestPlugin implements
 
 	@Override
 	public boolean supportsFile(final File file ) {
-			return TdriveUtils.validate(file);
+			return GeoLifeUtils.validate(file);
 	}
 		
 	@Override
@@ -117,8 +131,12 @@ public class TdriveIngestPlugin implements
 				globalVisibility) : null;
 		return new WritableDataAdapter[] {
 			new FeatureDataAdapter(
-					tdrivepointType,
+					geolifePointType,
+					fieldVisiblityHandler),
+			new FeatureDataAdapter(
+					geolifeTrackType,
 					fieldVisiblityHandler)
+					
 		};
 	}
 
@@ -127,11 +145,11 @@ public class TdriveIngestPlugin implements
 			final File input,
 			final ByteArrayId primaryIndexId,
 			final String globalVisibility ) {
-		final TdrivePoint[] tdrivePoints = toHdfsObjects(input);
+		final HdfsFile[] geolifeFiles = toHdfsObjects(input);
 		final List<CloseableIterator<GeoWaveData<SimpleFeature>>> allData = new ArrayList<CloseableIterator<GeoWaveData<SimpleFeature>>>();
-		for (final TdrivePoint track : tdrivePoints) {
+		for (final HdfsFile file : geolifeFiles) {
 			final CloseableIterator<GeoWaveData<SimpleFeature>> geowaveData = toGeoWaveDataInternal(
-					track,
+					file,
 					primaryIndexId,
 					globalVisibility);
 			allData.add(geowaveData);
@@ -142,47 +160,24 @@ public class TdriveIngestPlugin implements
 
 	@Override
 	public Schema getAvroSchemaForHdfsType() {
-		return TdrivePoint.getClassSchema();
+		return HdfsFile.getClassSchema();
 	}
 
 	@Override
-	public TdrivePoint[] toHdfsObjects(final File input ) {
-		FileReader fr = null;
-		BufferedReader br = null;
-		long pointInstance = 0l;
-		List<TdrivePoint> pts = new ArrayList<TdrivePoint>();
+	public HdfsFile[] toHdfsObjects(final File input ) {
+		HdfsFile hfile = new HdfsFile();
+		hfile.setOriginalFilePath(input.getAbsolutePath());
 		try {
-			fr = new FileReader(input);
-			br = new BufferedReader(fr);
-			String line;
-			try {
-				while ((line = br.readLine()) != null){
-					
-					String[] vals = line.split(",");
-					TdrivePoint td = new TdrivePoint();
-					td.setTaxiid(Integer.parseInt(vals[0]));
-					try {
-						td.setTimestamp(TdriveUtils.TIME_FORMAT_SECONDS.parse(vals[1]).getTime());
-					} catch (ParseException e) {
-						td.setTimestamp(0l);
-						LOGGER.warn("Couldn't parse time format: " + vals[1], e);
-					}
-					td.setLongitude(Double.parseDouble(vals[2]));
-					td.setLattitude(Double.parseDouble(vals[3]));
-					td.setPointinstance(pointInstance);
-					pts.add(td);
-					pointInstance++;
-				}
-			} catch (IOException e) {
-				Log.warn("Error reading line from file: " + input.getName(), e);
-			}
-		} catch (FileNotFoundException e) {
-			Log.warn("Error parsing tdrive file: " + input.getName(), e);
-		} finally {
-			IOUtils.closeQuietly(br);
-			IOUtils.closeQuietly(fr);
+			hfile.setOriginalFile(ByteBuffer.wrap(Files.readAllBytes(input.toPath())));
 		}
-		return pts.toArray(new TdrivePoint[pts.size()]);
+		catch (final IOException e) {
+			LOGGER.warn(
+					"Unable to read GeoLife file: " + input.getAbsolutePath(),
+					e);
+			return new HdfsFile[] {};
+		}
+		
+		return new HdfsFile[] {hfile};
 	}
 
 	@Override
@@ -191,35 +186,99 @@ public class TdriveIngestPlugin implements
 	}
 
 	@Override
-	public IngestWithMapper<TdrivePoint, SimpleFeature> ingestWithMapper() {return new IngestGpxTrackFromHdfs(this);
+	public IngestWithMapper<HdfsFile, SimpleFeature> ingestWithMapper() {
+		return new IngestGpxTrackFromHdfs(this);
 	}
 
 	@Override
-	public IngestWithReducer<TdrivePoint, ?, ?, SimpleFeature> ingestWithReducer() {
+	public IngestWithReducer<HdfsFile, ?, ?, SimpleFeature> ingestWithReducer() {
 		// unsupported right now
 		throw new UnsupportedOperationException(
-				"GPX tracks cannot be ingested with a reducer");
+				"GeoLife tracks cannot be ingested with a reducer");
 	}
 
 	private CloseableIterator<GeoWaveData<SimpleFeature>> toGeoWaveDataInternal(
-			final TdrivePoint tdrivePoint,
+			final HdfsFile hfile,
 			final ByteArrayId primaryIndexId,
 			final String globalVisibility ) {
 
 		
 		final List<GeoWaveData<SimpleFeature>> featureData = new ArrayList<GeoWaveData<SimpleFeature>>();
 		
-		//tdrivepointBuilder = new SimpleFeatureBuilder(tdrivepointType);
-		tdrivepointBuilder.set("geometry", GeometryUtils.GEOMETRY_FACTORY.createPoint(new Coordinate(tdrivePoint.getLongitude(), tdrivePoint.getLattitude())));
-		tdrivepointBuilder.set("taxiid", tdrivePoint.getTaxiid());
-		tdrivepointBuilder.set("pointinstance", tdrivePoint.getPointinstance());
-		tdrivepointBuilder.set("Timestamp", new Date(tdrivePoint.getTimestamp())); 
-		tdrivepointBuilder.set("Latsitude", tdrivePoint.getLattitude());
-		tdrivepointBuilder.set("Longitude", tdrivePoint.getLongitude());
-		featureData.add(new GeoWaveData<SimpleFeature>(
-				pointKey,
-				primaryIndexId,
-				tdrivepointBuilder.buildFeature(tdrivePoint.getTaxiid() + "_" + tdrivePoint.getPointinstance())));
+		
+        InputStream in = new ByteArrayInputStream(hfile.getOriginalFile().array());
+        InputStreamReader isr = new InputStreamReader(in);
+        BufferedReader br = new BufferedReader(isr);
+    	int pointInstance = 0;
+		List<Coordinate> pts = new ArrayList<Coordinate>();
+		String trackId = FilenameUtils.getName(hfile.getOriginalFilePath().toString());
+		String line;
+		Date startTimeStamp = null;
+		Date endTimeStamp = null;
+		String timestring = "";
+		try {
+				while ((line = br.readLine()) != null){
+					
+					String[] vals = line.split(",");
+					if (vals.length != 7) 
+						continue;
+				
+					Coordinate cord = new Coordinate(Double.parseDouble(vals[1]), Double.parseDouble(vals[0]));
+					pts.add(cord);
+					geolifePointBuilder.set("geometry", GeometryUtils.GEOMETRY_FACTORY.createPoint(cord));
+					geolifePointBuilder.set("trackid", trackId);
+					geolifePointBuilder.set("pointinstance", pointInstance);
+					pointInstance++;
+					
+					timestring = vals[5] + " " + vals[6];
+					Date ts = GeoLifeUtils.TIME_FORMAT_SECONDS.parse(timestring);
+					geolifePointBuilder.set("Timestamp", ts);
+					if (startTimeStamp == null){
+						startTimeStamp = ts;
+					}
+					endTimeStamp = ts;
+					
+										
+					geolifePointBuilder.set("Latitude", Double.parseDouble(vals[0]));
+					geolifePointBuilder.set("Longitude", Double.parseDouble(vals[1]));
+					
+					Double elevation = Double.parseDouble(vals[3]);
+					if (elevation == -777) //magic number form spec
+						elevation = null;
+					geolifePointBuilder.set("Elevation", elevation);
+					featureData.add(new GeoWaveData<SimpleFeature>(
+							pointKey,
+							primaryIndexId,
+							geolifePointBuilder.buildFeature(trackId + "_" + pointInstance)));
+				}
+				
+				geolifeTrackBuilder.set(
+						"geometry",
+						GeometryUtils.GEOMETRY_FACTORY.createLineString(pts.toArray(new Coordinate[pts.size()])));
+				
+				geolifeTrackBuilder.set("StartTimeStamp", startTimeStamp);
+				geolifeTrackBuilder.set("EndTimeStamp", endTimeStamp);
+				geolifeTrackBuilder.set("Duration",endTimeStamp.getTime() - startTimeStamp.getTime());
+				geolifeTrackBuilder.set("NumberPoints", pointInstance);
+				geolifeTrackBuilder.set("TrackId", trackId);
+				featureData.add(new GeoWaveData<SimpleFeature>(
+						trackKey,
+						primaryIndexId,
+						geolifeTrackBuilder.buildFeature(trackId)));
+				
+				
+			} catch (IOException e) {
+				LOGGER.warn("Error reading line from file: " + hfile.getOriginalFilePath(), e);
+			} catch (ParseException e) {
+				LOGGER.error("Error parsing time string: " + timestring, e);
+			}
+		finally {
+			IOUtils.closeQuietly(br);
+			IOUtils.closeQuietly(isr);
+			IOUtils.closeQuietly(in);
+		}
+		
+	
 		
 		return new CloseableIterator.Wrapper<GeoWaveData<SimpleFeature>>(featureData.iterator());
 	}
@@ -230,18 +289,17 @@ public class TdriveIngestPlugin implements
 	}
 
 	public static class IngestGpxTrackFromHdfs implements
-			IngestWithMapper<TdrivePoint, SimpleFeature>
+			IngestWithMapper<HdfsFile, SimpleFeature>
 	{
-		private final TdriveIngestPlugin parentPlugin;
+		private final GeoLifeIngestPlugin parentPlugin;
 
 		public IngestGpxTrackFromHdfs() {
 			this(
-					new TdriveIngestPlugin());
-			// this constructor will be used when deserialized
+					new GeoLifeIngestPlugin());
 		}
 
 		public IngestGpxTrackFromHdfs(
-				final TdriveIngestPlugin parentPlugin ) {
+				final GeoLifeIngestPlugin parentPlugin ) {
 			this.parentPlugin = parentPlugin;
 		}
 
@@ -253,7 +311,7 @@ public class TdriveIngestPlugin implements
 
 		@Override
 		public CloseableIterator<GeoWaveData<SimpleFeature>> toGeoWaveData(
-				final TdrivePoint input,
+				final HdfsFile input,
 				final ByteArrayId primaryIndexId,
 				final String globalVisibility ) {
 			return parentPlugin.toGeoWaveDataInternal(

@@ -1,4 +1,4 @@
-package mil.nga.giat.geowave.types.tdrive;
+package mil.nga.giat.geowave.types.geolife;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -44,20 +44,54 @@ import com.vividsolutions.jts.geom.Geometry;
  * This is a convenience class for performing common GPX static utility methods
  * such as schema validation, file parsing, and SimpleFeatureType definition.
  */
-public class TdriveUtils
+public class GeoLifeUtils
 {
-	private final static Logger LOGGER = Logger.getLogger(TdriveUtils.class);
+	private final static Logger LOGGER = Logger.getLogger(GeoLifeUtils.class);
 	
 	public static final DateFormat TIME_FORMAT_SECONDS = new SimpleDateFormat(
 			"yyyy-MM-dd HH:mm:ss");
-	public static String TDRIVE_POINT_FEATURE = "tdrivepoint";
+	public static String GEOLIFE_POINT_FEATURE = "geolifepoint";
+	public static String GEOLIFE_TRACK_FEATURE = "geolifetrack";
 
-
-
-	public static SimpleFeatureType createTdrivePointDataType() {
+	public static SimpleFeatureType createGeoLifeTrackDataType() {
 
 		final SimpleFeatureTypeBuilder simpleFeatureTypeBuilder = new SimpleFeatureTypeBuilder();
-		simpleFeatureTypeBuilder.setName(TDRIVE_POINT_FEATURE);
+		simpleFeatureTypeBuilder.setName(GEOLIFE_TRACK_FEATURE);
+
+		final AttributeTypeBuilder attributeTypeBuilder = new AttributeTypeBuilder();
+
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
+				Geometry.class).nillable(
+				true).buildDescriptor(
+				"geometry"));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
+				Date.class).nillable(
+				true).buildDescriptor(
+				"StartTimeStamp"));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
+				Date.class).nillable(
+				true).buildDescriptor(
+				"EndTimeStamp"));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
+				Long.class).nillable(
+				true).buildDescriptor(
+				"Duration"));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
+				Long.class).nillable(
+				true).buildDescriptor(
+				"NumberPoints"));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
+				String.class).nillable(
+				true).buildDescriptor(
+				"TrackId"));
+		return simpleFeatureTypeBuilder.buildFeatureType();
+
+	}
+
+	public static SimpleFeatureType createGeoLifePointDataType() {
+
+		final SimpleFeatureTypeBuilder simpleFeatureTypeBuilder = new SimpleFeatureTypeBuilder();
+		simpleFeatureTypeBuilder.setName(GEOLIFE_POINT_FEATURE);
 
 		final AttributeTypeBuilder attributeTypeBuilder = new AttributeTypeBuilder();
 
@@ -66,11 +100,11 @@ public class TdriveUtils
 				false).buildDescriptor(
 				"geometry"));
 		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
-				Double.class).nillable(
+				String.class).nillable(
 				false).buildDescriptor(
-				"taxiid"));
+				"trackid"));
 		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
-				Double.class).nillable(
+				Integer.class).nillable(
 				true).buildDescriptor(
 				"pointinstance"));
 		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
@@ -85,6 +119,10 @@ public class TdriveUtils
 				Double.class).nillable(
 				true).buildDescriptor(
 				"Longitude"));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
+				Double.class).nillable(
+				true).buildDescriptor(
+				"Elevation"));
 
 		return simpleFeatureTypeBuilder.buildFeatureType();
 
@@ -93,19 +131,6 @@ public class TdriveUtils
 	
 
 	public static boolean validate(final File file ) {
-		Scanner scanner = null;
-		try {
-			scanner = new Scanner(file);
-			if (scanner.hasNextLine()){
-				String line = scanner.nextLine();
-				return line.split(",").length == 4;
-			} 
-		} catch (Exception e) {
-			Log.warn("Error validating file: " + file.getName(),e);
-			return false;
-		} finally {
-			IOUtils.closeQuietly(scanner);
-		}
-		return false;
+		return true;
 	}
 }
