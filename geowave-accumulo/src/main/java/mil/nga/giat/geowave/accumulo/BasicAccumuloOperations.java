@@ -1,19 +1,32 @@
 package mil.nga.giat.geowave.accumulo;
 
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.SortedSet;
+import java.util.concurrent.TimeUnit;
 
+import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.index.StringUtils;
 
 import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
+import org.apache.accumulo.core.client.BatchDeleter;
 import org.apache.accumulo.core.client.BatchScanner;
+import org.apache.accumulo.core.client.BatchWriterConfig;
 import org.apache.accumulo.core.client.Connector;
+import org.apache.accumulo.core.client.MutationsRejectedException;
 import org.apache.accumulo.core.client.Scanner;
 import org.apache.accumulo.core.client.TableExistsException;
 import org.apache.accumulo.core.client.TableNotFoundException;
+import org.apache.accumulo.core.data.Key;
+import org.apache.accumulo.core.data.Range;
+import org.apache.accumulo.core.data.Value;
 import org.apache.accumulo.core.security.Authorizations;
 import org.apache.hadoop.io.Text;
 import org.apache.log4j.Logger;
@@ -38,6 +51,8 @@ public class BasicAccumuloOperations implements
 	private final String authorization;
 	private final String tableNamespace;
 	private Connector connector;
+	private final Map<String, Long> locGrpCache;
+	private long cacheTimeoutMillis;
 
 	/**
 	 * This is will create an Accumulo connector based on passed in connection
@@ -148,6 +163,8 @@ public class BasicAccumuloOperations implements
 		this.authorization = authorization;
 		this.tableNamespace = tableNamespace;
 		this.connector = connector;
+		locGrpCache = new HashMap<String, Long>();
+		cacheTimeoutMillis = TimeUnit.DAYS.toMillis(1);
 	}
 
 	public int getNumThreads() {
@@ -271,6 +288,51 @@ public class BasicAccumuloOperations implements
 	}
 
 	@Override
+	public boolean deleteRow(
+			final String tableName,
+			final ByteArrayId rowId ) {
+
+		boolean success = true;
+		BatchDeleter deleter = null;
+		try {
+
+			deleter = createBatchDeleter(tableName);
+
+			deleter.setRanges(Arrays.asList(Range.exact(new Text(
+					rowId.getBytes()))));
+
+			final Iterator<Map.Entry<Key, Value>> iterator = deleter.iterator();
+			while (iterator.hasNext()) {
+				final Entry<Key, Value> entry = iterator.next();
+
+				if (!Arrays.equals(
+						entry.getKey().getRowData().getBackingArray(),
+						rowId.getBytes())) {
+					success = false;
+					break;
+				}
+			}
+
+			if (success) {
+				deleter.delete();
+			}
+
+			deleter.close();
+		}
+		catch (final TableNotFoundException | MutationsRejectedException e) {
+			logger.warn(
+					"Unable to delete row from table [" + tableName + "].",
+					e);
+			if (deleter != null) {
+				deleter.close();
+			}
+			success = false;
+		}
+
+		return success;
+	}
+
+	@Override
 	public boolean tableExists(
 			final String tableName ) {
 		final String qName = getQualifiedTableName(tableName);
@@ -285,10 +347,32 @@ public class BasicAccumuloOperations implements
 			throws AccumuloException,
 			TableNotFoundException {
 		final String qName = getQualifiedTableName(tableName);
-		return connector.tableOperations().exists(
+		final String localityGroupStr = qName + StringUtils.stringFromBinary(localityGroup);
+
+		// check the cache for our locality group
+		if (locGrpCache.containsKey(localityGroupStr)) {
+			if ((locGrpCache.get(localityGroupStr) - new Date().getTime()) < cacheTimeoutMillis) {
+				return true;
+			}
+			else {
+				locGrpCache.remove(localityGroupStr);
+			}
+		}
+
+		// check accumulo to see if locality group exists
+		final boolean groupExists = connector.tableOperations().exists(
 				qName) && connector.tableOperations().getLocalityGroups(
 				qName).keySet().contains(
 				StringUtils.stringFromBinary(localityGroup));
+
+		// update the cache
+		if (groupExists) {
+			locGrpCache.put(
+					localityGroupStr,
+					new Date().getTime());
+		}
+
+		return groupExists;
 	}
 
 	@Override
@@ -299,7 +383,19 @@ public class BasicAccumuloOperations implements
 			TableNotFoundException,
 			AccumuloSecurityException {
 		final String qName = getQualifiedTableName(tableName);
+		final String localityGroupStr = qName + StringUtils.stringFromBinary(localityGroup);
 
+		// check the cache for our locality group
+		if (locGrpCache.containsKey(localityGroupStr)) {
+			if ((locGrpCache.get(localityGroupStr) - new Date().getTime()) < cacheTimeoutMillis) {
+				return;
+			}
+			else {
+				locGrpCache.remove(localityGroupStr);
+			}
+		}
+
+		// add locality group to accumulo and update the cache
 		if (connector.tableOperations().exists(
 				qName)) {
 			final Map<String, Set<Text>> localityGroups = connector.tableOperations().getLocalityGroups(
@@ -317,6 +413,10 @@ public class BasicAccumuloOperations implements
 			connector.tableOperations().setLocalityGroups(
 					qName,
 					localityGroups);
+
+			locGrpCache.put(
+					localityGroupStr,
+					new Date().getTime());
 		}
 	}
 
@@ -328,5 +428,30 @@ public class BasicAccumuloOperations implements
 				getQualifiedTableName(tableName),
 				authorization == null ? new Authorizations() : new Authorizations(
 						authorization));
+	}
+
+	@Override
+	public BatchDeleter createBatchDeleter(
+			final String tableName )
+			throws TableNotFoundException {
+		return connector.createBatchDeleter(
+				getQualifiedTableName(tableName),
+				authorization == null ? new Authorizations() : new Authorizations(
+						authorization),
+				numThreads,
+				new BatchWriterConfig().setMaxWriteThreads(
+						numThreads).setMaxMemory(
+						byteBufferSize).setTimeout(
+						timeoutMillis,
+						TimeUnit.MILLISECONDS));
+	}
+
+	public long getCacheTimeoutMillis() {
+		return cacheTimeoutMillis;
+	}
+
+	public void setCacheTimeoutMillis(
+			final long cacheTimeoutMillis ) {
+		this.cacheTimeoutMillis = cacheTimeoutMillis;
 	}
 }

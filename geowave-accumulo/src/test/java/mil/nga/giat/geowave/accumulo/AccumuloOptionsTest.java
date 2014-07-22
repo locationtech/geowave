@@ -141,8 +141,8 @@ public class AccumuloOptionsTest
 						"test_pt_2")).get(
 				0);
 
-		// as we have chosen to persist the index, we will see the index
-		// entry in the index store
+		// as we have chosen to persist the index, we will see the index entry
+		// in the index store
 		Assert.assertEquals(
 				true,
 				indexStore.indexExists(index.getId()));
@@ -384,6 +384,165 @@ public class AccumuloOptionsTest
 		Assert.assertEquals(
 				true,
 				adapterStore.adapterExists(adapter.getAdapterId()));
+	}
+
+	@Test
+	public void testAlternateIndexOption() {
+
+		// setup accumulo instance
+		final MockInstance mockInstance = new MockInstance();
+		Connector mockConnector = null;
+		try {
+			mockConnector = mockInstance.getConnector(
+					"root",
+					new PasswordToken(
+							new byte[0]));
+		}
+		catch (AccumuloException | AccumuloSecurityException e) {
+			LOGGER.error(
+					"Failed to create mock accumulo connection",
+					e);
+		}
+
+		final AccumuloOptions accumuloOptions = new AccumuloOptions();
+
+		final AccumuloOperations accumuloOperations = new BasicAccumuloOperations(
+				mockConnector);
+
+		final AccumuloIndexStore indexStore = new AccumuloIndexStore(
+				accumuloOperations);
+
+		final AccumuloAdapterStore adapterStore = new AccumuloAdapterStore(
+				accumuloOperations);
+
+		final AccumuloDataStore mockDataStore = new AccumuloDataStore(
+				indexStore,
+				adapterStore,
+				accumuloOperations,
+				accumuloOptions);
+
+		final Index index = IndexType.SPATIAL.createDefaultIndex();
+		final WritableDataAdapter<TestGeometry> adapter = new TestGeometryAdapter();
+
+		final GeometryFactory factory = new GeometryFactory();
+
+		final ByteArrayId adapterId = adapter.getAdapterId();
+
+		accumuloOptions.setUseAltIndex(false);
+
+		final ByteArrayId rowId0 = mockDataStore.ingest(
+				adapter,
+				index,
+				new TestGeometry(
+						factory.createPoint(new Coordinate(
+								25,
+								32)),
+						"test_pt_0")).get(
+				0);
+
+		TestGeometry geom0 = mockDataStore.getEntry(
+				index,
+				new ByteArrayId(
+						"test_pt_0"),
+				adapterId);
+
+		// this should return our data correctly
+		Assert.assertEquals(
+				"test_pt_0",
+				geom0.id);
+
+		// delete entry by data id & adapter id
+		mockDataStore.deleteEntry(
+				index,
+				new ByteArrayId(
+						"test_pt_0"),
+				adapterId);
+
+		geom0 = mockDataStore.getEntry(
+				index,
+				new ByteArrayId(
+						"test_pt_0"),
+				adapterId);
+
+		// this should return null as the entry was deleted
+		Assert.assertEquals(
+				null,
+				geom0);
+
+		accumuloOptions.setUseAltIndex(true);
+
+		accumuloOperations.deleteAll();
+
+		mockDataStore.ingest(
+				adapter,
+				index,
+				new TestGeometry(
+						factory.createPoint(new Coordinate(
+								25,
+								32)),
+						"test_pt_1")).get(
+				0);
+
+		final TestGeometry geom1 = mockDataStore.getEntry(
+				index,
+				new ByteArrayId(
+						"test_pt_1"),
+				adapterId);
+
+		// this should return our data correctly
+		Assert.assertEquals(
+				"test_pt_1",
+				geom1.id);
+
+		final ArrayList<TestGeometry> geomList = new ArrayList<TestGeometry>();
+		geomList.add(new TestGeometry(
+				factory.createPoint(new Coordinate(
+						25,
+						32)),
+				"test_pt_2"));
+
+		mockDataStore.ingest(
+				adapter,
+				index,
+				geomList.iterator());
+
+		final TestGeometry geom2 = mockDataStore.getEntry(
+				index,
+				new ByteArrayId(
+						"test_pt_2"),
+				adapterId);
+
+		// this should return our data correctly
+		Assert.assertEquals(
+				"test_pt_2",
+				geom2.id);
+
+		final AccumuloIndexWriter indexWriter = new AccumuloIndexWriter(
+				index,
+				accumuloOperations,
+				accumuloOptions,
+				mockDataStore);
+
+		indexWriter.write(
+				adapter,
+				new TestGeometry(
+						factory.createPoint(new Coordinate(
+								25,
+								32)),
+						"test_pt_3"));
+
+		indexWriter.close();
+
+		final TestGeometry geom3 = mockDataStore.getEntry(
+				index,
+				new ByteArrayId(
+						"test_pt_3"),
+				adapterId);
+
+		// this should return our data correctly
+		Assert.assertEquals(
+				"test_pt_3",
+				geom3.id);
 	}
 
 	private static class TestGeometry

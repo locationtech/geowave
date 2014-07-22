@@ -1,7 +1,10 @@
 package mil.nga.giat.geowave.accumulo;
 
+import mil.nga.giat.geowave.index.ByteArrayId;
+
 import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
+import org.apache.accumulo.core.client.BatchDeleter;
 import org.apache.accumulo.core.client.BatchScanner;
 import org.apache.accumulo.core.client.Scanner;
 import org.apache.accumulo.core.client.TableNotFoundException;
@@ -12,6 +15,22 @@ import org.apache.accumulo.core.client.TableNotFoundException;
  */
 public interface AccumuloOperations
 {
+
+	/**
+	 * Creates a new batch deleter that can be used by an index
+	 * 
+	 * @param tableName
+	 *            The basic name of the table. Note that that basic
+	 *            implementation of the factory will allow for a table namespace
+	 *            to prefix this name
+	 * @return The appropriate batch deleter
+	 * @throws TableNotFoundException
+	 *             The table does not exist in this Accumulo instance
+	 */
+	public BatchDeleter createBatchDeleter(
+			final String tableName )
+			throws TableNotFoundException;
+
 	/**
 	 * Creates a new batch scanner that can be used by an index
 	 * 
@@ -157,4 +176,16 @@ public interface AccumuloOperations
 	 *         successfully
 	 */
 	public boolean deleteAll();
+
+	/**
+	 * Drops the specified row from the specified table. Returns whether the
+	 * operation completed successfully.
+	 * 
+	 * @return Returns true if the row deletion didn't encounter any errors,
+	 *         false if nothing was found or the row was not dropped
+	 *         successfully
+	 */
+	public boolean deleteRow(
+			final String tableName,
+			final ByteArrayId rowId );
 }
