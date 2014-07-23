@@ -10,6 +10,7 @@ public class AccumuloOptions
 	protected boolean persistIndex = true;
 	protected boolean createIndex = true;
 	protected boolean useLocalityGroups = true;
+	protected boolean useAltIndex = true;
 
 	public boolean isPersistAdapter() {
 		return persistAdapter;
@@ -45,5 +46,14 @@ public class AccumuloOptions
 	public void setUseLocalityGroups(
 			final boolean useLocalityGroups ) {
 		this.useLocalityGroups = useLocalityGroups;
+	}
+
+	public boolean isUseAltIndex() {
+		return useAltIndex;
+	}
+
+	public void setUseAltIndex(
+			final boolean useAltIndex ) {
+		this.useAltIndex = useAltIndex;
 	}
 }

@@ -43,6 +43,7 @@ import org.apache.log4j.Logger;
 public class AccumuloUtils
 {
 	private final static Logger LOGGER = Logger.getLogger(AccumuloUtils.class);
+	public final static String ALT_INDEX_TABLE = "_GEOWAVE_ALT_INDEX";
 
 	public static Range byteArrayRangeToAccumuloRange(
 			final ByteArrayRange byteArrayRange ) {
@@ -236,6 +237,36 @@ public class AccumuloUtils
 
 		writer.write(mutations);
 		return rowIds;
+	}
+
+	public static <T> void writeAltIndex(
+			final WritableDataAdapter<T> writableAdapter,
+			final List<ByteArrayId> rowIds,
+			final T entry,
+			final Writer writer ) {
+
+		final byte[] adapterId = writableAdapter.getAdapterId().getBytes();
+		final byte[] dataId = writableAdapter.getDataId(
+				entry).getBytes();
+
+		final List<Mutation> mutations = new ArrayList<Mutation>();
+
+		for (final ByteArrayId rowId : rowIds) {
+
+			final Mutation mutation = new Mutation(
+					new Text(
+							dataId));
+			mutation.put(
+					new Text(
+							adapterId),
+					new Text(
+							rowId.getBytes()),
+					new Value(
+							"".getBytes()));
+
+			mutations.add(mutation);
+		}
+		writer.write(mutations);
 	}
 
 	@SuppressWarnings({

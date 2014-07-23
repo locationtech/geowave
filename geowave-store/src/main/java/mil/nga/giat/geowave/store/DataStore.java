@@ -111,9 +111,55 @@ public interface DataStore
 	 *         Null is returned if the row ID does not match any entries in the
 	 *         data store for the given index.
 	 */
+	@Deprecated
 	public <T> T getEntry(
 			final Index index,
 			final ByteArrayId rowId );
+
+	/**
+	 * Returns the data element associated with the given data ID and adapter ID
+	 * stored in the given index
+	 * 
+	 * @param index
+	 *            The index to search for the entry.
+	 * @param dataId
+	 *            The data ID to use for the query.
+	 * 
+	 * @param adapterId
+	 *            The adapter ID to use for the query.
+	 * 
+	 * @return The entry that was ingested with the given data ID and adapter
+	 *         ID. This combination of data ID and adapter ID is the one
+	 *         assigned to the entry on ingest into the given index. Null is
+	 *         returned if the data ID and adapter ID do not match any entries
+	 *         in the data store for the given index.
+	 */
+	public <T> T getEntry(
+			final Index index,
+			final ByteArrayId dataId,
+			final ByteArrayId adapterId );
+
+	/**
+	 * Deletes the data element associated with the given data ID and adapter ID
+	 * stored in the given index
+	 * 
+	 * @param index
+	 *            The index to search for the entry.
+	 * @param dataId
+	 *            The data ID to use for the query.
+	 * 
+	 * @param adapterId
+	 *            The adapter ID to use for the query.
+	 * 
+	 * @return Returns true if the entry was found and deleted successfully.
+	 *         Returns false if the entry could not be found, if the entry could
+	 *         not be deleted, or if the entry in the alternate index could not
+	 *         be deleted.
+	 */
+	public boolean deleteEntry(
+			final Index index,
+			final ByteArrayId dataId,
+			final ByteArrayId adapterId );
 
 	/**
 	 * Returns all data with the given row ID prefix stored in the given index
@@ -323,5 +369,4 @@ public interface DataStore
 			List<ByteArrayId> adapterIds,
 			final Query query,
 			final int limit );
-
 }

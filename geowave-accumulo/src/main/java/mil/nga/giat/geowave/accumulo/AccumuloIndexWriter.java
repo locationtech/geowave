@@ -28,15 +28,21 @@ public class AccumuloIndexWriter implements
 	private final AccumuloOptions accumuloOptions;
 	protected final AccumuloDataStore dataStore;
 	private Writer writer;
+	private Writer altIdxWriter;
+
+	private boolean useAltIndex;
+	private String tableName;
+	private String altIdxTableName;
 
 	public AccumuloIndexWriter(
 			final Index index,
 			final AccumuloOperations accumuloOperations,
 			final AccumuloDataStore dataStore ) {
-		this.index = index;
-		this.accumuloOperations = accumuloOperations;
-		this.dataStore = dataStore;
-		this.accumuloOptions = new AccumuloOptions();
+		this(
+				index,
+				accumuloOperations,
+				new AccumuloOptions(),
+				dataStore);
 	}
 
 	public AccumuloIndexWriter(
@@ -48,12 +54,47 @@ public class AccumuloIndexWriter implements
 		this.accumuloOperations = accumuloOperations;
 		this.accumuloOptions = accumuloOptions;
 		this.dataStore = dataStore;
+		initialize();
+	}
+
+	private void initialize() {
+		tableName = StringUtils.stringFromBinary(index.getId().getBytes());
+		altIdxTableName = tableName + AccumuloUtils.ALT_INDEX_TABLE;
+
+		useAltIndex = accumuloOptions.isUseAltIndex();
+
+		if (useAltIndex) {
+			if (accumuloOperations.tableExists(tableName)) {
+				if (!accumuloOperations.tableExists(altIdxTableName)) {
+					useAltIndex = false;
+					LOGGER.warn("Requested alternate index table [" + altIdxTableName + "] does not exist.");
+				}
+			}
+			else {
+				if (accumuloOperations.tableExists(altIdxTableName)) {
+					accumuloOperations.deleteTable(altIdxTableName);
+					LOGGER.warn("Deleting current alternate index table [" + altIdxTableName + "] as main table does not yet exist.");
+				}
+			}
+		}
 	}
 
 	private synchronized void ensureOpen() {
 		if (writer == null) {
 			try {
 				writer = accumuloOperations.createWriter(StringUtils.stringFromBinary(index.getId().getBytes()));
+			}
+			catch (final TableNotFoundException e) {
+				LOGGER.error(
+						"Unable to open writer",
+						e);
+			}
+		}
+		if (useAltIndex && (altIdxWriter == null)) {
+			try {
+				altIdxWriter = accumuloOperations.createWriter(
+						altIdxTableName,
+						accumuloOptions.isCreateIndex());
 			}
 			catch (final TableNotFoundException e) {
 				LOGGER.error(
@@ -68,6 +109,10 @@ public class AccumuloIndexWriter implements
 			writer.close();
 			writer = null;
 		}
+		if (useAltIndex && (altIdxWriter != null)) {
+			altIdxWriter.close();
+			writer = null;
+		}
 	}
 
 	@Override
@@ -75,7 +120,6 @@ public class AccumuloIndexWriter implements
 			final WritableDataAdapter<T> writableAdapter,
 			final T entry ) {
 
-		final String tableName = StringUtils.stringFromBinary(index.getId().getBytes());
 		final byte[] adapterId = writableAdapter.getAdapterId().getBytes();
 
 		dataStore.store(writableAdapter);
@@ -92,18 +136,28 @@ public class AccumuloIndexWriter implements
 		}
 		catch (AccumuloException | TableNotFoundException | AccumuloSecurityException e) {
 			LOGGER.error(
-					"Unable to determine existence of locality group [" + writableAdapter.getAdapterId() + "]",
+					"Unable to determine existence of locality group [" + writableAdapter.getAdapterId().getString() + "]",
 					e);
 		}
 
+		List<ByteArrayId> rowIds;
 		synchronized (this) {
 			ensureOpen();
-			return AccumuloUtils.write(
+			rowIds = AccumuloUtils.write(
 					writableAdapter,
 					index,
 					entry,
 					writer);
+
+			if (useAltIndex) {
+				AccumuloUtils.writeAltIndex(
+						writableAdapter,
+						rowIds,
+						entry,
+						altIdxWriter);
+			}
 		}
+		return rowIds;
 	}
 
 	@Override

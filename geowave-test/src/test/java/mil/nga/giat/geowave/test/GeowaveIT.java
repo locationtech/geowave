@@ -20,6 +20,7 @@ import mil.nga.giat.geowave.accumulo.AccumuloDataStore;
 import mil.nga.giat.geowave.accumulo.AccumuloIndexStore;
 import mil.nga.giat.geowave.accumulo.AccumuloOperations;
 import mil.nga.giat.geowave.accumulo.BasicAccumuloOperations;
+import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.ingest.IngestMain;
 import mil.nga.giat.geowave.store.CloseableIterator;
 import mil.nga.giat.geowave.store.index.Index;
@@ -134,6 +135,18 @@ public class GeowaveIT
 			accumuloOperations.deleteAll();
 			Assert.fail("Error occurred while testing a polygon query of spatial index: '" + e.getLocalizedMessage() + "'");
 		}
+
+		try {
+			testDelete(
+					new File(
+							TEST_POLYGON_FILTER_FILE).toURI().toURL(),
+					IndexType.SPATIAL);
+		}
+		catch (final Exception e) {
+			e.printStackTrace();
+			accumuloOperations.deleteAll();
+			Assert.fail("Error occurred while testing deletion of an entry using spatial index: '" + e.getLocalizedMessage() + "'");
+		}
 	}
 
 	@Test
@@ -177,6 +190,18 @@ public class GeowaveIT
 		catch (final Exception e) {
 			accumuloOperations.deleteAll();
 			Assert.fail("Error occurred while testing a polygon and time range query of spatial temporal index: '" + e.getLocalizedMessage() + "'");
+		}
+
+		try {
+			testDelete(
+					new File(
+							TEST_POLYGON_TEMPORAL_FILTER_FILE).toURI().toURL(),
+					IndexType.SPATIAL_TEMPORAL);
+		}
+		catch (final Exception e) {
+			e.printStackTrace();
+			accumuloOperations.deleteAll();
+			Assert.fail("Error occurred while testing deletion of an entry using spatial temporal index: '" + e.getLocalizedMessage() + "'");
 		}
 	}
 
@@ -392,6 +417,83 @@ public class GeowaveIT
 				expectedResultCount,
 				totalResults);
 		actualResults.close();
+	}
+
+	private void testDelete(
+			final URL savedFilterResource,
+			final IndexType indexType )
+			throws Exception {
+		LOGGER.info("deleting from " + indexType.toString() + " index");
+		System.out.println("deleting from " + indexType.toString() + " index");
+		boolean success = false;
+		final mil.nga.giat.geowave.store.DataStore geowaveStore = new AccumuloDataStore(
+				new AccumuloIndexStore(
+						accumuloOperations),
+				new AccumuloAdapterStore(
+						accumuloOperations),
+				accumuloOperations);
+		final Map<String, Object> map = new HashMap<String, Object>();
+		DataStore dataStore = null;
+		map.put(
+				"url",
+				savedFilterResource);
+		final SimpleFeature savedFilter;
+		SimpleFeatureIterator sfi = null;
+		try {
+			dataStore = DataStoreFinder.getDataStore(map);
+
+			// just grab the first feature and use it as a filter
+			sfi = dataStore.getFeatureSource(
+					dataStore.getNames().get(
+							0)).getFeatures().features();
+			savedFilter = sfi.next();
+
+		}
+		finally {
+			if (sfi != null) {
+				sfi.close();
+			}
+			dataStore.dispose();
+		}
+
+		final Index index = indexType.createDefaultIndex();
+		final CloseableIterator<?> actualResults;
+
+		actualResults = geowaveStore.query(
+				index,
+				savedFilterToQuery(savedFilter));
+
+		SimpleFeature testFeature = null;
+		while (actualResults.hasNext()) {
+			final Object obj = actualResults.next();
+			if ((testFeature == null) && (obj instanceof SimpleFeature)) {
+				testFeature = (SimpleFeature) obj;
+			}
+		}
+		actualResults.close();
+
+		if (testFeature != null) {
+			final ByteArrayId dataId = new ByteArrayId(
+					testFeature.getID());
+			final ByteArrayId adapterId = new ByteArrayId(
+					testFeature.getFeatureType().getTypeName());
+
+			if (geowaveStore.deleteEntry(
+					index,
+					dataId,
+					adapterId)) {
+
+				if (geowaveStore.getEntry(
+						index,
+						dataId,
+						adapterId) == null) {
+					success = true;
+				}
+			}
+		}
+		Assert.assertTrue(
+				"Unable to delete entry by data ID and adapter ID",
+				success);
 	}
 
 	private long hashCentroid(

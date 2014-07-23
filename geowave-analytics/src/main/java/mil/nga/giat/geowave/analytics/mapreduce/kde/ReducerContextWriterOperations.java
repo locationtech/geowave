@@ -2,9 +2,11 @@ package mil.nga.giat.geowave.analytics.mapreduce.kde;
 
 import mil.nga.giat.geowave.accumulo.AccumuloOperations;
 import mil.nga.giat.geowave.accumulo.Writer;
+import mil.nga.giat.geowave.index.ByteArrayId;
 
 import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
+import org.apache.accumulo.core.client.BatchDeleter;
 import org.apache.accumulo.core.client.BatchScanner;
 import org.apache.accumulo.core.client.Scanner;
 import org.apache.accumulo.core.client.TableNotFoundException;
@@ -85,4 +87,18 @@ public class ReducerContextWriterOperations implements
 			throws AccumuloException,
 			TableNotFoundException,
 			AccumuloSecurityException {}
+
+	@Override
+	public boolean deleteRow(
+			String tableName,
+			ByteArrayId rowId ) {
+		return false;
+	}
+
+	@Override
+	public BatchDeleter createBatchDeleter(
+			String tableName )
+			throws TableNotFoundException {
+		return null;
+	}
 }
