@@ -139,12 +139,6 @@ public class ComparisonStatsJobRunner extends
 			if (!statsIndexStore.indexExists(spatialIndex.getId())) {
 				statsIndexStore.addIndex(spatialIndex);
 			}
-			AccumuloOutputFormat.setOutputInfo(
-					conf,
-					user,
-					password.getBytes(),
-					true,
-					tableName);
 			AccumuloOutputFormat.setZooKeeperInstance(
 					ingester,
 					instance,
