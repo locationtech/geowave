@@ -143,14 +143,7 @@ public class KDEJobRunner extends
 					GaussianCellMapper.CQL_FILTER_KEY,
 					cqlFilter);
 		}
-		InputFormatBase.setInputInfo(
-				conf,
-				user,
-				password.getBytes(),
-				AccumuloUtils.getQualifiedTableName(
-						namespace,
-						StringUtils.stringFromBinary(spatialIndex.getId().getBytes())),
-				new Authorizations());
+		
 		InputFormatBase.setConnectorInfo(
 				job,
 				user,
@@ -349,12 +342,7 @@ public class KDEJobRunner extends
 		if (!statsIndexStore.indexExists(spatialIndex.getId())) {
 			statsIndexStore.addIndex(spatialIndex);
 		}
-		AccumuloOutputFormat.setOutputInfo(
-				conf,
-				user,
-				password.getBytes(),
-				true,
-				tableName);
+	
 		AccumuloOutputFormat.setZooKeeperInstance(
 				statsReducer,
 				instance,

@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
@@ -23,17 +24,9 @@
 	<properties>
 		<geotools.version>11.0</geotools.version>
 		<geoserver.version>2.5</geoserver.version>
-		<accumulo.version>1.5.0</accumulo.version>
-		
-		 
+		<accumulo.version>1.5.1</accumulo.version>
 		<hadoop.version>2.0.0-cdh4.7.0</hadoop.version> 
 		<hadoop.version.mr>2.0.0-mr1-cdh4.7.0</hadoop.version.mr> 
-		 
-		<!-- 
-		<hadoop.version>2.3.0-cdh5.0.1</hadoop.version> 
-		<hadoop.version.mr>2.3.0-mr1-cdh5.0.1</hadoop.version.mr>
-		  -->
-		
 		<avro.version>1.7.6</avro.version>
 		<commons.cli.version>1.2</commons.cli.version>
 		<geotools.scope>compile</geotools.scope>
@@ -81,7 +74,7 @@
 										</goals>
 									</pluginExecutionFilter>
 									<action>
-										<ignore></ignore>
+										<ignore />
 									</action>
 								</pluginExecution>
 							</pluginExecutions>
@@ -254,6 +247,22 @@
 			<snapshots>
 				<enabled>true</enabled>
 			</snapshots>
+		</repository>
+		<repository>
+			<releases>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+				<checksumPolicy>warn</checksumPolicy>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+				<updatePolicy>never</updatePolicy>
+				<checksumPolicy>fail</checksumPolicy>
+			</snapshots>
+			<id>HDPReleases</id>
+			<name>HDP Releases</name>
+			<url>http://repo.hortonworks.com/content/repositories/releases/</url>
+			<layout>default</layout>
 		</repository>
 	</repositories>
 	<profiles>
