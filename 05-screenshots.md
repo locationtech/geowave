@@ -65,7 +65,7 @@ Screenshots below are of data loaded from the various attributed data sets into 
 <p>This data set corresponds to a Mapbox zoom level of 3</p>  
 <p align="center">
 	<br/>
-	<a href="https://ngageoint.github.io/geowave/assets/images/osmgpx-world-full.jpg" target="_blank"><img align="center" src="https://ngageoint.github.io/	geowave/assets/images/osmgpx-world-thumb.jpg" alt="Geolife points at city scale"></a>
+	<a href="https://ngageoint.github.io/geowave/assets/images/osmgpx-world-full.jpg" target="_blank"><img align="center" src="https://ngageoint.github.io/geowave/assets/images/osmgpx-world-thumb.jpg" alt="Geolife points at city scale"></a>
 </p>
 
 
