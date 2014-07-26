@@ -35,7 +35,7 @@ Screenshots below are of data loaded from the various attributed data sets into 
 <p>This data set corresponds to a Mapbox zoom level of 15</p>  
 <p align="center">
 	<a href="https://ngageoint.github.io/geowave/assets/images/geolife-density-17-full.jpg" target="_blank"><img align="center" src="https://	ngageoint.github.io/	geowave/assets/images/geolife-density-17-thumb.jpg" alt="T-drive density at city scale"></a><br/>
-	<i>Graphic background &copy;MapBox and &copy;OpenStreetMap</i><br/>
+	<br/>
 	<a href="https://ngageoint.github.io/geowave/assets/images/geolife-points-17-full.jpg" target="_blank"><img align="center" src="https://ngageoint.github.io/	geowave/assets/images/geolife-points-17-thumb.jpg" alt="Geolife points at city scale"></a><br/>
 	<i>Graphic background &copy;MapBox and &copy;OpenStreetMap</i>
 </p>
