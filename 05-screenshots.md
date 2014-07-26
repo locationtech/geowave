@@ -26,17 +26,17 @@ Screenshots below are of data loaded from the various attributed data sets into 
 ## GeoLife at city scale
 <p>Below are renderings of GeoLife data.  They display both the raw points, as well as the results of a GeoWave kernel density analytic.  The data corresponds to Mapbox zoom level 13.</p>  
 <p align="center">
-	<a href="https://ngageoint.github.io/geowave/assets/images/geolife-density-13.jpg" target="_blank"><img align="center" src="https://	ngageoint.github.io/	geowave/assets/images/geolife-density-13-thumb.jpg" alt="T-drive density at city scale"></a><br/>
+	<a href="https://ngageoint.github.io/geowave/assets/images/geolife-density-13.jpg" target="_blank"><img align="center" src="https://ngageoint.github.io/geowave/assets/images/geolife-density-13-thumb.jpg" alt="T-drive density at city scale"></a><br/>
 	<br/>
-	<a href="https://ngageoint.github.io/geowave/assets/images/geolife-points-13.jpg" target="_blank"><img align="center" src="https://ngageoint.github.io/	geowave/assets/images/geolife-points-13-thumb.jpg" alt="Geolife points at city scale"></a>
+	<a href="https://ngageoint.github.io/geowave/assets/images/geolife-points-13.jpg" target="_blank"><img align="center" src="https://ngageoint.github.io/geowave/assets/images/geolife-points-13-thumb.jpg" alt="Geolife points at city scale"></a>
 </p>
 
 ## GeoLife at house scale
 <p>This data set corresponds to a Mapbox zoom level of 15</p>  
 <p align="center">
-	<a href="https://ngageoint.github.io/geowave/assets/images/geolife-density-17-full.jpg" target="_blank"><img align="center" src="https://	ngageoint.github.io/	geowave/assets/images/geolife-density-17-thumb.jpg" alt="T-drive density at city scale"></a><br/>
+	<a href="https://ngageoint.github.io/geowave/assets/images/geolife-density-17-full.jpg" target="_blank"><img align="center" src="https://ngageoint.github.io/geowave/assets/images/geolife-density-17-thumb.jpg" alt="T-drive density at city scale"></a><br/>
 	<br/>
-	<a href="https://ngageoint.github.io/geowave/assets/images/geolife-points-17-full.jpg" target="_blank"><img align="center" src="https://ngageoint.github.io/	geowave/assets/images/geolife-points-17-thumb.jpg" alt="Geolife points at city scale"></a><br/>
+	<a href="https://ngageoint.github.io/geowave/assets/images/geolife-points-17-full.jpg" target="_blank"><img align="center" src="https://ngageoint.github.io/geowave/assets/images/geolife-points-17-thumb.jpg" alt="Geolife points at city scale"></a><br/>
 	<i>Graphic background &copy;MapBox and &copy;OpenStreetMap</i>
 </p>
 
