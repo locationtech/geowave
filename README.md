@@ -19,10 +19,11 @@ See [GeoWave io page](http://ngageoint.github.io/geowave/) for more detailed doc
 ## Screenshots
 
 <p align="center">
-	<img align="center" src="https://ngageoint.github.io/geowave/assets/images/t-drive-points-1.jpg" alt="T-drive points at city scale"><br/><br/>
-	<img align="center" src="https://ngageoint.github.io/geowave/assets/images/t-drive-density-1.jpg" alt="T-drive density at city scale">
+	<a href="https://ngageoint.github.io/geowave/assets/images/geolife-density-13.jpg" target="_blank"><img align="center" src="https://ngageoint.github.io/geowave/assets/images/geolife-density-13-thumb.jpg" alt="T-drive density at city scale"></a><br/><br/>
+	<a href="https://ngageoint.github.io/geowave/assets/images/geolife-density-17-full.jpg" target="_blank"><img align="center" src="https://ngageoint.github.io/geowave/assets/images/geolife-density-17-thumb.jpg" alt="T-drive density at city scale"></a><br/><br/>
+	<a href="https://ngageoint.github.io/geowave/assets/images/osmgpx-full.jpg" target="_blank"><img align="center" src="https://ngageoint.github.io/geowave/assets/images/osmgpx-thumb.jpg" alt="T-drive density at city scale"></a><br/>
+	
 </p>
-The backgrounds above are &copy;Mapbox and &copy;OpenStreetMap.
 
 See [Screenshots](https://ngageoint.github.io/geowave/screenshots.html) for more information.
 
