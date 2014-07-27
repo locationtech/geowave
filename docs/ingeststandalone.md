@@ -19,27 +19,15 @@ Geowave requires a few pieces of fundamental information in order to persist dat
      * Accumulo Username - this is the name of the user you would like to connect as.  This is a user account managed by accumulo, not a system, etc. user.
      * Accumulo Password - this is the password associated with the user specified above.  Again, this is an accumulo controlled secret.
      * Geowave Namespace - this is *not* an Accumulo namespace; rather think of it as a prefix geowave will use on any tables it creates. The only current constraint is only one index type is allowed per namespace.
-
-<br/>
-
  * SimpleFeatureType instance
    * [Simple Feature Types](http://www.opengeospatial.org/standards/sfs) are an OGC specification for defining geospatial features.  Leveraging this standard is one of the easiest ways to get GIS data into GeoWave
    * SimpleFeatureType instance - org.opengis.feature.simple.SimpleFeatureType  - this defines the names, types, and other metadata (nullable, etc)  of a feature.  Think of it as a Map of Name:Values where the values are typed.
-
-<br/>
-
  * DataAdapter instance
    * A geowave data adapter is an implementation of the DataAdapter interface that handles the persistence serialization of whatever the object you are storing is.  
    * We are storing SimpleFeatures, so can leverage the provided FeatreDataAdapter
-     
-<br/>
-
  * Index instance
    * The final piece needed - the index defines which attributes are indexed, and how that index is constructed.
    * There are lots of options for index configuration, but for convienence we have provided two defaults
-
-<br/>
-
  * DataStore
    * This is the piece that puts everything above together.
    * Initialization required a BasicAccumuloOperations instance, the rest are provided as parameters for calls which need them.
@@ -52,7 +40,7 @@ Here we will programatically generate a grid of points at each location where a 
 
 ### Basic Accumulo Operations
 
-```java
+~~~java
 /***
  * The class tells geowave about the accumulo instance it should connect to, as well as what tables it should create/store it's data in
  * @param zookeepers Zookeepers associated with the accumulo instance, comma separate
@@ -68,13 +56,13 @@ protected BasicAccumuloOperations getAccumuloInstance(String zookeepers, String 
   throws AccumuloException, AccumuloSecurityException {
 	return new BasicAccumuloOperations(zookeepers, accumuloInstance, accumuloUser, accumuloPass, geowaveNamespace);
 }
-```
+~~~
 
 ### Simple Feature Type
 
 We know fore sure we need a geometry field.  Everything else is really optional.  It's often convenient to add a text latitude and longitude field for ease of display values (getFeatureInfo, etc.).   
 
-```java
+~~~java
 /***
  * A simple feature is just a mechanism for defining attributes (a feature is just a collection of attributes + some metadata)
  * We need to describe what our data looks like so the serializer (FeatureDataAdapter for this case) can know how to store it.
@@ -105,12 +93,12 @@ protected SimpleFeatureType createPointFeatureType(){
 	
 	return builder.buildFeatureType();
 }
-```    
+~~~    
           
 
 ### Spatial index
 
-```java
+~~~java
 /***
  * We need an index model that tells us how to index the data - the index determines
  * -What fields are indexed
@@ -127,11 +115,11 @@ protected Index createSpatialIndex(){
 	//performance is the distribution/characterization of the data is well known.
 	return IndexType.SPATIAL.createDefaultIndex();
 }
-```
+~~~
 
 ### Data Adapter
 
-```java
+~~~java
 /***
  * The dataadapter interface describes how to serialize a data type.
  * Here we are using an implementation that understands how to serialize
@@ -142,12 +130,12 @@ protected Index createSpatialIndex(){
 protected FeatureDataAdapter createDataAdapter(SimpleFeatureType sft){
 	return new FeatureDataAdapter(sft);
 }
-```
+~~~
 
 
 ### Generating and loading points
 
-```java
+~~~java
 protected void GenerateGrid(BasicAccumuloOperations bao){
 
 	//create our datastore object
@@ -191,7 +179,7 @@ protected void GenerateGrid(BasicAccumuloOperations bao){
 		}
 	}
 }
-```
+~~~
 
 
 ### Easy optimizations
@@ -201,7 +189,7 @@ The datastore ingest method can take an iterator on a collection - so let's use 
 
 #### Custom feature collection
 
-```java
+~~~java
 protected void GenerateGrid(BasicAccumuloOperations bao){
 
 	//create our datastore object
@@ -245,11 +233,11 @@ protected void GenerateGrid(BasicAccumuloOperations bao){
 		}
 	}
 }
-```
+~~~
 
 #### Decoupling ingest
 
-```java
+~~~java
 public class SimpleIngestProducerConsumer extends SimpleIngest {
 
 	private static Logger log = Logger.getLogger(SimpleIngestProducerConsumer.class);
@@ -314,7 +302,7 @@ public class SimpleIngestProducerConsumer extends SimpleIngest {
 			log.error("Error joining ingest thread", e);
 		}
 	}
-```
+~~~
 
 
 ### Wrapup
