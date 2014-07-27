@@ -77,7 +77,7 @@
 									</transformers>
 									<createDependencyReducedPom>false</createDependencyReducedPom>
 									<minimizeJar>false</minimizeJar>
-									<finalName>${project.build.finalName}-runnable</finalName>
+									<finalName>${project.build.finalName}-phat</finalName>
 								</configuration>
 							</execution>
 						</executions>

@@ -52,7 +52,7 @@ public class SimpleIngest {
 	}
 	
 	
-	private void GenerateGrid(BasicAccumuloOperations bao){
+	protected void GenerateGrid(BasicAccumuloOperations bao){
 	
 		//create our datastore object
 		DataStore geowaveDataStore = getGeowaveDataStore(bao);
@@ -104,7 +104,7 @@ public class SimpleIngest {
 	 * @param instance Accumulo instance configuration
 	 * @return DataStore object for the particular accumulo instance
 	 */
-	private DataStore getGeowaveDataStore(BasicAccumuloOperations instance){
+	protected DataStore getGeowaveDataStore(BasicAccumuloOperations instance){
 		
 		// GeoWave persists both the index and data adapter to the same accumulo namespace as the data.  The intent here 
 		// is that all data is discoverable without configuration/classes stored outside of the accumulo instance.
@@ -122,7 +122,7 @@ public class SimpleIngest {
 	 * @throws AccumuloException
 	 * @throws AccumuloSecurityException
 	 */
-	private BasicAccumuloOperations getAccumuloInstance(String zookeepers, String accumuloInstance, String accumuloUser, String accumuloPass, String geowaveNamespace) 
+	protected BasicAccumuloOperations getAccumuloInstance(String zookeepers, String accumuloInstance, String accumuloUser, String accumuloPass, String geowaveNamespace) 
 	  throws AccumuloException, AccumuloSecurityException {
 		return new BasicAccumuloOperations(zookeepers, accumuloInstance, accumuloUser, accumuloPass, geowaveNamespace);
 	}
@@ -135,7 +135,7 @@ public class SimpleIngest {
 	 * @param sft  simple feature type you want to generate an adapter from
 	 * @return data adapter that handles serialization of the sft simple feature type
 	 */
-	private FeatureDataAdapter createDataAdapter(SimpleFeatureType sft){
+	protected FeatureDataAdapter createDataAdapter(SimpleFeatureType sft){
 		return new FeatureDataAdapter(sft);
 	}
 	
@@ -148,7 +148,7 @@ public class SimpleIngest {
 	 * -The number of "levels"  (different precisions, needed when the values indexed has ranges on any dimension)
 	 * @return GeoWave index for a default SPATIAL index
 	 */
-	private Index createSpatialIndex(){
+	protected Index createSpatialIndex(){
 		
 		//Reasonable values for spatial and spatio-temporal are provided through static factory methods.  
 		//They are intended to be a reasonable starting place - though creating a custom index may provide better
@@ -163,7 +163,7 @@ public class SimpleIngest {
 	 * Features/Attributes are also a general convention of GIS systems in general.
 	 * @return Simple Feature definition for our demo point feature
 	 */
-	private SimpleFeatureType createPointFeatureType(){
+	protected SimpleFeatureType createPointFeatureType(){
 
 		final SimpleFeatureTypeBuilder builder = new SimpleFeatureTypeBuilder();
 		final AttributeTypeBuilder ab = new AttributeTypeBuilder();
