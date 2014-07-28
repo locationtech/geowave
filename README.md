@@ -5,6 +5,7 @@
 <br/>
 
 
+
 GeoWave is an open source set of software that:
 	
 * Adds multi-dimensional indexing capability to [Apache Accumulo](http://projects.apache.org/projects/accumulo.html) 
