@@ -123,7 +123,7 @@ Accumulo: 1.5.1 and 1.6.0
 Hadoop: 2.0.0-cdh4.7.0, 2.3.0-cdh5.0.3, and 1.2.0.23*  
 GeoTools/GeoServer: 11.0/2.5 and 11.2/2.5.2  
 
-\* Accumulo 1.5.1 and Hadoop 1.2.0.23 is the one exception that is not tested and has been found to fail starting the AccumuloMiniCluster in the integration test
+\* Accumulo 1.5.1 and Hadoop 1.2.0.23 is the one exception that is not tested and has been found to fail starting the MiniAccumuloCluster in the integration test
 
 ### Ingest Data
 
