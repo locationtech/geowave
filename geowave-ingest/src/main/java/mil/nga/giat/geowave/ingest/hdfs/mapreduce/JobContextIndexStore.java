@@ -1,12 +1,12 @@
 package mil.nga.giat.geowave.ingest.hdfs.mapreduce;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
-import mil.nga.giat.geowave.accumulo.AccumuloIndexStore;
 import mil.nga.giat.geowave.accumulo.AccumuloOperations;
+import mil.nga.giat.geowave.accumulo.metadata.AccumuloIndexStore;
 import mil.nga.giat.geowave.index.ByteArrayId;
+import mil.nga.giat.geowave.store.CloseableIterator;
 import mil.nga.giat.geowave.store.index.Index;
 import mil.nga.giat.geowave.store.index.IndexStore;
 
@@ -83,7 +83,7 @@ public class JobContextIndexStore implements
 	}
 
 	@Override
-	public Iterator<Index> getIndices() {
+	public CloseableIterator<Index> getIndices() {
 		// this should not be called but just return what is in the accumulo
 		// adapter store
 		final AccumuloIndexStore indexStore = new AccumuloIndexStore(

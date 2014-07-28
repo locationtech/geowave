@@ -4,10 +4,11 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import mil.nga.giat.geowave.accumulo.AccumuloAdapterStore;
 import mil.nga.giat.geowave.accumulo.AccumuloDataStore;
-import mil.nga.giat.geowave.accumulo.AccumuloIndexStore;
 import mil.nga.giat.geowave.accumulo.AccumuloOperations;
+import mil.nga.giat.geowave.accumulo.metadata.AccumuloAdapterStore;
+import mil.nga.giat.geowave.accumulo.metadata.AccumuloDataStatisticsStore;
+import mil.nga.giat.geowave.accumulo.metadata.AccumuloIndexStore;
 import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.index.StringUtils;
 import mil.nga.giat.geowave.store.DataStore;
@@ -15,6 +16,7 @@ import mil.nga.giat.geowave.store.IndexWriter;
 import mil.nga.giat.geowave.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.store.adapter.WritableDataAdapter;
+import mil.nga.giat.geowave.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.store.index.Index;
 import mil.nga.giat.geowave.store.index.IndexStore;
 
@@ -48,6 +50,7 @@ public class GeoWaveOutputFormat extends
 			throws IOException,
 			InterruptedException {
 		try {
+			// TODO expose GeoWave's AccumuloOptions
 			final AccumuloOperations accumuloOperations = getAccumuloOperations(context);
 			final AdapterStore accumuloAdapterStore = new AccumuloAdapterStore(
 					accumuloOperations);
@@ -71,11 +74,14 @@ public class GeoWaveOutputFormat extends
 			final IndexStore jobContextIndexStore = getIndexStore(
 					context,
 					accumuloOperations);
+			final DataStatisticsStore statisticsStore = new AccumuloDataStatisticsStore(
+					accumuloOperations);
 			return new GeoWaveRecordWriter(
 					context,
 					accumuloOperations,
 					jobContextIndexStore,
-					jobContextAdapterStore);
+					jobContextAdapterStore,
+					statisticsStore);
 		}
 		catch (final Exception e) {
 			throw new IOException(
@@ -139,7 +145,8 @@ public class GeoWaveOutputFormat extends
 				final TaskAttemptContext context,
 				final AccumuloOperations accumuloOperations,
 				final IndexStore indexStore,
-				final AdapterStore adapterStore )
+				final AdapterStore adapterStore,
+				final DataStatisticsStore statisticsStore )
 				throws AccumuloException,
 				AccumuloSecurityException,
 				IOException {
@@ -150,6 +157,7 @@ public class GeoWaveOutputFormat extends
 			dataStore = new AccumuloDataStore(
 					indexStore,
 					adapterStore,
+					statisticsStore,
 					accumuloOperations);
 			this.adapterStore = adapterStore;
 			this.indexStore = indexStore;

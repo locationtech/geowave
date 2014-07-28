@@ -12,6 +12,7 @@ import mil.nga.giat.geowave.index.PersistenceUtils;
 import mil.nga.giat.geowave.index.sfc.RangeDecomposition;
 import mil.nga.giat.geowave.index.sfc.SFCDimensionDefinition;
 import mil.nga.giat.geowave.index.sfc.SpaceFillingCurve;
+import mil.nga.giat.geowave.index.sfc.data.BasicNumericDataset;
 import mil.nga.giat.geowave.index.sfc.data.MultiDimensionalNumericData;
 
 /***
@@ -68,6 +69,34 @@ public class ZOrderSFC implements
 				normalizedValues,
 				cardinalityPerDimension,
 				values.length);
+	}
+
+	@Override
+	public MultiDimensionalNumericData getRanges(
+			final byte[] id ) {
+		return new BasicNumericDataset(
+				ZOrderUtils.decodeRanges(
+						id,
+						cardinalityPerDimension,
+						dimensionDefs));
+	}
+
+	@Override
+	public long[] getCoordinates(
+			final byte[] id ) {
+		return ZOrderUtils.decodeIndices(
+				id,
+				cardinalityPerDimension,
+				dimensionDefs.length);
+	}
+
+	@Override
+	public double[] getInsertionIdRangePerDimension() {
+		final double[] retVal = new double[dimensionDefs.length];
+		for (int i = 0; i < dimensionDefs.length; i++) {
+			retVal[i] = dimensionDefs[i].getRange() / binsPerDimension;
+		}
+		return retVal;
 	}
 
 	@Override
@@ -199,5 +228,4 @@ public class ZOrderSFC implements
 		}
 		return true;
 	}
-
 }

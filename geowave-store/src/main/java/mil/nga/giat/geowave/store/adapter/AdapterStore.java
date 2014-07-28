@@ -1,8 +1,7 @@
 package mil.nga.giat.geowave.store.adapter;
 
-import java.util.Iterator;
-
 import mil.nga.giat.geowave.index.ByteArrayId;
+import mil.nga.giat.geowave.store.CloseableIterator;
 
 /**
  * This is responsible for persisting data adapters (either in memory or to disk
@@ -44,5 +43,5 @@ public interface AdapterStore
 	 * 
 	 * @return an iterator over all of the adapters in this store
 	 */
-	public Iterator<DataAdapter<?>> getAdapters();
+	public CloseableIterator<DataAdapter<?>> getAdapters();
 }

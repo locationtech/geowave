@@ -1,6 +1,7 @@
 package mil.nga.giat.geowave.analytics.mapreduce.kde;
 
 import mil.nga.giat.geowave.accumulo.AccumuloOperations;
+import mil.nga.giat.geowave.accumulo.IteratorConfig;
 import mil.nga.giat.geowave.accumulo.Writer;
 import mil.nga.giat.geowave.index.ByteArrayId;
 
@@ -49,7 +50,7 @@ public class ReducerContextWriterOperations implements
 	@Override
 	public Writer createWriter(
 			final String tableName,
-			final boolean createTable )
+			final boolean createTable)
 			throws TableNotFoundException {
 		return writer;
 	}
@@ -89,16 +90,27 @@ public class ReducerContextWriterOperations implements
 			AccumuloSecurityException {}
 
 	@Override
-	public boolean deleteRow(
-			String tableName,
-			ByteArrayId rowId ) {
+	public boolean delete(
+			final String tableName,
+			final ByteArrayId rowId,
+			final String columnFamily,
+			final String columnQualifier ) {
 		return false;
 	}
 
 	@Override
 	public BatchDeleter createBatchDeleter(
-			String tableName )
+			final String tableName )
 			throws TableNotFoundException {
 		return null;
+	}
+
+	@Override
+	public boolean attachIterators(
+			String tableName,
+			boolean createTable,
+			IteratorConfig[] iterators )
+			throws TableNotFoundException {
+		return false;
 	}
 }

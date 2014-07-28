@@ -1,64 +1,60 @@
 package mil.nga.giat.geowave.store.index;
 
+import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.index.NumericIndexStrategy;
-import mil.nga.giat.geowave.index.NumericIndexStrategy.SpatialFactory;
-import mil.nga.giat.geowave.index.NumericIndexStrategy.SpatialTemporalFactory;
-import mil.nga.giat.geowave.index.dimension.bin.TemporalBinningStrategy.Unit;
-import mil.nga.giat.geowave.store.dimension.DimensionField;
-import mil.nga.giat.geowave.store.dimension.LatitudeField;
-import mil.nga.giat.geowave.store.dimension.LongitudeField;
-import mil.nga.giat.geowave.store.dimension.TimeField;
+import mil.nga.giat.geowave.index.NumericIndexStrategyFactory.DataType;
 
 /**
  * This is an enumeration of default commonly used Indices supported (with
  * generally reasonable default configuration). Any other index can be
  * instantiated and used outside of this enumerated list. This is merely
  * provided for convenience.
- * 
+ *
  */
 public enum IndexType {
-	SPATIAL(
-			// TODO: enforce the index strategy dimensions are in sync with the
-			// index model dimensions
-			SpatialFactory.createIndexStrategy(),
-			new BasicIndexModel(
-					new DimensionField[] {
-						new LongitudeField(),
-						new LatitudeField()
-					})),
-	SPATIAL_TEMPORAL(
-			// TODO: enforce the index strategy dimensions are in sync with the
-			// index model dimensions
-			SpatialTemporalFactory.createIndexStrategy(),
-			new BasicIndexModel(
-					new DimensionField[] {
-						new LongitudeField(),
-						new LatitudeField(),
-						new TimeField(
-								Unit.YEAR)
-					}));
+	SPATIAL_VECTOR(
+			DimensionalityType.SPATIAL,
+			DataType.VECTOR),
+	SPATIAL_RASTER(
+			DimensionalityType.SPATIAL,
+			DataType.RASTER),
+	SPATIAL_TEMPORAL_VECTOR(
+			DimensionalityType.SPATIAL_TEMPORAL,
+			DataType.VECTOR),
+	SPATIAL_TEMPORAL_RASTER(
+			DimensionalityType.SPATIAL_TEMPORAL,
+			DataType.RASTER);
 
-	private final NumericIndexStrategy defaultStrategy;
-	private final CommonIndexModel defaultIndexModel;
+	private DimensionalityType dimensionalityType;
+	private DataType dataType;
 
 	private IndexType(
-			final NumericIndexStrategy defaultStrategy,
-			final CommonIndexModel defaultIndexModel ) {
-		this.defaultStrategy = defaultStrategy;
-		this.defaultIndexModel = defaultIndexModel;
+			final DimensionalityType dimensionalityType,
+			final DataType dataType ) {
+		this.dimensionalityType = dimensionalityType;
+		this.dataType = dataType;
 	}
 
-	public NumericIndexStrategy getDefaultIndexStrategy() {
-		return defaultStrategy;
+	public NumericIndexStrategy createDefaultIndexStrategy() {
+		return dimensionalityType.getIndexStrategyFactory().createIndexStrategy(
+				dataType);
 	}
 
 	public CommonIndexModel getDefaultIndexModel() {
-		return defaultIndexModel;
+		return dimensionalityType.getDefaultIndexModel();
+	}
+
+	public String getDefaultId() {
+		return dimensionalityType.name() + "_" + dataType.name() + "_INDEX";
 	}
 
 	public Index createDefaultIndex() {
-		return new Index(
-				defaultStrategy,
-				defaultIndexModel);
+		return new CustomIdIndex(
+				createDefaultIndexStrategy(),
+				getDefaultIndexModel(),
+				dimensionalityType,
+				dataType,
+				new ByteArrayId(
+						getDefaultId()));
 	}
 }

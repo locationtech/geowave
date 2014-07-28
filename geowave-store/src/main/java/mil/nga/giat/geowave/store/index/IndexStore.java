@@ -1,8 +1,7 @@
 package mil.nga.giat.geowave.store.index;
 
-import java.util.Iterator;
-
 import mil.nga.giat.geowave.index.ByteArrayId;
+import mil.nga.giat.geowave.store.CloseableIterator;
 
 /**
  * This is responsible for persisting index configuration (either in memory or
@@ -19,5 +18,5 @@ public interface IndexStore
 	public boolean indexExists(
 			ByteArrayId indexId );
 
-	public Iterator<Index> getIndices();
+	public CloseableIterator<Index> getIndices();
 }

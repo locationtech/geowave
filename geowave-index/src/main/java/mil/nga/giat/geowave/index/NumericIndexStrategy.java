@@ -13,58 +13,14 @@ import mil.nga.giat.geowave.index.sfc.tiered.TieredSFCIndexFactory;
 
 /**
  * Interface which defines a numeric index strategy.
- * 
+ *
  */
 public interface NumericIndexStrategy extends
 		Persistable
 {
-	public static class SpatialFactory
-	{
-		public static final int LONGITUDE_BITS = 31;
-		public static final int LATITUDE_BITS = 31;
-		private static final NumericDimensionDefinition[] SPATIAL_DIMENSIONS = new NumericDimensionDefinition[] {
-			new LongitudeDefinition(),
-			new LatitudeDefinition()
-		};
-
-		public static NumericIndexStrategy createIndexStrategy() {
-			return TieredSFCIndexFactory.createEqualIntervalPrecisionTieredStrategy(
-					SPATIAL_DIMENSIONS,
-					new int[] {
-						LONGITUDE_BITS,
-						LATITUDE_BITS
-					},
-					SFCType.HILBERT);
-		}
-	}
-
-	public static class SpatialTemporalFactory
-	{
-		private static final int LONGITUDE_BITS = 20;
-		private static final int LATITUDE_BITS = 20;
-		private static final int TIME_BITS = 20;
-		private static final NumericDimensionDefinition[] SPATIAL_TEMPORAL_DIMENSIONS = new NumericDimensionDefinition[] {
-			new LongitudeDefinition(),
-			new LatitudeDefinition(),
-			new TimeDefinition(
-					Unit.YEAR),
-		};
-
-		public static NumericIndexStrategy createIndexStrategy() {
-			return TieredSFCIndexFactory.createEqualIntervalPrecisionTieredStrategy(
-					SPATIAL_TEMPORAL_DIMENSIONS,
-					new int[] {
-						LONGITUDE_BITS,
-						LATITUDE_BITS,
-						TIME_BITS
-					},
-					SFCType.HILBERT);
-		}
-	}
-
 	/**
 	 * Returns a list of query ranges for an specified numeric range.
-	 * 
+	 *
 	 * @param indexedRange
 	 *            defines the numeric range for the query
 	 * @return a List of query ranges
@@ -74,7 +30,7 @@ public interface NumericIndexStrategy extends
 
 	/**
 	 * Returns a list of query ranges for an specified numeric range.
-	 * 
+	 *
 	 * @param indexedRange
 	 *            defines the numeric range for the query
 	 * @param maxRangeDecomposition
@@ -88,7 +44,7 @@ public interface NumericIndexStrategy extends
 
 	/**
 	 * Returns a list of id's for insertion.
-	 * 
+	 *
 	 * @param indexedData
 	 *            defines the numeric data to be indexed
 	 * @return a List of insertion ID's
@@ -97,18 +53,47 @@ public interface NumericIndexStrategy extends
 			MultiDimensionalNumericData indexedData );
 
 	/**
+	 * Returns the range that the given ID represents
+	 *
+	 * @param insertionId
+	 *            the insertion ID to determine a range for
+	 * @return the range that the given insertion ID represents, inclusive on
+	 *         the start and exclusive on the end for the range
+	 */
+	public MultiDimensionalNumericData getRangeForId(
+			ByteArrayId insertionId );
+
+	/**
+	 * Return an integer coordinate in each dimension for the given insertion ID
+	 *
+	 * @param insertionId
+	 *            the insertion ID to determine the coordinates for
+	 * @return the integer coordinate that the given insertion ID represents
+	 */
+	public long[] getCoordinatesPerDimension(
+			ByteArrayId insertionId );
+
+	/**
 	 * Returns an array of dimension definitions that defines this index
 	 * strategy, the array is in the order that is expected within
 	 * multidimensional numeric data that is passed to this index strategy
-	 * 
+	 *
 	 * @return the ordered array of dimension definitions that represents this
 	 *         index strategy
 	 */
 	public NumericDimensionDefinition[] getOrderedDimensionDefinitions();
 
 	/**
-	 * 
+	 *
 	 * @return a unique ID associated with the index strategy
 	 */
 	public String getId();
+
+	/***
+	 * Get the range/size of a single insertion ID for each dimension at the
+	 * highest precision supported by this index strategy
+	 *
+	 * @return the range of a single insertion ID for each dimension
+	 */
+	public double[] getHighestPrecisionIdRangePerDimension();
 }

@@ -11,6 +11,7 @@ import mil.nga.giat.geowave.index.dimension.TimeDefinition;
 import mil.nga.giat.geowave.index.dimension.bin.BinRange;
 import mil.nga.giat.geowave.index.dimension.bin.TemporalBinningStrategy.Unit;
 import mil.nga.giat.geowave.index.sfc.data.NumericData;
+import mil.nga.giat.geowave.index.sfc.data.NumericRange;
 import mil.nga.giat.geowave.store.data.field.FieldReader;
 import mil.nga.giat.geowave.store.data.field.FieldWriter;
 
@@ -69,9 +70,36 @@ public class TimeField implements
 	}
 
 	@Override
+	public double denormalize(
+			final double value ) {
+		return baseDefinition.denormalize(value);
+	}
+
+	@Override
 	public BinRange[] getNormalizedRanges(
 			final NumericData index ) {
 		return baseDefinition.getNormalizedRanges(index);
+	}
+
+	@Override
+	public NumericRange getDenormalizedRange(
+			final BinRange range ) {
+		return baseDefinition.getDenormalizedRange(range);
+	}
+
+	@Override
+	public int getFixedBinIdSize() {
+		return baseDefinition.getFixedBinIdSize();
+	}
+
+	@Override
+	public double getRange() {
+		return baseDefinition.getRange();
+	}
+	
+	@Override
+	public NumericRange getBounds() {
+		return baseDefinition.getBounds();
 	}
 
 	@Override

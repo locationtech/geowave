@@ -1,8 +1,8 @@
 package mil.nga.giat.geowave.analytics;
 
-import mil.nga.giat.geowave.gt.DecimationProcess;
-import mil.nga.giat.geowave.gt.datastore.GeoWaveFeatureCollection;
-import mil.nga.giat.geowave.gt.datastore.GeoWaveGTDataStore;
+import mil.nga.giat.geowave.vector.plugin.DecimationProcess;
+import mil.nga.giat.geowave.vector.plugin.GeoWaveFeatureCollection;
+import mil.nga.giat.geowave.vector.plugin.GeoWaveGTDataStore;
 
 import org.apache.log4j.Logger;
 import org.geotools.coverage.CoverageFactoryFinder;

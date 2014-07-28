@@ -5,14 +5,14 @@
 	<parent>
 		<groupId>mil.nga.giat</groupId>
 		<artifactId>geowave-parent</artifactId>
-		<version>0.8.0-SNAPSHOT</version>
+		<version>0.8.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>geowave-examples</artifactId>
 	<dependencies>
 		<dependency>
 			<groupId>mil.nga.giat</groupId>
 			<artifactId>geowave-types</artifactId>
-			<version>0.8.0-SNAPSHOT</version>
+			<version>0.8.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 	<build>

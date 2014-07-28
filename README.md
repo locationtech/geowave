@@ -1,4 +1,4 @@
-# GeoWave 0.8.0	
+# GeoWave 0.8.1	
 ## About  
 
 <img align="left" src="https://travis-ci.org/ngageoint/geowave.svg?branch=master"/>
@@ -48,7 +48,7 @@ Software source code previously released under an open source license and then m
 This *ultra* quickstart assumes you have [Apache Maven](http://maven.apache.org/), [Git](http://git-scm.com/), and [Java](http://www.oracle.com/technetwork/java/javase/downloads/index.html) (>= 1.7) installed on your system and on the path.  
 
 To view the data (via standard [OGC](http://www.opengeospatial.org/) services) a [GeoServer](http://geoserver.org/) instance >= 2.5 is required due to [GEOT-4587](http://jira.codehaus.org/browse/GEOT-4587).  
-[GeoServer](http://geoserver.org/) 2.5 with [Geotools](http://www.geotools.org/) 11.0 the most tested version.
+[GeoServer](http://geoserver.org/) 2.5.2 with [Geotools](http://www.geotools.org/) 11.2 the most tested version.
 
 [Apache Accumulo](http://projects.apache.org/projects/accumulo.html) version 1.5 or greater is required.  1.5.0, 1.5.1, and 1.6.0 have all been tested. 
 
@@ -65,38 +65,17 @@ Since GeoWave isn't currently in maven central we will build and install a local
 	$ git clone git@github.com:ngageoint/geowave.git
 	$ cd geowave && mvn install 
 
-If everything worked as expected you should see something like
-
-    [INFO] ------------------------------------------------------------------------
-    [INFO] Reactor Summary:
-    [INFO]
-    [INFO] geowave-parent .................................... SUCCESS [1.132s]
-    [INFO] geowave-index ..................................... SUCCESS [6.559s]
-    [INFO] geowave-store ..................................... SUCCESS [2.046s]
-    [INFO] geowave-accumulo .................................. SUCCESS [4.402s]
-    [INFO] geowave-gt ........................................ SUCCESS [5.056s]
-    [INFO] geowave-ingest .................................... SUCCESS [2.847s]
-    [INFO] geowave-analytics ................................. SUCCESS [4.749s]
-    [INFO] geowave-test ...................................... SUCCESS [2.158s]
-    [INFO] ------------------------------------------------------------------------
-    [INFO] BUILD SUCCESS
-    [INFO] ------------------------------------------------------------------------
-    [INFO] Total time: 29.270s
-    [INFO] Finished at: Mon Jun 09 21:22:16 EDT 2014
-    [INFO] Final Memory: 80M/382M
-    [INFO] ------------------------------------------------------------------------
-
 
 ### Deploy: GeoServer
 
 First we need to build the geoserver plugin - from the geowave root directory:
     
-    $ cd geowave-gt
+    $ cd geowave-deploy
     $ mvn package -Pgeotools-container-singlejar
 
 let's assume you have geoserver deployed in a tomcat container in /opt/tomcat
 
-    $ cp target/geowave-gt-0.7.0-geoserver-singlejar.jar /opt/tomcat/webapps/geoserver/WEB-INF/lib/
+    $ cp target/geowave-gt-0.8.0-geoserver-singlejar.jar /opt/tomcat/webapps/geoserver/WEB-INF/lib/
 
 and re-start tomcat
 
@@ -104,12 +83,12 @@ and re-start tomcat
 
 This should be very familiar by now; from the geowave root directory:
 
-    $ cd geowave-gt
+    $ cd geowave-deploy
     $ mvn package -Paccumulo-container-singlejar
 
 This distributable needs to be in the Accumulo classpath on every tablet server.
 
-See: [Installtion Page](https://ngageoint.github.io/geowave//installation.html) for more information about deployment.
+See: [Installation Page](https://ngageoint.github.io/geowave//installation.html) for more information about deployment.
 
 ### GeoWave System Integration Test
 
@@ -124,7 +103,7 @@ If any of these configuration parameters are left unspecified the default integr
 The Travis CI test matrix will test all combinations of the following releases using Oracle JDK7:  
 Accumulo: 1.5.1 and 1.6.0  
 Hadoop: 2.0.0-cdh4.7.0, 2.3.0-cdh5.0.3, and 1.2.0.23*  
-GeoTools/GeoServer: 11.0/2.5 and 11.2/2.5.2  
+GeoTools/GeoServer: 11.2/2.5.2  
 
 \* Accumulo 1.5.1 and Hadoop 1.2.0.23 is the one exception that is not tested and has been found to fail starting the MiniAccumuloCluster in the integration test
 

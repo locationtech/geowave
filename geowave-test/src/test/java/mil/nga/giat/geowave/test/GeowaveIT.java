@@ -15,11 +15,12 @@ import java.util.TimeZone;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import mil.nga.giat.geowave.accumulo.AccumuloAdapterStore;
 import mil.nga.giat.geowave.accumulo.AccumuloDataStore;
-import mil.nga.giat.geowave.accumulo.AccumuloIndexStore;
 import mil.nga.giat.geowave.accumulo.AccumuloOperations;
 import mil.nga.giat.geowave.accumulo.BasicAccumuloOperations;
+import mil.nga.giat.geowave.accumulo.metadata.AccumuloAdapterStore;
+import mil.nga.giat.geowave.accumulo.metadata.AccumuloDataStatisticsStore;
+import mil.nga.giat.geowave.accumulo.metadata.AccumuloIndexStore;
 import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.ingest.IngestMain;
 import mil.nga.giat.geowave.store.CloseableIterator;
@@ -90,13 +91,13 @@ public class GeowaveIT
 
 	@Test
 	public void testIngestAndQuerySpatialPointsAndLines() {
-		final Index spatialIndex = IndexType.SPATIAL.createDefaultIndex();
+		final Index spatialIndex = IndexType.SPATIAL_VECTOR.createDefaultIndex();
 		// ingest both lines and points
 		testIngest(
-				IndexType.SPATIAL,
+				IndexType.SPATIAL_VECTOR,
 				HAIL_SHAPEFILE_FILE);
 		testIngest(
-				IndexType.SPATIAL,
+				IndexType.SPATIAL_VECTOR,
 				TORNADO_TRACKS_SHAPEFILE_FILE);
 
 		try {
@@ -140,7 +141,7 @@ public class GeowaveIT
 			testDelete(
 					new File(
 							TEST_POLYGON_FILTER_FILE).toURI().toURL(),
-					IndexType.SPATIAL);
+					IndexType.SPATIAL_VECTOR);
 		}
 		catch (final Exception e) {
 			e.printStackTrace();
@@ -153,10 +154,10 @@ public class GeowaveIT
 	public void testIngestAndQuerySpatialTemporalPointsAndLines() {
 		// ingest both lines and points
 		testIngest(
-				IndexType.SPATIAL_TEMPORAL,
+				IndexType.SPATIAL_TEMPORAL_VECTOR,
 				HAIL_SHAPEFILE_FILE);
 		testIngest(
-				IndexType.SPATIAL_TEMPORAL,
+				IndexType.SPATIAL_TEMPORAL_VECTOR,
 				TORNADO_TRACKS_SHAPEFILE_FILE);
 		try {
 			testQuery(
@@ -196,7 +197,7 @@ public class GeowaveIT
 			testDelete(
 					new File(
 							TEST_POLYGON_TEMPORAL_FILTER_FILE).toURI().toURL(),
-					IndexType.SPATIAL_TEMPORAL);
+					IndexType.SPATIAL_TEMPORAL_VECTOR);
 		}
 		catch (final Exception e) {
 			e.printStackTrace();
@@ -296,7 +297,7 @@ public class GeowaveIT
 		// ingest framework's main method and pre-defined commandline arguments
 		LOGGER.warn("Ingesting '" + ingestFilePath + "' - this may take several minutes...");
 		final String[] args = StringUtils.split(
-				"-localingest -t geotools -b " + ingestFilePath + " -z " + zookeeper + " -i " + accumuloInstance + " -u " + accumuloUser + " -p " + accumuloPassword + " -n " + TEST_NAMESPACE + " -index " + (indexType.equals(IndexType.SPATIAL) ? "spatial" : "spatial-temporal"),
+				"-localingest -t geotools-vector -b " + ingestFilePath + " -z " + zookeeper + " -i " + accumuloInstance + " -u " + accumuloUser + " -p " + accumuloPassword + " -n " + TEST_NAMESPACE + " -dim " + (indexType.equals(IndexType.SPATIAL_VECTOR) ? "spatial" : "spatial-temporal"),
 				' ');
 		IngestMain.main(args);
 	}
@@ -331,6 +332,8 @@ public class GeowaveIT
 				new AccumuloIndexStore(
 						accumuloOperations),
 				new AccumuloAdapterStore(
+						accumuloOperations),
+				new AccumuloDataStatisticsStore(
 						accumuloOperations),
 				accumuloOperations);
 		final Map<String, Object> map = new HashMap<String, Object>();
@@ -430,6 +433,8 @@ public class GeowaveIT
 				new AccumuloIndexStore(
 						accumuloOperations),
 				new AccumuloAdapterStore(
+						accumuloOperations),
+				new AccumuloDataStatisticsStore(
 						accumuloOperations),
 				accumuloOperations);
 		final Map<String, Object> map = new HashMap<String, Object>();

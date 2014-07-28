@@ -4,6 +4,7 @@ import mil.nga.giat.geowave.index.PersistenceUtils;
 import mil.nga.giat.geowave.index.dimension.bin.BinRange;
 import mil.nga.giat.geowave.index.dimension.bin.BinningStrategy;
 import mil.nga.giat.geowave.index.sfc.data.NumericData;
+import mil.nga.giat.geowave.index.sfc.data.NumericRange;
 
 /**
  * Because space filling curves require an extent (minimum & maximum), the
@@ -50,6 +51,17 @@ public class UnboundedDimensionDefinition extends
 	 */
 	public BinningStrategy getBinningStrategy() {
 		return binningStrategy;
+	}
+
+	@Override
+	public NumericRange getDenormalizedRange(
+			BinRange range ) {
+		return binningStrategy.getDenormalizedRanges(range);
+	}
+
+	@Override
+	public int getFixedBinIdSize() {
+		return binningStrategy.getFixedBinIdSize();
 	}
 
 	@Override

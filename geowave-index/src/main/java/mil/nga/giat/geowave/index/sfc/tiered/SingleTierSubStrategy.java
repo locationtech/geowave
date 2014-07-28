@@ -7,7 +7,6 @@ import java.util.List;
 
 import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.index.ByteArrayRange;
-import mil.nga.giat.geowave.index.ByteArrayUtils;
 import mil.nga.giat.geowave.index.NumericIndexStrategy;
 import mil.nga.giat.geowave.index.PersistenceUtils;
 import mil.nga.giat.geowave.index.StringUtils;
@@ -20,7 +19,7 @@ import mil.nga.giat.geowave.index.sfc.data.MultiDimensionalNumericData;
  * This class wraps a single SpaceFillingCurve implementation with a tiered
  * approach to indexing (an SFC with a tier ID). This can be utilized by an
  * overall HierarchicalNumericIndexStrategy as an encapsulated sub-strategy.
- * 
+ *
  */
 public class SingleTierSubStrategy implements
 		NumericIndexStrategy
@@ -63,6 +62,26 @@ public class SingleTierSubStrategy implements
 	}
 
 	@Override
+	public MultiDimensionalNumericData getRangeForId(
+			final ByteArrayId insertionId ) {
+		final byte[] rowId = insertionId.getBytes();
+		return TieredSFCIndexStrategy.getRangeForId(
+				rowId,
+				baseDefinitions,
+				sfc);
+	}
+
+	@Override
+	public long[] getCoordinatesPerDimension(
+			final ByteArrayId insertionId ) {
+		final byte[] rowId = insertionId.getBytes();
+		return TieredSFCIndexStrategy.getCoordinatesForId(
+				rowId,
+				baseDefinitions,
+				sfc);
+	}
+
+	@Override
 	public List<ByteArrayId> getInsertionIds(
 			final MultiDimensionalNumericData indexedData ) {
 		final BinnedNumericDataset[] ranges = BinnedNumericDataset.applyBins(
@@ -70,21 +89,16 @@ public class SingleTierSubStrategy implements
 				baseDefinitions);
 		// place each of these indices into a single row ID at a tier that will
 		// fit its min and max
-		final List<ByteArrayId> rowIds = new ArrayList<ByteArrayId>(
-				ranges.length);
+		final List<ByteArrayId> rowIds = new ArrayList<ByteArrayId>();
 		for (final BinnedNumericDataset range : ranges) {
-			final double[] values = range.getCentroidPerDimension();
-
-			final byte[] tierAndBinId = ByteArrayUtils.combineArrays(
-					new byte[] {
-						tier
-					},
-					range.getBinId());
-			final byte[] rowId = sfc.getId(values);
-			rowIds.add(new ByteArrayId(
-					ByteArrayUtils.combineArrays(
-							tierAndBinId,
-							rowId)));
+			final List<ByteArrayId> binRowIds = TieredSFCIndexStrategy.getRowIdsAtTier(
+					range,
+					tier,
+					sfc,
+					null);
+			if (binRowIds != null) {
+				rowIds.addAll(binRowIds);
+			}
 		}
 		return rowIds;
 	}
@@ -186,4 +200,8 @@ public class SingleTierSubStrategy implements
 		}
 	}
 
+	@Override
+	public double[] getHighestPrecisionIdRangePerDimension() {
+		return sfc.getInsertionIdRangePerDimension();
+	}
 }

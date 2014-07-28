@@ -4,6 +4,7 @@ import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.index.Persistable;
 import mil.nga.giat.geowave.store.data.DataReader;
 import mil.nga.giat.geowave.store.index.CommonIndexModel;
+import mil.nga.giat.geowave.store.index.Index;
 
 /**
  * This interface should be implemented by any custom data type that must be
@@ -11,7 +12,7 @@ import mil.nga.giat.geowave.store.index.CommonIndexModel;
  * well as translating the data into values and queries that can be used to
  * index. Additionally, each entry is responsible for providing visibility if
  * applicable.
- * 
+ *
  * @param <T>
  *            The type for the data elements that are being adapted
  */
@@ -21,15 +22,11 @@ public interface DataAdapter<T> extends
 {
 	/**
 	 * Return the adapter ID
+	 *
 	 * @return a unique identifier for this adapter
 	 */
 	public ByteArrayId getAdapterId();
 
-	/**
-	 * 
-	 * @param entry
-	 * @return
-	 */
 	public boolean isSupported(
 			T entry );
 
@@ -37,11 +34,10 @@ public interface DataAdapter<T> extends
 			T entry );
 
 	public T decode(
-			AdapterPersistenceEncoding data,
-			CommonIndexModel indexModel );
+			IndexedAdapterPersistenceEncoding data,
+			Index index );
 
 	public AdapterPersistenceEncoding encode(
 			T entry,
 			CommonIndexModel indexModel );
-
 }

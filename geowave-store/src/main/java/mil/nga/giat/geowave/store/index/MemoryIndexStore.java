@@ -1,10 +1,11 @@
 package mil.nga.giat.geowave.store.index;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 import mil.nga.giat.geowave.index.ByteArrayId;
+import mil.nga.giat.geowave.store.CloseableIterator;
 
 /**
  * This is a simple HashMap based in-memory implementation of the IndexStore and
@@ -44,8 +45,10 @@ public class MemoryIndexStore implements
 	}
 
 	@Override
-	public Iterator<Index> getIndices() {
-		return indexMap.values().iterator();
+	public CloseableIterator<Index> getIndices() {
+		return new CloseableIterator.Wrapper<Index>(
+				new ArrayList<Index>(
+						indexMap.values()).iterator());
 	}
 
 }

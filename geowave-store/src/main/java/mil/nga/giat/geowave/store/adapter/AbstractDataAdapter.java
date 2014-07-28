@@ -23,6 +23,7 @@ import mil.nga.giat.geowave.store.dimension.DimensionField;
 import mil.nga.giat.geowave.store.filter.GenericTypeResolver;
 import mil.nga.giat.geowave.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.store.index.CommonIndexValue;
+import mil.nga.giat.geowave.store.index.Index;
 
 import org.apache.log4j.Logger;
 
@@ -36,7 +37,7 @@ import org.apache.log4j.Logger;
  * a field (for example if there are multiple ways of encoding/decoding the same
  * type). Otherwise the type matching handlers will simply match any field with
  * the same type as its generic field type.
- * 
+ *
  * @param <T>
  *            The type for the entries handled by this adapter
  */
@@ -162,9 +163,10 @@ abstract public class AbstractDataAdapter<T> implements
 	@SuppressWarnings("unchecked")
 	@Override
 	public T decode(
-			final AdapterPersistenceEncoding data,
-			final CommonIndexModel indexModel ) {
+			final IndexedAdapterPersistenceEncoding data,
+			final Index index ) {
 		final RowBuilder<T, Object> builder = newBuilder();
+		final CommonIndexModel indexModel = index.getIndexModel();
 		for (final DimensionField<? extends CommonIndexValue> dimension : indexModel.getDimensions()) {
 			final IndexFieldHandler<T, CommonIndexValue, Object> fieldHandler = (IndexFieldHandler<T, CommonIndexValue, Object>) getFieldHandler(dimension);
 			if (fieldHandler == null) {

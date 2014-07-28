@@ -56,9 +56,6 @@ abstract public class AbstractCommandLineDriver
 				" ",
 				"_");
 		ingestTypeName = ingestTypeName.replaceAll(
-				"-",
-				"_");
-		ingestTypeName = ingestTypeName.replaceAll(
 				",",
 				"");
 		return ingestTypeName;

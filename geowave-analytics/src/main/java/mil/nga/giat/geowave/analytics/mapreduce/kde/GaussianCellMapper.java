@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import mil.nga.giat.geowave.accumulo.AccumuloRowId;
-import mil.nga.giat.geowave.accumulo.AccumuloUtils;
+import mil.nga.giat.geowave.accumulo.util.AccumuloUtils;
 import mil.nga.giat.geowave.analytics.CellCounter;
 import mil.nga.giat.geowave.analytics.GaussianFilter;
 import mil.nga.giat.geowave.index.ByteArrayId;
@@ -48,7 +48,7 @@ public class GaussianCellMapper extends
 			throws IOException,
 			InterruptedException {
 		super.setup(context);
-		index = IndexType.SPATIAL.createDefaultIndex();
+		index = IndexType.SPATIAL_VECTOR.createDefaultIndex();
 		final String adapterStr = context.getConfiguration().get(
 				DATA_ADAPTER_KEY);
 		final byte[] adapterBytes = ByteArrayUtils.byteArrayFromString(adapterStr);

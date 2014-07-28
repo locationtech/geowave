@@ -2,6 +2,7 @@ package mil.nga.giat.geowave.index.dimension.bin;
 
 import mil.nga.giat.geowave.index.Persistable;
 import mil.nga.giat.geowave.index.sfc.data.NumericData;
+import mil.nga.giat.geowave.index.sfc.data.NumericRange;
 
 /**
  * This interface enables a dimension to define a methodology for applying bins
@@ -54,4 +55,24 @@ public interface BinningStrategy extends
 	 */
 	public BinRange[] getNormalizedRanges(
 			NumericData index );
+
+	/**
+	 * Given a set of normalized ranges (each of which are confined to the
+	 * normalized min and max of this binning strategy) with a bin for each of
+	 * the ranges, this will calculate the original unbinned range.
+	 * 
+	 * @param index
+	 *            the normalized and binned range
+	 * @return the original query range represented by the normalized and binned
+	 *         range
+	 */
+	public NumericRange getDenormalizedRanges(
+			BinRange binnedRange );
+
+	/**
+	 * Return the fixed size for the bin ID used by this binning strategy
+	 * 
+	 * @return the length of the bin ID
+	 */
+	public int getFixedBinIdSize();
 }

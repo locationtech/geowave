@@ -46,6 +46,48 @@ public interface HilbertSFCOperations
 			SFCDimensionDefinition[] dimensionDefinitions );
 
 	/**
+	 * Convert the single SFC value to the ranges of raw values that it
+	 * represents
+	 * 
+	 * @param hilbertValue
+	 *            the computed hilbert value to invert back to native
+	 *            coordinates
+	 * @param compactHilbertCurve
+	 *            the compact Hilbert curve to use for the conversion
+	 * @param dimensionDefinitions
+	 *            a set of dimension definitions to use to normalize the raw
+	 *            values
+	 * @return the ranges of values that the hilbert represents, inclusive on
+	 *         start and exclusive on end for each range
+	 */
+	public MultiDimensionalNumericData convertFromHilbert(
+			byte[] hilbertValue,
+			CompactHilbertCurve compactHilbertCurve,
+			SFCDimensionDefinition[] dimensionDefinitions );
+
+	/**
+	 * Convert the single SFC value to the per dimension SFC coordinates that it
+	 * represents
+	 * 
+	 * @param hilbertValue
+	 *            the computed hilbert value to invert back to integer
+	 *            coordinates per dimension
+	 * @param compactHilbertCurve
+	 *            the compact Hilbert curve to use for the conversion
+	 * @param dimensionDefinitions
+	 *            a set of dimension definitions to use to determine the bits of
+	 *            precision per dimension that is expected in the compact
+	 *            hilbert curve
+	 * 
+	 * @return the integer coordinate value per dimension that the given hilbert
+	 *         value represents
+	 */
+	public long[] indicesFromHilbert(
+			byte[] hilbertValue,
+			CompactHilbertCurve compactHilbertCurve,
+			SFCDimensionDefinition[] dimensionDefinitions );
+
+	/**
 	 * Decompose the raw range per dimension values into an optimal set of
 	 * compact Hilbert SFC ranges
 	 * 
@@ -88,5 +130,16 @@ public interface HilbertSFCOperations
 	 */
 	public BigInteger getEstimatedIdCount(
 			MultiDimensionalNumericData data,
+			SFCDimensionDefinition[] dimensionDefinitions );
+
+	/***
+	 * Get the range/size of a single insertion ID for each dimension
+	 * 
+	 * @param dimensionDefinitions
+	 *            a set of dimension definitions to use to calculate the range
+	 *            of each insertion ID
+	 * @return the range of a single insertion ID for each dimension
+	 */
+	public double[] getInsertionIdRangePerDimension(
 			SFCDimensionDefinition[] dimensionDefinitions );
 }

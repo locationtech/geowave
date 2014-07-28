@@ -2,13 +2,13 @@ package mil.nga.giat.geowave.analytics.mapreduce.kde.compare;
 
 import java.io.IOException;
 
-import mil.nga.giat.geowave.accumulo.AccumuloAdapterStore;
-import mil.nga.giat.geowave.accumulo.AccumuloIndexStore;
 import mil.nga.giat.geowave.accumulo.BasicAccumuloOperations;
+import mil.nga.giat.geowave.accumulo.metadata.AccumuloAdapterStore;
+import mil.nga.giat.geowave.accumulo.metadata.AccumuloIndexStore;
 import mil.nga.giat.geowave.analytics.mapreduce.kde.AccumuloKDEReducer;
 import mil.nga.giat.geowave.analytics.mapreduce.kde.KDEJobRunner;
-import mil.nga.giat.geowave.gt.adapter.FeatureDataAdapter;
 import mil.nga.giat.geowave.store.index.Index;
+import mil.nga.giat.geowave.vector.adapter.FeatureDataAdapter;
 
 import org.apache.accumulo.core.client.mapreduce.AccumuloOutputFormat;
 import org.apache.accumulo.core.client.security.tokens.PasswordToken;
