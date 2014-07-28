@@ -1,14 +1,13 @@
 package mil.nga.giat.geowave.examples.ingest;
 
+import java.io.IOException;
 import java.util.Date;
-import java.util.Iterator;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
 
 import mil.nga.giat.geowave.accumulo.BasicAccumuloOperations;
 import mil.nga.giat.geowave.gt.adapter.FeatureDataAdapter;
 import mil.nga.giat.geowave.store.DataStore;
 import mil.nga.giat.geowave.store.GeometryUtils;
+import mil.nga.giat.geowave.store.IndexWriter;
 import mil.nga.giat.geowave.store.index.Index;
 
 import org.apache.log4j.Logger;
@@ -18,12 +17,10 @@ import org.opengis.feature.simple.SimpleFeatureType;
 
 import com.vividsolutions.jts.geom.Coordinate;
 
-public class SimpleIngestProducerConsumer extends
+public class SimpleIngestIndexWriter extends
 		SimpleIngest
 {
-
-	private static Logger log = Logger.getLogger(SimpleIngestProducerConsumer.class);
-	private final FeatureCollection features = new FeatureCollection();
+	private static Logger log = Logger.getLogger(SimpleIngestIndexWriter.class);
 
 	public static void main(
 			final String[] args ) {
@@ -86,97 +83,44 @@ public class SimpleIngestProducerConsumer extends
 		// overwrite the existing feature)
 		int featureId = 0;
 
-		final Thread ingestThread = new Thread(
-				new Runnable() {
-					@Override
-					public void run() {
-						geowaveDataStore.ingest(
-								adapter,
-								index,
-								features);
-					}
-				},
-				"Ingestion Thread");
+		// get a handle on a GeoWave index writer which wraps the Accumulo
+		// BatchWriter, make sure to close it (here we use a try with resources
+		// block to close it automatically)
+		try (IndexWriter indexWriter = geowaveDataStore.createIndexWriter(index)) {
+			// build a grid of points across the globe at each whole
+			// lattitude/longitude intersection
+			for (int longitude = -180; longitude <= 180; longitude++) {
+				for (int latitude = -90; latitude <= 90; latitude++) {
+					pointBuilder.set(
+							"geometry",
+							GeometryUtils.GEOMETRY_FACTORY.createPoint(new Coordinate(
+									longitude,
+									latitude)));
+					pointBuilder.set(
+							"TimeStamp",
+							new Date());
+					pointBuilder.set(
+							"Latitude",
+							latitude);
+					pointBuilder.set(
+							"Longitude",
+							longitude);
+					// Note since trajectoryID and comment are marked as
+					// nillable we
+					// don't need to set them (they default ot null).
 
-		ingestThread.start();
-
-		// build a grid of points across the globe at each whole
-		// lattitude/longitude intersection
-		for (int longitude = -180; longitude <= 180; longitude++) {
-			for (int latitude = -90; latitude <= 90; latitude++) {
-				pointBuilder.set(
-						"geometry",
-						GeometryUtils.GEOMETRY_FACTORY.createPoint(new Coordinate(
-								longitude,
-								latitude)));
-				pointBuilder.set(
-						"TimeStamp",
-						new Date());
-				pointBuilder.set(
-						"Latitude",
-						latitude);
-				pointBuilder.set(
-						"Longitude",
-						longitude);
-				// Note since trajectoryID and comment are marked as nillable we
-				// don't need to set them (they default ot null).
-
-				final SimpleFeature sft = pointBuilder.buildFeature(String.valueOf(featureId));
-				featureId++;
-				features.add(sft);
+					final SimpleFeature sft = pointBuilder.buildFeature(String.valueOf(featureId));
+					featureId++;
+					indexWriter.write(
+							adapter,
+							sft);
+				}
 			}
 		}
-		features.ingestCompleted = true;
-		try {
-			ingestThread.join();
-		}
-		catch (final InterruptedException e) {
-			log.error(
-					"Error joining ingest thread",
+		catch (final IOException e) {
+			log.warn(
+					"Unable to close index writer",
 					e);
-		}
-	}
-
-	protected class FeatureCollection implements
-			Iterator<SimpleFeature>
-	{
-		private final BlockingQueue<SimpleFeature> queue = new LinkedBlockingQueue<SimpleFeature>(
-				10000);
-		public boolean ingestCompleted = false;
-
-		public void add(
-				final SimpleFeature sft ) {
-			try {
-				queue.put(sft);
-			}
-			catch (final InterruptedException e) {
-				log.error(
-						"Error inserting next item into queue",
-						e);
-			}
-		}
-
-		@Override
-		public boolean hasNext() {
-			return !(ingestCompleted && queue.isEmpty());
-		}
-
-		@Override
-		public SimpleFeature next() {
-			try {
-				return queue.take();
-			}
-			catch (final InterruptedException e) {
-				log.error(
-						"Error getting next item from queue",
-						e);
-			}
-			return null;
-		}
-
-		@Override
-		public void remove() {
-			log.error("Remove called, method not implemented");
 		}
 	}
 }
