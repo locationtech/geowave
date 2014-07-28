@@ -213,7 +213,7 @@ public class TdriveIngestPlugin implements
 				"geometry",
 				GeometryUtils.GEOMETRY_FACTORY.createPoint(new Coordinate(
 						tdrivePoint.getLongitude(),
-						tdrivePoint.getLattitude())));
+						tdrivePoint.getLatitude())));
 		tdrivepointBuilder.set(
 				"taxiid",
 				tdrivePoint.getTaxiid());
@@ -226,7 +226,7 @@ public class TdriveIngestPlugin implements
 						tdrivePoint.getTimestamp()));
 		tdrivepointBuilder.set(
 				"Latsitude",
-				tdrivePoint.getLattitude());
+				tdrivePoint.getLatitude());
 		tdrivepointBuilder.set(
 				"Longitude",
 				tdrivePoint.getLongitude());
