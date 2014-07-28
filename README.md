@@ -116,11 +116,20 @@ A specific Accumulo instance can be configured either directly within this pom.x
 
 If any of these configuration parameters are left unspecified the default integration test will use a MiniAccumuloCluster created within a temporary directory.  For this to work on Windows, make sure Cygwin is installed and a "CYGPATH" environment variable must reference the &lt;CYGWIN_HOME&gt;/bin/cygpath.exe file.  
 
+### Supported Versions
+
+The Travis CI test matrix will test all combinations of the following releases using Oracle JDK7:  
+Accumulo: 1.5.1 and 1.6.0  
+Hadoop: 2.0.0-cdh4.7.0, 2.3.0-cdh5.0.3, and 1.2.0.23*  
+GeoTools/GeoServer: 11.0/2.5 and 11.2/2.5.2  
+
+\* Accumulo 1.5.1 and Hadoop 1.2.0.23 is the one exception that is not tested and has been found to fail starting the AccumuloMiniCluster in the integration test
+
 ### Ingest Data
 
 *Coming Soon! With useful details!*
 
-(basically see  geowave-ingest::mil.nga.giat.geowave.ingest.VectorFileIngest for an example that can ingest any geotools supported format) 
+(basically run geowave-ingest::mil.nga.giat.geowave.ingest.IngestMain with the geowave-types module included in the classpath - geowave-ingest uses SPI to discover supported formats and geowave-types provides a set of basic formats) 
 
 
 ### View in GeoServer
