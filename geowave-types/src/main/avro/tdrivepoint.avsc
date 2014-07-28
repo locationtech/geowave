@@ -15,7 +15,7 @@
 				"type" : "long",
 				"doc"  : "timestamp of event"
 			},{
-				"name" : "lattitude",
+				"name" : "latitude",
 				"type" : "double",
 				"doc"  : "lattitude of taxi point event"
 			},{
