@@ -39,6 +39,9 @@ All pull request contributions to this project will be released under the Apache
 
 Software source code previously released under an open source license and then modified by NGA staff is considered a "joint work" (see *17 USC  101*); it is partially copyrighted, partially public domain, and as a whole is protected by the copyrights of the non-government authors and must be released according to the terms of the original open source license.
 
+##In the News###
+Information Week, [Federal IT Innovation Depends On Being Open](http://www.informationweek.com/government/open-government/federal-it-innovation-depends-on-being-open/a/d-id/1297521), 7/24/2014 mentions GeoWave.  
+
 ## *Ultra* Quickstart
 
 ### Dependencies: Software and Versions
