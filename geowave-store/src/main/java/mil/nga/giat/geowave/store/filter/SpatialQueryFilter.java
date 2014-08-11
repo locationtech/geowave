@@ -141,10 +141,7 @@ public class SpatialQueryFilter extends
 		if (dataGeometry == null) {
 			return false;
 		}
-		if (!dataGeometry.intersects(queryGeometry)) {
-			return false;
-		}
-		return true;
+		return dataGeometry.intersects(queryGeometry);
 	}
 
 	protected boolean isSpatialOnly() {

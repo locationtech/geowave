@@ -330,6 +330,11 @@ public class PrimitiveHilbertSFCOperations implements
 
 	}
 
+
+	/**
+	 *  The estimated ID count is the cross product of normalized range
+	 * of all dimensions per the bits of precision provided by the dimension definitions.
+	 */
 	@Override
 	public BigInteger getEstimatedIdCount(
 			final MultiDimensionalNumericData data,
