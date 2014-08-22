@@ -136,175 +136,80 @@ protected FeatureDataAdapter createDataAdapter(SimpleFeatureType sft){
 ### Generating and loading points
 
 ~~~java
-protected void GenerateGrid(BasicAccumuloOperations bao){
+protected void generateGrid(
+			final BasicAccumuloOperations bao ) {
 
-	//create our datastore object
-	DataStore geowaveDataStore = getGeowaveDataStore(bao);
-	
-	//In order to store data we need to determine the type of data store
-	SimpleFeatureType point = createPointFeatureType();
-	
-	//This a factory class that builds simple feature objects based on the type passed
-	SimpleFeatureBuilder pointBuilder = new SimpleFeatureBuilder(point);
-	
-	//This is an adapter, that is needed to describe how to persist the data type passed
-	FeatureDataAdapter adapter = createDataAdapter(point);
-	
-	//This describes how to index the data
-	Index index = createSpatialIndex();
-	
-			
-	//features require a featureID - this should be unqiue as it's a foreign key on the feature 
-	//(i.e. sending in a new feature with the same feature id will overwrite the existing feature)
-	int featureId = 0;
-	
-	//build a grid of points across the globe at each whole lattitude/longitude intersection
-	for (int longitude = -180; longitude <= 180; longitude++){
-		for (int latitude = -90; latitude <= 90; latitude++){
-			pointBuilder.set("geometry", GeometryUtils.GEOMETRY_FACTORY.createPoint(new Coordinate(longitude, latitude)));
-			pointBuilder.set("TimeStamp", new Date());
-			pointBuilder.set("Latitude", latitude);
-			pointBuilder.set("Longitude", longitude);
-			//Note since trajectoryID and comment are marked as nillable we don't need to set them (they default ot null).
-			
-			SimpleFeature sft = pointBuilder.buildFeature(String.valueOf(featureId));
-			featureId++;
-			
-			//this loads the data to geowave
-			//in practice you probably wouldn't do this in a tight loop - but use a producer/consumer, mapreduce, or some other
-			//pattern. But if it matters depends also on the amount of data you are ingesting.
-			//Note that the ingest method can take a feature, or an interator on a collection of SimpleFeatures.  The latter
-			//is the preferred mechanism for non-trivial data sets.
-			geowaveDataStore.ingest(adapter, index, sft);
-		}
-	}
-}
-~~~
-
-
-### Easy optimizations
-As noted above, it's probably not very efficient to generate the mutations directly in a loop with the feature generation. We can move this over to a simple producer/consumer patter (see SimpleIngestProducerConsumer.java in the geowave-examples project).
-
-The datastore ingest method can take an iterator on a collection - so let's use that instead.
-
-#### Custom feature collection
-
-~~~java
-protected void GenerateGrid(BasicAccumuloOperations bao){
-
-	//create our datastore object
-	DataStore geowaveDataStore = getGeowaveDataStore(bao);
-	
-	//In order to store data we need to determine the type of data store
-	SimpleFeatureType point = createPointFeatureType();
-	
-	//This a factory class that builds simple feature objects based on the type passed
-	SimpleFeatureBuilder pointBuilder = new SimpleFeatureBuilder(point);
-	
-	//This is an adapter, that is needed to describe how to persist the data type passed
-	FeatureDataAdapter adapter = createDataAdapter(point);
-	
-	//This describes how to index the data
-	Index index = createSpatialIndex();
-	
-			
-	//features require a featureID - this should be unqiue as it's a foreign key on the feature 
-	//(i.e. sending in a new feature with the same feature id will overwrite the existing feature)
-	int featureId = 0;
-	
-	//build a grid of points across the globe at each whole lattitude/longitude intersection
-	for (int longitude = -180; longitude <= 180; longitude++){
-		for (int latitude = -90; latitude <= 90; latitude++){
-			pointBuilder.set("geometry", GeometryUtils.GEOMETRY_FACTORY.createPoint(new Coordinate(longitude, latitude)));
-			pointBuilder.set("TimeStamp", new Date());
-			pointBuilder.set("Latitude", latitude);
-			pointBuilder.set("Longitude", longitude);
-			//Note since trajectoryID and comment are marked as nillable we don't need to set them (they default ot null).
-			
-			SimpleFeature sft = pointBuilder.buildFeature(String.valueOf(featureId));
-			featureId++;
-			
-			//this loads the data to geowave
-			//in practice you probably wouldn't do this in a tight loop - but use a producer/consumer, mapreduce, or some other
-			//pattern. But if it matters depends also on the amount of data you are ingesting.
-			//Note that the ingest method can take a feature, or an interator on a collection of SimpleFeatures.  The latter
-			//is the preferred mechanism for non-trivial data sets.
-			geowaveDataStore.ingest(adapter, index, sft);
-		}
-	}
-}
-~~~
-
-#### Decoupling ingest
-
-~~~java
-public class SimpleIngestProducerConsumer extends SimpleIngest {
-
-	private static Logger log = Logger.getLogger(SimpleIngestProducerConsumer.class);
-	private FeatureCollection _features = new FeatureCollection();
-
-	/***
-	 * Here we will change the ingest mechanism to use a producer/consumer pattern
-	 */
-	@Override
-	protected void GenerateGrid(BasicAccumuloOperations bao){
-	
-		//create our datastore object
+		// create our datastore object
 		final DataStore geowaveDataStore = getGeowaveDataStore(bao);
-		
-		//In order to store data we need to determine the type of data store
-		SimpleFeatureType point = createPointFeatureType();
-		
-		//This a factory class that builds simple feature objects based on the type passed
-		SimpleFeatureBuilder pointBuilder = new SimpleFeatureBuilder(point);
-		
-		//This is an adapter, that is needed to describe how to persist the data type passed
-		final FeatureDataAdapter adapter = createDataAdapter(point);
-		
-		//This describes how to index the data
-		final Index index = createSpatialIndex();
-		
-		//features require a featureID - this should be unqiue as it's a foreign key on the feature 
-		//(i.e. sending in a new feature with the same feature id will overwrite the existing feature)
-		int featureId = 0;
-		
-		final Thread ingestThread = new Thread(
-				new Runnable() {
-					@Override
-					public void run() {
-						geowaveDataStore.ingest(adapter, index, _features);
-					}
-				}, "Ingestion Thread"
-			);
-		
 
-		ingestThread.run();
-		
-		//build a grid of points across the globe at each whole lattitude/longitude intersection
-		for (int longitude = -180; longitude <= 180; longitude++){
-			for (int latitude = -90; latitude <= 90; latitude++){
-				pointBuilder.set("geometry", GeometryUtils.GEOMETRY_FACTORY.createPoint(new Coordinate(longitude, latitude)));
-				pointBuilder.set("TimeStamp", new Date());
-				pointBuilder.set("Latitude", latitude);
-				pointBuilder.set("Longitude", longitude);
-				//Note since trajectoryID and comment are marked as nillable we don't need to set them (they default ot null).
-				
-				SimpleFeature sft = pointBuilder.buildFeature(String.valueOf(featureId));
-				featureId++;
-				//geowaveDataStore.ingest(adapter, index, sft);
-				_features.add(sft);
+		// In order to store data we need to determine the type of data store
+		final SimpleFeatureType point = createPointFeatureType();
+
+		// This a factory class that builds simple feature objects based on the
+		// type passed
+		final SimpleFeatureBuilder pointBuilder = new SimpleFeatureBuilder(
+				point);
+
+		// This is an adapter, that is needed to describe how to persist the
+		// data type passed
+		final FeatureDataAdapter adapter = createDataAdapter(point);
+
+		// This describes how to index the data
+		final Index index = createSpatialIndex();
+
+		// features require a featureID - this should be unqiue as it's a
+		// foreign key on the feature
+		// (i.e. sending in a new feature with the same feature id will
+		// overwrite the existing feature)
+		int featureId = 0;
+
+		// get a handle on a GeoWave index writer which wraps the Accumulo
+		// BatchWriter, make sure to close it (here we use a try with resources
+		// block to close it automatically)
+		try (IndexWriter indexWriter = geowaveDataStore.createIndexWriter(index)) {
+			// build a grid of points across the globe at each whole
+			// lattitude/longitude intersection
+			for (int longitude = -180; longitude <= 180; longitude++) {
+				for (int latitude = -90; latitude <= 90; latitude++) {
+					pointBuilder.set(
+							"geometry",
+							GeometryUtils.GEOMETRY_FACTORY.createPoint(new Coordinate(
+									longitude,
+									latitude)));
+					pointBuilder.set(
+							"TimeStamp",
+							new Date());
+					pointBuilder.set(
+							"Latitude",
+							latitude);
+					pointBuilder.set(
+							"Longitude",
+							longitude);
+					// Note since trajectoryID and comment are marked as
+					// nillable we
+					// don't need to set them (they default ot null).
+
+					final SimpleFeature sft = pointBuilder.buildFeature(String.valueOf(featureId));
+					featureId++;
+					indexWriter.write(
+							adapter,
+							sft);
+				}
 			}
 		}
-		_features.IngestCompleted = true;
-		try {
-			ingestThread.join();
-		} catch (InterruptedException e) {
-			log.error("Error joining ingest thread", e);
+		catch (final IOException e) {
+			log.warn(
+					"Unable to close index writer",
+					e);
 		}
 	}
 ~~~
 
 
-### Wrapup
-As was mentioned previously, there are other ways to ingest the code that help take advantage of HDFS and other higher speed mechanism - what is demonstrated here is intended to be the bare minimum.
+### Other methods
+There are other patterns that can be used - see the various classes in the geowave-examples project.   The method displayed above is the suggested pattern - it's demonstrated in SimpleIngestIndexWriter.java
+
+The other methods displayed work, but are either more complicated than necessary (SimpleIngestProducerConsumer.java) or not very efficient (SimpleIngest.java).
+
+
 
