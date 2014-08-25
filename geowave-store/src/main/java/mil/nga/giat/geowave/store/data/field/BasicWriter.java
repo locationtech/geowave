@@ -17,7 +17,7 @@ import com.vividsolutions.jts.geom.Geometry;
 
 /**
  * This class contains all of the primitive writer field types supported
- * 
+ *
  */
 public class BasicWriter<RowType, FieldType> implements
 		FieldWriter<RowType, FieldType>
@@ -122,6 +122,28 @@ public class BasicWriter<RowType, FieldType> implements
 		}
 	}
 
+	public static class PrimitiveShortArrayWriter implements
+			FieldWriter<Object, short[]>
+	{
+		@Override
+		public byte[] writeField(
+				final short[] fieldValue ) {
+			final ByteBuffer buf = ByteBuffer.allocate(2 * fieldValue.length);
+			for (final short value : fieldValue) {
+				buf.putShort(value);
+			}
+			return buf.array();
+		}
+
+		@Override
+		public byte[] getVisibility(
+				final Object rowValue,
+				final ByteArrayId fieldId,
+				final short[] fieldValue ) {
+			return new byte[] {};
+		}
+	}
+
 	public static class FloatWriter implements
 			FieldWriter<Object, Float>
 	{
@@ -143,6 +165,29 @@ public class BasicWriter<RowType, FieldType> implements
 		}
 	}
 
+	public static class PrimitiveFloatArrayWriter implements
+			FieldWriter<Object, float[]>
+	{
+
+		@Override
+		public byte[] writeField(
+				final float[] fieldValue ) {
+			final ByteBuffer buf = ByteBuffer.allocate(4 * fieldValue.length);
+			for (final float value : fieldValue) {
+				buf.putFloat(value);
+			}
+			return buf.array();
+		}
+
+		@Override
+		public byte[] getVisibility(
+				final Object rowValue,
+				final ByteArrayId fieldId,
+				final float[] fieldValue ) {
+			return new byte[] {};
+		}
+	}
+
 	public static class DoubleWriter implements
 			FieldWriter<Object, Double>
 	{
@@ -159,6 +204,28 @@ public class BasicWriter<RowType, FieldType> implements
 				final Object rowValue,
 				final ByteArrayId fieldId,
 				final Double fieldValue ) {
+			return new byte[] {};
+		}
+	}
+
+	public static class PrimitiveDoubleArrayWriter implements
+			FieldWriter<Object, double[]>
+	{
+		@Override
+		public byte[] writeField(
+				final double[] fieldValue ) {
+			final ByteBuffer buf = ByteBuffer.allocate(8 * fieldValue.length);
+			for (final double value : fieldValue) {
+				buf.putDouble(value);
+			}
+			return buf.array();
+		}
+
+		@Override
+		public byte[] getVisibility(
+				final Object rowValue,
+				final ByteArrayId fieldId,
+				final double[] fieldValue ) {
 			return new byte[] {};
 		}
 	}
@@ -204,6 +271,28 @@ public class BasicWriter<RowType, FieldType> implements
 		}
 	}
 
+	public static class PrimitiveIntArrayWriter implements
+			FieldWriter<Object, int[]>
+	{
+		@Override
+		public byte[] writeField(
+				final int[] fieldValue ) {
+			final ByteBuffer buf = ByteBuffer.allocate(4 * fieldValue.length);
+			for (final int value : fieldValue) {
+				buf.putInt(value);
+			}
+			return buf.array();
+		}
+
+		@Override
+		public byte[] getVisibility(
+				final Object rowValue,
+				final ByteArrayId fieldId,
+				final int[] fieldValue ) {
+			return new byte[] {};
+		}
+	}
+
 	public static class LongWriter implements
 			FieldWriter<Object, Long>
 	{
@@ -224,6 +313,32 @@ public class BasicWriter<RowType, FieldType> implements
 				final Object rowValue,
 				final ByteArrayId fieldId,
 				final Long fieldValue ) {
+			return new byte[] {};
+		}
+	}
+
+	public static class PrimitiveLongArrayWriter implements
+			FieldWriter<Object, long[]>
+	{
+		public PrimitiveLongArrayWriter() {
+			super();
+		}
+
+		@Override
+		public byte[] writeField(
+				final long[] fieldValue ) {
+			final ByteBuffer buf = ByteBuffer.allocate(8 * fieldValue.length);
+			for (final long value : fieldValue) {
+				buf.putLong(value);
+			}
+			return buf.array();
+		}
+
+		@Override
+		public byte[] getVisibility(
+				final Object rowValue,
+				final ByteArrayId fieldId,
+				final long[] fieldValue ) {
 			return new byte[] {};
 		}
 	}

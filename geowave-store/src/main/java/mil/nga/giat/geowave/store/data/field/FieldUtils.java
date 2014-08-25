@@ -6,7 +6,22 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import mil.nga.giat.geowave.store.data.field.BasicReader.BooleanReader;
+import mil.nga.giat.geowave.store.data.field.ArrayReader.CalendarArrayReader;
+import mil.nga.giat.geowave.store.data.field.ArrayReader.DateArrayReader;
+import mil.nga.giat.geowave.store.data.field.ArrayReader.DoubleArrayReader;
+import mil.nga.giat.geowave.store.data.field.ArrayReader.FloatArrayReader;
+import mil.nga.giat.geowave.store.data.field.ArrayReader.GeometryArrayReader;
+import mil.nga.giat.geowave.store.data.field.ArrayReader.IntArrayReader;
+import mil.nga.giat.geowave.store.data.field.ArrayReader.LongArrayReader;
+import mil.nga.giat.geowave.store.data.field.ArrayReader.StringArrayReader;
+import mil.nga.giat.geowave.store.data.field.ArrayWriter.CalendarArrayWriter;
+import mil.nga.giat.geowave.store.data.field.ArrayWriter.DateArrayWriter;
+import mil.nga.giat.geowave.store.data.field.ArrayWriter.DoubleArrayWriter;
+import mil.nga.giat.geowave.store.data.field.ArrayWriter.FloatArrayWriter;
+import mil.nga.giat.geowave.store.data.field.ArrayWriter.GeometryArrayWriter;
+import mil.nga.giat.geowave.store.data.field.ArrayWriter.IntArrayWriter;
+import mil.nga.giat.geowave.store.data.field.ArrayWriter.LongArrayWriter;
+import mil.nga.giat.geowave.store.data.field.ArrayWriter.StringArrayWriter;
 import mil.nga.giat.geowave.store.data.field.BasicReader.ByteArrayReader;
 import mil.nga.giat.geowave.store.data.field.BasicReader.ByteReader;
 import mil.nga.giat.geowave.store.data.field.BasicReader.CalendarReader;
@@ -17,7 +32,10 @@ import mil.nga.giat.geowave.store.data.field.BasicReader.GeometryReader;
 import mil.nga.giat.geowave.store.data.field.BasicReader.IntReader;
 import mil.nga.giat.geowave.store.data.field.BasicReader.LongReader;
 import mil.nga.giat.geowave.store.data.field.BasicReader.PrimitiveByteArrayReader;
-import mil.nga.giat.geowave.store.data.field.BasicReader.ShortReader;
+import mil.nga.giat.geowave.store.data.field.BasicReader.PrimitiveDoubleArrayReader;
+import mil.nga.giat.geowave.store.data.field.BasicReader.PrimitiveFloatArrayReader;
+import mil.nga.giat.geowave.store.data.field.BasicReader.PrimitiveIntArrayReader;
+import mil.nga.giat.geowave.store.data.field.BasicReader.PrimitiveLongArrayReader;
 import mil.nga.giat.geowave.store.data.field.BasicReader.StringReader;
 import mil.nga.giat.geowave.store.data.field.BasicWriter.BooleanWriter;
 import mil.nga.giat.geowave.store.data.field.BasicWriter.ByteArrayWriter;
@@ -30,7 +48,10 @@ import mil.nga.giat.geowave.store.data.field.BasicWriter.GeometryWriter;
 import mil.nga.giat.geowave.store.data.field.BasicWriter.IntWriter;
 import mil.nga.giat.geowave.store.data.field.BasicWriter.LongWriter;
 import mil.nga.giat.geowave.store.data.field.BasicWriter.PrimitiveByteArrayWriter;
-import mil.nga.giat.geowave.store.data.field.BasicWriter.ShortWriter;
+import mil.nga.giat.geowave.store.data.field.BasicWriter.PrimitiveDoubleArrayWriter;
+import mil.nga.giat.geowave.store.data.field.BasicWriter.PrimitiveFloatArrayWriter;
+import mil.nga.giat.geowave.store.data.field.BasicWriter.PrimitiveIntArrayWriter;
+import mil.nga.giat.geowave.store.data.field.BasicWriter.PrimitiveLongArrayWriter;
 import mil.nga.giat.geowave.store.data.field.BasicWriter.StringWriter;
 
 import com.vividsolutions.jts.geom.Geometry;
@@ -38,7 +59,7 @@ import com.vividsolutions.jts.geom.Geometry;
 /**
  * This class has a set of convenience methods to determine the appropriate
  * field reader and writer for a given field type (Class)
- * 
+ *
  */
 public class FieldUtils
 {
@@ -58,26 +79,62 @@ public class FieldUtils
 				Float.class,
 				new FloatReader());
 		DEFAULT_READERS.put(
+				Float[].class,
+				new FloatArrayReader());
+		DEFAULT_READERS.put(
+				float[].class,
+				new PrimitiveFloatArrayReader());
+		DEFAULT_READERS.put(
 				Double.class,
 				new DoubleReader());
+		DEFAULT_READERS.put(
+				Double[].class,
+				new DoubleArrayReader());
+		DEFAULT_READERS.put(
+				double[].class,
+				new PrimitiveDoubleArrayReader());
 		DEFAULT_READERS.put(
 				Integer.class,
 				new IntReader());
 		DEFAULT_READERS.put(
+				Integer[].class,
+				new IntArrayReader());
+		DEFAULT_READERS.put(
+				int[].class,
+				new PrimitiveIntArrayReader());
+		DEFAULT_READERS.put(
 				Long.class,
 				new LongReader());
+		DEFAULT_READERS.put(
+				Long[].class,
+				new LongArrayReader());
+		DEFAULT_READERS.put(
+				long[].class,
+				new PrimitiveLongArrayReader());
 		DEFAULT_READERS.put(
 				Date.class,
 				new DateReader());
 		DEFAULT_READERS.put(
+				Date[].class,
+				new DateArrayReader());
+		DEFAULT_READERS.put(
 				String.class,
 				new StringReader());
+		DEFAULT_READERS.put(
+				String[].class,
+				new StringArrayReader());
 		DEFAULT_READERS.put(
 				Geometry.class,
 				new GeometryReader());
 		DEFAULT_READERS.put(
+				Geometry[].class,
+				new GeometryArrayReader());
+		DEFAULT_READERS.put(
 				Calendar.class,
 				new CalendarReader());
+		DEFAULT_READERS.put(
+				Calendar[].class,
+				new CalendarArrayReader());
 		DEFAULT_READERS.put(
 				Byte[].class,
 				new ByteArrayReader());
@@ -98,26 +155,62 @@ public class FieldUtils
 				Float.class,
 				new FloatWriter());
 		DEFAULT_WRITERS.put(
+				Float[].class,
+				new FloatArrayWriter());
+		DEFAULT_WRITERS.put(
+				float[].class,
+				new PrimitiveFloatArrayWriter());
+		DEFAULT_WRITERS.put(
 				Double.class,
 				new DoubleWriter());
+		DEFAULT_WRITERS.put(
+				Double[].class,
+				new DoubleArrayWriter());
+		DEFAULT_WRITERS.put(
+				double[].class,
+				new PrimitiveDoubleArrayWriter());
 		DEFAULT_WRITERS.put(
 				Integer.class,
 				new IntWriter());
 		DEFAULT_WRITERS.put(
+				Integer[].class,
+				new IntArrayWriter());
+		DEFAULT_WRITERS.put(
+				int[].class,
+				new PrimitiveIntArrayWriter());
+		DEFAULT_WRITERS.put(
 				Long.class,
 				new LongWriter());
+		DEFAULT_WRITERS.put(
+				Long[].class,
+				new LongArrayWriter());
+		DEFAULT_WRITERS.put(
+				long[].class,
+				new PrimitiveLongArrayWriter());
 		DEFAULT_WRITERS.put(
 				Date.class,
 				new DateWriter());
 		DEFAULT_WRITERS.put(
+				Date[].class,
+				new DateArrayWriter());
+		DEFAULT_WRITERS.put(
 				String.class,
 				new StringWriter());
+		DEFAULT_WRITERS.put(
+				String[].class,
+				new StringArrayWriter());
 		DEFAULT_WRITERS.put(
 				Geometry.class,
 				new GeometryWriter());
 		DEFAULT_WRITERS.put(
+				Geometry[].class,
+				new GeometryArrayWriter());
+		DEFAULT_WRITERS.put(
 				Calendar.class,
 				new CalendarWriter());
+		DEFAULT_WRITERS.put(
+				Calendar.class,
+				new CalendarArrayWriter());
 		DEFAULT_WRITERS.put(
 				Byte[].class,
 				new ByteArrayWriter());

@@ -11,6 +11,7 @@ import java.util.SortedMap;
 import java.util.TreeSet;
 
 import mil.nga.giat.geowave.accumulo.AccumuloRowId;
+import mil.nga.giat.geowave.accumulo.ModelConvertingDataAdapter;
 import mil.nga.giat.geowave.accumulo.Writer;
 import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.index.ByteArrayRange;
@@ -290,8 +291,13 @@ public class AccumuloUtils
 			}
 			final ByteArrayId fieldId = new ByteArrayId(
 					entry.getKey().getColumnQualifierData().getBackingArray());
+			final CommonIndexModel indexModel;
+			if (adapter instanceof ModelConvertingDataAdapter)
+				indexModel = ((ModelConvertingDataAdapter)adapter).convertModel(index.getIndexModel());
+			else
+				indexModel = index.getIndexModel();
 			// first check if this field is part of the index model
-			final FieldReader<? extends CommonIndexValue> indexFieldReader = index.getIndexModel().getReader(
+			final FieldReader<? extends CommonIndexValue> indexFieldReader = indexModel.getReader(
 					fieldId);
 			final byte byteValue[] = entry.getValue().get();
 			if (indexFieldReader != null) {
@@ -548,7 +554,12 @@ public class AccumuloUtils
 			final Index index,
 			final T entry,
 			final VisibilityWriter<T> customFieldVisibilityWriter ) {
-		final CommonIndexModel indexModel = index.getIndexModel();
+		final CommonIndexModel indexModel;
+		if (dataWriter instanceof ModelConvertingDataAdapter)
+			indexModel = ((ModelConvertingDataAdapter)dataWriter).convertModel(index.getIndexModel());
+		else
+			indexModel = index.getIndexModel();
+		
 		final AdapterPersistenceEncoding encodedData = dataWriter.encode(
 				entry,
 				indexModel);
