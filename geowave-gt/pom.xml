@@ -229,6 +229,7 @@
 												<exclude>org.apache.commons:commons-lang3</exclude> -->
 											<exclude>tomcat:*</exclude>
 											<exclude>*:servlet*:*</exclude>
+											<exclude>*:javax.servlet*:*</exclude>
 											<exclude>*:jsp*:*</exclude>
 											<exclude>*:jetty*:*</exclude>
 											<exclude>*:commons-httpclient:*</exclude>
