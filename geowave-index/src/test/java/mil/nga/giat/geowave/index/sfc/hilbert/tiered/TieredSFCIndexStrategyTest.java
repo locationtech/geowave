@@ -90,7 +90,7 @@ public class TieredSFCIndexStrategyTest {
 		NumericData[] dataPerDimension1 = new NumericData[SPATIAL_TEMPORAL_DIMENSIONS.length];
 		dataPerDimension1[0] = new NumericRange(45.170,45.173);
 		dataPerDimension1[1] = new NumericRange(50.190,50.192);
-		dataPerDimension1[2] = new NumericRange(calEnd.getTimeInMillis(),cal.getTimeInMillis());
+		dataPerDimension1[2] = new NumericRange(cal.getTimeInMillis(),calEnd.getTimeInMillis());
 
 		int year = cal.get(Calendar.YEAR);
 
@@ -98,13 +98,14 @@ public class TieredSFCIndexStrategyTest {
 		NumericData[] dataPerDimension2 = new NumericData[SPATIAL_TEMPORAL_DIMENSIONS.length];
 		dataPerDimension2[0] = new NumericRange(45,50);
 		dataPerDimension2[1] = new NumericRange(45,50);
-		dataPerDimension2[2] = new NumericRange(calEnd.getTimeInMillis(),cal.getTimeInMillis());
+		dataPerDimension2[2] = new NumericRange(cal.getTimeInMillis(),calEnd.getTimeInMillis());
 
 		cal.set(Calendar.YEAR, year - 1);
+		calEnd.set(Calendar.YEAR, year - 1);
 		NumericData[] dataPerDimension3 = new NumericData[SPATIAL_TEMPORAL_DIMENSIONS.length];
 		dataPerDimension3[0] = new NumericRange(45.1701,45.1703);
 		dataPerDimension3[1] = new NumericRange(50.1901,50.1902);
-		dataPerDimension3[2] = new NumericRange(calEnd.getTimeInMillis(),cal.getTimeInMillis());
+		dataPerDimension3[2] = new NumericRange(cal.getTimeInMillis(),calEnd.getTimeInMillis());
 
 
 		MultiDimensionalNumericData indexedData = new BasicNumericDataset(
@@ -119,13 +120,16 @@ public class TieredSFCIndexStrategyTest {
 
 		List<ByteArrayId> ids1 = strategy.getInsertionIds(indexedData);
 		assertEquals(1, ids1.size());
-		assertEquals(13, ids1.get(0).getBytes().length);
+		assertEquals(10, ids1.get(0).getBytes().length);
 
-		// same bin
+		// different bin bin
 		indexedData = new BasicNumericDataset(dataPerDimension2);
 		List<ByteArrayId> ids2 = strategy.getInsertionIds(indexedData);
 		assertEquals(1, ids2.size());
-		assertTrue(compare(ids1.get(0).getBytes(), ids2.get(0).getBytes(),5));
+		// different tier
+		assertFalse(compare(ids1.get(0).getBytes(), ids2.get(0).getBytes(),1));
+		// same time
+		assertTrue(compare(ids1.get(0).getBytes(), ids2.get(0).getBytes(),1,5));
 
 
 		// different bin
@@ -133,8 +137,12 @@ public class TieredSFCIndexStrategyTest {
 		List<ByteArrayId> ids3 = strategy.getInsertionIds(indexedData);
 		assertEquals(1, ids3.size());
 		assertFalse(compare(ids1.get(0).getBytes(), ids3.get(0)
-				.getBytes(),5));
+				.getBytes(),1,5));
 	}
+	
+	private boolean compare(byte[] one, byte[] two, int start, int stop) {
+		   return Arrays.equals(Arrays.copyOfRange(one, start, stop), Arrays.copyOfRange(two, start, stop));	
+		}
 	
 	private boolean compare(byte[] one, byte[] two, int length) {
 	   return Arrays.equals(Arrays.copyOf(one, length), Arrays.copyOf(two, length));	
