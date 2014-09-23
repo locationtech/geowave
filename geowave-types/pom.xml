@@ -4,19 +4,19 @@
 	<parent>
 		<groupId>mil.nga.giat</groupId>
 		<artifactId>geowave-parent</artifactId>
-		<version>0.8.0</version>
+		<version>0.8.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>geowave-types</artifactId>
 	<dependencies>
 		<dependency>
 			<groupId>mil.nga.giat</groupId>
 			<artifactId>geowave-gt</artifactId>
-			<version>0.8.0</version>
+			<version>0.8.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>mil.nga.giat</groupId>
 			<artifactId>geowave-ingest</artifactId>
-			<version>0.8.0</version>
+			<version>0.8.0-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 	<build>
