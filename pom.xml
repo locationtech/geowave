@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>mil.nga.giat</groupId>
 	<artifactId>geowave-parent</artifactId>
-	<version>0.8.0-SNAPSHOT</version>
+	<version>0.8.0</version>
 	<name>geowave-parent</name>
 	<packaging>pom</packaging>
 	<description>Geowave adds spatio-temporal indexing to accumulo through geotools and geoserver</description>
@@ -18,7 +17,8 @@
 	<scm>
 		<url>https://github.com/ngageoint/geowave.git</url>
 		<connection>scm:git:git@github.com:ngageoint/geowave.git</connection>
-	</scm>
+	  <tag>geowave-parent-0.8.0</tag>
+  </scm>
 
 
 	<properties>
@@ -317,14 +317,12 @@
 										</filter>
 									</filters>
 									<transformers>
-										<transformer
-											implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+										<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
 											<manifestEntries>
 												<Main-Class>mil.nga.giat.geowave.ingest.IngestMain</Main-Class>
 											</manifestEntries>
 										</transformer>
-										<transformer
-											implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
+										<transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
 									</transformers>
 									<createDependencyReducedPom>false</createDependencyReducedPom>
 									<minimizeJar>false</minimizeJar>
