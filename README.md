@@ -1,4 +1,4 @@
-# GeoWave 0.8.0	
+# GeoWave 0.8.1	
 ## About  
 
 <img align="left" src="https://travis-ci.org/ngageoint/geowave.svg?branch=master"/>
@@ -48,7 +48,7 @@ Software source code previously released under an open source license and then m
 This *ultra* quickstart assumes you have [Apache Maven](http://maven.apache.org/), [Git](http://git-scm.com/), and [Java](http://www.oracle.com/technetwork/java/javase/downloads/index.html) (>= 1.7) installed on your system and on the path.  
 
 To view the data (via standard [OGC](http://www.opengeospatial.org/) services) a [GeoServer](http://geoserver.org/) instance >= 2.5 is required due to [GEOT-4587](http://jira.codehaus.org/browse/GEOT-4587).  
-[GeoServer](http://geoserver.org/) 2.5 with [Geotools](http://www.geotools.org/) 11.0 the most tested version.
+[GeoServer](http://geoserver.org/) 2.5.2 with [Geotools](http://www.geotools.org/) 11.2 the most tested version.
 
 [Apache Accumulo](http://projects.apache.org/projects/accumulo.html) version 1.5 or greater is required.  1.5.0, 1.5.1, and 1.6.0 have all been tested. 
 
