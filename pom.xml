@@ -22,8 +22,8 @@
 
 
 	<properties>
-		<geotools.version>11.0</geotools.version>
-		<geoserver.version>2.5</geoserver.version>
+		<geotools.version>11.2</geotools.version>
+		<geoserver.version>2.5.2</geoserver.version>
 		<accumulo.version>1.5.1</accumulo.version>
 		<hadoop.version>2.0.0-cdh4.7.0</hadoop.version> 
 		<hadoop.version.mr>2.0.0-mr1-cdh4.7.0</hadoop.version.mr> 
@@ -234,9 +234,9 @@
 			<snapshots>
 				<enabled>true</enabled>
 			</snapshots>
-			<id>opengeo</id>
-			<name>OpenGeo Maven Repository</name>
-			<url>http://repo.opengeo.org</url>
+			<id>boundlessgeo</id>
+			<name>BoundlessGeo Maven Repository</name>
+			<url>http://repo.boundlessgeo.com/main</url>
 		</repository>
 		<repository>
 			<id>cloudera</id>
