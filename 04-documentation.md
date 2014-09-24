@@ -10,4 +10,4 @@ permalink: "documentation.html"
 
 # Partially Complete:
 
-The full documentation is currently in the process of being generated and trascribed to this format.  Some of it is complete - please use the navigation menu on the right to view the area of interest.  If there's a particular piece you would like to move to the top of the queue please file an issue.
+The full documentation is currently in the process of being generated and transcribed to this format.  Some of it is complete - please use the navigation menu on the right to view the area of interest.  If there's a particular piece you would like to move to the top of the queue please file an issue.
