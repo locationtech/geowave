@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 import mil.nga.giat.geowave.index.ByteArrayId;
-import mil.nga.giat.geowave.store.data.PersistenceEncoding;
+import mil.nga.giat.geowave.store.data.IndexedPersistenceEncoding;
 
 /**
  * This filter will perform de-duplication using the combination of data adapter
@@ -25,7 +25,7 @@ public class DedupeFilter implements
 
 	@Override
 	public boolean accept(
-			final PersistenceEncoding persistenceEncoding ) {
+			final IndexedPersistenceEncoding persistenceEncoding ) {
 		if (!persistenceEncoding.isDuplicated()) {
 			// short circuit this check if the row is not duplicated anywhere
 			return true;

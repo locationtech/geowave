@@ -216,10 +216,12 @@
 		<module>geowave-index</module>
 		<module>geowave-store</module>
 		<module>geowave-accumulo</module>
-		<module>geowave-gt</module>
+		<module>geowave-vector</module>
+		<module>geowave-raster</module>
 		<module>geowave-ingest</module>
 		<module>geowave-types</module>
 		<module>geowave-analytics</module>
+		<module>geowave-deploy</module>
 		<module>geowave-test</module>
 	</modules>
 

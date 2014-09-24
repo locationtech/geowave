@@ -5,7 +5,8 @@ import java.io.IOException;
 import javax.vecmath.Point2d;
 
 import mil.nga.giat.geowave.accumulo.AccumuloDataStore;
-import mil.nga.giat.geowave.gt.adapter.FeatureDataAdapter;
+import mil.nga.giat.geowave.accumulo.AccumuloOptions;
+import mil.nga.giat.geowave.vector.adapter.FeatureDataAdapter;
 import mil.nga.giat.geowave.store.DataStore;
 import mil.nga.giat.geowave.store.GeometryUtils;
 import mil.nga.giat.geowave.store.adapter.AdapterStore;
@@ -137,7 +138,7 @@ public class AccumuloKDEReducer extends
 				statsName));
 		builder = new SimpleFeatureBuilder(
 				type);
-		index = IndexType.SPATIAL.createDefaultIndex();
+		index = IndexType.SPATIAL_VECTOR.createDefaultIndex();
 		final IndexStore indexStore = new MemoryIndexStore(
 				new Index[] {
 					index
@@ -149,13 +150,19 @@ public class AccumuloKDEReducer extends
 					new FeatureDataAdapter(
 							type)
 				});
+		final AccumuloOptions options = new AccumuloOptions();
+		options.setPersistDataStatistics(false);
+		// TODO consider an in memory statistics store that will write the
+		// statistics when the job is completed
 		dataStore = new AccumuloDataStore(
 				indexStore,
 				adapterStore,
+				null,
 				new ReducerContextWriterOperations(
 						context,
 						context.getConfiguration().get(
-								KDEJobRunner.TABLE_NAME)));
+								KDEJobRunner.TABLE_NAME)),
+				options);
 
 		totalKeys = context.getConfiguration().getLong(
 				"Entries per level.level" + level,

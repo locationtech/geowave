@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import mil.nga.giat.geowave.index.ByteArrayId;
+import mil.nga.giat.geowave.store.CloseableIterator;
 
 /**
  * This is a simple HashMap based in-memory implementation of the AdapterStore and
@@ -48,8 +49,8 @@ public class MemoryAdapterStore implements
 	}
 
 	@Override
-	public Iterator<DataAdapter<?>> getAdapters() {
-		return new ArrayList<DataAdapter<?>>(
-				adapterMap.values()).iterator();
+	public CloseableIterator<DataAdapter<?>> getAdapters() {
+		return new CloseableIterator.Wrapper<DataAdapter<?>>(new ArrayList<DataAdapter<?>>(
+				adapterMap.values()).iterator());
 	}
 }

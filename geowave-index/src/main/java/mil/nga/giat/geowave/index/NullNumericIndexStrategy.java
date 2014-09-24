@@ -58,6 +58,7 @@ public class NullNumericIndexStrategy implements
 	@Override
 	public List<ByteArrayId> getInsertionIds(
 			final MultiDimensionalNumericData indexedData ) {
+		// return a single empty ID
 		final List<ByteArrayId> retVal = new ArrayList<ByteArrayId>();
 		retVal.add(new ByteArrayId(
 				new byte[] {}));
@@ -66,12 +67,34 @@ public class NullNumericIndexStrategy implements
 
 	@Override
 	public NumericDimensionDefinition[] getOrderedDimensionDefinitions() {
+		// there are no dimensions so return an empty array
 		return new NumericDimensionDefinition[] {};
 	}
 
 	@Override
 	public String getId() {
 		return id;
+	}
+
+	@Override
+	public MultiDimensionalNumericData getRangeForId(
+			final ByteArrayId insertionId ) {
+		// a null return here should be interpreted as negative to positive
+		// infinite
+		return null;
+	}
+
+	@Override
+	public double[] getHighestPrecisionIdRangePerDimension() {
+		// there are no dimensions so return an empty array
+		return new double[] {};
+	}
+
+	@Override
+	public long[] getCoordinatesPerDimension(
+			final ByteArrayId insertionId ) {
+		// there are no dimensions so return an empty array
+		return new long[] {};
 	}
 
 }

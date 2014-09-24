@@ -2,7 +2,7 @@ package mil.nga.giat.geowave.store.filter;
 
 import java.util.List;
 
-import mil.nga.giat.geowave.store.data.PersistenceEncoding;
+import mil.nga.giat.geowave.store.data.IndexedPersistenceEncoding;
 
 /**
  * This class wraps a list of filters into a single filter such that if any one
@@ -24,7 +24,7 @@ public class FilterList<T extends QueryFilter> implements
 
 	@Override
 	public boolean accept(
-			final PersistenceEncoding entry ) {
+			final IndexedPersistenceEncoding entry ) {
 		for (final QueryFilter filter : filters) {
 			if (!filter.accept(entry)) {
 				return false;

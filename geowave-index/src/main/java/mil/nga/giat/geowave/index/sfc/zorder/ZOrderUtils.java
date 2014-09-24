@@ -2,6 +2,9 @@ package mil.nga.giat.geowave.index.sfc.zorder;
 
 import java.util.BitSet;
 
+import mil.nga.giat.geowave.index.sfc.SFCDimensionDefinition;
+import mil.nga.giat.geowave.index.sfc.data.NumericRange;
+
 /**
  * Convenience methods used to decode/encode Z-Order space filling curve values
  * (using a simple bit-interleaving approach).
@@ -9,17 +12,17 @@ import java.util.BitSet;
  */
 public class ZOrderUtils
 {
-	public static double[] decode(
-			byte[] bytes,
-			int bitsPerDimension,
-			int numDimensions ) {
-		byte[] littleEndianBytes = swapEndianFormat(bytes);
-		BitSet bitSet = BitSet.valueOf(littleEndianBytes);
-		double[] normalizedValues = new double[numDimensions];
-		for (int d = 0; d < numDimensions; d++) {
-			BitSet dimensionSet = new BitSet();
+	public static NumericRange[] decodeRanges(
+			final byte[] bytes,
+			final int bitsPerDimension,
+			final SFCDimensionDefinition[] dimensionDefinitions ) {
+		final byte[] littleEndianBytes = swapEndianFormat(bytes);
+		final BitSet bitSet = BitSet.valueOf(littleEndianBytes);
+		final NumericRange[] normalizedValues = new NumericRange[dimensionDefinitions.length];
+		for (int d = 0; d < dimensionDefinitions.length; d++) {
+			final BitSet dimensionSet = new BitSet();
 			int j = 0;
-			for (int i = d; i < bitsPerDimension * numDimensions; i += numDimensions) {
+			for (int i = d; i < (bitsPerDimension * dimensionDefinitions.length); i += dimensionDefinitions.length) {
 				dimensionSet.set(
 						j++,
 						bitSet.get(i));
@@ -28,32 +31,83 @@ public class ZOrderUtils
 			normalizedValues[d] = decode(
 					dimensionSet,
 					0,
-					1);
+					1,
+					dimensionDefinitions[d]);
 		}
 
 		return normalizedValues;
 	}
 
-	private static double decode(
-			BitSet bs,
-			double floor,
-			double ceiling ) {
-		double mid = 0;
+	public static long[] decodeIndices(
+			final byte[] bytes,
+			final int bitsPerDimension,
+			final int numDimensions ) {
+		final byte[] littleEndianBytes = swapEndianFormat(bytes);
+		final BitSet bitSet = BitSet.valueOf(littleEndianBytes);
+		final long[] coordinates = new long[numDimensions];
+		final long rangePerDimension = (long) Math.pow(
+				2,
+				bitsPerDimension);
+		for (int d = 0; d < numDimensions; d++) {
+			final BitSet dimensionSet = new BitSet();
+			int j = 0;
+			for (int i = d; i < (bitsPerDimension * numDimensions); i += numDimensions) {
+				dimensionSet.set(
+						j++,
+						bitSet.get(i));
+			}
+
+			coordinates[d] = decodeIndex(
+					dimensionSet,
+					rangePerDimension);
+		}
+
+		return coordinates;
+	}
+
+	private static long decodeIndex(
+			final BitSet bs,
+			final long rangePerDimension ) {
+		long floor = 0;
+		long ceiling = rangePerDimension;
+		long mid = 0;
 		for (int i = 0; i < bs.length(); i++) {
 			mid = (floor + ceiling) / 2;
-			if (bs.get(i))
+			if (bs.get(i)) {
 				floor = mid;
-			else
+			}
+			else {
 				ceiling = mid;
+			}
 		}
 		return mid;
 	}
 
+	private static NumericRange decode(
+			final BitSet bs,
+			double floor,
+			double ceiling,
+			final SFCDimensionDefinition dimensionDefinition ) {
+		double mid = 0;
+		for (int i = 0; i < bs.length(); i++) {
+			mid = (floor + ceiling) / 2;
+			if (bs.get(i)) {
+				floor = mid;
+			}
+			else {
+				ceiling = mid;
+			}
+		}
+		return new NumericRange(
+				dimensionDefinition.denormalize(floor),
+				dimensionDefinition.denormalize(ceiling));
+	}
+
 	public static byte[] encode(
-			double[] normalizedValues,
-			int bitsPerDimension,
-			int numDimensions ) {
-		BitSet[] bitSets = new BitSet[numDimensions];
+			final double[] normalizedValues,
+			final int bitsPerDimension,
+			final int numDimensions ) {
+		final BitSet[] bitSets = new BitSet[numDimensions];
 
 		for (int d = 0; d < numDimensions; d++) {
 			bitSets[d] = getBits(
@@ -62,9 +116,7 @@ public class ZOrderUtils
 					1,
 					bitsPerDimension);
 		}
-		// BitVector bitVector =
-		// BitVectorFactories.OPTIMAL.apply(bitsPerDimension * numDimensions);
-		BitSet combinedBitSet = new BitSet(
+		final BitSet combinedBitSet = new BitSet(
 				bitsPerDimension * numDimensions);
 		int j = 0;
 		for (int i = 0; i < bitsPerDimension; i++) {
@@ -74,13 +126,13 @@ public class ZOrderUtils
 						bitSets[d].get(i));
 			}
 		}
-		byte[] littleEndianBytes = combinedBitSet.toByteArray();
+		final byte[] littleEndianBytes = combinedBitSet.toByteArray();
 		return swapEndianFormat(littleEndianBytes);
 	}
 
 	public static byte[] swapEndianFormat(
-			byte[] b ) {
-		byte[] endianSwappedBytes = new byte[b.length];
+			final byte[] b ) {
+		final byte[] endianSwappedBytes = new byte[b.length];
 		for (int i = 0; i < b.length; i++) {
 			endianSwappedBytes[i] = swapEndianFormat(b[i]);
 		}
@@ -88,7 +140,7 @@ public class ZOrderUtils
 	}
 
 	private static byte swapEndianFormat(
-			byte b ) {
+			final byte b ) {
 		int converted = 0x00;
 		converted ^= (b & 0b1000_0000) >> 7;
 		converted ^= (b & 0b0100_0000) >> 5;
@@ -102,14 +154,14 @@ public class ZOrderUtils
 	}
 
 	private static BitSet getBits(
-			double value,
+			final double value,
 			double floor,
 			double ceiling,
-			int bitsPerDimension ) {
-		BitSet buffer = new BitSet(
+			final int bitsPerDimension ) {
+		final BitSet buffer = new BitSet(
 				bitsPerDimension);
 		for (int i = 0; i < bitsPerDimension; i++) {
-			double mid = (floor + ceiling) / 2;
+			final double mid = (floor + ceiling) / 2;
 			if (value >= mid) {
 				buffer.set(i);
 				floor = mid;

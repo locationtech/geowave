@@ -27,6 +27,28 @@ public interface SpaceFillingCurve extends
 			double[] values );
 
 	/***
+	 * Gets n-dimensional ranges from a single dimension, i.e. 0033423 ->
+	 * [12,33]
+	 * 
+	 * @param id
+	 *            the SFC ID to calculate the ranges of values represented.
+	 * @return the valid ranges per dimension of a single SFC ID derived from
+	 *         the the SFC transform.
+	 */
+	public MultiDimensionalNumericData getRanges(
+			byte[] id );
+
+	/***
+	 * Gets n-dimensional coordinates from a single dimension
+	 * 
+	 * @param id
+	 *            the SFC ID to calculate the coordinates for each dimension.
+	 * @return the coordinate in each dimension for the given ID
+	 */
+	public long[] getCoordinates(
+			byte[] id );
+
+	/***
 	 * Returns a collection of ranges on the 1-d space filling curve that
 	 * correspond to the n-dimensional range described in the query parameter.
 	 * 
@@ -75,6 +97,13 @@ public interface SpaceFillingCurve extends
 	 */
 	public BigInteger getEstimatedIdCount(
 			MultiDimensionalNumericData data );
+
+	/***
+	 * Get the range/size of a single insertion ID for each dimension
+	 * 
+	 * @return the range of a single insertion ID for each dimension
+	 */
+	public double[] getInsertionIdRangePerDimension();
 
 	/**
 	 * Get the total number of bits of precision for this space filling curve

@@ -263,4 +263,26 @@ public class HilbertSFC implements
 		return totalPrecision;
 	}
 
+	@Override
+	public MultiDimensionalNumericData getRanges(
+			final byte[] id ) {
+		return getIdOperations.convertFromHilbert(
+				id,
+				compactHilbertCurve,
+				dimensionDefinitions);
+	}
+
+	@Override
+	public long[] getCoordinates(
+			final byte[] id ) {
+		return getIdOperations.indicesFromHilbert(
+				id,
+				compactHilbertCurve,
+				dimensionDefinitions);
+	}
+
+	@Override
+	public double[] getInsertionIdRangePerDimension() {
+		return getIdOperations.getInsertionIdRangePerDimension(dimensionDefinitions);
+	}
 }

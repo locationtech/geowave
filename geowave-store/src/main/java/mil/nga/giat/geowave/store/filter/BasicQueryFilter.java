@@ -13,7 +13,7 @@ import mil.nga.giat.geowave.index.sfc.data.BinnedNumericDataset;
 import mil.nga.giat.geowave.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.index.sfc.data.NumericData;
 import mil.nga.giat.geowave.index.sfc.data.NumericRange;
-import mil.nga.giat.geowave.store.data.PersistenceEncoding;
+import mil.nga.giat.geowave.store.data.IndexedPersistenceEncoding;
 import mil.nga.giat.geowave.store.dimension.DimensionField;
 
 /**
@@ -80,7 +80,7 @@ public class BasicQueryFilter implements
 
 	@Override
 	public boolean accept(
-			final PersistenceEncoding persistenceEncoding ) {
+			final IndexedPersistenceEncoding persistenceEncoding ) {
 		final BinnedNumericDataset[] dataRanges = BinnedNumericDataset.applyBins(
 				persistenceEncoding.getNumericData(dimensionFields),
 				dimensionFields);

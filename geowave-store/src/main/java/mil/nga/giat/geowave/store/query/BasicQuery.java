@@ -65,11 +65,13 @@ public class BasicQuery implements
 		for (int d = 0; d < dimensionFields.length; d++) {
 			orderedConstraintsPerDimension[d] = constraints.constraintsPerTypeOfDimensionDefinition.get(dimensionFields[d].getBaseDefinition().getClass());
 		}
-		filters.add(createQueryFilter(
-
+		final QueryFilter queryFilter = createQueryFilter(
 				new BasicNumericDataset(
 						orderedConstraintsPerDimension),
-				dimensionFields));
+				dimensionFields);
+		if (queryFilter != null) {
+			filters.add(queryFilter);
+		}
 		return filters;
 	}
 

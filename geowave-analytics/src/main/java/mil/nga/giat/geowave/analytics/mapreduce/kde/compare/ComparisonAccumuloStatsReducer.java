@@ -5,10 +5,10 @@ import java.io.IOException;
 import javax.vecmath.Point2d;
 
 import mil.nga.giat.geowave.accumulo.AccumuloDataStore;
+import mil.nga.giat.geowave.accumulo.AccumuloOptions;
 import mil.nga.giat.geowave.analytics.mapreduce.kde.AccumuloKDEReducer;
 import mil.nga.giat.geowave.analytics.mapreduce.kde.KDEJobRunner;
 import mil.nga.giat.geowave.analytics.mapreduce.kde.ReducerContextWriterOperations;
-import mil.nga.giat.geowave.gt.adapter.FeatureDataAdapter;
 import mil.nga.giat.geowave.store.DataStore;
 import mil.nga.giat.geowave.store.GeometryUtils;
 import mil.nga.giat.geowave.store.adapter.AdapterStore;
@@ -18,6 +18,7 @@ import mil.nga.giat.geowave.store.index.Index;
 import mil.nga.giat.geowave.store.index.IndexStore;
 import mil.nga.giat.geowave.store.index.IndexType;
 import mil.nga.giat.geowave.store.index.MemoryIndexStore;
+import mil.nga.giat.geowave.vector.adapter.FeatureDataAdapter;
 
 import org.apache.accumulo.core.data.Mutation;
 import org.apache.hadoop.io.LongWritable;
@@ -129,7 +130,7 @@ public class ComparisonAccumuloStatsReducer extends
 				statsName));
 		builder = new SimpleFeatureBuilder(
 				type);
-		index = IndexType.SPATIAL.createDefaultIndex();
+		index = IndexType.SPATIAL_VECTOR.createDefaultIndex();
 		final IndexStore indexStore = new MemoryIndexStore(
 				new Index[] {
 					index
@@ -141,13 +142,19 @@ public class ComparisonAccumuloStatsReducer extends
 					new FeatureDataAdapter(
 							type)
 				});
+		final AccumuloOptions options = new AccumuloOptions();
+		options.setPersistDataStatistics(false);
+		// TODO consider an in memory statistics store that will write the
+		// statistics when the job is completed
 		dataStore = new AccumuloDataStore(
 				indexStore,
 				adapterStore,
+				null,
 				new ReducerContextWriterOperations(
 						context,
 						context.getConfiguration().get(
-								KDEJobRunner.TABLE_NAME)));
+								KDEJobRunner.TABLE_NAME)),
+				options);
 
 		totalKeys = context.getConfiguration().getLong(
 				"Entries per level.level" + level,

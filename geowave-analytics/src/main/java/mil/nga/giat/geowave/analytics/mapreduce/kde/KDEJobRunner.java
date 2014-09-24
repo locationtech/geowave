@@ -3,12 +3,10 @@ package mil.nga.giat.geowave.analytics.mapreduce.kde;
 import java.io.IOException;
 import java.util.List;
 
-import mil.nga.giat.geowave.accumulo.AccumuloAdapterStore;
-import mil.nga.giat.geowave.accumulo.AccumuloIndexStore;
-import mil.nga.giat.geowave.accumulo.AccumuloUtils;
 import mil.nga.giat.geowave.accumulo.BasicAccumuloOperations;
-import mil.nga.giat.geowave.gt.adapter.FeatureDataAdapter;
-import mil.nga.giat.geowave.gt.datastore.ExtractGeometryFilterVisitor;
+import mil.nga.giat.geowave.accumulo.metadata.AccumuloAdapterStore;
+import mil.nga.giat.geowave.accumulo.metadata.AccumuloIndexStore;
+import mil.nga.giat.geowave.accumulo.util.AccumuloUtils;
 import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.index.ByteArrayRange;
 import mil.nga.giat.geowave.index.ByteArrayUtils;
@@ -20,6 +18,8 @@ import mil.nga.giat.geowave.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.store.index.Index;
 import mil.nga.giat.geowave.store.index.IndexType;
 import mil.nga.giat.geowave.store.query.BasicQuery.Constraints;
+import mil.nga.giat.geowave.vector.adapter.FeatureDataAdapter;
+import mil.nga.giat.geowave.vector.plugin.ExtractGeometryFilterVisitor;
 
 import org.apache.accumulo.core.client.IteratorSetting;
 import org.apache.accumulo.core.client.mapreduce.AccumuloInputFormat;
@@ -75,7 +75,7 @@ public class KDEJobRunner extends
 	@SuppressWarnings("deprecation")
 	public int runJob()
 			throws Exception {
-		final Index spatialIndex = IndexType.SPATIAL.createDefaultIndex();
+		final Index spatialIndex = IndexType.SPATIAL_VECTOR.createDefaultIndex();
 
 		final Configuration conf = super.getConf();
 
@@ -130,7 +130,7 @@ public class KDEJobRunner extends
 			final Geometry bbox = (Geometry) filter.accept(
 					ExtractGeometryFilterVisitor.GEOMETRY_VISITOR,
 					null);
-			if (bbox != null && !bbox.equals(GeometryUtils.infinity())) {
+			if ((bbox != null) && !bbox.equals(GeometryUtils.infinity())) {
 				final Constraints c = GeometryUtils.basicConstraintsFromGeometry(bbox);
 				final List<ByteArrayRange> ranges = spatialIndex.getIndexStrategy().getQueryRanges(
 						c.getIndexConstraints(spatialIndex.getIndexStrategy()));
@@ -143,7 +143,7 @@ public class KDEJobRunner extends
 					GaussianCellMapper.CQL_FILTER_KEY,
 					cqlFilter);
 		}
-		
+
 		InputFormatBase.setConnectorInfo(
 				job,
 				user,
@@ -342,7 +342,7 @@ public class KDEJobRunner extends
 		if (!statsIndexStore.indexExists(spatialIndex.getId())) {
 			statsIndexStore.addIndex(spatialIndex);
 		}
-	
+
 		AccumuloOutputFormat.setZooKeeperInstance(
 				statsReducer,
 				instance,

@@ -9,8 +9,10 @@ import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.index.ByteArrayRange;
 import mil.nga.giat.geowave.index.sfc.RangeDecomposition;
 import mil.nga.giat.geowave.index.sfc.SFCDimensionDefinition;
+import mil.nga.giat.geowave.index.sfc.data.BasicNumericDataset;
 import mil.nga.giat.geowave.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.index.sfc.data.NumericData;
+import mil.nga.giat.geowave.index.sfc.data.NumericRange;
 
 import com.google.common.base.Functions;
 import com.google.common.collect.ImmutableList;
@@ -36,8 +38,8 @@ import com.google.uzaygezen.core.ranges.LongRangeHome;
  * currently used if no single dimension is more than 48 bits of precision, and
  * for query decomposition it is currently used if the total precision is <= 62
  * bits.
- * 
- * 
+ *
+ *
  */
 public class PrimitiveHilbertSFCOperations implements
 		HilbertSFCOperations
@@ -104,7 +106,7 @@ public class PrimitiveHilbertSFCOperations implements
 	 * Converts the incoming values (one per dimension) into a BitVector using
 	 * the Compact Hilbert instance. BitVector is a wrapper to allow values
 	 * longer than 64 bits.
-	 * 
+	 *
 	 * @param values
 	 *            n-dimensional point to transoform to a point on the hilbert
 	 *            SFC
@@ -129,14 +131,79 @@ public class PrimitiveHilbertSFCOperations implements
 				hilbertBitVector);
 
 		return hilbertBitVector;
+	}
 
+	@Override
+	public long[] indicesFromHilbert(
+			final byte[] hilbertValue,
+			final CompactHilbertCurve compactHilbertCurve,
+			final SFCDimensionDefinition[] dimensionDefinitions ) {
+		// because it returns an array of longs right now, just use a static
+		// method that the unbounded operations can use as well
+		return internalIndicesFromHilbert(
+				hilbertValue,
+				compactHilbertCurve,
+				dimensionDefinitions);
+	}
+
+	protected static long[] internalIndicesFromHilbert(
+			final byte[] hilbertValue,
+			final CompactHilbertCurve compactHilbertCurve,
+			final SFCDimensionDefinition[] dimensionDefinitions ) {
+		final BitVector[] perDimensionBitVectors = indexInverse(
+				hilbertValue,
+				compactHilbertCurve,
+				dimensionDefinitions);
+		final long[] retVal = new long[dimensionDefinitions.length];
+		for (int i = 0; i < retVal.length; i++) {
+			retVal[i] = perDimensionBitVectors[i].toExactLong();
+		}
+		return retVal;
+	}
+
+	@Override
+	public MultiDimensionalNumericData convertFromHilbert(
+			final byte[] hilbertValue,
+			final CompactHilbertCurve compactHilbertCurve,
+			final SFCDimensionDefinition[] dimensionDefinitions ) {
+		final BitVector[] perDimensionBitVectors = indexInverse(
+				hilbertValue,
+				compactHilbertCurve,
+				dimensionDefinitions);
+		final NumericRange[] retVal = new NumericRange[dimensionDefinitions.length];
+		for (int i = 0; i < retVal.length; i++) {
+			retVal[i] = denormalizeDimension(
+					dimensionDefinitions[i],
+					perDimensionBitVectors[i].toExactLong(),
+					binsPerDimension[i]);
+		}
+		return new BasicNumericDataset(
+				retVal);
+	}
+
+	protected static BitVector[] indexInverse(
+			final byte[] hilbertValue,
+			final CompactHilbertCurve compactHilbertCurve,
+			final SFCDimensionDefinition[] dimensionDefinitions ) {
+		final BitVector[] perDimensionBitVectors = new BitVector[dimensionDefinitions.length];
+
+		final BitVector hilbertBitVector = BitVectorFactories.OPTIMAL.apply(compactHilbertCurve.getSpec().sumBitsPerDimension());
+		hilbertBitVector.copyFromBigEndian(hilbertValue);
+		for (int i = 0; i < dimensionDefinitions.length; i++) {
+			perDimensionBitVectors[i] = BitVectorFactories.OPTIMAL.apply(dimensionDefinitions[i].getBitsOfPrecision());
+		}
+
+		compactHilbertCurve.indexInverse(
+				hilbertBitVector,
+				perDimensionBitVectors);
+		return perDimensionBitVectors;
 	}
 
 	/***
 	 * Used to normalize the value based on the dimension definition, which
 	 * includes the dimensional bounds and the bits of precision. This ensures
 	 * the maximum amount of fidelity for represented values.
-	 * 
+	 *
 	 * @param boundedDimensionDefinition
 	 *            describes the min, max, and cardinality of a dimension
 	 * @param value
@@ -163,6 +230,46 @@ public class PrimitiveHilbertSFCOperations implements
 		return (long) Math.max(
 				Math.ceil(normalizedValue * bins) - 1L,
 				0);
+
+	}
+
+	/***
+	 * Used to normalize the value based on the dimension definition, which
+	 * includes the dimensional bounds and the bits of precision. This ensures
+	 * the maximum amount of fidelity for represented values.
+	 *
+	 * @param boundedDimensionDefinition
+	 *            describes the min, max, and cardinality of a dimension
+	 * @param value
+	 *            hilbert value to be denormalized
+	 * @param bins
+	 *            precomputed number of bins in this dimension the number of
+	 *            bins expected based on the cardinality of the definition
+	 * @return range of values reprenenting this hilbert value (exlusive on the
+	 *         end)
+	 * @throws IllegalArgumentException
+	 *             thrown when the value passed doesn't fit with in the hilbert
+	 *             SFC for the dimension definition provided
+	 */
+	private NumericRange denormalizeDimension(
+			final SFCDimensionDefinition boundedDimensionDefinition,
+			final long value,
+			final long bins )
+			throws IllegalArgumentException {
+		final double min = (double) (value) / (double) bins;
+		final double max = (double) (value + 1) / (double) bins;
+		if ((min < 0) || (min > 1)) {
+			throw new IllegalArgumentException(
+					"Value (" + value + ") is not within bounds. The normalized value (" + min + ") must be within (0,1)");
+		}
+		if ((max < 0) || (max > 1)) {
+			throw new IllegalArgumentException(
+					"Value (" + value + ") is not within bounds. The normalized value (" + max + ") must be within (0,1)");
+		}
+		// scale it to a value within the dimension definition range
+		return new NumericRange(
+				boundedDimensionDefinition.denormalize(min),
+				boundedDimensionDefinition.denormalize(max));
 
 	}
 
@@ -257,7 +364,7 @@ public class PrimitiveHilbertSFCOperations implements
 			final long endValue = clamp(
 					minHilbertValue,
 					maxHilbertValue,
-					range.getIndexRange().getEnd());
+					range.getIndexRange().getEnd() - 1);
 			// make sure its padded if necessary
 			final byte[] start = HilbertSFC.fitExpectedByteCount(
 					expectedByteCount,
@@ -300,7 +407,7 @@ public class PrimitiveHilbertSFCOperations implements
 	 * decomposition stops when the range is equal or smaller than this value).
 	 * Values is based on the _maximumRangeDecompsed and _minRangeDecompsed
 	 * instance members.
-	 * 
+	 *
 	 * @param minRangeList
 	 *            minimum values for each dimension (ordered)
 	 * @param maxRangeList
@@ -354,5 +461,15 @@ public class PrimitiveHilbertSFCOperations implements
 			estimatedIdCount *= (Math.abs(binMax - binMin) + 1);
 		}
 		return BigInteger.valueOf(estimatedIdCount);
+	}
+
+	@Override
+	public double[] getInsertionIdRangePerDimension(
+			final SFCDimensionDefinition[] dimensionDefinitions ) {
+		final double[] retVal = new double[dimensionDefinitions.length];
+		for (int i = 0; i < dimensionDefinitions.length; i++) {
+			retVal[i] = dimensionDefinitions[i].getRange() / binsPerDimension[i];
+		}
+		return retVal;
 	}
 }

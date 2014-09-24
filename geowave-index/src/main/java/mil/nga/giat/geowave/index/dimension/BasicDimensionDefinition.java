@@ -4,6 +4,7 @@ import java.nio.ByteBuffer;
 
 import mil.nga.giat.geowave.index.dimension.bin.BinRange;
 import mil.nga.giat.geowave.index.sfc.data.NumericData;
+import mil.nga.giat.geowave.index.sfc.data.NumericRange;
 
 /**
  * The Basic Dimension Definition class defines a Space Filling Curve dimension
@@ -38,7 +39,6 @@ public class BasicDimensionDefinition implements
 	@Override
 	public double normalize(
 			double value ) {
-
 		if ((value < min) || (value > max)) {
 			value = clamp(
 					value,
@@ -129,6 +129,44 @@ public class BasicDimensionDefinition implements
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
 		min = buf.getDouble();
 		max = buf.getDouble();
+	}
+
+	@Override
+	public double denormalize(
+			double value ) {
+		if ((value < 0) || (value > 1)) {
+			value = clamp(
+					value,
+					0,
+					1);
+		}
+
+		return (value * (max - min)) + min;
+	}
+
+	@Override
+	public NumericRange getDenormalizedRange(
+			final BinRange range ) {
+		return new NumericRange(
+				range.getNormalizedMin(),
+				range.getNormalizedMax());
+	}
+
+	@Override
+	public int getFixedBinIdSize() {
+		return 0;
+	}
+
+	@Override
+	public double getRange() {
+		return max - min;
+	}
+
+	@Override
+	public NumericRange getBounds() {
+		return new NumericRange(
+				min,
+				max);
 	}
 
 }
