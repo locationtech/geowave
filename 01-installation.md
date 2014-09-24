@@ -11,7 +11,7 @@ permalink: "installation.html"
 # Deploy: GeoServer
 
 ## Versions
-GeoWave is currently built against Geoserver 2.5.0 and Geotools 11.0.  The Geotools version will typically be linked to the geoserver version.  If wish to deploy against a different version simply change the value in the pom and rebuild (see: building) - but no guaruantees.  
+GeoWave is currently built against Geoserver 2.5.2 and Geotools 11.2.  The Geotools version will typically be linked to the geoserver version.  If wish to deploy against a different version simply change the value in the pom and rebuild (see: building) - but no guaruantees.  
 
 ## Install
 First we need to build the geoserver plugin - from the geowave root directory:
@@ -47,33 +47,7 @@ There are (with Accumulo 1.5.x or greater) two out of the box ways of doing this
   <h5>Dependency versions</h5>
   <p>
     It was mentioned above, but just to emphasize:<br/>
-  	GeoWave is currently (as of v 0.7) built against Accumulo 1.5.0, Geoserver 2.5.0, and Geotools 11.0.<br/>
-	If this doesn't match the enviornment you are deploying to be sure to change these values in the parent pom.xml, located in the root of the GeoWave project.
+  	GeoWave is currently (as of v 0.8.1) built against Accumulo 1.5.1, Geoserver 2.5.2, and Geotools 11.2.<br/>
+	If this doesn't match the environment you are deploying to be sure to change these values in the parent pom.xml, located in the root of the GeoWave project.
   </p>
 </div>
-
-
-
-
-You should see something that looks similar to:
-
-	[INFO] ------------------------------------------------------------------------
-	[INFO] Reactor Summary:
-	[INFO]
-	[INFO] geowave-parent .................................... SUCCESS [1.132s]
-	[INFO] geowave-index ..................................... SUCCESS [6.559s]
-	[INFO] geowave-store ..................................... SUCCESS [2.046s]
-	[INFO] geowave-accumulo .................................. SUCCESS [4.402s]
-	[INFO] geowave-gt ........................................ SUCCESS [5.056s]
-	[INFO] geowave-ingest .................................... SUCCESS [2.847s]
-	[INFO] geowave-analytics ................................. SUCCESS [4.749s]
-	[INFO] geowave-test ...................................... SUCCESS [2.158s]
-	[INFO] ------------------------------------------------------------------------
-	[INFO] BUILD SUCCESS
-	[INFO] ------------------------------------------------------------------------
-	[INFO] Total time: 29.270s
-	[INFO] Finished at: Mon Jun 09 21:22:16 EDT 2014
-	[INFO] Final Memory: 80M/382M
-	[INFO] ------------------------------------------------------------------------
-
-
