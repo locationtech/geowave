@@ -9,4 +9,4 @@ permalink: "javadoc.html"
 
 
 
-<a href="https://ngageoint.github.io/geowave/javadoc/index.html" target="_blank"><h1>Javadoc</h1></a>
+<a href="https://ngageoint.github.io/geowave/javadoc/index.html" target="_blank">Javadoc</a>
