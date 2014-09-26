@@ -71,11 +71,11 @@ Since GeoWave isn't currently in maven central we will build and install a local
 First we need to build the geoserver plugin - from the geowave root directory:
     
     $ cd geowave-deploy
-    $ mvn package -Pgeotools-container-singlejar
+    $ mvn package -P geotools-container-singlejar
 
 let's assume you have geoserver deployed in a tomcat container in /opt/tomcat
 
-    $ cp target/geowave-gt-0.8.0-geoserver-singlejar.jar /opt/tomcat/webapps/geoserver/WEB-INF/lib/
+    $ cp target/geowave-deploy-0.8.1-geoserver-singlejar.jar /opt/tomcat/webapps/geoserver/WEB-INF/lib/
 
 and re-start tomcat
 
@@ -84,7 +84,7 @@ and re-start tomcat
 This should be very familiar by now; from the geowave root directory:
 
     $ cd geowave-deploy
-    $ mvn package -Paccumulo-container-singlejar
+    $ mvn package -P accumulo-container-singlejar
 
 This distributable needs to be in the Accumulo classpath on every tablet server.
 
