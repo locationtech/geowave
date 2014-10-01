@@ -2,8 +2,8 @@ package mil.nga.giat.geowave.ingest;
 
 import mil.nga.giat.geowave.accumulo.AccumuloOperations;
 import mil.nga.giat.geowave.accumulo.BasicAccumuloOperations;
+import mil.nga.giat.geowave.store.index.DimensionalityType;
 import mil.nga.giat.geowave.store.index.Index;
-import mil.nga.giat.geowave.store.index.IndexType;
 
 import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
@@ -18,7 +18,7 @@ import org.apache.log4j.Logger;
  * setting up GeoWave to appropriately connect to Accumulo. This class also can
  * perform the function of clearing data for a namespace if that option is
  * activated.
- * 
+ *
  */
 public class AccumuloCommandLineOptions
 {
@@ -30,9 +30,8 @@ public class AccumuloCommandLineOptions
 	private final String namespace;
 	private final String visibility;
 	private final boolean clearNamespace;
-	private final IndexType type;
+	private final DimensionalityType type;
 	private AccumuloOperations operations;
-	private final Index primaryIndex;
 
 	public AccumuloCommandLineOptions(
 			final String zookeepers,
@@ -42,7 +41,7 @@ public class AccumuloCommandLineOptions
 			final String namespace,
 			final String visibility,
 			final boolean clearNamespace,
-			final IndexType type )
+			final DimensionalityType type )
 			throws AccumuloException,
 			AccumuloSecurityException {
 		this.zookeepers = zookeepers;
@@ -53,8 +52,6 @@ public class AccumuloCommandLineOptions
 		this.visibility = visibility;
 		this.clearNamespace = clearNamespace;
 		this.type = type;
-
-		primaryIndex = type.createDefaultIndex();
 
 		if (clearNamespace) {
 			clearNamespace();
@@ -98,16 +95,12 @@ public class AccumuloCommandLineOptions
 		return visibility;
 	}
 
-	public IndexType getType() {
+	public DimensionalityType getType() {
 		return type;
 	}
 
 	public boolean isClearNamespace() {
 		return clearNamespace;
-	}
-
-	public Index getPrimaryIndex() {
-		return primaryIndex;
 	}
 
 	public synchronized AccumuloOperations getAccumuloOperations()
@@ -122,6 +115,22 @@ public class AccumuloCommandLineOptions
 					namespace);
 		}
 		return operations;
+	}
+
+	public Index getIndex(
+			final Index[] supportedIndices ) {
+		for (final Index i : supportedIndices) {
+			if (i.getDimensionalityType().equals(
+					type)) {
+				return i;
+			}
+		}
+		return null;
+	}
+
+	public boolean isSupported(
+			final Index[] supportedIndices ) {
+		return (getIndex(supportedIndices) != null);
 	}
 
 	public static AccumuloCommandLineOptions parseOptions(
@@ -144,11 +153,11 @@ public class AccumuloCommandLineOptions
 				"n",
 				"");
 		final String typeValue = commandLine.getOptionValue(
-				"index",
+				"dim",
 				"spatial");
-		IndexType type = IndexType.SPATIAL;
+		DimensionalityType type = DimensionalityType.SPATIAL;
 		if (typeValue.equalsIgnoreCase("spatial-temporal")) {
-			type = IndexType.SPATIAL_TEMPORAL;
+			type = DimensionalityType.SPATIAL_TEMPORAL;
 		}
 		if (zookeepers == null) {
 			success = false;
@@ -229,10 +238,10 @@ public class AccumuloCommandLineOptions
 				"The table namespace (optional; default is no namespace)");
 		allOptions.addOption(namespace);
 		final Option indexType = new Option(
-				"index",
-				"index",
+				"dim",
+				"dimensionality",
 				true,
-				"The type of index, either 'spatial' or 'spatial-temporal' (optional; default is 'spatial')");
+				"The dimensionality type for the index, either 'spatial' or 'spatial-temporal' (optional; default is 'spatial')");
 		allOptions.addOption(indexType);
 		allOptions.addOption(new Option(
 				"c",

@@ -2,6 +2,7 @@ package mil.nga.giat.geowave.ingest;
 
 import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.ingest.hdfs.mapreduce.GeoWaveIngestKey;
+import mil.nga.giat.geowave.ingest.local.IngestRunData;
 import mil.nga.giat.geowave.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.store.adapter.WritableDataAdapter;
@@ -17,7 +18,7 @@ import org.apache.log4j.Logger;
  */
 public class GeoWaveData<T>
 {
-	private final static Logger LOGGER = Logger.getLogger(IngestRunData.class);
+	private final static Logger LOGGER = Logger.getLogger(GeoWaveData.class);
 	private final ByteArrayId adapterId;
 	private final ByteArrayId indexId;
 	private final WritableDataAdapter<T> adapter;

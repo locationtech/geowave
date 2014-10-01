@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import junit.framework.Assert;
+import mil.nga.giat.geowave.accumulo.metadata.AccumuloAdapterStore;
+import mil.nga.giat.geowave.accumulo.metadata.AccumuloDataStatisticsStore;
+import mil.nga.giat.geowave.accumulo.metadata.AccumuloIndexStore;
 import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.index.StringUtils;
 import mil.nga.giat.geowave.store.CloseableIterator;
@@ -72,18 +75,22 @@ public class AccumuloOptionsTest
 		final AccumuloAdapterStore adapterStore = new AccumuloAdapterStore(
 				accumuloOperations);
 
+		final AccumuloDataStatisticsStore statsStore = new AccumuloDataStatisticsStore(
+				accumuloOperations);
+
 		final DataStore mockDataStore = new AccumuloDataStore(
 				indexStore,
 				adapterStore,
+				statsStore,
 				accumuloOperations,
 				accumuloOptions);
 
-		final Index index = IndexType.SPATIAL.createDefaultIndex();
+		final Index index = IndexType.SPATIAL_VECTOR.createDefaultIndex();
 		final WritableDataAdapter<TestGeometry> adapter = new TestGeometryAdapter();
 
 		final GeometryFactory factory = new GeometryFactory();
 
-		accumuloOptions.setCreateIndex(false);
+		accumuloOptions.setCreateTable(false);
 		accumuloOptions.setPersistIndex(false);
 
 		final List<ByteArrayId> rowIds = mockDataStore.ingest(
@@ -101,7 +108,7 @@ public class AccumuloOptionsTest
 				0,
 				rowIds.size());
 
-		accumuloOptions.setCreateIndex(true);
+		accumuloOptions.setCreateTable(true);
 
 		final ByteArrayId rowId1 = mockDataStore.ingest(
 				adapter,
@@ -186,13 +193,17 @@ public class AccumuloOptionsTest
 		final AccumuloAdapterStore adapterStore = new AccumuloAdapterStore(
 				accumuloOperations);
 
+		final AccumuloDataStatisticsStore statsStore = new AccumuloDataStatisticsStore(
+				accumuloOperations);
+
 		final DataStore mockDataStore = new AccumuloDataStore(
 				indexStore,
 				adapterStore,
+				statsStore,
 				accumuloOperations,
 				accumuloOptions);
 
-		final Index index = IndexType.SPATIAL.createDefaultIndex();
+		final Index index = IndexType.SPATIAL_VECTOR.createDefaultIndex();
 		final WritableDataAdapter<TestGeometry> adapter = new TestGeometryAdapter();
 
 		final GeometryFactory factory = new GeometryFactory();
@@ -302,13 +313,17 @@ public class AccumuloOptionsTest
 		final AccumuloAdapterStore adapterStore = new AccumuloAdapterStore(
 				accumuloOperations);
 
+		final AccumuloDataStatisticsStore statsStore = new AccumuloDataStatisticsStore(
+				accumuloOperations);
+
 		final DataStore mockDataStore = new AccumuloDataStore(
 				indexStore,
 				adapterStore,
+				statsStore,
 				accumuloOperations,
 				accumuloOptions);
 
-		final Index index = IndexType.SPATIAL.createDefaultIndex();
+		final Index index = IndexType.SPATIAL_VECTOR.createDefaultIndex();
 		final WritableDataAdapter<TestGeometry> adapter = new TestGeometryAdapter();
 
 		final GeometryFactory factory = new GeometryFactory();
@@ -415,13 +430,17 @@ public class AccumuloOptionsTest
 		final AccumuloAdapterStore adapterStore = new AccumuloAdapterStore(
 				accumuloOperations);
 
+		final AccumuloDataStatisticsStore statsStore = new AccumuloDataStatisticsStore(
+				accumuloOperations);
+
 		final AccumuloDataStore mockDataStore = new AccumuloDataStore(
 				indexStore,
 				adapterStore,
+				statsStore,
 				accumuloOperations,
 				accumuloOptions);
 
-		final Index index = IndexType.SPATIAL.createDefaultIndex();
+		final Index index = IndexType.SPATIAL_VECTOR.createDefaultIndex();
 		final WritableDataAdapter<TestGeometry> adapter = new TestGeometryAdapter();
 
 		final GeometryFactory factory = new GeometryFactory();

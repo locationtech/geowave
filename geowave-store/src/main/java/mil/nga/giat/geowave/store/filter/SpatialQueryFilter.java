@@ -11,7 +11,7 @@ import mil.nga.giat.geowave.index.sfc.data.BasicNumericDataset;
 import mil.nga.giat.geowave.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.index.sfc.data.NumericData;
 import mil.nga.giat.geowave.store.GeometryUtils;
-import mil.nga.giat.geowave.store.data.PersistenceEncoding;
+import mil.nga.giat.geowave.store.data.IndexedPersistenceEncoding;
 import mil.nga.giat.geowave.store.dimension.DimensionField;
 import mil.nga.giat.geowave.store.dimension.GeometryWrapper;
 
@@ -106,7 +106,7 @@ public class SpatialQueryFilter extends
 
 	@Override
 	public boolean accept(
-			final PersistenceEncoding persistenceEncoding ) {
+			final IndexedPersistenceEncoding persistenceEncoding ) {
 		if (queryGeometry == null) {
 			return true;
 		}

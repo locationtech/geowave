@@ -2,6 +2,7 @@ package mil.nga.giat.geowave.accumulo;
 
 import java.util.Arrays;
 import java.util.Date;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -11,6 +12,8 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.concurrent.TimeUnit;
 
+import mil.nga.giat.geowave.accumulo.util.AccumuloUtils;
+import mil.nga.giat.geowave.accumulo.util.ConnectorPool;
 import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.index.StringUtils;
 
@@ -20,6 +23,7 @@ import org.apache.accumulo.core.client.BatchDeleter;
 import org.apache.accumulo.core.client.BatchScanner;
 import org.apache.accumulo.core.client.BatchWriterConfig;
 import org.apache.accumulo.core.client.Connector;
+import org.apache.accumulo.core.client.IteratorSetting;
 import org.apache.accumulo.core.client.MutationsRejectedException;
 import org.apache.accumulo.core.client.Scanner;
 import org.apache.accumulo.core.client.TableExistsException;
@@ -27,6 +31,7 @@ import org.apache.accumulo.core.client.TableNotFoundException;
 import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.Range;
 import org.apache.accumulo.core.data.Value;
+import org.apache.accumulo.core.iterators.IteratorUtil.IteratorScope;
 import org.apache.accumulo.core.security.Authorizations;
 import org.apache.hadoop.io.Text;
 import org.apache.log4j.Logger;
@@ -39,7 +44,7 @@ import org.apache.log4j.Logger;
 public class BasicAccumuloOperations implements
 		AccumuloOperations
 {
-	private final static Logger logger = Logger.getLogger(BasicAccumuloOperations.class);
+	private final static Logger LOGGER = Logger.getLogger(BasicAccumuloOperations.class);
 	private static final int DEFAULT_NUM_THREADS = 16;
 	private static final long DEFAULT_TIMEOUT_MILLIS = 1000L; // 1 second
 	private static final long DEFAULT_BYTE_BUFFER_SIZE = 1048576L; // 1 MB
@@ -58,7 +63,7 @@ public class BasicAccumuloOperations implements
 	 * This is will create an Accumulo connector based on passed in connection
 	 * information and credentials for convenience convenience. It will also use
 	 * reasonable defaults for unspecified parameters.
-	 * 
+	 *
 	 * @param zookeeperUrl
 	 *            The comma-delimited URLs for all zookeeper servers, this will
 	 *            be directly used to instantiate a ZookeeperInstance
@@ -100,7 +105,7 @@ public class BasicAccumuloOperations implements
 	/**
 	 * This constructor uses reasonable defaults and only requires an Accumulo
 	 * connector
-	 * 
+	 *
 	 * @param connector
 	 *            The connector to use for all operations
 	 */
@@ -114,7 +119,7 @@ public class BasicAccumuloOperations implements
 	/**
 	 * This constructor uses reasonable defaults and requires an Accumulo
 	 * connector and table namespace
-	 * 
+	 *
 	 * @param connector
 	 *            The connector to use for all operations
 	 * @param tableNamespace
@@ -135,7 +140,7 @@ public class BasicAccumuloOperations implements
 	/**
 	 * This is the full constructor for the operation factory and should be used
 	 * if any of the defaults are insufficient.
-	 * 
+	 *
 	 * @param numThreads
 	 *            The number of threads to use for a batch scanner and batch
 	 *            writer
@@ -209,12 +214,12 @@ public class BasicAccumuloOperations implements
 						qName);
 			}
 			catch (AccumuloException | AccumuloSecurityException | TableExistsException e) {
-				logger.warn(
+				LOGGER.warn(
 						"Unable to create table '" + qName + "'",
 						e);
 			}
 		}
-		return new mil.nga.giat.geowave.accumulo.BatchWriter(
+		return new mil.nga.giat.geowave.accumulo.BatchWriterWrapper(
 				connector.createBatchWriter(
 						qName,
 						byteBufferSize,
@@ -243,12 +248,12 @@ public class BasicAccumuloOperations implements
 			return true;
 		}
 		catch (final TableNotFoundException e) {
-			logger.warn(
+			LOGGER.warn(
 					"Unable to delete table, table not found '" + qName + "'",
 					e);
 		}
 		catch (AccumuloException | AccumuloSecurityException e) {
-			logger.warn(
+			LOGGER.warn(
 					"Unable to delete table '" + qName + "'",
 					e);
 		}
@@ -278,7 +283,7 @@ public class BasicAccumuloOperations implements
 						tableName);
 			}
 			catch (TableNotFoundException | AccumuloException | AccumuloSecurityException e) {
-				logger.warn(
+				LOGGER.warn(
 						"Unable to delete table '" + tableName + "'",
 						e);
 				success = false;
@@ -288,16 +293,30 @@ public class BasicAccumuloOperations implements
 	}
 
 	@Override
-	public boolean deleteRow(
+	public boolean delete(
 			final String tableName,
-			final ByteArrayId rowId ) {
+			final ByteArrayId rowId,
+			final String columnFamily,
+			final String columnQualifier ) {
 
 		boolean success = true;
 		BatchDeleter deleter = null;
 		try {
 
 			deleter = createBatchDeleter(tableName);
-
+			if ((columnFamily != null) && !columnFamily.isEmpty()) {
+				if ((columnQualifier != null) && !columnQualifier.isEmpty()) {
+					deleter.fetchColumn(
+							new Text(
+									columnFamily),
+							new Text(
+									columnQualifier));
+				}
+				else {
+					deleter.fetchColumnFamily(new Text(
+							columnFamily));
+				}
+			}
 			deleter.setRanges(Arrays.asList(Range.exact(new Text(
 					rowId.getBytes()))));
 
@@ -320,7 +339,7 @@ public class BasicAccumuloOperations implements
 			deleter.close();
 		}
 		catch (final TableNotFoundException | MutationsRejectedException e) {
-			logger.warn(
+			LOGGER.warn(
 					"Unable to delete row from table [" + tableName + "].",
 					e);
 			if (deleter != null) {
@@ -453,5 +472,142 @@ public class BasicAccumuloOperations implements
 	public void setCacheTimeoutMillis(
 			final long cacheTimeoutMillis ) {
 		this.cacheTimeoutMillis = cacheTimeoutMillis;
+	}
+
+	@Override
+	public boolean attachIterators(
+			final String tableName,
+			final boolean createTable,
+			final IteratorConfig[] iterators )
+			throws TableNotFoundException {
+		final String qName = getQualifiedTableName(tableName);
+		if (createTable && !connector.tableOperations().exists(
+				qName)) {
+			try {
+				connector.tableOperations().create(
+						qName);
+			}
+			catch (AccumuloException | AccumuloSecurityException | TableExistsException e) {
+				LOGGER.warn(
+						"Unable to create table '" + qName + "'",
+						e);
+			}
+		}
+		try {
+			if ((iterators != null) && (iterators.length > 0)) {
+				final Map<String, EnumSet<IteratorScope>> iteratorScopes = connector.tableOperations().listIterators(
+						qName);
+				for (final IteratorConfig iteratorConfig : iterators) {
+					final IteratorSetting iteratorSetting = iteratorConfig.getIteratorSettings();
+					boolean mustDelete = false;
+					boolean exists = false;
+					final EnumSet<IteratorScope> existingScopes = iteratorScopes.get(iteratorSetting.getName());
+					EnumSet<IteratorScope> configuredScopes;
+					if (iteratorConfig.getScopes() == null) {
+						configuredScopes = EnumSet.allOf(IteratorScope.class);
+					}
+					else {
+						configuredScopes = iteratorConfig.getScopes();
+					}
+					if (existingScopes != null) {
+						if (existingScopes.size() == configuredScopes.size()) {
+							exists = true;
+							for (final IteratorScope s : existingScopes) {
+								if (!configuredScopes.contains(s)) {
+									// this iterator exists with the wrong
+									// scope, we will assume we want to remove
+									// it and add the new configuration
+									LOGGER.warn("found iterator '" + iteratorSetting.getName() + "' missing scope '" + s.name() + "', removing it and re-attaching");
+
+									mustDelete = true;
+									break;
+								}
+							}
+						}
+						if (existingScopes.size() > 0) {
+							// see if the options are the same, if they are not
+							// the same, apply a merge with the existing options
+							// and the configured options
+							final IteratorSetting setting = connector.tableOperations().getIteratorSetting(
+									qName,
+									iteratorSetting.getName(),
+									existingScopes.iterator().next());
+							final Map<String, String> existingOptions = setting.getOptions();
+							final Map<String, String> configuredOptions = iteratorSetting.getOptions();
+							for (final Entry<String, String> e : existingOptions.entrySet()) {
+								final String configuredValue = configuredOptions.get(e.getKey());
+								if ((e.getValue() == null) && (configuredValue == null)) {
+									continue;
+								}
+								else if ((e.getValue() == null) || ((e.getValue() != null) && !e.getValue().equals(
+										configuredValue))) {
+									final String newValue = iteratorConfig.mergeOption(
+											e.getKey(),
+											e.getValue(),
+											configuredValue);
+									if ((newValue != null) && newValue.equals(e.getValue())) {
+										// once merged the value didn't change,
+										// so just continue
+										continue;
+									}
+									mustDelete = true;
+									if (newValue == null) {
+										iteratorSetting.removeOption(e.getKey());
+									}
+									else {
+										iteratorSetting.addOption(
+												e.getKey(),
+												newValue);
+									}
+								}
+							}
+							for (final Entry<String, String> e : configuredOptions.entrySet()) {
+								if (!existingOptions.containsKey(e.getKey())) {
+									// existing value should be null because
+									// this key is contained in the merged set
+									if (e.getValue() == null) {
+										continue;
+									}
+									else {
+										final String newValue = iteratorConfig.mergeOption(
+												e.getKey(),
+												null,
+												e.getValue());
+										mustDelete = true;
+										if (newValue == null) {
+											iteratorSetting.removeOption(e.getKey());
+										}
+										else {
+											iteratorSetting.addOption(
+													e.getKey(),
+													newValue);
+										}
+									}
+								}
+							}
+						}
+					}
+					if (mustDelete) {
+						connector.tableOperations().removeIterator(
+								qName,
+								iteratorSetting.getName(),
+								existingScopes);
+						exists = false;
+					}
+					if (!exists) {
+						connector.tableOperations().attachIterator(
+								qName,
+								iteratorSetting,
+								configuredScopes);
+					}
+				}
+			}
+		}
+		catch (AccumuloException | AccumuloSecurityException e) {
+			LOGGER.warn(
+					"Unable to create table '" + qName + "'",
+					e);
+		}
+		return false;
 	}
 }

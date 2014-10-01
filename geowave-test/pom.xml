@@ -1,19 +1,18 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<artifactId>geowave-parent</artifactId>
 		<groupId>mil.nga.giat</groupId>
 		<relativePath>../</relativePath>
-		<version>0.8.0-SNAPSHOT</version>
+		<version>0.8.1-SNAPSHOT</version>
 	</parent>
 	<properties>
 		<!-- Set these properties to connect to a remote Accumulo cluster for testing, 
 			otherwise the test will run a mini accumulo cluster using a temp directory -->
-		<zookeeperUrl></zookeeperUrl>
-		<instance></instance>
-		<username></username>
-		<password></password>
+		<zookeeperUrl />
+		<instance />
+		<username />
+		<password />
 	</properties>
 	<artifactId>geowave-test</artifactId>
 	<name>geowave-test</name>
@@ -22,7 +21,7 @@
 		<dependency>
 			<groupId>mil.nga.giat</groupId>
 			<artifactId>geowave-types</artifactId>
-			<version>0.8.0-SNAPSHOT</version>
+			<version>0.8.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>

@@ -11,7 +11,7 @@ import org.apache.log4j.Logger;
 /**
  * A set of convenience methods for serializing and deserializing persistable
  * objects
- * 
+ *
  */
 public class PersistenceUtils
 {
@@ -95,7 +95,7 @@ public class PersistenceUtils
 	}
 
 	@SuppressWarnings("unchecked")
-	private static <T> T classFactory(
+	public static <T> T classFactory(
 			final String className,
 			final Class<T> expectedType ) {
 		Class<?> factoryType = null;

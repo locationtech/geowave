@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import mil.nga.giat.geowave.gt.adapter.FeatureDataAdapter;
 import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.index.StringUtils;
 import mil.nga.giat.geowave.ingest.GeoWaveData;
@@ -30,6 +29,7 @@ import mil.nga.giat.geowave.store.data.field.FieldVisibilityHandler;
 import mil.nga.giat.geowave.store.data.field.GlobalVisibilityHandler;
 import mil.nga.giat.geowave.store.index.Index;
 import mil.nga.giat.geowave.store.index.IndexType;
+import mil.nga.giat.geowave.vector.adapter.FeatureDataAdapter;
 
 import org.apache.avro.Schema;
 import org.apache.commons.io.FilenameUtils;
@@ -78,8 +78,8 @@ public class GeoLifeIngestPlugin implements
 				geolifeTrackType);
 
 		supportedIndices = new Index[] {
-			IndexType.SPATIAL.createDefaultIndex(),
-			IndexType.SPATIAL_TEMPORAL.createDefaultIndex()
+			IndexType.SPATIAL_VECTOR.createDefaultIndex(),
+			IndexType.SPATIAL_TEMPORAL_VECTOR.createDefaultIndex()
 		};
 
 	}

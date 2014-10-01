@@ -7,6 +7,7 @@ import mil.nga.giat.geowave.index.PersistenceUtils;
 import mil.nga.giat.geowave.index.dimension.NumericDimensionDefinition;
 import mil.nga.giat.geowave.index.dimension.bin.BinRange;
 import mil.nga.giat.geowave.index.sfc.data.NumericData;
+import mil.nga.giat.geowave.index.sfc.data.NumericRange;
 import mil.nga.giat.geowave.store.data.field.FieldReader;
 import mil.nga.giat.geowave.store.data.field.FieldWriter;
 
@@ -41,9 +42,38 @@ abstract public class SpatialField implements
 	}
 
 	@Override
+	public NumericRange getDenormalizedRange(
+			final BinRange range ) {
+		return new NumericRange(
+				range.getNormalizedMin(),
+				range.getNormalizedMax());
+	}
+
+	@Override
+	public double getRange() {
+		return baseDefinition.getRange();
+	}
+
+	@Override
+	public int getFixedBinIdSize() {
+		return 0;
+	}
+
+	@Override
+	public NumericRange getBounds() {
+		return baseDefinition.getBounds();
+	}
+
+	@Override
 	public double normalize(
 			final double value ) {
 		return baseDefinition.normalize(value);
+	}
+
+	@Override
+	public double denormalize(
+			final double value ) {
+		return baseDefinition.denormalize(value);
 	}
 
 	@Override

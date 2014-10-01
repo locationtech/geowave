@@ -6,6 +6,7 @@ import mil.nga.giat.geowave.index.PersistenceUtils;
 import mil.nga.giat.geowave.index.dimension.NumericDimensionDefinition;
 import mil.nga.giat.geowave.index.dimension.bin.BinRange;
 import mil.nga.giat.geowave.index.sfc.data.NumericData;
+import mil.nga.giat.geowave.index.sfc.data.NumericRange;
 
 /**
  * This class wraps a dimension definition with a cardinality (bits of
@@ -63,6 +64,33 @@ public class SFCDimensionDefinition implements
 	public double normalize(
 			final double value ) {
 		return dimensionDefinition.normalize(value);
+	}
+
+	@Override
+	public double denormalize(
+			final double value ) {
+		return dimensionDefinition.denormalize(value);
+	}
+
+	@Override
+	public NumericRange getDenormalizedRange(
+			final BinRange range ) {
+		return dimensionDefinition.getDenormalizedRange(range);
+	}
+
+	@Override
+	public int getFixedBinIdSize() {
+		return dimensionDefinition.getFixedBinIdSize();
+	}
+
+	@Override
+	public double getRange() {
+		return dimensionDefinition.getRange();
+	}
+
+	@Override
+	public NumericRange getBounds() {
+		return dimensionDefinition.getBounds();
 	}
 
 	@Override

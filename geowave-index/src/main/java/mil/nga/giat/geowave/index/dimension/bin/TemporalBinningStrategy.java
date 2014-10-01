@@ -1,6 +1,7 @@
 package mil.nga.giat.geowave.index.dimension.bin;
 
 import java.nio.ByteBuffer;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -8,6 +9,7 @@ import java.util.TimeZone;
 
 import mil.nga.giat.geowave.index.StringUtils;
 import mil.nga.giat.geowave.index.sfc.data.NumericData;
+import mil.nga.giat.geowave.index.sfc.data.NumericRange;
 
 /**
  * This class is useful for establishing a consistent binning strategy using a
@@ -43,8 +45,8 @@ public class TemporalBinningStrategy implements
 		}
 
 		public static Unit getUnit(
-				int calendarEnum ) {
-			for (Unit u : values()) {
+				final int calendarEnum ) {
+			for (final Unit u : values()) {
 				if (u.calendarEnum == calendarEnum) {
 					return u;
 				}
@@ -55,6 +57,11 @@ public class TemporalBinningStrategy implements
 	};
 
 	protected static final long MILLIS_PER_DAY = 86400000L;
+	private static final NumberFormat TWO_DIGIT_NUMBER = NumberFormat.getIntegerInstance();
+	{
+		TWO_DIGIT_NUMBER.setMinimumIntegerDigits(2);
+		TWO_DIGIT_NUMBER.setMaximumIntegerDigits(2);
+	}
 
 	private Unit unit;
 	private String timezone;
@@ -156,6 +163,19 @@ public class TemporalBinningStrategy implements
 		}
 	}
 
+	@Override
+	public int getFixedBinIdSize() {
+		switch (unit) {
+			case YEAR:
+			default:
+				return 4;
+			case MONTH:
+				return 7;
+			case DAY:
+				return 10;
+		}
+	}
+
 	private byte[] getBinId(
 			final Calendar value ) {
 		// this is assuming we want human-readable bin ID's but alternatively we
@@ -165,10 +185,42 @@ public class TemporalBinningStrategy implements
 			default:
 				return StringUtils.stringToBinary(Integer.toString(value.get(Calendar.YEAR)));
 			case MONTH:
-				return StringUtils.stringToBinary((Integer.toString(value.get(Calendar.YEAR)) + "_" + Integer.toString(value.get(Calendar.MONTH))));
+				return StringUtils.stringToBinary((Integer.toString(value.get(Calendar.YEAR)) + "_" + TWO_DIGIT_NUMBER.format(value.get(Calendar.MONTH))));
 			case DAY:
-				return StringUtils.stringToBinary((Integer.toString(value.get(Calendar.YEAR)) + "_" + Integer.toString(value.get(Calendar.MONTH)) + "_" + Integer.toString(value.get(Calendar.DAY_OF_MONTH))));
+				return StringUtils.stringToBinary((Integer.toString(value.get(Calendar.YEAR)) + "_" + TWO_DIGIT_NUMBER.format(value.get(Calendar.MONTH)) + "_" + TWO_DIGIT_NUMBER.format(value.get(Calendar.DAY_OF_MONTH))));
 		}
+	}
+
+	private Calendar getStartEpoch(
+			final byte[] binId ) {
+		final String str = StringUtils.stringFromBinary(binId);
+		final Calendar cal = Calendar.getInstance(TimeZone.getTimeZone(timezone));
+		switch (unit) {
+			case DAY:
+				final int day = Integer.parseInt(str.substring(
+						8,
+						10));
+				cal.set(
+						Calendar.DAY_OF_MONTH,
+						day);
+			case MONTH:
+				final int month = Integer.parseInt(str.substring(
+						5,
+						7));
+				cal.set(
+						Calendar.MONTH,
+						month);
+			case YEAR:
+			default:
+				final int year = Integer.parseInt(str.substring(
+						0,
+						4));
+				cal.set(
+						Calendar.YEAR,
+						year);
+		}
+		setToEpoch(cal);
+		return cal;
 	}
 
 	@Override
@@ -239,8 +291,8 @@ public class TemporalBinningStrategy implements
 
 	@Override
 	public byte[] toBinary() {
-		byte[] timeZone = StringUtils.stringToBinary(timezone);
-		ByteBuffer binary = ByteBuffer.allocate(timezone.length() + 4);
+		final byte[] timeZone = StringUtils.stringToBinary(timezone);
+		final ByteBuffer binary = ByteBuffer.allocate(timezone.length() + 4);
 		binary.putInt(unit.calendarEnum);
 		binary.put(timeZone);
 		return binary.array();
@@ -248,10 +300,10 @@ public class TemporalBinningStrategy implements
 
 	@Override
 	public void fromBinary(
-			byte[] bytes ) {
-		ByteBuffer buffer = ByteBuffer.wrap(bytes);
-		int unitCalendarEnum = buffer.getInt();
-		byte[] timeZoneName = new byte[bytes.length - 4];
+			final byte[] bytes ) {
+		final ByteBuffer buffer = ByteBuffer.wrap(bytes);
+		final int unitCalendarEnum = buffer.getInt();
+		final byte[] timeZoneName = new byte[bytes.length - 4];
 		buffer.get(timeZoneName);
 		unit = Unit.getUnit(unitCalendarEnum);
 		timezone = StringUtils.stringFromBinary(timeZoneName);
@@ -261,28 +313,54 @@ public class TemporalBinningStrategy implements
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		String className = getClass().getName();
-		result = prime * result + ((className == null) ? 0 : className.hashCode());
-		result = prime * result + ((timezone == null) ? 0 : timezone.hashCode());
-		result = prime * result + ((unit == null) ? 0 : unit.calendarEnum);
+		final String className = getClass().getName();
+		result = (prime * result) + ((className == null) ? 0 : className.hashCode());
+		result = (prime * result) + ((timezone == null) ? 0 : timezone.hashCode());
+		result = (prime * result) + ((unit == null) ? 0 : unit.calendarEnum);
 		return result;
 	}
 
 	@Override
 	public boolean equals(
-			Object obj ) {
-		if (this == obj) return true;
-		if (obj == null) return false;
-		if (getClass() != obj.getClass()) return false;
-		TemporalBinningStrategy other = (TemporalBinningStrategy) obj;
+			final Object obj ) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		final TemporalBinningStrategy other = (TemporalBinningStrategy) obj;
 		if (timezone == null) {
-			if (other.timezone != null) return false;
+			if (other.timezone != null) {
+				return false;
+			}
 		}
-		else if (!timezone.equals(other.timezone)) return false;
+		else if (!timezone.equals(other.timezone)) {
+			return false;
+		}
 		if (unit == null) {
-			if (other.unit != null) return false;
+			if (other.unit != null) {
+				return false;
+			}
 		}
-		else if (unit.calendarEnum != other.unit.calendarEnum) return false;
+		else if (unit.calendarEnum != other.unit.calendarEnum) {
+			return false;
+		}
 		return true;
+	}
+
+	@Override
+	public NumericRange getDenormalizedRanges(
+			final BinRange binnedRange ) {
+		final Calendar startofEpoch = getStartEpoch(binnedRange.getBinId());
+		final long startOfEpochMillis = startofEpoch.getTimeInMillis();
+		final long minMillis = startOfEpochMillis + (long) binnedRange.getNormalizedMin();
+		final long maxMillis = startOfEpochMillis + (long) binnedRange.getNormalizedMax();
+		return new NumericRange(
+				minMillis,
+				maxMillis);
 	}
 }

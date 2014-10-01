@@ -10,16 +10,13 @@ import java.util.Map;
 
 import mil.nga.giat.geowave.accumulo.AccumuloDataStore;
 import mil.nga.giat.geowave.accumulo.AccumuloOperations;
-import mil.nga.giat.geowave.index.StringUtils;
 import mil.nga.giat.geowave.ingest.AccumuloCommandLineOptions;
 import mil.nga.giat.geowave.ingest.GeoWaveData;
-import mil.nga.giat.geowave.ingest.IngestRunData;
 import mil.nga.giat.geowave.ingest.IngestTypePluginProviderSpi;
 import mil.nga.giat.geowave.store.CloseableIterator;
 import mil.nga.giat.geowave.store.DataStore;
 import mil.nga.giat.geowave.store.IndexWriter;
 import mil.nga.giat.geowave.store.adapter.WritableDataAdapter;
-import mil.nga.giat.geowave.store.index.Index;
 
 import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
@@ -63,7 +60,6 @@ public class LocalFileIngestDriver extends
 	protected void runInternal(
 			final String[] args,
 			final List<IngestTypePluginProviderSpi<?, ?>> pluginProviders ) {
-
 		// first collect the local file ingest plugins
 		final Map<String, LocalFileIngestPlugin<?>> localFileIngestPlugins = new HashMap<String, LocalFileIngestPlugin<?>>();
 		final List<WritableDataAdapter<?>> adapters = new ArrayList<WritableDataAdapter<?>>();
@@ -83,18 +79,9 @@ public class LocalFileIngestDriver extends
 						e);
 				continue;
 			}
-			final Index[] supportedIndices = localFileIngestPlugin.getSupportedIndices();
-			final Index selectedIndex = accumulo.getPrimaryIndex();
-			boolean indexSupported = false;
-			for (final Index i : supportedIndices) {
-				if (i.getId().equals(
-						selectedIndex.getId())) {
-					indexSupported = true;
-					break;
-				}
-			}
+			final boolean indexSupported = (accumulo.getIndex(localFileIngestPlugin.getSupportedIndices()) != null);
 			if (!indexSupported) {
-				LOGGER.warn("Local file ingest plugin for ingest type '" + pluginProvider.getIngestTypeName() + "' does not support index '" + StringUtils.stringFromBinary(selectedIndex.getId().getBytes()) + "'");
+				LOGGER.warn("Local file ingest plugin for ingest type '" + pluginProvider.getIngestTypeName() + "' does not support dimensionality type '" + accumulo.getType().name() + "'");
 				continue;
 			}
 			localFileIngestPlugins.put(
@@ -120,12 +107,12 @@ public class LocalFileIngestDriver extends
 		}
 		final DataStore dataStore = new AccumuloDataStore(
 				operations);
-		try (IndexWriter indexWriter = dataStore.createIndexWriter(accumulo.getPrimaryIndex())) {
+		try (IngestRunData runData = new IngestRunData(
+				adapters,
+				dataStore)) {
 			processInput(
 					localFileIngestPlugins,
-					new IngestRunData(
-							indexWriter,
-							adapters));
+					runData);
 		}
 		catch (final IOException e) {
 			LOGGER.fatal(
@@ -141,10 +128,10 @@ public class LocalFileIngestDriver extends
 			final LocalFileIngestPlugin plugin,
 			final IngestRunData ingestRunData )
 			throws IOException {
-		// final Iterable<GeoWaveData<?>> ;
+		final IndexWriter indexWriter = ingestRunData.getIndexWriter(accumulo.getIndex(plugin.getSupportedIndices()));
 		try (CloseableIterator<GeoWaveData<?>> geowaveDataIt = plugin.toGeoWaveData(
 				file,
-				accumulo.getPrimaryIndex().getId(),
+				indexWriter.getIndex().getId(),
 				accumulo.getVisibility())) {
 			while (geowaveDataIt.hasNext()) {
 				final GeoWaveData<?> geowaveData = geowaveDataIt.next();
@@ -153,7 +140,7 @@ public class LocalFileIngestDriver extends
 					LOGGER.warn("Adapter not found for " + geowaveData.getValue());
 					continue;
 				}
-				ingestRunData.getIndexWriter().write(
+				indexWriter.write(
 						adapter,
 						geowaveData.getValue());
 			}
