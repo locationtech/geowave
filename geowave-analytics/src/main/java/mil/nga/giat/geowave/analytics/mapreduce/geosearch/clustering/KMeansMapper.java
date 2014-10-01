@@ -5,11 +5,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
 
-import mil.nga.giat.geowave.accumulo.AccumuloUtils;
-import mil.nga.giat.geowave.gt.adapter.FeatureDataAdapter;
+import mil.nga.giat.geowave.accumulo.util.AccumuloUtils;
 import mil.nga.giat.geowave.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.store.index.Index;
 import mil.nga.giat.geowave.store.index.IndexType;
+import mil.nga.giat.geowave.vector.adapter.FeatureDataAdapter;
 
 import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
@@ -91,7 +91,7 @@ public class KMeansMapper {
 //				inputDataStore = new AccumuloDataStore(new BasicAccumuloOperations(accumuloConnector, dataTableNamespace));
 				inputType = ClusteringUtils.createSimpleFeatureType(dataTypeId);
 				adapter = new FeatureDataAdapter(inputType);
-				index = IndexType.SPATIAL.createDefaultIndex();
+				index = IndexType.SPATIAL_VECTOR.createDefaultIndex();
 				
 			} catch (AccumuloException e) {
 				e.printStackTrace();

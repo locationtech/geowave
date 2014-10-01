@@ -2,11 +2,11 @@ package mil.nga.giat.geowave.analytics.mapreduce.geosearch.clustering;
 
 import mil.nga.giat.geowave.accumulo.AccumuloDataStore;
 import mil.nga.giat.geowave.accumulo.BasicAccumuloOperations;
-import mil.nga.giat.geowave.gt.adapter.FeatureDataAdapter;
 import mil.nga.giat.geowave.store.DataStore;
 import mil.nga.giat.geowave.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.store.index.Index;
 import mil.nga.giat.geowave.store.index.IndexType;
+import mil.nga.giat.geowave.vector.adapter.FeatureDataAdapter;
 
 import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
@@ -69,7 +69,7 @@ public class ClusteringDriver
 		Polygon polygon = ClusteringUtils.generateWorldPolygon();
 		
 		// spatial index definition and query stuff
-		final Index index = IndexType.SPATIAL.createDefaultIndex();
+		final Index index = IndexType.SPATIAL_VECTOR.createDefaultIndex();
 		final SimpleFeatureType type = ClusteringUtils.createSimpleFeatureType(dataTypeId);
 		final WritableDataAdapter<SimpleFeature> adapter = new FeatureDataAdapter(
 				type);

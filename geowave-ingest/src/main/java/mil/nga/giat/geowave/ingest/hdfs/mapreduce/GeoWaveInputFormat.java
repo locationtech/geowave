@@ -3,7 +3,7 @@ package mil.nga.giat.geowave.ingest.hdfs.mapreduce;
 import java.util.ArrayList;
 import java.util.List;
 
-import mil.nga.giat.geowave.accumulo.AccumuloUtils;
+import mil.nga.giat.geowave.accumulo.util.AccumuloUtils;
 import mil.nga.giat.geowave.index.ByteArrayRange;
 import mil.nga.giat.geowave.store.index.Index;
 import mil.nga.giat.geowave.store.index.IndexType;
@@ -24,7 +24,7 @@ public class GeoWaveInputFormat extends AccumuloInputFormat
 	protected static List<ByteArrayRange> getGeoWaveRangesForQuery(
 			final Polygon polygon ) {
 
-		final Index index = IndexType.SPATIAL.createDefaultIndex();
+		final Index index = IndexType.SPATIAL_VECTOR.createDefaultIndex();
 		final List<ByteArrayRange> ranges = index.getIndexStrategy().getQueryRanges(
 				new SpatialQuery(
 						polygon).getIndexConstraints(index.getIndexStrategy()));

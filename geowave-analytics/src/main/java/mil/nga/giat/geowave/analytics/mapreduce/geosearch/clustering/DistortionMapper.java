@@ -5,12 +5,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
 
-import mil.nga.giat.geowave.accumulo.AccumuloUtils;
-import mil.nga.giat.geowave.gt.adapter.FeatureDataAdapter;
+import mil.nga.giat.geowave.accumulo.util.AccumuloUtils;
 import mil.nga.giat.geowave.store.DataStore;
 import mil.nga.giat.geowave.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.store.index.Index;
 import mil.nga.giat.geowave.store.index.IndexType;
+import mil.nga.giat.geowave.vector.adapter.FeatureDataAdapter;
 
 import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
@@ -81,7 +81,7 @@ public class DistortionMapper extends Mapper<Key, Value, IntWritable, DoubleWrit
 			// set up global variables
 			dataType = ClusteringUtils.createSimpleFeatureType(dataTypeId);
 			adapter = new FeatureDataAdapter(dataType);
-			index = IndexType.SPATIAL.createDefaultIndex();			
+			index = IndexType.SPATIAL_VECTOR.createDefaultIndex();			
 
 		} catch (AccumuloException e) {
 			e.printStackTrace();
@@ -90,24 +90,6 @@ public class DistortionMapper extends Mapper<Key, Value, IntWritable, DoubleWrit
 		} catch (TableNotFoundException e) {
 			e.printStackTrace();
 		}
-
-//		ZooKeeperInstance zookeeperInstance = new ZooKeeperInstance(instanceName, zooservers);
-//		try {
-//			Connector accumuloConnector = zookeeperInstance.getConnector(userName, new PasswordToken(userPassword));
-//			
-//			// set up global variables
-//			kmeansType = ClusteringUtils.createSimpleFeatureType(runId + "_" + currentIteration);
-//			adapter = new FeatureDataAdapter(kmeansType);
-//			
-//			kmeansDataStore = new AccumuloDataStore(new BasicAccumuloOperations(accumuloConnector, kmeansTableNamespace));
-//			index = IndexType.SPATIAL.createDefaultIndex();
-//
-//			// retrieve centroids from current run
-//			centroids = ClusteringUtils.getData(kmeansDataStore, adapter, index, ClusteringUtils.generateWorldPolygon());
-//			
-//		} catch (AccumuloException | AccumuloSecurityException e) {
-//			e.printStackTrace();
-//		} 
 	}
 
 	/*

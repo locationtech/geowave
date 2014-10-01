@@ -10,11 +10,11 @@ import java.util.Map.Entry;
 
 import mil.nga.giat.geowave.accumulo.AccumuloDataStore;
 import mil.nga.giat.geowave.accumulo.BasicAccumuloOperations;
-import mil.nga.giat.geowave.gt.adapter.FeatureDataAdapter;
 import mil.nga.giat.geowave.store.DataStore;
 import mil.nga.giat.geowave.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.store.index.Index;
 import mil.nga.giat.geowave.store.index.IndexType;
+import mil.nga.giat.geowave.vector.adapter.FeatureDataAdapter;
 
 import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
@@ -252,7 +252,7 @@ public class PolygonGenerationDriver
 			
 			// index multipolygon result back to GeoWave
 			DataStore dataStore = new AccumuloDataStore(new BasicAccumuloOperations(accumuloConnector, outputTableNamespace));		
-			Index index = IndexType.SPATIAL.createDefaultIndex();		 
+			Index index = IndexType.SPATIAL_VECTOR.createDefaultIndex();		 
 			
 			// build a multipolygon feature type
 			SimpleFeatureTypeBuilder builder = new SimpleFeatureTypeBuilder();

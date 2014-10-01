@@ -5,8 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
 
-import mil.nga.giat.geowave.accumulo.AccumuloUtils;
-import mil.nga.giat.geowave.gt.adapter.FeatureDataAdapter;
+import mil.nga.giat.geowave.accumulo.util.AccumuloUtils;
 import mil.nga.giat.geowave.index.ByteArrayRange;
 import mil.nga.giat.geowave.store.CloseableIterator;
 import mil.nga.giat.geowave.store.DataStore;
@@ -14,6 +13,7 @@ import mil.nga.giat.geowave.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.store.index.Index;
 import mil.nga.giat.geowave.store.index.IndexType;
 import mil.nga.giat.geowave.store.query.SpatialQuery;
+import mil.nga.giat.geowave.vector.adapter.FeatureDataAdapter;
 
 import org.apache.accumulo.core.client.IteratorSetting;
 import org.apache.accumulo.core.data.Key;
@@ -198,7 +198,7 @@ public class ClusteringUtils
 	protected static List<ByteArrayRange> getGeoWaveRangesForQuery(
 			final Polygon polygon ) {
 
-		final Index index = IndexType.SPATIAL.createDefaultIndex();
+		final Index index = IndexType.SPATIAL_VECTOR.createDefaultIndex();
 		final List<ByteArrayRange> ranges = index.getIndexStrategy().getQueryRanges(
 				new SpatialQuery(
 						polygon).getIndexConstraints(index.getIndexStrategy()));
@@ -218,7 +218,7 @@ public class ClusteringUtils
 				entry.getKey(),
 				entry.getValue(),
 				adapter,
-				IndexType.SPATIAL.createDefaultIndex());
+				IndexType.SPATIAL_VECTOR.createDefaultIndex());
 
 		Geometry geometry = (Geometry) feature.getDefaultGeometry();
 
