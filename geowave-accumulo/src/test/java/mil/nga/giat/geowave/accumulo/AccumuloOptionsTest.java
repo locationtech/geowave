@@ -36,6 +36,7 @@ import org.apache.accumulo.core.client.TableNotFoundException;
 import org.apache.accumulo.core.client.mock.MockInstance;
 import org.apache.accumulo.core.client.security.tokens.PasswordToken;
 import org.apache.log4j.Logger;
+import org.junit.Before;
 import org.junit.Test;
 
 import com.vividsolutions.jts.geom.Coordinate;
@@ -46,10 +47,22 @@ public class AccumuloOptionsTest
 {
 	private final static Logger LOGGER = Logger.getLogger(AccumuloOptionsTest.class);
 
-	@Test
-	public void testIndexOptions() {
+	final AccumuloOptions accumuloOptions = new AccumuloOptions();
 
-		// setup accumulo instance
+	final GeometryFactory factory = new GeometryFactory();
+
+	AccumuloOperations accumuloOperations;
+
+	AccumuloIndexStore indexStore;
+
+	AccumuloAdapterStore adapterStore;
+
+	AccumuloDataStatisticsStore statsStore;
+
+	AccumuloDataStore mockDataStore;
+
+	@Before
+	public void setUp() {
 		final MockInstance mockInstance = new MockInstance();
 		Connector mockConnector = null;
 		try {
@@ -63,32 +76,31 @@ public class AccumuloOptionsTest
 					"Failed to create mock accumulo connection",
 					e);
 		}
-
-		final AccumuloOptions accumuloOptions = new AccumuloOptions();
-
-		final AccumuloOperations accumuloOperations = new BasicAccumuloOperations(
+		accumuloOperations = new BasicAccumuloOperations(
 				mockConnector);
 
-		final AccumuloIndexStore indexStore = new AccumuloIndexStore(
+		indexStore = new AccumuloIndexStore(
 				accumuloOperations);
 
-		final AccumuloAdapterStore adapterStore = new AccumuloAdapterStore(
+		adapterStore = new AccumuloAdapterStore(
 				accumuloOperations);
 
-		final AccumuloDataStatisticsStore statsStore = new AccumuloDataStatisticsStore(
+		statsStore = new AccumuloDataStatisticsStore(
 				accumuloOperations);
 
-		final DataStore mockDataStore = new AccumuloDataStore(
+		mockDataStore = new AccumuloDataStore(
 				indexStore,
 				adapterStore,
 				statsStore,
 				accumuloOperations,
 				accumuloOptions);
+	}
+
+	@Test
+	public void testIndexOptions() {
 
 		final Index index = IndexType.SPATIAL_VECTOR.createDefaultIndex();
 		final WritableDataAdapter<TestGeometry> adapter = new TestGeometryAdapter();
-
-		final GeometryFactory factory = new GeometryFactory();
 
 		accumuloOptions.setCreateTable(false);
 		accumuloOptions.setPersistIndex(false);
@@ -167,46 +179,8 @@ public class AccumuloOptionsTest
 	@Test
 	public void testLocalityGroups() {
 
-		// setup accumulo instance
-		final MockInstance mockInstance = new MockInstance();
-		Connector mockConnector = null;
-		try {
-			mockConnector = mockInstance.getConnector(
-					"root",
-					new PasswordToken(
-							new byte[0]));
-		}
-		catch (AccumuloException | AccumuloSecurityException e) {
-			LOGGER.error(
-					"Failed to create mock accumulo connection",
-					e);
-		}
-
-		final AccumuloOptions accumuloOptions = new AccumuloOptions();
-
-		final AccumuloOperations accumuloOperations = new BasicAccumuloOperations(
-				mockConnector);
-
-		final AccumuloIndexStore indexStore = new AccumuloIndexStore(
-				accumuloOperations);
-
-		final AccumuloAdapterStore adapterStore = new AccumuloAdapterStore(
-				accumuloOperations);
-
-		final AccumuloDataStatisticsStore statsStore = new AccumuloDataStatisticsStore(
-				accumuloOperations);
-
-		final DataStore mockDataStore = new AccumuloDataStore(
-				indexStore,
-				adapterStore,
-				statsStore,
-				accumuloOperations,
-				accumuloOptions);
-
 		final Index index = IndexType.SPATIAL_VECTOR.createDefaultIndex();
 		final WritableDataAdapter<TestGeometry> adapter = new TestGeometryAdapter();
-
-		final GeometryFactory factory = new GeometryFactory();
 
 		final String tableName = StringUtils.stringFromBinary(index.getId().getBytes());
 		final byte[] adapterId = adapter.getAdapterId().getBytes();
@@ -287,46 +261,8 @@ public class AccumuloOptionsTest
 	@Test
 	public void testAdapterOptions() {
 
-		// setup accumulo instance
-		final MockInstance mockInstance = new MockInstance();
-		Connector mockConnector = null;
-		try {
-			mockConnector = mockInstance.getConnector(
-					"root",
-					new PasswordToken(
-							new byte[0]));
-		}
-		catch (AccumuloException | AccumuloSecurityException e) {
-			LOGGER.error(
-					"Failed to create mock accumulo connection",
-					e);
-		}
-
-		final AccumuloOptions accumuloOptions = new AccumuloOptions();
-
-		final AccumuloOperations accumuloOperations = new BasicAccumuloOperations(
-				mockConnector);
-
-		final AccumuloIndexStore indexStore = new AccumuloIndexStore(
-				accumuloOperations);
-
-		final AccumuloAdapterStore adapterStore = new AccumuloAdapterStore(
-				accumuloOperations);
-
-		final AccumuloDataStatisticsStore statsStore = new AccumuloDataStatisticsStore(
-				accumuloOperations);
-
-		final DataStore mockDataStore = new AccumuloDataStore(
-				indexStore,
-				adapterStore,
-				statsStore,
-				accumuloOperations,
-				accumuloOptions);
-
 		final Index index = IndexType.SPATIAL_VECTOR.createDefaultIndex();
 		final WritableDataAdapter<TestGeometry> adapter = new TestGeometryAdapter();
-
-		final GeometryFactory factory = new GeometryFactory();
 
 		accumuloOptions.setPersistAdapter(false);
 
@@ -404,46 +340,8 @@ public class AccumuloOptionsTest
 	@Test
 	public void testAlternateIndexOption() {
 
-		// setup accumulo instance
-		final MockInstance mockInstance = new MockInstance();
-		Connector mockConnector = null;
-		try {
-			mockConnector = mockInstance.getConnector(
-					"root",
-					new PasswordToken(
-							new byte[0]));
-		}
-		catch (AccumuloException | AccumuloSecurityException e) {
-			LOGGER.error(
-					"Failed to create mock accumulo connection",
-					e);
-		}
-
-		final AccumuloOptions accumuloOptions = new AccumuloOptions();
-
-		final AccumuloOperations accumuloOperations = new BasicAccumuloOperations(
-				mockConnector);
-
-		final AccumuloIndexStore indexStore = new AccumuloIndexStore(
-				accumuloOperations);
-
-		final AccumuloAdapterStore adapterStore = new AccumuloAdapterStore(
-				accumuloOperations);
-
-		final AccumuloDataStatisticsStore statsStore = new AccumuloDataStatisticsStore(
-				accumuloOperations);
-
-		final AccumuloDataStore mockDataStore = new AccumuloDataStore(
-				indexStore,
-				adapterStore,
-				statsStore,
-				accumuloOperations,
-				accumuloOptions);
-
 		final Index index = IndexType.SPATIAL_VECTOR.createDefaultIndex();
 		final WritableDataAdapter<TestGeometry> adapter = new TestGeometryAdapter();
-
-		final GeometryFactory factory = new GeometryFactory();
 
 		final ByteArrayId adapterId = adapter.getAdapterId();
 
@@ -562,6 +460,77 @@ public class AccumuloOptionsTest
 		Assert.assertEquals(
 				"test_pt_3",
 				geom3.id);
+	}
+
+	@Test
+	public void testDeleteAll() {
+		final Index index = IndexType.SPATIAL_VECTOR.createDefaultIndex();
+		final WritableDataAdapter<TestGeometry> adapter0 = new TestGeometryAdapter();
+		final WritableDataAdapter<TestGeometry> adapter1 = new AnotherAdapter();
+
+		accumuloOptions.setUseAltIndex(true);
+
+		final ByteArrayId rowId0 = mockDataStore.ingest(
+				adapter0,
+				index,
+				new TestGeometry(
+						factory.createPoint(new Coordinate(
+								25,
+								32)),
+						"test_pt_0")).get(
+				0);
+
+		TestGeometry geom0 = mockDataStore.getEntry(
+				index,
+				new ByteArrayId(
+						"test_pt_0"),
+						adapter0.getAdapterId());
+		
+		final ByteArrayId rowId1 = mockDataStore.ingest(
+				adapter1,
+				index,
+				new TestGeometry(
+						factory.createPoint(new Coordinate(
+								25,
+								32)),
+						"test_pt_1")).get(
+				0);
+
+		TestGeometry geom1 = mockDataStore.getEntry(
+				index,
+				new ByteArrayId(
+						"test_pt_1"),
+						adapter1.getAdapterId());
+
+		// this should return our data correctly
+		Assert.assertEquals(
+				"test_pt_1",
+				geom1.id);
+
+		// delete entry by data id & adapter id
+		mockDataStore.deleteEntries(adapter0, index);
+
+		geom0 = mockDataStore.getEntry(
+				index,
+				new ByteArrayId(
+						"test_pt_0"),
+				adapter0.getAdapterId());
+
+		// this should return null as the entry was deleted
+		Assert.assertEquals(
+				null,
+				geom0);
+		
+		geom1 = mockDataStore.getEntry(
+				index,
+				new ByteArrayId(
+						"test_pt_1"),
+				adapter1.getAdapterId());
+
+		// this should return null as the entry was deleted
+		Assert.assertEquals(
+				"test_pt_1",
+				geom1.id);
 	}
 
 	private static class TestGeometry
@@ -720,6 +689,14 @@ public class AccumuloOptionsTest
 							id);
 				}
 			};
+		}
+	}
+	
+	public static class AnotherAdapter extends TestGeometryAdapter {
+		@Override
+		public ByteArrayId getAdapterId() {
+			return new ByteArrayId(
+					"test1");
 		}
 	}
 }

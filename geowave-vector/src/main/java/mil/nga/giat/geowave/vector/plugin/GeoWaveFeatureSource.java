@@ -1,19 +1,18 @@
 package mil.nga.giat.geowave.vector.plugin;
 
-import java.awt.RenderingHints.Key;
 import java.io.IOException;
-import java.util.Collections;
-import java.util.Set;
 
 import mil.nga.giat.geowave.vector.adapter.FeatureDataAdapter;
+import mil.nga.giat.geowave.vector.plugin.transaction.GeoWaveEmptyTransaction;
+import mil.nga.giat.geowave.vector.plugin.transaction.GeoWaveTransaction;
 
-import org.geotools.data.DataAccess;
+import org.geotools.data.AbstractFeatureLocking;
+import org.geotools.data.DataStore;
 import org.geotools.data.FeatureListener;
 import org.geotools.data.FeatureReader;
 import org.geotools.data.Query;
 import org.geotools.data.QueryCapabilities;
 import org.geotools.data.ResourceInfo;
-import org.geotools.data.simple.SimpleFeatureCollection;
 import org.geotools.data.simple.SimpleFeatureSource;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.opengis.feature.simple.SimpleFeature;
@@ -29,19 +28,23 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
  * GeoWave FeatureDataAdapter). This uses EPSG:4326 as the default CRS.
  * 
  */
-public class GeoWaveFeatureSource implements
+public class GeoWaveFeatureSource extends
+		AbstractFeatureLocking implements
 		SimpleFeatureSource
 {
-	private final GeoWaveGTDataStore store;
-	private FeatureDataAdapter adapter = null;
+	private final GeoWaveDataStoreComponents components;
 	private final GeoWaveQueryCaps queryCaps = new GeoWaveQueryCaps();
 	private final GeoWaveResourceInfo info;
 
 	public GeoWaveFeatureSource(
 			final GeoWaveGTDataStore store,
 			final FeatureDataAdapter adapter ) {
-		this.store = store;
-		this.adapter = adapter;
+		this.components = new GeoWaveDataStoreComponents(
+				store.getDataStore(),
+				store.getStatsDataStore(),
+				store,
+				adapter,
+				store.getTransactionsAllocater());
 		info = new GeoWaveResourceInfo(
 				this);
 	}
@@ -50,9 +53,14 @@ public class GeoWaveFeatureSource implements
 		return GeoWaveGTDataStore.DEFAULT_CRS;
 	}
 
+	public GeoWaveDataStoreComponents getComponents() {
+		return components;
+	}
+
 	protected FeatureDataAdapter getStatsAdapter(
 			final String typeName ) {
-		return store.getStatsAdapter(typeName);
+		return components.getGTstore().getStatsAdapter(
+				typeName);
 	}
 
 	protected ReferencedEnvelope getBoundsInternal(
@@ -61,9 +69,18 @@ public class GeoWaveFeatureSource implements
 		// TODO whats the most efficient way to get bounds in accumulo
 		// for now just perform the query and iterate through the results
 
-		final FeatureReader<SimpleFeatureType, SimpleFeature> reader = getReaderInternal(query);
+		final FeatureReader<SimpleFeatureType, SimpleFeature> reader = new GeoWaveFeatureReader(
+				query,
+				new GeoWaveEmptyTransaction(
+						this.components),
+				this.components);
 		if (!reader.hasNext()) {
-			return null;
+			return new ReferencedEnvelope(
+					-90.0,
+					-180.0,
+					90.0,
+					180.0,
+					GeoWaveGTDataStore.DEFAULT_CRS);
 		}
 		double minx = Double.MAX_VALUE, maxx = -Double.MAX_VALUE, miny = Double.MAX_VALUE, maxy = -Double.MAX_VALUE;
 		while (reader.hasNext()) {
@@ -95,7 +112,11 @@ public class GeoWaveFeatureSource implements
 			throws IOException {
 		// TODO whats the most efficient way to get bounds in accumulo
 		// for now just iterate through results and count
-		final FeatureReader<SimpleFeatureType, SimpleFeature> reader = getReaderInternal(query);
+		final FeatureReader<SimpleFeatureType, SimpleFeature> reader = new GeoWaveFeatureReader(
+				query,
+				new GeoWaveEmptyTransaction(
+						this.components),
+				this.components);
 		int count = 0;
 		while (reader.hasNext()) {
 			reader.next();
@@ -116,43 +137,55 @@ public class GeoWaveFeatureSource implements
 
 	@Override
 	public Name getName() {
-		return adapter.getType().getName();
+		return components.getAdapter().getType().getName();
 	}
 
 	public SimpleFeatureType getFeatureType() {
-		return adapter.getType();
+		return components.getAdapter().getType();
 	}
 
-	// TODO we must implement a writer to support WFS-T
 	protected GeoWaveFeatureReader getReaderInternal(
-			final Query query ) {
+			final Query query,
+			final GeoWaveTransaction transaction ) {
 		return new GeoWaveFeatureReader(
 				query,
-				store.dataStore,
-				store.statsDataStore,
-				adapter);
+				transaction,
+				components);
+
 	}
 
-	@Override
-	public void addFeatureListener(
-			final FeatureListener listener ) {
-		store.addListener(
-				this,
-				listener);
+	protected GeoWaveFeatureWriter getWriterInternal(
+			final GeoWaveTransaction transaction ) {
+
+		return new GeoWaveFeatureWriter(
+				components,
+				transaction,
+				null);
 	}
 
-	@Override
-	public void removeFeatureListener(
-			final FeatureListener listener ) {
-		store.removeListener(
-				this,
-				listener);
+	protected GeoWaveFeatureWriter getWriterInternal(
+			final GeoWaveTransaction transaction,
+			final Filter filter ) {
+		String typeName = (String) components.getAdapter().getType().getTypeName();
+		Query query = new Query(
+				typeName,
+				filter);
+		final GeoWaveFeatureReader myReader = getReaderInternal(
+				query,
+				transaction);
+		return new GeoWaveFeatureWriter(
+				components,
+				transaction,
+				myReader);
 	}
 
 	@Override
 	public ReferencedEnvelope getBounds()
 			throws IOException {
-		return getBoundsInternal(null);
+		Query query = new Query(
+				getSchema().getTypeName(),
+				Filter.INCLUDE);
+		return this.getBounds(query);
 	}
 
 	@Override
@@ -170,44 +203,28 @@ public class GeoWaveFeatureSource implements
 	}
 
 	@Override
-	public DataAccess<SimpleFeatureType, SimpleFeature> getDataStore() {
-		return store;
+	public DataStore getDataStore() {
+		return this.components.getGTstore();
 	}
 
 	@Override
 	public SimpleFeatureType getSchema() {
-		return adapter.getType();
+		return this.components.getAdapter().getType();
 	}
 
 	@Override
-	public Set<Key> getSupportedHints() {
-		// TODO perhaps advertise hints that are used internally such as
-		// decimation or density parameters
-		return Collections.emptySet();
+	public void addFeatureListener(
+			FeatureListener listener ) {
+		this.components.getGTstore().getListenerManager().addFeatureListener(
+				this,
+				listener);
 	}
 
 	@Override
-	public SimpleFeatureCollection getFeatures()
-			throws IOException {
-		return getReaderInternal(
-				null).getFeatureCollection();
-	}
-
-	@Override
-	public SimpleFeatureCollection getFeatures(
-			final Filter filter )
-			throws IOException {
-		return getReaderInternal(
-				new Query(
-						getSchema().getTypeName(),
-						filter)).getFeatureCollection();
-	}
-
-	@Override
-	public SimpleFeatureCollection getFeatures(
-			final Query query )
-			throws IOException {
-		return getReaderInternal(
-				query).getFeatureCollection();
+	public void removeFeatureListener(
+			FeatureListener listener ) {
+		this.components.getGTstore().getListenerManager().removeFeatureListener(
+				this,
+				listener);
 	}
 }

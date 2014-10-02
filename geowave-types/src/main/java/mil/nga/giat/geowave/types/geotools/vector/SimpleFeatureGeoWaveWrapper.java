@@ -8,7 +8,7 @@ import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.ingest.GeoWaveData;
 import mil.nga.giat.geowave.store.CloseableIterator;
 import mil.nga.giat.geowave.store.adapter.WritableDataAdapter;
-import mil.nga.giat.geowave.store.data.field.GlobalVisibilityHandler;
+import mil.nga.giat.geowave.store.data.visibility.GlobalVisibilityHandler;
 import mil.nga.giat.geowave.vector.adapter.FeatureDataAdapter;
 
 import org.apache.log4j.Logger;

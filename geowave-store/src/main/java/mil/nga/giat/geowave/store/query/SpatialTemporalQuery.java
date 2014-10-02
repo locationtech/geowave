@@ -1,9 +1,11 @@
 package mil.nga.giat.geowave.store.query;
 
 import java.util.Date;
+
 import mil.nga.giat.geowave.index.dimension.TimeDefinition;
 import mil.nga.giat.geowave.index.sfc.data.NumericRange;
 import mil.nga.giat.geowave.store.GeometryUtils;
+
 import com.vividsolutions.jts.geom.Geometry;
 
 /**
@@ -17,8 +19,7 @@ public class SpatialTemporalQuery extends
 		SpatialQuery
 {
 
-	private final Date startTime;
-	private final Date endTime;
+	private final TemporalConstraints temporalConstraints;
 
 	public SpatialTemporalQuery(
 			final Date startTime,
@@ -30,16 +31,37 @@ public class SpatialTemporalQuery extends
 						endTime,
 						queryGeometry),
 				queryGeometry);
-		this.startTime = startTime;
-		this.endTime = endTime;
+		temporalConstraints = new TemporalConstraints();
+		temporalConstraints.add(new TemporalRange(
+				startTime,
+				endTime));
 	}
 
-	public Date getStartTime() {
-		return startTime;
+	public SpatialTemporalQuery(
+			final TemporalConstraints constraints,
+			final Geometry queryGeometry ) {
+		super(
+				createSpatialTemporalConstraints(
+						constraints,
+						queryGeometry),
+				queryGeometry);
+		this.temporalConstraints = constraints;
 	}
 
-	public Date getEndTime() {
-		return endTime;
+	private static Constraints createSpatialTemporalConstraints(
+			final TemporalConstraints contraints,
+			final Geometry queryGeometry ) {
+
+		Constraints constraints = GeometryUtils.basicConstraintsFromGeometry(queryGeometry);
+		for (TemporalRange range : contraints.constraints) {
+			constraints.constraintsPerTypeOfDimensionDefinition.put(
+					TimeDefinition.class,
+					new NumericRange(
+							range.getStartTime().getTime(),
+							range.getEndTime().getTime()));
+		}
+
+		return constraints;
 	}
 
 	private static Constraints createSpatialTemporalConstraints(

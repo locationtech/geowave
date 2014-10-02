@@ -19,4 +19,11 @@ public interface MultiDimensionalNumericData
 	public double[] getCentroidPerDimension();
 
 	public int getDimensionCount();
+	
+	/** 
+	 * Unconstrained? 
+	 * 
+	 * @return return if unconstrained on a dimension
+	 */
+	public boolean isEmpty();
 }

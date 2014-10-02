@@ -6,10 +6,10 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import mil.nga.giat.geowave.accumulo.BasicAccumuloOperations;
-import mil.nga.giat.geowave.gt.adapter.FeatureDataAdapter;
 import mil.nga.giat.geowave.store.DataStore;
 import mil.nga.giat.geowave.store.GeometryUtils;
 import mil.nga.giat.geowave.store.index.Index;
+import mil.nga.giat.geowave.vector.adapter.FeatureDataAdapter;
 
 import org.apache.log4j.Logger;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
@@ -19,7 +19,7 @@ import org.opengis.feature.simple.SimpleFeatureType;
 import com.vividsolutions.jts.geom.Coordinate;
 
 public class SimpleIngestProducerConsumer extends
-		SimpleIngest
+SimpleIngest
 {
 
 	private static Logger log = Logger.getLogger(SimpleIngestProducerConsumer.class);
@@ -138,7 +138,7 @@ public class SimpleIngestProducerConsumer extends
 	}
 
 	protected class FeatureCollection implements
-			Iterator<SimpleFeature>
+	Iterator<SimpleFeature>
 	{
 		private final BlockingQueue<SimpleFeature> queue = new LinkedBlockingQueue<SimpleFeature>(
 				10000);

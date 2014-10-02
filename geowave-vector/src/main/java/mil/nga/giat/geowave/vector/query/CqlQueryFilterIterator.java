@@ -172,7 +172,7 @@ public class CqlQueryFilterIterator extends
 	}
 
 	public static void initClassLoader(
-			final Class cls )
+			@SuppressWarnings("rawtypes") final Class cls )
 			throws MalformedURLException {
 		synchronized (MUTEX) {
 			if (classLoaderInitialized) {

@@ -325,11 +325,11 @@ abstract public class AbstractAccumuloPersistence<T extends Persistable>
 							it));
 		}
 		catch (final TableNotFoundException e) {
-			LOGGER.error(
+			LOGGER.warn(
 					"Unable to find objects, table '" + getAccumuloTablename() + "' does not exist",
 					e);
 		}
-		return null;
+		return new CloseableIterator.Empty<T>();
 	}
 
 	@SuppressWarnings("unchecked")

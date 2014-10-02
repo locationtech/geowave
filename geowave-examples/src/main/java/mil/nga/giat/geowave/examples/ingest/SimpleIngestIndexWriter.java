@@ -4,11 +4,11 @@ import java.io.IOException;
 import java.util.Date;
 
 import mil.nga.giat.geowave.accumulo.BasicAccumuloOperations;
-import mil.nga.giat.geowave.gt.adapter.FeatureDataAdapter;
 import mil.nga.giat.geowave.store.DataStore;
 import mil.nga.giat.geowave.store.GeometryUtils;
 import mil.nga.giat.geowave.store.IndexWriter;
 import mil.nga.giat.geowave.store.index.Index;
+import mil.nga.giat.geowave.vector.adapter.FeatureDataAdapter;
 
 import org.apache.log4j.Logger;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
@@ -18,7 +18,7 @@ import org.opengis.feature.simple.SimpleFeatureType;
 import com.vividsolutions.jts.geom.Coordinate;
 
 public class SimpleIngestIndexWriter extends
-		SimpleIngest
+SimpleIngest
 {
 	private static Logger log = Logger.getLogger(SimpleIngestIndexWriter.class);
 

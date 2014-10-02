@@ -61,4 +61,8 @@ public class NumericRange implements
 		return true;
 	}
 
+	@Override
+	public String toString() {
+		return "NumericRange [min=" + min + ", max=" + max + "]";
+	}
 }
