@@ -6,6 +6,8 @@ import java.util.List;
 import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.store.adapter.WritableDataAdapter;
+import mil.nga.giat.geowave.store.data.VisibilityWriter;
+import mil.nga.giat.geowave.store.data.field.FieldVisibilityHandler;
 import mil.nga.giat.geowave.store.index.Index;
 import mil.nga.giat.geowave.store.query.Query;
 
@@ -60,6 +62,26 @@ public interface DataStore
 			final WritableDataAdapter<T> writableAdapter,
 			final Index index,
 			final Iterator<T> entryIterator );
+	
+	
+	/**
+	 * Ingests a single entry into the data store
+	 * 
+	 * @param writableAdapter
+	 *            The writable adapter that allows the data store to translate
+	 *            the entry into a persistable format
+	 * @param index
+	 *            The configuration information for the primary index to use.
+	 * @param entry
+	 *            The entry to ingest
+	 * @param customFieldVisibilityWriter per entry visibility control
+	 * @return Returns all row IDs for which the entry is ingested
+	 */
+	public <T>  List<ByteArrayId> ingest(
+			final WritableDataAdapter<T> writableAdapter,
+			final Index index,
+			final T entry,
+			final VisibilityWriter<T> customFieldVisibilityWriter);
 
 	/**
 	 * Ingests a collection of entries into the data store described by an
@@ -81,6 +103,30 @@ public interface DataStore
 			final Index index,
 			final Iterator<T> entryIterator,
 			final IngestCallback<T> ingestCallback );
+	
+	
+	/**
+	 * Ingests a collection of entries into the data store described by an
+	 * iterator on the entries
+	 * 
+	 * @param writableAdapter
+	 *            The writable adapter that allows the data store to translate
+	 *            the entries into a persistable format
+	 * @param index
+	 *            The configuration information for the primary index to use.
+	 * @param entryIterator
+	 *            An iterator on the entries to ingest
+	 * @param ingestCallback
+	 *            A callback method to receive feedback such as row IDs for
+	 *            every entry that is successfully ingested
+	 * @param customFieldVisibilityWriter per entry visibility control            
+	 */
+	public <T> void ingest(
+			final WritableDataAdapter<T> writableAdapter,
+			final Index index,
+			final Iterator<T> entryIterator,
+			final IngestCallback<T> ingestCallback,
+			final VisibilityWriter<T> customFieldVisibilityWriter);
 
 	/**
 	 * Returns all data in this data store that matches the query parameter. All
@@ -369,4 +415,31 @@ public interface DataStore
 			List<ByteArrayId> adapterIds,
 			final Query query,
 			final int limit );
+	
+	/**
+	 * Returns all data in this data store that matches the query parameter and
+	 * matches one of the adapter IDs. All data types that match the query and
+	 * one of the adapter IDs will be returned as an instance of the native data
+	 * type that was originally ingested. The iterator will only return as many
+	 * results as the limit passed in.
+	 * 
+	 * @param adapterIds
+	 *            The data adapter IDs to use for the query - only data that
+	 *            matches one of these adapter IDs will be returned
+	 * @param query
+	 *            The description of the query to be performed
+	 * @param limit
+	 *            The maximum number of entries to return
+	 * @param authorization
+	 * 			  The authorization used to override the default authorization for cell visibility.
+	 * @return An iterator on all results that match the query. The iterator
+	 *         implements Closeable and it is best practice to close the
+	 *         iterator after it is no longer needed.
+	 */
+	public <T> CloseableIterator<T> query(
+			final DataAdapter<T> adapter,
+			final Index index,
+			final Query query,
+			final int limit,
+			final String...authorizations);
 }

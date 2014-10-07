@@ -2,6 +2,7 @@ package mil.nga.giat.geowave.store.query;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -32,6 +33,10 @@ public class BasicQuery implements
 		// queries if they implement their own dimension definitions
 		protected final Map<Class<? extends NumericDimensionDefinition>, NumericData> constraintsPerTypeOfDimensionDefinition;
 
+		public Constraints() {
+			this.constraintsPerTypeOfDimensionDefinition = new LinkedHashMap<Class<? extends NumericDimensionDefinition>, NumericData>();
+		}
+
 		public Constraints(
 				final Map<Class<? extends NumericDimensionDefinition>, NumericData> constraintsPerTypeOfDimensionDefinition ) {
 			this.constraintsPerTypeOfDimensionDefinition = constraintsPerTypeOfDimensionDefinition;
@@ -39,10 +44,13 @@ public class BasicQuery implements
 
 		public MultiDimensionalNumericData getIndexConstraints(
 				final NumericIndexStrategy indexStrategy ) {
+			if (constraintsPerTypeOfDimensionDefinition.isEmpty()) return new BasicNumericDataset();
 			final NumericDimensionDefinition[] dimensionDefinitions = indexStrategy.getOrderedDimensionDefinitions();
 			final NumericData[] dataPerDimension = new NumericData[dimensionDefinitions.length];
+			// all or nothing...for now
 			for (int d = 0; d < dimensionDefinitions.length; d++) {
-				dataPerDimension[d] = constraintsPerTypeOfDimensionDefinition.get(dimensionDefinitions[d].getClass());
+				NumericData dimConstraint = constraintsPerTypeOfDimensionDefinition.get(dimensionDefinitions[d].getClass());
+				dataPerDimension[d] = (dimConstraint == null ? dimensionDefinitions[d].getFullRange() : dimConstraint);
 			}
 			return new BasicNumericDataset(
 					dataPerDimension);
@@ -63,7 +71,13 @@ public class BasicQuery implements
 		final List<QueryFilter> filters = new ArrayList<QueryFilter>();
 		final NumericData[] orderedConstraintsPerDimension = new NumericData[dimensionFields.length];
 		for (int d = 0; d < dimensionFields.length; d++) {
-			orderedConstraintsPerDimension[d] = constraints.constraintsPerTypeOfDimensionDefinition.get(dimensionFields[d].getBaseDefinition().getClass());
+			NumericData nd = constraints.constraintsPerTypeOfDimensionDefinition.get(dimensionFields[d].getBaseDefinition().getClass());
+			if (nd == null) {
+				orderedConstraintsPerDimension[d] = dimensionFields[d].getBaseDefinition().getFullRange();
+			}
+			else {
+				orderedConstraintsPerDimension[d] = constraints.constraintsPerTypeOfDimensionDefinition.get(dimensionFields[d].getBaseDefinition().getClass());
+			}
 		}
 		final QueryFilter queryFilter = createQueryFilter(
 				new BasicNumericDataset(

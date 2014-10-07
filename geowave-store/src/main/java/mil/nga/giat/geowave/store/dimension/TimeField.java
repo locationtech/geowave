@@ -55,6 +55,11 @@ public class TimeField implements
 				fieldId);
 	}
 
+	@Override 
+	public NumericData getFullRange() {		
+		return new NumericRange(0, System.currentTimeMillis()+1);
+	}
+	
 	public TimeField(
 			final NumericDimensionDefinition baseDefinition,
 			final ByteArrayId fieldId ) {

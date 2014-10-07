@@ -1,9 +1,7 @@
 package mil.nga.giat.geowave.test;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
 import java.util.Calendar;
 import java.util.Date;
@@ -12,8 +10,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 
 import mil.nga.giat.geowave.accumulo.AccumuloDataStore;
 import mil.nga.giat.geowave.accumulo.AccumuloOperations;
@@ -209,7 +205,7 @@ public class GeowaveIT
 	@BeforeClass
 	public static void setup() {
 		TimeZone.setDefault(TimeZone.getTimeZone("GMT"));
-		unZipFile(
+		GeowaveTestEnvironment.unZipFile(
 				GeowaveIT.class.getClassLoader().getResourceAsStream(
 						TEST_DATA_ZIP_RESOURCE_PATH),
 				TEST_CASE_BASE);
@@ -541,82 +537,5 @@ public class GeowaveIT
 				filterGeometry);
 	}
 
-	/**
-	 * Unzips the contents of a zip input stream to a target output directory if
-	 * the file exists and is the same size as the zip entry, it is not
-	 * overwritten
-	 * 
-	 * @param zipFile
-	 *            input zip file
-	 * @param output
-	 *            zip file output folder
-	 */
-	private static void unZipFile(
-			final InputStream zipStream,
-			final String outputFolder ) {
-
-		final byte[] buffer = new byte[1024];
-
-		try {
-
-			// create output directory is not exists
-			final File folder = new File(
-					outputFolder);
-			if (!folder.exists()) {
-				folder.mkdir();
-			}
-
-			// get the zip file content
-			final ZipInputStream zis = new ZipInputStream(
-					zipStream);
-			// get the zipped file list entry
-			ZipEntry ze = zis.getNextEntry();
-
-			while (ze != null) {
-				if (ze.isDirectory()) {
-					ze = zis.getNextEntry();
-					continue;
-				}
-				final String fileName = ze.getName();
-				final File newFile = new File(
-						outputFolder + File.separator + fileName);
-				if (newFile.exists()) {
-					if (newFile.length() == ze.getSize()) {
-						ze = zis.getNextEntry();
-						continue;
-					}
-					else {
-						newFile.delete();
-					}
-				}
-
-				// create all non exists folders
-				new File(
-						newFile.getParent()).mkdirs();
-
-				final FileOutputStream fos = new FileOutputStream(
-						newFile);
-
-				int len;
-				while ((len = zis.read(buffer)) > 0) {
-					fos.write(
-							buffer,
-							0,
-							len);
-				}
-
-				fos.close();
-				ze = zis.getNextEntry();
-			}
-
-			zis.closeEntry();
-			zis.close();
-		}
-		catch (final IOException e) {
-			LOGGER.warn(
-					"Unable to extract test data",
-					e);
-			Assert.fail("Unable to extract test data: '" + e.getLocalizedMessage() + "'");
-		}
-	}
+	
 }

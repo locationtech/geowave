@@ -409,6 +409,7 @@ public class AbstractDataAdapterTest
 		}
 
 		@Override
+
 		public double getRange() {
 			return 0;
 		}
@@ -432,6 +433,11 @@ public class AbstractDataAdapterTest
 
 		@Override
 		public NumericRange getBounds() {
+			return null;
+		}
+
+		public NumericData getFullRange() {
+			// TODO Auto-generated method stub
 			return null;
 		}
 

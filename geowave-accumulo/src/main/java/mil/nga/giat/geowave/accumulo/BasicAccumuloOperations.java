@@ -1,11 +1,13 @@
 package mil.nga.giat.geowave.accumulo;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -33,6 +35,7 @@ import org.apache.accumulo.core.data.Range;
 import org.apache.accumulo.core.data.Value;
 import org.apache.accumulo.core.iterators.IteratorUtil.IteratorScope;
 import org.apache.accumulo.core.security.Authorizations;
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.hadoop.io.Text;
 import org.apache.log4j.Logger;
 
@@ -42,7 +45,7 @@ import org.apache.log4j.Logger;
  * and a batch writer
  */
 public class BasicAccumuloOperations implements
-		AccumuloOperations
+AccumuloOperations
 {
 	private final static Logger LOGGER = Logger.getLogger(BasicAccumuloOperations.class);
 	private static final int DEFAULT_NUM_THREADS = 16;
@@ -55,7 +58,7 @@ public class BasicAccumuloOperations implements
 	private final long byteBufferSize;
 	private final String authorization;
 	private final String tableNamespace;
-	private Connector connector;
+	protected Connector connector;
 	private final Map<String, Long> locGrpCache;
 	private long cacheTimeoutMillis;
 
@@ -89,8 +92,8 @@ public class BasicAccumuloOperations implements
 			final String userName,
 			final String password,
 			final String tableNamespace )
-			throws AccumuloException,
-			AccumuloSecurityException {
+					throws AccumuloException,
+					AccumuloSecurityException {
 		this(
 				null,
 				tableNamespace);
@@ -195,7 +198,7 @@ public class BasicAccumuloOperations implements
 	@Override
 	public Writer createWriter(
 			final String tableName )
-			throws TableNotFoundException {
+					throws TableNotFoundException {
 		return createWriter(
 				tableName,
 				true);
@@ -205,7 +208,7 @@ public class BasicAccumuloOperations implements
 	public Writer createWriter(
 			final String tableName,
 			final boolean createTable )
-			throws TableNotFoundException {
+					throws TableNotFoundException {
 		final String qName = getQualifiedTableName(tableName);
 		if (createTable && !connector.tableOperations().exists(
 				qName)) {
@@ -228,14 +231,33 @@ public class BasicAccumuloOperations implements
 	}
 
 	@Override
+	public void createTable(
+			final String tableName ) {
+		final String qName = getQualifiedTableName(tableName);
+		if (!connector.tableOperations().exists(
+				qName)) {
+			try {
+				connector.tableOperations().create(
+						qName,
+						false);
+			}
+			catch (AccumuloException | AccumuloSecurityException | TableExistsException e) {
+				LOGGER.warn(
+						"Unable to create table '" + qName + "'",
+						e);
+			}
+		}
+	}
+
+	@Override
 	public BatchScanner createBatchScanner(
 			final String tableName )
-			throws TableNotFoundException {
+					throws TableNotFoundException {
 		return connector.createBatchScanner(
 				getQualifiedTableName(tableName),
 				authorization == null ? new Authorizations() : new Authorizations(
 						authorization),
-				numThreads);
+						numThreads);
 	}
 
 	@Override
@@ -298,6 +320,47 @@ public class BasicAccumuloOperations implements
 			final ByteArrayId rowId,
 			final String columnFamily,
 			final String columnQualifier ) {
+		return this.delete(
+				tableName,
+				Arrays.asList(rowId),
+				columnFamily,
+				columnQualifier);
+	}
+
+	@Override
+	public boolean deleteAll(
+			final String tableName,
+			final String columnFamily ) {
+		BatchDeleter deleter = null;
+		try {
+
+			deleter = createBatchDeleter(tableName);
+			deleter.setRanges(Arrays.asList(new Range()));
+			deleter.fetchColumnFamily(new Text(
+					columnFamily));
+			deleter.delete();
+			return true;
+		}
+		catch (final TableNotFoundException | MutationsRejectedException e) {
+			LOGGER.warn(
+					"Unable to delete row from table [" + tableName + "].",
+					e);
+			return false;
+		}
+		finally {
+			if (deleter != null) {
+				deleter.close();
+			}
+		}
+
+	}
+
+	@Override
+	public boolean delete(
+			final String tableName,
+			final List<ByteArrayId> rowIds,
+			final String columnFamily,
+			final String columnQualifier ) {
 
 		boolean success = true;
 		BatchDeleter deleter = null;
@@ -309,30 +372,32 @@ public class BasicAccumuloOperations implements
 					deleter.fetchColumn(
 							new Text(
 									columnFamily),
-							new Text(
-									columnQualifier));
+									new Text(
+											columnQualifier));
 				}
 				else {
 					deleter.fetchColumnFamily(new Text(
 							columnFamily));
 				}
 			}
-			deleter.setRanges(Arrays.asList(Range.exact(new Text(
-					rowId.getBytes()))));
+			final Set<ByteArrayId> removeSet = new HashSet<ByteArrayId>();
+			final List<Range> rowRanges = new ArrayList<Range>();
+			for (final ByteArrayId rowId : rowIds) {
+				rowRanges.add(Range.exact(new Text(
+						rowId.getBytes())));
+				removeSet.add(new ByteArrayId(
+						rowId.getBytes()));
+			}
+			deleter.setRanges(rowRanges);
 
 			final Iterator<Map.Entry<Key, Value>> iterator = deleter.iterator();
 			while (iterator.hasNext()) {
 				final Entry<Key, Value> entry = iterator.next();
-
-				if (!Arrays.equals(
-						entry.getKey().getRowData().getBackingArray(),
-						rowId.getBytes())) {
-					success = false;
-					break;
-				}
+				removeSet.remove(new ByteArrayId(
+						entry.getKey().getRowData().getBackingArray()));
 			}
 
-			if (success) {
+			if (removeSet.isEmpty()) {
 				deleter.delete();
 			}
 
@@ -363,8 +428,8 @@ public class BasicAccumuloOperations implements
 	public boolean localityGroupExists(
 			final String tableName,
 			final byte[] localityGroup )
-			throws AccumuloException,
-			TableNotFoundException {
+					throws AccumuloException,
+					TableNotFoundException {
 		final String qName = getQualifiedTableName(tableName);
 		final String localityGroupStr = qName + StringUtils.stringFromBinary(localityGroup);
 
@@ -381,8 +446,8 @@ public class BasicAccumuloOperations implements
 		// check accumulo to see if locality group exists
 		final boolean groupExists = connector.tableOperations().exists(
 				qName) && connector.tableOperations().getLocalityGroups(
-				qName).keySet().contains(
-				StringUtils.stringFromBinary(localityGroup));
+						qName).keySet().contains(
+								StringUtils.stringFromBinary(localityGroup));
 
 		// update the cache
 		if (groupExists) {
@@ -398,9 +463,9 @@ public class BasicAccumuloOperations implements
 	public void addLocalityGroup(
 			final String tableName,
 			final byte[] localityGroup )
-			throws AccumuloException,
-			TableNotFoundException,
-			AccumuloSecurityException {
+					throws AccumuloException,
+					TableNotFoundException,
+					AccumuloSecurityException {
 		final String qName = getQualifiedTableName(tableName);
 		final String localityGroupStr = qName + StringUtils.stringFromBinary(localityGroup);
 
@@ -441,8 +506,22 @@ public class BasicAccumuloOperations implements
 
 	@Override
 	public Scanner createScanner(
+			final String tableName,
+			final String... additionalAuthorizations )
+					throws TableNotFoundException {
+		return connector.createScanner(
+				getQualifiedTableName(tableName),
+				authorization == null ? new Authorizations(
+						additionalAuthorizations) : new Authorizations(
+								(String[]) ArrayUtils.add(
+										additionalAuthorizations,
+										authorization)));
+	}
+
+	@Override
+	public Scanner createScanner(
 			final String tableName )
-			throws TableNotFoundException {
+					throws TableNotFoundException {
 		return connector.createScanner(
 				getQualifiedTableName(tableName),
 				authorization == null ? new Authorizations() : new Authorizations(
@@ -450,19 +529,54 @@ public class BasicAccumuloOperations implements
 	}
 
 	@Override
+	public BatchScanner createBatchScanner(
+			final String tableName,
+			final String... additionalAuthorizations )
+					throws TableNotFoundException {
+		return connector.createBatchScanner(
+				getQualifiedTableName(tableName),
+				authorization == null ? new Authorizations(
+						additionalAuthorizations) : new Authorizations(
+								(String[]) ArrayUtils.add(
+										additionalAuthorizations,
+										authorization)),
+										numThreads);
+	}
+
+	public void insureAuthorization(
+			final String auth )
+					throws AccumuloException,
+					AccumuloSecurityException {
+		Authorizations auths = connector.securityOperations().getUserAuthorizations(
+				connector.whoami());
+		if (!auths.contains(auth)) {
+			final List<byte[]> newSet = new ArrayList<byte[]>();
+			newSet.addAll(auths.getAuthorizations());
+			newSet.add(auth.getBytes());
+			connector.securityOperations().changeUserAuthorizations(
+					connector.whoami(),
+					new Authorizations(
+							newSet));
+		}
+		auths = connector.securityOperations().getUserAuthorizations(
+				connector.whoami());
+		LOGGER.trace(connector.whoami() + " has authorizationss" + ArrayUtils.toString(auths.getAuthorizations()));
+	}
+
+	@Override
 	public BatchDeleter createBatchDeleter(
 			final String tableName )
-			throws TableNotFoundException {
+					throws TableNotFoundException {
 		return connector.createBatchDeleter(
 				getQualifiedTableName(tableName),
 				authorization == null ? new Authorizations() : new Authorizations(
 						authorization),
-				numThreads,
-				new BatchWriterConfig().setMaxWriteThreads(
-						numThreads).setMaxMemory(
-						byteBufferSize).setTimeout(
-						timeoutMillis,
-						TimeUnit.MILLISECONDS));
+						numThreads,
+						new BatchWriterConfig().setMaxWriteThreads(
+								numThreads).setMaxMemory(
+										byteBufferSize).setTimeout(
+												timeoutMillis,
+												TimeUnit.MILLISECONDS));
 	}
 
 	public long getCacheTimeoutMillis() {
@@ -479,7 +593,7 @@ public class BasicAccumuloOperations implements
 			final String tableName,
 			final boolean createTable,
 			final IteratorConfig[] iterators )
-			throws TableNotFoundException {
+					throws TableNotFoundException {
 		final String qName = getQualifiedTableName(tableName);
 		if (createTable && !connector.tableOperations().exists(
 				qName)) {

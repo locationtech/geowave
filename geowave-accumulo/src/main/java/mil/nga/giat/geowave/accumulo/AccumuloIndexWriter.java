@@ -206,7 +206,8 @@ public class AccumuloIndexWriter implements
 					writableAdapter,
 					index,
 					entry,
-					writer);
+					writer
+					);
 
 			if (useAltIndex) {
 				AccumuloUtils.writeAltIndex(

@@ -51,8 +51,12 @@ abstract public class AccumuloQuery
 		final String tableName = StringUtils.stringFromBinary(index.getId().getBytes());
 		ScannerBase scanner;
 		try {
-			if ((ranges != null) && (ranges.size() == 1)) {
-				scanner = accumuloOperations.createScanner(tableName);
+			if (ranges == null || ranges.isEmpty()) {
+				//((Scanner) scanner).s
+				scanner = accumuloOperations.createScanner(tableName, getAdditionalAuthorizations());
+			}
+			else if ((ranges != null) && (ranges.size() == 1)) {
+				scanner = accumuloOperations.createScanner(tableName, getAdditionalAuthorizations());
 				final ByteArrayRange r = ranges.get(0);
 				if (r.isSingleValue()) {
 					((Scanner) scanner).setRange(Range.exact(new Text(
@@ -66,7 +70,7 @@ abstract public class AccumuloQuery
 				}
 			}
 			else {
-				scanner = accumuloOperations.createBatchScanner(tableName);
+				scanner = accumuloOperations.createBatchScanner(tableName,getAdditionalAuthorizations());
 				((BatchScanner) scanner).setRanges(AccumuloUtils.byteArrayRangesToAccumuloRanges(ranges));
 			}
 		}
@@ -88,4 +92,6 @@ abstract public class AccumuloQuery
 		}
 		return scanner;
 	}
+	
+	public String[] getAdditionalAuthorizations() { return new String[0]; }
 }

@@ -1,5 +1,6 @@
 package mil.nga.giat.geowave.vector.query;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import mil.nga.giat.geowave.accumulo.query.AccumuloConstraintsQuery;
@@ -12,10 +13,10 @@ import mil.nga.giat.geowave.store.filter.DistributableQueryFilter;
 import mil.nga.giat.geowave.store.filter.QueryFilter;
 import mil.nga.giat.geowave.store.index.Index;
 import mil.nga.giat.geowave.vector.adapter.FeatureDataAdapter;
+import mil.nga.giat.geowave.vector.query.cql.FilterToCQLTool;
 
 import org.apache.accumulo.core.client.IteratorSetting;
 import org.apache.accumulo.core.client.ScannerBase;
-import org.geotools.filter.text.ecql.ECQL;
 import org.opengis.filter.Filter;
 
 /**
@@ -32,9 +33,14 @@ public class AccumuloCqlConstraintsQuery extends
 	public AccumuloCqlConstraintsQuery(
 			final Index index,
 			final Filter cqlFilter,
-			final FeatureDataAdapter dataAdapter ) {
+			final FeatureDataAdapter dataAdapter,
+			final String[] authorizations ) {
 		super(
-				index);
+				(List<ByteArrayId>) new LinkedList<ByteArrayId>(),
+				index,
+				(MultiDimensionalNumericData) null,
+				(List<QueryFilter>) new LinkedList<QueryFilter>(),
+				authorizations);
 		this.cqlFilter = cqlFilter;
 		this.dataAdapter = dataAdapter;
 	}
@@ -43,10 +49,14 @@ public class AccumuloCqlConstraintsQuery extends
 			final List<ByteArrayId> adapterIds,
 			final Index index,
 			final Filter cqlFilter,
-			final FeatureDataAdapter dataAdapter ) {
+			final FeatureDataAdapter dataAdapter,
+			final String[] authorizations ) {
 		super(
-				adapterIds,
-				index);
+				(List<ByteArrayId>) adapterIds,
+				index,
+				(MultiDimensionalNumericData) null,
+				(List<QueryFilter>) new LinkedList<QueryFilter>(),
+				authorizations);
 		this.cqlFilter = cqlFilter;
 		this.dataAdapter = dataAdapter;
 	}
@@ -56,11 +66,14 @@ public class AccumuloCqlConstraintsQuery extends
 			final MultiDimensionalNumericData constraints,
 			final List<QueryFilter> queryFilters,
 			final Filter cqlFilter,
-			final FeatureDataAdapter dataAdapter ) {
+			final FeatureDataAdapter dataAdapter,
+			final String[] authorizations ) {
 		super(
+				(List<ByteArrayId>) new LinkedList<ByteArrayId>(),
 				index,
-				constraints,
-				queryFilters);
+				(MultiDimensionalNumericData) constraints,
+				(List<QueryFilter>) queryFilters,
+				authorizations);
 		this.cqlFilter = cqlFilter;
 		this.dataAdapter = dataAdapter;
 	}
@@ -71,12 +84,14 @@ public class AccumuloCqlConstraintsQuery extends
 			final MultiDimensionalNumericData constraints,
 			final List<QueryFilter> queryFilters,
 			final Filter cqlFilter,
-			final FeatureDataAdapter dataAdapter ) {
+			final FeatureDataAdapter dataAdapter,
+			final String[] authorizations ) {
 		super(
 				adapterIds,
 				index,
 				constraints,
-				queryFilters);
+				queryFilters,
+				authorizations);
 		this.cqlFilter = cqlFilter;
 		this.dataAdapter = dataAdapter;
 	}
@@ -91,7 +106,7 @@ public class AccumuloCqlConstraintsQuery extends
 					CqlQueryFilterIterator.class);
 			iteratorSettings.addOption(
 					CqlQueryFilterIterator.CQL_FILTER,
-					ECQL.toCQL(cqlFilter));
+					FilterToCQLTool.toCQL(cqlFilter));
 			iteratorSettings.addOption(
 					CqlQueryFilterIterator.DATA_ADAPTER,
 					ByteArrayUtils.byteArrayToString(PersistenceUtils.toBinary(dataAdapter)));

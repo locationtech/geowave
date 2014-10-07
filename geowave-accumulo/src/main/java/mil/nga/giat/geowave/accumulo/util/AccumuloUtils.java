@@ -1,6 +1,7 @@
 package mil.nga.giat.geowave.accumulo.util;
 
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
@@ -21,8 +22,12 @@ import mil.nga.giat.geowave.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.store.data.DataWriter;
 import mil.nga.giat.geowave.store.data.PersistentDataset;
 import mil.nga.giat.geowave.store.data.PersistentValue;
+import mil.nga.giat.geowave.store.data.VisibilityWriter;
 import mil.nga.giat.geowave.store.data.field.FieldReader;
+import mil.nga.giat.geowave.store.data.field.FieldVisibilityHandler;
 import mil.nga.giat.geowave.store.data.field.FieldWriter;
+import mil.nga.giat.geowave.store.data.visibility.UnconstrainedVisibilityHandler;
+import mil.nga.giat.geowave.store.data.visibility.UniformVisibilityWriter;
 import mil.nga.giat.geowave.store.filter.QueryFilter;
 import mil.nga.giat.geowave.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.store.index.CommonIndexValue;
@@ -42,12 +47,19 @@ import org.apache.log4j.Logger;
  * A set of convenience methods for common operations on Accumulo within
  * GeoWave, such as conversions between GeoWave objects and corresponding
  * Accumulo objects.
- *
+ * 
  */
 public class AccumuloUtils
 {
 	private final static Logger LOGGER = Logger.getLogger(AccumuloUtils.class);
 	public final static String ALT_INDEX_TABLE = "_GEOWAVE_ALT_INDEX";
+
+	@SuppressWarnings({
+		"rawtypes",
+		"unchecked"
+	})
+	private static final UniformVisibilityWriter DEFAULT_VISIBILITY = new UniformVisibilityWriter(
+			new UnconstrainedVisibilityHandler());
 
 	public static Range byteArrayRangeToAccumuloRange(
 			final ByteArrayRange byteArrayRange ) {
@@ -120,6 +132,7 @@ public class AccumuloUtils
 				index);
 	}
 
+	@SuppressWarnings("unchecked")
 	protected static <T> T decodeRow(
 			final Key k,
 			final Value v,
@@ -231,16 +244,64 @@ public class AccumuloUtils
 			final Index index,
 			final T entry,
 			final Writer writer ) {
+		return AccumuloUtils.write(
+				writableAdapter,
+				index,
+				entry,
+				writer,
+				DEFAULT_VISIBILITY);
+	}
+
+	public static <T> IngestEntryInfo write(
+			final WritableDataAdapter<T> writableAdapter,
+			final Index index,
+			final T entry,
+			final Writer writer,
+			final VisibilityWriter<T> customFieldVisibilityWriter ) {
 		final IngestEntryInfo ingestInfo = getIngestInfo(
 				writableAdapter,
 				index,
-				entry);
-		final List<Mutation> mutations = ingestInfoToMutations(
-				writableAdapter,
 				entry,
+				customFieldVisibilityWriter);
+		final List<Mutation> mutations = buildMutations(
+				writableAdapter.getAdapterId().getBytes(),
 				ingestInfo);
+
+		final List<ByteArrayId> rowIds = new ArrayList<ByteArrayId>();
+		for (final Mutation m : mutations) {
+			rowIds.add(new ByteArrayId(
+					m.getRow()));
+		}
 		writer.write(mutations);
 		return ingestInfo;
+	}
+
+	public static <T> void removeFromAltIndex(
+			final WritableDataAdapter<T> writableAdapter,
+			final List<ByteArrayId> rowIds,
+			final T entry,
+			final Writer writer ) {
+
+		final byte[] adapterId = writableAdapter.getAdapterId().getBytes();
+		final byte[] dataId = writableAdapter.getDataId(
+				entry).getBytes();
+
+		final List<Mutation> mutations = new ArrayList<Mutation>();
+
+		for (final ByteArrayId rowId : rowIds) {
+
+			final Mutation mutation = new Mutation(
+					new Text(
+							dataId));
+			mutation.putDelete(
+					new Text(
+							adapterId),
+					new Text(
+							rowId.getBytes()));
+
+			mutations.add(mutation);
+		}
+		writer.write(mutations);
 	}
 
 	public static <T> void writeAltIndex(
@@ -277,39 +338,90 @@ public class AccumuloUtils
 	public static <T> List<Mutation> entryToMutations(
 			final WritableDataAdapter<T> dataWriter,
 			final Index index,
-			final T entry ) {
+			final T entry,
+			final VisibilityWriter<T> customFieldVisibilityWriter ) {
 		final IngestEntryInfo ingestInfo = getIngestInfo(
 				dataWriter,
 				index,
-				entry);
-		return ingestInfoToMutations(
-				dataWriter,
 				entry,
+				customFieldVisibilityWriter);
+		return buildMutations(
+				dataWriter.getAdapterId().getBytes(),
 				ingestInfo);
 	}
 
-	private static <T> List<Mutation> ingestInfoToMutations(
-			final WritableDataAdapter<T> dataWriter,
-			final T entry,
-			final IngestEntryInfo ingestInfo ) {
+	private static <T> List<Mutation> buildMutations(
+			byte[] adapterId,
+			IngestEntryInfo ingestInfo ) {
 		final List<Mutation> mutations = new ArrayList<Mutation>();
-		final List<ByteArrayId> rowIds = ingestInfo.getRowIds();
 		final List<FieldInfo> fieldInfoList = ingestInfo.getFieldInfo();
-		final byte[] adapterId = dataWriter.getAdapterId().getBytes();
-		for (final ByteArrayId rowId : rowIds) {
+		for (final ByteArrayId rowId : ingestInfo.getRowIds()) {
 			final Mutation mutation = new Mutation(
 					new Text(
 							rowId.getBytes()));
 			for (final FieldInfo fieldInfo : fieldInfoList) {
-				addToMutation(
-						fieldInfo,
-						mutation,
-						adapterId);
+				mutation.put(
+						new Text(
+								adapterId),
+						new Text(
+								fieldInfo.getDataValue().getId().getBytes()),
+						new ColumnVisibility(
+								fieldInfo.getVisibility()),
+						new Value(
+								fieldInfo.getWrittenValue()));
 			}
 
 			mutations.add(mutation);
 		}
 		return mutations;
+	}
+
+	public static <T> List<ByteArrayId> getRowIds(
+			final WritableDataAdapter<T> dataWriter,
+			final Index index,
+			final T entry ) {
+		final CommonIndexModel indexModel = index.getIndexModel();
+		final AdapterPersistenceEncoding encodedData = dataWriter.encode(
+				entry,
+				indexModel);
+		final List<ByteArrayId> insertionIds = encodedData.getInsertionIds(index);
+		final List<ByteArrayId> rowIds = new ArrayList<ByteArrayId>(
+				insertionIds.size());
+
+		addToRowIds(
+				rowIds,
+				insertionIds,
+				dataWriter.getDataId(
+						entry).getBytes(),
+				dataWriter.getAdapterId().getBytes());
+
+		return rowIds;
+	}
+
+	private static <T> void addToRowIds(
+			final List<ByteArrayId> rowIds,
+			final List<ByteArrayId> insertionIds,
+			final byte[] dataId,
+			final byte[] adapterId ) {
+
+		final int numberOfDuplicates = insertionIds.size() - 1;
+
+		for (final ByteArrayId insertionId : insertionIds) {
+			final byte[] indexId = insertionId.getBytes();
+			// because the combination of the adapter ID and data ID
+			// gaurantees uniqueness, we combine them in the row ID to
+			// disambiguate index values that are the same, also adding
+			// enough length values to be able to read the row ID again, we
+			// lastly add a number of duplicates which can be useful as
+			// metadata in our de-duplication
+			// step
+			rowIds.add(new ByteArrayId(
+					new AccumuloRowId(
+							indexId,
+							dataId,
+							adapterId,
+							numberOfDuplicates).getRowId()));
+		}
 	}
 
 	@SuppressWarnings({
@@ -319,7 +431,8 @@ public class AccumuloUtils
 	public static <T> IngestEntryInfo getIngestInfo(
 			final WritableDataAdapter<T> dataWriter,
 			final Index index,
-			final T entry ) {
+			final T entry,
+			final VisibilityWriter<T> customFieldVisibilityWriter ) {
 		final CommonIndexModel indexModel = index.getIndexModel();
 		final AdapterPersistenceEncoding encodedData = dataWriter.encode(
 				entry,
@@ -333,66 +446,43 @@ public class AccumuloUtils
 		final List<PersistentValue> commonValues = indexedData.getValues();
 
 		final List<FieldInfo> fieldInfoList = new ArrayList<FieldInfo>();
+
 		if (!insertionIds.isEmpty()) {
-			final int numberOfDuplicates = insertionIds.size() - 1;
-			final byte[] adapterId = dataWriter.getAdapterId().getBytes();
-			final byte[] dataId = dataWriter.getDataId(
-					entry).getBytes();
-			for (final ByteArrayId insertionId : insertionIds) {
-				final byte[] indexId = insertionId.getBytes();
-				// because the combination of the adapter ID and data ID
-				// gaurantees uniqueness, we combine them in the row ID to
-				// disambiguate index values that are the same, also adding
-				// enough length values to be able to read the row ID again, we
-				// lastly add a number of duplicates which can be useful as
-				// metadata in our de-duplication
-				// step
-				rowIds.add(new ByteArrayId(
-						new AccumuloRowId(
-								indexId,
-								dataId,
-								adapterId,
-								numberOfDuplicates).getRowId()));
-			}
+			addToRowIds(
+					rowIds,
+					insertionIds,
+					dataWriter.getDataId(
+							entry).getBytes(),
+					dataWriter.getAdapterId().getBytes());
+
 			for (final PersistentValue fieldValue : commonValues) {
-				final FieldInfo fieldInfo = getFieldInfo(
+				final FieldInfo<T> fieldInfo = getFieldInfo(
 						indexModel,
 						fieldValue,
-						entry);
+						entry,
+						customFieldVisibilityWriter);
 				if (fieldInfo != null) {
 					fieldInfoList.add(fieldInfo);
 				}
 			}
 			for (final PersistentValue fieldValue : extendedValues) {
 				if (fieldValue.getValue() != null) {
-					final FieldInfo fieldInfo = getFieldInfo(
+					final FieldInfo<T> fieldInfo = getFieldInfo(
 							dataWriter,
 							fieldValue,
-							entry);
+							entry,
+							customFieldVisibilityWriter);
 					if (fieldInfo != null) {
 						fieldInfoList.add(fieldInfo);
 					}
 				}
 			}
+			return new IngestEntryInfo(
+					rowIds,
+					fieldInfoList);
 		}
-		return new IngestEntryInfo(
-				rowIds,
-				fieldInfoList);
-	}
+		return null;
 
-	private static <T> void addToMutation(
-			final FieldInfo<T> fieldInfo,
-			final Mutation mutation,
-			final byte[] adapterId ) {
-		mutation.put(
-				new Text(
-						adapterId),
-				new Text(
-						fieldInfo.getDataValue().getId().getBytes()),
-				new ColumnVisibility(
-						fieldInfo.getVisibility()),
-				new Value(
-						fieldInfo.getWrittenValue()));
 	}
 
 	@SuppressWarnings({
@@ -401,23 +491,49 @@ public class AccumuloUtils
 	})
 	private static <T> FieldInfo<T> getFieldInfo(
 			final DataWriter dataWriter,
-			final PersistentValue fieldValue,
-			final T entry ) {
+			final PersistentValue<T> fieldValue,
+			final T entry,
+			final VisibilityWriter<T> customFieldVisibilityWriter ) {
 		final FieldWriter fieldWriter = dataWriter.getWriter(fieldValue.getId());
+		final FieldVisibilityHandler<T, Object> customVisibilityHandler = customFieldVisibilityWriter.getFieldVisibilityHandler(fieldValue.getId());
 		if (fieldWriter != null) {
-
 			final Object value = fieldValue.getValue();
 			return new FieldInfo<T>(
 					fieldValue,
 					fieldWriter.writeField(value),
-					fieldWriter.getVisibility(
-							entry,
-							fieldValue.getId(),
-							value));
+					merge(
+							customVisibilityHandler.getVisibility(
+									entry,
+									fieldValue.getId(),
+									value),
+							fieldWriter.getVisibility(
+									entry,
+									fieldValue.getId(),
+									value)));
 		}
 		else if (fieldValue.getValue() != null) {
 			LOGGER.warn("Data writer of class " + dataWriter.getClass() + " does not support field for " + fieldValue.getValue());
 		}
 		return null;
+	}
+
+	private static final byte[] BEG_AND_BYTE = "&".getBytes();
+	private static final byte[] END_AND_BYTE = ")".getBytes();
+
+	private static byte[] merge(
+			byte vis1[],
+			byte vis2[] ) {
+		if (vis1 == null || vis1.length == 0)
+			return vis2;
+		else if (vis2 == null || vis2.length == 0) return vis1;
+
+		ByteBuffer buffer = ByteBuffer.allocate(vis1.length + 3 + vis2.length);
+		buffer.putChar('(');
+		buffer.put(vis1);
+		buffer.putChar(')');
+		buffer.put(BEG_AND_BYTE);
+		buffer.put(vis2);
+		buffer.put(END_AND_BYTE);
+		return buffer.array();
 	}
 }

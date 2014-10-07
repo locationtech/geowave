@@ -1,5 +1,7 @@
 package mil.nga.giat.geowave.analytics.mapreduce.kde;
 
+import java.util.List;
+
 import mil.nga.giat.geowave.accumulo.AccumuloOperations;
 import mil.nga.giat.geowave.accumulo.IteratorConfig;
 import mil.nga.giat.geowave.accumulo.Writer;
@@ -41,6 +43,14 @@ public class ReducerContextWriterOperations implements
 	}
 
 	@Override
+	public Scanner createScanner(
+			final String tableName,
+			final String... additionalAuthorizations )
+			throws TableNotFoundException {
+		return null;
+	}
+
+	@Override
 	public Writer createWriter(
 			final String tableName )
 			throws TableNotFoundException {
@@ -50,7 +60,7 @@ public class ReducerContextWriterOperations implements
 	@Override
 	public Writer createWriter(
 			final String tableName,
-			final boolean createTable)
+			final boolean createTable )
 			throws TableNotFoundException {
 		return writer;
 	}
@@ -63,6 +73,13 @@ public class ReducerContextWriterOperations implements
 
 	@Override
 	public boolean deleteAll() {
+		return false;
+	}
+
+	@Override
+	public boolean deleteAll(
+			final String tableName,
+			final String columnFamily ) {
 		return false;
 	}
 
@@ -111,6 +128,27 @@ public class ReducerContextWriterOperations implements
 			boolean createTable,
 			IteratorConfig[] iterators )
 			throws TableNotFoundException {
+		return false;
+	}
+
+	public void createTable(
+			String tableName ) {}
+
+	@Override
+	public BatchScanner createBatchScanner(
+			String tableName,
+			String... additionalAuthorizations )
+			throws TableNotFoundException {
+		return null;
+	}
+
+	@Override
+	public boolean delete(
+			String tableName,
+			List<ByteArrayId> rowId,
+			String columnFamily,
+			String columnQualifier ) {
+		// TODO Auto-generated method stub
 		return false;
 	}
 }

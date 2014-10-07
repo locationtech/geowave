@@ -47,4 +47,25 @@ public interface CloseableIterator<E> extends
 			// just a pass through on close()
 		}
 	}
+	
+	public static class Empty<E> implements  CloseableIterator<E> {
+
+		@Override
+		public boolean hasNext() {
+			return false;
+		}
+
+		@Override
+		public E next() {
+			return null;
+		}
+
+		@Override
+		public void remove() {
+		}
+
+		@Override
+		public void close() throws IOException {
+		}
+	};
 }

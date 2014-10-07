@@ -1,7 +1,8 @@
-package mil.nga.giat.geowave.store.data.field;
+package mil.nga.giat.geowave.store.data.visibility;
 
 import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.index.StringUtils;
+import mil.nga.giat.geowave.store.data.field.FieldVisibilityHandler;
 
 /**
  * Basic implementation of a visibility handler where the decision of visibility

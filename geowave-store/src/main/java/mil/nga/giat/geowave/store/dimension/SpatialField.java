@@ -33,6 +33,11 @@ abstract public class SpatialField implements
 				GeometryAdapter.DEFAULT_GEOMETRY_FIELD_ID);
 	}
 
+	@Override 
+	public NumericData getFullRange() {
+		return this.baseDefinition.getFullRange();
+	}
+	
 	public SpatialField(
 			final NumericDimensionDefinition baseDefinition,
 			final ByteArrayId fieldId ) {

@@ -42,7 +42,7 @@ public interface NumericDimensionDefinition extends
 	 */
 	public BinRange[] getNormalizedRanges(
 			NumericData range );
-
+	
 	/**
 	 * Returns a range in the native bounds of the dimension definition,
 	 * denormalized from a bin and separate range
@@ -69,4 +69,12 @@ public interface NumericDimensionDefinition extends
 	 *         this dimension definition
 	 */
 	public NumericRange getBounds();
+
+	
+	/**
+	 * Provide the entire allowed range
+	 * @return
+	 */
+	public NumericData getFullRange();
+
 }
