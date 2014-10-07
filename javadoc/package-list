@@ -31,6 +31,7 @@ mil.nga.giat.geowave.store.adapter
 mil.nga.giat.geowave.store.adapter.statistics
 mil.nga.giat.geowave.store.data
 mil.nga.giat.geowave.store.data.field
+mil.nga.giat.geowave.store.data.visibility
 mil.nga.giat.geowave.store.dimension
 mil.nga.giat.geowave.store.filter
 mil.nga.giat.geowave.store.index
@@ -42,9 +43,16 @@ mil.nga.giat.geowave.types.gpx
 mil.nga.giat.geowave.types.tdrive
 mil.nga.giat.geowave.vector
 mil.nga.giat.geowave.vector.adapter
+mil.nga.giat.geowave.vector.auth
 mil.nga.giat.geowave.vector.plugin
+mil.nga.giat.geowave.vector.plugin.lock
+mil.nga.giat.geowave.vector.plugin.transaction
+mil.nga.giat.geowave.vector.plugin.visibility
 mil.nga.giat.geowave.vector.query
+mil.nga.giat.geowave.vector.query.cql
 mil.nga.giat.geowave.vector.query.row
 mil.nga.giat.geowave.vector.stats
+mil.nga.giat.geowave.vector.transaction
+mil.nga.giat.geowave.vector.utils
 mil.nga.giat.geowave.vector.wms
 mil.nga.giat.geowave.vector.wms.accumulo
