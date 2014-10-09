@@ -3,6 +3,7 @@ package mil.nga.giat.geowave.accumulo.util;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.SortedMap;
@@ -40,6 +41,7 @@ import org.apache.accumulo.core.data.Range;
 import org.apache.accumulo.core.data.Value;
 import org.apache.accumulo.core.iterators.user.WholeRowIterator;
 import org.apache.accumulo.core.security.ColumnVisibility;
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.hadoop.io.Text;
 import org.apache.log4j.Logger;
 
@@ -114,7 +116,7 @@ public class AccumuloUtils
 				adapter,
 				null,
 				null,
-				index);
+				index).getLeft();
 	}
 
 	public static Object decodeRow(
@@ -123,27 +125,45 @@ public class AccumuloUtils
 			final DataAdapter<?> adapter,
 			final QueryFilter clientFilter,
 			final Index index ) {
-		return decodeRow(
+		Pair<?, IngestEntryInfo> pair = decodeRow(
 				key,
 				value,
 				adapter,
 				null,
 				clientFilter,
 				index);
+		return pair != null ? pair.getLeft() : null;
 	}
-
-	@SuppressWarnings("unchecked")
-	protected static <T> T decodeRow(
-			final Key k,
-			final Value v,
-			DataAdapter<T> adapter,
+	
+	public static Object decodeRow(
+			final Key key,
+			final Value value,
 			final AdapterStore adapterStore,
 			final QueryFilter clientFilter,
 			final Index index ) {
-		if ((adapter == null) && (adapterStore == null)) {
+		Pair<Object, IngestEntryInfo> pair =  decodeRow(
+				key,
+				value,
+				null,
+				adapterStore,
+				clientFilter,
+				index);
+		return pair != null ? pair.getLeft() : null;
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <T> Pair<T, IngestEntryInfo> decodeRow(
+			final Key k,
+			final Value v,
+			final DataAdapter<T> dataAdapter,
+			final AdapterStore adapterStore,
+			final QueryFilter clientFilter,
+			final Index index ) {
+		if ((dataAdapter == null) && (adapterStore == null)) {
 			LOGGER.error("Could not decode row from iterator. Either adapter or adapter store must be non-null.");
 			return null;
 		}
+		DataAdapter<T> adapter = dataAdapter;
 		SortedMap<Key, Value> rowMapping;
 		try {
 			rowMapping = WholeRowIterator.decodeRow(
@@ -171,6 +191,8 @@ public class AccumuloUtils
 			adapterMatchVerified = true;
 			adapterId = null;
 		}
+		final List<FieldInfo> fieldInfoList = new ArrayList<FieldInfo>(rowMapping.size());
+
 		for (final Entry<Key, Value> entry : rowMapping.entrySet()) {
 			// the column family is the data element's type ID
 			if (adapterId == null) {
@@ -196,12 +218,18 @@ public class AccumuloUtils
 			// first check if this field is part of the index model
 			final FieldReader<? extends CommonIndexValue> indexFieldReader = index.getIndexModel().getReader(
 					fieldId);
+			byte byteValue[] = entry.getValue().get();
 			if (indexFieldReader != null) {
-				final CommonIndexValue indexValue = indexFieldReader.readField(entry.getValue().get());
+				final CommonIndexValue indexValue = indexFieldReader.readField(byteValue);
 				indexValue.setVisibility(entry.getKey().getColumnVisibilityData().getBackingArray());
-				indexData.addValue(new PersistentValue<CommonIndexValue>(
+				final PersistentValue<CommonIndexValue> val = new PersistentValue<CommonIndexValue>(
 						fieldId,
-						indexValue));
+						indexValue);
+				indexData.addValue(val);
+				fieldInfoList.add(getFieldInfo(
+						val,
+						byteValue,
+						indexValue.getVisibility()));
 			}
 			else {
 				// next check if this field is part of the adapter's
@@ -213,10 +241,15 @@ public class AccumuloUtils
 					LOGGER.error("field reader not found for data entry, the value will be ignored");
 					continue;
 				}
-				final Object value = extFieldReader.readField(entry.getValue().get());
-				extendedData.addValue(new PersistentValue<Object>(
+				final Object value = extFieldReader.readField(byteValue);
+				final PersistentValue<Object> val = new PersistentValue<Object>(
 						fieldId,
-						value));
+						value);
+				extendedData.addValue(val);
+				fieldInfoList.add(getFieldInfo(
+						val,
+						byteValue,
+						entry.getKey().getColumnVisibility().getBytes()));
 			}
 		}
 		final ByteSequence rowData = k.getRowData();
@@ -232,9 +265,13 @@ public class AccumuloUtils
 				indexData,
 				extendedData);
 		if ((clientFilter == null) || clientFilter.accept(encodedRow)) {
-			return adapter.decode(
-					encodedRow,
-					index);
+			return Pair.of(
+					adapter.decode(
+							encodedRow,
+							index),
+					new IngestEntryInfo(
+							Arrays.asList(new ByteArrayId(rowData.getBackingArray())),
+							fieldInfoList));
 		}
 		return null;
 	}
@@ -376,6 +413,13 @@ public class AccumuloUtils
 		return mutations;
 	}
 
+	/**
+	 * 
+	 * @param dataWriter
+	 * @param index
+	 * @param entry
+	 * @return List of zero or more matches
+	 */
 	public static <T> List<ByteArrayId> getRowIds(
 			final WritableDataAdapter<T> dataWriter,
 			final Index index,
@@ -515,6 +559,20 @@ public class AccumuloUtils
 			LOGGER.warn("Data writer of class " + dataWriter.getClass() + " does not support field for " + fieldValue.getValue());
 		}
 		return null;
+	}
+
+	@SuppressWarnings({
+		"rawtypes",
+		"unchecked"
+	})
+	private static <T> FieldInfo<T> getFieldInfo(
+			final PersistentValue<T> fieldValue,
+			final byte[] value,
+			final byte[] visibility ) {
+		return new FieldInfo<T>(
+				fieldValue,
+				value,
+				visibility);
 	}
 
 	private static final byte[] BEG_AND_BYTE = "&".getBytes();

@@ -25,27 +25,15 @@ public interface AccumuloOperations
 	 *            The basic name of the table. Note that that basic
 	 *            implementation of the factory will allow for a table namespace
 	 *            to prefix this name
+	 * @param additionalAuthorizations
+	 *            additional authorizations
 	 * @return The appropriate batch deleter
 	 * @throws TableNotFoundException
 	 *             The table does not exist in this Accumulo instance
 	 */
 	public BatchDeleter createBatchDeleter(
-			final String tableName )
-			throws TableNotFoundException;
-
-	/**
-	 * Creates a new batch scanner that can be used by an index
-	 * 
-	 * @param tableName
-	 *            The basic name of the table. Note that that basic
-	 *            implementation of the factory will allow for a table namespace
-	 *            to prefix this name
-	 * @return The appropriate batch scanner
-	 * @throws TableNotFoundException
-	 *             The table does not exist in this Accumulo instance
-	 */
-	public BatchScanner createBatchScanner(
-			final String tableName )
+			final String tableName,
+			final String... additionalAuthorizations )
 			throws TableNotFoundException;
 
 	/**
@@ -65,21 +53,6 @@ public interface AccumuloOperations
 	public BatchScanner createBatchScanner(
 			final String tableName,
 			String... additionalAuthorizations )
-			throws TableNotFoundException;
-
-	/**
-	 * Creates a new scanner that can be used by an index
-	 * 
-	 * @param tableName
-	 *            The basic name of the table. Note that that basic
-	 *            implementation of the factory will allow for a table namespace
-	 *            to prefix this name
-	 * @return The appropriate scanner
-	 * @throws TableNotFoundException
-	 *             The table does not exist in this Accumulo instance
-	 */
-	public Scanner createScanner(
-			final String tableName )
 			throws TableNotFoundException;
 
 	/**
@@ -294,6 +267,8 @@ public interface AccumuloOperations
 	 * @param columnQualifier
 	 *            the column qualifier for a given column family to delete, this
 	 *            can be null to delete the whole column family
+	 * @param additionalAuthorizations
+	 *            checks authorizations
 	 * @return Returns true if the row deletion didn't encounter any errors,
 	 *         false if nothing was found or the row was not dropped
 	 *         successfully
@@ -301,8 +276,9 @@ public interface AccumuloOperations
 	public boolean delete(
 			final String tableName,
 			final List<ByteArrayId> rowId,
-			String columnFamily,
-			String columnQualifier );
+			final String columnFamily,
+			final String columnQualifier,
+			final String... additionalAuthorizations );
 
 	/**
 	 * 
@@ -310,11 +286,43 @@ public interface AccumuloOperations
 	 * 
 	 * @param tableName
 	 *            the name of the table to delete from, this must be provided
-	 * @param indexId
-	 * @param adapterId
+	 * @param columnFamily
+	 *            the column family of the row to delete, this can be null to
+	 *            delete the whole row
+	 * @param additionalAuthorizations
+	 *            checks authorizations
 	 * @return
 	 */
 	public boolean deleteAll(
 			final String tableName,
-			final String columnFamily );
+			final String columnFamily,
+			final String... additionalAuthorizations );
+
+	/**
+	 * 
+	 * @param tableName
+	 * @param additionalAuthorizations
+	 * @return the number of rows in the table given the constraints by the
+	 *         provided authorizations
+	 */
+	public long getRowCount(
+			final String tableName,
+			String... additionalAuthorizations );
+
+	/**
+	 * 
+	 * @return default authorization for scans along with any additional
+	 *         authorizations (and deletions)
+	 */
+	public String[] getAuthorizations(
+			final String... additionalAuthorizations );
+
+	/**
+	 * 
+	 * Insure user has the given operations.
+	 */
+	public void insureAuthorization(
+			final String... authorizations )
+			throws AccumuloException,
+			AccumuloSecurityException;
 }

@@ -1,7 +1,12 @@
 package mil.nga.giat.geowave.vector.plugin;
 
 import java.io.IOException;
+import java.util.Map;
 
+import mil.nga.giat.geowave.index.ByteArrayId;
+import mil.nga.giat.geowave.store.adapter.statistics.BoundingBoxDataStatistics;
+import mil.nga.giat.geowave.store.adapter.statistics.CountDataStatistics;
+import mil.nga.giat.geowave.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.vector.adapter.FeatureDataAdapter;
 import mil.nga.giat.geowave.vector.plugin.transaction.GeoWaveEmptyTransaction;
 import mil.nga.giat.geowave.vector.plugin.transaction.GeoWaveTransaction;
@@ -28,6 +33,7 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
  * GeoWave FeatureDataAdapter). This uses EPSG:4326 as the default CRS.
  * 
  */
+@SuppressWarnings("unchecked")
 public class GeoWaveFeatureSource extends
 		AbstractFeatureLocking implements
 		SimpleFeatureSource
@@ -63,41 +69,54 @@ public class GeoWaveFeatureSource extends
 				typeName);
 	}
 
+	@SuppressWarnings("rawtypes")
 	protected ReferencedEnvelope getBoundsInternal(
 			final Query query )
 			throws IOException {
-		// TODO whats the most efficient way to get bounds in accumulo
-		// for now just perform the query and iterate through the results
+		double minx = -90.0, maxx = 90.0, miny = -180.0, maxy = 180.0;
 
-		final FeatureReader<SimpleFeatureType, SimpleFeature> reader = new GeoWaveFeatureReader(
-				query,
-				new GeoWaveEmptyTransaction(
-						this.components),
-				this.components);
-		if (!reader.hasNext()) {
-			return new ReferencedEnvelope(
-					-90.0,
-					-180.0,
-					90.0,
-					180.0,
-					GeoWaveGTDataStore.DEFAULT_CRS);
+		DataStatistics<SimpleFeature> bboxStats = null;
+		if (query.getFilter().equals(
+				Filter.INCLUDE)) {
+			Map<ByteArrayId, DataStatistics<SimpleFeature>> stats = this.components.getDataStatistics(new GeoWaveEmptyTransaction(
+					this.components));
+			bboxStats = stats.get(BoundingBoxDataStatistics.STATS_ID);
 		}
-		double minx = Double.MAX_VALUE, maxx = -Double.MAX_VALUE, miny = Double.MAX_VALUE, maxy = -Double.MAX_VALUE;
-		while (reader.hasNext()) {
-			final BoundingBox bbox = reader.next().getBounds();
-			minx = Math.min(
-					bbox.getMinX(),
-					minx);
-			maxx = Math.max(
-					bbox.getMaxX(),
-					maxx);
-			miny = Math.min(
-					bbox.getMinY(),
-					miny);
-			maxy = Math.max(
-					bbox.getMaxY(),
-					maxy);
+		if (bboxStats != null) {
+			minx = ((BoundingBoxDataStatistics) bboxStats).getMinX();
+			maxx = ((BoundingBoxDataStatistics) bboxStats).getMaxX();
+			miny = ((BoundingBoxDataStatistics) bboxStats).getMinY();
+			maxy = ((BoundingBoxDataStatistics) bboxStats).getMaxY();
+		}
+		else {
 
+			final FeatureReader<SimpleFeatureType, SimpleFeature> reader = new GeoWaveFeatureReader(
+					query,
+					new GeoWaveEmptyTransaction(
+							this.components),
+					this.components);
+			if (reader.hasNext()) {
+				minx = 90.0;
+				maxx = -90.0;
+				miny = 180.0;
+				maxy = -180.0;
+				while (reader.hasNext()) {
+					final BoundingBox bbox = reader.next().getBounds();
+					minx = Math.min(
+							bbox.getMinX(),
+							minx);
+					maxx = Math.max(
+							bbox.getMaxX(),
+							maxx);
+					miny = Math.min(
+							bbox.getMinY(),
+							miny);
+					maxy = Math.max(
+							bbox.getMaxY(),
+							maxy);
+
+				}
+			}
 		}
 		return new ReferencedEnvelope(
 				minx,
@@ -107,22 +126,30 @@ public class GeoWaveFeatureSource extends
 				GeoWaveGTDataStore.DEFAULT_CRS);
 	}
 
+	@SuppressWarnings("rawtypes")
 	protected int getCountInternal(
 			final Query query )
 			throws IOException {
-		// TODO whats the most efficient way to get bounds in accumulo
-		// for now just iterate through results and count
-		final FeatureReader<SimpleFeatureType, SimpleFeature> reader = new GeoWaveFeatureReader(
-				query,
-				new GeoWaveEmptyTransaction(
-						this.components),
-				this.components);
-		int count = 0;
-		while (reader.hasNext()) {
-			reader.next();
-			count++;
+		Map<ByteArrayId, DataStatistics<SimpleFeature>> stats = this.components.getDataStatistics(new GeoWaveEmptyTransaction(
+				this.components));
+		DataStatistics<SimpleFeature> countStats = stats.get(CountDataStatistics.STATS_ID);
+		if (countStats != null && query.getFilter().equals(Filter.INCLUDE)) {
+			return (int) ((CountDataStatistics) countStats).getCount();
 		}
-		return count;
+		else {
+			final FeatureReader<SimpleFeatureType, SimpleFeature> reader = new GeoWaveFeatureReader(
+					query,
+					new GeoWaveEmptyTransaction(
+							this.components),
+					this.components);
+			int count = 0;
+			while (reader.hasNext()) {
+				reader.next();
+				count++;
+			}
+			return count;
+		}
+
 	}
 
 	@Override

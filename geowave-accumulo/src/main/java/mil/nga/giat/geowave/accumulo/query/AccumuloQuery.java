@@ -28,18 +28,24 @@ abstract public class AccumuloQuery
 	protected final List<ByteArrayId> adapterIds;
 	protected final Index index;
 
+	private final String[] authorizations;
+
 	public AccumuloQuery(
-			final Index index ) {
+			final Index index,
+			final String... authorizations ) {
 		this(
 				null,
-				index);
+				index,
+				authorizations);
 	}
 
 	public AccumuloQuery(
 			final List<ByteArrayId> adapterIds,
-			final Index index ) {
+			final Index index,
+			final String... authorizations ) {
 		this.adapterIds = adapterIds;
 		this.index = index;
+		this.authorizations = authorizations;
 	}
 
 	abstract protected List<ByteArrayRange> getRanges();
@@ -52,11 +58,14 @@ abstract public class AccumuloQuery
 		ScannerBase scanner;
 		try {
 			if (ranges == null || ranges.isEmpty()) {
-				//((Scanner) scanner).s
-				scanner = accumuloOperations.createScanner(tableName, getAdditionalAuthorizations());
+				scanner = accumuloOperations.createScanner(
+						tableName,
+						accumuloOperations.getAuthorizations(getAdditionalAuthorizations()));
 			}
 			else if ((ranges != null) && (ranges.size() == 1)) {
-				scanner = accumuloOperations.createScanner(tableName, getAdditionalAuthorizations());
+				scanner = accumuloOperations.createScanner(
+						tableName,
+						accumuloOperations.getAuthorizations(getAdditionalAuthorizations()));
 				final ByteArrayRange r = ranges.get(0);
 				if (r.isSingleValue()) {
 					((Scanner) scanner).setRange(Range.exact(new Text(
@@ -70,7 +79,9 @@ abstract public class AccumuloQuery
 				}
 			}
 			else {
-				scanner = accumuloOperations.createBatchScanner(tableName,getAdditionalAuthorizations());
+				scanner = accumuloOperations.createBatchScanner(
+						tableName,
+						accumuloOperations.getAuthorizations(getAdditionalAuthorizations()));
 				((BatchScanner) scanner).setRanges(AccumuloUtils.byteArrayRangesToAccumuloRanges(ranges));
 			}
 		}
@@ -81,9 +92,6 @@ abstract public class AccumuloQuery
 			e.printStackTrace();
 			return null;
 		}
-		// we are assuming we always have to ensure no duplicates
-		// and that the deduplication is the least expensive filter so we add it
-		// first
 		if ((adapterIds != null) && !adapterIds.isEmpty()) {
 			for (final ByteArrayId adapterId : adapterIds) {
 				scanner.fetchColumnFamily(new Text(
@@ -92,6 +100,8 @@ abstract public class AccumuloQuery
 		}
 		return scanner;
 	}
-	
-	public String[] getAdditionalAuthorizations() { return new String[0]; }
+
+	public String[] getAdditionalAuthorizations() {
+		return authorizations;
+	}
 }

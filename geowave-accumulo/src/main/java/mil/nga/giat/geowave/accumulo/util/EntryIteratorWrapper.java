@@ -54,14 +54,14 @@ public class EntryIteratorWrapper<T> implements
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	private T decodeRow(
 			final Entry<Key, Value> row,
 			final QueryFilter clientFilter,
 			final Index index ) {
-		return AccumuloUtils.decodeRow(
+		return (T) AccumuloUtils.decodeRow(
 				row.getKey(),
 				row.getValue(),
-				null,
 				adapterStore,
 				clientFilter,
 				index);

@@ -1,25 +1,17 @@
 package mil.nga.giat.geowave.vector.query.cql;
 import static org.junit.Assert.assertTrue;
-import mil.nga.giat.geowave.vector.plugin.GeoWaveGTMemDataStore;
-import mil.nga.giat.geowave.vector.query.cql.FilterToCQLTool;
 
-import org.opengis.feature.simple.SimpleFeatureType;
-import org.opengis.feature.type.AttributeType;
-import org.opengis.feature.type.Name;
-import org.opengis.filter.Filter;
-import org.opengis.filter.expression.Expression;
 import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.geotools.data.DataUtilities;
-import org.geotools.feature.NameImpl;
 import org.geotools.feature.SchemaException;
-import org.geotools.feature.type.AbstractLazyAttributeTypeImpl;
-import org.geotools.feature.type.AttributeDescriptorImpl;
 import org.geotools.filter.FilterFactoryImpl;
 import org.geotools.filter.text.cql2.CQLException;
-import org.geotools.gml3.v3_2.gco.GCOSchema;
 import org.junit.Before;
 import org.junit.Test;
+import org.opengis.feature.simple.SimpleFeatureType;
+import org.opengis.filter.Filter;
+import org.opengis.filter.expression.Expression;
 
 
 public class FilterToCQLToolTest

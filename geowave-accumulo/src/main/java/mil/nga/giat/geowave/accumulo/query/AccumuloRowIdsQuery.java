@@ -11,36 +11,35 @@ import mil.nga.giat.geowave.store.index.Index;
 import org.apache.accumulo.core.client.ScannerBase;
 
 /**
- * Represents a query operation for a specific  set of Accumulo row IDs.
+ * Represents a query operation for a specific set of Accumulo row IDs.
  * 
  */
-public class AccumuloRowIdsQuery extends AccumuloFilteredIndexQuery {
+public class AccumuloRowIdsQuery extends
+		AccumuloFilteredIndexQuery
+{
 
 	final Collection<ByteArrayId> rows;
 
-	private final String[] authorizations;
-
-	public AccumuloRowIdsQuery(final Index index, final Collection<ByteArrayId> rows,
-			final String[] authorizations) {
-		super(index);
+	public AccumuloRowIdsQuery(
+			final Index index,
+			final Collection<ByteArrayId> rows,
+			final String[] authorizations ) {
+		super(
+				index,
+				authorizations);
 		this.rows = rows;
-		this.authorizations = authorizations;
 	}
 
 	@Override
 	protected List<ByteArrayRange> getRanges() {
 		final List<ByteArrayRange> ranges = new ArrayList<ByteArrayRange>();
 		for (ByteArrayId row : rows)
-			ranges.add(new ByteArrayRange(row, row));
+			ranges.add(new ByteArrayRange(
+					row,
+					row));
 		return ranges;
 	}
 
-	@Override
-	public String[] getAdditionalAuthorizations() {
-		return authorizations;
-	}	
-	
-
-	protected void addScanIteratorSettings(final ScannerBase scanner) {
-	}
+	protected void addScanIteratorSettings(
+			final ScannerBase scanner ) {}
 }

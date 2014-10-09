@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
+import mil.nga.giat.geowave.accumulo.util.VisibilityTransformer;
 import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.store.CloseableIterator;
 import mil.nga.giat.geowave.vector.plugin.GeoWaveDataStoreComponents;
@@ -18,7 +19,6 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.geotools.data.Transaction;
 import org.geotools.factory.Hints;
 import org.geotools.geometry.jts.ReferencedEnvelope;
-import org.geotools.util.Utilities;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
@@ -60,7 +60,7 @@ public class GeoWaveTransactionManagement implements
 		public ModifiedFeature(
 				final SimpleFeature oldFeature,
 				final SimpleFeature newFeature,
-				boolean alreadyWritten) {
+				boolean alreadyWritten ) {
 			super();
 			this.newFeature = newFeature;
 			this.oldFeature = oldFeature;
@@ -76,20 +76,24 @@ public class GeoWaveTransactionManagement implements
 	/** Simple object used for locking */
 	Object mutex;
 
-	/** Create an empty Diff 
-	 * @throws IOException */
+	/**
+	 * Create an empty Diff
+	 * 
+	 * @throws IOException
+	 */
 	public GeoWaveTransactionManagement(
 			final GeoWaveDataStoreComponents components,
 			final String typeName,
 			final Transaction transaction,
 			LockingManagement lockingManager,
-			String txID) throws IOException {
+			String txID )
+			throws IOException {
 		this.components = components;
 		mutex = this;
 		this.typeName = typeName;
 		this.transaction = transaction;
 		this.lockingManager = lockingManager;
-		this.txID= txID;
+		this.txID = txID;
 	}
 
 	/**
@@ -108,7 +112,6 @@ public class GeoWaveTransactionManagement implements
 	 */
 	public void clear() {
 		synchronized (mutex) {
-			// TODO: Change visibility
 			addedFidList.clear();
 			modifiedFeatures.clear();
 			removedFeatures.clear();
@@ -259,16 +262,26 @@ public class GeoWaveTransactionManagement implements
 
 	public void rollback()
 			throws IOException {
-
+		for (String fid : this.addedFidList.keySet()) {
+			components.remove(
+					fid,
+					this);
+		}
+		this.clear();
 	}
 
 	@Override
 	public String[] composeAuthorizations() {
-		final String[] initialAuths =   this.components.getGTstore().getAuthorizationSPI().getAuthorizations();
+		final String[] initialAuths = this.components.getGTstore().getAuthorizationSPI().getAuthorizations();
 		final String[] newAuths = new String[initialAuths.length + 1];
-		System.arraycopy(initialAuths, 0, newAuths, 0, initialAuths.length);
+		System.arraycopy(
+				initialAuths,
+				0,
+				newAuths,
+				0,
+				initialAuths.length);
 		newAuths[initialAuths.length] = this.txID;
-		return newAuths;		
+		return newAuths;
 	}
 
 	@Override
@@ -280,19 +293,24 @@ public class GeoWaveTransactionManagement implements
 		return txID;
 	}
 
-
 	public void commit()
 			throws IOException {
 		final Iterator<Pair<SimpleFeature, SimpleFeature>> updateIt = getUpdates();
 
 		final String transId = "\\(?" + txID + "\\)?";
+		VisibilityTransformer visibilityTransformer = new VisibilityTransformer(
+				"&?" + transId,
+				"");
 		for (Collection<ByteArrayId> rowIDs : this.addedFidList.values()) {
-			this.components.replaceFromVisibility(
+			this.components.replaceDataVisibility(
 					this,
 					rowIDs,
-					"&?" + transId,
-					"");
+					visibilityTransformer);
 		}
+
+		this.components.replaceStatsVisibility(
+				this,
+				visibilityTransformer);
 
 		final Iterator<SimpleFeature> removeIt = this.removedFeatures.values().iterator();
 
@@ -419,5 +437,5 @@ public class GeoWaveTransactionManagement implements
 
 		};
 	}
-	
+
 }

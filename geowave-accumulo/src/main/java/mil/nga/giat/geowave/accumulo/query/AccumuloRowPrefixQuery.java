@@ -18,10 +18,12 @@ public class AccumuloRowPrefixQuery extends
 
 	public AccumuloRowPrefixQuery(
 			final Index index,
-			final ByteArrayId rowPrefix ) {
+			final ByteArrayId rowPrefix,
+			final String...authorizations) {
 		super(
 				index,
-				rowPrefix);
+				rowPrefix,
+				authorizations);
 	}
 
 	@Override

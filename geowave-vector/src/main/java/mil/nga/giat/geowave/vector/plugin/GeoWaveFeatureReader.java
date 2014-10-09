@@ -11,11 +11,13 @@ import java.util.Set;
 import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.index.StringUtils;
 import mil.nga.giat.geowave.store.CloseableIterator;
+import mil.nga.giat.geowave.store.adapter.statistics.BoundingBoxDataStatistics;
 import mil.nga.giat.geowave.store.query.BasicQuery;
 import mil.nga.giat.geowave.store.query.SpatialQuery;
 import mil.nga.giat.geowave.store.query.SpatialTemporalQuery;
 import mil.nga.giat.geowave.store.query.TemporalConstraints;
 import mil.nga.giat.geowave.store.query.TemporalQuery;
+import mil.nga.giat.geowave.vector.adapter.FeatureDataAdapter;
 import mil.nga.giat.geowave.vector.plugin.transaction.GeoWaveTransaction;
 import mil.nga.giat.geowave.vector.wms.DistributableRenderer;
 
@@ -33,10 +35,10 @@ import com.vividsolutions.jts.geom.Geometry;
  * This class wraps a geotools data store as well as one for statistics (for
  * example to display Heatmaps) into a GeoTools FeatureReader for simple feature
  * data. It acts as a helper for GeoWave's GeoTools data store.
- *
+ * 
  */
 public class GeoWaveFeatureReader implements
-FeatureReader<SimpleFeatureType, SimpleFeature>
+		FeatureReader<SimpleFeatureType, SimpleFeature>
 {
 
 	private final GeoWaveDataStoreComponents components;
@@ -52,6 +54,10 @@ FeatureReader<SimpleFeatureType, SimpleFeature>
 		featureCollection = new GeoWaveFeatureCollection(
 				this,
 				query);
+	}
+
+	public GeoWaveTransaction getTransaction() {
+		return transaction;
 	}
 
 	public GeoWaveDataStoreComponents getComponents() {
@@ -117,7 +123,8 @@ FeatureReader<SimpleFeatureType, SimpleFeature>
 						components.getCurrentIndex(),
 						new ByteArrayId(
 								fid),
-								components.getAdapter().getAdapterId()));
+						components.getAdapter().getAdapterId(),
+						transaction.composeAuthorizations()));
 			}
 			return new CloseableIterator.Wrapper(
 					retVal.iterator());
@@ -148,9 +155,9 @@ FeatureReader<SimpleFeatureType, SimpleFeature>
 				composeQuery(
 						jtsBounds.getGeometryN(0),
 						timeBounds),
-						filter,
-						renderer,
-						transaction.composeAuthorizations()));
+				filter,
+				renderer,
+				transaction.composeAuthorizations()));
 	}
 
 	public CloseableIterator<SimpleFeature> getData(
@@ -167,13 +174,13 @@ FeatureReader<SimpleFeatureType, SimpleFeature>
 				composeQuery(
 						jtsBounds.getGeometryN(0),
 						timeBounds),
-						width,
-						height,
-						pixelSize,
-						filter,
-						envelope,
-						limit,
-						transaction.composeAuthorizations()));
+				width,
+				height,
+				pixelSize,
+				filter,
+				envelope,
+				limit,
+				transaction.composeAuthorizations()));
 	}
 
 	public CloseableIterator<SimpleFeature> getData(
@@ -186,18 +193,18 @@ FeatureReader<SimpleFeatureType, SimpleFeature>
 					composeQuery(
 							jtsBounds,
 							timeBounds),
-							null,
-							limit,
-							transaction.composeAuthorizations());
+					null,
+					limit,
+					transaction.composeAuthorizations());
 		}
 		return interweaveTransaction(components.getDataStore().query(
 				components.getAdapter(),
 				composeQuery(
 						jtsBounds,
 						timeBounds),
-						(Filter) null,
-						(Integer) null,
-						transaction.composeAuthorizations()));
+				(Filter) null,
+				(Integer) null,
+				transaction.composeAuthorizations()));
 	}
 
 	public CloseableIterator<SimpleFeature> getData(
@@ -211,17 +218,17 @@ FeatureReader<SimpleFeatureType, SimpleFeature>
 					composeQuery(
 							jtsBounds,
 							timeBounds),
-							filter,
-							limit));
+					filter,
+					limit));
 		}
 		return interweaveTransaction(components.getDataStore().query(
 				components.getAdapter(),
 				composeQuery(
 						jtsBounds,
 						timeBounds),
-						filter,
-						(Integer) null,
-						transaction.composeAuthorizations()));
+				filter,
+				(Integer) null,
+				transaction.composeAuthorizations()));
 	}
 
 	@SuppressWarnings("unchecked")
@@ -232,8 +239,8 @@ FeatureReader<SimpleFeatureType, SimpleFeature>
 			final String statsName ) {
 		return interweaveTransaction((CloseableIterator<SimpleFeature>) components.getStatsDataStore().query(
 				Arrays.asList(new ByteArrayId[] {
-						new ByteArrayId(
-								StringUtils.stringToBinary("l" + level + "_stats" + statsName))
+					new ByteArrayId(
+							StringUtils.stringToBinary("l" + level + "_stats" + statsName))
 				}),
 				composeQuery(
 						jtsBounds,
