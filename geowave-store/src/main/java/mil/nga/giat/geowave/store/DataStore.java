@@ -62,8 +62,7 @@ public interface DataStore
 			final WritableDataAdapter<T> writableAdapter,
 			final Index index,
 			final Iterator<T> entryIterator );
-	
-	
+
 	/**
 	 * Ingests a single entry into the data store
 	 * 
@@ -74,14 +73,15 @@ public interface DataStore
 	 *            The configuration information for the primary index to use.
 	 * @param entry
 	 *            The entry to ingest
-	 * @param customFieldVisibilityWriter per entry visibility control
+	 * @param customFieldVisibilityWriter
+	 *            per entry visibility control
 	 * @return Returns all row IDs for which the entry is ingested
 	 */
-	public <T>  List<ByteArrayId> ingest(
+	public <T> List<ByteArrayId> ingest(
 			final WritableDataAdapter<T> writableAdapter,
 			final Index index,
 			final T entry,
-			final VisibilityWriter<T> customFieldVisibilityWriter);
+			final VisibilityWriter<T> customFieldVisibilityWriter );
 
 	/**
 	 * Ingests a collection of entries into the data store described by an
@@ -103,8 +103,7 @@ public interface DataStore
 			final Index index,
 			final Iterator<T> entryIterator,
 			final IngestCallback<T> ingestCallback );
-	
-	
+
 	/**
 	 * Ingests a collection of entries into the data store described by an
 	 * iterator on the entries
@@ -119,14 +118,15 @@ public interface DataStore
 	 * @param ingestCallback
 	 *            A callback method to receive feedback such as row IDs for
 	 *            every entry that is successfully ingested
-	 * @param customFieldVisibilityWriter per entry visibility control            
+	 * @param customFieldVisibilityWriter
+	 *            per entry visibility control
 	 */
 	public <T> void ingest(
 			final WritableDataAdapter<T> writableAdapter,
 			final Index index,
 			final Iterator<T> entryIterator,
 			final IngestCallback<T> ingestCallback,
-			final VisibilityWriter<T> customFieldVisibilityWriter);
+			final VisibilityWriter<T> customFieldVisibilityWriter );
 
 	/**
 	 * Returns all data in this data store that matches the query parameter. All
@@ -170,9 +170,10 @@ public interface DataStore
 	 *            The index to search for the entry.
 	 * @param dataId
 	 *            The data ID to use for the query.
-	 * 
 	 * @param adapterId
 	 *            The adapter ID to use for the query.
+	 * @param authorizations
+	 *            additional authorizations to fetch the entry	           
 	 * 
 	 * @return The entry that was ingested with the given data ID and adapter
 	 *         ID. This combination of data ID and adapter ID is the one
@@ -183,7 +184,8 @@ public interface DataStore
 	public <T> T getEntry(
 			final Index index,
 			final ByteArrayId dataId,
-			final ByteArrayId adapterId );
+			final ByteArrayId adapterId,
+			final String...additionalAuthorizations);
 
 	/**
 	 * Deletes the data element associated with the given data ID and adapter ID
@@ -193,10 +195,10 @@ public interface DataStore
 	 *            The index to search for the entry.
 	 * @param dataId
 	 *            The data ID to use for the query.
-	 * 
 	 * @param adapterId
 	 *            The adapter ID to use for the query.
-	 * 
+	 * @param authorizations
+	 *            additional authorizations to delete the entry
 	 * @return Returns true if the entry was found and deleted successfully.
 	 *         Returns false if the entry could not be found, if the entry could
 	 *         not be deleted, or if the entry in the alternate index could not
@@ -205,7 +207,8 @@ public interface DataStore
 	public boolean deleteEntry(
 			final Index index,
 			final ByteArrayId dataId,
-			final ByteArrayId adapterId );
+			final ByteArrayId adapterId,
+			final String... authorizations );
 
 	/**
 	 * Returns all data with the given row ID prefix stored in the given index
@@ -214,6 +217,8 @@ public interface DataStore
 	 *            The index to search for the entry.
 	 * @param rowPrefix
 	 *            A prefix for the row ID to use as the query.
+	 * @param additionalAuthorizations
+	 * 		      additional authorizations to any data store specific defaults  
 	 * 
 	 * @return All entries that were ingested with a row ID that is prefixed by
 	 *         the given rowPrefix. The "row ID" is the one assigned to the
@@ -221,7 +226,8 @@ public interface DataStore
 	 */
 	public <T> CloseableIterator<T> getEntriesByPrefix(
 			final Index index,
-			final ByteArrayId rowPrefix );
+			final ByteArrayId rowPrefix,
+			final String...authorizations);
 
 	/**
 	 * Returns all data in this data store that matches the query parameter and
@@ -415,7 +421,7 @@ public interface DataStore
 			List<ByteArrayId> adapterIds,
 			final Query query,
 			final int limit );
-	
+
 	/**
 	 * Returns all data in this data store that matches the query parameter and
 	 * matches one of the adapter IDs. All data types that match the query and
@@ -431,7 +437,8 @@ public interface DataStore
 	 * @param limit
 	 *            The maximum number of entries to return
 	 * @param authorization
-	 * 			  The authorization used to override the default authorization for cell visibility.
+	 *            The authorization used to override the default authorization
+	 *            for cell visibility.
 	 * @return An iterator on all results that match the query. The iterator
 	 *         implements Closeable and it is best practice to close the
 	 *         iterator after it is no longer needed.
@@ -441,5 +448,5 @@ public interface DataStore
 			final Index index,
 			final Query query,
 			final int limit,
-			final String...authorizations);
+			final String... authorizations );
 }

@@ -4,9 +4,9 @@ import java.net.URL;
 
 import mil.nga.giat.geowave.accumulo.BasicAccumuloOperations;
 import mil.nga.giat.geowave.accumulo.metadata.AccumuloAdapterStore;
-import mil.nga.giat.geowave.accumulo.metadata.AccumuloDataStatisticsStore;
 import mil.nga.giat.geowave.accumulo.metadata.AccumuloIndexStore;
 import mil.nga.giat.geowave.store.adapter.statistics.DataStatisticsStore;
+import mil.nga.giat.geowave.vector.AccumuloDataStatisticsStoreExt;
 import mil.nga.giat.geowave.vector.VectorDataStore;
 import mil.nga.giat.geowave.vector.auth.AuthorizationFactorySPI;
 
@@ -61,7 +61,7 @@ public class GeoWaveGTMemDataStore extends
 		final AccumuloIndexStore indexStore = new AccumuloIndexStore(
 				dataOps);
 
-		final DataStatisticsStore statisticsStore = new AccumuloDataStatisticsStore(
+		final DataStatisticsStore statisticsStore = new AccumuloDataStatisticsStoreExt(
 				dataOps);
 
 		super.setAdapterStore(new AccumuloAdapterStore(

@@ -27,6 +27,7 @@ import org.apache.accumulo.core.client.BatchWriterConfig;
 import org.apache.accumulo.core.client.Connector;
 import org.apache.accumulo.core.client.IteratorSetting;
 import org.apache.accumulo.core.client.MutationsRejectedException;
+import org.apache.accumulo.core.client.RowIterator;
 import org.apache.accumulo.core.client.Scanner;
 import org.apache.accumulo.core.client.TableExistsException;
 import org.apache.accumulo.core.client.TableNotFoundException;
@@ -45,7 +46,7 @@ import org.apache.log4j.Logger;
  * and a batch writer
  */
 public class BasicAccumuloOperations implements
-AccumuloOperations
+		AccumuloOperations
 {
 	private final static Logger LOGGER = Logger.getLogger(BasicAccumuloOperations.class);
 	private static final int DEFAULT_NUM_THREADS = 16;
@@ -66,7 +67,7 @@ AccumuloOperations
 	 * This is will create an Accumulo connector based on passed in connection
 	 * information and credentials for convenience convenience. It will also use
 	 * reasonable defaults for unspecified parameters.
-	 *
+	 * 
 	 * @param zookeeperUrl
 	 *            The comma-delimited URLs for all zookeeper servers, this will
 	 *            be directly used to instantiate a ZookeeperInstance
@@ -92,8 +93,8 @@ AccumuloOperations
 			final String userName,
 			final String password,
 			final String tableNamespace )
-					throws AccumuloException,
-					AccumuloSecurityException {
+			throws AccumuloException,
+			AccumuloSecurityException {
 		this(
 				null,
 				tableNamespace);
@@ -108,7 +109,7 @@ AccumuloOperations
 	/**
 	 * This constructor uses reasonable defaults and only requires an Accumulo
 	 * connector
-	 *
+	 * 
 	 * @param connector
 	 *            The connector to use for all operations
 	 */
@@ -122,7 +123,7 @@ AccumuloOperations
 	/**
 	 * This constructor uses reasonable defaults and requires an Accumulo
 	 * connector and table namespace
-	 *
+	 * 
 	 * @param connector
 	 *            The connector to use for all operations
 	 * @param tableNamespace
@@ -143,7 +144,7 @@ AccumuloOperations
 	/**
 	 * This is the full constructor for the operation factory and should be used
 	 * if any of the defaults are insufficient.
-	 *
+	 * 
 	 * @param numThreads
 	 *            The number of threads to use for a batch scanner and batch
 	 *            writer
@@ -187,18 +188,23 @@ AccumuloOperations
 		return byteBufferSize;
 	}
 
-	public String getAuthorization() {
-		return authorization;
-	}
-
 	public Connector getConnector() {
 		return connector;
 	}
 
 	@Override
+	public String[] getAuthorizations(
+			final String... additionalAuthorizations ) {
+		return authorization == null ? additionalAuthorizations : (String[]) ArrayUtils.add(
+				additionalAuthorizations,
+				authorization);
+
+	}
+
+	@Override
 	public Writer createWriter(
 			final String tableName )
-					throws TableNotFoundException {
+			throws TableNotFoundException {
 		return createWriter(
 				tableName,
 				true);
@@ -208,7 +214,7 @@ AccumuloOperations
 	public Writer createWriter(
 			final String tableName,
 			final boolean createTable )
-					throws TableNotFoundException {
+			throws TableNotFoundException {
 		final String qName = getQualifiedTableName(tableName);
 		if (createTable && !connector.tableOperations().exists(
 				qName)) {
@@ -250,14 +256,27 @@ AccumuloOperations
 	}
 
 	@Override
-	public BatchScanner createBatchScanner(
-			final String tableName )
-					throws TableNotFoundException {
-		return connector.createBatchScanner(
-				getQualifiedTableName(tableName),
-				authorization == null ? new Authorizations() : new Authorizations(
-						authorization),
-						numThreads);
+	public long getRowCount(
+			final String tableName,
+			String... additionalAuthorizations ) {
+		RowIterator rowIterator;
+		try {
+			rowIterator = new RowIterator(
+					connector.createScanner(
+							getQualifiedTableName(tableName),
+							(this.authorization == null) ? new Authorizations(
+									additionalAuthorizations) : new Authorizations(
+									(String[]) ArrayUtils.add(
+											additionalAuthorizations,
+											authorization))));
+			while (rowIterator.hasNext())
+				rowIterator.next();
+			return rowIterator.getKVCount();
+		}
+		catch (TableNotFoundException e) {
+			LOGGER.warn("Table '" + tableName + "' not found during count operation");
+			return 0;
+		}
 	}
 
 	@Override
@@ -330,11 +349,13 @@ AccumuloOperations
 	@Override
 	public boolean deleteAll(
 			final String tableName,
-			final String columnFamily ) {
+			final String columnFamily,
+			final String... additionalAuthorizations ) {
 		BatchDeleter deleter = null;
 		try {
-
-			deleter = createBatchDeleter(tableName);
+			deleter = createBatchDeleter(
+					tableName,
+					additionalAuthorizations);
 			deleter.setRanges(Arrays.asList(new Range()));
 			deleter.fetchColumnFamily(new Text(
 					columnFamily));
@@ -360,20 +381,22 @@ AccumuloOperations
 			final String tableName,
 			final List<ByteArrayId> rowIds,
 			final String columnFamily,
-			final String columnQualifier ) {
+			final String columnQualifier,
+			final String... authorizations ) {
 
 		boolean success = true;
 		BatchDeleter deleter = null;
 		try {
-
-			deleter = createBatchDeleter(tableName);
+			deleter = createBatchDeleter(
+					tableName,
+					authorizations);
 			if ((columnFamily != null) && !columnFamily.isEmpty()) {
 				if ((columnQualifier != null) && !columnQualifier.isEmpty()) {
 					deleter.fetchColumn(
 							new Text(
 									columnFamily),
-									new Text(
-											columnQualifier));
+							new Text(
+									columnQualifier));
 				}
 				else {
 					deleter.fetchColumnFamily(new Text(
@@ -428,8 +451,8 @@ AccumuloOperations
 	public boolean localityGroupExists(
 			final String tableName,
 			final byte[] localityGroup )
-					throws AccumuloException,
-					TableNotFoundException {
+			throws AccumuloException,
+			TableNotFoundException {
 		final String qName = getQualifiedTableName(tableName);
 		final String localityGroupStr = qName + StringUtils.stringFromBinary(localityGroup);
 
@@ -446,8 +469,8 @@ AccumuloOperations
 		// check accumulo to see if locality group exists
 		final boolean groupExists = connector.tableOperations().exists(
 				qName) && connector.tableOperations().getLocalityGroups(
-						qName).keySet().contains(
-								StringUtils.stringFromBinary(localityGroup));
+				qName).keySet().contains(
+				StringUtils.stringFromBinary(localityGroup));
 
 		// update the cache
 		if (groupExists) {
@@ -463,9 +486,9 @@ AccumuloOperations
 	public void addLocalityGroup(
 			final String tableName,
 			final byte[] localityGroup )
-					throws AccumuloException,
-					TableNotFoundException,
-					AccumuloSecurityException {
+			throws AccumuloException,
+			TableNotFoundException,
+			AccumuloSecurityException {
 		final String qName = getQualifiedTableName(tableName);
 		final String localityGroupStr = qName + StringUtils.stringFromBinary(localityGroup);
 
@@ -508,75 +531,64 @@ AccumuloOperations
 	public Scanner createScanner(
 			final String tableName,
 			final String... additionalAuthorizations )
-					throws TableNotFoundException {
+			throws TableNotFoundException {
 		return connector.createScanner(
 				getQualifiedTableName(tableName),
-				authorization == null ? new Authorizations(
-						additionalAuthorizations) : new Authorizations(
-								(String[]) ArrayUtils.add(
-										additionalAuthorizations,
-										authorization)));
-	}
-
-	@Override
-	public Scanner createScanner(
-			final String tableName )
-					throws TableNotFoundException {
-		return connector.createScanner(
-				getQualifiedTableName(tableName),
-				authorization == null ? new Authorizations() : new Authorizations(
-						authorization));
+				new Authorizations(
+						getAuthorizations(additionalAuthorizations)));
 	}
 
 	@Override
 	public BatchScanner createBatchScanner(
 			final String tableName,
 			final String... additionalAuthorizations )
-					throws TableNotFoundException {
+			throws TableNotFoundException {
 		return connector.createBatchScanner(
 				getQualifiedTableName(tableName),
-				authorization == null ? new Authorizations(
-						additionalAuthorizations) : new Authorizations(
-								(String[]) ArrayUtils.add(
-										additionalAuthorizations,
-										authorization)),
-										numThreads);
+				new Authorizations(
+						getAuthorizations(additionalAuthorizations)),
+				numThreads);
 	}
 
+	@Override
 	public void insureAuthorization(
-			final String auth )
-					throws AccumuloException,
-					AccumuloSecurityException {
+			final String... authorizations )
+			throws AccumuloException,
+			AccumuloSecurityException {
 		Authorizations auths = connector.securityOperations().getUserAuthorizations(
 				connector.whoami());
-		if (!auths.contains(auth)) {
-			final List<byte[]> newSet = new ArrayList<byte[]>();
+		final List<byte[]> newSet = new ArrayList<byte[]>();
+		for (String auth : authorizations)
+			if (!auths.contains(auth)) {
+				newSet.add(auth.getBytes());
+			}
+		if (newSet.size() > 0) {
 			newSet.addAll(auths.getAuthorizations());
-			newSet.add(auth.getBytes());
 			connector.securityOperations().changeUserAuthorizations(
 					connector.whoami(),
 					new Authorizations(
 							newSet));
+			auths = connector.securityOperations().getUserAuthorizations(
+					connector.whoami());
+			LOGGER.trace(connector.whoami() + " has authorizationss" + ArrayUtils.toString(auths.getAuthorizations()));
 		}
-		auths = connector.securityOperations().getUserAuthorizations(
-				connector.whoami());
-		LOGGER.trace(connector.whoami() + " has authorizationss" + ArrayUtils.toString(auths.getAuthorizations()));
 	}
 
 	@Override
 	public BatchDeleter createBatchDeleter(
-			final String tableName )
-					throws TableNotFoundException {
+			final String tableName,
+			final String... additionalAuthorizations )
+			throws TableNotFoundException {
 		return connector.createBatchDeleter(
 				getQualifiedTableName(tableName),
-				authorization == null ? new Authorizations() : new Authorizations(
-						authorization),
-						numThreads,
-						new BatchWriterConfig().setMaxWriteThreads(
-								numThreads).setMaxMemory(
-										byteBufferSize).setTimeout(
-												timeoutMillis,
-												TimeUnit.MILLISECONDS));
+				new Authorizations(
+						getAuthorizations(additionalAuthorizations)),
+				numThreads,
+				new BatchWriterConfig().setMaxWriteThreads(
+						numThreads).setMaxMemory(
+						byteBufferSize).setTimeout(
+						timeoutMillis,
+						TimeUnit.MILLISECONDS));
 	}
 
 	public long getCacheTimeoutMillis() {
@@ -593,7 +605,7 @@ AccumuloOperations
 			final String tableName,
 			final boolean createTable,
 			final IteratorConfig[] iterators )
-					throws TableNotFoundException {
+			throws TableNotFoundException {
 		final String qName = getQualifiedTableName(tableName);
 		if (createTable && !connector.tableOperations().exists(
 				qName)) {

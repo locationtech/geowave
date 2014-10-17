@@ -41,14 +41,15 @@ public interface DataStatisticsStore
 	 *         exist
 	 */
 	public CloseableIterator<DataStatistics<?>> getDataStatistics(
-			ByteArrayId adapterId );
+			ByteArrayId adapterId,
+			String...authorizations);
 
 	/**
 	 * Get all data statistics from the store
 	 * 
 	 * @return the list of all statistics
 	 */
-	public CloseableIterator<DataStatistics<?>> getAllDataStatistics();
+	public CloseableIterator<DataStatistics<?>> getAllDataStatistics(String...authorizations);
 
 	/**
 	 * Get statistics by adapter ID and the statistics ID (which will define a
@@ -62,7 +63,8 @@ public interface DataStatisticsStore
 	 */
 	public DataStatistics<?> getDataStatistics(
 			ByteArrayId adapterId,
-			ByteArrayId statisticsId );
+			ByteArrayId statisticsId,
+			String...authorizations);
 
 	/**
 	 * Remove a statistic from the store
@@ -74,5 +76,6 @@ public interface DataStatisticsStore
 	 */
 	public boolean removeStatistics(
 			ByteArrayId adapterId,
-			ByteArrayId statisticsId );
+			ByteArrayId statisticsId,
+			String...authorizations );
 }

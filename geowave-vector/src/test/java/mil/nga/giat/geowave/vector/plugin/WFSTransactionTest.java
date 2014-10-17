@@ -104,6 +104,14 @@ public class WFSTransactionTest
 		reader.close();
 
 		transaction1.commit();
+		reader = dataStore.getFeatureReader(
+				query,
+				transaction1);
+		assertTrue(reader.hasNext());
+		reader.next();
+		assertFalse(reader.hasNext());
+		reader.close();
+		
 		transaction1.close();
 
 		// since this implementation does not support serializable, transaction2
@@ -113,6 +121,8 @@ public class WFSTransactionTest
 				query,
 				transaction2);
 		assertTrue(reader.hasNext());
+		reader.next();
+		assertFalse(reader.hasNext());
 		reader.close();
 		transaction2.commit();
 		transaction2.close();

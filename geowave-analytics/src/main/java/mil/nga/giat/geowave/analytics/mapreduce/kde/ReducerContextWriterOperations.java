@@ -27,21 +27,14 @@ public class ReducerContextWriterOperations implements
 				context,
 				tableName);
 	}
-
-	@Override
-	public BatchScanner createBatchScanner(
-			final String tableName )
-			throws TableNotFoundException {
-		return null;
+	
+	public void insureAuthorization(
+			final String... authorizations )
+			throws AccumuloException,
+			AccumuloSecurityException {
+		
 	}
-
-	@Override
-	public Scanner createScanner(
-			final String tableName )
-			throws TableNotFoundException {
-		return null;
-	}
-
+	
 	@Override
 	public Scanner createScanner(
 			final String tableName,
@@ -73,13 +66,6 @@ public class ReducerContextWriterOperations implements
 
 	@Override
 	public boolean deleteAll() {
-		return false;
-	}
-
-	@Override
-	public boolean deleteAll(
-			final String tableName,
-			final String columnFamily ) {
 		return false;
 	}
 
@@ -116,13 +102,6 @@ public class ReducerContextWriterOperations implements
 	}
 
 	@Override
-	public BatchDeleter createBatchDeleter(
-			final String tableName )
-			throws TableNotFoundException {
-		return null;
-	}
-
-	@Override
 	public boolean attachIterators(
 			String tableName,
 			boolean createTable,
@@ -143,12 +122,41 @@ public class ReducerContextWriterOperations implements
 	}
 
 	@Override
+	public BatchDeleter createBatchDeleter(
+			String tableName,
+			String... additionalAuthorizations )
+			throws TableNotFoundException {
+		return null;
+	}
+
+	@Override
 	public boolean delete(
 			String tableName,
 			List<ByteArrayId> rowId,
 			String columnFamily,
-			String columnQualifier ) {
-		// TODO Auto-generated method stub
+			String columnQualifier,
+			String... additionalAuthorizations ) {
 		return false;
+	}
+
+	@Override
+	public boolean deleteAll(
+			String tableName,
+			String columnFamily,
+			String... additionalAuthorizations ) {
+		return false;
+	}
+
+	@Override
+	public long getRowCount(
+			String tableName,
+			String... additionalAuthorizations ) {
+		return 0;
+	}
+
+	@Override
+	public String[] getAuthorizations(
+			String... additionalAuthorizations ) {
+		return additionalAuthorizations;
 	}
 }

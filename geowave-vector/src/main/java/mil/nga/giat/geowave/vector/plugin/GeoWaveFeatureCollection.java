@@ -2,11 +2,16 @@ package mil.nga.giat.geowave.vector.plugin;
 
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.Map;
 
+import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.store.CloseableIterator;
+import mil.nga.giat.geowave.store.adapter.statistics.BoundingBoxDataStatistics;
+import mil.nga.giat.geowave.store.adapter.statistics.CountDataStatistics;
+import mil.nga.giat.geowave.store.adapter.statistics.DataStatistics;
+import mil.nga.giat.geowave.store.query.TemporalConstraints;
 import mil.nga.giat.geowave.vector.wms.DistributableRenderer;
 import mil.nga.giat.geowave.vector.wms.accumulo.RenderedMaster;
-import mil.nga.giat.geowave.store.query.TemporalConstraints;
 
 import org.apache.log4j.Logger;
 import org.geotools.data.FeatureReader;
@@ -63,7 +68,22 @@ public class GeoWaveFeatureCollection extends
 
 	@Override
 	public int getCount() {
-		// TODO there must be a more efficient way
+		if (query.getFilter().equals(
+				Filter.INCLUDE)) {
+			// GEOWAVE-60 optimization
+			Map<ByteArrayId, DataStatistics<SimpleFeature>> statsMap = reader.getComponents().getDataStatistics(
+					reader.getTransaction());
+			if (statsMap.containsKey(CountDataStatistics.STATS_ID)) {
+				CountDataStatistics stats = (CountDataStatistics) statsMap.get(CountDataStatistics.STATS_ID);
+				if (stats != null && stats.isSet()) return (int) stats.getCount();
+			}
+		}
+		else if (query.getFilter().equals(
+				Filter.EXCLUDE)) {
+			return 0;
+		}
+
+		// fallback
 		int count = 0;
 		try {
 			final Iterator<SimpleFeature> iterator = openIterator();
@@ -83,11 +103,21 @@ public class GeoWaveFeatureCollection extends
 
 	@Override
 	public ReferencedEnvelope getBounds() {
-		// TODO whats the most efficient way to get bounds in accumulo
-		// for now just perform the query and iterate through the results
 
 		double minx = Double.MAX_VALUE, maxx = -Double.MAX_VALUE, miny = Double.MAX_VALUE, maxy = Double.MAX_VALUE;
 		try {
+			// GEOWAVE-60 optimization
+			Map<ByteArrayId, DataStatistics<SimpleFeature>> statsMap = reader.getComponents().getDataStatistics(
+					reader.getTransaction());
+			if (statsMap.containsKey(BoundingBoxDataStatistics.STATS_ID)) {
+				BoundingBoxDataStatistics<SimpleFeature> stats = (BoundingBoxDataStatistics<SimpleFeature>) statsMap.get(BoundingBoxDataStatistics.STATS_ID);
+				return new ReferencedEnvelope(
+						stats.getMinX(),
+						stats.getMaxX(),
+						stats.getMinY(),
+						stats.getMaxY(),
+						GeoWaveGTDataStore.DEFAULT_CRS);
+			}
 			final Iterator<SimpleFeature> iterator = openIterator();
 			if (!iterator.hasNext()) {
 				return null;

@@ -2,16 +2,22 @@ package mil.nga.giat.geowave.vector.plugin;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import mil.nga.giat.geowave.accumulo.util.VisibilityTransformer;
 import mil.nga.giat.geowave.index.ByteArrayId;
+import mil.nga.giat.geowave.index.StringUtils;
+import mil.nga.giat.geowave.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.store.data.visibility.GlobalVisibilityHandler;
 import mil.nga.giat.geowave.store.data.visibility.UniformVisibilityWriter;
 import mil.nga.giat.geowave.store.index.Index;
+import mil.nga.giat.geowave.vector.AccumuloDataStatisticsStoreExt;
 import mil.nga.giat.geowave.vector.VectorDataStore;
 import mil.nga.giat.geowave.vector.adapter.FeatureDataAdapter;
 import mil.nga.giat.geowave.vector.plugin.transaction.GeoWaveTransaction;
-import mil.nga.giat.geowave.vector.query.row.TransformingVisibilityQuery;
+import mil.nga.giat.geowave.vector.query.TransformingVisibilityQuery;
 import mil.nga.giat.geowave.vector.transaction.TransactionsAllocater;
 
 import org.opengis.feature.simple.SimpleFeature;
@@ -60,28 +66,66 @@ public class GeoWaveDataStoreComponents
 		return currentIndex;
 	}
 
-	public void replaceFromVisibility(
+	public void replaceDataVisibility(
 			GeoWaveTransaction transaction,
 			Collection<ByteArrayId> rowIDs,
-			String expression,
-			String replacement ) {
-		this.dataStore.query(new TransformingVisibilityQuery(
-				this.GTstore.getVisibilityManagement().visibilityReplacementIteratorClass(),
+			VisibilityTransformer transformer ) {
+		dataStore.query(new TransformingVisibilityQuery(
+				transformer,
 				currentIndex,
 				rowIDs,
-				transaction.composeAuthorizations(),
-				expression,
-				replacement));
+				transaction.composeAuthorizations()));
+	}
+
+	public void replaceStatsVisibility(
+			GeoWaveTransaction transaction,
+			VisibilityTransformer transformer ) {
+		((AccumuloDataStatisticsStoreExt) dataStore.getStatsStore()).transformVisibility(
+				this.adapter.getAdapterId(),
+				transformer,
+				transaction.composeAuthorizations());
+	}
+
+	@SuppressWarnings("unchecked")
+	public Map<ByteArrayId, DataStatistics<SimpleFeature>> getDataStatistics(
+			GeoWaveTransaction transaction ) {
+		final Map<ByteArrayId, DataStatistics<SimpleFeature>> stats = new HashMap<ByteArrayId, DataStatistics<SimpleFeature>>();
+
+		for (ByteArrayId statsId : adapter.getSupportedStatisticsIds()) {
+			@SuppressWarnings("unused")
+			DataStatistics<SimpleFeature> put = stats.put(
+					statsId,
+					(DataStatistics<SimpleFeature>) dataStore.getStatsStore().getDataStatistics(
+							this.adapter.getAdapterId(),
+							statsId,
+							transaction.composeAuthorizations()));
+		}
+		return stats;
 	}
 
 	public void remove(
 			SimpleFeature feature,
 			GeoWaveTransaction transaction )
 			throws IOException {
+
 		this.dataStore.deleteEntry(
-				this.adapter,
 				this.currentIndex,
-				feature);
+				adapter.getDataId(feature),
+				adapter.getAdapterId(),
+				transaction.composeAuthorizations());
+	}
+
+	public void remove(
+			String fid,
+			GeoWaveTransaction transaction )
+			throws IOException {
+
+		this.dataStore.deleteEntry(
+				this.currentIndex,
+				new ByteArrayId(
+						StringUtils.stringToBinary(fid)),
+				adapter.getAdapterId(),
+				transaction.composeAuthorizations());
 	}
 
 	@SuppressWarnings("unchecked")

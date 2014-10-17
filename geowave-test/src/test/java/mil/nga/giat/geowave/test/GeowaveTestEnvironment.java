@@ -64,7 +64,6 @@ public class GeowaveTestEnvironment
 				accumuloInstance = miniAccumulo.getInstanceName();
 				accumuloUser = "root";
 				accumuloPassword = DEFAULT_MINI_ACCUMULO_PASSWORD;
-				return;
 			}
 			catch (IOException  | InterruptedException e) {
 				LOGGER.warn(

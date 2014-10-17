@@ -28,20 +28,22 @@ public class AccumuloConstraintsQuery extends
 {
 	protected final MultiDimensionalNumericData constraints;
 	protected final List<DistributableQueryFilter> distributableFilters;
-	protected final String[] authorizations;
 
-
-
-  public AccumuloConstraintsQuery(
-		final Index index,
-		final Query query) {
-	this(null, index,query.getIndexConstraints(index.getIndexStrategy()),query.createFilters(index.getIndexModel()), new String[0]);
-	if (!query.isSupported(index)) {
-		throw new IllegalArgumentException(
-				"Index does not support the query");
+	public AccumuloConstraintsQuery(
+			final Index index,
+			final Query query ) {
+		this(
+				null,
+				index,
+				query.getIndexConstraints(index.getIndexStrategy()),
+				query.createFilters(index.getIndexModel()),
+				new String[0]);
+		if (!query.isSupported(index)) {
+			throw new IllegalArgumentException(
+					"Index does not support the query");
+		}
 	}
-  }
-	
+
 	public AccumuloConstraintsQuery(
 			final Index index ) {
 		this(
@@ -77,13 +79,13 @@ public class AccumuloConstraintsQuery extends
 			final Index index,
 			final MultiDimensionalNumericData constraints,
 			final List<QueryFilter> queryFilters,
-			final String[] authorizations) {
+			final String[] authorizations ) {
 		super(
 				adapterIds,
-				index);
+				index,
+				authorizations);
 		this.constraints = constraints;
 		final SplitFilterLists lists = splitList(queryFilters);
-		this.authorizations = authorizations;
 		List<QueryFilter> clientFilters = lists.clientFilters;
 		// add dedupe filters to the front of both lists so that the
 		// de-duplication is performed before any more complex filtering
@@ -96,7 +98,7 @@ public class AccumuloConstraintsQuery extends
 		distributableFilters.add(
 				0,
 				new DedupeFilter());
-	
+
 	}
 
 	protected void addScanIteratorSettings(
@@ -129,17 +131,13 @@ public class AccumuloConstraintsQuery extends
 	@Override
 	protected List<ByteArrayRange> getRanges() {
 		if (constraints == null || constraints.isEmpty()) {
-			return new ArrayList<ByteArrayRange>(); // implies in negative and positive infinity
+			return new ArrayList<ByteArrayRange>(); // implies in negative and
+													// positive infinity
 		}
 		else {
 			return index.getIndexStrategy().getQueryRanges(
 					constraints);
 		}
-	}
-
-	@Override
-	public String[] getAdditionalAuthorizations() {
-		return  this.authorizations;
 	}
 
 	private static SplitFilterLists splitList(

@@ -34,7 +34,7 @@ public class ZooKeeperTransactionAllocaterTest
 	public void startZookeeper()
 			throws Exception {
 		zkTestServer = new TestingServer(
-				2181);
+				12181);
 		allocater = new ZooKeeperTransactionsAllocater(
 				zkTestServer.getConnectString(),
 				"me",
@@ -112,7 +112,7 @@ public class ZooKeeperTransactionAllocaterTest
 								File oldDir = zkTestServer.getTempDirectory();
 								zkTestServer.close();
 								zkTestServer = new TestingServer(
-										2181,
+										12181,
 										oldDir);
 
 							}

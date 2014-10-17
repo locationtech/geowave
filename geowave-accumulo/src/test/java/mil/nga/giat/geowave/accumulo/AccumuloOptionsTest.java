@@ -1,17 +1,17 @@
 package mil.nga.giat.geowave.accumulo;
 
+import static org.junit.Assert.assertEquals;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import junit.framework.Assert;
 import mil.nga.giat.geowave.accumulo.metadata.AccumuloAdapterStore;
 import mil.nga.giat.geowave.accumulo.metadata.AccumuloDataStatisticsStore;
 import mil.nga.giat.geowave.accumulo.metadata.AccumuloIndexStore;
 import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.index.StringUtils;
 import mil.nga.giat.geowave.store.CloseableIterator;
-import mil.nga.giat.geowave.store.DataStore;
 import mil.nga.giat.geowave.store.adapter.AbstractDataAdapter;
 import mil.nga.giat.geowave.store.adapter.NativeFieldHandler;
 import mil.nga.giat.geowave.store.adapter.NativeFieldHandler.RowBuilder;
@@ -116,7 +116,7 @@ public class AccumuloOptionsTest
 
 		// as the table didn't already exist, the flag indicates not to create
 		// it, so no rows will be returned
-		Assert.assertEquals(
+		assertEquals(
 				0,
 				rowIds.size());
 
@@ -134,7 +134,7 @@ public class AccumuloOptionsTest
 
 		// as we have chosen not to persist the index, we will not see an index
 		// entry in the index store
-		Assert.assertEquals(
+		assertEquals(
 				false,
 				indexStore.indexExists(index.getId()));
 
@@ -144,7 +144,7 @@ public class AccumuloOptionsTest
 
 		// even though we didn't persist the index, the test point was still
 		// stored
-		Assert.assertEquals(
+		assertEquals(
 				"test_pt_1",
 				geom1.id);
 
@@ -162,7 +162,7 @@ public class AccumuloOptionsTest
 
 		// as we have chosen to persist the index, we will see the index entry
 		// in the index store
-		Assert.assertEquals(
+		assertEquals(
 				true,
 				indexStore.indexExists(index.getId()));
 
@@ -171,7 +171,7 @@ public class AccumuloOptionsTest
 				rowId2);
 
 		// of course, the point is actually stored in this case
-		Assert.assertEquals(
+		assertEquals(
 				"test_pt_2",
 				geom2.id);
 	}
@@ -200,7 +200,7 @@ public class AccumuloOptionsTest
 		try {
 			// as we are not using locality groups, we expect that this will
 			// return false
-			Assert.assertEquals(
+			assertEquals(
 					false,
 					accumuloOperations.localityGroupExists(
 							tableName,
@@ -217,7 +217,7 @@ public class AccumuloOptionsTest
 				rowId1);
 
 		// of course, the point is actually stored in this case
-		Assert.assertEquals(
+		assertEquals(
 				"test_pt_1",
 				geom1.id);
 
@@ -236,7 +236,7 @@ public class AccumuloOptionsTest
 		try {
 			// now that locality groups are turned on, we expect this to return
 			// true
-			Assert.assertEquals(
+			assertEquals(
 					true,
 					accumuloOperations.localityGroupExists(
 							tableName,
@@ -253,7 +253,7 @@ public class AccumuloOptionsTest
 				rowId2);
 
 		// of course, the point is actually stored in this case
-		Assert.assertEquals(
+		assertEquals(
 				"test_pt_2",
 				geom2.id);
 	}
@@ -281,7 +281,7 @@ public class AccumuloOptionsTest
 				rowId1);
 
 		// without specifying the adapter, this method returns null
-		Assert.assertEquals(
+		assertEquals(
 				null,
 				geom1);
 
@@ -301,12 +301,12 @@ public class AccumuloOptionsTest
 		}
 
 		// specifying the adapter, this method returns the entry
-		Assert.assertEquals(
+		assertEquals(
 				"test_pt_1",
 				geom1.id);
 
 		// the adapter should not exist in the metadata table
-		Assert.assertEquals(
+		assertEquals(
 				false,
 				adapterStore.adapterExists(adapter.getAdapterId()));
 
@@ -327,12 +327,12 @@ public class AccumuloOptionsTest
 				rowId2);
 
 		// specifying the adapter, this method returns the entry
-		Assert.assertEquals(
+		assertEquals(
 				"test_pt_2",
 				geom2.id);
 
 		// the adapter should exist in the metadata table
-		Assert.assertEquals(
+		assertEquals(
 				true,
 				adapterStore.adapterExists(adapter.getAdapterId()));
 	}
@@ -364,7 +364,7 @@ public class AccumuloOptionsTest
 				adapterId);
 
 		// this should return our data correctly
-		Assert.assertEquals(
+		assertEquals(
 				"test_pt_0",
 				geom0.id);
 
@@ -382,7 +382,7 @@ public class AccumuloOptionsTest
 				adapterId);
 
 		// this should return null as the entry was deleted
-		Assert.assertEquals(
+		assertEquals(
 				null,
 				geom0);
 
@@ -407,7 +407,7 @@ public class AccumuloOptionsTest
 				adapterId);
 
 		// this should return our data correctly
-		Assert.assertEquals(
+		assertEquals(
 				"test_pt_1",
 				geom1.id);
 
@@ -430,7 +430,7 @@ public class AccumuloOptionsTest
 				adapterId);
 
 		// this should return our data correctly
-		Assert.assertEquals(
+		assertEquals(
 				"test_pt_2",
 				geom2.id);
 
@@ -457,7 +457,7 @@ public class AccumuloOptionsTest
 				adapterId);
 
 		// this should return our data correctly
-		Assert.assertEquals(
+		assertEquals(
 				"test_pt_3",
 				geom3.id);
 	}
@@ -503,7 +503,7 @@ public class AccumuloOptionsTest
 						adapter1.getAdapterId());
 
 		// this should return our data correctly
-		Assert.assertEquals(
+		assertEquals(
 				"test_pt_1",
 				geom1.id);
 
@@ -517,7 +517,7 @@ public class AccumuloOptionsTest
 				adapter0.getAdapterId());
 
 		// this should return null as the entry was deleted
-		Assert.assertEquals(
+		assertEquals(
 				null,
 				geom0);
 		
@@ -528,7 +528,7 @@ public class AccumuloOptionsTest
 				adapter1.getAdapterId());
 
 		// this should return null as the entry was deleted
-		Assert.assertEquals(
+		assertEquals(
 				"test_pt_1",
 				geom1.id);
 	}

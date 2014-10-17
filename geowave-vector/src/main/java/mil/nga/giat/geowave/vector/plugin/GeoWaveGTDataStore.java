@@ -28,6 +28,7 @@ import mil.nga.giat.geowave.store.dimension.LongitudeField;
 import mil.nga.giat.geowave.store.dimension.TimeField;
 import mil.nga.giat.geowave.store.index.Index;
 import mil.nga.giat.geowave.store.index.IndexType;
+import mil.nga.giat.geowave.vector.AccumuloDataStatisticsStoreExt;
 import mil.nga.giat.geowave.vector.VectorDataStore;
 import mil.nga.giat.geowave.vector.adapter.FeatureDataAdapter;
 import mil.nga.giat.geowave.vector.auth.AuthorizationSPI;
@@ -237,7 +238,7 @@ TransactionNotification
 		final AccumuloIndexStore indexStore = new AccumuloIndexStore(
 				storeOperations);
 
-		final DataStatisticsStore statisticsStore = new AccumuloDataStatisticsStore(
+		final DataStatisticsStore statisticsStore = new AccumuloDataStatisticsStoreExt(
 				storeOperations);
 		adapterStore = new AccumuloAdapterStore(
 				storeOperations);
@@ -734,11 +735,13 @@ TransactionNotification
 		final DataAdapter<?> adapter = adapterStore.getAdapter(new ByteArrayId(
 				StringUtils.stringToBinary(typeName)));
 		if (adapter != null) {
+			String[] authorizations = getAuthorizationSPI().getAuthorizations();
 			final Iterator<Index> indicesIt = dataStore.getIndices();
 			while (indicesIt.hasNext()) {
 				dataStore.deleteEntries(
 						adapter,
-						indicesIt.next());
+						indicesIt.next(),
+						authorizations);
 			}
 		}
 	}

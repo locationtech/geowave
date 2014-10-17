@@ -192,7 +192,7 @@ public class DistributedRenderQuery extends
 		try {
 			scanner = accumuloOperations.createBatchScanner(
 					tableName,
-					this.authorizations);
+					this.getAdditionalAuthorizations());
 			if ((prefix != null) && (prefix.length > 0)) {
 				final Range r = Range.prefix(new Text(
 						prefix));

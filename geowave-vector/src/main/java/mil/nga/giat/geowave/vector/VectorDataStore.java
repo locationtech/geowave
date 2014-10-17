@@ -90,6 +90,10 @@ public class VectorDataStore extends
 		return indexStore.getIndices();
 	}
 
+	public DataStatisticsStore getStatsStore() {
+		return this.statisticsStore;
+	}
+
 	public CloseableIterator<SimpleFeature> query(
 			final FeatureDataAdapter adapter,
 			final Query query,

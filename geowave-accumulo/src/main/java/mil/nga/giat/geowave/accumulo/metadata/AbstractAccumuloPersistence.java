@@ -1,6 +1,7 @@
 package mil.nga.giat.geowave.accumulo.metadata;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
@@ -165,7 +166,7 @@ abstract public class AbstractAccumuloPersistence<T extends Persistable>
 	}
 
 	protected void addObject(
-			final T object ) {
+			final T object) {
 		final ByteArrayId id = getPrimaryId(object);
 		addObjectToCache(object);
 		try {
@@ -255,11 +256,13 @@ abstract public class AbstractAccumuloPersistence<T extends Persistable>
 	}
 
 	protected CloseableIterator<T> getAllObjectsWithSecondaryId(
-			final ByteArrayId secondaryId ) {
+			final ByteArrayId secondaryId,
+			final String... authorizations) {
 		try {
 			final BatchScanner scanner = getScanner(
 					null,
-					secondaryId);
+					secondaryId,
+					authorizations);
 			final Iterator<Entry<Key, Value>> it = scanner.iterator();
 			return new CloseableIteratorWrapper<T>(
 					new ScannerClosableWrapper(
@@ -278,7 +281,8 @@ abstract public class AbstractAccumuloPersistence<T extends Persistable>
 	@SuppressWarnings("unchecked")
 	protected T getObject(
 			final ByteArrayId primaryId,
-			final ByteArrayId secondaryId ) {
+			final ByteArrayId secondaryId,
+			final String... authorizations) {
 		final Object cacheResult = getObjectFromCache(
 				primaryId,
 				secondaryId);
@@ -288,7 +292,8 @@ abstract public class AbstractAccumuloPersistence<T extends Persistable>
 		try {
 			final BatchScanner scanner = getScanner(
 					primaryId,
-					secondaryId);
+					secondaryId,
+					authorizations);
 			try {
 				final Iterator<Entry<Key, Value>> it = scanner.iterator();
 				if (!it.hasNext()) {
@@ -314,9 +319,9 @@ abstract public class AbstractAccumuloPersistence<T extends Persistable>
 		return null;
 	}
 
-	protected CloseableIterator<T> getObjects() {
+	protected CloseableIterator<T> getObjects(final String... authorizations) {
 		try {
-			final BatchScanner scanner = getFullScanner();
+			final BatchScanner scanner = getFullScanner(authorizations);
 			final Iterator<Entry<Key, Value>> it = scanner.iterator();
 			return new CloseableIteratorWrapper<T>(
 					new ScannerClosableWrapper(
@@ -344,18 +349,20 @@ abstract public class AbstractAccumuloPersistence<T extends Persistable>
 		return result;
 	}
 
-	private BatchScanner getFullScanner()
+	private BatchScanner getFullScanner(final String... authorizations)
 			throws TableNotFoundException {
 		return getScanner(
 				null,
-				null);
+				null,
+				authorizations);
 	}
 
-	private BatchScanner getScanner(
+	protected BatchScanner getScanner(
 			final ByteArrayId primaryId,
-			final ByteArrayId secondaryId )
+			final ByteArrayId secondaryId,
+			final String... authorizations)
 			throws TableNotFoundException {
-		final BatchScanner scanner = accumuloOperations.createBatchScanner(getAccumuloTablename());
+		final BatchScanner scanner = accumuloOperations.createBatchScanner(getAccumuloTablename(),authorizations);
 		final IteratorSetting[] settings = getScanSettings();
 		if ((settings != null) && (settings.length > 0)) {
 			for (final IteratorSetting setting : settings) {
@@ -390,16 +397,19 @@ abstract public class AbstractAccumuloPersistence<T extends Persistable>
 		return scanner;
 	}
 
+			
 	protected boolean deleteObject(
 			final ByteArrayId primaryId,
-			final ByteArrayId secondaryId ) {
+			final ByteArrayId secondaryId,
+			final String... authorizations) {
 		return deleteObjectFromCache(
 				primaryId,
 				secondaryId) && accumuloOperations.delete(
 				getAccumuloTablename(),
-				primaryId,
+				Arrays.asList(primaryId),
 				getAccumuloColumnFamily(),
-				getAccumuloColumnQualifier(secondaryId));
+				getAccumuloColumnQualifier(secondaryId),
+				authorizations);
 	}
 
 	protected boolean objectExists(
