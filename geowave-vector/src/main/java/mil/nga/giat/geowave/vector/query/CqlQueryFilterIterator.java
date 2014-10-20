@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -172,7 +171,8 @@ public class CqlQueryFilterIterator extends
 	}
 
 	public static void initClassLoader(
-			@SuppressWarnings("rawtypes") final Class cls )
+			@SuppressWarnings("rawtypes")
+			final Class cls )
 			throws MalformedURLException {
 		synchronized (MUTEX) {
 			if (classLoaderInitialized) {
@@ -181,16 +181,14 @@ public class CqlQueryFilterIterator extends
 			LOGGER.info("Generating patched classloader");
 			if (cls.getClassLoader() instanceof VFSClassLoader) {
 				final VFSClassLoader cl = (VFSClassLoader) cls.getClassLoader();
-				final List<URL> jars = new ArrayList<URL>();
-				for (final FileObject f : cl.getFileObjects()) {
-					if (f.toString().contains(
-							"gt-")) {
-						jars.add(new URL(
-								f.toString()));
-					}
+				final FileObject[] fileObjs = cl.getFileObjects();
+				final URL[] fileUrls = new URL[fileObjs.length];
+				for (int i = 0; i < fileObjs.length; i++) {
+					fileUrls[i] = new URL(
+							fileObjs[i].toString());
 				}
 				final URLClassLoader ucl = new URLClassLoader(
-						jars.toArray(new URL[jars.size()]),
+						fileUrls,
 						cl);
 				GeoTools.addClassLoader(ucl);
 			}
