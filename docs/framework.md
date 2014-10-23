@@ -228,5 +228,5 @@ Okay, let's ingest this.  I'll take some liberty with the file locations, but th
     $ unzip ne_50m_admin_0_countries.zip
 	$ rm ne_50m_admin_0_countries.zip
     $ cd ..
-    $ java -jar geowave-types-0.8.0-SNAPSHOT-ingest-tool.jar -localingest -b ./ingest -i instance -n adminborders -p pass -t geotools -u user -z zooo-1:2181
+    $ java -jar geowave-types-0.8.0-SNAPSHOT-ingest-tool.jar -localingest -b ./ingest -i instance -n adminborders -p pass -t geotools-vector -u user -z zooo-1:2181
 	
