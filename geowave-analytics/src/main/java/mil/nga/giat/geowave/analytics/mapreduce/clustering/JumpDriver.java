@@ -233,26 +233,6 @@ public class JumpDriver
 				job,
 				true);
 
-		// // split ranges for polygon query into individual map tasks
-		// GeoWaveInputFormat.setRangesForPolygon(
-		// job,
-		// ClusteringUtils.generateWorldPolygon());
-		//
-		// AccumuloInputFormat.setConnectorInfo(job, user, authToken);
-		// AccumuloInputFormat.setInputTableName(job, dataTableNamespace);
-		// AccumuloInputFormat.setScanAuthorizations(job, null);
-		// AccumuloInputFormat.setZooKeeperInstance(job, instanceName,
-		// zooservers);
-		//
-		// // set up AccumuloOutputFormat
-		// GeoWaveOutputFormat.setAccumuloOperationsInfo(
-		// job,
-		// zooservers,
-		// instanceName,
-		// user,
-		// password,
-		// tempKMeansTableName);
-
 		// add all the dependency jars to the distributed cache for all
 		// map/reduce tasks
 		// all jars must be on hdfs at the specified directory prior to running

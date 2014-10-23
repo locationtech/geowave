@@ -116,8 +116,10 @@ public class ClusteringUtils
 				if (obj instanceof SimpleFeature) {
 					final SimpleFeature result = (SimpleFeature) obj;
 
-					// point id stored as metadata
-					Integer pointId = Integer.parseInt(result.getAttribute("name").toString());
+					// point id stored with record id as metadata, could be just id
+					String metadata = result.getAttribute("name").toString();
+					String[] splits = metadata.split("|");
+					Integer pointId = Integer.parseInt(splits[0]);
 					
 					Geometry geometry = (Geometry) result.getDefaultGeometry();
 
@@ -159,8 +161,10 @@ public class ClusteringUtils
 					if (obj instanceof SimpleFeature) {
 						final SimpleFeature result = (SimpleFeature) obj;
 
-						// point id stored as metadata
-						Integer pointId = Integer.parseInt(result.getAttribute("name").toString());
+						// point id stored with record id as metadata, could be just id
+						String metadata = result.getAttribute("name").toString();
+						String[] splits = metadata.split("|");
+						Integer pointId = Integer.parseInt(splits[0]);
 
 						Geometry geometry = (Geometry) result.getDefaultGeometry();
 

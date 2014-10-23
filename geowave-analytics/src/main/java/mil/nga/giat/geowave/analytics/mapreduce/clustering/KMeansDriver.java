@@ -62,7 +62,7 @@ public class KMeansDriver
 	private Instance zookeeperInstance;
 	private Connector accumuloConnector;
 	
-	private final String dataTableNamespace;
+	private String dataTableNamespace;
 	private String tempKMeansTableName;
 	private String runId;
 
@@ -77,10 +77,10 @@ public class KMeansDriver
 	 * @param tempKMeansTableName String Namespace for temporary Accumulo table to hold inter-run data 
 	 */
 	public KMeansDriver(
-			String instanceName,
-			String zooservers,
-			String user,
-			String password,
+			final String instanceName,
+			final String zooservers,
+			final String user,
+			final String password,
 			final String dataTableNamespace,
 			final String tempKMeansTableName) {
 		this.instanceName = instanceName;
@@ -94,12 +94,12 @@ public class KMeansDriver
 	}
 
 	public KMeansDriver(
-			String instanceName,
-			String zooservers,
-			String user,
-			String password,
-			final String tempKMeansTableName,
+			final String instanceName,
+			final String zooservers,
+			final String user,
+			final String password,
 			final String dataTableNamespace,
+			final String tempKMeansTableName,
 			final Connector conn ) {
 		this.instanceName = instanceName;
 		this.zooservers = zooservers;

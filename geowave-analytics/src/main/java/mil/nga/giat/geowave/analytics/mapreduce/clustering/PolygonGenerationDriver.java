@@ -105,7 +105,7 @@ public class PolygonGenerationDriver
 			final String user,
 			final String password,
 			final String tempKMeansTableNamespace,
-			String outputTableNamespace,
+			final String outputTableNamespace,
 			final Connector accumuloConnector ) {
 		this.instanceName = instanceName;
 		this.zooservers = zooservers;
