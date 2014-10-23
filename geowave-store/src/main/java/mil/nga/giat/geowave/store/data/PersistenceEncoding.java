@@ -191,8 +191,9 @@ public class PersistenceEncoding
 				MultiDimensionalNumericData md = correctForNormalizationError(index.getIndexStrategy().getRangeForId(
 						insertionId));
 				// used to check the result of the index strategy
-				if (LOGGER.isDebugEnabled() &&
-						checkCoverage(boxRangeData, md)) {
+				if (LOGGER.isDebugEnabled() && checkCoverage(
+						boxRangeData,
+						md)) {
 					LOGGER.error("Index strategy produced an unmatching tile during encoding and storing an entry");
 				}
 				if (!overlaps(
@@ -202,29 +203,35 @@ public class PersistenceEncoding
 		}
 		return untrimmedResult;
 	}
-	
+
 	private MultiDimensionalNumericData correctForNormalizationError(
-			MultiDimensionalNumericData boxRangeData) {
+			MultiDimensionalNumericData boxRangeData ) {
 		final NumericData[] currentDataSet = boxRangeData.getDataPerDimension();
-		final NumericData[] dataPerDimension = new NumericData[currentDataSet.length];	
+		final NumericData[] dataPerDimension = new NumericData[currentDataSet.length];
 		for (int d = 0; d < currentDataSet.length; d++) {
-			dataPerDimension[d] = new NumericRange(currentDataSet[d].getMin()-1E-12d,currentDataSet[d].getMax()+1E-12d);
+			dataPerDimension[d] = new NumericRange(
+					currentDataSet[d].getMin() - 1E-12d,
+					currentDataSet[d].getMax() + 1E-12d);
 		}
 		return new BasicNumericDataset(
 				dataPerDimension);
 	}
-	
-	/** 
-	 * Tool can be used custom index strategies to check if the tiles actual intersect with the provided bounding box.
+
+	/**
+	 * Tool can be used custom index strategies to check if the tiles actual
+	 * intersect with the provided bounding box.
+	 * 
 	 * @param boxRangeData
 	 * @param innerTile
 	 * @return
 	 */
-	private boolean checkCoverage(MultiDimensionalNumericData boxRangeData, MultiDimensionalNumericData innerTile) {
-		for (int i =0 ; i < boxRangeData.getDimensionCount(); i++) {
+	private boolean checkCoverage(
+			MultiDimensionalNumericData boxRangeData,
+			MultiDimensionalNumericData innerTile ) {
+		for (int i = 0; i < boxRangeData.getDimensionCount(); i++) {
 			double t0 = innerTile.getDataPerDimension()[i].getMax() - boxRangeData.getDataPerDimension()[i].getMin();
 			double t1 = boxRangeData.getDataPerDimension()[i].getMax() - innerTile.getDataPerDimension()[i].getMin();
-			if(Math.abs(t0 - t1) > (t0 + t1)) {
+			if (Math.abs(t0 - t1) > (t0 + t1)) {
 				return false;
 			}
 		}

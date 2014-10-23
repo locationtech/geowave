@@ -1,9 +1,11 @@
 package mil.nga.giat.geowave.store.dimension;
 
 import mil.nga.giat.geowave.index.sfc.data.NumericData;
+import mil.nga.giat.geowave.index.sfc.data.NumericRange;
 import mil.nga.giat.geowave.store.index.CommonIndexValue;
 
 import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.Envelope;
 
 /**
  * This class wraps JTS geometry with visibility so that it can be used within
@@ -53,6 +55,17 @@ public class GeometryWrapper implements
 
 		int latPosition = fields[0] instanceof LatitudeField ? 0 : 1;
 		int longPosition = fields[0] instanceof LatitudeField ? 1 : 0;
+		if (fields.length == 1) {
+			Envelope env = geometry.getEnvelopeInternal();
+			NumericRange r = latPosition == 0 ? new NumericRange(
+					env.getMinY(),
+					env.getMaxY()) : new NumericRange(
+					env.getMinX(),
+					env.getMaxX());
+			double t0 = rangeData[0].getMax() - r.getMin();
+			double t1 = r.getMax() - rangeData[0].getMin();
+			return Math.abs(t0 - t1) <= (t0 + t1);
+		}
 		return geometry.getFactory().createPolygon(
 				new Coordinate[] {
 					new Coordinate(
