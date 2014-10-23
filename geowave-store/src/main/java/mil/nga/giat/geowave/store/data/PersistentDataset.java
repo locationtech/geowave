@@ -71,6 +71,7 @@ public class PersistentDataset<T>
 			final ByteArrayId fieldId ) {
 		return fieldIdToValueMap.get(fieldId);
 	}
+	
 
 	/**
 	 * Get all of the values from this persistent data set

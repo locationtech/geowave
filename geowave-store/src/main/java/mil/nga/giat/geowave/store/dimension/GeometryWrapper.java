@@ -1,6 +1,9 @@
 package mil.nga.giat.geowave.store.dimension;
 
+import mil.nga.giat.geowave.index.sfc.data.NumericData;
 import mil.nga.giat.geowave.store.index.CommonIndexValue;
+
+import com.vividsolutions.jts.geom.Coordinate;
 
 /**
  * This class wraps JTS geometry with visibility so that it can be used within
@@ -40,4 +43,34 @@ public class GeometryWrapper implements
 		return geometry;
 	}
 
+	/**
+	 * Expects Longitude before Latitude
+	 */
+	@Override
+	public boolean overlaps(
+			final DimensionField[] fields,
+			final NumericData[] rangeData ) {
+
+		int latPosition = fields[0] instanceof LatitudeField ? 0 : 1;
+		int longPosition = fields[0] instanceof LatitudeField ? 1 : 0;
+		return geometry.getFactory().createPolygon(
+				new Coordinate[] {
+					new Coordinate(
+							rangeData[longPosition].getMin(),
+							rangeData[latPosition].getMin()),
+					new Coordinate(
+							rangeData[longPosition].getMin(),
+							rangeData[latPosition].getMax()),
+					new Coordinate(
+							rangeData[longPosition].getMax(),
+							rangeData[latPosition].getMax()),
+					new Coordinate(
+							rangeData[longPosition].getMax(),
+							rangeData[latPosition].getMin()),
+					new Coordinate(
+							rangeData[longPosition].getMin(),
+							rangeData[latPosition].getMin())
+				}).intersects(
+				geometry);
+	}
 }
