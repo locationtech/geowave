@@ -190,6 +190,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
+				<!--  use 2.13 or greater if using NetBeans -->
 				<version>2.10</version>
 				<configuration>
 					<argLine>${test.args} ${jacoco.surefire.argLine}</argLine>
