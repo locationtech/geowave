@@ -11,21 +11,9 @@ env:
   global:
     #github token
     - secure: "TosKDl5mnt8UKeyWDg65i6cWENR7EorQbFPSvZ5ZfQfAaDAOeIN2OA/zxtRMELeYM82+n+GGXQOt0qPiYqyRlufYJJSUnWiwvI5gm3a8+f58atcU2R2bF9jd81bsL9jCS+JCQxAmzh8FCO6t7DJ4OdoMyMaIR7XjlSlsIJ97dd8="
-    #coverty token
-    - secure: "L2++du/H4/mj/1/cfjgh09WnZwNqaAh7yEzVLHVyV8HhI1Ay4J38qilhEHJlGU+LHLGvGQGxBXmnHUJpfbXdSUE7LMrs2b43PgKlHs/v24maDAPrDkKe9fv8HmpaLLVIhRjHPtMo9LQVdg54oEQZacB3+2ndWTY5PqYTHJBQTR8="
 install: "mvn clean install javadoc:aggregate -DskipITs=true"
 script: "mvn verify -Daccumulo.version=${ACCUMULO_VERSION} -Dhadoop.version=${HADOOP_VERSION} -Dhadoop.version.mr=${HADOOP_VERSION_MR} -Dgeotools.version=${GEOTOOLS_VERSION} -Dgeoserver.version=${GEOSERVER_VERSION}"
 before_install:
   - chmod +x .utility/push-javadoc-to-gh-pages.sh
 after_success:
   - .utility/push-javadoc-to-gh-pages.sh
-
-addons:
-  coverity_scan:
-    project:
-      name: "ngageoint/geowave"
-      description: "Build submitted via Travis CI"
-    notification_email: chris@slowcar.net
-    build_command_prepend: "mvn clean"
-    build_command:   "mvn -DskipTests=true compile"
-    branch_pattern: master
