@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.SortedMap;
@@ -525,7 +526,10 @@ public class AccumuloUtils
 					rowIds,
 					fieldInfoList);
 		}
-		return null;
+		LOGGER.warn("Indexing failed to produce insertion ids; entry [" + dataWriter.getDataId(entry).getString() +"] not saved.");
+		return new IngestEntryInfo(
+				Collections.EMPTY_LIST,
+				Collections.EMPTY_LIST);
 
 	}
 
