@@ -1,7 +1,7 @@
 # GeoWave 0.8.1	
 ## About  
 
-<a href="https://travis-ci.org/ngageoint/geowave.svg?branch=master">
+<a href="https://travis-ci.org/ngageoint/geowave">
 	<img alt="Travis-CI test status" 
 	     src="https://travis-ci.org/ngageoint/geowave.svg?branch=master"/>
 </a>
