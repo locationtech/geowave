@@ -16,3 +16,13 @@ before_install:
   - chmod +x .utility/push-javadoc-to-gh-pages.sh
 after_success:
   - .utility/push-javadoc-to-gh-pages.sh
+
+addons:
+  coverity_scan:
+    project:
+      name: "ngageoint/geowave"
+      description: "Build submitted via Travis CI"
+    notification_email: chris@slowcar.net
+    build_command_prepend: "mvn clean"
+    build_command:   "mvn -DskipTests=true compile"
+    branch_pattern: coverity_scan
