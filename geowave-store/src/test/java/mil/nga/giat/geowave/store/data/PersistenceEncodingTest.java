@@ -3,6 +3,8 @@ package mil.nga.giat.geowave.store.data;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -48,7 +50,7 @@ import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.PrecisionModel;
 
-public class PersistentEncodingTest
+public class PersistenceEncodingTest
 {
 
 	private final GeometryFactory factory = new GeometryFactory(
@@ -73,25 +75,23 @@ public class PersistentEncodingTest
 			},
 			SFCType.HILBERT);
 
+	final SimpleDateFormat dateFormat = new SimpleDateFormat(
+			"yyyy-MM-dd HH:mm:ss.S");
+
 	private static final Index index = new Index(
 			strategy,
 			model,
 			DimensionalityType.SPATIAL_TEMPORAL,
 			DataType.OTHER);
 
-	Calendar sc = GregorianCalendar.getInstance();
-	Calendar ec = GregorianCalendar.getInstance();
+	Date start = null, end = null;
 
 	@Before
-	public void setUp() {
+	public void setUp()
+			throws ParseException {
 
-		sc.set(
-				Calendar.MONTH,
-				3); // avoids leap year and end of year issues
-		ec.setTime(sc.getTime());
-		ec.add(
-				Calendar.HOUR,
-				1);
+		start = dateFormat.parse("2012-04-03 13:30:23.304");
+		end = dateFormat.parse("2012-04-03 14:30:23.304");
 	}
 
 	@Test
@@ -105,8 +105,8 @@ public class PersistentEncodingTest
 				factory.createPoint(new Coordinate(
 						43.454,
 						28.232)),
-				sc.getTime(),
-				ec.getTime(),
+				start,
+				end,
 				"g1");
 		List<ByteArrayId> ids = adapter.encode(
 				entry,
@@ -133,8 +133,8 @@ public class PersistentEncodingTest
 							43.454,
 							28.242)
 				}),
-				sc.getTime(),
-				ec.getTime(),
+				start,
+				end,
 				"g1");
 		List<ByteArrayId> ids = adapter.encode(
 				entry,
@@ -143,12 +143,12 @@ public class PersistentEncodingTest
 		assertEquals(
 				7,
 				ids.size());
-		
+
 	}
-	
+
 	@Test
 	public void testLineWithPrecisionOnTheTileEdge() {
-		
+
 		NumericIndexStrategy strategy = TieredSFCIndexFactory.createSingleTierStrategy(
 				SPATIAL_TEMPORAL_DIMENSIONS,
 				new int[] {
@@ -158,28 +158,34 @@ public class PersistentEncodingTest
 				},
 				SFCType.HILBERT);
 
-		 Index index = new Index(
+		Index index = new Index(
 				strategy,
 				model,
 				DimensionalityType.SPATIAL_TEMPORAL,
 				DataType.OTHER);
-		
+
 		GeoObjDataAdapter adapter = new GeoObjDataAdapter(
 				NATIVE_FIELD_HANDLER_LIST,
 				COMMON_FIELD_HANDLER_LIST);
-		GeoObj entry   = new GeoObj(
+		GeoObj entry = new GeoObj(
 				factory.createLineString(new Coordinate[] {
 					new Coordinate(
 							-99.22,
-							33.75000000000001-0.0000000000002),  // notice that this gets tiled as 33.75
+							33.75000000000001), // notice that
+												// this gets
+												// tiled as
+												// 33.75
 					new Coordinate(
 							-99.15,
-							33.75000000000001-0.0000000000002)   // notice that this gets tiled as 33.75
-				}),
-				new Date(352771200000l),
-				new Date(352771200000l),
+							33.75000000000001)
+				// notice that this gets tiled as 33.75
+						}),
+				new Date(
+						352771200000l),
+				new Date(
+						352771200000l),
 				"g1");
-		List<ByteArrayId>  ids = adapter.encode(
+		List<ByteArrayId> ids = adapter.encode(
 				entry,
 				model).getInsertionIds(
 				index);
@@ -208,8 +214,8 @@ public class PersistentEncodingTest
 							43.444,
 							28.232),
 				}),
-				sc.getTime(),
-				ec.getTime(),
+				start,
+				end,
 				"g1");
 		List<ByteArrayId> ids = adapter.encode(
 				entry,
@@ -222,26 +228,26 @@ public class PersistentEncodingTest
 
 	@Test
 	public void testPointRange() {
-		//TODO: fix this test so it doesn't use current time (Issue #95)
-		// GeoObjDataAdapter adapter = new GeoObjDataAdapter(
-		// 		NATIVE_FIELD_RANGE_HANDLER_LIST,
-		// 		COMMON_FIELD_RANGE_HANDLER_LIST);
 
-		// GeoObj entry = new GeoObj(
-		// 		factory.createPoint(new Coordinate(
-		// 				43.454,
-		// 				28.232)),
-		// 		sc.getTime(),
-		// 		ec.getTime(),
-		// 		"g1");
-		// List<ByteArrayId> ids = adapter.encode(
-		// 		entry,
-		// 		model).getInsertionIds(
-		// 		index);
+		GeoObjDataAdapter adapter = new GeoObjDataAdapter(
+				NATIVE_FIELD_RANGE_HANDLER_LIST,
+				COMMON_FIELD_RANGE_HANDLER_LIST);
 
-		// assertEquals(
-		// 		8,
-		// 		ids.size());
+		GeoObj entry = new GeoObj(
+				factory.createPoint(new Coordinate(
+						43.454,
+						28.232)),
+				start,
+				end,
+				"g1");
+		List<ByteArrayId> ids = adapter.encode(
+				entry,
+				model).getInsertionIds(
+				index);
+
+		assertEquals(
+				8,
+				ids.size());
 	}
 
 	@Test
@@ -259,15 +265,14 @@ public class PersistentEncodingTest
 							43.454,
 							28.242)
 				}),
-				sc.getTime(),
-				ec.getTime(),
+				start,
+				end,
 				"g1");
 		List<ByteArrayId> ids = adapter.encode(
 				entry,
 				model).getInsertionIds(
 				index);
-		assertTrue(
-				ids.size()<100);
+		assertTrue(ids.size() < 100);
 	}
 
 	private static final ByteArrayId GEOM = new ByteArrayId(
