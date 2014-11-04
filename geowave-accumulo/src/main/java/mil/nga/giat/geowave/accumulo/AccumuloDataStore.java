@@ -1370,4 +1370,12 @@ public class AccumuloDataStore implements
 				Key key,
 				Value value );
 	}
+
+	public AdapterStore getAdapterStore() {
+		return adapterStore;
+	}
+
+	public IndexStore getIndexStore() {
+		return indexStore;
+	}
 }

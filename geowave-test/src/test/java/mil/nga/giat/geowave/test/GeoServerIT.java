@@ -4,7 +4,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLEncoder;
@@ -16,6 +15,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
@@ -48,32 +48,13 @@ public class GeoServerIT extends
 		GeoWaveTestEnvironment
 {
 	static final Logger log = LoggerFactory.getLogger(GeoServerIT.class);
-	static final Server jettyServer = new Server();
-	static final int port = 9011;
-	static final String resturlPrefix = "http://localhost:" + port + "/geoserver/rest/workspaces/geowave/datastores";
-	static final String wfsurlPrefix = "http://localhost:" + port + "/geoserver/wfs";
-
-	private static final String TEST_RESOURCE_PACKAGE = "mil/nga/giat/geowave/test/";
-	private static final String TEST_DATA_ZIP_RESOURCE_PATH = TEST_RESOURCE_PACKAGE + "gs.zip";
-
-	private static final Map<String, String> PARAMS = new HashMap<String, String>();
+	static final String resturlPrefix = JETTY_BASE_URL + "/geoserver/rest/workspaces/geowave/datastores";
+	static final String wfsurlPrefix = JETTY_BASE_URL + "/geoserver/wfs";
 
 	@BeforeClass
 	public static void setUp()
 			throws ClientProtocolException,
 			IOException {
-		GeoWaveTestEnvironment.unZipFile(
-				GeoServerIT.class.getClassLoader().getResourceAsStream(
-						TEST_DATA_ZIP_RESOURCE_PATH),
-				TEST_CASE_BASE);
-		PARAMS.put(
-				"\\{\\{ZOOINSTANCE\\}\\}",
-				zookeeper);
-		replaceParameters(
-				PARAMS,
-				new File(
-						TEST_CASE_BASE + "/gs/workspaces/geowave/test/datastore.xml"));
-		startServer();
 		checkStore();
 		createLayers();
 	}
@@ -93,20 +74,10 @@ public class GeoServerIT extends
 		assertTrue(queryFindPointBeyondTime());
 	}
 
-	@AfterClass
-	static public void breakDown() {
-		try {
-			jettyServer.stop();
-		}
-		catch (final Exception e) {
-			e.printStackTrace();
-		}
-	}
-
 	private static Credentials getCredentials() {
 		return new UsernamePasswordCredentials(
 				"admin",
-				"geoserver"); // "root","L.}GiBeC");
+				"geoserver");
 	}
 
 	static public boolean checkStore()
@@ -205,7 +176,7 @@ public class GeoServerIT extends
 				"geowave:geostuff"));
 		localParams.add(new Tuple(
 				"service",
-				"wfs"));
+				"WFS"));
 
 		for (final Tuple aParam : paramTuples) {
 			if (buf.length() > 0) {
@@ -344,7 +315,7 @@ public class GeoServerIT extends
 		final boolean result = r.getStatusLine().getStatusCode() == 200;
 		if (result) {
 			final String content = getContent(r);
-			final String pattern = "34.68158180311274 35.1828408241272";
+			final String pattern = "35.1828408241272 34.68158180311274";
 
 			// name space check as well
 			return content.contains(pattern) && content.contains("geowave:geometry");
@@ -438,66 +409,5 @@ public class GeoServerIT extends
 				run);
 		thread.start();
 		thread.join(waitTime);
-	}
-
-	static private void startServer() {
-
-		try {
-			final SocketConnector conn = new SocketConnector();
-			conn.setPort(port);
-			conn.setAcceptQueueSize(100);
-			conn.setMaxIdleTime(1000 * 60 * 60);
-			conn.setSoLingerTime(-1);
-
-			jettyServer.setConnectors(new Connector[] {
-				conn
-			});
-
-			final WebAppContext wah = new WebAppContext();
-			wah.setContextPath("/geoserver");
-			wah.setWar("src/test/webapp");
-
-			jettyServer.setHandler(wah);
-			wah.setTempDirectory(new File(
-					"target/work"));
-			// this allows to send large SLD's from the styles form
-			wah.getServletContext().getContextHandler().setMaxFormContentSize(
-					1024 * 1024 * 2);
-
-			final String jettyConfigFile = System.getProperty("jetty.config.file");
-			if (jettyConfigFile != null) {
-				log.info("Loading Jetty config from file: " + jettyConfigFile);
-				(new XmlConfiguration(
-						new FileInputStream(
-								jettyConfigFile))).configure(jettyServer);
-			}
-
-			jettyServer.start();
-			while (!jettyServer.isRunning() && !jettyServer.isStarted()) {
-				Thread.sleep(1000);
-			}
-
-			// use this to test normal stop behaviour, that is, to check stuff
-			// that
-			// need to be done on container shutdown (and yes, this will make
-			// jetty stop just after you started it...)
-			// jettyServer.stop();
-		}
-		catch (final Exception e) {
-			log.error(
-					"Could not start the Jetty server: " + e.getMessage(),
-					e);
-
-			if (jettyServer != null) {
-				try {
-					jettyServer.stop();
-				}
-				catch (final Exception e1) {
-					log.error(
-							"Unable to stop the " + "Jetty server:" + e1.getMessage(),
-							e1);
-				}
-			}
-		}
 	}
 }

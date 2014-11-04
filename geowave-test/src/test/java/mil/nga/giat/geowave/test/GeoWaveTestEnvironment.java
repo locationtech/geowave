@@ -55,6 +55,15 @@ public class GeoWaveTestEnvironment
 	protected static final String TEST_CASE_BASE = "data/";
 	protected static final String DEFAULT_MINI_ACCUMULO_PASSWORD = "Ge0wave";
 	protected static final String HADOOP_WINDOWS_UTIL = "winutils.exe";
+	protected static final int JETTY_PORT = 9011;
+	protected static final String JETTY_BASE_URL = "http://localhost:" + JETTY_PORT;
+	protected static final String GEOSERVER_USER = "admin";
+	protected static final String GEOSERVER_PASS = "geoserver";
+	protected static final String TEST_WORKSPACE = "geowave_test";
+	protected static final String GEOSERVER_WAR_DIR = "target/geoserver";
+	protected static final String GEOSERVER_CONTEXT_PATH = "/geoserver";
+	protected static final String GEOWAVE_WAR_DIR = "target/geowave-services";
+	protected static final String GEOWAVE_CONTEXT_PATH = "/geowave-services";
 	protected static final Object MUTEX = new Object();
 	protected static AccumuloOperations accumuloOperations;
 	protected static String zookeeper;
@@ -62,6 +71,7 @@ public class GeoWaveTestEnvironment
 	protected static String accumuloUser;
 	protected static String accumuloPassword;
 	protected static MiniAccumuloCluster miniAccumulo;
+	protected static final Server jettyServer = new Server();
 	protected static File tempDir;
 
 	protected static boolean DEFER_CLEANUP = false;
@@ -164,6 +174,8 @@ public class GeoWaveTestEnvironment
 							e);
 					Assert.fail("Could not connect to Accumulo instance: '" + e.getLocalizedMessage() + "'");
 				}
+				setupWfs();
+		        startServer();
 			}
 		}
 	}
@@ -173,10 +185,144 @@ public class GeoWaveTestEnvironment
 		return (str != null) && !str.isEmpty();
 	}
 
+	protected static void setupWfs() {
+		GeoWaveTestEnvironment.unZipFile(
+				GeoServerIT.class.getClassLoader().getResourceAsStream(
+						TEST_RESOURCE_PACKAGE + "gs.zip"),
+				GEOSERVER_WAR_DIR);
+		final File file = new File(
+				GEOSERVER_WAR_DIR + "/data/workspaces/geowave/test/datastore.xml");
+		try {
+			String str = FileUtils.readFileToString(file);
+			str = str.replaceAll(
+					"\\{\\{ZOOINSTANCE\\}\\}",
+					GeoWaveITSuite.zookeeper);
+			FileUtils.deleteQuietly(file);
+			FileUtils.write(
+					file,
+					str);
+		}
+		catch (final IOException e) {
+			LOGGER.error(
+					"Failed to setup WFS.",
+					e);
+		}
+	}
+	
+	protected static void startServer() {
+
+		try {
+			final SocketConnector conn = new SocketConnector();
+			conn.setPort(JETTY_PORT);
+			conn.setAcceptQueueSize(ACCEPT_QUEUE_SIZE);
+			conn.setMaxIdleTime(MAX_IDLE_TIME);
+			conn.setSoLingerTime(SO_LINGER_TIME);
+
+			jettyServer.setConnectors(new Connector[] {
+				conn
+			});
+
+			final WebAppContext gsWebapp = new WebAppContext();
+			gsWebapp.setContextPath(GEOSERVER_CONTEXT_PATH);
+			gsWebapp.setWar(GEOSERVER_WAR_DIR);
+
+			final WebAppClassLoader classLoader = new WebAppClassLoader(
+					gsWebapp);
+			classLoader.addClassPath(System.getProperty("java.class.path"));
+			gsWebapp.setClassLoader(classLoader);
+
+			final File warDir = new File(
+					GEOWAVE_WAR_DIR);
+
+			// update the config file
+			writeConfigFile(new File(
+					warDir,
+					"/WEB-INF/config.properties"));
+
+			final WebAppContext gwWebapp = new WebAppContext();
+			gwWebapp.setContextPath(GEOWAVE_CONTEXT_PATH);
+			gwWebapp.setWar(warDir.getAbsolutePath());
+
+			jettyServer.setHandlers(new WebAppContext[] {
+				gsWebapp,
+				gwWebapp
+			});
+			gsWebapp.setTempDirectory(tempDir);
+			// this allows to send large SLD's from the styles form
+			gsWebapp.getServletContext().getContextHandler().setMaxFormContentSize(
+					MAX_FORM_CONTENT_SIZE);
+
+			final String jettyConfigFile = System.getProperty("jetty.config.file");
+			if (jettyConfigFile != null) {
+				LOGGER.info("Loading Jetty config from file: " + jettyConfigFile);
+				(new XmlConfiguration(
+						new FileInputStream(
+								jettyConfigFile))).configure(jettyServer);
+			}
+
+			jettyServer.start();
+			while (!jettyServer.isRunning() && !jettyServer.isStarted()) {
+				Thread.sleep(1000);
+			}
+
+			// use this to test normal stop behavior, that is, to check stuff
+			// that need to be done on container shutdown (and yes, this will
+			// make jetty stop just after you started it...) jettyServer.stop();
+		}
+		catch (final Exception e) {
+			LOGGER.error(
+					"Could not start the Jetty server: " + e.getMessage(),
+					e);
+
+			if (jettyServer != null) {
+				try {
+					jettyServer.stop();
+				}
+				catch (final Exception e1) {
+					LOGGER.error(
+							"Unable to stop the Jetty server",
+							e1);
+				}
+			}
+		}
+	}
+	
+	protected static void writeConfigFile(
+			final File configFile ) {
+		try {
+			final PrintWriter writer = new PrintWriter(
+					configFile);
+			writer.println("zookeeper.url=" + zookeeper);
+			writer.println("zookeeper.instance=" + accumuloInstance);
+			writer.println("zookeeper.username=" + accumuloUser);
+			writer.println("zookeeper.password=" + accumuloPassword);
+			writer.println("geoserver.url=" + JETTY_BASE_URL);
+			writer.println("geoserver.username=" + GEOSERVER_USER);
+			writer.println("geoserver.password=" + GEOSERVER_PASS);
+			writer.println("geoserver.workspace=" + TEST_WORKSPACE);
+			writer.close();
+		}
+		catch (final FileNotFoundException e) {
+			LOGGER.error(
+					"Unable to find config file",
+					e);
+		}
+	}
+	
 	@AfterClass
 	public static void cleanup() {
 		synchronized (MUTEX) {
 			if (!DEFER_CLEANUP) {
+			
+				try {
+					jettyServer.stop();
+				}
+				catch (final Exception e) {
+					LOGGER.error(
+							"Unable to stop the Jetty server",
+							e);
+				}
+			
 				Assert.assertTrue(
 						"Index not deleted successfully",
 						(accumuloOperations == null) || accumuloOperations.deleteAll());

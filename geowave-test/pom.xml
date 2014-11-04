@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<artifactId>geowave-parent</artifactId>
@@ -31,6 +32,26 @@
 			<groupId>mil.nga.giat</groupId>
 			<artifactId>geowave-types</artifactId>
 			<version>${project.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>com.sun.jersey</groupId>
+					<artifactId>jersey-core</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.sun.jersey</groupId>
+					<artifactId>jersey-server</artifactId>
+				</exclusion>
+				<exclusion>
+					<artifactId>hsqldb</artifactId>
+					<groupId>hsqldb</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>mil.nga.giat</groupId>
+			<artifactId>geowave-services</artifactId>
+			<version>${project.version}</version>
+			<type>pom</type>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
@@ -50,18 +71,6 @@
 			</exclusions>
 		</dependency>
 		<dependency>
-			<groupId>org.geoserver</groupId>
-			<artifactId>gs-restconfig</artifactId>
-			<version>2.5.2</version>
-			<scope>test</scope>
-			<exclusions>
-				<exclusion>
-					<artifactId>gt-epsg-hsql</artifactId>
-					<groupId>org.geotools</groupId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
 			<version>4.3.6</version>
@@ -72,7 +81,100 @@
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>2.9</version>
+				<executions>
+					<execution>
+						<id>unpack-wars</id>
+						<goals>
+							<goal>unpack</goal>
+						</goals>
+						<phase>package</phase>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<groupId>mil.nga.giat</groupId>
+									<artifactId>geowave-services</artifactId>
+									<version>${project.version}</version>
+									<type>war</type>
+									<overWrite>true</overWrite>
+									<outputDirectory>${project.build.directory}/geowave-services</outputDirectory>
+									<includes>**\/*.class,**\/*.config,**\/*.xml</includes>
+								</artifactItem>
+								<artifactItem>
+									<groupId>org.geoserver.web</groupId>
+									<artifactId>gs-web-app</artifactId>
+									<version>${geoserver.version}</version>
+									<type>war</type>
+									<overWrite>false</overWrite>
+									<outputDirectory>${project.build.directory}/geoserver</outputDirectory>
+									<excludes>**/*jai*.jar</excludes>
+								</artifactItem>
+							</artifactItems>
+						</configuration>
+					</execution>
+					<execution>
+						<id>setup-wps</id>
+						<goals>
+							<goal>copy</goal>
+						</goals>
+						<phase>package</phase>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<groupId>org.geoserver.extension</groupId>
+									<artifactId>gs-web-wps</artifactId>
+									<version>${geoserver.version}</version>
+									<overWrite>true</overWrite>
+									<outputDirectory>${project.build.directory}/geoserver/WEB-INF/lib</outputDirectory>
+								</artifactItem>
+								<artifactItem>
+									<groupId>org.geoserver.extension</groupId>
+									<artifactId>gs-wps-core</artifactId>
+									<version>${geoserver.version}</version>
+									<overWrite>true</overWrite>
+									<outputDirectory>${project.build.directory}/geoserver/WEB-INF/lib</outputDirectory>
+								</artifactItem>
+								<artifactItem>
+									<groupId>org.geotools</groupId>
+									<artifactId>gt-process-geometry</artifactId>
+									<version>${geotools.version}</version>
+									<overWrite>true</overWrite>
+									<outputDirectory>${project.build.directory}/geoserver/WEB-INF/lib</outputDirectory>
+								</artifactItem>
+								<artifactItem>
+									<groupId>org.geotools.xsd</groupId>
+									<artifactId>gt-xsd-wps</artifactId>
+									<version>${geotools.version}</version>
+									<overWrite>true</overWrite>
+									<outputDirectory>${project.build.directory}/geoserver/WEB-INF/lib</outputDirectory>
+								</artifactItem>
+								<artifactItem>
+									<groupId>org.geotools.ogc</groupId>
+									<artifactId>net.opengis.wps</artifactId>
+									<version>${geotools.version}</version>
+									<overWrite>true</overWrite>
+									<outputDirectory>${project.build.directory}/geoserver/WEB-INF/lib</outputDirectory>
+								</artifactItem>
+								<artifactItem>
+									<groupId>xalan</groupId>
+									<artifactId>serializer</artifactId>
+									<version>2.7.1</version>
+									<overWrite>true</overWrite>
+									<outputDirectory>${project.build.directory}/geoserver/WEB-INF/lib</outputDirectory>
+								</artifactItem>
+								<!-- <artifactItem> <groupId>mil.nga.giat</groupId> <artifactId>geowave-vector</artifactId> 
+									<version>${project.version}</version> <overWrite>true</overWrite> <outputDirectory>${project.build.directory}/geoserver/WEB-INF/lib</outputDirectory> 
+									</artifactItem> -->
+							</artifactItems>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-failsafe-plugin</artifactId>
+				<version>2.18.1</version>
 				<executions>
 					<execution>
 						<configuration>
