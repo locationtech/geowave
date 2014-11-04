@@ -117,6 +117,7 @@ public class GeoWaveFeatureSource extends
 
 				}
 			}
+			reader.close();
 		}
 		return new ReferencedEnvelope(
 				minx,
@@ -147,6 +148,7 @@ public class GeoWaveFeatureSource extends
 				reader.next();
 				count++;
 			}
+			reader.close();
 			return count;
 		}
 

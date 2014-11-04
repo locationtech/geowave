@@ -354,14 +354,6 @@ TransactionNotification
 	@Override
 	public SimpleFeatureSource getFeatureSource(
 			final String typeName ) {
-		return this.getFeatureSource(
-				typeName,
-				null);
-	}
-
-	public SimpleFeatureSource getFeatureSource(
-			final String typeName,
-			final Transaction transaction ) {
 
 		final FeatureDataAdapter adapter = getAdapter(typeName);
 		if (adapter == null) {
@@ -382,8 +374,7 @@ TransactionNotification
 			final Name name )
 					throws IOException {
 		return getFeatureSource(
-				name.getLocalPart(),
-				null);
+				name.getLocalPart());
 	}
 
 	public SimpleFeatureSource getFeatureSource(
@@ -391,8 +382,7 @@ TransactionNotification
 			final Transaction transaction )
 					throws IOException {
 		return getFeatureSource(
-				name.getLocalPart(),
-				transaction);
+				name.getLocalPart());
 	}
 
 	@Override
@@ -440,8 +430,7 @@ TransactionNotification
 		}
 		SimpleFeatureType featureType = getSchema(query.getTypeName());
 		final GeoWaveFeatureSource source = (GeoWaveFeatureSource) getFeatureSource(
-				typeName,
-				transaction);
+				typeName);
 
 		if ((propertyNames != null) || (query.getCoordinateSystem() != null)) {
 			try {
@@ -498,27 +487,26 @@ TransactionNotification
 			final Filter filter,
 			final Transaction transaction )
 					throws IOException {
-
+			
 		final GeoWaveFeatureSource source = (GeoWaveFeatureSource) getFeatureSource(
-				typeName,
-				transaction);
+				typeName);
 
 		if (filter == null) {
 			throw new NullPointerException(
 					"getFeatureReader requires Filter: " + "did you mean Filter.INCLUDE?");
 		}
 
+		if (transaction == null) {
+			throw new NullPointerException(
+					"getFeatureWriter requires Transaction: " + "did you mean to use Transaction.AUTO_COMMIT?");
+		}
+		
 		final GeoWaveTransactionState state = getMyTransactionState(
 				transaction,
 				source);
 
 		if (filter == Filter.EXCLUDE) {
 			return source.getWriterInternal(state.getGeoWaveTransaction(typeName));
-		}
-
-		if (transaction == null) {
-			throw new NullPointerException(
-					"getFeatureWriter requires Transaction: " + "did you mean to use Transaction.AUTO_COMMIT?");
 		}
 
 		FeatureWriter<SimpleFeatureType, SimpleFeature> writer;
@@ -736,12 +724,18 @@ TransactionNotification
 				StringUtils.stringToBinary(typeName)));
 		if (adapter != null) {
 			String[] authorizations = getAuthorizationSPI().getAuthorizations();
-			final Iterator<Index> indicesIt = dataStore.getIndices();
-			while (indicesIt.hasNext()) {
-				dataStore.deleteEntries(
-						adapter,
-						indicesIt.next(),
-						authorizations);
+			try (CloseableIterator<Index> indicesIt = dataStore.getIndices()) {
+				while (indicesIt.hasNext()) {
+					dataStore.deleteEntries(
+							adapter,
+							indicesIt.next(),
+							authorizations);
+				}
+			}
+			catch (IOException ex) {
+				LOGGER.error(
+						"Cannot close index iterator.",
+						ex);
 			}
 		}
 	}
@@ -798,43 +792,50 @@ TransactionNotification
 
 		final boolean needTime = adapter.hasTemporalConstraints();
 
-		final Iterator<Index> indices = dataStore.getIndices();
-		boolean currentSelectionHasTime = false;
-		while (indices.hasNext()) {
-			final Index index = indices.next();
-			@SuppressWarnings("rawtypes")
-			final DimensionField[] dims = index.getIndexModel().getDimensions();
-			boolean hasLat = false;
-			boolean hasLong = false;
-			boolean hasTime = false;
-			for (final DimensionField<?> dim : dims) {
-				hasLat |= dim instanceof LatitudeField;
-				hasLong |= dim instanceof LongitudeField;
-				hasTime |= dim instanceof TimeField;
-			}
+		try (CloseableIterator<Index> indices = dataStore.getIndices()) {
+			boolean currentSelectionHasTime = false;
+			while (indices.hasNext()) {
+				final Index index = indices.next();
+				@SuppressWarnings("rawtypes")
+				final DimensionField[] dims = index.getIndexModel().getDimensions();
+				boolean hasLat = false;
+				boolean hasLong = false;
+				boolean hasTime = false;
+				for (final DimensionField<?> dim : dims) {
+					hasLat |= dim instanceof LatitudeField;
+					hasLong |= dim instanceof LongitudeField;
+					hasTime |= dim instanceof TimeField;
+				}
 
-			// pick the first matching one or
-			// pick the one does not match the required time constraints
-			if (hasLat && hasLong) {
-				if ((index == null) || (currentSelectionHasTime != hasTime)) {
-					currentSelection = index;
-					currentSelectionHasTime = hasTime;
+				// pick the first matching one or
+				// pick the one does not match the required time constraints
+				if (hasLat && hasLong) {
+					if ((currentSelection == null) || (currentSelectionHasTime != hasTime)) {
+						currentSelection = index;
+						currentSelectionHasTime = hasTime;
+					}
 				}
 			}
-		}
-		// at this point, preferredID is not found
-		// only select the index if one has not been found or
-		// the current selection does not have temporal constraints and some are
-		// desired.
-		if ((currentSelection == null) || (!currentSelectionHasTime && needTime)) {
-			if (needTime) {
-				currentSelection = IndexType.SPATIAL_TEMPORAL_VECTOR.createDefaultIndex();
-			}
-			else {
-				currentSelection = IndexType.SPATIAL_VECTOR.createDefaultIndex();
-			}
+			// at this point, preferredID is not found
+			// only select the index if one has not been found or
+			// the current selection does not have temporal constraints and some
+			// are
+			// desired.
+			if ((currentSelection == null) || (!currentSelectionHasTime && needTime)) {
+				if (needTime) {
+					currentSelection = IndexType.SPATIAL_TEMPORAL_VECTOR.createDefaultIndex();
+				}
+				else {
+					currentSelection = IndexType.SPATIAL_VECTOR.createDefaultIndex();
+				}
 
-			LOGGER.warn("Creating new index for GeoSpatial Data");
+				LOGGER.warn("Creating new index for GeoSpatial Data");
+			}
+		}
+		catch (IOException ex) {
+			LOGGER.error(
+					"Cannot close index iterator.",
+					ex);
 		}
 
 		preferredIndexes.put(

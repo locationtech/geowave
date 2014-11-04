@@ -86,7 +86,7 @@ public class VectorDataStore extends
 				accumuloOptions);
 	}
 
-	public Iterator<Index> getIndices() {
+	public CloseableIterator<Index> getIndices() {
 		return indexStore.getIndices();
 	}
 
@@ -105,17 +105,22 @@ public class VectorDataStore extends
 		// query the indices that are supported for this query object, and these
 		// data adapter Ids
 
-		final Iterator<Index> indices = indexStore.getIndices();
-		while (indices.hasNext()) {
-			final Index index = indices.next();
-			results.add(this.query(
-					adapter,
-					query,
-					index,
-					filter,
-					limit,
-					authorizations));
+		try (CloseableIterator<Index> indices = indexStore.getIndices()) {
+			while (indices.hasNext()) {
+				final Index index = indices.next();
+				results.add(this.query(
+						adapter,
+						query,
+						index,
+						filter,
+						limit,
+						authorizations));
+			}
 		}
+		catch (IOException e) {
+			LOGGER.error("Cannot close index iterator.", e);
+		}
+		
 		return new CloseableIteratorWrapper<SimpleFeature>(
 				new Closeable() {
 					@Override
@@ -189,7 +194,7 @@ public class VectorDataStore extends
 			while (indices.hasNext()) {
 				final Index index = indices.next();
 				final DistributedRenderQuery accumuloQuery;
-				if ((query == null) && (adapter instanceof FeatureDataAdapter)) {
+				if (query == null) {
 					accumuloQuery = new DistributedRenderQuery(
 							Arrays.asList(new ByteArrayId[] {
 								adapter.getAdapterId()
@@ -200,7 +205,7 @@ public class VectorDataStore extends
 							distributedRenderer,
 							authorizations);
 				}
-				else if (query.isSupported(index) && (adapter instanceof FeatureDataAdapter)) {
+				else if (query.isSupported(index)) {
 					// construct the query
 					accumuloQuery = new DistributedRenderQuery(
 							Arrays.asList(new ByteArrayId[] {

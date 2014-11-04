@@ -130,7 +130,7 @@ public class AccumuloIndexWriter implements
 		}
 		if (useAltIndex && (altIdxWriter != null)) {
 			altIdxWriter.close();
-			writer = null;
+			altIdxWriter = null;
 		}
 	}
 
@@ -264,12 +264,14 @@ public class AccumuloIndexWriter implements
 		// write the statistics
 		if (persistStats) {
 			final List<DataStatistics> accumulatedStats = new ArrayList<DataStatistics>();
-			for (final List<DataStatisticsBuilder> builders : statsMap.values()) {
-				if ((builders != null) && !builders.isEmpty()) {
-					for (final DataStatisticsBuilder builder : builders) {
-						final Collection<DataStatistics> s = builder.getStatistics();
-						if ((s != null) && !s.isEmpty()) {
-							accumulatedStats.addAll(s);
+			synchronized(this) {
+				for (final List<DataStatisticsBuilder> builders : statsMap.values()) {
+					if ((builders != null) && !builders.isEmpty()) {
+						for (final DataStatisticsBuilder builder : builders) {
+							final Collection<DataStatistics> s = builder.getStatistics();
+							if ((s != null) && !s.isEmpty()) {
+								accumulatedStats.addAll(s);
+							}
 						}
 					}
 				}

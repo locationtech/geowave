@@ -211,12 +211,12 @@ public class GeoWaveOutputFormat extends
 		}
 
 		@Override
-		public void close(
+		public synchronized void close(
 				final TaskAttemptContext attempt )
 				throws IOException,
 				InterruptedException {
 			for (final IndexWriter indexWriter : indexWriterCache.values()) {
-				indexWriter.close();
+			   indexWriter.close();
 			}
 		}
 	}

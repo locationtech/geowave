@@ -683,6 +683,7 @@ public final class DelayedBackbufferGraphic extends
 
 	@Override
 	public void finalize() {
+		super.finalize();
 		delegate.finalize();
 	}
 

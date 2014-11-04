@@ -866,7 +866,8 @@ public class AccumuloDataStore implements
 					e);
 		}
 		finally {
-			scanner.close();
+			if (scanner != null)
+			  scanner.close();
 		}
 		return null;
 	}
