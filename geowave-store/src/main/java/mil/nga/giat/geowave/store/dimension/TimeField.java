@@ -112,7 +112,7 @@ public class TimeField implements
 			final Time dataElement ) {
 		return dataElement.toNumericData();
 	}
-
+	
 	@Override
 	public ByteArrayId getFieldId() {
 		return fieldId;

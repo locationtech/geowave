@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.SortedMap;
@@ -11,8 +12,11 @@ import java.util.TreeSet;
 
 import mil.nga.giat.geowave.accumulo.AccumuloRowId;
 import mil.nga.giat.geowave.accumulo.Writer;
+import mil.nga.giat.geowave.accumulo.mapreduce.input.GeoWaveInputKey;
 import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.index.ByteArrayRange;
+import mil.nga.giat.geowave.index.NumericIndexStrategy;
+import mil.nga.giat.geowave.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.store.IngestEntryInfo;
 import mil.nga.giat.geowave.store.IngestEntryInfo.FieldInfo;
 import mil.nga.giat.geowave.store.adapter.AdapterPersistenceEncoding;
@@ -49,7 +53,7 @@ import org.apache.log4j.Logger;
  * A set of convenience methods for common operations on Accumulo within
  * GeoWave, such as conversions between GeoWave objects and corresponding
  * Accumulo objects.
- * 
+ *
  */
 public class AccumuloUtils
 {
@@ -96,7 +100,38 @@ public class AccumuloUtils
 			}
 			accumuloRanges.add(range);
 		}
+		if (accumuloRanges.isEmpty()) {
+			// implies full table scan
+			accumuloRanges.add(new Range());
+		}
 		return accumuloRanges;
+	}
+
+	public static List<ByteArrayRange> constraintsToByteArrayRanges(
+			final MultiDimensionalNumericData constraints,
+			final NumericIndexStrategy indexStrategy ) {
+		if ((constraints == null) || constraints.isEmpty()) {
+			return new ArrayList<ByteArrayRange>(); // implies in negative and
+													// positive infinity
+		}
+		else {
+			return indexStrategy.getQueryRanges(constraints);
+		}
+	}
+
+	public static List<ByteArrayRange> constraintsToByteArrayRanges(
+			final MultiDimensionalNumericData constraints,
+			final NumericIndexStrategy indexStrategy,
+			final int maxRanges ) {
+		if ((constraints == null) || constraints.isEmpty()) {
+			return new ArrayList<ByteArrayRange>(); // implies in negative and
+													// positive infinity
+		}
+		else {
+			return indexStrategy.getQueryRanges(
+					constraints,
+					maxRanges);
+		}
 	}
 
 	public static String getQualifiedTableName(
@@ -115,8 +150,7 @@ public class AccumuloUtils
 				value,
 				adapter,
 				null,
-				null,
-				index).getLeft();
+				index);
 	}
 
 	public static Object decodeRow(
@@ -125,36 +159,78 @@ public class AccumuloUtils
 			final DataAdapter<?> adapter,
 			final QueryFilter clientFilter,
 			final Index index ) {
-		Pair<?, IngestEntryInfo> pair = decodeRow(
+		final AccumuloRowId rowId = new AccumuloRowId(
+				key.getRow().copyBytes());
+		return decodeRowObj(
 				key,
 				value,
+				rowId,
 				adapter,
 				null,
 				clientFilter,
 				index);
-		return pair != null ? pair.getLeft() : null;
 	}
-	
+
 	public static Object decodeRow(
 			final Key key,
 			final Value value,
 			final AdapterStore adapterStore,
 			final QueryFilter clientFilter,
 			final Index index ) {
-		Pair<Object, IngestEntryInfo> pair =  decodeRow(
+		final AccumuloRowId rowId = new AccumuloRowId(
+				key.getRow().copyBytes());
+		return decodeRowObj(
 				key,
 				value,
+				rowId,
 				null,
 				adapterStore,
 				clientFilter,
 				index);
+	}
+
+	public static Object decodeRow(
+			final Key key,
+			final Value value,
+			final AccumuloRowId rowId,
+			final AdapterStore adapterStore,
+			final QueryFilter clientFilter,
+			final Index index ) {
+		return decodeRowObj(
+				key,
+				value,
+				rowId,
+				null,
+				adapterStore,
+				clientFilter,
+				index);
+	}
+
+	private static <T> Object decodeRowObj(
+			final Key key,
+			final Value value,
+			final AccumuloRowId rowId,
+			final DataAdapter<T> dataAdapter,
+			final AdapterStore adapterStore,
+			final QueryFilter clientFilter,
+			final Index index ) {
+		final Pair<T, IngestEntryInfo> pair = decodeRow(
+				key,
+				value,
+				rowId,
+				dataAdapter,
+				adapterStore,
+				clientFilter,
+				index);
 		return pair != null ? pair.getLeft() : null;
+
 	}
 
 	@SuppressWarnings("unchecked")
 	public static <T> Pair<T, IngestEntryInfo> decodeRow(
 			final Key k,
 			final Value v,
+			final AccumuloRowId rowId,
 			final DataAdapter<T> dataAdapter,
 			final AdapterStore adapterStore,
 			final QueryFilter clientFilter,
@@ -191,7 +267,8 @@ public class AccumuloUtils
 			adapterMatchVerified = true;
 			adapterId = null;
 		}
-		final List<FieldInfo> fieldInfoList = new ArrayList<FieldInfo>(rowMapping.size());
+		final List<FieldInfo> fieldInfoList = new ArrayList<FieldInfo>(
+				rowMapping.size());
 
 		for (final Entry<Key, Value> entry : rowMapping.entrySet()) {
 			// the column family is the data element's type ID
@@ -218,7 +295,7 @@ public class AccumuloUtils
 			// first check if this field is part of the index model
 			final FieldReader<? extends CommonIndexValue> indexFieldReader = index.getIndexModel().getReader(
 					fieldId);
-			byte byteValue[] = entry.getValue().get();
+			final byte byteValue[] = entry.getValue().get();
 			if (indexFieldReader != null) {
 				final CommonIndexValue indexValue = indexFieldReader.readField(byteValue);
 				indexValue.setVisibility(entry.getKey().getColumnVisibilityData().getBackingArray());
@@ -252,9 +329,6 @@ public class AccumuloUtils
 						entry.getKey().getColumnVisibility().getBytes()));
 			}
 		}
-		final ByteSequence rowData = k.getRowData();
-		final AccumuloRowId rowId = new AccumuloRowId(
-				rowData.getBackingArray());
 		final IndexedAdapterPersistenceEncoding encodedRow = new IndexedAdapterPersistenceEncoding(
 				adapterId,
 				new ByteArrayId(
@@ -270,7 +344,8 @@ public class AccumuloUtils
 							encodedRow,
 							index),
 					new IngestEntryInfo(
-							Arrays.asList(new ByteArrayId(rowData.getBackingArray())),
+							Arrays.asList(new ByteArrayId(
+									k.getRowData().getBackingArray())),
 							fieldInfoList));
 		}
 		return null;
@@ -388,8 +463,8 @@ public class AccumuloUtils
 	}
 
 	private static <T> List<Mutation> buildMutations(
-			byte[] adapterId,
-			IngestEntryInfo ingestInfo ) {
+			final byte[] adapterId,
+			final IngestEntryInfo ingestInfo ) {
 		final List<Mutation> mutations = new ArrayList<Mutation>();
 		final List<FieldInfo> fieldInfoList = ingestInfo.getFieldInfo();
 		for (final ByteArrayId rowId : ingestInfo.getRowIds()) {
@@ -414,7 +489,7 @@ public class AccumuloUtils
 	}
 
 	/**
-	 * 
+	 *
 	 * @param dataWriter
 	 * @param index
 	 * @param entry
@@ -525,7 +600,10 @@ public class AccumuloUtils
 					rowIds,
 					fieldInfoList);
 		}
-		return null;
+		LOGGER.warn("Indexing failed to produce insertion ids; entry [" + dataWriter.getDataId(entry).getString() +"] not saved.");
+		return new IngestEntryInfo(
+				Collections.EMPTY_LIST,
+				Collections.EMPTY_LIST);
 
 	}
 
@@ -579,13 +657,16 @@ public class AccumuloUtils
 	private static final byte[] END_AND_BYTE = ")".getBytes();
 
 	private static byte[] merge(
-			byte vis1[],
-			byte vis2[] ) {
-		if (vis1 == null || vis1.length == 0)
+			final byte vis1[],
+			final byte vis2[] ) {
+		if ((vis1 == null) || (vis1.length == 0)) {
 			return vis2;
-		else if (vis2 == null || vis2.length == 0) return vis1;
+		}
+		else if ((vis2 == null) || (vis2.length == 0)) {
+			return vis1;
+		}
 
-		ByteBuffer buffer = ByteBuffer.allocate(vis1.length + 3 + vis2.length);
+		final ByteBuffer buffer = ByteBuffer.allocate(vis1.length + 3 + vis2.length);
 		buffer.putChar('(');
 		buffer.put(vis1);
 		buffer.putChar(')');

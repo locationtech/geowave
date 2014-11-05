@@ -3,6 +3,7 @@ package mil.nga.giat.geowave.accumulo.query;
 import java.util.ArrayList;
 import java.util.List;
 
+import mil.nga.giat.geowave.accumulo.util.AccumuloUtils;
 import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.index.ByteArrayRange;
 import mil.nga.giat.geowave.index.ByteArrayUtils;
@@ -21,7 +22,7 @@ import org.apache.accumulo.core.iterators.user.WholeRowIterator;
 
 /**
  * This class represents basic numeric contraints applied to an Accumulo Query
- * 
+ *
  */
 public class AccumuloConstraintsQuery extends
 		AccumuloFilteredIndexQuery
@@ -57,8 +58,19 @@ public class AccumuloConstraintsQuery extends
 		this(
 				adapterIds,
 				index,
+				null);
+	}
+
+	public AccumuloConstraintsQuery(
+			final List<ByteArrayId> adapterIds,
+			final Index index,
+			final DedupeFilter clientDedupeFilter ) {
+		this(
+				adapterIds,
+				index,
 				null,
 				null,
+				clientDedupeFilter,
 				new String[0]);
 	}
 
@@ -80,27 +92,48 @@ public class AccumuloConstraintsQuery extends
 			final MultiDimensionalNumericData constraints,
 			final List<QueryFilter> queryFilters,
 			final String[] authorizations ) {
+		this(
+				adapterIds,
+				index,
+				constraints,
+				queryFilters,
+				null,
+				authorizations);
+
+	}
+
+	public AccumuloConstraintsQuery(
+			final List<ByteArrayId> adapterIds,
+			final Index index,
+			final MultiDimensionalNumericData constraints,
+			final List<QueryFilter> queryFilters,
+			final DedupeFilter clientDedupeFilter,
+			final String[] authorizations ) {
 		super(
 				adapterIds,
 				index,
 				authorizations);
 		this.constraints = constraints;
 		final SplitFilterLists lists = splitList(queryFilters);
-		List<QueryFilter> clientFilters = lists.clientFilters;
+		final List<QueryFilter> clientFilters = lists.clientFilters;
 		// add dedupe filters to the front of both lists so that the
 		// de-duplication is performed before any more complex filtering
-		// operations
+		// operations, use the supplied client dedupe filter if possible
 		clientFilters.add(
 				0,
-				new DedupeFilter());
+				clientDedupeFilter != null ? clientDedupeFilter : new DedupeFilter());
 		super.setClientFilters(clientFilters);
 		distributableFilters = lists.distributableFilters;
+		// we are assuming we always have to ensure no duplicates
+		// and that the deduplication is the least expensive filter so we add it
+		// first
 		distributableFilters.add(
 				0,
 				new DedupeFilter());
 
 	}
 
+	@Override
 	protected void addScanIteratorSettings(
 			final ScannerBase scanner ) {
 		if ((distributableFilters != null) && !distributableFilters.isEmpty()) {
@@ -130,14 +163,9 @@ public class AccumuloConstraintsQuery extends
 
 	@Override
 	protected List<ByteArrayRange> getRanges() {
-		if (constraints == null || constraints.isEmpty()) {
-			return new ArrayList<ByteArrayRange>(); // implies in negative and
-													// positive infinity
-		}
-		else {
-			return index.getIndexStrategy().getQueryRanges(
-					constraints);
-		}
+		return AccumuloUtils.constraintsToByteArrayRanges(
+				constraints,
+				index.getIndexStrategy());
 	}
 
 	private static SplitFilterLists splitList(

@@ -1,4 +1,4 @@
-package mil.nga.giat.geowave.ingest.hdfs.mapreduce;
+package mil.nga.giat.geowave.accumulo.mapreduce;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -10,7 +10,6 @@ import mil.nga.giat.geowave.accumulo.BasicAccumuloOperations;
 import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.index.ByteArrayUtils;
 import mil.nga.giat.geowave.index.PersistenceUtils;
-import mil.nga.giat.geowave.index.StringUtils;
 import mil.nga.giat.geowave.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.store.index.Index;
 
@@ -31,12 +30,12 @@ public class GeoWaveConfiguratorBase
 
 	protected static enum GeoWaveMetaStore {
 		INDEX,
-		DATA_ADAPTER
+		DATA_ADAPTER,
 	}
 
 	/**
 	 * Configuration keys for AccumuloOperations configuration.
-	 * 
+	 *
 	 */
 	protected static enum AccumuloOperationsConfig {
 		ZOOKEEPER_URL,
@@ -46,17 +45,26 @@ public class GeoWaveConfiguratorBase
 		TABLE_NAMESPACE
 	}
 
+	// TODO use these options to restrict creation when set (currently, within
+	// the GeoWavevDataStore if anything doesn't exist it is automatically
+	// persisted)
+	protected static enum GeneralConfig {
+		CREATE_ADAPTERS,
+		CREATE_INDEX,
+		CREATE_TABLES
+	}
+
 	/**
 	 * Provides a configuration key for a given feature enum, prefixed by the
 	 * implementingClass, and suffixed by a custom String
-	 * 
+	 *
 	 * @param implementingClass
 	 *            the class whose name will be used as a prefix for the property
 	 *            configuration key
 	 * @param e
 	 *            the enum used to provide the unique part of the configuration
 	 *            key
-	 * 
+	 *
 	 * @param suffix
 	 *            the custom suffix to be used in the configuration key
 	 * @return the configuration key
@@ -73,7 +81,7 @@ public class GeoWaveConfiguratorBase
 	/**
 	 * Provides a configuration key for a given feature enum, prefixed by the
 	 * implementingClass
-	 * 
+	 *
 	 * @param implementingClass
 	 *            the class whose name will be used as a prefix for the property
 	 *            configuration key
@@ -228,7 +236,7 @@ public class GeoWaveConfiguratorBase
 					enumToConfKey(
 							implementingClass,
 							GeoWaveMetaStore.INDEX,
-							StringUtils.stringFromBinary(index.getId().getBytes())),
+							index.getId().getString()),
 					ByteArrayUtils.byteArrayToString(PersistenceUtils.toBinary(index)));
 		}
 	}
@@ -252,7 +260,7 @@ public class GeoWaveConfiguratorBase
 					enumToConfKey(
 							implementingClass,
 							GeoWaveMetaStore.DATA_ADAPTER,
-							StringUtils.stringFromBinary(adapter.getAdapterId().getBytes())),
+							adapter.getAdapterId().getString()),
 					ByteArrayUtils.byteArrayToString(PersistenceUtils.toBinary(adapter)));
 		}
 	}
@@ -274,7 +282,7 @@ public class GeoWaveConfiguratorBase
 		final String input = configuration.get(enumToConfKey(
 				implementingClass,
 				GeoWaveMetaStore.DATA_ADAPTER,
-				StringUtils.stringFromBinary(adapterId.getBytes())));
+				adapterId.getString()));
 		if (input != null) {
 			final byte[] dataAdapterBytes = ByteArrayUtils.byteArrayFromString(input);
 			return PersistenceUtils.fromBinary(
@@ -312,6 +320,35 @@ public class GeoWaveConfiguratorBase
 		return new DataAdapter[] {};
 	}
 
+	private static Boolean canCreateAdaptersInternal(
+			final Class<?> implementingClass,
+			final Configuration configuration ) {
+		return configuration.getBoolean(
+				enumToConfKey(
+						implementingClass,
+						GeneralConfig.CREATE_ADAPTERS),
+				true);
+	}
+
+	public static Boolean canCreateAdapters(
+			final Class<?> implementingClass,
+			final JobContext context ) {
+		return canCreateAdaptersInternal(
+				implementingClass,
+				getConfiguration(context));
+	}
+
+	public static void setCreateAdapters(
+			final Class<?> implementingClass,
+			final Job job,
+			final boolean enableFeature ) {
+		job.getConfiguration().setBoolean(
+				enumToConfKey(
+						implementingClass,
+						GeneralConfig.CREATE_ADAPTERS),
+				enableFeature);
+	}
+
 	private static Index getIndexInternal(
 			final Class<?> implementingClass,
 			final Configuration configuration,
@@ -319,7 +356,7 @@ public class GeoWaveConfiguratorBase
 		final String input = configuration.get(enumToConfKey(
 				implementingClass,
 				GeoWaveMetaStore.INDEX,
-				StringUtils.stringFromBinary(indexId.getBytes())));
+				indexId.getString()));
 		if (input != null) {
 			final byte[] indexBytes = ByteArrayUtils.byteArrayFromString(input);
 			return PersistenceUtils.fromBinary(

@@ -2,6 +2,7 @@ package mil.nga.giat.geowave.ingest.hdfs.mapreduce;
 
 import java.io.IOException;
 
+import mil.nga.giat.geowave.accumulo.mapreduce.output.GeoWaveOutputKey;
 import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.index.ByteArrayUtils;
 import mil.nga.giat.geowave.index.PersistenceUtils;
@@ -16,7 +17,7 @@ import org.apache.hadoop.mapreduce.Mapper;
  * This class is the map-reduce mapper for ingestion with the mapper only.
  */
 public class IngestMapper extends
-		Mapper<AvroKey, NullWritable, GeoWaveIngestKey, Object>
+		Mapper<AvroKey, NullWritable, GeoWaveOutputKey, Object>
 {
 	private IngestWithMapper ingestWithMapper;
 	private String globalVisibility;

@@ -1,8 +1,15 @@
 # GeoWave 0.8.1	
 ## About  
 
-<img align="left" src="https://travis-ci.org/ngageoint/geowave.svg?branch=master"/>
+<a href="https://travis-ci.org/ngageoint/geowave">
+	<img alt="Travis-CI test status" 
+	     src="https://travis-ci.org/ngageoint/geowave.svg?branch=master"/>
+</a>
 <br/>
+<a href="https://scan.coverity.com/projects/3371">
+  <img alt="Coverity Scan Build Status"
+       src="https://scan.coverity.com/projects/3371/badge.svg"/>
+</a>
 
 
 

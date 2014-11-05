@@ -1,30 +1,25 @@
-package mil.nga.giat.geowave.ingest.hdfs.mapreduce;
+package mil.nga.giat.geowave.analytics;
 
 import mil.nga.giat.geowave.index.ByteArrayId;
 
-/**
- * This class encapsulates the unique identifier for GeoWave to ingest data
- * using a map-reduce GeoWave output format. The record writer must have bother
- * the adapter and the index for the data element to ingest.
- */
-public class GeoWaveIngestKey
+public class GeoWaveKey
 {
-	private final ByteArrayId indexId;
 	private final ByteArrayId adapterId;
+	private final ByteArrayId dataId;
 
-	public GeoWaveIngestKey(
-			final ByteArrayId indexId,
-			final ByteArrayId adapterId ) {
-		this.indexId = indexId;
+	public GeoWaveKey(
+			final ByteArrayId adapterId,
+			final ByteArrayId dataId ) {
 		this.adapterId = adapterId;
-	}
-
-	public ByteArrayId getIndexId() {
-		return indexId;
+		this.dataId = dataId;
 	}
 
 	public ByteArrayId getAdapterId() {
 		return adapterId;
+	}
+
+	public ByteArrayId getDataId() {
+		return dataId;
 	}
 
 	@Override
@@ -32,7 +27,7 @@ public class GeoWaveIngestKey
 		final int prime = 31;
 		int result = 1;
 		result = (prime * result) + ((adapterId == null) ? 0 : adapterId.hashCode());
-		result = (prime * result) + ((indexId == null) ? 0 : indexId.hashCode());
+		result = (prime * result) + ((dataId == null) ? 0 : dataId.hashCode());
 		return result;
 	}
 
@@ -48,7 +43,7 @@ public class GeoWaveIngestKey
 		if (getClass() != obj.getClass()) {
 			return false;
 		}
-		final GeoWaveIngestKey other = (GeoWaveIngestKey) obj;
+		final GeoWaveKey other = (GeoWaveKey) obj;
 		if (adapterId == null) {
 			if (other.adapterId != null) {
 				return false;
@@ -57,12 +52,12 @@ public class GeoWaveIngestKey
 		else if (!adapterId.equals(other.adapterId)) {
 			return false;
 		}
-		if (indexId == null) {
-			if (other.indexId != null) {
+		if (dataId == null) {
+			if (other.dataId != null) {
 				return false;
 			}
 		}
-		else if (!indexId.equals(other.indexId)) {
+		else if (!dataId.equals(other.dataId)) {
 			return false;
 		}
 		return true;

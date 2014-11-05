@@ -1,4 +1,4 @@
-package mil.nga.giat.geowave.ingest.hdfs.mapreduce;
+package mil.nga.giat.geowave.accumulo.mapreduce.output;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -6,6 +6,9 @@ import java.util.Map;
 
 import mil.nga.giat.geowave.accumulo.AccumuloDataStore;
 import mil.nga.giat.geowave.accumulo.AccumuloOperations;
+import mil.nga.giat.geowave.accumulo.mapreduce.GeoWaveConfiguratorBase;
+import mil.nga.giat.geowave.accumulo.mapreduce.JobContextAdapterStore;
+import mil.nga.giat.geowave.accumulo.mapreduce.JobContextIndexStore;
 import mil.nga.giat.geowave.accumulo.metadata.AccumuloAdapterStore;
 import mil.nga.giat.geowave.accumulo.metadata.AccumuloDataStatisticsStore;
 import mil.nga.giat.geowave.accumulo.metadata.AccumuloIndexStore;
@@ -38,14 +41,14 @@ import org.apache.log4j.Logger;
  * within a map-reduce job.
  */
 public class GeoWaveOutputFormat extends
-		OutputFormat<GeoWaveIngestKey, Object>
+		OutputFormat<GeoWaveOutputKey, Object>
 {
 
 	private static final Class<?> CLASS = GeoWaveOutputFormat.class;
 	protected static final Logger LOGGER = Logger.getLogger(CLASS);
 
 	@Override
-	public RecordWriter<GeoWaveIngestKey, Object> getRecordWriter(
+	public RecordWriter<GeoWaveOutputKey, Object> getRecordWriter(
 			final TaskAttemptContext context )
 			throws IOException,
 			InterruptedException {
@@ -54,7 +57,7 @@ public class GeoWaveOutputFormat extends
 			final AccumuloOperations accumuloOperations = getAccumuloOperations(context);
 			final AdapterStore accumuloAdapterStore = new AccumuloAdapterStore(
 					accumuloOperations);
-			final DataAdapter<?>[] adapters = getDataAdapters(context);
+			final DataAdapter<?>[] adapters = JobContextAdapterStore.getDataAdapters(context);
 			for (final DataAdapter<?> a : adapters) {
 				if (!accumuloAdapterStore.adapterExists(a.getAdapterId())) {
 					accumuloAdapterStore.addAdapter(a);
@@ -62,7 +65,7 @@ public class GeoWaveOutputFormat extends
 			}
 			final IndexStore accumuloIndexStore = new AccumuloIndexStore(
 					accumuloOperations);
-			final Index[] indices = getIndices(context);
+			final Index[] indices = JobContextIndexStore.getIndices(context);
 			for (final Index i : indices) {
 				if (!accumuloIndexStore.indexExists(i.getId())) {
 					accumuloIndexStore.addIndex(i);
@@ -87,6 +90,38 @@ public class GeoWaveOutputFormat extends
 			throw new IOException(
 					e);
 		}
+	}
+
+	public static void addIndex(
+			final Job job,
+			final Index index ) {
+		JobContextIndexStore.addIndex(
+				job,
+				index);
+	}
+
+	public static void addDataAdapter(
+			final Job job,
+			final DataAdapter<?> adapter ) {
+		JobContextAdapterStore.addDataAdapter(
+				job,
+				adapter);
+	}
+
+	protected static IndexStore getIndexStore(
+			final JobContext context,
+			final AccumuloOperations accumuloOperations ) {
+		return new JobContextIndexStore(
+				context,
+				accumuloOperations);
+	}
+
+	protected static AdapterStore getDataAdapterStore(
+			final JobContext context,
+			final AccumuloOperations accumuloOperations ) {
+		return new JobContextAdapterStore(
+				context,
+				accumuloOperations);
 	}
 
 	@Override
@@ -134,7 +169,7 @@ public class GeoWaveOutputFormat extends
 	 * write to Accumulo.
 	 */
 	protected class GeoWaveRecordWriter extends
-			RecordWriter<GeoWaveIngestKey, Object>
+			RecordWriter<GeoWaveOutputKey, Object>
 	{
 		private final Map<ByteArrayId, IndexWriter> indexWriterCache = new HashMap<ByteArrayId, IndexWriter>();
 		private final AdapterStore adapterStore;
@@ -169,9 +204,13 @@ public class GeoWaveOutputFormat extends
 		 * does not exist. The table name must only contain alphanumerics and
 		 * underscore.
 		 */
+		@SuppressWarnings({
+			"unchecked",
+			"rawtypes"
+		})
 		@Override
 		public void write(
-				final GeoWaveIngestKey ingestKey,
+				final GeoWaveOutputKey ingestKey,
 				final Object object )
 				throws IOException {
 			final DataAdapter<?> adapter = adapterStore.getAdapter(ingestKey.getAdapterId());
@@ -223,7 +262,7 @@ public class GeoWaveOutputFormat extends
 
 	/**
 	 * Configures a {@link AccumuloOperations} for this job.
-	 * 
+	 *
 	 * @param job
 	 *            the Hadoop job instance to be configured
 	 * @param zooKeepers
@@ -268,7 +307,7 @@ public class GeoWaveOutputFormat extends
 
 	/**
 	 * Sets the log level for this job.
-	 * 
+	 *
 	 * @param job
 	 *            the Hadoop job instance to be configured
 	 * @param level
@@ -286,7 +325,7 @@ public class GeoWaveOutputFormat extends
 
 	/**
 	 * Gets the log level from this configuration.
-	 * 
+	 *
 	 * @param context
 	 *            the Hadoop context for the configured job
 	 * @return the log level
@@ -307,10 +346,10 @@ public class GeoWaveOutputFormat extends
 	/**
 	 * Sets the directive to create new tables, as necessary. Table names can
 	 * only be alpha-numeric and underscores.
-	 * 
+	 *
 	 * <p>
 	 * By default, this feature is <b>disabled</b>.
-	 * 
+	 *
 	 * @param job
 	 *            the Hadoop job instance to be configured
 	 * @param enableFeature
@@ -327,7 +366,7 @@ public class GeoWaveOutputFormat extends
 
 	/**
 	 * Determines whether tables are permitted to be created as needed.
-	 * 
+	 *
 	 * @param context
 	 *            the Hadoop context for the configured job
 	 * @return true if the feature is disabled, false otherwise
@@ -347,71 +386,5 @@ public class GeoWaveOutputFormat extends
 		return GeoWaveConfiguratorBase.getAccumuloOperations(
 				CLASS,
 				context);
-	}
-
-	public static AdapterStore getDataAdapterStore(
-			final JobContext context,
-			final AccumuloOperations accumuloOperations ) {
-		return new JobContextAdapterStore(
-				context,
-				accumuloOperations);
-	}
-
-	public static IndexStore getIndexStore(
-			final JobContext context,
-			final AccumuloOperations accumuloOperations ) {
-		return new JobContextIndexStore(
-				context,
-				accumuloOperations);
-	}
-
-	protected static Index getIndex(
-			final JobContext context,
-			final ByteArrayId indexId ) {
-		return GeoWaveConfiguratorBase.getIndex(
-				CLASS,
-				context,
-				indexId);
-	}
-
-	protected static Index[] getIndices(
-			final JobContext context ) {
-		return GeoWaveConfiguratorBase.getIndices(
-				CLASS,
-				context);
-	}
-
-	protected static DataAdapter<?> getDataAdapter(
-			final JobContext context,
-			final ByteArrayId adapterId ) {
-		return GeoWaveConfiguratorBase.getDataAdapter(
-				CLASS,
-				context,
-				adapterId);
-	}
-
-	protected static DataAdapter<?>[] getDataAdapters(
-			final JobContext context ) {
-		return GeoWaveConfiguratorBase.getDataAdapters(
-				CLASS,
-				context);
-	}
-
-	public static void addDataAdapter(
-			final Job job,
-			final DataAdapter<?> adapter ) {
-		GeoWaveConfiguratorBase.addDataAdapter(
-				CLASS,
-				job,
-				adapter);
-	}
-
-	public static void addIndex(
-			final Job job,
-			final Index index ) {
-		GeoWaveConfiguratorBase.addIndex(
-				CLASS,
-				job,
-				index);
 	}
 }

@@ -57,15 +57,10 @@ abstract public class AccumuloQuery
 		final String tableName = StringUtils.stringFromBinary(index.getId().getBytes());
 		ScannerBase scanner;
 		try {
-			if (ranges == null || ranges.isEmpty()) {
+			if ((ranges != null) && (ranges.size() == 1)) {
 				scanner = accumuloOperations.createScanner(
 						tableName,
-						accumuloOperations.getAuthorizations(getAdditionalAuthorizations()));
-			}
-			else if ((ranges != null) && (ranges.size() == 1)) {
-				scanner = accumuloOperations.createScanner(
-						tableName,
-						accumuloOperations.getAuthorizations(getAdditionalAuthorizations()));
+						getAdditionalAuthorizations());
 				final ByteArrayRange r = ranges.get(0);
 				if (r.isSingleValue()) {
 					((Scanner) scanner).setRange(Range.exact(new Text(
@@ -81,7 +76,7 @@ abstract public class AccumuloQuery
 			else {
 				scanner = accumuloOperations.createBatchScanner(
 						tableName,
-						accumuloOperations.getAuthorizations(getAdditionalAuthorizations()));
+						getAdditionalAuthorizations());
 				((BatchScanner) scanner).setRanges(AccumuloUtils.byteArrayRangesToAccumuloRanges(ranges));
 			}
 		}
@@ -89,7 +84,6 @@ abstract public class AccumuloQuery
 			LOGGER.warn(
 					"Unable to query table '" + tableName + "'.  Table does not exist.",
 					e);
-			e.printStackTrace();
 			return null;
 		}
 		if ((adapterIds != null) && !adapterIds.isEmpty()) {

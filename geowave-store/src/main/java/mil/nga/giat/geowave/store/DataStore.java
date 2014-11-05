@@ -7,7 +7,6 @@ import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.store.data.VisibilityWriter;
-import mil.nga.giat.geowave.store.data.field.FieldVisibilityHandler;
 import mil.nga.giat.geowave.store.index.Index;
 import mil.nga.giat.geowave.store.query.Query;
 
@@ -20,7 +19,7 @@ public interface DataStore
 {
 	/**
 	 * Returns an index writer to perform batched write operations
-	 * 
+	 *
 	 * @param index
 	 *            The configuration information for the primary index to use.
 	 * @return Returns the inex writer which can be used for batch write
@@ -31,7 +30,7 @@ public interface DataStore
 
 	/**
 	 * Ingests a single entry into the data store
-	 * 
+	 *
 	 * @param writableAdapter
 	 *            The writable adapter that allows the data store to translate
 	 *            the entry into a persistable format
@@ -49,7 +48,7 @@ public interface DataStore
 	/**
 	 * Ingests a collection of entries into the data store described by an
 	 * iterator on the entries
-	 * 
+	 *
 	 * @param writableAdapter
 	 *            The writable adapter that allows the data store to translate
 	 *            the entries into a persistable format
@@ -65,7 +64,7 @@ public interface DataStore
 
 	/**
 	 * Ingests a single entry into the data store
-	 * 
+	 *
 	 * @param writableAdapter
 	 *            The writable adapter that allows the data store to translate
 	 *            the entry into a persistable format
@@ -86,7 +85,7 @@ public interface DataStore
 	/**
 	 * Ingests a collection of entries into the data store described by an
 	 * iterator on the entries
-	 * 
+	 *
 	 * @param writableAdapter
 	 *            The writable adapter that allows the data store to translate
 	 *            the entries into a persistable format
@@ -107,7 +106,7 @@ public interface DataStore
 	/**
 	 * Ingests a collection of entries into the data store described by an
 	 * iterator on the entries
-	 * 
+	 *
 	 * @param writableAdapter
 	 *            The writable adapter that allows the data store to translate
 	 *            the entries into a persistable format
@@ -133,7 +132,7 @@ public interface DataStore
 	 * indices that are supported by the query will be queried and all data
 	 * types that match the query will be returned as an instance of the native
 	 * data type that was originally ingested.
-	 * 
+	 *
 	 * @param query
 	 *            The description of the query to be performed
 	 * @return An iterator on all results that match the query. The iterator
@@ -146,12 +145,12 @@ public interface DataStore
 	/**
 	 * Returns the data element associated with the given row ID stored in the
 	 * given index
-	 * 
+	 *
 	 * @param index
 	 *            The index to search for the entry.
 	 * @param rowId
 	 *            The full row ID to use as the query.
-	 * 
+	 *
 	 * @return The entry that was ingested with the given row ID. This row ID is
 	 *         the one assigned to the entry on ingest into the given index.
 	 *         Null is returned if the row ID does not match any entries in the
@@ -165,7 +164,7 @@ public interface DataStore
 	/**
 	 * Returns the data element associated with the given data ID and adapter ID
 	 * stored in the given index
-	 * 
+	 *
 	 * @param index
 	 *            The index to search for the entry.
 	 * @param dataId
@@ -190,7 +189,7 @@ public interface DataStore
 	/**
 	 * Deletes the data element associated with the given data ID and adapter ID
 	 * stored in the given index
-	 * 
+	 *
 	 * @param index
 	 *            The index to search for the entry.
 	 * @param dataId
@@ -212,7 +211,7 @@ public interface DataStore
 
 	/**
 	 * Returns all data with the given row ID prefix stored in the given index
-	 * 
+	 *
 	 * @param index
 	 *            The index to search for the entry.
 	 * @param rowPrefix
@@ -234,7 +233,7 @@ public interface DataStore
 	 * matches the adapter (the same adapter ID as the ID ingested). All indices
 	 * that are supported by the query will be queried and returned as an
 	 * instance of the native data type that this adapter supports.
-	 * 
+	 *
 	 * @param adapter
 	 *            the data adapter to use for the query
 	 * @param query
@@ -252,7 +251,7 @@ public interface DataStore
 	 * within the index described by the index passed in. All data types that
 	 * match the query will be returned as an instance of the native data type
 	 * that was originally ingested.
-	 * 
+	 *
 	 * @param index
 	 *            The index information to query against. All data within the
 	 *            index of this index ID will be queried and returned.
@@ -272,7 +271,7 @@ public interface DataStore
 	 * (the same adapter ID as the ID ingested). All data that matches the
 	 * query, adapter ID, and is in the index ID will be returned as an instance
 	 * of the native data type that this adapter supports.
-	 * 
+	 *
 	 * @param adapter
 	 *            the data adapter to use for the query
 	 * @param index
@@ -294,7 +293,7 @@ public interface DataStore
 	 * matches one of the adapter IDs. All data types that match the query and
 	 * one of the adapter IDs will be returned as an instance of the native data
 	 * type that was originally ingested.
-	 * 
+	 *
 	 * @param adapterIds
 	 *            The data adapter IDs to use for the query - only data that
 	 *            matches one of these adapter IDs will be returned
@@ -314,7 +313,7 @@ public interface DataStore
 	 * types that match the query will be returned as an instance of the native
 	 * data type that was originally ingested. The iterator will only return as
 	 * many results as the limit passed in.
-	 * 
+	 *
 	 * @param query
 	 *            The description of the query to be performed
 	 * @param limit
@@ -333,7 +332,7 @@ public interface DataStore
 	 * that are supported by the query will be queried and returned as an
 	 * instance of the native data type that this adapter supports. The iterator
 	 * will only return as many results as the limit passed in.
-	 * 
+	 *
 	 * @param adapter
 	 *            the data adapter to use for the query
 	 * @param query
@@ -355,7 +354,7 @@ public interface DataStore
 	 * match the query will be returned as an instance of the native data type
 	 * that was originally ingested. The iterator will only return as many
 	 * results as the limit passed in.
-	 * 
+	 *
 	 * @param index
 	 *            The index information to query against. All data within the
 	 *            index of this index ID will be queried and returned.
@@ -379,7 +378,7 @@ public interface DataStore
 	 * query, adapter ID, and is in the index ID will be returned as an instance
 	 * of the native data type that this adapter supports. The iterator will
 	 * only return as many results as the limit passed in.
-	 * 
+	 *
 	 * @param adapter
 	 *            the data adapter to use for the query
 	 * @param index
@@ -405,7 +404,7 @@ public interface DataStore
 	 * one of the adapter IDs will be returned as an instance of the native data
 	 * type that was originally ingested. The iterator will only return as many
 	 * results as the limit passed in.
-	 * 
+	 *
 	 * @param adapterIds
 	 *            The data adapter IDs to use for the query - only data that
 	 *            matches one of these adapter IDs will be returned
@@ -428,7 +427,7 @@ public interface DataStore
 	 * one of the adapter IDs will be returned as an instance of the native data
 	 * type that was originally ingested. The iterator will only return as many
 	 * results as the limit passed in.
-	 * 
+	 *
 	 * @param adapterIds
 	 *            The data adapter IDs to use for the query - only data that
 	 *            matches one of these adapter IDs will be returned

@@ -1,15 +1,19 @@
-package mil.nga.giat.geowave.ingest.hdfs.mapreduce;
+package mil.nga.giat.geowave.accumulo.mapreduce;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import mil.nga.giat.geowave.accumulo.AccumuloOperations;
 import mil.nga.giat.geowave.accumulo.metadata.AccumuloIndexStore;
+import mil.nga.giat.geowave.accumulo.util.CloseableIteratorWrapper;
 import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.store.CloseableIterator;
 import mil.nga.giat.geowave.store.index.Index;
 import mil.nga.giat.geowave.store.index.IndexStore;
 
+import org.apache.commons.collections.IteratorUtils;
+import org.apache.commons.collections.Transformer;
+import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.JobContext;
 
 /**
@@ -20,7 +24,7 @@ import org.apache.hadoop.mapreduce.JobContext;
 public class JobContextIndexStore implements
 		IndexStore
 {
-
+	private static final Class<?> CLASS = JobContextIndexStore.class;
 	private final JobContext context;
 	private final AccumuloOperations accumuloOperations;
 	private final Map<ByteArrayId, Index> indexCache = new HashMap<ByteArrayId, Index>();
@@ -64,7 +68,7 @@ public class JobContextIndexStore implements
 	private Index getIndexInternal(
 			final ByteArrayId indexId ) {
 		// first try to get it from the job context
-		Index index = GeoWaveOutputFormat.getIndex(
+		Index index = getIndex(
 				context,
 				indexId);
 		if (index == null) {
@@ -84,11 +88,52 @@ public class JobContextIndexStore implements
 
 	@Override
 	public CloseableIterator<Index> getIndices() {
-		// this should not be called but just return what is in the accumulo
-		// adapter store
 		final AccumuloIndexStore indexStore = new AccumuloIndexStore(
 				accumuloOperations);
-		return indexStore.getIndices();
+		final CloseableIterator<Index> it = indexStore.getIndices();
+		// cache any results
+		return new CloseableIteratorWrapper<Index>(
+				it,
+				IteratorUtils.transformedIterator(
+						it,
+						new Transformer() {
+
+							@Override
+							public Object transform(
+									final Object obj ) {
+								if (obj instanceof Index) {
+									indexCache.put(
+											((Index) obj).getId(),
+											(Index) obj);
+								}
+								return obj;
+							}
+						}));
+	}
+
+	public static void addIndex(
+			final Job job,
+			final Index index ) {
+		GeoWaveConfiguratorBase.addIndex(
+				CLASS,
+				job,
+				index);
+	}
+
+	protected static Index getIndex(
+			final JobContext context,
+			final ByteArrayId indexId ) {
+		return GeoWaveConfiguratorBase.getIndex(
+				CLASS,
+				context,
+				indexId);
+	}
+
+	public static Index[] getIndices(
+			final JobContext context ) {
+		return GeoWaveConfiguratorBase.getIndices(
+				CLASS,
+				context);
 	}
 
 }

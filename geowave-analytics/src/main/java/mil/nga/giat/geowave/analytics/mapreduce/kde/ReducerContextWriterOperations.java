@@ -27,14 +27,15 @@ public class ReducerContextWriterOperations implements
 				context,
 				tableName);
 	}
-	
+
+	@Override
 	public void insureAuthorization(
 			final String... authorizations )
 			throws AccumuloException,
 			AccumuloSecurityException {
-		
+
 	}
-	
+
 	@Override
 	public Scanner createScanner(
 			final String tableName,
@@ -103,60 +104,55 @@ public class ReducerContextWriterOperations implements
 
 	@Override
 	public boolean attachIterators(
-			String tableName,
-			boolean createTable,
-			IteratorConfig[] iterators )
+			final String tableName,
+			final boolean createTable,
+			final IteratorConfig[] iterators )
 			throws TableNotFoundException {
 		return false;
 	}
 
+	@Override
 	public void createTable(
-			String tableName ) {}
+			final String tableName ) {}
 
 	@Override
 	public BatchScanner createBatchScanner(
-			String tableName,
-			String... additionalAuthorizations )
+			final String tableName,
+			final String... additionalAuthorizations )
 			throws TableNotFoundException {
 		return null;
 	}
 
 	@Override
 	public BatchDeleter createBatchDeleter(
-			String tableName,
-			String... additionalAuthorizations )
+			final String tableName,
+			final String... additionalAuthorizations )
 			throws TableNotFoundException {
 		return null;
 	}
 
 	@Override
 	public boolean delete(
-			String tableName,
-			List<ByteArrayId> rowId,
-			String columnFamily,
-			String columnQualifier,
-			String... additionalAuthorizations ) {
+			final String tableName,
+			final List<ByteArrayId> rowId,
+			final String columnFamily,
+			final String columnQualifier,
+			final String... additionalAuthorizations ) {
 		return false;
 	}
 
 	@Override
 	public boolean deleteAll(
-			String tableName,
-			String columnFamily,
-			String... additionalAuthorizations ) {
+			final String tableName,
+			final String columnFamily,
+			final String... additionalAuthorizations ) {
 		return false;
 	}
 
 	@Override
 	public long getRowCount(
-			String tableName,
-			String... additionalAuthorizations ) {
+			final String tableName,
+			final String... additionalAuthorizations ) {
 		return 0;
-	}
-
-	@Override
-	public String[] getAuthorizations(
-			String... additionalAuthorizations ) {
-		return additionalAuthorizations;
 	}
 }

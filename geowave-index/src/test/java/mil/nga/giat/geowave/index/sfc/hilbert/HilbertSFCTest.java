@@ -111,8 +111,6 @@ public class HilbertSFCTest
 		SpaceFillingCurve hilbertSFC = SFCFactory.createSpaceFillingCurve(
 				SPATIAL_DIMENSIONS,
 				SFCType.HILBERT);
-		System.err.println(ByteBuffer.wrap(
-				hilbertSFC.getId(testValues)).getLong());
 		Assert.assertEquals(
 				expectedID,
 				ByteBuffer.wrap(

@@ -311,14 +311,6 @@ public interface AccumuloOperations
 
 	/**
 	 * 
-	 * @return default authorization for scans along with any additional
-	 *         authorizations (and deletions)
-	 */
-	public String[] getAuthorizations(
-			final String... additionalAuthorizations );
-
-	/**
-	 * 
 	 * Insure user has the given operations.
 	 */
 	public void insureAuthorization(

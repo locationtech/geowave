@@ -43,23 +43,42 @@ public class RasterTile<T extends Persistable> implements
 		return metadata;
 	}
 
-	@Override
-	public byte[] toBinary() {
+	protected static byte[] getDataBufferBinary(
+			final DataBuffer dataBuffer ) {
 		final SerializableState serializableDataBuffer = SerializerFactory.getState(dataBuffer);
-		byte[] dataBufferBinary = new byte[0];
 		try {
 			final ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			final ObjectOutputStream oos = new ObjectOutputStream(
 					baos);
 			oos.writeObject(serializableDataBuffer);
-			dataBufferBinary = baos.toByteArray();
+			return baos.toByteArray();
 		}
 		catch (final IOException e) {
 			LOGGER.warn(
 					"Unable to serialize data buffer",
 					e);
 		}
-		// return dataBufferBinary;
+		return new byte[] {};
+	}
+
+	protected static DataBuffer getDataBuffer(
+			final byte[] binary )
+			throws IOException,
+			ClassNotFoundException {
+		final ByteArrayInputStream bais = new ByteArrayInputStream(
+				binary);
+		final ObjectInputStream ois = new ObjectInputStream(
+				bais);
+		final Object o = ois.readObject();
+		if ((o instanceof SerializableState) && (((SerializableState) o).getObject() instanceof DataBuffer)) {
+			return (DataBuffer) ((SerializableState) o).getObject();
+		}
+		return null;
+	}
+
+	@Override
+	public byte[] toBinary() {
+		final byte[] dataBufferBinary = getDataBufferBinary(dataBuffer);
 		byte[] metadataBytes;
 		if (metadata != null) {
 			metadataBytes = PersistenceUtils.toBinary(metadata);
@@ -89,14 +108,7 @@ public class RasterTile<T extends Persistable> implements
 			}
 			final byte[] dataBufferBytes = new byte[bytes.length - metadataLength - 4];
 			buf.get(dataBufferBytes);
-			final ByteArrayInputStream bais = new ByteArrayInputStream(
-					dataBufferBytes);
-			final ObjectInputStream ois = new ObjectInputStream(
-					bais);
-			final Object o = ois.readObject();
-			if ((o instanceof SerializableState) && (((SerializableState) o).getObject() instanceof DataBuffer)) {
-				dataBuffer = (DataBuffer) ((SerializableState) o).getObject();
-			}
+			dataBuffer = getDataBuffer(dataBufferBytes);
 		}
 		catch (final Exception e) {
 			LOGGER.warn(

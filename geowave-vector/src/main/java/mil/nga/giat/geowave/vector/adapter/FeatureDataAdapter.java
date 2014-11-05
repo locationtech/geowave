@@ -4,6 +4,7 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
+import mil.nga.giat.geowave.accumulo.mapreduce.HadoopDataAdapter;
 import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.index.StringUtils;
 import mil.nga.giat.geowave.store.TimeUtils;
@@ -55,7 +56,7 @@ import com.vividsolutions.jts.geom.Geometry;
  * This data adapter will handle all reading/writing concerns for storing and
  * retrieving GeoTools SimpleFeature objects to and from a GeoWave persistent
  * store in Accumulo.
- * 
+ *
  * If the implementor needs to write rows with particular visibility, this can
  * be done by providing a FieldVisibilityHandler to a constructor or a
  * VisibilityManagement to a constructor. When using VisibilityManagement, the
@@ -65,30 +66,31 @@ import com.vividsolutions.jts.geom.Geometry;
  * attribute that contains the visibility meta-data.
  * persistedType.getDescriptor("someAttributeName").getUserData().put(
  * "visibility", Boolean.TRUE)
- * 
- * 
+ *
+ *
  * The adapter will use the SimpleFeature's default geometry for spatial
  * indexing.
- * 
+ *
  * The adaptor will use the first temporal attribute (a Calendar or Date object)
  * as the timestamp of a temporal index.
- * 
+ *
  * If the feature type contains a UserData property 'time' for a specific time
  * attribute with Boolean.TRUE, then the attribute is used as the timestamp of a
  * temporal index.
- * 
+ *
  * If the feature type contains UserData properties 'start' and 'end' for two
  * different time attributes with value Boolean.TRUE, then the attributes are
  * used for a range index.
- * 
+ *
  * If the feature type contains a UserData property 'time' for *all* time
  * attributes with Boolean.FALSE, then a temporal index is not used.
- * 
- * 
+ *
+ *
  */
 public class FeatureDataAdapter extends
 		AbstractDataAdapter<SimpleFeature> implements
-		StatisticalDataAdapter<SimpleFeature>
+		StatisticalDataAdapter<SimpleFeature>,
+		HadoopDataAdapter<SimpleFeature, FeatureWritable>
 {
 	private final static Logger LOGGER = Logger.getLogger(FeatureDataAdapter.class);
 	// the original coordinate system will always be represented internally by
@@ -161,7 +163,7 @@ public class FeatureDataAdapter extends
 				type);
 		setFeatureType(type);
 		this.fieldVisiblityHandler = fieldVisiblityHandler;
-		this.fieldVisibilityManagement = visibilityManagement;
+		fieldVisibilityManagement = visibilityManagement;
 	}
 
 	private void setFeatureType(
@@ -213,12 +215,12 @@ public class FeatureDataAdapter extends
 	protected List<IndexFieldHandler<SimpleFeature, ? extends CommonIndexValue, Object>> getDefaultTypeMatchingHandlers(
 			final Object typeObj ) {
 		if ((typeObj != null) && (typeObj instanceof SimpleFeatureType)) {
-			TimeDescriptors timeDescriptors = inferTimeAttributeDescriptor((SimpleFeatureType) typeObj);
+			final TimeDescriptors timeDescriptors = inferTimeAttributeDescriptor((SimpleFeatureType) typeObj);
 			nativeFieldHandlers = typeToFieldHandlers((SimpleFeatureType) typeObj);
 			final List<IndexFieldHandler<SimpleFeature, ? extends CommonIndexValue, Object>> defaultHandlers = new ArrayList<IndexFieldHandler<SimpleFeature, ? extends CommonIndexValue, Object>>();
 			final SimpleFeatureType internalType = (SimpleFeatureType) typeObj;
 
-			if (timeDescriptors.startRange != null && timeDescriptors.endRange != null) {
+			if ((timeDescriptors.startRange != null) && (timeDescriptors.endRange != null)) {
 				defaultHandlers.add(new FeatureTimeRangeHandler(
 						new FeatureAttributeHandler(
 								timeDescriptors.startRange),
@@ -283,7 +285,7 @@ public class FeatureDataAdapter extends
 		else {
 			basicWriter = (FieldWriter<SimpleFeature, Object>) FieldUtils.getDefaultWriterForClass(bindingClass);
 		}
-		return this.fieldVisibilityManagement.createVisibilityWriter(
+		return fieldVisibilityManagement.createVisibilityWriter(
 				descriptor.getLocalName(),
 				basicWriter,
 				fieldVisiblityHandler,
@@ -296,10 +298,10 @@ public class FeatureDataAdapter extends
 		final String encodedType = DataUtilities.encodeType(persistedType);
 		final String typeName = persistedType.getTypeName();
 		final byte[] typeNameBytes = StringUtils.stringToBinary(typeName);
-		final byte[] fieldVisibilityAtributeNameBytes = StringUtils.stringToBinary(this.visibilityAttributeName);
-		final byte[] visibilityManagementClassNameBytes = StringUtils.stringToBinary(this.fieldVisibilityManagement.getClass().getCanonicalName());
+		final byte[] fieldVisibilityAtributeNameBytes = StringUtils.stringToBinary(visibilityAttributeName);
+		final byte[] visibilityManagementClassNameBytes = StringUtils.stringToBinary(fieldVisibilityManagement.getClass().getCanonicalName());
 
-		TimeDescriptors timeDescriptors = inferTimeAttributeDescriptor(persistedType);
+		final TimeDescriptors timeDescriptors = inferTimeAttributeDescriptor(persistedType);
 		final byte[] timeAndRangeBytes = timeDescriptors.toBinary();
 		final String namespace = persistedType.getName().getNamespaceURI();
 
@@ -346,13 +348,13 @@ public class FeatureDataAdapter extends
 
 		final String typeName = StringUtils.stringFromBinary(typeNameBytes);
 		final String namespace = StringUtils.stringFromBinary(namespaceBytes);
-		this.visibilityAttributeName = StringUtils.stringFromBinary(fieldVisibilityAtributeNameBytes);
-		String visibilityManagementClassName = StringUtils.stringFromBinary(visibilityManagementClassNameBytes);
+		visibilityAttributeName = StringUtils.stringFromBinary(fieldVisibilityAtributeNameBytes);
+		final String visibilityManagementClassName = StringUtils.stringFromBinary(visibilityManagementClassNameBytes);
 		try {
-			this.fieldVisibilityManagement = (VisibilityManagement<SimpleFeature>) Class.forName(
+			fieldVisibilityManagement = (VisibilityManagement<SimpleFeature>) Class.forName(
 					visibilityManagementClassName).newInstance();
 		}
-		catch (Exception ex) {
+		catch (final Exception ex) {
 			LOGGER.error(
 					"Cannot instantiate " + visibilityManagementClassName,
 					ex);
@@ -367,13 +369,13 @@ public class FeatureDataAdapter extends
 					namespace,
 					typeName,
 					encodedType));
-			TimeDescriptors timeDescriptors = new TimeDescriptors();
+			final TimeDescriptors timeDescriptors = new TimeDescriptors();
 			timeDescriptors.fromBinary(
-					this.persistedType,
+					persistedType,
 					timeAndRangeBytes);
-			if (this.persistedType.getDescriptor(this.visibilityAttributeName) != null) {
-				this.persistedType.getDescriptor(
-						this.visibilityAttributeName).getUserData().put(
+			if (persistedType.getDescriptor(visibilityAttributeName) != null) {
+				persistedType.getDescriptor(
+						visibilityAttributeName).getUserData().put(
 						"visibility",
 						Boolean.TRUE);
 			}
@@ -501,15 +503,10 @@ public class FeatureDataAdapter extends
 	   return GEOMETRY_VISIBILITY_HANDLER;
 	}
 
-	public boolean hasGeometricConstraints() {
-		return this.typeMatchingFieldHandlers.keySet().contains(
-				FeatureGeometryHandler.class);
-	}
-
 	public boolean hasTemporalConstraints() {
-		return this.typeMatchingFieldHandlers.keySet().contains(
-				Time.class) || this.typeMatchingFieldHandlers.keySet().contains(
-				FeatureTimestampHandler.class) || this.typeMatchingFieldHandlers.keySet().contains(
+		return typeMatchingFieldHandlers.keySet().contains(
+				Time.class) || typeMatchingFieldHandlers.keySet().contains(
+				FeatureTimestampHandler.class) || typeMatchingFieldHandlers.keySet().contains(
 				FeatureTimeRangeHandler.class);
 	}
 
@@ -518,12 +515,12 @@ public class FeatureDataAdapter extends
 	 * otherwise infer.
 	 */
 	protected static final TimeDescriptors inferTimeAttributeDescriptor(
-			SimpleFeatureType persistType ) {
+			final SimpleFeatureType persistType ) {
 		final TimeDescriptors timeDescriptors = new TimeDescriptors();
 		for (final AttributeDescriptor attrDesc : persistType.getAttributeDescriptors()) {
 			final Class<?> bindingClass = attrDesc.getType().getBinding();
 			if (TimeUtils.isTemporal(bindingClass)) {
-				Boolean isTime = (Boolean) attrDesc.getUserData().get(
+				final Boolean isTime = (Boolean) attrDesc.getUserData().get(
 						"time");
 				if (isTime != null) {
 					if (isTime.booleanValue()) {
@@ -535,21 +532,21 @@ public class FeatureDataAdapter extends
 					}
 					continue; // skip
 				}
-				Boolean isStart = (Boolean) attrDesc.getUserData().get(
+				final Boolean isStart = (Boolean) attrDesc.getUserData().get(
 						"start");
-				Boolean isEnd = (Boolean) attrDesc.getUserData().get(
+				final Boolean isEnd = (Boolean) attrDesc.getUserData().get(
 						"end");
-				if (isStart != null && isStart.booleanValue()) {
+				if ((isStart != null) && isStart.booleanValue()) {
 					timeDescriptors.startRange = attrDesc;
 				}
-				else if (isStart == null && timeDescriptors.startRange == null && attrDesc.getLocalName().toLowerCase().startsWith(
+				else if ((isStart == null) && (timeDescriptors.startRange == null) && attrDesc.getLocalName().toLowerCase().startsWith(
 						"start")) {
 					timeDescriptors.startRange = attrDesc;
 				}
-				else if (isEnd != null && isEnd.booleanValue()) {
+				else if ((isEnd != null) && isEnd.booleanValue()) {
 					timeDescriptors.endRange = attrDesc;
 				}
-				else if (isEnd == null && timeDescriptors.endRange == null && attrDesc.getLocalName().toLowerCase().startsWith(
+				else if ((isEnd == null) && (timeDescriptors.endRange == null) && attrDesc.getLocalName().toLowerCase().startsWith(
 						"end")) {
 					timeDescriptors.endRange = attrDesc;
 				}
@@ -558,7 +555,7 @@ public class FeatureDataAdapter extends
 				}
 			}
 		}
-		if (timeDescriptors.endRange != null && timeDescriptors.startRange != null) {
+		if ((timeDescriptors.endRange != null) && (timeDescriptors.startRange != null)) {
 			timeDescriptors.startRange.getUserData().put(
 					"start",
 					Boolean.TRUE);
@@ -576,9 +573,11 @@ public class FeatureDataAdapter extends
 
 	private void determineVisibilityAttribute() {
 		for (final AttributeDescriptor attrDesc : persistedType.getAttributeDescriptors()) {
-			Boolean isVisibility = (Boolean) attrDesc.getUserData().get(
+			final Boolean isVisibility = (Boolean) attrDesc.getUserData().get(
 					"visibility");
-			if (isVisibility != null && isVisibility.booleanValue()) this.visibilityAttributeName = attrDesc.getLocalName();
+			if ((isVisibility != null) && isVisibility.booleanValue()) {
+				visibilityAttributeName = attrDesc.getLocalName();
+			}
 		}
 	}
 
@@ -589,13 +588,13 @@ public class FeatureDataAdapter extends
 		AttributeDescriptor time = null;
 
 		byte[] toBinary() {
-			StringBuffer buffer = new StringBuffer();
+			final StringBuffer buffer = new StringBuffer();
 			if (time != null) {
 				buffer.append(
 						time.getLocalName()).append(
 						"::");
 			}
-			else if (startRange != null && endRange != null) {
+			else if ((startRange != null) && (endRange != null)) {
 				buffer.append(
 						':').append(
 						startRange.getLocalName()).append(
@@ -606,9 +605,9 @@ public class FeatureDataAdapter extends
 		}
 
 		void fromBinary(
-				SimpleFeatureType type,
-				byte[] image ) {
-			String buf = StringUtils.stringFromBinary(image);
+				final SimpleFeatureType type,
+				final byte[] image ) {
+			final String buf = StringUtils.stringFromBinary(image);
 			if (buf.startsWith(":")) {
 				// range
 				type.getDescriptor(
@@ -633,5 +632,19 @@ public class FeatureDataAdapter extends
 						Boolean.TRUE);
 			}
 		}
+	}
+
+	@Override
+	public FeatureWritable toWritable(
+			final SimpleFeature entry ) {
+		return new FeatureWritable(
+				reprojectedType,
+				entry);
+	}
+
+	@Override
+	public SimpleFeature fromWritable(
+			final FeatureWritable writable ) {
+		return writable.getFeature();
 	}
 }

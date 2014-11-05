@@ -183,6 +183,13 @@ public class AbstractDataAdapterTest
 		public void setVisibility(
 				final byte[] visibility ) {}
 
+		@Override
+		public boolean overlaps(
+				DimensionField[] dimensions,
+				NumericData[] rangeData ) {
+			return true;
+		}
+
 	}
 
 	// *************************************************************************
@@ -492,6 +499,8 @@ public class AbstractDataAdapterTest
 		public String getId() {
 			return null;
 		}
+		
+		
 
 	}
 

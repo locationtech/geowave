@@ -20,6 +20,29 @@ import com.vividsolutions.jts.geom.Geometry;
  */
 public class BasicReader
 {
+	
+	public static class ArrayReader<T> implements
+	FieldReader<T[]>{
+		private FieldReader<T> baseReader;
+		
+		public ArrayReader(
+				FieldReader<T> baseReader ) {
+			this.baseReader = baseReader;
+		}
+
+		@Override
+		public T[] readField(
+				byte[] fieldData ) {
+			//do my array stuff
+			ByteBuffer buf = ByteBuffer.wrap(fieldData);
+			Object[] retVal = new Object[buf.getInt()];
+			for (int i = 0; i < retVal.length; i++){
+				retVal[i] = baseReader.readField(fieldData);
+			}
+			return (T[])retVal;
+		}
+		
+	}
 	public static class BooleanReader implements
 			FieldReader<Boolean>
 	{

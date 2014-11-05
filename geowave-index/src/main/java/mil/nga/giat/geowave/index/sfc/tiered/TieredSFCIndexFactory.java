@@ -11,7 +11,7 @@ import mil.nga.giat.geowave.index.sfc.SpaceFillingCurve;
 /**
  * A factory for creating TieredSFCIndexStrategy using various approaches for
  * breaking down the bits of precision per tier
- *
+ * 
  */
 public class TieredSFCIndexFactory
 {
@@ -20,7 +20,7 @@ public class TieredSFCIndexFactory
 	/**
 	 * Used to create a Single Tier Index Strategy. For example, this would be
 	 * used to generate a strategy that has Point type spatial data.
-	 *
+	 * 
 	 * @param dimensionDefs
 	 *            an array of SFC Dimension Definition objects
 	 * @param sfc
@@ -46,7 +46,40 @@ public class TieredSFCIndexFactory
 	}
 
 	/**
-	 *
+	 * Used to create a Single Tier Index Strategy. For example, this would be
+	 * used to generate a strategy that has Point type spatial data.
+	 * 
+	 * @param dimensionDefs
+	 *            an array of SFC Dimension Definition objects
+	 * @param sfc
+	 *            the type of space filling curve (e.g. Hilbert)
+	 * @return an Index Strategy object with a single tier
+	 */
+	static public TieredSFCIndexStrategy createSingleTierStrategy(
+			final NumericDimensionDefinition[] baseDefinitions,
+			final int[] maxBitsPerDimension,
+			final SFCType sfc ) {
+		final SFCDimensionDefinition[] sfcDimensions = new SFCDimensionDefinition[baseDefinitions.length];
+		for (int d = 0; d < baseDefinitions.length; d++) {
+
+			sfcDimensions[d] = new SFCDimensionDefinition(
+					baseDefinitions[d],
+					maxBitsPerDimension[d]);
+		}
+
+		final SpaceFillingCurve[] orderedSfcs = new SpaceFillingCurve[] {
+			SFCFactory.createSpaceFillingCurve(
+					sfcDimensions,
+					sfc)
+		};
+
+		return new TieredSFCIndexStrategy(
+				sfcDimensions,
+				orderedSfcs);
+	}
+
+	/**
+	 * 
 	 * @param baseDefinitions
 	 *            an array of Numeric Dimension Definitions
 	 * @param maxBitsPerDimension
@@ -98,7 +131,7 @@ public class TieredSFCIndexFactory
 	}
 
 	/**
-	 *
+	 * 
 	 * @param baseDefinitions
 	 *            an array of Numeric Dimension Definitions
 	 * @param maxBitsPerDimension
@@ -119,7 +152,7 @@ public class TieredSFCIndexFactory
 	}
 
 	/**
-	 *
+	 * 
 	 * @param baseDefinitions
 	 *            an array of Numeric Dimension Definitions
 	 * @param maxBitsPerDimension
@@ -168,7 +201,7 @@ public class TieredSFCIndexFactory
 	}
 
 	/**
-	 *
+	 * 
 	 * @param orderedDimensionDefinitions
 	 *            an array of Numeric Dimension Definitions
 	 * @param bitsPerDimensionPerLevel

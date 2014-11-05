@@ -1,4 +1,6 @@
-package mil.nga.giat.geowave.ingest.hdfs.mapreduce;
+package mil.nga.giat.geowave.accumulo.mapreduce.output;
+
+import mil.nga.giat.geowave.accumulo.mapreduce.GeoWaveConfiguratorBase;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.mapreduce.Job;
@@ -12,25 +14,8 @@ public class GeoWaveOutputConfigurator extends
 {
 	/**
 	 * General configuration keys
-	 * 
+	 *
 	 */
-	// TODO use these options to restrict creation when set (currently, within
-	// the GeoWavevDataStore if anything doesn't exist it is automatically
-	// persisted)
-	protected static enum GeneralConfig {
-		CREATE_ADAPTERS,
-		CREATE_INDEX,
-		CREATE_TABLES
-	}
-
-	public static Boolean canCreateAdapters(
-			final Class<?> implementingClass,
-			final JobContext context ) {
-		return canCreateAdaptersInternal(
-				implementingClass,
-				getConfiguration(context));
-	}
-
 	public static Boolean canCreateIndex(
 			final Class<?> implementingClass,
 			final JobContext context ) {
@@ -58,17 +43,6 @@ public class GeoWaveOutputConfigurator extends
 				enableFeature);
 	}
 
-	public static void setCreateAdapters(
-			final Class<?> implementingClass,
-			final Job job,
-			final boolean enableFeature ) {
-		job.getConfiguration().setBoolean(
-				enumToConfKey(
-						implementingClass,
-						GeneralConfig.CREATE_ADAPTERS),
-				enableFeature);
-	}
-
 	public static void setCreateIndex(
 			final Class<?> implementingClass,
 			final Job job,
@@ -78,16 +52,6 @@ public class GeoWaveOutputConfigurator extends
 						implementingClass,
 						GeneralConfig.CREATE_INDEX),
 				enableFeature);
-	}
-
-	private static Boolean canCreateAdaptersInternal(
-			final Class<?> implementingClass,
-			final Configuration configuration ) {
-		return configuration.getBoolean(
-				enumToConfKey(
-						implementingClass,
-						GeneralConfig.CREATE_ADAPTERS),
-				true);
 	}
 
 	private static Boolean canCreateIndexInternal(
