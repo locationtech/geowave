@@ -221,7 +221,6 @@ public class DensityProcess implements
 			final double log2PixelSize = Math.log(pixelSizeDefaultCrs * 180.0) / Math.log(2);
 
 			int level = (int) Math.round(log2PixelSize);
-			// System.err.println(level);
 			if (level < minLevel) {
 				level = minLevel;
 			}
@@ -237,13 +236,6 @@ public class DensityProcess implements
 			hints.put(
 					DecimationProcess.OUTPUT_BBOX,
 					argOutputEnv);
-			// new ReferencedEnvelope(
-			// new Rectangle2D.Double(
-			// minx,
-			// miny,
-			// maxx - minx,
-			// maxy - miny),
-			// argOutputEnv.getCoordinateReferenceSystem()));
 		}
 		catch (TransformException | FactoryException e) {
 			LOGGER.warn(

@@ -1,15 +1,21 @@
-package mil.nga.giat.geowave.ingest.hdfs.mapreduce;
+package mil.nga.giat.geowave.accumulo.mapreduce;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import mil.nga.giat.geowave.accumulo.AccumuloOperations;
 import mil.nga.giat.geowave.accumulo.metadata.AccumuloAdapterStore;
+import mil.nga.giat.geowave.accumulo.util.CloseableIteratorWrapper;
 import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.store.CloseableIterator;
 import mil.nga.giat.geowave.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.store.adapter.DataAdapter;
 
+import org.apache.commons.collections.IteratorUtils;
+import org.apache.commons.collections.Transformer;
+import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.JobContext;
 
 /**
@@ -21,6 +27,7 @@ import org.apache.hadoop.mapreduce.JobContext;
 public class JobContextAdapterStore implements
 		AdapterStore
 {
+	private static final Class<?> CLASS = JobContextAdapterStore.class;
 	private final JobContext context;
 	private final AccumuloOperations accumuloOperations;
 	private final Map<ByteArrayId, DataAdapter<?>> adapterCache = new HashMap<ByteArrayId, DataAdapter<?>>();
@@ -64,7 +71,7 @@ public class JobContextAdapterStore implements
 	private DataAdapter<?> getAdapterInternal(
 			final ByteArrayId adapterId ) {
 		// first try to get it from the job context
-		DataAdapter<?> adapter = GeoWaveOutputFormat.getDataAdapter(
+		DataAdapter<?> adapter = getDataAdapter(
 				context,
 				adapterId);
 		if (adapter == null) {
@@ -84,11 +91,81 @@ public class JobContextAdapterStore implements
 
 	@Override
 	public CloseableIterator<DataAdapter<?>> getAdapters() {
-		// this should not be called but just return what is in the accumulo
-		// adapter store
 		final AccumuloAdapterStore adapterStore = new AccumuloAdapterStore(
 				accumuloOperations);
-		return adapterStore.getAdapters();
+		final CloseableIterator<DataAdapter<?>> it = adapterStore.getAdapters();
+		// cache any results
+		return new CloseableIteratorWrapper<DataAdapter<?>>(
+				it,
+				IteratorUtils.transformedIterator(
+						it,
+						new Transformer() {
+
+							@Override
+							public Object transform(
+									final Object obj ) {
+								if (obj instanceof DataAdapter) {
+									adapterCache.put(
+											((DataAdapter) obj).getAdapterId(),
+											(DataAdapter) obj);
+								}
+								return obj;
+							}
+						}));
+	}
+
+	public List<ByteArrayId> getAdapterIds() {
+		final DataAdapter<?>[] userAdapters = GeoWaveConfiguratorBase.getDataAdapters(
+				CLASS,
+				context);
+		if ((userAdapters == null) || (userAdapters.length <= 0)) {
+			return IteratorUtils.toList(IteratorUtils.transformedIterator(
+					getAdapters(),
+					new Transformer() {
+
+						@Override
+						public Object transform(
+								final Object input ) {
+							if (input instanceof DataAdapter) {
+								return ((DataAdapter) input).getAdapterId();
+							}
+							return input;
+						}
+					}));
+		}
+		else {
+			final List<ByteArrayId> retVal = new ArrayList<ByteArrayId>(
+					userAdapters.length);
+			for (final DataAdapter<?> adapter : userAdapters) {
+				retVal.add(adapter.getAdapterId());
+			}
+			return retVal;
+		}
+	}
+
+	protected static DataAdapter<?> getDataAdapter(
+			final JobContext context,
+			final ByteArrayId adapterId ) {
+		return GeoWaveConfiguratorBase.getDataAdapter(
+				CLASS,
+				context,
+				adapterId);
+	}
+
+	public static DataAdapter<?>[] getDataAdapters(
+			final JobContext context ) {
+		return GeoWaveConfiguratorBase.getDataAdapters(
+				CLASS,
+				context);
+	}
+
+	public static void addDataAdapter(
+			final Job job,
+			final DataAdapter<?> adapter ) {
+		GeoWaveConfiguratorBase.addDataAdapter(
+				CLASS,
+				job,
+				adapter);
 	}
 
 }

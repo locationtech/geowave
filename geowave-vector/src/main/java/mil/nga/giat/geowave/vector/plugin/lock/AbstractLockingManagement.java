@@ -29,44 +29,37 @@ public abstract class AbstractLockingManagement implements
 	private final static Logger LOGGER = Logger.getLogger(AbstractLockingManagement.class);
 
 	public static final String LOCKING_MANAGEMENT_CLASS = "GEOWAVE_LM";
-	public static final AtomicBoolean LOCKING_MANAGEMENT_CLASS_LCK = new AtomicBoolean(
-			false);
+	public static final Object LOCKING_MANAGEMENT_CLASS_LCK = new Object();
 
 	public static AbstractLockingManagement getLockingManagement(
 			GeoWavePluginConfig pluginConfig ) {
 		synchronized (LOCKING_MANAGEMENT_CLASS_LCK) {
 			String val = System.getenv(LOCKING_MANAGEMENT_CLASS);
-			try {
 
-				if (val == null) {
+			if (val == null) {
+				return new MemoryLockManager(
+						pluginConfig);
+			}
+			else {
+				try {
+					Class<? extends AbstractLockingManagement> lockManagerClass = (Class<? extends AbstractLockingManagement>) Class.forName(val);
+					if (!AbstractLockingManagement.class.isAssignableFrom(lockManagerClass)) {
+						throw new IllegalArgumentException(
+								"Invalid LockManagement class " + val);
+					}
+					else {
+						Constructor cons = lockManagerClass.getConstructor(GeoWavePluginConfig.class);
+						return (AbstractLockingManagement) cons.newInstance(pluginConfig);
+					}
+				}
+				catch (Exception ex) {
+					LOGGER.error(
+							"Cannot instantiate lock management class " + val,
+							ex);
 					return new MemoryLockManager(
 							pluginConfig);
 				}
-				else {
-					try {
-						Class<? extends AbstractLockingManagement> lockManagerClass = (Class<? extends AbstractLockingManagement>) Class.forName(val);
-						if (!AbstractLockingManagement.class.isAssignableFrom(lockManagerClass)) {
-							throw new IllegalArgumentException(
-									"Invalid LockManagement class " + val);
-						}
-						else {
-							Constructor cons = lockManagerClass.getConstructor(GeoWavePluginConfig.class);
-							return (AbstractLockingManagement) cons.newInstance(pluginConfig);
-						}
-					}
-					catch (Exception ex) {
-						LOGGER.error(
-								"Cannot instantiate lock management class " + val,
-								ex);
-						return new MemoryLockManager(
-								pluginConfig);
-					}
-				}
 			}
-			finally {
-				LOCKING_MANAGEMENT_CLASS_LCK.set(true);
-			}
-
 		}
 	}
 

@@ -115,7 +115,7 @@ public class GaussianCellMapper extends
 			throws IOException,
 			InterruptedException {
 		final AccumuloRowId rowElements = new AccumuloRowId(
-				key.getRow().getBytes());
+				key);
 		if (!new ByteArrayId(
 				rowElements.getAdapterId()).equals(adapter.getAdapterId())) {
 			return;

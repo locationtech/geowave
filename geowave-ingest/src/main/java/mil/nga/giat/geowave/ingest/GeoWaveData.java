@@ -1,7 +1,7 @@
 package mil.nga.giat.geowave.ingest;
 
+import mil.nga.giat.geowave.accumulo.mapreduce.output.GeoWaveOutputKey;
 import mil.nga.giat.geowave.index.ByteArrayId;
-import mil.nga.giat.geowave.ingest.hdfs.mapreduce.GeoWaveIngestKey;
 import mil.nga.giat.geowave.ingest.local.IngestRunData;
 import mil.nga.giat.geowave.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.store.adapter.DataAdapter;
@@ -64,10 +64,10 @@ public class GeoWaveData<T>
 		return indexId;
 	}
 
-	public GeoWaveIngestKey getKey() {
-		return new GeoWaveIngestKey(
-				indexId,
-				adapterId);
+	public GeoWaveOutputKey getKey() {
+		return new GeoWaveOutputKey(
+				adapterId,
+				indexId);
 	}
 
 	public T getValue() {

@@ -70,7 +70,6 @@ abstract public class AbstractDataAdapter<T> implements
 				indexFieldHandlers,
 				defaultTypeData);
 	}
-	
 
 	protected void init(
 			final List<? extends IndexFieldHandler<T, ? extends CommonIndexValue, Object>> indexFieldHandlers,

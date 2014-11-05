@@ -24,9 +24,9 @@
 	<properties>
 		<geotools.version>11.2</geotools.version>
 		<geoserver.version>2.5.2</geoserver.version>
-		<accumulo.version>1.5.1</accumulo.version>
-		<hadoop.version>2.0.0-cdh4.7.0</hadoop.version>
-		<hadoop.version.mr>2.0.0-mr1-cdh4.7.0</hadoop.version.mr>
+		<accumulo.version>1.6.0</accumulo.version>
+		<hadoop.version>2.3.0-cdh5.0.3</hadoop.version>
+		<hadoop.version.mr>2.3.0-cdh5.0.3</hadoop.version.mr>
 		<avro.version>1.7.6</avro.version>
 		<commons.cli.version>1.2</commons.cli.version>
 		<geotools.scope>compile</geotools.scope>
@@ -46,7 +46,7 @@
 
 		<!-- need to use a 64-bit JVM for tests -->
 		<!-- Remove the MaxPermSize for Java8 -->
-		<test.args>-Xms256m -Xmx6144m -XX:MaxPermSize=512m</test.args>
+		<test.args>-Xms256m -Xmx1024m -XX:MaxPermSize=256m</test.args>
 	</properties>
 	<dependencyManagement>
 		<dependencies>

@@ -54,7 +54,9 @@ public class CountDataStatistics<T> extends
 	public void entryIngested(
 			final IngestEntryInfo entryInfo,
 			final T entry ) {
-		if (!isSet()) count = 0;
+		if (!isSet()) {
+			count = 0;
+		}
 		count += 1;
 	}
 
@@ -66,7 +68,9 @@ public class CountDataStatistics<T> extends
 	@Override
 	public void merge(
 			final Mergeable statistics ) {
-		if (!isSet()) count = 0;
+		if (!isSet()) {
+			count = 0;
+		}
 		if ((statistics != null) && (statistics instanceof CountDataStatistics)) {
 			@SuppressWarnings("unchecked")
 			final CountDataStatistics<T> cStats = (CountDataStatistics<T>) statistics;
@@ -80,7 +84,9 @@ public class CountDataStatistics<T> extends
 	public void entryDeleted(
 			final IngestEntryInfo entryInfo,
 			final T entry ) {
-		if (!isSet()) count = 0;
+		if (!isSet()) {
+			count = 0;
+		}
 		count -= 1;
 
 	}

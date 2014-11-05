@@ -23,43 +23,20 @@ import com.google.common.collect.Iterators;
 public abstract class AccumuloFilteredIndexQuery extends
 		AccumuloQuery
 {
-	private List<QueryFilter> clientFilters;
-
+	protected List<QueryFilter> clientFilters;
 	private final static Logger LOGGER = Logger.getLogger(AccumuloFilteredIndexQuery.class);
 
 	public AccumuloFilteredIndexQuery(
 			final Index index,
-			final List<QueryFilter> clientFilters,
 			final String... authorizations ) {
 		super(
 				index,
 				authorizations);
-		this.clientFilters = clientFilters;
 	}
 
 	public AccumuloFilteredIndexQuery(
-			List<ByteArrayId> adapterIds,
+			final List<ByteArrayId> adapterIds,
 			final Index index,
-			List<QueryFilter> clientFilters,
-			final String... authorizations ) {
-		super(
-				adapterIds,
-				index,
-				authorizations);
-		this.clientFilters = clientFilters;
-	}
-
-	public AccumuloFilteredIndexQuery(
-			Index index,
-			final String... authorizations ) {
-		super(
-				index,
-				authorizations);
-	}
-
-	public AccumuloFilteredIndexQuery(
-			List<ByteArrayId> adapterIds,
-			Index index,
 			final String... authorizations ) {
 		super(
 				adapterIds,
@@ -72,18 +49,30 @@ public abstract class AccumuloFilteredIndexQuery extends
 	}
 
 	protected void setClientFilters(
-			List<QueryFilter> clientFilters ) {
+			final List<QueryFilter> clientFilters ) {
 		this.clientFilters = clientFilters;
 	}
 
 	protected abstract void addScanIteratorSettings(
 			final ScannerBase scanner );
 
-	@SuppressWarnings("rawtypes")
 	public CloseableIterator<?> query(
 			final AccumuloOperations accumuloOperations,
 			final AdapterStore adapterStore,
 			final Integer limit ) {
+		return query(
+				accumuloOperations,
+				adapterStore,
+				limit,
+				false);
+	}
+
+	@SuppressWarnings("rawtypes")
+	public CloseableIterator<?> query(
+			final AccumuloOperations accumuloOperations,
+			final AdapterStore adapterStore,
+			final Integer limit,
+			final boolean withKeys ) {
 		if (!accumuloOperations.tableExists(StringUtils.stringFromBinary(index.getId().getBytes()))) {
 			LOGGER.warn("Table does not exist " + StringUtils.stringFromBinary(index.getId().getBytes()));
 			return new CloseableIterator.Empty();
@@ -92,12 +81,9 @@ public abstract class AccumuloFilteredIndexQuery extends
 				accumuloOperations,
 				limit);
 		addScanIteratorSettings(scanner);
-		Iterator it = new EntryIteratorWrapper(
+		Iterator it = initIterator(
 				adapterStore,
-				index,
-				scanner.iterator(),
-				new FilterList<QueryFilter>(
-						clientFilters));
+				scanner);
 		if ((limit != null) && (limit > 0)) {
 			it = Iterators.limit(
 					it,
@@ -109,4 +95,14 @@ public abstract class AccumuloFilteredIndexQuery extends
 				it);
 	}
 
+	protected Iterator initIterator(
+			final AdapterStore adapterStore,
+			final ScannerBase scanner ) {
+		return new EntryIteratorWrapper(
+				adapterStore,
+				index,
+				scanner.iterator(),
+				new FilterList<QueryFilter>(
+						clientFilters));
+	}
 }

@@ -46,7 +46,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class GeoServerIT extends
-GeowaveTestEnvironment
+		GeoWaveTestEnvironment
 {
 	static final Logger log = LoggerFactory.getLogger(GeoServerIT.class);
 	static final Server jettyServer = new Server();
@@ -66,13 +66,13 @@ GeowaveTestEnvironment
 			IOException {
 
 		cleanUpGSFiles();
-		GeowaveTestEnvironment.unZipFile(
-				GeowaveIT.class.getClassLoader().getResourceAsStream(
+		GeoWaveTestEnvironment.unZipFile(
+				GeoServerIT.class.getClassLoader().getResourceAsStream(
 						TEST_DATA_ZIP_RESOURCE_PATH),
-						TEST_CASE_BASE);
+				TEST_CASE_BASE);
 		PARAMS.put(
 				"\\{\\{ZOOINSTANCE\\}\\}",
-				GeowaveTestEnvironment.zookeeper);
+				GeoWaveITSuite.zookeeper);
 		replaceParameters(
 				PARAMS,
 				new File(
@@ -112,6 +112,12 @@ GeowaveTestEnvironment
 			e.printStackTrace();
 		}
 
+	}
+
+	private static Credentials getCredentials() {
+		return new UsernamePasswordCredentials(
+				"admin",
+				"geoserver"); // "root","L.}GiBeC");
 	}
 
 	static private void cleanUpGSFiles()
@@ -169,7 +175,7 @@ GeowaveTestEnvironment
 			final DefaultHttpClient httpclient,
 			final String version,
 			final Tuple... paramTuples )
-					throws AuthenticationException {
+			throws AuthenticationException {
 		final HttpPost command = new HttpPost(
 				wfsurlPrefix + "/Transaction");
 		final HttpParams params = command.getParams();
@@ -224,8 +230,8 @@ GeowaveTestEnvironment
 			}
 			buf.append(
 					aParam.name).append(
-							'=').append(
-									aParam.value);
+					'=').append(
+					aParam.value);
 		}
 		for (final Tuple aParam : localParams) {
 			if (buf.length() > 0) {
@@ -233,8 +239,8 @@ GeowaveTestEnvironment
 			}
 			buf.append(
 					aParam.name).append(
-							'=').append(
-									aParam.value);
+					'=').append(
+					aParam.value);
 		}
 		final HttpGet command = new HttpGet(
 				wfsurlPrefix + "?" + buf.toString());
@@ -287,15 +293,12 @@ GeowaveTestEnvironment
 						"src/test/resources/wfs-requests/insert_with_time.xml"),
 				"text/xml"));
 		final HttpResponse r = httpclient.execute(command);
-		if (r.getStatusLine().getStatusCode() != 200) {
-			System.err.println(getContent(r));
-		}
 		return r.getStatusLine().getStatusCode() == 200;
 	}
 
 	private String getContent(
 			final HttpResponse r )
-					throws IOException {
+			throws IOException {
 		final InputStream is = r.getEntity().getContent();
 		final Header encoding = r.getEntity().getContentEncoding();
 		final String encodingName = encoding == null ? "UTF-8" : encoding.getName();
@@ -371,9 +374,9 @@ GeowaveTestEnvironment
 
 	public boolean updatePoint(
 			final String lockID )
-					throws IOException,
-					InterruptedException,
-					AuthenticationException {
+			throws IOException,
+			InterruptedException,
+			AuthenticationException {
 		final DefaultHttpClient httpclient = createClient();
 		final HttpPost command = createWFSTransaction(
 				httpclient,
@@ -417,9 +420,9 @@ GeowaveTestEnvironment
 				new Tuple(
 						"cql_filter",
 						URLEncoder.encode("BBOX(geometry,34.68,35.18,34.7,35.19) and when during 2005-05-19T00:00:00Z/2005-05-19T21:32:56Z")),
-						new Tuple(
-								"srsName",
-								"EPSG:4326"));
+				new Tuple(
+						"srsName",
+						"EPSG:4326"));
 		final HttpResponse r = httpclient.execute(command);
 		final String content = getContent(r);
 		System.out.println(content);
@@ -435,9 +438,9 @@ GeowaveTestEnvironment
 				new Tuple(
 						"cql_filter",
 						URLEncoder.encode("BBOX(geometry,34.68,35.18,34.7,35.19) and when during 2005-05-19T20:32:56Z/2005-05-19T21:32:56Z")),
-						new Tuple(
-								"srsName",
-								"EPSG:4326"));
+				new Tuple(
+						"srsName",
+						"EPSG:4326"));
 		final HttpResponse r = httpclient.execute(command);
 		final String content = getContent(r);
 		return content.contains("numberOfFeatures=\"0\"");
@@ -446,7 +449,7 @@ GeowaveTestEnvironment
 	public static void run(
 			final Runnable run,
 			final long waitTime )
-					throws InterruptedException {
+			throws InterruptedException {
 		final Thread thread = new Thread(
 				run);
 		thread.start();
@@ -463,7 +466,7 @@ GeowaveTestEnvironment
 			conn.setSoLingerTime(-1);
 
 			jettyServer.setConnectors(new Connector[] {
-					conn
+				conn
 			});
 
 			final WebAppContext wah = new WebAppContext();
