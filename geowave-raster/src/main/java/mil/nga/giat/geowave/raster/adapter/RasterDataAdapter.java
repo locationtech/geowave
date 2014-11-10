@@ -38,6 +38,7 @@ import javax.media.jai.remote.SerializerFactory;
 
 import mil.nga.giat.geowave.accumulo.AttachedIteratorDataAdapter;
 import mil.nga.giat.geowave.accumulo.IteratorConfig;
+import mil.nga.giat.geowave.accumulo.mapreduce.HadoopDataAdapter;
 import mil.nga.giat.geowave.accumulo.util.IteratorWrapper;
 import mil.nga.giat.geowave.accumulo.util.IteratorWrapper.Converter;
 import mil.nga.giat.geowave.index.ByteArrayId;
@@ -126,7 +127,8 @@ import com.vividsolutions.jts.geom.Geometry;
 public class RasterDataAdapter implements
 		StatisticalDataAdapter<GridCoverage>,
 		IndexDependentDataAdapter<GridCoverage>,
-		AttachedIteratorDataAdapter<GridCoverage>
+		AttachedIteratorDataAdapter<GridCoverage>,
+		HadoopDataAdapter<GridCoverage, GridCoverageWritable>
 { // these priorities are fairly arbitrary at the moment
 	private static final int RASTER_TILE_COMBINER_PRIORITY = 4;
 	private static final int RASTER_TILE_VISIBILITY_COMBINER_PRIORITY = 6;
@@ -840,34 +842,8 @@ public class RasterDataAdapter implements
 	@Override
 	public byte[] toBinary() {
 		final byte[] coverageNameBytes = StringUtils.stringToBinary(coverageName);
-		final SerializableState serializableSampleModel = SerializerFactory.getState(sampleModel);
-		byte[] sampleModelBinary = new byte[0];
-		try {
-			final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			final ObjectOutputStream oos = new ObjectOutputStream(
-					baos);
-			oos.writeObject(serializableSampleModel);
-			sampleModelBinary = baos.toByteArray();
-		}
-		catch (final IOException e) {
-			LOGGER.warn(
-					"Unable to serialize sample model",
-					e);
-		}
-		final SerializableState serializableColorModel = SerializerFactory.getState(colorModel);
-		byte[] colorModelBinary = new byte[0];
-		try {
-			final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			final ObjectOutputStream oos = new ObjectOutputStream(
-					baos);
-			oos.writeObject(serializableColorModel);
-			colorModelBinary = baos.toByteArray();
-		}
-		catch (final IOException e) {
-			LOGGER.warn(
-					"Unable to serialize sample model",
-					e);
-		}
+		final byte[] sampleModelBinary = getSampleModelBinary(sampleModel);
+		final byte[] colorModelBinary = getColorModelBinary(colorModel);
 		int metadataBinaryLength = 4;
 		final List<byte[]> entryBinaries = new ArrayList<byte[]>();
 		for (final Entry<String, String> e : metadata.entrySet()) {
@@ -889,31 +865,7 @@ public class RasterDataAdapter implements
 		else {
 			histogramConfigBinary = new byte[] {};
 		}
-		final byte[] noDataBinary;
-		if (noDataValuesPerBand != null) {
-			int totalBytes = 4;
-			final List<byte[]> noDataValuesBytes = new ArrayList<byte[]>(
-					noDataValuesPerBand.length);
-			for (final double[] noDataValues : noDataValuesPerBand) {
-				final int thisBytes = 4 + (noDataValues.length * 8);
-				totalBytes += thisBytes;
-				final ByteBuffer noDataBuf = ByteBuffer.allocate(thisBytes);
-				noDataBuf.putInt(noDataValues.length);
-				for (final double noDataValue : noDataValues) {
-					noDataBuf.putDouble(noDataValue);
-				}
-				noDataValuesBytes.add(noDataBuf.array());
-			}
-			final ByteBuffer noDataBuf = ByteBuffer.allocate(totalBytes);
-			noDataBuf.putInt(noDataValuesPerBand.length);
-			for (final byte[] noDataValueBytes : noDataValuesBytes) {
-				noDataBuf.put(noDataValueBytes);
-			}
-			noDataBinary = noDataBuf.array();
-		}
-		else {
-			noDataBinary = new byte[] {};
-		}
+		final byte[] noDataBinary = getNoDataBinary(noDataValuesPerBand);
 
 		final byte[] backgroundBinary;
 		if (backgroundValuesPerBand != null) {
@@ -957,6 +909,70 @@ public class RasterDataAdapter implements
 		buf.put(mergeStrategyBinary);
 		buf.put(buildPyramid ? (byte) 1 : (byte) 0);
 		return buf.array();
+	}
+
+	protected static byte[] getColorModelBinary(
+			final ColorModel colorModel ) {
+		final SerializableState serializableColorModel = SerializerFactory.getState(colorModel);
+		try {
+			final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			final ObjectOutputStream oos = new ObjectOutputStream(
+					baos);
+			oos.writeObject(serializableColorModel);
+			return baos.toByteArray();
+		}
+		catch (final IOException e) {
+			LOGGER.warn(
+					"Unable to serialize sample model",
+					e);
+		}
+		return new byte[] {};
+	}
+
+	protected static byte[] getSampleModelBinary(
+			final SampleModel sampleModel ) {
+		final SerializableState serializableSampleModel = SerializerFactory.getState(sampleModel);
+		try {
+			final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			final ObjectOutputStream oos = new ObjectOutputStream(
+					baos);
+			oos.writeObject(serializableSampleModel);
+			return baos.toByteArray();
+		}
+		catch (final IOException e) {
+			LOGGER.warn(
+					"Unable to serialize sample model",
+					e);
+		}
+		return new byte[] {};
+	}
+
+	protected static byte[] getNoDataBinary(
+			final double[][] noDataValuesPerBand ) {
+		if (noDataValuesPerBand != null) {
+			int totalBytes = 4;
+			final List<byte[]> noDataValuesBytes = new ArrayList<byte[]>(
+					noDataValuesPerBand.length);
+			for (final double[] noDataValues : noDataValuesPerBand) {
+				final int thisBytes = 4 + (noDataValues.length * 8);
+				totalBytes += thisBytes;
+				final ByteBuffer noDataBuf = ByteBuffer.allocate(thisBytes);
+				noDataBuf.putInt(noDataValues.length);
+				for (final double noDataValue : noDataValues) {
+					noDataBuf.putDouble(noDataValue);
+				}
+				noDataValuesBytes.add(noDataBuf.array());
+			}
+			final ByteBuffer noDataBuf = ByteBuffer.allocate(totalBytes);
+			noDataBuf.putInt(noDataValuesPerBand.length);
+			for (final byte[] noDataValueBytes : noDataValuesBytes) {
+				noDataBuf.put(noDataValueBytes);
+			}
+			return noDataBuf.array();
+		}
+		else {
+			return new byte[] {};
+		}
 	}
 
 	@Override
@@ -1314,6 +1330,47 @@ public class RasterDataAdapter implements
 			tileCombiner,
 			tileVisibilityCombiner
 		};
+	}
+
+	@Override
+	public GridCoverageWritable toWritable(
+			final GridCoverage entry ) {
+		final Envelope env = entry.getEnvelope();
+
+		final DataBuffer dataBuffer = entry.getRenderedImage().copyData(
+				new InternalWritableRaster(
+						sampleModel.createCompatibleSampleModel(
+								tileSize,
+								tileSize),
+						new Point())).getDataBuffer();
+		return new GridCoverageWritable(
+				dataBuffer,
+				env.getMinimum(0),
+				env.getMaximum(0),
+				env.getMinimum(1),
+				env.getMaximum(1));
+	}
+
+	@Override
+	public GridCoverage fromWritable(
+			final GridCoverageWritable writable ) {
+		final ReferencedEnvelope mapExtent = new ReferencedEnvelope(
+				writable.getMinX(),
+				writable.getMaxX(),
+				writable.getMinY(),
+				writable.getMaxY(),
+				GeoWaveGTRasterFormat.DEFAULT_CRS);
+		try {
+			return prepareCoverage(
+					writable.getDataBuffer(),
+					mapExtent);
+		}
+		catch (final IOException e) {
+			LOGGER.error(
+					"Unable to read raster data",
+					e);
+		}
+		return null;
 	}
 
 }

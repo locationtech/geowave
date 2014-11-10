@@ -73,7 +73,7 @@ public class CqlQueryFilterIterator extends
 			final List<Value> values ) {
 		if ((gtFilter != null) && (model != null) && (dataAdapter != null)) {
 			final AccumuloRowId rowId = new AccumuloRowId(
-					currentRow.getBytes());
+					currentRow.copyBytes());
 			final PersistentDataset<CommonIndexValue> commonData = new PersistentDataset<CommonIndexValue>();
 			final PersistentDataset<Object> extendedData = new PersistentDataset<Object>();
 			for (int i = 0; (i < keys.size()) && (i < values.size()); i++) {

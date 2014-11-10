@@ -42,7 +42,7 @@ public class IngestFromHdfsDriver extends
 	}
 
 	private static synchronized ExecutorService getSingletonExecutorService() {
-		if (singletonExecutor == null) {
+		if (singletonExecutor == null || singletonExecutor.isShutdown()) {
 			singletonExecutor = Executors.newFixedThreadPool(NUM_CONCURRENT_JOBS);
 		}
 		return singletonExecutor;
@@ -55,7 +55,7 @@ public class IngestFromHdfsDriver extends
 		final Configuration conf = new Configuration();
 		conf.set(
 				"fs.defaultFS",
-				"hdfs://" + hdfsOptions.getHdfsHostPort());
+				 hdfsOptions.getHdfsHostPort());
 		conf.set(
 				"fs.hdfs.impl",
 				org.apache.hadoop.hdfs.DistributedFileSystem.class.getName());

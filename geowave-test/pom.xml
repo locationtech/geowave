@@ -17,14 +17,11 @@
 		<spring.version>3.1.4.RELEASE</spring.version>
 		<jvm.opts>-DGEOSERVER_DATA_DIR=src/test/resources/gs</jvm.opts>
 		<gt.version>11-SNAPSHOT</gt.version>
-		<test.maxPermSize>512M</test.maxPermSize>
 		<wicket.version>1.4.12</wicket.version>
-		<javac.maxHeapSize>1024m</javac.maxHeapSize>
 		<gt.version>11-SNAPSHOT</gt.version>
 		<spring.security.version>3.1.0.RELEASE</spring.security.version>
 		<maven.build.timestamp.format>dd-MMM-yyyy HH:mm</maven.build.timestamp.format>
 		<test.excludedGroups></test.excludedGroups>
-		<test.maxHeapSize>1024M</test.maxHeapSize>
 		<imageio-ext.version>1.1.10</imageio-ext.version>
 	</properties>
 	<artifactId>geowave-test</artifactId>
@@ -84,6 +81,13 @@
 							<reportsDirectory>${sonar.surefire.reportsPath}</reportsDirectory>
 							<argLine>${test.args} ${jacoco.failsafe.argLine}</argLine>
 							<runOrder>reversealphabetical</runOrder>
+
+							<excludes>
+								<exclude>**/*IT.java</exclude>
+							</excludes>
+							<includes>
+								<include>**/*ITSuite.java</include>
+							</includes>
 						</configuration>
 						<goals>
 							<goal>integration-test</goal>

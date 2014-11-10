@@ -67,7 +67,7 @@ public class BasicAccumuloOperations implements
 	 * This is will create an Accumulo connector based on passed in connection
 	 * information and credentials for convenience convenience. It will also use
 	 * reasonable defaults for unspecified parameters.
-	 * 
+	 *
 	 * @param zookeeperUrl
 	 *            The comma-delimited URLs for all zookeeper servers, this will
 	 *            be directly used to instantiate a ZookeeperInstance
@@ -109,7 +109,7 @@ public class BasicAccumuloOperations implements
 	/**
 	 * This constructor uses reasonable defaults and only requires an Accumulo
 	 * connector
-	 * 
+	 *
 	 * @param connector
 	 *            The connector to use for all operations
 	 */
@@ -123,7 +123,7 @@ public class BasicAccumuloOperations implements
 	/**
 	 * This constructor uses reasonable defaults and requires an Accumulo
 	 * connector and table namespace
-	 * 
+	 *
 	 * @param connector
 	 *            The connector to use for all operations
 	 * @param tableNamespace
@@ -144,7 +144,7 @@ public class BasicAccumuloOperations implements
 	/**
 	 * This is the full constructor for the operation factory and should be used
 	 * if any of the defaults are insufficient.
-	 * 
+	 *
 	 * @param numThreads
 	 *            The number of threads to use for a batch scanner and batch
 	 *            writer
@@ -192,13 +192,13 @@ public class BasicAccumuloOperations implements
 		return connector;
 	}
 
-	@Override
-	public String[] getAuthorizations(
+	private String[] getAuthorizations(
 			final String... additionalAuthorizations ) {
-		return authorization == null ? additionalAuthorizations : (String[]) ArrayUtils.add(
-				additionalAuthorizations,
-				authorization);
+		final String[] safeAdditionalAuthorizations = additionalAuthorizations == null ? new String[] {} : additionalAuthorizations;
 
+		return authorization == null ? safeAdditionalAuthorizations : (String[]) ArrayUtils.add(
+				safeAdditionalAuthorizations,
+				authorization);
 	}
 
 	@Override
@@ -258,22 +258,23 @@ public class BasicAccumuloOperations implements
 	@Override
 	public long getRowCount(
 			final String tableName,
-			String... additionalAuthorizations ) {
+			final String... additionalAuthorizations ) {
 		RowIterator rowIterator;
 		try {
 			rowIterator = new RowIterator(
 					connector.createScanner(
 							getQualifiedTableName(tableName),
-							(this.authorization == null) ? new Authorizations(
+							(authorization == null) ? new Authorizations(
 									additionalAuthorizations) : new Authorizations(
 									(String[]) ArrayUtils.add(
 											additionalAuthorizations,
 											authorization))));
-			while (rowIterator.hasNext())
+			while (rowIterator.hasNext()) {
 				rowIterator.next();
+			}
 			return rowIterator.getKVCount();
 		}
-		catch (TableNotFoundException e) {
+		catch (final TableNotFoundException e) {
 			LOGGER.warn("Table '" + tableName + "' not found during count operation");
 			return 0;
 		}
@@ -558,10 +559,11 @@ public class BasicAccumuloOperations implements
 		Authorizations auths = connector.securityOperations().getUserAuthorizations(
 				connector.whoami());
 		final List<byte[]> newSet = new ArrayList<byte[]>();
-		for (String auth : authorizations)
+		for (final String auth : authorizations) {
 			if (!auths.contains(auth)) {
 				newSet.add(auth.getBytes());
 			}
+		}
 		if (newSet.size() > 0) {
 			newSet.addAll(auths.getAuthorizations());
 			connector.securityOperations().changeUserAuthorizations(
@@ -570,7 +572,7 @@ public class BasicAccumuloOperations implements
 							newSet));
 			auths = connector.securityOperations().getUserAuthorizations(
 					connector.whoami());
-			LOGGER.trace(connector.whoami() + " has authorizationss" + ArrayUtils.toString(auths.getAuthorizations()));
+			LOGGER.trace(connector.whoami() + " has authorizations " + ArrayUtils.toString(auths.getAuthorizations()));
 		}
 	}
 

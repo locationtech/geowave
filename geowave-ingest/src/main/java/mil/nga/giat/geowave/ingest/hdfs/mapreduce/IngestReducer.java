@@ -2,6 +2,7 @@ package mil.nga.giat.geowave.ingest.hdfs.mapreduce;
 
 import java.io.IOException;
 
+import mil.nga.giat.geowave.accumulo.mapreduce.output.GeoWaveOutputKey;
 import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.index.ByteArrayUtils;
 import mil.nga.giat.geowave.index.PersistenceUtils;
@@ -17,7 +18,7 @@ import org.apache.hadoop.mapreduce.Reducer;
  * reducer.
  */
 public class IngestReducer extends
-		Reducer<WritableComparable<?>, Writable, GeoWaveIngestKey, Object>
+		Reducer<WritableComparable<?>, Writable, GeoWaveOutputKey, Object>
 {
 	private IngestWithReducer ingestWithReducer;
 	private String globalVisibility;

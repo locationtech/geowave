@@ -12,14 +12,13 @@ import com.vividsolutions.jts.geom.Geometry;
  * The Spatial Temporal Query class represents a query in three dimensions. The
  * constraint that is applied represents an intersection operation on the query
  * geometry AND a date range intersection based on startTime and endTime.
- * 
- * 
+ *
+ *
  */
 public class SpatialTemporalQuery extends
 		SpatialQuery
 {
-
-	private final TemporalConstraints temporalConstraints;
+	protected SpatialTemporalQuery() {}
 
 	public SpatialTemporalQuery(
 			final Date startTime,
@@ -31,10 +30,6 @@ public class SpatialTemporalQuery extends
 						endTime,
 						queryGeometry),
 				queryGeometry);
-		temporalConstraints = new TemporalConstraints();
-		temporalConstraints.add(new TemporalRange(
-				startTime,
-				endTime));
 	}
 
 	public SpatialTemporalQuery(
@@ -45,15 +40,13 @@ public class SpatialTemporalQuery extends
 						constraints,
 						queryGeometry),
 				queryGeometry);
-		this.temporalConstraints = constraints;
 	}
 
 	private static Constraints createSpatialTemporalConstraints(
-			final TemporalConstraints contraints,
+			final TemporalConstraints temporalConstraints,
 			final Geometry queryGeometry ) {
-
-		Constraints constraints = GeometryUtils.basicConstraintsFromGeometry(queryGeometry);
-		for (TemporalRange range : contraints.constraints) {
+		final Constraints constraints = GeometryUtils.basicConstraintsFromGeometry(queryGeometry);
+		for (final TemporalRange range : temporalConstraints.constraints) {
 			constraints.constraintsPerTypeOfDimensionDefinition.put(
 					TimeDefinition.class,
 					new NumericRange(
@@ -68,7 +61,7 @@ public class SpatialTemporalQuery extends
 			final Date startTime,
 			final Date endTime,
 			final Geometry queryGeometry ) {
-		Constraints constraints = GeometryUtils.basicConstraintsFromGeometry(queryGeometry);
+		final Constraints constraints = GeometryUtils.basicConstraintsFromGeometry(queryGeometry);
 		constraints.constraintsPerTypeOfDimensionDefinition.put(
 				TimeDefinition.class,
 				new NumericRange(
