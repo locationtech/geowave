@@ -1,4 +1,8 @@
 mil.nga.giat.geowave.accumulo
+mil.nga.giat.geowave.accumulo.mapreduce
+mil.nga.giat.geowave.accumulo.mapreduce.dedupe
+mil.nga.giat.geowave.accumulo.mapreduce.input
+mil.nga.giat.geowave.accumulo.mapreduce.output
 mil.nga.giat.geowave.accumulo.metadata
 mil.nga.giat.geowave.accumulo.query
 mil.nga.giat.geowave.accumulo.util
