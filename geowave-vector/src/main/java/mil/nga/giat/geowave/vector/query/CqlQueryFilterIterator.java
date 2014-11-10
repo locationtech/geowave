@@ -192,8 +192,9 @@ public class CqlQueryFilterIterator extends
 						cl);
 				GeoTools.addClassLoader(ucl);
 			}
+			classLoaderInitialized = true;
 		}
-		classLoaderInitialized = true;
+	
 	}
 
 	@Override

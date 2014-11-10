@@ -5,6 +5,7 @@ import java.lang.reflect.Constructor;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import mil.nga.giat.geowave.vector.plugin.GeoWavePluginConfig;
 
@@ -28,11 +29,13 @@ public abstract class AbstractLockingManagement implements
 	private final static Logger LOGGER = Logger.getLogger(AbstractLockingManagement.class);
 
 	public static final String LOCKING_MANAGEMENT_CLASS = "GEOWAVE_LM";
+	public static final Object LOCKING_MANAGEMENT_CLASS_LCK = new Object();
 
 	public static AbstractLockingManagement getLockingManagement(
 			GeoWavePluginConfig pluginConfig ) {
-		synchronized (LOCKING_MANAGEMENT_CLASS) {
+		synchronized (LOCKING_MANAGEMENT_CLASS_LCK) {
 			String val = System.getenv(LOCKING_MANAGEMENT_CLASS);
+
 			if (val == null) {
 				return new MemoryLockManager(
 						pluginConfig);
