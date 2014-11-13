@@ -426,10 +426,11 @@ public class JumpDriver
 		for (int kk = 1; kk <= maxNumClusters; kk++) {
 			// generate run id for the kmeans run (on the temp table)
 			final UUID uuid = UUID.randomUUID();
+			
+			System.out.println("run id: " + uuid.toString());
 
-			Integer iter;
 			try {
-				iter = kmeans.runKMeans(
+				Integer iter = kmeans.runKMeans(
 						uuid.toString(),
 						dataTypeId,
 						kk);

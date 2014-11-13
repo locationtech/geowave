@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.UUID;
 
 import mil.nga.giat.geowave.accumulo.util.AccumuloUtils;
 import mil.nga.giat.geowave.index.ByteArrayRange;
@@ -118,8 +119,8 @@ public class ClusteringUtils
 
 					// point id stored with record id as metadata, could be just id
 					String metadata = result.getAttribute("name").toString();
-					String[] splits = metadata.split("|");
-					Integer pointId = Integer.parseInt(splits[0]);
+					metadata = metadata.contains("|") ? metadata.split("|")[0] : metadata;
+					Integer pointId = Integer.parseInt(metadata);
 					
 					Geometry geometry = (Geometry) result.getDefaultGeometry();
 
@@ -144,10 +145,42 @@ public class ClusteringUtils
 	}
 	
 	/*
+	 * Temp method for debug
+	 */
+	public static void printData(DataStore dataStore, DataAdapter<SimpleFeature> adapter, Index index, Polygon polygon)
+	{
+		try {
+			// extract points from GeoWave
+			CloseableIterator<?> actualResults = dataStore.query(adapter, index, new SpatialQuery(polygon));
+			while (actualResults.hasNext()) {
+				final Object obj = actualResults.next();
+				if (obj instanceof SimpleFeature) {
+					final SimpleFeature result = (SimpleFeature) obj;
+
+					// point id stored with record id as metadata, could be just id
+					String metadata = result.getAttribute("name").toString();
+					metadata = metadata.contains("|") ? metadata.split("|")[0] : metadata;
+					Integer pointId = Integer.parseInt(metadata);
+					
+					Geometry geometry = (Geometry) result.getDefaultGeometry();
+
+					Point point = geometry.getCentroid();
+					System.out.println("point id: " + pointId + ", point: " + point.toText());
+				}
+			}
+			actualResults.close();
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/*
 	 * Retrieve data from GeoWave at specified indices in the iterator
 	 */
 	public static List<DataPoint> getSpecifiedPoints(DataStore dataStore, DataAdapter<SimpleFeature> adapter, Index index, Polygon polygon, List<Integer> indices)
 	{
+//		System.out.println("indices to retrieve: " + indices.toString());
 		List<DataPoint> points = new ArrayList<DataPoint>();
 		try {
 			int entryCounter = 0;
@@ -160,12 +193,12 @@ public class ClusteringUtils
 					final Object obj = actualResults.next();
 					if (obj instanceof SimpleFeature) {
 						final SimpleFeature result = (SimpleFeature) obj;
-
-						// point id stored with record id as metadata, could be just id
+						
+						// point id stored as name attribute
 						String metadata = result.getAttribute("name").toString();
-						String[] splits = metadata.split("|");
-						Integer pointId = Integer.parseInt(splits[0]);
-
+						metadata = metadata.length() > 0 ? metadata : UUID.randomUUID().toString();
+						Integer pointId = Integer.parseInt(metadata);
+						
 						Geometry geometry = (Geometry) result.getDefaultGeometry();
 
 						Point point = geometry.getCentroid();

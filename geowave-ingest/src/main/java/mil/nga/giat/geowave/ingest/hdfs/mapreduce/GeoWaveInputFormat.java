@@ -38,6 +38,7 @@ public class GeoWaveInputFormat extends AccumuloInputFormat
 	public static void setRangesForPolygon(Job job, Polygon polygon)
 	{
 		List<ByteArrayRange> byteRanges = getGeoWaveRangesForQuery(polygon);
+		System.out.println("range count for input data for k-means: " + byteRanges.size());
 		
 		/*
 		 * TODO group ranges to fit maximum allowable number of mappers	
@@ -46,8 +47,9 @@ public class GeoWaveInputFormat extends AccumuloInputFormat
 		 *  - perhaps put this logic in an overridden getSplits() method?	
 		 */
 		final List<Range> ranges = new ArrayList<Range>();
-		for (final ByteArrayRange byteRange : byteRanges) {
+		for (final ByteArrayRange byteRange : byteRanges) {			
 			ranges.add(AccumuloUtils.byteArrayRangeToAccumuloRange(byteRange));
+			System.out.println("range: " + AccumuloUtils.byteArrayRangeToAccumuloRange(byteRange).toString());
 		}
 		
 		setRanges(

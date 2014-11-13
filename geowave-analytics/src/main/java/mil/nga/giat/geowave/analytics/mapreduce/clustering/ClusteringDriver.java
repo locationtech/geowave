@@ -22,14 +22,14 @@ import com.vividsolutions.jts.geom.Polygon;
 public class ClusteringDriver
 {
 	// configuration for Accumulo
-		private final String instanceName;
-		private final String zooservers;
-		private final String user;
-		private final String password;
-		private Instance zookeeperInstance;
-		private Connector accumuloConnector;
-		private final String dataTableNamespace;
-		private final String tempKMeansTableNamespace;
+	private final String instanceName;
+	private final String zooservers;
+	private final String user;
+	private final String password;
+	private Instance zookeeperInstance;
+	private Connector accumuloConnector;
+	private final String dataTableNamespace;
+	private final String tempKMeansTableNamespace;
 		
 	@SuppressWarnings("deprecation")
 	public ClusteringDriver(
@@ -98,6 +98,9 @@ public class ClusteringDriver
 		int numPts = ClusteringUtils.getPointCount(inputDataStore, adapter, index, polygon);
 		System.out.println("pt count: " + numPts);
 		
+		//TODO temp code
+		ClusteringUtils.printData(inputDataStore, adapter, index, polygon);
+		
 		// no point to process < 3 pts since there wont be a polygon
 		if(numPts >= 3)	
 		{
@@ -117,17 +120,18 @@ public class ClusteringDriver
 					accumuloConnector);
 			
 			String clusterAssignmentRowId = jumpDriver.runKMeansWithJumpMethod(maxNumClusters);
+			System.out.println("row id for chosen clustering result: " + clusterAssignmentRowId);
 			
-			PolygonGenerationDriver polygonGenerationDriver = new PolygonGenerationDriver(
-					instanceName,
-					zooservers,
-					user,
-					password,
-					tempKMeansTableNamespace,
-					dataTableNamespace,
-					accumuloConnector );
-			String outputRowId = polygonGenerationDriver.generatePolygons(clusterAssignmentRowId);
-			System.out.println("Output row id: [" + outputRowId + "] in input data table namespace");
+//			PolygonGenerationDriver polygonGenerationDriver = new PolygonGenerationDriver(
+//					instanceName,
+//					zooservers,
+//					user,
+//					password,
+//					tempKMeansTableNamespace,
+//					dataTableNamespace,
+//					accumuloConnector );
+//			String outputRowId = polygonGenerationDriver.generatePolygons(clusterAssignmentRowId);
+//			System.out.println("Output row id: [" + outputRowId + "] in input data table namespace");
 		}
 	}
 

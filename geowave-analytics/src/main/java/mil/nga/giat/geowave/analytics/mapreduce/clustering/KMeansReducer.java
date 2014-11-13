@@ -22,9 +22,9 @@ public class KMeansReducer {
 
 		public void  reduce(IntWritable assignedCentroidId, Iterable<Text> values, Context context) throws IOException, InterruptedException 
 		{
+			System.out.println("K-Means, Reducing...");
 			
 			Integer centroidId = assignedCentroidId.get();
-			System.out.println("K-Means, Reducing...");
 			
 			String runId = context.getConfiguration().get("run.id");
 			String iter = context.getConfiguration().get("iteration.number");
@@ -60,30 +60,7 @@ public class KMeansReducer {
 			 */
 			Mutation m = new Mutation(context.getConfiguration().get("run.id"));
 			m.put(new Text(iter), new Text(centroidId.toString()), new Value(coord.toString().getBytes()));
-			context.write(new Text(context.getConfiguration().get("kmeans.table")), m);		
-
-//			SimpleFeatureType type = ClusteringUtils.createSimpleFeatureType(runId + "_" + iter); 
-//
-//			SimpleFeatureBuilder featureBuilder = new SimpleFeatureBuilder(type);
-//			
-//			WritableDataAdapter<SimpleFeature> adapter = new FeatureDataAdapter(type);
-//			
-//			Index index = IndexType.SPATIAL.createDefaultIndex();
-//			
-//			// output key
-//			GeoWaveIngestKey outKey = new GeoWaveIngestKey(index.getId(), adapter.getAdapterId());
-//			
-//			// output value
-//			Coordinate[] coords = {new Coordinate(avgX, avgY)};
-//			CoordinateArraySequence cas = new CoordinateArraySequence(coords);
-//			Point pt = new Point(cas, new GeometryFactory());
-//
-//			featureBuilder.add(pt);
-//			featureBuilder.add(assignedCentroidId); // centroid id as metadata
-//			SimpleFeature feature = featureBuilder.buildFeature(null);
-//			
-//			// send it to GeoWave
-//			context.write(outKey, feature);			
+			context.write(new Text(context.getConfiguration().get("kmeans.table")), m);				
 		}
 	}
 	

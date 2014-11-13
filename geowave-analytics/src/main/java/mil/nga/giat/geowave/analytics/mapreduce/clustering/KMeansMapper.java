@@ -37,7 +37,6 @@ public class KMeansMapper {
 	{
 		protected String runId;
 		protected List<DataPoint> centroids;
-//		protected DataStore inputDataStore;
 		protected Index index;
 		protected SimpleFeatureType inputType;
 		protected WritableDataAdapter<SimpleFeature> adapter;
@@ -50,7 +49,6 @@ public class KMeansMapper {
 			
 			Integer lastIter = Integer.parseInt(context.getConfiguration().get("iteration.number")) - 1;
 			String dataTypeId = context.getConfiguration().get("dataTypeId");
-//			String dataTableNamespace = context.getConfiguration().get("data.table");
 			
 			// retrieve centroid information from table
 			String userName = context.getConfiguration().get("accumulo.userName");
@@ -65,14 +63,14 @@ public class KMeansMapper {
 
 				Scanner scanner = accumuloConnector.createScanner(tableName, new Authorizations());
 
-				IteratorSetting iter = new IteratorSetting(15, "GeoSearch Iterator", RegExFilter.class);
-				RegExFilter.setRegexs(iter, runId, lastIter.toString(), null, null, false);
+				IteratorSetting iter = ClusteringUtils.createScanIterator("GeoSearch Iterator", runId, lastIter.toString(), null, null, false);
 				scanner.addScanIterator(iter);
+				
+				System.out.println("retrieved centroids: ");
 				for(final Entry<Key,Value> entry : scanner)
 				{
-					// key: runId | cc | pt_id
-					// value: jts coordinate string					
-//					System.out.println("key: " + entry.getKey().toString());	
+					// key: runId | iteration | pt_id
+					// value: jts coordinate string						
 					
 					int id = Integer.parseInt(entry.getKey().getColumnQualifier().toString());
 					
@@ -81,14 +79,13 @@ public class KMeansMapper {
 					String[] splits = ptStr.split(",");
 					
 					DataPoint dp = new DataPoint(id, Double.parseDouble(splits[0]), Double.parseDouble(splits[1]), id, true);
-					centroids.add(dp);
+					System.out.println(dp.toString());
 					
-//					System.out.println("set up, last iter: " + lastIter + ", centroid: " + id + " " + ptStr);
+					centroids.add(dp);
 				}
 				scanner.close();
 				
 				// set up global variables
-//				inputDataStore = new AccumuloDataStore(new BasicAccumuloOperations(accumuloConnector, dataTableNamespace));
 				inputType = ClusteringUtils.createSimpleFeatureType(dataTypeId);
 				adapter = new FeatureDataAdapter(inputType);
 				index = IndexType.SPATIAL_VECTOR.createDefaultIndex();
@@ -100,47 +97,6 @@ public class KMeansMapper {
 			} catch (TableNotFoundException e) {
 				e.printStackTrace();
 			}
-			
-			// retrieve centroids from previous run			
-//			runId = context.getConfiguration().get("run.id");
-//			Integer currentIteration = Integer.parseInt(context.getConfiguration().get("iteration.number"));
-//			
-//			centroids = new ArrayList<DataPoint>();
-//			
-//			Integer lastIteration = currentIteration - 1;
-//			
-//			// retrieve centroid information from table
-//			String userName = context.getConfiguration().get("accumulo.userName");
-//			String userPassword = context.getConfiguration().get("accumulo.password");
-//			String instanceName = context.getConfiguration().get("zookeeper.instanceName");
-//			String zooservers = context.getConfiguration().get("zookeeper.zooservers");
-//			String dataTableName = context.getConfiguration().get("data.table");
-//			String kmeansTableName = context.getConfiguration().get("kmeans.table");
-//
-//			ZooKeeperInstance zookeeperInstance = new ZooKeeperInstance(instanceName, zooservers);
-//			try {
-//				Connector accumuloConnector = zookeeperInstance.getConnector(userName, new PasswordToken(userPassword));
-//				
-//				DataStore kmeansDataStore = new AccumuloDataStore(new BasicAccumuloOperations(accumuloConnector, kmeansTableName));
-//				index = IndexType.SPATIAL.createDefaultIndex();
-//				
-//				// type definition for previous run
-//				SimpleFeatureType previousType = ClusteringUtils.createSimpleFeatureType(runId + "_" + lastIteration);
-//
-//				// stuff to interact with GeoWave
-//				WritableDataAdapter<SimpleFeature> oldAdapter = new FeatureDataAdapter(previousType);
-//
-//				// retrieve centroids from previous run
-//				centroids = ClusteringUtils.getData(kmeansDataStore, oldAdapter, index, ClusteringUtils.generateWorldPolygon());
-//				
-//				// set up global variables
-//				inputDataStore = new AccumuloDataStore(new BasicAccumuloOperations(accumuloConnector, dataTableName));
-//				inputType = ClusteringUtils.createSimpleFeatureType(runId + "_" + currentIteration);
-//				adapter = new FeatureDataAdapter(inputType);
-//				
-//			} catch (AccumuloException | AccumuloSecurityException e) {
-//				e.printStackTrace();
-//			} 
 		}
 
 		/*
@@ -176,7 +132,6 @@ public class KMeansMapper {
 					closestCentroidId = centroid.id;
 				}
 			}
-//			System.out.println("ptid: " + dp.id + ", " + ptStr + ", closest centroid: " + closestCentroidId);
 			context.write(new IntWritable(closestCentroidId), new Text(value.toString()));
 		}
 	}

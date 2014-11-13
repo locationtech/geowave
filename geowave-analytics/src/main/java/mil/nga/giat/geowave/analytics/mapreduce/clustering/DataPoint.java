@@ -1,10 +1,10 @@
 package mil.nga.giat.geowave.analytics.mapreduce.clustering;
 
 public class DataPoint {
-	public double x;
-	public double y;
-	public int assignedCentroidId = -1;
-	public int id;
+	public Double x;
+	public Double y;
+	public Integer assignedCentroidId = -1;
+	public Integer id;
 	public boolean isCentroid = false;
 
 	public DataPoint()
@@ -25,5 +25,10 @@ public class DataPoint {
 	{		
 		// Euclidean distance 
 		return Math.sqrt(Math.pow(Math.abs(x - dp.x), 2) + Math.pow(Math.abs(y - dp.y), 2));
+	}
+	
+	public String toString()
+	{
+		return "id: " + id + ", coordinate: (" + x + ", " + y + ")";
 	}
 }
