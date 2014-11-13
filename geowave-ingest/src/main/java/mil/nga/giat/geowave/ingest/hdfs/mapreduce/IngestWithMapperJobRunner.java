@@ -1,5 +1,6 @@
 package mil.nga.giat.geowave.ingest.hdfs.mapreduce;
 
+import mil.nga.giat.geowave.accumulo.mapreduce.output.GeoWaveOutputKey;
 import mil.nga.giat.geowave.ingest.AccumuloCommandLineOptions;
 
 import org.apache.hadoop.fs.Path;
@@ -42,7 +43,7 @@ public class IngestWithMapperJobRunner extends
 			final Job job ) {
 		job.setMapperClass(IngestMapper.class);
 		// set mapper output info
-		job.setMapOutputKeyClass(GeoWaveIngestKey.class);
+		job.setMapOutputKeyClass(GeoWaveOutputKey.class);
 		job.setMapOutputValueClass(Object.class);
 	}
 

@@ -12,6 +12,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.nio.ByteBuffer;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.media.jai.remote.SerializableState;
 import javax.media.jai.remote.Serializer;
@@ -40,7 +41,7 @@ public class ServerRenderOptions implements
 		Persistable
 {
 	private final static Logger LOGGER = Logger.getLogger(ServerRenderOptions.class);
-	private static boolean serializerRegistered = false;
+	private static final AtomicBoolean serializerRegistered = new AtomicBoolean(false);
 
 	protected RenderingHints renderingHints;
 	protected Color bgColor;
@@ -181,11 +182,13 @@ public class ServerRenderOptions implements
 		return buf.array();
 	}
 
-	synchronized private void registerSerializers() {
-		if (!serializerRegistered) {
+	private void registerSerializers() {
+		synchronized(serializerRegistered) {
+		  if (!serializerRegistered.get()) {
 			SerializerFactory.registerSerializer(new TextureAnchorKeySerializer());
 			SerializerFactory.registerSerializer(new Point2dSerializer());
-			serializerRegistered = true;
+			serializerRegistered.set(true);
+		  }
 		}
 	}
 

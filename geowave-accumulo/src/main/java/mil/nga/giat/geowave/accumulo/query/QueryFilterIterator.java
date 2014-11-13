@@ -35,9 +35,9 @@ public class QueryFilterIterator extends
 		WholeRowIterator
 {
 	protected static final String QUERY_ITERATOR_NAME = "GEOWAVE_QUERY_FILTER";
-	protected static final String WHOLE_ROW_ITERATOR_NAME = "GEOWAVE_WHOLE_ROW_ITERATOR";
+	public static final String WHOLE_ROW_ITERATOR_NAME = "GEOWAVE_WHOLE_ROW_ITERATOR";
 	protected static final int QUERY_ITERATOR_PRIORITY = 10;
-	protected static final int WHOLE_ROW_ITERATOR_PRIORITY = 10;
+	public static final int WHOLE_ROW_ITERATOR_PRIORITY = 10;
 	protected static final String FILTER = "filter";
 	protected static final String MODEL = "model";
 	private DistributableQueryFilter filter;

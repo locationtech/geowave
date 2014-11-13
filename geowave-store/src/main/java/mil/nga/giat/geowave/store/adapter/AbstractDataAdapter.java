@@ -288,6 +288,10 @@ abstract public class AbstractDataAdapter<T> implements
 				defaultTypeData);
 	}
 
+	public FieldVisibilityHandler<T, Object> getFieldVisiblityHandler() {
+		return fieldVisiblityHandler;
+	}
+
 	protected byte[] defaultTypeDataToBinary() {
 		return new byte[] {};
 	}

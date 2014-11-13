@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<artifactId>geowave-parent</artifactId>
@@ -13,6 +14,15 @@
 		<instance />
 		<username />
 		<password />
+		<spring.version>3.1.4.RELEASE</spring.version>
+		<jvm.opts>-DGEOSERVER_DATA_DIR=src/test/resources/gs</jvm.opts>
+		<gt.version>11-SNAPSHOT</gt.version>
+		<wicket.version>1.4.12</wicket.version>
+		<gt.version>11-SNAPSHOT</gt.version>
+		<spring.security.version>3.1.0.RELEASE</spring.security.version>
+		<maven.build.timestamp.format>dd-MMM-yyyy HH:mm</maven.build.timestamp.format>
+		<test.excludedGroups></test.excludedGroups>
+		<imageio-ext.version>1.1.10</imageio-ext.version>
 	</properties>
 	<artifactId>geowave-test</artifactId>
 	<name>geowave-test</name>
@@ -26,7 +36,7 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.4</version>
+			<version>4.11</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -34,12 +44,22 @@
 			<artifactId>accumulo-minicluster</artifactId>
 			<version>${accumulo.version}</version>
 			<scope>test</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.hadoop</groupId>
-			<artifactId>hadoop-client</artifactId>
-			<version>${hadoop.version}</version>
-			<scope>test</scope>
+			<groupId>org.geoserver</groupId>
+			<artifactId>gs-restconfig</artifactId>
+			<version>2.5.2</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>gt-epsg-hsql</artifactId>
+					<groupId>org.geotools</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 	</dependencies>
 	<build>
@@ -61,6 +81,13 @@
 							<reportsDirectory>${sonar.surefire.reportsPath}</reportsDirectory>
 							<argLine>${test.args} ${jacoco.failsafe.argLine}</argLine>
 							<runOrder>reversealphabetical</runOrder>
+
+							<excludes>
+								<exclude>**/*IT.java</exclude>
+							</excludes>
+							<includes>
+								<include>**/*ITSuite.java</include>
+							</includes>
 						</configuration>
 						<goals>
 							<goal>integration-test</goal>

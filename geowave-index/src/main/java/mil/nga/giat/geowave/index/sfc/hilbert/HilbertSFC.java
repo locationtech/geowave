@@ -89,6 +89,7 @@ public class HilbertSFC implements
 			else {
 				final UnboundedHilbertSFCOperations unboundedOps = new UnboundedHilbertSFCOperations();
 				unboundedOps.init(dimensionDefs);
+				decomposeQueryOperations = unboundedOps;
 			}
 		}
 		else {

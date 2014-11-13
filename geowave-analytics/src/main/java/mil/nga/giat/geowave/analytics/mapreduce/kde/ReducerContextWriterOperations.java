@@ -1,5 +1,7 @@
 package mil.nga.giat.geowave.analytics.mapreduce.kde;
 
+import java.util.List;
+
 import mil.nga.giat.geowave.accumulo.AccumuloOperations;
 import mil.nga.giat.geowave.accumulo.IteratorConfig;
 import mil.nga.giat.geowave.accumulo.Writer;
@@ -27,15 +29,17 @@ public class ReducerContextWriterOperations implements
 	}
 
 	@Override
-	public BatchScanner createBatchScanner(
-			final String tableName )
-			throws TableNotFoundException {
-		return null;
+	public void insureAuthorization(
+			final String... authorizations )
+			throws AccumuloException,
+			AccumuloSecurityException {
+
 	}
 
 	@Override
 	public Scanner createScanner(
-			final String tableName )
+			final String tableName,
+			final String... additionalAuthorizations )
 			throws TableNotFoundException {
 		return null;
 	}
@@ -50,7 +54,7 @@ public class ReducerContextWriterOperations implements
 	@Override
 	public Writer createWriter(
 			final String tableName,
-			final boolean createTable)
+			final boolean createTable )
 			throws TableNotFoundException {
 		return writer;
 	}
@@ -99,18 +103,56 @@ public class ReducerContextWriterOperations implements
 	}
 
 	@Override
-	public BatchDeleter createBatchDeleter(
-			final String tableName )
+	public boolean attachIterators(
+			final String tableName,
+			final boolean createTable,
+			final IteratorConfig[] iterators )
+			throws TableNotFoundException {
+		return false;
+	}
+
+	@Override
+	public void createTable(
+			final String tableName ) {}
+
+	@Override
+	public BatchScanner createBatchScanner(
+			final String tableName,
+			final String... additionalAuthorizations )
 			throws TableNotFoundException {
 		return null;
 	}
 
 	@Override
-	public boolean attachIterators(
-			String tableName,
-			boolean createTable,
-			IteratorConfig[] iterators )
+	public BatchDeleter createBatchDeleter(
+			final String tableName,
+			final String... additionalAuthorizations )
 			throws TableNotFoundException {
+		return null;
+	}
+
+	@Override
+	public boolean delete(
+			final String tableName,
+			final List<ByteArrayId> rowId,
+			final String columnFamily,
+			final String columnQualifier,
+			final String... additionalAuthorizations ) {
 		return false;
+	}
+
+	@Override
+	public boolean deleteAll(
+			final String tableName,
+			final String columnFamily,
+			final String... additionalAuthorizations ) {
+		return false;
+	}
+
+	@Override
+	public long getRowCount(
+			final String tableName,
+			final String... additionalAuthorizations ) {
+		return 0;
 	}
 }

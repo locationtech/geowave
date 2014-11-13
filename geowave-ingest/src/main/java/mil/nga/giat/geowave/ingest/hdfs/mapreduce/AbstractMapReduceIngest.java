@@ -1,5 +1,6 @@
 package mil.nga.giat.geowave.ingest.hdfs.mapreduce;
 
+import mil.nga.giat.geowave.accumulo.mapreduce.output.GeoWaveOutputFormat;
 import mil.nga.giat.geowave.index.ByteArrayUtils;
 import mil.nga.giat.geowave.index.Persistable;
 import mil.nga.giat.geowave.index.PersistenceUtils;

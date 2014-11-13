@@ -1,11 +1,13 @@
 package mil.nga.giat.geowave.accumulo;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -25,6 +27,7 @@ import org.apache.accumulo.core.client.BatchWriterConfig;
 import org.apache.accumulo.core.client.Connector;
 import org.apache.accumulo.core.client.IteratorSetting;
 import org.apache.accumulo.core.client.MutationsRejectedException;
+import org.apache.accumulo.core.client.RowIterator;
 import org.apache.accumulo.core.client.Scanner;
 import org.apache.accumulo.core.client.TableExistsException;
 import org.apache.accumulo.core.client.TableNotFoundException;
@@ -33,6 +36,7 @@ import org.apache.accumulo.core.data.Range;
 import org.apache.accumulo.core.data.Value;
 import org.apache.accumulo.core.iterators.IteratorUtil.IteratorScope;
 import org.apache.accumulo.core.security.Authorizations;
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.hadoop.io.Text;
 import org.apache.log4j.Logger;
 
@@ -55,7 +59,7 @@ public class BasicAccumuloOperations implements
 	private final long byteBufferSize;
 	private final String authorization;
 	private final String tableNamespace;
-	private Connector connector;
+	protected Connector connector;
 	private final Map<String, Long> locGrpCache;
 	private long cacheTimeoutMillis;
 
@@ -184,12 +188,17 @@ public class BasicAccumuloOperations implements
 		return byteBufferSize;
 	}
 
-	public String getAuthorization() {
-		return authorization;
-	}
-
 	public Connector getConnector() {
 		return connector;
+	}
+
+	private String[] getAuthorizations(
+			final String... additionalAuthorizations ) {
+		final String[] safeAdditionalAuthorizations = additionalAuthorizations == null ? new String[] {} : additionalAuthorizations;
+
+		return authorization == null ? safeAdditionalAuthorizations : (String[]) ArrayUtils.add(
+				safeAdditionalAuthorizations,
+				authorization);
 	}
 
 	@Override
@@ -228,14 +237,47 @@ public class BasicAccumuloOperations implements
 	}
 
 	@Override
-	public BatchScanner createBatchScanner(
-			final String tableName )
-			throws TableNotFoundException {
-		return connector.createBatchScanner(
-				getQualifiedTableName(tableName),
-				authorization == null ? new Authorizations() : new Authorizations(
-						authorization),
-				numThreads);
+	public void createTable(
+			final String tableName ) {
+		final String qName = getQualifiedTableName(tableName);
+		if (!connector.tableOperations().exists(
+				qName)) {
+			try {
+				connector.tableOperations().create(
+						qName,
+						false);
+			}
+			catch (AccumuloException | AccumuloSecurityException | TableExistsException e) {
+				LOGGER.warn(
+						"Unable to create table '" + qName + "'",
+						e);
+			}
+		}
+	}
+
+	@Override
+	public long getRowCount(
+			final String tableName,
+			final String... additionalAuthorizations ) {
+		RowIterator rowIterator;
+		try {
+			rowIterator = new RowIterator(
+					connector.createScanner(
+							getQualifiedTableName(tableName),
+							(authorization == null) ? new Authorizations(
+									additionalAuthorizations) : new Authorizations(
+									(String[]) ArrayUtils.add(
+											additionalAuthorizations,
+											authorization))));
+			while (rowIterator.hasNext()) {
+				rowIterator.next();
+			}
+			return rowIterator.getKVCount();
+		}
+		catch (final TableNotFoundException e) {
+			LOGGER.warn("Table '" + tableName + "' not found during count operation");
+			return 0;
+		}
 	}
 
 	@Override
@@ -298,12 +340,57 @@ public class BasicAccumuloOperations implements
 			final ByteArrayId rowId,
 			final String columnFamily,
 			final String columnQualifier ) {
+		return this.delete(
+				tableName,
+				Arrays.asList(rowId),
+				columnFamily,
+				columnQualifier);
+	}
+
+	@Override
+	public boolean deleteAll(
+			final String tableName,
+			final String columnFamily,
+			final String... additionalAuthorizations ) {
+		BatchDeleter deleter = null;
+		try {
+			deleter = createBatchDeleter(
+					tableName,
+					additionalAuthorizations);
+			deleter.setRanges(Arrays.asList(new Range()));
+			deleter.fetchColumnFamily(new Text(
+					columnFamily));
+			deleter.delete();
+			return true;
+		}
+		catch (final TableNotFoundException | MutationsRejectedException e) {
+			LOGGER.warn(
+					"Unable to delete row from table [" + tableName + "].",
+					e);
+			return false;
+		}
+		finally {
+			if (deleter != null) {
+				deleter.close();
+			}
+		}
+
+	}
+
+	@Override
+	public boolean delete(
+			final String tableName,
+			final List<ByteArrayId> rowIds,
+			final String columnFamily,
+			final String columnQualifier,
+			final String... authorizations ) {
 
 		boolean success = true;
 		BatchDeleter deleter = null;
 		try {
-
-			deleter = createBatchDeleter(tableName);
+			deleter = createBatchDeleter(
+					tableName,
+					authorizations);
 			if ((columnFamily != null) && !columnFamily.isEmpty()) {
 				if ((columnQualifier != null) && !columnQualifier.isEmpty()) {
 					deleter.fetchColumn(
@@ -317,22 +404,24 @@ public class BasicAccumuloOperations implements
 							columnFamily));
 				}
 			}
-			deleter.setRanges(Arrays.asList(Range.exact(new Text(
-					rowId.getBytes()))));
+			final Set<ByteArrayId> removeSet = new HashSet<ByteArrayId>();
+			final List<Range> rowRanges = new ArrayList<Range>();
+			for (final ByteArrayId rowId : rowIds) {
+				rowRanges.add(Range.exact(new Text(
+						rowId.getBytes())));
+				removeSet.add(new ByteArrayId(
+						rowId.getBytes()));
+			}
+			deleter.setRanges(rowRanges);
 
 			final Iterator<Map.Entry<Key, Value>> iterator = deleter.iterator();
 			while (iterator.hasNext()) {
 				final Entry<Key, Value> entry = iterator.next();
-
-				if (!Arrays.equals(
-						entry.getKey().getRowData().getBackingArray(),
-						rowId.getBytes())) {
-					success = false;
-					break;
-				}
+				removeSet.remove(new ByteArrayId(
+						entry.getKey().getRowData().getBackingArray()));
 			}
 
-			if (success) {
+			if (removeSet.isEmpty()) {
 				deleter.delete();
 			}
 
@@ -441,22 +530,61 @@ public class BasicAccumuloOperations implements
 
 	@Override
 	public Scanner createScanner(
-			final String tableName )
+			final String tableName,
+			final String... additionalAuthorizations )
 			throws TableNotFoundException {
 		return connector.createScanner(
 				getQualifiedTableName(tableName),
-				authorization == null ? new Authorizations() : new Authorizations(
-						authorization));
+				new Authorizations(
+						getAuthorizations(additionalAuthorizations)));
+	}
+
+	@Override
+	public BatchScanner createBatchScanner(
+			final String tableName,
+			final String... additionalAuthorizations )
+			throws TableNotFoundException {
+		return connector.createBatchScanner(
+				getQualifiedTableName(tableName),
+				new Authorizations(
+						getAuthorizations(additionalAuthorizations)),
+				numThreads);
+	}
+
+	@Override
+	public void insureAuthorization(
+			final String... authorizations )
+			throws AccumuloException,
+			AccumuloSecurityException {
+		Authorizations auths = connector.securityOperations().getUserAuthorizations(
+				connector.whoami());
+		final List<byte[]> newSet = new ArrayList<byte[]>();
+		for (final String auth : authorizations) {
+			if (!auths.contains(auth)) {
+				newSet.add(auth.getBytes());
+			}
+		}
+		if (newSet.size() > 0) {
+			newSet.addAll(auths.getAuthorizations());
+			connector.securityOperations().changeUserAuthorizations(
+					connector.whoami(),
+					new Authorizations(
+							newSet));
+			auths = connector.securityOperations().getUserAuthorizations(
+					connector.whoami());
+			LOGGER.trace(connector.whoami() + " has authorizations " + ArrayUtils.toString(auths.getAuthorizations()));
+		}
 	}
 
 	@Override
 	public BatchDeleter createBatchDeleter(
-			final String tableName )
+			final String tableName,
+			final String... additionalAuthorizations )
 			throws TableNotFoundException {
 		return connector.createBatchDeleter(
 				getQualifiedTableName(tableName),
-				authorization == null ? new Authorizations() : new Authorizations(
-						authorization),
+				new Authorizations(
+						getAuthorizations(additionalAuthorizations)),
 				numThreads,
 				new BatchWriterConfig().setMaxWriteThreads(
 						numThreads).setMaxMemory(

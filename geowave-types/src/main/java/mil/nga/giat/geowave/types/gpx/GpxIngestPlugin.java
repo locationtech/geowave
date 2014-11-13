@@ -33,7 +33,7 @@ import mil.nga.giat.geowave.store.CloseableIterator;
 import mil.nga.giat.geowave.store.GeometryUtils;
 import mil.nga.giat.geowave.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.store.data.field.FieldVisibilityHandler;
-import mil.nga.giat.geowave.store.data.field.GlobalVisibilityHandler;
+import mil.nga.giat.geowave.store.data.visibility.GlobalVisibilityHandler;
 import mil.nga.giat.geowave.store.index.Index;
 import mil.nga.giat.geowave.store.index.IndexType;
 import mil.nga.giat.geowave.vector.adapter.FeatureDataAdapter;
@@ -49,6 +49,7 @@ import org.xml.sax.SAXException;
 
 import com.google.common.collect.Iterators;
 import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.Geometry;
 
 /**
  * This plugin is used for ingesting any GPX formatted data from a local file
@@ -70,7 +71,7 @@ public class GpxIngestPlugin implements
 
 	private final static String TAG_SEPARATOR = " ||| ";
 
-	private Map<Long, GpxTrack> metadata;
+	private Map<Long, GpxTrack> metadata = null;
 	private static long currentFreeTrackId = 0;
 
 	private final SimpleFeatureBuilder pointBuilder;
@@ -87,7 +88,6 @@ public class GpxIngestPlugin implements
 	private final Index[] supportedIndices;
 
 	public GpxIngestPlugin() {
-
 		pointType = GpxUtils.createGPXPointDataType();
 		waypointType = GpxUtils.createGPXWaypointDataType();
 		trackType = GpxUtils.createGPXTrackDataType();
@@ -125,9 +125,10 @@ public class GpxIngestPlugin implements
 		final File f = new File(
 				baseDirectory,
 				"metadata.xml");
+		metadata = null;
 		if (!f.exists()) {
-			LOGGER.warn("No metadata file found - looked at: " + f.getAbsolutePath());
-			LOGGER.warn("No metadata will be loaded");
+			LOGGER.info("No metadata file found - looked at: " + f.getAbsolutePath());
+			LOGGER.info("No metadata will be loaded");
 		}
 		else {
 			try {
@@ -283,6 +284,7 @@ public class GpxIngestPlugin implements
 		Long minTime = gpxTrack.getTimestamp();
 		Long maxTime = gpxTrack.getTimestamp();
 		long trackPoint = 0;
+		long wayPoint = 0;
 		final List<Coordinate> coordinateSequence = new ArrayList<Coordinate>();
 		String name = null;
 		String cmt = null;
@@ -378,8 +380,8 @@ public class GpxIngestPlugin implements
 								featureData.add(new GeoWaveData<SimpleFeature>(
 										waypointKey,
 										primaryIndexId,
-										waypointBuilder.buildFeature(name + gpxTrack.getTrackid() + "_" + lat.hashCode() + "_" + lon.hashCode())));
-								trackPoint++;
+										waypointBuilder.buildFeature(name + "_" + gpxTrack.getTrackid() + "_" + wayPoint)));
+								wayPoint++;
 								lat = null;
 								lon = null;
 								elevation = null;
@@ -509,89 +511,90 @@ public class GpxIngestPlugin implements
 			}
 			IOUtils.closeQuietly(in);
 		}
+		if (!coordinateSequence.isEmpty()) {
+			try {
+				trackBuilder.set(
+						"geometry",
+						GeometryUtils.GEOMETRY_FACTORY.createLineString(coordinateSequence.toArray(new Coordinate[coordinateSequence.size()])));
+				boolean setDuration = true;
+				if (minTime != null) {
+					trackBuilder.set(
+							"StartTimeStamp",
+							new Date(
+									minTime));
+				}
+				else {
+					setDuration = false;
 
-		try {
-			trackBuilder.set(
-					"geometry",
-					GeometryUtils.GEOMETRY_FACTORY.createLineString(coordinateSequence.toArray(new Coordinate[coordinateSequence.size()])));
-			boolean setDuration = true;
-			if (minTime != null) {
-				trackBuilder.set(
-						"StartTimeStamp",
-						new Date(
-								minTime));
-			}
-			else {
-				setDuration = false;
+					trackBuilder.set(
+							"StartTimeStamp",
+							null);
+				}
+				if (maxTime != null) {
+					trackBuilder.set(
+							"EndTimeStamp",
+							new Date(
+									maxTime));
+				}
+				else {
+					setDuration = false;
+
+					trackBuilder.set(
+							"EndTimeStamp",
+							null);
+				}
+				if (setDuration) {
+					trackBuilder.set(
+							"Duration",
+							maxTime - minTime);
+				}
+				else {
+					trackBuilder.set(
+							"Duration",
+							null);
+				}
 
 				trackBuilder.set(
-						"StartTimeStamp",
-						null);
-			}
-			if (maxTime != null) {
+						"NumberPoints",
+						trackPoint);
 				trackBuilder.set(
-						"EndTimeStamp",
-						new Date(
-								maxTime));
-			}
-			else {
-				setDuration = false;
+						"TrackId",
+						gpxTrack.getTrackid().toString());
+				trackBuilder.set(
+						"UserId",
+						gpxTrack.getUserid());
+				trackBuilder.set(
+						"User",
+						gpxTrack.getUser());
+				trackBuilder.set(
+						"Description",
+						gpxTrack.getDescription());
 
-				trackBuilder.set(
-						"EndTimeStamp",
-						null);
-			}
-			if (setDuration) {
-				trackBuilder.set(
-						"Duration",
-						maxTime - minTime);
-			}
-			else {
-				trackBuilder.set(
-						"Duration",
-						null);
-			}
+				if ((gpxTrack.getTags() != null) && (gpxTrack.getTags().size() > 0)) {
+					final String tags = org.apache.commons.lang.StringUtils.join(
+							gpxTrack.getTags(),
+							TAG_SEPARATOR);
+					trackBuilder.set(
+							"Tags",
+							tags);
+				}
+				else {
+					trackBuilder.set(
+							"Tags",
+							null);
+				}
 
-			trackBuilder.set(
-					"NumberPoints",
-					trackPoint);
-			trackBuilder.set(
-					"TrackId",
-					gpxTrack.getTrackid().toString());
-			trackBuilder.set(
-					"UserId",
-					gpxTrack.getUserid());
-			trackBuilder.set(
-					"User",
-					gpxTrack.getUser());
-			trackBuilder.set(
-					"Description",
-					gpxTrack.getDescription());
-
-			if ((gpxTrack.getTags() != null) && (gpxTrack.getTags().size() > 0)) {
-				final String tags = org.apache.commons.lang.StringUtils.join(
-						gpxTrack.getTags(),
-						TAG_SEPARATOR);
-				trackBuilder.set(
-						"Tags",
-						tags);
+				featureData.add(new GeoWaveData<SimpleFeature>(
+						trackKey,
+						primaryIndexId,
+						trackBuilder.buildFeature(gpxTrack.getTrackid().toString())));
 			}
-			else {
-				trackBuilder.set(
-						"Tags",
-						null);
+			catch (final IllegalArgumentException e) {
+				LOGGER.warn(
+						"Track: " + gpxTrack.getTrackid() + " only had 1 point",
+						e);
+
 			}
-
-			featureData.add(new GeoWaveData<SimpleFeature>(
-					trackKey,
-					primaryIndexId,
-					trackBuilder.buildFeature(gpxTrack.getTrackid().toString())));
-		}
-		catch (final IllegalArgumentException e) {
-			LOGGER.warn(
-					"Track: " + gpxTrack.getTrackid() + " only had 1 point",
-					e);
-
 		}
 		return new CloseableIterator.Wrapper<GeoWaveData<SimpleFeature>>(
 				featureData.iterator());

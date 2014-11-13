@@ -25,11 +25,11 @@ import org.apache.hadoop.io.Text;
 /**
  * This class will persist Index objects within an Accumulo table for GeoWave
  * metadata. The adapters will be persisted in an "INDEX" column family.
- *
+ * 
  * There is an LRU cache associated with it so staying in sync with external
  * updates is not practical - it assumes the objects are not updated often or at
  * all. The objects are stored in their own table.
- *
+ * 
  **/
 public class AccumuloDataStatisticsStore extends
 		AbstractAccumuloPersistence<DataStatistics<?>> implements
@@ -128,10 +128,12 @@ public class AccumuloDataStatisticsStore extends
 	@Override
 	public DataStatistics<?> getDataStatistics(
 			final ByteArrayId adapterId,
-			final ByteArrayId statisticsId ) {
+			final ByteArrayId statisticsId,
+			String... authorizations ) {
 		return getObject(
 				statisticsId,
-				adapterId);
+				adapterId,
+				authorizations);
 	}
 
 	@Override
@@ -170,23 +172,29 @@ public class AccumuloDataStatisticsStore extends
 	}
 
 	@Override
-	public CloseableIterator<DataStatistics<?>> getAllDataStatistics() {
-		return getObjects();
+	public CloseableIterator<DataStatistics<?>> getAllDataStatistics(
+			String... authorizations ) {
+		return getObjects(authorizations);
 	}
 
 	@Override
 	public boolean removeStatistics(
 			final ByteArrayId adapterId,
-			final ByteArrayId statisticsId ) {
+			final ByteArrayId statisticsId,
+			String... authorizations ) {
 		return deleteObject(
 				statisticsId,
-				adapterId);
+				adapterId,
+				authorizations);
 	}
 
 	@Override
 	public CloseableIterator<DataStatistics<?>> getDataStatistics(
-			final ByteArrayId adapterId ) {
-		return getAllObjectsWithSecondaryId(adapterId);
+			final ByteArrayId adapterId,
+			String... authorizations ) {
+		return getAllObjectsWithSecondaryId(
+				adapterId,
+				authorizations);
 	}
 
 	@Override

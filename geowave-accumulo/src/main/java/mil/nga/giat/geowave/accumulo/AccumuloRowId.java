@@ -3,6 +3,8 @@ package mil.nga.giat.geowave.accumulo;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 
+import org.apache.accumulo.core.data.Key;
+
 /**
  * This class encapsulates the elements that compose the row ID in Accumulo, and
  * can serialize and deserialize the individual elements to/from the row ID. The
@@ -11,7 +13,7 @@ import java.util.Arrays;
  * number of duplicate row IDs for this entry. The data ID must be unique for an
  * adapter, so the combination of adapter ID and data ID is intended to
  * guarantee uniqueness for this row ID.
- * 
+ *
  */
 public class AccumuloRowId
 {
@@ -19,6 +21,12 @@ public class AccumuloRowId
 	private final byte[] dataId;
 	private final byte[] adapterId;
 	private final int numberOfDuplicates;
+
+	public AccumuloRowId(
+			final Key key ) {
+		this(
+				key.getRow().copyBytes());
+	}
 
 	public AccumuloRowId(
 			final byte[] accumuloRowId ) {

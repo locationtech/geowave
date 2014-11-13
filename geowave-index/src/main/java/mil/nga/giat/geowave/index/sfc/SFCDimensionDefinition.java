@@ -36,6 +36,11 @@ public class SFCDimensionDefinition implements
 		this.dimensionDefinition = dimensionDefinition;
 	}
 
+	@Override 
+	public NumericData getFullRange() {
+		return this.dimensionDefinition.getFullRange();
+	}
+	
 	/**
 	 * 
 	 * @return bitsOfPrecision the bits of precision for the dimension object

@@ -38,11 +38,10 @@ public class EntryIteratorWrapper<T> implements
 		this.index = index;
 		this.scannerIt = scannerIt;
 		this.clientFilter = clientFilter;
-		findNext();
 	}
 
 	private void findNext() {
-		while (scannerIt.hasNext()) {
+		while (nextValue == null && scannerIt.hasNext()) {
 			final Entry<Key, Value> row = scannerIt.next();
 			final T decodedValue = decodeRow(
 					row,
@@ -53,17 +52,16 @@ public class EntryIteratorWrapper<T> implements
 				return;
 			}
 		}
-		nextValue = null;
 	}
 
+	@SuppressWarnings("unchecked")
 	private T decodeRow(
 			final Entry<Key, Value> row,
 			final QueryFilter clientFilter,
 			final Index index ) {
-		return AccumuloUtils.decodeRow(
+		return (T) AccumuloUtils.decodeRow(
 				row.getKey(),
 				row.getValue(),
-				null,
 				adapterStore,
 				clientFilter,
 				index);
@@ -71,23 +69,20 @@ public class EntryIteratorWrapper<T> implements
 
 	@Override
 	public boolean hasNext() {
+		findNext();
 		return nextValue != null;
 	}
 
 	@Override
 	public T next() {
 		final T previousNext = nextValue;
-		findNext();
+		nextValue = null;
 		return previousNext;
 	}
 
 	@Override
 	public void remove() {
-		// TODO what should we do here considering the scanning iterator is
-		// already past the current entry? it probably doesn't matter much as
-		// this is not called in practice
-
-		// scannerIt.remove();
+		scannerIt.remove();
 	}
 
 }
