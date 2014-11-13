@@ -18,7 +18,9 @@ public class GeoWaveQueryCaps extends
 	@Override
 	public boolean supportsSorting(
 			final SortBy[] sortAttributes ) {
-		return false;
+		// called for every WFS-T operation.  Without sorting requests, the argument is empty or null
+		// returning false fails the operation, disabling any capability of writing.
+		return sortAttributes == null || sortAttributes.length == 0;
 	}
 
 }

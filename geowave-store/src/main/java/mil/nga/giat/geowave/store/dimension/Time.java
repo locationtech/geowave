@@ -74,6 +74,17 @@ public interface Time extends
 			endTime = buf.getLong();
 		}
 
+		@Override
+		public boolean overlaps(
+				final DimensionField[] field,
+				final NumericData[] rangeData ) {
+			assert (field[0] instanceof TimeField);
+			long t0 = (long) Math.ceil(rangeData[0].getMax()) - this.startTime;
+			long t1 = this.endTime - (long) Math.floor(rangeData[0].getMin());
+			return Math.abs(t0 - t1) <= (t0 + t1);
+
+		}
+
 	}
 
 	/**
@@ -125,6 +136,14 @@ public interface Time extends
 				final byte[] bytes ) {
 			final ByteBuffer buf = ByteBuffer.wrap(bytes);
 			time = buf.getLong();
+		}
+
+		@Override
+		public boolean overlaps(
+				final DimensionField[] field,
+				final NumericData[] rangeData ) {
+			assert (field[0] instanceof TimeField);
+			return (long) Math.floor(rangeData[0].getMin()) <= this.time && (long) Math.ceil(rangeData[0].getMax()) >= this.time;
 		}
 	}
 

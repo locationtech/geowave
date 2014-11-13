@@ -475,7 +475,7 @@ public class TieredSFCIndexStrategy implements
 		final byte[] sfcId = Arrays.copyOfRange(
 				rowId,
 				rowIdOffset,
-				(rowId.length - rowIdOffset) + 1);
+				rowId.length);
 		return new SFCIdAndBinInfo(
 				sfcId,
 				binIds,

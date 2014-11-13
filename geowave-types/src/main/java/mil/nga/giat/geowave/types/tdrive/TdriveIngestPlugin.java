@@ -22,7 +22,7 @@ import mil.nga.giat.geowave.store.CloseableIterator;
 import mil.nga.giat.geowave.store.GeometryUtils;
 import mil.nga.giat.geowave.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.store.data.field.FieldVisibilityHandler;
-import mil.nga.giat.geowave.store.data.field.GlobalVisibilityHandler;
+import mil.nga.giat.geowave.store.data.visibility.GlobalVisibilityHandler;
 import mil.nga.giat.geowave.store.index.Index;
 import mil.nga.giat.geowave.store.index.IndexType;
 import mil.nga.giat.geowave.vector.adapter.FeatureDataAdapter;

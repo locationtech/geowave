@@ -4,12 +4,12 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 import mil.nga.giat.geowave.accumulo.AccumuloDataStore;
 import mil.nga.giat.geowave.accumulo.AccumuloOperations;
 import mil.nga.giat.geowave.accumulo.AccumuloOptions;
-import mil.nga.giat.geowave.accumulo.query.AccumuloConstraintsQuery;
 import mil.nga.giat.geowave.accumulo.util.CloseableIteratorWrapper;
 import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.store.CloseableIterator;
@@ -86,12 +86,62 @@ public class VectorDataStore extends
 				accumuloOptions);
 	}
 
-	@SuppressWarnings("unchecked")
+	public CloseableIterator<Index> getIndices() {
+		return indexStore.getIndices();
+	}
+
+	public DataStatisticsStore getStatsStore() {
+		return this.statisticsStore;
+	}
+
 	public CloseableIterator<SimpleFeature> query(
 			final FeatureDataAdapter adapter,
 			final Query query,
 			final Filter filter,
-			final Integer limit ) {
+			final Integer limit,
+			final String... authorizations ) {
+		final List<CloseableIterator<SimpleFeature>> results = new ArrayList<CloseableIterator<SimpleFeature>>();
+
+		// query the indices that are supported for this query object, and these
+		// data adapter Ids
+
+		try (CloseableIterator<Index> indices = indexStore.getIndices()) {
+			while (indices.hasNext()) {
+				final Index index = indices.next();
+				results.add(this.query(
+						adapter,
+						query,
+						index,
+						filter,
+						limit,
+						authorizations));
+			}
+		}
+		catch (IOException e) {
+			LOGGER.error("Cannot close index iterator.", e);
+		}
+		
+		return new CloseableIteratorWrapper<SimpleFeature>(
+				new Closeable() {
+					@Override
+					public void close()
+							throws IOException {
+						for (final CloseableIterator<?> result : results) {
+							result.close();
+						}
+					}
+				},
+				Iterators.concat(results.iterator()));
+	}
+
+	@SuppressWarnings("unchecked")
+	public CloseableIterator<SimpleFeature> query(
+			final FeatureDataAdapter adapter,
+			final Query query,
+			final Index index,
+			final Filter filter,
+			final Integer limit,
+			final String... authorizations ) {
 		store(adapter);
 		final List<ByteArrayId> adapterIds = Arrays.asList(new ByteArrayId[] {
 			adapter.getAdapterId()
@@ -100,70 +150,42 @@ public class VectorDataStore extends
 				new DataAdapter[] {
 					adapter
 				});
-		// query the indices that are supported for this query object, and these
-		// data adapter Ids
-		try (final CloseableIterator<Index> indices = indexStore.getIndices()) {
-			final List<CloseableIterator<SimpleFeature>> results = new ArrayList<CloseableIterator<SimpleFeature>>();
-			while (indices.hasNext()) {
-				final Index index = indices.next();
-				final AccumuloConstraintsQuery accumuloQuery;
-				if (query == null) {
-					accumuloQuery = new AccumuloCqlConstraintsQuery(
-							adapterIds,
-							index,
-							filter,
-							adapter);
-				}
-				else if (query.isSupported(index)) {
-					// construct the query
-					accumuloQuery = new AccumuloCqlConstraintsQuery(
-							adapterIds,
-							index,
-							query.getIndexConstraints(index.getIndexStrategy()),
-							query.createFilters(index.getIndexModel()),
-							filter,
-							adapter);
-				}
-				else {
-					continue;
-				}
-				results.add((CloseableIterator<SimpleFeature>) accumuloQuery.query(
-						accumuloOperations,
-						adapterStore,
-						limit));
-			}
-			// concatenate iterators
-			return new CloseableIteratorWrapper<SimpleFeature>(
-					new Closeable() {
-						@Override
-						public void close()
-								throws IOException {
-							for (final CloseableIterator<?> result : results) {
-								result.close();
-							}
-						}
-					},
-					Iterators.concat(results.iterator()));
+
+		if (query == null) {
+			return (CloseableIterator<SimpleFeature>) new AccumuloCqlConstraintsQuery(
+					adapterIds,
+					index,
+					filter,
+					adapter,
+					authorizations).query(
+					accumuloOperations,
+					adapterStore,
+					limit);
 		}
-		catch (final IOException e) {
-			LOGGER.warn(
-					"unable to close index iterator for query",
-					e);
+		else if (query.isSupported(index)) {
+			// construct the query
+			return (CloseableIterator<SimpleFeature>) new AccumuloCqlConstraintsQuery(
+					adapterIds,
+					index,
+					query.getIndexConstraints(index.getIndexStrategy()),
+					query.createFilters(index.getIndexModel()),
+					filter,
+					adapter,
+					authorizations).query(
+					accumuloOperations,
+					adapterStore,
+					limit);
 		}
-		return new CloseableIteratorWrapper<SimpleFeature>(
-				new Closeable() {
-					@Override
-					public void close()
-							throws IOException {}
-				},
-				new ArrayList<SimpleFeature>().iterator());
+
+		return new CloseableIterator.Empty<SimpleFeature>();
 	}
 
 	public CloseableIterator<SimpleFeature> query(
 			final FeatureDataAdapter adapter,
 			final Query query,
 			final Filter filter,
-			final DistributableRenderer distributedRenderer ) {
+			final DistributableRenderer distributedRenderer,
+			final String... authorizations ) {
 
 		// query the indices that are supported for this query object, and these
 		// data adapter Ids
@@ -172,7 +194,7 @@ public class VectorDataStore extends
 			while (indices.hasNext()) {
 				final Index index = indices.next();
 				final DistributedRenderQuery accumuloQuery;
-				if ((query == null) && (adapter instanceof FeatureDataAdapter)) {
+				if (query == null) {
 					accumuloQuery = new DistributedRenderQuery(
 							Arrays.asList(new ByteArrayId[] {
 								adapter.getAdapterId()
@@ -180,9 +202,10 @@ public class VectorDataStore extends
 							index,
 							filter,
 							adapter,
-							distributedRenderer);
+							distributedRenderer,
+							authorizations);
 				}
-				else if (query.isSupported(index) && (adapter instanceof FeatureDataAdapter)) {
+				else if (query.isSupported(index)) {
 					// construct the query
 					accumuloQuery = new DistributedRenderQuery(
 							Arrays.asList(new ByteArrayId[] {
@@ -193,7 +216,8 @@ public class VectorDataStore extends
 							query.createFilters(index.getIndexModel()),
 							filter,
 							adapter,
-							distributedRenderer);
+							distributedRenderer,
+							authorizations);
 				}
 				else {
 					continue;
@@ -243,7 +267,8 @@ public class VectorDataStore extends
 			final double pixelSize,
 			final Filter filter,
 			final ReferencedEnvelope envelope,
-			final Integer limit ) {
+			final Integer limit,
+			final String... authorizations ) {
 		// query the indices that are supported for this query object, and these
 		// data adapter Ids
 		try (final CloseableIterator<Index> indices = indexStore.getIndices()) {
@@ -262,7 +287,8 @@ public class VectorDataStore extends
 							pixelSize,
 							filter,
 							adapter,
-							envelope);
+							envelope,
+							authorizations);
 				}
 				else if (query.isSupported(index)) {
 					// construct the query
@@ -278,7 +304,8 @@ public class VectorDataStore extends
 							pixelSize,
 							filter,
 							adapter,
-							envelope);
+							envelope,
+							authorizations);
 				}
 				else {
 					continue;

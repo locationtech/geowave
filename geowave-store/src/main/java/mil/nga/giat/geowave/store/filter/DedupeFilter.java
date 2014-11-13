@@ -12,7 +12,7 @@ import mil.nga.giat.geowave.store.data.IndexedPersistenceEncoding;
  * This filter will perform de-duplication using the combination of data adapter
  * ID and data ID to determine uniqueness. It can be performed client-side
  * and/or distributed.
- * 
+ *
  */
 public class DedupeFilter implements
 		DistributableQueryFilter
@@ -26,8 +26,9 @@ public class DedupeFilter implements
 	@Override
 	public boolean accept(
 			final IndexedPersistenceEncoding persistenceEncoding ) {
-		if (!persistenceEncoding.isDuplicated()) {
+		if (!supportsMultipleIndices() && !persistenceEncoding.isDuplicated()) {
 			// short circuit this check if the row is not duplicated anywhere
+			// and this is only intended to support a single index
 			return true;
 		}
 		final ByteArrayId adapterId = persistenceEncoding.getAdapterId();
@@ -44,6 +45,10 @@ public class DedupeFilter implements
 		}
 		visitedDataIds.add(dataId);
 		return true;
+	}
+
+	protected boolean supportsMultipleIndices() {
+		return false;
 	}
 
 	@Override

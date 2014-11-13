@@ -24,7 +24,8 @@ abstract public class AbstractAccumuloRowQuery<T> extends
 
 	public AbstractAccumuloRowQuery(
 			final Index index,
-			final ByteArrayId row ) {
+			final ByteArrayId row,
+			final String[] authorizations) {
 		super(
 				index);
 		this.row = row;

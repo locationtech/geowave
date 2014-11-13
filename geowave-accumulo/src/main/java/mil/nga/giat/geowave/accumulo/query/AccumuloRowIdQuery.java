@@ -22,10 +22,12 @@ public class AccumuloRowIdQuery extends
 
 	public AccumuloRowIdQuery(
 			final Index index,
-			final ByteArrayId row ) {
+			final ByteArrayId row,
+			final String... authorizations ) {
 		super(
 				index,
-				row);
+				row,
+				authorizations);
 	}
 
 	@Override

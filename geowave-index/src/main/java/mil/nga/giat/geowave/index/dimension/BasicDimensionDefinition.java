@@ -66,6 +66,10 @@ public class BasicDimensionDefinition implements
 		};
 	}
 
+	public NumericData getFullRange() {
+		return new NumericRange(0, System.currentTimeMillis()+1);
+	}
+	
 	private static double clamp(
 			final double x,
 			final double min,

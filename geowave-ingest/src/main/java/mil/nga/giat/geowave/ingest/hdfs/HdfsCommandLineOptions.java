@@ -45,7 +45,7 @@ public class HdfsCommandLineOptions
 	public static HdfsCommandLineOptions parseOptions(
 			final CommandLine commandLine )
 			throws ParseException {
-		final String hdfsHostPort = commandLine.getOptionValue("hdfs");
+		String hdfsHostPort = commandLine.getOptionValue("hdfs");
 		final String basePath = commandLine.getOptionValue("hdfsbase");
 		boolean success = true;
 		if (hdfsHostPort == null) {
@@ -59,6 +59,10 @@ public class HdfsCommandLineOptions
 		if (!success) {
 			throw new ParseException(
 					"Required option is missing");
+		}
+
+		if (!hdfsHostPort.contains("://")) {
+			hdfsHostPort = "hdfs://" + hdfsHostPort;
 		}
 		return new HdfsCommandLineOptions(
 				hdfsHostPort,

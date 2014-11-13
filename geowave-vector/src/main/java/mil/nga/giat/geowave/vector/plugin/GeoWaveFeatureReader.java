@@ -1,20 +1,29 @@
 package mil.nga.giat.geowave.vector.plugin;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Set;
 
 import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.index.StringUtils;
 import mil.nga.giat.geowave.store.CloseableIterator;
+import mil.nga.giat.geowave.store.adapter.statistics.BoundingBoxDataStatistics;
+import mil.nga.giat.geowave.store.query.BasicQuery;
 import mil.nga.giat.geowave.store.query.SpatialQuery;
-import mil.nga.giat.geowave.vector.VectorDataStore;
+import mil.nga.giat.geowave.store.query.SpatialTemporalQuery;
+import mil.nga.giat.geowave.store.query.TemporalConstraints;
+import mil.nga.giat.geowave.store.query.TemporalQuery;
 import mil.nga.giat.geowave.vector.adapter.FeatureDataAdapter;
+import mil.nga.giat.geowave.vector.plugin.transaction.GeoWaveTransaction;
 import mil.nga.giat.geowave.vector.wms.DistributableRenderer;
 
 import org.geotools.data.FeatureReader;
 import org.geotools.data.Query;
+import org.geotools.filter.FidFilterImpl;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
@@ -31,22 +40,28 @@ import com.vividsolutions.jts.geom.Geometry;
 public class GeoWaveFeatureReader implements
 		FeatureReader<SimpleFeatureType, SimpleFeature>
 {
-	private final FeatureDataAdapter adapter;
-	private final VectorDataStore dataStore;
-	private final VectorDataStore statsDataStore;
+
+	private final GeoWaveDataStoreComponents components;
 	private final GeoWaveFeatureCollection featureCollection;
+	private final GeoWaveTransaction transaction;
 
 	public GeoWaveFeatureReader(
 			final Query query,
-			final VectorDataStore dataStore,
-			final VectorDataStore statsDataStore,
-			final FeatureDataAdapter adapter ) {
-		this.adapter = adapter;
-		this.dataStore = dataStore;
-		this.statsDataStore = statsDataStore;
+			final GeoWaveTransaction transaction,
+			final GeoWaveDataStoreComponents components ) {
+		this.components = components;
+		this.transaction = transaction;
 		featureCollection = new GeoWaveFeatureCollection(
 				this,
 				query);
+	}
+
+	public GeoWaveTransaction getTransaction() {
+		return transaction;
+	}
+
+	public GeoWaveDataStoreComponents getComponents() {
+		return components;
 	}
 
 	@Override
@@ -62,7 +77,7 @@ public class GeoWaveFeatureReader implements
 		if (featureCollection.isDistributedRenderQuery()) {
 			return GeoWaveFeatureCollection.getDistributedRenderFeatureType();
 		}
-		return adapter.getType();
+		return components.getAdapter().getType();
 	}
 
 	@Override
@@ -89,107 +104,184 @@ public class GeoWaveFeatureReader implements
 		return it.next();
 	}
 
+	public CloseableIterator<SimpleFeature> getNoData() {
+		return new CloseableIterator.Empty<SimpleFeature>();
+	}
+
+	@SuppressWarnings({
+		"unchecked",
+		"rawtypes"
+	})
 	public CloseableIterator<SimpleFeature> getAllData(
 			final Filter filter,
 			final Integer limit ) {
+		if (filter instanceof FidFilterImpl) {
+			final List<SimpleFeature> retVal = new ArrayList<SimpleFeature>();
+			final Set<String> fids = ((FidFilterImpl) filter).getIDs();
+			for (final String fid : fids) {
+				retVal.add((SimpleFeature) components.getDataStore().getEntry(
+						components.getCurrentIndex(),
+						new ByteArrayId(
+								fid),
+						components.getAdapter().getAdapterId(),
+						transaction.composeAuthorizations()));
+			}
+			return new CloseableIterator.Wrapper(
+					retVal.iterator());
+		}
 		if ((limit != null) && (limit >= 0)) {
-			return dataStore.query(
-					adapter,
+			return components.getDataStore().query(
+					components.getAdapter(),
 					null,
 					filter,
-					limit);
+					limit,
+					transaction.composeAuthorizations());
 		}
-		return dataStore.query(
-				adapter,
+		return interweaveTransaction(components.getDataStore().query(
+				components.getAdapter(),
 				(mil.nga.giat.geowave.store.query.Query) null,
 				filter,
-				(Integer) null);
+				(Integer) null,
+				transaction.composeAuthorizations()));
 	}
 
 	public CloseableIterator<SimpleFeature> renderData(
 			final Geometry jtsBounds,
+			final TemporalConstraints timeBounds,
 			final Filter filter,
 			final DistributableRenderer renderer ) {
-		return dataStore.query(
-				adapter,
-				new SpatialQuery(
-						jtsBounds.getGeometryN(0)),
+		return interweaveTransaction(components.getDataStore().query(
+				components.getAdapter(),
+				composeQuery(
+						jtsBounds.getGeometryN(0),
+						timeBounds),
 				filter,
-				renderer);
+				renderer,
+				transaction.composeAuthorizations()));
 	}
 
 	public CloseableIterator<SimpleFeature> getData(
 			final Geometry jtsBounds,
+			final TemporalConstraints timeBounds,
 			final int width,
 			final int height,
 			final double pixelSize,
 			final Filter filter,
 			final ReferencedEnvelope envelope,
 			final Integer limit ) {
-		return dataStore.query(
-				adapter,
-				new SpatialQuery(
-						jtsBounds.getGeometryN(0)),
+		return interweaveTransaction(components.getDataStore().query(
+				components.getAdapter(),
+				composeQuery(
+						jtsBounds.getGeometryN(0),
+						timeBounds),
 				width,
 				height,
 				pixelSize,
 				filter,
 				envelope,
-				limit);
+				limit,
+				transaction.composeAuthorizations()));
 	}
 
 	public CloseableIterator<SimpleFeature> getData(
 			final Geometry jtsBounds,
+			final TemporalConstraints timeBounds,
 			final Integer limit ) {
 		if ((limit != null) && (limit >= 0)) {
-			return dataStore.query(
-					adapter,
-					new SpatialQuery(
-							jtsBounds),
-					limit);
+			return components.getDataStore().query(
+					components.getAdapter(),
+					composeQuery(
+							jtsBounds,
+							timeBounds),
+					null,
+					limit,
+					transaction.composeAuthorizations());
 		}
-		return dataStore.query(
-				adapter,
-				new SpatialQuery(
-						jtsBounds));
+		return interweaveTransaction(components.getDataStore().query(
+				components.getAdapter(),
+				composeQuery(
+						jtsBounds,
+						timeBounds),
+				(Filter) null,
+				(Integer) null,
+				transaction.composeAuthorizations()));
 	}
 
 	public CloseableIterator<SimpleFeature> getData(
 			final Geometry jtsBounds,
+			final TemporalConstraints timeBounds,
 			final Filter filter,
 			final Integer limit ) {
 		if ((limit != null) && (limit >= 0)) {
-			return dataStore.query(
-					adapter,
-					new SpatialQuery(
-							jtsBounds),
+			return interweaveTransaction(components.getDataStore().query(
+					components.getAdapter(),
+					composeQuery(
+							jtsBounds,
+							timeBounds),
 					filter,
-					limit);
+					limit));
 		}
-		return dataStore.query(
-				adapter,
-				new SpatialQuery(
-						jtsBounds),
+		return interweaveTransaction(components.getDataStore().query(
+				components.getAdapter(),
+				composeQuery(
+						jtsBounds,
+						timeBounds),
 				filter,
-				(Integer) null);
+				(Integer) null,
+				transaction.composeAuthorizations()));
 	}
 
 	@SuppressWarnings("unchecked")
 	public CloseableIterator<SimpleFeature> getData(
 			final Geometry jtsBounds,
+			final TemporalConstraints timeBounds,
 			final int level,
 			final String statsName ) {
-		return (CloseableIterator<SimpleFeature>) statsDataStore.query(
+		return interweaveTransaction((CloseableIterator<SimpleFeature>) components.getStatsDataStore().query(
 				Arrays.asList(new ByteArrayId[] {
 					new ByteArrayId(
 							StringUtils.stringToBinary("l" + level + "_stats" + statsName))
 				}),
-				new SpatialQuery(
-						jtsBounds));
+				composeQuery(
+						jtsBounds,
+						timeBounds)));
+
 	}
 
 	public GeoWaveFeatureCollection getFeatureCollection() {
 		return featureCollection;
 	}
 
+	private CloseableIterator<SimpleFeature> interweaveTransaction(
+			final CloseableIterator<SimpleFeature> it ) {
+		return transaction.interweaveTransaction(it);
+
+	}
+
+	private BasicQuery composeQuery(
+			final Geometry jtsBounds,
+			final TemporalConstraints timeBounds ) {
+		if (jtsBounds == null) {
+			if (timeBounds == null) {
+				return new TemporalQuery(
+						new TemporalConstraints());
+			}
+			else {
+				return new TemporalQuery(
+						timeBounds);
+			}
+		}
+		else {
+			if (timeBounds == null) {
+				return new SpatialQuery(
+						jtsBounds);
+			}
+			else {
+				return new SpatialTemporalQuery(
+						timeBounds,
+						jtsBounds);
+			}
+
+		}
+	}
 }

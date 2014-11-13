@@ -6,6 +6,7 @@ import java.util.List;
 import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.store.adapter.WritableDataAdapter;
+import mil.nga.giat.geowave.store.data.VisibilityWriter;
 import mil.nga.giat.geowave.store.index.Index;
 import mil.nga.giat.geowave.store.query.Query;
 
@@ -18,7 +19,7 @@ public interface DataStore
 {
 	/**
 	 * Returns an index writer to perform batched write operations
-	 * 
+	 *
 	 * @param index
 	 *            The configuration information for the primary index to use.
 	 * @return Returns the inex writer which can be used for batch write
@@ -29,7 +30,7 @@ public interface DataStore
 
 	/**
 	 * Ingests a single entry into the data store
-	 * 
+	 *
 	 * @param writableAdapter
 	 *            The writable adapter that allows the data store to translate
 	 *            the entry into a persistable format
@@ -47,7 +48,7 @@ public interface DataStore
 	/**
 	 * Ingests a collection of entries into the data store described by an
 	 * iterator on the entries
-	 * 
+	 *
 	 * @param writableAdapter
 	 *            The writable adapter that allows the data store to translate
 	 *            the entries into a persistable format
@@ -62,9 +63,29 @@ public interface DataStore
 			final Iterator<T> entryIterator );
 
 	/**
+	 * Ingests a single entry into the data store
+	 *
+	 * @param writableAdapter
+	 *            The writable adapter that allows the data store to translate
+	 *            the entry into a persistable format
+	 * @param index
+	 *            The configuration information for the primary index to use.
+	 * @param entry
+	 *            The entry to ingest
+	 * @param customFieldVisibilityWriter
+	 *            per entry visibility control
+	 * @return Returns all row IDs for which the entry is ingested
+	 */
+	public <T> List<ByteArrayId> ingest(
+			final WritableDataAdapter<T> writableAdapter,
+			final Index index,
+			final T entry,
+			final VisibilityWriter<T> customFieldVisibilityWriter );
+
+	/**
 	 * Ingests a collection of entries into the data store described by an
 	 * iterator on the entries
-	 * 
+	 *
 	 * @param writableAdapter
 	 *            The writable adapter that allows the data store to translate
 	 *            the entries into a persistable format
@@ -83,11 +104,35 @@ public interface DataStore
 			final IngestCallback<T> ingestCallback );
 
 	/**
+	 * Ingests a collection of entries into the data store described by an
+	 * iterator on the entries
+	 *
+	 * @param writableAdapter
+	 *            The writable adapter that allows the data store to translate
+	 *            the entries into a persistable format
+	 * @param index
+	 *            The configuration information for the primary index to use.
+	 * @param entryIterator
+	 *            An iterator on the entries to ingest
+	 * @param ingestCallback
+	 *            A callback method to receive feedback such as row IDs for
+	 *            every entry that is successfully ingested
+	 * @param customFieldVisibilityWriter
+	 *            per entry visibility control
+	 */
+	public <T> void ingest(
+			final WritableDataAdapter<T> writableAdapter,
+			final Index index,
+			final Iterator<T> entryIterator,
+			final IngestCallback<T> ingestCallback,
+			final VisibilityWriter<T> customFieldVisibilityWriter );
+
+	/**
 	 * Returns all data in this data store that matches the query parameter. All
 	 * indices that are supported by the query will be queried and all data
 	 * types that match the query will be returned as an instance of the native
 	 * data type that was originally ingested.
-	 * 
+	 *
 	 * @param query
 	 *            The description of the query to be performed
 	 * @return An iterator on all results that match the query. The iterator
@@ -100,12 +145,12 @@ public interface DataStore
 	/**
 	 * Returns the data element associated with the given row ID stored in the
 	 * given index
-	 * 
+	 *
 	 * @param index
 	 *            The index to search for the entry.
 	 * @param rowId
 	 *            The full row ID to use as the query.
-	 * 
+	 *
 	 * @return The entry that was ingested with the given row ID. This row ID is
 	 *         the one assigned to the entry on ingest into the given index.
 	 *         Null is returned if the row ID does not match any entries in the
@@ -119,14 +164,15 @@ public interface DataStore
 	/**
 	 * Returns the data element associated with the given data ID and adapter ID
 	 * stored in the given index
-	 * 
+	 *
 	 * @param index
 	 *            The index to search for the entry.
 	 * @param dataId
 	 *            The data ID to use for the query.
-	 * 
 	 * @param adapterId
 	 *            The adapter ID to use for the query.
+	 * @param authorizations
+	 *            additional authorizations to fetch the entry	           
 	 * 
 	 * @return The entry that was ingested with the given data ID and adapter
 	 *         ID. This combination of data ID and adapter ID is the one
@@ -137,20 +183,21 @@ public interface DataStore
 	public <T> T getEntry(
 			final Index index,
 			final ByteArrayId dataId,
-			final ByteArrayId adapterId );
+			final ByteArrayId adapterId,
+			final String...additionalAuthorizations);
 
 	/**
 	 * Deletes the data element associated with the given data ID and adapter ID
 	 * stored in the given index
-	 * 
+	 *
 	 * @param index
 	 *            The index to search for the entry.
 	 * @param dataId
 	 *            The data ID to use for the query.
-	 * 
 	 * @param adapterId
 	 *            The adapter ID to use for the query.
-	 * 
+	 * @param authorizations
+	 *            additional authorizations to delete the entry
 	 * @return Returns true if the entry was found and deleted successfully.
 	 *         Returns false if the entry could not be found, if the entry could
 	 *         not be deleted, or if the entry in the alternate index could not
@@ -159,15 +206,18 @@ public interface DataStore
 	public boolean deleteEntry(
 			final Index index,
 			final ByteArrayId dataId,
-			final ByteArrayId adapterId );
+			final ByteArrayId adapterId,
+			final String... authorizations );
 
 	/**
 	 * Returns all data with the given row ID prefix stored in the given index
-	 * 
+	 *
 	 * @param index
 	 *            The index to search for the entry.
 	 * @param rowPrefix
 	 *            A prefix for the row ID to use as the query.
+	 * @param additionalAuthorizations
+	 * 		      additional authorizations to any data store specific defaults  
 	 * 
 	 * @return All entries that were ingested with a row ID that is prefixed by
 	 *         the given rowPrefix. The "row ID" is the one assigned to the
@@ -175,14 +225,15 @@ public interface DataStore
 	 */
 	public <T> CloseableIterator<T> getEntriesByPrefix(
 			final Index index,
-			final ByteArrayId rowPrefix );
+			final ByteArrayId rowPrefix,
+			final String...authorizations);
 
 	/**
 	 * Returns all data in this data store that matches the query parameter and
 	 * matches the adapter (the same adapter ID as the ID ingested). All indices
 	 * that are supported by the query will be queried and returned as an
 	 * instance of the native data type that this adapter supports.
-	 * 
+	 *
 	 * @param adapter
 	 *            the data adapter to use for the query
 	 * @param query
@@ -200,7 +251,7 @@ public interface DataStore
 	 * within the index described by the index passed in. All data types that
 	 * match the query will be returned as an instance of the native data type
 	 * that was originally ingested.
-	 * 
+	 *
 	 * @param index
 	 *            The index information to query against. All data within the
 	 *            index of this index ID will be queried and returned.
@@ -220,7 +271,7 @@ public interface DataStore
 	 * (the same adapter ID as the ID ingested). All data that matches the
 	 * query, adapter ID, and is in the index ID will be returned as an instance
 	 * of the native data type that this adapter supports.
-	 * 
+	 *
 	 * @param adapter
 	 *            the data adapter to use for the query
 	 * @param index
@@ -242,7 +293,7 @@ public interface DataStore
 	 * matches one of the adapter IDs. All data types that match the query and
 	 * one of the adapter IDs will be returned as an instance of the native data
 	 * type that was originally ingested.
-	 * 
+	 *
 	 * @param adapterIds
 	 *            The data adapter IDs to use for the query - only data that
 	 *            matches one of these adapter IDs will be returned
@@ -262,7 +313,7 @@ public interface DataStore
 	 * types that match the query will be returned as an instance of the native
 	 * data type that was originally ingested. The iterator will only return as
 	 * many results as the limit passed in.
-	 * 
+	 *
 	 * @param query
 	 *            The description of the query to be performed
 	 * @param limit
@@ -281,7 +332,7 @@ public interface DataStore
 	 * that are supported by the query will be queried and returned as an
 	 * instance of the native data type that this adapter supports. The iterator
 	 * will only return as many results as the limit passed in.
-	 * 
+	 *
 	 * @param adapter
 	 *            the data adapter to use for the query
 	 * @param query
@@ -303,7 +354,7 @@ public interface DataStore
 	 * match the query will be returned as an instance of the native data type
 	 * that was originally ingested. The iterator will only return as many
 	 * results as the limit passed in.
-	 * 
+	 *
 	 * @param index
 	 *            The index information to query against. All data within the
 	 *            index of this index ID will be queried and returned.
@@ -327,7 +378,7 @@ public interface DataStore
 	 * query, adapter ID, and is in the index ID will be returned as an instance
 	 * of the native data type that this adapter supports. The iterator will
 	 * only return as many results as the limit passed in.
-	 * 
+	 *
 	 * @param adapter
 	 *            the data adapter to use for the query
 	 * @param index
@@ -353,7 +404,7 @@ public interface DataStore
 	 * one of the adapter IDs will be returned as an instance of the native data
 	 * type that was originally ingested. The iterator will only return as many
 	 * results as the limit passed in.
-	 * 
+	 *
 	 * @param adapterIds
 	 *            The data adapter IDs to use for the query - only data that
 	 *            matches one of these adapter IDs will be returned
@@ -369,4 +420,32 @@ public interface DataStore
 			List<ByteArrayId> adapterIds,
 			final Query query,
 			final int limit );
+
+	/**
+	 * Returns all data in this data store that matches the query parameter and
+	 * matches one of the adapter IDs. All data types that match the query and
+	 * one of the adapter IDs will be returned as an instance of the native data
+	 * type that was originally ingested. The iterator will only return as many
+	 * results as the limit passed in.
+	 *
+	 * @param adapterIds
+	 *            The data adapter IDs to use for the query - only data that
+	 *            matches one of these adapter IDs will be returned
+	 * @param query
+	 *            The description of the query to be performed
+	 * @param limit
+	 *            The maximum number of entries to return
+	 * @param authorization
+	 *            The authorization used to override the default authorization
+	 *            for cell visibility.
+	 * @return An iterator on all results that match the query. The iterator
+	 *         implements Closeable and it is best practice to close the
+	 *         iterator after it is no longer needed.
+	 */
+	public <T> CloseableIterator<T> query(
+			final DataAdapter<T> adapter,
+			final Index index,
+			final Query query,
+			final int limit,
+			final String... authorizations );
 }

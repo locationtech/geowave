@@ -1,24 +1,24 @@
 package mil.nga.giat.geowave.store.query;
 
 import java.util.Date;
+
 import mil.nga.giat.geowave.index.dimension.TimeDefinition;
 import mil.nga.giat.geowave.index.sfc.data.NumericRange;
 import mil.nga.giat.geowave.store.GeometryUtils;
+
 import com.vividsolutions.jts.geom.Geometry;
 
 /**
  * The Spatial Temporal Query class represents a query in three dimensions. The
  * constraint that is applied represents an intersection operation on the query
  * geometry AND a date range intersection based on startTime and endTime.
- * 
- * 
+ *
+ *
  */
 public class SpatialTemporalQuery extends
 		SpatialQuery
 {
-
-	private final Date startTime;
-	private final Date endTime;
+	protected SpatialTemporalQuery() {}
 
 	public SpatialTemporalQuery(
 			final Date startTime,
@@ -30,23 +30,38 @@ public class SpatialTemporalQuery extends
 						endTime,
 						queryGeometry),
 				queryGeometry);
-		this.startTime = startTime;
-		this.endTime = endTime;
 	}
 
-	public Date getStartTime() {
-		return startTime;
+	public SpatialTemporalQuery(
+			final TemporalConstraints constraints,
+			final Geometry queryGeometry ) {
+		super(
+				createSpatialTemporalConstraints(
+						constraints,
+						queryGeometry),
+				queryGeometry);
 	}
 
-	public Date getEndTime() {
-		return endTime;
+	private static Constraints createSpatialTemporalConstraints(
+			final TemporalConstraints temporalConstraints,
+			final Geometry queryGeometry ) {
+		final Constraints constraints = GeometryUtils.basicConstraintsFromGeometry(queryGeometry);
+		for (final TemporalRange range : temporalConstraints.constraints) {
+			constraints.constraintsPerTypeOfDimensionDefinition.put(
+					TimeDefinition.class,
+					new NumericRange(
+							range.getStartTime().getTime(),
+							range.getEndTime().getTime()));
+		}
+
+		return constraints;
 	}
 
 	private static Constraints createSpatialTemporalConstraints(
 			final Date startTime,
 			final Date endTime,
 			final Geometry queryGeometry ) {
-		Constraints constraints = GeometryUtils.basicConstraintsFromGeometry(queryGeometry);
+		final Constraints constraints = GeometryUtils.basicConstraintsFromGeometry(queryGeometry);
 		constraints.constraintsPerTypeOfDimensionDefinition.put(
 				TimeDefinition.class,
 				new NumericRange(

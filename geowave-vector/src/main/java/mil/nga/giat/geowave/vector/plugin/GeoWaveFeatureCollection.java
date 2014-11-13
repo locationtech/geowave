@@ -2,8 +2,14 @@ package mil.nga.giat.geowave.vector.plugin;
 
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.Map;
 
+import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.store.CloseableIterator;
+import mil.nga.giat.geowave.store.adapter.statistics.BoundingBoxDataStatistics;
+import mil.nga.giat.geowave.store.adapter.statistics.CountDataStatistics;
+import mil.nga.giat.geowave.store.adapter.statistics.DataStatistics;
+import mil.nga.giat.geowave.store.query.TemporalConstraints;
 import mil.nga.giat.geowave.vector.wms.DistributableRenderer;
 import mil.nga.giat.geowave.vector.wms.accumulo.RenderedMaster;
 
@@ -17,6 +23,7 @@ import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
+import org.opengis.filter.Filter;
 import org.opengis.geometry.BoundingBox;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.operation.TransformException;
@@ -52,12 +59,31 @@ public class GeoWaveFeatureCollection extends
 			final GeoWaveFeatureReader reader,
 			final Query query ) {
 		this.reader = reader;
-		this.query = query;
+		this.query = validateQuery(
+				GeoWaveFeatureCollection.getSchema(
+						reader,
+						query).getTypeName(),
+				query);
 	}
 
 	@Override
 	public int getCount() {
-		// TODO there must be a more efficient way
+		if (query.getFilter().equals(
+				Filter.INCLUDE)) {
+			// GEOWAVE-60 optimization
+			Map<ByteArrayId, DataStatistics<SimpleFeature>> statsMap = reader.getComponents().getDataStatistics(
+					reader.getTransaction());
+			if (statsMap.containsKey(CountDataStatistics.STATS_ID)) {
+				CountDataStatistics stats = (CountDataStatistics) statsMap.get(CountDataStatistics.STATS_ID);
+				if (stats != null && stats.isSet()) return (int) stats.getCount();
+			}
+		}
+		else if (query.getFilter().equals(
+				Filter.EXCLUDE)) {
+			return 0;
+		}
+
+		// fallback
 		int count = 0;
 		try {
 			final Iterator<SimpleFeature> iterator = openIterator();
@@ -77,11 +103,21 @@ public class GeoWaveFeatureCollection extends
 
 	@Override
 	public ReferencedEnvelope getBounds() {
-		// TODO whats the most efficient way to get bounds in accumulo
-		// for now just perform the query and iterate through the results
 
 		double minx = Double.MAX_VALUE, maxx = -Double.MAX_VALUE, miny = Double.MAX_VALUE, maxy = Double.MAX_VALUE;
 		try {
+			// GEOWAVE-60 optimization
+			Map<ByteArrayId, DataStatistics<SimpleFeature>> statsMap = reader.getComponents().getDataStatistics(
+					reader.getTransaction());
+			if (statsMap.containsKey(BoundingBoxDataStatistics.STATS_ID)) {
+				BoundingBoxDataStatistics<SimpleFeature> stats = (BoundingBoxDataStatistics<SimpleFeature>) statsMap.get(BoundingBoxDataStatistics.STATS_ID);
+				return new ReferencedEnvelope(
+						stats.getMinX(),
+						stats.getMaxX(),
+						stats.getMinY(),
+						stats.getMaxY(),
+						GeoWaveGTDataStore.DEFAULT_CRS);
+			}
 			final Iterator<SimpleFeature> iterator = openIterator();
 			if (!iterator.hasNext()) {
 				return null;
@@ -158,39 +194,50 @@ public class GeoWaveFeatureCollection extends
 	}
 
 	protected boolean isDistributedRenderQuery() {
+		return GeoWaveFeatureCollection.isDistributedRenderQuery(query);
+	}
+
+	protected static final boolean isDistributedRenderQuery(
+			Query query ) {
 		return query.getHints().containsKey(
 				SERVER_FEATURE_RENDERER);
+	}
+
+	private static SimpleFeatureType getSchema(
+			GeoWaveFeatureReader reader,
+			Query query ) {
+		if (GeoWaveFeatureCollection.isDistributedRenderQuery(query)) {
+			return getDistributedRenderFeatureType();
+		}
+		return reader.getComponents().getAdapter().getType();
 	}
 
 	@Override
 	protected Iterator<SimpleFeature> openIterator() {
 		Geometry jtsBounds;
-		ReferencedEnvelope argOutputEnv = null;
+		TemporalConstraints timeBounds;
+
 		try {
-			if ((query != null) && query.getHints().containsKey(
-					DecimationProcess.OUTPUT_BBOX)) {
-				argOutputEnv = ((ReferencedEnvelope) query.getHints().get(
-						DecimationProcess.OUTPUT_BBOX)).transform(
-						GeoWaveGTDataStore.DEFAULT_CRS,
-						true);
-				jtsBounds = new GeometryFactory().toGeometry(argOutputEnv);
+			ReferencedEnvelope referencedEnvelope = this.getEnvelope(query);
+			jtsBounds = getBBox(
+					query,
+					referencedEnvelope);
+			timeBounds = getBoundedTime(query);
+			Integer limit = getLimit(query);
+
+			if (query.getFilter() == Filter.EXCLUDE) {
+				featureCursor = reader.getNoData();
 			}
-			else {
-				jtsBounds = getBBox(query);
-			}
-			Integer limit = null;
-			if ((query != null) && !query.isMaxFeaturesUnlimited() && (query.getMaxFeatures() >= 0)) {
-				limit = query.getMaxFeatures();
-			}
-			if (jtsBounds == null) {
+			else if (query.getFilter() == Filter.INCLUDE || (jtsBounds == null && timeBounds == null)) {
 				// get all of the data (yikes)
 				featureCursor = reader.getAllData(
-						query == null ? null : query.getFilter(),
+						query.getFilter(),
 						limit);
 			}
 			else if (isDistributedRenderQuery()) {
 				featureCursor = reader.renderData(
 						jtsBounds,
+						timeBounds,
 						query.getFilter(),
 						(DistributableRenderer) query.getHints().get(
 								SERVER_FEATURE_RENDERER));
@@ -205,27 +252,23 @@ public class GeoWaveFeatureCollection extends
 					pixelSize = (Double) query.getHints().get(
 							DecimationProcess.PIXEL_SIZE);
 				}
-				if (argOutputEnv == null) {
-					argOutputEnv = ((ReferencedEnvelope) query.getHints().get(
-							DecimationProcess.OUTPUT_BBOX)).transform(
-							GeoWaveGTDataStore.DEFAULT_CRS,
-							true);
-				}
 				featureCursor = reader.getData(
 						jtsBounds,
+						timeBounds,
 						(Integer) query.getHints().get(
 								DecimationProcess.OUTPUT_WIDTH),
 						(Integer) query.getHints().get(
 								DecimationProcess.OUTPUT_HEIGHT),
 						pixelSize,
 						query.getFilter(),
-						argOutputEnv,
+						referencedEnvelope,
 						limit);
 
 			}
 			else if (getStatsQueryName() != null) {
 				featureCursor = reader.getData(
 						jtsBounds,
+						timeBounds,
 						(Integer) query.getHints().get(
 								LEVEL),
 						(String) query.getHints().get(
@@ -235,7 +278,8 @@ public class GeoWaveFeatureCollection extends
 				// get the data within the bounding box
 				featureCursor = reader.getData(
 						jtsBounds,
-						query == null ? null : query.getFilter(),
+						timeBounds,
+						query.getFilter(),
 						limit);
 			}
 		}
@@ -247,19 +291,62 @@ public class GeoWaveFeatureCollection extends
 		return featureCursor;
 	}
 
+	private ReferencedEnvelope getEnvelope(
+			final Query query )
+			throws TransformException,
+			FactoryException {
+		if (query.getHints().containsKey(
+				DecimationProcess.OUTPUT_BBOX)) {
+			return ((ReferencedEnvelope) query.getHints().get(
+					DecimationProcess.OUTPUT_BBOX)).transform(
+					GeoWaveGTDataStore.DEFAULT_CRS,
+					true);
+		}
+		return null;
+	}
+
 	private Geometry getBBox(
+			final Query query,
+			ReferencedEnvelope envelope ) {
+		if (envelope != null) return new GeometryFactory().toGeometry(envelope);
+
+		final Geometry bbox = (Geometry) query.getFilter().accept(
+				ExtractGeometryFilterVisitor.GEOMETRY_VISITOR,
+				null);
+		if (bbox == null || bbox.isEmpty()) return null;
+		final double area = bbox.getArea();
+		if (Double.isInfinite(area) || Double.isNaN(area)) {
+			return null;
+		}
+
+		return bbox;
+	}
+
+	private Query validateQuery(
+			String typeName,
+			Query query ) {
+		return query == null ? new Query(
+				typeName,
+				Filter.EXCLUDE) : query;
+	}
+
+	private Integer getLimit(
+			Query query ) {
+		if (!query.isMaxFeaturesUnlimited() && (query.getMaxFeatures() >= 0)) {
+			return query.getMaxFeatures();
+		}
+		return null;
+	}
+
+	private TemporalConstraints getBoundedTime(
 			final Query query ) {
 		if (query == null) {
 			return null;
 		}
-		final Geometry bbox = (Geometry) query.getFilter().accept(
-				ExtractGeometryFilterVisitor.GEOMETRY_VISITOR,
+		final TemporalConstraints bbox = (TemporalConstraints) query.getFilter().accept(
+				ExtractTimeFilterVisitor.TIME_VISITOR,
 				null);
-		final double area = bbox.getArea();
-		if ((bbox == null) || bbox.isEmpty() || Double.isInfinite(area) || Double.isNaN(area)) {
-			return null;
-		}
-		return bbox;
+		return bbox.isEmpty() ? null : bbox;
 	}
 
 	@Override

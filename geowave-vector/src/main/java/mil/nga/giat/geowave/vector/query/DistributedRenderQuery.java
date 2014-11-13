@@ -26,6 +26,7 @@ import mil.nga.giat.geowave.store.filter.DistributableQueryFilter;
 import mil.nga.giat.geowave.store.filter.QueryFilter;
 import mil.nga.giat.geowave.store.index.Index;
 import mil.nga.giat.geowave.vector.adapter.FeatureDataAdapter;
+import mil.nga.giat.geowave.vector.query.cql.FilterToCQLTool;
 import mil.nga.giat.geowave.vector.wms.DistributableRenderer;
 
 import org.apache.accumulo.core.client.BatchScanner;
@@ -35,7 +36,6 @@ import org.apache.accumulo.core.client.TableNotFoundException;
 import org.apache.accumulo.core.data.Range;
 import org.apache.hadoop.io.Text;
 import org.apache.log4j.Logger;
-import org.geotools.filter.text.ecql.ECQL;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.filter.Filter;
 
@@ -58,9 +58,14 @@ public class DistributedRenderQuery extends
 			final Index index,
 			final Filter cqlFilter,
 			final FeatureDataAdapter dataAdapter,
-			final DistributableRenderer renderer ) {
+			final DistributableRenderer renderer,
+			final String... authorizations ) {
 		super(
-				index);
+				(List<ByteArrayId>) null, // adaptor ids
+				index,
+				(MultiDimensionalNumericData) null,
+				(List<QueryFilter>) null,
+				authorizations);
 		this.renderer = renderer;
 		this.cqlFilter = cqlFilter;
 		this.dataAdapter = dataAdapter;
@@ -71,10 +76,14 @@ public class DistributedRenderQuery extends
 			final Index index,
 			final Filter cqlFilter,
 			final FeatureDataAdapter dataAdapter,
-			final DistributableRenderer renderer ) {
+			final DistributableRenderer renderer,
+			final String... authorizations ) {
 		super(
 				adapterIds,
-				index);
+				index,
+				(MultiDimensionalNumericData) null,
+				(List<QueryFilter>) null,
+				authorizations);
 		this.renderer = renderer;
 		this.cqlFilter = cqlFilter;
 		this.dataAdapter = dataAdapter;
@@ -86,11 +95,14 @@ public class DistributedRenderQuery extends
 			final List<QueryFilter> queryFilters,
 			final Filter cqlFilter,
 			final FeatureDataAdapter dataAdapter,
-			final DistributableRenderer renderer ) {
+			final DistributableRenderer renderer,
+			final String... authorizations ) {
 		super(
+				(List<ByteArrayId>) null, // adaptor ids
 				index,
 				constraints,
-				queryFilters);
+				queryFilters,
+				authorizations);
 		this.renderer = renderer;
 		this.cqlFilter = cqlFilter;
 		this.dataAdapter = dataAdapter;
@@ -103,12 +115,14 @@ public class DistributedRenderQuery extends
 			final List<QueryFilter> queryFilters,
 			final Filter cqlFilter,
 			final FeatureDataAdapter dataAdapter,
-			final DistributableRenderer renderer ) {
+			final DistributableRenderer renderer,
+			final String... authorizations ) {
 		super(
 				adapterIds,
 				index,
 				constraints,
-				queryFilters);
+				queryFilters,
+				authorizations);
 		this.renderer = renderer;
 		this.cqlFilter = cqlFilter;
 		this.dataAdapter = dataAdapter;
@@ -176,7 +190,9 @@ public class DistributedRenderQuery extends
 			final String tableName ) {
 		BatchScanner scanner;
 		try {
-			scanner = accumuloOperations.createBatchScanner(tableName);
+			scanner = accumuloOperations.createBatchScanner(
+					tableName,
+					this.getAdditionalAuthorizations());
 			if ((prefix != null) && (prefix.length > 0)) {
 				final Range r = Range.prefix(new Text(
 						prefix));
@@ -215,10 +231,7 @@ public class DistributedRenderQuery extends
 					CqlQueryRenderIterator.class);
 			iteratorSettings.addOption(
 					CqlQueryFilterIterator.CQL_FILTER,
-					ECQL.toCQL(
-							cqlFilter).replaceAll(
-							"!=",
-							"<>"));
+					FilterToCQLTool.toCQL(cqlFilter));
 			iteratorSettings.addOption(
 					CqlQueryFilterIterator.DATA_ADAPTER,
 					ByteArrayUtils.byteArrayToString(PersistenceUtils.toBinary(dataAdapter)));

@@ -571,7 +571,7 @@ public class GeoWaveRasterReader extends
 
 		final RasterDataAdapter adapter = (RasterDataAdapter) geowaveAdapterStore.getAdapter(new ByteArrayId(
 				coverageName));
-		final Iterator<GridCoverage> gridCoverageIt = queryForTiles(
+		final CloseableIterator<GridCoverage> gridCoverageIt = queryForTiles(
 				pixelDimension,
 				state.getRequestEnvelopeTransformed(),
 				resolutionLevels[imageChoice.intValue()][0],
@@ -592,6 +592,8 @@ public class GeoWaveRasterReader extends
 				config.getInterpolation(),
 				histogram);
 
+		gridCoverageIt.close();
+		
 		return transformResult(
 				result,
 				pixelDimension,
@@ -628,7 +630,7 @@ public class GeoWaveRasterReader extends
 		return true;
 	}
 
-	private Iterator<GridCoverage> queryForTiles(
+	private CloseableIterator<GridCoverage> queryForTiles(
 			final Rectangle pixelDimension,
 			final GeneralEnvelope requestEnvelope,
 			final double levelResX,

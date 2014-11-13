@@ -66,6 +66,28 @@ public class Index implements
 	}
 
 	@Override
+	public int hashCode() {
+		return getId().hashCode();
+	}
+
+	@Override
+	public boolean equals(
+			final Object obj ) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		final Index other = (Index) obj;
+		return getId().equals(
+				other.getId());
+	}
+
+	@Override
 	public byte[] toBinary() {
 		final byte[] indexStrategyBinary = PersistenceUtils.toBinary(indexStrategy);
 		final byte[] indexModelBinary = PersistenceUtils.toBinary(indexModel);

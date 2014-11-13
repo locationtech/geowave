@@ -49,11 +49,13 @@ public class SpatialDecimationQuery extends
 			final double pixelSize,
 			final Filter cqlFilter,
 			final FeatureDataAdapter dataAdapter,
-			final ReferencedEnvelope envelope ) {
+			final ReferencedEnvelope envelope,
+			final String...authorizations) {
 		super(
 				index,
 				cqlFilter,
-				dataAdapter);
+				dataAdapter,
+				authorizations);
 		this.width = width;
 		this.height = height;
 		this.envelope = envelope;
@@ -68,12 +70,14 @@ public class SpatialDecimationQuery extends
 			final double pixelSize,
 			final Filter cqlFilter,
 			final FeatureDataAdapter dataAdapter,
-			final ReferencedEnvelope envelope ) {
+			final ReferencedEnvelope envelope,
+			final String...authorizations) {
 		super(
 				adapterIds,
 				index,
 				cqlFilter,
-				dataAdapter);
+				dataAdapter,
+				authorizations);
 		this.width = width;
 		this.height = height;
 		this.envelope = envelope;
@@ -89,13 +93,15 @@ public class SpatialDecimationQuery extends
 			final double pixelSize,
 			final Filter cqlFilter,
 			final FeatureDataAdapter dataAdapter,
-			final ReferencedEnvelope envelope ) {
+			final ReferencedEnvelope envelope,
+			final String...authorizations) {
 		super(
 				index,
 				constraints,
 				queryFilters,
 				cqlFilter,
-				dataAdapter);
+				dataAdapter,
+				authorizations);
 		this.width = width;
 		this.height = height;
 		this.envelope = envelope;
@@ -112,14 +118,16 @@ public class SpatialDecimationQuery extends
 			final double pixelSize,
 			final Filter cqlFilter,
 			final FeatureDataAdapter dataAdapter,
-			final ReferencedEnvelope envelope ) {
+			final ReferencedEnvelope envelope,
+			final String...authorizations) {
 		super(
 				adapterIds,
 				index,
 				constraints,
 				queryFilters,
 				cqlFilter,
-				dataAdapter);
+				dataAdapter,
+				authorizations);
 		this.width = width;
 		this.height = height;
 		this.envelope = envelope;
