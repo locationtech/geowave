@@ -296,14 +296,14 @@ public class FeatureDataAdapter extends
 	protected byte[] defaultTypeDataToBinary() {
 		// serialize the feature type
 		final String encodedType = DataUtilities.encodeType(persistedType);
-		final String typeName = persistedType.getTypeName();
+		final String typeName = reprojectedType.getTypeName();
 		final byte[] typeNameBytes = StringUtils.stringToBinary(typeName);
 		final byte[] fieldVisibilityAtributeNameBytes = StringUtils.stringToBinary(visibilityAttributeName);
 		final byte[] visibilityManagementClassNameBytes = StringUtils.stringToBinary(fieldVisibilityManagement.getClass().getCanonicalName());
 
 		final TimeDescriptors timeDescriptors = inferTimeAttributeDescriptor(persistedType);
 		final byte[] timeAndRangeBytes = timeDescriptors.toBinary();
-		final String namespace = persistedType.getName().getNamespaceURI();
+		final String namespace = this.reprojectedType.getName().getNamespaceURI();
 
 		byte[] namespaceBytes;
 		if (namespace != null) {

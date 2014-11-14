@@ -134,7 +134,7 @@ public class ZooKeeperTransactionAllocaterTest
 		int s = 0;
 
 		public void run() {
-			while (s < 10 && !shutdown) {
+			while (s < 20 && !shutdown) {
 				s++;
 				try {
 					Thread.sleep(100);
@@ -149,7 +149,7 @@ public class ZooKeeperTransactionAllocaterTest
 						activeTX.notify();
 					}
 					try {
-						Thread.sleep(200 + (random.nextInt()%200));
+						Thread.sleep(200 + (Math.abs(random.nextInt())%200));
 					}
 					catch (InterruptedException e) {}
 					allocater.releaseTransaction(txID);
