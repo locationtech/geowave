@@ -2,6 +2,7 @@ package mil.nga.giat.geowave.vector.plugin;
 
 import java.io.Serializable;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -30,7 +31,8 @@ public class GeoWavePluginConfig
 	protected static final String INSTANCE_NAME_KEY = "InstanceName";
 	protected static final String USERNAME_KEY = "UserName";
 	protected static final String PASSWORD_KEY = "Password";
-	protected static final String NAMESPACE_KEY = "Namespace";
+	protected static final String ACCUMULO_NAMESPACE_KEY = "AccumuloNamespace";
+        protected static final String FEATURE_NAMESPACE_KEY = "namespace";
 	protected static final String LOCK_MGT_KEY = "Lock Management";
 	protected static final String AUTH_MGT_KEY = "Authorization Management Provider";
 	protected static final String AUTH_URL_KEY = "Authorization Data URL";
@@ -59,11 +61,17 @@ public class GeoWavePluginConfig
 			Collections.singletonMap(
 					Parameter.IS_PASSWORD,
 					Boolean.TRUE));
-	private static final Param NAMESPACE = new Param(
-			NAMESPACE_KEY,
+	private static final Param ACCUMULO_NAMESPACE = new Param(
+			ACCUMULO_NAMESPACE_KEY,
 			String.class,
-			"The table namespace associated with this data store",
+			"The table Accumulo namespace associated with this data store",
 			true);
+        
+	public static final Param FEATURE_NAMESPACE = new Param(
+                        FEATURE_NAMESPACE_KEY, 
+                        URI.class,
+                        "uri to a the namespace", 
+                        false);
 
 	private static final Param LOCK_MGT = new Param(
 			LOCK_MGT_KEY,
@@ -91,7 +99,8 @@ public class GeoWavePluginConfig
 	private final String instanceName;
 	private final String userName;
 	private final String password;
-	private final String namespace;
+	private final String accumuloNamespace;
+	private final String featureNamespace;        
 	private final LockingManagementFactory lockingManagementFactory;
 	private final AuthorizationFactorySPI authorizationFactory;
 	private final URL authorizationURL;
@@ -112,7 +121,8 @@ public class GeoWavePluginConfig
 			accumuloParams.add(INSTANCE_NAME);
 			accumuloParams.add(USERNAME);
 			accumuloParams.add(PASSWORD);
-			accumuloParams.add(NAMESPACE);
+			accumuloParams.add(ACCUMULO_NAMESPACE);
+                        accumuloParams.add(FEATURE_NAMESPACE);
 			accumuloParams.add(LOCK_MGT);
 			accumuloParams.add(AUTH_MGT);
 			accumuloParams.add(AUTH_URL);
@@ -153,12 +163,19 @@ public class GeoWavePluginConfig
 		}
 		password = param.toString();
 
-		param = params.get(NAMESPACE_KEY);
+		param = params.get(ACCUMULO_NAMESPACE_KEY);
 		if (param == null) {
 			throw new GeoWavePluginException(
-					"Accumulo Plugin: Missing namespace param");
+					"Accumulo Plugin: Missing Accumulo namespace param");
 		}
-		namespace = param.toString();
+		accumuloNamespace = param.toString();
+                
+       		param = params.get(FEATURE_NAMESPACE_KEY);
+		if (param == null) {
+			throw new GeoWavePluginException(
+					"Accumulo Plugin: Missing feature namespace param");
+		}
+		featureNamespace = param.toString();
 
 		param = params.get(LOCK_MGT_KEY);
 
@@ -240,9 +257,13 @@ public class GeoWavePluginConfig
 		return password;
 	}
 
-	public String getNamespace() {
-		return namespace;
+	public String getAccumuloNamespace() {
+		return accumuloNamespace;
 	}
+        
+	public String getFeatureNamespace() {
+		return featureNamespace;
+	}        
 
 	private static Map<String, List<String>> getLockMgtOptions() {
 		List<String> options = new ArrayList<String>();

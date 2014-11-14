@@ -119,6 +119,7 @@ TransactionNotification
 
 	private final AuthorizationSPI authorizationSPI;
 	final private TransactionsAllocater transactionsAllocater;
+        private String featureNamespace = null;        
 
 	/**
 	 * Manages InProcess locks for FeatureLocking implementations.
@@ -234,7 +235,7 @@ TransactionNotification
 				config.getInstanceName(),
 				config.getUserName(),
 				config.getPassword(),
-				config.getNamespace());
+				config.getAccumuloNamespace());
 		final AccumuloIndexStore indexStore = new AccumuloIndexStore(
 				storeOperations);
 
@@ -253,10 +254,12 @@ TransactionNotification
 				config.getInstanceName(),
 				config.getUserName(),
 				config.getPassword(),
-				config.getNamespace() + "_stats");
+				config.getAccumuloNamespace() + "_stats");
 
 		statsDataStore = new VectorDataStore(
 				statsOperations);
+                
+                featureNamespace = config.getFeatureNamespace();                
 	}
 
 	protected Index getIndex(
@@ -552,7 +555,7 @@ TransactionNotification
 			}
 			featureAdapter = (FeatureDataAdapter) adapter;
 		}
-		featureAdapter.setNamespace(null);
+		featureAdapter.setNamespace(featureNamespace);
 		return featureAdapter;
 	}
 
