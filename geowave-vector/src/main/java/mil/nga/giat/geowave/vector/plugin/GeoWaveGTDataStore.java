@@ -2,7 +2,6 @@ package mil.nga.giat.geowave.vector.plugin;
 
 import java.io.IOException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -134,12 +133,6 @@ public class GeoWaveGTDataStore extends
 		lockingManager = new MemoryLockManager(
 				"default");
 		authorizationSPI = new EmptyAuthorizationProvider();
-		try {
-			featureNameSpaceURI =  new URI("http://localhost:9090/geowave");
-		}
-		catch (URISyntaxException e) {
-			LOGGER.error("Deault URI http://localhost:9090/geowave is malformed ", e);
-		}
 	}
 
 	public GeoWaveGTDataStore(
@@ -150,12 +143,6 @@ public class GeoWaveGTDataStore extends
 		lockingManager = new MemoryLockManager(
 				"default");
 		this.transactionsAllocater = transactionsAllocater;
-		try {
-			featureNameSpaceURI =  new URI("http://localhost:9090/geowave");
-		}
-		catch (URISyntaxException e) {
-			LOGGER.error("Deault URI http://localhost:9090/geowave is malformed ", e);
-		}
 	}
 
 	public GeoWaveGTDataStore(
@@ -174,12 +161,9 @@ public class GeoWaveGTDataStore extends
 				config.getZookeeperServers(),
 				"gt",
 				this);
-		try {
-			featureNameSpaceURI =  new URI("http://localhost:9090/geowave");
-		}
-		catch (URISyntaxException e) {
-			LOGGER.error("Deault URI http://localhost:9090/geowave is malformed ", e);
-		}
+
+		featureNameSpaceURI = config.getFeatureNamespace();
+
 	}
 
 	@Override
@@ -311,8 +295,9 @@ public class GeoWaveGTDataStore extends
 		final FeatureDataAdapter adapter = new FeatureDataAdapter(
 				featureType,
 				getVisibilityManagement());
-		if ( featureNameSpaceURI != null)
-		   adapter.setNamespace(featureNameSpaceURI.toString());
+		if (featureNameSpaceURI != null) {
+			adapter.setNamespace(featureNameSpaceURI.toString());
+		}
 
 		adapterStore.addAdapter(adapter);
 		getPreferredIndex(adapter);
@@ -570,7 +555,9 @@ public class GeoWaveGTDataStore extends
 			}
 			featureAdapter = (FeatureDataAdapter) adapter;
 		}
-		featureAdapter.setNamespace(this.featureNameSpaceURI.toString());
+		if (featureNameSpaceURI != null) featureAdapter.setNamespace(featureNameSpaceURI.toString());
+		// else
+		// featureAdapter.setNamespace(null);
 		return featureAdapter;
 	}
 
@@ -595,9 +582,8 @@ public class GeoWaveGTDataStore extends
 		final FeatureDataAdapter adapter = getStatsAdapter(typeName);
 		if (adapter != null) {
 			final SimpleFeatureType type = adapter.getType();
-			String nameSpace = featureNameSpaceURI != null
-					 ? featureNameSpaceURI.toString() : type.getName().getNamespaceURI();
-			
+			final String nameSpace = featureNameSpaceURI != null ? featureNameSpaceURI.toString() : type.getName().getNamespaceURI();
+
 			return new SimpleFeatureTypeImpl(
 					new NameImpl(
 							nameSpace,
@@ -744,7 +730,7 @@ public class GeoWaveGTDataStore extends
 		final DataAdapter<?> adapter = adapterStore.getAdapter(new ByteArrayId(
 				StringUtils.stringToBinary(typeName)));
 		if (adapter != null) {
-			String[] authorizations = getAuthorizationSPI().getAuthorizations();
+			final String[] authorizations = getAuthorizationSPI().getAuthorizations();
 			try (CloseableIterator<Index> indicesIt = dataStore.getIndices()) {
 				while (indicesIt.hasNext()) {
 					dataStore.deleteEntries(
@@ -753,7 +739,7 @@ public class GeoWaveGTDataStore extends
 							authorizations);
 				}
 			}
-			catch (IOException ex) {
+			catch (final IOException ex) {
 				LOGGER.error(
 						"Cannot close index iterator.",
 						ex);
@@ -853,7 +839,7 @@ public class GeoWaveGTDataStore extends
 				LOGGER.warn("Creating new index for GeoSpatial Data");
 			}
 		}
-		catch (IOException ex) {
+		catch (final IOException ex) {
 			LOGGER.error(
 					"Cannot close index iterator.",
 					ex);
@@ -880,7 +866,7 @@ public class GeoWaveGTDataStore extends
 	}
 
 	Name getTypeName(
-			String typeName ) {
+			final String typeName ) {
 		return new NameImpl(
 				featureNameSpaceURI.toString(),
 				typeName);
