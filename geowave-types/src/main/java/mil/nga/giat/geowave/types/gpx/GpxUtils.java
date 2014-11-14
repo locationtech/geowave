@@ -57,6 +57,7 @@ public class GpxUtils
 	public static final DateFormat TIME_FORMAT_SECONDS = new SimpleDateFormat(
 			"yyyy-MM-dd'T'HH:mm:ss'Z'");
 	public static String GPX_POINT_FEATURE = "gpxpoint";
+	public static String GPX_ROUTE_FEATURE = "gpxroute";
 	public static String GPX_TRACK_FEATURE = "gpxtrack";
 	public static String GPX_WAYPOINT_FEATURE = "gpxwaypoint";
 
@@ -80,6 +81,7 @@ public class GpxUtils
 					case "gpxFile": {
 						final GpxTrack gt = new GpxTrack();
 						node = event.asStartElement();
+						@SuppressWarnings("unchecked")
 						final Iterator<Attribute> attributes = node.getAttributes();
 						while (attributes.hasNext()) {
 							final Attribute a = attributes.next();
@@ -185,7 +187,10 @@ public class GpxUtils
 				Geometry.class).nillable(
 				true).buildDescriptor(
 				"geometry"));
-
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
+				String.class).nillable(
+				true).buildDescriptor(
+				"Name"));
 		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
 				Date.class).nillable(
 				true).buildDescriptor(
@@ -222,6 +227,62 @@ public class GpxUtils
 				String.class).nillable(
 				true).buildDescriptor(
 				"Tags"));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
+				String.class).nillable(
+				true).buildDescriptor(
+				"Source"));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
+				String.class).nillable(
+				true).buildDescriptor(
+				"Comment"));
+
+		return simpleFeatureTypeBuilder.buildFeatureType();
+
+	}
+
+	public static SimpleFeatureType createGPXRouteDataType() {
+
+		final SimpleFeatureTypeBuilder simpleFeatureTypeBuilder = new SimpleFeatureTypeBuilder();
+		simpleFeatureTypeBuilder.setName(GPX_ROUTE_FEATURE);
+
+		final AttributeTypeBuilder attributeTypeBuilder = new AttributeTypeBuilder();
+
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
+				Geometry.class).nillable(
+				true).buildDescriptor(
+				"geometry"));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
+				String.class).nillable(
+				true).buildDescriptor(
+				"Name"));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
+				Long.class).nillable(
+				true).buildDescriptor(
+				"NumberPoints"));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
+				String.class).nillable(
+				true).buildDescriptor(
+				"TrackId"));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
+				String.class).nillable(
+				true).buildDescriptor(
+				"Symbol"));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
+				String.class).nillable(
+				true).buildDescriptor(
+				"User"));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
+				String.class).nillable(
+				true).buildDescriptor(
+				"Description"));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
+				String.class).nillable(
+				true).buildDescriptor(
+				"Source"));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
+				String.class).nillable(
+				true).buildDescriptor(
+				"Comment"));
 
 		return simpleFeatureTypeBuilder.buildFeatureType();
 
@@ -254,6 +315,62 @@ public class GpxUtils
 				Date.class).nillable(
 				true).buildDescriptor(
 				"Timestamp"));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
+				String.class).nillable(
+				true).buildDescriptor(
+				"Comment"));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
+				Integer.class).nillable(
+				true).buildDescriptor(
+				"Satellites"));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
+				Double.class).nillable(
+				true).buildDescriptor(
+				"VDOP"));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
+				Double.class).nillable(
+				true).buildDescriptor(
+				"HDOP"));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
+				Double.class).nillable(
+				true).buildDescriptor(
+				"PDOP"));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
+				String.class).nillable(
+				true).buildDescriptor(
+				"Symbol"));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
+				String.class).nillable(
+				true).buildDescriptor(
+				"Classification"));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
+				Double.class).nillable(
+				true).buildDescriptor(
+				"GeoHeight"));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
+				Double.class).nillable(
+				true).buildDescriptor(
+				"Course"));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
+				Double.class).nillable(
+				true).buildDescriptor(
+				"MagneticVariation"));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
+				String.class).nillable(
+				true).buildDescriptor(
+				"Source"));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
+				String.class).nillable(
+				true).buildDescriptor(
+				"Link"));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
+				String.class).nillable(
+				true).buildDescriptor(
+				"Fix"));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
+				Integer.class).nillable(
+				true).buildDescriptor(
+				"Station"));
 
 		return simpleFeatureTypeBuilder.buildFeatureType();
 
@@ -298,6 +415,42 @@ public class GpxUtils
 				String.class).nillable(
 				true).buildDescriptor(
 				"Symbol"));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
+				String.class).nillable(
+				true).buildDescriptor(
+				"Link"));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
+				String.class).nillable(
+				true).buildDescriptor(
+				"Source"));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
+				Integer.class).nillable(
+				true).buildDescriptor(
+				"Station"));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
+				String.class).nillable(
+				true).buildDescriptor(
+				"URL"));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
+				String.class).nillable(
+				true).buildDescriptor(
+				"URLName"));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
+				String.class).nillable(
+				true).buildDescriptor(
+				"Fix"));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
+				Double.class).nillable(
+				true).buildDescriptor(
+				"MagneticVariation"));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
+				Double.class).nillable(
+				true).buildDescriptor(
+				"GeoHeight"));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
+				Double.class).nillable(
+				true).buildDescriptor(
+				"Elevation"));
 
 		return simpleFeatureTypeBuilder.buildFeatureType();
 

@@ -1,0 +1,13 @@
+<gpxFiles generator="OpenStreetMap PlanetGpxDump.java"
+          timestamp="2009-12-27T23:55:00Z">
+    <gpxFile id="12345" timestamp="2006-03-21T09:33:03Z"
+           fileName="sample_osm_gpx.xml" points="7" startLatitude="10.1234567"
+           startLongitude="53.1234567" user="Foo" uid="12345"
+           visibility="identifiable">
+        <description>Description</description>
+        <tags>
+            <tag>tag1</tag>
+            <tag>tag2</tag>
+        </tags>
+    </gpxFile>
+</gpxFiles>
