@@ -4,6 +4,8 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.Serializable;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -15,7 +17,8 @@ public class GeoWavePluginConfigTest
 
 	@Test
 	public void test()
-			throws GeoWavePluginException {
+			throws GeoWavePluginException,
+			URISyntaxException {
 		List<Param> params = GeoWavePluginConfig.getPluginParams();
 		HashMap<String, Serializable> paramValues = new HashMap<String, Serializable>();
 		for (Param param : params) {
@@ -28,8 +31,17 @@ public class GeoWavePluginConfigTest
 						param.getName(),
 						options.get(0));
 			}
-			else if (!param.getName().equals(GeoWavePluginConfig.AUTH_URL_KEY))
-			  paramValues.put(param.getName(), (Serializable)( param.getDefaultValue() == null ? "" :param.getDefaultValue()  ));
+			else if (param.getName().equals(
+					GeoWavePluginConfig.FEATURE_NAMESPACE_KEY)) {
+				paramValues.put(
+						param.getName(),
+						new URI(
+								"http://test/test"));
+			}
+			else if (!param.getName().equals(
+					GeoWavePluginConfig.AUTH_URL_KEY)) paramValues.put(
+					param.getName(),
+					(Serializable) (param.getDefaultValue() == null ? "" : param.getDefaultValue()));
 		}
 		GeoWavePluginConfig config = new GeoWavePluginConfig(
 				paramValues);

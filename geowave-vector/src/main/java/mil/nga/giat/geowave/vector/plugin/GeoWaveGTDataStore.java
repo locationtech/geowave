@@ -1,6 +1,8 @@
 package mil.nga.giat.geowave.vector.plugin;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -14,7 +16,6 @@ import mil.nga.giat.geowave.accumulo.AccumuloOperations;
 import mil.nga.giat.geowave.accumulo.BasicAccumuloOperations;
 import mil.nga.giat.geowave.accumulo.metadata.AbstractAccumuloPersistence;
 import mil.nga.giat.geowave.accumulo.metadata.AccumuloAdapterStore;
-import mil.nga.giat.geowave.accumulo.metadata.AccumuloDataStatisticsStore;
 import mil.nga.giat.geowave.accumulo.metadata.AccumuloIndexStore;
 import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.index.StringUtils;
@@ -85,12 +86,12 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
  * GeoTools uses Java SPI (see
  * META-INF/services/org.geotools.data.DataStoreFactorySpi) to inject this
  * datastore.
- *
+ * 
  */
 public class GeoWaveGTDataStore extends
-AbstractDataStore implements
-DataStore,
-TransactionNotification
+		AbstractDataStore implements
+		DataStore,
+		TransactionNotification
 {
 	/** Package logger */
 	private final static Logger LOGGER = Logger.getLogger(GeoWaveGTDataStore.class);
@@ -119,6 +120,7 @@ TransactionNotification
 
 	private final AuthorizationSPI authorizationSPI;
 	final private TransactionsAllocater transactionsAllocater;
+	private URI featureNameSpaceURI;
 
 	/**
 	 * Manages InProcess locks for FeatureLocking implementations.
@@ -132,6 +134,12 @@ TransactionNotification
 		lockingManager = new MemoryLockManager(
 				"default");
 		authorizationSPI = new EmptyAuthorizationProvider();
+		try {
+			featureNameSpaceURI =  new URI("http://localhost:9090/geowave");
+		}
+		catch (URISyntaxException e) {
+			LOGGER.error("Deault URI http://localhost:9090/geowave is malformed ", e);
+		}
 	}
 
 	public GeoWaveGTDataStore(
@@ -142,13 +150,19 @@ TransactionNotification
 		lockingManager = new MemoryLockManager(
 				"default");
 		this.transactionsAllocater = transactionsAllocater;
+		try {
+			featureNameSpaceURI =  new URI("http://localhost:9090/geowave");
+		}
+		catch (URISyntaxException e) {
+			LOGGER.error("Deault URI http://localhost:9090/geowave is malformed ", e);
+		}
 	}
 
 	public GeoWaveGTDataStore(
 			final GeoWavePluginConfig config )
-					throws IOException,
-					AccumuloException,
-					AccumuloSecurityException {
+			throws IOException,
+			AccumuloException,
+			AccumuloSecurityException {
 		listenerManager = new FeatureListenerManager();
 
 		lockingManager = config.getLockingManagementFactory().createLockingManager(
@@ -160,6 +174,12 @@ TransactionNotification
 				config.getZookeeperServers(),
 				"gt",
 				this);
+		try {
+			featureNameSpaceURI =  new URI("http://localhost:9090/geowave");
+		}
+		catch (URISyntaxException e) {
+			LOGGER.error("Deault URI http://localhost:9090/geowave is malformed ", e);
+		}
 	}
 
 	@Override
@@ -227,14 +247,14 @@ TransactionNotification
 
 	public void init(
 			final GeoWavePluginConfig config )
-					throws AccumuloException,
-					AccumuloSecurityException {
+			throws AccumuloException,
+			AccumuloSecurityException {
 		storeOperations = new BasicAccumuloOperations(
 				config.getZookeeperServers(),
 				config.getInstanceName(),
 				config.getUserName(),
 				config.getPassword(),
-				config.getNamespace());
+				config.getAccumuloNamespace());
 		final AccumuloIndexStore indexStore = new AccumuloIndexStore(
 				storeOperations);
 
@@ -253,7 +273,7 @@ TransactionNotification
 				config.getInstanceName(),
 				config.getUserName(),
 				config.getPassword(),
-				config.getNamespace() + "_stats");
+				config.getAccumuloNamespace() + "_stats");
 
 		statsDataStore = new VectorDataStore(
 				statsOperations);
@@ -291,6 +311,8 @@ TransactionNotification
 		final FeatureDataAdapter adapter = new FeatureDataAdapter(
 				featureType,
 				getVisibilityManagement());
+		if ( featureNameSpaceURI != null)
+		   adapter.setNamespace(featureNameSpaceURI.toString());
 
 		adapterStore.addAdapter(adapter);
 		getPreferredIndex(adapter);
@@ -327,7 +349,7 @@ TransactionNotification
 	protected FeatureReader<SimpleFeatureType, SimpleFeature> getFeatureReader(
 			final String typeName,
 			final Query query )
-					throws IOException {
+			throws IOException {
 		final FeatureDataAdapter adapter = getAdapter(query.getTypeName());
 
 		if (adapter == null) {
@@ -346,7 +368,7 @@ TransactionNotification
 	@Override
 	protected FeatureReader<SimpleFeatureType, SimpleFeature> getFeatureReader(
 			final String typeName )
-					throws IOException {
+			throws IOException {
 		throw new UnsupportedOperationException(
 				"Should not get here");
 	}
@@ -372,24 +394,22 @@ TransactionNotification
 	@Override
 	public SimpleFeatureSource getFeatureSource(
 			final Name name )
-					throws IOException {
-		return getFeatureSource(
-				name.getLocalPart());
+			throws IOException {
+		return getFeatureSource(name.getLocalPart());
 	}
 
 	public SimpleFeatureSource getFeatureSource(
 			final Name name,
 			final Transaction transaction )
-					throws IOException {
-		return getFeatureSource(
-				name.getLocalPart());
+			throws IOException {
+		return getFeatureSource(name.getLocalPart());
 	}
 
 	@Override
 	protected FeatureWriter<SimpleFeatureType, SimpleFeature> createFeatureWriter(
 			final String typeName,
 			final Transaction transaction )
-					throws IOException {
+			throws IOException {
 		return getFeatureWriter(
 				typeName,
 				Filter.INCLUDE,
@@ -411,7 +431,7 @@ TransactionNotification
 	public FeatureReader<SimpleFeatureType, SimpleFeature> getFeatureReader(
 			final Query query,
 			final Transaction transaction )
-					throws IOException {
+			throws IOException {
 		final Filter filter = query.getFilter();
 		final String typeName = query.getTypeName();
 		final String propertyNames[] = query.getPropertyNames();
@@ -429,8 +449,7 @@ TransactionNotification
 					"getFeatureReader requires Transaction: " + "did you mean to use Transaction.AUTO_COMMIT?");
 		}
 		SimpleFeatureType featureType = getSchema(query.getTypeName());
-		final GeoWaveFeatureSource source = (GeoWaveFeatureSource) getFeatureSource(
-				typeName);
+		final GeoWaveFeatureSource source = (GeoWaveFeatureSource) getFeatureSource(typeName);
 
 		if ((propertyNames != null) || (query.getCoordinateSystem() != null)) {
 			try {
@@ -486,10 +505,9 @@ TransactionNotification
 			final String typeName,
 			final Filter filter,
 			final Transaction transaction )
-					throws IOException {
-			
-		final GeoWaveFeatureSource source = (GeoWaveFeatureSource) getFeatureSource(
-				typeName);
+			throws IOException {
+
+		final GeoWaveFeatureSource source = (GeoWaveFeatureSource) getFeatureSource(typeName);
 
 		if (filter == null) {
 			throw new NullPointerException(
@@ -500,7 +518,7 @@ TransactionNotification
 			throw new NullPointerException(
 					"getFeatureWriter requires Transaction: " + "did you mean to use Transaction.AUTO_COMMIT?");
 		}
-		
+
 		final GeoWaveTransactionState state = getMyTransactionState(
 				transaction,
 				source);
@@ -528,7 +546,7 @@ TransactionNotification
 	public FeatureWriter<SimpleFeatureType, SimpleFeature> getFeatureWriterAppend(
 			final String typeName,
 			final Transaction transaction )
-					throws IOException {
+			throws IOException {
 		return this.getFeatureWriter(
 				typeName,
 				Filter.EXCLUDE,
@@ -552,7 +570,7 @@ TransactionNotification
 			}
 			featureAdapter = (FeatureDataAdapter) adapter;
 		}
-		featureAdapter.setNamespace(null);
+		featureAdapter.setNamespace(this.featureNameSpaceURI.toString());
 		return featureAdapter;
 	}
 
@@ -577,17 +595,20 @@ TransactionNotification
 		final FeatureDataAdapter adapter = getStatsAdapter(typeName);
 		if (adapter != null) {
 			final SimpleFeatureType type = adapter.getType();
+			String nameSpace = featureNameSpaceURI != null
+					 ? featureNameSpaceURI.toString() : type.getName().getNamespaceURI();
+			
 			return new SimpleFeatureTypeImpl(
 					new NameImpl(
-							type.getName().getNamespaceURI(),
+							nameSpace,
 							type.getName().getSeparator(),
 							typeName),
-							type.getAttributeDescriptors(),
-							type.getGeometryDescriptor(),
-							type.isAbstract(),
-							type.getRestrictions(),
-							type.getSuper(),
-							type.getDescription());
+					type.getAttributeDescriptors(),
+					type.getGeometryDescriptor(),
+					type.isAbstract(),
+					type.getRestrictions(),
+					type.getSuper(),
+					type.getDescription());
 		}
 		return null;
 	}
@@ -712,14 +733,14 @@ TransactionNotification
 	@Override
 	public void removeSchema(
 			final Name typeName )
-					throws IOException {
+			throws IOException {
 		this.removeSchema(typeName.getLocalPart());
 	}
 
 	@Override
 	public void removeSchema(
 			final String typeName )
-					throws IOException {
+			throws IOException {
 		final DataAdapter<?> adapter = adapterStore.getAdapter(new ByteArrayId(
 				StringUtils.stringToBinary(typeName)));
 		if (adapter != null) {
@@ -743,7 +764,7 @@ TransactionNotification
 	/**
 	 * Used to retrieve the TransactionStateDiff for this transaction.
 	 * <p>
-	 *
+	 * 
 	 * @param transaction
 	 * @return GeoWaveTransactionState or null if subclass is handling
 	 *         differences
@@ -752,7 +773,7 @@ TransactionNotification
 	protected GeoWaveTransactionState getMyTransactionState(
 			final Transaction transaction,
 			final GeoWaveFeatureSource source )
-					throws IOException {
+			throws IOException {
 		synchronized (transaction) {
 			GeoWaveTransactionState state = null;
 			if (transaction == Transaction.AUTO_COMMIT) {
@@ -856,5 +877,12 @@ TransactionNotification
 					"Cannot add transaction id as an authorization.",
 					ex);
 		}
+	}
+
+	Name getTypeName(
+			String typeName ) {
+		return new NameImpl(
+				featureNameSpaceURI.toString(),
+				typeName);
 	}
 }
