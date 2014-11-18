@@ -41,8 +41,6 @@ import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
-import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
-import org.geotools.referencing.crs.DefaultGeographicCRS;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 
@@ -62,7 +60,7 @@ public class PolygonGenerationDriver
 	private final String password;
 	private Instance zookeeperInstance;
 	private Connector accumuloConnector;
-	private final String tempKMeansTableNamespace;
+	private final String tempKMeansTableName;
 
 	private String outputTableNamespace;
 
@@ -78,22 +76,21 @@ public class PolygonGenerationDriver
 	 * @param dataTableNamespace
 	 *            String GeoWave namespace for input data table, only run data
 	 *            shall be stored in this table
-	 * @param tempKMeansTableNamespace
-	 *            String Namespace for temporary GeoWave table that will be
-	 *            destroyed upon job completion
+	 * @param tempKMeansTableName
+	 *            String Table for storing intra-processing information
 	 */
 	public PolygonGenerationDriver(
 			final String instanceName,
 			final String zooservers,
 			final String user,
 			final String password,
-			final String tempKMeansTableNamespace,
+			final String tempKMeansTableName,
 			String outputTableNamespace) {
 		this.instanceName = instanceName;
 		this.zooservers = zooservers;
 		this.user = user;
 		this.password = password;
-		this.tempKMeansTableNamespace = tempKMeansTableNamespace;
+		this.tempKMeansTableName = tempKMeansTableName;
 		this.outputTableNamespace = outputTableNamespace;
 
 		connectToAccumulo();
@@ -104,14 +101,14 @@ public class PolygonGenerationDriver
 			final String zooservers,
 			final String user,
 			final String password,
-			final String tempKMeansTableNamespace,
+			final String tempKMeansTableName,
 			final String outputTableNamespace,
 			final Connector accumuloConnector ) {
 		this.instanceName = instanceName;
 		this.zooservers = zooservers;
 		this.user = user;
 		this.password = password;
-		this.tempKMeansTableNamespace = tempKMeansTableNamespace;
+		this.tempKMeansTableName = tempKMeansTableName;
 		this.outputTableNamespace = outputTableNamespace;
 
 		this.accumuloConnector = accumuloConnector;
@@ -141,12 +138,11 @@ public class PolygonGenerationDriver
 	{
 		System.out.println("Starting polygon generation...");
 
-		final UUID uuid = UUID.randomUUID();
-		String outputRowId = "Polygons_" + uuid.toString();
+		String outputRowId = "Polygons_" + UUID.randomUUID().toString();
 		
 		try {
 			
-			Scanner scanner = accumuloConnector.createScanner(tempKMeansTableNamespace, new Authorizations());
+			Scanner scanner = accumuloConnector.createScanner(tempKMeansTableName, new Authorizations());
 
 			IteratorSetting iter = ClusteringUtils.createScanIterator("GeoSearch Filter", clusterAssignmentRowId, null, null, null, false);
 			scanner.addScanIterator(iter);
@@ -193,14 +189,14 @@ public class PolygonGenerationDriver
 			AccumuloInputFormat.setRanges(job, ranges);
 
 			AccumuloInputFormat.setConnectorInfo(job, user, authToken);
-			AccumuloInputFormat.setInputTableName(job, tempKMeansTableNamespace);
+			AccumuloInputFormat.setInputTableName(job, tempKMeansTableName);
 			AccumuloInputFormat.setScanAuthorizations(job, null);
 			AccumuloInputFormat.setZooKeeperInstance(job, instanceName, zooservers);
 
 			// set up AccumuloOutputFormat
 			AccumuloOutputFormat.setConnectorInfo(job, user, authToken);
 			AccumuloOutputFormat.setZooKeeperInstance(job, instanceName, zooservers);
-			AccumuloOutputFormat.setDefaultTableName(job, tempKMeansTableNamespace);
+			AccumuloOutputFormat.setDefaultTableName(job, tempKMeansTableName);
 			AccumuloOutputFormat.setCreateTables(job, true);
 
 			// add all the dependency jars to the distributed cache for all map/reduce tasks
@@ -227,12 +223,15 @@ public class PolygonGenerationDriver
 
 			// retrieve list of polygon strings, in WKB format
 			WKBReader wkbReader = new WKBReader();
+//			WKTWriter wktWriter = new WKTWriter();
 			List<Polygon> polygons = new ArrayList<Polygon>();
 			for(final Entry<Key,Value> entry : scanner)
 			{
 				Geometry geometry = wkbReader.read(entry.getValue().get());
 				if(geometry instanceof Polygon)
 				{
+//					Polygon polygon = (Polygon) geometry;
+//					System.out.println(wktWriter.write(polygon));
 					polygons.add((Polygon) geometry);
 				}
 			}
@@ -255,16 +254,7 @@ public class PolygonGenerationDriver
 			Index index = IndexType.SPATIAL_VECTOR.createDefaultIndex();		 
 			
 			// build a multipolygon feature type
-			SimpleFeatureTypeBuilder builder = new SimpleFeatureTypeBuilder();
-	        builder.setName("MultiPolygon");
-	        builder.setCRS(DefaultGeographicCRS.WGS84); // <- Coordinate reference system
-
-	        // add attributes in order
-	        builder.add("geom", MultiPolygon.class);
-	        builder.add("name", String.class);
-	        
-	        // build the type
-	        final SimpleFeatureType multiPolygonType = builder.buildFeatureType();
+			SimpleFeatureType multiPolygonType = ClusteringUtils.createMultiPolygonSimpleFeatureaType("MultiPolygon");
 
 	    	WritableDataAdapter<SimpleFeature> adapter = new FeatureDataAdapter(multiPolygonType);
 			SimpleFeatureBuilder featureBuilder = new SimpleFeatureBuilder(multiPolygonType);

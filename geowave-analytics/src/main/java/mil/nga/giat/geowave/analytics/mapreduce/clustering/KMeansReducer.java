@@ -22,11 +22,8 @@ public class KMeansReducer {
 
 		public void  reduce(IntWritable assignedCentroidId, Iterable<Text> values, Context context) throws IOException, InterruptedException 
 		{
-			System.out.println("K-Means, Reducing...");
 			
-			Integer centroidId = assignedCentroidId.get();
-			
-			String runId = context.getConfiguration().get("run.id");
+			Integer centroidId = assignedCentroidId.get();			
 			String iter = context.getConfiguration().get("iteration.number");
 			
 			double totalX = 0.0, totalY = 0.0, ptCount = 0.0;
@@ -50,8 +47,6 @@ public class KMeansReducer {
 			double avgY = totalY / ptCount;
 			
 			Coordinate coord = new Coordinate(avgX, avgY);
-			
-			System.out.println("runid: " + runId + ", iter: " + iter + ", centroidId: " + centroidId + ", centroid: " + coord.toString());
 			
 			/*
 			 *  writes to the centroid keeper row

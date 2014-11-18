@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
 
-import mil.nga.giat.geowave.accumulo.util.AccumuloUtils;
+import mil.nga.giat.geowave.accumulo.mapreduce.input.GeoWaveInputKey;
 import mil.nga.giat.geowave.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.store.index.Index;
 import mil.nga.giat.geowave.store.index.IndexType;
@@ -21,19 +21,19 @@ import org.apache.accumulo.core.client.ZooKeeperInstance;
 import org.apache.accumulo.core.client.security.tokens.PasswordToken;
 import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.Value;
-import org.apache.accumulo.core.iterators.user.RegExFilter;
 import org.apache.accumulo.core.security.Authorizations;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
+import org.geotools.feature.simple.SimpleFeatureImpl;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 
+import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.Point;
 
 public class KMeansMapper {
-	public static class Map extends Mapper<Key, Value, IntWritable, Text>
+	public static class Map extends Mapper<GeoWaveInputKey, SimpleFeatureImpl, IntWritable, Text>
 	{
 		protected String runId;
 		protected List<DataPoint> centroids;
@@ -66,12 +66,10 @@ public class KMeansMapper {
 				IteratorSetting iter = ClusteringUtils.createScanIterator("GeoSearch Iterator", runId, lastIter.toString(), null, null, false);
 				scanner.addScanIterator(iter);
 				
-				System.out.println("retrieved centroids: ");
 				for(final Entry<Key,Value> entry : scanner)
 				{
 					// key: runId | iteration | pt_id
-					// value: jts coordinate string						
-					
+					// value: jts coordinate string		
 					int id = Integer.parseInt(entry.getKey().getColumnQualifier().toString());
 					
 					String ptStr = entry.getValue().toString();
@@ -79,14 +77,13 @@ public class KMeansMapper {
 					String[] splits = ptStr.split(",");
 					
 					DataPoint dp = new DataPoint(id, Double.parseDouble(splits[0]), Double.parseDouble(splits[1]), id, true);
-					System.out.println(dp.toString());
 					
 					centroids.add(dp);
 				}
 				scanner.close();
 				
 				// set up global variables
-				inputType = ClusteringUtils.createSimpleFeatureType(dataTypeId);
+				inputType = ClusteringUtils.createPointSimpleFeatureType(dataTypeId);
 				adapter = new FeatureDataAdapter(inputType);
 				index = IndexType.SPATIAL_VECTOR.createDefaultIndex();
 				
@@ -105,21 +102,14 @@ public class KMeansMapper {
 		 */
 
 		@Override
-		public void  map(Key key, Value value, Context context) throws IOException, InterruptedException {	
-			
-			// let GeoWaveUtils decode input
-			SimpleFeature feature = (SimpleFeature) AccumuloUtils.decodeRow(
-					key,
-					value,
-					adapter,
-					index);
+		public void  map(GeoWaveInputKey key, SimpleFeatureImpl value, Context context) throws IOException, InterruptedException {	
 
-			Integer pointId = Integer.parseInt(feature.getAttribute("name").toString());
-			Geometry geometry = (Geometry) feature.getDefaultGeometry();
+			Integer pointId = Integer.parseInt(value.getAttribute("name").toString());
+			Geometry geometry = (Geometry) value.getDefaultGeometry();
 
-			Point point = geometry.getCentroid();
+			Coordinate coord = geometry.getCentroid().getCoordinate();
 			
-			DataPoint dp = new DataPoint(pointId, point.getX(), point.getY(), -1, false);
+			DataPoint dp = new DataPoint(pointId, coord.x, coord.y, -1, false);
 			
 			double minDist = Double.MAX_VALUE;
 			Integer closestCentroidId = -1;
@@ -132,7 +122,7 @@ public class KMeansMapper {
 					closestCentroidId = centroid.id;
 				}
 			}
-			context.write(new IntWritable(closestCentroidId), new Text(value.toString()));
+			context.write(new IntWritable(closestCentroidId), new Text(coord.toString()));
 		}
 	}
 

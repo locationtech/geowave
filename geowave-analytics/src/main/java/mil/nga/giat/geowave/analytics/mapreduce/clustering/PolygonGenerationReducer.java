@@ -148,7 +148,6 @@ public class PolygonGenerationReducer extends Reducer<IntWritable, Text, Text, M
 				com.vividsolutions.jts.geom.LinearRing linearRing = new com.vividsolutions.jts.geom.LinearRing(cas, new GeometryFactory());
 				sortedPolygon = new com.vividsolutions.jts.geom.Polygon(linearRing, null, new GeometryFactory());
 			}
-			System.out.println("cluster: " + centroidId + ", polygon: " + sortedPolygon.toText());
 
 			WKBWriter wkbWriter = new WKBWriter();
 

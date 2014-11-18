@@ -10,9 +10,8 @@ import java.util.Map.Entry;
 
 import mil.nga.giat.geowave.accumulo.AccumuloDataStore;
 import mil.nga.giat.geowave.accumulo.BasicAccumuloOperations;
-import mil.nga.giat.geowave.accumulo.util.AccumuloUtils;
+import mil.nga.giat.geowave.accumulo.mapreduce.input.GeoWaveInputFormat;
 import mil.nga.giat.geowave.index.ByteArrayRange;
-import mil.nga.giat.geowave.ingest.hdfs.mapreduce.GeoWaveInputFormat;
 import mil.nga.giat.geowave.store.DataStore;
 import mil.nga.giat.geowave.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.store.index.Index;
@@ -26,21 +25,16 @@ import org.apache.accumulo.core.client.BatchWriter;
 import org.apache.accumulo.core.client.BatchWriterConfig;
 import org.apache.accumulo.core.client.Connector;
 import org.apache.accumulo.core.client.Instance;
-import org.apache.accumulo.core.client.IteratorSetting;
 import org.apache.accumulo.core.client.Scanner;
 import org.apache.accumulo.core.client.TableExistsException;
 import org.apache.accumulo.core.client.TableNotFoundException;
 import org.apache.accumulo.core.client.ZooKeeperInstance;
-import org.apache.accumulo.core.client.mapreduce.AccumuloInputFormat;
 import org.apache.accumulo.core.client.mapreduce.AccumuloOutputFormat;
-import org.apache.accumulo.core.client.mapreduce.InputFormatBase;
 import org.apache.accumulo.core.client.security.tokens.AuthenticationToken;
 import org.apache.accumulo.core.client.security.tokens.PasswordToken;
 import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.Mutation;
-import org.apache.accumulo.core.data.Range;
 import org.apache.accumulo.core.data.Value;
-import org.apache.accumulo.core.iterators.user.RegExFilter;
 import org.apache.accumulo.core.security.Authorizations;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.filecache.DistributedCache;
@@ -55,8 +49,6 @@ import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 
 import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.Point;
 import com.vividsolutions.jts.geom.Polygon;
 
 public class KMeansDriver
@@ -81,7 +73,7 @@ public class KMeansDriver
 	 * @param user String User for Accumulo instance
 	 * @param password String Password for access
 	 * @param dataTableNamespace String GeoWave namespace for input data table, only run data shall be stored in this table
-	 * @param tempKMeansTableName String Namespace for temporary Accumulo table to hold inter-run data 
+	 * @param tempKMeansTableName String Table for storing intra-processing information
 	 */
 	public KMeansDriver(
 			final String instanceName,
@@ -216,74 +208,20 @@ public class KMeansDriver
 			job.setReducerClass(KMeansReducer.Reduce.class);
 			job.setNumReduceTasks(numClusters);
 
-			job.setInputFormatClass(AccumuloInputFormat.class);
+			job.setInputFormatClass(GeoWaveInputFormat.class);
 			job.setOutputFormatClass(AccumuloOutputFormat.class);
 
-			InputFormatBase.setConnectorInfo(
-					job,
-					user,
-					authToken);
-			InputFormatBase.setInputTableName(
-					job,
-					dataTableNamespace);
-			InputFormatBase.setScanAuthorizations(
-					job,
-					null);
-			InputFormatBase.setZooKeeperInstance(
-					job,
-					instanceName,
-					zooservers);
 			// split ranges for polygon query into individual map tasks
-//			GeoWaveInputFormat.setRangesForPolygon(
-//					job,
-//					polygon);
-			
-			//TODO debug code ---------------------------------
-			List<ByteArrayRange> byteRanges = getGeoWaveRangesForQuery(polygon);
-			System.out.println("range count for input data for k-means: " + byteRanges.size());
-			final List<Range> ranges = new ArrayList<Range>();
-			for (final ByteArrayRange byteRange : byteRanges) {			
-				ranges.add(AccumuloUtils.byteArrayRangeToAccumuloRange(byteRange));
-				System.out.println("range: " + AccumuloUtils.byteArrayRangeToAccumuloRange(byteRange).toString());
-			}
-			
-			AccumuloInputFormat.setRanges(
-					job,
-					ranges);
-			
-			// one range per mapper
-			AccumuloInputFormat.setAutoAdjustRanges(
-					job,
-					false);
-			
-			System.out.println("points retrieved from geowave: ");
-			Scanner scanner = accumuloConnector.createScanner(tempKMeansTableName, new Authorizations());
-
-			SimpleFeatureType inputType = ClusteringUtils.createSimpleFeatureType(dataTypeId);
-			WritableDataAdapter<SimpleFeature> adapter = new FeatureDataAdapter(inputType);
-			Index index = IndexType.SPATIAL_VECTOR.createDefaultIndex();
-//			for(Range range : ranges)
-//			{
-				scanner.setRange(new Range());
-
-				for(final Entry<Key,Value> entry : scanner)
-				{
-					SimpleFeature feature = (SimpleFeature) AccumuloUtils.decodeRow(
-							entry.getKey(),
-							entry.getValue(),
-							adapter,
-							index);
-
-					Integer pointId = Integer.parseInt(feature.getAttribute("name").toString());
-					Geometry geometry = (Geometry) feature.getDefaultGeometry();
-
-					Point point = geometry.getCentroid();
-
-					DataPoint dp = new DataPoint(pointId, point.getX(), point.getY(), -1, false);
-					System.out.println(dp.toString());
-				}
-//			}
-			//-------------------------------------------------------
+			final Index index = IndexType.SPATIAL_VECTOR.createDefaultIndex();
+			final SimpleFeatureType type = ClusteringUtils.createPointSimpleFeatureType(dataTypeId);
+			final WritableDataAdapter<SimpleFeature> adapter = new FeatureDataAdapter(
+					type);
+			GeoWaveInputFormat.addDataAdapter(job, adapter);
+			GeoWaveInputFormat.addIndex(job, index);
+			GeoWaveInputFormat.setAccumuloOperationsInfo(job, zooservers, instanceName, user, password, dataTableNamespace);
+			GeoWaveInputFormat.setMinimumSplitCount(job, 1);
+			GeoWaveInputFormat.setMaximumSplitCount(job, 20);
+			GeoWaveInputFormat.setQuery(job, new SpatialQuery(polygon));
 			
 			// set up AccumuloOutputFormat
 			AccumuloOutputFormat.setConnectorInfo(job, user, authToken);
@@ -316,7 +254,6 @@ public class KMeansDriver
 				e.printStackTrace();
 			}
 
-			System.out.println("running kmeans, iteration: " + iterCounter);
 			job.waitForCompletion(true);
 
 			// check for convergence
@@ -351,15 +288,13 @@ public class KMeansDriver
 			final int numClusters,
 			final Polygon polygon )
 			throws SchemaException {
-		System.out.println("Initializing centroids, num centroids: " + numClusters);
-
 		List<DataPoint> points = new ArrayList<DataPoint>();
 
 		// spatial index definition and query stuff
 		final Index index = IndexType.SPATIAL_VECTOR.createDefaultIndex();
 
 		// stuff to build SimpleFeature objects
-		final SimpleFeatureType type = ClusteringUtils.createSimpleFeatureType(dataTypeId);
+		final SimpleFeatureType type = ClusteringUtils.createPointSimpleFeatureType(dataTypeId);
 
 		// stuff to interact with GeoWave
 		final WritableDataAdapter<SimpleFeature> adapter = new FeatureDataAdapter(
@@ -398,7 +333,6 @@ public class KMeansDriver
 			// sort the picks in ascending order
 			Collections.sort(randInts);
 		}
-//		System.out.println("number of centroids to pick: " + randInts.size());
 
 		// extract points from GeoWave
 		points = ClusteringUtils.getSpecifiedPoints(
@@ -407,7 +341,6 @@ public class KMeansDriver
 				index,
 				polygon,
 				randInts);
-//		System.out.println("retreived point count: " + points.size());
 		
 		// write centroids to a custom temporary Accumulo table on the GeoWave instance
 		try {
@@ -419,9 +352,7 @@ public class KMeansDriver
 			// write initial clusters to table
 			Integer centroidCount= 0;
 			for(DataPoint centroid : points)
-			{		
-				System.out.println("centroid id: " + centroidCount + ", center: (" + centroid.x + ", " + centroid.y + ")");
-				
+			{						
 				/*
 				 *  writes to the centroid keeper row
 				 *  
@@ -449,17 +380,6 @@ public class KMeansDriver
 
 		return points;
 	}
-	
-	/*
-	 * null field will result in all possible entries in that field
-	 */
-//	private IteratorSetting createScanIterator(String iterName, String rowRegex, String colfRegex, String colqRegex, String valRegex, boolean orFields)
-//	{
-//		IteratorSetting iter = new IteratorSetting(15, iterName, RegExFilter.class);
-//		RegExFilter.setRegexs(iter, rowRegex, colfRegex, colqRegex, valRegex, orFields);	
-//		
-//		return iter;
-//	}
 
 	/*
 	 * convergence metric is the average centroid movement between the previous
@@ -467,14 +387,11 @@ public class KMeansDriver
 	 */
 	private boolean checkForConvergence(Integer iterCount)
 	{
-		System.out.println("checking for convergence...");
-		Scanner scanner;
 		try {
-			scanner = accumuloConnector.createScanner(tempKMeansTableName, new Authorizations());			
+			Scanner scanner = accumuloConnector.createScanner(tempKMeansTableName, new Authorizations());			
 			
 			// retrieve centroid information from previous run
 			Integer previousIter = iterCount - 1;
-			System.out.println("last iteration: " + previousIter + ", centroids:");
 			scanner.addScanIterator(ClusteringUtils.createScanIterator("GeoSearch filter", runId, previousIter.toString(), null, null, false));
 			HashMap<Integer, DataPoint> idToCentroidMap = new HashMap<Integer,DataPoint>();
 			for(final Entry<Key,Value> entry : scanner)
@@ -488,12 +405,9 @@ public class KMeansDriver
 				
 				DataPoint dp = new DataPoint(id, Double.parseDouble(splits[0]), Double.parseDouble(splits[1]), id, true);
 				idToCentroidMap.put(id, dp);
-				
-				System.out.println(dp.toString());
 			}
 			scanner.clearScanIterators();
 
-			System.out.println("current iteration: " + iterCount + ", centroids: ");
 			// retrieve latest centroid information
 			scanner.addScanIterator(ClusteringUtils.createScanIterator("GeoSearch filter", runId, iterCount.toString(), null, null, false));
 			double diff = 0.0;
@@ -504,28 +418,18 @@ public class KMeansDriver
 				ptStr = ptStr.substring(1, ptStr.length() -1);
 				String[] splits = ptStr.split(",");
 				
-				System.out.println("iteration: " + entry.getKey().getColumnFamily().toString() + ", centroid: " + entry.getKey().getColumnQualifier().toString() + ", (" + entry.getValue().toString() + ")");
-				
 				int id = Integer.parseInt(entry.getKey().getColumnQualifier().toString());
 				
 				DataPoint dp = new DataPoint(id, Double.parseDouble(splits[0]), Double.parseDouble(splits[1]), id, true);
-				System.out.println(dp.toString());
 				if(idToCentroidMap.get(id) != null)
 				{
 					diff += idToCentroidMap.get(id).calculateDistance(dp);
-				}
-				else
-				{
-					System.err.println("current run (" + iterCount + ") centroid does not exist in previous run centroid list, this is not good!");
 				}			
 			}
 			scanner.clearScanIterators();
 			
 			scanner.close();
-			System.out.println("total diff: " + diff + ", centroid count: " + idToCentroidMap.size());
 			diff /= (double) idToCentroidMap.size();
-			
-			System.out.println("run: " + iterCount + ", avg centroid movement: " + diff);
 			
 			if(diff < convergenceTol)	return true;
 		} catch (TableNotFoundException e) {

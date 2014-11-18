@@ -6,22 +6,32 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.UUID;
 
+import mil.nga.giat.geowave.accumulo.AccumuloDataStore;
+import mil.nga.giat.geowave.accumulo.BasicAccumuloOperations;
 import mil.nga.giat.geowave.accumulo.util.AccumuloUtils;
 import mil.nga.giat.geowave.index.ByteArrayRange;
 import mil.nga.giat.geowave.store.CloseableIterator;
 import mil.nga.giat.geowave.store.DataStore;
 import mil.nga.giat.geowave.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.store.index.Index;
 import mil.nga.giat.geowave.store.index.IndexType;
 import mil.nga.giat.geowave.store.query.SpatialQuery;
 import mil.nga.giat.geowave.vector.adapter.FeatureDataAdapter;
 
+import org.apache.accumulo.core.client.AccumuloException;
+import org.apache.accumulo.core.client.AccumuloSecurityException;
+import org.apache.accumulo.core.client.Connector;
+import org.apache.accumulo.core.client.Instance;
 import org.apache.accumulo.core.client.IteratorSetting;
+import org.apache.accumulo.core.client.ZooKeeperInstance;
 import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.Value;
 import org.apache.accumulo.core.iterators.user.RegExFilter;
 import org.geotools.data.DataUtilities;
 import org.geotools.feature.SchemaException;
+import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
+import org.geotools.referencing.crs.DefaultGeographicCRS;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 
@@ -29,6 +39,7 @@ import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.LinearRing;
+import com.vividsolutions.jts.geom.MultiPolygon;
 import com.vividsolutions.jts.geom.Point;
 import com.vividsolutions.jts.geom.Polygon;
 import com.vividsolutions.jts.geom.impl.CoordinateArraySequence;
@@ -64,7 +75,22 @@ public class ClusteringUtils
 		return new Polygon(linearRing, null, new GeometryFactory());
 	}
 	
-	public static SimpleFeatureType createSimpleFeatureType(final String dataTypeId)
+	public static SimpleFeatureType createMultiPolygonSimpleFeatureaType(final String dataTypeId)
+	{
+		// build a multipolygon feature type
+		SimpleFeatureTypeBuilder builder = new SimpleFeatureTypeBuilder();
+		builder.setName(dataTypeId);
+		builder.setCRS(DefaultGeographicCRS.WGS84); // <- Coordinate reference system
+
+		// add attributes in order
+		builder.add("geom", MultiPolygon.class);
+		builder.add("name", String.class);
+
+		// build the type
+		return builder.buildFeatureType();
+	}
+	
+	public static SimpleFeatureType createPointSimpleFeatureType(final String dataTypeId)
 	{
 		try {
 			return DataUtilities.createType(
@@ -145,7 +171,7 @@ public class ClusteringUtils
 	}
 	
 	/*
-	 * Temp method for debug
+	 * helper method to visualize point data
 	 */
 	public static void printData(DataStore dataStore, DataAdapter<SimpleFeature> adapter, Index index, Polygon polygon)
 	{
@@ -180,7 +206,6 @@ public class ClusteringUtils
 	 */
 	public static List<DataPoint> getSpecifiedPoints(DataStore dataStore, DataAdapter<SimpleFeature> adapter, Index index, Polygon polygon, List<Integer> indices)
 	{
-//		System.out.println("indices to retrieve: " + indices.toString());
 		List<DataPoint> points = new ArrayList<DataPoint>();
 		try {
 			int entryCounter = 0;

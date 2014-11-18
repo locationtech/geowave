@@ -82,12 +82,14 @@ public class ClusteringDriver
 	
 	public void generatePolygonsForPoints()
 	{
+		System.out.println("Initiating clustering and polygon generation...");
+		
 		String dataTypeId = "Location";
 		Polygon polygon = ClusteringUtils.generateWorldPolygon();
 		
 		// spatial index definition and query stuff
 		final Index index = IndexType.SPATIAL_VECTOR.createDefaultIndex();
-		final SimpleFeatureType type = ClusteringUtils.createSimpleFeatureType(dataTypeId);
+		final SimpleFeatureType type = ClusteringUtils.createPointSimpleFeatureType(dataTypeId);
 		final WritableDataAdapter<SimpleFeature> adapter = new FeatureDataAdapter(
 				type);
 		final DataStore inputDataStore = new AccumuloDataStore(
@@ -96,16 +98,13 @@ public class ClusteringDriver
 						dataTableNamespace));
 
 		int numPts = ClusteringUtils.getPointCount(inputDataStore, adapter, index, polygon);
-		System.out.println("pt count: " + numPts);
+		System.out.println("Input point count: " + numPts);
 		
-		//TODO temp code
-		ClusteringUtils.printData(inputDataStore, adapter, index, polygon);
-		
-		// no point to process < 3 pts since there wont be a polygon
+		// no point (pun intended) to process < 3 pts since there wont be a polygon
 		if(numPts >= 3)	
 		{
 			int maxNumClusters;
-			if(numPts < 10) maxNumClusters = numPts - 1;
+			if(numPts < 10) maxNumClusters = numPts / 2;
 			else if(numPts < 1000) maxNumClusters = numPts / 10;
 			else if(numPts < 100000) maxNumClusters = numPts / 1000;
 			else maxNumClusters = 100;
@@ -120,18 +119,22 @@ public class ClusteringDriver
 					accumuloConnector);
 			
 			String clusterAssignmentRowId = jumpDriver.runKMeansWithJumpMethod(maxNumClusters);
-			System.out.println("row id for chosen clustering result: " + clusterAssignmentRowId);
 			
-//			PolygonGenerationDriver polygonGenerationDriver = new PolygonGenerationDriver(
-//					instanceName,
-//					zooservers,
-//					user,
-//					password,
-//					tempKMeansTableNamespace,
-//					dataTableNamespace,
-//					accumuloConnector );
-//			String outputRowId = polygonGenerationDriver.generatePolygons(clusterAssignmentRowId);
-//			System.out.println("Output row id: [" + outputRowId + "] in input data table namespace");
+			PolygonGenerationDriver polygonGenerationDriver = new PolygonGenerationDriver(
+					instanceName,
+					zooservers,
+					user,
+					password,
+					tempKMeansTableNamespace,
+					dataTableNamespace,
+					accumuloConnector );
+			String outputRowId = polygonGenerationDriver.generatePolygons(clusterAssignmentRowId);
+			System.out.println("Output row id: [" + outputRowId + "] in temp table");
+			System.out.println("Output data type id: [MultiPolygon] in input table namespace: " + dataTableNamespace);
+		}
+		else
+		{
+			System.out.println("Not enough data for polygon genration");
 		}
 	}
 

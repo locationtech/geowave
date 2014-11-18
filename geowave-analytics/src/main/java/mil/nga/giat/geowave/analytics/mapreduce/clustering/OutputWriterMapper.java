@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
 
+import mil.nga.giat.geowave.accumulo.mapreduce.input.GeoWaveInputKey;
 import mil.nga.giat.geowave.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.store.index.Index;
 import mil.nga.giat.geowave.store.index.IndexType;
@@ -24,10 +25,14 @@ import org.apache.accumulo.core.data.Value;
 import org.apache.accumulo.core.security.Authorizations;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
+import org.geotools.feature.simple.SimpleFeatureImpl;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 
-public class OutputWriterMapper extends Mapper<Key, Value, Text, Mutation>
+import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.Geometry;
+
+public class OutputWriterMapper extends Mapper<GeoWaveInputKey, SimpleFeatureImpl, Text, Mutation>
 {
 //	protected String runId;
 	protected List<DataPoint> centroids;
@@ -78,7 +83,7 @@ public class OutputWriterMapper extends Mapper<Key, Value, Text, Mutation>
 			
 			// set up global variables
 			String dataTypeId = context.getConfiguration().get("dataTypeId");  // "Location"
-			inputType = ClusteringUtils.createSimpleFeatureType(dataTypeId);
+			inputType = ClusteringUtils.createPointSimpleFeatureType(dataTypeId);
 			adapter = new FeatureDataAdapter(inputType);
 			index = IndexType.SPATIAL_VECTOR.createDefaultIndex();
 			
@@ -94,20 +99,15 @@ public class OutputWriterMapper extends Mapper<Key, Value, Text, Mutation>
 	}
 	
 	@Override
-	public void  map(Key key, Value value, Context context) throws IOException, InterruptedException 
+	public void  map(GeoWaveInputKey key, SimpleFeatureImpl value, Context context) throws IOException, InterruptedException 
 	{
-		// key : token | cc | pt_id   - token and cc should be constant since this mapper processes a point cloud for token+cc
-		// value : String representation of JTS Coordinate (x,y,z), example: (34.75, 31.5, NaN) 		
-		String outputRowId = context.getConfiguration().get("outputRowId");
+		Integer pointId = Integer.parseInt(value.getAttribute("name").toString());
+		Geometry geometry = (Geometry) value.getDefaultGeometry();
+
+		Coordinate coord = geometry.getCentroid().getCoordinate();
 		
-		String ptStr = value.toString();
-		int endIdx = ptStr.length() -1;
-		ptStr = ptStr.substring(1, endIdx);
-		String[] splits = ptStr.split(",");
-
-		int id = Integer.parseInt(key.getColumnQualifier().toString());
-
-		DataPoint dp = new DataPoint(id, Double.parseDouble(splits[0]), Double.parseDouble(splits[1]), -1, false);
+		DataPoint dp = new DataPoint(pointId, coord.x, coord.y, -1, false);		
+		String outputRowId = context.getConfiguration().get("outputRowId");
 
 		// find the closest centroid to dp
 		DataPoint assignedCentroid = null;
@@ -123,7 +123,7 @@ public class OutputWriterMapper extends Mapper<Key, Value, Text, Mutation>
 		}
 		
 		Mutation m = new Mutation(outputRowId);
-		m.put(new Text(new Integer(assignedCentroid.id).toString()), key.getColumnQualifier(), new Value(value.toString().getBytes()));
+		m.put(new Text(new Integer(assignedCentroid.id).toString()), new Text(pointId.toString()), new Value(coord.toString().getBytes()));
 		
 		context.write(outKey, m);
 	}

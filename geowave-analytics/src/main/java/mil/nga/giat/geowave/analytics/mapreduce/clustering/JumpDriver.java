@@ -9,7 +9,12 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.UUID;
 
-import mil.nga.giat.geowave.ingest.hdfs.mapreduce.GeoWaveInputFormat;
+import mil.nga.giat.geowave.accumulo.mapreduce.input.GeoWaveInputFormat;
+import mil.nga.giat.geowave.store.adapter.WritableDataAdapter;
+import mil.nga.giat.geowave.store.index.Index;
+import mil.nga.giat.geowave.store.index.IndexType;
+import mil.nga.giat.geowave.store.query.SpatialQuery;
+import mil.nga.giat.geowave.vector.adapter.FeatureDataAdapter;
 
 import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
@@ -20,7 +25,6 @@ import org.apache.accumulo.core.client.Scanner;
 import org.apache.accumulo.core.client.TableNotFoundException;
 import org.apache.accumulo.core.client.ZooKeeperInstance;
 import org.apache.accumulo.core.client.mapreduce.AccumuloOutputFormat;
-import org.apache.accumulo.core.client.mapreduce.InputFormatBase;
 import org.apache.accumulo.core.client.security.tokens.AuthenticationToken;
 import org.apache.accumulo.core.client.security.tokens.PasswordToken;
 import org.apache.accumulo.core.data.Key;
@@ -36,6 +40,8 @@ import org.apache.hadoop.io.DoubleWritable;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
+import org.opengis.feature.simple.SimpleFeature;
+import org.opengis.feature.simple.SimpleFeatureType;
 
 public class JumpDriver
 {
@@ -47,7 +53,7 @@ public class JumpDriver
 	private Instance zookeeperInstance;
 	private Connector accumuloConnector;
 	private final String dataTableNamespace;
-	private final String tempKMeansTableNamespace;
+	private final String tempKMeansTableName;
 	private String outputRowIdForJumpValues;
 
 	private final Integer _numDimensions = 2;
@@ -66,9 +72,8 @@ public class JumpDriver
 	 * @param dataTableNamespace
 	 *            String GeoWave namespace for input data table, only run data
 	 *            shall be stored in this table
-	 * @param tempKMeansTableNamespace
-	 *            String Namespace for GeoWave table that will be storing all
-	 *            temporary values
+	 * @param tempKMeansTableName
+	 *            String Table for storing intra-processing information
 	 */
 	public JumpDriver(
 			final String instanceName,
@@ -76,13 +81,13 @@ public class JumpDriver
 			final String user,
 			final String password,
 			final String dataTableNamespace,
-			final String tempKMeansTableNamespace ) {
+			final String tempKMeansTableName ) {
 		this.instanceName = instanceName;
 		this.zooservers = zooservers;
 		this.user = user;
 		this.password = password;
 		this.dataTableNamespace = dataTableNamespace;
-		this.tempKMeansTableNamespace = tempKMeansTableNamespace;
+		this.tempKMeansTableName = tempKMeansTableName;
 
 		connectToAccumulo();
 	}
@@ -93,14 +98,14 @@ public class JumpDriver
 			final String user,
 			final String password,
 			final String dataTableNamespace,
-			final String tempKMeansTableNamespace,
+			final String tempKMeansTableName,
 			final Connector accumuloConnector ) {
 		this.instanceName = instanceName;
 		this.zooservers = zooservers;
 		this.user = user;
 		this.password = password;
 		this.dataTableNamespace = dataTableNamespace;
-		this.tempKMeansTableNamespace = tempKMeansTableNamespace;
+		this.tempKMeansTableName = tempKMeansTableName;
 
 		this.accumuloConnector = accumuloConnector;
 	}
@@ -165,7 +170,7 @@ public class JumpDriver
 				runId);
 		job.getConfiguration().set(
 				"kmeans.table",
-				tempKMeansTableNamespace);
+				tempKMeansTableName);
 		job.getConfiguration().set(
 				"iteration.number",
 				iteration.toString());
@@ -198,37 +203,31 @@ public class JumpDriver
 		job.setInputFormatClass(GeoWaveInputFormat.class);
 		job.setOutputFormatClass(AccumuloOutputFormat.class);
 
-		InputFormatBase.setConnectorInfo(
-				job,
-				user,
-				authToken);
-		InputFormatBase.setInputTableName(
-				job,
-				dataTableNamespace);
-		InputFormatBase.setScanAuthorizations(
-				job,
-				null);
-		InputFormatBase.setZooKeeperInstance(
-				job,
-				instanceName,
-				zooservers);
 		// split ranges for polygon query into individual map tasks
-		GeoWaveInputFormat.setRangesForPolygon(
-				job,
-				ClusteringUtils.generateWorldPolygon());
+		final Index index = IndexType.SPATIAL_VECTOR.createDefaultIndex();
+		final SimpleFeatureType type = ClusteringUtils.createPointSimpleFeatureType(dataTypeId);
+		final WritableDataAdapter<SimpleFeature> adapter = new FeatureDataAdapter(
+				type);
+		GeoWaveInputFormat.addDataAdapter(job, adapter);
+		GeoWaveInputFormat.addIndex(job, index);
+		GeoWaveInputFormat.setAccumuloOperationsInfo(job, zooservers, instanceName, user, password, dataTableNamespace);
+		GeoWaveInputFormat.setMinimumSplitCount(job, 1);
+		GeoWaveInputFormat.setMaximumSplitCount(job, 20);
+		GeoWaveInputFormat.setQuery(job, new SpatialQuery(ClusteringUtils.generateWorldPolygon()));
 
 		// set up AccumuloOutputFormat
 		AccumuloOutputFormat.setConnectorInfo(
 				job,
 				user,
 				authToken);
-		AccumuloOutputFormat.setZooKeeperInstance(
+		AccumuloOutputFormat//.setZooKeeperInstance(job, new ClientConfiguration().withInstance(instanceName).withZkHosts(zooservers));
+		.setZooKeeperInstance(
 				job,
 				instanceName,
 				zooservers);
 		AccumuloOutputFormat.setDefaultTableName(
 				job,
-				tempKMeansTableNamespace);
+				tempKMeansTableName);
 		AccumuloOutputFormat.setCreateTables(
 				job,
 				true);
@@ -298,7 +297,7 @@ public class JumpDriver
 
 		job.getConfiguration().set(
 				"kmeans.table",
-				tempKMeansTableNamespace);
+				tempKMeansTableName);
 
 		job.getConfiguration().set(
 				"data.table",
@@ -330,37 +329,30 @@ public class JumpDriver
 		job.setInputFormatClass(GeoWaveInputFormat.class);
 		job.setOutputFormatClass(AccumuloOutputFormat.class);
 
-		InputFormatBase.setConnectorInfo(
-				job,
-				user,
-				authToken);
-		InputFormatBase.setInputTableName(
-				job,
-				dataTableNamespace);
-		InputFormatBase.setScanAuthorizations(
-				job,
-				null);
-		InputFormatBase.setZooKeeperInstance(
-				job,
-				instanceName,
-				zooservers);
 		// split ranges for polygon query into individual map tasks
-		GeoWaveInputFormat.setRangesForPolygon(
-				job,
-				ClusteringUtils.generateWorldPolygon());
-
-		// set up AccumuloOutputFormat
+		final Index index = IndexType.SPATIAL_VECTOR.createDefaultIndex();
+		final SimpleFeatureType type = ClusteringUtils.createPointSimpleFeatureType(dataTypeId);
+		final WritableDataAdapter<SimpleFeature> adapter = new FeatureDataAdapter(
+				type);
+		GeoWaveInputFormat.addDataAdapter(job, adapter);
+		GeoWaveInputFormat.addIndex(job, index);
+		GeoWaveInputFormat.setAccumuloOperationsInfo(job, zooservers, instanceName, user, password, dataTableNamespace);
+		GeoWaveInputFormat.setMinimumSplitCount(job, 1);
+		GeoWaveInputFormat.setMaximumSplitCount(job, 20);
+		GeoWaveInputFormat.setQuery(job, new SpatialQuery(ClusteringUtils.generateWorldPolygon()));
+		
 		AccumuloOutputFormat.setConnectorInfo(
 				job,
 				user,
 				authToken);
-		AccumuloOutputFormat.setZooKeeperInstance(
+		AccumuloOutputFormat//.setZooKeeperInstance(job, new ClientConfiguration().withInstance(instanceName).withZkHosts(zooservers));
+		.setZooKeeperInstance(
 				job,
 				instanceName,
 				zooservers);
 		AccumuloOutputFormat.setDefaultTableName(
 				job,
-				tempKMeansTableNamespace);
+				tempKMeansTableName);
 		AccumuloOutputFormat.setCreateTables(
 				job,
 				true);
@@ -415,10 +407,10 @@ public class JumpDriver
 				user,
 				password,
 				dataTableNamespace,
-				tempKMeansTableNamespace,
+				tempKMeansTableName,
 				accumuloConnector);
 
-		outputRowIdForJumpValues = tempKMeansTableNamespace + "_JUMP";
+		outputRowIdForJumpValues = UUID.randomUUID() + "_JUMP";
 
 		String outputRowIdForStats = null;
 
@@ -426,8 +418,6 @@ public class JumpDriver
 		for (int kk = 1; kk <= maxNumClusters; kk++) {
 			// generate run id for the kmeans run (on the temp table)
 			final UUID uuid = UUID.randomUUID();
-			
-			System.out.println("run id: " + uuid.toString());
 
 			try {
 				Integer iter = kmeans.runKMeans(
@@ -457,7 +447,7 @@ public class JumpDriver
 		// retrieve the jump values
 		try {
 			final Scanner scanner = accumuloConnector.createScanner(
-					tempKMeansTableNamespace,
+					tempKMeansTableName,
 					new Authorizations());
 			final IteratorSetting iter = ClusteringUtils.createScanIterator(
 					"GeoSearch Iterator",
@@ -470,7 +460,6 @@ public class JumpDriver
 
 			double maxJump = -1.0;
 			Integer jumpIdx = -1;
-			System.out.print("jump values: ");
 			double oldD = 0.0;
 
 			// colQual is cluster count
@@ -492,7 +481,6 @@ public class JumpDriver
 			for (final int idx : clusterCounts) {
 				final Double newD = clusterCountToDistortionMap.get(idx);
 				final Double jump = newD - oldD;
-				System.out.print(jump + "  ");
 				if (jump > maxJump) {
 					maxJump = jump;
 					jumpIdx = idx;
@@ -500,15 +488,12 @@ public class JumpDriver
 				oldD = newD;
 			}
 
-			System.out.println();
 			System.out.println("best estimate for number of clusters: " + jumpIdx);
 			scanner.clearScanIterators();
 			scanner.close();
 
-			// write point assignment to temp table, associate with the final
-			// kmeans run
+			// write point assignment to temp table, associate with the final kmeans run
 			outputRowIdForStats = clusterCountToStatsMap.get(jumpIdx).runId + "_FINAL";
-			System.out.println("writing final assignment to row: " + outputRowIdForStats);
 			writeFinalAssignmentsToAccumulo(
 					clusterCountToStatsMap.get(jumpIdx).runId,
 					clusterCountToStatsMap.get(jumpIdx).convergedIteration.toString(),

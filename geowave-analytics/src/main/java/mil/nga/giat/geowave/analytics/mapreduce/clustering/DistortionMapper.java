@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
 
-import mil.nga.giat.geowave.accumulo.util.AccumuloUtils;
+import mil.nga.giat.geowave.accumulo.mapreduce.input.GeoWaveInputKey;
 import mil.nga.giat.geowave.store.DataStore;
 import mil.nga.giat.geowave.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.store.index.Index;
@@ -25,13 +25,14 @@ import org.apache.accumulo.core.security.Authorizations;
 import org.apache.hadoop.io.DoubleWritable;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.mapreduce.Mapper;
+import org.geotools.feature.simple.SimpleFeatureImpl;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.Point;
 
-public class DistortionMapper extends Mapper<Key, Value, IntWritable, DoubleWritable>
+public class DistortionMapper extends Mapper<GeoWaveInputKey, SimpleFeatureImpl, IntWritable, DoubleWritable>
 {
 	protected String runId;
 	protected List<DataPoint> centroids;
@@ -79,7 +80,7 @@ public class DistortionMapper extends Mapper<Key, Value, IntWritable, DoubleWrit
 			scanner.close();
 			
 			// set up global variables
-			dataType = ClusteringUtils.createSimpleFeatureType(dataTypeId);
+			dataType = ClusteringUtils.createPointSimpleFeatureType(dataTypeId);
 			adapter = new FeatureDataAdapter(dataType);
 			index = IndexType.SPATIAL_VECTOR.createDefaultIndex();			
 
@@ -98,22 +99,16 @@ public class DistortionMapper extends Mapper<Key, Value, IntWritable, DoubleWrit
 	 */
 
 	@Override
-	public void  map(Key key, Value value, Context context) throws IOException, InterruptedException {
-		// let GeoWaveUtils decode input
-		SimpleFeature feature = (SimpleFeature) AccumuloUtils.decodeRow(
-				key,
-				value,
-				adapter,
-				index);
+	public void  map(GeoWaveInputKey key, SimpleFeatureImpl value, Context context) throws IOException, InterruptedException {
 
-		Integer pointId = Integer.parseInt(feature.getAttribute("name").toString());
-		Geometry geometry = (Geometry) feature.getDefaultGeometry();
+		Integer pointId = Integer.parseInt(value.getAttribute("name").toString());
+		Geometry geometry = (Geometry) value.getDefaultGeometry();
 
 		Point point = geometry.getCentroid();
 
 		DataPoint dp = new DataPoint(pointId, point.getX(), point.getY(), -1, false);
 
-		// step 2.1 - find the closest centroid to dp
+		// find the closest centroid to dp
 		DataPoint assignedCentroid = null;
 		double leastDist = Double.MAX_VALUE;
 		for(DataPoint centroid : centroids)
@@ -126,7 +121,7 @@ public class DistortionMapper extends Mapper<Key, Value, IntWritable, DoubleWrit
 			}
 		}
 
-		// step 2.2 - calculate error for dp
+		// calculate error for dp
 		// using identity matrix for the common covariance, therefore 
 		// E[(p - c)^-1 * cov * (p - c)] => (px - cx)^2 + (py - cy)^2
 		double x2 = Math.pow(dp.x - assignedCentroid.x, 2);
