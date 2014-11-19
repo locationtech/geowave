@@ -1,11 +1,10 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<artifactId>geowave-parent</artifactId>
 		<groupId>mil.nga.giat</groupId>
 		<relativePath>../</relativePath>
-		<version>0.8.1-SNAPSHOT</version>
+		<version>0.8.1</version>
 	</parent>
 	<artifactId>geowave-deploy</artifactId>
 	<name>geowave-deploy</name>
@@ -17,83 +16,12 @@
 		<dependency>
 			<groupId>mil.nga.giat</groupId>
 			<artifactId>geowave-vector</artifactId>
-			<version>0.8.1-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>mil.nga.giat</groupId>
 			<artifactId>geowave-raster</artifactId>
-			<version>0.8.1-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>mil.nga.giat</groupId>
-			<artifactId>geowave-accumulo</artifactId>
-			<version>0.8.1-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>org.geotools</groupId>
-			<artifactId>gt-opengis</artifactId>
-			<version>${geotools.version}</version>
-			<scope>${geotools.scope}</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.geotools</groupId>
-			<artifactId>gt-main</artifactId>
-			<version>${geotools.version}</version>
-			<scope>${geotools.scope}</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.curator</groupId>
-			<artifactId>curator-test</artifactId>
-			<version>2.5.0</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.geotools</groupId>
-			<artifactId>gt-data</artifactId>
-			<version>${geotools.version}</version>
-			<scope>${geotools.scope}</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.geotools</groupId>
-			<artifactId>gt-cql</artifactId>
-			<version>${geotools.version}</version>
-			<scope>${geotools.scope}</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.geotools</groupId>
-			<artifactId>gt-wps</artifactId>
-			<version>${geotools.version}</version>
-			<scope>${geotools.scope}</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.geoserver</groupId>
-			<artifactId>gs-wms</artifactId>
-			<version>${geoserver.version}</version>
-			<scope>${geotools.scope}</scope>
-			<exclusions>
-				<exclusion>
-					<artifactId>gt-epsg-hsql</artifactId>
-					<groupId>org.geotools</groupId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>org.geotools</groupId>
-			<artifactId>gt-render</artifactId>
-			<version>${geotools.version}</version>
-			<scope>${geotools.scope}</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.geotools</groupId>
-			<artifactId>gt-epsg-wkt</artifactId>
-			<version>${geotools.version}</version>
-			<scope>${geotools.scope}</scope>
-		</dependency>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.4</version>
-			<scope>test</scope>
+			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
 	<build>
@@ -323,8 +251,7 @@
 										</filter>
 									</filters>
 									<transformers>
-										<transformer
-											implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
+										<transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
 
 									</transformers>
 									<createDependencyReducedPom>false</createDependencyReducedPom>
@@ -386,8 +313,7 @@
 										</filter>
 									</filters>
 									<transformers>
-										<transformer
-											implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
+										<transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
 									</transformers>
 									<createDependencyReducedPom>false</createDependencyReducedPom>
 									<minimizeJar>false</minimizeJar>
