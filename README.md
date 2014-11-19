@@ -1,4 +1,4 @@
-# GeoWave 0.8.1	
+# GeoWave 0.8.2	
 ## About  
 
 <a href="https://travis-ci.org/ngageoint/geowave">
@@ -82,7 +82,7 @@ First we need to build the geoserver plugin - from the geowave root directory:
 
 let's assume you have geoserver deployed in a tomcat container in /opt/tomcat
 
-    $ cp target/geowave-deploy-0.8.1-geoserver-singlejar.jar /opt/tomcat/webapps/geoserver/WEB-INF/lib/
+    $ cp target/geowave-deploy-0.8.2-geoserver-singlejar.jar /opt/tomcat/webapps/geoserver/WEB-INF/lib/
 
 and re-start tomcat
 
