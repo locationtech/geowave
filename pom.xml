@@ -117,58 +117,22 @@
 			</plugins>
 		</pluginManagement>
 		<plugins>
-			<!-- Compute unit test coverage for Sonar BEWARE: Sonar doesn't run the 
-				verify phase, it has to be forced by setting -Dsonar.phase=verify -->
-			<plugin>
+			 <plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>0.7.1.201405082137</version>
-				<configuration>
-					<includes>
-						<include>mil/nga/giat/geowave**</include>
-					</includes>
-				</configuration>
+				<version>0.5.8.201207111220</version>
 				<executions>
 					<execution>
-						<id>pre-unit-test</id>
 						<goals>
 							<goal>prepare-agent</goal>
 						</goals>
-						<configuration>
-							<destFile>${sonar.jacoco.reportPath}</destFile>
-							<propertyName>jacoco.surefire.argLine</propertyName>
-						</configuration>
 					</execution>
 					<execution>
-						<id>pre-integration-test</id>
-						<phase>pre-integration-test</phase>
-						<goals>
-							<goal>prepare-agent</goal>
-						</goals>
-						<configuration>
-							<destFile>${sonar.jacoco.itReportPath}</destFile>
-							<propertyName>jacoco.failsafe.argLine</propertyName>
-						</configuration>
-					</execution>
-					<execution>
-						<id>post-unit-test</id>
+						<id>report</id>
 						<phase>test</phase>
 						<goals>
 							<goal>report</goal>
 						</goals>
-						<configuration>
-							<datafile>${sonar.jacoco.reportPath}</datafile>
-						</configuration>
-					</execution>
-					<execution>
-						<id>post-integration-test</id>
-						<phase>post-integration-test</phase>
-						<goals>
-							<goal>report</goal>
-						</goals>
-						<configuration>
-							<dataFile>${sonar.jacoco.itReportPath}</dataFile>
-						</configuration>
 					</execution>
 				</executions>
 			</plugin>
