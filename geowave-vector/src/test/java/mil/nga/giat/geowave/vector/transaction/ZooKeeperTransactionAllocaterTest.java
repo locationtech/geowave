@@ -162,6 +162,7 @@ public class ZooKeeperTransactionAllocaterTest
 					}
 				}
 				catch (Throwable e) {
+					e.printStackTrace();
 					synchronized (failures) {
 						failures.add(e);
 						shutdown = true;

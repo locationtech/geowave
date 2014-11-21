@@ -26,6 +26,7 @@ import mil.nga.giat.geowave.store.index.IndexStore;
 import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.apache.accumulo.core.client.mapreduce.lib.util.ConfiguratorBase;
+import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.JobContext;
 import org.apache.hadoop.mapreduce.OutputCommitter;
@@ -93,18 +94,18 @@ public class GeoWaveOutputFormat extends
 	}
 
 	public static void addIndex(
-			final Job job,
+			final Configuration config,
 			final Index index ) {
 		JobContextIndexStore.addIndex(
-				job,
+				config,
 				index);
 	}
 
 	public static void addDataAdapter(
-			final Job job,
+			final Configuration config,
 			final DataAdapter<?> adapter ) {
 		JobContextAdapterStore.addDataAdapter(
-				job,
+				config,
 				adapter);
 	}
 
@@ -255,14 +256,59 @@ public class GeoWaveOutputFormat extends
 				throws IOException,
 				InterruptedException {
 			for (final IndexWriter indexWriter : indexWriterCache.values()) {
-			   indexWriter.close();
+				indexWriter.close();
 			}
 		}
 	}
 
 	/**
 	 * Configures a {@link AccumuloOperations} for this job.
-	 *
+	 * 
+	 * @param config
+	 *            hadoop configuration
+	 * @param zooKeepers
+	 *            a comma-separated list of zookeeper servers
+	 * @param instanceName
+	 *            the Accumulo instance name
+	 * @param userName
+	 *            the Accumulo user name
+	 * @param password
+	 *            the Accumulo password
+	 * @param geowaveTableNamespace
+	 *            the GeoWave table namespace
+	 */
+	public static void setAccumuloOperationsInfo(
+			final Configuration config,
+			final String zooKeepers,
+			final String instanceName,
+			final String userName,
+			final String password,
+			final String geowaveTableNamespace ) {
+		GeoWaveConfiguratorBase.setZookeeperUrl(
+				CLASS,
+				config,
+				zooKeepers);
+		GeoWaveConfiguratorBase.setInstanceName(
+				CLASS,
+				config,
+				instanceName);
+		GeoWaveConfiguratorBase.setUserName(
+				CLASS,
+				config,
+				userName);
+		GeoWaveConfiguratorBase.setPassword(
+				CLASS,
+				config,
+				password);
+		GeoWaveConfiguratorBase.setTableNamespace(
+				CLASS,
+				config,
+				geowaveTableNamespace);
+	}
+
+	/**
+	 * Configures a {@link AccumuloOperations} for this job.
+	 * 
 	 * @param job
 	 *            the Hadoop job instance to be configured
 	 * @param zooKeepers
@@ -283,31 +329,18 @@ public class GeoWaveOutputFormat extends
 			final String userName,
 			final String password,
 			final String geowaveTableNamespace ) {
-		GeoWaveConfiguratorBase.setZookeeperUrl(
-				CLASS,
-				job,
-				zooKeepers);
-		GeoWaveConfiguratorBase.setInstanceName(
-				CLASS,
-				job,
-				instanceName);
-		GeoWaveConfiguratorBase.setUserName(
-				CLASS,
-				job,
-				userName);
-		GeoWaveConfiguratorBase.setPassword(
-				CLASS,
-				job,
-				password);
-		GeoWaveConfiguratorBase.setTableNamespace(
-				CLASS,
-				job,
+		setAccumuloOperationsInfo(
+				job.getConfiguration(),
+				zooKeepers,
+				instanceName,
+				userName,
+				password,
 				geowaveTableNamespace);
 	}
 
 	/**
 	 * Sets the log level for this job.
-	 *
+	 * 
 	 * @param job
 	 *            the Hadoop job instance to be configured
 	 * @param level
@@ -315,17 +348,17 @@ public class GeoWaveOutputFormat extends
 	 * @since 1.5.0
 	 */
 	public static void setLogLevel(
-			final Job job,
+			Configuration config,
 			final Level level ) {
 		ConfiguratorBase.setLogLevel(
 				CLASS,
-				job.getConfiguration(),
+				config,
 				level);
 	}
 
 	/**
 	 * Gets the log level from this configuration.
-	 *
+	 * 
 	 * @param context
 	 *            the Hadoop context for the configured job
 	 * @return the log level
@@ -346,10 +379,10 @@ public class GeoWaveOutputFormat extends
 	/**
 	 * Sets the directive to create new tables, as necessary. Table names can
 	 * only be alpha-numeric and underscores.
-	 *
+	 * 
 	 * <p>
 	 * By default, this feature is <b>disabled</b>.
-	 *
+	 * 
 	 * @param job
 	 *            the Hadoop job instance to be configured
 	 * @param enableFeature
@@ -366,7 +399,7 @@ public class GeoWaveOutputFormat extends
 
 	/**
 	 * Determines whether tables are permitted to be created as needed.
-	 *
+	 * 
 	 * @param context
 	 *            the Hadoop context for the configured job
 	 * @return true if the feature is disabled, false otherwise

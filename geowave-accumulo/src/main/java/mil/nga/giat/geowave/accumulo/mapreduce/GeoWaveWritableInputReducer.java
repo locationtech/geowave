@@ -4,8 +4,6 @@ import java.io.IOException;
 
 import mil.nga.giat.geowave.accumulo.mapreduce.input.GeoWaveInputFormat;
 import mil.nga.giat.geowave.accumulo.mapreduce.input.GeoWaveInputKey;
-import mil.nga.giat.geowave.store.adapter.AdapterStore;
-import mil.nga.giat.geowave.store.adapter.DataAdapter;
 
 import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
@@ -27,7 +25,7 @@ public abstract class GeoWaveWritableInputReducer<KEYOUT, VALUEOUT> extends
 		Reducer<GeoWaveInputKey, ObjectWritable, KEYOUT, VALUEOUT>
 {
 	protected static final Logger LOGGER = Logger.getLogger(GeoWaveWritableInputReducer.class);
-	protected AdapterStore adapterStore;
+	protected HadoopWritableSerializationTool serializationTool;
 
 	@Override
 	protected void reduce(
@@ -48,24 +46,23 @@ public abstract class GeoWaveWritableInputReducer<KEYOUT, VALUEOUT> extends
 			final Reducer<GeoWaveInputKey, ObjectWritable, KEYOUT, VALUEOUT>.Context context )
 			throws IOException,
 			InterruptedException {
-		if (adapterStore != null) {
-			final DataAdapter<?> adapter = adapterStore.getAdapter(key.getAdapterId());
-			if ((adapter != null) && (adapter instanceof HadoopDataAdapter)) {
-				final Iterable<Object> transformedValues = Iterables.transform(
-						values,
-						new Function<ObjectWritable, Object>() {
-							@Override
-							public Object apply(
-									final ObjectWritable writable ) {
-								return ((HadoopDataAdapter) adapter).fromWritable((Writable) writable.get());
-							}
-						});
-				reduceNativeValues(
-						key,
-						transformedValues,
-						context);
-			}
-		}
+		final HadoopWritableSerializer<?, Writable> serializer = serializationTool.getHadoopWritableSerializerForAdapter(key.getAdapterId());
+		final Iterable<Object> transformedValues = Iterables.transform(
+				values,
+				new Function<ObjectWritable, Object>() {
+					@Override
+					public Object apply(
+							final ObjectWritable writable ) {
+						final Object innerObj = writable.get();
+						return (innerObj instanceof Writable) ? serializer.fromWritable((Writable) innerObj) : innerObj;
+					}
+				});
+
+		reduceNativeValues(
+				key,
+				transformedValues,
+				context);
+
 	}
 
 	protected abstract void reduceNativeValues(
@@ -81,9 +78,10 @@ public abstract class GeoWaveWritableInputReducer<KEYOUT, VALUEOUT> extends
 			throws IOException,
 			InterruptedException {
 		try {
-			adapterStore = new JobContextAdapterStore(
-					context,
-					GeoWaveInputFormat.getAccumuloOperations(context));
+			serializationTool = new HadoopWritableSerializationTool(
+					new JobContextAdapterStore(
+							context,
+							GeoWaveInputFormat.getAccumuloOperations(context)));
 		}
 		catch (AccumuloException | AccumuloSecurityException e) {
 			LOGGER.warn(

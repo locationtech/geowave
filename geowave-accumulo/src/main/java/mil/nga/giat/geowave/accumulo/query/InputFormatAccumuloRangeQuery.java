@@ -30,12 +30,14 @@ public class InputFormatAccumuloRangeQuery extends
 {
 	private final static Logger LOGGER = Logger.getLogger(InputFormatAccumuloRangeQuery.class);
 	private final Range accumuloRange;
+	private final boolean isOutputWritable;
 
 	public InputFormatAccumuloRangeQuery(
 			final List<ByteArrayId> adapterIds,
 			final Index index,
 			final Range accumuloRange,
 			final List<QueryFilter> queryFilters,
+			final boolean isOutputWritable,
 			final String[] authorizations ) {
 		super(
 				adapterIds,
@@ -44,6 +46,7 @@ public class InputFormatAccumuloRangeQuery extends
 				queryFilters,
 				authorizations);
 		this.accumuloRange = accumuloRange;
+		this.isOutputWritable = isOutputWritable;
 	}
 
 	@Override
@@ -81,6 +84,7 @@ public class InputFormatAccumuloRangeQuery extends
 				adapterStore,
 				index,
 				scanner.iterator(),
+				isOutputWritable,
 				new FilterList<QueryFilter>(
 						clientFilters));
 	}

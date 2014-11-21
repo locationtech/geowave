@@ -5,7 +5,6 @@ import java.net.URI;
 
 import mil.nga.giat.geowave.accumulo.mapreduce.input.GeoWaveInputKey;
 import mil.nga.giat.geowave.store.adapter.AdapterStore;
-import mil.nga.giat.geowave.store.adapter.DataAdapter;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configuration.IntegerRanges;
@@ -28,7 +27,7 @@ import org.apache.hadoop.security.Credentials;
  * This class wraps an existing reduce context that will write hadoop writable
  * objects as a reduce context that writes the native object for ease of
  * implementing mapreduce jobs.
- *
+ * 
  * @param <KEYIN>
  *            The reduce context's input type
  * @param <VALUEIN>
@@ -38,13 +37,21 @@ public class NativeReduceContext<KEYIN, VALUEIN> implements
 		ReduceContext<KEYIN, VALUEIN, GeoWaveInputKey, Object>
 {
 	private final ReduceContext<KEYIN, VALUEIN, GeoWaveInputKey, ObjectWritable> writableContext;
-	private final AdapterStore adapterStore;
+	private final HadoopWritableSerializationTool serializationTool;
 
 	public NativeReduceContext(
 			final ReduceContext<KEYIN, VALUEIN, GeoWaveInputKey, ObjectWritable> writableContext,
 			final AdapterStore adapterStore ) {
 		this.writableContext = writableContext;
-		this.adapterStore = adapterStore;
+		this.serializationTool = new HadoopWritableSerializationTool(
+				adapterStore);
+	}
+
+	public NativeReduceContext(
+			final ReduceContext<KEYIN, VALUEIN, GeoWaveInputKey, ObjectWritable> writableContext,
+			final HadoopWritableSerializationTool serializationTool ) {
+		this.writableContext = writableContext;
+		this.serializationTool = serializationTool;
 	}
 
 	// delegate everything, except the write method, for this transform the
@@ -55,15 +62,12 @@ public class NativeReduceContext<KEYIN, VALUEIN> implements
 			final Object value )
 			throws IOException,
 			InterruptedException {
-		if (adapterStore != null) {
-			final DataAdapter<?> adapter = adapterStore.getAdapter(key.getAdapterId());
-			if ((adapter != null) && (adapter instanceof HadoopDataAdapter)) {
-				writableContext.write(
-						key,
-						new ObjectWritable(
-								((HadoopDataAdapter) adapter).toWritable(value)));
-			}
-		}
+		writableContext.write(
+				key,
+				serializationTool.toWritable(
+						key.getAdapterId(),
+						value));
+
 	}
 
 	@Override

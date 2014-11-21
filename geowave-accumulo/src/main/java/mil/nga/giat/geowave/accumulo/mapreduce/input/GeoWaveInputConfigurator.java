@@ -3,14 +3,19 @@ package mil.nga.giat.geowave.accumulo.mapreduce.input;
 import java.util.Map;
 
 import mil.nga.giat.geowave.accumulo.mapreduce.GeoWaveConfiguratorBase;
+import mil.nga.giat.geowave.accumulo.mapreduce.JobContextIndexStore;
+import mil.nga.giat.geowave.accumulo.metadata.AccumuloIndexStore;
 import mil.nga.giat.geowave.index.ByteArrayUtils;
 import mil.nga.giat.geowave.index.PersistenceUtils;
+import mil.nga.giat.geowave.store.index.Index;
 import mil.nga.giat.geowave.store.query.DistributableQuery;
 
+import org.apache.accumulo.core.client.AccumuloException;
+import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.apache.accumulo.core.client.Instance;
 import org.apache.accumulo.core.client.ZooKeeperInstance;
+import org.apache.commons.collections.IteratorUtils;
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.JobContext;
 
 /**
@@ -24,7 +29,8 @@ public class GeoWaveInputConfigurator extends
 		QUERY,
 		AUTHORIZATION,
 		MIN_SPLITS,
-		MAX_SPLITS
+		MAX_SPLITS,
+		OUTPUT_WRITABLE // used to inform the input format to output a Writable from the HadoopDataAdapter
 	}
 
 	private static DistributableQuery getQueryInternal(
@@ -88,20 +94,19 @@ public class GeoWaveInputConfigurator extends
 
 	public static void setQuery(
 			final Class<?> implementingClass,
-			final Job job,
+			final Configuration config,
 			final DistributableQuery query ) {
 		if (query != null) {
-			job.getConfiguration().set(
+			config.set(
 					enumToConfKey(
 							implementingClass,
 							InputConfig.QUERY),
 					ByteArrayUtils.byteArrayToString(PersistenceUtils.toBinary(query)));
 		}
 		else {
-			job.getConfiguration().unset(
-					enumToConfKey(
-							implementingClass,
-							InputConfig.QUERY));
+			config.unset(enumToConfKey(
+					implementingClass,
+					InputConfig.QUERY));
 		}
 	}
 
@@ -115,20 +120,19 @@ public class GeoWaveInputConfigurator extends
 
 	public static void setMinimumSplitCount(
 			final Class<?> implementingClass,
-			final Job job,
+			final Configuration config,
 			final Integer minSplits ) {
 		if (minSplits != null) {
-			job.getConfiguration().set(
+			config.set(
 					enumToConfKey(
 							implementingClass,
 							InputConfig.MIN_SPLITS),
 					minSplits.toString());
 		}
 		else {
-			job.getConfiguration().unset(
-					enumToConfKey(
-							implementingClass,
-							InputConfig.MIN_SPLITS));
+			config.unset(enumToConfKey(
+					implementingClass,
+					InputConfig.MIN_SPLITS));
 		}
 	}
 
@@ -142,29 +146,28 @@ public class GeoWaveInputConfigurator extends
 
 	public static void setMaximumSplitCount(
 			final Class<?> implementingClass,
-			final Job job,
+			final Configuration config,
 			final Integer maxSplits ) {
 		if (maxSplits != null) {
-			job.getConfiguration().set(
+			config.set(
 					enumToConfKey(
 							implementingClass,
 							InputConfig.MAX_SPLITS),
 					maxSplits.toString());
 		}
 		else {
-			job.getConfiguration().unset(
-					enumToConfKey(
-							implementingClass,
-							InputConfig.MAX_SPLITS));
+			config.unset(enumToConfKey(
+					implementingClass,
+					InputConfig.MAX_SPLITS));
 		}
 	}
 
 	public static void addAuthorization(
 			final Class<?> implementingClass,
-			final Job job,
+			final Configuration config,
 			final String authorization ) {
 		if (authorization != null) {
-			job.getConfiguration().set(
+			config.set(
 					enumToConfKey(
 							implementingClass,
 							InputConfig.AUTHORIZATION,
@@ -206,5 +209,29 @@ public class GeoWaveInputConfigurator extends
 		return new ZooKeeperInstance(
 				instanceName,
 				zookeeperUrl);
+	}
+
+	public static Index[] searchForIndices(
+			final Class<?> implementingClass,
+			final JobContext context ) {
+		final Index[] userIndices = JobContextIndexStore.getIndices(context);
+		if ((userIndices == null) || (userIndices.length <= 0)) {
+			try {
+				// if there are no indices, assume we are searching all indices
+				// in the metadata store
+				return (Index[]) IteratorUtils.toArray(
+						new AccumuloIndexStore(
+								getAccumuloOperations(
+										implementingClass,
+										context)).getIndices(),
+						Index.class);
+			}
+			catch (AccumuloException | AccumuloSecurityException e) {
+				LOGGER.warn(
+						"Unable to lookup indices from GeoWave metadata store",
+						e);
+			}
+		}
+		return userIndices;
 	}
 }

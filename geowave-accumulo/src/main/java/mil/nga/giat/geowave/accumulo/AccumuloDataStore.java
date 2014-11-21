@@ -1142,7 +1142,7 @@ public class AccumuloDataStore implements
 				index,
 				query,
 				limit,
-				null);
+				(String[])null);
 	}
 
 	@Override

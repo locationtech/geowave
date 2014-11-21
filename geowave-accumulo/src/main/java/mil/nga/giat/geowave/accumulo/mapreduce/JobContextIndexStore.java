@@ -13,7 +13,7 @@ import mil.nga.giat.geowave.store.index.IndexStore;
 
 import org.apache.commons.collections.IteratorUtils;
 import org.apache.commons.collections.Transformer;
-import org.apache.hadoop.mapreduce.Job;
+import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.mapreduce.JobContext;
 
 /**
@@ -112,11 +112,11 @@ public class JobContextIndexStore implements
 	}
 
 	public static void addIndex(
-			final Job job,
+			final Configuration config,
 			final Index index ) {
 		GeoWaveConfiguratorBase.addIndex(
 				CLASS,
-				job,
+				config,
 				index);
 	}
 

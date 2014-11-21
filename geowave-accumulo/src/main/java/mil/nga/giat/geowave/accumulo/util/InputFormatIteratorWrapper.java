@@ -6,6 +6,7 @@ import java.util.Map.Entry;
 import java.util.NoSuchElementException;
 
 import mil.nga.giat.geowave.accumulo.AccumuloRowId;
+import mil.nga.giat.geowave.accumulo.mapreduce.HadoopWritableSerializationTool;
 import mil.nga.giat.geowave.accumulo.mapreduce.input.GeoWaveInputKey;
 import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.store.adapter.AdapterStore;
@@ -23,29 +24,32 @@ import org.apache.commons.lang.ArrayUtils;
  * reference to the next value. It maintains the adapter ID, data ID, and
  * original accumulo key in the GeoWaveInputKey for use by the
  * GeoWaveInputFormat.
- *
+ * 
  * @param <T>
  *            The type for the entry
  */
 public class InputFormatIteratorWrapper<T> implements
 		Iterator<Entry<GeoWaveInputKey, T>>
 {
-	private final AdapterStore adapterStore;
 	private final Index index;
 	private final Iterator<Entry<Key, Value>> scannerIt;
 	private final QueryFilter clientFilter;
-
+	private final HadoopWritableSerializationTool serializationTool;
+	private final boolean isOutputWritable;
 	private Entry<GeoWaveInputKey, T> nextValue;
 
 	public InputFormatIteratorWrapper(
 			final AdapterStore adapterStore,
 			final Index index,
 			final Iterator<Entry<Key, Value>> scannerIt,
+			final boolean isOutputWritable,
 			final QueryFilter clientFilter ) {
-		this.adapterStore = adapterStore;
+		this.serializationTool = new HadoopWritableSerializationTool(
+				adapterStore);
 		this.index = index;
 		this.scannerIt = scannerIt;
 		this.clientFilter = clientFilter;
+		this.isOutputWritable = isOutputWritable;
 	}
 
 	private void findNext() {
@@ -69,19 +73,23 @@ public class InputFormatIteratorWrapper<T> implements
 			final Index index ) {
 		final AccumuloRowId rowId = new AccumuloRowId(
 				row.getKey());
-		final T value = (T) AccumuloUtils.decodeRow(
+		final Object value = AccumuloUtils.decodeRow(
 				row.getKey(),
 				row.getValue(),
 				rowId,
-				adapterStore,
+				serializationTool.getAdapterStore(),
 				clientFilter,
 				index);
 		if (value == null) {
 			return null;
 		}
+		final ByteArrayId adapterId = new ByteArrayId(
+				rowId.getAdapterId());
+		T result = (T) (isOutputWritable ? serializationTool.getHadoopWritableSerializerForAdapter(
+				adapterId).toWritable(
+				value) : value);
 		final GeoWaveInputKey key = new GeoWaveInputKey(
-				new ByteArrayId(
-						rowId.getAdapterId()),
+				adapterId,
 				new ByteArrayId(
 						// if deduplication is disabled, prefix the actual data
 						// ID with the index ID concatenated with the insertion
@@ -95,7 +103,7 @@ public class InputFormatIteratorWrapper<T> implements
 		key.setAccumuloKey(row.getKey());
 		return new GeoWaveInputFormatEntry(
 				key,
-				value);
+				result);
 	}
 
 	@Override

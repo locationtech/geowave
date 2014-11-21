@@ -111,7 +111,7 @@ public class ComparisonStatsJobRunner extends
 					new Path(
 							"/tmp/" + namespace + "_stats_" + minLevel + "_" + maxLevel + "_" + coverageName + "/combined_pct"));
 			GeoWaveOutputFormat.setAccumuloOperationsInfo(
-					ingester,
+					ingester.getConfiguration(),
 					zookeeper,
 					instance,
 					user,

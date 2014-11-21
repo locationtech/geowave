@@ -35,6 +35,7 @@ public class GeoWavePluginConfig
 {
 	private final static Logger LOGGER = Logger.getLogger(GeoWavePluginConfig.class);
 
+
 	protected static final String ZOOKEEPER_SERVERS_KEY = "ZookeeperServers";
 	protected static final String INSTANCE_NAME_KEY = "InstanceName";
 	protected static final String USERNAME_KEY = "UserName";
