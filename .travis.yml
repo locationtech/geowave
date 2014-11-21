@@ -5,8 +5,8 @@ env:
   matrix:
     - ACCUMULO_VERSION='1.5.1'   HADOOP_VERSION='2.0.0-cdh4.7.0'     HADOOP_VERSION_MR='2.0.0-mr1-cdh4.7.0'   GEOTOOLS_VERSION='11.2'   GEOSERVER_VERSION='2.5.2'
     - ACCUMULO_VERSION='1.6.0'   HADOOP_VERSION='2.0.0-cdh4.7.0'     HADOOP_VERSION_MR='2.0.0-mr1-cdh4.7.0'   GEOTOOLS_VERSION='11.2'   GEOSERVER_VERSION='2.5.2' 
-    - ACCUMULO_VERSION='1.5.1'   HADOOP_VERSION='2.3.0-cdh5.0.3'     HADOOP_VERSION_MR='2.3.0-cdh5.0.3'       GEOTOOLS_VERSION='11.2'   GEOSERVER_VERSION='2.5.2'
-    - ACCUMULO_VERSION='1.6.0'   HADOOP_VERSION='2.3.0-cdh5.0.3'     HADOOP_VERSION_MR='2.3.0-cdh5.0.3'       GEOTOOLS_VERSION='11.2'   GEOSERVER_VERSION='2.5.2' 	
+    - ACCUMULO_VERSION='1.5.1'   HADOOP_VERSION='2.5.0-cdh5.2.0'     HADOOP_VERSION_MR='2.5.0-cdh5.2.0'       GEOTOOLS_VERSION='11.2'   GEOSERVER_VERSION='2.5.2'
+    - ACCUMULO_VERSION='1.6.0'   HADOOP_VERSION='2.5.0-cdh5.2.0'     HADOOP_VERSION_MR='2.5.0-cdh5.2.0'       GEOTOOLS_VERSION='11.2'   GEOSERVER_VERSION='2.5.2' 	
   global:
     #github token
     - secure: "TosKDl5mnt8UKeyWDg65i6cWENR7EorQbFPSvZ5ZfQfAaDAOeIN2OA/zxtRMELeYM82+n+GGXQOt0qPiYqyRlufYJJSUnWiwvI5gm3a8+f58atcU2R2bF9jd81bsL9jCS+JCQxAmzh8FCO6t7DJ4OdoMyMaIR7XjlSlsIJ97dd8="
@@ -15,5 +15,7 @@ script: "mvn verify -Daccumulo.version=${ACCUMULO_VERSION} -Dhadoop.version=${HA
 before_install:
   - export MAVEN_OPTS="-Xmx512m -XX:MaxPermSize=192m"
   - chmod +x .utility/push-javadoc-to-gh-pages.sh
+  - sudo pip install codecov
 after_success:
   - .utility/push-javadoc-to-gh-pages.sh
+  - codecov

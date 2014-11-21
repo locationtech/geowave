@@ -11,6 +11,11 @@
        src="https://scan.coverity.com/projects/3371/badge.svg"/>
 </a>
 
+<a href="https://codecov.io/github/ngageoint/geowave?branch=master">
+  <img src="https://codecov.io/github/ngageoint/geowave/coverage.svg?branch=master" 
+        alt="Coverage via codecov.io" />
+</a>
+
 
 
 GeoWave is an open source set of software that:
