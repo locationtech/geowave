@@ -28,8 +28,8 @@ import com.google.common.io.Files;
 
 @RunWith(Suite.class)
 @SuiteClasses({
-	GeoWaveBasicIT.class,
-	GeoWaveMapReduceIT.class,
+	//GeoWaveBasicIT.class,
+	//GeoWaveMapReduceIT.class,
 	GeoServerIT.class
 })
 public class GeoWaveITSuite

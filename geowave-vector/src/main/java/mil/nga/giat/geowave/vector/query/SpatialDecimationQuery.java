@@ -170,6 +170,7 @@ public class SpatialDecimationQuery extends
 								width,
 								height),
 						pixelSize);
+				// log base 2 to determine number of bits
 				final double cardinalityX = Math.log((spans[0] / 360)) / Math.log(2);
 				final double cardinalityY = Math.log((spans[1] / 180)) / Math.log(2);
 				final long combinedCardinality = Math.max(
