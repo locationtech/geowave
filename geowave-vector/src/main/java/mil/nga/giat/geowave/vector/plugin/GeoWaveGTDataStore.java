@@ -47,6 +47,13 @@ import mil.nga.giat.geowave.vector.transaction.ZooKeeperTransactionsAllocater;
 
 import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
+import org.apache.commons.cli.BasicParser;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.OptionGroup;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
 import org.apache.log4j.Logger;
 import org.geotools.data.AbstractDataStore;
 import org.geotools.data.DataSourceException;
@@ -555,7 +562,9 @@ public class GeoWaveGTDataStore extends
 			}
 			featureAdapter = (FeatureDataAdapter) adapter;
 		}
-		if (featureNameSpaceURI != null) featureAdapter.setNamespace(featureNameSpaceURI.toString());
+		if (featureNameSpaceURI != null) {
+			featureAdapter.setNamespace(featureNameSpaceURI.toString());
+		}
 		// else
 		// featureAdapter.setNamespace(null);
 		return featureAdapter;
@@ -852,16 +861,18 @@ public class GeoWaveGTDataStore extends
 	}
 
 	@Override
-	public void transactionCreated(
+	public boolean transactionCreated(
 			final String clientID,
 			final String txID ) {
 		try {
 			((BasicAccumuloOperations) storeOperations).insureAuthorization(txID);
+			return true;
 		}
 		catch (final Exception ex) {
 			LOGGER.error(
 					"Cannot add transaction id as an authorization.",
 					ex);
+			return false;
 		}
 	}
 
@@ -870,5 +881,62 @@ public class GeoWaveGTDataStore extends
 		return new NameImpl(
 				featureNameSpaceURI.toString(),
 				typeName);
+	}
+
+	private static void printHelp(
+			final Options options ) {
+		final HelpFormatter formatter = new HelpFormatter();
+		formatter.printHelp(
+				"GeoWaveGTDateStore",
+				"\nOptions:",
+				options,
+				"");
+	}
+
+	public static void main(
+			final String args[] )
+			throws ParseException,
+			GeoWavePluginException,
+			IOException,
+			AccumuloException,
+			AccumuloSecurityException {
+		final Options options = new Options();
+		final OptionGroup baseOptionGroup = new OptionGroup();
+		baseOptionGroup.setRequired(false);
+		baseOptionGroup.addOption(new Option(
+				"h",
+				"help",
+				false,
+				"Display help"));
+		baseOptionGroup.addOption(new Option(
+				"m",
+				"maximum",
+				true,
+				"Maximum number of simulataneous transactions"));
+		options.addOptionGroup(baseOptionGroup);
+		GeoWavePluginConfig.applyOptions(options);
+		final BasicParser parser = new BasicParser();
+		final CommandLine commandLine = parser.parse(
+				options,
+				args);
+		if (commandLine.hasOption("h")) {
+			printHelp(options);
+			System.exit(0);
+		}
+		else {
+			try {
+				final GeoWavePluginConfig plugin = GeoWavePluginConfig.buildFromOptions(commandLine);
+				final int maximum = Integer.parseInt(commandLine.getOptionValue('m'));
+				final GeoWaveGTDataStore dataStore = new GeoWaveGTDataStore(
+						plugin);
+				((ZooKeeperTransactionsAllocater) dataStore.transactionsAllocater).preallocateTransactionIDs(maximum);
+			}
+			catch (final Exception ex) {
+				LOGGER.error(
+						"Failed to pre-allocate transaction ID set",
+						ex);
+				System.exit(-1);
+			}
+		}
 	}
 }

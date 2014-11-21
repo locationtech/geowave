@@ -41,13 +41,13 @@ public class ZooKeeperTransactionAllocaterTest
 				new TransactionNotification() {
 
 					@Override
-					public void transactionCreated(
+					public boolean transactionCreated(
 							String clientID,
 							String txID ) {
 						synchronized (createdTXIds) {
 							createdTXIds.add(txID);
+							return true;
 						}
-
 					}
 
 				});

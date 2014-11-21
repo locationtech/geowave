@@ -17,6 +17,10 @@ import mil.nga.giat.geowave.vector.auth.AuthorizationFactorySPI;
 import mil.nga.giat.geowave.vector.auth.EmptyAuthorizationFactory;
 import mil.nga.giat.geowave.vector.plugin.lock.LockingManagementFactory;
 
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
 import org.apache.log4j.Logger;
 import org.geotools.data.DataAccessFactory.Param;
 import org.geotools.data.Parameter;
@@ -112,7 +116,7 @@ public class GeoWavePluginConfig
 	private static List<Param> accumuloParams = null;
 
 	public static List<Param> getAuthPluginParams() {
-		List<Param> accumuloParams = new ArrayList<Param>();
+		final List<Param> accumuloParams = new ArrayList<Param>();
 		accumuloParams.add(AUTH_MGT);
 		accumuloParams.add(AUTH_URL);
 		return accumuloParams;
@@ -181,7 +185,7 @@ public class GeoWavePluginConfig
 				namespaceURI = param instanceof String ? new URI(
 						param.toString()) : (URI) param;
 			}
-			catch (URISyntaxException e) {
+			catch (final URISyntaxException e) {
 				LOGGER.error("Malformed Feature Namespace URI : " + param);
 			}
 		}
@@ -189,30 +193,34 @@ public class GeoWavePluginConfig
 
 		param = params.get(LOCK_MGT_KEY);
 
-		Iterator<LockingManagementFactory> it = getLockManagementFactoryList();
+		final Iterator<LockingManagementFactory> it = getLockManagementFactoryList();
 		LockingManagementFactory factory = null;
 		while (it.hasNext()) {
 			factory = it.next();
-			if (param == null || param.toString().equals(
-					factory.toString())) break;
+			if ((param == null) || param.toString().equals(
+					factory.toString())) {
+				break;
+			}
 		}
 		lockingManagementFactory = factory;
 
 		authorizationFactory = getAuthorizationFactory(params);
-		this.authorizationURL = getAuthorizationURL(params);
+		authorizationURL = getAuthorizationURL(params);
 	}
 
 	public static AuthorizationFactorySPI getAuthorizationFactory(
 			final Map<String, Serializable> params )
 
 			throws GeoWavePluginException {
-		Serializable param = params.get(AUTH_MGT_KEY);
-		Iterator<AuthorizationFactorySPI> authIt = getAuthorizationFactoryList();
+		final Serializable param = params.get(AUTH_MGT_KEY);
+		final Iterator<AuthorizationFactorySPI> authIt = getAuthorizationFactoryList();
 		AuthorizationFactorySPI authFactory = new EmptyAuthorizationFactory();
 		while (authIt.hasNext()) {
 			authFactory = authIt.next();
-			if (param == null || param.toString().equals(
-					authFactory.toString())) break;
+			if ((param == null) || param.toString().equals(
+					authFactory.toString())) {
+				break;
+			}
 		}
 		return authFactory;
 	}
@@ -221,7 +229,7 @@ public class GeoWavePluginConfig
 			final Map<String, Serializable> params )
 			throws GeoWavePluginException {
 
-		Serializable param = params.get(AUTH_URL_KEY);
+		final Serializable param = params.get(AUTH_URL_KEY);
 		if (param == null) {
 			return null;
 
@@ -231,7 +239,7 @@ public class GeoWavePluginConfig
 				return new URL(
 						param.toString());
 			}
-			catch (MalformedURLException e) {
+			catch (final MalformedURLException e) {
 
 				throw new GeoWavePluginException(
 						"Accumulo Plugin: malformed Authorization Service URL " + param.toString());
@@ -276,36 +284,98 @@ public class GeoWavePluginConfig
 	}
 
 	private static Map<String, List<String>> getLockMgtOptions() {
-		List<String> options = new ArrayList<String>();
-		Iterator<LockingManagementFactory> it = getLockManagementFactoryList();
-		while (it.hasNext())
+		final List<String> options = new ArrayList<String>();
+		final Iterator<LockingManagementFactory> it = getLockManagementFactoryList();
+		while (it.hasNext()) {
 			options.add(it.next().toString());
-		Map<String, List<String>> map = new HashMap<String, List<String>>();
+		}
+		final Map<String, List<String>> map = new HashMap<String, List<String>>();
 		map.put(
-				Param.OPTIONS,
+				Parameter.OPTIONS,
 				options);
 		return map;
 	}
 
 	private static Map<String, List<String>> getAuthSPIOptions() {
-		List<String> options = new ArrayList<String>();
-		Iterator<AuthorizationFactorySPI> it = getAuthorizationFactoryList();
-		while (it.hasNext())
+		final List<String> options = new ArrayList<String>();
+		final Iterator<AuthorizationFactorySPI> it = getAuthorizationFactoryList();
+		while (it.hasNext()) {
 			options.add(it.next().toString());
-		Map<String, List<String>> map = new HashMap<String, List<String>>();
+		}
+		final Map<String, List<String>> map = new HashMap<String, List<String>>();
 		map.put(
-				Param.OPTIONS,
+				Parameter.OPTIONS,
 				options);
 		return map;
 	}
 
 	private static Iterator<LockingManagementFactory> getLockManagementFactoryList() {
-		ServiceLoader<LockingManagementFactory> ldr = ServiceLoader.load(LockingManagementFactory.class);
+		final ServiceLoader<LockingManagementFactory> ldr = ServiceLoader.load(LockingManagementFactory.class);
 		return ldr.iterator();
 	}
 
 	private static Iterator<AuthorizationFactorySPI> getAuthorizationFactoryList() {
-		ServiceLoader<AuthorizationFactorySPI> ldr = ServiceLoader.load(AuthorizationFactorySPI.class);
+		final ServiceLoader<AuthorizationFactorySPI> ldr = ServiceLoader.load(AuthorizationFactorySPI.class);
 		return ldr.iterator();
+	}
+
+	public static void applyOptions(
+			final Options allOptions ) {
+		final Option zookeeperUrl = new Option(
+				"z",
+				"zookeepers",
+				true,
+				"A comma-separated list of zookeeper servers that an Accumulo instance is using");
+		allOptions.addOption(zookeeperUrl);
+		final Option instanceId = new Option(
+				"i",
+				"instance-id",
+				true,
+				"The Accumulo instance ID");
+		allOptions.addOption(instanceId);
+		final Option user = new Option(
+				"u",
+				"user",
+				true,
+				"A valid Accumulo user ID");
+		allOptions.addOption(user);
+		final Option password = new Option(
+				"p",
+				"password",
+				true,
+				"The password for the user");
+		allOptions.addOption(password);
+
+		final Option namespace = new Option(
+				"n",
+				"namespace",
+				true,
+				"The table namespace (optional; default is no namespace)");
+		allOptions.addOption(namespace);
+	}
+
+	public static GeoWavePluginConfig buildFromOptions(
+			final CommandLine commandLine )
+			throws ParseException,
+			GeoWavePluginException {
+		final Map<String, Serializable> params = new HashMap<String, Serializable>();
+		params.put(
+				ZOOKEEPER_SERVERS_KEY,
+				commandLine.getOptionValue("z"));
+		params.put(
+				INSTANCE_NAME_KEY,
+				commandLine.getOptionValue("i"));
+		params.put(
+				USERNAME_KEY,
+				commandLine.getOptionValue("u"));
+		params.put(
+				PASSWORD_KEY,
+				commandLine.getOptionValue("p"));
+		params.put(
+				ACCUMULO_NAMESPACE_KEY,
+				commandLine.getOptionValue("n"));
+		return new GeoWavePluginConfig(
+				params);
+
 	}
 }
