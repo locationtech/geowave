@@ -12,8 +12,8 @@ env:
   global:
     #github token
     - secure: "TosKDl5mnt8UKeyWDg65i6cWENR7EorQbFPSvZ5ZfQfAaDAOeIN2OA/zxtRMELeYM82+n+GGXQOt0qPiYqyRlufYJJSUnWiwvI5gm3a8+f58atcU2R2bF9jd81bsL9jCS+JCQxAmzh8FCO6t7DJ4OdoMyMaIR7XjlSlsIJ97dd8="
-install: "mvn clean install javadoc:aggregate -DskipITs=true"
-script: "mvn verify -Daccumulo.version=${ACCUMULO_VERSION} -Dhadoop.version=${HADOOP_VERSION} -Dhadoop.version.mr=${HADOOP_VERSION_MR} -Dgeotools.version=${GEOTOOLS_VERSION} -Dgeoserver.version=${GEOSERVER_VERSION}"
+install: "mvn -q clean install javadoc:aggregate -DskipITs=true"
+script: "mvn -q verify -Daccumulo.version=${ACCUMULO_VERSION} -Dhadoop.version=${HADOOP_VERSION} -Dhadoop.version.mr=${HADOOP_VERSION_MR} -Dgeotools.version=${GEOTOOLS_VERSION} -Dgeoserver.version=${GEOSERVER_VERSION}"
 before_install:
   - export MAVEN_OPTS="-Xmx512m -XX:MaxPermSize=192m"
   - chmod +x .utility/push-javadoc-to-gh-pages.sh
