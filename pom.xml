@@ -21,11 +21,11 @@
 
 
 	<properties>
-		<geotools.version>11.2</geotools.version>
-		<geoserver.version>2.5.2</geoserver.version>
+		<geotools.version>12.1</geotools.version>
+		<geoserver.version>2.6.1</geoserver.version>
 		<accumulo.version>1.6.1</accumulo.version>
-		<hadoop.version>2.3.0-cdh5.0.3</hadoop.version>
-		<hadoop.version.mr>2.3.0-cdh5.0.3</hadoop.version.mr>
+		<hadoop.version>2.5.0-cdh5.2.0</hadoop.version>
+		<hadoop.version.mr>2.5.0-cdh5.2.0</hadoop.version.mr>
 		<avro.version>1.7.6</avro.version>
 		<commons.cli.version>1.2</commons.cli.version>
 		<geotools.scope>compile</geotools.scope>
@@ -206,6 +206,7 @@
 							<sourceFileIncludes>
 								<include>**.java</include>
 							</sourceFileIncludes>
+							<quiet>true</quiet>
 							<windowtitle>GeoWave ${project.version}</windowtitle>
 							<doctitle>GeoWave ${project.version}</doctitle>
 							<groups>
