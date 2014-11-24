@@ -3,12 +3,18 @@ package mil.nga.giat.geowave.accumulo.mapreduce.input;
 import java.util.Map;
 
 import mil.nga.giat.geowave.accumulo.mapreduce.GeoWaveConfiguratorBase;
+import mil.nga.giat.geowave.accumulo.mapreduce.JobContextIndexStore;
+import mil.nga.giat.geowave.accumulo.metadata.AccumuloIndexStore;
 import mil.nga.giat.geowave.index.ByteArrayUtils;
 import mil.nga.giat.geowave.index.PersistenceUtils;
+import mil.nga.giat.geowave.store.index.Index;
 import mil.nga.giat.geowave.store.query.DistributableQuery;
 
+import org.apache.accumulo.core.client.AccumuloException;
+import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.apache.accumulo.core.client.Instance;
 import org.apache.accumulo.core.client.ZooKeeperInstance;
+import org.apache.commons.collections.IteratorUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.JobContext;
@@ -206,5 +212,27 @@ public class GeoWaveInputConfigurator extends
 		return new ZooKeeperInstance(
 				instanceName,
 				zookeeperUrl);
+	}
+	
+	public static Index[] searchForIndices(
+			final  Class<?> implementingClass,
+			final JobContext context ) {
+		final Index[] userIndices = JobContextIndexStore.getIndices(context);
+		if ((userIndices == null) || (userIndices.length <= 0)) {
+			try {
+				// if there are no indices, assume we are searching all indices
+				// in the metadata store
+				return (Index[]) IteratorUtils.toArray(
+						new AccumuloIndexStore(
+								getAccumuloOperations(implementingClass, context)).getIndices(),
+						Index.class);
+			}
+			catch (AccumuloException | AccumuloSecurityException e) {
+				LOGGER.warn(
+						"Unable to lookup indices from GeoWave metadata store",
+						e);
+			}
+		}
+		return userIndices;
 	}
 }

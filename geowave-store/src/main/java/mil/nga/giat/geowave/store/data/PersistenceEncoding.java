@@ -210,8 +210,8 @@ public class PersistenceEncoding
 		final NumericData[] dataPerDimension = new NumericData[currentDataSet.length];
 		for (int d = 0; d < currentDataSet.length; d++) {
 			dataPerDimension[d] = new NumericRange(
-					currentDataSet[d].getMin() - 1E-12d,
-					currentDataSet[d].getMax() + 1E-12d);
+					currentDataSet[d].getMin() - 1E-20d,
+					currentDataSet[d].getMax() + 1E-20d);
 		}
 		return new BasicNumericDataset(
 				dataPerDimension);

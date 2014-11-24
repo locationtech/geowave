@@ -40,7 +40,7 @@ import com.google.common.collect.Iterators;
 /**
  * This class is used by the GeoWaveInputFormat to read data from an Accumulo
  * data store.
- *
+ * 
  * @param <T>
  *            The native type for the reader
  */
@@ -165,7 +165,9 @@ public class GeoWaveRecordReader<T> extends
 									r,
 									i),
 							new InputFormatAccumuloRangeQuery(
-									adapterStore.getAdapterIds(),
+									GeoWaveInputFormat.getAdapterIds(
+											attempt,
+											adapterStore),
 									i,
 									r,
 									queryFilters,
@@ -420,7 +422,6 @@ public class GeoWaveRecordReader<T> extends
 		return new Iterator<Object>() {
 			Iterator<?> currentIterator = Iterators.emptyIterator();
 			Iterator<?> removeFrom;
-			RangeIndexPair currentRangeIndex;
 
 			@Override
 			public boolean hasNext() {

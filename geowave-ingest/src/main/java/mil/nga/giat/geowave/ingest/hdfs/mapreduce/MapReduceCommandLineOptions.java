@@ -3,6 +3,8 @@ package mil.nga.giat.geowave.ingest.hdfs.mapreduce;
 import mil.nga.giat.geowave.ingest.hdfs.HdfsCommandLineOptions;
 
 import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.OptionGroup;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.log4j.Logger;
@@ -25,24 +27,33 @@ public class MapReduceCommandLineOptions
 
 	public static void applyOptions(
 			final Options allOptions ) {
-		allOptions.addOption(
+		OptionGroup jobTrackerOrResourceManager = new OptionGroup();
+		jobTrackerOrResourceManager.addOption(new Option(
 				"jobtracker",
 				true,
-				"Hadoop job tracker hostname and port in the format hostname:port");
+				"Hadoop job tracker hostname and port in the format hostname:port"));
+		jobTrackerOrResourceManager.addOption(new Option(
+				"resourceman",
+				true,
+				"Yarn resource manager hostname and port in the format hostname:port"));
+		allOptions.addOptionGroup(jobTrackerOrResourceManager);
 	}
 
-	public String getJobTrackerHostPort() {
+	public String getJobTrackerOrResourceManagerHostPort() {
 		return jobTrackerHostPort;
 	}
 
 	public static MapReduceCommandLineOptions parseOptions(
 			final CommandLine commandLine )
 			throws ParseException {
-		final String jobTrackerHostPort = commandLine.getOptionValue("jobtracker");
+		String jobTrackerHostPort = commandLine.getOptionValue("jobtracker");
 		boolean success = true;
 		if (jobTrackerHostPort == null) {
-			success = false;
-			LOGGER.fatal("Job tracker host:port not set");
+			jobTrackerHostPort = commandLine.getOptionValue("resourceman");
+			if (jobTrackerHostPort == null) {
+				success = false;
+				LOGGER.fatal("Job tracker or resource manager host:port must be set");
+			}
 		}
 		if (!success) {
 			throw new ParseException(

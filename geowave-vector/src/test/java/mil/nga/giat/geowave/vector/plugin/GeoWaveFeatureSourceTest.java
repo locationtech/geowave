@@ -58,7 +58,6 @@ public class GeoWaveFeatureSourceTest
 				"geometry:Geometry:srid=4326,pop:java.lang.Long,pid:String,when:Date");
 
 		dataStore.createSchema(type);
-
 	}
 
 	@Test

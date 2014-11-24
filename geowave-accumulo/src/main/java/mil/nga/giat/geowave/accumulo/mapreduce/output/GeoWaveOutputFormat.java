@@ -104,7 +104,7 @@ public class GeoWaveOutputFormat extends
 			final Job job,
 			final DataAdapter<?> adapter ) {
 		JobContextAdapterStore.addDataAdapter(
-				job,
+				job.getConfiguration(),
 				adapter);
 	}
 
@@ -255,14 +255,14 @@ public class GeoWaveOutputFormat extends
 				throws IOException,
 				InterruptedException {
 			for (final IndexWriter indexWriter : indexWriterCache.values()) {
-			   indexWriter.close();
+				indexWriter.close();
 			}
 		}
 	}
 
 	/**
 	 * Configures a {@link AccumuloOperations} for this job.
-	 *
+	 * 
 	 * @param job
 	 *            the Hadoop job instance to be configured
 	 * @param zooKeepers
@@ -307,7 +307,7 @@ public class GeoWaveOutputFormat extends
 
 	/**
 	 * Sets the log level for this job.
-	 *
+	 * 
 	 * @param job
 	 *            the Hadoop job instance to be configured
 	 * @param level
@@ -325,7 +325,7 @@ public class GeoWaveOutputFormat extends
 
 	/**
 	 * Gets the log level from this configuration.
-	 *
+	 * 
 	 * @param context
 	 *            the Hadoop context for the configured job
 	 * @return the log level
@@ -346,10 +346,10 @@ public class GeoWaveOutputFormat extends
 	/**
 	 * Sets the directive to create new tables, as necessary. Table names can
 	 * only be alpha-numeric and underscores.
-	 *
+	 * 
 	 * <p>
 	 * By default, this feature is <b>disabled</b>.
-	 *
+	 * 
 	 * @param job
 	 *            the Hadoop job instance to be configured
 	 * @param enableFeature
@@ -366,7 +366,7 @@ public class GeoWaveOutputFormat extends
 
 	/**
 	 * Determines whether tables are permitted to be created as needed.
-	 *
+	 * 
 	 * @param context
 	 *            the Hadoop context for the configured job
 	 * @return true if the feature is disabled, false otherwise

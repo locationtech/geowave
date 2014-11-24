@@ -25,7 +25,15 @@ public class GeoWaveResourceInfo implements
 	public GeoWaveResourceInfo(
 			final GeoWaveFeatureSource fs ) {
 		myFS = fs;
-		myURI = URI.create(myFS.getFeatureType().getName().getURI());
+		final String namespaceURI = myFS.getFeatureType().getName().getNamespaceURI();
+		if (namespaceURI != null) {
+			myURI = URI.create(myFS.getFeatureType().getName().getNamespaceURI());
+		}
+		else {
+			// this is the old way...but ContentDataStore, provided by geotools sets to null.
+			// which is correct?
+			myURI = URI.create(myFS.getFeatureType().getName().getURI());
+		}
 	}
 
 	@Override

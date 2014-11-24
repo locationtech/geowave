@@ -21,11 +21,20 @@
 
 
 	<properties>
-		<geotools.version>12.1</geotools.version>
+ 		<hadoop.env.classifier>hadoop2</hadoop.env.classifier>
+ 		<geotools.version>12.1</geotools.version>
 		<geoserver.version>2.6.1</geoserver.version>
 		<accumulo.version>1.6.1</accumulo.version>
 		<hadoop.version>2.5.0-cdh5.2.0</hadoop.version>
 		<hadoop.version.mr>2.5.0-cdh5.2.0</hadoop.version.mr>
+ 		<!--
+				<geotools.version>11.2</geotools.version>
+		<geoserver.version>2.5.2</geoserver.version>
+		<accumulo.version>1.5.1</accumulo.version>
+		<hadoop.version>2.0.0-cdh4.7.0</hadoop.version>
+		<hadoop.version.mr>2.0.0-cdh4.7.0</hadoop.version.mr>
+		-->	
+	
 		<avro.version>1.7.6</avro.version>
 		<commons.cli.version>1.2</commons.cli.version>
 		<geotools.scope>compile</geotools.scope>
@@ -52,31 +61,28 @@
 				<groupId>javax.media</groupId>
 				<artifactId>jai_codec</artifactId>
 				<version>1.1.3</version>
-				<scope>provided</scope>
+				<scope>${geotools.scope}</scope>
 			</dependency>
 			<dependency>
 				<groupId>javax.media</groupId>
 				<artifactId>jai_core</artifactId>
 				<version>1.1.3</version>
-				<scope>provided</scope>
+				<scope>${geotools.scope}</scope>
 			</dependency>
 			<dependency>
 				<groupId>javax.media</groupId>
 				<artifactId>jai_imageio</artifactId>
 				<version>1.1</version>
-				<scope>provided</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.slf4j</groupId>
 				<artifactId>slf4j-api</artifactId>
 				<version>1.6.1</version>
-				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.slf4j</groupId>
 				<artifactId>slf4j-log4j12</artifactId>
 				<version>1.6.1</version>
-				<scope>compile</scope>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

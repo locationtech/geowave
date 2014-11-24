@@ -56,6 +56,27 @@ public abstract class GeoWaveWritableInputMapper<KEYOUT, VALUEOUT> extends
 		}
 	}
 
+	/**
+	 * Helper method to create an object writable from a value managed by the
+	 * adapter.
+	 * 
+	 * @param key
+	 * @param value
+	 * @return
+	 */
+	protected Writable toWritableValue(
+			final GeoWaveInputKey key,
+			final Object value ) {
+		if (adapterStore != null) {
+			final DataAdapter<?> adapter = adapterStore.getAdapter(key.getAdapterId());
+			if ((adapter != null) && (adapter instanceof HadoopDataAdapter)) {
+				return ((HadoopDataAdapter) adapter).toWritable(value);
+			}
+		}
+		return new ObjectWritable(
+				value);
+	}
+
 	protected abstract void mapNativeValue(
 			final GeoWaveInputKey key,
 			final Object value,

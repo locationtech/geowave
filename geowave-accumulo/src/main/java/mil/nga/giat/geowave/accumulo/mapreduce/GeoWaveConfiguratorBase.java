@@ -35,7 +35,7 @@ public class GeoWaveConfiguratorBase
 
 	/**
 	 * Configuration keys for AccumuloOperations configuration.
-	 *
+	 * 
 	 */
 	protected static enum AccumuloOperationsConfig {
 		ZOOKEEPER_URL,
@@ -57,19 +57,19 @@ public class GeoWaveConfiguratorBase
 	/**
 	 * Provides a configuration key for a given feature enum, prefixed by the
 	 * implementingClass, and suffixed by a custom String
-	 *
+	 * 
 	 * @param implementingClass
 	 *            the class whose name will be used as a prefix for the property
 	 *            configuration key
 	 * @param e
 	 *            the enum used to provide the unique part of the configuration
 	 *            key
-	 *
+	 * 
 	 * @param suffix
 	 *            the custom suffix to be used in the configuration key
 	 * @return the configuration key
 	 */
-	protected static String enumToConfKey(
+	public static String enumToConfKey(
 			final Class<?> implementingClass,
 			final Enum<?> e,
 			final String suffix ) {
@@ -81,7 +81,7 @@ public class GeoWaveConfiguratorBase
 	/**
 	 * Provides a configuration key for a given feature enum, prefixed by the
 	 * implementingClass
-	 *
+	 * 
 	 * @param implementingClass
 	 *            the class whose name will be used as a prefix for the property
 	 *            configuration key
@@ -90,10 +90,43 @@ public class GeoWaveConfiguratorBase
 	 *            key
 	 * @return the configuration key
 	 */
-	protected static String enumToConfKey(
+	public static String enumToConfKey(
 			final Class<?> implementingClass,
 			final Enum<?> e ) {
-		return implementingClass.getSimpleName() + "." + e.getDeclaringClass().getSimpleName() + "." + org.apache.hadoop.util.StringUtils.camelize(e.name().toLowerCase());
+		String s =implementingClass.getSimpleName() + "." + e.getDeclaringClass().getSimpleName() + "." + org.apache.hadoop.util.StringUtils.camelize(e.name().toLowerCase());
+		return s;
+	}
+
+	public static final <T> T getInstance(
+			final Class<?> implementingClass,
+			final Enum<?> e,
+			final JobContext context,
+			final Class<T> interfaceClass )
+			throws InstantiationException,
+			IllegalAccessException {
+		return (T) getConfiguration(
+				context).getClass(
+				enumToConfKey(
+						implementingClass,
+						e),
+				interfaceClass).newInstance();
+	}
+
+	public static final <T> T getInstance(
+			final Class<?> implementingClass,
+			final Enum<?> e,
+			final JobContext context,
+			final Class<T> interfaceClass,
+			final Class<? extends T> defaultClass )
+			throws InstantiationException,
+			IllegalAccessException {
+		return (T) getConfiguration(
+				context).getClass(
+				enumToConfKey(
+						implementingClass,
+						e),
+				defaultClass,
+				interfaceClass).newInstance();
 	}
 
 	public static void setZookeeperUrl(
@@ -115,22 +148,27 @@ public class GeoWaveConfiguratorBase
 			final JobContext context )
 			throws AccumuloException,
 			AccumuloSecurityException {
-		return new BasicAccumuloOperations(
-				getZookeeperUrl(
-						implementingClass,
-						context),
-				getInstanceName(
-						implementingClass,
-						context),
-				getUserName(
-						implementingClass,
-						context),
-				getPassword(
-						implementingClass,
-						context),
-				getTableNamespace(
-						implementingClass,
-						context));
+		final String zookeeperURL = getZookeeperUrl(
+				implementingClass,
+				context);
+		if (zookeeperURL != null && zookeeperURL.length() > 0)
+			return new BasicAccumuloOperations(
+					zookeeperURL,
+					getInstanceName(
+							implementingClass,
+							context),
+					getUserName(
+							implementingClass,
+							context),
+					getPassword(
+							implementingClass,
+							context),
+					getTableNamespace(
+							implementingClass,
+							context));
+		else {
+			return null;
+		}
 	}
 
 	public static String getZookeeperUrl(
@@ -253,10 +291,10 @@ public class GeoWaveConfiguratorBase
 
 	public static void addDataAdapter(
 			final Class<?> implementingClass,
-			final Job job,
+			final Configuration conf,
 			final DataAdapter<?> adapter ) {
 		if (adapter != null) {
-			job.getConfiguration().set(
+			conf.set(
 					enumToConfKey(
 							implementingClass,
 							GeoWaveMetaStore.DATA_ADAPTER,

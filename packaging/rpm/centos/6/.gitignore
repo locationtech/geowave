@@ -1,0 +1,6 @@
+*.jar
+*.zip
+BUILD/
+BUILDROOT/
+RPMS/
+SRPMS/

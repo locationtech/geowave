@@ -29,11 +29,13 @@ import com.google.common.io.Files;
 @RunWith(Suite.class)
 @SuiteClasses({
 	//GeoWaveBasicIT.class,
-	//GeoWaveMapReduceIT.class,
-	GeoServerIT.class
+	GeoWaveKMeansIT.class,
+	//GeoServerIT.class
 })
 public class GeoWaveITSuite
 {
+	private final static Logger LOGGER = Logger.getLogger(GeoWaveITSuite.class);
+	
 	protected static final String TEST_FILTER_START_TIME_ATTRIBUTE_NAME = "StartTime";
 	protected static final String TEST_FILTER_END_TIME_ATTRIBUTE_NAME = "EndTime";
 	protected static final String TEST_NAMESPACE = "mil_nga_giat_geowave_test";
@@ -41,7 +43,7 @@ public class GeoWaveITSuite
 	protected static final String TEST_CASE_BASE = "data/";
 	protected static final String DEFAULT_MINI_ACCUMULO_PASSWORD = "Ge0wave";
 	protected static final String HADOOP_WINDOWS_UTIL = "winutils.exe";
-	private final static Logger LOGGER = Logger.getLogger(GeoWaveITSuite.class);
+	
 	protected static AccumuloOperations accumuloOperations;
 	protected static String zookeeper;
 	protected static String accumuloInstance;

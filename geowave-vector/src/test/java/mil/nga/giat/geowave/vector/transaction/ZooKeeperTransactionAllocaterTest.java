@@ -29,6 +29,7 @@ public class ZooKeeperTransactionAllocaterTest
 	Set<String> activeTX = new HashSet<String>();
 	volatile boolean shutdown = false;
 	private Random random = new Random();
+	private int maxSize = 9;
 
 	@Before
 	public void startZookeeper()
@@ -41,13 +42,16 @@ public class ZooKeeperTransactionAllocaterTest
 				new TransactionNotification() {
 
 					@Override
-					public void transactionCreated(
+					public boolean transactionCreated(
 							String clientID,
 							String txID ) {
 						synchronized (createdTXIds) {
+							if (createdTXIds.size() == maxSize) 
+								return false;
 							createdTXIds.add(txID);
+							
+							return true;
 						}
-
 					}
 
 				});
@@ -134,7 +138,7 @@ public class ZooKeeperTransactionAllocaterTest
 		int s = 0;
 
 		public void run() {
-			while (s < 10 && !shutdown) {
+			while (s < 100 && !shutdown) {
 				s++;
 				try {
 					Thread.sleep(100);
@@ -158,6 +162,7 @@ public class ZooKeeperTransactionAllocaterTest
 					}
 				}
 				catch (Throwable e) {
+					e.printStackTrace();
 					synchronized (failures) {
 						failures.add(e);
 						shutdown = true;

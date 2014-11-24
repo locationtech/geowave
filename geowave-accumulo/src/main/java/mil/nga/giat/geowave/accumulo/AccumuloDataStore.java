@@ -1093,7 +1093,7 @@ public class AccumuloDataStore implements
 			final Index index,
 			final Query query,
 			final Integer limit ) {
-		if (!query.isSupported(index)) {
+		if (query != null && !query.isSupported(index)) {
 			throw new IllegalArgumentException(
 					"Index does not support the query");
 		}
@@ -1120,7 +1120,8 @@ public class AccumuloDataStore implements
 				adapter,
 				index,
 				query,
-				limit);
+				limit,
+				(String[])null);
 	}
 
 	@Override
@@ -1143,7 +1144,7 @@ public class AccumuloDataStore implements
 			final Query query,
 			final Integer limit,
 			final String... authorizations ) {
-		if (!query.isSupported(index)) {
+		if (query != null && !query.isSupported(index)) {
 			throw new IllegalArgumentException(
 					"Index does not support the query");
 		}

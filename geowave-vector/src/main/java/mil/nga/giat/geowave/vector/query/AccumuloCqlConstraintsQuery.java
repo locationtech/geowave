@@ -1,5 +1,6 @@
 package mil.nga.giat.geowave.vector.query;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -36,7 +37,7 @@ public class AccumuloCqlConstraintsQuery extends
 			final FeatureDataAdapter dataAdapter,
 			final String[] authorizations ) {
 		super(
-				(List<ByteArrayId>) new LinkedList<ByteArrayId>(),
+				Arrays.asList(dataAdapter.getAdapterId()),
 				index,
 				(MultiDimensionalNumericData) null,
 				(List<QueryFilter>) new LinkedList<QueryFilter>(),
@@ -45,6 +46,8 @@ public class AccumuloCqlConstraintsQuery extends
 		this.dataAdapter = dataAdapter;
 	}
 
+
+	
 	public AccumuloCqlConstraintsQuery(
 			final List<ByteArrayId> adapterIds,
 			final Index index,
