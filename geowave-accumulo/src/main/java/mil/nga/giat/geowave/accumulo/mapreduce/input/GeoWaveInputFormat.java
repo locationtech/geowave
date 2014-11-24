@@ -424,14 +424,13 @@ public class GeoWaveInputFormat extends
 				final String instanceId = instance.getInstanceID();
 				final List<Range> rangeList = new ArrayList<Range>(
 						ranges);
-				int count = 0;
 				while (!binRanges(
 						rangeList,
 						getUserName(context),
 						getPassword(context),
 						tserverBinnedRanges,
 						tl,
-						instanceId) && (count < 8)) {
+						instanceId)) {
 					if (!(instance instanceof MockInstance)) {
 						if (!Tables.exists(
 								instance,
@@ -447,7 +446,6 @@ public class GeoWaveInputFormat extends
 									tableId);
 						}
 					}
-					count++;
 					tserverBinnedRanges.clear();
 					LOGGER.warn("Unable to locate bins for specified ranges. Retrying.");
 					UtilWaitThread.sleep(100 + (int) (Math.random() * 100));

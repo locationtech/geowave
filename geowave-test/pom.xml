@@ -1,11 +1,10 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<artifactId>geowave-parent</artifactId>
 		<groupId>mil.nga.giat</groupId>
 		<relativePath>../</relativePath>
-		<version>0.8.1-SNAPSHOT</version>
+		<version>0.8.2-SNAPSHOT</version>
 	</parent>
 	<properties>
 		<!-- Set these properties to connect to a remote Accumulo cluster for testing, 
@@ -21,7 +20,7 @@
 		<gt.version>11-SNAPSHOT</gt.version>
 		<spring.security.version>3.1.0.RELEASE</spring.security.version>
 		<maven.build.timestamp.format>dd-MMM-yyyy HH:mm</maven.build.timestamp.format>
-		<test.excludedGroups></test.excludedGroups>
+		<test.excludedGroups />
 		<imageio-ext.version>1.1.10</imageio-ext.version>
 	</properties>
 	<artifactId>geowave-test</artifactId>
@@ -31,7 +30,7 @@
 		<dependency>
 			<groupId>mil.nga.giat</groupId>
 			<artifactId>geowave-types</artifactId>
-			<version>0.8.1-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
@@ -54,12 +53,19 @@
 			<groupId>org.geoserver</groupId>
 			<artifactId>gs-restconfig</artifactId>
 			<version>2.5.2</version>
+			<scope>test</scope>
 			<exclusions>
 				<exclusion>
 					<artifactId>gt-epsg-hsql</artifactId>
 					<groupId>org.geotools</groupId>
 				</exclusion>
 			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>4.3.6</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 	<build>
@@ -79,7 +85,7 @@
 							<!-- Sonar currently just supports surefire so "trick" Sonar into 
 								thinking they are surefire reports -->
 							<reportsDirectory>${sonar.surefire.reportsPath}</reportsDirectory>
-							<argLine>${test.args} ${jacoco.failsafe.argLine}</argLine>
+							<argLine>${test.args} ${jacoco.failsafe.argline}</argLine>
 							<runOrder>reversealphabetical</runOrder>
 
 							<excludes>

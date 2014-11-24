@@ -1,4 +1,4 @@
-# GeoWave 0.8.1	
+# GeoWave 0.8.2	
 ## About  
 
 <a href="https://travis-ci.org/ngageoint/geowave">
@@ -11,12 +11,17 @@
        src="https://scan.coverity.com/projects/3371/badge.svg"/>
 </a>
 
+<a href="https://codecov.io/github/ngageoint/geowave?branch=master">
+  <img src="https://codecov.io/github/ngageoint/geowave/coverage.svg?branch=master" 
+        alt="Coverage via codecov.io" />
+</a>
+
 
 
 GeoWave is an open source set of software that:
 	
-* Adds multi-dimensional indexing capability to [Apache Accumulo](http://projects.apache.org/projects/accumulo.html) 
-* Adds support for geographic objects and geospatial operators to [Apache Accumulo](http://projects.apache.org/projects/accumulo.html) 
+* Adds multi-dimensional indexing capability to [Apache Accumulo](https://accumulo.apache.org) 
+* Adds support for geographic objects and geospatial operators to [Apache Accumulo](https://accumulo.apache.org) 
 * Contains a [GeoServer](http://geoserver.org/) plugin to allow geospatial data in Accumulo to be shared and visualized via OGC standard services
 * Provides Map-Reduce input and output formats for distributed processing and analysis of geospatial data
 
@@ -57,7 +62,7 @@ This *ultra* quickstart assumes you have [Apache Maven](http://maven.apache.org/
 To view the data (via standard [OGC](http://www.opengeospatial.org/) services) a [GeoServer](http://geoserver.org/) instance >= 2.5 is required due to [GEOT-4587](http://jira.codehaus.org/browse/GEOT-4587).  
 [GeoServer](http://geoserver.org/) 2.5.2 with [Geotools](http://www.geotools.org/) 11.2 the most tested version.
 
-[Apache Accumulo](http://projects.apache.org/projects/accumulo.html) version 1.5 or greater is required.  1.5.0, 1.5.1, and 1.6.0 have all been tested. 
+[Apache Accumulo](https://accumulo.apache.org) version 1.5 or greater is required.  1.5.0, 1.5.1, and 1.6.0 have all been tested. 
 
 [Apache Hadoop](http://hadoop.apache.org/) versions 1.x and 2.x *should* all work.  The software has specifically been run on [Cloudera](http://cloudera.com/content/cloudera/en/home.html) CDH4 and [Hortonworks Data Platform](http://hortonworks.com/hdp/) 2.1.   
 
@@ -82,7 +87,7 @@ First we need to build the geoserver plugin - from the geowave root directory:
 
 let's assume you have geoserver deployed in a tomcat container in /opt/tomcat
 
-    $ cp target/geowave-deploy-0.8.1-geoserver-singlejar.jar /opt/tomcat/webapps/geoserver/WEB-INF/lib/
+    $ cp target/geowave-deploy-0.8.2-geoserver-singlejar.jar /opt/tomcat/webapps/geoserver/WEB-INF/lib/
 
 and re-start tomcat
 
