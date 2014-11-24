@@ -53,12 +53,19 @@
 			<groupId>org.geoserver</groupId>
 			<artifactId>gs-restconfig</artifactId>
 			<version>2.5.2</version>
+			<scope>test</scope>
 			<exclusions>
 				<exclusion>
 					<artifactId>gt-epsg-hsql</artifactId>
 					<groupId>org.geotools</groupId>
 				</exclusion>
 			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>4.3.6</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 	<build>
@@ -78,7 +85,7 @@
 							<!-- Sonar currently just supports surefire so "trick" Sonar into 
 								thinking they are surefire reports -->
 							<reportsDirectory>${sonar.surefire.reportsPath}</reportsDirectory>
-							<argLine>${test.args} ${jacoco.failsafe.argLine}</argLine>
+							<argLine>${test.args} ${jacoco.failsafe.argline}</argLine>
 							<runOrder>reversealphabetical</runOrder>
 
 							<excludes>
