@@ -19,6 +19,11 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>mil.nga.giat</groupId>
+			<artifactId>geowave-raster</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>org.apache.hadoop</groupId>
 			<artifactId>hadoop-client</artifactId>
 			<version>${hadoop.version.mr}</version>

@@ -19,14 +19,11 @@ public class MergingCombiner extends
 		Mergeable currentMergeable = null;
 		while (iter.hasNext()) {
 			final Value val = iter.next();
-			Mergeable mergeable = PersistenceUtils.fromBinary(
-					val.get(),
-					Mergeable.class);
 			// hopefully its never the case that null stastics are stored,
 			// but just in case, check
-			mergeable = transform(
+			final Mergeable mergeable = getMergeable(
 					key,
-					mergeable);
+					val.get());
 			if (mergeable != null) {
 				if (currentMergeable == null) {
 					currentMergeable = mergeable;
@@ -38,14 +35,21 @@ public class MergingCombiner extends
 		}
 		if (currentMergeable != null) {
 			return new Value(
-					PersistenceUtils.toBinary(currentMergeable));
+					getBinary(currentMergeable));
 		}
 		return super.getTopValue();
 	}
 
-	protected Mergeable transform(
+	protected Mergeable getMergeable(
 			final Key key,
+			final byte[] binary ) {
+		return PersistenceUtils.fromBinary(
+				binary,
+				Mergeable.class);
+	}
+
+	protected byte[] getBinary(
 			final Mergeable mergeable ) {
-		return mergeable;
+		return PersistenceUtils.toBinary(mergeable);
 	}
 }

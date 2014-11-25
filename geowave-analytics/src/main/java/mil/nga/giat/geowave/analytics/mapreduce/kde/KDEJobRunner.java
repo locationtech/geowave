@@ -1,41 +1,27 @@
 package mil.nga.giat.geowave.analytics.mapreduce.kde;
 
 import java.io.IOException;
-import java.util.List;
 
-import mil.nga.giat.geowave.accumulo.BasicAccumuloOperations;
-import mil.nga.giat.geowave.accumulo.metadata.AccumuloAdapterStore;
-import mil.nga.giat.geowave.accumulo.metadata.AccumuloIndexStore;
+import mil.nga.giat.geowave.accumulo.mapreduce.input.GeoWaveInputFormat;
+import mil.nga.giat.geowave.accumulo.mapreduce.output.GeoWaveOutputFormat;
+import mil.nga.giat.geowave.accumulo.mapreduce.output.GeoWaveOutputKey;
 import mil.nga.giat.geowave.accumulo.util.AccumuloUtils;
-import mil.nga.giat.geowave.index.ByteArrayId;
-import mil.nga.giat.geowave.index.ByteArrayRange;
-import mil.nga.giat.geowave.index.ByteArrayUtils;
-import mil.nga.giat.geowave.index.PersistenceUtils;
 import mil.nga.giat.geowave.index.StringUtils;
 import mil.nga.giat.geowave.store.GeometryUtils;
-import mil.nga.giat.geowave.store.adapter.AdapterStore;
-import mil.nga.giat.geowave.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.store.index.Index;
 import mil.nga.giat.geowave.store.index.IndexType;
-import mil.nga.giat.geowave.store.query.BasicQuery.Constraints;
-import mil.nga.giat.geowave.vector.adapter.FeatureDataAdapter;
+import mil.nga.giat.geowave.store.query.SpatialQuery;
 import mil.nga.giat.geowave.vector.plugin.ExtractGeometryFilterVisitor;
 
 import org.apache.accumulo.core.client.IteratorSetting;
-import org.apache.accumulo.core.client.mapreduce.AccumuloInputFormat;
-import org.apache.accumulo.core.client.mapreduce.AccumuloOutputFormat;
 import org.apache.accumulo.core.client.mapreduce.InputFormatBase;
-import org.apache.accumulo.core.client.security.tokens.PasswordToken;
-import org.apache.accumulo.core.data.Mutation;
 import org.apache.accumulo.core.iterators.user.WholeRowIterator;
-import org.apache.accumulo.core.security.Authorizations;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.DoubleWritable;
 import org.apache.hadoop.io.LongWritable;
-import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.input.SequenceFileInputFormat;
@@ -44,6 +30,7 @@ import org.apache.hadoop.mapreduce.lib.output.SequenceFileOutputFormat;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 import org.geotools.filter.text.ecql.ECQL;
+import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.filter.Filter;
 
 import com.vividsolutions.jts.geom.Geometry;
@@ -67,7 +54,13 @@ public class KDEJobRunner extends
 	protected String featureType;
 	protected int maxLevel;
 	protected int minLevel;
+	protected int minSplits;
+	protected int maxSplits;
 	protected String cqlFilter;
+
+	public KDEJobRunner() {
+
+	}
 
 	/**
 	 * Main method to execute the MapReduce analytic.
@@ -78,20 +71,6 @@ public class KDEJobRunner extends
 		final Index spatialIndex = IndexType.SPATIAL_VECTOR.createDefaultIndex();
 
 		final Configuration conf = super.getConf();
-
-		final BasicAccumuloOperations ops = new BasicAccumuloOperations(
-				zookeeper,
-				instance,
-				user,
-				password,
-				namespace);
-		final AdapterStore adapterStore = new AccumuloAdapterStore(
-				ops);
-		final DataAdapter<?> adapter = adapterStore.getAdapter(new ByteArrayId(
-				StringUtils.stringToBinary(featureType)));
-		conf.set(
-				GaussianCellMapper.DATA_ADAPTER_KEY,
-				ByteArrayUtils.byteArrayToString(PersistenceUtils.toBinary(adapter)));
 		conf.setInt(
 				MAX_LEVEL_KEY,
 				maxLevel);
@@ -101,6 +80,7 @@ public class KDEJobRunner extends
 		conf.set(
 				AccumuloKDEReducer.STATS_NAME_KEY,
 				statsName);
+
 		if (cqlFilter != null) {
 			conf.set(
 					GaussianCellMapper.CQL_FILTER_KEY,
@@ -122,46 +102,34 @@ public class KDEJobRunner extends
 		job.setOutputKeyClass(DoubleWritable.class);
 		job.setOutputValueClass(LongWritable.class);
 
-		job.setInputFormatClass(AccumuloInputFormat.class);
+		job.setInputFormatClass(GeoWaveInputFormat.class);
 		job.setOutputFormatClass(SequenceFileOutputFormat.class);
 		job.setNumReduceTasks(8);
+		GeoWaveInputFormat.setMinimumSplitCount(
+				job,
+				minSplits);
+		GeoWaveInputFormat.setMaximumSplitCount(
+				job,
+				maxSplits);
+		GeoWaveInputFormat.setAccumuloOperationsInfo(
+				job,
+				zookeeper,
+				instance,
+				user,
+				password,
+				namespace);
 		if (cqlFilter != null) {
 			final Filter filter = ECQL.toFilter(cqlFilter);
 			final Geometry bbox = (Geometry) filter.accept(
 					ExtractGeometryFilterVisitor.GEOMETRY_VISITOR,
 					null);
 			if ((bbox != null) && !bbox.equals(GeometryUtils.infinity())) {
-				final Constraints c = GeometryUtils.basicConstraintsFromGeometry(bbox);
-				final List<ByteArrayRange> ranges = spatialIndex.getIndexStrategy().getQueryRanges(
-						c.getIndexConstraints(spatialIndex.getIndexStrategy()));
-
-				InputFormatBase.setRanges(
+				GeoWaveInputFormat.setQuery(
 						job,
-						AccumuloUtils.byteArrayRangesToAccumuloRanges(ranges));
+						new SpatialQuery(
+								bbox));
 			}
-			conf.set(
-					GaussianCellMapper.CQL_FILTER_KEY,
-					cqlFilter);
 		}
-
-		InputFormatBase.setConnectorInfo(
-				job,
-				user,
-				new PasswordToken(
-						password.getBytes()));
-		InputFormatBase.setInputTableName(
-				job,
-				AccumuloUtils.getQualifiedTableName(
-						namespace,
-						StringUtils.stringFromBinary(spatialIndex.getId().getBytes())));
-		InputFormatBase.setScanAuthorizations(
-				job,
-				new Authorizations());
-
-		InputFormatBase.setZooKeeperInstance(
-				job,
-				instance,
-				zookeeper);
 
 		// we have to at least use a whole row iterator
 		final IteratorSetting iteratorSettings = new IteratorSetting(
@@ -273,15 +241,15 @@ public class KDEJobRunner extends
 	}
 
 	protected Class getJob2OutputFormatClass() {
-		return AccumuloOutputFormat.class;
+		return GeoWaveOutputFormat.class;
 	}
 
 	protected Class getJob2OutputKeyClass() {
-		return Text.class;
+		return GeoWaveOutputKey.class;
 	}
 
 	protected Class getJob2OutputValueClass() {
-		return Mutation.class;
+		return SimpleFeature.class;
 	}
 
 	protected Class getJob2Reducer() {
@@ -320,44 +288,21 @@ public class KDEJobRunner extends
 			final String statsNamespace,
 			final String tableName )
 			throws Exception {
-		final BasicAccumuloOperations statsOperations = new BasicAccumuloOperations(
+		GeoWaveOutputFormat.setAccumuloOperationsInfo(
+				statsReducer,
 				zookeeper,
 				instance,
 				user,
 				password,
 				statsNamespace);
-		final AccumuloAdapterStore statsAdapterStore = new AccumuloAdapterStore(
-				statsOperations);
-		for (int level = minLevel; level <= maxLevel; level++) {
-			final FeatureDataAdapter featureAdapter = new FeatureDataAdapter(
-					AccumuloKDEReducer.createFeatureType(AccumuloKDEReducer.getTypeName(
-							level,
-							statsName)));
-			if (!statsAdapterStore.adapterExists(featureAdapter.getAdapterId())) {
-				statsAdapterStore.addAdapter(featureAdapter);
-			}
-		}
-		final AccumuloIndexStore statsIndexStore = new AccumuloIndexStore(
-				statsOperations);
-		if (!statsIndexStore.indexExists(spatialIndex.getId())) {
-			statsIndexStore.addIndex(spatialIndex);
-		}
-
-		AccumuloOutputFormat.setZooKeeperInstance(
+		GeoWaveOutputFormat.addDataAdapter(
 				statsReducer,
-				instance,
-				zookeeper);
-		AccumuloOutputFormat.setCreateTables(
+				AccumuloKDEReducer.getDataAdapter(
+						statsName,
+						AccumuloKDEReducer.NUM_BANDS));
+		GeoWaveOutputFormat.addIndex(
 				statsReducer,
-				true);
-		AccumuloOutputFormat.setConnectorInfo(
-				statsReducer,
-				user,
-				new PasswordToken(
-						password.getBytes()));
-		AccumuloOutputFormat.setDefaultTableName(
-				statsReducer,
-				tableName);
+				spatialIndex);
 	}
 
 	public static void main(
@@ -374,23 +319,27 @@ public class KDEJobRunner extends
 	public int run(
 			final String[] args )
 			throws Exception {
-		zookeeper = args[0];
-		instance = args[1];
-		user = args[2];
-		password = args[3];
-		namespace = args[4];
-		featureType = args[5];
-		minLevel = Integer.parseInt(args[6]);
-		maxLevel = Integer.parseInt(args[7]);
-		statsName = args[8];
-		if (args.length > getCQLFilterArg()) {
-			cqlFilter = args[getCQLFilterArg()];
+		if (args.length > 0) {
+			zookeeper = args[0];
+			instance = args[1];
+			user = args[2];
+			password = args[3];
+			namespace = args[4];
+			featureType = args[5];
+			minLevel = Integer.parseInt(args[6]);
+			maxLevel = Integer.parseInt(args[7]);
+			minSplits = Integer.parseInt(args[8]);
+			maxSplits = Integer.parseInt(args[9]);
+			statsName = args[10];
+			if (args.length > getCQLFilterArg()) {
+				cqlFilter = args[getCQLFilterArg()];
+			}
 		}
 		return runJob();
 	}
 
 	protected int getCQLFilterArg() {
-		return 9;
+		return 11;
 	}
 
 }

@@ -2,29 +2,24 @@ package mil.nga.giat.geowave.analytics.mapreduce.kde.compare;
 
 import java.io.IOException;
 
-import mil.nga.giat.geowave.accumulo.BasicAccumuloOperations;
-import mil.nga.giat.geowave.accumulo.metadata.AccumuloAdapterStore;
-import mil.nga.giat.geowave.accumulo.metadata.AccumuloIndexStore;
+import mil.nga.giat.geowave.accumulo.mapreduce.output.GeoWaveOutputFormat;
+import mil.nga.giat.geowave.accumulo.mapreduce.output.GeoWaveOutputKey;
 import mil.nga.giat.geowave.analytics.mapreduce.kde.AccumuloKDEReducer;
 import mil.nga.giat.geowave.analytics.mapreduce.kde.KDEJobRunner;
 import mil.nga.giat.geowave.store.index.Index;
-import mil.nga.giat.geowave.vector.adapter.FeatureDataAdapter;
 
-import org.apache.accumulo.core.client.mapreduce.AccumuloOutputFormat;
-import org.apache.accumulo.core.client.security.tokens.PasswordToken;
-import org.apache.accumulo.core.data.Mutation;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.DoubleWritable;
 import org.apache.hadoop.io.LongWritable;
-import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.input.SequenceFileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.SequenceFileOutputFormat;
 import org.apache.hadoop.util.ToolRunner;
+import org.opengis.feature.simple.SimpleFeature;
 
 public class ComparisonStatsJobRunner extends
 		KDEJobRunner
@@ -108,52 +103,30 @@ public class ComparisonStatsJobRunner extends
 			ingester.setNumReduceTasks((maxLevel - minLevel) + 1);
 			ingester.setMapOutputKeyClass(ComparisonCellData.class);
 			ingester.setMapOutputValueClass(LongWritable.class);
-			ingester.setOutputKeyClass(Text.class);
-			ingester.setOutputValueClass(Mutation.class);
+			ingester.setOutputKeyClass(GeoWaveOutputKey.class);
+			ingester.setOutputValueClass(SimpleFeature.class);
 			ingester.setInputFormatClass(SequenceFileInputFormat.class);
-			ingester.setOutputFormatClass(AccumuloOutputFormat.class);
+			ingester.setOutputFormatClass(GeoWaveOutputFormat.class);
 
 			FileInputFormat.setInputPaths(
 					ingester,
 					new Path(
 							"/tmp/" + namespace + "_stats_" + minLevel + "_" + maxLevel + "_" + statsName + "/combined_pct"));
-			final BasicAccumuloOperations statsOperations = new BasicAccumuloOperations(
+			GeoWaveOutputFormat.setAccumuloOperationsInfo(
+					ingester,
 					zookeeper,
 					instance,
 					user,
 					password,
 					statsNamespace);
-			final AccumuloAdapterStore statsAdapterStore = new AccumuloAdapterStore(
-					statsOperations);
-			for (int level = minLevel; level <= maxLevel; level++) {
-				final FeatureDataAdapter featureAdapter = new FeatureDataAdapter(
-						ComparisonAccumuloStatsReducer.createFeatureType(AccumuloKDEReducer.getTypeName(
-								level,
-								statsName)));
-				if (!statsAdapterStore.adapterExists(featureAdapter.getAdapterId())) {
-					statsAdapterStore.addAdapter(featureAdapter);
-				}
-			}
-			final AccumuloIndexStore statsIndexStore = new AccumuloIndexStore(
-					statsOperations);
-			if (!statsIndexStore.indexExists(spatialIndex.getId())) {
-				statsIndexStore.addIndex(spatialIndex);
-			}
-			AccumuloOutputFormat.setZooKeeperInstance(
+			GeoWaveOutputFormat.addDataAdapter(
 					ingester,
-					instance,
-					zookeeper);
-			AccumuloOutputFormat.setCreateTables(
+					AccumuloKDEReducer.getDataAdapter(
+							statsNamespace,
+							ComparisonAccumuloStatsReducer.NUM_BANDS));
+			GeoWaveOutputFormat.addIndex(
 					ingester,
-					true);
-			AccumuloOutputFormat.setConnectorInfo(
-					ingester,
-					user,
-					new PasswordToken(
-							password.getBytes()));
-			AccumuloOutputFormat.setDefaultTableName(
-					ingester,
-					tableName);
+					spatialIndex);
 			return ingester.waitForCompletion(true);
 
 		}

@@ -631,13 +631,10 @@ public class RasterDataAdapter implements
 		final SampleModel sm = sampleModel.createCompatibleSampleModel(
 				tileSize,
 				tileSize);
-		WritableRaster raster = Raster.createWritableRaster(
-				sm,
-				null);
 
 		final boolean alphaPremultiplied = colorModel.isAlphaPremultiplied();
 
-		raster = Raster.createWritableRaster(
+		final WritableRaster raster = Raster.createWritableRaster(
 				sm,
 				dataBuffer,
 				null);
@@ -764,6 +761,7 @@ public class RasterDataAdapter implements
 		try {
 			final AffineTransform2D gridToCRS = new AffineTransform2D(
 					worldToScreenTransform.createInverse());
+
 			final GridCoverageFactory gcf = CoverageFactoryFinder.getGridCoverageFactory(null);
 			return gcf.create(
 					coverageName,
@@ -1300,11 +1298,12 @@ public class RasterDataAdapter implements
 
 	@Override
 	public IteratorConfig[] getAttachedIteratorConfig() {
+		final EnumSet<IteratorScope> visibilityCombinerScope = EnumSet.of(IteratorScope.scan);
 		final RasterTileCombinerConfig tileCombiner = new RasterTileCombinerConfig(
 				new IteratorSetting(
 						RASTER_TILE_COMBINER_PRIORITY,
 						RasterTileCombiner.class),
-				EnumSet.allOf(IteratorScope.class));
+				EnumSet.complementOf(visibilityCombinerScope));
 		final List<Column> columns = new ArrayList<Column>();
 		columns.add(new Column(
 				getCoverageName()));
@@ -1319,7 +1318,7 @@ public class RasterDataAdapter implements
 				new IteratorSetting(
 						RASTER_TILE_VISIBILITY_COMBINER_PRIORITY,
 						RasterTileVisibilityCombiner.class),
-				EnumSet.allOf(IteratorScope.class));
+				visibilityCombinerScope);
 		tileVisibilityCombiner.getIteratorSettings().addOption(
 				RasterTileCombinerHelper.MERGE_STRATEGY_KEY,
 				mergeStrategyStr);
@@ -1327,8 +1326,8 @@ public class RasterDataAdapter implements
 				tileVisibilityCombiner.getIteratorSettings(),
 				columns);
 		return new IteratorConfig[] {
-			tileCombiner,
-			tileVisibilityCombiner
+//			tileCombiner,
+//			tileVisibilityCombiner
 		};
 	}
 

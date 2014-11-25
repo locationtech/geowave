@@ -1,58 +1,53 @@
 package mil.nga.giat.geowave.analytics.mapreduce.kde;
 
+import java.awt.Transparency;
+import java.awt.color.ColorSpace;
+import java.awt.image.ComponentColorModel;
+import java.awt.image.DataBuffer;
+import java.awt.image.SampleModel;
+import java.awt.image.WritableRaster;
 import java.io.IOException;
+import java.util.HashMap;
 
+import javax.media.jai.RasterFactory;
 import javax.vecmath.Point2d;
 
-import mil.nga.giat.geowave.accumulo.AccumuloDataStore;
-import mil.nga.giat.geowave.accumulo.AccumuloOptions;
-import mil.nga.giat.geowave.vector.adapter.FeatureDataAdapter;
-import mil.nga.giat.geowave.store.DataStore;
-import mil.nga.giat.geowave.store.GeometryUtils;
-import mil.nga.giat.geowave.store.adapter.AdapterStore;
-import mil.nga.giat.geowave.store.adapter.DataAdapter;
-import mil.nga.giat.geowave.store.adapter.MemoryAdapterStore;
-import mil.nga.giat.geowave.store.index.Index;
-import mil.nga.giat.geowave.store.index.IndexStore;
+import mil.nga.giat.geowave.accumulo.mapreduce.output.GeoWaveOutputKey;
+import mil.nga.giat.geowave.index.ByteArrayId;
+import mil.nga.giat.geowave.raster.adapter.RasterDataAdapter;
+import mil.nga.giat.geowave.raster.adapter.merge.nodata.NoDataMergeStrategy;
+import mil.nga.giat.geowave.raster.plugin.GeoWaveGTRasterFormat;
 import mil.nga.giat.geowave.store.index.IndexType;
-import mil.nga.giat.geowave.store.index.MemoryIndexStore;
 
-import org.apache.accumulo.core.data.Mutation;
 import org.apache.hadoop.io.DoubleWritable;
 import org.apache.hadoop.io.LongWritable;
-import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.log4j.Logger;
-import org.geotools.feature.AttributeTypeBuilder;
-import org.geotools.feature.simple.SimpleFeatureBuilder;
-import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
-import org.opengis.feature.simple.SimpleFeature;
-import org.opengis.feature.simple.SimpleFeatureType;
-
-import com.vividsolutions.jts.geom.Envelope;
-import com.vividsolutions.jts.geom.Geometry;
+import org.geotools.coverage.CoverageFactoryFinder;
+import org.geotools.coverage.grid.GridCoverageFactory;
+import org.geotools.geometry.DirectPosition2D;
+import org.geotools.geometry.Envelope2D;
+import org.geotools.geometry.jts.ReferencedEnvelope;
+import org.opengis.coverage.grid.GridCoverage;
+import org.opengis.geometry.Envelope;
 
 public class AccumuloKDEReducer extends
-		Reducer<DoubleWritable, LongWritable, Text, Mutation>
+		Reducer<DoubleWritable, LongWritable, GeoWaveOutputKey, GridCoverage>
 {
 	private final static Logger LOGGER = Logger.getLogger(AccumuloKDEReducer.class);
 	public static final String STATS_NAME_KEY = "STATS_NAME";
+	public static final int NUM_BANDS = 3;
 	private long totalKeys = 0;
 	private double max = -Double.MAX_VALUE;
 	private double inc = 0;
 
-	private SimpleFeatureType type;
-	private SimpleFeatureBuilder builder;
-	private Index index;
-	private DataStore dataStore;
 	private int minLevels;
 	private int maxLevels;
 	private int numLevels;
 	private int level;
 	private int numXPosts;
 	private int numYPosts;
-	private FeatureDataAdapter adapter;
-	private String statsName;
+	private String coverageName;
 
 	@Override
 	protected void reduce(
@@ -68,26 +63,64 @@ public class AccumuloKDEReducer extends
 			}
 		}
 		else {
-			final double normalized = key.get() / max;
+			final double value = key.get();
+			final double normalizedValue = value / max;
 			// calculate weights for this key
 			for (final LongWritable v : values) {
 				final long cellIndex = v.get() / numLevels;
 				final Point2d[] bbox = fromIndexToLL_UR(cellIndex);
-				builder.add(GeometryUtils.GEOMETRY_FACTORY.toGeometry(new Envelope(
-						bbox[0].x,
-						bbox[1].x,
-						bbox[0].y,
-						bbox[1].y)));
-				builder.add(key.get());
-				builder.add(normalized);
+				final WritableRaster raster = createRaster(NUM_BANDS);
+				raster.setSample(
+						0,
+						0,
+						0,
+						key.get());
+				raster.setSample(
+						0,
+						0,
+						1,
+						normalizedValue);
 				inc += (1.0 / totalKeys);
-				builder.add(inc);
-				final SimpleFeature feature = builder.buildFeature(new Long(
-						cellIndex).toString());
-				dataStore.ingest(
-						adapter,
-						index,
-						feature);
+				// the inc represents the percentile that this cell falls in
+				raster.setSample(
+						0,
+						0,
+						2,
+						inc);
+				Envelope mapExtent;
+				try {
+					mapExtent = new ReferencedEnvelope(
+							bbox[0].x,
+							bbox[1].x,
+							bbox[0].y,
+							bbox[1].y,
+							GeoWaveGTRasterFormat.DEFAULT_CRS);
+
+				}
+				catch (final IllegalArgumentException e) {
+					LOGGER.warn(
+							"Unable to calculate transformation for grid coordinates on read",
+							e);
+					mapExtent = new Envelope2D(
+							new DirectPosition2D(
+									bbox[0].x,
+									bbox[0].y),
+							new DirectPosition2D(
+									bbox[0].x,
+									bbox[0].y));
+				}
+
+				final GridCoverageFactory gcf = CoverageFactoryFinder.getGridCoverageFactory(null);
+				context.write(
+						new GeoWaveOutputKey(
+								new ByteArrayId(
+										coverageName),
+								new ByteArrayId(
+										IndexType.SPATIAL_VECTOR.getDefaultId())),
+						gcf.create(
+								coverageName,
+								raster,
+								mapExtent));
 			}
 		}
 	}
@@ -120,9 +153,10 @@ public class AccumuloKDEReducer extends
 		maxLevels = context.getConfiguration().getInt(
 				KDEJobRunner.MAX_LEVEL_KEY,
 				25);
-		statsName = context.getConfiguration().get(
+		final String statsName = context.getConfiguration().get(
 				STATS_NAME_KEY,
 				"");
+		coverageName = getCoverageName(statsName);
 		numLevels = (maxLevels - minLevels) + 1;
 		level = context.getConfiguration().getInt(
 				"mapred.task.partition",
@@ -133,68 +167,62 @@ public class AccumuloKDEReducer extends
 		numYPosts = (int) Math.pow(
 				2,
 				level);
-		type = createFeatureType(getTypeName(
-				level,
-				statsName));
-		builder = new SimpleFeatureBuilder(
-				type);
-		index = IndexType.SPATIAL_VECTOR.createDefaultIndex();
-		final IndexStore indexStore = new MemoryIndexStore(
-				new Index[] {
-					index
-				});
-		adapter = new FeatureDataAdapter(
-				type);
-		final AdapterStore adapterStore = new MemoryAdapterStore(
-				new DataAdapter[] {
-					new FeatureDataAdapter(
-							type)
-				});
-		final AccumuloOptions options = new AccumuloOptions();
-		options.setPersistDataStatistics(false);
-		// TODO consider an in memory statistics store that will write the
-		// statistics when the job is completed
-		dataStore = new AccumuloDataStore(
-				indexStore,
-				adapterStore,
-				null,
-				new ReducerContextWriterOperations(
-						context,
-						context.getConfiguration().get(
-								KDEJobRunner.TABLE_NAME)),
-				options);
-
 		totalKeys = context.getConfiguration().getLong(
 				"Entries per level.level" + level,
 				10);
 	}
 
-	public static String getTypeName(
-			final int level,
+	public static String getCoverageName(
 			final String statsName ) {
-		return "l" + level + "_stats" + statsName;
+		return "stats_" + statsName;
 	}
 
-	public static SimpleFeatureType createFeatureType(
-			final String typeName ) {
-		final SimpleFeatureTypeBuilder simpleFeatureTypeBuilder = new SimpleFeatureTypeBuilder();
-		simpleFeatureTypeBuilder.setName(typeName);
+	public static WritableRaster createRaster(
+			final int numBands ) {
+		return RasterFactory.createBandedRaster(
+				DataBuffer.TYPE_DOUBLE,
+				1,
+				1,
+				numBands,
+				null);
+	}
 
-		final AttributeTypeBuilder attributeTypeBuilder = new AttributeTypeBuilder();
-
-		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
-				Geometry.class).buildDescriptor(
-				"geometry"));
-		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
-				Double.class).buildDescriptor(
-				"Value"));
-		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
-				Double.class).buildDescriptor(
-				"Normalized"));
-		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
-				Double.class).buildDescriptor(
-				"Percentile"));
-		return simpleFeatureTypeBuilder.buildFeatureType();
+	public static RasterDataAdapter getDataAdapter(
+			final String statsName,
+			final int numBands ) {
+		final String coverageName = AccumuloKDEReducer.getCoverageName(statsName);
+		final double[][] noDataValuesPerBand = new double[numBands][];
+		final double[] backgroundValuesPerBand = new double[numBands];
+		for (int i = 0; i < numBands; i++) {
+			noDataValuesPerBand[i] = new double[] {
+				Double.valueOf(Double.NaN)
+			};
+			backgroundValuesPerBand[i] = Double.valueOf(Double.NaN);
+		}
+		final SampleModel sampleModel = AccumuloKDEReducer.createRaster(
+				numBands).getSampleModel();
+		return new RasterDataAdapter(
+				coverageName,
+				sampleModel,
+				new ComponentColorModel(
+						ColorSpace.getInstance(ColorSpace.CS_GRAY),
+						new int[] {
+							16
+						},
+						false,
+						true,
+						Transparency.OPAQUE,
+						DataBuffer.TYPE_DOUBLE),
+				new HashMap<String, String>(),
+				1,
+				noDataValuesPerBand,
+				backgroundValuesPerBand,
+				null,
+				false,
+				new NoDataMergeStrategy(
+						new ByteArrayId(
+								coverageName),
+						sampleModel));
 	}
 
 }
