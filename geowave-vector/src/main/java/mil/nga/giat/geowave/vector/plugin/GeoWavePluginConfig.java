@@ -40,7 +40,8 @@ public class GeoWavePluginConfig
 	protected static final String USERNAME_KEY = "UserName";
 	protected static final String PASSWORD_KEY = "Password";
 	protected static final String ACCUMULO_NAMESPACE_KEY = "Namespace";
-	protected static final String FEATURE_NAMESPACE_KEY = "Feature Namespace";
+	// name matches the workspace parameter provided to the factory
+	protected static final String FEATURE_NAMESPACE_KEY = "namespace";
 	protected static final String LOCK_MGT_KEY = "Lock Management";
 	protected static final String AUTH_MGT_KEY = "Authorization Management Provider";
 	protected static final String AUTH_URL_KEY = "Authorization Data URL";
@@ -75,11 +76,13 @@ public class GeoWavePluginConfig
 			"The table namespace associated with this data store",
 			true);
 
+	/* 	
 	private static final Param FEATURE_NAMESPACE = new Param(
 			FEATURE_NAMESPACE_KEY,
-			URI.class,
+			String.class,
 			"The overriding namespace for all feature types maintained within this data store",
 			false);
+			*/
 
 	private static final Param LOCK_MGT = new Param(
 			LOCK_MGT_KEY,
@@ -130,7 +133,8 @@ public class GeoWavePluginConfig
 			accumuloParams.add(USERNAME);
 			accumuloParams.add(PASSWORD);
 			accumuloParams.add(ACCUMULO_NAMESPACE);
-			accumuloParams.add(FEATURE_NAMESPACE);
+			// is pulled from the workspace
+	//		accumuloParams.add(FEATURE_NAMESPACE);
 			accumuloParams.add(LOCK_MGT);
 			accumuloParams.add(AUTH_MGT);
 			accumuloParams.add(AUTH_URL);
