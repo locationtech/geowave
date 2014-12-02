@@ -6,6 +6,8 @@ import java.util.Map;
 import mil.nga.giat.geowave.accumulo.MergingCombiner;
 import mil.nga.giat.geowave.index.Mergeable;
 import mil.nga.giat.geowave.index.Persistable;
+import mil.nga.giat.geowave.index.PersistenceUtils;
+import mil.nga.giat.geowave.raster.adapter.RasterTile;
 
 import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.Value;
@@ -19,12 +21,21 @@ public class RasterTileCombiner extends
 	private final RasterTileCombinerHelper<Persistable> helper = new RasterTileCombinerHelper<Persistable>();
 
 	@Override
-	protected Mergeable transform(
+	protected Mergeable getMergeable(
 			final Key key,
-			final Mergeable mergeable ) {
+			final byte[] binary ) {
+		final RasterTile mergeable = PersistenceUtils.classFactory(
+				RasterTile.class.getName(),
+				RasterTile.class);
 		return helper.transform(
 				key,
 				mergeable);
+	}
+
+	@Override
+	protected byte[] getBinary(
+			final Mergeable mergeable ) {
+		return mergeable.toBinary();
 	}
 
 	@Override

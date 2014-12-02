@@ -1310,11 +1310,12 @@ public class RasterDataAdapter implements
 
 	@Override
 	public IteratorConfig[] getAttachedIteratorConfig() {
+		final EnumSet<IteratorScope> visibilityCombinerScope = EnumSet.of(IteratorScope.scan);
 		final RasterTileCombinerConfig tileCombiner = new RasterTileCombinerConfig(
 				new IteratorSetting(
 						RASTER_TILE_COMBINER_PRIORITY,
 						RasterTileCombiner.class),
-				EnumSet.allOf(IteratorScope.class));
+				EnumSet.complementOf(visibilityCombinerScope));
 		final List<Column> columns = new ArrayList<Column>();
 		columns.add(new Column(
 				getCoverageName()));
@@ -1329,7 +1330,7 @@ public class RasterDataAdapter implements
 				new IteratorSetting(
 						RASTER_TILE_VISIBILITY_COMBINER_PRIORITY,
 						RasterTileVisibilityCombiner.class),
-				EnumSet.allOf(IteratorScope.class));
+				visibilityCombinerScope);
 		tileVisibilityCombiner.getIteratorSettings().addOption(
 				RasterTileCombinerHelper.MERGE_STRATEGY_KEY,
 				mergeStrategyStr);
