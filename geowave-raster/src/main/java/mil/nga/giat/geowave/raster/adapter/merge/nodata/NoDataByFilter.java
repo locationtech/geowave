@@ -81,7 +81,7 @@ public class NoDataByFilter implements
 			noDataBinary = new byte[] {};
 		}
 		final byte[] geometryBinary = GeometryUtils.geometryToBinary(shape);
-		final ByteBuffer buf = ByteBuffer.allocate(geometryBinary.length + noDataPerBand.length + 4);
+		final ByteBuffer buf = ByteBuffer.allocate(geometryBinary.length + noDataBinary.length + 4);
 		buf.putInt(noDataBinary.length);
 		buf.put(noDataBinary);
 		buf.put(geometryBinary);
