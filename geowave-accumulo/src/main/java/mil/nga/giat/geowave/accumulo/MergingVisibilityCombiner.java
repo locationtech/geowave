@@ -34,12 +34,15 @@ public class MergingVisibilityCombiner extends
 		Key outputKey = null;
 		while (input.hasTop()) {
 			final Value val = input.getTopValue();
-			// the SortedKeyValueIterator uses the same instance of topKey to hold keys (a wrapper)
-			final Key currentKey = new Key(input.getTopKey());
+			// the SortedKeyValueIterator uses the same instance of topKey to
+			// hold keys (a wrapper)
+			final Key currentKey = new Key(
+					input.getTopKey());
 			if (outputKey == null) {
 				outputKey = currentKey;
-			} else if (currentMergeable != null &&
-					   !outputKey.getRowData().equals(currentKey.getRowData())) {
+			}
+			else if ((currentMergeable != null) && !outputKey.getRowData().equals(
+					currentKey.getRowData())) {
 				output.append(
 						outputKey,
 						new Value(
@@ -57,14 +60,11 @@ public class MergingVisibilityCombiner extends
 						outputKey,
 						combinedVisibility);
 			}
-			Mergeable mergeable = PersistenceUtils.fromBinary(
-					val.get(),
-					Mergeable.class);
+			final Mergeable mergeable = getMergeable(
+					currentKey,
+					val.get());
 			// hopefully its never the case that null mergeables are stored,
 			// but just in case, check
-			mergeable = transform(
-					currentKey,
-					mergeable);
 			if (mergeable != null) {
 				if (currentMergeable == null) {
 					currentMergeable = mergeable;
@@ -79,23 +79,30 @@ public class MergingVisibilityCombiner extends
 			output.append(
 					outputKey,
 					new Value(
-							PersistenceUtils.toBinary(currentMergeable)));
+							getBinary(currentMergeable)));
 		}
 	}
 
-	protected Mergeable transform(
-			Key key,
+	protected Mergeable getMergeable(
+			final Key key,
+			final byte[] binary ) {
+		return PersistenceUtils.fromBinary(
+				binary,
+				Mergeable.class);
+	}
+
+	protected byte[] getBinary(
 			final Mergeable mergeable ) {
-		return mergeable;
+		return PersistenceUtils.toBinary(mergeable);
 	}
 
 	private static byte[] combineVisibilities(
 			final byte[] vis1,
 			final byte[] vis2 ) {
-		if (vis1 == null || vis1.length == 0) {
+		if ((vis1 == null) || (vis1.length == 0)) {
 			return vis2;
 		}
-		if (vis2 == null || vis2.length == 0) {
+		if ((vis2 == null) || (vis2.length == 0)) {
 			return vis1;
 		}
 		return new ColumnVisibility(
