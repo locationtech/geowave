@@ -27,6 +27,10 @@ public class RasterTileCombiner extends
 		final RasterTile mergeable = PersistenceUtils.classFactory(
 				RasterTile.class.getName(),
 				RasterTile.class);
+
+		if (mergeable != null) {
+			mergeable.fromBinary(binary);
+		}
 		return helper.transform(
 				key,
 				mergeable);
