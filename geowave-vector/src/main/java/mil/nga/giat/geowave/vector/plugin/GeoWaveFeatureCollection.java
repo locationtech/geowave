@@ -40,7 +40,7 @@ import com.vividsolutions.jts.geom.GeometryFactory;
  *
  */
 public class GeoWaveFeatureCollection extends
-DataFeatureCollection
+		DataFeatureCollection
 {
 
 	public static final Hints.Key LEVEL = new Hints.Key(
@@ -63,7 +63,7 @@ DataFeatureCollection
 				GeoWaveFeatureCollection.getSchema(
 						reader,
 						query).getTypeName(),
-						query);
+				query);
 	}
 
 	@Override
@@ -240,8 +240,8 @@ DataFeatureCollection
 			}
 			else if (query.getHints().containsKey(
 					DecimationProcess.OUTPUT_WIDTH) && query.getHints().containsKey(
-							DecimationProcess.OUTPUT_HEIGHT) && query.getHints().containsKey(
-									DecimationProcess.OUTPUT_BBOX)) {
+					DecimationProcess.OUTPUT_HEIGHT) && query.getHints().containsKey(
+					DecimationProcess.OUTPUT_BBOX)) {
 				double pixelSize = 1;
 				if (query.getHints().containsKey(
 						DecimationProcess.PIXEL_SIZE)) {
@@ -253,12 +253,12 @@ DataFeatureCollection
 						timeBounds,
 						(Integer) query.getHints().get(
 								DecimationProcess.OUTPUT_WIDTH),
-								(Integer) query.getHints().get(
-										DecimationProcess.OUTPUT_HEIGHT),
-										pixelSize,
-										query.getFilter(),
-										referencedEnvelope,
-										limit);
+						(Integer) query.getHints().get(
+								DecimationProcess.OUTPUT_HEIGHT),
+						pixelSize,
+						query.getFilter(),
+						referencedEnvelope,
+						limit);
 
 			}
 			else if (getStatsQueryName() != null) {
@@ -267,8 +267,8 @@ DataFeatureCollection
 						timeBounds,
 						(Integer) query.getHints().get(
 								LEVEL),
-								(String) query.getHints().get(
-										STATS_NAME));
+						(String) query.getHints().get(
+								STATS_NAME));
 			}
 			else if ((jtsBounds == null) && (timeBounds == null)) {
 				// get all of the data (yikes)
@@ -295,14 +295,14 @@ DataFeatureCollection
 
 	private ReferencedEnvelope getEnvelope(
 			final Query query )
-					throws TransformException,
-					FactoryException {
+			throws TransformException,
+			FactoryException {
 		if (query.getHints().containsKey(
 				DecimationProcess.OUTPUT_BBOX)) {
 			return ((ReferencedEnvelope) query.getHints().get(
 					DecimationProcess.OUTPUT_BBOX)).transform(
-							GeoWaveGTDataStore.DEFAULT_CRS,
-							true);
+					GeoWaveGTDataStore.DEFAULT_CRS,
+					true);
 		}
 		return null;
 	}
