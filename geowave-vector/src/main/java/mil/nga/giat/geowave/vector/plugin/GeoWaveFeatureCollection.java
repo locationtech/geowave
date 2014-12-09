@@ -40,7 +40,7 @@ import com.vividsolutions.jts.geom.GeometryFactory;
  *
  */
 public class GeoWaveFeatureCollection extends
-		DataFeatureCollection
+DataFeatureCollection
 {
 
 	public static final Hints.Key LEVEL = new Hints.Key(
@@ -63,7 +63,7 @@ public class GeoWaveFeatureCollection extends
 				GeoWaveFeatureCollection.getSchema(
 						reader,
 						query).getTypeName(),
-				query);
+						query);
 	}
 
 	@Override
@@ -230,12 +230,6 @@ public class GeoWaveFeatureCollection extends
 			if (query.getFilter() == Filter.EXCLUDE) {
 				featureCursor = reader.getNoData();
 			}
-			else if ((query.getFilter() == Filter.INCLUDE) || ((jtsBounds == null) && (timeBounds == null))) {
-				// get all of the data (yikes)
-				featureCursor = reader.getAllData(
-						query.getFilter(),
-						limit);
-			}
 			else if (isDistributedRenderQuery()) {
 				featureCursor = reader.renderData(
 						jtsBounds,
@@ -246,8 +240,8 @@ public class GeoWaveFeatureCollection extends
 			}
 			else if (query.getHints().containsKey(
 					DecimationProcess.OUTPUT_WIDTH) && query.getHints().containsKey(
-					DecimationProcess.OUTPUT_HEIGHT) && query.getHints().containsKey(
-					DecimationProcess.OUTPUT_BBOX)) {
+							DecimationProcess.OUTPUT_HEIGHT) && query.getHints().containsKey(
+									DecimationProcess.OUTPUT_BBOX)) {
 				double pixelSize = 1;
 				if (query.getHints().containsKey(
 						DecimationProcess.PIXEL_SIZE)) {
@@ -259,12 +253,12 @@ public class GeoWaveFeatureCollection extends
 						timeBounds,
 						(Integer) query.getHints().get(
 								DecimationProcess.OUTPUT_WIDTH),
-						(Integer) query.getHints().get(
-								DecimationProcess.OUTPUT_HEIGHT),
-						pixelSize,
-						query.getFilter(),
-						referencedEnvelope,
-						limit);
+								(Integer) query.getHints().get(
+										DecimationProcess.OUTPUT_HEIGHT),
+										pixelSize,
+										query.getFilter(),
+										referencedEnvelope,
+										limit);
 
 			}
 			else if (getStatsQueryName() != null) {
@@ -273,8 +267,14 @@ public class GeoWaveFeatureCollection extends
 						timeBounds,
 						(Integer) query.getHints().get(
 								LEVEL),
-						(String) query.getHints().get(
-								STATS_NAME));
+								(String) query.getHints().get(
+										STATS_NAME));
+			}
+			else if ((jtsBounds == null) && (timeBounds == null)) {
+				// get all of the data (yikes)
+				featureCursor = reader.getAllData(
+						query.getFilter(),
+						limit);
 			}
 			else {
 				// get the data within the bounding box
@@ -295,14 +295,14 @@ public class GeoWaveFeatureCollection extends
 
 	private ReferencedEnvelope getEnvelope(
 			final Query query )
-			throws TransformException,
-			FactoryException {
+					throws TransformException,
+					FactoryException {
 		if (query.getHints().containsKey(
 				DecimationProcess.OUTPUT_BBOX)) {
 			return ((ReferencedEnvelope) query.getHints().get(
 					DecimationProcess.OUTPUT_BBOX)).transform(
-					GeoWaveGTDataStore.DEFAULT_CRS,
-					true);
+							GeoWaveGTDataStore.DEFAULT_CRS,
+							true);
 		}
 		return null;
 	}
