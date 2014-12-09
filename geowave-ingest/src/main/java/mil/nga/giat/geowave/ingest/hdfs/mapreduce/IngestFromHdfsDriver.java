@@ -65,9 +65,16 @@ public class IngestFromHdfsDriver extends
 				mapReduceOptions.getJobTrackerOrResourceManagerHostPort());
 		// the following 3 properties will only be used if the hadoop version
 		// does support yarn
-		conf.set(
+		if ("local".equals(mapReduceOptions.getJobTrackerOrResourceManagerHostPort())) {
+			conf.set(
+				"mapreduce.framework.name",
+				"local");
+		}
+		else {
+			conf.set(
 				"mapreduce.framework.name",
 				"yarn");
+		}
 		conf.set(
 				"yarn.resourcemanager.address",
 				mapReduceOptions.getJobTrackerOrResourceManagerHostPort());
