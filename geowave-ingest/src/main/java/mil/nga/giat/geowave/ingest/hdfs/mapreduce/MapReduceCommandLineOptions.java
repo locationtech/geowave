@@ -36,6 +36,7 @@ public class MapReduceCommandLineOptions
 				"resourceman",
 				true,
 				"Yarn resource manager hostname and port in the format hostname:port"));
+		allOptions.addOptionGroup(jobTrackerOrResourceManager);
 	}
 
 	public String getJobTrackerOrResourceManagerHostPort() {
