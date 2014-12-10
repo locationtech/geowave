@@ -363,7 +363,8 @@ public class GeoServerIT extends
 			final String content = getContent(r);
 			final String pattern = "34.68158180311274 35.1828408241272";
 
-			return content.contains(pattern);
+			// name space check as well
+			return content.contains(pattern) && content.contains("geowave:geometry");
 		}
 		return false;
 

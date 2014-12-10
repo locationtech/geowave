@@ -7,6 +7,8 @@ import java.util.Map;
 import mil.nga.giat.geowave.accumulo.MergingVisibilityCombiner;
 import mil.nga.giat.geowave.index.Mergeable;
 import mil.nga.giat.geowave.index.Persistable;
+import mil.nga.giat.geowave.index.PersistenceUtils;
+import mil.nga.giat.geowave.raster.adapter.RasterTile;
 
 import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.Value;
@@ -41,14 +43,27 @@ public class RasterTileVisibilityCombiner extends
 	}
 
 	@Override
-	protected Mergeable transform(
+	protected Mergeable getMergeable(
 			final Key key,
-			final Mergeable mergeable ) {
+			final byte[] binary ) {
+		final RasterTile mergeable = PersistenceUtils.classFactory(
+				RasterTile.class.getName(),
+				RasterTile.class);
+		
+		if (mergeable != null) {
+			mergeable.fromBinary(binary);
+		}
 		return helper.transform(
 				key,
 				mergeable);
 	}
 
+	@Override
+	protected byte[] getBinary(
+			final Mergeable mergeable ) {
+		return mergeable.toBinary();
+	}
+	
 	@Override
 	public void init(
 			final SortedKeyValueIterator<Key, Value> source,

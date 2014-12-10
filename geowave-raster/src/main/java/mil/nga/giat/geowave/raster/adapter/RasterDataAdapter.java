@@ -129,7 +129,11 @@ public class RasterDataAdapter implements
 		IndexDependentDataAdapter<GridCoverage>,
 		AttachedIteratorDataAdapter<GridCoverage>,
 		HadoopDataAdapter<GridCoverage, GridCoverageWritable>
-{ // these priorities are fairly arbitrary at the moment
+{ // these
+	// priorities
+	// are fairly
+	// arbitrary at
+	// the moment
 	private static final int RASTER_TILE_COMBINER_PRIORITY = 4;
 	private static final int RASTER_TILE_VISIBILITY_COMBINER_PRIORITY = 6;
 	private final static Logger LOGGER = Logger.getLogger(RasterDataAdapter.class);
@@ -667,13 +671,13 @@ public class RasterDataAdapter implements
 
 				bandName = colorInterpretation.name();
 				if ((colorInterpretation == ColorInterpretation.UNDEFINED) || bandNames.contains(bandName)) {// make
-																												// sure
-																												// we
-																												// create
-																												// no
-																												// duplicate
-																												// band
-																												// names
+					// sure
+					// we
+					// create
+					// no
+					// duplicate
+					// band
+					// names
 					bandName = "Band" + (i + 1);
 				}
 			}
@@ -886,7 +890,7 @@ public class RasterDataAdapter implements
 		else {
 			mergeStrategyBinary = new byte[] {};
 		}
-		final ByteBuffer buf = ByteBuffer.allocate(coverageNameBytes.length + sampleModelBinary.length + colorModelBinary.length + metadataBinaryLength + histogramConfigBinary.length + noDataBinary.length + backgroundBinary.length + 29);
+		final ByteBuffer buf = ByteBuffer.allocate(coverageNameBytes.length + sampleModelBinary.length + colorModelBinary.length + metadataBinaryLength + histogramConfigBinary.length + noDataBinary.length + backgroundBinary.length + mergeStrategyBinary.length + 33);
 		buf.putInt(tileSize);
 		buf.putInt(coverageNameBytes.length);
 		buf.put(coverageNameBytes);
@@ -954,12 +958,18 @@ public class RasterDataAdapter implements
 			final List<byte[]> noDataValuesBytes = new ArrayList<byte[]>(
 					noDataValuesPerBand.length);
 			for (final double[] noDataValues : noDataValuesPerBand) {
-				final int thisBytes = 4 + (noDataValues.length * 8);
+				int length = 0;
+				if (noDataValues != null) {
+					length = noDataValues.length;
+				}
+				final int thisBytes = 4 + (length * 8);
 				totalBytes += thisBytes;
 				final ByteBuffer noDataBuf = ByteBuffer.allocate(thisBytes);
-				noDataBuf.putInt(noDataValues.length);
-				for (final double noDataValue : noDataValues) {
-					noDataBuf.putDouble(noDataValue);
+				noDataBuf.putInt(length);
+				if (noDataValues != null) {
+					for (final double noDataValue : noDataValues) {
+						noDataBuf.putDouble(noDataValue);
+					}
 				}
 				noDataValuesBytes.add(noDataBuf.array());
 			}
@@ -1157,8 +1167,8 @@ public class RasterDataAdapter implements
 	{
 
 		/**
-			 *
-			 */
+		 *
+		 */
 		private static final long serialVersionUID = 2227219522016820587L;
 
 		private final double nodata;
@@ -1300,11 +1310,12 @@ public class RasterDataAdapter implements
 
 	@Override
 	public IteratorConfig[] getAttachedIteratorConfig() {
+		final EnumSet<IteratorScope> visibilityCombinerScope = EnumSet.of(IteratorScope.scan);
 		final RasterTileCombinerConfig tileCombiner = new RasterTileCombinerConfig(
 				new IteratorSetting(
 						RASTER_TILE_COMBINER_PRIORITY,
 						RasterTileCombiner.class),
-				EnumSet.allOf(IteratorScope.class));
+				EnumSet.complementOf(visibilityCombinerScope));
 		final List<Column> columns = new ArrayList<Column>();
 		columns.add(new Column(
 				getCoverageName()));
@@ -1319,7 +1330,7 @@ public class RasterDataAdapter implements
 				new IteratorSetting(
 						RASTER_TILE_VISIBILITY_COMBINER_PRIORITY,
 						RasterTileVisibilityCombiner.class),
-				EnumSet.allOf(IteratorScope.class));
+				visibilityCombinerScope);
 		tileVisibilityCombiner.getIteratorSettings().addOption(
 				RasterTileCombinerHelper.MERGE_STRATEGY_KEY,
 				mergeStrategyStr);

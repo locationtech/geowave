@@ -445,13 +445,11 @@ public class RasterUtils
 			resultEnvelope = requestEnvelope;
 		}
 
-		image = toBufferedImage(
-				rescaleImageViaPlanarImage(
+		image = rescaleImageViaPlanarImage(
 						interpolation,
 						rescaleX,
 						rescaleY,
-						image),
-				image.getType());
+						image);
 		RenderedImage result;
 		if (outputTransparentColor == null) {
 			result = image;
@@ -554,7 +552,7 @@ public class RasterUtils
 		return image;
 	}
 
-	private static Image rescaleImageViaPlanarImage(
+	private static BufferedImage rescaleImageViaPlanarImage(
 			Integer interpolation,
 			final double rescaleX,
 			final double rescaleY,
