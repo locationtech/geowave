@@ -22,6 +22,8 @@ import org.geotools.feature.SchemaException;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.GeometryFactory;
@@ -30,6 +32,8 @@ import com.vividsolutions.jts.geom.impl.CoordinateArraySequence;
 
 public class DataForTesting
 {
+	final static Logger log = LoggerFactory.getLogger(DataForTesting.class);
+
 	public static void createData(
 			final String instanceName,
 			final String zooservers,
@@ -37,11 +41,8 @@ public class DataForTesting
 			final String password,
 			final String tableNamespace ) {
 		/*
-		 * Data is defined as 4 clusters of 15 points each XXXXX XXXXX XXXXX
-		 * XXXXX XXXXX XXXXX
-		 * 
-		 * XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX therefore, clustering should give
-		 * 4 clusters as the optimum result.
+		 * Data is defined as 4 clusters of 15 points each therefore, clustering
+		 * should give 4 clusters as the optimum result.
 		 */
 		final List<Coordinate> data = new ArrayList<Coordinate>();
 
@@ -89,6 +90,8 @@ public class DataForTesting
 					user,
 					new PasswordToken(
 							password));
+			log.info("connected to accumulo!");
+
 			final DataStore dataStore = new AccumuloDataStore(
 					new BasicAccumuloOperations(
 							accumuloConnector,
@@ -127,6 +130,8 @@ public class DataForTesting
 
 				idCounter++;
 			}
+
+			log.info("created point count: " + data.size());
 
 		}
 		catch (AccumuloException | SchemaException | AccumuloSecurityException e) {

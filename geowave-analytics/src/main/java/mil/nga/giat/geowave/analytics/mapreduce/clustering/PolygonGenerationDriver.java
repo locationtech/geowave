@@ -213,17 +213,17 @@ public class PolygonGenerationDriver
 					job,
 					ranges);
 
-			AbstractInputFormat.setConnectorInfo(
+			InputFormatBase.setConnectorInfo(
 					job,
 					user,
 					authToken);
 			InputFormatBase.setInputTableName(
 					job,
 					tempKMeansTableName);
-			AbstractInputFormat.setScanAuthorizations(
+			InputFormatBase.setScanAuthorizations(
 					job,
 					null);
-			AbstractInputFormat.setZooKeeperInstance(
+			InputFormatBase.setZooKeeperInstance(
 					job,
 					instanceName,
 					zooservers);
@@ -243,26 +243,6 @@ public class PolygonGenerationDriver
 			AccumuloOutputFormat.setCreateTables(
 					job,
 					true);
-
-			// add all the dependency jars to the distributed cache for all
-			// map/reduce tasks
-			// all jars must be on hdfs at the specified directory prior to
-			// running job
-			// FileSystem fs = FileSystem.get(job.getConfiguration());
-			// Path dcache = new Path("/data/cache/lib");
-			// try {
-			// FileStatus[] jars = fs.globStatus(new Path( dcache.toString() +
-			// "/*.jar"));
-			// for (int i=0; i< jars.length; i++) {
-			// Path path = jars[i].getPath();
-			// if (fs.exists(path) && jars[i].isFile()) {
-			// DistributedCache.addFileToClassPath(new Path(dcache.toString() +
-			// "/" + path.getName()), job.getConfiguration(), fs);
-			// }
-			// }
-			// } catch (IOException e) {
-			// e.printStackTrace();
-			// }
 
 			job.waitForCompletion(true);
 
@@ -285,12 +265,16 @@ public class PolygonGenerationDriver
 				final Geometry geometry = wkbReader.read(entry.getValue().get());
 				if (geometry instanceof Polygon) {
 					// Polygon polygon = (Polygon) geometry;
-					// System.out.println(wktWriter.write(polygon));
+					// log.info(wktWriter.write(polygon));
 					polygons.add((Polygon) geometry);
 				}
 			}
 			scanner.clearScanIterators();
 			scanner.close();
+
+			if (polygons.size() == 0) {
+				return null;
+			}
 
 			final com.vividsolutions.jts.geom.Polygon[] sortedPolygonArray = new com.vividsolutions.jts.geom.Polygon[polygons.size()];
 			int polygonCounter = 0;
@@ -312,7 +296,7 @@ public class PolygonGenerationDriver
 			final Index index = IndexType.SPATIAL_VECTOR.createDefaultIndex();
 
 			// build a multipolygon feature type
-			final SimpleFeatureType multiPolygonType = ClusteringUtils.createMultiPolygonSimpleFeatureaType("MultiPolygon");
+			final SimpleFeatureType multiPolygonType = ClusteringUtils.createMultiPolygonSimpleFeatureType("MultiPolygon");
 
 			final WritableDataAdapter<SimpleFeature> adapter = new FeatureDataAdapter(
 					multiPolygonType);

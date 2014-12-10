@@ -12,7 +12,6 @@ import mil.nga.giat.geowave.accumulo.mapreduce.input.GeoWaveInputFormat;
 import mil.nga.giat.geowave.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.store.index.Index;
 import mil.nga.giat.geowave.store.index.IndexType;
-import mil.nga.giat.geowave.store.query.SpatialQuery;
 import mil.nga.giat.geowave.vector.adapter.FeatureDataAdapter;
 
 import org.apache.accumulo.core.client.AccumuloException;
@@ -224,53 +223,22 @@ public class JumpDriver
 		GeoWaveInputFormat.setMaximumSplitCount(
 				job,
 				20);
-		GeoWaveInputFormat.setQuery(
-				job,
-				new SpatialQuery(
-						ClusteringUtils.generateWorldPolygon()));
 
 		// set up AccumuloOutputFormat
 		AccumuloOutputFormat.setConnectorInfo(
 				job,
 				user,
 				authToken);
-		AccumuloOutputFormat// .setZooKeeperInstance(job, new
-							// ClientConfiguration().withInstance(instanceName).withZkHosts(zooservers));
-				.setZooKeeperInstance(
-						job,
-						instanceName,
-						zooservers);
+		AccumuloOutputFormat.setZooKeeperInstance(
+				job,
+				instanceName,
+				zooservers);
 		AccumuloOutputFormat.setDefaultTableName(
 				job,
 				tempKMeansTableName);
 		AccumuloOutputFormat.setCreateTables(
 				job,
 				true);
-
-		// add all the dependency jars to the distributed cache for all
-		// map/reduce tasks
-		// all jars must be on hdfs at the specified directory prior to running
-		// job
-		// final FileSystem fs = FileSystem.get(job.getConfiguration());
-		// final Path dcache = new Path(
-		// "/data/cache/lib");
-		// try {
-		// final FileStatus[] jars = fs.globStatus(new Path(
-		// dcache.toString() + "/*.jar"));
-		// for (int i = 0; i < jars.length; i++) {
-		// final Path path = jars[i].getPath();
-		// if (fs.exists(path) && jars[i].isFile()) {
-		// DistributedCache.addFileToClassPath(
-		// new Path(
-		// dcache.toString() + "/" + path.getName()),
-		// job.getConfiguration(),
-		// fs);
-		// }
-		// }
-		// }
-		// catch (final IOException e) {
-		// log.error("Jump driver: " + e.getMessage(), e);
-		// }
 
 		job.waitForCompletion(true);
 
@@ -368,52 +336,25 @@ public class JumpDriver
 		GeoWaveInputFormat.setMaximumSplitCount(
 				job,
 				20);
-		GeoWaveInputFormat.setQuery(
-				job,
-				new SpatialQuery(
-						ClusteringUtils.generateWorldPolygon()));
+		// GeoWaveInputFormat.setQuery(
+		// job,
+		// new SpatialQuery(
+		// ClusteringUtils.generateWorldPolygon()));
 
 		AccumuloOutputFormat.setConnectorInfo(
 				job,
 				user,
 				authToken);
-		AccumuloOutputFormat// .setZooKeeperInstance(job, new
-							// ClientConfiguration().withInstance(instanceName).withZkHosts(zooservers));
-				.setZooKeeperInstance(
-						job,
-						instanceName,
-						zooservers);
+		AccumuloOutputFormat.setZooKeeperInstance(
+				job,
+				instanceName,
+				zooservers);
 		AccumuloOutputFormat.setDefaultTableName(
 				job,
 				tempKMeansTableName);
 		AccumuloOutputFormat.setCreateTables(
 				job,
 				true);
-
-		// add all the dependency jars to the distributed cache for all
-		// map/reduce tasks
-		// all jars must be on hdfs at the specified directory prior to running
-		// job
-		// final FileSystem fs = FileSystem.get(job.getConfiguration());
-		// final Path dcache = new Path(
-		// "/data/cache/lib");
-		// try {
-		// final FileStatus[] jars = fs.globStatus(new Path(
-		// dcache.toString() + "/*.jar"));
-		// for (int i = 0; i < jars.length; i++) {
-		// final Path path = jars[i].getPath();
-		// if (fs.exists(path) && jars[i].isFile()) {
-		// DistributedCache.addFileToClassPath(
-		// new Path(
-		// dcache.toString() + "/" + path.getName()),
-		// job.getConfiguration(),
-		// fs);
-		// }
-		// }
-		// }
-		// catch (final IOException e) {
-		// log.error("Jump driver: " + e.getMessage(), e);
-		// }
 
 		job.waitForCompletion(true);
 	}
