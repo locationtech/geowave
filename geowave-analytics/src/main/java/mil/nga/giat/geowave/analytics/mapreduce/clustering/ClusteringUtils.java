@@ -6,16 +6,22 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.UUID;
 
+import mil.nga.giat.geowave.accumulo.BasicAccumuloOperations;
+import mil.nga.giat.geowave.accumulo.metadata.AccumuloDataStatisticsStore;
 import mil.nga.giat.geowave.accumulo.util.AccumuloUtils;
+import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.index.ByteArrayRange;
 import mil.nga.giat.geowave.store.CloseableIterator;
 import mil.nga.giat.geowave.store.DataStore;
 import mil.nga.giat.geowave.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.store.adapter.statistics.CountDataStatistics;
+import mil.nga.giat.geowave.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.store.index.Index;
 import mil.nga.giat.geowave.store.index.IndexType;
 import mil.nga.giat.geowave.store.query.SpatialQuery;
 import mil.nga.giat.geowave.vector.adapter.FeatureDataAdapter;
 
+import org.apache.accumulo.core.client.Connector;
 import org.apache.accumulo.core.client.IteratorSetting;
 import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.Value;
@@ -96,7 +102,7 @@ public class ClusteringUtils
 				new GeometryFactory());
 	}
 
-	public static SimpleFeatureType createMultiPolygonSimpleFeatureaType(
+	public static SimpleFeatureType createMultiPolygonSimpleFeatureType(
 			final String dataTypeId ) {
 		// build a multipolygon feature type
 		final SimpleFeatureTypeBuilder builder = new SimpleFeatureTypeBuilder();
@@ -132,35 +138,22 @@ public class ClusteringUtils
 		return null;
 	}
 
-	/*
-	 * Retrieve point count for the polygon space from the specified data store
-	 */
-	public static Integer getPointCount(
-			final DataStore dataStore,
-			final DataAdapter<SimpleFeature> adapter,
-			final Index index,
-			final Polygon polygon ) {
-		int count = 0;
-		try {
-			// extract points from GeoWave
-			final CloseableIterator<?> actualResults = dataStore.query(
-					adapter,
-					index,
-					new SpatialQuery(
-							polygon));
-			while (actualResults.hasNext()) {
-				final Object obj = actualResults.next();
-				if (obj instanceof SimpleFeature) {
-					count++;
-				}
-			}
-			actualResults.close();
-		}
-		catch (final IOException e) {
-			e.printStackTrace();
+	@SuppressWarnings("rawtypes")
+	public static Integer getPointCount(Connector connector, String tableNamespace, String adapterId)
+	{		
+		AccumuloDataStatisticsStore statStore = new
+				AccumuloDataStatisticsStore(new BasicAccumuloOperations(
+						connector,
+						tableNamespace));
+		final DataStatistics<?> stats = statStore.getDataStatistics(
+				new ByteArrayId(
+						adapterId),
+				CountDataStatistics.STATS_ID);
+		if ((stats != null) && (stats instanceof CountDataStatistics)) {				
+			return (int) ((CountDataStatistics) stats).getCount();
 		}
 
-		return count;
+		return null;
 	}
 
 	/*
@@ -260,7 +253,6 @@ public class ClusteringUtils
 			final DataStore dataStore,
 			final DataAdapter<SimpleFeature> adapter,
 			final Index index,
-			final Polygon polygon,
 			final List<Integer> indices ) {
 		final List<DataPoint> points = new ArrayList<DataPoint>();
 		try {
@@ -269,9 +261,7 @@ public class ClusteringUtils
 			// extract points from GeoWave
 			final CloseableIterator<?> actualResults = dataStore.query(
 					adapter,
-					index,
-					new SpatialQuery(
-							polygon));
+					null);
 			while (actualResults.hasNext()) {
 				if (indices.contains(entryCounter)) {
 					final Object obj = actualResults.next();

@@ -152,8 +152,6 @@ public class KMeansDriver
 
 		System.out.println("K-Means Driver Running...");
 
-		final Polygon polygon = ClusteringUtils.generateWorldPolygon();
-
 		final AuthenticationToken authToken = new PasswordToken(
 				password.getBytes());
 
@@ -164,8 +162,7 @@ public class KMeansDriver
 		 */
 		initializeCentroids(
 				dataTypeId,
-				numClusters,
-				polygon);
+				numClusters);
 		iterCounter++;
 
 		/*
@@ -244,8 +241,7 @@ public class KMeansDriver
 					20);
 			GeoWaveInputFormat.setQuery(
 					job,
-					new SpatialQuery(
-							polygon));
+					null);
 
 			// set up AccumuloOutputFormat
 			AccumuloOutputFormat.setConnectorInfo(
@@ -262,31 +258,6 @@ public class KMeansDriver
 			AccumuloOutputFormat.setCreateTables(
 					job,
 					true);
-
-			// add all the dependency jars to the distributed cache for all
-			// map/reduce tasks
-			// all jars must be on hdfs at the specified directory prior to
-			// running job
-			// final FileSystem fs = FileSystem.get(job.getConfiguration());
-			// final Path dcache = new Path(
-			// "/data/cache/lib");
-			// try {
-			// final FileStatus[] jars = fs.globStatus(new Path(
-			// dcache.toString() + "/*.jar"));
-			// for (int i = 0; i < jars.length; i++) {
-			// final Path path = jars[i].getPath();
-			// if (fs.exists(path) && jars[i].isFile()) {
-			// DistributedCache.addFileToClassPath(
-			// new Path(
-			// dcache.toString() + "/" + path.getName()),
-			// job.getConfiguration(),
-			// fs);
-			// }
-			// }
-			// }
-			// catch (final IOException e) {
-			// e.printStackTrace();
-			// }
 
 			job.waitForCompletion(true);
 
@@ -319,8 +290,7 @@ public class KMeansDriver
 	 */
 	private List<DataPoint> initializeCentroids(
 			final String dataTypeId,
-			final int numClusters,
-			final Polygon polygon )
+			final int numClusters )
 			throws SchemaException {
 		List<DataPoint> points = new ArrayList<DataPoint>();
 
@@ -339,10 +309,9 @@ public class KMeansDriver
 						dataTableNamespace));
 
 		final int numPts = ClusteringUtils.getPointCount(
-				inputDataStore,
-				adapter,
-				index,
-				polygon);
+				accumuloConnector,
+				dataTableNamespace,
+				dataTypeId);
 
 		final Random random = new Random();
 		// pick out numPts of random numbers for picking centroid points
@@ -377,7 +346,6 @@ public class KMeansDriver
 				inputDataStore,
 				adapter,
 				index,
-				polygon,
 				randInts);
 
 		// write centroids to a custom temporary Accumulo table on the GeoWave
