@@ -26,9 +26,9 @@ import com.google.common.collect.Iterators;
  * file to HDFS and then ingesting it within the map phase of a map-reduce job.
  */
 abstract public class AbstractLocalIngestWithMapper<T> extends
-AbstractStageFileToHdfs implements
-LocalFileIngestPlugin<T>,
-IngestFromHdfsPlugin<HdfsFile, T>
+		AbstractStageFileToHdfs implements
+		LocalFileIngestPlugin<T>,
+		IngestFromHdfsPlugin<HdfsFile, T>
 {
 	private final static Logger LOGGER = Logger.getLogger(AbstractLocalIngestWithMapper.class);
 
@@ -75,7 +75,7 @@ IngestFromHdfsPlugin<HdfsFile, T>
 	}
 
 	private static class InternalIngestWithMapper<T> implements
-	IngestWithMapper<HdfsFile, T>
+			IngestWithMapper<HdfsFile, T>
 	{
 		private AbstractLocalIngestWithMapper parentPlugin;
 
