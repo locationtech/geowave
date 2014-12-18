@@ -15,7 +15,6 @@ import mil.nga.giat.geowave.ingest.local.LocalFileIngestPlugin;
 import mil.nga.giat.geowave.store.CloseableIterator;
 import mil.nga.giat.geowave.store.adapter.WritableDataAdapter;
 
-import org.apache.commons.collections.IteratorUtils;
 import org.apache.log4j.Logger;
 
 import com.google.common.collect.Iterators;
@@ -48,8 +47,9 @@ abstract public class AbstractLocalIngestWithMapper<T> extends
 			final File input,
 			final ByteArrayId primaryIndexId,
 			final String globalVisibility ) {
-		try (InputStream inputStream = new FileInputStream(
-				input)) {
+		try {
+			final InputStream inputStream = new FileInputStream(
+					input);
 			return toGeoWaveDataInternal(
 					inputStream,
 					primaryIndexId,
@@ -57,7 +57,7 @@ abstract public class AbstractLocalIngestWithMapper<T> extends
 		}
 		catch (final IOException e) {
 			LOGGER.warn(
-					"Cannot find file, unable to ingest",
+					"Cannot open file, unable to ingest",
 					e);
 		}
 		return new CloseableIterator.Wrapper(
@@ -97,20 +97,12 @@ abstract public class AbstractLocalIngestWithMapper<T> extends
 				final HdfsFile input,
 				final ByteArrayId primaryIndexId,
 				final String globalVisibility ) {
-			try (InputStream inputStream = new ByteBufferBackedInputStream(
-					input.getOriginalFile())) {
-				return parentPlugin.toGeoWaveDataInternal(
-						inputStream,
-						primaryIndexId,
-						globalVisibility);
-			}
-			catch (final IOException e) {
-				LOGGER.warn(
-						"Unable to read HDFS file",
-						e);
-			}
-			return new CloseableIterator.Wrapper<GeoWaveData<T>>(
-					IteratorUtils.emptyIterator());
+			final InputStream inputStream = new ByteBufferBackedInputStream(
+					input.getOriginalFile());
+			return parentPlugin.toGeoWaveDataInternal(
+					inputStream,
+					primaryIndexId,
+					globalVisibility);
 		}
 
 		@Override
