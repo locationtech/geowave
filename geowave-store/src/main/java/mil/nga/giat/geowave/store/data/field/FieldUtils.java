@@ -6,7 +6,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import mil.nga.giat.geowave.store.data.field.BasicReader.BooleanReader;
 import mil.nga.giat.geowave.store.data.field.BasicReader.ByteArrayReader;
+import mil.nga.giat.geowave.store.data.field.BasicReader.ByteReader;
 import mil.nga.giat.geowave.store.data.field.BasicReader.CalendarReader;
 import mil.nga.giat.geowave.store.data.field.BasicReader.DateReader;
 import mil.nga.giat.geowave.store.data.field.BasicReader.DoubleReader;
@@ -15,8 +17,11 @@ import mil.nga.giat.geowave.store.data.field.BasicReader.GeometryReader;
 import mil.nga.giat.geowave.store.data.field.BasicReader.IntReader;
 import mil.nga.giat.geowave.store.data.field.BasicReader.LongReader;
 import mil.nga.giat.geowave.store.data.field.BasicReader.PrimitiveByteArrayReader;
+import mil.nga.giat.geowave.store.data.field.BasicReader.ShortReader;
 import mil.nga.giat.geowave.store.data.field.BasicReader.StringReader;
+import mil.nga.giat.geowave.store.data.field.BasicWriter.BooleanWriter;
 import mil.nga.giat.geowave.store.data.field.BasicWriter.ByteArrayWriter;
+import mil.nga.giat.geowave.store.data.field.BasicWriter.ByteWriter;
 import mil.nga.giat.geowave.store.data.field.BasicWriter.CalendarWriter;
 import mil.nga.giat.geowave.store.data.field.BasicWriter.DateWriter;
 import mil.nga.giat.geowave.store.data.field.BasicWriter.DoubleWriter;
@@ -25,6 +30,7 @@ import mil.nga.giat.geowave.store.data.field.BasicWriter.GeometryWriter;
 import mil.nga.giat.geowave.store.data.field.BasicWriter.IntWriter;
 import mil.nga.giat.geowave.store.data.field.BasicWriter.LongWriter;
 import mil.nga.giat.geowave.store.data.field.BasicWriter.PrimitiveByteArrayWriter;
+import mil.nga.giat.geowave.store.data.field.BasicWriter.ShortWriter;
 import mil.nga.giat.geowave.store.data.field.BasicWriter.StringWriter;
 
 import com.vividsolutions.jts.geom.Geometry;
@@ -39,6 +45,15 @@ public class FieldUtils
 	private static final Map<Class<?>, FieldReader<?>> DEFAULT_READERS = new HashMap<Class<?>, FieldReader<?>>();
 	private static final Map<Class<?>, FieldWriter<?, ?>> DEFAULT_WRITERS = new HashMap<Class<?>, FieldWriter<?, ?>>();
 	static {
+		DEFAULT_READERS.put(
+				Boolean.class,
+				new BooleanReader());
+		DEFAULT_READERS.put(
+				Byte.class,
+				new ByteReader());
+		DEFAULT_READERS.put(
+				Short.class,
+				new ShortReader());
 		DEFAULT_READERS.put(
 				Float.class,
 				new FloatReader());
@@ -70,6 +85,15 @@ public class FieldUtils
 				byte[].class,
 				new PrimitiveByteArrayReader());
 
+		DEFAULT_WRITERS.put(
+				Boolean.class,
+				new BooleanWriter());
+		DEFAULT_WRITERS.put(
+				Byte.class,
+				new ByteWriter());
+		DEFAULT_WRITERS.put(
+				Short.class,
+				new ShortWriter());
 		DEFAULT_WRITERS.put(
 				Float.class,
 				new FloatWriter());
