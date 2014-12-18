@@ -7,7 +7,6 @@ import java.nio.ByteBuffer;
 public class ByteBufferBackedInputStream extends
 		InputStream
 {
-
 	private final ByteBuffer buf;
 
 	public ByteBufferBackedInputStream(
@@ -41,6 +40,44 @@ public class ByteBufferBackedInputStream extends
 				bytes,
 				off,
 				len);
+		return len;
+	}
+
+	@Override
+	public int available()
+			throws IOException {
+		return buf.remaining();
+	}
+
+	@Override
+	public int read(
+			byte[] bytes )
+			throws IOException {
+		if (!buf.hasRemaining()) {
+			return -1;
+		}
+
+		int len = Math.min(
+				bytes.length,
+				buf.remaining());
+		buf.get(
+				bytes,
+				0,
+				len);
+		return len;
+	}
+
+	@Override
+	public synchronized void reset()
+			throws IOException {
+		buf.reset();
+	}
+
+	@Override
+	public long skip(
+			long len )
+			throws IOException {
+		buf.get(new byte[(int) len]);
 		return len;
 	}
 }
