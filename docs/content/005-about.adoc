@@ -1,0 +1,57 @@
+[[about]]
+<<<
+== What is GeoWave
+
+GeoWave is a library for storage, index, and search of multi-dimensional data on top of a sorted key-value datastore.
+GeoWave includes specific tailored implementations that have advanced support for OGC spatial types (up to 3 dimensions),
+and both bounded and unbounded temporal values. Both single and ranged values are supported on all axes. GeoWave’s
+geospatial support is built on top of the GeoTools extensibility model, so it plugins natively to GeoServer, uDig, and
+any other GeoTools compatible project – and can ingest GeoTools compatible data sources. GeoWave comes out of the box
+with an Accumulo implementation.
+
+Features:
+
+* Adds multi-dimensional indexing capability to http://projects.apache.org/projects/accumulo.html[Apache Accumulo^]
+* Adds support for geographic objects and geospatial operators to http://projects.apache.org/projects/accumulo.html[Apache Accumulo^]
+* Contains a http://geoserver.org/[GeoServer^] plugin to allow geospatial data in Accumulo to be shared and visualized via OGC standard services
+* Provides Map-Reduce input and output formats for distributed processing and analysis of geospatial data
+
+GeoWave attempts to do for Accumulo as PostGIS does for PostgreSQL.
+
+<<<
+
+=== Origin
+
+GeoWave was developed at the National Geospatial-Intelligence Agency (NGA) in collaboration with
+http://www.radiantblue.com/[RadiantBlue Technologies] and http://www.boozallen.com/[Booz Allen Hamilton^]. The government
+has https://github.com/ngageoint/geowave/blob/master/NOTICE[unlimited rights^] and is releasing this software to
+increase the impact of government investments by providing developers with the opportunity to take things in new directions.
+The software use, modification, and distribution rights are stipulated within the http://www.apache.org/licenses/LICENSE-2.0.html[Apache 2.0^] license.
+
+=== Pull Requests
+
+All pull request contributions to this project will be released under the Apache 2.0 license.
+
+Software source code previously released under an open source license and then modified by NGA staff is considered a
+"joint work" (see __17 USC 101__); it is partially copyrighted, partially public domain, and as a whole is protected by
+the copyrights of the non-government authors and must be released according to the terms of the original open source license.
+
+=== Intent
+
+==== Pluggable Backend
+GeoWave is intended to be a multidimensional indexing layer that can be added on top of any sorted key-value store.
+Accumulo was chosen as the target architecture – but HBase would be a relatively straightforward swap – and any
+datastore which allows prefix based range scans should be trivial extensions.
+
+==== Modular Design
+
+The architecture itself is designed to be extremely extensible – with most of the functionality units defined by
+interfaces, with default implementations of these interfaces to cover most use cases. It is expected that the out of the
+box functionality should satisfy 90% of use cases – at least that is the intent – but the modular architecture allows
+for easy feature extension as well as integration into other platforms.
+
+==== Self-Describing Data
+
+GeoWave also targets keeping data configuration, format, and other information needed to manipulate data in the database
+itself. This allows software to programmatically interrogate all the data stored in a single or set of GeoWave instances
+without needing bits of configuration from clients, application servers, or other external stores.
