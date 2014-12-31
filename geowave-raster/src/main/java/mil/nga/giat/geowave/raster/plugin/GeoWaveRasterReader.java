@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -512,6 +511,8 @@ public class GeoWaveRasterReader extends
 		final ImageReadParam readP = new ImageReadParam();
 		final Integer imageChoice;
 
+		final RasterDataAdapter adapter = (RasterDataAdapter) geowaveAdapterStore.getAdapter(new ByteArrayId(
+				coverageName));
 		if (pixelDimension != null) {
 			try {
 				synchronized (this) {
@@ -523,7 +524,8 @@ public class GeoWaveRasterReader extends
 										(int) pixelDimension.getWidth(),
 										(int) pixelDimension.getHeight(),
 										backgroundColor,
-										outputTransparentColor),
+										outputTransparentColor,
+										adapter.getColorModel()),
 								state.getRequestedEnvelope());
 					}
 					imageChoice = setReadParams(
@@ -551,7 +553,8 @@ public class GeoWaveRasterReader extends
 								(int) pixelDimension.getWidth(),
 								(int) pixelDimension.getHeight(),
 								backgroundColor,
-								outputTransparentColor),
+								outputTransparentColor,
+								adapter.getColorModel()),
 						state.getRequestedEnvelope());
 			}
 		}
@@ -569,8 +572,6 @@ public class GeoWaveRasterReader extends
 					resolutionLevels[imageChoice.intValue()][1]);
 		}
 
-		final RasterDataAdapter adapter = (RasterDataAdapter) geowaveAdapterStore.getAdapter(new ByteArrayId(
-				coverageName));
 		final CloseableIterator<GridCoverage> gridCoverageIt = queryForTiles(
 				pixelDimension,
 				state.getRequestEnvelopeTransformed(),
@@ -590,10 +591,11 @@ public class GeoWaveRasterReader extends
 				coverageFactory,
 				state.getCoverageName(),
 				config.getInterpolation(),
-				histogram);
+				histogram,
+				adapter.getColorModel());
 
 		gridCoverageIt.close();
-		
+
 		return transformResult(
 				result,
 				pixelDimension,

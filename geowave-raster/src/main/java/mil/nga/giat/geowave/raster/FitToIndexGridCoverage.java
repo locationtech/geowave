@@ -26,7 +26,7 @@ public class FitToIndexGridCoverage implements
 		GridCoverage
 {
 	private final GridCoverage gridCoverage;
-	private final ByteArrayId indexId;
+	private final ByteArrayId insertionId;
 	private final Resolution resolution;
 	private final Envelope originalEnvelope;
 	private final Geometry footprintWorldGeometry;
@@ -34,13 +34,13 @@ public class FitToIndexGridCoverage implements
 
 	public FitToIndexGridCoverage(
 			final GridCoverage gridCoverage,
-			final ByteArrayId indexId,
+			final ByteArrayId insertionId,
 			final Resolution resolution,
 			final Envelope originalEnvelope,
 			final Geometry footprintWorldGeometry,
 			final Geometry footprintScreenGeometry ) {
 		this.gridCoverage = gridCoverage;
-		this.indexId = indexId;
+		this.insertionId = insertionId;
 		this.resolution = resolution;
 		this.originalEnvelope = originalEnvelope;
 		this.footprintWorldGeometry = footprintWorldGeometry;
@@ -55,8 +55,8 @@ public class FitToIndexGridCoverage implements
 		return footprintScreenGeometry;
 	}
 
-	public ByteArrayId getIndexId() {
-		return indexId;
+	public ByteArrayId getInsertionId() {
+		return insertionId;
 	}
 
 	public Resolution getResolution() {

@@ -49,18 +49,17 @@ public class ComparisonStatsJobRunner extends
 	protected boolean postJob2Actions(
 			final Configuration conf,
 			final Index spatialIndex,
-			final String statsNamespace,
-			final String tableName )
+			final String statsNamespace )
 			throws Exception {
 		final FileSystem fs = FileSystem.get(conf);
 		fs.delete(
 				new Path(
-						"/tmp/" + namespace + "_stats_" + minLevel + "_" + maxLevel + "_" + statsName + "/basic"),
+						"/tmp/" + namespace + "_stats_" + minLevel + "_" + maxLevel + "_" + coverageName + "/basic"),
 				true);
 		final Job combiner = new Job(
 				conf);
 		combiner.setJarByClass(this.getClass());
-		combiner.setJobName(namespace + "(" + statsName + ")" + " levels " + minLevel + "-" + maxLevel + " combining seasons");
+		combiner.setJobName(namespace + "(" + coverageName + ")" + " levels " + minLevel + "-" + maxLevel + " combining seasons");
 		combiner.setMapperClass(ComparisonCombiningStatsMapper.class);
 		combiner.setReducerClass(ComparisonCombiningStatsReducer.class);
 		combiner.setMapOutputKeyClass(LongWritable.class);
@@ -72,17 +71,17 @@ public class ComparisonStatsJobRunner extends
 		FileOutputFormat.setOutputPath(
 				combiner,
 				new Path(
-						"/tmp/" + namespace + "_stats_" + minLevel + "_" + maxLevel + "_" + statsName + "/combined_pct"));
+						"/tmp/" + namespace + "_stats_" + minLevel + "_" + maxLevel + "_" + coverageName + "/combined_pct"));
 
 		FileInputFormat.setInputPaths(
 				combiner,
 				new Path(
-						"/tmp/" + namespace + "_stats_" + minLevel + "_" + maxLevel + "_" + statsName + "/percentiles"));
+						"/tmp/" + namespace + "_stats_" + minLevel + "_" + maxLevel + "_" + coverageName + "/percentiles"));
 		if (combiner.waitForCompletion(true)) {
 
 			fs.delete(
 					new Path(
-							"/tmp/" + namespace + "_stats_" + minLevel + "_" + maxLevel + "_" + statsName + "/percentiles"),
+							"/tmp/" + namespace + "_stats_" + minLevel + "_" + maxLevel + "_" + coverageName + "/percentiles"),
 					true);
 			for (int l = minLevel; l <= maxLevel; l++) {
 				conf.setLong(
@@ -96,7 +95,7 @@ public class ComparisonStatsJobRunner extends
 			final Job ingester = new Job(
 					conf);
 			ingester.setJarByClass(this.getClass());
-			ingester.setJobName(namespace + "(" + statsName + ")" + " levels " + minLevel + "-" + maxLevel + " Ingest");
+			ingester.setJobName(namespace + "(" + coverageName + ")" + " levels " + minLevel + "-" + maxLevel + " Ingest");
 			ingester.setMapperClass(ComparisonIdentityMapper.class);
 			ingester.setPartitionerClass(ComparisonCellLevelPartitioner.class);
 			ingester.setReducerClass(ComparisonAccumuloStatsReducer.class);
@@ -111,7 +110,7 @@ public class ComparisonStatsJobRunner extends
 			FileInputFormat.setInputPaths(
 					ingester,
 					new Path(
-							"/tmp/" + namespace + "_stats_" + minLevel + "_" + maxLevel + "_" + statsName + "/combined_pct"));
+							"/tmp/" + namespace + "_stats_" + minLevel + "_" + maxLevel + "_" + coverageName + "/combined_pct"));
 			GeoWaveOutputFormat.setAccumuloOperationsInfo(
 					ingester,
 					zookeeper,
@@ -176,7 +175,7 @@ public class ComparisonStatsJobRunner extends
 
 	@Override
 	protected String getJob2Name() {
-		return namespace + "(" + statsName + ")" + " levels " + minLevel + "-" + maxLevel + " Percentile Calculation by season";
+		return namespace + "(" + coverageName + ")" + " levels " + minLevel + "-" + maxLevel + " Percentile Calculation by season";
 	}
 
 	@Override
@@ -208,15 +207,13 @@ public class ComparisonStatsJobRunner extends
 	@Override
 	protected void setupJob2Output(
 			final Configuration conf,
-			final Index spatialIndex,
 			final Job statsReducer,
-			final String statsNamespace,
-			final String tableName )
+			final String statsNamespace )
 			throws Exception {
 		FileOutputFormat.setOutputPath(
 				statsReducer,
 				new Path(
-						"/tmp/" + namespace + "_stats_" + minLevel + "_" + maxLevel + "_" + statsName + "/percentiles"));
+						"/tmp/" + namespace + "_stats_" + minLevel + "_" + maxLevel + "_" + coverageName + "/percentiles"));
 	}
 
 	@Override

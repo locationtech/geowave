@@ -138,10 +138,9 @@ public class ComparisonAccumuloStatsReducer extends
 		maxLevels = context.getConfiguration().getInt(
 				KDEJobRunner.MAX_LEVEL_KEY,
 				25);
-		final String statsName = context.getConfiguration().get(
+		coverageName = context.getConfiguration().get(
 				STATS_NAME_KEY,
 				"");
-		coverageName = AccumuloKDEReducer.getCoverageName(statsName);
 		numLevels = (maxLevels - minLevels) + 1;
 		level = context.getConfiguration().getInt(
 				"mapred.task.partition",

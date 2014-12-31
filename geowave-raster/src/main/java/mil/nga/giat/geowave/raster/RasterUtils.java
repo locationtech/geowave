@@ -69,7 +69,6 @@ public class RasterUtils
 	private static final int MIN_SEGMENTS = 5;
 	private static final int MAX_SEGMENTS = 500;
 	private static final double SIMPLIFICATION_MAX_DEGREES = 0.0001;
-	private static int DEFAULT_IMAGE_TYPE = BufferedImage.TYPE_3BYTE_BGR;
 
 	public static Geometry getFootprint(
 			final ReferencedEnvelope projectedReferenceEnvelope,
@@ -384,7 +383,8 @@ public class RasterUtils
 			final GridCoverageFactory coverageFactory,
 			final String coverageName,
 			final Integer interpolation,
-			final Histogram histogram ) {
+			final Histogram histogram,
+			final ColorModel defaultColorModel ) {
 		final double rescaleX = levelResX / (requestEnvelope.getSpan(0) / pixelDimension.getWidth());
 		final double rescaleY = levelResY / (requestEnvelope.getSpan(1) / pixelDimension.getHeight());
 		final double width = pixelDimension.getWidth() / rescaleX;
@@ -426,7 +426,8 @@ public class RasterUtils
 					imageWidth,
 					imageHeight,
 					backgroundColor,
-					null);// the transparent color will be used later
+					null,// the transparent color will be used later
+					defaultColorModel);
 		}
 
 		GeneralEnvelope resultEnvelope = null;
@@ -446,10 +447,10 @@ public class RasterUtils
 		}
 
 		image = rescaleImageViaPlanarImage(
-						interpolation,
-						rescaleX,
-						rescaleY,
-						image);
+				interpolation,
+				rescaleX,
+				rescaleY,
+				image);
 		RenderedImage result;
 		if (outputTransparentColor == null) {
 			result = image;
@@ -617,11 +618,15 @@ public class RasterUtils
 			final int width,
 			final int height,
 			final Color backgroundColor,
-			final Color outputTransparentColor ) {
+			final Color outputTransparentColor,
+			final ColorModel defaultColorModel ) {
 		BufferedImage emptyImage = new BufferedImage(
-				width,
-				height,
-				DEFAULT_IMAGE_TYPE);
+				defaultColorModel,
+				defaultColorModel.createCompatibleWritableRaster(
+						width,
+						height),
+				defaultColorModel.isAlphaPremultiplied(),
+				null);
 
 		final Graphics2D g2D = (Graphics2D) emptyImage.getGraphics();
 		final Color save = g2D.getColor();

@@ -90,7 +90,8 @@ public class PrimitiveHilbertSFCOperations implements
 			dimensionValues.add(normalizeDimension(
 					dimensionDefinitions[i],
 					values[i],
-					binsPerDimension[i]));
+					binsPerDimension[i],
+					false));
 		}
 
 		// Convert the normalized values to a BitVector
@@ -124,12 +125,12 @@ public class PrimitiveHilbertSFCOperations implements
 			bitVectors[i] = BitVectorFactories.OPTIMAL.apply(dimensionDefinitions[i].getBitsOfPrecision());
 			bitVectors[i].copyFrom(values.get(i));
 		}
-
-		compactHilbertCurve.index(
-				bitVectors,
-				0,
-				hilbertBitVector);
-
+		synchronized (compactHilbertCurve) {
+			compactHilbertCurve.index(
+					bitVectors,
+					0,
+					hilbertBitVector);
+		}
 		return hilbertBitVector;
 	}
 
@@ -193,9 +194,11 @@ public class PrimitiveHilbertSFCOperations implements
 			perDimensionBitVectors[i] = BitVectorFactories.OPTIMAL.apply(dimensionDefinitions[i].getBitsOfPrecision());
 		}
 
-		compactHilbertCurve.indexInverse(
-				hilbertBitVector,
-				perDimensionBitVectors);
+		synchronized (compactHilbertCurve) {
+			compactHilbertCurve.indexInverse(
+					hilbertBitVector,
+					perDimensionBitVectors);
+		}
 		return perDimensionBitVectors;
 	}
 
@@ -211,6 +214,10 @@ public class PrimitiveHilbertSFCOperations implements
 	 * @param bins
 	 *            precomputed number of bins in this dimension the number of
 	 *            bins expected based on the cardinality of the definition
+	 * @param isMin
+	 *            flag indicating if this value is a minimum of a range in which
+	 *            case it needs to be inclusive on a boundary, otherwise it is
+	 *            exclusive
 	 * @return value after normalization
 	 * @throws IllegalArgumentException
 	 *             thrown when the value passed doesn't fit with in the
@@ -219,17 +226,29 @@ public class PrimitiveHilbertSFCOperations implements
 	private long normalizeDimension(
 			final SFCDimensionDefinition boundedDimensionDefinition,
 			final double value,
-			final long bins )
+			final long bins,
+			final boolean isMin )
 			throws IllegalArgumentException {
 		final double normalizedValue = boundedDimensionDefinition.normalize(value);
 		if ((normalizedValue < 0) || (normalizedValue > 1)) {
 			throw new IllegalArgumentException(
 					"Value (" + value + ") is not within dimension bounds. The normalized value (" + normalizedValue + ") must be within (0,1)");
 		}
-		// scale it to a value within the bits of precision, and round up
-		return (long) Math.max(
-				Math.ceil(normalizedValue * bins) - 1L,
-				0);
+		// scale it to a value within the bits of precision,
+		// because max is handled as exclusive and min is inclusive, we need to
+		// handle the edge differently
+		if (isMin) {
+			return (long) Math.min(
+					Math.floor(normalizedValue * bins),
+					bins-1);
+
+		}
+		else {
+			return (long) Math.max(
+					Math.ceil(normalizedValue * bins) - 1L,
+					0);
+
+		}
 
 	}
 
@@ -245,7 +264,7 @@ public class PrimitiveHilbertSFCOperations implements
 	 * @param bins
 	 *            precomputed number of bins in this dimension the number of
 	 *            bins expected based on the cardinality of the definition
-	 * @return range of values reprenenting this hilbert value (exlusive on the
+	 * @return range of values representing this hilbert value (exlusive on the
 	 *         end)
 	 * @throws IllegalArgumentException
 	 *             thrown when the value passed doesn't fit with in the hilbert
@@ -295,11 +314,19 @@ public class PrimitiveHilbertSFCOperations implements
 			final long normalizedMin = normalizeDimension(
 					dimensionDefinitions[d],
 					rangePerDimension[d].getMin(),
-					binsPerDimension[d]);
-			final long normalizedMax = normalizeDimension(
+					binsPerDimension[d],
+					true);
+			long normalizedMax = normalizeDimension(
 					dimensionDefinitions[d],
 					rangePerDimension[d].getMax(),
-					binsPerDimension[d]);
+					binsPerDimension[d],
+					false);
+			if (normalizedMin > normalizedMax) {
+				// if they're both equal, which is possible because we treat max
+				// as exclusive, set bin max to bin min (ie. treat it as
+				// inclusive in this case)
+				normalizedMax = normalizedMin;
+			}
 			minRangeList.add(normalizedMin);
 			maxRangeList.add(normalizedMax);
 			region.add(LongRange.of(
@@ -332,11 +359,11 @@ public class PrimitiveHilbertSFCOperations implements
 				removeVacuum,
 				LongRangeHome.INSTANCE,
 				zero);
-
-		compactHilbertCurve.accept(new ZoomingSpaceVisitorAdapter(
-				compactHilbertCurve,
-				queryBuilder));
-
+		synchronized (compactHilbertCurve) {
+			compactHilbertCurve.accept(new ZoomingSpaceVisitorAdapter(
+					compactHilbertCurve,
+					queryBuilder));
+		}
 		final List<FilteredIndexRange<LongRange, LongRange>> hilbertRanges = queryBuilder.get().getFilteredIndexRanges();
 
 		final ByteArrayRange[] sfcRanges = new ByteArrayRange[hilbertRanges.size()];
@@ -437,10 +464,10 @@ public class PrimitiveHilbertSFCOperations implements
 
 	}
 
-
 	/**
-	 *  The estimated ID count is the cross product of normalized range
-	 * of all dimensions per the bits of precision provided by the dimension definitions.
+	 * The estimated ID count is the cross product of normalized range of all
+	 * dimensions per the bits of precision provided by the dimension
+	 * definitions.
 	 */
 	@Override
 	public BigInteger getEstimatedIdCount(
@@ -453,11 +480,19 @@ public class PrimitiveHilbertSFCOperations implements
 			final long binMin = normalizeDimension(
 					dimensionDefinitions[d],
 					mins[d],
-					binsPerDimension[d]);
-			final long binMax = normalizeDimension(
+					binsPerDimension[d],
+					true);
+			long binMax = normalizeDimension(
 					dimensionDefinitions[d],
 					maxes[d],
-					binsPerDimension[d]);
+					binsPerDimension[d],
+					false);
+			if (binMin > binMax) {
+				// if they're both equal, which is possible because we treat max
+				// as exclusive, set bin max to bin min (ie. treat it as
+				// inclusive in this case)
+				binMax = binMin;
+			}
 			estimatedIdCount *= (Math.abs(binMax - binMin) + 1);
 		}
 		return BigInteger.valueOf(estimatedIdCount);

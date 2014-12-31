@@ -2,11 +2,10 @@ package mil.nga.giat.geowave.analytics.mapreduce.kde;
 
 import java.io.IOException;
 
+import mil.nga.giat.geowave.accumulo.mapreduce.GeoWaveConfiguratorBase;
 import mil.nga.giat.geowave.accumulo.mapreduce.input.GeoWaveInputFormat;
 import mil.nga.giat.geowave.accumulo.mapreduce.output.GeoWaveOutputFormat;
 import mil.nga.giat.geowave.accumulo.mapreduce.output.GeoWaveOutputKey;
-import mil.nga.giat.geowave.accumulo.util.AccumuloUtils;
-import mil.nga.giat.geowave.index.StringUtils;
 import mil.nga.giat.geowave.store.GeometryUtils;
 import mil.nga.giat.geowave.store.index.Index;
 import mil.nga.giat.geowave.store.index.IndexType;
@@ -30,6 +29,7 @@ import org.apache.hadoop.mapreduce.lib.output.SequenceFileOutputFormat;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 import org.geotools.filter.text.ecql.ECQL;
+import org.opengis.coverage.grid.GridCoverage;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.filter.Filter;
 
@@ -42,14 +42,12 @@ public class KDEJobRunner extends
 
 	public static final String MAX_LEVEL_KEY = "MAX_LEVEL";
 	public static final String MIN_LEVEL_KEY = "MIN_LEVEL";
-	public static final String TABLE_NAME = "TABLE_NAME";
-
 	protected String user;
 	protected String password;
 	protected String instance;
 	protected String zookeeper;
 
-	protected String statsName;
+	protected String coverageName;
 	protected String namespace;
 	protected String featureType;
 	protected int maxLevel;
@@ -57,6 +55,10 @@ public class KDEJobRunner extends
 	protected int minSplits;
 	protected int maxSplits;
 	protected String cqlFilter;
+	protected String newNamespace;
+
+	protected String hdfsHostPort;
+	protected String jobTrackerOrResourceManHostPort;
 
 	public KDEJobRunner() {
 
@@ -71,6 +73,10 @@ public class KDEJobRunner extends
 		final Index spatialIndex = IndexType.SPATIAL_VECTOR.createDefaultIndex();
 
 		final Configuration conf = super.getConf();
+		GeoWaveConfiguratorBase.setRemoteInvocationParams(
+				hdfsHostPort,
+				jobTrackerOrResourceManHostPort,
+				conf);
 		conf.setInt(
 				MAX_LEVEL_KEY,
 				maxLevel);
@@ -78,8 +84,8 @@ public class KDEJobRunner extends
 				MIN_LEVEL_KEY,
 				minLevel);
 		conf.set(
-				AccumuloKDEReducer.STATS_NAME_KEY,
-				statsName);
+				AccumuloKDEReducer.COVERAGE_NAME_KEY,
+				coverageName);
 
 		if (cqlFilter != null) {
 			conf.set(
@@ -143,26 +149,18 @@ public class KDEJobRunner extends
 		final FileSystem fs = FileSystem.get(conf);
 		fs.delete(
 				new Path(
-						"/tmp/" + namespace + "_stats_" + minLevel + "_" + maxLevel + "_" + statsName),
+						"/tmp/" + namespace + "_stats_" + minLevel + "_" + maxLevel + "_" + coverageName),
 				true);
 		FileOutputFormat.setOutputPath(
 				job,
 				new Path(
-						"/tmp/" + namespace + "_stats_" + minLevel + "_" + maxLevel + "_" + statsName + "/basic"));
+						"/tmp/" + namespace + "_stats_" + minLevel + "_" + maxLevel + "_" + coverageName + "/basic"));
 
 		final boolean job1Success = job.waitForCompletion(true);
 		boolean job2Success = false;
 		boolean postJob2Success = false;
 		// Linear MapReduce job chaining
 		if (job1Success) {
-			final String statsNamespace = namespace + "_stats";
-			final String tableName = AccumuloUtils.getQualifiedTableName(
-					statsNamespace,
-					StringUtils.stringFromBinary(spatialIndex.getId().getBytes()));
-
-			conf.set(
-					TABLE_NAME,
-					tableName);
 			setupEntriesPerLevel(
 					job,
 					conf);
@@ -184,20 +182,17 @@ public class KDEJobRunner extends
 			FileInputFormat.setInputPaths(
 					statsReducer,
 					new Path(
-							"/tmp/" + namespace + "_stats_" + minLevel + "_" + maxLevel + "_" + statsName + "/basic"));
+							"/tmp/" + namespace + "_stats_" + minLevel + "_" + maxLevel + "_" + coverageName + "/basic"));
 			setupJob2Output(
 					conf,
-					spatialIndex,
 					statsReducer,
-					statsNamespace,
-					tableName);
+					newNamespace);
 			job2Success = statsReducer.waitForCompletion(true);
 			if (job2Success) {
 				postJob2Success = postJob2Actions(
 						conf,
 						spatialIndex,
-						statsNamespace,
-						tableName);
+						newNamespace);
 			}
 		}
 		else {
@@ -206,10 +201,9 @@ public class KDEJobRunner extends
 
 		fs.delete(
 				new Path(
-						"/tmp/" + namespace + "_stats_" + minLevel + "_" + maxLevel + "_" + statsName),
+						"/tmp/" + namespace + "_stats_" + minLevel + "_" + maxLevel + "_" + coverageName),
 				true);
 		return (job1Success && job2Success && postJob2Success) ? 0 : 1;
-
 	}
 
 	protected void setupEntriesPerLevel(
@@ -234,8 +228,7 @@ public class KDEJobRunner extends
 	protected boolean postJob2Actions(
 			final Configuration conf,
 			final Index spatialIndex,
-			final String statsNamespace,
-			final String tableName )
+			final String statsNamespace )
 			throws Exception {
 		return true;
 	}
@@ -249,7 +242,7 @@ public class KDEJobRunner extends
 	}
 
 	protected Class getJob2OutputValueClass() {
-		return SimpleFeature.class;
+		return GridCoverage.class;
 	}
 
 	protected Class getJob2Reducer() {
@@ -274,19 +267,17 @@ public class KDEJobRunner extends
 	}
 
 	protected String getJob2Name() {
-		return namespace + "(" + statsName + ")" + " levels " + minLevel + "-" + maxLevel + " Ingest";
+		return namespace + "(" + coverageName + ")" + " levels " + minLevel + "-" + maxLevel + " Ingest";
 	}
 
 	protected String getJob1Name() {
-		return namespace + "(" + statsName + ")" + " levels " + minLevel + "-" + maxLevel + " Calculation";
+		return namespace + "(" + coverageName + ")" + " levels " + minLevel + "-" + maxLevel + " Calculation";
 	}
 
 	protected void setupJob2Output(
 			final Configuration conf,
-			final Index spatialIndex,
 			final Job statsReducer,
-			final String statsNamespace,
-			final String tableName )
+			final String statsNamespace )
 			throws Exception {
 		GeoWaveOutputFormat.setAccumuloOperationsInfo(
 				statsReducer,
@@ -298,11 +289,11 @@ public class KDEJobRunner extends
 		GeoWaveOutputFormat.addDataAdapter(
 				statsReducer,
 				AccumuloKDEReducer.getDataAdapter(
-						statsName,
+						coverageName,
 						AccumuloKDEReducer.NUM_BANDS));
 		GeoWaveOutputFormat.addIndex(
 				statsReducer,
-				spatialIndex);
+				IndexType.SPATIAL_RASTER.createDefaultIndex());
 	}
 
 	public static void main(
@@ -330,7 +321,13 @@ public class KDEJobRunner extends
 			maxLevel = Integer.parseInt(args[7]);
 			minSplits = Integer.parseInt(args[8]);
 			maxSplits = Integer.parseInt(args[9]);
-			statsName = args[10];
+			coverageName = args[10];
+			hdfsHostPort = args[11];
+			if (!hdfsHostPort.contains("://")) {
+				hdfsHostPort = "hdfs://" + hdfsHostPort;
+			}
+			jobTrackerOrResourceManHostPort = args[12];
+			newNamespace = args[13];
 			if (args.length > getCQLFilterArg()) {
 				cqlFilter = args[getCQLFilterArg()];
 			}
@@ -339,7 +336,7 @@ public class KDEJobRunner extends
 	}
 
 	protected int getCQLFilterArg() {
-		return 11;
+		return 14;
 	}
 
 }

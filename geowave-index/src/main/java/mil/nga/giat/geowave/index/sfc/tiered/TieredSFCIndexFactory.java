@@ -102,10 +102,8 @@ public class TieredSFCIndexFactory
 		for (final int element : maxBitsPerDimension) {
 			numTiers = Math.min(
 					numTiers,
-					element);
+					element + 1);
 		}
-		// Subtracting one from the number tiers prevents an extra tier. If
-		// we decide to create a catch-all, then we can ignore the subtraction.
 		final SpaceFillingCurve[] spaceFillingCurves = new SpaceFillingCurve[numTiers];
 
 		for (int tier = 0; tier < numTiers; tier++) {
