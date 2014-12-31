@@ -1,0 +1,18 @@
+= GeoWave Documentation
+v${project.version}
+
+////
+PDF Generation gives an error if you try to use icons
+////
+ifdef::backend-html5[]
+== Links
+
+=== icon:home[] http://spohnan.github.io/geowave[Site]
+
+=== icon:file-code-o[] http://spohnan.github.io/geowave/apidocs/index.html[Javadoc]
+
+=== icon:github[] https://github.com/ngageoint/geowave[GitHub]
+
+=== icon:file-archive-o[] http://spohnan.github.io/geowave/packages.html[RPMs]
+
+endif::backend-html5[]
