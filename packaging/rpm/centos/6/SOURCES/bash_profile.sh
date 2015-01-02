@@ -9,3 +9,8 @@ fi
 if [ "x" == "x$GEOSERVER_DATA_DIR" ]; then
     export GEOSERVER_DATA_DIR=/usr/local/geowave/geoserver/data_dir
 fi
+
+# Sourcing of this file does not always work with default profile settings so we'll ensure with this
+if [ -f /etc/bash_completion.d/geowave-ingest-cmd-completion.sh ] && ! shopt -oq posix; then
+    . /etc/bash_completion.d/geowave-ingest-cmd-completion.sh
+fi

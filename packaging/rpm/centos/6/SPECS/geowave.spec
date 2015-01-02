@@ -92,7 +92,7 @@ cp %{SOURCE7} %{buildroot}%{geowave_geoserver_data}/workspaces
 cp %{SOURCE8} %{buildroot}%{geowave_geoserver_data}/workspaces/geowave
 cp %{SOURCE9} %{buildroot}%{geowave_geoserver_data}/workspaces/geowave
 
-# Stage geowave ingest tool 
+# Stage geowave ingest tool
 mkdir -p %{buildroot}%{geowave_ingest_home}
 cp %{SOURCE10} %{buildroot}%{geowave_ingest_home}
 cp %{buildroot}%{geowave_accumulo_home}/geowave-accumulo-build.properties %{buildroot}%{geowave_ingest_home}/build.properties
@@ -100,6 +100,9 @@ pushd %{buildroot}%{geowave_ingest_home}
 zip -g %{buildroot}%{geowave_ingest_home}/geowave-ingest-tool.jar build.properties
 popd
 mv %{buildroot}%{geowave_ingest_home}/build.properties %{buildroot}%{geowave_ingest_home}/geowave-ingest-build.properties
+unzip -p %{SOURCE10} geowave-ingest.sh > %{buildroot}%{geowave_ingest_home}/geowave-ingest.sh
+mkdir -p %{buildroot}/etc/bash_completion.d
+unzip -p %{SOURCE10} geowave-ingest-cmd-completion.sh > %{buildroot}/etc/bash_completion.d/geowave-ingest-cmd-completion.sh
 
 # Copy documentation into place
 mkdir -p %{buildroot}%{geowave_docs_home}
@@ -167,6 +170,8 @@ fi
 %defattr(644, geowave, geowave, 755)
 %dir %{geowave_home}
 
+%attr(644, root, root) /etc/profile.d/geowave.sh
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 %package        docs
@@ -217,7 +222,6 @@ exit 0
 
 %attr(644, root, root) /etc/logrotate.d/geowave
 %attr(755, root, root) /etc/init.d/geowave
-%attr(644, root, root) /etc/profile.d/geowave.sh
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -231,13 +235,25 @@ Requires:       %{name}-core
 GeoWave provides geospatial and temporal indexing on top of Accumulo.
 This package installs the GeoWave ingest tool
 
+%post ingest
+ln -s /usr/local/geowave/ingest/geowave-ingest.sh /usr/local/bin/geowave-ingest
+
+%postun ingest
+if [ $1 -eq 0 ]; then
+  rm -f /usr/local/bin/geowave-ingest
+fi
+
 %files ingest
 %defattr(644, geowave, geowave, 755)
 %{geowave_ingest_home}
 
+%attr(755, geowave, geowave) %{geowave_ingest_home}/geowave-ingest.sh
+%attr(644, root, root) /etc/bash_completion.d/geowave-ingest-cmd-completion.sh
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 %changelog
-* Wed Nov 19 2014 Andrew Spohn <andrew.e.spohn.ctr.nga.mil> - 1.0
+* Fri Jan 2 2015 Andrew Spohn <andrew.e.spohn.ctr.nga.mil> - 0.8.2-1
+- Added a helper script for geowave-ingest and bash command completion
+* Wed Nov 19 2014 Andrew Spohn <andrew.e.spohn.ctr.nga.mil> - 0.8.2
 - First packaging
-
