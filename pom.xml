@@ -361,5 +361,12 @@
 				</plugins>
 			</build>
 		</profile>
+		<profile>
+			<!-- Generate docs with: mvn -P docs -pl docs install -->
+			<id>docs</id>
+			<modules>
+				<module>docs</module>
+			</modules>
+		</profile>
 	</profiles>
 </project>
