@@ -34,6 +34,7 @@ Source8:        namespace.xml
 Source9:        workspace.xml
 Source10:       geowave-ingest-tool.jar
 Source11:       gh-pages.zip
+Source12:       puppet-scripts.tar.gz
 BuildRequires:  unzip
 BuildRequires:  zip
 
@@ -108,6 +109,10 @@ unzip -p %{SOURCE10} geowave-ingest-cmd-completion.sh > %{buildroot}/etc/bash_co
 mkdir -p %{buildroot}%{geowave_docs_home}
 unzip -qq %{SOURCE11} -d %{buildroot}%{geowave_docs_home}
 #TODO: Reformat *.md pages into *.html pages using something like pandoc
+
+# Puppet scripts
+mkdir -p %{buildroot}/etc/puppet/modules
+tar xvzf %{SOURCE12} -C %{buildroot}/etc/puppet/modules
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -252,7 +257,23 @@ fi
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+%package        puppet
+Summary:        GeoWave Puppet Scripts
+Group:          Applications/Internet
+Requires:       puppet-server
+
+%description puppet
+This package installs the geowave Puppet module to /etc/puppet/modules
+
+%files puppet
+%defattr(644, root, root, 755)
+/etc/puppet/modules/geowave
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 %changelog
+* Mon Jan 5 2015 Andrew Spohn <andrew.e.spohn.ctr.nga.mil> - 0.8.2-2
+- Added geowave-puppet rpm
 * Fri Jan 2 2015 Andrew Spohn <andrew.e.spohn.ctr.nga.mil> - 0.8.2-1
 - Added a helper script for geowave-ingest and bash command completion
 * Wed Nov 19 2014 Andrew Spohn <andrew.e.spohn.ctr.nga.mil> - 0.8.2

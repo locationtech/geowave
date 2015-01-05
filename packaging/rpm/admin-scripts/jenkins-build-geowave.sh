@@ -21,3 +21,7 @@ mv $WORKSPACE/geowave-types/target/*-ingest-tool.jar $WORKSPACE/geowave-types/ta
 git fetch --all
 git archive origin/gh-pages --remote=$WORKSPACE --format=zip > $WORKSPACE/geowave-deploy/target/gh-pages.zip
 
+# Copy over the puppet scripts
+pushd $WORKSPACE/packaging/puppet
+tar cvzf $WORKSPACE/geowave-deploy/target/puppet-scripts.tar.gz $WORKSPACE/packaging/puppet/geowave
+popd
