@@ -9,13 +9,21 @@ import mil.nga.giat.geowave.ingest.GeoWaveData;
 import mil.nga.giat.geowave.store.CloseableIterator;
 import mil.nga.giat.geowave.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.store.data.visibility.GlobalVisibilityHandler;
+import mil.nga.giat.geowave.types.geotools.vector.RetypingVectorDataPlugin.RetypingVectorDataSource;
 import mil.nga.giat.geowave.vector.adapter.FeatureDataAdapter;
 
 import org.apache.log4j.Logger;
+import org.geoserver.feature.RetypingFeatureCollection;
 import org.geotools.data.DataStore;
 import org.geotools.data.simple.SimpleFeatureCollection;
 import org.geotools.data.simple.SimpleFeatureIterator;
+import org.geotools.feature.simple.SimpleFeatureBuilder;
+import org.opengis.feature.IllegalAttributeException;
 import org.opengis.feature.simple.SimpleFeature;
+import org.opengis.feature.simple.SimpleFeatureType;
+import org.opengis.feature.type.AttributeDescriptor;
+import org.opengis.feature.type.Name;
+import org.opengis.filter.identity.FeatureId;
 
 /**
  * This is a wrapper for a GeoTools SimpleFeatureCollection as a convenience to
@@ -32,18 +40,30 @@ public class SimpleFeatureGeoWaveWrapper implements
 	{
 		private final SimpleFeatureIterator featureIterator;
 		private final WritableDataAdapter<SimpleFeature> dataAdapter;
+		private RetypingVectorDataSource source = null;
+		private SimpleFeatureBuilder builder = null;
 
 		public InternalIterator(
 				final SimpleFeatureCollection featureCollection,
 				final String visibility ) {
 			featureIterator = featureCollection.features();
+			final SimpleFeatureType originalSchema = featureCollection.getSchema();
+			SimpleFeatureType retypedSchema = originalSchema;
+			if (retypingPlugin != null) {
+				source = retypingPlugin.getRetypingSource(originalSchema);
+				if (source != null) {
+					retypedSchema = source.getRetypedSimpleFeatureType();
+					builder = new SimpleFeatureBuilder(
+							retypedSchema);
+				}
+			}
 			if ((visibility == null) || visibility.isEmpty()) {
 				dataAdapter = new FeatureDataAdapter(
-						featureCollection.getSchema());
+						retypedSchema);
 			}
 			else {
 				dataAdapter = new FeatureDataAdapter(
-						featureCollection.getSchema(),
+						retypedSchema,
 						new GlobalVisibilityHandler(
 								visibility));
 			}
@@ -54,12 +74,54 @@ public class SimpleFeatureGeoWaveWrapper implements
 			return featureIterator.hasNext();
 		}
 
+		private SimpleFeature retype(
+				final SimpleFeature original )
+				throws IllegalAttributeException {
+			final SimpleFeatureType target = builder.getFeatureType();
+			for (int i = 0; i < target.getAttributeCount(); i++) {
+				final AttributeDescriptor attributeType = target.getDescriptor(i);
+				Object value = null;
+
+				if (original.getFeatureType().getDescriptor(
+						attributeType.getName()) != null) {
+					final Name name = attributeType.getName();
+					value = source.retypeAttributeValue(
+							original.getAttribute(name),
+							name);
+				}
+
+				builder.add(value);
+			}
+			String featureId = source.getFeatureId(original);
+			if (featureId == null) {
+				// a null ID will default to use the original
+				final FeatureId id = RetypingFeatureCollection.reTypeId(
+						original.getIdentifier(),
+						original.getFeatureType(),
+						target);
+				featureId = id.getID();
+			}
+			final SimpleFeature retyped = builder.buildFeature(featureId);
+			retyped.getUserData().putAll(
+					original.getUserData());
+			return retyped;
+		}
+
 		@Override
 		public GeoWaveData<SimpleFeature> next() {
-			return new GeoWaveData<SimpleFeature>(
-					dataAdapter,
-					primaryIndexId,
-					featureIterator.next());
+			final SimpleFeature originalFeature = featureIterator.next();
+			if (builder != null) {
+				return new GeoWaveData<SimpleFeature>(
+						dataAdapter,
+						primaryIndexId,
+						retype(originalFeature));
+			}
+			else {
+				return new GeoWaveData<SimpleFeature>(
+						dataAdapter,
+						primaryIndexId,
+						originalFeature);
+			}
 		}
 
 		@Override
@@ -78,16 +140,19 @@ public class SimpleFeatureGeoWaveWrapper implements
 	private InternalIterator currentIterator = null;
 	private final String visibility;
 	private final DataStore dataStore;
+	private final RetypingVectorDataPlugin retypingPlugin;
 
 	public SimpleFeatureGeoWaveWrapper(
 			final List<SimpleFeatureCollection> featureCollections,
 			final ByteArrayId primaryIndexId,
 			final String visibility,
-			final DataStore dataStore ) {
+			final DataStore dataStore,
+			final RetypingVectorDataPlugin retypingPlugin ) {
 		this.featureCollections = featureCollections;
 		this.visibility = visibility;
 		this.primaryIndexId = primaryIndexId;
 		this.dataStore = dataStore;
+		this.retypingPlugin = retypingPlugin;
 	}
 
 	@Override
