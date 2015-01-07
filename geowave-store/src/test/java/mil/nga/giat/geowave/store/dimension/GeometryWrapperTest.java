@@ -51,7 +51,7 @@ public class GeometryWrapperTest
 				}));
 		rangeData = new NumericRange(
 				33.7442334433,
-				33.75 - (1E-13d));
+				33.75 - (1E-10d));
 		assertFalse(wrapper.overlaps(
 				fields,
 				new NumericData[] {
