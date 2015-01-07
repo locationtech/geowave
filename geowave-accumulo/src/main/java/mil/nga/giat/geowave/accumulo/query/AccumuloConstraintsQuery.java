@@ -64,14 +64,15 @@ public class AccumuloConstraintsQuery extends
 	public AccumuloConstraintsQuery(
 			final List<ByteArrayId> adapterIds,
 			final Index index,
-			final DedupeFilter clientDedupeFilter ) {
+			final DedupeFilter clientDedupeFilter, 
+			final String...authorizations) {
 		this(
 				adapterIds,
 				index,
 				null,
 				null,
 				clientDedupeFilter,
-				new String[0]);
+				authorizations);
 	}
 
 	public AccumuloConstraintsQuery(
