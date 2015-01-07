@@ -380,11 +380,6 @@ public class AccumuloUtils
 				writableAdapter.getAdapterId().getBytes(),
 				ingestInfo);
 
-		final List<ByteArrayId> rowIds = new ArrayList<ByteArrayId>();
-		for (final Mutation m : mutations) {
-			rowIds.add(new ByteArrayId(
-					m.getRow()));
-		}
 		writer.write(mutations);
 		return ingestInfo;
 	}
