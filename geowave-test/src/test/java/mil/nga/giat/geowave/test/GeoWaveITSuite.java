@@ -9,8 +9,9 @@ import org.junit.runners.Suite.SuiteClasses;
 @RunWith(Suite.class)
 @SuiteClasses({
 	GeoWaveBasicIT.class,
+	GeoWaveRasterIT.class,
 	GeoWaveMapReduceIT.class,
-	GeoServerIT.class
+	GeoServerIT.class,
 })
 public class GeoWaveITSuite
 {
@@ -20,6 +21,7 @@ public class GeoWaveITSuite
 			GeoWaveTestEnvironment.DEFER_CLEANUP = true;
 		}
 	}
+
 	@AfterClass
 	public static void cleanup() {
 		synchronized (GeoWaveTestEnvironment.MUTEX) {

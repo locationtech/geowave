@@ -6,6 +6,7 @@ import mil.nga.giat.geowave.accumulo.mapreduce.GeoWaveConfiguratorBase;
 import mil.nga.giat.geowave.accumulo.mapreduce.input.GeoWaveInputFormat;
 import mil.nga.giat.geowave.accumulo.mapreduce.output.GeoWaveOutputFormat;
 import mil.nga.giat.geowave.accumulo.mapreduce.output.GeoWaveOutputKey;
+import mil.nga.giat.geowave.raster.RasterUtils;
 import mil.nga.giat.geowave.store.GeometryUtils;
 import mil.nga.giat.geowave.store.index.Index;
 import mil.nga.giat.geowave.store.index.IndexType;
@@ -30,7 +31,6 @@ import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 import org.geotools.filter.text.ecql.ECQL;
 import org.opengis.coverage.grid.GridCoverage;
-import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.filter.Filter;
 
 import com.vividsolutions.jts.geom.Geometry;
@@ -42,6 +42,8 @@ public class KDEJobRunner extends
 
 	public static final String MAX_LEVEL_KEY = "MAX_LEVEL";
 	public static final String MIN_LEVEL_KEY = "MIN_LEVEL";
+	public static final String COVERAGE_NAME_KEY = "COVERAGE_NAME";
+	public static final String TILE_SIZE_KEY = "TILE_SIZE";
 	protected String user;
 	protected String password;
 	protected String instance;
@@ -56,6 +58,7 @@ public class KDEJobRunner extends
 	protected int maxSplits;
 	protected String cqlFilter;
 	protected String newNamespace;
+	protected int tileSize;
 
 	protected String hdfsHostPort;
 	protected String jobTrackerOrResourceManHostPort;
@@ -84,9 +87,11 @@ public class KDEJobRunner extends
 				MIN_LEVEL_KEY,
 				minLevel);
 		conf.set(
-				AccumuloKDEReducer.COVERAGE_NAME_KEY,
+				COVERAGE_NAME_KEY,
 				coverageName);
-
+		conf.setInt(
+				TILE_SIZE_KEY,
+				tileSize);
 		if (cqlFilter != null) {
 			conf.set(
 					GaussianCellMapper.CQL_FILTER_KEY,
@@ -288,9 +293,10 @@ public class KDEJobRunner extends
 				statsNamespace);
 		GeoWaveOutputFormat.addDataAdapter(
 				statsReducer,
-				AccumuloKDEReducer.getDataAdapter(
+				RasterUtils.createDataAdapterTypeDouble(
 						coverageName,
-						AccumuloKDEReducer.NUM_BANDS));
+						AccumuloKDEReducer.NUM_BANDS,
+						tileSize));
 		GeoWaveOutputFormat.addIndex(
 				statsReducer,
 				IndexType.SPATIAL_RASTER.createDefaultIndex());

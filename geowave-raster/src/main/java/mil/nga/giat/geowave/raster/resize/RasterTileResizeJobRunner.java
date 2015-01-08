@@ -13,6 +13,7 @@ import mil.nga.giat.geowave.accumulo.metadata.AccumuloAdapterStore;
 import mil.nga.giat.geowave.accumulo.metadata.AccumuloIndexStore;
 import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.raster.adapter.RasterDataAdapter;
+import mil.nga.giat.geowave.raster.adapter.merge.nodata.NoDataMergeStrategy;
 import mil.nga.giat.geowave.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.store.index.Index;
 
@@ -129,7 +130,8 @@ public class RasterTileResizeJobRunner extends
 				new RasterDataAdapter(
 						(RasterDataAdapter) adapter,
 						newCoverageName,
-						newTileSize));
+						newTileSize,
+						new NoDataMergeStrategy()));
 		Index index = null;
 		if (indexId != null) {
 			index = new AccumuloIndexStore(

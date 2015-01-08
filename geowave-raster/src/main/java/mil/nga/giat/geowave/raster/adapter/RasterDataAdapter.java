@@ -60,6 +60,7 @@ import mil.nga.giat.geowave.raster.adapter.merge.RasterTileCombinerConfig;
 import mil.nga.giat.geowave.raster.adapter.merge.RasterTileCombinerHelper;
 import mil.nga.giat.geowave.raster.adapter.merge.RasterTileMergeStrategy;
 import mil.nga.giat.geowave.raster.adapter.merge.RasterTileVisibilityCombiner;
+import mil.nga.giat.geowave.raster.adapter.merge.RootMergeStrategy;
 import mil.nga.giat.geowave.raster.adapter.merge.nodata.NoDataMergeStrategy;
 import mil.nga.giat.geowave.raster.plugin.GeoWaveGTRasterFormat;
 import mil.nga.giat.geowave.raster.stats.HistogramConfig;
@@ -164,7 +165,7 @@ public class RasterDataAdapter implements
 	private boolean buildPyramid;
 	private ByteArrayId[] supportedStatsIds;
 	private DataStatisticsVisibilityHandler<GridCoverage> visibilityHandler;
-	private RasterTileMergeStrategy<?> mergeStrategy;
+	private RootMergeStrategy<?> mergeStrategy;
 
 	protected RasterDataAdapter() {}
 
@@ -178,12 +179,7 @@ public class RasterDataAdapter implements
 				originalGridCoverage,
 				DEFAULT_TILE_SIZE,
 				DEFAULT_BUILD_PYRAMID,
-				new NoDataMergeStrategy(
-						new ByteArrayId(
-								coverageName),
-						originalGridCoverage.getRenderedImage().getSampleModel().createCompatibleSampleModel(
-								DEFAULT_TILE_SIZE,
-								DEFAULT_TILE_SIZE)));
+				new NoDataMergeStrategy());
 	}
 
 	public RasterDataAdapter(
@@ -208,7 +204,10 @@ public class RasterDataAdapter implements
 		}
 		backgroundValuesPerBand = CoverageUtilities.getBackgroundValues(originalGridCoverage);
 		this.buildPyramid = buildPyramid;
-		this.mergeStrategy = mergeStrategy;
+		this.mergeStrategy = new RootMergeStrategy(
+				getAdapterId(),
+				sampleModel,
+				mergeStrategy);
 		init();
 	}
 
@@ -232,18 +231,14 @@ public class RasterDataAdapter implements
 				new HistogramConfig(
 						sampleModel),
 				buildPyramid,
-				new NoDataMergeStrategy(
-						new ByteArrayId(
-								coverageName),
-						sampleModel.createCompatibleSampleModel(
-								tileSize,
-								tileSize)));
+				new NoDataMergeStrategy());
 	}
 
 	public RasterDataAdapter(
 			final RasterDataAdapter adapter,
 			final String coverageName,
-			final int tileSize ) {
+			final int tileSize,
+			final RasterTileMergeStrategy<?> mergeStrategy ) {
 		this(
 				coverageName,
 				adapter.getSampleModel(),
@@ -254,7 +249,24 @@ public class RasterDataAdapter implements
 				adapter.backgroundValuesPerBand,
 				adapter.histogramConfig,
 				adapter.buildPyramid,
-				adapter.mergeStrategy);
+				mergeStrategy);
+	}
+
+	public RasterDataAdapter(
+			final RasterDataAdapter adapter,
+			final String coverageName,
+			final RasterTileMergeStrategy<?> mergeStrategy ) {
+		this(
+				coverageName,
+				adapter.getSampleModel(),
+				adapter.getColorModel(),
+				adapter.getMetadata(),
+				adapter.tileSize,
+				adapter.getNoDataValuesPerBand(),
+				adapter.backgroundValuesPerBand,
+				adapter.histogramConfig,
+				adapter.buildPyramid,
+				mergeStrategy);
 	}
 
 	public RasterDataAdapter(
@@ -279,7 +291,10 @@ public class RasterDataAdapter implements
 		// accumulated
 		this.histogramConfig = histogramConfig;
 		this.buildPyramid = buildPyramid;
-		this.mergeStrategy = mergeStrategy;
+		this.mergeStrategy = new RootMergeStrategy(
+				getAdapterId(),
+				sampleModel,
+				mergeStrategy);
 		init();
 	}
 
@@ -518,12 +533,13 @@ public class RasterDataAdapter implements
 									footprint,
 									new AffineTransform2D(
 											worldToScreenTransform));
+							final com.vividsolutions.jts.geom.Envelope fullTileEnvelope = new com.vividsolutions.jts.geom.Envelope(
+									0,
+									tileSize,
+									0,
+									tileSize);
 							final GeometryClipper tileClipper = new GeometryClipper(
-									new com.vividsolutions.jts.geom.Envelope(
-											0,
-											tileSize,
-											0,
-											tileSize));
+									fullTileEnvelope);
 							footprintWithinTileScreenGeom = tileClipper.clip(
 									wholeFootprintScreenGeom,
 									true);
@@ -536,6 +552,11 @@ public class RasterDataAdapter implements
 							footprintWithinTileWorldGeom = JTS.transform(
 									footprintWithinTileScreenGeom,
 									gridToCRS);
+							if (footprintWithinTileScreenGeom.covers(new GeometryFactory().toGeometry(fullTileEnvelope))) {
+								// if the screen geometry fully covers the tile,
+								// don't bother carrying it forward
+								footprintWithinTileScreenGeom = null;
+							}
 						}
 						catch (final TransformException e) {
 							LOGGER.warn(
@@ -1183,7 +1204,7 @@ public class RasterDataAdapter implements
 			buf.get(mergeStrategyBinary);
 			mergeStrategy = PersistenceUtils.fromBinary(
 					mergeStrategyBinary,
-					RasterTileMergeStrategy.class);
+					RootMergeStrategy.class);
 		}
 		buildPyramid = (buf.get() != 0);
 		init();

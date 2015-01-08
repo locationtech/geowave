@@ -4,76 +4,65 @@ import java.awt.image.Raster;
 import java.awt.image.SampleModel;
 import java.awt.image.WritableRaster;
 
-import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.raster.FitToIndexGridCoverage;
 import mil.nga.giat.geowave.raster.adapter.MergeableRasterTile;
 import mil.nga.giat.geowave.raster.adapter.RasterDataAdapter;
 import mil.nga.giat.geowave.raster.adapter.RasterTile;
-import mil.nga.giat.geowave.raster.adapter.merge.AbstractMergeStrategy;
+import mil.nga.giat.geowave.raster.adapter.merge.RasterTileMergeStrategy;
 import mil.nga.giat.geowave.raster.adapter.merge.nodata.NoDataMetadata.SampleIndex;
 
 import org.opengis.coverage.grid.GridCoverage;
 
-public class NoDataMergeStrategy extends
-		AbstractMergeStrategy<NoDataMetadata>
+public class NoDataMergeStrategy implements
+		RasterTileMergeStrategy<NoDataMetadata>
 {
 
-	protected NoDataMergeStrategy() {}
-
-	public NoDataMergeStrategy(
-			final ByteArrayId adapterId,
-			final SampleModel sampleModel ) {
-		super(
-				adapterId,
-				sampleModel);
-	}
+	public NoDataMergeStrategy() {}
 
 	@Override
 	public void merge(
 			final RasterTile<NoDataMetadata> thisTile,
-			final RasterTile<NoDataMetadata> nextTile ) {
+			final RasterTile<NoDataMetadata> nextTile,
+			final SampleModel sampleModel ) {
 		// this strategy aims for latest tile with data values, but where there
 		// is no data in the latest and there is data in the earlier tile, it
 		// fills the data from the earlier tile
-		if (nextTile != null) {
-			if (nextTile.getMetadata() == null) {
-				// just overwrite this tile's metadata and data with that of the
-				// other tile
-				thisTile.setDataBuffer(nextTile.getDataBuffer());
-				thisTile.setMetadata(nextTile.getMetadata());
-			}
-			else if (nextTile instanceof MergeableRasterTile) {
-				final NoDataMetadata otherTileMetadata = nextTile.getMetadata();
+
+		// if next tile is null or if this tile does not have metadata, just
+		// keep this tile as is
+		if ((nextTile != null) && (thisTile.getMetadata() != null)) {
+			if (nextTile instanceof MergeableRasterTile) {
 				final NoDataMetadata thisTileMetadata = thisTile.getMetadata();
-				final SampleModel sampleModel = getSampleModel(((MergeableRasterTile) nextTile).getDataAdapterId());
-				final WritableRaster otherRaster = Raster.createWritableRaster(
-						sampleModel,
-						nextTile.getDataBuffer(),
-						null);
+				final NoDataMetadata nextTileMetadata = nextTile.getMetadata();
+
 				final WritableRaster thisRaster = Raster.createWritableRaster(
 						sampleModel,
 						thisTile.getDataBuffer(),
 						null);
-				final int maxX = otherRaster.getMinX() + otherRaster.getWidth();
-				final int maxY = otherRaster.getMinY() + otherRaster.getHeight();
+				final WritableRaster nextRaster = Raster.createWritableRaster(
+						sampleModel,
+						nextTile.getDataBuffer(),
+						null);
+				final int maxX = thisRaster.getMinX() + thisRaster.getWidth();
+				final int maxY = thisRaster.getMinY() + thisRaster.getHeight();
 				boolean recalculateMetadata = false;
-				for (int b = 0; b < otherRaster.getNumBands(); b++) {
-					for (int x = otherRaster.getMinX(); x < maxX; x++) {
-						for (int y = otherRaster.getMinY(); y < maxY; y++) {
-							if (otherTileMetadata.isNoData(
+				for (int b = 0; b < thisRaster.getNumBands(); b++) {
+					for (int x = thisRaster.getMinX(); x < maxX; x++) {
+						for (int y = thisRaster.getMinY(); y < maxY; y++) {
+							if (thisTileMetadata.isNoData(
 									new SampleIndex(
 											x,
 											y,
 											b),
-									otherRaster.getSampleDouble(
+									thisRaster.getSampleDouble(
 											x,
 											y,
 											b))) {
-								final double sample = thisRaster.getSampleDouble(
+								final double sample = nextRaster.getSampleDouble(
 										x,
 										y,
 										b);
-								if ((thisTileMetadata == null) || !thisTileMetadata.isNoData(
+								if ((nextTileMetadata == null) || !nextTileMetadata.isNoData(
 										new SampleIndex(
 												x,
 												y,
@@ -84,7 +73,7 @@ public class NoDataMergeStrategy extends
 									// otherwise just use the other raster
 									// metadata
 									recalculateMetadata = true;
-									otherRaster.setSample(
+									thisRaster.setSample(
 											x,
 											y,
 											b,
@@ -94,20 +83,25 @@ public class NoDataMergeStrategy extends
 						}
 					}
 				}
-				thisTile.setDataBuffer(otherRaster.getDataBuffer());
 				if (recalculateMetadata) {
 					thisTile.setMetadata(NoDataMetadataFactory.mergeMetadata(
 							thisTileMetadata,
 							thisRaster,
-							otherTileMetadata,
-							otherRaster));
-				}
-				else {
-					thisTile.setMetadata(otherTileMetadata);
+							nextTileMetadata,
+							nextRaster));
 				}
 			}
 		}
 	}
+
+	@Override
+	public byte[] toBinary() {
+		return new byte[] {};
+	}
+
+	@Override
+	public void fromBinary(
+			final byte[] bytes ) {}
 
 	@Override
 	public NoDataMetadata getMetadata(

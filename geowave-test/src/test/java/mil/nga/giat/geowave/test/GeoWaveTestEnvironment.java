@@ -198,7 +198,8 @@ public class GeoWaveTestEnvironment
 				}
 				if (tempDir != null) {
 					try {
-						// sleep because mini accumulo processes still have a hold
+						// sleep because mini accumulo processes still have a
+						// hold
 						// on the log files and there is no hook to get notified
 						// when it is completely stopped
 						Thread.sleep(1000);

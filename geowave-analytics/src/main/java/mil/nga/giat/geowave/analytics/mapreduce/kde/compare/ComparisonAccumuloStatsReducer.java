@@ -6,9 +6,9 @@ import java.io.IOException;
 import javax.vecmath.Point2d;
 
 import mil.nga.giat.geowave.accumulo.mapreduce.output.GeoWaveOutputKey;
-import mil.nga.giat.geowave.analytics.mapreduce.kde.AccumuloKDEReducer;
 import mil.nga.giat.geowave.analytics.mapreduce.kde.KDEJobRunner;
 import mil.nga.giat.geowave.index.ByteArrayId;
+import mil.nga.giat.geowave.raster.RasterUtils;
 import mil.nga.giat.geowave.raster.plugin.GeoWaveGTRasterFormat;
 import mil.nga.giat.geowave.store.index.IndexType;
 
@@ -27,7 +27,6 @@ public class ComparisonAccumuloStatsReducer extends
 		Reducer<ComparisonCellData, LongWritable, GeoWaveOutputKey, GridCoverage>
 {
 	private final static Logger LOGGER = Logger.getLogger(ComparisonAccumuloStatsReducer.class);
-	public static final String STATS_NAME_KEY = "STATS_NAME";
 	public static final int NUM_BANDS = 4;
 	private long totalKeys = 0;
 	private double inc = 0;
@@ -39,6 +38,7 @@ public class ComparisonAccumuloStatsReducer extends
 	private int numXPosts;
 	private int numYPosts;
 	private String coverageName;
+	private int tileSize;
 
 	@Override
 	protected void reduce(
@@ -51,7 +51,9 @@ public class ComparisonAccumuloStatsReducer extends
 		for (final LongWritable v : values) {
 			final long cellIndex = v.get() / numLevels;
 			final Point2d[] bbox = fromIndexToLL_UR(cellIndex);
-			final WritableRaster raster = AccumuloKDEReducer.createRaster(NUM_BANDS);
+			final WritableRaster raster = RasterUtils.createRasterTypeDouble(
+					NUM_BANDS,
+					tileSize);
 			raster.setSample(
 					0,
 					0,
@@ -139,8 +141,11 @@ public class ComparisonAccumuloStatsReducer extends
 				KDEJobRunner.MAX_LEVEL_KEY,
 				25);
 		coverageName = context.getConfiguration().get(
-				STATS_NAME_KEY,
+				KDEJobRunner.COVERAGE_NAME_KEY,
 				"");
+		tileSize = context.getConfiguration().getInt(
+				KDEJobRunner.TILE_SIZE_KEY,
+				25);
 		numLevels = (maxLevels - minLevels) + 1;
 		level = context.getConfiguration().getInt(
 				"mapred.task.partition",

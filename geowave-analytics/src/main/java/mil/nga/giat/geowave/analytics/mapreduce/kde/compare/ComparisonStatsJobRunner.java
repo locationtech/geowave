@@ -4,8 +4,8 @@ import java.io.IOException;
 
 import mil.nga.giat.geowave.accumulo.mapreduce.output.GeoWaveOutputFormat;
 import mil.nga.giat.geowave.accumulo.mapreduce.output.GeoWaveOutputKey;
-import mil.nga.giat.geowave.analytics.mapreduce.kde.AccumuloKDEReducer;
 import mil.nga.giat.geowave.analytics.mapreduce.kde.KDEJobRunner;
+import mil.nga.giat.geowave.raster.RasterUtils;
 import mil.nga.giat.geowave.store.index.Index;
 
 import org.apache.hadoop.conf.Configuration;
@@ -120,9 +120,10 @@ public class ComparisonStatsJobRunner extends
 					statsNamespace);
 			GeoWaveOutputFormat.addDataAdapter(
 					ingester,
-					AccumuloKDEReducer.getDataAdapter(
+					RasterUtils.createDataAdapterTypeDouble(
 							statsNamespace,
-							ComparisonAccumuloStatsReducer.NUM_BANDS));
+							ComparisonAccumuloStatsReducer.NUM_BANDS,
+							tileSize));
 			GeoWaveOutputFormat.addIndex(
 					ingester,
 					spatialIndex);
