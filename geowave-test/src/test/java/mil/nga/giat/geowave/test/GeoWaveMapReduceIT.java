@@ -100,10 +100,10 @@ public class GeoWaveMapReduceIT extends
 			throws MalformedURLException {
 		hdfs = System.getProperty("hdfs");
 		jobtracker = System.getProperty("jobtracker");
-		if (!GeoWaveITSuite.isSet(hdfs)) {
+		if (!isSet(hdfs)) {
 			hdfs = "file:///";
 
-			hdfsBaseDirectory = GeoWaveITSuite.tempDir.toURI().toURL().toString() + "/" + HDFS_BASE_DIRECTORY;
+			hdfsBaseDirectory = tempDir.toURI().toURL().toString() + "/" + HDFS_BASE_DIRECTORY;
 			hdfsProtocol = false;
 		}
 		else {
@@ -117,7 +117,7 @@ public class GeoWaveMapReduceIT extends
 						"hdfs://");
 			}
 		}
-		if (!GeoWaveITSuite.isSet(jobtracker)) {
+		if (!isSet(jobtracker)) {
 			jobtracker = DEFAULT_JOB_TRACKER;
 		}
 	}
@@ -148,7 +148,7 @@ public class GeoWaveMapReduceIT extends
 		// ingest framework's main method and pre-defined commandline arguments
 		LOGGER.warn("Ingesting '" + ingestFilePath + "' - this may take several minutes...");
 		final String[] args = StringUtils.split(
-				"-hdfsingest -t gpx -hdfs " + hdfs + " -hdfsbase " + hdfsBaseDirectory + " -jobtracker " + jobtracker + " -b " + ingestFilePath + " -z " + GeoWaveITSuite.zookeeper + " -i " + GeoWaveITSuite.accumuloInstance + " -u " + GeoWaveITSuite.accumuloUser + " -p " + GeoWaveITSuite.accumuloPassword + " -n " + TEST_NAMESPACE + " -dim " + (indexType.equals(IndexType.SPATIAL_VECTOR) ? "spatial" : "spatial-temporal"),
+				"-hdfsingest -t gpx -hdfs " + hdfs + " -hdfsbase " + hdfsBaseDirectory + " -jobtracker " + jobtracker + " -b " + ingestFilePath + " -z " + zookeeper + " -i " + accumuloInstance + " -u " + accumuloUser + " -p " + accumuloPassword + " -n " + TEST_NAMESPACE + " -dim " + (indexType.equals(IndexType.SPATIAL_VECTOR) ? "spatial" : "spatial-temporal"),
 				' ');
 		IngestMain.main(args);
 	}
@@ -233,7 +233,7 @@ public class GeoWaveMapReduceIT extends
 						GENERAL_GPX_FILTER_FILE).toURI().toURL()),
 				null,
 				null);
-		GeoWaveITSuite.accumuloOperations.deleteAll();
+		accumuloOperations.deleteAll();
 	}
 
 	@Test
@@ -251,12 +251,12 @@ public class GeoWaveMapReduceIT extends
 
 		final mil.nga.giat.geowave.store.DataStore geowaveStore = new AccumuloDataStore(
 				new AccumuloIndexStore(
-						GeoWaveITSuite.accumuloOperations),
+						accumuloOperations),
 				new AccumuloAdapterStore(
-						GeoWaveITSuite.accumuloOperations),
+						accumuloOperations),
 				new AccumuloDataStatisticsStore(
-						GeoWaveITSuite.accumuloOperations),
-				GeoWaveITSuite.accumuloOperations);
+						accumuloOperations),
+				accumuloOperations);
 		final Map<ByteArrayId, ExpectedResults> adapterIdToResultsMap = new HashMap<ByteArrayId, GeoWaveTestEnvironment.ExpectedResults>();
 		for (final WritableDataAdapter<SimpleFeature> adapter : adapters) {
 			adapterIdToResultsMap.put(
@@ -318,7 +318,7 @@ public class GeoWaveMapReduceIT extends
 				null,
 				null,
 				null);
-		GeoWaveITSuite.accumuloOperations.deleteAll();
+		accumuloOperations.deleteAll();
 	}
 
 	private void runTestJob(
@@ -349,10 +349,10 @@ public class GeoWaveMapReduceIT extends
 				conf,
 				jobRunner,
 				new String[] {
-					GeoWaveITSuite.zookeeper,
-					GeoWaveITSuite.accumuloInstance,
-					GeoWaveITSuite.accumuloUser,
-					GeoWaveITSuite.accumuloPassword,
+					zookeeper,
+					accumuloInstance,
+					accumuloUser,
+					accumuloPassword,
 					TEST_NAMESPACE
 				});
 		Assert.assertEquals(
