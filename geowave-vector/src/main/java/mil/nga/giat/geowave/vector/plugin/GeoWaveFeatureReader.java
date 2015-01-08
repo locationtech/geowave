@@ -11,13 +11,11 @@ import java.util.Set;
 import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.index.StringUtils;
 import mil.nga.giat.geowave.store.CloseableIterator;
-import mil.nga.giat.geowave.store.adapter.statistics.BoundingBoxDataStatistics;
 import mil.nga.giat.geowave.store.query.BasicQuery;
 import mil.nga.giat.geowave.store.query.SpatialQuery;
 import mil.nga.giat.geowave.store.query.SpatialTemporalQuery;
 import mil.nga.giat.geowave.store.query.TemporalConstraints;
 import mil.nga.giat.geowave.store.query.TemporalQuery;
-import mil.nga.giat.geowave.vector.adapter.FeatureDataAdapter;
 import mil.nga.giat.geowave.vector.plugin.transaction.GeoWaveTransaction;
 import mil.nga.giat.geowave.vector.wms.DistributableRenderer;
 

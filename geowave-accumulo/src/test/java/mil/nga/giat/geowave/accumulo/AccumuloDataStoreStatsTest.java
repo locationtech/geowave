@@ -347,7 +347,7 @@ public class AccumuloDataStoreStatsTest
 
 	}
 
-	private static class TestGeometry
+	protected static class TestGeometry
 	{
 		private final Geometry geom;
 		private final String id;
@@ -360,7 +360,7 @@ public class AccumuloDataStoreStatsTest
 		}
 	}
 
-	private static class TestGeometryAdapter extends
+	protected static class TestGeometryAdapter extends
 			AbstractDataAdapter<TestGeometry> implements
 			StatisticalDataAdapter<TestGeometry>
 	{
