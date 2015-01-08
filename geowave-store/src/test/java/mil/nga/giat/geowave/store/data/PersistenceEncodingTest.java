@@ -10,6 +10,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.TimeZone;
 
 import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.index.NumericIndexStrategy;
@@ -75,8 +76,6 @@ public class PersistenceEncodingTest
 			},
 			SFCType.HILBERT);
 
-	final SimpleDateFormat dateFormat = new SimpleDateFormat(
-			"yyyy-MM-dd HH:mm:ss.S");
 
 	private static final Index index = new Index(
 			strategy,
@@ -89,7 +88,9 @@ public class PersistenceEncodingTest
 	@Before
 	public void setUp()
 			throws ParseException {
-
+		TimeZone.setDefault(TimeZone.getTimeZone("GMT"));
+		final SimpleDateFormat dateFormat = new SimpleDateFormat(
+				"yyyy-MM-dd HH:mm:ss.S");
 		start = dateFormat.parse("2012-04-03 13:30:23.304");
 		end = dateFormat.parse("2012-04-03 14:30:23.304");
 	}
