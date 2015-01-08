@@ -81,7 +81,7 @@ public class GeoWaveBasicIT extends
 		}
 		catch (final Exception e) {
 			e.printStackTrace();
-			GeoWaveITSuite.accumuloOperations.deleteAll();
+			accumuloOperations.deleteAll();
 			Assert.fail("Error occurred while testing a bounding box query of spatial index: '" + e.getLocalizedMessage() + "'");
 		}
 		try {
@@ -99,7 +99,7 @@ public class GeoWaveBasicIT extends
 		}
 		catch (final Exception e) {
 			e.printStackTrace();
-			GeoWaveITSuite.accumuloOperations.deleteAll();
+			accumuloOperations.deleteAll();
 			Assert.fail("Error occurred while testing a polygon query of spatial index: '" + e.getLocalizedMessage() + "'");
 		}
 
@@ -111,10 +111,10 @@ public class GeoWaveBasicIT extends
 		}
 		catch (final Exception e) {
 			e.printStackTrace();
-			GeoWaveITSuite.accumuloOperations.deleteAll();
+			accumuloOperations.deleteAll();
 			Assert.fail("Error occurred while testing deletion of an entry using spatial index: '" + e.getLocalizedMessage() + "'");
 		}
-		GeoWaveITSuite.accumuloOperations.deleteAll();
+		accumuloOperations.deleteAll();
 	}
 
 	@Test
@@ -140,7 +140,7 @@ public class GeoWaveBasicIT extends
 		}
 		catch (final Exception e) {
 			e.printStackTrace();
-			GeoWaveITSuite.accumuloOperations.deleteAll();
+			accumuloOperations.deleteAll();
 			Assert.fail("Error occurred while testing a bounding box and time range query of spatial temporal index: '" + e.getLocalizedMessage() + "'");
 		}
 		try {
@@ -156,7 +156,7 @@ public class GeoWaveBasicIT extends
 					"polygon constraint and time range");
 		}
 		catch (final Exception e) {
-			GeoWaveITSuite.accumuloOperations.deleteAll();
+			accumuloOperations.deleteAll();
 			Assert.fail("Error occurred while testing a polygon and time range query of spatial temporal index: '" + e.getLocalizedMessage() + "'");
 		}
 
@@ -168,10 +168,10 @@ public class GeoWaveBasicIT extends
 		}
 		catch (final Exception e) {
 			e.printStackTrace();
-			GeoWaveITSuite.accumuloOperations.deleteAll();
+			accumuloOperations.deleteAll();
 			Assert.fail("Error occurred while testing deletion of an entry using spatial temporal index: '" + e.getLocalizedMessage() + "'");
 		}
-		GeoWaveITSuite.accumuloOperations.deleteAll();
+		accumuloOperations.deleteAll();
 	}
 
 	private void testIngest(
@@ -181,7 +181,7 @@ public class GeoWaveBasicIT extends
 		// ingest framework's main method and pre-defined commandline arguments
 		LOGGER.warn("Ingesting '" + ingestFilePath + "' - this may take several minutes...");
 		final String[] args = StringUtils.split(
-				"-localingest -t geotools-vector -b " + ingestFilePath + " -z " + GeoWaveITSuite.zookeeper + " -i " + GeoWaveITSuite.accumuloInstance + " -u " + GeoWaveITSuite.accumuloUser + " -p " + GeoWaveITSuite.accumuloPassword + " -n " + TEST_NAMESPACE + " -dim " + (indexType.equals(IndexType.SPATIAL_VECTOR) ? "spatial" : "spatial-temporal"),
+				"-localingest -t geotools-vector -b " + ingestFilePath + " -z " + zookeeper + " -i " + accumuloInstance + " -u " + accumuloUser + " -p " + accumuloPassword + " -n " + TEST_NAMESPACE + " -dim " + (indexType.equals(IndexType.SPATIAL_VECTOR) ? "spatial" : "spatial-temporal"),
 				' ');
 		IngestMain.main(args);
 	}
@@ -209,12 +209,12 @@ public class GeoWaveBasicIT extends
 		System.out.println("querying " + queryDescription);
 		final mil.nga.giat.geowave.store.DataStore geowaveStore = new AccumuloDataStore(
 				new AccumuloIndexStore(
-						GeoWaveITSuite.accumuloOperations),
+						accumuloOperations),
 				new AccumuloAdapterStore(
-						GeoWaveITSuite.accumuloOperations),
+						accumuloOperations),
 				new AccumuloDataStatisticsStore(
-						GeoWaveITSuite.accumuloOperations),
-						GeoWaveITSuite.accumuloOperations);
+						accumuloOperations),
+						accumuloOperations);
 		// this file is the filtered dataset (using the previous file as a
 		// filter) so use it to ensure the query worked
 		final DistributableQuery query = resourceToQuery(savedFilterResource);
@@ -239,12 +239,12 @@ public class GeoWaveBasicIT extends
 				totalResults++;
 			}
 			else {
-				GeoWaveITSuite.accumuloOperations.deleteAll();
+				accumuloOperations.deleteAll();
 				Assert.fail("Actual result '" + obj.toString() + "' is not of type Simple Feature.");
 			}
 		}
 		if (expectedResults.count != totalResults) {
-			GeoWaveITSuite.accumuloOperations.deleteAll();
+			accumuloOperations.deleteAll();
 		}
 		Assert.assertEquals(
 				expectedResults.count,
@@ -261,12 +261,12 @@ public class GeoWaveBasicIT extends
 		boolean success = false;
 		final mil.nga.giat.geowave.store.DataStore geowaveStore = new AccumuloDataStore(
 				new AccumuloIndexStore(
-						GeoWaveITSuite.accumuloOperations),
+						accumuloOperations),
 				new AccumuloAdapterStore(
-						GeoWaveITSuite.accumuloOperations),
+						accumuloOperations),
 				new AccumuloDataStatisticsStore(
-						GeoWaveITSuite.accumuloOperations),
-						GeoWaveITSuite.accumuloOperations);
+						accumuloOperations),
+						accumuloOperations);
 		final DistributableQuery query = resourceToQuery(savedFilterResource);
 		final Index index = indexType.createDefaultIndex();
 		final CloseableIterator<?> actualResults;

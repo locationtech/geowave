@@ -16,7 +16,6 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
@@ -56,7 +55,6 @@ public class GeoServerIT extends
 
 	private static final String TEST_RESOURCE_PACKAGE = "mil/nga/giat/geowave/test/";
 	private static final String TEST_DATA_ZIP_RESOURCE_PATH = TEST_RESOURCE_PACKAGE + "gs.zip";
-	private static final String TEST_CASE_BASE = "data/";
 
 	private static final Map<String, String> PARAMS = new HashMap<String, String>();
 
@@ -64,15 +62,13 @@ public class GeoServerIT extends
 	public static void setUp()
 			throws ClientProtocolException,
 			IOException {
-
-		cleanUpGSFiles();
 		GeoWaveTestEnvironment.unZipFile(
 				GeoServerIT.class.getClassLoader().getResourceAsStream(
 						TEST_DATA_ZIP_RESOURCE_PATH),
 				TEST_CASE_BASE);
 		PARAMS.put(
 				"\\{\\{ZOOINSTANCE\\}\\}",
-				GeoWaveITSuite.zookeeper);
+				zookeeper);
 		replaceParameters(
 				PARAMS,
 				new File(
@@ -105,25 +101,12 @@ public class GeoServerIT extends
 		catch (final Exception e) {
 			e.printStackTrace();
 		}
-		try {
-			cleanUpGSFiles();
-		}
-		catch (final Exception e) {
-			e.printStackTrace();
-		}
-
 	}
 
 	private static Credentials getCredentials() {
 		return new UsernamePasswordCredentials(
 				"admin",
 				"geoserver"); // "root","L.}GiBeC");
-	}
-
-	static private void cleanUpGSFiles()
-			throws IOException {
-		FileUtils.deleteDirectory(new File(
-				TEST_CASE_BASE));
 	}
 
 	static public boolean checkStore()
