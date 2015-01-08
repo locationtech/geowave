@@ -36,12 +36,24 @@ public class GeoToolsVectorDataStoreIngestPlugin implements
 	private final static Logger LOGGER = Logger.getLogger(GeoToolsVectorDataStoreIngestPlugin.class);
 
 	private final Index[] supportedIndices;
+	private final RetypingVectorDataPlugin retypingPlugin;
 
 	public GeoToolsVectorDataStoreIngestPlugin() {
+		// by default inherit the types of the original file
+		this(
+				null);
+	}
+
+	public GeoToolsVectorDataStoreIngestPlugin(
+			final RetypingVectorDataPlugin retypingPlugin ) {
+		// this constructor can be used directly as an extension point for
+		// retyping the original feature data, if the retyping plugin is null,
+		// the data will be ingested as the original type
 		supportedIndices = new Index[] {
 			IndexType.SPATIAL_VECTOR.createDefaultIndex(),
 			IndexType.SPATIAL_TEMPORAL_VECTOR.createDefaultIndex()
 		};
+		this.retypingPlugin = retypingPlugin;
 	}
 
 	@Override
@@ -120,7 +132,8 @@ public class GeoToolsVectorDataStoreIngestPlugin implements
 				featureCollections,
 				primaryIndexId,
 				visibility,
-				dataStore);
+				dataStore,
+				retypingPlugin);
 	}
 
 	@Override
