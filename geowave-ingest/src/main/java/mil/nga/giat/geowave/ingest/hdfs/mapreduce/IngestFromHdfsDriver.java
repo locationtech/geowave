@@ -88,6 +88,7 @@ public class IngestFromHdfsDriver extends
 		conf.set(
 				"yarn.app.mapreduce.am.staging-dir",
 				"/tmp/hadoop-" + user);
+
 		final Path hdfsBaseDirectory = new Path(
 				hdfsOptions.getBasePath());
 		try {
