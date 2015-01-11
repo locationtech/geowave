@@ -53,7 +53,7 @@ public class BasicNumericDatasetTest
 					DELTA);
 		}
 
-	};
+	}
 
 	@Test
 	public void testNumericRangesMaxValues() {
@@ -76,7 +76,7 @@ public class BasicNumericDatasetTest
 					max[i],
 					DELTA);
 		}
-	};
+	}
 
 	@Test
 	public void testNumericRangesCentroidValues() {
@@ -100,8 +100,8 @@ public class BasicNumericDatasetTest
 					DELTA);
 		}
 		
-	};
-	
+	}
+
 	@Test
 	public void testNumericValuesAllValues() {
 
@@ -136,6 +136,6 @@ public class BasicNumericDatasetTest
 					DELTA);
 		}
 
-	};
+	}
 
 }

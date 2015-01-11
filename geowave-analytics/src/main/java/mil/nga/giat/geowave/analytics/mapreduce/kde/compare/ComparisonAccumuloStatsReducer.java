@@ -75,8 +75,7 @@ public class ComparisonAccumuloStatsReducer extends
 			builder.add(key.getCombinedPercentile());
 			inc += (1.0 / totalKeys);
 			builder.add(inc);
-			final SimpleFeature feature = builder.buildFeature(new Long(
-					cellIndex).toString());
+			final SimpleFeature feature = builder.buildFeature(Long.toString(cellIndex));
 			dataStore.ingest(
 					adapter,
 					index,

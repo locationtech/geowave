@@ -13,7 +13,7 @@ public class MemoryTransactionsAllocater implements
 
 	private TransactionNotification notificationRequester;
 
-	private LinkedList<String> lockPaths = new LinkedList<String>();
+	private final LinkedList<String> lockPaths = new LinkedList<String>();
 
 	public MemoryTransactionsAllocater() {
 		super();

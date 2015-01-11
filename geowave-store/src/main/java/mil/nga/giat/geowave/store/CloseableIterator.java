@@ -67,5 +67,5 @@ public interface CloseableIterator<E> extends
 		@Override
 		public void close() throws IOException {
 		}
-	};
+	}
 }

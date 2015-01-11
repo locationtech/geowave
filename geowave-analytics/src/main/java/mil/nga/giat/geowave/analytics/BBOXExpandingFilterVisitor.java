@@ -50,7 +50,7 @@ class BBOXExpandingFilterVisitor extends DuplicatingFilterVisitor {
         this.expandMinX = expandMinX;
         this.expandMaxX = expandMaxX;
         this.expandMinY = expandMinY;
-        this.expandMaxY = expandMaxX;
+        this.expandMaxY = expandMaxY;
     }
     
     /**

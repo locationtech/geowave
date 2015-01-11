@@ -52,12 +52,9 @@ public class Resolution implements
 			return false;
 		}
 		final Resolution other = (Resolution) obj;
-		if (!Arrays.equals(
+		return Arrays.equals(
 				resolutionPerDimension,
-				other.resolutionPerDimension)) {
-			return false;
-		}
-		return true;
+				other.resolutionPerDimension);
 	}
 
 	@Override

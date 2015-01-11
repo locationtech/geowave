@@ -178,8 +178,7 @@ public class SpatialDecimationQuery extends
 
 				iteratorSettings.addOption(
 						FixedCardinalitySkippingIterator.CARDINALITY_SKIP_INTERVAL,
-						new Integer(
-								(int) combinedCardinality).toString());
+						Integer.toString((int) combinedCardinality));
 				scanner.addScanIterator(iteratorSettings);
 			}
 			catch (final TransformException e) {

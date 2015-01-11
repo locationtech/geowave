@@ -202,9 +202,9 @@ public class ServerFeatureStyle implements
 					if ((styles != null) && (styles.length > 0)) {
 						for (final Style s : styles) {
 							if (!s.featureTypeStyles().isEmpty()) {
-								return s.featureTypeStyles().get(
-										0).rules().toArray(
-										new Rule[] {});
+								List<Rule> var = s.featureTypeStyles().get(
+										0).rules();
+								return var.toArray(new Rule[var.size()]);
 							}
 						}
 					}

@@ -811,7 +811,7 @@ public class GeoWaveInputFormat extends
 			}
 			return new GeoWaveInputSplit(
 					rangesPerIndex,
-					locations.toArray(new String[] {}));
+					locations.toArray(new String[locations.size()]));
 		}
 
 		private int getMaxCardinality() {

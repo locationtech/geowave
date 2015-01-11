@@ -24,9 +24,9 @@ public class ZooKeeperTransactionAllocaterTest
 	TestingServer zkTestServer;
 	ZooKeeperTransactionsAllocater allocater;
 
-	List<String> createdTXIds = new ArrayList<String>();
-	List<Throwable> failures = new ArrayList<Throwable>();
-	Set<String> activeTX = new HashSet<String>();
+	final List<String> createdTXIds = new ArrayList<String>();
+	final List<Throwable> failures = new ArrayList<Throwable>();
+	final Set<String> activeTX = new HashSet<String>();
 	volatile boolean shutdown = false;
 	private Random random = new Random();
 	private int maxSize = 9;

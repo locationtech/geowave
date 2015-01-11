@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -212,7 +211,7 @@ public class GeoWaveRasterReader extends
 					coverageNames.add(((RasterDataAdapter) adapter).getCoverageName());
 				}
 			}
-			return coverageNames.toArray(new String[] {});
+			return coverageNames.toArray(new String[coverageNames.size()]);
 		}
 		catch (final IOException e) {
 			LOGGER.warn(
@@ -258,8 +257,8 @@ public class GeoWaveRasterReader extends
 
 		final DataAdapter<?> adapter = geowaveAdapterStore.getAdapter(new ByteArrayId(
 				coverageName));
-		return ((RasterDataAdapter) adapter).getMetadata().keySet().toArray(
-				new String[] {});
+		Set<String> var = ((RasterDataAdapter) adapter).getMetadata().keySet();
+		return var.toArray(new String[var.size()]);
 	}
 
 	@Override

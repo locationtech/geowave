@@ -554,7 +554,7 @@ public class PersistenceEncodingTest
 				final byte[] bytes ) {
 
 		}
-	};
+	}
 
 	private static class TimeRangeFieldHandler implements
 			PersistentIndexFieldHandler<GeoObj, CommonIndexValue, Object>,
@@ -613,6 +613,6 @@ public class PersistenceEncodingTest
 				final byte[] bytes ) {
 
 		}
-	};
+	}
 
 }

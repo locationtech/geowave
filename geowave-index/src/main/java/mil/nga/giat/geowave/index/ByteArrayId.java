@@ -49,11 +49,8 @@ public class ByteArrayId
 			return false;
 		}
 		final ByteArrayId other = (ByteArrayId) obj;
-		if (!Arrays.equals(
+		return Arrays.equals(
 				id,
-				other.id)) {
-			return false;
-		}
-		return true;
+				other.id);
 	}
 }
