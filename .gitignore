@@ -6,3 +6,4 @@ target
 *.log
 dependency-reduced-pom.xml
 *.imls
+.idea/
