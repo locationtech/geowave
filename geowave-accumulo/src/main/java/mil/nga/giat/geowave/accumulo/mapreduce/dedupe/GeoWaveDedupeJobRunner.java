@@ -73,6 +73,8 @@ public class GeoWaveDedupeJobRunner extends
 		job.setInputFormatClass(GeoWaveInputFormat.class);
 		job.setOutputFormatClass(getOutputFormatClass());
 		job.setNumReduceTasks(getNumReduceTasks());
+
+		job.setSpeculativeExecution(false);
 		if ((adapters != null) && (adapters.size() > 0)) {
 			for (final DataAdapter<?> adapter : adapters) {
 				GeoWaveInputFormat.addDataAdapter(

@@ -125,6 +125,7 @@ public class KDEJobRunner extends
 		job.setInputFormatClass(AccumuloInputFormat.class);
 		job.setOutputFormatClass(SequenceFileOutputFormat.class);
 		job.setNumReduceTasks(8);
+		job.setSpeculativeExecution(false);
 		if (cqlFilter != null) {
 			final Filter filter = ECQL.toFilter(cqlFilter);
 			final Geometry bbox = (Geometry) filter.accept(
