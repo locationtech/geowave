@@ -116,6 +116,7 @@ public class KDEJobRunner extends
 		job.setInputFormatClass(GeoWaveInputFormat.class);
 		job.setOutputFormatClass(SequenceFileOutputFormat.class);
 		job.setNumReduceTasks(8);
+		job.setSpeculativeExecution(false);
 		GeoWaveInputFormat.setMinimumSplitCount(
 				job,
 				minSplits);

@@ -406,6 +406,7 @@ public class GeoWaveMapReduceIT extends
 			job.setMapOutputValueClass(NullWritable.class);
 			job.setOutputFormatClass(NullOutputFormat.class);
 			job.setNumReduceTasks(0);
+			job.setSpeculativeExecution(false);
 
 			GeoWaveInputFormat.setAccumuloOperationsInfo(
 					job,

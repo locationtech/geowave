@@ -54,6 +54,8 @@ public class IngestFromHdfsDriver extends
 			final String[] args,
 			final List<IngestTypePluginProviderSpi<?, ?>> pluginProviders ) {
 
+
+
 		final Path hdfsBaseDirectory = new Path(
 				hdfsOptions.getBasePath());
 		try {
