@@ -39,7 +39,7 @@ public class VisibilityQueryFilter implements
 			Node vTree,
 			byte[] expression ) {
 		if (vTree.getTerm(
-				expression).equals(
+				expression).toArray().equals(
 				authorization)) return true;
 		boolean result = false;
 		for (Node child : vTree.getChildren()) {

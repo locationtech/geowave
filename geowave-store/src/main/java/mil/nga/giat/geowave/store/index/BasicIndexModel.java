@@ -100,12 +100,9 @@ public class BasicIndexModel implements
 			return false;
 		}
 		final BasicIndexModel other = (BasicIndexModel) obj;
-		if (!Arrays.equals(
+		return Arrays.equals(
 				dimensions,
-				other.dimensions)) {
-			return false;
-		}
-		return true;
+				other.dimensions);
 	}
 
 	@Override

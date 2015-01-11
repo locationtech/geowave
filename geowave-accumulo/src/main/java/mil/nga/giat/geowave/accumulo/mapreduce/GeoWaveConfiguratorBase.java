@@ -315,7 +315,7 @@ public class GeoWaveConfiguratorBase
 						dataAdapterBytes,
 						DataAdapter.class));
 			}
-			return adapters.toArray(new DataAdapter[] {});
+			return adapters.toArray(new DataAdapter[adapters.size()]);
 		}
 		return new DataAdapter[] {};
 	}
@@ -389,7 +389,7 @@ public class GeoWaveConfiguratorBase
 						indexBytes,
 						Index.class));
 			}
-			return indices.toArray(new Index[] {});
+			return indices.toArray(new Index[indices.size()]);
 		}
 		return new Index[] {};
 	}

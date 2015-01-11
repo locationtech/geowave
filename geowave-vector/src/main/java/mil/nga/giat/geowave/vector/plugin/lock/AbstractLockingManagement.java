@@ -5,7 +5,6 @@ import java.lang.reflect.Constructor;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import mil.nga.giat.geowave.vector.plugin.GeoWavePluginConfig;
 

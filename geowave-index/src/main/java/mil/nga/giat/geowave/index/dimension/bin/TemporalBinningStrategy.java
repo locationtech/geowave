@@ -54,7 +54,7 @@ public class TemporalBinningStrategy implements
 			throw new IllegalArgumentException(
 					"Calendar enum '" + calendarEnum + "' not found as a valid unit ");
 		}
-	};
+	}
 
 	protected static final long MILLIS_PER_DAY = 86400000L;
 	private static final NumberFormat TWO_DIGIT_NUMBER = NumberFormat.getIntegerInstance();
@@ -286,7 +286,7 @@ public class TemporalBinningStrategy implements
 			// iterate until we reach our end epoch
 		}
 		while (!lastBin);
-		return bins.toArray(new BinRange[] {});
+		return bins.toArray(new BinRange[bins.size()]);
 	}
 
 	@Override

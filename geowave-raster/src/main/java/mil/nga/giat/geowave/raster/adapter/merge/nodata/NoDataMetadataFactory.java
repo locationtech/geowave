@@ -352,7 +352,6 @@ public class NoDataMetadataFactory
 					// this will ignore the no data values for this x,y
 					// which should be fine because the shape will
 					// always classify this x,y as "no data"
-					continue;
 				}
 				else if (!skipNoData) {
 					for (int b = 0; b < numBands; b++) {

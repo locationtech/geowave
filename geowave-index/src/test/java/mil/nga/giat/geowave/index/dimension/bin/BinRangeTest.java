@@ -30,7 +30,7 @@ public class BinRangeTest
 
 		Assert.assertFalse(binRange.isFullExtent());
 
-	};
+	}
 
 	@Test
 	public void testBinRangeFullExtent() {
@@ -56,6 +56,6 @@ public class BinRangeTest
 
 		Assert.assertTrue(binRange.isFullExtent());
 
-	};
+	}
 
 }

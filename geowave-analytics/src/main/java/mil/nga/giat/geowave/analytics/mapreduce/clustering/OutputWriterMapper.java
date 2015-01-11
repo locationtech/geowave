@@ -168,8 +168,7 @@ public class OutputWriterMapper extends
 				outputRowId);
 		m.put(
 				new Text(
-						new Integer(
-								assignedCentroid.id).toString()),
+						assignedCentroid.id.toString()),
 				new Text(
 						pointId.toString()),
 				new Value(

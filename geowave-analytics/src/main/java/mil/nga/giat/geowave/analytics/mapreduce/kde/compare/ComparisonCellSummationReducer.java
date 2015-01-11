@@ -24,8 +24,7 @@ public class ComparisonCellSummationReducer extends
 
 		context.getCounter(
 				"Entries per level (" + (isWinter ? "winter" : "summer") + ")",
-				"level " + new Long(
-						level).toString()).increment(
+				"level " + Long.toString(level)).increment(
 				1);
 	}
 }

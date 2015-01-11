@@ -128,14 +128,12 @@ public class StageToHdfsDriver extends
 				LOGGER.fatal(
 						"Unexpected I/O exception when reading input files",
 						e);
-				return;
 			}
 		}
 		catch (final IOException e) {
 			LOGGER.fatal(
 					"Unable to create remote HDFS directory",
 					e);
-			return;
 		}
 	}
 }
