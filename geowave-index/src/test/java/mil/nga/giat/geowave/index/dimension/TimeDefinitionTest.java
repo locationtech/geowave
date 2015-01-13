@@ -57,7 +57,7 @@ public class TimeDefinitionTest
 						calendar.getTimeInMillis()).getNormalizedValue(),
 				DELTA);
 
-	};
+	}
 
 	@Test
 	public void testTimeDefinitionMaxBinByMonth() {
@@ -102,8 +102,8 @@ public class TimeDefinitionTest
 						calendar.getTimeInMillis()).getNormalizedValue(),
 				DELTA);
 
-	};
-	
+	}
+
 	@Test
 	public void testTimeDefinitionMinBinByMonth() {
 
@@ -120,16 +120,16 @@ public class TimeDefinitionTest
 				1);
 		calendar.set(
 				Calendar.HOUR_OF_DAY,
-				00);
+				0);
 		calendar.set(
 				Calendar.MINUTE,
-				00);
+				0);
 		calendar.set(
 				Calendar.SECOND,
 				0);
 		calendar.set(
 				Calendar.MILLISECOND,
-				000);
+				0);
 
 		BinningStrategy bin = getStrategyByUnit(Unit.MONTH);
 
@@ -147,7 +147,7 @@ public class TimeDefinitionTest
 						calendar.getTimeInMillis()).getNormalizedValue(),
 				DELTA);
 
-	};
+	}
 
 	@Test
 	public void testTimeDefinitionMaxBinByYEAR() {
@@ -194,7 +194,7 @@ public class TimeDefinitionTest
 				bin.getBinnedValue(
 						calendar.getTimeInMillis()).getNormalizedValue(),
 				DELTA);
-	};
+	}
 
 
 	private BinningStrategy getStrategyByUnit(

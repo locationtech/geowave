@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.UUID;
 
 import mil.nga.giat.geowave.index.ByteArrayId;
-import mil.nga.giat.geowave.store.data.field.FieldVisibilityHandler;
 import mil.nga.giat.geowave.store.data.visibility.GlobalVisibilityHandler;
 import mil.nga.giat.geowave.vector.plugin.visibility.FieldLevelVisibilityHandler;
 import mil.nga.giat.geowave.vector.plugin.visibility.JsonDefinitionColumnVisibilityManagement;

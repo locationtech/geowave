@@ -27,7 +27,7 @@ public class BasicDimensionDefinitionTest
 						midValue),
 				DELTA);
 
-	};
+	}
 
 	@Test
 	public void testNormalizeUpperValue() {
@@ -43,7 +43,7 @@ public class BasicDimensionDefinitionTest
 						lowerValue),
 				DELTA);
 
-	};
+	}
 
 	@Test
 	public void testNormalizeLowerValue() {
@@ -59,7 +59,7 @@ public class BasicDimensionDefinitionTest
 						upperValue),
 				DELTA);
 
-	};
+	}
 
 	@Test
 	public void testNormalizeClampOutOfBoundsValue() {
@@ -75,7 +75,7 @@ public class BasicDimensionDefinitionTest
 						value),
 				DELTA);
 
-	};
+	}
 
 	@Test
 	public void testNormalizeRangesBinRangeCount() {
@@ -92,7 +92,7 @@ public class BasicDimensionDefinitionTest
 				binCount,
 				binRange.length);
 
-	};
+	}
 
 	@Test
 	public void testNormalizeClampOutOfBoundsRanges() {
@@ -113,7 +113,7 @@ public class BasicDimensionDefinitionTest
 				binRange[0].getNormalizedMax(),
 				DELTA);
 
-	};
+	}
 
 	private double getNormalizedValueUsingBounds(
 			final double min,

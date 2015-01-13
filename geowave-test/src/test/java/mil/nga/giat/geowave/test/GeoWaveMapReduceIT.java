@@ -85,7 +85,7 @@ public class GeoWaveMapReduceIT extends
 		EXPECTED,
 		UNEXPECTED,
 		ERROR
-	};
+	}
 
 	@BeforeClass
 	public static void extractTestFiles() {
@@ -226,7 +226,7 @@ public class GeoWaveMapReduceIT extends
 			Assert.assertNotNull(url);
 			expectedResultsResources.add(url);
 		}
-		final ExpectedResults expectedResults = getExpectedResults(expectedResultsResources.toArray(new URL[] {}));
+		final ExpectedResults expectedResults = getExpectedResults(expectedResultsResources.toArray(new URL[expectedResultsResources.size()]));
 		runTestJob(
 				expectedResults,
 				resourceToQuery(new File(

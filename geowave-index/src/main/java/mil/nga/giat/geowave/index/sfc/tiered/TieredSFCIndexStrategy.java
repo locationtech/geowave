@@ -363,12 +363,9 @@ public class TieredSFCIndexStrategy implements
 				other.baseDefinitions)) {
 			return false;
 		}
-		if (!Arrays.equals(
+		return Arrays.equals(
 				orderedSfcs,
-				other.orderedSfcs)) {
-			return false;
-		}
-		return true;
+				other.orderedSfcs);
 	}
 
 	@Override

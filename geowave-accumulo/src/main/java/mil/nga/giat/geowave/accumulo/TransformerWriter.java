@@ -62,7 +62,6 @@ public class TransformerWriter
 											rowID,
 											currentRowID)) {
 										rowID = currentRowID;
-										continue;
 									}
 									else {
 										rowID = currentRowID;

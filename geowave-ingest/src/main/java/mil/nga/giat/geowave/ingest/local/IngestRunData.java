@@ -31,7 +31,7 @@ public class IngestRunData implements
 			final DataStore dataStore ) {
 		this.dataStore = dataStore;
 		adapterCache = new MemoryAdapterStore(
-				adapters.toArray(new WritableDataAdapter[] {}));
+				adapters.toArray(new WritableDataAdapter[adapters.size()]));
 	}
 
 	public WritableDataAdapter<?> getDataAdapter(

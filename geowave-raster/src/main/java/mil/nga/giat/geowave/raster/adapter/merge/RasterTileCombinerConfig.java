@@ -28,7 +28,7 @@ public class RasterTileCombinerConfig extends
 			final String optionKey,
 			final String currentValue,
 			final String nextValue ) {
-		if (optionKey == RasterTileCombinerHelper.MERGE_STRATEGY_KEY) {
+		if (RasterTileCombinerHelper.MERGE_STRATEGY_KEY.equals(optionKey)) {
 			final byte[] mergeStrategyBytes = ByteArrayUtils.byteArrayFromString(currentValue);
 			final RasterTileMergeStrategy currentStrategy = PersistenceUtils.fromBinary(
 					mergeStrategyBytes,
@@ -39,7 +39,7 @@ public class RasterTileCombinerConfig extends
 			currentStrategy.merge(nextStrategy);
 			return ByteArrayUtils.byteArrayToString(PersistenceUtils.toBinary(currentStrategy));
 		}
-		else if (optionKey == RasterTileCombiner.COLUMNS_KEY) {
+		else if (RasterTileCombiner.COLUMNS_KEY.equals(optionKey)) {
 			if ((currentValue == null) || currentValue.trim().isEmpty()) {
 				return nextValue;
 			}

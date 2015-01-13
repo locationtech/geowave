@@ -1,9 +1,6 @@
 package mil.nga.giat.geowave.accumulo.util;
 
-import java.util.List;
-
 import mil.nga.giat.geowave.accumulo.Writer;
-import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.store.IngestCallback;
 import mil.nga.giat.geowave.store.IngestEntryInfo;
 import mil.nga.giat.geowave.store.adapter.WritableDataAdapter;

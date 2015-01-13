@@ -26,6 +26,6 @@ public class BinValueTest
 				binValue.getNormalizedValue(),
 				DELTA);
 
-	};
+	}
 
 }
