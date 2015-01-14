@@ -174,6 +174,7 @@ public class GeoWaveMapReduceIT extends
 	@Test
 	public void testIngestAndQueryGeneralGpx()
 			throws Exception {
+		accumuloOperations.deleteAll();
 		testIngest(
 				IndexType.SPATIAL_VECTOR,
 				GENERAL_GPX_INPUT_GPX_DIR);
@@ -233,12 +234,12 @@ public class GeoWaveMapReduceIT extends
 						GENERAL_GPX_FILTER_FILE).toURI().toURL()),
 				null,
 				null);
-		accumuloOperations.deleteAll();
 	}
 
 	@Test
 	public void testIngestOsmGpxMultipleIndices()
 			throws Exception {
+		accumuloOperations.deleteAll();
 		// ingest the data set into multiple indices and then try several query
 		// methods, by adapter and by index
 		testIngest(
@@ -318,7 +319,6 @@ public class GeoWaveMapReduceIT extends
 				null,
 				null,
 				null);
-		accumuloOperations.deleteAll();
 	}
 
 	private void runTestJob(
