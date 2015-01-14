@@ -20,8 +20,6 @@ public class GeoWaveITSuite
 		synchronized (GeoWaveTestEnvironment.MUTEX) {
 			GeoWaveTestEnvironment.DEFER_CLEANUP = true;
 		}
-		setupWfs();
-		startServer();
 	}
 	@AfterClass
 	public static void cleanup() {

@@ -20,13 +20,12 @@
 		<connection>scm:git:git@github.com:ngageoint/geowave.git</connection>
 	</scm>
 
-
 	<properties>
 		<geotools.version>12.1</geotools.version>
 		<geoserver.version>2.6.1</geoserver.version>
-		<accumulo.version>1.5.1</accumulo.version>
-		<hadoop.version>2.0.0-cdh4.7.0</hadoop.version>
-		<hadoop.version.mr>2.0.0-mr1-cdh4.7.0</hadoop.version.mr>
+		<accumulo.version>1.6.1</accumulo.version>
+		<hadoop.version>2.5.0-cdh5.2.0</hadoop.version>
+		<hadoop.version.mr>2.5.0-cdh5.2.0</hadoop.version.mr>
 		<avro.version>1.7.6</avro.version>
 		<commons.cli.version>1.2</commons.cli.version>
 		<geotools.scope>compile</geotools.scope>
@@ -43,8 +42,6 @@
 		<ut.reportPath>${project.reporting.outputDirectory}/jacoco-ut</ut.reportPath>
 		<sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
 		<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
-		<!-- need to use a 64-bit JVM for tests -->
-		<!-- Remove the MaxPermSize for Java8 -->
 		<test.args>-Xms256m -Xmx1024m -XX:MaxPermSize=256m</test.args>
 	</properties>
 	<dependencyManagement>

@@ -7,23 +7,6 @@
 		<relativePath>../</relativePath>
 		<version>0.8.2-SNAPSHOT</version>
 	</parent>
-	<properties>
-		<!-- Set these properties to connect to a remote Accumulo cluster for testing, 
-			otherwise the test will run a mini accumulo cluster using a temp directory -->
-		<zookeeperUrl />
-		<instance />
-		<username />
-		<password />
-		<spring.version>3.1.4.RELEASE</spring.version>
-		<jvm.opts>-DGEOSERVER_DATA_DIR=src/test/resources/gs</jvm.opts>
-		<gt.version>11-SNAPSHOT</gt.version>
-		<wicket.version>1.4.12</wicket.version>
-		<gt.version>11-SNAPSHOT</gt.version>
-		<spring.security.version>3.1.0.RELEASE</spring.security.version>
-		<maven.build.timestamp.format>dd-MMM-yyyy HH:mm</maven.build.timestamp.format>
-		<test.excludedGroups />
-		<imageio-ext.version>1.1.10</imageio-ext.version>
-	</properties>
 	<artifactId>geowave-test</artifactId>
 	<name>geowave-test</name>
 	<description>A module for integration and functional tests of GeoWave</description>
@@ -89,7 +72,7 @@
 						<goals>
 							<goal>unpack</goal>
 						</goals>
-						<phase>package</phase>
+						<phase>pre-integration-test</phase>
 						<configuration>
 							<artifactItems>
 								<artifactItem>
@@ -99,7 +82,7 @@
 									<type>war</type>
 									<overWrite>true</overWrite>
 									<outputDirectory>${project.build.directory}/geowave-services</outputDirectory>
-									<includes>**\/*.class,**\/*.config,**\/*.xml</includes>
+									<includes>**/*.class,**/*.config,**/*.xml</includes>
 								</artifactItem>
 								<artifactItem>
 									<groupId>org.geoserver.web</groupId>
@@ -108,7 +91,7 @@
 									<type>war</type>
 									<overWrite>false</overWrite>
 									<outputDirectory>${project.build.directory}/geoserver</outputDirectory>
-									<excludes>**/*jai*.jar</excludes>
+									<excludes>**/*2.7-SNAPSHOT.jar,**/*20140915*.jar,**/*13-SNAPSHOT.jar</excludes>
 								</artifactItem>
 							</artifactItems>
 						</configuration>
@@ -118,7 +101,7 @@
 						<goals>
 							<goal>copy</goal>
 						</goals>
-						<phase>package</phase>
+						<phase>pre-integration-test</phase>
 						<configuration>
 							<artifactItems>
 								<artifactItem>
@@ -163,9 +146,6 @@
 									<overWrite>true</overWrite>
 									<outputDirectory>${project.build.directory}/geoserver/WEB-INF/lib</outputDirectory>
 								</artifactItem>
-								<!-- <artifactItem> <groupId>mil.nga.giat</groupId> <artifactId>geowave-vector</artifactId> 
-									<version>${project.version}</version> <overWrite>true</overWrite> <outputDirectory>${project.build.directory}/geoserver/WEB-INF/lib</outputDirectory> 
-									</artifactItem> -->
 							</artifactItems>
 						</configuration>
 					</execution>

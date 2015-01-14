@@ -1,9 +1,13 @@
 package mil.nga.giat.geowave.test;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintWriter;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Calendar;
 import java.util.Date;
@@ -13,6 +17,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TimeZone;
+import java.util.concurrent.TimeUnit;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -29,6 +34,10 @@ import org.apache.accumulo.minicluster.MiniAccumuloCluster;
 import org.apache.accumulo.minicluster.MiniAccumuloConfig;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.SystemUtils;
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.mapreduce.MRJobConfig;
 import org.apache.hadoop.util.VersionInfo;
 import org.apache.hadoop.util.VersionUtil;
 import org.apache.log4j.Logger;
@@ -39,6 +48,12 @@ import org.geotools.data.simple.SimpleFeatureIterator;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
+import org.mortbay.jetty.Connector;
+import org.mortbay.jetty.Server;
+import org.mortbay.jetty.bio.SocketConnector;
+import org.mortbay.jetty.webapp.WebAppClassLoader;
+import org.mortbay.jetty.webapp.WebAppContext;
+import org.mortbay.xml.XmlConfiguration;
 import org.opengis.feature.simple.SimpleFeature;
 
 import com.google.common.io.Files;
@@ -57,13 +72,21 @@ public class GeoWaveTestEnvironment
 	protected static final String HADOOP_WINDOWS_UTIL = "winutils.exe";
 	protected static final int JETTY_PORT = 9011;
 	protected static final String JETTY_BASE_URL = "http://localhost:" + JETTY_PORT;
+	protected static final int ACCEPT_QUEUE_SIZE = 100;
+	protected static final int MAX_IDLE_TIME = (int) TimeUnit.HOURS.toMillis(1);
+	protected static final int SO_LINGER_TIME = -1;
+	protected static final int MAX_FORM_CONTENT_SIZE = 1024 * 1024 * 2;
 	protected static final String GEOSERVER_USER = "admin";
 	protected static final String GEOSERVER_PASS = "geoserver";
 	protected static final String TEST_WORKSPACE = "geowave_test";
 	protected static final String GEOSERVER_WAR_DIR = "target/geoserver";
 	protected static final String GEOSERVER_CONTEXT_PATH = "/geoserver";
+	protected static final String GEOSERVER_REST_PATH = JETTY_BASE_URL + GEOSERVER_CONTEXT_PATH + "/rest";
 	protected static final String GEOWAVE_WAR_DIR = "target/geowave-services";
 	protected static final String GEOWAVE_CONTEXT_PATH = "/geowave-services";
+	protected static final String GEOWAVE_BASE_URL = JETTY_BASE_URL + GEOWAVE_CONTEXT_PATH;
+	protected static final String HDFS_BASE_DIRECTORY = "test_tmp";
+	protected static final String DEFAULT_JOB_TRACKER = "local";
 	protected static final Object MUTEX = new Object();
 	protected static AccumuloOperations accumuloOperations;
 	protected static String zookeeper;
@@ -72,6 +95,10 @@ public class GeoWaveTestEnvironment
 	protected static String accumuloPassword;
 	protected static MiniAccumuloCluster miniAccumulo;
 	protected static final Server jettyServer = new Server();
+	protected static String jobtracker;
+	protected static String hdfs;
+	protected static boolean hdfsProtocol;
+	protected static String hdfsBaseDirectory;
 	protected static File tempDir;
 
 	protected static boolean DEFER_CLEANUP = false;
@@ -85,6 +112,9 @@ public class GeoWaveTestEnvironment
 	@BeforeClass
 	public static void setup() {
 		synchronized (MUTEX) {
+
+			System.err.println("TEST CLASSPATH: \n" + System.getProperty("java.class.path"));
+
 			TimeZone.setDefault(TimeZone.getTimeZone("GMT"));
 			if (accumuloOperations == null) {
 				zookeeper = System.getProperty("zookeeperUrl");
@@ -174,8 +204,15 @@ public class GeoWaveTestEnvironment
 							e);
 					Assert.fail("Could not connect to Accumulo instance: '" + e.getLocalizedMessage() + "'");
 				}
-				setupWfs();
-		        startServer();
+				try {
+					setupHdfs();
+				}
+				catch (final MalformedURLException e) {
+					LOGGER.warn(
+							"Unable to setup HDFS",
+							e);
+				}
+				startServer();
 			}
 		}
 	}
@@ -185,30 +222,57 @@ public class GeoWaveTestEnvironment
 		return (str != null) && !str.isEmpty();
 	}
 
-	protected static void setupWfs() {
-		GeoWaveTestEnvironment.unZipFile(
-				GeoServerIT.class.getClassLoader().getResourceAsStream(
-						TEST_RESOURCE_PACKAGE + "gs.zip"),
-				GEOSERVER_WAR_DIR);
-		final File file = new File(
-				GEOSERVER_WAR_DIR + "/data/workspaces/geowave/test/datastore.xml");
-		try {
-			String str = FileUtils.readFileToString(file);
-			str = str.replaceAll(
-					"\\{\\{ZOOINSTANCE\\}\\}",
-					GeoWaveITSuite.zookeeper);
-			FileUtils.deleteQuietly(file);
-			FileUtils.write(
-					file,
-					str);
+	protected static void setupHdfs()
+			throws MalformedURLException {
+		hdfs = System.getProperty("hdfs");
+		jobtracker = System.getProperty("jobtracker");
+		if (!isSet(hdfs)) {
+			hdfs = "file:///";
+
+			hdfsBaseDirectory = tempDir.toURI().toURL().toString() + "/" + HDFS_BASE_DIRECTORY;
+			hdfsProtocol = false;
 		}
-		catch (final IOException e) {
+		else {
+			hdfsBaseDirectory = HDFS_BASE_DIRECTORY;
+			if (!hdfs.contains("://")) {
+				hdfs = "hdfs://" + hdfs;
+				hdfsProtocol = true;
+			}
+			else {
+				hdfsProtocol = hdfs.toLowerCase().startsWith(
+						"hdfs://");
+			}
+		}
+		if (!isSet(jobtracker)) {
+			jobtracker = DEFAULT_JOB_TRACKER;
+		}
+	}
+
+	protected static void writeConfigFile(
+			final File configFile ) {
+		try {
+			final PrintWriter writer = new PrintWriter(
+					configFile);
+			writer.println("zookeeper.url=" + zookeeper);
+			writer.println("zookeeper.instance=" + accumuloInstance);
+			writer.println("zookeeper.username=" + accumuloUser);
+			writer.println("zookeeper.password=" + accumuloPassword);
+			writer.println("geoserver.url=" + JETTY_BASE_URL);
+			writer.println("geoserver.username=" + GEOSERVER_USER);
+			writer.println("geoserver.password=" + GEOSERVER_PASS);
+			writer.println("geoserver.workspace=" + TEST_WORKSPACE);
+			writer.println("hdfs=" + hdfs);
+			writer.println("hdfsBase=" + hdfsBaseDirectory);
+			writer.println("jobTracker=" + jobtracker);
+			writer.close();
+		}
+		catch (final FileNotFoundException e) {
 			LOGGER.error(
-					"Failed to setup WFS.",
+					"Unable to find config file",
 					e);
 		}
 	}
-	
+
 	protected static void startServer() {
 
 		try {
@@ -228,7 +292,10 @@ public class GeoWaveTestEnvironment
 
 			final WebAppClassLoader classLoader = new WebAppClassLoader(
 					gsWebapp);
-			classLoader.addClassPath(System.getProperty("java.class.path"));
+			classLoader.addClassPath(System.getProperty(
+					"java.class.path").replace(
+					":",
+					";"));
 			gsWebapp.setClassLoader(classLoader);
 
 			final File warDir = new File(
@@ -286,34 +353,11 @@ public class GeoWaveTestEnvironment
 			}
 		}
 	}
-	
-	protected static void writeConfigFile(
-			final File configFile ) {
-		try {
-			final PrintWriter writer = new PrintWriter(
-					configFile);
-			writer.println("zookeeper.url=" + zookeeper);
-			writer.println("zookeeper.instance=" + accumuloInstance);
-			writer.println("zookeeper.username=" + accumuloUser);
-			writer.println("zookeeper.password=" + accumuloPassword);
-			writer.println("geoserver.url=" + JETTY_BASE_URL);
-			writer.println("geoserver.username=" + GEOSERVER_USER);
-			writer.println("geoserver.password=" + GEOSERVER_PASS);
-			writer.println("geoserver.workspace=" + TEST_WORKSPACE);
-			writer.close();
-		}
-		catch (final FileNotFoundException e) {
-			LOGGER.error(
-					"Unable to find config file",
-					e);
-		}
-	}
-	
+
 	@AfterClass
 	public static void cleanup() {
 		synchronized (MUTEX) {
 			if (!DEFER_CLEANUP) {
-			
 				try {
 					jettyServer.stop();
 				}
@@ -322,7 +366,9 @@ public class GeoWaveTestEnvironment
 							"Unable to stop the Jetty server",
 							e);
 				}
-			
+
+				cleanupHdfsFiles();
+
 				Assert.assertTrue(
 						"Index not deleted successfully",
 						(accumuloOperations == null) || accumuloOperations.deleteAll());
@@ -344,7 +390,8 @@ public class GeoWaveTestEnvironment
 				}
 				if (tempDir != null) {
 					try {
-						// sleep because mini accumulo processes still have a hold
+						// sleep because mini accumulo processes still have a
+						// hold
 						// on the log files and there is no hook to get notified
 						// when it is completely stopped
 						Thread.sleep(1000);
@@ -359,6 +406,42 @@ public class GeoWaveTestEnvironment
 				}
 			}
 		}
+	}
+
+	public static void cleanupHdfsFiles() {
+		if (hdfsProtocol) {
+			final Path tmpDir = new Path(
+					hdfsBaseDirectory);
+			try {
+				final FileSystem fs = FileSystem.get(getConfiguration());
+				fs.delete(
+						tmpDir,
+						true);
+			}
+			catch (final IOException e) {
+				LOGGER.error(
+						"Unable to delete HDFS temp directory",
+						e);
+			}
+		}
+	}
+
+	protected static Configuration getConfiguration() {
+		final Configuration conf = new Configuration();
+		conf.set(
+				"fs.defaultFS",
+				hdfs);
+		conf.set(
+				"fs.hdfs.impl",
+				org.apache.hadoop.hdfs.DistributedFileSystem.class.getName());
+		conf.set(
+				"mapred.job.tracker",
+				jobtracker);
+		// for travis-ci to run, we want to limit the memory consumption
+		conf.setInt(
+				MRJobConfig.IO_SORT_MB,
+				10);
+		return conf;
 	}
 
 	public static void addAuthorization(

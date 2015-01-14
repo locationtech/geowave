@@ -14,8 +14,8 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.http.client.ClientProtocolException;
 import org.geotools.feature.SchemaException;
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -26,7 +26,6 @@ public class GeoWaveServicesIT extends
 {
 	private static final Logger LOGGER = LoggerFactory.getLogger(GeoWaveServicesIT.class);
 
-	private static final String GEOWAVE_BASE_URL = JETTY_BASE_URL + GEOWAVE_CONTEXT_PATH;
 	private static final String TEST_DATA_ZIP_RESOURCE_PATH = TEST_RESOURCE_PACKAGE + "mapreduce-testdata.zip";
 	private static final String TEST_CASE_GENERAL_GPX_BASE = TEST_CASE_BASE + "general_gpx_test_case/";
 	private static final String GENERAL_GPX_INPUT_GPX_DIR = TEST_CASE_GENERAL_GPX_BASE + "input_gpx/";
@@ -36,14 +35,13 @@ public class GeoWaveServicesIT extends
 	private static final String TEST_STYLE_PATH = "../geowave-examples/example-slds/";
 	private static final String TEST_SLD_FILE = TEST_STYLE_PATH + TEST_STYLE_NAME + ".sld";
 
-	private InfoServiceClient infoServiceClient;
-	private GeoserverServiceClient geoserverServiceClient;
-	private IngestServiceClient ingestServiceClient;
+	private static InfoServiceClient infoServiceClient;
+	private static GeoserverServiceClient geoserverServiceClient;
+	private static IngestServiceClient ingestServiceClient;
 
 	@BeforeClass
-	public static void setUp()
-			throws ClientProtocolException,
-			IOException {
+	public static void setup() {
+		accumuloOperations.deleteAll();
 
 		// unzip the test data resources that will be used
 		GeoWaveTestEnvironment.unZipFile(
@@ -86,13 +84,42 @@ public class GeoWaveServicesIT extends
 		assertTrue(success);
 		success = false;
 
-		// *****************************************************
-		// Info Service Client Test
-		// *****************************************************
+		// verify that the namespace was created
+		LOGGER.info("Verify that the namespace was created via localIngest.");
+		JSONArray namespaces = infoServiceClient.getNamespaces().getJSONArray(
+				"namespaces");
+		for (int i = 0; i < namespaces.size(); i++) {
+			if (namespaces.getJSONObject(
+					i).getString(
+					"name").equals(
+					TEST_NAMESPACE)) {
+				success = true;
+				break;
+			}
+		}
+		assertTrue(success);
+		success = false;
+
+		accumuloOperations.deleteAll();
+
+		// ingest data using the local ingest service
+		LOGGER.info("Ingesting data using the hdfs ingest service.");
+		success = ingestServiceClient.hdfsIngest(
+				new File[] {
+					new File(
+							ASHLAND_GPX_FILE)
+				},
+				TEST_NAMESPACE,
+				null,
+				ASHLAND_INGEST_TTYPE,
+				null,
+				false);
+		assertTrue(success);
+		success = false;
 
 		// verify that the namespace was created
-		LOGGER.info("Verify that the namespace was created.");
-		final JSONArray namespaces = infoServiceClient.getNamespaces().getJSONArray(
+		LOGGER.info("Verify that the namespace was created via localIngest.");
+		namespaces = infoServiceClient.getNamespaces().getJSONArray(
 				"namespaces");
 		for (int i = 0; i < namespaces.size(); i++) {
 			if (namespaces.getJSONObject(
@@ -195,10 +222,10 @@ public class GeoWaveServicesIT extends
 		// verify that we can publish a datastore
 		LOGGER.info("Verify that we can publish a datastore.");
 		assertTrue(geoserverServiceClient.publishDatastore(
-				GeoWaveITSuite.zookeeper,
-				GeoWaveITSuite.accumuloUser,
-				GeoWaveITSuite.accumuloPassword,
-				GeoWaveITSuite.accumuloInstance,
+				zookeeper,
+				accumuloUser,
+				accumuloPassword,
+				accumuloInstance,
 				TEST_NAMESPACE,
 				null,
 				null,
@@ -233,11 +260,11 @@ public class GeoWaveServicesIT extends
 
 			assertTrue(dsInfo.getString(
 					"ZookeeperServers").equals(
-					GeoWaveITSuite.zookeeper));
+					zookeeper));
 
 			assertTrue(dsInfo.getString(
 					"InstanceName").equals(
-					GeoWaveITSuite.accumuloInstance));
+					accumuloInstance));
 		}
 
 		// verify that we can recall the datastore
@@ -292,7 +319,5 @@ public class GeoWaveServicesIT extends
 				TEST_WORKSPACE));
 		assertTrue(geoserverServiceClient.deleteStyle(TEST_STYLE_NAME));
 		assertTrue(geoserverServiceClient.deleteWorkspace(TEST_WORKSPACE));
-
-		GeoWaveITSuite.accumuloOperations.deleteAll();
 	}
 }

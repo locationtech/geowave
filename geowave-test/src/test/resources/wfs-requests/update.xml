@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<wfs:Transaction
+	xsi:schemaLocation="http://www.opengis.net/wfs
+	                    http://schemas.opengis.net/wfs/1.1.0/WFS-transaction.xsd"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:ogc="http://www.opengis.net/ogc"
+	xmlns:gml="http://www.opengis.net/gml" 
+	xmlns:wfs="http://www.opengis.net/wfs"
+	xmlns:{0}="http://{0}" 
+	version="1.1.0" 
+	service="WFS"
+	releaseAction="ALL" 
+	lockId="{1}">
+	<wfs:LockId>{1}</wfs:LockId>
+	<wfs:Update typeName="{0}:geostuff">
+		<wfs:Property>
+			<wfs:Name>geometry</wfs:Name>
+			<wfs:Value>
+				<gml:Point srsDimension="2"
+					srsName="http://www.opengis.net/gml/srs/epsg.xml#4326">
+					<gml:pos>34.681581803112744 35.1828408241272</gml:pos>
+				</gml:Point>
+			</wfs:Value>
+		</wfs:Property>
+		<ogc:Filter>
+			<PropertyIsEqualTo>
+				<PropertyName>pid</PropertyName>
+				<Literal>24bda997-3182-76ae-9716-6cf662044094</Literal>
+			</PropertyIsEqualTo>
+		</ogc:Filter>
+	</wfs:Update>
+</wfs:Transaction>
