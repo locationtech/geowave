@@ -72,6 +72,7 @@ sed -i 's/yyyy_mm_dd.//g' %{buildroot}%{geowave_geoserver_home}/etc/jetty.xml
 
 # Remove cruft we don't want in our deployment
 rm -fr %{buildroot}%{geowave_geoserver_home}/bin/*.bat
+rm -fr %{buildroot}%{geowave_geoserver_home}/data_dir/layergroups/*
 rm -fr %{buildroot}%{geowave_geoserver_home}/data_dir/workspaces/*
 rm -fr %{buildroot}%{geowave_geoserver_home}/logs/keepme.txt
 
