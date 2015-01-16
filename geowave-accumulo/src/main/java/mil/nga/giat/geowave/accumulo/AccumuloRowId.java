@@ -17,7 +17,7 @@ import org.apache.accumulo.core.data.Key;
  */
 public class AccumuloRowId
 {
-	private final byte[] indexId;
+	private final byte[] insertionId;
 	private final byte[] dataId;
 	private final byte[] adapterId;
 	private final int numberOfDuplicates;
@@ -43,13 +43,13 @@ public class AccumuloRowId
 				accumuloRowId,
 				0,
 				accumuloRowId.length - 12);
-		final byte[] indexId = new byte[accumuloRowId.length - 12 - adapterIdLength - dataIdLength];
+		final byte[] insertionId = new byte[accumuloRowId.length - 12 - adapterIdLength - dataIdLength];
 		final byte[] adapterId = new byte[adapterIdLength];
 		final byte[] dataId = new byte[dataIdLength];
-		buf.get(indexId);
+		buf.get(insertionId);
 		buf.get(adapterId);
 		buf.get(dataId);
-		this.indexId = indexId;
+		this.insertionId = insertionId;
 		this.dataId = dataId;
 		this.adapterId = adapterId;
 		this.numberOfDuplicates = numberOfDuplicates;
@@ -60,15 +60,15 @@ public class AccumuloRowId
 			final byte[] dataId,
 			final byte[] adapterId,
 			final int numberOfDuplicates ) {
-		this.indexId = indexId;
+		this.insertionId = indexId;
 		this.dataId = dataId;
 		this.adapterId = adapterId;
 		this.numberOfDuplicates = numberOfDuplicates;
 	}
 
 	public byte[] getRowId() {
-		final ByteBuffer buf = ByteBuffer.allocate(12 + dataId.length + adapterId.length + indexId.length);
-		buf.put(indexId);
+		final ByteBuffer buf = ByteBuffer.allocate(12 + dataId.length + adapterId.length + insertionId.length);
+		buf.put(insertionId);
 		buf.put(adapterId);
 		buf.put(dataId);
 		buf.putInt(adapterId.length);
@@ -77,8 +77,8 @@ public class AccumuloRowId
 		return buf.array();
 	}
 
-	public byte[] getIndexId() {
-		return indexId;
+	public byte[] getInsertionId() {
+		return insertionId;
 	}
 
 	public byte[] getDataId() {
@@ -91,5 +91,9 @@ public class AccumuloRowId
 
 	public int getNumberOfDuplicates() {
 		return numberOfDuplicates;
+	}
+
+	public boolean isDeduplicationEnabled() {
+		return numberOfDuplicates >= 0;
 	}
 }

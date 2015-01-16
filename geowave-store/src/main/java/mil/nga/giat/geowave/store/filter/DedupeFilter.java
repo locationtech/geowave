@@ -26,7 +26,7 @@ public class DedupeFilter implements
 	@Override
 	public boolean accept(
 			final IndexedPersistenceEncoding persistenceEncoding ) {
-		if (!supportsMultipleIndices() && !persistenceEncoding.isDuplicated()) {
+		if (!persistenceEncoding.isDuplicated()) {
 			// short circuit this check if the row is not duplicated anywhere
 			// and this is only intended to support a single index
 			return true;

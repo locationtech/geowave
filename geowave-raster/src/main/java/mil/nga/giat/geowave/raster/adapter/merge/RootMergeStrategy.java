@@ -40,10 +40,10 @@ public class RootMergeStrategy<T extends Persistable> implements
 	// the purpose for these maps instead of a list of samplemodel and adapter
 	// ID pairs is to allow for multiple adapters to share the same sample model
 	protected Map<Integer, SampleModel> sampleModels = new HashMap<Integer, SampleModel>();
-	protected Map<ByteArrayId, Integer> adapterIdToSampleModelKey = new HashMap<ByteArrayId, Integer>();
+	public Map<ByteArrayId, Integer> adapterIdToSampleModelKey = new HashMap<ByteArrayId, Integer>();
 
-	protected Map<Integer, RasterTileMergeStrategy<T>> childMergeStrategies = new HashMap<Integer, RasterTileMergeStrategy<T>>();
-	protected Map<ByteArrayId, Integer> adapterIdToChildMergeStrategyKey = new HashMap<ByteArrayId, Integer>();
+	public Map<Integer, RasterTileMergeStrategy<T>> childMergeStrategies = new HashMap<Integer, RasterTileMergeStrategy<T>>();
+	public Map<ByteArrayId, Integer> adapterIdToChildMergeStrategyKey = new HashMap<ByteArrayId, Integer>();
 
 	protected RootMergeStrategy() {}
 

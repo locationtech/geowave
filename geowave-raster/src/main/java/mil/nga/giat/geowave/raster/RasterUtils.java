@@ -428,8 +428,19 @@ public class RasterUtils
 						noDataValues,
 						coverageImage);
 			}
+			Raster raster = coverageImage.getData();
 			final int posx = (int) ((coverageEnv.getMinimum(0) - requestEnvelope.getMinimum(0)) / levelResX);
 			final int posy = (int) ((requestEnvelope.getMaximum(1) - coverageEnv.getMaximum(1)) / levelResY);
+			for (int x = raster.getMinX(); x < raster.getMinX() + raster.getWidth(); x++){
+				for (int y = raster.getMinY(); y < raster.getMinY() + raster.getHeight(); y++){
+					for (int b = 0; b < raster.getNumBands(); b++){
+						double val = raster.getSampleDouble(x, y, b);
+						if (!Double.isNaN(val) && val != 1.0){
+						LOGGER.warn("posx=" + posx + ",posy=" + posy + ",x=" + x + ",y="+y+",b=" + b + ",value="+val);
+						}
+					}
+				}
+			}
 
 			image.getRaster().setRect(
 					posx,

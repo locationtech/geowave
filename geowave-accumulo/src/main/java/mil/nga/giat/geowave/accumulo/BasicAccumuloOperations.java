@@ -656,59 +656,69 @@ public class BasicAccumuloOperations implements
 							// see if the options are the same, if they are not
 							// the same, apply a merge with the existing options
 							// and the configured options
-							final IteratorSetting setting = connector.tableOperations().getIteratorSetting(
-									qName,
-									iteratorSetting.getName(),
-									existingScopes.iterator().next());
-							final Map<String, String> existingOptions = setting.getOptions();
-							final Map<String, String> configuredOptions = iteratorSetting.getOptions();
-							for (final Entry<String, String> e : existingOptions.entrySet()) {
-								final String configuredValue = configuredOptions.get(e.getKey());
-								if ((e.getValue() == null) && (configuredValue == null)) {
-									continue;
-								}
-								else if ((e.getValue() == null) || ((e.getValue() != null) && !e.getValue().equals(
-										configuredValue))) {
-									final String newValue = iteratorConfig.mergeOption(
-											e.getKey(),
-											e.getValue(),
-											configuredValue);
-									if ((newValue != null) && newValue.equals(e.getValue())) {
-										// once merged the value didn't change,
-										// so just continue
-										continue;
-									}
-									mustDelete = true;
-									if (newValue == null) {
-										iteratorSetting.removeOption(e.getKey());
-									}
-									else {
-										iteratorSetting.addOption(
-												e.getKey(),
-												newValue);
-									}
-								}
-							}
-							for (final Entry<String, String> e : configuredOptions.entrySet()) {
-								if (!existingOptions.containsKey(e.getKey())) {
-									// existing value should be null because
-									// this key is contained in the merged set
-									if (e.getValue() == null) {
-										continue;
-									}
-									else {
-										final String newValue = iteratorConfig.mergeOption(
-												e.getKey(),
-												null,
-												e.getValue());
-										mustDelete = true;
-										if (newValue == null) {
-											iteratorSetting.removeOption(e.getKey());
+							Iterator<IteratorScope> it = existingScopes.iterator();
+							while (it.hasNext()) {
+								IteratorScope scope = it.next();
+								final IteratorSetting setting = connector.tableOperations().getIteratorSetting(
+										qName,
+										iteratorSetting.getName(),
+										scope);
+								if (setting != null) {
+									final Map<String, String> existingOptions = setting.getOptions();
+									final Map<String, String> configuredOptions = iteratorSetting.getOptions();
+									for (final Entry<String, String> e : existingOptions.entrySet()) {
+										final String configuredValue = configuredOptions.get(e.getKey());
+										if ((e.getValue() == null) && (configuredValue == null)) {
+											continue;
 										}
-										else {
-											iteratorSetting.addOption(
+										else if ((e.getValue() == null) || ((e.getValue() != null) && !e.getValue().equals(
+												configuredValue))) {
+											final String newValue = iteratorConfig.mergeOption(
 													e.getKey(),
-													newValue);
+													e.getValue(),
+													configuredValue);
+											if ((newValue != null) && newValue.equals(e.getValue())) {
+												// once merged the value didn't
+												// change,
+												// so just continue
+												continue;
+											}
+											mustDelete = true;
+											if (newValue == null) {
+												iteratorSetting.removeOption(e.getKey());
+											}
+											else {
+												iteratorSetting.addOption(
+														e.getKey(),
+														newValue);
+											}
+										}
+									}
+									for (final Entry<String, String> e : configuredOptions.entrySet()) {
+										if (!existingOptions.containsKey(e.getKey())) {
+											// existing value should be null
+											// because
+											// this key is contained in the
+											// merged
+											// set
+											if (e.getValue() == null) {
+												continue;
+											}
+											else {
+												final String newValue = iteratorConfig.mergeOption(
+														e.getKey(),
+														null,
+														e.getValue());
+												mustDelete = true;
+												if (newValue == null) {
+													iteratorSetting.removeOption(e.getKey());
+												}
+												else {
+													iteratorSetting.addOption(
+															e.getKey(),
+															newValue);
+												}
+											}
 										}
 									}
 								}

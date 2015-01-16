@@ -3,6 +3,8 @@ package mil.nga.giat.geowave.raster.plugin;
 import java.awt.Color;
 import java.awt.Rectangle;
 import java.awt.geom.Rectangle2D;
+import java.awt.image.Raster;
+import java.awt.image.RenderedImage;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
@@ -403,7 +405,7 @@ public class GeoWaveRasterReader extends
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * org.opengis.coverage.grid.GridCoverageReader#read(org.opengis.parameter
 	 * .GeneralParameterValue [])
@@ -595,7 +597,19 @@ public class GeoWaveRasterReader extends
 				adapter.getColorModel());
 
 		gridCoverageIt.close();
+		RenderedImage image = result.getRenderedImage();
+		Raster raster = image.getData();
+		for (int x = image.getMinX(); x < image.getMinX() + image.getWidth(); x++){
+			for (int y = image.getMinY(); y < image.getMinY() + image.getHeight(); y++){
+				for (int b = 0; b < raster.getNumBands(); b++){
+					double val = raster.getSampleDouble(x, y, b);
+					if (!Double.isNaN(val) && val != 1.0){
 
+						LOGGER.warn("x=" + x + ",y="+y+",b=" + b + ",value="+val);
+					}
+				}
+			}
+		}
 		return transformResult(
 				result,
 				pixelDimension,

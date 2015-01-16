@@ -2,12 +2,17 @@ package mil.nga.giat.geowave.analytics.mapreduce.kde;
 
 import java.io.IOException;
 
+import mil.nga.giat.geowave.accumulo.AccumuloOperations;
+import mil.nga.giat.geowave.accumulo.BasicAccumuloOperations;
 import mil.nga.giat.geowave.accumulo.mapreduce.GeoWaveConfiguratorBase;
 import mil.nga.giat.geowave.accumulo.mapreduce.input.GeoWaveInputFormat;
 import mil.nga.giat.geowave.accumulo.mapreduce.output.GeoWaveOutputFormat;
 import mil.nga.giat.geowave.accumulo.mapreduce.output.GeoWaveOutputKey;
+import mil.nga.giat.geowave.accumulo.metadata.AccumuloAdapterStore;
+import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.raster.RasterUtils;
 import mil.nga.giat.geowave.store.GeometryUtils;
+import mil.nga.giat.geowave.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.store.index.Index;
 import mil.nga.giat.geowave.store.index.IndexType;
 import mil.nga.giat.geowave.store.query.SpatialQuery;
@@ -117,6 +122,18 @@ public class KDEJobRunner extends
 		job.setOutputFormatClass(SequenceFileOutputFormat.class);
 		job.setNumReduceTasks(8);
 		job.setSpeculativeExecution(false);
+		final AccumuloOperations ops = new BasicAccumuloOperations(
+				zookeeper,
+				instance,
+				user,
+				password,
+				namespace);
+		final AdapterStore adapterStore = new AccumuloAdapterStore(
+				ops);
+		GeoWaveInputFormat.addDataAdapter(
+				job,
+				adapterStore.getAdapter(new ByteArrayId(
+						featureType)));
 		GeoWaveInputFormat.setMinimumSplitCount(
 				job,
 				minSplits);
@@ -335,6 +352,7 @@ public class KDEJobRunner extends
 			}
 			jobTrackerOrResourceManHostPort = args[12];
 			newNamespace = args[13];
+			tileSize = Integer.parseInt(args[14]);
 			if (args.length > getCQLFilterArg()) {
 				cqlFilter = args[getCQLFilterArg()];
 			}
@@ -343,7 +361,7 @@ public class KDEJobRunner extends
 	}
 
 	protected int getCQLFilterArg() {
-		return 14;
+		return 15;
 	}
 
 }

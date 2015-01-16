@@ -136,8 +136,8 @@ public class AccumuloKDEReducer extends
 			final long index ) {
 		final int xPost = (int) Math.floor(index / numYPosts);
 		final int yPost = (int) (index % numYPosts);
-		final int xTile = xPost / tileSize;
-		final int yTile = yPost / tileSize;
+		final int xTile = (int) Math.floor(xPost / tileSize);
+		final int yTile = (int) Math.floor(yPost / tileSize);
 		final int x = (xPost % tileSize);
 		final int y = (yPost % tileSize);
 		final double tileWestLon = ((xTile * 360.0) / numXTiles) - 180.0;

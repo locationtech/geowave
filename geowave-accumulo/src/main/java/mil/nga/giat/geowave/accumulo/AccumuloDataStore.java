@@ -540,8 +540,8 @@ public class AccumuloDataStore implements
 
 	protected static byte[] getRowIdBytes(
 			final AccumuloRowId rowElements ) {
-		final ByteBuffer buf = ByteBuffer.allocate(12 + rowElements.getDataId().length + rowElements.getAdapterId().length + rowElements.getIndexId().length);
-		buf.put(rowElements.getIndexId());
+		final ByteBuffer buf = ByteBuffer.allocate(12 + rowElements.getDataId().length + rowElements.getAdapterId().length + rowElements.getInsertionId().length);
+		buf.put(rowElements.getInsertionId());
 		buf.put(rowElements.getAdapterId());
 		buf.put(rowElements.getDataId());
 		buf.putInt(rowElements.getAdapterId().length);
