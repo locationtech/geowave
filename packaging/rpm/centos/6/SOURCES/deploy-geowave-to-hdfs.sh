@@ -6,7 +6,7 @@
 HDFS_USER=hdfs
 ACCUMULO_USER=accumulo
 GEOWAVE_ACCUMULO_HOME=/usr/local/geowave/accumulo
-ACCUMULO_LIB_DIR=/accumulo/classpath
+ACCUMULO_LIB_DIR=/accumulo/classpath/geowave
 
 REQUIRED_APPS=('hadoop')
 
@@ -30,7 +30,7 @@ fi
 # Check to see if lib directory is already present
 su $HDFS_USER -c "hadoop fs -ls $ACCUMULO_LIB_DIR"
 if [ $? -ne 0 ]; then # Try creating
-    sudo -u $HDFS_USER hadoop fs -mkdir $ACCUMULO_LIB_DIR
+    sudo -u $HDFS_USER hadoop fs -mkdir -p $ACCUMULO_LIB_DIR
     if [ $? -ne 0 ]; then
         echo >&2 "Unable to create $ACCUMULO_LIB_DIR directory in hdfs. Aborting."; exit 1;
     fi
