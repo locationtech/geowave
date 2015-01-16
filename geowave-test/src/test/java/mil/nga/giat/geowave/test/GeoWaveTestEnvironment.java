@@ -112,9 +112,6 @@ public class GeoWaveTestEnvironment
 	@BeforeClass
 	public static void setup() {
 		synchronized (MUTEX) {
-
-			System.err.println("TEST CLASSPATH: \n" + System.getProperty("java.class.path"));
-
 			TimeZone.setDefault(TimeZone.getTimeZone("GMT"));
 			if (accumuloOperations == null) {
 				zookeeper = System.getProperty("zookeeperUrl");

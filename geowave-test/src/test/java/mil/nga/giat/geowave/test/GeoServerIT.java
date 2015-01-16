@@ -68,7 +68,7 @@ public class GeoServerIT extends
 			throws ClientProtocolException,
 			IOException {
 
-		boolean success = accumuloOperations.deleteAll();
+		accumuloOperations.deleteAll();
 
 		// setup the wfs-requests
 		geostuff_layer = MessageFormat.format(
@@ -95,7 +95,7 @@ public class GeoServerIT extends
 				GEOWAVE_BASE_URL);
 
 		// create the workspace
-		success &= geoserverServiceClient.createWorkspace(TEST_WORKSPACE);
+		boolean success = geoserverServiceClient.createWorkspace(TEST_WORKSPACE);
 
 		// enable wfs & wms
 		success &= enableWfs();

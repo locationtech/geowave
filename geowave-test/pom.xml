@@ -89,9 +89,9 @@
 									<artifactId>gs-web-app</artifactId>
 									<version>${geoserver.version}</version>
 									<type>war</type>
-									<overWrite>false</overWrite>
+									<overWrite>true</overWrite>
 									<outputDirectory>${project.build.directory}/geoserver</outputDirectory>
-									<excludes>**/*2.7-SNAPSHOT.jar,**/*20140915*.jar,**/*13-SNAPSHOT.jar</excludes>
+									<excludes>**/commons-dbcp-1.4.jar,**/*1.7-SNAPSHOT.jar,**/*2.7-SNAPSHOT.jar,**/*20140915*.jar,**/*13-SNAPSHOT.jar</excludes>
 								</artifactItem>
 							</artifactItems>
 						</configuration>

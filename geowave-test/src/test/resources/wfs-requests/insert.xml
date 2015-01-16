@@ -8,7 +8,7 @@
 	xsi:schemaLocation="http://www.opengis.net/wfs
 						http://schemas.opengis.net/wfs/1.1.0/WFS-transaction.xsd
 						http://{0}
-						http://localhost:9011/geoserver/wfs?service=wfs&amp;version=1.1.0&amp;request=DescribeFeatureType&amp;typeNames={0}:geostuff">
+						http://localhost:9011/geoserver/wfs/DescribeFeatureType?typename={0}:geostuff">
 	<wfs:Insert>
 		<{0}:geostuff>
 			<{0}:pid>24bda997-3182-76ae-9716-6cf662044094</{0}:pid>
