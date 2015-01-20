@@ -10,7 +10,8 @@ import org.junit.runners.Suite.SuiteClasses;
 @SuiteClasses({
 	GeoWaveBasicIT.class,
 	GeoWaveMapReduceIT.class,
-	GeoServerIT.class
+	GeoServerIT.class,
+	GeoWaveServicesIT.class
 })
 public class GeoWaveITSuite
 {

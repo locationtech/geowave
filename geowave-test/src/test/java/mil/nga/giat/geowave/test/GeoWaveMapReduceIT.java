@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.FilenameFilter;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -36,14 +35,11 @@ import mil.nga.giat.geowave.types.gpx.GpxIngestPlugin;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.fs.FileSystem;
-import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.ObjectWritable;
 import org.apache.hadoop.mapreduce.Counter;
 import org.apache.hadoop.mapreduce.Counters;
 import org.apache.hadoop.mapreduce.Job;
-import org.apache.hadoop.mapreduce.MRJobConfig;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.input.SequenceFileInputFormat;
@@ -51,7 +47,6 @@ import org.apache.hadoop.mapreduce.lib.output.NullOutputFormat;
 import org.apache.hadoop.util.ToolRunner;
 import org.apache.log4j.Logger;
 import org.geotools.data.DataStoreFinder;
-import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -71,15 +66,9 @@ public class GeoWaveMapReduceIT extends
 	private static final String GENERAL_GPX_INPUT_GPX_DIR = TEST_CASE_GENERAL_GPX_BASE + "input_gpx/";
 	private static final String GENERAL_GPX_EXPECTED_RESULTS_DIR = TEST_CASE_GENERAL_GPX_BASE + "filter_results/";
 	private static final String OSM_GPX_INPUT_DIR = TEST_CASE_BASE + "osm_gpx_test_case/";
-	private static final String HDFS_BASE_DIRECTORY = "test_tmp";
-	private static final String DEFAULT_JOB_TRACKER = "local";
 	private static final String EXPECTED_RESULTS_KEY = "EXPECTED_RESULTS";
 	private static final int MIN_INPUT_SPLITS = 2;
 	private static final int MAX_INPUT_SPLITS = 4;
-	protected static String jobtracker;
-	protected static String hdfs;
-	protected static boolean hdfsProtocol;
-	private static String hdfsBaseDirectory;
 
 	public static enum ResultCounterType {
 		EXPECTED,
@@ -95,52 +84,6 @@ public class GeoWaveMapReduceIT extends
 				TEST_CASE_BASE);
 	}
 
-	@BeforeClass
-	public static void setVariables()
-			throws MalformedURLException {
-		hdfs = System.getProperty("hdfs");
-		jobtracker = System.getProperty("jobtracker");
-		if (!isSet(hdfs)) {
-			hdfs = "file:///";
-
-			hdfsBaseDirectory = tempDir.toURI().toURL().toString() + "/" + HDFS_BASE_DIRECTORY;
-			hdfsProtocol = false;
-		}
-		else {
-			hdfsBaseDirectory = HDFS_BASE_DIRECTORY;
-			if (!hdfs.contains("://")) {
-				hdfs = "hdfs://" + hdfs;
-				hdfsProtocol = true;
-			}
-			else {
-				hdfsProtocol = hdfs.toLowerCase().startsWith(
-						"hdfs://");
-			}
-		}
-		if (!isSet(jobtracker)) {
-			jobtracker = DEFAULT_JOB_TRACKER;
-		}
-	}
-
-	@AfterClass
-	public static void cleanupHdfsFiles() {
-		if (hdfsProtocol) {
-			final Path tmpDir = new Path(
-					hdfsBaseDirectory);
-			try {
-				final FileSystem fs = FileSystem.get(getConfiguration());
-				fs.delete(
-						tmpDir,
-						true);
-			}
-			catch (final IOException e) {
-				LOGGER.error(
-						"Unable to delete HDFS temp directory",
-						e);
-			}
-		}
-	}
-
 	private void testIngest(
 			final IndexType indexType,
 			final String ingestFilePath ) {
@@ -151,24 +94,6 @@ public class GeoWaveMapReduceIT extends
 				"-hdfsingest -t gpx -hdfs " + hdfs + " -hdfsbase " + hdfsBaseDirectory + " -jobtracker " + jobtracker + " -b " + ingestFilePath + " -z " + zookeeper + " -i " + accumuloInstance + " -u " + accumuloUser + " -p " + accumuloPassword + " -n " + TEST_NAMESPACE + " -dim " + (indexType.equals(IndexType.SPATIAL_VECTOR) ? "spatial" : "spatial-temporal"),
 				' ');
 		IngestMain.main(args);
-	}
-
-	protected static Configuration getConfiguration() {
-		final Configuration conf = new Configuration();
-		conf.set(
-				"fs.defaultFS",
-				hdfs);
-		conf.set(
-				"fs.hdfs.impl",
-				org.apache.hadoop.hdfs.DistributedFileSystem.class.getName());
-		conf.set(
-				"mapred.job.tracker",
-				jobtracker);
-		// for travis-ci to run, we want to limit the memory consumption
-		conf.setInt(
-				MRJobConfig.IO_SORT_MB,
-				10);
-		return conf;
 	}
 
 	@Test
