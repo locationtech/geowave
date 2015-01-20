@@ -5,7 +5,7 @@ The geowave-types project comes with several plugins out of the box
 
 [source, bash]
 ----
-$ java -jar geowave-types-0.8.0-SNAPSHOT-ingest-tool.jar  -localingest --list
+$ geowave-ingest -localingest --list
 Available ingest types currently registered as plugins:
 
 tdrive:
