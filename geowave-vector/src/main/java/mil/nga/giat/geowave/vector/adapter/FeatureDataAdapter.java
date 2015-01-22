@@ -33,6 +33,7 @@ import mil.nga.giat.geowave.vector.plugin.GeoWaveGTDataStore;
 import mil.nga.giat.geowave.vector.plugin.visibility.AdaptorProxyFieldLevelVisibilityHandler;
 import mil.nga.giat.geowave.vector.plugin.visibility.JsonDefinitionColumnVisibilityManagement;
 import mil.nga.giat.geowave.vector.stats.FeatureBoundingBoxStatistics;
+import mil.nga.giat.geowave.vector.utils.TimeDescriptors;
 
 import org.apache.log4j.Logger;
 import org.geotools.data.DataUtilities;
@@ -112,6 +113,7 @@ public class FeatureDataAdapter extends
 
 	private String visibilityAttributeName = "GEOWAVE_VISIBILITY";
 	private VisibilityManagement<SimpleFeature> fieldVisibilityManagement;
+	private TimeDescriptors timeDescriptors = null;
 
 	protected FeatureDataAdapter() {}
 
@@ -170,6 +172,7 @@ public class FeatureDataAdapter extends
 			final SimpleFeatureType type ) {
 		persistedType = type;
 		determineVisibilityAttribute();
+		inferTimeAttributeDescriptor(persistedType);
 		if (!GeoWaveGTDataStore.DEFAULT_CRS.equals(type.getCoordinateReferenceSystem())) {
 			reprojectedType = SimpleFeatureTypeBuilder.retype(
 					type,
@@ -221,23 +224,23 @@ public class FeatureDataAdapter extends
 			final List<IndexFieldHandler<SimpleFeature, ? extends CommonIndexValue, Object>> defaultHandlers = new ArrayList<IndexFieldHandler<SimpleFeature, ? extends CommonIndexValue, Object>>();
 			final SimpleFeatureType internalType = (SimpleFeatureType) typeObj;
 
-			if ((timeDescriptors.startRange != null) && (timeDescriptors.endRange != null)) {
+			if ((timeDescriptors.getStartRange() != null) && (timeDescriptors.getEndRange() != null)) {
 				defaultHandlers.add(new FeatureTimeRangeHandler(
 						new FeatureAttributeHandler(
-								timeDescriptors.startRange),
+								timeDescriptors.getStartRange()),
 						new FeatureAttributeHandler(
-								timeDescriptors.endRange),
+								timeDescriptors.getEndRange()),
 						new AdaptorProxyFieldLevelVisibilityHandler(
-								timeDescriptors.startRange.getLocalName(),
+								timeDescriptors.getStartRange().getLocalName(),
 								this)));
 			}
-			else if (timeDescriptors.time != null) {
+			else if (timeDescriptors.getTime() != null) {
 				// if we didn't succeed in identifying a start and end time,
 				// just grab the first attribute and use it as a timestamp
 				defaultHandlers.add(new FeatureTimestampHandler(
-						timeDescriptors.time,
+						timeDescriptors.getTime(),
 						new AdaptorProxyFieldLevelVisibilityHandler(
-								timeDescriptors.time.getLocalName(),
+								timeDescriptors.getTime().getLocalName(),
 								this)));
 			}
 
@@ -302,7 +305,7 @@ public class FeatureDataAdapter extends
 		final byte[] fieldVisibilityAtributeNameBytes = StringUtils.stringToBinary(visibilityAttributeName);
 		final byte[] visibilityManagementClassNameBytes = StringUtils.stringToBinary(fieldVisibilityManagement.getClass().getCanonicalName());
 
-		final TimeDescriptors timeDescriptors = inferTimeAttributeDescriptor(persistedType);
+		final TimeDescriptors timeDescriptors = getTimeDescriptors();
 		final byte[] timeAndRangeBytes = timeDescriptors.toBinary();
 		final String namespace = reprojectedType.getName().getNamespaceURI();
 
@@ -369,14 +372,18 @@ public class FeatureDataAdapter extends
 
 		final String encodedType = StringUtils.stringFromBinary(encodedTypeBytes);
 		try {
-			setFeatureType(DataUtilities.createType(
+			final SimpleFeatureType myType = DataUtilities.createType(
 					namespace,
 					typeName,
-					encodedType));
-			final TimeDescriptors timeDescriptors = new TimeDescriptors();
+					encodedType);
+
+			timeDescriptors = new TimeDescriptors();
 			timeDescriptors.fromBinary(
-					persistedType,
+					myType,
 					timeAndRangeBytes);
+			// {@link DataUtilities#createType} looses the meta-data.
+			timeDescriptors.updateType(myType);
+			setFeatureType(myType);
 			if (persistedType.getDescriptor(visibilityAttributeName) != null) {
 				persistedType.getDescriptor(
 						visibilityAttributeName).getUserData().put(
@@ -514,6 +521,11 @@ public class FeatureDataAdapter extends
 				FeatureTimeRangeHandler.class);
 	}
 
+	public synchronized TimeDescriptors getTimeDescriptors() {
+		if (timeDescriptors == null) timeDescriptors = inferTimeAttributeDescriptor(persistedType);
+		return timeDescriptors;
+	}
+
 	/**
 	 * Determine if a time or range descriptor is set. If so, then user it,
 	 * otherwise infer.
@@ -521,57 +533,10 @@ public class FeatureDataAdapter extends
 	protected static final TimeDescriptors inferTimeAttributeDescriptor(
 			final SimpleFeatureType persistType ) {
 		final TimeDescriptors timeDescriptors = new TimeDescriptors();
-		for (final AttributeDescriptor attrDesc : persistType.getAttributeDescriptors()) {
-			final Class<?> bindingClass = attrDesc.getType().getBinding();
-			if (TimeUtils.isTemporal(bindingClass)) {
-				final Boolean isTime = (Boolean) attrDesc.getUserData().get(
-						"time");
-				if (isTime != null) {
-					if (isTime.booleanValue()) {
-						timeDescriptors.time = attrDesc;
-						// override
-						timeDescriptors.endRange = null;
-						timeDescriptors.startRange = null;
-						break;
-					}
-					continue; // skip
-				}
-				final Boolean isStart = (Boolean) attrDesc.getUserData().get(
-						"start");
-				final Boolean isEnd = (Boolean) attrDesc.getUserData().get(
-						"end");
-				if ((isStart != null) && isStart.booleanValue()) {
-					timeDescriptors.startRange = attrDesc;
-				}
-				else if ((isStart == null) && (timeDescriptors.startRange == null) && attrDesc.getLocalName().toLowerCase().startsWith(
-						"start")) {
-					timeDescriptors.startRange = attrDesc;
-				}
-				else if ((isEnd != null) && isEnd.booleanValue()) {
-					timeDescriptors.endRange = attrDesc;
-				}
-				else if ((isEnd == null) && (timeDescriptors.endRange == null) && attrDesc.getLocalName().toLowerCase().startsWith(
-						"end")) {
-					timeDescriptors.endRange = attrDesc;
-				}
-				else if (timeDescriptors.time == null) {
-					timeDescriptors.time = attrDesc;
-				}
-			}
-		}
-		if ((timeDescriptors.endRange != null) && (timeDescriptors.startRange != null)) {
-			timeDescriptors.startRange.getUserData().put(
-					"start",
-					Boolean.TRUE);
-			timeDescriptors.endRange.getUserData().put(
-					"end",
-					Boolean.TRUE);
-		}
-		else if (timeDescriptors.time != null) {
-			timeDescriptors.time.getUserData().put(
-					"time",
-					Boolean.TRUE);
-		}
+		timeDescriptors.inferType(persistType);
+		// Up the meta-data so that it is clear and visible any inference that
+		// has occurred here. Also, this is critical to serialization/deserialization
+		timeDescriptors.updateType(persistType);
 		return timeDescriptors;
 	}
 
@@ -581,59 +546,6 @@ public class FeatureDataAdapter extends
 					"visibility");
 			if ((isVisibility != null) && isVisibility.booleanValue()) {
 				visibilityAttributeName = attrDesc.getLocalName();
-			}
-		}
-	}
-
-	private static class TimeDescriptors
-	{
-		AttributeDescriptor startRange = null;
-		AttributeDescriptor endRange = null;
-		AttributeDescriptor time = null;
-
-		byte[] toBinary() {
-			final StringBuffer buffer = new StringBuffer();
-			if (time != null) {
-				buffer.append(
-						time.getLocalName()).append(
-						"::");
-			}
-			else if ((startRange != null) && (endRange != null)) {
-				buffer.append(
-						':').append(
-						startRange.getLocalName()).append(
-						':').append(
-						endRange.getLocalName());
-			}
-			return StringUtils.stringToBinary(buffer.toString());
-		}
-
-		void fromBinary(
-				final SimpleFeatureType type,
-				final byte[] image ) {
-			final String buf = StringUtils.stringFromBinary(image);
-			if (buf.startsWith(":")) {
-				// range
-				type.getDescriptor(
-						buf.substring(
-								1,
-								buf.indexOf(
-										':',
-										1))).getUserData().put(
-						"start",
-						Boolean.TRUE);
-				type.getDescriptor(
-						buf.substring(buf.lastIndexOf(':') + 1)).getUserData().put(
-						"end",
-						Boolean.TRUE);
-			}
-			else if (buf.length() > 0) {
-				type.getDescriptor(
-						buf.substring(
-								0,
-								buf.indexOf(':'))).getUserData().put(
-						"time",
-						Boolean.TRUE);
 			}
 		}
 	}

@@ -9,12 +9,17 @@ public class TemporalConstraints
 {
 	LinkedList<TemporalRange> constraints = new LinkedList<TemporalRange>();
 
-	private static final TemporalRange FULL_RANGE = new TemporalRange(
+	public static final TemporalRange FULL_RANGE = new TemporalRange(
 			TemporalRange.START_TIME,
 			TemporalRange.END_TIME);
 
 	public TemporalConstraints() {
 
+	}
+
+	public TemporalConstraints(
+			TemporalRange range ) {
+		this.constraints.add(range);
 	}
 
 	public void add(
@@ -106,8 +111,6 @@ public class TemporalConstraints
 			final TemporalConstraints sideL,
 			final TemporalConstraints sideR ) {
 
-		// seems odd. Means that one or the other side did not have time
-		// constraints
 		if (sideL.constraints.isEmpty()) {
 			return sideR;
 		}

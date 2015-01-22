@@ -30,7 +30,11 @@ import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.PrecisionModel;
 
-public class WFSBoundedQueryTest
+/**
+ * Test with a default spatial index rather than geo-temporal
+ * 
+ */
+public class WFSBoundedSpatialQueryTest
 {
 	GeoWaveGTMemDataStore dataStore;
 	SimpleFeatureType schema;
@@ -50,6 +54,10 @@ public class WFSBoundedQueryTest
 				"geostuff",
 				"geometry:Geometry:srid=4326,pop:java.lang.Long,pid:String,when:Date");
 
+		type.getDescriptor(
+				"when").getUserData().put(
+				"time",
+				false);
 		dataStore.createSchema(type);
 
 	}
