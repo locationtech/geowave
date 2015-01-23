@@ -5,8 +5,8 @@
 === Overview
 
 A GeoWave http://puppetlabs.com/[Puppet module^] has been provided as part of both the tar.gz archive bundle and as an
-http://en.wikipedia.org/wiki/RPM_Package_Manager[RPM^]. This module can be used to install the various GeoWave services
-onto separate nodes in a cluster or all onto a single node for development.
+RPM. This module can be used to install the various GeoWave services onto separate nodes in a cluster or all onto a single
+node for development.
 
 === Options
 
@@ -82,4 +82,26 @@ node 'c1-app-01' {
     http_port             => '8888',
   }
 }
+----
+
+=== Puppet script management
+
+As mentioned in the overview the scripts are available from within the http://s3.amazonaws.com/geowave-rpms/index.html[GeoWave source tar bundle^]
+(Search for gz to filter the list) or you could use the RPM package to install and pick up future updates on your puppet server.
+
+==== Source Archive
+
+Unzip the source archive, locate puppet-scripts.tar.gz and manage the scripts yourself on your Puppet Server
+
+==== RPM
+
+There's a bit of a boostrap issue when first configuring the Puppet server to use the geowave puppet RPM as yum won't know
+about the rpm repo and the GeoWave Repo Puppet class hasn't been installed yet. There is an RPM available that will set
+up the yum repo config after which you should install geowave-cdh-puppet manually and proceed to configure GeoWave on the
+rest of the cluster using Puppet.
+
+[source, bash]
+----
+rpm -Uvh http://s3.amazonaws.com/geowave-rpms/dev/noarch/geowave-repo-dev-1.0-2.noarch.rpm
+yum install geowave-cdh5-puppet
 ----

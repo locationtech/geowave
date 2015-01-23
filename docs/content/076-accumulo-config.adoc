@@ -1,0 +1,35 @@
+[[accumulo-config]]
+<<<
+== Accumulo Configuration
+
+=== Overview
+
+The recommended Accumulo configuration for GeoWave requires several manual configuration steps but isolates the GeoWave
+libraries in application specific classpath(s) reducing the possibility of dependency conflict issues. A single user for
+all of geowave data or a user per data type are two of the many local configuration options just ensure each namespace
+containing GeoWave tables is configured to pick up the geowave-accumulo.jar.
+
+==== Procedure
+
+. Create a user and namespace
+. Grant the user ownership permissions on all tables created within the application namespace
+. Create an application or data set specific classpath
+. Configure all tables within the namespace to use the application classpath
+. Configure GeoWave transaction support
+
+[source, bash]
+----
+accumulo shell -u root
+createuser geowave // <1>
+createnamespace geowave
+grant NameSpace.CREATE_TABLE -ns geowave -u geowave
+config -s general.vfs.context.classpath.geowave=hdfs://NAME_NODE_FQDN:8020/accumulo/classpath/geowave/geowave-accumulo.jar
+config -ns geowave -s table.classpath.context=geowave
+exit // <2>
+java -cp "/usr/local/geowave/geoserver/webapps/geoserver/WEB-INF/lib/*" mil.nga.giat.geowave.vector.plugin.GeoWaveGTDataStore -z ZOOKEEPER_NODE:2181 -i accumulo -u root -p ROOT_PASSWORD -n geowave -m 20
+----
+<1> You'll be prompted for a password
+<2> Done with Accumulo specific configs
+
+These manual configuration steps have to be performed once after the first install of GeoWave. After the initial install you
+may elect to do further user and namespace creation and configuring to provide isolation between groups and data sets
