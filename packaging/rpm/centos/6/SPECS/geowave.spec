@@ -38,6 +38,7 @@ Source12:       puppet-scripts.tar.gz
 BuildRequires:  unzip
 BuildRequires:  zip
 BuildRequires:  xmlto
+BuildRequires:  asciidoc
 
 %description
 GeoWave provides geospatial and temporal indexing on top of Accumulo.
@@ -109,7 +110,7 @@ unzip -p %{SOURCE10} geowave-ingest-cmd-completion.sh > %{buildroot}/etc/bash_co
 
 # Copy documentation into place
 mkdir -p %{buildroot}%{geowave_docs_home}
-tar xvzf %{SOURCE11} -C %{buildroot}%{geowave_docs_home}
+tar -xzf %{SOURCE11} -C %{buildroot}%{geowave_docs_home} --strip=1
 
 # Compile and deploy man pages
 mkdir -p %{buildroot}/usr/local/share/man/man1
@@ -121,7 +122,7 @@ rm -f %{buildroot}%{geowave_docs_home}/*.pdfmarks
 
 # Puppet scripts
 mkdir -p %{buildroot}/etc/puppet/modules
-tar xvzf %{SOURCE12} -C %{buildroot}/etc/puppet/modules
+tar -xzf %{SOURCE12} -C %{buildroot}/etc/puppet/modules
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
