@@ -17,10 +17,12 @@ cache:
   directories:
   - $HOME/.m2
 install: "mvn -q clean install javadoc:aggregate -Daccumulo.version=${ACCUMULO_VERSION} -Dhadoop.version=${HADOOP_VERSION} -Dgeotools.version=${GEOTOOLS_VERSION} -Dgeoserver.version=${GEOSERVER_VERSION} -DskipITs=true -DskipTests=true"
-script: "mvn -q verify cobertura:cobertura -Daccumulo.version=${ACCUMULO_VERSION} -Dhadoop.version=${HADOOP_VERSION} -Dgeotools.version=${GEOTOOLS_VERSION} -Dgeoserver.version=${GEOSERVER_VERSION}"
+script: "mvn -q verify -Daccumulo.version=${ACCUMULO_VERSION} -Dhadoop.version=${HADOOP_VERSION} -Dgeotools.version=${GEOTOOLS_VERSION} -Dgeoserver.version=${GEOSERVER_VERSION}"
 before_install:
   - export MAVEN_OPTS="-Xmx512m -XX:MaxPermSize=192m"
   - chmod +x .utility/push-javadoc-to-gh-pages.sh
+  - mkdir mcp; cd mcp; git clone --branch=maven-munge-hack git://github.com/chrisbennight/coveralls-maven-plugin.git; cd coveralls-maven-plugin; git submodule init; git submodule update; mvn -q clean install; cd ../..;
 after_success:
   - .utility/push-javadoc-to-gh-pages.sh
-  - mvn coveralls:report
+  - mvn coveralls:report -Daccumulo.version=${ACCUMULO_VERSION} -Dhadoop.version=${HADOOP_VERSION} -Dgeotools.version=${GEOTOOLS_VERSION} -Dgeoserver.version=${GEOSERVER_VERSION}
+
