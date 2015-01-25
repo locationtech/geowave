@@ -37,7 +37,7 @@ import com.vividsolutions.jts.geom.GeometryFactory;
  * object in order to open the appropriate cursor to iterate over data. It uses
  * Keys within the Query hints to determine whether to perform special purpose
  * queries such as decimation or distributed rendering.
- *
+ * 
  */
 public class GeoWaveFeatureCollection extends
 		DataFeatureCollection
@@ -350,7 +350,8 @@ public class GeoWaveFeatureCollection extends
 			return null;
 		}
 		final TemporalConstraints bbox = (TemporalConstraints) query.getFilter().accept(
-				ExtractTimeFilterVisitor.TIME_VISITOR,
+				new ExtractTimeFilterVisitor(
+						reader.getComponents().getAdapter().getTimeDescriptors()),
 				null);
 		return bbox.isEmpty() ? null : bbox;
 	}
