@@ -3,6 +3,7 @@ package mil.nga.giat.geowave.vector.adapter;
 import java.lang.reflect.ParameterizedType;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -21,6 +22,7 @@ import mil.nga.giat.geowave.index.HierarchicalNumericIndexStrategy.SubStrategy;
 import mil.nga.giat.geowave.index.PersistenceUtils;
 import mil.nga.giat.geowave.index.StringUtils;
 import mil.nga.giat.geowave.index.sfc.data.MultiDimensionalNumericData;
+import mil.nga.giat.geowave.index.sfc.tiered.SingleTierSubStrategy;
 import mil.nga.giat.geowave.store.TimeUtils;
 import mil.nga.giat.geowave.store.adapter.AbstractDataAdapter;
 import mil.nga.giat.geowave.store.adapter.AdapterPersistenceEncoding;
@@ -54,6 +56,7 @@ import org.apache.accumulo.core.client.IteratorSetting.Column;
 import org.apache.accumulo.core.iterators.Combiner;
 import org.apache.accumulo.core.iterators.IteratorUtil.IteratorScope;
 import org.apache.accumulo.core.iterators.user.TransformingIterator;
+import org.apache.commons.collections.iterators.EmptyIterator;
 import org.apache.log4j.Logger;
 import org.geotools.data.DataUtilities;
 import org.geotools.data.simple.SimpleFeatureIterator;
@@ -572,174 +575,185 @@ public class FeatureCollectionDataAdapter extends
 			}
 		}
 
+		final SubStrategy[] subStrategies;
 		if (index.getIndexStrategy() instanceof HierarchicalNumericIndexStrategy) {
 
-			final HierarchicalNumericIndexStrategy imagePyramid = (HierarchicalNumericIndexStrategy) index.getIndexStrategy();
-			final SubStrategy[] subStrategies = imagePyramid.getSubStrategies();
+			final HierarchicalNumericIndexStrategy indexStrategy = (HierarchicalNumericIndexStrategy) index.getIndexStrategy();
+			subStrategies = indexStrategy.getSubStrategies();
+		}
+		else if (index.getIndexStrategy() instanceof SingleTierSubStrategy) {
+			final SingleTierSubStrategy indexStrategy = (SingleTierSubStrategy) index.getIndexStrategy();
+			subStrategies = new SubStrategy[] {
+				new SubStrategy(
+						indexStrategy,
+						new byte[] {})
+			};
+		}
+		else {
+			LOGGER.warn("Could not determine index strategy type.");
+			return Collections.<DefaultFeatureCollection> emptyList().iterator();
+		}
 
-			// this is a mapping of simple features to index ids
-			final Map<ByteArrayId, ArrayList<SimpleFeatureWrapper>> indexedFeaturesMap = new HashMap<ByteArrayId, ArrayList<SimpleFeatureWrapper>>();
+		// this is a mapping of simple features to index ids
+		final Map<ByteArrayId, ArrayList<SimpleFeatureWrapper>> indexedFeaturesMap = new HashMap<ByteArrayId, ArrayList<SimpleFeatureWrapper>>();
 
-			// this is a list of insertions that need to be moved down to the
-			// next level in the hierarchy
-			final List<SimpleFeatureWrapper> reprocessQueue = new ArrayList<SimpleFeatureWrapper>();
+		// this is a list of insertions that need to be moved down to the
+		// next level in the hierarchy
+		final List<SimpleFeatureWrapper> reprocessQueue = new ArrayList<SimpleFeatureWrapper>();
 
-			final Iterator<SimpleFeature> featItr = originalEntry.iterator();
+		final Iterator<SimpleFeature> featItr = originalEntry.iterator();
 
-			// process each feature and continue processing until all features
-			// are placed
-			while (featItr.hasNext() || (reprocessQueue.size() > 0)) {
-				SimpleFeature feature;
-				int subStratIdx;
-				ByteArrayId prevId;
+		// process each feature and continue processing until all features
+		// are placed
+		while (featItr.hasNext() || (reprocessQueue.size() > 0)) {
+			SimpleFeature feature;
+			int subStratIdx;
+			ByteArrayId prevId;
 
-				// reprocess data before inserting new features
-				if (featItr.hasNext() && reprocessQueue.size() == 0) {
-					// this is a special case used during global optimization
-					if (originalEntry instanceof FitToIndexDefaultFeatureCollection) {
-						feature = featItr.next();
-						subStratIdx = ((FitToIndexDefaultFeatureCollection) originalEntry).getSubStratIdx() + 1;
-						prevId = ((FitToIndexDefaultFeatureCollection) originalEntry).getIndexId();
-					}
-					else {
-						feature = featItr.next();
-						subStratIdx = 0;
-						prevId = null;
-					}
+			// reprocess data before inserting new features
+			if (featItr.hasNext() && reprocessQueue.size() == 0) {
+				// this is a special case used during global optimization
+				if (originalEntry instanceof FitToIndexDefaultFeatureCollection) {
+					feature = featItr.next();
+					subStratIdx = ((FitToIndexDefaultFeatureCollection) originalEntry).getSubStratIdx() + 1;
+					prevId = ((FitToIndexDefaultFeatureCollection) originalEntry).getIndexId();
 				}
 				else {
-					final SimpleFeatureWrapper featWrapper = reprocessQueue.remove(reprocessQueue.size() - 1);
-					feature = featWrapper.getSimpleFeature();
-					subStratIdx = featWrapper.getSubStratIdx() + 1;
-					prevId = featWrapper.getInsertionId();
+					feature = featItr.next();
+					subStratIdx = 0;
+					prevId = null;
+				}
+			}
+			else {
+				final SimpleFeatureWrapper featWrapper = reprocessQueue.remove(reprocessQueue.size() - 1);
+				feature = featWrapper.getSimpleFeature();
+				subStratIdx = featWrapper.getSubStratIdx() + 1;
+				prevId = featWrapper.getInsertionId();
+			}
+
+			final MultiDimensionalNumericData bounds = featureDataAdapter.encode(
+					feature,
+					index.getIndexModel()).getNumericData(
+					index.getIndexModel().getDimensions());
+
+			final List<ByteArrayId> ids = subStrategies[subStratIdx].getIndexStrategy().getInsertionIds(
+					bounds);
+
+			// determine whether the feature can be inserted within this
+			// substrategy
+			for (final ByteArrayId id : ids) {
+
+				// in the case of reprocessed data, only process the
+				// insertion ids that map to the parent id
+				if (prevId != null) {
+
+					// bounds of parent insertion id
+					final MultiDimensionalNumericData prevBounds = subStrategies[subStratIdx - 1].getIndexStrategy().getRangeForId(
+							prevId);
+
+					// bounds of current insertion id
+					final MultiDimensionalNumericData subBounds = subStrategies[subStratIdx].getIndexStrategy().getRangeForId(
+							id);
+
+					boolean include = true;
+
+					final double[] boundMax = prevBounds.getMaxValuesPerDimension();
+					final double[] boundMin = prevBounds.getMinValuesPerDimension();
+
+					final double[] subBoundCentroid = subBounds.getCentroidPerDimension();
+
+					// if the centroid of the sub index is outside the
+					// range of the parent index, exclude it from the
+					// list
+					for (int i = 0; i < prevBounds.getDimensionCount(); i++) {
+						if ((subBoundCentroid[i] < boundMin[i]) || (subBoundCentroid[i] >= boundMax[i])) {
+							include = false;
+							break;
+						}
+					}
+
+					if (!include) {
+						continue;
+					}
 				}
 
-				final MultiDimensionalNumericData bounds = featureDataAdapter.encode(
-						feature,
-						index.getIndexModel()).getNumericData(
-						index.getIndexModel().getDimensions());
+				// if the insertion id is already present
+				if (indexedFeaturesMap.containsKey(id)) {
 
-				final List<ByteArrayId> ids = subStrategies[subStratIdx].getIndexStrategy().getInsertionIds(
-						bounds);
+					final ArrayList<SimpleFeatureWrapper> entry = indexedFeaturesMap.get(id);
 
-				// determine whether the feature can be inserted within this
-				// substrategy
-				for (final ByteArrayId id : ids) {
-
-					// in the case of reprocessed data, only process the
-					// insertion ids that map to the parent id
-					if (prevId != null) {
-
-						// bounds of parent insertion id
-						final MultiDimensionalNumericData prevBounds = subStrategies[subStratIdx - 1].getIndexStrategy().getRangeForId(
-								prevId);
-						
-
-						// bounds of current insertion id
-						final MultiDimensionalNumericData subBounds = subStrategies[subStratIdx].getIndexStrategy().getRangeForId(
-								id);
-
-						boolean include = true;
-
-						final double[] boundMax = prevBounds.getMaxValuesPerDimension();
-						final double[] boundMin = prevBounds.getMinValuesPerDimension();
-
-						final double[] subBoundCentroid = subBounds.getCentroidPerDimension();
-
-						// if the centroid of the sub index is outside the
-						// range of the parent index, exclude it from the
-						// list
-						for (int i = 0; i < prevBounds.getDimensionCount(); i++) {
-							if ((subBoundCentroid[i] < boundMin[i]) || (subBoundCentroid[i] >= boundMax[i])) {
-								include = false;
-								break;
-							}
-						}
-
-						if (!include) {
-							continue;
-						}
+					// if the entry is null, that means we have already
+					// disabled this insertion id
+					if (entry == null) {
+						reprocessQueue.add(new SimpleFeatureWrapper(
+								feature,
+								id,
+								subStratIdx));
 					}
-
-					// if the insertion id is already present
-					if (indexedFeaturesMap.containsKey(id)) {
-
-						final ArrayList<SimpleFeatureWrapper> entry = indexedFeaturesMap.get(id);
-
-						// if the entry is null, that means we have already
-						// disabled this insertion id
-						if (entry == null) {
-							reprocessQueue.add(new SimpleFeatureWrapper(
-									feature,
-									id,
-									subStratIdx));
-						}
-						// if the entry is full and we are not at the lowest
-						// tier, we need to add all the entries to the
-						// reprocess queue and mark the insertion id as null
-						// (i.e. disabled)
-						else if ((entry.size() == featuresPerEntry) && ((subStratIdx + 1) < subStrategies.length)) {
-							entry.add(new SimpleFeatureWrapper(
-									feature,
-									id,
-									subStratIdx));
-
-							reprocessQueue.addAll(entry);
-
-							indexedFeaturesMap.put(
-									id,
-									null);
-						}
-						// if the entry is non-null, and the size hasn't
-						// reached the limit (or we have reached the lowest
-						// tier), insert our feature
-						else {
-							entry.add(new SimpleFeatureWrapper(
-									feature,
-									id,
-									subStratIdx));
-						}
-					}
-					// if this is a new insertion id, create a new list and
-					// add it to the indexed features map
-					else {
-						final ArrayList<SimpleFeatureWrapper> entry = new ArrayList<SimpleFeatureWrapper>();
+					// if the entry is full and we are not at the lowest
+					// tier, we need to add all the entries to the
+					// reprocess queue and mark the insertion id as null
+					// (i.e. disabled)
+					else if ((entry.size() == featuresPerEntry) && ((subStratIdx + 1) < subStrategies.length)) {
 						entry.add(new SimpleFeatureWrapper(
 								feature,
 								id,
 								subStratIdx));
+
+						reprocessQueue.addAll(entry);
+
 						indexedFeaturesMap.put(
 								id,
-								entry);
+								null);
+					}
+					// if the entry is non-null, and the size hasn't
+					// reached the limit (or we have reached the lowest
+					// tier), insert our feature
+					else {
+						entry.add(new SimpleFeatureWrapper(
+								feature,
+								id,
+								subStratIdx));
 					}
 				}
-
-			}
-
-			final List<DefaultFeatureCollection> featureCollections = new ArrayList<DefaultFeatureCollection>();
-
-			// create the feature collections and return
-			final Set<ByteArrayId> keys = indexedFeaturesMap.keySet();
-			for (final ByteArrayId key : keys) {
-
-				final ArrayList<SimpleFeatureWrapper> wrappedFeatures = indexedFeaturesMap.get(key);
-
-				if (wrappedFeatures != null) {
-					final DefaultFeatureCollection collection = new FitToIndexDefaultFeatureCollection(
-							new DefaultFeatureCollection(),
-							key);
-
-					for (final SimpleFeatureWrapper wrappedFeature : wrappedFeatures) {
-						collection.add(wrappedFeature.getSimpleFeature());
-					}
-
-					featureCollections.add(collection);
+				// if this is a new insertion id, create a new list and
+				// add it to the indexed features map
+				else {
+					final ArrayList<SimpleFeatureWrapper> entry = new ArrayList<SimpleFeatureWrapper>();
+					entry.add(new SimpleFeatureWrapper(
+							feature,
+							id,
+							subStratIdx));
+					indexedFeaturesMap.put(
+							id,
+							entry);
 				}
 			}
 
-			return featureCollections.iterator();
 		}
-		return null;
+
+		final List<DefaultFeatureCollection> featureCollections = new ArrayList<DefaultFeatureCollection>();
+
+		// create the feature collections and return
+		final Set<ByteArrayId> keys = indexedFeaturesMap.keySet();
+		for (final ByteArrayId key : keys) {
+
+			final ArrayList<SimpleFeatureWrapper> wrappedFeatures = indexedFeaturesMap.get(key);
+
+			if (wrappedFeatures != null) {
+				final DefaultFeatureCollection collection = new FitToIndexDefaultFeatureCollection(
+						new DefaultFeatureCollection(),
+						key);
+
+				for (final SimpleFeatureWrapper wrappedFeature : wrappedFeatures) {
+					collection.add(wrappedFeature.getSimpleFeature());
+				}
+
+				featureCollections.add(collection);
+			}
+		}
+
+		return featureCollections.iterator();
 	}
 
 	@Override

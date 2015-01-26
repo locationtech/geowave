@@ -20,6 +20,7 @@ import org.apache.accumulo.core.data.Value;
 import org.apache.accumulo.core.iterators.IteratorEnvironment;
 import org.apache.accumulo.core.iterators.SortedKeyValueIterator;
 import org.apache.accumulo.core.iterators.user.TransformingIterator;
+import org.apache.commons.lang.ArrayUtils;
 
 public class ArrayToElementsIterator extends
 		TransformingIterator
@@ -95,9 +96,8 @@ public class ArrayToElementsIterator extends
 					if (addEncoding) {
 						if (entryBytes[i] != null) {
 							value = new byte[1 + entryBytes[i].length];
-							buf = ByteBuffer.wrap(value);
-							buf.put(val.get()[0]);
-							buf.put(entryBytes[i]);
+							value = ArrayUtils.add(entryBytes[i], 0, 
+									val.get()[0]);
 						}
 						else {
 							value = new byte[] {

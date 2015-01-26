@@ -111,7 +111,7 @@ public class AccumuloUtils
 			final NumericIndexStrategy indexStrategy ) {
 		if ((constraints == null) || constraints.isEmpty()) {
 			return new ArrayList<ByteArrayRange>(); // implies in negative and
-													// positive infinity
+			// positive infinity
 		}
 		else {
 			return indexStrategy.getQueryRanges(constraints);
@@ -124,7 +124,7 @@ public class AccumuloUtils
 			final int maxRanges ) {
 		if ((constraints == null) || constraints.isEmpty()) {
 			return new ArrayList<ByteArrayRange>(); // implies in negative and
-													// positive infinity
+			// positive infinity
 		}
 		else {
 			return indexStrategy.getQueryRanges(
@@ -292,13 +292,14 @@ public class AccumuloUtils
 			final ByteArrayId fieldId = new ByteArrayId(
 					entry.getKey().getColumnQualifierData().getBackingArray());
 			final CommonIndexModel indexModel;
-			if (adapter instanceof ModelConvertingDataAdapter)
-				indexModel = ((ModelConvertingDataAdapter)adapter).convertModel(index.getIndexModel());
-			else
+			if (adapter instanceof ModelConvertingDataAdapter) {
+				indexModel = ((ModelConvertingDataAdapter) adapter).convertModel(index.getIndexModel());
+			}
+			else {
 				indexModel = index.getIndexModel();
+			}
 			// first check if this field is part of the index model
-			final FieldReader<? extends CommonIndexValue> indexFieldReader = indexModel.getReader(
-					fieldId);
+			final FieldReader<? extends CommonIndexValue> indexFieldReader = indexModel.getReader(fieldId);
 			final byte byteValue[] = entry.getValue().get();
 			if (indexFieldReader != null) {
 				final CommonIndexValue indexValue = indexFieldReader.readField(byteValue);
@@ -555,11 +556,13 @@ public class AccumuloUtils
 			final T entry,
 			final VisibilityWriter<T> customFieldVisibilityWriter ) {
 		final CommonIndexModel indexModel;
-		if (dataWriter instanceof ModelConvertingDataAdapter)
-			indexModel = ((ModelConvertingDataAdapter)dataWriter).convertModel(index.getIndexModel());
-		else
+		if (dataWriter instanceof ModelConvertingDataAdapter) {
+			indexModel = ((ModelConvertingDataAdapter) dataWriter).convertModel(index.getIndexModel());
+		}
+		else {
 			indexModel = index.getIndexModel();
-		
+		}
+
 		final AdapterPersistenceEncoding encodedData = dataWriter.encode(
 				entry,
 				indexModel);

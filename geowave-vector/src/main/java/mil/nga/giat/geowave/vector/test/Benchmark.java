@@ -27,6 +27,7 @@ import mil.nga.giat.geowave.accumulo.query.ElementsToArrayIterator;
 import mil.nga.giat.geowave.accumulo.util.AccumuloUtils;
 import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.index.ByteArrayUtils;
+import mil.nga.giat.geowave.index.HierarchicalNumericIndexStrategy;
 import mil.nga.giat.geowave.index.HierarchicalNumericIndexStrategy.SubStrategy;
 import mil.nga.giat.geowave.index.PersistenceUtils;
 import mil.nga.giat.geowave.index.StringUtils;
@@ -87,8 +88,21 @@ public class Benchmark
 		COLLECTION_INGEST
 	}
 
+	private static enum IndexMode {
+		VECTOR,
+		RASTER,
+		SINGLE
+	}
+
+	private static enum IterMode {
+		ATTACHED,
+		DETACHED
+	}
+
 	private AccumuloMode mode = AccumuloMode.MINI_ACCUMULO;
 	private static final String DEFAULT_MINI_ACCUMULO_PASSWORD = "Ge0wave";
+
+	private final IterMode iterMode = IterMode.ATTACHED;
 
 	private final static Logger log = Logger.getLogger(Benchmark.class);
 
@@ -134,8 +148,14 @@ public class Benchmark
 		1.0
 	};
 
-	final private String featureNamespace = "featureTest_raster";
-	final private String featureCollectionNamespace = "featureCollectionTest_raster_";
+	// TODO: Set these values appropriately
+	final private IndexMode indexMode = IndexMode.VECTOR;
+	final private int tier = 4;
+
+	final private String featureNamespace;
+	final private String featureCollectionNamespace;
+
+	final private Index index;
 
 	private Geometry worldBBox;
 	private final List<Geometry> smallBBoxes = new ArrayList<Geometry>();
@@ -151,6 +171,36 @@ public class Benchmark
 	List<Long> smallQueryRuntimes = new ArrayList<Long>();
 	List<Long> medQueryRuntimes = new ArrayList<Long>();
 	List<Long> largeQueryRuntimes = new ArrayList<Long>();
+
+	public Benchmark() {
+		if (indexMode == IndexMode.VECTOR) {
+			index = IndexType.SPATIAL_VECTOR.createDefaultIndex();
+			featureNamespace = "featureTest_vector";
+			featureCollectionNamespace = "featureCollectionTest_vector_";
+		}
+		else if (indexMode == IndexMode.RASTER) {
+			index = IndexType.SPATIAL_RASTER.createDefaultIndex();
+			featureNamespace = "featureTest_raster";
+			featureCollectionNamespace = "featureCollectionTest_raster_";
+		}
+		else if (indexMode == IndexMode.SINGLE) {
+			featureNamespace = "featureTest_tier_" + tier;
+			featureCollectionNamespace = "featureCollectionTest_tier_" + tier + "_";
+			final Index tempIdx = IndexType.SPATIAL_VECTOR.createDefaultIndex();
+			final SubStrategy[] subStrats = ((TieredSFCIndexStrategy) tempIdx.getIndexStrategy()).getSubStrategies();
+			index = new CustomIdIndex(
+					subStrats[tier].getIndexStrategy(),
+					tempIdx.getIndexModel(),
+					tempIdx.getDimensionalityType(),
+					tempIdx.getDataType(),
+					tempIdx.getId());
+		}
+		else {
+			index = null;
+			featureNamespace = null;
+			featureCollectionNamespace = null;
+		}
+	}
 
 	public void accumuloInit()
 			throws AccumuloException,
@@ -207,12 +257,12 @@ public class Benchmark
 			TableNotFoundException {
 
 		ingestFeatureData(false);
-		//ingestCollectionData(true);
-		//saveIngestRuntimes();
+		// ingestCollectionData(true);
+		// saveIngestRuntimes();
 
-		redistributeData();
+		// redistributeData();
 
-		int numIters = 10;
+		final int numIters = 5;
 		for (int i = 0; i < numIters; i++) {
 			log.info("************************************************");
 			log.info("***  RUNNING BENCHMARK ITERATION  " + (i + 1) + " OF " + numIters);
@@ -304,7 +354,7 @@ public class Benchmark
 		final AccumuloDataStore featureDataStore = new AccumuloDataStore(
 				featureOperations);
 		final AccumuloIndexWriter featureWriter = new AccumuloIndexWriter(
-				IndexType.SPATIAL_RASTER.createDefaultIndex(),
+				index,
 				featureOperations,
 				featureDataStore);
 		final FeatureDataAdapter featureAdapter = new FeatureDataAdapter(
@@ -351,7 +401,7 @@ public class Benchmark
 			final AccumuloDataStore featureCollectionDataStore = new AccumuloDataStore(
 					featureCollectionOperations);
 			final AccumuloIndexWriter featureCollectionWriter = new AccumuloIndexWriter(
-					IndexType.SPATIAL_RASTER.createDefaultIndex(),
+					index,
 					featureCollectionOperations,
 					featureCollectionDataStore);
 			final FeatureCollectionDataAdapter featureCollectionAdapter = new FeatureCollectionDataAdapter(
@@ -512,17 +562,63 @@ public class Benchmark
 					0.05,
 					0.05));
 
+			// PrintWriter printWriter = new PrintWriter(
+			// new FileOutputStream(
+			// new File(
+			// "small-queries.txt"),
+			// true));
+			//
+			// double north = regCenter[1] + (0.05 / 2.0);
+			// double south = regCenter[1] - (0.05 / 2.0);
+			// double east = regCenter[0] + (0.05 / 2.0);
+			// double west = regCenter[0] - (0.05 / 2.0);
+			//
+			// printWriter.println(north + " " + south + " " + east + " " +
+			// west);
+			// printWriter.close();
+
 			// city sized bounding box
 			medBBoxes.add(createBoundingBox(
 					regCenter,
 					1.0,
 					1.0));
 
+			// printWriter = new PrintWriter(
+			// new FileOutputStream(
+			// new File(
+			// "medium-queries.txt"),
+			// true));
+			//
+			// north = regCenter[1] + (1.0 / 2.0);
+			// south = regCenter[1] - (1.0 / 2.0);
+			// east = regCenter[0] + (1.0 / 2.0);
+			// west = regCenter[0] - (1.0 / 2.0);
+			//
+			// printWriter.println(north + " " + south + " " + east + " " +
+			// west);
+			// printWriter.close();
+
 			// region sized bounding box
 			largeBBoxes.add(createBoundingBox(
 					regCenter,
 					regDims[0],
 					regDims[1]));
+
+			// printWriter = new PrintWriter(
+			// new FileOutputStream(
+			// new File(
+			// "large-queries.txt"),
+			// true));
+			//
+			// north = regCenter[1] + (regDims[1] / 2.0);
+			// south = regCenter[1] - (regDims[1] / 2.0);
+			// east = regCenter[0] + (regDims[0] / 2.0);
+			// west = regCenter[0] - (regDims[0] / 2.0);
+			//
+			// printWriter.println(north + " " + south + " " + east + " " +
+			// west);
+			// printWriter.close();
+
 		}
 
 		// world sized bounding box
@@ -692,132 +788,133 @@ public class Benchmark
 			AccumuloException,
 			TableNotFoundException {
 
-		final Index index = IndexType.SPATIAL_RASTER.createDefaultIndex();
-		final TieredSFCIndexStrategy tieredStrat = (TieredSFCIndexStrategy) index.getIndexStrategy();
+		if (index.getIndexStrategy() instanceof HierarchicalNumericIndexStrategy) {
+			final TieredSFCIndexStrategy tieredStrat = (TieredSFCIndexStrategy) index.getIndexStrategy();
 
-		final String tablename = AccumuloUtils.getQualifiedTableName(
-				featureCollectionNamespace + tileSize,
-				StringUtils.stringFromBinary(index.getId().getBytes()));
+			final String tablename = AccumuloUtils.getQualifiedTableName(
+					featureCollectionNamespace + tileSize,
+					StringUtils.stringFromBinary(index.getId().getBytes()));
 
-		// first, detach the transforming iterators
-		removeIterators(
-				tablename,
-				operations.getConnector());
+			// first, detach the transforming iterators
+			removeIterators(
+					tablename,
+					operations.getConnector());
 
-		final long startTime = new Date().getTime();
+			final long startTime = new Date().getTime();
 
-		final SubStrategy[] subStrategies = tieredStrat.getSubStrategies();
+			final SubStrategy[] subStrategies = tieredStrat.getSubStrategies();
 
-		// iterate over each tier
-		for (int i = 0; i < subStrategies.length; i++) {
+			// iterate over each tier
+			for (int i = 0; i < subStrategies.length; i++) {
 
-			totalNumOverflow = 0;
-			totalNumOcuppiedSubTiles = 0;
-			totalNumCollsProcessed = 0;
+				totalNumOverflow = 0;
+				totalNumOcuppiedSubTiles = 0;
+				totalNumCollsProcessed = 0;
 
-			log.info("***   Processing Tier " + (i + 1) + " of " + subStrategies.length);
+				log.info("***   Processing Tier " + (i + 1) + " of " + subStrategies.length);
 
-			final SubStrategy subStrat = subStrategies[i];
+				final SubStrategy subStrat = subStrategies[i];
 
-			// create an index for this substrategy
-			final CustomIdIndex customIndex = new CustomIdIndex(
-					subStrat.getIndexStrategy(),
-					index.getIndexModel(),
-					index.getDimensionalityType(),
-					index.getDataType(),
-					index.getId());
+				// create an index for this substrategy
+				final CustomIdIndex customIndex = new CustomIdIndex(
+						subStrat.getIndexStrategy(),
+						index.getIndexModel(),
+						index.getDimensionalityType(),
+						index.getDataType(),
+						index.getId());
 
-			final AccumuloConstraintsQuery q = new AccumuloConstraintsQuery(
-					Arrays.asList(new ByteArrayId[] {
-						adapter.getAdapterId()
-					}),
-					customIndex,
-					new SpatialQuery(
-							worldBBox).getIndexConstraints(customIndex.getIndexStrategy()),
-					null);
-			q.setQueryFiltersEnabled(false);
+				final AccumuloConstraintsQuery q = new AccumuloConstraintsQuery(
+						Arrays.asList(new ByteArrayId[] {
+							adapter.getAdapterId()
+						}),
+						customIndex,
+						new SpatialQuery(
+								worldBBox).getIndexConstraints(customIndex.getIndexStrategy()),
+						null);
+				q.setQueryFiltersEnabled(false);
 
-			// query at the specified index
-			final CloseableIterator<DefaultFeatureCollection> itr = (CloseableIterator<DefaultFeatureCollection>) q.query(
-					operations,
-					new MemoryAdapterStore(
-							new DataAdapter[] {
-								adapter
-							}),
-					null);
+				// query at the specified index
+				final CloseableIterator<DefaultFeatureCollection> itr = (CloseableIterator<DefaultFeatureCollection>) q.query(
+						operations,
+						new MemoryAdapterStore(
+								new DataAdapter[] {
+									adapter
+								}),
+						null);
 
-			// TODO:
-			final int numThreads = 32;
-			final ExecutorService executor = Executors.newFixedThreadPool(numThreads);
-			final int subStratIdx = i;
+				// TODO:
+				final int numThreads = 32;
+				final ExecutorService executor = Executors.newFixedThreadPool(numThreads);
+				final int subStratIdx = i;
 
-			run = true;
-			final ArrayBlockingQueue<DefaultFeatureCollection> queue = new ArrayBlockingQueue<DefaultFeatureCollection>(
-					numThreads * 2);
+				run = true;
+				final ArrayBlockingQueue<DefaultFeatureCollection> queue = new ArrayBlockingQueue<DefaultFeatureCollection>(
+						numThreads * 2);
 
-			// create numThreads consumers
-			for (int thread = 0; thread < numThreads; thread++) {
-				executor.execute(new Runnable() {
-					@Override
-					public void run() {
-						featCollConsumer(
-								queue,
-								subStratIdx,
-								tileSize);
+				// create numThreads consumers
+				for (int thread = 0; thread < numThreads; thread++) {
+					executor.execute(new Runnable() {
+						@Override
+						public void run() {
+							featCollConsumer(
+									queue,
+									subStratIdx,
+									tileSize);
+						}
+					});
+				}
+
+				// iterate over each collection
+				while (itr.hasNext()) {
+					// create a new thread for each feature collection
+					final DefaultFeatureCollection coll = itr.next();
+					try {
+						queue.put(coll);
 					}
-				});
-			}
+					catch (final InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+				run = false;
 
-			// iterate over each collection
-			while (itr.hasNext()) {
-				// create a new thread for each feature collection
-				final DefaultFeatureCollection coll = itr.next();
 				try {
-					queue.put(coll);
+					executor.shutdown();
+					executor.awaitTermination(
+							Long.MAX_VALUE,
+							TimeUnit.DAYS);
 				}
 				catch (final InterruptedException e) {
 					e.printStackTrace();
 				}
-			}
-			run = false;
 
-			try {
-				executor.shutdown();
-				executor.awaitTermination(
-						Long.MAX_VALUE,
-						TimeUnit.DAYS);
-			}
-			catch (final InterruptedException e) {
-				e.printStackTrace();
+				itr.close();
+
+				log.info("***     Colls. Processed: " + totalNumCollsProcessed);
+				log.info("***     Overflowed Tiles: " + totalNumOverflow);
+				log.info("***     Occupied SubTiles: " + totalNumOcuppiedSubTiles);
 			}
 
-			itr.close();
+			final long stopTime = new Date().getTime();
 
-			log.info("***     Colls. Processed: " + totalNumCollsProcessed);
-			log.info("***     Overflowed Tiles: " + totalNumOverflow);
-			log.info("***     Occupied SubTiles: " + totalNumOcuppiedSubTiles);
+			// finally, attach the transforming iterators
+			attachIterators(
+					index.getIndexModel(),
+					tablename,
+					operations.getConnector());
+
+			log.info("*** Runtime: " + (stopTime - startTime) + " ms");
 		}
-
-		final long stopTime = new Date().getTime();
-
-		// finally, attach the transforming iterators
-		attachIterators(
-				index.getIndexModel(),
-				tablename,
-				operations.getConnector());
-
-		log.info("*** Runtime: " + (stopTime - startTime) + " ms");
 	}
 
 	private MultiDimensionalNumericData getSlimBounds(
-			MultiDimensionalNumericData bounds ) {
+			final MultiDimensionalNumericData bounds ) {
 		// Ideally: smallest dimension range / (4*max bins per dimension {i.e.
 		// 2^31})
-		double epsilon = 180.0 / (4.0 * Math.pow(
+		final double epsilon = 180.0 / (4.0 * Math.pow(
 				2.0,
 				31.0));
 
-		NumericData[] slimRanges = new NumericData[2];
+		final NumericData[] slimRanges = new NumericData[2];
 		slimRanges[0] = new NumericRange(
 				bounds.getDataPerDimension()[0].getMin() + epsilon,
 				bounds.getDataPerDimension()[0].getMax() - epsilon);
@@ -863,11 +960,10 @@ public class Benchmark
 		final AccumuloDataStore featureCollectionDataStore = new AccumuloDataStore(
 				featureCollectionOperations);
 		final AccumuloIndexWriter featureCollectionWriter = new AccumuloIndexWriter(
-				IndexType.SPATIAL_RASTER.createDefaultIndex(),
+				index,
 				featureCollectionOperations,
 				featureCollectionDataStore);
 
-		final Index index = IndexType.SPATIAL_RASTER.createDefaultIndex();
 		final TieredSFCIndexStrategy tieredStrat = (TieredSFCIndexStrategy) index.getIndexStrategy();
 
 		final FeatureDataAdapter featAdapter = new FeatureDataAdapter(
@@ -904,7 +1000,7 @@ public class Benchmark
 				final List<ByteArrayId> ids = subStrategies[subStratIdx].getIndexStrategy().getInsertionIds(
 						bounds);
 
-				// TODO: This will need to be modified to support polygons
+				// TODO: This will need to be modified to support polygon
 				// geometries
 				if (ids.size() > 1) {
 					log.warn("Multiple row ids returned for this entry?!");
@@ -989,13 +1085,13 @@ public class Benchmark
 					// if deletion failed, wait and try again a few times
 					if (!result) {
 						log.warn("Unable to delete row.  Trying again...");
-						int attempts = 5;
+						final int attempts = 5;
 						for (int attempt = 0; attempt < attempts; attempt++) {
 
 							try {
 								Thread.sleep(500);
 							}
-							catch (InterruptedException e) {
+							catch (final InterruptedException e) {
 								log.error(
 										"Sleep interrupted!",
 										e);
@@ -1008,10 +1104,12 @@ public class Benchmark
 									featureCollectionAdapter.getAdapterId().getString(),
 									null);
 						}
-						if (!result)
+						if (!result) {
 							log.error("After " + attempts + " attempts, Index Id: [" + rowId.getIndexId().toString() + "] was NOT deleted successfully!");
-						else
+						}
+						else {
 							log.info("The row was deleted successfully!");
+						}
 					}
 
 					// if the deletion was unsuccessful, don't re-ingest
@@ -1121,7 +1219,7 @@ public class Benchmark
 		final long queryStart = new Date().getTime();
 		final CloseableIterator<SimpleFeature> itr = featureDataStore.query(
 				featureAdapter,
-				IndexType.SPATIAL_RASTER.createDefaultIndex(),
+				index,
 				new SpatialQuery(
 						geom));
 
@@ -1144,13 +1242,15 @@ public class Benchmark
 			AccumuloSecurityException,
 			SchemaException,
 			IOException,
-			InterruptedException {
+			InterruptedException,
+			TableNotFoundException {
 
 		log.info("****************************************************************************");
 		log.info("                   Testing FeatureCollectionDataAdapter                     ");
 		log.info("****************************************************************************");
 
-		for (final int batchSize : pointsPerTile) {
+		for (int idx = pointsPerTile.length - 1; idx >= 0; idx--) {
+			final int batchSize = pointsPerTile[idx];
 			final BasicAccumuloOperations featureCollectionOperations = new BasicAccumuloOperations(
 					zookeeperUrl,
 					instancename,
@@ -1163,12 +1263,21 @@ public class Benchmark
 					TYPE,
 					batchSize);
 
+			if (iterMode == IterMode.DETACHED) {
+				removeIterators(
+						AccumuloUtils.getQualifiedTableName(
+								featureCollectionNamespace + batchSize,
+								StringUtils.stringFromBinary(index.getId().getBytes())),
+						featureCollectionOperations.getConnector());
+			}
+
 			log.info("*** Features per tilespace: " + batchSize);
 
 			long runtime = 0;
 
 			log.info("*** World Query");
 			runtime = featureCollectionQuery(
+					featureCollectionOperations,
 					featureCollectionDataStore,
 					featureCollectionAdapter,
 					worldBBox);
@@ -1177,50 +1286,87 @@ public class Benchmark
 
 			log.info("*** Small Queries");
 			for (int i = 0; (i < numSmallQueries) && (i < smallBBoxes.size()); i++) {
-				log.info("***   Query " + (i + 1));
+				log.info("***   Query " + (numSmallQueries - i));
 				runtime = featureCollectionQuery(
+						featureCollectionOperations,
 						featureCollectionDataStore,
 						featureCollectionAdapter,
-						smallBBoxes.get(i));
+						smallBBoxes.get(numSmallQueries - (i + 1)));
 
 				smallQueryRuntimes.add(runtime);
 			}
 
 			log.info("*** Medium Queries");
 			for (int i = 0; (i < numMedQueries) && (i < medBBoxes.size()); i++) {
-				log.info("***   Query " + (i + 1));
+				log.info("***   Query " + (numMedQueries - i));
 				runtime = featureCollectionQuery(
+						featureCollectionOperations,
 						featureCollectionDataStore,
 						featureCollectionAdapter,
-						medBBoxes.get(i));
+						medBBoxes.get(numMedQueries - (i + 1)));
 
 				medQueryRuntimes.add(runtime);
 			}
 
 			log.info("*** Large Queries");
 			for (int i = 0; (i < numLargeQueries) && (i < largeBBoxes.size()); i++) {
-				log.info("***   Query " + (i + 1));
+				log.info("***   Query " + (numLargeQueries - i));
 				runtime = featureCollectionQuery(
+						featureCollectionOperations,
 						featureCollectionDataStore,
 						featureCollectionAdapter,
-						largeBBoxes.get(i));
+						largeBBoxes.get(numLargeQueries - (i + 1)));
 
 				largeQueryRuntimes.add(runtime);
+			}
+
+			if (iterMode == IterMode.DETACHED) {
+				attachIterators(
+						index.getIndexModel(),
+						AccumuloUtils.getQualifiedTableName(
+								featureCollectionNamespace + batchSize,
+								StringUtils.stringFromBinary(index.getId().getBytes())),
+						featureCollectionOperations.getConnector());
 			}
 		}
 	}
 
 	private long featureCollectionQuery(
+			final BasicAccumuloOperations featureCollectionOperations,
 			final AccumuloDataStore featureCollectionDataStore,
 			final FeatureCollectionDataAdapter featureCollectionAdapter,
 			final Geometry geom )
 			throws IOException {
+
 		final long queryStart = new Date().getTime();
-		final CloseableIterator<DefaultFeatureCollection> itr = featureCollectionDataStore.query(
-				featureCollectionAdapter,
-				IndexType.SPATIAL_RASTER.createDefaultIndex(),
-				new SpatialQuery(
-						geom));
+
+		CloseableIterator<DefaultFeatureCollection> itr = null;
+		if (iterMode == IterMode.DETACHED) {
+			final AccumuloConstraintsQuery q = new AccumuloConstraintsQuery(
+					Arrays.asList(new ByteArrayId[] {
+						featureCollectionAdapter.getAdapterId()
+					}),
+					index,
+					new SpatialQuery(
+							geom).getIndexConstraints(index.getIndexStrategy()),
+					null);
+			q.setQueryFiltersEnabled(false);
+
+			itr = (CloseableIterator<DefaultFeatureCollection>) q.query(
+					featureCollectionOperations,
+					new MemoryAdapterStore(
+							new DataAdapter[] {
+								featureCollectionAdapter
+							}),
+					null);
+		}
+		else {
+			itr = featureCollectionDataStore.query(
+					featureCollectionAdapter,
+					index,
+					new SpatialQuery(
+							geom));
+		}
 
 		int i = 0;
 		int j = 0;
@@ -1247,7 +1393,6 @@ public class Benchmark
 			tb.runBenchmarks();
 		}
 		catch (final Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
