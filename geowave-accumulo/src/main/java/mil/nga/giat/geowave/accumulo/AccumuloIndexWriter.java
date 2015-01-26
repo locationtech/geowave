@@ -170,44 +170,42 @@ public class AccumuloIndexWriter implements
 
 		final byte[] adapterId = writableAdapter.getAdapterId().getBytes();
 
+		try {
+			if (writableAdapter instanceof AttachedIteratorDataAdapter) {
+				if (!DataAdapterAndIndexCache.getInstance(
+						AttachedIteratorDataAdapter.ATTACHED_ITERATOR_CACHE_ID).add(
+						adapterIdObj,
+						indexName)) {
+					accumuloOperations.attachIterators(
+							indexName,
+							accumuloOptions.isCreateTable(),
+							((AttachedIteratorDataAdapter) writableAdapter).getAttachedIteratorConfig());
+				}
+			}
+			if (accumuloOptions.isUseLocalityGroups() && !accumuloOperations.localityGroupExists(
+					indexName,
+					adapterId)) {
+				accumuloOperations.addLocalityGroup(
+						indexName,
+						adapterId);
+			}
+		}
+		catch (AccumuloException | TableNotFoundException | AccumuloSecurityException e) {
+			LOGGER.error(
+					"Unable to determine existence of locality group [" + writableAdapter.getAdapterId().getString() + "]",
+					e);
+		}
 		IngestEntryInfo entryInfo;
 		synchronized (this) {
 			dataStore.store(writableAdapter);
 			dataStore.store(index);
-
-			try {
-				if (writableAdapter instanceof AttachedIteratorDataAdapter) {
-					if (!DataAdapterAndIndexCache.getInstance(
-							AttachedIteratorDataAdapter.ATTACHED_ITERATOR_CACHE_ID).add(
-							adapterIdObj,
-							indexName)) {
-						accumuloOperations.attachIterators(
-								indexName,
-								accumuloOptions.isCreateTable(),
-								((AttachedIteratorDataAdapter) writableAdapter).getAttachedIteratorConfig());
-					}
-				}
-				if (accumuloOptions.isUseLocalityGroups() && !accumuloOperations.localityGroupExists(
-						indexName,
-						adapterId)) {
-					accumuloOperations.addLocalityGroup(
-							indexName,
-							adapterId);
-				}
-			}
-			catch (AccumuloException | TableNotFoundException | AccumuloSecurityException e) {
-				LOGGER.error(
-						"Unable to determine existence of locality group [" + writableAdapter.getAdapterId().getString() + "]",
-						e);
-			}
 
 			ensureOpen();
 			entryInfo = AccumuloUtils.write(
 					writableAdapter,
 					index,
 					entry,
-					writer
-					);
+					writer);
 
 			if (useAltIndex) {
 				AccumuloUtils.writeAltIndex(
@@ -264,7 +262,7 @@ public class AccumuloIndexWriter implements
 		// write the statistics
 		if (persistStats) {
 			final List<DataStatistics> accumulatedStats = new ArrayList<DataStatistics>();
-			synchronized(this) {
+			synchronized (this) {
 				for (final List<DataStatisticsBuilder> builders : statsMap.values()) {
 					if ((builders != null) && !builders.isEmpty()) {
 						for (final DataStatisticsBuilder builder : builders) {
@@ -283,6 +281,39 @@ public class AccumuloIndexWriter implements
 					statsStore.incorporateStatistics(s);
 				}
 			}
+		}
+	}
+
+	@Override
+	public <T> void setupAdapter(
+			final WritableDataAdapter<T> writableAdapter ) {
+		try {
+			final ByteArrayId adapterIdObj = writableAdapter.getAdapterId();
+
+			final byte[] adapterId = writableAdapter.getAdapterId().getBytes();
+			if (writableAdapter instanceof AttachedIteratorDataAdapter) {
+				if (!DataAdapterAndIndexCache.getInstance(
+						AttachedIteratorDataAdapter.ATTACHED_ITERATOR_CACHE_ID).add(
+						adapterIdObj,
+						indexName)) {
+					accumuloOperations.attachIterators(
+							indexName,
+							accumuloOptions.isCreateTable(),
+							((AttachedIteratorDataAdapter) writableAdapter).getAttachedIteratorConfig());
+				}
+			}
+			if (accumuloOptions.isUseLocalityGroups() && !accumuloOperations.localityGroupExists(
+					indexName,
+					adapterId)) {
+				accumuloOperations.addLocalityGroup(
+						indexName,
+						adapterId);
+			}
+		}
+		catch (AccumuloException | TableNotFoundException | AccumuloSecurityException e) {
+			LOGGER.error(
+					"Unable to determine existence of locality group [" + writableAdapter.getAdapterId().getString() + "]",
+					e);
 		}
 	}
 }

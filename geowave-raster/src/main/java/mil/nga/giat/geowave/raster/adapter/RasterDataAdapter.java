@@ -588,7 +588,7 @@ public class RasterDataAdapter implements
 							}
 						}
 
-						GridCoverage resampledCoverage = (GridCoverage) Operations.DEFAULT.resample(
+						final GridCoverage resampledCoverage = (GridCoverage) Operations.DEFAULT.resample(
 								originalData,
 								GeoWaveGTRasterFormat.DEFAULT_CRS,
 								insertionIdGeometry,
@@ -611,13 +611,28 @@ public class RasterDataAdapter implements
 							}
 						}
 						if (resize) {
-							resampledCoverage = Operations.DEFAULT.scale(
-									resampledCoverage,
-									(double) tileSize / (double) e.getSpan(0),
-									(double) tileSize / (double) e.getSpan(1),
-									0,
-									0);
+							System.err.println("crap");
+							// resampledCoverage = Operations.DEFAULT.scale(
+							// resampledCoverage,
+							// (double) tileSize / (double) e.getSpan(0),
+							// (double) tileSize / (double) e.getSpan(1),
+							// -resampledCoverage.getRenderedImage().getMinX(),
+							// -resampledCoverage.getRenderedImage().getMinY());
 						}
+						// if ((resampledCoverage.getRenderedImage().getWidth()
+						// != tileSize) ||
+						// (resampledCoverage.getRenderedImage().getHeight() !=
+						// tileSize) ||
+						// (resampledCoverage.getRenderedImage().getMinX() != 0)
+						// || (resampledCoverage.getRenderedImage().getMinY() !=
+						// 0)) {
+						// resampledCoverage = Operations.DEFAULT.scale(
+						// resampledCoverage,
+						// 1,
+						// 1,
+						// -resampledCoverage.getRenderedImage().getMinX(),
+						// -resampledCoverage.getRenderedImage().getMinY());
+						// }
 						return new FitToIndexGridCoverage(
 								resampledCoverage,
 								insertionId,

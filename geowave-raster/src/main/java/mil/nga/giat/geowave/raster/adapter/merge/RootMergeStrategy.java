@@ -151,7 +151,7 @@ public class RootMergeStrategy<T extends Persistable> implements
 					// sample models, it should be a fair assumption
 					// that the sample model exists in 'this'
 					for (final Entry<Integer, T> sampleModelEntry : thisValues.entrySet()) {
-						if (sampleModel.equals(sampleModelEntry)) {
+						if (sampleModel.equals(sampleModelEntry.getValue())) {
 							// add the sample model key to the
 							// adapterIdToSampleModelKey map
 							thisAdapterIdToValueKeys.put(

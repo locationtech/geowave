@@ -86,6 +86,15 @@ abstract public class SimpleAbstractMergeStrategy<T extends Persistable> impleme
 			double nextSample );
 
 	@Override
+	public boolean equals(
+			Object obj ) {
+		if (this == obj) return true;
+		if (obj == null) return false;
+		if (getClass() != obj.getClass()) return false;
+		return true;
+	}
+	
+	@Override
 	public byte[] toBinary() {
 		return new byte[] {};
 	}

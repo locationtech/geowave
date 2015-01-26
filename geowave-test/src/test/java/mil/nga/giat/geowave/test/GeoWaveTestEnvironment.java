@@ -45,7 +45,7 @@ import com.google.common.io.Files;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.Point;
 
-public class GeoWaveTestEnvironment
+abstract public class GeoWaveTestEnvironment
 {
 	private final static Logger LOGGER = Logger.getLogger(GeoWaveTestEnvironment.class);
 	protected static final String TEST_FILTER_START_TIME_ATTRIBUTE_NAME = "StartTime";
@@ -196,22 +196,22 @@ public class GeoWaveTestEnvironment
 								e);
 					}
 				}
-				if (tempDir != null) {
-					try {
-						// sleep because mini accumulo processes still have a
-						// hold
-						// on the log files and there is no hook to get notified
-						// when it is completely stopped
-						Thread.sleep(1000);
-						FileUtils.deleteDirectory(tempDir);
-						tempDir = null;
-					}
-					catch (final IOException | InterruptedException e) {
-						LOGGER.warn(
-								"Unable to delete mini Accumulo temporary directory",
-								e);
-					}
-				}
+//				if (tempDir != null) {
+//					try {
+//						// sleep because mini accumulo processes still have a
+//						// hold
+//						// on the log files and there is no hook to get notified
+//						// when it is completely stopped
+//						Thread.sleep(1000);
+//						FileUtils.deleteDirectory(tempDir);
+//						tempDir = null;
+//					}
+//					catch (final IOException | InterruptedException e) {
+//						LOGGER.warn(
+//								"Unable to delete mini Accumulo temporary directory",
+//								e);
+//					}
+//				}
 			}
 		}
 	}
@@ -238,8 +238,8 @@ public class GeoWaveTestEnvironment
 
 	protected static class ExpectedResults
 	{
-		protected Set<Long> hashedCentroids;
-		protected int count;
+		public Set<Long> hashedCentroids;
+		public int count;
 
 		protected ExpectedResults(
 				final Set<Long> hashedCentroids,

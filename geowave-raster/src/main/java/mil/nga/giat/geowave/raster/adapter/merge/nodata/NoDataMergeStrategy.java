@@ -11,12 +11,12 @@ import mil.nga.giat.geowave.raster.adapter.RasterTile;
 import mil.nga.giat.geowave.raster.adapter.merge.RasterTileMergeStrategy;
 import mil.nga.giat.geowave.raster.adapter.merge.nodata.NoDataMetadata.SampleIndex;
 
+import org.apache.log4j.Logger;
 import org.opengis.coverage.grid.GridCoverage;
 
 public class NoDataMergeStrategy implements
 		RasterTileMergeStrategy<NoDataMetadata>
 {
-
 	public NoDataMergeStrategy() {}
 
 	@Override
@@ -24,6 +24,7 @@ public class NoDataMergeStrategy implements
 			final RasterTile<NoDataMetadata> thisTile,
 			final RasterTile<NoDataMetadata> nextTile,
 			final SampleModel sampleModel ) {
+
 		// this strategy aims for latest tile with data values, but where there
 		// is no data in the latest and there is data in the earlier tile, it
 		// fills the data from the earlier tile
@@ -69,8 +70,8 @@ public class NoDataMergeStrategy implements
 												b),
 										sample)) {
 									// we only need to recalculate metadata if
-									// the other raster is overwritten,
-									// otherwise just use the other raster
+									// the raster is overwritten,
+									// otherwise just use this raster's
 									// metadata
 									recalculateMetadata = true;
 									thisRaster.setSample(
@@ -92,6 +93,21 @@ public class NoDataMergeStrategy implements
 				}
 			}
 		}
+	}
+
+	@Override
+	public boolean equals(
+			final Object obj ) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		return true;
 	}
 
 	@Override

@@ -28,6 +28,7 @@ public class GaussianCellMapper extends
 	protected static final String CQL_FILTER_KEY = "CQL_FILTER";
 	protected int minLevel;
 	protected int maxLevel;
+	protected int tileSize;
 	protected Filter filter;
 	protected Map<Integer, LevelStore> levelStoreMap;
 
@@ -43,6 +44,9 @@ public class GaussianCellMapper extends
 		maxLevel = context.getConfiguration().getInt(
 				KDEJobRunner.MAX_LEVEL_KEY,
 				25);
+		tileSize = context.getConfiguration().getInt(
+				KDEJobRunner.TILE_SIZE_KEY,
+				1);
 		final String cql = context.getConfiguration().get(
 				CQL_FILTER_KEY);
 		if ((cql != null) && !cql.isEmpty()) {
@@ -60,10 +64,10 @@ public class GaussianCellMapper extends
 		for (int level = maxLevel; level >= minLevel; level--) {
 			final int numXPosts = (int) Math.pow(
 					2,
-					level + 1);
+					level + 1) * tileSize;
 			final int numYPosts = (int) Math.pow(
 					2,
-					level);
+					level) * tileSize;
 			populateLevelStore(
 					context,
 					numXPosts,

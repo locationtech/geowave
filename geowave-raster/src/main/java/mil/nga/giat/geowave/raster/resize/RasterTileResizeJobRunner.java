@@ -1,5 +1,6 @@
 package mil.nga.giat.geowave.raster.resize;
 
+import mil.nga.giat.geowave.accumulo.AccumuloDataStore;
 import mil.nga.giat.geowave.accumulo.AccumuloOperations;
 import mil.nga.giat.geowave.accumulo.BasicAccumuloOperations;
 import mil.nga.giat.geowave.accumulo.mapreduce.GeoWaveConfiguratorBase;
@@ -14,6 +15,8 @@ import mil.nga.giat.geowave.accumulo.metadata.AccumuloIndexStore;
 import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.raster.adapter.RasterDataAdapter;
 import mil.nga.giat.geowave.raster.adapter.merge.nodata.NoDataMergeStrategy;
+import mil.nga.giat.geowave.store.DataStore;
+import mil.nga.giat.geowave.store.IndexWriter;
 import mil.nga.giat.geowave.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.store.index.Index;
 
@@ -122,16 +125,18 @@ public class RasterTileResizeJobRunner extends
 			throw new IllegalArgumentException(
 					"Adapter for coverage '" + oldCoverageName + "' does not exist in namespace '" + oldNamespace + "'");
 		}
+
+		final RasterDataAdapter newAdapter = new RasterDataAdapter(
+				(RasterDataAdapter) adapter,
+				newCoverageName,
+				newTileSize,
+				new NoDataMergeStrategy());
 		JobContextAdapterStore.addDataAdapter(
 				job,
 				adapter);
 		JobContextAdapterStore.addDataAdapter(
 				job,
-				new RasterDataAdapter(
-						(RasterDataAdapter) adapter,
-						newCoverageName,
-						newTileSize,
-						new NoDataMergeStrategy()));
+				newAdapter);
 		Index index = null;
 		if (indexId != null) {
 			index = new AccumuloIndexStore(
@@ -149,6 +154,16 @@ public class RasterTileResizeJobRunner extends
 		JobContextIndexStore.addIndex(
 				job,
 				index);
+		final AccumuloOperations ops = new BasicAccumuloOperations(
+				zookeeper,
+				instance,
+				user,
+				password,
+				newNamespace);
+		final DataStore store = new AccumuloDataStore(
+				ops);
+		final IndexWriter writer = store.createIndexWriter(index);
+		writer.setupAdapter(newAdapter);
 		return job.waitForCompletion(true) ? 0 : 1;
 	}
 

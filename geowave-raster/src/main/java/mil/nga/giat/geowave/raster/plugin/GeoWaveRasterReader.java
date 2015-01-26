@@ -3,8 +3,6 @@ package mil.nga.giat.geowave.raster.plugin;
 import java.awt.Color;
 import java.awt.Rectangle;
 import java.awt.geom.Rectangle2D;
-import java.awt.image.Raster;
-import java.awt.image.RenderedImage;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
@@ -88,13 +86,13 @@ public class GeoWaveRasterReader extends
 
 	private GeoWaveRasterConfig config;
 
-	private final AdapterStore geowaveAdapterStore;
+	private AdapterStore geowaveAdapterStore;
 
-	private final DataStatisticsStore geowaveStatisticsStore;
+	private DataStatisticsStore geowaveStatisticsStore;
 
-	private final RasterDataStore geowaveDataStore;
+	private RasterDataStore geowaveDataStore;
 
-	private final Index rasterIndex;
+	private Index rasterIndex;
 
 	protected final static CoordinateOperationFactory OPERATION_FACTORY = new BufferedCoordinateOperationFactory(
 			new Hints(
@@ -149,6 +147,7 @@ public class GeoWaveRasterReader extends
 
 		try {
 			config = GeoWaveRasterConfig.readFrom(url);
+			init(config);
 		}
 		catch (final Exception e) {
 			LOGGER.error(
@@ -158,6 +157,24 @@ public class GeoWaveRasterReader extends
 					e);
 		}
 
+	}
+
+	public GeoWaveRasterReader(
+			final GeoWaveRasterConfig config )
+			throws DataSourceException,
+			AccumuloException,
+			AccumuloSecurityException {
+		super(
+				new Object(),
+				new Hints());
+		this.config = config;
+		init(config);
+	}
+
+	private void init(
+			final GeoWaveRasterConfig config )
+			throws AccumuloException,
+			AccumuloSecurityException {
 		final AccumuloOperations accumuloOperations = new BasicAccumuloOperations(
 				config.getZookeeperUrls(),
 				config.getAccumuloInstanceId(),
@@ -259,7 +276,7 @@ public class GeoWaveRasterReader extends
 
 		final DataAdapter<?> adapter = geowaveAdapterStore.getAdapter(new ByteArrayId(
 				coverageName));
-		Set<String> var = ((RasterDataAdapter) adapter).getMetadata().keySet();
+		final Set<String> var = ((RasterDataAdapter) adapter).getMetadata().keySet();
 		return var.toArray(new String[var.size()]);
 	}
 
@@ -405,7 +422,7 @@ public class GeoWaveRasterReader extends
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.opengis.coverage.grid.GridCoverageReader#read(org.opengis.parameter
 	 * .GeneralParameterValue [])
@@ -419,19 +436,19 @@ public class GeoWaveRasterReader extends
 			LOGGER.warn("Unable to find data adapter for '" + coverageName + "'");
 			return null;
 		}
-		final GeoWaveRasterReaderState state = new GeoWaveRasterReaderState(
-				coverageName);
 		final Date start = new Date();
 		// /////////////////////////////////////////////////////////////////////
 		//
 		// Checking params
 		//
 		// /////////////////////////////////////////////////////////////////////
-		Color outputTransparentColor = GeoWaveGTRasterFormat.OUTPUT_TRANSPARENT_COLOR.getDefaultValue();
+		Color outputTransparentColor = null;
 
-		Color backgroundColor = AbstractGridFormat.BACKGROUND_COLOR.getDefaultValue();
+		Color backgroundColor = null;
 
 		Rectangle dim = null;
+
+		GeneralEnvelope requestedEnvelope = null;
 
 		if (params != null) {
 			for (final GeneralParameterValue generalParameterValue : params) {
@@ -440,7 +457,7 @@ public class GeoWaveRasterReader extends
 				if (param.getDescriptor().getName().getCode().equals(
 						AbstractGridFormat.READ_GRIDGEOMETRY2D.getName().toString())) {
 					final GridGeometry2D gg = (GridGeometry2D) param.getValue();
-					state.setRequestedEnvelope((GeneralEnvelope) gg.getEnvelope());
+					requestedEnvelope = (GeneralEnvelope) gg.getEnvelope();
 					dim = gg.getGridRange2D().getBounds();
 				}
 				else if (param.getDescriptor().getName().getCode().equals(
@@ -453,7 +470,33 @@ public class GeoWaveRasterReader extends
 				}
 			}
 		}
+		final GridCoverage2D coverage = renderGridCoverage(
+				coverageName,
+				dim,
+				requestedEnvelope,
+				backgroundColor,
+				outputTransparentColor);
+		LOGGER.info("GeoWave Raster Reader needs : " + ((new Date()).getTime() - start.getTime()) + " millisecs");
+		return coverage;
+	}
 
+	public GridCoverage2D renderGridCoverage(
+			final String coverageName,
+			final Rectangle dim,
+			final GeneralEnvelope generalEnvelope,
+			Color backgroundColor,
+			Color outputTransparentColor )
+			throws IOException {
+		if (backgroundColor == null) {
+			backgroundColor = AbstractGridFormat.BACKGROUND_COLOR.getDefaultValue();
+		}
+		if (outputTransparentColor == null) {
+			outputTransparentColor = GeoWaveGTRasterFormat.OUTPUT_TRANSPARENT_COLOR.getDefaultValue();
+		}
+
+		final GeoWaveRasterReaderState state = new GeoWaveRasterReaderState(
+				coverageName);
+		state.setRequestedEnvelope(generalEnvelope);
 		// /////////////////////////////////////////////////////////////////////
 		//
 		// Loading tiles trying to optimize as much as possible
@@ -467,8 +510,6 @@ public class GeoWaveRasterReader extends
 				state,
 				crs,
 				getOriginalEnvelope(coverageName));
-		LOGGER.info("Mosaic Reader needs : " + ((new Date()).getTime() - start.getTime()) + " millisecs");
-
 		return coverage;
 	}
 
@@ -597,19 +638,6 @@ public class GeoWaveRasterReader extends
 				adapter.getColorModel());
 
 		gridCoverageIt.close();
-		RenderedImage image = result.getRenderedImage();
-		Raster raster = image.getData();
-		for (int x = image.getMinX(); x < image.getMinX() + image.getWidth(); x++){
-			for (int y = image.getMinY(); y < image.getMinY() + image.getHeight(); y++){
-				for (int b = 0; b < raster.getNumBands(); b++){
-					double val = raster.getSampleDouble(x, y, b);
-					if (!Double.isNaN(val) && val != 1.0){
-
-						LOGGER.warn("x=" + x + ",y="+y+",b=" + b + ",value="+val);
-					}
-				}
-			}
-		}
 		return transformResult(
 				result,
 				pixelDimension,

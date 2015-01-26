@@ -2,6 +2,7 @@ package mil.nga.giat.geowave.analytics.mapreduce.kde;
 
 import java.io.IOException;
 
+import mil.nga.giat.geowave.accumulo.AccumuloDataStore;
 import mil.nga.giat.geowave.accumulo.AccumuloOperations;
 import mil.nga.giat.geowave.accumulo.BasicAccumuloOperations;
 import mil.nga.giat.geowave.accumulo.mapreduce.GeoWaveConfiguratorBase;
@@ -11,8 +12,11 @@ import mil.nga.giat.geowave.accumulo.mapreduce.output.GeoWaveOutputKey;
 import mil.nga.giat.geowave.accumulo.metadata.AccumuloAdapterStore;
 import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.raster.RasterUtils;
+import mil.nga.giat.geowave.store.DataStore;
 import mil.nga.giat.geowave.store.GeometryUtils;
+import mil.nga.giat.geowave.store.IndexWriter;
 import mil.nga.giat.geowave.store.adapter.AdapterStore;
+import mil.nga.giat.geowave.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.store.index.Index;
 import mil.nga.giat.geowave.store.index.IndexType;
 import mil.nga.giat.geowave.store.query.SpatialQuery;
@@ -68,8 +72,46 @@ public class KDEJobRunner extends
 	protected String hdfsHostPort;
 	protected String jobTrackerOrResourceManHostPort;
 
-	public KDEJobRunner() {
+	public KDEJobRunner() {}
 
+	public KDEJobRunner(
+			final String zookeeper,
+			final String instance,
+			final String user,
+			final String password,
+			final String namespace,
+			final String featureType,
+			final int minLevel,
+			final int maxLevel,
+			final int minSplits,
+			final int maxSplits,
+			final String coverageName,
+			final String hdfsHostPort,
+			final String jobTrackerOrResourceManHostPort,
+			final String newNamespace,
+			final int tileSize,
+			final String cqlFilter ) {
+		this.zookeeper = zookeeper;
+		this.instance = instance;
+		this.user = user;
+		this.password = password;
+		this.namespace = namespace;
+		this.featureType = featureType;
+		this.minLevel = minLevel;
+		this.maxLevel = maxLevel;
+		this.minSplits = minSplits;
+		this.maxSplits = maxSplits;
+		this.coverageName = coverageName;
+		if (!hdfsHostPort.contains("://")) {
+			this.hdfsHostPort = "hdfs://" + hdfsHostPort;
+		}
+		else {
+			this.hdfsHostPort = hdfsHostPort;
+		}
+		this.jobTrackerOrResourceManHostPort = jobTrackerOrResourceManHostPort;
+		this.newNamespace = newNamespace;
+		this.tileSize = tileSize;
+		this.cqlFilter = cqlFilter;
 	}
 
 	/**
@@ -78,8 +120,6 @@ public class KDEJobRunner extends
 	@SuppressWarnings("deprecation")
 	public int runJob()
 			throws Exception {
-		final Index spatialIndex = IndexType.SPATIAL_VECTOR.createDefaultIndex();
-
 		final Configuration conf = super.getConf();
 		GeoWaveConfiguratorBase.setRemoteInvocationParams(
 				hdfsHostPort,
@@ -214,7 +254,6 @@ public class KDEJobRunner extends
 			if (job2Success) {
 				postJob2Success = postJob2Actions(
 						conf,
-						spatialIndex,
 						newNamespace);
 			}
 		}
@@ -250,7 +289,6 @@ public class KDEJobRunner extends
 
 	protected boolean postJob2Actions(
 			final Configuration conf,
-			final Index spatialIndex,
 			final String statsNamespace )
 			throws Exception {
 		return true;
@@ -302,22 +340,47 @@ public class KDEJobRunner extends
 			final Job statsReducer,
 			final String statsNamespace )
 			throws Exception {
-		GeoWaveOutputFormat.setAccumuloOperationsInfo(
+		final Index index = IndexType.SPATIAL_RASTER.createDefaultIndex();
+		final WritableDataAdapter<?> adapter = RasterUtils.createDataAdapterTypeDouble(
+				coverageName,
+				AccumuloKDEReducer.NUM_BANDS,
+				tileSize);
+		setup(
 				statsReducer,
+				statsNamespace,
+				adapter,
+				index);
+	}
+
+	protected void setup(
+			final Job job,
+			final String namespace,
+			final WritableDataAdapter<?> adapter,
+			final Index index )
+			throws Exception {
+		final AccumuloOperations ops = new BasicAccumuloOperations(
 				zookeeper,
 				instance,
 				user,
 				password,
-				statsNamespace);
+				namespace);
+		GeoWaveOutputFormat.setAccumuloOperationsInfo(
+				job,
+				zookeeper,
+				instance,
+				user,
+				password,
+				namespace);
 		GeoWaveOutputFormat.addDataAdapter(
-				statsReducer,
-				RasterUtils.createDataAdapterTypeDouble(
-						coverageName,
-						AccumuloKDEReducer.NUM_BANDS,
-						tileSize));
+				job,
+				adapter);
 		GeoWaveOutputFormat.addIndex(
-				statsReducer,
-				IndexType.SPATIAL_RASTER.createDefaultIndex());
+				job,
+				index);
+		final DataStore store = new AccumuloDataStore(
+				ops);
+		final IndexWriter writer = store.createIndexWriter(index);
+		writer.setupAdapter(adapter);
 	}
 
 	public static void main(

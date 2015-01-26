@@ -39,6 +39,50 @@ public class AccumuloKDEReducer extends
 			this.x = x;
 			this.y = y;
 		}
+
+		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = 1;
+			long temp;
+			temp = Double.doubleToLongBits(tileEastLon);
+			result = (prime * result) + (int) (temp ^ (temp >>> 32));
+			temp = Double.doubleToLongBits(tileNorthLat);
+			result = (prime * result) + (int) (temp ^ (temp >>> 32));
+			temp = Double.doubleToLongBits(tileSouthLat);
+			result = (prime * result) + (int) (temp ^ (temp >>> 32));
+			temp = Double.doubleToLongBits(tileWestLon);
+			result = (prime * result) + (int) (temp ^ (temp >>> 32));
+			return result;
+		}
+
+		@Override
+		public boolean equals(
+				final Object obj ) {
+			if (this == obj) {
+				return true;
+			}
+			if (obj == null) {
+				return false;
+			}
+			if (getClass() != obj.getClass()) {
+				return false;
+			}
+			final TileInfo other = (TileInfo) obj;
+			if (Double.doubleToLongBits(tileEastLon) != Double.doubleToLongBits(other.tileEastLon)) {
+				return false;
+			}
+			if (Double.doubleToLongBits(tileNorthLat) != Double.doubleToLongBits(other.tileNorthLat)) {
+				return false;
+			}
+			if (Double.doubleToLongBits(tileSouthLat) != Double.doubleToLongBits(other.tileSouthLat)) {
+				return false;
+			}
+			if (Double.doubleToLongBits(tileWestLon) != Double.doubleToLongBits(other.tileWestLon)) {
+				return false;
+			}
+			return true;
+		}
 	}
 
 	public static final int NUM_BANDS = 3;
@@ -56,7 +100,6 @@ public class AccumuloKDEReducer extends
 	private int maxLevels;
 	private int numLevels;
 	private int level;
-	private int numXPosts;
 	private int numYPosts;
 	private int numXTiles;
 	private int numYTiles;
@@ -103,7 +146,6 @@ public class AccumuloKDEReducer extends
 						tileInfo.y,
 						2,
 						inc);
-
 				context.write(
 						new GeoWaveOutputKey(
 								new ByteArrayId(
@@ -136,8 +178,8 @@ public class AccumuloKDEReducer extends
 			final long index ) {
 		final int xPost = (int) Math.floor(index / numYPosts);
 		final int yPost = (int) (index % numYPosts);
-		final int xTile = (int) Math.floor(xPost / tileSize);
-		final int yTile = (int) Math.floor(yPost / tileSize);
+		final int xTile = (int) Math.floor((double) xPost / (double) tileSize);
+		final int yTile = (int) Math.floor((double) yPost / (double) tileSize);
 		final int x = (xPost % tileSize);
 		final int y = (yPost % tileSize);
 		final double tileWestLon = ((xTile * 360.0) / numXTiles) - 180.0;
@@ -175,14 +217,13 @@ public class AccumuloKDEReducer extends
 		level = context.getConfiguration().getInt(
 				"mapred.task.partition",
 				0) + minLevels;
-		numXPosts = (int) Math.pow(
+		numXTiles = (int) Math.pow(
 				2,
 				level + 1);
-		numYPosts = (int) Math.pow(
+		numYTiles = (int) Math.pow(
 				2,
 				level);
-		numXTiles = (int) Math.ceil((double) numXPosts / (double) tileSize);
-		numYTiles = (int) Math.ceil((double) numYPosts / (double) tileSize);
+		numYPosts = numYTiles * tileSize;
 		totalKeys = context.getConfiguration().getLong(
 				"Entries per level.level" + level,
 				10);

@@ -6,7 +6,7 @@ import mil.nga.giat.geowave.accumulo.mapreduce.output.GeoWaveOutputFormat;
 import mil.nga.giat.geowave.accumulo.mapreduce.output.GeoWaveOutputKey;
 import mil.nga.giat.geowave.analytics.mapreduce.kde.KDEJobRunner;
 import mil.nga.giat.geowave.raster.RasterUtils;
-import mil.nga.giat.geowave.store.index.Index;
+import mil.nga.giat.geowave.store.index.IndexType;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
@@ -48,7 +48,6 @@ public class ComparisonStatsJobRunner extends
 	@Override
 	protected boolean postJob2Actions(
 			final Configuration conf,
-			final Index spatialIndex,
 			final String statsNamespace )
 			throws Exception {
 		final FileSystem fs = FileSystem.get(conf);
@@ -118,15 +117,14 @@ public class ComparisonStatsJobRunner extends
 					user,
 					password,
 					statsNamespace);
-			GeoWaveOutputFormat.addDataAdapter(
+			setup(
 					ingester,
+					statsNamespace,
 					RasterUtils.createDataAdapterTypeDouble(
 							statsNamespace,
 							ComparisonAccumuloStatsReducer.NUM_BANDS,
-							tileSize));
-			GeoWaveOutputFormat.addIndex(
-					ingester,
-					spatialIndex);
+							tileSize),
+					IndexType.SPATIAL_RASTER.createDefaultIndex());
 			return ingester.waitForCompletion(true);
 
 		}

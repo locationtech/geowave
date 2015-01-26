@@ -6,6 +6,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
+
 import mil.nga.giat.geowave.raster.adapter.merge.nodata.NoDataMetadata.SampleIndex;
 
 import com.vividsolutions.jts.geom.Coordinate;
@@ -391,6 +393,7 @@ public class NoDataMetadataFactory
 				}
 			}
 		}
+
 		final double[][] usedNoDataValues;
 		if (!skipNoData) {
 			usedNoDataValues = new double[noDataValuesPerBand.length][];
@@ -450,17 +453,17 @@ public class NoDataMetadataFactory
 			NoDataByCoordinate
 	{
 		private final Geometry[] shapes;
-		private boolean acceptAll = false;
+		private boolean acceptNone = false;
 
 		public MultiShape(
 				final Geometry[] shapes ) {
 			this.shapes = shapes;
 			if ((shapes == null) || (shapes.length == 0)) {
-				acceptAll = true;
+				acceptNone = true;
 			}
 			for (final Geometry shape : shapes) {
 				if (shape == null) {
-					acceptAll = true;
+					acceptNone = true;
 				}
 			}
 		}
@@ -469,7 +472,7 @@ public class NoDataMetadataFactory
 		public boolean accept(
 				final int x,
 				final int y ) {
-			if (!acceptAll) {
+			if (!acceptNone) {
 				for (final Geometry shape : shapes) {
 					// if any one contains the point than it is not "no data"
 					// based on shape
@@ -479,9 +482,8 @@ public class NoDataMetadataFactory
 						return true;
 					}
 				}
-				return false;
 			}
-			return true;
+			return false;
 		}
 	}
 

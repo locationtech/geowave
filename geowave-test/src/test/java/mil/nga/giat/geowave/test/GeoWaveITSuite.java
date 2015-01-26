@@ -1,5 +1,7 @@
 package mil.nga.giat.geowave.test;
 
+import mil.nga.giat.geowave.test.mapreduce.MapReduceTestEnvironment;
+
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
@@ -10,7 +12,7 @@ import org.junit.runners.Suite.SuiteClasses;
 @SuiteClasses({
 	GeoWaveBasicIT.class,
 	GeoWaveRasterIT.class,
-	GeoWaveMapReduceIT.class,
+	MapReduceTestEnvironment.class,
 	GeoServerIT.class,
 })
 public class GeoWaveITSuite
