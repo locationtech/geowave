@@ -196,22 +196,22 @@ abstract public class GeoWaveTestEnvironment
 								e);
 					}
 				}
-//				if (tempDir != null) {
-//					try {
-//						// sleep because mini accumulo processes still have a
-//						// hold
-//						// on the log files and there is no hook to get notified
-//						// when it is completely stopped
-//						Thread.sleep(1000);
-//						FileUtils.deleteDirectory(tempDir);
-//						tempDir = null;
-//					}
-//					catch (final IOException | InterruptedException e) {
-//						LOGGER.warn(
-//								"Unable to delete mini Accumulo temporary directory",
-//								e);
-//					}
-//				}
+				if (tempDir != null) {
+					try {
+						// sleep because mini accumulo processes still have a
+						// hold
+						// on the log files and there is no hook to get notified
+						// when it is completely stopped
+						Thread.sleep(1000);
+						FileUtils.deleteDirectory(tempDir);
+						tempDir = null;
+					}
+					catch (final IOException | InterruptedException e) {
+						LOGGER.warn(
+								"Unable to delete mini Accumulo temporary directory",
+								e);
+					}
+				}
 			}
 		}
 	}

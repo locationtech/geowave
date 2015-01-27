@@ -594,8 +594,11 @@ public class RasterDataAdapter implements
 								insertionIdGeometry,
 								interpolation,
 								backgroundValuesPerBand);
-						final GridEnvelope e = resampledCoverage.getGridGeometry().getGridRange();
-						boolean resize = false;
+						// NOTE: for now this is commented out, but beware the
+						// resample operation under certain conditions,
+						// this requires more investigation rather than adding a
+						// hacky fix
+						
 						// sometimes the resample results in an image that is
 						// not tileSize in width and height although the
 						// insertionIdGeometry is telling it to resample to
@@ -604,21 +607,25 @@ public class RasterDataAdapter implements
 						// in these cases, check and perform a rescale to
 						// finalize the grid coverage to guarantee it is the
 						// correct tileSize
-						for (int d = 0; d < e.getDimension(); d++) {
-							if (e.getSpan(d) != tileSize) {
-								resize = true;
-								break;
-							}
-						}
-						if (resize) {
-							System.err.println("crap");
-							// resampledCoverage = Operations.DEFAULT.scale(
-							// resampledCoverage,
-							// (double) tileSize / (double) e.getSpan(0),
-							// (double) tileSize / (double) e.getSpan(1),
-							// -resampledCoverage.getRenderedImage().getMinX(),
-							// -resampledCoverage.getRenderedImage().getMinY());
-						}
+
+						// final GridEnvelope e =
+						// resampledCoverage.getGridGeometry().getGridRange();
+						// boolean resize = false;
+
+						// for (int d = 0; d < e.getDimension(); d++) {
+						// if (e.getSpan(d) != tileSize) {
+						// resize = true;
+						// break;
+						// }
+						// }
+						// if (resize) {
+						// resampledCoverage = Operations.DEFAULT.scale(
+						// resampledCoverage,
+						// (double) tileSize / (double) e.getSpan(0),
+						// (double) tileSize / (double) e.getSpan(1),
+						// -resampledCoverage.getRenderedImage().getMinX(),
+						// -resampledCoverage.getRenderedImage().getMinY());
+						// }
 						// if ((resampledCoverage.getRenderedImage().getWidth()
 						// != tileSize) ||
 						// (resampledCoverage.getRenderedImage().getHeight() !=
