@@ -10,7 +10,7 @@ import mil.nga.giat.geowave.index.sfc.data.NumericRange;
  * The Basic Dimension Definition class defines a Space Filling Curve dimension
  * as a minimum and maximum range with values linearly interpolated within the
  * range. Values outside of the range will be clamped within the range.
- * 
+ *
  */
 public class BasicDimensionDefinition implements
 		NumericDimensionDefinition
@@ -23,7 +23,7 @@ public class BasicDimensionDefinition implements
 	/**
 	 * Constructor which defines and enforces the bounds of a numeric dimension
 	 * definition.
-	 * 
+	 *
 	 * @param min
 	 *            the minimum bounds of the dimension
 	 * @param max
@@ -39,12 +39,7 @@ public class BasicDimensionDefinition implements
 	@Override
 	public double normalize(
 			double value ) {
-		if ((value < min) || (value > max)) {
-			value = clamp(
-					value,
-					min,
-					max);
-		}
+		value = clamp(value);
 
 		return ((value - min) / (max - min));
 	}
@@ -55,22 +50,27 @@ public class BasicDimensionDefinition implements
 		return new BinRange[] {
 			new BinRange(
 					// by default clamp to the min and max
-					clamp(
-							range.getMin(),
-							min,
-							max),
-					clamp(
-							range.getMax(),
-							min,
-							max))
+					clamp(range.getMin()),
+					clamp(range.getMax()))
 		};
 	}
 
+	@Override
 	public NumericData getFullRange() {
-		return new NumericRange(0, System.currentTimeMillis()+1);
+		return new NumericRange(
+				min,
+				max);
 	}
-	
-	private static double clamp(
+
+	protected double clamp(
+			final double x ) {
+		return clamp(
+				x,
+				min,
+				max);
+	}
+
+	protected static double clamp(
 			final double x,
 			final double min,
 			final double max ) {
