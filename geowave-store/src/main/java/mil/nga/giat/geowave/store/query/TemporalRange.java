@@ -5,19 +5,24 @@ import java.util.Date;
 
 import mil.nga.giat.geowave.index.sfc.data.NumericData;
 
-public class TemporalRange  {
+public class TemporalRange
+{
 	private Date startTime;
 	private Date endTime;
 
-	public static final Date START_TIME = new Date(0);
-	public static final Date END_TIME = new Date(Long.MAX_VALUE);
+	public static final Date START_TIME = new Date(
+			0);
+	public static final Date END_TIME = new Date(
+			Long.MAX_VALUE);
 
 	protected TemporalRange() {
-		this.startTime = START_TIME;
-		this.endTime = END_TIME;
+		startTime = START_TIME;
+		endTime = END_TIME;
 	}
-	
-	public TemporalRange(final Date startTime, final Date endTime) {
+
+	public TemporalRange(
+			final Date startTime,
+			final Date endTime ) {
 		super();
 		this.startTime = startTime;
 		this.endTime = endTime;
@@ -31,72 +36,87 @@ public class TemporalRange  {
 		return endTime;
 	}
 
-	public boolean isWithin(Date time) {
-		return (startTime.before(time) || startTime.equals(time))
-				&& (endTime.equals(time) || endTime.after(time));
+	public boolean isWithin(
+			final Date time ) {
+		return (startTime.before(time) || startTime.equals(time)) && (endTime.equals(time) || endTime.after(time));
 	}
 
-	public boolean isWithin(NumericData timeRange) {
+	public boolean isWithin(
+			final NumericData timeRange ) {
 		final double st = startTime.getTime();
 		final double et = endTime.getTime();
 		final double rst = timeRange.getMin();
 		final double ret = timeRange.getMax();
-		return ((st < rst && et > rst) || (st < ret && et > ret) || (st < rst && et > ret));
+		return (((st < rst) && (et > rst)) || ((st < ret) && (et > ret)) || ((st < rst) && (et > ret)));
 	}
 
 	public byte[] toBinary() {
-		ByteBuffer buf = ByteBuffer.allocate(16);
+		final ByteBuffer buf = ByteBuffer.allocate(16);
 		buf.putLong(startTime.getTime());
 		buf.putLong(endTime.getTime());
 		return buf.array();
 	}
-	
-	public void  fromBinary( byte[] data) {
-		ByteBuffer buf = ByteBuffer.wrap(data);
-		startTime = new Date(buf.getLong());
-		endTime = new Date(buf.getLong());
-	}
-	
-	
-	@Override
-	public String toString() {
-		return "TemporalRange [startTime=" + startTime + ", endTime=" + endTime
-				+ "]";
+
+	public void fromBinary(
+			final byte[] data ) {
+		final ByteBuffer buf = ByteBuffer.wrap(data);
+		startTime = new Date(
+				buf.getLong());
+		endTime = new Date(
+				buf.getLong());
 	}
 
-	protected static  final int  getBufferSize() {
+	@Override
+	public String toString() {
+		return "TemporalRange [startTime=" + startTime + ", endTime=" + endTime + "]";
+	}
+
+	protected static final int getBufferSize() {
 		return 16;
 	}
-	
+
+	public boolean isInfinity() {
+		return (startTime.getTime() == 0) && (endTime.getTime() == END_TIME.getTime());
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((endTime == null) ? 0 : endTime.hashCode());
-		result = prime * result
-				+ ((startTime == null) ? 0 : startTime.hashCode());
+		result = (prime * result) + ((endTime == null) ? 0 : endTime.hashCode());
+		result = (prime * result) + ((startTime == null) ? 0 : startTime.hashCode());
 		return result;
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
+	public boolean equals(
+			final Object obj ) {
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
-		TemporalRange other = (TemporalRange) obj;
+		}
+		final TemporalRange other = (TemporalRange) obj;
 		if (endTime == null) {
-			if (other.endTime != null)
+			if (other.endTime != null) {
 				return false;
-		} else if (!endTime.equals(other.endTime))
+			}
+		}
+		else if (!endTime.equals(other.endTime)) {
 			return false;
+		}
 		if (startTime == null) {
-			if (other.startTime != null)
+			if (other.startTime != null) {
 				return false;
-		} else if (!startTime.equals(other.startTime))
+			}
+		}
+		else if (!startTime.equals(other.startTime)) {
 			return false;
+		}
 		return true;
 	}
 

@@ -1,14 +1,19 @@
-<wfs:GetFeature service="WFS" version="1.1.0" xmlns:wfs="http://www.opengis.net/wfs"
-	xmlns:ogc="http://www.opengis.net/ogc" xmlns:geowave="http://localhost:9090/geowave"
-	xmlns:gml="http://www.opengis.net/gml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-	<Query typeName="geowave:geostuff">
-		<wfs:PropertyName>geowave:geometry</wfs:PropertyName> 
-		<wfs:PropertyName>geowave:class</wfs:PropertyName> 
-		<wfs:PropertyName>geowave:pid</wfs:PropertyName> 
-		<wfs:PropertyName>geowave:when</wfs:PropertyName>
+<wfs:GetFeature
+	service="WFS"
+	version="1.1.0"
+	xmlns:wfs="http://www.opengis.net/wfs"
+	xmlns:ogc="http://www.opengis.net/ogc"
+	xmlns:{0}="http://{0}"
+	xmlns:gml="http://www.opengis.net/gml"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<Query typeName="{0}:geostuff">
+		<wfs:PropertyName>{0}:geometry</wfs:PropertyName> 
+		<wfs:PropertyName>{0}:class</wfs:PropertyName> 
+		<wfs:PropertyName>{0}:pid</wfs:PropertyName> 
+		<wfs:PropertyName>{0}:when</wfs:PropertyName>
 		<ogc:Filter> 
 		  <ogc:PropertyIsEqualTo> 
-			<ogc:PropertyName>geowave:class</ogc:PropertyName>
+			<ogc:PropertyName>{0}:class</ogc:PropertyName>
 			<ogc:Literal>black</ogc:Literal> 
 		</ogc:PropertyIsEqualTo> 
 	  </ogc:Filter>

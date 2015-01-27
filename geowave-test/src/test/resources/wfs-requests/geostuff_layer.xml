@@ -1,5 +1,5 @@
 <featureType>
-	<name xmlns:geowave="http://localhost:9090/geowave">geostuff</name>
+	<name xmlns:{0}="http://{0}">geostuff</name>
 	<nativeName>geostuff</nativeName>
 	<title>geostuff</title>
 	<description>GeoWave Resource</description>

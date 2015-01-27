@@ -140,7 +140,7 @@ public class AccumuloKDEReducer extends
 						1,
 						normalizedValue);
 				inc += (1.0 / totalKeys);
-				// the inc represents the percentile that this cell falls in
+
 				raster.setSample(
 						tileInfo.x,
 						tileInfo.y,

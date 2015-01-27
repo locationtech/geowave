@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>mil.nga.giat</groupId>
 	<artifactId>geowave-parent</artifactId>
@@ -19,13 +20,11 @@
 		<connection>scm:git:git@github.com:ngageoint/geowave.git</connection>
 	</scm>
 
-
 	<properties>
 		<geotools.version>12.1</geotools.version>
 		<geoserver.version>2.6.1</geoserver.version>
 		<accumulo.version>1.6.1</accumulo.version>
 		<hadoop.version>2.5.0-cdh5.2.0</hadoop.version>
-		<hadoop.version.mr>2.5.0-cdh5.2.0</hadoop.version.mr>
 		<avro.version>1.7.6</avro.version>
 		<commons.cli.version>1.2</commons.cli.version>
 		<geotools.scope>compile</geotools.scope>
@@ -34,16 +33,15 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<sonar.language>java</sonar.language>
-		<!-- Feed Sonar with the JaCoCo integration tests coverage report (that 
+		<!-- Feed Sonar with the JaCoCo integration tests coverage report (that
 			you have previously generated) -->
 		<jacoco.it.reportPath>${project.build.directory}/coverage-reports/jacoco-it.exec</jacoco.it.reportPath>
 		<jacoco.ut.reportPath>${project.build.directory}/coverage-reports/jacoco-ut.exec</jacoco.ut.reportPath>
 		<it.reportPath>${project.reporting.outputDirectory}/jacoco-it</it.reportPath>
 		<ut.reportPath>${project.reporting.outputDirectory}/jacoco-ut</ut.reportPath>
+		<jacoco.version>0.7.2.201409121644</jacoco.version>
 		<sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
 		<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
-		<!-- need to use a 64-bit JVM for tests -->
-		<!-- Remove the MaxPermSize for Java8 -->
 		<test.args>-Xms256m -Xmx1024m -XX:MaxPermSize=256m</test.args>
 	</properties>
 	<dependencyManagement>
@@ -85,6 +83,106 @@
 				<artifactId>slf4j-log4j12</artifactId>
 				<version>1.6.1</version>
 			</dependency>
+			<dependency>
+				<groupId>org.apache.accumulo</groupId>
+				<artifactId>accumulo-core</artifactId>
+				<version>${accumulo.version}</version>
+				<scope>${accumulo.scope}</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.hadoop</groupId>
+				<artifactId>hadoop-client</artifactId>
+				<version>${hadoop.version}</version>
+				<scope>${hadoop.scope}</scope>
+			</dependency>
+			<dependency>
+				<groupId>commons-cli</groupId>
+				<artifactId>commons-cli</artifactId>
+				<version>${commons.cli.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.geotools</groupId>
+				<artifactId>gt-opengis</artifactId>
+				<version>${geotools.version}</version>
+				<scope>${geotools.scope}</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.geotools</groupId>
+				<artifactId>gt-shapefile</artifactId>
+				<version>${geotools.version}</version>
+				<scope>${geotools.scope}</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.geotools</groupId>
+				<artifactId>gt-main</artifactId>
+				<version>${geotools.version}</version>
+				<scope>${geotools.scope}</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.geotools</groupId>
+				<artifactId>gt-data</artifactId>
+				<version>${geotools.version}</version>
+				<scope>${geotools.scope}</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.geotools</groupId>
+				<artifactId>gt-wps</artifactId>
+				<version>${geotools.version}</version>
+				<scope>${geotools.scope}</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.geoserver</groupId>
+				<artifactId>gs-wms</artifactId>
+				<version>${geoserver.version}</version>
+				<scope>${geotools.scope}</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.geoserver</groupId>
+				<artifactId>gs-main</artifactId>
+				<version>${geoserver.version}</version>
+				<scope>${geotools.scope}</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.geoserver</groupId>
+				<artifactId>gs-ows</artifactId>
+				<version>${geoserver.version}</version>
+				<scope>${geotools.scope}</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.geoserver</groupId>
+				<artifactId>gs-platform</artifactId>
+				<version>${geoserver.version}</version>
+				<scope>${geotools.scope}</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.geoserver</groupId>
+				<artifactId>gs-wfs</artifactId>
+				<version>${geoserver.version}</version>
+				<scope>${geotools.scope}</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.geotools</groupId>
+				<artifactId>gt-render</artifactId>
+				<version>${geotools.version}</version>
+				<scope>${geotools.scope}</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.geotools</groupId>
+				<artifactId>gt-epsg-wkt</artifactId>
+				<version>${geotools.version}</version>
+				<scope>${geotools.scope}</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.avro</groupId>
+				<artifactId>avro</artifactId>
+				<version>${avro.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.avro</groupId>
+				<artifactId>avro-mapred</artifactId>
+				<version>${avro.version}</version>
+				<classifier>hadoop2</classifier>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 	<build>
@@ -106,7 +204,7 @@
 											jacoco-maven-plugin
 										</artifactId>
 										<versionRange>
-											[0.7.1.201405082137,)
+											[${jacoco.version},)
 										</versionRange>
 										<goals>
 											<goal>prepare-agent</goal>
@@ -126,7 +224,7 @@
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>0.7.1.201405082137</version>
+				<version>${jacoco.version}</version>
 				<executions>
 					<execution>
 						<id>pre-unit-test</id>
@@ -247,21 +345,22 @@
 				</executions>
 			</plugin>
 			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>cobertura-maven-plugin</artifactId>
-				<version>2.6</version>
-				<configuration>
-					<format>xml</format>
-					<maxmem>256m</maxmem>
-					<!-- aggregated reports for multi-module projects -->
-					<aggregate>true</aggregate>
-					<check/>
-				</configuration>
-			</plugin>
-			<plugin>
 				<groupId>org.eluder.coveralls</groupId>
 				<artifactId>coveralls-maven-plugin</artifactId>
-				<version>3.0.1</version>
+				<version>3.1.0-munge-hack-SNAPSHOT</version>
+				<configuration>
+					<jacocoReports>
+						<jacocoReport>${project.basedir}/geowave-index/target/site/jacoco-ut/jacoco.xml</jacocoReport>
+						<jacocoReport>${project.basedir}/geowave-analytics/target/site/jacoco-ut/jacoco.xml</jacocoReport>
+						<jacocoReport>${project.basedir}/geowave-ingest/target/site/jacoco-ut/jacoco.xml</jacocoReport>
+						<jacocoReport>${project.basedir}/geowave-raster/target/site/jacoco-ut/jacoco.xml</jacocoReport>
+						<jacocoReport>${project.basedir}/geowave-store/target/site/jacoco-ut/jacoco.xml</jacocoReport>
+						<jacocoReport>${project.basedir}/geowave-types/target/site/jacoco-ut/jacoco.xml</jacocoReport> -
+						<jacocoReport>${project.basedir}/geowave-vector/target/site/jacoco-ut/jacoco.xml</jacocoReport>
+						<jacocoReport>${project.basedir}/geowave-accumulo/target/site/jacoco-ut/jacoco.xml</jacocoReport>
+						<jacocoReport>${project.basedir}/geowave-test/target/site/jacoco-it/jacoco.xml</jacocoReport>
+					</jacocoReports>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
@@ -274,6 +373,9 @@
 		<module>geowave-ingest</module>
 		<module>geowave-types</module>
 		<module>geowave-analytics</module>
+		<module>geowave-utils</module>
+		<module>geowave-client</module>
+		<module>geowave-services</module>
 		<module>geowave-deploy</module>
 		<module>geowave-test</module>
 	</modules>
@@ -371,12 +473,14 @@
 										</filter>
 									</filters>
 									<transformers>
-										<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+										<transformer
+											implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
 											<manifestEntries>
 												<Main-Class>mil.nga.giat.geowave.ingest.IngestMain</Main-Class>
 											</manifestEntries>
 										</transformer>
-										<transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
+										<transformer
+											implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
 									</transformers>
 									<createDependencyReducedPom>false</createDependencyReducedPom>
 									<minimizeJar>false</minimizeJar>

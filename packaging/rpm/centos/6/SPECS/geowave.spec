@@ -33,10 +33,12 @@ Source7:        default.xml
 Source8:        namespace.xml
 Source9:        workspace.xml
 Source10:       geowave-ingest-tool.jar
-Source11:       gh-pages.zip
+Source11:       site.tar.gz
 Source12:       puppet-scripts.tar.gz
 BuildRequires:  unzip
 BuildRequires:  zip
+BuildRequires:  xmlto
+BuildRequires:  asciidoc
 
 %description
 GeoWave provides geospatial and temporal indexing on top of Accumulo.
@@ -72,6 +74,7 @@ sed -i 's/yyyy_mm_dd.//g' %{buildroot}%{geowave_geoserver_home}/etc/jetty.xml
 
 # Remove cruft we don't want in our deployment
 rm -fr %{buildroot}%{geowave_geoserver_home}/bin/*.bat
+rm -fr %{buildroot}%{geowave_geoserver_home}/data_dir/layergroups/*
 rm -fr %{buildroot}%{geowave_geoserver_home}/data_dir/workspaces/*
 rm -fr %{buildroot}%{geowave_geoserver_home}/logs/keepme.txt
 
@@ -107,12 +110,19 @@ unzip -p %{SOURCE10} geowave-ingest-cmd-completion.sh > %{buildroot}/etc/bash_co
 
 # Copy documentation into place
 mkdir -p %{buildroot}%{geowave_docs_home}
-unzip -qq %{SOURCE11} -d %{buildroot}%{geowave_docs_home}
-#TODO: Reformat *.md pages into *.html pages using something like pandoc
+tar -xzf %{SOURCE11} -C %{buildroot}%{geowave_docs_home} --strip=1
+
+# Compile and deploy man pages
+mkdir -p %{buildroot}/usr/local/share/man/man1
+for file in `ls %{buildroot}%{geowave_docs_home}/manpages/*.adoc`; do
+  a2x -f manpage $file -D %{buildroot}/usr/local/share/man/man1
+done
+rm -rf %{buildroot}%{geowave_docs_home}/manpages
+rm -f %{buildroot}%{geowave_docs_home}/*.pdfmarks
 
 # Puppet scripts
 mkdir -p %{buildroot}/etc/puppet/modules
-tar xvzf %{SOURCE12} -C %{buildroot}/etc/puppet/modules
+tar -xzf %{SOURCE12} -C %{buildroot}/etc/puppet/modules
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -191,7 +201,14 @@ This package installs the GeoWave documentation into the GeoWave directory
 
 %files docs
 %defattr(644, geowave, geowave, 755)
-%{geowave_docs_home}
+%doc %{geowave_docs_home}
+
+%doc %attr(644 root, root) /usr/local/share/man/man1/geowave-ingest.1
+%doc %attr(644 root, root) /usr/local/share/man/man1/geowave-ingest-clear.1
+%doc %attr(644 root, root) /usr/local/share/man/man1/geowave-ingest-hdfsingest.1
+%doc %attr(644 root, root) /usr/local/share/man/man1/geowave-ingest-hdfsstage.1
+%doc %attr(644 root, root) /usr/local/share/man/man1/geowave-ingest-localingest.1
+%doc %attr(644 root, root) /usr/local/share/man/man1/geowave-ingest-poststage.1
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -272,9 +289,11 @@ This package installs the geowave Puppet module to /etc/puppet/modules
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 %changelog
-* Mon Jan 5 2015 Andrew Spohn <andrew.e.spohn.ctr.nga.mil> - 0.8.2-2
+* Thu Jan 15 2015 Andrew Spohn <andrew.e.spohn.ctr@nga.mil> - 0.8.2-3
+- Added man pages
+* Mon Jan 5 2015 Andrew Spohn <andrew.e.spohn.ctr@nga.mil> - 0.8.2-2
 - Added geowave-puppet rpm
-* Fri Jan 2 2015 Andrew Spohn <andrew.e.spohn.ctr.nga.mil> - 0.8.2-1
+* Fri Jan 2 2015 Andrew Spohn <andrew.e.spohn.ctr@nga.mil> - 0.8.2-1
 - Added a helper script for geowave-ingest and bash command completion
-* Wed Nov 19 2014 Andrew Spohn <andrew.e.spohn.ctr.nga.mil> - 0.8.2
+* Wed Nov 19 2014 Andrew Spohn <andrew.e.spohn.ctr@nga.mil> - 0.8.2
 - First packaging

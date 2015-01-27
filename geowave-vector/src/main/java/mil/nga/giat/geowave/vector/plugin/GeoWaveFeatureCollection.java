@@ -350,7 +350,8 @@ public class GeoWaveFeatureCollection extends
 			return null;
 		}
 		final TemporalConstraints bbox = (TemporalConstraints) query.getFilter().accept(
-				ExtractTimeFilterVisitor.TIME_VISITOR,
+				new ExtractTimeFilterVisitor(
+						reader.getComponents().getAdapter().getTimeDescriptors()),
 				null);
 		return bbox.isEmpty() ? null : bbox;
 	}
