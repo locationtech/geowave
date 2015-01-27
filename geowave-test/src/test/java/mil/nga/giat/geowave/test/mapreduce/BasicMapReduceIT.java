@@ -1,4 +1,4 @@
-package mil.nga.giat.geowave.test;
+package mil.nga.giat.geowave.test.mapreduce;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -24,16 +24,15 @@ import mil.nga.giat.geowave.accumulo.metadata.AccumuloDataStatisticsStore;
 import mil.nga.giat.geowave.accumulo.metadata.AccumuloIndexStore;
 import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.index.ByteArrayUtils;
-import mil.nga.giat.geowave.ingest.IngestMain;
 import mil.nga.giat.geowave.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.store.index.Index;
 import mil.nga.giat.geowave.store.index.IndexType;
 import mil.nga.giat.geowave.store.query.DistributableQuery;
+import mil.nga.giat.geowave.test.GeoWaveTestEnvironment;
 import mil.nga.giat.geowave.types.gpx.GpxIngestPlugin;
 
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang.StringUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.ObjectWritable;
@@ -48,27 +47,15 @@ import org.apache.hadoop.util.ToolRunner;
 import org.apache.log4j.Logger;
 import org.geotools.data.DataStoreFinder;
 import org.junit.Assert;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.opengis.feature.simple.SimpleFeature;
 
 import com.vividsolutions.jts.geom.Geometry;
 
-public class GeoWaveMapReduceIT extends
-		GeoWaveTestEnvironment
+public class BasicMapReduceIT extends
+		MapReduceTestEnvironment
 {
-	private final static Logger LOGGER = Logger.getLogger(GeoWaveMapReduceIT.class);
-	private static final String TEST_RESOURCE_PACKAGE = "mil/nga/giat/geowave/test/";
-	private static final String TEST_DATA_ZIP_RESOURCE_PATH = TEST_RESOURCE_PACKAGE + "mapreduce-testdata.zip";
-	private static final String TEST_CASE_GENERAL_GPX_BASE = TEST_CASE_BASE + "general_gpx_test_case/";
-	private static final String GENERAL_GPX_FILTER_PACKAGE = TEST_CASE_GENERAL_GPX_BASE + "filter/";
-	private static final String GENERAL_GPX_FILTER_FILE = GENERAL_GPX_FILTER_PACKAGE + "filter.shp";
-	private static final String GENERAL_GPX_INPUT_GPX_DIR = TEST_CASE_GENERAL_GPX_BASE + "input_gpx/";
-	private static final String GENERAL_GPX_EXPECTED_RESULTS_DIR = TEST_CASE_GENERAL_GPX_BASE + "filter_results/";
-	private static final String OSM_GPX_INPUT_DIR = TEST_CASE_BASE + "osm_gpx_test_case/";
-	private static final String EXPECTED_RESULTS_KEY = "EXPECTED_RESULTS";
-	private static final int MIN_INPUT_SPLITS = 2;
-	private static final int MAX_INPUT_SPLITS = 4;
+	private final static Logger LOGGER = Logger.getLogger(BasicMapReduceIT.class);
 
 	public static enum ResultCounterType {
 		EXPECTED,
@@ -76,29 +63,10 @@ public class GeoWaveMapReduceIT extends
 		ERROR
 	}
 
-	@BeforeClass
-	public static void extractTestFiles() {
-		GeoWaveTestEnvironment.unZipFile(
-				GeoWaveMapReduceIT.class.getClassLoader().getResourceAsStream(
-						TEST_DATA_ZIP_RESOURCE_PATH),
-				TEST_CASE_BASE);
-	}
-
-	private void testIngest(
-			final IndexType indexType,
-			final String ingestFilePath ) {
-		// ingest gpx data directly into GeoWave using the
-		// ingest framework's main method and pre-defined commandline arguments
-		LOGGER.warn("Ingesting '" + ingestFilePath + "' - this may take several minutes...");
-		final String[] args = StringUtils.split(
-				"-hdfsingest -t gpx -hdfs " + hdfs + " -hdfsbase " + hdfsBaseDirectory + " -jobtracker " + jobtracker + " -b " + ingestFilePath + " -z " + zookeeper + " -i " + accumuloInstance + " -u " + accumuloUser + " -p " + accumuloPassword + " -n " + TEST_NAMESPACE + " -dim " + (indexType.equals(IndexType.SPATIAL_VECTOR) ? "spatial" : "spatial-temporal"),
-				' ');
-		IngestMain.main(args);
-	}
-
 	@Test
 	public void testIngestAndQueryGeneralGpx()
 			throws Exception {
+		accumuloOperations.deleteAll();
 		testIngest(
 				IndexType.SPATIAL_VECTOR,
 				GENERAL_GPX_INPUT_GPX_DIR);
@@ -158,12 +126,12 @@ public class GeoWaveMapReduceIT extends
 						GENERAL_GPX_FILTER_FILE).toURI().toURL()),
 				null,
 				null);
-		accumuloOperations.deleteAll();
 	}
 
 	@Test
 	public void testIngestOsmGpxMultipleIndices()
 			throws Exception {
+		accumuloOperations.deleteAll();
 		// ingest the data set into multiple indices and then try several query
 		// methods, by adapter and by index
 		testIngest(
@@ -243,7 +211,6 @@ public class GeoWaveMapReduceIT extends
 				null,
 				null,
 				null);
-		accumuloOperations.deleteAll();
 	}
 
 	private void runTestJob(

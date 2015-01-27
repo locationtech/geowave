@@ -73,7 +73,7 @@ public class QueryFilterIterator extends
 					new ByteArrayId(
 							rowId.getDataId()),
 					new ByteArrayId(
-							rowId.getIndexId()),
+							rowId.getInsertionId()),
 					rowId.getNumberOfDuplicates(),
 					commonData);
 			return filter.accept(encoding);

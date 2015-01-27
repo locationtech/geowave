@@ -34,4 +34,9 @@ public class FitToIndexPersistenceEncoding extends
 		return insertionIds;
 	}
 
+	@Override
+	public boolean isDeduplicationEnabled() {
+		return false;
+	}
+
 }

@@ -22,7 +22,7 @@ public interface DataStore
 	 *
 	 * @param index
 	 *            The configuration information for the primary index to use.
-	 * @return Returns the inex writer which can be used for batch write
+	 * @return Returns the index writer which can be used for batch write
 	 *         operations
 	 */
 	public <T> IndexWriter createIndexWriter(

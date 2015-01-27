@@ -54,5 +54,4 @@ public class RasterTileCombiner extends
 				env);
 		helper.init(options);
 	}
-
 }

@@ -37,7 +37,7 @@ import com.vividsolutions.jts.geom.GeometryFactory;
  * object in order to open the appropriate cursor to iterate over data. It uses
  * Keys within the Query hints to determine whether to perform special purpose
  * queries such as decimation or distributed rendering.
- * 
+ *
  */
 public class GeoWaveFeatureCollection extends
 		DataFeatureCollection
@@ -106,7 +106,7 @@ public class GeoWaveFeatureCollection extends
 	@Override
 	public ReferencedEnvelope getBounds() {
 
-		double minx = Double.MAX_VALUE, maxx = -Double.MAX_VALUE, miny = Double.MAX_VALUE, maxy = Double.MAX_VALUE;
+		double minx = Double.MAX_VALUE, maxx = -Double.MAX_VALUE, miny = Double.MAX_VALUE, maxy = -Double.MAX_VALUE;
 		try {
 			// GEOWAVE-60 optimization
 			final Map<ByteArrayId, DataStatistics<SimpleFeature>> statsMap = reader.getComponents().getDataStatistics(

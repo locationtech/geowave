@@ -2,12 +2,15 @@ package mil.nga.giat.geowave.raster;
 
 import java.util.TreeMap;
 
+import org.geotools.coverage.grid.GridCoverage2D;
+
 import mil.nga.giat.geowave.accumulo.AccumuloDataStore;
 import mil.nga.giat.geowave.accumulo.AccumuloOperations;
 import mil.nga.giat.geowave.accumulo.AccumuloOptions;
 import mil.nga.giat.geowave.index.HierarchicalNumericIndexStrategy;
 import mil.nga.giat.geowave.index.HierarchicalNumericIndexStrategy.SubStrategy;
 import mil.nga.giat.geowave.index.NumericIndexStrategy;
+import mil.nga.giat.geowave.raster.plugin.GeoWaveGTRasterFormat;
 import mil.nga.giat.geowave.store.CloseableIterator;
 import mil.nga.giat.geowave.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.store.adapter.DataAdapter;

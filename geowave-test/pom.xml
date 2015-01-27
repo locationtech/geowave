@@ -37,6 +37,11 @@
 			<type>pom</type>
 		</dependency>
 		<dependency>
+			<groupId>mil.nga.giat</groupId>
+			<artifactId>geowave-analytics</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.11</version>
