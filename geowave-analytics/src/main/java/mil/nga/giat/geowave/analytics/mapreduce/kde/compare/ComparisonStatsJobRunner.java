@@ -2,29 +2,24 @@ package mil.nga.giat.geowave.analytics.mapreduce.kde.compare;
 
 import java.io.IOException;
 
-import mil.nga.giat.geowave.accumulo.BasicAccumuloOperations;
-import mil.nga.giat.geowave.accumulo.metadata.AccumuloAdapterStore;
-import mil.nga.giat.geowave.accumulo.metadata.AccumuloIndexStore;
-import mil.nga.giat.geowave.analytics.mapreduce.kde.AccumuloKDEReducer;
+import mil.nga.giat.geowave.accumulo.mapreduce.output.GeoWaveOutputFormat;
+import mil.nga.giat.geowave.accumulo.mapreduce.output.GeoWaveOutputKey;
 import mil.nga.giat.geowave.analytics.mapreduce.kde.KDEJobRunner;
-import mil.nga.giat.geowave.store.index.Index;
-import mil.nga.giat.geowave.vector.adapter.FeatureDataAdapter;
+import mil.nga.giat.geowave.raster.RasterUtils;
+import mil.nga.giat.geowave.store.index.IndexType;
 
-import org.apache.accumulo.core.client.mapreduce.AccumuloOutputFormat;
-import org.apache.accumulo.core.client.security.tokens.PasswordToken;
-import org.apache.accumulo.core.data.Mutation;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.DoubleWritable;
 import org.apache.hadoop.io.LongWritable;
-import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.input.SequenceFileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.SequenceFileOutputFormat;
 import org.apache.hadoop.util.ToolRunner;
+import org.opengis.feature.simple.SimpleFeature;
 
 public class ComparisonStatsJobRunner extends
 		KDEJobRunner
@@ -53,19 +48,17 @@ public class ComparisonStatsJobRunner extends
 	@Override
 	protected boolean postJob2Actions(
 			final Configuration conf,
-			final Index spatialIndex,
-			final String statsNamespace,
-			final String tableName )
+			final String statsNamespace )
 			throws Exception {
 		final FileSystem fs = FileSystem.get(conf);
 		fs.delete(
 				new Path(
-						"/tmp/" + namespace + "_stats_" + minLevel + "_" + maxLevel + "_" + statsName + "/basic"),
+						"/tmp/" + namespace + "_stats_" + minLevel + "_" + maxLevel + "_" + coverageName + "/basic"),
 				true);
 		final Job combiner = new Job(
 				conf);
 		combiner.setJarByClass(this.getClass());
-		combiner.setJobName(namespace + "(" + statsName + ")" + " levels " + minLevel + "-" + maxLevel + " combining seasons");
+		combiner.setJobName(namespace + "(" + coverageName + ")" + " levels " + minLevel + "-" + maxLevel + " combining seasons");
 		combiner.setMapperClass(ComparisonCombiningStatsMapper.class);
 		combiner.setReducerClass(ComparisonCombiningStatsReducer.class);
 		combiner.setMapOutputKeyClass(LongWritable.class);
@@ -77,17 +70,17 @@ public class ComparisonStatsJobRunner extends
 		FileOutputFormat.setOutputPath(
 				combiner,
 				new Path(
-						"/tmp/" + namespace + "_stats_" + minLevel + "_" + maxLevel + "_" + statsName + "/combined_pct"));
+						"/tmp/" + namespace + "_stats_" + minLevel + "_" + maxLevel + "_" + coverageName + "/combined_pct"));
 
 		FileInputFormat.setInputPaths(
 				combiner,
 				new Path(
-						"/tmp/" + namespace + "_stats_" + minLevel + "_" + maxLevel + "_" + statsName + "/percentiles"));
+						"/tmp/" + namespace + "_stats_" + minLevel + "_" + maxLevel + "_" + coverageName + "/percentiles"));
 		if (combiner.waitForCompletion(true)) {
 
 			fs.delete(
 					new Path(
-							"/tmp/" + namespace + "_stats_" + minLevel + "_" + maxLevel + "_" + statsName + "/percentiles"),
+							"/tmp/" + namespace + "_stats_" + minLevel + "_" + maxLevel + "_" + coverageName + "/percentiles"),
 					true);
 			for (int l = minLevel; l <= maxLevel; l++) {
 				conf.setLong(
@@ -101,59 +94,37 @@ public class ComparisonStatsJobRunner extends
 			final Job ingester = new Job(
 					conf);
 			ingester.setJarByClass(this.getClass());
-			ingester.setJobName(namespace + "(" + statsName + ")" + " levels " + minLevel + "-" + maxLevel + " Ingest");
+			ingester.setJobName(namespace + "(" + coverageName + ")" + " levels " + minLevel + "-" + maxLevel + " Ingest");
 			ingester.setMapperClass(ComparisonIdentityMapper.class);
 			ingester.setPartitionerClass(ComparisonCellLevelPartitioner.class);
 			ingester.setReducerClass(ComparisonAccumuloStatsReducer.class);
 			ingester.setNumReduceTasks((maxLevel - minLevel) + 1);
 			ingester.setMapOutputKeyClass(ComparisonCellData.class);
 			ingester.setMapOutputValueClass(LongWritable.class);
-			ingester.setOutputKeyClass(Text.class);
-			ingester.setOutputValueClass(Mutation.class);
+			ingester.setOutputKeyClass(GeoWaveOutputKey.class);
+			ingester.setOutputValueClass(SimpleFeature.class);
 			ingester.setInputFormatClass(SequenceFileInputFormat.class);
-			ingester.setOutputFormatClass(AccumuloOutputFormat.class);
+			ingester.setOutputFormatClass(GeoWaveOutputFormat.class);
 
 			FileInputFormat.setInputPaths(
 					ingester,
 					new Path(
-							"/tmp/" + namespace + "_stats_" + minLevel + "_" + maxLevel + "_" + statsName + "/combined_pct"));
-			final BasicAccumuloOperations statsOperations = new BasicAccumuloOperations(
+							"/tmp/" + namespace + "_stats_" + minLevel + "_" + maxLevel + "_" + coverageName + "/combined_pct"));
+			GeoWaveOutputFormat.setAccumuloOperationsInfo(
+					ingester,
 					zookeeper,
 					instance,
 					user,
 					password,
 					statsNamespace);
-			final AccumuloAdapterStore statsAdapterStore = new AccumuloAdapterStore(
-					statsOperations);
-			for (int level = minLevel; level <= maxLevel; level++) {
-				final FeatureDataAdapter featureAdapter = new FeatureDataAdapter(
-						ComparisonAccumuloStatsReducer.createFeatureType(AccumuloKDEReducer.getTypeName(
-								level,
-								statsName)));
-				if (!statsAdapterStore.adapterExists(featureAdapter.getAdapterId())) {
-					statsAdapterStore.addAdapter(featureAdapter);
-				}
-			}
-			final AccumuloIndexStore statsIndexStore = new AccumuloIndexStore(
-					statsOperations);
-			if (!statsIndexStore.indexExists(spatialIndex.getId())) {
-				statsIndexStore.addIndex(spatialIndex);
-			}
-			AccumuloOutputFormat.setZooKeeperInstance(
+			setup(
 					ingester,
-					instance,
-					zookeeper);
-			AccumuloOutputFormat.setCreateTables(
-					ingester,
-					true);
-			AccumuloOutputFormat.setConnectorInfo(
-					ingester,
-					user,
-					new PasswordToken(
-							password.getBytes()));
-			AccumuloOutputFormat.setDefaultTableName(
-					ingester,
-					tableName);
+					statsNamespace,
+					RasterUtils.createDataAdapterTypeDouble(
+							statsNamespace,
+							ComparisonAccumuloStatsReducer.NUM_BANDS,
+							tileSize),
+					IndexType.SPATIAL_RASTER.createDefaultIndex());
 			return ingester.waitForCompletion(true);
 
 		}
@@ -203,7 +174,7 @@ public class ComparisonStatsJobRunner extends
 
 	@Override
 	protected String getJob2Name() {
-		return namespace + "(" + statsName + ")" + " levels " + minLevel + "-" + maxLevel + " Percentile Calculation by season";
+		return namespace + "(" + coverageName + ")" + " levels " + minLevel + "-" + maxLevel + " Percentile Calculation by season";
 	}
 
 	@Override
@@ -235,15 +206,13 @@ public class ComparisonStatsJobRunner extends
 	@Override
 	protected void setupJob2Output(
 			final Configuration conf,
-			final Index spatialIndex,
 			final Job statsReducer,
-			final String statsNamespace,
-			final String tableName )
+			final String statsNamespace )
 			throws Exception {
 		FileOutputFormat.setOutputPath(
 				statsReducer,
 				new Path(
-						"/tmp/" + namespace + "_stats_" + minLevel + "_" + maxLevel + "_" + statsName + "/percentiles"));
+						"/tmp/" + namespace + "_stats_" + minLevel + "_" + maxLevel + "_" + coverageName + "/percentiles"));
 	}
 
 	@Override

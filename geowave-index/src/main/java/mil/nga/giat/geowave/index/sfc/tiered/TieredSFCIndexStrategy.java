@@ -271,11 +271,11 @@ public class TieredSFCIndexStrategy implements
 						(byte) tier
 					},
 					index.getBinId());
-			final double[] minValues = index.getMinValuesPerDimension();
+			final double[] maxValues = index.getMaxValuesPerDimension();
 			retVal.add(new ByteArrayId(
 					ByteArrayUtils.combineArrays(
 							tierAndBinId,
-							sfc.getId(minValues))));
+							sfc.getId(maxValues))));
 			return retVal;
 		}
 		else if ((maxEstimatedDuplicateIds == null) || (rowCount.compareTo(maxEstimatedDuplicateIds) <= 0) || (tier == 0)) {

@@ -6,9 +6,12 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
+
 import mil.nga.giat.geowave.raster.adapter.merge.nodata.NoDataMetadata.SampleIndex;
 
 import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.Envelope;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
 
@@ -41,7 +44,9 @@ public class NoDataMetadataFactory
 				noDataSummary,
 				new Geometry[] {
 					shape
-				});
+				},
+				data.getWidth(),
+				data.getHeight());
 	}
 
 	public static NoDataMetadata mergeMetadata(
@@ -125,13 +130,37 @@ public class NoDataMetadataFactory
 
 	private static NoDataMetadata createMetadata(
 			final NoDataSummary noDataSummary,
-			final Geometry[] shapes ) {
+			final Geometry[] shapes,
+			final int width,
+			final int height ) {
 		if (noDataSummary.indices.size() > MAX_LIST_NO_DATA) {
-			Geometry finalShape = shapes[0];
-			if (shapes.length > 1) {
-				for (int i = 1; i < shapes.length; i++) {
-					finalShape = finalShape.intersection(shapes[i]);
+			Geometry finalShape;
+			if ((shapes == null) || (shapes.length == 0)) {
+				finalShape = null;
+			}
+			else {
+				finalShape = shapes[0];
+				if ((shapes.length > 1) && (finalShape != null)) {
+					for (int i = 1; i < shapes.length; i++) {
+						if (shapes[i] == null) {
+							finalShape = null;
+							break;
+						}
+						else {
+							finalShape = finalShape.union(shapes[i]);
+						}
+					}
 				}
+			}
+			if ((finalShape != null) && finalShape.covers(new GeometryFactory().toGeometry(new Envelope(
+					0,
+					width,
+					0,
+					height)))) {
+				// if the coverage of this geometric union ever gets to the
+				// point that it fully covers the raster, stop storing it and
+				// just set the geometry to null
+				finalShape = null;
 			}
 			return new NoDataByFilter(
 					finalShape,
@@ -229,7 +258,10 @@ public class NoDataMetadataFactory
 				new Geometry[] {
 					noDataMetadata1.getShape(),
 					noDataMetadata2.getShape()
-				});
+				},
+				raster2.getWidth(), // both rasters better be the same
+									// dimensions
+				raster2.getHeight());
 	}
 
 	private static NoDataSummary getNoDataSummary(
@@ -338,7 +370,12 @@ public class NoDataMetadataFactory
 								// then it is valid
 								boolean noData = true;
 								for (final double sample : samples) {
-									if (sample != allNoDataValues[b][i]) {
+									// we wrap it with Object equality to make
+									// sure we generically catch special
+									// cases, such as NaN and positive and
+									// negative infinite
+									if (!new Double(
+											sample).equals(allNoDataValues[b][i])) {
 										noData = false;
 										break;
 									}
@@ -356,6 +393,7 @@ public class NoDataMetadataFactory
 				}
 			}
 		}
+
 		final double[][] usedNoDataValues;
 		if (!skipNoData) {
 			usedNoDataValues = new double[noDataValuesPerBand.length][];
@@ -420,6 +458,9 @@ public class NoDataMetadataFactory
 		public MultiShape(
 				final Geometry[] shapes ) {
 			this.shapes = shapes;
+			if ((shapes == null) || (shapes.length == 0)) {
+				acceptNone = true;
+			}
 			for (final Geometry shape : shapes) {
 				if (shape == null) {
 					acceptNone = true;
@@ -442,7 +483,7 @@ public class NoDataMetadataFactory
 					}
 				}
 			}
-			return true;
+			return false;
 		}
 	}
 

@@ -1,58 +1,120 @@
 package mil.nga.giat.geowave.analytics.mapreduce.kde;
 
+import java.awt.image.WritableRaster;
 import java.io.IOException;
 
-import javax.vecmath.Point2d;
-
-import mil.nga.giat.geowave.accumulo.AccumuloDataStore;
-import mil.nga.giat.geowave.accumulo.AccumuloOptions;
-import mil.nga.giat.geowave.vector.adapter.FeatureDataAdapter;
-import mil.nga.giat.geowave.store.DataStore;
-import mil.nga.giat.geowave.store.GeometryUtils;
-import mil.nga.giat.geowave.store.adapter.AdapterStore;
-import mil.nga.giat.geowave.store.adapter.DataAdapter;
-import mil.nga.giat.geowave.store.adapter.MemoryAdapterStore;
-import mil.nga.giat.geowave.store.index.Index;
-import mil.nga.giat.geowave.store.index.IndexStore;
+import mil.nga.giat.geowave.accumulo.mapreduce.output.GeoWaveOutputKey;
+import mil.nga.giat.geowave.index.ByteArrayId;
+import mil.nga.giat.geowave.raster.RasterUtils;
 import mil.nga.giat.geowave.store.index.IndexType;
-import mil.nga.giat.geowave.store.index.MemoryIndexStore;
 
-import org.apache.accumulo.core.data.Mutation;
 import org.apache.hadoop.io.DoubleWritable;
 import org.apache.hadoop.io.LongWritable;
-import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Reducer;
-import org.apache.log4j.Logger;
-import org.geotools.feature.AttributeTypeBuilder;
-import org.geotools.feature.simple.SimpleFeatureBuilder;
-import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
-import org.opengis.feature.simple.SimpleFeature;
-import org.opengis.feature.simple.SimpleFeatureType;
-
-import com.vividsolutions.jts.geom.Envelope;
-import com.vividsolutions.jts.geom.Geometry;
+import org.opengis.coverage.grid.GridCoverage;
 
 public class AccumuloKDEReducer extends
-		Reducer<DoubleWritable, LongWritable, Text, Mutation>
+		Reducer<DoubleWritable, LongWritable, GeoWaveOutputKey, GridCoverage>
 {
-	private final static Logger LOGGER = Logger.getLogger(AccumuloKDEReducer.class);
-	public static final String STATS_NAME_KEY = "STATS_NAME";
+	private static final class TileInfo
+	{
+		private final double tileWestLon;
+		private final double tileEastLon;
+		private final double tileSouthLat;
+		private final double tileNorthLat;
+		private final int x;
+		private final int y;
+
+		public TileInfo(
+				final double tileWestLon,
+				final double tileEastLon,
+				final double tileSouthLat,
+				final double tileNorthLat,
+				final int x,
+				final int y ) {
+			this.tileWestLon = tileWestLon;
+			this.tileEastLon = tileEastLon;
+			this.tileSouthLat = tileSouthLat;
+			this.tileNorthLat = tileNorthLat;
+			this.x = x;
+			this.y = y;
+		}
+
+		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = 1;
+			long temp;
+			temp = Double.doubleToLongBits(tileEastLon);
+			result = (prime * result) + (int) (temp ^ (temp >>> 32));
+			temp = Double.doubleToLongBits(tileNorthLat);
+			result = (prime * result) + (int) (temp ^ (temp >>> 32));
+			temp = Double.doubleToLongBits(tileSouthLat);
+			result = (prime * result) + (int) (temp ^ (temp >>> 32));
+			temp = Double.doubleToLongBits(tileWestLon);
+			result = (prime * result) + (int) (temp ^ (temp >>> 32));
+			return result;
+		}
+
+		@Override
+		public boolean equals(
+				final Object obj ) {
+			if (this == obj) {
+				return true;
+			}
+			if (obj == null) {
+				return false;
+			}
+			if (getClass() != obj.getClass()) {
+				return false;
+			}
+			final TileInfo other = (TileInfo) obj;
+			if (Double.doubleToLongBits(tileEastLon) != Double.doubleToLongBits(other.tileEastLon)) {
+				return false;
+			}
+			if (Double.doubleToLongBits(tileNorthLat) != Double.doubleToLongBits(other.tileNorthLat)) {
+				return false;
+			}
+			if (Double.doubleToLongBits(tileSouthLat) != Double.doubleToLongBits(other.tileSouthLat)) {
+				return false;
+			}
+			if (Double.doubleToLongBits(tileWestLon) != Double.doubleToLongBits(other.tileWestLon)) {
+				return false;
+			}
+			return true;
+		}
+	}
+
+	public static final int NUM_BANDS = 3;
+	protected static final String[] NAME_PER_BAND = new String[] {
+		"Weight",
+		"Normalized",
+		"Percentile"
+	};
+
+	protected static final double[] MINS_PER_BAND = new double[] {
+		0,
+		0,
+		0
+	};
+	protected static final double[] MAXES_PER_BAND = new double[] {
+		Double.MAX_VALUE,
+		1,
+		1
+	};
 	private long totalKeys = 0;
 	private double max = -Double.MAX_VALUE;
 	private double inc = 0;
 
-	private SimpleFeatureType type;
-	private SimpleFeatureBuilder builder;
-	private Index index;
-	private DataStore dataStore;
 	private int minLevels;
 	private int maxLevels;
 	private int numLevels;
 	private int level;
-	private int numXPosts;
 	private int numYPosts;
-	private FeatureDataAdapter adapter;
-	private String statsName;
+	private int numXTiles;
+	private int numYTiles;
+	private String coverageName;
+	private int tileSize;
 
 	@Override
 	protected void reduce(
@@ -68,43 +130,71 @@ public class AccumuloKDEReducer extends
 			}
 		}
 		else {
-			final double normalized = key.get() / max;
+			final double value = key.get();
+			final double normalizedValue = value / max;
 			// calculate weights for this key
 			for (final LongWritable v : values) {
 				final long cellIndex = v.get() / numLevels;
-				final Point2d[] bbox = fromIndexToLL_UR(cellIndex);
-				builder.add(GeometryUtils.GEOMETRY_FACTORY.toGeometry(new Envelope(
-						bbox[0].x,
-						bbox[1].x,
-						bbox[0].y,
-						bbox[1].y)));
-				builder.add(key.get());
-				builder.add(normalized);
+				final TileInfo tileInfo = fromCellIndexToTileInfo(cellIndex);
+				final WritableRaster raster = RasterUtils.createRasterTypeDouble(
+						NUM_BANDS,
+						tileSize);
+				raster.setSample(
+						tileInfo.x,
+						tileInfo.y,
+						0,
+						key.get());
+				raster.setSample(
+						tileInfo.x,
+						tileInfo.y,
+						1,
+						normalizedValue);
 				inc += (1.0 / totalKeys);
-				builder.add(inc);
-				final SimpleFeature feature = builder.buildFeature(Long.toString(cellIndex));
-				dataStore.ingest(
-						adapter,
-						index,
-						feature);
+
+				raster.setSample(
+						tileInfo.x,
+						tileInfo.y,
+						2,
+						inc);
+				context.write(
+						new GeoWaveOutputKey(
+								new ByteArrayId(
+										coverageName),
+								new ByteArrayId(
+										IndexType.SPATIAL_RASTER.getDefaultId())),
+						RasterUtils.createCoverageTypeDouble(
+								coverageName,
+								tileInfo.tileWestLon,
+								tileInfo.tileEastLon,
+								tileInfo.tileSouthLat,
+								tileInfo.tileNorthLat,
+								MINS_PER_BAND,
+								MAXES_PER_BAND,
+								NAME_PER_BAND,
+								raster));
 			}
 		}
 	}
 
-	private Point2d[] fromIndexToLL_UR(
+	private TileInfo fromCellIndexToTileInfo(
 			final long index ) {
-		final double llLon = ((Math.floor(index / numYPosts) * 360.0) / numXPosts) - 180.0;
-		final double llLat = (((index % numYPosts) * 180.0) / numYPosts) - 90.0;
-		final double urLon = llLon + (360.0 / numXPosts);
-		final double urLat = llLat + (180.0 / numYPosts);
-		return new Point2d[] {
-			new Point2d(
-					llLon,
-					llLat),
-			new Point2d(
-					urLon,
-					urLat)
-		};
+		final int xPost = (int) Math.floor(index / numYPosts);
+		final int yPost = (int) (index % numYPosts);
+		final int xTile = (int) Math.floor((double) xPost / (double) tileSize);
+		final int yTile = (int) Math.floor((double) yPost / (double) tileSize);
+		final int x = (xPost % tileSize);
+		final int y = (yPost % tileSize);
+		final double tileWestLon = ((xTile * 360.0) / numXTiles) - 180.0;
+		final double tileSouthLat = ((yTile * 180.0) / numYTiles) - 90.0;
+		final double tileEastLon = tileWestLon + (360.0 / numXTiles);
+		final double tileNorthLat = tileSouthLat + (180.0 / numYTiles);
+		return new TileInfo(
+				tileWestLon,
+				tileEastLon,
+				tileSouthLat,
+				tileNorthLat,
+				x,
+				y);
 	}
 
 	@Override
@@ -119,81 +209,25 @@ public class AccumuloKDEReducer extends
 		maxLevels = context.getConfiguration().getInt(
 				KDEJobRunner.MAX_LEVEL_KEY,
 				25);
-		statsName = context.getConfiguration().get(
-				STATS_NAME_KEY,
+		coverageName = context.getConfiguration().get(
+				KDEJobRunner.COVERAGE_NAME_KEY,
 				"");
+		tileSize = context.getConfiguration().getInt(
+				KDEJobRunner.TILE_SIZE_KEY,
+				1);
 		numLevels = (maxLevels - minLevels) + 1;
 		level = context.getConfiguration().getInt(
 				"mapred.task.partition",
 				0) + minLevels;
-		numXPosts = (int) Math.pow(
+		numXTiles = (int) Math.pow(
 				2,
 				level + 1);
-		numYPosts = (int) Math.pow(
+		numYTiles = (int) Math.pow(
 				2,
 				level);
-		type = createFeatureType(getTypeName(
-				level,
-				statsName));
-		builder = new SimpleFeatureBuilder(
-				type);
-		index = IndexType.SPATIAL_VECTOR.createDefaultIndex();
-		final IndexStore indexStore = new MemoryIndexStore(
-				new Index[] {
-					index
-				});
-		adapter = new FeatureDataAdapter(
-				type);
-		final AdapterStore adapterStore = new MemoryAdapterStore(
-				new DataAdapter[] {
-					new FeatureDataAdapter(
-							type)
-				});
-		final AccumuloOptions options = new AccumuloOptions();
-		options.setPersistDataStatistics(false);
-		// TODO consider an in memory statistics store that will write the
-		// statistics when the job is completed
-		dataStore = new AccumuloDataStore(
-				indexStore,
-				adapterStore,
-				null,
-				new ReducerContextWriterOperations(
-						context,
-						context.getConfiguration().get(
-								KDEJobRunner.TABLE_NAME)),
-				options);
-
+		numYPosts = numYTiles * tileSize;
 		totalKeys = context.getConfiguration().getLong(
 				"Entries per level.level" + level,
 				10);
 	}
-
-	public static String getTypeName(
-			final int level,
-			final String statsName ) {
-		return "l" + level + "_stats" + statsName;
-	}
-
-	public static SimpleFeatureType createFeatureType(
-			final String typeName ) {
-		final SimpleFeatureTypeBuilder simpleFeatureTypeBuilder = new SimpleFeatureTypeBuilder();
-		simpleFeatureTypeBuilder.setName(typeName);
-
-		final AttributeTypeBuilder attributeTypeBuilder = new AttributeTypeBuilder();
-
-		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
-				Geometry.class).buildDescriptor(
-				"geometry"));
-		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
-				Double.class).buildDescriptor(
-				"Value"));
-		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
-				Double.class).buildDescriptor(
-				"Normalized"));
-		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
-				Double.class).buildDescriptor(
-				"Percentile"));
-		return simpleFeatureTypeBuilder.buildFeatureType();
-	}
-
 }

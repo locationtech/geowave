@@ -332,7 +332,7 @@ public class AccumuloUtils
 				new ByteArrayId(
 						rowId.getDataId()),
 				new ByteArrayId(
-						rowId.getIndexId()),
+						rowId.getInsertionId()),
 				rowId.getNumberOfDuplicates(),
 				indexData,
 				extendedData);
@@ -506,7 +506,8 @@ public class AccumuloUtils
 				insertionIds,
 				dataWriter.getDataId(
 						entry).getBytes(),
-				dataWriter.getAdapterId().getBytes());
+				dataWriter.getAdapterId().getBytes(),
+				encodedData.isDeduplicationEnabled());
 
 		return rowIds;
 	}
@@ -515,7 +516,8 @@ public class AccumuloUtils
 			final List<ByteArrayId> rowIds,
 			final List<ByteArrayId> insertionIds,
 			final byte[] dataId,
-			final byte[] adapterId ) {
+			final byte[] adapterId,
+			final boolean enableDeduplication ) {
 
 		final int numberOfDuplicates = insertionIds.size() - 1;
 
@@ -533,7 +535,7 @@ public class AccumuloUtils
 							indexId,
 							dataId,
 							adapterId,
-							numberOfDuplicates).getRowId()));
+							enableDeduplication ? numberOfDuplicates : -1).getRowId()));
 		}
 	}
 
@@ -566,7 +568,8 @@ public class AccumuloUtils
 					insertionIds,
 					dataWriter.getDataId(
 							entry).getBytes(),
-					dataWriter.getAdapterId().getBytes());
+					dataWriter.getAdapterId().getBytes(),
+					encodedData.isDeduplicationEnabled());
 
 			for (final PersistentValue fieldValue : commonValues) {
 				final FieldInfo<T> fieldInfo = getFieldInfo(
@@ -594,7 +597,8 @@ public class AccumuloUtils
 					rowIds,
 					fieldInfoList);
 		}
-		LOGGER.warn("Indexing failed to produce insertion ids; entry [" + dataWriter.getDataId(entry).getString() +"] not saved.");
+		LOGGER.warn("Indexing failed to produce insertion ids; entry [" + dataWriter.getDataId(
+				entry).getString() + "] not saved.");
 		return new IngestEntryInfo(
 				Collections.EMPTY_LIST,
 				Collections.EMPTY_LIST);

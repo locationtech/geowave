@@ -108,7 +108,7 @@ public class CqlQueryFilterIterator extends
 					new ByteArrayId(
 							rowId.getDataId()),
 					new ByteArrayId(
-							rowId.getIndexId()),
+							rowId.getInsertionId()),
 					rowId.getNumberOfDuplicates(),
 					commonData,
 					extendedData);

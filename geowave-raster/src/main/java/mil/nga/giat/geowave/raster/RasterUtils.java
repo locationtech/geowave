@@ -6,11 +6,14 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
+import java.awt.Transparency;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
+import java.awt.image.ComponentColorModel;
+import java.awt.image.DataBuffer;
 import java.awt.image.Raster;
 import java.awt.image.RenderedImage;
 import java.awt.image.SampleModel;
@@ -18,6 +21,7 @@ import java.awt.image.WritableRaster;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
@@ -27,28 +31,39 @@ import javax.media.jai.Histogram;
 import javax.media.jai.Interpolation;
 import javax.media.jai.JAI;
 import javax.media.jai.PlanarImage;
+import javax.media.jai.RasterFactory;
 import javax.media.jai.RenderedImageAdapter;
 import javax.media.jai.RenderedOp;
 import javax.media.jai.TiledImage;
 import javax.media.jai.operator.ScaleDescriptor;
 
 import mil.nga.giat.geowave.index.sfc.data.MultiDimensionalNumericData;
+import mil.nga.giat.geowave.raster.adapter.RasterDataAdapter;
+import mil.nga.giat.geowave.raster.adapter.merge.nodata.NoDataMergeStrategy;
 import mil.nga.giat.geowave.raster.plugin.GeoWaveGTRasterFormat;
 
 import org.apache.log4j.Logger;
+import org.geotools.coverage.Category;
+import org.geotools.coverage.CoverageFactoryFinder;
+import org.geotools.coverage.GridSampleDimension;
+import org.geotools.coverage.TypeMap;
 import org.geotools.coverage.grid.GridCoverage2D;
 import org.geotools.coverage.grid.GridCoverageFactory;
 import org.geotools.geometry.DirectPosition2D;
+import org.geotools.geometry.Envelope2D;
 import org.geotools.geometry.GeneralEnvelope;
 import org.geotools.geometry.jts.JTSFactoryFinder;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.referencing.CRS;
 import org.geotools.referencing.operation.builder.GridToEnvelopeMapper;
 import org.geotools.referencing.operation.matrix.MatrixFactory;
+import org.geotools.referencing.operation.transform.LinearTransform1D;
 import org.geotools.referencing.operation.transform.ProjectiveTransform;
 import org.geotools.resources.i18n.ErrorKeys;
 import org.geotools.resources.i18n.Errors;
 import org.geotools.resources.image.ImageUtilities;
+import org.geotools.util.NumberRange;
+import org.opengis.coverage.SampleDimensionType;
 import org.opengis.coverage.grid.GridCoverage;
 import org.opengis.geometry.Envelope;
 import org.opengis.geometry.MismatchedDimensionException;
@@ -58,6 +73,7 @@ import org.opengis.referencing.operation.MathTransform;
 import org.opengis.referencing.operation.Matrix;
 import org.opengis.referencing.operation.TransformException;
 
+import com.sun.media.imageioimpl.common.BogusColorSpace;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
@@ -69,7 +85,6 @@ public class RasterUtils
 	private static final int MIN_SEGMENTS = 5;
 	private static final int MAX_SEGMENTS = 500;
 	private static final double SIMPLIFICATION_MAX_DEGREES = 0.0001;
-	private static int DEFAULT_IMAGE_TYPE = BufferedImage.TYPE_3BYTE_BGR;
 
 	public static Geometry getFootprint(
 			final ReferencedEnvelope projectedReferenceEnvelope,
@@ -384,7 +399,8 @@ public class RasterUtils
 			final GridCoverageFactory coverageFactory,
 			final String coverageName,
 			final Integer interpolation,
-			final Histogram histogram ) {
+			final Histogram histogram,
+			final ColorModel defaultColorModel ) {
 		final double rescaleX = levelResX / (requestEnvelope.getSpan(0) / pixelDimension.getWidth());
 		final double rescaleY = levelResY / (requestEnvelope.getSpan(1) / pixelDimension.getHeight());
 		final double width = pixelDimension.getWidth() / rescaleX;
@@ -426,7 +442,8 @@ public class RasterUtils
 					imageWidth,
 					imageHeight,
 					backgroundColor,
-					null);// the transparent color will be used later
+					null,// the transparent color will be used later
+					defaultColorModel);
 		}
 
 		GeneralEnvelope resultEnvelope = null;
@@ -446,10 +463,10 @@ public class RasterUtils
 		}
 
 		image = rescaleImageViaPlanarImage(
-						interpolation,
-						rescaleX,
-						rescaleY,
-						image);
+				interpolation,
+				rescaleX * (width / imageWidth),
+				rescaleY * (height / imageHeight),
+				image);
 		RenderedImage result;
 		if (outputTransparentColor == null) {
 			result = image;
@@ -617,11 +634,15 @@ public class RasterUtils
 			final int width,
 			final int height,
 			final Color backgroundColor,
-			final Color outputTransparentColor ) {
+			final Color outputTransparentColor,
+			final ColorModel defaultColorModel ) {
 		BufferedImage emptyImage = new BufferedImage(
-				width,
-				height,
-				DEFAULT_IMAGE_TYPE);
+				defaultColorModel,
+				defaultColorModel.createCompatibleWritableRaster(
+						width,
+						height),
+				defaultColorModel.isAlphaPremultiplied(),
+				null);
 
 		final Graphics2D g2D = (Graphics2D) emptyImage.getGraphics();
 		final Color save = g2D.getColor();
@@ -642,4 +663,306 @@ public class RasterUtils
 		return emptyImage;
 	}
 
+	public static WritableRaster createRasterTypeDouble(
+			final int numBands,
+			final int tileSize ) {
+		final WritableRaster raster = RasterFactory.createBandedRaster(
+				DataBuffer.TYPE_DOUBLE,
+				tileSize,
+				tileSize,
+				numBands,
+				null);
+		final double[] defaultValues = new double[tileSize * tileSize * numBands];
+		Arrays.fill(
+				defaultValues,
+				Double.NaN);
+		raster.setDataElements(
+				0,
+				0,
+				tileSize,
+				tileSize,
+				defaultValues);
+		return raster;
+	}
+
+	public static RasterDataAdapter createDataAdapterTypeDouble(
+			final String coverageName,
+			final int numBands,
+			final int tileSize ) {
+		return createDataAdapterTypeDouble(
+				coverageName,
+				numBands,
+				tileSize,
+				null,
+				null,
+				null);
+	}
+
+	public static RasterDataAdapter createDataAdapterTypeDouble(
+			final String coverageName,
+			final int numBands,
+			final int tileSize,
+			final double[] minsPerBand,
+			final double[] maxesPerBand,
+			final String[] namesPerBand ) {
+		final double[][] noDataValuesPerBand = new double[numBands][];
+		final double[] backgroundValuesPerBand = new double[numBands];
+		final int[] bitsPerSample = new int[numBands];
+		for (int i = 0; i < numBands; i++) {
+			noDataValuesPerBand[i] = new double[] {
+				Double.valueOf(Double.NaN)
+			};
+			backgroundValuesPerBand[i] = Double.valueOf(Double.NaN);
+			bitsPerSample[i] = DataBuffer.getDataTypeSize(DataBuffer.TYPE_DOUBLE);
+		}
+		final SampleModel sampleModel = createRasterTypeDouble(
+				numBands,
+				tileSize).getSampleModel();
+		return new RasterDataAdapter(
+				coverageName,
+				sampleModel,
+				new ComponentColorModel(
+						new BogusColorSpace(
+								numBands),
+						bitsPerSample,
+						false,
+						false,
+						Transparency.OPAQUE,
+						DataBuffer.TYPE_DOUBLE),
+				new HashMap<String, String>(),
+				tileSize,
+				minsPerBand,
+				maxesPerBand,
+				namesPerBand,
+				noDataValuesPerBand,
+				backgroundValuesPerBand,
+				null,
+				false,
+				new NoDataMergeStrategy());
+	}
+
+	public static GridCoverage2D createCoverageTypeDouble(
+			final String coverageName,
+			final double westLon,
+			final double eastLon,
+			final double southLat,
+			final double northLat,
+			final WritableRaster raster ) {
+		final GridCoverageFactory gcf = CoverageFactoryFinder.getGridCoverageFactory(null);
+		Envelope mapExtent;
+		try {
+			mapExtent = new ReferencedEnvelope(
+					westLon,
+					eastLon,
+					southLat,
+					northLat,
+					GeoWaveGTRasterFormat.DEFAULT_CRS);
+		}
+		catch (final IllegalArgumentException e) {
+			LOGGER.warn(
+					"Unable to use default CRS",
+					e);
+			mapExtent = new Envelope2D(
+					new DirectPosition2D(
+							westLon,
+							southLat),
+					new DirectPosition2D(
+							eastLon,
+							northLat));
+		}
+		return gcf.create(
+				coverageName,
+				raster,
+				mapExtent);
+	}
+
+	public static GridCoverage2D createCoverageTypeDouble(
+			final String coverageName,
+			final double westLon,
+			final double eastLon,
+			final double southLat,
+			final double northLat,
+			final double[] minPerBand,
+			final double[] maxPerBand,
+			final String[] namePerBand,
+			final WritableRaster raster ) {
+		final GridCoverageFactory gcf = CoverageFactoryFinder.getGridCoverageFactory(null);
+		Envelope mapExtent;
+		try {
+			mapExtent = new ReferencedEnvelope(
+					westLon,
+					eastLon,
+					southLat,
+					northLat,
+					GeoWaveGTRasterFormat.DEFAULT_CRS);
+		}
+		catch (final IllegalArgumentException e) {
+			LOGGER.warn(
+					"Unable to use default CRS",
+					e);
+			mapExtent = new Envelope2D(
+					new DirectPosition2D(
+							westLon,
+							southLat),
+					new DirectPosition2D(
+							eastLon,
+							northLat));
+		}
+		final GridSampleDimension[] bands = new GridSampleDimension[raster.getNumBands()];
+		create(
+				namePerBand,
+				raster.getSampleModel(),
+				minPerBand,
+				maxPerBand,
+				bands);
+		return gcf.create(
+				coverageName,
+				raster,
+				mapExtent,
+				bands);
+	}
+
+	/**
+	 * NOTE: This is a small bit of functionality "inspired by"
+	 * org.geotools.coverage.grid.RenderedSampleDimension ie. some of the code
+	 * has been modified/simplified from the original version, but it had
+	 * private visibility and could not be re-used as is Creates a set of sample
+	 * dimensions for the data backing the given iterator. Particularly, it was
+	 * desirable to be able to provide the name per band which was not provided
+	 * in the original.
+	 *
+	 * @param name
+	 *            The name for each band of the data (e.g. "Elevation").
+	 * @param model
+	 *            The image or raster sample model.
+	 * @param min
+	 *            The minimal value, or {@code null} for computing it
+	 *            automatically.
+	 * @param max
+	 *            The maximal value, or {@code null} for computing it
+	 *            automatically.
+	 * @param units
+	 *            The units of sample values, or {@code null} if unknow.
+	 * @param colors
+	 *            The colors to use for values from {@code min} to {@code max}
+	 *            for each bands, or {@code null} for a default color palette.
+	 *            If non-null, each arrays {@code colors[b]} may have any
+	 *            length; colors will be interpolated as needed.
+	 * @param dst
+	 *            The array where to store sample dimensions. The array length
+	 *            must matches the number of bands.
+	 */
+	private static void create(
+			final CharSequence[] name,
+			final SampleModel model,
+			final double[] min,
+			final double[] max,
+			final GridSampleDimension[] dst ) {
+		final int numBands = dst.length;
+		if ((min != null) && (min.length != numBands)) {
+			throw new IllegalArgumentException(
+					Errors.format(
+							ErrorKeys.NUMBER_OF_BANDS_MISMATCH_$3,
+							numBands,
+							min.length,
+							"min[i]"));
+		}
+		if ((name != null) && (name.length != numBands)) {
+			throw new IllegalArgumentException(
+					Errors.format(
+							ErrorKeys.NUMBER_OF_BANDS_MISMATCH_$3,
+							numBands,
+							min.length,
+							"min[i]"));
+		}
+		if ((max != null) && (max.length != numBands)) {
+			throw new IllegalArgumentException(
+					Errors.format(
+							ErrorKeys.NUMBER_OF_BANDS_MISMATCH_$3,
+							numBands,
+							max.length,
+							"max[i]"));
+		}
+		/*
+		 * Arguments are know to be valids. We now need to compute two ranges:
+		 *
+		 * STEP 1: Range of target (sample) values. This is computed in the
+		 * following block. STEP 2: Range of source (geophysics) values. It will
+		 * be computed one block later.
+		 *
+		 * The target (sample) values will typically range from 0 to 255 or 0 to
+		 * 65535, but the general case is handled as well. If the source
+		 * (geophysics) raster uses floating point numbers, then a "nodata"
+		 * category may be added in order to handle NaN values. If the source
+		 * raster use integer numbers instead, then we will rescale samples only
+		 * if they would not fit in the target data type.
+		 */
+		final SampleDimensionType sourceType = TypeMap.getSampleDimensionType(
+				model,
+				0);
+		final boolean sourceIsFloat = TypeMap.isFloatingPoint(sourceType);
+		SampleDimensionType targetType = null;
+		if (targetType == null) {
+			// Default to TYPE_BYTE for floating point images only; otherwise
+			// keep unchanged.
+			targetType = sourceIsFloat ? SampleDimensionType.UNSIGNED_8BITS : sourceType;
+		}
+		// Default setting: no scaling
+		final boolean targetIsFloat = TypeMap.isFloatingPoint(targetType);
+		NumberRange targetRange = TypeMap.getRange(targetType);
+		Category[] categories = new Category[1];
+		final boolean needScaling;
+		if (targetIsFloat) {
+			// Never rescale if the target is floating point numbers.
+			needScaling = false;
+		}
+		else if (sourceIsFloat) {
+			// Always rescale for "float to integer" conversions. In addition,
+			// Use 0 value as a "no data" category for unsigned data type only.
+			needScaling = true;
+			if (!TypeMap.isSigned(targetType)) {
+				categories = new Category[2];
+				categories[1] = Category.NODATA;
+				targetRange = TypeMap.getPositiveRange(targetType);
+			}
+		}
+		else {
+			// In "integer to integer" conversions, rescale only if
+			// the target range is smaller than the source range.
+			needScaling = !targetRange.contains(TypeMap.getRange(sourceType));
+		}
+
+		/*
+		 * Now, constructs the sample dimensions. We will inconditionnaly
+		 * provides a "nodata" category for floating point images targeting
+		 * unsigned integers, since we don't know if the user plan to have NaN
+		 * values. Even if the current image doesn't have NaN values, it could
+		 * have NaN later if the image uses a writable raster.
+		 */
+		NumberRange sourceRange = TypeMap.getRange(sourceType);
+		for (int b = 0; b < numBands; b++) {
+			if (needScaling) {
+				sourceRange = NumberRange.create(
+						min[b],
+						max[b]).castTo(
+						sourceRange.getElementClass());
+				categories[0] = new Category(
+						name[b],
+						null,
+						targetRange,
+						sourceRange);
+			}
+			else {
+				categories[0] = new Category(
+						name[b],
+						null,
+						targetRange,
+						LinearTransform1D.IDENTITY);
+			}
+			dst[b] = new GridSampleDimension(
+					name[b],
+					categories,
+					null).geophysics(true);
+		}
+	}
 }

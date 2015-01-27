@@ -9,8 +9,6 @@ import java.util.Map;
 import mil.nga.giat.geowave.analytics.GaussianFilter;
 import mil.nga.giat.geowave.analytics.mapreduce.kde.GaussianCellMapper;
 
-import org.apache.accumulo.core.data.Key;
-import org.apache.accumulo.core.data.Value;
 import org.opengis.feature.simple.SimpleFeature;
 
 import com.vividsolutions.jts.geom.Point;
@@ -30,19 +28,6 @@ public class ComparisonGaussianCellMapper extends
 		super.setup(context);
 		timeAttribute = context.getConfiguration().get(
 				TIME_ATTRIBUTE_KEY);
-	}
-
-	@Override
-	protected void map(
-			final Key key,
-			final Value value,
-			final org.apache.hadoop.mapreduce.Mapper.Context context )
-			throws IOException,
-			InterruptedException {
-		super.map(
-				key,
-				value,
-				context);
 	}
 
 	@Override

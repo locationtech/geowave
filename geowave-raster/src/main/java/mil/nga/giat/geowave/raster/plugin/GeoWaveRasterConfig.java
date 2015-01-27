@@ -63,6 +63,25 @@ public class GeoWaveRasterConfig
 
 	protected GeoWaveRasterConfig() {}
 
+	public static GeoWaveRasterConfig createConfig(
+			final String zookeeperUrl,
+			final String accumuloInstanceId,
+			final String accumuloUsername,
+			final String accumuloPassword,
+			final String geowaveNamespace,
+			final boolean equalizeHistogram,
+			final Integer interpolation ) {
+		final GeoWaveRasterConfig result = new GeoWaveRasterConfig();
+		result.zookeeperUrls = zookeeperUrl;
+		result.accumuloInstanceId = accumuloInstanceId;
+		result.accumuloUsername = accumuloUsername;
+		result.accumuloPassword = accumuloPassword;
+		result.geowaveNamespace = geowaveNamespace;
+		result.equalizeHistogram = equalizeHistogram;
+		result.interpolation = interpolation;
+		return result;
+	}
+
 	public static GeoWaveRasterConfig readFrom(
 			final URL xmlURL )
 			throws Exception {

@@ -20,7 +20,7 @@ import org.apache.accumulo.core.data.Key;
 public class RasterTileCombinerHelper<T extends Persistable>
 {
 	public static final String MERGE_STRATEGY_KEY = "MERGE_STRATEGY";
-	private RasterTileMergeStrategy<T> mergeStrategy;
+	private RootMergeStrategy<T> mergeStrategy;
 
 	public Mergeable transform(
 			final Key key,
@@ -45,7 +45,7 @@ public class RasterTileCombinerHelper<T extends Persistable>
 			final byte[] mergeStrategyBytes = ByteArrayUtils.byteArrayFromString(mergeStrategyStr);
 			mergeStrategy = PersistenceUtils.fromBinary(
 					mergeStrategyBytes,
-					RasterTileMergeStrategy.class);
+					RootMergeStrategy.class);
 		}
 	}
 }

@@ -61,7 +61,7 @@ public class NativeReduceContext<KEYIN, VALUEIN> implements
 				writableContext.write(
 						key,
 						new ObjectWritable(
-								((HadoopDataAdapter) value).toWritable(value)));
+								((HadoopDataAdapter) adapter).toWritable(value)));
 			}
 		}
 	}
