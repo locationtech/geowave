@@ -1,5 +1,6 @@
 package mil.nga.giat.geowave.index;
 
+import mil.nga.giat.geowave.index.dimension.HalfResolutionLatitudeDefinition;
 import mil.nga.giat.geowave.index.dimension.LatitudeDefinition;
 import mil.nga.giat.geowave.index.dimension.LongitudeDefinition;
 import mil.nga.giat.geowave.index.dimension.NumericDimensionDefinition;
@@ -26,7 +27,9 @@ public interface NumericIndexStrategyFactory
 		public static final int LATITUDE_BITS = 31;
 		private static final NumericDimensionDefinition[] SPATIAL_DIMENSIONS = new NumericDimensionDefinition[] {
 			new LongitudeDefinition(),
-			new LatitudeDefinition()
+			new HalfResolutionLatitudeDefinition()
+		// just use the same range for latitude to make square sfc values in
+		// decimal degrees (EPSG:4326)
 		};
 
 		@Override
@@ -41,19 +44,48 @@ public interface NumericIndexStrategyFactory
 							SPATIAL_DIMENSIONS,
 							new int[] {
 								LONGITUDE_BITS,
-								LONGITUDE_BITS - 1
-							// ensure that the latitude is 1 bit less than
-							// longitude to
-							// produce square tiles in EPSG:4326
+								LATITUDE_BITS
 							},
 							SFCType.HILBERT);
 				default:
 				case VECTOR:
-					return TieredSFCIndexFactory.createEqualIntervalPrecisionTieredStrategy(
+					return TieredSFCIndexFactory.createDefinedPrecisionTieredStrategy(
 							SPATIAL_DIMENSIONS,
-							new int[] {
-								LONGITUDE_BITS,
-								LATITUDE_BITS
+							new int[][] {
+								new int[] {
+									0,
+									1,
+									2,
+									3,
+									4,
+									5,
+									6,
+									7,
+									8,
+									9,
+									10,
+									11,
+									13,
+									18,
+									31
+								},
+								new int[] {
+									0,
+									1,
+									2,
+									3,
+									4,
+									5,
+									6,
+									7,
+									8,
+									9,
+									10,
+									11,
+									13,
+									18,
+									31
+								}
 							},
 							SFCType.HILBERT);
 			}
@@ -68,7 +100,9 @@ public interface NumericIndexStrategyFactory
 		private static final int TIME_BITS = 20;
 		private static final NumericDimensionDefinition[] SPATIAL_TEMPORAL_DIMENSIONS = new NumericDimensionDefinition[] {
 			new LongitudeDefinition(),
-			new LatitudeDefinition(),
+			new HalfResolutionLatitudeDefinition(),
+			// just use the same range for latitude to make square sfc values in
+			// decimal degrees (EPSG:4326)
 			new TimeDefinition(
 					Unit.YEAR),
 		};
@@ -85,10 +119,7 @@ public interface NumericIndexStrategyFactory
 							SPATIAL_TEMPORAL_DIMENSIONS,
 							new int[] {
 								LONGITUDE_BITS,
-								LONGITUDE_BITS - 1,
-								// ensure that the latitude is 1 bit less than
-								// longitude
-								// to produce square tiles in EPSG:4326
+								LATITUDE_BITS,
 								TIME_BITS
 							},
 							SFCType.HILBERT);
