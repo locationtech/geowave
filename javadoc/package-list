@@ -30,6 +30,7 @@ mil.nga.giat.geowave.raster.adapter.merge
 mil.nga.giat.geowave.raster.adapter.merge.nodata
 mil.nga.giat.geowave.raster.plugin
 mil.nga.giat.geowave.raster.query
+mil.nga.giat.geowave.raster.resize
 mil.nga.giat.geowave.raster.stats
 mil.nga.giat.geowave.services
 mil.nga.giat.geowave.services.clients
