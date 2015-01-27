@@ -33,6 +33,10 @@ import mil.nga.giat.geowave.store.adapter.IndexedAdapterPersistenceEncoding;
 import mil.nga.giat.geowave.store.adapter.NativeFieldHandler;
 import mil.nga.giat.geowave.store.adapter.NativeFieldHandler.RowBuilder;
 import mil.nga.giat.geowave.store.adapter.PersistentIndexFieldHandler;
+import mil.nga.giat.geowave.store.data.PersistentDataset;
+import mil.nga.giat.geowave.store.data.PersistentValue;
+import mil.nga.giat.geowave.store.data.field.ArrayWriter;
+import mil.nga.giat.geowave.store.data.field.BasicWriter.StringWriter;
 import mil.nga.giat.geowave.store.data.field.FieldReader;
 import mil.nga.giat.geowave.store.data.field.FieldUtils;
 import mil.nga.giat.geowave.store.data.field.FieldVisibilityHandler;
@@ -46,17 +50,16 @@ import mil.nga.giat.geowave.store.index.BasicIndexModel;
 import mil.nga.giat.geowave.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.store.index.CommonIndexValue;
 import mil.nga.giat.geowave.store.index.Index;
-import mil.nga.giat.geowave.vector.util.FitToIndexDefaultFeatureCollection;
-import mil.nga.giat.geowave.vector.util.SimpleFeatureWrapper;
 import mil.nga.giat.geowave.vector.adapter.merge.FeatureCollectionCombiner;
 import mil.nga.giat.geowave.vector.plugin.GeoWaveGTDataStore;
+import mil.nga.giat.geowave.vector.util.FitToIndexDefaultFeatureCollection;
+import mil.nga.giat.geowave.vector.util.SimpleFeatureWrapper;
 
 import org.apache.accumulo.core.client.IteratorSetting;
 import org.apache.accumulo.core.client.IteratorSetting.Column;
 import org.apache.accumulo.core.iterators.Combiner;
 import org.apache.accumulo.core.iterators.IteratorUtil.IteratorScope;
 import org.apache.accumulo.core.iterators.user.TransformingIterator;
-import org.apache.commons.collections.iterators.EmptyIterator;
 import org.apache.log4j.Logger;
 import org.geotools.data.DataUtilities;
 import org.geotools.data.simple.SimpleFeatureIterator;
@@ -100,6 +103,7 @@ public class FeatureCollectionDataAdapter extends
 	public static final int ARRAY_TO_ELEMENTS_PRIORITY = 5;
 	public static final int ELEMENTS_TO_ARRAY_PRIORITY = 15;
 	public static final int DEFAULT_FEATURES_PER_ENTRY = 5000;
+	private static final String FEATURE_COLLECTION_DATA_ID_KEY = "GeoWave_FeatureCollectionDataAdapter_DataId_Key";
 
 	private final static Logger LOGGER = Logger.getLogger(FeatureCollectionDataAdapter.class);
 	// the original coordinate system will always be represented internally by
@@ -338,15 +342,21 @@ public class FeatureCollectionDataAdapter extends
 	@Override
 	public FieldReader<Object> getReader(
 			final ByteArrayId fieldId ) {
-		final AttributeDescriptor descriptor = reprojectedType.getDescriptor(StringUtils.stringFromBinary(fieldId.getBytes()));
 		Class<?> bindingClass = null;
-		try {
-			bindingClass = Class.forName("[L" + descriptor.getType().getBinding().getName() + ";");
+		if (!fieldId.equals(new ByteArrayId(
+				FEATURE_COLLECTION_DATA_ID_KEY))) {
+			final AttributeDescriptor descriptor = reprojectedType.getDescriptor(StringUtils.stringFromBinary(fieldId.getBytes()));
+			try {
+				bindingClass = Class.forName("[L" + descriptor.getType().getBinding().getName() + ";");
+			}
+			catch (final ClassNotFoundException e) {
+				LOGGER.error(
+						"Could not create array binding for Simple Feature Type",
+						e);
+			}
 		}
-		catch (final ClassNotFoundException e) {
-			LOGGER.error(
-					"Could not create array binding for Simple Feature Type",
-					e);
+		else {
+			bindingClass = String[].class;
 		}
 		return (FieldReader<Object>) FieldUtils.getDefaultReaderForClass(bindingClass);
 	}
@@ -355,15 +365,21 @@ public class FeatureCollectionDataAdapter extends
 	@Override
 	public FieldWriter<DefaultFeatureCollection, Object> getWriter(
 			final ByteArrayId fieldId ) {
-		final AttributeDescriptor descriptor = reprojectedType.getDescriptor(StringUtils.stringFromBinary(fieldId.getBytes()));
 		Class<?> bindingClass = null;
-		try {
-			bindingClass = Class.forName("[L" + descriptor.getType().getBinding().getName() + ";");
+		if (!fieldId.equals(new ByteArrayId(
+				FEATURE_COLLECTION_DATA_ID_KEY))) {
+			final AttributeDescriptor descriptor = reprojectedType.getDescriptor(StringUtils.stringFromBinary(fieldId.getBytes()));
+			try {
+				bindingClass = Class.forName("[L" + descriptor.getType().getBinding().getName() + ";");
+			}
+			catch (final ClassNotFoundException e) {
+				LOGGER.error(
+						"Could not create array binding for Simple Feature Type",
+						e);
+			}
 		}
-		catch (final ClassNotFoundException e) {
-			LOGGER.error(
-					"Could not create array binding for Simple Feature Type",
-					e);
+		else {
+			bindingClass = String[].class;
 		}
 		FieldWriter<DefaultFeatureCollection, Object> retVal;
 		if (fieldVisiblityHandler != null) {
@@ -449,15 +465,6 @@ public class FeatureCollectionDataAdapter extends
 	@Override
 	public ByteArrayId getDataId(
 			final DefaultFeatureCollection entry ) {
-		/*
-		 * final ArrayWriter<Object, String> writer = new ArrayWriter<Object,
-		 * String>( new StringWriter());
-		 * 
-		 * final String[] dataIds = new String[entry.size()];
-		 * entry.fids().toArray( dataIds);
-		 * 
-		 * return new ByteArrayId( writer.writeField(dataIds));
-		 */
 		return new ByteArrayId(
 				new byte[] {});
 	}
@@ -480,6 +487,20 @@ public class FeatureCollectionDataAdapter extends
 		final AdapterPersistenceEncoding encoding = super.encode(
 				entry,
 				indexModel);
+
+		final ArrayList<String> dataIds = new ArrayList<String>();
+		final Iterator<SimpleFeature> itr = entry.iterator();
+		while (itr.hasNext()) {
+			dataIds.add(itr.next().getID());
+		}
+
+		// TODO: add an entry for the data adapters
+		encoding.getAdapterExtendedData().addValue(
+				new PersistentValue<Object>(
+						new ByteArrayId(
+								FEATURE_COLLECTION_DATA_ID_KEY),
+						dataIds.toArray(new String[dataIds.size()])));
+
 		if (entry instanceof FitToIndexDefaultFeatureCollection) {
 			return new FitToIndexPersistenceEncoding(
 					getAdapterId(),
@@ -503,14 +524,43 @@ public class FeatureCollectionDataAdapter extends
 	public DefaultFeatureCollection decode(
 			final IndexedAdapterPersistenceEncoding data,
 			final Index index ) {
+
 		final Index convertedIndex = new Index(
 				index.getIndexStrategy(),
 				convertModel(index.getIndexModel()),
 				index.getDimensionalityType(),
 				index.getDataType());
+
+		final ArrayWriter<Object, String> arrayWriter = new ArrayWriter<Object, String>(
+				new StringWriter());
+
+		ByteArrayId dataId = null;
+		final PersistentDataset<Object> extendedData = new PersistentDataset<Object>();
+		for (final PersistentValue<Object> value : data.getAdapterExtendedData().getValues()) {
+			if (!value.getId().equals(
+					new ByteArrayId(
+							FEATURE_COLLECTION_DATA_ID_KEY))) {
+				extendedData.addValue(value);
+			}
+			else {
+				dataId = new ByteArrayId(
+						arrayWriter.writeField((String[]) value.getValue()));
+			}
+		}
+
 		return super.decode(
-				data,
+				new IndexedAdapterPersistenceEncoding(
+						data.getAdapterId(),
+						dataId,
+						data.getIndexInsertionId(),
+						data.getDuplicateCount(),
+						data.getCommonData(),
+						extendedData),
 				convertedIndex);
+
+		// return super.decode(
+		// data,
+		// convertedIndex);
 	}
 
 	@Override
@@ -531,8 +581,7 @@ public class FeatureCollectionDataAdapter extends
 				if ((persistedType.getCoordinateReferenceSystem() != null) && persistedType.getCoordinateReferenceSystem().equals(
 						crs) && (transform != null)) {
 					// we can use the transform we have already calculated for
-					// this
-					// feature
+					// this feature
 					featureTransform = transform;
 				}
 				else if (crs != null) {
@@ -611,7 +660,7 @@ public class FeatureCollectionDataAdapter extends
 			ByteArrayId prevId;
 
 			// reprocess data before inserting new features
-			if (featItr.hasNext() && reprocessQueue.size() == 0) {
+			if (featItr.hasNext() && (reprocessQueue.size() == 0)) {
 				// this is a special case used during global optimization
 				if (originalEntry instanceof FitToIndexDefaultFeatureCollection) {
 					feature = featItr.next();

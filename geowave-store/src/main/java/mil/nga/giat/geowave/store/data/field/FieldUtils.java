@@ -22,6 +22,7 @@ import mil.nga.giat.geowave.store.data.field.ArrayWriter.GeometryArrayWriter;
 import mil.nga.giat.geowave.store.data.field.ArrayWriter.IntArrayWriter;
 import mil.nga.giat.geowave.store.data.field.ArrayWriter.LongArrayWriter;
 import mil.nga.giat.geowave.store.data.field.ArrayWriter.StringArrayWriter;
+import mil.nga.giat.geowave.store.data.field.BasicReader.BooleanReader;
 import mil.nga.giat.geowave.store.data.field.BasicReader.ByteArrayReader;
 import mil.nga.giat.geowave.store.data.field.BasicReader.ByteReader;
 import mil.nga.giat.geowave.store.data.field.BasicReader.CalendarReader;
@@ -36,6 +37,7 @@ import mil.nga.giat.geowave.store.data.field.BasicReader.PrimitiveDoubleArrayRea
 import mil.nga.giat.geowave.store.data.field.BasicReader.PrimitiveFloatArrayReader;
 import mil.nga.giat.geowave.store.data.field.BasicReader.PrimitiveIntArrayReader;
 import mil.nga.giat.geowave.store.data.field.BasicReader.PrimitiveLongArrayReader;
+import mil.nga.giat.geowave.store.data.field.BasicReader.ShortReader;
 import mil.nga.giat.geowave.store.data.field.BasicReader.StringReader;
 import mil.nga.giat.geowave.store.data.field.BasicWriter.BooleanWriter;
 import mil.nga.giat.geowave.store.data.field.BasicWriter.ByteArrayWriter;
@@ -52,6 +54,7 @@ import mil.nga.giat.geowave.store.data.field.BasicWriter.PrimitiveDoubleArrayWri
 import mil.nga.giat.geowave.store.data.field.BasicWriter.PrimitiveFloatArrayWriter;
 import mil.nga.giat.geowave.store.data.field.BasicWriter.PrimitiveIntArrayWriter;
 import mil.nga.giat.geowave.store.data.field.BasicWriter.PrimitiveLongArrayWriter;
+import mil.nga.giat.geowave.store.data.field.BasicWriter.ShortWriter;
 import mil.nga.giat.geowave.store.data.field.BasicWriter.StringWriter;
 
 import com.vividsolutions.jts.geom.Geometry;

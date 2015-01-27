@@ -256,11 +256,11 @@ public class Benchmark
 			InterruptedException,
 			TableNotFoundException {
 
-		ingestFeatureData(false);
-		// ingestCollectionData(true);
-		// saveIngestRuntimes();
+		ingestFeatureData(true);
+		ingestCollectionData(true);
+		saveIngestRuntimes();
 
-		// redistributeData();
+		redistributeData();
 
 		final int numIters = 5;
 		for (int i = 0; i < numIters; i++) {
@@ -273,6 +273,7 @@ public class Benchmark
 		}
 
 		saveQueryRuntimes();
+		cleanup();
 	}
 
 	private void saveIngestRuntimes()
@@ -517,9 +518,15 @@ public class Benchmark
 					builder.set(
 							"dim3",
 							rand.nextDouble());
+					builder.set(
+							"startTime",
+							new Date());
+					builder.set(
+							"stopTime",
+							new Date());
 
 					// generate the feature
-					final SimpleFeature feature = builder.buildFeature(null);
+					final SimpleFeature feature = builder.buildFeature("[" + i + "," + j + "," + k + "]");
 					if (ingestType == IngestType.FEATURE_INGEST) {
 						if ((k % (pointsPerColl[j % pointsPerColl.length] / 10)) == 0) {
 							log.info("***     Ingesting feature " + (k + 1) + " of collection of size " + pointsPerColl[j % pointsPerColl.length]);
@@ -953,6 +960,27 @@ public class Benchmark
 			e1.printStackTrace();
 		}
 
+		final Index index;
+		if (indexMode == IndexMode.VECTOR) {
+			index = IndexType.SPATIAL_VECTOR.createDefaultIndex();
+		}
+		else if (indexMode == IndexMode.RASTER) {
+			index = IndexType.SPATIAL_RASTER.createDefaultIndex();
+		}
+		else if (indexMode == IndexMode.SINGLE) {
+			final Index tempIdx = IndexType.SPATIAL_VECTOR.createDefaultIndex();
+			final SubStrategy[] subStrats = ((TieredSFCIndexStrategy) tempIdx.getIndexStrategy()).getSubStrategies();
+			index = new CustomIdIndex(
+					subStrats[tier].getIndexStrategy(),
+					tempIdx.getIndexModel(),
+					tempIdx.getDimensionalityType(),
+					tempIdx.getDataType(),
+					tempIdx.getId());
+		}
+		else {
+			index = null;
+		}
+
 		final BasicAccumuloOperations featureCollectionOperations = new BasicAccumuloOperations(
 				connector,
 				featureCollectionNamespace + tileSize);
@@ -1383,6 +1411,29 @@ public class Benchmark
 		log.info("***     Collections: " + j);
 
 		return (queryStop - queryStart);
+	}
+
+	private void cleanup()
+			throws AccumuloException,
+			AccumuloSecurityException {
+
+		final BasicAccumuloOperations featureOperations = new BasicAccumuloOperations(
+				zookeeperUrl,
+				instancename,
+				username,
+				password,
+				featureNamespace);
+		featureOperations.deleteAll();
+
+		for (final int batchSize : pointsPerTile) {
+			final BasicAccumuloOperations featureCollectionOperations = new BasicAccumuloOperations(
+					zookeeperUrl,
+					instancename,
+					username,
+					password,
+					featureCollectionNamespace + batchSize);
+			featureCollectionOperations.deleteAll();
+		}
 	}
 
 	public static void main(

@@ -41,6 +41,8 @@ public class FeatureCollectionRowBuilder implements
 		final ArrayReader<String> reader = new ArrayReader<String>(
 				new StringReader());
 
+		final String[] dataIds = reader.readField(dataId.getBytes());
+
 		final DefaultFeatureCollection collection = new DefaultFeatureCollection(
 				null,
 				type);
@@ -56,7 +58,7 @@ public class FeatureCollectionRowBuilder implements
 							fieldData.get(j)[i]);
 				}
 			}
-			collection.add(builder.buildFeature(null));
+			collection.add(builder.buildFeature(dataIds[i]));
 		}
 		return collection;
 	}
