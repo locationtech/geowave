@@ -14,5 +14,8 @@ public interface IndexWriter extends
 			final WritableDataAdapter<T> writableAdapter,
 			T entry );
 
+	public <T> void setupAdapter(
+			final WritableDataAdapter<T> writableAdapter );
+
 	public Index getIndex();
 }

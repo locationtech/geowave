@@ -1,4 +1,4 @@
-package mil.nga.giat.geowave.test;
+package mil.nga.giat.geowave.test.service;
 
 import static org.junit.Assert.assertTrue;
 
@@ -15,22 +15,18 @@ import net.sf.json.JSONObject;
 
 import org.apache.commons.io.IOUtils;
 import org.geotools.feature.SchemaException;
-import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class GeoWaveServicesIT extends
-		GeoWaveTestEnvironment
+		ServicesTestEnvironment
 {
 	private static final Logger LOGGER = LoggerFactory.getLogger(GeoWaveServicesIT.class);
 
-	private static final String TEST_DATA_ZIP_RESOURCE_PATH = TEST_RESOURCE_PACKAGE + "mapreduce-testdata.zip";
-	private static final String TEST_CASE_GENERAL_GPX_BASE = TEST_CASE_BASE + "general_gpx_test_case/";
-	private static final String GENERAL_GPX_INPUT_GPX_DIR = TEST_CASE_GENERAL_GPX_BASE + "input_gpx/";
 	private static final String ASHLAND_GPX_FILE = GENERAL_GPX_INPUT_GPX_DIR + "ashland.gpx";
-	private static final String ASHLAND_INGEST_TTYPE = "gpx";
+	private static final String ASHLAND_INGEST_TYPE = "gpx";
 	private static final String TEST_STYLE_NAME = "DecimatePoints";
 	private static final String TEST_STYLE_PATH = "../geowave-examples/example-slds/";
 	private static final String TEST_SLD_FILE = TEST_STYLE_PATH + TEST_STYLE_NAME + ".sld";
@@ -42,12 +38,6 @@ public class GeoWaveServicesIT extends
 	@BeforeClass
 	public static void setup() {
 		accumuloOperations.deleteAll();
-
-		// unzip the test data resources that will be used
-		GeoWaveTestEnvironment.unZipFile(
-				GeoWaveBasicIT.class.getClassLoader().getResourceAsStream(
-						TEST_DATA_ZIP_RESOURCE_PATH),
-				TEST_CASE_BASE);
 	}
 
 	@Test
@@ -78,7 +68,7 @@ public class GeoWaveServicesIT extends
 				},
 				TEST_NAMESPACE,
 				null,
-				ASHLAND_INGEST_TTYPE,
+				ASHLAND_INGEST_TYPE,
 				null,
 				false);
 		assertTrue(success);
@@ -111,7 +101,7 @@ public class GeoWaveServicesIT extends
 				},
 				TEST_NAMESPACE,
 				null,
-				ASHLAND_INGEST_TTYPE,
+				ASHLAND_INGEST_TYPE,
 				null,
 				false);
 		assertTrue(success);

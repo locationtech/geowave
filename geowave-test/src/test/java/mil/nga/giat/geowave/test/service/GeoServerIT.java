@@ -1,4 +1,4 @@
-package mil.nga.giat.geowave.test;
+package mil.nga.giat.geowave.test.service;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -44,7 +44,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class GeoServerIT extends
-		GeoWaveTestEnvironment
+		ServicesTestEnvironment
 {
 	private static final Logger LOGGER = LoggerFactory.getLogger(GeoServerIT.class);
 	private static final String WFS_URL_PREFIX = JETTY_BASE_URL + "/geoserver/wfs";

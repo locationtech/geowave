@@ -5,18 +5,18 @@ import java.awt.image.DataBuffer;
 import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.index.Mergeable;
 import mil.nga.giat.geowave.index.Persistable;
-import mil.nga.giat.geowave.raster.adapter.merge.RasterTileMergeStrategy;
+import mil.nga.giat.geowave.raster.adapter.merge.RootMergeStrategy;
 
 public class MergeableRasterTile<T extends Persistable> extends
 		RasterTile<T>
 {
-	private final RasterTileMergeStrategy<T> mergeStrategy;
+	private final RootMergeStrategy<T> mergeStrategy;
 	private final ByteArrayId dataAdapterId;
 
 	public MergeableRasterTile(
 			final DataBuffer dataBuffer,
 			final T metadata,
-			final RasterTileMergeStrategy<T> mergeStrategy,
+			final RootMergeStrategy<T> mergeStrategy,
 			final ByteArrayId dataAdapterId ) {
 		super(
 				dataBuffer,
@@ -35,7 +35,8 @@ public class MergeableRasterTile<T extends Persistable> extends
 		if ((mergeStrategy != null) && (merge != null) && (merge instanceof RasterTile)) {
 			mergeStrategy.merge(
 					this,
-					(RasterTile<T>) merge);
+					(RasterTile<T>) merge,
+					dataAdapterId);
 		}
 	}
 }

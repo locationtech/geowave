@@ -36,8 +36,8 @@ import com.google.uzaygezen.core.ranges.BigIntegerRangeHome;
  * represent intermediate results. This can be significantly slower than using a
  * primitive long for intermediate results but can support arbitrarily many bits
  * of precision.
- * 
- * 
+ *
+ *
  */
 public class UnboundedHilbertSFCOperations implements
 		HilbertSFCOperations
@@ -87,7 +87,8 @@ public class UnboundedHilbertSFCOperations implements
 			dimensionValues.add(normalizeDimension(
 					dimensionDefinitions[i],
 					values[i],
-					binsPerDimension[i]));
+					binsPerDimension[i],
+					false));
 		}
 
 		// Convert the normalized values to a BitVector
@@ -103,7 +104,7 @@ public class UnboundedHilbertSFCOperations implements
 	 * Converts the incoming values (one per dimension) into a BitVector using
 	 * the Compact Hilbert instance. BitVector is a wrapper to allow values
 	 * longer than 64 bits.
-	 * 
+	 *
 	 * @param values
 	 *            n-dimensional point to transoform to a point on the hilbert
 	 *            SFC
@@ -135,7 +136,7 @@ public class UnboundedHilbertSFCOperations implements
 	 * Used to normalize the value based on the dimension definition, which
 	 * includes the dimensional bounds and the bits of precision. This ensures
 	 * the maximum amount of fidelity for represented values.
-	 * 
+	 *
 	 * @param boundedDimensionDefinition
 	 *            describes the min, max, and cardinality of a dimension
 	 * @param value
@@ -143,6 +144,10 @@ public class UnboundedHilbertSFCOperations implements
 	 * @param bins
 	 *            precomputed number of bins in this dimension the number of
 	 *            bins expected bas on the cardinality of the definition
+	 * @param isMin
+	 *            flag indicating if this value is a minimum of a range in which
+	 *            case it needs to be inclusive on a boundary, otherwise it is
+	 *            exclusive
 	 * @return value after normalization
 	 * @throws IllegalArgumentException
 	 *             thrown when the value passed doesn't fit with in the
@@ -151,7 +156,8 @@ public class UnboundedHilbertSFCOperations implements
 	private BigInteger normalizeDimension(
 			final SFCDimensionDefinition boundedDimensionDefinition,
 			final double value,
-			final BigDecimal bins )
+			final BigDecimal bins,
+			final boolean isMin )
 			throws IllegalArgumentException {
 		final double normalizedValue = boundedDimensionDefinition.normalize(value);
 		if ((normalizedValue < 0) || (normalizedValue > 1)) {
@@ -161,15 +167,27 @@ public class UnboundedHilbertSFCOperations implements
 		final BigDecimal val = BigDecimal.valueOf(normalizedValue);
 		// scale it to a value within the bits of precision
 		final BigDecimal valueScaledWithinPrecision = val.multiply(bins);
-		// round it, subtract one to set the range between [0, 2^cardinality-1)
-		// and make sure it isn't below 0 (exactly 0 for the normalized value
-		// could produce a bit shifted value of -1 without this check)
-		final BigInteger bitShiftedValue = valueScaledWithinPrecision.setScale(
-				0,
-				RoundingMode.CEILING).subtract(
-				BigDecimal.ONE).max(
-				BigDecimal.ZERO).toBigInteger();
-		return bitShiftedValue;
+		if (isMin) {
+			// round it down, and make sure it isn't above bins - 1 (exactly 1
+			// for the normalized value could produce a bit shifted value equal
+			// to bins without this check)
+			return valueScaledWithinPrecision.setScale(
+					0,
+					RoundingMode.FLOOR).min(
+					bins.subtract(BigDecimal.ONE)).toBigInteger();
+		}
+		else {
+			// round it up, subtract one to set the range between [0,
+			// 2^cardinality-1)
+			// and make sure it isn't below 0 (exactly 0 for the normalized
+			// value
+			// could produce a bit shifted value of -1 without this check)
+			return valueScaledWithinPrecision.setScale(
+					0,
+					RoundingMode.CEILING).subtract(
+					BigDecimal.ONE).max(
+					BigDecimal.ZERO).toBigInteger();
+		}
 
 	}
 
@@ -212,7 +230,7 @@ public class UnboundedHilbertSFCOperations implements
 	 * Used to normalize the value based on the dimension definition, which
 	 * includes the dimensional bounds and the bits of precision. This ensures
 	 * the maximum amount of fidelity for represented values.
-	 * 
+	 *
 	 * @param boundedDimensionDefinition
 	 *            describes the min, max, and cardinality of a dimension
 	 * @param value
@@ -235,7 +253,8 @@ public class UnboundedHilbertSFCOperations implements
 				value).divide(
 				bins).doubleValue();
 		final double max = new BigDecimal(
-				value).add(BigDecimal.ONE).divide(
+				value).add(
+				BigDecimal.ONE).divide(
 				bins).doubleValue();
 
 		if ((min < 0) || (min > 1)) {
@@ -275,11 +294,19 @@ public class UnboundedHilbertSFCOperations implements
 			final BigInteger normalizedMin = normalizeDimension(
 					dimensionDefinitions[d],
 					rangePerDimension[d].getMin(),
-					binsPerDimension[d]);
-			final BigInteger normalizedMax = normalizeDimension(
+					binsPerDimension[d],
+					true);
+			BigInteger normalizedMax = normalizeDimension(
 					dimensionDefinitions[d],
 					rangePerDimension[d].getMax(),
-					binsPerDimension[d]);
+					binsPerDimension[d],
+					false);
+			if (normalizedMin.compareTo(normalizedMax) > 0) {
+				// if they're both equal, which is possible because we treat max
+				// as exclusive, set bin max to bin min (ie. treat it as
+				// inclusive in this case)
+				normalizedMax = normalizedMin;
+			}
 			minRangeList.add(normalizedMin);
 			maxRangeList.add(normalizedMax);
 			region.add(BigIntegerRange.of(
@@ -347,7 +374,8 @@ public class UnboundedHilbertSFCOperations implements
 			final BigInteger endValue = clamp(
 					minHilbertValue,
 					maxHilbertValue,
-					range.getIndexRange().getEnd().subtract(BigInteger.ONE));
+					range.getIndexRange().getEnd().subtract(
+							BigInteger.ONE));
 			// make sure its padded if necessary
 			final byte[] start = HilbertSFC.fitExpectedByteCount(
 					expectedByteCount,
@@ -384,7 +412,7 @@ public class UnboundedHilbertSFCOperations implements
 	 * decomposition stops when the range is equal or smaller than this value).
 	 * Values is based on the _maximumRangeDecompsed and _minRangeDecompsed
 	 * instance members.
-	 * 
+	 *
 	 * @param minRangeList
 	 *            minimum values for each dimension (ordered)
 	 * @param maxRangeList
@@ -424,11 +452,19 @@ public class UnboundedHilbertSFCOperations implements
 			final BigInteger binMin = normalizeDimension(
 					dimensionDefinitions[d],
 					mins[d],
-					binsPerDimension[d]);
-			final BigInteger binMax = normalizeDimension(
+					binsPerDimension[d],
+					true);
+			BigInteger binMax = normalizeDimension(
 					dimensionDefinitions[d],
 					maxes[d],
-					binsPerDimension[d]);
+					binsPerDimension[d],
+					false);
+			if (binMin.compareTo(binMax) > 0) {
+				// if they're both equal, which is possible because we treat max
+				// as exclusive, set bin max to bin min (ie. treat it as
+				// inclusive in this case)
+				binMax = binMin;
+			}
 			estimatedIdCount = estimatedIdCount.multiply(binMax.subtract(
 					binMin).abs().add(
 					BigInteger.ONE));

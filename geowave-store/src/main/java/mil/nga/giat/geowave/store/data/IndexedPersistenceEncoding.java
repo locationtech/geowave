@@ -42,6 +42,11 @@ public class IndexedPersistenceEncoding extends
 		return indexId;
 	}
 
+	@Override
+	public boolean isDeduplicationEnabled() {
+		return duplicateCount >= 0;
+	}
+
 	/**
 	 * Return the number of duplicates for this entry. Entries are duplicated
 	 * when a single row ID is insufficient to index it.

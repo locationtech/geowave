@@ -86,13 +86,13 @@ public class GeoWaveRasterReader extends
 
 	private GeoWaveRasterConfig config;
 
-	private final AdapterStore geowaveAdapterStore;
+	private AdapterStore geowaveAdapterStore;
 
-	private final DataStatisticsStore geowaveStatisticsStore;
+	private DataStatisticsStore geowaveStatisticsStore;
 
-	private final RasterDataStore geowaveDataStore;
+	private RasterDataStore geowaveDataStore;
 
-	private final Index rasterIndex;
+	private Index rasterIndex;
 
 	protected final static CoordinateOperationFactory OPERATION_FACTORY = new BufferedCoordinateOperationFactory(
 			new Hints(
@@ -147,6 +147,7 @@ public class GeoWaveRasterReader extends
 
 		try {
 			config = GeoWaveRasterConfig.readFrom(url);
+			init(config);
 		}
 		catch (final Exception e) {
 			LOGGER.error(
@@ -156,6 +157,24 @@ public class GeoWaveRasterReader extends
 					e);
 		}
 
+	}
+
+	public GeoWaveRasterReader(
+			final GeoWaveRasterConfig config )
+			throws DataSourceException,
+			AccumuloException,
+			AccumuloSecurityException {
+		super(
+				new Object(),
+				new Hints());
+		this.config = config;
+		init(config);
+	}
+
+	private void init(
+			final GeoWaveRasterConfig config )
+			throws AccumuloException,
+			AccumuloSecurityException {
 		final AccumuloOperations accumuloOperations = new BasicAccumuloOperations(
 				config.getZookeeperUrls(),
 				config.getAccumuloInstanceId(),
@@ -257,7 +276,7 @@ public class GeoWaveRasterReader extends
 
 		final DataAdapter<?> adapter = geowaveAdapterStore.getAdapter(new ByteArrayId(
 				coverageName));
-		Set<String> var = ((RasterDataAdapter) adapter).getMetadata().keySet();
+		final Set<String> var = ((RasterDataAdapter) adapter).getMetadata().keySet();
 		return var.toArray(new String[var.size()]);
 	}
 
@@ -417,19 +436,19 @@ public class GeoWaveRasterReader extends
 			LOGGER.warn("Unable to find data adapter for '" + coverageName + "'");
 			return null;
 		}
-		final GeoWaveRasterReaderState state = new GeoWaveRasterReaderState(
-				coverageName);
 		final Date start = new Date();
 		// /////////////////////////////////////////////////////////////////////
 		//
 		// Checking params
 		//
 		// /////////////////////////////////////////////////////////////////////
-		Color outputTransparentColor = GeoWaveGTRasterFormat.OUTPUT_TRANSPARENT_COLOR.getDefaultValue();
+		Color outputTransparentColor = null;
 
-		Color backgroundColor = AbstractGridFormat.BACKGROUND_COLOR.getDefaultValue();
+		Color backgroundColor = null;
 
 		Rectangle dim = null;
+
+		GeneralEnvelope requestedEnvelope = null;
 
 		if (params != null) {
 			for (final GeneralParameterValue generalParameterValue : params) {
@@ -438,7 +457,7 @@ public class GeoWaveRasterReader extends
 				if (param.getDescriptor().getName().getCode().equals(
 						AbstractGridFormat.READ_GRIDGEOMETRY2D.getName().toString())) {
 					final GridGeometry2D gg = (GridGeometry2D) param.getValue();
-					state.setRequestedEnvelope((GeneralEnvelope) gg.getEnvelope());
+					requestedEnvelope = (GeneralEnvelope) gg.getEnvelope();
 					dim = gg.getGridRange2D().getBounds();
 				}
 				else if (param.getDescriptor().getName().getCode().equals(
@@ -451,7 +470,33 @@ public class GeoWaveRasterReader extends
 				}
 			}
 		}
+		final GridCoverage2D coverage = renderGridCoverage(
+				coverageName,
+				dim,
+				requestedEnvelope,
+				backgroundColor,
+				outputTransparentColor);
+		LOGGER.info("GeoWave Raster Reader needs : " + ((new Date()).getTime() - start.getTime()) + " millisecs");
+		return coverage;
+	}
 
+	public GridCoverage2D renderGridCoverage(
+			final String coverageName,
+			final Rectangle dim,
+			final GeneralEnvelope generalEnvelope,
+			Color backgroundColor,
+			Color outputTransparentColor )
+			throws IOException {
+		if (backgroundColor == null) {
+			backgroundColor = AbstractGridFormat.BACKGROUND_COLOR.getDefaultValue();
+		}
+		if (outputTransparentColor == null) {
+			outputTransparentColor = GeoWaveGTRasterFormat.OUTPUT_TRANSPARENT_COLOR.getDefaultValue();
+		}
+
+		final GeoWaveRasterReaderState state = new GeoWaveRasterReaderState(
+				coverageName);
+		state.setRequestedEnvelope(generalEnvelope);
 		// /////////////////////////////////////////////////////////////////////
 		//
 		// Loading tiles trying to optimize as much as possible
@@ -465,8 +510,6 @@ public class GeoWaveRasterReader extends
 				state,
 				crs,
 				getOriginalEnvelope(coverageName));
-		LOGGER.info("Mosaic Reader needs : " + ((new Date()).getTime() - start.getTime()) + " millisecs");
-
 		return coverage;
 	}
 
@@ -511,6 +554,8 @@ public class GeoWaveRasterReader extends
 		final ImageReadParam readP = new ImageReadParam();
 		final Integer imageChoice;
 
+		final RasterDataAdapter adapter = (RasterDataAdapter) geowaveAdapterStore.getAdapter(new ByteArrayId(
+				coverageName));
 		if (pixelDimension != null) {
 			try {
 				synchronized (this) {
@@ -522,7 +567,8 @@ public class GeoWaveRasterReader extends
 										(int) pixelDimension.getWidth(),
 										(int) pixelDimension.getHeight(),
 										backgroundColor,
-										outputTransparentColor),
+										outputTransparentColor,
+										adapter.getColorModel()),
 								state.getRequestedEnvelope());
 					}
 					imageChoice = setReadParams(
@@ -550,7 +596,8 @@ public class GeoWaveRasterReader extends
 								(int) pixelDimension.getWidth(),
 								(int) pixelDimension.getHeight(),
 								backgroundColor,
-								outputTransparentColor),
+								outputTransparentColor,
+								adapter.getColorModel()),
 						state.getRequestedEnvelope());
 			}
 		}
@@ -568,8 +615,6 @@ public class GeoWaveRasterReader extends
 					resolutionLevels[imageChoice.intValue()][1]);
 		}
 
-		final RasterDataAdapter adapter = (RasterDataAdapter) geowaveAdapterStore.getAdapter(new ByteArrayId(
-				coverageName));
 		final CloseableIterator<GridCoverage> gridCoverageIt = queryForTiles(
 				pixelDimension,
 				state.getRequestEnvelopeTransformed(),
@@ -589,10 +634,10 @@ public class GeoWaveRasterReader extends
 				coverageFactory,
 				state.getCoverageName(),
 				config.getInterpolation(),
-				histogram);
+				histogram,
+				adapter.getColorModel());
 
 		gridCoverageIt.close();
-		
 		return transformResult(
 				result,
 				pixelDimension,

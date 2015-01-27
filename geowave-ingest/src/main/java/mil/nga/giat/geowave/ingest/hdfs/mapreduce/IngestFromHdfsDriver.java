@@ -6,6 +6,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import mil.nga.giat.geowave.accumulo.mapreduce.GeoWaveConfiguratorBase;
 import mil.nga.giat.geowave.ingest.AbstractCommandLineDriver;
 import mil.nga.giat.geowave.ingest.AccumuloCommandLineOptions;
 import mil.nga.giat.geowave.ingest.IngestTypePluginProviderSpi;
@@ -52,46 +53,17 @@ public class IngestFromHdfsDriver extends
 	protected void runInternal(
 			final String[] args,
 			final List<IngestTypePluginProviderSpi<?, ?>> pluginProviders ) {
-		final Configuration conf = new Configuration();
-		conf.set(
-				"fs.defaultFS",
-				hdfsOptions.getHdfsHostPort());
-		conf.set(
-				"fs.hdfs.impl",
-				org.apache.hadoop.hdfs.DistributedFileSystem.class.getName());
-		// if this property is used, it hadoop does not support yarn
-		conf.set(
-				"mapred.job.tracker",
-				mapReduceOptions.getJobTrackerOrResourceManagerHostPort());
-		// the following 3 properties will only be used if the hadoop version
-		// does support yarn
-		if ("local".equals(mapReduceOptions.getJobTrackerOrResourceManagerHostPort())) {
-			conf.set(
-				"mapreduce.framework.name",
-				"local");
-		}
-		else {
-			conf.set(
-				"mapreduce.framework.name",
-				"yarn");
-		}
-		conf.set(
-				"yarn.resourcemanager.address",
-				mapReduceOptions.getJobTrackerOrResourceManagerHostPort());
-		// if remotely submitted with yarn, the job configuration xml will be
-		// written to this staging directory, it is generally good practice to
-		// ensure the staging directory is different for each user
-		String user = System.getProperty("user.name");
-		if ((user == null) || user.isEmpty()) {
-			user = "default";
-		}
-		conf.set(
-				"yarn.app.mapreduce.am.staging-dir",
-				"/tmp/hadoop-" + user);
+
+
 
 		final Path hdfsBaseDirectory = new Path(
 				hdfsOptions.getBasePath());
 		try {
+			final Configuration conf = new Configuration();
+			GeoWaveConfiguratorBase.setRemoteInvocationParams(
+					hdfsOptions.getHdfsHostPort(),
+					mapReduceOptions.getJobTrackerOrResourceManagerHostPort(),
+					conf);
 			final FileSystem fs = FileSystem.get(conf);
 			if (!fs.exists(hdfsBaseDirectory)) {
 				LOGGER.fatal("HDFS base directory " + hdfsBaseDirectory + " does not exist");

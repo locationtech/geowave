@@ -13,6 +13,7 @@ import mil.nga.giat.geowave.store.index.Index;
 
 import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.Value;
+import org.apache.commons.lang.ArrayUtils;
 
 /**
  * This is used internally to translate Accumulo rows into native objects (using
@@ -81,7 +82,15 @@ public class InputFormatIteratorWrapper<T> implements
 				new ByteArrayId(
 						rowId.getAdapterId()),
 				new ByteArrayId(
-						rowId.getDataId()));
+						// if deduplication is disabled, prefix the actual data
+						// ID with the index ID concatenated with the insertion
+						// ID to gaurantee uniqueness and effectively disable
+						// aggregating by only the data ID
+						rowId.isDeduplicationEnabled() ? rowId.getDataId() : ArrayUtils.addAll(
+								ArrayUtils.addAll(
+										index.getId().getBytes(),
+										rowId.getInsertionId()),
+								rowId.getDataId())));
 		key.setAccumuloKey(row.getKey());
 		return new GeoWaveInputFormatEntry(
 				key,

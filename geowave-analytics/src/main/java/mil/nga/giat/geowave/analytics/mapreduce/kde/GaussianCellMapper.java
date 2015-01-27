@@ -4,19 +4,11 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import mil.nga.giat.geowave.accumulo.AccumuloRowId;
-import mil.nga.giat.geowave.accumulo.util.AccumuloUtils;
+import mil.nga.giat.geowave.accumulo.AccumuloDataStore;
+import mil.nga.giat.geowave.accumulo.mapreduce.input.GeoWaveInputKey;
 import mil.nga.giat.geowave.analytics.CellCounter;
 import mil.nga.giat.geowave.analytics.GaussianFilter;
-import mil.nga.giat.geowave.index.ByteArrayId;
-import mil.nga.giat.geowave.index.ByteArrayUtils;
-import mil.nga.giat.geowave.index.PersistenceUtils;
-import mil.nga.giat.geowave.store.adapter.DataAdapter;
-import mil.nga.giat.geowave.store.index.Index;
-import mil.nga.giat.geowave.store.index.IndexType;
 
-import org.apache.accumulo.core.data.Key;
-import org.apache.accumulo.core.data.Value;
 import org.apache.hadoop.io.DoubleWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.mapreduce.Mapper;
@@ -30,15 +22,13 @@ import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.Point;
 
 public class GaussianCellMapper extends
-		Mapper<Key, Value, LongWritable, DoubleWritable>
+		Mapper<GeoWaveInputKey, SimpleFeature, LongWritable, DoubleWritable>
 {
-	private final static Logger LOGGER = Logger.getLogger(GaussianCellMapper.class);
-	public static final String DATA_ADAPTER_KEY = "DATA_ADAPTER";
+	private final static Logger LOGGER = Logger.getLogger(AccumuloDataStore.class);
 	protected static final String CQL_FILTER_KEY = "CQL_FILTER";
-	protected DataAdapter<?> adapter;
-	protected Index index;
 	protected int minLevel;
 	protected int maxLevel;
+	protected int tileSize;
 	protected Filter filter;
 	protected Map<Integer, LevelStore> levelStoreMap;
 
@@ -48,19 +38,15 @@ public class GaussianCellMapper extends
 			throws IOException,
 			InterruptedException {
 		super.setup(context);
-		index = IndexType.SPATIAL_VECTOR.createDefaultIndex();
-		final String adapterStr = context.getConfiguration().get(
-				DATA_ADAPTER_KEY);
-		final byte[] adapterBytes = ByteArrayUtils.byteArrayFromString(adapterStr);
-		adapter = PersistenceUtils.fromBinary(
-				adapterBytes,
-				DataAdapter.class);
 		minLevel = context.getConfiguration().getInt(
 				KDEJobRunner.MIN_LEVEL_KEY,
 				1);
 		maxLevel = context.getConfiguration().getInt(
 				KDEJobRunner.MAX_LEVEL_KEY,
 				25);
+		tileSize = context.getConfiguration().getInt(
+				KDEJobRunner.TILE_SIZE_KEY,
+				1);
 		final String cql = context.getConfiguration().get(
 				CQL_FILTER_KEY);
 		if ((cql != null) && !cql.isEmpty()) {
@@ -74,13 +60,14 @@ public class GaussianCellMapper extends
 			}
 		}
 		levelStoreMap = new HashMap<Integer, LevelStore>();
+
 		for (int level = maxLevel; level >= minLevel; level--) {
 			final int numXPosts = (int) Math.pow(
 					2,
-					level + 1);
+					level + 1) * tileSize;
 			final int numYPosts = (int) Math.pow(
 					2,
-					level);
+					level) * tileSize;
 			populateLevelStore(
 					context,
 					numXPosts,
@@ -109,42 +96,29 @@ public class GaussianCellMapper extends
 
 	@Override
 	protected void map(
-			final Key key,
-			final Value value,
+			final GeoWaveInputKey key,
+			final SimpleFeature value,
 			final Context context )
 			throws IOException,
 			InterruptedException {
-		final AccumuloRowId rowElements = new AccumuloRowId(
-				key);
-		if (!new ByteArrayId(
-				rowElements.getAdapterId()).equals(adapter.getAdapterId())) {
-			return;
-		}
-		final Object feature = AccumuloUtils.decodeRow(
-				key,
-				value,
-				adapter,
-				index);
 		Point pt = null;
-		SimpleFeature simpleFeature = null;
-		if ((feature != null) && (feature instanceof SimpleFeature)) {
-			simpleFeature = ((SimpleFeature) feature);
-			if ((filter != null) && !filter.evaluate(simpleFeature)) {
+		if (value != null) {
+			if ((filter != null) && !filter.evaluate(value)) {
 				return;
 			}
-			final Object geomObj = simpleFeature.getDefaultGeometry();
+			final Object geomObj = value.getDefaultGeometry();
 			if ((geomObj != null) && (geomObj instanceof Geometry)) {
 				pt = ((Geometry) geomObj).getCentroid();
 			}
 		}
-		if (pt == null || pt.isEmpty()) {
+		if ((pt == null) || pt.isEmpty()) {
 			return;
 		}
 		for (int level = maxLevel; level >= minLevel; level--) {
 			incrementLevelStore(
 					level,
 					pt,
-					simpleFeature);
+					value);
 		}
 	}
 
