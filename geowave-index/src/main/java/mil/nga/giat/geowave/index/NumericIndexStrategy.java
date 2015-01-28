@@ -2,14 +2,8 @@ package mil.nga.giat.geowave.index;
 
 import java.util.List;
 
-import mil.nga.giat.geowave.index.dimension.LatitudeDefinition;
-import mil.nga.giat.geowave.index.dimension.LongitudeDefinition;
 import mil.nga.giat.geowave.index.dimension.NumericDimensionDefinition;
-import mil.nga.giat.geowave.index.dimension.TimeDefinition;
-import mil.nga.giat.geowave.index.dimension.bin.TemporalBinningStrategy.Unit;
-import mil.nga.giat.geowave.index.sfc.SFCFactory.SFCType;
 import mil.nga.giat.geowave.index.sfc.data.MultiDimensionalNumericData;
-import mil.nga.giat.geowave.index.sfc.tiered.TieredSFCIndexFactory;
 
 /**
  * Interface which defines a numeric index strategy.

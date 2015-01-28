@@ -45,7 +45,7 @@ public enum IndexType {
 	}
 
 	public String getDefaultId() {
-		return dimensionalityType.name() + "_" + dataType.name() + "_INDEX";
+		return dimensionalityType.name() + "_" + dataType.name() + "_IDX";
 	}
 
 	public Index createDefaultIndex() {

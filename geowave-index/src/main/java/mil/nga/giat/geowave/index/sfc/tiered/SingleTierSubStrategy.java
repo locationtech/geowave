@@ -95,7 +95,8 @@ public class SingleTierSubStrategy implements
 					range,
 					tier,
 					sfc,
-					null);
+					null,
+					tier);
 			if (binRowIds != null) {
 				rowIds.addAll(binRowIds);
 			}

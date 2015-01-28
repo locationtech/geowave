@@ -35,16 +35,10 @@ public class GeoWaveServicesIT extends
 	private static GeoserverServiceClient geoserverServiceClient;
 	private static IngestServiceClient ingestServiceClient;
 
-	@BeforeClass
-	public static void setup() {
-		accumuloOperations.deleteAll();
-	}
-
 	@Test
-	public void ServicesTest()
+	public void servicesTest()
 			throws IOException,
 			SchemaException {
-
 		// initialize the service clients
 		geoserverServiceClient = new GeoserverServiceClient(
 				GEOWAVE_BASE_URL);

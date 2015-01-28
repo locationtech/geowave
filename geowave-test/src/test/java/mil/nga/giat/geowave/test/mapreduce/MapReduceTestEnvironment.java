@@ -61,6 +61,7 @@ abstract public class MapReduceTestEnvironment extends
 	@BeforeClass
 	public static void setVariables()
 			throws MalformedURLException {
+		GeoWaveTestEnvironment.setup();
 		hdfs = System.getProperty("hdfs");
 		jobtracker = System.getProperty("jobtracker");
 		if (!isSet(hdfs)) {
