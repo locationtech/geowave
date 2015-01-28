@@ -71,6 +71,7 @@ abstract public class ServicesTestEnvironment extends
 		synchronized (MUTEX) {
 			if (jettyServer == null) {
 				try {
+					MapReduceTestEnvironment.setVariables();
 					jettyServer = new Server();
 					final SocketConnector conn = new SocketConnector();
 					conn.setPort(JETTY_PORT);
