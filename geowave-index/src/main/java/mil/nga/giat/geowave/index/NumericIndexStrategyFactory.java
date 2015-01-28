@@ -25,11 +25,28 @@ public interface NumericIndexStrategyFactory
 	{
 		public static final int LONGITUDE_BITS = 31;
 		public static final int LATITUDE_BITS = 31;
-		private static final NumericDimensionDefinition[] SPATIAL_DIMENSIONS = new NumericDimensionDefinition[] {
+		public static final NumericDimensionDefinition[] SPATIAL_DIMENSIONS = new NumericDimensionDefinition[] {
 			new LongitudeDefinition(),
 			new HalfResolutionLatitudeDefinition()
 		// just use the same range for latitude to make square sfc values in
 		// decimal degrees (EPSG:4326)
+		};
+		public static final int[] DEFINED_BITS_OF_PRECISION = new int[] {
+			0,
+			1,
+			2,
+			3,
+			4,
+			5,
+			6,
+			7,
+			8,
+			9,
+			10,
+			11,
+			13,
+			18,
+			31
 		};
 
 		@Override
@@ -52,40 +69,8 @@ public interface NumericIndexStrategyFactory
 					return TieredSFCIndexFactory.createDefinedPrecisionTieredStrategy(
 							SPATIAL_DIMENSIONS,
 							new int[][] {
-								new int[] {
-									0,
-									1,
-									2,
-									3,
-									4,
-									5,
-									6,
-									7,
-									8,
-									9,
-									10,
-									11,
-									13,
-									18,
-									31
-								},
-								new int[] {
-									0,
-									1,
-									2,
-									3,
-									4,
-									5,
-									6,
-									7,
-									8,
-									9,
-									10,
-									11,
-									13,
-									18,
-									31
-								}
+								DEFINED_BITS_OF_PRECISION.clone(),
+								DEFINED_BITS_OF_PRECISION.clone()
 							},
 							SFCType.HILBERT);
 			}

@@ -67,9 +67,6 @@ public class GeoServerIT extends
 	public static void setUp()
 			throws ClientProtocolException,
 			IOException {
-
-		accumuloOperations.deleteAll();
-
 		// setup the wfs-requests
 		geostuff_layer = MessageFormat.format(
 				IOUtils.toString(new FileInputStream(
@@ -133,6 +130,7 @@ public class GeoServerIT extends
 	@Test
 	public void test()
 			throws Exception {
+		accumuloOperations.deleteAll();
 		assertTrue(createPoint());
 		final String lockID = lockPoint();
 

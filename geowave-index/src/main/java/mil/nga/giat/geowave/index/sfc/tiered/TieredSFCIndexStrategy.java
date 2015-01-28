@@ -81,14 +81,17 @@ public class TieredSFCIndexStrategy implements
 		final BinnedNumericDataset[] binnedQueries = BinnedNumericDataset.applyBins(
 				indexedRange,
 				baseDefinitions);
-		// BiMap<Byte, Integer> orderedSfcIndexToTierId.inverse();
+		int maxRangeDecompositionPerSfc = maxRangeDecomposition;
+		if ((maxRangeDecomposition > 1) && (orderedSfcs.length > 1)) {
+			maxRangeDecompositionPerSfc = (int) Math.ceil((double) maxRangeDecomposition / (double) orderedSfcs.length);
+		}
 		for (int sfcIndex = orderedSfcs.length - 1; sfcIndex >= 0; sfcIndex--) {
 			final SpaceFillingCurve sfc = orderedSfcs[sfcIndex];
 			final Byte tier = orderedSfcIndexToTierId.get(sfcIndex);
 			queryRanges.addAll(getQueryRanges(
 					binnedQueries,
 					sfc,
-					maxRangeDecomposition,
+					maxRangeDecompositionPerSfc,
 					tier));
 		}
 		return queryRanges;
@@ -100,10 +103,15 @@ public class TieredSFCIndexStrategy implements
 			final int maxRanges,
 			final byte tier ) {
 		final List<ByteArrayRange> queryRanges = new ArrayList<ByteArrayRange>();
+
+		int maxRangeDecompositionPerBin = maxRanges;
+		if ((maxRanges > 1) && (binnedQueries.length > 1)) {
+			maxRangeDecompositionPerBin = (int) Math.ceil((double) maxRanges / (double) binnedQueries.length);
+		}
 		for (final BinnedNumericDataset binnedQuery : binnedQueries) {
 			final RangeDecomposition rangeDecomp = sfc.decomposeQuery(
 					binnedQuery,
-					maxRanges);
+					maxRangeDecompositionPerBin);
 			final byte[] tierAndBinId = ByteArrayUtils.combineArrays(
 					new byte[] {
 						tier

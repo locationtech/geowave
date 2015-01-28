@@ -39,19 +39,19 @@ public class TieredSFCIndexFactory
 		};
 		// unwrap SFC dimension definitions
 		final NumericDimensionDefinition[] baseDefinitions = new NumericDimensionDefinition[dimensionDefs.length];
-		int minBitsOfPrecision = Integer.MAX_VALUE;
+		int maxBitsOfPrecision = Integer.MIN_VALUE;
 		for (int d = 0; d < baseDefinitions.length; d++) {
 			baseDefinitions[d] = dimensionDefs[d].getDimensionDefinition();
-			minBitsOfPrecision = Math.min(
+			maxBitsOfPrecision = Math.max(
 					dimensionDefs[d].getBitsOfPrecision(),
-					minBitsOfPrecision);
+					maxBitsOfPrecision);
 		}
 		return new TieredSFCIndexStrategy(
 				baseDefinitions,
 				orderedSfcs,
 				ImmutableBiMap.of(
 						0,
-						(byte) minBitsOfPrecision));
+						(byte) maxBitsOfPrecision));
 	}
 
 	/**
@@ -69,14 +69,14 @@ public class TieredSFCIndexFactory
 			final int[] maxBitsPerDimension,
 			final SFCType sfc ) {
 		final SFCDimensionDefinition[] sfcDimensions = new SFCDimensionDefinition[baseDefinitions.length];
-		int minBitsOfPrecision = Integer.MAX_VALUE;
+		int maxBitsOfPrecision = Integer.MIN_VALUE;
 		for (int d = 0; d < baseDefinitions.length; d++) {
 			sfcDimensions[d] = new SFCDimensionDefinition(
 					baseDefinitions[d],
 					maxBitsPerDimension[d]);
-			minBitsOfPrecision = Math.min(
+			maxBitsOfPrecision = Math.max(
 					maxBitsPerDimension[d],
-					minBitsOfPrecision);
+					maxBitsOfPrecision);
 		}
 
 		final SpaceFillingCurve[] orderedSfcs = new SpaceFillingCurve[] {
@@ -90,7 +90,7 @@ public class TieredSFCIndexFactory
 				orderedSfcs,
 				ImmutableBiMap.of(
 						0,
-						(byte) minBitsOfPrecision));
+						(byte) maxBitsOfPrecision));
 	}
 
 	/**
@@ -125,19 +125,19 @@ public class TieredSFCIndexFactory
 		final ImmutableBiMap.Builder<Integer, Byte> sfcIndexToTier = ImmutableBiMap.builder();
 		for (int sfcIndex = 0; sfcIndex < numIndices; sfcIndex++) {
 			final SFCDimensionDefinition[] sfcDimensions = new SFCDimensionDefinition[baseDefinitions.length];
-			int minBitsOfPrecision = Integer.MAX_VALUE;
+			int maxBitsOfPrecision = Integer.MIN_VALUE;
 			for (int d = 0; d < baseDefinitions.length; d++) {
 				final int bitsOfPrecision = maxBitsPerDimension[d] - (numIndices - sfcIndex - 1);
-				minBitsOfPrecision = Math.min(
+				maxBitsOfPrecision = Math.max(
 						bitsOfPrecision,
-						minBitsOfPrecision);
+						maxBitsOfPrecision);
 				sfcDimensions[d] = new SFCDimensionDefinition(
 						baseDefinitions[d],
 						bitsOfPrecision);
 			}
 			sfcIndexToTier.put(
 					sfcIndex,
-					(byte) minBitsOfPrecision);
+					(byte) maxBitsOfPrecision);
 
 			spaceFillingCurves[sfcIndex] = SFCFactory.createSpaceFillingCurve(
 					sfcDimensions,
@@ -195,7 +195,7 @@ public class TieredSFCIndexFactory
 		final ImmutableBiMap.Builder<Integer, Byte> sfcIndexToTier = ImmutableBiMap.builder();
 		for (int sfcIndex = 0; sfcIndex < numIndices; sfcIndex++) {
 			final SFCDimensionDefinition[] sfcDimensions = new SFCDimensionDefinition[baseDefinitions.length];
-			int minBitsOfPrecision = Integer.MAX_VALUE;
+			int maxBitsOfPrecision = Integer.MIN_VALUE;
 			for (int d = 0; d < baseDefinitions.length; d++) {
 				int bitsOfPrecision;
 				if (numIndices == 1) {
@@ -205,16 +205,16 @@ public class TieredSFCIndexFactory
 					final double bitPrecisionIncrement = ((double) maxBitsPerDimension[d] / (numIndices - 1));
 					bitsOfPrecision = (int) (bitPrecisionIncrement * sfcIndex);
 				}
-				minBitsOfPrecision = Math.min(
+				maxBitsOfPrecision = Math.max(
 						bitsOfPrecision,
-						minBitsOfPrecision);
+						maxBitsOfPrecision);
 				sfcDimensions[d] = new SFCDimensionDefinition(
 						baseDefinitions[d],
 						bitsOfPrecision);
 			}
 			sfcIndexToTier.put(
 					sfcIndex,
-					(byte) minBitsOfPrecision);
+					(byte) maxBitsOfPrecision);
 			spaceFillingCurves[sfcIndex] = SFCFactory.createSpaceFillingCurve(
 					sfcDimensions,
 					sfcType);
@@ -262,18 +262,18 @@ public class TieredSFCIndexFactory
 		final ImmutableBiMap.Builder<Integer, Byte> sfcIndexToTier = ImmutableBiMap.builder();
 		for (int l = 0; l < numLevels; l++) {
 			final SFCDimensionDefinition[] sfcDimensions = new SFCDimensionDefinition[numDimensions];
-			int minBitsOfPrecision = Integer.MAX_VALUE;
+			int maxBitsOfPrecision = Integer.MIN_VALUE;
 			for (int d = 0; d < numDimensions; d++) {
 				sfcDimensions[d] = new SFCDimensionDefinition(
 						orderedDimensionDefinitions[d],
 						bitsPerDimensionPerLevel[d][l]);
-				minBitsOfPrecision = Math.min(
+				maxBitsOfPrecision = Math.max(
 						bitsPerDimensionPerLevel[d][l],
-						minBitsOfPrecision);
+						maxBitsOfPrecision);
 			}
 			sfcIndexToTier.put(
 					l,
-					(byte) minBitsOfPrecision);
+					(byte) maxBitsOfPrecision);
 			orderedSFCTiers[l] = SFCFactory.createSpaceFillingCurve(
 					sfcDimensions,
 					sfcType);

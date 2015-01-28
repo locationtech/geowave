@@ -214,7 +214,7 @@ public class GeoWaveBasicIT extends
 						accumuloOperations),
 				new AccumuloDataStatisticsStore(
 						accumuloOperations),
-						accumuloOperations);
+				accumuloOperations);
 		// this file is the filtered dataset (using the previous file as a
 		// filter) so use it to ensure the query worked
 		final DistributableQuery query = resourceToQuery(savedFilterResource);
@@ -266,7 +266,7 @@ public class GeoWaveBasicIT extends
 						accumuloOperations),
 				new AccumuloDataStatisticsStore(
 						accumuloOperations),
-						accumuloOperations);
+				accumuloOperations);
 		final DistributableQuery query = resourceToQuery(savedFilterResource);
 		final Index index = indexType.createDefaultIndex();
 		final CloseableIterator<?> actualResults;

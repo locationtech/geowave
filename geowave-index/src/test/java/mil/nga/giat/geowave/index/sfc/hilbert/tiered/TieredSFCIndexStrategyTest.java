@@ -8,11 +8,15 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import mil.nga.giat.geowave.index.ByteArrayId;
+import mil.nga.giat.geowave.index.ByteArrayRange;
 import mil.nga.giat.geowave.index.NumericIndexStrategy;
 import mil.nga.giat.geowave.index.NumericIndexStrategyFactory.DataType;
+import mil.nga.giat.geowave.index.NumericIndexStrategyFactory.SpatialFactory;
 import mil.nga.giat.geowave.index.NumericIndexStrategyFactory.SpatialTemporalFactory;
 import mil.nga.giat.geowave.index.dimension.LatitudeDefinition;
 import mil.nga.giat.geowave.index.dimension.LongitudeDefinition;
@@ -114,6 +118,86 @@ public class TieredSFCIndexStrategyTest
 				ids3.get(
 						0).getBytes(),
 				5));
+	}
+
+	@Test
+	public void testPredefinedSpatialEntries()
+			throws Exception {
+		final NumericIndexStrategy strategy = new SpatialFactory().createIndexStrategy(DataType.VECTOR);
+		for (int sfcIndex = 0; sfcIndex < SpatialFactory.DEFINED_BITS_OF_PRECISION.length; sfcIndex++) {
+			final NumericData[] dataPerDimension = new NumericData[2];
+			final double precision = 360 / Math.pow(
+					2,
+					SpatialFactory.DEFINED_BITS_OF_PRECISION[sfcIndex]);
+			if (precision > 180) {
+				dataPerDimension[0] = new NumericRange(
+						-180,
+						180);
+				dataPerDimension[1] = new NumericRange(
+						-90,
+						90);
+			}
+			else {
+				dataPerDimension[0] = new NumericRange(
+						0,
+						precision);
+
+				dataPerDimension[1] = new NumericRange(
+						-precision,
+						0);
+			}
+			final MultiDimensionalNumericData indexedData = new BasicNumericDataset(
+					dataPerDimension);
+			final List<ByteArrayId> ids = strategy.getInsertionIds(indexedData);
+			final List<ByteArrayRange> queryRanges = strategy.getQueryRanges(indexedData);
+			final Set<Byte> queryRangeTiers = new HashSet<Byte>();
+			boolean rangeAtTierFound = false;
+			for (final ByteArrayRange range : queryRanges) {
+				final byte tier = range.getStart().getBytes()[0];
+				queryRangeTiers.add(range.getStart().getBytes()[0]);
+				if (tier == SpatialFactory.DEFINED_BITS_OF_PRECISION[sfcIndex]) {
+					if (rangeAtTierFound) {
+						throw new Exception(
+								"multiple ranges were found unexpectedly for tier " + tier);
+					}
+					assertEquals(
+							"this range is an exact fit, so it should have exactly one value for tier " + SpatialFactory.DEFINED_BITS_OF_PRECISION[sfcIndex],
+							range.getStart(),
+							range.getEnd());
+					rangeAtTierFound = true;
+				}
+			}
+			if (!rangeAtTierFound) {
+				throw new Exception(
+						"no ranges were found at the expected exact fit tier " + SpatialFactory.DEFINED_BITS_OF_PRECISION[sfcIndex]);
+			}
+
+			// ensure the first byte is equal to the appropriate number of bits
+			// of precision
+			if ((ids.get(
+					0).getBytes()[0] == 0) || (((sfcIndex != (SpatialFactory.DEFINED_BITS_OF_PRECISION.length - 1)) && (SpatialFactory.DEFINED_BITS_OF_PRECISION[sfcIndex + 1] != (SpatialFactory.DEFINED_BITS_OF_PRECISION[sfcIndex] + 1))))) {
+				assertEquals(
+						"Insertion ID expected to be exact match at tier " + SpatialFactory.DEFINED_BITS_OF_PRECISION[sfcIndex],
+						SpatialFactory.DEFINED_BITS_OF_PRECISION[sfcIndex],
+						ids.get(
+								0).getBytes()[0]);
+				assertEquals(
+						"Insertion ID size expected to be 1",
+						1,
+						ids.size());
+			}
+			else {
+				assertEquals(
+						"Insertion ID expected to be duplicated at tier " + SpatialFactory.DEFINED_BITS_OF_PRECISION[sfcIndex + 1],
+						SpatialFactory.DEFINED_BITS_OF_PRECISION[sfcIndex + 1],
+						ids.get(
+								0).getBytes()[0]);
+				assertEquals(
+						"Insertion ID size expected to be 4 at tier " + SpatialFactory.DEFINED_BITS_OF_PRECISION[sfcIndex + 1],
+						4,
+						ids.size());
+			}
+		}
 	}
 
 	@Test

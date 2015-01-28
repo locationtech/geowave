@@ -27,6 +27,7 @@ import org.apache.accumulo.core.iterators.user.WholeRowIterator;
 public class AccumuloConstraintsQuery extends
 		AccumuloFilteredIndexQuery
 {
+	private static final int MAX_RANGE_DECOMPOSITION = 5000;
 	protected final MultiDimensionalNumericData constraints;
 	protected final List<DistributableQueryFilter> distributableFilters;
 
@@ -166,7 +167,8 @@ public class AccumuloConstraintsQuery extends
 	protected List<ByteArrayRange> getRanges() {
 		return AccumuloUtils.constraintsToByteArrayRanges(
 				constraints,
-				index.getIndexStrategy());
+				index.getIndexStrategy(),
+				MAX_RANGE_DECOMPOSITION);
 	}
 
 	private static SplitFilterLists splitList(
