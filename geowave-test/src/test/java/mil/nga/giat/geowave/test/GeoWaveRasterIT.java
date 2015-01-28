@@ -683,7 +683,7 @@ public class GeoWaveRasterIT extends
 			// there should be exactly one
 			Assert.assertFalse(it.hasNext());
 		}
-	} 
+	}
 
 	private static interface ExpectedValue
 	{

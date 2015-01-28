@@ -1,6 +1,5 @@
 package mil.nga.giat.geowave.index;
 
-import mil.nga.giat.geowave.index.dimension.HalfResolutionLatitudeDefinition;
 import mil.nga.giat.geowave.index.dimension.LatitudeDefinition;
 import mil.nga.giat.geowave.index.dimension.LongitudeDefinition;
 import mil.nga.giat.geowave.index.dimension.NumericDimensionDefinition;
@@ -27,7 +26,8 @@ public interface NumericIndexStrategyFactory
 		public static final int LATITUDE_BITS = 31;
 		public static final NumericDimensionDefinition[] SPATIAL_DIMENSIONS = new NumericDimensionDefinition[] {
 			new LongitudeDefinition(),
-			new HalfResolutionLatitudeDefinition()
+			new LatitudeDefinition(
+					true)
 		// just use the same range for latitude to make square sfc values in
 		// decimal degrees (EPSG:4326)
 		};
@@ -85,7 +85,8 @@ public interface NumericIndexStrategyFactory
 		private static final int TIME_BITS = 20;
 		private static final NumericDimensionDefinition[] SPATIAL_TEMPORAL_DIMENSIONS = new NumericDimensionDefinition[] {
 			new LongitudeDefinition(),
-			new HalfResolutionLatitudeDefinition(),
+			new LatitudeDefinition(
+					true),
 			// just use the same range for latitude to make square sfc values in
 			// decimal degrees (EPSG:4326)
 			new TimeDefinition(
