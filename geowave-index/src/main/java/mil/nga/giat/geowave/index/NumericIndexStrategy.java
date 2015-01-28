@@ -29,15 +29,16 @@ public interface NumericIndexStrategy extends
 	 *            defines the numeric range for the query
 	 * @param maxRangeDecomposition
 	 *            the maximum number of ranges provided by a single query
-	 *            decomposition
+	 *            decomposition, this is a best attempt and not a guarantee
 	 * @return a List of query ranges
 	 */
 	public List<ByteArrayRange> getQueryRanges(
 			MultiDimensionalNumericData indexedRange,
-			int maxRangeDecomposition );
+			int maxEstimatedRangeDecomposition );
 
 	/**
-	 * Returns a list of id's for insertion.
+	 * Returns a list of id's for insertion. The index strategy will use a
+	 * reasonable default for the maximum duplication of insertion IDs
 	 *
 	 * @param indexedData
 	 *            defines the numeric data to be indexed
@@ -45,6 +46,20 @@ public interface NumericIndexStrategy extends
 	 */
 	public List<ByteArrayId> getInsertionIds(
 			MultiDimensionalNumericData indexedData );
+
+	/**
+	 * Returns a list of id's for insertion.
+	 *
+	 * @param indexedData
+	 *            defines the numeric data to be indexed
+	 * @param maxDuplicateInsertionIds
+	 *            defines the maximum number of insertion IDs that can be used,
+	 *            this is a best attempt and not a guarantee
+	 * @return a List of insertion ID's
+	 */
+	public List<ByteArrayId> getInsertionIds(
+			MultiDimensionalNumericData indexedData,
+			int maxEstimatedDuplicateIds );
 
 	/**
 	 * Returns the range that the given ID represents

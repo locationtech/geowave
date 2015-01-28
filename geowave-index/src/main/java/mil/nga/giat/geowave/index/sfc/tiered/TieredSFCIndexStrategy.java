@@ -159,6 +159,23 @@ public class TieredSFCIndexStrategy implements
 	@Override
 	public List<ByteArrayId> getInsertionIds(
 			final MultiDimensionalNumericData indexedData ) {
+		return internalGetInsertionIds(
+				indexedData,
+				maxEstimatedDuplicateIdsBigInteger);
+	}
+
+	@Override
+	public List<ByteArrayId> getInsertionIds(
+			final MultiDimensionalNumericData indexedData,
+			final int maxDuplicateInsertionIds ) {
+		return internalGetInsertionIds(
+				indexedData,
+				BigInteger.valueOf(maxDuplicateInsertionIds));
+	}
+
+	private List<ByteArrayId> internalGetInsertionIds(
+			final MultiDimensionalNumericData indexedData,
+			final BigInteger maxDuplicateInsertionIds ) {
 		final BinnedNumericDataset[] ranges = BinnedNumericDataset.applyBins(
 				indexedData,
 				baseDefinitions);
@@ -167,7 +184,9 @@ public class TieredSFCIndexStrategy implements
 		final List<ByteArrayId> rowIds = new ArrayList<ByteArrayId>(
 				ranges.length);
 		for (final BinnedNumericDataset range : ranges) {
-			rowIds.addAll(getRowIds(range));
+			rowIds.addAll(getRowIds(
+					range,
+					maxDuplicateInsertionIds));
 		}
 		return rowIds;
 	}
@@ -256,7 +275,8 @@ public class TieredSFCIndexStrategy implements
 	}
 
 	synchronized private List<ByteArrayId> getRowIds(
-			final BinnedNumericDataset index ) {
+			final BinnedNumericDataset index,
+			final BigInteger maxEstimatedDuplicateIds ) {
 		// most times this should be a single row ID, but if the lowest
 		// precision tier does not have a single SFC value for this data, it
 		// will be multiple row IDs
@@ -271,7 +291,7 @@ public class TieredSFCIndexStrategy implements
 					index,
 					tierId,
 					sfc,
-					maxEstimatedDuplicateIdsBigInteger,
+					maxEstimatedDuplicateIds,
 					sfcIndex);
 			if (rowIdsAtTier != null) {
 				return rowIdsAtTier;

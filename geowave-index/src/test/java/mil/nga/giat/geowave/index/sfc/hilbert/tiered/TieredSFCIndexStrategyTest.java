@@ -182,7 +182,7 @@ public class TieredSFCIndexStrategyTest
 						ids.get(
 								0).getBytes()[0]);
 				assertEquals(
-						"Insertion ID size expected to be 1",
+						"Insertion ID size expected to be 1 at tier " + SpatialFactory.DEFINED_BITS_OF_PRECISION[sfcIndex],
 						1,
 						ids.size());
 			}
@@ -202,6 +202,52 @@ public class TieredSFCIndexStrategyTest
 						expectedIds,
 						ids.size());
 			}
+		}
+	}
+
+	@Test
+	public void testOneEstimatedDuplicateInsertion()
+			throws Exception {
+		final NumericIndexStrategy strategy = new SpatialFactory().createIndexStrategy(DataType.VECTOR);
+		for (final int element : SpatialFactory.DEFINED_BITS_OF_PRECISION) {
+			final NumericData[] dataPerDimension = new NumericData[2];
+			final double precision = 360 / Math.pow(
+					2,
+					element);
+			if (precision > 180) {
+				dataPerDimension[0] = new NumericRange(
+						-180,
+						180);
+				dataPerDimension[1] = new NumericRange(
+						-90,
+						90);
+			}
+			else {
+				dataPerDimension[0] = new NumericRange(
+						0,
+						precision);
+
+				dataPerDimension[1] = new NumericRange(
+						-precision,
+						0);
+			}
+			final MultiDimensionalNumericData indexedData = new BasicNumericDataset(
+					dataPerDimension);
+			final List<ByteArrayId> ids = strategy.getInsertionIds(
+					indexedData,
+					1);
+			assertEquals(
+					"Insertion ID size expected to be 1 at tier " + element,
+					1,
+					ids.size());
+			// ensure the first byte is equal to the appropriate number of bits
+			// of precision
+			assertEquals(
+					"Insertion ID expected to be exact match at tier " + element,
+					element,
+					ids.get(
+							0).getBytes()[0]);
+
 		}
 	}
 

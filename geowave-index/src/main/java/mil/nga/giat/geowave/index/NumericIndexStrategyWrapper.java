@@ -94,4 +94,13 @@ public class NumericIndexStrategyWrapper implements
 	public double[] getHighestPrecisionIdRangePerDimension() {
 		return indexStrategy.getHighestPrecisionIdRangePerDimension();
 	}
+
+	@Override
+	public List<ByteArrayId> getInsertionIds(
+			final MultiDimensionalNumericData indexedData,
+			final int maxDuplicateInsertionIds ) {
+		return indexStrategy.getInsertionIds(
+				indexedData,
+				maxDuplicateInsertionIds);
+	}
 }
