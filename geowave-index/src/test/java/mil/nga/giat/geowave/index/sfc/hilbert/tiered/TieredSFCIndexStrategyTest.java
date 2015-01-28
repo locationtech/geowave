@@ -175,7 +175,7 @@ public class TieredSFCIndexStrategyTest
 			// ensure the first byte is equal to the appropriate number of bits
 			// of precision
 			if ((ids.get(
-					0).getBytes()[0] == 0) || (((sfcIndex != (SpatialFactory.DEFINED_BITS_OF_PRECISION.length - 1)) && (SpatialFactory.DEFINED_BITS_OF_PRECISION[sfcIndex + 1] != (SpatialFactory.DEFINED_BITS_OF_PRECISION[sfcIndex] + 1))))) {
+					0).getBytes()[0] == 0) || ((sfcIndex == (SpatialFactory.DEFINED_BITS_OF_PRECISION.length - 1)) || (SpatialFactory.DEFINED_BITS_OF_PRECISION[sfcIndex + 1] != (SpatialFactory.DEFINED_BITS_OF_PRECISION[sfcIndex] + 1)))) {
 				assertEquals(
 						"Insertion ID expected to be exact match at tier " + SpatialFactory.DEFINED_BITS_OF_PRECISION[sfcIndex],
 						SpatialFactory.DEFINED_BITS_OF_PRECISION[sfcIndex],
@@ -192,9 +192,14 @@ public class TieredSFCIndexStrategyTest
 						SpatialFactory.DEFINED_BITS_OF_PRECISION[sfcIndex + 1],
 						ids.get(
 								0).getBytes()[0]);
+				// if the precision is within the bounds of longitude but not
+				// within latitude we will end up with 2 (rectangular
+				// decomposition)
+				// otherwise we will get a square decomposition of 4 ids
+				final int expectedIds = (precision > 90) && (precision <= 180) ? 2 : 4;
 				assertEquals(
-						"Insertion ID size expected to be 4 at tier " + SpatialFactory.DEFINED_BITS_OF_PRECISION[sfcIndex + 1],
-						4,
+						"Insertion ID size expected to be " + expectedIds + " at tier " + SpatialFactory.DEFINED_BITS_OF_PRECISION[sfcIndex + 1],
+						expectedIds,
 						ids.size());
 			}
 		}
