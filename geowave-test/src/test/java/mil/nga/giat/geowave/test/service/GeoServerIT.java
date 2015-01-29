@@ -67,6 +67,8 @@ public class GeoServerIT extends
 	public static void setUp()
 			throws ClientProtocolException,
 			IOException {
+		ServicesTestEnvironment.startServices();
+		accumuloOperations.deleteAll();
 		// setup the wfs-requests
 		geostuff_layer = MessageFormat.format(
 				IOUtils.toString(new FileInputStream(
@@ -130,7 +132,6 @@ public class GeoServerIT extends
 	@Test
 	public void test()
 			throws Exception {
-		accumuloOperations.deleteAll();
 		assertTrue(createPoint());
 		final String lockID = lockPoint();
 
@@ -224,7 +225,7 @@ public class GeoServerIT extends
 				version));
 		postParameters.add(new BasicNameValuePair(
 				"typename",
-				"geowave_test:geostuff"));
+				TEST_WORKSPACE + ":geostuff"));
 		for (final BasicNameValuePair aParam : paramTuples) {
 			postParameters.add(aParam);
 		}
@@ -257,7 +258,7 @@ public class GeoServerIT extends
 				"GetFeature"));
 		localParams.add(new BasicNameValuePair(
 				"typeNames",
-				"geowave_test:geostuff"));
+				TEST_WORKSPACE + ":geostuff"));
 		localParams.add(new BasicNameValuePair(
 				"service",
 				"WFS"));
@@ -361,7 +362,7 @@ public class GeoServerIT extends
 			final String pattern = "34.68158180311274 35.1828408241272";
 
 			// name space check as well
-			return content.contains(pattern) && content.contains("geowave_test:geometry");
+			return content.contains(pattern) && content.contains(TEST_WORKSPACE + ":geometry");
 		}
 		return false;
 	}

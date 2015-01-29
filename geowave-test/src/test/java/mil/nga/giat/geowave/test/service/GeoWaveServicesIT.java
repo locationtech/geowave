@@ -36,7 +36,7 @@ public class GeoWaveServicesIT extends
 	private static IngestServiceClient ingestServiceClient;
 
 	@Test
-	public void servicesTest()
+	public void testServices()
 			throws IOException,
 			SchemaException {
 		// initialize the service clients
