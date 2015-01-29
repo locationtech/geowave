@@ -28,26 +28,27 @@ public class RasterTileCombinerConfig extends
 			final String optionKey,
 			final String currentValue,
 			final String nextValue ) {
-		if (optionKey == RasterTileCombinerHelper.MERGE_STRATEGY_KEY) {
-			final byte[] mergeStrategyBytes = ByteArrayUtils.byteArrayFromString(currentValue);
-			final RasterTileMergeStrategy currentStrategy = PersistenceUtils.fromBinary(
-					mergeStrategyBytes,
-					RasterTileMergeStrategy.class);
-			final RasterTileMergeStrategy nextStrategy = PersistenceUtils.fromBinary(
-					mergeStrategyBytes,
-					RasterTileMergeStrategy.class);
+		if ((currentValue == null) || currentValue.trim().isEmpty()) {
+			return nextValue;
+		}
+		else if ((nextValue == null) || nextValue.trim().isEmpty()) {
+			return currentValue;
+		}
+		if (RasterTileCombinerHelper.MERGE_STRATEGY_KEY.equals(optionKey)) {
+			final byte[] currentStrategyBytes = ByteArrayUtils.byteArrayFromString(currentValue);
+			final byte[] nextStrategyBytes = ByteArrayUtils.byteArrayFromString(nextValue);
+			final RootMergeStrategy currentStrategy = PersistenceUtils.fromBinary(
+					currentStrategyBytes,
+					RootMergeStrategy.class);
+			final RootMergeStrategy nextStrategy = PersistenceUtils.fromBinary(
+					nextStrategyBytes,
+					RootMergeStrategy.class);
 			currentStrategy.merge(nextStrategy);
 			return ByteArrayUtils.byteArrayToString(PersistenceUtils.toBinary(currentStrategy));
 		}
-		else if (optionKey == RasterTileCombiner.COLUMNS_KEY) {
-			if ((currentValue == null) || currentValue.trim().isEmpty()) {
-				return nextValue;
-			}
-			else if ((nextValue == null) || nextValue.trim().isEmpty()) {
-				return currentValue;
-			}
+		else if (RasterTileCombiner.COLUMNS_KEY.equals(optionKey)) {
 			final String encodedColumns = currentValue;
-			Set<String> nextColumns = new HashSet<String>();
+			final Set<String> nextColumns = new HashSet<String>();
 			for (final String column : nextValue.split(",")) {
 				nextColumns.add(column);
 			}

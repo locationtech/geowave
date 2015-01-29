@@ -11,7 +11,7 @@ import mil.nga.giat.geowave.index.sfc.data.MultiDimensionalNumericData;
  * and always returning empty IDs and ranges. It can be used in cases when the
  * data is "indexed" by another means, and not using multi-dimensional numeric
  * data.
- * 
+ *
  */
 public class NullNumericIndexStrategy implements
 		NumericIndexStrategy
@@ -58,11 +58,9 @@ public class NullNumericIndexStrategy implements
 	@Override
 	public List<ByteArrayId> getInsertionIds(
 			final MultiDimensionalNumericData indexedData ) {
-		// return a single empty ID
-		final List<ByteArrayId> retVal = new ArrayList<ByteArrayId>();
-		retVal.add(new ByteArrayId(
-				new byte[] {}));
-		return retVal;
+		return getInsertionIds(
+				indexedData,
+				1);
 	}
 
 	@Override
@@ -95,6 +93,17 @@ public class NullNumericIndexStrategy implements
 			final ByteArrayId insertionId ) {
 		// there are no dimensions so return an empty array
 		return new long[] {};
+	}
+
+	@Override
+	public List<ByteArrayId> getInsertionIds(
+			final MultiDimensionalNumericData indexedData,
+			final int maxDuplicateInsertionIds ) {
+		// return a single empty ID
+		final List<ByteArrayId> retVal = new ArrayList<ByteArrayId>();
+		retVal.add(new ByteArrayId(
+				new byte[] {}));
+		return retVal;
 	}
 
 }

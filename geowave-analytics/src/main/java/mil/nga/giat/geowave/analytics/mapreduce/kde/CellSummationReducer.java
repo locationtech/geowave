@@ -68,8 +68,7 @@ public class CellSummationReducer extends
 		}
 		context.getCounter(
 				"Entries per level",
-				"level " + new Long(
-						level).toString()).increment(
+				"level " + Long.toString(level)).increment(
 				1);
 	}
 

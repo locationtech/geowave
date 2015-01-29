@@ -33,15 +33,17 @@ public class MapContextCellCounter implements
 	public void increment(
 			final long cellId,
 			final double weight ) {
-		try {
-			context.write(
-					new LongWritable(
-							getCellId(cellId)),
-					new DoubleWritable(
-							weight));
-		}
-		catch (IOException | InterruptedException e) {
-			e.printStackTrace();
+		if (weight > 0) {
+			try {
+				context.write(
+						new LongWritable(
+								getCellId(cellId)),
+						new DoubleWritable(
+								weight));
+			}
+			catch (IOException | InterruptedException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 

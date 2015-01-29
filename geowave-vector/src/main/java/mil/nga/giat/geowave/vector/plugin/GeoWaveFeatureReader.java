@@ -11,16 +11,16 @@ import java.util.Set;
 import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.index.StringUtils;
 import mil.nga.giat.geowave.store.CloseableIterator;
-import mil.nga.giat.geowave.store.adapter.statistics.BoundingBoxDataStatistics;
+import mil.nga.giat.geowave.store.index.Index;
 import mil.nga.giat.geowave.store.query.BasicQuery;
 import mil.nga.giat.geowave.store.query.SpatialQuery;
 import mil.nga.giat.geowave.store.query.SpatialTemporalQuery;
 import mil.nga.giat.geowave.store.query.TemporalConstraints;
 import mil.nga.giat.geowave.store.query.TemporalQuery;
-import mil.nga.giat.geowave.vector.adapter.FeatureDataAdapter;
 import mil.nga.giat.geowave.vector.plugin.transaction.GeoWaveTransaction;
 import mil.nga.giat.geowave.vector.wms.DistributableRenderer;
 
+import org.apache.log4j.Logger;
 import org.geotools.data.FeatureReader;
 import org.geotools.data.Query;
 import org.geotools.filter.FidFilterImpl;
@@ -40,6 +40,7 @@ import com.vividsolutions.jts.geom.Geometry;
 public class GeoWaveFeatureReader implements
 		FeatureReader<SimpleFeatureType, SimpleFeature>
 {
+	private final static Logger LOGGER = Logger.getLogger(GeoWaveFeatureReader.class);
 
 	private final GeoWaveDataStoreComponents components;
 	private final GeoWaveFeatureCollection featureCollection;
@@ -261,6 +262,7 @@ public class GeoWaveFeatureReader implements
 	private BasicQuery composeQuery(
 			final Geometry jtsBounds,
 			final TemporalConstraints timeBounds ) {
+
 		if (jtsBounds == null) {
 			if (timeBounds == null) {
 				return new TemporalQuery(
@@ -272,16 +274,33 @@ public class GeoWaveFeatureReader implements
 			}
 		}
 		else {
-			if (timeBounds == null) {
-				return new SpatialQuery(
-						jtsBounds);
-			}
-			else {
-				return new SpatialTemporalQuery(
+
+			if (timeBounds != null) {
+				final BasicQuery query = new SpatialTemporalQuery(
 						timeBounds,
 						jtsBounds);
+				// for now, do not use a geotemporal query IF an index does not
+				// exist to support it
+				// NOTE: If the index does exist, the assumption is that the
+				// data adapter is indexed under
+				// the index's constraints. Ideally, we could use meta-data to
+				// determine which adapters are indexed
+				// by specific indices.
+				try (CloseableIterator<Index> indexIt = getComponents().getDataStore().getIndices()) {
+					while (indexIt.hasNext()) {
+						if (query.isSupported(indexIt.next())) {
+							return query;
+						}
+					}
+				}
+				catch (final IOException e) {
+					LOGGER.error(
+							"Error determining available indices.  Supporting non-temporal queries only.",
+							e);
+				}
 			}
-
+			return new SpatialQuery(
+					jtsBounds);
 		}
 	}
 }

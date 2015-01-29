@@ -2,7 +2,6 @@ package mil.nga.giat.geowave.store.adapter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 import mil.nga.giat.geowave.index.ByteArrayId;

@@ -120,6 +120,8 @@ abstract public class AbstractMapReduceIngest<T extends Persistable & DataAdapte
 					dataAdapter);
 		}
 
+		job.setSpeculativeExecution(false);
+
 		// add primary index
 		GeoWaveOutputFormat.addIndex(
 				job,

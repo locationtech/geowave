@@ -1,0 +1,40 @@
+[[install-from-rpm]]
+<<<
+== Installation from RPM
+
+=== Overview
+
+There is a public http://s3.amazonaws.com/geowave-rpms/index.html[GeoWave RPM Repo] available with the following packages.
+
+
+.GeoWave RPMs
+[cols="2*", options="header"]
+|===
+|Name
+|Description
+
+|geowave-cdh5-accumulo
+|Accumulo Components
+
+|geowave-cdh5-core
+|Core (home directory and geowave user)
+
+|geowave-cdh5-docs
+|Documentation (HTML, PDF and man pages)
+
+|geowave-cdh5-ingest
+|Ingest Tool
+
+|geowave-cdh5-jetty
+|GeoServer Components
+
+|geowave-cdh5-puppet
+|Puppet Scripts
+
+|geowave-cdh5-single-host
+|All GeoWave Components
+
+|geowave-repo-dev
+|Development RPM Repo config file
+
+|===

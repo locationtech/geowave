@@ -49,7 +49,7 @@ public class CqlQueryFilterIterator extends
 		WholeRowIterator
 {
 	private static final Logger LOGGER = Logger.getLogger(CqlQueryFilterIterator.class);
-	private static Object MUTEX = new Object();
+	private static final Object MUTEX = new Object();
 	private static boolean classLoaderInitialized = false;
 	public static final String CQL_QUERY_ITERATOR_NAME = "GEOWAVE_CQL_QUERY_FILTER";
 	public static final int CQL_QUERY_ITERATOR_PRIORITY = 10;
@@ -108,7 +108,7 @@ public class CqlQueryFilterIterator extends
 					new ByteArrayId(
 							rowId.getDataId()),
 					new ByteArrayId(
-							rowId.getIndexId()),
+							rowId.getInsertionId()),
 					rowId.getNumberOfDuplicates(),
 					commonData,
 					extendedData);

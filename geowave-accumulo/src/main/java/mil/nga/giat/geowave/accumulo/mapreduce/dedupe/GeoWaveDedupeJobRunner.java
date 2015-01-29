@@ -42,6 +42,7 @@ public class GeoWaveDedupeJobRunner extends
 		job.setInputFormatClass(GeoWaveInputFormat.class);
 		job.setOutputFormatClass(getOutputFormatClass());
 		job.setNumReduceTasks(getNumReduceTasks());
+		job.setSpeculativeExecution(false);
 
 		final FileSystem fs = FileSystem.get(job.getConfiguration());
 		final Path outputPath = getHdfsOutputPath();

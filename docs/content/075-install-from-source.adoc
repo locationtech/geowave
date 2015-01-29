@@ -1,0 +1,48 @@
+[[install-from-source]]
+<<<
+== Installation from Source
+
+=== GeoServer
+
+==== GeoServer Versions
+
+GeoWave is currently built against GeoServer 2.6.1 and GeoTools 12.1 with the GeoTools version linked to the GeoServer
+version. If wish to deploy against a different version simply change the value in the pom and rebuild (see: building) -
+but no guarantees.
+
+==== GeoServer Install
+
+First we need to build the GeoServer plugin - from the GeoWave root directory:
+
+[source, bash]
+----
+$ cd geowave-gt
+$ mvn package -Pgeotools-container-singlejar
+----
+
+let's assume you have GeoServer deployed in a Tomcat container in
+/opt/tomcat
+
+[source, bash]
+----
+$ cp target/geowave-gt-*-geoserver-singlejar.jar /opt/tomcat/webapps/geoserver/WEB-INF/lib/
+----
+
+and re-start Tomcat
+
+=== Accumulo
+
+==== Accumulo Versions
+
+GeoWave has been tested and works against accumulo 1.5.0, 1.5.1, and 1.6.0. If you wish to build against a different
+version simply change the value in the pom.
+
+==== Accumulo Install
+
+This should be very familiar by now; from the geowave root directory:
+
+[source, bash]
+----
+$ cd geowave-gt
+$ mvn package -Paccumulo-container-singlejar
+----

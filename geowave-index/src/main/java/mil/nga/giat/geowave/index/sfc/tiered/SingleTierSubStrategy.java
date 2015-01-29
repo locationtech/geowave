@@ -84,6 +84,17 @@ public class SingleTierSubStrategy implements
 	@Override
 	public List<ByteArrayId> getInsertionIds(
 			final MultiDimensionalNumericData indexedData ) {
+		return getInsertionIds(
+				indexedData,
+				1);
+	}
+
+	@Override
+	public List<ByteArrayId> getInsertionIds(
+			final MultiDimensionalNumericData indexedData,
+			final int maxDuplicateInsertionIds ) {
+		// we need to duplicate per bin so we can't adhere to max duplication
+		// anyways
 		final BinnedNumericDataset[] ranges = BinnedNumericDataset.applyBins(
 				indexedData,
 				baseDefinitions);
@@ -95,7 +106,8 @@ public class SingleTierSubStrategy implements
 					range,
 					tier,
 					sfc,
-					null);
+					null,
+					tier);
 			if (binRowIds != null) {
 				rowIds.addAll(binRowIds);
 			}

@@ -188,7 +188,6 @@ public class BasicQuery implements
 				LOGGER.warn(
 						"Cannot find dimension definition class: " + classNameStr,
 						e);
-				continue;
 			}
 		}
 		constraints = new Constraints(

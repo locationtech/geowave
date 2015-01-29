@@ -6,6 +6,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import mil.nga.giat.geowave.accumulo.mapreduce.GeoWaveConfiguratorBase;
 import mil.nga.giat.geowave.ingest.AbstractCommandLineDriver;
 import mil.nga.giat.geowave.ingest.AccumuloCommandLineOptions;
 import mil.nga.giat.geowave.ingest.IngestTypePluginProviderSpi;
@@ -91,6 +92,11 @@ public class IngestFromHdfsDriver extends
 		final Path hdfsBaseDirectory = new Path(
 				hdfsOptions.getBasePath());
 		try {
+			final Configuration conf = new Configuration();
+			GeoWaveConfiguratorBase.setRemoteInvocationParams(
+					hdfsOptions.getHdfsHostPort(),
+					mapReduceOptions.getJobTrackerOrResourceManagerHostPort(),
+					conf);
 			final FileSystem fs = FileSystem.get(conf);
 			if (!fs.exists(hdfsBaseDirectory)) {
 				LOGGER.fatal("HDFS base directory " + hdfsBaseDirectory + " does not exist");

@@ -1,6 +1,7 @@
 package mil.nga.giat.geowave.vector.adapter;
 
 import java.nio.ByteBuffer;
+import java.util.Arrays;
 
 import mil.nga.giat.geowave.store.data.IndexedPersistenceEncoding;
 import mil.nga.giat.geowave.store.data.PersistentValue;
@@ -38,9 +39,8 @@ public class VisibilityQueryFilter implements
 	private boolean matches(
 			Node vTree,
 			byte[] expression ) {
-		if (vTree.getTerm(
-				expression).equals(
-				authorization)) return true;
+		if (Arrays.equals(vTree.getTerm(
+				expression).toArray(),authorization)) return true;
 		boolean result = false;
 		for (Node child : vTree.getChildren()) {
 			result |= matches(

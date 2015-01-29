@@ -1,4 +1,4 @@
-# GeoWave 0.8.2	
+# GeoWave 0.8.3	
 ## About  
 
 <a href="https://travis-ci.org/ngageoint/geowave">
@@ -11,9 +11,9 @@
        src="https://scan.coverity.com/projects/3371/badge.svg"/>
 </a>
 
-<a href="https://codecov.io/github/ngageoint/geowave?branch=master">
-  <img src="https://codecov.io/github/ngageoint/geowave/coverage.svg?branch=master" 
-        alt="Coverage via codecov.io" />
+<a href='https://coveralls.io/r/ngageoint/?branch=master'>
+  <img src='https://coveralls.io/repos/ngageoint/geowave/badge.png?branch=master'
+       alt='Coverage Status' />
 </a>
 
 
@@ -87,7 +87,7 @@ First we need to build the geoserver plugin - from the geowave root directory:
 
 let's assume you have geoserver deployed in a tomcat container in /opt/tomcat
 
-    $ cp target/geowave-deploy-0.8.2-geoserver-singlejar.jar /opt/tomcat/webapps/geoserver/WEB-INF/lib/
+    $ cp target/geowave-deploy-0.8.3-geoserver-singlejar.jar /opt/tomcat/webapps/geoserver/WEB-INF/lib/
 
 and re-start tomcat
 

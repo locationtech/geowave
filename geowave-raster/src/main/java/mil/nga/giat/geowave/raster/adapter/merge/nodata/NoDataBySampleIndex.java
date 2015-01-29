@@ -9,6 +9,10 @@ public class NoDataBySampleIndex implements
 {
 	private Set<SampleIndex> noDataIndexSet;
 
+	protected NoDataBySampleIndex() {
+		super();
+	}
+
 	public NoDataBySampleIndex(
 			final Set<SampleIndex> noDataIndexSet ) {
 		this.noDataIndexSet = noDataIndexSet;

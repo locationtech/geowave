@@ -106,7 +106,7 @@ public class GeoWaveFeatureCollection extends
 	@Override
 	public ReferencedEnvelope getBounds() {
 
-		double minx = Double.MAX_VALUE, maxx = -Double.MAX_VALUE, miny = Double.MAX_VALUE, maxy = Double.MAX_VALUE;
+		double minx = Double.MAX_VALUE, maxx = -Double.MAX_VALUE, miny = Double.MAX_VALUE, maxy = -Double.MAX_VALUE;
 		try {
 			// GEOWAVE-60 optimization
 			final Map<ByteArrayId, DataStatistics<SimpleFeature>> statsMap = reader.getComponents().getDataStatistics(
@@ -350,7 +350,8 @@ public class GeoWaveFeatureCollection extends
 			return null;
 		}
 		final TemporalConstraints bbox = (TemporalConstraints) query.getFilter().accept(
-				ExtractTimeFilterVisitor.TIME_VISITOR,
+				new ExtractTimeFilterVisitor(
+						reader.getComponents().getAdapter().getTimeDescriptors()),
 				null);
 		return bbox.isEmpty() ? null : bbox;
 	}

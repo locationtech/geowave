@@ -681,7 +681,7 @@ public class GeoWaveGTDataStore extends
 					typeNames.add(((FeatureDataAdapter) adapter).getType().getTypeName());
 				}
 			}
-			return typeNames.toArray(new String[] {});
+			return typeNames.toArray(new String[typeNames.size()]);
 		}
 		catch (final IOException e) {
 			LOGGER.warn(

@@ -91,8 +91,8 @@ public class SpatialQueryFilter extends
 		}
 		return new StrippedGeometry(
 				new BasicNumericDataset(
-						numericDataPerDimension.toArray(new NumericData[] {})),
-				fields.toArray(new DimensionField<?>[] {}),
+						numericDataPerDimension.toArray(new NumericData[numericDataPerDimension.size()])),
+				fields.toArray(new DimensionField<?>[fields.size()]),
 				geometryFieldIds);
 	}
 

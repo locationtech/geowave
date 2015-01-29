@@ -135,13 +135,11 @@ public class EvaluationVisitor extends
 		if (!(obj instanceof Number) && !(obj instanceof Boolean)) {
 			if (obj.toString().trim().toLowerCase().equals(
 					"true")) {
-				obj = new Boolean(
-						true);
+				obj = Boolean.TRUE;
 			}
 			else if (obj.toString().trim().toLowerCase().equals(
 					"false")) {
-				obj = new Boolean(
-						false);
+				obj = Boolean.FALSE;
 			}
 		}
 		return obj;
@@ -156,8 +154,7 @@ public class EvaluationVisitor extends
 
 		switch (expression.getType()) {
 			case NOT:
-				result = !(new Boolean(
-						result.toString()));
+				result = !(Boolean.valueOf(result.toString()));
 				break;
 
 			case NEGATE:
@@ -172,8 +169,7 @@ public class EvaluationVisitor extends
 			final Value expression ) {
 		switch (expression.getType()) {
 			case BOOLEAN:
-				result = new Boolean(
-						expression.getText());
+				result = Boolean.valueOf(expression.getText());
 				break;
 
 			case DATE_TIME:
@@ -498,9 +494,8 @@ public class EvaluationVisitor extends
 							"if() takes exactly 3 arguments");
 				}
 
-				final Boolean cond = new Boolean(
-						evaluate(
-								function.getExpressions()[0]).toString());
+				final Boolean cond = Boolean.valueOf(evaluate(
+						function.getExpressions()[0]).toString());
 				final Object then = evaluate(function.getExpressions()[1]);
 				final Object els = evaluate(function.getExpressions()[2]);
 

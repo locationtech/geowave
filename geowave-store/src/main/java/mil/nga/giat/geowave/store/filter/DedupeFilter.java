@@ -26,6 +26,13 @@ public class DedupeFilter implements
 	@Override
 	public boolean accept(
 			final IndexedPersistenceEncoding persistenceEncoding ) {
+		if (!persistenceEncoding.isDeduplicationEnabled()) {
+			// certain types of data such as raster do not intend to be
+			// duplicated
+			// short circuit this check if the row is does not support
+			// deduplication
+			return true;
+		}
 		if (!supportsMultipleIndices() && !persistenceEncoding.isDuplicated()) {
 			// short circuit this check if the row is not duplicated anywhere
 			// and this is only intended to support a single index

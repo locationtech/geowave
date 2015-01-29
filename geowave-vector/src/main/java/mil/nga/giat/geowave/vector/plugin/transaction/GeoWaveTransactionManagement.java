@@ -74,7 +74,7 @@ public class GeoWaveTransactionManagement implements
 	}
 
 	/** Simple object used for locking */
-	Object mutex;
+	final Object mutex;
 
 	/**
 	 * Create an empty Diff

@@ -353,7 +353,7 @@ public class GeoWaveConfiguratorBase
 						dataAdapterBytes,
 						DataAdapter.class));
 			}
-			return adapters.toArray(new DataAdapter[] {});
+			return adapters.toArray(new DataAdapter[adapters.size()]);
 		}
 		return new DataAdapter[] {};
 	}
@@ -427,7 +427,7 @@ public class GeoWaveConfiguratorBase
 						indexBytes,
 						Index.class));
 			}
-			return indices.toArray(new Index[] {});
+			return indices.toArray(new Index[indices.size()]);
 		}
 		return new Index[] {};
 	}
@@ -499,5 +499,46 @@ public class GeoWaveConfiguratorBase
 			throw new RuntimeException(
 					e);
 		}
+	}
+	
+	public static void setRemoteInvocationParams(
+			final String hdfsHostPort,
+			final String jobTrackerOrResourceManagerHostPort,
+			final Configuration conf  ) {
+		conf.set(
+				"fs.defaultFS",
+				hdfsHostPort);
+		conf.set(
+				"fs.hdfs.impl",
+				org.apache.hadoop.hdfs.DistributedFileSystem.class.getName());
+		// if this property is used, it hadoop does not support yarn
+		conf.set(
+				"mapred.job.tracker",
+				jobTrackerOrResourceManagerHostPort);
+		// the following 3 properties will only be used if the hadoop version
+		// does support yarn
+		if ("local".equals(jobTrackerOrResourceManagerHostPort)) {
+			conf.set(
+					"mapreduce.framework.name",
+					"local");
+		}
+		else {
+			conf.set(
+					"mapreduce.framework.name",
+					"yarn");
+		}
+		conf.set(
+				"yarn.resourcemanager.address",
+				jobTrackerOrResourceManagerHostPort);
+		// if remotely submitted with yarn, the job configuration xml will be
+		// written to this staging directory, it is generally good practice to
+		// ensure the staging directory is different for each user
+		String user = System.getProperty("user.name");
+		if ((user == null) || user.isEmpty()) {
+			user = "default";
+		}
+		conf.set(
+				"yarn.app.mapreduce.am.staging-dir",
+				"/tmp/hadoop-" + user);
 	}
 }

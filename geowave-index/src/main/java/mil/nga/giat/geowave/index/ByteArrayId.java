@@ -29,6 +29,11 @@ public class ByteArrayId
 	}
 
 	@Override
+	public String toString() {
+		return "ByteArrayId [getString()=" + getString() + "]";
+	}
+
+	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
@@ -49,11 +54,8 @@ public class ByteArrayId
 			return false;
 		}
 		final ByteArrayId other = (ByteArrayId) obj;
-		if (!Arrays.equals(
+		return Arrays.equals(
 				id,
-				other.id)) {
-			return false;
-		}
-		return true;
+				other.id);
 	}
 }
