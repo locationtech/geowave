@@ -28,7 +28,7 @@ public class IteratorUtils
 					other.getRowData().getBackingArray());
 
 			otherRowId = new AccumuloRowId(
-					otherRowId.getIndexId(),
+					otherRowId.getInsertionId(),
 					myRowId.getDataId(),
 					otherRowId.getAdapterId(),
 					otherRowId.getNumberOfDuplicates());

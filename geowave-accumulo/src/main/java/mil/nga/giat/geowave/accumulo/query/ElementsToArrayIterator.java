@@ -201,7 +201,7 @@ public class ElementsToArrayIterator extends
 
 			// create a new rowid
 			final byte[] rowIdBytes = new AccumuloRowId(
-					rowId.getIndexId(),
+					rowId.getInsertionId(),
 					new byte[] {},
 					rowId.getAdapterId(),
 					rowId.getNumberOfDuplicates()).getRowId();

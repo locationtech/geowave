@@ -80,7 +80,7 @@ public class ArrayToElementsIterator extends
 
 					// generate the new rowId
 					rowId = new AccumuloRowId(
-							rowId.getIndexId(),
+							rowId.getInsertionId(),
 							dataId,
 							rowId.getAdapterId(),
 							rowId.getNumberOfDuplicates());
@@ -96,7 +96,9 @@ public class ArrayToElementsIterator extends
 					if (addEncoding) {
 						if (entryBytes[i] != null) {
 							value = new byte[1 + entryBytes[i].length];
-							value = ArrayUtils.add(entryBytes[i], 0, 
+							value = ArrayUtils.add(
+									entryBytes[i],
+									0,
 									val.get()[0]);
 						}
 						else {

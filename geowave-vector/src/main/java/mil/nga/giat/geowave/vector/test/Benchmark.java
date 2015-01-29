@@ -11,30 +11,19 @@ import java.util.Date;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 import mil.nga.giat.geowave.accumulo.AccumuloDataStore;
 import mil.nga.giat.geowave.accumulo.AccumuloIndexWriter;
-import mil.nga.giat.geowave.accumulo.AccumuloRowId;
 import mil.nga.giat.geowave.accumulo.BasicAccumuloOperations;
-import mil.nga.giat.geowave.accumulo.IteratorConfig;
 import mil.nga.giat.geowave.accumulo.query.AccumuloConstraintsQuery;
 import mil.nga.giat.geowave.accumulo.query.ArrayToElementsIterator;
 import mil.nga.giat.geowave.accumulo.query.ElementsToArrayIterator;
 import mil.nga.giat.geowave.accumulo.util.AccumuloUtils;
 import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.index.ByteArrayUtils;
-import mil.nga.giat.geowave.index.HierarchicalNumericIndexStrategy;
 import mil.nga.giat.geowave.index.HierarchicalNumericIndexStrategy.SubStrategy;
 import mil.nga.giat.geowave.index.PersistenceUtils;
 import mil.nga.giat.geowave.index.StringUtils;
-import mil.nga.giat.geowave.index.sfc.data.BasicNumericDataset;
-import mil.nga.giat.geowave.index.sfc.data.MultiDimensionalNumericData;
-import mil.nga.giat.geowave.index.sfc.data.NumericData;
-import mil.nga.giat.geowave.index.sfc.data.NumericRange;
 import mil.nga.giat.geowave.index.sfc.tiered.TieredSFCIndexStrategy;
 import mil.nga.giat.geowave.store.CloseableIterator;
 import mil.nga.giat.geowave.store.adapter.DataAdapter;
@@ -47,15 +36,14 @@ import mil.nga.giat.geowave.store.index.IndexType;
 import mil.nga.giat.geowave.store.query.SpatialQuery;
 import mil.nga.giat.geowave.vector.adapter.FeatureCollectionDataAdapter;
 import mil.nga.giat.geowave.vector.adapter.FeatureDataAdapter;
-import mil.nga.giat.geowave.vector.util.FitToIndexDefaultFeatureCollection;
+import mil.nga.giat.geowave.vector.util.FeatureCollectionRedistributor;
+import mil.nga.giat.geowave.vector.util.RedistributeConfig;
 
 import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.apache.accumulo.core.client.Connector;
-import org.apache.accumulo.core.client.Instance;
 import org.apache.accumulo.core.client.IteratorSetting;
 import org.apache.accumulo.core.client.TableNotFoundException;
-import org.apache.accumulo.core.client.ZooKeeperInstance;
 import org.apache.accumulo.core.iterators.IteratorUtil.IteratorScope;
 import org.apache.accumulo.core.iterators.user.TransformingIterator;
 import org.apache.accumulo.minicluster.MiniAccumuloCluster;
@@ -151,6 +139,8 @@ public class Benchmark
 	// TODO: Set these values appropriately
 	final private IndexMode indexMode = IndexMode.VECTOR;
 	final private int tier = 4;
+
+	final private int numThreads = 32;
 
 	final private String featureNamespace;
 	final private String featureCollectionNamespace;
@@ -690,41 +680,69 @@ public class Benchmark
 
 		for (final int tileSize : pointsPerTile) {
 			log.info("*** Features per tilespace: " + tileSize);
-			final BasicAccumuloOperations featureCollectionOperations = new BasicAccumuloOperations(
-					zookeeperUrl,
-					instancename,
-					username,
-					password,
-					featureCollectionNamespace + tileSize);
-			final FeatureCollectionDataAdapter featureCollectionAdapter = new FeatureCollectionDataAdapter(
-					TYPE,
-					tileSize);
-			redistribute(
-					tileSize,
-					featureCollectionOperations,
-					featureCollectionAdapter);
+			// final BasicAccumuloOperations featureCollectionOperations = new
+			// BasicAccumuloOperations(
+			// zookeeperUrl,
+			// instancename,
+			// username,
+			// password,
+			// featureCollectionNamespace + tileSize);
+			// final FeatureCollectionDataAdapter featureCollectionAdapter = new
+			// FeatureCollectionDataAdapter(
+			// TYPE,
+			// tileSize);
+
+			final IndexType indexType;
+			if ((indexMode == IndexMode.VECTOR) || (indexMode == IndexMode.SINGLE)) {
+				indexType = IndexType.SPATIAL_VECTOR;
+			}
+			else if (indexMode == IndexMode.RASTER) {
+				indexType = IndexType.SPATIAL_RASTER;
+			}
+			else {
+				indexType = null;
+			}
+
+			final FeatureCollectionRedistributor redistributor = new FeatureCollectionRedistributor(
+					new RedistributeConfig().setZookeeperUrl(
+							zookeeperUrl).setInstanceName(
+							instancename).setUserName(
+							username).setPassword(
+							password).setTableNamespace(
+							featureCollectionNamespace + tileSize).setIndexType(
+							indexType).setTier(
+							(indexMode == IndexMode.SINGLE) ? tier : -1).setFeatureType(
+							TYPE).setFeaturesPerEntry(
+							tileSize).setNumThreads(
+							numThreads));
+			redistributor.redistribute();
+
+			// redistribute(
+			// tileSize,
+			// featureCollectionOperations,
+			// featureCollectionAdapter);
 			log.info("");
 		}
 	}
 
 	// this is used to ensure that the iterators aren't added when we ingest
-	private static class RawFeatureCollectionDataAdapter extends
-			FeatureCollectionDataAdapter
-	{
-		public RawFeatureCollectionDataAdapter(
-				final SimpleFeatureType type,
-				final int featuresPerEntry ) {
-			super(
-					type,
-					featuresPerEntry);
-		}
-
-		@Override
-		public IteratorConfig[] getAttachedIteratorConfig(
-				final Index index ) {
-			return null;
-		}
-	}
+	// private static class RawFeatureCollectionDataAdapter extends
+	// FeatureCollectionDataAdapter
+	// {
+	// public RawFeatureCollectionDataAdapter(
+	// final SimpleFeatureType type,
+	// final int featuresPerEntry ) {
+	// super(
+	// type,
+	// featuresPerEntry);
+	// }
+	//
+	// @Override
+	// public IteratorConfig[] getAttachedIteratorConfig(
+	// final Index index ) {
+	// return null;
+	// }
+	// }
 
 	private void removeIterators(
 			final String tablename,
@@ -784,394 +802,409 @@ public class Benchmark
 				EnumSet.of(IteratorScope.scan));
 	}
 
-	private boolean run = true;
+	// private boolean run = true;
 
-	private void redistribute(
-			final int tileSize,
-			final BasicAccumuloOperations operations,
-			final FeatureCollectionDataAdapter adapter )
-			throws IOException,
-			AccumuloSecurityException,
-			AccumuloException,
-			TableNotFoundException {
+	// private void redistribute(
+	// final int tileSize,
+	// final BasicAccumuloOperations operations,
+	// final FeatureCollectionDataAdapter adapter )
+	// throws IOException,
+	// AccumuloSecurityException,
+	// AccumuloException,
+	// TableNotFoundException {
+	//
+	// if (index.getIndexStrategy() instanceof HierarchicalNumericIndexStrategy)
+	// {
+	// final TieredSFCIndexStrategy tieredStrat = (TieredSFCIndexStrategy)
+	// index.getIndexStrategy();
+	//
+	// final String tablename = AccumuloUtils.getQualifiedTableName(
+	// featureCollectionNamespace + tileSize,
+	// StringUtils.stringFromBinary(index.getId().getBytes()));
+	//
+	// // first, detach the transforming iterators
+	// removeIterators(
+	// tablename,
+	// operations.getConnector());
+	//
+	// final long startTime = new Date().getTime();
+	//
+	// final SubStrategy[] subStrategies = tieredStrat.getSubStrategies();
+	//
+	// // iterate over each tier
+	// for (int i = 0; i < subStrategies.length; i++) {
+	//
+	// totalNumOverflow = 0;
+	// totalNumOcuppiedSubTiles = 0;
+	// totalNumCollsProcessed = 0;
+	//
+	// log.info("***   Processing Tier " + (i + 1) + " of " +
+	// subStrategies.length);
+	//
+	// final SubStrategy subStrat = subStrategies[i];
+	//
+	// // create an index for this substrategy
+	// final CustomIdIndex customIndex = new CustomIdIndex(
+	// subStrat.getIndexStrategy(),
+	// index.getIndexModel(),
+	// index.getDimensionalityType(),
+	// index.getDataType(),
+	// index.getId());
+	//
+	// final AccumuloConstraintsQuery q = new AccumuloConstraintsQuery(
+	// Arrays.asList(new ByteArrayId[] {
+	// adapter.getAdapterId()
+	// }),
+	// customIndex,
+	// new SpatialQuery(
+	// worldBBox).getIndexConstraints(customIndex.getIndexStrategy()),
+	// null);
+	// q.setQueryFiltersEnabled(false);
+	//
+	// // query at the specified index
+	// final CloseableIterator<DefaultFeatureCollection> itr =
+	// (CloseableIterator<DefaultFeatureCollection>) q.query(
+	// operations,
+	// new MemoryAdapterStore(
+	// new DataAdapter[] {
+	// adapter
+	// }),
+	// null);
+	//
+	// // TODO:
+	// final int numThreads = 32;
+	// final ExecutorService executor =
+	// Executors.newFixedThreadPool(numThreads);
+	// final int subStratIdx = i;
+	//
+	// run = true;
+	// final ArrayBlockingQueue<DefaultFeatureCollection> queue = new
+	// ArrayBlockingQueue<DefaultFeatureCollection>(
+	// numThreads * 2);
+	//
+	// // create numThreads consumers
+	// for (int thread = 0; thread < numThreads; thread++) {
+	// executor.execute(new Runnable() {
+	// @Override
+	// public void run() {
+	// featCollConsumer(
+	// queue,
+	// subStratIdx,
+	// tileSize);
+	// }
+	// });
+	// }
+	//
+	// // iterate over each collection
+	// while (itr.hasNext()) {
+	// // create a new thread for each feature collection
+	// final DefaultFeatureCollection coll = itr.next();
+	// try {
+	// queue.put(coll);
+	// }
+	// catch (final InterruptedException e) {
+	// e.printStackTrace();
+	// }
+	// }
+	// run = false;
+	//
+	// try {
+	// executor.shutdown();
+	// executor.awaitTermination(
+	// Long.MAX_VALUE,
+	// TimeUnit.DAYS);
+	// }
+	// catch (final InterruptedException e) {
+	// e.printStackTrace();
+	// }
+	//
+	// itr.close();
+	//
+	// log.info("***     Colls. Processed: " + totalNumCollsProcessed);
+	// log.info("***     Overflowed Tiles: " + totalNumOverflow);
+	// log.info("***     Occupied SubTiles: " + totalNumOcuppiedSubTiles);
+	// }
+	//
+	// final long stopTime = new Date().getTime();
+	//
+	// // finally, attach the transforming iterators
+	// attachIterators(
+	// index.getIndexModel(),
+	// tablename,
+	// operations.getConnector());
+	//
+	// log.info("*** Runtime: " + (stopTime - startTime) + " ms");
+	// }
+	// }
 
-		if (index.getIndexStrategy() instanceof HierarchicalNumericIndexStrategy) {
-			final TieredSFCIndexStrategy tieredStrat = (TieredSFCIndexStrategy) index.getIndexStrategy();
+	// private MultiDimensionalNumericData getSlimBounds(
+	// final MultiDimensionalNumericData bounds ) {
+	// // Ideally: smallest dimension range / (4*max bins per dimension {i.e.
+	// // 2^31})
+	// final double epsilon = 180.0 / (4.0 * Math.pow(
+	// 2.0,
+	// 31.0));
+	//
+	// final NumericData[] slimRanges = new NumericData[2];
+	// slimRanges[0] = new NumericRange(
+	// bounds.getDataPerDimension()[0].getMin() + epsilon,
+	// bounds.getDataPerDimension()[0].getMax() - epsilon);
+	// slimRanges[1] = new NumericRange(
+	// bounds.getDataPerDimension()[1].getMin() + epsilon,
+	// bounds.getDataPerDimension()[1].getMax() - epsilon);
+	//
+	// return new BasicNumericDataset(
+	// slimRanges);
+	// }
 
-			final String tablename = AccumuloUtils.getQualifiedTableName(
-					featureCollectionNamespace + tileSize,
-					StringUtils.stringFromBinary(index.getId().getBytes()));
+	// private int totalNumOverflow = 0;
+	// private int totalNumOcuppiedSubTiles = 0;
+	// private int totalNumCollsProcessed = 0;
 
-			// first, detach the transforming iterators
-			removeIterators(
-					tablename,
-					operations.getConnector());
-
-			final long startTime = new Date().getTime();
-
-			final SubStrategy[] subStrategies = tieredStrat.getSubStrategies();
-
-			// iterate over each tier
-			for (int i = 0; i < subStrategies.length; i++) {
-
-				totalNumOverflow = 0;
-				totalNumOcuppiedSubTiles = 0;
-				totalNumCollsProcessed = 0;
-
-				log.info("***   Processing Tier " + (i + 1) + " of " + subStrategies.length);
-
-				final SubStrategy subStrat = subStrategies[i];
-
-				// create an index for this substrategy
-				final CustomIdIndex customIndex = new CustomIdIndex(
-						subStrat.getIndexStrategy(),
-						index.getIndexModel(),
-						index.getDimensionalityType(),
-						index.getDataType(),
-						index.getId());
-
-				final AccumuloConstraintsQuery q = new AccumuloConstraintsQuery(
-						Arrays.asList(new ByteArrayId[] {
-							adapter.getAdapterId()
-						}),
-						customIndex,
-						new SpatialQuery(
-								worldBBox).getIndexConstraints(customIndex.getIndexStrategy()),
-						null);
-				q.setQueryFiltersEnabled(false);
-
-				// query at the specified index
-				final CloseableIterator<DefaultFeatureCollection> itr = (CloseableIterator<DefaultFeatureCollection>) q.query(
-						operations,
-						new MemoryAdapterStore(
-								new DataAdapter[] {
-									adapter
-								}),
-						null);
-
-				// TODO:
-				final int numThreads = 32;
-				final ExecutorService executor = Executors.newFixedThreadPool(numThreads);
-				final int subStratIdx = i;
-
-				run = true;
-				final ArrayBlockingQueue<DefaultFeatureCollection> queue = new ArrayBlockingQueue<DefaultFeatureCollection>(
-						numThreads * 2);
-
-				// create numThreads consumers
-				for (int thread = 0; thread < numThreads; thread++) {
-					executor.execute(new Runnable() {
-						@Override
-						public void run() {
-							featCollConsumer(
-									queue,
-									subStratIdx,
-									tileSize);
-						}
-					});
-				}
-
-				// iterate over each collection
-				while (itr.hasNext()) {
-					// create a new thread for each feature collection
-					final DefaultFeatureCollection coll = itr.next();
-					try {
-						queue.put(coll);
-					}
-					catch (final InterruptedException e) {
-						e.printStackTrace();
-					}
-				}
-				run = false;
-
-				try {
-					executor.shutdown();
-					executor.awaitTermination(
-							Long.MAX_VALUE,
-							TimeUnit.DAYS);
-				}
-				catch (final InterruptedException e) {
-					e.printStackTrace();
-				}
-
-				itr.close();
-
-				log.info("***     Colls. Processed: " + totalNumCollsProcessed);
-				log.info("***     Overflowed Tiles: " + totalNumOverflow);
-				log.info("***     Occupied SubTiles: " + totalNumOcuppiedSubTiles);
-			}
-
-			final long stopTime = new Date().getTime();
-
-			// finally, attach the transforming iterators
-			attachIterators(
-					index.getIndexModel(),
-					tablename,
-					operations.getConnector());
-
-			log.info("*** Runtime: " + (stopTime - startTime) + " ms");
-		}
-	}
-
-	private MultiDimensionalNumericData getSlimBounds(
-			final MultiDimensionalNumericData bounds ) {
-		// Ideally: smallest dimension range / (4*max bins per dimension {i.e.
-		// 2^31})
-		final double epsilon = 180.0 / (4.0 * Math.pow(
-				2.0,
-				31.0));
-
-		final NumericData[] slimRanges = new NumericData[2];
-		slimRanges[0] = new NumericRange(
-				bounds.getDataPerDimension()[0].getMin() + epsilon,
-				bounds.getDataPerDimension()[0].getMax() - epsilon);
-		slimRanges[1] = new NumericRange(
-				bounds.getDataPerDimension()[1].getMin() + epsilon,
-				bounds.getDataPerDimension()[1].getMax() - epsilon);
-
-		return new BasicNumericDataset(
-				slimRanges);
-	}
-
-	private int totalNumOverflow = 0;
-	private int totalNumOcuppiedSubTiles = 0;
-	private int totalNumCollsProcessed = 0;
-
-	private void featCollConsumer(
-			final ArrayBlockingQueue<DefaultFeatureCollection> queue,
-			final int subStratIdx,
-			final int tileSize ) {
-
-		int numOverflow = 0;
-		int numOcuppiedSubTiles = 0;
-		int numCollsProcessed = 0;
-
-		final Instance inst = new ZooKeeperInstance(
-				instancename,
-				zookeeperUrl);
-
-		Connector connector = null;
-		try {
-			connector = inst.getConnector(
-					username,
-					password);
-		}
-		catch (AccumuloException | AccumuloSecurityException e1) {
-			e1.printStackTrace();
-		}
-
-		final Index index;
-		if (indexMode == IndexMode.VECTOR) {
-			index = IndexType.SPATIAL_VECTOR.createDefaultIndex();
-		}
-		else if (indexMode == IndexMode.RASTER) {
-			index = IndexType.SPATIAL_RASTER.createDefaultIndex();
-		}
-		else if (indexMode == IndexMode.SINGLE) {
-			final Index tempIdx = IndexType.SPATIAL_VECTOR.createDefaultIndex();
-			final SubStrategy[] subStrats = ((TieredSFCIndexStrategy) tempIdx.getIndexStrategy()).getSubStrategies();
-			index = new CustomIdIndex(
-					subStrats[tier].getIndexStrategy(),
-					tempIdx.getIndexModel(),
-					tempIdx.getDimensionalityType(),
-					tempIdx.getDataType(),
-					tempIdx.getId());
-		}
-		else {
-			index = null;
-		}
-
-		final BasicAccumuloOperations featureCollectionOperations = new BasicAccumuloOperations(
-				connector,
-				featureCollectionNamespace + tileSize);
-
-		final AccumuloDataStore featureCollectionDataStore = new AccumuloDataStore(
-				featureCollectionOperations);
-		final AccumuloIndexWriter featureCollectionWriter = new AccumuloIndexWriter(
-				index,
-				featureCollectionOperations,
-				featureCollectionDataStore);
-
-		final TieredSFCIndexStrategy tieredStrat = (TieredSFCIndexStrategy) index.getIndexStrategy();
-
-		final FeatureDataAdapter featAdapter = new FeatureDataAdapter(
-				TYPE);
-
-		final RawFeatureCollectionDataAdapter featureCollectionAdapter = new RawFeatureCollectionDataAdapter(
-				TYPE,
-				tileSize);
-
-		final SubStrategy[] subStrategies = tieredStrat.getSubStrategies();
-
-		while ((queue.size() > 0) || run) {
-
-			DefaultFeatureCollection featColl = null;
-			try {
-				featColl = queue.poll(
-						100,
-						TimeUnit.MILLISECONDS);
-			}
-			catch (final InterruptedException e1) {
-				e1.printStackTrace();
-			}
-
-			if (featColl != null) {
-
-				numCollsProcessed++;
-
-				// use the first feature to determine the index insertion id
-				final MultiDimensionalNumericData bounds = featAdapter.encode(
-						featColl.features().next(),
-						index.getIndexModel()).getNumericData(
-						index.getIndexModel().getDimensions());
-
-				final List<ByteArrayId> ids = subStrategies[subStratIdx].getIndexStrategy().getInsertionIds(
-						bounds);
-
-				// TODO: This will need to be modified to support polygon
-				// geometries
-				if (ids.size() > 1) {
-					log.warn("Multiple row ids returned for this entry?!");
-				}
-
-				final ByteArrayId id = ids.get(0);
-
-				boolean subTilesOccupied = false;
-				final boolean tilespaceFull = featColl.size() > tileSize;
-
-				// for each tier below the current one, make sure there that
-				// none of this tile's subtiles are populated
-				if (!tilespaceFull) {
-					for (int j = subStratIdx + 1; j < subStrategies.length; j++) {
-
-						// create an index for this substrategy
-						final CustomIdIndex subIndex = new CustomIdIndex(
-								subStrategies[j].getIndexStrategy(),
-								index.getIndexModel(),
-								index.getDimensionalityType(),
-								index.getDataType(),
-								index.getId());
-
-						// build the subtier query
-						final AccumuloConstraintsQuery subQuery = new AccumuloConstraintsQuery(
-								Arrays.asList(new ByteArrayId[] {
-									featureCollectionAdapter.getAdapterId()
-								}),
-								subIndex,
-								getSlimBounds(subStrategies[subStratIdx].getIndexStrategy().getRangeForId(
-										id)),
-								null);
-						subQuery.setQueryFiltersEnabled(false);
-
-						// query at the specified subtier
-						final CloseableIterator<DefaultFeatureCollection> subItr = (CloseableIterator<DefaultFeatureCollection>) subQuery.query(
-								featureCollectionOperations,
-								new MemoryAdapterStore(
-										new DataAdapter[] {
-											featureCollectionAdapter
-										}),
-								null);
-
-						// if there are any points, we need to set a flag to
-						// move this collection to the next lowest tier
-						if (subItr.hasNext()) {
-							subTilesOccupied = true;
-							numOcuppiedSubTiles++;
-							try {
-								subItr.close();
-							}
-							catch (final IOException e) {
-								e.printStackTrace();
-							}
-							break;
-						}
-					}
-				}
-				else {
-					numOverflow++;
-				}
-
-				// if the collection size is greater than tilesize
-				// or there are points in the subtiles below this tile
-				if (tilespaceFull || subTilesOccupied) {
-
-					// build a row id for deletion
-					final AccumuloRowId rowId = new AccumuloRowId(
-							id.getBytes(),
-							new byte[] {},
-							featureCollectionAdapter.getAdapterId().getBytes(),
-							0);
-
-					// delete this tile
-					boolean result = featureCollectionOperations.delete(
-							StringUtils.stringFromBinary(index.getId().getBytes()),
-							new ByteArrayId(
-									rowId.getRowId()),
-							featureCollectionAdapter.getAdapterId().getString(),
-							null);
-
-					// if deletion failed, wait and try again a few times
-					if (!result) {
-						log.warn("Unable to delete row.  Trying again...");
-						final int attempts = 5;
-						for (int attempt = 0; attempt < attempts; attempt++) {
-
-							try {
-								Thread.sleep(500);
-							}
-							catch (final InterruptedException e) {
-								log.error(
-										"Sleep interrupted!",
-										e);
-							}
-
-							result = featureCollectionOperations.delete(
-									StringUtils.stringFromBinary(index.getId().getBytes()),
-									new ByteArrayId(
-											rowId.getRowId()),
-									featureCollectionAdapter.getAdapterId().getString(),
-									null);
-						}
-						if (!result) {
-							log.error("After " + attempts + " attempts, Index Id: [" + rowId.getIndexId().toString() + "] was NOT deleted successfully!");
-						}
-						else {
-							log.info("The row was deleted successfully!");
-						}
-					}
-
-					// if the deletion was unsuccessful, don't re-ingest
-					// anything
-					if (result) {
-						if (subTilesOccupied) {
-							// re-ingest the data if the tiers below this one
-							// are occupied. send the tier information along
-							// with our data
-							featureCollectionWriter.write(
-									featureCollectionAdapter,
-									new FitToIndexDefaultFeatureCollection(
-											featColl,
-											id,
-											subStratIdx));
-						}
-						else {
-							// re-ingest because the tile has overflowed
-							featureCollectionWriter.write(
-									featureCollectionAdapter,
-									featColl);
-						}
-					}
-				}
-			}
-		}
-
-		synchronized (this) {
-			totalNumOverflow += numOverflow;
-			totalNumOcuppiedSubTiles += numOcuppiedSubTiles;
-			totalNumCollsProcessed += numCollsProcessed;
-		}
-		featureCollectionWriter.close();
-	}
+	// private void featCollConsumer(
+	// final ArrayBlockingQueue<DefaultFeatureCollection> queue,
+	// final int subStratIdx,
+	// final int tileSize ) {
+	//
+	// int numOverflow = 0;
+	// int numOcuppiedSubTiles = 0;
+	// int numCollsProcessed = 0;
+	//
+	// final Instance inst = new ZooKeeperInstance(
+	// instancename,
+	// zookeeperUrl);
+	//
+	// Connector connector = null;
+	// try {
+	// connector = inst.getConnector(
+	// username,
+	// password);
+	// }
+	// catch (AccumuloException | AccumuloSecurityException e1) {
+	// e1.printStackTrace();
+	// }
+	//
+	// final Index index;
+	// if (indexMode == IndexMode.VECTOR) {
+	// index = IndexType.SPATIAL_VECTOR.createDefaultIndex();
+	// }
+	// else if (indexMode == IndexMode.RASTER) {
+	// index = IndexType.SPATIAL_RASTER.createDefaultIndex();
+	// }
+	// else if (indexMode == IndexMode.SINGLE) {
+	// final Index tempIdx = IndexType.SPATIAL_VECTOR.createDefaultIndex();
+	// final SubStrategy[] subStrats = ((TieredSFCIndexStrategy)
+	// tempIdx.getIndexStrategy()).getSubStrategies();
+	// index = new CustomIdIndex(
+	// subStrats[tier].getIndexStrategy(),
+	// tempIdx.getIndexModel(),
+	// tempIdx.getDimensionalityType(),
+	// tempIdx.getDataType(),
+	// tempIdx.getId());
+	// }
+	// else {
+	// index = null;
+	// }
+	//
+	// final BasicAccumuloOperations featureCollectionOperations = new
+	// BasicAccumuloOperations(
+	// connector,
+	// featureCollectionNamespace + tileSize);
+	//
+	// final AccumuloDataStore featureCollectionDataStore = new
+	// AccumuloDataStore(
+	// featureCollectionOperations);
+	// final AccumuloIndexWriter featureCollectionWriter = new
+	// AccumuloIndexWriter(
+	// index,
+	// featureCollectionOperations,
+	// featureCollectionDataStore);
+	//
+	// final TieredSFCIndexStrategy tieredStrat = (TieredSFCIndexStrategy)
+	// index.getIndexStrategy();
+	//
+	// final FeatureDataAdapter featAdapter = new FeatureDataAdapter(
+	// TYPE);
+	//
+	// final RawFeatureCollectionDataAdapter featureCollectionAdapter = new
+	// RawFeatureCollectionDataAdapter(
+	// TYPE,
+	// tileSize);
+	//
+	// final SubStrategy[] subStrategies = tieredStrat.getSubStrategies();
+	//
+	// while ((queue.size() > 0) || run) {
+	//
+	// DefaultFeatureCollection featColl = null;
+	// try {
+	// featColl = queue.poll(
+	// 100,
+	// TimeUnit.MILLISECONDS);
+	// }
+	// catch (final InterruptedException e1) {
+	// e1.printStackTrace();
+	// }
+	//
+	// if (featColl != null) {
+	//
+	// numCollsProcessed++;
+	//
+	// // use the first feature to determine the index insertion id
+	// final MultiDimensionalNumericData bounds = featAdapter.encode(
+	// featColl.features().next(),
+	// index.getIndexModel()).getNumericData(
+	// index.getIndexModel().getDimensions());
+	//
+	// final List<ByteArrayId> ids =
+	// subStrategies[subStratIdx].getIndexStrategy().getInsertionIds(
+	// bounds);
+	//
+	// // TODO: This will need to be modified to support polygon
+	// // geometries
+	// if (ids.size() > 1) {
+	// log.warn("Multiple row ids returned for this entry?!");
+	// }
+	//
+	// final ByteArrayId id = ids.get(0);
+	//
+	// boolean subTilesOccupied = false;
+	// final boolean tilespaceFull = featColl.size() > tileSize;
+	//
+	// // for each tier below the current one, make sure there that
+	// // none of this tile's subtiles are populated
+	// if (!tilespaceFull) {
+	// for (int j = subStratIdx + 1; j < subStrategies.length; j++) {
+	//
+	// // create an index for this substrategy
+	// final CustomIdIndex subIndex = new CustomIdIndex(
+	// subStrategies[j].getIndexStrategy(),
+	// index.getIndexModel(),
+	// index.getDimensionalityType(),
+	// index.getDataType(),
+	// index.getId());
+	//
+	// // build the subtier query
+	// final AccumuloConstraintsQuery subQuery = new AccumuloConstraintsQuery(
+	// Arrays.asList(new ByteArrayId[] {
+	// featureCollectionAdapter.getAdapterId()
+	// }),
+	// subIndex,
+	// getSlimBounds(subStrategies[subStratIdx].getIndexStrategy().getRangeForId(
+	// id)),
+	// null);
+	// subQuery.setQueryFiltersEnabled(false);
+	//
+	// // query at the specified subtier
+	// final CloseableIterator<DefaultFeatureCollection> subItr =
+	// (CloseableIterator<DefaultFeatureCollection>) subQuery.query(
+	// featureCollectionOperations,
+	// new MemoryAdapterStore(
+	// new DataAdapter[] {
+	// featureCollectionAdapter
+	// }),
+	// null);
+	//
+	// // if there are any points, we need to set a flag to
+	// // move this collection to the next lowest tier
+	// if (subItr.hasNext()) {
+	// subTilesOccupied = true;
+	// numOcuppiedSubTiles++;
+	// try {
+	// subItr.close();
+	// }
+	// catch (final IOException e) {
+	// e.printStackTrace();
+	// }
+	// break;
+	// }
+	// }
+	// }
+	// else {
+	// numOverflow++;
+	// }
+	//
+	// // if the collection size is greater than tilesize
+	// // or there are points in the subtiles below this tile
+	// if (tilespaceFull || subTilesOccupied) {
+	//
+	// // build a row id for deletion
+	// final AccumuloRowId rowId = new AccumuloRowId(
+	// id.getBytes(),
+	// new byte[] {},
+	// featureCollectionAdapter.getAdapterId().getBytes(),
+	// 0);
+	//
+	// // delete this tile
+	// boolean result = featureCollectionOperations.delete(
+	// StringUtils.stringFromBinary(index.getId().getBytes()),
+	// new ByteArrayId(
+	// rowId.getRowId()),
+	// featureCollectionAdapter.getAdapterId().getString(),
+	// null);
+	//
+	// // if deletion failed, wait and try again a few times
+	// if (!result) {
+	// log.warn("Unable to delete row.  Trying again...");
+	// final int attempts = 5;
+	// for (int attempt = 0; attempt < attempts; attempt++) {
+	//
+	// try {
+	// Thread.sleep(500);
+	// }
+	// catch (final InterruptedException e) {
+	// log.error(
+	// "Sleep interrupted!",
+	// e);
+	// }
+	//
+	// result = featureCollectionOperations.delete(
+	// StringUtils.stringFromBinary(index.getId().getBytes()),
+	// new ByteArrayId(
+	// rowId.getRowId()),
+	// featureCollectionAdapter.getAdapterId().getString(),
+	// null);
+	// }
+	// if (!result) {
+	// log.error("After " + attempts + " attempts, Index Id: [" +
+	// rowId.getIndexId().toString() + "] was NOT deleted successfully!");
+	// }
+	// else {
+	// log.info("The row was deleted successfully!");
+	// }
+	// }
+	//
+	// // if the deletion was unsuccessful, don't re-ingest
+	// // anything
+	// if (result) {
+	// if (subTilesOccupied) {
+	// // re-ingest the data if the tiers below this one
+	// // are occupied. send the tier information along
+	// // with our data
+	// featureCollectionWriter.write(
+	// featureCollectionAdapter,
+	// new FitToIndexDefaultFeatureCollection(
+	// featColl,
+	// id,
+	// subStratIdx));
+	// }
+	// else {
+	// // re-ingest because the tile has overflowed
+	// featureCollectionWriter.write(
+	// featureCollectionAdapter,
+	// featColl);
+	// }
+	// }
+	// }
+	// }
+	// }
+	//
+	// synchronized (this) {
+	// totalNumOverflow += numOverflow;
+	// totalNumOcuppiedSubTiles += numOcuppiedSubTiles;
+	// totalNumCollsProcessed += numCollsProcessed;
+	// }
+	// featureCollectionWriter.close();
+	// }
 
 	private void simpleFeatureTest()
 			throws AccumuloException,
