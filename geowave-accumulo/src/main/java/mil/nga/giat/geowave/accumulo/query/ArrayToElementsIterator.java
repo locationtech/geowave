@@ -42,9 +42,9 @@ public class ArrayToElementsIterator extends
 
 		if (model != null) {
 
-			long longDataId = 0;
-
 			while (input.hasTop()) {
+				long longDataId = 0;
+
 				final Value val = input.getTopValue();
 				final Key currentKey = input.getTopKey();
 

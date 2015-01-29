@@ -557,10 +557,6 @@ public class FeatureCollectionDataAdapter extends
 						data.getCommonData(),
 						extendedData),
 				convertedIndex);
-
-		// return super.decode(
-		// data,
-		// convertedIndex);
 	}
 
 	@Override
