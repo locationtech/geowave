@@ -404,7 +404,7 @@ public class FeatureCollectionRedistributor
 							id.getBytes(),
 							new byte[] {},
 							featureCollectionAdapter.getAdapterId().getBytes(),
-							0);
+							-1);
 
 					// delete this tile
 					boolean result = featureCollectionOperations.delete(
