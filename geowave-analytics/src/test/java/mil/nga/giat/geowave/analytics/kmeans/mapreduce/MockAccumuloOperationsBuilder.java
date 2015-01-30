@@ -1,7 +1,7 @@
 package mil.nga.giat.geowave.analytics.kmeans.mapreduce;
 
 import mil.nga.giat.geowave.accumulo.BasicAccumuloOperations;
-import mil.nga.giat.geowave.analytics.tools.BasicAccumuloOperationsBuilder;
+import mil.nga.giat.geowave.analytics.tools.dbops.BasicAccumuloOperationsBuilder;
 
 import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;

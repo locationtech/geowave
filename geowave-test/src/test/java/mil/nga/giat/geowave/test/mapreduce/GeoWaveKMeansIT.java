@@ -1,8 +1,6 @@
-package mil.nga.giat.geowave.test;
+package mil.nga.giat.geowave.test.mapreduce;
 
-import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.List;
 
 import mil.nga.giat.geowave.analytics.clustering.CentroidManager;
@@ -14,6 +12,7 @@ import mil.nga.giat.geowave.analytics.parameters.ClusteringParameters;
 import mil.nga.giat.geowave.analytics.parameters.ExtractParameters;
 import mil.nga.giat.geowave.analytics.parameters.GlobalParameters;
 import mil.nga.giat.geowave.analytics.parameters.JumpParameters;
+import mil.nga.giat.geowave.analytics.parameters.MapReduceParameters;
 import mil.nga.giat.geowave.analytics.parameters.ParameterEnum;
 import mil.nga.giat.geowave.analytics.parameters.SampleParameters;
 import mil.nga.giat.geowave.analytics.tools.AnalyticItemWrapper;
@@ -24,92 +23,22 @@ import mil.nga.giat.geowave.index.sfc.data.NumericRange;
 import mil.nga.giat.geowave.store.index.IndexType;
 import mil.nga.giat.geowave.store.query.DistributableQuery;
 import mil.nga.giat.geowave.store.query.SpatialQuery;
+import mil.nga.giat.geowave.test.GeoWaveTestEnvironment;
 
 import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
-import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.fs.FileSystem;
-import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.mapreduce.MRJobConfig;
-import org.apache.log4j.Logger;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.geotools.referencing.crs.DefaultGeographicCRS;
-import org.junit.AfterClass;
 import org.junit.Assert;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.opengis.feature.simple.SimpleFeature;
 
 import com.vividsolutions.jts.geom.Geometry;
 
 public class GeoWaveKMeansIT extends
-		GeoWaveTestEnvironment
+		MapReduceTestEnvironment
 {
-	private final static Logger LOGGER = Logger.getLogger(GeoWaveKMeansIT.class);
-	private static final String HDFS_BASE_DIRECTORY = "test_tmp";
-	private static final String DEFAULT_JOB_TRACKER = "local";
-
-	private static final int MIN_INPUT_SPLITS = 2;
-	private static final int MAX_INPUT_SPLITS = 4;
-	protected static String jobtracker;
-	protected static String hdfs;
-	protected static boolean hdfsProtocol;
-	private static String hdfsBaseDirectory;
-
-	public static enum ResultCounterType {
-		EXPECTED,
-		UNEXPECTED,
-		ERROR
-	};
-
-	@BeforeClass
-	public static void setVariables()
-			throws MalformedURLException {
-		hdfs = System.getProperty("hdfs");
-		jobtracker = System.getProperty("jobtracker");
-		if (!GeoWaveITSuite.isSet(hdfs)) {
-			hdfs = "file:///";
-
-			hdfsBaseDirectory = GeoWaveITSuite.tempDir.toURI().toURL().toString() + "/" + HDFS_BASE_DIRECTORY;
-			new File(
-					hdfsBaseDirectory).deleteOnExit();
-			hdfsProtocol = false;
-		}
-		else {
-			hdfsBaseDirectory = HDFS_BASE_DIRECTORY;
-			if (!hdfs.contains("://")) {
-				hdfs = "hdfs://" + hdfs;
-				hdfsProtocol = true;
-			}
-			else {
-				hdfsProtocol = hdfs.toLowerCase().startsWith(
-						"hdfs://");
-			}
-		}
-		if (!GeoWaveITSuite.isSet(jobtracker)) {
-			jobtracker = DEFAULT_JOB_TRACKER;
-		}
-	}
-
-	@AfterClass
-	public static void cleanupHdfsFiles() {
-		if (hdfsProtocol) {
-			final Path tmpDir = new Path(
-					hdfsBaseDirectory);
-			try {
-				final FileSystem fs = FileSystem.get(getConfiguration());
-				fs.delete(
-						tmpDir,
-						true);
-			}
-			catch (final IOException e) {
-				LOGGER.error(
-						"Unable to delete HDFS temp directory",
-						e);
-			}
-		}
-	}
 
 	private SimpleFeatureBuilder getBuilder() {
 		final SimpleFeatureTypeBuilder typeBuilder = new SimpleFeatureTypeBuilder();
@@ -136,20 +65,15 @@ public class GeoWaveKMeansIT extends
 			new FeatureCentroidDistanceFn(),
 			getBuilder());
 
-	private void testIngest(
-			final String zookeeper,
-			final String instance,
-			final String user,
-			final String password,
-			final String namespace )
+	private void testIngest()
 			throws IOException {
 
 		dataGenerator.writeToGeoWave(
 				zookeeper,
-				instance,
-				user,
-				password,
-				namespace,
+				accumuloInstance,
+				accumuloUser,
+				accumuloPassword,
+				TEST_NAMESPACE,
 				dataGenerator.generatePointSet(
 						0.15,
 						0.2,
@@ -165,10 +89,10 @@ public class GeoWaveKMeansIT extends
 						}));
 		dataGenerator.writeToGeoWave(
 				zookeeper,
-				instance,
-				user,
-				password,
-				namespace,
+				accumuloInstance,
+				accumuloUser,
+				accumuloPassword,
+				TEST_NAMESPACE,
 				dataGenerator.generatePointSet(
 						0.15,
 						0.2,
@@ -184,10 +108,10 @@ public class GeoWaveKMeansIT extends
 						}));
 		dataGenerator.writeToGeoWave(
 				zookeeper,
-				instance,
-				user,
-				password,
-				namespace,
+				accumuloInstance,
+				accumuloUser,
+				accumuloPassword,
+				TEST_NAMESPACE,
 				dataGenerator.generatePointSet(
 						0.15,
 						0.2,
@@ -204,39 +128,16 @@ public class GeoWaveKMeansIT extends
 
 	}
 
-	protected static Configuration getConfiguration() {
-		final Configuration conf = new Configuration();
-		conf.set(
-				"fs.defaultFS",
-				hdfs);
-		conf.set(
-				"fs.hdfs.impl",
-				org.apache.hadoop.hdfs.DistributedFileSystem.class.getName());
-		conf.set(
-				"mapred.job.tracker",
-				jobtracker);
-		// for travis-ci to run, we want to limit the memory consumption
-		conf.setInt(
-				MRJobConfig.IO_SORT_MB,
-				10);
-		return conf;
-	}
-
 	@Test
 	public void testIngestAndQueryGeneralGpx()
 			throws Exception {
-		testIngest(
-				GeoWaveITSuite.zookeeper,
-				GeoWaveITSuite.accumuloInstance,
-				GeoWaveITSuite.accumuloUser,
-				GeoWaveITSuite.accumuloPassword,
-				TEST_NAMESPACE);
+		testIngest();
 
-		//runKPlusPlus(new SpatialQuery(
-		//		dataGenerator.getBoundingRegion()));
-		runKJumpPlusPlus(new SpatialQuery(
-				dataGenerator.getBoundingRegion()));
-		GeoWaveITSuite.accumuloOperations.deleteAll();
+		 runKPlusPlus(new SpatialQuery(
+		 dataGenerator.getBoundingRegion()));
+	//	runKJumpPlusPlus(new SpatialQuery(
+	//			dataGenerator.getBoundingRegion()));
+	//	GeoWaveTestEnvironment.accumuloOperations.deleteAll();
 	}
 
 	private void runKPlusPlus(
@@ -261,7 +162,7 @@ public class GeoWaveKMeansIT extends
 							GlobalParameters.Global.ACCUMULO_PASSWORD,
 							GlobalParameters.Global.ACCUMULO_NAMESPACE,
 							GlobalParameters.Global.BATCH_ID,
-							GlobalParameters.Global.HDFS_BASEDIR,
+							MapReduceParameters.MRConfig.HDFS_BASE_DIR,
 							SampleParameters.Sample.MAX_SAMPLE_SIZE,
 							SampleParameters.Sample.MIN_SAMPLE_SIZE
 						},
@@ -273,14 +174,14 @@ public class GeoWaveKMeansIT extends
 							2,
 							true,
 							"centroid",
-							GeoWaveITSuite.zookeeper,
-							GeoWaveITSuite.accumuloInstance,
-							GeoWaveITSuite.accumuloUser,
-							GeoWaveITSuite.accumuloPassword,
+							zookeeper,
+							accumuloInstance,
+							accumuloUser,
+							accumuloPassword,
 							TEST_NAMESPACE,
 							"bx1",
-							this.hdfsBaseDirectory + "/t1",
-							10,
+							hdfsBaseDirectory + "/t1",
+							3,
 							2
 						}));
 
@@ -320,7 +221,7 @@ public class GeoWaveKMeansIT extends
 							GlobalParameters.Global.ACCUMULO_PASSWORD,
 							GlobalParameters.Global.ACCUMULO_NAMESPACE,
 							GlobalParameters.Global.BATCH_ID,
-							GlobalParameters.Global.HDFS_BASEDIR,
+							MapReduceParameters.MRConfig.HDFS_BASE_DIR,
 							JumpParameters.Jump.RANGE_OF_CENTROIDS,
 							JumpParameters.Jump.KPLUSPLUS_MIN,
 							ClusteringParameters.Clustering.MAX_ITERATIONS
@@ -331,18 +232,18 @@ public class GeoWaveKMeansIT extends
 							Integer.toString(MAX_INPUT_SPLITS),
 							"2",
 							"centroid",
-							GeoWaveITSuite.zookeeper,
-							GeoWaveITSuite.accumuloInstance,
-							GeoWaveITSuite.accumuloUser,
-							GeoWaveITSuite.accumuloPassword,
+							zookeeper,
+							accumuloInstance,
+							accumuloUser,
+							accumuloPassword,
 							TEST_NAMESPACE,
 							"bx2",
-							this.hdfsBaseDirectory + "/t2",
+							hdfsBaseDirectory + "/t2",
 							new NumericRange(
 									4,
-									8),
+									7),
 							5,
-							8
+							2
 						}));
 
 		Assert.assertEquals(
@@ -362,18 +263,18 @@ public class GeoWaveKMeansIT extends
 	}
 
 	private int countResults(
-			String batchID,
-			int level,
-			int expectedParentCount )
+			final String batchID,
+			final int level,
+			final int expectedParentCount )
 			throws AccumuloException,
 			AccumuloSecurityException,
 			IOException {
 
-		CentroidManager<SimpleFeature> centroidManager = new CentroidManagerGeoWave<SimpleFeature>(
-				GeoWaveITSuite.zookeeper,
-				GeoWaveITSuite.accumuloInstance,
-				GeoWaveITSuite.accumuloUser,
-				GeoWaveITSuite.accumuloPassword,
+		final CentroidManager<SimpleFeature> centroidManager = new CentroidManagerGeoWave<SimpleFeature>(
+				GeoWaveTestEnvironment.zookeeper,
+				GeoWaveTestEnvironment.accumuloInstance,
+				GeoWaveTestEnvironment.accumuloUser,
+				GeoWaveTestEnvironment.accumuloPassword,
 				TEST_NAMESPACE,
 				new SimpleFeatureItemWrapperFactory(),
 				"centroid",
@@ -381,11 +282,11 @@ public class GeoWaveKMeansIT extends
 				batchID,
 				level);
 
-		CentroidManager<SimpleFeature> hullManager = new CentroidManagerGeoWave<SimpleFeature>(
-				GeoWaveITSuite.zookeeper,
-				GeoWaveITSuite.accumuloInstance,
-				GeoWaveITSuite.accumuloUser,
-				GeoWaveITSuite.accumuloPassword,
+		final CentroidManager<SimpleFeature> hullManager = new CentroidManagerGeoWave<SimpleFeature>(
+				GeoWaveTestEnvironment.zookeeper,
+				GeoWaveTestEnvironment.accumuloInstance,
+				GeoWaveTestEnvironment.accumuloUser,
+				GeoWaveTestEnvironment.accumuloPassword,
 				TEST_NAMESPACE,
 				new SimpleFeatureItemWrapperFactory(),
 				"convex_hull",
@@ -395,14 +296,14 @@ public class GeoWaveKMeansIT extends
 
 		int childCount = 0;
 		int parentCount = 0;
-		for (String grp : centroidManager.getAllCentroidGroups()) {
-			List<AnalyticItemWrapper<SimpleFeature>> centroids = centroidManager.getCentroidsForGroup(grp);
-			List<AnalyticItemWrapper<SimpleFeature>> hulls = hullManager.getCentroidsForGroup(grp);
-			for (AnalyticItemWrapper<SimpleFeature> centroid : centroids) {
+		for (final String grp : centroidManager.getAllCentroidGroups()) {
+			final List<AnalyticItemWrapper<SimpleFeature>> centroids = centroidManager.getCentroidsForGroup(grp);
+			final List<AnalyticItemWrapper<SimpleFeature>> hulls = hullManager.getCentroidsForGroup(grp);
+			for (final AnalyticItemWrapper<SimpleFeature> centroid : centroids) {
 				Assert.assertTrue(centroid.getGeometry() != null);
 				Assert.assertTrue(centroid.getBatchID() != null);
 				boolean found = false;
-				for (AnalyticItemWrapper<SimpleFeature> hull : hulls) {
+				for (final AnalyticItemWrapper<SimpleFeature> hull : hulls) {
 					found |= (hull.getName().equals(centroid.getName()));
 					Assert.assertTrue(hull.getGeometry() != null);
 					Assert.assertTrue(hull.getBatchID() != null);

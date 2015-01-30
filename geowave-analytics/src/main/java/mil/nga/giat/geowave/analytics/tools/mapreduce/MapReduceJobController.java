@@ -1,10 +1,9 @@
 package mil.nga.giat.geowave.analytics.tools.mapreduce;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Set;
 
-import mil.nga.giat.geowave.analytics.parameters.ParameterEnum;
+import mil.nga.giat.geowave.analytics.parameters.MapReduceParameters;
 import mil.nga.giat.geowave.analytics.tools.IndependentJobRunner;
 import mil.nga.giat.geowave.analytics.tools.PropertyManagement;
 
@@ -25,7 +24,7 @@ public class MapReduceJobController implements
 		MapReduceJobRunner,
 		IndependentJobRunner
 {
-	
+
 	final static Logger LOGGER = LoggerFactory.getLogger(MapReduceJobController.class);
 
 	private MapReduceJobRunner[] runners;
@@ -65,7 +64,7 @@ public class MapReduceJobController implements
 			throws Exception {
 		for (int i = 0; i < runners.length; i++) {
 			final MapReduceJobRunner runner = runners[i];
-			LOGGER.info("Running " +  runner.getClass().toString());
+			LOGGER.info("Running " + runner.getClass().toString());
 			final int status = runner.run(
 					config,
 					runTimeProperties);
@@ -83,11 +82,7 @@ public class MapReduceJobController implements
 	@Override
 	public void fillOptions(
 			final Set<Option> options ) {
-		options.add(PropertyManagement.newOption(
-				MRConfig.ConfigFile,
-				"conf",
-				"MapReduce Configuration",
-				true));
+		MapReduceParameters.fillOptions(options);
 
 		for (int i = 0; i < runners.length; i++) {
 			final MapReduceJobRunner runner = runners[i];
@@ -108,39 +103,9 @@ public class MapReduceJobController implements
 
 	public static Configuration getConfiguration(
 			final PropertyManagement pm )
-			throws FileNotFoundException {
-		final String name = pm.getProperty(MRConfig.ConfigFile);
-		final Configuration config = new Configuration();
-		if (name != null) {
-			config.addResource(
-					new FileInputStream(
-							name),
-					name);
-		}
-		return config;
+			throws IOException {
+		return new HadoopOptions(
+				pm).getConfiguration();
 	}
 
-	public static enum MRConfig
-			implements
-			ParameterEnum {
-		ConfigFile(
-				String.class);
-
-		private final Class<?> baseClass;
-
-		MRConfig(
-				final Class<?> baseClass ) {
-			this.baseClass = baseClass;
-		}
-
-		@Override
-		public Class<?> getBaseClass() {
-			return baseClass;
-		}
-
-		@Override
-		public Enum<?> self() {
-			return this;
-		}
-	}
 }

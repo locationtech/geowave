@@ -8,6 +8,7 @@ import mil.nga.giat.geowave.accumulo.mapreduce.input.GeoWaveInputKey;
 import mil.nga.giat.geowave.accumulo.mapreduce.output.GeoWaveOutputKey;
 import mil.nga.giat.geowave.analytics.clustering.CentroidManager;
 import mil.nga.giat.geowave.analytics.clustering.CentroidManagerGeoWave;
+import mil.nga.giat.geowave.analytics.clustering.CentroidPairing;
 import mil.nga.giat.geowave.analytics.clustering.NestedGroupCentroidAssignment;
 import mil.nga.giat.geowave.analytics.extract.CentroidExtractor;
 import mil.nga.giat.geowave.analytics.extract.SimpleFeatureCentroidExtractor;
@@ -15,12 +16,11 @@ import mil.nga.giat.geowave.analytics.kmeans.AssociationNotification;
 import mil.nga.giat.geowave.analytics.parameters.CentroidParameters;
 import mil.nga.giat.geowave.analytics.tools.AnalyticItemWrapper;
 import mil.nga.giat.geowave.analytics.tools.AnalyticItemWrapperFactory;
-import mil.nga.giat.geowave.analytics.tools.CentroidPairing;
 import mil.nga.giat.geowave.analytics.tools.ConfigurationWrapper;
 import mil.nga.giat.geowave.analytics.tools.GeoObjectDimensionValues;
-import mil.nga.giat.geowave.analytics.tools.JobContextConfigurationWrapper;
 import mil.nga.giat.geowave.analytics.tools.SimpleFeatureItemWrapperFactory;
 import mil.nga.giat.geowave.analytics.tools.mapreduce.GroupIDText;
+import mil.nga.giat.geowave.analytics.tools.mapreduce.JobContextConfigurationWrapper;
 
 import org.apache.hadoop.io.BytesWritable;
 import org.apache.hadoop.io.ObjectWritable;
@@ -122,7 +122,7 @@ public class KMeansMapReduce
 			super.setup(context);
 			final ConfigurationWrapper config = new JobContextConfigurationWrapper(
 					context,
-					LOGGER);
+					KMeansMapReduce.LOGGER);
 
 			try {			
 				nestedGroupCentroidAssigner = 
@@ -233,8 +233,8 @@ public class KMeansMapReduce
 				totals.values[i] = totals.values[i] / ptCount;
 			}
 
-			if (LOGGER.isTraceEnabled()) {
-			  LOGGER.trace(groupID + " contains " + centroidID);
+			if (KMeansMapReduce.LOGGER.isTraceEnabled()) {
+				KMeansMapReduce.LOGGER.trace(groupID + " contains " + centroidID);
 			}
 			// new center
 			context.write(
@@ -283,7 +283,7 @@ public class KMeansMapReduce
 				centroidManager = new CentroidManagerGeoWave<Object>(
 						new JobContextConfigurationWrapper(
 								context,
-								LOGGER));
+								KMeansMapReduce.LOGGER));
 			}
 			catch (final Exception e) {
 				throw new IOException(

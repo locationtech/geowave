@@ -138,7 +138,7 @@ public class ZooKeeperTransactionAllocaterTest
 		int s = 0;
 
 		public void run() {
-			while (s < 100 && !shutdown) {
+			while (s < 10 && !shutdown) {
 				s++;
 				try {
 					Thread.sleep(100);

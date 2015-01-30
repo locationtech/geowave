@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import mil.nga.giat.geowave.accumulo.mapreduce.GeoWaveConfiguratorBase;
+import mil.nga.giat.geowave.analytics.clustering.CentroidPairing;
 import mil.nga.giat.geowave.analytics.clustering.NestedGroupCentroidAssignment;
 import mil.nga.giat.geowave.analytics.distance.DistanceFn;
 import mil.nga.giat.geowave.analytics.kmeans.AssociationNotification;
@@ -17,7 +18,6 @@ import mil.nga.giat.geowave.analytics.sample.RandomProbabilitySampleFn;
 import mil.nga.giat.geowave.analytics.sample.SampleProbabilityFn;
 import mil.nga.giat.geowave.analytics.tools.AnalyticItemWrapper;
 import mil.nga.giat.geowave.analytics.tools.AnalyticItemWrapperFactory;
-import mil.nga.giat.geowave.analytics.tools.CentroidPairing;
 import mil.nga.giat.geowave.analytics.tools.ConfigurationWrapper;
 import mil.nga.giat.geowave.analytics.tools.PropertyManagement;
 import mil.nga.giat.geowave.analytics.tools.RunnerUtils;

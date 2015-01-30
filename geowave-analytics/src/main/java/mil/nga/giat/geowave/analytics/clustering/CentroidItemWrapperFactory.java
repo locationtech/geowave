@@ -5,7 +5,6 @@ import java.io.IOException;
 import mil.nga.giat.geowave.analytics.kmeans.AssociationNotification;
 import mil.nga.giat.geowave.analytics.tools.AnalyticItemWrapper;
 import mil.nga.giat.geowave.analytics.tools.AnalyticItemWrapperFactory;
-import mil.nga.giat.geowave.analytics.tools.CentroidPairing;
 import mil.nga.giat.geowave.analytics.tools.ConfigurationWrapper;
 
 import org.apache.accumulo.core.client.AccumuloException;

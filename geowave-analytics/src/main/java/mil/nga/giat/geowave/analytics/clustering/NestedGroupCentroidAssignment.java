@@ -13,7 +13,6 @@ import mil.nga.giat.geowave.analytics.parameters.CommonParameters;
 import mil.nga.giat.geowave.analytics.parameters.GlobalParameters;
 import mil.nga.giat.geowave.analytics.parameters.ParameterEnum;
 import mil.nga.giat.geowave.analytics.tools.AnalyticItemWrapper;
-import mil.nga.giat.geowave.analytics.tools.CentroidPairing;
 import mil.nga.giat.geowave.analytics.tools.ConfigurationWrapper;
 import mil.nga.giat.geowave.analytics.tools.PropertyManagement;
 import mil.nga.giat.geowave.analytics.tools.RunnerUtils;

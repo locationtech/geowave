@@ -1,6 +1,7 @@
-package mil.nga.giat.geowave.analytics.tools;
+package mil.nga.giat.geowave.analytics.tools.mapreduce;
 
 import mil.nga.giat.geowave.accumulo.mapreduce.GeoWaveConfiguratorBase;
+import mil.nga.giat.geowave.analytics.tools.ConfigurationWrapper;
 
 import org.apache.hadoop.mapreduce.JobContext;
 import org.apache.log4j.Logger;
@@ -36,7 +37,7 @@ public class JobContextConfigurationWrapper implements
 				scope,
 				property);
 		if (context.getConfiguration().getRaw(
-				propName) == null) logger.warn("Using defaut for propert " + propName);
+				propName) == null) logger.warn("Using default for property " + propName);
 		return context.getConfiguration().getInt(
 				propName,
 				defaultValue);
@@ -51,7 +52,7 @@ public class JobContextConfigurationWrapper implements
 				scope,
 				property);
 		if (context.getConfiguration().getRaw(
-				propName) == null) logger.warn("Using defaut for propert " + propName);
+				propName) == null) logger.warn("Using default for property " + propName);
 		return context.getConfiguration().get(
 				propName,
 				defaultValue);
@@ -70,7 +71,7 @@ public class JobContextConfigurationWrapper implements
 					scope,
 					property);
 			if (context.getConfiguration().getRaw(
-					propName) == null) logger.warn("Using defaut for propert " + propName);
+					propName) == null) logger.warn("Using default for property " + propName);
 			return GeoWaveConfiguratorBase.getInstance(
 					scope,
 					property,

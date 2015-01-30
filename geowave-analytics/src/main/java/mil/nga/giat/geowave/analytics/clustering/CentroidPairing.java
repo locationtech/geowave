@@ -1,4 +1,6 @@
-package mil.nga.giat.geowave.analytics.tools;
+package mil.nga.giat.geowave.analytics.clustering;
+
+import mil.nga.giat.geowave.analytics.tools.AnalyticItemWrapper;
 
 public class CentroidPairing<T>
 {

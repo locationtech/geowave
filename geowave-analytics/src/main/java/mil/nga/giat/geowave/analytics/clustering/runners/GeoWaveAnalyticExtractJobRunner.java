@@ -12,6 +12,7 @@ import mil.nga.giat.geowave.analytics.extract.DimensionExtractor;
 import mil.nga.giat.geowave.analytics.extract.SimpleFeatureGeometryExtractor;
 import mil.nga.giat.geowave.analytics.parameters.ExtractParameters;
 import mil.nga.giat.geowave.analytics.parameters.GlobalParameters;
+import mil.nga.giat.geowave.analytics.parameters.MapReduceParameters;
 import mil.nga.giat.geowave.analytics.tools.AnalyticFeature;
 import mil.nga.giat.geowave.analytics.tools.IndependentJobRunner;
 import mil.nga.giat.geowave.analytics.tools.PropertyManagement;
@@ -106,7 +107,7 @@ public class GeoWaveAnalyticExtractJobRunner extends
 			final PropertyManagement runTimeProperties ) {
 		return new Path(
 				runTimeProperties.getProperty(
-						GlobalParameters.Global.HDFS_BASEDIR,
+						MapReduceParameters.MRConfig.HDFS_BASE_DIR,
 						"/tmp") + "/" + runTimeProperties.getProperty(
 						GlobalParameters.Global.ACCUMULO_NAMESPACE,
 						"x") + "_dedupe");
@@ -131,7 +132,7 @@ public class GeoWaveAnalyticExtractJobRunner extends
 			throws Exception {
 
 		outputBaseDir = runTimeProperties.getProperty(
-				GlobalParameters.Global.HDFS_BASEDIR,
+				MapReduceParameters.MRConfig.HDFS_BASE_DIR,
 				"/tmp");
 
 		LOGGER.info("Output base directory " + outputBaseDir);
@@ -260,9 +261,10 @@ public class GeoWaveAnalyticExtractJobRunner extends
 					GlobalParameters.Global.ACCUMULO_PASSWORD,
 					GlobalParameters.Global.ACCUMULO_USER,
 					GlobalParameters.Global.ACCUMULO_NAMESPACE,
-					GlobalParameters.Global.HDFS_BASEDIR,
 					GlobalParameters.Global.BATCH_ID
 				});
+		
+		MapReduceParameters.fillOptions(options);
 
 	}
 

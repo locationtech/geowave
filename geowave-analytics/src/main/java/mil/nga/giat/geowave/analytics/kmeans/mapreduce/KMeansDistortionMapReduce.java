@@ -6,6 +6,7 @@ import java.util.List;
 import mil.nga.giat.geowave.accumulo.mapreduce.GeoWaveWritableInputMapper;
 import mil.nga.giat.geowave.accumulo.mapreduce.input.GeoWaveInputKey;
 import mil.nga.giat.geowave.analytics.clustering.CentroidManagerGeoWave;
+import mil.nga.giat.geowave.analytics.clustering.CentroidPairing;
 import mil.nga.giat.geowave.analytics.clustering.NestedGroupCentroidAssignment;
 import mil.nga.giat.geowave.analytics.extract.CentroidExtractor;
 import mil.nga.giat.geowave.analytics.extract.SimpleFeatureCentroidExtractor;
@@ -14,11 +15,10 @@ import mil.nga.giat.geowave.analytics.parameters.CentroidParameters;
 import mil.nga.giat.geowave.analytics.parameters.JumpParameters;
 import mil.nga.giat.geowave.analytics.tools.AnalyticItemWrapper;
 import mil.nga.giat.geowave.analytics.tools.AnalyticItemWrapperFactory;
-import mil.nga.giat.geowave.analytics.tools.CentroidPairing;
 import mil.nga.giat.geowave.analytics.tools.ConfigurationWrapper;
-import mil.nga.giat.geowave.analytics.tools.JobContextConfigurationWrapper;
 import mil.nga.giat.geowave.analytics.tools.SimpleFeatureItemWrapperFactory;
 import mil.nga.giat.geowave.analytics.tools.mapreduce.CountofDoubleWritable;
+import mil.nga.giat.geowave.analytics.tools.mapreduce.JobContextConfigurationWrapper;
 
 import org.apache.accumulo.core.data.Mutation;
 import org.apache.accumulo.core.data.Value;
@@ -135,7 +135,7 @@ public class KMeansDistortionMapReduce
 			super.setup(context);
 			final ConfigurationWrapper config = new JobContextConfigurationWrapper(
 					context,
-					LOGGER);
+					KMeansDistortionMapReduce.LOGGER);
 
 			try {
 				nestedGroupCentroidAssigner = new NestedGroupCentroidAssignment<Object>(
@@ -267,7 +267,7 @@ public class KMeansDistortionMapReduce
 			super.setup(context);
 			final ConfigurationWrapper config = new JobContextConfigurationWrapper(
 					context,
-					LOGGER);
+					KMeansDistortionMapReduce.LOGGER);
 
 			final int k = config.getInt(
 					JumpParameters.Jump.COUNT_OF_CENTROIDS,
@@ -282,7 +282,7 @@ public class KMeansDistortionMapReduce
 						config);
 			}
 			catch (final Exception e) {
-				LOGGER.warn(
+				KMeansDistortionMapReduce.LOGGER.warn(
 						"Unable to initialize centroid manager",
 						e);
 				throw new IOException(

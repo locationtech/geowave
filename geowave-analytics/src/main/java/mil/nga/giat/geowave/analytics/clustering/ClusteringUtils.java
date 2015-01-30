@@ -9,6 +9,8 @@ import mil.nga.giat.geowave.accumulo.mapreduce.input.GeoWaveInputConfigurator;
 import mil.nga.giat.geowave.accumulo.metadata.AccumuloAdapterStore;
 import mil.nga.giat.geowave.accumulo.metadata.AccumuloIndexStore;
 import mil.nga.giat.geowave.analytics.tools.AnalyticFeature;
+import mil.nga.giat.geowave.analytics.tools.dbops.BasicAccumuloOperationsBuilder;
+import mil.nga.giat.geowave.analytics.tools.dbops.DirectBasicAccumuloOperationsBuilder;
 import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.index.ByteArrayRange;
 import mil.nga.giat.geowave.index.NumericIndexStrategy;
@@ -47,6 +49,12 @@ public class ClusteringUtils
 {
 
 	final static Logger LOGGER = LoggerFactory.getLogger(ClusteringUtils.class);
+	private static BasicAccumuloOperationsBuilder basicAccumuloOperationsBuilder = new DirectBasicAccumuloOperationsBuilder();
+
+	public static void setBasicAccumuloOperationsBuilder(
+			BasicAccumuloOperationsBuilder basicAccumuloOperationsBuilder ) {
+		ClusteringUtils.basicAccumuloOperationsBuilder = basicAccumuloOperationsBuilder;
+	}
 
 	/*
 	 * null field will result in all possible entries in that field
@@ -81,7 +89,7 @@ public class ClusteringUtils
 			final String namespace )
 			throws Exception {
 
-		return new BasicAccumuloOperations(
+		return basicAccumuloOperationsBuilder.build(
 				zookeeper,
 				accumuloInstance,
 				accumuloUser,
@@ -186,7 +194,7 @@ public class ClusteringUtils
 				dimensionNames,
 				4326);
 
-		final AccumuloOperations operations = new BasicAccumuloOperations(
+		final AccumuloOperations operations = basicAccumuloOperationsBuilder.build(
 				zookeeper,
 				accumuloInstance,
 				accumuloUser,
@@ -256,7 +264,7 @@ public class ClusteringUtils
 			final String namespace ) {
 		BasicAccumuloOperations ops;
 		try {
-			ops = new BasicAccumuloOperations(
+			ops = basicAccumuloOperationsBuilder.build(
 					zookeeper,
 					accumuloInstance,
 					accumuloUser,

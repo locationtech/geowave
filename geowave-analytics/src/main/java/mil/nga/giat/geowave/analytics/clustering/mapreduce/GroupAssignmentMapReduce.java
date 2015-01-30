@@ -9,17 +9,17 @@ import java.util.concurrent.atomic.AtomicInteger;
 import mil.nga.giat.geowave.accumulo.mapreduce.GeoWaveWritableInputMapper;
 import mil.nga.giat.geowave.accumulo.mapreduce.input.GeoWaveInputKey;
 import mil.nga.giat.geowave.analytics.clustering.CentroidManagerGeoWave;
+import mil.nga.giat.geowave.analytics.clustering.CentroidPairing;
 import mil.nga.giat.geowave.analytics.clustering.NestedGroupCentroidAssignment;
 import mil.nga.giat.geowave.analytics.extract.CentroidExtractor;
 import mil.nga.giat.geowave.analytics.extract.SimpleFeatureCentroidExtractor;
 import mil.nga.giat.geowave.analytics.kmeans.AssociationNotification;
 import mil.nga.giat.geowave.analytics.parameters.CentroidParameters;
 import mil.nga.giat.geowave.analytics.tools.AnalyticItemWrapperFactory;
-import mil.nga.giat.geowave.analytics.tools.CentroidPairing;
 import mil.nga.giat.geowave.analytics.tools.ConfigurationWrapper;
-import mil.nga.giat.geowave.analytics.tools.JobContextConfigurationWrapper;
 import mil.nga.giat.geowave.analytics.tools.SimpleFeatureItemWrapperFactory;
 import mil.nga.giat.geowave.analytics.tools.mapreduce.GroupIDText;
+import mil.nga.giat.geowave.analytics.tools.mapreduce.JobContextConfigurationWrapper;
 
 import org.apache.hadoop.io.ObjectWritable;
 import org.apache.hadoop.mapreduce.Mapper;
@@ -117,7 +117,7 @@ public class GroupAssignmentMapReduce
 				InterruptedException {
 
 			for (Entry<String, AtomicInteger> e : LogCounts.entrySet()) {
-				LOGGER.trace(e.getKey() + " = " + e.getValue());
+				GroupAssignmentMapReduce.LOGGER.trace(e.getKey() + " = " + e.getValue());
 			}
 			super.cleanup(context);
 		}
@@ -131,7 +131,7 @@ public class GroupAssignmentMapReduce
 
 			final ConfigurationWrapper config = new JobContextConfigurationWrapper(
 					context,
-					LOGGER);
+					GroupAssignmentMapReduce.LOGGER);
 
 			try {
 				nestedGroupCentroidAssigner = new NestedGroupCentroidAssignment<Object>(

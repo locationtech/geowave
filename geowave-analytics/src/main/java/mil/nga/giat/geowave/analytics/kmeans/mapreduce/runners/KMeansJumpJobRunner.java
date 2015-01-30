@@ -16,6 +16,7 @@ import mil.nga.giat.geowave.analytics.parameters.ClusteringParameters;
 import mil.nga.giat.geowave.analytics.parameters.CommonParameters;
 import mil.nga.giat.geowave.analytics.parameters.GlobalParameters;
 import mil.nga.giat.geowave.analytics.parameters.JumpParameters;
+import mil.nga.giat.geowave.analytics.parameters.MapReduceParameters;
 import mil.nga.giat.geowave.analytics.parameters.SampleParameters;
 import mil.nga.giat.geowave.analytics.tools.AnalyticItemWrapperFactory;
 import mil.nga.giat.geowave.analytics.tools.PropertyManagement;
@@ -273,9 +274,9 @@ public class KMeansJumpJobRunner extends
 					GlobalParameters.Global.ACCUMULO_PASSWORD,
 					GlobalParameters.Global.ACCUMULO_USER,
 					GlobalParameters.Global.ACCUMULO_NAMESPACE,
-					GlobalParameters.Global.HDFS_BASEDIR,
 					GlobalParameters.Global.BATCH_ID
 				});
+		MapReduceParameters.fillOptions(options);
 		// override
 		PropertyManagement.removeOption(
 				options,

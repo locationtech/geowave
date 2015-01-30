@@ -23,8 +23,8 @@ import mil.nga.giat.geowave.analytics.sample.functions.SamplingRankFunction;
 import mil.nga.giat.geowave.analytics.tools.AnalyticItemWrapper;
 import mil.nga.giat.geowave.analytics.tools.AnalyticItemWrapperFactory;
 import mil.nga.giat.geowave.analytics.tools.ConfigurationWrapper;
-import mil.nga.giat.geowave.analytics.tools.JobContextConfigurationWrapper;
 import mil.nga.giat.geowave.analytics.tools.SimpleFeatureItemWrapperFactory;
+import mil.nga.giat.geowave.analytics.tools.mapreduce.JobContextConfigurationWrapper;
 import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.index.StringUtils;
 import mil.nga.giat.geowave.store.index.IndexType;
@@ -172,7 +172,7 @@ public class KSamplerMapReduce
 
 			ConfigurationWrapper config = new JobContextConfigurationWrapper(
 					context,
-					LOGGER);
+					KSamplerMapReduce.LOGGER);
 			sampleSize = config.getInt(
 					SampleParameters.Sample.SAMPLE_SIZE,
 					KSamplerMapReduce.class,
@@ -220,8 +220,7 @@ public class KSamplerMapReduce
 	public static class SampleReducer<T> extends
 			GeoWaveWritableInputReducer<GeoWaveOutputKey, T>
 	{
-		protected static final Logger LOGGER = Logger.getLogger(GeoWaveReducer.class);
-
+		
 		private int maxCount = 1;
 		private CentroidExtractor<T> centroidExtractor;
 		private AnalyticItemWrapperFactory<T> itemWrapperFactory;
@@ -287,7 +286,7 @@ public class KSamplerMapReduce
 
 			ConfigurationWrapper config = new JobContextConfigurationWrapper(
 					context,
-					LOGGER);
+					KSamplerMapReduce.LOGGER);
 
 			maxCount = config.getInt(
 					SampleParameters.Sample.SAMPLE_SIZE,

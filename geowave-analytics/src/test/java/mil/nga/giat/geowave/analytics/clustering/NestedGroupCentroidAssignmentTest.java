@@ -11,7 +11,6 @@ import mil.nga.giat.geowave.accumulo.BasicAccumuloOperations;
 import mil.nga.giat.geowave.analytics.distance.FeatureCentroidDistanceFn;
 import mil.nga.giat.geowave.analytics.kmeans.AssociationNotification;
 import mil.nga.giat.geowave.analytics.tools.AnalyticFeature;
-import mil.nga.giat.geowave.analytics.tools.CentroidPairing;
 import mil.nga.giat.geowave.analytics.tools.SimpleFeatureItemWrapperFactory;
 import mil.nga.giat.geowave.index.StringUtils;
 import mil.nga.giat.geowave.store.index.Index;

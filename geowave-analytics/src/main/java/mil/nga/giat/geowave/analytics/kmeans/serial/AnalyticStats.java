@@ -1,4 +1,4 @@
-package mil.nga.giat.geowave.analytics.tools;
+package mil.nga.giat.geowave.analytics.kmeans.serial;
 
 public interface AnalyticStats
 {

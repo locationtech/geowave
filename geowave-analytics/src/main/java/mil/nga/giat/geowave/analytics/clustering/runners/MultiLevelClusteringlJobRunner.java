@@ -10,6 +10,7 @@ import mil.nga.giat.geowave.analytics.parameters.ClusteringParameters.Clustering
 import mil.nga.giat.geowave.analytics.parameters.CommonParameters;
 import mil.nga.giat.geowave.analytics.parameters.ExtractParameters;
 import mil.nga.giat.geowave.analytics.parameters.GlobalParameters;
+import mil.nga.giat.geowave.analytics.parameters.MapReduceParameters;
 import mil.nga.giat.geowave.analytics.parameters.GlobalParameters.Global;
 import mil.nga.giat.geowave.analytics.parameters.HullParameters;
 import mil.nga.giat.geowave.analytics.tools.PropertyManagement;
@@ -76,9 +77,9 @@ public abstract class MultiLevelClusteringlJobRunner extends
 				options,
 				new Global[] {
 					Global.BATCH_ID,
-					Global.HDFS_BASEDIR,
 					Global.ACCUMULO_NAMESPACE
 				});
+		MapReduceParameters.fillOptions(options);
 		// the output data type is used for centroid management
 		PropertyManagement.removeOption(
 				options,
@@ -165,7 +166,7 @@ public abstract class MultiLevelClusteringlJobRunner extends
 
 		// run clustering for each level
 		final String outputBaseDir = propertyManagement.getProperty(
-				GlobalParameters.Global.HDFS_BASEDIR,
+				MapReduceParameters.MRConfig.HDFS_BASE_DIR,
 				"/tmp");
 		for (int i = 0; (status == 0) && (i < zoomLevels); i++) {
 			final int zoomLevel = i + 1;

@@ -3,7 +3,7 @@ package mil.nga.giat.geowave.analytics.sample;
 import java.util.Collection;
 import java.util.SortedMap;
 
-import mil.nga.giat.geowave.analytics.tools.CentroidPairing;
+import mil.nga.giat.geowave.analytics.clustering.CentroidPairing;
 
 import com.google.common.collect.Maps;
 

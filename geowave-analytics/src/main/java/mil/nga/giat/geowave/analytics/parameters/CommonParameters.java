@@ -5,8 +5,8 @@ import java.util.Set;
 
 import mil.nga.giat.geowave.analytics.distance.DistanceFn;
 import mil.nga.giat.geowave.analytics.extract.DimensionExtractor;
-import mil.nga.giat.geowave.analytics.tools.BasicAccumuloOperationsBuilder;
 import mil.nga.giat.geowave.analytics.tools.PropertyManagement;
+import mil.nga.giat.geowave.analytics.tools.dbops.BasicAccumuloOperationsBuilder;
 
 import org.apache.commons.cli.Option;
 import org.apache.hadoop.fs.Path;

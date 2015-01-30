@@ -1,15 +1,15 @@
-package mil.nga.giat.geowave.analytics.kmeans;
+package mil.nga.giat.geowave.analytics.kmeans.serial;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import mil.nga.giat.geowave.analytics.clustering.CentroidPairing;
+import mil.nga.giat.geowave.analytics.kmeans.AssociationNotification;
+import mil.nga.giat.geowave.analytics.kmeans.CentroidAssociationFn;
 import mil.nga.giat.geowave.analytics.sample.SampleNotification;
 import mil.nga.giat.geowave.analytics.sample.Sampler;
 import mil.nga.giat.geowave.analytics.tools.AnalyticItemWrapper;
 import mil.nga.giat.geowave.analytics.tools.AnalyticItemWrapperFactory;
-import mil.nga.giat.geowave.analytics.tools.AnalyticStats;
-import mil.nga.giat.geowave.analytics.tools.CentroidPairing;
-import mil.nga.giat.geowave.analytics.tools.StatsMap;
 
 import org.apache.commons.lang3.tuple.Pair;
 

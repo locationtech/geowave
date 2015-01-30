@@ -18,10 +18,10 @@ import mil.nga.giat.geowave.analytics.tools.AnalyticFeature;
 import mil.nga.giat.geowave.analytics.tools.AnalyticItemWrapper;
 import mil.nga.giat.geowave.analytics.tools.AnalyticItemWrapperFactory;
 import mil.nga.giat.geowave.analytics.tools.ConfigurationWrapper;
-import mil.nga.giat.geowave.analytics.tools.JobContextConfigurationWrapper;
 import mil.nga.giat.geowave.analytics.tools.Projection;
 import mil.nga.giat.geowave.analytics.tools.SimpleFeatureItemWrapperFactory;
 import mil.nga.giat.geowave.analytics.tools.SimpleFeatureProjection;
+import mil.nga.giat.geowave.analytics.tools.mapreduce.JobContextConfigurationWrapper;
 import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.index.StringUtils;
 import mil.nga.giat.geowave.store.index.IndexType;
@@ -66,6 +66,8 @@ import com.vividsolutions.jts.geom.GeometryFactory;
  */
 public class ConvexHullMapReduce
 {
+	protected static final Logger LOGGER = Logger.getLogger(ConvexHullMapReduce.class);
+	
 	public static class ConvexHullMap<T> extends
 			GeoWaveWritableInputMapper<GeoWaveInputKey, ObjectWritable>
 	{
@@ -123,7 +125,7 @@ public class ConvexHullMapReduce
 
 			final ConfigurationWrapper config = new JobContextConfigurationWrapper(
 					context,
-					LOGGER);
+					ConvexHullMapReduce.LOGGER);
 			try {
 				itemWrapperFactory = config.getInstance(
 						HullParameters.Hull.WRAPPER_FACTORY_CLASS,
@@ -153,7 +155,6 @@ public class ConvexHullMapReduce
 	public static class ConvexHullReducer<T> extends
 			GeoWaveWritableInputReducer<GeoWaveOutputKey, SimpleFeature>
 	{
-		protected static final Logger LOGGER = Logger.getLogger(GeoWaveReducer.class);
 
 		private CentroidManager<T> centroidManager;
 		private ByteArrayId indexId;
@@ -210,8 +211,8 @@ public class ConvexHullMapReduce
 					context,
 					batchCoords) : currentHull;
 
-			if (LOGGER.isTraceEnabled()) {
-				LOGGER.trace(centroid.getGroupID() + " contains " + groupID);
+			if (ConvexHullMapReduce.LOGGER.isTraceEnabled()) {
+				ConvexHullMapReduce.LOGGER.trace(centroid.getGroupID() + " contains " + groupID);
 			}
 
 			final SimpleFeature newPolygonFeature = AnalyticFeature.createGeometryFeature(
@@ -271,7 +272,7 @@ public class ConvexHullMapReduce
 						config);
 			}
 			catch (final Exception e) {
-				LOGGER.warn(
+				ConvexHullMapReduce.LOGGER.warn(
 						"Unable to initialize centroid manager",
 						e);
 				throw new IOException(

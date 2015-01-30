@@ -22,8 +22,6 @@ public class GlobalParameters
 				String.class),
 		ACCUMULO_NAMESPACE(
 				String.class),
-		HDFS_BASEDIR(
-				String.class),
 		PARENT_BATCH_ID(
 				String.class),
 		BATCH_ID(
@@ -57,16 +55,7 @@ public class GlobalParameters
 					"z",
 					"A comma-separated list of zookeeper servers used by an Accumulo instance.",
 					true));
-		}
-		if (contains(
-				params,
-				Global.HDFS_BASEDIR)) {
-			options.add(PropertyManagement.newOption(
-					Global.HDFS_BASEDIR,
-					"hb",
-					"Base directory in HDFS for inprocess work.",
-					true));
-		}
+		}	
 		if (contains(
 				params,
 				Global.BATCH_ID)) {

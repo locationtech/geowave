@@ -7,15 +7,16 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import mil.nga.giat.geowave.analytics.clustering.CentroidPairing;
 import mil.nga.giat.geowave.analytics.distance.FeatureCentroidDistanceFn;
+import mil.nga.giat.geowave.analytics.kmeans.serial.KMeansParallelInitialize;
+import mil.nga.giat.geowave.analytics.kmeans.serial.StatsMap;
+import mil.nga.giat.geowave.analytics.kmeans.serial.AnalyticStats.StatValue;
 import mil.nga.giat.geowave.analytics.sample.BahmanEtAlSampleProbabilityFn;
 import mil.nga.giat.geowave.analytics.sample.Sampler;
 import mil.nga.giat.geowave.analytics.tools.AnalyticItemWrapper;
-import mil.nga.giat.geowave.analytics.tools.AnalyticStats.StatValue;
-import mil.nga.giat.geowave.analytics.tools.CentroidPairing;
 import mil.nga.giat.geowave.analytics.tools.GeometryDataSetGenerator;
 import mil.nga.giat.geowave.analytics.tools.SimpleFeatureItemWrapperFactory;
-import mil.nga.giat.geowave.analytics.tools.StatsMap;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.geotools.feature.simple.SimpleFeatureBuilder;

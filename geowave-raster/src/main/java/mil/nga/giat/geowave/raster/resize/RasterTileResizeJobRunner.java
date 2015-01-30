@@ -133,10 +133,10 @@ public class RasterTileResizeJobRunner extends
 				newTileSize,
 				new NoDataMergeStrategy());
 		JobContextAdapterStore.addDataAdapter(
-				job,
+				job.getConfiguration(),
 				adapter);
 		JobContextAdapterStore.addDataAdapter(
-				job,
+				job.getConfiguration(),
 				newAdapter);
 		Index index = null;
 		if (indexId != null) {

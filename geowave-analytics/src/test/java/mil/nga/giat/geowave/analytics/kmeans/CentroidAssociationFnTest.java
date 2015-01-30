@@ -5,10 +5,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import mil.nga.giat.geowave.analytics.clustering.CentroidPairing;
 import mil.nga.giat.geowave.analytics.clustering.LongCentroid;
 import mil.nga.giat.geowave.analytics.distance.DistanceFn;
 import mil.nga.giat.geowave.analytics.tools.AnalyticItemWrapper;
-import mil.nga.giat.geowave.analytics.tools.CentroidPairing;
 
 import org.junit.Assert;
 import org.junit.Test;

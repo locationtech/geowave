@@ -144,6 +144,11 @@ public class PropertyManagement
 		return null;
 	}
 
+	public boolean hasProperty(
+			final ParameterEnum property ) {
+		return properties.getProperty(toPropertyName(property)) != null;
+	}
+
 	public String getProperty(
 			final ParameterEnum property ) {
 		return properties.getProperty(toPropertyName(property));

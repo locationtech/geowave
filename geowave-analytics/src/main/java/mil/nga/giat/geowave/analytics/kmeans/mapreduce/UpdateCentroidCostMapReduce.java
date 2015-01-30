@@ -8,17 +8,17 @@ import mil.nga.giat.geowave.accumulo.mapreduce.input.GeoWaveInputKey;
 import mil.nga.giat.geowave.accumulo.mapreduce.output.GeoWaveOutputKey;
 import mil.nga.giat.geowave.analytics.clustering.CentroidManager;
 import mil.nga.giat.geowave.analytics.clustering.CentroidManagerGeoWave;
+import mil.nga.giat.geowave.analytics.clustering.CentroidPairing;
 import mil.nga.giat.geowave.analytics.clustering.NestedGroupCentroidAssignment;
 import mil.nga.giat.geowave.analytics.kmeans.AssociationNotification;
 import mil.nga.giat.geowave.analytics.parameters.CentroidParameters;
 import mil.nga.giat.geowave.analytics.tools.AnalyticItemWrapper;
 import mil.nga.giat.geowave.analytics.tools.AnalyticItemWrapperFactory;
-import mil.nga.giat.geowave.analytics.tools.CentroidPairing;
 import mil.nga.giat.geowave.analytics.tools.ConfigurationWrapper;
-import mil.nga.giat.geowave.analytics.tools.JobContextConfigurationWrapper;
 import mil.nga.giat.geowave.analytics.tools.SimpleFeatureItemWrapperFactory;
 import mil.nga.giat.geowave.analytics.tools.mapreduce.CountofDoubleWritable;
 import mil.nga.giat.geowave.analytics.tools.mapreduce.GroupIDText;
+import mil.nga.giat.geowave.analytics.tools.mapreduce.JobContextConfigurationWrapper;
 
 import org.apache.hadoop.io.ObjectWritable;
 import org.apache.hadoop.mapreduce.Mapper;
@@ -100,7 +100,7 @@ public class UpdateCentroidCostMapReduce
 
 			final ConfigurationWrapper config = new JobContextConfigurationWrapper(
 					context,
-					LOGGER);
+					UpdateCentroidCostMapReduce.LOGGER);
 
 			try {
 				nestedGroupCentroidAssigner = new NestedGroupCentroidAssignment<Object>(
@@ -187,7 +187,7 @@ public class UpdateCentroidCostMapReduce
 			centroid.resetAssociatonCount();
 			centroid.incrementAssociationCount((long) count);
 
-			LOGGER.info(centroid.toString());
+			UpdateCentroidCostMapReduce.LOGGER.info("Update centroid " + centroid.toString());
 			context.write(
 					new GeoWaveOutputKey(
 							centroidManager.getDataTypeId(),
@@ -225,14 +225,14 @@ public class UpdateCentroidCostMapReduce
 
 			final ConfigurationWrapper config = new JobContextConfigurationWrapper(
 					context,
-					LOGGER);
+					UpdateCentroidCostMapReduce.LOGGER);
 
 			try {
 				centroidManager = new CentroidManagerGeoWave<Object>(
 						config);
 			}
 			catch (final Exception e) {
-				LOGGER.warn(
+				UpdateCentroidCostMapReduce.LOGGER.warn(
 						"Unable to initialize centroid manager",
 						e);
 				throw new IOException(

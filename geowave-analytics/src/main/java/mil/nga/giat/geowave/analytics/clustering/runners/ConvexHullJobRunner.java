@@ -16,6 +16,7 @@ import mil.nga.giat.geowave.analytics.clustering.mapreduce.ConvexHullMapReduce;
 import mil.nga.giat.geowave.analytics.parameters.CentroidParameters;
 import mil.nga.giat.geowave.analytics.parameters.GlobalParameters;
 import mil.nga.giat.geowave.analytics.parameters.HullParameters;
+import mil.nga.giat.geowave.analytics.parameters.MapReduceParameters;
 import mil.nga.giat.geowave.analytics.parameters.ParameterEnum;
 import mil.nga.giat.geowave.analytics.tools.AnalyticFeature;
 import mil.nga.giat.geowave.analytics.tools.IndependentJobRunner;
@@ -206,10 +207,10 @@ public class ConvexHullJobRunner extends
 					GlobalParameters.Global.ACCUMULO_PASSWORD,
 					GlobalParameters.Global.ACCUMULO_USER,
 					GlobalParameters.Global.ACCUMULO_NAMESPACE,
-					GlobalParameters.Global.HDFS_BASEDIR,
 					GlobalParameters.Global.BATCH_ID
 				});
 
+		MapReduceParameters.fillOptions(options);
 		NestedGroupCentroidAssignment.fillOptions(options);
 
 		HullParameters.fillOptions(
