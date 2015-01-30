@@ -1,4 +1,4 @@
-package mil.nga.giat.geowave.vector.test;
+package mil.nga.giat.geowave.benchmark.utils;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

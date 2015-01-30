@@ -33,7 +33,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<sonar.language>java</sonar.language>
-		<!-- Feed Sonar with the JaCoCo integration tests coverage report (that
+		<!-- Feed Sonar with the JaCoCo integration tests coverage report (that 
 			you have previously generated) -->
 		<jacoco.it.reportPath>${project.build.directory}/coverage-reports/jacoco-it.exec</jacoco.it.reportPath>
 		<jacoco.ut.reportPath>${project.build.directory}/coverage-reports/jacoco-ut.exec</jacoco.ut.reportPath>
@@ -365,7 +365,8 @@
 						<jacocoReport>${project.basedir}/geowave-ingest/target/site/jacoco-ut/jacoco.xml</jacocoReport>
 						<jacocoReport>${project.basedir}/geowave-raster/target/site/jacoco-ut/jacoco.xml</jacocoReport>
 						<jacocoReport>${project.basedir}/geowave-store/target/site/jacoco-ut/jacoco.xml</jacocoReport>
-						<jacocoReport>${project.basedir}/geowave-types/target/site/jacoco-ut/jacoco.xml</jacocoReport> -
+						<jacocoReport>${project.basedir}/geowave-types/target/site/jacoco-ut/jacoco.xml</jacocoReport>
+						-
 						<jacocoReport>${project.basedir}/geowave-vector/target/site/jacoco-ut/jacoco.xml</jacocoReport>
 						<jacocoReport>${project.basedir}/geowave-accumulo/target/site/jacoco-ut/jacoco.xml</jacocoReport>
 						<jacocoReport>${project.basedir}/geowave-test/target/site/jacoco-it/jacoco.xml</jacocoReport>
@@ -387,6 +388,7 @@
 		<module>geowave-client</module>
 		<module>geowave-services</module>
 		<module>geowave-deploy</module>
+		<module>geowave-benchmark</module>
 		<module>geowave-test</module>
 	</modules>
 

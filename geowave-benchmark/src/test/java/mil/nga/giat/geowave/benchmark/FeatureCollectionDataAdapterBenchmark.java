@@ -1,4 +1,4 @@
-package mil.nga.giat.geowave.vector.test;
+package mil.nga.giat.geowave.benchmark;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -64,7 +64,7 @@ import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.Point;
 
-public class Benchmark
+public class FeatureCollectionDataAdapterBenchmark
 {
 	private static enum AccumuloMode {
 		MINI_ACCUMULO,
@@ -92,7 +92,7 @@ public class Benchmark
 
 	private final IterMode iterMode = IterMode.ATTACHED;
 
-	private final static Logger log = Logger.getLogger(Benchmark.class);
+	private final static Logger log = Logger.getLogger(FeatureCollectionDataAdapterBenchmark.class);
 
 	private String zookeeperUrl;
 	private String instancename;
@@ -137,7 +137,7 @@ public class Benchmark
 	};
 
 	// TODO: Set these values appropriately
-	final private IndexMode indexMode = IndexMode.VECTOR;
+	final private IndexMode indexMode = IndexMode.RASTER;
 	final private int tier = 4;
 
 	final private int numThreads = 32;
@@ -162,7 +162,7 @@ public class Benchmark
 	List<Long> medQueryRuntimes = new ArrayList<Long>();
 	List<Long> largeQueryRuntimes = new ArrayList<Long>();
 
-	public Benchmark() {
+	public FeatureCollectionDataAdapterBenchmark() {
 		if (indexMode == IndexMode.VECTOR) {
 			index = IndexType.SPATIAL_VECTOR.createDefaultIndex();
 			featureNamespace = "featureTest_vector";
@@ -986,7 +986,7 @@ public class Benchmark
 
 	public static void main(
 			final String[] args ) {
-		final Benchmark tb = new Benchmark();
+		final FeatureCollectionDataAdapterBenchmark tb = new FeatureCollectionDataAdapterBenchmark();
 		try {
 			tb.accumuloInit();
 			tb.runBenchmarks();
