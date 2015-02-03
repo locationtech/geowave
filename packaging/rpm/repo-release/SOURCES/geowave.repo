@@ -1,0 +1,7 @@
+[geowave]
+name=GeoWave for Enterprise Linux 6
+baseurl=https://s3.amazonaws.com/geowave-rpms/release/noarch/
+enabled=0
+gpgcheck=0
+failovermethod=priority
+priority=15

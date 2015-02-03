@@ -36,7 +36,7 @@ buildArg() {
 
     # No arg uses default  
     if [ -z "$BUILD_ARG" ]; then
-        echo $DEFAULT_ARG
+        echo "-$DEFAULT_ARG"
         exit
     fi
 
@@ -50,7 +50,7 @@ buildArg() {
         fi
     done
     if [ $match -eq 0 ]; then
-        echo $DEFAULT_ARG
+        echo "-$DEFAULT_ARG"
         exit
     fi 
     
