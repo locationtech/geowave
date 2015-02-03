@@ -111,8 +111,8 @@ public class FeatureCollectionDataAdapterBenchmark
 		1000000
 	};
 
-	final private int collsPerRegion = 15;
-	final private int numRegions = 15;
+	final private int collsPerRegion = 22;
+	final private int numRegions = 22;
 
 	// this is the chunk size for the feature collection data adapter
 	final private int[] pointsPerTile = new int[] {
@@ -139,6 +139,7 @@ public class FeatureCollectionDataAdapterBenchmark
 	// TODO: Set these values appropriately
 	final private IndexMode indexMode = IndexMode.RASTER;
 	final private int tier = 4;
+	final private boolean compactTables = true;
 
 	final private int numThreads = 32;
 
@@ -263,7 +264,7 @@ public class FeatureCollectionDataAdapterBenchmark
 		}
 
 		saveQueryRuntimes();
-		cleanup();
+		// cleanup();
 	}
 
 	private void saveIngestRuntimes()
@@ -743,6 +744,22 @@ public class FeatureCollectionDataAdapterBenchmark
 		final FeatureDataAdapter featureAdapter = new FeatureDataAdapter(
 				TYPE);
 
+		if (compactTables) {
+			try {
+				featureOperations.getConnector().tableOperations().compact(
+						featureNamespace,
+						null,
+						null,
+						true,
+						true);
+			}
+			catch (TableNotFoundException e) {
+				log.error(
+						"Could not find table [" + featureNamespace + "] for compaction.",
+						e);
+			}
+		}
+
 		long runtime = 0;
 
 		log.info("*** World Query");
@@ -825,7 +842,7 @@ public class FeatureCollectionDataAdapterBenchmark
 		log.info("                   Testing FeatureCollectionDataAdapter                     ");
 		log.info("****************************************************************************");
 
-		for (int idx = pointsPerTile.length - 1; idx >= 0; idx--) {
+		for (int idx = 0; idx < pointsPerTile.length; idx++) {
 			final int batchSize = pointsPerTile[idx];
 			final BasicAccumuloOperations featureCollectionOperations = new BasicAccumuloOperations(
 					zookeeperUrl,
@@ -838,6 +855,22 @@ public class FeatureCollectionDataAdapterBenchmark
 			final FeatureCollectionDataAdapter featureCollectionAdapter = new FeatureCollectionDataAdapter(
 					TYPE,
 					batchSize);
+
+			if (compactTables) {
+				try {
+					featureCollectionOperations.getConnector().tableOperations().compact(
+							featureCollectionNamespace + batchSize,
+							null,
+							null,
+							true,
+							true);
+				}
+				catch (TableNotFoundException e) {
+					log.error(
+							"Could not find table [" + featureCollectionNamespace + batchSize + "] for compaction.",
+							e);
+				}
+			}
 
 			if (iterMode == IterMode.DETACHED) {
 				removeIterators(
@@ -862,36 +895,36 @@ public class FeatureCollectionDataAdapterBenchmark
 
 			log.info("*** Small Queries");
 			for (int i = 0; (i < numSmallQueries) && (i < smallBBoxes.size()); i++) {
-				log.info("***   Query " + (numSmallQueries - i));
+				log.info("***   Query " + (i + 1));
 				runtime = featureCollectionQuery(
 						featureCollectionOperations,
 						featureCollectionDataStore,
 						featureCollectionAdapter,
-						smallBBoxes.get(numSmallQueries - (i + 1)));
+						smallBBoxes.get(i));
 
 				smallQueryRuntimes.add(runtime);
 			}
 
 			log.info("*** Medium Queries");
 			for (int i = 0; (i < numMedQueries) && (i < medBBoxes.size()); i++) {
-				log.info("***   Query " + (numMedQueries - i));
+				log.info("***   Query " + (i + 1));
 				runtime = featureCollectionQuery(
 						featureCollectionOperations,
 						featureCollectionDataStore,
 						featureCollectionAdapter,
-						medBBoxes.get(numMedQueries - (i + 1)));
+						medBBoxes.get(i));
 
 				medQueryRuntimes.add(runtime);
 			}
 
 			log.info("*** Large Queries");
 			for (int i = 0; (i < numLargeQueries) && (i < largeBBoxes.size()); i++) {
-				log.info("***   Query " + (numLargeQueries - i));
+				log.info("***   Query " + (i + 1));
 				runtime = featureCollectionQuery(
 						featureCollectionOperations,
 						featureCollectionDataStore,
 						featureCollectionAdapter,
-						largeBBoxes.get(numLargeQueries - (i + 1)));
+						largeBBoxes.get(i));
 
 				largeQueryRuntimes.add(runtime);
 			}
