@@ -53,7 +53,7 @@ import org.opengis.feature.simple.SimpleFeature;
 import com.vividsolutions.jts.geom.Geometry;
 
 public class BasicMapReduceIT extends
-		MapReduceTestEnvironment
+		MapReduceTestBase
 {
 	private final static Logger LOGGER = Logger.getLogger(BasicMapReduceIT.class);
 
@@ -237,6 +237,7 @@ public class BasicMapReduceIT extends
 			}
 		}
 		final Configuration conf = getConfiguration();
+		MapReduceTestEnvironment.FilterConfiguration(conf);
 		final int res = ToolRunner.run(
 				conf,
 				jobRunner,
@@ -278,7 +279,7 @@ public class BasicMapReduceIT extends
 			// filtered results which should match the expected results
 			// resources
 			final Configuration conf = super.getConf();
-
+			MapReduceTestEnvironment.FilterConfiguration(conf);
 			final ByteBuffer buf = ByteBuffer.allocate((8 * expectedResults.hashedCentroids.size()) + 4);
 			buf.putInt(expectedResults.hashedCentroids.size());
 			for (final Long hashedCentroid : expectedResults.hashedCentroids) {
@@ -287,8 +288,7 @@ public class BasicMapReduceIT extends
 			conf.set(
 					EXPECTED_RESULTS_KEY,
 					ByteArrayUtils.byteArrayToString(buf.array()));
-			final Job job = new Job(
-					conf);
+			final Job job = Job.getInstance(conf);
 			job.setJarByClass(this.getClass());
 
 			job.setJobName("GeoWave Test (" + namespace + ")");

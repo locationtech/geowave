@@ -1,12 +1,5 @@
 package mil.nga.giat.geowave.test.mapreduce;
 
-import java.awt.Rectangle;
-import java.awt.image.Raster;
-import java.awt.image.RenderedImage;
-import java.io.IOException;
-
-import javax.media.jai.Interpolation;
-
 import mil.nga.giat.geowave.accumulo.util.ConnectorPool;
 import mil.nga.giat.geowave.analytics.mapreduce.kde.KDEJobRunner;
 import mil.nga.giat.geowave.raster.plugin.GeoWaveGTRasterFormat;
@@ -15,7 +8,6 @@ import mil.nga.giat.geowave.raster.plugin.GeoWaveRasterReader;
 import mil.nga.giat.geowave.raster.resize.RasterTileResizeJobRunner;
 import mil.nga.giat.geowave.store.index.IndexType;
 import mil.nga.giat.geowave.types.gpx.GpxUtils;
-
 import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.apache.accumulo.core.client.Connector;
@@ -25,141 +17,20 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.opengis.coverage.grid.GridCoverage;
 
+import javax.media.jai.Interpolation;
+import java.awt.*;
+import java.awt.image.Raster;
+import java.awt.image.RenderedImage;
+import java.io.IOException;
+
 public class KDEMapReduceIT extends
-		MapReduceTestEnvironment
+		MapReduceTestBase
 {
 	private static final String TEST_COVERAGE_NAME_PREFIX = "TEST_COVERAGE";
 	private static final String TEST_RESIZE_COVERAGE_NAME_PREFIX = "TEST_RESIZE";
 	private static final int MAX_TILE_SIZE_POWER_OF_2 = 5;
 	private static final int BASE_MIN_LEVEL = 14;
 	private static final int BASE_MAX_LEVEL = 16;
-
-	@Test
-	public void testKDEAndRasterResize()
-			throws Exception {
-		accumuloOperations.deleteAll();
-		testIngest(
-				IndexType.SPATIAL_VECTOR,
-				GENERAL_GPX_INPUT_GPX_DIR);
-		for (int i = 0; i <= MAX_TILE_SIZE_POWER_OF_2; i++) {
-			final String tileSizeCoverageName = TEST_COVERAGE_NAME_PREFIX + i;
-			ToolRunner.run(
-					new KDEJobRunner(),
-					new String[] {
-						zookeeper,
-						accumuloInstance,
-						accumuloUser,
-						accumuloPassword,
-						TEST_NAMESPACE,
-						GpxUtils.GPX_WAYPOINT_FEATURE,
-						new Integer(
-								BASE_MIN_LEVEL - i).toString(),
-						new Integer(
-								BASE_MAX_LEVEL - i).toString(),
-						new Integer(
-								MIN_INPUT_SPLITS).toString(),
-						new Integer(
-								MAX_INPUT_SPLITS).toString(),
-						tileSizeCoverageName,
-						hdfs,
-						jobtracker,
-						TEST_NAMESPACE,
-						new Integer(
-								(int) Math.pow(
-										2,
-										i)).toString()
-					});
-		}
-		final int[] counts1 = testCounts(
-				TEST_COVERAGE_NAME_PREFIX,
-				MAX_TILE_SIZE_POWER_OF_2 + 1,
-				new Rectangle(
-						6,
-						6));
-
-		final Connector conn = ConnectorPool.getInstance().getConnector(
-				zookeeper,
-				accumuloInstance,
-				accumuloUser,
-				accumuloPassword);
-		conn.tableOperations().compact(
-				TEST_NAMESPACE + "_" + IndexType.SPATIAL_RASTER.createDefaultIndex().getId().getString(),
-				null,
-				null,
-				true,
-				true);
-		final int[] counts2 = testCounts(
-				TEST_COVERAGE_NAME_PREFIX,
-				MAX_TILE_SIZE_POWER_OF_2 + 1,
-				new Rectangle(
-						128,
-						128));
-
-		for (int i = 0; i <= MAX_TILE_SIZE_POWER_OF_2; i++) {
-			final String originalTileSizeCoverageName = TEST_COVERAGE_NAME_PREFIX + i;
-			final String resizeTileSizeCoverageName = TEST_RESIZE_COVERAGE_NAME_PREFIX + i;
-			ToolRunner.run(
-					new RasterTileResizeJobRunner(),
-					new String[] {
-						zookeeper,
-						accumuloInstance,
-						accumuloUser,
-						accumuloPassword,
-						TEST_NAMESPACE,
-						originalTileSizeCoverageName,
-						new Integer(
-								MIN_INPUT_SPLITS).toString(),
-						new Integer(
-								MAX_INPUT_SPLITS).toString(),
-						hdfs,
-						jobtracker,
-						resizeTileSizeCoverageName,
-						TEST_NAMESPACE,
-						new Integer(
-								(int) Math.pow(
-										2,
-										MAX_TILE_SIZE_POWER_OF_2 - i)).toString()
-					});
-		}
-
-		final int[] counts3 = testCounts(
-				TEST_RESIZE_COVERAGE_NAME_PREFIX,
-				MAX_TILE_SIZE_POWER_OF_2 + 1,
-				new Rectangle(
-						28,
-						28));
-
-		conn.tableOperations().compact(
-				TEST_NAMESPACE + "_" + IndexType.SPATIAL_RASTER.createDefaultIndex().getId().getString(),
-				null,
-				null,
-				true,
-				true);
-
-		final int[] counts4 = testCounts(
-				TEST_RESIZE_COVERAGE_NAME_PREFIX,
-				MAX_TILE_SIZE_POWER_OF_2 + 1,
-				new Rectangle(
-						16,
-						16));
-
-//		 System.err.println("testing kde");
-//		 for (int i = 0; i < counts1.length; i++) {
-//		 System.err.println("counts["+i+"]:" + counts1[i]);
-//		 }
-//		 System.err.println("testing kde after compaction");
-//		 for (int i = 0; i < counts2.length; i++) {
-//		 System.err.println("counts["+i+"]:" + counts2[i]);
-//		 }
-//		 System.err.println("testing resize");
-//		 for (int i = 0; i < counts3.length; i++) {
-//		 System.err.println("counts["+i+"]:" + counts3[i]);
-//		 }
-//		 System.err.println("testing resize after compaction");
-//		 for (int i = 0; i < counts4.length; i++) {
-//		 System.err.println("counts["+i+"]:" + counts4[i]);
-//		 }
-	}
 
 	private static int[] testCounts(
 			final String coverageNamePrefix,
@@ -225,5 +96,124 @@ public class KDEMapReduceIT extends
 					counts[i]);
 		}
 		return counts;
+	}
+
+	@Test
+	public void testKDEAndRasterResize()
+			throws Exception {
+		accumuloOperations.deleteAll();
+		testIngest(
+				IndexType.SPATIAL_VECTOR,
+				GENERAL_GPX_INPUT_GPX_DIR);
+		for (int i = 0; i <= MAX_TILE_SIZE_POWER_OF_2; i++) {
+			final String tileSizeCoverageName = TEST_COVERAGE_NAME_PREFIX + i;
+			ToolRunner.run(
+					new KDEJobRunner(),
+					new String[] {
+						zookeeper,
+						accumuloInstance,
+						accumuloUser,
+						accumuloPassword,
+						TEST_NAMESPACE,
+						GpxUtils.GPX_WAYPOINT_FEATURE,
+						Integer.toString(BASE_MIN_LEVEL - i),
+						Integer.toString(BASE_MAX_LEVEL - i),
+						Integer.toString(MIN_INPUT_SPLITS),
+						Integer.toString(MAX_INPUT_SPLITS),
+						tileSizeCoverageName,
+						hdfs,
+						jobtracker,
+						TEST_NAMESPACE,
+						Integer.toString((int) Math.pow(
+								2,
+								i))
+					});
+		}
+		final int[] counts1 = testCounts(
+				TEST_COVERAGE_NAME_PREFIX,
+				MAX_TILE_SIZE_POWER_OF_2 + 1,
+				new Rectangle(
+						6,
+						6));
+
+		final Connector conn = ConnectorPool.getInstance().getConnector(
+				zookeeper,
+				accumuloInstance,
+				accumuloUser,
+				accumuloPassword);
+		conn.tableOperations().compact(
+				TEST_NAMESPACE + "_" + IndexType.SPATIAL_RASTER.createDefaultIndex().getId().getString(),
+				null,
+				null,
+				true,
+				true);
+		final int[] counts2 = testCounts(
+				TEST_COVERAGE_NAME_PREFIX,
+				MAX_TILE_SIZE_POWER_OF_2 + 1,
+				new Rectangle(
+						128,
+						128));
+
+		for (int i = 0; i <= MAX_TILE_SIZE_POWER_OF_2; i++) {
+			final String originalTileSizeCoverageName = TEST_COVERAGE_NAME_PREFIX + i;
+			final String resizeTileSizeCoverageName = TEST_RESIZE_COVERAGE_NAME_PREFIX + i;
+			ToolRunner.run(
+					new RasterTileResizeJobRunner(),
+					new String[] {
+						zookeeper,
+						accumuloInstance,
+						accumuloUser,
+						accumuloPassword,
+						TEST_NAMESPACE,
+						originalTileSizeCoverageName,
+						Integer.toString(MIN_INPUT_SPLITS),
+						Integer.toString(MAX_INPUT_SPLITS),
+						hdfs,
+						jobtracker,
+						resizeTileSizeCoverageName,
+						TEST_NAMESPACE,
+						Integer.toString((int) Math.pow(
+								2,
+								MAX_TILE_SIZE_POWER_OF_2 - i))
+					});
+		}
+
+		final int[] counts3 = testCounts(
+				TEST_RESIZE_COVERAGE_NAME_PREFIX,
+				MAX_TILE_SIZE_POWER_OF_2 + 1,
+				new Rectangle(
+						28,
+						28));
+
+		conn.tableOperations().compact(
+				TEST_NAMESPACE + "_" + IndexType.SPATIAL_RASTER.createDefaultIndex().getId().getString(),
+				null,
+				null,
+				true,
+				true);
+
+		final int[] counts4 = testCounts(
+				TEST_RESIZE_COVERAGE_NAME_PREFIX,
+				MAX_TILE_SIZE_POWER_OF_2 + 1,
+				new Rectangle(
+						16,
+						16));
+
+		// System.err.println("testing kde");
+		// for (int i = 0; i < counts1.length; i++) {
+		// System.err.println("counts["+i+"]:" + counts1[i]);
+		// }
+		// System.err.println("testing kde after compaction");
+		// for (int i = 0; i < counts2.length; i++) {
+		// System.err.println("counts["+i+"]:" + counts2[i]);
+		// }
+		// System.err.println("testing resize");
+		// for (int i = 0; i < counts3.length; i++) {
+		// System.err.println("counts["+i+"]:" + counts3[i]);
+		// }
+		// System.err.println("testing resize after compaction");
+		// for (int i = 0; i < counts4.length; i++) {
+		// System.err.println("counts["+i+"]:" + counts4[i]);
+		// }
 	}
 }

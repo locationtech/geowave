@@ -10,6 +10,7 @@ import java.io.InputStream;
 import java.net.URLEncoder;
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -226,9 +227,9 @@ public class GeoServerIT extends
 		postParameters.add(new BasicNameValuePair(
 				"typename",
 				TEST_WORKSPACE + ":geostuff"));
-		for (final BasicNameValuePair aParam : paramTuples) {
-			postParameters.add(aParam);
-		}
+		Collections.addAll(
+				postParameters,
+				paramTuples);
 
 		command.setEntity(new UrlEncodedFormEntity(
 				postParameters));
@@ -247,7 +248,7 @@ public class GeoServerIT extends
 			final String version,
 			final BasicNameValuePair... paramTuples ) {
 
-		final StringBuffer buf = new StringBuffer();
+		final StringBuilder buf = new StringBuilder();
 
 		final List<BasicNameValuePair> localParams = new LinkedList<BasicNameValuePair>();
 		localParams.add(new BasicNameValuePair(

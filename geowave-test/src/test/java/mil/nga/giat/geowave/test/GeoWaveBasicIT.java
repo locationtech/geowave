@@ -1,6 +1,7 @@
 package mil.nga.giat.geowave.test;
 
 import java.io.File;
+import java.net.URISyntaxException;
 import java.net.URL;
 
 import mil.nga.giat.geowave.accumulo.AccumuloDataStore;
@@ -48,10 +49,12 @@ public class GeoWaveBasicIT extends
 	private static final String TEST_POLYGON_TEMPORAL_FILTER_FILE = TEST_FILTER_PACKAGE + "Polygon-Temporal-Filter.shp";
 
 	@BeforeClass
-	public static void extractTestFiles() {
+	public static void extractTestFiles()
+			throws URISyntaxException {
 		GeoWaveTestEnvironment.unZipFile(
-				GeoWaveBasicIT.class.getClassLoader().getResourceAsStream(
-						TEST_DATA_ZIP_RESOURCE_PATH),
+				new File(
+						GeoWaveBasicIT.class.getClassLoader().getResource(
+								TEST_DATA_ZIP_RESOURCE_PATH).toURI()),
 				TEST_CASE_BASE);
 	}
 

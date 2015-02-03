@@ -5,8 +5,8 @@ import java.net.MalformedURLException;
 
 import mil.nga.giat.geowave.ingest.IngestMain;
 import mil.nga.giat.geowave.store.index.IndexType;
-import mil.nga.giat.geowave.test.GeoWaveTestEnvironment;
 
+import mil.nga.giat.geowave.test.GeoWaveTestEnvironment;
 import org.apache.commons.lang.StringUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
@@ -20,14 +20,7 @@ abstract public class MapReduceTestEnvironment extends
 		GeoWaveTestEnvironment
 {
 	private final static Logger LOGGER = Logger.getLogger(MapReduceTestEnvironment.class);
-	protected static final String TEST_RESOURCE_PACKAGE = "mil/nga/giat/geowave/test/";
-	protected static final String TEST_DATA_ZIP_RESOURCE_PATH = TEST_RESOURCE_PACKAGE + "mapreduce-testdata.zip";
-	protected static final String TEST_CASE_GENERAL_GPX_BASE = TEST_CASE_BASE + "general_gpx_test_case/";
-	protected static final String GENERAL_GPX_FILTER_PACKAGE = TEST_CASE_GENERAL_GPX_BASE + "filter/";
-	protected static final String GENERAL_GPX_FILTER_FILE = GENERAL_GPX_FILTER_PACKAGE + "filter.shp";
-	protected static final String GENERAL_GPX_INPUT_GPX_DIR = TEST_CASE_GENERAL_GPX_BASE + "input_gpx/";
-	protected static final String GENERAL_GPX_EXPECTED_RESULTS_DIR = TEST_CASE_GENERAL_GPX_BASE + "filter_results/";
-	protected static final String OSM_GPX_INPUT_DIR = TEST_CASE_BASE + "osm_gpx_test_case/";
+
 	protected static final String HDFS_BASE_DIRECTORY = "test_tmp";
 	protected static final String DEFAULT_JOB_TRACKER = "local";
 	protected static final String EXPECTED_RESULTS_KEY = "EXPECTED_RESULTS";
@@ -37,14 +30,6 @@ abstract public class MapReduceTestEnvironment extends
 	protected static String hdfs;
 	protected static boolean hdfsProtocol;
 	protected static String hdfsBaseDirectory;
-
-	@BeforeClass
-	public static void extractTestFiles() {
-		GeoWaveTestEnvironment.unZipFile(
-				MapReduceTestEnvironment.class.getClassLoader().getResourceAsStream(
-						TEST_DATA_ZIP_RESOURCE_PATH),
-				TEST_CASE_BASE);
-	}
 
 	protected void testIngest(
 			final IndexType indexType,
@@ -67,7 +52,7 @@ abstract public class MapReduceTestEnvironment extends
 		if (!isSet(hdfs)) {
 			hdfs = "file:///";
 
-			hdfsBaseDirectory = tempDir.toURI().toURL().toString() + "/" + HDFS_BASE_DIRECTORY;
+			hdfsBaseDirectory = TEMP_DIR.toURI().toURL().toString() + "/" + HDFS_BASE_DIRECTORY;
 			hdfsProtocol = false;
 		}
 		else {
@@ -105,6 +90,32 @@ abstract public class MapReduceTestEnvironment extends
 		}
 	}
 
+	public static void FilterConfiguration(
+			Configuration conf ) {
+		// final parameters, can't be overriden
+		conf.unset("mapreduce.job.end-notification.max.retry.interval");
+		conf.unset("mapreduce.job.end-notification.max.attempts");
+
+		// deprecated parameters (added in by default since we used the
+		// Configuration() constructor (everything is set))
+		conf.unset("session.id");
+		conf.unset("mapred.jar");
+		conf.unset("fs.default.name");
+		conf.unset("mapred.map.tasks.speculative.execution");
+		conf.unset("mapred.reduce.tasks");
+		conf.unset("mapred.reduce.tasks.speculative.execution");
+		conf.unset("mapred.mapoutput.value.class");
+		conf.unset("mapred.used.genericoptionsparser");
+		conf.unset("mapreduce.map.class");
+		conf.unset("mapred.job.name");
+		conf.unset("mapreduce.inputformat.class");
+		conf.unset("mapred.input.dir");
+		conf.unset("mapreduce.outputformat.class");
+		conf.unset("mapred.map.tasks");
+		conf.unset("mapred.mapoutput.key.class");
+		conf.unset("mapred.working.dir");
+	}
+
 	protected static Configuration getConfiguration() {
 		final Configuration conf = new Configuration();
 		conf.set(
@@ -114,13 +125,17 @@ abstract public class MapReduceTestEnvironment extends
 				"fs.hdfs.impl",
 				org.apache.hadoop.hdfs.DistributedFileSystem.class.getName());
 		conf.set(
-				"mapred.job.tracker",
+				"mapreduce.jobtracker.address",
 				jobtracker);
 		// for travis-ci to run, we want to limit the memory consumption
 		conf.setInt(
 				MRJobConfig.IO_SORT_MB,
 				10);
+
+		FilterConfiguration(conf);
+
 		return conf;
+
 	}
 
 }

@@ -7,7 +7,6 @@ import java.io.PrintWriter;
 import java.util.concurrent.TimeUnit;
 
 import mil.nga.giat.geowave.test.mapreduce.MapReduceTestEnvironment;
-
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.mortbay.jetty.Connector;
@@ -110,7 +109,7 @@ abstract public class ServicesTestEnvironment extends
 						gsWebapp,
 						gwWebapp
 					});
-					gsWebapp.setTempDirectory(tempDir);
+					gsWebapp.setTempDirectory(TEMP_DIR);
 					// this allows to send large SLD's from the styles form
 					gsWebapp.getServletContext().getContextHandler().setMaxFormContentSize(
 							MAX_FORM_CONTENT_SIZE);
