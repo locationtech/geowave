@@ -1,0 +1,9 @@
+[geowave-dev]
+name=GeoWave for Enterprise Linux 6 (Development Repo)
+baseurl=https://s3.amazonaws.com/geowave-rpms/dev/noarch/
+enabled=0
+gpgcheck=0
+failovermethod=priority
+priority=15
+# Uncomment if you _always_ want your client to check for new dev RPMs
+#metadata_expire=0
