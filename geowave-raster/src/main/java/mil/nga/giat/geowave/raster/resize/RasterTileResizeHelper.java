@@ -8,8 +8,8 @@ import mil.nga.giat.geowave.accumulo.mapreduce.JobContextIndexStore;
 import mil.nga.giat.geowave.accumulo.mapreduce.input.GeoWaveInputKey;
 import mil.nga.giat.geowave.accumulo.mapreduce.output.GeoWaveOutputKey;
 import mil.nga.giat.geowave.index.ByteArrayId;
+import mil.nga.giat.geowave.raster.adapter.MergeableRasterTile;
 import mil.nga.giat.geowave.raster.adapter.RasterDataAdapter;
-import mil.nga.giat.geowave.raster.adapter.RasterTile;
 import mil.nga.giat.geowave.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.store.index.Index;
 
@@ -61,9 +61,11 @@ public class RasterTileResizeHelper
 			throws IOException,
 			InterruptedException {
 		GridCoverage mergedCoverage = null;
-		RasterTile<?> mergedTile = null;
+		MergeableRasterTile<?> mergedTile = null;
 		boolean needsMerge = false;
-		for (final Object value : values) {
+		final Iterator it = values.iterator();
+		while (it.hasNext()) {
+			final Object value = it.next();
 			if (value instanceof GridCoverage) {
 				if (mergedCoverage == null) {
 					mergedCoverage = (GridCoverage) value;
@@ -73,7 +75,7 @@ public class RasterTileResizeHelper
 						mergedTile = newAdapter.getRasterTileFromCoverage(mergedCoverage);
 						needsMerge = true;
 					}
-					final RasterTile thisTile = newAdapter.getRasterTileFromCoverage((GridCoverage) value);
+					final MergeableRasterTile thisTile = newAdapter.getRasterTileFromCoverage((GridCoverage) value);
 					mergedTile.merge(thisTile);
 				}
 			}

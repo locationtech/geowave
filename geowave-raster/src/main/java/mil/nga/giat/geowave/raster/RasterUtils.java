@@ -18,6 +18,8 @@ import java.awt.image.Raster;
 import java.awt.image.RenderedImage;
 import java.awt.image.SampleModel;
 import java.awt.image.WritableRaster;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -26,6 +28,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.imageio.ImageIO;
 import javax.media.jai.BorderExtender;
 import javax.media.jai.Histogram;
 import javax.media.jai.Interpolation;
@@ -90,7 +93,6 @@ public class RasterUtils
 			final ReferencedEnvelope projectedReferenceEnvelope,
 			final GridCoverage gridCoverage ) {
 		try {
-
 			final Envelope sampleEnvelope = gridCoverage.getEnvelope();
 			final double avgSpan = (projectedReferenceEnvelope.getSpan(0) + projectedReferenceEnvelope.getSpan(1)) / 2;
 
@@ -103,11 +105,11 @@ public class RasterUtils
 							Math.max(
 									(avgSpan * MIN_SEGMENTS) / SIMPLIFICATION_MAX_DEGREES,
 									MIN_SEGMENTS),
-							MAX_SEGMENTS),
-					CRS.findMathTransform(
-							gridCoverage.getCoordinateReferenceSystem(),
-							GeoWaveGTRasterFormat.DEFAULT_CRS,
-							true));
+									MAX_SEGMENTS),
+									CRS.findMathTransform(
+											gridCoverage.getCoordinateReferenceSystem(),
+											GeoWaveGTRasterFormat.DEFAULT_CRS,
+											true));
 			return DouglasPeuckerSimplifier.simplify(
 					new GeometryFactory().createPolygon(polyCoords),
 					SIMPLIFICATION_MAX_DEGREES);
@@ -155,8 +157,8 @@ public class RasterUtils
 			final double maxY,
 			final int numPointsPerSegment,
 			final MathTransform gridToCRS )
-			throws MismatchedDimensionException,
-			TransformException {
+					throws MismatchedDimensionException,
+					TransformException {
 		final Point2D[] screenCoordinates = getScreenCoordinates(
 				minX,
 				minY,
@@ -279,7 +281,7 @@ public class RasterUtils
 	public static MathTransform createTransform(
 			final double[] idRangePerDimension,
 			final MultiDimensionalNumericData fullBounds )
-			throws IllegalStateException {
+					throws IllegalStateException {
 		final GridToEnvelopeMapper mapper = new GridToEnvelopeMapper();
 		final boolean swapXY = mapper.getSwapXY();
 		final boolean[] reverse = mapper.getReverseAxis();
@@ -351,7 +353,7 @@ public class RasterUtils
 	public static AffineTransform createAffineTransform(
 			final double[] idRangePerDimension,
 			final MultiDimensionalNumericData fullBounds )
-			throws IllegalStateException {
+					throws IllegalStateException {
 		final MathTransform transform = createTransform(
 				idRangePerDimension,
 				fullBounds);
@@ -398,7 +400,7 @@ public class RasterUtils
 			final boolean xAxisSwitch,
 			final GridCoverageFactory coverageFactory,
 			final String coverageName,
-			final Integer interpolation,
+			final Interpolation interpolation,
 			final Histogram histogram,
 			final ColorModel defaultColorModel ) {
 		final double rescaleX = levelResX / (requestEnvelope.getSpan(0) / pixelDimension.getWidth());
@@ -412,7 +414,6 @@ public class RasterUtils
 		final int imageHeight = (int) Math.max(
 				Math.round(height),
 				1);
-
 		BufferedImage image = null;
 
 		while (gridCoverages.hasNext()) {
@@ -434,9 +435,7 @@ public class RasterUtils
 					posx,
 					posy,
 					coverageImage.getData());
-
 		}
-
 		if (image == null) {
 			image = getEmptyImage(
 					imageWidth,
@@ -570,7 +569,7 @@ public class RasterUtils
 	}
 
 	private static BufferedImage rescaleImageViaPlanarImage(
-			Integer interpolation,
+			Interpolation interpolation,
 			final double rescaleX,
 			final double rescaleY,
 			final BufferedImage image ) {
@@ -579,16 +578,6 @@ public class RasterUtils
 				image.getWidth(),
 				image.getHeight());
 
-		interpolation = Interpolation.INTERP_BICUBIC;
-		if (interpolation != null) {
-			if (interpolation.intValue() == 1) {
-				interpolation = Interpolation.INTERP_NEAREST;
-			}
-
-			else if (interpolation.intValue() == 2) {
-				interpolation = Interpolation.INTERP_BILINEAR;
-			}
-		}
 		final RenderingHints scalingHints = new RenderingHints(
 				RenderingHints.KEY_RENDERING,
 				RenderingHints.VALUE_RENDER_QUALITY);
@@ -611,12 +600,11 @@ public class RasterUtils
 				planarImage,
 				new Float(
 						rescaleX),
-				new Float(
-						rescaleY),
-				0.0f,
-				0.0f,
-				Interpolation.getInstance(interpolation),
-				scalingHints);
+						new Float(
+								rescaleY),
+								0.0f,
+								0.0f,interpolation,
+								scalingHints);
 
 		final WritableRaster scaledImageRaster = (WritableRaster) result.getData();
 
@@ -641,8 +629,8 @@ public class RasterUtils
 				defaultColorModel.createCompatibleWritableRaster(
 						width,
 						height),
-				defaultColorModel.isAlphaPremultiplied(),
-				null);
+						defaultColorModel.isAlphaPremultiplied(),
+						null);
 
 		final Graphics2D g2D = (Graphics2D) emptyImage.getGraphics();
 		final Color save = g2D.getColor();
@@ -710,7 +698,7 @@ public class RasterUtils
 		final int[] bitsPerSample = new int[numBands];
 		for (int i = 0; i < numBands; i++) {
 			noDataValuesPerBand[i] = new double[] {
-				Double.valueOf(Double.NaN)
+					Double.valueOf(Double.NaN)
 			};
 			backgroundValuesPerBand[i] = Double.valueOf(Double.NaN);
 			bitsPerSample[i] = DataBuffer.getDataTypeSize(DataBuffer.TYPE_DOUBLE);
@@ -724,21 +712,23 @@ public class RasterUtils
 				new ComponentColorModel(
 						new BogusColorSpace(
 								numBands),
-						bitsPerSample,
-						false,
-						false,
-						Transparency.OPAQUE,
-						DataBuffer.TYPE_DOUBLE),
-				new HashMap<String, String>(),
-				tileSize,
-				minsPerBand,
-				maxesPerBand,
-				namesPerBand,
-				noDataValuesPerBand,
-				backgroundValuesPerBand,
-				null,
-				false,
-				new NoDataMergeStrategy());
+								bitsPerSample,
+								false,
+								false,
+								Transparency.OPAQUE,
+								DataBuffer.TYPE_DOUBLE),
+								new HashMap<String, String>(),
+								tileSize,
+								minsPerBand,
+								maxesPerBand,
+								namesPerBand,
+								noDataValuesPerBand,
+								backgroundValuesPerBand,
+								null,
+								false,
+								Interpolation.INTERP_NEAREST,
+								false,
+								new NoDataMergeStrategy());
 	}
 
 	public static GridCoverage2D createCoverageTypeDouble(
@@ -766,9 +756,9 @@ public class RasterUtils
 					new DirectPosition2D(
 							westLon,
 							southLat),
-					new DirectPosition2D(
-							eastLon,
-							northLat));
+							new DirectPosition2D(
+									eastLon,
+									northLat));
 		}
 		return gcf.create(
 				coverageName,
@@ -804,9 +794,9 @@ public class RasterUtils
 					new DirectPosition2D(
 							westLon,
 							southLat),
-					new DirectPosition2D(
-							eastLon,
-							northLat));
+							new DirectPosition2D(
+									eastLon,
+									northLat));
 		}
 		final GridSampleDimension[] bands = new GridSampleDimension[raster.getNumBands()];
 		create(
@@ -872,8 +862,8 @@ public class RasterUtils
 					Errors.format(
 							ErrorKeys.NUMBER_OF_BANDS_MISMATCH_$3,
 							numBands,
-							min.length,
-							"min[i]"));
+							name.length,
+							"name[i]"));
 		}
 		if ((max != null) && (max.length != numBands)) {
 			throw new IllegalArgumentException(
@@ -945,7 +935,7 @@ public class RasterUtils
 				sourceRange = NumberRange.create(
 						min[b],
 						max[b]).castTo(
-						sourceRange.getElementClass());
+								sourceRange.getElementClass());
 				categories[0] = new Category(
 						name[b],
 						null,

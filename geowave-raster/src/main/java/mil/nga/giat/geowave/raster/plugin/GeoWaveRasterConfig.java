@@ -5,6 +5,7 @@ import java.net.URL;
 import java.util.Hashtable;
 import java.util.Map;
 
+import javax.media.jai.Interpolation;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -21,18 +22,20 @@ public class GeoWaveRasterConfig
 	protected static enum ConfigParameter {
 		ZOOKEEPER_URLS(
 				"zookeeperUrls"),
-		INSTANCE_ID(
-				"instanceId"),
-		USERNAME(
-				"username"),
-		PASSWORD(
-				"password"),
-		NAMESPACE(
-				"namespace"),
-		INTERPOLATION(
-				"interpolation"),
-		EQUALIZE_HISTOGRAM(
-				"equalizeHistogram");
+				INSTANCE_ID(
+						"instanceId"),
+						USERNAME(
+								"username"),
+								PASSWORD(
+										"password"),
+										NAMESPACE(
+												"namespace"),
+												// the following two are optional parameters that will override the
+												// behavior of tile mosaicing that is already set within each adapter
+												INTERPOLATION(
+														"interpolationOverride"),
+														EQUALIZE_HISTOGRAM(
+																"equalizeHistogramOverride");
 		private String configName;
 
 		private ConfigParameter(
@@ -57,9 +60,9 @@ public class GeoWaveRasterConfig
 
 	private String geowaveNamespace;
 
-	private boolean equalizeHistogram;
+	private Boolean equalizeHistogramOverride = null;
 
-	private Integer interpolation;
+	private Integer interpolationOverride = null;
 
 	protected GeoWaveRasterConfig() {}
 
@@ -68,23 +71,39 @@ public class GeoWaveRasterConfig
 			final String accumuloInstanceId,
 			final String accumuloUsername,
 			final String accumuloPassword,
+			final String geowaveNamespace ) {
+		return createConfig(
+				zookeeperUrl,
+				accumuloInstanceId,
+				accumuloUsername,
+				accumuloPassword,
+				geowaveNamespace,
+				null,
+				null);
+	}
+
+	public static GeoWaveRasterConfig createConfig(
+			final String zookeeperUrl,
+			final String accumuloInstanceId,
+			final String accumuloUsername,
+			final String accumuloPassword,
 			final String geowaveNamespace,
-			final boolean equalizeHistogram,
-			final Integer interpolation ) {
+			final Boolean equalizeHistogramOverride,
+			final Integer interpolationOverride ) {
 		final GeoWaveRasterConfig result = new GeoWaveRasterConfig();
 		result.zookeeperUrls = zookeeperUrl;
 		result.accumuloInstanceId = accumuloInstanceId;
 		result.accumuloUsername = accumuloUsername;
 		result.accumuloPassword = accumuloPassword;
 		result.geowaveNamespace = geowaveNamespace;
-		result.equalizeHistogram = equalizeHistogram;
-		result.interpolation = interpolation;
+		result.equalizeHistogramOverride = equalizeHistogramOverride;
+		result.interpolationOverride = interpolationOverride;
 		return result;
 	}
 
 	public static GeoWaveRasterConfig readFrom(
 			final URL xmlURL )
-			throws Exception {
+					throws Exception {
 		GeoWaveRasterConfig result = CONFIG_CACHE.get(xmlURL.toString());
 
 		if (result != null) {
@@ -128,13 +147,15 @@ public class GeoWaveRasterConfig
 				dom,
 				ConfigParameter.EQUALIZE_HISTOGRAM.getConfigName());
 		if (equalizeHistogram != null) {
-			result.equalizeHistogram = equalizeHistogram.trim().toLowerCase().equals(
-					"true");
+			if (equalizeHistogram.trim().toLowerCase().equals(
+					"true")) {
+				result.equalizeHistogramOverride = true;
+			}
+			else {
+				result.equalizeHistogramOverride = false;
+			}
 		}
-		else {
-			result.equalizeHistogram = false;
-		}
-		result.interpolation = readValueInteger(
+		result.interpolationOverride = readValueInteger(
 				dom,
 				ConfigParameter.INTERPOLATION.getConfigName());
 		CONFIG_CACHE.put(
@@ -168,12 +189,29 @@ public class GeoWaveRasterConfig
 		return geowaveNamespace;
 	}
 
-	public Integer getInterpolation() {
-		return interpolation;
+	public boolean isInterpolationOverrideSet() {
+		return (interpolationOverride != null);
 	}
 
-	public boolean isEqualizeHistogram() {
-		return equalizeHistogram;
+	public Interpolation getInterpolationOverride() {
+		if (!isInterpolationOverrideSet()) {
+			throw new IllegalStateException(
+					"Interpolation Override is not set for this config");
+		}
+
+		return Interpolation.getInstance(interpolationOverride);
+	}
+
+	public boolean isEqualizeHistogramOverrideSet() {
+		return (equalizeHistogramOverride != null);
+	}
+
+	public boolean isEqualizeHistogramOverride() {
+		if (!isEqualizeHistogramOverrideSet()) {
+			throw new IllegalStateException(
+					"Equalize Histogram is not set for this config");
+		}
+		return equalizeHistogramOverride;
 	}
 
 	static private String readValueString(

@@ -11,7 +11,6 @@ import mil.nga.giat.geowave.raster.adapter.RasterTile;
 import mil.nga.giat.geowave.raster.adapter.merge.RasterTileMergeStrategy;
 import mil.nga.giat.geowave.raster.adapter.merge.nodata.NoDataMetadata.SampleIndex;
 
-import org.apache.log4j.Logger;
 import org.opengis.coverage.grid.GridCoverage;
 
 public class NoDataMergeStrategy implements

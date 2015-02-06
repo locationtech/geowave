@@ -3,6 +3,7 @@ package mil.nga.giat.geowave.raster.adapter;
 import java.awt.Color;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.RenderingHints;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.NoninvertibleTransformException;
 import java.awt.image.BufferedImage;
@@ -31,7 +32,12 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import javax.measure.unit.Unit;
+import javax.media.jai.BorderExtender;
 import javax.media.jai.Interpolation;
+import javax.media.jai.InterpolationBicubic2;
+import javax.media.jai.InterpolationBilinear;
+import javax.media.jai.InterpolationNearest;
+import javax.media.jai.JAI;
 import javax.media.jai.PlanarImage;
 import javax.media.jai.remote.SerializableState;
 import javax.media.jai.remote.SerializerFactory;
@@ -132,19 +138,19 @@ public class RasterDataAdapter implements
 		IndexDependentDataAdapter<GridCoverage>,
 		AttachedIteratorDataAdapter<GridCoverage>,
 		HadoopDataAdapter<GridCoverage, GridCoverageWritable>
-{ // these
-	// priorities
-	// are fairly
-	// arbitrary at
-	// the moment
+{ 
+	static {
+		SourceThresholdFixMosaicDescriptor.register(false);
+	}
+	// these priorities are fairly arbitrary at the moment
 	private static final int RASTER_TILE_COMBINER_PRIORITY = 4;
 	private static final int RASTER_TILE_VISIBILITY_COMBINER_PRIORITY = 6;
 	private final static Logger LOGGER = Logger.getLogger(RasterDataAdapter.class);
-
 	private final static ByteArrayId DATA_FIELD_ID = new ByteArrayId(
 			"image");
 	private final static int DEFAULT_TILE_SIZE = 256;
 	private final static boolean DEFAULT_BUILD_PYRAMID = false;
+	private static Operations resampleOperations;
 
 	/**
 	 * A transparent color for missing data.
@@ -169,6 +175,8 @@ public class RasterDataAdapter implements
 	private ByteArrayId[] supportedStatsIds;
 	private DataStatisticsVisibilityHandler<GridCoverage> visibilityHandler;
 	private RootMergeStrategy<?> mergeStrategy;
+	private boolean equalizeHistogram;
+	private Interpolation interpolation;
 
 	protected RasterDataAdapter() {}
 
@@ -233,6 +241,8 @@ public class RasterDataAdapter implements
 				backgroundValuesPerBand,
 				new HistogramConfig(
 						sampleModel),
+				true,
+				Interpolation.INTERP_BICUBIC,
 				buildPyramid,
 				new NoDataMergeStrategy());
 	}
@@ -244,13 +254,17 @@ public class RasterDataAdapter implements
 			final RasterTileMergeStrategy<?> mergeStrategy ) {
 		this(
 				coverageName,
-				adapter.getSampleModel(),
+				adapter.getSampleModel().createCompatibleSampleModel(
+						tileSize,
+						tileSize),
 				adapter.getColorModel(),
 				adapter.getMetadata(),
 				tileSize,
 				adapter.getNoDataValuesPerBand(),
 				adapter.backgroundValuesPerBand,
 				adapter.histogramConfig,
+				adapter.equalizeHistogram,
+				interpolationToByte(adapter.interpolation),
 				adapter.buildPyramid,
 				mergeStrategy);
 	}
@@ -265,9 +279,14 @@ public class RasterDataAdapter implements
 				adapter.getColorModel(),
 				adapter.getMetadata(),
 				adapter.tileSize,
+				null,
+				null,
+				null,
 				adapter.getNoDataValuesPerBand(),
 				adapter.backgroundValuesPerBand,
 				adapter.histogramConfig,
+				adapter.equalizeHistogram,
+				interpolationToByte(adapter.interpolation),
 				adapter.buildPyramid,
 				mergeStrategy);
 	}
@@ -281,6 +300,8 @@ public class RasterDataAdapter implements
 			final double[][] noDataValuesPerBand,
 			final double[] backgroundValuesPerBand,
 			final HistogramConfig histogramConfig,
+			final boolean equalizeHistogram,
+			final int interpolationType,
 			final boolean buildPyramid,
 			final RasterTileMergeStrategy<?> mergeStrategy ) {
 		this(
@@ -295,6 +316,8 @@ public class RasterDataAdapter implements
 				noDataValuesPerBand,
 				backgroundValuesPerBand,
 				histogramConfig,
+				equalizeHistogram,
+				interpolationType,
 				buildPyramid,
 				mergeStrategy);
 	}
@@ -311,6 +334,8 @@ public class RasterDataAdapter implements
 			final double[][] noDataValuesPerBand,
 			final double[] backgroundValuesPerBand,
 			final HistogramConfig histogramConfig,
+			final boolean equalizeHistogram,
+			final int interpolationType,
 			final boolean buildPyramid,
 			final RasterTileMergeStrategy<?> mergeStrategy ) {
 		this.coverageName = coverageName;
@@ -327,6 +352,8 @@ public class RasterDataAdapter implements
 		// accumulated
 		this.histogramConfig = histogramConfig;
 		this.buildPyramid = buildPyramid;
+		this.equalizeHistogram = equalizeHistogram;
+		interpolation = Interpolation.getInstance(interpolationType);
 		this.mergeStrategy = new RootMergeStrategy(
 				getAdapterId(),
 				sampleModel,
@@ -335,7 +362,6 @@ public class RasterDataAdapter implements
 	}
 
 	private void init() {
-
 		int supportedStatsLength = 3;
 
 		if (histogramConfig != null) {
@@ -454,6 +480,21 @@ public class RasterDataAdapter implements
 				final Entry<Double, SubStrategy> bestEntry = substrategyMap.higherEntry(1.0);
 				pyramidLevels.add(bestEntry.getValue());
 			}
+			final SubStrategy pyramidLevel = pyramidLevels.get(0);
+			final double[] idRangePerDimension = pyramidLevel.getIndexStrategy().getHighestPrecisionIdRangePerDimension();
+			// to create a pyramid, ingest into each substrategy that is
+			// lower resolution than the sample set in at least one
+			// dimension and the one substrategy that is at least the same
+			// resolution or higher resolution to retain the original
+			// resolution as well as possible
+			double maxSubstrategyResToSampleSetRes = -Double.MAX_VALUE;
+
+			for (int d = 0; d < tileRangePerDimension.length; d++) {
+				final double substrategyResToSampleSetRes = idRangePerDimension[d] / tileRangePerDimension[d];
+				maxSubstrategyResToSampleSetRes = Math.max(
+						maxSubstrategyResToSampleSetRes,
+						substrategyResToSampleSetRes);
+			}
 			return new IteratorWrapper<SubStrategy, GridCoverage>(
 					pyramidLevels.iterator(),
 					new MosaicPerPyramidLevelBuilder(
@@ -463,7 +504,8 @@ public class RasterDataAdapter implements
 							backgroundValuesPerBand,
 							RasterUtils.getFootprint(
 									projectedReferenceEnvelope,
-									gridCoverage)));
+									gridCoverage),
+							interpolation));
 		}
 		return null;
 	}
@@ -476,18 +518,21 @@ public class RasterDataAdapter implements
 		private final int tileSize;
 		private final double[] backgroundValuesPerBand;
 		private final Geometry footprint;
+		private final Interpolation defaultInterpolation;
 
 		public MosaicPerPyramidLevelBuilder(
 				final MultiDimensionalNumericData originalBounds,
 				final GridCoverage originalData,
 				final int tileSize,
 				final double[] backgroundValuesPerBand,
-				final Geometry footprint ) {
+				final Geometry footprint,
+				final Interpolation defaultInterpolation ) {
 			this.originalBounds = originalBounds;
 			this.originalData = originalData;
 			this.tileSize = tileSize;
 			this.backgroundValuesPerBand = backgroundValuesPerBand;
 			this.footprint = footprint;
+			this.defaultInterpolation = defaultInterpolation;
 		}
 
 		@Override
@@ -600,7 +645,7 @@ public class RasterDataAdapter implements
 									e);
 						}
 
-						Interpolation interpolation = Interpolation.getInstance(Interpolation.INTERP_BICUBIC);
+						Interpolation tileInterpolation = defaultInterpolation;
 						final int dataType = originalData.getRenderedImage().getSampleModel().getDataType();
 
 						// TODO a JAI bug "workaround" in GeoTools does not
@@ -620,15 +665,14 @@ public class RasterDataAdapter implements
 									GeoWaveGTRasterFormat.DEFAULT_CRS);
 							final Geometry tileJTSGeometry = new GeometryFactory().toGeometry(tileReferencedEnvelope);
 							if (!footprint.contains(tileJTSGeometry)) {
-								interpolation = Interpolation.getInstance(Interpolation.INTERP_NEAREST);
+								tileInterpolation = Interpolation.getInstance(Interpolation.INTERP_NEAREST);
 							}
 						}
-
-						final GridCoverage resampledCoverage = (GridCoverage) Operations.DEFAULT.resample(
+						final GridCoverage resampledCoverage = (GridCoverage) getResampleOperations().resample(
 								originalData,
 								GeoWaveGTRasterFormat.DEFAULT_CRS,
 								insertionIdGeometry,
-								interpolation,
+								tileInterpolation,
 								backgroundValuesPerBand);
 						// NOTE: for now this is commented out, but beware the
 						// resample operation under certain conditions,
@@ -699,6 +743,32 @@ public class RasterDataAdapter implements
 				}
 			};
 		}
+	}
+
+	private static synchronized Operations getResampleOperations() {
+		if (resampleOperations == null) {
+			final RenderingHints resampleHints = new RenderingHints(
+					RenderingHints.KEY_RENDERING,
+					RenderingHints.VALUE_RENDER_QUALITY);
+			resampleHints.put(
+					RenderingHints.KEY_ALPHA_INTERPOLATION,
+					RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
+			resampleHints.put(
+					RenderingHints.KEY_ANTIALIASING,
+					RenderingHints.VALUE_ANTIALIAS_ON);
+			resampleHints.put(
+					RenderingHints.KEY_COLOR_RENDERING,
+					RenderingHints.VALUE_COLOR_RENDER_QUALITY);
+			resampleHints.put(
+					RenderingHints.KEY_DITHERING,
+					RenderingHints.VALUE_DITHER_ENABLE);
+			resampleHints.put(
+					JAI.KEY_BORDER_EXTENDER,
+					BorderExtender.createInstance(BorderExtender.BORDER_COPY));
+			resampleOperations = new Operations(
+					resampleHints);
+		}
+		return resampleOperations;
 	}
 
 	@Override
@@ -779,6 +849,7 @@ public class RasterDataAdapter implements
 		try {
 			return prepareCoverage(
 					rasterTile.getDataBuffer(),
+					tileSize,
 					mapExtent);
 		}
 		catch (final IOException e) {
@@ -799,6 +870,7 @@ public class RasterDataAdapter implements
 	 */
 	private GridCoverage2D prepareCoverage(
 			final DataBuffer dataBuffer,
+			final int tileSize,
 			final ReferencedEnvelope mapExtent )
 			throws IOException {
 		final SampleModel sm = sampleModel.createCompatibleSampleModel(
@@ -969,19 +1041,21 @@ public class RasterDataAdapter implements
 		return null;
 	}
 
-	public RasterTile<?> getRasterTileFromCoverage(
+	public MergeableRasterTile<?> getRasterTileFromCoverage(
 			final GridCoverage entry ) {
 		final SampleModel sm = sampleModel.createCompatibleSampleModel(
 				tileSize,
 				tileSize);
-		return new RasterTile(
+		return new MergeableRasterTile(
 				entry.getRenderedImage().copyData(
 						new InternalWritableRaster(
 								sm,
 								new Point())).getDataBuffer(),
 				mergeStrategy.getMetadata(
 						entry,
-						this));
+						this),
+				mergeStrategy,
+				getAdapterId());
 	}
 
 	@Override
@@ -1122,7 +1196,7 @@ public class RasterDataAdapter implements
 		else {
 			mergeStrategyBinary = new byte[] {};
 		}
-		final ByteBuffer buf = ByteBuffer.allocate(coverageNameBytes.length + sampleModelBinary.length + colorModelBinary.length + metadataBinaryLength + histogramConfigBinary.length + noDataBinary.length + minsBinary.length + maxesBinary.length + namesBinary.length + backgroundBinary.length + mergeStrategyBinary.length + 45);
+		final ByteBuffer buf = ByteBuffer.allocate(coverageNameBytes.length + sampleModelBinary.length + colorModelBinary.length + metadataBinaryLength + histogramConfigBinary.length + noDataBinary.length + minsBinary.length + maxesBinary.length + namesBinary.length + backgroundBinary.length + mergeStrategyBinary.length + 47);
 		buf.putInt(tileSize);
 		buf.putInt(coverageNameBytes.length);
 		buf.put(coverageNameBytes);
@@ -1150,7 +1224,27 @@ public class RasterDataAdapter implements
 		buf.putInt(mergeStrategyBinary.length);
 		buf.put(mergeStrategyBinary);
 		buf.put(buildPyramid ? (byte) 1 : (byte) 0);
+		buf.put(equalizeHistogram ? (byte) 1 : (byte) 0);
+		buf.put(interpolationToByte(interpolation));
 		return buf.array();
+	}
+
+	protected static byte interpolationToByte(
+			final Interpolation interpolation ) {
+		// this is silly because it seems like a translation JAI should provide,
+		// but it seems its not provided and its the most efficient approach
+		// (rather than serializing class names)
+		if (interpolation instanceof InterpolationNearest) {
+			return Interpolation.INTERP_NEAREST;
+		}
+		if (interpolation instanceof InterpolationBilinear) {
+			return Interpolation.INTERP_BILINEAR;
+		}
+		if (interpolation instanceof InterpolationBicubic2) {
+			return Interpolation.INTERP_BICUBIC_2;
+		}
+
+		return Interpolation.INTERP_BICUBIC;
 	}
 
 	protected static byte[] getColorModelBinary(
@@ -1369,6 +1463,8 @@ public class RasterDataAdapter implements
 					RootMergeStrategy.class);
 		}
 		buildPyramid = (buf.get() != 0);
+		equalizeHistogram = (buf.get() != 0);
+		interpolation = Interpolation.getInstance(buf.get());
 		init();
 	}
 
@@ -1656,6 +1752,7 @@ public class RasterDataAdapter implements
 		try {
 			return prepareCoverage(
 					writable.getDataBuffer(),
+					tileSize,
 					mapExtent);
 		}
 		catch (final IOException e) {
@@ -1664,6 +1761,14 @@ public class RasterDataAdapter implements
 					e);
 		}
 		return null;
+	}
+
+	public boolean isEqualizeHistogram() {
+		return equalizeHistogram;
+	}
+
+	public Interpolation getInterpolation() {
+		return interpolation;
 	}
 
 }

@@ -59,10 +59,10 @@ public class GeoWaveBasicIT extends
 	public void testIngestAndQuerySpatialPointsAndLines() {
 		final Index spatialIndex = IndexType.SPATIAL_VECTOR.createDefaultIndex();
 		// ingest both lines and points
-		testIngest(
+		testLocalIngest(
 				IndexType.SPATIAL_VECTOR,
 				HAIL_SHAPEFILE_FILE);
-		testIngest(
+		testLocalIngest(
 				IndexType.SPATIAL_VECTOR,
 				TORNADO_TRACKS_SHAPEFILE_FILE);
 
@@ -120,10 +120,10 @@ public class GeoWaveBasicIT extends
 	@Test
 	public void testIngestAndQuerySpatialTemporalPointsAndLines() {
 		// ingest both lines and points
-		testIngest(
+		testLocalIngest(
 				IndexType.SPATIAL_TEMPORAL_VECTOR,
 				HAIL_SHAPEFILE_FILE);
-		testIngest(
+		testLocalIngest(
 				IndexType.SPATIAL_TEMPORAL_VECTOR,
 				TORNADO_TRACKS_SHAPEFILE_FILE);
 		try {
@@ -172,18 +172,6 @@ public class GeoWaveBasicIT extends
 			Assert.fail("Error occurred while testing deletion of an entry using spatial temporal index: '" + e.getLocalizedMessage() + "'");
 		}
 		accumuloOperations.deleteAll();
-	}
-
-	private void testIngest(
-			final IndexType indexType,
-			final String ingestFilePath ) {
-		// ingest a shapefile (geotools type) directly into GeoWave using the
-		// ingest framework's main method and pre-defined commandline arguments
-		LOGGER.warn("Ingesting '" + ingestFilePath + "' - this may take several minutes...");
-		final String[] args = StringUtils.split(
-				"-localingest -t geotools-vector -b " + ingestFilePath + " -z " + zookeeper + " -i " + accumuloInstance + " -u " + accumuloUser + " -p " + accumuloPassword + " -n " + TEST_NAMESPACE + " -dim " + (indexType.equals(IndexType.SPATIAL_VECTOR) ? "spatial" : "spatial-temporal"),
-				' ');
-		IngestMain.main(args);
 	}
 
 	private void testQuery(

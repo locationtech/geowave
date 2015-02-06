@@ -244,25 +244,8 @@ public class GaussianFilter
 							k).append(
 							", ");
 				}
-				System.err.println("order = " + i + "; sigma = " + sigma + "; radius = " + radius + ": " + buffer);
 			}
 		}
-		// for (int radius = 4; radius >= 1; radius--) {
-		// for (double sigma = 4; sigma >= 0.25; sigma /= 2) {
-		//
-		// double[] kernel = getGaussianKernel(
-		// sigma,
-		// radius);
-		// StringBuffer buffer = new StringBuffer();
-		// for (double k : kernel) {
-		// buffer.append(
-		// k).append(
-		// ", ");
-		// }
-		// System.err.println("sigma = " + sigma + "; radius = " + radius + ": "
-		// + buffer);
-		// }
-		// }
 	}
 
 	protected static double getSigma(

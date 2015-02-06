@@ -82,7 +82,7 @@ public class CellSummationReducer extends
 					new DoubleWritable(
 							-e.getValue()),
 					new LongWritable(
-							e.getKey()));
+							e.getKey() - minLevel));
 		}
 		super.cleanup(context);
 	}

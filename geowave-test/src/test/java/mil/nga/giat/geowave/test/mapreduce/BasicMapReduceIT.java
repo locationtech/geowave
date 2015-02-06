@@ -47,6 +47,7 @@ import org.apache.hadoop.util.ToolRunner;
 import org.apache.log4j.Logger;
 import org.geotools.data.DataStoreFinder;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.opengis.feature.simple.SimpleFeature;
 
@@ -63,11 +64,19 @@ public class BasicMapReduceIT extends
 		ERROR
 	}
 
+	@BeforeClass
+	public static void extractTestFiles() {
+		GeoWaveTestEnvironment.unZipFile(
+				MapReduceTestEnvironment.class.getClassLoader().getResourceAsStream(
+						TEST_DATA_ZIP_RESOURCE_PATH),
+				TEST_CASE_BASE);
+	}
+
 	@Test
 	public void testIngestAndQueryGeneralGpx()
 			throws Exception {
 		accumuloOperations.deleteAll();
-		testIngest(
+		testMapReduceIngest(
 				IndexType.SPATIAL_VECTOR,
 				GENERAL_GPX_INPUT_GPX_DIR);
 		final File gpxInputDir = new File(
@@ -134,10 +143,10 @@ public class BasicMapReduceIT extends
 		accumuloOperations.deleteAll();
 		// ingest the data set into multiple indices and then try several query
 		// methods, by adapter and by index
-		testIngest(
+		testMapReduceIngest(
 				IndexType.SPATIAL_VECTOR,
 				OSM_GPX_INPUT_DIR);
-		testIngest(
+		testMapReduceIngest(
 				IndexType.SPATIAL_TEMPORAL_VECTOR,
 				OSM_GPX_INPUT_DIR);
 		final WritableDataAdapter<SimpleFeature>[] adapters = new GpxIngestPlugin().getDataAdapters(null);

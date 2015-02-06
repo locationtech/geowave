@@ -20,7 +20,6 @@ abstract public class MapReduceTestEnvironment extends
 		GeoWaveTestEnvironment
 {
 	private final static Logger LOGGER = Logger.getLogger(MapReduceTestEnvironment.class);
-	protected static final String TEST_RESOURCE_PACKAGE = "mil/nga/giat/geowave/test/";
 	protected static final String TEST_DATA_ZIP_RESOURCE_PATH = TEST_RESOURCE_PACKAGE + "mapreduce-testdata.zip";
 	protected static final String TEST_CASE_GENERAL_GPX_BASE = TEST_CASE_BASE + "general_gpx_test_case/";
 	protected static final String GENERAL_GPX_FILTER_PACKAGE = TEST_CASE_GENERAL_GPX_BASE + "filter/";
@@ -38,15 +37,7 @@ abstract public class MapReduceTestEnvironment extends
 	protected static boolean hdfsProtocol;
 	protected static String hdfsBaseDirectory;
 
-	@BeforeClass
-	public static void extractTestFiles() {
-		GeoWaveTestEnvironment.unZipFile(
-				MapReduceTestEnvironment.class.getClassLoader().getResourceAsStream(
-						TEST_DATA_ZIP_RESOURCE_PATH),
-				TEST_CASE_BASE);
-	}
-
-	protected void testIngest(
+	protected void testMapReduceIngest(
 			final IndexType indexType,
 			final String ingestFilePath ) {
 		// ingest gpx data directly into GeoWave using the

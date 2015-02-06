@@ -1,6 +1,7 @@
 package mil.nga.giat.geowave.test;
 
 import mil.nga.giat.geowave.test.mapreduce.BasicMapReduceIT;
+import mil.nga.giat.geowave.test.mapreduce.KDERasterResizeIT;
 import mil.nga.giat.geowave.test.service.GeoServerIT;
 import mil.nga.giat.geowave.test.service.GeoWaveServicesIT;
 import mil.nga.giat.geowave.test.service.ServicesTestEnvironment;
@@ -16,8 +17,7 @@ import org.junit.runners.Suite.SuiteClasses;
 	GeoWaveBasicIT.class,
 	GeoWaveRasterIT.class,
 	BasicMapReduceIT.class,
-	// KDEMapReduceIT.class, //for now this is commented out, further
-	// investigation is required
+	KDERasterResizeIT.class,
 	GeoServerIT.class,
 	GeoWaveServicesIT.class
 })

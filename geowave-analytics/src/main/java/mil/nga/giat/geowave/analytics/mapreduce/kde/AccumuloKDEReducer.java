@@ -14,7 +14,7 @@ import org.apache.hadoop.mapreduce.Reducer;
 import org.opengis.coverage.grid.GridCoverage;
 
 public class AccumuloKDEReducer extends
-		Reducer<DoubleWritable, LongWritable, GeoWaveOutputKey, GridCoverage>
+Reducer<DoubleWritable, LongWritable, GeoWaveOutputKey, GridCoverage>
 {
 	private static final class TileInfo
 	{
@@ -102,9 +102,9 @@ public class AccumuloKDEReducer extends
 		1,
 		1
 	};
-	private long totalKeys = 0;
 	private double max = -Double.MAX_VALUE;
-	private double inc = 0;
+	private long currentKey = 0;
+	private long totalKeys;
 
 	private int minLevels;
 	private int maxLevels;
@@ -121,8 +121,8 @@ public class AccumuloKDEReducer extends
 			final DoubleWritable key,
 			final Iterable<LongWritable> values,
 			final Context context )
-			throws IOException,
-			InterruptedException {
+					throws IOException,
+					InterruptedException {
 		if (key.get() < 0) {
 			final double prevMax = -key.get();
 			if (prevMax > max) {
@@ -132,6 +132,9 @@ public class AccumuloKDEReducer extends
 		else {
 			final double value = key.get();
 			final double normalizedValue = value / max;
+			// for consistency give all cells with matching weight the same
+			// percentile
+			final double percentile = (currentKey + 1.0) / totalKeys;
 			// calculate weights for this key
 			for (final LongWritable v : values) {
 				final long cellIndex = v.get() / numLevels;
@@ -149,39 +152,39 @@ public class AccumuloKDEReducer extends
 						tileInfo.y,
 						1,
 						normalizedValue);
-				inc += (1.0 / totalKeys);
 
 				raster.setSample(
 						tileInfo.x,
 						tileInfo.y,
 						2,
-						inc);
+						percentile);
 				context.write(
 						new GeoWaveOutputKey(
 								new ByteArrayId(
 										coverageName),
-								new ByteArrayId(
-										IndexType.SPATIAL_RASTER.getDefaultId())),
-						RasterUtils.createCoverageTypeDouble(
-								coverageName,
-								tileInfo.tileWestLon,
-								tileInfo.tileEastLon,
-								tileInfo.tileSouthLat,
-								tileInfo.tileNorthLat,
-								MINS_PER_BAND,
-								MAXES_PER_BAND,
-								NAME_PER_BAND,
-								raster));
+										new ByteArrayId(
+												IndexType.SPATIAL_RASTER.getDefaultId())),
+												RasterUtils.createCoverageTypeDouble(
+														coverageName,
+														tileInfo.tileWestLon,
+														tileInfo.tileEastLon,
+														tileInfo.tileSouthLat,
+														tileInfo.tileNorthLat,
+														MINS_PER_BAND,
+														MAXES_PER_BAND,
+														NAME_PER_BAND,
+														raster));
+				currentKey++;
 			}
 		}
 	}
 
 	private TileInfo fromCellIndexToTileInfo(
 			final long index ) {
-		final int xPost = (int) Math.floor(index / numYPosts);
+		final int xPost = (int) (index / numYPosts);
 		final int yPost = (int) (index % numYPosts);
-		final int xTile = (int) Math.floor((double) xPost / (double) tileSize);
-		final int yTile = (int) Math.floor((double) yPost / (double) tileSize);
+		final int xTile = xPost / tileSize;
+		final int yTile = yPost / tileSize;
 		final int x = (xPost % tileSize);
 		final int y = (yPost % tileSize);
 		final double tileWestLon = ((xTile * 360.0) / numXTiles) - 180.0;
@@ -194,14 +197,18 @@ public class AccumuloKDEReducer extends
 				tileSouthLat,
 				tileNorthLat,
 				x,
-				y);
+				tileSize - y - 1); // remember java rasters go from 0 at the top
+		// to (height-1) at the bottom, so we have
+		// to
+		// inverse the y here which goes from bottom
+		// to top
 	}
 
 	@Override
 	protected void setup(
 			final Context context )
-			throws IOException,
-			InterruptedException {
+					throws IOException,
+					InterruptedException {
 		super.setup(context);
 		minLevels = context.getConfiguration().getInt(
 				KDEJobRunner.MIN_LEVEL_KEY,
@@ -226,6 +233,7 @@ public class AccumuloKDEReducer extends
 				2,
 				level);
 		numYPosts = numYTiles * tileSize;
+
 		totalKeys = context.getConfiguration().getLong(
 				"Entries per level.level" + level,
 				10);

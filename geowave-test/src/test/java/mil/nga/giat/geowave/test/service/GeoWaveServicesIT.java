@@ -15,13 +15,12 @@ import net.sf.json.JSONObject;
 
 import org.apache.commons.io.IOUtils;
 import org.geotools.feature.SchemaException;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class GeoWaveServicesIT extends
-		ServicesTestEnvironment
+ServicesTestEnvironment
 {
 	private static final Logger LOGGER = LoggerFactory.getLogger(GeoWaveServicesIT.class);
 
@@ -57,8 +56,8 @@ public class GeoWaveServicesIT extends
 		LOGGER.info("Ingesting data using the local ingest service.");
 		success = ingestServiceClient.localIngest(
 				new File[] {
-					new File(
-							ASHLAND_GPX_FILE)
+						new File(
+								ASHLAND_GPX_FILE)
 				},
 				TEST_NAMESPACE,
 				null,
@@ -75,8 +74,8 @@ public class GeoWaveServicesIT extends
 		for (int i = 0; i < namespaces.size(); i++) {
 			if (namespaces.getJSONObject(
 					i).getString(
-					"name").equals(
-					TEST_NAMESPACE)) {
+							"name").equals(
+									TEST_NAMESPACE)) {
 				success = true;
 				break;
 			}
@@ -90,8 +89,8 @@ public class GeoWaveServicesIT extends
 		LOGGER.info("Ingesting data using the hdfs ingest service.");
 		success = ingestServiceClient.hdfsIngest(
 				new File[] {
-					new File(
-							ASHLAND_GPX_FILE)
+						new File(
+								ASHLAND_GPX_FILE)
 				},
 				TEST_NAMESPACE,
 				null,
@@ -108,8 +107,8 @@ public class GeoWaveServicesIT extends
 		for (int i = 0; i < namespaces.size(); i++) {
 			if (namespaces.getJSONObject(
 					i).getString(
-					"name").equals(
-					TEST_NAMESPACE)) {
+							"name").equals(
+									TEST_NAMESPACE)) {
 				success = true;
 				break;
 			}
@@ -121,12 +120,12 @@ public class GeoWaveServicesIT extends
 		LOGGER.info("Verify the adapter type.");
 		final JSONArray adapters = infoServiceClient.getAdapters(
 				TEST_NAMESPACE).getJSONArray(
-				"adapters");
+						"adapters");
 		for (int i = 0; i < adapters.size(); i++) {
 			if (adapters.getJSONObject(
 					i).getString(
-					"name").equals(
-					GpxUtils.GPX_WAYPOINT_FEATURE)) {
+							"name").equals(
+									GpxUtils.GPX_WAYPOINT_FEATURE)) {
 				success = true;
 				break;
 			}
@@ -138,12 +137,12 @@ public class GeoWaveServicesIT extends
 		LOGGER.info("Verify the index type.");
 		final JSONArray indices = infoServiceClient.getIndices(
 				TEST_NAMESPACE).getJSONArray(
-				"indices");
+						"indices");
 		for (int i = 0; i < indices.size(); i++) {
 			if (indices.getJSONObject(
 					i).getString(
-					"name").equals(
-					IndexType.SPATIAL_VECTOR.getDefaultId())) {
+							"name").equals(
+									IndexType.SPATIAL_VECTOR.getDefaultId())) {
 				success = true;
 				break;
 			}
@@ -166,8 +165,8 @@ public class GeoWaveServicesIT extends
 		for (int i = 0; i < workspaces.size(); i++) {
 			if (workspaces.getJSONObject(
 					i).getString(
-					"name").equals(
-					TEST_WORKSPACE)) {
+							"name").equals(
+									TEST_WORKSPACE)) {
 				success = true;
 				break;
 			}
@@ -178,8 +177,8 @@ public class GeoWaveServicesIT extends
 		// upload the default style
 		LOGGER.info("Upload the default style.");
 		assertTrue(geoserverServiceClient.publishStyle(new File[] {
-			new File(
-					TEST_SLD_FILE)
+				new File(
+						TEST_SLD_FILE)
 		}));
 
 		// verify that the style was uploaded
@@ -189,8 +188,8 @@ public class GeoWaveServicesIT extends
 		for (int i = 0; i < styles.size(); i++) {
 			if (styles.getJSONObject(
 					i).getString(
-					"name").equals(
-					TEST_STYLE_NAME)) {
+							"name").equals(
+									TEST_STYLE_NAME)) {
 				success = true;
 				break;
 			}
@@ -220,14 +219,14 @@ public class GeoWaveServicesIT extends
 		LOGGER.info("Verify that the datastore was published.");
 		final JSONArray datastores = geoserverServiceClient.getDatastores(
 				TEST_WORKSPACE).getJSONArray(
-				"dataStores");
+						"dataStores");
 
 		JSONObject dsInfo = null;
 		for (int i = 0; i < datastores.size(); i++) {
 			if (datastores.getJSONObject(
 					i).getString(
-					"name").equals(
-					TEST_NAMESPACE)) {
+							"name").equals(
+									TEST_NAMESPACE)) {
 				dsInfo = datastores.getJSONObject(i);
 				success = true;
 				break;
@@ -240,15 +239,15 @@ public class GeoWaveServicesIT extends
 
 			assertTrue(dsInfo.getString(
 					"Namespace").equals(
-					TEST_NAMESPACE));
+							TEST_NAMESPACE));
 
 			assertTrue(dsInfo.getString(
 					"ZookeeperServers").equals(
-					zookeeper));
+							zookeeper));
 
 			assertTrue(dsInfo.getString(
 					"InstanceName").equals(
-					accumuloInstance));
+							accumuloInstance));
 		}
 
 		// verify that we can recall the datastore
@@ -258,8 +257,8 @@ public class GeoWaveServicesIT extends
 				TEST_WORKSPACE);
 		assertTrue(datastore.getJSONObject(
 				"dataStore").getString(
-				"name").equals(
-				TEST_NAMESPACE));
+						"name").equals(
+								TEST_NAMESPACE));
 
 		// verify that we can publish a layer
 		LOGGER.info("Verify that we can publish a layer.");
@@ -273,13 +272,13 @@ public class GeoWaveServicesIT extends
 		LOGGER.info("Verify that the layer was published.");
 		final JSONArray layers = geoserverServiceClient.getLayers().getJSONArray(
 				"layers").getJSONObject(
-				0).getJSONArray(
-				"layers");
+						0).getJSONArray(
+								"layers");
 		for (int i = 0; i < layers.size(); i++) {
 			if (layers.getJSONObject(
 					i).getString(
-					"name").equals(
-					GpxUtils.GPX_WAYPOINT_FEATURE)) {
+							"name").equals(
+									GpxUtils.GPX_WAYPOINT_FEATURE)) {
 				success = true;
 				break;
 			}
@@ -292,8 +291,8 @@ public class GeoWaveServicesIT extends
 		final JSONObject layer = geoserverServiceClient.getLayer(GpxUtils.GPX_WAYPOINT_FEATURE);
 		assertTrue(layer.getJSONObject(
 				"layer").getString(
-				"name").equals(
-				GpxUtils.GPX_WAYPOINT_FEATURE));
+						"name").equals(
+								GpxUtils.GPX_WAYPOINT_FEATURE));
 
 		// verify that we are able to delete
 		LOGGER.info("Verify that we are able to clean up.");
