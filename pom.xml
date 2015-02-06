@@ -43,6 +43,7 @@
 		<sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
 		<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
 		<test.args>-Xms256m -Xmx1024m -XX:MaxPermSize=256m</test.args>
+		<formatter.location>${project.basedir}/../tools/eclipse/eclipse-formatter.xml</formatter.location>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -371,6 +372,14 @@
 						<jacocoReport>${project.basedir}/geowave-accumulo/target/site/jacoco-ut/jacoco.xml</jacocoReport>
 						<jacocoReport>${project.basedir}/geowave-test/target/site/jacoco-it/jacoco.xml</jacocoReport>
 					</jacocoReports>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>com.googlecode.maven-java-formatter-plugin</groupId>
+				<artifactId>maven-java-formatter-plugin</artifactId>
+				<version>0.4</version>
+				<configuration>
+					<configFile>${formatter.location}</configFile>
 				</configuration>
 			</plugin>
 		</plugins>

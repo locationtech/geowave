@@ -15,7 +15,6 @@ import net.sf.json.JSONObject;
 
 import org.apache.commons.io.IOUtils;
 import org.geotools.feature.SchemaException;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +24,8 @@ public class GeoWaveServicesIT extends
 {
 	private static final Logger LOGGER = LoggerFactory.getLogger(GeoWaveServicesIT.class);
 
+	protected static final String TEST_CASE_GENERAL_GPX_BASE = TEST_CASE_BASE + "general_gpx_test_case/";
+	protected static final String GENERAL_GPX_INPUT_GPX_DIR = TEST_CASE_GENERAL_GPX_BASE + "input_gpx/";
 	private static final String ASHLAND_GPX_FILE = GENERAL_GPX_INPUT_GPX_DIR + "ashland.gpx";
 	private static final String ASHLAND_INGEST_TYPE = "gpx";
 	private static final String TEST_STYLE_NAME = "DecimatePoints";

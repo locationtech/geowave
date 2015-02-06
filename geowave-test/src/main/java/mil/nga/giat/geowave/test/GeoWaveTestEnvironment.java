@@ -23,12 +23,16 @@ import mil.nga.giat.geowave.store.query.DistributableQuery;
 import mil.nga.giat.geowave.store.query.SpatialQuery;
 import mil.nga.giat.geowave.store.query.SpatialTemporalQuery;
 
+import net.lingala.zip4j.core.ZipFile;
+import net.lingala.zip4j.exception.ZipException;
 import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.apache.accumulo.minicluster.MiniAccumuloCluster;
 import org.apache.accumulo.minicluster.MiniAccumuloConfig;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.SystemUtils;
+import org.apache.hadoop.fs.FileUtil;
 import org.apache.hadoop.util.VersionInfo;
 import org.apache.hadoop.util.VersionUtil;
 import org.apache.log4j.Logger;
@@ -62,7 +66,9 @@ abstract public class GeoWaveTestEnvironment
 	protected static String accumuloUser;
 	protected static String accumuloPassword;
 	protected static MiniAccumuloCluster miniAccumulo;
-	protected static File tempDir;
+	protected static File TEMP_DIR = new File(
+			"./target/accumulo_temp"); // breaks on windows if temp directory
+										// isn't on same drive as project
 
 	protected static boolean DEFER_CLEANUP = false;
 
@@ -83,10 +89,14 @@ abstract public class GeoWaveTestEnvironment
 				accumuloPassword = System.getProperty("password");
 				if (!isSet(zookeeper) || !isSet(accumuloInstance) || !isSet(accumuloUser) || !isSet(accumuloPassword)) {
 					try {
-						tempDir = Files.createTempDir();
-						tempDir.deleteOnExit();
+
+						// TEMP_DIR = Files.createTempDir();
+						if (!TEMP_DIR.exists()) {
+							TEMP_DIR.mkdirs();
+						}
+						TEMP_DIR.deleteOnExit();
 						final MiniAccumuloConfig config = new MiniAccumuloConfig(
-								tempDir,
+								TEMP_DIR,
 								DEFAULT_MINI_ACCUMULO_PASSWORD);
 						config.setNumTservers(2);
 						miniAccumulo = new MiniAccumuloCluster(
@@ -114,17 +124,18 @@ abstract public class GeoWaveTestEnvironment
 										hadoopHome);
 								if (hadoopDir.exists()) {
 									final File binDir = new File(
-											tempDir,
+											TEMP_DIR,
 											"bin");
-									binDir.mkdir();
-									FileUtils.copyFile(
-											new File(
-													hadoopDir + File.separator + "bin",
-													HADOOP_WINDOWS_UTIL),
-											new File(
-													binDir,
-													HADOOP_WINDOWS_UTIL));
-									success = true;
+									if (binDir.mkdir()) {
+										FileUtils.copyFile(
+												new File(
+														hadoopDir + File.separator + "bin",
+														HADOOP_WINDOWS_UTIL),
+												new File(
+														binDir,
+														HADOOP_WINDOWS_UTIL));
+										success = true;
+									}
 								}
 							}
 							if (!success) {
@@ -143,7 +154,7 @@ abstract public class GeoWaveTestEnvironment
 						LOGGER.warn(
 								"Unable to start mini accumulo instance",
 								e);
-						LOGGER.info("Check '" + tempDir.getAbsolutePath() + File.separator + "logs' for more info");
+						LOGGER.info("Check '" + TEMP_DIR.getAbsolutePath() + File.separator + "logs' for more info");
 						if (SystemUtils.IS_OS_WINDOWS) {
 							LOGGER.warn("For windows, make sure that Cygwin is installed and set a CYGPATH environment variable to %CYGWIN_HOME%/bin/cygpath to successfully run a mini accumulo cluster");
 						}
@@ -196,15 +207,15 @@ abstract public class GeoWaveTestEnvironment
 								e);
 					}
 				}
-				if (tempDir != null) {
+				if (TEMP_DIR != null) {
 					try {
 						// sleep because mini accumulo processes still have a
 						// hold
 						// on the log files and there is no hook to get notified
 						// when it is completely stopped
 						Thread.sleep(1000);
-						FileUtils.deleteDirectory(tempDir);
-						tempDir = null;
+						FileUtils.deleteDirectory(TEMP_DIR);
+						TEMP_DIR = null;
 					}
 					catch (final IOException | InterruptedException e) {
 						LOGGER.warn(
@@ -338,7 +349,9 @@ abstract public class GeoWaveTestEnvironment
 			if (sfi != null) {
 				sfi.close();
 			}
-			dataStore.dispose();
+			if (dataStore != null) {
+				dataStore.dispose();
+			}
 		}
 		return savedFilter;
 	}
@@ -380,7 +393,7 @@ abstract public class GeoWaveTestEnvironment
 	public static void addAuthorization(
 			final String auth ) {
 		try {
-			((BasicAccumuloOperations) accumuloOperations).insureAuthorization(auth);
+			accumuloOperations.insureAuthorization(auth);
 		}
 		catch (AccumuloException | AccumuloSecurityException e) {
 			LOGGER.warn(
@@ -391,77 +404,32 @@ abstract public class GeoWaveTestEnvironment
 	}
 
 	/**
-	 * Unzips the contents of a zip input stream to a target output directory if
-	 * the file exists and is the same size as the zip entry, it is not
-	 * overwritten
-	 *
-	 * @param zipFile
+	 * Unzips the contents of a zip file to a target output directory, deleting
+	 * anything that existed beforehand
+	 * 
+	 * @param zipInput
 	 *            input zip file
-	 * @param output
+	 * @param outputFolder
 	 *            zip file output folder
 	 */
 	protected static void unZipFile(
-			final InputStream zipStream,
+			final File zipInput,
 			final String outputFolder ) {
 
-		final byte[] buffer = new byte[1024];
-
 		try {
-
-			// create output directory is not exists
-			final File folder = new File(
+			File of = new File(
 					outputFolder);
-			if (!folder.exists()) {
-				folder.mkdir();
+			if (!of.exists()) {
+				of.mkdirs();
 			}
-
-			// get the zip file content
-			final ZipInputStream zis = new ZipInputStream(
-					zipStream);
-			// get the zipped file list entry
-			ZipEntry ze = zis.getNextEntry();
-
-			while (ze != null) {
-				if (ze.isDirectory()) {
-					ze = zis.getNextEntry();
-					continue;
-				}
-				final String fileName = ze.getName();
-				final File newFile = new File(
-						outputFolder + File.separator + fileName);
-				if (newFile.exists()) {
-					if (newFile.length() == ze.getSize()) {
-						ze = zis.getNextEntry();
-						continue;
-					}
-					else {
-						newFile.delete();
-					}
-				}
-
-				// create all non exists folders
-				new File(
-						newFile.getParent()).mkdirs();
-
-				final FileOutputStream fos = new FileOutputStream(
-						newFile);
-
-				int len;
-				while ((len = zis.read(buffer)) > 0) {
-					fos.write(
-							buffer,
-							0,
-							len);
-				}
-
-				fos.close();
-				ze = zis.getNextEntry();
+			else {
+				FileUtil.fullyDelete(of);
 			}
-
-			zis.closeEntry();
-			zis.close();
+			ZipFile z = new ZipFile(
+					zipInput);
+			z.extractAll(outputFolder);
 		}
-		catch (final IOException e) {
+		catch (final ZipException e) {
 			LOGGER.warn(
 					"Unable to extract test data",
 					e);
