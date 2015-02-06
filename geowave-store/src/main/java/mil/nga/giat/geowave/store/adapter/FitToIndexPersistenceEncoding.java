@@ -1,16 +1,15 @@
-package mil.nga.giat.geowave.raster;
+package mil.nga.giat.geowave.store.adapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import mil.nga.giat.geowave.index.ByteArrayId;
-import mil.nga.giat.geowave.store.adapter.AdapterPersistenceEncoding;
 import mil.nga.giat.geowave.store.data.PersistentDataset;
 import mil.nga.giat.geowave.store.index.CommonIndexValue;
 import mil.nga.giat.geowave.store.index.Index;
 
 public class FitToIndexPersistenceEncoding extends
-		AdapterPersistenceEncoding
+AdapterPersistenceEncoding
 {
 	private final List<ByteArrayId> insertionIds = new ArrayList<ByteArrayId>();
 

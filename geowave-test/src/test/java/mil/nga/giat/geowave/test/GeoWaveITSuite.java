@@ -14,6 +14,7 @@ import org.junit.runners.Suite.SuiteClasses;
 @RunWith(Suite.class)
 @SuiteClasses({
 	GeoWaveBasicIT.class,
+	GeoWaveFeatureCollectionIT.class,
 	GeoWaveRasterIT.class,
 	BasicMapReduceIT.class,
 	// KDEMapReduceIT.class, //for now this is commented out, further

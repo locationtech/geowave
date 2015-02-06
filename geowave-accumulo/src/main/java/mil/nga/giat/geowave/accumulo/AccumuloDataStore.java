@@ -253,7 +253,7 @@ public class AccumuloDataStore implements
 					accumuloOperations.attachIterators(
 							indexName,
 							accumuloOptions.isCreateTable(),
-							((AttachedIteratorDataAdapter) writableAdapter).getAttachedIteratorConfig());
+							((AttachedIteratorDataAdapter) writableAdapter).getAttachedIteratorConfig(index));
 				}
 			}
 			final IngestEntryInfo entryInfo = AccumuloUtils.write(
@@ -437,7 +437,7 @@ public class AccumuloDataStore implements
 					accumuloOperations.attachIterators(
 							indexName,
 							accumuloOptions.isCreateTable(),
-							((AttachedIteratorDataAdapter) dataWriter).getAttachedIteratorConfig());
+							((AttachedIteratorDataAdapter) dataWriter).getAttachedIteratorConfig(index));
 				}
 			}
 			final List<IngestCallback<T>> callbacks = new ArrayList<IngestCallback<T>>();
