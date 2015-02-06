@@ -74,7 +74,7 @@ The naturalearthdata side has a few shapefile we can use use. On the page
 http://www.naturalearthdata.com/downloads/50m-cultural-vectors/[50m Cultural Vectors]
 
 Let's download the Admin 0 - Countries shapefile:
-http://www.naturalearthdata.com/download/50m/cultural/ne_50m_admin_0_countries.zip[ne_50m_admin_0_countries.zip]
+http://naciscdn.org/naturalearth/50m/cultural/ne_50m_admin_0_countries.zip[ne_50m_admin_0_countries.zip]
 
 Okay, let's ingest this. I'll take some liberty with the file locations,
 but the process should be obvious
@@ -87,5 +87,5 @@ $ cd ingest
 $ unzip ne_50m_admin_0_countries.zip
 $ rm ne_50m_admin_0_countries.zip
 $ cd ..
-$ geowave-ingest -localingest -b ./ingest -i instance -n adminborders -p pass -t geotools-vector -u user -z zoo-1:2181
+$ geowave-ingest -localingest -b ./ingest -i ACCUMULO_INSTANCE_NAME -n geowave.50m_admin_0_countries -t geotools-vector -u USERNAME -p PASSWORD -z zoo-1:2181
 ----
