@@ -12,6 +12,8 @@ mil.nga.giat.geowave.analytics.mapreduce.kde
 mil.nga.giat.geowave.analytics.mapreduce.kde.compare
 mil.nga.giat.geowave.analytics.mapreduce.kde.parser
 mil.nga.giat.geowave.analytics.mapreduce.kde.parser.model
+mil.nga.giat.geowave.benchmark
+mil.nga.giat.geowave.benchmark.utils
 mil.nga.giat.geowave.index
 mil.nga.giat.geowave.index.dimension
 mil.nga.giat.geowave.index.dimension.bin
@@ -54,6 +56,7 @@ mil.nga.giat.geowave.types.tdrive
 mil.nga.giat.geowave.utils
 mil.nga.giat.geowave.vector
 mil.nga.giat.geowave.vector.adapter
+mil.nga.giat.geowave.vector.adapter.merge
 mil.nga.giat.geowave.vector.auth
 mil.nga.giat.geowave.vector.plugin
 mil.nga.giat.geowave.vector.plugin.lock
@@ -64,6 +67,7 @@ mil.nga.giat.geowave.vector.query.cql
 mil.nga.giat.geowave.vector.query.row
 mil.nga.giat.geowave.vector.stats
 mil.nga.giat.geowave.vector.transaction
+mil.nga.giat.geowave.vector.util
 mil.nga.giat.geowave.vector.utils
 mil.nga.giat.geowave.vector.wms
 mil.nga.giat.geowave.vector.wms.accumulo
