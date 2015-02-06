@@ -57,4 +57,25 @@ public enum IndexType {
 				new ByteArrayId(
 						getDefaultId()));
 	}
+
+	// This is a support class to assist in creating default indices as enums
+	// aren't handled well in Jace/JNI
+	public static class JaceIndexType
+	{
+		public static Index createSpatialVectorIndex() {
+			return IndexType.SPATIAL_VECTOR.createDefaultIndex();
+		}
+
+		public static Index createSpatialTemporalVectorIndex() {
+			return IndexType.SPATIAL_TEMPORAL_VECTOR.createDefaultIndex();
+		}
+
+		public static Index createSpatialRasterIndex() {
+			return IndexType.SPATIAL_RASTER.createDefaultIndex();
+		}
+
+		public static Index createSpatialTemporalRasterIndex() {
+			return IndexType.SPATIAL_TEMPORAL_VECTOR.createDefaultIndex();
+		}
+	}
 }

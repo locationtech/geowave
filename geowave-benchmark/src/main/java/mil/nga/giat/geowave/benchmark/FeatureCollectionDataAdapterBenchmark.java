@@ -137,7 +137,7 @@ public class FeatureCollectionDataAdapterBenchmark
 	};
 
 	// TODO: Set these values appropriately
-	final private IndexMode indexMode = IndexMode.RASTER;
+	final private IndexMode indexMode = IndexMode.VECTOR;
 	final private int tier = 4;
 	final private boolean compactTables = true;
 
@@ -166,17 +166,17 @@ public class FeatureCollectionDataAdapterBenchmark
 	public FeatureCollectionDataAdapterBenchmark() {
 		if (indexMode == IndexMode.VECTOR) {
 			index = IndexType.SPATIAL_VECTOR.createDefaultIndex();
-			featureNamespace = "featureTest_vector";
-			featureCollectionNamespace = "featureCollectionTest_vector_";
+			featureNamespace = "geowave.featureTest_vector";
+			featureCollectionNamespace = "geowave.featureCollectionTest_vector_";
 		}
 		else if (indexMode == IndexMode.RASTER) {
 			index = IndexType.SPATIAL_RASTER.createDefaultIndex();
-			featureNamespace = "featureTest_raster";
-			featureCollectionNamespace = "featureCollectionTest_raster_";
+			featureNamespace = "geowave.featureTest_raster";
+			featureCollectionNamespace = "geowave.featureCollectionTest_raster_";
 		}
 		else if (indexMode == IndexMode.SINGLE) {
-			featureNamespace = "featureTest_tier_" + tier;
-			featureCollectionNamespace = "featureCollectionTest_tier_" + tier + "_";
+			featureNamespace = "geowave.featureTest_tier_" + tier;
+			featureCollectionNamespace = "geowave.featureCollectionTest_tier_" + tier + "_";
 			final Index tempIdx = IndexType.SPATIAL_VECTOR.createDefaultIndex();
 			final SubStrategy[] subStrats = ((TieredSFCIndexStrategy) tempIdx.getIndexStrategy()).getSubStrategies();
 			index = new CustomIdIndex(

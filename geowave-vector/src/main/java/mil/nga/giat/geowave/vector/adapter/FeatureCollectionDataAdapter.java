@@ -494,7 +494,6 @@ public class FeatureCollectionDataAdapter extends
 			dataIds.add(itr.next().getID());
 		}
 
-		// TODO: add an entry for the data adapters
 		encoding.getAdapterExtendedData().addValue(
 				new PersistentValue<Object>(
 						new ByteArrayId(
@@ -563,7 +562,6 @@ public class FeatureCollectionDataAdapter extends
 	public Iterator<DefaultFeatureCollection> convertToIndex(
 			final Index index,
 			final DefaultFeatureCollection originalEntry ) {
-		// TODO: Make this a Feature Data utility method
 		// if the feature is in a different coordinate reference system than
 		// EPSG:4326, transform the geometry
 		final SimpleFeatureIterator itr = originalEntry.features();

@@ -403,7 +403,7 @@
 						<executions>
 							<execution>
 								<id>unpack-dependencies</id>
-								<phase>compile</phase>
+								<phase>package</phase>
 								<goals>
 									<goal>unpack</goal>
 								</goals>
@@ -421,7 +421,7 @@
 							</execution>
 							<execution>
 								<id>copy-jace-core-runtime</id>
-								<phase>compile</phase>
+								<phase>package</phase>
 								<goals>
 									<goal>copy</goal>
 								</goals>
@@ -483,10 +483,10 @@
 								</goals>
 								<configuration>
 									<inputHeaders>
-										<path>${pdal.directory}/include/pdal/drivers/geowave</path>
+										<path>${pdal.directory}/io/geowave</path>
 									</inputHeaders>
 									<inputSources>
-										<path>${pdal.directory}/src/drivers/geowave</path>
+										<path>${pdal.directory}/io/geowave</path>
 									</inputSources>
 									<outputHeaders>${project.build.directory}/dependency/jace/include</outputHeaders>
 									<outputSources>${project.build.directory}/dependency/jace/source</outputSources>

@@ -139,10 +139,6 @@ public class ElementsToArrayIterator extends
 									fieldId,
 									encoding);
 						}
-						else {
-							// TODO: we should probably check to make sure the
-							// encoding matches
-						}
 					}
 					else {
 
@@ -163,9 +159,6 @@ public class ElementsToArrayIterator extends
 												fieldId,
 												Encoding.FIXED_SIZE_ENCODING.getByteEncoding());
 										break;
-									}
-									else {
-										// TODO: bad, unknown field type
 									}
 								}
 							}

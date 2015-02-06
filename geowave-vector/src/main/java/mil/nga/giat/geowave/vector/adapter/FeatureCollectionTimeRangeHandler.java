@@ -82,7 +82,6 @@ public class FeatureCollectionTimeRangeHandler implements
 			else {
 				// otherwise the assumption is that we combine the two
 				// visibilities
-				// TODO make sure this is how we should handle this case
 				visibility = ByteArrayUtils.combineArrays(
 						startVisibility,
 						endVisibility);

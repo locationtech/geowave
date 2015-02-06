@@ -115,9 +115,6 @@ public class ArrayField<T extends CommonIndexValue> implements
 				elementField.getWriter());
 	}
 
-	// public FieldReader<T> getReader() {
-	// return elementField.getReader();
-	// }
 	@Override
 	public NumericDimensionDefinition getBaseDefinition() {
 		return elementField.getBaseDefinition();
