@@ -27,7 +27,7 @@ GeoWave is an open source set of software that:
 
 Basically, GeoWave attempts to do for Accumulo as PostGIS does for PostgreSQL.  
 
-See [GeoWave io page](http://ngageoint.github.io/geowave/) for more detailed documenatation, quickstart, examples, etc.
+See [GeoWave io page](http://ngageoint.github.io/geowave/) for more detailed documentatation, quickstart, examples, etc.
 
 ## Screenshots
 
