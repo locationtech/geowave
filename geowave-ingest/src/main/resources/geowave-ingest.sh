@@ -7,4 +7,5 @@ else
   JAVA="$JAVA_HOME/bin/java"
 fi
 
-exec $JAVA -jar /usr/local/geowave/ingest/geowave-ingest-tool.jar $@
+# Using -cp and the classname instead of -jar because Java 7 and below fail to auto-launch jars with more than 65k files
+exec $JAVA -cp /usr/local/geowave/ingest/geowave-ingest-tool.jar mil.nga.giat.geowave.ingest.IngestMain $@

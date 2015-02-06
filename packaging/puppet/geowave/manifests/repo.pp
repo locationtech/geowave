@@ -1,7 +1,7 @@
 class geowave::repo(
   $repo_name       = 'geowave',
   $repo_desc       = 'GeoWave Repo',
-  $repo_enabled    = 1,
+  $repo_enabled    = 0,
   $repo_base_url   = 'http://s3.amazonaws.com/geowave-rpms/release/noarch/',
   $repo_refresh_md = 21600, # Repo metadata is good for 6 hours by default 
   $repo_priority   = 15,

@@ -8,6 +8,10 @@ A GeoWave http://puppetlabs.com/[Puppet module^] has been provided as part of bo
 RPM. This module can be used to install the various GeoWave services onto separate nodes in a cluster or all onto a single
 node for development.
 
+There are a couple of different RPM repo settings that may need setting. As the repo is disabled by default to avoid picking
+up new Accumulo iterator jars without coordinating a service restart you'll have to enable and then disable in consecutive
+Puppet runs to do the initial install.
+
 === Options
 
 hadoop_vendor_version::
@@ -29,6 +33,10 @@ repo_base_url::
 Used with the optional geowave::repo class to point the local package management system at a source for GeoWave RPMs.
 The default location is http://s3.amazonaws.com/geowave-rpms/dev/noarch/
 
+repo_enabled::
+To pick up an updated Accumulo iterator you'll need to restart the Accumulo service. As we don't want to pick up new
+RPMs with something like a yum-cron job without coordinating a restart so the repo is disabled by default.
+
 repo_refresh_md::
 The number of seconds before checking for new RPMs. On a production system the default of every 6 hours should be sufficient
 but you can lower this down to 0 for a development system on which you wish to pick up new packages as soon as they are
@@ -44,6 +52,7 @@ with every pull (don't use cached metadata)
 ----
 # Dev VM
 class { 'geowave::repo':
+  repo_enabled    => 1,
   repo_refresh_md => 0,
 } ->
 class { 'geowave':
@@ -63,6 +72,7 @@ run the app server on an alternate port so as not to conflict with another servi
 node 'c1-master' {
   class { 'geowave::repo':
     repo_base_url   => 'http://my-local-rpm-repo/geowave-rpms/dev/noarch/',
+    repo_enabled    => 1,
   } ->
   class { 'geowave':
     hadoop_vendor_version => 'cdh5',
@@ -75,6 +85,7 @@ node 'c1-master' {
 node 'c1-app-01' {
   class { 'geowave::repo':
     repo_base_url   => 'http://my-local-rpm-repo/geowave-rpms/dev/noarch/',
+    repo_enabled    => 1,
   } ->
   class { 'geowave':
     hadoop_vendor_version => 'cdh5',
@@ -102,6 +113,6 @@ rest of the cluster using Puppet.
 
 [source, bash]
 ----
-rpm -Uvh http://s3.amazonaws.com/geowave-rpms/dev/noarch/geowave-repo-dev-1.0-2.noarch.rpm
+rpm -Uvh http://s3.amazonaws.com/geowave-rpms/release/noarch/geowave-repo-1.0-3.noarch.rpm
 yum install geowave-cdh5-puppet
 ----
