@@ -48,6 +48,9 @@ mil.nga.giat.geowave.store.dimension
 mil.nga.giat.geowave.store.filter
 mil.nga.giat.geowave.store.index
 mil.nga.giat.geowave.store.query
+mil.nga.giat.geowave.test
+mil.nga.giat.geowave.test.mapreduce
+mil.nga.giat.geowave.test.service
 mil.nga.giat.geowave.types.geolife
 mil.nga.giat.geowave.types.geotools.raster
 mil.nga.giat.geowave.types.geotools.vector
