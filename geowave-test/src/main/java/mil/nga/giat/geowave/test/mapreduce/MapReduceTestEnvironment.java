@@ -90,7 +90,7 @@ abstract public class MapReduceTestEnvironment extends
 		}
 	}
 
-	public static void FilterConfiguration(
+	public static void filterConfiguration(
 			Configuration conf ) {
 		// final parameters, can't be overriden
 		conf.unset("mapreduce.job.end-notification.max.retry.interval");
@@ -132,7 +132,7 @@ abstract public class MapReduceTestEnvironment extends
 				MRJobConfig.IO_SORT_MB,
 				10);
 
-		FilterConfiguration(conf);
+		filterConfiguration(conf);
 
 		return conf;
 

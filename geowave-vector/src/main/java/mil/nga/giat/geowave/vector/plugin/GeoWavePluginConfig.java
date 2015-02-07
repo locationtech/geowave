@@ -125,7 +125,7 @@ public class GeoWavePluginConfig
 		return accumuloParams;
 	}
 
-	public static List<Param> getPluginParams() {
+	public synchronized static List<Param> getPluginParams() {
 		if (accumuloParams == null) {
 			accumuloParams = new ArrayList<Param>();
 			accumuloParams.add(ZOOKEEPER_SERVERS);

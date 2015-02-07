@@ -1,14 +1,13 @@
 package mil.nga.giat.geowave.raster.plugin;
 
 import java.awt.Color;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.util.HashMap;
 
+import mil.nga.giat.geowave.index.StringUtils;
+import mil.nga.giat.geowave.raster.RasterUtils;
 import mil.nga.giat.geowave.raster.plugin.GeoWaveRasterConfig.ConfigParameter;
 
 import org.apache.log4j.Logger;
@@ -159,7 +158,14 @@ public class GeoWaveGTRasterFormat extends
 		catch (final IOException e) {
 			return false;
 		}
-		final String xmlStr = out.toString();
+		final String xmlStr;
+		try {
+			xmlStr = out.toString(StringUtils.UTF8_CHAR_SET.toString());
+		}
+		catch (UnsupportedEncodingException e) {
+			LOGGER.error("Unable to write ByteArray to UTF-8", e);
+			return false;
+		}
 
 		for (final ConfigParameter parameter : GeoWaveRasterConfig.ConfigParameter.values()) {
 			if (!xmlStr.contains(parameter.getConfigName())) {

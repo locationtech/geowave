@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.UUID;
+import java.util.regex.Pattern;
 
 import mil.nga.giat.geowave.accumulo.BasicAccumuloOperations;
 import mil.nga.giat.geowave.accumulo.metadata.AccumuloDataStatisticsStore;
@@ -181,7 +182,7 @@ public class ClusteringUtils
 					// id
 					String metadata = result.getAttribute(
 							"name").toString();
-					metadata = metadata.contains("|") ? metadata.split("|")[0] : metadata;
+					metadata = metadata.contains("|") ? metadata.split(Pattern.quote("|"))[0] : metadata;
 					final Integer pointId = Integer.parseInt(metadata);
 
 					final Geometry geometry = (Geometry) result.getDefaultGeometry();
@@ -230,7 +231,7 @@ public class ClusteringUtils
 					// id
 					String metadata = result.getAttribute(
 							"name").toString();
-					metadata = metadata.contains("|") ? metadata.split("|")[0] : metadata;
+					metadata = metadata.contains("|") ? metadata.split(Pattern.quote("|"))[0] : metadata;
 					final Integer pointId = Integer.parseInt(metadata);
 
 					final Geometry geometry = (Geometry) result.getDefaultGeometry();

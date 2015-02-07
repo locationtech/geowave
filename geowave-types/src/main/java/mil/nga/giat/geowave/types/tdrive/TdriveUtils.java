@@ -2,10 +2,12 @@ package mil.nga.giat.geowave.types.tdrive;
 
 import java.io.File;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;
 
+import mil.nga.giat.geowave.index.StringUtils;
 import org.apache.commons.io.IOUtils;
 import org.geotools.feature.AttributeTypeBuilder;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
@@ -20,9 +22,22 @@ import com.vividsolutions.jts.geom.Geometry;
  */
 public class TdriveUtils
 {
-	public static final DateFormat TIME_FORMAT_SECONDS = new SimpleDateFormat(
-			"yyyy-MM-dd HH:mm:ss");
-	public static String TDRIVE_POINT_FEATURE = "tdrivepoint";
+	public static final String TDRIVE_POINT_FEATURE = "tdrivepoint";
+
+
+	private static final ThreadLocal<DateFormat> dateFormat = new ThreadLocal<DateFormat>(){
+		@Override
+		protected DateFormat initialValue(){
+			return new SimpleDateFormat(
+					"yyyy-MM-dd HH:mm:ss");
+		}
+	};
+
+	public static Date parseDate(String source)
+			throws ParseException {
+		return dateFormat.get().parse(source);
+	}
+
 
 	public static SimpleFeatureType createTdrivePointDataType() {
 
@@ -65,7 +80,7 @@ public class TdriveUtils
 		Scanner scanner = null;
 		try {
 			scanner = new Scanner(
-					file);
+					file, StringUtils.UTF8_CHAR_SET.toString());
 			if (scanner.hasNextLine()) {
 				final String line = scanner.nextLine();
 				return line.split(",").length == 4;

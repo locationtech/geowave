@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.ServiceLoader;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.HelpFormatter;
@@ -74,6 +75,7 @@ abstract public class AbstractCommandLineDriver
 			String[] args,
 			List<IngestTypePluginProviderSpi<?, ?>> pluginProviders );
 
+	@SuppressFBWarnings(value="DM_EXIT", justification = "Exiting JVM with System.exit(0) is intentional")
 	protected List<IngestTypePluginProviderSpi<?, ?>> applyArguments(
 			final String[] args ) {
 		final List<IngestTypePluginProviderSpi<?, ?>> selectedPluginProviders = new ArrayList<IngestTypePluginProviderSpi<?, ?>>();

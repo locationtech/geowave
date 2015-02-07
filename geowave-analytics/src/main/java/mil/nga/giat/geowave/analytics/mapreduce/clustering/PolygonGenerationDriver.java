@@ -10,6 +10,7 @@ import java.util.UUID;
 
 import mil.nga.giat.geowave.accumulo.AccumuloDataStore;
 import mil.nga.giat.geowave.accumulo.BasicAccumuloOperations;
+import mil.nga.giat.geowave.index.StringUtils;
 import mil.nga.giat.geowave.store.DataStore;
 import mil.nga.giat.geowave.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.store.index.Index;
@@ -163,7 +164,7 @@ public class PolygonGenerationDriver
 
 			// set up map/reduce job
 			final AuthenticationToken authToken = new PasswordToken(
-					password.getBytes());
+					password.getBytes(StringUtils.UTF8_CHAR_SET));
 			final Job job = new Job(
 					new Configuration(),
 					"GeoSearch, Polygon Generation");

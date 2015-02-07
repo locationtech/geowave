@@ -138,17 +138,16 @@ public class IngestServiceImpl implements
 
 		final File baseDir = Files.createTempDir();
 
-		final Set<String> filenames = fileMap.keySet();
-		for (final String filename : filenames) {
+		for (final Map.Entry<String, InputStream> kvp : fileMap.entrySet()){
 			final File tempFile = new File(
 					baseDir,
-					filename);
+					kvp.getKey());
 
 			// read the file
 			try (OutputStream fileOutputStream = new FileOutputStream(
 					tempFile)) {
 
-				final InputStream inStream = fileMap.get(filename);
+				final InputStream inStream = kvp.getValue();
 
 				int read = 0;
 				final byte[] bytes = new byte[1024];

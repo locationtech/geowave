@@ -9,7 +9,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import mil.nga.giat.geowave.accumulo.util.AccumuloUtils;
 import mil.nga.giat.geowave.index.ByteArrayId;
+import mil.nga.giat.geowave.index.StringUtils;
 import mil.nga.giat.geowave.ingest.GeoWaveData;
 import mil.nga.giat.geowave.store.CloseableIterator;
 import mil.nga.giat.geowave.types.HelperClass;
@@ -65,7 +67,7 @@ public class GPXIngestPluginTest
 						this.getClass().getClassLoader().getResource(
 								"12345.xml").getPath()),
 				new ByteArrayId(
-						"123".getBytes()),
+						"123".getBytes(StringUtils.UTF8_CHAR_SET)),
 				"");
 
 		int totalCount = 0;

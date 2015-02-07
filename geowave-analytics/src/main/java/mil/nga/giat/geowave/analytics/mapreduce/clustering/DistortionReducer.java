@@ -2,6 +2,7 @@ package mil.nga.giat.geowave.analytics.mapreduce.clustering;
 
 import java.io.IOException;
 
+import mil.nga.giat.geowave.index.StringUtils;
 import org.apache.accumulo.core.data.Mutation;
 import org.apache.accumulo.core.data.Value;
 import org.apache.hadoop.io.DoubleWritable;
@@ -53,7 +54,7 @@ public class DistortionReducer extends
 					new Text(
 							clusterCount),
 					new Value(
-							distortion.toString().getBytes()));
+							distortion.toString().getBytes(StringUtils.UTF8_CHAR_SET)));
 
 			// write distortion to accumulo, defaults to table given to
 			// AccumuloOutputFormat, in driver

@@ -75,7 +75,7 @@ public class WFSSpatialTest
 		SimpleFeature newFeature = writer.next();
 		newFeature.setAttribute(
 				"pop",
-				new Long(
+				Long.valueOf(
 						100));
 		newFeature.setAttribute(
 				"pid",
@@ -91,7 +91,7 @@ public class WFSSpatialTest
 		newFeature = writer.next();
 		newFeature.setAttribute(
 				"pop",
-				new Long(
+				Long.valueOf(
 						100));
 		newFeature.setAttribute(
 				"pid",

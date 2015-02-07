@@ -11,6 +11,7 @@ import mil.nga.giat.geowave.accumulo.AccumuloDataStore;
 import mil.nga.giat.geowave.accumulo.BasicAccumuloOperations;
 import mil.nga.giat.geowave.accumulo.mapreduce.input.GeoWaveInputFormat;
 import mil.nga.giat.geowave.index.ByteArrayRange;
+import mil.nga.giat.geowave.index.StringUtils;
 import mil.nga.giat.geowave.store.DataStore;
 import mil.nga.giat.geowave.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.store.index.Index;
@@ -153,7 +154,7 @@ public class KMeansDriver
 		System.out.println("K-Means Driver Running...");
 
 		final AuthenticationToken authToken = new PasswordToken(
-				password.getBytes());
+				password.getBytes(StringUtils.UTF8_CHAR_SET));
 
 		Integer iterCounter = 0;
 
@@ -380,7 +381,7 @@ public class KMeansDriver
 						new Text(
 								centroidCount.toString()),
 						new Value(
-								coord.toString().getBytes()));
+								coord.toString().getBytes(StringUtils.UTF8_CHAR_SET)));
 
 				centroidCount++;
 

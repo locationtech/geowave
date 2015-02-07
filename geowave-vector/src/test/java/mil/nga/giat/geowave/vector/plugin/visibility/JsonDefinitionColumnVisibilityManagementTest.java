@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.UUID;
 
 import mil.nga.giat.geowave.index.ByteArrayId;
+import mil.nga.giat.geowave.index.StringUtils;
 import mil.nga.giat.geowave.store.data.visibility.GlobalVisibilityHandler;
 import mil.nga.giat.geowave.vector.plugin.visibility.FieldLevelVisibilityHandler;
 import mil.nga.giat.geowave.vector.plugin.visibility.JsonDefinitionColumnVisibilityManagement;
@@ -78,7 +79,7 @@ public class JsonDefinitionColumnVisibilityManagementTest
 				UUID.randomUUID().toString());
 		newFeature.setAttribute(
 				"pop",
-				new Long(
+				Long.valueOf(
 						100));
 		newFeature.setAttribute(
 				"pid",
@@ -97,22 +98,22 @@ public class JsonDefinitionColumnVisibilityManagementTest
 	public void testPIDNonDefault() {
 
 		assertTrue(Arrays.equals(
-				"TS".getBytes(),
+				"TS".getBytes(StringUtils.UTF8_CHAR_SET),
 				simplePIDHandler.getVisibility(
 						newFeature,
 						new ByteArrayId(
-								"pid".getBytes()),
+								"pid".getBytes(StringUtils.UTF8_CHAR_SET)),
 						"pid")));
 	}
 
 	@Test
 	public void testPOPNonDefault() {
 		assertTrue(Arrays.equals(
-				"default".getBytes(),
+				"default".getBytes(StringUtils.UTF8_CHAR_SET),
 				simplePOPHandler.getVisibility(
 						newFeature,
 						new ByteArrayId(
-								"pop".getBytes()),
+								"pop".getBytes(StringUtils.UTF8_CHAR_SET)),
 						"pop")));
 
 	}
@@ -120,11 +121,11 @@ public class JsonDefinitionColumnVisibilityManagementTest
 	@Test
 	public void testGEORegexDefault() {
 		assertTrue(Arrays.equals(
-				"S".getBytes(),
+				"S".getBytes(StringUtils.UTF8_CHAR_SET),
 				simpleGEOHandler.getVisibility(
 						newFeature,
 						new ByteArrayId(
-								"geometry".getBytes()),
+								"geometry".getBytes(StringUtils.UTF8_CHAR_SET)),
 						"geometry")));
 
 	}
@@ -135,11 +136,11 @@ public class JsonDefinitionColumnVisibilityManagementTest
 				"vis",
 				"{\"pid\":\"TS\", \".*\":\"U\"}");
 		assertTrue(Arrays.equals(
-				"U".getBytes(),
+				"U".getBytes(StringUtils.UTF8_CHAR_SET),
 				simplePOPHandler.getVisibility(
 						newFeature,
 						new ByteArrayId(
-								"pop".getBytes()),
+								"pop".getBytes(StringUtils.UTF8_CHAR_SET)),
 						"pop")));
 
 	}

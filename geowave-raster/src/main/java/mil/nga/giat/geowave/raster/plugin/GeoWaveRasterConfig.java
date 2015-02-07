@@ -201,7 +201,7 @@ public class GeoWaveRasterConfig
 			return null;
 		}
 
-		return new Integer(
+		return Integer.valueOf(
 				n.getTextContent());
 	}
 

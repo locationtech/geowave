@@ -445,7 +445,7 @@ public class TieredSFCIndexStrategy implements
 		final Builder<Integer, Byte> bimapBuilder = ImmutableBiMap.builder();
 		for (int i = 0; i < mappingSize; i++) {
 			bimapBuilder.put(
-					new Byte(
+					Byte.valueOf(
 							buf.get()).intValue(),
 					buf.get());
 		}

@@ -3,6 +3,7 @@ package mil.nga.giat.geowave.accumulo.util;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.NoSuchElementException;
 
 import mil.nga.giat.geowave.accumulo.AccumuloRowId;
 import mil.nga.giat.geowave.accumulo.mapreduce.input.GeoWaveInputKey;
@@ -104,7 +105,7 @@ public class InputFormatIteratorWrapper<T> implements
 	}
 
 	@Override
-	public Entry<GeoWaveInputKey, T> next() {
+	public Entry<GeoWaveInputKey, T> next() throws NoSuchElementException{
 		final Entry<GeoWaveInputKey, T> previousNext = nextValue;
 		nextValue = null;
 		return previousNext;

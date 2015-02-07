@@ -541,8 +541,7 @@ public class AbstractDataAdapterTest
 						testIndexModel));
 
 		Assert.assertEquals(
-				new String(
-						"EncodeDecode_test"),
+				"EncodeDecode_test",
 				beforeValue,
 				afterValue);
 	}

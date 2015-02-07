@@ -16,6 +16,7 @@ import mil.nga.giat.geowave.accumulo.Writer;
 import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.index.ByteArrayRange;
 import mil.nga.giat.geowave.index.NumericIndexStrategy;
+import mil.nga.giat.geowave.index.StringUtils;
 import mil.nga.giat.geowave.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.store.IngestEntryInfo;
 import mil.nga.giat.geowave.store.IngestEntryInfo.FieldInfo;
@@ -440,7 +441,7 @@ public class AccumuloUtils
 						new Text(
 								rowId.getBytes()),
 						new Value(
-								"".getBytes()));
+								"".getBytes(StringUtils.UTF8_CHAR_SET)));
 
 				mutations.add(mutation);
 			}
@@ -665,8 +666,8 @@ public class AccumuloUtils
 				visibility);
 	}
 
-	private static final byte[] BEG_AND_BYTE = "&".getBytes();
-	private static final byte[] END_AND_BYTE = ")".getBytes();
+	private static final byte[] BEG_AND_BYTE = "&".getBytes(StringUtils.UTF8_CHAR_SET);
+	private static final byte[] END_AND_BYTE = ")".getBytes(StringUtils.UTF8_CHAR_SET);
 
 	private static byte[] merge(
 			final byte vis1[],

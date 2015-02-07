@@ -7,10 +7,12 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import mil.nga.giat.geowave.accumulo.util.AccumuloUtils;
 import mil.nga.giat.geowave.accumulo.util.TransformerWriter;
 import mil.nga.giat.geowave.accumulo.util.VisibilityTransformer;
 import mil.nga.giat.geowave.index.ByteArrayId;
 
+import mil.nga.giat.geowave.index.StringUtils;
 import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.apache.accumulo.core.client.Connector;
@@ -61,7 +63,7 @@ public class TransformWriterTest
 			String value ) {
 		Mutation m = new Mutation(
 				new Text(
-						id.getBytes()));
+						id.getBytes(StringUtils.UTF8_CHAR_SET)));
 		m.put(
 				new Text(
 						cf),
@@ -70,7 +72,7 @@ public class TransformWriterTest
 				new ColumnVisibility(
 						vis),
 				new Value(
-						value.getBytes()));
+						value.getBytes(StringUtils.UTF8_CHAR_SET)));
 		writer.write(m);
 	}
 
@@ -100,7 +102,7 @@ public class TransformWriterTest
 					entry.getKey().getRow().getBytes());
 			result.put(
 					rowID,
-					new Integer(
+					Integer.valueOf(
 							1 + (result.containsKey(rowID) ? result.get(
 									rowID).intValue() : 0)));
 		}
@@ -163,10 +165,10 @@ public class TransformWriterTest
 		check(
 				scanner.iterator(),
 				new Expect(
-						"1234".getBytes(),
+						"1234".getBytes(StringUtils.UTF8_CHAR_SET),
 						2),
 				new Expect(
-						"1235".getBytes(),
+						"1235".getBytes(StringUtils.UTF8_CHAR_SET),
 						2));
 		scanner.close();
 
@@ -177,10 +179,10 @@ public class TransformWriterTest
 		check(
 				scanner.iterator(),
 				new Expect(
-						"1234".getBytes(),
+						"1234".getBytes(StringUtils.UTF8_CHAR_SET),
 						0),
 				new Expect(
-						"1235".getBytes(),
+						"1235".getBytes(StringUtils.UTF8_CHAR_SET),
 						0));
 		scanner.close();
 

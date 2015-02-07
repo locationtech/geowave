@@ -56,7 +56,7 @@ import com.vividsolutions.jts.geom.GeometryFactory;
 public class ExtractGeometryFilterVisitor extends
 		NullFilterVisitor
 {
-	static public NullFilterVisitor GEOMETRY_VISITOR = new ExtractGeometryFilterVisitor(
+	public static final NullFilterVisitor GEOMETRY_VISITOR = new ExtractGeometryFilterVisitor(
 			GeoWaveGTDataStore.DEFAULT_CRS);
 
 	private static Logger LOGGER = Logger.getLogger(ExtractGeometryFilterVisitor.class);

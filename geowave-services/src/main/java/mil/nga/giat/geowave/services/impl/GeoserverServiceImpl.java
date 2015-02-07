@@ -643,6 +643,7 @@ public class GeoserverServiceImpl implements
 					"layer");
 
 			final Map<String, List<String>> namespaceLayersMap = new HashMap<String, List<String>>();
+			final Pattern p = Pattern.compile("workspaces/(.*?)/datastores/(.*?)/");
 			for (int i = 0; i < layerArray.size(); i++) {
 				final String name = layerArray.getJSONObject(
 						i).getString(
@@ -655,7 +656,6 @@ public class GeoserverServiceImpl implements
 				String workspace = null;
 				String datastoreName = null;
 
-				final Pattern p = Pattern.compile("workspaces/(.*?)/datastores/(.*?)/");
 				final Matcher m = p.matcher(layer);
 
 				if (m.find()) {
@@ -717,17 +717,13 @@ public class GeoserverServiceImpl implements
 
 			// create the json object with layers sorted by namespace
 			final JSONArray layersArray = new JSONArray();
-			final Set<String> namespaces = namespaceLayersMap.keySet();
-			for (final String namespace : namespaces) {
+			for (final Map.Entry<String, List<String>> kvp : namespaceLayersMap.entrySet()) {
 				final JSONArray layers = new JSONArray();
 
-				for (int i = 0; i < namespaceLayersMap.get(
-						namespace).size(); i++) {
+				for (int i = 0; i < kvp.getValue().size(); i++) {
 					final JSONObject layerObj = new JSONObject();
 					layerObj.put(
-							"name",
-							namespaceLayersMap.get(
-									namespace).get(
+							"name", kvp.getValue().get(
 									i));
 					layers.add(layerObj);
 				}
@@ -735,7 +731,7 @@ public class GeoserverServiceImpl implements
 				final JSONObject layersObj = new JSONObject();
 				layersObj.put(
 						"namespace",
-						namespace);
+						kvp.getKey());
 				layersObj.put(
 						"layers",
 						layers);

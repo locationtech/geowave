@@ -109,7 +109,7 @@ public class TimeUtils
 					longVal);
 		}
 		else if (Long.class.isAssignableFrom(bindingClass)) {
-			return new Long(
+			return Long.valueOf(
 					longVal);
 		}
 		LOGGER.warn("Numeric value '" + longVal + "' of type '" + bindingClass + "' is not of expected temporal type");

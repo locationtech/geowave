@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import mil.nga.giat.geowave.accumulo.mapreduce.input.GeoWaveInputKey;
+import mil.nga.giat.geowave.index.StringUtils;
 import mil.nga.giat.geowave.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.store.index.Index;
 import mil.nga.giat.geowave.store.index.IndexType;
@@ -172,7 +173,7 @@ public class OutputWriterMapper extends
 				new Text(
 						pointId.toString()),
 				new Value(
-						coord.toString().getBytes()));
+						coord.toString().getBytes(StringUtils.UTF8_CHAR_SET)));
 
 		context.write(
 				outKey,

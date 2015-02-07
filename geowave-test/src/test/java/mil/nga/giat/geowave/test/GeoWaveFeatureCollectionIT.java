@@ -109,7 +109,7 @@ public class GeoWaveFeatureCollectionIT extends
 	}
 
 	@Test
-	public void FeatureCollectionDataAdapterTest()
+	public void featureCollectionDataAdapterTest()
 			throws AccumuloException,
 			AccumuloSecurityException,
 			IOException,
@@ -173,12 +173,14 @@ public class GeoWaveFeatureCollectionIT extends
 		log.info("                    Ingesting Feature Collection Data                       ");
 		log.info("****************************************************************************");
 
-		String msg = "*** Original Collection Sizes: [ ";
+		final StringBuilder sb = new StringBuilder();
+		sb.append("*** Original Collection Sizes: [ ");
 		for (final int numPts : pointsPerColl) {
-			msg += numPts + " ";
+			sb.append(numPts);
+			sb.append(" ");
 		}
-		msg += "]";
-		log.info(msg);
+		sb.append("]");
+		log.info(sb.toString());
 
 		final Map<Integer, Map<String, SimpleFeature>> ingestedFeatures = new HashMap<Integer, Map<String, SimpleFeature>>();
 

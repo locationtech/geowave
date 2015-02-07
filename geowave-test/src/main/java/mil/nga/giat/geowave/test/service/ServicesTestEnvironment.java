@@ -1,11 +1,9 @@
 package mil.nga.giat.geowave.test.service;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.concurrent.TimeUnit;
 
+import mil.nga.giat.geowave.index.StringUtils;
 import mil.nga.giat.geowave.test.mapreduce.MapReduceTestEnvironment;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -44,7 +42,7 @@ abstract public class ServicesTestEnvironment extends
 			final File configFile ) {
 		try {
 			final PrintWriter writer = new PrintWriter(
-					configFile);
+					configFile, StringUtils.UTF8_CHAR_SET.toString());
 			writer.println("zookeeper.url=" + zookeeper);
 			writer.println("zookeeper.instance=" + accumuloInstance);
 			writer.println("zookeeper.username=" + accumuloUser);
@@ -62,6 +60,9 @@ abstract public class ServicesTestEnvironment extends
 			LOGGER.error(
 					"Unable to find config file",
 					e);
+		}
+		catch (UnsupportedEncodingException e) {
+			LOGGER.error("Unable to write config file in UTF-8", e);
 		}
 	}
 

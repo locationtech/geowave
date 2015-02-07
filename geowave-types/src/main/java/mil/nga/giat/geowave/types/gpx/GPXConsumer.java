@@ -410,7 +410,7 @@ public class GPXConsumer implements
 			}
 			case "time": {
 				try {
-					element.timestamp = GpxUtils.TIME_FORMAT_SECONDS.parse(
+					element.timestamp = GpxUtils.parseDateSeconds(
 							getChildCharacters(
 									eventReader,
 									"time")).getTime();
@@ -418,7 +418,7 @@ public class GPXConsumer implements
 				}
 				catch (final Exception t) {
 					try {
-						element.timestamp = GpxUtils.TIME_FORMAT_MILLIS.parse(
+						element.timestamp = GpxUtils.parseDateMillis(
 								getChildCharacters(
 										eventReader,
 										"time")).getTime();

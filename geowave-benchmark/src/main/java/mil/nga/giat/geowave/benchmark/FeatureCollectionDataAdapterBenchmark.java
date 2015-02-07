@@ -375,12 +375,14 @@ public class FeatureCollectionDataAdapterBenchmark
 		log.info("                    Ingesting Feature Collection Data                       ");
 		log.info("****************************************************************************");
 
-		String msg = "*** Original Collection Sizes: [ ";
+		StringBuilder sb = new StringBuilder();
+		sb.append("*** Original Collection Sizes: [ ");
 		for (final int numPts : pointsPerColl) {
-			msg += numPts + " ";
+			sb.append(numPts);
+			sb.append(" ");
 		}
-		msg += "]";
-		log.info(msg);
+		sb.append("]");
+		log.info(sb.toString());
 
 		for (final int batchSize : pointsPerTile) {
 			log.info("*** Features per tilespace: " + batchSize);
