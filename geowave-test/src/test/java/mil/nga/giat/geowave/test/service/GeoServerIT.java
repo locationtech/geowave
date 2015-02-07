@@ -20,6 +20,9 @@ import javax.ws.rs.core.Response.Status;
 
 import mil.nga.giat.geowave.services.clients.GeoserverServiceClient;
 
+import org.apache.accumulo.core.client.AccumuloException;
+import org.apache.accumulo.core.client.AccumuloSecurityException;
+import org.apache.accumulo.core.client.TableNotFoundException;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
@@ -39,6 +42,7 @@ import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -69,7 +73,13 @@ public class GeoServerIT extends
 			throws ClientProtocolException,
 			IOException {
 		ServicesTestEnvironment.startServices();
-		accumuloOperations.deleteAll();
+		try {
+			accumuloOperations.deleteAll();
+		}
+		catch (TableNotFoundException | AccumuloSecurityException | AccumuloException ex) {
+			LOGGER.error("Unable to clear accumulo namespace", ex);
+			Assert.fail("Index not deleted successfully");
+		}
 		// setup the wfs-requests
 		geostuff_layer = MessageFormat.format(
 				IOUtils.toString(new FileInputStream(

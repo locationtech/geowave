@@ -11,7 +11,9 @@ import mil.nga.giat.geowave.types.gpx.GpxUtils;
 import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.apache.accumulo.core.client.Connector;
+import org.apache.accumulo.core.client.TableNotFoundException;
 import org.apache.hadoop.util.ToolRunner;
+import org.apache.log4j.Logger;
 import org.geotools.geometry.GeneralEnvelope;
 import org.junit.Assert;
 import org.junit.Test;
@@ -31,6 +33,7 @@ public class KDEMapReduceIT extends
 	private static final int MAX_TILE_SIZE_POWER_OF_2 = 5;
 	private static final int BASE_MIN_LEVEL = 14;
 	private static final int BASE_MAX_LEVEL = 16;
+	private static final Logger LOGGER = Logger.getLogger(KDEMapReduceIT.class);
 
 	private static int[] testCounts(
 			final String coverageNamePrefix,
@@ -101,7 +104,13 @@ public class KDEMapReduceIT extends
 	@Test
 	public void testKDEAndRasterResize()
 			throws Exception {
-		accumuloOperations.deleteAll();
+		try {
+			accumuloOperations.deleteAll();
+		}
+		catch (TableNotFoundException | AccumuloSecurityException | AccumuloException ex) {
+			LOGGER.error("Unable to clear accumulo namespace", ex);
+			Assert.fail("Index not deleted successfully");
+		}
 		testIngest(
 				IndexType.SPATIAL_VECTOR,
 				GENERAL_GPX_INPUT_GPX_DIR);

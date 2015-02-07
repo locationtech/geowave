@@ -13,8 +13,12 @@ import mil.nga.giat.geowave.types.gpx.GpxUtils;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
+import org.apache.accumulo.core.client.AccumuloException;
+import org.apache.accumulo.core.client.AccumuloSecurityException;
+import org.apache.accumulo.core.client.TableNotFoundException;
 import org.apache.commons.io.IOUtils;
 import org.geotools.feature.SchemaException;
+import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -85,7 +89,13 @@ public class GeoWaveServicesIT extends
 		assertTrue(success);
 		success = false;
 
-		accumuloOperations.deleteAll();
+		try {
+			accumuloOperations.deleteAll();
+		}
+		catch (TableNotFoundException | AccumuloSecurityException | AccumuloException ex) {
+			LOGGER.error("Unable to clear accumulo namespace", ex);
+			Assert.fail("Index not deleted successfully");
+		}
 
 		// ingest data using the local ingest service
 		LOGGER.info("Ingesting data using the hdfs ingest service.");

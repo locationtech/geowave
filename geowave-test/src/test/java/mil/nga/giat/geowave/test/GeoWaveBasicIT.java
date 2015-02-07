@@ -15,6 +15,9 @@ import mil.nga.giat.geowave.store.index.Index;
 import mil.nga.giat.geowave.store.index.IndexType;
 import mil.nga.giat.geowave.store.query.DistributableQuery;
 
+import org.apache.accumulo.core.client.AccumuloException;
+import org.apache.accumulo.core.client.AccumuloSecurityException;
+import org.apache.accumulo.core.client.TableNotFoundException;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.junit.Assert;
@@ -84,7 +87,13 @@ public class GeoWaveBasicIT extends
 		}
 		catch (final Exception e) {
 			e.printStackTrace();
-			accumuloOperations.deleteAll();
+			try {
+				accumuloOperations.deleteAll();
+			}
+			catch (TableNotFoundException | AccumuloSecurityException | AccumuloException ex) {
+				LOGGER.error("Unable to clear accumulo namespace", ex);
+			}
+
 			Assert.fail("Error occurred while testing a bounding box query of spatial index: '" + e.getLocalizedMessage() + "'");
 		}
 		try {
@@ -102,7 +111,12 @@ public class GeoWaveBasicIT extends
 		}
 		catch (final Exception e) {
 			e.printStackTrace();
-			accumuloOperations.deleteAll();
+			try {
+				accumuloOperations.deleteAll();
+			}
+			catch (TableNotFoundException | AccumuloSecurityException | AccumuloException ex) {
+				LOGGER.error("Unable to clear accumulo namespace", ex);
+			}
 			Assert.fail("Error occurred while testing a polygon query of spatial index: '" + e.getLocalizedMessage() + "'");
 		}
 
@@ -114,10 +128,20 @@ public class GeoWaveBasicIT extends
 		}
 		catch (final Exception e) {
 			e.printStackTrace();
-			accumuloOperations.deleteAll();
+			try {
+				accumuloOperations.deleteAll();
+			}
+			catch (TableNotFoundException | AccumuloSecurityException | AccumuloException ex) {
+				LOGGER.error("Unable to clear accumulo namespace", ex);
+			}
 			Assert.fail("Error occurred while testing deletion of an entry using spatial index: '" + e.getLocalizedMessage() + "'");
 		}
-		accumuloOperations.deleteAll();
+		try {
+			accumuloOperations.deleteAll();
+		}
+		catch (TableNotFoundException | AccumuloSecurityException | AccumuloException ex) {
+			LOGGER.error("Unable to clear accumulo namespace", ex);
+		}
 	}
 
 	@Test
@@ -143,7 +167,12 @@ public class GeoWaveBasicIT extends
 		}
 		catch (final Exception e) {
 			e.printStackTrace();
-			accumuloOperations.deleteAll();
+			try {
+				accumuloOperations.deleteAll();
+			}
+			catch (TableNotFoundException | AccumuloSecurityException | AccumuloException ex) {
+				LOGGER.error("Unable to clear accumulo namespace", ex);
+			}
 			Assert.fail("Error occurred while testing a bounding box and time range query of spatial temporal index: '" + e.getLocalizedMessage() + "'");
 		}
 		try {
@@ -159,7 +188,12 @@ public class GeoWaveBasicIT extends
 					"polygon constraint and time range");
 		}
 		catch (final Exception e) {
-			accumuloOperations.deleteAll();
+			try {
+				accumuloOperations.deleteAll();
+			}
+			catch (TableNotFoundException | AccumuloSecurityException | AccumuloException ex) {
+				LOGGER.error("Unable to clear accumulo namespace", ex);
+			}
 			Assert.fail("Error occurred while testing a polygon and time range query of spatial temporal index: '" + e.getLocalizedMessage() + "'");
 		}
 
@@ -171,10 +205,20 @@ public class GeoWaveBasicIT extends
 		}
 		catch (final Exception e) {
 			e.printStackTrace();
-			accumuloOperations.deleteAll();
+			try {
+				accumuloOperations.deleteAll();
+			}
+			catch (TableNotFoundException | AccumuloSecurityException | AccumuloException ex) {
+				LOGGER.error("Unable to clear accumulo namespace", ex);
+			}
 			Assert.fail("Error occurred while testing deletion of an entry using spatial temporal index: '" + e.getLocalizedMessage() + "'");
 		}
-		accumuloOperations.deleteAll();
+		try {
+			accumuloOperations.deleteAll();
+		}
+		catch (TableNotFoundException | AccumuloSecurityException | AccumuloException ex) {
+			LOGGER.error("Unable to clear accumulo namespace", ex);
+		}
 	}
 
 	private void testIngest(
@@ -242,12 +286,23 @@ public class GeoWaveBasicIT extends
 				totalResults++;
 			}
 			else {
-				accumuloOperations.deleteAll();
+				try {
+					accumuloOperations.deleteAll();
+				}
+				catch (TableNotFoundException | AccumuloSecurityException | AccumuloException ex) {
+					LOGGER.error("Unable to clear accumulo namespace", ex);
+				}
 				Assert.fail("Actual result '" + obj.toString() + "' is not of type Simple Feature.");
 			}
 		}
 		if (expectedResults.count != totalResults) {
-			accumuloOperations.deleteAll();
+			try {
+				accumuloOperations.deleteAll();
+			}
+			catch (TableNotFoundException | AccumuloSecurityException | AccumuloException ex) {
+				LOGGER.error("Unable to clear accumulo namespace", ex);
+				Assert.fail("Unable to clear accumulo namespace");
+			}
 		}
 		Assert.assertEquals(
 				expectedResults.count,
