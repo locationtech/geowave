@@ -246,14 +246,15 @@ public class AccumuloDataStore implements
 						adapterId);
 			}
 			if (writableAdapter instanceof AttachedIteratorDataAdapter) {
-				if (!DataAdapterAndIndexCache.getInstance(
+				final IteratorConfig[] config = ((AttachedIteratorDataAdapter) writableAdapter).getAttachedIteratorConfig(index);
+				if (config != null && !DataAdapterAndIndexCache.getInstance(
 						AttachedIteratorDataAdapter.ATTACHED_ITERATOR_CACHE_ID).add(
 						writableAdapter.getAdapterId(),
 						indexName)) {
 					accumuloOperations.attachIterators(
 							indexName,
 							accumuloOptions.isCreateTable(),
-							((AttachedIteratorDataAdapter) writableAdapter).getAttachedIteratorConfig(index));
+							config);
 				}
 			}
 			final IngestEntryInfo entryInfo = AccumuloUtils.write(
@@ -430,14 +431,15 @@ public class AccumuloDataStore implements
 						adapterId);
 			}
 			if (dataWriter instanceof AttachedIteratorDataAdapter) {
-				if (!DataAdapterAndIndexCache.getInstance(
+				final IteratorConfig[] config = ((AttachedIteratorDataAdapter) dataWriter).getAttachedIteratorConfig(index);
+				if (config != null && !DataAdapterAndIndexCache.getInstance(
 						AttachedIteratorDataAdapter.ATTACHED_ITERATOR_CACHE_ID).add(
 						dataWriter.getAdapterId(),
 						indexName)) {
 					accumuloOperations.attachIterators(
 							indexName,
 							accumuloOptions.isCreateTable(),
-							((AttachedIteratorDataAdapter) dataWriter).getAttachedIteratorConfig(index));
+							config);
 				}
 			}
 			final List<IngestCallback<T>> callbacks = new ArrayList<IngestCallback<T>>();

@@ -172,14 +172,15 @@ public class AccumuloIndexWriter implements
 
 		try {
 			if (writableAdapter instanceof AttachedIteratorDataAdapter) {
-				if (!DataAdapterAndIndexCache.getInstance(
+				final IteratorConfig[] config = ((AttachedIteratorDataAdapter) writableAdapter).getAttachedIteratorConfig(index);
+				if (config != null && !DataAdapterAndIndexCache.getInstance(
 						AttachedIteratorDataAdapter.ATTACHED_ITERATOR_CACHE_ID).add(
 						adapterIdObj,
 						indexName)) {
 					accumuloOperations.attachIterators(
 							indexName,
 							accumuloOptions.isCreateTable(),
-							((AttachedIteratorDataAdapter) writableAdapter).getAttachedIteratorConfig(index));
+							config);
 				}
 			}
 			if (accumuloOptions.isUseLocalityGroups() && !accumuloOperations.localityGroupExists(
@@ -292,14 +293,15 @@ public class AccumuloIndexWriter implements
 
 			final byte[] adapterId = writableAdapter.getAdapterId().getBytes();
 			if (writableAdapter instanceof AttachedIteratorDataAdapter) {
-				if (!DataAdapterAndIndexCache.getInstance(
+				final IteratorConfig[] config = ((AttachedIteratorDataAdapter) writableAdapter).getAttachedIteratorConfig(index);
+				if (config != null && !DataAdapterAndIndexCache.getInstance(
 						AttachedIteratorDataAdapter.ATTACHED_ITERATOR_CACHE_ID).add(
 						adapterIdObj,
 						indexName)) {
 					accumuloOperations.attachIterators(
 							indexName,
 							accumuloOptions.isCreateTable(),
-							((AttachedIteratorDataAdapter) writableAdapter).getAttachedIteratorConfig(index));
+							config);
 				}
 			}
 			if (accumuloOptions.isUseLocalityGroups() && !accumuloOperations.localityGroupExists(
