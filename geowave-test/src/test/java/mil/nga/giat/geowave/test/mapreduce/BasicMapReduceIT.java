@@ -301,7 +301,7 @@ public class BasicMapReduceIT extends
 			job.setSpeculativeExecution(false);
 
 			GeoWaveInputFormat.setAccumuloOperationsInfo(
-					job,
+					job.getConfiguration(),
 					zookeeper,
 					instance,
 					user,

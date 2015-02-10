@@ -5,7 +5,6 @@ import java.net.URI;
 
 import mil.nga.giat.geowave.accumulo.mapreduce.input.GeoWaveInputKey;
 import mil.nga.giat.geowave.store.adapter.AdapterStore;
-import mil.nga.giat.geowave.store.adapter.DataAdapter;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configuration.IntegerRanges;
@@ -29,7 +28,7 @@ import org.apache.hadoop.security.Credentials;
  * This class wraps an existing map context that will write hadoop writable
  * objects as a map context that writes the native object for ease of
  * implementing mapreduce jobs.
- *
+ * 
  * @param <KEYIN>
  *            The map context's input type
  * @param <VALUEIN>
@@ -39,11 +38,19 @@ public class NativeMapContext<KEYIN, VALUEIN> implements
 		MapContext<KEYIN, VALUEIN, GeoWaveInputKey, Object>
 {
 	private final MapContext<KEYIN, VALUEIN, GeoWaveInputKey, ObjectWritable> context;
-	private final AdapterStore adapterStore;
+	private final HadoopAdapterStore adapterStore;
 
 	public NativeMapContext(
 			final MapContext<KEYIN, VALUEIN, GeoWaveInputKey, ObjectWritable> context,
 			final AdapterStore adapterStore ) {
+		this.context = context;
+		this.adapterStore = new HadoopAdapterStore(
+				adapterStore);
+	}
+
+	public NativeMapContext(
+			final MapContext<KEYIN, VALUEIN, GeoWaveInputKey, ObjectWritable> context,
+			final HadoopAdapterStore adapterStore ) {
 		this.context = context;
 		this.adapterStore = adapterStore;
 	}
@@ -147,15 +154,11 @@ public class NativeMapContext<KEYIN, VALUEIN> implements
 			final Object value )
 			throws IOException,
 			InterruptedException {
-		if (adapterStore != null) {
-			final DataAdapter<?> adapter = adapterStore.getAdapter(key.getAdapterId());
-			if ((adapter != null) && (adapter instanceof HadoopDataAdapter)) {
-				context.write(
-						key,
-						new ObjectWritable(
-								((HadoopDataAdapter) adapter).toWritable(value)));
-			}
-		}
+		context.write(
+				key,
+				adapterStore.toWritable(
+						key.getAdapterId(),
+						value));
 	}
 
 	@Override

@@ -24,9 +24,9 @@ public abstract class GeoWaveJobRunner extends
 		Configured implements
 		Tool
 {
-	
+
 	protected static final Logger LOGGER = Logger.getLogger(GeoWaveJobRunner.class);
-	
+
 	protected String user;
 	protected String password;
 	protected String instance;
@@ -44,9 +44,10 @@ public abstract class GeoWaveJobRunner extends
 	@SuppressWarnings("deprecation")
 	public int runJob()
 			throws Exception {
-		final Configuration conf = super.getConf();
 		final Job job = new Job(
-				conf);
+				super.getConf());
+		// must use the assembled job configuration
+		final Configuration conf = job.getConfiguration();
 
 		GeoWaveInputFormat.setAccumuloOperationsInfo(
 				job,
@@ -55,7 +56,7 @@ public abstract class GeoWaveJobRunner extends
 				user,
 				password,
 				namespace);
-		
+
 		GeoWaveOutputFormat.setAccumuloOperationsInfo(
 				job,
 				zookeeper,
@@ -65,40 +66,38 @@ public abstract class GeoWaveJobRunner extends
 				namespace);
 
 		job.setJarByClass(this.getClass());
-		
+
 		configure(job);
 
 		if ((adapters != null) && (adapters.size() > 0)) {
 			for (final DataAdapter<?> adapter : adapters) {
 				GeoWaveInputFormat.addDataAdapter(
-						job,
+						conf,
 						adapter);
 			}
 		}
 		if ((indices != null) && (indices.size() > 0)) {
 			for (final Index index : indices) {
 				GeoWaveInputFormat.addIndex(
-						job,
+						conf,
 						index);
 			}
 		}
 		if (query != null) {
 			GeoWaveInputFormat.setQuery(
-					job,
+					conf,
 					query);
 		}
 		if (minInputSplits != null) {
 			GeoWaveInputFormat.setMinimumSplitCount(
-					job,
+					conf,
 					minInputSplits);
 		}
 		if (maxInputSplits != null) {
 			GeoWaveInputFormat.setMaximumSplitCount(
-					job,
+					conf,
 					maxInputSplits);
 		}
-
-		
 
 		final boolean jobSuccess = job.waitForCompletion(true);
 
@@ -106,7 +105,8 @@ public abstract class GeoWaveJobRunner extends
 	}
 
 	protected abstract void configure(
-			Job job ) throws Exception ;
+			Job job )
+			throws Exception;
 
 	public void setMaxInputSplits(
 			final int maxInputSplits ) {

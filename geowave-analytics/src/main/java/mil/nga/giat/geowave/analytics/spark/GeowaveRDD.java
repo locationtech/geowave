@@ -1,96 +1,54 @@
-package mil.nga.giat.geowave.analytics.clustering.runners;
+package mil.nga.giat.geowave.analytics.spark;
 
+import java.io.Serializable;
 import java.util.Set;
 import java.util.UUID;
 
 import mil.nga.giat.geowave.accumulo.mapreduce.GeoWaveConfiguratorBase;
-import mil.nga.giat.geowave.accumulo.mapreduce.dedupe.GeoWaveDedupeJobRunner;
-import mil.nga.giat.geowave.accumulo.mapreduce.output.GeoWaveOutputFormat;
+import mil.nga.giat.geowave.accumulo.mapreduce.input.GeoWaveInputFormat;
+import mil.nga.giat.geowave.accumulo.mapreduce.input.GeoWaveInputKey;
 import mil.nga.giat.geowave.analytics.clustering.ClusteringUtils;
 import mil.nga.giat.geowave.analytics.clustering.mapreduce.SimpleFeatureOutputReducer;
 import mil.nga.giat.geowave.analytics.extract.DimensionExtractor;
 import mil.nga.giat.geowave.analytics.extract.SimpleFeatureGeometryExtractor;
 import mil.nga.giat.geowave.analytics.parameters.ExtractParameters;
 import mil.nga.giat.geowave.analytics.parameters.GlobalParameters;
+import mil.nga.giat.geowave.analytics.parameters.GlobalParameters.Global;
 import mil.nga.giat.geowave.analytics.parameters.MapReduceParameters;
 import mil.nga.giat.geowave.analytics.tools.AnalyticFeature;
 import mil.nga.giat.geowave.analytics.tools.IndependentJobRunner;
 import mil.nga.giat.geowave.analytics.tools.PropertyManagement;
-import mil.nga.giat.geowave.analytics.tools.mapreduce.MapReduceJobController;
+import mil.nga.giat.geowave.analytics.tools.kryo.FeatureSerializer;
+import mil.nga.giat.geowave.analytics.tools.mapreduce.HadoopOptions;
 import mil.nga.giat.geowave.analytics.tools.mapreduce.MapReduceJobRunner;
 import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.index.StringUtils;
 import mil.nga.giat.geowave.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.store.index.Index;
-import mil.nga.giat.geowave.store.query.DistributableQuery;
 import mil.nga.giat.geowave.vector.adapter.FeatureDataAdapter;
 
 import org.apache.commons.cli.Option;
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.mapreduce.Job;
-import org.apache.hadoop.mapreduce.Reducer;
-import org.apache.hadoop.util.ToolRunner;
+import org.apache.hadoop.io.Writable;
+import org.apache.log4j.Logger;
+import org.apache.spark.SparkConf;
+import org.apache.spark.api.java.JavaPairRDD;
+import org.apache.spark.api.java.JavaSparkContext;
+import org.apache.spark.api.java.function.PairFunction;
+import org.apache.spark.serializer.KryoRegistrator;
+import org.geotools.feature.simple.SimpleFeatureImpl;
 
-/**
- * 
- * Run a map reduce job to extract a population of data from GeoWave (Accumulo),
- * remove duplicates, and output a SimpleFeature with the ID and the extracted
- * geometry from each of the GeoWave data item.
- * 
- */
-public class GeoWaveAnalyticExtractJobRunner extends
-		GeoWaveDedupeJobRunner implements
+import scala.Tuple2;
+
+import com.esotericsoftware.kryo.Kryo;
+
+public class GeowaveRDD implements
 		MapReduceJobRunner,
-		IndependentJobRunner
+		IndependentJobRunner,
+		Serializable
 {
-	private String outputBaseDir = "/tmp";
-	private int reducerCount = 1;
-	private String outputDataTypeId;
 
-	public GeoWaveAnalyticExtractJobRunner() {}
-
-	public String getOutputDataTypeId() {
-		return outputDataTypeId;
-	}
-
-	@Override
-	protected int getNumReduceTasks() {
-		return reducerCount;
-	}
-
-	@Override
-	protected String getHdfsOutputBase() {
-		return outputBaseDir;
-	}
-
-	@Override
-	protected void configure(
-			final Job job )
-			throws Exception {
-
-		super.configure(job);
-		@SuppressWarnings("rawtypes")
-		final Class<? extends DimensionExtractor> dimensionExtractorClass = job.getConfiguration().getClass(
-				GeoWaveConfiguratorBase.enumToConfKey(
-						SimpleFeatureOutputReducer.class,
-						ExtractParameters.Extract.DIMENSION_EXTRACT_CLASS),
-				SimpleFeatureGeometryExtractor.class,
-				DimensionExtractor.class);
-
-		GeoWaveOutputFormat.addDataAdapter(
-				job.getConfiguration(),
-				createAdapter(
-						job.getConfiguration().get(
-								GeoWaveConfiguratorBase.enumToConfKey(
-										SimpleFeatureOutputReducer.class,
-										ExtractParameters.Extract.OUTPUT_DATA_TYPE_ID)),
-						dimensionExtractorClass));
-
-		job.setJobName("GeoWave Extract (" + namespace + ")");
-		job.setReduceSpeculativeExecution(false);
-
-	}
+	protected static final Logger LOGGER = Logger.getLogger(GeowaveRDD.class);
 
 	private FeatureDataAdapter createAdapter(
 			final String outputDataTypeID,
@@ -103,47 +61,18 @@ public class GeoWaveAnalyticExtractJobRunner extends
 				4326);
 	}
 
-	public static Path getHdfsOutputPath(
-			final PropertyManagement runTimeProperties ) {
-		return new Path(
-				runTimeProperties.getProperty(
-						MapReduceParameters.MRConfig.HDFS_BASE_DIR,
-						"/tmp") + "/" + runTimeProperties.getProperty(
-						GlobalParameters.Global.ACCUMULO_NAMESPACE,
-						"x") + "_dedupe");
-	}
-
-	@Override
-	public Path getHdfsOutputPath() {
-		return new Path(
-				getHdfsOutputBase() + "/" + namespace + "_dedupe");
-	}
-
-	@Override
-	@SuppressWarnings("rawtypes")
-	protected Class<? extends Reducer> getReducer() {
-		return SimpleFeatureOutputReducer.class;
-	}
-
 	@Override
 	public int run(
-			final Configuration config,
-			final PropertyManagement runTimeProperties )
+			Configuration config,
+			PropertyManagement runTimeProperties )
 			throws Exception {
-
-		outputBaseDir = runTimeProperties.getProperty(
+		final String outputBaseDir = runTimeProperties.getProperty(
 				MapReduceParameters.MRConfig.HDFS_BASE_DIR,
 				"/tmp");
 
 		LOGGER.info("Output base directory " + outputBaseDir);
 
-		reducerCount = Math.max(
-				1,
-				runTimeProperties.getPropertyAsInt(
-						ExtractParameters.Extract.REDUCER_COUNT,
-						reducerCount));
-
-		outputDataTypeId = runTimeProperties.getProperty(
+		final String outputDataTypeId = runTimeProperties.getProperty(
 				ExtractParameters.Extract.OUTPUT_DATA_TYPE_ID,
 				"centroid");
 
@@ -169,19 +98,36 @@ public class GeoWaveAnalyticExtractJobRunner extends
 						GlobalParameters.Global.BATCH_ID,
 						UUID.randomUUID().toString()));
 
-		DistributableQuery myQuery = query;
-		if (myQuery == null) {
-			myQuery = runTimeProperties.getPropertyAsQuery(ExtractParameters.Extract.QUERY);
-		}
-		setQuery(myQuery);
-		setMinInputSplits(runTimeProperties.getPropertyAsInt(
-				ExtractParameters.Extract.MIN_INPUT_SPLIT,
-				1));
-		setMaxInputSplits(runTimeProperties.getPropertyAsInt(
-				ExtractParameters.Extract.MAX_INPUT_SPLIT,
-				10000));
-		setOutputBaseDir(outputBaseDir);
-		setConf(config);
+		// DistributableQuery myQuery =
+		// runTimeProperties.getPropertyAsQuery(ExtractParameters.Extract.QUERY);
+
+		// GeoWaveInputFormat.setQuery(
+		// jobConf,
+		// myQuery);
+		GeoWaveInputFormat.setAccumuloOperationsInfo(
+				config,
+				runTimeProperties.getProperty(Global.ZOOKEEKER),
+				runTimeProperties.getProperty(Global.ACCUMULO_INSTANCE),
+				runTimeProperties.getProperty(Global.ACCUMULO_USER),
+				runTimeProperties.getProperty(Global.ACCUMULO_PASSWORD),
+				runTimeProperties.getProperty(Global.ACCUMULO_NAMESPACE));
+
+		assert (config.get(
+				GeoWaveConfiguratorBase.enumToConfKey(
+						GeoWaveInputFormat.class,
+						GeoWaveConfiguratorBase.AccumuloOperationsConfig.ZOOKEEPER_URL),
+				"").length() > 0);
+
+		GeoWaveInputFormat.setMinimumSplitCount(
+				config,
+				runTimeProperties.getPropertyAsInt(
+						ExtractParameters.Extract.MIN_INPUT_SPLIT,
+						1));
+		GeoWaveInputFormat.setMaximumSplitCount(
+				config,
+				runTimeProperties.getPropertyAsInt(
+						ExtractParameters.Extract.MAX_INPUT_SPLIT,
+						10000));
 
 		config.setClass(
 				GeoWaveConfiguratorBase.enumToConfKey(
@@ -217,7 +163,9 @@ public class GeoWaveAnalyticExtractJobRunner extends
 			for (@SuppressWarnings("rawtypes")
 			final DataAdapter adapter : adapters) {
 				if (byteId.equals(adapter.getAdapterId())) {
-					addDataAdapter(adapter);
+					GeoWaveInputFormat.addDataAdapter(
+							config,
+							adapter);
 				}
 			}
 		}
@@ -227,20 +175,73 @@ public class GeoWaveAnalyticExtractJobRunner extends
 					StringUtils.stringToBinary(indexId));
 			for (final Index index : indices) {
 				if (byteId.equals(index.getId())) {
-					addIndex(index);
+					GeoWaveInputFormat.addIndex(
+							config,
+							index);
 				}
 			}
 		}
 
-		return ToolRunner.run(
+		doit(config);
+		return 0;
+	}
+
+	public static class MyRegistrator implements
+			KryoRegistrator
+	{
+		public void registerClasses(
+				Kryo kryo ) {
+			kryo.register(
+					SimpleFeatureImpl.class,
+					new FeatureSerializer());
+		}
+	}
+
+	public void doit(
+			Configuration config ) {
+		GeoWaveInputFormat.setIsOutputWritable(config, true);
+		
+		final SparkConf conf = new SparkConf().setAppName(
+				"Simple Application").setMaster(
+				"local");
+/*		conf.set(
+				"spark.serializer",
+				"org.apache.spark.serializer.KryoSerializer");
+		conf.set(
+				"spark.kryo.registrator",
+				MyRegistrator.class.getName());
+	*/
+		final JavaSparkContext sc = new JavaSparkContext(
+				conf);
+
+		JavaPairRDD<GeoWaveInputKey, Writable> geoData = sc.newAPIHadoopRDD(
 				config,
-				this,
-				runTimeProperties.toGeoWaveRunnerArguments());
+				GeoWaveInputFormat.class,
+				GeoWaveInputKey.class,
+				Writable.class);
+
+		long j = geoData.mapToPair(
+				new PairFunction<Tuple2<GeoWaveInputKey, Writable>, byte[], Writable>() {
+					@SuppressWarnings({
+						"rawtypes",
+						"unchecked"
+					})
+					@Override
+					public Tuple2<byte[], Writable> call(
+							Tuple2<GeoWaveInputKey, Writable> arg0 )
+							throws Exception {
+						return new Tuple2(
+								arg0._1.getAdapterId().getBytes(),
+								arg0._2);
+					}
+				}).groupByKey().count();
+		System.out.println(j);
+		sc.close();
 	}
 
 	@Override
 	public void fillOptions(
-			final Set<Option> options ) {
+			Set<Option> options ) {
 		ExtractParameters.fillOptions(
 				options,
 				new ExtractParameters.Extract[] {
@@ -263,7 +264,7 @@ public class GeoWaveAnalyticExtractJobRunner extends
 					GlobalParameters.Global.ACCUMULO_NAMESPACE,
 					GlobalParameters.Global.BATCH_ID
 				});
-		
+
 		MapReduceParameters.fillOptions(options);
 
 	}
@@ -273,13 +274,9 @@ public class GeoWaveAnalyticExtractJobRunner extends
 			final PropertyManagement runTimeProperties )
 			throws Exception {
 		return this.run(
-				MapReduceJobController.getConfiguration(runTimeProperties),
+				new HadoopOptions(
+						runTimeProperties).getConfiguration(),
 				runTimeProperties);
-	}
-
-	private void setOutputBaseDir(
-			final String outputBaseDir ) {
-		this.outputBaseDir = outputBaseDir;
 	}
 
 }

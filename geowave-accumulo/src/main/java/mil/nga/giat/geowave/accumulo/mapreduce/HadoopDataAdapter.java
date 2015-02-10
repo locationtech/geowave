@@ -19,9 +19,5 @@ import org.apache.hadoop.io.Writable;
 public interface HadoopDataAdapter<T, W extends Writable> extends
 		DataAdapter<T>
 {
-	public W toWritable(
-			T entry );
-
-	public T fromWritable(
-			W writable );
+	public HadoopWritableSerializer<T,W> createWritableSerializer();
 }

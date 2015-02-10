@@ -36,6 +36,19 @@ public class GridCoverageWritable implements
 		this.maxY = maxY;
 	}
 
+	public void set(
+			final DataBuffer dataBuffer,
+			final double minX,
+			final double maxX,
+			final double minY,
+			final double maxY ) {
+		this.dataBuffer = dataBuffer;
+		this.minX = minX;
+		this.maxX = maxX;
+		this.minY = minY;
+		this.maxY = maxY;
+	}
+
 	public DataBuffer getDataBuffer() {
 		return dataBuffer;
 	}

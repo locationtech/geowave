@@ -96,26 +96,6 @@ public class UpdateCentroidCostJobRunner extends
 		job.setOutputValueClass(SimpleFeature.class);
 		job.setNumReduceTasks(reducerCount);
 
-		GeoWaveConfiguratorBase.setZookeeperUrl(
-				UpdateCentroidCostMapReduce.class,
-				job,
-				zookeeper);
-		GeoWaveConfiguratorBase.setInstanceName(
-				UpdateCentroidCostMapReduce.class,
-				job,
-				instance);
-		GeoWaveConfiguratorBase.setUserName(
-				UpdateCentroidCostMapReduce.class,
-				job,
-				user);
-		GeoWaveConfiguratorBase.setPassword(
-				UpdateCentroidCostMapReduce.class,
-				job,
-				password);
-		GeoWaveConfiguratorBase.setTableNamespace(
-				UpdateCentroidCostMapReduce.class,
-				job,
-				namespace);
 		FileInputFormat.setInputPaths(
 				job,
 				inputHDFSPath);

@@ -73,27 +73,6 @@ public class KMeansJobRunner extends
 		FileInputFormat.setInputPaths(
 				job,
 				inputHDFSPath);
-
-		GeoWaveConfiguratorBase.setZookeeperUrl(
-				KMeansMapReduce.class,
-				job,
-				zookeeper);
-		GeoWaveConfiguratorBase.setInstanceName(
-				KMeansMapReduce.class,
-				job,
-				instance);
-		GeoWaveConfiguratorBase.setUserName(
-				KMeansMapReduce.class,
-				job,
-				user);
-		GeoWaveConfiguratorBase.setPassword(
-				KMeansMapReduce.class,
-				job,
-				password);
-		GeoWaveConfiguratorBase.setTableNamespace(
-				KMeansMapReduce.class,
-				job,
-				namespace);
 	}
 
 	@Override

@@ -23,7 +23,7 @@ public abstract class GeoWaveWritableOutputReducer<KEYIN, VALUEIN> extends
 		Reducer<KEYIN, VALUEIN, GeoWaveInputKey, ObjectWritable>
 {
 	protected static final Logger LOGGER = Logger.getLogger(GeoWaveWritableOutputReducer.class);
-	protected AdapterStore adapterStore;
+	protected HadoopAdapterStore adapterStore;
 
 	@Override
 	protected void reduce(
@@ -65,9 +65,9 @@ public abstract class GeoWaveWritableOutputReducer<KEYIN, VALUEIN> extends
 			throws IOException,
 			InterruptedException {
 		try {
-			adapterStore = new JobContextAdapterStore(
+			adapterStore = new HadoopAdapterStore(new JobContextAdapterStore(
 					context,
-					GeoWaveInputFormat.getAccumuloOperations(context));
+					GeoWaveInputFormat.getAccumuloOperations(context)));
 		}
 		catch (AccumuloException | AccumuloSecurityException e) {
 			LOGGER.warn(

@@ -39,6 +39,7 @@ import javax.media.jai.remote.SerializerFactory;
 import mil.nga.giat.geowave.accumulo.AttachedIteratorDataAdapter;
 import mil.nga.giat.geowave.accumulo.IteratorConfig;
 import mil.nga.giat.geowave.accumulo.mapreduce.HadoopDataAdapter;
+import mil.nga.giat.geowave.accumulo.mapreduce.HadoopWritableSerializer;
 import mil.nga.giat.geowave.accumulo.util.IteratorWrapper;
 import mil.nga.giat.geowave.accumulo.util.IteratorWrapper.Converter;
 import mil.nga.giat.geowave.index.ByteArrayId;
@@ -792,7 +793,7 @@ public class RasterDataAdapter implements
 	/**
 	 * This method is responsible for creating a coverage from the supplied
 	 * {@link RenderedImage}.
-	 *
+	 * 
 	 * @param image
 	 * @return
 	 * @throws IOException
@@ -1626,44 +1627,50 @@ public class RasterDataAdapter implements
 	}
 
 	@Override
-	public GridCoverageWritable toWritable(
-			final GridCoverage entry ) {
-		final Envelope env = entry.getEnvelope();
+	public HadoopWritableSerializer<GridCoverage, GridCoverageWritable> createWritableSerializer() {
+		return new HadoopWritableSerializer<GridCoverage, GridCoverageWritable>() {
 
-		final DataBuffer dataBuffer = entry.getRenderedImage().copyData(
-				new InternalWritableRaster(
-						sampleModel.createCompatibleSampleModel(
-								tileSize,
-								tileSize),
-						new Point())).getDataBuffer();
-		return new GridCoverageWritable(
-				dataBuffer,
-				env.getMinimum(0),
-				env.getMaximum(0),
-				env.getMinimum(1),
-				env.getMaximum(1));
-	}
+			@Override
+			public GridCoverageWritable toWritable(
+					final GridCoverage entry ) {
+				final Envelope env = entry.getEnvelope();
 
-	@Override
-	public GridCoverage fromWritable(
-			final GridCoverageWritable writable ) {
-		final ReferencedEnvelope mapExtent = new ReferencedEnvelope(
-				writable.getMinX(),
-				writable.getMaxX(),
-				writable.getMinY(),
-				writable.getMaxY(),
-				GeoWaveGTRasterFormat.DEFAULT_CRS);
-		try {
-			return prepareCoverage(
-					writable.getDataBuffer(),
-					mapExtent);
-		}
-		catch (final IOException e) {
-			LOGGER.error(
-					"Unable to read raster data",
-					e);
-		}
-		return null;
+				final DataBuffer dataBuffer = entry.getRenderedImage().copyData(
+						new InternalWritableRaster(
+								sampleModel.createCompatibleSampleModel(
+										tileSize,
+										tileSize),
+								new Point())).getDataBuffer();
+				return new GridCoverageWritable(
+						dataBuffer,
+						env.getMinimum(0),
+						env.getMaximum(0),
+						env.getMinimum(1),
+						env.getMaximum(1));
+			}
+
+			@Override
+			public GridCoverage fromWritable(
+					final GridCoverageWritable writable ) {
+				final ReferencedEnvelope mapExtent = new ReferencedEnvelope(
+						writable.getMinX(),
+						writable.getMaxX(),
+						writable.getMinY(),
+						writable.getMaxY(),
+						GeoWaveGTRasterFormat.DEFAULT_CRS);
+				try {
+					return prepareCoverage(
+							writable.getDataBuffer(),
+							mapExtent);
+				}
+				catch (final IOException e) {
+					LOGGER.error(
+							"Unable to read raster data",
+							e);
+				}
+				return null;
+			}
+		};
 	}
 
 }

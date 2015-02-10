@@ -17,7 +17,6 @@ import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.apache.accumulo.core.client.mapreduce.InputFormatBase;
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.JobContext;
 import org.apache.log4j.Logger;
 
@@ -37,7 +36,7 @@ public class GeoWaveConfiguratorBase
 	 * Configuration keys for AccumuloOperations configuration.
 	 * 
 	 */
-	protected static enum AccumuloOperationsConfig {
+	public static enum AccumuloOperationsConfig {
 		ZOOKEEPER_URL,
 		INSTANCE_NAME,
 		USER_NAME,
@@ -51,7 +50,7 @@ public class GeoWaveConfiguratorBase
 	protected static enum GeneralConfig {
 		CREATE_ADAPTERS,
 		CREATE_INDEX,
-		CREATE_TABLES
+		CREATE_TABLES,
 	}
 
 	/**
@@ -131,10 +130,10 @@ public class GeoWaveConfiguratorBase
 
 	public static void setZookeeperUrl(
 			final Class<?> implementingClass,
-			final Job job,
+			final Configuration config,
 			final String zookeeperUrl ) {
 		if (zookeeperUrl != null) {
-			job.getConfiguration().set(
+			config.set(
 					enumToConfKey(
 							implementingClass,
 							AccumuloOperationsConfig.ZOOKEEPER_URL),
@@ -181,10 +180,10 @@ public class GeoWaveConfiguratorBase
 
 	public static void setInstanceName(
 			final Class<?> implementingClass,
-			final Job job,
+			final Configuration config,
 			final String instanceName ) {
 		if (instanceName != null) {
-			job.getConfiguration().set(
+			config.set(
 					enumToConfKey(
 							implementingClass,
 							AccumuloOperationsConfig.INSTANCE_NAME),
@@ -203,10 +202,10 @@ public class GeoWaveConfiguratorBase
 
 	public static void setUserName(
 			final Class<?> implementingClass,
-			final Job job,
+			final Configuration config,
 			final String userName ) {
 		if (userName != null) {
-			job.getConfiguration().set(
+			config.set(
 					enumToConfKey(
 							implementingClass,
 							AccumuloOperationsConfig.USER_NAME),
@@ -225,10 +224,10 @@ public class GeoWaveConfiguratorBase
 
 	public static void setPassword(
 			final Class<?> implementingClass,
-			final Job job,
+			final Configuration config,
 			final String password ) {
 		if (password != null) {
-			job.getConfiguration().set(
+			config.set(
 					enumToConfKey(
 							implementingClass,
 							AccumuloOperationsConfig.PASSWORD),
@@ -246,10 +245,10 @@ public class GeoWaveConfiguratorBase
 
 	public static void setTableNamespace(
 			final Class<?> implementingClass,
-			final Job job,
+			final Configuration config,
 			final String tableNamespace ) {
 		if (tableNamespace != null) {
-			job.getConfiguration().set(
+			config.set(
 					enumToConfKey(
 							implementingClass,
 							AccumuloOperationsConfig.TABLE_NAMESPACE),
@@ -267,10 +266,10 @@ public class GeoWaveConfiguratorBase
 
 	public static void addIndex(
 			final Class<?> implementingClass,
-			final Job job,
+			final Configuration config,
 			final Index index ) {
 		if (index != null) {
-			job.getConfiguration().set(
+			config.set(
 					enumToConfKey(
 							implementingClass,
 							GeoWaveMetaStore.INDEX,
@@ -378,9 +377,9 @@ public class GeoWaveConfiguratorBase
 
 	public static void setCreateAdapters(
 			final Class<?> implementingClass,
-			final Job job,
+			final Configuration config,
 			final boolean enableFeature ) {
-		job.getConfiguration().setBoolean(
+		config.setBoolean(
 				enumToConfKey(
 						implementingClass,
 						GeneralConfig.CREATE_ADAPTERS),

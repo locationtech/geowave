@@ -42,10 +42,10 @@ public class ClusteringUtilsTest
 		final SpatialQuery query = new SpatialQuery(
 				ClusteringUtils.generateWorldPolygon());
 		GeoWaveInputFormat.setQuery(
-				job,
+				job.getConfiguration(),
 				query);
 		GeoWaveInputFormat.addIndex(
-				job,
+				job.getConfiguration(),
 				IndexType.SPATIAL_VECTOR.createDefaultIndex());
 		assertEquals(
 				"POLYGON ((-180 -90, -180 90, 180 90, 180 -90, -180 -90))",
@@ -54,7 +54,7 @@ public class ClusteringUtilsTest
 						GeoWaveInputFormat.class));
 		final GeometryFactory factory = new GeometryFactory();
 		GeoWaveInputFormat.setQuery(
-				job,
+				job.getConfiguration(),
 				new SpatialQuery(
 						factory.createPolygon(new Coordinate[] {
 							new Coordinate(

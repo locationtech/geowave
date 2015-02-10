@@ -131,7 +131,7 @@ public class KMeansDistortionJobRunner extends
 		// Required since the Mapper uses the input format parameters to lookup
 		// the adapter
 		GeoWaveInputFormat.setAccumuloOperationsInfo(
-				job,
+				job.getConfiguration(),
 				zookeeper,
 				instance,
 				user,
@@ -140,23 +140,23 @@ public class KMeansDistortionJobRunner extends
 
 		GeoWaveConfiguratorBase.setZookeeperUrl(
 				KMeansDistortionMapReduce.class,
-				job,
+				job.getConfiguration(),
 				zookeeper);
 		GeoWaveConfiguratorBase.setInstanceName(
 				KMeansDistortionMapReduce.class,
-				job,
+				job.getConfiguration(),
 				instance);
 		GeoWaveConfiguratorBase.setUserName(
 				KMeansDistortionMapReduce.class,
-				job,
+				job.getConfiguration(),
 				user);
 		GeoWaveConfiguratorBase.setPassword(
 				KMeansDistortionMapReduce.class,
-				job,
+				job.getConfiguration(),
 				password);
 		GeoWaveConfiguratorBase.setTableNamespace(
 				KMeansDistortionMapReduce.class,
-				job,
+				job.getConfiguration(),
 				namespace);
 
 		final AuthenticationToken authToken = new PasswordToken(

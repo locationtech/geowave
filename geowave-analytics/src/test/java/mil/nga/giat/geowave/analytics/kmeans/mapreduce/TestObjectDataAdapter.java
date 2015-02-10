@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import mil.nga.giat.geowave.accumulo.mapreduce.HadoopDataAdapter;
+import mil.nga.giat.geowave.accumulo.mapreduce.HadoopWritableSerializer;
 import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.store.adapter.AbstractDataAdapter;
 import mil.nga.giat.geowave.store.adapter.NativeFieldHandler;
@@ -197,17 +198,30 @@ public class TestObjectDataAdapter extends
 		};
 	}
 
-	@Override
-	public TestObjectWritable toWritable(
-			TestObject entry ) {
-		return new TestObjectWritable(
-				entry);
-	}
+
 
 	@Override
-	public TestObject fromWritable(
-			TestObjectWritable writable ) {
-		return writable.getObj();
+	public HadoopWritableSerializer<TestObject, TestObjectWritable> createWritableSerializer() {
+		return new TestObjectHadoopSerializer();
+	}
+	
+	private class TestObjectHadoopSerializer implements
+			HadoopWritableSerializer<TestObject, TestObjectWritable>
+	{
+
+		@Override
+		public TestObjectWritable toWritable(
+				TestObject entry ) {
+			return new TestObjectWritable(
+					entry);
+		}
+
+		@Override
+		public TestObject fromWritable(
+				TestObjectWritable writable ) {
+			return writable.getObj();
+		}
+
 	}
 
 }

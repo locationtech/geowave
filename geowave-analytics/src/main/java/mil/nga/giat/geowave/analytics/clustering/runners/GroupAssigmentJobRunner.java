@@ -105,7 +105,7 @@ public class GroupAssigmentJobRunner extends
 		// Required since the Mapper uses the input format parameters to lookup
 		// the adapter
 		GeoWaveInputFormat.setAccumuloOperationsInfo(
-				job,
+				job.getConfiguration(),
 				zookeeper,
 				instance,
 				user,

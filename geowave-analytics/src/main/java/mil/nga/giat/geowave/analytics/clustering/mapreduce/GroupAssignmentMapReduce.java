@@ -85,9 +85,13 @@ public class GroupAssignmentMapReduce
 							pairing.getCentroid().getID());
 					pairing.getPairedItem().setZoomLevel(
 							pairing.getCentroid().getZoomLevel()+1);
+					// just get the contents of the returned ObjectWritable to avoid
+					// having to assign outputValWritable rather than update its contents.
+					// the 'toWritabeValue' method is efficient, not creating an extra instance of
+					// ObjectWritable each time, so this is just a simple exchange of a reference
 					outputValWritable.set(toWritableValue(
 							key,
-							pairing.getPairedItem().getWrappedItem()));
+							pairing.getPairedItem().getWrappedItem()).get());
 					AtomicInteger ii = LogCounts.get(pairing.getCentroid().getID());
 					
 					if (ii == null) {

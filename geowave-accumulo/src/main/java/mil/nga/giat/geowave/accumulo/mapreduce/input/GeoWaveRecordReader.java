@@ -142,7 +142,7 @@ public class GeoWaveRecordReader<T> extends
 
 		try {
 			final AccumuloOperations operations = GeoWaveInputFormat.getAccumuloOperations(attempt);
-
+			final boolean isOutputWritable = GeoWaveInputFormat.isOutputWritable(attempt);
 			final JobContextAdapterStore adapterStore = GeoWaveInputFormat.getDataAdapterStore(
 					attempt,
 					operations);
@@ -171,6 +171,7 @@ public class GeoWaveRecordReader<T> extends
 									i,
 									r,
 									queryFilters,
+									isOutputWritable,
 									additionalAuthorizations).query(
 									operations,
 									adapterStore,
