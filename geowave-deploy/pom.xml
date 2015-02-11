@@ -483,10 +483,10 @@
 								</goals>
 								<configuration>
 									<inputHeaders>
-										<path>${pdal.directory}/io/geowave</path>
+										<path>${pdal.directory}/plugins/geowave/io</path>
 									</inputHeaders>
 									<inputSources>
-										<path>${pdal.directory}/io/geowave</path>
+										<path>${pdal.directory}/plugins/geowave/io</path>
 									</inputSources>
 									<outputHeaders>${project.build.directory}/dependency/jace/include</outputHeaders>
 									<outputSources>${project.build.directory}/dependency/jace/source</outputSources>
