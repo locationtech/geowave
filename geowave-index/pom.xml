@@ -20,5 +20,10 @@
 			<version>4.4</version>
 			<scope>test</scope>
 		</dependency>
+        <dependency>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>annotations</artifactId>
+            <version>${findbugs.version}</version>
+        </dependency>
 	</dependencies>
 </project>

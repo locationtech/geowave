@@ -76,7 +76,7 @@ public class WFSBoundedSpatialQueryTest
 		SimpleFeature newFeature = writer.next();
 		newFeature.setAttribute(
 				"pop",
-				new Long(
+				Long.valueOf(
 						100));
 		newFeature.setAttribute(
 				"pid",
@@ -94,7 +94,7 @@ public class WFSBoundedSpatialQueryTest
 		newFeature = writer.next();
 		newFeature.setAttribute(
 				"pop",
-				new Long(
+				Long.valueOf(
 						100));
 		newFeature.setAttribute(
 				"pid",
@@ -112,7 +112,7 @@ public class WFSBoundedSpatialQueryTest
 		newFeature = writer.next();
 		newFeature.setAttribute(
 				"pop",
-				new Long(
+				Long.valueOf(
 						100));
 		newFeature.setAttribute(
 				"pid",

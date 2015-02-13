@@ -7,6 +7,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.TimeZone;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import mil.nga.giat.geowave.index.StringUtils;
 import mil.nga.giat.geowave.index.sfc.data.NumericData;
 import mil.nga.giat.geowave.index.sfc.data.NumericRange;
@@ -130,6 +131,7 @@ public class TemporalBinningStrategy implements
 
 	}
 
+	@SuppressFBWarnings(value="SF_SWITCH_FALLTHROUGH", justification="Fallthrough intentional for time parsing" )
 	protected void setToEpoch(
 			final Calendar value ) {
 		// reset appropriate values to 0 based on the unit
@@ -191,6 +193,7 @@ public class TemporalBinningStrategy implements
 		}
 	}
 
+	@SuppressFBWarnings(value="SF_SWITCH_FALLTHROUGH", justification="Fallthrough intentional for time parsing" )
 	private Calendar getStartEpoch(
 			final byte[] binId ) {
 		final String str = StringUtils.stringFromBinary(binId);

@@ -47,9 +47,8 @@ abstract public class AbstractLocalIngestWithMapper<T> extends
 			final File input,
 			final ByteArrayId primaryIndexId,
 			final String globalVisibility ) {
-		try {
-			final InputStream inputStream = new FileInputStream(
-					input);
+		try (final InputStream inputStream = new FileInputStream(
+					input)){
 			return toGeoWaveDataInternal(
 					inputStream,
 					primaryIndexId,

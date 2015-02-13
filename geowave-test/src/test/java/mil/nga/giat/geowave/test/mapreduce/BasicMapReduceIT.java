@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import mil.nga.giat.geowave.accumulo.AccumuloDataStore;
 import mil.nga.giat.geowave.accumulo.mapreduce.GeoWaveConfiguratorBase;
 import mil.nga.giat.geowave.accumulo.mapreduce.GeoWaveWritableInputMapper;
@@ -228,6 +229,7 @@ public class BasicMapReduceIT extends
 				null);
 	}
 
+	@SuppressFBWarnings(value="DM_GC", justification = "Memory usage kept low for travis-ci")
 	private void runTestJob(
 			final ExpectedResults expectedResults,
 			final DistributableQuery query,
@@ -252,7 +254,7 @@ public class BasicMapReduceIT extends
 			}
 		}
 		final Configuration conf = getConfiguration();
-		MapReduceTestEnvironment.FilterConfiguration(conf);
+		MapReduceTestEnvironment.filterConfiguration(conf);
 		final int res = ToolRunner.run(
 				conf,
 				jobRunner,
@@ -294,7 +296,7 @@ public class BasicMapReduceIT extends
 			// filtered results which should match the expected results
 			// resources
 			final Configuration conf = super.getConf();
-			MapReduceTestEnvironment.FilterConfiguration(conf);
+			MapReduceTestEnvironment.filterConfiguration(conf);
 			final ByteBuffer buf = ByteBuffer.allocate((8 * expectedResults.hashedCentroids.size()) + 4);
 			buf.putInt(expectedResults.hashedCentroids.size());
 			for (final Long hashedCentroid : expectedResults.hashedCentroids) {

@@ -778,15 +778,16 @@ public class FeatureCollectionDataAdapter extends
 		final List<DefaultFeatureCollection> featureCollections = new ArrayList<DefaultFeatureCollection>();
 
 		// create the feature collections and return
-		final Set<ByteArrayId> keys = indexedFeaturesMap.keySet();
-		for (final ByteArrayId key : keys) {
+		//final Set<ByteArrayId> keys = indexedFeaturesMap.keySet();
+	//	for (final ByteArrayId key : keys) {
+		for (final Map.Entry<ByteArrayId, ArrayList<SimpleFeatureWrapper>> kvp : indexedFeaturesMap.entrySet()){
 
-			final ArrayList<SimpleFeatureWrapper> wrappedFeatures = indexedFeaturesMap.get(key);
+			final ArrayList<SimpleFeatureWrapper> wrappedFeatures = kvp.getValue();
 
 			if (wrappedFeatures != null) {
 				final DefaultFeatureCollection collection = new FitToIndexDefaultFeatureCollection(
 						new DefaultFeatureCollection(),
-						key);
+						kvp.getKey());
 
 				for (final SimpleFeatureWrapper wrappedFeature : wrappedFeatures) {
 					collection.add(wrappedFeature.getSimpleFeature());

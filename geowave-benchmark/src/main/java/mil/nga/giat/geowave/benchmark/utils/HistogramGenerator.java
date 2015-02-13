@@ -1,9 +1,6 @@
 package mil.nga.giat.geowave.benchmark.utils;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -164,18 +161,18 @@ public class HistogramGenerator
 
 			numColls++;
 			numFeatures += coll.size();
-			featsPerTile.add(new Double(
-					coll.size()));
+			featsPerTile.add(Double.valueOf(
+							coll.size()));
 		}
 		itr.close();
 
 		System.out.println("Features: " + numFeatures);
-		for (final Integer tier : featsPerTier.keySet()) {
-			System.out.println("  Features (Tier " + tier + "): " + featsPerTier.get(tier));
+		for (final Map.Entry<Integer, Integer> kvp : featsPerTier.entrySet()) {
+			System.out.println("  Features (Tier " + kvp.getKey() + "): " + kvp.getValue());
 		}
 		System.out.println("Collections: " + numColls);
-		for (final Integer tier : collsPerTier.keySet()) {
-			System.out.println("  Collections (Tier " + tier + "): " + collsPerTier.get(tier));
+		for (final Map.Entry<Integer, Integer> kvp : collsPerTier.entrySet()) {
+			System.out.println("  Collections (Tier " + kvp.getKey() + "): " + kvp.getValue());
 		}
 		System.out.println("Features per Tile (MEAN): " + new Mean().evaluate(Doubles.toArray(featsPerTile)));
 		System.out.println("Features per Tile (STD): " + new StandardDeviation().evaluate(Doubles.toArray(featsPerTile)));
@@ -270,26 +267,26 @@ public class HistogramGenerator
 				accumuloOperations.getConnector());
 
 		System.out.println("Features: " + numFeatures);
-		for (final Integer tier : featsPerTier_full.keySet()) {
-			System.out.println("  Features (Tier " + tier + "): " + featsPerTier_full.get(tier));
+		for (final Map.Entry<Integer, Integer> kvp : featsPerTier.entrySet()) {
+			System.out.println("  Features (Tier " + kvp.getKey() + "): " + kvp.getValue());
 		}
 		System.out.println("Collections: " + numColls);
-		for (final Integer tier : collsPerTier_full.keySet()) {
-			System.out.println("  Collections (Tier " + tier + "): " + collsPerTier_full.get(tier));
+		for (final Map.Entry<Integer, Integer> kvp : collsPerTier_full.entrySet()) {
+			System.out.println("  Collections (Tier " + kvp.getKey() + "): " + kvp.getValue());
 		}
 		System.out.println("Features per Tile (MEAN): " + new Mean().evaluate(Doubles.toArray(featsPerTile_full)));
 		System.out.println("Features per Tile (STD): " + new StandardDeviation().evaluate(Doubles.toArray(featsPerTile_full)));
 
 		// write the histograms
 		PrintWriter writer = new PrintWriter(
-				"hist_" + queryNum + "_" + tileSize);
+				"hist_" + queryNum + "_" + tileSize, StringUtils.UTF8_CHAR_SET.toString());
 		for (final int v : hist) {
 			writer.println(v);
 		}
 		writer.close();
 
 		writer = new PrintWriter(
-				"hist_full_" + queryNum + "_" + tileSize);
+				"hist_full_" + queryNum + "_" + tileSize, StringUtils.UTF8_CHAR_SET.toString());
 		for (final int v : hist_full) {
 			writer.println(v);
 		}
@@ -408,12 +405,12 @@ public class HistogramGenerator
 		itr10.close();
 
 		System.out.println("Features: " + numFeatures);
-		for (final Integer tier : featsPerTier10.keySet()) {
-			System.out.println("  Features (Tier " + tier + "): " + featsPerTier10.get(tier));
+		for (final Map.Entry<Integer, Integer> kvp : featsPerTier10.entrySet()) {
+			System.out.println("  Features (Tier " + kvp.getKey() + "): " + kvp.getValue());
 		}
 		System.out.println("Collections: " + numColls);
-		for (final Integer tier : collsPerTier10.keySet()) {
-			System.out.println("  Collections (Tier " + tier + "): " + collsPerTier10.get(tier));
+		for (final Map.Entry<Integer, Integer> kvp : collsPerTier10.entrySet()) {
+			System.out.println("  Collections (Tier " + kvp.getKey() + "): " + kvp.getValue());
 		}
 		System.out.println("Features per Tile (MEAN): " + new Mean().evaluate(Doubles.toArray(featsPerTile10)));
 		System.out.println("Features per Tile (STD): " + new StandardDeviation().evaluate(Doubles.toArray(featsPerTile10)));
@@ -508,12 +505,12 @@ public class HistogramGenerator
 				accumuloOperations.getConnector());
 
 		System.out.println("Features: " + numFeatures);
-		for (final Integer tier : featsPerTier10_full.keySet()) {
-			System.out.println("  Features (Tier " + tier + "): " + featsPerTier10_full.get(tier));
+		for (final Map.Entry<Integer, Integer> kvp : featsPerTier10_full.entrySet()) {
+			System.out.println("  Features (Tier " + kvp.getKey() + "): " + kvp.getValue());
 		}
 		System.out.println("Collections: " + numColls);
-		for (final Integer tier : collsPerTier10_full.keySet()) {
-			System.out.println("  Collections (Tier " + tier + "): " + collsPerTier10_full.get(tier));
+		for (final Map.Entry<Integer, Integer> kvp : collsPerTier10_full.entrySet()) {
+			System.out.println("  Collections (Tier " + kvp.getKey() + "): " + kvp.getValue());
 		}
 		System.out.println("Features per Tile (MEAN): " + new Mean().evaluate(Doubles.toArray(featsPerTile10_full)));
 		System.out.println("Features per Tile (STD): " + new StandardDeviation().evaluate(Doubles.toArray(featsPerTile10_full)));
@@ -603,12 +600,12 @@ public class HistogramGenerator
 		itr11.close();
 
 		System.out.println("Features: " + numFeatures);
-		for (final Integer tier : featsPerTier11.keySet()) {
-			System.out.println("  Features (Tier " + tier + "): " + featsPerTier11.get(tier));
+		for (final Map.Entry<Integer, Integer> kvp : featsPerTier11.entrySet()) {
+			System.out.println("  Features (Tier " + kvp.getKey() + "): " + kvp.getValue());
 		}
 		System.out.println("Collections: " + numColls);
-		for (final Integer tier : collsPerTier11.keySet()) {
-			System.out.println("  Collections (Tier " + tier + "): " + collsPerTier11.get(tier));
+		for (final Map.Entry<Integer, Integer> kvp : collsPerTier11.entrySet()) {
+			System.out.println("  Collections (Tier " + kvp.getKey() + "): " + kvp.getValue());
 		}
 		System.out.println("Features per Tile (MEAN): " + new Mean().evaluate(Doubles.toArray(featsPerTile11)));
 		System.out.println("Features per Tile (STD): " + new StandardDeviation().evaluate(Doubles.toArray(featsPerTile11)));
@@ -703,12 +700,12 @@ public class HistogramGenerator
 				accumuloOperations.getConnector());
 
 		System.out.println("Features: " + numFeatures);
-		for (final Integer tier : featsPerTier11_full.keySet()) {
-			System.out.println("  Features (Tier " + tier + "): " + featsPerTier11_full.get(tier));
+		for (final Map.Entry<Integer, Integer> kvp : featsPerTier11_full.entrySet()) {
+			System.out.println("  Features (Tier " + kvp.getKey() + "): " + kvp.getValue());
 		}
 		System.out.println("Collections: " + numColls);
-		for (final Integer tier : collsPerTier11_full.keySet()) {
-			System.out.println("  Collections (Tier " + tier + "): " + collsPerTier11_full.get(tier));
+		for (final Map.Entry<Integer, Integer> kvp : collsPerTier11_full.entrySet()) {
+			System.out.println("  Collections (Tier " + kvp.getKey() + "): " + kvp.getValue());
 		}
 		System.out.println("Features per Tile (MEAN): " + new Mean().evaluate(Doubles.toArray(featsPerTile11_full)));
 		System.out.println("Features per Tile (STD): " + new StandardDeviation().evaluate(Doubles.toArray(featsPerTile11_full)));
@@ -787,8 +784,7 @@ public class HistogramGenerator
 		};
 
 		final BufferedReader br = new BufferedReader(
-				new FileReader(
-						"large-queries.txt"));
+				new InputStreamReader(new FileInputStream("large-queries.txt"), StringUtils.UTF8_CHAR_SET));
 
 		int queryNum = 0;
 

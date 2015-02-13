@@ -93,7 +93,9 @@ abstract public class GeoWaveTestEnvironment
 
 						// TEMP_DIR = Files.createTempDir();
 						if (!TEMP_DIR.exists()) {
-							TEMP_DIR.mkdirs();
+							if (!TEMP_DIR.mkdirs()){
+								throw new IOException("Could not create temporary directory");
+							}
 						}
 						TEMP_DIR.deleteOnExit();
 						final MiniAccumuloConfig config = new MiniAccumuloConfig(
@@ -320,7 +322,7 @@ abstract public class GeoWaveTestEnvironment
 				}
 			}
 			finally {
-				featureIterator.close();
+				IOUtils.closeQuietly(featureIterator);
 				dataStore.dispose();
 			}
 		}
@@ -430,7 +432,9 @@ abstract public class GeoWaveTestEnvironment
 			File of = new File(
 					outputFolder);
 			if (!of.exists()) {
-				of.mkdirs();
+				if (!of.mkdirs()){
+					throw new IOException("Could not create temporary directory: " + of.toString());
+				}
 			}
 			else {
 				FileUtil.fullyDelete(of);
@@ -443,6 +447,10 @@ abstract public class GeoWaveTestEnvironment
 			LOGGER.warn(
 					"Unable to extract test data",
 					e);
+			Assert.fail("Unable to extract test data: '" + e.getLocalizedMessage() + "'");
+		}
+		catch (IOException e) {
+			LOGGER.warn("Unable to create temporary directory: " + outputFolder, e);
 			Assert.fail("Unable to extract test data: '" + e.getLocalizedMessage() + "'");
 		}
 	}

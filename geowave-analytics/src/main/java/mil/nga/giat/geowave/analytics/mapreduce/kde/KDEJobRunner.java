@@ -277,7 +277,7 @@ public class KDEJobRunner extends
 					"Entries per level.level" + l,
 					job1.getCounters().getGroup(
 							"Entries per level").findCounter(
-							"level " + new Long(
+							"level " + Long.valueOf(
 									l)).getValue());
 		}
 	}

@@ -1,5 +1,6 @@
 package mil.nga.giat.geowave.accumulo.util;
 
+import mil.nga.giat.geowave.index.StringUtils;
 import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.Value;
 import org.apache.commons.lang3.tuple.Pair;
@@ -36,7 +37,7 @@ public class VisibilityTransformer implements
 		byte[] cf = originalKey.getColumnFamilyData().toArray();
 		byte[] cq = originalKey.getColumnQualifierData().toArray();
 		long timestamp = originalKey.getTimestamp();
-		byte[] cv = newVisibility.getBytes();
+		byte[] cv = newVisibility.getBytes(StringUtils.UTF8_CHAR_SET);
 		Key newKey = new Key(
 				row,
 				0,

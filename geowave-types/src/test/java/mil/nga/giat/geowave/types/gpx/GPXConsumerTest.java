@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Set;
 
 import mil.nga.giat.geowave.index.ByteArrayId;
+import mil.nga.giat.geowave.index.StringUtils;
 import mil.nga.giat.geowave.ingest.GeoWaveData;
 import mil.nga.giat.geowave.types.HelperClass;
 import mil.nga.giat.geowave.types.ValidateObject;
@@ -175,7 +176,7 @@ public class GPXConsumerTest
 		GPXConsumer consumer = new GPXConsumer(
 				is,
 				new ByteArrayId(
-						"123".getBytes()),
+						"123".getBytes(StringUtils.UTF8_CHAR_SET)),
 				"123",
 				new HashMap<String, Map<String, String>>(),
 				true,
@@ -225,12 +226,12 @@ public class GPXConsumerTest
 	static {
 		fileCount.put(
 				"000991807.gpx",
-				new Long(
+				Long.valueOf(
 						40));
 		/** tests duplicate waypoint **/
 		fileCount.put(
 				"mystic_basin_trail.gpx",
-				new Long(
+				Long.valueOf(
 						24));
 	}
 
@@ -250,7 +251,7 @@ public class GPXConsumerTest
 				GPXConsumer consumer = new GPXConsumer(
 						is,
 						new ByteArrayId(
-								"123".getBytes()),
+								"123".getBytes(StringUtils.UTF8_CHAR_SET)),
 						"",
 						new HashMap<String, Map<String, String>>(),
 						false,

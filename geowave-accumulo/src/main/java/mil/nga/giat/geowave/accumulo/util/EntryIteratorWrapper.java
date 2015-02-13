@@ -2,6 +2,7 @@ package mil.nga.giat.geowave.accumulo.util;
 
 import java.util.Iterator;
 import java.util.Map.Entry;
+import java.util.NoSuchElementException;
 
 import mil.nga.giat.geowave.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.store.filter.QueryFilter;
@@ -74,7 +75,7 @@ public class EntryIteratorWrapper<T> implements
 	}
 
 	@Override
-	public T next() {
+	public T next() throws NoSuchElementException{
 		final T previousNext = nextValue;
 		nextValue = null;
 		return previousNext;

@@ -206,7 +206,6 @@ public class FeatureCollectionRedistributor
 							"Process interrupted while awaiting executor termination.",
 							e);
 				}
-
 				itr.close();
 
 				LOGGER.info("***     Colls. Processed: " + listSum(totalNumCollsProcessed));
@@ -437,7 +436,7 @@ public class FeatureCollectionRedistributor
 									null);
 						}
 						if (!result) {
-							LOGGER.error("After " + attempts + " attempts, Index Id: [" + rowId.getInsertionId().toString() + "] was NOT deleted successfully!");
+							LOGGER.error("After " + attempts + " attempts, Index Id: [" + Arrays.toString(rowId.getInsertionId()) + "] was NOT deleted successfully!");
 						}
 						else {
 							LOGGER.info("The row was deleted successfully!");

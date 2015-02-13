@@ -44,6 +44,7 @@
 		<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
 		<test.args>-Xms256m -Xmx1024m -XX:MaxPermSize=256m</test.args>
 		<formatter.location>${project.basedir}/../tools/eclipse/eclipse-formatter.xml</formatter.location>
+        <findbugs.version>3.0.0</findbugs.version>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -194,8 +195,14 @@
 				<version>${avro.version}</version>
 				<classifier>hadoop2</classifier>
 			</dependency>
-		</dependencies>
-	</dependencyManagement>
+            <dependency>
+                <groupId>com.google.code.findbugs</groupId>
+                <artifactId>annotations</artifactId>
+                <version>${findbugs.version}</version>
+                <scope>compile</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 	<build>
 		<pluginManagement>
 			<plugins>
@@ -229,7 +236,12 @@
 						</lifecycleMappingMetadata>
 					</configuration>
 				</plugin>
-			</plugins>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>findbugs-maven-plugin</artifactId>
+                    <version>${findbugs.version}</version>
+                </plugin>
+ 			</plugins>
 		</pluginManagement>
 		<plugins>
 			<plugin>
@@ -382,6 +394,25 @@
 					<configFile>${formatter.location}</configFile>
 				</configuration>
 			</plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>findbugs-maven-plugin</artifactId>
+                <version>${findbugs.version}</version>
+                <configuration>
+                    <failOnError>false</failOnError>
+                    <threshold>Medium</threshold>
+                    <effort>Max</effort>
+                    <xmlOutput>true</xmlOutput>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
 		</plugins>
 	</build>
 	<modules>
@@ -400,7 +431,6 @@
 		<module>geowave-benchmark</module>
 		<module>geowave-test</module>
 	</modules>
-
 	<repositories>
 		<repository>
 			<snapshots>
@@ -442,6 +472,23 @@
 			<layout>default</layout>
 		</repository>
 	</repositories>
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>findbugs-maven-plugin</artifactId>
+                <version>${findbugs.version}</version>
+                <configuration>
+                    <findbugsXmlOutput>true</findbugsXmlOutput>
+                    <xmlOutput>true</xmlOutput>
+                    <effort>Max</effort>
+                    <threshold>Low</threshold>
+                    <failOnError>false</failOnError>
+                    <xmlOutputDirectory>${project.basedir}/target/site</xmlOutputDirectory>
+                </configuration>
+            </plugin>
+        </plugins>
+    </reporting>
 	<profiles>
 		<profile>
 			<id>accumulo-container</id>

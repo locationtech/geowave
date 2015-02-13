@@ -9,6 +9,7 @@ import java.util.Map.Entry;
 import java.util.UUID;
 
 import mil.nga.giat.geowave.accumulo.mapreduce.input.GeoWaveInputFormat;
+import mil.nga.giat.geowave.index.StringUtils;
 import mil.nga.giat.geowave.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.store.index.Index;
 import mil.nga.giat.geowave.store.index.IndexType;
@@ -131,7 +132,7 @@ public class JumpDriver
 			final Integer iteration )
 			throws Exception {
 		final AuthenticationToken authToken = new PasswordToken(
-				password.getBytes());
+				password.getBytes(StringUtils.UTF8_CHAR_SET));
 
 		// create a map/reduce job to do the calculations
 		final Job job = new Job(
@@ -251,7 +252,7 @@ public class JumpDriver
 			final String outputRowId )
 			throws Exception {
 		final AuthenticationToken authToken = new PasswordToken(
-				password.getBytes());
+				password.getBytes(StringUtils.UTF8_CHAR_SET));
 
 		// create a map/reduce job to do the calculations
 		final Job job = new Job(

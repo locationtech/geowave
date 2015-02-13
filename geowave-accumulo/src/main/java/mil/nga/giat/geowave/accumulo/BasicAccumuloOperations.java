@@ -559,7 +559,7 @@ public class BasicAccumuloOperations implements
 		final List<byte[]> newSet = new ArrayList<byte[]>();
 		for (final String auth : authorizations) {
 			if (!auths.contains(auth)) {
-				newSet.add(auth.getBytes());
+				newSet.add(auth.getBytes(StringUtils.UTF8_CHAR_SET));
 			}
 		}
 		if (newSet.size() > 0) {

@@ -17,6 +17,7 @@ abstract public class SimpleAbstractMergeStrategy<T extends Persistable> impleme
 	protected SimpleAbstractMergeStrategy() {
 		super();
 	}
+	private static final long serialVersionUID = 8937483748317L;
 
 	@Override
 	public void merge(
@@ -92,6 +93,12 @@ abstract public class SimpleAbstractMergeStrategy<T extends Persistable> impleme
 		if (obj == null) return false;
 		if (getClass() != obj.getClass()) return false;
 		return true;
+	}
+
+	@Override
+	public int hashCode() {
+		return (int)serialVersionUID;
+		//this looks correct based on behaviour of equals?!? should return the same hash code for all instances
 	}
 	
 	@Override

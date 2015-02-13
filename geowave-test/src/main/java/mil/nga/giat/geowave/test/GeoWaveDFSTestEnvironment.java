@@ -15,12 +15,12 @@ public class GeoWaveDFSTestEnvironment extends
 {
 	protected static final String HDFS_BASE = new File(
 			"./target/hdfs_temp/").getAbsoluteFile().toString();
-	protected static Configuration CONF = getConfiguration();
+	protected static final Configuration CONF = getConfiguration();
 	protected static MiniDFSCluster HDFS_CLUSTER = null;
 	protected static String NAME_NODE = null;
 
 	@BeforeClass
-	public static void SetupDFS()
+	public static void setupDFS()
 			throws IOException {
 		FileUtil.fullyDelete(new File(
 				HDFS_BASE));
@@ -34,7 +34,7 @@ public class GeoWaveDFSTestEnvironment extends
 	}
 
 	@AfterClass
-	public static void ShutdownDFS() {
+	public static void shutdownDFS() {
 		HDFS_CLUSTER.shutdown();
 	}
 

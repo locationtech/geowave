@@ -92,7 +92,7 @@ public class ArrayField<T extends CommonIndexValue> implements
 		if ((min == null) || (max == null)) {
 			return null;
 		}
-		if (min == max) {
+		if (min.equals(max)) {
 			return new NumericValue(
 					min);
 		}

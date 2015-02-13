@@ -77,7 +77,7 @@ public class FitToIndexDefaultFeatureCollection extends
 
 	public boolean containsAll(
 			Collection<?> collection ) {
-		return collection.containsAll(collection);
+		return this.collection.containsAll(collection);
 	}
 
 	public SimpleFeatureIterator features() {
@@ -144,12 +144,12 @@ public class FitToIndexDefaultFeatureCollection extends
 
 	public boolean removeAll(
 			Collection<?> collection ) {
-		return collection.removeAll(collection);
+		return this.collection.removeAll(collection);
 	}
 
 	public boolean retainAll(
 			Collection<?> collection ) {
-		return collection.retainAll(collection);
+		return this.collection.retainAll(collection);
 	}
 
 	public int size() {

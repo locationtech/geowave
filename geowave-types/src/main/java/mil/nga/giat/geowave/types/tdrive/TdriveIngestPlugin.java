@@ -1,10 +1,6 @@
 package mil.nga.giat.geowave.types.tdrive;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -132,13 +128,15 @@ public class TdriveIngestPlugin implements
 	@Override
 	public TdrivePoint[] toHdfsObjects(
 			final File input ) {
-		FileReader fr = null;
+		BufferedReader fr = null;
 		BufferedReader br = null;
 		long pointInstance = 0l;
 		final List<TdrivePoint> pts = new ArrayList<TdrivePoint>();
 		try {
-			fr = new FileReader(
-					input);
+			fr = new BufferedReader(
+					new InputStreamReader(
+							new FileInputStream(input),
+							StringUtils.UTF8_CHAR_SET));
 			br = new BufferedReader(
 					fr);
 			String line;
@@ -149,7 +147,7 @@ public class TdriveIngestPlugin implements
 					final TdrivePoint td = new TdrivePoint();
 					td.setTaxiid(Integer.parseInt(vals[0]));
 					try {
-						td.setTimestamp(TdriveUtils.TIME_FORMAT_SECONDS.parse(
+						td.setTimestamp(TdriveUtils.parseDate(
 								vals[1]).getTime());
 					}
 					catch (final ParseException e) {

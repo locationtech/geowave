@@ -102,24 +102,26 @@ public class ElementsToArrayIterator extends
 
 				dataIds.add(dataId);
 
-				final Set<Key> keys = entries.keySet();
+				//final Set<Key> keys = entries.keySet();
 
-				for (final Key key : keys) {
+				//for (final Key key : keys) {
+				for (final Map.Entry<Key, Value> kvp : entries.entrySet()){
+
 
 					if (firstKey == null) {
-						firstKey = key;
+						firstKey = kvp.getKey();
 					}
 
 					// if it's a common index field, we don't want to add the
 					// encoding to the value as that would cause issues within
 					// the QueryFilterIterator
 					final ByteArrayId fieldId = new ByteArrayId(
-							key.getColumnQualifierData().getBackingArray());
+							kvp.getKey().getColumnQualifierData().getBackingArray());
 					final boolean dropEncoding = (model.getReader(fieldId) == null);
 
 					// parse the field value and determine which encoding to use
 					byte[] value = entries.get(
-							key).get();
+							kvp.getKey()).get();
 					if (dropEncoding) {
 						final ByteBuffer buf = ByteBuffer.wrap(value);
 						final Byte encoding = buf.get();
@@ -210,10 +212,8 @@ public class ElementsToArrayIterator extends
 			final List<Value> values = new ArrayList<Value>();
 
 			// now reconstruct the field data arrays
-			final Set<ByteArrayId> fieldIds = fieldMap.keySet();
-			for (final ByteArrayId field : fieldIds) {
-
-				final Map<ByteArrayId, byte[]> fieldData = fieldMap.get(field);
+			for (final Map.Entry<ByteArrayId, Map<ByteArrayId, byte[]>> kvp : fieldMap.entrySet()) {
+				final Map<ByteArrayId, byte[]> fieldData = kvp.getValue();
 				final byte[][] fieldDataBytes = new byte[dataIds.size()][];
 
 				// construct the array of byte arrays
@@ -223,7 +223,7 @@ public class ElementsToArrayIterator extends
 
 				// use the writer to create a single byte array
 				byte[] valueBytes;
-				final byte encoding = encodingMap.get(field);
+				final byte encoding = encodingMap.get(kvp.getKey());
 				if (encoding == Encoding.FIXED_SIZE_ENCODING.getByteEncoding()) {
 					valueBytes = fixedSizeWriter.writeField(fieldDataBytes);
 				}
@@ -238,7 +238,7 @@ public class ElementsToArrayIterator extends
 				keys.add(replaceColumnQualifier(
 						rootKey,
 						new Text(
-								field.getBytes())));
+								kvp.getKey().getBytes())));
 
 				values.add(new Value(
 						valueBytes));
