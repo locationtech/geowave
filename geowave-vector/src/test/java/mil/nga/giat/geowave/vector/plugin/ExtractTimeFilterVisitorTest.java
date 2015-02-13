@@ -1,6 +1,7 @@
 package mil.nga.giat.geowave.vector.plugin;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -8,31 +9,31 @@ import java.text.ParseException;
 import java.util.Date;
 
 import mil.nga.giat.geowave.store.query.TemporalConstraints;
+import mil.nga.giat.geowave.store.query.TemporalConstraintsSet;
 import mil.nga.giat.geowave.store.query.TemporalRange;
 import mil.nga.giat.geowave.vector.utils.DateUtilities;
-import mil.nga.giat.geowave.vector.utils.TimeDescriptors;
 
 import org.geotools.data.Query;
-import org.geotools.feature.NameImpl;
-import org.geotools.feature.type.AttributeDescriptorImpl;
+import org.geotools.filter.FilterFactoryImpl;
 import org.geotools.filter.text.cql2.CQL;
 import org.geotools.filter.text.cql2.CQLException;
 import org.geotools.filter.text.ecql.ECQL;
-import org.geotools.gml3.v3_2.gco.GCOSchema;
+import org.junit.Before;
 import org.junit.Test;
 import org.opengis.filter.Filter;
+import org.opengis.filter.FilterFactory;
 
 public class ExtractTimeFilterVisitorTest
 {
-	private final TimeDescriptors TIMEDESCRIPTOR = new TimeDescriptors(
-			new AttributeDescriptorImpl(
-					GCOSchema.DATE_PROPERTYTYPE_TYPE,
-					new NameImpl(
-							"when"),
-					100,
-					485903457,
-					false,
-					new Date()));
+	final ExtractTimeFilterVisitor visitorWithDescriptor = new ExtractTimeFilterVisitor();
+	final ExtractTimeFilterVisitor visitorWithDescriptorForRange = new ExtractTimeFilterVisitor();
+
+	@Before
+	public void setup() {
+		visitorWithDescriptorForRange.addRangeVariables(
+				"start",
+				"end");
+	}
 
 	@Test
 	public void testAfter()
@@ -52,9 +53,6 @@ public class ExtractTimeFilterVisitorTest
 				time,
 				range.getStartRange().getStartTime());
 
-		final ExtractTimeFilterVisitor visitorWithDescriptor = new ExtractTimeFilterVisitor(
-				TIMEDESCRIPTOR);
-
 		range = (TemporalConstraints) query.getFilter().accept(
 				visitorWithDescriptor,
 				null);
@@ -62,16 +60,9 @@ public class ExtractTimeFilterVisitorTest
 		assertEquals(
 				time,
 				range.getStartRange().getStartTime());
-
-		filter = CQL.toFilter("sometime after 2005-05-19T20:32:56Z");
-		query = new Query(
-				"type",
-				filter);
-		range = (TemporalConstraints) query.getFilter().accept(
-				visitorWithDescriptor,
-				null);
-		assertNotNull(range);
-		assertTrue(range.isEmpty());
+		assertEquals(
+				"when",
+				range.getName());
 	}
 
 	@Test
@@ -80,7 +71,6 @@ public class ExtractTimeFilterVisitorTest
 			ParseException {
 		final ExtractTimeFilterVisitor visitor = new ExtractTimeFilterVisitor();
 		final Date stime = DateUtilities.parseISO("2005-05-19T20:32:56Z");
-		final Date etime = DateUtilities.parseISO("2005-05-19T21:32:56Z");
 		Filter filter = ECQL.toFilter("when > 2005-05-19T20:32:56Z");
 		Query query = new Query(
 				"type",
@@ -95,18 +85,127 @@ public class ExtractTimeFilterVisitorTest
 		assertEquals(
 				TemporalRange.END_TIME,
 				range.getEndRange().getEndTime());
+		assertEquals(
+				"when",
+				range.getName());
 
-		final ExtractTimeFilterVisitor visitorWithDescriptor = new ExtractTimeFilterVisitor(
-				TIMEDESCRIPTOR);
-		filter = ECQL.toFilter("sometime > 2005-05-19T20:32:56Z");
+		filter = ECQL.toFilter("2005-05-19T20:32:56Z < when");
 		query = new Query(
 				"type",
 				filter);
 		range = (TemporalConstraints) query.getFilter().accept(
-				visitorWithDescriptor,
+				visitor,
 				null);
 		assertNotNull(range);
-		assertTrue(range.isEmpty());
+		assertEquals(
+				stime,
+				range.getStartRange().getStartTime());
+		assertEquals(
+				TemporalRange.END_TIME,
+				range.getEndRange().getEndTime());
+		assertEquals(
+				"when",
+				range.getName());
+
+		filter = ECQL.toFilter("2005-05-19T20:32:56Z <= when");
+		query = new Query(
+				"type",
+				filter);
+		range = (TemporalConstraints) query.getFilter().accept(
+				visitor,
+				null);
+		assertNotNull(range);
+		assertEquals(
+				stime,
+				range.getStartRange().getStartTime());
+		assertEquals(
+				TemporalRange.END_TIME,
+				range.getEndRange().getEndTime());
+		assertEquals(
+				"when",
+				range.getName());
+	}
+
+	@Test
+	public void testMixedRanges()
+			throws CQLException,
+			ParseException {
+		final Date stime = DateUtilities.parseISO("2005-05-19T20:32:56Z");
+		final Date etime = DateUtilities.parseISO("2005-05-20T20:32:56Z");
+
+		Filter filter = ECQL.toFilter("start > 2005-05-19T20:32:56Z and end < 2005-05-20T20:32:56Z");
+		FilterFactory factory = new FilterFactoryImpl();
+		filter = factory.and(
+				Filter.INCLUDE,
+				filter);
+		Query query = new Query(
+				"type",
+				filter);
+		TemporalConstraintsSet rangeSet = (TemporalConstraintsSet) query.getFilter().accept(
+				visitorWithDescriptor,
+				null);
+		assertNotNull(rangeSet);
+		assertTrue(!rangeSet.isEmpty());
+		assertEquals(
+				stime,
+				rangeSet.getConstraintsFor(
+						"start").getStartRange().getStartTime());
+		assertEquals(
+				etime,
+				rangeSet.getConstraintsFor(
+						"end").getEndRange().getEndTime());
+
+		final Date stime1 = DateUtilities.parseISO("2005-05-17T20:32:56Z");
+		final Date etime1 = DateUtilities.parseISO("2005-05-18T20:32:56Z");
+		filter = ECQL.toFilter("(start > 2005-05-17T20:32:56Z and end < 2005-05-18T20:32:56Z) or (start > 2005-05-19T20:32:56Z and end < 2005-05-20T20:32:56Z)");
+		filter = factory.and(
+				Filter.INCLUDE,
+				filter);
+		query = new Query(
+				"type",
+				filter);
+		rangeSet = (TemporalConstraintsSet) query.getFilter().accept(
+				visitorWithDescriptorForRange,
+				null);
+		assertNotNull(rangeSet);
+		assertTrue(!rangeSet.isEmpty());
+		assertEquals(
+				stime1,
+				rangeSet.getConstraintsFor(
+						"start_end").getStartRange().getStartTime());
+		assertEquals(
+				etime1,
+				rangeSet.getConstraintsFor(
+						"start_end").getStartRange().getEndTime());
+		assertEquals(
+				stime,
+				rangeSet.getConstraintsFor(
+						"start_end").getEndRange().getStartTime());
+		assertEquals(
+				etime,
+				rangeSet.getConstraintsFor(
+						"start_end").getEndRange().getEndTime());
+
+		filter = ECQL.toFilter("start < 2005-05-20T20:32:56Z and end > 2005-05-19T20:32:56Z");
+		filter = factory.and(
+				Filter.INCLUDE,
+				filter);
+		query = new Query(
+				"type",
+				filter);
+		rangeSet = (TemporalConstraintsSet) query.getFilter().accept(
+				visitorWithDescriptorForRange,
+				null);
+		assertNotNull(rangeSet);
+		assertTrue(!rangeSet.isEmpty());
+		assertEquals(
+				stime,
+				rangeSet.getConstraintsFor(
+						"start_end").getStartRange().getStartTime());
+		assertEquals(
+				etime,
+				rangeSet.getConstraintsFor(
+						"start_end").getEndRange().getEndTime());
 
 	}
 
@@ -130,18 +229,45 @@ public class ExtractTimeFilterVisitorTest
 		assertEquals(
 				etime,
 				range.getEndRange().getEndTime());
+		assertEquals(
+				"when",
+				range.getName());
 
-		final ExtractTimeFilterVisitor visitorWithDescriptor = new ExtractTimeFilterVisitor(
-				TIMEDESCRIPTOR);
-		filter = ECQL.toFilter("sometime < 2005-05-19T20:32:56Z");
+		filter = ECQL.toFilter(" 2005-05-19T21:32:56Z > when");
 		query = new Query(
 				"type",
 				filter);
 		range = (TemporalConstraints) query.getFilter().accept(
-				visitorWithDescriptor,
+				visitor,
 				null);
 		assertNotNull(range);
-		assertTrue(range.isEmpty());
+		assertEquals(
+				TemporalRange.START_TIME,
+				range.getStartRange().getStartTime());
+		assertEquals(
+				etime,
+				range.getEndRange().getEndTime());
+		assertEquals(
+				"when",
+				range.getName());
+
+		filter = ECQL.toFilter(" 2005-05-19T21:32:56Z >= when");
+		query = new Query(
+				"type",
+				filter);
+		range = (TemporalConstraints) query.getFilter().accept(
+				visitor,
+				null);
+		assertNotNull(range);
+		assertEquals(
+				TemporalRange.START_TIME,
+				range.getStartRange().getStartTime());
+		assertEquals(
+				etime,
+				range.getEndRange().getEndTime());
+		assertEquals(
+				"when",
+				range.getName());
 
 	}
 
@@ -156,72 +282,107 @@ public class ExtractTimeFilterVisitorTest
 		Query query = new Query(
 				"type",
 				filter);
-		TemporalConstraints range = (TemporalConstraints) query.getFilter().accept(
+		TemporalConstraintsSet rangeSet = (TemporalConstraintsSet) query.getFilter().accept(
 				visitor,
 				null);
-		assertNotNull(range);
+		assertNotNull(rangeSet);
 		assertEquals(
 				TemporalRange.START_TIME,
-				range.getStartRange().getStartTime());
+				rangeSet.getConstraintsFor(
+						"when").getStartRange().getStartTime());
 		assertEquals(
 				TemporalRange.END_TIME,
-				range.getEndRange().getEndTime());
+				rangeSet.getConstraintsFor(
+						"when").getEndRange().getEndTime());
 
 		filter = ECQL.toFilter("when < 2005-05-19T21:32:56Z and when > 2005-05-19T20:32:56Z");
 		query = new Query(
 				"type",
 				filter);
-		range = (TemporalConstraints) query.getFilter().accept(
+		rangeSet = (TemporalConstraintsSet) query.getFilter().accept(
 				visitor,
 				null);
-		assertNotNull(range);
+		assertNotNull(rangeSet);
 		assertEquals(
 				stime,
-				range.getStartRange().getStartTime());
+				rangeSet.getConstraintsFor(
+						"when").getStartRange().getStartTime());
 		assertEquals(
 				etime,
-				range.getEndRange().getEndTime());
+				rangeSet.getConstraintsFor(
+						"when").getEndRange().getEndTime());
 
-		final ExtractTimeFilterVisitor visitorWithDescriptor = new ExtractTimeFilterVisitor(
-				TIMEDESCRIPTOR);
 		filter = ECQL.toFilter("sometime < 2005-05-19T20:32:56Z and when > 2005-05-19T20:32:56Z");
 		query = new Query(
 				"type",
 				filter);
-		range = (TemporalConstraints) query.getFilter().accept(
+		rangeSet = (TemporalConstraintsSet) query.getFilter().accept(
 				visitorWithDescriptor,
 				null);
 		assertEquals(
 				stime,
-				range.getStartRange().getStartTime());
+				rangeSet.getConstraintsFor(
+						"when").getStartRange().getStartTime());
 		assertEquals(
 				TemporalRange.END_TIME,
-				range.getEndRange().getEndTime());
+				rangeSet.getConstraintsFor(
+						"when").getEndRange().getEndTime());
+		assertEquals(
+				TemporalRange.START_TIME,
+				rangeSet.getConstraintsFor(
+						"sometime").getStartRange().getStartTime());
+		assertEquals(
+				stime,
+				rangeSet.getConstraintsFor(
+						"sometime").getEndRange().getEndTime());
 
 		filter = ECQL.toFilter("when < 2005-05-19T20:32:56Z and sometime > 2005-05-19T20:32:56Z");
 		query = new Query(
 				"type",
 				filter);
-		range = (TemporalConstraints) query.getFilter().accept(
+		rangeSet = (TemporalConstraintsSet) query.getFilter().accept(
 				visitorWithDescriptor,
 				null);
 		assertEquals(
 				TemporalRange.START_TIME,
-				range.getStartRange().getStartTime());
+				rangeSet.getConstraintsFor(
+						"when").getStartRange().getStartTime());
 		assertEquals(
 				stime,
-				range.getEndRange().getEndTime());
+				rangeSet.getConstraintsFor(
+						"when").getEndRange().getEndTime());
+		assertEquals(
+				stime,
+				rangeSet.getConstraintsFor(
+						"sometime").getStartRange().getStartTime());
+		assertEquals(
+				TemporalRange.END_TIME,
+				rangeSet.getConstraintsFor(
+						"sometime").getEndRange().getEndTime());
 
-		filter = ECQL.toFilter("sometime < 2005-05-19T20:32:56Z and sometime > 2005-05-19T20:32:56Z");
+		filter = ECQL.toFilter("2005-05-19T20:32:56Z > when and  2005-05-19T20:32:56Z < sometime");
 		query = new Query(
 				"type",
 				filter);
-		range = (TemporalConstraints) query.getFilter().accept(
+		rangeSet = (TemporalConstraintsSet) query.getFilter().accept(
 				visitorWithDescriptor,
 				null);
-
-		assertNotNull(range);
-		assertTrue(range.isEmpty());
+		assertEquals(
+				TemporalRange.START_TIME,
+				rangeSet.getConstraintsFor(
+						"when").getStartRange().getStartTime());
+		assertEquals(
+				stime,
+				rangeSet.getConstraintsFor(
+						"when").getEndRange().getEndTime());
+		assertEquals(
+				stime,
+				rangeSet.getConstraintsFor(
+						"sometime").getStartRange().getStartTime());
+		assertEquals(
+				TemporalRange.END_TIME,
+				rangeSet.getConstraintsFor(
+						"sometime").getEndRange().getEndTime());
 
 	}
 
@@ -245,18 +406,6 @@ public class ExtractTimeFilterVisitorTest
 		assertEquals(
 				etime,
 				range.getEndRange().getEndTime());
-
-		final ExtractTimeFilterVisitor visitorWithDescriptor = new ExtractTimeFilterVisitor(
-				TIMEDESCRIPTOR);
-		filter = ECQL.toFilter("sometime = 2005-05-19T20:32:56Z");
-		query = new Query(
-				"type",
-				filter);
-		range = (TemporalConstraints) query.getFilter().accept(
-				visitorWithDescriptor,
-				null);
-		assertNotNull(range);
-		assertTrue(range.isEmpty());
 
 	}
 
@@ -282,9 +431,6 @@ public class ExtractTimeFilterVisitorTest
 				etime,
 				range.getStartRange().getEndTime());
 
-		final ExtractTimeFilterVisitor visitorWithDescriptor = new ExtractTimeFilterVisitor(
-				TIMEDESCRIPTOR);
-
 		range = (TemporalConstraints) query.getFilter().accept(
 				visitor,
 				null);
@@ -295,16 +441,6 @@ public class ExtractTimeFilterVisitorTest
 		assertEquals(
 				etime,
 				range.getStartRange().getEndTime());
-
-		filter = CQL.toFilter("sometime during 2005-05-19T20:32:56Z/2005-05-19T21:32:56Z");
-		query = new Query(
-				"type",
-				filter);
-		range = (TemporalConstraints) query.getFilter().accept(
-				visitorWithDescriptor,
-				null);
-		assertNotNull(range);
-		assertTrue(range.isEmpty());
 	}
 
 	@Test
@@ -328,8 +464,6 @@ public class ExtractTimeFilterVisitorTest
 				etime,
 				range.getStartRange().getEndTime());
 
-		final ExtractTimeFilterVisitor visitorWithDescriptor = new ExtractTimeFilterVisitor(
-				TIMEDESCRIPTOR);
 		range = (TemporalConstraints) query.getFilter().accept(
 				visitorWithDescriptor,
 				null);
@@ -340,16 +474,6 @@ public class ExtractTimeFilterVisitorTest
 		assertEquals(
 				etime,
 				range.getStartRange().getEndTime());
-
-		filter = CQL.toFilter("sometime before 2005-05-19T20:32:56Z");
-		query = new Query(
-				"type",
-				filter);
-		range = (TemporalConstraints) query.getFilter().accept(
-				visitorWithDescriptor,
-				null);
-		assertNotNull(range);
-		assertTrue(range.isEmpty());
 	}
 
 	@Test
@@ -362,39 +486,31 @@ public class ExtractTimeFilterVisitorTest
 		Query query = new Query(
 				"type",
 				filter);
-		TemporalConstraints range = (TemporalConstraints) query.getFilter().accept(
+		TemporalConstraintsSet rangeSet = (TemporalConstraintsSet) query.getFilter().accept(
 				visitor,
 				null);
-		assertNotNull(range);
+		assertNotNull(rangeSet);
 		assertEquals(
 				TemporalRange.START_TIME,
-				range.getStartRange().getStartTime());
+				rangeSet.getConstraintsFor(
+						"when").getStartRange().getStartTime());
 		assertEquals(
 				stime,
-				range.getStartRange().getEndTime());
+				rangeSet.getConstraintsFor(
+						"when").getStartRange().getEndTime());
 
-		final ExtractTimeFilterVisitor visitorWithDescriptor = new ExtractTimeFilterVisitor(
-				TIMEDESCRIPTOR);
-		range = (TemporalConstraints) query.getFilter().accept(
+		rangeSet = (TemporalConstraintsSet) query.getFilter().accept(
 				visitorWithDescriptor,
 				null);
-		assertNotNull(range);
+		assertNotNull(rangeSet);
 		assertEquals(
 				TemporalRange.START_TIME,
-				range.getStartRange().getStartTime());
+				rangeSet.getConstraintsFor(
+						"when").getStartRange().getStartTime());
 		assertEquals(
 				stime,
-				range.getStartRange().getEndTime());
-
-		filter = CQL.toFilter("sometime BEFORE OR DURING 2005-05-19T20:32:56Z/2005-05-19T21:32:56Z");
-		query = new Query(
-				"type",
-				filter);
-		range = (TemporalConstraints) query.getFilter().accept(
-				visitorWithDescriptor,
-				null);
-		assertNotNull(range);
-		assertTrue(range.isEmpty());
+				rangeSet.getConstraintsFor(
+						"when").getStartRange().getEndTime());
 	}
 
 	@Test
@@ -408,39 +524,31 @@ public class ExtractTimeFilterVisitorTest
 		Query query = new Query(
 				"type",
 				filter);
-		TemporalConstraints range = (TemporalConstraints) query.getFilter().accept(
+		TemporalConstraintsSet rangeSet = (TemporalConstraintsSet) query.getFilter().accept(
 				visitor,
 				null);
-		assertNotNull(range);
+		assertNotNull(rangeSet);
 		assertEquals(
 				stime,
-				range.getStartRange().getStartTime());
+				rangeSet.getConstraintsFor(
+						"when").getStartRange().getStartTime());
 		assertEquals(
 				TemporalRange.END_TIME,
-				range.getStartRange().getEndTime());
+				rangeSet.getConstraintsFor(
+						"when").getStartRange().getEndTime());
 
-		final ExtractTimeFilterVisitor visitorWithDescriptor = new ExtractTimeFilterVisitor(
-				TIMEDESCRIPTOR);
-
-		range = (TemporalConstraints) query.getFilter().accept(
+		rangeSet = (TemporalConstraintsSet) query.getFilter().accept(
 				visitorWithDescriptor,
 				null);
-		assertNotNull(range);
+		assertNotNull(rangeSet);
 		assertEquals(
 				stime,
-				range.getStartRange().getStartTime());
+				rangeSet.getConstraintsFor(
+						"when").getStartRange().getStartTime());
 		assertEquals(
 				TemporalRange.END_TIME,
-				range.getStartRange().getEndTime());
-
-		filter = CQL.toFilter("sometime DURING OR AFTER 2005-05-19T20:32:56Z/2005-05-19T21:32:56Z");
-		query = new Query(
-				"type",
-				filter);
-		range = (TemporalConstraints) query.getFilter().accept(
-				visitorWithDescriptor,
-				null);
-		assertTrue(range.isEmpty());
+				rangeSet.getConstraintsFor(
+						"when").getStartRange().getEndTime());
 
 	}
 
@@ -455,70 +563,54 @@ public class ExtractTimeFilterVisitorTest
 		Query query = new Query(
 				"type",
 				filter);
-		TemporalConstraints range = (TemporalConstraints) query.getFilter().accept(
+		TemporalConstraintsSet rangeSet = (TemporalConstraintsSet) query.getFilter().accept(
 				visitor,
 				null);
-		assertNotNull(range);
+		assertNotNull(rangeSet);
 		assertEquals(
 				sTime,
-				range.getStartRange().getStartTime());
+				rangeSet.getConstraintsFor(
+						"when").getStartRange().getStartTime());
 		assertEquals(
 				eTime,
-				range.getStartRange().getEndTime());
-
-		final ExtractTimeFilterVisitor visitorWithDescriptor = new ExtractTimeFilterVisitor(
-				TIMEDESCRIPTOR);
-
-		range = (TemporalConstraints) query.getFilter().accept(
-				visitorWithDescriptor,
-				null);
-		assertNotNull(range);
-		assertEquals(
-				sTime,
-				range.getStartRange().getStartTime());
-		assertEquals(
-				eTime,
-				range.getStartRange().getEndTime());
+				rangeSet.getConstraintsFor(
+						"when").getStartRange().getEndTime());
 
 		filter = CQL.toFilter("sometime before 2005-05-20T20:32:56Z and when after 2005-05-19T20:32:56Z");
 		query = new Query(
 				"type",
 				filter);
-		range = (TemporalConstraints) query.getFilter().accept(
+		rangeSet = (TemporalConstraintsSet) query.getFilter().accept(
 				visitorWithDescriptor,
 				null);
-		assertNotNull(range);
+		assertNotNull(rangeSet);
 		assertEquals(
 				sTime,
-				range.getStartRange().getStartTime());
+				rangeSet.getConstraintsFor(
+						"when").getStartRange().getStartTime());
 		assertEquals(
 				TemporalRange.END_TIME,
-				range.getStartRange().getEndTime());
+				rangeSet.getConstraintsFor(
+						"when").getStartRange().getEndTime());
 
 		filter = CQL.toFilter("when before 2005-05-20T20:32:56Z and sometime after 2005-05-19T20:32:56Z");
 		query = new Query(
 				"type",
 				filter);
-		range = (TemporalConstraints) query.getFilter().accept(
+		rangeSet = (TemporalConstraintsSet) query.getFilter().accept(
 				visitorWithDescriptor,
 				null);
-		assertNotNull(range);
+		assertNotNull(rangeSet);
+		assertFalse(rangeSet.isEmpty());
 		assertEquals(
 				TemporalRange.START_TIME,
-				range.getStartRange().getStartTime());
+				rangeSet.getConstraintsFor(
+						"when").getStartRange().getStartTime());
 		assertEquals(
 				eTime,
-				range.getStartRange().getEndTime());
+				rangeSet.getConstraintsFor(
+						"when").getStartRange().getEndTime());
 
-		filter = CQL.toFilter("sometime before 2005-05-20T20:32:56Z and sometime after 2005-05-19T20:32:56Z");
-		query = new Query(
-				"type",
-				filter);
-		range = (TemporalConstraints) query.getFilter().accept(
-				visitorWithDescriptor,
-				null);
-		assertNotNull(range);
-		assertTrue(range.isEmpty());
 	}
 
 	@Test
@@ -530,11 +622,11 @@ public class ExtractTimeFilterVisitorTest
 		final Query query = new Query(
 				"type",
 				filter);
-		final TemporalConstraints range = (TemporalConstraints) query.getFilter().accept(
+		TemporalConstraintsSet rangeSet = (TemporalConstraintsSet) query.getFilter().accept(
 				visitor,
 				null);
-		assertNotNull(range);
-		assertTrue(range.isEmpty());
+		assertNotNull(rangeSet);
+		assertTrue(rangeSet.isEmpty());
 	}
 
 	@Test
@@ -548,49 +640,45 @@ public class ExtractTimeFilterVisitorTest
 		Query query = new Query(
 				"type",
 				filter);
-		TemporalConstraints range = (TemporalConstraints) query.getFilter().accept(
+		TemporalConstraintsSet rangeSet = (TemporalConstraintsSet) query.getFilter().accept(
 				visitor,
 				null);
-		assertNotNull(range);
+		assertNotNull(rangeSet);
 		assertEquals(
 				eTime1,
-				range.getStartRange().getEndTime());
+				rangeSet.getConstraintsFor(
+						"when").getStartRange().getEndTime());
 		assertEquals(
 				sTime2,
-				range.getRanges().get(
+				rangeSet.getConstraintsFor(
+						"when").getRanges().get(
 						1).getStartTime());
 
-		final ExtractTimeFilterVisitor visitorWithDescriptor = new ExtractTimeFilterVisitor(
-				TIMEDESCRIPTOR);
+		// test mixed
 		filter = CQL.toFilter("when before 2005-05-17T20:32:56Z or sometime after 2005-05-19T20:32:56Z");
 		query = new Query(
 				"type",
 				filter);
-		range = (TemporalConstraints) query.getFilter().accept(
+		rangeSet = (TemporalConstraintsSet) query.getFilter().accept(
 				visitorWithDescriptor,
 				null);
-		assertNotNull(range);
+		assertNotNull(rangeSet);
 		assertEquals(
 				eTime1,
-				range.getStartRange().getEndTime());
+				rangeSet.getConstraintsFor(
+						"when").getStartRange().getEndTime());
 		assertEquals(
 				TemporalRange.START_TIME,
-				range.getEndRange().getStartTime());
-
-		filter = CQL.toFilter("sometime before 2005-05-17T20:32:56Z or when after 2005-05-19T20:32:56Z");
-		query = new Query(
-				"type",
-				filter);
-		range = (TemporalConstraints) query.getFilter().accept(
-				visitorWithDescriptor,
-				null);
-		assertNotNull(range);
+				rangeSet.getConstraintsFor(
+						"when").getEndRange().getStartTime());
 		assertEquals(
 				TemporalRange.END_TIME,
-				range.getStartRange().getEndTime());
+				rangeSet.getConstraintsFor(
+						"sometime").getStartRange().getEndTime());
 		assertEquals(
 				sTime2,
-				range.getEndRange().getStartTime());
+				rangeSet.getConstraintsFor(
+						"sometime").getEndRange().getStartTime());
 
 	}
 
@@ -605,17 +693,19 @@ public class ExtractTimeFilterVisitorTest
 		final Query query = new Query(
 				"type",
 				filter);
-		final TemporalConstraints range = (TemporalConstraints) query.getFilter().accept(
+		TemporalConstraintsSet rangeSet = (TemporalConstraintsSet) query.getFilter().accept(
 				visitor,
 				null);
-		assertNotNull(range);
+		assertNotNull(rangeSet);
 		assertEquals(
 				eTime1,
-				range.getStartRange().getStartTime());
+				rangeSet.getConstraintsFor(
+						"when").getStartRange().getStartTime());
 		assertEquals(
 				new Date(
 						sTime2.getTime() - 1),
-				range.getStartRange().getEndTime());
+				rangeSet.getConstraintsFor(
+						"when").getStartRange().getEndTime());
 	}
 
 	@Test
@@ -629,44 +719,47 @@ public class ExtractTimeFilterVisitorTest
 		Query query = new Query(
 				"type",
 				filter);
-		TemporalConstraints range = (TemporalConstraints) query.getFilter().accept(
+		TemporalConstraintsSet rangeSet = (TemporalConstraintsSet) query.getFilter().accept(
 				visitor,
 				null);
-		assertNotNull(range);
+		assertNotNull(rangeSet);
 		assertEquals(
 				TemporalRange.START_TIME,
-				range.getStartRange().getStartTime());
+				rangeSet.getConstraintsFor(
+						"when").getStartRange().getStartTime());
 		assertEquals(
 				new Date(
 						sTime.getTime() - 1),
-				range.getStartRange().getEndTime());
+				rangeSet.getConstraintsFor(
+						"when").getStartRange().getEndTime());
 		assertEquals(
 				eTime,
-				range.getRanges().get(
+				rangeSet.getConstraintsFor(
+						"when").getRanges().get(
 						1).getStartTime());
 		assertEquals(
 				TemporalRange.END_TIME,
-				range.getRanges().get(
+				rangeSet.getConstraintsFor(
+						"when").getRanges().get(
 						1).getEndTime());
-
-		final ExtractTimeFilterVisitor visitorWithDescriptor = new ExtractTimeFilterVisitor(
-				TIMEDESCRIPTOR);
 
 		filter = CQL.toFilter("not (sometime before 2005-05-20T20:32:56Z and when after 2005-05-19T20:32:56Z)");
 		query = new Query(
 				"type",
 				filter);
-		range = (TemporalConstraints) query.getFilter().accept(
+		rangeSet = (TemporalConstraintsSet) query.getFilter().accept(
 				visitorWithDescriptor,
 				null);
-		assertNotNull(range);
+		assertNotNull(rangeSet);
 		assertEquals(
 				new Date(
 						sTime.getTime() - 1),
-				range.getEndRange().getEndTime());
+				rangeSet.getConstraintsFor(
+						"when").getEndRange().getEndTime());
 		assertEquals(
 				TemporalRange.START_TIME,
-				range.getEndRange().getStartTime());
+				rangeSet.getConstraintsFor(
+						"when").getEndRange().getStartTime());
 
 	}
 

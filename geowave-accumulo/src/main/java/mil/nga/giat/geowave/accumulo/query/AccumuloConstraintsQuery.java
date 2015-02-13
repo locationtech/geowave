@@ -9,6 +9,7 @@ import mil.nga.giat.geowave.index.ByteArrayRange;
 import mil.nga.giat.geowave.index.ByteArrayUtils;
 import mil.nga.giat.geowave.index.PersistenceUtils;
 import mil.nga.giat.geowave.index.sfc.data.MultiDimensionalNumericData;
+import mil.nga.giat.geowave.store.ScanCallback;
 import mil.nga.giat.geowave.store.filter.DedupeFilter;
 import mil.nga.giat.geowave.store.filter.DistributableFilterList;
 import mil.nga.giat.geowave.store.filter.DistributableQueryFilter;
@@ -60,6 +61,7 @@ public class AccumuloConstraintsQuery extends
 		this(
 				adapterIds,
 				index,
+				null,
 				null);
 	}
 
@@ -67,6 +69,7 @@ public class AccumuloConstraintsQuery extends
 			final List<ByteArrayId> adapterIds,
 			final Index index,
 			final DedupeFilter clientDedupeFilter, 
+			final ScanCallback<?> scanCallback,
 			final String...authorizations) {
 		this(
 				adapterIds,
@@ -74,6 +77,7 @@ public class AccumuloConstraintsQuery extends
 				null,
 				null,
 				clientDedupeFilter,
+				scanCallback,
 				authorizations);
 	}
 
@@ -100,6 +104,7 @@ public class AccumuloConstraintsQuery extends
 				constraints,
 				queryFilters,
 				null,
+				null,
 				new String[0]);
 
 	}
@@ -115,6 +120,7 @@ public class AccumuloConstraintsQuery extends
 				index,
 				constraints,
 				queryFilters,
+				null,
 				null,
 				authorizations);
 
@@ -126,10 +132,12 @@ public class AccumuloConstraintsQuery extends
 			final MultiDimensionalNumericData constraints,
 			final List<QueryFilter> queryFilters,
 			final DedupeFilter clientDedupeFilter,
+			final ScanCallback<?> scanCallback,
 			final String[] authorizations ) {
 		super(
 				adapterIds,
 				index,
+				scanCallback,
 				authorizations);
 		this.constraints = constraints;
 		final SplitFilterLists lists = splitList(queryFilters);

@@ -9,6 +9,7 @@ import mil.nga.giat.geowave.index.dimension.NumericDimensionDefinition;
 import mil.nga.giat.geowave.index.sfc.data.NumericData;
 import mil.nga.giat.geowave.index.sfc.data.NumericRange;
 import mil.nga.giat.geowave.index.sfc.data.NumericValue;
+import mil.nga.giat.geowave.store.query.BasicQuery.ConstraintData;
 import mil.nga.giat.geowave.store.query.BasicQuery.Constraints;
 
 import org.apache.log4j.Logger;
@@ -67,15 +68,15 @@ public class GeometryUtils
 				env.getMinY(),
 				env.getMaxY());
 
-		final Map<Class<? extends NumericDimensionDefinition>, NumericData> constraintsPerDimension = new HashMap<Class<? extends NumericDimensionDefinition>, NumericData>();
+		final Map<Class<? extends NumericDimensionDefinition>, ConstraintData> constraintsPerDimension = new HashMap<Class<? extends NumericDimensionDefinition>, ConstraintData>();
 		// Create and return a new IndexRange array with an x and y axis
 		// range
 		constraintsPerDimension.put(
 				LongitudeDefinition.class,
-				rangeLongitude);
+				new ConstraintData(rangeLongitude, false));
 		constraintsPerDimension.put(
 				LatitudeDefinition.class,
-				rangeLatitude);
+				new ConstraintData(rangeLatitude, false));
 		return new Constraints(
 				constraintsPerDimension);
 	}
@@ -98,15 +99,15 @@ public class GeometryUtils
 		final NumericData longitude = new NumericValue(
 				longitudeDegrees);
 
-		final Map<Class<? extends NumericDimensionDefinition>, NumericData> constraintsPerDimension = new HashMap<Class<? extends NumericDimensionDefinition>, NumericData>();
+		final Map<Class<? extends NumericDimensionDefinition>, ConstraintData> constraintsPerDimension = new HashMap<Class<? extends NumericDimensionDefinition>, ConstraintData>();
 		// Create and return a new IndexRange array with an x and y axis
 		// range
 		constraintsPerDimension.put(
 				LongitudeDefinition.class,
-				longitude);
+				new ConstraintData(longitude, false));
 		constraintsPerDimension.put(
 				LatitudeDefinition.class,
-				latitude);
+				new ConstraintData(latitude, false));
 		return new Constraints(
 				constraintsPerDimension);
 	}

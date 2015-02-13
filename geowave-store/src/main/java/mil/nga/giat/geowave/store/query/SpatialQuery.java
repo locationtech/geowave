@@ -40,7 +40,7 @@ public class SpatialQuery extends
 		this.queryGeometry = queryGeometry;
 	}
 
-	protected SpatialQuery(
+	public SpatialQuery(
 			final Constraints constraints,
 			final Geometry queryGeometry ) {
 		super(

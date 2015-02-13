@@ -167,7 +167,7 @@ public class BasicRowIdStore
 			final Key rowIdKey = new Key(
 					new Text(
 							rowId.getBytes()));
-			if ((rowIdKey != null) && ((minRowId == null) || (minRowId.compareTo(rowIdKey) > 0))) {
+			if (minRowId == null || (minRowId.compareTo(rowIdKey) > 0)) {
 				minRowId = rowIdKey;
 			}
 		}

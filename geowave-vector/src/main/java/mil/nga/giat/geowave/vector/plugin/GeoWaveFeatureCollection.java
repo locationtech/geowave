@@ -2,6 +2,7 @@ package mil.nga.giat.geowave.vector.plugin;
 
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import mil.nga.giat.geowave.index.ByteArrayId;
@@ -9,17 +10,23 @@ import mil.nga.giat.geowave.store.CloseableIterator;
 import mil.nga.giat.geowave.store.adapter.statistics.BoundingBoxDataStatistics;
 import mil.nga.giat.geowave.store.adapter.statistics.CountDataStatistics;
 import mil.nga.giat.geowave.store.adapter.statistics.DataStatistics;
-import mil.nga.giat.geowave.store.query.TemporalConstraints;
+import mil.nga.giat.geowave.store.query.TemporalConstraintsSet;
+import mil.nga.giat.geowave.vector.stats.FeatureBoundingBoxStatistics;
+import mil.nga.giat.geowave.vector.stats.FeatureNumericRangeStatistics;
+import mil.nga.giat.geowave.vector.stats.FeatureTimeRangeStatistics;
 import mil.nga.giat.geowave.vector.wms.DistributableRenderer;
 import mil.nga.giat.geowave.vector.wms.accumulo.RenderedMaster;
 
 import org.apache.log4j.Logger;
+import org.geotools.data.DataUtilities;
 import org.geotools.data.FeatureReader;
 import org.geotools.data.Query;
 import org.geotools.data.store.DataFeatureCollection;
 import org.geotools.factory.Hints;
 import org.geotools.feature.FeatureIterator;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
+import org.geotools.feature.visitor.MaxVisitor;
+import org.geotools.feature.visitor.MinVisitor;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
@@ -37,7 +44,7 @@ import com.vividsolutions.jts.geom.GeometryFactory;
  * object in order to open the appropriate cursor to iterate over data. It uses
  * Keys within the Query hints to determine whether to perform special purpose
  * queries such as decimation or distributed rendering.
- *
+ * 
  */
 public class GeoWaveFeatureCollection extends
 		DataFeatureCollection
@@ -111,8 +118,9 @@ public class GeoWaveFeatureCollection extends
 			// GEOWAVE-60 optimization
 			final Map<ByteArrayId, DataStatistics<SimpleFeature>> statsMap = reader.getComponents().getDataStatistics(
 					reader.getTransaction());
-			if (statsMap.containsKey(BoundingBoxDataStatistics.STATS_ID)) {
-				final BoundingBoxDataStatistics<SimpleFeature> stats = (BoundingBoxDataStatistics<SimpleFeature>) statsMap.get(BoundingBoxDataStatistics.STATS_ID);
+			final ByteArrayId statId = FeatureBoundingBoxStatistics.composeId(reader.getFeatureType().getGeometryDescriptor().getLocalName());
+			if (statsMap.containsKey(statId)) {
+				final BoundingBoxDataStatistics<SimpleFeature> stats = (BoundingBoxDataStatistics<SimpleFeature>) statsMap.get(statId);
 				return new ReferencedEnvelope(
 						stats.getMinX(),
 						stats.getMaxX(),
@@ -217,7 +225,7 @@ public class GeoWaveFeatureCollection extends
 	@Override
 	protected Iterator<SimpleFeature> openIterator() {
 		Geometry jtsBounds;
-		TemporalConstraints timeBounds;
+		TemporalConstraintsSet timeBounds;
 
 		try {
 			final ReferencedEnvelope referencedEnvelope = getEnvelope(query);
@@ -325,7 +333,7 @@ public class GeoWaveFeatureCollection extends
 			return null;
 		}
 
-		return bbox;
+		return reader.clipIndexedBBOXConstraints(bbox);
 	}
 
 	private Query validateQuery(
@@ -344,16 +352,100 @@ public class GeoWaveFeatureCollection extends
 		return null;
 	}
 
-	private TemporalConstraints getBoundedTime(
+	@Override
+	public void accepts(
+			final org.opengis.feature.FeatureVisitor visitor,
+			final org.opengis.util.ProgressListener progress )
+			throws IOException {
+
+		if ((visitor instanceof MinVisitor)) {
+			final ExtractAttributesFilter filter = new ExtractAttributesFilter();
+
+			final MinVisitor minVisitor = (MinVisitor) visitor;
+			final List<String> attrs = (List<String>) minVisitor.getExpression().accept(
+					filter,
+					null);
+			int acceptedCount = 0;
+			for (final String attr : attrs) {
+				final DataStatistics<SimpleFeature> stat = reader.getStatsFor(attr);
+				if (stat == null) {
+					continue;
+				}
+				else if (stat instanceof FeatureTimeRangeStatistics) {
+					minVisitor.setValue(reader.convertToType(
+							attr,
+							((FeatureTimeRangeStatistics) stat).getMinTime()));
+					acceptedCount++;
+				}
+				else if (stat instanceof FeatureNumericRangeStatistics) {
+					minVisitor.setValue(reader.convertToType(
+							attr,
+							((FeatureNumericRangeStatistics) stat).getMin()));
+					acceptedCount++;
+				}
+			}
+
+			if (acceptedCount > 0) {
+				if (progress != null) {
+					progress.complete();
+				}
+				return;
+			}
+		}
+		else if ((visitor instanceof MaxVisitor)) {
+			final ExtractAttributesFilter filter = new ExtractAttributesFilter();
+
+			final MaxVisitor maxVisitor = (MaxVisitor) visitor;
+			final List<String> attrs = (List<String>) maxVisitor.getExpression().accept(
+					filter,
+					null);
+			int acceptedCount = 0;
+			for (final String attr : attrs) {
+				final DataStatistics<SimpleFeature> stat = reader.getStatsFor(attr);
+				if (stat == null) {
+					continue;
+				}
+				else if (stat instanceof FeatureTimeRangeStatistics) {
+					maxVisitor.setValue(reader.convertToType(
+							attr,
+							((FeatureTimeRangeStatistics) stat).getMaxTime()));
+					acceptedCount++;
+				}
+				else if (stat instanceof FeatureNumericRangeStatistics) {
+					maxVisitor.setValue(reader.convertToType(
+							attr,
+							((FeatureNumericRangeStatistics) stat).getMax()));
+					acceptedCount++;
+				}
+			}
+
+			if (acceptedCount > 0) {
+				if (progress != null) {
+					progress.complete();
+				}
+				return;
+			}
+		}
+		DataUtilities.visit(
+				this,
+				visitor,
+				progress);
+	}
+
+	/**
+	 * Return constraints that are indexed
+	 * 
+	 * @param query
+	 * @return
+	 */
+	protected TemporalConstraintsSet getBoundedTime(
 			final Query query ) {
 		if (query == null) {
 			return null;
 		}
-		final TemporalConstraints bbox = (TemporalConstraints) query.getFilter().accept(
-				new ExtractTimeFilterVisitor(
-						reader.getComponents().getAdapter().getTimeDescriptors()),
-				null);
-		return bbox.isEmpty() ? null : bbox;
+		final TemporalConstraintsSet constraints = new ExtractTimeFilterVisitor().getConstraints(query);
+
+		return constraints.isEmpty() ? constraints : reader.clipIndexedTemporalConstraints(constraints);
 	}
 
 	@Override

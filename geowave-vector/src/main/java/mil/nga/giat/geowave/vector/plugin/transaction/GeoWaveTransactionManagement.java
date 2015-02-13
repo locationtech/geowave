@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.NoSuchElementException;
 import java.util.concurrent.ConcurrentHashMap;
 
 import mil.nga.giat.geowave.accumulo.util.VisibilityTransformer;
@@ -55,7 +56,7 @@ public class GeoWaveTransactionManagement implements
 
 	private final String typeName;
 
-	private class ModifiedFeature
+	private static class ModifiedFeature
 	{
 		public ModifiedFeature(
 				final SimpleFeature oldFeature,
@@ -101,6 +102,7 @@ public class GeoWaveTransactionManagement implements
 	 * 
 	 * @return true if Diff is empty
 	 */
+	@Override
 	public boolean isEmpty() {
 		synchronized (mutex) {
 			return modifiedFeatures.isEmpty() && addedFidList.isEmpty() && this.removedFeatures.isEmpty();
@@ -125,6 +127,7 @@ public class GeoWaveTransactionManagement implements
 	 * @param f
 	 *            replacement feature; null to indicate remove
 	 */
+	@Override
 	public void modify(
 			String fid,
 			SimpleFeature original,
@@ -199,6 +202,7 @@ public class GeoWaveTransactionManagement implements
 
 	}
 
+	@Override
 	public void add(
 			String fid,
 			SimpleFeature feature )
@@ -235,6 +239,7 @@ public class GeoWaveTransactionManagement implements
 				false);
 	}
 
+	@Override
 	public void remove(
 			String fid,
 			SimpleFeature feature )
@@ -367,7 +372,9 @@ public class GeoWaveTransactionManagement implements
 			}
 
 			@Override
-			public Pair<SimpleFeature, SimpleFeature> next() {
+			public Pair<SimpleFeature, SimpleFeature> next()
+					throws NoSuchElementException {
+				if (pair == null) throw new NoSuchElementException();
 				final Pair<SimpleFeature, SimpleFeature> retVal = pair;
 				pair = null;
 				return retVal;
@@ -416,7 +423,9 @@ public class GeoWaveTransactionManagement implements
 			}
 
 			@Override
-			public SimpleFeature next() {
+			public SimpleFeature next()
+					throws NoSuchElementException {
+				if (feature == null) throw new NoSuchElementException();
 				final SimpleFeature retVal = feature;
 				feature = null;
 				return retVal;

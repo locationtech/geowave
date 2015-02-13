@@ -26,6 +26,7 @@ public class AccumuloRowIdsQuery extends
 			final String[] authorizations ) {
 		super(
 				index,
+				null,
 				authorizations);
 		this.rows = rows;
 	}

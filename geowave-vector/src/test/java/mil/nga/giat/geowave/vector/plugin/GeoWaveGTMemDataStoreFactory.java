@@ -18,6 +18,7 @@ import org.geotools.data.DataStore;
 public class GeoWaveGTMemDataStoreFactory extends
 		AbstractDataStoreFactory
 {
+	
 	// GeoServer seems to call this several times so we should cache a
 	// connection if the parameters are the same, I'm not sure this is entirely
 	// correct but it keeps us from making several connections for the same data
@@ -39,7 +40,8 @@ public class GeoWaveGTMemDataStoreFactory extends
 
 			dataStore = new GeoWaveGTMemDataStore(
 					GeoWavePluginConfig.getAuthorizationFactory(params),
-					GeoWavePluginConfig.getAuthorizationURL(params));
+					GeoWavePluginConfig.getAuthorizationURL(params),
+					new GeoWavePluginConfig(params).getInstanceName());
 		}
 		catch (final Exception ex) {
 			throw new IOException(

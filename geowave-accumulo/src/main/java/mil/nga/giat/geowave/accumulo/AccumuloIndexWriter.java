@@ -13,7 +13,7 @@ import mil.nga.giat.geowave.accumulo.util.DataAdapterAndIndexCache;
 import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.index.StringUtils;
 import mil.nga.giat.geowave.store.IndexWriter;
-import mil.nga.giat.geowave.store.IngestEntryInfo;
+import mil.nga.giat.geowave.store.DataStoreEntryInfo;
 import mil.nga.giat.geowave.store.adapter.IndexDependentDataAdapter;
 import mil.nga.giat.geowave.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.store.adapter.statistics.DataStatistics;
@@ -195,7 +195,7 @@ public class AccumuloIndexWriter implements
 					"Unable to determine existence of locality group [" + writableAdapter.getAdapterId().getString() + "]",
 					e);
 		}
-		IngestEntryInfo entryInfo;
+		DataStoreEntryInfo entryInfo;
 		synchronized (this) {
 			dataStore.store(writableAdapter);
 			dataStore.store(index);

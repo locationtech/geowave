@@ -14,7 +14,7 @@ public class IngestCallbackList<T> implements
 
 	@Override
 	public void entryIngested(
-			final IngestEntryInfo entryInfo,
+			final DataStoreEntryInfo entryInfo,
 			final T entry ) {
 		for (final IngestCallback<T> callback : callbacks) {
 			callback.entryIngested(

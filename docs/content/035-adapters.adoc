@@ -65,3 +65,19 @@ chunk of data. No distributed filtering can be performed on this data except for
 client side filtering extensibility point can still be used if necessary. The Data Adapter has to provide methods to
 serialize and deserialize these items in the form of Field Readers and Writers, but it is not necessary to have these
 methods on the classpath of any Accumulo nodes.
+
+==== Statistics
+
+Adapters provide a set of statistics stored within a statistic store.  The set of available statistics is specific to each adapter and 
+the set of attributes for those data items managed by the adapter. Statistics include:
+
+* Ranges over an attribute, including time.
+* Enveloping bounding box over all geometries.
+* Cardinality of the number of stored items.
+
+Optional statistics include:
+
+* Histograms over the range of values for an attribute.
+* Cardinality of discrete values of an attribute.
+
+
