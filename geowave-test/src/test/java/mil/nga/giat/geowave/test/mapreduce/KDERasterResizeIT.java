@@ -36,8 +36,8 @@ public class KDERasterResizeIT extends
 	protected static final String TEST_DATA_ZIP_RESOURCE_PATH = TEST_RESOURCE_PACKAGE + "kde-testdata.zip";
 	protected static final String KDE_INPUT_DIR = TEST_CASE_BASE + "kde_test_case/";
 	private static final String KDE_SHAPEFILE_FILE = KDE_INPUT_DIR + "kde-test.shp";
-	private static final double TARGET_MIN_LON = 52.492;
-	private static final double TARGET_MIN_LAT = 29.553;
+	private static final double TARGET_MIN_LON = 155;
+	private static final double TARGET_MIN_LAT = 16;
 	private static final double TARGET_DECIMAL_DEGREES_SIZE = 0.132;
 	private static final String KDE_FEATURE_TYPE_NAME = "kde-test";
 	private static final int MIN_TILE_SIZE_POWER_OF_2 = 0;
@@ -295,14 +295,6 @@ public class KDERasterResizeIT extends
 				}
 			}
 		}
-		// make sure all of the counts are the same before and after compaction
-		// for (int i = 1; i < counts.length; i++) {
-		// Assert.assertEquals('
-		// "The count of non-nodata values is different between the 1 pixel KDE and the 2^"
-		// + i + " pixel KDE",
-		// counts[0],
-		// counts[i]);
-		// }
 		return expectedResults;
 	}
 }

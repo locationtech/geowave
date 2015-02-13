@@ -4,11 +4,14 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 
 import mil.nga.giat.geowave.services.clients.GeoserverServiceClient;
 import mil.nga.giat.geowave.services.clients.InfoServiceClient;
 import mil.nga.giat.geowave.services.clients.IngestServiceClient;
 import mil.nga.giat.geowave.store.index.IndexType;
+import mil.nga.giat.geowave.test.GeoWaveTestEnvironment;
+import mil.nga.giat.geowave.test.mapreduce.MapReduceTestEnvironment;
 import mil.nga.giat.geowave.types.gpx.GpxUtils;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -19,6 +22,7 @@ import org.apache.accumulo.core.client.TableNotFoundException;
 import org.apache.commons.io.IOUtils;
 import org.geotools.feature.SchemaException;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +31,8 @@ public class GeoWaveServicesIT extends
 		ServicesTestEnvironment
 {
 	private static final Logger LOGGER = LoggerFactory.getLogger(GeoWaveServicesIT.class);
-
+	
+	protected static final String TEST_DATA_ZIP_RESOURCE_PATH = TEST_RESOURCE_PACKAGE + "mapreduce-testdata.zip";
 	protected static final String TEST_CASE_GENERAL_GPX_BASE = TEST_CASE_BASE + "general_gpx_test_case/";
 	protected static final String GENERAL_GPX_INPUT_GPX_DIR = TEST_CASE_GENERAL_GPX_BASE + "input_gpx/";
 	private static final String ASHLAND_GPX_FILE = GENERAL_GPX_INPUT_GPX_DIR + "ashland.gpx";
@@ -40,6 +45,16 @@ public class GeoWaveServicesIT extends
 	private static GeoserverServiceClient geoserverServiceClient;
 	private static IngestServiceClient ingestServiceClient;
 
+	@BeforeClass
+	public static void extractTestFiles()
+			throws URISyntaxException {
+		GeoWaveTestEnvironment.unZipFile(
+				new File(
+						MapReduceTestEnvironment.class.getClassLoader().getResource(
+								TEST_DATA_ZIP_RESOURCE_PATH).toURI()),
+				TEST_CASE_BASE);
+	}
+	
 	@Test
 	public void testServices()
 			throws IOException,

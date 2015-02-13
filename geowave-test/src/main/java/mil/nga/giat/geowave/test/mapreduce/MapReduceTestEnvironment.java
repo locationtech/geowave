@@ -1,12 +1,14 @@
 package mil.nga.giat.geowave.test.mapreduce;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 
 import mil.nga.giat.geowave.ingest.IngestMain;
 import mil.nga.giat.geowave.store.index.IndexType;
-
 import mil.nga.giat.geowave.test.GeoWaveTestEnvironment;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
@@ -20,13 +22,7 @@ abstract public class MapReduceTestEnvironment extends
 		GeoWaveTestEnvironment
 {
 	private final static Logger LOGGER = Logger.getLogger(MapReduceTestEnvironment.class);
-	protected static final String TEST_DATA_ZIP_RESOURCE_PATH = TEST_RESOURCE_PACKAGE + "mapreduce-testdata.zip";
-	protected static final String TEST_CASE_GENERAL_GPX_BASE = TEST_CASE_BASE + "general_gpx_test_case/";
-	protected static final String GENERAL_GPX_FILTER_PACKAGE = TEST_CASE_GENERAL_GPX_BASE + "filter/";
-	protected static final String GENERAL_GPX_FILTER_FILE = GENERAL_GPX_FILTER_PACKAGE + "filter.shp";
-	protected static final String GENERAL_GPX_INPUT_GPX_DIR = TEST_CASE_GENERAL_GPX_BASE + "input_gpx/";
-	protected static final String GENERAL_GPX_EXPECTED_RESULTS_DIR = TEST_CASE_GENERAL_GPX_BASE + "filter_results/";
-	protected static final String OSM_GPX_INPUT_DIR = TEST_CASE_BASE + "osm_gpx_test_case/";
+
 	protected static final String HDFS_BASE_DIRECTORY = "test_tmp";
 	protected static final String DEFAULT_JOB_TRACKER = "local";
 	protected static final String EXPECTED_RESULTS_KEY = "EXPECTED_RESULTS";

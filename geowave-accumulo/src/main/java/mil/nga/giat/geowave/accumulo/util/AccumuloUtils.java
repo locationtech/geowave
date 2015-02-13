@@ -18,8 +18,9 @@ import mil.nga.giat.geowave.index.ByteArrayRange;
 import mil.nga.giat.geowave.index.NumericIndexStrategy;
 import mil.nga.giat.geowave.index.StringUtils;
 import mil.nga.giat.geowave.index.sfc.data.MultiDimensionalNumericData;
-import mil.nga.giat.geowave.store.IngestEntryInfo;
-import mil.nga.giat.geowave.store.IngestEntryInfo.FieldInfo;
+import mil.nga.giat.geowave.store.DataStoreEntryInfo;
+import mil.nga.giat.geowave.store.DataStoreEntryInfo.FieldInfo;
+import mil.nga.giat.geowave.store.ScanCallback;
 import mil.nga.giat.geowave.store.adapter.AdapterPersistenceEncoding;
 import mil.nga.giat.geowave.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.store.adapter.DataAdapter;
@@ -53,7 +54,7 @@ import org.apache.log4j.Logger;
  * A set of convenience methods for common operations on Accumulo within
  * GeoWave, such as conversions between GeoWave objects and corresponding
  * Accumulo objects.
- *
+ * 
  */
 public class AccumuloUtils
 {
@@ -168,25 +169,29 @@ public class AccumuloUtils
 				adapter,
 				null,
 				clientFilter,
-				index);
+				index,
+				null);
 	}
 
-	public static Object decodeRow(
+	@SuppressWarnings("unchecked")
+	public static <T> T decodeRow(
 			final Key key,
 			final Value value,
 			final AdapterStore adapterStore,
 			final QueryFilter clientFilter,
-			final Index index ) {
+			final Index index,
+			final ScanCallback<T> scanCallback ) {
 		final AccumuloRowId rowId = new AccumuloRowId(
 				key.getRow().copyBytes());
-		return decodeRowObj(
+		return (T) decodeRowObj(
 				key,
 				value,
 				rowId,
 				null,
 				adapterStore,
 				clientFilter,
-				index);
+				index,
+				scanCallback);
 	}
 
 	public static Object decodeRow(
@@ -203,7 +208,8 @@ public class AccumuloUtils
 				null,
 				adapterStore,
 				clientFilter,
-				index);
+				index,
+				null);
 	}
 
 	private static <T> Object decodeRowObj(
@@ -213,28 +219,31 @@ public class AccumuloUtils
 			final DataAdapter<T> dataAdapter,
 			final AdapterStore adapterStore,
 			final QueryFilter clientFilter,
-			final Index index ) {
-		final Pair<T, IngestEntryInfo> pair = decodeRow(
+			final Index index,
+			final ScanCallback<T> scanCallback ) {
+		final Pair<T, DataStoreEntryInfo> pair = decodeRow(
 				key,
 				value,
 				rowId,
 				dataAdapter,
 				adapterStore,
 				clientFilter,
-				index);
+				index,
+				scanCallback);
 		return pair != null ? pair.getLeft() : null;
 
 	}
 
 	@SuppressWarnings("unchecked")
-	public static <T> Pair<T, IngestEntryInfo> decodeRow(
+	public static <T> Pair<T, DataStoreEntryInfo> decodeRow(
 			final Key k,
 			final Value v,
 			final AccumuloRowId rowId,
 			final DataAdapter<T> dataAdapter,
 			final AdapterStore adapterStore,
 			final QueryFilter clientFilter,
-			final Index index ) {
+			final Index index,
+			final ScanCallback<T> scanCallback ) {
 		if ((dataAdapter == null) && (adapterStore == null)) {
 			LOGGER.error("Could not decode row from iterator. Either adapter or adapter store must be non-null.");
 			return null;
@@ -346,19 +355,23 @@ public class AccumuloUtils
 				extendedData);
 		if ((clientFilter == null) || clientFilter.accept(encodedRow)) {
 			// cannot get here unless adapter is found (not null)
-			return Pair.of(
+			Pair<T, DataStoreEntryInfo> pair = Pair.of(
 					adapter.decode(
 							encodedRow,
 							index),
-					new IngestEntryInfo(
+					new DataStoreEntryInfo(
 							Arrays.asList(new ByteArrayId(
 									k.getRowData().getBackingArray())),
 							fieldInfoList));
+			if (scanCallback != null) scanCallback.entryScanned(
+					pair.getRight(),
+					pair.getLeft());
+			return pair;
 		}
 		return null;
 	}
 
-	public static <T> IngestEntryInfo write(
+	public static <T> DataStoreEntryInfo write(
 			final WritableDataAdapter<T> writableAdapter,
 			final Index index,
 			final T entry,
@@ -371,13 +384,13 @@ public class AccumuloUtils
 				DEFAULT_VISIBILITY);
 	}
 
-	public static <T> IngestEntryInfo write(
+	public static <T> DataStoreEntryInfo write(
 			final WritableDataAdapter<T> writableAdapter,
 			final Index index,
 			final T entry,
 			final Writer writer,
 			final VisibilityWriter<T> customFieldVisibilityWriter ) {
-		final IngestEntryInfo ingestInfo = getIngestInfo(
+		final DataStoreEntryInfo ingestInfo = getIngestInfo(
 				writableAdapter,
 				index,
 				entry,
@@ -420,7 +433,7 @@ public class AccumuloUtils
 
 	public static <T> void writeAltIndex(
 			final WritableDataAdapter<T> writableAdapter,
-			final IngestEntryInfo entryInfo,
+			final DataStoreEntryInfo entryInfo,
 			final T entry,
 			final Writer writer ) {
 
@@ -454,7 +467,7 @@ public class AccumuloUtils
 			final Index index,
 			final T entry,
 			final VisibilityWriter<T> customFieldVisibilityWriter ) {
-		final IngestEntryInfo ingestInfo = getIngestInfo(
+		final DataStoreEntryInfo ingestInfo = getIngestInfo(
 				dataWriter,
 				index,
 				entry,
@@ -466,7 +479,7 @@ public class AccumuloUtils
 
 	private static <T> List<Mutation> buildMutations(
 			final byte[] adapterId,
-			final IngestEntryInfo ingestInfo ) {
+			final DataStoreEntryInfo ingestInfo ) {
 		final List<Mutation> mutations = new ArrayList<Mutation>();
 		final List<FieldInfo> fieldInfoList = ingestInfo.getFieldInfo();
 		for (final ByteArrayId rowId : ingestInfo.getRowIds()) {
@@ -491,7 +504,7 @@ public class AccumuloUtils
 	}
 
 	/**
-	 *
+	 * 
 	 * @param dataWriter
 	 * @param index
 	 * @param entry
@@ -551,7 +564,7 @@ public class AccumuloUtils
 		"rawtypes",
 		"unchecked"
 	})
-	public static <T> IngestEntryInfo getIngestInfo(
+	public static <T> DataStoreEntryInfo getIngestInfo(
 			final WritableDataAdapter<T> dataWriter,
 			final Index index,
 			final T entry,
@@ -608,13 +621,13 @@ public class AccumuloUtils
 					}
 				}
 			}
-			return new IngestEntryInfo(
+			return new DataStoreEntryInfo(
 					rowIds,
 					fieldInfoList);
 		}
 		LOGGER.warn("Indexing failed to produce insertion ids; entry [" + dataWriter.getDataId(
 				entry).getString() + "] not saved.");
-		return new IngestEntryInfo(
+		return new DataStoreEntryInfo(
 				Collections.EMPTY_LIST,
 				Collections.EMPTY_LIST);
 

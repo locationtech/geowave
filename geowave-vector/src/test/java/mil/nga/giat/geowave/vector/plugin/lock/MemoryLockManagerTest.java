@@ -4,6 +4,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
+import java.util.UUID;
 
 import mil.nga.giat.geowave.vector.plugin.lock.LockingManagement;
 import mil.nga.giat.geowave.vector.plugin.lock.MemoryLockManager;
@@ -25,10 +26,10 @@ public class MemoryLockManagerTest
 		final DefaultTransaction t1 = new DefaultTransaction();
 		memoryLockManager.lock(
 				t1,
-				"f1");
+				"f8");
 		memoryLockManager.lock(
 				t1,
-				"f1");
+				"f8");
 		t1.commit();
 		t1.close();
 	}
@@ -41,13 +42,13 @@ public class MemoryLockManagerTest
 				"default");
 		final Transaction t1 = Transaction.AUTO_COMMIT;
 		final DefaultTransaction t2 = new DefaultTransaction();
-		t2.addAuthorization("auth1");
+		t2.addAuthorization("auth5");
 		FeatureLock lock = new FeatureLock(
-				"auth1",
+				"auth5",
 				1 /* minute */);
 		memoryLockManager.lockFeatureID(
 				"sometime",
-				"f1",
+				"f5",
 				t1,
 				lock);
 		Thread commiter = new Thread(
@@ -57,7 +58,7 @@ public class MemoryLockManagerTest
 						try {
 							Thread.sleep(4000);
 							memoryLockManager.release(
-									"auth1",
+									"auth5",
 									t1);
 						}
 						catch (InterruptedException e) {
@@ -76,7 +77,7 @@ public class MemoryLockManagerTest
 		commiter.start();
 		memoryLockManager.lock(
 				t2,
-				"f1");
+				"f5");
 		assertTrue((System.currentTimeMillis() - currentTime) < 4000);
 		commiter.join();
 	}
@@ -95,12 +96,12 @@ public class MemoryLockManagerTest
 				1 /* minute */);
 		memoryLockManager.lockFeatureID(
 				"sometime",
-				"f1",
+				"f4",
 				t1,
 				lock);
 		memoryLockManager.lock(
 				t2,
-				"f1");
+				"f4");
 		t2.commit();
 		// commit should not take away the lock
 		assertTrue(memoryLockManager.exists("auth1"));
@@ -108,6 +109,7 @@ public class MemoryLockManagerTest
 				"auth1",
 				t1);
 		assertFalse(memoryLockManager.exists("auth1"));
+		t1.close();
 	}
 
 	@Test
@@ -118,21 +120,21 @@ public class MemoryLockManagerTest
 				"default");
 		final Transaction t1 = Transaction.AUTO_COMMIT;
 		FeatureLock lock = new FeatureLock(
-				"auth1",
+				"auth2",
 				1 /* minute */);
 		memoryLockManager.lockFeatureID(
 				"sometime",
-				"f1",
+				"f2",
 				t1,
 				lock);
 		memoryLockManager.refresh(
-				"auth1",
+				"auth2",
 				t1);
-		assertTrue(memoryLockManager.exists("auth1"));
+		assertTrue(memoryLockManager.exists("auth2"));
 		memoryLockManager.release(
-				"auth1",
+				"auth2",
 				t1);
-		assertFalse(memoryLockManager.exists("auth1"));
+		assertFalse(memoryLockManager.exists("auth2"));
 	}
 
 	@Test
@@ -140,11 +142,11 @@ public class MemoryLockManagerTest
 			throws InterruptedException,
 			IOException {
 		final LockingManagement memoryLockManager = new MemoryLockManager(
-				"default");
+				UUID.randomUUID().toString());
 		final DefaultTransaction t1 = new DefaultTransaction();
 		memoryLockManager.lock(
 				t1,
-				"f1");
+				"f3");
 		final DefaultTransaction t2 = new DefaultTransaction();
 
 		Thread commiter = new Thread(
@@ -175,8 +177,10 @@ public class MemoryLockManagerTest
 	//	System.out.println("t2");
 		memoryLockManager.lock(
 				t2,
-				"f1");
-		assertTrue((System.currentTimeMillis() - currentTime) >= 4000);
+				"f3");
+		final long endTime = System.currentTimeMillis();
+		//System.out.println(endTime + " > " + currentTime);
+		assertTrue((endTime - currentTime) >= 3800);
 
 		commiter.join();
 		t2.commit();

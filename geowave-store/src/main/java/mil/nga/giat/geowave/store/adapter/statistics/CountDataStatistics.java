@@ -6,7 +6,7 @@ import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.index.Mergeable;
 import mil.nga.giat.geowave.store.DeleteCallback;
 import mil.nga.giat.geowave.store.IngestCallback;
-import mil.nga.giat.geowave.store.IngestEntryInfo;
+import mil.nga.giat.geowave.store.DataStoreEntryInfo;
 
 public class CountDataStatistics<T> extends
 		AbstractDataStatistics<T> implements
@@ -25,7 +25,8 @@ public class CountDataStatistics<T> extends
 	public CountDataStatistics(
 			final ByteArrayId dataAdapterId ) {
 		super(
-				dataAdapterId);
+				dataAdapterId,
+				STATS_ID);
 	}
 
 	public boolean isSet() {
@@ -52,7 +53,7 @@ public class CountDataStatistics<T> extends
 
 	@Override
 	public void entryIngested(
-			final IngestEntryInfo entryInfo,
+			final DataStoreEntryInfo entryInfo,
 			final T entry ) {
 		if (!isSet()) {
 			count = 0;
@@ -82,7 +83,7 @@ public class CountDataStatistics<T> extends
 
 	@Override
 	public void entryDeleted(
-			final IngestEntryInfo entryInfo,
+			final DataStoreEntryInfo entryInfo,
 			final T entry ) {
 		if (!isSet()) {
 			count = 0;

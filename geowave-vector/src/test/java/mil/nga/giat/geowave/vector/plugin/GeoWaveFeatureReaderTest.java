@@ -6,9 +6,12 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
+
+import mil.nga.giat.geowave.vector.utils.DateUtilities;
 
 import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
@@ -19,6 +22,8 @@ import org.geotools.data.FeatureWriter;
 import org.geotools.data.Query;
 import org.geotools.data.Transaction;
 import org.geotools.feature.SchemaException;
+import org.geotools.feature.visitor.MaxVisitor;
+import org.geotools.feature.visitor.MinVisitor;
 import org.geotools.filter.text.cql2.CQLException;
 import org.geotools.filter.text.ecql.ECQL;
 import org.junit.Before;
@@ -35,11 +40,12 @@ public class GeoWaveFeatureReaderTest
 	GeoWaveGTMemDataStore dataStore;
 	SimpleFeatureType schema;
 	SimpleFeatureType type;
-	GeometryFactory factory = new GeometryFactory(
+	final GeometryFactory factory = new GeometryFactory(
 			new PrecisionModel(
 					PrecisionModel.FIXED));
 	Query query = null;
 	List<String> fids = new ArrayList<String>();
+	Date stime, etime;
 
 	@Before
 	public void setup()
@@ -48,12 +54,16 @@ public class GeoWaveFeatureReaderTest
 			SchemaException,
 			CQLException,
 			Exception {
+
 		dataStore = new GeoWaveGTMemDataStore();
 		type = DataUtilities.createType(
-				"geostuff",
-				"geometry:Geometry:srid=4326,pop:java.lang.Long,pid:String");
+				"GeoWaveFeatureReaderTest",
+				"geometry:Geometry:srid=4326,start:Date,end:Date,pop:java.lang.Long,pid:String");
 
 		dataStore.createSchema(type);
+
+		stime = DateUtilities.parseISO("2005-05-15T20:32:56Z");
+		etime = DateUtilities.parseISO("2005-05-20T20:32:56Z");
 
 		final Transaction transaction1 = new DefaultTransaction();
 		final FeatureWriter<SimpleFeatureType, SimpleFeature> writer = dataStore.getFeatureWriter(
@@ -63,11 +73,16 @@ public class GeoWaveFeatureReaderTest
 		SimpleFeature newFeature = writer.next();
 		newFeature.setAttribute(
 				"pop",
-				Long.valueOf(
-						100));
+				Long.valueOf(100));
 		newFeature.setAttribute(
 				"pid",
 				UUID.randomUUID().toString());
+		newFeature.setAttribute(
+				"start",
+				stime);
+		newFeature.setAttribute(
+				"end",
+				etime);
 		newFeature.setAttribute(
 				"geometry",
 				factory.createPoint(new Coordinate(
@@ -78,11 +93,13 @@ public class GeoWaveFeatureReaderTest
 		newFeature = writer.next();
 		newFeature.setAttribute(
 				"pop",
-				Long.valueOf(
-						101));
+				Long.valueOf(101));
 		newFeature.setAttribute(
 				"pid",
 				UUID.randomUUID().toString());
+		newFeature.setAttribute(
+				"start",
+				etime);
 		newFeature.setAttribute(
 				"geometry",
 				factory.createPoint(new Coordinate(
@@ -96,16 +113,17 @@ public class GeoWaveFeatureReaderTest
 
 		// System.out.println(fids);
 		query = new Query(
-				"geostuff",
+				"GeoWaveFeatureReaderTest",
 				ECQL.toFilter("IN ('" + fids.get(0) + "')"),
 				new String[] {
 					"geometry",
 					"pid"
 				});
+
 	}
 
 	@Test
-	public void test()
+	public void testRangeIndex()
 			throws IllegalArgumentException,
 			NoSuchElementException,
 			IOException {
@@ -124,4 +142,41 @@ public class GeoWaveFeatureReaderTest
 
 	}
 
+	@Test
+	public void testMax()
+			throws IllegalArgumentException,
+			NoSuchElementException,
+			IOException {
+		final GeoWaveFeatureReader reader = (GeoWaveFeatureReader) dataStore.getFeatureReader(
+				type.getTypeName(),
+				query);
+		final MaxVisitor visitor = new MaxVisitor(
+				"start",
+				type);
+		reader.getFeatureCollection().accepts(
+				visitor,
+				null);
+		assertTrue(visitor.getMax().equals(
+				etime));
+
+	}
+
+	@Test
+	public void testMin()
+			throws IllegalArgumentException,
+			NoSuchElementException,
+			IOException {
+		final GeoWaveFeatureReader reader = (GeoWaveFeatureReader) dataStore.getFeatureReader(
+				type.getTypeName(),
+				query);
+		final MinVisitor visitor = new MinVisitor(
+				"start",
+				type);
+		reader.getFeatureCollection().accepts(
+				visitor,
+				null);
+		assertTrue(visitor.getMin().equals(
+				stime));
+
+	}
 }

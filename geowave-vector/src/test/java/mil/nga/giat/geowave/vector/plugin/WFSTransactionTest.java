@@ -32,7 +32,7 @@ public class WFSTransactionTest
 	GeoWaveGTMemDataStore dataStore;
 	SimpleFeatureType schema;
 	SimpleFeatureType type;
-	GeometryFactory factory = new GeometryFactory(
+	final GeometryFactory factory = new GeometryFactory(
 			new PrecisionModel(
 					PrecisionModel.FIXED));
 	Query query = null;
@@ -62,24 +62,24 @@ public class WFSTransactionTest
 	public void testInsertIsolation()
 			throws IOException,
 			CQLException {
-		Transaction transaction1 = new DefaultTransaction();
+		final Transaction transaction1 = new DefaultTransaction();
 
-		FeatureWriter<SimpleFeatureType, SimpleFeature> writer = dataStore.getFeatureWriter(
+		final FeatureWriter<SimpleFeatureType, SimpleFeature> writer = dataStore.getFeatureWriter(
 				type.getTypeName(),
 				transaction1);
 		assertFalse(writer.hasNext());
-		SimpleFeature newFeature = writer.next();
+		final SimpleFeature newFeature = writer.next();
 		newFeature.setAttribute(
 				"pop",
-				Long.valueOf(
-						100));
+				Long.valueOf(100));
 		newFeature.setAttribute(
 				"pid",
 				UUID.randomUUID().toString());
 		newFeature.setAttribute(
 				"geometry",
 				factory.createPoint(new Coordinate(
-						27.25,41.25)));
+						27.25,
+						41.25)));
 		writer.write();
 		writer.close();
 
@@ -87,7 +87,7 @@ public class WFSTransactionTest
 				query,
 				transaction1);
 		assertTrue(reader.hasNext());
-		SimpleFeature priorFeature = reader.next();
+		final SimpleFeature priorFeature = reader.next();
 		assertEquals(
 				newFeature.getAttribute("pid"),
 				priorFeature.getAttribute("pid"));
@@ -96,7 +96,7 @@ public class WFSTransactionTest
 		// uncommitted at this point, so this next transaction should not see
 		// it.
 
-		Transaction transaction2 = new DefaultTransaction();
+		final Transaction transaction2 = new DefaultTransaction();
 		reader = dataStore.getFeatureReader(
 				query,
 				transaction2);
@@ -111,7 +111,7 @@ public class WFSTransactionTest
 		reader.next();
 		assertFalse(reader.hasNext());
 		reader.close();
-		
+
 		transaction1.close();
 
 		// since this implementation does not support serializable, transaction2
@@ -144,15 +144,15 @@ public class WFSTransactionTest
 		SimpleFeature newFeature = writer.next();
 		newFeature.setAttribute(
 				"pop",
-				Long.valueOf(
-						100));
+				Long.valueOf(100));
 		newFeature.setAttribute(
 				"pid",
 				UUID.randomUUID().toString());
 		newFeature.setAttribute(
 				"geometry",
 				factory.createPoint(new Coordinate(
-						27.25,41.25)));
+						27.25,
+						41.25)));
 		writer.write();
 		writer.close();
 		transaction1.commit();
@@ -171,13 +171,14 @@ public class WFSTransactionTest
 		// Add one more in this transaction and remove the
 		// prior feature.
 
-		String idToRemove = priorFeature.getID();
+		final String idToRemove = priorFeature.getID();
 		transaction1 = new DefaultTransaction();
 		writer = dataStore.getFeatureWriter(
 				type.getTypeName(),
 				transaction1);
-		while (writer.hasNext())
+		while (writer.hasNext()) {
 			writer.next();
+		}
 		newFeature = writer.next();
 		newFeature.setAttribute(
 				"pop",
@@ -189,7 +190,8 @@ public class WFSTransactionTest
 		newFeature.setAttribute(
 				"geometry",
 				factory.createPoint(new Coordinate(
-						27.25,41.25)));
+						27.25,
+						41.25)));
 		writer.write();
 		writer.close();
 
@@ -261,18 +263,18 @@ public class WFSTransactionTest
 				type.getTypeName(),
 				transaction1);
 		assertFalse(writer.hasNext());
-		SimpleFeature newFeature = writer.next();
+		final SimpleFeature newFeature = writer.next();
 		newFeature.setAttribute(
 				"pop",
-				Long.valueOf(
-						100));
+				Long.valueOf(100));
 		newFeature.setAttribute(
 				"pid",
 				UUID.randomUUID().toString());
 		newFeature.setAttribute(
 				"geometry",
 				factory.createPoint(new Coordinate(
-						27.25,41.25)));
+						27.25,
+						41.25)));
 		writer.write();
 		writer.close();
 		transaction1.commit();
@@ -285,7 +287,7 @@ public class WFSTransactionTest
 				transaction1);
 		assertTrue(writer.hasNext());
 		SimpleFeature priorFeature = writer.next();
-		String pid = UUID.randomUUID().toString();
+		final String pid = UUID.randomUUID().toString();
 		priorFeature.setAttribute(
 				"pid",
 				pid);

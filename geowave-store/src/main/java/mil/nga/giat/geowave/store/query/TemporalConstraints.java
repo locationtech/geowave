@@ -7,7 +7,8 @@ import java.util.List;
 
 public class TemporalConstraints
 {
-	LinkedList<TemporalRange> constraints = new LinkedList<TemporalRange>();
+	private LinkedList<TemporalRange> constraints = new LinkedList<TemporalRange>();
+	private String name;
 
 	public static final TemporalRange FULL_RANGE = new TemporalRange(
 			TemporalRange.START_TIME,
@@ -17,9 +18,45 @@ public class TemporalConstraints
 
 	}
 
+	public String getName() {
+		return name;
+	}
+
+	public void empty() {
+		constraints.clear();
+	}
+
 	public TemporalConstraints(
-			TemporalRange range ) {
+			String name ) {
+		this.name = name;
+	}
+
+	public TemporalConstraints(
+			List<TemporalRange> ranges,
+			String name ) {
+		this.constraints.addAll(ranges);
+		this.name = name;
+	}
+
+	public TemporalConstraints(
+			TemporalRange range,
+			String name ) {
 		this.constraints.add(range);
+		this.name = name;
+	}
+
+	public void replaceWithIntersections(
+			final TemporalConstraints constraints ) {
+		this.constraints = TemporalConstraints.findIntersections(
+				this,
+				constraints).constraints;
+	}
+
+	public void replaceWithMerged(
+			final TemporalConstraints constraints ) {
+		this.constraints = TemporalConstraints.merge(
+				this,
+				constraints).constraints;
 	}
 
 	public void add(
@@ -142,10 +179,10 @@ public class TemporalConstraints
 	public static final TemporalConstraints merge(
 			final TemporalConstraints left,
 			final TemporalConstraints right ) {
-		if (!left.isEmpty()) {
+		if (left.isEmpty()) {
 			return right;
 		}
-		if (!right.isEmpty()) {
+		if (right.isEmpty()) {
 			return left;
 		}
 

@@ -1,10 +1,18 @@
 package mil.nga.giat.geowave.store.adapter.statistics;
 
 import java.nio.ByteBuffer;
+import java.util.HashMap;
+import java.util.Map;
 
 import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.index.Mergeable;
-import mil.nga.giat.geowave.store.IngestEntryInfo;
+import mil.nga.giat.geowave.index.dimension.LatitudeDefinition;
+import mil.nga.giat.geowave.index.dimension.LongitudeDefinition;
+import mil.nga.giat.geowave.index.dimension.NumericDimensionDefinition;
+import mil.nga.giat.geowave.index.sfc.data.NumericRange;
+import mil.nga.giat.geowave.store.DataStoreEntryInfo;
+import mil.nga.giat.geowave.store.query.BasicQuery.ConstraintData;
+import mil.nga.giat.geowave.store.query.BasicQuery.Constraints;
 
 import com.vividsolutions.jts.geom.Envelope;
 
@@ -26,7 +34,16 @@ abstract public class BoundingBoxDataStatistics<T> extends
 	public BoundingBoxDataStatistics(
 			final ByteArrayId dataAdapterId ) {
 		super(
-				dataAdapterId);
+				dataAdapterId,
+				STATS_ID);
+	}
+
+	public BoundingBoxDataStatistics(
+			final ByteArrayId dataAdapterId,
+			final ByteArrayId staticticsId ) {
+		super(
+				dataAdapterId,
+				staticticsId);
 	}
 
 	public boolean isSet() {
@@ -62,7 +79,7 @@ abstract public class BoundingBoxDataStatistics<T> extends
 
 	@Override
 	public byte[] toBinary() {
-		final ByteBuffer buffer = ByteBuffer.allocate(32);
+		final ByteBuffer buffer = super.binaryBuffer(32);
 		buffer.putDouble(minX);
 		buffer.putDouble(minY);
 		buffer.putDouble(maxX);
@@ -73,7 +90,7 @@ abstract public class BoundingBoxDataStatistics<T> extends
 	@Override
 	public void fromBinary(
 			final byte[] bytes ) {
-		final ByteBuffer buffer = ByteBuffer.wrap(bytes);
+		final ByteBuffer buffer = super.binaryBuffer(bytes);
 		minX = buffer.getDouble();
 		minY = buffer.getDouble();
 		maxX = buffer.getDouble();
@@ -82,7 +99,7 @@ abstract public class BoundingBoxDataStatistics<T> extends
 
 	@Override
 	public void entryIngested(
-			final IngestEntryInfo entryInfo,
+			final DataStoreEntryInfo entryInfo,
 			final T entry ) {
 		final Envelope env = getEnvelope(entry);
 		if (env != null) {
@@ -101,13 +118,36 @@ abstract public class BoundingBoxDataStatistics<T> extends
 		}
 	}
 
+	public Constraints getConstraints() {
+		// Create a NumericRange object using the x axis
+		final NumericRange rangeLongitude = new NumericRange(
+				minX,
+				maxX);
+
+		// Create a NumericRange object using the y axis
+		final NumericRange rangeLatitude = new NumericRange(
+				minY,
+				maxY);
+
+		final Map<Class<? extends NumericDimensionDefinition>, ConstraintData> constraintsPerDimension = new HashMap<Class<? extends NumericDimensionDefinition>, ConstraintData>();
+		// Create and return a new IndexRange array with an x and y axis
+		// range
+		constraintsPerDimension.put(
+				LongitudeDefinition.class,
+				new ConstraintData(
+						rangeLongitude,
+						true));
+		constraintsPerDimension.put(
+				LatitudeDefinition.class,
+				new ConstraintData(
+						rangeLatitude,
+						true));
+		return new Constraints(
+				constraintsPerDimension);
+	}
+
 	abstract protected Envelope getEnvelope(
 			final T entry );
-
-	@Override
-	public ByteArrayId getStatisticsId() {
-		return STATS_ID;
-	}
 
 	@Override
 	public void merge(

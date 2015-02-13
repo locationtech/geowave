@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -28,25 +27,25 @@ import mil.nga.giat.geowave.accumulo.util.DataAdapterAndIndexCache;
 import mil.nga.giat.geowave.accumulo.util.IteratorWrapper;
 import mil.nga.giat.geowave.accumulo.util.IteratorWrapper.Callback;
 import mil.nga.giat.geowave.accumulo.util.IteratorWrapper.Converter;
+import mil.nga.giat.geowave.store.adapter.statistics.StatsCompositionTool;
 import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.index.ByteArrayRange;
 import mil.nga.giat.geowave.index.ByteArrayUtils;
 import mil.nga.giat.geowave.index.StringUtils;
 import mil.nga.giat.geowave.store.CloseableIterator;
 import mil.nga.giat.geowave.store.DataStore;
+import mil.nga.giat.geowave.store.DataStoreEntryInfo;
 import mil.nga.giat.geowave.store.IndexWriter;
 import mil.nga.giat.geowave.store.IngestCallback;
 import mil.nga.giat.geowave.store.IngestCallbackList;
-import mil.nga.giat.geowave.store.IngestEntryInfo;
+import mil.nga.giat.geowave.store.ScanCallback;
 import mil.nga.giat.geowave.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.store.adapter.IndexDependentDataAdapter;
 import mil.nga.giat.geowave.store.adapter.MemoryAdapterStore;
 import mil.nga.giat.geowave.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.store.adapter.statistics.DataStatistics;
-import mil.nga.giat.geowave.store.adapter.statistics.DataStatisticsBuilder;
 import mil.nga.giat.geowave.store.adapter.statistics.DataStatisticsStore;
-import mil.nga.giat.geowave.store.adapter.statistics.StatisticalDataAdapter;
 import mil.nga.giat.geowave.store.data.VisibilityWriter;
 import mil.nga.giat.geowave.store.data.visibility.UnconstrainedVisibilityHandler;
 import mil.nga.giat.geowave.store.data.visibility.UniformVisibilityWriter;
@@ -69,11 +68,12 @@ import org.apache.accumulo.core.data.Mutation;
 import org.apache.accumulo.core.data.Range;
 import org.apache.accumulo.core.data.Value;
 import org.apache.accumulo.core.iterators.user.WholeRowIterator;
-import org.apache.commons.lang3.tuple.Pair;
 import org.apache.hadoop.io.Text;
 import org.apache.log4j.Logger;
 
 import com.google.common.collect.Iterators;
+
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 /**
  * This is the Accumulo implementation of the data store. It requires an
@@ -233,7 +233,7 @@ public class AccumuloDataStore implements
 				}
 			}
 
-			final List<DataStatisticsBuilder<T>> statisticsBuilders = getStatsBuilders(writableAdapter);
+			final StatsCompositionTool<T> statisticsTool = getStatsCompositionTool(writableAdapter);
 
 			writer = accumuloOperations.createWriter(
 					indexName,
@@ -257,7 +257,7 @@ public class AccumuloDataStore implements
 							((AttachedIteratorDataAdapter) writableAdapter).getAttachedIteratorConfig(index));
 				}
 			}
-			final IngestEntryInfo entryInfo = AccumuloUtils.write(
+			final DataStoreEntryInfo entryInfo = AccumuloUtils.write(
 					writableAdapter,
 					index,
 					entry,
@@ -280,15 +280,11 @@ public class AccumuloDataStore implements
 				altIdxWriter.close();
 			}
 
-			for (final DataStatisticsBuilder<T> builder : statisticsBuilders) {
-				builder.entryIngested(
-						entryInfo,
-						entry);
-				final Collection<DataStatistics<T>> statistics = builder.getStatistics();
-				for (final DataStatistics<T> s : statistics) {
-					statisticsStore.incorporateStatistics(s);
-				}
-			}
+			statisticsTool.entryIngested(
+					entryInfo,
+					entry);
+			
+			statisticsTool.flush();
 
 			return entryInfo.getRowIds();
 		}
@@ -418,6 +414,7 @@ public class AccumuloDataStore implements
 					}
 				}
 			}
+
 			final String indexName = StringUtils.stringFromBinary(index.getId().getBytes());
 			final mil.nga.giat.geowave.accumulo.Writer writer = accumuloOperations.createWriter(
 					indexName,
@@ -452,24 +449,9 @@ public class AccumuloDataStore implements
 						altIdxWriter,
 						dataWriter));
 			}
-			boolean persistStats = accumuloOptions.isPersistDataStatistics() && (dataWriter instanceof StatisticalDataAdapter) && (statisticsStore != null);
-			List<DataStatisticsBuilder<T>> statisticsBuilders = null;
-			if (persistStats) {
-				final ByteArrayId[] statisticsIds = ((StatisticalDataAdapter<T>) dataWriter).getSupportedStatisticsIds();
-				statisticsBuilders = new ArrayList<DataStatisticsBuilder<T>>(
-						statisticsIds.length);
-				for (final ByteArrayId id : statisticsIds) {
-					statisticsBuilders.add(new DataStatisticsBuilder<T>(
-							(StatisticalDataAdapter) dataWriter,
-							id));
-				}
-				if ((statisticsBuilders != null) && !statisticsBuilders.isEmpty()) {
-					callbacks.addAll(statisticsBuilders);
-				}
-				else {
-					persistStats = false;
-				}
-			}
+			final StatsCompositionTool<T> statsCompositionTool = this.getStatsCompositionTool(dataWriter);
+			callbacks.add(statsCompositionTool);
+
 			if (ingestCallback != null) {
 				callbacks.add(ingestCallback);
 			}
@@ -523,14 +505,9 @@ public class AccumuloDataStore implements
 			if (useAltIndex && (altIdxWriter != null)) {
 				altIdxWriter.close();
 			}
-			if (persistStats) {
-				for (final DataStatisticsBuilder<T> builder : statisticsBuilders) {
-					final Collection<DataStatistics<T>> statistics = builder.getStatistics();
-					for (final DataStatistics<T> s : statistics) {
-						statisticsStore.incorporateStatistics(s);
-					}
-				}
-			}
+
+			statsCompositionTool.flush();
+
 		}
 		catch (final TableNotFoundException | AccumuloException | AccumuloSecurityException e) {
 			LOGGER.error(
@@ -666,15 +643,19 @@ public class AccumuloDataStore implements
 				Integer.MAX_VALUE,
 				authorizations);
 
+		final StatsCompositionTool<Object> statsCompositionTool = getStatsCompositionTool(adapter);
 		final boolean success = (rows.size() > 0) && deleteRowsForSingleEntry(
 				tableName,
 				rows,
 				createDecodingDeleteObserver(
-						getStatsBuilders(adapter),
+						statsCompositionTool,
 						adapter,
 						index),
 				authorizations);
 
+		if (success) {
+			statsCompositionTool.flush();
+		}
 		if (success && useAltIndex) {
 			deleteAltIndexEntry(
 					altIdxTableName,
@@ -686,7 +667,7 @@ public class AccumuloDataStore implements
 
 	}
 
-	@SuppressFBWarnings(value="DLS_DEAD_LOCAL_STORE", justification="i is part of loop condition" )
+	@SuppressFBWarnings(value = "DLS_DEAD_LOCAL_STORE", justification = "i is part of loop condition")
 	private List<Entry<Key, Value>> getEntryRows(
 			final String tableName,
 			final ByteArrayId dataId,
@@ -727,7 +708,9 @@ public class AccumuloDataStore implements
 
 			final Iterator<Map.Entry<Key, Value>> iterator = scanner.iterator();
 			int i = 0;
-			if (iterator.hasNext() && i < limit) { //FB supression as FB not detecting i reference here
+			if (iterator.hasNext() && (i < limit)) { // FB supression as FB not
+														// detecting i reference
+														// here
 				resultList.add(iterator.next());
 				i++;
 			}
@@ -919,9 +902,9 @@ public class AccumuloDataStore implements
 		return query(
 				adapter,
 				index,
-				query,
-				Integer.valueOf(
-						limit),
+				query,				
+				Integer.valueOf(limit),
+				null,
 				authorizations);
 	}
 
@@ -933,8 +916,7 @@ public class AccumuloDataStore implements
 		return query(
 				adapter,
 				query,
-				Integer.valueOf(
-						limit));
+				Integer.valueOf(limit));
 	}
 
 	@SuppressWarnings("unchecked")
@@ -952,7 +934,8 @@ public class AccumuloDataStore implements
 						new DataAdapter[] {
 							adapter
 						}),
-				limit));
+				limit,
+				null));
 	}
 
 	@Override
@@ -964,7 +947,8 @@ public class AccumuloDataStore implements
 				adapterIds,
 				query,
 				adapterStore,
-				limit);
+				limit,
+				null);
 	}
 
 	@Override
@@ -975,6 +959,7 @@ public class AccumuloDataStore implements
 				adapterIds,
 				query,
 				adapterStore,
+				null,
 				null);
 	}
 
@@ -983,6 +968,7 @@ public class AccumuloDataStore implements
 			final Query query,
 			final AdapterStore adapterStore,
 			final Integer limit,
+			final ScanCallback<?> scanCallback,
 			final String... authorizations ) {
 		try (final CloseableIterator<Index> indices = indexStore.getIndices()) {
 			return query(
@@ -991,6 +977,7 @@ public class AccumuloDataStore implements
 					indices,
 					adapterStore,
 					limit,
+					scanCallback,
 					authorizations);
 		}
 		catch (final IOException e) {
@@ -1013,6 +1000,7 @@ public class AccumuloDataStore implements
 			final CloseableIterator<Index> indices,
 			final AdapterStore adapterStore,
 			final Integer limit,
+			final ScanCallback<?> scanCallback,
 			final String... authorizations ) {
 		// query the indices that are supported for this query object, and these
 		// data adapter Ids
@@ -1030,6 +1018,7 @@ public class AccumuloDataStore implements
 						adapterIds,
 						index,
 						clientDedupeFilter,
+						scanCallback,
 						authorizations);
 			}
 			else if (query.isSupported(index)) {
@@ -1040,6 +1029,7 @@ public class AccumuloDataStore implements
 						query.getIndexConstraints(index.getIndexStrategy()),
 						query.createFilters(index.getIndexModel()),
 						clientDedupeFilter,
+						scanCallback,
 						authorizations);
 			}
 			else {
@@ -1114,7 +1104,7 @@ public class AccumuloDataStore implements
 			final Index index,
 			final Query query,
 			final Integer limit ) {
-		if (query != null && !query.isSupported(index)) {
+		if ((query != null) && !query.isSupported(index)) {
 			throw new IllegalArgumentException(
 					"Index does not support the query");
 		}
@@ -1159,13 +1149,14 @@ public class AccumuloDataStore implements
 	}
 
 	@SuppressWarnings("unchecked")
-	private <T> CloseableIterator<T> query(
+	public <T> CloseableIterator<T> query(
 			final DataAdapter<T> adapter,
 			final Index index,
 			final Query query,
 			final Integer limit,
+			final ScanCallback<?> scanCallback,
 			final String... authorizations ) {
-		if (query != null && !query.isSupported(index)) {
+		if ((query != null) && !query.isSupported(index)) {
 			throw new IllegalArgumentException(
 					"Index does not support the query");
 		}
@@ -1186,6 +1177,7 @@ public class AccumuloDataStore implements
 							adapter
 						}),
 				limit,
+				scanCallback,
 				authorizations);
 	}
 
@@ -1217,36 +1209,11 @@ public class AccumuloDataStore implements
 				additionalAuthorizations);
 	}
 
-	private <T> void recordDeletion(
-			final List<DataStatisticsBuilder<T>> statsBuilders,
-			final Pair<T, IngestEntryInfo> entryData ) {
-
-		for (final DataStatisticsBuilder<T> builder : statsBuilders) {
-			builder.entryDeleted(
-					entryData.getRight(),
-					entryData.getLeft());
-			final Collection<DataStatistics<T>> statistics = builder.getStatistics();
-			for (final DataStatistics<T> s : statistics) {
-				statisticsStore.incorporateStatistics(s);
-			}
-		}
-	}
-
-	private <T> List<DataStatisticsBuilder<T>> getStatsBuilders(
+	private <T> StatsCompositionTool<T> getStatsCompositionTool(
 			final DataAdapter<T> adapter ) {
-		final boolean persistStats = accumuloOptions.isPersistDataStatistics() && (adapter instanceof StatisticalDataAdapter) && (statisticsStore != null);
-		final List<DataStatisticsBuilder<T>> statisticsBuilders = new ArrayList<DataStatisticsBuilder<T>>();
-		if (persistStats) {
-			final ByteArrayId[] statisticsIds = ((StatisticalDataAdapter<T>) adapter).getSupportedStatisticsIds();
-			if ((statisticsIds != null) && (statisticsIds.length != 0)) {
-				for (final ByteArrayId id : statisticsIds) {
-					statisticsBuilders.add(new DataStatisticsBuilder<T>(
-							(StatisticalDataAdapter) adapter,
-							id));
-				}
-			}
-		}
-		return statisticsBuilders;
+		return new StatsCompositionTool<T>(
+				adapter,
+				accumuloOptions.isPersistDataStatistics() ? statisticsStore : null);
 	}
 
 	private boolean deleteAll(
@@ -1332,12 +1299,12 @@ public class AccumuloDataStore implements
 
 	}
 
-	private <T> DeleteRowObserver createDecodingDeleteObserver(
-			final List<DataStatisticsBuilder<T>> builders,
-			final DataAdapter<T> adapter,
+	private DeleteRowObserver createDecodingDeleteObserver(
+			final StatsCompositionTool<Object> stats,
+			final DataAdapter<Object> adapter,
 			final Index index ) {
 
-		return builders.isEmpty() ? null : new DeleteRowObserver() {
+		return stats.isPersisting() ?  new DeleteRowObserver() {
 			// many rows can be associated with one entry.
 			// need a control to delete only one.
 			boolean foundOne = false;
@@ -1349,22 +1316,31 @@ public class AccumuloDataStore implements
 				if (!foundOne) {
 					final AccumuloRowId rowId = new AccumuloRowId(
 							key.getRow().copyBytes());
-					@SuppressWarnings("unchecked")
-					final Pair<T, IngestEntryInfo> rowData = AccumuloUtils.decodeRow(
+					AccumuloUtils.decodeRow(
 							key,
 							value,
 							rowId,
 							adapter,
 							null,
 							null,
-							index);
-					recordDeletion(
-							builders,
-							rowData);
+							index,
+							new ScanCallback<Object>() {
+
+								@Override
+								public void entryScanned(
+										final DataStoreEntryInfo entryInfo,
+										final Object entry ) {
+									stats.entryDeleted(
+											entryInfo,
+											entry);
+								}
+
+							});
+
 				}
 				foundOne = true;
 			}
-		};
+		} : null;
 	}
 
 	private interface DeleteRowObserver

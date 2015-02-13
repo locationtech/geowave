@@ -35,7 +35,7 @@ public class WFSSpatialTest
 	GeoWaveGTMemDataStore dataStore;
 	SimpleFeatureType schema;
 	SimpleFeatureType type;
-	GeometryFactory factory = new GeometryFactory(
+	final GeometryFactory factory = new GeometryFactory(
 			new PrecisionModel(
 					PrecisionModel.FIXED));
 	Query query = null;
@@ -66,17 +66,16 @@ public class WFSSpatialTest
 			throws IOException,
 			CQLException,
 			ParseException {
-		Transaction transaction1 = new DefaultTransaction();
+		final Transaction transaction1 = new DefaultTransaction();
 
-		FeatureWriter<SimpleFeatureType, SimpleFeature> writer = dataStore.getFeatureWriter(
+		final FeatureWriter<SimpleFeatureType, SimpleFeature> writer = dataStore.getFeatureWriter(
 				type.getTypeName(),
 				transaction1);
 		assertFalse(writer.hasNext());
 		SimpleFeature newFeature = writer.next();
 		newFeature.setAttribute(
 				"pop",
-				Long.valueOf(
-						100));
+				Long.valueOf(100));
 		newFeature.setAttribute(
 				"pid",
 				UUID.randomUUID().toString());
@@ -86,13 +85,13 @@ public class WFSSpatialTest
 		newFeature.setAttribute(
 				"geometry",
 				factory.createPoint(new Coordinate(
-						27.25,41.25)));
+						27.25,
+						41.25)));
 
 		newFeature = writer.next();
 		newFeature.setAttribute(
 				"pop",
-				Long.valueOf(
-						100));
+				Long.valueOf(100));
 		newFeature.setAttribute(
 				"pid",
 				UUID.randomUUID().toString());
@@ -102,15 +101,16 @@ public class WFSSpatialTest
 		newFeature.setAttribute(
 				"geometry",
 				factory.createPoint(new Coordinate(
-						27.25,41.25)));
+						27.25,
+						41.25)));
 		writer.write();
 		writer.close();
 
-		FeatureReader<SimpleFeatureType, SimpleFeature> reader = dataStore.getFeatureReader(
+		final FeatureReader<SimpleFeatureType, SimpleFeature> reader = dataStore.getFeatureReader(
 				query,
 				transaction1);
 		assertTrue(reader.hasNext());
-		SimpleFeature priorFeature = reader.next();
+		final SimpleFeature priorFeature = reader.next();
 		assertEquals(
 				newFeature.getAttribute("pid"),
 				priorFeature.getAttribute("pid"));

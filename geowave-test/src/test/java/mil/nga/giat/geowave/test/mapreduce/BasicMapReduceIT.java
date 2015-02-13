@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.FilenameFilter;
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -51,7 +50,6 @@ import org.apache.hadoop.util.ToolRunner;
 import org.apache.log4j.Logger;
 import org.geotools.data.DataStoreFinder;
 import org.junit.Assert;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.opengis.feature.simple.SimpleFeature;
 
@@ -68,16 +66,6 @@ public class BasicMapReduceIT extends
 		EXPECTED,
 		UNEXPECTED,
 		ERROR
-	}
-
-	@BeforeClass
-	public static void extractTestFiles()
-			throws URISyntaxException {
-		GeoWaveTestEnvironment.unZipFile(
-				new File(
-						MapReduceTestEnvironment.class.getClassLoader().getResource(
-								TEST_DATA_ZIP_RESOURCE_PATH).toURI()),
-				TEST_CASE_BASE);
 	}
 
 	@Test

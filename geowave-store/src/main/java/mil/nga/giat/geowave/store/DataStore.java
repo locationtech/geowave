@@ -448,4 +448,35 @@ public interface DataStore
 			final Query query,
 			final int limit,
 			final String... authorizations );
+	
+	/**
+	 * Returns all data in this data store that matches the query parameter and
+	 * matches one of the adapter IDs. All data types that match the query and
+	 * one of the adapter IDs will be returned as an instance of the native data
+	 * type that was originally ingested. The iterator will only return as many
+	 * results as the limit passed in.
+	 *
+	 * @param adapterIds
+	 *            The data adapter IDs to use for the query - only data that
+	 *            matches one of these adapter IDs will be returned
+	 * @param query
+	 *            The description of the query to be performed
+	 * @param limit
+	 *            The maximum number of entries to return
+	 * @param scanCallback
+	 *            A callback invoked for each row with full row information.
+	 * @param authorizations
+	 *            The authorization used to override the default authorization
+	 *            for cell visibility.
+	 * @return An iterator on all results that match the query. The iterator
+	 *         implements Closeable and it is best practice to close the
+	 *         iterator after it is no longer needed.
+	 */
+	public <T> CloseableIterator<T> query(
+			final DataAdapter<T> adapter,
+			final Index index,
+			final Query query,
+			final Integer limit,
+			final ScanCallback<?> scanCallback,
+			final String... authorizations );
 }

@@ -6,11 +6,12 @@ import java.util.List;
 import mil.nga.giat.geowave.accumulo.util.CloseableIteratorWrapper;
 import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.index.ByteArrayRange;
+import mil.nga.giat.geowave.store.ScanCallback;
 import mil.nga.giat.geowave.store.index.Index;
 
 /**
  * Represents a query operation using an Accumulo row prefix.
- *
+ * 
  */
 public class AccumuloRowPrefixQuery extends
 		AbstractAccumuloRowQuery<CloseableIteratorWrapper<?>>
@@ -19,11 +20,24 @@ public class AccumuloRowPrefixQuery extends
 	public AccumuloRowPrefixQuery(
 			final Index index,
 			final ByteArrayId rowPrefix,
-			final String...authorizations) {
+			final ScanCallback<CloseableIteratorWrapper<?>> scanCallback,
+			final String... authorizations ) {
 		super(
 				index,
 				rowPrefix,
-				authorizations);
+				authorizations,
+				scanCallback);
+	}
+
+	public AccumuloRowPrefixQuery(
+			final Index index,
+			final ByteArrayId rowPrefix,
+			final String... authorizations ) {
+		super(
+				index,
+				rowPrefix,
+				authorizations,
+				null);
 	}
 
 	@Override

@@ -1,6 +1,5 @@
 package mil.nga.giat.geowave.accumulo;
 
-import java.io.IOException;
 import java.util.List;
 
 import mil.nga.giat.geowave.index.ByteArrayId;

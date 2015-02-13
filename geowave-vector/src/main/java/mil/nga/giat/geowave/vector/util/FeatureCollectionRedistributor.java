@@ -161,39 +161,43 @@ public class FeatureCollectionRedistributor
 				final ReentrantLock runLock = new ReentrantLock();
 				runLock.lock();
 
-				final ArrayBlockingQueue<DefaultFeatureCollection> queue = new ArrayBlockingQueue<DefaultFeatureCollection>(
-						config.getNumThreads() * 2);
+				try {
+					final ArrayBlockingQueue<DefaultFeatureCollection> queue = new ArrayBlockingQueue<DefaultFeatureCollection>(
+							config.getNumThreads() * 2);
 
-				// create numThreads consumers
-				for (int thread = 0; thread < config.getNumThreads(); thread++) {
-					executor.execute(new Runnable() {
-						@Override
-						public void run() {
-							featCollConsumer(
-									runLock,
-									totalNumOverflow,
-									totalNumOcuppiedSubTiles,
-									totalNumCollsProcessed,
-									queue,
-									subStratIdx);
+					// create numThreads consumers
+					for (int thread = 0; thread < config.getNumThreads(); thread++) {
+						executor.execute(new Runnable() {
+							@Override
+							public void run() {
+								featCollConsumer(
+										runLock,
+										totalNumOverflow,
+										totalNumOcuppiedSubTiles,
+										totalNumCollsProcessed,
+										queue,
+										subStratIdx);
+							}
+						});
+					}
+
+					// iterate over each collection
+					while (itr.hasNext()) {
+						// create a new thread for each feature collection
+						final DefaultFeatureCollection coll = itr.next();
+						try {
+							queue.put(coll);
 						}
-					});
-				}
-
-				// iterate over each collection
-				while (itr.hasNext()) {
-					// create a new thread for each feature collection
-					final DefaultFeatureCollection coll = itr.next();
-					try {
-						queue.put(coll);
-					}
-					catch (final InterruptedException e) {
-						LOGGER.error(
-								"Process interrupted while placing an item on the queue.",
-								e);
+						catch (final InterruptedException e) {
+							LOGGER.error(
+									"Process interrupted while placing an item on the queue.",
+									e);
+						}
 					}
 				}
-				runLock.unlock();
+				finally {
+					runLock.unlock();
+				}
 
 				try {
 					executor.shutdown();

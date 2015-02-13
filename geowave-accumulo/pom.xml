@@ -50,7 +50,6 @@
         <dependency>
             <groupId>com.google.code.findbugs</groupId>
             <artifactId>annotations</artifactId>
-            <version>${findbugs.version}</version>
         </dependency>
     </dependencies>
 	<build>

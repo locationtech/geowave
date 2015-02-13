@@ -43,7 +43,7 @@ import org.opengis.filter.Filter;
  * rows as SimpleFeatures and it will decode a CQL filter string into a query
  * filter to check acceptance with each SimpleFeature within an AccumuloIterator
  * and skip the row if it is not accepted.
- *
+ * 
  */
 public class CqlQueryFilterIterator extends
 		WholeRowIterator
@@ -171,8 +171,7 @@ public class CqlQueryFilterIterator extends
 	}
 
 	public static void initClassLoader(
-			@SuppressWarnings("rawtypes")
-			final Class cls )
+			@SuppressWarnings("rawtypes") final Class cls )
 			throws MalformedURLException {
 		synchronized (MUTEX) {
 			if (classLoaderInitialized) {
@@ -187,14 +186,19 @@ public class CqlQueryFilterIterator extends
 					fileUrls[i] = new URL(
 							fileObjs[i].toString());
 				}
-				final URLClassLoader ucl = new URLClassLoader(
-						fileUrls,
-						cl);
-				GeoTools.addClassLoader(ucl);
+				GeoTools.addClassLoader(java.security.AccessController.doPrivileged(new java.security.PrivilegedAction<URLClassLoader>() {
+					public URLClassLoader run() {
+						final URLClassLoader ucl = new URLClassLoader(
+								fileUrls,
+								cl);
+						return ucl;
+					}
+				}));
+	
 			}
 			classLoaderInitialized = true;
 		}
-	
+
 	}
 
 	@Override

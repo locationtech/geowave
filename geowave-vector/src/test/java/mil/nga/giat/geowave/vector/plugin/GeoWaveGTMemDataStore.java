@@ -1,6 +1,7 @@
 package mil.nga.giat.geowave.vector.plugin;
 
 import java.net.URL;
+import java.util.UUID;
 
 import mil.nga.giat.geowave.accumulo.BasicAccumuloOperations;
 import mil.nga.giat.geowave.accumulo.metadata.AccumuloAdapterStore;
@@ -23,33 +24,47 @@ public class GeoWaveGTMemDataStore extends
 		GeoWaveGTDataStore
 {
 
+	public GeoWaveGTMemDataStore(
+			final String instanceName )
+			throws AccumuloException,
+			AccumuloSecurityException {
+		super(
+				new MemoryTransactionsAllocater());
+		((MemoryTransactionsAllocater) super.getTransactionsAllocater()).setNotificationRequester(this);
+		init(instanceName);
+
+	}
+
 	public GeoWaveGTMemDataStore()
 			throws AccumuloException,
 			AccumuloSecurityException {
 		super(
 				new MemoryTransactionsAllocater());
 		((MemoryTransactionsAllocater) super.getTransactionsAllocater()).setNotificationRequester(this);
-		init();
+		init(UUID.randomUUID().toString());
 
 	}
 
 	public GeoWaveGTMemDataStore(
-			AuthorizationFactorySPI authorizationFactorySPI,
-			URL authURL )
+			final AuthorizationFactorySPI authorizationFactorySPI,
+			final URL authURL,
+			final String instanceName )
 			throws AccumuloException,
 			AccumuloSecurityException {
 		super(
 				new MemoryTransactionsAllocater(),
 				authorizationFactorySPI.create(authURL));
 		((MemoryTransactionsAllocater) super.getTransactionsAllocater()).setNotificationRequester(this);
-		init();
+		init(instanceName);
 	}
 
-	public void init()
+	public void init(
+			final String instanceName )
 			throws AccumuloException,
 			AccumuloSecurityException {
 
-		final MockInstance mockDataInstance = new MockInstance();
+		final MockInstance mockDataInstance = new MockInstance(
+				instanceName);
 		final Connector mockDataConnector = mockDataInstance.getConnector(
 				"root",
 				new PasswordToken(

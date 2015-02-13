@@ -12,8 +12,8 @@ import com.vividsolutions.jts.geom.Geometry;
  * The Spatial Temporal Query class represents a query in three dimensions. The
  * constraint that is applied represents an intersection operation on the query
  * geometry AND a date range intersection based on startTime and endTime.
- *
- *
+ * 
+ * 
  */
 public class SpatialTemporalQuery extends
 		SpatialQuery
@@ -42,32 +42,60 @@ public class SpatialTemporalQuery extends
 				queryGeometry);
 	}
 
+	public static Constraints createConstraints(
+			final TemporalRange temporalRange,
+			final boolean isDefault ) {
+		final Constraints constraints = new Constraints();
+		constraints.addConstraint(
+				TimeDefinition.class,
+				new ConstraintData(
+						new NumericRange(
+								temporalRange.getStartTime().getTime(),
+								temporalRange.getEndTime().getTime()),
+						isDefault));
+
+		return constraints;
+	}
+
+	public static Constraints createConstraints(
+			final TemporalConstraints temporalConstraints,
+			final boolean isDefault ) {
+		final Constraints constraints = new Constraints();
+		for (final TemporalRange range : temporalConstraints.getRanges()) {
+			constraints.addConstraint(
+					TimeDefinition.class,
+					new ConstraintData(
+							new NumericRange(
+									range.getStartTime().getTime(),
+									range.getEndTime().getTime()),
+							isDefault));
+		}
+		return constraints;
+	}
+
 	private static Constraints createSpatialTemporalConstraints(
 			final TemporalConstraints temporalConstraints,
 			final Geometry queryGeometry ) {
-		final Constraints constraints = GeometryUtils.basicConstraintsFromGeometry(queryGeometry);
-		for (final TemporalRange range : temporalConstraints.constraints) {
-			constraints.constraintsPerTypeOfDimensionDefinition.put(
-					TimeDefinition.class,
-					new NumericRange(
-							range.getStartTime().getTime(),
-							range.getEndTime().getTime()));
-		}
-
-		return constraints;
+		final Constraints geoConstraints = GeometryUtils.basicConstraintsFromGeometry(queryGeometry);
+		final Constraints timeConstraints = createConstraints(
+				temporalConstraints,
+				false);
+		return geoConstraints.merge(timeConstraints);
 	}
 
 	private static Constraints createSpatialTemporalConstraints(
 			final Date startTime,
 			final Date endTime,
 			final Geometry queryGeometry ) {
-		final Constraints constraints = GeometryUtils.basicConstraintsFromGeometry(queryGeometry);
-		constraints.constraintsPerTypeOfDimensionDefinition.put(
+		final Constraints geoConstraints = GeometryUtils.basicConstraintsFromGeometry(queryGeometry);
+		geoConstraints.addConstraint(
 				TimeDefinition.class,
-				new NumericRange(
-						startTime.getTime(),
-						endTime.getTime()));
-		return constraints;
+				new ConstraintData(
+						new NumericRange(
+								startTime.getTime(),
+								endTime.getTime()),
+						false));
+		return geoConstraints;
 	}
 
 }

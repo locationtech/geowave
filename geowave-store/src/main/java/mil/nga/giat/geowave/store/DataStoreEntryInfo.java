@@ -5,7 +5,7 @@ import java.util.List;
 import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.store.data.PersistentValue;
 
-public class IngestEntryInfo
+public class DataStoreEntryInfo
 {
 	public static class FieldInfo<T>
 	{
@@ -38,7 +38,7 @@ public class IngestEntryInfo
 	private final List<ByteArrayId> rowIds;
 	private final List<FieldInfo> fieldInfo;
 
-	public IngestEntryInfo(
+	public DataStoreEntryInfo(
 			final List<ByteArrayId> rowIds,
 			final List<FieldInfo> fieldInfo ) {
 		this.rowIds = rowIds;

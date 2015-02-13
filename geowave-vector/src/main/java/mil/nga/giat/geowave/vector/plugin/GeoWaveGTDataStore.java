@@ -826,7 +826,7 @@ public class GeoWaveGTDataStore extends
 				// pick the first matching one or
 				// pick the one does not match the required time constraints
 				if (hasLat && hasLong) {
-					if ((currentSelection == null) || (currentSelectionHasTime != hasTime)) {
+					if ((currentSelection == null) || (currentSelectionHasTime != needTime)) {
 						currentSelection = index;
 						currentSelectionHasTime = hasTime;
 					}
@@ -834,18 +834,10 @@ public class GeoWaveGTDataStore extends
 			}
 			// at this point, preferredID is not found
 			// only select the index if one has not been found or
-			// the current selection does not have temporal constraints and some
-			// are
-			// desired.
-			if ((currentSelection == null) || (!currentSelectionHasTime && needTime)) {
-				if (needTime) {
-					currentSelection = IndexType.SPATIAL_TEMPORAL_VECTOR.createDefaultIndex();
-				}
-				else {
-					currentSelection = IndexType.SPATIAL_VECTOR.createDefaultIndex();
-				}
-
-				LOGGER.warn("Creating new index for GeoSpatial Data");
+			// the current selection. Not using temporal at this point.
+			// temporal index should only be used if explicitly requested.
+			if (currentSelection == null) {
+				currentSelection = IndexType.SPATIAL_VECTOR.createDefaultIndex();
 			}
 		}
 		catch (final IOException ex) {

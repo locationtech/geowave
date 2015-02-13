@@ -34,20 +34,62 @@ public class BasicQuery implements
 {
 	private final static Logger LOGGER = Logger.getLogger(BasicQuery.class);
 
+	public static class ConstraintData
+	{
+		protected final NumericData range;
+		protected final boolean isDefault;
+
+		public ConstraintData(
+				final NumericData range,
+				final boolean isDefault ) {
+			super();
+			this.range = range;
+			this.isDefault = isDefault;
+		}
+	}
+
 	public static class Constraints
 	{
 		// these basic queries are tied to NumericDimensionDefinition types, not
 		// ideal, but third-parties can and will nned to implement their own
 		// queries if they implement their own dimension definitions
-		protected final Map<Class<? extends NumericDimensionDefinition>, NumericData> constraintsPerTypeOfDimensionDefinition;
+		protected final Map<Class<? extends NumericDimensionDefinition>, ConstraintData> constraintsPerTypeOfDimensionDefinition;
 
 		public Constraints() {
-			constraintsPerTypeOfDimensionDefinition = new LinkedHashMap<Class<? extends NumericDimensionDefinition>, NumericData>();
+			constraintsPerTypeOfDimensionDefinition = new LinkedHashMap<Class<? extends NumericDimensionDefinition>, ConstraintData>();
 		}
 
 		public Constraints(
-				final Map<Class<? extends NumericDimensionDefinition>, NumericData> constraintsPerTypeOfDimensionDefinition ) {
+				final Map<Class<? extends NumericDimensionDefinition>, ConstraintData> constraintsPerTypeOfDimensionDefinition ) {
 			this.constraintsPerTypeOfDimensionDefinition = constraintsPerTypeOfDimensionDefinition;
+		}
+
+		public Constraints merge(
+				Constraints constraints ) {
+			this.constraintsPerTypeOfDimensionDefinition.putAll(constraints.constraintsPerTypeOfDimensionDefinition);
+			return this;
+		}
+
+		public void addConstraint(
+				final Class<? extends NumericDimensionDefinition> dimDefinition,
+				final ConstraintData constraintData ) {
+			constraintsPerTypeOfDimensionDefinition.put(
+					dimDefinition,
+					constraintData);
+		}
+
+		public boolean isEmpty() {
+			return constraintsPerTypeOfDimensionDefinition.isEmpty();
+		}
+
+		public boolean matches(
+				Constraints constraints ) {
+			if (constraints.isEmpty() != this.isEmpty()) return false;
+			for (final Map.Entry<Class<? extends NumericDimensionDefinition>, ConstraintData> entry : constraintsPerTypeOfDimensionDefinition.entrySet()) {
+				ConstraintData data = constraints.constraintsPerTypeOfDimensionDefinition.get(entry.getKey());
+				if (!data.range.equals(entry.getValue().range)) return false;
+			}
+			return true;
 		}
 
 		public MultiDimensionalNumericData getIndexConstraints(
@@ -59,11 +101,32 @@ public class BasicQuery implements
 			final NumericData[] dataPerDimension = new NumericData[dimensionDefinitions.length];
 			// all or nothing...for now
 			for (int d = 0; d < dimensionDefinitions.length; d++) {
-				final NumericData dimConstraint = constraintsPerTypeOfDimensionDefinition.get(dimensionDefinitions[d].getClass());
-				dataPerDimension[d] = (dimConstraint == null ? dimensionDefinitions[d].getFullRange() : dimConstraint);
+				final ConstraintData dimConstraint = constraintsPerTypeOfDimensionDefinition.get(dimensionDefinitions[d].getClass());
+				dataPerDimension[d] = (dimConstraint == null ? dimensionDefinitions[d].getFullRange() : dimConstraint.range);
 			}
 			return new BasicNumericDataset(
 					dataPerDimension);
+		}
+
+		public boolean isSupported(
+				final Index index ) {
+			final DimensionField<? extends CommonIndexValue>[] fields = index.getIndexModel().getDimensions();
+			final Set<Class<? extends NumericDimensionDefinition>> fieldTypeSet = new HashSet<Class<? extends NumericDimensionDefinition>>();
+			// first create a set of the field's base definition types that are
+			// within the index model
+			for (final DimensionField<? extends CommonIndexValue> field : fields) {
+				fieldTypeSet.add(field.getBaseDefinition().getClass());
+			}
+			// then ensure each of the definition types that is required by
+			// these
+			// constraints are in the index model
+			for (final Map.Entry<Class<? extends NumericDimensionDefinition>, ConstraintData> entry : constraintsPerTypeOfDimensionDefinition.entrySet()) {
+				// defaults are not mandatory
+				if (!fieldTypeSet.contains(entry.getKey()) && !entry.getValue().isDefault) {
+					return false;
+				}
+			}
+			return true;
 		}
 	}
 
@@ -83,12 +146,12 @@ public class BasicQuery implements
 		final List<QueryFilter> filters = new ArrayList<QueryFilter>();
 		final NumericData[] orderedConstraintsPerDimension = new NumericData[dimensionFields.length];
 		for (int d = 0; d < dimensionFields.length; d++) {
-			final NumericData nd = constraints.constraintsPerTypeOfDimensionDefinition.get(dimensionFields[d].getBaseDefinition().getClass());
+			final ConstraintData nd = constraints.constraintsPerTypeOfDimensionDefinition.get(dimensionFields[d].getBaseDefinition().getClass());
 			if (nd == null) {
 				orderedConstraintsPerDimension[d] = dimensionFields[d].getBaseDefinition().getFullRange();
 			}
 			else {
-				orderedConstraintsPerDimension[d] = constraints.constraintsPerTypeOfDimensionDefinition.get(dimensionFields[d].getBaseDefinition().getClass());
+				orderedConstraintsPerDimension[d] = constraints.constraintsPerTypeOfDimensionDefinition.get(dimensionFields[d].getBaseDefinition().getClass()).range;
 			}
 		}
 		final QueryFilter queryFilter = createQueryFilter(
@@ -112,21 +175,7 @@ public class BasicQuery implements
 	@Override
 	public boolean isSupported(
 			final Index index ) {
-		final DimensionField<? extends CommonIndexValue>[] fields = index.getIndexModel().getDimensions();
-		final Set<Class<? extends NumericDimensionDefinition>> fieldTypeSet = new HashSet<Class<? extends NumericDimensionDefinition>>();
-		// first create a set of the field's base definition types that are
-		// within the index model
-		for (final DimensionField<? extends CommonIndexValue> field : fields) {
-			fieldTypeSet.add(field.getBaseDefinition().getClass());
-		}
-		// then ensure each of the definition types that is required by these
-		// constraints are in the index model
-		for (final Class<? extends NumericDimensionDefinition> fieldType : constraints.constraintsPerTypeOfDimensionDefinition.keySet()) {
-			if (!fieldTypeSet.contains(fieldType)) {
-				return false;
-			}
-		}
-		return true;
+		return constraints.isSupported(index);
 	}
 
 	@Override
@@ -140,16 +189,18 @@ public class BasicQuery implements
 		final List<byte[]> bytes = new ArrayList<byte[]>(
 				constraints.constraintsPerTypeOfDimensionDefinition.size());
 		int totalBytes = 4;
-		for (final Entry<Class<? extends NumericDimensionDefinition>, NumericData> c : constraints.constraintsPerTypeOfDimensionDefinition.entrySet()) {
+		for (final Entry<Class<? extends NumericDimensionDefinition>, ConstraintData> c : constraints.constraintsPerTypeOfDimensionDefinition.entrySet()) {
 			final byte[] className = StringUtils.stringToBinary(c.getKey().getName());
-			final double min = c.getValue().getMin();
-			final double max = c.getValue().getMax();
-			final int entryLength = className.length + 20;
+			final double min = c.getValue().range.getMin();
+			final double max = c.getValue().range.getMax();
+			final int entryLength = className.length + 22;
+			final short isDefault = (short) (c.getValue().isDefault ? 1 : 0);
 			final ByteBuffer entryBuf = ByteBuffer.allocate(entryLength);
 			entryBuf.putInt(className.length);
 			entryBuf.put(className);
 			entryBuf.putDouble(min);
 			entryBuf.putDouble(max);
+			entryBuf.putShort(isDefault);
 			bytes.add(entryBuf.array());
 			totalBytes += entryLength;
 		}
@@ -167,7 +218,7 @@ public class BasicQuery implements
 			final byte[] bytes ) {
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
 		final int numEntries = buf.getInt();
-		final Map<Class<? extends NumericDimensionDefinition>, NumericData> constraintsPerTypeOfDimensionDefinition = new LinkedHashMap<Class<? extends NumericDimensionDefinition>, NumericData>(
+		final Map<Class<? extends NumericDimensionDefinition>, ConstraintData> constraintsPerTypeOfDimensionDefinition = new LinkedHashMap<Class<? extends NumericDimensionDefinition>, ConstraintData>(
 				numEntries);
 		for (int i = 0; i < numEntries; i++) {
 			final int classNameLength = buf.getInt();
@@ -175,14 +226,17 @@ public class BasicQuery implements
 			buf.get(className);
 			final double min = buf.getDouble();
 			final double max = buf.getDouble();
+			final boolean isDefault = buf.getShort() > 0;
 			final String classNameStr = StringUtils.stringFromBinary(className);
 			try {
 				final Class<? extends NumericDimensionDefinition> cls = (Class<? extends NumericDimensionDefinition>) Class.forName(classNameStr);
 				constraintsPerTypeOfDimensionDefinition.put(
 						cls,
-						new NumericRange(
-								min,
-								max));
+						new ConstraintData(
+								new NumericRange(
+										min,
+										max),
+								isDefault));
 			}
 			catch (final ClassNotFoundException e) {
 				LOGGER.warn(

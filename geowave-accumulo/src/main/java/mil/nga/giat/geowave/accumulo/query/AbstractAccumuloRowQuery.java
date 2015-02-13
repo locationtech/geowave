@@ -2,9 +2,10 @@ package mil.nga.giat.geowave.accumulo.query;
 
 import mil.nga.giat.geowave.accumulo.AccumuloOperations;
 import mil.nga.giat.geowave.accumulo.util.CloseableIteratorWrapper;
-import mil.nga.giat.geowave.accumulo.util.EntryIteratorWrapper;
 import mil.nga.giat.geowave.accumulo.util.CloseableIteratorWrapper.ScannerClosableWrapper;
+import mil.nga.giat.geowave.accumulo.util.EntryIteratorWrapper;
 import mil.nga.giat.geowave.index.ByteArrayId;
+import mil.nga.giat.geowave.store.ScanCallback;
 import mil.nga.giat.geowave.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.store.index.Index;
 
@@ -21,14 +22,17 @@ abstract public class AbstractAccumuloRowQuery<T> extends
 		AccumuloQuery
 {
 	protected final ByteArrayId row;
+	protected final ScanCallback<T> scanCallback;
 
 	public AbstractAccumuloRowQuery(
 			final Index index,
 			final ByteArrayId row,
-			final String[] authorizations) {
+			final String[] authorizations,
+			final ScanCallback<T> scanCallback ) {
 		super(
 				index);
 		this.row = row;
+		this.scanCallback = scanCallback;
 	}
 
 	public T query(

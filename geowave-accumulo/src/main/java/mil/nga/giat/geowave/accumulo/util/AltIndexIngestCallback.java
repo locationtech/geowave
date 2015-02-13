@@ -2,7 +2,7 @@ package mil.nga.giat.geowave.accumulo.util;
 
 import mil.nga.giat.geowave.accumulo.Writer;
 import mil.nga.giat.geowave.store.IngestCallback;
-import mil.nga.giat.geowave.store.IngestEntryInfo;
+import mil.nga.giat.geowave.store.DataStoreEntryInfo;
 import mil.nga.giat.geowave.store.adapter.WritableDataAdapter;
 
 public class AltIndexIngestCallback<T> implements
@@ -20,7 +20,7 @@ public class AltIndexIngestCallback<T> implements
 
 	@Override
 	public void entryIngested(
-			final IngestEntryInfo entryInfo,
+			final DataStoreEntryInfo entryInfo,
 			final T entry ) {
 		AccumuloUtils.writeAltIndex(
 				writeableAdapter,
