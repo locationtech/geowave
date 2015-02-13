@@ -32,6 +32,9 @@ import mil.nga.giat.geowave.store.query.DistributableQuery;
 import mil.nga.giat.geowave.test.GeoWaveTestEnvironment;
 import mil.nga.giat.geowave.types.gpx.GpxIngestPlugin;
 
+import org.apache.accumulo.core.client.AccumuloException;
+import org.apache.accumulo.core.client.AccumuloSecurityException;
+import org.apache.accumulo.core.client.TableNotFoundException;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.io.NullWritable;
@@ -66,7 +69,13 @@ public class BasicMapReduceIT extends
 	@Test
 	public void testIngestAndQueryGeneralGpx()
 			throws Exception {
-		accumuloOperations.deleteAll();
+		try {
+			accumuloOperations.deleteAll();
+		}
+		catch (TableNotFoundException | AccumuloSecurityException | AccumuloException ex) {
+			LOGGER.error("Unable to clear accumulo namespace", ex);
+			Assert.fail("Index not deleted successfully");
+		}
 		testIngest(
 				IndexType.SPATIAL_VECTOR,
 				GENERAL_GPX_INPUT_GPX_DIR);
@@ -131,7 +140,13 @@ public class BasicMapReduceIT extends
 	@Test
 	public void testIngestOsmGpxMultipleIndices()
 			throws Exception {
-		accumuloOperations.deleteAll();
+		try {
+			accumuloOperations.deleteAll();
+		}
+		catch (TableNotFoundException | AccumuloSecurityException | AccumuloException ex) {
+			LOGGER.error("Unable to clear accumulo namespace", ex);
+			Assert.fail("Index not deleted successfully");
+		}
 		// ingest the data set into multiple indices and then try several query
 		// methods, by adapter and by index
 		testIngest(

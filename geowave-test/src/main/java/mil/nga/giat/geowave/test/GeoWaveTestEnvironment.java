@@ -27,6 +27,7 @@ import net.lingala.zip4j.core.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
 import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
+import org.apache.accumulo.core.client.TableNotFoundException;
 import org.apache.accumulo.minicluster.MiniAccumuloCluster;
 import org.apache.accumulo.minicluster.MiniAccumuloConfig;
 import org.apache.commons.io.FileUtils;
@@ -188,9 +189,18 @@ abstract public class GeoWaveTestEnvironment
 	public static void cleanup() {
 		synchronized (MUTEX) {
 			if (!DEFER_CLEANUP) {
-				Assert.assertTrue(
-						"Index not deleted successfully",
-						(accumuloOperations == null) || accumuloOperations.deleteAll());
+
+				if (accumuloOperations == null){
+					Assert.fail("Invalid state <null> for accumulo operations during CLEANUP phase");
+				}
+				try {
+					accumuloOperations.deleteAll();
+				}
+				catch (TableNotFoundException | AccumuloSecurityException | AccumuloException ex) {
+					LOGGER.error("Unable to clear accumulo namespace", ex);
+					Assert.fail("Index not deleted successfully");
+				}
+
 				accumuloOperations = null;
 				zookeeper = null;
 				accumuloInstance = null;

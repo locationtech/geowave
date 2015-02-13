@@ -1,5 +1,6 @@
 package mil.nga.giat.geowave.accumulo;
 
+import java.io.IOException;
 import java.util.List;
 
 import mil.nga.giat.geowave.index.ByteArrayId;
@@ -220,14 +221,13 @@ public interface AccumuloOperations
 			AccumuloSecurityException;
 
 	/**
-	 * Drops all tables in the given namespace. Returns whether any tables were
-	 * found and the operation completed successfully.
-	 * 
-	 * @return Returns true if at least one table was found and dropped with the
-	 *         given namespace, false if nothing was found or it was not dropped
-	 *         successfully
+	 * Drops all tables in the instance namespace.  If no tables are found in
+	 * the namespace no operation occurs.
 	 */
-	public boolean deleteAll();
+	public void deleteAll()
+			throws TableNotFoundException,
+			AccumuloException,
+			AccumuloSecurityException;
 
 	/**
 	 * Drops the specified row from the specified table. Returns whether the
