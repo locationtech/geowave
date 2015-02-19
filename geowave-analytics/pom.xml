@@ -109,10 +109,10 @@
 			<artifactId>antlr-runtime</artifactId>
 			<version>3.3</version>
 		</dependency>
-		<dependency> <!-- Spark dependency -->
-			<groupId>org.apache.spark</groupId>
-			<artifactId>spark-core_2.10</artifactId>
-			<version>1.2.0</version>
+		<dependency> 
+			<groupId>com.esotericsoftware.kryo</groupId>
+			<artifactId>kryo</artifactId>
+			<version>2.21</version>
 		</dependency>
 	</dependencies>
 	<build>
