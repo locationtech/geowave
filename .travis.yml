@@ -5,11 +5,11 @@ jdk:
 env:
   matrix:
     - ACCUMULO_VERSION='1.5.1'   HADOOP_VERSION='2.0.0-cdh4.7.0'     GEOTOOLS_VERSION='11.4'   GEOSERVER_VERSION='2.5.4'
-    - ACCUMULO_VERSION='1.6.0'   HADOOP_VERSION='2.0.0-cdh4.7.0'     GEOTOOLS_VERSION='11.4'   GEOSERVER_VERSION='2.5.4' 
+    - ACCUMULO_VERSION='1.6.0'   HADOOP_VERSION='2.0.0-cdh4.7.0'     GEOTOOLS_VERSION='11.4'   GEOSERVER_VERSION='2.5.4'
     - ACCUMULO_VERSION='1.5.1'   HADOOP_VERSION='2.5.0-cdh5.2.0'     GEOTOOLS_VERSION='11.4'   GEOSERVER_VERSION='2.5.4'
-    - ACCUMULO_VERSION='1.6.0'   HADOOP_VERSION='2.5.0-cdh5.2.0'     GEOTOOLS_VERSION='11.4'   GEOSERVER_VERSION='2.5.4' 	
+    - ACCUMULO_VERSION='1.6.0'   HADOOP_VERSION='2.5.0-cdh5.2.0'     GEOTOOLS_VERSION='11.4'   GEOSERVER_VERSION='2.5.4'
     - ACCUMULO_VERSION='1.5.1'   HADOOP_VERSION='2.5.0-cdh5.2.0'     GEOTOOLS_VERSION='12.2'   GEOSERVER_VERSION='2.6.2'
-    - ACCUMULO_VERSION='1.6.0'   HADOOP_VERSION='2.5.0-cdh5.2.0'     GEOTOOLS_VERSION='12.2'   GEOSERVER_VERSION='2.6.2' 	
+    - ACCUMULO_VERSION='1.6.0'   HADOOP_VERSION='2.5.0-cdh5.2.0'     GEOTOOLS_VERSION='12.2'   GEOSERVER_VERSION='2.6.2'
   global:
     #github token
     - secure: "TosKDl5mnt8UKeyWDg65i6cWENR7EorQbFPSvZ5ZfQfAaDAOeIN2OA/zxtRMELeYM82+n+GGXQOt0qPiYqyRlufYJJSUnWiwvI5gm3a8+f58atcU2R2bF9jd81bsL9jCS+JCQxAmzh8FCO6t7DJ4OdoMyMaIR7XjlSlsIJ97dd8="
@@ -23,6 +23,7 @@ before_install:
   - chmod +x .utility/push-javadoc-to-gh-pages.sh
   - mkdir mcp; cd mcp; git clone --branch=maven-munge-hack git://github.com/chrisbennight/coveralls-maven-plugin.git; cd coveralls-maven-plugin; git submodule init; git submodule update; mvn -q clean install; cd ../..;
 after_success:
+  - "mvn -P docs -pl docs install"
   - .utility/push-javadoc-to-gh-pages.sh
   - mvn coveralls:report -Daccumulo.version=${ACCUMULO_VERSION} -Dhadoop.version=${HADOOP_VERSION} -Dgeotools.version=${GEOTOOLS_VERSION} -Dgeoserver.version=${GEOSERVER_VERSION}
 

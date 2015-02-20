@@ -133,12 +133,17 @@
             <plugin>
                 <groupId>org.asciidoctor</groupId>
                 <artifactId>asciidoctor-maven-plugin</artifactId>
-                <version>1.5.0</version>
+                <version>1.5.2</version>
                 <dependencies>
                     <dependency>
                         <groupId>org.asciidoctor</groupId>
-                        <artifactId>asciidoctorj</artifactId>
-                        <version>1.5.2</version>
+                        <artifactId>asciidoctorj-epub3</artifactId>
+                        <version>1.5.0-alpha.4</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.asciidoctor</groupId>
+                        <artifactId>asciidoctorj-pdf</artifactId>
+                        <version>1.5.0-alpha.6</version>
                     </dependency>
                 </dependencies>
                 <configuration>
@@ -153,6 +158,17 @@
                 </configuration>
                 <executions>
                     <execution>
+                        <id>generate-epub</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>process-asciidoc</goal>
+                        </goals>
+                        <configuration>
+                            <backend>epub3</backend>
+                            <sourceHighlighter>coderay</sourceHighlighter>
+                        </configuration>
+                    </execution>
+                    <execution>
                         <id>generate-pdf</id>
                         <phase>generate-resources</phase>
                         <goals>
@@ -163,19 +179,11 @@
                                 <require>asciidoctor-pdf</require>
                             </requires>
                             <backend>pdf</backend>
-                            <!-- WARNING callout bullets don't yet work with CodeRay -->
                             <sourceHighlighter>coderay</sourceHighlighter>
-                            <attributes>
-                                <imagesdir>./images</imagesdir>
-                                <pagenums/>
-                                <toc/>
-                                <idprefix/>
-                                <idseparator>-</idseparator>
-                            </attributes>
                         </configuration>
                     </execution>
                     <execution>
-                        <id>asciidoc-to-html</id>
+                        <id>generate-html</id>
                         <phase>generate-resources</phase>
                         <goals>
                             <goal>process-asciidoc</goal>
@@ -185,7 +193,7 @@
                             <sourceHighlighter>highlightjs</sourceHighlighter>
                             <attributes>
                                 <stylesdir>stylesheets</stylesdir>
-                                <stylesheet>slate.css</stylesheet>
+                                <stylesheet>geowave.css</stylesheet>
                                 <imagesdir>./images</imagesdir>
                                 <toc>right</toc>
                                 <icons>font</icons>
