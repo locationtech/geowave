@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>mil.nga.giat</groupId>
 		<artifactId>geowave-parent</artifactId>
-		<version>0.8.3-SNAPSHOT</version>
+		<version>0.8.3</version>
 	</parent>
 	<artifactId>geowave-types</artifactId>
 	<dependencies>
