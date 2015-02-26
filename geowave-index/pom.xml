@@ -4,7 +4,7 @@
 		<artifactId>geowave-parent</artifactId>
 		<groupId>mil.nga.giat</groupId>
 		<relativePath>../</relativePath>
-		<version>0.8.3</version>
+		<version>0.8.4-SNAPSHOT</version>
 	</parent>
 	<artifactId>geowave-index</artifactId>
 	<name>geowave-index</name>
