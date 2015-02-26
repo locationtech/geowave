@@ -14,6 +14,7 @@ mil.nga.giat.geowave.analytics.mapreduce.kde.parser
 mil.nga.giat.geowave.analytics.mapreduce.kde.parser.model
 mil.nga.giat.geowave.benchmark
 mil.nga.giat.geowave.benchmark.utils
+mil.nga.giat.geowave.demo.app
 mil.nga.giat.geowave.index
 mil.nga.giat.geowave.index.dimension
 mil.nga.giat.geowave.index.dimension.bin
