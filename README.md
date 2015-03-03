@@ -1,4 +1,4 @@
-# GeoWave 0.8.3	
+# GeoWave 0.8.4	
 ## About  
 
 <a href="https://travis-ci.org/ngageoint/geowave">
@@ -28,6 +28,8 @@ GeoWave is an open source set of software that:
 Basically, GeoWave attempts to do for Accumulo as PostGIS does for PostgreSQL.  
 
 See [GeoWave io page](http://ngageoint.github.io/geowave/) for more detailed documentatation, quickstart, examples, etc.
+
+NGA is submitting GeoWave to [Google's Summer of Code 2015](https://www.google-melange.com/gsoc/homepage/google/gsoc2015) for students to build on and improve.  
 
 ## Screenshots
 
@@ -87,7 +89,7 @@ First we need to build the geoserver plugin - from the geowave root directory:
 
 let's assume you have geoserver deployed in a tomcat container in /opt/tomcat
 
-    $ cp target/geowave-deploy-0.8.3-geoserver-singlejar.jar /opt/tomcat/webapps/geoserver/WEB-INF/lib/
+    $ cp target/geowave-deploy-0.8.4-geoserver-singlejar.jar /opt/tomcat/webapps/geoserver/WEB-INF/lib/
 
 and re-start tomcat
 

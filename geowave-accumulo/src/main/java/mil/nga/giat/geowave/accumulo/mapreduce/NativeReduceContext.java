@@ -198,9 +198,8 @@ public class NativeReduceContext<KEYIN, VALUEIN> implements
 		return writableContext.getJobName();
 	}
 
-	@Override
 	public boolean userClassesTakesPrecedence() {
-		return writableContext.userClassesTakesPrecedence();
+		return writableContext.getConfiguration().getBoolean(MAPREDUCE_JOB_USER_CLASSPATH_FIRST, false);
 	}
 
 	@Override
