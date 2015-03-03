@@ -116,7 +116,7 @@ abstract public class AbstractMapReduceIngest<T extends Persistable & DataAdapte
 		final WritableDataAdapter<?>[] dataAdapters = ingestPlugin.getDataAdapters(accumuloOptions.getVisibility());
 		for (final WritableDataAdapter<?> dataAdapter : dataAdapters) {
 			GeoWaveOutputFormat.addDataAdapter(
-					job,
+					job.getConfiguration(),
 					dataAdapter);
 		}
 
@@ -124,7 +124,7 @@ abstract public class AbstractMapReduceIngest<T extends Persistable & DataAdapte
 
 		// add primary index
 		GeoWaveOutputFormat.addIndex(
-				job,
+				job.getConfiguration(),
 				primaryIndex);
 
 		// add required indices
@@ -132,7 +132,7 @@ abstract public class AbstractMapReduceIngest<T extends Persistable & DataAdapte
 		if (requiredIndices != null) {
 			for (final Index requiredIndex : requiredIndices) {
 				GeoWaveOutputFormat.addIndex(
-						job,
+						job.getConfiguration(),
 						requiredIndex);
 			}
 		}

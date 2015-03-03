@@ -29,12 +29,18 @@ import com.vividsolutions.jts.io.WKBWriter;
  * serializes its type.
  */
 public class FeatureWritable implements
-		Writable
+		Writable,
+		java.io.Serializable
 {
 	private SimpleFeatureType featureType;
 	private SimpleFeature feature;
 
 	public FeatureWritable() {}
+
+	public FeatureWritable(
+			final SimpleFeatureType featureType ) {
+		this.featureType = featureType;
+	}
 
 	public FeatureWritable(
 			final SimpleFeatureType featureType,
@@ -45,6 +51,11 @@ public class FeatureWritable implements
 
 	public SimpleFeature getFeature() {
 		return feature;
+	}
+
+	public void setFeature(
+			SimpleFeature feature ) {
+		this.feature = feature;
 	}
 
 	@Override
@@ -167,7 +178,7 @@ public class FeatureWritable implements
 
 	/**
 	 * Reads the attributes.
-	 *
+	 * 
 	 * @param ad
 	 * @return
 	 * @throws IOException
@@ -255,4 +266,18 @@ public class FeatureWritable implements
 			}
 		}
 	}
+
+	private void writeObject(
+			java.io.ObjectOutputStream out )
+			throws IOException {
+		this.write(out);
+	}
+
+	private void readObject(
+			java.io.ObjectInputStream in )
+			throws IOException,
+			ClassNotFoundException {
+		this.readFields(in);
+	}
+
 }

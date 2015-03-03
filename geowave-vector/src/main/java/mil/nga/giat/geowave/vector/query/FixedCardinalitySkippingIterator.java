@@ -131,6 +131,7 @@ public class FixedCardinalitySkippingIterator extends
 				rowCopy,
 				0,
 				rowCopy.length);
+		// number of bits not used in the last byte
 		int remainder = (8 - (cardinality % 8));
 		if (remainder == 8) {
 			remainder = 0;

@@ -7,7 +7,7 @@ import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.RuleReturnScope;
 import org.antlr.runtime.tree.CommonTree;
-import org.springframework.expression.EvaluationException;
+//import org.springframework.expression.EvaluationException;
 
 public class Expression extends
 		AbstractExpression
@@ -54,17 +54,17 @@ public class Expression extends
 		try {
 			final RuleReturnScope rule = parser.expression();
 			if (parser.hasError()) {
-				throw new EvaluationException(
+				throw new java.lang.RuntimeException(
 						parser.errorMessage() + " " + parser.errorPosition());
 			}
 
 			return (CommonTree) rule.getTree();
 		}
-		catch (final EvaluationException e) {
+		catch (final RuntimeException e) {
 			throw e;
 		}
 		catch (final Exception e) {
-			throw new EvaluationException(
+			throw new RuntimeException(
 					e.getMessage(),
 					e);
 		}

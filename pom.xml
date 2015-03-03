@@ -22,6 +22,7 @@
 
 	<properties>
 		<geotools.version>12.1</geotools.version>
+		<hadoop.env.classifier>hadoop2</hadoop.env.classifier>		
 		<geoserver.version>2.6.1</geoserver.version>
 		<accumulo.version>1.6.1</accumulo.version>
 		<hadoop.version>2.6.0</hadoop.version>

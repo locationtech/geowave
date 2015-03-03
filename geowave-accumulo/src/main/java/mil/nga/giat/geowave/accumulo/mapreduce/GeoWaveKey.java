@@ -28,6 +28,10 @@ public abstract class GeoWaveKey implements
 	public ByteArrayId getAdapterId() {
 		return adapterId;
 	}
+	
+	public void setAdapterId(ByteArrayId adapterId) {
+		this.adapterId = adapterId;
+	}
 
 	@Override
 	public int compareTo(

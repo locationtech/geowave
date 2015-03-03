@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import mil.nga.giat.geowave.accumulo.mapreduce.HadoopDataAdapter;
+import mil.nga.giat.geowave.accumulo.mapreduce.HadoopWritableSerializer;
 import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.index.StringUtils;
-import mil.nga.giat.geowave.store.TimeUtils;
 import mil.nga.giat.geowave.store.adapter.AbstractDataAdapter;
 import mil.nga.giat.geowave.store.adapter.AdapterPersistenceEncoding;
 import mil.nga.giat.geowave.store.adapter.IndexFieldHandler;
@@ -535,7 +535,8 @@ public class FeatureDataAdapter extends
 		final TimeDescriptors timeDescriptors = new TimeDescriptors();
 		timeDescriptors.inferType(persistType);
 		// Up the meta-data so that it is clear and visible any inference that
-		// has occurred here. Also, this is critical to serialization/deserialization
+		// has occurred here. Also, this is critical to
+		// serialization/deserialization
 		timeDescriptors.updateType(persistType);
 		return timeDescriptors;
 	}
@@ -551,16 +552,34 @@ public class FeatureDataAdapter extends
 	}
 
 	@Override
-	public FeatureWritable toWritable(
-			final SimpleFeature entry ) {
-		return new FeatureWritable(
-				reprojectedType,
-				entry);
+	public HadoopWritableSerializer<SimpleFeature, FeatureWritable> createWritableSerializer() {
+		return new FeatureWritableSerializer(this.reprojectedType);
 	}
 
-	@Override
-	public SimpleFeature fromWritable(
-			final FeatureWritable writable ) {
-		return writable.getFeature();
+	private class FeatureWritableSerializer implements
+			HadoopWritableSerializer<SimpleFeature, FeatureWritable>
+	{
+
+		private final SimpleFeatureType type;
+		private final FeatureWritable writable;
+		FeatureWritableSerializer(SimpleFeatureType type) {
+			this.type = type;
+			writable = new FeatureWritable(type);
+		}
+			
+
+		@Override
+		public FeatureWritable toWritable(
+				SimpleFeature entry ) {
+			writable.setFeature(entry);
+			return writable;
+		}
+
+		@Override
+		public SimpleFeature fromWritable(
+				FeatureWritable writable ) {
+			return writable.getFeature();
+		}
+
 	}
 }
