@@ -34,34 +34,29 @@ that will be installed in $PATH. In a development environment were this script h
 artifact directly with the command ```java -jar geowave-types-VERSION-ingest-tool.jar <operation> <options>```
 
 === Cmd: geowave-ingest
-----
-include::manpages/geowave-ingest.text[]
-----
+
+include::manpages/geowave-ingest.txt[]
 
 === Operation: -clear
-----
-include::manpages/geowave-ingest-clear.text[]
-----
+
+include::manpages/geowave-ingest-clear.txt[]
 
 === Operation: -hdfsingest
-----
-include::manpages/geowave-ingest-hdfsingest.text[]
-----
+
+include::manpages/geowave-ingest-hdfsingest.txt[]
 
 === Operation: -hdfsstage
-----
-include::manpages/geowave-ingest-hdfsstage.text[]
-----
+
+include::manpages/geowave-ingest-hdfsstage.txt[]
 
 === Operation: -localingest
-----
-include::manpages/geowave-ingest-localingest.text[]
-----
+
+include::manpages/geowave-ingest-localingest.txt[]
 
 === Operation: -poststage
-----
-include::manpages/geowave-ingest-poststage.text[]
-----
+
+include::manpages/geowave-ingest-poststage.txt[]
+
 
 ==== Ingesting all the things
 

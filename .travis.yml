@@ -25,6 +25,7 @@ before_install:
   - chmod +x .utility/push-javadoc-to-gh-pages.sh
   - mkdir mcp; cd mcp; git clone --branch=maven-munge-hack git://github.com/chrisbennight/coveralls-maven-plugin.git; cd coveralls-maven-plugin; git submodule init; git submodule update; mvn -q clean install; cd ../..;
 after_success:
+  - "mvn -P docs -pl docs install"
   - .utility/push-javadoc-to-gh-pages.sh
   - mvn coveralls:report -Daccumulo.version=${ACCUMULO_VERSION} -Dhadoop.version=${HADOOP_VERSION} -Dgeotools.version=${GEOTOOLS_VERSION} -Dgeoserver.version=${GEOSERVER_VERSION} -P ${PLATFORM_VERSION}
 
