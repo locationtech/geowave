@@ -34,9 +34,9 @@ NGA is submitting GeoWave to [Google's Summer of Code 2015](https://www.google-m
 ## Screenshots
 
 <p align="center">
-	<a href="https://ngageoint.github.io/geowave/assets/images/geolife-density-13.jpg" target="_blank"><img align="center" src="https://ngageoint.github.io/geowave/assets/images/geolife-density-13-thumb.jpg" alt="T-drive density at city scale"></a><br/><br/>
-	<a href="https://ngageoint.github.io/geowave/assets/images/geolife-density-17-full.jpg" target="_blank"><img align="center" src="https://ngageoint.github.io/geowave/assets/images/geolife-density-17-thumb.jpg" alt="T-drive density at city scale"></a><br/><br/>
-	<a href="https://ngageoint.github.io/geowave/assets/images/osmgpx-full.jpg" target="_blank"><img align="center" src="https://ngageoint.github.io/geowave/assets/images/osmgpx-thumb.jpg" alt="T-drive density at city scale"></a><br/>
+	<a href="https://raw.githubusercontent.com/ngageoint/geowave/master/docs/content/images/geolife-density-13.jpg" target="_blank"><img align="center" src="https://raw.githubusercontent.com/ngageoint/geowave/master/docs/content/images/geolife-density-13-thumb.jpg" alt="T-drive density at city scale"></a><br/><br/>
+	<a href="https://raw.githubusercontent.com/ngageoint/geowave/master/docs/content/images/geolife-density-17-full.jpg" target="_blank"><img align="center" src="https://raw.githubusercontent.com/ngageoint/geowave/master/docs/content/images/geolife-density-17-thumb.jpg" alt="T-drive density at city scale"></a><br/><br/>
+	<a href="https://raw.githubusercontent.com/ngageoint/geowave/master/docs/content/images/osmgpx-full.jpg" target="_blank"><img align="center" src="https://raw.githubusercontent.com/ngageoint/geowave/master/docs/content/images/osmgpx-thumb.jpg" alt="T-drive density at city scale"></a><br/>
 	
 </p>
 
