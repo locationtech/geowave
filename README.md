@@ -34,13 +34,13 @@ NGA is submitting GeoWave to [Google's Summer of Code 2015](https://www.google-m
 ## Screenshots
 
 <p align="center">
-	<a href="https://raw.githubusercontent.com/ngageoint/geowave/master/docs/content/images/geolife-density-13.jpg" target="_blank"><img align="center" src="https://raw.githubusercontent.com/ngageoint/geowave/master/docs/content/images/geolife-density-13-thumb.jpg" alt="T-drive density at city scale"></a><br/><br/>
-	<a href="https://raw.githubusercontent.com/ngageoint/geowave/master/docs/content/images/geolife-density-17-full.jpg" target="_blank"><img align="center" src="https://raw.githubusercontent.com/ngageoint/geowave/master/docs/content/images/geolife-density-17-thumb.jpg" alt="T-drive density at city scale"></a><br/><br/>
-	<a href="https://raw.githubusercontent.com/ngageoint/geowave/master/docs/content/images/osmgpx-full.jpg" target="_blank"><img align="center" src="https://raw.githubusercontent.com/ngageoint/geowave/master/docs/content/images/osmgpx-thumb.jpg" alt="T-drive density at city scale"></a><br/>
+	<a href="https://raw.githubusercontent.com/ngageoint/geowave/master/docs/content/images/geolife-density-13.jpg" target="_blank"><img align="center" src="https://raw.githubusercontent.com/ngageoint/geowave/master/docs/content/images/geolife-density-13-thumb.jpg" alt="Geolife data at city scale"></a><br/><br/>
+	<a href="https://raw.githubusercontent.com/ngageoint/geowave/master/docs/content/images/geolife-density-17.jpg" target="_blank"><img align="center" src="https://raw.githubusercontent.com/ngageoint/geowave/master/docs/content/images/geolife-density-17-thumb.jpg" alt="Geolife data at block scale"></a><br/><br/>
+	<a href="https://raw.githubusercontent.com/ngageoint/geowave/master/docs/content/images/osmgpx.jpg" target="_blank"><img align="center" src="https://raw.githubusercontent.com/ngageoint/geowave/master/docs/content/images/osmgpx-thumb.jpg" alt="OSM GPX tracks at country scale"></a><br/>
 	
 </p>
 
-See [Screenshots](https://ngageoint.github.io/geowave/screenshots.html) for more information.
+See [Screenshots](http://ngageoint.github.io/geowave/documentation.html#screenshots-2) for more information.
 
 ## Origin
 
@@ -68,7 +68,7 @@ To view the data (via standard [OGC](http://www.opengeospatial.org/) services) a
 
 [Apache Hadoop](http://hadoop.apache.org/) versions 1.x and 2.x *should* all work.  The software has specifically been run on [Cloudera](http://cloudera.com/content/cloudera/en/home.html) CDH4 and [Hortonworks Data Platform](http://hortonworks.com/hdp/) 2.1.   
 
-MapReduce 1 with the new API (org.apache.hadoop.mapreduce.*) is used.  Testing is underway against YARN / MR2 and seems to be positive, but well, it's still underway.  
+MapReduce v2 + YARN is the currently preferred MR implementation / scheduler.
 
 [Java Advanced Imaging](http://download.java.net/media/jai/builds/release/1_1_3/) and [Java Image I/O](http://download.java.net/media/jai-imageio/builds/release/1.1/) are also both required to be installed on the GeoServer instance(s) *as well* as on the Accumulo nodes.  The Accumulo support is only required for certain functions (distributed rendering) - so this may be skipped in some cases.
 
@@ -102,7 +102,7 @@ This should be very familiar by now; from the geowave root directory:
 
 This distributable needs to be in the Accumulo classpath on every tablet server.
 
-See: [Installation Page](https://ngageoint.github.io/geowave//installation.html) for more information about deployment.
+See: [Installation Page](http://ngageoint.github.io/geowave/documentation.html#installation-from-rpm) for more information about deployment.
 
 ### GeoWave System Integration Test
 
@@ -114,12 +114,13 @@ If any of these configuration parameters are left unspecified the default integr
 
 ### Supported Versions
 
-The Travis CI test matrix will test all combinations of the following releases using Oracle JDK7:  
-Accumulo: 1.5.1 and 1.6.0  
-Hadoop: 2.0.0-cdh4.7.0, 2.3.0-cdh5.0.3, and 1.2.0.23*  
-GeoTools/GeoServer: 11.2/2.5.2  
+See the <a href="https://github.com/ngageoint/geowave/blob/master/.travis.yml" target="_blank">travis test matrix</a> for currently tested configurations, but basically:
 
-\* Accumulo 1.5.1 and Hadoop 1.2.0.23 is the one exception that is not tested and has been found to fail starting the MiniAccumuloCluster in the integration test
+Accumulo: N and N-1  (1.6.x and 1.5.x currently); 
+Hadoop: Apache 2.6, CDH 4.7 -> 5.3, Hortonworks 2.6
+GeoTools/GeoServer: 11.4, 12.2/2.5.4, 2.6.2
+
+We have dropped support for hadoop < 2.x;  it's should still work if you want to backport, but no guarauntees. 
 
 ### Ingest Data
 
