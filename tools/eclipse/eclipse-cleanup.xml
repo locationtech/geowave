@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <profiles version="2">
-<profile kind="CleanUpProfile" name="giat-cloud-cleanup" version="2">
-<setting id="cleanup.format_source_code" value="true"/>
+<profile kind="CleanUpProfile" name="geowave-cleanup" version="2">
+<setting id="cleanup.format_source_code" value="false"/>
 <setting id="cleanup.add_missing_annotations" value="true"/>
 <setting id="cleanup.use_this_for_non_static_method_access_only_if_necessary" value="true"/>
 <setting id="cleanup.remove_unused_private_types" value="true"/>

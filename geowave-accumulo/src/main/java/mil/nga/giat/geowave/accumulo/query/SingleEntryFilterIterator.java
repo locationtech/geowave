@@ -54,6 +54,10 @@ public class SingleEntryFilterIterator extends
 			accept = false;
 		}
 		else {
+			if (entries == null) {
+				LOGGER.error("Internal error in iterator - entries map null when it shouldn't be");
+				return false;
+			}
 			for (final Key key : entries.keySet()) {
 				final byte[] localAdapterId = key.getColumnFamilyData().getBackingArray();
 

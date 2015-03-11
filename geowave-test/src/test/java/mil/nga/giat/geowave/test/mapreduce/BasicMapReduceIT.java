@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -32,6 +33,9 @@ import mil.nga.giat.geowave.store.query.DistributableQuery;
 import mil.nga.giat.geowave.test.GeoWaveTestEnvironment;
 import mil.nga.giat.geowave.types.gpx.GpxIngestPlugin;
 
+import org.apache.accumulo.core.client.AccumuloException;
+import org.apache.accumulo.core.client.AccumuloSecurityException;
+import org.apache.accumulo.core.client.TableNotFoundException;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.io.NullWritable;
@@ -53,8 +57,10 @@ import org.opengis.feature.simple.SimpleFeature;
 
 import com.vividsolutions.jts.geom.Geometry;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 public class BasicMapReduceIT extends
-		MapReduceTestEnvironment
+		MapReduceTestBase
 {
 	private final static Logger LOGGER = Logger.getLogger(BasicMapReduceIT.class);
 
@@ -65,17 +71,27 @@ public class BasicMapReduceIT extends
 	}
 
 	@BeforeClass
-	public static void extractTestFiles() {
+	public static void extractTestFiles()
+			throws URISyntaxException {
 		GeoWaveTestEnvironment.unZipFile(
-				MapReduceTestEnvironment.class.getClassLoader().getResourceAsStream(
-						TEST_DATA_ZIP_RESOURCE_PATH),
+				new File(
+						MapReduceTestEnvironment.class.getClassLoader().getResource(
+								TEST_DATA_ZIP_RESOURCE_PATH).toURI()),
 				TEST_CASE_BASE);
 	}
 
 	@Test
 	public void testIngestAndQueryGeneralGpx()
 			throws Exception {
-		accumuloOperations.deleteAll();
+		try {
+			accumuloOperations.deleteAll();
+		}
+		catch (TableNotFoundException | AccumuloSecurityException | AccumuloException ex) {
+			LOGGER.error(
+					"Unable to clear accumulo namespace",
+					ex);
+			Assert.fail("Index not deleted successfully");
+		}
 		testMapReduceIngest(
 				IndexType.SPATIAL_VECTOR,
 				GENERAL_GPX_INPUT_GPX_DIR);
@@ -140,7 +156,15 @@ public class BasicMapReduceIT extends
 	@Test
 	public void testIngestOsmGpxMultipleIndices()
 			throws Exception {
-		accumuloOperations.deleteAll();
+		try {
+			accumuloOperations.deleteAll();
+		}
+		catch (TableNotFoundException | AccumuloSecurityException | AccumuloException ex) {
+			LOGGER.error(
+					"Unable to clear accumulo namespace",
+					ex);
+			Assert.fail("Index not deleted successfully");
+		}
 		// ingest the data set into multiple indices and then try several query
 		// methods, by adapter and by index
 		testMapReduceIngest(
@@ -222,6 +246,7 @@ public class BasicMapReduceIT extends
 				null);
 	}
 
+	@SuppressFBWarnings(value = "DM_GC", justification = "Memory usage kept low for travis-ci")
 	private void runTestJob(
 			final ExpectedResults expectedResults,
 			final DistributableQuery query,
@@ -246,6 +271,7 @@ public class BasicMapReduceIT extends
 			}
 		}
 		final Configuration conf = getConfiguration();
+		MapReduceTestEnvironment.filterConfiguration(conf);
 		final int res = ToolRunner.run(
 				conf,
 				jobRunner,
@@ -287,7 +313,7 @@ public class BasicMapReduceIT extends
 			// filtered results which should match the expected results
 			// resources
 			final Configuration conf = super.getConf();
-
+			MapReduceTestEnvironment.filterConfiguration(conf);
 			final ByteBuffer buf = ByteBuffer.allocate((8 * expectedResults.hashedCentroids.size()) + 4);
 			buf.putInt(expectedResults.hashedCentroids.size());
 			for (final Long hashedCentroid : expectedResults.hashedCentroids) {
@@ -296,8 +322,7 @@ public class BasicMapReduceIT extends
 			conf.set(
 					EXPECTED_RESULTS_KEY,
 					ByteArrayUtils.byteArrayToString(buf.array()));
-			final Job job = new Job(
-					conf);
+			final Job job = Job.getInstance(conf);
 			job.setJarByClass(this.getClass());
 
 			job.setJobName("GeoWave Test (" + namespace + ")");
@@ -310,7 +335,7 @@ public class BasicMapReduceIT extends
 			job.setSpeculativeExecution(false);
 
 			GeoWaveInputFormat.setAccumuloOperationsInfo(
-					job,
+					job.getConfiguration(),
 					zookeeper,
 					instance,
 					user,

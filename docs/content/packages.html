@@ -58,11 +58,11 @@
                                     YUM using the command below.
                                 </p>
                                 <br/>
-                                <h4>Configure a YUM client to use development RPMs</h4>
+                                <h4>Configure a host to use GeoWave RPMs</h4>
                         <pre>
 
-        rpm -Uvh http://s3.amazonaws.com/geowave-rpms/dev/noarch/geowave-repo-dev-1.0-2.noarch.rpm
-        yum search geowave
+        rpm -Uvh http://s3.amazonaws.com/geowave-rpms/release/noarch/geowave-repo-1.0-3.noarch.rpm
+        yum --enablerepo=geowave search geowave
                         </pre>
                                 <br/>
                                 <p>
@@ -105,8 +105,12 @@
                                         All of the prebuilt component jars packaged into a compressed archive instead of an RPM format
                                     </li>
                                     <li>
+                                        <b>geowave-repo</b><br/>
+                                        This package will install the GeoWave RPM repo config file into /etc/yum.repos.d
+                                    </li>
+                                    <li>
                                         <b>geowave-repo-dev</b><br/>
-                                        This package will install the RPM repo config file into /etc/yum.repos.d
+                                        This package will install the GeoWave Development RPM repo config file into /etc/yum.repos.d
                                     </li>
                                 </ul>
                                 </p>

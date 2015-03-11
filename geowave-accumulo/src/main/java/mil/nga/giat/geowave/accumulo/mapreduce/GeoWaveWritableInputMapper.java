@@ -4,13 +4,10 @@ import java.io.IOException;
 
 import mil.nga.giat.geowave.accumulo.mapreduce.input.GeoWaveInputFormat;
 import mil.nga.giat.geowave.accumulo.mapreduce.input.GeoWaveInputKey;
-import mil.nga.giat.geowave.store.adapter.AdapterStore;
-import mil.nga.giat.geowave.store.adapter.DataAdapter;
 
 import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.apache.hadoop.io.ObjectWritable;
-import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.log4j.Logger;
 
@@ -24,7 +21,7 @@ public abstract class GeoWaveWritableInputMapper<KEYOUT, VALUEOUT> extends
 		Mapper<GeoWaveInputKey, ObjectWritable, KEYOUT, VALUEOUT>
 {
 	protected static final Logger LOGGER = Logger.getLogger(GeoWaveWritableInputMapper.class);
-	protected AdapterStore adapterStore;
+	protected HadoopWritableSerializationTool serializationTool;
 
 	@Override
 	protected void map(
@@ -45,15 +42,29 @@ public abstract class GeoWaveWritableInputMapper<KEYOUT, VALUEOUT> extends
 			final Mapper<GeoWaveInputKey, ObjectWritable, KEYOUT, VALUEOUT>.Context context )
 			throws IOException,
 			InterruptedException {
-		if (adapterStore != null) {
-			final DataAdapter<?> adapter = adapterStore.getAdapter(key.getAdapterId());
-			if ((adapter != null) && (adapter instanceof HadoopDataAdapter)) {
-				mapNativeValue(
-						key,
-						((HadoopDataAdapter) adapter).fromWritable((Writable) value.get()),
-						context);
-			}
-		}
+		mapNativeValue(
+				key,
+				serializationTool.fromWritable(
+						key.getAdapterId(),
+						value),
+				context);
+
+	}
+
+	/**
+	 * Helper method to create an object writable from a value managed by the
+	 * adapter.
+	 * 
+	 * @param key
+	 * @param value
+	 * @return
+	 */
+	protected ObjectWritable toWritableValue(
+			final GeoWaveInputKey key,
+			final Object value ) {
+		return serializationTool.toWritable(
+				key.getAdapterId(),
+				value);
 	}
 
 	protected abstract void mapNativeValue(
@@ -69,9 +80,10 @@ public abstract class GeoWaveWritableInputMapper<KEYOUT, VALUEOUT> extends
 			throws IOException,
 			InterruptedException {
 		try {
-			adapterStore = new JobContextAdapterStore(
-					context,
-					GeoWaveInputFormat.getAccumuloOperations(context));
+			serializationTool = new HadoopWritableSerializationTool(
+					new JobContextAdapterStore(
+							context,
+							GeoWaveInputFormat.getAccumuloOperations(context)));
 		}
 		catch (AccumuloException | AccumuloSecurityException e) {
 			LOGGER.warn(

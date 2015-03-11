@@ -7,6 +7,7 @@ import mil.nga.giat.geowave.store.index.Index;
 
 import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
+import org.apache.accumulo.core.client.TableNotFoundException;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
@@ -64,7 +65,13 @@ public class AccumuloCommandLineOptions
 		// don't delete all tables in the case that no namespace is given
 		if ((namespace != null) && !namespace.isEmpty()) {
 			LOGGER.info("deleting all tables prefixed by '" + namespace + "'");
-			getAccumuloOperations().deleteAll();
+			try {
+				getAccumuloOperations().deleteAll();
+			}
+			catch (TableNotFoundException | AccumuloSecurityException | AccumuloException e) {
+				LOGGER.error("Unable to clear accumulo namespace");
+			}
+
 		}
 		else {
 			LOGGER.error("cannot clear a namespace if no namespace is provided");

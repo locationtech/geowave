@@ -71,7 +71,7 @@ public class FeatureDataAdapterTest
 
 		newFeature.setAttribute(
 				"pop",
-				new Long(
+				Long.valueOf(
 						100));
 		newFeature.setAttribute(
 				"pid",
@@ -309,7 +309,7 @@ public class FeatureDataAdapterTest
 
 		newFeature.setAttribute(
 				"pop",
-				new Long(
+				Long.valueOf(
 						100));
 		newFeature.setAttribute(
 				"pid",

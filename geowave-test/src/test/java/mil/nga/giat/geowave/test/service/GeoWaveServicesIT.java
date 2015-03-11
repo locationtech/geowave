@@ -13,17 +13,23 @@ import mil.nga.giat.geowave.types.gpx.GpxUtils;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
+import org.apache.accumulo.core.client.AccumuloException;
+import org.apache.accumulo.core.client.AccumuloSecurityException;
+import org.apache.accumulo.core.client.TableNotFoundException;
 import org.apache.commons.io.IOUtils;
 import org.geotools.feature.SchemaException;
+import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class GeoWaveServicesIT extends
-ServicesTestEnvironment
+		ServicesTestEnvironment
 {
 	private static final Logger LOGGER = LoggerFactory.getLogger(GeoWaveServicesIT.class);
 
+	protected static final String TEST_CASE_GENERAL_GPX_BASE = TEST_CASE_BASE + "general_gpx_test_case/";
+	protected static final String GENERAL_GPX_INPUT_GPX_DIR = TEST_CASE_GENERAL_GPX_BASE + "input_gpx/";
 	private static final String ASHLAND_GPX_FILE = GENERAL_GPX_INPUT_GPX_DIR + "ashland.gpx";
 	private static final String ASHLAND_INGEST_TYPE = "gpx";
 	private static final String TEST_STYLE_NAME = "DecimatePoints";
@@ -56,8 +62,8 @@ ServicesTestEnvironment
 		LOGGER.info("Ingesting data using the local ingest service.");
 		success = ingestServiceClient.localIngest(
 				new File[] {
-						new File(
-								ASHLAND_GPX_FILE)
+					new File(
+							ASHLAND_GPX_FILE)
 				},
 				TEST_NAMESPACE,
 				null,
@@ -74,8 +80,8 @@ ServicesTestEnvironment
 		for (int i = 0; i < namespaces.size(); i++) {
 			if (namespaces.getJSONObject(
 					i).getString(
-							"name").equals(
-									TEST_NAMESPACE)) {
+					"name").equals(
+					TEST_NAMESPACE)) {
 				success = true;
 				break;
 			}
@@ -83,14 +89,22 @@ ServicesTestEnvironment
 		assertTrue(success);
 		success = false;
 
-		accumuloOperations.deleteAll();
+		try {
+			accumuloOperations.deleteAll();
+		}
+		catch (TableNotFoundException | AccumuloSecurityException | AccumuloException ex) {
+			LOGGER.error(
+					"Unable to clear accumulo namespace",
+					ex);
+			Assert.fail("Index not deleted successfully");
+		}
 
 		// ingest data using the local ingest service
 		LOGGER.info("Ingesting data using the hdfs ingest service.");
 		success = ingestServiceClient.hdfsIngest(
 				new File[] {
-						new File(
-								ASHLAND_GPX_FILE)
+					new File(
+							ASHLAND_GPX_FILE)
 				},
 				TEST_NAMESPACE,
 				null,
@@ -107,8 +121,8 @@ ServicesTestEnvironment
 		for (int i = 0; i < namespaces.size(); i++) {
 			if (namespaces.getJSONObject(
 					i).getString(
-							"name").equals(
-									TEST_NAMESPACE)) {
+					"name").equals(
+					TEST_NAMESPACE)) {
 				success = true;
 				break;
 			}
@@ -120,12 +134,12 @@ ServicesTestEnvironment
 		LOGGER.info("Verify the adapter type.");
 		final JSONArray adapters = infoServiceClient.getAdapters(
 				TEST_NAMESPACE).getJSONArray(
-						"adapters");
+				"adapters");
 		for (int i = 0; i < adapters.size(); i++) {
 			if (adapters.getJSONObject(
 					i).getString(
-							"name").equals(
-									GpxUtils.GPX_WAYPOINT_FEATURE)) {
+					"name").equals(
+					GpxUtils.GPX_WAYPOINT_FEATURE)) {
 				success = true;
 				break;
 			}
@@ -137,12 +151,12 @@ ServicesTestEnvironment
 		LOGGER.info("Verify the index type.");
 		final JSONArray indices = infoServiceClient.getIndices(
 				TEST_NAMESPACE).getJSONArray(
-						"indices");
+				"indices");
 		for (int i = 0; i < indices.size(); i++) {
 			if (indices.getJSONObject(
 					i).getString(
-							"name").equals(
-									IndexType.SPATIAL_VECTOR.getDefaultId())) {
+					"name").equals(
+					IndexType.SPATIAL_VECTOR.getDefaultId())) {
 				success = true;
 				break;
 			}
@@ -165,8 +179,8 @@ ServicesTestEnvironment
 		for (int i = 0; i < workspaces.size(); i++) {
 			if (workspaces.getJSONObject(
 					i).getString(
-							"name").equals(
-									TEST_WORKSPACE)) {
+					"name").equals(
+					TEST_WORKSPACE)) {
 				success = true;
 				break;
 			}
@@ -177,8 +191,8 @@ ServicesTestEnvironment
 		// upload the default style
 		LOGGER.info("Upload the default style.");
 		assertTrue(geoserverServiceClient.publishStyle(new File[] {
-				new File(
-						TEST_SLD_FILE)
+			new File(
+					TEST_SLD_FILE)
 		}));
 
 		// verify that the style was uploaded
@@ -188,8 +202,8 @@ ServicesTestEnvironment
 		for (int i = 0; i < styles.size(); i++) {
 			if (styles.getJSONObject(
 					i).getString(
-							"name").equals(
-									TEST_STYLE_NAME)) {
+					"name").equals(
+					TEST_STYLE_NAME)) {
 				success = true;
 				break;
 			}
@@ -219,14 +233,14 @@ ServicesTestEnvironment
 		LOGGER.info("Verify that the datastore was published.");
 		final JSONArray datastores = geoserverServiceClient.getDatastores(
 				TEST_WORKSPACE).getJSONArray(
-						"dataStores");
+				"dataStores");
 
 		JSONObject dsInfo = null;
 		for (int i = 0; i < datastores.size(); i++) {
 			if (datastores.getJSONObject(
 					i).getString(
-							"name").equals(
-									TEST_NAMESPACE)) {
+					"name").equals(
+					TEST_NAMESPACE)) {
 				dsInfo = datastores.getJSONObject(i);
 				success = true;
 				break;
@@ -239,15 +253,15 @@ ServicesTestEnvironment
 
 			assertTrue(dsInfo.getString(
 					"Namespace").equals(
-							TEST_NAMESPACE));
+					TEST_NAMESPACE));
 
 			assertTrue(dsInfo.getString(
 					"ZookeeperServers").equals(
-							zookeeper));
+					zookeeper));
 
 			assertTrue(dsInfo.getString(
 					"InstanceName").equals(
-							accumuloInstance));
+					accumuloInstance));
 		}
 
 		// verify that we can recall the datastore
@@ -257,8 +271,8 @@ ServicesTestEnvironment
 				TEST_WORKSPACE);
 		assertTrue(datastore.getJSONObject(
 				"dataStore").getString(
-						"name").equals(
-								TEST_NAMESPACE));
+				"name").equals(
+				TEST_NAMESPACE));
 
 		// verify that we can publish a layer
 		LOGGER.info("Verify that we can publish a layer.");
@@ -272,13 +286,13 @@ ServicesTestEnvironment
 		LOGGER.info("Verify that the layer was published.");
 		final JSONArray layers = geoserverServiceClient.getLayers().getJSONArray(
 				"layers").getJSONObject(
-						0).getJSONArray(
-								"layers");
+				0).getJSONArray(
+				"layers");
 		for (int i = 0; i < layers.size(); i++) {
 			if (layers.getJSONObject(
 					i).getString(
-							"name").equals(
-									GpxUtils.GPX_WAYPOINT_FEATURE)) {
+					"name").equals(
+					GpxUtils.GPX_WAYPOINT_FEATURE)) {
 				success = true;
 				break;
 			}
@@ -291,8 +305,8 @@ ServicesTestEnvironment
 		final JSONObject layer = geoserverServiceClient.getLayer(GpxUtils.GPX_WAYPOINT_FEATURE);
 		assertTrue(layer.getJSONObject(
 				"layer").getString(
-						"name").equals(
-								GpxUtils.GPX_WAYPOINT_FEATURE));
+				"name").equals(
+				GpxUtils.GPX_WAYPOINT_FEATURE));
 
 		// verify that we are able to delete
 		LOGGER.info("Verify that we are able to clean up.");

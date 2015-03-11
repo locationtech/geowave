@@ -27,7 +27,7 @@ public class RasterTileResizeMapper extends
 			throws IOException,
 			InterruptedException {
 		if (helper.isOriginalCoverage(key.getAdapterId())) {
-			final DataAdapter<?> adapter = adapterStore.getAdapter(key.getAdapterId());
+			final DataAdapter<?> adapter = super.serializationTool.getAdapter(key.getAdapterId());
 			if ((adapter != null) && (adapter instanceof RasterDataAdapter)) {
 				final Iterator<GridCoverage> coverages = helper.getCoveragesForIndex(value);
 				while (coverages.hasNext()) {

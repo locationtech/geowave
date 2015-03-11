@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>mil.nga.giat</groupId>
 	<artifactId>geowave-parent</artifactId>
-	<version>0.8.3-SNAPSHOT</version>
+	<version>0.8.4-SNAPSHOT</version>
 	<name>geowave-parent</name>
 	<packaging>pom</packaging>
 	<description>Geowave adds spatio-temporal indexing to accumulo through geotools and geoserver</description>
@@ -22,18 +22,20 @@
 
 	<properties>
 		<geotools.version>12.1</geotools.version>
+		<hadoop.env.classifier>hadoop2</hadoop.env.classifier>		
 		<geoserver.version>2.6.1</geoserver.version>
 		<accumulo.version>1.6.1</accumulo.version>
-		<hadoop.version>2.5.0-cdh5.2.0</hadoop.version>
+		<hadoop.version>2.6.0</hadoop.version>
 		<avro.version>1.7.6</avro.version>
 		<commons.cli.version>1.2</commons.cli.version>
 		<geotools.scope>compile</geotools.scope>
 		<accumulo.scope>compile</accumulo.scope>
 		<hadoop.scope>compile</hadoop.scope>
+                <zookeeper.version>3.4.6</zookeeper.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<sonar.language>java</sonar.language>
-		<!-- Feed Sonar with the JaCoCo integration tests coverage report (that
+		<!-- Feed Sonar with the JaCoCo integration tests coverage report (that 
 			you have previously generated) -->
 		<jacoco.it.reportPath>${project.build.directory}/coverage-reports/jacoco-it.exec</jacoco.it.reportPath>
 		<jacoco.ut.reportPath>${project.build.directory}/coverage-reports/jacoco-ut.exec</jacoco.ut.reportPath>
@@ -43,9 +45,16 @@
 		<sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
 		<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
 		<test.args>-Xms256m -Xmx1024m -XX:MaxPermSize=256m</test.args>
+		<formatter.location>${project.basedir}/../tools/eclipse/eclipse-formatter.xml</formatter.location>
+        <findbugs.version>3.0.0</findbugs.version>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
+                        <dependency>
+				<groupId>org.apache.zookeeper</groupId>
+				<artifactId>zookeeper</artifactId>
+				<version>${zookeeper.version}</version>
+			</dependency>
 			<dependency>
 				<groupId>xerces</groupId>
 				<artifactId>xercesImpl</artifactId>
@@ -193,8 +202,14 @@
 				<version>${avro.version}</version>
 				<classifier>hadoop2</classifier>
 			</dependency>
-		</dependencies>
-	</dependencyManagement>
+            <dependency>
+                <groupId>com.google.code.findbugs</groupId>
+                <artifactId>annotations</artifactId>
+                <version>${findbugs.version}</version>
+                <scope>compile</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 	<build>
 		<pluginManagement>
 			<plugins>
@@ -228,7 +243,12 @@
 						</lifecycleMappingMetadata>
 					</configuration>
 				</plugin>
-			</plugins>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>findbugs-maven-plugin</artifactId>
+                    <version>${findbugs.version}</version>
+                </plugin>
+ 			</plugins>
 		</pluginManagement>
 		<plugins>
 			<plugin>
@@ -365,13 +385,41 @@
 						<jacocoReport>${project.basedir}/geowave-ingest/target/site/jacoco-ut/jacoco.xml</jacocoReport>
 						<jacocoReport>${project.basedir}/geowave-raster/target/site/jacoco-ut/jacoco.xml</jacocoReport>
 						<jacocoReport>${project.basedir}/geowave-store/target/site/jacoco-ut/jacoco.xml</jacocoReport>
-						<jacocoReport>${project.basedir}/geowave-types/target/site/jacoco-ut/jacoco.xml</jacocoReport> -
+						<jacocoReport>${project.basedir}/geowave-types/target/site/jacoco-ut/jacoco.xml</jacocoReport>
+						-
 						<jacocoReport>${project.basedir}/geowave-vector/target/site/jacoco-ut/jacoco.xml</jacocoReport>
 						<jacocoReport>${project.basedir}/geowave-accumulo/target/site/jacoco-ut/jacoco.xml</jacocoReport>
 						<jacocoReport>${project.basedir}/geowave-test/target/site/jacoco-it/jacoco.xml</jacocoReport>
 					</jacocoReports>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>com.googlecode.maven-java-formatter-plugin</groupId>
+				<artifactId>maven-java-formatter-plugin</artifactId>
+				<version>0.4</version>
+				<configuration>
+					<configFile>${formatter.location}</configFile>
+				</configuration>
+			</plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>findbugs-maven-plugin</artifactId>
+                <version>${findbugs.version}</version>
+                <configuration>
+                    <failOnError>false</failOnError>
+                    <threshold>Medium</threshold>
+                    <effort>Max</effort>
+                    <xmlOutput>true</xmlOutput>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
 		</plugins>
 	</build>
 	<modules>
@@ -387,9 +435,9 @@
 		<module>geowave-client</module>
 		<module>geowave-services</module>
 		<module>geowave-deploy</module>
+		<module>geowave-benchmark</module>
 		<module>geowave-test</module>
 	</modules>
-
 	<repositories>
 		<repository>
 			<snapshots>
@@ -404,33 +452,24 @@
 			<name>Open Source Geospatial Foundation Repository</name>
 			<url>http://download.osgeo.org/webdav/geotools/</url>
 		</repository>
-		<repository>
-			<id>cloudera</id>
-			<url>https://repository.cloudera.com/artifactory/cloudera-repos</url>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-		</repository>
-		<repository>
-			<releases>
-				<enabled>true</enabled>
-				<updatePolicy>always</updatePolicy>
-				<checksumPolicy>warn</checksumPolicy>
-			</releases>
-			<snapshots>
-				<enabled>false</enabled>
-				<updatePolicy>never</updatePolicy>
-				<checksumPolicy>fail</checksumPolicy>
-			</snapshots>
-			<id>HDPReleases</id>
-			<name>HDP Releases</name>
-			<url>http://repo.hortonworks.com/content/repositories/releases/</url>
-			<layout>default</layout>
-		</repository>
 	</repositories>
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>findbugs-maven-plugin</artifactId>
+                <version>${findbugs.version}</version>
+                <configuration>
+                    <findbugsXmlOutput>true</findbugsXmlOutput>
+                    <xmlOutput>true</xmlOutput>
+                    <effort>Max</effort>
+                    <threshold>Low</threshold>
+                    <failOnError>false</failOnError>
+                    <xmlOutputDirectory>${project.basedir}/target/site</xmlOutputDirectory>
+                </configuration>
+            </plugin>
+        </plugins>
+    </reporting>
 	<profiles>
 		<profile>
 			<id>accumulo-container</id>
@@ -509,5 +548,79 @@
 				<module>docs</module>
 			</modules>
 		</profile>
-	</profiles>
+                <profile>
+                    <id>cloudera</id>
+                    <properties>
+                        <hadoop.version>2.5.0-cdh5.2.0</hadoop.version>
+                    </properties>
+                    <repositories>
+                        <repository>
+                            <id>cloudera</id>
+                            <url>https://repository.cloudera.com/artifactory/cloudera-repos</url>
+                            <releases>
+                                <enabled>true</enabled>
+                            </releases>
+                            <snapshots>
+                                <enabled>true</enabled>
+                            </snapshots>
+                        </repository>
+                        <repository>
+                            <releases>
+                                <enabled>true</enabled>
+                                <updatePolicy>always</updatePolicy>
+                                <checksumPolicy>warn</checksumPolicy>
+                            </releases>
+                            <snapshots>
+                                <enabled>false</enabled>
+                                <updatePolicy>never</updatePolicy>
+                                <checksumPolicy>fail</checksumPolicy>
+                            </snapshots>
+                            <id>HDPReleases</id>
+                            <name>HDP Releases</name>
+                            <url>http://repo.hortonworks.com/content/repositories/releases/</url>
+                            <layout>default</layout>
+                        </repository>
+                    </repositories>
+                </profile>
+                <profile>
+                    <id>hortonworks</id>
+                    <properties>
+                        <hadoop.version>2.6.0.2.2.0.0-2041</hadoop.version>
+                    </properties>
+                    <repositories>
+                        <repository>
+                            <releases>
+                                <enabled>true</enabled>
+                                <updatePolicy>always</updatePolicy>
+                                <checksumPolicy>warn</checksumPolicy>
+                            </releases>
+                            <snapshots>
+                                <enabled>false</enabled>
+                                <updatePolicy>never</updatePolicy>
+                                <checksumPolicy>fail</checksumPolicy>
+                            </snapshots>
+                            <id>HDPReleases</id>
+                            <name>HDP Releases</name>
+                            <url>http://repo.hortonworks.com/content/repositories/releases/</url>
+                            <layout>default</layout>
+                        </repository>
+                        <repository>
+                            <releases>
+                                <enabled>true</enabled>
+                                <updatePolicy>always</updatePolicy>
+                                <checksumPolicy>warn</checksumPolicy>
+                            </releases>
+                            <snapshots>
+                                <enabled>false</enabled>
+                                <updatePolicy>never</updatePolicy>
+                                <checksumPolicy>fail</checksumPolicy>
+                            </snapshots>
+                            <id>HDPJettyHadoop</id>
+                            <name>HDP Jetty Hadoop</name>
+                            <url>http://repo.hortonworks.com/content/repositories/jetty-hadoop/</url>
+                            <layout>default</layout>
+                        </repository>
+                    </repositories>
+                </profile>
+        </profiles>
 </project>

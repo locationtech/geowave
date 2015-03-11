@@ -3,7 +3,6 @@ package mil.nga.giat.geowave.vector.transaction;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -11,10 +10,12 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
-import mil.nga.giat.geowave.vector.transaction.TransactionNotification;
-import mil.nga.giat.geowave.vector.transaction.ZooKeeperTransactionsAllocater;
-
 import org.apache.curator.test.TestingServer;
+import org.apache.zookeeper.WatchedEvent;
+import org.apache.zookeeper.Watcher;
+import org.apache.zookeeper.Watcher.Event.KeeperState;
+import org.apache.zookeeper.ZooKeeper;
+import org.apache.zookeeper.ZooKeeper.States;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -46,10 +47,9 @@ public class ZooKeeperTransactionAllocaterTest
 							String clientID,
 							String txID ) {
 						synchronized (createdTXIds) {
-							if (createdTXIds.size() == maxSize) 
-								return false;
+							if (createdTXIds.size() == maxSize) return false;
 							createdTXIds.add(txID);
-							
+
 							return true;
 						}
 					}
@@ -57,11 +57,14 @@ public class ZooKeeperTransactionAllocaterTest
 				});
 	}
 
-	private int runTest() throws InterruptedException {
+	private int runTest(
+			final boolean recovery )
+			throws InterruptedException {
 		Thread[] thr = new Thread[10];
 		for (int i = 0; i < thr.length; i++) {
 			thr[i] = new Thread(
-					new TXRequester());
+					new TXRequester(
+							recovery));
 			thr[i].start();
 		}
 
@@ -84,16 +87,13 @@ public class ZooKeeperTransactionAllocaterTest
 	public void test()
 			throws InterruptedException {
 
-		int workDone = runTest();
+		int workDone = runTest(false);
 		System.out.println("Total created transactionIDS " + createdTXIds.size());
 		assertTrue(createdTXIds.size() <= workDone);
 
 	}
 
-	
-	// not a good test in the sense that the data is not flushed to the server.
-	// works...with discrepencies
-	//@Test
+	@Test
 	public void recoveryTest()
 			throws InterruptedException {
 
@@ -108,17 +108,42 @@ public class ZooKeeperTransactionAllocaterTest
 							ok = true;
 
 							try {
+								// wait for some activity before closing the
+								// session to test recovery
 								synchronized (activeTX) {
 									activeTX.wait();
 								}
-								System.out.println("restart");
-								zkTestServer.stop();
-								File oldDir = zkTestServer.getTempDirectory();
-								zkTestServer.close();
-								zkTestServer = new TestingServer(
-										12181,
-										oldDir);
-
+								// Per hint from ZooKeeper pages, simulate a
+								// session timeout by attaching an instance
+								// to the same session and then closing it.
+								final Object Lock = new Long(
+										122);
+								final ZooKeeper kp = new ZooKeeper(
+										zkTestServer.getConnectString(),
+										5000,
+										new Watcher() {
+											@Override
+											public void process(
+													WatchedEvent event ) {
+												if (event.getState() == KeeperState.SyncConnected) {
+													synchronized (Lock) {
+														Lock.notify();
+													}
+												}
+											}
+										},
+										allocater.getConnection().getSessionId(),
+										allocater.getConnection().getSessionPasswd());
+								// do not close until the connection is
+								// established
+								synchronized (Lock) {
+									if (kp.getState() == States.CONNECTING) {
+										synchronized (Lock) {
+											Lock.wait();
+										}
+									}
+									kp.close();
+								}
 							}
 							catch (Exception e) {
 								ok = false;
@@ -128,17 +153,25 @@ public class ZooKeeperTransactionAllocaterTest
 					}
 				});
 		thr.start();
-		runTest();
+		runTest(true);
 		thr.join();
 	}
 
 	private class TXRequester implements
 			Runnable
 	{
+		final boolean recovery;
+
+		private TXRequester(
+				final boolean recovery ) {
+			this.recovery = recovery;
+		}
+
 		int s = 0;
 
+		@Override
 		public void run() {
-			while (s < 10 && !shutdown) {
+			while (s < 50 && !shutdown) {
 				s++;
 				try {
 					Thread.sleep(100);
@@ -147,13 +180,15 @@ public class ZooKeeperTransactionAllocaterTest
 				try {
 					String txID = allocater.getTransaction();
 					synchronized (activeTX) {
-						assert (!activeTX.contains(txID)); // throws assertion
-															// error
+						// no guarantees with forced session close as tested in the recovery test
+						assert (recovery || !activeTX.contains(txID)); // throws
+																		// assertion
+						// error
 						activeTX.add(txID);
-						activeTX.notify();
+						activeTX.notifyAll();
 					}
 					try {
-						Thread.sleep(200 + (Math.abs(random.nextInt())%200));
+						Thread.sleep(200 + (Math.abs(random.nextInt()) % 200));
 					}
 					catch (InterruptedException e) {}
 					allocater.releaseTransaction(txID);

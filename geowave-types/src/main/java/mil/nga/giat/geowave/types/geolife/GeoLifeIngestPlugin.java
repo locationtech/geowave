@@ -63,6 +63,7 @@ public class GeoLifeIngestPlugin implements
 
 	private final Index[] supportedIndices;
 
+
 	public GeoLifeIngestPlugin() {
 
 		geolifePointType = GeoLifeUtils.createGeoLifePointDataType();
@@ -195,7 +196,7 @@ public class GeoLifeIngestPlugin implements
 		final InputStream in = new ByteArrayInputStream(
 				hfile.getOriginalFile().array());
 		final InputStreamReader isr = new InputStreamReader(
-				in);
+				in, StringUtils.UTF8_CHAR_SET);
 		final BufferedReader br = new BufferedReader(
 				isr);
 		int pointInstance = 0;
@@ -229,7 +230,7 @@ public class GeoLifeIngestPlugin implements
 				pointInstance++;
 
 				timestring = vals[5] + " " + vals[6];
-				final Date ts = GeoLifeUtils.TIME_FORMAT_SECONDS.parse(timestring);
+				final Date ts = GeoLifeUtils.parseDate(timestring);
 				geolifePointBuilder.set(
 						"Timestamp",
 						ts);

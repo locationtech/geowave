@@ -3,7 +3,9 @@ package mil.nga.giat.geowave.test.mapreduce;
 import java.awt.Rectangle;
 import java.awt.image.Raster;
 import java.awt.image.RenderedImage;
+import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 
 import javax.media.jai.Interpolation;
 
@@ -45,10 +47,12 @@ public class KDERasterResizeIT extends
 	private static final int BASE_MAX_LEVEL = 17;
 
 	@BeforeClass
-	public static void extractTestFiles() {
+	public static void extractTestFiles()
+			throws URISyntaxException {
 		GeoWaveTestEnvironment.unZipFile(
-				KDERasterResizeIT.class.getClassLoader().getResourceAsStream(
-						TEST_DATA_ZIP_RESOURCE_PATH),
+				new File(
+						KDERasterResizeIT.class.getClassLoader().getResource(
+								TEST_DATA_ZIP_RESOURCE_PATH).toURI()),
 				TEST_CASE_BASE);
 	}
 

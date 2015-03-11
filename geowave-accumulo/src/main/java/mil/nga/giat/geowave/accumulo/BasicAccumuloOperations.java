@@ -309,8 +309,14 @@ public class BasicAccumuloOperations implements
 				unqualifiedTableName);
 	}
 
+	/**
+	 *
+	 */
 	@Override
-	public boolean deleteAll() {
+	public void deleteAll()
+			throws AccumuloSecurityException,
+			AccumuloException,
+			TableNotFoundException {
 		SortedSet<String> tableNames = connector.tableOperations().list();
 
 		if ((tableNamespace != null) && !tableNamespace.isEmpty()) {
@@ -318,21 +324,13 @@ public class BasicAccumuloOperations implements
 					tableNamespace,
 					tableNamespace + '\uffff');
 		}
-		boolean success = !tableNames.isEmpty();
+
 		for (final String tableName : tableNames) {
-			try {
 				connector.tableOperations().delete(
 						tableName);
 			}
-			catch (TableNotFoundException | AccumuloException | AccumuloSecurityException e) {
-				LOGGER.warn(
-						"Unable to delete table '" + tableName + "'",
-						e);
-				success = false;
-			}
 		}
-		return success;
-	}
+
 
 	@Override
 	public boolean delete(
@@ -561,7 +559,7 @@ public class BasicAccumuloOperations implements
 		final List<byte[]> newSet = new ArrayList<byte[]>();
 		for (final String auth : authorizations) {
 			if (!auths.contains(auth)) {
-				newSet.add(auth.getBytes());
+				newSet.add(auth.getBytes(StringUtils.UTF8_CHAR_SET));
 			}
 		}
 		if (newSet.size() > 0) {

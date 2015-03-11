@@ -14,6 +14,7 @@ import java.util.Map.Entry;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import mil.nga.giat.geowave.accumulo.AccumuloOperations;
 import mil.nga.giat.geowave.accumulo.mapreduce.JobContextAdapterStore;
 import mil.nga.giat.geowave.accumulo.query.InputFormatAccumuloRangeQuery;
@@ -37,10 +38,14 @@ import org.apache.log4j.Logger;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Iterators;
 
+
+
+
+
 /**
  * This class is used by the GeoWaveInputFormat to read data from an Accumulo
  * data store.
- *
+ * 
  * @param <T>
  *            The native type for the reader
  */
@@ -142,7 +147,7 @@ public class GeoWaveRecordReader<T> extends
 
 		try {
 			final AccumuloOperations operations = GeoWaveInputFormat.getAccumuloOperations(attempt);
-
+			final boolean isOutputWritable = GeoWaveInputFormat.isOutputWritable(attempt);
 			final JobContextAdapterStore adapterStore = GeoWaveInputFormat.getDataAdapterStore(
 					attempt,
 					operations);
@@ -165,10 +170,13 @@ public class GeoWaveRecordReader<T> extends
 									r,
 									i),
 							new InputFormatAccumuloRangeQuery(
-									adapterStore.getAdapterIds(),
+									GeoWaveInputFormat.getAdapterIds(
+											attempt,
+											adapterStore),
 									i,
 									r,
 									queryFilters,
+									isOutputWritable,
 									additionalAuthorizations).query(
 									operations,
 									adapterStore,
@@ -420,7 +428,6 @@ public class GeoWaveRecordReader<T> extends
 		return new Iterator<Object>() {
 			Iterator<?> currentIterator = Iterators.emptyIterator();
 			Iterator<?> removeFrom;
-			RangeIndexPair currentRangeIndex;
 
 			@Override
 			public boolean hasNext() {
@@ -443,6 +450,7 @@ public class GeoWaveRecordReader<T> extends
 				return currentIterator.next();
 			}
 
+			@SuppressFBWarnings(value = "NP_NULL_ON_SOME_PATH", justification = "Precondition catches null")
 			@Override
 			public void remove() {
 				Preconditions.checkState(

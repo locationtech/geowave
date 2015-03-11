@@ -93,10 +93,10 @@ public class RasterTileResizeJobRunner extends
 		job.setNumReduceTasks(8);
 
 		GeoWaveInputFormat.setMinimumSplitCount(
-				job,
+				job.getConfiguration(),
 				minSplits);
 		GeoWaveInputFormat.setMaximumSplitCount(
-				job,
+				job.getConfiguration(),
 				maxSplits);
 		GeoWaveInputFormat.setAccumuloOperationsInfo(
 				job,
@@ -133,10 +133,10 @@ public class RasterTileResizeJobRunner extends
 				newTileSize,
 				new NoDataMergeStrategy());
 		JobContextAdapterStore.addDataAdapter(
-				job,
+				job.getConfiguration(),
 				adapter);
 		JobContextAdapterStore.addDataAdapter(
-				job,
+				job.getConfiguration(),
 				newAdapter);
 		Index index = null;
 		if (indexId != null) {
@@ -155,7 +155,7 @@ public class RasterTileResizeJobRunner extends
 			}
 		}
 		JobContextIndexStore.addIndex(
-				job,
+				job.getConfiguration(),
 				index);
 		final AccumuloOperations ops = new BasicAccumuloOperations(
 				zookeeper,

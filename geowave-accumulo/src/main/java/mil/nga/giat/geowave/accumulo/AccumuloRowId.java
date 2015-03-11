@@ -3,6 +3,7 @@ package mil.nga.giat.geowave.accumulo;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.accumulo.core.data.Key;
 
 /**
@@ -15,6 +16,7 @@ import org.apache.accumulo.core.data.Key;
  * guarantee uniqueness for this row ID.
  *
  */
+@SuppressFBWarnings(value="EI_EXPOSE_REP", justification = "private class only accessed internally")
 public class AccumuloRowId
 {
 	private final byte[] insertionId;

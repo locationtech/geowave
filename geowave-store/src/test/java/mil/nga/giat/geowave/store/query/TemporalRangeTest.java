@@ -23,6 +23,41 @@ public class TemporalRangeTest {
 		assertTrue(range.isWithin(new NumericRange(998, 9900)));
 		assertTrue(range.isWithin(new NumericRange(20, 199)));
 		assertTrue(range.isWithin(new NumericRange(150, 199)));
+		
+		assertTrue(check(new NumericRange(-1, 1), new NumericRange(-1,1)));
+		
+		assertFalse(check(new NumericRange(9, 19), new NumericRange(20, 30)));
+		assertTrue(check(new NumericRange(11, 21), new NumericRange(20, 30)));
+		assertTrue(check(new NumericRange(20, 30), new NumericRange(20, 30)));		
+		assertFalse(check(new NumericRange(9, 19), new NumericRange(20, 30)));
+		assertTrue(check(new NumericRange(11, 21), new NumericRange(20, 30)));
+		assertTrue(check(new NumericRange(21, 29), new NumericRange(20, 30)));
+		assertTrue(check(new NumericRange(20, 30), new NumericRange(21, 29)));
+		assertTrue(check(new NumericRange(20, 30), new NumericRange(11, 21)));
+		assertFalse(check(new NumericRange(20, 30), new NumericRange(9, 19)));
+		
+		assertTrue(check(new NumericRange(-3, -1), new NumericRange(-2, 0)));
+		assertTrue(check(new NumericRange(-2, 0), new NumericRange(-3, -1)));
+		assertFalse(check(new NumericRange(-3, 1), new NumericRange(2, 4)));
+		assertTrue(check(new NumericRange(-3, 1), new NumericRange(-2, 0)));
+		assertTrue(check(new NumericRange(-2, 0), new NumericRange(-3, 1)));
+		assertTrue(check(new NumericRange(-2, 0), new NumericRange(-3, -1)));
+		assertTrue(check(new NumericRange(-3, -1), new NumericRange(-2, 0)));
+		assertTrue(check(new NumericRange(-2, 0), new NumericRange(-1, 1)));
+		assertTrue(check(new NumericRange(-1, 3), new NumericRange(0, 2)));
+		assertFalse(check(new NumericRange(-1, -0.5), new NumericRange(0, 2)));
+		assertTrue(check(new NumericRange(0, 2), new NumericRange(-1, 3)));
+		assertTrue(check(new NumericRange(0, 2), new NumericRange(-1, 3)));
+		assertFalse(check(new NumericRange(-1, 2), new NumericRange(3,4)));
+		assertFalse(check(new NumericRange(-1, 2), new NumericRange(3,6)));
+		assertTrue(check(new NumericRange(-1, 2), new NumericRange(1,4)));
+	
 	}
 
+	public static boolean check(NumericRange r1, NumericRange r2) {
+		double t0 = r1.getMax() - r2.getMin();
+		double t1 = r2.getMax() - r1.getMin();
+		return ! (Math.abs(t0 - t1) > (t0 + t1));
+
+	}
 }

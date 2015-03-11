@@ -4,6 +4,7 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.hadoop.io.WritableComparable;
 
 public class ComparisonCellData implements
@@ -58,6 +59,25 @@ public class ComparisonCellData implements
 		return Double.compare(
 				combined,
 				other.getCombinedPercentile());
+	}
+
+	@Override
+	public boolean equals(Object val) {
+		if (!(val instanceof ComparisonCellData)){
+			return false;
+		}
+		if (val == this){
+			return true;
+		}
+		return this.compareTo((ComparisonCellData)val) == 0;
+	}
+
+	@Override
+	public int hashCode(){
+		return new HashCodeBuilder(2003,6373)
+				.append(summerPercentile)
+				.append(winterPercentile)
+				.toHashCode();
 	}
 
 	private static double applyCombinationFunction(

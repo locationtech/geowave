@@ -3,6 +3,12 @@ package mil.nga.giat.geowave.store.data.field;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
+import java.nio.DoubleBuffer;
+import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
+import java.nio.LongBuffer;
+import java.nio.ShortBuffer;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
@@ -16,7 +22,7 @@ import com.vividsolutions.jts.geom.Geometry;
 
 /**
  * This class contains all of the primitive reader field types supported
- * 
+ *
  */
 public class BasicReader
 {
@@ -89,6 +95,24 @@ public class BasicReader
 
 	}
 
+	public static class PrimitiveShortArrayReader implements
+			FieldReader<short[]>
+	{
+
+		@Override
+		public short[] readField(
+				final byte[] fieldData ) {
+			if ((fieldData == null) || (fieldData.length < 2)) {
+				return null;
+			}
+			final ShortBuffer buff = ByteBuffer.wrap(
+					fieldData).asShortBuffer();
+			final short[] result = new short[buff.remaining()];
+			buff.get(result);
+			return result;
+		}
+	}
+
 	public static class FloatReader implements
 			FieldReader<Float>
 	{
@@ -103,6 +127,24 @@ public class BasicReader
 					fieldData).getFloat();
 		}
 
+	}
+
+	public static class PrimitiveFloatArrayReader implements
+			FieldReader<float[]>
+	{
+
+		@Override
+		public float[] readField(
+				final byte[] fieldData ) {
+			if ((fieldData == null) || (fieldData.length < 4)) {
+				return null;
+			}
+			final FloatBuffer buff = ByteBuffer.wrap(
+					fieldData).asFloatBuffer();
+			final float[] result = new float[buff.remaining()];
+			buff.get(result);
+			return result;
+		}
 	}
 
 	public static class DoubleReader implements
@@ -121,6 +163,24 @@ public class BasicReader
 
 	}
 
+	public static class PrimitiveDoubleArrayReader implements
+			FieldReader<double[]>
+	{
+
+		@Override
+		public double[] readField(
+				final byte[] fieldData ) {
+			if ((fieldData == null) || (fieldData.length < 8)) {
+				return null;
+			}
+			final DoubleBuffer buff = ByteBuffer.wrap(
+					fieldData).asDoubleBuffer();
+			final double[] result = new double[buff.remaining()];
+			buff.get(result);
+			return result;
+		}
+	}
+
 	public static class BigDecimalReader implements
 			FieldReader<BigDecimal>
 	{
@@ -131,7 +191,6 @@ public class BasicReader
 			if ((fieldData == null) || (fieldData.length < 8)) {
 				return null;
 			}
-
 			final double doubleVal = ByteBuffer.wrap(
 					fieldData).getDouble();
 			return new BigDecimal(
@@ -156,6 +215,24 @@ public class BasicReader
 
 	}
 
+	public static class PrimitiveIntArrayReader implements
+			FieldReader<int[]>
+	{
+
+		@Override
+		public int[] readField(
+				final byte[] fieldData ) {
+			if ((fieldData == null) || (fieldData.length < 4)) {
+				return null;
+			}
+			final IntBuffer buff = ByteBuffer.wrap(
+					fieldData).asIntBuffer();
+			final int[] result = new int[buff.remaining()];
+			buff.get(result);
+			return result;
+		}
+	}
+
 	public static class LongReader implements
 			FieldReader<Long>
 	{
@@ -170,6 +247,24 @@ public class BasicReader
 					fieldData).getLong();
 		}
 
+	}
+
+	public static class PrimitiveLongArrayReader implements
+			FieldReader<long[]>
+	{
+
+		@Override
+		public long[] readField(
+				final byte[] fieldData ) {
+			if ((fieldData == null) || (fieldData.length < 8)) {
+				return null;
+			}
+			final LongBuffer buff = ByteBuffer.wrap(
+					fieldData).asLongBuffer();
+			final long[] result = new long[buff.remaining()];
+			buff.get(result);
+			return result;
+		}
 	}
 
 	public static class BigIntegerReader implements
@@ -232,7 +327,6 @@ public class BasicReader
 					ByteBuffer.wrap(
 							fieldData).getLong());
 		}
-
 	}
 
 	public static class CalendarReader implements
@@ -273,7 +367,9 @@ public class BasicReader
 		@Override
 		public byte[] readField(
 				final byte[] fieldData ) {
-			return fieldData;
+			return Arrays.copyOf(
+					fieldData,
+					fieldData.length);
 		}
 
 	}

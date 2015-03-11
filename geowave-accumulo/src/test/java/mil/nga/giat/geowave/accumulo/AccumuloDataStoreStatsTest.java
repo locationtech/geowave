@@ -11,7 +11,9 @@ import java.util.List;
 import mil.nga.giat.geowave.accumulo.metadata.AccumuloAdapterStore;
 import mil.nga.giat.geowave.accumulo.metadata.AccumuloDataStatisticsStore;
 import mil.nga.giat.geowave.accumulo.metadata.AccumuloIndexStore;
+import mil.nga.giat.geowave.accumulo.util.AccumuloUtils;
 import mil.nga.giat.geowave.index.ByteArrayId;
+import mil.nga.giat.geowave.index.StringUtils;
 import mil.nga.giat.geowave.store.CloseableIterator;
 import mil.nga.giat.geowave.store.adapter.AbstractDataAdapter;
 import mil.nga.giat.geowave.store.adapter.NativeFieldHandler;
@@ -264,7 +266,7 @@ public class AccumuloDataStoreStatsTest
 
 		assertFalse(mockDataStore.deleteEntry(
 				index,
-				new ByteArrayId("test_pt_2".getBytes()),
+				new ByteArrayId("test_pt_2".getBytes(StringUtils.UTF8_CHAR_SET)),
 				adapter.getAdapterId(),
 				"aaa"));
 
@@ -285,7 +287,7 @@ public class AccumuloDataStoreStatsTest
 		
 		assertTrue(mockDataStore.deleteEntry(
 				index,
-				new ByteArrayId("test_pt".getBytes()),
+				new ByteArrayId("test_pt".getBytes(StringUtils.UTF8_CHAR_SET)),
 				adapter.getAdapterId(),
 				"aaa"));
 

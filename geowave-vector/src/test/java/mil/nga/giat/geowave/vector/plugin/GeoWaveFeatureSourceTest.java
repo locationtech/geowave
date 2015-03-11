@@ -9,6 +9,7 @@ import java.text.ParseException;
 import java.util.UUID;
 
 import mil.nga.giat.geowave.index.ByteArrayId;
+import mil.nga.giat.geowave.index.StringUtils;
 import mil.nga.giat.geowave.store.CloseableIterator;
 import mil.nga.giat.geowave.store.adapter.statistics.BoundingBoxDataStatistics;
 import mil.nga.giat.geowave.store.adapter.statistics.CountDataStatistics;
@@ -108,7 +109,7 @@ public class GeoWaveFeatureSourceTest
 
 		CloseableIterator<DataStatistics<?>> stats = dataStore.dataStore.getStatsStore().getDataStatistics(
 				new ByteArrayId(
-						"geostuff".getBytes()));
+						"geostuff".getBytes(StringUtils.UTF8_CHAR_SET)));
 		assertTrue(stats.hasNext());
 		DataStatistics<?> stats1 = stats.next();
 		assertTrue(stats.hasNext());
@@ -189,7 +190,7 @@ public class GeoWaveFeatureSourceTest
 		SimpleFeature newFeature = writer.next();
 		newFeature.setAttribute(
 				"pop",
-				new Long(
+				Long.valueOf(
 						100));
 		newFeature.setAttribute(
 				"pid",
@@ -207,7 +208,7 @@ public class GeoWaveFeatureSourceTest
 		newFeature = writer.next();
 		newFeature.setAttribute(
 				"pop",
-				new Long(
+				Long.valueOf(
 						100));
 		newFeature.setAttribute(
 				"pid",
@@ -225,7 +226,7 @@ public class GeoWaveFeatureSourceTest
 		newFeature = writer.next();
 		newFeature.setAttribute(
 				"pop",
-				new Long(
+				Long.valueOf(
 						100));
 		newFeature.setAttribute(
 				"pid",

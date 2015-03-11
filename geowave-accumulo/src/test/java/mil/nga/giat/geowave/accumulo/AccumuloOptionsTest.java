@@ -36,6 +36,7 @@ import org.apache.accumulo.core.client.TableNotFoundException;
 import org.apache.accumulo.core.client.mock.MockInstance;
 import org.apache.accumulo.core.client.security.tokens.PasswordToken;
 import org.apache.log4j.Logger;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -388,7 +389,13 @@ public class AccumuloOptionsTest
 
 		accumuloOptions.setUseAltIndex(true);
 
-		accumuloOperations.deleteAll();
+		try {
+			accumuloOperations.deleteAll();
+		}
+		catch (TableNotFoundException | AccumuloSecurityException | AccumuloException e) {
+			LOGGER.error("Unable to clear accumulo namespace", e);
+			Assert.fail("Unable to clear accumulo namespace");
+		}
 
 		mockDataStore.ingest(
 				adapter,

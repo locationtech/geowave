@@ -63,7 +63,7 @@ public class GeoWaveFeatureReaderTest
 		SimpleFeature newFeature = writer.next();
 		newFeature.setAttribute(
 				"pop",
-				new Long(
+				Long.valueOf(
 						100));
 		newFeature.setAttribute(
 				"pid",
@@ -78,7 +78,7 @@ public class GeoWaveFeatureReaderTest
 		newFeature = writer.next();
 		newFeature.setAttribute(
 				"pop",
-				new Long(
+				Long.valueOf(
 						101));
 		newFeature.setAttribute(
 				"pid",

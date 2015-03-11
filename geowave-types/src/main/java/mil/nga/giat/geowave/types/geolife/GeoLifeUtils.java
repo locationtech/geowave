@@ -2,6 +2,7 @@ package mil.nga.giat.geowave.types.geolife;
 
 import java.io.File;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -17,10 +18,22 @@ import com.vividsolutions.jts.geom.Geometry;
  */
 public class GeoLifeUtils
 {
-	public static final DateFormat TIME_FORMAT_SECONDS = new SimpleDateFormat(
-			"yyyy-MM-dd HH:mm:ss");
-	public static String GEOLIFE_POINT_FEATURE = "geolifepoint";
-	public static String GEOLIFE_TRACK_FEATURE = "geolifetrack";
+
+	private static final ThreadLocal<DateFormat> dateFormat = new ThreadLocal<DateFormat>(){
+		@Override
+		protected DateFormat initialValue(){
+			return new SimpleDateFormat(
+					"yyyy-MM-dd HH:mm:ss");
+		}
+	};
+
+	public static Date parseDate(String source)
+			throws ParseException {
+		return dateFormat.get().parse(source);
+	}
+
+	public static final String GEOLIFE_POINT_FEATURE = "geolifepoint";
+	public static final String GEOLIFE_TRACK_FEATURE = "geolifetrack";
 
 	public static SimpleFeatureType createGeoLifeTrackDataType() {
 

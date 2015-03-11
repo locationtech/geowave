@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import mil.nga.giat.geowave.accumulo.metadata.AccumuloAdapterStore;
 import mil.nga.giat.geowave.accumulo.metadata.AccumuloDataStatisticsStore;
 import mil.nga.giat.geowave.accumulo.metadata.AccumuloIndexStore;
@@ -253,7 +254,7 @@ public class AccumuloDataStore implements
 					accumuloOperations.attachIterators(
 							indexName,
 							accumuloOptions.isCreateTable(),
-							((AttachedIteratorDataAdapter) writableAdapter).getAttachedIteratorConfig());
+							((AttachedIteratorDataAdapter) writableAdapter).getAttachedIteratorConfig(index));
 				}
 			}
 			final IngestEntryInfo entryInfo = AccumuloUtils.write(
@@ -437,7 +438,7 @@ public class AccumuloDataStore implements
 					accumuloOperations.attachIterators(
 							indexName,
 							accumuloOptions.isCreateTable(),
-							((AttachedIteratorDataAdapter) dataWriter).getAttachedIteratorConfig());
+							((AttachedIteratorDataAdapter) dataWriter).getAttachedIteratorConfig(index));
 				}
 			}
 			final List<IngestCallback<T>> callbacks = new ArrayList<IngestCallback<T>>();
@@ -685,6 +686,7 @@ public class AccumuloDataStore implements
 
 	}
 
+	@SuppressFBWarnings(value="DLS_DEAD_LOCAL_STORE", justification="i is part of loop condition" )
 	private List<Entry<Key, Value>> getEntryRows(
 			final String tableName,
 			final ByteArrayId dataId,
@@ -725,7 +727,7 @@ public class AccumuloDataStore implements
 
 			final Iterator<Map.Entry<Key, Value>> iterator = scanner.iterator();
 			int i = 0;
-			if (iterator.hasNext() && i < limit) {
+			if (iterator.hasNext() && i < limit) { //FB supression as FB not detecting i reference here
 				resultList.add(iterator.next());
 				i++;
 			}
@@ -918,7 +920,7 @@ public class AccumuloDataStore implements
 				adapter,
 				index,
 				query,
-				new Integer(
+				Integer.valueOf(
 						limit),
 				authorizations);
 	}
@@ -931,7 +933,7 @@ public class AccumuloDataStore implements
 		return query(
 				adapter,
 				query,
-				new Integer(
+				Integer.valueOf(
 						limit));
 	}
 
@@ -1139,7 +1141,8 @@ public class AccumuloDataStore implements
 				adapter,
 				index,
 				query,
-				limit);
+				limit,
+				(String[])null);
 	}
 
 	@Override

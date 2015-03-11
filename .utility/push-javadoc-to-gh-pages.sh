@@ -2,9 +2,9 @@
 
 if [ "$TRAVIS_REPO_SLUG" == "ngageoint/geowave" ] && [ "$TRAVIS_JDK_VERSION" == "oraclejdk7" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_BRANCH" == "master" ]; then
 
-  echo -e "Publishing javadoc...\n"
+  echo -e "Publishing site ...\n"
 
-  cp -R target/site/apidocs $HOME/javadoc-latest
+  cp -R target/site $HOME/site
 
   cd $HOME
   git config --global user.email "travis@travis-ci.org"
@@ -12,8 +12,13 @@ if [ "$TRAVIS_REPO_SLUG" == "ngageoint/geowave" ] && [ "$TRAVIS_JDK_VERSION" == 
   git clone --quiet --branch=gh-pages https://${GH_TOKEN}@github.com/ngageoint/geowave gh-pages > /dev/null
 
   cd gh-pages
-  git rm -rf ./javadoc
-  cp -Rf $HOME/javadoc-latest ./javadoc
+  git rm -rf .
+  cp -Rf $HOME/site/* .
+
+  # Don't check in big binary blobs
+  # TODO: Push to S3 if we want to link to them via the web site
+  rm -f *.epub *.pdf *.pdfmarks
+
   git add -f .
   git commit -m "Lastest javadoc on successful travis build $TRAVIS_BUILD_NUMBER auto-pushed to gh-pages"
   git push -fq origin gh-pages > /dev/null

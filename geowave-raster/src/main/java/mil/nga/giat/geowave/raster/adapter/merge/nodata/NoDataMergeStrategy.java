@@ -18,6 +18,8 @@ public class NoDataMergeStrategy implements
 {
 	public NoDataMergeStrategy() {}
 
+	private static final long serialVersionUID = 38473874l;
+
 	@Override
 	public void merge(
 			final RasterTile<NoDataMetadata> thisTile,
@@ -107,6 +109,12 @@ public class NoDataMergeStrategy implements
 			return false;
 		}
 		return true;
+	}
+
+	@Override
+	public int hashCode() {
+		return (int)serialVersionUID;
+		//this looks correct based on behaviour of equals?!? should return the same hash code for all instances
 	}
 
 	@Override

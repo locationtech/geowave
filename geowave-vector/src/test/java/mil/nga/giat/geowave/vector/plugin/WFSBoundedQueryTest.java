@@ -68,7 +68,7 @@ public class WFSBoundedQueryTest
 		SimpleFeature newFeature = writer.next();
 		newFeature.setAttribute(
 				"pop",
-				new Long(
+				Long.valueOf(
 						100));
 		newFeature.setAttribute(
 				"pid",
@@ -86,7 +86,7 @@ public class WFSBoundedQueryTest
 		newFeature = writer.next();
 		newFeature.setAttribute(
 				"pop",
-				new Long(
+				Long.valueOf(
 						100));
 		newFeature.setAttribute(
 				"pid",
@@ -104,7 +104,7 @@ public class WFSBoundedQueryTest
 		newFeature = writer.next();
 		newFeature.setAttribute(
 				"pop",
-				new Long(
+				Long.valueOf(
 						100));
 		newFeature.setAttribute(
 				"pid",

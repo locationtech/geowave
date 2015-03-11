@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
         <artifactId>geowave-parent</artifactId>
         <groupId>mil.nga.giat</groupId>
         <relativePath>../</relativePath>
-        <version>0.8.3-SNAPSHOT</version>
+        <version>0.8.4-SNAPSHOT</version>
     </parent>
 
     <artifactId>geowave-docs</artifactId>
@@ -113,13 +113,13 @@
                         <phase>generate-sources</phase>
                         <configuration>
                             <target>
-                                <fileset id="generate-index-file" dir="${project.basedir}/content" includes="*.adoc" />
+                                <fileset id="generate-index-file" dir="${project.basedir}/content" includes="*.adoc"/>
                                 <!--
                                     Abusing this a bit to do some simple templating, I have a file list and need
                                     a list of asciidoc includes that look like include::000-titlepage.adoc[]
                                  -->
                                 <pathconvert pathsep="[]${line.separator}" property="asciidoc-files" refid="generate-index-file">
-                                    <map from="${project.basedir}/content/" to="include::" />
+                                    <map from="${project.basedir}/content/" to="include::"/>
                                 </pathconvert>
                                 <echo file="${project.build.directory}/content/documentation.adoc">${asciidoc-files}[]</echo>
                             </target>
@@ -133,12 +133,17 @@
             <plugin>
                 <groupId>org.asciidoctor</groupId>
                 <artifactId>asciidoctor-maven-plugin</artifactId>
-                <version>1.5.0</version>
+                <version>1.5.2</version>
                 <dependencies>
                     <dependency>
                         <groupId>org.asciidoctor</groupId>
-                        <artifactId>asciidoctorj</artifactId>
-                        <version>1.5.2</version>
+                        <artifactId>asciidoctorj-epub3</artifactId>
+                        <version>1.5.0-alpha.4</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.asciidoctor</groupId>
+                        <artifactId>asciidoctorj-pdf</artifactId>
+                        <version>1.5.0-alpha.6</version>
                     </dependency>
                 </dependencies>
                 <configuration>
@@ -153,6 +158,17 @@
                 </configuration>
                 <executions>
                     <execution>
+                        <id>generate-epub</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>process-asciidoc</goal>
+                        </goals>
+                        <configuration>
+                            <backend>epub3</backend>
+                            <sourceHighlighter>coderay</sourceHighlighter>
+                        </configuration>
+                    </execution>
+                    <execution>
                         <id>generate-pdf</id>
                         <phase>generate-resources</phase>
                         <goals>
@@ -163,19 +179,11 @@
                                 <require>asciidoctor-pdf</require>
                             </requires>
                             <backend>pdf</backend>
-                            <!-- WARNING callout bullets don't yet work with CodeRay -->
                             <sourceHighlighter>coderay</sourceHighlighter>
-                            <attributes>
-                                <imagesdir>./images</imagesdir>
-                                <pagenums/>
-                                <toc/>
-                                <idprefix/>
-                                <idseparator>-</idseparator>
-                            </attributes>
                         </configuration>
                     </execution>
                     <execution>
-                        <id>asciidoc-to-html</id>
+                        <id>generate-html</id>
                         <phase>generate-resources</phase>
                         <goals>
                             <goal>process-asciidoc</goal>
@@ -185,7 +193,7 @@
                             <sourceHighlighter>highlightjs</sourceHighlighter>
                             <attributes>
                                 <stylesdir>stylesheets</stylesdir>
-                                <stylesheet>slate.css</stylesheet>
+                                <stylesheet>geowave.css</stylesheet>
                                 <imagesdir>./images</imagesdir>
                                 <toc>right</toc>
                                 <icons>font</icons>

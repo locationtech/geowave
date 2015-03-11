@@ -603,7 +603,7 @@ public class GeoWaveRasterReader extends
 			}
 		}
 		else {
-			imageChoice = new Integer(
+			imageChoice = Integer.valueOf(
 					0);
 		}
 

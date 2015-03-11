@@ -120,6 +120,8 @@ public class ZOrderSFC implements
 	public RangeDecomposition decomposeQuery(
 			final MultiDimensionalNumericData query,
 			final int maxFilteredIndexedRanges ) {
+		// TODO: Because the research and benchmarking show Hilbert to outperform Z-Order
+		// the optimization of full query decomposition is not implemented at the moment for Z-Order
 		final double[] queryMins = query.getMinValuesPerDimension();
 		final double[] queryMaxes = query.getMaxValuesPerDimension();
 		final double[] normalizedMins = new double[query.getDimensionCount()];

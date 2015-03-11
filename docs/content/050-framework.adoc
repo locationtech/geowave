@@ -34,34 +34,29 @@ that will be installed in $PATH. In a development environment were this script h
 artifact directly with the command ```java -jar geowave-types-VERSION-ingest-tool.jar <operation> <options>```
 
 === Cmd: geowave-ingest
-----
-include::manpages/geowave-ingest.text[]
-----
+
+include::manpages/geowave-ingest.txt[]
 
 === Operation: -clear
-----
-include::manpages/geowave-ingest-clear.text[]
-----
+
+include::manpages/geowave-ingest-clear.txt[]
 
 === Operation: -hdfsingest
-----
-include::manpages/geowave-ingest-hdfsingest.text[]
-----
+
+include::manpages/geowave-ingest-hdfsingest.txt[]
 
 === Operation: -hdfsstage
-----
-include::manpages/geowave-ingest-hdfsstage.text[]
-----
+
+include::manpages/geowave-ingest-hdfsstage.txt[]
 
 === Operation: -localingest
-----
-include::manpages/geowave-ingest-localingest.text[]
-----
+
+include::manpages/geowave-ingest-localingest.txt[]
 
 === Operation: -poststage
-----
-include::manpages/geowave-ingest-poststage.text[]
-----
+
+include::manpages/geowave-ingest-poststage.txt[]
+
 
 ==== Ingesting all the things
 
@@ -74,7 +69,7 @@ The naturalearthdata side has a few shapefile we can use use. On the page
 http://www.naturalearthdata.com/downloads/50m-cultural-vectors/[50m Cultural Vectors]
 
 Let's download the Admin 0 - Countries shapefile:
-http://www.naturalearthdata.com/download/50m/cultural/ne_50m_admin_0_countries.zip[ne_50m_admin_0_countries.zip]
+http://naciscdn.org/naturalearth/50m/cultural/ne_50m_admin_0_countries.zip[ne_50m_admin_0_countries.zip]
 
 Okay, let's ingest this. I'll take some liberty with the file locations,
 but the process should be obvious
@@ -87,5 +82,5 @@ $ cd ingest
 $ unzip ne_50m_admin_0_countries.zip
 $ rm ne_50m_admin_0_countries.zip
 $ cd ..
-$ geowave-ingest -localingest -b ./ingest -i instance -n adminborders -p pass -t geotools-vector -u user -z zoo-1:2181
+$ geowave-ingest -localingest -b ./ingest -i ACCUMULO_INSTANCE_NAME -n geowave.50m_admin_0_countries -t geotools-vector -u USERNAME -p PASSWORD -z zoo-1:2181
 ----

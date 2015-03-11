@@ -134,6 +134,7 @@ abstract public class AbstractDataAdapter<T> implements
 		for (final DimensionField<? extends CommonIndexValue> dimension : indexModel.getDimensions()) {
 			final IndexFieldHandler<T, ? extends CommonIndexValue, Object> fieldHandler = getFieldHandler(dimension);
 			if (fieldHandler == null) {
+				LOGGER.warn("Unable to find field handler for data adapter '" + StringUtils.stringFromBinary(getAdapterId().getBytes()) + "' and indexed field '" + StringUtils.stringFromBinary(dimension.getFieldId().getBytes()));
 				continue;
 			}
 			final CommonIndexValue value = fieldHandler.toIndexValue(entry);
@@ -170,6 +171,7 @@ abstract public class AbstractDataAdapter<T> implements
 		for (final DimensionField<? extends CommonIndexValue> dimension : indexModel.getDimensions()) {
 			final IndexFieldHandler<T, CommonIndexValue, Object> fieldHandler = (IndexFieldHandler<T, CommonIndexValue, Object>) getFieldHandler(dimension);
 			if (fieldHandler == null) {
+				LOGGER.warn("Unable to find field handler for data adapter '" + StringUtils.stringFromBinary(getAdapterId().getBytes()) + "' and indexed field '" + StringUtils.stringFromBinary(dimension.getFieldId().getBytes()));
 				continue;
 			}
 			final CommonIndexValue value = data.getCommonData().getValue(
@@ -203,9 +205,6 @@ abstract public class AbstractDataAdapter<T> implements
 							dimension.getClass(),
 							DimensionField.class),
 					typeMatchingFieldHandlers);
-			if (fieldHandler == null) {
-				LOGGER.warn("Unable to find field handler for data adapter '" + StringUtils.stringFromBinary(getAdapterId().getBytes()) + "' and indexed field '" + StringUtils.stringFromBinary(dimension.getFieldId().getBytes()));
-			}
 		}
 		return fieldHandler;
 	}

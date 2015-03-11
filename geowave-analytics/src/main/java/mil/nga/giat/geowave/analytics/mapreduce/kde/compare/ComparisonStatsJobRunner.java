@@ -87,7 +87,7 @@ public class ComparisonStatsJobRunner extends
 						"Entries per level.level" + l,
 						combiner.getCounters().getGroup(
 								"Entries per level").findCounter(
-								"level " + new Long(
+								"level " + Long.valueOf(
 										l)).getValue());
 			}
 			// Stats Reducer Job configuration parameters
@@ -111,7 +111,7 @@ public class ComparisonStatsJobRunner extends
 					new Path(
 							"/tmp/" + namespace + "_stats_" + minLevel + "_" + maxLevel + "_" + coverageName + "/combined_pct"));
 			GeoWaveOutputFormat.setAccumuloOperationsInfo(
-					ingester,
+					ingester.getConfiguration(),
 					zookeeper,
 					instance,
 					user,
@@ -192,13 +192,13 @@ public class ComparisonStatsJobRunner extends
 					"Entries per level (winter, " + l + ")",
 					job1.getCounters().getGroup(
 							"Entries per level (winter)").findCounter(
-							"level " + new Long(
+							"level " + Long.valueOf(
 									l)).getValue());
 			conf.setLong(
 					"Entries per level (summer, " + l + ")",
 					job1.getCounters().getGroup(
 							"Entries per level (summer)").findCounter(
-							"level " + new Long(
+							"level " + Long.valueOf(
 									l)).getValue());
 		}
 	}

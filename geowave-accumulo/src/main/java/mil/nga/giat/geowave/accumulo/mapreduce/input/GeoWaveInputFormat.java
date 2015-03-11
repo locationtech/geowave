@@ -18,11 +18,13 @@ import mil.nga.giat.geowave.accumulo.AccumuloOperations;
 import mil.nga.giat.geowave.accumulo.mapreduce.GeoWaveConfiguratorBase;
 import mil.nga.giat.geowave.accumulo.mapreduce.JobContextAdapterStore;
 import mil.nga.giat.geowave.accumulo.mapreduce.JobContextIndexStore;
+import mil.nga.giat.geowave.accumulo.mapreduce.input.GeoWaveInputConfigurator.InputConfig;
 import mil.nga.giat.geowave.accumulo.mapreduce.input.GeoWaveInputFormat.IntermediateSplitInfo.RangeLocationPair;
-import mil.nga.giat.geowave.accumulo.metadata.AccumuloIndexStore;
 import mil.nga.giat.geowave.accumulo.util.AccumuloUtils;
+import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.index.NumericIndexStrategy;
 import mil.nga.giat.geowave.index.sfc.data.MultiDimensionalNumericData;
+import mil.nga.giat.geowave.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.store.index.Index;
 import mil.nga.giat.geowave.store.query.DistributableQuery;
@@ -47,7 +49,10 @@ import org.apache.accumulo.core.master.state.tables.TableState;
 import org.apache.accumulo.core.security.Credentials;
 import org.apache.accumulo.core.util.UtilWaitThread;
 import org.apache.commons.collections.IteratorUtils;
+import org.apache.commons.collections.Transformer;
+import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.io.Text;
+import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.mapreduce.InputFormat;
 import org.apache.hadoop.mapreduce.InputSplit;
 import org.apache.hadoop.mapreduce.Job;
@@ -66,8 +71,8 @@ import org.apache.accumulo.core.security.thrift.TCredentials;
 end[ACCUMULO_1.5.1]*/
 // @formatter:on
 
-public class GeoWaveInputFormat extends
-		InputFormat<GeoWaveInputKey, Object>
+public class GeoWaveInputFormat<T extends Writable> extends
+		InputFormat<GeoWaveInputKey, T>
 {
 	private static final Class<?> CLASS = GeoWaveInputFormat.class;
 	protected static final Logger LOGGER = Logger.getLogger(CLASS);
@@ -75,7 +80,52 @@ public class GeoWaveInputFormat extends
 
 	/**
 	 * Configures a {@link AccumuloOperations} for this job.
-	 *
+	 * 
+	 * @param job
+	 *            the Hadoop job instance to be configured
+	 * @param zooKeepers
+	 *            a comma-separated list of zookeeper servers
+	 * @param instanceName
+	 *            the Accumulo instance name
+	 * @param userName
+	 *            the Accumulo user name
+	 * @param password
+	 *            the Accumulo password
+	 * @param geowaveTableNamespace
+	 *            the GeoWave table namespace
+	 */
+	public static void setAccumuloOperationsInfo(
+			final Configuration config,
+			final String zooKeepers,
+			final String instanceName,
+			final String userName,
+			final String password,
+			final String geowaveTableNamespace ) {
+		GeoWaveConfiguratorBase.setZookeeperUrl(
+				CLASS,
+				config,
+				zooKeepers);
+		GeoWaveConfiguratorBase.setInstanceName(
+				CLASS,
+				config,
+				instanceName);
+		GeoWaveConfiguratorBase.setUserName(
+				CLASS,
+				config,
+				userName);
+		GeoWaveConfiguratorBase.setPassword(
+				CLASS,
+				config,
+				password);
+		GeoWaveConfiguratorBase.setTableNamespace(
+				CLASS,
+				config,
+				geowaveTableNamespace);
+	}
+
+	/**
+	 * Configures a {@link AccumuloOperations} for this job.
+	 * 
 	 * @param job
 	 *            the Hadoop job instance to be configured
 	 * @param zooKeepers
@@ -96,68 +146,77 @@ public class GeoWaveInputFormat extends
 			final String userName,
 			final String password,
 			final String geowaveTableNamespace ) {
-		GeoWaveConfiguratorBase.setZookeeperUrl(
-				CLASS,
-				job,
-				zooKeepers);
-		GeoWaveConfiguratorBase.setInstanceName(
-				CLASS,
-				job,
-				instanceName);
-		GeoWaveConfiguratorBase.setUserName(
-				CLASS,
-				job,
-				userName);
-		GeoWaveConfiguratorBase.setPassword(
-				CLASS,
-				job,
-				password);
-		GeoWaveConfiguratorBase.setTableNamespace(
-				CLASS,
-				job,
+		setAccumuloOperationsInfo(
+				job.getConfiguration(),
+				zooKeepers,
+				instanceName,
+				userName,
+				password,
 				geowaveTableNamespace);
 	}
 
+	/**
+	 * Add an adapter specific to the input format
+	 * 
+	 * @param job
+	 * @param adapter
+	 */
 	public static void addDataAdapter(
-			final Job job,
+			final Configuration config,
 			final DataAdapter<?> adapter ) {
+
+		// Also store for use the mapper and reducers
 		JobContextAdapterStore.addDataAdapter(
-				job,
+				config,
+				adapter);
+		GeoWaveConfiguratorBase.addDataAdapter(
+				CLASS,
+				config,
 				adapter);
 	}
 
 	public static void addIndex(
-			final Job job,
+			final Configuration config,
 			final Index index ) {
 		JobContextIndexStore.addIndex(
-				job,
+				config,
 				index);
 	}
 
 	public static void setMinimumSplitCount(
-			final Job job,
+			final Configuration config,
 			final Integer minSplits ) {
 		GeoWaveInputConfigurator.setMinimumSplitCount(
 				CLASS,
-				job,
+				config,
 				minSplits);
 	}
 
 	public static void setMaximumSplitCount(
-			final Job job,
+			final Configuration config,
 			final Integer maxSplits ) {
 		GeoWaveInputConfigurator.setMaximumSplitCount(
 				CLASS,
-				job,
+				config,
 				maxSplits);
 	}
 
+	public static void setIsOutputWritable(
+			final Configuration config,
+			final Boolean isOutputWritable ) {
+		config.setBoolean(
+				GeoWaveConfiguratorBase.enumToConfKey(
+						CLASS,
+						InputConfig.OUTPUT_WRITABLE),
+				isOutputWritable);
+	}
+
 	public static void setQuery(
-			final Job job,
+			final Configuration config,
 			final DistributableQuery query ) {
 		GeoWaveInputConfigurator.setQuery(
 				CLASS,
-				job,
+				config,
 				query);
 	}
 
@@ -170,23 +229,9 @@ public class GeoWaveInputFormat extends
 
 	protected static Index[] getIndices(
 			final JobContext context ) {
-		final Index[] userIndices = JobContextIndexStore.getIndices(context);
-		if ((userIndices == null) || (userIndices.length <= 0)) {
-			try {
-				// if there are no indices, assume we are searching all indices
-				// in the metadata store
-				return (Index[]) IteratorUtils.toArray(
-						new AccumuloIndexStore(
-								getAccumuloOperations(context)).getIndices(),
-						Index.class);
-			}
-			catch (AccumuloException | AccumuloSecurityException e) {
-				LOGGER.warn(
-						"Unable to lookup indices from GeoWave metadata store",
-						e);
-			}
-		}
-		return userIndices;
+		return GeoWaveInputConfigurator.searchForIndices(
+				CLASS,
+				context);
 	}
 
 	protected static String getTableNamespace(
@@ -210,9 +255,19 @@ public class GeoWaveInputFormat extends
 				context);
 	}
 
+	protected static Boolean isOutputWritable(
+			final JobContext context ) {
+		return GeoWaveConfiguratorBase.getConfiguration(
+				context).getBoolean(
+				GeoWaveConfiguratorBase.enumToConfKey(
+						CLASS,
+						InputConfig.OUTPUT_WRITABLE),
+				false);
+	}
+
 	/**
 	 * Initializes an Accumulo {@link TabletLocator} based on the configuration.
-	 *
+	 * 
 	 * @param instance
 	 *            the accumulo instance
 	 * @param tableName
@@ -238,7 +293,10 @@ public class GeoWaveInputFormat extends
 								tableName)));
 
   		else[ACCUMULO_1.5.1]*/
-		tabletLocator = TabletLocator.getLocator(instance, new Text(tableId));
+		tabletLocator = TabletLocator.getLocator(
+				instance,
+				new Text(
+						tableId));
 		/*end[ACCUMULO_1.5.1]*/
 		// @formatter:on
 		return tabletLocator;
@@ -1004,18 +1062,18 @@ public class GeoWaveInputFormat extends
 	}
 
 	@Override
-	public RecordReader<GeoWaveInputKey, Object> createRecordReader(
+	public RecordReader<GeoWaveInputKey, T> createRecordReader(
 			final InputSplit split,
 			final TaskAttemptContext context )
 			throws IOException,
 			InterruptedException {
 		LOGGER.setLevel(getLogLevel(context));
-		return new GeoWaveRecordReader<Object>();
+		return new GeoWaveRecordReader<T>();
 	}
 
 	/**
 	 * Sets the log level for this job.
-	 *
+	 * 
 	 * @param job
 	 *            the Hadoop job instance to be configured
 	 * @param level
@@ -1023,17 +1081,17 @@ public class GeoWaveInputFormat extends
 	 * @since 1.5.0
 	 */
 	public static void setLogLevel(
-			final Job job,
+			final Configuration config,
 			final Level level ) {
 		ConfiguratorBase.setLogLevel(
 				CLASS,
-				job.getConfiguration(),
+				config,
 				level);
 	}
 
 	/**
 	 * Gets the log level from this configuration.
-	 *
+	 * 
 	 * @param context
 	 *            the Hadoop context for the configured job
 	 * @return the log level
@@ -1050,7 +1108,7 @@ public class GeoWaveInputFormat extends
 	/**
 	 * Check whether a configuration is fully configured to be used with an
 	 * Accumulo {@link org.apache.hadoop.mapreduce.InputFormat}.
-	 *
+	 * 
 	 * @param context
 	 *            the Hadoop context for the configured job
 	 * @throws IOException
@@ -1111,4 +1169,43 @@ public class GeoWaveInputFormat extends
 				context,
 				accumuloOperations);
 	}
+
+	/**
+	 * First look for input-specific adapters
+	 * 
+	 * @param context
+	 * @param adapterStore
+	 * @return
+	 */
+	public static List<ByteArrayId> getAdapterIds(
+			final JobContext context,
+			final AdapterStore adapterStore ) {
+		final DataAdapter<?>[] userAdapters = GeoWaveConfiguratorBase.getDataAdapters(
+				CLASS,
+				context);
+		if ((userAdapters == null) || (userAdapters.length <= 0)) {
+			return IteratorUtils.toList(IteratorUtils.transformedIterator(
+					adapterStore.getAdapters(),
+					new Transformer() {
+
+						@Override
+						public Object transform(
+								final Object input ) {
+							if (input instanceof DataAdapter) {
+								return ((DataAdapter) input).getAdapterId();
+							}
+							return input;
+						}
+					}));
+		}
+		else {
+			final List<ByteArrayId> retVal = new ArrayList<ByteArrayId>(
+					userAdapters.length);
+			for (final DataAdapter<?> adapter : userAdapters) {
+				retVal.add(adapter.getAdapterId());
+			}
+			return retVal;
+		}
+	}
+
 }

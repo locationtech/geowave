@@ -171,14 +171,14 @@ public class KDEJobRunner extends
 		final AdapterStore adapterStore = new AccumuloAdapterStore(
 				ops);
 		GeoWaveInputFormat.addDataAdapter(
-				job,
+				job.getConfiguration(),
 				adapterStore.getAdapter(new ByteArrayId(
 						featureType)));
 		GeoWaveInputFormat.setMinimumSplitCount(
-				job,
+				job.getConfiguration(),
 				minSplits);
 		GeoWaveInputFormat.setMaximumSplitCount(
-				job,
+				job.getConfiguration(),
 				maxSplits);
 		GeoWaveInputFormat.setAccumuloOperationsInfo(
 				job,
@@ -194,7 +194,7 @@ public class KDEJobRunner extends
 					null);
 			if ((bbox != null) && !bbox.equals(GeometryUtils.infinity())) {
 				GeoWaveInputFormat.setQuery(
-						job,
+						job.getConfiguration(),
 						new SpatialQuery(
 								bbox));
 			}
@@ -277,7 +277,7 @@ public class KDEJobRunner extends
 					"Entries per level.level" + l,
 					job1.getCounters().getGroup(
 							"Entries per level").findCounter(
-							"level " + new Long(
+							"level " + Long.valueOf(
 									l)).getValue());
 		}
 	}
@@ -375,10 +375,10 @@ public class KDEJobRunner extends
 				password,
 				namespace);
 		GeoWaveOutputFormat.addDataAdapter(
-				job,
+				job.getConfiguration(),
 				adapter);
 		GeoWaveOutputFormat.addIndex(
-				job,
+				job.getConfiguration(),
 				index);
 		final DataStore store = new AccumuloDataStore(
 				ops);

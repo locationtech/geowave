@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import mil.nga.giat.geowave.accumulo.mapreduce.input.GeoWaveInputFormat;
 import mil.nga.giat.geowave.accumulo.mapreduce.input.GeoWaveInputKey;
-import mil.nga.giat.geowave.store.adapter.AdapterStore;
 
 import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
@@ -23,7 +22,7 @@ public abstract class GeoWaveWritableOutputMapper<KEYIN, VALUEIN> extends
 		Mapper<KEYIN, VALUEIN, GeoWaveInputKey, ObjectWritable>
 {
 	protected static final Logger LOGGER = Logger.getLogger(GeoWaveWritableOutputMapper.class);
-	protected AdapterStore adapterStore;
+	protected HadoopWritableSerializationTool serializationTool;
 
 	@Override
 	protected void map(
@@ -49,7 +48,7 @@ public abstract class GeoWaveWritableOutputMapper<KEYIN, VALUEIN> extends
 				value,
 				new NativeMapContext(
 						context,
-						adapterStore));
+						serializationTool));
 	}
 
 	protected abstract void mapNativeValue(
@@ -65,9 +64,10 @@ public abstract class GeoWaveWritableOutputMapper<KEYIN, VALUEIN> extends
 			throws IOException,
 			InterruptedException {
 		try {
-			adapterStore = new JobContextAdapterStore(
-					context,
-					GeoWaveInputFormat.getAccumuloOperations(context));
+			serializationTool = new HadoopWritableSerializationTool(
+					new JobContextAdapterStore(
+							context,
+							GeoWaveInputFormat.getAccumuloOperations(context)));
 		}
 		catch (AccumuloException | AccumuloSecurityException e) {
 			LOGGER.warn(

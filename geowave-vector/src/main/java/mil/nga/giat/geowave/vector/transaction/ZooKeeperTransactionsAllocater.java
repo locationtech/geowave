@@ -6,14 +6,15 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
-
 import org.apache.log4j.Logger;
 import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.KeeperException;
 import org.apache.zookeeper.WatchedEvent;
 import org.apache.zookeeper.Watcher;
+import org.apache.zookeeper.Watcher.Event.KeeperState;
 import org.apache.zookeeper.ZooDefs;
 import org.apache.zookeeper.ZooKeeper;
+import org.apache.zookeeper.ZooKeeper.States;
 
 /**
  * Use ZooKeeper to maintain the population of Transaction IDs. ZooKeeper's
@@ -29,6 +30,7 @@ public class ZooKeeperTransactionsAllocater implements
 		Watcher,
 		TransactionsAllocater
 {
+
 	private final static Logger LOGGER = Logger.getLogger(ZooKeeperTransactionsAllocater.class);
 	private ZooKeeper zk;
 	private final String clientID;
@@ -37,6 +39,14 @@ public class ZooKeeperTransactionsAllocater implements
 	private final TransactionNotification notificationRequester;
 	private boolean autoAllocateNewTransactionID = true;
 	private final Set<String> lockPaths = Collections.synchronizedSet(new HashSet<String>());
+
+	private enum MyState {
+		CONNECTING,
+		CONNECTED,
+		IDLE
+	};
+
+	private MyState myState = MyState.IDLE;
 
 	public ZooKeeperTransactionsAllocater(
 			final String clientID,
@@ -56,15 +66,11 @@ public class ZooKeeperTransactionsAllocater implements
 			final TransactionNotification notificationRequester )
 			throws IOException {
 		this.hostPort = hostPort;
-		zk = new ZooKeeper(
-				hostPort,
-				5000,
-				this);
 		this.clientID = clientID;
-		clientTXPath = "/" + clientID + "/tx";
+		this.clientTXPath = "/" + clientID + "/tx";
 		this.notificationRequester = notificationRequester;
 		try {
-			init();
+			reconnect();
 		}
 		catch (InterruptedException | KeeperException e) {
 			throw new IOException(
@@ -112,7 +118,8 @@ public class ZooKeeperTransactionsAllocater implements
 			// untimely departure
 		}
 		catch (final Exception ex) {
-			throw new IOException(
+			LOGGER.error(
+					"Exception releasing transaction",
 					ex);
 		}
 
@@ -234,12 +241,12 @@ public class ZooKeeperTransactionsAllocater implements
 						autoAllocateNewTransactionID = false;
 					}
 				}
-				catch (KeeperException.ConnectionLossException | KeeperException.SessionExpiredException ex) {
+				catch (KeeperException.ConnectionLossException | KeeperException.SessionExpiredException | java.nio.channels.CancelledKeyException ex) {
 					if (hostPort != null) {
 						reconnect();
 					}
 					count++;
-					if (count >= 5) {
+					if (count > 5) {
 						throw ex;
 					}
 				}
@@ -247,6 +254,7 @@ public class ZooKeeperTransactionsAllocater implements
 
 		}
 		catch (final Exception ex) {
+			LOGGER.error(ex);
 			throw new IOException(
 					ex);
 		}
@@ -255,10 +263,16 @@ public class ZooKeeperTransactionsAllocater implements
 	}
 
 	@Override
-	public void process(
+	public synchronized void process(
 			final WatchedEvent event ) {
-		// TODO Auto-generated method stub
-
+		if (event.getState() == KeeperState.AuthFailed) {
+			LOGGER.error("Failed to authenticate with Zooker");
+			myState = MyState.IDLE;
+		}
+		else if (event.getState() == KeeperState.SyncConnected && myState != MyState.CONNECTED) {
+			myState = MyState.CONNECTED;
+			this.notifyAll();
+		}
 	}
 
 	private String create(
@@ -278,6 +292,10 @@ public class ZooKeeperTransactionsAllocater implements
 			// do nothing
 		}
 		return path;
+	}
+
+	protected ZooKeeper getConnection() {
+		return zk;
 	}
 
 	private void init()
@@ -307,15 +325,26 @@ public class ZooKeeperTransactionsAllocater implements
 
 	}
 
-	private void reconnect()
+	private synchronized void reconnect()
 			throws IOException,
 			KeeperException,
 			InterruptedException {
-		zk = new ZooKeeper(
-				hostPort,
-				5000,
-				this);
-		init();
+		LOGGER.info("Connecting to Zookeeper");
+		boolean doInit = false;
+		// only one client class should try to perform the connection
+		if (myState != MyState.CONNECTING) {
+			myState = MyState.CONNECTING;
+			doInit = true;
+			zk = new ZooKeeper(
+					hostPort,
+					15000,
+					this);
+		}
+
+		while (zk.getState() == States.CONNECTING || zk.getState() == States.NOT_CONNECTED)
+			this.wait();
+		if (doInit) init();
+
 	}
 
 }

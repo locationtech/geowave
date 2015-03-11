@@ -35,6 +35,7 @@ public class GeoWavePluginConfig
 {
 	private final static Logger LOGGER = Logger.getLogger(GeoWavePluginConfig.class);
 
+
 	protected static final String ZOOKEEPER_SERVERS_KEY = "ZookeeperServers";
 	protected static final String INSTANCE_NAME_KEY = "InstanceName";
 	protected static final String USERNAME_KEY = "UserName";
@@ -125,7 +126,7 @@ public class GeoWavePluginConfig
 		return accumuloParams;
 	}
 
-	public static List<Param> getPluginParams() {
+	public synchronized static List<Param> getPluginParams() {
 		if (accumuloParams == null) {
 			accumuloParams = new ArrayList<Param>();
 			accumuloParams.add(ZOOKEEPER_SERVERS);
