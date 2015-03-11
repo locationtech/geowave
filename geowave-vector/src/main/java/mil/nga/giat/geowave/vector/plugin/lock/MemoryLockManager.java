@@ -6,6 +6,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.log4j.Logger;
+
 import mil.nga.giat.geowave.vector.plugin.GeoWavePluginConfig;
 
 
@@ -19,6 +21,7 @@ public class MemoryLockManager extends
 		AbstractLockingManagement
 {
 
+	private final static Logger LOGGER = Logger.getLogger(MemoryLockManager.class);
 	private static final Map<String, Map<String, AuthorizedLock>> LOCKS = new HashMap<String, Map<String, AuthorizedLock>>();
 	private final Map<String, AuthorizedLock> locks;
 
@@ -107,6 +110,7 @@ public class MemoryLockManager extends
 				return;
 			}
 		}
+		// want to loop until this 'lock' is the 'winning' lock.
 		while (featureLock != lock) {
 			// at this point, some other transaction may have the lock
 			synchronized (featureLock) {
@@ -114,19 +118,21 @@ public class MemoryLockManager extends
 				// completed.
 				while (!featureLock.isStale())
 					try {
-						// only wait a little, because the feature could be
+						// only wait a little, because the feature lock could be
 						// stale
+						// flagged as mismatched wait...but this is correct
 						featureLock.wait(Math.min(
 								5000,
 								featureLock.getExpireTime() - System.currentTimeMillis()));
 					}
 					catch (InterruptedException ex) {}
 					catch (Exception e) {
-						e.printStackTrace();
+						LOGGER.error("Memory lock manager filed to wait for lock release. Will cycle till lock is stale.", e);
 					}
 			}
 			synchronized (locks) {
 				featureLock = locks.get(featureID);
+				// did this code win the race to get the lock for the feature ID?
 				if (featureLock == null || featureLock.isStale()) {
 					locks.put(
 							featureID,

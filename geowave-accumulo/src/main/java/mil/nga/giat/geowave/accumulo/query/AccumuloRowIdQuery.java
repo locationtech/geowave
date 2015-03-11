@@ -7,6 +7,7 @@ import java.util.List;
 import mil.nga.giat.geowave.accumulo.util.CloseableIteratorWrapper;
 import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.index.ByteArrayRange;
+import mil.nga.giat.geowave.store.ScanCallback;
 import mil.nga.giat.geowave.store.index.Index;
 
 import org.apache.log4j.Logger;
@@ -27,7 +28,20 @@ public class AccumuloRowIdQuery extends
 		super(
 				index,
 				row,
-				authorizations);
+				authorizations,
+				null);
+	}
+
+	public AccumuloRowIdQuery(
+			final Index index,
+			final ByteArrayId row,
+			final ScanCallback<Object> scanCallback,
+			final String... authorizations ) {
+		super(
+				index,
+				row,
+				authorizations,
+				scanCallback);
 	}
 
 	@Override

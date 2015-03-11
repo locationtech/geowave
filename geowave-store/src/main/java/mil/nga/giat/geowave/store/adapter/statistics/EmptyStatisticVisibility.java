@@ -1,6 +1,6 @@
 package mil.nga.giat.geowave.store.adapter.statistics;
 
-import mil.nga.giat.geowave.store.IngestEntryInfo;
+import mil.nga.giat.geowave.store.DataStoreEntryInfo;
 
 /**
  * 
@@ -13,7 +13,7 @@ public class EmptyStatisticVisibility<T> implements
 
 	@Override
 	public byte[] getVisibility(
-			final IngestEntryInfo entryInfo,
+			final DataStoreEntryInfo entryInfo,
 			final T entry ) {
 		return null;
 	}

@@ -14,25 +14,21 @@ import mil.nga.giat.geowave.store.adapter.IndexFieldHandler;
 import mil.nga.giat.geowave.store.adapter.NativeFieldHandler;
 import mil.nga.giat.geowave.store.adapter.NativeFieldHandler.RowBuilder;
 import mil.nga.giat.geowave.store.adapter.PersistentIndexFieldHandler;
-import mil.nga.giat.geowave.store.adapter.statistics.BoundingBoxDataStatistics;
-import mil.nga.giat.geowave.store.adapter.statistics.CountDataStatistics;
 import mil.nga.giat.geowave.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.store.adapter.statistics.DataStatisticsVisibilityHandler;
-import mil.nga.giat.geowave.store.adapter.statistics.FieldTypeStatisticVisibility;
 import mil.nga.giat.geowave.store.adapter.statistics.StatisticalDataAdapter;
 import mil.nga.giat.geowave.store.data.field.FieldReader;
 import mil.nga.giat.geowave.store.data.field.FieldUtils;
 import mil.nga.giat.geowave.store.data.field.FieldVisibilityHandler;
 import mil.nga.giat.geowave.store.data.field.FieldWriter;
 import mil.nga.giat.geowave.store.data.visibility.VisibilityManagement;
-import mil.nga.giat.geowave.store.dimension.GeometryWrapper;
 import mil.nga.giat.geowave.store.dimension.Time;
 import mil.nga.giat.geowave.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.store.index.CommonIndexValue;
 import mil.nga.giat.geowave.vector.plugin.GeoWaveGTDataStore;
 import mil.nga.giat.geowave.vector.plugin.visibility.AdaptorProxyFieldLevelVisibilityHandler;
 import mil.nga.giat.geowave.vector.plugin.visibility.JsonDefinitionColumnVisibilityManagement;
-import mil.nga.giat.geowave.vector.stats.FeatureBoundingBoxStatistics;
+import mil.nga.giat.geowave.vector.stats.StatsManager;
 import mil.nga.giat.geowave.vector.utils.TimeDescriptors;
 
 import org.apache.log4j.Logger;
@@ -88,6 +84,7 @@ import com.vividsolutions.jts.geom.Geometry;
  * 
  * 
  */
+@SuppressWarnings("unchecked")
 public class FeatureDataAdapter extends
 		AbstractDataAdapter<SimpleFeature> implements
 		StatisticalDataAdapter<SimpleFeature>,
@@ -103,13 +100,7 @@ public class FeatureDataAdapter extends
 	// from the data adapter should match in CRS
 	private SimpleFeatureType reprojectedType;
 	private MathTransform transform;
-
-	private final static ByteArrayId[] SUPPORTED_STATS_IDS = new ByteArrayId[] {
-		BoundingBoxDataStatistics.STATS_ID,
-		CountDataStatistics.STATS_ID
-	};
-	private final static DataStatisticsVisibilityHandler<SimpleFeature> GEOMETRY_VISIBILITY_HANDLER = new FieldTypeStatisticVisibility<SimpleFeature>(
-			GeometryWrapper.class);
+	private StatsManager statsManager;
 
 	private String visibilityAttributeName = "GEOWAVE_VISIBILITY";
 	private VisibilityManagement<SimpleFeature> fieldVisibilityManagement;
@@ -172,7 +163,6 @@ public class FeatureDataAdapter extends
 			final SimpleFeatureType type ) {
 		persistedType = type;
 		determineVisibilityAttribute();
-		inferTimeAttributeDescriptor(persistedType);
 		if (!GeoWaveGTDataStore.DEFAULT_CRS.equals(type.getCoordinateReferenceSystem())) {
 			reprojectedType = SimpleFeatureTypeBuilder.retype(
 					type,
@@ -194,6 +184,10 @@ public class FeatureDataAdapter extends
 		else {
 			reprojectedType = persistedType;
 		}
+		resetTimeDescriptors();
+		statsManager = new StatsManager(
+				this,
+				persistedType);
 	}
 
 	private static List<NativeFieldHandler<SimpleFeature, Object>> typeToFieldHandlers(
@@ -215,33 +209,42 @@ public class FeatureDataAdapter extends
 		return fieldVisibilityManagement;
 	}
 
+	private IndexFieldHandler<SimpleFeature, Time, Object> getTimeRangeHandler(
+			final SimpleFeatureType featureType ) {
+		final TimeDescriptors timeDescriptors = inferTimeAttributeDescriptor(featureType);
+		if ((timeDescriptors.getStartRange() != null) && (timeDescriptors.getEndRange() != null)) {
+			return (new FeatureTimeRangeHandler(
+					new FeatureAttributeHandler(
+							timeDescriptors.getStartRange()),
+					new FeatureAttributeHandler(
+							timeDescriptors.getEndRange()),
+					new AdaptorProxyFieldLevelVisibilityHandler(
+							timeDescriptors.getStartRange().getLocalName(),
+							this)));
+		}
+		else if (timeDescriptors.getTime() != null) {
+			// if we didn't succeed in identifying a start and end time,
+			// just grab the first attribute and use it as a timestamp
+			return new FeatureTimestampHandler(
+					timeDescriptors.getTime(),
+					new AdaptorProxyFieldLevelVisibilityHandler(
+							timeDescriptors.getTime().getLocalName(),
+							this));
+		}
+		return null;
+	}
+
 	@Override
 	protected List<IndexFieldHandler<SimpleFeature, ? extends CommonIndexValue, Object>> getDefaultTypeMatchingHandlers(
 			final Object typeObj ) {
 		if ((typeObj != null) && (typeObj instanceof SimpleFeatureType)) {
-			final TimeDescriptors timeDescriptors = inferTimeAttributeDescriptor((SimpleFeatureType) typeObj);
-			nativeFieldHandlers = typeToFieldHandlers((SimpleFeatureType) typeObj);
-			final List<IndexFieldHandler<SimpleFeature, ? extends CommonIndexValue, Object>> defaultHandlers = new ArrayList<IndexFieldHandler<SimpleFeature, ? extends CommonIndexValue, Object>>();
 			final SimpleFeatureType internalType = (SimpleFeatureType) typeObj;
 
-			if ((timeDescriptors.getStartRange() != null) && (timeDescriptors.getEndRange() != null)) {
-				defaultHandlers.add(new FeatureTimeRangeHandler(
-						new FeatureAttributeHandler(
-								timeDescriptors.getStartRange()),
-						new FeatureAttributeHandler(
-								timeDescriptors.getEndRange()),
-						new AdaptorProxyFieldLevelVisibilityHandler(
-								timeDescriptors.getStartRange().getLocalName(),
-								this)));
-			}
-			else if (timeDescriptors.getTime() != null) {
-				// if we didn't succeed in identifying a start and end time,
-				// just grab the first attribute and use it as a timestamp
-				defaultHandlers.add(new FeatureTimestampHandler(
-						timeDescriptors.getTime(),
-						new AdaptorProxyFieldLevelVisibilityHandler(
-								timeDescriptors.getTime().getLocalName(),
-								this)));
+			nativeFieldHandlers = typeToFieldHandlers((SimpleFeatureType) typeObj);
+			final List<IndexFieldHandler<SimpleFeature, ? extends CommonIndexValue, Object>> defaultHandlers = new ArrayList<IndexFieldHandler<SimpleFeature, ? extends CommonIndexValue, Object>>();
+			final IndexFieldHandler<SimpleFeature, Time, Object> timeHandler = getTimeRangeHandler(internalType);
+			if (timeHandler != null) {
+				defaultHandlers.add(timeHandler);
 			}
 
 			defaultHandlers.add(new FeatureGeometryHandler(
@@ -377,7 +380,7 @@ public class FeatureDataAdapter extends
 					typeName,
 					encodedType);
 
-			timeDescriptors = new TimeDescriptors();
+			TimeDescriptors timeDescriptors = new TimeDescriptors();
 			timeDescriptors.fromBinary(
 					myType,
 					timeAndRangeBytes);
@@ -491,27 +494,21 @@ public class FeatureDataAdapter extends
 
 	@Override
 	public ByteArrayId[] getSupportedStatisticsIds() {
-		return SUPPORTED_STATS_IDS;
+		return statsManager.getSupportedStatisticsIds();
 	}
 
 	@Override
 	public DataStatistics<SimpleFeature> createDataStatistics(
 			final ByteArrayId statisticsId ) {
-		if (BoundingBoxDataStatistics.STATS_ID.equals(statisticsId)) {
-			return new FeatureBoundingBoxStatistics(
-					getAdapterId());
-		}
-		else if (CountDataStatistics.STATS_ID.equals(statisticsId)) {
-			return new CountDataStatistics(
-					getAdapterId());
-		}
-		return null;
+		return statsManager.createDataStatistics(
+				this,
+				statisticsId);
 	}
 
 	@Override
 	public DataStatisticsVisibilityHandler<SimpleFeature> getVisibilityHandler(
 			final ByteArrayId statisticsId ) {
-		return GEOMETRY_VISIBILITY_HANDLER;
+		return statsManager.getVisibilityHandler(statisticsId);
 	}
 
 	public boolean hasTemporalConstraints() {
@@ -521,8 +518,14 @@ public class FeatureDataAdapter extends
 				FeatureTimeRangeHandler.class);
 	}
 
+	public synchronized void resetTimeDescriptors() {
+		timeDescriptors = inferTimeAttributeDescriptor(persistedType);
+	}
+
 	public synchronized TimeDescriptors getTimeDescriptors() {
-		if (timeDescriptors == null) timeDescriptors = inferTimeAttributeDescriptor(persistedType);
+		if (timeDescriptors == null) {
+			timeDescriptors = inferTimeAttributeDescriptor(persistedType);
+		}
 		return timeDescriptors;
 	}
 

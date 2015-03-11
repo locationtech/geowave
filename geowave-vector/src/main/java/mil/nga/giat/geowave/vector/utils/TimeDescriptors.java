@@ -68,6 +68,10 @@ public class TimeDescriptors
 		return time;
 	}
 
+	public boolean hasTime() {
+		return time != null || (startRange != null && endRange != null);
+	}
+	
 	public byte[] toBinary() {
 		final StringBuffer buffer = new StringBuffer();
 		if (time != null) {

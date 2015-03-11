@@ -2,7 +2,6 @@ package mil.nga.giat.geowave.vector;
 
 import java.io.Closeable;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -25,7 +24,6 @@ import mil.nga.giat.geowave.vector.query.DistributedRenderQuery;
 import mil.nga.giat.geowave.vector.query.SpatialDecimationQuery;
 import mil.nga.giat.geowave.vector.wms.DistributableRenderer;
 
-import org.apache.log4j.Logger;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.filter.Filter;
@@ -43,7 +41,6 @@ import com.google.common.collect.Iterators;
 public class VectorDataStore extends
 		AccumuloDataStore
 {
-	private final static Logger LOGGER = Logger.getLogger(VectorDataStore.class);
 
 	public VectorDataStore(
 			final IndexStore indexStore,
@@ -93,51 +90,11 @@ public class VectorDataStore extends
 		return this.statisticsStore;
 	}
 
-	public CloseableIterator<SimpleFeature> query(
-			final FeatureDataAdapter adapter,
-			final Query query,
-			final Filter filter,
-			final Integer limit,
-			final String... authorizations ) {
-		final List<CloseableIterator<SimpleFeature>> results = new ArrayList<CloseableIterator<SimpleFeature>>();
-
-		// query the indices that are supported for this query object, and these
-		// data adapter Ids
-
-		try (CloseableIterator<Index> indices = indexStore.getIndices()) {
-			while (indices.hasNext()) {
-				final Index index = indices.next();
-				results.add(this.query(
-						adapter,
-						query,
-						index,
-						filter,
-						limit,
-						authorizations));
-			}
-		}
-		catch (IOException e) {
-			LOGGER.error("Cannot close index iterator.", e);
-		}
-		
-		return new CloseableIteratorWrapper<SimpleFeature>(
-				new Closeable() {
-					@Override
-					public void close()
-							throws IOException {
-						for (final CloseableIterator<?> result : results) {
-							result.close();
-						}
-					}
-				},
-				Iterators.concat(results.iterator()));
-	}
-
 	@SuppressWarnings("unchecked")
 	public CloseableIterator<SimpleFeature> query(
 			final FeatureDataAdapter adapter,
-			final Query query,
 			final Index index,
+			final Query query,
 			final Filter filter,
 			final Integer limit,
 			final String... authorizations ) {
@@ -181,6 +138,7 @@ public class VectorDataStore extends
 
 	public CloseableIterator<SimpleFeature> query(
 			final FeatureDataAdapter adapter,
+			final Index index,
 			final Query query,
 			final Filter filter,
 			final DistributableRenderer distributedRenderer,
@@ -188,78 +146,60 @@ public class VectorDataStore extends
 
 		// query the indices that are supported for this query object, and these
 		// data adapter Ids
-		try (final CloseableIterator<Index> indices = indexStore.getIndices()) {
-			final List<CloseableIterator<SimpleFeature>> results = new ArrayList<CloseableIterator<SimpleFeature>>();
-			while (indices.hasNext()) {
-				final Index index = indices.next();
-				final DistributedRenderQuery accumuloQuery;
-				if (query == null) {
-					accumuloQuery = new DistributedRenderQuery(
-							Arrays.asList(new ByteArrayId[] {
-								adapter.getAdapterId()
-							}),
-							index,
-							filter,
-							adapter,
-							distributedRenderer,
-							authorizations);
-				}
-				else if (query.isSupported(index)) {
-					// construct the query
-					accumuloQuery = new DistributedRenderQuery(
-							Arrays.asList(new ByteArrayId[] {
-								adapter.getAdapterId()
-							}),
-							index,
-							query.getIndexConstraints(index.getIndexStrategy()),
-							query.createFilters(index.getIndexModel()),
-							filter,
-							adapter,
-							distributedRenderer,
-							authorizations);
-				}
-				else {
-					continue;
-				}
-				results.addAll(accumuloQuery.queryDistributedRender(
-						accumuloOperations,
-						new MemoryAdapterStore(
-								new DataAdapter[] {
-									adapter
-								}),
-						distributedRenderer.isDecimationEnabled()));
-			}
-			// concatenate iterators
-			return new CloseableIteratorWrapper<SimpleFeature>(
-					new Closeable() {
-						@Override
-						public void close()
-								throws IOException {
-							for (final CloseableIterator<SimpleFeature> result : results) {
-								result.close();
-							}
-						}
-					},
-					Iterators.concat(results.iterator()));
+		final DistributedRenderQuery accumuloQuery;
+		if (query == null) {
+			accumuloQuery = new DistributedRenderQuery(
+					Arrays.asList(new ByteArrayId[] {
+						adapter.getAdapterId()
+					}),
+					index,
+					filter,
+					adapter,
+					distributedRenderer,
+					authorizations);
+		}
+		else if (query.isSupported(index)) {
+			// construct the query
+			accumuloQuery = new DistributedRenderQuery(
+					Arrays.asList(new ByteArrayId[] {
+						adapter.getAdapterId()
+					}),
+					index,
+					query.getIndexConstraints(index.getIndexStrategy()),
+					query.createFilters(index.getIndexModel()),
+					filter,
+					adapter,
+					distributedRenderer,
+					authorizations);
+		}
+		else {
+			return (new CloseableIterator.Empty<SimpleFeature>());
+		}
 
-		}
-		catch (final IOException e) {
-			LOGGER.warn(
-					"unable to close index iterator for query",
-					e);
-		}
+		final List<CloseableIterator<SimpleFeature>> results = accumuloQuery.queryDistributedRender(
+				accumuloOperations,
+				new MemoryAdapterStore(
+						new DataAdapter[] {
+							adapter
+						}),
+				distributedRenderer.isDecimationEnabled());
 		return new CloseableIteratorWrapper<SimpleFeature>(
 				new Closeable() {
 					@Override
 					public void close()
-							throws IOException {}
+							throws IOException {
+						for (final CloseableIterator<SimpleFeature> result : results) {
+							result.close();
+						}
+					}
 				},
-				new ArrayList<SimpleFeature>().iterator());
+				Iterators.concat(results.iterator()));
 	}
 
 	@SuppressWarnings("unchecked")
 	public CloseableIterator<SimpleFeature> query(
 			final FeatureDataAdapter adapter,
+			final Index index,
 			final Query query,
 			final int width,
 			final int height,
@@ -268,79 +208,40 @@ public class VectorDataStore extends
 			final ReferencedEnvelope envelope,
 			final Integer limit,
 			final String... authorizations ) {
-		// query the indices that are supported for this query object, and these
-		// data adapter Ids
-		try (final CloseableIterator<Index> indices = indexStore.getIndices()) {
-			final List<CloseableIterator<SimpleFeature>> results = new ArrayList<CloseableIterator<SimpleFeature>>();
-			while (indices.hasNext()) {
-				final Index index = indices.next();
-				final SpatialDecimationQuery accumuloQuery;
-				if ((query == null)) {
-					accumuloQuery = new SpatialDecimationQuery(
-							Arrays.asList(new ByteArrayId[] {
-								adapter.getAdapterId()
-							}),
-							index,
-							width,
-							height,
-							pixelSize,
-							filter,
-							adapter,
-							envelope,
-							authorizations);
-				}
-				else if (query.isSupported(index)) {
-					// construct the query
-					accumuloQuery = new SpatialDecimationQuery(
-							Arrays.asList(new ByteArrayId[] {
-								adapter.getAdapterId()
-							}),
-							index,
-							query.getIndexConstraints(index.getIndexStrategy()),
-							query.createFilters(index.getIndexModel()),
-							width,
-							height,
-							pixelSize,
-							filter,
-							adapter,
-							envelope,
-							authorizations);
-				}
-				else {
-					continue;
-				}
-				results.add((CloseableIterator<SimpleFeature>) accumuloQuery.query(
-						accumuloOperations,
-						new MemoryAdapterStore(
-								new DataAdapter[] {
-									adapter
-								}),
-						limit));
-			}
-			// concatenate iterators
-			return new CloseableIteratorWrapper<SimpleFeature>(
-					new Closeable() {
-						@Override
-						public void close()
-								throws IOException {
-							for (final CloseableIterator<?> result : results) {
-								result.close();
-							}
-						}
-					},
-					Iterators.concat(results.iterator()));
-		}
-		catch (final IOException e) {
-			LOGGER.warn(
-					"unable to close index iterator for query",
-					e);
-		}
-		return new CloseableIteratorWrapper<SimpleFeature>(
-				new Closeable() {
-					@Override
-					public void close()
-							throws IOException {}
-				},
-				new ArrayList<SimpleFeature>().iterator());
+
+		final SpatialDecimationQuery accumuloQuery = (query == null) ? new SpatialDecimationQuery(
+				Arrays.asList(new ByteArrayId[] {
+					adapter.getAdapterId()
+				}),
+				index,
+				width,
+				height,
+				pixelSize,
+				filter,
+				adapter,
+				envelope,
+				authorizations) : new SpatialDecimationQuery(
+				Arrays.asList(new ByteArrayId[] {
+					adapter.getAdapterId()
+				}),
+				index,
+				query.getIndexConstraints(index.getIndexStrategy()),
+				query.createFilters(index.getIndexModel()),
+				width,
+				height,
+				pixelSize,
+				filter,
+				adapter,
+				envelope,
+				authorizations);
+
+		return (CloseableIterator<SimpleFeature>) accumuloQuery.query(
+				accumuloOperations,
+				new MemoryAdapterStore(
+						new DataAdapter[] {
+							adapter
+						}),
+				limit);
+
 	}
 }

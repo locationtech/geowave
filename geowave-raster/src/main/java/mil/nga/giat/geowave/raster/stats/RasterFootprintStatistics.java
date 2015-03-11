@@ -4,7 +4,7 @@ import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.index.Mergeable;
 import mil.nga.giat.geowave.raster.FitToIndexGridCoverage;
 import mil.nga.giat.geowave.raster.RasterUtils;
-import mil.nga.giat.geowave.store.IngestEntryInfo;
+import mil.nga.giat.geowave.store.DataStoreEntryInfo;
 import mil.nga.giat.geowave.store.adapter.statistics.AbstractDataStatistics;
 
 import org.apache.log4j.Logger;
@@ -30,7 +30,8 @@ public class RasterFootprintStatistics extends
 	public RasterFootprintStatistics(
 			final ByteArrayId dataAdapterId ) {
 		super(
-				dataAdapterId);
+				dataAdapterId,
+				STATS_ID);
 	}
 
 	@Override
@@ -63,18 +64,13 @@ public class RasterFootprintStatistics extends
 
 	@Override
 	public void entryIngested(
-			final IngestEntryInfo entryInfo,
+			final DataStoreEntryInfo entryInfo,
 			final GridCoverage entry ) {
 		if (entry instanceof FitToIndexGridCoverage) {
 			footprint = RasterUtils.combineIntoOneGeometry(
 					footprint,
 					((FitToIndexGridCoverage) entry).getFootprintWorldGeometry());
 		}
-	}
-
-	@Override
-	public ByteArrayId getStatisticsId() {
-		return STATS_ID;
 	}
 
 	@Override

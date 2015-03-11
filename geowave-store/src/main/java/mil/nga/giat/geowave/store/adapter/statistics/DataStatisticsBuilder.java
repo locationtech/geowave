@@ -5,13 +5,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 import mil.nga.giat.geowave.index.ByteArrayId;
+import mil.nga.giat.geowave.store.DataStoreEntryInfo;
 import mil.nga.giat.geowave.store.DeleteCallback;
 import mil.nga.giat.geowave.store.IngestCallback;
-import mil.nga.giat.geowave.store.IngestEntryInfo;
+import mil.nga.giat.geowave.store.ScanCallback;
 
 public class DataStatisticsBuilder<T> implements
 		IngestCallback<T>,
-		DeleteCallback<T>
+		DeleteCallback<T>,
+		ScanCallback<T>
 {
 	private final StatisticalDataAdapter<T> adapter;
 	private final Map<ByteArrayId, DataStatistics<T>> statisticsMap = new HashMap<ByteArrayId, DataStatistics<T>>();
@@ -28,7 +30,7 @@ public class DataStatisticsBuilder<T> implements
 
 	@Override
 	public void entryIngested(
-			final IngestEntryInfo entryInfo,
+			final DataStoreEntryInfo entryInfo,
 			final T entry ) {
 		final ByteArrayId visibility = new ByteArrayId(
 				visibilityHandler.getVisibility(
@@ -54,7 +56,7 @@ public class DataStatisticsBuilder<T> implements
 	@SuppressWarnings("unchecked")
 	@Override
 	public void entryDeleted(
-			final IngestEntryInfo entryInfo,
+			final DataStoreEntryInfo entryInfo,
 			final T entry ) {
 		final ByteArrayId visibilityByteArray = new ByteArrayId(
 				visibilityHandler.getVisibility(
@@ -73,6 +75,28 @@ public class DataStatisticsBuilder<T> implements
 					entryInfo,
 					entry);
 		}
+	}
+
+	@Override
+	public void entryScanned(
+			DataStoreEntryInfo entryInfo,
+			T entry ) {
+		final ByteArrayId visibility = new ByteArrayId(
+				visibilityHandler.getVisibility(
+						entryInfo,
+						entry));
+		DataStatistics<T> statistics = statisticsMap.get(visibility);
+		if (statistics == null) {
+			statistics = adapter.createDataStatistics(statisticsId);
+			statistics.setVisibility(visibility.getBytes());
+			statisticsMap.put(
+					visibility,
+					statistics);
+		}
+		statistics.entryIngested(
+				entryInfo,
+				entry);
+		
 	}
 
 }

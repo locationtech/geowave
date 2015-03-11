@@ -10,7 +10,7 @@ import mil.nga.giat.geowave.index.Mergeable;
 import mil.nga.giat.geowave.index.PersistenceUtils;
 import mil.nga.giat.geowave.raster.FitToIndexGridCoverage;
 import mil.nga.giat.geowave.raster.Resolution;
-import mil.nga.giat.geowave.store.IngestEntryInfo;
+import mil.nga.giat.geowave.store.DataStoreEntryInfo;
 import mil.nga.giat.geowave.store.adapter.statistics.AbstractDataStatistics;
 
 import org.opengis.coverage.grid.GridCoverage;
@@ -30,7 +30,8 @@ public class OverviewStatistics extends
 	public OverviewStatistics(
 			final ByteArrayId dataAdapterId ) {
 		super(
-				dataAdapterId);
+				dataAdapterId,
+				STATS_ID);
 	}
 
 	@Override
@@ -72,7 +73,7 @@ public class OverviewStatistics extends
 
 	@Override
 	public void entryIngested(
-			final IngestEntryInfo entryInfo,
+			final DataStoreEntryInfo entryInfo,
 			final GridCoverage entry ) {
 		if (entry instanceof FitToIndexGridCoverage) {
 			final FitToIndexGridCoverage fitEntry = (FitToIndexGridCoverage) entry;
@@ -102,11 +103,6 @@ public class OverviewStatistics extends
 			combinedRes[i++] = res;
 		}
 		return combinedRes;
-	}
-
-	@Override
-	public ByteArrayId getStatisticsId() {
-		return STATS_ID;
 	}
 
 	@Override

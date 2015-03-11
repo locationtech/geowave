@@ -1,10 +1,10 @@
 package mil.nga.giat.geowave.store.adapter.statistics;
 
-import mil.nga.giat.geowave.store.IngestEntryInfo;
+import mil.nga.giat.geowave.store.DataStoreEntryInfo;
 
 public interface DataStatisticsVisibilityHandler<T>
 {
 	public byte[] getVisibility(
-			IngestEntryInfo entryInfo,
+			DataStoreEntryInfo entryInfo,
 			T entry );
 }

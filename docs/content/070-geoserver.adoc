@@ -40,6 +40,13 @@ As expected with Accumulo, operations on a single feature instances are atomic.
 Lock management supports life-limited locks on feature instances. There are only two supported lock managers: in memory
 and Zookeeper. Memory is suitable for single Geoserver instance installations.
 
+===== Index Selection
+
+Data written through WFS-T is indexed within a single index.  The adapter inspects existing indices, finding one that matches
+the data requirements.  A geo-temporal index is chosen for features with temporal attributes.  The adapter creates a geo-spatial index
+upon failure of finding a suitable index.  Geo-temporal index is not created, regardless of the existence of temporal attributes.  Currently, 
+geo-temporal indices lead to poor performance for queries requesting vectors over large spans of time. 
+
 ==== Authorization Management
 
 Authorization Management provides the set of credentials compared against the security labels attached to each cell.
@@ -100,3 +107,8 @@ The rule `.*` matches all properties. The more specific rule `geo.*` must be ord
 
 The system extracts the JSON visibility string from a feature instance property named `GEOWAVE_VISIBILITY`. Selection
 of an alternate property is achieved by setting the associated attribute descriptor 'visibility' to the boolean value TRUE.
+
+==== Statistics
+
+The adapter captures statistics for each numeric, temporal and geo-spatial attribute.  Statistics are used to constrain queries and 
+answer inquiries by GeoServer for data ranges, as required for map requests and calibration of zoom levels in Open Layers.

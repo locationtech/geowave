@@ -1,7 +1,7 @@
 package mil.nga.giat.geowave.store.adapter.statistics;
 
-import mil.nga.giat.geowave.store.IngestEntryInfo;
-import mil.nga.giat.geowave.store.IngestEntryInfo.FieldInfo;
+import mil.nga.giat.geowave.store.DataStoreEntryInfo;
+import mil.nga.giat.geowave.store.DataStoreEntryInfo.FieldInfo;
 
 public class FieldTypeStatisticVisibility<T> implements
 		DataStatisticsVisibilityHandler<T>
@@ -15,7 +15,7 @@ public class FieldTypeStatisticVisibility<T> implements
 
 	@Override
 	public byte[] getVisibility(
-			final IngestEntryInfo entryInfo,
+			final DataStoreEntryInfo entryInfo,
 			final T entry ) {
 		for (final FieldInfo<T> f : entryInfo.getFieldInfo()) {
 			if ((f.getDataValue().getValue() != null) && fieldType.isAssignableFrom(f.getDataValue().getValue().getClass())) {

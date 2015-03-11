@@ -15,7 +15,7 @@ public class TemporalRange
 	public static final Date END_TIME = new Date(
 			Long.MAX_VALUE);
 
-	protected TemporalRange() {
+	public TemporalRange() {
 		startTime = START_TIME;
 		endTime = END_TIME;
 	}
@@ -36,6 +36,16 @@ public class TemporalRange
 		return endTime;
 	}
 
+	public void setStartTime(
+			Date startTime ) {
+		this.startTime = startTime;
+	}
+
+	public void setEndTime(
+			Date endTime ) {
+		this.endTime = endTime;
+	}
+
 	public boolean isWithin(
 			final Date time ) {
 		return (startTime.before(time) || startTime.equals(time)) && (endTime.equals(time) || endTime.after(time));
@@ -48,6 +58,20 @@ public class TemporalRange
 		final double rst = timeRange.getMin();
 		final double ret = timeRange.getMax();
 		return (((st < rst) && (et > rst)) || ((st < ret) && (et > ret)) || ((st < rst) && (et > ret)));
+	}
+	
+	public TemporalRange intersect(TemporalRange range) {
+		Date start = startTime.after(range.getStartTime()) ? startTime : range.getStartTime();
+		Date end =  endTime.before(range.getEndTime()) ? endTime : range.getEndTime();
+		if (start.after(end)) return new TemporalRange(START_TIME, START_TIME);
+		return new TemporalRange(start, end);
+	}
+	
+	public TemporalRange union(TemporalRange range) {
+		Date start = startTime.before(range.getStartTime()) ? startTime : range.getStartTime();
+		Date end =  endTime.after(range.getEndTime()) ? endTime : range.getEndTime();
+		if (start.after(end)) return new TemporalRange(START_TIME, START_TIME);
+		return new TemporalRange(start, end);
 	}
 
 	public byte[] toBinary() {

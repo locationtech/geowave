@@ -10,6 +10,7 @@ import mil.nga.giat.geowave.accumulo.util.EntryIteratorWrapper;
 import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.index.StringUtils;
 import mil.nga.giat.geowave.store.CloseableIterator;
+import mil.nga.giat.geowave.store.ScanCallback;
 import mil.nga.giat.geowave.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.store.filter.FilterList;
 import mil.nga.giat.geowave.store.filter.QueryFilter;
@@ -25,23 +26,28 @@ public abstract class AccumuloFilteredIndexQuery extends
 {
 	protected List<QueryFilter> clientFilters;
 	private final static Logger LOGGER = Logger.getLogger(AccumuloFilteredIndexQuery.class);
+	protected final ScanCallback<?> scanCallback;
 
 	public AccumuloFilteredIndexQuery(
 			final Index index,
+			final ScanCallback<?> scanCallback,
 			final String... authorizations ) {
 		super(
 				index,
 				authorizations);
+		this.scanCallback = scanCallback;
 	}
 
 	public AccumuloFilteredIndexQuery(
 			final List<ByteArrayId> adapterIds,
 			final Index index,
+			final ScanCallback<?> scanCallback,
 			final String... authorizations ) {
 		super(
 				adapterIds,
 				index,
 				authorizations);
+		this.scanCallback = scanCallback;
 	}
 
 	protected List<QueryFilter> getClientFilters() {
@@ -103,6 +109,7 @@ public abstract class AccumuloFilteredIndexQuery extends
 				index,
 				scanner.iterator(),
 				new FilterList<QueryFilter>(
-						clientFilters));
+						clientFilters),
+				scanCallback);
 	}
 }

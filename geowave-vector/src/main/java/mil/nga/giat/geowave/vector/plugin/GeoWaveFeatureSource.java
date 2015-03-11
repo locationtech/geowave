@@ -10,15 +10,19 @@ import mil.nga.giat.geowave.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.vector.adapter.FeatureDataAdapter;
 import mil.nga.giat.geowave.vector.plugin.transaction.GeoWaveEmptyTransaction;
 import mil.nga.giat.geowave.vector.plugin.transaction.GeoWaveTransaction;
+import mil.nga.giat.geowave.vector.stats.FeatureBoundingBoxStatistics;
 
 import org.geotools.data.AbstractFeatureLocking;
+import org.geotools.data.DataSourceException;
 import org.geotools.data.DataStore;
 import org.geotools.data.FeatureListener;
 import org.geotools.data.FeatureReader;
 import org.geotools.data.Query;
 import org.geotools.data.QueryCapabilities;
 import org.geotools.data.ResourceInfo;
+import org.geotools.data.simple.SimpleFeatureCollection;
 import org.geotools.data.simple.SimpleFeatureSource;
+import org.geotools.data.store.EmptyFeatureCollection;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
@@ -45,7 +49,7 @@ public class GeoWaveFeatureSource extends
 	public GeoWaveFeatureSource(
 			final GeoWaveGTDataStore store,
 			final FeatureDataAdapter adapter ) {
-		this.components = new GeoWaveDataStoreComponents(
+		components = new GeoWaveDataStoreComponents(
 				store.getDataStore(),
 				store.getStatsDataStore(),
 				store,
@@ -69,6 +73,40 @@ public class GeoWaveFeatureSource extends
 				typeName);
 	}
 
+	@Override
+	public SimpleFeatureCollection getFeatures(
+			final Query query )
+			throws IOException {
+		final Query q = query;
+
+		final SimpleFeatureType schema = getSchema();
+		final String typeName = schema.getTypeName();
+
+		if (query.getTypeName() == null) { // typeName unspecified we will "any"
+											// use a default
+			// q = new DefaultQuery(query);
+			q.setTypeName(typeName);
+		}
+		else if (!typeName.equals(query.getTypeName())) {
+			return new EmptyFeatureCollection(
+					schema);
+		}
+
+		final QueryCapabilities queryCapabilities = getQueryCapabilities();
+		if (!queryCapabilities.supportsSorting(query.getSortBy())) {
+			throw new DataSourceException(
+					"DataStore cannot provide the requested sort order");
+		}
+
+		final GeoWaveFeatureReader reader = new GeoWaveFeatureReader(
+				query,
+				new GeoWaveEmptyTransaction(
+						components),
+				components);
+
+		return reader.getFeatureCollection();
+	}
+
 	@SuppressWarnings("rawtypes")
 	protected ReferencedEnvelope getBoundsInternal(
 			final Query query )
@@ -78,9 +116,9 @@ public class GeoWaveFeatureSource extends
 		DataStatistics<SimpleFeature> bboxStats = null;
 		if (query.getFilter().equals(
 				Filter.INCLUDE)) {
-			Map<ByteArrayId, DataStatistics<SimpleFeature>> stats = this.components.getDataStatistics(new GeoWaveEmptyTransaction(
-					this.components));
-			bboxStats = stats.get(BoundingBoxDataStatistics.STATS_ID);
+			final Map<ByteArrayId, DataStatistics<SimpleFeature>> stats = components.getDataStatistics(new GeoWaveEmptyTransaction(
+					components));
+			bboxStats = stats.get(FeatureBoundingBoxStatistics.composeId(this.getFeatureType().getGeometryDescriptor().getLocalName()));
 		}
 		if (bboxStats != null) {
 			minx = ((BoundingBoxDataStatistics) bboxStats).getMinX();
@@ -93,8 +131,8 @@ public class GeoWaveFeatureSource extends
 			final FeatureReader<SimpleFeatureType, SimpleFeature> reader = new GeoWaveFeatureReader(
 					query,
 					new GeoWaveEmptyTransaction(
-							this.components),
-					this.components);
+							components),
+					components);
 			if (reader.hasNext()) {
 				minx = 90.0;
 				maxx = -90.0;
@@ -131,18 +169,19 @@ public class GeoWaveFeatureSource extends
 	protected int getCountInternal(
 			final Query query )
 			throws IOException {
-		Map<ByteArrayId, DataStatistics<SimpleFeature>> stats = this.components.getDataStatistics(new GeoWaveEmptyTransaction(
-				this.components));
-		DataStatistics<SimpleFeature> countStats = stats.get(CountDataStatistics.STATS_ID);
-		if (countStats != null && query.getFilter().equals(Filter.INCLUDE)) {
+		final Map<ByteArrayId, DataStatistics<SimpleFeature>> stats = components.getDataStatistics(new GeoWaveEmptyTransaction(
+				components));
+		final DataStatistics<SimpleFeature> countStats = stats.get(CountDataStatistics.STATS_ID);
+		if ((countStats != null) && query.getFilter().equals(
+				Filter.INCLUDE)) {
 			return (int) ((CountDataStatistics) countStats).getCount();
 		}
 		else {
 			final FeatureReader<SimpleFeatureType, SimpleFeature> reader = new GeoWaveFeatureReader(
 					query,
 					new GeoWaveEmptyTransaction(
-							this.components),
-					this.components);
+							components),
+					components);
 			int count = 0;
 			while (reader.hasNext()) {
 				reader.next();
@@ -195,8 +234,8 @@ public class GeoWaveFeatureSource extends
 	protected GeoWaveFeatureWriter getWriterInternal(
 			final GeoWaveTransaction transaction,
 			final Filter filter ) {
-		String typeName = (String) components.getAdapter().getType().getTypeName();
-		Query query = new Query(
+		final String typeName = components.getAdapter().getType().getTypeName();
+		final Query query = new Query(
 				typeName,
 				filter);
 		final GeoWaveFeatureReader myReader = getReaderInternal(
@@ -211,7 +250,7 @@ public class GeoWaveFeatureSource extends
 	@Override
 	public ReferencedEnvelope getBounds()
 			throws IOException {
-		Query query = new Query(
+		final Query query = new Query(
 				getSchema().getTypeName(),
 				Filter.INCLUDE);
 		return this.getBounds(query);
@@ -233,26 +272,26 @@ public class GeoWaveFeatureSource extends
 
 	@Override
 	public DataStore getDataStore() {
-		return this.components.getGTstore();
+		return components.getGTstore();
 	}
 
 	@Override
 	public SimpleFeatureType getSchema() {
-		return this.components.getAdapter().getType();
+		return components.getAdapter().getType();
 	}
 
 	@Override
 	public void addFeatureListener(
-			FeatureListener listener ) {
-		this.components.getGTstore().getListenerManager().addFeatureListener(
+			final FeatureListener listener ) {
+		components.getGTstore().getListenerManager().addFeatureListener(
 				this,
 				listener);
 	}
 
 	@Override
 	public void removeFeatureListener(
-			FeatureListener listener ) {
-		this.components.getGTstore().getListenerManager().removeFeatureListener(
+			final FeatureListener listener ) {
+		components.getGTstore().getListenerManager().removeFeatureListener(
 				this,
 				listener);
 	}

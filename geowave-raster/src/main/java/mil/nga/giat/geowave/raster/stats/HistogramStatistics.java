@@ -19,7 +19,7 @@ import mil.nga.giat.geowave.index.Mergeable;
 import mil.nga.giat.geowave.index.PersistenceUtils;
 import mil.nga.giat.geowave.raster.FitToIndexGridCoverage;
 import mil.nga.giat.geowave.raster.Resolution;
-import mil.nga.giat.geowave.store.IngestEntryInfo;
+import mil.nga.giat.geowave.store.DataStoreEntryInfo;
 import mil.nga.giat.geowave.store.adapter.statistics.AbstractDataStatistics;
 
 import org.apache.log4j.Logger;
@@ -53,7 +53,8 @@ public class HistogramStatistics extends
 			final ByteArrayId dataAdapterId,
 			final HistogramConfig histogramConfig ) {
 		super(
-				dataAdapterId);
+				dataAdapterId,
+				STATS_ID);
 		this.histogramConfig = histogramConfig;
 	}
 
@@ -157,7 +158,7 @@ public class HistogramStatistics extends
 
 	@Override
 	public void entryIngested(
-			final IngestEntryInfo entryInfo,
+			final DataStoreEntryInfo entryInfo,
 			final GridCoverage entry ) {
 		/*
 		 * Create the operation for the Histogram with a ROI. No subsampling

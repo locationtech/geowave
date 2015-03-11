@@ -35,7 +35,7 @@ public class WFSBoundedQueryTest
 	GeoWaveGTMemDataStore dataStore;
 	SimpleFeatureType schema;
 	SimpleFeatureType type;
-	GeometryFactory factory = new GeometryFactory(
+	final GeometryFactory factory = new GeometryFactory(
 			new PrecisionModel(
 					PrecisionModel.FIXED));
 
@@ -68,8 +68,7 @@ public class WFSBoundedQueryTest
 		SimpleFeature newFeature = writer.next();
 		newFeature.setAttribute(
 				"pop",
-				Long.valueOf(
-						100));
+				Long.valueOf(100));
 		newFeature.setAttribute(
 				"pid",
 				UUID.randomUUID().toString());
@@ -86,8 +85,7 @@ public class WFSBoundedQueryTest
 		newFeature = writer.next();
 		newFeature.setAttribute(
 				"pop",
-				Long.valueOf(
-						100));
+				Long.valueOf(100));
 		newFeature.setAttribute(
 				"pid",
 				UUID.randomUUID().toString());
@@ -104,8 +102,7 @@ public class WFSBoundedQueryTest
 		newFeature = writer.next();
 		newFeature.setAttribute(
 				"pop",
-				Long.valueOf(
-						100));
+				Long.valueOf(100));
 		newFeature.setAttribute(
 				"pid",
 				UUID.randomUUID().toString());

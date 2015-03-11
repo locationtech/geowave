@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.NoSuchElementException;
 
+import mil.nga.giat.geowave.store.ScanCallback;
 import mil.nga.giat.geowave.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.store.filter.QueryFilter;
 import mil.nga.giat.geowave.store.index.Index;
@@ -27,6 +28,7 @@ public class EntryIteratorWrapper<T> implements
 	private final Index index;
 	private final Iterator<Entry<Key, Value>> scannerIt;
 	private final QueryFilter clientFilter;
+	private final ScanCallback<T> scanCallback;
 
 	private T nextValue;
 
@@ -39,10 +41,24 @@ public class EntryIteratorWrapper<T> implements
 		this.index = index;
 		this.scannerIt = scannerIt;
 		this.clientFilter = clientFilter;
+		this.scanCallback = null;
+	}
+
+	public EntryIteratorWrapper(
+			final AdapterStore adapterStore,
+			final Index index,
+			final Iterator<Entry<Key, Value>> scannerIt,
+			final QueryFilter clientFilter,
+			final ScanCallback<T> scanCallback ) {
+		this.adapterStore = adapterStore;
+		this.index = index;
+		this.scannerIt = scannerIt;
+		this.clientFilter = clientFilter;
+		this.scanCallback = scanCallback;
 	}
 
 	private void findNext() {
-		while (nextValue == null && scannerIt.hasNext()) {
+		while ((nextValue == null) && scannerIt.hasNext()) {
 			final Entry<Key, Value> row = scannerIt.next();
 			final T decodedValue = decodeRow(
 					row,
@@ -55,17 +71,17 @@ public class EntryIteratorWrapper<T> implements
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	private T decodeRow(
 			final Entry<Key, Value> row,
 			final QueryFilter clientFilter,
 			final Index index ) {
-		return (T) AccumuloUtils.decodeRow(
+		return AccumuloUtils.decodeRow(
 				row.getKey(),
 				row.getValue(),
 				adapterStore,
 				clientFilter,
-				index);
+				index,
+				scanCallback);
 	}
 
 	@Override
@@ -75,7 +91,8 @@ public class EntryIteratorWrapper<T> implements
 	}
 
 	@Override
-	public T next() throws NoSuchElementException{
+	public T next()
+			throws NoSuchElementException {
 		final T previousNext = nextValue;
 		nextValue = null;
 		return previousNext;
