@@ -386,7 +386,6 @@
 						<jacocoReport>${project.basedir}/geowave-raster/target/site/jacoco-ut/jacoco.xml</jacocoReport>
 						<jacocoReport>${project.basedir}/geowave-store/target/site/jacoco-ut/jacoco.xml</jacocoReport>
 						<jacocoReport>${project.basedir}/geowave-types/target/site/jacoco-ut/jacoco.xml</jacocoReport>
-						-
 						<jacocoReport>${project.basedir}/geowave-vector/target/site/jacoco-ut/jacoco.xml</jacocoReport>
 						<jacocoReport>${project.basedir}/geowave-accumulo/target/site/jacoco-ut/jacoco.xml</jacocoReport>
 						<jacocoReport>${project.basedir}/geowave-test/target/site/jacoco-it/jacoco.xml</jacocoReport>
