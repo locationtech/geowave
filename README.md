@@ -29,6 +29,8 @@ Basically, GeoWave attempts to do for Accumulo as PostGIS does for PostgreSQL.
 
 See [GeoWave io page](http://ngageoint.github.io/geowave/) for more detailed documentation, quickstart, examples, etc.
 
+[GeoWave](https://wiki.eclipse.org/Google_Summer_of_Code_2015_Ideas) is on the project list for the [Google Summer of Code](https://www.google-melange.com/gsoc/homepage/google/gsoc2015).  
+
 ## Screenshots
 
 <p align="center">
