@@ -1,0 +1,73 @@
+---
+- hosts: all
+  tasks:
+
+    # First, install dependencies
+    # - JDK
+    # - Maven
+    # - Git
+
+    - name: wget jdk
+      shell:  wget --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/7u75-b13/jdk-7u75-linux-x64.rpm
+      args:
+        chdir: /home/vagrant
+        creates: jdk-7u75-linux-x64.rpm
+
+    - name: install jdk
+      yum: 
+        name: /home/vagrant/jdk-7u75-linux-x64.rpm 
+      sudo: yes
+
+    - name: wget maven
+      shell:  wget http://apache.arvixe.com/maven/maven-3/3.2.5/binaries/apache-maven-3.2.5-bin.tar.gz
+      args:
+        chdir: /home/vagrant
+        creates: apache-maven-3.2.5-bin.tar.gz
+
+    - name: untar maven
+      shell: tar -xzf apache-maven-3.2.5-bin.tar.gz -C /usr/local
+      args:
+        chdir: /home/vagrant
+        creates: /usr/local/apache-maven-3.2.5
+      sudo: yes
+
+    - name: link maven
+      shell: ln -s apache-maven-3.2.5 maven
+      args:
+        chdir: /usr/local
+        creates: maven
+      sudo: yes
+
+    - name: add maven to path
+      shell: printf 'export M2_HOME=/usr/local/maven\nexport M2=$M2_HOME/bin\nexport PATH=$M2:$PATH' > maven.sh
+      args:
+        chdir: /etc/profile.d
+        creates: maven.sh
+      sudo: yes
+
+    - name: install git
+      yum: name=git
+      sudo: yes
+
+    # Next, setup GeoWave
+    - name: clone GeoWave
+      git: repo=git@github.com:ngageoint/geowave.git dest=/home/vagrant/geowave
+
+    - name: build GeoWave
+      shell: mvn clean package -pl geowave-deploy -am -P benchmark-singlejar -DskipITs=true -DskipTests=true
+      args:
+        chdir: /home/vagrant/geowave
+        creates: /home/vagrant/geowave/geowave-deploy/target/benchmark-singlejar.jar
+
+    - name: copy GeoWave init script
+      shell: cp /home/vagrant/geowave/vagrant/geowave /etc/init.d
+      sudo: yes
+
+    - name: add geowave service via chkconfig
+      shell: chkconfig --add geowave
+      sudo: yes
+
+    - name: start GeoWave service
+      shell: service geowave start
+      sudo: yes
+    

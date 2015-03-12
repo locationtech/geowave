@@ -1,0 +1,23 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "chef/centos-6.5"
+  config.vm.hostname = "geowave-vagrant"
+  config.vm.host_name = "geowave-vagrant"
+  
+  config.ssh.forward_agent = true
+  config.vm.network :forwarded_port, guest: 80, host:8080 
+
+  config.vm.provider :virtualbox do |vb|
+    vb.customize ["modifyvm", :id, "--memory", 4096]
+    vb.customize ["modifyvm", :id, "--cpus", 2]
+    vb.customize ["modifyvm", :id, "--ioapic", "on"]
+    vb.name = "geowave-vagrant"
+    vb.gui = true
+  end
+
+  config.vm.provision :ansible do |ansible|
+    ansible.playbook = "playbook.yml"
+  end
+end
