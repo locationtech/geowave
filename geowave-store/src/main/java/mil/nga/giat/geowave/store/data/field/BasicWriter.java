@@ -237,9 +237,11 @@ public class BasicWriter<RowType, FieldType> implements
 		@Override
 		public byte[] writeField(
 				final BigDecimal fieldValue ) {
-			final ByteBuffer buf = ByteBuffer.allocate(8);
-			buf.putDouble(fieldValue.doubleValue());
-			return buf.array();
+            final byte[] unscaled = fieldValue.unscaledValue().toByteArray();
+            final ByteBuffer buf = ByteBuffer.allocate(4 + unscaled.length);
+            buf.putInt(fieldValue.scale());
+            buf.put(unscaled);
+            return buf.array();
 		}
 
 		@Override

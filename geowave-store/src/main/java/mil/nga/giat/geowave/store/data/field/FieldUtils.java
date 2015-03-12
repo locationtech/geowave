@@ -1,5 +1,7 @@
 package mil.nga.giat.geowave.store.data.field;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -144,6 +146,15 @@ public class FieldUtils
 		DEFAULT_READERS.put(
 				byte[].class,
 				new PrimitiveByteArrayReader());
+        DEFAULT_READERS.put(
+                BigInteger.class,
+                new BasicReader.BigIntegerReader());
+        DEFAULT_READERS.put(
+                BigDecimal.class,
+                new BasicReader.BigDecimalReader());
+        DEFAULT_READERS.put(
+                short[].class,
+                new BasicReader.PrimitiveShortArrayReader());
 
 		DEFAULT_WRITERS.put(
 				Boolean.class,
@@ -212,7 +223,7 @@ public class FieldUtils
 				Calendar.class,
 				new CalendarWriter());
 		DEFAULT_WRITERS.put(
-				Calendar.class,
+				Calendar[].class,
 				new CalendarArrayWriter());
 		DEFAULT_WRITERS.put(
 				Byte[].class,
@@ -220,6 +231,15 @@ public class FieldUtils
 		DEFAULT_WRITERS.put(
 				byte[].class,
 				new PrimitiveByteArrayWriter());
+        DEFAULT_WRITERS.put(
+                BigInteger.class,
+                new BasicWriter.BigIntegerWriter());
+        DEFAULT_WRITERS.put(
+                BigDecimal.class,
+                new BasicWriter.BigDecimalWriter());
+        DEFAULT_WRITERS.put(
+                short[].class,
+                new BasicWriter.PrimitiveShortArrayWriter());
 
 	}
 
