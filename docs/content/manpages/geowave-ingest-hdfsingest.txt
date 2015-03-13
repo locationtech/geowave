@@ -1,18 +1,26 @@
+//:geowave-ingest-hdfsingest(1)
+//:============================
+//::doctype: manpage
+
 NAME
+//:----
 
 geowave-ingest-hdfsingest - Load content from an HDFS file system
 
 SYNOPSIS
+//:--------
 
 *geowave-ingest -hdfsingest* <options>
 
 DESCRIPTION
+//:-----------
 
 The geowave-ingest -hdfsingest(1) operator first copies the local files to an Avro record in HDFS, then executes the
 ingest process as a map-reduce job. Data is ingested into Geowave using the GeowaveInputFormat. This is likely to be
 the fastest ingest method overall for data sets of any notable size (or if they have a large ingest/transform cost).
 
 OPTIONS
+//:-------
 
 -b, --base <arg>::
 Base input file or directory to crawl with one of the supported ingest types
@@ -66,6 +74,7 @@ Individual or comma-delimited set of file extensions to accept (optional)
 A comma-separated list of zookeeper servers that an Accumulo instance is using
 
 ADDITIONAL
+//:----------
 
 The options here are, for the most part, same as for *geowave-ingest -localingest*, with a few additions.
 

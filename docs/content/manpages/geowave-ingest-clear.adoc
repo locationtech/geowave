@@ -1,5 +1,0 @@
-geowave-ingest-clear(1)
-=======================
-:doctype: manpage
-
-include::manpages/geowave-ingest-clear.txt[]

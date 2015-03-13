@@ -1,5 +1,0 @@
-geowave-ingest(1)
-=================
-:doctype: manpage
-
-include::manpages/geowave-ingest.txt[]

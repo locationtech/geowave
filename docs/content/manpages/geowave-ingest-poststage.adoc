@@ -1,5 +1,0 @@
-geowave-ingest-poststage(1)
-=============================
-:doctype: manpage
-
-include::manpages/geowave-ingest-poststage.txt[]
