@@ -1,17 +1,25 @@
+//:geowave-ingest-poststage(1)
+//:===========================
+//::doctype: manpage
+
 NAME
+//:----
 
 geowave-ingest-poststage - Ingest supported content that has already been staged in HDFS
 
 SYNOPSIS
+//:--------
 
 *geowave-ingest -poststage* <options>
 
 DESCRIPTION
+//:-----------
 
 The geowave-ingest -poststage(1) operator executes the ingest process as a map-reduce job using data that has already
 been staged in an HDFS file system
 
 OPTIONS
+//:-------
 
 -c, --clear::
 Clear ALL data stored with the same prefix as this namespace (optional; default is to append data to the namespace if it exists)
