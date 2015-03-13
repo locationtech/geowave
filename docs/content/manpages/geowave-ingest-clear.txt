@@ -1,16 +1,24 @@
+//:geowave-ingest-clear(1)
+//:=======================
+//::doctype: manpage
+
 NAME
+//:----
 
 geowave-ingest-clear - Delete existing GeoWave content from Accumulo
 
 SYNOPSIS
+//:--------
 
 *geowave-ingest -clear* <options>
 
 DESCRIPTION
+//:-----------
 
 The geowave-ingest -clear(1) operator will delete all GeoWave data stored in Accumulo for the provided data set
 
 OPTIONS
+//:-------
 
 -c, --clear::
 Clear ALL data stored with the same prefix as this namespace (optional; default is to append data to the namespace if it exists)

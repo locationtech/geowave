@@ -35,6 +35,7 @@ Source9:        workspace.xml
 Source10:       geowave-ingest-tool.jar
 Source11:       site.tar.gz
 Source12:       puppet-scripts.tar.gz
+Source13:       manpages.tar.gz
 BuildRequires:  unzip
 BuildRequires:  zip
 BuildRequires:  xmlto
@@ -112,11 +113,9 @@ unzip -p %{SOURCE10} geowave-ingest-cmd-completion.sh > %{buildroot}/etc/bash_co
 mkdir -p %{buildroot}%{geowave_docs_home}
 tar -xzf %{SOURCE11} -C %{buildroot}%{geowave_docs_home} --strip=1
 
-# Compile and deploy man pages
+# Copy man pages into place
 mkdir -p %{buildroot}/usr/local/share/man/man1
-for file in `ls %{buildroot}%{geowave_docs_home}/manpages/*.adoc`; do
-  a2x -f manpage $file -D %{buildroot}/usr/local/share/man/man1
-done
+tar -xvf %{SOURCE13} -C %{buildroot}/usr/local/share/man/man1
 rm -rf %{buildroot}%{geowave_docs_home}/manpages
 rm -f %{buildroot}%{geowave_docs_home}/*.pdfmarks
 

@@ -1,5 +1,0 @@
-geowave-ingest-hdfsstage(1)
-=============================
-:doctype: manpage
-
-include::manpages/geowave-ingest-hdfsstage.txt[]

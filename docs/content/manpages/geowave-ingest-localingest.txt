@@ -1,17 +1,25 @@
+//:geowave-ingest-localingest(1)
+//:=============================
+//::doctype: manpage
+
 NAME
+//:----
 
 geowave-ingest-localingest - Load content from local file system
 
 SYNOPSIS
+//:--------
 
 *geowave-ingest -localingest* <options>
 
 DESCRIPTION
+//:-----------
 
 The geowave-ingest -localingest(1) operator will run the ingest code (parse to features, load features to accumulo)
 against local file system content.
 
 OPTIONS
+//:-------
 
 -b, --base <arg>::
 Base input file or directory to crawl with one of the supported ingest types
@@ -53,6 +61,7 @@ Individual or comma-delimited set of file extensions to accept (optional)
 A comma-separated list of zookeeper servers that an Accumulo instance is using
 
 ADDITIONAL
+//:----------
 
 The index type uses one of the two predefined index implementations. You can perform temporal lookup/filtering with
 either, but the spatial-temporal includes indexing in the primary index - so will be more performant if spatial extents
@@ -72,6 +81,7 @@ Finally, the base directory is the root directory that will be scanned on the lo
 process will scan all subdirectories under the provided directory.
 
 EXAMPLES
+//:--------
 
 List all of the currently registered as ingest type plugins:
 

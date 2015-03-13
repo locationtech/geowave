@@ -1,5 +1,0 @@
-geowave-ingest-localingest(1)
-=============================
-:doctype: manpage
-
-include::manpages/geowave-ingest-localingest.txt[]

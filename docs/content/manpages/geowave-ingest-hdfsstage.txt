@@ -1,16 +1,24 @@
+//:geowave-ingest-hdfsstage(1)
+//:===========================
+//::doctype: manpage
+
 NAME
+//:----
 
 geowave-ingest-hdfsstage - Load supported content from a local file system into HDFS
 
 SYNOPSIS
+//:--------
 
 *geowave-ingest -hdfsstage* <options>
 
 DESCRIPTION
+//:-----------
 
 The geowave-ingest -hdfsstage(1) operator copies the local files to an Avro record in HDFS
 
 OPTIONS
+//:-------
 
 -b,--base <arg>::
 Base input file or directory to crawl with one of the supported ingest types
