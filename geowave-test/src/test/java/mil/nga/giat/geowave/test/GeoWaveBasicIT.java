@@ -253,7 +253,7 @@ public class GeoWaveBasicIT extends
         args.put(BigInteger.class, BigInteger.valueOf(893489348343423l));
         args.put(BigDecimal.class, new BigDecimal("939384.93840238409237483617837483"));
         args.put(Calendar.class, Calendar.getInstance());
-        args.put(String.class, "TThis is my string. There are many like it, but this one is mine.\n" +
+        args.put(String.class, "This is my string. There are many like it, but this one is mine.\n" +
                 "My string is my best friend. It is my life. I must master it as I must master my life.");
         args.put(long[].class, new long[]{12345l, 6789l, 1011l, 1213111111111111l});
         args.put(int[].class, new int[]{-55, -44, -33, -934839, 55});
@@ -304,7 +304,6 @@ public class GeoWaveBasicIT extends
 
                 if (before instanceof double[]) {
                     Assert.assertArrayEquals((double[]) before, (double[]) after, 1e-12d);
-                    break;
                 } else if (before instanceof boolean[]) {
                     boolean[] b = (boolean[]) before;
                     boolean[] a = (boolean[]) after;
