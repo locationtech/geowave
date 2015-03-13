@@ -1,6 +1,10 @@
 #!/bin/sh
+#
+# chkconfig: 2345 20 80
+# description: GeoWave MiniAccumulo Cluster
+
 SERVICE_NAME=geowave
-PATH_TO_JAR=/home/vagrant/geowave/geowave-deploy/target/benchmark-singlejar.jar
+PATH_TO_JAR=/home/vagrant/geowave/geowave-deploy/target/geowave-singlejar.jar
 CLASS_TO_RUN=mil.nga.giat.geowave.demo.app.GeoWaveDemoApp
 PID_PATH_NAME=/tmp/geowave-pid
 case $1 in
