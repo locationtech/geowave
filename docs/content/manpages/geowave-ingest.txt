@@ -1,16 +1,24 @@
+//:geowave-ingest(1)
+//:=================
+//::doctype: manpage
+
 NAME
+//:----
 
 geowave-ingest - Ingest data from a local file system or HDFS into GeoWave
 
 SYNOPSIS
+//:--------
 
 *geowave-ingest* <operation> <options>
 
 DESCRIPTION
+//:-----------
 
 The geowave-ingest(1) command will ingest data from a local file system or HDFS into GeoWave
 
 OPERATIONS
+//:----------
 
 -clear::
 Clear ALL data from a GeoWave namespace, this actually deletes Accumulo tables prefixed by the given namespace
@@ -28,7 +36,7 @@ ingest supported files in local file system directly, without using HDFS
 ingest supported files that already exist in HDFS
 
 ADDITIONAL
-
+//:----------
 
 Options are specific to operation choice. Use <operation> -h for help.
 

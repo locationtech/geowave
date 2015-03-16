@@ -1,4 +1,4 @@
-# GeoWave 0.8.4	
+# GeoWave 0.8.4
 ## About  
 
 <a href="https://travis-ci.org/ngageoint/geowave">
@@ -19,17 +19,17 @@
 
 
 GeoWave is an open source set of software that:
-	
+
 * Adds multi-dimensional indexing capability to [Apache Accumulo](https://accumulo.apache.org) 
 * Adds support for geographic objects and geospatial operators to [Apache Accumulo](https://accumulo.apache.org) 
 * Contains a [GeoServer](http://geoserver.org/) plugin to allow geospatial data in Accumulo to be shared and visualized via OGC standard services
 * Provides Map-Reduce input and output formats for distributed processing and analysis of geospatial data
 
-Basically, GeoWave attempts to do for Accumulo as PostGIS does for PostgreSQL.  
+Basically, GeoWave attempts to do for Accumulo as PostGIS does for PostgreSQL.
 
-See [GeoWave io page](http://ngageoint.github.io/geowave/) for more detailed documentatation, quickstart, examples, etc.
+See [GeoWave io page](http://ngageoint.github.io/geowave/) for more detailed documentation, quickstart, examples, etc.
 
-NGA is submitting GeoWave to [Google's Summer of Code 2015](https://www.google-melange.com/gsoc/homepage/google/gsoc2015) for students to build on and improve.  
+[GeoWave](https://wiki.eclipse.org/Google_Summer_of_Code_2015_Ideas) is on the project list for the [Google Summer of Code](https://www.google-melange.com/gsoc/homepage/google/gsoc2015).  
 
 ## Screenshots
 
@@ -49,7 +49,7 @@ GeoWave was developed at the National Geospatial-Intelligence Agency (NGA) in co
 
 ## Pull Requests
 
-All pull request contributions to this project will be released under the Apache 2.0 license.  
+All pull request contributions to this project will be released under the Apache 2.0 license.
 
 Software source code previously released under an open source license and then modified by NGA staff is considered a "joint work" (see *17 USC  101*); it is partially copyrighted, partially public domain, and as a whole is protected by the copyrights of the non-government authors and must be released according to the terms of the original open source license.
 
@@ -110,7 +110,7 @@ The geowave-test module will run end-to-end integration testing on either a conf
 
 A specific Accumulo instance can be configured either directly within this pom.xml or as Java options -DzookeeperUrl=&lt;zookeeperUrl&gt; -Dinstance=&lt;instance&gt; -Dusername=&lt;username&gt; -Dpassword=&lt;password&gt;
 
-If any of these configuration parameters are left unspecified the default integration test will use a MiniAccumuloCluster created within a temporary directory.  For this to work on Windows, make sure Cygwin is installed and a "CYGPATH" environment variable must reference the &lt;CYGWIN_HOME&gt;/bin/cygpath.exe file.  
+If any of these configuration parameters are left unspecified the default integration test will use a MiniAccumuloCluster created within a temporary directory.  For this to work on Windows, make sure Cygwin is installed and a "CYGPATH" environment variable must reference the &lt;CYGWIN_HOME&gt;/bin/cygpath.exe file.
 
 ### Supported Versions
 
@@ -120,7 +120,7 @@ Accumulo: N and N-1  (1.6.x and 1.5.x currently);
 Hadoop: Apache 2.6, CDH 4.7 -> 5.3, Hortonworks 2.6
 GeoTools/GeoServer: 11.4, 12.2/2.5.4, 2.6.2
 
-We have dropped support for hadoop < 2.x;  it's should still work if you want to backport, but no guarauntees. 
+We have dropped support for hadoop < 2.x;  it's should still work if you want to backport, but no guarantees. 
 
 ### Ingest Data
 

@@ -25,13 +25,13 @@ public class GeoWaveDemoApp
 
 		File tempDir = Files.createTempDir();
 		// @formatter:off
-		/*if[ACCUMULO_1.5.1]
+		/*if[ACCUMULO_1.5.2]
 		final MiniAccumuloCluster accumulo = new MiniAccumuloCluster(
 				new MiniAccumuloConfig(
 						tempDir,
 						password).setNumTservers(
 						2));
-  		else[ACCUMULO_1.5.1]*/
+  		else[ACCUMULO_1.5.2]*/
 		final MiniAccumuloCluster accumulo = new MiniAccumuloCluster(
 				new MiniAccumuloConfig(
 						tempDir,
@@ -39,7 +39,7 @@ public class GeoWaveDemoApp
 						2).setInstanceName(
 						instanceName).setZooKeeperPort(
 						2181));
-		/*end[ACCUMULO_1.5.1]*/
+		/*end[ACCUMULO_1.5.2]*/
 		// @formatter:on
 		accumulo.start();
 		System.out.println("starting up ...");

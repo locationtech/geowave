@@ -31,7 +31,7 @@ For the purposes of GeoWave we have implemented two space fillings curves:
 ==== Z-Order SFC
 
 This is also commonly called a GeoHash, or Morton order (and sometimes incorrectly called a Peano curve). This is the
-most popular SFC used for muti-dimensional -> 1-dimensional mappigns – primarily because it is both intuitive and very
+most popular SFC used for multi-dimensional -> 1-dimensional mappings – primarily because it is both intuitive and very
 easy to implement in code. There are two common ways to implement this – ideally a bit-interleaving is used (that is
 what gives rise to the diagram in figure 2) – imagine we had two numbers, A and B. Let the binary representation of
 those numbers be A1A2A3 and B1B2B3. The “bit interleaved” version would be A1B1A2B2A3B3. Since we are working with

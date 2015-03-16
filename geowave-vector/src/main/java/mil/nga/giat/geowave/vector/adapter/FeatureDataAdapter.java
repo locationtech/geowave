@@ -292,6 +292,9 @@ public class FeatureDataAdapter extends
 		else {
 			basicWriter = (FieldWriter<SimpleFeature, Object>) FieldUtils.getDefaultWriterForClass(bindingClass);
 		}
+        if (basicWriter == null) {
+            LOGGER.error("BasicWriter not found for binding type:" + bindingClass.getName().toString());
+        }
 		return fieldVisibilityManagement.createVisibilityWriter(
 				descriptor.getLocalName(),
 				basicWriter,

@@ -20,7 +20,8 @@ ARTIFACT_02_URL=$LOCAL_JENKINS/job/${ARGS[job]}/lastSuccessfulBuild/artifact/geo
 ARTIFACT_03_URL=$LOCAL_JENKINS/job/${ARGS[job]}/lastSuccessfulBuild/artifact/geowave-types/target/geowave-ingest-tool.jar
 ARTIFACT_04_URL=$LOCAL_JENKINS/job/${ARGS[job]}/lastSuccessfulBuild/artifact/target/site.tar.gz
 ARTIFACT_05_URL=$LOCAL_JENKINS/job/${ARGS[job]}/lastSuccessfulBuild/artifact/geowave-deploy/target/puppet-scripts.tar.gz
-ARTIFACT_06_URL=$LOCAL_JENKINS/userContent/geoserver/${ARGS[geoserver]}
+ARTIFACT_06_URL=$LOCAL_JENKINS/job/${ARGS[job]}/lastSuccessfulBuild/artifact/docs/target/manpages.tar.gz
+ARTIFACT_07_URL=$LOCAL_JENKINS/userContent/geoserver/${ARGS[geoserver]}
 RPM_ARCH=noarch
 
 case ${ARGS[command]} in
@@ -36,6 +37,7 @@ case ${ARGS[command]} in
         update_artifact $ARTIFACT_03_URL;
         update_artifact $ARTIFACT_04_URL;
         update_artifact $ARTIFACT_05_URL;
-        update_artifact $ARTIFACT_06_URL geoserver.zip; ;;
+        update_artifact $ARTIFACT_06_URL;
+        update_artifact $ARTIFACT_07_URL geoserver.zip; ;;
         *) about ;;
 esac

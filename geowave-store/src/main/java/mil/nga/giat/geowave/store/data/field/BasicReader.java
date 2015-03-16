@@ -188,13 +188,14 @@ public class BasicReader
 		@Override
 		public BigDecimal readField(
 				final byte[] fieldData ) {
-			if ((fieldData == null) || (fieldData.length < 8)) {
+			if ((fieldData == null) || (fieldData.length < 5)) {
 				return null;
 			}
-			final double doubleVal = ByteBuffer.wrap(
-					fieldData).getDouble();
-			return new BigDecimal(
-					doubleVal);
+            final ByteBuffer bb = ByteBuffer.wrap(fieldData);
+            final int scale = bb.getInt();
+            final byte[] unscaled = new byte[fieldData.length - 4];
+            bb.get(unscaled);
+            return new BigDecimal(new BigInteger(unscaled), scale);
 		}
 
 	}
@@ -373,5 +374,4 @@ public class BasicReader
 		}
 
 	}
-
 }

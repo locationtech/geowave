@@ -17,10 +17,10 @@ import mil.nga.giat.geowave.analytics.tools.mapreduce.MapReduceJobRunner;
 
 
 //@formatter:off
-/*if[ACCUMULO_1.5.1]
- else[ACCUMULO_1.5.1]*/
+/*if[ACCUMULO_1.5.2]
+ else[ACCUMULO_1.5.2]*/
 import org.apache.accumulo.core.client.ClientConfiguration;
-/*end[ACCUMULO_1.5.1]*/
+/*end[ACCUMULO_1.5.2]*/
 //@formatter:on
 import org.apache.accumulo.core.client.mapreduce.AccumuloOutputFormat;
 import org.apache.accumulo.core.client.security.tokens.AuthenticationToken;
@@ -168,16 +168,16 @@ public class KMeansDistortionJobRunner extends
 				authToken);
 
 		// @formatter:off
-		/* if[ACCUMULO_1.5.1]
+		/* if[ACCUMULO_1.5.2]
 		AccumuloOutputFormat.setZooKeeperInstance(job, instance, zookeeper);
-		else[ACCUMULO_1.5.1]*/
+		else[ACCUMULO_1.5.2]*/
 		final ClientConfiguration config = new ClientConfiguration().withZkHosts(
 				zookeeper).withInstance(
 				instance);
 		AccumuloOutputFormat.setZooKeeperInstance(
 				job,
 				config);
-		/* end[ACCUMULO_1.5.1] */
+		/* end[ACCUMULO_1.5.2] */
 		// @formatter:on
 
 		AccumuloOutputFormat.setDefaultTableName(
