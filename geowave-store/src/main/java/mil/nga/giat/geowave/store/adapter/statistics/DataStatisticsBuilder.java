@@ -96,7 +96,6 @@ public class DataStatisticsBuilder<T> implements
 		statistics.entryIngested(
 				entryInfo,
 				entry);
-		
-	}
 
+	}
 }

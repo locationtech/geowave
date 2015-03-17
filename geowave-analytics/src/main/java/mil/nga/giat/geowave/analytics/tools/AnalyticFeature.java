@@ -37,7 +37,10 @@ public class AnalyticFeature
 			final int zoomLevel,
 			final int iteration,
 			final long count ) {
-		assert (extraDimensionNames.length == extraDimensions.length);
+		if (extraDimensionNames.length != extraDimensions.length) {
+			LOGGER.error("The number of extraDimension names does not equal the number of extraDimensions");
+			throw new IllegalArgumentException("The number of extraDimension names does not equal the number of extraDimensions");
+		}
 		final List<AttributeDescriptor> descriptors = featureType.getAttributeDescriptors();
 		final Object[] defaults = new Object[descriptors.size()];
 		int p = 0;

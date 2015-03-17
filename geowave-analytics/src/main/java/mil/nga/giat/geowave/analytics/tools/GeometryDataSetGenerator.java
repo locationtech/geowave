@@ -229,7 +229,10 @@ public class GeometryDataSetGenerator
 				minCenterDistanceFactor,
 				minAxis,
 				maxAxis);
-		assert (numberOfCenters < minSetSize);
+		if (numberOfCenters >= minSetSize) {
+			LOGGER.error("The number of centers passed much be less than the minimum set size");
+			throw new IllegalArgumentException("The number of centers passed much be less than the minimum set size");
+		}
 
 		final double minDistance = computeMinDistance(
 				minCenterDistanceFactor,

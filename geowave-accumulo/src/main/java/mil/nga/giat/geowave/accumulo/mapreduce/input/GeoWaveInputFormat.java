@@ -81,8 +81,8 @@ public class GeoWaveInputFormat<T extends Writable> extends
 	/**
 	 * Configures a {@link AccumuloOperations} for this job.
 	 * 
-	 * @param job
-	 *            the Hadoop job instance to be configured
+	 * @param config
+	 *            the Hadoop configuration instance
 	 * @param zooKeepers
 	 *            a comma-separated list of zookeeper servers
 	 * @param instanceName
@@ -853,7 +853,7 @@ public class GeoWaveInputFormat<T extends Writable> extends
 					otherSplitInfo);
 		}
 
-		private GeoWaveInputSplit toFinalSplit() {
+		private synchronized GeoWaveInputSplit toFinalSplit() {
 			final Map<Index, List<Range>> rangesPerIndex = new HashMap<Index, List<Range>>();
 			final Set<String> locations = new HashSet<String>();
 			for (final Entry<Index, List<RangeLocationPair>> entry : splitInfo.entrySet()) {

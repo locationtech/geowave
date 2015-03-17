@@ -25,6 +25,7 @@ import mil.nga.giat.geowave.vector.plugin.ExtractGeometryFilterVisitor;
 import org.apache.accumulo.core.client.IteratorSetting;
 import org.apache.accumulo.core.client.mapreduce.InputFormatBase;
 import org.apache.accumulo.core.iterators.user.WholeRowIterator;
+import org.apache.commons.io.IOUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.fs.FileSystem;

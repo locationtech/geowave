@@ -29,6 +29,7 @@ public class StatsCompositionTool<T> implements
 	final DataStatisticsStore statisticsStore;
 	List<DataStatisticsBuilder<T>> statisticsBuilders = null;
 	final boolean persistStats;
+	final Object MUTEX = new Object();
 
 	public StatsCompositionTool() {
 		statisticsStore = null;
@@ -63,10 +64,12 @@ public class StatsCompositionTool<T> implements
 		if (statisticsBuilders == null) {
 			return;
 		}
-		for (final DataStatisticsBuilder<T> builder : statisticsBuilders) {
-			builder.entryDeleted(
-					entryInfo,
-					entry);
+		synchronized (MUTEX) {
+			for (final DataStatisticsBuilder<T> builder : statisticsBuilders) {
+				builder.entryDeleted(
+						entryInfo,
+						entry);
+			}
 		}
 
 	}
@@ -78,10 +81,13 @@ public class StatsCompositionTool<T> implements
 		if (statisticsBuilders == null) {
 			return;
 		}
-		for (final DataStatisticsBuilder<T> builder : statisticsBuilders) {
-			builder.entryScanned(
-					entryInfo,
-					entry);
+
+		synchronized (MUTEX) {
+			for (final DataStatisticsBuilder<T> builder : statisticsBuilders) {
+				builder.entryScanned(
+						entryInfo,
+						entry);
+			}
 		}
 
 	}
@@ -93,10 +99,30 @@ public class StatsCompositionTool<T> implements
 		if (statisticsBuilders == null) {
 			return;
 		}
-		for (final DataStatisticsBuilder<T> builder : statisticsBuilders) {
-			final Collection<DataStatistics<T>> statistics = builder.getStatistics();
-			for (final DataStatistics<T> s : statistics) {
-				statisticsStore.incorporateStatistics(s);
+
+		synchronized (MUTEX) {
+			for (final DataStatisticsBuilder<T> builder : statisticsBuilders) {
+				final Collection<DataStatistics<T>> statistics = builder.getStatistics();
+				for (final DataStatistics<T> s : statistics) {
+					statisticsStore.incorporateStatistics(s);
+				}
+				statistics.clear();
+			}
+		}
+	}
+
+	/**
+	 * Reset statistics, losing and updates since last flush
+	 */
+	public void reset() {
+		if (statisticsBuilders == null) {
+			return;
+		}
+
+		synchronized (MUTEX) {
+			for (final DataStatisticsBuilder<T> builder : statisticsBuilders) {
+				final Collection<DataStatistics<T>> statistics = builder.getStatistics();
+				statistics.clear();
 			}
 		}
 	}
@@ -108,10 +134,13 @@ public class StatsCompositionTool<T> implements
 		if (statisticsBuilders == null) {
 			return;
 		}
-		for (final DataStatisticsBuilder<T> builder : statisticsBuilders) {
-			builder.entryIngested(
-					entryInfo,
-					entry);
+
+		synchronized (MUTEX) {
+			for (final DataStatisticsBuilder<T> builder : statisticsBuilders) {
+				builder.entryIngested(
+						entryInfo,
+						entry);
+			}
 		}
 	}
 

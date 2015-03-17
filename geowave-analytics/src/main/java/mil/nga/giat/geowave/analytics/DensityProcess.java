@@ -203,7 +203,7 @@ public class DensityProcess implements
 		// specified in the
 		// transformation)
 		// TODO: set the properties to read only the specified value attribute
-		targetQuery.setProperties(null);
+		targetQuery.setProperties(Query.ALL_PROPERTIES);
 
 		// set the decimation hint to ensure points are read
 		final Hints hints = targetQuery.getHints();

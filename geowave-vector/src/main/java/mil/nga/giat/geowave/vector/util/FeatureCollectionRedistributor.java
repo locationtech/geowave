@@ -56,7 +56,9 @@ import org.apache.accumulo.core.client.ZooKeeperInstance;
 import org.apache.accumulo.core.iterators.IteratorUtil.IteratorScope;
 import org.apache.accumulo.core.iterators.user.TransformingIterator;
 import org.apache.log4j.Logger;
+import org.geotools.data.simple.SimpleFeatureIterator;
 import org.geotools.feature.DefaultFeatureCollection;
+import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 
 import com.vividsolutions.jts.geom.Coordinate;
@@ -325,8 +327,11 @@ public class FeatureCollectionRedistributor
 				numCollsProcessed++;
 
 				// use the first feature to determine the index insertion id
+				SimpleFeatureIterator itr = featColl.features();
+				SimpleFeature sft = itr.next();
+				itr.close();
 				final MultiDimensionalNumericData bounds = featAdapter.encode(
-						featColl.features().next(),
+						sft,
 						index.getIndexModel()).getNumericData(
 						index.getIndexModel().getDimensions());
 

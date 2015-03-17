@@ -11,6 +11,7 @@ env:
   global:
     #github token
     - secure: "TosKDl5mnt8UKeyWDg65i6cWENR7EorQbFPSvZ5ZfQfAaDAOeIN2OA/zxtRMELeYM82+n+GGXQOt0qPiYqyRlufYJJSUnWiwvI5gm3a8+f58atcU2R2bF9jd81bsL9jCS+JCQxAmzh8FCO6t7DJ4OdoMyMaIR7XjlSlsIJ97dd8="
+    - secure: IcwzKevdTSsKK9YERJ/LV81pfDe7Fx7qBxYcy43b0/emsioZJsJV5XSYHfFRIqceMkzp8LFBU8qiZR3cPZPKQoCjaG1QcwDeKQpyczIkMwzWzydhLR5dAzVETbQC9i2hH4sWjVVHW5WU6UUc3gCz5rPyIXFUYVUYxFeMWxHCe8w=
 cache:
   directories:
   - $HOME/.m2
@@ -26,3 +27,14 @@ after_success:
   - .utility/push-javadoc-to-gh-pages.sh
   - mvn coveralls:report -Daccumulo.version=${ACCUMULO_VERSION} -Dhadoop.version=${HADOOP_VERSION} -Dgeotools.version=${GEOTOOLS_VERSION} -Dgeoserver.version=${GEOSERVER_VERSION} -P ${PLATFORM_VERSION}
 
+addons:
+  coverity_scan:
+    project:
+      name: ngageoint/geowave
+      description: Build submitted via Travis CI
+    notification_email: GeoWave@nga.mil
+    build_command_prepend: mvn clean
+    build_command: mvn clean compile -Dfindbugs.skip -Daccumulo.version=${ACCUMULO_VERSION}
+      -Dhadoop.version=${HADOOP_VERSION} -Dgeotools.version=${GEOTOOLS_VERSION} -Dgeoserver.version=${GEOSERVER_VERSION}
+      -DskipITs=true -DskipTests=true -P ${PLATFORM_VERSION}
+    branch_pattern: coverity_scan

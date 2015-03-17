@@ -60,6 +60,7 @@ import org.apache.accumulo.core.client.IteratorSetting.Column;
 import org.apache.accumulo.core.iterators.Combiner;
 import org.apache.accumulo.core.iterators.IteratorUtil.IteratorScope;
 import org.apache.accumulo.core.iterators.user.TransformingIterator;
+import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.geotools.data.DataUtilities;
 import org.geotools.data.simple.SimpleFeatureIterator;
@@ -634,6 +635,7 @@ public class FeatureCollectionDataAdapter extends
 		}
 		else {
 			LOGGER.warn("Could not determine index strategy type.");
+			IOUtils.closeQuietly(itr);
 			return Collections.<DefaultFeatureCollection> emptyList().iterator();
 		}
 
@@ -796,7 +798,7 @@ public class FeatureCollectionDataAdapter extends
 				featureCollections.add(collection);
 			}
 		}
-
+		IOUtils.closeQuietly(itr);
 		return featureCollections.iterator();
 	}
 

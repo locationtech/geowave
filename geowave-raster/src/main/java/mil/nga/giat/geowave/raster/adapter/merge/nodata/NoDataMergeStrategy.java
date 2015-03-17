@@ -10,7 +10,7 @@ import mil.nga.giat.geowave.raster.adapter.RasterDataAdapter;
 import mil.nga.giat.geowave.raster.adapter.RasterTile;
 import mil.nga.giat.geowave.raster.adapter.merge.RasterTileMergeStrategy;
 import mil.nga.giat.geowave.raster.adapter.merge.nodata.NoDataMetadata.SampleIndex;
-
+import org.apache.log4j.Logger;
 import org.opengis.coverage.grid.GridCoverage;
 
 public class NoDataMergeStrategy implements
@@ -19,6 +19,7 @@ public class NoDataMergeStrategy implements
 	public NoDataMergeStrategy() {}
 
 	private static final long serialVersionUID = 38473874l;
+	private static final Logger LOGGER = Logger.getLogger(NoDataMergeStrategy.class);
 
 	@Override
 	public void merge(
@@ -86,11 +87,15 @@ public class NoDataMergeStrategy implements
 					}
 				}
 				if (recalculateMetadata) {
-					thisTile.setMetadata(NoDataMetadataFactory.mergeMetadata(
-							thisTileMetadata,
-							thisRaster,
-							nextTileMetadata,
-							nextRaster));
+					if (nextTileMetadata == null) {
+						LOGGER.error("Error merging raster tiles, nextTileMetadata was null.");
+					}
+					else {
+						thisTile.setMetadata(
+								NoDataMetadataFactory.mergeMetadata(
+										thisTileMetadata, thisRaster, nextTileMetadata, nextRaster));
+
+					}
 				}
 			}
 		}

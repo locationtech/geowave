@@ -463,10 +463,11 @@ public class NoDataMetadataFactory
 			this.shapes = shapes;
 			if ((shapes == null) || (shapes.length == 0)) {
 				acceptNone = true;
-			}
-			for (final Geometry shape : shapes) {
-				if (shape == null) {
-					acceptNone = true;
+			} else {
+				for (final Geometry shape : shapes) {
+					if (shape == null) {
+						acceptNone = true;
+					}
 				}
 			}
 		}

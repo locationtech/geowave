@@ -73,8 +73,6 @@ import org.apache.log4j.Logger;
 
 import com.google.common.collect.Iterators;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-
 /**
  * This is the Accumulo implementation of the data store. It requires an
  * AccumuloOperations instance that describes how to connect (read/write data)
@@ -283,8 +281,10 @@ public class AccumuloDataStore implements
 			statisticsTool.entryIngested(
 					entryInfo,
 					entry);
-			
-			statisticsTool.flush();
+
+			synchronizeStatsWithStore(
+					statisticsTool,
+					true);
 
 			return entryInfo.getRowIds();
 		}
@@ -355,7 +355,7 @@ public class AccumuloDataStore implements
 			final IngestCallback<T> ingestCallback,
 			final VisibilityWriter<T> customFieldVisibilityWriter ) {
 		if (dataWriter instanceof IndexDependentDataAdapter) {
-			ingest(
+			ingestInternal(
 					dataWriter,
 					index,
 					new IteratorWrapper<T, T>(
@@ -506,7 +506,9 @@ public class AccumuloDataStore implements
 				altIdxWriter.close();
 			}
 
-			statsCompositionTool.flush();
+			synchronizeStatsWithStore(
+					statsCompositionTool,
+					true);
 
 		}
 		catch (final TableNotFoundException | AccumuloException | AccumuloSecurityException e) {
@@ -653,9 +655,9 @@ public class AccumuloDataStore implements
 						index),
 				authorizations);
 
-		if (success) {
-			statsCompositionTool.flush();
-		}
+		synchronizeStatsWithStore(
+				statsCompositionTool,
+				success);
 		if (success && useAltIndex) {
 			deleteAltIndexEntry(
 					altIdxTableName,
@@ -663,6 +665,15 @@ public class AccumuloDataStore implements
 					adapterId);
 		}
 
+		try {
+			// issue; going to call .flush() internally even if success = false;
+			statsCompositionTool.close();
+		}
+		catch (Exception ex) {
+			LOGGER.error(
+					"Error closing statsCompositionTool",
+					ex);
+		}
 		return success;
 
 	}
@@ -902,7 +913,7 @@ public class AccumuloDataStore implements
 		return query(
 				adapter,
 				index,
-				query,				
+				query,
 				Integer.valueOf(limit),
 				null,
 				authorizations);
@@ -1132,7 +1143,7 @@ public class AccumuloDataStore implements
 				index,
 				query,
 				limit,
-				(String[])null);
+				(String[]) null);
 	}
 
 	@Override
@@ -1148,6 +1159,7 @@ public class AccumuloDataStore implements
 				null);
 	}
 
+	@Override
 	@SuppressWarnings("unchecked")
 	public <T> CloseableIterator<T> query(
 			final DataAdapter<T> adapter,
@@ -1214,6 +1226,15 @@ public class AccumuloDataStore implements
 		return new StatsCompositionTool<T>(
 				adapter,
 				accumuloOptions.isPersistDataStatistics() ? statisticsStore : null);
+	}
+
+	private <T> void synchronizeStatsWithStore(
+			StatsCompositionTool<T> compositionTool,
+			boolean commitStats ) {
+		if (commitStats)
+			compositionTool.flush();
+		else
+			compositionTool.reset();
 	}
 
 	private boolean deleteAll(
@@ -1304,7 +1325,7 @@ public class AccumuloDataStore implements
 			final DataAdapter<Object> adapter,
 			final Index index ) {
 
-		return stats.isPersisting() ?  new DeleteRowObserver() {
+		return stats.isPersisting() ? new DeleteRowObserver() {
 			// many rows can be associated with one entry.
 			// need a control to delete only one.
 			boolean foundOne = false;
