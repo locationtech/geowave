@@ -269,9 +269,11 @@ public class GeoLifeIngestPlugin implements
 			geolifeTrackBuilder.set(
 					"EndTimeStamp",
 					endTimeStamp);
-			geolifeTrackBuilder.set(
-					"Duration",
-					endTimeStamp.getTime() - startTimeStamp.getTime());
+			if (endTimeStamp != null && startTimeStamp != null) {
+				geolifeTrackBuilder.set(
+						"Duration",
+						endTimeStamp.getTime() - startTimeStamp.getTime());
+			}
 			geolifeTrackBuilder.set(
 					"NumberPoints",
 					pointInstance);

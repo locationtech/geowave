@@ -18,6 +18,7 @@ import mil.nga.giat.geowave.store.query.Query;
 
 import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
+import org.apache.log4j.Logger;
 
 /**
  * 
@@ -30,6 +31,7 @@ import org.apache.accumulo.core.client.AccumuloSecurityException;
  */
 public class StatsTool
 {
+	private static final Logger LOGGER = Logger.getLogger(StatsTool.class);
 
 	public static boolean calculateStastics(
 			final AccumuloOperations accumuloOperations,
@@ -49,32 +51,38 @@ public class StatsTool
 				accumuloOperations);
 		final DataAdapter<?> adapter = adapterStore.getAdapter(adapterId);
 		if (adapter == null) {
-			System.err.println("Unknown adapter " + adapterId);
+			LOGGER.error("Unknown adapter " + adapterId);
 			return false;
 		}
 		statsStore.deleteObjects(
 				adapter.getAdapterId(),
 				authorizations);
-		final StatsCompositionTool<?> statsTool = new StatsCompositionTool(
+		try (StatsCompositionTool<?> statsTool = new StatsCompositionTool(
 				adapter,
-				statsStore);
-		try (CloseableIterator<Index> indexit = indexStore.getIndices()) {
-			while (indexit.hasNext()) {
-				final Index index = indexit.next();
-				try (CloseableIterator<?> entryIt = dataStore.query(
-						adapter,
-						index,
-						(Query) null,
-						(Integer) null,
-						statsTool,
-						authorizations)) {
-					while (entryIt.hasNext()) {
-						entryIt.next();
+				statsStore)) {
+			try (CloseableIterator<Index> indexit = indexStore.getIndices()) {
+				while (indexit.hasNext()) {
+					final Index index = indexit.next();
+					try (CloseableIterator<?> entryIt = dataStore.query(
+							adapter,
+							index,
+							(Query) null,
+							(Integer) null,
+							statsTool,
+							authorizations)) {
+						while (entryIt.hasNext()) {
+							entryIt.next();
+						}
 					}
 				}
 			}
 		}
-		statsTool.flush();
+		catch (Exception ex) {
+			LOGGER.error(
+					"Error while writing statistics.",
+					ex);
+			return false;
+		}
 		return true;
 	}
 

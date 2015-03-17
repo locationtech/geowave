@@ -63,7 +63,7 @@ public class IteratorWrapper<InputType, ConvertedType> implements
 	}
 
 	@Override
-	public ConvertedType next() {
+	public synchronized ConvertedType next() {
 		while (!conversionQueue.hasNext() && inputIterator.hasNext()) {
 			// fill conversion queue with converted objects from the next input
 			final InputType input = inputIterator.next();

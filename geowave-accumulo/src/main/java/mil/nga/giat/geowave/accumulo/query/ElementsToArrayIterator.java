@@ -33,10 +33,13 @@ import org.apache.accumulo.core.iterators.SortedKeyValueIterator;
 import org.apache.accumulo.core.iterators.user.TransformingIterator;
 import org.apache.accumulo.core.iterators.user.WholeRowIterator;
 import org.apache.hadoop.io.Text;
+import org.apache.log4j.Logger;
 
 public class ElementsToArrayIterator extends
 		TransformingIterator
 {
+	private final static Logger LOGGER = Logger.getLogger(ElementsToArrayIterator.class);
+
 	public static final String MODEL = "model";
 
 	private CommonIndexModel model;
@@ -102,11 +105,7 @@ public class ElementsToArrayIterator extends
 
 				dataIds.add(dataId);
 
-				//final Set<Key> keys = entries.keySet();
-
-				//for (final Key key : keys) {
-				for (final Map.Entry<Key, Value> kvp : entries.entrySet()){
-
+				for (final Map.Entry<Key, Value> kvp : entries.entrySet()) {
 
 					if (firstKey == null) {
 						firstKey = kvp.getKey();
@@ -190,66 +189,70 @@ public class ElementsToArrayIterator extends
 				getSource().next();
 			}
 
-			final ByteSequence rowData = firstKey.getRowData();
-			final AccumuloRowId rowId = new AccumuloRowId(
-					rowData.getBackingArray());
-
-			// create a new rowid
-			final byte[] rowIdBytes = new AccumuloRowId(
-					rowId.getInsertionId(),
-					new byte[] {},
-					rowId.getAdapterId(),
-					rowId.getNumberOfDuplicates()).getRowId();
-
-			// set the data id
-			final Key rootKey = IteratorUtils.replaceRow(
-					replaceColumnQualifier(
-							firstKey,
-							new Text()),
-					rowIdBytes);
-
-			final List<Key> keys = new ArrayList<Key>();
-			final List<Value> values = new ArrayList<Value>();
-
-			// now reconstruct the field data arrays
-			for (final Map.Entry<ByteArrayId, Map<ByteArrayId, byte[]>> kvp : fieldMap.entrySet()) {
-				final Map<ByteArrayId, byte[]> fieldData = kvp.getValue();
-				final byte[][] fieldDataBytes = new byte[dataIds.size()][];
-
-				// construct the array of byte arrays
-				for (int i = 0; i < dataIds.size(); i++) {
-					fieldDataBytes[i] = fieldData.get(dataIds.get(i));
-				}
-
-				// use the writer to create a single byte array
-				byte[] valueBytes;
-				final byte encoding = encodingMap.get(kvp.getKey());
-				if (encoding == Encoding.FIXED_SIZE_ENCODING.getByteEncoding()) {
-					valueBytes = fixedSizeWriter.writeField(fieldDataBytes);
-				}
-				else if (encoding == Encoding.VARIABLE_SIZE_ENCODING.getByteEncoding()) {
-					valueBytes = variableSizeWriter.writeField(fieldDataBytes);
-				}
-				else {
-					valueBytes = new byte[] {};
-				}
-
-				// set the field name
-				keys.add(replaceColumnQualifier(
-						rootKey,
-						new Text(
-								kvp.getKey().getBytes())));
-
-				values.add(new Value(
-						valueBytes));
+			if (firstKey == null) {
+				LOGGER.error("Valid firstKey was not found");
 			}
+			else {
+				final ByteSequence rowData = firstKey.getRowData();
+				final AccumuloRowId rowId = new AccumuloRowId(
+						rowData.getBackingArray());
 
-			output.append(
-					new SkeletonKey(
-							rootKey),
-					WholeRowIterator.encodeRow(
-							keys,
-							values));
+				// create a new rowid
+				final byte[] rowIdBytes = new AccumuloRowId(
+						rowId.getInsertionId(),
+						new byte[] { },
+						rowId.getAdapterId(),
+						rowId.getNumberOfDuplicates()).getRowId();
+
+				// set the data id
+				final Key rootKey = IteratorUtils.replaceRow(
+						replaceColumnQualifier(
+								firstKey, new Text()),
+						rowIdBytes);
+
+				final List<Key> keys = new ArrayList<Key>();
+				final List<Value> values = new ArrayList<Value>();
+
+				// now reconstruct the field data arrays
+				for (final Map.Entry<ByteArrayId, Map<ByteArrayId, byte[]>> kvp : fieldMap.entrySet()) {
+					final Map<ByteArrayId, byte[]> fieldData = kvp.getValue();
+					final byte[][] fieldDataBytes = new byte[dataIds.size()][];
+
+					// construct the array of byte arrays
+					for (int i = 0; i < dataIds.size(); i++) {
+						fieldDataBytes[i] = fieldData.get(dataIds.get(i));
+					}
+
+					// use the writer to create a single byte array
+					byte[] valueBytes;
+					final byte encoding = encodingMap.get(kvp.getKey());
+					if (encoding == Encoding.FIXED_SIZE_ENCODING.getByteEncoding()) {
+						valueBytes = fixedSizeWriter.writeField(fieldDataBytes);
+					}
+					else if (encoding == Encoding.VARIABLE_SIZE_ENCODING.getByteEncoding()) {
+						valueBytes = variableSizeWriter.writeField(fieldDataBytes);
+					}
+					else {
+						valueBytes = new byte[] { };
+					}
+
+					// set the field name
+					keys.add(
+							replaceColumnQualifier(
+									rootKey,
+									new Text(kvp.getKey().getBytes())));
+
+					values.add(
+							new Value(
+									valueBytes));
+				}
+
+				output.append(
+						new SkeletonKey(rootKey),
+						WholeRowIterator.encodeRow(
+								keys,
+								values));
+			}
 		}
 	}
 

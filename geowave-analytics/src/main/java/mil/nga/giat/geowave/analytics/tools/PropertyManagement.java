@@ -30,6 +30,7 @@ import com.vividsolutions.jts.io.WKTReader;
 public class PropertyManagement
 {
 	final static Logger LOGGER = LoggerFactory.getLogger(PropertyManagement.class);
+	private final Object MUTEX = new Object();
 
 	private final Properties properties = new Properties();
 
@@ -64,52 +65,60 @@ public class PropertyManagement
 
 	public Object get(
 			final ParameterEnum propertyName ) {
-		return properties.get(toPropertyName(propertyName));
+			return properties.get(toPropertyName(propertyName));
 	}
 
 	public void store(
 			final ParameterEnum propertyName,
 			final Object value ) {
-		properties.put(
-				toPropertyName(propertyName),
-				value);
-
+		synchronized (MUTEX) {
+			properties.put(
+					toPropertyName(propertyName), value);
+		}
 	}
 
 	public Object storeIfEmpty(
 			final ParameterEnum propertyName,
 			final Object value ) {
 		final String pName = toPropertyName(propertyName);
-		if (!properties.containsKey(pName)) {
-			LOGGER.info("Setting parameter : " + pName + " to " + value.toString());
-			properties.put(
-					pName,
-					value);
-			return value;
-		}
-		return properties.get(pName);
+		synchronized (MUTEX) {
+			if (!properties.containsKey(pName)) {
+				LOGGER.info("Setting parameter : " + pName + " to " + value.toString());
+				properties.put(
+						pName, value);
+				return value;
+			}
 
+			return properties.get(pName);
+		}
 	}
 
-	public void copy(
+
+	public synchronized void copy(
 			final ParameterEnum propertyNameFrom,
 			final ParameterEnum propertyNameTo ) {
-		if (properties.containsKey(toPropertyName(propertyNameFrom))) {
-			properties.put(
-					toPropertyName(propertyNameTo),
-					properties.get(toPropertyName(propertyNameFrom)));
+		synchronized (MUTEX) {
+			if (properties.containsKey(toPropertyName(propertyNameFrom))) {
+				properties.put(
+						toPropertyName(propertyNameTo),
+						properties.get(toPropertyName(propertyNameFrom)));
+			}
 		}
 	}
 
 	public void store(
 			final ParameterEnum[] names,
 			final Object[] values ) {
-		assert (values.length == names.length);
-		int i = 0;
-		for (final Object value : values) {
-			properties.put(
-					toPropertyName(names[i++]),
-					value);
+		if (values.length != names.length){
+			LOGGER.error("The number of values must equal the number of names passed to the store method");
+			throw new IllegalArgumentException("The number of values must equal the number of names passed to the store method");
+		}
+		synchronized (MUTEX) {
+			int i = 0;
+			for (final Object value : values) {
+				properties.put(
+						toPropertyName(names[i++]), value);
+			}
 		}
 	}
 
@@ -384,16 +393,16 @@ public class PropertyManagement
 	public void buildFromOptions(
 			final CommandLine commandLine )
 			throws ParseException {
-		for (final Option option : commandLine.getOptions()) {
-			if (!option.hasArg()) {
-				properties.put(
-						option.getLongOpt(),
-						true);
-			}
-			else {
-				properties.put(
-						option.getLongOpt(),
-						option.getValue());
+		synchronized (MUTEX) {
+			for (final Option option : commandLine.getOptions()) {
+				if (!option.hasArg()) {
+					properties.put(
+							option.getLongOpt(), true);
+				}
+				else {
+					properties.put(
+							option.getLongOpt(), option.getValue());
+				}
 			}
 		}
 	}

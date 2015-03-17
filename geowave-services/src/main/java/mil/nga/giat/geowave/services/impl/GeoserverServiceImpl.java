@@ -388,30 +388,30 @@ public class GeoserverServiceImpl implements
 								"entry");
 					}
 
-					// report zookeeper servers, instance name and namespace for
-					// each datastore
-					for (int j = 0; j < entryArray.size(); j++) {
-						final JSONObject entry = entryArray.getJSONObject(j);
-						final String key = entry.getString("@key");
-						final String value = entry.getString("$");
+					if (entryArray == null){
+						log.error("entry Array was null; didn't find a valid connectionParameters datastore object of type JSONObject or JSONArray");
+					} else {
+						// report zookeeper servers, instance name and namespace for
+						// each datastore
+						for (int j = 0; j < entryArray.size(); j++) {
+							final JSONObject entry = entryArray.getJSONObject(j);
+							final String key = entry.getString("@key");
+							final String value = entry.getString("$");
 
-						if (key.equals("ZookeeperServers")) {
-							datastore.put(
-									"ZookeeperServers",
-									value);
-						}
-						else if (key.equals("InstanceName")) {
-							datastore.put(
-									"InstanceName",
-									value);
-						}
-						else if (key.equals("Namespace")) {
-							datastore.put(
-									"Namespace",
-									value);
+							if (key.equals("ZookeeperServers")) {
+								datastore.put(
+										"ZookeeperServers", value);
+							}
+							else if (key.equals("InstanceName")) {
+								datastore.put(
+										"InstanceName", value);
+							}
+							else if (key.equals("Namespace")) {
+								datastore.put(
+										"Namespace", value);
+							}
 						}
 					}
-
 					datastores.add(datastore);
 				}
 			}
@@ -689,26 +689,29 @@ public class GeoserverServiceImpl implements
 									"entry");
 						}
 
-						// group layers by namespace
-						for (int j = 0; j < entryArray.size(); j++) {
-							final JSONObject entry = entryArray.getJSONObject(j);
-							final String key = entry.getString("@key");
-							final String value = entry.getString("$");
+						if (entryArray == null){
+							log.error("entry Array is null - didn't find a connectionParameters datastore object that was a JSONObject or JSONArray");
+						} else {
+							// group layers by namespace
+							for (int j = 0; j < entryArray.size(); j++) {
+								final JSONObject entry = entryArray.getJSONObject(j);
+								final String key = entry.getString("@key");
+								final String value = entry.getString("$");
 
-							if (key.equals("Namespace")) {
-								if (namespaceLayersMap.containsKey(value)) {
-									namespaceLayersMap.get(
-											value).add(
-											name);
+								if (key.equals("Namespace")) {
+									if (namespaceLayersMap.containsKey(value)) {
+										namespaceLayersMap.get(
+												value).add(
+												name);
+									}
+									else {
+										final ArrayList<String> layers = new ArrayList<String>();
+										layers.add(name);
+										namespaceLayersMap.put(
+												value, layers);
+									}
+									break;
 								}
-								else {
-									final ArrayList<String> layers = new ArrayList<String>();
-									layers.add(name);
-									namespaceLayersMap.put(
-											value,
-											layers);
-								}
-								break;
 							}
 						}
 					}

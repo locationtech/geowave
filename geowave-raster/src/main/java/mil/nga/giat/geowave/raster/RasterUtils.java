@@ -403,6 +403,12 @@ public class RasterUtils
 			final Interpolation interpolation,
 			final Histogram histogram,
 			final ColorModel defaultColorModel ) {
+
+		if (pixelDimension == null){
+			LOGGER.error("Pixel dimension can not be null");
+			throw new IllegalArgumentException("Pixel dimension can not be null");
+		}
+
 		final double rescaleX = levelResX / (requestEnvelope.getSpan(0) / pixelDimension.getWidth());
 		final double rescaleY = levelResY / (requestEnvelope.getSpan(1) / pixelDimension.getHeight());
 		final double width = pixelDimension.getWidth() / rescaleX;
@@ -831,13 +837,6 @@ public class RasterUtils
 	 * @param max
 	 *            The maximal value, or {@code null} for computing it
 	 *            automatically.
-	 * @param units
-	 *            The units of sample values, or {@code null} if unknow.
-	 * @param colors
-	 *            The colors to use for values from {@code min} to {@code max}
-	 *            for each bands, or {@code null} for a default color palette.
-	 *            If non-null, each arrays {@code colors[b]} may have any
-	 *            length; colors will be interpolated as needed.
 	 * @param dst
 	 *            The array where to store sample dimensions. The array length
 	 *            must matches the number of bands.

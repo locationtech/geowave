@@ -17,6 +17,7 @@ import mil.nga.giat.geowave.vector.plugin.GeoWaveDataStoreComponents;
 import mil.nga.giat.geowave.vector.plugin.lock.LockingManagement;
 
 import org.apache.commons.lang3.tuple.Pair;
+import org.apache.log4j.Logger;
 import org.geotools.data.Transaction;
 import org.geotools.factory.Hints;
 import org.geotools.geometry.jts.ReferencedEnvelope;
@@ -39,6 +40,9 @@ import com.google.common.collect.Multimap;
 public class GeoWaveTransactionManagement implements
 		GeoWaveTransaction
 {
+
+	private static final Logger LOGGER = Logger.getLogger(GeoWaveTransactionManagement.class);
+
 	/** Map of modified features; by feature id */
 	private final Map<String, ModifiedFeature> modifiedFeatures = new ConcurrentHashMap<String, ModifiedFeature>();
 	private final Multimap<String, SimpleFeature> removedFeatures = LinkedListMultimap.create();
@@ -172,12 +176,13 @@ public class GeoWaveTransactionManagement implements
 					updated,
 					this);
 			synchronized (mutex) {
-				modifiedFeatures.put(
-						fid,
-						new ModifiedFeature(
-								modRecord.oldFeature,
-								updated,
-								true));
+				if (modRecord != null) {
+					modifiedFeatures.put(
+							fid, new ModifiedFeature(
+									modRecord.oldFeature, updated, true));
+				} else {
+					LOGGER.error("modRecord was set to null in another thread; synchronization issue");
+				}
 			}
 		}
 		else {

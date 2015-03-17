@@ -10,6 +10,7 @@ import java.util.Map.Entry;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import mil.nga.giat.geowave.accumulo.AccumuloRowId;
 import mil.nga.giat.geowave.accumulo.metadata.AbstractAccumuloPersistence;
 import mil.nga.giat.geowave.accumulo.metadata.AccumuloAdapterStore;
 import mil.nga.giat.geowave.accumulo.AccumuloDataStore;
@@ -595,7 +596,7 @@ public class GeowaveUtils
 			return AccumuloUtils.decodeRow(
 					row.getKey(),
 					row.getValue(),
-					null,
+					new AccumuloRowId(row.getKey()), //need to pass this, otherwise null value for rowId gets dereferenced later
 					adapterStore,
 					clientFilter,
 					index);

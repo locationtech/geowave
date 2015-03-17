@@ -167,7 +167,9 @@ public class RasterTileResizeJobRunner extends
 				ops);
 		final IndexWriter writer = store.createIndexWriter(index);
 		writer.setupAdapter(newAdapter);
-		return job.waitForCompletion(true) ? 0 : 1;
+		Boolean retVal = job.waitForCompletion(true);
+		writer.close();
+		return retVal ? 0 : 1;
 	}
 
 	public static void main(
