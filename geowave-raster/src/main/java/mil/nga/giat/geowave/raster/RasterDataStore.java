@@ -2,15 +2,12 @@ package mil.nga.giat.geowave.raster;
 
 import java.util.TreeMap;
 
-import org.geotools.coverage.grid.GridCoverage2D;
-
 import mil.nga.giat.geowave.accumulo.AccumuloDataStore;
 import mil.nga.giat.geowave.accumulo.AccumuloOperations;
 import mil.nga.giat.geowave.accumulo.AccumuloOptions;
 import mil.nga.giat.geowave.index.HierarchicalNumericIndexStrategy;
 import mil.nga.giat.geowave.index.HierarchicalNumericIndexStrategy.SubStrategy;
 import mil.nga.giat.geowave.index.NumericIndexStrategy;
-import mil.nga.giat.geowave.raster.plugin.GeoWaveGTRasterFormat;
 import mil.nga.giat.geowave.store.CloseableIterator;
 import mil.nga.giat.geowave.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.store.adapter.DataAdapter;
@@ -21,7 +18,7 @@ import mil.nga.giat.geowave.store.index.IndexStore;
 import mil.nga.giat.geowave.store.query.Query;
 
 public class RasterDataStore extends
-		AccumuloDataStore
+AccumuloDataStore
 {
 
 	public RasterDataStore(
@@ -117,9 +114,9 @@ public class RasterDataStore extends
 							index.getDimensionalityType(),
 							index.getDataType(),
 							index.getId()), // make sure the index ID is the
-											// same as the orginal so that we
-											// are querying the correct table
-					query);
+							// same as the orginal so that we
+							// are querying the correct table
+							query);
 		}
 		else {
 			return super.query(

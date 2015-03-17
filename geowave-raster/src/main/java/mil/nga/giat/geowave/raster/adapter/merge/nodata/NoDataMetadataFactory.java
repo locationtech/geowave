@@ -6,8 +6,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
-
 import mil.nga.giat.geowave.raster.adapter.merge.nodata.NoDataMetadata.SampleIndex;
 
 import com.vividsolutions.jts.geom.Coordinate;
@@ -54,6 +52,11 @@ public class NoDataMetadataFactory
 			final WritableRaster raster1,
 			final NoDataMetadata noDataMetadata2,
 			final WritableRaster raster2 ) {
+		if ((noDataMetadata1 == null) || (noDataMetadata2 == null)) {
+			// this implies that there is no nodata values in one of the rasters
+			// so there is no nodata values in the merge
+			return null;
+		}
 		final Set<SampleIndex> noDataIndices1 = noDataMetadata1.getNoDataIndices();
 		final Set<SampleIndex> noDataIndices2 = noDataMetadata2.getNoDataIndices();
 		if ((noDataIndices1 != null) && (noDataIndices2 != null)) {

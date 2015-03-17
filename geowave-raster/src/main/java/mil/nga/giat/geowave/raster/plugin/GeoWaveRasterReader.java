@@ -17,6 +17,7 @@ import java.util.Set;
 import javax.imageio.ImageReadParam;
 import javax.media.jai.Histogram;
 import javax.media.jai.ImageLayout;
+import javax.media.jai.Interpolation;
 
 import mil.nga.giat.geowave.accumulo.AccumuloOperations;
 import mil.nga.giat.geowave.accumulo.BasicAccumuloOperations;
@@ -422,7 +423,7 @@ public class GeoWaveRasterReader extends
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * org.opengis.coverage.grid.GridCoverageReader#read(org.opengis.parameter
 	 * .GeneralParameterValue [])
@@ -608,40 +609,55 @@ public class GeoWaveRasterReader extends
 
 		final double[][] resolutionLevels = getResolutionLevels(coverageName);
 		Histogram histogram = null;
-		if (config.isEqualizeHistogram()) {
+		boolean equalizeHistogram;
+		if (config.isEqualizeHistogramOverrideSet()) {
+			equalizeHistogram = config.isEqualizeHistogramOverride();
+		}
+		else {
+			equalizeHistogram = adapter.isEqualizeHistogram();
+		}
+		if (equalizeHistogram) {
 			histogram = getHistogram(
 					coverageName,
 					resolutionLevels[imageChoice.intValue()][0],
 					resolutionLevels[imageChoice.intValue()][1]);
 		}
 
-		final CloseableIterator<GridCoverage> gridCoverageIt = queryForTiles(
+		try (final CloseableIterator<GridCoverage> gridCoverageIt = queryForTiles(
 				pixelDimension,
 				state.getRequestEnvelopeTransformed(),
 				resolutionLevels[imageChoice.intValue()][0],
 				resolutionLevels[imageChoice.intValue()][1],
-				adapter);
-		final GridCoverage2D result = RasterUtils.mosaicGridCoverages(
-				gridCoverageIt,
-				backgroundColor,
-				outputTransparentColor,
-				pixelDimension,
-				state.getRequestEnvelopeTransformed(),
-				resolutionLevels[imageChoice.intValue()][0],
-				resolutionLevels[imageChoice.intValue()][1],
-				adapter.getNoDataValuesPerBand(),
-				state.isXAxisSwitch(),
-				coverageFactory,
-				state.getCoverageName(),
-				config.getInterpolation(),
-				histogram,
-				adapter.getColorModel());
+				adapter)) {
 
-		gridCoverageIt.close();
-		return transformResult(
-				result,
-				pixelDimension,
-				state);
+			Interpolation interpolation;
+			if (config.isInterpolationOverrideSet()) {
+				interpolation = config.getInterpolationOverride();
+			}
+			else {
+				interpolation = adapter.getInterpolation();
+			}
+			final GridCoverage2D result = RasterUtils.mosaicGridCoverages(
+					gridCoverageIt,
+					backgroundColor,
+					outputTransparentColor,
+					pixelDimension,
+					state.getRequestEnvelopeTransformed(),
+					resolutionLevels[imageChoice.intValue()][0],
+					resolutionLevels[imageChoice.intValue()][1],
+					adapter.getNoDataValuesPerBand(),
+					state.isXAxisSwitch(),
+					coverageFactory,
+					state.getCoverageName(),
+					interpolation,
+					histogram,
+					adapter.getColorModel());
+
+			return transformResult(
+					result,
+					pixelDimension,
+					state);
+		}
 	}
 
 	private boolean setupResolutions(

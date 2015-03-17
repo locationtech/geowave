@@ -1,12 +1,14 @@
 package mil.nga.giat.geowave.test.mapreduce;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 
 import mil.nga.giat.geowave.ingest.IngestMain;
 import mil.nga.giat.geowave.store.index.IndexType;
-
 import mil.nga.giat.geowave.test.GeoWaveTestEnvironment;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
@@ -31,7 +33,7 @@ abstract public class MapReduceTestEnvironment extends
 	protected static boolean hdfsProtocol;
 	protected static String hdfsBaseDirectory;
 
-	protected void testIngest(
+	protected void testMapReduceIngest(
 			final IndexType indexType,
 			final String ingestFilePath ) {
 		// ingest gpx data directly into GeoWave using the

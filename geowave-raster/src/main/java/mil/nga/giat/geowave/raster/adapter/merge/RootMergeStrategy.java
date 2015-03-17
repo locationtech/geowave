@@ -395,6 +395,7 @@ public class RootMergeStrategy<T extends Persistable> implements
 			final RasterTile<T> nextTile,
 			final ByteArrayId dataAdapterId ) {
 		final RasterTileMergeStrategy<T> childMergeStrategy = getChildMergeStrategy(dataAdapterId);
+
 		if (childMergeStrategy != null) {
 			childMergeStrategy.merge(
 					thisTile,

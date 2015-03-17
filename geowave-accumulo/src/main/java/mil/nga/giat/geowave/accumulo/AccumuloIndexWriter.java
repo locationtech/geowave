@@ -84,7 +84,7 @@ public class AccumuloIndexWriter implements
 			if (accumuloOperations.tableExists(indexName)) {
 				if (!accumuloOperations.tableExists(altIdxTableName)) {
 					useAltIndex = false;
-					LOGGER.warn("Requested alternate index table [" + altIdxTableName + "] does not exist.");
+					LOGGER.info("Requested alternate index table [" + altIdxTableName + "] does not exist.");
 				}
 			}
 			else {

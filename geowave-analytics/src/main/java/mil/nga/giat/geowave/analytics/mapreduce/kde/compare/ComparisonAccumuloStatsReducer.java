@@ -38,7 +38,7 @@ public class ComparisonAccumuloStatsReducer extends
 		1
 	};
 	private long totalKeys = 0;
-	private double inc = 0;
+	private long currentKey;
 
 	private int minLevels;
 	private int maxLevels;
@@ -56,6 +56,9 @@ public class ComparisonAccumuloStatsReducer extends
 			final Context context )
 			throws IOException,
 			InterruptedException {
+		// for consistency give all cells with matching weight the same
+		// percentile
+		final double percentile = (currentKey + 1.0) / totalKeys;
 		// calculate weights for this key
 		for (final LongWritable v : values) {
 			final long cellIndex = v.get() / numLevels;
@@ -78,12 +81,11 @@ public class ComparisonAccumuloStatsReducer extends
 					0,
 					2,
 					key.getCombinedPercentile());
-			inc += (1.0 / totalKeys);
 			raster.setSample(
 					0,
 					0,
 					3,
-					inc);
+					percentile);
 
 			context.write(
 					new GeoWaveOutputKey(
@@ -101,6 +103,7 @@ public class ComparisonAccumuloStatsReducer extends
 							MAXES_PER_BAND,
 							NAME_PER_BAND,
 							raster));
+			currentKey++;
 		}
 	}
 

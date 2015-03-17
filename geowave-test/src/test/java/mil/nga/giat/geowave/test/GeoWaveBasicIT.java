@@ -79,10 +79,10 @@ public class GeoWaveBasicIT extends
 	public void testIngestAndQuerySpatialPointsAndLines() {
 		final Index spatialIndex = IndexType.SPATIAL_VECTOR.createDefaultIndex();
 		// ingest both lines and points
-		testIngest(
+		testLocalIngest(
 				IndexType.SPATIAL_VECTOR,
 				HAIL_SHAPEFILE_FILE);
-		testIngest(
+		testLocalIngest(
 				IndexType.SPATIAL_VECTOR,
 				TORNADO_TRACKS_SHAPEFILE_FILE);
 
@@ -161,10 +161,10 @@ public class GeoWaveBasicIT extends
 	@Test
 	public void testIngestAndQuerySpatialTemporalPointsAndLines() {
 		// ingest both lines and points
-		testIngest(
+		testLocalIngest(
 				IndexType.SPATIAL_TEMPORAL_VECTOR,
 				HAIL_SHAPEFILE_FILE);
-		testIngest(
+		testLocalIngest(
 				IndexType.SPATIAL_TEMPORAL_VECTOR,
 				TORNADO_TRACKS_SHAPEFILE_FILE);
 		try {

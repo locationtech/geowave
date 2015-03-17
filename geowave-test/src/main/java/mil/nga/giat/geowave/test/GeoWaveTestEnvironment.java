@@ -18,13 +18,15 @@ import java.util.zip.ZipInputStream;
 
 import mil.nga.giat.geowave.accumulo.AccumuloOperations;
 import mil.nga.giat.geowave.accumulo.BasicAccumuloOperations;
+import mil.nga.giat.geowave.ingest.IngestMain;
 import mil.nga.giat.geowave.store.CloseableIterator;
+import mil.nga.giat.geowave.store.index.IndexType;
 import mil.nga.giat.geowave.store.query.DistributableQuery;
 import mil.nga.giat.geowave.store.query.SpatialQuery;
 import mil.nga.giat.geowave.store.query.SpatialTemporalQuery;
-
 import net.lingala.zip4j.core.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
+
 import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.apache.accumulo.core.client.TableNotFoundException;
@@ -32,6 +34,7 @@ import org.apache.accumulo.minicluster.MiniAccumuloCluster;
 import org.apache.accumulo.minicluster.MiniAccumuloConfig;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.SystemUtils;
 import org.apache.hadoop.fs.FileUtil;
 import org.apache.hadoop.util.VersionInfo;
@@ -77,6 +80,18 @@ abstract public class GeoWaveTestEnvironment
 		return VersionUtil.compareVersions(
 				VersionInfo.getVersion(),
 				"2.2.0") >= 0;
+	}
+
+	protected void testLocalIngest(
+			final IndexType indexType,
+			final String ingestFilePath ) {
+		// ingest a shapefile (geotools type) directly into GeoWave using the
+		// ingest framework's main method and pre-defined commandline arguments
+		LOGGER.warn("Ingesting '" + ingestFilePath + "' - this may take several minutes...");
+		final String[] args = StringUtils.split(
+				"-localingest -t geotools-vector -b " + ingestFilePath + " -z " + zookeeper + " -i " + accumuloInstance + " -u " + accumuloUser + " -p " + accumuloPassword + " -n " + TEST_NAMESPACE + " -dim " + (indexType.equals(IndexType.SPATIAL_VECTOR) ? "spatial" : "spatial-temporal"),
+				' ');
+		IngestMain.main(args);
 	}
 
 	@BeforeClass

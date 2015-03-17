@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import mil.nga.giat.geowave.accumulo.AccumuloDataStore;
 import mil.nga.giat.geowave.accumulo.mapreduce.GeoWaveConfiguratorBase;
 import mil.nga.giat.geowave.accumulo.mapreduce.GeoWaveWritableInputMapper;
@@ -56,6 +55,8 @@ import org.opengis.feature.simple.SimpleFeature;
 
 import com.vividsolutions.jts.geom.Geometry;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 public class BasicMapReduceIT extends
 		MapReduceTestBase
 {
@@ -74,10 +75,12 @@ public class BasicMapReduceIT extends
 			accumuloOperations.deleteAll();
 		}
 		catch (TableNotFoundException | AccumuloSecurityException | AccumuloException ex) {
-			LOGGER.error("Unable to clear accumulo namespace", ex);
+			LOGGER.error(
+					"Unable to clear accumulo namespace",
+					ex);
 			Assert.fail("Index not deleted successfully");
 		}
-		testIngest(
+		testMapReduceIngest(
 				IndexType.SPATIAL_VECTOR,
 				GENERAL_GPX_INPUT_GPX_DIR);
 		final File gpxInputDir = new File(
@@ -145,15 +148,17 @@ public class BasicMapReduceIT extends
 			accumuloOperations.deleteAll();
 		}
 		catch (TableNotFoundException | AccumuloSecurityException | AccumuloException ex) {
-			LOGGER.error("Unable to clear accumulo namespace", ex);
+			LOGGER.error(
+					"Unable to clear accumulo namespace",
+					ex);
 			Assert.fail("Index not deleted successfully");
 		}
 		// ingest the data set into multiple indices and then try several query
 		// methods, by adapter and by index
-		testIngest(
+		testMapReduceIngest(
 				IndexType.SPATIAL_VECTOR,
 				OSM_GPX_INPUT_DIR);
-		testIngest(
+		testMapReduceIngest(
 				IndexType.SPATIAL_TEMPORAL_VECTOR,
 				OSM_GPX_INPUT_DIR);
 		final WritableDataAdapter<SimpleFeature>[] adapters = new GpxIngestPlugin().getDataAdapters(null);
@@ -229,7 +234,7 @@ public class BasicMapReduceIT extends
 				null);
 	}
 
-	@SuppressFBWarnings(value="DM_GC", justification = "Memory usage kept low for travis-ci")
+	@SuppressFBWarnings(value = "DM_GC", justification = "Memory usage kept low for travis-ci")
 	private void runTestJob(
 			final ExpectedResults expectedResults,
 			final DistributableQuery query,

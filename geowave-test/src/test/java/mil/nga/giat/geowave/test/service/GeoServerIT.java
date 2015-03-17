@@ -77,7 +77,9 @@ public class GeoServerIT extends
 			accumuloOperations.deleteAll();
 		}
 		catch (TableNotFoundException | AccumuloSecurityException | AccumuloException ex) {
-			LOGGER.error("Unable to clear accumulo namespace", ex);
+			LOGGER.error(
+					"Unable to clear accumulo namespace",
+					ex);
 			Assert.fail("Index not deleted successfully");
 		}
 		// setup the wfs-requests

@@ -12,7 +12,7 @@ public class ComparisonCellDataReducer extends
 		Reducer<DoubleWritable, LongWritable, LongWritable, DoubleWritable>
 {
 	private long totalKeys = 0;
-	private double inc = 0;
+	private long currentKey = 0;
 
 	private int level;
 
@@ -23,13 +23,16 @@ public class ComparisonCellDataReducer extends
 			final Context context )
 			throws IOException,
 			InterruptedException {
+		// for consistency give all cells with matching weight the same
+		// percentile
+		final double percentile = (currentKey + 1.0) / totalKeys;
 		// calculate weights for this key
 		for (final LongWritable v : values) {
-			inc += (1.0 / totalKeys);
 			context.write(
 					v,
 					new DoubleWritable(
-							inc));
+							percentile));
+			currentKey++;
 		}
 	}
 
