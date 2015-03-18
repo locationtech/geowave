@@ -9,5 +9,6 @@ import org.opengis.feature.simple.SimpleFeature;
 public interface QueryIssuer
 {
 	CloseableIterator<SimpleFeature> query(
-			Index index, Query constraints );
+			Index index,
+			Query constraints );
 }

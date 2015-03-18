@@ -12,7 +12,7 @@ import mil.nga.giat.geowave.store.data.IndexedPersistenceEncoding;
  * This filter will perform de-duplication using the combination of data adapter
  * ID and data ID to determine uniqueness. It can be performed client-side
  * and/or distributed.
- *
+ * 
  */
 public class DedupeFilter implements
 		DistributableQueryFilter

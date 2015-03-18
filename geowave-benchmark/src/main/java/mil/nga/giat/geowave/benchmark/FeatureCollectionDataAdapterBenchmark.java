@@ -356,7 +356,9 @@ public class FeatureCollectionDataAdapterBenchmark
 				featureOperations.deleteAll();
 			}
 			catch (TableNotFoundException | AccumuloSecurityException | AccumuloException e) {
-				log.error("Unable to clear accumulo namespace", e);
+				log.error(
+						"Unable to clear accumulo namespace",
+						e);
 			}
 		}
 		ingestData(
@@ -411,7 +413,9 @@ public class FeatureCollectionDataAdapterBenchmark
 					featureCollectionOperations.deleteAll();
 				}
 				catch (TableNotFoundException | AccumuloSecurityException | AccumuloException e) {
-					log.error("Unable to clear accumulo namespace", e);
+					log.error(
+							"Unable to clear accumulo namespace",
+							e);
 				}
 
 			}
@@ -1022,9 +1026,10 @@ public class FeatureCollectionDataAdapterBenchmark
 			featureOperations.deleteAll();
 		}
 		catch (TableNotFoundException | AccumuloSecurityException | AccumuloException e) {
-			log.error("Unable to clear accumulo namespace", e);
+			log.error(
+					"Unable to clear accumulo namespace",
+					e);
 		}
-
 
 		for (final int batchSize : pointsPerTile) {
 			final BasicAccumuloOperations featureCollectionOperations = new BasicAccumuloOperations(
@@ -1037,7 +1042,9 @@ public class FeatureCollectionDataAdapterBenchmark
 				featureCollectionOperations.deleteAll();
 			}
 			catch (TableNotFoundException | AccumuloSecurityException | AccumuloException e) {
-				log.error("Unable to clear accumulo namespace", e);
+				log.error(
+						"Unable to clear accumulo namespace",
+						e);
 			}
 
 		}

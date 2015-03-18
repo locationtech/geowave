@@ -10,15 +10,15 @@ import javax.media.jai.operator.MosaicDescriptor;
 import com.sun.media.jai.opimage.MosaicRIF;
 
 /**
- *
+ * 
  * this is a workaround because GeoTools resampling will force the source
  * threshold to be 1.0 on Mosaic operations, which will mask all values under
  * 1.0. org.geotools.coverage.processing.operation.Resample2D line 631 in
  * gt-coverage-12.1
- *
+ * 
  * This is mostly the same as MosaicDescriptor with the one key difference being
  * that the default source threshold is Double.MIN_VALUE instead of 1.0
- *
+ * 
  */
 public class SourceThresholdFixMosaicDescriptor extends
 		MosaicDescriptor

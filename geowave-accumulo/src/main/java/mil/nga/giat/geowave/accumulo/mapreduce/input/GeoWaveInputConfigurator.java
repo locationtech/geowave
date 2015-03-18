@@ -30,7 +30,8 @@ public class GeoWaveInputConfigurator extends
 		AUTHORIZATION,
 		MIN_SPLITS,
 		MAX_SPLITS,
-		OUTPUT_WRITABLE // used to inform the input format to output a Writable from the HadoopDataAdapter
+		OUTPUT_WRITABLE // used to inform the input format to output a Writable
+						// from the HadoopDataAdapter
 	}
 
 	private static DistributableQuery getQueryInternal(

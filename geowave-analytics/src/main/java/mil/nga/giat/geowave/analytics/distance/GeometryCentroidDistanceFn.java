@@ -15,8 +15,7 @@ public class GeometryCentroidDistanceFn implements
 
 	private DistanceFn<Coordinate> coordinateDistanceFunction = new CoordinateEuclideanDistanceFn();
 
-	public GeometryCentroidDistanceFn() {
-	}
+	public GeometryCentroidDistanceFn() {}
 
 	public GeometryCentroidDistanceFn(
 			final DistanceFn<Coordinate> coordinateDistanceFunction ) {

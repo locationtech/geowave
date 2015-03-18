@@ -64,9 +64,10 @@ public abstract class GeoWaveWritableOutputReducer<KEYIN, VALUEIN> extends
 			throws IOException,
 			InterruptedException {
 		try {
-			serializationTool = new HadoopWritableSerializationTool(new JobContextAdapterStore(
-					context,
-					GeoWaveInputFormat.getAccumuloOperations(context)));
+			serializationTool = new HadoopWritableSerializationTool(
+					new JobContextAdapterStore(
+							context,
+							GeoWaveInputFormat.getAccumuloOperations(context)));
 		}
 		catch (AccumuloException | AccumuloSecurityException e) {
 			LOGGER.warn(

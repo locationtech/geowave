@@ -220,8 +220,8 @@ public interface AccumuloOperations
 			AccumuloSecurityException;
 
 	/**
-	 * Drops all tables in the instance namespace.  If no tables are found in
-	 * the namespace no operation occurs.
+	 * Drops all tables in the instance namespace. If no tables are found in the
+	 * namespace no operation occurs.
 	 */
 	public void deleteAll()
 			throws TableNotFoundException,

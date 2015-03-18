@@ -9,7 +9,7 @@ import java.util.LinkedList;
  * queue of mutations internally in the case where a single entry converts to
  * multiple mutations). It is generalized to wrap any iterator with a converter
  * to a list of a different type.
- *
+ * 
  * @param <InputType>
  *            The type of the input iterator
  * @param <ConvertedType>
@@ -84,8 +84,7 @@ public class IteratorWrapper<InputType, ConvertedType> implements
 	private synchronized void notifyIterationComplete() {
 		if (lastInput != null) {
 			if (conversionCallback != null) {
-				conversionCallback.notifyIterationComplete(
-						lastInput);
+				conversionCallback.notifyIterationComplete(lastInput);
 			}
 			lastInput = null;
 		}

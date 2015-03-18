@@ -32,8 +32,7 @@ public class PersistentDataset<T>
 	}
 
 	/**
-	 * Add the field ID/value pair to this data set.
-	 * Do not overwrite.
+	 * Add the field ID/value pair to this data set. Do not overwrite.
 	 * 
 	 * @param value
 	 *            the field ID/value pair to add
@@ -45,7 +44,7 @@ public class PersistentDataset<T>
 				value.getId(),
 				value.getValue());
 	}
-	
+
 	/**
 	 * Add or update the field ID/value pair to this data set
 	 * 
@@ -71,7 +70,6 @@ public class PersistentDataset<T>
 			final ByteArrayId fieldId ) {
 		return fieldIdToValueMap.get(fieldId);
 	}
-	
 
 	/**
 	 * Get all of the values from this persistent data set

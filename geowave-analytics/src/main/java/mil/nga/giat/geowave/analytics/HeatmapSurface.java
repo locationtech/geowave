@@ -195,7 +195,12 @@ public class HeatmapSurface
 			int ySize ) {
 		float[][] gridExtract = new float[xSize][ySize];
 		for (int i = 0; i < xSize; i++) {
-			System.arraycopy(grid[xBase + i], yBase, gridExtract[i], 0, ySize);
+			System.arraycopy(
+					grid[xBase + i],
+					yBase,
+					gridExtract[i],
+					0,
+					ySize);
 		}
 		return gridExtract;
 	}

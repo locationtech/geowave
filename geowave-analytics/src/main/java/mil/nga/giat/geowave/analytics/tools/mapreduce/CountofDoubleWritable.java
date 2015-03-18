@@ -8,10 +8,9 @@ import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.io.WritableComparable;
 import org.apache.hadoop.io.WritableComparator;
 
-/** Used  for
- * (1) representation of collections
- * (2) summation in a combiner
- * (3) and finally, for computation of averages
+/**
+ * Used for (1) representation of collections (2) summation in a combiner (3)
+ * and finally, for computation of averages
  */
 public class CountofDoubleWritable implements
 		Writable,
@@ -78,7 +77,7 @@ public class CountofDoubleWritable implements
 
 	@Override
 	public int hashCode() {
-		return (int) Double.doubleToLongBits(value/count);
+		return (int) Double.doubleToLongBits(value / count);
 	}
 
 	@Override

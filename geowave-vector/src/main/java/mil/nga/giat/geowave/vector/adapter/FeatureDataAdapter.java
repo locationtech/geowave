@@ -292,9 +292,9 @@ public class FeatureDataAdapter extends
 		else {
 			basicWriter = (FieldWriter<SimpleFeature, Object>) FieldUtils.getDefaultWriterForClass(bindingClass);
 		}
-        if (basicWriter == null) {
-            LOGGER.error("BasicWriter not found for binding type:" + bindingClass.getName().toString());
-        }
+		if (basicWriter == null) {
+			LOGGER.error("BasicWriter not found for binding type:" + bindingClass.getName().toString());
+		}
 		return fieldVisibilityManagement.createVisibilityWriter(
 				descriptor.getLocalName(),
 				basicWriter,
@@ -559,7 +559,8 @@ public class FeatureDataAdapter extends
 
 	@Override
 	public HadoopWritableSerializer<SimpleFeature, FeatureWritable> createWritableSerializer() {
-		return new FeatureWritableSerializer(this.reprojectedType);
+		return new FeatureWritableSerializer(
+				this.reprojectedType);
 	}
 
 	private class FeatureWritableSerializer implements
@@ -568,11 +569,13 @@ public class FeatureDataAdapter extends
 
 		private final SimpleFeatureType type;
 		private final FeatureWritable writable;
-		FeatureWritableSerializer(SimpleFeatureType type) {
+
+		FeatureWritableSerializer(
+				SimpleFeatureType type ) {
 			this.type = type;
-			writable = new FeatureWritable(type);
+			writable = new FeatureWritable(
+					type);
 		}
-			
 
 		@Override
 		public FeatureWritable toWritable(

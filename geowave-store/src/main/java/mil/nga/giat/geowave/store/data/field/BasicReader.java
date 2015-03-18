@@ -22,7 +22,7 @@ import com.vividsolutions.jts.geom.Geometry;
 
 /**
  * This class contains all of the primitive reader field types supported
- *
+ * 
  */
 public class BasicReader
 {
@@ -191,11 +191,14 @@ public class BasicReader
 			if ((fieldData == null) || (fieldData.length < 5)) {
 				return null;
 			}
-            final ByteBuffer bb = ByteBuffer.wrap(fieldData);
-            final int scale = bb.getInt();
-            final byte[] unscaled = new byte[fieldData.length - 4];
-            bb.get(unscaled);
-            return new BigDecimal(new BigInteger(unscaled), scale);
+			final ByteBuffer bb = ByteBuffer.wrap(fieldData);
+			final int scale = bb.getInt();
+			final byte[] unscaled = new byte[fieldData.length - 4];
+			bb.get(unscaled);
+			return new BigDecimal(
+					new BigInteger(
+							unscaled),
+					scale);
 		}
 
 	}

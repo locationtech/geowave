@@ -25,12 +25,14 @@ public interface InfoService
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/namespaces/{namespace}/indices")
 	public Response getIndices(
-			@PathParam("namespace") String namespace );
+			@PathParam("namespace")
+			String namespace );
 
 	// lists the adapters associated with the given namespace
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/namespaces/{namespace}/adapters")
 	public Response getAdapters(
-			@PathParam("namespace") String namespace );
+			@PathParam("namespace")
+			String namespace );
 }

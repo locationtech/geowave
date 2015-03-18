@@ -34,7 +34,8 @@ public interface GeoserverService
 	@DELETE
 	@Path("/workspaces/{workspace}")
 	public Response deleteWorkspace(
-			@PathParam("workspace") final String workspace );
+			@PathParam("workspace")
+			final String workspace );
 
 	@GET
 	@Path("/styles")
@@ -45,7 +46,8 @@ public interface GeoserverService
 	@Path("/styles/{styleName}")
 	@Produces(MediaType.APPLICATION_OCTET_STREAM)
 	public Response getStyle(
-			@PathParam("styleName") final String styleName );
+			@PathParam("styleName")
+			final String styleName );
 
 	@POST
 	@Path("/styles")
@@ -57,20 +59,26 @@ public interface GeoserverService
 	@DELETE
 	@Path("/styles/{styleName}")
 	public Response deleteStyle(
-			@PathParam("styleName") final String styleName );
+			@PathParam("styleName")
+			final String styleName );
 
 	@GET
 	@Path("/datastores")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getDatastores(
-			@DefaultValue("") @QueryParam("workspace") String customWorkspace );
+			@DefaultValue("")
+			@QueryParam("workspace")
+			String customWorkspace );
 
 	@GET
 	@Path("/datastores/{datastoreName}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getDatastore(
-			@PathParam("datastoreName") final String datastoreName,
-			@DefaultValue("") @QueryParam("workspace") String customWorkspace );
+			@PathParam("datastoreName")
+			final String datastoreName,
+			@DefaultValue("")
+			@QueryParam("workspace")
+			String customWorkspace );
 
 	@POST
 	@Path("/datastores")
@@ -82,8 +90,11 @@ public interface GeoserverService
 	@DELETE
 	@Path("/datastores/{datastoreName}")
 	public Response deleteDatastore(
-			@PathParam("datastoreName") final String datastoreName,
-			@DefaultValue("") @QueryParam("workspace") String customWorkspace );
+			@PathParam("datastoreName")
+			final String datastoreName,
+			@DefaultValue("")
+			@QueryParam("workspace")
+			String customWorkspace );
 
 	@GET
 	@Path("/layers")
@@ -94,7 +105,8 @@ public interface GeoserverService
 	@Path("/layers/{layerName}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getLayer(
-			@PathParam("layerName") final String layerName );
+			@PathParam("layerName")
+			final String layerName );
 
 	@POST
 	@Path("/layers")
@@ -106,6 +118,7 @@ public interface GeoserverService
 	@DELETE
 	@Path("/layers/{layer}")
 	public Response deleteLayer(
-			@PathParam("layer") final String layerName );
+			@PathParam("layer")
+			final String layerName );
 
 }

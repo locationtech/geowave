@@ -19,7 +19,7 @@ import org.geotools.feature.DefaultFeatureCollection;
  * This class handles the internal responsibility of persisting time ranges
  * based on a start time attribute and end time attribute to and from a GeoWave
  * common index field for SimpleFeature data.
- *
+ * 
  */
 public class FeatureCollectionTimeRangeHandler implements
 		IndexFieldHandler<DefaultFeatureCollection, ArrayWrapper<Time>, Object>

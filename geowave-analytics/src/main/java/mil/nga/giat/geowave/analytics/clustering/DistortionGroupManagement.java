@@ -27,7 +27,8 @@ import org.slf4j.LoggerFactory;
  * with a different value k.
  * 
  * Choose the appropriate batch for each group. Then change the batch identifier
- * for group centroids to a final provided single batch identifier ( parent batch ).
+ * for group centroids to a final provided single batch identifier ( parent
+ * batch ).
  * 
  */
 public class DistortionGroupManagement
@@ -38,8 +39,10 @@ public class DistortionGroupManagement
 	/**
 	 * 
 	 * @param ops
-	 * @param distortationTableName the name of the table holding the distortions
-	 * @param parentBatchId the batch id to associate with the centroids for each group
+	 * @param distortationTableName
+	 *            the name of the table holding the distortions
+	 * @param parentBatchId
+	 *            the batch id to associate with the centroids for each group
 	 * @return
 	 */
 	public static <T> int retainBestGroups(
@@ -49,7 +52,7 @@ public class DistortionGroupManagement
 			final String indexId,
 			final String distortationTableName,
 			final String parentBatchId,
-			final int level) {
+			final int level ) {
 
 		try {
 			final Scanner scanner = ops.createScanner(distortationTableName);
@@ -76,7 +79,7 @@ public class DistortionGroupManagement
 						distortion);
 
 			}
-		
+
 			scanner.clearScanIterators();
 			scanner.close();
 
@@ -87,11 +90,11 @@ public class DistortionGroupManagement
 					indexId,
 					parentBatchId,
 					level);
-			
+
 			for (final DistortionGroup grp : groupDistortions.values()) {
 				final int optimalK = grp.bestCount();
-				LOGGER.info("Batch: " +parentBatchId + "; Group: " + grp.groupID + "; Optimal Cluster Size: " + optimalK);
-				final String batchId = parentBatchId + "_" + optimalK;			
+				LOGGER.info("Batch: " + parentBatchId + "; Group: " + grp.groupID + "; Optimal Cluster Size: " + optimalK);
+				final String batchId = parentBatchId + "_" + optimalK;
 				centroidManager.transferBatch(
 						batchId,
 						grp.getGroupID());

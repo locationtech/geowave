@@ -23,8 +23,7 @@ public abstract class EmptyDimensionExtractor<T> implements
 	@Override
 	public abstract Geometry getGeometry(
 			T anObject );
-	
-	
+
 	@Override
 	public abstract String getGroupID(
 			T anObject );

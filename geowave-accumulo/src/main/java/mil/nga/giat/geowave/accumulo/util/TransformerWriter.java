@@ -15,9 +15,10 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.apache.log4j.Logger;
 
 /**
- *  Unlike the transform iterator, this transform works on the client side deleting to original cell and adding a new cell.
- *  The transformation is carried out by a {@link Transformer}.
- *
+ * Unlike the transform iterator, this transform works on the client side
+ * deleting to original cell and adding a new cell. The transformation is
+ * carried out by a {@link Transformer}.
+ * 
  */
 public class TransformerWriter
 {
@@ -63,7 +64,9 @@ public class TransformerWriter
 							}
 							else if (rawIt.hasNext()) {
 								Entry<Key, Value> entry = rawIt.next();
-								Entry<Key, Value> newEntry = transformer.transform(Pair.of(entry.getKey(),entry.getValue()));
+								Entry<Key, Value> newEntry = transformer.transform(Pair.of(
+										entry.getKey(),
+										entry.getValue()));
 
 								Mutation mutation = new Mutation(
 										entry.getKey().getRow());
@@ -72,12 +75,12 @@ public class TransformerWriter
 										entry.getKey().getColumnQualifier(),
 										entry.getKey().getColumnVisibilityParsed(),
 										entry.getKey().getTimestamp());
-								
+
 								pendingOutput.add(mutation);
-								
+
 								mutation = new Mutation(
 										newEntry.getKey().getRow());
-								
+
 								mutation.put(
 										newEntry.getKey().getColumnFamily(),
 										newEntry.getKey().getColumnQualifier(),

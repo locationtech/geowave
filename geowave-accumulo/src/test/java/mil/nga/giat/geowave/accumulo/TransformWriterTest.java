@@ -102,9 +102,8 @@ public class TransformWriterTest
 					entry.getKey().getRow().getBytes());
 			result.put(
 					rowID,
-					Integer.valueOf(
-							1 + (result.containsKey(rowID) ? result.get(
-									rowID).intValue() : 0)));
+					Integer.valueOf(1 + (result.containsKey(rowID) ? result.get(
+							rowID).intValue() : 0)));
 		}
 		int expectedCount = 0;
 		for (Expect e : expectations) {

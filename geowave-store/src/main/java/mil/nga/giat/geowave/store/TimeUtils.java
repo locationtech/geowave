@@ -24,14 +24,16 @@ public class TimeUtils
 	 *            The calendar object
 	 * @return The time in milliseconds
 	 */
-	public static long calendarToGMTMillis(Calendar cal ) {
-		// get Date object representing this Calendar's time value, millisecond offset from the Epoch, January 1, 1970 00:00:00.000 GMT (Gregorian)
+	public static long calendarToGMTMillis(
+			Calendar cal ) {
+		// get Date object representing this Calendar's time value, millisecond
+		// offset from the Epoch, January 1, 1970 00:00:00.000 GMT (Gregorian)
 		Date date = cal.getTime();
-		// Returns the number of milliseconds since January 1, 1970, 00:00:00 GMT represented by this Date object.
+		// Returns the number of milliseconds since January 1, 1970, 00:00:00
+		// GMT represented by this Date object.
 		long time = date.getTime();
 		return time;
 	}
-
 
 	/**
 	 * Get the time in millis of this temporal object (either numeric
@@ -109,8 +111,7 @@ public class TimeUtils
 					longVal);
 		}
 		else if (Long.class.isAssignableFrom(bindingClass)) {
-			return Long.valueOf(
-					longVal);
+			return Long.valueOf(longVal);
 		}
 		LOGGER.warn("Numeric value '" + longVal + "' of type '" + bindingClass + "' is not of expected temporal type");
 		return null;

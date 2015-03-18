@@ -22,11 +22,12 @@ public class GaussianFilter
 		0.061,
 		0.006
 	};
-//	private static double[] minorSmoothingGaussianKernel = new double[] {
-//		0.2186801,
-//		0.531923041,
-//		0.2186801
-//	};
+
+	// private static double[] minorSmoothingGaussianKernel = new double[] {
+	// 0.2186801,
+	// 0.531923041,
+	// 0.2186801
+	// };
 
 	private static class ValueRange
 	{
@@ -57,6 +58,7 @@ public class GaussianFilter
 				-90,
 				90)
 	};
+
 	public static void incrementPt(
 			final double lat,
 			final double lon,
@@ -73,6 +75,7 @@ public class GaussianFilter
 				numYPosts,
 				1);
 	}
+
 	public static void incrementPt(
 			final double lat,
 			final double lon,

@@ -197,14 +197,14 @@ public class GeoWaveRasterReader extends
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param source
 	 *            The source object.
 	 * @throws IOException
 	 * @throws AccumuloSecurityException
 	 * @throws AccumuloException
 	 * @throws UnsupportedEncodingException
-	 *
+	 * 
 	 */
 	public GeoWaveRasterReader(
 			final Object source )
@@ -603,8 +603,7 @@ public class GeoWaveRasterReader extends
 			}
 		}
 		else {
-			imageChoice = Integer.valueOf(
-					0);
+			imageChoice = Integer.valueOf(0);
 		}
 
 		final double[][] resolutionLevels = getResolutionLevels(coverageName);
@@ -736,7 +735,7 @@ public class GeoWaveRasterReader extends
 	/**
 	 * transforms (if necessary) the requested envelope into the CRS used by
 	 * this reader.
-	 *
+	 * 
 	 * @throws DataSourceException
 	 */
 	private static void transformRequestEnvelope(

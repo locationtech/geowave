@@ -58,32 +58,35 @@ public class GpxUtils
 	public static final String GPX_TRACK_FEATURE = "gpxtrack";
 	public static final String GPX_WAYPOINT_FEATURE = "gpxwaypoint";
 
-	private static final ThreadLocal<DateFormat> dateFormatSeconds = new ThreadLocal<DateFormat>(){
+	private static final ThreadLocal<DateFormat> dateFormatSeconds = new ThreadLocal<DateFormat>() {
 		@Override
-		protected DateFormat initialValue(){
+		protected DateFormat initialValue() {
 			return new SimpleDateFormat(
 					"yyyy-MM-dd'T'HH:mm:ss'Z'");
 		}
 	};
 
-	private static final ThreadLocal<DateFormat> dateFormatMillis = new ThreadLocal<DateFormat>(){
+	private static final ThreadLocal<DateFormat> dateFormatMillis = new ThreadLocal<DateFormat>() {
 		@Override
-		protected DateFormat initialValue(){
+		protected DateFormat initialValue() {
 			return new SimpleDateFormat(
 					"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 		}
 	};
 
-	public static Date parseDateSeconds(String source)
+	public static Date parseDateSeconds(
+			String source )
 			throws ParseException {
-		return dateFormatSeconds.get().parse(source);
+		return dateFormatSeconds.get().parse(
+				source);
 	}
 
-	public static Date parseDateMillis(String source)
+	public static Date parseDateMillis(
+			String source )
 			throws ParseException {
-		return dateFormatMillis.get().parse(source);
+		return dateFormatMillis.get().parse(
+				source);
 	}
-
 
 	public static Map<Long, GpxTrack> parseOsmMetadata(
 			final File metadataFile )
@@ -117,13 +120,13 @@ public class GpxUtils
 								case "timestamp": {
 									try {
 										gt.setTimestamp(parseDateSeconds(
-														a.getValue()).getTime());
+												a.getValue()).getTime());
 
 									}
 									catch (final Exception t) {
 										try {
 											gt.setTimestamp(parseDateMillis(
-															a.getValue()).getTime());
+													a.getValue()).getTime());
 										}
 										catch (final Exception t2) {
 											LOGGER.warn(

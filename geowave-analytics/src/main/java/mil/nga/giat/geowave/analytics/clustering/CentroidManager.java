@@ -52,7 +52,7 @@ public interface CentroidManager<T>
 			final String batchID,
 			final String groupID )
 			throws IOException;
-	
+
 	public int processForAllGroups(
 			CentroidProcessingFn<T> fn )
 			throws IOException;

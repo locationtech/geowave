@@ -8,8 +8,8 @@ import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.store.CloseableIterator;
 
 /**
- * This is a simple HashMap based in-memory implementation of the AdapterStore and
- * can be useful if it is undesirable to persist and query objects within
+ * This is a simple HashMap based in-memory implementation of the AdapterStore
+ * and can be useful if it is undesirable to persist and query objects within
  * another storage mechanism such as an Accumulo table.
  */
 public class MemoryAdapterStore implements
@@ -49,7 +49,8 @@ public class MemoryAdapterStore implements
 
 	@Override
 	public CloseableIterator<DataAdapter<?>> getAdapters() {
-		return new CloseableIterator.Wrapper<DataAdapter<?>>(new ArrayList<DataAdapter<?>>(
-				adapterMap.values()).iterator());
+		return new CloseableIterator.Wrapper<DataAdapter<?>>(
+				new ArrayList<DataAdapter<?>>(
+						adapterMap.values()).iterator());
 	}
 }

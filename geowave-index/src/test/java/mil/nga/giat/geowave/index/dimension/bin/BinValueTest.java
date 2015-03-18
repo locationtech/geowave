@@ -10,13 +10,15 @@ public class BinValueTest
 
 	final double BIN_VALUE = 100;
 	private double DELTA = 1e-15;
-	
+
 	@Test
 	public void testBinValue() {
 
 		final int binIdValue = 2;
-		final byte[] binID = ByteBuffer.allocate(4).putInt(binIdValue).array();
-		
+		final byte[] binID = ByteBuffer.allocate(
+				4).putInt(
+				binIdValue).array();
+
 		BinValue binValue = new BinValue(
 				binID,
 				BIN_VALUE);

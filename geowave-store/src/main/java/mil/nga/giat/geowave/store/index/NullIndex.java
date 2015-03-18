@@ -11,8 +11,8 @@ import mil.nga.giat.geowave.store.dimension.DimensionField;
  * table named with the provided ID and primarily useful to access the data by
  * row ID. Because it has no dimensions, range scans will result in full table
  * scans.
- *
- *
+ * 
+ * 
  */
 public class NullIndex extends
 		Index

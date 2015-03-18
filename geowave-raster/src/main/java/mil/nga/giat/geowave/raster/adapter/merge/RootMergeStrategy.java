@@ -29,8 +29,8 @@ import org.apache.log4j.Logger;
 import org.opengis.coverage.grid.GridCoverage;
 
 /**
- *
- *
+ * 
+ * 
  * @param <T>
  */
 public class RootMergeStrategy<T extends Persistable> implements

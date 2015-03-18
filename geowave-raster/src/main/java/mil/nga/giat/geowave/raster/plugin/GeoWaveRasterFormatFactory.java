@@ -6,7 +6,8 @@ import java.util.Map;
 import org.geotools.coverage.grid.io.AbstractGridFormat;
 import org.geotools.coverage.grid.io.GridFormatFactorySpi;
 
-public class GeoWaveRasterFormatFactory implements GridFormatFactorySpi
+public class GeoWaveRasterFormatFactory implements
+		GridFormatFactorySpi
 {
 
 	@Override

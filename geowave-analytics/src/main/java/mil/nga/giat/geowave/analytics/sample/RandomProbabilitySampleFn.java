@@ -11,7 +11,7 @@ public class RandomProbabilitySampleFn implements
 	public double getProbability(
 			final double weight,
 			final double normalizingConstant,
-			final int sampleSize) {
+			final int sampleSize ) {
 		return Math.log(random.nextDouble()) / (weight / normalizingConstant);
 	}
 

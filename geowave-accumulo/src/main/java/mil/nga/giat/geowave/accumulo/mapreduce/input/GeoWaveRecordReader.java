@@ -38,10 +38,6 @@ import org.apache.log4j.Logger;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Iterators;
 
-
-
-
-
 /**
  * This class is used by the GeoWaveInputFormat to read data from an Accumulo
  * data store.

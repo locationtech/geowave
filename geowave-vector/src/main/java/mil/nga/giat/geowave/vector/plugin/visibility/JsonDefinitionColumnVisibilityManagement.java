@@ -28,7 +28,7 @@ import org.codehaus.jackson.map.ObjectMapper;
  * general than another, as shown in the example. The expression ".*" matches
  * all attributes. The more specific expression "geo.*" must be ordered first.
  * 
- *
+ * 
  * 
  */
 public class JsonDefinitionColumnVisibilityManagement<T> extends

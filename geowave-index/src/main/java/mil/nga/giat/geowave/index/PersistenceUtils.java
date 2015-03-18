@@ -11,7 +11,7 @@ import org.apache.log4j.Logger;
 /**
  * A set of convenience methods for serializing and deserializing persistable
  * objects
- *
+ * 
  */
 public class PersistenceUtils
 {

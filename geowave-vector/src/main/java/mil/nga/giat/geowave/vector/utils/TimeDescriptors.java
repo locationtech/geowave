@@ -9,7 +9,7 @@ import org.opengis.feature.type.AttributeDescriptor;
 /**
  * 
  * Describes temporally indexed attributes associated with a feature type.
- *
+ * 
  */
 public class TimeDescriptors
 {
@@ -71,7 +71,7 @@ public class TimeDescriptors
 	public boolean hasTime() {
 		return time != null || (startRange != null && endRange != null);
 	}
-	
+
 	public byte[] toBinary() {
 		final StringBuffer buffer = new StringBuffer();
 		if (time != null) {

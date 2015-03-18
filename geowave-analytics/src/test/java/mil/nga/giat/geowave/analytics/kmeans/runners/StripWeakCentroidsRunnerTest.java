@@ -156,10 +156,10 @@ public class StripWeakCentroidsRunnerTest
 							groupID);
 					return testSet;
 				}
-				
+
 				@Override
 				public List<AnalyticItemWrapper<Long>> getCentroidsForGroup(
-						final String  batchID,
+						final String batchID,
 						final String groupID )
 						throws IOException {
 					Assert.assertEquals(
@@ -280,10 +280,10 @@ public class StripWeakCentroidsRunnerTest
 							groupID);
 					return testSet;
 				}
-				
+
 				@Override
 				public List<AnalyticItemWrapper<Long>> getCentroidsForGroup(
-						final String  batchID,
+						final String batchID,
 						final String groupID )
 						throws IOException {
 					Assert.assertEquals(

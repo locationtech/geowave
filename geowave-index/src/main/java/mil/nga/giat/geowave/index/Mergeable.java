@@ -1,6 +1,5 @@
 package mil.nga.giat.geowave.index;
 
-
 public interface Mergeable extends
 		Persistable
 {

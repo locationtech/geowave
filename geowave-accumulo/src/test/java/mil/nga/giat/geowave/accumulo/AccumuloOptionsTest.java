@@ -393,7 +393,9 @@ public class AccumuloOptionsTest
 			accumuloOperations.deleteAll();
 		}
 		catch (TableNotFoundException | AccumuloSecurityException | AccumuloException e) {
-			LOGGER.error("Unable to clear accumulo namespace", e);
+			LOGGER.error(
+					"Unable to clear accumulo namespace",
+					e);
 			Assert.fail("Unable to clear accumulo namespace");
 		}
 
@@ -491,8 +493,8 @@ public class AccumuloOptionsTest
 				index,
 				new ByteArrayId(
 						"test_pt_0"),
-						adapter0.getAdapterId());
-		
+				adapter0.getAdapterId());
+
 		final ByteArrayId rowId1 = mockDataStore.ingest(
 				adapter1,
 				index,
@@ -507,7 +509,7 @@ public class AccumuloOptionsTest
 				index,
 				new ByteArrayId(
 						"test_pt_1"),
-						adapter1.getAdapterId());
+				adapter1.getAdapterId());
 
 		// this should return our data correctly
 		assertEquals(
@@ -515,7 +517,9 @@ public class AccumuloOptionsTest
 				geom1.id);
 
 		// delete entry by data id & adapter id
-		mockDataStore.deleteEntries(adapter0, index);
+		mockDataStore.deleteEntries(
+				adapter0,
+				index);
 
 		geom0 = mockDataStore.getEntry(
 				index,
@@ -527,7 +531,7 @@ public class AccumuloOptionsTest
 		assertEquals(
 				null,
 				geom0);
-		
+
 		geom1 = mockDataStore.getEntry(
 				index,
 				new ByteArrayId(
@@ -698,8 +702,10 @@ public class AccumuloOptionsTest
 			};
 		}
 	}
-	
-	public static class AnotherAdapter extends TestGeometryAdapter {
+
+	public static class AnotherAdapter extends
+			TestGeometryAdapter
+	{
 		@Override
 		public ByteArrayId getAdapterId() {
 			return new ByteArrayId(

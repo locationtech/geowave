@@ -22,20 +22,20 @@ public class GeoWaveRasterConfig
 	protected static enum ConfigParameter {
 		ZOOKEEPER_URLS(
 				"zookeeperUrls"),
-				INSTANCE_ID(
-						"instanceId"),
-						USERNAME(
-								"username"),
-								PASSWORD(
-										"password"),
-										NAMESPACE(
-												"namespace"),
-												// the following two are optional parameters that will override the
-												// behavior of tile mosaicing that is already set within each adapter
-												INTERPOLATION(
-														"interpolationOverride"),
-														EQUALIZE_HISTOGRAM(
-																"equalizeHistogramOverride");
+		INSTANCE_ID(
+				"instanceId"),
+		USERNAME(
+				"username"),
+		PASSWORD(
+				"password"),
+		NAMESPACE(
+				"namespace"),
+		// the following two are optional parameters that will override the
+		// behavior of tile mosaicing that is already set within each adapter
+		INTERPOLATION(
+				"interpolationOverride"),
+		EQUALIZE_HISTOGRAM(
+				"equalizeHistogramOverride");
 		private String configName;
 
 		private ConfigParameter(
@@ -103,7 +103,7 @@ public class GeoWaveRasterConfig
 
 	public static GeoWaveRasterConfig readFrom(
 			final URL xmlURL )
-					throws Exception {
+			throws Exception {
 		GeoWaveRasterConfig result = CONFIG_CACHE.get(xmlURL.toString());
 
 		if (result != null) {
@@ -239,8 +239,7 @@ public class GeoWaveRasterConfig
 			return null;
 		}
 
-		return Integer.valueOf(
-				n.getTextContent());
+		return Integer.valueOf(n.getTextContent());
 	}
 
 	static private Node getNodeByName(

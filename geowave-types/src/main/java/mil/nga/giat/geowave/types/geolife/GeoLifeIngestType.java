@@ -9,9 +9,9 @@ import mil.nga.giat.geowave.ingest.local.LocalFileIngestPlugin;
 import org.opengis.feature.simple.SimpleFeature;
 
 /**
- * This represents an ingest type plugin provider for GeoLife data. It will support
- * ingesting directly from a local file system or staging data from a local
- * files system and ingesting into GeoWave using a map-reduce job.
+ * This represents an ingest type plugin provider for GeoLife data. It will
+ * support ingesting directly from a local file system or staging data from a
+ * local files system and ingesting into GeoWave using a map-reduce job.
  */
 public class GeoLifeIngestType implements
 		IngestTypePluginProviderSpi<HdfsFile, SimpleFeature>

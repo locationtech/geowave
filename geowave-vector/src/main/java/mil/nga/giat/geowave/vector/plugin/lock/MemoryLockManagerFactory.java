@@ -2,7 +2,6 @@ package mil.nga.giat.geowave.vector.plugin.lock;
 
 import mil.nga.giat.geowave.vector.plugin.GeoWavePluginConfig;
 
-
 public class MemoryLockManagerFactory implements
 		LockingManagementFactory
 {

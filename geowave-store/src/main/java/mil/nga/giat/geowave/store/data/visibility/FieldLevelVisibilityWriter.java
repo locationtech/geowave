@@ -8,7 +8,7 @@ import mil.nga.giat.geowave.store.data.field.FieldWriter;
  * Wrapper for a writer to extract the overriding column level visibility for
  * each specific attribute.
  * 
- *
+ * 
  * 
  * @param <T>
  * @param <CommonIndexValue>

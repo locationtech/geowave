@@ -71,8 +71,7 @@ public class FeatureDataAdapterTest
 
 		newFeature.setAttribute(
 				"pop",
-				Long.valueOf(
-						100));
+				Long.valueOf(100));
 		newFeature.setAttribute(
 				"pid",
 				UUID.randomUUID().toString());
@@ -309,8 +308,7 @@ public class FeatureDataAdapterTest
 
 		newFeature.setAttribute(
 				"pop",
-				Long.valueOf(
-						100));
+				Long.valueOf(100));
 		newFeature.setAttribute(
 				"pid",
 				UUID.randomUUID().toString());

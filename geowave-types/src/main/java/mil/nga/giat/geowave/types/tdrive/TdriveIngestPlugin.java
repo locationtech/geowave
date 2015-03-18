@@ -135,7 +135,8 @@ public class TdriveIngestPlugin implements
 		try {
 			fr = new BufferedReader(
 					new InputStreamReader(
-							new FileInputStream(input),
+							new FileInputStream(
+									input),
 							StringUtils.UTF8_CHAR_SET));
 			br = new BufferedReader(
 					fr);

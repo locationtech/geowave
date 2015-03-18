@@ -1,9 +1,9 @@
 package mil.nga.giat.geowave.index.dimension.bin;
 
 /**
- * The Bin Range class is used to define the specific bins or ranges
- * of a particular Binning Strategy.
- *
+ * The Bin Range class is used to define the specific bins or ranges of a
+ * particular Binning Strategy.
+ * 
  */
 public class BinRange
 {
@@ -13,11 +13,13 @@ public class BinRange
 	private final boolean fullExtent;
 
 	/**
-	 * Constructor used to create a new BinRange object with a 
-	 * only a minimum and maximum value.
+	 * Constructor used to create a new BinRange object with a only a minimum
+	 * and maximum value.
 	 * 
-	 * @param normalizedMin  the lower bounds of the bin
-	 * @param normalizedMax  the upper bounds of the bin
+	 * @param normalizedMin
+	 *            the lower bounds of the bin
+	 * @param normalizedMax
+	 *            the upper bounds of the bin
 	 */
 	public BinRange(
 			final double normalizedMin,
@@ -34,10 +36,14 @@ public class BinRange
 	 * 
 	 * has a minimum and maximum value.
 	 * 
-	 * @param binId  a unique ID associated with the bin
-	 * @param normalizedMin  the lower bounds of the bin
-	 * @param normalizedMax  the upper bounds of the bin
-	 * @param fullExtent  flag to indicate whether this is the full bin
+	 * @param binId
+	 *            a unique ID associated with the bin
+	 * @param normalizedMin
+	 *            the lower bounds of the bin
+	 * @param normalizedMax
+	 *            the upper bounds of the bin
+	 * @param fullExtent
+	 *            flag to indicate whether this is the full bin
 	 */
 	public BinRange(
 			final byte[] binId,
@@ -68,7 +74,7 @@ public class BinRange
 
 	/**
 	 * 
-	 * @return  the upper bounds of this bin
+	 * @return the upper bounds of this bin
 	 */
 	public double getNormalizedMax() {
 		return normalizedMax;
@@ -76,7 +82,7 @@ public class BinRange
 
 	/**
 	 * 
-	 * @return  flag to indicate whether this is the entire bin extent
+	 * @return flag to indicate whether this is the entire bin extent
 	 */
 	public boolean isFullExtent() {
 		return fullExtent;

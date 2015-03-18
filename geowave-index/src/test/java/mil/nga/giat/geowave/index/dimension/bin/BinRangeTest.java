@@ -36,7 +36,9 @@ public class BinRangeTest
 	public void testBinRangeFullExtent() {
 
 		final int binIdValue = 120;
-		final byte[] binID = ByteBuffer.allocate(4).putInt(binIdValue).array();
+		final byte[] binID = ByteBuffer.allocate(
+				4).putInt(
+				binIdValue).array();
 		final boolean fullExtent = true;
 
 		BinRange binRange = new BinRange(

@@ -59,19 +59,29 @@ public class TemporalRange
 		final double ret = timeRange.getMax();
 		return (((st < rst) && (et > rst)) || ((st < ret) && (et > ret)) || ((st < rst) && (et > ret)));
 	}
-	
-	public TemporalRange intersect(TemporalRange range) {
+
+	public TemporalRange intersect(
+			TemporalRange range ) {
 		Date start = startTime.after(range.getStartTime()) ? startTime : range.getStartTime();
-		Date end =  endTime.before(range.getEndTime()) ? endTime : range.getEndTime();
-		if (start.after(end)) return new TemporalRange(START_TIME, START_TIME);
-		return new TemporalRange(start, end);
+		Date end = endTime.before(range.getEndTime()) ? endTime : range.getEndTime();
+		if (start.after(end)) return new TemporalRange(
+				START_TIME,
+				START_TIME);
+		return new TemporalRange(
+				start,
+				end);
 	}
-	
-	public TemporalRange union(TemporalRange range) {
+
+	public TemporalRange union(
+			TemporalRange range ) {
 		Date start = startTime.before(range.getStartTime()) ? startTime : range.getStartTime();
-		Date end =  endTime.after(range.getEndTime()) ? endTime : range.getEndTime();
-		if (start.after(end)) return new TemporalRange(START_TIME, START_TIME);
-		return new TemporalRange(start, end);
+		Date end = endTime.after(range.getEndTime()) ? endTime : range.getEndTime();
+		if (start.after(end)) return new TemporalRange(
+				START_TIME,
+				START_TIME);
+		return new TemporalRange(
+				start,
+				end);
 	}
 
 	public byte[] toBinary() {

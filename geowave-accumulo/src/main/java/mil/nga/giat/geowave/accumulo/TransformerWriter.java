@@ -56,7 +56,9 @@ public class TransformerWriter
 							else if (rawIt.hasNext()) {
 								while (rawIt.hasNext()) {
 									Entry<Key, Value> entry = rawIt.next();
-									addEntry(lastEntries,entry);
+									addEntry(
+											lastEntries,
+											entry);
 									byte[] currentRowID = entry.getKey().getRow().getBytes();
 									if (rowID == null || Arrays.equals(
 											rowID,

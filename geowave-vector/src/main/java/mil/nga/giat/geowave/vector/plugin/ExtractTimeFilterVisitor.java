@@ -935,8 +935,7 @@ public class ExtractTimeFilterVisitor extends
 			return new ParameterTimeConstraint(
 					new TemporalRange(
 							TemporalRange.START_TIME,
-							leftResult.getStartRange().getStartTime()
-							),
+							leftResult.getStartRange().getStartTime()),
 					rightResult.getName());
 	}
 
@@ -964,7 +963,7 @@ public class ExtractTimeFilterVisitor extends
 			return new ParameterTimeConstraint(
 					new TemporalRange(
 							leftResult.getStartRange().getStartTime(),
-							TemporalRange.END_TIME),							
+							TemporalRange.END_TIME),
 					rightResult.getName());
 	}
 
@@ -992,7 +991,7 @@ public class ExtractTimeFilterVisitor extends
 			return new ParameterTimeConstraint(
 					new TemporalRange(
 							leftResult.getStartRange().getStartTime(),
-							TemporalRange.END_TIME),	
+							TemporalRange.END_TIME),
 					rightResult.getName());
 	}
 

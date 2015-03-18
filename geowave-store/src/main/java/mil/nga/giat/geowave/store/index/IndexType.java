@@ -9,7 +9,7 @@ import mil.nga.giat.geowave.index.NumericIndexStrategyFactory.DataType;
  * generally reasonable default configuration). Any other index can be
  * instantiated and used outside of this enumerated list. This is merely
  * provided for convenience.
- *
+ * 
  */
 public enum IndexType {
 	SPATIAL_VECTOR(

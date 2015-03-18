@@ -92,7 +92,7 @@ public class GeoWaveConfiguratorBase
 	public static String enumToConfKey(
 			final Class<?> implementingClass,
 			final Enum<?> e ) {
-		String s =implementingClass.getSimpleName() + "." + e.getDeclaringClass().getSimpleName() + "." + org.apache.hadoop.util.StringUtils.camelize(e.name().toLowerCase());
+		String s = implementingClass.getSimpleName() + "." + e.getDeclaringClass().getSimpleName() + "." + org.apache.hadoop.util.StringUtils.camelize(e.name().toLowerCase());
 		return s;
 	}
 
@@ -499,11 +499,11 @@ public class GeoWaveConfiguratorBase
 					e);
 		}
 	}
-	
+
 	public static void setRemoteInvocationParams(
 			final String hdfsHostPort,
 			final String jobTrackerOrResourceManagerHostPort,
-			final Configuration conf  ) {
+			final Configuration conf ) {
 		conf.set(
 				"fs.defaultFS",
 				hdfsHostPort);

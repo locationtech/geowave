@@ -44,7 +44,8 @@ public class FeatureSerializer extends
 			final Kryo arg0,
 			final Output arg1,
 			final SimpleFeature arg2 ) {
-		final FeatureWritable fw = new FeatureWritable(arg2.getFeatureType());
+		final FeatureWritable fw = new FeatureWritable(
+				arg2.getFeatureType());
 		fw.setFeature(arg2);
 		final ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		try (DataOutputStream os = new DataOutputStream(

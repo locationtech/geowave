@@ -44,7 +44,7 @@ import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.Point;
 
 public class GeoWaveFeatureCollectionIT extends
-GeoWaveTestEnvironment
+		GeoWaveTestEnvironment
 {
 	private final static Logger log = Logger.getLogger(GeoWaveFeatureCollectionIT.class);
 
@@ -73,8 +73,8 @@ GeoWaveTestEnvironment
 
 	// min and max width/height of a collection
 	private final double[] collMinMaxSize = new double[] {
-			0.5,
-			1.0
+		0.5,
+		1.0
 	};
 
 	private final static int numThreads = 8;
@@ -101,8 +101,8 @@ GeoWaveTestEnvironment
 		// world sized bounding box
 		worldBBox = createBoundingBox(
 				new double[] {
-						0.0,
-						0.0
+					0.0,
+					0.0
 				},
 				360.0,
 				180.0);
@@ -219,10 +219,10 @@ GeoWaveTestEnvironment
 	private Map<String, SimpleFeature> ingestData(
 			final AccumuloIndexWriter writer,
 			final WritableDataAdapter<DefaultFeatureCollection> adapter )
-					throws AccumuloException,
-					AccumuloSecurityException,
-					IOException,
-					TableNotFoundException {
+			throws AccumuloException,
+			AccumuloSecurityException,
+			IOException,
+			TableNotFoundException {
 		final Map<String, SimpleFeature> ingestedFeatures = new HashMap<String, SimpleFeature>();
 
 		final Random rand = new Random(
@@ -282,12 +282,12 @@ GeoWaveTestEnvironment
 							Math.max(
 									-180.0,
 									coord[0]),
-									180.0);
+							180.0);
 					coord[1] = Math.min(
 							Math.max(
 									-90.0,
 									coord[1]),
-									90.0);
+							90.0);
 
 					final Point point = geometryFactory.createPoint(new Coordinate(
 							coord[0],
@@ -381,7 +381,7 @@ GeoWaveTestEnvironment
 			final AccumuloDataStore featureCollectionDataStore,
 			final FeatureCollectionDataAdapter featureCollectionAdapter,
 			final Geometry geom )
-					throws IOException {
+			throws IOException {
 
 		final List<SimpleFeature> returnedFeatures = new ArrayList<SimpleFeature>();
 
@@ -440,7 +440,7 @@ GeoWaveTestEnvironment
 		for (final AttributeDescriptor attrib : TYPE.getAttributeDescriptors()) {
 			if ((f1.getAttribute(attrib.getName()) == null) || (f2.getAttribute(attrib.getName()) == null) || !f1.getAttribute(
 					attrib.getName()).equals(
-							f2.getAttribute(attrib.getName()))) {
+					f2.getAttribute(attrib.getName()))) {
 				return false;
 			}
 		}
@@ -464,14 +464,14 @@ GeoWaveTestEnvironment
 			final FeatureCollectionRedistributor redistributor = new FeatureCollectionRedistributor(
 					new RedistributeConfig().setZookeeperUrl(
 							zookeeper).setInstanceName(
-									accumuloInstance).setUserName(
-											accumuloUser).setPassword(
-													accumuloPassword).setTableNamespace(
-															TEST_NAMESPACE + tileSize).setIndexType(
-																	IndexType.SPATIAL_VECTOR).setFeatureType(
-																			TYPE).setFeaturesPerEntry(
-																					tileSize).setNumThreads(
-																							numThreads));
+							accumuloInstance).setUserName(
+							accumuloUser).setPassword(
+							accumuloPassword).setTableNamespace(
+							TEST_NAMESPACE + tileSize).setIndexType(
+							IndexType.SPATIAL_VECTOR).setFeatureType(
+							TYPE).setFeaturesPerEntry(
+							tileSize).setNumThreads(
+							numThreads));
 			redistributor.redistribute();
 			log.info("");
 		}

@@ -15,7 +15,6 @@ import mil.nga.giat.geowave.analytics.tools.RunnerUtils;
 import mil.nga.giat.geowave.analytics.tools.mapreduce.CountofDoubleWritable;
 import mil.nga.giat.geowave.analytics.tools.mapreduce.MapReduceJobRunner;
 
-
 //@formatter:off
 /*if[ACCUMULO_1.5.2]
  else[ACCUMULO_1.5.2]*/
@@ -35,7 +34,6 @@ import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.input.SequenceFileInputFormat;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
-
 
 /**
  * 

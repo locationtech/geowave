@@ -178,9 +178,13 @@ public class GeoWaveTransactionManagement implements
 			synchronized (mutex) {
 				if (modRecord != null) {
 					modifiedFeatures.put(
-							fid, new ModifiedFeature(
-									modRecord.oldFeature, updated, true));
-				} else {
+							fid,
+							new ModifiedFeature(
+									modRecord.oldFeature,
+									updated,
+									true));
+				}
+				else {
 					LOGGER.error("modRecord was set to null in another thread; synchronization issue");
 				}
 			}

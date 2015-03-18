@@ -13,7 +13,7 @@ import com.google.common.collect.ImmutableBiMap;
 /**
  * A factory for creating TieredSFCIndexStrategy using various approaches for
  * breaking down the bits of precision per tier
- *
+ * 
  */
 public class TieredSFCIndexFactory
 {
@@ -22,7 +22,7 @@ public class TieredSFCIndexFactory
 	/**
 	 * Used to create a Single Tier Index Strategy. For example, this would be
 	 * used to generate a strategy that has Point type spatial data.
-	 *
+	 * 
 	 * @param dimensionDefs
 	 *            an array of SFC Dimension Definition objects
 	 * @param sfc
@@ -57,7 +57,7 @@ public class TieredSFCIndexFactory
 	/**
 	 * Used to create a Single Tier Index Strategy. For example, this would be
 	 * used to generate a strategy that has Point type spatial data.
-	 *
+	 * 
 	 * @param dimensionDefs
 	 *            an array of SFC Dimension Definition objects
 	 * @param sfc
@@ -94,7 +94,7 @@ public class TieredSFCIndexFactory
 	}
 
 	/**
-	 *
+	 * 
 	 * @param baseDefinitions
 	 *            an array of Numeric Dimension Definitions
 	 * @param maxBitsPerDimension
@@ -152,7 +152,7 @@ public class TieredSFCIndexFactory
 	}
 
 	/**
-	 *
+	 * 
 	 * @param baseDefinitions
 	 *            an array of Numeric Dimension Definitions
 	 * @param maxBitsPerDimension
@@ -173,7 +173,7 @@ public class TieredSFCIndexFactory
 	}
 
 	/**
-	 *
+	 * 
 	 * @param baseDefinitions
 	 *            an array of Numeric Dimension Definitions
 	 * @param maxBitsPerDimension
@@ -228,7 +228,7 @@ public class TieredSFCIndexFactory
 	}
 
 	/**
-	 *
+	 * 
 	 * @param orderedDimensionDefinitions
 	 *            an array of Numeric Dimension Definitions
 	 * @param bitsPerDimensionPerLevel

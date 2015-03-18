@@ -140,7 +140,7 @@ public class BinnedNumericDataset implements
 		}
 		return binnedQueries;
 	}
-	
+
 	@Override
 	public boolean isEmpty() {
 		return indexRanges.isEmpty();

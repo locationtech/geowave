@@ -1,8 +1,8 @@
 package mil.nga.giat.geowave.index.sfc.data;
 
 /**
- * Interface which defines the methods associated with a
- * multi-dimensional numeric data range. 
+ * Interface which defines the methods associated with a multi-dimensional
+ * numeric data range.
  * 
  */
 public interface MultiDimensionalNumericData
@@ -19,9 +19,9 @@ public interface MultiDimensionalNumericData
 	public double[] getCentroidPerDimension();
 
 	public int getDimensionCount();
-	
-	/** 
-	 * Unconstrained? 
+
+	/**
+	 * Unconstrained?
 	 * 
 	 * @return return if unconstrained on a dimension
 	 */

@@ -150,7 +150,7 @@ public class SampleMultipleSetsJobRunner<T> extends
 		runTimeProperties.copy(
 				CentroidParameters.Centroid.DATA_TYPE_ID,
 				SampleParameters.Sample.DATA_TYPE_ID);
-		
+
 		runTimeProperties.copy(
 				CentroidParameters.Centroid.INDEX_ID,
 				SampleParameters.Sample.INDEX_ID);

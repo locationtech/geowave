@@ -10,7 +10,7 @@ import org.antlr.runtime.tree.CommonTree;
 
 public abstract class LogicalExpression
 {
-//	private static final char BS = '\\';
+	// private static final char BS = '\\';
 
 	private static String extractString(
 			final String text ) {

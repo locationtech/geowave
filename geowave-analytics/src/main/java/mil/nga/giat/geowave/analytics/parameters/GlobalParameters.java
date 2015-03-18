@@ -55,7 +55,7 @@ public class GlobalParameters
 					"z",
 					"A comma-separated list of zookeeper servers used by an Accumulo instance.",
 					true));
-		}	
+		}
 		if (contains(
 				params,
 				Global.BATCH_ID)) {

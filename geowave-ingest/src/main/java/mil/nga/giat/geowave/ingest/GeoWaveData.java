@@ -11,7 +11,7 @@ import org.apache.log4j.Logger;
 /**
  * This models any information that is necessary to ingest an entry into
  * GeoWave: the adapter and index you wish to use as well as the actual data
- *
+ * 
  * @param <T>
  *            The java type for the actual data being ingested
  */

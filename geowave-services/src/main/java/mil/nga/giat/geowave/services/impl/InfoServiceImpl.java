@@ -45,7 +45,8 @@ public class InfoServiceImpl implements
 	private Connector connector;
 
 	public InfoServiceImpl(
-			@Context final ServletConfig servletConfig ) {
+			@Context
+			final ServletConfig servletConfig ) {
 		final Properties props = ServiceUtils.loadProperties(servletConfig.getServletContext().getResourceAsStream(
 				servletConfig.getInitParameter("config.properties")));
 
@@ -108,7 +109,8 @@ public class InfoServiceImpl implements
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/namespaces/{namespace}/indices")
 	public Response getIndices(
-			@PathParam("namespace") final String namespace ) {
+			@PathParam("namespace")
+			final String namespace ) {
 		final List<Index> indices = GeowaveUtils.getIndices(
 				connector,
 				namespace);
@@ -136,7 +138,8 @@ public class InfoServiceImpl implements
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/namespaces/{namespace}/adapters")
 	public Response getAdapters(
-			@PathParam("namespace") final String namespace ) {
+			@PathParam("namespace")
+			final String namespace ) {
 		final Collection<DataAdapter<?>> dataAdapters = GeowaveUtils.getDataAdapters(
 				connector,
 				namespace);

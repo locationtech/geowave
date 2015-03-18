@@ -8,7 +8,7 @@ import org.junit.Test;
 
 public class BasicDimensionDefinitionTest
 {
-	
+
 	private double MINIMUM = 20;
 	private double MAXIMUM = 100;
 	private double DELTA = 1e-15;

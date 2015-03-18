@@ -14,7 +14,8 @@ public interface CommonIndexValue
 
 	public void setVisibility(
 			byte[] visibility );
-	
-	public boolean overlaps(DimensionField[] field,
-			                NumericData[] rangeData);
+
+	public boolean overlaps(
+			DimensionField[] field,
+			NumericData[] rangeData );
 }

@@ -512,11 +512,11 @@ public class GPXConsumer implements
 				final String prefix,
 				final boolean includeLatLong,
 				final boolean includeParent ) {
-			// /top?			
+			// /top?
 			if (parent == null) {
 				if ((prefix != null) && (prefix.length() > 0)) {
 					return prefix;
-				}			
+				}
 			}
 
 			final StringBuffer buf = new StringBuffer();

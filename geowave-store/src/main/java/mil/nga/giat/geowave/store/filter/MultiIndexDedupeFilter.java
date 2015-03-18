@@ -7,7 +7,7 @@ package mil.nga.giat.geowave.store.filter;
  * can be used distributed if necessary. This will cache every ID that streams
  * in regardless of whether its duplicated within a given index, so that it will
  * support deduplication across multiple indices.
- *
+ * 
  */
 public class MultiIndexDedupeFilter extends
 		DedupeFilter

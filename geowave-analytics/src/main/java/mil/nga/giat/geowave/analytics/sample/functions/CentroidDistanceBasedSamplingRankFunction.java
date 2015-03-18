@@ -80,7 +80,9 @@ public class CentroidDistanceBasedSamplingRankFunction<T> implements
 	public static void setParameters(
 			final Configuration config,
 			final PropertyManagement runTimeProperties ) {
-		NestedGroupCentroidAssignment.setParameters(config, runTimeProperties);
+		NestedGroupCentroidAssignment.setParameters(
+				config,
+				runTimeProperties);
 		RunnerUtils.setParameter(
 				config,
 				CentroidDistanceBasedSamplingRankFunction.class,

@@ -50,7 +50,7 @@ public class SpatialDecimationQuery extends
 			final Filter cqlFilter,
 			final FeatureDataAdapter dataAdapter,
 			final ReferencedEnvelope envelope,
-			final String...authorizations) {
+			final String... authorizations ) {
 		super(
 				index,
 				cqlFilter,
@@ -71,7 +71,7 @@ public class SpatialDecimationQuery extends
 			final Filter cqlFilter,
 			final FeatureDataAdapter dataAdapter,
 			final ReferencedEnvelope envelope,
-			final String...authorizations) {
+			final String... authorizations ) {
 		super(
 				adapterIds,
 				index,
@@ -94,7 +94,7 @@ public class SpatialDecimationQuery extends
 			final Filter cqlFilter,
 			final FeatureDataAdapter dataAdapter,
 			final ReferencedEnvelope envelope,
-			final String...authorizations) {
+			final String... authorizations ) {
 		super(
 				index,
 				constraints,
@@ -119,7 +119,7 @@ public class SpatialDecimationQuery extends
 			final Filter cqlFilter,
 			final FeatureDataAdapter dataAdapter,
 			final ReferencedEnvelope envelope,
-			final String...authorizations) {
+			final String... authorizations ) {
 		super(
 				adapterIds,
 				index,

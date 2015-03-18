@@ -154,11 +154,11 @@ public class KSamplerJobRunner extends
 		runTimeProperties.storeIfEmpty(
 				GlobalParameters.Global.BATCH_ID,
 				UUID.randomUUID().toString());
-		
+
 		runTimeProperties.storeIfEmpty(
 				SampleParameters.Sample.DATA_TYPE_ID,
 				"sample");
-		
+
 		runTimeProperties.storeIfEmpty(
 				CentroidParameters.Centroid.ZOOM_LEVEL,
 				zoomLevel);

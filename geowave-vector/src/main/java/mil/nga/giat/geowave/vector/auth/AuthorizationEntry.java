@@ -6,9 +6,10 @@ import java.util.List;
  * Used for Json based authorization data sets.
  * 
  * @author rwgdrummer
- *
+ * 
  */
-public class AuthorizationEntry {
+public class AuthorizationEntry
+{
 	String userName;
 	List<String> authorizations;
 
@@ -16,7 +17,8 @@ public class AuthorizationEntry {
 		return userName;
 	}
 
-	protected void setUserName(String userName) {
+	protected void setUserName(
+			String userName ) {
 		this.userName = userName;
 	}
 
@@ -24,7 +26,8 @@ public class AuthorizationEntry {
 		return authorizations;
 	}
 
-	protected void setAuthorizations(List<String> authorizations) {
+	protected void setAuthorizations(
+			List<String> authorizations ) {
 		this.authorizations = authorizations;
 	}
 

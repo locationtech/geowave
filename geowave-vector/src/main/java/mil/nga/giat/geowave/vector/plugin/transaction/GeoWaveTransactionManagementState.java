@@ -14,8 +14,8 @@ import org.geotools.data.DataSourceException;
 import org.geotools.data.Transaction;
 
 /**
- *  Implements the transaction state protocol with Geotools.
- *
+ * Implements the transaction state protocol with Geotools.
+ * 
  */
 public class GeoWaveTransactionManagementState implements
 		GeoWaveTransactionState
@@ -39,7 +39,8 @@ public class GeoWaveTransactionManagementState implements
 	public GeoWaveTransactionManagementState(
 			GeoWaveDataStoreComponents components,
 			Transaction transaction,
-			LockingManagement lockingManager ) throws IOException {
+			LockingManagement lockingManager )
+			throws IOException {
 		this.components = components;
 		this.transaction = transaction;
 		this.lockingManager = lockingManager;
@@ -217,18 +218,18 @@ public class GeoWaveTransactionManagementState implements
 		Entry<String, GeoWaveTransactionManagement> entry;
 
 		try {
-		for (Iterator<Entry<String, GeoWaveTransactionManagement>> i = typeNameDiff.entrySet().iterator(); i.hasNext();) {
-			entry = i.next();
+			for (Iterator<Entry<String, GeoWaveTransactionManagement>> i = typeNameDiff.entrySet().iterator(); i.hasNext();) {
+				entry = i.next();
 
-			String typeName = (String) entry.getKey();
-			GeoWaveTransactionManagement diff = (GeoWaveTransactionManagement) entry.getValue();
-			diff.rollback();
+				String typeName = (String) entry.getKey();
+				GeoWaveTransactionManagement diff = (GeoWaveTransactionManagement) entry.getValue();
+				diff.rollback();
 
-			components.getGTstore().getListenerManager().fireChanged(
-					typeName,
-					transaction,
-					false);
-		}
+				components.getGTstore().getListenerManager().fireChanged(
+						typeName,
+						transaction,
+						false);
+			}
 		}
 		finally {
 			this.components.releaseTransaction(txID);

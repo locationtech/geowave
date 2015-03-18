@@ -85,7 +85,7 @@ public abstract class MultiLevelClusteringJobRunner extends
 		PropertyManagement.removeOption(
 				options,
 				CentroidParameters.Centroid.DATA_TYPE_ID);
-		
+
 		PropertyManagement.removeOption(
 				options,
 				CentroidParameters.Centroid.DATA_NAMESPACE_URI);
@@ -116,7 +116,7 @@ public abstract class MultiLevelClusteringJobRunner extends
 		final String dataTypeId = propertyManagement.getProperty(
 				ExtractParameters.Extract.OUTPUT_DATA_TYPE_ID,
 				"centroid");
-		
+
 		final String namespaceURI = propertyManagement.getProperty(
 				ExtractParameters.Extract.DATA_NAMESPACE_URI,
 				BasicFeatureTypes.DEFAULT_NAMESPACE);
@@ -124,7 +124,7 @@ public abstract class MultiLevelClusteringJobRunner extends
 		propertyManagement.storeIfEmpty(
 				ExtractParameters.Extract.DATA_NAMESPACE_URI,
 				namespaceURI);
-		
+
 		propertyManagement.storeIfEmpty(
 				ExtractParameters.Extract.OUTPUT_DATA_TYPE_ID,
 				dataTypeId);

@@ -75,7 +75,7 @@ abstract public class AbstractCommandLineDriver
 			String[] args,
 			List<IngestTypePluginProviderSpi<?, ?>> pluginProviders );
 
-	@SuppressFBWarnings(value="DM_EXIT", justification = "Exiting JVM with System.exit(0) is intentional")
+	@SuppressFBWarnings(value = "DM_EXIT", justification = "Exiting JVM with System.exit(0) is intentional")
 	protected List<IngestTypePluginProviderSpi<?, ?>> applyArguments(
 			final String[] args ) {
 		final List<IngestTypePluginProviderSpi<?, ?>> selectedPluginProviders = new ArrayList<IngestTypePluginProviderSpi<?, ?>>();

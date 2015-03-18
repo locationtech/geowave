@@ -34,11 +34,10 @@ public class LongitudeField extends
 				fieldId);
 	}
 
-	
 	@Override
 	public NumericData getNumericData(
 			final GeometryWrapper geometry ) {
 		return GeometryUtils.longitudeRangeFromGeometry(geometry.getGeometry());
 	}
-	
+
 }

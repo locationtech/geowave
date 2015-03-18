@@ -357,16 +357,19 @@ public class AccumuloUtils
 			// cannot get here unless adapter is found (not null)
 			if (adapter == null) {
 				LOGGER.error("Error, adapter was null when it should not be");
-			} else {
+			}
+			else {
 				Pair<T, DataStoreEntryInfo> pair = Pair.of(
 						adapter.decode(
-								encodedRow, index), new DataStoreEntryInfo(
-								Arrays.asList(
-										new ByteArrayId(
-												k.getRowData().getBackingArray())), fieldInfoList));
-				if (scanCallback != null)
-					scanCallback.entryScanned(
-							pair.getRight(), pair.getLeft());
+								encodedRow,
+								index),
+						new DataStoreEntryInfo(
+								Arrays.asList(new ByteArrayId(
+										k.getRowData().getBackingArray())),
+								fieldInfoList));
+				if (scanCallback != null) scanCallback.entryScanned(
+						pair.getRight(),
+						pair.getLeft());
 				return pair;
 			}
 		}

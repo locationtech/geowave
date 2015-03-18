@@ -153,7 +153,7 @@ public class HilbertSFCTest
 
 	}
 
-//	@Test(expected = IllegalArgumentException.class)
+	// @Test(expected = IllegalArgumentException.class)
 	public void testGetId_2DSpatialIllegalArgument()
 			throws Exception {
 
@@ -273,6 +273,5 @@ public class HilbertSFCTest
 
 	}
 
-
-	/*public void testDecomposeQuery_2DSpatialRanges() {}*/
+	/* public void testDecomposeQuery_2DSpatialRanges() {} */
 }

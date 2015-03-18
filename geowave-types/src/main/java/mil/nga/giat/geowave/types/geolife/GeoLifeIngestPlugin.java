@@ -63,7 +63,6 @@ public class GeoLifeIngestPlugin implements
 
 	private final Index[] supportedIndices;
 
-
 	public GeoLifeIngestPlugin() {
 
 		geolifePointType = GeoLifeUtils.createGeoLifePointDataType();
@@ -196,7 +195,8 @@ public class GeoLifeIngestPlugin implements
 		final InputStream in = new ByteArrayInputStream(
 				hfile.getOriginalFile().array());
 		final InputStreamReader isr = new InputStreamReader(
-				in, StringUtils.UTF8_CHAR_SET);
+				in,
+				StringUtils.UTF8_CHAR_SET);
 		final BufferedReader br = new BufferedReader(
 				isr);
 		int pointInstance = 0;

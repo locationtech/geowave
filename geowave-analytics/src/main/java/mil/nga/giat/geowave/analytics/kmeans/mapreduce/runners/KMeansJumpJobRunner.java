@@ -106,7 +106,7 @@ public class KMeansJumpJobRunner extends
 		propertyManagement.store(
 				CentroidParameters.Centroid.ZOOM_LEVEL,
 				currentZoomLevel);
-		
+
 		propertyManagement.storeIfEmpty(
 				GlobalParameters.Global.BATCH_ID,
 				UUID.randomUUID().toString());
@@ -130,7 +130,7 @@ public class KMeansJumpJobRunner extends
 		propertyManagement.copy(
 				CentroidParameters.Centroid.DATA_TYPE_ID,
 				SampleParameters.Sample.DATA_TYPE_ID);
-		
+
 		propertyManagement.copy(
 				CentroidParameters.Centroid.INDEX_ID,
 				SampleParameters.Sample.INDEX_ID);
@@ -175,7 +175,7 @@ public class KMeansJumpJobRunner extends
 			propertyManagement.store(
 					GlobalParameters.Global.PARENT_BATCH_ID,
 					currentBatchId);
-			
+
 			for (int k = (int) Math.max(
 					2,
 					Math.round(rangeOfIterations.getMin())); k < Math.round(rangeOfIterations.getMax()); k++) {
@@ -294,8 +294,6 @@ public class KMeansJumpJobRunner extends
 				options,
 				SampleParameters.Sample.INDEX_ID);
 	}
-
-
 
 	private class KMeansParallelJobRunnerDelegate implements
 			MapReduceJobRunner

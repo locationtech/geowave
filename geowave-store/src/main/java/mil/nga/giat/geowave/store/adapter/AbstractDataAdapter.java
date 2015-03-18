@@ -37,7 +37,7 @@ import org.apache.log4j.Logger;
  * a field (for example if there are multiple ways of encoding/decoding the same
  * type). Otherwise the type matching handlers will simply match any field with
  * the same type as its generic field type.
- *
+ * 
  * @param <T>
  *            The type for the entries handled by this adapter
  */

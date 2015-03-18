@@ -39,7 +39,8 @@ public class AnalyticFeature
 			final long count ) {
 		if (extraDimensionNames.length != extraDimensions.length) {
 			LOGGER.error("The number of extraDimension names does not equal the number of extraDimensions");
-			throw new IllegalArgumentException("The number of extraDimension names does not equal the number of extraDimensions");
+			throw new IllegalArgumentException(
+					"The number of extraDimension names does not equal the number of extraDimensions");
 		}
 		final List<AttributeDescriptor> descriptors = featureType.getAttributeDescriptors();
 		final Object[] defaults = new Object[descriptors.size()];
@@ -94,7 +95,7 @@ public class AnalyticFeature
 		try {
 			final SimpleFeatureTypeBuilder builder = new SimpleFeatureTypeBuilder();
 			builder.setName(centroidDataTypeId);
-			builder.setNamespaceURI(namespaceURI == null ?  BasicFeatureTypes.DEFAULT_NAMESPACE : namespaceURI);
+			builder.setNamespaceURI(namespaceURI == null ? BasicFeatureTypes.DEFAULT_NAMESPACE : namespaceURI);
 			builder.setSRS(SRID);
 			for (final ClusterFeatureAttribute attrVal : ClusterFeatureAttribute.values()) {
 				builder.add(

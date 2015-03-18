@@ -14,7 +14,7 @@ import org.apache.hadoop.mapreduce.Reducer;
 import org.opengis.coverage.grid.GridCoverage;
 
 public class AccumuloKDEReducer extends
-Reducer<DoubleWritable, LongWritable, GeoWaveOutputKey, GridCoverage>
+		Reducer<DoubleWritable, LongWritable, GeoWaveOutputKey, GridCoverage>
 {
 	private static final class TileInfo
 	{
@@ -121,8 +121,8 @@ Reducer<DoubleWritable, LongWritable, GeoWaveOutputKey, GridCoverage>
 			final DoubleWritable key,
 			final Iterable<LongWritable> values,
 			final Context context )
-					throws IOException,
-					InterruptedException {
+			throws IOException,
+			InterruptedException {
 		if (key.get() < 0) {
 			final double prevMax = -key.get();
 			if (prevMax > max) {
@@ -162,18 +162,18 @@ Reducer<DoubleWritable, LongWritable, GeoWaveOutputKey, GridCoverage>
 						new GeoWaveOutputKey(
 								new ByteArrayId(
 										coverageName),
-										new ByteArrayId(
-												IndexType.SPATIAL_RASTER.getDefaultId())),
-												RasterUtils.createCoverageTypeDouble(
-														coverageName,
-														tileInfo.tileWestLon,
-														tileInfo.tileEastLon,
-														tileInfo.tileSouthLat,
-														tileInfo.tileNorthLat,
-														MINS_PER_BAND,
-														MAXES_PER_BAND,
-														NAME_PER_BAND,
-														raster));
+								new ByteArrayId(
+										IndexType.SPATIAL_RASTER.getDefaultId())),
+						RasterUtils.createCoverageTypeDouble(
+								coverageName,
+								tileInfo.tileWestLon,
+								tileInfo.tileEastLon,
+								tileInfo.tileSouthLat,
+								tileInfo.tileNorthLat,
+								MINS_PER_BAND,
+								MAXES_PER_BAND,
+								NAME_PER_BAND,
+								raster));
 				currentKey++;
 			}
 		}
@@ -207,8 +207,8 @@ Reducer<DoubleWritable, LongWritable, GeoWaveOutputKey, GridCoverage>
 	@Override
 	protected void setup(
 			final Context context )
-					throws IOException,
-					InterruptedException {
+			throws IOException,
+			InterruptedException {
 		super.setup(context);
 		minLevels = context.getConfiguration().getInt(
 				KDEJobRunner.MIN_LEVEL_KEY,
