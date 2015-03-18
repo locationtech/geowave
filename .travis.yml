@@ -4,10 +4,10 @@ jdk:
   - oraclejdk7
 env:
   matrix:
-    - ACCUMULO_VERSION='1.5.2'              HADOOP_VERSION='2.6.0'              GEOTOOLS_VERSION='11.5'   GEOSERVER_VERSION='2.5.5' PLATFORM_VERSION='""'
-    - ACCUMULO_VERSION='1.6.0-cdh5.1.4'     HADOOP_VERSION='2.5.0-cdh5.3.2'     GEOTOOLS_VERSION='12.2'   GEOSERVER_VERSION='2.6.2' PLATFORM_VERSION='cloudera'
-    - ACCUMULO_VERSION='1.6.2'              HADOOP_VERSION='2.6.0'              GEOTOOLS_VERSION='12.2'   GEOSERVER_VERSION='2.6.2' PLATFORM_VERSION='""'
-    - ACCUMULO_VERSION='1.6.1.2.2.0.0-2041' HADOOP_VERSION='2.6.0.2.2.0.0-2041' GEOTOOLS_VERSION='12.2'   GEOSERVER_VERSION='2.6.2' PLATFORM_VERSION='hortonworks'
+    - ACCUMULO_VERSION='1.5.2'              ACCUMULO_LEGACY='-Daccumulo.legacy' HADOOP_VERSION='2.6.0'              GEOTOOLS_VERSION='11.5'   GEOSERVER_VERSION='2.5.5' PLATFORM_VERSION='""'
+    - ACCUMULO_VERSION='1.6.0-cdh5.1.4'     ACCUMULO_LEGACY=''                  HADOOP_VERSION='2.5.0-cdh5.3.2'     GEOTOOLS_VERSION='12.2'   GEOSERVER_VERSION='2.6.2' PLATFORM_VERSION='cloudera'
+    - ACCUMULO_VERSION='1.6.2'              ACCUMULO_LEGACY=''                  HADOOP_VERSION='2.6.0'              GEOTOOLS_VERSION='12.2'   GEOSERVER_VERSION='2.6.2' PLATFORM_VERSION='""'
+    - ACCUMULO_VERSION='1.6.1.2.2.0.0-2041' ACCUMULO_LEGACY=''                  HADOOP_VERSION='2.6.0.2.2.0.0-2041' GEOTOOLS_VERSION='12.2'   GEOSERVER_VERSION='2.6.2' PLATFORM_VERSION='hortonworks'
   global:
     #github token
     - secure: "TosKDl5mnt8UKeyWDg65i6cWENR7EorQbFPSvZ5ZfQfAaDAOeIN2OA/zxtRMELeYM82+n+GGXQOt0qPiYqyRlufYJJSUnWiwvI5gm3a8+f58atcU2R2bF9jd81bsL9jCS+JCQxAmzh8FCO6t7DJ4OdoMyMaIR7XjlSlsIJ97dd8="
@@ -15,8 +15,8 @@ env:
 cache:
   directories:
   - $HOME/.m2
-install: "mvn -q clean install javadoc:aggregate -Dfindbugs.skip -Daccumulo.version=${ACCUMULO_VERSION} -Dhadoop.version=${HADOOP_VERSION} -Dgeotools.version=${GEOTOOLS_VERSION} -Dgeoserver.version=${GEOSERVER_VERSION} -DskipITs=true -DskipTests=true -P ${PLATFORM_VERSION}; .utility/build-docs-site.sh"
-script: "mvn -q verify -Daccumulo.version=${ACCUMULO_VERSION} -Dhadoop.version=${HADOOP_VERSION} -Dgeotools.version=${GEOTOOLS_VERSION} -Dgeoserver.version=${GEOSERVER_VERSION} -P ${PLATFORM_VERSION}"
+install: "mvn -q clean install javadoc:aggregate -Dfindbugs.skip -Daccumulo.version=${ACCUMULO_VERSION} ${ACCUMULO_LEGACY} -Dhadoop.version=${HADOOP_VERSION} -Dgeotools.version=${GEOTOOLS_VERSION} -Dgeoserver.version=${GEOSERVER_VERSION} -DskipITs=true -DskipTests=true -P ${PLATFORM_VERSION}; .utility/build-docs-site.sh"
+script: "mvn -q verify -Daccumulo.version=${ACCUMULO_VERSION} ${ACCUMULO_LEGACY} -Dhadoop.version=${HADOOP_VERSION} -Dgeotools.version=${GEOTOOLS_VERSION} -Dgeoserver.version=${GEOSERVER_VERSION} -P ${PLATFORM_VERSION}"
 before_install:
   - export MAVEN_OPTS="-Xmx512m -XX:MaxPermSize=192m"
   - chmod +x .utility/push-javadoc-to-gh-pages.sh
@@ -25,7 +25,7 @@ before_install:
   - .utility/maven-coveralls-hack.sh
 after_success:
   - .utility/push-javadoc-to-gh-pages.sh
-  - mvn coveralls:report -Daccumulo.version=${ACCUMULO_VERSION} -Dhadoop.version=${HADOOP_VERSION} -Dgeotools.version=${GEOTOOLS_VERSION} -Dgeoserver.version=${GEOSERVER_VERSION} -P ${PLATFORM_VERSION}
+  - mvn coveralls:report -Daccumulo.version=${ACCUMULO_VERSION} ${ACCUMULO_LEGACY} -Dhadoop.version=${HADOOP_VERSION} -Dgeotools.version=${GEOTOOLS_VERSION} -Dgeoserver.version=${GEOSERVER_VERSION} -P ${PLATFORM_VERSION}
 
 addons:
   coverity_scan:
@@ -34,7 +34,7 @@ addons:
       description: Build submitted via Travis CI
     notification_email: GeoWave@nga.mil
     build_command_prepend: mvn clean
-    build_command: mvn clean compile -Dfindbugs.skip -Daccumulo.version=${ACCUMULO_VERSION}
+    build_command: mvn clean compile -Dfindbugs.skip -Daccumulo.version=${ACCUMULO_VERSION} ${ACCUMULO_LEGACY}
       -Dhadoop.version=${HADOOP_VERSION} -Dgeotools.version=${GEOTOOLS_VERSION} -Dgeoserver.version=${GEOSERVER_VERSION}
       -DskipITs=true -DskipTests=true -P ${PLATFORM_VERSION}
     branch_pattern: coverity_scan

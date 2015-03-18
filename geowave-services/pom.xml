@@ -8,8 +8,8 @@
 		<version>0.8.4-SNAPSHOT</version>
 	</parent>
 	<artifactId>geowave-services</artifactId>
+    <name>geowave-services</name>
 	<packaging>war</packaging>
-
 	<dependencies>
 		<dependency>
 			<groupId>mil.nga.giat</groupId>
