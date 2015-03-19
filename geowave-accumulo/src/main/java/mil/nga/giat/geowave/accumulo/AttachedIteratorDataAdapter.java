@@ -8,5 +8,6 @@ public interface AttachedIteratorDataAdapter<T> extends
 {
 	public static final String ATTACHED_ITERATOR_CACHE_ID = "AttachedIterators";
 
-	public IteratorConfig[] getAttachedIteratorConfig(final Index index);
+	public IteratorConfig[] getAttachedIteratorConfig(
+			final Index index );
 }

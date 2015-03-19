@@ -30,7 +30,7 @@ public class AdapterPersistenceEncoding extends
 
 	/**
 	 * This returns a representation of the custom fields for the data adapter
-	 *
+	 * 
 	 * @return the extended data beyond the common index fields that are
 	 *         provided by the adapter
 	 */

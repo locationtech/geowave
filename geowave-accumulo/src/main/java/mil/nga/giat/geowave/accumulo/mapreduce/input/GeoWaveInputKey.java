@@ -41,8 +41,9 @@ public class GeoWaveInputKey extends
 			final Key accumuloKey ) {
 		this.accumuloKey = accumuloKey;
 	}
-	
-	public void setDataId(ByteArrayId dataId) {
+
+	public void setDataId(
+			ByteArrayId dataId ) {
 		this.dataId = dataId;
 	}
 

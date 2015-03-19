@@ -257,7 +257,9 @@ public class StripWeakCentroidsRunner<T> implements
 				if (priorChg != null) {
 					final double chgOfChg = Math.abs(priorChg.chg - changeFromLast.chg);
 					if (chgOfChg > max) {
-						position = Math.max(position,changeFromLast.position);
+						position = Math.max(
+								position,
+								changeFromLast.position);
 						max = chgOfChg;
 					}
 				}

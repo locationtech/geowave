@@ -15,7 +15,7 @@ import com.vividsolutions.jts.geom.Geometry;
 /**
  * This class handles the internal responsibility of persisting JTS geometries
  * to and from a GeoWave common index field for FeatureCollection data.
- *
+ * 
  */
 public class FeatureCollectionGeometryHandler implements
 		IndexFieldHandler<DefaultFeatureCollection, ArrayWrapper<GeometryWrapper>, Object>

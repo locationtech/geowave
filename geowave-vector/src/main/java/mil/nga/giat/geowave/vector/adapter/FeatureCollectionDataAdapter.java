@@ -93,7 +93,7 @@ import com.vividsolutions.jts.geom.Geometry;
  * the term 'start' and the other contains either the term 'stop' or 'end' it
  * will interpret the combination of these attributes as a time range to index
  * on.
- *
+ * 
  */
 public class FeatureCollectionDataAdapter extends
 		AbstractDataAdapter<DefaultFeatureCollection> implements
@@ -780,9 +780,9 @@ public class FeatureCollectionDataAdapter extends
 		final List<DefaultFeatureCollection> featureCollections = new ArrayList<DefaultFeatureCollection>();
 
 		// create the feature collections and return
-		//final Set<ByteArrayId> keys = indexedFeaturesMap.keySet();
-	//	for (final ByteArrayId key : keys) {
-		for (final Map.Entry<ByteArrayId, ArrayList<SimpleFeatureWrapper>> kvp : indexedFeaturesMap.entrySet()){
+		// final Set<ByteArrayId> keys = indexedFeaturesMap.keySet();
+		// for (final ByteArrayId key : keys) {
+		for (final Map.Entry<ByteArrayId, ArrayList<SimpleFeatureWrapper>> kvp : indexedFeaturesMap.entrySet()) {
 
 			final ArrayList<SimpleFeatureWrapper> wrappedFeatures = kvp.getValue();
 

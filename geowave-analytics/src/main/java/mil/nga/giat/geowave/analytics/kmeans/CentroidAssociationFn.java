@@ -5,8 +5,8 @@ import mil.nga.giat.geowave.analytics.distance.DistanceFn;
 import mil.nga.giat.geowave.analytics.tools.AnalyticItemWrapper;
 
 /**
- * Compute the distance of a points to the closest centroid, providing
- * the resulting distance using a provided distance function. 
+ * Compute the distance of a points to the closest centroid, providing the
+ * resulting distance using a provided distance function.
  * 
  */
 public class CentroidAssociationFn<T>

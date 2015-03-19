@@ -51,7 +51,7 @@ public class KSamplerMapReduceTest
 
 	private static final List<Object> capturedObjects = new ArrayList<Object>();
 
-	Key accumuloKey = null; 
+	Key accumuloKey = null;
 
 	public KSamplerMapReduceTest() {
 
@@ -118,7 +118,7 @@ public class KSamplerMapReduceTest
 		mapDriver = MapDriver.newMapDriver(mapper);
 		reduceDriver = ReduceDriver.newReduceDriver(reducer);
 		DataAdapter adapter = AnalyticFeature.createGeometryFeatureAdapter(
-				"altoids",				
+				"altoids",
 				new String[] {},
 				"http://geowave.test.net",
 				ClusteringUtils.CLUSTERING_CRS);

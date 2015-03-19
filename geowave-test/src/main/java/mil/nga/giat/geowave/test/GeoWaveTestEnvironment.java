@@ -108,8 +108,9 @@ abstract public class GeoWaveTestEnvironment
 
 						// TEMP_DIR = Files.createTempDir();
 						if (!TEMP_DIR.exists()) {
-							if (!TEMP_DIR.mkdirs()){
-								throw new IOException("Could not create temporary directory");
+							if (!TEMP_DIR.mkdirs()) {
+								throw new IOException(
+										"Could not create temporary directory");
 							}
 						}
 						TEMP_DIR.deleteOnExit();
@@ -207,14 +208,16 @@ abstract public class GeoWaveTestEnvironment
 		synchronized (MUTEX) {
 			if (!DEFER_CLEANUP) {
 
-				if (accumuloOperations == null){
+				if (accumuloOperations == null) {
 					Assert.fail("Invalid state <null> for accumulo operations during CLEANUP phase");
 				}
 				try {
 					accumuloOperations.deleteAll();
 				}
 				catch (TableNotFoundException | AccumuloSecurityException | AccumuloException ex) {
-					LOGGER.error("Unable to clear accumulo namespace", ex);
+					LOGGER.error(
+							"Unable to clear accumulo namespace",
+							ex);
 					Assert.fail("Index not deleted successfully");
 				}
 
@@ -451,8 +454,9 @@ abstract public class GeoWaveTestEnvironment
 			File of = new File(
 					outputFolder);
 			if (!of.exists()) {
-				if (!of.mkdirs()){
-					throw new IOException("Could not create temporary directory: " + of.toString());
+				if (!of.mkdirs()) {
+					throw new IOException(
+							"Could not create temporary directory: " + of.toString());
 				}
 			}
 			else {
@@ -469,7 +473,9 @@ abstract public class GeoWaveTestEnvironment
 			Assert.fail("Unable to extract test data: '" + e.getLocalizedMessage() + "'");
 		}
 		catch (IOException e) {
-			LOGGER.warn("Unable to create temporary directory: " + outputFolder, e);
+			LOGGER.warn(
+					"Unable to create temporary directory: " + outputFolder,
+					e);
 			Assert.fail("Unable to extract test data: '" + e.getLocalizedMessage() + "'");
 		}
 	}

@@ -24,7 +24,6 @@ abstract public class TimeRangeDataStatistics<T> extends
 						fieldId));
 	}
 
-
 	public TemporalRange asTemporalRange() {
 		return new TemporalRange(
 				new Date(

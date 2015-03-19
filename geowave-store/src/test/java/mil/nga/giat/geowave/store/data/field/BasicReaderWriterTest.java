@@ -192,8 +192,7 @@ public class BasicReaderWriterTest
 		};
 		byteArrayExpected = new Byte[] {
 			Byte.MIN_VALUE,
-			Byte.valueOf(
-					(byte) 55),
+			Byte.valueOf((byte) 55),
 			Byte.MAX_VALUE
 		};
 		primByteArrayExpected = new byte[] {

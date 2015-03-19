@@ -56,7 +56,8 @@ public class TemporalRangeTest
 
 	@Test
 	public void test()
-			throws ParseException, IOException {
+			throws ParseException,
+			IOException {
 		Calendar gmt = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
 		Calendar local = Calendar.getInstance(TimeZone.getTimeZone("EDT"));
 		local.setTimeInMillis(gmt.getTimeInMillis());
@@ -106,8 +107,10 @@ public class TemporalRangeTest
 		stats.entryIngested(
 				null,
 				newFeature);
-		
-		assertEquals(DateUtilities.parseISO("2005-05-19T23:32:56Z"), stats.asTemporalRange().getStartTime());
+
+		assertEquals(
+				DateUtilities.parseISO("2005-05-19T23:32:56Z"),
+				stats.asTemporalRange().getStartTime());
 	}
 
 }

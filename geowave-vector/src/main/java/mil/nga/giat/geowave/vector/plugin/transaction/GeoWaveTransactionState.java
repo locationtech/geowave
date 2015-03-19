@@ -8,5 +8,6 @@ public interface GeoWaveTransactionState extends
 		State
 {
 	public GeoWaveTransaction getGeoWaveTransaction(
-			String typeName )  throws IOException;
+			String typeName )
+			throws IOException;
 }

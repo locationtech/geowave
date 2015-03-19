@@ -462,6 +462,13 @@
 				<configuration>
 					<configFile>${formatter.location}</configFile>
 				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>format</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>

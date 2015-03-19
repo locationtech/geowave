@@ -14,7 +14,7 @@ public class GeoWaveOutputConfigurator extends
 {
 	/**
 	 * General configuration keys
-	 *
+	 * 
 	 */
 	public static Boolean canCreateIndex(
 			final Class<?> implementingClass,

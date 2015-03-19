@@ -47,7 +47,6 @@ public class TestObject implements
 		this.name = id;
 	}
 
-	
 	public int getLevel() {
 		return level;
 	}

@@ -42,7 +42,8 @@ abstract public class ServicesTestEnvironment extends
 			final File configFile ) {
 		try {
 			final PrintWriter writer = new PrintWriter(
-					configFile, StringUtils.UTF8_CHAR_SET.toString());
+					configFile,
+					StringUtils.UTF8_CHAR_SET.toString());
 			writer.println("zookeeper.url=" + zookeeper);
 			writer.println("zookeeper.instance=" + accumuloInstance);
 			writer.println("zookeeper.username=" + accumuloUser);
@@ -62,7 +63,9 @@ abstract public class ServicesTestEnvironment extends
 					e);
 		}
 		catch (UnsupportedEncodingException e) {
-			LOGGER.error("Unable to write config file in UTF-8", e);
+			LOGGER.error(
+					"Unable to write config file in UTF-8",
+					e);
 		}
 	}
 

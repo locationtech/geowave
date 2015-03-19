@@ -180,7 +180,8 @@ public class ZooKeeperTransactionAllocaterTest
 				try {
 					String txID = allocater.getTransaction();
 					synchronized (activeTX) {
-						// no guarantees with forced session close as tested in the recovery test
+						// no guarantees with forced session close as tested in
+						// the recovery test
 						assert (recovery || !activeTX.contains(txID)); // throws
 																		// assertion
 						// error

@@ -30,7 +30,8 @@ public class GeoWaveResourceInfo implements
 			myURI = URI.create(myFS.getFeatureType().getName().getNamespaceURI());
 		}
 		else {
-			// this is the old way...but ContentDataStore, provided by geotools sets to null.
+			// this is the old way...but ContentDataStore, provided by geotools
+			// sets to null.
 			// which is correct?
 			myURI = URI.create(myFS.getFeatureType().getName().getURI());
 		}

@@ -91,9 +91,11 @@ public class NoDataMergeStrategy implements
 						LOGGER.error("Error merging raster tiles, nextTileMetadata was null.");
 					}
 					else {
-						thisTile.setMetadata(
-								NoDataMetadataFactory.mergeMetadata(
-										thisTileMetadata, thisRaster, nextTileMetadata, nextRaster));
+						thisTile.setMetadata(NoDataMetadataFactory.mergeMetadata(
+								thisTileMetadata,
+								thisRaster,
+								nextTileMetadata,
+								nextRaster));
 
 					}
 				}
@@ -118,8 +120,9 @@ public class NoDataMergeStrategy implements
 
 	@Override
 	public int hashCode() {
-		return (int)serialVersionUID;
-		//this looks correct based on behaviour of equals?!? should return the same hash code for all instances
+		return (int) serialVersionUID;
+		// this looks correct based on behaviour of equals?!? should return the
+		// same hash code for all instances
 	}
 
 	@Override

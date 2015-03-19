@@ -181,6 +181,4 @@ public class KMeansSingleSampleJobRunner<T> extends
 				SampleParameters.Sample.INDEX_ID);
 	}
 
-	
-
 }

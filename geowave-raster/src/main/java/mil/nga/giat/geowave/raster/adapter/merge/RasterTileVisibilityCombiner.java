@@ -49,7 +49,7 @@ public class RasterTileVisibilityCombiner extends
 		final RasterTile mergeable = PersistenceUtils.classFactory(
 				RasterTile.class.getName(),
 				RasterTile.class);
-		
+
 		if (mergeable != null) {
 			mergeable.fromBinary(binary);
 		}
@@ -63,7 +63,7 @@ public class RasterTileVisibilityCombiner extends
 			final Mergeable mergeable ) {
 		return mergeable.toBinary();
 	}
-	
+
 	@Override
 	public void init(
 			final SortedKeyValueIterator<Key, Value> source,

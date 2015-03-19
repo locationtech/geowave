@@ -361,14 +361,18 @@ public class AccumuloDataStoreStatsTest
 
 		countStats = (CountDataStatistics) this.statsStore.getDataStatistics(
 				adapter.getAdapterId(),
-				CountDataStatistics.STATS_ID, "bbb");
+				CountDataStatistics.STATS_ID,
+				"bbb");
 		assertTrue(countStats != null);
 
-		this.statsStore.deleteObjects(adapter.getAdapterId(),"bbb");
+		this.statsStore.deleteObjects(
+				adapter.getAdapterId(),
+				"bbb");
 
 		countStats = (CountDataStatistics) this.statsStore.getDataStatistics(
 				adapter.getAdapterId(),
-				CountDataStatistics.STATS_ID,"bbb");
+				CountDataStatistics.STATS_ID,
+				"bbb");
 		assertNull(countStats);
 
 	}

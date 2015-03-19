@@ -67,7 +67,7 @@ public class BasicAccumuloOperations implements
 	 * This is will create an Accumulo connector based on passed in connection
 	 * information and credentials for convenience convenience. It will also use
 	 * reasonable defaults for unspecified parameters.
-	 *
+	 * 
 	 * @param zookeeperUrl
 	 *            The comma-delimited URLs for all zookeeper servers, this will
 	 *            be directly used to instantiate a ZookeeperInstance
@@ -109,7 +109,7 @@ public class BasicAccumuloOperations implements
 	/**
 	 * This constructor uses reasonable defaults and only requires an Accumulo
 	 * connector
-	 *
+	 * 
 	 * @param connector
 	 *            The connector to use for all operations
 	 */
@@ -123,7 +123,7 @@ public class BasicAccumuloOperations implements
 	/**
 	 * This constructor uses reasonable defaults and requires an Accumulo
 	 * connector and table namespace
-	 *
+	 * 
 	 * @param connector
 	 *            The connector to use for all operations
 	 * @param tableNamespace
@@ -144,7 +144,7 @@ public class BasicAccumuloOperations implements
 	/**
 	 * This is the full constructor for the operation factory and should be used
 	 * if any of the defaults are insufficient.
-	 *
+	 * 
 	 * @param numThreads
 	 *            The number of threads to use for a batch scanner and batch
 	 *            writer
@@ -326,11 +326,10 @@ public class BasicAccumuloOperations implements
 		}
 
 		for (final String tableName : tableNames) {
-				connector.tableOperations().delete(
-						tableName);
-			}
+			connector.tableOperations().delete(
+					tableName);
 		}
-
+	}
 
 	@Override
 	public boolean delete(

@@ -96,7 +96,8 @@ public class GeoWaveAnalyticExtractJobRunner extends
 	private FeatureDataAdapter createAdapter(
 			final String outputDataTypeID,
 			final String namespaceURI,
-			@SuppressWarnings("rawtypes") final Class<? extends DimensionExtractor> dimensionExtractorClass )
+			@SuppressWarnings("rawtypes")
+			final Class<? extends DimensionExtractor> dimensionExtractorClass )
 			throws Exception {
 		final DimensionExtractor<?> extractor = dimensionExtractorClass.newInstance();
 		return AnalyticFeature.createGeometryFeatureAdapter(

@@ -9,7 +9,7 @@ import org.geotools.data.Transaction;
  * transaction state as AUTO_COMMIT. Locking under an AUTO_COMMIT is not
  * authorized.
  * 
- *
+ * 
  * 
  */
 public interface LockingManagement extends

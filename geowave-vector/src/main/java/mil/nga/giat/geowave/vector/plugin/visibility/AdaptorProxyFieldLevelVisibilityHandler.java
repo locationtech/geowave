@@ -1,6 +1,5 @@
 package mil.nga.giat.geowave.vector.plugin.visibility;
 
-
 import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.store.data.field.FieldVisibilityHandler;
 import mil.nga.giat.geowave.vector.adapter.FeatureDataAdapter;
@@ -16,7 +15,7 @@ import org.opengis.feature.simple.SimpleFeature;
  * {@link VisibilityManagement}. Referencing the {@link FeatureDataAdapter}
  * removes the initialization order constraint.
  * 
- *
+ * 
  * 
  * @param <CommonIndexValue>
  */

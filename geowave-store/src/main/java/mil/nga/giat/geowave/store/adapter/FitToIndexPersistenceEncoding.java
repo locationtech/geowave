@@ -9,7 +9,7 @@ import mil.nga.giat.geowave.store.index.CommonIndexValue;
 import mil.nga.giat.geowave.store.index.Index;
 
 public class FitToIndexPersistenceEncoding extends
-AdapterPersistenceEncoding
+		AdapterPersistenceEncoding
 {
 	private final List<ByteArrayId> insertionIds = new ArrayList<ByteArrayId>();
 

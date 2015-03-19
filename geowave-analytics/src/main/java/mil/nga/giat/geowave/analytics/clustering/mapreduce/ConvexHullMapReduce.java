@@ -303,7 +303,7 @@ public class ConvexHullMapReduce
 							HullParameters.Hull.DATA_NAMESPACE_URI,
 							ConvexHullMapReduce.class,
 							BasicFeatureTypes.DEFAULT_NAMESPACE),
-							ClusteringUtils.CLUSTERING_CRS);
+					ClusteringUtils.CLUSTERING_CRS);
 
 			indexId = new ByteArrayId(
 					StringUtils.stringToBinary(config.getString(

@@ -163,7 +163,9 @@ public class GeoWaveGTRasterFormat extends
 			xmlStr = out.toString(StringUtils.UTF8_CHAR_SET.toString());
 		}
 		catch (UnsupportedEncodingException e) {
-			LOGGER.error("Unable to write ByteArray to UTF-8", e);
+			LOGGER.error(
+					"Unable to write ByteArray to UTF-8",
+					e);
 			return false;
 		}
 

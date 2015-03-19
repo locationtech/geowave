@@ -23,7 +23,7 @@ import com.vividsolutions.jts.geom.Geometry;
 
 /**
  * This class contains all of the object array writer field types supported
- *
+ * 
  */
 public class ArrayWriter<RowType, FieldType> implements
 		FieldWriter<RowType, FieldType[]>

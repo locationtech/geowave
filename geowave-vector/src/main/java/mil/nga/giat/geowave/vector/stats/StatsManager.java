@@ -74,10 +74,12 @@ public class StatsManager
 						dataAdapter.getAdapterId(),
 						descriptor.getLocalName()));
 			}
-			else continue;
+			else
+				continue;
 			// last one added to set visibility
 			visibilityHandlers.put(
-					statsList.get(statsList.size() - 1).getStatisticsId(),
+					statsList.get(
+							statsList.size() - 1).getStatisticsId(),
 					new FieldIdStatisticVisibility(
 							new ByteArrayId(
 									descriptor.getLocalName())));

@@ -198,13 +198,11 @@ public class TestObjectDataAdapter extends
 		};
 	}
 
-
-
 	@Override
 	public HadoopWritableSerializer<TestObject, TestObjectWritable> createWritableSerializer() {
 		return new TestObjectHadoopSerializer();
 	}
-	
+
 	private class TestObjectHadoopSerializer implements
 			HadoopWritableSerializer<TestObject, TestObjectWritable>
 	{

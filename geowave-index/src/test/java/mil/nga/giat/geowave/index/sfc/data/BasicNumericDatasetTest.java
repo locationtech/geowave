@@ -80,7 +80,7 @@ public class BasicNumericDatasetTest
 
 	@Test
 	public void testNumericRangesCentroidValues() {
-		
+
 		int expectedCount = 3;
 		double[] expectedCentroidValues = new double[] {
 			30,
@@ -99,20 +99,20 @@ public class BasicNumericDatasetTest
 					centroid[i],
 					DELTA);
 		}
-		
+
 	}
 
 	@Test
 	public void testNumericValuesAllValues() {
 
 		int expectedCount = 3;
-		
+
 		double[] expectedValues = new double[] {
 			25,
 			60,
 			0
 		};
-		
+
 		double[] mins = basicNumericDatasetValues.getMinValuesPerDimension();
 		double[] max = basicNumericDatasetValues.getMaxValuesPerDimension();
 		double[] centroid = basicNumericDatasetValues.getCentroidPerDimension();

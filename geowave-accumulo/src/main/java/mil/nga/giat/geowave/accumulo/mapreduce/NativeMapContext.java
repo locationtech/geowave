@@ -192,7 +192,9 @@ public class NativeMapContext<KEYIN, VALUEIN> implements
 	}
 
 	public boolean userClassesTakesPrecedence() {
-		return context.getConfiguration().getBoolean(MAPREDUCE_JOB_USER_CLASSPATH_FIRST, false);
+		return context.getConfiguration().getBoolean(
+				MAPREDUCE_JOB_USER_CLASSPATH_FIRST,
+				false);
 	}
 
 	@Override

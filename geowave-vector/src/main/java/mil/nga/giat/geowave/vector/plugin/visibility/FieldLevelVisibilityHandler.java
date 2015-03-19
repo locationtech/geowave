@@ -7,11 +7,13 @@ import mil.nga.giat.geowave.store.data.visibility.VisibilityManagement;
 import org.opengis.feature.simple.SimpleFeature;
 
 /**
- * Define visibility for a specific attribute using the {@link VisibilityManagement}.
- * The visibility is determined by meta-data in a separate feature attribute.
- * @see JsonDefinitionColumnVisibilityManagement 
+ * Define visibility for a specific attribute using the
+ * {@link VisibilityManagement}. The visibility is determined by meta-data in a
+ * separate feature attribute.
  * 
- *
+ * @see JsonDefinitionColumnVisibilityManagement
+ * 
+ * 
  * 
  * @param <T>
  * @param <CommonIndexValue>
@@ -28,10 +30,17 @@ public class FieldLevelVisibilityHandler<T, CommonIndexValue> implements
 	/**
 	 * Used when acting with an Index adaptor as a visibility handler. This
 	 * 
-	 * @param fieldName  - the name of the field for which to set determine the visibility.
-	 * @param fieldVisiblityHandler  default visibility handler if a specific visibility cannot be determined from the contents of the attribute
-	 * used to determine visibility (name providied by parameter 'visibilityAttribute')
-	 * @param visibilityAttribute the attribute name that contains data to discern visibility for other field/attributes.
+	 * @param fieldName
+	 *            - the name of the field for which to set determine the
+	 *            visibility.
+	 * @param fieldVisiblityHandler
+	 *            default visibility handler if a specific visibility cannot be
+	 *            determined from the contents of the attribute used to
+	 *            determine visibility (name providied by parameter
+	 *            'visibilityAttribute')
+	 * @param visibilityAttribute
+	 *            the attribute name that contains data to discern visibility
+	 *            for other field/attributes.
 	 * @param visibilityManagement
 	 */
 	public FieldLevelVisibilityHandler(

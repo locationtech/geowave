@@ -62,22 +62,24 @@ public class ComparisonCellData implements
 	}
 
 	@Override
-	public boolean equals(Object val) {
-		if (!(val instanceof ComparisonCellData)){
+	public boolean equals(
+			Object val ) {
+		if (!(val instanceof ComparisonCellData)) {
 			return false;
 		}
-		if (val == this){
+		if (val == this) {
 			return true;
 		}
-		return this.compareTo((ComparisonCellData)val) == 0;
+		return this.compareTo((ComparisonCellData) val) == 0;
 	}
 
 	@Override
-	public int hashCode(){
-		return new HashCodeBuilder(2003,6373)
-				.append(summerPercentile)
-				.append(winterPercentile)
-				.toHashCode();
+	public int hashCode() {
+		return new HashCodeBuilder(
+				2003,
+				6373).append(
+				summerPercentile).append(
+				winterPercentile).toHashCode();
 	}
 
 	private static double applyCombinationFunction(

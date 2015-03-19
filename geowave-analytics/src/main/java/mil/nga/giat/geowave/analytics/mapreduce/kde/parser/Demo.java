@@ -65,7 +65,7 @@ public class Demo
 				public Object getValue() {
 					return Math.PI;
 				}
-				
+
 			});
 			e.registerValue(new CustomValue() {
 
@@ -76,9 +76,9 @@ public class Demo
 
 				@Override
 				public Object getValue() {
-					return Math.PI*Math.PI;
+					return Math.PI * Math.PI;
 				}
-				
+
 			});
 			System.err.println(expression + " = " + e.evaluate());
 		}

@@ -55,7 +55,7 @@ public abstract class GeoWaveReducer extends
 					public Object apply(
 							final ObjectWritable writable ) {
 						final Object innerObj = writable.get();
-						return innerObj instanceof Writable ? serializer.fromWritable((Writable)innerObj) : innerObj;
+						return innerObj instanceof Writable ? serializer.fromWritable((Writable) innerObj) : innerObj;
 					}
 				});
 		reduceNativeValues(

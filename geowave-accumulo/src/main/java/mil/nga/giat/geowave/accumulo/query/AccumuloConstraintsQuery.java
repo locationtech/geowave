@@ -23,7 +23,7 @@ import org.apache.accumulo.core.iterators.user.WholeRowIterator;
 
 /**
  * This class represents basic numeric contraints applied to an Accumulo Query
- *
+ * 
  */
 public class AccumuloConstraintsQuery extends
 		AccumuloFilteredIndexQuery
@@ -68,9 +68,9 @@ public class AccumuloConstraintsQuery extends
 	public AccumuloConstraintsQuery(
 			final List<ByteArrayId> adapterIds,
 			final Index index,
-			final DedupeFilter clientDedupeFilter, 
+			final DedupeFilter clientDedupeFilter,
 			final ScanCallback<?> scanCallback,
-			final String...authorizations) {
+			final String... authorizations ) {
 		this(
 				adapterIds,
 				index,

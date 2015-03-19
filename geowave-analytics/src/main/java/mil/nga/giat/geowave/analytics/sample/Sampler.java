@@ -50,8 +50,12 @@ public class Sampler<T>
 		for (final CentroidPairing<T> pairing : pairings) {
 			final double weight = pairing.getDistance();
 			if (weight > 0.0) {
-				final double score = sampleProbabilityFn.getProbability(weight,normalizingConstant, sampleSize);
-				// could add extra to make sure new point is far enough away from the rest
+				final double score = sampleProbabilityFn.getProbability(
+						weight,
+						normalizingConstant,
+						sampleSize);
+				// could add extra to make sure new point is far enough away
+				// from the rest
 				if (reservoir.size() < sampleSize) {
 					reservoir.put(
 							score,

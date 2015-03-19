@@ -55,11 +55,13 @@ public class TimeField implements
 				fieldId);
 	}
 
-	@Override 
-	public NumericData getFullRange() {		
-		return new NumericRange(0, System.currentTimeMillis()+1);
+	@Override
+	public NumericData getFullRange() {
+		return new NumericRange(
+				0,
+				System.currentTimeMillis() + 1);
 	}
-	
+
 	public TimeField(
 			final NumericDimensionDefinition baseDefinition,
 			final ByteArrayId fieldId ) {
@@ -101,7 +103,7 @@ public class TimeField implements
 	public double getRange() {
 		return baseDefinition.getRange();
 	}
-	
+
 	@Override
 	public NumericRange getBounds() {
 		return baseDefinition.getBounds();
@@ -112,7 +114,7 @@ public class TimeField implements
 			final Time dataElement ) {
 		return dataElement.toNumericData();
 	}
-	
+
 	@Override
 	public ByteArrayId getFieldId() {
 		return fieldId;

@@ -16,8 +16,8 @@ public class BahmanEtAlSampleProbabilityFn implements
 	public double getProbability(
 			final double weight,
 			final double normalizingConstant,
-			final int sampleSize) {
-		return (((double)sampleSize) * weight) / normalizingConstant;
+			final int sampleSize ) {
+		return (((double) sampleSize) * weight) / normalizingConstant;
 	}
 
 	@Override

@@ -10,12 +10,15 @@ import mil.nga.giat.geowave.index.sfc.zorder.ZOrderSFC;
 public class SFCFactory
 {
 	/***
-	 * Generates a SFC instance based on the dimensions definition and the 
-	 * space filling curve type
+	 * Generates a SFC instance based on the dimensions definition and the space
+	 * filling curve type
 	 * 
-	 * @param dimensionDefs  specifies the min, max, and cardinality for this instance of
-	 *                       the SFC
-	 * @param sfc  specifies the type (Hilbert, ZOrder) of space filling curve to generate
+	 * @param dimensionDefs
+	 *            specifies the min, max, and cardinality for this instance of
+	 *            the SFC
+	 * @param sfc
+	 *            specifies the type (Hilbert, ZOrder) of space filling curve to
+	 *            generate
 	 * @return a space filling curve instance generated based on the supplied
 	 *         parameters
 	 */

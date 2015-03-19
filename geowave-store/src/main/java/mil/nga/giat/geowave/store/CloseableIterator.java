@@ -47,8 +47,10 @@ public interface CloseableIterator<E> extends
 			// just a pass through on close()
 		}
 	}
-	
-	public static class Empty<E> implements  CloseableIterator<E> {
+
+	public static class Empty<E> implements
+			CloseableIterator<E>
+	{
 
 		@Override
 		public boolean hasNext() {
@@ -61,11 +63,10 @@ public interface CloseableIterator<E> extends
 		}
 
 		@Override
-		public void remove() {
-		}
+		public void remove() {}
 
 		@Override
-		public void close() throws IOException {
-		}
+		public void close()
+				throws IOException {}
 	}
 }

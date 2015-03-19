@@ -64,8 +64,13 @@ public class GeometryWrapper implements
 					env.getMaxY()) : new NumericRange(
 					env.getMinX(),
 					env.getMaxX());
-			return ((rangeData[0].getMin() < r.getMax()) || DoubleMath.fuzzyEquals(rangeData[0].getMin(), r.getMax(), DOUBLE_TOLERANCE)) 
-					&& ((rangeData[0].getMax() > r.getMin()) || DoubleMath.fuzzyEquals(rangeData[0].getMax(), r.getMin(), DOUBLE_TOLERANCE));
+			return ((rangeData[0].getMin() < r.getMax()) || DoubleMath.fuzzyEquals(
+					rangeData[0].getMin(),
+					r.getMax(),
+					DOUBLE_TOLERANCE)) && ((rangeData[0].getMax() > r.getMin()) || DoubleMath.fuzzyEquals(
+					rangeData[0].getMax(),
+					r.getMin(),
+					DOUBLE_TOLERANCE));
 		}
 		return geometry.getFactory().createPolygon(
 				new Coordinate[] {
@@ -84,7 +89,8 @@ public class GeometryWrapper implements
 					new Coordinate(
 							rangeData[longPosition].getMin(),
 							rangeData[latPosition].getMin())
-				}).buffer(DOUBLE_TOLERANCE).intersects(
+				}).buffer(
+				DOUBLE_TOLERANCE).intersects(
 				geometry);
 	}
 }

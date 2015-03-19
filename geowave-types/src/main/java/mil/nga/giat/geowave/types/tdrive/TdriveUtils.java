@@ -24,20 +24,20 @@ public class TdriveUtils
 {
 	public static final String TDRIVE_POINT_FEATURE = "tdrivepoint";
 
-
-	private static final ThreadLocal<DateFormat> dateFormat = new ThreadLocal<DateFormat>(){
+	private static final ThreadLocal<DateFormat> dateFormat = new ThreadLocal<DateFormat>() {
 		@Override
-		protected DateFormat initialValue(){
+		protected DateFormat initialValue() {
 			return new SimpleDateFormat(
 					"yyyy-MM-dd HH:mm:ss");
 		}
 	};
 
-	public static Date parseDate(String source)
+	public static Date parseDate(
+			String source )
 			throws ParseException {
-		return dateFormat.get().parse(source);
+		return dateFormat.get().parse(
+				source);
 	}
-
 
 	public static SimpleFeatureType createTdrivePointDataType() {
 
@@ -80,7 +80,8 @@ public class TdriveUtils
 		Scanner scanner = null;
 		try {
 			scanner = new Scanner(
-					file, StringUtils.UTF8_CHAR_SET.toString());
+					file,
+					StringUtils.UTF8_CHAR_SET.toString());
 			if (scanner.hasNextLine()) {
 				final String line = scanner.nextLine();
 				return line.split(",").length == 4;

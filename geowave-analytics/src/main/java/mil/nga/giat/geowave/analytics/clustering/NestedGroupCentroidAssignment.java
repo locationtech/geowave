@@ -78,7 +78,6 @@ public class NestedGroupCentroidAssignment<T>
 		this.associationdFunction.setDistanceFunction(distanceFunction);
 	}
 
-
 	/**
 	 * Override zoomLevel from parameters
 	 * 

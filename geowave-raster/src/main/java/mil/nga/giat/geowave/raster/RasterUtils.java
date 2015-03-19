@@ -105,11 +105,11 @@ public class RasterUtils
 							Math.max(
 									(avgSpan * MIN_SEGMENTS) / SIMPLIFICATION_MAX_DEGREES,
 									MIN_SEGMENTS),
-									MAX_SEGMENTS),
-									CRS.findMathTransform(
-											gridCoverage.getCoordinateReferenceSystem(),
-											GeoWaveGTRasterFormat.DEFAULT_CRS,
-											true));
+							MAX_SEGMENTS),
+					CRS.findMathTransform(
+							gridCoverage.getCoordinateReferenceSystem(),
+							GeoWaveGTRasterFormat.DEFAULT_CRS,
+							true));
 			return DouglasPeuckerSimplifier.simplify(
 					new GeometryFactory().createPolygon(polyCoords),
 					SIMPLIFICATION_MAX_DEGREES);
@@ -157,8 +157,8 @@ public class RasterUtils
 			final double maxY,
 			final int numPointsPerSegment,
 			final MathTransform gridToCRS )
-					throws MismatchedDimensionException,
-					TransformException {
+			throws MismatchedDimensionException,
+			TransformException {
 		final Point2D[] screenCoordinates = getScreenCoordinates(
 				minX,
 				minY,
@@ -273,7 +273,7 @@ public class RasterUtils
 
 	/**
 	 * Creates a math transform using the information provided.
-	 *
+	 * 
 	 * @return The math transform.
 	 * @throws IllegalStateException
 	 *             if the grid range or the envelope were not set.
@@ -281,7 +281,7 @@ public class RasterUtils
 	public static MathTransform createTransform(
 			final double[] idRangePerDimension,
 			final MultiDimensionalNumericData fullBounds )
-					throws IllegalStateException {
+			throws IllegalStateException {
 		final GridToEnvelopeMapper mapper = new GridToEnvelopeMapper();
 		final boolean swapXY = mapper.getSwapXY();
 		final boolean[] reverse = mapper.getReverseAxis();
@@ -345,7 +345,7 @@ public class RasterUtils
 
 	/**
 	 * Returns the math transform as a two-dimensional affine transform.
-	 *
+	 * 
 	 * @return The math transform as a two-dimensional affine transform.
 	 * @throws IllegalStateException
 	 *             if the math transform is not of the appropriate type.
@@ -353,7 +353,7 @@ public class RasterUtils
 	public static AffineTransform createAffineTransform(
 			final double[] idRangePerDimension,
 			final MultiDimensionalNumericData fullBounds )
-					throws IllegalStateException {
+			throws IllegalStateException {
 		final MathTransform transform = createTransform(
 				idRangePerDimension,
 				fullBounds);
@@ -404,9 +404,10 @@ public class RasterUtils
 			final Histogram histogram,
 			final ColorModel defaultColorModel ) {
 
-		if (pixelDimension == null){
+		if (pixelDimension == null) {
 			LOGGER.error("Pixel dimension can not be null");
-			throw new IllegalArgumentException("Pixel dimension can not be null");
+			throw new IllegalArgumentException(
+					"Pixel dimension can not be null");
 		}
 
 		final double rescaleX = levelResX / (requestEnvelope.getSpan(0) / pixelDimension.getWidth());
@@ -606,11 +607,12 @@ public class RasterUtils
 				planarImage,
 				new Float(
 						rescaleX),
-						new Float(
-								rescaleY),
-								0.0f,
-								0.0f,interpolation,
-								scalingHints);
+				new Float(
+						rescaleY),
+				0.0f,
+				0.0f,
+				interpolation,
+				scalingHints);
 
 		final WritableRaster scaledImageRaster = (WritableRaster) result.getData();
 
@@ -635,8 +637,8 @@ public class RasterUtils
 				defaultColorModel.createCompatibleWritableRaster(
 						width,
 						height),
-						defaultColorModel.isAlphaPremultiplied(),
-						null);
+				defaultColorModel.isAlphaPremultiplied(),
+				null);
 
 		final Graphics2D g2D = (Graphics2D) emptyImage.getGraphics();
 		final Color save = g2D.getColor();
@@ -704,7 +706,7 @@ public class RasterUtils
 		final int[] bitsPerSample = new int[numBands];
 		for (int i = 0; i < numBands; i++) {
 			noDataValuesPerBand[i] = new double[] {
-					Double.valueOf(Double.NaN)
+				Double.valueOf(Double.NaN)
 			};
 			backgroundValuesPerBand[i] = Double.valueOf(Double.NaN);
 			bitsPerSample[i] = DataBuffer.getDataTypeSize(DataBuffer.TYPE_DOUBLE);
@@ -718,23 +720,23 @@ public class RasterUtils
 				new ComponentColorModel(
 						new BogusColorSpace(
 								numBands),
-								bitsPerSample,
-								false,
-								false,
-								Transparency.OPAQUE,
-								DataBuffer.TYPE_DOUBLE),
-								new HashMap<String, String>(),
-								tileSize,
-								minsPerBand,
-								maxesPerBand,
-								namesPerBand,
-								noDataValuesPerBand,
-								backgroundValuesPerBand,
-								null,
-								false,
-								Interpolation.INTERP_NEAREST,
-								false,
-								new NoDataMergeStrategy());
+						bitsPerSample,
+						false,
+						false,
+						Transparency.OPAQUE,
+						DataBuffer.TYPE_DOUBLE),
+				new HashMap<String, String>(),
+				tileSize,
+				minsPerBand,
+				maxesPerBand,
+				namesPerBand,
+				noDataValuesPerBand,
+				backgroundValuesPerBand,
+				null,
+				false,
+				Interpolation.INTERP_NEAREST,
+				false,
+				new NoDataMergeStrategy());
 	}
 
 	public static GridCoverage2D createCoverageTypeDouble(
@@ -762,9 +764,9 @@ public class RasterUtils
 					new DirectPosition2D(
 							westLon,
 							southLat),
-							new DirectPosition2D(
-									eastLon,
-									northLat));
+					new DirectPosition2D(
+							eastLon,
+							northLat));
 		}
 		return gcf.create(
 				coverageName,
@@ -800,9 +802,9 @@ public class RasterUtils
 					new DirectPosition2D(
 							westLon,
 							southLat),
-							new DirectPosition2D(
-									eastLon,
-									northLat));
+					new DirectPosition2D(
+							eastLon,
+							northLat));
 		}
 		final GridSampleDimension[] bands = new GridSampleDimension[raster.getNumBands()];
 		create(
@@ -826,7 +828,7 @@ public class RasterUtils
 	 * dimensions for the data backing the given iterator. Particularly, it was
 	 * desirable to be able to provide the name per band which was not provided
 	 * in the original.
-	 *
+	 * 
 	 * @param name
 	 *            The name for each band of the data (e.g. "Elevation").
 	 * @param model
@@ -874,11 +876,11 @@ public class RasterUtils
 		}
 		/*
 		 * Arguments are know to be valids. We now need to compute two ranges:
-		 *
+		 * 
 		 * STEP 1: Range of target (sample) values. This is computed in the
 		 * following block. STEP 2: Range of source (geophysics) values. It will
 		 * be computed one block later.
-		 *
+		 * 
 		 * The target (sample) values will typically range from 0 to 255 or 0 to
 		 * 65535, but the general case is handled as well. If the source
 		 * (geophysics) raster uses floating point numbers, then a "nodata"
@@ -934,7 +936,7 @@ public class RasterUtils
 				sourceRange = NumberRange.create(
 						min[b],
 						max[b]).castTo(
-								sourceRange.getElementClass());
+						sourceRange.getElementClass());
 				categories[0] = new Category(
 						name[b],
 						null,

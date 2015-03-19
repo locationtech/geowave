@@ -22,7 +22,6 @@ import com.vividsolutions.jts.io.ParseException;
 import com.vividsolutions.jts.io.WKBReader;
 import com.vividsolutions.jts.io.WKBWriter;
 
-
 /**
  * This class contains a set of Geometry utility methods that are generally
  * useful throughout the GeoWave core codebase
@@ -32,7 +31,6 @@ public class GeometryUtils
 	public static final GeometryFactory GEOMETRY_FACTORY = new GeometryFactory();
 	private final static Logger LOGGER = Logger.getLogger(GeometryUtils.class);
 	private static final int DEFAULT_DIMENSIONALITY = 2;
-
 
 	/**
 	 * This utility method will convert a JTS geometry to contraints that can be
@@ -73,10 +71,14 @@ public class GeometryUtils
 		// range
 		constraintsPerDimension.put(
 				LongitudeDefinition.class,
-				new ConstraintData(rangeLongitude, false));
+				new ConstraintData(
+						rangeLongitude,
+						false));
 		constraintsPerDimension.put(
 				LatitudeDefinition.class,
-				new ConstraintData(rangeLatitude, false));
+				new ConstraintData(
+						rangeLatitude,
+						false));
 		return new Constraints(
 				constraintsPerDimension);
 	}
@@ -104,10 +106,14 @@ public class GeometryUtils
 		// range
 		constraintsPerDimension.put(
 				LongitudeDefinition.class,
-				new ConstraintData(longitude, false));
+				new ConstraintData(
+						longitude,
+						false));
 		constraintsPerDimension.put(
 				LatitudeDefinition.class,
-				new ConstraintData(latitude, false));
+				new ConstraintData(
+						latitude,
+						false));
 		return new Constraints(
 				constraintsPerDimension);
 	}
@@ -167,14 +173,16 @@ public class GeometryUtils
 	 */
 	public static byte[] geometryToBinary(
 			final Geometry geometry ) {
-		
+
 		int dimensions = DEFAULT_DIMENSIONALITY;
-	    
-		if (!geometry.isEmpty()){
-			dimensions  = Double.isNaN(geometry.getCoordinate().getOrdinate(Coordinate.Z)) ? 2 : 3;
+
+		if (!geometry.isEmpty()) {
+			dimensions = Double.isNaN(geometry.getCoordinate().getOrdinate(
+					Coordinate.Z)) ? 2 : 3;
 		}
 
-		return new WKBWriter(dimensions).write(geometry);
+		return new WKBWriter(
+				dimensions).write(geometry);
 	}
 
 	/**

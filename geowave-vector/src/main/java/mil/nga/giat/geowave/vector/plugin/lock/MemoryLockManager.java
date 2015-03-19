@@ -10,11 +10,10 @@ import org.apache.log4j.Logger;
 
 import mil.nga.giat.geowave.vector.plugin.GeoWavePluginConfig;
 
-
 /**
  * Single GeoServer lock support. In a clustered model, do not use.
  * 
- *
+ * 
  * 
  */
 public class MemoryLockManager extends
@@ -127,12 +126,15 @@ public class MemoryLockManager extends
 					}
 					catch (InterruptedException ex) {}
 					catch (Exception e) {
-						LOGGER.error("Memory lock manager filed to wait for lock release. Will cycle till lock is stale.", e);
+						LOGGER.error(
+								"Memory lock manager filed to wait for lock release. Will cycle till lock is stale.",
+								e);
 					}
 			}
 			synchronized (locks) {
 				featureLock = locks.get(featureID);
-				// did this code win the race to get the lock for the feature ID?
+				// did this code win the race to get the lock for the feature
+				// ID?
 				if (featureLock == null || featureLock.isStale()) {
 					locks.put(
 							featureID,

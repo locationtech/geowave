@@ -76,7 +76,6 @@ public class PersistenceEncodingTest
 			},
 			SFCType.HILBERT);
 
-
 	private static final Index index = new Index(
 			strategy,
 			model,

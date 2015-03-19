@@ -200,14 +200,15 @@ public class ElementsToArrayIterator extends
 				// create a new rowid
 				final byte[] rowIdBytes = new AccumuloRowId(
 						rowId.getInsertionId(),
-						new byte[] { },
+						new byte[] {},
 						rowId.getAdapterId(),
 						rowId.getNumberOfDuplicates()).getRowId();
 
 				// set the data id
 				final Key rootKey = IteratorUtils.replaceRow(
 						replaceColumnQualifier(
-								firstKey, new Text()),
+								firstKey,
+								new Text()),
 						rowIdBytes);
 
 				final List<Key> keys = new ArrayList<Key>();
@@ -233,22 +234,22 @@ public class ElementsToArrayIterator extends
 						valueBytes = variableSizeWriter.writeField(fieldDataBytes);
 					}
 					else {
-						valueBytes = new byte[] { };
+						valueBytes = new byte[] {};
 					}
 
 					// set the field name
-					keys.add(
-							replaceColumnQualifier(
-									rootKey,
-									new Text(kvp.getKey().getBytes())));
+					keys.add(replaceColumnQualifier(
+							rootKey,
+							new Text(
+									kvp.getKey().getBytes())));
 
-					values.add(
-							new Value(
-									valueBytes));
+					values.add(new Value(
+							valueBytes));
 				}
 
 				output.append(
-						new SkeletonKey(rootKey),
+						new SkeletonKey(
+								rootKey),
 						WholeRowIterator.encodeRow(
 								keys,
 								values));

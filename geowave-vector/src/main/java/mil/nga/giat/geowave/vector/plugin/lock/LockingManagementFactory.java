@@ -4,9 +4,7 @@ import mil.nga.giat.geowave.vector.plugin.GeoWavePluginConfig;
 
 /**
  * Factories are used with the {@link java.util.ServiceLoader) approach to
- * discover locking management strategies. 
- * 
- * 
+ * discover locking management strategies. * *
  */
 public interface LockingManagementFactory
 {

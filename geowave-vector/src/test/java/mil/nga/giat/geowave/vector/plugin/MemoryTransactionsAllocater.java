@@ -19,17 +19,16 @@ public class MemoryTransactionsAllocater implements
 		super();
 	}
 
-	
-	public MemoryTransactionsAllocater(TransactionNotification notificationRequester) {
+	public MemoryTransactionsAllocater(
+			TransactionNotification notificationRequester ) {
 		super();
 		this.notificationRequester = notificationRequester;
 	}
-	
+
 	public void setNotificationRequester(
 			TransactionNotification notificationRequester ) {
 		this.notificationRequester = notificationRequester;
 	}
-
 
 	public TransactionNotification getNotificationRequester() {
 		return notificationRequester;
@@ -42,8 +41,7 @@ public class MemoryTransactionsAllocater implements
 			String txID )
 			throws IOException {
 		synchronized (lockPaths) {
-			if (!lockPaths.contains(txID))
-			   lockPaths.add(txID);
+			if (!lockPaths.contains(txID)) lockPaths.add(txID);
 		}
 
 	}
@@ -51,7 +49,7 @@ public class MemoryTransactionsAllocater implements
 	public String getTransaction()
 			throws IOException {
 		synchronized (lockPaths) {
-			if (lockPaths.size() > 0){
+			if (lockPaths.size() > 0) {
 				return lockPaths.removeFirst();
 			}
 		}
@@ -62,5 +60,4 @@ public class MemoryTransactionsAllocater implements
 		return id;
 	}
 
-	
 }

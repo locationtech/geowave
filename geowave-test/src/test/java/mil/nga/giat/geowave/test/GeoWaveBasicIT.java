@@ -105,7 +105,9 @@ public class GeoWaveBasicIT extends
 				accumuloOperations.deleteAll();
 			}
 			catch (TableNotFoundException | AccumuloSecurityException | AccumuloException ex) {
-				LOGGER.error("Unable to clear accumulo namespace", ex);
+				LOGGER.error(
+						"Unable to clear accumulo namespace",
+						ex);
 			}
 
 			Assert.fail("Error occurred while testing a bounding box query of spatial index: '" + e.getLocalizedMessage() + "'");
@@ -129,7 +131,9 @@ public class GeoWaveBasicIT extends
 				accumuloOperations.deleteAll();
 			}
 			catch (TableNotFoundException | AccumuloSecurityException | AccumuloException ex) {
-				LOGGER.error("Unable to clear accumulo namespace", ex);
+				LOGGER.error(
+						"Unable to clear accumulo namespace",
+						ex);
 			}
 			Assert.fail("Error occurred while testing a polygon query of spatial index: '" + e.getLocalizedMessage() + "'");
 		}
@@ -146,7 +150,9 @@ public class GeoWaveBasicIT extends
 				accumuloOperations.deleteAll();
 			}
 			catch (TableNotFoundException | AccumuloSecurityException | AccumuloException ex) {
-				LOGGER.error("Unable to clear accumulo namespace", ex);
+				LOGGER.error(
+						"Unable to clear accumulo namespace",
+						ex);
 			}
 			Assert.fail("Error occurred while testing deletion of an entry using spatial index: '" + e.getLocalizedMessage() + "'");
 		}
@@ -154,7 +160,9 @@ public class GeoWaveBasicIT extends
 			accumuloOperations.deleteAll();
 		}
 		catch (TableNotFoundException | AccumuloSecurityException | AccumuloException ex) {
-			LOGGER.error("Unable to clear accumulo namespace", ex);
+			LOGGER.error(
+					"Unable to clear accumulo namespace",
+					ex);
 		}
 	}
 
@@ -185,7 +193,9 @@ public class GeoWaveBasicIT extends
 				accumuloOperations.deleteAll();
 			}
 			catch (TableNotFoundException | AccumuloSecurityException | AccumuloException ex) {
-				LOGGER.error("Unable to clear accumulo namespace", ex);
+				LOGGER.error(
+						"Unable to clear accumulo namespace",
+						ex);
 			}
 			Assert.fail("Error occurred while testing a bounding box and time range query of spatial temporal index: '" + e.getLocalizedMessage() + "'");
 		}
@@ -206,7 +216,9 @@ public class GeoWaveBasicIT extends
 				accumuloOperations.deleteAll();
 			}
 			catch (TableNotFoundException | AccumuloSecurityException | AccumuloException ex) {
-				LOGGER.error("Unable to clear accumulo namespace", ex);
+				LOGGER.error(
+						"Unable to clear accumulo namespace",
+						ex);
 			}
 			Assert.fail("Error occurred while testing a polygon and time range query of spatial temporal index: '" + e.getLocalizedMessage() + "'");
 		}
@@ -223,7 +235,9 @@ public class GeoWaveBasicIT extends
 				accumuloOperations.deleteAll();
 			}
 			catch (TableNotFoundException | AccumuloSecurityException | AccumuloException ex) {
-				LOGGER.error("Unable to clear accumulo namespace", ex);
+				LOGGER.error(
+						"Unable to clear accumulo namespace",
+						ex);
 			}
 			Assert.fail("Error occurred while testing deletion of an entry using spatial temporal index: '" + e.getLocalizedMessage() + "'");
 		}
@@ -231,113 +245,235 @@ public class GeoWaveBasicIT extends
 			accumuloOperations.deleteAll();
 		}
 		catch (TableNotFoundException | AccumuloSecurityException | AccumuloException ex) {
-			LOGGER.error("Unable to clear accumulo namespace", ex);
+			LOGGER.error(
+					"Unable to clear accumulo namespace",
+					ex);
 		}
 	}
 
-    @Test
-    public void testFeatureSerialization() {
+	@Test
+	public void testFeatureSerialization() {
 
-        final Map<Class, Object> args = new HashMap<>();
-        args.put(Geometry.class, GeometryUtils.GEOMETRY_FACTORY.createPoint(new Coordinate(123.4, 567.8)).buffer(1));
-        args.put(Integer.class, 23);
-        args.put(Long.class, 473874387l);
-        args.put(Boolean.class, Boolean.TRUE);
-        args.put(Byte.class, (byte) 0xa);
-        args.put(Short.class, Short.valueOf("2"));
-        args.put(Float.class, 34.23434f);
-        args.put(Double.class, 85.3498394839d);
-        args.put(byte[].class, new byte[]{(byte) 1, (byte) 2, (byte) 3});
-        args.put(Byte[].class, new Byte[]{(byte) 4, (byte) 5, (byte) 6});
-        args.put(Date.class, new Date(8675309l));
-        args.put(BigInteger.class, BigInteger.valueOf(893489348343423l));
-        args.put(BigDecimal.class, new BigDecimal("939384.93840238409237483617837483"));
-        args.put(Calendar.class, Calendar.getInstance());
-        args.put(String.class, "This is my string. There are many like it, but this one is mine.\n" +
-                "My string is my best friend. It is my life. I must master it as I must master my life.");
-        args.put(long[].class, new long[]{12345l, 6789l, 1011l, 1213111111111111l});
-        args.put(int[].class, new int[]{-55, -44, -33, -934839, 55});
-        args.put(double[].class, new double[]{1.125d, 2.25d});
-        args.put(float[].class, new float[]{1.5f, 1.75f});
-        args.put(short[].class, new short[]{(short) 8, (short) 9, (short) 10});
+		final Map<Class, Object> args = new HashMap<>();
+		args.put(
+				Geometry.class,
+				GeometryUtils.GEOMETRY_FACTORY.createPoint(
+						new Coordinate(
+								123.4,
+								567.8)).buffer(
+						1));
+		args.put(
+				Integer.class,
+				23);
+		args.put(
+				Long.class,
+				473874387l);
+		args.put(
+				Boolean.class,
+				Boolean.TRUE);
+		args.put(
+				Byte.class,
+				(byte) 0xa);
+		args.put(
+				Short.class,
+				Short.valueOf("2"));
+		args.put(
+				Float.class,
+				34.23434f);
+		args.put(
+				Double.class,
+				85.3498394839d);
+		args.put(
+				byte[].class,
+				new byte[] {
+					(byte) 1,
+					(byte) 2,
+					(byte) 3
+				});
+		args.put(
+				Byte[].class,
+				new Byte[] {
+					(byte) 4,
+					(byte) 5,
+					(byte) 6
+				});
+		args.put(
+				Date.class,
+				new Date(
+						8675309l));
+		args.put(
+				BigInteger.class,
+				BigInteger.valueOf(893489348343423l));
+		args.put(
+				BigDecimal.class,
+				new BigDecimal(
+						"939384.93840238409237483617837483"));
+		args.put(
+				Calendar.class,
+				Calendar.getInstance());
+		args.put(
+				String.class,
+				"This is my string. There are many like it, but this one is mine.\n" + "My string is my best friend. It is my life. I must master it as I must master my life.");
+		args.put(
+				long[].class,
+				new long[] {
+					12345l,
+					6789l,
+					1011l,
+					1213111111111111l
+				});
+		args.put(
+				int[].class,
+				new int[] {
+					-55,
+					-44,
+					-33,
+					-934839,
+					55
+				});
+		args.put(
+				double[].class,
+				new double[] {
+					1.125d,
+					2.25d
+				});
+		args.put(
+				float[].class,
+				new float[] {
+					1.5f,
+					1.75f
+				});
+		args.put(
+				short[].class,
+				new short[] {
+					(short) 8,
+					(short) 9,
+					(short) 10
+				});
 
-        final SimpleFeatureTypeBuilder builder = new SimpleFeatureTypeBuilder();
-        final AttributeTypeBuilder ab = new AttributeTypeBuilder();
-        builder.setName("featureserializationtest");
+		final SimpleFeatureTypeBuilder builder = new SimpleFeatureTypeBuilder();
+		final AttributeTypeBuilder ab = new AttributeTypeBuilder();
+		builder.setName("featureserializationtest");
 
-        for (Map.Entry<Class, Object> arg : args.entrySet()) {
-            builder.add(ab.binding(arg.getKey()).nillable(false).buildDescriptor(arg.getKey().getName().toString()));
-        }
+		for (Map.Entry<Class, Object> arg : args.entrySet()) {
+			builder.add(ab.binding(
+					arg.getKey()).nillable(
+					false).buildDescriptor(
+					arg.getKey().getName().toString()));
+		}
 
-        final SimpleFeatureType serTestType = builder.buildFeatureType();
-        final SimpleFeatureBuilder serBuilder = new SimpleFeatureBuilder(serTestType);
-        final FeatureDataAdapter serAdapter = new FeatureDataAdapter(serTestType);
-        final Index index = IndexType.SPATIAL_VECTOR.createDefaultIndex();
+		final SimpleFeatureType serTestType = builder.buildFeatureType();
+		final SimpleFeatureBuilder serBuilder = new SimpleFeatureBuilder(
+				serTestType);
+		final FeatureDataAdapter serAdapter = new FeatureDataAdapter(
+				serTestType);
+		final Index index = IndexType.SPATIAL_VECTOR.createDefaultIndex();
 
-        for (Map.Entry<Class, Object> arg : args.entrySet()) {
-            serBuilder.set(arg.getKey().getName(), arg.getValue());
-        }
+		for (Map.Entry<Class, Object> arg : args.entrySet()) {
+			serBuilder.set(
+					arg.getKey().getName(),
+					arg.getValue());
+		}
 
-        final mil.nga.giat.geowave.store.DataStore geowaveStore = new AccumuloDataStore(
-                new AccumuloIndexStore(
-                        accumuloOperations),
-                new AccumuloAdapterStore(
-                        accumuloOperations),
-                new AccumuloDataStatisticsStore(
-                        accumuloOperations),
-                accumuloOperations);
+		final mil.nga.giat.geowave.store.DataStore geowaveStore = new AccumuloDataStore(
+				new AccumuloIndexStore(
+						accumuloOperations),
+				new AccumuloAdapterStore(
+						accumuloOperations),
+				new AccumuloDataStatisticsStore(
+						accumuloOperations),
+				accumuloOperations);
 
-        SimpleFeature sf = serBuilder.buildFeature("343");
-        geowaveStore.ingest(serAdapter, index, sf);
-        DistributableQuery q = new SpatialQuery(((Geometry) args.get(Geometry.class)).buffer(0.5d));
-        CloseableIterator<?> iter = geowaveStore.query(q);
-        boolean foundFeat = false;
-        while (iter.hasNext()) {
-            Object maybeFeat = iter.next();
-            Assert.assertTrue("Iterator should return simple feature in this test",
-                    maybeFeat instanceof SimpleFeature);
-            foundFeat = true;
-            SimpleFeature isFeat = (SimpleFeature) maybeFeat;
-            for (Property p : isFeat.getProperties()) {
-                Object before = args.get(p.getType().getBinding());
-                Object after = isFeat.getAttribute(p.getType().getName().toString());
+		SimpleFeature sf = serBuilder.buildFeature("343");
+		geowaveStore.ingest(
+				serAdapter,
+				index,
+				sf);
+		DistributableQuery q = new SpatialQuery(
+				((Geometry) args.get(Geometry.class)).buffer(0.5d));
+		CloseableIterator<?> iter = geowaveStore.query(q);
+		boolean foundFeat = false;
+		while (iter.hasNext()) {
+			Object maybeFeat = iter.next();
+			Assert.assertTrue(
+					"Iterator should return simple feature in this test",
+					maybeFeat instanceof SimpleFeature);
+			foundFeat = true;
+			SimpleFeature isFeat = (SimpleFeature) maybeFeat;
+			for (Property p : isFeat.getProperties()) {
+				Object before = args.get(p.getType().getBinding());
+				Object after = isFeat.getAttribute(p.getType().getName().toString());
 
-                if (before instanceof double[]) {
-                    Assert.assertArrayEquals((double[]) before, (double[]) after, 1e-12d);
-                } else if (before instanceof boolean[]) {
-                    boolean[] b = (boolean[]) before;
-                    boolean[] a = (boolean[]) after;
-                    Assert.assertTrue(a.length == b.length);
-                    for (int i = 0; i < b.length; i++) {
-                        Assert.assertTrue(b[i] == a[i]);
-                    }
-                } else if (before instanceof byte[]) {
-                    Assert.assertArrayEquals((byte[]) before, (byte[]) after);
-                } else if (before instanceof char[]) {
-                    Assert.assertArrayEquals((char[]) before, (char[]) after);
-                } else if (before instanceof float[]) {
-                    Assert.assertArrayEquals((float[]) before, (float[]) after, 1e-12f);
-                } else if (before instanceof int[]) {
-                    Assert.assertArrayEquals((int[]) before, (int[]) after);
-                } else if (before instanceof long[]) {
-                    Assert.assertArrayEquals((long[]) before, (long[]) after);
-                } else if (before instanceof short[]) {
-                    Assert.assertArrayEquals((short[]) before, (short[]) after);
-                } else if (before.getClass().isArray()) {
-                    Assert.assertArrayEquals(returnArray(p.getType().getBinding(), before), returnArray(p.getType().getBinding(), after));
-                } else {
-                    Assert.assertTrue(before.equals(after));
-                }
-            }
-        }
-        IOUtils.closeQuietly(iter);
-        Assert.assertTrue("One feature should be found", foundFeat);
-    }
+				if (before instanceof double[]) {
+					Assert.assertArrayEquals(
+							(double[]) before,
+							(double[]) after,
+							1e-12d);
+				}
+				else if (before instanceof boolean[]) {
+					boolean[] b = (boolean[]) before;
+					boolean[] a = (boolean[]) after;
+					Assert.assertTrue(a.length == b.length);
+					for (int i = 0; i < b.length; i++) {
+						Assert.assertTrue(b[i] == a[i]);
+					}
+				}
+				else if (before instanceof byte[]) {
+					Assert.assertArrayEquals(
+							(byte[]) before,
+							(byte[]) after);
+				}
+				else if (before instanceof char[]) {
+					Assert.assertArrayEquals(
+							(char[]) before,
+							(char[]) after);
+				}
+				else if (before instanceof float[]) {
+					Assert.assertArrayEquals(
+							(float[]) before,
+							(float[]) after,
+							1e-12f);
+				}
+				else if (before instanceof int[]) {
+					Assert.assertArrayEquals(
+							(int[]) before,
+							(int[]) after);
+				}
+				else if (before instanceof long[]) {
+					Assert.assertArrayEquals(
+							(long[]) before,
+							(long[]) after);
+				}
+				else if (before instanceof short[]) {
+					Assert.assertArrayEquals(
+							(short[]) before,
+							(short[]) after);
+				}
+				else if (before.getClass().isArray()) {
+					Assert.assertArrayEquals(
+							returnArray(
+									p.getType().getBinding(),
+									before),
+							returnArray(
+									p.getType().getBinding(),
+									after));
+				}
+				else {
+					Assert.assertTrue(before.equals(after));
+				}
+			}
+		}
+		IOUtils.closeQuietly(iter);
+		Assert.assertTrue(
+				"One feature should be found",
+				foundFeat);
+	}
 
-    public <T> T[] returnArray(Class<T> clazz, Object o){
-        return (T[])o;
-    }
-
+	public <T> T[] returnArray(
+			Class<T> clazz,
+			Object o ) {
+		return (T[]) o;
+	}
 
 	private void testIngest(
 			final IndexType indexType,
@@ -408,7 +544,9 @@ public class GeoWaveBasicIT extends
 					accumuloOperations.deleteAll();
 				}
 				catch (TableNotFoundException | AccumuloSecurityException | AccumuloException ex) {
-					LOGGER.error("Unable to clear accumulo namespace", ex);
+					LOGGER.error(
+							"Unable to clear accumulo namespace",
+							ex);
 				}
 				Assert.fail("Actual result '" + obj.toString() + "' is not of type Simple Feature.");
 			}
@@ -418,7 +556,9 @@ public class GeoWaveBasicIT extends
 				accumuloOperations.deleteAll();
 			}
 			catch (TableNotFoundException | AccumuloSecurityException | AccumuloException ex) {
-				LOGGER.error("Unable to clear accumulo namespace", ex);
+				LOGGER.error(
+						"Unable to clear accumulo namespace",
+						ex);
 				Assert.fail("Unable to clear accumulo namespace");
 			}
 		}

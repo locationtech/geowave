@@ -16,12 +16,15 @@ import org.opengis.feature.simple.SimpleFeature;
  * @source $URL$
  */
 
-public class GeoWaveEmptyTransaction implements GeoWaveTransaction {
+public class GeoWaveEmptyTransaction implements
+		GeoWaveTransaction
+{
 
 	private final GeoWaveDataStoreComponents components;
 
 	/** Create an empty Diff */
-	public GeoWaveEmptyTransaction(GeoWaveDataStoreComponents components) {
+	public GeoWaveEmptyTransaction(
+			GeoWaveDataStoreComponents components ) {
 		this.components = components;
 	}
 
@@ -42,67 +45,98 @@ public class GeoWaveEmptyTransaction implements GeoWaveTransaction {
 	 *            the update feature replacement feature; null to indicate
 	 *            remove
 	 */
-	public void modify(String fid, SimpleFeature original, SimpleFeature updated)
+	public void modify(
+			String fid,
+			SimpleFeature original,
+			SimpleFeature updated )
 			throws IOException {
 		// point move?
-		if (!updated.getBounds().equals(original.getBounds())) {
-			this.components.remove(original,this);
-			this.components.writeCommit(updated,this);
-		} else {
-			this.components.writeCommit(updated,this);
+		if (!updated.getBounds().equals(
+				original.getBounds())) {
+			this.components.remove(
+					original,
+					this);
+			this.components.writeCommit(
+					updated,
+					this);
 		}
-		
+		else {
+			this.components.writeCommit(
+					updated,
+					this);
+		}
+
 		ReferencedEnvelope bounds = new ReferencedEnvelope();
 		bounds.include(updated.getBounds());
 		bounds.include(original.getBounds());
-		this.components
-				.getGTstore()
-				.getListenerManager()
-				.fireFeaturesChanged(updated.getFeatureType().getTypeName(),
-						Transaction.AUTO_COMMIT, bounds, true);
+		this.components.getGTstore().getListenerManager().fireFeaturesChanged(
+				updated.getFeatureType().getTypeName(),
+				Transaction.AUTO_COMMIT,
+				bounds,
+				true);
 
 	}
 
-	public void add(String fid, SimpleFeature feature) throws IOException {
-		feature.getUserData().put(Hints.USE_PROVIDED_FID, true);
-		if (feature.getUserData().containsKey(Hints.PROVIDED_FID)) {
+	public void add(
+			String fid,
+			SimpleFeature feature )
+			throws IOException {
+		feature.getUserData().put(
+				Hints.USE_PROVIDED_FID,
+				true);
+		if (feature.getUserData().containsKey(
+				Hints.PROVIDED_FID)) {
 			String providedFid = (String) feature.getUserData().get(
 					Hints.PROVIDED_FID);
-			feature.getUserData().put(Hints.PROVIDED_FID, providedFid);
-		} else {
-			feature.getUserData().put(Hints.PROVIDED_FID, feature.getID());
+			feature.getUserData().put(
+					Hints.PROVIDED_FID,
+					providedFid);
 		}
-		this.components.writeCommit(feature,this);
+		else {
+			feature.getUserData().put(
+					Hints.PROVIDED_FID,
+					feature.getID());
+		}
+		this.components.writeCommit(
+				feature,
+				this);
 
-		components.getGTstore().getListenerManager().fireFeaturesAdded(components
-				.getAdapter().getType().getTypeName(), Transaction.AUTO_COMMIT,
-				ReferencedEnvelope.reference(feature.getBounds()), true);
+		components.getGTstore().getListenerManager().fireFeaturesAdded(
+				components.getAdapter().getType().getTypeName(),
+				Transaction.AUTO_COMMIT,
+				ReferencedEnvelope.reference(feature.getBounds()),
+				true);
 	}
 
-	public void remove(String fid, SimpleFeature feature) throws IOException {
-		this.components.remove(feature,this);
-		this.components
-		.getGTstore()
-		.getListenerManager()
-		.fireFeaturesRemoved(feature.getFeatureType().getTypeName(),
-				Transaction.AUTO_COMMIT, ReferencedEnvelope.reference(feature.getBounds()), true);
+	public void remove(
+			String fid,
+			SimpleFeature feature )
+			throws IOException {
+		this.components.remove(
+				feature,
+				this);
+		this.components.getGTstore().getListenerManager().fireFeaturesRemoved(
+				feature.getFeatureType().getTypeName(),
+				Transaction.AUTO_COMMIT,
+				ReferencedEnvelope.reference(feature.getBounds()),
+				true);
 	}
-	
+
 	public String getID() {
 		return "";
 	}
 
 	public CloseableIterator<SimpleFeature> interweaveTransaction(
-			CloseableIterator<SimpleFeature> it) {
+			CloseableIterator<SimpleFeature> it ) {
 		return it;
 	}
 
 	@Override
 	public String[] composeAuthorizations() {
-		return  this.components.getGTstore().getAuthorizationSPI().getAuthorizations();	
+		return this.components.getGTstore().getAuthorizationSPI().getAuthorizations();
 
 	}
-	
+
 	@Override
 	public String composeVisibility() {
 		return "";

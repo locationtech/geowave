@@ -48,7 +48,7 @@ public class FitToIndexDefaultFeatureCollection extends
 	public DefaultFeatureCollection getCollection() {
 		return collection;
 	}
-	
+
 	public ByteArrayId getIndexId() {
 		return indexId;
 	}

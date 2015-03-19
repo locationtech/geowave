@@ -12,7 +12,7 @@ import mil.nga.giat.geowave.store.index.Index;
  * well as translating the data into values and queries that can be used to
  * index. Additionally, each entry is responsible for providing visibility if
  * applicable.
- *
+ * 
  * @param <T>
  *            The type for the data elements that are being adapted
  */
@@ -22,7 +22,7 @@ public interface DataAdapter<T> extends
 {
 	/**
 	 * Return the adapter ID
-	 *
+	 * 
 	 * @return a unique identifier for this adapter
 	 */
 	public ByteArrayId getAdapterId();

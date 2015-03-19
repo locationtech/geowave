@@ -4,6 +4,6 @@ public interface CustomFunction
 {
 	public Object evaluate(
 			Object[] parameters );
-	
+
 	public String getName();
 }

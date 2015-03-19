@@ -18,7 +18,7 @@ import com.vividsolutions.jts.io.WKBWriter;
 /**
  * The Spatial Query class represents a query in two dimensions. The constraint
  * that is applied represents an intersection operation on the query geometry.
- *
+ * 
  */
 public class SpatialQuery extends
 		BasicQuery
@@ -29,7 +29,7 @@ public class SpatialQuery extends
 	/**
 	 * Convenience constructor used to construct a SpatialQuery object that has
 	 * an X and Y dimension (axis).
-	 *
+	 * 
 	 * @param queryGeometry
 	 *            spatial geometry of the query
 	 */
@@ -53,7 +53,7 @@ public class SpatialQuery extends
 	}
 
 	/**
-	 *
+	 * 
 	 * @return queryGeometry the spatial geometry of the SpatialQuery object
 	 */
 	public Geometry getQueryGeometry() {

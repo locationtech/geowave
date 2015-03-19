@@ -39,8 +39,10 @@ public class VisibilityQueryFilter implements
 	private boolean matches(
 			Node vTree,
 			byte[] expression ) {
-		if (Arrays.equals(vTree.getTerm(
-				expression).toArray(),authorization)) return true;
+		if (Arrays.equals(
+				vTree.getTerm(
+						expression).toArray(),
+				authorization)) return true;
 		boolean result = false;
 		for (Node child : vTree.getChildren()) {
 			result |= matches(

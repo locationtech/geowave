@@ -10,7 +10,7 @@ import org.opengis.coverage.grid.GridCoverage;
 import com.vividsolutions.jts.geom.Envelope;
 
 public class RasterBoundingBoxStatistics extends
-BoundingBoxDataStatistics<GridCoverage>
+		BoundingBoxDataStatistics<GridCoverage>
 {
 	protected RasterBoundingBoxStatistics() {
 		super();

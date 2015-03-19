@@ -18,7 +18,7 @@ import mil.nga.giat.geowave.store.index.IndexStore;
 import mil.nga.giat.geowave.store.query.Query;
 
 public class RasterDataStore extends
-AccumuloDataStore
+		AccumuloDataStore
 {
 
 	public RasterDataStore(
@@ -114,9 +114,9 @@ AccumuloDataStore
 							index.getDimensionalityType(),
 							index.getDataType(),
 							index.getId()), // make sure the index ID is the
-							// same as the orginal so that we
-							// are querying the correct table
-							query);
+					// same as the orginal so that we
+					// are querying the correct table
+					query);
 		}
 		else {
 			return super.query(

@@ -19,7 +19,8 @@ public interface DimensionExtractor<T>
 
 	/**
 	 * 
-	 * @return Dimension names in the same order as dimentions returns from the {@link DimensionExtractor#getDimensions(Object)}
+	 * @return Dimension names in the same order as dimentions returns from the
+	 *         {@link DimensionExtractor#getDimensions(Object)}
 	 */
 	public String[] getDimensionNames();
 
@@ -31,10 +32,10 @@ public interface DimensionExtractor<T>
 	 */
 	public Geometry getGeometry(
 			T anObject );
-	
-	/** 
-	 * @param An assigned group ID, if one exists. null, otherwisw.
-	 *            --
+
+	/**
+	 * @param An
+	 *            assigned group ID, if one exists. null, otherwisw. --
 	 */
 	public String getGroupID(
 			T anObject );

@@ -203,7 +203,9 @@ public class NativeReduceContext<KEYIN, VALUEIN> implements
 	}
 
 	public boolean userClassesTakesPrecedence() {
-		return writableContext.getConfiguration().getBoolean(MAPREDUCE_JOB_USER_CLASSPATH_FIRST, false);
+		return writableContext.getConfiguration().getBoolean(
+				MAPREDUCE_JOB_USER_CLASSPATH_FIRST,
+				false);
 	}
 
 	@Override

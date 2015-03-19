@@ -55,19 +55,19 @@ public class MapReduceParameters
 				"hdfs",
 				"HDFS hostname and port in the format hostname:port",
 				true));
-		
+
 		options.add(PropertyManagement.newOption(
 				MRConfig.HDFS_BASE_DIR,
 				"hdfsbase",
 				"Fully qualified path to the base directory in hdfs",
 				true));
-		
+
 		options.add(PropertyManagement.newOption(
 				MRConfig.JOBTRACKER_HOST_PORT,
 				"jobtracker",
 				"Hadoop job tracker hostname and port in the format hostname:port",
 				true));
-		
+
 		options.add(PropertyManagement.newOption(
 				MRConfig.YARN_RESOURCE_MANAGER,
 				"resourceman",

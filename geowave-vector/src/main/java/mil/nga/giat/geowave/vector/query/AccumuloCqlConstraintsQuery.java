@@ -46,8 +46,6 @@ public class AccumuloCqlConstraintsQuery extends
 		this.dataAdapter = dataAdapter;
 	}
 
-
-	
 	public AccumuloCqlConstraintsQuery(
 			final List<ByteArrayId> adapterIds,
 			final Index index,

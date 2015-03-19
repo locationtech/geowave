@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
-
 import mil.nga.giat.geowave.vector.plugin.transaction.GeoWaveTransaction;
 import org.geotools.data.FeatureWriter;
 import org.geotools.feature.simple.SimpleFeatureBuilder;

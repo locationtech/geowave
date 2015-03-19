@@ -27,7 +27,7 @@ import com.vividsolutions.jts.geom.Geometry;
 
 /**
  * This class contains all of the object array reader field types supported
- *
+ * 
  */
 public class ArrayReader<FieldType> implements
 		FieldReader<FieldType[]>

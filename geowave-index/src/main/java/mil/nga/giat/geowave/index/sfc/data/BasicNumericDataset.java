@@ -11,17 +11,18 @@ public class BasicNumericDataset implements
 
 	private final NumericData[] dataPerDimension;
 
-	
-	/** 
+	/**
 	 * Open ended/unconstrained
 	 */
 	public BasicNumericDataset() {
 		this.dataPerDimension = new NumericData[0];
 	}
+
 	/**
 	 * Constructor used to create a new Basic Numeric Dataset object.
 	 * 
-	 * @param dataPerDimension  an array of numeric data objects
+	 * @param dataPerDimension
+	 *            an array of numeric data objects
 	 */
 	public BasicNumericDataset(
 			final NumericData[] dataPerDimension ) {
@@ -83,10 +84,10 @@ public class BasicNumericDataset implements
 	public int getDimensionCount() {
 		return dataPerDimension.length;
 	}
-	
+
 	@Override
 	public boolean isEmpty() {
 		return this.dataPerDimension == null || this.dataPerDimension.length == 0;
 	}
-	
+
 }

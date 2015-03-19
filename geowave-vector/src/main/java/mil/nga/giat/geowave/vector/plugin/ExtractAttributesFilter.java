@@ -48,8 +48,7 @@ public class ExtractAttributesFilter extends
 		NullFilterVisitor
 {
 
-	public ExtractAttributesFilter() {
-	}
+	public ExtractAttributesFilter() {}
 
 	@Override
 	public Object visit(
@@ -65,14 +64,12 @@ public class ExtractAttributesFilter extends
 		return true;
 	}
 
-
-
 	@SuppressWarnings("deprecation")
 	@Override
 	public Object visit(
 			final BBOX filter,
 			final Object data ) {
-			return new LinkedList();
+		return new LinkedList();
 	}
 
 	/**

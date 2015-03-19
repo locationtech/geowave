@@ -44,7 +44,7 @@ public class SourceThresholdMosaicDescriptor extends
 		null,
 		new double[][] {
 			{
-			Double.MIN_VALUE
+				Double.MIN_VALUE
 			}
 		},
 		new double[] {

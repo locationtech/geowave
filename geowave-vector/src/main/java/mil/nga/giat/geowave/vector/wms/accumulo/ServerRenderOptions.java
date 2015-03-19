@@ -41,7 +41,8 @@ public class ServerRenderOptions implements
 		Persistable
 {
 	private final static Logger LOGGER = Logger.getLogger(ServerRenderOptions.class);
-	private static final AtomicBoolean serializerRegistered = new AtomicBoolean(false);
+	private static final AtomicBoolean serializerRegistered = new AtomicBoolean(
+			false);
 
 	protected RenderingHints renderingHints;
 	protected Color bgColor;
@@ -183,12 +184,12 @@ public class ServerRenderOptions implements
 	}
 
 	private void registerSerializers() {
-		synchronized(serializerRegistered) {
-		  if (!serializerRegistered.get()) {
-			SerializerFactory.registerSerializer(new TextureAnchorKeySerializer());
-			SerializerFactory.registerSerializer(new Point2dSerializer());
-			serializerRegistered.set(true);
-		  }
+		synchronized (serializerRegistered) {
+			if (!serializerRegistered.get()) {
+				SerializerFactory.registerSerializer(new TextureAnchorKeySerializer());
+				SerializerFactory.registerSerializer(new Point2dSerializer());
+				serializerRegistered.set(true);
+			}
 		}
 	}
 

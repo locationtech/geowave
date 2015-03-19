@@ -1,9 +1,8 @@
 package mil.nga.giat.geowave.index.sfc.data;
 
 /**
- * Interface used to define numeric data associated with a space 
- * filling curve.
- *
+ * Interface used to define numeric data associated with a space filling curve.
+ * 
  */
 public interface NumericData
 {

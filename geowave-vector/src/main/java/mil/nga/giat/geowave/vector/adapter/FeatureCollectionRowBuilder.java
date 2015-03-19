@@ -19,7 +19,7 @@ import org.opengis.feature.simple.SimpleFeatureType;
  * rows from a set field values (in this case SimpleFeatures from a set of
  * attribute values). This implementation simply wraps a geotools
  * SimpleFeatureBuilder.
- *
+ * 
  */
 public class FeatureCollectionRowBuilder implements
 		RowBuilder<DefaultFeatureCollection, Object>

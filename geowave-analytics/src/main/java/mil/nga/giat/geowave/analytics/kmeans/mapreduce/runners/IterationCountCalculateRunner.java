@@ -31,7 +31,6 @@ public class IterationCountCalculateRunner<T> implements
 
 	public IterationCountCalculateRunner() {}
 
-
 	public int getIterationsCount() {
 		return iterationsCount;
 	}

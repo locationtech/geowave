@@ -196,7 +196,6 @@ public class TimeDefinitionTest
 				DELTA);
 	}
 
-
 	private BinningStrategy getStrategyByUnit(
 			Unit unit ) {
 		return new TimeDefinition(

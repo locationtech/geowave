@@ -14,7 +14,8 @@ public class RangeDecomposition
 	/**
 	 * Constructor used to create a new Range Decomposition object.
 	 * 
-	 * @param ranges ranges for the space filling curve
+	 * @param ranges
+	 *            ranges for the space filling curve
 	 */
 	public RangeDecomposition(
 			final ByteArrayRange[] ranges ) {

@@ -596,7 +596,10 @@ public class GeowaveUtils
 			return AccumuloUtils.decodeRow(
 					row.getKey(),
 					row.getValue(),
-					new AccumuloRowId(row.getKey()), //need to pass this, otherwise null value for rowId gets dereferenced later
+					new AccumuloRowId(
+							row.getKey()), // need to pass this, otherwise null
+											// value for rowId gets dereferenced
+											// later
 					adapterStore,
 					clientFilter,
 					index);

@@ -10,7 +10,7 @@ import mil.nga.giat.geowave.index.sfc.data.NumericRange;
  * The Basic Dimension Definition class defines a Space Filling Curve dimension
  * as a minimum and maximum range with values linearly interpolated within the
  * range. Values outside of the range will be clamped within the range.
- *
+ * 
  */
 public class BasicDimensionDefinition implements
 		NumericDimensionDefinition
@@ -23,7 +23,7 @@ public class BasicDimensionDefinition implements
 	/**
 	 * Constructor which defines and enforces the bounds of a numeric dimension
 	 * definition.
-	 *
+	 * 
 	 * @param min
 	 *            the minimum bounds of the dimension
 	 * @param max

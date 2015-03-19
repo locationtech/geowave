@@ -56,7 +56,8 @@ public class GeoserverServiceImpl implements
 	private final String defaultWorkspace;
 
 	public GeoserverServiceImpl(
-			@Context final ServletConfig servletConfig ) {
+			@Context
+			final ServletConfig servletConfig ) {
 		final Properties props = ServiceUtils.loadProperties(servletConfig.getServletContext().getResourceAsStream(
 				servletConfig.getInitParameter("config.properties")));
 
@@ -182,7 +183,8 @@ public class GeoserverServiceImpl implements
 	@DELETE
 	@Path("/workspaces/{workspace}")
 	public Response deleteWorkspace(
-			@PathParam("workspace") final String workspace ) {
+			@PathParam("workspace")
+			final String workspace ) {
 
 		final Client client = ClientBuilder.newClient().register(
 				HttpAuthenticationFeature.basic(
@@ -238,7 +240,8 @@ public class GeoserverServiceImpl implements
 	@Path("/styles/{styleName}")
 	@Produces(MediaType.APPLICATION_OCTET_STREAM)
 	public Response getStyle(
-			@PathParam("styleName") final String styleName ) {
+			@PathParam("styleName")
+			final String styleName ) {
 
 		final Client client = ClientBuilder.newClient().register(
 				HttpAuthenticationFeature.basic(
@@ -312,7 +315,8 @@ public class GeoserverServiceImpl implements
 	@DELETE
 	@Path("/styles/{styleName}")
 	public Response deleteStyle(
-			@PathParam("styleName") final String styleName ) {
+			@PathParam("styleName")
+			final String styleName ) {
 
 		final Client client = ClientBuilder.newClient().register(
 				HttpAuthenticationFeature.basic(
@@ -329,7 +333,9 @@ public class GeoserverServiceImpl implements
 	@Path("/datastores")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getDatastores(
-			@DefaultValue("") @QueryParam("workspace") String customWorkspace ) {
+			@DefaultValue("")
+			@QueryParam("workspace")
+			String customWorkspace ) {
 
 		customWorkspace = (customWorkspace.equals("")) ? defaultWorkspace : customWorkspace;
 
@@ -388,10 +394,12 @@ public class GeoserverServiceImpl implements
 								"entry");
 					}
 
-					if (entryArray == null){
+					if (entryArray == null) {
 						log.error("entry Array was null; didn't find a valid connectionParameters datastore object of type JSONObject or JSONArray");
-					} else {
-						// report zookeeper servers, instance name and namespace for
+					}
+					else {
+						// report zookeeper servers, instance name and namespace
+						// for
 						// each datastore
 						for (int j = 0; j < entryArray.size(); j++) {
 							final JSONObject entry = entryArray.getJSONObject(j);
@@ -400,15 +408,18 @@ public class GeoserverServiceImpl implements
 
 							if (key.equals("ZookeeperServers")) {
 								datastore.put(
-										"ZookeeperServers", value);
+										"ZookeeperServers",
+										value);
 							}
 							else if (key.equals("InstanceName")) {
 								datastore.put(
-										"InstanceName", value);
+										"InstanceName",
+										value);
 							}
 							else if (key.equals("Namespace")) {
 								datastore.put(
-										"Namespace", value);
+										"Namespace",
+										value);
 							}
 						}
 					}
@@ -433,8 +444,11 @@ public class GeoserverServiceImpl implements
 	@Path("/datastores/{datastoreName}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getDatastore(
-			@PathParam("datastoreName") final String datastoreName,
-			@DefaultValue("") @QueryParam("workspace") String customWorkspace ) {
+			@PathParam("datastoreName")
+			final String datastoreName,
+			@DefaultValue("")
+			@QueryParam("workspace")
+			String customWorkspace ) {
 
 		customWorkspace = (customWorkspace.equals("")) ? defaultWorkspace : customWorkspace;
 
@@ -538,8 +552,11 @@ public class GeoserverServiceImpl implements
 	@DELETE
 	@Path("/datastores/{datastoreName}")
 	public Response deleteDatastore(
-			@PathParam("datastoreName") final String datastoreName,
-			@DefaultValue("") @QueryParam("workspace") String customWorkspace ) {
+			@PathParam("datastoreName")
+			final String datastoreName,
+			@DefaultValue("")
+			@QueryParam("workspace")
+			String customWorkspace ) {
 
 		customWorkspace = (customWorkspace.equals("")) ? defaultWorkspace : customWorkspace;
 
@@ -689,9 +706,10 @@ public class GeoserverServiceImpl implements
 									"entry");
 						}
 
-						if (entryArray == null){
+						if (entryArray == null) {
 							log.error("entry Array is null - didn't find a connectionParameters datastore object that was a JSONObject or JSONArray");
-						} else {
+						}
+						else {
 							// group layers by namespace
 							for (int j = 0; j < entryArray.size(); j++) {
 								final JSONObject entry = entryArray.getJSONObject(j);
@@ -708,7 +726,8 @@ public class GeoserverServiceImpl implements
 										final ArrayList<String> layers = new ArrayList<String>();
 										layers.add(name);
 										namespaceLayersMap.put(
-												value, layers);
+												value,
+												layers);
 									}
 									break;
 								}
@@ -726,7 +745,8 @@ public class GeoserverServiceImpl implements
 				for (int i = 0; i < kvp.getValue().size(); i++) {
 					final JSONObject layerObj = new JSONObject();
 					layerObj.put(
-							"name", kvp.getValue().get(
+							"name",
+							kvp.getValue().get(
 									i));
 					layers.add(layerObj);
 				}
@@ -759,7 +779,8 @@ public class GeoserverServiceImpl implements
 	@Path("/layers/{layerName}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getLayer(
-			@PathParam("layerName") final String layerName ) {
+			@PathParam("layerName")
+			final String layerName ) {
 
 		final Client client = ClientBuilder.newClient().register(
 				HttpAuthenticationFeature.basic(
@@ -854,7 +875,8 @@ public class GeoserverServiceImpl implements
 	@DELETE
 	@Path("/layers/{layer}")
 	public Response deleteLayer(
-			@PathParam("layer") final String layerName ) {
+			@PathParam("layer")
+			final String layerName ) {
 
 		final Client client = ClientBuilder.newClient().register(
 				HttpAuthenticationFeature.basic(

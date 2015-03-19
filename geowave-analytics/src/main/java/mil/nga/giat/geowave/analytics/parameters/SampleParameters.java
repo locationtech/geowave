@@ -69,7 +69,7 @@ public class SampleParameters
 					"Sample Data Type Id",
 					true));
 		}
-	
+
 		if (contains(
 				params,
 				Sample.INDEX_ID)) {

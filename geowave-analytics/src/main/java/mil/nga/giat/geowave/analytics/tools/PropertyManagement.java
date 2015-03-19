@@ -65,7 +65,7 @@ public class PropertyManagement
 
 	public Object get(
 			final ParameterEnum propertyName ) {
-			return properties.get(toPropertyName(propertyName));
+		return properties.get(toPropertyName(propertyName));
 	}
 
 	public void store(
@@ -73,7 +73,8 @@ public class PropertyManagement
 			final Object value ) {
 		synchronized (MUTEX) {
 			properties.put(
-					toPropertyName(propertyName), value);
+					toPropertyName(propertyName),
+					value);
 		}
 	}
 
@@ -85,14 +86,14 @@ public class PropertyManagement
 			if (!properties.containsKey(pName)) {
 				LOGGER.info("Setting parameter : " + pName + " to " + value.toString());
 				properties.put(
-						pName, value);
+						pName,
+						value);
 				return value;
 			}
 
 			return properties.get(pName);
 		}
 	}
-
 
 	public synchronized void copy(
 			final ParameterEnum propertyNameFrom,
@@ -109,15 +110,17 @@ public class PropertyManagement
 	public void store(
 			final ParameterEnum[] names,
 			final Object[] values ) {
-		if (values.length != names.length){
+		if (values.length != names.length) {
 			LOGGER.error("The number of values must equal the number of names passed to the store method");
-			throw new IllegalArgumentException("The number of values must equal the number of names passed to the store method");
+			throw new IllegalArgumentException(
+					"The number of values must equal the number of names passed to the store method");
 		}
 		synchronized (MUTEX) {
 			int i = 0;
 			for (final Object value : values) {
 				properties.put(
-						toPropertyName(names[i++]), value);
+						toPropertyName(names[i++]),
+						value);
 			}
 		}
 	}
@@ -397,11 +400,13 @@ public class PropertyManagement
 			for (final Option option : commandLine.getOptions()) {
 				if (!option.hasArg()) {
 					properties.put(
-							option.getLongOpt(), true);
+							option.getLongOpt(),
+							true);
 				}
 				else {
 					properties.put(
-							option.getLongOpt(), option.getValue());
+							option.getLongOpt(),
+							option.getValue());
 				}
 			}
 		}

@@ -161,8 +161,7 @@ public class HistogramGenerator
 
 			numColls++;
 			numFeatures += coll.size();
-			featsPerTile.add(Double.valueOf(
-							coll.size()));
+			featsPerTile.add(Double.valueOf(coll.size()));
 		}
 		itr.close();
 
@@ -279,14 +278,16 @@ public class HistogramGenerator
 
 		// write the histograms
 		PrintWriter writer = new PrintWriter(
-				"hist_" + queryNum + "_" + tileSize, StringUtils.UTF8_CHAR_SET.toString());
+				"hist_" + queryNum + "_" + tileSize,
+				StringUtils.UTF8_CHAR_SET.toString());
 		for (final int v : hist) {
 			writer.println(v);
 		}
 		writer.close();
 
 		writer = new PrintWriter(
-				"hist_full_" + queryNum + "_" + tileSize, StringUtils.UTF8_CHAR_SET.toString());
+				"hist_full_" + queryNum + "_" + tileSize,
+				StringUtils.UTF8_CHAR_SET.toString());
 		for (final int v : hist_full) {
 			writer.println(v);
 		}
@@ -784,7 +785,10 @@ public class HistogramGenerator
 		};
 
 		final BufferedReader br = new BufferedReader(
-				new InputStreamReader(new FileInputStream("large-queries.txt"), StringUtils.UTF8_CHAR_SET));
+				new InputStreamReader(
+						new FileInputStream(
+								"large-queries.txt"),
+						StringUtils.UTF8_CHAR_SET));
 
 		int queryNum = 0;
 

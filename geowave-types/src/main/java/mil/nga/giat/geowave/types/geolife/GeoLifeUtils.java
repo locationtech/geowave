@@ -19,17 +19,19 @@ import com.vividsolutions.jts.geom.Geometry;
 public class GeoLifeUtils
 {
 
-	private static final ThreadLocal<DateFormat> dateFormat = new ThreadLocal<DateFormat>(){
+	private static final ThreadLocal<DateFormat> dateFormat = new ThreadLocal<DateFormat>() {
 		@Override
-		protected DateFormat initialValue(){
+		protected DateFormat initialValue() {
 			return new SimpleDateFormat(
 					"yyyy-MM-dd HH:mm:ss");
 		}
 	};
 
-	public static Date parseDate(String source)
+	public static Date parseDate(
+			String source )
 			throws ParseException {
-		return dateFormat.get().parse(source);
+		return dateFormat.get().parse(
+				source);
 	}
 
 	public static final String GEOLIFE_POINT_FEATURE = "geolifepoint";

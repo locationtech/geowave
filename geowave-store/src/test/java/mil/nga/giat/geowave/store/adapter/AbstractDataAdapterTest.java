@@ -78,9 +78,9 @@ public class AbstractDataAdapterTest
 		}
 
 		/**
-		 *
+		 * 
 		 * Return the adapter ID
-		 *
+		 * 
 		 * @return a unique identifier for this adapter
 		 */
 		@Override
@@ -416,7 +416,6 @@ public class AbstractDataAdapterTest
 		}
 
 		@Override
-
 		public double getRange() {
 			return 0;
 		}
@@ -499,8 +498,6 @@ public class AbstractDataAdapterTest
 		public String getId() {
 			return null;
 		}
-		
-		
 
 	}
 

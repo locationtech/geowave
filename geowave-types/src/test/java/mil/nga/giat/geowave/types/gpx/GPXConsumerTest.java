@@ -226,13 +226,11 @@ public class GPXConsumerTest
 	static {
 		fileCount.put(
 				"000991807.gpx",
-				Long.valueOf(
-						40));
+				Long.valueOf(40));
 		/** tests duplicate waypoint **/
 		fileCount.put(
 				"mystic_basin_trail.gpx",
-				Long.valueOf(
-						24));
+				Long.valueOf(24));
 	}
 
 	private void descent(

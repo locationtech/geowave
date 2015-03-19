@@ -139,7 +139,7 @@ public class RasterDataAdapter implements
 		IndexDependentDataAdapter<GridCoverage>,
 		AttachedIteratorDataAdapter<GridCoverage>,
 		HadoopDataAdapter<GridCoverage, GridCoverageWritable>
-{ 
+{
 	static {
 		SourceThresholdFixMosaicDescriptor.register(false);
 	}
@@ -1688,7 +1688,8 @@ public class RasterDataAdapter implements
 	}
 
 	@Override
-	public IteratorConfig[] getAttachedIteratorConfig(final Index index) {
+	public IteratorConfig[] getAttachedIteratorConfig(
+			final Index index ) {
 		final EnumSet<IteratorScope> visibilityCombinerScope = EnumSet.of(IteratorScope.scan);
 		final RasterTileCombinerConfig tileCombiner = new RasterTileCombinerConfig(
 				new IteratorSetting(
@@ -1768,6 +1769,7 @@ public class RasterDataAdapter implements
 			}
 		};
 	}
+
 	public boolean isEqualizeHistogram() {
 		return equalizeHistogram;
 	}

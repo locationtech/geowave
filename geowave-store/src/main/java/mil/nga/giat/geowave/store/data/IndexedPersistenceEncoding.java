@@ -35,7 +35,7 @@ public class IndexedPersistenceEncoding extends
 	/**
 	 * Return the index ID, this is the ID that the entry inserted at given by
 	 * the index
-	 *
+	 * 
 	 * @return the index ID
 	 */
 	public ByteArrayId getIndexInsertionId() {
@@ -50,7 +50,7 @@ public class IndexedPersistenceEncoding extends
 	/**
 	 * Return the number of duplicates for this entry. Entries are duplicated
 	 * when a single row ID is insufficient to index it.
-	 *
+	 * 
 	 * @return the number of duplicates
 	 */
 	public int getDuplicateCount() {
@@ -59,7 +59,7 @@ public class IndexedPersistenceEncoding extends
 
 	/**
 	 * Return a flag indicating if the entry has any duplicates
-	 *
+	 * 
 	 * @return is it duplicated?
 	 */
 	public boolean isDuplicated() {
