@@ -16,6 +16,8 @@
 
 package mil.nga.giat.geowave.store.filter;
 
+import org.apache.log4j.Logger;
+
 import java.lang.ref.Reference;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Array;
@@ -43,6 +45,7 @@ import java.util.WeakHashMap;
  */
 public abstract class GenericTypeResolver
 {
+	private static final Logger LOGGER = Logger.getLogger(GenericTypeResolver.class);
 
 	/** Cache from Class to TypeVariable Map */
 	private static final Map<Class<?>, Reference<Map<TypeVariable<?>, Type>>> typeVariableCache = Collections.synchronizedMap(new WeakHashMap<Class<?>, Reference<Map<TypeVariable<?>, Type>>>());
@@ -259,6 +262,11 @@ public abstract class GenericTypeResolver
 		Reference<Map<TypeVariable<?>, Type>> ref = typeVariableCache.get(clazz);
 		Map<TypeVariable<?>, Type> typeVariableMap = (ref != null ? ref.get() : null);
 
+		if (clazz == null) {
+			throw new IllegalArgumentException(
+					"clazz can not be null");
+		}
+
 		if (typeVariableMap == null) {
 			typeVariableMap = new HashMap<TypeVariable<?>, Type>();
 
@@ -295,6 +303,10 @@ public abstract class GenericTypeResolver
 							typeVariableMap);
 				}
 				type = type.getEnclosingClass();
+				if (type == null) {
+					LOGGER.fatal("type.getEnclosingClass() returned null");
+					return null;
+				}
 			}
 
 			typeVariableCache.put(

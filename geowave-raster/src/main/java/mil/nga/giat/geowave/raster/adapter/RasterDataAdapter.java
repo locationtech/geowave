@@ -930,6 +930,12 @@ public class RasterDataAdapter implements
 					sm,
 					i);
 
+			if (st == null) {
+				LOGGER.error("Could not get sample dimension type, getSampleDimensionType returned null");
+				throw new IOException(
+						"Could not get sample dimension type, getSampleDimensionType returned null");
+			}
+
 			// set some no data values, as well as Min and Max values
 			double noData;
 			double min = -Double.MAX_VALUE, max = Double.MAX_VALUE;

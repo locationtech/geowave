@@ -5,12 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
+import java.util.*;
 
 import javax.servlet.ServletConfig;
 import javax.ws.rs.Consumes;
@@ -100,18 +95,23 @@ public class IngestServiceImpl implements
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response hdfsIngest(
 			final FormDataMultiPart multiPart ) {
-		ingest(
+		return ingest(
 				"hdfsingest",
 				multiPart);
-		return Response.ok().build();
+
 	}
 
-	private void ingest(
+	private Response ingest(
 			final String ingestMethod,
 			final FormDataMultiPart multiPart ) {
 
+		List<FormDataBodyPart> fileFields = multiPart.getFields("file");
+		if (fileFields == null) {
+			return Response.noContent().build();
+		}
+
 		// read the list of files
-		final List<FormDataBodyPart> fields = multiPart.getFields("file");
+		final List<FormDataBodyPart> fields = fileFields;
 		final Map<String, InputStream> fileMap = new HashMap<String, InputStream>();
 		for (final FormDataBodyPart field : fields) {
 			fileMap.put(
@@ -168,7 +168,7 @@ public class IngestServiceImpl implements
 		}
 
 		// ingest the files
-		runIngest(
+		return runIngest(
 				baseDir,
 				ingestMethod,
 				ingestType,
@@ -178,7 +178,7 @@ public class IngestServiceImpl implements
 				clear);
 	}
 
-	private void runIngest(
+	private Response runIngest(
 			final File baseDir,
 			final String ingestMethod,
 			final String ingestType,
@@ -225,5 +225,6 @@ public class IngestServiceImpl implements
 		}
 
 		IngestMain.main(args.toArray(new String[] {}));
+		return Response.ok().build();
 	}
 }

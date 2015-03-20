@@ -27,12 +27,17 @@ import org.apache.hadoop.io.ObjectWritable;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
+import org.apache.log4j.Logger;
 import org.opengis.coverage.grid.GridCoverage;
+
+import java.io.IOException;
 
 public class RasterTileResizeJobRunner extends
 		Configured implements
 		Tool
 {
+	private static final Logger LOGGER = Logger.getLogger(RasterTileResizeJobRunner.class);
+
 	public static final String NEW_ADAPTER_ID_KEY = "NEW_ADAPTER_ID";
 	public static final String OLD_ADAPTER_ID_KEY = "OLD_ADAPTER_ID";
 
@@ -167,8 +172,18 @@ public class RasterTileResizeJobRunner extends
 				ops);
 		final IndexWriter writer = store.createIndexWriter(index);
 		writer.setupAdapter(newAdapter);
-		Boolean retVal = job.waitForCompletion(true);
-		writer.close();
+		boolean retVal = false;
+		try {
+			retVal = job.waitForCompletion(true);
+		}
+		catch (IOException ex) {
+			LOGGER.error(
+					"Error waiting for map reduce tile resize job: ",
+					ex);
+		}
+		finally {
+			writer.close();
+		}
 		return retVal ? 0 : 1;
 	}
 

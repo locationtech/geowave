@@ -1,5 +1,6 @@
 package mil.nga.giat.geowave.analytics.kmeans.mapreduce.runners;
 
+import java.io.IOException;
 import java.util.Set;
 import java.util.UUID;
 
@@ -208,15 +209,23 @@ public class KMeansJumpJobRunner extends
 			propertyManagement.store(
 					GlobalParameters.Global.BATCH_ID,
 					currentBatchId);
+
+			Class<AnalyticItemWrapperFactory> analyticItemWrapperFC = propertyManagement.getPropertyAsClass(
+					CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS,
+					AnalyticItemWrapperFactory.class);
+			if (analyticItemWrapperFC == null) {
+				LOGGER.error("Could not get instance of " + CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS);
+				throw new IOException(
+						"Could not get instance of " + CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS);
+			}
+
 			/**
 			 * Associate the batch id with the best set of groups so the caller
 			 * can find the clusters for the given batch
 			 */
 			final int result = DistortionGroupManagement.retainBestGroups(
 					ClusteringUtils.createOperations(propertyManagement),
-					(AnalyticItemWrapperFactory<SimpleFeature>) propertyManagement.getPropertyAsClass(
-							CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS,
-							AnalyticItemWrapperFactory.class).newInstance(),
+					(AnalyticItemWrapperFactory<SimpleFeature>) analyticItemWrapperFC.newInstance(),
 					propertyManagement.getProperty(CentroidParameters.Centroid.DATA_TYPE_ID),
 					propertyManagement.getProperty(CentroidParameters.Centroid.INDEX_ID),
 					tableName,

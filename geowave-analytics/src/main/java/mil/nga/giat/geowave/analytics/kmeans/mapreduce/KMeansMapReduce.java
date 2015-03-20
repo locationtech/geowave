@@ -216,6 +216,11 @@ public class KMeansMapReduce
 					centroidID,
 					groupID);
 
+			if (centroid == null){
+				LOGGER.error("unable to get centroid instance, getFeatureForCentroid returned null");
+				throw new IOException("unable to get centroid instance, getFeatureForCentroid returned null");
+			}
+
 			// do not update the cost, because this cost is associated with the
 			// centroid PRIOR to this update.
 			// centroid.setCost(totals.distance);
@@ -236,12 +241,8 @@ public class KMeansMapReduce
 			if (KMeansMapReduce.LOGGER.isTraceEnabled()) {
 				KMeansMapReduce.LOGGER.trace(groupID + " contains " + centroidID);
 			}
-			// new center
-			context.write(
-					new GeoWaveOutputKey(
-							centroidManager.getDataTypeId(),
-							centroidManager.getIndexId()),
-					centroidManager.createNextCentroid(
+
+			AnalyticItemWrapper<Object> nextCentroid = centroidManager.createNextCentroid(
 							centroid.getWrappedItem(),
 							groupID,
 							new Coordinate(
@@ -249,8 +250,18 @@ public class KMeansMapReduce
 									totals.y,
 									totals.z),
 							centroid.getExtraDimensions(),
-							totals.values).getWrappedItem());
+							totals.values);
+
+			if (nextCentroid != null){
+			// new center
+			context.write(
+					new GeoWaveOutputKey(
+							centroidManager.getDataTypeId(),
+							centroidManager.getIndexId()),
+							nextCentroid.getWrappedItem());
+			}
 		}
+
 
 		private AnalyticItemWrapper<Object> getFeatureForCentroid(
 				final String id,

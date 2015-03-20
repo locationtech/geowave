@@ -134,7 +134,7 @@ public final class DelayedBackbufferGraphic extends
 		}
 	}
 
-	public BufferedImage getImage() {
+	public synchronized BufferedImage getImage() {
 		return image;
 	}
 

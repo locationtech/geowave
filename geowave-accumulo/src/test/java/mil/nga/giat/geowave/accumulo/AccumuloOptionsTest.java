@@ -517,9 +517,14 @@ public class AccumuloOptionsTest
 				geom1.id);
 
 		// delete entry by data id & adapter id
-		mockDataStore.deleteEntries(
-				adapter0,
-				index);
+		try {
+			mockDataStore.deleteEntries(
+					adapter0,
+					index);
+		}
+		catch (IOException e) {
+			Assert.fail("Unable to delete entries");
+		}
 
 		geom0 = mockDataStore.getEntry(
 				index,

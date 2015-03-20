@@ -73,7 +73,11 @@ public class GeoToolsRasterDataStoreIngestPlugin implements
 
 		final AbstractGridFormat format = GridFormatFinder.findFormat(input);
 		final GridCoverage2DReader reader = format.getReader(input);
-
+		if (reader == null) {
+			LOGGER.error("Unable to get reader instance, getReader returned null");
+			return new Wrapper(
+					Collections.emptyIterator());
+		}
 		try {
 			final GridCoverage2D coverage = reader.read(null);
 			if (coverage != null) {

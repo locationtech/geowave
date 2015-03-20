@@ -9,6 +9,7 @@ import mil.nga.giat.geowave.store.DataStoreEntryInfo;
 import mil.nga.giat.geowave.store.DeleteCallback;
 import mil.nga.giat.geowave.store.IngestCallback;
 import mil.nga.giat.geowave.store.ScanCallback;
+import org.apache.log4j.Logger;
 
 public class DataStatisticsBuilder<T> implements
 		IngestCallback<T>,
@@ -19,6 +20,7 @@ public class DataStatisticsBuilder<T> implements
 	private final Map<ByteArrayId, DataStatistics<T>> statisticsMap = new HashMap<ByteArrayId, DataStatistics<T>>();
 	private final ByteArrayId statisticsId;
 	private final DataStatisticsVisibilityHandler<T> visibilityHandler;
+	private static final Logger LOGGER = Logger.getLogger(DataStatistics.class);
 
 	public DataStatisticsBuilder(
 			final StatisticalDataAdapter<T> adapter,
@@ -39,6 +41,10 @@ public class DataStatisticsBuilder<T> implements
 		DataStatistics<T> statistics = statisticsMap.get(visibility);
 		if (statistics == null) {
 			statistics = adapter.createDataStatistics(statisticsId);
+			if (statistics == null) {
+				LOGGER.error("Could not get statistics instance, createDataStatistics returned null");
+				return;
+			}
 			statistics.setVisibility(visibility.getBytes());
 			statisticsMap.put(
 					visibility,
@@ -65,6 +71,10 @@ public class DataStatisticsBuilder<T> implements
 		DataStatistics<T> statistics = statisticsMap.get(visibilityByteArray);
 		if (statistics == null) {
 			statistics = adapter.createDataStatistics(statisticsId);
+			if (statistics == null) {
+				LOGGER.error("Unable to create DataStatistics instance, createDataStatistics returned null");
+				return;
+			}
 			statistics.setVisibility(visibilityByteArray.getBytes());
 			statisticsMap.put(
 					visibilityByteArray,
@@ -88,6 +98,11 @@ public class DataStatisticsBuilder<T> implements
 		DataStatistics<T> statistics = statisticsMap.get(visibility);
 		if (statistics == null) {
 			statistics = adapter.createDataStatistics(statisticsId);
+			if (statistics == null) {
+				LOGGER.error("Unable to get statistics instance, createDataStatistics returned null");
+				return;
+			}
+
 			statistics.setVisibility(visibility.getBytes());
 			statisticsMap.put(
 					visibility,

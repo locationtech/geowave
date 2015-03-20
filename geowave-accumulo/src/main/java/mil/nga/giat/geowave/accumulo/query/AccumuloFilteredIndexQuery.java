@@ -86,6 +86,11 @@ public abstract class AccumuloFilteredIndexQuery extends
 		final ScannerBase scanner = getScanner(
 				accumuloOperations,
 				limit);
+
+		if (scanner == null) {
+			LOGGER.error("Could not get scanner instance, getScanner returned null");
+			return new CloseableIterator.Empty();
+		}
 		addScanIteratorSettings(scanner);
 		Iterator it = initIterator(
 				adapterStore,

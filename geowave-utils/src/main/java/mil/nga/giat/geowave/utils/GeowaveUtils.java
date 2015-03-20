@@ -75,6 +75,8 @@ import org.apache.log4j.Logger;
 public class GeowaveUtils
 {
 
+	private static final Logger LOGGER = Logger.getLogger(GeowaveUtils.class);
+
 	/**
 	 * Get Namespaces
 	 * 
@@ -171,6 +173,12 @@ public class GeowaveUtils
 				namespace,
 				index);
 
+		if (iterator == null) {
+			LOGGER.error("could not get iterator instance, getIterator returned null");
+			throw new IOException(
+					"could not get iterator instance, getIterator returned null");
+		}
+
 		int numberSplits = quantile - 1;
 		BigInteger min = null;
 		BigInteger max = null;
@@ -250,6 +258,12 @@ public class GeowaveUtils
 				namespace,
 				index);
 
+		if (iterator == null) {
+			LOGGER.error("Could not get iterator instance, getIterator returned null");
+			throw new IOException(
+					"Could not get iterator instance, getIterator returned null");
+		}
+
 		long ii = 0;
 		long splitInterval = count / numberSplits;
 		SortedSet<Text> splits = new TreeSet<Text>();
@@ -300,6 +314,12 @@ public class GeowaveUtils
 				connector,
 				namespace,
 				index);
+
+		if (iterator == null) {
+			LOGGER.error("Unable to get iterator instance, getIterator returned null");
+			throw new IOException(
+					"Unable to get iterator instance, getIterator returned null");
+		}
 
 		long ii = 0;
 		SortedSet<Text> splits = new TreeSet<Text>();

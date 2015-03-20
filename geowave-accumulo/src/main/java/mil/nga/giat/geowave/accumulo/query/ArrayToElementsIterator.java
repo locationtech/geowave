@@ -128,15 +128,14 @@ public class ArrayToElementsIterator extends
 			final Map<String, String> options,
 			final IteratorEnvironment env )
 			throws IOException {
-		super.init(
-				source,
-				options,
-				env);
-
 		if (options == null) {
 			throw new IllegalArgumentException(
 					"Arguments must be set for " + ArrayToElementsIterator.class.getName());
 		}
+		super.init(
+				source,
+				options,
+				env);
 		try {
 
 			final String modelStr = options.get(MODEL);

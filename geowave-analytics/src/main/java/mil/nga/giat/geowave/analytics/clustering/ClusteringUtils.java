@@ -277,6 +277,17 @@ public class ClusteringUtils
 	public static DataAdapter<?> createAdapter(
 			final PropertyManagement propertyManagement )
 			throws Exception {
+
+		Class<DimensionExtractor> dimensionExtractorClass = propertyManagement.getPropertyAsClass(
+				CommonParameters.Common.DIMENSION_EXTRACT_CLASS,
+				DimensionExtractor.class);
+
+		if (dimensionExtractorClass == null) {
+			LOGGER.error("Could not find class: " + CommonParameters.Common.DIMENSION_EXTRACT_CLASS);
+			throw new ClassNotFoundException(
+					"Could not find class: " + CommonParameters.Common.DIMENSION_EXTRACT_CLASS);
+		}
+
 		return ClusteringUtils.createAdapter(
 				propertyManagement.getProperty(CentroidParameters.Centroid.DATA_TYPE_ID),
 				propertyManagement.getProperty(
@@ -287,9 +298,6 @@ public class ClusteringUtils
 				propertyManagement.getProperty(GlobalParameters.Global.ACCUMULO_USER),
 				propertyManagement.getProperty(GlobalParameters.Global.ACCUMULO_PASSWORD),
 				propertyManagement.getProperty(GlobalParameters.Global.ACCUMULO_NAMESPACE),
-				propertyManagement.getPropertyAsClass(
-						CommonParameters.Common.DIMENSION_EXTRACT_CLASS,
-						DimensionExtractor.class).newInstance().getDimensionNames());
-
+				dimensionExtractorClass.newInstance().getDimensionNames());
 	}
 }

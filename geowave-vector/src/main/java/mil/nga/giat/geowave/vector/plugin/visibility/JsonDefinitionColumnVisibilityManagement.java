@@ -51,16 +51,17 @@ public class JsonDefinitionColumnVisibilityManagement<T> extends
 			Iterator<String> attNameIt = attributeMap.getFieldNames();
 			while (attNameIt.hasNext()) {
 				String attName = attNameIt.next();
-				if (fieldName.matches(attName)) return validate(attributeMap.get(
-						attName).getTextValue());
+				if (fieldName.matches(attName)) {
+					JsonNode attNode = attributeMap.get(attName);
+					if (attNode == null) {
+						LOGGER.error("Cannot parse visibility expression, JsonNode for attribute " + attName + " was null");
+						return null;
+					}
+					return validate(attNode.getTextValue());
+				}
 			}
 		}
-		catch (JsonProcessingException e) {
-			LOGGER.error(
-					"Cannot parse visibility expression " + visibilityObject.toString(),
-					e);
-		}
-		catch (IOException e) {
+		catch (IOException | NullPointerException e) {
 			LOGGER.error(
 					"Cannot parse visibility expression " + visibilityObject.toString(),
 					e);

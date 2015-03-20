@@ -183,6 +183,13 @@ public class UpdateCentroidCostMapReduce
 			final AnalyticItemWrapper<Object> centroid = getFeatureForCentroid(
 					id,
 					groupID);
+
+			if (centroid == null) {
+				LOGGER.error("Couldn't get a centroid instance, getFeatureForCentroid returned null");
+				throw new IOException(
+						"Couldn't get a centroid instance, getFeatureForCentroid returned null");
+			}
+
 			centroid.setCost(sum);
 			centroid.resetAssociatonCount();
 			centroid.incrementAssociationCount((long) count);

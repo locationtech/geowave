@@ -1,5 +1,6 @@
 package mil.nga.giat.geowave.analytics.clustering.runners;
 
+import java.io.IOException;
 import java.util.Set;
 import java.util.UUID;
 
@@ -217,6 +218,12 @@ public class GeoWaveAnalyticExtractJobRunner extends
 				runTimeProperties.getProperty(GlobalParameters.Global.ACCUMULO_USER),
 				runTimeProperties.getProperty(GlobalParameters.Global.ACCUMULO_PASSWORD),
 				runTimeProperties.getProperty(GlobalParameters.Global.ACCUMULO_NAMESPACE));
+
+		if (adapters == null) {
+			LOGGER.error("unable to get adapters instance, getAdapters returned null");
+			throw new IOException(
+					"unable to get adapters instance, getAdapters returned null");
+		}
 
 		if (adapterId != null) {
 			final ByteArrayId byteId = new ByteArrayId(

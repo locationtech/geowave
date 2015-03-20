@@ -384,6 +384,7 @@ public class KDEJobRunner extends
 				ops);
 		final IndexWriter writer = store.createIndexWriter(index);
 		writer.setupAdapter(adapter);
+		writer.close();
 	}
 
 	public static void main(
