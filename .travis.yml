@@ -9,9 +9,10 @@ env:
     - ACCUMULO_VERSION='1.6.2'              ACCUMULO_LEGACY=''                  HADOOP_VERSION='2.6.0'              GEOTOOLS_VERSION='12.2'   GEOSERVER_VERSION='2.6.2' PLATFORM_VERSION='""'
     - ACCUMULO_VERSION='1.6.1.2.2.0.0-2041' ACCUMULO_LEGACY=''                  HADOOP_VERSION='2.6.0.2.2.0.0-2041' GEOTOOLS_VERSION='12.2'   GEOSERVER_VERSION='2.6.2' PLATFORM_VERSION='hortonworks'
   global:
-    #github token
     - secure: "TosKDl5mnt8UKeyWDg65i6cWENR7EorQbFPSvZ5ZfQfAaDAOeIN2OA/zxtRMELeYM82+n+GGXQOt0qPiYqyRlufYJJSUnWiwvI5gm3a8+f58atcU2R2bF9jd81bsL9jCS+JCQxAmzh8FCO6t7DJ4OdoMyMaIR7XjlSlsIJ97dd8="
-    - secure: IcwzKevdTSsKK9YERJ/LV81pfDe7Fx7qBxYcy43b0/emsioZJsJV5XSYHfFRIqceMkzp8LFBU8qiZR3cPZPKQoCjaG1QcwDeKQpyczIkMwzWzydhLR5dAzVETbQC9i2hH4sWjVVHW5WU6UUc3gCz5rPyIXFUYVUYxFeMWxHCe8w=
+    - secure: "IcwzKevdTSsKK9YERJ/LV81pfDe7Fx7qBxYcy43b0/emsioZJsJV5XSYHfFRIqceMkzp8LFBU8qiZR3cPZPKQoCjaG1QcwDeKQpyczIkMwzWzydhLR5dAzVETbQC9i2hH4sWjVVHW5WU6UUc3gCz5rPyIXFUYVUYxFeMWxHCe8w="
+    - secure: "DdDzYhyJMMf6ZEIMe3FvK6IDWFWqWLbuFg8SCCnrAHpt6mGo8EOsvvbuyvvWqgCGsFZyvk+hJGamNjQEnSiBSP/2kwSUmpGgZ5DquHxFTkmTeh13ifqf231rwaCwBw9yrDXKdyMxHMVeHIXOjqV7Ylru2t2WoFxIEj4vHnqRjGQ="
+
 cache:
   directories:
   - $HOME/.m2
@@ -22,8 +23,10 @@ before_install:
   - chmod +x .utility/push-javadoc-to-gh-pages.sh
   - chmod +x .utility/build-docs-site.sh
   - chmod +x .utility/maven-coveralls-hack.sh
+  - chmod +x .utility/changelog-generator.sh
   - .utility/maven-coveralls-hack.sh
 after_success:
+  - .utility/changelog-generator.sh
   - .utility/push-javadoc-to-gh-pages.sh
   - mvn coveralls:report -Daccumulo.version=${ACCUMULO_VERSION} ${ACCUMULO_LEGACY} -Dhadoop.version=${HADOOP_VERSION} -Dgeotools.version=${GEOTOOLS_VERSION} -Dgeoserver.version=${GEOSERVER_VERSION} -P ${PLATFORM_VERSION}
 

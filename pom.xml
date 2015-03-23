@@ -440,7 +440,7 @@
 			<plugin>
 				<groupId>org.eluder.coveralls</groupId>
 				<artifactId>coveralls-maven-plugin</artifactId>
-				<version>3.1.0-munge-hack</version>
+				<version>3.1.1-munge-hack</version>
 				<configuration>
 					<jacocoReports>
 						<jacocoReport>${project.basedir}/geowave-index/target/site/jacoco-ut/jacoco.xml</jacocoReport>
