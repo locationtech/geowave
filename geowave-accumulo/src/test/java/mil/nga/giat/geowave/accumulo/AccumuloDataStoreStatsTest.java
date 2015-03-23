@@ -529,7 +529,10 @@ public class AccumuloDataStoreStatsTest
 				return new CountDataStatistics<TestGeometry>(
 						getAdapterId());
 			}
-			return null;
+			LOGGER.warn("Unrecognized statistics ID " + statisticsId.getString() + " using count statistic");
+			return new CountDataStatistics<TestGeometry>(
+					getAdapterId(),
+					statisticsId);
 		}
 
 		@Override

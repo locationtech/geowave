@@ -3,6 +3,7 @@ package mil.nga.giat.geowave.analytics.clustering;
 import java.io.IOException;
 import java.util.List;
 
+import mil.nga.giat.geowave.analytics.clustering.exception.MatchingCentroidNotFoundException;
 import mil.nga.giat.geowave.analytics.tools.AnalyticItemWrapper;
 import mil.nga.giat.geowave.index.ByteArrayId;
 
@@ -36,6 +37,12 @@ public interface CentroidManager<T>
 			final Coordinate coordinate,
 			final String[] extraNames,
 			final double[] extraValues );
+
+	public AnalyticItemWrapper<T> getCentroidById(
+			final String id,
+			final String groupID )
+			throws IOException,
+			MatchingCentroidNotFoundException;
 
 	public void delete(
 			final String[] dataIds )

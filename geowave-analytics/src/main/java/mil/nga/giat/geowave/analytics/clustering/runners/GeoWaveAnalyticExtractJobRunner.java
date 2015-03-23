@@ -219,12 +219,6 @@ public class GeoWaveAnalyticExtractJobRunner extends
 				runTimeProperties.getProperty(GlobalParameters.Global.ACCUMULO_PASSWORD),
 				runTimeProperties.getProperty(GlobalParameters.Global.ACCUMULO_NAMESPACE));
 
-		if (adapters == null) {
-			LOGGER.error("unable to get adapters instance, getAdapters returned null");
-			throw new IOException(
-					"unable to get adapters instance, getAdapters returned null");
-		}
-
 		if (adapterId != null) {
 			final ByteArrayId byteId = new ByteArrayId(
 					StringUtils.stringToBinary(adapterId));

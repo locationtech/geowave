@@ -41,10 +41,6 @@ public class DataStatisticsBuilder<T> implements
 		DataStatistics<T> statistics = statisticsMap.get(visibility);
 		if (statistics == null) {
 			statistics = adapter.createDataStatistics(statisticsId);
-			if (statistics == null) {
-				LOGGER.error("Could not get statistics instance, createDataStatistics returned null");
-				return;
-			}
 			statistics.setVisibility(visibility.getBytes());
 			statisticsMap.put(
 					visibility,
@@ -71,10 +67,6 @@ public class DataStatisticsBuilder<T> implements
 		DataStatistics<T> statistics = statisticsMap.get(visibilityByteArray);
 		if (statistics == null) {
 			statistics = adapter.createDataStatistics(statisticsId);
-			if (statistics == null) {
-				LOGGER.error("Unable to create DataStatistics instance, createDataStatistics returned null");
-				return;
-			}
 			statistics.setVisibility(visibilityByteArray.getBytes());
 			statisticsMap.put(
 					visibilityByteArray,
@@ -98,11 +90,6 @@ public class DataStatisticsBuilder<T> implements
 		DataStatistics<T> statistics = statisticsMap.get(visibility);
 		if (statistics == null) {
 			statistics = adapter.createDataStatistics(statisticsId);
-			if (statistics == null) {
-				LOGGER.error("Unable to get statistics instance, createDataStatistics returned null");
-				return;
-			}
-
 			statistics.setVisibility(visibility.getBytes());
 			statisticsMap.put(
 					visibility,

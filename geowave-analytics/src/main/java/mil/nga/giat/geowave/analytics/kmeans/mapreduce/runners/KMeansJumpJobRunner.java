@@ -210,14 +210,10 @@ public class KMeansJumpJobRunner extends
 					GlobalParameters.Global.BATCH_ID,
 					currentBatchId);
 
-			Class<AnalyticItemWrapperFactory> analyticItemWrapperFC = propertyManagement.getPropertyAsClass(
+			@SuppressWarnings("rawtypes")
+			final Class<AnalyticItemWrapperFactory> analyticItemWrapperFC = propertyManagement.getPropertyAsClass(
 					CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS,
 					AnalyticItemWrapperFactory.class);
-			if (analyticItemWrapperFC == null) {
-				LOGGER.error("Could not get instance of " + CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS);
-				throw new IOException(
-						"Could not get instance of " + CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS);
-			}
 
 			/**
 			 * Associate the batch id with the best set of groups so the caller

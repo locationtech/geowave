@@ -273,10 +273,6 @@ public class KSamplerMapReduce
 					point.getCoordinate(),
 					item.getExtraDimensions(),
 					item.getDimensionValues());
-			if (nextCentroid == null) {
-				LOGGER.error("could not get next centroid, createNextItem returned null");
-				return null;
-			}
 
 			nextCentroid.setBatchID(batchID);
 			nextCentroid.setGroupID(groupID);

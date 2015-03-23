@@ -20,6 +20,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -80,6 +81,7 @@ import mil.nga.giat.geowave.store.adapter.FitToIndexPersistenceEncoding;
 import mil.nga.giat.geowave.store.adapter.IndexDependentDataAdapter;
 import mil.nga.giat.geowave.store.adapter.IndexedAdapterPersistenceEncoding;
 import mil.nga.giat.geowave.store.adapter.statistics.BoundingBoxDataStatistics;
+import mil.nga.giat.geowave.store.adapter.statistics.CountDataStatistics;
 import mil.nga.giat.geowave.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.store.adapter.statistics.DataStatisticsVisibilityHandler;
 import mil.nga.giat.geowave.store.adapter.statistics.FieldIdStatisticVisibility;
@@ -96,6 +98,7 @@ import org.apache.accumulo.core.client.IteratorSetting;
 import org.apache.accumulo.core.client.IteratorSetting.Column;
 import org.apache.accumulo.core.iterators.Combiner;
 import org.apache.accumulo.core.iterators.IteratorUtil.IteratorScope;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.math.util.MathUtils;
 import org.apache.log4j.Logger;
 import org.geotools.coverage.Category;
@@ -107,6 +110,7 @@ import org.geotools.coverage.grid.GridCoverageFactory;
 import org.geotools.coverage.grid.GridEnvelope2D;
 import org.geotools.coverage.grid.GridGeometry2D;
 import org.geotools.coverage.processing.Operations;
+import org.geotools.feature.DefaultFeatureCollection;
 import org.geotools.geometry.GeneralEnvelope;
 import org.geotools.geometry.jts.GeometryClipper;
 import org.geotools.geometry.jts.JTS;
@@ -398,11 +402,8 @@ public class RasterDataAdapter implements
 							sampleEnvelope.getMaximum(1)),
 					gridCoverage.getCoordinateReferenceSystem());
 
-			final ReferencedEnvelope projectedReferenceEnvelope;
-			if (GeoWaveGTRasterFormat.DEFAULT_CRS.equals(sourceCrs)) {
-				projectedReferenceEnvelope = sampleReferencedEnvelope;
-			}
-			else {
+			ReferencedEnvelope projectedReferenceEnvelope = sampleReferencedEnvelope;
+			if (!GeoWaveGTRasterFormat.DEFAULT_CRS.equals(sourceCrs)) {
 				try {
 					projectedReferenceEnvelope = sampleReferencedEnvelope.transform(
 							GeoWaveGTRasterFormat.DEFAULT_CRS,
@@ -412,7 +413,6 @@ public class RasterDataAdapter implements
 					LOGGER.warn(
 							"Unable to transform envelope of grid coverage to EPSG:4326",
 							e);
-					return null;
 				}
 			}
 
@@ -508,7 +508,8 @@ public class RasterDataAdapter implements
 									gridCoverage),
 							interpolation));
 		}
-		return null;
+		LOGGER.warn("Strategy is not an instance of HierarchicalNumericIndexStrategy : " + index.getIndexStrategy().getClass().getName());
+		return Collections.<GridCoverage> emptyList().iterator();
 	}
 
 	private static class MosaicPerPyramidLevelBuilder implements
@@ -1513,7 +1514,10 @@ public class RasterDataAdapter implements
 							coverageName),
 					histogramConfig);
 		}
-		return null;
+		LOGGER.warn("Unrecognized statistics ID " + statisticsId.getString() + " using count statistic");
+		return new CountDataStatistics<GridCoverage>(
+				getAdapterId(),
+				statisticsId);
 	}
 
 	public double[][] getNoDataValuesPerBand() {

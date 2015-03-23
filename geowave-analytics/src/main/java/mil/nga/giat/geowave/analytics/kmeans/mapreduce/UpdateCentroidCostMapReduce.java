@@ -10,6 +10,7 @@ import mil.nga.giat.geowave.analytics.clustering.CentroidManager;
 import mil.nga.giat.geowave.analytics.clustering.CentroidManagerGeoWave;
 import mil.nga.giat.geowave.analytics.clustering.CentroidPairing;
 import mil.nga.giat.geowave.analytics.clustering.NestedGroupCentroidAssignment;
+import mil.nga.giat.geowave.analytics.clustering.exception.MatchingCentroidNotFoundException;
 import mil.nga.giat.geowave.analytics.kmeans.AssociationNotification;
 import mil.nga.giat.geowave.analytics.parameters.CentroidParameters;
 import mil.nga.giat.geowave.analytics.tools.AnalyticItemWrapper;
@@ -180,14 +181,15 @@ public class UpdateCentroidCostMapReduce
 				count += next.getCount();
 			}
 
-			final AnalyticItemWrapper<Object> centroid = getFeatureForCentroid(
-					id,
-					groupID);
-
-			if (centroid == null) {
-				LOGGER.error("Couldn't get a centroid instance, getFeatureForCentroid returned null");
-				throw new IOException(
-						"Couldn't get a centroid instance, getFeatureForCentroid returned null");
+			AnalyticItemWrapper<Object> centroid;
+			try {
+				centroid = getFeatureForCentroid(
+						id,
+						groupID);
+			}
+			catch (MatchingCentroidNotFoundException e) {
+				LOGGER.error("Unable to get centroid " + id + " for group " + groupID);
+				return;
 			}
 
 			centroid.setCost(sum);
@@ -205,22 +207,11 @@ public class UpdateCentroidCostMapReduce
 		private AnalyticItemWrapper<Object> getFeatureForCentroid(
 				final String id,
 				final String groupID )
-				throws IOException {
-			return getFeatureForCentroid(
+				throws IOException,
+				MatchingCentroidNotFoundException {
+			return centroidManager.getCentroidById(
 					id,
-					centroidManager.getCentroidsForGroup(groupID));
-		}
-
-		private AnalyticItemWrapper<Object> getFeatureForCentroid(
-				final String id,
-				final List<AnalyticItemWrapper<Object>> centroids ) {
-			for (final AnalyticItemWrapper<Object> centroid : centroids) {
-				if (centroid.getID().equals(
-						id)) {
-					return centroid;
-				}
-			}
-			return null;
+					groupID);
 		}
 
 		@Override

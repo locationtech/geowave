@@ -16,6 +16,7 @@ import java.util.UUID;
 
 import mil.nga.giat.geowave.analytics.clustering.CentroidManager;
 import mil.nga.giat.geowave.analytics.clustering.ClusteringUtils;
+import mil.nga.giat.geowave.analytics.clustering.exception.MatchingCentroidNotFoundException;
 import mil.nga.giat.geowave.analytics.distance.FeatureCentroidDistanceFn;
 import mil.nga.giat.geowave.analytics.kmeans.mapreduce.runners.KMeansIterationsJobRunner;
 import mil.nga.giat.geowave.analytics.parameters.CentroidParameters;
@@ -298,6 +299,23 @@ public class KMeansIterationsJobRunnerTest
 				public ByteArrayId getIndexId() {
 					return new ByteArrayId(
 							StringUtils.stringToBinary(IndexType.SPATIAL_VECTOR.getDefaultId()));
+				}
+
+				@Override
+				public AnalyticItemWrapper<SimpleFeature> getCentroidById(
+						String id,
+						String groupID )
+						throws IOException,
+						MatchingCentroidNotFoundException {
+					Iterator<AnalyticItemWrapper<SimpleFeature>> it = this.getCentroidsForGroup(
+							groupID).iterator();
+					while (it.hasNext()) {
+						AnalyticItemWrapper<SimpleFeature> feature = (it.next());
+						if (feature.getID().equals(
+								id)) return feature;
+					}
+					throw new MatchingCentroidNotFoundException(
+							id);
 				}
 
 			};

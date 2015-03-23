@@ -10,6 +10,7 @@ import mil.nga.giat.geowave.analytics.clustering.CentroidManager;
 import mil.nga.giat.geowave.analytics.clustering.CentroidManagerGeoWave;
 import mil.nga.giat.geowave.analytics.clustering.CentroidPairing;
 import mil.nga.giat.geowave.analytics.clustering.NestedGroupCentroidAssignment;
+import mil.nga.giat.geowave.analytics.clustering.exception.MatchingCentroidNotFoundException;
 import mil.nga.giat.geowave.analytics.extract.CentroidExtractor;
 import mil.nga.giat.geowave.analytics.extract.SimpleFeatureCentroidExtractor;
 import mil.nga.giat.geowave.analytics.kmeans.AssociationNotification;
@@ -212,13 +213,15 @@ public class KMeansMapReduce
 				totals.add(geoObject);
 			}
 
-			final AnalyticItemWrapper<Object> centroid = getFeatureForCentroid(
-					centroidID,
-					groupID);
-
-			if (centroid == null){
-				LOGGER.error("unable to get centroid instance, getFeatureForCentroid returned null");
-				throw new IOException("unable to get centroid instance, getFeatureForCentroid returned null");
+			AnalyticItemWrapper<Object> centroid;
+			try {
+				centroid = getFeatureForCentroid(
+						centroidID,
+						groupID);
+			}
+			catch (MatchingCentroidNotFoundException e) {
+				LOGGER.error("Unable to get centroid " + centroidID + " for group " + groupID);
+				return;
 			}
 
 			// do not update the cost, because this cost is associated with the
@@ -252,37 +255,24 @@ public class KMeansMapReduce
 							centroid.getExtraDimensions(),
 							totals.values);
 
-			if (nextCentroid != null){
+
 			// new center
 			context.write(
 					new GeoWaveOutputKey(
 							centroidManager.getDataTypeId(),
 							centroidManager.getIndexId()),
 							nextCentroid.getWrappedItem());
-			}
+			
 		}
 
 
 		private AnalyticItemWrapper<Object> getFeatureForCentroid(
 				final String id,
 				final String groupID )
-				throws IOException {
-			return getFeatureForCentroid(
-					id,
-					centroidManager.getCentroidsForGroup(groupID));
+				throws IOException, MatchingCentroidNotFoundException {
+			return centroidManager.getCentroidById(id, groupID);
 		}
 
-		private AnalyticItemWrapper<Object> getFeatureForCentroid(
-				final String id,
-				final List<AnalyticItemWrapper<Object>> centroids ) {
-			for (final AnalyticItemWrapper<Object> centroid : centroids) {
-				if (centroid.getID().equals(
-						id)) {
-					return centroid;
-				}
-			}
-			return null;
-		}
 
 		@Override
 		protected void setup(

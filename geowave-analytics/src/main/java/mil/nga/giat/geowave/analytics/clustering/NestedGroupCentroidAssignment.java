@@ -187,7 +187,7 @@ public class NestedGroupCentroidAssignment<T>
 			final List<AnalyticItemWrapper<T>> centroids = centroidManager.getCentroidsForGroup(
 					parentBatchID,
 					group.getGroupID());
-			if ((centroids == null) || (centroids.size() == 0)) {
+			if (centroids.size() == 0) {
 				throw new IOException(
 						"Cannot find group " + group.getGroupID());
 			}
@@ -227,7 +227,7 @@ public class NestedGroupCentroidAssignment<T>
 			final List<AnalyticItemWrapper<T>> centroids = (currentLevel == endZoomLevel) ? centroidManager.getCentroidsForGroup(group.getGroupID()) : centroidManager.getCentroidsForGroup(
 					parentBatchID,
 					group.getGroupID());
-			if ((centroids == null) || (centroids.size() == 0)) {
+			if (centroids.size() == 0) {
 				throw new IOException(
 						"Cannot find group " + group.getGroupID());
 			}

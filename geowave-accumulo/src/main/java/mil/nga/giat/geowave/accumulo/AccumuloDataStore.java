@@ -300,7 +300,6 @@ public class AccumuloDataStore implements
 			}
 			catch (Exception e) {
 				LOGGER.error("Unable to close statistics tool");
-				return null;
 			}
 		}
 		return new ArrayList<ByteArrayId>();
@@ -1213,11 +1212,6 @@ public class AccumuloDataStore implements
 		final String adapterId = StringUtils.stringFromBinary(adapter.getAdapterId().getBytes());
 
 		final CloseableIterator<DataStatistics<?>> it = statisticsStore.getDataStatistics(adapter.getAdapterId());
-		if (it == null) {
-			LOGGER.error("Unable to  get data statistics iterator, getDataStatistics returned null");
-			throw new IOException(
-					"Unable to get data statistics iterator, getDataStatistics returned null");
-		}
 
 		while (it.hasNext()) {
 			final DataStatistics stats = it.next();
