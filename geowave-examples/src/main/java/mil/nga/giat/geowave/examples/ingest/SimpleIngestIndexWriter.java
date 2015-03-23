@@ -18,7 +18,7 @@ import org.opengis.feature.simple.SimpleFeatureType;
 import com.vividsolutions.jts.geom.Coordinate;
 
 public class SimpleIngestIndexWriter extends
-SimpleIngest
+		SimpleIngest
 {
 	private static Logger log = Logger.getLogger(SimpleIngestIndexWriter.class);
 
@@ -38,7 +38,8 @@ SimpleIngest
 					args[2],
 					args[3],
 					args[4]);
-			si.generateGrid(bao);
+			final DataStore geowaveDataStore = si.getGeowaveDataStore(bao);
+			si.generateGrid(geowaveDataStore);
 		}
 		catch (final Exception e) {
 			log.error(
@@ -57,10 +58,7 @@ SimpleIngest
 	 */
 	@Override
 	protected void generateGrid(
-			final BasicAccumuloOperations bao ) {
-
-		// create our datastore object
-		final DataStore geowaveDataStore = getGeowaveDataStore(bao);
+			final DataStore geowaveDataStore ) {
 
 		// In order to store data we need to determine the type of data store
 		final SimpleFeatureType point = createPointFeatureType();
@@ -89,32 +87,13 @@ SimpleIngest
 		try (IndexWriter indexWriter = geowaveDataStore.createIndexWriter(index)) {
 			// build a grid of points across the globe at each whole
 			// lattitude/longitude intersection
-			for (int longitude = -180; longitude <= 180; longitude++) {
-				for (int latitude = -90; latitude <= 90; latitude++) {
-					pointBuilder.set(
-							"geometry",
-							GeometryUtils.GEOMETRY_FACTORY.createPoint(new Coordinate(
-									longitude,
-									latitude)));
-					pointBuilder.set(
-							"TimeStamp",
-							new Date());
-					pointBuilder.set(
-							"Latitude",
-							latitude);
-					pointBuilder.set(
-							"Longitude",
-							longitude);
-					// Note since trajectoryID and comment are marked as
-					// nillable we
-					// don't need to set them (they default ot null).
 
-					final SimpleFeature sft = pointBuilder.buildFeature(String.valueOf(featureId));
-					featureId++;
-					indexWriter.write(
-							adapter,
-							sft);
-				}
+			for (SimpleFeature sft : getGriddedFeatures(
+					pointBuilder,
+					1000)) {
+				indexWriter.write(
+						adapter,
+						sft);
 			}
 		}
 		catch (final IOException e) {

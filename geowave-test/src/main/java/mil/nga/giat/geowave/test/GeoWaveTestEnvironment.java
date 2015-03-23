@@ -5,6 +5,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -49,7 +51,6 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.opengis.feature.simple.SimpleFeature;
 
-import com.google.common.io.Files;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.Point;
 
@@ -95,7 +96,8 @@ abstract public class GeoWaveTestEnvironment
 	}
 
 	@BeforeClass
-	public static void setup() {
+	public static void setup()
+			throws IOException {
 		synchronized (MUTEX) {
 			TimeZone.setDefault(TimeZone.getTimeZone("GMT"));
 			if (accumuloOperations == null) {

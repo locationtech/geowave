@@ -1,10 +1,15 @@
 package mil.nga.giat.geowave.test.service;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.concurrent.TimeUnit;
 
 import mil.nga.giat.geowave.index.StringUtils;
 import mil.nga.giat.geowave.test.mapreduce.MapReduceTestEnvironment;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.mortbay.jetty.Connector;
@@ -36,6 +41,7 @@ abstract public class ServicesTestEnvironment extends
 	protected static final String GEOWAVE_WAR_DIR = "target/geowave-services";
 	protected static final String GEOWAVE_CONTEXT_PATH = "/geowave-services";
 	protected static final String GEOWAVE_BASE_URL = JETTY_BASE_URL + GEOWAVE_CONTEXT_PATH;
+	protected static final String GEOWAVE_WORKSPACE_PATH = GEOSERVER_WAR_DIR + "/data/workspaces/" + TEST_WORKSPACE;
 	protected static Server jettyServer;
 
 	protected static void writeConfigFile(
@@ -74,6 +80,7 @@ abstract public class ServicesTestEnvironment extends
 		synchronized (MUTEX) {
 			if (jettyServer == null) {
 				try {
+					// delete old workspace configuration if it's still there
 					MapReduceTestEnvironment.setVariables();
 					jettyServer = new Server();
 					final SocketConnector conn = new SocketConnector();
@@ -96,6 +103,7 @@ abstract public class ServicesTestEnvironment extends
 							":",
 							";"));
 					gsWebapp.setClassLoader(classLoader);
+					gsWebapp.setParentLoaderPriority(true);
 
 					final File warDir = new File(
 							GEOWAVE_WAR_DIR);

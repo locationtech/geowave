@@ -1,7 +1,10 @@
 package mil.nga.giat.geowave.examples.ingest;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import com.vividsolutions.jts.geom.Point;
 import mil.nga.giat.geowave.accumulo.AccumuloDataStore;
 import mil.nga.giat.geowave.accumulo.BasicAccumuloOperations;
 import mil.nga.giat.geowave.accumulo.metadata.AccumuloAdapterStore;
@@ -29,6 +32,7 @@ public class SimpleIngest
 {
 
 	static Logger log = Logger.getLogger(SimpleIngest.class);
+	public static final String FEATURE_NAME = "GridPoint";
 
 	public static void main(
 			final String[] args ) {
@@ -46,7 +50,9 @@ public class SimpleIngest
 					args[2],
 					args[3],
 					args[4]);
-			si.generateGrid(bao);
+
+			final DataStore geowaveDataStore = si.getGeowaveDataStore(bao);
+			si.generateGrid(geowaveDataStore);
 		}
 		catch (final Exception e) {
 			log.error(
@@ -59,11 +65,41 @@ public class SimpleIngest
 
 	}
 
-	protected void generateGrid(
-			final BasicAccumuloOperations bao ) {
+	public static List<SimpleFeature> getGriddedFeatures(
+			SimpleFeatureBuilder pointBuilder,
+			int firstFeatureId ) {
 
-		// create our datastore object
-		final DataStore geowaveDataStore = getGeowaveDataStore(bao);
+		int featureId = firstFeatureId;
+		List<SimpleFeature> feats = new ArrayList<>();
+		for (int longitude = -180; longitude <= 180; longitude += 5) {
+			for (int latitude = -90; latitude <= 90; latitude += 5) {
+				pointBuilder.set(
+						"geometry",
+						GeometryUtils.GEOMETRY_FACTORY.createPoint(new Coordinate(
+								longitude,
+								latitude)));
+				pointBuilder.set(
+						"TimeStamp",
+						new Date());
+				pointBuilder.set(
+						"Latitude",
+						latitude);
+				pointBuilder.set(
+						"Longitude",
+						longitude);
+				// Note since trajectoryID and comment are marked as nillable we
+				// don't need to set them (they default ot null).
+
+				final SimpleFeature sft = pointBuilder.buildFeature(String.valueOf(featureId));
+				feats.add(sft);
+				featureId++;
+			}
+		}
+		return feats;
+	}
+
+	protected void generateGrid(
+			final DataStore geowaveDataStore ) {
 
 		// In order to store data we need to determine the type of data store
 		final SimpleFeatureType point = createPointFeatureType();
@@ -88,41 +124,24 @@ public class SimpleIngest
 
 		// build a grid of points across the globe at each whole
 		// lattitude/longitude intersection
-		for (int longitude = -180; longitude <= 180; longitude++) {
-			for (int latitude = -90; latitude <= 90; latitude++) {
-				pointBuilder.set(
-						"geometry",
-						GeometryUtils.GEOMETRY_FACTORY.createPoint(new Coordinate(
-								longitude,
-								latitude)));
-				pointBuilder.set(
-						"TimeStamp",
-						new Date());
-				pointBuilder.set(
-						"Latitude",
-						latitude);
-				pointBuilder.set(
-						"Longitude",
-						longitude);
-				// Note since trajectoryID and comment are marked as nillable we
-				// don't need to set them (they default ot null).
 
-				final SimpleFeature sft = pointBuilder.buildFeature(String.valueOf(featureId));
-				featureId++;
+		// this loads the data to geowave
+		// in practice you probably wouldn't do this in a tight loop -
+		// but use a the SimpleIngestIndexWriter, producer/consumer, mapreduce,
+		// or some other pattern. But if it matters depends also on the amount
+		// of data
+		// you are ingesting.
 
-				// this loads the data to geowave
-				// in practice you probably wouldn't do this in a tight loop -
-				// but use a producer/consumer, mapreduce, or some other
-				// pattern. But if it matters depends also on the amount of data
-				// you are ingesting.
-				// Note that the ingest method can take a feature, or an
-				// interator on a collection of SimpleFeatures. The latter
-				// is the preferred mechanism for non-trivial data sets.
-				geowaveDataStore.ingest(
-						adapter,
-						index,
-						sft);
-			}
+		// Note that the ingest method can take a feature, or an
+		// interator on a collection of SimpleFeatures. The latter
+		// is the preferred mechanism for non-trivial data sets.
+		for (SimpleFeature sft : getGriddedFeatures(
+				pointBuilder,
+				0)) {
+			geowaveDataStore.ingest(
+					adapter,
+					index,
+					sft);
 		}
 	}
 
@@ -130,7 +149,7 @@ public class SimpleIngest
 	 * DataStore is essentially the controller that take the accumulo
 	 * information, geowave configuration, and data type, and inserts/queries
 	 * from accumulo
-	 *
+	 * 
 	 * @param instance
 	 *            Accumulo instance configuration
 	 * @return DataStore object for the particular accumulo instance
@@ -145,17 +164,17 @@ public class SimpleIngest
 		return new AccumuloDataStore(
 				new AccumuloIndexStore(
 						instance),
-						new AccumuloAdapterStore(
-								instance),
-								new AccumuloDataStatisticsStore(
-										instance),
-										instance);
+				new AccumuloAdapterStore(
+						instance),
+				new AccumuloDataStatisticsStore(
+						instance),
+				instance);
 	}
 
 	/***
 	 * The class tells geowave about the accumulo instance it should connect to,
 	 * as well as what tables it should create/store it's data in
-	 *
+	 * 
 	 * @param zookeepers
 	 *            Zookeepers associated with the accumulo instance, comma
 	 *            separate
@@ -179,8 +198,8 @@ public class SimpleIngest
 			final String accumuloUser,
 			final String accumuloPass,
 			final String geowaveNamespace )
-					throws AccumuloException,
-					AccumuloSecurityException {
+			throws AccumuloException,
+			AccumuloSecurityException {
 		return new BasicAccumuloOperations(
 				zookeepers,
 				accumuloInstance,
@@ -193,13 +212,13 @@ public class SimpleIngest
 	 * The dataadapter interface describes how to serialize a data type. Here we
 	 * are using an implementation that understands how to serialize OGC
 	 * SimpleFeature types.
-	 *
+	 * 
 	 * @param sft
 	 *            simple feature type you want to generate an adapter from
 	 * @return data adapter that handles serialization of the sft simple feature
 	 *         type
 	 */
-	protected FeatureDataAdapter createDataAdapter(
+	public static FeatureDataAdapter createDataAdapter(
 			final SimpleFeatureType sft ) {
 		return new FeatureDataAdapter(
 				sft);
@@ -211,10 +230,10 @@ public class SimpleIngest
 	 * range of the index (min/max values) -The range type (bounded/unbounded)
 	 * -The number of "levels" (different precisions, needed when the values
 	 * indexed has ranges on any dimension)
-	 *
+	 * 
 	 * @return GeoWave index for a default SPATIAL index
 	 */
-	protected Index createSpatialIndex() {
+	public static Index createSpatialIndex() {
 
 		// Reasonable values for spatial and spatio-temporal are provided
 		// through static factory methods.
@@ -231,10 +250,10 @@ public class SimpleIngest
 	 * what our data looks like so the serializer (FeatureDataAdapter for this
 	 * case) can know how to store it. Features/Attributes are also a general
 	 * convention of GIS systems in general.
-	 *
+	 * 
 	 * @return Simple Feature definition for our demo point feature
 	 */
-	protected SimpleFeatureType createPointFeatureType() {
+	public static SimpleFeatureType createPointFeatureType() {
 
 		final SimpleFeatureTypeBuilder builder = new SimpleFeatureTypeBuilder();
 		final AttributeTypeBuilder ab = new AttributeTypeBuilder();
@@ -244,7 +263,7 @@ public class SimpleIngest
 		// The value you set here will also persist through discovery - so when
 		// people are looking at a dataset they will see the
 		// type names associated with the data.
-		builder.setName("Point");
+		builder.setName(FEATURE_NAME);
 
 		// The data is persisted in a sparse format, so if data is nullable it
 		// will not take up any space if no values are persisted.
@@ -256,28 +275,28 @@ public class SimpleIngest
 		// having to handle geometries.
 		builder.add(ab.binding(
 				Geometry.class).nillable(
-						false).buildDescriptor(
-								"geometry"));
+				false).buildDescriptor(
+				"geometry"));
 		builder.add(ab.binding(
 				Date.class).nillable(
-						true).buildDescriptor(
-								"TimeStamp"));
+				true).buildDescriptor(
+				"TimeStamp"));
 		builder.add(ab.binding(
 				Double.class).nillable(
-						false).buildDescriptor(
-								"Latitude"));
+				false).buildDescriptor(
+				"Latitude"));
 		builder.add(ab.binding(
 				Double.class).nillable(
-						false).buildDescriptor(
-								"Longitude"));
+				false).buildDescriptor(
+				"Longitude"));
 		builder.add(ab.binding(
 				String.class).nillable(
-						true).buildDescriptor(
-								"TrajectoryID"));
+				true).buildDescriptor(
+				"TrajectoryID"));
 		builder.add(ab.binding(
 				String.class).nillable(
-						true).buildDescriptor(
-								"Comment"));
+				true).buildDescriptor(
+				"Comment"));
 
 		return builder.buildFeatureType();
 	}
