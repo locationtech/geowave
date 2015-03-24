@@ -15,7 +15,7 @@ env:
 cache:
   directories:
   - $HOME/.m2
-install: "mvn -q clean install javadoc:aggregate -Dfindbugs.skip -Daccumulo.version=${ACCUMULO_VERSION} ${ACCUMULO_LEGACY} -Dhadoop.version=${HADOOP_VERSION} -Dgeotools.version=${GEOTOOLS_VERSION} -Dgeoserver.version=${GEOSERVER_VERSION} -DskipITs=true -DskipTests=true -P ${PLATFORM_VERSION}; .utility/build-docs-site.sh"
+install: "mvn -q clean install -Dfindbugs.skip -Daccumulo.version=${ACCUMULO_VERSION} ${ACCUMULO_LEGACY} -Dhadoop.version=${HADOOP_VERSION} -Dgeotools.version=${GEOTOOLS_VERSION} -Dgeoserver.version=${GEOSERVER_VERSION} -DskipITs=true -DskipTests=true -P ${PLATFORM_VERSION}; .utility/build-docs-site.sh"
 script: "mvn -q verify -Daccumulo.version=${ACCUMULO_VERSION} ${ACCUMULO_LEGACY} -Dhadoop.version=${HADOOP_VERSION} -Dgeotools.version=${GEOTOOLS_VERSION} -Dgeoserver.version=${GEOSERVER_VERSION} -P ${PLATFORM_VERSION}"
 before_install:
   - export MAVEN_OPTS="-Xmx512m -XX:MaxPermSize=192m"
