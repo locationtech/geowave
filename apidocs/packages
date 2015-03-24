@@ -87,6 +87,7 @@ mil.nga.giat.geowave.services.impl
 mil.nga.giat.geowave.services.utils
 mil.nga.giat.geowave.benchmark
 mil.nga.giat.geowave.benchmark.utils
+mil.nga.giat.geowave.examples.ingest
 mil.nga.giat.geowave.test
 mil.nga.giat.geowave.test.mapreduce
 mil.nga.giat.geowave.test.service
