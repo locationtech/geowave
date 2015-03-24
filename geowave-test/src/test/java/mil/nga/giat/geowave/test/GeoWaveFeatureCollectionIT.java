@@ -83,7 +83,8 @@ public class GeoWaveFeatureCollectionIT extends
 	private static Geometry worldBBox;
 
 	@BeforeClass
-	public static void setup() {
+	public static void setup()
+			throws IOException {
 
 		GeoWaveTestEnvironment.setup();
 
