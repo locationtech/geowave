@@ -17,9 +17,9 @@ More information on this data set is available at http://research.microsoft.com/
 Below are renderings of GeoLife data. They display both the raw points, as well as the results of a GeoWave kernel
 density analytic. The data corresponds to Mapbox zoom level 13.
 
-image::geolife-density-13.jpg[scaledwidth="100%",alt="T-drive density at city scale"]
+image::geolife-density-13-thumb.jpg[scaledwidth="100%",alt="Geolife density at city scale",link=images/geolife-density-13.jpg]
 
-image::geolife-points-13.jpg[scaledwidth="100%",alt="Geolife points at city scale"]
+image::geolife-points-13-thumb.jpg[scaledwidth="100%",alt="Geolife points at city scale",link=images/geolife-points-13.jpg]
 
 <<<
 
@@ -27,10 +27,10 @@ image::geolife-points-13.jpg[scaledwidth="100%",alt="Geolife points at city scal
 
 This data set corresponds to a Mapbox zoom level of 15
 
-image::geolife-density-17.jpg[scaledwidth="100%",alt="T-drive density at city scale"]
+image::geolife-density-17-thumb.jpg[scaledwidth="100%",alt="GeoLife at house scale",link=images/geolife-density-17.jpg]
 _Graphic background (C)MapBox and (C)OpenStreetMap_
 
-image::geolife-points-17.jpg[scaledwidth="100%",alt="Geolife points at city scale"]
+image::geolife-points-17-thumb.jpg[scaledwidth="100%",alt="GeoLife at house scale",link=images/geolife-points-17.jpg]
 _Graphic background (C)MapBox and (C)OpenStreetMap_
 
 <<<
@@ -47,7 +47,7 @@ More information on this data set is available at http://wiki.openstreetmap.org/
 
 The data below corresponds to a Mapbox zoom level of 6
 
-image::osmgpx.jpg[scaledwidth="100%",alt="T-drive density at city scale"]
+image::osmgpx-thumb.jpg[scaledwidth="100%",alt="OSM GPX at continent scale",link=images/osmgpx.jpg]
 
 <<<
 
@@ -55,7 +55,7 @@ image::osmgpx.jpg[scaledwidth="100%",alt="T-drive density at city scale"]
 
 This data set corresponds to a Mapbox zoom level of 3
 
-image::osmgpx-world.jpg[scaledwidth="100%",alt="Geolife points at city scale"]
+image::osmgpx-world-thumb.jpg[scaledwidth="100%",alt="Geolife points at city scale",link=images/osmgpx-world.jpg]
 
 <<<
 
@@ -71,9 +71,9 @@ More information on this data set is available at: http://research.microsoft.com
 Below are renderings of the t-drive data. They display both the raw points, as well as the results of a Geowave kernel
 density analytic. The data corresponds to Mapbox zoom level 12.
 
-image::t-drive-points-12.jpg[scaledwidth="100%",alt="T-drive points at city scale"]
+image::t-drive-points-12-thumb.jpg[scaledwidth="100%",alt="T-drive points at city scale",link=images/t-drive-points-12.jpg]
 
-image::t-drive-density-12.jpg[scaledwidth="100%",alt="T-drive density at city scale"]
+image::t-drive-density-12-thumb.jpg[scaledwidth="100%",alt="T-drive density at city scale",link=images/t-drive-density-12.jpg]
 
 <<<
 

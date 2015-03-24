@@ -35,21 +35,24 @@ with a quick refresh of the browser.
 To preview the entire finished page web page or see the generated PDF you'll need to run the transformation process.
 
 [source, bash]
-.Generate Website Pages
+.Generate Documentation
 ----
  cd geowave
  mvn -P docs -pl docs install # <1>
 ----
-<1> Process _only_ the docs module
+<1> -pl docs = Process _only_ the docs module. Skips the javadoc generation step.
 
 The source documents will be transformed and will be available for inspection in the `geowave/target/site/` directory.
 
-=== Publishing
+=== Site
 
-To publish updated documentation to the application web site we have to build both the javadocs and the site pages. The
-`geowave/.utility/build-site-content.sh` script can be used to build all documentation. Once all docs have been built the
-`geowave/.utility/publish-to-github-pages.sh` script will push the content up to the application web site.
+To build all the content used for the https://ngageoint.github.io/geowave/[GeoWave website] use the following command. The
+entire site, including both docs and javadocs, will be available for inspection in the `geowave/target/site/` directory.
 
++[source, bash]
++.Generate Website
++----
++ cd geowave
++ mvn -P docs install
++----
 
-WARNING: The publishing is done with a forced push so _all_ site content must be generated before publishing. If you only
-generate the pages then the javadoc link will be broken. Use the provided build-site-content.sh script to automate.
