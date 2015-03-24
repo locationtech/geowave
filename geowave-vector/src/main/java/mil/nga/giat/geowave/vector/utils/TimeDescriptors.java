@@ -75,16 +75,19 @@ public class TimeDescriptors
 	public byte[] toBinary() {
 		final StringBuffer buffer = new StringBuffer();
 		if (time != null) {
-			buffer.append(
-					time.getLocalName()).append(
-					"::");
+			buffer.append(time.getLocalName());
 		}
-		else if ((startRange != null) && (endRange != null)) {
+		else
+			buffer.append("-");
+		if ((startRange != null) && (endRange != null)) {
 			buffer.append(
 					':').append(
 					startRange.getLocalName()).append(
 					':').append(
 					endRange.getLocalName());
+		}
+		else {
+			buffer.append("::");
 		}
 		return StringUtils.stringToBinary(buffer.toString());
 	}
@@ -93,20 +96,15 @@ public class TimeDescriptors
 			final SimpleFeatureType type,
 			final byte[] image ) {
 		final String buf = StringUtils.stringFromBinary(image);
-		if (buf.startsWith(":")) {
-			// range
-			startRange = type.getDescriptor(buf.substring(
-					1,
-					buf.indexOf(
-							':',
-							1)));
-			endRange = type.getDescriptor(buf.substring(buf.lastIndexOf(':') + 1));
+		String[] splits = buf.split(":");
 
+		if (!"-".equals(splits[0])) {
+			time = type.getDescriptor(splits[0].trim());
 		}
-		else if (buf.length() > 0) {
-			time = type.getDescriptor(buf.substring(
-					0,
-					buf.indexOf(':')));
+		if (splits.length > 1 && splits[1].length() > 0) {
+			startRange = type.getDescriptor(splits[1]);
+			endRange = type.getDescriptor(splits[2]);
+
 		}
 	}
 
@@ -150,7 +148,6 @@ public class TimeDescriptors
 				if (isTime != null) {
 					if (isTime.booleanValue()) {
 						setTime(attrDesc);
-						// override
 						setStartRange(null);
 						setEndRange(null);
 						break;
@@ -179,5 +176,56 @@ public class TimeDescriptors
 				}
 			}
 		}
+		if (this.getStartRange() != null) {
+			if (this.getEndRange() != null) {
+				this.setTime(null);
+			}
+			else {
+				if (getTime() == null) {
+					this.setTime(getStartRange());
+				}
+				this.setStartRange(null);
+			}
+		}
+		else if (this.getEndRange() != null && this.getStartRange() == null) {
+			if (getTime() == null) {
+				this.setTime(getEndRange());
+			}
+			this.setEndRange(null);
+		}
+
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((endRange == null) ? 0 : endRange.hashCode());
+		result = prime * result + ((startRange == null) ? 0 : startRange.hashCode());
+		result = prime * result + ((time == null) ? 0 : time.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(
+			Object obj ) {
+		if (this == obj) return true;
+		if (obj == null) return false;
+		if (getClass() != obj.getClass()) return false;
+		TimeDescriptors other = (TimeDescriptors) obj;
+		if (endRange == null) {
+			if (other.endRange != null) return false;
+		}
+		else if (!endRange.equals(other.endRange)) return false;
+		if (startRange == null) {
+			if (other.startRange != null) return false;
+		}
+		else if (!startRange.equals(other.startRange)) return false;
+		if (time == null) {
+			if (other.time != null) return false;
+		}
+		else if (!time.equals(other.time)) return false;
+		return true;
+	}
+
 }
