@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ ! -f ~/.m2/repository/org/eluder/coveralls/coveralls-maven-plugin/3.1.0-munge-hack/coveralls-maven-plugin-3.1.0-munge-hack.jar ]
+if [ ! -f ~/.m2/repository/org/eluder/coveralls/coveralls-maven-plugin/3.1.1-munge-hack/coveralls-maven-plugin-3.1.1-munge-hack.jar ]
 then
     mkdir mcp;
     cd mcp;

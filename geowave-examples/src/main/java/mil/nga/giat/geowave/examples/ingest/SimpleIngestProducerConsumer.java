@@ -1,25 +1,20 @@
 package mil.nga.giat.geowave.examples.ingest;
 
-import java.util.Date;
-import java.util.Iterator;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
-
 import mil.nga.giat.geowave.accumulo.BasicAccumuloOperations;
 import mil.nga.giat.geowave.store.DataStore;
-import mil.nga.giat.geowave.store.GeometryUtils;
 import mil.nga.giat.geowave.store.index.Index;
 import mil.nga.giat.geowave.vector.adapter.FeatureDataAdapter;
-
 import org.apache.log4j.Logger;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 
-import com.vividsolutions.jts.geom.Coordinate;
+import java.util.Iterator;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class SimpleIngestProducerConsumer extends
-SimpleIngest
+		SimpleIngest
 {
 
 	private static Logger log = Logger.getLogger(SimpleIngestProducerConsumer.class);
@@ -41,7 +36,8 @@ SimpleIngest
 					args[2],
 					args[3],
 					args[4]);
-			si.generateGrid(bao);
+			final DataStore geowaveDataStore = si.getGeowaveDataStore(bao);
+			si.generateGrid(geowaveDataStore);
 		}
 		catch (final Exception e) {
 			log.error(
@@ -60,10 +56,7 @@ SimpleIngest
 	 */
 	@Override
 	protected void generateGrid(
-			final BasicAccumuloOperations bao ) {
-
-		// create our datastore object
-		final DataStore geowaveDataStore = getGeowaveDataStore(bao);
+			final DataStore geowaveDataStore ) {
 
 		// In order to store data we need to determine the type of data store
 		final SimpleFeatureType point = createPointFeatureType();
@@ -80,12 +73,6 @@ SimpleIngest
 		// This describes how to index the data
 		final Index index = createSpatialIndex();
 
-		// features require a featureID - this should be unqiue as it's a
-		// foreign key on the feature
-		// (i.e. sending in a new feature with the same feature id will
-		// overwrite the existing feature)
-		int featureId = 0;
-
 		final Thread ingestThread = new Thread(
 				new Runnable() {
 					@Override
@@ -101,30 +88,11 @@ SimpleIngest
 		ingestThread.start();
 
 		// build a grid of points across the globe at each whole
-		// lattitude/longitude intersection
-		for (int longitude = -180; longitude <= 180; longitude++) {
-			for (int latitude = -90; latitude <= 90; latitude++) {
-				pointBuilder.set(
-						"geometry",
-						GeometryUtils.GEOMETRY_FACTORY.createPoint(new Coordinate(
-								longitude,
-								latitude)));
-				pointBuilder.set(
-						"TimeStamp",
-						new Date());
-				pointBuilder.set(
-						"Latitude",
-						latitude);
-				pointBuilder.set(
-						"Longitude",
-						longitude);
-				// Note since trajectoryID and comment are marked as nillable we
-				// don't need to set them (they default ot null).
-
-				final SimpleFeature sft = pointBuilder.buildFeature(String.valueOf(featureId));
-				featureId++;
-				features.add(sft);
-			}
+		// latitude/longitude intersection
+		for (SimpleFeature sft : getGriddedFeatures(
+				pointBuilder,
+				-10000)) {
+			features.add(sft);
 		}
 		features.ingestCompleted = true;
 		try {
@@ -138,9 +106,9 @@ SimpleIngest
 	}
 
 	protected class FeatureCollection implements
-	Iterator<SimpleFeature>
+			Iterator<SimpleFeature>
 	{
-		private final BlockingQueue<SimpleFeature> queue = new LinkedBlockingQueue<SimpleFeature>(
+		private final BlockingQueue<SimpleFeature> queue = new LinkedBlockingQueue<>(
 				10000);
 		public boolean ingestCompleted = false;
 
