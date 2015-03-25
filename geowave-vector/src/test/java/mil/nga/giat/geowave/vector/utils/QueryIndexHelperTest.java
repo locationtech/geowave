@@ -555,7 +555,7 @@ public class QueryIndexHelperTest
 
 		Coordinate coord = ((Point) defaultCRSFeat.getDefaultGeometry()).getCoordinate();
 
-	    // coordinate should match reprojected feature
+		// coordinate should match reprojected feature
 		assertEquals(
 				coord.x,
 				geoStats.getMinX(),

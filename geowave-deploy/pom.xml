@@ -388,21 +388,14 @@
 			</properties>
 		</profile>
 		<profile>
-			<id>linux-amd64-gcc-debug</id>
+			<id>linux-amd64-gcc</id>
 			<properties>
 				<cmake.generator>Unix Makefiles</cmake.generator>
 				<build.architecture>amd64</build.architecture>
 			</properties>
 		</profile>
 		<profile>
-			<id>linux-amd64-gcc-release</id>
-			<properties>
-				<cmake.generator>Unix Makefiles</cmake.generator>
-				<build.architecture>amd64</build.architecture>
-			</properties>
-		</profile>
-		<profile>
-			<id>generate-pdal-proxies</id>
+			<id>generate-jace-proxies</id>
 			<build>
 				<plugins>
 					<plugin>
@@ -491,10 +484,9 @@
 								</goals>
 								<configuration>
 									<inputHeaders>
-										<path>${pdal.directory}/plugins/geowave/io</path>
+										<path>${project.build.directory}/../jace/</path>
 									</inputHeaders>
 									<inputSources>
-										<path>${pdal.directory}/plugins/geowave/io</path>
 									</inputSources>
 									<outputHeaders>${project.build.directory}/dependency/jace/include</outputHeaders>
 									<outputSources>${project.build.directory}/dependency/jace/source</outputSources>
@@ -524,7 +516,7 @@
 								</goals>
 								<configuration>
 									<target name="copy-patch-files">
-										<copy file="${project.build.directory}/../CMakeLists.txt"
+										<copy file="${project.build.directory}/../jace/CMakeLists.txt"
 											tofile="${project.build.directory}/dependency/jace/CMakeLists.txt" />
 									</target>
 								</configuration>
