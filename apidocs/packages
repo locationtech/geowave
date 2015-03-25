@@ -60,6 +60,7 @@ mil.nga.giat.geowave.types.gpx
 mil.nga.giat.geowave.types.tdrive
 mil.nga.giat.geowave.analytics
 mil.nga.giat.geowave.analytics.clustering
+mil.nga.giat.geowave.analytics.clustering.exception
 mil.nga.giat.geowave.analytics.clustering.mapreduce
 mil.nga.giat.geowave.analytics.clustering.runners
 mil.nga.giat.geowave.analytics.distance
