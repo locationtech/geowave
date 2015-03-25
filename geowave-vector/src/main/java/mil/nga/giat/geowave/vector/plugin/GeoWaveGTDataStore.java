@@ -709,6 +709,11 @@ public class GeoWaveGTDataStore extends
 					"Schema modification not supported");
 		}
 		final FeatureDataAdapter oldAdaptor = getAdapter(typeName);
+		if (oldAdaptor == null) {
+			LOGGER.error("could not get adapter for type: " + typeName);
+			throw new UnsupportedOperationException(
+					"Can not update schema for invalid type");
+		}
 		final SimpleFeatureType oldFeatureType = oldAdaptor.getType();
 		for (final AttributeDescriptor descriptor : oldFeatureType.getAttributeDescriptors()) {
 			final AttributeDescriptor newDescriptor = featureType.getDescriptor(descriptor.getLocalName());
@@ -750,7 +755,7 @@ public class GeoWaveGTDataStore extends
 			}
 			catch (final IOException ex) {
 				LOGGER.error(
-						"Cannot close index iterator.",
+						"Unable to remove schema",
 						ex);
 			}
 		}

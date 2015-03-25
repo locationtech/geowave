@@ -5,6 +5,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,6 +47,7 @@ import org.apache.accumulo.core.client.Connector;
 import org.apache.accumulo.core.client.mock.MockInstance;
 import org.apache.accumulo.core.client.security.tokens.PasswordToken;
 import org.apache.log4j.Logger;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -322,11 +324,16 @@ public class AccumuloDataStoreStatsTest
 				1,
 				countStats.getCount());
 
-		mockDataStore.deleteEntries(
-				adapter,
-				index,
-				"aaa",
-				"bbb");
+		try {
+			mockDataStore.deleteEntries(
+					adapter,
+					index,
+					"aaa",
+					"bbb");
+		}
+		catch (IOException e) {
+			Assert.fail("Couldn't delete entries");
+		}
 		it1 = mockDataStore.query(
 				adapter,
 				index,
@@ -522,7 +529,10 @@ public class AccumuloDataStoreStatsTest
 				return new CountDataStatistics<TestGeometry>(
 						getAdapterId());
 			}
-			return null;
+			LOGGER.warn("Unrecognized statistics ID " + statisticsId.getString() + " using count statistic");
+			return new CountDataStatistics<TestGeometry>(
+					getAdapterId(),
+					statisticsId);
 		}
 
 		@Override

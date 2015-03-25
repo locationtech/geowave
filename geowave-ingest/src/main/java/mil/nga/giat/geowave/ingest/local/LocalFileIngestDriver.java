@@ -18,6 +18,7 @@ import mil.nga.giat.geowave.store.DataStore;
 import mil.nga.giat.geowave.store.IndexWriter;
 import mil.nga.giat.geowave.store.adapter.WritableDataAdapter;
 
+import mil.nga.giat.geowave.store.index.Index;
 import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.apache.commons.cli.CommandLine;
@@ -128,10 +129,23 @@ public class LocalFileIngestDriver extends
 			final LocalFileIngestPlugin plugin,
 			final IngestRunData ingestRunData )
 			throws IOException {
-		final IndexWriter indexWriter = ingestRunData.getIndexWriter(accumulo.getIndex(plugin.getSupportedIndices()));
+
+		Index supportedIndex = accumulo.getIndex(plugin.getSupportedIndices());
+		if (supportedIndex == null) {
+			LOGGER.error("Could not get index instance, getIndex() returned null;");
+			throw new IOException(
+					"Could not get index instance, getIndex() returned null");
+		}
+		final IndexWriter indexWriter = ingestRunData.getIndexWriter(supportedIndex);
+		Index idx = indexWriter.getIndex();
+		if (idx == null) {
+			LOGGER.error("Could not get index instance, getIndex() returned null;");
+			throw new IOException(
+					"Could not get index instance, getIndex() returned null");
+		}
 		try (CloseableIterator<GeoWaveData<?>> geowaveDataIt = plugin.toGeoWaveData(
 				file,
-				indexWriter.getIndex().getId(),
+				idx.getId(),
 				accumulo.getVisibility())) {
 			while (geowaveDataIt.hasNext()) {
 				final GeoWaveData<?> geowaveData = geowaveDataIt.next();

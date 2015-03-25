@@ -208,7 +208,8 @@ public class AccumuloDataStore implements
 		store(writableAdapter);
 		store(index);
 
-		Writer writer;
+		Writer writer = null;
+		StatsCompositionTool<T> statisticsTool = null;
 		try {
 			final String indexName = StringUtils.stringFromBinary(index.getId().getBytes());
 			final String altIdxTableName = indexName + AccumuloUtils.ALT_INDEX_TABLE;
@@ -231,7 +232,7 @@ public class AccumuloDataStore implements
 				}
 			}
 
-			final StatsCompositionTool<T> statisticsTool = getStatsCompositionTool(writableAdapter);
+			statisticsTool = getStatsCompositionTool(writableAdapter);
 
 			writer = accumuloOperations.createWriter(
 					indexName,
@@ -292,6 +293,14 @@ public class AccumuloDataStore implements
 			LOGGER.error(
 					"Unable to ingest data entry",
 					e);
+		}
+		finally {
+			try {
+				statisticsTool.close();
+			}
+			catch (Exception e) {
+				LOGGER.error("Unable to close statistics tool");
+			}
 		}
 		return new ArrayList<ByteArrayId>();
 	}
@@ -1196,7 +1205,8 @@ public class AccumuloDataStore implements
 	public <T> void deleteEntries(
 			final DataAdapter<T> adapter,
 			final Index index,
-			final String... additionalAuthorizations ) {
+			final String... additionalAuthorizations )
+			throws IOException {
 		final String tableName = index.getId().getString();
 		final String altIdxTableName = tableName + AccumuloUtils.ALT_INDEX_TABLE;
 		final String adapterId = StringUtils.stringFromBinary(adapter.getAdapterId().getBytes());

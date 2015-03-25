@@ -30,6 +30,11 @@ public class RasterTileResizeMapper extends
 			final DataAdapter<?> adapter = super.serializationTool.getAdapter(key.getAdapterId());
 			if ((adapter != null) && (adapter instanceof RasterDataAdapter)) {
 				final Iterator<GridCoverage> coverages = helper.getCoveragesForIndex(value);
+				if (coverages == null) {
+					LOGGER.error("Couldn't get coverages instance, getCoveragesForIndex returned null");
+					throw new IOException(
+							"Couldn't get coverages instance, getCoveragesForIndex returned null");
+				}
 				while (coverages.hasNext()) {
 					final GridCoverage c = coverages.next();
 					// it should be a FitToIndexGridCoverage because it was just

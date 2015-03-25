@@ -16,6 +16,7 @@ import mil.nga.giat.geowave.vector.stats.FeatureBoundingBoxStatistics;
 import mil.nga.giat.geowave.vector.stats.FeatureTimeRangeStatistics;
 import mil.nga.giat.geowave.vector.utils.TimeDescriptors;
 
+import org.apache.log4j.Logger;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.AttributeDescriptor;
@@ -24,6 +25,8 @@ import com.vividsolutions.jts.geom.Geometry;
 
 public class QueryIndexHelper
 {
+
+	private static final Logger LOGGER = Logger.getLogger(QueryIndexHelper.class);
 
 	private static TemporalRange getStatsRange(
 			final Map<ByteArrayId, DataStatistics<SimpleFeature>> statsMap,
@@ -244,6 +247,12 @@ public class QueryIndexHelper
 		final TemporalConstraints boundsTemporalConstraints = QueryIndexHelper.getTemporalConstraintsForIndex(
 				timeDescriptors,
 				timeBoundsSet);
+
+		if (boundsTemporalConstraints == null) {
+			LOGGER.error("couldn't create aa TemporalContrainst instance, getTemporalContrainstForIndex returned null");
+			return new Constraints();
+		}
+
 		final Constraints boundsTimeConstraints = SpatialTemporalQuery.createConstraints(
 				boundsTemporalConstraints,
 				false);

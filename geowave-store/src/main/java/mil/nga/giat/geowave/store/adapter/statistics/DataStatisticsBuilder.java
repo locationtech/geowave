@@ -9,6 +9,7 @@ import mil.nga.giat.geowave.store.DataStoreEntryInfo;
 import mil.nga.giat.geowave.store.DeleteCallback;
 import mil.nga.giat.geowave.store.IngestCallback;
 import mil.nga.giat.geowave.store.ScanCallback;
+import org.apache.log4j.Logger;
 
 public class DataStatisticsBuilder<T> implements
 		IngestCallback<T>,
@@ -19,6 +20,7 @@ public class DataStatisticsBuilder<T> implements
 	private final Map<ByteArrayId, DataStatistics<T>> statisticsMap = new HashMap<ByteArrayId, DataStatistics<T>>();
 	private final ByteArrayId statisticsId;
 	private final DataStatisticsVisibilityHandler<T> visibilityHandler;
+	private static final Logger LOGGER = Logger.getLogger(DataStatistics.class);
 
 	public DataStatisticsBuilder(
 			final StatisticalDataAdapter<T> adapter,

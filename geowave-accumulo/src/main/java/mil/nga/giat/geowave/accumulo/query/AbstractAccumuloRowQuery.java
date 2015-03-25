@@ -12,6 +12,7 @@ import mil.nga.giat.geowave.store.index.Index;
 import org.apache.accumulo.core.client.IteratorSetting;
 import org.apache.accumulo.core.client.ScannerBase;
 import org.apache.accumulo.core.iterators.user.WholeRowIterator;
+import org.apache.log4j.Logger;
 
 /**
  * Represents a query operation by an Accumulo row. This abstraction is
@@ -21,6 +22,7 @@ import org.apache.accumulo.core.iterators.user.WholeRowIterator;
 abstract public class AbstractAccumuloRowQuery<T> extends
 		AccumuloQuery
 {
+	private static final Logger LOGGER = Logger.getLogger(AbstractAccumuloRowQuery.class);
 	protected final ByteArrayId row;
 	protected final ScanCallback<T> scanCallback;
 
@@ -41,6 +43,10 @@ abstract public class AbstractAccumuloRowQuery<T> extends
 		final ScannerBase scanner = getScanner(
 				accumuloOperations,
 				getScannerLimit());
+		if (scanner == null) {
+			LOGGER.error("Unable to get a new scanner instance, getScanner returned null");
+			return null;
+		}
 		addScanIteratorSettings(scanner);
 		final CloseableIteratorWrapper<Object> it = new CloseableIteratorWrapper<Object>(
 				new ScannerClosableWrapper(

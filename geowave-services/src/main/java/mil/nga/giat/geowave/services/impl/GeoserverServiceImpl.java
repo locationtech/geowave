@@ -2,12 +2,7 @@ package mil.nga.giat.geowave.services.impl;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -273,8 +268,13 @@ public class GeoserverServiceImpl implements
 	public Response publishStyle(
 			final FormDataMultiPart multiPart ) {
 
+		Collection<FormDataBodyPart> fileFields = multiPart.getFields("file");
+		if (fileFields == null) {
+			return Response.noContent().build();
+		}
+
 		// read the list of files & upload to geoserver services
-		for (final FormDataBodyPart field : multiPart.getFields("file")) {
+		for (final FormDataBodyPart field : fileFields) {
 			final String filename = field.getFormDataContentDisposition().getFileName();
 			if (filename.endsWith(".sld") || filename.endsWith(".xml")) {
 				final String styleName = filename.substring(

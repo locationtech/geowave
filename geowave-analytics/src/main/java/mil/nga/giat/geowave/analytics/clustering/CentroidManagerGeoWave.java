@@ -12,6 +12,7 @@ import mil.nga.giat.geowave.accumulo.BasicAccumuloOperations;
 import mil.nga.giat.geowave.accumulo.mapreduce.GeoWaveConfiguratorBase;
 import mil.nga.giat.geowave.accumulo.metadata.AccumuloAdapterStore;
 import mil.nga.giat.geowave.accumulo.metadata.AccumuloIndexStore;
+import mil.nga.giat.geowave.analytics.clustering.exception.MatchingCentroidNotFoundException;
 import mil.nga.giat.geowave.analytics.parameters.CentroidParameters;
 import mil.nga.giat.geowave.analytics.parameters.CommonParameters;
 import mil.nga.giat.geowave.analytics.parameters.GlobalParameters;
@@ -406,6 +407,21 @@ public class CentroidManagerGeoWave<T> implements
 					centroids);
 		}
 		return centroids;
+	}
+
+	public AnalyticItemWrapper<T> getCentroidById(
+			final String id,
+			final String groupID )
+			throws IOException,
+			MatchingCentroidNotFoundException {
+		for (final AnalyticItemWrapper<T> centroid : this.getCentroidsForGroup(groupID)) {
+			if (centroid.getID().equals(
+					id)) {
+				return centroid;
+			}
+		}
+		throw new MatchingCentroidNotFoundException(
+				id);
 	}
 
 	private List<AnalyticItemWrapper<T>> loadCentroids(

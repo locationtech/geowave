@@ -872,7 +872,7 @@ public class GeoWaveInputFormat<T extends Writable> extends
 					locations.toArray(new String[locations.size()]));
 		}
 
-		private int getMaxCardinality() {
+		private synchronized int getMaxCardinality() {
 			int maxCardinality = 1;
 			for (final List<RangeLocationPair> pList : splitInfo.values()) {
 				for (final RangeLocationPair p : pList) {

@@ -276,7 +276,7 @@ abstract public class AbstractAccumuloPersistence<T extends Persistable>
 					"Unable to find objects, table '" + getAccumuloTablename() + "' does not exist",
 					e);
 		}
-		return null;
+		return new CloseableIterator.Empty<T>();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -448,9 +448,6 @@ abstract public class AbstractAccumuloPersistence<T extends Persistable>
 					"Unable to find objects, table '" + getAccumuloTablename() + "' does not exist",
 					e);
 		}
-		this.getAllObjectsWithSecondaryId(
-				secondaryId,
-				authorizations);
 
 		return true;
 	}

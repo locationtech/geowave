@@ -11,6 +11,7 @@ import java.util.Random;
 
 import mil.nga.giat.geowave.analytics.clustering.CentroidManager;
 import mil.nga.giat.geowave.analytics.clustering.LongCentroid;
+import mil.nga.giat.geowave.analytics.clustering.exception.MatchingCentroidNotFoundException;
 import mil.nga.giat.geowave.analytics.kmeans.mapreduce.runners.StripWeakCentroidsRunner;
 import mil.nga.giat.geowave.analytics.kmeans.mapreduce.runners.StripWeakCentroidsRunner.MaxChangeBreakStrategy;
 import mil.nga.giat.geowave.analytics.kmeans.mapreduce.runners.StripWeakCentroidsRunner.StableChangeBreakStrategy;
@@ -198,6 +199,19 @@ public class StripWeakCentroidsRunnerTest
 							StringUtils.stringToBinary(IndexType.SPATIAL_VECTOR.getDefaultId()));
 				}
 
+				@Override
+				public AnalyticItemWrapper<Long> getCentroidById(
+						String id,
+						String groupID )
+						throws IOException,
+						MatchingCentroidNotFoundException {
+					Assert.assertEquals(
+							"1",
+							groupID);
+					throw new MatchingCentroidNotFoundException(
+							id);
+				}
+
 			};
 		}
 
@@ -320,6 +334,19 @@ public class StripWeakCentroidsRunnerTest
 				public ByteArrayId getIndexId() {
 					return new ByteArrayId(
 							StringUtils.stringToBinary(IndexType.SPATIAL_VECTOR.getDefaultId()));
+				}
+
+				@Override
+				public AnalyticItemWrapper<Long> getCentroidById(
+						String id,
+						String groupID )
+						throws IOException,
+						MatchingCentroidNotFoundException {
+					Assert.assertEquals(
+							"1",
+							groupID);
+					throw new MatchingCentroidNotFoundException(
+							id);
 				}
 
 			};

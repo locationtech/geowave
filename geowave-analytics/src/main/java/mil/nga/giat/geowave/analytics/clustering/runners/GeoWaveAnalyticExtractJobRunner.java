@@ -1,5 +1,6 @@
 package mil.nga.giat.geowave.analytics.clustering.runners;
 
+import java.io.IOException;
 import java.util.Set;
 import java.util.UUID;
 

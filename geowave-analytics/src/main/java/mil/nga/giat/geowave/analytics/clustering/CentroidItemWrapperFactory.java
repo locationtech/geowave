@@ -33,16 +33,8 @@ public class CentroidItemWrapperFactory<T> implements
 	@Override
 	public AnalyticItemWrapper<T> create(
 			final T item ) {
-		try {
-			return new CentroidItemWrapper(
-					item);
-		}
-		catch (final IOException e) {
-			LOGGER.error(
-					"Cannot determine the centroid for a given item",
-					e);
-			return null;
-		}
+		return new CentroidItemWrapper(
+				item);
 	}
 
 	@Override
@@ -83,18 +75,23 @@ public class CentroidItemWrapperFactory<T> implements
 		AnalyticItemWrapper<T> centroidItem;
 
 		public CentroidItemWrapper(
-				final T item )
-				throws IOException {
+				final T item ) {
 			wrappedItem = itemFactory.create(item);
-			nestedGroupCentroidAssignment.findCentroidForLevel(
-					wrappedItem,
-					new AssociationNotification<T>() {
-						@Override
-						public void notify(
-								final CentroidPairing<T> pairing ) {
-							centroidItem = pairing.getCentroid();
-						}
-					});
+			try {
+				nestedGroupCentroidAssignment.findCentroidForLevel(
+						wrappedItem,
+						new AssociationNotification<T>() {
+							@Override
+							public void notify(
+									final CentroidPairing<T> pairing ) {
+								centroidItem = pairing.getCentroid();
+							}
+						});
+			}
+			catch (IOException e) {
+				LOGGER.error("Cannot resolve paired centroid for " + wrappedItem.getID());
+				centroidItem = wrappedItem;
+			}
 		}
 
 		@Override
@@ -204,7 +201,12 @@ public class CentroidItemWrapperFactory<T> implements
 			final Coordinate coordinate,
 			final String[] extraNames,
 			final double[] extraValues ) {
-		return null;
+		return this.itemFactory.createNextItem(
+				feature,
+				groupID,
+				coordinate,
+				extraNames,
+				extraValues);
 	}
 
 }

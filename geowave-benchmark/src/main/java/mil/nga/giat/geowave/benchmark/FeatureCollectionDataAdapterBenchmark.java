@@ -355,7 +355,7 @@ public class FeatureCollectionDataAdapterBenchmark
 			try {
 				featureOperations.deleteAll();
 			}
-			catch (TableNotFoundException | AccumuloSecurityException | AccumuloException e) {
+			catch (Throwable e) {
 				log.error(
 						"Unable to clear accumulo namespace",
 						e);
@@ -412,7 +412,7 @@ public class FeatureCollectionDataAdapterBenchmark
 				try {
 					featureCollectionOperations.deleteAll();
 				}
-				catch (TableNotFoundException | AccumuloSecurityException | AccumuloException e) {
+				catch (Throwable e) {
 					log.error(
 							"Unable to clear accumulo namespace",
 							e);

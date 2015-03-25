@@ -14,6 +14,7 @@ import mil.nga.giat.geowave.store.index.Index;
 
 import org.apache.accumulo.core.client.ScannerBase;
 import org.apache.accumulo.core.client.TableNotFoundException;
+import org.apache.log4j.Logger;
 
 /**
  * Used to remove the transaction id from the visibility of data fields for
@@ -25,6 +26,7 @@ public class TransformingVisibilityQuery extends
 {
 
 	private final VisibilityTransformer transformer;
+	private static final Logger LOGGER = Logger.getLogger(TransformingVisibilityQuery.class);
 
 	public TransformingVisibilityQuery(
 			final VisibilityTransformer transformer,
@@ -59,6 +61,10 @@ public class TransformingVisibilityQuery extends
 		final ScannerBase scanner = getScanner(
 				accumuloOperations,
 				limit);
+		if (scanner == null) {
+			LOGGER.error("Could not get scanner instance, getScanner returned null");
+			return new CloseableIterator.Empty<Boolean>();
+		}
 		addScanIteratorSettings(scanner);
 		final String tableName = StringUtils.stringFromBinary(index.getId().getBytes());
 		TransformerWriter writer = new TransformerWriter(

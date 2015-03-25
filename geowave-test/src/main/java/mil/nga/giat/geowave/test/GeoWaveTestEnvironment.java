@@ -329,6 +329,11 @@ abstract public class GeoWaveTestEnvironment
 			SimpleFeatureIterator featureIterator = null;
 			try {
 				dataStore = DataStoreFinder.getDataStore(map);
+				if (dataStore == null) {
+					LOGGER.error("Could not get dataStore instance, getDataStore returned null");
+					throw new IOException(
+							"Could not get dataStore instance, getDataStore returned null");
+				}
 				final SimpleFeatureCollection expectedResults = dataStore.getFeatureSource(
 						dataStore.getNames().get(
 								0)).getFeatures();
@@ -371,7 +376,11 @@ abstract public class GeoWaveTestEnvironment
 		SimpleFeatureIterator sfi = null;
 		try {
 			dataStore = DataStoreFinder.getDataStore(map);
-
+			if (dataStore == null) {
+				LOGGER.error("Could not get dataStore instance, getDataStore returned null");
+				throw new IOException(
+						"Could not get dataStore instance, getDataStore returned null");
+			}
 			// just grab the first feature and use it as a filter
 			sfi = dataStore.getFeatureSource(
 					dataStore.getNames().get(

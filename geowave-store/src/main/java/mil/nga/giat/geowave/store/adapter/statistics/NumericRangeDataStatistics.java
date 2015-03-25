@@ -23,10 +23,10 @@ abstract public class NumericRangeDataStatistics<T> extends
 
 	public NumericRangeDataStatistics(
 			final ByteArrayId dataAdapterId,
-			final ByteArrayId statisticsIds ) {
+			final ByteArrayId statisticsId ) {
 		super(
 				dataAdapterId,
-				statisticsIds);
+				statisticsId);
 	}
 
 	public boolean isSet() {

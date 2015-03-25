@@ -1,5 +1,6 @@
 package mil.nga.giat.geowave.analytics.clustering;
 
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -157,7 +158,8 @@ public class ClusteringUtils
 			final String accumuloInstance,
 			final String accumuloUser,
 			final String accumuloPassword,
-			final String namespace ) {
+			final String namespace )
+			throws IOException {
 		BasicAccumuloOperations ops;
 		try {
 			ops = new BasicAccumuloOperations(
@@ -180,16 +182,13 @@ public class ClusteringUtils
 			return result;
 		}
 		catch (final AccumuloException e) {
-			LOGGER.error(
-					"cannot connect to GeoWave ",
-					e);
+			throw new IOException(
+					"Cannot connect to GeoWave for Adapter Inquiry (" + accumuloInstance + "@ " + zookeeper + ")");
 		}
 		catch (final AccumuloSecurityException e) {
-			LOGGER.error(
-					"cannot connect to GeoWave ",
-					e);
+			throw new IOException(
+					"Cannot connect to GeoWave for Adapter Inquiry (" + accumuloInstance + "@ " + zookeeper + ")");
 		}
-		return null;
 	}
 
 	public static Index[] getIndices(
@@ -221,12 +220,12 @@ public class ClusteringUtils
 		}
 		catch (final AccumuloException e) {
 			LOGGER.error(
-					"cannot connect to GeoWave ",
+					"Cannot connect to GeoWave for Index Inquiry (" + accumuloInstance + "@ " + zookeeper + ")",
 					e);
 		}
 		catch (final AccumuloSecurityException e) {
 			LOGGER.error(
-					"cannot connect to GeoWave ",
+					"Cannot connect to GeoWave for Index Inquiry (" + accumuloInstance + "@ " + zookeeper + ")",
 					e);
 		}
 		return new Index[] {
@@ -277,6 +276,11 @@ public class ClusteringUtils
 	public static DataAdapter<?> createAdapter(
 			final PropertyManagement propertyManagement )
 			throws Exception {
+
+		Class<DimensionExtractor> dimensionExtractorClass = propertyManagement.getPropertyAsClass(
+				CommonParameters.Common.DIMENSION_EXTRACT_CLASS,
+				DimensionExtractor.class);
+
 		return ClusteringUtils.createAdapter(
 				propertyManagement.getProperty(CentroidParameters.Centroid.DATA_TYPE_ID),
 				propertyManagement.getProperty(
@@ -287,9 +291,6 @@ public class ClusteringUtils
 				propertyManagement.getProperty(GlobalParameters.Global.ACCUMULO_USER),
 				propertyManagement.getProperty(GlobalParameters.Global.ACCUMULO_PASSWORD),
 				propertyManagement.getProperty(GlobalParameters.Global.ACCUMULO_NAMESPACE),
-				propertyManagement.getPropertyAsClass(
-						CommonParameters.Common.DIMENSION_EXTRACT_CLASS,
-						DimensionExtractor.class).newInstance().getDimensionNames());
-
+				dimensionExtractorClass.newInstance().getDimensionNames());
 	}
 }

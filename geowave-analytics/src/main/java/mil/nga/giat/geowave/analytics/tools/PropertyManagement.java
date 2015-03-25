@@ -279,7 +279,8 @@ public class PropertyManagement
 
 	public <T> Class<T> getPropertyAsClass(
 			final ParameterEnum property,
-			final Class<T> iface ) {
+			final Class<T> iface )
+			throws ClassNotFoundException {
 		final Object val = properties.get(toPropertyName(property));
 		if (val != null) {
 			if (val instanceof Class) {
@@ -293,15 +294,20 @@ public class PropertyManagement
 						property.getBaseClass());
 			}
 			catch (final ClassNotFoundException e) {
-				LOGGER.error("Class not found for property " + property);
+				LOGGER.error("Class not found for property " + toPropertyName(property));
+				throw e;
 			}
 			catch (final java.lang.IllegalArgumentException ex) {
 				LOGGER.error(
-						"Invalid class for property" + property,
+						"Invalid class for property" + toPropertyName(property),
 						ex);
 			}
 		}
-		return null;
+		else {
+			LOGGER.error("Value not found for property " + toPropertyName(property));
+		}
+		throw new ClassNotFoundException(
+				"Value not found for property " + toPropertyName(property));
 	}
 
 	public <T> Class<? extends T> getPropertyAsClass(

@@ -244,17 +244,21 @@ public class KSamplerMapReduce
 				Integer outputCount = outputCounts.get(groupID);
 				outputCount = outputCount == null ? 0 : outputCount;
 				if ((outputCount == null) || (outputCount < maxCount)) {
-					context.write(
-							new GeoWaveOutputKey(
-									sampleDataTypeId,
-									indexId),
-							createCentroid(
-									groupID,
-									sampleItem).getWrappedItem());
-					outputCount++;
-					outputCounts.put(
+
+					AnalyticItemWrapper<T> centroid = createCentroid(
 							groupID,
-							outputCount);
+							sampleItem);
+					if (centroid != null) {
+						context.write(
+								new GeoWaveOutputKey(
+										sampleDataTypeId,
+										indexId),
+								centroid.getWrappedItem());
+						outputCount++;
+						outputCounts.put(
+								groupID,
+								outputCount);
+					}
 				}
 			}
 		}
@@ -269,6 +273,7 @@ public class KSamplerMapReduce
 					point.getCoordinate(),
 					item.getExtraDimensions(),
 					item.getDimensionValues());
+
 			nextCentroid.setBatchID(batchID);
 			nextCentroid.setGroupID(groupID);
 			nextCentroid.setZoomLevel(zoomLevel);

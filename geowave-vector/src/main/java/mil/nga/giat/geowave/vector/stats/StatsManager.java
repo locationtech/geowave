@@ -16,6 +16,8 @@ import mil.nga.giat.geowave.store.adapter.statistics.FieldIdStatisticVisibility;
 import mil.nga.giat.geowave.store.adapter.statistics.FieldTypeStatisticVisibility;
 import mil.nga.giat.geowave.store.dimension.GeometryWrapper;
 
+import org.apache.log4j.Logger;
+import org.opengis.coverage.grid.GridCoverage;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.AttributeDescriptor;
@@ -25,6 +27,7 @@ import com.vividsolutions.jts.geom.Geometry;
 public class StatsManager
 {
 
+	private final static Logger LOGGER = Logger.getLogger(StatsManager.class);
 	private final static DataStatisticsVisibilityHandler<SimpleFeature> GEOMETRY_VISIBILITY_HANDLER = new FieldTypeStatisticVisibility<SimpleFeature>(
 			GeometryWrapper.class);
 
@@ -44,7 +47,10 @@ public class StatsManager
 			return new CountDataStatistics<SimpleFeature>(
 					dataAdapter.getAdapterId());
 		}
-		return null;
+		LOGGER.warn("Unrecognized statistics ID " + statisticsId.getString() + " using count statistic");
+		return new CountDataStatistics<SimpleFeature>(
+				dataAdapter.getAdapterId(),
+				statisticsId);
 	}
 
 	public DataStatisticsVisibilityHandler<SimpleFeature> getVisibilityHandler(

@@ -41,6 +41,7 @@ import org.apache.accumulo.core.iterators.IteratorUtil.IteratorScope;
 import org.apache.accumulo.core.iterators.user.TransformingIterator;
 import org.apache.commons.math.stat.descriptive.moment.Mean;
 import org.apache.commons.math.stat.descriptive.moment.StandardDeviation;
+import org.apache.log4j.Logger;
 import org.geotools.data.DataUtilities;
 import org.geotools.feature.DefaultFeatureCollection;
 import org.geotools.feature.SchemaException;
@@ -53,6 +54,9 @@ import com.vividsolutions.jts.geom.GeometryFactory;
 
 public class HistogramGenerator
 {
+
+	private static final Logger LOGGER = Logger.getLogger(HistogramGenerator.class);
+
 	public void generateHistogram(
 			final int tileSize,
 			final int queryNum,
@@ -793,30 +797,41 @@ public class HistogramGenerator
 		int queryNum = 0;
 
 		String curLine;
-		while ((curLine = br.readLine()) != null) {
-			queryNum++;
+		try {
+			while ((curLine = br.readLine()) != null) {
+				queryNum++;
 
-			// left off at 7...
-			if (queryNum >= 7) {
-				final String[] coords = curLine.split(" ");
-				final double north = Double.parseDouble(coords[0]);
-				final double south = Double.parseDouble(coords[1]);
-				final double east = Double.parseDouble(coords[2]);
-				final double west = Double.parseDouble(coords[3]);
+				// left off at 7...
+				if (queryNum >= 7) {
+					final String[] coords = curLine.split(" ");
+					final double north = Double.parseDouble(coords[0]);
+					final double south = Double.parseDouble(coords[1]);
+					final double east = Double.parseDouble(coords[2]);
+					final double west = Double.parseDouble(coords[3]);
 
-				// perform this query for each tileSize
-				for (final int tileSize : tileSizes) {
-					System.out.println("\nQuery " + queryNum + " - Tile Size " + tileSize);
-					qt.generateHistogram(
-							tileSize,
-							queryNum,
-							north,
-							south,
-							east,
-							west);
+					// perform this query for each tileSize
+					for (final int tileSize : tileSizes) {
+						System.out.println("\nQuery " + queryNum + " - Tile Size " + tileSize);
+
+						qt.generateHistogram(
+								tileSize,
+								queryNum,
+								north,
+								south,
+								east,
+								west);
+					}
+
 				}
 			}
 		}
-		br.close();
+		catch (Exception e) {
+			LOGGER.error(
+					"Unable to generate histogram",
+					e);
+		}
+		finally {
+			br.close();
+		}
 	}
 }

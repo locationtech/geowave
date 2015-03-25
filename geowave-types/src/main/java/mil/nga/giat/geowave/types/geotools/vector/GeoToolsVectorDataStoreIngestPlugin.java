@@ -104,6 +104,10 @@ public class GeoToolsVectorDataStoreIngestPlugin implements
 					"url",
 					input.toURI().toURL());
 			dataStore = DataStoreFinder.getDataStore(map);
+			if (dataStore == null) {
+				LOGGER.error("Unable to get a datastore instance, getDataStore returned null");
+				return null;
+			}
 
 			names = dataStore.getNames();
 		}
@@ -112,7 +116,8 @@ public class GeoToolsVectorDataStoreIngestPlugin implements
 					"Unable to ingest data source for file '" + input.getAbsolutePath() + "'",
 					e);
 		}
-		if ((dataStore == null) || (names == null)) {
+		if (names == null || dataStore == null) {
+			LOGGER.error("Unable to get datatore name");
 			return null;
 		}
 		final List<SimpleFeatureCollection> featureCollections = new ArrayList<SimpleFeatureCollection>();
