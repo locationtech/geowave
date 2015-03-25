@@ -43,18 +43,18 @@ public class LocalFileIngestDriver extends
 	}
 
 	@Override
-	public void parseOptions(
+	protected void parseOptionsInternal(
 			final CommandLine commandLine )
 			throws ParseException {
 		accumulo = AccumuloCommandLineOptions.parseOptions(commandLine);
-		super.parseOptions(commandLine);
+		super.parseOptionsInternal(commandLine);
 	}
 
 	@Override
-	public void applyOptions(
+	protected void applyOptionsInternal(
 			final Options allOptions ) {
 		AccumuloCommandLineOptions.applyOptions(allOptions);
-		super.applyOptions(allOptions);
+		super.applyOptionsInternal(allOptions);
 	}
 
 	@Override
