@@ -56,20 +56,7 @@ public class QueryIndexHelper
 			final TimeDescriptors timeDescriptors,
 			final TemporalConstraintsSet constraintsSet ) {
 
-		if ((timeDescriptors.getTime() != null) && constraintsSet.hasConstraintsFor(timeDescriptors.getTime().getLocalName())) {
-			final String name = timeDescriptors.getTime().getLocalName();
-			final FeatureTimeRangeStatistics stats = ((FeatureTimeRangeStatistics) statsMap.get(FeatureTimeRangeStatistics.composeId(name)));
-
-			final TemporalConstraints constraints = constraintsSet.getConstraintsFor(name);
-			if (stats != null) {
-				constraints.replaceWithIntersections(new TemporalConstraints(
-						stats.asTemporalRange(),
-						name));
-			}
-			constraintsSet.removeAllConstraintsExcept(name);
-			return constraintsSet;
-		}
-		else if ((timeDescriptors.getEndRange() != null) && (timeDescriptors.getStartRange() != null)) {
+		if ((timeDescriptors.getEndRange() != null) && (timeDescriptors.getStartRange() != null)) {
 			final TemporalRange statsStartRange = getStatsRange(
 					statsMap,
 					timeDescriptors.getStartRange());
@@ -105,6 +92,19 @@ public class QueryIndexHelper
 			// specifically look for non-overlapping regions of time
 			return constraintsSet;
 		}
+		else if ((timeDescriptors.getTime() != null) && constraintsSet.hasConstraintsFor(timeDescriptors.getTime().getLocalName())) {
+			final String name = timeDescriptors.getTime().getLocalName();
+			final FeatureTimeRangeStatistics stats = ((FeatureTimeRangeStatistics) statsMap.get(FeatureTimeRangeStatistics.composeId(name)));
+
+			final TemporalConstraints constraints = constraintsSet.getConstraintsFor(name);
+			if (stats != null) {
+				constraints.replaceWithIntersections(new TemporalConstraints(
+						stats.asTemporalRange(),
+						name));
+			}
+			constraintsSet.removeAllConstraintsExcept(name);
+			return constraintsSet;
+		}
 		return constraintsSet;
 	}
 
@@ -136,15 +136,7 @@ public class QueryIndexHelper
 			final TimeDescriptors timeDescriptors,
 			final Map<ByteArrayId, DataStatistics<SimpleFeature>> stats ) {
 
-		if (timeDescriptors.getTime() != null) {
-			final FeatureTimeRangeStatistics timeStat = ((FeatureTimeRangeStatistics) stats.get(FeatureTimeRangeStatistics.composeId(timeDescriptors.getTime().getLocalName())));
-			if (timeStat != null) {
-				return SpatialTemporalQuery.createConstraints(
-						timeStat.asTemporalRange(),
-						true);
-			}
-		}
-		else if ((timeDescriptors.getEndRange() != null) || (timeDescriptors.getStartRange() != null)) {
+		if ((timeDescriptors.getEndRange() != null) || (timeDescriptors.getStartRange() != null)) {
 			final FeatureTimeRangeStatistics endRange = (timeDescriptors.getEndRange() != null) ? ((FeatureTimeRangeStatistics) stats.get(FeatureTimeRangeStatistics.composeId(timeDescriptors.getEndRange().getLocalName()))) : null;
 			final FeatureTimeRangeStatistics startRange = (timeDescriptors.getStartRange() != null) ? ((FeatureTimeRangeStatistics) stats.get(FeatureTimeRangeStatistics.composeId(timeDescriptors.getStartRange().getLocalName()))) : null;
 
@@ -162,6 +154,14 @@ public class QueryIndexHelper
 			else if (startRange != null) {
 				return SpatialTemporalQuery.createConstraints(
 						startRange.asTemporalRange(),
+						true);
+			}
+		}
+		else if (timeDescriptors.getTime() != null) {
+			final FeatureTimeRangeStatistics timeStat = ((FeatureTimeRangeStatistics) stats.get(FeatureTimeRangeStatistics.composeId(timeDescriptors.getTime().getLocalName())));
+			if (timeStat != null) {
+				return SpatialTemporalQuery.createConstraints(
+						timeStat.asTemporalRange(),
 						true);
 			}
 		}
@@ -185,11 +185,12 @@ public class QueryIndexHelper
 		if ((timeBoundsSet == null) || timeBoundsSet.isEmpty()) {
 			return null;
 		}
-		if ((timeDescriptors.getTime() != null) && timeBoundsSet.hasConstraintsFor(timeDescriptors.getTime().getLocalName())) {
-			return timeBoundsSet.getConstraintsFor(timeDescriptors.getTime().getLocalName());
-		}
-		else if ((timeDescriptors.getStartRange() != null) && (timeDescriptors.getEndRange() != null) && timeBoundsSet.hasConstraintsFor(timeDescriptors.getStartRange().getLocalName() + "_" + timeDescriptors.getEndRange().getLocalName())) {
+
+		if ((timeDescriptors.getStartRange() != null) && (timeDescriptors.getEndRange() != null) && timeBoundsSet.hasConstraintsFor(timeDescriptors.getStartRange().getLocalName() + "_" + timeDescriptors.getEndRange().getLocalName())) {
 			return timeBoundsSet.getConstraintsFor(timeDescriptors.getStartRange().getLocalName() + "_" + timeDescriptors.getEndRange().getLocalName());
+		}
+		else if ((timeDescriptors.getTime() != null) && timeBoundsSet.hasConstraintsFor(timeDescriptors.getTime().getLocalName())) {
+			return timeBoundsSet.getConstraintsFor(timeDescriptors.getTime().getLocalName());
 		}
 
 		return null;
@@ -247,13 +248,7 @@ public class QueryIndexHelper
 		final TemporalConstraints boundsTemporalConstraints = QueryIndexHelper.getTemporalConstraintsForIndex(
 				timeDescriptors,
 				timeBoundsSet);
-
-		if (boundsTemporalConstraints == null) {
-			LOGGER.error("couldn't create aa TemporalContrainst instance, getTemporalContrainstForIndex returned null");
-			return new Constraints();
-		}
-
-		final Constraints boundsTimeConstraints = SpatialTemporalQuery.createConstraints(
+		final Constraints boundsTimeConstraints = boundsTemporalConstraints == null ? indexTimeConstraints : SpatialTemporalQuery.createConstraints(
 				boundsTemporalConstraints,
 				false);
 		return (boundsTimeConstraints.matches(indexTimeConstraints)) ? new Constraints() : boundsTimeConstraints;
