@@ -3,6 +3,7 @@
 <p><a href="https://github.com/ngageoint/geowave/compare/v0.8.3...HEAD">Full Changelog</a></p>
 <p><strong>Implemented enhancements:</strong></p>
 <ul>
+<li><p>Ingest plugins based on simple feature data can select a subset to ingest with a CQL filter string <a href="https://github.com/ngageoint/geowave/issues/289">#289</a></p></li>
 <li><p>Support subseting of selected attributes within iterators <a href="https://github.com/ngageoint/geowave/issues/237">#237</a></p></li>
 <li><p>Add GeoWave to Vagrant config for PDAL. <a href="https://github.com/ngageoint/geowave/issues/234">#234</a></p></li>
 <li><p>Maven Checkstyle + format all code <a href="https://github.com/ngageoint/geowave/issues/227">#227</a></p></li>
@@ -13,6 +14,7 @@
 <li><p>Allow max polygon/line decomposition to be passed as a parameter to index strategy <a href="https://github.com/ngageoint/geowave/issues/198">#198</a></p></li>
 <li><p>Add core dependency versions to shaded jar redistributable <a href="https://github.com/ngageoint/geowave/issues/150">#150</a></p></li>
 <li><p>Migrate docs to asciidoc <a href="https://github.com/ngageoint/geowave/issues/147">#147</a></p></li>
+<li><p>add ability for individual ingest plugins to advertise additional commandline options <a href="https://github.com/ngageoint/geowave/issues/146">#146</a></p></li>
 <li><p>Remote submission of existing mapreduce jobs on yarn <a href="https://github.com/ngageoint/geowave/issues/128">#128</a></p></li>
 <li><p>Improvements to JUMP K-Means Cluster integration <a href="https://github.com/ngageoint/geowave/issues/119">#119</a></p></li>
 <li><p>Update code, interfaces, and documentation to clarify namespace type: (accumulo vs. geowave) <a href="https://github.com/ngageoint/geowave/issues/65">#65</a></p></li>
@@ -35,6 +37,7 @@
 </ul>
 <p><strong>Merged pull requests:</strong></p>
 <ul>
+<li><p>Documentation and web site updates <a href="https://github.com/ngageoint/geowave/pull/293">#293</a> (<a href="https://github.com/spohnan">spohnan</a>)</p></li>
 <li><p>#146: plugins can advertise custom options; #289: feature plugins advertise cql filter <a href="https://github.com/ngageoint/geowave/pull/291">#291</a> (<a href="https://github.com/rfecher">rfecher</a>)</p></li>
 <li><p>Geowave 283 <a href="https://github.com/ngageoint/geowave/pull/287">#287</a> (<a href="https://github.com/rwgdrummer">rwgdrummer</a>)</p></li>
 <li><p>Add: Added in changelog auto generation <a href="https://github.com/ngageoint/geowave/pull/284">#284</a> (<a href="https://github.com/chrisbennight">chrisbennight</a>)</p></li>

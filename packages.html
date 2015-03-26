@@ -214,7 +214,7 @@
                     if (fileSize !== '0' && !isInSkipList(fileName, _skipList)) {
                         if(startsWith(fileName, eventHash.substring(1))) {
                             buffer.push([
-                                '<a href="' + fileName + '" download="' + baseName(fileName)  + '" target="_blank">' + baseName(fileName) + '</a>',
+                                '<a href="' + _url + fileName + '" download="' + baseName(fileName)  + '" target="_blank">' + baseName(fileName) + '</a>',
                                 $(this).find('LastModified').text(),
                                 filesize($(this).find('Size').text())
                             ]);

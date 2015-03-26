@@ -519,7 +519,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#ordering">Ordering</a></li>
 <li><a href="#preview">Preview</a></li>
 <li><a href="#transformation">Transformation</a></li>
-<li><a href="#publishing">Publishing</a></li>
+<li><a href="#site">Site</a></li>
 </ul>
 </li>
 <li><a href="#puppet-2">Puppet</a>
@@ -864,12 +864,12 @@ density analytic. The data corresponds to Mapbox zoom level 13.</p>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="./images/geolife-density-13.jpg" alt="T-drive density at city scale">
+<a class="image" href="images/geolife-density-13.jpg"><img src="./images/geolife-density-13-thumb.jpg" alt="Geolife density at city scale"></a>
 </div>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="./images/geolife-points-13.jpg" alt="Geolife points at city scale">
+<a class="image" href="images/geolife-points-13.jpg"><img src="./images/geolife-points-13-thumb.jpg" alt="Geolife points at city scale"></a>
 </div>
 </div>
 <div style="page-break-after: always;"></div>
@@ -881,7 +881,7 @@ density analytic. The data corresponds to Mapbox zoom level 13.</p>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="./images/geolife-density-17.jpg" alt="T-drive density at city scale">
+<a class="image" href="images/geolife-density-17.jpg"><img src="./images/geolife-density-17-thumb.jpg" alt="GeoLife at house scale"></a>
 </div>
 </div>
 <div class="paragraph">
@@ -889,7 +889,7 @@ density analytic. The data corresponds to Mapbox zoom level 13.</p>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="./images/geolife-points-17.jpg" alt="Geolife points at city scale">
+<a class="image" href="images/geolife-points-17.jpg"><img src="./images/geolife-points-17-thumb.jpg" alt="GeoLife at house scale"></a>
 </div>
 </div>
 <div class="paragraph">
@@ -915,7 +915,7 @@ just under one million trajectories.</p>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="./images/osmgpx.jpg" alt="T-drive density at city scale">
+<a class="image" href="images/osmgpx.jpg"><img src="./images/osmgpx-thumb.jpg" alt="OSM GPX at continent scale"></a>
 </div>
 </div>
 <div style="page-break-after: always;"></div>
@@ -927,7 +927,7 @@ just under one million trajectories.</p>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="./images/osmgpx-world.jpg" alt="Geolife points at city scale">
+<a class="image" href="images/osmgpx-world.jpg"><img src="./images/osmgpx-world-thumb.jpg" alt="Geolife points at city scale"></a>
 </div>
 </div>
 <div style="page-break-after: always;"></div>
@@ -950,12 +950,12 @@ density analytic. The data corresponds to Mapbox zoom level 12.</p>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="./images/t-drive-points-12.jpg" alt="T-drive points at city scale">
+<a class="image" href="images/t-drive-points-12.jpg"><img src="./images/t-drive-points-12-thumb.jpg" alt="T-drive points at city scale"></a>
 </div>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="./images/t-drive-density-12.jpg" alt="T-drive density at city scale">
+<a class="image" href="images/t-drive-density-12.jpg"><img src="./images/t-drive-density-12-thumb.jpg" alt="T-drive density at city scale"></a>
 </div>
 </div>
 <div style="page-break-after: always;"></div>
@@ -3095,7 +3095,7 @@ with a quick refresh of the browser.</p>
 <p>To preview the entire finished page web page or see the generated PDF you&#8217;ll need to run the transformation process.</p>
 </div>
 <div class="listingblock">
-<div class="title">Generate Website Pages</div>
+<div class="title">Generate Documentation</div>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash" data-lang="bash"> cd geowave
  mvn -P docs -pl docs install <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
@@ -3105,7 +3105,7 @@ with a quick refresh of the browser.</p>
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>Process <em>only</em> the docs module</td>
+<td>-pl docs = Process <em>only</em> the docs module. Skips the javadoc generation step.</td>
 </tr>
 </table>
 </div>
@@ -3114,24 +3114,18 @@ with a quick refresh of the browser.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="publishing"><a class="anchor" href="#publishing"></a>Publishing</h3>
+<h3 id="site"><a class="anchor" href="#site"></a>Site</h3>
 <div class="paragraph">
-<p>To publish updated documentation to the application web site we have to build both the javadocs and the site pages. The
-<code>geowave/.utility/build-site-content.sh</code> script can be used to build all documentation. Once all docs have been built the
-<code>geowave/.utility/publish-to-github-pages.sh</code> script will push the content up to the application web site.</p>
+<p>To build all the content used for the <a href="https://ngageoint.github.io/geowave/">GeoWave website</a> use the following command. The
+entire site, including both docs and javadocs, will be available for inspection in the <code>geowave/target/site/</code> directory.</p>
 </div>
-<div class="admonitionblock warning">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-warning" title="Warning"></i>
-</td>
-<td class="content">
-The publishing is done with a forced push so <em>all</em> site content must be generated before publishing. If you only
-generate the pages then the javadoc link will be broken. Use the provided build-site-content.sh script to automate.
-</td>
-</tr>
-</table>
+<div class="paragraph">
+<p>+[source, bash]
++.Generate Website
++----
++ cd geowave
++ mvn -P docs install
++----</p>
 </div>
 <div style="page-break-after: always;"></div>
 </div>
@@ -3295,7 +3289,7 @@ yum install geowave-cdh5-puppet</code></pre>
 <div class="sect2">
 <h3 id="version"><a class="anchor" href="#version"></a>Version</h3>
 <div class="paragraph">
-<p>This documentation was generated for GeoWave version 0.8.4-SNAPSHOT from commit b693645d672d9a38fb46e71ed813566d3ceb3aec.</p>
+<p>This documentation was generated for GeoWave version 0.8.4-SNAPSHOT from commit b372e8f08b42d19eb7fc86fdfac5d9ad4ad3ff71.</p>
 </div>
 <div style="page-break-after: always;"></div>
 </div>
@@ -3347,7 +3341,7 @@ yum install geowave-cdh5-puppet</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-03-26 13:55:54 UTC
+Last updated 2015-03-26 23:27:06 UTC
 </div>
 </div>
 </body>
