@@ -53,6 +53,7 @@ mil.nga.giat.geowave.ingest
 mil.nga.giat.geowave.ingest.hdfs
 mil.nga.giat.geowave.ingest.hdfs.mapreduce
 mil.nga.giat.geowave.ingest.local
+mil.nga.giat.geowave.types
 mil.nga.giat.geowave.types.geolife
 mil.nga.giat.geowave.types.geotools.raster
 mil.nga.giat.geowave.types.geotools.vector
