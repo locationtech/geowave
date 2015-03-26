@@ -14,34 +14,6 @@
     <name>geowave-docs</name>
     <packaging>pom</packaging>
 
-    <repositories>
-        <repository>
-            <id>rubygems-proxy-releases</id>
-            <name>RubyGems.org Proxy (Releases)</name>
-            <url>http://rubygems-proxy.torquebox.org/releases</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
-    <dependencies>
-        <dependency>
-            <groupId>rubygems</groupId>
-            <artifactId>asciidoctor-pdf</artifactId>
-            <version>1.5.0.alpha.6</version>
-            <type>gem</type>
-            <scope>provided</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>rubygems</groupId>
-                    <artifactId>asciidoctor</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-    </dependencies>
     <build>
         <plugins>
             <plugin>
@@ -91,7 +63,7 @@
             <plugin>
                 <groupId>de.saumya.mojo</groupId>
                 <artifactId>gem-maven-plugin</artifactId>
-                <version>1.0.5</version>
+                <version>1.0.8</version>
                 <configuration>
                     <jrubyVersion>1.7.9</jrubyVersion>
                     <gemHome>${project.build.directory}/gems</gemHome>
@@ -140,6 +112,8 @@
                         <artifactId>asciidoctorj-epub3</artifactId>
                         <version>1.5.0-alpha.4</version>
                     </dependency>
+                    <!-- Known issue that pdf won't be able to include images when run from Windows -->
+                    <!-- Link to bug report https://github.com/asciidoctor/asciidoctor-pdf/issues/87 -->
                     <dependency>
                         <groupId>org.asciidoctor</groupId>
                         <artifactId>asciidoctorj-pdf</artifactId>

@@ -2,5 +2,6 @@
 
 if [ "$TRAVIS_BRANCH" == "master" ]
 then
-    mvn -P docs -pl docs install
+    # Build web site, documentation and java docs
+    mvn -P docs install
 fi
