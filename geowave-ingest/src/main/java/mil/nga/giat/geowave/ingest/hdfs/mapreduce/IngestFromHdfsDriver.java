@@ -213,7 +213,7 @@ public class IngestFromHdfsDriver extends
 	}
 
 	@Override
-	public void parseOptions(
+	protected void parseOptionsInternal(
 			final CommandLine commandLine )
 			throws ParseException {
 		accumuloOptions = AccumuloCommandLineOptions.parseOptions(commandLine);
@@ -222,7 +222,7 @@ public class IngestFromHdfsDriver extends
 	}
 
 	@Override
-	public void applyOptions(
+	protected void applyOptionsInternal(
 			final Options allOptions ) {
 		AccumuloCommandLineOptions.applyOptions(allOptions);
 		HdfsCommandLineOptions.applyOptions(allOptions);

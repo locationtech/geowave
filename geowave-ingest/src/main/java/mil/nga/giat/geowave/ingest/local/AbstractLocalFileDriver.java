@@ -26,7 +26,7 @@ import org.apache.log4j.Logger;
  *            file.
  */
 abstract public class AbstractLocalFileDriver<P extends LocalPluginBase, R> extends
-		AbstractCommandLineDriver
+AbstractCommandLineDriver
 {
 	private final static Logger LOGGER = Logger.getLogger(AbstractLocalFileDriver.class);
 	protected LocalInputCommandLineOptions localInput;
@@ -40,7 +40,7 @@ abstract public class AbstractLocalFileDriver<P extends LocalPluginBase, R> exte
 	protected void processInput(
 			final Map<String, P> localPlugins,
 			final R runData )
-			throws IOException {
+					throws IOException {
 		if (localInput.getInput() == null) {
 			LOGGER.fatal("Unable to ingest data, base directory or file input not specified");
 			return;
@@ -71,17 +71,17 @@ abstract public class AbstractLocalFileDriver<P extends LocalPluginBase, R> exte
 			String typeName,
 			P plugin,
 			R runData )
-			throws IOException;
+					throws IOException;
 
 	@Override
-	public void parseOptions(
+	protected void parseOptionsInternal(
 			final CommandLine commandLine )
-			throws ParseException {
+					throws ParseException {
 		localInput = LocalInputCommandLineOptions.parseOptions(commandLine);
 	}
 
 	@Override
-	public void applyOptions(
+	protected void applyOptionsInternal(
 			final Options allOptions ) {
 		LocalInputCommandLineOptions.applyOptions(allOptions);
 	}

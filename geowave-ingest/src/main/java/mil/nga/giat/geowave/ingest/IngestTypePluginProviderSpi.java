@@ -67,6 +67,15 @@ public interface IngestTypePluginProviderSpi<I, O>
 	public String getIngestTypeName();
 
 	/**
+	 * This is a means for a plugin to provide custom command-line options. If
+	 * this is null, there will be no custom options added.
+	 * 
+	 * 
+	 * @return The ingest type's option provider or null for no custom options
+	 */
+	public IngestTypeOptionProvider getIngestTypeOptionProvider();
+
+	/**
 	 * This is a user-friendly full description of the data type that this
 	 * plugin provider supports. It will be presented to the command-line user
 	 * as help when the registered data types are listed.
