@@ -31,6 +31,8 @@ after_success:
   - mvn coveralls:report -Daccumulo.version=${ACCUMULO_VERSION} ${ACCUMULO_LEGACY} -Dhadoop.version=${HADOOP_VERSION} -Dgeotools.version=${GEOTOOLS_VERSION} -Dgeoserver.version=${GEOSERVER_VERSION} -P ${PLATFORM_VERSION}
 
 addons:
+  apt_packages:
+    - pandoc
   coverity_scan:
     project:
       name: ngageoint/geowave
