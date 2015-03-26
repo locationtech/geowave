@@ -4,6 +4,6 @@ if [ "$TRAVIS_REPO_SLUG" == "ngageoint/geowave" ] && [ "$TRAVIS_JDK_VERSION" == 
 then
   gem install github_changelog_generator
   github_changelog_generator
-  cp --parents CHANGELOG.md $HOME/site/CHANGELOG.md
+  cp CHANGELOG.md $HOME/site/
   echo -e "Published CHANGELOG.md to $HOME/site/CHANGELOG.md.\n"
 fi
