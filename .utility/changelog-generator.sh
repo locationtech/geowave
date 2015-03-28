@@ -4,7 +4,7 @@ if [ "$TRAVIS_REPO_SLUG" == "ngageoint/geowave" ] && [ "$TRAVIS_JDK_VERSION" == 
 then
   gem install github_changelog_generator
   github_changelog_generator
-  pandoc -f markdown -t html CHANGELOG.md > changelog.html
+  pandoc -f markdown -t html -s -c stylesheets/changelog.css CHANGELOG.md > changelog.html
   cp changelog.html target/site/
-  echo -e "Published CHANGELOG.md\n"
+  echo -e "Published changelog.html\n"
 fi
