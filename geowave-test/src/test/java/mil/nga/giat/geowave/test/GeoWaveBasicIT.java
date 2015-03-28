@@ -1,25 +1,54 @@
 package mil.nga.giat.geowave.test;
 
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.Geometry;
+import java.io.File;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
 import mil.nga.giat.geowave.accumulo.AccumuloDataStore;
 import mil.nga.giat.geowave.accumulo.metadata.AccumuloAdapterStore;
 import mil.nga.giat.geowave.accumulo.metadata.AccumuloDataStatisticsStore;
 import mil.nga.giat.geowave.accumulo.metadata.AccumuloIndexStore;
+import mil.nga.giat.geowave.accumulo.util.AccumuloUtils;
 import mil.nga.giat.geowave.index.ByteArrayId;
+import mil.nga.giat.geowave.ingest.GeoWaveData;
 import mil.nga.giat.geowave.ingest.IngestMain;
+import mil.nga.giat.geowave.ingest.local.LocalFileIngestPlugin;
 import mil.nga.giat.geowave.store.CloseableIterator;
+import mil.nga.giat.geowave.store.DataStoreEntryInfo;
 import mil.nga.giat.geowave.store.GeometryUtils;
+import mil.nga.giat.geowave.store.IngestCallback;
+import mil.nga.giat.geowave.store.adapter.AdapterStore;
+import mil.nga.giat.geowave.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.store.adapter.MemoryAdapterStore;
+import mil.nga.giat.geowave.store.adapter.WritableDataAdapter;
+import mil.nga.giat.geowave.store.adapter.statistics.BoundingBoxDataStatistics;
+import mil.nga.giat.geowave.store.adapter.statistics.DataStatistics;
+import mil.nga.giat.geowave.store.adapter.statistics.DataStatisticsStore;
+import mil.nga.giat.geowave.store.adapter.statistics.StatisticalDataAdapter;
+import mil.nga.giat.geowave.store.data.visibility.GlobalVisibilityHandler;
+import mil.nga.giat.geowave.store.data.visibility.UniformVisibilityWriter;
 import mil.nga.giat.geowave.store.index.Index;
 import mil.nga.giat.geowave.store.index.IndexType;
 import mil.nga.giat.geowave.store.query.DistributableQuery;
 import mil.nga.giat.geowave.store.query.SpatialQuery;
+import mil.nga.giat.geowave.types.geotools.vector.GeoToolsVectorDataStoreIngestPlugin;
 import mil.nga.giat.geowave.vector.adapter.FeatureDataAdapter;
+import mil.nga.giat.geowave.vector.stats.FeatureBoundingBoxStatistics;
+
 import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.apache.accumulo.core.client.TableNotFoundException;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.math.util.MathUtils;
 import org.apache.log4j.Logger;
 import org.geotools.feature.AttributeTypeBuilder;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
@@ -30,16 +59,10 @@ import org.junit.Test;
 import org.opengis.feature.Property;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
+import org.opengis.filter.Filter;
 
-import java.io.File;
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.Geometry;
 
 public class GeoWaveBasicIT extends
 		GeoWaveTestEnvironment
@@ -137,7 +160,28 @@ public class GeoWaveBasicIT extends
 			}
 			Assert.fail("Error occurred while testing a polygon query of spatial index: '" + e.getLocalizedMessage() + "'");
 		}
-
+		try {
+			testStats(
+					new File[] {
+						new File(
+								HAIL_SHAPEFILE_FILE),
+						new File(
+								TORNADO_TRACKS_SHAPEFILE_FILE)
+					},
+					spatialIndex);
+		}
+		catch (final Exception e) {
+			e.printStackTrace();
+			try {
+				accumuloOperations.deleteAll();
+			}
+			catch (TableNotFoundException | AccumuloSecurityException | AccumuloException ex) {
+				LOGGER.error(
+						"Unable to clear accumulo namespace",
+						ex);
+			}
+			Assert.fail("Error occurred while testing a bounding box stats on spatial index: '" + e.getLocalizedMessage() + "'");
+		}
 		try {
 			testDelete(
 					new File(
@@ -166,8 +210,188 @@ public class GeoWaveBasicIT extends
 		}
 	}
 
+	protected static class StatisticsCache implements
+			IngestCallback<SimpleFeature>
+	{
+		// assume a bounding box statistic exists and calculate the value
+		// separately to ensure calculation works
+		private double minX = Double.MAX_VALUE;
+		private double minY = Double.MAX_VALUE;;
+		private double maxX = -Double.MAX_VALUE;;
+		private double maxY = -Double.MAX_VALUE;;
+		protected final Map<ByteArrayId, DataStatistics<SimpleFeature>> statsCache = new HashMap<ByteArrayId, DataStatistics<SimpleFeature>>();
+
+		// otherwise use the statistics interface to calculate every statistic
+		// and compare results to what is available in the statistics data store
+		private StatisticsCache(
+				final StatisticalDataAdapter<SimpleFeature> dataAdapter ) {
+			final ByteArrayId[] statsIds = dataAdapter.getSupportedStatisticsIds();
+			for (final ByteArrayId statsId : statsIds) {
+				final DataStatistics<SimpleFeature> stats = dataAdapter.createDataStatistics(statsId);
+				statsCache.put(
+						statsId,
+						stats);
+			}
+		}
+
+		@Override
+		public void entryIngested(
+				final DataStoreEntryInfo entryInfo,
+				final SimpleFeature entry ) {
+			for (final DataStatistics<SimpleFeature> stats : statsCache.values()) {
+				stats.entryIngested(
+						entryInfo,
+						entry);
+			}
+			final Geometry geometry = ((Geometry) entry.getDefaultGeometry());
+			if (geometry != null && !geometry.isEmpty()) {
+				minX = Math.min(
+						minX,
+						geometry.getEnvelopeInternal().getMinX());
+				minY = Math.min(
+						minY,
+						geometry.getEnvelopeInternal().getMinY());
+				maxX = Math.max(
+						maxX,
+						geometry.getEnvelopeInternal().getMaxX());
+				maxY = Math.max(
+						maxY,
+						geometry.getEnvelopeInternal().getMaxY());
+			}
+		}
+	}
+
+	public void testStats(
+			final File[] inputFiles,
+			final Index index ) {
+		final LocalFileIngestPlugin<SimpleFeature> localFileIngest = new GeoToolsVectorDataStoreIngestPlugin(Filter.INCLUDE);
+		final Map<ByteArrayId, StatisticsCache> statsCache = new HashMap<ByteArrayId, StatisticsCache>();
+		for (final File inputFile : inputFiles) {
+			LOGGER.warn("Calculating stats from file '" + inputFile.getName() + "' - this may take several minutes...");
+			try (final CloseableIterator<GeoWaveData<SimpleFeature>> dataIterator = localFileIngest.toGeoWaveData(
+					inputFile,
+					index.getId(),
+					null)) {
+				final AdapterStore adapterCache = new MemoryAdapterStore(
+						localFileIngest.getDataAdapters(null));
+				while (dataIterator.hasNext()) {
+					final GeoWaveData<SimpleFeature> data = dataIterator.next();
+					final WritableDataAdapter<SimpleFeature> adapter = data.getAdapter(adapterCache);
+					// it should be a statistical data adapter
+					if (adapter instanceof StatisticalDataAdapter) {
+						StatisticsCache cachedValues = statsCache.get(adapter.getAdapterId());
+						if (cachedValues == null) {
+							cachedValues = new StatisticsCache(
+									(StatisticalDataAdapter<SimpleFeature>) adapter);
+							statsCache.put(
+									adapter.getAdapterId(),
+									cachedValues);
+						}
+						final DataStoreEntryInfo entryInfo = AccumuloUtils.getIngestInfo(
+								adapter,
+								index,
+								data.getValue(),
+								new UniformVisibilityWriter<SimpleFeature>(
+										new GlobalVisibilityHandler<SimpleFeature, Object>(
+												"")));
+						cachedValues.entryIngested(
+								entryInfo,
+								data.getValue());
+					}
+				}
+			}
+			catch (final IOException e) {
+				e.printStackTrace();
+				try {
+					accumuloOperations.deleteAll();
+				}
+				catch (TableNotFoundException | AccumuloSecurityException | AccumuloException ex) {
+					LOGGER.error(
+							"Unable to clear accumulo namespace",
+							ex);
+				}
+				Assert.fail("Error occurred while reading data from file '" + inputFile.getAbsolutePath() + "': '" + e.getLocalizedMessage() + "'");
+			}
+		}
+		final DataStatisticsStore statsStore = new AccumuloDataStatisticsStore(
+				accumuloOperations);
+		final AdapterStore adapterStore = new AccumuloAdapterStore(
+				accumuloOperations);
+		try (CloseableIterator<DataAdapter<?>> adapterIterator = adapterStore.getAdapters()) {
+			while (adapterIterator.hasNext()) {
+				final FeatureDataAdapter adapter = (FeatureDataAdapter) adapterIterator.next();
+				final StatisticsCache cachedValue = statsCache.get(adapter.getAdapterId());
+				Assert.assertNotNull(cachedValue);
+				final Collection<DataStatistics<SimpleFeature>> expectedStats = cachedValue.statsCache.values();
+				try (CloseableIterator<DataStatistics<?>> statsIterator = statsStore.getDataStatistics(adapter.getAdapterId())) {
+					int statsCount = 0;
+					while (statsIterator.hasNext()) {
+						statsIterator.next();
+						statsCount++;
+					}
+					Assert.assertEquals(
+							"The number of stats for data adapter '" + adapter.getAdapterId().getString() + "' do not match count expected",
+							expectedStats.size(),
+							statsCount);
+				}
+
+				for (final DataStatistics<SimpleFeature> expectedStat : expectedStats) {
+					final DataStatistics<?> actualStats = statsStore.getDataStatistics(
+							expectedStat.getDataAdapterId(),
+							expectedStat.getStatisticsId());
+					Assert.assertNotNull(actualStats);
+					// if the stats are the same, their binary serialization
+					// should be the same
+					Assert.assertArrayEquals(
+							expectedStat.toBinary(),
+							actualStats.toBinary());
+				}
+				// finally check the one stat that is more manually calculated -
+				// the bounding box
+				final BoundingBoxDataStatistics<?> bboxStat = (BoundingBoxDataStatistics<SimpleFeature>) statsStore.getDataStatistics(
+						adapter.getAdapterId(),
+						FeatureBoundingBoxStatistics.composeId(adapter.getType().getGeometryDescriptor().getLocalName()));
+
+				Assert.assertNotNull(bboxStat);
+				Assert.assertEquals(
+						"The min X of the bounding box stat does not match the expected value",
+						cachedValue.minX,
+						bboxStat.getMinX(),
+						MathUtils.EPSILON);
+				Assert.assertEquals(
+						"The min Y of the bounding box stat does not match the expected value",
+						cachedValue.minY,
+						bboxStat.getMinY(),
+						MathUtils.EPSILON);
+				Assert.assertEquals(
+						"The max X of the bounding box stat does not match the expected value",
+						cachedValue.maxX,
+						bboxStat.getMaxX(),
+						MathUtils.EPSILON);
+				Assert.assertEquals(
+						"The max Y of the bounding box stat does not match the expected value",
+						cachedValue.maxY,
+						bboxStat.getMaxY(),
+						MathUtils.EPSILON);
+			}
+		}
+		catch (final IOException e) {
+			e.printStackTrace();
+			try {
+				accumuloOperations.deleteAll();
+			}
+			catch (TableNotFoundException | AccumuloSecurityException | AccumuloException ex) {
+				LOGGER.error(
+						"Unable to clear accumulo namespace",
+						ex);
+			}
+			Assert.fail("Error occurred while retrieving adapters or statistics from metadata table: '" + e.getLocalizedMessage() + "'");
+		}
+	}
+
 	@Test
 	public void testIngestAndQuerySpatialTemporalPointsAndLines() {
+		final Index spatialTemporalIndex = IndexType.SPATIAL_VECTOR.createDefaultIndex();
 		// ingest both lines and points
 		testLocalIngest(
 				IndexType.SPATIAL_TEMPORAL_VECTOR,
@@ -223,6 +447,28 @@ public class GeoWaveBasicIT extends
 			Assert.fail("Error occurred while testing a polygon and time range query of spatial temporal index: '" + e.getLocalizedMessage() + "'");
 		}
 
+		try {
+			testStats(
+					new File[] {
+						new File(
+								HAIL_SHAPEFILE_FILE),
+						new File(
+								TORNADO_TRACKS_SHAPEFILE_FILE)
+					},
+					spatialTemporalIndex);
+		}
+		catch (final Exception e) {
+			e.printStackTrace();
+			try {
+				accumuloOperations.deleteAll();
+			}
+			catch (TableNotFoundException | AccumuloSecurityException | AccumuloException ex) {
+				LOGGER.error(
+						"Unable to clear accumulo namespace",
+						ex);
+			}
+			Assert.fail("Error occurred while testing a bounding box stats on spatial temporal index: '" + e.getLocalizedMessage() + "'");
+		}
 		try {
 			testDelete(
 					new File(
@@ -355,7 +601,7 @@ public class GeoWaveBasicIT extends
 		final AttributeTypeBuilder ab = new AttributeTypeBuilder();
 		builder.setName("featureserializationtest");
 
-		for (Map.Entry<Class, Object> arg : args.entrySet()) {
+		for (final Map.Entry<Class, Object> arg : args.entrySet()) {
 			builder.add(ab.binding(
 					arg.getKey()).nillable(
 					false).buildDescriptor(
@@ -369,7 +615,7 @@ public class GeoWaveBasicIT extends
 				serTestType);
 		final Index index = IndexType.SPATIAL_VECTOR.createDefaultIndex();
 
-		for (Map.Entry<Class, Object> arg : args.entrySet()) {
+		for (final Map.Entry<Class, Object> arg : args.entrySet()) {
 			serBuilder.set(
 					arg.getKey().getName(),
 					arg.getValue());
@@ -384,25 +630,25 @@ public class GeoWaveBasicIT extends
 						accumuloOperations),
 				accumuloOperations);
 
-		SimpleFeature sf = serBuilder.buildFeature("343");
+		final SimpleFeature sf = serBuilder.buildFeature("343");
 		geowaveStore.ingest(
 				serAdapter,
 				index,
 				sf);
-		DistributableQuery q = new SpatialQuery(
+		final DistributableQuery q = new SpatialQuery(
 				((Geometry) args.get(Geometry.class)).buffer(0.5d));
-		CloseableIterator<?> iter = geowaveStore.query(q);
+		final CloseableIterator<?> iter = geowaveStore.query(q);
 		boolean foundFeat = false;
 		while (iter.hasNext()) {
-			Object maybeFeat = iter.next();
+			final Object maybeFeat = iter.next();
 			Assert.assertTrue(
 					"Iterator should return simple feature in this test",
 					maybeFeat instanceof SimpleFeature);
 			foundFeat = true;
-			SimpleFeature isFeat = (SimpleFeature) maybeFeat;
-			for (Property p : isFeat.getProperties()) {
-				Object before = args.get(p.getType().getBinding());
-				Object after = isFeat.getAttribute(p.getType().getName().toString());
+			final SimpleFeature isFeat = (SimpleFeature) maybeFeat;
+			for (final Property p : isFeat.getProperties()) {
+				final Object before = args.get(p.getType().getBinding());
+				final Object after = isFeat.getAttribute(p.getType().getName().toString());
 
 				if (before instanceof double[]) {
 					Assert.assertArrayEquals(
@@ -411,8 +657,8 @@ public class GeoWaveBasicIT extends
 							1e-12d);
 				}
 				else if (before instanceof boolean[]) {
-					boolean[] b = (boolean[]) before;
-					boolean[] a = (boolean[]) after;
+					final boolean[] b = (boolean[]) before;
+					final boolean[] a = (boolean[]) after;
 					Assert.assertTrue(a.length == b.length);
 					for (int i = 0; i < b.length; i++) {
 						Assert.assertTrue(b[i] == a[i]);
@@ -467,11 +713,19 @@ public class GeoWaveBasicIT extends
 		Assert.assertTrue(
 				"One feature should be found",
 				foundFeat);
+		try {
+			accumuloOperations.deleteAll();
+		}
+		catch (TableNotFoundException | AccumuloSecurityException | AccumuloException ex) {
+			LOGGER.error(
+					"Unable to clear accumulo namespace",
+					ex);
+		}
 	}
 
 	public <T> T[] returnArray(
-			Class<T> clazz,
-			Object o ) {
+			final Class<T> clazz,
+			final Object o ) {
 		return (T[]) o;
 	}
 

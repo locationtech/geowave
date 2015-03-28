@@ -16,7 +16,7 @@ public class FeatureBoundingBoxStatistics extends
 		FeatureStatistic
 {
 
-	public static final String STATS_TYPE = "BBOX";
+	private static final String STATS_TYPE = "BBOX";
 
 	protected FeatureBoundingBoxStatistics() {
 		super();
