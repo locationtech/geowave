@@ -48,6 +48,17 @@ if [ $? -ne 0 ]; then
     echo >&2 "Unable to upload geowave-accumulo.jar into hdfs. Aborting."; exit 1;
 fi
 
+# Also upload the build metadata file for ease of inspection
+su $HDFS_USER -c "hadoop fs -ls $ACCUMULO_LIB_DIR/geowave-accumulo-build.properties"
+if [ $? -eq 0 ]; then
+    su $HDFS_USER -c "hadoop fs -rm $ACCUMULO_LIB_DIR/geowave-accumulo-build.properties"
+fi
+
+su $HDFS_USER -c "hadoop fs -put $GEOWAVE_ACCUMULO_HOME/geowave-accumulo-build.properties $ACCUMULO_LIB_DIR/geowave-accumulo-build.properties"
+if [ $? -ne 0 ]; then
+    echo >&2 "Unable to upload geowave-accumulo-build.properties into hdfs. Aborting."; exit 1;
+fi
+
 # Set ownership to Accumulo user
 su $HDFS_USER -c "hadoop fs -chown -R $ACCUMULO_USER $ACCUMULO_LIB_DIR"
 if [ $? -ne 0 ]; then
