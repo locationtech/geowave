@@ -6,6 +6,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.google.common.collect.Interner;
+import com.google.common.collect.Interners;
 import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.index.sfc.data.BasicNumericDataset;
 import mil.nga.giat.geowave.index.sfc.data.MultiDimensionalNumericData;
@@ -25,6 +27,9 @@ import com.vividsolutions.jts.geom.Geometry;
 public class SpatialQueryFilter extends
 		BasicQueryFilter
 {
+
+	private static final Interner<Geometry> geometryInterner = Interners.newWeakInterner();
+
 	private Geometry queryGeometry;
 
 	private Set<ByteArrayId> geometryFieldIds;
@@ -188,7 +193,7 @@ public class SpatialQueryFilter extends
 					fieldId));
 		}
 		buf.get(theRest);
-		queryGeometry = GeometryUtils.geometryFromBinary(geometryBinary);
+		queryGeometry = geometryInterner.intern(GeometryUtils.geometryFromBinary(geometryBinary));
 
 		super.fromBinary(theRest);
 	}
