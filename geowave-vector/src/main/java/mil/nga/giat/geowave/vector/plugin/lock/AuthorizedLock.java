@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.geotools.data.Transaction;
 import org.geotools.data.Transaction.State;
 
@@ -18,6 +19,9 @@ import org.geotools.data.Transaction.State;
  * 
  * 
  */
+@SuppressFBWarnings({
+	"SE_TRANSIENT_FIELD_NOT_RESTORED"
+})
 public class AuthorizedLock implements
 		State,
 		java.io.Serializable

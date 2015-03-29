@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.log4j.Logger;
 
 import mil.nga.giat.geowave.vector.plugin.GeoWavePluginConfig;
@@ -90,6 +91,9 @@ public class MemoryLockManager extends
 			lockToRelease.resetExpireTime();
 	}
 
+	@SuppressFBWarnings(value = {
+		"MWN_MISMATCHED_WAIT"
+	}, justification = "incorrect flag; lock held (in synchronized block)")
 	@Override
 	public void lock(
 			AuthorizedLock lock,

@@ -12,7 +12,7 @@ public class CoordinateCircleDistanceFn implements
 		DistanceFn<Coordinate>
 {
 
-	protected static CoordinateReferenceSystem DEFAULT_CRS;
+	protected static final CoordinateReferenceSystem DEFAULT_CRS;
 	static {
 		try {
 			DEFAULT_CRS = CRS.decode(

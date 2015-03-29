@@ -103,7 +103,7 @@ public class GeoWaveRasterReader extends
 
 	private static Set<AxisDirection> LEFTDirections;
 	// class initializer
-	{
+	static {
 		LEFTDirections = new HashSet<AxisDirection>();
 		LEFTDirections.add(AxisDirection.DISPLAY_LEFT);
 		LEFTDirections.add(AxisDirection.EAST);

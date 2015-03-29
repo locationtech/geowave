@@ -36,7 +36,7 @@ public class GeoWaveGTRasterFormat extends
 			Color.class,
 			null,
 			null);
-	public static CoordinateReferenceSystem DEFAULT_CRS;
+	public static final CoordinateReferenceSystem DEFAULT_CRS;
 	static {
 		try {
 			DEFAULT_CRS = CRS.decode("EPSG:4326");
@@ -45,6 +45,8 @@ public class GeoWaveGTRasterFormat extends
 			LOGGER.error(
 					"Unable to decode EPSG:4326 CRS",
 					e);
+			throw new RuntimeException(
+					"Unable to initialize EPSG:4326 CRS");
 		}
 	}
 

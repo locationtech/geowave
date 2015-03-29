@@ -94,6 +94,9 @@ public class EntryIteratorWrapper<T> implements
 	public T next()
 			throws NoSuchElementException {
 		final T previousNext = nextValue;
+		if (nextValue == null) {
+			throw new NoSuchElementException();
+		}
 		nextValue = null;
 		return previousNext;
 	}

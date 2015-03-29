@@ -94,7 +94,7 @@ public class PersistenceEncoding
 				dataPerDimension);
 	}
 
-	private class DimensionRangePair
+	private static class DimensionRangePair
 	{
 		DimensionField[] dimensions;
 		NumericData[] dataPerDimension;

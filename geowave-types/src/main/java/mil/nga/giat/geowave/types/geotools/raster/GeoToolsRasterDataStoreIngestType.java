@@ -14,7 +14,7 @@ import org.opengis.coverage.grid.GridCoverage;
  * local file system into GeoWave.
  */
 public class GeoToolsRasterDataStoreIngestType implements
-IngestTypePluginProviderSpi<Object, GridCoverage>
+		IngestTypePluginProviderSpi<Object, GridCoverage>
 {
 
 	@Override

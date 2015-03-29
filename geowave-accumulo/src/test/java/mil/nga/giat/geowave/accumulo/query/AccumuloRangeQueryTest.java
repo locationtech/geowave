@@ -2,7 +2,6 @@ package mil.nga.giat.geowave.accumulo.query;
 
 import java.util.*;
 
-
 import com.vividsolutions.jts.geom.Polygon;
 import com.vividsolutions.jts.io.ParseException;
 import com.vividsolutions.jts.io.WKBReader;
@@ -135,8 +134,9 @@ public class AccumuloRangeQueryTest
 	}
 
 	/**
-	 * Verifies equality for interning is still working as expected (topologically),
-	 * as the the largeQuery() test has a dependency on this;
+	 * Verifies equality for interning is still working as expected
+	 * (topologically), as the the largeQuery() test has a dependency on this;
+	 * 
 	 * @throws ParseException
 	 */
 	@Test
@@ -189,10 +189,18 @@ public class AccumuloRangeQueryTest
 		final Geometry gSerialized = wkbReader.read(b);
 		final Geometry gSerializedArrayCopy = wkbReader.read(b2);
 
-		Assert.assertEquals(g, gNewInstance);
-		Assert.assertEquals(g, gSerializedArrayCopy);
-		Assert.assertEquals(gSerialized, gSerializedArrayCopy);
-		Assert.assertEquals(gSerialized, gSerializedArrayCopy);
+		Assert.assertEquals(
+				g,
+				gNewInstance);
+		Assert.assertEquals(
+				g,
+				gSerializedArrayCopy);
+		Assert.assertEquals(
+				gSerialized,
+				gSerializedArrayCopy);
+		Assert.assertEquals(
+				gSerialized,
+				gSerializedArrayCopy);
 	}
 
 	@Test

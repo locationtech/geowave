@@ -1,5 +1,6 @@
 package mil.nga.giat.geowave.ingest;
 
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,6 +10,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.ServiceLoader;
 
+import mil.nga.giat.geowave.index.StringUtils;
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.HelpFormatter;
@@ -65,7 +67,7 @@ abstract public class AbstractCommandLineDriver
 
 	public void run(
 			final String[] args )
-					throws ParseException {
+			throws ParseException {
 		final List<IngestTypePluginProviderSpi<?, ?>> pluginProviders = applyArguments(args);
 		runInternal(
 				args,
@@ -103,11 +105,6 @@ abstract public class AbstractCommandLineDriver
 					options,
 					args);
 			if (commandLine.hasOption("h")) {
-				if (commandLine.hasOption("t")) {
-					selectedPluginProviders = getPluginProviders(
-							commandLine,
-							options);
-				}
 				printHelp(
 						options,
 						operation);
@@ -116,7 +113,9 @@ abstract public class AbstractCommandLineDriver
 			else if (commandLine.hasOption("l")) {
 				final HelpFormatter formatter = new HelpFormatter();
 				final PrintWriter pw = new PrintWriter(
-						System.out);
+						new OutputStreamWriter(
+								System.out,
+								StringUtils.UTF8_CHAR_SET));
 				pw.println("Available ingest types currently registered as plugins:\n");
 				for (final Entry<String, IngestTypePluginProviderSpi<?, ?>> pluginProviderEntry : pluginProviderRegistry.entrySet()) {
 					final IngestTypePluginProviderSpi<?, ?> pluginProvider = pluginProviderEntry.getValue();
@@ -186,7 +185,7 @@ abstract public class AbstractCommandLineDriver
 		final List<IngestTypePluginProviderSpi<?, ?>> selectedPluginProviders = new ArrayList<IngestTypePluginProviderSpi<?, ?>>();
 		final String[] pluginProviderNames = commandLine.getOptionValue(
 				"t").split(
-						",");
+				",");
 		for (final String pluginProviderName : pluginProviderNames) {
 			final IngestTypePluginProviderSpi<?, ?> pluginProvider = pluginProviderRegistry.get(pluginProviderName);
 			if (pluginProvider == null) {
@@ -221,11 +220,11 @@ abstract public class AbstractCommandLineDriver
 
 	abstract protected void parseOptionsInternal(
 			final CommandLine commandLine )
-					throws ParseException;
+			throws ParseException;
 
 	abstract protected void applyOptionsInternal(
 			final Options allOptions );
-	
+
 	abstract protected void runInternal(
 			String[] args,
 			List<IngestTypePluginProviderSpi<?, ?>> pluginProviders );

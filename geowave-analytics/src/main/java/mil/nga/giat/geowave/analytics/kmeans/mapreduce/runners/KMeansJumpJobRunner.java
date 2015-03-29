@@ -300,7 +300,7 @@ public class KMeansJumpJobRunner extends
 				SampleParameters.Sample.INDEX_ID);
 	}
 
-	private class KMeansParallelJobRunnerDelegate implements
+	private static class KMeansParallelJobRunnerDelegate implements
 			MapReduceJobRunner
 	{
 		final KMeansSingleSampleJobRunner<SimpleFeature> singleSamplekmeansJobRunner = new KMeansSingleSampleJobRunner<SimpleFeature>();

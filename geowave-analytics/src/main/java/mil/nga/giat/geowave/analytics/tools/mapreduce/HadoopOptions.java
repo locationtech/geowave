@@ -43,20 +43,19 @@ public class HadoopOptions
 				runTimeProperties.getProperty(MRConfig.YARN_RESOURCE_MANAGER));
 
 		final String name = runTimeProperties.getProperty(MapReduceParameters.MRConfig.CONFIG_FILE);
+
 		if (name != null) {
-			if (name != null) {
-				try {
-					config.addResource(
-							new FileInputStream(
-									name),
-							name);
-				}
-				catch (final IOException ex) {
-					LOGGER.error(
-							"Configuration file " + name + " not found",
-							ex);
-					throw ex;
-				}
+			try (FileInputStream in = new FileInputStream(
+					name)) {
+				config.addResource(
+						in,
+						name);
+			}
+			catch (final IOException ex) {
+				LOGGER.error(
+						"Configuration file " + name + " not found",
+						ex);
+				throw ex;
 			}
 		}
 
