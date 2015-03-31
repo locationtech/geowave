@@ -14,6 +14,8 @@
 <p><strong>Implemented enhancements:</strong></p>
 <ul>
 <li><p>Ingest plugins based on simple feature data can select a subset to ingest with a CQL filter string <a href="https://github.com/ngageoint/geowave/issues/289">#289</a></p></li>
+<li><p>Reduce size of the images in the Documentation page as it takes lot of time to load <a href="https://github.com/ngageoint/geowave/issues/274">#274</a></p></li>
+<li><p>Fix missing links for images in README.md <a href="https://github.com/ngageoint/geowave/issues/252">#252</a></p></li>
 <li><p>Support subseting of selected attributes within iterators <a href="https://github.com/ngageoint/geowave/issues/237">#237</a></p></li>
 <li><p>Add GeoWave to Vagrant config for PDAL. <a href="https://github.com/ngageoint/geowave/issues/234">#234</a></p></li>
 <li><p>Maven Checkstyle + format all code <a href="https://github.com/ngageoint/geowave/issues/227">#227</a></p></li>
@@ -33,8 +35,10 @@
 </ul>
 <p><strong>Fixed bugs:</strong></p>
 <ul>
+<li><p>Exception on input format with large / complex multi-polygon <a href="https://github.com/ngageoint/geowave/issues/285">#285</a></p></li>
 <li><p>Exception when exposing data through geoserver with more than two date fields <a href="https://github.com/ngageoint/geowave/issues/283">#283</a></p></li>
 <li><p>RPM build jobs failing <a href="https://github.com/ngageoint/geowave/issues/261">#261</a></p></li>
+<li><p>Fix missing links for images in README.md <a href="https://github.com/ngageoint/geowave/issues/252">#252</a></p></li>
 <li><p>Fix race condition in ZooKeeperTransactionsAllocater <a href="https://github.com/ngageoint/geowave/issues/251">#251</a></p></li>
 <li><p>Apache Hadoop distros integration <a href="https://github.com/ngageoint/geowave/issues/241">#241</a></p></li>
 <li><p>IT Environment fixes <a href="https://github.com/ngageoint/geowave/issues/231">#231</a></p></li>
@@ -47,6 +51,7 @@
 </ul>
 <p><strong>Merged pull requests:</strong></p>
 <ul>
+<li><p>Findbugs; add to verify phase, address current issues <a href="https://github.com/ngageoint/geowave/pull/298">#298</a> (<a href="https://github.com/chrisbennight">chrisbennight</a>)</p></li>
 <li><p>added large polygon query, geometry interning in filters <a href="https://github.com/ngageoint/geowave/pull/297">#297</a> (<a href="https://github.com/chrisbennight">chrisbennight</a>)</p></li>
 <li><p>add css style to changelog;standalone html <a href="https://github.com/ngageoint/geowave/pull/296">#296</a> (<a href="https://github.com/chrisbennight">chrisbennight</a>)</p></li>
 <li><p>Accumulo iterator versioning docs <a href="https://github.com/ngageoint/geowave/pull/295">#295</a> (<a href="https://github.com/spohnan">spohnan</a>)</p></li>
