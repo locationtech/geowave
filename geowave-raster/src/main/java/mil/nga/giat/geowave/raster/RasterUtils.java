@@ -40,6 +40,7 @@ import javax.media.jai.RenderedOp;
 import javax.media.jai.TiledImage;
 import javax.media.jai.operator.ScaleDescriptor;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import mil.nga.giat.geowave.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.raster.adapter.RasterDataAdapter;
 import mil.nga.giat.geowave.raster.adapter.merge.nodata.NoDataMergeStrategy;
@@ -314,7 +315,7 @@ public class RasterUtils
 			// coordinates).
 			// j is a dimension in the 'userRange' space (target coordinates).
 			int j = i;
-			if (swapXY && (j <= 1)) {
+			if (swapXY) {
 				j = 1 - j;
 			}
 			double scale = idRangePerDimension[j];
@@ -509,6 +510,9 @@ public class RasterUtils
 				resultEnvelope);
 	}
 
+	@SuppressFBWarnings(value = {
+		"RV_RETURN_VALUE_IGNORED_NO_SIDE_EFFECT"
+	}, justification = "incorrect; drawImage has side effects")
 	public static BufferedImage toBufferedImage(
 			final Image image,
 			final int type ) {

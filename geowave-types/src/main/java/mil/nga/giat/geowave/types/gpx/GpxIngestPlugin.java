@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicLong;
 
 import javax.xml.stream.XMLStreamException;
 
@@ -56,11 +57,12 @@ public class GpxIngestPlugin extends
 	private final static String TAG_SEPARATOR = " ||| ";
 
 	private Map<Long, GpxTrack> metadata = null;
-	private static long currentFreeTrackId = 0;
+	private static final AtomicLong currentFreeTrackId = new AtomicLong(
+			0);
 
 	private final Index[] supportedIndices;
 
-	public GpxIngestPlugin( ) {
+	public GpxIngestPlugin() {
 		supportedIndices = new Index[] {
 			IndexType.SPATIAL_VECTOR.createDefaultIndex(),
 			IndexType.SPATIAL_TEMPORAL_VECTOR.createDefaultIndex()
@@ -176,7 +178,7 @@ public class GpxIngestPlugin extends
 		}
 		if (track == null) {
 			track = new GpxTrack();
-			track.setTrackid(currentFreeTrackId++);
+			track.setTrackid(currentFreeTrackId.getAndIncrement());
 		}
 
 		try {

@@ -138,7 +138,7 @@ public class GeometryDataSetGenerator
 		final double max[] = new double[range.length];
 		for (int i = 0; i < range.length; i++) {
 			min[i] = Math.max(
-					minAxis[i] + (minCenterDistanceFactor * (Math.abs(rand.nextInt()) % (range[i] / minCenterDistanceFactor))),
+					minAxis[i] + (minCenterDistanceFactor * (rand.nextInt(Integer.MAX_VALUE) % (range[i] / minCenterDistanceFactor))),
 					minAxis[i]);
 			max[i] = Math.min(
 					min[i] + (minCenterDistanceFactor * range[i]),
@@ -285,7 +285,7 @@ public class GeometryDataSetGenerator
 		 */
 		final int clusterdItemsCount = (int) Math.ceil((minSetSize) * (1.0 - outlierFactor));
 		while (pointSet.size() < clusterdItemsCount) {
-			final int centerPos = Math.abs(rand.nextInt()) % minForCenter.size();
+			final int centerPos = rand.nextInt(Integer.MAX_VALUE) % minForCenter.size();
 
 			pointSet.add(createNewFeature(
 					minForCenter.get(centerPos),
@@ -398,7 +398,7 @@ public class GeometryDataSetGenerator
 
 		final int dims = coordSystem.getDimension();
 
-		final int shapeSize = (Math.abs(rand.nextInt()) % 5) + 1;
+		final int shapeSize = (rand.nextInt(Integer.MAX_VALUE) % 5) + 1;
 		final Coordinate[] shape = new Coordinate[shapeSize > 2 ? shapeSize + 1 : shapeSize];
 		final double[] constrainedMaxAxis = Arrays.copyOf(
 				maxAxis,

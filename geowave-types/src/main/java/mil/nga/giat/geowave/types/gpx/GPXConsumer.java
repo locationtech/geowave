@@ -92,7 +92,6 @@ public class GPXConsumer implements
 
 	XMLEventReader eventReader;
 	GeoWaveData<SimpleFeature> nextFeature = null;
-	Coordinate nextCoordinate = null;
 
 	/**
 	 * 
@@ -597,8 +596,7 @@ public class GPXConsumer implements
 							minTime);
 				}
 			}
-			return (minTime < Long.MAX_VALUE) ? new Long(
-					minTime) : null;
+			return (minTime < Long.MAX_VALUE) ? Long.valueOf(minTime) : null;
 		}
 
 		private Long getEndTime() {
@@ -614,8 +612,7 @@ public class GPXConsumer implements
 							maxTime);
 				}
 			}
-			return (maxTime > 0) ? new Long(
-					maxTime) : null;
+			return (maxTime > 0) ? Long.valueOf(maxTime) : null;
 		}
 
 		public boolean build(
@@ -746,8 +743,7 @@ public class GPXConsumer implements
 				setAttribute(
 						builder,
 						"NumberPoints",
-						new Long(
-								childSequence.size()));
+						Long.valueOf(childSequence.size()));
 
 				final Long minTime = getStartTime();
 				if (minTime != null) {

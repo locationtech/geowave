@@ -6,6 +6,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import mil.nga.giat.geowave.vector.adapter.FeatureWritable;
 
 import org.opengis.feature.simple.SimpleFeature;
@@ -19,6 +20,9 @@ public class FeatureSerializer extends
 		Serializer<SimpleFeature>
 {
 
+	@SuppressFBWarnings({
+		"RR_NOT_CHECKED"
+	})
 	@Override
 	public SimpleFeature read(
 			final Kryo arg0,

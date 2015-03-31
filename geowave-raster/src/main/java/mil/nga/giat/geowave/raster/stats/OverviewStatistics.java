@@ -36,22 +36,25 @@ public class OverviewStatistics extends
 
 	@Override
 	public byte[] toBinary() {
-		final List<byte[]> resolutionBinaries = new ArrayList<byte[]>(
-				resolutions.length);
-		int byteCount = 4; // an int for the list size
-		for (final Resolution res : resolutions) {
-			final byte[] resBinary = PersistenceUtils.toBinary(res);
-			resolutionBinaries.add(resBinary);
-			byteCount += (resBinary.length + 4); // an int for the binary size
-		}
+		synchronized (this) {
+			final List<byte[]> resolutionBinaries = new ArrayList<byte[]>(
+					resolutions.length);
+			int byteCount = 4; // an int for the list size
+			for (final Resolution res : resolutions) {
+				final byte[] resBinary = PersistenceUtils.toBinary(res);
+				resolutionBinaries.add(resBinary);
+				byteCount += (resBinary.length + 4); // an int for the binary
+														// size
+			}
 
-		final ByteBuffer buf = ByteBuffer.allocate(byteCount);
-		buf.putInt(resolutionBinaries.size());
-		for (final byte[] resBinary : resolutionBinaries) {
-			buf.putInt(resBinary.length);
-			buf.put(resBinary);
+			final ByteBuffer buf = ByteBuffer.allocate(byteCount);
+			buf.putInt(resolutionBinaries.size());
+			for (final byte[] resBinary : resolutionBinaries) {
+				buf.putInt(resBinary.length);
+				buf.put(resBinary);
+			}
+			return buf.array();
 		}
-		return buf.array();
 	}
 
 	@Override

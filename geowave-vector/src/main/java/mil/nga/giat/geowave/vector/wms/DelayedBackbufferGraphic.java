@@ -16,6 +16,8 @@
  */
 package mil.nga.giat.geowave.vector.wms;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import java.awt.Color;
 import java.awt.Composite;
 import java.awt.Font;
@@ -681,6 +683,10 @@ public final class DelayedBackbufferGraphic extends
 				arcHeight);
 	}
 
+	@SuppressFBWarnings(value = {
+		"FI_PUBLIC_SHOULD_BE_PROTECTED",
+		"FI_EXPLICIT_INVOCATION"
+	}, justification = "Access defined in java.awt.Graphics; finalization only called by container resource finalize method)_")
 	@Override
 	public void finalize() {
 		super.finalize();

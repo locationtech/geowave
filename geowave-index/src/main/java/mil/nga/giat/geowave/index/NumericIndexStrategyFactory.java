@@ -24,7 +24,7 @@ public interface NumericIndexStrategyFactory
 	{
 		public static final int LONGITUDE_BITS = 31;
 		public static final int LATITUDE_BITS = 31;
-		public static final NumericDimensionDefinition[] SPATIAL_DIMENSIONS = new NumericDimensionDefinition[] {
+		protected static final NumericDimensionDefinition[] SPATIAL_DIMENSIONS = new NumericDimensionDefinition[] {
 			new LongitudeDefinition(),
 			new LatitudeDefinition(
 					true)

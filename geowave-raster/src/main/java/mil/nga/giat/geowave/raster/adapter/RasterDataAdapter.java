@@ -1680,6 +1680,21 @@ public class RasterDataAdapter implements
 				SimpleInternationalString.wrap("Background")
 			};
 		}
+
+		@Override
+		public boolean equals(
+				Object obj ) {
+			if (!(obj instanceof SimplifiedGridSampleDimension)) {
+				return false;
+			}
+			return super.equals(obj);
+		}
+
+		@Override
+		public int hashCode() {
+			return super.hashCode();
+		}
+
 	}
 
 	private static class InternalWritableRaster extends

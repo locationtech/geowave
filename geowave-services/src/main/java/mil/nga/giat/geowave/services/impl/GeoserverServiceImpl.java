@@ -868,7 +868,7 @@ public class GeoserverServiceImpl implements
 						"{'layer':{'defaultStyle':{'name':'" + defaultStyle + "'}}}",
 						MediaType.APPLICATION_JSON));
 
-		return Response.ok().build();
+		return resp;
 	}
 
 	@Override

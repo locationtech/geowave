@@ -32,12 +32,12 @@ import org.opengis.filter.identity.FeatureId;
  * closeable iterator of GeoWaveData
  */
 public class SimpleFeatureGeoWaveWrapper implements
-CloseableIterator<GeoWaveData<SimpleFeature>>
+		CloseableIterator<GeoWaveData<SimpleFeature>>
 {
 	private final static Logger LOGGER = Logger.getLogger(SimpleFeatureGeoWaveWrapper.class);
 
 	private class InternalIterator implements
-	CloseableIterator<GeoWaveData<SimpleFeature>>
+			CloseableIterator<GeoWaveData<SimpleFeature>>
 	{
 		private final SimpleFeatureIterator featureIterator;
 		private final WritableDataAdapter<SimpleFeature> dataAdapter;
@@ -98,7 +98,7 @@ CloseableIterator<GeoWaveData<SimpleFeature>>
 
 		private SimpleFeature retype(
 				final SimpleFeature original )
-						throws IllegalAttributeException {
+				throws IllegalAttributeException {
 			final SimpleFeatureType target = builder.getFeatureType();
 			for (int i = 0; i < target.getAttributeCount(); i++) {
 				final AttributeDescriptor attributeType = target.getDescriptor(i);

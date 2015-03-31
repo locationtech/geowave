@@ -563,7 +563,7 @@ public class FeatureDataAdapter extends
 				this.reprojectedType);
 	}
 
-	private class FeatureWritableSerializer implements
+	private static class FeatureWritableSerializer implements
 			HadoopWritableSerializer<SimpleFeature, FeatureWritable>
 	{
 

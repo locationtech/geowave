@@ -116,6 +116,9 @@ public class InputFormatIteratorWrapper<T> implements
 	public Entry<GeoWaveInputKey, T> next()
 			throws NoSuchElementException {
 		final Entry<GeoWaveInputKey, T> previousNext = nextValue;
+		if (nextValue == null) {
+			throw new NoSuchElementException();
+		}
 		nextValue = null;
 		return previousNext;
 	}

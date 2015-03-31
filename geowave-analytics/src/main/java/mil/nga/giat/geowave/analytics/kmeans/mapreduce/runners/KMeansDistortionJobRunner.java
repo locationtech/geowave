@@ -14,6 +14,7 @@ import mil.nga.giat.geowave.analytics.tools.PropertyManagement;
 import mil.nga.giat.geowave.analytics.tools.RunnerUtils;
 import mil.nga.giat.geowave.analytics.tools.mapreduce.CountofDoubleWritable;
 import mil.nga.giat.geowave.analytics.tools.mapreduce.MapReduceJobRunner;
+import mil.nga.giat.geowave.index.StringUtils;
 
 //@formatter:off
 /*if[ACCUMULO_1.5.2]
@@ -21,6 +22,7 @@ import mil.nga.giat.geowave.analytics.tools.mapreduce.MapReduceJobRunner;
 import org.apache.accumulo.core.client.ClientConfiguration;
 /*end[ACCUMULO_1.5.2]*/
 //@formatter:on
+
 import org.apache.accumulo.core.client.mapreduce.AccumuloOutputFormat;
 import org.apache.accumulo.core.client.security.tokens.AuthenticationToken;
 import org.apache.accumulo.core.client.security.tokens.PasswordToken;
@@ -115,8 +117,7 @@ public class KMeansDistortionJobRunner extends
 				job.getConfiguration(),
 				KMeansDistortionMapReduce.class,
 				new Object[] {
-					new Integer(
-							k)
+					Integer.valueOf(k)
 				},
 				new ParameterEnum[] {
 					JumpParameters.Jump.COUNT_OF_CENTROIDS
@@ -158,7 +159,7 @@ public class KMeansDistortionJobRunner extends
 				namespace);
 
 		final AuthenticationToken authToken = new PasswordToken(
-				password.getBytes());
+				password.getBytes(StringUtils.UTF8_CHAR_SET));
 		// set up AccumuloOutputFormat
 		AccumuloOutputFormat.setConnectorInfo(
 				job,

@@ -130,7 +130,7 @@ public class BasicRowIdStore
 			final MathTransform worldToData )
 			throws NoninvertibleTransformException,
 			MismatchedDimensionException {
-		Key minRowId = null;
+
 		// add one to the pixel in height because pixel space starts at
 		// the top and goes down so to get the lower left spatial
 		// coordinate for a pixel you want the [x, y+1] in pixel space
@@ -167,11 +167,9 @@ public class BasicRowIdStore
 			final Key rowIdKey = new Key(
 					new Text(
 							rowId.getBytes()));
-			if (minRowId == null || (minRowId.compareTo(rowIdKey) > 0)) {
-				minRowId = rowIdKey;
-			}
+			return rowIdKey;
 		}
-		return minRowId;
+		return null;
 	}
 
 	protected int getPixelIndex(

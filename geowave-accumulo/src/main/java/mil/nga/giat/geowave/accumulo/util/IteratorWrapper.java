@@ -55,7 +55,7 @@ public class IteratorWrapper<InputType, ConvertedType> implements
 	}
 
 	@Override
-	public boolean hasNext() {
+	public synchronized boolean hasNext() {
 		if (conversionQueue.hasNext()) {
 			return true;
 		}
@@ -91,7 +91,7 @@ public class IteratorWrapper<InputType, ConvertedType> implements
 	}
 
 	@Override
-	public void remove() {
+	public synchronized void remove() {
 		conversionQueue.remove();
 		inputIterator.remove();
 	}

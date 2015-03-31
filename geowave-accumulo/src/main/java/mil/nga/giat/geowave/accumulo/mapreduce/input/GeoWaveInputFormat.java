@@ -3,17 +3,10 @@ package mil.nga.giat.geowave.accumulo.mapreduce.input;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.net.InetAddress;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Set;
-import java.util.TreeSet;
 
+import com.google.common.base.*;
 import mil.nga.giat.geowave.accumulo.AccumuloOperations;
 import mil.nga.giat.geowave.accumulo.mapreduce.GeoWaveConfiguratorBase;
 import mil.nga.giat.geowave.accumulo.mapreduce.JobContextAdapterStore;
@@ -482,6 +475,7 @@ public class GeoWaveInputFormat<T extends Writable> extends
 				final String instanceId = instance.getInstanceID();
 				final List<Range> rangeList = new ArrayList<Range>(
 						ranges);
+				Random r = new Random();
 				while (!binRanges(
 						rangeList,
 						getUserName(context),
@@ -506,7 +500,7 @@ public class GeoWaveInputFormat<T extends Writable> extends
 					}
 					tserverBinnedRanges.clear();
 					LOGGER.warn("Unable to locate bins for specified ranges. Retrying.");
-					UtilWaitThread.sleep(100 + (int) (Math.random() * 100));
+					UtilWaitThread.sleep(100 + r.nextInt(101));
 					// sleep randomly between 100 and 200 ms
 					tl.invalidateCache();
 				}
@@ -909,6 +903,28 @@ public class GeoWaveInputFormat<T extends Writable> extends
 				}
 			}
 			return retVal;
+		}
+
+		@Override
+		public boolean equals(
+				Object obj ) {
+			if (obj == null) {
+				return false;
+			}
+			if (!(obj instanceof IntermediateSplitInfo)) {
+				return false;
+			}
+			return this.compareTo((IntermediateSplitInfo) obj) == 0;
+		}
+
+		@Override
+		public int hashCode() {
+			// think this matches the spirit of compareTo
+			int mc = getMaxCardinality();
+			return com.google.common.base.Objects.hashCode(
+					mc,
+					getTotalRangeAtCardinality(mc),
+					super.hashCode());
 		}
 
 		private synchronized BigInteger getTotalRangeAtCardinality(

@@ -5,6 +5,7 @@ package mil.nga.giat.geowave.analytics.mapreduce.kde.parser;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.antlr.runtime.BitSet;
 import org.antlr.runtime.MismatchedSetException;
 import org.antlr.runtime.NoViableAltException;
@@ -20,6 +21,11 @@ import org.antlr.runtime.tree.RewriteRuleSubtreeStream;
 import org.antlr.runtime.tree.RewriteRuleTokenStream;
 import org.antlr.runtime.tree.TreeAdaptor;
 
+@SuppressFBWarnings({
+	"RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE",
+	"SF_SWITCH_NO_DEFAULT",
+	"DLS_DEAD_LOCAL_STORE"
+})
 @SuppressWarnings("all")
 public class BasicMathParser extends
 		Parser

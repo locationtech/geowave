@@ -264,7 +264,8 @@ public class GeoWaveBasicIT extends
 	public void testStats(
 			final File[] inputFiles,
 			final Index index ) {
-		final LocalFileIngestPlugin<SimpleFeature> localFileIngest = new GeoToolsVectorDataStoreIngestPlugin(Filter.INCLUDE);
+		final LocalFileIngestPlugin<SimpleFeature> localFileIngest = new GeoToolsVectorDataStoreIngestPlugin(
+				Filter.INCLUDE);
 		final Map<ByteArrayId, StatisticsCache> statsCache = new HashMap<ByteArrayId, StatisticsCache>();
 		for (final File inputFile : inputFiles) {
 			LOGGER.warn("Calculating stats from file '" + inputFile.getName() + "' - this may take several minutes...");

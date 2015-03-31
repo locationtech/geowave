@@ -18,6 +18,7 @@ import java.util.Set;
 import javax.media.jai.remote.SerializableState;
 import javax.media.jai.remote.SerializerFactory;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.index.Mergeable;
 import mil.nga.giat.geowave.index.Persistable;
@@ -199,6 +200,9 @@ public class RootMergeStrategy<T extends Persistable> implements
 		}
 	}
 
+	@SuppressFBWarnings(value = {
+		"DLS_DEAD_LOCAL_STORE"
+	}, justification = "Incorrect warning, sampleModelBinary used")
 	@Override
 	public byte[] toBinary() {
 		int byteCount = 16;
