@@ -113,13 +113,13 @@ public class AccumuloDataStoreStatsTest
 
 		@Override
 		public FieldVisibilityHandler<TestGeometry, Object> getFieldVisibilityHandler(
-				ByteArrayId fieldId ) {
+				final ByteArrayId fieldId ) {
 			return new FieldVisibilityHandler<TestGeometry, Object>() {
 				@Override
 				public byte[] getVisibility(
-						TestGeometry rowValue,
-						ByteArrayId fieldId,
-						Object fieldValue ) {
+						final TestGeometry rowValue,
+						final ByteArrayId fieldId,
+						final Object fieldValue ) {
 					return "aaa".getBytes();
 				}
 
@@ -132,13 +132,13 @@ public class AccumuloDataStoreStatsTest
 
 		@Override
 		public FieldVisibilityHandler<TestGeometry, Object> getFieldVisibilityHandler(
-				ByteArrayId fieldId ) {
+				final ByteArrayId fieldId ) {
 			return new FieldVisibilityHandler<TestGeometry, Object>() {
 				@Override
 				public byte[] getVisibility(
-						TestGeometry rowValue,
-						ByteArrayId fieldId,
-						Object fieldValue ) {
+						final TestGeometry rowValue,
+						final ByteArrayId fieldId,
+						final Object fieldValue ) {
 					return "bbb".getBytes();
 				}
 
@@ -237,7 +237,7 @@ public class AccumuloDataStoreStatsTest
 				3,
 				count);
 
-		CountDataStatistics countStats = (CountDataStatistics) this.statsStore.getDataStatistics(
+		CountDataStatistics countStats = (CountDataStatistics) statsStore.getDataStatistics(
 				adapter.getAdapterId(),
 				CountDataStatistics.STATS_ID,
 				"aaa",
@@ -246,7 +246,7 @@ public class AccumuloDataStoreStatsTest
 				3,
 				countStats.getCount());
 
-		countStats = (CountDataStatistics) this.statsStore.getDataStatistics(
+		countStats = (CountDataStatistics) statsStore.getDataStatistics(
 				adapter.getAdapterId(),
 				CountDataStatistics.STATS_ID,
 				"aaa");
@@ -254,13 +254,32 @@ public class AccumuloDataStoreStatsTest
 				2,
 				countStats.getCount());
 
-		countStats = (CountDataStatistics) this.statsStore.getDataStatistics(
+		countStats = (CountDataStatistics) statsStore.getDataStatistics(
 				adapter.getAdapterId(),
 				CountDataStatistics.STATS_ID,
 				"bbb");
 		assertEquals(
 				1,
 				countStats.getCount());
+
+		BoundingBoxDataStatistics bboxStats = (BoundingBoxDataStatistics) statsStore.getDataStatistics(
+				adapter.getAdapterId(),
+				BoundingBoxDataStatistics.STATS_ID,
+				"aaa");
+		assertTrue((bboxStats.getMinX() == 25) && (bboxStats.getMaxX() == 26) && (bboxStats.getMinY() == 32) && (bboxStats.getMaxY() == 32));
+
+		bboxStats = (BoundingBoxDataStatistics) statsStore.getDataStatistics(
+				adapter.getAdapterId(),
+				BoundingBoxDataStatistics.STATS_ID,
+				"bbb");
+		assertTrue((bboxStats.getMinX() == 27) && (bboxStats.getMaxX() == 27) && (bboxStats.getMinY() == 32) && (bboxStats.getMaxY() == 32));
+
+		bboxStats = (BoundingBoxDataStatistics) statsStore.getDataStatistics(
+				adapter.getAdapterId(),
+				BoundingBoxDataStatistics.STATS_ID,
+				"aaa",
+				"bbb");
+		assertTrue((bboxStats.getMinX() == 25) && (bboxStats.getMaxX() == 27) && (bboxStats.getMinY() == 32) && (bboxStats.getMaxY() == 32));
 
 		assertFalse(mockDataStore.deleteEntry(
 				index,
@@ -308,7 +327,7 @@ public class AccumuloDataStoreStatsTest
 				2,
 				count);
 
-		countStats = (CountDataStatistics) this.statsStore.getDataStatistics(
+		countStats = (CountDataStatistics) statsStore.getDataStatistics(
 				adapter.getAdapterId(),
 				CountDataStatistics.STATS_ID,
 				"aaa");
@@ -316,13 +335,32 @@ public class AccumuloDataStoreStatsTest
 				1,
 				countStats.getCount());
 
-		countStats = (CountDataStatistics) this.statsStore.getDataStatistics(
+		countStats = (CountDataStatistics) statsStore.getDataStatistics(
 				adapter.getAdapterId(),
 				CountDataStatistics.STATS_ID,
 				"bbb");
 		assertEquals(
 				1,
 				countStats.getCount());
+
+		bboxStats = (BoundingBoxDataStatistics) statsStore.getDataStatistics(
+				adapter.getAdapterId(),
+				BoundingBoxDataStatistics.STATS_ID,
+				"aaa");
+		assertTrue((bboxStats.getMinX() == 25) && (bboxStats.getMaxX() == 26) && (bboxStats.getMinY() == 32) && (bboxStats.getMaxY() == 32));
+
+		bboxStats = (BoundingBoxDataStatistics) statsStore.getDataStatistics(
+				adapter.getAdapterId(),
+				BoundingBoxDataStatistics.STATS_ID,
+				"bbb");
+		assertTrue((bboxStats.getMinX() == 27) && (bboxStats.getMaxX() == 27) && (bboxStats.getMinY() == 32) && (bboxStats.getMaxY() == 32));
+
+		bboxStats = (BoundingBoxDataStatistics) statsStore.getDataStatistics(
+				adapter.getAdapterId(),
+				BoundingBoxDataStatistics.STATS_ID,
+				"aaa",
+				"bbb");
+		assertTrue((bboxStats.getMinX() == 25) && (bboxStats.getMaxX() == 27) && (bboxStats.getMinY() == 32) && (bboxStats.getMaxY() == 32));
 
 		try {
 			mockDataStore.deleteEntries(
@@ -331,7 +369,7 @@ public class AccumuloDataStoreStatsTest
 					"aaa",
 					"bbb");
 		}
-		catch (IOException e) {
+		catch (final IOException e) {
 			Assert.fail("Couldn't delete entries");
 		}
 		it1 = mockDataStore.query(
@@ -350,7 +388,7 @@ public class AccumuloDataStoreStatsTest
 				0,
 				count);
 
-		countStats = (CountDataStatistics) this.statsStore.getDataStatistics(
+		countStats = (CountDataStatistics) statsStore.getDataStatistics(
 				adapter.getAdapterId(),
 				CountDataStatistics.STATS_ID);
 		assertNull(countStats);
@@ -366,17 +404,17 @@ public class AccumuloDataStoreStatsTest
 				visWriterBBB).get(
 				0);
 
-		countStats = (CountDataStatistics) this.statsStore.getDataStatistics(
+		countStats = (CountDataStatistics) statsStore.getDataStatistics(
 				adapter.getAdapterId(),
 				CountDataStatistics.STATS_ID,
 				"bbb");
 		assertTrue(countStats != null);
 
-		this.statsStore.deleteObjects(
+		statsStore.deleteObjects(
 				adapter.getAdapterId(),
 				"bbb");
 
-		countStats = (CountDataStatistics) this.statsStore.getDataStatistics(
+		countStats = (CountDataStatistics) statsStore.getDataStatistics(
 				adapter.getAdapterId(),
 				CountDataStatistics.STATS_ID,
 				"bbb");
@@ -599,7 +637,7 @@ public class AccumuloDataStoreStatsTest
 		protected Envelope getEnvelope(
 				final TestGeometry entry ) {
 			// incorporate the bounding box of the entry's envelope
-			final Geometry geometry = (Geometry) entry.geom;
+			final Geometry geometry = entry.geom;
 			if ((geometry != null) && !geometry.isEmpty()) {
 				return geometry.getEnvelopeInternal();
 			}
