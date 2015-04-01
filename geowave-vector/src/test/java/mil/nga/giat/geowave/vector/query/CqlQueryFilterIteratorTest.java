@@ -3,8 +3,14 @@ package mil.nga.giat.geowave.vector.query;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.net.*;
+import java.nio.file.Files;
 import java.util.Iterator;
 import java.util.Map.Entry;
+import java.util.regex.Pattern;
 
 import mil.nga.giat.geowave.accumulo.BasicAccumuloOperations;
 import mil.nga.giat.geowave.accumulo.metadata.AccumuloAdapterStore;
@@ -28,12 +34,16 @@ import org.apache.accumulo.core.client.mock.MockInstance;
 import org.apache.accumulo.core.client.security.tokens.PasswordToken;
 import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.Value;
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.vfs2.impl.VFSClassLoader;
+import org.apache.hadoop.fs.FsUrlStreamHandlerFactory;
 import org.geotools.data.DataUtilities;
 import org.geotools.data.DefaultTransaction;
 import org.geotools.data.FeatureWriter;
 import org.geotools.data.Transaction;
 import org.geotools.feature.SchemaException;
 import org.geotools.filter.FilterFactoryImpl;
+import org.junit.Assert;
 import org.junit.Test;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
@@ -42,6 +52,7 @@ import org.opengis.filter.expression.Expression;
 
 import com.vividsolutions.jts.io.ParseException;
 import com.vividsolutions.jts.io.WKTReader;
+import sun.misc.Launcher;
 
 public class CqlQueryFilterIteratorTest
 {
@@ -127,6 +138,83 @@ public class CqlQueryFilterIteratorTest
 		// line string covers more than one tile
 		assertTrue(count >= 1);
 
+	}
+
+	@Test
+	public void testStreamHandlerFactoryConflictResolution() {
+		unsetURLStreamHandlerFactory();
+		URL.setURLStreamHandlerFactory(new FsUrlStreamHandlerFactory());
+		try {
+			Class.forName(CqlQueryFilterIterator.class.getName());
+		}
+		catch (Exception e) {
+			Assert.fail("Iterator did not handle an alread loaded URLStreamHandler, exception was: " + e.getLocalizedMessage());
+		}
+		catch (Error e) {
+			Assert.fail("Iterator did not handle an alread loaded URLStreamHandler, error was: " + e.getLocalizedMessage());
+		}
+		Assert.assertEquals(
+				unsetURLStreamHandlerFactory(),
+				FsUrlStreamHandlerFactory.class.getName());
+		URL.setURLStreamHandlerFactory(new UnitTestCustomStreamHandlerFactory());
+		try {
+			Method m = CqlQueryFilterIterator.class.getDeclaredMethod(
+					"initialize",
+					null);
+			m.setAccessible(true);
+			m.invoke(null);
+		}
+		catch (NoSuchMethodException e) {
+			Assert.fail("Error changing scope of CqlQueryFilterIterator init() method");
+		}
+		catch (InvocationTargetException e) {
+			if (e.getTargetException().getMessage().equals(
+					"factory already defined")) {
+				Assert.assertEquals(
+						unsetURLStreamHandlerFactory(),
+						UnitTestCustomStreamHandlerFactory.class.getName());
+				URL.setURLStreamHandlerFactory(new FsUrlStreamHandlerFactory());
+				return;
+			}
+			Assert.fail("Error invoking scope of CqlQueryFilterIterator init() method");
+		}
+		catch (IllegalAccessException e) {
+			Assert.fail("Error accessing scope of CqlQueryFilterIterator init() method");
+		}
+		Assert.fail("Loading conflicting duplicate StreamHandler factories did not throw an error");
+	}
+
+	private static String unsetURLStreamHandlerFactory() {
+		try {
+			Field f = URL.class.getDeclaredField("factory");
+			f.setAccessible(true);
+			Object curFac = f.get(null);
+			f.set(
+					null,
+					null);
+			URL.setURLStreamHandlerFactory(null);
+			return curFac.getClass().getName();
+		}
+		catch (Exception e) {
+			return null;
+		}
+	}
+
+	public class UnitTestCustomStreamHandlerFactory implements
+			java.net.URLStreamHandlerFactory
+	{
+		public UnitTestCustomStreamHandlerFactory() {}
+
+		public URLStreamHandler createURLStreamHandler(
+				String protocol ) {
+			if (protocol.equals("http")) {
+				return new sun.net.www.protocol.http.Handler();
+			}
+			else if (protocol.equals("https")) {
+				return new sun.net.www.protocol.https.Handler();
+			}
+			return null;
+		}
 	}
 
 	private void initScanner(
