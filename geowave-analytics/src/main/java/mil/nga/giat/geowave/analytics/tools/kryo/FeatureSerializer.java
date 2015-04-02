@@ -6,10 +6,11 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import mil.nga.giat.geowave.vector.adapter.FeatureWritable;
 
 import org.opengis.feature.simple.SimpleFeature;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Serializer;
@@ -19,25 +20,24 @@ import com.esotericsoftware.kryo.io.Output;
 public class FeatureSerializer extends
 		Serializer<SimpleFeature>
 {
+	final static Logger LOGGER = LoggerFactory.getLogger(FeatureSerializer.class);
 
-	@SuppressFBWarnings({
-		"RR_NOT_CHECKED"
-	})
 	@Override
 	public SimpleFeature read(
 			final Kryo arg0,
 			final Input arg1,
 			final Class<SimpleFeature> arg2 ) {
 		final FeatureWritable fw = new FeatureWritable();
-		final byte[] data = new byte[arg1.readInt()];
-		arg1.read(data);
+		final byte[] data = arg1.readBytes(arg1.readInt());
 		try (DataInputStream is = new DataInputStream(
 				new ByteArrayInputStream(
 						data))) {
 			fw.readFields(is);
 		}
 		catch (final IOException e) {
-			e.printStackTrace();
+			LOGGER.error(
+					"Cannot deserialize Simple Feature",
+					e);
 			return null;
 		}
 		return fw.getFeature();
@@ -61,7 +61,9 @@ public class FeatureSerializer extends
 			arg1.write(data);
 		}
 		catch (final IOException e) {
-			e.printStackTrace();
+			LOGGER.error(
+					"Cannot serialize Simple Feature",
+					e);
 		}
 	}
 

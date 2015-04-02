@@ -252,7 +252,7 @@ public class CentroidManagerGeoWave<T> implements
 			LOGGER.error("Cannot instantiate " + GeoWaveConfiguratorBase.enumToConfKey(
 					this.getClass(),
 					CommonParameters.Common.ACCUMULO_CONNECT_FACTORY));
-			throw new IOException(
+			throw new IOException(e.getLocalizedMessage(),
 					e);
 		}
 		dataStore = new AccumuloDataStore(
@@ -273,22 +273,41 @@ public class CentroidManagerGeoWave<T> implements
 			throws AccumuloException,
 			IOException,
 			AccumuloSecurityException {
-		this.centroidFactory = (AnalyticItemWrapperFactory<T>) runTimeProperties.getClassInstance(CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS);
-		this.centroidDataTypeId = runTimeProperties.getProperty(CentroidParameters.Centroid.DATA_TYPE_ID);
-		final String indexId = runTimeProperties.getProperty(CentroidParameters.Centroid.INDEX_ID);
-		this.batchId = runTimeProperties.getProperty(
+		try {
+			this.centroidFactory = (AnalyticItemWrapperFactory<T>) runTimeProperties.getClassInstance(
+					CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS,
+					SimpleFeatureItemWrapperFactory.class);
+		}
+		catch (InstantiationException e) {
+			throw new IOException(e.getLocalizedMessage(),
+					e);
+		}
+		this.centroidDataTypeId = runTimeProperties.getPropertyAsString(CentroidParameters.Centroid.DATA_TYPE_ID);
+		final String indexId = runTimeProperties.getPropertyAsString(CentroidParameters.Centroid.INDEX_ID);
+		this.batchId = runTimeProperties.getPropertyAsString(
 				GlobalParameters.Global.BATCH_ID,
 				Long.toString(Calendar.getInstance().getTime().getTime()));
 		this.level = runTimeProperties.getPropertyAsInt(
 				CentroidParameters.Centroid.ZOOM_LEVEL,
 				1);
 
-		basicAccumuloOperations = new BasicAccumuloOperations(
-				runTimeProperties.getProperty(GlobalParameters.Global.ZOOKEEKER),
-				runTimeProperties.getProperty(GlobalParameters.Global.ACCUMULO_INSTANCE),
-				runTimeProperties.getProperty(GlobalParameters.Global.ACCUMULO_USER),
-				runTimeProperties.getProperty(GlobalParameters.Global.ACCUMULO_PASSWORD),
-				runTimeProperties.getProperty(GlobalParameters.Global.ACCUMULO_NAMESPACE));
+		try {
+			basicAccumuloOperations = runTimeProperties.getInstance(
+					CommonParameters.Common.ACCUMULO_CONNECT_FACTORY,
+					this.getClass(),
+					BasicAccumuloOperationsFactory.class,
+					DirectBasicAccumuloOperationsFactory.class).build(
+					runTimeProperties.getPropertyAsString(GlobalParameters.Global.ZOOKEEKER),
+					runTimeProperties.getPropertyAsString(GlobalParameters.Global.ACCUMULO_INSTANCE),
+					runTimeProperties.getPropertyAsString(GlobalParameters.Global.ACCUMULO_USER),
+					runTimeProperties.getPropertyAsString(GlobalParameters.Global.ACCUMULO_PASSWORD),
+					runTimeProperties.getPropertyAsString(GlobalParameters.Global.ACCUMULO_NAMESPACE));
+		}
+		catch (InstantiationException | IllegalAccessException e) {
+			throw new IOException(
+					e.getLocalizedMessage(),e);
+		}
+
 		dataStore = new AccumuloDataStore(
 				basicAccumuloOperations);
 		indexStore = new AccumuloIndexStore(

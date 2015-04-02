@@ -201,8 +201,8 @@ public class KMeansDistortionJobRunner extends
 			final PropertyManagement runTimeProperties )
 			throws Exception {
 		distortationTableName = AccumuloUtils.getQualifiedTableName(
-				runTimeProperties.getProperty(GlobalParameters.Global.ACCUMULO_NAMESPACE),
-				runTimeProperties.getProperty(
+				runTimeProperties.getPropertyAsString(GlobalParameters.Global.ACCUMULO_NAMESPACE),
+				runTimeProperties.getPropertyAsString(
 						CentroidParameters.Centroid.DISTORTION_TABLE_NAME,
 						"KmeansDistortion"));
 		reducerCount = Math.min(

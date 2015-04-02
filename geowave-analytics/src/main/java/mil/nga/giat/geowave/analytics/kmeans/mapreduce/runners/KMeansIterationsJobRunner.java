@@ -78,7 +78,9 @@ public class KMeansIterationsJobRunner<T> implements
 				ClusteringParameters.Clustering.CONVERGANCE_TOLERANCE,
 				convergenceTol);
 
-		final DistanceFn<T> distanceFunction = (DistanceFn<T>) runTimeProperties.getClassInstance(CommonParameters.Common.DISTANCE_FUNCTION_CLASS);
+		final DistanceFn<T> distanceFunction = (DistanceFn<T>) runTimeProperties.getClassInstance(
+				CommonParameters.Common.DISTANCE_FUNCTION_CLASS,
+				FeatureCentroidDistanceFn.class);
 
 		int maxIterationCount = runTimeProperties.getPropertyAsInt(
 				ClusteringParameters.Clustering.MAX_ITERATIONS,

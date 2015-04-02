@@ -6,6 +6,11 @@ public class CoordinateEuclideanDistanceFn implements
 		DistanceFn<Coordinate>
 {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 888639577783179566L;
+
 	@Override
 	public double measure(
 			final Coordinate x,

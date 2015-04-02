@@ -6,6 +6,7 @@ import java.util.Set;
 import mil.nga.giat.geowave.analytics.distance.DistanceFn;
 import mil.nga.giat.geowave.analytics.extract.DimensionExtractor;
 import mil.nga.giat.geowave.analytics.tools.PropertyManagement;
+import mil.nga.giat.geowave.analytics.tools.dbops.AdapterStoreFactory;
 import mil.nga.giat.geowave.analytics.tools.dbops.BasicAccumuloOperationsFactory;
 
 import org.apache.commons.cli.Option;
@@ -20,6 +21,8 @@ public class CommonParameters
 				DimensionExtractor.class),
 		ACCUMULO_CONNECT_FACTORY(
 				BasicAccumuloOperationsFactory.class),
+		ADAPTER_STORE_FACTORY(
+				AdapterStoreFactory.class),
 		DISTANCE_FUNCTION_CLASS(
 				DistanceFn.class),
 		HDFS_INPUT_PATH(
@@ -53,6 +56,15 @@ public class CommonParameters
 					Common.DIMENSION_EXTRACT_CLASS,
 					"dde",
 					"Dimension Extractor Class implements mil.nga.giat.geowave.analytics.extract.DimensionExtractor",
+					true));
+		}
+		if (contains(
+				params,
+				Common.ADAPTER_STORE_FACTORY)) {
+			options.add(PropertyManagement.newOption(
+					Common.ADAPTER_STORE_FACTORY,
+					"caf",
+					"Adapter Store factory implements mil.nga.giat.geowave.analytics.tools.dbops.AdapterStoreFactory",
 					true));
 		}
 		if (contains(
