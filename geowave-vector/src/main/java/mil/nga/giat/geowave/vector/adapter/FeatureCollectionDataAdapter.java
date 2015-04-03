@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import mil.nga.giat.geowave.accumulo.IteratorConfig;
 import mil.nga.giat.geowave.accumulo.ModelConvertingDataAdapter;
@@ -52,6 +51,7 @@ import mil.nga.giat.geowave.store.index.CommonIndexValue;
 import mil.nga.giat.geowave.store.index.Index;
 import mil.nga.giat.geowave.vector.adapter.merge.FeatureCollectionCombiner;
 import mil.nga.giat.geowave.vector.plugin.GeoWaveGTDataStore;
+import mil.nga.giat.geowave.vector.util.FeatureDataUtils;
 import mil.nga.giat.geowave.vector.util.FitToIndexDefaultFeatureCollection;
 import mil.nga.giat.geowave.vector.util.SimpleFeatureWrapper;
 
@@ -60,26 +60,18 @@ import org.apache.accumulo.core.client.IteratorSetting.Column;
 import org.apache.accumulo.core.iterators.Combiner;
 import org.apache.accumulo.core.iterators.IteratorUtil.IteratorScope;
 import org.apache.accumulo.core.iterators.user.TransformingIterator;
-import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.geotools.data.DataUtilities;
 import org.geotools.data.simple.SimpleFeatureIterator;
 import org.geotools.feature.DefaultFeatureCollection;
 import org.geotools.feature.SchemaException;
-import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
-import org.geotools.geometry.jts.JTS;
 import org.geotools.referencing.CRS;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.AttributeDescriptor;
-import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.referencing.FactoryException;
-import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.operation.MathTransform;
-import org.opengis.referencing.operation.TransformException;
-
-import com.vividsolutions.jts.geom.Geometry;
 
 /**
  * This data adapter will handle all reading/writing concerns for storing and
@@ -93,7 +85,7 @@ import com.vividsolutions.jts.geom.Geometry;
  * the term 'start' and the other contains either the term 'stop' or 'end' it
  * will interpret the combination of these attributes as a time range to index
  * on.
- * 
+ *
  */
 public class FeatureCollectionDataAdapter extends
 		AbstractDataAdapter<DefaultFeatureCollection> implements
@@ -563,60 +555,27 @@ public class FeatureCollectionDataAdapter extends
 	public Iterator<DefaultFeatureCollection> convertToIndex(
 			final Index index,
 			final DefaultFeatureCollection originalEntry ) {
-		// if the feature is in a different coordinate reference system than
-		// EPSG:4326, transform the geometry
-		final SimpleFeatureIterator itr = originalEntry.features();
 
-		while (itr.hasNext()) {
-			SimpleFeature feature = itr.next();
-			final CoordinateReferenceSystem crs = feature.getFeatureType().getCoordinateReferenceSystem();
+		final DefaultFeatureCollection defaultCRSEntry;
 
-			if (!GeoWaveGTDataStore.DEFAULT_CRS.equals(crs)) {
-				MathTransform featureTransform = null;
-				if ((persistedType.getCoordinateReferenceSystem() != null) && persistedType.getCoordinateReferenceSystem().equals(
-						crs) && (transform != null)) {
-					// we can use the transform we have already calculated for
-					// this feature
-					featureTransform = transform;
-				}
-				else if (crs != null) {
-					// this feature differs from the persisted type in CRS,
-					// calculate the transform
-					try {
-						featureTransform = CRS.findMathTransform(
-								crs,
-								GeoWaveGTDataStore.DEFAULT_CRS,
-								true);
-					}
-					catch (final FactoryException e) {
-						LOGGER.warn(
-								"Unable to find transform to EPSG:4326, the feature geometry will remain in its original CRS",
-								e);
-					}
-				}
-				if (featureTransform != null) {
-					try {
-						final Object geom = feature.getDefaultGeometry();
+		if (originalEntry instanceof FitToIndexDefaultFeatureCollection) {
+			defaultCRSEntry = originalEntry;
+		}
+		else {
+			defaultCRSEntry = new DefaultFeatureCollection(
+					originalEntry.getID());
 
-						// what should we do besides log a message when an entry
-						// can't be transformed to EPSG:4326 for some reason?
-						// this will clone the feature and retype it to
-						// EPSG:4326
-						feature = SimpleFeatureBuilder.retype(
-								feature,
-								reprojectedType);
-						// this will transform the geometry
-						feature.setDefaultGeometry(JTS.transform(
-								(Geometry) geom,
-								featureTransform));
-					}
-					catch (MismatchedDimensionException | TransformException e) {
-						LOGGER.warn(
-								"Unable to perform transform to EPSG:4326, the feature geometry will remain in its original CRS",
-								e);
-					}
-				}
+			final SimpleFeatureIterator itr = originalEntry.features();
+
+			while (itr.hasNext()) {
+				defaultCRSEntry.add(FeatureDataUtils.defaultCRSTransform(
+						itr.next(),
+						persistedType,
+						reprojectedType,
+						transform));
 			}
+
+			itr.close();
 		}
 
 		final SubStrategy[] subStrategies;
@@ -635,7 +594,6 @@ public class FeatureCollectionDataAdapter extends
 		}
 		else {
 			LOGGER.warn("Could not determine index strategy type.");
-			IOUtils.closeQuietly(itr);
 			return Collections.<DefaultFeatureCollection> emptyList().iterator();
 		}
 
@@ -646,7 +604,7 @@ public class FeatureCollectionDataAdapter extends
 		// next level in the hierarchy
 		final List<SimpleFeatureWrapper> reprocessQueue = new ArrayList<SimpleFeatureWrapper>();
 
-		final Iterator<SimpleFeature> featItr = originalEntry.iterator();
+		final Iterator<SimpleFeature> featItr = defaultCRSEntry.iterator();
 
 		// process each feature and continue processing until all features
 		// are placed
@@ -658,10 +616,10 @@ public class FeatureCollectionDataAdapter extends
 			// reprocess data before inserting new features
 			if (featItr.hasNext() && (reprocessQueue.size() == 0)) {
 				// this is a special case used during global optimization
-				if (originalEntry instanceof FitToIndexDefaultFeatureCollection) {
+				if (defaultCRSEntry instanceof FitToIndexDefaultFeatureCollection) {
 					feature = featItr.next();
-					subStratIdx = ((FitToIndexDefaultFeatureCollection) originalEntry).getSubStratIdx() + 1;
-					prevId = ((FitToIndexDefaultFeatureCollection) originalEntry).getIndexId();
+					subStratIdx = ((FitToIndexDefaultFeatureCollection) defaultCRSEntry).getSubStratIdx() + 1;
+					prevId = ((FitToIndexDefaultFeatureCollection) defaultCRSEntry).getIndexId();
 				}
 				else {
 					feature = featItr.next();
@@ -798,7 +756,6 @@ public class FeatureCollectionDataAdapter extends
 				featureCollections.add(collection);
 			}
 		}
-		IOUtils.closeQuietly(itr);
 		return featureCollections.iterator();
 	}
 

@@ -17,10 +17,10 @@ import mil.nga.giat.geowave.store.adapter.statistics.FieldTypeStatisticVisibilit
 import mil.nga.giat.geowave.store.dimension.GeometryWrapper;
 
 import org.apache.log4j.Logger;
-import org.opengis.coverage.grid.GridCoverage;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.AttributeDescriptor;
+import org.opengis.referencing.operation.MathTransform;
 
 import com.vividsolutions.jts.geom.Geometry;
 
@@ -63,8 +63,20 @@ public class StatsManager
 
 	public StatsManager(
 			final DataAdapter<SimpleFeature> dataAdapter,
-			final SimpleFeatureType feature ) {
-		for (final AttributeDescriptor descriptor : feature.getAttributeDescriptors()) {
+			final SimpleFeatureType persistedType ) {
+		this(
+				dataAdapter,
+				persistedType,
+				null,
+				null);
+	}
+
+	public StatsManager(
+			final DataAdapter<SimpleFeature> dataAdapter,
+			final SimpleFeatureType persistedType,
+			final SimpleFeatureType reprojectedType,
+			final MathTransform transform ) {
+		for (final AttributeDescriptor descriptor : persistedType.getAttributeDescriptors()) {
 			if (TimeUtils.isTemporal(descriptor.getType().getBinding())) {
 				statsList.add(new FeatureTimeRangeStatistics(
 						dataAdapter.getAdapterId(),
@@ -78,10 +90,14 @@ public class StatsManager
 			else if (Geometry.class.isAssignableFrom(descriptor.getType().getBinding())) {
 				statsList.add(new FeatureBoundingBoxStatistics(
 						dataAdapter.getAdapterId(),
-						descriptor.getLocalName()));
+						descriptor.getLocalName(),
+						persistedType,
+						reprojectedType,
+						transform));
 			}
-			else
+			else {
 				continue;
+			}
 			// last one added to set visibility
 			visibilityHandlers.put(
 					statsList.get(
