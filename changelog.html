@@ -15,9 +15,11 @@
 <ul>
 <li><p>Ingest plugins based on simple feature data can select a subset to ingest with a CQL filter string <a href="https://github.com/ngageoint/geowave/issues/289">#289</a></p></li>
 <li><p>Reduce size of the images in the Documentation page as it takes lot of time to load <a href="https://github.com/ngageoint/geowave/issues/274">#274</a></p></li>
+<li><p>Triage/address latest coverity scan results <a href="https://github.com/ngageoint/geowave/issues/264">#264</a></p></li>
 <li><p>Fix missing links for images in README.md <a href="https://github.com/ngageoint/geowave/issues/252">#252</a></p></li>
 <li><p>Support subseting of selected attributes within iterators <a href="https://github.com/ngageoint/geowave/issues/237">#237</a></p></li>
 <li><p>Add GeoWave to Vagrant config for PDAL. <a href="https://github.com/ngageoint/geowave/issues/234">#234</a></p></li>
+<li><p>Maven Findbugs <a href="https://github.com/ngageoint/geowave/issues/228">#228</a></p></li>
 <li><p>Maven Checkstyle + format all code <a href="https://github.com/ngageoint/geowave/issues/227">#227</a></p></li>
 <li><p>Store statistics for time ranges &amp; connect up to datastore <a href="https://github.com/ngageoint/geowave/issues/218">#218</a></p></li>
 <li><p>Determine best Guava version to use <a href="https://github.com/ngageoint/geowave/issues/205">#205</a></p></li>
@@ -35,6 +37,7 @@
 </ul>
 <p><strong>Fixed bugs:</strong></p>
 <ul>
+<li><p>Static initializer fails when run under per namespace classpaths <a href="https://github.com/ngageoint/geowave/issues/302">#302</a></p></li>
 <li><p>Exception on input format with large / complex multi-polygon <a href="https://github.com/ngageoint/geowave/issues/285">#285</a></p></li>
 <li><p>Exception when exposing data through geoserver with more than two date fields <a href="https://github.com/ngageoint/geowave/issues/283">#283</a></p></li>
 <li><p>RPM build jobs failing <a href="https://github.com/ngageoint/geowave/issues/261">#261</a></p></li>
@@ -48,10 +51,12 @@
 <ul>
 <li><p>Getting BufferUnderflowException when previewing a layer from geoserver <a href="https://github.com/ngageoint/geowave/issues/279">#279</a></p></li>
 <li><p>Exclude guava from shaded jar built with geotools-singlejar profile <a href="https://github.com/ngageoint/geowave/issues/267">#267</a></p></li>
+<li><p>Documentation generation / travis speed issue <a href="https://github.com/ngageoint/geowave/issues/257">#257</a></p></li>
 <li><p>BigInteger.class errors <a href="https://github.com/ngageoint/geowave/issues/256">#256</a></p></li>
 </ul>
 <p><strong>Merged pull requests:</strong></p>
 <ul>
+<li><p>Added a fix to convert to default CRS before storing bounding box stats. <a href="https://github.com/ngageoint/geowave/pull/308">#308</a> (<a href="https://github.com/jwomeara">jwomeara</a>)</p></li>
 <li><p>Added logic to test bounding box statistics <a href="https://github.com/ngageoint/geowave/pull/304">#304</a> (<a href="https://github.com/jwomeara">jwomeara</a>)</p></li>
 <li><p>Fix for URLStreamHandlerFactory initialization errors <a href="https://github.com/ngageoint/geowave/pull/303">#303</a> (<a href="https://github.com/chrisbennight">chrisbennight</a>)</p></li>
 <li><p>Findbugs; add to verify phase, address current issues <a href="https://github.com/ngageoint/geowave/pull/298">#298</a> (<a href="https://github.com/chrisbennight">chrisbennight</a>)</p></li>
