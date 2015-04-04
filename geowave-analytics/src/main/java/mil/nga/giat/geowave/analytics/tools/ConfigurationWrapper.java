@@ -7,10 +7,19 @@ public interface ConfigurationWrapper
 			Class<?> scope,
 			int defaultValue );
 
+	public double getDouble(
+			Enum<?> property,
+			Class<?> scope,
+			double defaultValue );
+
 	public String getString(
 			Enum<?> property,
 			Class<?> scope,
 			String defaultValue );
+
+	public byte[] getBytes(
+			Enum<?> property,
+			Class<?> scope );
 
 	public <T> T getInstance(
 			Enum<?> property,

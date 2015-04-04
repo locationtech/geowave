@@ -165,9 +165,9 @@ public class ConvexHullJobRunner extends
 		namespaceURI = runTimeProperties.storeIfEmpty(
 				HullParameters.Hull.DATA_NAMESPACE_URI,
 				BasicFeatureTypes.DEFAULT_NAMESPACE).toString();
-		indexId = runTimeProperties.getProperty(
+		indexId = runTimeProperties.getPropertyAsString(
 				HullParameters.Hull.INDEX_ID,
-				runTimeProperties.getProperty(CentroidParameters.Centroid.INDEX_ID));
+				runTimeProperties.getPropertyAsString(CentroidParameters.Centroid.INDEX_ID));
 		runTimeProperties.storeIfEmpty(
 				HullParameters.Hull.WRAPPER_FACTORY_CLASS,
 				SimpleFeatureItemWrapperFactory.class);

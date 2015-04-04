@@ -6,6 +6,11 @@ public class CoordinateCosineDistanceFn implements
 		DistanceFn<Coordinate>
 {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2074200104626591273L;
+
 	@Override
 	public double measure(
 			final Coordinate x,
