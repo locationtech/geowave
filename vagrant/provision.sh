@@ -29,5 +29,6 @@ mvn clean package -pl geowave-deploy -am -P geowave-singlejar -DskipITs=true -Ds
 # Install GeoWave service
 echo "GeoWave: Installing Service..."
 sudo cp /home/vagrant/geowave/vagrant/geowave.sh /etc/init.d/geowave
+sudo chmod a+x /etc/init.d/geowave
 sudo chkconfig --add geowave
 sudo service geowave start
