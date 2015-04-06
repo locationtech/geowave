@@ -344,6 +344,9 @@
 							<goal>prepare-agent</goal>
 						</goals>
 						<configuration>
+							<includes>
+								<include>mil/nga/giat/geowave/**</include>
+							</includes>
 							<destFile>${jacoco.it.reportPath}</destFile>
 							<propertyName>jacoco.failsafe.argline</propertyName>
 						</configuration>
