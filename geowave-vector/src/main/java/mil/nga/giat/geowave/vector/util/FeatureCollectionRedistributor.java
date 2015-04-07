@@ -486,7 +486,7 @@ public class FeatureCollectionRedistributor
 		featureCollectionWriter.close();
 	}
 
-	private class RawFeatureCollectionDataAdapter extends
+	private static class RawFeatureCollectionDataAdapter extends
 			FeatureCollectionDataAdapter
 	{
 		public RawFeatureCollectionDataAdapter(

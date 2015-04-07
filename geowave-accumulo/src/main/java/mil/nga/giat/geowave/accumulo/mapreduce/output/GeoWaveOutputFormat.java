@@ -169,7 +169,7 @@ public class GeoWaveOutputFormat extends
 	 * A base class to be used to create {@link RecordWriter} instances that
 	 * write to Accumulo.
 	 */
-	protected class GeoWaveRecordWriter extends
+	protected static class GeoWaveRecordWriter extends
 			RecordWriter<GeoWaveOutputKey, Object>
 	{
 		private final Map<ByteArrayId, IndexWriter> indexWriterCache = new HashMap<ByteArrayId, IndexWriter>();

@@ -1,5 +1,6 @@
 package mil.nga.giat.geowave.types.geotools.raster;
 
+import mil.nga.giat.geowave.ingest.IngestTypeOptionProvider;
 import mil.nga.giat.geowave.ingest.IngestTypePluginProviderSpi;
 import mil.nga.giat.geowave.ingest.hdfs.StageToHdfsPlugin;
 import mil.nga.giat.geowave.ingest.hdfs.mapreduce.IngestFromHdfsPlugin;
@@ -46,6 +47,12 @@ public class GeoToolsRasterDataStoreIngestType implements
 	@Override
 	public String getIngestTypeDescription() {
 		return "all file-based raster formats supported within geotools";
+	}
+
+	@Override
+	public IngestTypeOptionProvider getIngestTypeOptionProvider() {
+		// no custom options are provided
+		return null;
 	}
 
 }

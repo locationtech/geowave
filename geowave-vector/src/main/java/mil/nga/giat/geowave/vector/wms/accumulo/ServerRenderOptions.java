@@ -18,6 +18,7 @@ import javax.media.jai.remote.SerializableState;
 import javax.media.jai.remote.Serializer;
 import javax.media.jai.remote.SerializerFactory;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import mil.nga.giat.geowave.index.Persistable;
 import mil.nga.giat.geowave.vector.wms.DelayedBackbufferGraphic;
 
@@ -183,6 +184,9 @@ public class ServerRenderOptions implements
 		return buf.array();
 	}
 
+	@SuppressFBWarnings(value = {
+		"JLM_JSR166_UTILCONCURRENT_MONITORENTER"
+	}, justification = "lock ensures transactional atomicity")
 	private void registerSerializers() {
 		synchronized (serializerRegistered) {
 			if (!serializerRegistered.get()) {

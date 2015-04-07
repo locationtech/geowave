@@ -60,4 +60,18 @@ public class CustomIdIndex extends
 				idBinary);
 	}
 
+	@Override
+	public boolean equals(
+			Object obj ) {
+		if (!(obj instanceof CustomIdIndex)) {
+			return false;
+		}
+		return super.equals(obj);
+	}
+
+	@Override
+	public int hashCode() {
+		return super.hashCode();
+	}
+
 }

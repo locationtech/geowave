@@ -1,6 +1,5 @@
 package mil.nga.giat.geowave.analytics.kmeans.mapreduce.runners;
 
-import java.io.IOException;
 import java.util.Set;
 import java.util.UUID;
 
@@ -9,7 +8,6 @@ import mil.nga.giat.geowave.analytics.clustering.ClusteringUtils;
 import mil.nga.giat.geowave.analytics.clustering.DistortionGroupManagement;
 import mil.nga.giat.geowave.analytics.clustering.runners.ClusteringRunner;
 import mil.nga.giat.geowave.analytics.distance.FeatureCentroidDistanceFn;
-import mil.nga.giat.geowave.analytics.extract.DimensionExtractor;
 import mil.nga.giat.geowave.analytics.extract.SimpleFeatureCentroidExtractor;
 import mil.nga.giat.geowave.analytics.extract.SimpleFeatureGeometryExtractor;
 import mil.nga.giat.geowave.analytics.parameters.CentroidParameters;
@@ -25,13 +23,10 @@ import mil.nga.giat.geowave.analytics.tools.SimpleFeatureItemWrapperFactory;
 import mil.nga.giat.geowave.analytics.tools.mapreduce.MapReduceJobController;
 import mil.nga.giat.geowave.analytics.tools.mapreduce.MapReduceJobRunner;
 import mil.nga.giat.geowave.index.sfc.data.NumericRange;
-import mil.nga.giat.geowave.store.adapter.DataAdapter;
-import mil.nga.giat.geowave.store.index.Index;
 
 import org.apache.commons.cli.Option;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
-import org.geotools.feature.type.BasicFeatureTypes;
 import org.opengis.feature.simple.SimpleFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -144,9 +139,9 @@ public class KMeansJumpJobRunner extends
 		ClusteringUtils.createAdapter(propertyManagement);
 		ClusteringUtils.createIndex(propertyManagement);
 
-		final boolean destroyDistorationTable = propertyManagement.getProperty(CentroidParameters.Centroid.DISTORTION_TABLE_NAME) == null;
+		final boolean destroyDistorationTable = propertyManagement.getPropertyAsString(CentroidParameters.Centroid.DISTORTION_TABLE_NAME) == null;
 
-		final String currentBatchId = propertyManagement.getProperty(
+		final String currentBatchId = propertyManagement.getPropertyAsString(
 				GlobalParameters.Global.BATCH_ID,
 				UUID.randomUUID().toString());
 
@@ -157,12 +152,7 @@ public class KMeansJumpJobRunner extends
 						'_')).toString();
 
 		try {
-			final BasicAccumuloOperations ops = ClusteringUtils.createOperations(
-					propertyManagement.getProperty(GlobalParameters.Global.ZOOKEEKER),
-					propertyManagement.getProperty(GlobalParameters.Global.ACCUMULO_INSTANCE),
-					propertyManagement.getProperty(GlobalParameters.Global.ACCUMULO_USER),
-					propertyManagement.getProperty(GlobalParameters.Global.ACCUMULO_PASSWORD),
-					propertyManagement.getProperty(GlobalParameters.Global.ACCUMULO_NAMESPACE));
+			final BasicAccumuloOperations ops = ClusteringUtils.createOperations(propertyManagement);
 
 			if (!ops.tableExists(tableName)) {
 				ops.createTable(tableName);
@@ -222,8 +212,8 @@ public class KMeansJumpJobRunner extends
 			final int result = DistortionGroupManagement.retainBestGroups(
 					ClusteringUtils.createOperations(propertyManagement),
 					(AnalyticItemWrapperFactory<SimpleFeature>) analyticItemWrapperFC.newInstance(),
-					propertyManagement.getProperty(CentroidParameters.Centroid.DATA_TYPE_ID),
-					propertyManagement.getProperty(CentroidParameters.Centroid.INDEX_ID),
+					propertyManagement.getPropertyAsString(CentroidParameters.Centroid.DATA_TYPE_ID),
+					propertyManagement.getPropertyAsString(CentroidParameters.Centroid.INDEX_ID),
 					tableName,
 					currentBatchId,
 					currentZoomLevel);
@@ -300,7 +290,7 @@ public class KMeansJumpJobRunner extends
 				SampleParameters.Sample.INDEX_ID);
 	}
 
-	private class KMeansParallelJobRunnerDelegate implements
+	private static class KMeansParallelJobRunnerDelegate implements
 			MapReduceJobRunner
 	{
 		final KMeansSingleSampleJobRunner<SimpleFeature> singleSamplekmeansJobRunner = new KMeansSingleSampleJobRunner<SimpleFeature>();

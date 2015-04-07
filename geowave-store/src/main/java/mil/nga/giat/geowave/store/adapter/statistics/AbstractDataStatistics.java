@@ -45,7 +45,7 @@ abstract public class AbstractDataStatistics<T> implements
 	@Override
 	public ByteArrayId getStatisticsId() {
 		return statisticsId;
-	};
+	}
 
 	protected ByteBuffer binaryBuffer(
 			final int size ) {

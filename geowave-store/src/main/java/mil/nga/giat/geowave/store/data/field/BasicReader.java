@@ -13,6 +13,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import mil.nga.giat.geowave.index.StringUtils;
 import mil.nga.giat.geowave.store.GeometryUtils;
 
@@ -55,6 +56,9 @@ public class BasicReader
 			FieldReader<Boolean>
 	{
 
+		@SuppressFBWarnings(value = {
+			"NP_BOOLEAN_RETURN_NULL"
+		}, justification = "matches pattern of other read* methods")
 		@Override
 		public Boolean readField(
 				final byte[] fieldData ) {

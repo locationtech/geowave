@@ -1,8 +1,6 @@
 package mil.nga.giat.geowave.analytics.kmeans.mapreduce;
 
-import java.io.IOException;
-import java.util.List;
-
+import com.vividsolutions.jts.geom.Point;
 import mil.nga.giat.geowave.accumulo.mapreduce.GeoWaveWritableInputMapper;
 import mil.nga.giat.geowave.accumulo.mapreduce.input.GeoWaveInputKey;
 import mil.nga.giat.geowave.analytics.clustering.CentroidManagerGeoWave;
@@ -19,7 +17,7 @@ import mil.nga.giat.geowave.analytics.tools.ConfigurationWrapper;
 import mil.nga.giat.geowave.analytics.tools.SimpleFeatureItemWrapperFactory;
 import mil.nga.giat.geowave.analytics.tools.mapreduce.CountofDoubleWritable;
 import mil.nga.giat.geowave.analytics.tools.mapreduce.JobContextConfigurationWrapper;
-
+import mil.nga.giat.geowave.index.StringUtils;
 import org.apache.accumulo.core.data.Mutation;
 import org.apache.accumulo.core.data.Value;
 import org.apache.hadoop.io.ObjectWritable;
@@ -28,38 +26,33 @@ import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.log4j.Logger;
 
-import com.vividsolutions.jts.geom.Point;
+import java.io.IOException;
+import java.util.List;
 
 /**
- * 
  * Calculate the distortation.
- * 
+ * <p/>
  * See Catherine A. Sugar and Gareth M. James (2003).
  * "Finding the number of clusters in a data set: An information theoretic approach"
  * Journal of the American Statistical Association 98 (January): 750–763
  * 
- * 
- * @formatter:off
- * 
- *                Context configuration parameters include:
- * 
+ * @formatter:off Context configuration parameters include:
+ *                <p/>
  *                "KMeansDistortionMapReduce.Common.DistanceFunctionClass" ->
  *                {@link mil.nga.giat.geowave.analytics.distance.DistanceFn}
  *                used to determine distance to centroid
- * 
+ *                <p/>
  *                "KMeansDistortionMapReduce.Centroid.WrapperFactoryClass" ->
  *                {@link AnalyticItemWrapperFactory} to extract wrap spatial
  *                objects with Centroid management functions
- * 
+ *                <p/>
  *                "KMeansDistortionMapReduce.Centroid.ExtractorClass" ->
  *                {@link mil.nga.giat.geowave.analytics.extract.CentroidExtractor}
- * 
+ *                <p/>
  *                "KMeansDistortionMapReduce.Jump.CountOfCentroids" -> May be
  *                different from actual.
- * 
- * @see CentroidManagerGeoWave
- * 
  * @formatter:on
+ * @see CentroidManagerGeoWave
  */
 public class KMeansDistortionMapReduce
 {
@@ -249,7 +242,8 @@ public class KMeansDistortionMapReduce
 						new Text(
 								kCount),
 						new Value(
-								distortion.toString().getBytes()));
+								distortion.toString().getBytes(
+										StringUtils.UTF8_CHAR_SET)));
 
 				// write distortion to accumulo, defaults to table given to
 				// AccumuloOutputFormat, in driver

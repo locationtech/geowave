@@ -213,6 +213,25 @@ public class StripWeakCentroidsRunner<T> implements
 			return new Double(
 					(arg0).chg).compareTo(chg);
 		}
+
+		@Override
+		public boolean equals(
+				Object obj ) {
+			if (obj == null) {
+				return false;
+			}
+			if (!(obj instanceof ChangeFromLast)) {
+				return false;
+			}
+			return this.compareTo((ChangeFromLast) obj) == 0;
+		}
+
+		@Override
+		public int hashCode() {
+			return Double.valueOf(
+					chg).hashCode();
+		}
+
 	}
 
 	public static class StableChangeBreakStrategy<T> implements

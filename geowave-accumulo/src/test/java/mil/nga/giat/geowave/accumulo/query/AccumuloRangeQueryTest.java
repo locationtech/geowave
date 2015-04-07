@@ -1,14 +1,17 @@
 package mil.nga.giat.geowave.accumulo.query;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
-import junit.framework.Assert;
+import com.vividsolutions.jts.geom.Polygon;
+import com.vividsolutions.jts.io.ParseException;
+import com.vividsolutions.jts.io.WKBReader;
+import com.vividsolutions.jts.io.WKBWriter;
 import mil.nga.giat.geowave.accumulo.AccumuloDataStore;
 import mil.nga.giat.geowave.accumulo.BasicAccumuloOperations;
 import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.store.CloseableIterator;
 import mil.nga.giat.geowave.store.DataStore;
+import mil.nga.giat.geowave.store.GeometryUtils;
 import mil.nga.giat.geowave.store.adapter.AbstractDataAdapter;
 import mil.nga.giat.geowave.store.adapter.NativeFieldHandler;
 import mil.nga.giat.geowave.store.adapter.NativeFieldHandler.RowBuilder;
@@ -33,6 +36,7 @@ import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.apache.accumulo.core.client.Connector;
 import org.apache.accumulo.core.client.mock.MockInstance;
 import org.apache.accumulo.core.client.security.tokens.PasswordToken;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -112,6 +116,94 @@ public class AccumuloRangeQueryTest
 	}
 
 	@Test
+	public void largeQuery() {
+		final Geometry largeGeo = createPolygon(50000);
+		final Query largeQuery = new SpatialQuery(
+				largeGeo);
+		final CloseableIterator itr = mockDataStore.query(
+				index,
+				largeQuery);
+		int numfeats = 0;
+		while (itr.hasNext()) {
+			itr.next();
+			numfeats++;
+		}
+		Assert.assertEquals(
+				numfeats,
+				1);
+	}
+
+	/**
+	 * Verifies equality for interning is still working as expected
+	 * (topologically), as the the largeQuery() test has a dependency on this;
+	 * 
+	 * @throws ParseException
+	 */
+	@Test
+	public void testInterning()
+			throws ParseException {
+		final Geometry g = GeometryUtils.GEOMETRY_FACTORY.createPolygon(new Coordinate[] {
+			new Coordinate(
+					0,
+					0),
+			new Coordinate(
+					1,
+					0),
+			new Coordinate(
+					1,
+					1),
+			new Coordinate(
+					0,
+					1),
+			new Coordinate(
+					0,
+					0)
+		});
+		final Geometry gNewInstance = GeometryUtils.GEOMETRY_FACTORY.createPolygon(new Coordinate[] {
+			new Coordinate(
+					0,
+					0),
+			new Coordinate(
+					1,
+					0),
+			new Coordinate(
+					1,
+					1),
+			new Coordinate(
+					0,
+					1),
+			new Coordinate(
+					0,
+					0)
+		});
+		final WKBWriter wkbWriter = new WKBWriter();
+		final byte[] b = wkbWriter.write(g);
+		final byte[] b2 = new byte[b.length];
+		System.arraycopy(
+				b,
+				0,
+				b2,
+				0,
+				b.length);
+		final WKBReader wkbReader = new WKBReader();
+		final Geometry gSerialized = wkbReader.read(b);
+		final Geometry gSerializedArrayCopy = wkbReader.read(b2);
+
+		Assert.assertEquals(
+				g,
+				gNewInstance);
+		Assert.assertEquals(
+				g,
+				gSerializedArrayCopy);
+		Assert.assertEquals(
+				gSerialized,
+				gSerializedArrayCopy);
+		Assert.assertEquals(
+				gSerialized,
+				gSerializedArrayCopy);
+	}
+
+	@Test
 	public void testMiss() {
 		final Query intersectQuery = new SpatialQuery(
 				factory.createPolygon(new Coordinate[] {
@@ -159,6 +251,31 @@ public class AccumuloRangeQueryTest
 		Assert.assertEquals(
 				"test_shape_1",
 				geom1.id);
+	}
+
+	private static Polygon createPolygon(
+			int numPoints ) {
+		double centerX = 4;
+		double centerY = 12;
+		int maxRadius = 80;
+
+		List<Coordinate> coords = new ArrayList<Coordinate>();
+		Random rand = new Random(
+				8675309l);
+
+		double increment = (double) 360 / numPoints;
+
+		for (double theta = 0; theta <= 360; theta += increment) {
+			double radius = rand.nextDouble() * maxRadius + 0.1;
+			double rad = theta * Math.PI / 180.0;
+			double x = centerX + radius * Math.sin(rad);
+			double y = centerY + radius * Math.cos(rad);
+			coords.add(new Coordinate(
+					x,
+					y));
+		}
+		coords.add(coords.get(0));
+		return GeometryUtils.GEOMETRY_FACTORY.createPolygon(coords.toArray(new Coordinate[coords.size()]));
 	}
 
 	protected static class TestGeometry

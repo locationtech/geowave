@@ -242,7 +242,7 @@ public class KSamplerMapReduce
 			for (final Object value : values) {
 				final AnalyticItemWrapper<T> sampleItem = itemWrapperFactory.create((T) value);
 				Integer outputCount = outputCounts.get(groupID);
-				outputCount = outputCount == null ? 0 : outputCount;
+				outputCount = outputCount == null ? Integer.valueOf(0) : outputCount;
 				if ((outputCount == null) || (outputCount < maxCount)) {
 
 					AnalyticItemWrapper<T> centroid = createCentroid(
@@ -381,7 +381,8 @@ public class KSamplerMapReduce
 		private static String getGroupAsString(
 				final byte[] data ) {
 			return new String(
-					getGroup(data));
+					getGroup(data),
+					StringUtils.UTF8_CHAR_SET);
 		}
 
 		private static byte[] getGroup(
@@ -400,7 +401,7 @@ public class KSamplerMapReduce
 				final double weight,
 				final byte[] dataIdBytes ) {
 			keyBuffer.rewind();
-			final byte[] groupIDBytes = groupID.getBytes();
+			final byte[] groupIDBytes = groupID.getBytes(StringUtils.UTF8_CHAR_SET);
 			// try to reuse
 			final int size = dataIdBytes.length + 16 + groupIDBytes.length;
 			if (keyBuffer.capacity() < size) {

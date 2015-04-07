@@ -3,6 +3,7 @@ package mil.nga.giat.geowave.store;
 import java.io.Closeable;
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 /**
  * This interface wraps both the Iterator interface and the Closeable interface.
@@ -58,8 +59,9 @@ public interface CloseableIterator<E> extends
 		}
 
 		@Override
-		public E next() {
-			return null;
+		public E next()
+				throws NoSuchElementException {
+			throw new NoSuchElementException();
 		}
 
 		@Override

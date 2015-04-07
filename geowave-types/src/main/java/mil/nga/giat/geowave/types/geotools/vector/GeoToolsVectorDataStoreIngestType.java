@@ -1,9 +1,11 @@
 package mil.nga.giat.geowave.types.geotools.vector;
 
+import mil.nga.giat.geowave.ingest.IngestTypeOptionProvider;
 import mil.nga.giat.geowave.ingest.IngestTypePluginProviderSpi;
 import mil.nga.giat.geowave.ingest.hdfs.StageToHdfsPlugin;
 import mil.nga.giat.geowave.ingest.hdfs.mapreduce.IngestFromHdfsPlugin;
 import mil.nga.giat.geowave.ingest.local.LocalFileIngestPlugin;
+import mil.nga.giat.geowave.types.CQLFilterOptionProvider;
 
 import org.opengis.feature.simple.SimpleFeature;
 
@@ -15,6 +17,7 @@ import org.opengis.feature.simple.SimpleFeature;
 public class GeoToolsVectorDataStoreIngestType implements
 		IngestTypePluginProviderSpi<Object, SimpleFeature>
 {
+	protected final CQLFilterOptionProvider cqlFilterOptionProvider = new CQLFilterOptionProvider();
 
 	@Override
 	public StageToHdfsPlugin<Object> getStageToHdfsPlugin() {
@@ -32,7 +35,8 @@ public class GeoToolsVectorDataStoreIngestType implements
 
 	@Override
 	public LocalFileIngestPlugin<SimpleFeature> getLocalFileIngestPlugin() {
-		return new GeoToolsVectorDataStoreIngestPlugin();
+		return new GeoToolsVectorDataStoreIngestPlugin(
+				cqlFilterOptionProvider);
 	}
 
 	@Override
@@ -44,4 +48,10 @@ public class GeoToolsVectorDataStoreIngestType implements
 	public String getIngestTypeDescription() {
 		return "all file-based vector datastores supported within geotools";
 	}
+
+	@Override
+	public IngestTypeOptionProvider getIngestTypeOptionProvider() {
+		return cqlFilterOptionProvider;
+	}
+
 }

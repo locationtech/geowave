@@ -24,6 +24,8 @@ import org.geotools.data.Transaction;
 import org.geotools.feature.SchemaException;
 import org.geotools.feature.visitor.MaxVisitor;
 import org.geotools.feature.visitor.MinVisitor;
+import org.geotools.filter.FilterFactoryImpl;
+import org.geotools.filter.spatial.BBOXImpl;
 import org.geotools.filter.text.cql2.CQLException;
 import org.geotools.filter.text.ecql.ECQL;
 import org.junit.Before;
@@ -119,6 +121,39 @@ public class GeoWaveFeatureReaderTest
 					"geometry",
 					"pid"
 				});
+
+	}
+
+	@Test
+	public void testBBOX()
+			throws IllegalArgumentException,
+			NoSuchElementException,
+			IOException {
+		FilterFactoryImpl factory = new FilterFactoryImpl();
+		Query query = new Query(
+				"GeoWaveFeatureReaderTest",
+				factory.bbox(
+						"",
+						-180,
+						-90,
+						180,
+						90,
+						"EPSG:4326"),
+				new String[] {
+					"geometry",
+					"pid"
+				});
+
+		final FeatureReader reader = dataStore.getFeatureReader(
+				type.getTypeName(),
+				query);
+		int count = 0;
+		while (reader.hasNext()) {
+			final SimpleFeature feature = (SimpleFeature) reader.next();
+			assertTrue(fids.contains(feature.getID()));
+			count++;
+		}
+		assertTrue(count > 0);
 
 	}
 

@@ -29,14 +29,14 @@ public class ClearNamespaceDriver extends
 	}
 
 	@Override
-	public void parseOptions(
+	public void parseOptionsInternal(
 			final CommandLine commandLine )
 			throws ParseException {
 		accumulo = AccumuloCommandLineOptions.parseOptions(commandLine);
 	}
 
 	@Override
-	public void applyOptions(
+	public void applyOptionsInternal(
 			final Options allOptions ) {
 		AccumuloCommandLineOptions.applyOptions(allOptions);
 	}

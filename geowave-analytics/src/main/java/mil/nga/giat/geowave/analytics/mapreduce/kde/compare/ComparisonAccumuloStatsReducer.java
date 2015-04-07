@@ -109,7 +109,7 @@ public class ComparisonAccumuloStatsReducer extends
 
 	private Point2d[] fromIndexToLL_UR(
 			final long index ) {
-		final double llLon = ((Math.floor(index / numYPosts) * 360.0) / numXPosts) - 180.0;
+		final double llLon = ((Math.floor(index / (double) numYPosts) * 360.0) / numXPosts) - 180.0;
 		final double llLat = (((index % numYPosts) * 180.0) / numYPosts) - 90.0;
 		final double urLon = llLon + (360.0 / numXPosts);
 		final double urLat = llLat + (180.0 / numYPosts);

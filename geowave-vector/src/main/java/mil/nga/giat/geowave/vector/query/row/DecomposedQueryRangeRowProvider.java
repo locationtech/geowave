@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.TreeSet;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import mil.nga.giat.geowave.accumulo.util.AccumuloUtils;
 import mil.nga.giat.geowave.index.ByteArrayRange;
 import mil.nga.giat.geowave.index.NumericIndexStrategy;
@@ -26,6 +27,9 @@ public class DecomposedQueryRangeRowProvider extends
 {
 	private final TreeSet<Range> ranges;
 
+	@SuppressFBWarnings(value = {
+		"RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE"
+	}, justification = "newer constraint types may be null")
 	public DecomposedQueryRangeRowProvider(
 			final NumericIndexStrategy indexStrategy,
 			final Envelope envelope ) {

@@ -1,5 +1,6 @@
 package mil.nga.giat.geowave.ingest;
 
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,7 +10,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.ServiceLoader;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import mil.nga.giat.geowave.index.StringUtils;
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.HelpFormatter;
@@ -18,6 +19,8 @@ import org.apache.commons.cli.OptionGroup;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.log4j.Logger;
+
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 /**
  * This implements a generic command-line driven utility for discovering a set
@@ -71,14 +74,10 @@ abstract public class AbstractCommandLineDriver
 				pluginProviders);
 	}
 
-	abstract protected void runInternal(
-			String[] args,
-			List<IngestTypePluginProviderSpi<?, ?>> pluginProviders );
-
 	@SuppressFBWarnings(value = "DM_EXIT", justification = "Exiting JVM with System.exit(0) is intentional")
 	protected List<IngestTypePluginProviderSpi<?, ?>> applyArguments(
 			final String[] args ) {
-		final List<IngestTypePluginProviderSpi<?, ?>> selectedPluginProviders = new ArrayList<IngestTypePluginProviderSpi<?, ?>>();
+		List<IngestTypePluginProviderSpi<?, ?>> selectedPluginProviders = new ArrayList<IngestTypePluginProviderSpi<?, ?>>();
 		final Options options = new Options();
 		final OptionGroup baseOptionGroup = new OptionGroup();
 		baseOptionGroup.setRequired(false);
@@ -98,10 +97,11 @@ abstract public class AbstractCommandLineDriver
 				true,
 				"Explicitly set the ingest type by name (or multiple comma-delimited types), if not set all available ingest types will be used"));
 		options.addOptionGroup(baseOptionGroup);
-		applyOptions(options);
+		applyOptionsInternal(options);
+		final int optionCount = options.getOptions().size();
 		final BasicParser parser = new BasicParser();
 		try {
-			final CommandLine commandLine = parser.parse(
+			CommandLine commandLine = parser.parse(
 					options,
 					args);
 			if (commandLine.hasOption("h")) {
@@ -113,7 +113,9 @@ abstract public class AbstractCommandLineDriver
 			else if (commandLine.hasOption("l")) {
 				final HelpFormatter formatter = new HelpFormatter();
 				final PrintWriter pw = new PrintWriter(
-						System.out);
+						new OutputStreamWriter(
+								System.out,
+								StringUtils.UTF8_CHAR_SET));
 				pw.println("Available ingest types currently registered as plugins:\n");
 				for (final Entry<String, IngestTypePluginProviderSpi<?, ?>> pluginProviderEntry : pluginProviderRegistry.entrySet()) {
 					final IngestTypePluginProviderSpi<?, ?> pluginProvider = pluginProviderEntry.getValue();
@@ -132,21 +134,9 @@ abstract public class AbstractCommandLineDriver
 			}
 			else if (commandLine.hasOption("t")) {
 				try {
-					final String[] pluginProviderNames = commandLine.getOptionValue(
-							"t").split(
-							",");
-					for (final String pluginProviderName : pluginProviderNames) {
-						final IngestTypePluginProviderSpi<?, ?> pluginProvider = pluginProviderRegistry.get(pluginProviderName);
-						if (pluginProvider == null) {
-							throw new IllegalArgumentException(
-									"Unable to find SPI plugin provider for ingest type '" + pluginProviderName + "'");
-						}
-						selectedPluginProviders.add(pluginProvider);
-					}
-					if (selectedPluginProviders.isEmpty()) {
-						throw new IllegalArgumentException(
-								"There were no ingest type plugin providers found");
-					}
+					selectedPluginProviders = getPluginProviders(
+							commandLine,
+							options);
 				}
 				catch (final Exception e) {
 					LOGGER.fatal(
@@ -162,7 +152,20 @@ abstract public class AbstractCommandLineDriver
 					System.exit(-3);
 				}
 			}
-			parseOptions(commandLine);
+			if (options.getOptions().size() > optionCount) {
+				// custom options have been added, reparse the commandline
+				// arguments with the new set of options
+				commandLine = parser.parse(
+						options,
+						args);
+				for (final IngestTypePluginProviderSpi<?, ?> plugin : selectedPluginProviders) {
+					final IngestTypeOptionProvider optionProvider = plugin.getIngestTypeOptionProvider();
+					if (optionProvider != null) {
+						optionProvider.parseOptions(commandLine);
+					}
+				}
+			}
+			parseOptionsInternal(commandLine);
 		}
 		catch (final ParseException e) {
 			LOGGER.fatal(
@@ -172,6 +175,34 @@ abstract public class AbstractCommandLineDriver
 					options,
 					operation);
 			System.exit(-1);
+		}
+		return selectedPluginProviders;
+	}
+
+	private List<IngestTypePluginProviderSpi<?, ?>> getPluginProviders(
+			final CommandLine commandLine,
+			final Options options ) {
+		final List<IngestTypePluginProviderSpi<?, ?>> selectedPluginProviders = new ArrayList<IngestTypePluginProviderSpi<?, ?>>();
+		final String[] pluginProviderNames = commandLine.getOptionValue(
+				"t").split(
+				",");
+		for (final String pluginProviderName : pluginProviderNames) {
+			final IngestTypePluginProviderSpi<?, ?> pluginProvider = pluginProviderRegistry.get(pluginProviderName);
+			if (pluginProvider == null) {
+				throw new IllegalArgumentException(
+						"Unable to find SPI plugin provider for ingest type '" + pluginProviderName + "'");
+			}
+			selectedPluginProviders.add(pluginProvider);
+		}
+		if (selectedPluginProviders.isEmpty()) {
+			throw new IllegalArgumentException(
+					"There were no ingest type plugin providers found");
+		}
+		for (final IngestTypePluginProviderSpi<?, ?> plugin : selectedPluginProviders) {
+			final IngestTypeOptionProvider optionProvider = plugin.getIngestTypeOptionProvider();
+			if (optionProvider != null) {
+				optionProvider.applyOptions(options);
+			}
 		}
 		return selectedPluginProviders;
 	}
@@ -187,10 +218,14 @@ abstract public class AbstractCommandLineDriver
 				"");
 	}
 
-	abstract public void parseOptions(
+	abstract protected void parseOptionsInternal(
 			final CommandLine commandLine )
 			throws ParseException;
 
-	abstract public void applyOptions(
+	abstract protected void applyOptionsInternal(
 			final Options allOptions );
+
+	abstract protected void runInternal(
+			String[] args,
+			List<IngestTypePluginProviderSpi<?, ?>> pluginProviders );
 }

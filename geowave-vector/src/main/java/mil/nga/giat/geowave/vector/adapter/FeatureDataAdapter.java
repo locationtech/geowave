@@ -29,31 +29,25 @@ import mil.nga.giat.geowave.vector.plugin.GeoWaveGTDataStore;
 import mil.nga.giat.geowave.vector.plugin.visibility.AdaptorProxyFieldLevelVisibilityHandler;
 import mil.nga.giat.geowave.vector.plugin.visibility.JsonDefinitionColumnVisibilityManagement;
 import mil.nga.giat.geowave.vector.stats.StatsManager;
+import mil.nga.giat.geowave.vector.util.FeatureDataUtils;
 import mil.nga.giat.geowave.vector.utils.TimeDescriptors;
 
 import org.apache.log4j.Logger;
 import org.geotools.data.DataUtilities;
 import org.geotools.feature.SchemaException;
-import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
-import org.geotools.geometry.jts.JTS;
 import org.geotools.referencing.CRS;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.AttributeDescriptor;
-import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.referencing.FactoryException;
-import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.operation.MathTransform;
-import org.opengis.referencing.operation.TransformException;
-
-import com.vividsolutions.jts.geom.Geometry;
 
 /**
  * This data adapter will handle all reading/writing concerns for storing and
  * retrieving GeoTools SimpleFeature objects to and from a GeoWave persistent
  * store in Accumulo.
- * 
+ *
  * If the implementor needs to write rows with particular visibility, this can
  * be done by providing a FieldVisibilityHandler to a constructor or a
  * VisibilityManagement to a constructor. When using VisibilityManagement, the
@@ -63,26 +57,26 @@ import com.vividsolutions.jts.geom.Geometry;
  * attribute that contains the visibility meta-data.
  * persistedType.getDescriptor("someAttributeName").getUserData().put(
  * "visibility", Boolean.TRUE)
- * 
- * 
+ *
+ *
  * The adapter will use the SimpleFeature's default geometry for spatial
  * indexing.
- * 
+ *
  * The adaptor will use the first temporal attribute (a Calendar or Date object)
  * as the timestamp of a temporal index.
- * 
+ *
  * If the feature type contains a UserData property 'time' for a specific time
  * attribute with Boolean.TRUE, then the attribute is used as the timestamp of a
  * temporal index.
- * 
+ *
  * If the feature type contains UserData properties 'start' and 'end' for two
  * different time attributes with value Boolean.TRUE, then the attributes are
  * used for a range index.
- * 
+ *
  * If the feature type contains a UserData property 'time' for *all* time
  * attributes with Boolean.FALSE, then a temporal index is not used.
- * 
- * 
+ *
+ *
  */
 @SuppressWarnings("unchecked")
 public class FeatureDataAdapter extends
@@ -187,7 +181,9 @@ public class FeatureDataAdapter extends
 		resetTimeDescriptors();
 		statsManager = new StatsManager(
 				this,
-				persistedType);
+				persistedType,
+				reprojectedType,
+				transform);
 	}
 
 	private static List<NativeFieldHandler<SimpleFeature, Object>> typeToFieldHandlers(
@@ -383,7 +379,7 @@ public class FeatureDataAdapter extends
 					typeName,
 					encodedType);
 
-			TimeDescriptors timeDescriptors = new TimeDescriptors();
+			final TimeDescriptors timeDescriptors = new TimeDescriptors();
 			timeDescriptors.fromBinary(
 					myType,
 					timeAndRangeBytes);
@@ -441,57 +437,13 @@ public class FeatureDataAdapter extends
 	public AdapterPersistenceEncoding encode(
 			final SimpleFeature entry,
 			final CommonIndexModel indexModel ) {
-		// if the feature is in a different coordinate reference system than
-		// EPSG:4326, transform the geometry
-		final CoordinateReferenceSystem crs = entry.getFeatureType().getCoordinateReferenceSystem();
-		SimpleFeature defaultCRSEntry = entry;
-
-		if (!GeoWaveGTDataStore.DEFAULT_CRS.equals(crs)) {
-			MathTransform featureTransform = null;
-			if ((persistedType.getCoordinateReferenceSystem() != null) && persistedType.getCoordinateReferenceSystem().equals(
-					crs) && (transform != null)) {
-				// we can use the transform we have already calculated for this
-				// feature
-				featureTransform = transform;
-			}
-			else if (crs != null) {
-				// this feature differs from the persisted type in CRS,
-				// calculate the transform
-				try {
-					featureTransform = CRS.findMathTransform(
-							crs,
-							GeoWaveGTDataStore.DEFAULT_CRS,
-							true);
-				}
-				catch (final FactoryException e) {
-					LOGGER.warn(
-							"Unable to find transform to EPSG:4326, the feature geometry will remain in its original CRS",
-							e);
-				}
-			}
-			if (featureTransform != null) {
-				try {
-					// what should we do besides log a message when an entry
-					// can't be transformed to EPSG:4326 for some reason?
-					// this will clone the feature and retype it to EPSG:4326
-					defaultCRSEntry = SimpleFeatureBuilder.retype(
-							entry,
-							reprojectedType);
-					// this will transform the geometry
-					defaultCRSEntry.setDefaultGeometry(JTS.transform(
-							(Geometry) entry.getDefaultGeometry(),
-							featureTransform));
-				}
-				catch (MismatchedDimensionException | TransformException e) {
-					LOGGER.warn(
-							"Unable to perform transform to EPSG:4326, the feature geometry will remain in its original CRS",
-							e);
-				}
-			}
-		}
 
 		return super.encode(
-				defaultCRSEntry,
+				FeatureDataUtils.defaultCRSTransform(
+						entry,
+						persistedType,
+						reprojectedType,
+						transform),
 				indexModel);
 	}
 
@@ -560,10 +512,10 @@ public class FeatureDataAdapter extends
 	@Override
 	public HadoopWritableSerializer<SimpleFeature, FeatureWritable> createWritableSerializer() {
 		return new FeatureWritableSerializer(
-				this.reprojectedType);
+				reprojectedType);
 	}
 
-	private class FeatureWritableSerializer implements
+	private static class FeatureWritableSerializer implements
 			HadoopWritableSerializer<SimpleFeature, FeatureWritable>
 	{
 
@@ -571,7 +523,7 @@ public class FeatureDataAdapter extends
 		private final FeatureWritable writable;
 
 		FeatureWritableSerializer(
-				SimpleFeatureType type ) {
+				final SimpleFeatureType type ) {
 			this.type = type;
 			writable = new FeatureWritable(
 					type);
@@ -579,14 +531,14 @@ public class FeatureDataAdapter extends
 
 		@Override
 		public FeatureWritable toWritable(
-				SimpleFeature entry ) {
+				final SimpleFeature entry ) {
 			writable.setFeature(entry);
 			return writable;
 		}
 
 		@Override
 		public SimpleFeature fromWritable(
-				FeatureWritable writable ) {
+				final FeatureWritable writable ) {
 			return writable.getFeature();
 		}
 

@@ -105,7 +105,7 @@ public class SimpleIngestProducerConsumer extends
 		}
 	}
 
-	protected class FeatureCollection implements
+	protected static class FeatureCollection implements
 			Iterator<SimpleFeature>
 	{
 		private final BlockingQueue<SimpleFeature> queue = new LinkedBlockingQueue<>(

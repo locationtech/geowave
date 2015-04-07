@@ -30,6 +30,7 @@ import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.log4j.Logger;
 import org.geotools.feature.AttributeTypeBuilder;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
@@ -88,6 +89,9 @@ public class GpxUtils
 				source);
 	}
 
+	@SuppressFBWarnings({
+		"SF_SWITCH_NO_DEFAULT"
+	})
 	public static Map<Long, GpxTrack> parseOsmMetadata(
 			final File metadataFile )
 			throws FileNotFoundException,

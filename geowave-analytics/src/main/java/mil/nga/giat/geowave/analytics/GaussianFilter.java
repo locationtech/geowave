@@ -231,26 +231,6 @@ public class GaussianFilter
 		}
 	}
 
-	public static void main(
-			final String[] args ) {
-		for (int radius = 4; radius >= 1; radius--) {
-			for (int i = -5; i <= 5; i++) {
-				final double sigma = getSigma(
-						radius,
-						i);
-				final double[] kernel = getGaussianKernel(
-						sigma,
-						radius);
-				final StringBuffer buffer = new StringBuffer();
-				for (final double k : kernel) {
-					buffer.append(
-							k).append(
-							", ");
-				}
-			}
-		}
-	}
-
 	protected static double getSigma(
 			final int radius,
 			final int order ) {

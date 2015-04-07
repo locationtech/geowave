@@ -32,14 +32,14 @@ public class GeoWaveITSuite
 	@BeforeClass
 	public static void setup() {
 		synchronized (GeoWaveTestEnvironment.MUTEX) {
-			GeoWaveTestEnvironment.DEFER_CLEANUP = true;
+			GeoWaveTestEnvironment.DEFER_CLEANUP.set(true);
 		}
 	}
 
 	@AfterClass
 	public static void cleanup() {
 		synchronized (GeoWaveTestEnvironment.MUTEX) {
-			GeoWaveTestEnvironment.DEFER_CLEANUP = false;
+			GeoWaveTestEnvironment.DEFER_CLEANUP.set(false);
 			ServicesTestEnvironment.stopServices();
 			GeoWaveTestEnvironment.cleanup();
 		}

@@ -17,11 +17,8 @@ import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.index.StringUtils;
 import mil.nga.giat.geowave.ingest.GeoWaveData;
 import mil.nga.giat.geowave.ingest.hdfs.HdfsFile;
-import mil.nga.giat.geowave.ingest.hdfs.StageToHdfsPlugin;
-import mil.nga.giat.geowave.ingest.hdfs.mapreduce.IngestFromHdfsPlugin;
 import mil.nga.giat.geowave.ingest.hdfs.mapreduce.IngestWithMapper;
 import mil.nga.giat.geowave.ingest.hdfs.mapreduce.IngestWithReducer;
-import mil.nga.giat.geowave.ingest.local.LocalFileIngestPlugin;
 import mil.nga.giat.geowave.store.CloseableIterator;
 import mil.nga.giat.geowave.store.GeometryUtils;
 import mil.nga.giat.geowave.store.adapter.WritableDataAdapter;
@@ -29,6 +26,8 @@ import mil.nga.giat.geowave.store.data.field.FieldVisibilityHandler;
 import mil.nga.giat.geowave.store.data.visibility.GlobalVisibilityHandler;
 import mil.nga.giat.geowave.store.index.Index;
 import mil.nga.giat.geowave.store.index.IndexType;
+import mil.nga.giat.geowave.types.AbstractSimpleFeatureIngestPlugin;
+import mil.nga.giat.geowave.types.CQLFilterOptionProvider;
 import mil.nga.giat.geowave.vector.adapter.FeatureDataAdapter;
 
 import org.apache.avro.Schema;
@@ -39,15 +38,12 @@ import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 
-import com.google.common.collect.Iterators;
 import com.vividsolutions.jts.geom.Coordinate;
 
 /*
  */
-public class GeoLifeIngestPlugin implements
-		LocalFileIngestPlugin<SimpleFeature>,
-		IngestFromHdfsPlugin<HdfsFile, SimpleFeature>,
-		StageToHdfsPlugin<HdfsFile>
+public class GeoLifeIngestPlugin extends
+		AbstractSimpleFeatureIngestPlugin<HdfsFile>
 {
 
 	private final static Logger LOGGER = Logger.getLogger(GeoLifeIngestPlugin.class);
@@ -64,7 +60,6 @@ public class GeoLifeIngestPlugin implements
 	private final Index[] supportedIndices;
 
 	public GeoLifeIngestPlugin() {
-
 		geolifePointType = GeoLifeUtils.createGeoLifePointDataType();
 		pointKey = new ByteArrayId(
 				StringUtils.stringToBinary(GeoLifeUtils.GEOLIFE_POINT_FEATURE));
@@ -125,24 +120,6 @@ public class GeoLifeIngestPlugin implements
 	}
 
 	@Override
-	public CloseableIterator<GeoWaveData<SimpleFeature>> toGeoWaveData(
-			final File input,
-			final ByteArrayId primaryIndexId,
-			final String globalVisibility ) {
-		final HdfsFile[] geolifeFiles = toHdfsObjects(input);
-		final List<CloseableIterator<GeoWaveData<SimpleFeature>>> allData = new ArrayList<CloseableIterator<GeoWaveData<SimpleFeature>>>();
-		for (final HdfsFile file : geolifeFiles) {
-			final CloseableIterator<GeoWaveData<SimpleFeature>> geowaveData = toGeoWaveDataInternal(
-					file,
-					primaryIndexId,
-					globalVisibility);
-			allData.add(geowaveData);
-		}
-		return new CloseableIterator.Wrapper<GeoWaveData<SimpleFeature>>(
-				Iterators.concat(allData.iterator()));
-	}
-
-	@Override
 	public Schema getAvroSchemaForHdfsType() {
 		return HdfsFile.getClassSchema();
 	}
@@ -185,7 +162,8 @@ public class GeoLifeIngestPlugin implements
 				"GeoLife tracks cannot be ingested with a reducer");
 	}
 
-	private CloseableIterator<GeoWaveData<SimpleFeature>> toGeoWaveDataInternal(
+	@Override
+	protected CloseableIterator<GeoWaveData<SimpleFeature>> toGeoWaveDataInternal(
 			final HdfsFile hfile,
 			final ByteArrayId primaryIndexId,
 			final String globalVisibility ) {
@@ -269,7 +247,7 @@ public class GeoLifeIngestPlugin implements
 			geolifeTrackBuilder.set(
 					"EndTimeStamp",
 					endTimeStamp);
-			if (endTimeStamp != null && startTimeStamp != null) {
+			if ((endTimeStamp != null) && (startTimeStamp != null)) {
 				geolifeTrackBuilder.set(
 						"Duration",
 						endTimeStamp.getTime() - startTimeStamp.getTime());
@@ -311,11 +289,9 @@ public class GeoLifeIngestPlugin implements
 		return new Index[] {};
 	}
 
-	public static class IngestGeoLifeFromHdfs implements
-			IngestWithMapper<HdfsFile, SimpleFeature>
+	public static class IngestGeoLifeFromHdfs extends
+			AbstractIngestSimpleFeatureWithMapper<HdfsFile>
 	{
-		private final GeoLifeIngestPlugin parentPlugin;
-
 		public IngestGeoLifeFromHdfs() {
 			this(
 					new GeoLifeIngestPlugin());
@@ -323,33 +299,8 @@ public class GeoLifeIngestPlugin implements
 
 		public IngestGeoLifeFromHdfs(
 				final GeoLifeIngestPlugin parentPlugin ) {
-			this.parentPlugin = parentPlugin;
+			super(
+					parentPlugin);
 		}
-
-		@Override
-		public WritableDataAdapter<SimpleFeature>[] getDataAdapters(
-				final String globalVisibility ) {
-			return parentPlugin.getDataAdapters(globalVisibility);
-		}
-
-		@Override
-		public CloseableIterator<GeoWaveData<SimpleFeature>> toGeoWaveData(
-				final HdfsFile input,
-				final ByteArrayId primaryIndexId,
-				final String globalVisibility ) {
-			return parentPlugin.toGeoWaveDataInternal(
-					input,
-					primaryIndexId,
-					globalVisibility);
-		}
-
-		@Override
-		public byte[] toBinary() {
-			return new byte[] {};
-		}
-
-		@Override
-		public void fromBinary(
-				final byte[] bytes ) {}
 	}
 }
