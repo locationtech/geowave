@@ -173,6 +173,7 @@
 					</execution>
 				</executions>
 			</plugin>
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-failsafe-plugin</artifactId>
@@ -204,6 +205,69 @@
 						</goals>
 					</execution>
 				</executions>
+			</plugin>
+			<plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.7</version>
+				<dependencies>
+					<dependency>
+						<groupId>org.jacoco</groupId>
+						<artifactId>org.jacoco.ant</artifactId>
+						<version>${jacoco.version}</version>
+					</dependency>
+				</dependencies>
+				<executions>
+					<execution>
+						<phase>post-integration-test</phase>
+						<configuration>
+							<tasks xmlns:jacoco="antlib:org.jacoco.ant">
+								<taskdef uri="antlib:org.jacoco.ant" resource="org/jacoco/ant/antlib.xml"
+									classpathref="maven.plugin.classpath" />
+								<jacoco:report>
+									<executiondata>
+										<fileset dir="../" includes="**/coverage-reports/*.exec" />
+									</executiondata>
+
+									<structure name="GeoWave">
+										<classfiles>
+											<fileset dir="../"
+												includes="geowave-ingest/target/classes/**,geowave-index/target/classes/**,geowave-raster/target/classes/**,geowave-store/target/classes/**,geowave-types/target/classes/**,geowave-vector/target/classes/**,geowave-accumulo/target/munged/classes/**,geowave-examples/target/munged/classes/**,geowave-analytics/target/munged/classes/**" />
+										</classfiles>
+										<sourcefiles>
+											<fileset dir="../" includes="**/src/main/java/**" />
+										</sourcefiles>
+									</structure>
+
+									<xml destfile="${project.reporting.outputDirectory}/jacoco.xml" />
+								</jacoco:report>
+							</tasks>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.eluder.coveralls</groupId>
+				<artifactId>coveralls-maven-plugin</artifactId>
+				<version>3.1.1-munge-hack</version>
+				<configuration>
+					<jacocoReports>
+						<jacocoReport>${project.reporting.outputDirectory}/jacoco.xml</jacocoReport>
+					</jacocoReports>
+					<sourceDirectories>
+						<sourceDirectory>../geowave-ingest/src/main/java</sourceDirectory>
+						<sourceDirectory>../geowave-raster/src/main/java</sourceDirectory>
+						<sourceDirectory>../geowave-index/src/main/java</sourceDirectory>
+						<sourceDirectory>../geowave-store/src/main/java</sourceDirectory>
+						<sourceDirectory>../geowave-types/src/main/java</sourceDirectory>
+						<sourceDirectory>../geowave-vector/src/main/java</sourceDirectory>
+						<sourceDirectory>../geowave-accumulo/src/main/java</sourceDirectory>
+						<sourceDirectory>../geowave-examples/src/main/java</sourceDirectory>
+						<sourceDirectory>../geowave-analytics/src/main/java</sourceDirectory>
+					</sourceDirectories>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
