@@ -450,6 +450,7 @@
 				<version>3.1.1-munge-hack</version>
 				<configuration>
 					<jacocoReports>
+						<jacocoReport>${project.basedir}/geowave-test/target/site/jacoco-it/jacoco.xml</jacocoReport>
 						<jacocoReport>${project.basedir}/geowave-index/target/site/jacoco-ut/jacoco.xml</jacocoReport>
 						<jacocoReport>${project.basedir}/geowave-analytics/target/site/jacoco-ut/jacoco.xml</jacocoReport>
 						<jacocoReport>${project.basedir}/geowave-ingest/target/site/jacoco-ut/jacoco.xml</jacocoReport>
@@ -459,7 +460,7 @@
 						<jacocoReport>${project.basedir}/geowave-vector/target/site/jacoco-ut/jacoco.xml</jacocoReport>
 						<jacocoReport>${project.basedir}/geowave-accumulo/target/site/jacoco-ut/jacoco.xml</jacocoReport>
                         <jacocoReport>${project.basedir}/geowave-examples/target/site/jacoco-ut/jacoco.xml</jacocoReport>
-						<jacocoReport>${project.basedir}/geowave-test/target/site/jacoco-it/jacoco.xml</jacocoReport>
+						
 					</jacocoReports>
 				</configuration>
 			</plugin>
