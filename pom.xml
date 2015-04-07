@@ -364,6 +364,9 @@
 							<goal>prepare-agent</goal>
 						</goals>
 						<configuration>
+							<includes>
+								<include>mil/nga/giat/geowave/**</include>
+							</includes>
 							<destFile>${jacoco.ut.reportPath}</destFile>
 							<propertyName>jacoco.surefire.argline</propertyName>
 						</configuration>
@@ -386,6 +389,9 @@
 							<goal>prepare-agent</goal>
 						</goals>
 						<configuration>
+							<includes>
+								<include>mil/nga/giat/geowave/**</include>
+							</includes>
 							<destFile>${jacoco.it.reportPath}</destFile>
 							<propertyName>jacoco.failsafe.argline</propertyName>
 						</configuration>
@@ -398,7 +404,7 @@
 						</goals>
 						<configuration>
 							<dataFile>${jacoco.it.reportPath}</dataFile>
-							<outputDirectory>${ut.reportPath}</outputDirectory>
+							<outputDirectory>${it.reportPath}</outputDirectory>
 						</configuration>
 					</execution>
 				</executions>
@@ -425,6 +431,7 @@
 					<argLine>${test.args} ${jacoco.surefire.argline}</argLine>
 					<excludes>
 						<exclude>**IT.java</exclude>
+						<exclude>**/*ITSuite.java</exclude>
 					</excludes>
 				</configuration>
 			</plugin>
