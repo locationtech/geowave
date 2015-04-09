@@ -1,0 +1,63 @@
+[[maven-repositories]]
+<<<
+== Maven Repositories
+
+=== Overview
+
+There are public maven repositories available for both release and snapshot geowave artifacts (no transitive dependencies).
+Automated deployment is available, but requires a S3 access key (typically added to your ~/.m2/settings.xml)
+
+=== Maven POM fragments
+==== Releases
+[source, xml]
+----
+    <repository>
+        <id>geowave-maven-releases</id>
+        <name>GeoWave AWS Release Repository</name>
+        <url>http://geowave-maven.s3-website-us-east-1.amazonaws.com/release</url>
+        <releases>
+            <enabled>true</enabled>
+        </releases>
+        <snapshots>
+            <enabled>false</enabled>
+        </snapshots>
+    </repository>
+----
+
+==== Snapshots
+[source, xml]
+----
+    <repository>
+        <id>geowave-maven-snapshot</id>
+        <name>GeoWave AWS Snapshot Repository</name>
+        <url>http://geowave-maven.s3-website-us-east-1.amazonaws.com/snapshot</url>
+        <releases>
+            <enabled>false</enabled>
+        </releases>
+        <snapshots>
+            <enabled>true</enabled>
+        </snapshots>
+    </repository>
+----
+
+=== Maven settings.xml fragments
+(you probably don't need this unless you are deploying official GeoWave artifacts)
+
+==== Snapshots
+[source, xml]
+----
+  <servers>
+    <server>
+      <id>geowave-maven-releases</id>
+      <username>ACCESS_KEY_ID</username>
+      <password>SECRET_ACCESS_KEY</password>
+    </server>
+    <server>
+      <id>geowave-maven-snapshots</id>
+      <username>ACCESS_KEY_ID</username>
+      <password>SECRET_ACCESS_KEY</password>
+    </server>
+  </servers>
+----
+
+
