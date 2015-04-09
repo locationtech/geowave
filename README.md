@@ -1,6 +1,8 @@
 # GeoWave 0.8.5
 ## About  
 
+[![Join the chat at https://gitter.im/ngageoint/geowave](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/ngageoint/geowave?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 <a href="https://travis-ci.org/ngageoint/geowave">
 	<img alt="Travis-CI test status" 
 	     src="https://travis-ci.org/ngageoint/geowave.svg?branch=master"/>
