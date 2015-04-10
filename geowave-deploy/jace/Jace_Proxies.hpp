@@ -23,6 +23,9 @@
 #include "jace/proxy/java/util/List.h"
 #include "jace/proxy/java/util/UUID.h"
 
+#include "jace/proxy/org/apache/accumulo/core/client/AccumuloException.h"
+#include "jace/proxy/org/apache/accumulo/core/client/AccumuloSecurityException.h"
+
 #include "jace/proxy/org/geotools/data/DataUtilities.h"
 #include "jace/proxy/org/geotools/data/simple/SimpleFeatureCollection.h"
 #include "jace/proxy/org/geotools/data/simple/SimpleFeatureIterator.h"
@@ -50,7 +53,6 @@
 
 #include "jace/proxy/mil/nga/giat/geowave/accumulo/AccumuloDataStore.h"
 #include "jace/proxy/mil/nga/giat/geowave/accumulo/AccumuloIndexWriter.h"
-#include "jace/proxy/mil/nga/giat/geowave/accumulo/AccumuloOptions.h"
 #include "jace/proxy/mil/nga/giat/geowave/accumulo/BasicAccumuloOperations.h"
 #include "jace/proxy/mil/nga/giat/geowave/accumulo/metadata/AccumuloAdapterStore.h"
 #include "jace/proxy/mil/nga/giat/geowave/accumulo/metadata/AccumuloDataStatisticsStore.h"
