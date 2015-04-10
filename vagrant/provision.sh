@@ -21,7 +21,7 @@ sudo yum -y install git
 
 # Setup GeoWave
 echo "GeoWave: Cloning..."
-git clone https://github.com/ngageoint/geowave.git
+git clone --depth=10 --branch=master https://github.com/ngageoint/geowave.git
 cd geowave
 echo "GeoWave: Building..."
 mvn clean package -pl geowave-deploy -am -P geowave-singlejar -DskipITs=true -DskipTests=true
