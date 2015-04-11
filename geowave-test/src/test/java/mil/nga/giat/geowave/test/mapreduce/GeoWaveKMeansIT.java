@@ -1,6 +1,7 @@
 package mil.nga.giat.geowave.test.mapreduce;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.List;
 
 import mil.nga.giat.geowave.analytics.clustering.CentroidManager;

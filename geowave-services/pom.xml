@@ -5,10 +5,10 @@
 		<artifactId>geowave-parent</artifactId>
 		<groupId>mil.nga.giat</groupId>
 		<relativePath>../</relativePath>
-		<version>0.8.4-SNAPSHOT</version>
+		<version>0.8.6-SNAPSHOT</version>
 	</parent>
 	<artifactId>geowave-services</artifactId>
-    <name>geowave-services</name>
+	<name>geowave-services</name>
 	<packaging>war</packaging>
 	<dependencies>
 		<dependency>

@@ -1,9 +1,9 @@
 package mil.nga.giat.geowave.vector.query;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLClassLoader;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.net.*;
 import java.util.List;
 import java.util.Map;
 
@@ -63,7 +63,46 @@ public class CqlQueryFilterIterator extends
 	private Filter gtFilter;
 
 	static {
-		URL.setURLStreamHandlerFactory(new FsUrlStreamHandlerFactory());
+		initialize();
+	}
+
+	private static void initialize() {
+		try {
+			URL.setURLStreamHandlerFactory(new FsUrlStreamHandlerFactory());
+		}
+		catch (Error factoryError) {
+			String type = "";
+			Field f = null;
+			try {
+				f = URL.class.getDeclaredField("factory");
+			}
+			catch (NoSuchFieldException e) {
+				LOGGER.error(
+						"URL.setURLStreamHandlerFactory() can only be called once per JVM instance, and currently something has set it to;  additionally unable to discover type of Factory",
+						e);
+				throw (factoryError);
+			}
+			f.setAccessible(true);
+			Object o;
+			try {
+				o = f.get(null);
+			}
+			catch (IllegalAccessException e) {
+				LOGGER.error(
+						"URL.setURLStreamHandlerFactory() can only be called once per JVM instance, and currently something has set it to;  additionally unable to discover type of Factory",
+						e);
+				throw (factoryError);
+			}
+			if (o instanceof FsUrlStreamHandlerFactory) {
+				LOGGER.info("setURLStreamHandlerFactory already set on this JVM to FsUrlStreamHandlerFactory.  Nothing to do");
+				return;
+			}
+			else {
+				type = o.getClass().getCanonicalName();
+			}
+			LOGGER.error("URL.setURLStreamHandlerFactory() can only be called once per JVM instance, and currently something has set it to: " + type);
+			throw (factoryError);
+		}
 	}
 
 	@Override

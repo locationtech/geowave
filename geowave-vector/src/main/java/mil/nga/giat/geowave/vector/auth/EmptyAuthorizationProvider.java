@@ -18,7 +18,6 @@ public class EmptyAuthorizationProvider implements
 
 	@Override
 	public String[] getAuthorizations() {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		return new String[0];
 	}
 

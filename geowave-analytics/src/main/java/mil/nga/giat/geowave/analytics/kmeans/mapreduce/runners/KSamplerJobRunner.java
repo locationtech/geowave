@@ -184,8 +184,8 @@ public class KSamplerJobRunner extends
 				config,
 				runTimeProperties);
 
-		sampleDataTypeId = runTimeProperties.getProperty(SampleParameters.Sample.DATA_TYPE_ID);
-		indexId = runTimeProperties.getProperty(SampleParameters.Sample.INDEX_ID);
+		sampleDataTypeId = runTimeProperties.getPropertyAsString(SampleParameters.Sample.DATA_TYPE_ID);
+		indexId = runTimeProperties.getPropertyAsString(SampleParameters.Sample.INDEX_ID);
 
 		return ToolRunner.run(
 				config,

@@ -4,8 +4,11 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
 import java.util.concurrent.TimeUnit;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import mil.nga.giat.geowave.index.StringUtils;
 import mil.nga.giat.geowave.test.mapreduce.MapReduceTestEnvironment;
 import org.apache.commons.io.FileUtils;
@@ -20,6 +23,7 @@ import org.mortbay.jetty.webapp.WebAppContext;
 import org.mortbay.xml.XmlConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.xml.sax.SAXException;
 
 abstract public class ServicesTestEnvironment extends
 		MapReduceTestEnvironment
@@ -75,6 +79,9 @@ abstract public class ServicesTestEnvironment extends
 		}
 	}
 
+	@SuppressFBWarnings(value = {
+		"SWL_SLEEP_WITH_LOCK_HELD"
+	}, justification = "Sleep in lock intentional, waiting on external resource")
 	@BeforeClass
 	public static void startServices() {
 		synchronized (MUTEX) {
@@ -96,8 +103,28 @@ abstract public class ServicesTestEnvironment extends
 					gsWebapp.setContextPath(GEOSERVER_CONTEXT_PATH);
 					gsWebapp.setWar(GEOSERVER_WAR_DIR);
 
-					final WebAppClassLoader classLoader = new WebAppClassLoader(
-							gsWebapp);
+					final WebAppClassLoader classLoader = AccessController.doPrivileged(new PrivilegedAction<WebAppClassLoader>() {
+						@Override
+						public WebAppClassLoader run() {
+							try {
+								return new WebAppClassLoader(
+										gsWebapp);
+							}
+							catch (IOException e) {
+								LOGGER.error(
+										"Unable to create new classloader",
+										e);
+								return null;
+							}
+						}
+					});
+					if (classLoader == null) {
+						throw new IOException(
+								"Unable to create classloader");
+					}
+
+					// new WebAppClassLoader(
+					// gsWebapp);
 					classLoader.addClassPath(System.getProperty(
 							"java.class.path").replace(
 							":",
@@ -147,7 +174,10 @@ abstract public class ServicesTestEnvironment extends
 					// jettyServer.stop();
 
 				}
-				catch (final Exception e) {
+				catch (final RuntimeException e) {
+					throw e;
+				}
+				catch (Exception e) {
 					LOGGER.error(
 							"Could not start the Jetty server: " + e.getMessage(),
 							e);
@@ -170,7 +200,7 @@ abstract public class ServicesTestEnvironment extends
 	@AfterClass
 	public static void stopServices() {
 		synchronized (MUTEX) {
-			if (!DEFER_CLEANUP) {
+			if (!DEFER_CLEANUP.get()) {
 				if (jettyServer != null) {
 					try {
 						jettyServer.stop();

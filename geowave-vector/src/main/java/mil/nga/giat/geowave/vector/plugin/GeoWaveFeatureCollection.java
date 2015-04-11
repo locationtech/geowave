@@ -27,6 +27,8 @@ import org.geotools.feature.FeatureIterator;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.geotools.feature.visitor.MaxVisitor;
 import org.geotools.feature.visitor.MinVisitor;
+import org.geotools.filter.AttributeExpressionImpl;
+import org.geotools.filter.spatial.BBOXImpl;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
@@ -222,6 +224,21 @@ public class GeoWaveFeatureCollection extends
 		return reader.getComponents().getAdapter().getType();
 	}
 
+	private Filter getFilter(
+			Query query ) {
+		Filter filter = query.getFilter();
+		if (filter instanceof BBOXImpl) {
+			BBOXImpl bbox = ((BBOXImpl) filter);
+			String propName = bbox.getPropertyName();
+			if (propName == null || propName.isEmpty()) {
+				bbox.setPropertyName(getSchema(
+						reader,
+						query).getGeometryDescriptor().getLocalName());
+			}
+		}
+		return filter;
+	}
+
 	@Override
 	protected Iterator<SimpleFeature> openIterator() {
 		Geometry jtsBounds;
@@ -242,7 +259,7 @@ public class GeoWaveFeatureCollection extends
 				featureCursor = reader.renderData(
 						jtsBounds,
 						timeBounds,
-						query.getFilter(),
+						getFilter(query),
 						(DistributableRenderer) query.getHints().get(
 								SERVER_FEATURE_RENDERER));
 			}
@@ -264,7 +281,7 @@ public class GeoWaveFeatureCollection extends
 						(Integer) query.getHints().get(
 								DecimationProcess.OUTPUT_HEIGHT),
 						pixelSize,
-						query.getFilter(),
+						getFilter(query),
 						referencedEnvelope,
 						limit);
 
@@ -281,7 +298,7 @@ public class GeoWaveFeatureCollection extends
 			else if ((jtsBounds == null) && (timeBounds == null)) {
 				// get all of the data (yikes)
 				featureCursor = reader.getAllData(
-						query.getFilter(),
+						getFilter(query),
 						limit);
 			}
 			else {
@@ -289,7 +306,7 @@ public class GeoWaveFeatureCollection extends
 				featureCursor = reader.getData(
 						jtsBounds,
 						timeBounds,
-						query.getFilter(),
+						getFilter(query),
 						limit);
 			}
 		}

@@ -134,8 +134,7 @@ public class SimpleFeatureItemWrapperFactory implements
 				final int level ) {
 			item.setAttribute(
 					ClusterFeatureAttribute.ZOOM_LEVEL.attrName(),
-					new Integer(
-							level));
+					Integer.valueOf(level));
 
 		}
 

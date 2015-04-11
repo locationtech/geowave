@@ -2,11 +2,16 @@ package mil.nga.giat.geowave.analytics.mapreduce.kde.parser;
 
 // $ANTLR 3.3 BasicMath.g 2014-05-13 05:58:45
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.antlr.runtime.*;
 import java.util.Stack;
 import java.util.List;
 import java.util.ArrayList;
 
+@SuppressFBWarnings({
+	"SF_SWITCH_NO_DEFAULT",
+	"SIC_INNER_SHOULD_BE_STATIC"
+})
 @SuppressWarnings("all")
 public class BasicMathLexer extends
 		Lexer

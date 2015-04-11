@@ -3,6 +3,7 @@ package mil.nga.giat.geowave.analytics.tools.mapreduce;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
+import java.io.Serializable;
 
 import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.io.WritableComparable;
@@ -94,7 +95,8 @@ public class CountofDoubleWritable implements
 
 	/** A Comparator optimized for DoubleWritable. */
 	public static class Comparator extends
-			WritableComparator
+			WritableComparator implements
+			Serializable
 	{
 		public Comparator() {
 			super(
@@ -114,7 +116,9 @@ public class CountofDoubleWritable implements
 			double thatValue = readDouble(
 					b2,
 					s2);
-			return (thisValue < thatValue ? -1 : (thisValue == thatValue ? 0 : 1));
+			return Double.compare(
+					thisValue,
+					thatValue);
 		}
 	}
 

@@ -31,32 +31,31 @@ public class HadoopOptions
 			final PropertyManagement runTimeProperties )
 			throws IOException {
 		final boolean setRemoteInvocation = runTimeProperties.hasProperty(MRConfig.HDFS_HOST_PORT) || runTimeProperties.hasProperty(MRConfig.JOBTRACKER_HOST_PORT);
-		final String hostport = runTimeProperties.getProperty(
+		final String hostport = runTimeProperties.getPropertyAsString(
 				MRConfig.HDFS_HOST_PORT,
 				"localhost:53000");
 		hdfsHostPort = (!hostport.contains("://")) ? "hdfs://" + hostport : hostport;
 		basePath = new Path(
-				runTimeProperties.getProperty(MRConfig.HDFS_BASE_DIR),
+				runTimeProperties.getPropertyAsString(MRConfig.HDFS_BASE_DIR),
 				"/");
-		jobTrackerHostPort = runTimeProperties.getProperty(
+		jobTrackerHostPort = runTimeProperties.getPropertyAsString(
 				MRConfig.JOBTRACKER_HOST_PORT,
-				runTimeProperties.getProperty(MRConfig.YARN_RESOURCE_MANAGER));
+				runTimeProperties.getPropertyAsString(MRConfig.YARN_RESOURCE_MANAGER));
 
-		final String name = runTimeProperties.getProperty(MapReduceParameters.MRConfig.CONFIG_FILE);
+		final String name = runTimeProperties.getPropertyAsString(MapReduceParameters.MRConfig.CONFIG_FILE);
+
 		if (name != null) {
-			if (name != null) {
-				try {
-					config.addResource(
-							new FileInputStream(
-									name),
-							name);
-				}
-				catch (final IOException ex) {
-					LOGGER.error(
-							"Configuration file " + name + " not found",
-							ex);
-					throw ex;
-				}
+			try (FileInputStream in = new FileInputStream(
+					name)) {
+				config.addResource(
+						in,
+						name);
+			}
+			catch (final IOException ex) {
+				LOGGER.error(
+						"Configuration file " + name + " not found",
+						ex);
+				throw ex;
 			}
 		}
 

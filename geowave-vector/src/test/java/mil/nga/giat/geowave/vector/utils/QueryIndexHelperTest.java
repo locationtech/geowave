@@ -19,23 +19,29 @@ import mil.nga.giat.geowave.store.query.BasicQuery.Constraints;
 import mil.nga.giat.geowave.store.query.TemporalConstraints;
 import mil.nga.giat.geowave.store.query.TemporalConstraintsSet;
 import mil.nga.giat.geowave.store.query.TemporalRange;
+import mil.nga.giat.geowave.vector.plugin.GeoWaveGTDataStore;
 import mil.nga.giat.geowave.vector.stats.FeatureBoundingBoxStatistics;
 import mil.nga.giat.geowave.vector.stats.FeatureTimeRangeStatistics;
+import mil.nga.giat.geowave.vector.util.FeatureDataUtils;
 import mil.nga.giat.geowave.vector.util.QueryIndexHelper;
 
 import org.geotools.data.DataUtilities;
 import org.geotools.feature.SchemaException;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
+import org.geotools.referencing.CRS;
 import org.junit.Before;
 import org.junit.Test;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.AttributeDescriptor;
+import org.opengis.referencing.FactoryException;
+import org.opengis.referencing.operation.MathTransform;
 
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Envelope;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
+import com.vividsolutions.jts.geom.Point;
 import com.vividsolutions.jts.geom.PrecisionModel;
 
 public class QueryIndexHelperTest
@@ -46,6 +52,7 @@ public class QueryIndexHelperTest
 	SimpleFeatureType rangeType;
 	SimpleFeatureType singleType;
 	SimpleFeatureType geoType;
+	SimpleFeatureType geoMercType;
 
 	final TimeDescriptors geoTimeDescriptors = new TimeDescriptors();
 	final TimeDescriptors rangeTimeDescriptors = new TimeDescriptors();
@@ -59,10 +66,13 @@ public class QueryIndexHelperTest
 
 	Object[] singleDefaults, rangeDefaults, geoDefaults;
 
+	MathTransform transform;
+
 	@Before
 	public void setup()
 			throws SchemaException,
-			ParseException {
+			ParseException,
+			FactoryException {
 
 		startTime = DateUtilities.parseISO("2005-05-15T20:32:56Z");
 		endTime = DateUtilities.parseISO("2005-05-20T20:32:56Z");
@@ -71,6 +81,10 @@ public class QueryIndexHelperTest
 				"geostuff",
 				"geometry:Geometry:srid=4326,pop:java.lang.Long,pid:String");
 
+		geoMercType = DataUtilities.createType(
+				"geostuff",
+				"geometry:Geometry:srid=3785,pop:java.lang.Long,pid:String");
+
 		rangeType = DataUtilities.createType(
 				"geostuff",
 				"geometry:Geometry:srid=4326,start:Date,end:Date,pop:java.lang.Long,pid:String");
@@ -78,6 +92,11 @@ public class QueryIndexHelperTest
 		singleType = DataUtilities.createType(
 				"geostuff",
 				"geometry:Geometry:srid=4326,when:Date,pop:java.lang.Long,pid:String");
+
+		transform = CRS.findMathTransform(
+				geoMercType.getCoordinateReferenceSystem(),
+				geoType.getCoordinateReferenceSystem(),
+				true);
 
 		rangeTimeDescriptors.inferType(rangeType);
 		singleTimeDescriptors.inferType(singleType);
@@ -507,10 +526,77 @@ public class QueryIndexHelperTest
 
 	}
 
+	@Test
+	public void testBBOXStatReprojection() {
+
+		// create a EPSG:3785 feature (units in meters)
+		final SimpleFeature mercFeat = createGeoMercFeature(factory.createPoint(new Coordinate(
+				19971868.8804,
+				20037508.3428)));
+
+		// convert from EPSG:3785 to EPSG:4326 (convert to degrees lon/lat)
+		// approximately 180.0, 85.0
+		final SimpleFeature defaultCRSFeat = FeatureDataUtils.defaultCRSTransform(
+				mercFeat,
+				geoMercType,
+				geoType,
+				transform);
+
+		final FeatureBoundingBoxStatistics geoStats = new FeatureBoundingBoxStatistics(
+				dataAdapterId,
+				"geometry",
+				geoMercType,
+				geoType,
+				transform);
+
+		geoStats.entryIngested(
+				null,
+				mercFeat);
+
+		Coordinate coord = ((Point) defaultCRSFeat.getDefaultGeometry()).getCoordinate();
+
+		// coordinate should match reprojected feature
+		assertEquals(
+				coord.x,
+				geoStats.getMinX(),
+				0.0001);
+		assertEquals(
+				coord.x,
+				geoStats.getMaxX(),
+				0.0001);
+		assertEquals(
+				coord.y,
+				geoStats.getMinY(),
+				0.0001);
+		assertEquals(
+				coord.y,
+				geoStats.getMaxY(),
+				0.0001);
+
+	}
+
 	private SimpleFeature createGeoFeature(
 			final Geometry geo ) {
 		final SimpleFeature instance = SimpleFeatureBuilder.build(
 				geoType,
+				geoDefaults,
+				UUID.randomUUID().toString());
+		instance.setAttribute(
+				"pop",
+				Long.valueOf(100));
+		instance.setAttribute(
+				"pid",
+				UUID.randomUUID().toString());
+		instance.setAttribute(
+				"geometry",
+				geo);
+		return instance;
+	}
+
+	private SimpleFeature createGeoMercFeature(
+			final Geometry geo ) {
+		final SimpleFeature instance = SimpleFeatureBuilder.build(
+				geoMercType,
 				geoDefaults,
 				UUID.randomUUID().toString());
 		instance.setAttribute(

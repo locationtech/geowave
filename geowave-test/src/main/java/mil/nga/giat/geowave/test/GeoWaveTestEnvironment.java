@@ -15,9 +15,11 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TimeZone;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import mil.nga.giat.geowave.accumulo.AccumuloOperations;
 import mil.nga.giat.geowave.accumulo.BasicAccumuloOperations;
 import mil.nga.giat.geowave.ingest.IngestMain;
@@ -75,7 +77,8 @@ abstract public class GeoWaveTestEnvironment
 			"./target/accumulo_temp"); // breaks on windows if temp directory
 										// isn't on same drive as project
 
-	protected static boolean DEFER_CLEANUP = false;
+	protected static final AtomicBoolean DEFER_CLEANUP = new AtomicBoolean(
+			false);
 
 	protected static boolean isYarn() {
 		return VersionUtil.compareVersions(
@@ -205,10 +208,13 @@ abstract public class GeoWaveTestEnvironment
 		return (str != null) && !str.isEmpty();
 	}
 
+	@SuppressFBWarnings(value = {
+		"SWL_SLEEP_WITH_LOCK_HELD"
+	}, justification = "Sleep in lock while waiting for external resources")
 	@AfterClass
 	public static void cleanup() {
 		synchronized (MUTEX) {
-			if (!DEFER_CLEANUP) {
+			if (!DEFER_CLEANUP.get()) {
 
 				if (accumuloOperations == null) {
 					Assert.fail("Invalid state <null> for accumulo operations during CLEANUP phase");
@@ -284,6 +290,9 @@ abstract public class GeoWaveTestEnvironment
 		public Set<Long> hashedCentroids;
 		public int count;
 
+		@SuppressFBWarnings({
+			"URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD"
+		})
 		protected ExpectedResults(
 				final Set<Long> hashedCentroids,
 				final int count ) {

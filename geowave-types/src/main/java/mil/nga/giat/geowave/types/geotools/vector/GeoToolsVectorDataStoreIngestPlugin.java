@@ -22,6 +22,7 @@ import org.geotools.data.simple.SimpleFeatureCollection;
 import org.geotools.data.simple.SimpleFeatureSource;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.type.Name;
+import org.opengis.filter.Filter;
 
 /**
  * This plugin is used for ingesting any GeoTools supported file data store from
@@ -37,15 +38,19 @@ public class GeoToolsVectorDataStoreIngestPlugin implements
 
 	private final Index[] supportedIndices;
 	private final RetypingVectorDataPlugin retypingPlugin;
+	private final Filter filter;
 
-	public GeoToolsVectorDataStoreIngestPlugin() {
+	public GeoToolsVectorDataStoreIngestPlugin(
+			final Filter filter ) {
 		// by default inherit the types of the original file
 		this(
-				null);
+				null,
+				filter);
 	}
 
 	public GeoToolsVectorDataStoreIngestPlugin(
-			final RetypingVectorDataPlugin retypingPlugin ) {
+			final RetypingVectorDataPlugin retypingPlugin,
+			final Filter filter ) {
 		// this constructor can be used directly as an extension point for
 		// retyping the original feature data, if the retyping plugin is null,
 		// the data will be ingested as the original type
@@ -54,6 +59,7 @@ public class GeoToolsVectorDataStoreIngestPlugin implements
 			IndexType.SPATIAL_TEMPORAL_VECTOR.createDefaultIndex()
 		};
 		this.retypingPlugin = retypingPlugin;
+		this.filter = filter;
 	}
 
 	@Override
@@ -138,7 +144,8 @@ public class GeoToolsVectorDataStoreIngestPlugin implements
 				primaryIndexId,
 				visibility,
 				dataStore,
-				retypingPlugin);
+				retypingPlugin,
+				filter);
 	}
 
 	@Override

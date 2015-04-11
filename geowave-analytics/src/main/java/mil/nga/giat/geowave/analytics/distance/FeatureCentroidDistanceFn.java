@@ -15,6 +15,10 @@ public class FeatureCentroidDistanceFn implements
 		DistanceFn<SimpleFeature>
 {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private DistanceFn<Coordinate> coordinateDistanceFunction = new CoordinateEuclideanDistanceFn();
 
 	public FeatureCentroidDistanceFn() {}

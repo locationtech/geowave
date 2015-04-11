@@ -12,7 +12,11 @@ public class CoordinateCircleDistanceFn implements
 		DistanceFn<Coordinate>
 {
 
-	protected static CoordinateReferenceSystem DEFAULT_CRS;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1245559892132762143L;
+	protected static final CoordinateReferenceSystem DEFAULT_CRS;
 	static {
 		try {
 			DEFAULT_CRS = CRS.decode(

@@ -100,6 +100,9 @@ public class DistortionGroupManagement
 						grp.getGroupID());
 			}
 		}
+		catch (final RuntimeException ex) {
+			throw ex;
+		}
 		catch (final Exception ex) {
 			LOGGER.error(
 					"Cannot detremine groups for batch" + parentBatchId,

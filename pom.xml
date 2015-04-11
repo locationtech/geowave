@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>mil.nga.giat</groupId>
 	<artifactId>geowave-parent</artifactId>
-	<version>0.8.4-SNAPSHOT</version>
+	<version>0.8.6-SNAPSHOT</version>
 	<name>geowave-parent</name>
 	<packaging>pom</packaging>
 	<description>Geowave adds spatio-temporal indexing to accumulo through geotools and geoserver</description>
@@ -15,6 +15,18 @@
 			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
 		</license>
 	</licenses>
+	<distributionManagement>
+		<repository>
+			<id>geowave-maven-releases</id>
+			<name>GeoWave AWS Release Repository</name>
+			<url>s3://geowave-maven/release</url>
+		</repository>
+		<snapshotRepository>
+			<id>geowave-maven-snapshots</id>
+			<name>GeoWave AWS Snapshot Repository</name>
+			<url>s3://geowave-maven/snapshot</url>
+		</snapshotRepository>
+	</distributionManagement>
 	<scm>
 		<url>https://github.com/ngageoint/geowave.git</url>
 		<connection>scm:git:git@github.com:ngageoint/geowave.git</connection>
@@ -47,7 +59,11 @@
 		<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
 		<test.args>-Xms256m -Xmx1024m -XX:MaxPermSize=256m</test.args>
 		<formatter.location>${project.basedir}/../tools/eclipse/eclipse-formatter.xml</formatter.location>
-		<findbugs.version>3.0.0</findbugs.version>
+		<findbugs.version>3.0.1</findbugs.version>
+		<findbugs.omitVisitors>MutableStaticFields,FindReturnRef</findbugs.omitVisitors>
+		<findbugs.effort>Max</findbugs.effort>
+		<findbugs.threshold>Medium</findbugs.threshold>
+		<findbugs.failOnError>true</findbugs.failOnError>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -223,12 +239,19 @@
 			<dependency>
 				<groupId>com.google.code.findbugs</groupId>
 				<artifactId>annotations</artifactId>
-				<version>${findbugs.version}</version>
+				<version>3.0.0</version>
 				<scope>compile</scope>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
 	<build>
+		<extensions>
+			<extension>
+				<groupId>org.springframework.build</groupId>
+				<artifactId>aws-maven</artifactId>
+				<version>5.0.0.RELEASE</version>
+			</extension>
+		</extensions>
 		<pluginManagement>
 			<plugins>
 				<!--This plugin's configuration is used to store Eclipse m2e settings 
@@ -255,6 +278,44 @@
 									</pluginExecutionFilter>
 									<action>
 										<ignore />
+									</action>
+								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+											com.googlecode.maven-java-formatter-plugin
+										</groupId>
+										<artifactId>
+											maven-java-formatter-plugin
+										</artifactId>
+										<versionRange>
+											[0.4,)
+										</versionRange>
+										<goals>
+											<goal>format</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+											org.sonatype.plugins
+										</groupId>
+										<artifactId>
+											munge-maven-plugin
+										</artifactId>
+										<versionRange>
+											[1.0,)
+										</versionRange>
+										<goals>
+											<goal>munge</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
 									</action>
 								</pluginExecution>
 							</pluginExecutions>
@@ -324,6 +385,9 @@
 							<goal>prepare-agent</goal>
 						</goals>
 						<configuration>
+							<includes>
+								<include>mil/nga/giat/geowave/**</include>
+							</includes>
 							<destFile>${jacoco.ut.reportPath}</destFile>
 							<propertyName>jacoco.surefire.argline</propertyName>
 						</configuration>
@@ -346,6 +410,9 @@
 							<goal>prepare-agent</goal>
 						</goals>
 						<configuration>
+							<includes>
+								<include>mil/nga/giat/geowave/**</include>
+							</includes>
 							<destFile>${jacoco.it.reportPath}</destFile>
 							<propertyName>jacoco.failsafe.argline</propertyName>
 						</configuration>
@@ -358,7 +425,7 @@
 						</goals>
 						<configuration>
 							<dataFile>${jacoco.it.reportPath}</dataFile>
-							<outputDirectory>${ut.reportPath}</outputDirectory>
+							<outputDirectory>${it.reportPath}</outputDirectory>
 						</configuration>
 					</execution>
 				</executions>
@@ -385,6 +452,7 @@
 					<argLine>${test.args} ${jacoco.surefire.argline}</argLine>
 					<excludes>
 						<exclude>**IT.java</exclude>
+						<exclude>**/*ITSuite.java</exclude>
 					</excludes>
 				</configuration>
 			</plugin>
@@ -392,9 +460,6 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
 				<version>2.9.1</version>
-				<configuration>
-					<additionalparam>-Xdoclint:none</additionalparam>
-				</configuration>
 				<executions>
 					<execution>
 						<id>aggregate</id>
@@ -406,6 +471,7 @@
 							<sourceFileIncludes>
 								<include>**.java</include>
 							</sourceFileIncludes>
+							<additionalparam>${javadoc.opts}</additionalparam>
 							<quiet>true</quiet>
 							<windowtitle>GeoWave ${project.version}</windowtitle>
 							<doctitle>GeoWave ${project.version}</doctitle>
@@ -457,12 +523,11 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>findbugs-maven-plugin</artifactId>
-				<version>${findbugs.version}</version>
 				<configuration>
-					<failOnError>false</failOnError>
-					<threshold>Medium</threshold>
-					<effort>Max</effort>
-					<xmlOutput>true</xmlOutput>
+					<failOnError>${findbugs.failOnError}</failOnError>
+					<threshold>${findbugs.threshold}</threshold>
+					<effort>${findbugs.effort}</effort>
+					<excludeFilterFile>${findbugs.filterFile}</excludeFilterFile>
 				</configuration>
 				<executions>
 					<execution>
@@ -516,10 +581,11 @@
 				<configuration>
 					<findbugsXmlOutput>true</findbugsXmlOutput>
 					<xmlOutput>true</xmlOutput>
-					<effort>Max</effort>
-					<threshold>Low</threshold>
-					<failOnError>false</failOnError>
+					<effort>${findbugs.effort}</effort>
+					<threshold>${findbugs.threshold}</threshold>
+					<failOnError>${findbugs.failOnError}</failOnError>
 					<xmlOutputDirectory>${project.basedir}/target/site</xmlOutputDirectory>
+					<omitVisitors>${findbugs.omitVisitors}</omitVisitors>
 				</configuration>
 			</plugin>
 		</plugins>
@@ -675,6 +741,15 @@
 					<layout>default</layout>
 				</repository>
 			</repositories>
+		</profile>
+		<profile>
+			<id>doclint-java8-disable</id>
+			<activation>
+				<jdk>[1.8,)</jdk>
+			</activation>
+			<properties>
+				<javadoc.opts>-Xdoclint:none</javadoc.opts>
+			</properties>
 		</profile>
 	</profiles>
 </project>

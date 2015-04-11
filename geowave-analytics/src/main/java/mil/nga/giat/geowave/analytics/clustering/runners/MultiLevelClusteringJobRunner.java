@@ -113,11 +113,11 @@ public abstract class MultiLevelClusteringJobRunner extends
 
 		jobExtractRunner.setConf(config);
 
-		final String dataTypeId = propertyManagement.getProperty(
+		final String dataTypeId = propertyManagement.getPropertyAsString(
 				ExtractParameters.Extract.OUTPUT_DATA_TYPE_ID,
 				"centroid");
 
-		final String namespaceURI = propertyManagement.getProperty(
+		final String namespaceURI = propertyManagement.getPropertyAsString(
 				ExtractParameters.Extract.DATA_NAMESPACE_URI,
 				BasicFeatureTypes.DEFAULT_NAMESPACE);
 
@@ -183,7 +183,7 @@ public abstract class MultiLevelClusteringJobRunner extends
 				false);
 
 		// run clustering for each level
-		final String outputBaseDir = propertyManagement.getProperty(
+		final String outputBaseDir = propertyManagement.getPropertyAsString(
 				MapReduceParameters.MRConfig.HDFS_BASE_DIR,
 				"/tmp");
 		for (int i = 0; (status == 0) && (i < zoomLevels); i++) {
@@ -194,7 +194,7 @@ public abstract class MultiLevelClusteringJobRunner extends
 					propertyManagement);
 			if (status == 0) {
 				final Path nextPath = new Path(
-						outputBaseDir + "/" + propertyManagement.getProperty(GlobalParameters.Global.ACCUMULO_NAMESPACE) + "_level_" + zoomLevel);
+						outputBaseDir + "/" + propertyManagement.getPropertyAsString(GlobalParameters.Global.ACCUMULO_NAMESPACE) + "_level_" + zoomLevel);
 				if (fs.exists(nextPath)) {
 					fs.delete(
 							nextPath,

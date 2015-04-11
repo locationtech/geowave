@@ -193,7 +193,10 @@ public class TemporalBinningStrategy implements
 		}
 	}
 
-	@SuppressFBWarnings(value = "SF_SWITCH_FALLTHROUGH", justification = "Fallthrough intentional for time parsing")
+	@SuppressFBWarnings(value = {
+		"SF_SWITCH_FALLTHROUGH",
+		"SF_SWITCH_NO_DEFAULT"
+	}, justification = "Fallthrough intentional for time parsing")
 	private Calendar getStartEpoch(
 			final byte[] binId ) {
 		final String str = StringUtils.stringFromBinary(binId);

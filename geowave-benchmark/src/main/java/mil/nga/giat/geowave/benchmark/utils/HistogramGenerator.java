@@ -354,7 +354,6 @@ public class HistogramGenerator
 		final List<Double> featsPerTile10 = new ArrayList<Double>();
 		final Map<Integer, Integer> collsPerTier10 = new HashMap<Integer, Integer>();
 		final Map<Integer, Integer> featsPerTier10 = new HashMap<Integer, Integer>();
-		final int[] hist10 = new int[500];
 		System.out.println("\nQuery 10");
 		int numColls = 0;
 		int numFeatures = 0;
@@ -396,11 +395,6 @@ public class HistogramGenerator
 						tier,
 						coll.size());
 			}
-
-			final int histIdx = Math.min(
-					(int) (coll.size() / 2.0),
-					499);
-			hist10[histIdx]++;
 
 			numColls++;
 			numFeatures += coll.size();
@@ -447,7 +441,6 @@ public class HistogramGenerator
 		final List<Double> featsPerTile10_full = new ArrayList<Double>();
 		final Map<Integer, Integer> collsPerTier10_full = new HashMap<Integer, Integer>();
 		final Map<Integer, Integer> featsPerTier10_full = new HashMap<Integer, Integer>();
-		final int[] hist10_full = new int[500];
 		System.out.println("\nQuery 10 - Full");
 		numColls = 0;
 		numFeatures = 0;
@@ -490,11 +483,6 @@ public class HistogramGenerator
 						coll.size());
 			}
 
-			final int histIdx = Math.min(
-					(int) (coll.size() / 2.0),
-					499);
-			hist10_full[histIdx]++;
-
 			numColls++;
 			numFeatures += coll.size();
 			featsPerTile10_full.add(new Double(
@@ -521,7 +509,6 @@ public class HistogramGenerator
 		System.out.println("Features per Tile (STD): " + new StandardDeviation().evaluate(Doubles.toArray(featsPerTile10_full)));
 
 		// ================================================================================================
-		final Coordinate[] coords11 = new Coordinate[5];
 		coords10[0] = new Coordinate(
 				-119.29923973537691,
 				-66.02765731285959);
@@ -549,7 +536,6 @@ public class HistogramGenerator
 		final List<Double> featsPerTile11 = new ArrayList<Double>();
 		final Map<Integer, Integer> collsPerTier11 = new HashMap<Integer, Integer>();
 		final Map<Integer, Integer> featsPerTier11 = new HashMap<Integer, Integer>();
-		final int[] hist11 = new int[500];
 		System.out.println("\nQuery 11");
 		numColls = 0;
 		numFeatures = 0;
@@ -591,11 +577,6 @@ public class HistogramGenerator
 						tier,
 						coll.size());
 			}
-
-			final int histIdx = Math.min(
-					(int) (coll.size() / 2.0),
-					499);
-			hist11[histIdx]++;
 
 			numColls++;
 			numFeatures += coll.size();
@@ -642,7 +623,6 @@ public class HistogramGenerator
 		final List<Double> featsPerTile11_full = new ArrayList<Double>();
 		final Map<Integer, Integer> collsPerTier11_full = new HashMap<Integer, Integer>();
 		final Map<Integer, Integer> featsPerTier11_full = new HashMap<Integer, Integer>();
-		final int[] hist11_full = new int[500];
 		System.out.println("\nQuery 11 - Full");
 		numColls = 0;
 		numFeatures = 0;
@@ -684,11 +664,6 @@ public class HistogramGenerator
 						tier,
 						coll.size());
 			}
-
-			final int histIdx = Math.min(
-					(int) (coll.size() / 2.0),
-					499);
-			hist11_full[histIdx]++;
 
 			numColls++;
 			numFeatures += coll.size();

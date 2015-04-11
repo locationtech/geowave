@@ -1,6 +1,5 @@
 package mil.nga.giat.geowave.analytics.clustering.runners;
 
-import java.io.IOException;
 import java.util.Set;
 import java.util.UUID;
 
@@ -111,9 +110,9 @@ public class GeoWaveAnalyticExtractJobRunner extends
 	public static Path getHdfsOutputPath(
 			final PropertyManagement runTimeProperties ) {
 		return new Path(
-				runTimeProperties.getProperty(
+				runTimeProperties.getPropertyAsString(
 						MapReduceParameters.MRConfig.HDFS_BASE_DIR,
-						"/tmp") + "/" + runTimeProperties.getProperty(
+						"/tmp") + "/" + runTimeProperties.getPropertyAsString(
 						GlobalParameters.Global.ACCUMULO_NAMESPACE,
 						"x") + "_dedupe");
 	}
@@ -136,7 +135,7 @@ public class GeoWaveAnalyticExtractJobRunner extends
 			final PropertyManagement runTimeProperties )
 			throws Exception {
 
-		outputBaseDir = runTimeProperties.getProperty(
+		outputBaseDir = runTimeProperties.getPropertyAsString(
 				MapReduceParameters.MRConfig.HDFS_BASE_DIR,
 				"/tmp");
 
@@ -165,7 +164,7 @@ public class GeoWaveAnalyticExtractJobRunner extends
 				GeoWaveConfiguratorBase.enumToConfKey(
 						SimpleFeatureOutputReducer.class,
 						ExtractParameters.Extract.GROUP_ID),
-				runTimeProperties.getProperty(
+				runTimeProperties.getPropertyAsString(
 						ExtractParameters.Extract.GROUP_ID,
 						UUID.randomUUID().toString()));
 
@@ -173,7 +172,7 @@ public class GeoWaveAnalyticExtractJobRunner extends
 				GeoWaveConfiguratorBase.enumToConfKey(
 						SimpleFeatureOutputReducer.class,
 						GlobalParameters.Global.BATCH_ID),
-				runTimeProperties.getProperty(
+				runTimeProperties.getPropertyAsString(
 						GlobalParameters.Global.BATCH_ID,
 						UUID.randomUUID().toString()));
 
@@ -197,27 +196,17 @@ public class GeoWaveAnalyticExtractJobRunner extends
 						ExtractParameters.Extract.DIMENSION_EXTRACT_CLASS),
 				runTimeProperties.getPropertyAsClass(
 						ExtractParameters.Extract.DIMENSION_EXTRACT_CLASS,
-						SimpleFeatureGeometryExtractor.class,
-						DimensionExtractor.class),
+						DimensionExtractor.class,
+						SimpleFeatureGeometryExtractor.class),
 				DimensionExtractor.class);
 
-		final String indexId = runTimeProperties.getProperty(ExtractParameters.Extract.INDEX_ID);
-		final String adapterId = runTimeProperties.getProperty(ExtractParameters.Extract.ADAPTER_ID);
+		final String indexId = runTimeProperties.getPropertyAsString(ExtractParameters.Extract.INDEX_ID);
+		final String adapterId = runTimeProperties.getPropertyAsString(ExtractParameters.Extract.ADAPTER_ID);
 
-		final Index[] indices = ClusteringUtils.getIndices(
-				runTimeProperties.getProperty(GlobalParameters.Global.ZOOKEEKER),
-				runTimeProperties.getProperty(GlobalParameters.Global.ACCUMULO_INSTANCE),
-				runTimeProperties.getProperty(GlobalParameters.Global.ACCUMULO_USER),
-				runTimeProperties.getProperty(GlobalParameters.Global.ACCUMULO_PASSWORD),
-				runTimeProperties.getProperty(GlobalParameters.Global.ACCUMULO_NAMESPACE));
+		final Index[] indices = ClusteringUtils.getIndices(runTimeProperties);
 
 		@SuppressWarnings("rawtypes")
-		final DataAdapter[] adapters = ClusteringUtils.getAdapters(
-				runTimeProperties.getProperty(GlobalParameters.Global.ZOOKEEKER),
-				runTimeProperties.getProperty(GlobalParameters.Global.ACCUMULO_INSTANCE),
-				runTimeProperties.getProperty(GlobalParameters.Global.ACCUMULO_USER),
-				runTimeProperties.getProperty(GlobalParameters.Global.ACCUMULO_PASSWORD),
-				runTimeProperties.getProperty(GlobalParameters.Global.ACCUMULO_NAMESPACE));
+		final DataAdapter[] adapters = ClusteringUtils.getAdapters(runTimeProperties);
 
 		if (adapterId != null) {
 			final ByteArrayId byteId = new ByteArrayId(

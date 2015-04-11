@@ -4,6 +4,8 @@ import mil.nga.giat.geowave.ingest.IngestTypePluginProviderSpi;
 import mil.nga.giat.geowave.ingest.hdfs.StageToHdfsPlugin;
 import mil.nga.giat.geowave.ingest.hdfs.mapreduce.IngestFromHdfsPlugin;
 import mil.nga.giat.geowave.ingest.local.LocalFileIngestPlugin;
+import mil.nga.giat.geowave.types.AbstractSimpleFeatureIngestPlugin;
+import mil.nga.giat.geowave.types.AbstractSimpleFeatureIngestType;
 
 import org.opengis.feature.simple.SimpleFeature;
 
@@ -12,31 +14,11 @@ import org.opengis.feature.simple.SimpleFeature;
  * ingesting directly from a local file system or staging data from a local
  * files system and ingesting into GeoWave using a map-reduce job.
  */
-public class TdriveIngestType implements
-		IngestTypePluginProviderSpi<TdrivePoint, SimpleFeature>
+public class TdriveIngestType extends
+		AbstractSimpleFeatureIngestType<TdrivePoint>
 {
-	private static TdriveIngestPlugin singletonInstance;
-
-	private static synchronized TdriveIngestPlugin getSingletonInstance() {
-		if (singletonInstance == null) {
-			singletonInstance = new TdriveIngestPlugin();
-		}
-		return singletonInstance;
-	}
-
-	@Override
-	public StageToHdfsPlugin<TdrivePoint> getStageToHdfsPlugin() {
-		return getSingletonInstance();
-	}
-
-	@Override
-	public IngestFromHdfsPlugin<TdrivePoint, SimpleFeature> getIngestFromHdfsPlugin() {
-		return getSingletonInstance();
-	}
-
-	@Override
-	public LocalFileIngestPlugin<SimpleFeature> getLocalFileIngestPlugin() {
-		return getSingletonInstance();
+	protected AbstractSimpleFeatureIngestPlugin<TdrivePoint> newPluginInstance() {
+		return new TdriveIngestPlugin();
 	}
 
 	@Override

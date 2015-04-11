@@ -5,7 +5,7 @@
 		<artifactId>geowave-parent</artifactId>
 		<groupId>mil.nga.giat</groupId>
 		<relativePath>../</relativePath>
-		<version>0.8.4-SNAPSHOT</version>
+		<version>0.8.6-SNAPSHOT</version>
 	</parent>
 	<artifactId>geowave-test</artifactId>
 	<name>geowave-test</name>
@@ -43,14 +43,9 @@
 		</dependency>
 		<dependency>
 			<groupId>mil.nga.giat</groupId>
-			<artifactId>geowave-analytics</artifactId>
+			<artifactId>geowave-examples</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-        <dependency>
-            <groupId>mil.nga.giat</groupId>
-            <artifactId>geowave-examples</artifactId>
-            <version>${project.version}</version>
-        </dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
@@ -84,7 +79,7 @@
 	</dependencies>
 	<build>
 		<plugins>
-         	<plugin>
+			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-dependency-plugin</artifactId>
 				<version>2.9</version>
@@ -186,7 +181,7 @@
 								<instance>${instance}</instance>
 								<username>${username}</username>
 								<password>${password}</password>
-                                <geoserver.version>${geoserver.version}</geoserver.version>
+								<geoserver.version>${geoserver.version}</geoserver.version>
 							</systemPropertyVariables>
 							<!-- Sonar currently just supports surefire so "trick" Sonar into 
 								thinking they are surefire reports -->

@@ -1,6 +1,11 @@
 package mil.nga.giat.geowave.types.tdrive;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -9,11 +14,8 @@ import java.util.List;
 import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.index.StringUtils;
 import mil.nga.giat.geowave.ingest.GeoWaveData;
-import mil.nga.giat.geowave.ingest.hdfs.StageToHdfsPlugin;
-import mil.nga.giat.geowave.ingest.hdfs.mapreduce.IngestFromHdfsPlugin;
 import mil.nga.giat.geowave.ingest.hdfs.mapreduce.IngestWithMapper;
 import mil.nga.giat.geowave.ingest.hdfs.mapreduce.IngestWithReducer;
-import mil.nga.giat.geowave.ingest.local.LocalFileIngestPlugin;
 import mil.nga.giat.geowave.store.CloseableIterator;
 import mil.nga.giat.geowave.store.GeometryUtils;
 import mil.nga.giat.geowave.store.adapter.WritableDataAdapter;
@@ -21,6 +23,7 @@ import mil.nga.giat.geowave.store.data.field.FieldVisibilityHandler;
 import mil.nga.giat.geowave.store.data.visibility.GlobalVisibilityHandler;
 import mil.nga.giat.geowave.store.index.Index;
 import mil.nga.giat.geowave.store.index.IndexType;
+import mil.nga.giat.geowave.types.AbstractSimpleFeatureIngestPlugin;
 import mil.nga.giat.geowave.vector.adapter.FeatureDataAdapter;
 
 import org.apache.avro.Schema;
@@ -31,15 +34,12 @@ import org.mortbay.log.Log;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 
-import com.google.common.collect.Iterators;
 import com.vividsolutions.jts.geom.Coordinate;
 
 /*
  */
-public class TdriveIngestPlugin implements
-		LocalFileIngestPlugin<SimpleFeature>,
-		IngestFromHdfsPlugin<TdrivePoint, SimpleFeature>,
-		StageToHdfsPlugin<TdrivePoint>
+public class TdriveIngestPlugin extends
+		AbstractSimpleFeatureIngestPlugin<TdrivePoint>
 {
 
 	private final static Logger LOGGER = Logger.getLogger(TdriveIngestPlugin.class);
@@ -100,24 +100,6 @@ public class TdriveIngestPlugin implements
 					tdrivepointType,
 					fieldVisiblityHandler)
 		};
-	}
-
-	@Override
-	public CloseableIterator<GeoWaveData<SimpleFeature>> toGeoWaveData(
-			final File input,
-			final ByteArrayId primaryIndexId,
-			final String globalVisibility ) {
-		final TdrivePoint[] tdrivePoints = toHdfsObjects(input);
-		final List<CloseableIterator<GeoWaveData<SimpleFeature>>> allData = new ArrayList<CloseableIterator<GeoWaveData<SimpleFeature>>>();
-		for (final TdrivePoint track : tdrivePoints) {
-			final CloseableIterator<GeoWaveData<SimpleFeature>> geowaveData = toGeoWaveDataInternal(
-					track,
-					primaryIndexId,
-					globalVisibility);
-			allData.add(geowaveData);
-		}
-		return new CloseableIterator.Wrapper<GeoWaveData<SimpleFeature>>(
-				Iterators.concat(allData.iterator()));
 	}
 
 	@Override
@@ -189,7 +171,7 @@ public class TdriveIngestPlugin implements
 
 	@Override
 	public IngestWithMapper<TdrivePoint, SimpleFeature> ingestWithMapper() {
-		return new IngestGpxTrackFromHdfs(
+		return new IngestTdrivePointFromHdfs(
 				this);
 	}
 
@@ -200,7 +182,8 @@ public class TdriveIngestPlugin implements
 				"GPX tracks cannot be ingested with a reducer");
 	}
 
-	private CloseableIterator<GeoWaveData<SimpleFeature>> toGeoWaveDataInternal(
+	@Override
+	protected CloseableIterator<GeoWaveData<SimpleFeature>> toGeoWaveDataInternal(
 			final TdrivePoint tdrivePoint,
 			final ByteArrayId primaryIndexId,
 			final String globalVisibility ) {
@@ -243,46 +226,19 @@ public class TdriveIngestPlugin implements
 		return new Index[] {};
 	}
 
-	public static class IngestGpxTrackFromHdfs implements
-			IngestWithMapper<TdrivePoint, SimpleFeature>
+	public static class IngestTdrivePointFromHdfs extends
+			AbstractIngestSimpleFeatureWithMapper<TdrivePoint>
 	{
-		private final TdriveIngestPlugin parentPlugin;
-
-		public IngestGpxTrackFromHdfs() {
+		public IngestTdrivePointFromHdfs() {
 			this(
 					new TdriveIngestPlugin());
 			// this constructor will be used when deserialized
 		}
 
-		public IngestGpxTrackFromHdfs(
+		public IngestTdrivePointFromHdfs(
 				final TdriveIngestPlugin parentPlugin ) {
-			this.parentPlugin = parentPlugin;
+			super(
+					parentPlugin);
 		}
-
-		@Override
-		public WritableDataAdapter<SimpleFeature>[] getDataAdapters(
-				final String globalVisibility ) {
-			return parentPlugin.getDataAdapters(globalVisibility);
-		}
-
-		@Override
-		public CloseableIterator<GeoWaveData<SimpleFeature>> toGeoWaveData(
-				final TdrivePoint input,
-				final ByteArrayId primaryIndexId,
-				final String globalVisibility ) {
-			return parentPlugin.toGeoWaveDataInternal(
-					input,
-					primaryIndexId,
-					globalVisibility);
-		}
-
-		@Override
-		public byte[] toBinary() {
-			return new byte[] {};
-		}
-
-		@Override
-		public void fromBinary(
-				final byte[] bytes ) {}
 	}
 }

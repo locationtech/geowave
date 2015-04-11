@@ -23,6 +23,7 @@ import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.AttributeDescriptor;
 import org.opengis.feature.type.Name;
+import org.opengis.filter.Filter;
 import org.opengis.filter.identity.FeatureId;
 
 /**
@@ -41,11 +42,15 @@ public class SimpleFeatureGeoWaveWrapper implements
 		private final SimpleFeatureIterator featureIterator;
 		private final WritableDataAdapter<SimpleFeature> dataAdapter;
 		private RetypingVectorDataSource source = null;
+		private final Filter filter;
 		private SimpleFeatureBuilder builder = null;
+		private GeoWaveData<SimpleFeature> currentData = null;
 
 		public InternalIterator(
 				final SimpleFeatureCollection featureCollection,
-				final String visibility ) {
+				final String visibility,
+				final Filter filter ) {
+			this.filter = filter;
 			featureIterator = featureCollection.features();
 			final SimpleFeatureType originalSchema = featureCollection.getSchema();
 			SimpleFeatureType retypedSchema = originalSchema;
@@ -71,7 +76,24 @@ public class SimpleFeatureGeoWaveWrapper implements
 
 		@Override
 		public boolean hasNext() {
-			return featureIterator.hasNext();
+			if (currentData == null) {
+				// return a flag indicating if we find more data that matches
+				// the filter, essentially peeking and caching the result
+				return nextData();
+			}
+			return true;
+		}
+
+		@Override
+		public GeoWaveData<SimpleFeature> next() {
+			if (currentData == null) {
+				// get the next data that matches the filter
+				nextData();
+			}
+			// return that data and set the current data to null
+			final GeoWaveData<SimpleFeature> retVal = currentData;
+			currentData = null;
+			return retVal;
 		}
 
 		private SimpleFeature retype(
@@ -107,21 +129,23 @@ public class SimpleFeatureGeoWaveWrapper implements
 			return retyped;
 		}
 
-		@Override
-		public GeoWaveData<SimpleFeature> next() {
-			final SimpleFeature originalFeature = featureIterator.next();
-			if (builder != null) {
-				return new GeoWaveData<SimpleFeature>(
-						dataAdapter,
-						primaryIndexId,
-						retype(originalFeature));
+		private synchronized boolean nextData() {
+			SimpleFeature nextAcceptedFeature;
+			do {
+				if (!featureIterator.hasNext()) {
+					return false;
+				}
+				nextAcceptedFeature = featureIterator.next();
+				if (builder != null) {
+					nextAcceptedFeature = retype(nextAcceptedFeature);
+				}
 			}
-			else {
-				return new GeoWaveData<SimpleFeature>(
-						dataAdapter,
-						primaryIndexId,
-						originalFeature);
-			}
+			while (!filter.evaluate(nextAcceptedFeature));
+			currentData = new GeoWaveData<SimpleFeature>(
+					dataAdapter,
+					primaryIndexId,
+					nextAcceptedFeature);
+			return true;
 		}
 
 		@Override
@@ -141,18 +165,21 @@ public class SimpleFeatureGeoWaveWrapper implements
 	private final String visibility;
 	private final DataStore dataStore;
 	private final RetypingVectorDataPlugin retypingPlugin;
+	private final Filter filter;
 
 	public SimpleFeatureGeoWaveWrapper(
 			final List<SimpleFeatureCollection> featureCollections,
 			final ByteArrayId primaryIndexId,
 			final String visibility,
 			final DataStore dataStore,
-			final RetypingVectorDataPlugin retypingPlugin ) {
+			final RetypingVectorDataPlugin retypingPlugin,
+			final Filter filter ) {
 		this.featureCollections = featureCollections;
 		this.visibility = visibility;
 		this.primaryIndexId = primaryIndexId;
 		this.dataStore = dataStore;
 		this.retypingPlugin = retypingPlugin;
+		this.filter = filter;
 	}
 
 	@Override
@@ -181,7 +208,8 @@ public class SimpleFeatureGeoWaveWrapper implements
 			final SimpleFeatureCollection collection = it.next();
 			final InternalIterator featureIt = new InternalIterator(
 					collection,
-					visibility);
+					visibility,
+					filter);
 
 			it.remove();
 			if (!featureIt.hasNext()) {

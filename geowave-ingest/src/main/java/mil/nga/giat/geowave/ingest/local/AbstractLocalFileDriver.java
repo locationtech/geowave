@@ -74,14 +74,14 @@ abstract public class AbstractLocalFileDriver<P extends LocalPluginBase, R> exte
 			throws IOException;
 
 	@Override
-	public void parseOptions(
+	protected void parseOptionsInternal(
 			final CommandLine commandLine )
 			throws ParseException {
 		localInput = LocalInputCommandLineOptions.parseOptions(commandLine);
 	}
 
 	@Override
-	public void applyOptions(
+	protected void applyOptionsInternal(
 			final Options allOptions ) {
 		LocalInputCommandLineOptions.applyOptions(allOptions);
 	}

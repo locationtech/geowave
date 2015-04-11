@@ -1,5 +1,7 @@
 package mil.nga.giat.geowave.analytics.tools;
 
+import java.io.Serializable;
+
 import mil.nga.giat.geowave.accumulo.mapreduce.GeoWaveConfiguratorBase;
 import mil.nga.giat.geowave.analytics.parameters.ParameterEnum;
 
@@ -73,7 +75,7 @@ public class RunnerUtils
 			final PropertyManagement pmt,
 			final ParameterEnum[] enums ) {
 		for (final ParameterEnum configItem : enums) {
-			final Object val = pmt.get(configItem);
+			final Serializable val = pmt.get(configItem);
 			if (val != null) {
 				if (val instanceof Long) {
 					config.setLong(

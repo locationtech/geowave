@@ -12,22 +12,22 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicLong;
 
 import javax.xml.stream.XMLStreamException;
 
 import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.ingest.GeoWaveData;
-import mil.nga.giat.geowave.ingest.hdfs.StageToHdfsPlugin;
-import mil.nga.giat.geowave.ingest.hdfs.mapreduce.IngestFromHdfsPlugin;
 import mil.nga.giat.geowave.ingest.hdfs.mapreduce.IngestWithMapper;
 import mil.nga.giat.geowave.ingest.hdfs.mapreduce.IngestWithReducer;
-import mil.nga.giat.geowave.ingest.local.LocalFileIngestPlugin;
 import mil.nga.giat.geowave.store.CloseableIterator;
 import mil.nga.giat.geowave.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.store.data.field.FieldVisibilityHandler;
 import mil.nga.giat.geowave.store.data.visibility.GlobalVisibilityHandler;
 import mil.nga.giat.geowave.store.index.Index;
 import mil.nga.giat.geowave.store.index.IndexType;
+import mil.nga.giat.geowave.types.AbstractSimpleFeatureIngestPlugin;
+import mil.nga.giat.geowave.types.CQLFilterOptionProvider;
 import mil.nga.giat.geowave.vector.adapter.FeatureDataAdapter;
 
 import org.apache.avro.Schema;
@@ -48,10 +48,8 @@ import com.google.common.collect.Iterators;
  * file is directly in the root base directory that is passed in command-line to
  * the ingest framework.
  */
-public class GpxIngestPlugin implements
-		LocalFileIngestPlugin<SimpleFeature>,
-		IngestFromHdfsPlugin<GpxTrack, SimpleFeature>,
-		StageToHdfsPlugin<GpxTrack>
+public class GpxIngestPlugin extends
+		AbstractSimpleFeatureIngestPlugin<GpxTrack>
 {
 
 	private final static Logger LOGGER = Logger.getLogger(GpxIngestPlugin.class);
@@ -59,12 +57,12 @@ public class GpxIngestPlugin implements
 	private final static String TAG_SEPARATOR = " ||| ";
 
 	private Map<Long, GpxTrack> metadata = null;
-	private static long currentFreeTrackId = 0;
+	private static final AtomicLong currentFreeTrackId = new AtomicLong(
+			0);
 
 	private final Index[] supportedIndices;
 
 	public GpxIngestPlugin() {
-
 		supportedIndices = new Index[] {
 			IndexType.SPATIAL_VECTOR.createDefaultIndex(),
 			IndexType.SPATIAL_TEMPORAL_VECTOR.createDefaultIndex()
@@ -161,24 +159,6 @@ public class GpxIngestPlugin implements
 	}
 
 	@Override
-	public CloseableIterator<GeoWaveData<SimpleFeature>> toGeoWaveData(
-			final File input,
-			final ByteArrayId primaryIndexId,
-			final String globalVisibility ) {
-		final GpxTrack[] gpxTracks = toHdfsObjects(input);
-		final List<CloseableIterator<GeoWaveData<SimpleFeature>>> allData = new ArrayList<CloseableIterator<GeoWaveData<SimpleFeature>>>();
-		for (final GpxTrack track : gpxTracks) {
-			final CloseableIterator<GeoWaveData<SimpleFeature>> geowaveData = toGeoWaveDataInternal(
-					track,
-					primaryIndexId,
-					globalVisibility);
-			allData.add(geowaveData);
-		}
-		return new CloseableIterator.Wrapper<GeoWaveData<SimpleFeature>>(
-				Iterators.concat(allData.iterator()));
-	}
-
-	@Override
 	public Schema getAvroSchemaForHdfsType() {
 		return GpxTrack.getClassSchema();
 	}
@@ -198,7 +178,7 @@ public class GpxIngestPlugin implements
 		}
 		if (track == null) {
 			track = new GpxTrack();
-			track.setTrackid(currentFreeTrackId++);
+			track.setTrackid(currentFreeTrackId.getAndIncrement());
 		}
 
 		try {
@@ -233,7 +213,8 @@ public class GpxIngestPlugin implements
 				"GPX tracks cannot be ingested with a reducer");
 	}
 
-	private CloseableIterator<GeoWaveData<SimpleFeature>> toGeoWaveDataInternal(
+	@Override
+	protected CloseableIterator<GeoWaveData<SimpleFeature>> toGeoWaveDataInternal(
 			final GpxTrack gpxTrack,
 			final ByteArrayId primaryIndexId,
 			final String globalVisibility ) {
@@ -298,12 +279,9 @@ public class GpxIngestPlugin implements
 		return pathDataSet;
 	}
 
-	public static class IngestGpxTrackFromHdfs implements
-			IngestWithMapper<GpxTrack, SimpleFeature>
+	public static class IngestGpxTrackFromHdfs extends
+			AbstractIngestSimpleFeatureWithMapper<GpxTrack>
 	{
-
-		private final GpxIngestPlugin parentPlugin;
-
 		public IngestGpxTrackFromHdfs() {
 			this(
 					new GpxIngestPlugin());
@@ -312,34 +290,9 @@ public class GpxIngestPlugin implements
 
 		public IngestGpxTrackFromHdfs(
 				final GpxIngestPlugin parentPlugin ) {
-			this.parentPlugin = parentPlugin;
+			super(
+					parentPlugin);
 		}
-
-		@Override
-		public WritableDataAdapter<SimpleFeature>[] getDataAdapters(
-				final String globalVisibility ) {
-			return parentPlugin.getDataAdapters(globalVisibility);
-		}
-
-		@Override
-		public CloseableIterator<GeoWaveData<SimpleFeature>> toGeoWaveData(
-				final GpxTrack input,
-				final ByteArrayId primaryIndexId,
-				final String globalVisibility ) {
-			return parentPlugin.toGeoWaveDataInternal(
-					input,
-					primaryIndexId,
-					globalVisibility);
-		}
-
-		@Override
-		public byte[] toBinary() {
-			return new byte[] {};
-		}
-
-		@Override
-		public void fromBinary(
-				final byte[] bytes ) {}
 	}
 
 }
