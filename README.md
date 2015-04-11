@@ -56,7 +56,7 @@ We work to maintain a N and N-1 tested and supported version pace for the follow
 
 | Geoserver | Geotools | Accumulo | Hadoop | PDAL | Mapnik | Java |
 |:---------:|:--------:|:--------:|:------:|:----:|:------:|:----:|
-| 2.5.x, 2.6.x | 11.x, 12.x | 1.5.x, 1.6.x | 2.x | 0.9.9 |  2.2.0 | Java7, Java8 |
+| 2.5.x, 2.6.x | 11.x, 12.x | 1.5.x, 1.6.x | 2.x | master (pull request pending) |  2.2.0 | Java7, Java8 |
 
 * [Apache Maven](http://maven.apache.org/) 3.x or greater is required for building
 * [Java Advanced Imaging](http://download.java.net/media/jai/builds/release/1_1_3/) and [Java Image I/O](http://download.java.net/media/jai-imageio/builds/release/1.1/) should both be installed on geoserver (license prohibits us redistributing)
