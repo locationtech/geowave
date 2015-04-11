@@ -52,6 +52,8 @@
 		<jacoco.ut.reportPath>${project.build.directory}/coverage-reports/jacoco-ut.exec</jacoco.ut.reportPath>
 		<it.reportPath>${project.reporting.outputDirectory}/jacoco-it</it.reportPath>
 		<ut.reportPath>${project.reporting.outputDirectory}/jacoco-ut</ut.reportPath>
+		<sonar.jacoco.reportPath>${ut.reportPath}</sonar.jacoco.reportPath>
+		<sonar.jacoco.itReportPath>${it.reportPath}</sonar.jacoco.itReportPath>
 		<jacoco.version>0.7.4.201502262128</jacoco.version>
 		<sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
 		<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
@@ -419,7 +421,7 @@
 						<id>post-integration-test</id>
 						<phase>post-integration-test</phase>
 						<goals>
-							<goal>report</goal>
+							<goal>report-integration</goal>
 						</goals>
 						<configuration>
 							<dataFile>${jacoco.it.reportPath}</dataFile>
@@ -480,7 +482,7 @@
 								</group>
 								<group>
 									<title>GeoTools Storage</title>
-									<packages>mil.nga.giat.geowave.gt*</packages>
+									<packages>mil.nga.giat.geowave.vector*:mil.nga.giat.geowave.vector*</packages>
 								</group>
 								<group>
 									<title>Storage</title>
@@ -502,25 +504,6 @@
 						</configuration>
 					</execution>
 				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.eluder.coveralls</groupId>
-				<artifactId>coveralls-maven-plugin</artifactId>
-				<version>3.1.1-munge-hack</version>
-				<configuration>
-					<jacocoReports>
-						<jacocoReport>${project.basedir}/geowave-index/target/site/jacoco-ut/jacoco.xml</jacocoReport>
-						<jacocoReport>${project.basedir}/geowave-analytics/target/site/jacoco-ut/jacoco.xml</jacocoReport>
-						<jacocoReport>${project.basedir}/geowave-ingest/target/site/jacoco-ut/jacoco.xml</jacocoReport>
-						<jacocoReport>${project.basedir}/geowave-raster/target/site/jacoco-ut/jacoco.xml</jacocoReport>
-						<jacocoReport>${project.basedir}/geowave-store/target/site/jacoco-ut/jacoco.xml</jacocoReport>
-						<jacocoReport>${project.basedir}/geowave-types/target/site/jacoco-ut/jacoco.xml</jacocoReport>
-						<jacocoReport>${project.basedir}/geowave-vector/target/site/jacoco-ut/jacoco.xml</jacocoReport>
-						<jacocoReport>${project.basedir}/geowave-accumulo/target/site/jacoco-ut/jacoco.xml</jacocoReport>
-                        <jacocoReport>${project.basedir}/geowave-examples/target/site/jacoco-ut/jacoco.xml</jacocoReport>
-						<jacocoReport>${project.basedir}/geowave-test/target/site/jacoco-it/jacoco.xml</jacocoReport>
-					</jacocoReports>
-				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>com.googlecode.maven-java-formatter-plugin</groupId>
@@ -572,7 +555,7 @@
 		<module>geowave-deploy</module>
 		<module>geowave-benchmark</module>
 		<module>geowave-test</module>
-        <module>geowave-examples</module>
+		<module>geowave-examples</module>
 	</modules>
 	<repositories>
 		<repository>
