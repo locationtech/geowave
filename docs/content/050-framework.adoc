@@ -71,9 +71,6 @@ http://www.naturalearthdata.com/downloads/50m-cultural-vectors/[50m Cultural Vec
 Let's download the Admin 0 - Countries shapefile:
 http://naciscdn.org/naturalearth/50m/cultural/ne_50m_admin_0_countries.zip[ne_50m_admin_0_countries.zip]
 
-Okay, let's ingest this. I'll take some liberty with the file locations,
-but the process should be obvious
-
 [source, bash]
 ----
 $ mkdir ingest
@@ -82,5 +79,16 @@ $ cd ingest
 $ unzip ne_50m_admin_0_countries.zip
 $ rm ne_50m_admin_0_countries.zip
 $ cd ..
-$ geowave-ingest -localingest -b ./ingest -i ACCUMULO_INSTANCE_NAME -n geowave.50m_admin_0_countries -t geotools-vector -u USERNAME -p PASSWORD -z zoo-1:2181
+$ geowave-ingest -localingest \
+      -b ./ingest \
+      -i ACCUMULO_INSTANCE_NAME \
+      -n geowave.50m_admin_0_countries \ <1>
+      -t geotools-vector \ <2>
+      -u USERNAME \
+      -p PASSWORD \
+      -z ZOOKEEPER_HOST_NAME:2181
 ----
+<1> We preface the table name with the Accumulo namespace we configured earlier in the Accumulo configuration section followed by a dot (NAMESPACE.TABLE_NAME)
+<2> Ensure you match the correct GeoWave ingest plugin type for the data you are ingesting
+
+After running the ingest command you should see the various index tables in Accumulo

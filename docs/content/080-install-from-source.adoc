@@ -6,9 +6,16 @@
 
 ==== GeoServer Versions
 
-GeoWave is currently built against GeoServer 2.6.1 and GeoTools 12.1 with the GeoTools version linked to the GeoServer
-version. If wish to deploy against a different version simply change the value in the pom and rebuild (see: building) -
-but no guarantees.
+GeoWave has to be built against specific versions of GeoWave and GeoTools. To see the currently supported versions look at
+the build matrix section of the .travis.yml file in the root directory of the project. All of the examples below use the variable
+$BUILD_ARGS to represent your choice of all the dependency versions.
+
+Example build args:
+
+[source, bash]
+----
+export BUILD_ARGS="-Daccumulo.version=1.6.0 -Dhadoop.version=2.5.0-cdh5.3.0 -Dgeotools.version=13.0 -Dgeoserver.version=2.7.0 -P cloudera"
+----
 
 ==== GeoServer Install
 
@@ -16,8 +23,8 @@ First we need to build the GeoServer plugin - from the GeoWave root directory:
 
 [source, bash]
 ----
-$ cd geowave-gt
-$ mvn package -Pgeotools-container-singlejar
+$ cd geowave-deploy
+$ mvn package -P geotools-container-singlejar $BUILD_ARGS
 ----
 
 let's assume you have GeoServer deployed in a Tomcat container in
@@ -25,7 +32,7 @@ let's assume you have GeoServer deployed in a Tomcat container in
 
 [source, bash]
 ----
-$ cp target/geowave-gt-*-geoserver-singlejar.jar /opt/tomcat/webapps/geoserver/WEB-INF/lib/
+$ cp geowave-deploy/target/*-geoserver-singlejar.jar /opt/tomcat/webapps/geoserver/WEB-INF/lib/
 ----
 
 and re-start Tomcat
@@ -43,6 +50,6 @@ This should be very familiar by now; from the geowave root directory:
 
 [source, bash]
 ----
-$ cd geowave-gt
-$ mvn package -Paccumulo-container-singlejar
+$ cd geowave-deploy
+$ mvn package -P accumulo-container-singlejar $BUILD_ARGS
 ----
