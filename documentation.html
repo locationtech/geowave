@@ -486,7 +486,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel2">
 <li><a href="#overview-4">Overview</a></li>
 <li><a href="#examples">Examples</a></li>
-<li><a href="#rpm-installation-notes">RPM Installation Notes</a></li>
+</ul>
+</li>
+<li><a href="#maven-repositories-2">Maven Repositories</a>
+<ul class="sectlevel2">
 <li><a href="#overview-5">Overview</a></li>
 <li><a href="#maven-pom-fragments">Maven POM fragments</a></li>
 <li><a href="#maven-settings-xml-fragments">Maven settings.xml fragments</a></li>
@@ -1999,6 +2002,10 @@ wraps a bunch of GeoTools supported formats. We will use the shapefile capabilit
 <p>Let&#8217;s download the Admin 0 - Countries shapefile:
 <a href="http://naciscdn.org/naturalearth/50m/cultural/ne_50m_admin_0_countries.zip">ne_50m_admin_0_countries.zip</a></p>
 </div>
+<div class="paragraph">
+<p>Okay, let&#8217;s ingest this. I&#8217;ll take some liberty with the file locations,
+but the process should be obvious</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">$ mkdir ingest
@@ -2007,30 +2014,8 @@ $ cd ingest
 $ unzip ne_50m_admin_0_countries.zip
 $ rm ne_50m_admin_0_countries.zip
 $ cd ..
-$ geowave-ingest -localingest \
-      -b ./ingest \
-      -i ACCUMULO_INSTANCE_NAME \
-      -n geowave.50m_admin_0_countries \ <i class="conum" data-value="1"></i><b>(1)</b>
-      -t geotools-vector \ <i class="conum" data-value="2"></i><b>(2)</b>
-      -u USERNAME \
-      -p PASSWORD \
-      -z ZOOKEEPER_HOST_NAME:2181</code></pre>
+$ geowave-ingest -localingest -b ./ingest -i ACCUMULO_INSTANCE_NAME -n geowave.50m_admin_0_countries -t geotools-vector -u USERNAME -p PASSWORD -z zoo-1:2181</code></pre>
 </div>
-</div>
-<div class="colist arabic">
-<table>
-<tr>
-<td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>We preface the table name with the Accumulo namespace we configured earlier in the Accumulo configuration section followed by a dot (NAMESPACE.TABLE_NAME)</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>Ensure you match the correct GeoWave ingest plugin type for the data you are ingesting</td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p>After running the ingest command you should see the various index tables in Accumulo</p>
 </div>
 </div>
 </div>
@@ -2573,11 +2558,10 @@ answer inquiries by GeoServer for data ranges, as required for map requests and 
 <div class="sect2">
 <h3 id="overview-4"><a class="anchor" href="#overview-4"></a>Overview</h3>
 <div class="paragraph">
-<p>There is a public <a href="http://ngageoint.github.io/geowave/packages.html">GeoWave RPM Repo</a> available with the following packages.
+<p>There is a public <a href="http://s3.amazonaws.com/geowave-rpms/index.html">GeoWave RPM Repo</a> available with the following packages.
 As you&#8217;ll need to coordinate a restart of Accumulo to pick up changes to the GeoWave iterator classes the repos default to
 be disabled so you can keep auto updates enabled. When ready to do an update simply add <code>--enablerepo=geowave</code> to your
-command. The packages are built for a number of different hadoop distributions (Cloudera, Hortonworks and Apache) the RPMs
-have the vendor name embedded as the second portion of the rpm name (geowave-apache-accumulo, geowave-hdp2-accumulo or geowave-cdh5-accumulo)</p>
+command.</p>
 </div>
 </div>
 <div class="sect2">
@@ -2585,7 +2569,7 @@ have the vendor name embedded as the second portion of the rpm name (geowave-apa
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash" data-lang="bash"># Use GeoWave repo RPM to configure a host and search for GeoWave RPMs to install
-rpm -Uvh http://s3.amazonaws.com/geowave-rpms/release/noarch/geowave-repo-1.0-3.noarch.rpm
+rpm -Uvh http://s3.amazonaws.com/geowave-rpms/release/noarch/geowave-repo-dev-1.0-3.noarch.rpm
 yum --enablerepo=geowave search geowave
 
 # Install GeoWave Accumulo iterator on a host (probably a namenode)
@@ -2610,32 +2594,32 @@ Restart Accumulo service</code></pre>
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">geowave-*-accumulo</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">geowave-cdh5-accumulo</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Accumulo Components</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">geowave-*-core</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">geowave-cdh5-core</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Core (home directory and geowave user)</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">geowave-*-docs</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">geowave-cdh5-docs</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Documentation (HTML, PDF and man pages)</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">geowave-*-ingest</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">geowave-cdh5-ingest</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Ingest Tool</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">geowave-*-jetty</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">GeoServer components installed into /usr/local/geowave/geoserver and available at <a href="http://FQDN:8080/geoserver" class="bare">http://FQDN:8080/geoserver</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">geowave-cdh5-jetty</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">GeoServer Components</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">geowave-*-puppet</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">geowave-cdh5-puppet</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Puppet Scripts</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">geowave-*-single-host</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">All GeoWave Components installed on a single host (sometimes useful for development)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">geowave-cdh5-single-host</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">All GeoWave Components</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">geowave-repo</p></td>
@@ -2647,27 +2631,13 @@ Restart Accumulo service</code></pre>
 </tr>
 </tbody>
 </table>
-</div>
-<div class="sect2">
-<h3 id="rpm-installation-notes"><a class="anchor" href="#rpm-installation-notes"></a>RPM Installation Notes</h3>
-<div class="ulist">
-<ul>
-<li>
-<p>geowwave-cdh5-accumulo: This RPM will install the GeoWave Accumulo iterator into the local file system and then upload
-it into HDFS using the <code>hadoop fs -put</code> command. This means of deployment requires that the RPM is installed on a node that
-has the correct binaries and configuration in place to push files to HDFS, like your namenode.</p>
-</li>
-<li>
-<p>With the exception of the Accumulo RPM mentioned above you can install the rest of the RPMs all on a single node or
-a mix of nodes depending on your cluster configuration. All GeoWave files get installed into the `/usr/local/geowave/' directory</p>
-<div id="maven-repositories" class="paragraph">
-<p>&lt;&lt;&lt;
-== Maven Repositories</p>
-</div>
-</li>
-</ul>
+<div style="page-break-after: always;"></div>
 </div>
 </div>
+</div>
+<div class="sect1">
+<h2 id="maven-repositories-2"><a class="anchor" href="#maven-repositories-2"></a>Maven Repositories</h2>
+<div class="sectionbody">
 <div class="sect2">
 <h3 id="overview-5"><a class="anchor" href="#overview-5"></a>Overview</h3>
 <div class="paragraph">
@@ -2750,17 +2720,9 @@ Automated deployment is available, but requires a S3 access key (typically added
 <div class="sect3">
 <h4 id="geoserver-versions"><a class="anchor" href="#geoserver-versions"></a>GeoServer Versions</h4>
 <div class="paragraph">
-<p>GeoWave has to be built against specific versions of GeoWave and GeoTools. To see the currently supported versions look at
-the build matrix section of the .travis.yml file in the root directory of the project. All of the examples below use the variable
-$BUILD_ARGS to represent your choice of all the dependency versions.</p>
-</div>
-<div class="paragraph">
-<p>Example build args:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">export BUILD_ARGS="-Daccumulo.version=1.6.0 -Dhadoop.version=2.5.0-cdh5.3.0 -Dgeotools.version=13.0 -Dgeoserver.version=2.7.0 -P cloudera"</code></pre>
-</div>
+<p>GeoWave is currently built against GeoServer 2.6.1 and GeoTools 12.1 with the GeoTools version linked to the GeoServer
+version. If wish to deploy against a different version simply change the value in the pom and rebuild (see: building) -
+but no guarantees.</p>
 </div>
 </div>
 <div class="sect3">
@@ -2770,8 +2732,8 @@ $BUILD_ARGS to represent your choice of all the dependency versions.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">$ cd geowave-deploy
-$ mvn package -P geotools-container-singlejar $BUILD_ARGS</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">$ cd geowave-gt
+$ mvn package -Pgeotools-container-singlejar</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2780,7 +2742,7 @@ $ mvn package -P geotools-container-singlejar $BUILD_ARGS</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">$ cp geowave-deploy/target/*-geoserver-singlejar.jar /opt/tomcat/webapps/geoserver/WEB-INF/lib/</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">$ cp target/geowave-gt-*-geoserver-singlejar.jar /opt/tomcat/webapps/geoserver/WEB-INF/lib/</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2804,8 +2766,8 @@ version simply change the value in the pom.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">$ cd geowave-deploy
-$ mvn package -P accumulo-container-singlejar $BUILD_ARGS</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">$ cd geowave-gt
+$ mvn package -Paccumulo-container-singlejar</code></pre>
 </div>
 </div>
 <div style="page-break-after: always;"></div>
@@ -3391,12 +3353,13 @@ with a quick refresh of the browser.</p>
 <p>To build all the content used for the <a href="https://ngageoint.github.io/geowave/">GeoWave website</a> use the following command. The
 entire site, including both docs and javadocs, will be available for inspection in the <code>geowave/target/site/</code> directory.</p>
 </div>
-<div class="listingblock">
-<div class="title">Generate Website</div>
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">cd geowave
-mvn -P docs install</code></pre>
-</div>
+<div class="paragraph">
+<p>+[source, bash]
++.Generate Website
++----
++ cd geowave
++ mvn -P docs install
++----</p>
 </div>
 <div style="page-break-after: always;"></div>
 </div>
@@ -3445,7 +3408,7 @@ Puppet runs to do the initial install.</p>
 <dt class="hdlist1">repo_base_url</dt>
 <dd>
 <p>Used with the optional geowave::repo class to point the local package management system at a source for GeoWave RPMs.
-The default location is <a href="http://s3.amazonaws.com/geowave-rpms/release/noarch/" class="bare">http://s3.amazonaws.com/geowave-rpms/release/noarch/</a></p>
+The default location is <a href="http://s3.amazonaws.com/geowave-rpms/dev/noarch/" class="bare">http://s3.amazonaws.com/geowave-rpms/dev/noarch/</a></p>
 </dd>
 <dt class="hdlist1">repo_enabled</dt>
 <dd>
@@ -3525,7 +3488,7 @@ node 'c1-app-01' {
 <div class="sect2">
 <h3 id="puppet-script-management"><a class="anchor" href="#puppet-script-management"></a>Puppet script management</h3>
 <div class="paragraph">
-<p>As mentioned in the overview the scripts are available from within the <a href="http://ngageoint.github.io/geowave/packages.html" target="_blank">GeoWave source tar bundle</a>
+<p>As mentioned in the overview the scripts are available from within the <a href="http://s3.amazonaws.com/geowave-rpms/index.html" target="_blank">GeoWave source tar bundle</a>
 (Search for gz to filter the list) or you could use the RPM package to install and pick up future updates on your puppet server.</p>
 </div>
 <div class="sect3">
@@ -3560,7 +3523,7 @@ yum install geowave-cdh5-puppet</code></pre>
 <div class="sect2">
 <h3 id="version"><a class="anchor" href="#version"></a>Version</h3>
 <div class="paragraph">
-<p>This documentation was generated for GeoWave version 0.8.6-SNAPSHOT from commit ce2f1f580f9cdae887289bdd9e6a6588773a0dde.</p>
+<p>This documentation was generated for GeoWave version 0.8.6-SNAPSHOT from commit 896701e40617aefc2f02d60b946c08e8e6f85b64.</p>
 </div>
 <div style="page-break-after: always;"></div>
 </div>
@@ -3612,7 +3575,7 @@ yum install geowave-cdh5-puppet</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-04-14 00:51:30 UTC
+Last updated 2015-04-14 01:11:20 UTC
 </div>
 </div>
 </body>
