@@ -31,7 +31,7 @@ The port on which the Jetty application server will run, defaults to 8080.
 
 repo_base_url::
 Used with the optional geowave::repo class to point the local package management system at a source for GeoWave RPMs.
-The default location is http://s3.amazonaws.com/geowave-rpms/dev/noarch/
+The default location is http://s3.amazonaws.com/geowave-rpms/release/noarch/
 
 repo_enabled::
 To pick up an updated Accumulo iterator you'll need to restart the Accumulo service. As we don't want to pick up new
@@ -97,7 +97,7 @@ node 'c1-app-01' {
 
 === Puppet script management
 
-As mentioned in the overview the scripts are available from within the http://s3.amazonaws.com/geowave-rpms/index.html[GeoWave source tar bundle^]
+As mentioned in the overview the scripts are available from within the http://ngageoint.github.io/geowave/packages.html[GeoWave source tar bundle^]
 (Search for gz to filter the list) or you could use the RPM package to install and pick up future updates on your puppet server.
 
 ==== Source Archive

@@ -4,17 +4,18 @@
 
 === Overview
 
-There is a public http://s3.amazonaws.com/geowave-rpms/index.html[GeoWave RPM Repo] available with the following packages.
+There is a public http://ngageoint.github.io/geowave/packages.html[GeoWave RPM Repo] available with the following packages.
 As you'll need to coordinate a restart of Accumulo to pick up changes to the GeoWave iterator classes the repos default to
 be disabled so you can keep auto updates enabled. When ready to do an update simply add `--enablerepo=geowave` to your
-command.
+command. The packages are built for a number of different hadoop distributions (Cloudera, Hortonworks and Apache) the RPMs
+have the vendor name embedded as the second portion of the rpm name (geowave-apache-accumulo, geowave-hdp2-accumulo or geowave-cdh5-accumulo)
 
 === Examples
 
 [source, bash]
 ----
 # Use GeoWave repo RPM to configure a host and search for GeoWave RPMs to install
-rpm -Uvh http://s3.amazonaws.com/geowave-rpms/release/noarch/geowave-repo-dev-1.0-3.noarch.rpm
+rpm -Uvh http://s3.amazonaws.com/geowave-rpms/release/noarch/geowave-repo-1.0-3.noarch.rpm
 yum --enablerepo=geowave search geowave
 
 # Install GeoWave Accumulo iterator on a host (probably a namenode)
@@ -31,26 +32,26 @@ Restart Accumulo service
 |Name
 |Description
 
-|geowave-cdh5-accumulo
+|geowave-*-accumulo
 |Accumulo Components
 
-|geowave-cdh5-core
+|geowave-*-core
 |Core (home directory and geowave user)
 
-|geowave-cdh5-docs
+|geowave-*-docs
 |Documentation (HTML, PDF and man pages)
 
-|geowave-cdh5-ingest
+|geowave-*-ingest
 |Ingest Tool
 
-|geowave-cdh5-jetty
-|GeoServer Components
+|geowave-*-jetty
+|GeoServer components installed into /usr/local/geowave/geoserver and available at http://FQDN:8080/geoserver
 
-|geowave-cdh5-puppet
+|geowave-*-puppet
 |Puppet Scripts
 
-|geowave-cdh5-single-host
-|All GeoWave Components
+|geowave-*-single-host
+|All GeoWave Components installed on a single host (sometimes useful for development)
 
 |geowave-repo
 |GeoWave RPM Repo config file
@@ -59,3 +60,12 @@ Restart Accumulo service
 |GeoWave Development RPM Repo config file
 
 |===
+
+
+=== RPM Installation Notes
+
+* geowwave-cdh5-accumulo: This RPM will install the GeoWave Accumulo iterator into the local file system and then upload
+it into HDFS using the `hadoop fs -put` command. This means of deployment requires that the RPM is installed on a node that
+has the correct binaries and configuration in place to push files to HDFS, like your namenode.
+* With the exception of the Accumulo RPM mentioned above you can install the rest of the RPMs all on a single node or
+a mix of nodes depending on your cluster configuration. All GeoWave files get installed into the `/usr/local/geowave/' directory

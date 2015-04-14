@@ -23,14 +23,14 @@ Basically, GeoWave is working to bridge geospatial software with distributed com
 * A [changelog is available](http://ngageoint.github.io/geowave/changelog.html) which details the changes and features for each of our [github releases](https://github.com/ngageoint/geowave/releases)
 
 ## The Software
-* We have a [RPM repository](http://s3.amazonaws.com/geowave-rpms/index.html)
+* We have a [RPM repository](http://ngageoint.github.io/geowave/packages.html)
   * See [Documentation: Installation from RPM](http://ngageoint.github.io/geowave/documentation.html#installation-from-rpm) for more info.
   * Deb packages if enough people request them
 * We have [Maven artifact repositories](http://ngageoint.github.io/geowave/documentation.html#maven-repositories) (indexes not enabled, but it works in a maven repo fragment)
   * Releases: http://geowave-maven.s3-website-us-east-1.amazonaws.com/release
   * Snapshots: http://geowave-maven.s3-website-us-east-1.amazonaws.com/snapshot (nightly)
 * We have a [vagrant dev environment](https://github.com/ngageoint/geowave/tree/master/vagrant)
-* We have a development all in one RPM package: "geowave-repo-dev"
+* We have a development all in one RPM package: "geowave-cdh5-single-host"
 * And you can always [build from source](http://ngageoint.github.io/geowave/documentation.html#installation-from-source)
   
  

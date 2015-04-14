@@ -38,7 +38,7 @@ To preview the entire finished page web page or see the generated PDF you'll nee
 .Generate Documentation
 ----
  cd geowave
- mvn -P docs -pl docs install # <1>
+ mvn -P docs -pl docs install <1>
 ----
 <1> -pl docs = Process _only_ the docs module. Skips the javadoc generation step.
 
@@ -49,10 +49,10 @@ The source documents will be transformed and will be available for inspection in
 To build all the content used for the https://ngageoint.github.io/geowave/[GeoWave website] use the following command. The
 entire site, including both docs and javadocs, will be available for inspection in the `geowave/target/site/` directory.
 
-+[source, bash]
-+.Generate Website
-+----
-+ cd geowave
-+ mvn -P docs install
-+----
+[source, bash]
+.Generate Website
+----
+cd geowave
+mvn -P docs install
+----
 
