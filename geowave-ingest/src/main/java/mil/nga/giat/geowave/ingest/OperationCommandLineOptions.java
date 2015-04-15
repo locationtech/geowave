@@ -1,5 +1,6 @@
 package mil.nga.giat.geowave.ingest;
 
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -7,6 +8,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.ServiceLoader;
 
+import mil.nga.giat.geowave.index.StringUtils;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
@@ -122,7 +124,9 @@ public class OperationCommandLineOptions
 	public static void printHelp() {
 		final HelpFormatter helpFormatter = new HelpFormatter();
 		final PrintWriter pw = new PrintWriter(
-				System.out);
+				new OutputStreamWriter(
+						System.out,
+						StringUtils.UTF8_CHAR_SET));
 		final int width = HelpFormatter.DEFAULT_WIDTH;
 		helpFormatter.printUsage(
 				pw,
