@@ -9,6 +9,8 @@ ifdef::backend-html5[]
 
 === icon:home[] http://ngageoint.github.io/geowave/[Site]
 
+=== icon:file-pdf-o[] https://s3.amazonaws.com/geowave/docs/documentation.pdf[PDF^]
+
 === icon:file-code-o[] http://ngageoint.github.io/geowave/apidocs/index.html[Javadoc]
 
 === icon:github[] https://github.com/ngageoint/geowave[GitHub]

@@ -64,8 +64,9 @@ Restart Accumulo service
 
 === RPM Installation Notes
 
-* geowwave-cdh5-accumulo: This RPM will install the GeoWave Accumulo iterator into the local file system and then upload
+geowave-cdh5-accumulo: This RPM will install the GeoWave Accumulo iterator into the local file system and then upload
 it into HDFS using the `hadoop fs -put` command. This means of deployment requires that the RPM is installed on a node that
 has the correct binaries and configuration in place to push files to HDFS, like your namenode.
-* With the exception of the Accumulo RPM mentioned above you can install the rest of the RPMs all on a single node or
+
+With the exception of the Accumulo RPM mentioned above you can install the rest of the RPMs all on a single node or
 a mix of nodes depending on your cluster configuration. All GeoWave files get installed into the `/usr/local/geowave/' directory
