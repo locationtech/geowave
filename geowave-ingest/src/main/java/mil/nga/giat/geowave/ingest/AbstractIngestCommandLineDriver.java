@@ -11,6 +11,7 @@ import java.util.Map.Entry;
 import java.util.ServiceLoader;
 
 import mil.nga.giat.geowave.index.StringUtils;
+
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.HelpFormatter;
@@ -29,13 +30,14 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  * operation set by the user.
  * 
  */
-abstract public class AbstractCommandLineDriver
+abstract public class AbstractIngestCommandLineDriver implements
+		CLIOperationDriver
 {
-	private final static Logger LOGGER = Logger.getLogger(AbstractCommandLineDriver.class);
+	private final static Logger LOGGER = Logger.getLogger(AbstractIngestCommandLineDriver.class);
 	final protected Map<String, IngestTypePluginProviderSpi<?, ?>> pluginProviderRegistry;
 	private final String operation;
 
-	public AbstractCommandLineDriver(
+	public AbstractIngestCommandLineDriver(
 			final String operation ) {
 		super();
 		pluginProviderRegistry = new HashMap<String, IngestTypePluginProviderSpi<?, ?>>();
@@ -65,6 +67,7 @@ abstract public class AbstractCommandLineDriver
 		return ingestTypeName;
 	}
 
+	@Override
 	public void run(
 			final String[] args )
 			throws ParseException {

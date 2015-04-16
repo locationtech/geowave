@@ -128,8 +128,9 @@ public class GeoWaveFeatureReaderTest
 	public void testFID()
 			throws IllegalArgumentException,
 			NoSuchElementException,
-			IOException {
-		final FeatureReader reader = dataStore.getFeatureReader(
+			IOException,
+			CQLException {
+		FeatureReader reader = dataStore.getFeatureReader(
 				type.getTypeName(),
 				query);
 		int count = 0;
@@ -140,7 +141,7 @@ public class GeoWaveFeatureReaderTest
 		}
 		assertTrue(count > 0);
 	}
-			
+
 	@Test
 	public void testBBOX()
 			throws IllegalArgumentException,

@@ -6,7 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Map;
 
-import mil.nga.giat.geowave.ingest.AbstractCommandLineDriver;
+import mil.nga.giat.geowave.ingest.AbstractIngestCommandLineDriver;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Options;
@@ -26,7 +26,7 @@ import org.apache.log4j.Logger;
  *            file.
  */
 abstract public class AbstractLocalFileDriver<P extends LocalPluginBase, R> extends
-		AbstractCommandLineDriver
+		AbstractIngestCommandLineDriver
 {
 	private final static Logger LOGGER = Logger.getLogger(AbstractLocalFileDriver.class);
 	protected LocalInputCommandLineOptions localInput;

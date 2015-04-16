@@ -252,7 +252,8 @@ public class CentroidManagerGeoWave<T> implements
 			LOGGER.error("Cannot instantiate " + GeoWaveConfiguratorBase.enumToConfKey(
 					this.getClass(),
 					CommonParameters.Common.ACCUMULO_CONNECT_FACTORY));
-			throw new IOException(e.getLocalizedMessage(),
+			throw new IOException(
+					e.getLocalizedMessage(),
 					e);
 		}
 		dataStore = new AccumuloDataStore(
@@ -279,7 +280,8 @@ public class CentroidManagerGeoWave<T> implements
 					SimpleFeatureItemWrapperFactory.class);
 		}
 		catch (InstantiationException e) {
-			throw new IOException(e.getLocalizedMessage(),
+			throw new IOException(
+					e.getLocalizedMessage(),
 					e);
 		}
 		this.centroidDataTypeId = runTimeProperties.getPropertyAsString(CentroidParameters.Centroid.DATA_TYPE_ID);
@@ -305,7 +307,8 @@ public class CentroidManagerGeoWave<T> implements
 		}
 		catch (InstantiationException | IllegalAccessException e) {
 			throw new IOException(
-					e.getLocalizedMessage(),e);
+					e.getLocalizedMessage(),
+					e);
 		}
 
 		dataStore = new AccumuloDataStore(

@@ -12,13 +12,13 @@ import org.apache.commons.cli.ParseException;
  * first stage intermediate data to HDFS and then to ingest it.
  */
 public class MultiStageCommandLineDriver extends
-		AbstractCommandLineDriver
+		AbstractIngestCommandLineDriver
 {
-	private final AbstractCommandLineDriver[] orderedStages;
+	private final AbstractIngestCommandLineDriver[] orderedStages;
 
 	public MultiStageCommandLineDriver(
 			final String operation,
-			final AbstractCommandLineDriver[] orderedStages ) {
+			final AbstractIngestCommandLineDriver[] orderedStages ) {
 		super(
 				operation);
 		this.orderedStages = orderedStages;
@@ -28,7 +28,7 @@ public class MultiStageCommandLineDriver extends
 	protected void runInternal(
 			final String[] args,
 			final List<IngestTypePluginProviderSpi<?, ?>> pluginProviders ) {
-		for (final AbstractCommandLineDriver stage : orderedStages) {
+		for (final AbstractIngestCommandLineDriver stage : orderedStages) {
 			stage.runInternal(
 					args,
 					pluginProviders);
@@ -39,7 +39,7 @@ public class MultiStageCommandLineDriver extends
 	public void parseOptionsInternal(
 			final CommandLine commandLine )
 			throws ParseException {
-		for (final AbstractCommandLineDriver stage : orderedStages) {
+		for (final AbstractIngestCommandLineDriver stage : orderedStages) {
 			stage.parseOptionsInternal(commandLine);
 		}
 	}
@@ -47,7 +47,7 @@ public class MultiStageCommandLineDriver extends
 	@Override
 	public void applyOptionsInternal(
 			final Options allOptions ) {
-		for (final AbstractCommandLineDriver stage : orderedStages) {
+		for (final AbstractIngestCommandLineDriver stage : orderedStages) {
 			stage.applyOptionsInternal(allOptions);
 		}
 	}
