@@ -17,7 +17,7 @@ import org.apache.log4j.Logger;
  */
 public class MapReduceCommandLineOptions
 {
-	private final static Logger LOGGER = Logger.getLogger(HdfsCommandLineOptions.class);
+	private final static Logger LOGGER = Logger.getLogger(MapReduceCommandLineOptions.class);
 	private final String jobTrackerHostPort;
 
 	public MapReduceCommandLineOptions(
