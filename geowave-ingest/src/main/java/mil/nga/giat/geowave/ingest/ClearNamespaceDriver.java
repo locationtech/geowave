@@ -16,7 +16,7 @@ import org.apache.log4j.Logger;
  * all tables prefixed by the given namespace.
  */
 public class ClearNamespaceDriver extends
-		AbstractCommandLineDriver
+		AbstractIngestCommandLineDriver
 {
 	private final static Logger LOGGER = Logger.getLogger(ClearNamespaceDriver.class);
 	protected AccumuloCommandLineOptions accumulo;

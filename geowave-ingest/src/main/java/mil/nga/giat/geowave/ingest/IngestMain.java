@@ -20,17 +20,14 @@ public class IngestMain
 
 	public static void main(
 			final String[] args ) {
-		final Options operations = new Options();
-		OperationCommandLineOptions.applyOptions(operations);
 		if (args.length < 1) {
-			final HelpFormatter help = new HelpFormatter();
-			help.printHelp(
-					"<operation> <options>",
-					"\nOperations:",
-					operations,
-					"\nOptions are specific to operation choice. Use <operation> -h for help.");
-			System.exit(-1);
+			OperationCommandLineOptions.printHelp();
 		}
+
+		final Options operations = new Options();
+
+		OperationCommandLineOptions.applyOptions(operations);
+
 		final String[] optionsArgs = new String[args.length - 1];
 		System.arraycopy(
 				args,

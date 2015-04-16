@@ -216,6 +216,7 @@
 						<phase>post-integration-test</phase>
 						<configuration>
 							<tasks xmlns:jacoco="antlib:org.jacoco.ant">
+								<mkdir dir="${project.reporting.outputDirectory}" />
 								<taskdef uri="antlib:org.jacoco.ant" resource="org/jacoco/ant/antlib.xml"
 									classpathref="maven.plugin.classpath" />
 								<jacoco:report>

@@ -7,7 +7,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import mil.nga.giat.geowave.accumulo.mapreduce.GeoWaveConfiguratorBase;
-import mil.nga.giat.geowave.ingest.AbstractCommandLineDriver;
+import mil.nga.giat.geowave.ingest.AbstractIngestCommandLineDriver;
 import mil.nga.giat.geowave.ingest.AccumuloCommandLineOptions;
 import mil.nga.giat.geowave.ingest.IngestTypePluginProviderSpi;
 import mil.nga.giat.geowave.ingest.hdfs.HdfsCommandLineOptions;
@@ -26,7 +26,7 @@ import org.apache.log4j.Logger;
  * that had been staged in HDFS.
  */
 public class IngestFromHdfsDriver extends
-		AbstractCommandLineDriver
+		AbstractIngestCommandLineDriver
 {
 	private final static Logger LOGGER = Logger.getLogger(IngestFromHdfsDriver.class);
 	private final static int NUM_CONCURRENT_JOBS = 5;
