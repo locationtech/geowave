@@ -294,14 +294,7 @@ public class GeoWaveFeatureCollection extends
 								LEVEL),
 						(String) query.getHints().get(
 								STATS_NAME));
-			}
-			else if ((jtsBounds == null) && (timeBounds == null)) {
-				// get all of the data (yikes)
-				featureCursor = reader.getAllData(
-						getFilter(query),
-						limit);
-			}
-			else {
+			} else {
 				// get the data within the bounding box
 				featureCursor = reader.getData(
 						jtsBounds,

@@ -339,35 +339,6 @@ public class GeoWaveFeatureReader implements
 
 	}
 
-	@SuppressWarnings({
-		"unchecked",
-		"rawtypes"
-	})
-	public CloseableIterator<SimpleFeature> getAllData(
-			final Filter filter,
-			final Integer limit ) {
-		if (filter instanceof FidFilterImpl) {
-			final List<SimpleFeature> retVal = new ArrayList<SimpleFeature>();
-			final Set<String> fids = ((FidFilterImpl) filter).getIDs();
-			for (final String fid : fids) {
-				retVal.add((SimpleFeature) components.getDataStore().getEntry(
-						components.getCurrentIndex(),
-						new ByteArrayId(
-								fid),
-						components.getAdapter().getAdapterId(),
-						transaction.composeAuthorizations()));
-			}
-			return new CloseableIterator.Wrapper(
-					retVal.iterator());
-		}
-		return issueQuery(
-				null,
-				null,
-				new BaseIssuer(
-						filter,
-						limit));
-	}
-
 	public CloseableIterator<SimpleFeature> renderData(
 			final Geometry jtsBounds,
 			final TemporalConstraintsSet timeBounds,
@@ -420,6 +391,20 @@ public class GeoWaveFeatureReader implements
 			final TemporalConstraintsSet timeBounds,
 			final Filter filter,
 			final Integer limit ) {
+		if (filter instanceof FidFilterImpl) {
+			final List<SimpleFeature> retVal = new ArrayList<SimpleFeature>();
+			final Set<String> fids = ((FidFilterImpl) filter).getIDs();
+			for (final String fid : fids) {
+				retVal.add((SimpleFeature) components.getDataStore().getEntry(
+						components.getCurrentIndex(),
+						new ByteArrayId(
+								fid),
+						components.getAdapter().getAdapterId(),
+						transaction.composeAuthorizations()));
+			}
+			return new CloseableIterator.Wrapper(
+					retVal.iterator());
+		}
 		return issueQuery(
 				jtsBounds,
 				timeBounds,
