@@ -46,16 +46,25 @@ cd ${WORKSPACE}/${ARGS[buildroot]}/TARBALL/geowave
 rpm2cpio *.rpm | cpio -idmv
 
 # Remove what we don't want to distribute within the tarball
-rm -f *.rpm *.xml gh-pages.zip *.spec
+rm -f *.rpm *.xml *.spec
 
 # Extract the build metadata from one of the artifacts
 unzip -p geowave-accumulo.jar build.properties > build.properties
 
-# Archive things up and get rid of our temp area
+# Extract the pdf version of the docs so it's more visibly available
+tar xzf site.tar.gz --strip-components=1  site/documentation.pdf
+
+# Archive things, copy some artifacts up to AWS if available and get rid of our temp area
 cd ..
 githash=$(cat geowave/build.properties | grep project.scm.revision | sed -e 's/project.scm.revision=//g')
 version=$(cat geowave/build.properties | grep project.version | sed -e 's/project.version=//g')
 tar cvzf geowave-$version-${githash:0:7}.tar.gz geowave
+
+# Push our compiled docs to S3 if aws command has been installed
+if command -v aws >/dev/null 2>&1 ; then
+    aws s3 cp geowave/documentation.pdf s3://geowave/docs/
+fi
+
 rm -rf geowave
 
 echo '###### Copy rpm to repo and reindex'
