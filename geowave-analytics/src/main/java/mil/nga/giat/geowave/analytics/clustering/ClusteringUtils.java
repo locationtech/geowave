@@ -14,6 +14,8 @@ import mil.nga.giat.geowave.analytics.parameters.GlobalParameters;
 import mil.nga.giat.geowave.analytics.tools.AnalyticFeature;
 import mil.nga.giat.geowave.analytics.tools.PropertyManagement;
 import mil.nga.giat.geowave.analytics.tools.dbops.AccumuloAdapterStoreFactory;
+import mil.nga.giat.geowave.analytics.tools.dbops.AdapterStoreFactory;
+import mil.nga.giat.geowave.analytics.tools.dbops.BasicAccumuloOperationsFactory;
 import mil.nga.giat.geowave.analytics.tools.dbops.DirectBasicAccumuloOperationsFactory;
 import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.index.ByteArrayRange;
@@ -125,6 +127,7 @@ public class ClusteringUtils
 
 			final AdapterStore adapterStore = propertyManagement.getClassInstance(
 					CommonParameters.Common.ADAPTER_STORE_FACTORY,
+					AdapterStoreFactory.class,
 					AccumuloAdapterStoreFactory.class).getAdapterStore(
 					propertyManagement);
 
@@ -157,6 +160,7 @@ public class ClusteringUtils
 		try {
 			ops = propertyManagement.getClassInstance(
 					CommonParameters.Common.ACCUMULO_CONNECT_FACTORY,
+					BasicAccumuloOperationsFactory.class,
 					DirectBasicAccumuloOperationsFactory.class).build(
 					zookeeper,
 					accumuloInstance,
@@ -229,6 +233,7 @@ public class ClusteringUtils
 			throws Exception {
 		return propertyManagement.getClassInstance(
 				CommonParameters.Common.ACCUMULO_CONNECT_FACTORY,
+				BasicAccumuloOperationsFactory.class,
 				DirectBasicAccumuloOperationsFactory.class).build(
 				propertyManagement.getPropertyAsString(GlobalParameters.Global.ZOOKEEKER),
 				propertyManagement.getPropertyAsString(GlobalParameters.Global.ACCUMULO_INSTANCE),
@@ -253,6 +258,7 @@ public class ClusteringUtils
 						BasicFeatureTypes.DEFAULT_NAMESPACE),
 				propertyManagement.getClassInstance(
 						CommonParameters.Common.ADAPTER_STORE_FACTORY,
+						AdapterStoreFactory.class,
 						AccumuloAdapterStoreFactory.class).getAdapterStore(
 						propertyManagement),
 				dimensionExtractorClass.newInstance().getDimensionNames());

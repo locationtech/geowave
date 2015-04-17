@@ -55,6 +55,7 @@ public class GeometryDataSetGenerator
 	private double[] minAxis;
 	private double[] maxAxis;
 	private CoordinateSystem coordSystem;
+	private boolean includePolygons = true;
 
 	public GeometryDataSetGenerator(
 			final DistanceFn<SimpleFeature> distanceFunction,
@@ -63,6 +64,15 @@ public class GeometryDataSetGenerator
 		this.distanceFunction = distanceFunction;
 		this.builder = builder;
 		init();
+	}
+
+	public boolean isIncludePolygons() {
+		return includePolygons;
+	}
+
+	public void setIncludePolygons(
+			boolean includePolygons ) {
+		this.includePolygons = includePolygons;
 	}
 
 	public SimpleFeature getCorner() {
@@ -398,7 +408,7 @@ public class GeometryDataSetGenerator
 
 		final int dims = coordSystem.getDimension();
 
-		final int shapeSize = (rand.nextInt(Integer.MAX_VALUE) % 5) + 1;
+		final int shapeSize = includePolygons ? (rand.nextInt(Integer.MAX_VALUE) % 5) + 1 : 1;
 		final Coordinate[] shape = new Coordinate[shapeSize > 2 ? shapeSize + 1 : shapeSize];
 		final double[] constrainedMaxAxis = Arrays.copyOf(
 				maxAxis,

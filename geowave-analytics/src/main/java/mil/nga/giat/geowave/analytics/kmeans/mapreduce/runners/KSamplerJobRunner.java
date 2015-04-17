@@ -2,14 +2,8 @@ package mil.nga.giat.geowave.analytics.kmeans.mapreduce.runners;
 
 import java.util.UUID;
 
-import mil.nga.giat.geowave.accumulo.AccumuloOperations;
-import mil.nga.giat.geowave.accumulo.BasicAccumuloOperations;
-import mil.nga.giat.geowave.accumulo.mapreduce.GeoWaveJobRunner;
 import mil.nga.giat.geowave.accumulo.mapreduce.input.GeoWaveInputKey;
-import mil.nga.giat.geowave.accumulo.mapreduce.output.GeoWaveOutputFormat;
 import mil.nga.giat.geowave.accumulo.mapreduce.output.GeoWaveOutputKey;
-import mil.nga.giat.geowave.accumulo.metadata.AccumuloAdapterStore;
-import mil.nga.giat.geowave.accumulo.metadata.AccumuloIndexStore;
 import mil.nga.giat.geowave.analytics.clustering.NestedGroupCentroidAssignment;
 import mil.nga.giat.geowave.analytics.kmeans.mapreduce.KSamplerMapReduce;
 import mil.nga.giat.geowave.analytics.parameters.CentroidParameters;
@@ -20,19 +14,20 @@ import mil.nga.giat.geowave.analytics.sample.functions.RandomSamplingRankFunctio
 import mil.nga.giat.geowave.analytics.sample.functions.SamplingRankFunction;
 import mil.nga.giat.geowave.analytics.tools.PropertyManagement;
 import mil.nga.giat.geowave.analytics.tools.RunnerUtils;
+import mil.nga.giat.geowave.analytics.tools.mapreduce.FormatConfiguration;
+import mil.nga.giat.geowave.analytics.tools.mapreduce.GeoWaveAnalyticJobRunner;
+import mil.nga.giat.geowave.analytics.tools.mapreduce.GeoWaveOutputFormatConfiguration;
 import mil.nga.giat.geowave.analytics.tools.mapreduce.MapReduceJobRunner;
 import mil.nga.giat.geowave.index.ByteArrayId;
+import mil.nga.giat.geowave.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.store.index.Index;
+import mil.nga.giat.geowave.store.index.IndexStore;
 import mil.nga.giat.geowave.store.index.IndexType;
 
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.ObjectWritable;
 import org.apache.hadoop.mapreduce.Job;
-import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
-import org.apache.hadoop.mapreduce.lib.input.SequenceFileInputFormat;
-import org.apache.hadoop.util.ToolRunner;
 
 /**
  * 
@@ -46,27 +41,19 @@ import org.apache.hadoop.util.ToolRunner;
  * 
  */
 public class KSamplerJobRunner extends
-		GeoWaveJobRunner implements
+		GeoWaveAnalyticJobRunner implements
 		MapReduceJobRunner
 {
-	protected Path inputHDFSPath;
 	protected int zoomLevel = 1;
 	private Class<? extends SamplingRankFunction> samplingRankFunctionClass = RandomSamplingRankFunction.class;
-	private String sampleDataTypeId;
-	private String indexId;
 
 	public KSamplerJobRunner() {
-
+		super.setOutputFormatConfiguration(new GeoWaveOutputFormatConfiguration());
 	}
 
 	public void setSamplingRankFunctionClass(
 			final Class<? extends SamplingRankFunction> samplingRankFunctionClass ) {
 		this.samplingRankFunctionClass = samplingRankFunctionClass;
-	}
-
-	public void setInputHDFSPath(
-			final Path inputHDFSPath ) {
-		this.inputHDFSPath = inputHDFSPath;
 	}
 
 	public void setZoomLevel(
@@ -75,74 +62,44 @@ public class KSamplerJobRunner extends
 	}
 
 	@Override
+	public Class<?> getScope() {
+		return KSamplerMapReduce.class;
+	}
+
+	@Override
 	public void configure(
 			final Job job )
 			throws Exception {
-
-		job.setJobName("GeoWave K-Sample (" + namespace + ")");
-		job.setInputFormatClass(SequenceFileInputFormat.class);
 		job.setMapperClass(KSamplerMapReduce.SampleMap.class);
 		job.setMapOutputKeyClass(GeoWaveInputKey.class);
 		job.setMapOutputValueClass(ObjectWritable.class);
 		job.setReducerClass(KSamplerMapReduce.SampleReducer.class);
 		job.setPartitionerClass(KSamplerMapReduce.SampleKeyPartitioner.class);
-		job.setOutputFormatClass(GeoWaveOutputFormat.class);
 		job.setReduceSpeculativeExecution(false);
 		job.setOutputKeyClass(GeoWaveOutputKey.class);
 		job.setOutputValueClass(Object.class);
-		job.setNumReduceTasks(zoomLevel); // increase the tasks for each level
-											// to compensate for the increased
-											// work load
-
-		RunnerUtils.setParameter(
-				job.getConfiguration(),
-				KSamplerMapReduce.class,
-				new Object[] {
-					samplingRankFunctionClass
-				},
-				new ParameterEnum[] {
-					SampleParameters.Sample.SAMPLE_RANK_FUNCTION,
-				});
-
-		FileInputFormat.setInputPaths(
-				job,
-				inputHDFSPath);
-
-		addDataAdapter(getAdapter(job));
-		addIndex(getIndex());
 	}
 
 	private DataAdapter<?> getAdapter(
-			final Job job )
+			final PropertyManagement runTimeProperties )
 			throws Exception {
-		final AccumuloOperations operations = new BasicAccumuloOperations(
-				zookeeper,
-				instance,
-				user,
-				password,
-				namespace);
-
-		final AccumuloAdapterStore adapterStore = new AccumuloAdapterStore(
-				operations);
+		final AdapterStore adapterStore = super.getAdapterStore(runTimeProperties);
 
 		return adapterStore.getAdapter(new ByteArrayId(
-				sampleDataTypeId));
+				runTimeProperties.getPropertyAsString(
+						SampleParameters.Sample.DATA_TYPE_ID,
+						"sample")));
 	}
 
-	private Index getIndex()
+	private Index getIndex(
+			final PropertyManagement runTimeProperties )
 			throws Exception {
-		final AccumuloOperations operations = new BasicAccumuloOperations(
-				zookeeper,
-				instance,
-				user,
-				password,
-				namespace);
-
-		final AccumuloIndexStore indexStore = new AccumuloIndexStore(
-				operations);
+		final IndexStore indexStore = super.getIndexStore(runTimeProperties);
 
 		return indexStore.getIndex(new ByteArrayId(
-				indexId));
+				runTimeProperties.getPropertyAsString(
+						SampleParameters.Sample.INDEX_ID,
+						"index")));
 	}
 
 	@Override
@@ -159,7 +116,7 @@ public class KSamplerJobRunner extends
 				SampleParameters.Sample.DATA_TYPE_ID,
 				"sample");
 
-		runTimeProperties.storeIfEmpty(
+		runTimeProperties.store(
 				CentroidParameters.Centroid.ZOOM_LEVEL,
 				zoomLevel);
 
@@ -180,17 +137,32 @@ public class KSamplerJobRunner extends
 					CentroidParameters.Centroid.ZOOM_LEVEL
 				});
 
+		RunnerUtils.setParameter(
+				config,
+				KSamplerMapReduce.class,
+				new Object[] {
+					samplingRankFunctionClass
+				},
+				new ParameterEnum[] {
+					SampleParameters.Sample.SAMPLE_RANK_FUNCTION,
+				});
+
 		NestedGroupCentroidAssignment.setParameters(
 				config,
 				runTimeProperties);
 
-		sampleDataTypeId = runTimeProperties.getPropertyAsString(SampleParameters.Sample.DATA_TYPE_ID);
-		indexId = runTimeProperties.getPropertyAsString(SampleParameters.Sample.INDEX_ID);
-
-		return ToolRunner.run(
+		addDataAdapter(
 				config,
-				this,
-				runTimeProperties.toGeoWaveRunnerArguments());
+				getAdapter(runTimeProperties));
+		addIndex(
+				config,
+				getIndex(runTimeProperties));
+
+		super.setReducerCount(zoomLevel);
+		return super.run(
+				config,
+				runTimeProperties);
+
 	}
 
 }

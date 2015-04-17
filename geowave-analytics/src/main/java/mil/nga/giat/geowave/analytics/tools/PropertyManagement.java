@@ -107,8 +107,9 @@ public class PropertyManagement implements
 		this.converters.add(new QueryConverter());
 		this.converters.add(new PathConverter());
 		this.converters.add(new PersistableConverter());
-		for (PropertyConverter<?> converter : converters)
-			this.addConverter(converter);
+		for (final PropertyConverter<?> converter : converters) {
+			addConverter(converter);
+		}
 		store(
 				names,
 				values);
@@ -138,19 +139,20 @@ public class PropertyManagement implements
 		try {
 			convertedValue = converter.convert(value);
 		}
-		catch (Exception e) {
+		catch (final Exception e) {
 			throw new IllegalArgumentException(
 					String.format(
 							"Cannot store %s with value %s. Expected type = %s; Error message = %s",
 							toPropertyName(property),
 							value.toString(),
 							property.getBaseClass().toString(),
-							e.getLocalizedMessage()));
+							e.getLocalizedMessage()),
+					e);
 		}
 		properties.put(
 				toPropertyName(property),
 				convertedValue);
-		this.addConverter(converter);
+		addConverter(converter);
 	}
 
 	public synchronized void store(
@@ -162,7 +164,7 @@ public class PropertyManagement implements
 					property,
 					value);
 		}
-		catch (Exception e) {
+		catch (final Exception e) {
 			throw new IllegalArgumentException(
 					String.format(
 							"Cannot store %s with value %s:%s",
@@ -226,7 +228,8 @@ public class PropertyManagement implements
 	@SuppressWarnings("unchecked")
 	public <T> T getClassInstance(
 			final ParameterEnum property,
-			final Class<T> defaultClass )
+			final Class<T> iface,
+			final Class<?> defaultClass )
 			throws InstantiationException {
 		final Object o = properties.get(toPropertyName(property));
 
@@ -288,15 +291,16 @@ public class PropertyManagement implements
 
 		final Serializable value = properties.get(toPropertyName(property));
 		if (!Serializable.class.isAssignableFrom(property.getBaseClass())) {
-			for (PropertyConverter converter : this.converters)
+			for (final PropertyConverter converter : converters) {
 				if (property.getBaseClass().isAssignableFrom(
 						converter.baseClass())) {
 					return this.validate(
 							property,
 							converter.convert(value));
 				}
+			}
 		}
-		return (Serializable) this.validate(
+		return this.validate(
 				property,
 				value);
 	}
@@ -312,7 +316,7 @@ public class PropertyManagement implements
 	 */
 	public <T> T getProperty(
 			final ParameterEnum property,
-			PropertyConverter<T> converter )
+			final PropertyConverter<T> converter )
 			throws Exception {
 
 		final Serializable value = properties.get(toPropertyName(property));
@@ -358,7 +362,9 @@ public class PropertyManagement implements
 			final int defaultValue ) {
 		final Object val = properties.get(toPropertyName(property));
 		if (val != null) {
-			if (val instanceof Integer) return (Integer) val;
+			if (val instanceof Integer) {
+				return (Integer) val;
+			}
 			return (Integer) validate(
 					property,
 					Integer.parseInt(val.toString()));
@@ -372,7 +378,9 @@ public class PropertyManagement implements
 			final double defaultValue ) {
 		final Object val = properties.get(toPropertyName(property));
 		if (val != null) {
-			if (val instanceof Double) return (Double) val;
+			if (val instanceof Double) {
+				return (Double) val;
+			}
 			return Double.parseDouble(val.toString());
 		}
 		LOGGER.warn("Using default value for parameter : " + toPropertyName(property));
@@ -603,6 +611,18 @@ public class PropertyManagement implements
 		}
 	}
 
+	public static boolean hasOption(
+			final Set<Option> options,
+			final ParameterEnum optionParameter ) {
+		for (final Option option : options) {
+			if (option.getLongOpt().equals(
+					toPropertyName(optionParameter))) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public static void removeOption(
 			final Set<Option> options,
 			final ParameterEnum parameter ) {
@@ -617,29 +637,29 @@ public class PropertyManagement implements
 
 	@Override
 	public int getInt(
-			Enum<?> property,
-			Class<?> scope,
-			int defaultValue ) {
-		return this.getPropertyAsInt(
+			final Enum<?> property,
+			final Class<?> scope,
+			final int defaultValue ) {
+		return getPropertyAsInt(
 				(ParameterEnum) (property),
 				defaultValue);
 	}
 
 	@Override
 	public double getDouble(
-			Enum<?> property,
-			Class<?> scope,
-			double defaultValue ) {
-		return this.getPropertyAsDouble(
+			final Enum<?> property,
+			final Class<?> scope,
+			final double defaultValue ) {
+		return getPropertyAsDouble(
 				(ParameterEnum) (property),
 				defaultValue);
 	}
 
 	@Override
 	public String getString(
-			Enum<?> property,
-			Class<?> scope,
-			String defaultValue ) {
+			final Enum<?> property,
+			final Class<?> scope,
+			final String defaultValue ) {
 		return this.getPropertyAsString(
 				(ParameterEnum) (property),
 				defaultValue);
@@ -647,10 +667,10 @@ public class PropertyManagement implements
 
 	@Override
 	public <T> T getInstance(
-			Enum<?> property,
-			Class<?> scope,
-			Class<T> iface,
-			Class<? extends T> defaultValue )
+			final Enum<?> property,
+			final Class<?> scope,
+			final Class<T> iface,
+			final Class<? extends T> defaultValue )
 			throws InstantiationException,
 			IllegalAccessException {
 		return this.getPropertyAsClass(
@@ -661,13 +681,13 @@ public class PropertyManagement implements
 
 	@Override
 	public byte[] getBytes(
-			Enum<?> property,
-			Class<?> scope ) {
+			final Enum<?> property,
+			final Class<?> scope ) {
 		return getPropertyAsBytes((ParameterEnum) property);
 	}
 
 	public void toOutput(
-			OutputStream os )
+			final OutputStream os )
 			throws IOException {
 		try (ObjectOutputStream oos = new ObjectOutputStream(
 				os)) {
@@ -676,7 +696,7 @@ public class PropertyManagement implements
 	}
 
 	public void fromInput(
-			InputStream is )
+			final InputStream is )
 			throws IOException,
 			ClassNotFoundException {
 		try (ObjectInputStream ois = new ObjectInputStream(
@@ -687,9 +707,9 @@ public class PropertyManagement implements
 	}
 
 	public void fromProperties(
-			Properties properties ) {
+			final Properties properties ) {
 		this.properties.clear();
-		for (Object key : properties.keySet()) {
+		for (final Object key : properties.keySet()) {
 			this.properties.put(
 					key.toString(),
 					properties.getProperty(key.toString()));
@@ -707,19 +727,19 @@ public class PropertyManagement implements
 	 * @param converter
 	 */
 	public synchronized void addConverter(
-			PropertyConverter<?> converter ) {
-		this.converters.add(converter);
+			final PropertyConverter<?> converter ) {
+		converters.add(converter);
 	}
 
 	private static byte[] toBytes(
-			Persistable persistableObject )
+			final Persistable persistableObject )
 			throws UnsupportedEncodingException {
 		return PersistenceUtils.toBinary(persistableObject);
 	}
 
 	private static Persistable fromBytes(
-			byte[] data,
-			Class<? extends Persistable> expectedType )
+			final byte[] data,
+			final Class<? extends Persistable> expectedType )
 			throws InstantiationException,
 			IllegalAccessException,
 			ClassNotFoundException,
@@ -735,31 +755,35 @@ public class PropertyManagement implements
 		if (value != null) {
 			if (value instanceof Class) {
 				if (propertyName.getBaseClass().isAssignableFrom(
-						(Class<?>) value)) throw new IllegalArgumentException(
-						String.format(
-								"%s does not accept class %s",
-								toPropertyName(propertyName),
-								((Class<?>) value).getName()));
+						(Class<?>) value)) {
+					throw new IllegalArgumentException(
+							String.format(
+									"%s does not accept class %s",
+									toPropertyName(propertyName),
+									((Class<?>) value).getName()));
+				}
 			}
 			else if (!propertyName.getBaseClass().isInstance(
-					value)) throw new IllegalArgumentException(
-					String.format(
-							"%s does not accept type %s",
-							toPropertyName(propertyName),
-							value.getClass().getName()));
+					value)) {
+				throw new IllegalArgumentException(
+						String.format(
+								"%s does not accept type %s",
+								toPropertyName(propertyName),
+								value.getClass().getName()));
+			}
 		}
 		return value;
 	}
 
 	@SuppressWarnings("unchecked")
 	private Serializable convertIfNecessary(
-			ParameterEnum property,
+			final ParameterEnum property,
 			final Object value )
 			throws Exception {
 
 		if (!(value instanceof Serializable)) {
 			for (@SuppressWarnings("rawtypes")
-			PropertyConverter converter : converters) {
+			final PropertyConverter converter : converters) {
 				if (property.getBaseClass().isAssignableFrom(
 						converter.baseClass())) {
 					return converter.convert(value);
@@ -767,9 +791,9 @@ public class PropertyManagement implements
 			}
 		}
 		if (!property.getBaseClass().isInstance(
-				value) && value instanceof String) {
+				value) && (value instanceof String)) {
 			for (@SuppressWarnings("rawtypes")
-			PropertyConverter converter : converters) {
+			final PropertyConverter converter : converters) {
 				if (property.getBaseClass().isAssignableFrom(
 						converter.baseClass())) {
 					return converter.convert(converter.convert(value.toString()));
@@ -804,11 +828,11 @@ public class PropertyManagement implements
 
 		@Override
 		public Serializable convert(
-				DistributableQuery ob ) {
+				final DistributableQuery ob ) {
 			try {
 				return toBytes(ob);
 			}
-			catch (UnsupportedEncodingException e) {
+			catch (final UnsupportedEncodingException e) {
 				throw new IllegalArgumentException(
 						String.format(
 								"Cannot convert %s to a DistributableQuery: %s",
@@ -819,7 +843,7 @@ public class PropertyManagement implements
 
 		@Override
 		public DistributableQuery convert(
-				Serializable ob )
+				final Serializable ob )
 				throws Exception {
 			if (ob instanceof byte[]) {
 				return (DistributableQuery) PropertyManagement.fromBytes(
@@ -852,13 +876,13 @@ public class PropertyManagement implements
 
 		@Override
 		public Serializable convert(
-				Path ob ) {
+				final Path ob ) {
 			return ob.toUri().toString();
 		}
 
 		@Override
 		public Path convert(
-				Serializable ob )
+				final Serializable ob )
 				throws Exception {
 			return new Path(
 					ob.toString());
@@ -881,11 +905,11 @@ public class PropertyManagement implements
 
 		@Override
 		public Serializable convert(
-				Persistable ob ) {
+				final Persistable ob ) {
 			try {
 				return toBytes(ob);
 			}
-			catch (UnsupportedEncodingException e) {
+			catch (final UnsupportedEncodingException e) {
 				throw new IllegalArgumentException(
 						String.format(
 								"Cannot convert %s to a Persistable: %s",
@@ -896,7 +920,7 @@ public class PropertyManagement implements
 
 		@Override
 		public Persistable convert(
-				Serializable ob )
+				final Serializable ob )
 				throws Exception {
 			if (ob instanceof byte[]) {
 				return fromBytes(

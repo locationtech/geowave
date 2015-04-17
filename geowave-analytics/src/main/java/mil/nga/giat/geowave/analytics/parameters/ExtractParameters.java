@@ -64,7 +64,6 @@ public class ExtractParameters
 					"Output Data Type ID",
 					true));
 		}
-
 		if (contains(
 				params,
 				Extract.ADAPTER_ID)) {

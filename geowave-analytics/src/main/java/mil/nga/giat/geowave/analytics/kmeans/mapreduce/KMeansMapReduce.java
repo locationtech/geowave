@@ -1,7 +1,7 @@
 package mil.nga.giat.geowave.analytics.kmeans.mapreduce;
 
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.Point;
+import java.io.IOException;
+
 import mil.nga.giat.geowave.accumulo.mapreduce.GeoWaveWritableInputMapper;
 import mil.nga.giat.geowave.accumulo.mapreduce.input.GeoWaveInputKey;
 import mil.nga.giat.geowave.accumulo.mapreduce.output.GeoWaveOutputKey;
@@ -14,16 +14,23 @@ import mil.nga.giat.geowave.analytics.extract.CentroidExtractor;
 import mil.nga.giat.geowave.analytics.extract.SimpleFeatureCentroidExtractor;
 import mil.nga.giat.geowave.analytics.kmeans.AssociationNotification;
 import mil.nga.giat.geowave.analytics.parameters.CentroidParameters;
-import mil.nga.giat.geowave.analytics.tools.*;
+import mil.nga.giat.geowave.analytics.tools.AnalyticItemWrapper;
+import mil.nga.giat.geowave.analytics.tools.AnalyticItemWrapperFactory;
+import mil.nga.giat.geowave.analytics.tools.ConfigurationWrapper;
+import mil.nga.giat.geowave.analytics.tools.GeoObjectDimensionValues;
+import mil.nga.giat.geowave.analytics.tools.SimpleFeatureItemWrapperFactory;
 import mil.nga.giat.geowave.analytics.tools.mapreduce.GroupIDText;
 import mil.nga.giat.geowave.analytics.tools.mapreduce.JobContextConfigurationWrapper;
+
 import org.apache.hadoop.io.BytesWritable;
 import org.apache.hadoop.io.ObjectWritable;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Reducer;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
+import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.Point;
 
 /**
  * K-Means mapper and reducer. Mapper determines the closest centroid for an
@@ -53,7 +60,7 @@ import java.io.IOException;
 public class KMeansMapReduce
 {
 
-	protected static final Logger LOGGER = Logger.getLogger(KMeansReduce.class);
+	protected static final Logger LOGGER = LoggerFactory.getLogger(KMeansMapReduce.class);
 
 	public static class KMeansMapper extends
 			GeoWaveWritableInputMapper<GroupIDText, BytesWritable>

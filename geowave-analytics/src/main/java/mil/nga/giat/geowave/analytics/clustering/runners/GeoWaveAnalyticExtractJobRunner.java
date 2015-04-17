@@ -18,6 +18,7 @@ import mil.nga.giat.geowave.analytics.tools.AnalyticFeature;
 import mil.nga.giat.geowave.analytics.tools.IndependentJobRunner;
 import mil.nga.giat.geowave.analytics.tools.PropertyManagement;
 import mil.nga.giat.geowave.analytics.tools.RunnerUtils;
+import mil.nga.giat.geowave.analytics.tools.mapreduce.JobContextConfigurationWrapper;
 import mil.nga.giat.geowave.analytics.tools.mapreduce.MapReduceJobController;
 import mil.nga.giat.geowave.analytics.tools.mapreduce.MapReduceJobRunner;
 import mil.nga.giat.geowave.index.ByteArrayId;
@@ -66,7 +67,25 @@ public class GeoWaveAnalyticExtractJobRunner extends
 			final Job job )
 			throws Exception {
 
+		JobContextConfigurationWrapper configWrapper = new JobContextConfigurationWrapper(
+				job);
+
+		reducerCount = Math.max(
+				configWrapper.getInt(
+						ExtractParameters.Extract.REDUCER_COUNT,
+						SimpleFeatureOutputReducer.class,
+						1),
+				1);
+
+		outputBaseDir = configWrapper.getString(
+				MapReduceParameters.MRConfig.HDFS_BASE_DIR,
+				SimpleFeatureOutputReducer.class,
+				"/tmp");
+
+		LOGGER.info("Output base directory " + outputBaseDir);
+
 		super.configure(job);
+
 		@SuppressWarnings("rawtypes")
 		final Class<? extends DimensionExtractor> dimensionExtractorClass = job.getConfiguration().getClass(
 				GeoWaveConfiguratorBase.enumToConfKey(
@@ -135,19 +154,7 @@ public class GeoWaveAnalyticExtractJobRunner extends
 			final PropertyManagement runTimeProperties )
 			throws Exception {
 
-		outputBaseDir = runTimeProperties.getPropertyAsString(
-				MapReduceParameters.MRConfig.HDFS_BASE_DIR,
-				"/tmp");
-
-		LOGGER.info("Output base directory " + outputBaseDir);
-
-		reducerCount = Math.max(
-				1,
-				runTimeProperties.getPropertyAsInt(
-						ExtractParameters.Extract.REDUCER_COUNT,
-						reducerCount));
-
-		if (!runTimeProperties.hasProperty(ExtractParameters.Extract.OUTPUT_DATA_TYPE_ID)) runTimeProperties.store(
+		runTimeProperties.storeIfEmpty(
 				ExtractParameters.Extract.OUTPUT_DATA_TYPE_ID,
 				"centroid");
 
@@ -156,6 +163,8 @@ public class GeoWaveAnalyticExtractJobRunner extends
 				SimpleFeatureOutputReducer.class,
 				runTimeProperties,
 				new ParameterEnum[] {
+					MapReduceParameters.MRConfig.HDFS_BASE_DIR,
+					ExtractParameters.Extract.REDUCER_COUNT,
 					ExtractParameters.Extract.DATA_NAMESPACE_URI,
 					ExtractParameters.Extract.OUTPUT_DATA_TYPE_ID
 				});
@@ -187,7 +196,6 @@ public class GeoWaveAnalyticExtractJobRunner extends
 		setMaxInputSplits(runTimeProperties.getPropertyAsInt(
 				ExtractParameters.Extract.MAX_INPUT_SPLIT,
 				10000));
-		setOutputBaseDir(outputBaseDir);
 		setConf(config);
 
 		config.setClass(
@@ -273,11 +281,6 @@ public class GeoWaveAnalyticExtractJobRunner extends
 		return this.run(
 				MapReduceJobController.getConfiguration(runTimeProperties),
 				runTimeProperties);
-	}
-
-	private void setOutputBaseDir(
-			final String outputBaseDir ) {
-		this.outputBaseDir = outputBaseDir;
 	}
 
 }

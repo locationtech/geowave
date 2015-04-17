@@ -15,13 +15,13 @@ import mil.nga.giat.geowave.analytics.parameters.MapReduceParameters;
 import mil.nga.giat.geowave.analytics.parameters.SampleParameters;
 import mil.nga.giat.geowave.analytics.tools.PropertyManagement;
 import mil.nga.giat.geowave.analytics.tools.SimpleFeatureItemWrapperFactory;
+import mil.nga.giat.geowave.analytics.tools.mapreduce.FormatConfiguration;
 import mil.nga.giat.geowave.analytics.tools.mapreduce.MapReduceJobController;
 import mil.nga.giat.geowave.analytics.tools.mapreduce.MapReduceJobRunner;
 
 import org.apache.commons.cli.Option;
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.fs.Path;
-import org.apache.log4j.Logger;
+import org.slf4j.*;
 
 /*
  * Loop and sample multiple sets of K centers.
@@ -41,7 +41,7 @@ public class SampleMultipleSetsJobRunner<T> extends
 		MapReduceJobRunner
 {
 
-	protected static final Logger LOGGER = Logger.getLogger(SampleMultipleSetsJobRunner.class);
+	protected static final Logger LOGGER = LoggerFactory.getLogger(SampleMultipleSetsJobRunner.class);
 
 	private final KSamplerJobRunner initialSampleRunner = new KSamplerJobRunner();
 	private final UpdateCentroidCostJobRunner updateCostRunner = new UpdateCentroidCostJobRunner();
@@ -49,6 +49,7 @@ public class SampleMultipleSetsJobRunner<T> extends
 	private final StripWeakCentroidsRunner<T> stripWeakCentroidsRunner = new StripWeakCentroidsRunner<T>();
 	private final IterationCountCalculateRunner<T> iterationCountCalculateRunner = new IterationCountCalculateRunner<T>();
 	private int iterations = 1;
+	private int zoomLevel = 1;
 
 	public SampleMultipleSetsJobRunner() {
 		stage1Setup();
@@ -105,13 +106,8 @@ public class SampleMultipleSetsJobRunner<T> extends
 			final PropertyManagement runTimeProperties )
 			throws Exception {
 
-		setZoomLevel(runTimeProperties.getPropertyAsInt(
-				CentroidParameters.Centroid.ZOOM_LEVEL,
-				1));
-
 		// run stage 1
 		updateCostRunner.setReducerCount(1);
-		setInputHDFSPath(runTimeProperties.getPropertyAsPath(CommonParameters.Common.HDFS_INPUT_PATH));
 
 		this.stripWeakCentroidsRunner.setRange(
 				runTimeProperties.getPropertyAsInt(
@@ -154,6 +150,10 @@ public class SampleMultipleSetsJobRunner<T> extends
 		runTimeProperties.copy(
 				CentroidParameters.Centroid.INDEX_ID,
 				SampleParameters.Sample.INDEX_ID);
+
+		NestedGroupCentroidAssignment.setZoomLevel(
+				config,
+				zoomLevel);
 
 		stage1Setup();
 		final int status1 = super.run(
@@ -198,7 +198,6 @@ public class SampleMultipleSetsJobRunner<T> extends
 				options,
 				new CommonParameters.Common[] {
 					CommonParameters.Common.DISTANCE_FUNCTION_CLASS,
-					CommonParameters.Common.HDFS_INPUT_PATH,
 					CommonParameters.Common.DIMENSION_EXTRACT_CLASS
 				});
 		GlobalParameters.fillOptions(
@@ -216,13 +215,14 @@ public class SampleMultipleSetsJobRunner<T> extends
 
 		NestedGroupCentroidAssignment.fillOptions(options);
 		CentroidManagerGeoWave.fillOptions(options);
+		initialSampleRunner.fillOptions(options);
 	}
 
-	public void setInputHDFSPath(
-			final Path inputHDFSPath ) {
-		initialSampleRunner.setInputHDFSPath(inputHDFSPath);
-		updateCostRunner.setInputHDFSPath(inputHDFSPath);
-		jobGrowSampleRunner.setInputHDFSPath(inputHDFSPath);
+	public void setInputFormatConfiguration(
+			final FormatConfiguration inputFormatConfiguration ) {
+		initialSampleRunner.setInputFormatConfiguration(inputFormatConfiguration);
+		updateCostRunner.setInputFormatConfiguration(inputFormatConfiguration);
+		jobGrowSampleRunner.setInputFormatConfiguration(inputFormatConfiguration);
 	}
 
 	private void setIterations(
@@ -234,6 +234,7 @@ public class SampleMultipleSetsJobRunner<T> extends
 
 	public void setZoomLevel(
 			final int zoomLevel ) {
+		this.zoomLevel = zoomLevel;
 		initialSampleRunner.setZoomLevel(zoomLevel);
 		jobGrowSampleRunner.setZoomLevel(zoomLevel);
 	}

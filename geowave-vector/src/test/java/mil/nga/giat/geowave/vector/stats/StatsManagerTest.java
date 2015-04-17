@@ -79,6 +79,16 @@ public class StatsManagerTest
 				dataAdapter,
 				FeatureBoundingBoxStatistics.composeId("somewhere")));
 
+		FeatureBoundingBoxStatistics newStat = new FeatureBoundingBoxStatistics();
+		newStat.fromBinary(stat.toBinary());
+		assertEquals(
+				newStat.getMaxY(),
+				((FeatureBoundingBoxStatistics) stat).getMaxY(),
+				0.001);
+		assertEquals(
+				newStat.getFieldName(),
+				((FeatureBoundingBoxStatistics) stat).getFieldName());
+
 		stat = statsManager.createDataStatistics(
 				dataAdapter,
 				FeatureTimeRangeStatistics.composeId("when"));
@@ -94,5 +104,6 @@ public class StatsManagerTest
 		assertFalse(stat == statsManager.createDataStatistics(
 				dataAdapter,
 				FeatureNumericRangeStatistics.composeId("pop")));
+
 	}
 }

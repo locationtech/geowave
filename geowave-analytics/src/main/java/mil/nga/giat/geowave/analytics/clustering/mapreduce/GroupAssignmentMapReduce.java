@@ -23,7 +23,8 @@ import mil.nga.giat.geowave.analytics.tools.mapreduce.JobContextConfigurationWra
 
 import org.apache.hadoop.io.ObjectWritable;
 import org.apache.hadoop.mapreduce.Mapper;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Adjust input items so that so that the assigned centroid becomes the group
@@ -57,7 +58,7 @@ import org.apache.log4j.Logger;
 public class GroupAssignmentMapReduce
 {
 
-	protected static final Logger LOGGER = Logger.getLogger(GroupAssignmentMapReduce.class);
+	protected static final Logger LOGGER = LoggerFactory.getLogger(GroupAssignmentMapReduce.class);
 
 	public static class GroupAssignmentMapper extends
 			GeoWaveWritableInputMapper<GeoWaveInputKey, ObjectWritable>
@@ -125,7 +126,7 @@ public class GroupAssignmentMapReduce
 				InterruptedException {
 
 			for (Entry<String, AtomicInteger> e : logCounts.entrySet()) {
-				GroupAssignmentMapReduce.LOGGER.trace(e.getKey() + " = " + e.getValue());
+				GroupAssignmentMapReduce.LOGGER.info(e.getKey() + " = " + e.getValue());
 			}
 			super.cleanup(context);
 		}

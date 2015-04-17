@@ -519,6 +519,11 @@ public class TieredSFCIndexStrategy implements
 			this.binIds = binIds;
 			this.rowIdOffset = rowIdOffset;
 		}
+	}
 
+	public void setMaxEstimatedDuplicateIds(
+			int maxEstimatedDuplicateIds ) {
+		this.maxEstimatedDuplicateIds = maxEstimatedDuplicateIds;
+		maxEstimatedDuplicateIdsBigInteger = BigInteger.valueOf(maxEstimatedDuplicateIds);
 	}
 }

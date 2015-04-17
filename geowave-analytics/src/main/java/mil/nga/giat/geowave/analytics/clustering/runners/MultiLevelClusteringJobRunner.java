@@ -10,12 +10,16 @@ import mil.nga.giat.geowave.analytics.parameters.ClusteringParameters.Clustering
 import mil.nga.giat.geowave.analytics.parameters.CommonParameters;
 import mil.nga.giat.geowave.analytics.parameters.ExtractParameters;
 import mil.nga.giat.geowave.analytics.parameters.GlobalParameters;
-import mil.nga.giat.geowave.analytics.parameters.MapReduceParameters;
 import mil.nga.giat.geowave.analytics.parameters.GlobalParameters.Global;
 import mil.nga.giat.geowave.analytics.parameters.HullParameters;
+import mil.nga.giat.geowave.analytics.parameters.InputParameters;
+import mil.nga.giat.geowave.analytics.parameters.MapReduceParameters;
+import mil.nga.giat.geowave.analytics.parameters.OutputParameters;
 import mil.nga.giat.geowave.analytics.tools.PropertyManagement;
 import mil.nga.giat.geowave.analytics.tools.mapreduce.MapReduceJobController;
 import mil.nga.giat.geowave.analytics.tools.mapreduce.MapReduceJobRunner;
+import mil.nga.giat.geowave.analytics.tools.mapreduce.SequenceFileInputFormatConfiguration;
+import mil.nga.giat.geowave.analytics.tools.mapreduce.SequenceFileOutputFormatConfiguration;
 import mil.nga.giat.geowave.store.index.IndexType;
 
 import org.apache.commons.cli.Option;
@@ -169,14 +173,12 @@ public abstract class MultiLevelClusteringJobRunner extends
 				config,
 				propertyManagement);
 
-		// retain the output path
-		propertyManagement.store(
-				CommonParameters.Common.HDFS_INPUT_PATH,
-				extractPath);
-
-		groupAssignmentRunner.setInputHDFSPath(extractPath);
-		clusteringRunner.setInputHDFSPath(extractPath);
-		hullRunner.setInputHDFSPath(extractPath);
+		groupAssignmentRunner.setInputFormatConfiguration(new SequenceFileInputFormatConfiguration(
+				extractPath));
+		clusteringRunner.setInputFormatConfiguration(new SequenceFileInputFormatConfiguration(
+				extractPath));
+		hullRunner.setInputFormatConfiguration(new SequenceFileInputFormatConfiguration(
+				extractPath));
 
 		final boolean retainGroupAssigments = propertyManagement.getPropertyAsBoolean(
 				Clustering.RETAIN_GROUP_ASSIGNMENTS,
@@ -189,6 +191,11 @@ public abstract class MultiLevelClusteringJobRunner extends
 		for (int i = 0; (status == 0) && (i < zoomLevels); i++) {
 			final int zoomLevel = i + 1;
 			clusteringRunner.setZoomLevel(zoomLevel);
+			hullRunner.setZoomLevel(zoomLevel);
+			// need to get this removed at some point.
+			propertyManagement.store(
+					CentroidParameters.Centroid.ZOOM_LEVEL,
+					zoomLevel);
 			status = clusteringRunner.run(
 					config,
 					propertyManagement);
@@ -201,7 +208,8 @@ public abstract class MultiLevelClusteringJobRunner extends
 							true);
 				}
 
-				groupAssignmentRunner.setOutputHDFSPath(nextPath);
+				groupAssignmentRunner.setOutputFormatConfiguration(new SequenceFileOutputFormatConfiguration(
+						nextPath));
 				groupAssignmentRunner.setZoomLevel(zoomLevel);
 
 				status = retainGroupAssigments ? groupAssignmentRunner.run(
@@ -213,8 +221,14 @@ public abstract class MultiLevelClusteringJobRunner extends
 							config,
 							propertyManagement);
 				}
-				if (retainGroupAssigments) clusteringRunner.setInputHDFSPath(nextPath);
-				groupAssignmentRunner.setInputHDFSPath(nextPath);
+				if (retainGroupAssigments) {
+					clusteringRunner.setInputFormatConfiguration(new SequenceFileInputFormatConfiguration(
+							nextPath));
+					hullRunner.setInputFormatConfiguration(new SequenceFileInputFormatConfiguration(
+							nextPath));
+					groupAssignmentRunner.setInputFormatConfiguration(new SequenceFileInputFormatConfiguration(
+							nextPath));
+				}
 
 			}
 		}

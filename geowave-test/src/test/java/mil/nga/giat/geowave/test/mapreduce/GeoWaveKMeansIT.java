@@ -173,7 +173,7 @@ public class GeoWaveKMeansIT extends
 							Integer.toString(MAX_INPUT_SPLITS),
 							"2",
 							2,
-							true,
+							false,
 							"centroid",
 							zookeeper,
 							accumuloInstance,
@@ -301,6 +301,7 @@ public class GeoWaveKMeansIT extends
 			final List<AnalyticItemWrapper<SimpleFeature>> centroids = centroidManager.getCentroidsForGroup(grp);
 			final List<AnalyticItemWrapper<SimpleFeature>> hulls = hullManager.getCentroidsForGroup(grp);
 			for (final AnalyticItemWrapper<SimpleFeature> centroid : centroids) {
+				if (centroid.getAssociationCount() == 0) continue;
 				Assert.assertTrue(centroid.getGeometry() != null);
 				Assert.assertTrue(centroid.getBatchID() != null);
 				boolean found = false;

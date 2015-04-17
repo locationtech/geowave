@@ -30,9 +30,10 @@ import mil.nga.giat.geowave.vector.adapter.FeatureDataAdapter;
 import org.apache.hadoop.io.ObjectWritable;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Reducer;
-import org.apache.log4j.Logger;
 import org.geotools.feature.type.BasicFeatureTypes;
 import org.opengis.feature.simple.SimpleFeature;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.vividsolutions.jts.algorithm.ConvexHull;
 import com.vividsolutions.jts.geom.Coordinate;
@@ -67,7 +68,7 @@ import com.vividsolutions.jts.geom.GeometryFactory;
  */
 public class ConvexHullMapReduce
 {
-	protected static final Logger LOGGER = Logger.getLogger(ConvexHullMapReduce.class);
+	protected static final Logger LOGGER = LoggerFactory.getLogger(ConvexHullMapReduce.class);
 
 	public static class ConvexHullMap<T> extends
 			GeoWaveWritableInputMapper<GeoWaveInputKey, ObjectWritable>

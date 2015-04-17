@@ -32,7 +32,9 @@ import org.apache.hadoop.io.ObjectWritable;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Partitioner;
 import org.apache.hadoop.mapreduce.Reducer;
-import org.apache.log4j.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.vividsolutions.jts.geom.Point;
 
@@ -102,7 +104,7 @@ import com.vividsolutions.jts.geom.Point;
  */
 public class KSamplerMapReduce
 {
-	protected static final Logger LOGGER = Logger.getLogger(KSamplerMapReduce.class);
+	protected static final Logger LOGGER = LoggerFactory.getLogger(KSamplerMapReduce.class);
 
 	public static class SampleMap<T> extends
 			GeoWaveWritableInputMapper<GeoWaveInputKey, ObjectWritable>

@@ -1,6 +1,8 @@
 package mil.nga.giat.geowave.analytics.kmeans.mapreduce;
 
-import com.vividsolutions.jts.geom.Point;
+import java.io.IOException;
+import java.util.List;
+
 import mil.nga.giat.geowave.accumulo.mapreduce.GeoWaveWritableInputMapper;
 import mil.nga.giat.geowave.accumulo.mapreduce.input.GeoWaveInputKey;
 import mil.nga.giat.geowave.analytics.clustering.CentroidManagerGeoWave;
@@ -18,16 +20,17 @@ import mil.nga.giat.geowave.analytics.tools.SimpleFeatureItemWrapperFactory;
 import mil.nga.giat.geowave.analytics.tools.mapreduce.CountofDoubleWritable;
 import mil.nga.giat.geowave.analytics.tools.mapreduce.JobContextConfigurationWrapper;
 import mil.nga.giat.geowave.index.StringUtils;
+
 import org.apache.accumulo.core.data.Mutation;
 import org.apache.accumulo.core.data.Value;
 import org.apache.hadoop.io.ObjectWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Reducer;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.util.List;
+import com.vividsolutions.jts.geom.Point;
 
 /**
  * Calculate the distortation.
@@ -57,7 +60,7 @@ import java.util.List;
 public class KMeansDistortionMapReduce
 {
 
-	protected static final Logger LOGGER = Logger.getLogger(KMeansDistortionMapReduce.class);
+	protected static final Logger LOGGER = LoggerFactory.getLogger(KMeansDistortionMapReduce.class);
 
 	public static class KMeansDistortionMapper extends
 			GeoWaveWritableInputMapper<Text, CountofDoubleWritable>

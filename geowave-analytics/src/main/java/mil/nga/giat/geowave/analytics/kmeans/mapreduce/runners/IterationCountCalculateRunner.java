@@ -36,7 +36,7 @@ public class IterationCountCalculateRunner<T> implements
 	}
 
 	public void setIterationsCount(
-			int iterationsCount ) {
+			final int iterationsCount ) {
 		this.iterationsCount = iterationsCount;
 	}
 
@@ -68,8 +68,7 @@ public class IterationCountCalculateRunner<T> implements
 					final List<AnalyticItemWrapper<T>> centroids ) {
 				resultHolder.set(Math.max(
 						resultHolder.get(),
-						(centroids.size() > 0) ? (int) Math.round(Math.log(centroids.get(
-								0).getCost())) : 0));
+						(centroids.size() > 0) ? (int) Math.round(Math.log(maxCost(centroids))) : 0));
 				return 0;
 			}
 		});
@@ -78,6 +77,17 @@ public class IterationCountCalculateRunner<T> implements
 				iterationsCount,
 				resultHolder.get());
 
+	}
+
+	private double maxCost(
+			final List<AnalyticItemWrapper<T>> centroids ) {
+		double max = 0.0;
+		for (final AnalyticItemWrapper<T> centroid : centroids) {
+			max = Math.max(
+					max,
+					centroid.getCost());
+		}
+		return max;
 	}
 
 }

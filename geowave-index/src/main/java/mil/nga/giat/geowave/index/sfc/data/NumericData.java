@@ -4,7 +4,8 @@ package mil.nga.giat.geowave.index.sfc.data;
  * Interface used to define numeric data associated with a space filling curve.
  * 
  */
-public interface NumericData
+public interface NumericData extends
+		java.io.Serializable
 {
 	public double getMin();
 

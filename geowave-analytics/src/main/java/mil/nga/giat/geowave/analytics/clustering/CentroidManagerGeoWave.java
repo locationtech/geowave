@@ -277,6 +277,7 @@ public class CentroidManagerGeoWave<T> implements
 		try {
 			this.centroidFactory = (AnalyticItemWrapperFactory<T>) runTimeProperties.getClassInstance(
 					CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS,
+					CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS.getBaseClass(),
 					SimpleFeatureItemWrapperFactory.class);
 		}
 		catch (InstantiationException e) {

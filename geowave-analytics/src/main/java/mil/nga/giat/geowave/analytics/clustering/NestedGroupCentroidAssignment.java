@@ -124,6 +124,12 @@ public class NestedGroupCentroidAssignment<T>
 			final Set<Option> options ) {
 		CentroidManagerGeoWave.fillOptions(options);
 
+		GlobalParameters.fillOptions(
+				options,
+				new GlobalParameters.Global[] {
+					GlobalParameters.Global.PARENT_BATCH_ID
+				});
+
 		CommonParameters.fillOptions(
 				options,
 				new CommonParameters.Common[] {

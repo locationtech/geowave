@@ -45,7 +45,6 @@ import org.apache.commons.collections.IteratorUtils;
 import org.apache.commons.collections.Transformer;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.io.Text;
-import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.mapreduce.InputFormat;
 import org.apache.hadoop.mapreduce.InputSplit;
 import org.apache.hadoop.mapreduce.Job;
@@ -64,7 +63,7 @@ import org.apache.accumulo.core.security.thrift.TCredentials;
 end[ACCUMULO_1.5.2]*/
 // @formatter:on
 
-public class GeoWaveInputFormat<T extends Writable> extends
+public class GeoWaveInputFormat<T> extends
 		InputFormat<GeoWaveInputKey, T>
 {
 	private static final Class<?> CLASS = GeoWaveInputFormat.class;
@@ -94,25 +93,13 @@ public class GeoWaveInputFormat<T extends Writable> extends
 			final String userName,
 			final String password,
 			final String geowaveTableNamespace ) {
-		GeoWaveConfiguratorBase.setZookeeperUrl(
+		GeoWaveConfiguratorBase.setAccumuloOperationsInfo(
 				CLASS,
 				config,
-				zooKeepers);
-		GeoWaveConfiguratorBase.setInstanceName(
-				CLASS,
-				config,
-				instanceName);
-		GeoWaveConfiguratorBase.setUserName(
-				CLASS,
-				config,
-				userName);
-		GeoWaveConfiguratorBase.setPassword(
-				CLASS,
-				config,
-				password);
-		GeoWaveConfiguratorBase.setTableNamespace(
-				CLASS,
-				config,
+				zooKeepers,
+				instanceName,
+				userName,
+				password,
 				geowaveTableNamespace);
 	}
 

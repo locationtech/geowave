@@ -24,7 +24,8 @@ import mil.nga.giat.geowave.analytics.tools.RunnerUtils;
 import mil.nga.giat.geowave.analytics.tools.SimpleFeatureItemWrapperFactory;
 
 import org.apache.hadoop.conf.Configuration;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Rank objects using their distance to the closest centroid of a set of
@@ -70,7 +71,7 @@ public class CentroidDistanceBasedSamplingRankFunction<T> implements
 		SamplingRankFunction<T>
 {
 
-	protected static final Logger LOGGER = Logger.getLogger(CentroidDistanceBasedSamplingRankFunction.class);
+	protected static final Logger LOGGER = LoggerFactory.getLogger(CentroidDistanceBasedSamplingRankFunction.class);
 
 	private SampleProbabilityFn sampleProbabilityFn;
 	private NestedGroupCentroidAssignment<T> nestedGroupCentroidAssigner;

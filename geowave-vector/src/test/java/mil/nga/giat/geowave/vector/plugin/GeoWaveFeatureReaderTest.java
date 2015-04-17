@@ -47,6 +47,7 @@ public class GeoWaveFeatureReaderTest
 					PrecisionModel.FIXED));
 	Query query = null;
 	List<String> fids = new ArrayList<String>();
+	List<String> pids = new ArrayList<String>();
 	Date stime, etime;
 
 	@Before
@@ -91,6 +92,8 @@ public class GeoWaveFeatureReaderTest
 						27.25,
 						41.25)));
 		fids.add(newFeature.getID());
+		pids.add(newFeature.getAttribute(
+				"pid").toString());
 		writer.write();
 		newFeature = writer.next();
 		newFeature.setAttribute(
@@ -180,6 +183,38 @@ public class GeoWaveFeatureReaderTest
 			throws IllegalArgumentException,
 			NoSuchElementException,
 			IOException {
+		final FeatureReader reader = dataStore.getFeatureReader(
+				type.getTypeName(),
+				query);
+		int count = 0;
+		while (reader.hasNext()) {
+			final SimpleFeature feature = (SimpleFeature) reader.next();
+			assertTrue(fids.contains(feature.getID()));
+			count++;
+		}
+		assertEquals(
+				1,
+				count);
+
+	}
+
+	@Test
+	public void testLike()
+			throws IllegalArgumentException,
+			NoSuchElementException,
+			IOException,
+			CQLException {
+		System.out.println(pids);
+		Query query = new Query(
+				"GeoWaveFeatureReaderTest",
+				ECQL.toFilter("pid like '" + pids.get(
+						0).substring(
+						0,
+						1) + "%'"),
+				new String[] {
+					"geometry",
+					"pid"
+				});
 		final FeatureReader reader = dataStore.getFeatureReader(
 				type.getTypeName(),
 				query);

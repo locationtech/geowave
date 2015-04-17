@@ -14,9 +14,9 @@ import java.util.Properties;
 import java.util.Set;
 
 import mil.nga.giat.geowave.analytics.extract.EmptyDimensionExtractor;
-import mil.nga.giat.geowave.analytics.parameters.CommonParameters;
 import mil.nga.giat.geowave.analytics.parameters.ExtractParameters;
 import mil.nga.giat.geowave.analytics.parameters.GlobalParameters;
+import mil.nga.giat.geowave.analytics.parameters.InputParameters.Input;
 import mil.nga.giat.geowave.analytics.parameters.ParameterEnum;
 import mil.nga.giat.geowave.store.query.DistributableQuery;
 import mil.nga.giat.geowave.store.query.SpatialQuery;
@@ -106,7 +106,7 @@ public class PropertyManagementTest
 					24,
 					33)
 		});
-		SpatialQuery sq = new SpatialQuery(
+		final SpatialQuery sq = new SpatialQuery(
 				testGeoFilter);
 		final PropertyManagement pm = new PropertyManagement();
 		pm.store(
@@ -136,19 +136,19 @@ public class PropertyManagementTest
 		final Path path1 = new Path(
 				"http://java.sun.com/j2se/1.3/foo");
 		pm.store(
-				CommonParameters.Common.HDFS_INPUT_PATH,
+				Input.HDFS_INPUT_PATH,
 				path1);
-		final Path path2 = pm.getPropertyAsPath(CommonParameters.Common.HDFS_INPUT_PATH);
+		final Path path2 = pm.getPropertyAsPath(Input.HDFS_INPUT_PATH);
 		assertEquals(
 				path1,
 				path2);
 		pm.store(
-				CommonParameters.Common.HDFS_INPUT_PATH,
+				Input.HDFS_INPUT_PATH,
 				"x/y/z");
 		assertEquals(
 				new Path(
 						"x/y/z"),
-				pm.getPropertyAsPath(CommonParameters.Common.HDFS_INPUT_PATH));
+				pm.getPropertyAsPath(Input.HDFS_INPUT_PATH));
 	}
 
 	@Test
@@ -198,16 +198,21 @@ public class PropertyManagementTest
 			throws Exception {
 		final PropertyManagement.PropertyConverter<NonSerializableExample> converter = new PropertyManagement.PropertyConverter<NonSerializableExample>() {
 
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			public Serializable convert(
-					NonSerializableExample ob )
+					final NonSerializableExample ob )
 					throws Exception {
 				return Integer.valueOf(1);
 			}
 
 			@Override
 			public NonSerializableExample convert(
-					Serializable ob )
+					final Serializable ob )
 					throws Exception {
 				assertTrue(ob instanceof Integer);
 				return new NonSerializableExample();
@@ -248,15 +253,15 @@ public class PropertyManagementTest
 		final Path path1 = new Path(
 				"http://java.sun.com/j2se/1.3/foo");
 		pm.store(
-				CommonParameters.Common.HDFS_INPUT_PATH,
+				Input.HDFS_INPUT_PATH,
 				path1);
 
-		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		final ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		try (ObjectOutputStream os = new ObjectOutputStream(
 				bos)) {
 			os.writeObject(pm);
 		}
-		ByteArrayInputStream bis = new ByteArrayInputStream(
+		final ByteArrayInputStream bis = new ByteArrayInputStream(
 				bos.toByteArray());
 		try (ObjectInputStream is = new ObjectInputStream(
 				bis)) {
@@ -266,7 +271,7 @@ public class PropertyManagementTest
 					pm2.getPropertyAsString(ExtractParameters.Extract.ADAPTER_ID));
 			assertEquals(
 					path1,
-					pm2.getPropertyAsPath(CommonParameters.Common.HDFS_INPUT_PATH));
+					pm2.getPropertyAsPath(Input.HDFS_INPUT_PATH));
 		}
 	}
 
@@ -337,7 +342,7 @@ public class PropertyManagementTest
 				ExtractParameters.Extract.QUERY,
 				"POLYGON ((24 33, 28 33, 28 31, 24 31, 24 33))");
 		pm.store(
-				CommonParameters.Common.HDFS_INPUT_PATH,
+				Input.HDFS_INPUT_PATH,
 				"file:///foo");
 		byte[] result = null;
 		try (ByteArrayOutputStream bos = new ByteArrayOutputStream()) {
@@ -360,10 +365,10 @@ public class PropertyManagementTest
 
 		final Properties props = new Properties();
 		props.put(
-				"common-hdfs-input-path",
+				"input-hdfs-input-path",
 				path1.toUri().toString());
 		pm.fromProperties(props);
-		final Path path2 = pm.getPropertyAsPath(CommonParameters.Common.HDFS_INPUT_PATH);
+		final Path path2 = pm.getPropertyAsPath(Input.HDFS_INPUT_PATH);
 		assertEquals(
 				path1,
 				path2);

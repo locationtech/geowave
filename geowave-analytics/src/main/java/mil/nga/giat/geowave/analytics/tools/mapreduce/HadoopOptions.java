@@ -13,7 +13,8 @@ import org.apache.commons.cli.Option;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class encapsulates the command-line options and parsed values specific
@@ -21,7 +22,7 @@ import org.apache.log4j.Logger;
  */
 public class HadoopOptions
 {
-	private final static Logger LOGGER = Logger.getLogger(HadoopOptions.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(HadoopOptions.class);
 	private final String hdfsHostPort;
 	private final Path basePath;
 	private final String jobTrackerHostPort;
@@ -70,7 +71,7 @@ public class HadoopOptions
 		}
 		final FileSystem fs = FileSystem.get(config);
 		if (!fs.exists(basePath)) {
-			LOGGER.fatal("HDFS base directory " + basePath + " does not exist");
+			LOGGER.error("HDFS base directory " + basePath + " does not exist");
 			return;
 		}
 	}

@@ -5,6 +5,7 @@ import java.util.Set;
 
 import mil.nga.giat.geowave.analytics.clustering.runners.MultiLevelJumpKMeansClusteringJobRunner;
 import mil.nga.giat.geowave.analytics.clustering.runners.MultiLevelKMeansClusteringJobRunner;
+import mil.nga.giat.geowave.analytics.mapreduce.nn.NNJobRunner;
 
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
@@ -25,6 +26,10 @@ public class AnalyticsMain
 				"kmeans-parallel",
 				"KMeans Parallel Clustering",
 				new MultiLevelKMeansClusteringJobRunner()),
+		NN(
+				"nn",
+				"Nearest Neighbors",
+				new NNJobRunner()),
 		KMeansJump(
 				"kmeans-jump",
 				"KMeans Clustering using Jump Method",
@@ -57,11 +62,24 @@ public class AnalyticsMain
 	}
 
 	public static AnalyticRunner getRunner(
-			final String arg ) {
+			final String argValue ) {
 		for (final AnalyticRunner o : AnalyticRunner.values()) {
-			if (arg.equalsIgnoreCase(o.commandlineOptionValue)) {
+			if (argValue.equalsIgnoreCase(o.commandlineOptionValue)) {
 				return o;
 			}
+		}
+		try {
+			return (AnalyticRunner) Class.forName(
+					argValue).newInstance();
+		}
+		catch (InstantiationException e) {
+			System.err.println("Cannot not instantiate " + argValue);
+		}
+		catch (IllegalAccessException e) {
+			System.err.println("Cannot not access " + argValue);
+		}
+		catch (ClassNotFoundException | ClassCastException e) {
+			System.err.println(argValue + " is neither a known service or viable AnalyticRunner class");
 		}
 		return null;
 	}

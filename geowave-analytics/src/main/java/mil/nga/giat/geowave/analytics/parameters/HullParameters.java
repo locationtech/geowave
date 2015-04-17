@@ -116,6 +116,15 @@ public class HullParameters
 					"Data Type ID for a centroid item",
 					true));
 		}
+		if (contains(
+				params,
+				Hull.WRAPPER_FACTORY_CLASS)) {
+			options.add(PropertyManagement.newOption(
+					Hull.WRAPPER_FACTORY_CLASS,
+					"hfc",
+					"Class to create analytic item to capture hulls. Implements mil.nga.giat.geowave.analytics.tools.AnalyticItemWrapperFactory",
+					true));
+		}
 
 	}
 
