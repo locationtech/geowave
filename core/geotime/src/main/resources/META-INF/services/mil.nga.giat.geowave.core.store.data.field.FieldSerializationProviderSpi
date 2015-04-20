@@ -1,0 +1,6 @@
+mil.nga.giat.geowave.core.geotime.store.field.CalendarArraySerializationProvider
+mil.nga.giat.geowave.core.geotime.store.field.CalendarSerializationProvider
+mil.nga.giat.geowave.core.geotime.store.field.DateArraySerializationProvider
+mil.nga.giat.geowave.core.geotime.store.field.DateSerializationProvider
+mil.nga.giat.geowave.core.geotime.store.field.GeometryArraySerializationProvider
+mil.nga.giat.geowave.core.geotime.store.field.GeometrySerializationProvider

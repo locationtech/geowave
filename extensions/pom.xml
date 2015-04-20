@@ -1,0 +1,24 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>geowave-parent</artifactId>
+		<groupId>mil.nga.giat</groupId>
+		<relativePath>../</relativePath>
+		<version>0.8.7-SNAPSHOT</version>
+	</parent>
+	<artifactId>geowave-extension-parent</artifactId>
+	<name>GeoWave Extensions</name>
+	<description>The set of extended capabilities supported for GeoWave</description>	
+	<packaging>pom</packaging>
+	<modules>
+		<module>adapters/raster</module>
+		<module>adapters/vector</module>
+		<module>datastores/accumulo</module>
+		<module>formats/geolife</module>
+		<module>formats/geotools-raster</module>
+		<module>formats/geotools-vector</module>
+		<module>formats/gpx</module>
+		<module>formats/tdrive</module>
+	</modules>
+</project>

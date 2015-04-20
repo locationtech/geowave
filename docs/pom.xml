@@ -10,8 +10,8 @@
         <version>0.8.7-SNAPSHOT</version>
     </parent>
 
-    <artifactId>geowave-docs</artifactId>
-    <name>geowave-docs</name>
+    <artifactId>geowave-doc</artifactId>
+    <name>GeoWave Documentation</name>
     <packaging>pom</packaging>
 
     <repositories>

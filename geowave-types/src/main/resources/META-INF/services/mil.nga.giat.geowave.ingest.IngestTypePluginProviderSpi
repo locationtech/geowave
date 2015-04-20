@@ -1,5 +1,0 @@
-mil.nga.giat.geowave.types.geotools.vector.GeoToolsVectorDataStoreIngestType
-mil.nga.giat.geowave.types.geotools.raster.GeoToolsRasterDataStoreIngestType
-mil.nga.giat.geowave.types.gpx.GpxIngestType
-mil.nga.giat.geowave.types.tdrive.TdriveIngestType
-mil.nga.giat.geowave.types.geolife.GeoLifeIngestType

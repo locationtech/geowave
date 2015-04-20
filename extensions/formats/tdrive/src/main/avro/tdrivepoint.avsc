@@ -1,0 +1,28 @@
+{
+	"type" : "record",
+	"name" : "TdrivePoint",
+	"namespace" : "mil.nga.giat.geowave.format.tdrive",
+		"fields" : [{
+				"name" : "taxiid",
+				"type" : "int",
+				"doc"  : "unique id for a taxi"
+			},{
+				"name" : "pointinstance",
+				"type" : "long",
+				"doc"  : "point index in series"
+			},{
+				"name" : "timestamp",
+				"type" : "long",
+				"doc"  : "timestamp of event"
+			},{
+				"name" : "latitude",
+				"type" : "double",
+				"doc"  : "lattitude of taxi point event"
+			},{
+				"name" : "longitude",
+				"type" : "double",
+				"doc"  : "longitude of taxi point event"
+			}
+		],
+	"doc:" : "Stores GPX Track files, and, if available metadata blobs per OSM practice"
+}
