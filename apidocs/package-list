@@ -21,6 +21,7 @@ mil.nga.giat.geowave.analytics.mapreduce.kde
 mil.nga.giat.geowave.analytics.mapreduce.kde.compare
 mil.nga.giat.geowave.analytics.mapreduce.kde.parser
 mil.nga.giat.geowave.analytics.mapreduce.kde.parser.model
+mil.nga.giat.geowave.analytics.mapreduce.nn
 mil.nga.giat.geowave.analytics.parameters
 mil.nga.giat.geowave.analytics.sample
 mil.nga.giat.geowave.analytics.sample.functions
@@ -28,6 +29,8 @@ mil.nga.giat.geowave.analytics.tools
 mil.nga.giat.geowave.analytics.tools.dbops
 mil.nga.giat.geowave.analytics.tools.kryo
 mil.nga.giat.geowave.analytics.tools.mapreduce
+mil.nga.giat.geowave.analytics.tools.model
+mil.nga.giat.geowave.analytics.tools.partitioners
 mil.nga.giat.geowave.benchmark
 mil.nga.giat.geowave.benchmark.utils
 mil.nga.giat.geowave.demo.app
