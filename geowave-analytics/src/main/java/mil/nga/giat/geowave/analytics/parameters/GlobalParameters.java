@@ -24,6 +24,8 @@ public class GlobalParameters
 				String.class),
 		PARENT_BATCH_ID(
 				String.class),
+		CRS_ID(
+				String.class),
 		BATCH_ID(
 				String.class);
 		private final Class<?> baseClass;
@@ -63,6 +65,24 @@ public class GlobalParameters
 					Global.BATCH_ID,
 					"b",
 					"Batch ID",
+					true));
+		}
+		if (contains(
+				params,
+				Global.PARENT_BATCH_ID)) {
+			options.add(PropertyManagement.newOption(
+					Global.PARENT_BATCH_ID,
+					"pb",
+					"Batch ID",
+					true));
+		}
+		if (contains(
+				params,
+				Global.CRS_ID)) {
+			options.add(PropertyManagement.newOption(
+					Global.CRS_ID,
+					"crs",
+					"CRS ID",
 					true));
 		}
 		if (contains(

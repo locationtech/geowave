@@ -4,13 +4,15 @@ import java.io.Serializable;
 
 import mil.nga.giat.geowave.accumulo.mapreduce.GeoWaveConfiguratorBase;
 import mil.nga.giat.geowave.analytics.parameters.ParameterEnum;
+import mil.nga.giat.geowave.index.ByteArrayUtils;
 
 import org.apache.hadoop.conf.Configuration;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class RunnerUtils
 {
-	protected static final Logger LOGGER = Logger.getLogger(RunnerUtils.class);
+	protected static final Logger LOGGER = LoggerFactory.getLogger(RunnerUtils.class);
 
 	public static final void setParameter(
 			final Configuration config,
@@ -113,6 +115,13 @@ public class RunnerUtils
 							((Class) val),
 							configItem.getBaseClass());
 				}
+				else if (val instanceof byte[]) {
+					config.set(
+							GeoWaveConfiguratorBase.enumToConfKey(
+									clazz,
+									configItem.self()),
+							ByteArrayUtils.byteArrayToString((byte[]) val));
+				}
 				else {
 					config.set(
 							GeoWaveConfiguratorBase.enumToConfKey(
@@ -124,5 +133,4 @@ public class RunnerUtils
 			}
 		}
 	}
-
 }

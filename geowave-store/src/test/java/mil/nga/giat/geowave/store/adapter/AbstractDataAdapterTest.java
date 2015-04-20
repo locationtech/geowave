@@ -35,7 +35,7 @@ public class AbstractDataAdapterTest
 
 	// Mock class instantiating abstract class so we can test logic
 	// contained in abstract class.
-	private static class MockAbstractDataAdapter extends
+	protected static class MockAbstractDataAdapter extends
 			AbstractDataAdapter<Integer>
 	{
 		@SuppressWarnings("unused")
@@ -164,7 +164,7 @@ public class AbstractDataAdapterTest
 	// Test index field type for dimension.
 	//
 	// *************************************************************************
-	class TestIndexFieldType implements
+	protected static class TestIndexFieldType implements
 			CommonIndexValue
 	{
 		private final Integer indexValue;
@@ -198,7 +198,7 @@ public class AbstractDataAdapterTest
 	// instantiation of MockAbstractDataAdapter object.
 	//
 	// *************************************************************************
-	private class TestPersistentIndexFieldHandler implements
+	protected static class TestPersistentIndexFieldHandler implements
 			PersistentIndexFieldHandler<Integer, TestIndexFieldType, Object>
 	{
 
@@ -334,7 +334,7 @@ public class AbstractDataAdapterTest
 	// for instantiation of MockAbstractDataAdapter object.
 	//
 	// *************************************************************************
-	class TestNativeFieldHandler implements
+	protected static class TestNativeFieldHandler implements
 			NativeFieldHandler<Integer, Object>
 	{
 
@@ -357,7 +357,7 @@ public class AbstractDataAdapterTest
 	// TestIndexModel.
 	//
 	// *************************************************************************
-	private class TestDimensionField implements
+	protected class TestDimensionField implements
 			DimensionField<TestIndexFieldType>
 	{
 		final ByteArrayId fieldId;
@@ -455,7 +455,7 @@ public class AbstractDataAdapterTest
 	// AbstractDataAdapter.
 	//
 	// *************************************************************************
-	private class TestIndexModel implements
+	protected class TestIndexModel implements
 			CommonIndexModel
 	{
 

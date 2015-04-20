@@ -540,4 +540,50 @@ public class GeoWaveConfiguratorBase
 				"yarn.app.mapreduce.am.staging-dir",
 				"/tmp/hadoop-" + user);
 	}
+
+	/**
+	 * Configures a {@link AccumuloOperations} for this job.
+	 * 
+	 * @param config
+	 *            the Hadoop configuration instance
+	 * @param zooKeepers
+	 *            a comma-separated list of zookeeper servers
+	 * @param instanceName
+	 *            the Accumulo instance name
+	 * @param userName
+	 *            the Accumulo user name
+	 * @param password
+	 *            the Accumulo password
+	 * @param geowaveTableNamespace
+	 *            the GeoWave table namespace
+	 */
+	public static void setAccumuloOperationsInfo(
+			final Class<?> scope,
+			final Configuration config,
+			final String zooKeepers,
+			final String instanceName,
+			final String userName,
+			final String password,
+			final String geowaveTableNamespace ) {
+		GeoWaveConfiguratorBase.setZookeeperUrl(
+				scope,
+				config,
+				zooKeepers);
+		GeoWaveConfiguratorBase.setInstanceName(
+				scope,
+				config,
+				instanceName);
+		GeoWaveConfiguratorBase.setUserName(
+				scope,
+				config,
+				userName);
+		GeoWaveConfiguratorBase.setPassword(
+				scope,
+				config,
+				password);
+		GeoWaveConfiguratorBase.setTableNamespace(
+				scope,
+				config,
+				geowaveTableNamespace);
+	}
 }

@@ -22,6 +22,7 @@ import mil.nga.giat.geowave.analytics.tools.AnalyticItemWrapper;
 import mil.nga.giat.geowave.analytics.tools.IndependentJobRunner;
 import mil.nga.giat.geowave.analytics.tools.PropertyManagement;
 import mil.nga.giat.geowave.analytics.tools.SimpleFeatureItemWrapperFactory;
+import mil.nga.giat.geowave.analytics.tools.mapreduce.FormatConfiguration;
 import mil.nga.giat.geowave.analytics.tools.mapreduce.MapReduceJobController;
 import mil.nga.giat.geowave.analytics.tools.mapreduce.MapReduceJobRunner;
 
@@ -29,7 +30,8 @@ import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.apache.commons.cli.Option;
 import org.apache.hadoop.conf.Configuration;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 
@@ -41,7 +43,7 @@ public class KMeansIterationsJobRunner<T> implements
 		MapReduceJobRunner,
 		IndependentJobRunner
 {
-	protected static final Logger LOGGER = Logger.getLogger(KMeansIterationsJobRunner.class);
+	protected static final Logger LOGGER = LoggerFactory.getLogger(KMeansIterationsJobRunner.class);
 
 	private final KMeansJobRunner jobRunner = new KMeansJobRunner();
 	private double convergenceTol = 0.0001;
@@ -62,6 +64,11 @@ public class KMeansIterationsJobRunner<T> implements
 		}
 	}
 
+	public void setInputFormatConfiguration(
+			final FormatConfiguration inputFormatConfiguration ) {
+		jobRunner.setInputFormatConfiguration(inputFormatConfiguration);
+	}
+
 	public void setReducerCount(
 			final int reducerCount ) {
 		jobRunner.setReducerCount(reducerCount);
@@ -78,8 +85,9 @@ public class KMeansIterationsJobRunner<T> implements
 				ClusteringParameters.Clustering.CONVERGANCE_TOLERANCE,
 				convergenceTol);
 
-		final DistanceFn<T> distanceFunction = (DistanceFn<T>) runTimeProperties.getClassInstance(
+		final DistanceFn<T> distanceFunction = runTimeProperties.getClassInstance(
 				CommonParameters.Common.DISTANCE_FUNCTION_CLASS,
+				DistanceFn.class,
 				FeatureCentroidDistanceFn.class);
 
 		int maxIterationCount = runTimeProperties.getPropertyAsInt(
@@ -95,7 +103,7 @@ public class KMeansIterationsJobRunner<T> implements
 				return status;
 			}
 
-			// new one each time to force a refresh if the centroids
+			// new one each time to force a refresh of the centroids
 			final CentroidManager<T> centroidManager = constructCentroidManager(
 					config,
 					runTimeProperties);
@@ -114,7 +122,6 @@ public class KMeansIterationsJobRunner<T> implements
 			final Configuration config,
 			final PropertyManagement runTimeProperties )
 			throws Exception {
-		jobRunner.setInputHDFSPath(runTimeProperties.getPropertyAsPath(CommonParameters.Common.HDFS_INPUT_PATH));
 
 		runTimeProperties.storeIfEmpty(
 				CentroidParameters.Centroid.EXTRACTOR_CLASS,
@@ -148,6 +155,16 @@ public class KMeansIterationsJobRunner<T> implements
 				grpCount.incrementAndGet();
 				centroidCount.addAndGet(centroids.size() / 2);
 
+				if (LOGGER.isTraceEnabled()) {
+					LOGGER.trace(
+							"Parent Group: {} ",
+							groupID);
+					for (final AnalyticItemWrapper<T> troid : centroids) {
+						LOGGER.warn(
+								"Child Group: {} ",
+								troid.getID());
+					}
+				}
 				failuresCount.addAndGet(computeCostAndCleanUp(
 						groupID,
 						centroids,
@@ -202,7 +219,7 @@ public class KMeansIterationsJobRunner<T> implements
 				// number of points in a cluster.
 				// it is an edge case.
 				// deletionKeys.add( prior.getID() );
-				LOGGER.warn("Centroid is no longer viable " + prior.getName() + " from group " + prior.getGroupID());
+				LOGGER.warn("Centroid is no longer viable " + prior.getID() + " from group " + prior.getGroupID());
 				prior = centroid;
 				continue;
 			}
@@ -214,7 +231,13 @@ public class KMeansIterationsJobRunner<T> implements
 					centroid.getWrappedItem());
 			deletionKeys.add(prior.getID());
 			if (LOGGER.isTraceEnabled()) {
-				LOGGER.trace("Within group " + prior.getGroupID() + " replace " + prior.getID() + " with " + centroid.getID());
+				LOGGER.trace(
+						"Within group {} replace {} with {}",
+						new String[] {
+							prior.getGroupID(),
+							prior.getID(),
+							centroid.getID()
+						});
 			}
 			prior = null;
 		}
@@ -253,12 +276,12 @@ public class KMeansIterationsJobRunner<T> implements
 		CommonParameters.fillOptions(
 				options,
 				new CommonParameters.Common[] {
-					CommonParameters.Common.DISTANCE_FUNCTION_CLASS,
-					CommonParameters.Common.HDFS_INPUT_PATH
+					CommonParameters.Common.DISTANCE_FUNCTION_CLASS
 				});
 
 		CentroidManagerGeoWave.fillOptions(options);
 		NestedGroupCentroidAssignment.fillOptions(options);
+		jobRunner.fillOptions(options);
 	}
 
 	@Override

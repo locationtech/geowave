@@ -16,7 +16,7 @@ public class GeometryCentroidDistanceFn implements
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -4340689267509659236L;
 	private DistanceFn<Coordinate> coordinateDistanceFunction = new CoordinateEuclideanDistanceFn();
 
 	public GeometryCentroidDistanceFn() {}

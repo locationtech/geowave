@@ -7,7 +7,6 @@ import mil.nga.giat.geowave.analytics.clustering.ClusteringUtils;
 import mil.nga.giat.geowave.analytics.clustering.NestedGroupCentroidAssignment;
 import mil.nga.giat.geowave.analytics.clustering.runners.ClusteringRunner;
 import mil.nga.giat.geowave.analytics.distance.FeatureCentroidDistanceFn;
-import mil.nga.giat.geowave.analytics.extract.DimensionExtractor;
 import mil.nga.giat.geowave.analytics.extract.SimpleFeatureCentroidExtractor;
 import mil.nga.giat.geowave.analytics.extract.SimpleFeatureGeometryExtractor;
 import mil.nga.giat.geowave.analytics.parameters.CentroidParameters;
@@ -18,14 +17,12 @@ import mil.nga.giat.geowave.analytics.parameters.MapReduceParameters;
 import mil.nga.giat.geowave.analytics.parameters.SampleParameters;
 import mil.nga.giat.geowave.analytics.tools.PropertyManagement;
 import mil.nga.giat.geowave.analytics.tools.SimpleFeatureItemWrapperFactory;
+import mil.nga.giat.geowave.analytics.tools.mapreduce.FormatConfiguration;
 import mil.nga.giat.geowave.analytics.tools.mapreduce.MapReduceJobController;
 import mil.nga.giat.geowave.analytics.tools.mapreduce.MapReduceJobRunner;
-import mil.nga.giat.geowave.store.adapter.DataAdapter;
-import mil.nga.giat.geowave.store.index.Index;
 
 import org.apache.commons.cli.Option;
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.fs.Path;
 
 /**
  * 
@@ -39,7 +36,6 @@ public class KMeansSingleSampleJobRunner<T> extends
 	final KMeansIterationsJobRunner<T> kmeansJobRunner = new KMeansIterationsJobRunner<T>();
 
 	private int currentZoomLevel = 1;
-	private Path currentInputPath = null;
 
 	public KMeansSingleSampleJobRunner() {
 		// defaults
@@ -65,10 +61,10 @@ public class KMeansSingleSampleJobRunner<T> extends
 	}
 
 	@Override
-	public void setInputHDFSPath(
-			final Path inputHDFSPath ) {
-		currentInputPath = inputHDFSPath;
-		sampleSetsRunner.setInputHDFSPath(inputHDFSPath);
+	public void setInputFormatConfiguration(
+			final FormatConfiguration inputFormatConfiguration ) {
+		sampleSetsRunner.setInputFormatConfiguration(inputFormatConfiguration);
+		kmeansJobRunner.setInputFormatConfiguration(inputFormatConfiguration);
 	}
 
 	@Override
@@ -89,12 +85,10 @@ public class KMeansSingleSampleJobRunner<T> extends
 		propertyManagement.store(
 				CentroidParameters.Centroid.ZOOM_LEVEL,
 				currentZoomLevel);
+
 		propertyManagement.storeIfEmpty(
 				GlobalParameters.Global.BATCH_ID,
 				UUID.randomUUID().toString());
-		propertyManagement.store(
-				CommonParameters.Common.HDFS_INPUT_PATH,
-				currentInputPath);
 
 		propertyManagement.storeIfEmpty(
 				CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS,
@@ -167,9 +161,6 @@ public class KMeansSingleSampleJobRunner<T> extends
 		NestedGroupCentroidAssignment.fillOptions(options);
 
 		// override
-		PropertyManagement.removeOption(
-				options,
-				CommonParameters.Common.HDFS_INPUT_PATH);
 		PropertyManagement.removeOption(
 				options,
 				CentroidParameters.Centroid.ZOOM_LEVEL);

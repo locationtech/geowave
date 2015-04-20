@@ -3,16 +3,15 @@ package mil.nga.giat.geowave.analytics.tools.mapreduce;
 import mil.nga.giat.geowave.accumulo.mapreduce.GeoWaveConfiguratorBase;
 import mil.nga.giat.geowave.analytics.tools.ConfigurationWrapper;
 import mil.nga.giat.geowave.index.ByteArrayUtils;
-import mil.nga.giat.geowave.index.PersistenceUtils;
-import mil.nga.giat.geowave.store.adapter.DataAdapter;
 
 import org.apache.hadoop.mapreduce.JobContext;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class JobContextConfigurationWrapper implements
 		ConfigurationWrapper
 {
-	protected static final Logger LOGGER = Logger.getLogger(JobContextConfigurationWrapper.class);
+	protected static final Logger LOGGER = LoggerFactory.getLogger(JobContextConfigurationWrapper.class);
 
 	private final JobContext context;
 	private Logger logger = LOGGER;
@@ -41,9 +40,10 @@ public class JobContextConfigurationWrapper implements
 				property);
 		if (context.getConfiguration().getRaw(
 				propName) == null) logger.warn("Using default for property " + propName);
-		return context.getConfiguration().getInt(
+		int v = context.getConfiguration().getInt(
 				propName,
 				defaultValue);
+		return v;
 	}
 
 	@Override
@@ -74,7 +74,10 @@ public class JobContextConfigurationWrapper implements
 					scope,
 					property);
 			if (context.getConfiguration().getRaw(
-					propName) == null) logger.warn("Using default for property " + propName);
+					propName) == null) {
+				if (defaultValue == null) return null;
+				logger.warn("Using default for property " + propName);
+			}
 			return GeoWaveConfiguratorBase.getInstance(
 					scope,
 					property,

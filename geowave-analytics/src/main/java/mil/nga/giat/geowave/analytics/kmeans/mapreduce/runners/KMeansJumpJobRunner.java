@@ -20,13 +20,13 @@ import mil.nga.giat.geowave.analytics.parameters.SampleParameters;
 import mil.nga.giat.geowave.analytics.tools.AnalyticItemWrapperFactory;
 import mil.nga.giat.geowave.analytics.tools.PropertyManagement;
 import mil.nga.giat.geowave.analytics.tools.SimpleFeatureItemWrapperFactory;
+import mil.nga.giat.geowave.analytics.tools.mapreduce.FormatConfiguration;
 import mil.nga.giat.geowave.analytics.tools.mapreduce.MapReduceJobController;
 import mil.nga.giat.geowave.analytics.tools.mapreduce.MapReduceJobRunner;
 import mil.nga.giat.geowave.index.sfc.data.NumericRange;
 
 import org.apache.commons.cli.Option;
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.fs.Path;
 import org.opengis.feature.simple.SimpleFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,7 +53,6 @@ public class KMeansJumpJobRunner extends
 	final KMeansParallelJobRunnerDelegate kmeansRunner = new KMeansParallelJobRunnerDelegate();
 
 	private int currentZoomLevel = 1;
-	private Path currentInputPath = null;
 
 	public KMeansJumpJobRunner() {
 		// defaults
@@ -75,27 +74,20 @@ public class KMeansJumpJobRunner extends
 	public void setZoomLevel(
 			final int zoomLevel ) {
 		currentZoomLevel = zoomLevel;
+		kmeansRunner.setZoomLevel(zoomLevel);
 	}
 
 	@Override
-	public void setInputHDFSPath(
-			final Path inputHDFSPath ) {
-		currentInputPath = inputHDFSPath;
+	public void setInputFormatConfiguration(
+			final FormatConfiguration inputFormatConfiguration ) {
+		jumpRunner.setInputFormatConfiguration(inputFormatConfiguration);
+		kmeansRunner.setInputFormatConfiguration(inputFormatConfiguration);
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public int run(
 			final Configuration configuration,
-			final PropertyManagement propertyManagement )
-			throws Exception {
-		return runJob(
-				configuration,
-				propertyManagement);
-	}
-
-	@SuppressWarnings("unchecked")
-	private int runJob(
-			final Configuration config,
 			final PropertyManagement propertyManagement )
 			throws Exception {
 
@@ -106,9 +98,6 @@ public class KMeansJumpJobRunner extends
 		propertyManagement.storeIfEmpty(
 				GlobalParameters.Global.BATCH_ID,
 				UUID.randomUUID().toString());
-		propertyManagement.store(
-				CommonParameters.Common.HDFS_INPUT_PATH,
-				currentInputPath);
 
 		propertyManagement.storeIfEmpty(
 				CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS,
@@ -130,11 +119,6 @@ public class KMeansJumpJobRunner extends
 		propertyManagement.copy(
 				CentroidParameters.Centroid.INDEX_ID,
 				SampleParameters.Sample.INDEX_ID);
-
-		jumpRunner.setInputHDFSPath(currentInputPath);
-
-		kmeansRunner.setInputHDFSPath(currentInputPath);
-		kmeansRunner.setZoomLevel(currentZoomLevel);
 
 		ClusteringUtils.createAdapter(propertyManagement);
 		ClusteringUtils.createIndex(propertyManagement);
@@ -190,7 +174,7 @@ public class KMeansJumpJobRunner extends
 				jumpRunner.setReducerCount(k);
 				LOGGER.info("KMeans for k: " + k + " and batch " + currentBatchId);
 				final int status = super.run(
-						config,
+						configuration,
 						propertyManagement);
 				if (status != 0) {
 					return status;
@@ -275,10 +259,7 @@ public class KMeansJumpJobRunner extends
 					GlobalParameters.Global.BATCH_ID
 				});
 		MapReduceParameters.fillOptions(options);
-		// override
-		PropertyManagement.removeOption(
-				options,
-				CommonParameters.Common.HDFS_INPUT_PATH);
+
 		PropertyManagement.removeOption(
 				options,
 				CentroidParameters.Centroid.ZOOM_LEVEL);
@@ -325,10 +306,10 @@ public class KMeansJumpJobRunner extends
 			singleSamplekmeansJobRunner.setZoomLevel(zoomLevel);
 		}
 
-		public void setInputHDFSPath(
-				final Path inputHDFSPath ) {
-			parallelJobRunner.setInputHDFSPath(inputHDFSPath);
-			singleSamplekmeansJobRunner.setInputHDFSPath(inputHDFSPath);
+		public void setInputFormatConfiguration(
+				final FormatConfiguration inputFormatConfiguration ) {
+			parallelJobRunner.setInputFormatConfiguration(inputFormatConfiguration);
+			singleSamplekmeansJobRunner.setInputFormatConfiguration(inputFormatConfiguration);
 		}
 
 	}

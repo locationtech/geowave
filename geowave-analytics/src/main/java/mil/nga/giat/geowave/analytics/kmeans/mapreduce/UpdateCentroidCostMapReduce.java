@@ -1,7 +1,6 @@
 package mil.nga.giat.geowave.analytics.kmeans.mapreduce;
 
 import java.io.IOException;
-import java.util.List;
 
 import mil.nga.giat.geowave.accumulo.mapreduce.GeoWaveWritableInputMapper;
 import mil.nga.giat.geowave.accumulo.mapreduce.input.GeoWaveInputKey;
@@ -24,7 +23,8 @@ import mil.nga.giat.geowave.analytics.tools.mapreduce.JobContextConfigurationWra
 import org.apache.hadoop.io.ObjectWritable;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Reducer;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Update the SINGLE cost of the clustering as a measure of distance from all
@@ -53,7 +53,7 @@ import org.apache.log4j.Logger;
 public class UpdateCentroidCostMapReduce
 {
 
-	protected static final Logger LOGGER = Logger.getLogger(UpdateCentroidCostMapReduce.class);
+	protected static final Logger LOGGER = LoggerFactory.getLogger(UpdateCentroidCostMapReduce.class);
 
 	public static class UpdateCentroidCostMap extends
 			GeoWaveWritableInputMapper<GroupIDText, CountofDoubleWritable>

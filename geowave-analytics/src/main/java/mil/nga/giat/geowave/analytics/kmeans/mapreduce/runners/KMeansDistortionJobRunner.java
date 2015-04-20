@@ -13,7 +13,7 @@ import mil.nga.giat.geowave.analytics.parameters.ParameterEnum;
 import mil.nga.giat.geowave.analytics.tools.PropertyManagement;
 import mil.nga.giat.geowave.analytics.tools.RunnerUtils;
 import mil.nga.giat.geowave.analytics.tools.mapreduce.CountofDoubleWritable;
-import mil.nga.giat.geowave.analytics.tools.mapreduce.MapReduceJobRunner;
+import mil.nga.giat.geowave.analytics.tools.mapreduce.GeoWaveAnalyticJobRunner;
 import mil.nga.giat.geowave.index.StringUtils;
 
 //@formatter:off
@@ -22,20 +22,13 @@ import mil.nga.giat.geowave.index.StringUtils;
 import org.apache.accumulo.core.client.ClientConfiguration;
 /*end[ACCUMULO_1.5.2]*/
 //@formatter:on
-
 import org.apache.accumulo.core.client.mapreduce.AccumuloOutputFormat;
 import org.apache.accumulo.core.client.security.tokens.AuthenticationToken;
 import org.apache.accumulo.core.client.security.tokens.PasswordToken;
 import org.apache.accumulo.core.data.Mutation;
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.conf.Configured;
-import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
-import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
-import org.apache.hadoop.mapreduce.lib.input.SequenceFileInputFormat;
-import org.apache.hadoop.util.Tool;
-import org.apache.hadoop.util.ToolRunner;
 
 /**
  * 
@@ -48,22 +41,13 @@ import org.apache.hadoop.util.ToolRunner;
  * 
  */
 public class KMeansDistortionJobRunner extends
-		Configured implements
-		Tool,
-		MapReduceJobRunner
+		GeoWaveAnalyticJobRunner
 {
-	private int reducerCount = 8;
 	private int k = 1;
-	private Path inputHDFSPath;
 	private String distortationTableName;
 
 	public KMeansDistortionJobRunner() {
-
-	}
-
-	public void setReducerCount(
-			final int reducerCount ) {
-		this.reducerCount = reducerCount;
+		setReducerCount(8);
 	}
 
 	public void setCentroidsCount(
@@ -76,28 +60,11 @@ public class KMeansDistortionJobRunner extends
 		this.distortationTableName = distortationTableName;
 	}
 
-	public void setInputHDFSPath(
-			final Path inputHDFSPath ) {
-		this.inputHDFSPath = inputHDFSPath;
-	}
-
 	@Override
-	public int run(
-			final String[] args )
+	public void configure(
+			final Job job )
 			throws Exception {
-		final Configuration conf = super.getConf();
-		final Job job = new Job(
-				conf);
-		final String zookeeper = args[0];
-		final String instance = args[1];
-		final String user = args[2];
-		final String password = args[3];
-		final String namespace = args[4];
 
-		job.setJarByClass(this.getClass());
-
-		job.setJobName("GeoWave K-Means Distortion (" + namespace + ")");
-		job.setInputFormatClass(SequenceFileInputFormat.class);
 		job.setMapperClass(KMeansDistortionMapReduce.KMeansDistortionMapper.class);
 		job.setMapOutputKeyClass(Text.class);
 		job.setMapOutputValueClass(CountofDoubleWritable.class);
@@ -106,7 +73,6 @@ public class KMeansDistortionJobRunner extends
 		job.setOutputKeyClass(Text.class);
 		job.setOutputValueClass(Mutation.class);
 		job.setOutputFormatClass(AccumuloOutputFormat.class);
-		job.setNumReduceTasks(reducerCount);
 		// extends wait time to 15 minutes (default: 600 seconds)
 		final long milliSeconds = 1000 * 60 * 15;
 		job.getConfiguration().setLong(
@@ -123,17 +89,13 @@ public class KMeansDistortionJobRunner extends
 					JumpParameters.Jump.COUNT_OF_CENTROIDS
 				});
 
-		FileInputFormat.setInputPaths(
-				job,
-				inputHDFSPath);
-
 		// Required since the Mapper uses the input format parameters to lookup
 		// the adapter
 		GeoWaveInputFormat.setAccumuloOperationsInfo(
 				job.getConfiguration(),
 				zookeeper,
-				instance,
-				user,
+				instanceName,
+				userName,
 				password,
 				namespace);
 
@@ -144,11 +106,11 @@ public class KMeansDistortionJobRunner extends
 		GeoWaveConfiguratorBase.setInstanceName(
 				KMeansDistortionMapReduce.class,
 				job.getConfiguration(),
-				instance);
+				instanceName);
 		GeoWaveConfiguratorBase.setUserName(
 				KMeansDistortionMapReduce.class,
 				job.getConfiguration(),
-				user);
+				userName);
 		GeoWaveConfiguratorBase.setPassword(
 				KMeansDistortionMapReduce.class,
 				job.getConfiguration(),
@@ -163,16 +125,16 @@ public class KMeansDistortionJobRunner extends
 		// set up AccumuloOutputFormat
 		AccumuloOutputFormat.setConnectorInfo(
 				job,
-				user,
+				userName,
 				authToken);
 
 		// @formatter:off
 		/* if[ACCUMULO_1.5.2]
-		AccumuloOutputFormat.setZooKeeperInstance(job, instance, zookeeper);
+		AccumuloOutputFormat.setZooKeeperInstance(job, instanceName, zookeeper);
 		else[ACCUMULO_1.5.2]*/
 		final ClientConfiguration config = new ClientConfiguration().withZkHosts(
 				zookeeper).withInstance(
-				instance);
+				instanceName);
 		AccumuloOutputFormat.setZooKeeperInstance(
 				job,
 				config);
@@ -185,10 +147,11 @@ public class KMeansDistortionJobRunner extends
 		AccumuloOutputFormat.setCreateTables(
 				job,
 				true);
+	}
 
-		final boolean jobSuccess = job.waitForCompletion(true);
-
-		return (jobSuccess) ? 0 : 1;
+	@Override
+	public Class<?> getScope() {
+		return KMeansDistortionMapReduce.class;
 	}
 
 	public String getDistortationTableName() {
@@ -200,16 +163,15 @@ public class KMeansDistortionJobRunner extends
 			final Configuration config,
 			final PropertyManagement runTimeProperties )
 			throws Exception {
+
 		distortationTableName = AccumuloUtils.getQualifiedTableName(
 				runTimeProperties.getPropertyAsString(GlobalParameters.Global.ACCUMULO_NAMESPACE),
 				runTimeProperties.getPropertyAsString(
 						CentroidParameters.Centroid.DISTORTION_TABLE_NAME,
 						"KmeansDistortion"));
-		reducerCount = Math.min(
-				runTimeProperties.getPropertyAsInt(
-						ClusteringParameters.Clustering.MAX_REDUCER_COUNT,
-						16),
-				reducerCount);
+		setReducerCount(runTimeProperties.getPropertyAsInt(
+				ClusteringParameters.Clustering.MAX_REDUCER_COUNT,
+				super.getReducerCount()));
 		RunnerUtils.setParameter(
 				config,
 				KMeansDistortionMapReduce.class,
@@ -223,9 +185,8 @@ public class KMeansDistortionJobRunner extends
 				config,
 				runTimeProperties);
 
-		return ToolRunner.run(
+		return super.run(
 				config,
-				this,
-				runTimeProperties.toGeoWaveRunnerArguments());
+				runTimeProperties);
 	}
 }

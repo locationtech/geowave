@@ -8,9 +8,10 @@ import mil.nga.giat.geowave.analytics.extract.DimensionExtractor;
 import mil.nga.giat.geowave.analytics.tools.PropertyManagement;
 import mil.nga.giat.geowave.analytics.tools.dbops.AdapterStoreFactory;
 import mil.nga.giat.geowave.analytics.tools.dbops.BasicAccumuloOperationsFactory;
+import mil.nga.giat.geowave.analytics.tools.dbops.IndexStoreFactory;
+import mil.nga.giat.geowave.analytics.tools.model.IndexModelBuilder;
 
 import org.apache.commons.cli.Option;
-import org.apache.hadoop.fs.Path;
 
 public class CommonParameters
 {
@@ -23,10 +24,12 @@ public class CommonParameters
 				BasicAccumuloOperationsFactory.class),
 		ADAPTER_STORE_FACTORY(
 				AdapterStoreFactory.class),
+		INDEX_STORE_FACTORY(
+				IndexStoreFactory.class),
 		DISTANCE_FUNCTION_CLASS(
 				DistanceFn.class),
-		HDFS_INPUT_PATH(
-				Path.class);
+		INDEX_MODEL_BUILDER_CLASS(
+				IndexModelBuilder.class);
 
 		private final Class<?> baseClass;
 
@@ -69,6 +72,15 @@ public class CommonParameters
 		}
 		if (contains(
 				params,
+				Common.INDEX_STORE_FACTORY)) {
+			options.add(PropertyManagement.newOption(
+					Common.INDEX_STORE_FACTORY,
+					"cif",
+					"Index Store factory implements mil.nga.giat.geowave.analytics.tools.dbops.IndexStoreFactory",
+					true));
+		}
+		if (contains(
+				params,
 				Common.DISTANCE_FUNCTION_CLASS)) {
 			options.add(PropertyManagement.newOption(
 					Common.DISTANCE_FUNCTION_CLASS,
@@ -78,11 +90,11 @@ public class CommonParameters
 		}
 		if (contains(
 				params,
-				Common.HDFS_INPUT_PATH)) {
+				Common.INDEX_MODEL_BUILDER_CLASS)) {
 			options.add(PropertyManagement.newOption(
-					Common.HDFS_INPUT_PATH,
-					"cip",
-					"HDFS Input Path",
+					Common.INDEX_MODEL_BUILDER_CLASS,
+					"cim",
+					"Class implements mil.nga.giat.geowave.analytics.tools.model.IndexModelBuilder",
 					true));
 		}
 

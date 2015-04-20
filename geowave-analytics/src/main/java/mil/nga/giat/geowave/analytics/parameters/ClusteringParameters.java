@@ -21,6 +21,10 @@ public class ClusteringParameters
 				Integer.class),
 		CONVERGANCE_TOLERANCE(
 				Double.class),
+		DISTANCE_THRESHOLDS(
+				String.class),
+		GEOMETRIC_DISTANCE_UNIT(
+				String.class),
 		ZOOM_LEVELS(
 				Integer.class);
 
@@ -52,6 +56,24 @@ public class ClusteringParameters
 					Clustering.ZOOM_LEVELS,
 					"zl",
 					"Number of Zoom Levels to Process",
+					true));
+		}
+		if (contains(
+				params,
+				Clustering.GEOMETRIC_DISTANCE_UNIT)) {
+			options.add(PropertyManagement.newOption(
+					Clustering.GEOMETRIC_DISTANCE_UNIT,
+					"du",
+					"Geometric distance unit (m=meters,km=kilometers, see symbols for javax.units.BaseUnit)",
+					true));
+		}
+		if (contains(
+				params,
+				Clustering.DISTANCE_THRESHOLDS)) {
+			options.add(PropertyManagement.newOption(
+					Clustering.DISTANCE_THRESHOLDS,
+					"dt",
+					"Comma separated list of distance thresholds, per dimension",
 					true));
 		}
 		if (contains(

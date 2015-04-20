@@ -21,9 +21,10 @@ import mil.nga.giat.geowave.vector.adapter.FeatureDataAdapter;
 import org.apache.hadoop.io.ObjectWritable;
 import org.apache.hadoop.mapreduce.ReduceContext;
 import org.apache.hadoop.mapreduce.Reducer;
-import org.apache.log4j.Logger;
 import org.geotools.feature.type.BasicFeatureTypes;
 import org.opengis.feature.simple.SimpleFeature;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.vividsolutions.jts.geom.Geometry;
 
@@ -67,7 +68,7 @@ public class SimpleFeatureOutputReducer extends
 	protected String groupID;
 	protected FeatureDataAdapter outputAdapter;
 
-	protected static final Logger LOGGER = Logger.getLogger(SimpleFeatureOutputReducer.class);
+	protected static final Logger LOGGER = LoggerFactory.getLogger(SimpleFeatureOutputReducer.class);
 
 	@Override
 	protected void reduceNativeValues(

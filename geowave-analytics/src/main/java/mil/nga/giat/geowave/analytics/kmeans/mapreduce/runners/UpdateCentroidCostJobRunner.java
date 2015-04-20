@@ -1,8 +1,5 @@
 package mil.nga.giat.geowave.analytics.kmeans.mapreduce.runners;
 
-import mil.nga.giat.geowave.accumulo.mapreduce.GeoWaveConfiguratorBase;
-import mil.nga.giat.geowave.accumulo.mapreduce.GeoWaveJobRunner;
-import mil.nga.giat.geowave.accumulo.mapreduce.output.GeoWaveOutputFormat;
 import mil.nga.giat.geowave.accumulo.mapreduce.output.GeoWaveOutputKey;
 import mil.nga.giat.geowave.analytics.clustering.CentroidManagerGeoWave;
 import mil.nga.giat.geowave.analytics.clustering.NestedGroupCentroidAssignment;
@@ -12,32 +9,33 @@ import mil.nga.giat.geowave.analytics.parameters.ParameterEnum;
 import mil.nga.giat.geowave.analytics.tools.PropertyManagement;
 import mil.nga.giat.geowave.analytics.tools.RunnerUtils;
 import mil.nga.giat.geowave.analytics.tools.mapreduce.CountofDoubleWritable;
+import mil.nga.giat.geowave.analytics.tools.mapreduce.GeoWaveAnalyticJobRunner;
+import mil.nga.giat.geowave.analytics.tools.mapreduce.GeoWaveOutputFormatConfiguration;
 import mil.nga.giat.geowave.analytics.tools.mapreduce.GroupIDText;
 import mil.nga.giat.geowave.analytics.tools.mapreduce.MapReduceJobRunner;
 
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.mapreduce.Job;
-import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
-import org.apache.hadoop.mapreduce.lib.input.SequenceFileInputFormat;
-import org.apache.hadoop.util.ToolRunner;
 import org.opengis.feature.simple.SimpleFeature;
 
 /**
- * CentroidManagerGeoWave
+ * Update the centroid with its cost, measured by the average distance of
+ * assigned points.
  * 
  * 
  */
 public class UpdateCentroidCostJobRunner extends
-		GeoWaveJobRunner implements
+		GeoWaveAnalyticJobRunner implements
 		MapReduceJobRunner
 {
-	private Path inputHDFSPath = null;
-
-	private int reducerCount = 1;
 
 	public UpdateCentroidCostJobRunner() {
+		super.setOutputFormatConfiguration(new GeoWaveOutputFormatConfiguration());
+	}
 
+	@Override
+	public Class<?> getScope() {
+		return UpdateCentroidCostMapReduce.class;
 	}
 
 	@Override
@@ -62,20 +60,9 @@ public class UpdateCentroidCostJobRunner extends
 					CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS
 				});
 
-		return ToolRunner.run(
+		return super.run(
 				config,
-				this,
-				runTimeProperties.toGeoWaveRunnerArguments());
-	}
-
-	public void setInputHDFSPath(
-			final Path inputHDFSPath ) {
-		this.inputHDFSPath = inputHDFSPath;
-	}
-
-	public void setReducerCount(
-			final int reducerCount ) {
-		this.reducerCount = reducerCount;
+				runTimeProperties);
 	}
 
 	@Override
@@ -83,22 +70,13 @@ public class UpdateCentroidCostJobRunner extends
 			final Job job )
 			throws Exception {
 
-		job.setJobName("GeoWave Update Centroid Cost (" + namespace + ")");
-		job.setInputFormatClass(SequenceFileInputFormat.class);
 		job.setMapperClass(UpdateCentroidCostMapReduce.UpdateCentroidCostMap.class);
 		job.setMapOutputKeyClass(GroupIDText.class);
 		job.setMapOutputValueClass(CountofDoubleWritable.class);
 		job.setCombinerClass(UpdateCentroidCostMapReduce.UpdateCentroidCostCombiner.class);
 		job.setReducerClass(UpdateCentroidCostMapReduce.UpdateCentroidCostReducer.class);
-		job.setOutputFormatClass(GeoWaveOutputFormat.class);
 		job.setReduceSpeculativeExecution(false);
 		job.setOutputKeyClass(GeoWaveOutputKey.class);
 		job.setOutputValueClass(SimpleFeature.class);
-		job.setNumReduceTasks(reducerCount);
-
-		FileInputFormat.setInputPaths(
-				job,
-				inputHDFSPath);
-
 	}
 }

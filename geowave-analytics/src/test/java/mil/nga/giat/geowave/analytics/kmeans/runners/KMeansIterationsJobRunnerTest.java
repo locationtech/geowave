@@ -23,8 +23,8 @@ import mil.nga.giat.geowave.analytics.parameters.CentroidParameters;
 import mil.nga.giat.geowave.analytics.parameters.ClusteringParameters;
 import mil.nga.giat.geowave.analytics.parameters.ClusteringParameters.Clustering;
 import mil.nga.giat.geowave.analytics.parameters.CommonParameters;
-import mil.nga.giat.geowave.analytics.parameters.CommonParameters.Common;
 import mil.nga.giat.geowave.analytics.parameters.GlobalParameters;
+import mil.nga.giat.geowave.analytics.parameters.InputParameters.Input;
 import mil.nga.giat.geowave.analytics.tools.AnalyticFeature;
 import mil.nga.giat.geowave.analytics.tools.AnalyticItemWrapper;
 import mil.nga.giat.geowave.analytics.tools.PropertyManagement;
@@ -90,19 +90,14 @@ public class KMeansIterationsJobRunnerTest
 		jobRunner.fillOptions(options);
 		assertTrue(options.size() >= 14);
 		options.contains(PropertyManagement.newOption(
-				Common.HDFS_INPUT_PATH,
-				"cip",
+				Input.HDFS_INPUT_PATH,
+				"eip",
 				"HDFS Input Path",
 				true));
 		options.contains(PropertyManagement.newOption(
 				Clustering.CONVERGANCE_TOLERANCE,
 				"cct",
 				"Convergence Tolerance",
-				true));
-		options.contains(PropertyManagement.newOption(
-				Common.HDFS_INPUT_PATH,
-				"cip",
-				"HDFS Input Path",
 				true));
 	}
 

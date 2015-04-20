@@ -6,7 +6,8 @@ import java.util.Arrays;
  * This class is a wrapper around a byte array to ensure equals and hashcode
  * operations use the values of the bytes rather than explicit object identity
  */
-public class ByteArrayId
+public class ByteArrayId implements
+		java.io.Serializable
 {
 	private final byte[] id;
 

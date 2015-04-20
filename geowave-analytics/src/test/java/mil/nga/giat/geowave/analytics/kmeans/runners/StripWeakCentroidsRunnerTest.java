@@ -5,7 +5,6 @@ import static org.junit.Assert.assertEquals;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
@@ -15,11 +14,12 @@ import mil.nga.giat.geowave.analytics.clustering.exception.MatchingCentroidNotFo
 import mil.nga.giat.geowave.analytics.kmeans.mapreduce.runners.StripWeakCentroidsRunner;
 import mil.nga.giat.geowave.analytics.kmeans.mapreduce.runners.StripWeakCentroidsRunner.MaxChangeBreakStrategy;
 import mil.nga.giat.geowave.analytics.kmeans.mapreduce.runners.StripWeakCentroidsRunner.StableChangeBreakStrategy;
+import mil.nga.giat.geowave.analytics.kmeans.mapreduce.runners.StripWeakCentroidsRunner.TailMaxBreakStrategy;
+import mil.nga.giat.geowave.analytics.kmeans.mapreduce.runners.StripWeakCentroidsRunner.TailStableChangeBreakStrategy;
 import mil.nga.giat.geowave.analytics.tools.AnalyticItemWrapper;
 import mil.nga.giat.geowave.analytics.tools.PropertyManagement;
 import mil.nga.giat.geowave.index.ByteArrayId;
 import mil.nga.giat.geowave.index.StringUtils;
-import mil.nga.giat.geowave.store.CloseableIterator;
 import mil.nga.giat.geowave.store.index.IndexType;
 
 import org.apache.hadoop.conf.Configuration;
@@ -46,8 +46,8 @@ public class StripWeakCentroidsRunnerTest
 	public void testStable1()
 			throws Exception {
 
-		List<AnalyticItemWrapper<Long>> list = new ArrayList<AnalyticItemWrapper<Long>>();
-		int cnts[] = new int[] {
+		final List<AnalyticItemWrapper<Long>> list = new ArrayList<AnalyticItemWrapper<Long>>();
+		final int cnts[] = new int[] {
 			1000,
 			851,
 			750,
@@ -58,12 +58,90 @@ public class StripWeakCentroidsRunnerTest
 			90,
 			70
 		};
-		for (int i = 0; i < cnts.length; i++)
+		for (int i = 0; i < cnts.length; i++) {
 			list.add(new LongCentroid(
 					i,
 					"",
 					cnts[i]));
-		StableChangeBreakStrategy<Long> breakS = new StableChangeBreakStrategy<Long>();
+		}
+		final StableChangeBreakStrategy<Long> breakS = new StableChangeBreakStrategy<Long>();
+		assertEquals(
+				5,
+				breakS.getBreakPoint(list));
+	}
+
+	@Test
+	public void testStableUniform()
+			throws Exception {
+
+		final List<AnalyticItemWrapper<Long>> list = new ArrayList<AnalyticItemWrapper<Long>>();
+		final int cnts[] = new int[] {
+			1000,
+			851,
+			750,
+			650,
+			525,
+			200,
+			100,
+			90,
+			70
+		};
+		for (int i = 0; i < cnts.length; i++) {
+			list.add(new LongCentroid(
+					i,
+					"",
+					cnts[i]));
+		}
+		final TailStableChangeBreakStrategy<Long> breakS = new TailStableChangeBreakStrategy<Long>();
+		assertEquals(
+				5,
+				breakS.getBreakPoint(list));
+	}
+
+	@Test
+	public void testMaxDense()
+			throws Exception {
+
+		final List<AnalyticItemWrapper<Long>> list = new ArrayList<AnalyticItemWrapper<Long>>();
+		final int cnts[] = new int[] {
+			900,
+			600,
+			800,
+		};
+		for (int i = 0; i < cnts.length; i++) {
+			list.add(new LongCentroid(
+					i,
+					"",
+					cnts[i]));
+		}
+		final TailMaxBreakStrategy<Long> breakS = new TailMaxBreakStrategy<Long>();
+		assertEquals(
+				3,
+				breakS.getBreakPoint(list));
+	}
+
+	@Test
+	public void testMaxUniform()
+			throws Exception {
+
+		final List<AnalyticItemWrapper<Long>> list = new ArrayList<AnalyticItemWrapper<Long>>();
+		final int cnts[] = new int[] {
+			1000,
+			851,
+			750,
+			650,
+			525,
+			200,
+			90,
+			70
+		};
+		for (int i = 0; i < cnts.length; i++) {
+			list.add(new LongCentroid(
+					i,
+					"",
+					cnts[i]));
+		}
+		final TailMaxBreakStrategy<Long> breakS = new TailMaxBreakStrategy<Long>();
 		assertEquals(
 				5,
 				breakS.getBreakPoint(list));
@@ -98,14 +176,15 @@ public class StripWeakCentroidsRunnerTest
 		private final int max;
 
 		StripWeakCentroidsRunnerForTest(
-				int min,
-				int max ) {
+				final int min,
+				final int max ) {
 			super();
 			this.min = min;
 			this.max = max;
 			testSet = load();
 		}
 
+		@Override
 		protected CentroidManager<Long> constructCentroidManager(
 				final Configuration config,
 				final PropertyManagement runTimeProperties )
@@ -182,7 +261,7 @@ public class StripWeakCentroidsRunnerTest
 
 				@Override
 				public AnalyticItemWrapper<Long> getCentroid(
-						String id ) {
+						final String id ) {
 					// TODO Auto-generated method stub
 					return null;
 				}
@@ -201,8 +280,8 @@ public class StripWeakCentroidsRunnerTest
 
 				@Override
 				public AnalyticItemWrapper<Long> getCentroidById(
-						String id,
-						String groupID )
+						final String id,
+						final String groupID )
 						throws IOException,
 						MatchingCentroidNotFoundException {
 					Assert.assertEquals(
@@ -248,6 +327,7 @@ public class StripWeakCentroidsRunnerTest
 			super();
 		}
 
+		@Override
 		protected CentroidManager<Long> constructCentroidManager(
 				final Configuration config,
 				final PropertyManagement runTimeProperties )
@@ -319,7 +399,7 @@ public class StripWeakCentroidsRunnerTest
 
 				@Override
 				public AnalyticItemWrapper<Long> getCentroid(
-						String id ) {
+						final String id ) {
 					// TODO Auto-generated method stub
 					return null;
 				}
@@ -338,8 +418,8 @@ public class StripWeakCentroidsRunnerTest
 
 				@Override
 				public AnalyticItemWrapper<Long> getCentroidById(
-						String id,
-						String groupID )
+						final String id,
+						final String groupID )
 						throws IOException,
 						MatchingCentroidNotFoundException {
 					Assert.assertEquals(
