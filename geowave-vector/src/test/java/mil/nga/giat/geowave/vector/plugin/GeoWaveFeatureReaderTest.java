@@ -25,7 +25,6 @@ import org.geotools.feature.SchemaException;
 import org.geotools.feature.visitor.MaxVisitor;
 import org.geotools.feature.visitor.MinVisitor;
 import org.geotools.filter.FilterFactoryImpl;
-import org.geotools.filter.spatial.BBOXImpl;
 import org.geotools.filter.text.cql2.CQLException;
 import org.geotools.filter.text.ecql.ECQL;
 import org.junit.Before;
@@ -79,7 +78,7 @@ public class GeoWaveFeatureReaderTest
 				Long.valueOf(100));
 		newFeature.setAttribute(
 				"pid",
-				UUID.randomUUID().toString());
+				"a" + UUID.randomUUID().toString());
 		newFeature.setAttribute(
 				"start",
 				stime);
@@ -101,7 +100,7 @@ public class GeoWaveFeatureReaderTest
 				Long.valueOf(101));
 		newFeature.setAttribute(
 				"pid",
-				UUID.randomUUID().toString());
+				"b" + UUID.randomUUID().toString());
 		newFeature.setAttribute(
 				"start",
 				etime);
@@ -111,6 +110,8 @@ public class GeoWaveFeatureReaderTest
 						28.25,
 						41.25)));
 		fids.add(newFeature.getID());
+		pids.add(newFeature.getAttribute(
+				"pid").toString());
 		writer.write();
 		writer.close();
 		transaction1.commit();
@@ -133,7 +134,7 @@ public class GeoWaveFeatureReaderTest
 			NoSuchElementException,
 			IOException,
 			CQLException {
-		FeatureReader reader = dataStore.getFeatureReader(
+		final FeatureReader reader = dataStore.getFeatureReader(
 				type.getTypeName(),
 				query);
 		int count = 0;
@@ -150,8 +151,8 @@ public class GeoWaveFeatureReaderTest
 			throws IllegalArgumentException,
 			NoSuchElementException,
 			IOException {
-		FilterFactoryImpl factory = new FilterFactoryImpl();
-		Query query = new Query(
+		final FilterFactoryImpl factory = new FilterFactoryImpl();
+		final Query query = new Query(
 				"GeoWaveFeatureReaderTest",
 				factory.bbox(
 						"",
@@ -205,7 +206,7 @@ public class GeoWaveFeatureReaderTest
 			IOException,
 			CQLException {
 		System.out.println(pids);
-		Query query = new Query(
+		final Query query = new Query(
 				"GeoWaveFeatureReaderTest",
 				ECQL.toFilter("pid like '" + pids.get(
 						0).substring(
