@@ -29,7 +29,8 @@ public class GeoWaveGTMemDataStore extends
 			throws AccumuloException,
 			AccumuloSecurityException {
 		super(
-				new MemoryTransactionsAllocater());
+				new MemoryTransactionsAllocater(
+						"root"));
 		((MemoryTransactionsAllocater) super.getTransactionsAllocater()).setNotificationRequester(this);
 		init(instanceName);
 
@@ -39,7 +40,8 @@ public class GeoWaveGTMemDataStore extends
 			throws AccumuloException,
 			AccumuloSecurityException {
 		super(
-				new MemoryTransactionsAllocater());
+				new MemoryTransactionsAllocater(
+						"root"));
 		((MemoryTransactionsAllocater) super.getTransactionsAllocater()).setNotificationRequester(this);
 		init(UUID.randomUUID().toString());
 
@@ -52,7 +54,8 @@ public class GeoWaveGTMemDataStore extends
 			throws AccumuloException,
 			AccumuloSecurityException {
 		super(
-				new MemoryTransactionsAllocater(),
+				new MemoryTransactionsAllocater(
+						"root"),
 				authorizationFactorySPI.create(authURL));
 		((MemoryTransactionsAllocater) super.getTransactionsAllocater()).setNotificationRequester(this);
 		init(instanceName);

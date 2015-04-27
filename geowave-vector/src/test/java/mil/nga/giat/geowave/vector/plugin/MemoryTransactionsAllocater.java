@@ -12,11 +12,14 @@ public class MemoryTransactionsAllocater implements
 {
 
 	private TransactionNotification notificationRequester;
+	private String userId;
 
 	private final LinkedList<String> lockPaths = new LinkedList<String>();
 
-	public MemoryTransactionsAllocater() {
+	public MemoryTransactionsAllocater(
+			String userId ) {
 		super();
+		this.userId = userId;
 	}
 
 	public MemoryTransactionsAllocater(
@@ -55,7 +58,7 @@ public class MemoryTransactionsAllocater implements
 		}
 		String id = UUID.randomUUID().toString();
 		if (notificationRequester != null) notificationRequester.transactionCreated(
-				"me",
+				userId,
 				id);
 		return id;
 	}

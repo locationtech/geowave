@@ -126,7 +126,8 @@ public class ZooKeeperTransactionsAllocater implements
 	}
 
 	public void preallocateTransactionIDs(
-			final int maximuAmount ) {
+			final int maximuAmount,
+			String userAccount ) {
 		try {
 			final List<String> children = zk.getChildren(
 					clientTXPath,
@@ -135,7 +136,7 @@ public class ZooKeeperTransactionsAllocater implements
 			for (int i = 0; i < amountToAdd; i++) {
 				final String transId = UUID.randomUUID().toString();
 				if (notificationRequester.transactionCreated(
-						clientID,
+						userAccount,
 						transId)) {
 					zk.create(
 							clientTXPath + "/" + transId,
