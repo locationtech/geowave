@@ -26,7 +26,7 @@ Basically, GeoWave is working to bridge geospatial software with distributed com
 * We have a [RPM repository](http://ngageoint.github.io/geowave/packages.html)
   * See [Documentation: Installation from RPM](http://ngageoint.github.io/geowave/documentation.html#installation-from-rpm) for more info.
   * Deb packages if enough people request them
-* We have [Maven artifact repositories](http://ngageoint.github.io/geowave/documentation.html#maven-repositories) (indexes not enabled, but it works in a maven repo fragment)
+* We have [Maven artifact repositories](http://ngageoint.github.io/geowave/documentation.html#maven-repositories-2) (indexes not enabled, but it works in a maven repo fragment)
   * Releases: http://geowave-maven.s3-website-us-east-1.amazonaws.com/release
   * Snapshots: http://geowave-maven.s3-website-us-east-1.amazonaws.com/snapshot (nightly)
 * We have a [vagrant dev environment](https://github.com/ngageoint/geowave/tree/master/vagrant)
@@ -56,7 +56,7 @@ We work to maintain a N and N-1 tested and supported version pace for the follow
 
 | Geoserver | Geotools | Accumulo | Hadoop | PDAL | Mapnik | Java |
 |:---------:|:--------:|:--------:|:------:|:----:|:------:|:----:|
-| 2.5.x, 2.6.x | 11.x, 12.x | 1.5.x, 1.6.x | 2.x | 0.9.9 |  master (pull request pending) | Java7, Java8 |
+| 2.6.x, 2.7.x | 12.x, 13.x | 1.5.x, 1.6.x | 2.x | 0.9.9 |  master (pull request pending) | Java7, Java8 |
 
 * [Apache Maven](http://maven.apache.org/) 3.x or greater is required for building
 * [Java Advanced Imaging](http://download.java.net/media/jai/builds/release/1_1_3/) and [Java Image I/O](http://download.java.net/media/jai-imageio/builds/release/1.1/) should both be installed on geoserver (license prohibits us redistributing)
