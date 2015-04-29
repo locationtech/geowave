@@ -2862,7 +2862,7 @@ config -s general.vfs.context.classpath.geowave=hdfs://NAME_NODE_FQDN:8020/accum
 config -ns geowave -s table.classpath.context=geowave
 exit <i class="conum" data-value="2"></i><b>(2)</b>
 # From the node with the GeoWave application server installed
-java -cp "/usr/local/geowave/geoserver/webapps/geoserver/WEB-INF/lib/*" mil.nga.giat.geowave.vector.plugin.GeoWaveGTDataStore -z ZOOKEEPER_NODE:2181 -i accumulo -u root -p ROOT_PASSWORD -n geowave -m 20</code></pre>
+java -cp "/usr/local/geowave/geoserver/webapps/geoserver/WEB-INF/lib/*" mil.nga.giat.geowave.vector.plugin.GeoWaveGTDataStore -z ZOOKEEPER_NODE:2181 -i accumulo -u root -p ROOT_PASSWORD -n geowave -m 20 -r geowave</code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -3567,7 +3567,7 @@ yum install geowave-cdh5-puppet</code></pre>
 <div class="sect2">
 <h3 id="version"><a class="anchor" href="#version"></a>Version</h3>
 <div class="paragraph">
-<p>This documentation was generated for GeoWave version 0.8.6-SNAPSHOT from commit 6c8a91484c76393ca53537219b7369df510b6c22.</p>
+<p>This documentation was generated for GeoWave version 0.8.6-SNAPSHOT from commit ab365c191fde379ccdd6dc8cf80f6de9351c28d0.</p>
 </div>
 <div style="page-break-after: always;"></div>
 </div>
@@ -3619,7 +3619,7 @@ yum install geowave-cdh5-puppet</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-04-28 12:10:20 UTC
+Last updated 2015-04-29 00:13:34 UTC
 </div>
 </div>
 </body>
