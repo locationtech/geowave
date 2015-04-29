@@ -313,6 +313,7 @@ public interface AccumuloOperations
 	 * Insure user has the given operations.
 	 */
 	public void insureAuthorization(
+			final String clientUser,
 			final String... authorizations )
 			throws AccumuloException,
 			AccumuloSecurityException;

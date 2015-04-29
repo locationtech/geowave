@@ -169,7 +169,7 @@ public class GeoWaveGTDataStore extends
 		init(config);
 		transactionsAllocater = new ZooKeeperTransactionsAllocater(
 				config.getZookeeperServers(),
-				"gt",
+				config.getUserName(),
 				this);
 
 		featureNameSpaceURI = config.getFeatureNamespace();
@@ -865,7 +865,9 @@ public class GeoWaveGTDataStore extends
 			final String clientID,
 			final String txID ) {
 		try {
-			((BasicAccumuloOperations) storeOperations).insureAuthorization(txID);
+			((BasicAccumuloOperations) storeOperations).insureAuthorization(
+					clientID,
+					txID);
 			return true;
 		}
 		catch (final Exception ex) {
@@ -908,13 +910,19 @@ public class GeoWaveGTDataStore extends
 				"help",
 				false,
 				"Display help"));
-		baseOptionGroup.addOption(new Option(
+		options.addOptionGroup(baseOptionGroup);
+		options.addOption(new Option(
 				"m",
 				"maximum",
 				true,
 				"Maximum number of simulataneous transactions"));
-		options.addOptionGroup(baseOptionGroup);
+		options.addOption(new Option(
+				"r",
+				"recipient",
+				true,
+				"Recipient application user account for the set of transactions"));
 		GeoWavePluginConfig.applyOptions(options);
+
 		final BasicParser parser = new BasicParser();
 		final CommandLine commandLine = parser.parse(
 				options,
@@ -929,7 +937,9 @@ public class GeoWaveGTDataStore extends
 				final int maximum = Integer.parseInt(commandLine.getOptionValue('m'));
 				final GeoWaveGTDataStore dataStore = new GeoWaveGTDataStore(
 						plugin);
-				((ZooKeeperTransactionsAllocater) dataStore.transactionsAllocater).preallocateTransactionIDs(maximum);
+				((ZooKeeperTransactionsAllocater) dataStore.transactionsAllocater).preallocateTransactionIDs(
+						maximum,
+						commandLine.getOptionValue('r'));
 			}
 			catch (final Exception ex) {
 				LOGGER.error(

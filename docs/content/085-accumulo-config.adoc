@@ -27,7 +27,7 @@ config -s general.vfs.context.classpath.geowave=hdfs://NAME_NODE_FQDN:8020/accum
 config -ns geowave -s table.classpath.context=geowave
 exit // <2>
 # From the node with the GeoWave application server installed
-java -cp "/usr/local/geowave/geoserver/webapps/geoserver/WEB-INF/lib/*" mil.nga.giat.geowave.vector.plugin.GeoWaveGTDataStore -z ZOOKEEPER_NODE:2181 -i accumulo -u root -p ROOT_PASSWORD -n geowave -m 20
+java -cp "/usr/local/geowave/geoserver/webapps/geoserver/WEB-INF/lib/*" mil.nga.giat.geowave.vector.plugin.GeoWaveGTDataStore -z ZOOKEEPER_NODE:2181 -i accumulo -u root -p ROOT_PASSWORD -n geowave -m 20 -r geowave
 ----
 <1> You'll be prompted for a password
 <2> Done with Accumulo specific configs

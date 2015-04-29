@@ -550,11 +550,12 @@ public class BasicAccumuloOperations implements
 
 	@Override
 	public void insureAuthorization(
+			final String clientUser,
 			final String... authorizations )
 			throws AccumuloException,
 			AccumuloSecurityException {
 		Authorizations auths = connector.securityOperations().getUserAuthorizations(
-				connector.whoami());
+				clientUser);
 		final List<byte[]> newSet = new ArrayList<byte[]>();
 		for (final String auth : authorizations) {
 			if (!auths.contains(auth)) {
@@ -564,12 +565,12 @@ public class BasicAccumuloOperations implements
 		if (newSet.size() > 0) {
 			newSet.addAll(auths.getAuthorizations());
 			connector.securityOperations().changeUserAuthorizations(
-					connector.whoami(),
+					clientUser,
 					new Authorizations(
 							newSet));
 			auths = connector.securityOperations().getUserAuthorizations(
-					connector.whoami());
-			LOGGER.trace(connector.whoami() + " has authorizations " + ArrayUtils.toString(auths.getAuthorizations()));
+					clientUser);
+			LOGGER.trace(clientUser + " has authorizations " + ArrayUtils.toString(auths.getAuthorizations()));
 		}
 	}
 
