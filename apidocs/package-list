@@ -19,8 +19,6 @@ mil.nga.giat.geowave.analytics.kmeans.mapreduce.runners
 mil.nga.giat.geowave.analytics.kmeans.serial
 mil.nga.giat.geowave.analytics.mapreduce.kde
 mil.nga.giat.geowave.analytics.mapreduce.kde.compare
-mil.nga.giat.geowave.analytics.mapreduce.kde.parser
-mil.nga.giat.geowave.analytics.mapreduce.kde.parser.model
 mil.nga.giat.geowave.analytics.mapreduce.nn
 mil.nga.giat.geowave.analytics.parameters
 mil.nga.giat.geowave.analytics.sample
