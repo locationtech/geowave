@@ -1,0 +1,33 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>mil.nga.giat</groupId>
+		<artifactId>geowave-core-parent</artifactId>
+		<relativePath>../</relativePath>
+		<version>0.8.7-SNAPSHOT</version>
+	</parent>
+	<artifactId>geowave-core-geotime</artifactId>
+	<name>GeoWave Spatial and Temporal Support</name>
+	<dependencies>
+		<dependency>
+			<groupId>com.vividsolutions</groupId>
+			<artifactId>jts</artifactId>
+		</dependency>
+		<!--we can switch the dependency from store to ingest when accumulo becomes 
+			a pluggable data store and is no longer a dependency on ingest -->
+		<dependency>
+			<groupId>mil.nga.giat</groupId>
+			<artifactId>geowave-core-store</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!-- <dependency> <groupId>mil.nga.giat</groupId> <artifactId>geowave-core-ingest</artifactId> 
+			<version>${project.version}</version> </dependency> -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.4</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+</project>

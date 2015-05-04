@@ -1,0 +1,21 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>geowave-parent</artifactId>
+		<groupId>mil.nga.giat</groupId>
+		<relativePath>../</relativePath>
+		<version>0.8.7-SNAPSHOT</version>
+	</parent>
+	<artifactId>geowave-core-parent</artifactId>
+	<name>GeoWave Core Parent POM</name>
+	<description>The set of base functionality provided for all configurations of GeoWave</description>	
+	<packaging>pom</packaging>
+	<modules>
+		<module>index</module>
+		<module>store</module>
+		<module>geotime</module>
+		<module>cli</module>
+		<module>ingest</module>
+	</modules>
+</project>

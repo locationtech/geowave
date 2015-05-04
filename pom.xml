@@ -5,7 +5,7 @@
 	<groupId>mil.nga.giat</groupId>
 	<artifactId>geowave-parent</artifactId>
 	<version>0.8.7-SNAPSHOT</version>
-	<name>geowave-parent</name>
+	<name>GeoWave Parent POM</name>
 	<packaging>pom</packaging>
 	<description>Geowave adds spatio-temporal indexing to accumulo through geotools and geoserver</description>
 	<url>https://github.com/ngageoint/geowave</url>
@@ -43,6 +43,7 @@
 		<accumulo.scope>compile</accumulo.scope>
 		<hadoop.scope>compile</hadoop.scope>
 		<zookeeper.version>3.4.6</zookeeper.version>
+		<jersey.version>2.14</jersey.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<sonar.language>java</sonar.language>
@@ -58,7 +59,6 @@
 		<sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
 		<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
 		<test.args>-Xms256m -Xmx1024m -XX:MaxPermSize=256m</test.args>
-		<formatter.location>${project.basedir}/../tools/eclipse/eclipse-formatter.xml</formatter.location>
 		<findbugs.version>3.0.1</findbugs.version>
 		<findbugs.omitVisitors>MutableStaticFields,FindReturnRef</findbugs.omitVisitors>
 		<findbugs.effort>Max</findbugs.effort>
@@ -100,6 +100,11 @@
 				<version>1.1</version>
 			</dependency>
 			<dependency>
+				<groupId>com.vividsolutions</groupId>
+				<artifactId>jts</artifactId>
+				<version>1.13</version>
+			</dependency>
+			<dependency>
 				<groupId>org.slf4j</groupId>
 				<artifactId>slf4j-api</artifactId>
 				<version>1.6.1</version>
@@ -108,6 +113,11 @@
 				<groupId>org.slf4j</groupId>
 				<artifactId>slf4j-log4j12</artifactId>
 				<version>1.6.1</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-lang3</artifactId>
+				<version>3.1</version>
 			</dependency>
 			<dependency>
 				<groupId>com.google.guava</groupId>
@@ -242,6 +252,31 @@
 				<version>3.0.0</version>
 				<scope>compile</scope>
 			</dependency>
+			<dependency>
+				<groupId>org.glassfish.jersey.media</groupId>
+				<artifactId>jersey-media-multipart</artifactId>
+				<version>${jersey.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.glassfish.jersey.core</groupId>
+				<artifactId>jersey-client</artifactId>
+				<version>${jersey.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.glassfish.jersey.containers</groupId>
+				<artifactId>jersey-container-servlet</artifactId>
+				<version>${jersey.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.glassfish.jersey.media</groupId>
+				<artifactId>jersey-media-json-jackson</artifactId>
+				<version>${jersey.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.glassfish.jersey.ext</groupId>
+				<artifactId>jersey-proxy-client</artifactId>
+				<version>${jersey.version}</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 	<build>
@@ -318,6 +353,19 @@
 										<ignore></ignore>
 									</action>
 								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.apache.avro</groupId>
+										<artifactId>avro-maven-plugin</artifactId>
+										<versionRange>[1.7.6,)</versionRange>
+										<goals>
+											<goal>schema</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<execute />
+									</action>
+								</pluginExecution>
 							</pluginExecutions>
 						</lifecycleMappingMetadata>
 					</configuration>
@@ -326,6 +374,23 @@
 					<groupId>org.codehaus.mojo</groupId>
 					<artifactId>findbugs-maven-plugin</artifactId>
 					<version>${findbugs.version}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.avro</groupId>
+					<artifactId>avro-maven-plugin</artifactId>
+					<version>${avro.version}</version>
+					<executions>
+						<execution>
+							<phase>generate-sources</phase>
+							<goals>
+								<goal>schema</goal>
+							</goals>
+							<configuration>
+								<sourceDirectory>${project.basedir}/src/main/avro/</sourceDirectory>
+								<outputDirectory>${project.basedir}/src/main/java/</outputDirectory>
+							</configuration>
+						</execution>
+					</executions>
 				</plugin>
 			</plugins>
 		</pluginManagement>
@@ -478,27 +543,51 @@
 							<groups>
 								<group>
 									<title>Analytics</title>
-									<packages>mil.nga.giat.geowave.analytics*</packages>
+									<packages>mil.nga.giat.geowave.analytic*</packages>
 								</group>
 								<group>
-									<title>GeoTools Storage</title>
-									<packages>mil.nga.giat.geowave.vector*:mil.nga.giat.geowave.vector*</packages>
+									<title>Data Adapter for Vector Data</title>
+									<packages>mil.nga.giat.geowave.adapter.vector*</packages>
 								</group>
 								<group>
-									<title>Storage</title>
-									<packages>mil.nga.giat.geowave.accumulo*:mil.nga.giat.geowave.store*</packages>
+									<title>Data Adapter for Raster Data</title>
+									<packages>mil.nga.giat.geowave.adapter.raster*</packages>
+								</group>
+								<group>
+									<title>Storage API</title>
+									<packages>mil.nga.giat.geowave.core.store*</packages>
+								</group>
+								<group>
+									<title>Spatial-Temporal Core</title>
+									<packages>mil.nga.giat.geowave.core.geotime*</packages>
+								</group>
+								<group>
+									<title>Accumulo Data Store</title>
+									<packages>mil.nga.giat.geowave.datastore.accumulo*</packages>
 								</group>
 								<group>
 									<title>Indexing</title>
-									<packages>mil.nga.giat.geowave.index*</packages>
+									<packages>mil.nga.giat.geowave.core.index*</packages>
+								</group>
+								<group>
+									<title>Command-Line Tools</title>
+									<packages>mil.nga.giat.geowave.core.cli*</packages>
 								</group>
 								<group>
 									<title>Ingest Framework</title>
-									<packages>mil.nga.giat.geowave.ingest*</packages>
+									<packages>mil.nga.giat.geowave.core.ingest*</packages>
 								</group>
 								<group>
-									<title>Base Ingest Types</title>
-									<packages>mil.nga.giat.geowave.types*</packages>
+									<title>Base Ingest Formats</title>
+									<packages>mil.nga.giat.geowave.format*</packages>
+								</group>
+								<group>
+									<title>Services</title>
+									<packages>mil.nga.giat.geowave.service*</packages>
+								</group>
+								<group>
+									<title>Examples</title>
+									<packages>mil.nga.giat.geowave.example*</packages>
 								</group>
 							</groups>
 						</configuration>
@@ -510,7 +599,7 @@
 				<artifactId>maven-java-formatter-plugin</artifactId>
 				<version>0.4</version>
 				<configuration>
-					<configFile>${formatter.location}</configFile>
+					<configFile>eclipse/eclipse-formatter.xml</configFile>
 				</configuration>
 				<executions>
 					<execution>
@@ -519,6 +608,13 @@
 						</goals>
 					</execution>
 				</executions>
+				<dependencies>
+					<dependency>
+						<groupId>mil.nga.giat</groupId>
+						<artifactId>geowave-dev-resources</artifactId>
+						<version>1.0</version>
+					</dependency>
+				</dependencies>
 			</plugin>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
@@ -541,21 +637,13 @@
 		</plugins>
 	</build>
 	<modules>
-		<module>geowave-index</module>
-		<module>geowave-store</module>
-		<module>geowave-accumulo</module>
-		<module>geowave-vector</module>
-		<module>geowave-raster</module>
-		<module>geowave-ingest</module>
-		<module>geowave-types</module>
-		<module>geowave-analytics</module>
-		<module>geowave-utils</module>
-		<module>geowave-client</module>
-		<module>geowave-services</module>
-		<module>geowave-deploy</module>
-		<module>geowave-benchmark</module>
-		<module>geowave-test</module>
-		<module>geowave-examples</module>
+		<module>analytics</module>
+		<module>core</module>
+		<module>deploy</module>
+		<module>examples</module>
+		<module>extensions</module>
+		<module>services</module>
+		<module>test</module>
 	</modules>
 	<repositories>
 		<repository>
@@ -606,7 +694,7 @@
 			</properties>
 		</profile>
 		<profile>
-			<id>ingest-singlejar</id>
+			<id>geowave-tools-singlejar</id>
 			<build>
 				<plugins>
 					<plugin>
@@ -645,7 +733,7 @@
 										<transformer
 											implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
 											<manifestEntries>
-												<Main-Class>mil.nga.giat.geowave.ingest.IngestMain</Main-Class>
+												<Main-Class>mil.nga.giat.geowave.cli.GeoWaveMain</Main-Class>
 											</manifestEntries>
 										</transformer>
 										<transformer
@@ -653,7 +741,7 @@
 									</transformers>
 									<createDependencyReducedPom>false</createDependencyReducedPom>
 									<minimizeJar>false</minimizeJar>
-									<finalName>${project.build.finalName}-ingest-tool</finalName>
+									<finalName>${project.build.finalName}-tools</finalName>
 								</configuration>
 							</execution>
 						</executions>

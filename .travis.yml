@@ -25,10 +25,11 @@ before_install:
   - chmod +x .utility/maven-coveralls-hack.sh
   - chmod +x .utility/changelog-generator.sh
   - .utility/maven-coveralls-hack.sh
+  - cd dev-resources;mvn clean install;cd ..
 after_success:
   - .utility/changelog-generator.sh
   - .utility/push-javadoc-to-gh-pages.sh
-  - cd geowave-test; mvn coveralls:report -Daccumulo.version=${ACCUMULO_VERSION} ${ACCUMULO_LEGACY} -Dhadoop.version=${HADOOP_VERSION} -Dgeotools.version=${GEOTOOLS_VERSION} -Dgeoserver.version=${GEOSERVER_VERSION} -P ${PLATFORM_VERSION}
+  - cd test; mvn coveralls:report -Daccumulo.version=${ACCUMULO_VERSION} ${ACCUMULO_LEGACY} -Dhadoop.version=${HADOOP_VERSION} -Dgeotools.version=${GEOTOOLS_VERSION} -Dgeoserver.version=${GEOSERVER_VERSION} -P ${PLATFORM_VERSION}
 
 addons:
   apt_packages:
