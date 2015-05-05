@@ -108,7 +108,7 @@ public class TdriveIngestPlugin extends
 	}
 
 	@Override
-	public TdrivePoint[] toHdfsObjects(
+	public TdrivePoint[] toAvroObjects(
 			final File input ) {
 		BufferedReader fr = null;
 		BufferedReader br = null;

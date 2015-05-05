@@ -1,4 +1,4 @@
-package mil.nga.giat.geowave.core.ingest.hdfs;
+package mil.nga.giat.geowave.core.ingest.avro;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,26 +10,26 @@ import org.apache.log4j.Logger;
 
 /**
  * This class can be sub-classed as a general-purpose recipe for parallelizing
- * ingestion of files by directly staging the binary of the file to HDFS.
+ * ingestion of files by directly staging the binary of the file to Avro.
  */
-abstract public class AbstractStageFileToHdfs implements
-		StageToHdfsPlugin<HdfsFile>
+abstract public class AbstractStageWholeFileToAvro implements
+		StageToAvroPlugin<WholeFile>
 {
-	private final static Logger LOGGER = Logger.getLogger(AbstractStageFileToHdfs.class);
+	private final static Logger LOGGER = Logger.getLogger(AbstractStageWholeFileToAvro.class);
 
 	@Override
 	public Schema getAvroSchemaForHdfsType() {
-		return HdfsFile.getClassSchema();
+		return WholeFile.getClassSchema();
 	}
 
 	@Override
-	public HdfsFile[] toHdfsObjects(
+	public WholeFile[] toAvroObjects(
 			final File f ) {
 		try {
 			// TODO: consider a streaming mechanism in case a single file is too
 			// large
-			return new HdfsFile[] {
-				new HdfsFile(
+			return new WholeFile[] {
+				new WholeFile(
 						ByteBuffer.wrap(Files.readAllBytes(f.toPath())),
 						f.getAbsolutePath())
 			};
@@ -39,7 +39,7 @@ abstract public class AbstractStageFileToHdfs implements
 					"Unable to read file",
 					e);
 		}
-		return new HdfsFile[] {};
+		return new WholeFile[] {};
 
 	}
 }

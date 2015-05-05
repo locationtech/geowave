@@ -1,6 +1,6 @@
 package mil.nga.giat.geowave.core.ingest.hdfs.mapreduce;
 
-import mil.nga.giat.geowave.core.ingest.hdfs.HdfsPluginBase;
+import mil.nga.giat.geowave.core.ingest.avro.AvroPluginBase;
 import mil.nga.giat.geowave.core.store.index.Index;
 
 /**
@@ -19,7 +19,7 @@ import mil.nga.giat.geowave.core.store.index.Index;
  *            the type that represents each data entry being ingested
  */
 public interface IngestFromHdfsPlugin<I, O> extends
-		HdfsPluginBase
+		AvroPluginBase
 {
 	/**
 	 * Returns a flag indicating to the ingestion framework whether it should

@@ -1,6 +1,6 @@
 package mil.nga.giat.geowave.core.ingest;
 
-import mil.nga.giat.geowave.core.ingest.hdfs.StageToHdfsPlugin;
+import mil.nga.giat.geowave.core.ingest.avro.StageToAvroPlugin;
 import mil.nga.giat.geowave.core.ingest.hdfs.mapreduce.IngestFromHdfsPlugin;
 import mil.nga.giat.geowave.core.ingest.local.LocalFileIngestPlugin;
 
@@ -20,14 +20,15 @@ public interface IngestFormatPluginProviderSpi<I, O>
 {
 	/**
 	 * This plugin will be used by the ingestion framework to stage intermediate
-	 * data to HDFS from a local filesystem.
+	 * data from a local filesystem (for example to HDFS for map reduce ingest
+	 * or to kafka for kafka ingest).
 	 * 
-	 * @return The plugin for staging to HDFS if it is supported
+	 * @return The plugin for staging to avro if it is supported
 	 * @throws UnsupportedOperationException
 	 *             If staging data is not supported (generally this implies that
-	 *             ingesting using map-reduce will not be supported)
+	 *             ingesting using map-reduce or kafka will not be supported)
 	 */
-	public StageToHdfsPlugin<I> getStageToHdfsPlugin()
+	public StageToAvroPlugin<I> getStageToAvroPlugin()
 			throws UnsupportedOperationException;
 
 	/**

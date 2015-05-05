@@ -1,1 +1,1 @@
-src/main/java/mil/nga/giat/geowave/core/ingest/hdfs/HdfsFile.java
+src/main/java/mil/nga/giat/geowave/core/ingest/avro/WholeFile.java

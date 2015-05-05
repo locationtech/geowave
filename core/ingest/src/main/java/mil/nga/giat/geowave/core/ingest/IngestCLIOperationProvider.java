@@ -5,6 +5,7 @@ import mil.nga.giat.geowave.core.cli.CLIOperationCategory;
 import mil.nga.giat.geowave.core.cli.CLIOperationProviderSpi;
 import mil.nga.giat.geowave.core.ingest.hdfs.StageToHdfsDriver;
 import mil.nga.giat.geowave.core.ingest.hdfs.mapreduce.IngestFromHdfsDriver;
+import mil.nga.giat.geowave.core.ingest.kafka.StageToKafkaDriver;
 import mil.nga.giat.geowave.core.ingest.local.LocalFileIngestDriver;
 
 public class IngestCLIOperationProvider implements
@@ -46,7 +47,12 @@ public class IngestCLIOperationProvider implements
 									"hdfsingest"),
 							new IngestFromHdfsDriver(
 									"hdfsingest")
-						}))
+						})),
+		new CLIOperation(
+				"kafkastage",
+				"stage supported files in local file system to a Kafka topic",
+				new StageToKafkaDriver(
+						"kafkastage")),
 	};
 
 	private static final CLIOperationCategory CATEGORY = new IngestOperationCategory();

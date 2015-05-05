@@ -1,4 +1,4 @@
-package mil.nga.giat.geowave.core.ingest.hdfs;
+package mil.nga.giat.geowave.core.ingest.avro;
 
 import org.apache.avro.Schema;
 
@@ -8,7 +8,7 @@ import org.apache.avro.Schema;
  * ingestion framework has standardized on Avro for java object serialization
  * and an Avro schema must be provided for handling any intermediate data.
  */
-public interface HdfsPluginBase
+public interface AvroPluginBase
 {
 	public Schema getAvroSchemaForHdfsType();
 
