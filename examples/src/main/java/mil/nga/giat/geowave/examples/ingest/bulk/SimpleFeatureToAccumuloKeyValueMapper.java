@@ -25,8 +25,9 @@ import org.opengis.feature.simple.SimpleFeature;
 import com.vividsolutions.jts.geom.Coordinate;
 
 public class SimpleFeatureToAccumuloKeyValueMapper extends
-		Mapper<LongWritable, Text, Key, Value> {
-	
+		Mapper<LongWritable, Text, Key, Value>
+{
+
 	private WritableDataAdapter<SimpleFeature> adapter = new FeatureDataAdapter(
 			GeonamesSimpleFeatureType.getInstance());
 	private final Index index = IndexType.SPATIAL_VECTOR.createDefaultIndex();

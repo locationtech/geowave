@@ -6,8 +6,9 @@ import org.apache.accumulo.core.data.Value;
 /**
  * Immutable wrapper object containing a single Accumulo [Key,Value] Pair
  */
-public class AccumuloKeyValuePair {
-	
+public class AccumuloKeyValuePair
+{
+
 	private final Key key;
 	private final Value value;
 

@@ -10,8 +10,9 @@ import com.vividsolutions.jts.geom.Geometry;
  * Provides a static method to obtain an instance of a SimpleFeatureType for
  * Geonames data
  */
-public class GeonamesSimpleFeatureType {
-	
+public class GeonamesSimpleFeatureType
+{
+
 	private static final String FEATURE_NAME = "GeonamesPoint";
 	private static SimpleFeatureType simpleFeatureType;
 

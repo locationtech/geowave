@@ -17,7 +17,8 @@ import org.apache.hadoop.mapreduce.lib.input.LineRecordReader;
  * tab-delimited entry per line.
  */
 public class GeonamesDataFileInputFormat extends
-		FileInputFormat<LongWritable, Text> {
+		FileInputFormat<LongWritable, Text>
+{
 
 	@Override
 	public RecordReader<LongWritable, Text> createRecordReader(
@@ -27,5 +28,5 @@ public class GeonamesDataFileInputFormat extends
 			InterruptedException {
 		return new LineRecordReader();
 	}
-	
+
 }

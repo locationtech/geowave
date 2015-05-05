@@ -26,8 +26,9 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-public class BulkIngestInputGenerationIT {
-	
+public class BulkIngestInputGenerationIT
+{
+
 	private static final Logger LOGGER = Logger.getLogger(BulkIngestInputGenerationIT.class);
 	private static final String TEST_DATA_LOCATION = "src/test/resources/mil/nga/giat/geowave/test/geonames/barbados";
 	private static final long NUM_GEONAMES_RECORDS = 834; // (see BB.txt)

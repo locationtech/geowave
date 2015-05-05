@@ -26,8 +26,9 @@ import org.apache.accumulo.core.data.Value;
  * @param <T>
  *            the type of entries to index within Geowave
  */
-public class AccumuloKeyValuePairGenerator<T> {
-	
+public class AccumuloKeyValuePairGenerator<T>
+{
+
 	private WritableDataAdapter<T> adapter;
 	private Index index;
 	private VisibilityWriter<T> visibilityWriter;
