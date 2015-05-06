@@ -211,6 +211,38 @@ public class ZooKeeperTransactionAllocaterTest
 		}
 	}
 
+	@Test
+	public void testPreallocate()
+			throws IOException {
+		final List<String> precreatedTXIds = new ArrayList<String>();
+		ZooKeeperTransactionsAllocater preallocater = new ZooKeeperTransactionsAllocater(
+				zkTestServer.getConnectString(),
+				"fred",
+				new TransactionNotification() {
+
+					@Override
+					public boolean transactionCreated(
+							String clientID,
+							String txID ) {
+						synchronized (createdTXIds) {
+							precreatedTXIds.add(txID);
+							return true;
+						}
+					}
+
+				});
+		preallocater.preallocateTransactionIDs(
+				10,
+				"wilma");
+		assertEquals(
+				10,
+				precreatedTXIds.size());
+		final String txId = preallocater.getTransaction();
+		assertTrue(precreatedTXIds.contains(txId));
+		preallocater.releaseTransaction(txId);
+
+	}
+
 	@After
 	public void stopZookeeper()
 			throws IOException,
