@@ -5,12 +5,12 @@
 # In the Execute Shell block before calling this script set the versions
 
 # Build the various artifacts
-cd $WORKSPACE/geowave-deploy
+cd $WORKSPACE/deploy
 mvn package -P geotools-container-singlejar $BUILD_ARGS
-mv $WORKSPACE/geowave-deploy/target/*-geoserver-singlejar.jar $WORKSPACE/geowave-deploy/target/geowave-geoserver.jar
+mv $WORKSPACE/deploy/target/*-geoserver-singlejar.jar $WORKSPACE/deploy/target/geowave-geoserver.jar
 
 mvn package -P accumulo-container-singlejar $BUILD_ARGS
-mv $WORKSPACE/geowave-deploy/target/*-accumulo-singlejar.jar $WORKSPACE/geowave-deploy/target/geowave-accumulo.jar
+mv $WORKSPACE/deploy/target/*-accumulo-singlejar.jar $WORKSPACE/deploy/target/geowave-accumulo.jar
 
 cd $WORKSPACE/geowave-types
 mvn package -P ingest-singlejar $BUILD_ARGS
@@ -30,4 +30,4 @@ find $WORKSPACE/docs/target/asciidoc/ -name "*.txt" -exec a2x -d manpage -f manp
 tar -czf $WORKSPACE/docs/target/manpages.tar.gz -C $WORKSPACE/docs/target/manpages/ .
 
 # Copy over the puppet scripts
-tar -czf $WORKSPACE/geowave-deploy/target/puppet-scripts.tar.gz -C $WORKSPACE/packaging/puppet geowave
+tar -czf $WORKSPACE/deploy/target/puppet-scripts.tar.gz -C $WORKSPACE/packaging/puppet geowave
