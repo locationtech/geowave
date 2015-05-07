@@ -12,6 +12,7 @@
 	<properties>
 		<maven.build.timestamp.format>yyyy-MM-dd'T'HH:mm:ssZ</maven.build.timestamp.format>
 		<build.timestamp>${maven.build.timestamp}</build.timestamp>
+		<BUILD_SHARED_LIBS>ON</BUILD_SHARED_LIBS>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -371,7 +372,7 @@
 			<properties>
 				<cmake.generator>Visual Studio 11 Win64</cmake.generator>
 				<cmake.config>Debug|x64</cmake.config>
-				<build.type>-DCMAKE_BUILD_TYPE:string=Debug</build.type>
+				<CMAKE_BUILD_TYPE>Debug</CMAKE_BUILD_TYPE>
 				<build.architecture>amd64</build.architecture>
 			</properties>
 		</profile>
@@ -380,7 +381,7 @@
 			<properties>
 				<cmake.generator>Visual Studio 11 Win64</cmake.generator>
 				<cmake.config>Release|x64</cmake.config>
-				<build.type>-DCMAKE_BUILD_TYPE:string=Release</build.type>
+				<CMAKE_BUILD_TYPE>Release</CMAKE_BUILD_TYPE>
 				<build.architecture>amd64</build.architecture>
 			</properties>
 		</profile>
@@ -388,7 +389,7 @@
 			<id>linux-amd64-gcc-debug</id>
 			<properties>
 				<cmake.generator>Unix Makefiles</cmake.generator>
-				<build.type>-DCMAKE_BUILD_TYPE:string=Debug</build.type>
+				<CMAKE_BUILD_TYPE>Debug</CMAKE_BUILD_TYPE>
 				<build.architecture>amd64</build.architecture>
 			</properties>
 		</profile>
@@ -396,7 +397,7 @@
 			<id>linux-amd64-gcc-release</id>
 			<properties>
 				<cmake.generator>Unix Makefiles</cmake.generator>
-				<build.type>-DCMAKE_BUILD_TYPE:string=Release</build.type>
+				<CMAKE_BUILD_TYPE>Release</CMAKE_BUILD_TYPE>
 				<build.architecture>amd64</build.architecture>
 			</properties>
 		</profile>
@@ -549,7 +550,8 @@
 										<BUILD_ARCHITECTURE>${build.architecture}</BUILD_ARCHITECTURE>
 									</environmentVariables>
 									<options>
-										<option>${build.type}</option>
+										<option>-DCMAKE_BUILD_TYPE:string=${CMAKE_BUILD_TYPE}</option>
+										<option>-DBUILD_SHARED_LIBS:bool=${BUILD_SHARED_LIBS}</option>
 									</options>
 								</configuration>
 							</execution>
