@@ -371,6 +371,7 @@
 			<properties>
 				<cmake.generator>Visual Studio 11 Win64</cmake.generator>
 				<cmake.config>Debug|x64</cmake.config>
+				<build.type>-DCMAKE_BUILD_TYPE:string=Debug</build.type>
 				<build.architecture>amd64</build.architecture>
 			</properties>
 		</profile>
@@ -379,13 +380,23 @@
 			<properties>
 				<cmake.generator>Visual Studio 11 Win64</cmake.generator>
 				<cmake.config>Release|x64</cmake.config>
+				<build.type>-DCMAKE_BUILD_TYPE:string=Release</build.type>
 				<build.architecture>amd64</build.architecture>
 			</properties>
 		</profile>
 		<profile>
-			<id>linux-amd64-gcc</id>
+			<id>linux-amd64-gcc-debug</id>
 			<properties>
 				<cmake.generator>Unix Makefiles</cmake.generator>
+				<build.type>-DCMAKE_BUILD_TYPE:string=Debug</build.type>
+				<build.architecture>amd64</build.architecture>
+			</properties>
+		</profile>
+		<profile>
+			<id>linux-amd64-gcc-release</id>
+			<properties>
+				<cmake.generator>Unix Makefiles</cmake.generator>
+				<build.type>-DCMAKE_BUILD_TYPE:string=Release</build.type>
 				<build.architecture>amd64</build.architecture>
 			</properties>
 		</profile>
@@ -537,6 +548,9 @@
 										<JACE_HOME>${project.build.directory}/dependency/jace</JACE_HOME>
 										<BUILD_ARCHITECTURE>${build.architecture}</BUILD_ARCHITECTURE>
 									</environmentVariables>
+									<options>
+										<option>${build.type}</option>
+									</options>
 								</configuration>
 							</execution>
 							<execution>
