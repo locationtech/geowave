@@ -125,21 +125,35 @@ public class ZooKeeperTransactionsAllocater implements
 
 	}
 
+	/**
+	 * Pre-allocate transaction IDs using an administrative account for another
+	 * account
+	 * 
+	 * @param maximumAmount
+	 *            maximum number of transaction IDs needed
+	 * @param userAccount
+	 *            the user account to use those IDs
+	 */
 	public void preallocateTransactionIDs(
-			final int maximuAmount,
+			final int maximumAmount,
 			String userAccount ) {
 		try {
+
+			final String localClientTXPath = "/" + userAccount + "/tx";
+			init(
+					userAccount,
+					localClientTXPath);
 			final List<String> children = zk.getChildren(
-					clientTXPath,
+					localClientTXPath,
 					false);
-			final int amountToAdd = maximuAmount - children.size();
+			final int amountToAdd = maximumAmount - children.size();
 			for (int i = 0; i < amountToAdd; i++) {
 				final String transId = UUID.randomUUID().toString();
 				if (notificationRequester.transactionCreated(
 						userAccount,
 						transId)) {
 					zk.create(
-							clientTXPath + "/" + transId,
+							localClientTXPath + "/" + transId,
 							new byte[0],
 							ZooDefs.Ids.OPEN_ACL_UNSAFE,
 							CreateMode.PERSISTENT);
@@ -299,7 +313,9 @@ public class ZooKeeperTransactionsAllocater implements
 		return zk;
 	}
 
-	private void init()
+	private void init(
+			final String clientID,
+			final String clientTXPath )
 			throws KeeperException,
 			InterruptedException {
 		if (zk.exists(
@@ -344,7 +360,9 @@ public class ZooKeeperTransactionsAllocater implements
 
 		while (zk.getState() == States.CONNECTING || zk.getState() == States.NOT_CONNECTED)
 			this.wait();
-		if (doInit) init();
+		if (doInit) init(
+				clientID,
+				clientTXPath);
 
 	}
 
