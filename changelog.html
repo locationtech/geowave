@@ -14,6 +14,7 @@
 <p><strong>Implemented enhancements:</strong></p>
 <ul>
 <li><p>Publish geowave-dev-resources as separate artifact <a href="https://github.com/ngageoint/geowave/issues/365">#365</a></p></li>
+<li><p>Enhancements to RPM Packaging <a href="https://github.com/ngageoint/geowave/issues/342">#342</a></p></li>
 <li><p>Refactor projects to separate core and plugins <a href="https://github.com/ngageoint/geowave/issues/320">#320</a></p></li>
 </ul>
 <p><strong>Closed issues:</strong></p>
@@ -21,13 +22,14 @@
 <li><p>Add geowave internal maven repo as plugin repository in parent pom <a href="https://github.com/ngageoint/geowave/issues/368">#368</a></p></li>
 <li><p>Build fails when resolving dependencies for geowave-deploy <a href="https://github.com/ngageoint/geowave/issues/364">#364</a></p></li>
 <li><p>GeoWave Vagrant process fails due to incorrect directory paths <a href="https://github.com/ngageoint/geowave/issues/363">#363</a></p></li>
-<li><p>implement geowavefileoutput format for high-speed ingest <a href="https://github.com/ngageoint/geowave/issues/157">#157</a></p></li>
 </ul>
 <p><strong>Merged pull requests:</strong></p>
 <ul>
+<li><p>geowave-dev-resources to maven <a href="https://github.com/ngageoint/geowave/pull/366">#366</a> (<a href="https://github.com/chrisbennight">chrisbennight</a>)</p></li>
+<li><p>GEOWAVE-116: GeoTools query example <a href="https://github.com/ngageoint/geowave/pull/377">#377</a> (<a href="https://github.com/dcy2003">dcy2003</a>)</p></li>
+<li><p>Jace update <a href="https://github.com/ngageoint/geowave/pull/375">#375</a> (<a href="https://github.com/jwomeara">jwomeara</a>)</p></li>
 <li><p>Add +x perm back to build scripts <a href="https://github.com/ngageoint/geowave/pull/369">#369</a> (<a href="https://github.com/spohnan">spohnan</a>)</p></li>
 <li><p>GEOWAVE-157 <a href="https://github.com/ngageoint/geowave/pull/367">#367</a> (<a href="https://github.com/dcy2003">dcy2003</a>)</p></li>
-<li><p>geowave-dev-resources to maven <a href="https://github.com/ngageoint/geowave/pull/366">#366</a> (<a href="https://github.com/chrisbennight">chrisbennight</a>)</p></li>
 <li><p>Refactor project to separate core from extensions (#320) <a href="https://github.com/ngageoint/geowave/pull/360">#360</a> (<a href="https://github.com/rfecher">rfecher</a>)</p></li>
 <li><p>0.8.7 snapshot <a href="https://github.com/ngageoint/geowave/pull/359">#359</a> (<a href="https://github.com/rfecher">rfecher</a>)</p></li>
 </ul>
@@ -44,8 +46,6 @@
 <li><p>Add a designated user for allocated transaction IDs applied to WFS-T transactions. <a href="https://github.com/ngageoint/geowave/issues/352">#352</a></p></li>
 <li><p>GeoWaveFeatureReaderTest fails periodically <a href="https://github.com/ngageoint/geowave/issues/350">#350</a></p></li>
 <li><p>FID Filter being ignored in GeoServer plug-in <a href="https://github.com/ngageoint/geowave/issues/343">#343</a></p></li>
-<li><p>Package download updates <a href="https://github.com/ngageoint/geowave/issues/338">#338</a></p></li>
-<li><p>Update geoserver/geotools dependencies <a href="https://github.com/ngageoint/geowave/issues/336">#336</a></p></li>
 <li><p>Coveralls code coverage is incorrectly low due to lack of merge between unit and integration tests <a href="https://github.com/ngageoint/geowave/issues/263">#263</a></p></li>
 </ul>
 <p><strong>Merged pull requests:</strong></p>
@@ -85,9 +85,9 @@
 <li><p>Reduce vagrant geowave clone depth <a href="https://github.com/ngageoint/geowave/pull/324">#324</a> (<a href="https://github.com/chrisbennight">chrisbennight</a>)</p></li>
 <li><p>added common jace dependency generation <a href="https://github.com/ngageoint/geowave/pull/322">#322</a> (<a href="https://github.com/jwomeara">jwomeara</a>)</p></li>
 <li><p>Cleaned up README <a href="https://github.com/ngageoint/geowave/pull/319">#319</a> (<a href="https://github.com/chrisbennight">chrisbennight</a>)</p></li>
+<li><p>Add a Gitter chat badge to README.md <a href="https://github.com/ngageoint/geowave/pull/317">#317</a> (<a href="https://github.com/gitter-badger">gitter-badger</a>)</p></li>
 <li><p>Added deploy to S3 option+repo <a href="https://github.com/ngageoint/geowave/pull/316">#316</a> (<a href="https://github.com/chrisbennight">chrisbennight</a>)</p></li>
 <li><p>Roll to v0.8.5-SNAPSHOT <a href="https://github.com/ngageoint/geowave/pull/314">#314</a> (<a href="https://github.com/spohnan">spohnan</a>)</p></li>
-<li><p>Add a Gitter chat badge to README.md <a href="https://github.com/ngageoint/geowave/pull/317">#317</a> (<a href="https://github.com/gitter-badger">gitter-badger</a>)</p></li>
 </ul>
 <h2 id="v0.8.4-2015-04-07"><a href="https://github.com/ngageoint/geowave/tree/v0.8.4">v0.8.4</a> (2015-04-07)</h2>
 <p><a href="https://github.com/ngageoint/geowave/compare/v0.8.3...v0.8.4">Full Changelog</a></p>
@@ -141,6 +141,9 @@
 </ul>
 <p><strong>Merged pull requests:</strong></p>
 <ul>
+<li><p>Add: Added in changelog auto generation <a href="https://github.com/ngageoint/geowave/pull/284">#284</a> (<a href="https://github.com/chrisbennight">chrisbennight</a>)</p></li>
+<li><p>Integration &amp; unit tests for examples <a href="https://github.com/ngageoint/geowave/pull/281">#281</a> (<a href="https://github.com/chrisbennight">chrisbennight</a>)</p></li>
+<li><p>Coverty triage, phase V <a href="https://github.com/ngageoint/geowave/pull/277">#277</a> (<a href="https://github.com/chrisbennight">chrisbennight</a>)</p></li>
 <li><p>release v0.8.4 <a href="https://github.com/ngageoint/geowave/pull/313">#313</a> (<a href="https://github.com/spohnan">spohnan</a>)</p></li>
 <li><p>Jacoco fix <a href="https://github.com/ngageoint/geowave/pull/311">#311</a> (<a href="https://github.com/rfecher">rfecher</a>)</p></li>
 <li><p>need to set the mode to executable on the init.d service script <a href="https://github.com/ngageoint/geowave/pull/310">#310</a> (<a href="https://github.com/kitplummer">kitplummer</a>)</p></li>
@@ -156,9 +159,7 @@
 <li><p>Documentation and web site updates <a href="https://github.com/ngageoint/geowave/pull/293">#293</a> (<a href="https://github.com/spohnan">spohnan</a>)</p></li>
 <li><p>#146: plugins can advertise custom options; #289: feature plugins advertise cql filter <a href="https://github.com/ngageoint/geowave/pull/291">#291</a> (<a href="https://github.com/rfecher">rfecher</a>)</p></li>
 <li><p>Geowave 283 <a href="https://github.com/ngageoint/geowave/pull/287">#287</a> (<a href="https://github.com/rwgdrummer">rwgdrummer</a>)</p></li>
-<li><p>Add: Added in changelog auto generation <a href="https://github.com/ngageoint/geowave/pull/284">#284</a> (<a href="https://github.com/chrisbennight">chrisbennight</a>)</p></li>
-<li><p>Integration &amp; unit tests for examples <a href="https://github.com/ngageoint/geowave/pull/281">#281</a> (<a href="https://github.com/chrisbennight">chrisbennight</a>)</p></li>
-<li><p>Coverty triage, phase V <a href="https://github.com/ngageoint/geowave/pull/277">#277</a> (<a href="https://github.com/chrisbennight">chrisbennight</a>)</p></li>
+<li><p>Geowave 274 image thumbnails <a href="https://github.com/ngageoint/geowave/pull/286">#286</a> (<a href="https://github.com/spohnan">spohnan</a>)</p></li>
 <li><p>applied eclipse formatter; attached formatter to process-sources lifecycle <a href="https://github.com/ngageoint/geowave/pull/276">#276</a> (<a href="https://github.com/chrisbennight">chrisbennight</a>)</p></li>
 <li><p>exclude guava from geotools jar #267 <a href="https://github.com/ngageoint/geowave/pull/275">#275</a> (<a href="https://github.com/rfecher">rfecher</a>)</p></li>
 <li><p>Geowave vagrant <a href="https://github.com/ngageoint/geowave/pull/273">#273</a> (<a href="https://github.com/jwomeara">jwomeara</a>)</p></li>
@@ -177,7 +178,6 @@
 <li><p>Documentation and man page reorganization <a href="https://github.com/ngageoint/geowave/pull/246">#246</a> (<a href="https://github.com/spohnan">spohnan</a>)</p></li>
 <li><p>Kmeans cl <a href="https://github.com/ngageoint/geowave/pull/245">#245</a> (<a href="https://github.com/rwgdrummer">rwgdrummer</a>)</p></li>
 <li><p>Build against Apache Hadoop <a href="https://github.com/ngageoint/geowave/pull/242">#242</a> (<a href="https://github.com/dlyle65535">dlyle65535</a>)</p></li>
-<li><p>Geowave 274 image thumbnails <a href="https://github.com/ngageoint/geowave/pull/286">#286</a> (<a href="https://github.com/spohnan">spohnan</a>)</p></li>
 </ul>
 <h2 id="v0.8.3-2015-02-26"><a href="https://github.com/ngageoint/geowave/tree/v0.8.3">v0.8.3</a> (2015-02-26)</h2>
 <p><a href="https://github.com/ngageoint/geowave/compare/v0.8.2...v0.8.3">Full Changelog</a></p>
@@ -201,6 +201,9 @@
 <p><strong>Merged pull requests:</strong></p>
 <ul>
 <li><p>Geowave 234 <a href="https://github.com/ngageoint/geowave/pull/247">#247</a> (<a href="https://github.com/jwomeara">jwomeara</a>)</p></li>
+<li><p>Kmeans cl <a href="https://github.com/ngageoint/geowave/pull/244">#244</a> (<a href="https://github.com/rwgdrummer">rwgdrummer</a>)</p></li>
+<li><p>Build against Apache Hadoop <a href="https://github.com/ngageoint/geowave/pull/240">#240</a> (<a href="https://github.com/dlyle65535">dlyle65535</a>)</p></li>
+<li><p>Added a check to ensure that null iterators aren't attached to accumulo. <a href="https://github.com/ngageoint/geowave/pull/233">#233</a> (<a href="https://github.com/jwomeara">jwomeara</a>)</p></li>
 <li><p>Handle no tables added case <a href="https://github.com/ngageoint/geowave/pull/232">#232</a> (<a href="https://github.com/chrisbennight">chrisbennight</a>)</p></li>
 <li><p>Geowave 228 <a href="https://github.com/ngageoint/geowave/pull/230">#230</a> (<a href="https://github.com/chrisbennight">chrisbennight</a>)</p></li>
 <li><p>Updated test package versions. <a href="https://github.com/ngageoint/geowave/pull/226">#226</a> (<a href="https://github.com/jwomeara">jwomeara</a>)</p></li>
@@ -210,9 +213,6 @@
 <li><p>Add dev and release repo RPMs to packaging directory <a href="https://github.com/ngageoint/geowave/pull/215">#215</a> (<a href="https://github.com/spohnan">spohnan</a>)</p></li>
 <li><p>changed snapshot coveralls tweak to release <a href="https://github.com/ngageoint/geowave/pull/212">#212</a> (<a href="https://github.com/chrisbennight">chrisbennight</a>)</p></li>
 <li><p>incrementing version to 0.8.3 <a href="https://github.com/ngageoint/geowave/pull/211">#211</a> (<a href="https://github.com/jwomeara">jwomeara</a>)</p></li>
-<li><p>Kmeans cl <a href="https://github.com/ngageoint/geowave/pull/244">#244</a> (<a href="https://github.com/rwgdrummer">rwgdrummer</a>)</p></li>
-<li><p>Build against Apache Hadoop <a href="https://github.com/ngageoint/geowave/pull/240">#240</a> (<a href="https://github.com/dlyle65535">dlyle65535</a>)</p></li>
-<li><p>Added a check to ensure that null iterators aren't attached to accumulo. <a href="https://github.com/ngageoint/geowave/pull/233">#233</a> (<a href="https://github.com/jwomeara">jwomeara</a>)</p></li>
 </ul>
 <h2 id="v0.8.2-2015-01-29"><a href="https://github.com/ngageoint/geowave/tree/v0.8.2">v0.8.2</a> (2015-01-29)</h2>
 <p><a href="https://github.com/ngageoint/geowave/compare/v0.8.1...v0.8.2">Full Changelog</a></p>
@@ -262,6 +262,7 @@
 <li><p>Geowave 199 <a href="https://github.com/ngageoint/geowave/pull/206">#206</a> (<a href="https://github.com/rfecher">rfecher</a>)</p></li>
 <li><p>adding dimension definition that creates equal sfc ranges in both lat an... <a href="https://github.com/ngageoint/geowave/pull/203">#203</a> (<a href="https://github.com/rfecher">rfecher</a>)</p></li>
 <li><p>using input and output format for kde and raster format (issue #102); te... <a href="https://github.com/ngageoint/geowave/pull/202">#202</a> (<a href="https://github.com/rfecher">rfecher</a>)</p></li>
+<li><p>Geowave 102 <a href="https://github.com/ngageoint/geowave/pull/201">#201</a> (<a href="https://github.com/rfecher">rfecher</a>)</p></li>
 <li><p>tweaks to make jacoco work / cleanup cobertura error spam <a href="https://github.com/ngageoint/geowave/pull/197">#197</a> (<a href="https://github.com/chrisbennight">chrisbennight</a>)</p></li>
 <li><p>Add docs for RPM list and Accumulo config <a href="https://github.com/ngageoint/geowave/pull/196">#196</a> (<a href="https://github.com/spohnan">spohnan</a>)</p></li>
 <li><p>Fix various path issues and add RPM build requirement <a href="https://github.com/ngageoint/geowave/pull/195">#195</a> (<a href="https://github.com/spohnan">spohnan</a>)</p></li>
@@ -303,7 +304,6 @@
 <li><p>GEOWAVE-122 <a href="https://github.com/ngageoint/geowave/pull/123">#123</a> (<a href="https://github.com/rwgdrummer">rwgdrummer</a>)</p></li>
 <li><p>added clustering to analytics <a href="https://github.com/ngageoint/geowave/pull/118">#118</a> (<a href="https://github.com/bptran">bptran</a>)</p></li>
 <li><p>updated to version 0.8.2-SNAPSHOT <a href="https://github.com/ngageoint/geowave/pull/114">#114</a> (<a href="https://github.com/rfecher">rfecher</a>)</p></li>
-<li><p>Geowave 102 <a href="https://github.com/ngageoint/geowave/pull/201">#201</a> (<a href="https://github.com/rfecher">rfecher</a>)</p></li>
 </ul>
 <h2 id="v0.8.1-2014-11-19"><a href="https://github.com/ngageoint/geowave/tree/v0.8.1">v0.8.1</a> (2014-11-19)</h2>
 <p><a href="https://github.com/ngageoint/geowave/compare/v0.8.0...v0.8.1">Full Changelog</a></p>
@@ -336,10 +336,13 @@
 <p><strong>Merged pull requests:</strong></p>
 <ul>
 <li><p>Geowave 112 <a href="https://github.com/ngageoint/geowave/pull/113">#113</a> (<a href="https://github.com/rfecher">rfecher</a>)</p></li>
+<li><p>GeoWave-Analytics Clustering <a href="https://github.com/ngageoint/geowave/pull/111">#111</a> (<a href="https://github.com/bptran">bptran</a>)</p></li>
 <li><p>Capture build info within artifacts <a href="https://github.com/ngageoint/geowave/pull/110">#110</a> (<a href="https://github.com/spohnan">spohnan</a>)</p></li>
 <li><p>Geowave 106 redux <a href="https://github.com/ngageoint/geowave/pull/109">#109</a> (<a href="https://github.com/rwgdrummer">rwgdrummer</a>)</p></li>
 <li><p>GEOWAVE-106 <a href="https://github.com/ngageoint/geowave/pull/108">#108</a> (<a href="https://github.com/rwgdrummer">rwgdrummer</a>)</p></li>
+<li><p>fixed feature namespace issue <a href="https://github.com/ngageoint/geowave/pull/107">#107</a> (<a href="https://github.com/mfarwell">mfarwell</a>)</p></li>
 <li><p>GPX GEOWAVE-89 with latest master <a href="https://github.com/ngageoint/geowave/pull/105">#105</a> (<a href="https://github.com/rwgdrummer">rwgdrummer</a>)</p></li>
+<li><p>Capture build info within artifacts <a href="https://github.com/ngageoint/geowave/pull/104">#104</a> (<a href="https://github.com/spohnan">spohnan</a>)</p></li>
 <li><p>geowave input format (issue #84) <a href="https://github.com/ngageoint/geowave/pull/101">#101</a> (<a href="https://github.com/rfecher">rfecher</a>)</p></li>
 <li><p>GEOWAVE-99. <a href="https://github.com/ngageoint/geowave/pull/100">#100</a> (<a href="https://github.com/rwgdrummer">rwgdrummer</a>)</p></li>
 <li><p>incorporated last commit from GEOWAVE-75-Opt <a href="https://github.com/ngageoint/geowave/pull/98">#98</a> (<a href="https://github.com/rwgdrummer">rwgdrummer</a>)</p></li>
@@ -351,9 +354,6 @@
 <li><p>updated ingest examples to reflect recent code changes <a href="https://github.com/ngageoint/geowave/pull/81">#81</a> (<a href="https://github.com/rfecher">rfecher</a>)</p></li>
 <li><p>fixed package name in raster format and jai dependency <a href="https://github.com/ngageoint/geowave/pull/78">#78</a> (<a href="https://github.com/rfecher">rfecher</a>)</p></li>
 <li><p>Geowave 45 (support for raster data) <a href="https://github.com/ngageoint/geowave/pull/76">#76</a> (<a href="https://github.com/rfecher">rfecher</a>)</p></li>
-<li><p>GeoWave-Analytics Clustering <a href="https://github.com/ngageoint/geowave/pull/111">#111</a> (<a href="https://github.com/bptran">bptran</a>)</p></li>
-<li><p>fixed feature namespace issue <a href="https://github.com/ngageoint/geowave/pull/107">#107</a> (<a href="https://github.com/mfarwell">mfarwell</a>)</p></li>
-<li><p>Capture build info within artifacts <a href="https://github.com/ngageoint/geowave/pull/104">#104</a> (<a href="https://github.com/spohnan">spohnan</a>)</p></li>
 </ul>
 <h2 id="v0.8.0-2014-09-23"><a href="https://github.com/ngageoint/geowave/tree/v0.8.0">v0.8.0</a> (2014-09-23)</h2>
 <p><a href="https://github.com/ngageoint/geowave/compare/0.7.0...v0.8.0">Full Changelog</a></p>
@@ -392,13 +392,13 @@
 </ul>
 <p><strong>Merged pull requests:</strong></p>
 <ul>
+<li><p>Added support for locality group caching, entry deletion, and alternativ... <a href="https://github.com/ngageoint/geowave/pull/52">#52</a> (<a href="https://github.com/jwomeara">jwomeara</a>)</p></li>
+<li><p>T drive datatype for ingest <a href="https://github.com/ngageoint/geowave/pull/51">#51</a> (<a href="https://github.com/chrisbennight">chrisbennight</a>)</p></li>
 <li><p>Corrected TimeUtils.calendarToGMTMillis method. Added serveral junit tes... <a href="https://github.com/ngageoint/geowave/pull/69">#69</a> (<a href="https://github.com/rhayes-bah">rhayes-bah</a>)</p></li>
 <li><p>GEOWAVE-57 <a href="https://github.com/ngageoint/geowave/pull/64">#64</a> (<a href="https://github.com/chrisbennight">chrisbennight</a>)</p></li>
 <li><p>GEOWAVE-61 Exclude servlet classes from shaded jar <a href="https://github.com/ngageoint/geowave/pull/62">#62</a> (<a href="https://github.com/chrisbennight">chrisbennight</a>)</p></li>
 <li><p>Geolife input type <a href="https://github.com/ngageoint/geowave/pull/59">#59</a> (<a href="https://github.com/chrisbennight">chrisbennight</a>)</p></li>
 <li><p>GEOWAVE-55/56 created tavis build matrix/ensure accumulo 1.6.x works <a href="https://github.com/ngageoint/geowave/pull/58">#58</a> (<a href="https://github.com/chrisbennight">chrisbennight</a>)</p></li>
-<li><p>Added support for locality group caching, entry deletion, and alternativ... <a href="https://github.com/ngageoint/geowave/pull/52">#52</a> (<a href="https://github.com/jwomeara">jwomeara</a>)</p></li>
-<li><p>T drive datatype for ingest <a href="https://github.com/ngageoint/geowave/pull/51">#51</a> (<a href="https://github.com/chrisbennight">chrisbennight</a>)</p></li>
 <li><p>provided methods for all GeoTools queries to apply CQL filtering within ... <a href="https://github.com/ngageoint/geowave/pull/44">#44</a> (<a href="https://github.com/rfecher">rfecher</a>)</p></li>
 <li><p>fixed performance issue with integration tests; used closeable iterators... <a href="https://github.com/ngageoint/geowave/pull/39">#39</a> (<a href="https://github.com/rfecher">rfecher</a>)</p></li>
 <li><p>Added Accumulo Options which allow you to configure the behavior of the ... <a href="https://github.com/ngageoint/geowave/pull/38">#38</a> (<a href="https://github.com/jwomeara">jwomeara</a>)</p></li>
