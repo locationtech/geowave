@@ -8,7 +8,7 @@
 %define geowave_accumulo_home %{geowave_home}/accumulo
 %define geowave_docs_home %{geowave_home}/docs
 %define geowave_geoserver_home %{geowave_home}/geoserver
-%define geowave_ingest_home %{geowave_home}/ingest
+%define geowave_tools_home %{geowave_home}/tools
 %define geowave_geoserver_libs %{geowave_geoserver_home}/webapps/geoserver/WEB-INF/lib
 %define geowave_geoserver_data %{geowave_geoserver_home}/data_dir
 
@@ -32,7 +32,7 @@ Source6:        bash_profile.sh
 Source7:        default.xml
 Source8:        namespace.xml
 Source9:        workspace.xml
-Source10:       geowave-ingest-tool.jar
+Source10:       geowave-tools.jar
 Source11:       site.tar.gz
 Source12:       puppet-scripts.tar.gz
 Source13:       manpages.tar.gz
@@ -97,17 +97,18 @@ cp %{SOURCE7} %{buildroot}%{geowave_geoserver_data}/workspaces
 cp %{SOURCE8} %{buildroot}%{geowave_geoserver_data}/workspaces/geowave
 cp %{SOURCE9} %{buildroot}%{geowave_geoserver_data}/workspaces/geowave
 
-# Stage geowave ingest tool
-mkdir -p %{buildroot}%{geowave_ingest_home}
-cp %{SOURCE10} %{buildroot}%{geowave_ingest_home}
-cp %{buildroot}%{geowave_accumulo_home}/geowave-accumulo-build.properties %{buildroot}%{geowave_ingest_home}/build.properties
-pushd %{buildroot}%{geowave_ingest_home}
-zip -g %{buildroot}%{geowave_ingest_home}/geowave-ingest-tool.jar build.properties
+# Stage geowave tools
+mkdir -p %{buildroot}%{geowave_tools_home}/plugins
+cp %{SOURCE10} %{buildroot}%{geowave_tools_home}
+cp %{buildroot}%{geowave_accumulo_home}/geowave-accumulo-build.properties %{buildroot}%{geowave_tools_home}/build.properties
+pushd %{buildroot}%{geowave_tools_home}
+zip -g %{buildroot}%{geowave_tools_home}/geowave-tools.jar build.properties
 popd
-mv %{buildroot}%{geowave_ingest_home}/build.properties %{buildroot}%{geowave_ingest_home}/geowave-ingest-build.properties
-unzip -p %{SOURCE10} geowave-ingest.sh > %{buildroot}%{geowave_ingest_home}/geowave-ingest.sh
-mkdir -p %{buildroot}/etc/bash_completion.d
-unzip -p %{SOURCE10} geowave-ingest-cmd-completion.sh > %{buildroot}/etc/bash_completion.d/geowave-ingest-cmd-completion.sh
+mv %{buildroot}%{geowave_tools_home}/build.properties %{buildroot}%{geowave_tools_home}/geowave-tools-build.properties
+unzip -p %{SOURCE10} geowave-tools.sh > %{buildroot}%{geowave_tools_home}/geowave-tools.sh
+# TODO: Add bash completion back for new geowave tool
+#mkdir -p %{buildroot}/etc/bash_completion.d
+#unzip -p %{SOURCE10} geowave-tools-cmd-completion.sh > %{buildroot}/etc/bash_completion.d/geowave-tools-cmd-completion.sh
 
 # Copy documentation into place
 mkdir -p %{buildroot}%{geowave_docs_home}
@@ -130,11 +131,11 @@ Summary:        All GeoWave Components
 Group:          Applications/Internet
 Requires:       %{name}-accumulo
 Requires:       %{name}-jetty
-Requires:       %{name}-ingest
+Requires:       %{name}-tools
 
 %description single-host
 GeoWave provides geospatial and temporal indexing on top of Accumulo.
-This package installs the accumulo, geoserver and ingest components and 
+This package installs the accumulo, geoserver and tools components and
 would likely be useful for dev environments
 
 %files single-host
@@ -223,6 +224,7 @@ This package installs the Accumulo components of GeoWave
 
 %post jetty
 /sbin/chkconfig --add geowave
+chown -R geowave:geowave /usr/local/geowave
 exit 0
 
 %preun jetty
@@ -246,30 +248,30 @@ exit 0
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-%package        ingest
-Summary:        GeoWave Ingest Tool
+%package        tools
+Summary:        GeoWave Tools
 Group:          Applications/Internet
-Provides:       %{name}-ingest = %{version}
+Provides:       %{name}-tools = %{version}
 Requires:       %{name}-core
 
-%description ingest
+%description tools
 GeoWave provides geospatial and temporal indexing on top of Accumulo.
-This package installs the GeoWave ingest tool
+This package installs GeoWave tools utility
 
-%post ingest
-ln -s /usr/local/geowave/ingest/geowave-ingest.sh /usr/local/bin/geowave-ingest
+%post tools
+ln -fs /usr/local/geowave/tools/geowave-tools.sh /usr/local/bin/geowave
 
-%postun ingest
+%postun tools
 if [ $1 -eq 0 ]; then
-  rm -f /usr/local/bin/geowave-ingest
+  rm -f /usr/local/bin/geowave
 fi
 
-%files ingest
+%files tools
 %defattr(644, geowave, geowave, 755)
-%{geowave_ingest_home}
+%{geowave_tools_home}
 
-%attr(755, geowave, geowave) %{geowave_ingest_home}/geowave-ingest.sh
-%attr(644, root, root) /etc/bash_completion.d/geowave-ingest-cmd-completion.sh
+%attr(755, geowave, geowave) %{geowave_tools_home}/geowave-tools.sh
+# %attr(644, root, root) /etc/bash_completion.d/geowave-tools-cmd-completion.sh
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -288,6 +290,9 @@ This package installs the geowave Puppet module to /etc/puppet/modules
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 %changelog
+* Thu May 7 2015 Andrew Spohn <andrew.e.spohn.ctr@nga.mil> - 0.8.7
+- Use alternatives to support parallel version installs
+- Replace geowave-ingest with geowave-tools
 * Thu Jan 15 2015 Andrew Spohn <andrew.e.spohn.ctr@nga.mil> - 0.8.2-3
 - Added man pages
 * Mon Jan 5 2015 Andrew Spohn <andrew.e.spohn.ctr@nga.mil> - 0.8.2-2

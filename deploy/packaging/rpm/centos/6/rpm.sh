@@ -15,13 +15,16 @@ while [ $# -gt 0 ]; do
 done
 
 # Artifact settings
-ARTIFACT_01_URL=$LOCAL_JENKINS/job/${ARGS[job]}/lastSuccessfulBuild/artifact/geowave-deploy/target/geowave-accumulo.jar
-ARTIFACT_02_URL=$LOCAL_JENKINS/job/${ARGS[job]}/lastSuccessfulBuild/artifact/geowave-deploy/target/geowave-geoserver.jar
-ARTIFACT_03_URL=$LOCAL_JENKINS/job/${ARGS[job]}/lastSuccessfulBuild/artifact/geowave-types/target/geowave-ingest-tool.jar
-ARTIFACT_04_URL=$LOCAL_JENKINS/job/${ARGS[job]}/lastSuccessfulBuild/artifact/target/site.tar.gz
-ARTIFACT_05_URL=$LOCAL_JENKINS/job/${ARGS[job]}/lastSuccessfulBuild/artifact/geowave-deploy/target/puppet-scripts.tar.gz
-ARTIFACT_06_URL=$LOCAL_JENKINS/job/${ARGS[job]}/lastSuccessfulBuild/artifact/docs/target/manpages.tar.gz
-ARTIFACT_07_URL=$LOCAL_JENKINS/userContent/geoserver/${ARGS[geoserver]}
+ARTIFACT_01_URL=$LOCAL_JENKINS/job/${ARGS[job]}/lastSuccessfulBuild/artifact/deploy/target/geowave-accumulo.jar
+ARTIFACT_02_URL=$LOCAL_JENKINS/job/${ARGS[job]}/lastSuccessfulBuild/artifact/deploy/target/geowave-geoserver.jar
+ARTIFACT_03_URL=$LOCAL_JENKINS/job/${ARGS[job]}/lastSuccessfulBuild/artifact/deploy/target/jace-linux-amd64-debug.tar.gz
+ARTIFACT_04_URL=$LOCAL_JENKINS/job/${ARGS[job]}/lastSuccessfulBuild/artifact/deploy/target/jace-linux-amd64-release.tar.gz
+ARTIFACT_05_URL=$LOCAL_JENKINS/job/${ARGS[job]}/lastSuccessfulBuild/artifact/deploy/target/jace-source.tar.gz
+ARTIFACT_06_URL=$LOCAL_JENKINS/job/${ARGS[job]}/lastSuccessfulBuild/artifact/deploy/target/geowave-ingest-tool.jar
+ARTIFACT_07_URL=$LOCAL_JENKINS/job/${ARGS[job]}/lastSuccessfulBuild/artifact/target/site.tar.gz
+ARTIFACT_08_URL=$LOCAL_JENKINS/job/${ARGS[job]}/lastSuccessfulBuild/artifact/deploy/target/puppet-scripts.tar.gz
+ARTIFACT_09_URL=$LOCAL_JENKINS/job/${ARGS[job]}/lastSuccessfulBuild/artifact/docs/target/manpages.tar.gz
+ARTIFACT_10_URL=$LOCAL_JENKINS/userContent/geoserver/${ARGS[geoserver]}
 RPM_ARCH=noarch
 
 case ${ARGS[command]} in
@@ -38,6 +41,9 @@ case ${ARGS[command]} in
         update_artifact $ARTIFACT_04_URL;
         update_artifact $ARTIFACT_05_URL;
         update_artifact $ARTIFACT_06_URL;
-        update_artifact $ARTIFACT_07_URL geoserver.zip; ;;
+        update_artifact $ARTIFACT_07_URL;
+        update_artifact $ARTIFACT_08_URL;
+        update_artifact $ARTIFACT_09_URL;
+        update_artifact $ARTIFACT_10_URL geoserver.zip; ;;
         *) about ;;
 esac
