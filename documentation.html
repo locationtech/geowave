@@ -3093,8 +3093,11 @@ location of the cygpath binary provided by cygwin then is should work. Eclipse a
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">$ cd geowave
-$ mvn clean package -pl geowave-deploy -am -P generate-jace-proxies,linux-amd64-gcc-debug -DskipTests</code></pre>
+$ mvn clean package -pl deploy -am -P generate-jace-proxies,linux-amd64-gcc-debug -DBUILD_SHARED_LIBS=ON -DskipTests</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>Note, to build static libraries use -DBUILD_SHARED_LIBS=OFF</p>
 </div>
 <div class="paragraph">
 <p>Refer to the table below to select the platform most applicable to your needs.</p>
@@ -3128,9 +3131,15 @@ $ mvn clean package -pl geowave-deploy -am -P generate-jace-proxies,linux-amd64-
 <td class="tableblock halign-left valign-top"><p class="tableblock">amd64</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">linux-amd64-gcc</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">linux-amd64-gcc-debug</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Unix Makefiles</p></td>
-<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Debug</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">amd64</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">linux-amd64-gcc-release</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Unix Makefiles</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Release</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">amd64</p></td>
 </tr>
 </tbody>
@@ -3171,19 +3180,19 @@ GeoWave is supported as a plugin for Mapnik for reading vector data from Accumul
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">GEOWAVE_RUNTIME_JAR</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">/path/to/geowave/geowave-deploy/target/geowave-deploy-0.8.5-jace.jar</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">/path/to/geowave/deploy/target/geowave-deploy-0.8.7-jace.jar</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">GEOWAVE_JACE_RUNTIME_JAR</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">/path/to/geowave/geowave-deploy/target/dependency/jace-core-runtime-1.2.22.jar</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">/path/to/geowave/deploy/target/dependency/jace-core-runtime-1.2.22.jar</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">GEOWAVE_INCLUDES</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">/path/to/geowave/geowave-deploy/target/dependency/jace/include</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">/path/to/geowave/deploy/target/dependency/jace/include</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">GEOWAVE_LIBS</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">/path/to/geowave/geowave-deploy/target/dependency/jace</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">/path/to/geowave/deploy/target/dependency/jace</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">JAVA_AWT_INCLUDE_PATH</p></td>
@@ -3215,6 +3224,18 @@ GeoWave is supported as a plugin for Mapnik for reading vector data from Accumul
 </div>
 <div class="paragraph">
 <p>Last, but not least, you should ensure that the libraries specified above are available either via PATH or LD_LIBRARY_PATH.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="mapnik-python-tests"><a class="anchor" href="#mapnik-python-tests"></a>Mapnik Python Tests</h4>
+<div class="paragraph">
+<p>In order to run the GeoWave integration test located in python-mapnik, you need to set environment variables defining the locations of the GeoWave runtime and ingest jars.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">$ export GEOWAVE_RUNTIME_JAR=/path/to/geowave/deploy/target/geowave-deploy-0.8.7-jace.jar
+$ export GEOWAVE_INGEST_JAR=/path/to/geowave/extensions/formats/geotools-vector/target/geowave-format-vector-0.8.7-tools.jar</code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -3260,22 +3281,22 @@ and writing data to Accumulo.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">GEOWAVE_RUNTIME_JAR</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">/path/to/geowave/geowave-deploy/target/geowave-deploy-0.8.5-jace.jar</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">/path/to/geowave/deploy/target/geowave-deploy-0.8.7-jace.jar</p></td>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">JACE_RUNTIME_JAR</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">/path/to/geowave/geowave-deploy/target/dependency/jace-core-runtime-1.2.22.jar</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">/path/to/geowave/deploy/target/dependency/jace-core-runtime-1.2.22.jar</p></td>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">JACE_INCLUDE_DIR</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">/path/to/geowave/geowave-deploy/target/dependency/jace/include</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">/path/to/geowave/deploy/target/dependency/jace/include</p></td>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">JACE_LIBRARY</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">/path/to/geowave/geowave-deploy/target/dependency/jace/libjace.so</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">/path/to/geowave/deploy/target/dependency/jace/libjace.so</p></td>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
@@ -3312,7 +3333,7 @@ and writing data to Accumulo.</p>
 <p>Once CMake is configured, you can proceed with your normal PDAL build process.</p>
 </div>
 <div class="paragraph">
-<p>Last, but not least, you should ensure that the libraries specified above are available either via PATH or LD_LIBRARY_PATH.</p>
+<p>Last, but not least, when building shared libraries you should ensure that the libraries specified above are available via PATH or LD_LIBRARY_PATH.</p>
 </div>
 <div class="paragraph">
 <p>Within the PDAL documentation, you can see examples of how GeoWave can be used as both a
@@ -3567,7 +3588,7 @@ yum install geowave-cdh5-puppet</code></pre>
 <div class="sect2">
 <h3 id="version"><a class="anchor" href="#version"></a>Version</h3>
 <div class="paragraph">
-<p>This documentation was generated for GeoWave version 0.8.7-SNAPSHOT from commit f646b14f6669ab9c65856f042bdc95a2d3a48f0e.</p>
+<p>This documentation was generated for GeoWave version 0.8.7-SNAPSHOT from commit 9088b985d64e7d9acf741282c94426839f8f3cb2.</p>
 </div>
 <div style="page-break-after: always;"></div>
 </div>
@@ -3619,7 +3640,7 @@ yum install geowave-cdh5-puppet</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-05-08 01:40:08 UTC
+Last updated 2015-05-08 12:59:32 UTC
 </div>
 </div>
 </body>
