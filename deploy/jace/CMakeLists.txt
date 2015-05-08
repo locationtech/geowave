@@ -42,4 +42,4 @@ link_directories (${BOOST_LIBRARY})
 get_headers ("${CMAKE_CURRENT_SOURCE_DIR}/include" HEADER_FILES)
 get_sources ("${CMAKE_CURRENT_SOURCE_DIR}/source" SOURCE_FILES)
 
-add_library (jace SHARED ${SOURCE_FILES} ${HEADER_FILES})
+add_library (jace ${SOURCE_FILES} ${HEADER_FILES})
