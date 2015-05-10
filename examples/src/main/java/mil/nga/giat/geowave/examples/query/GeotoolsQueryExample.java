@@ -118,6 +118,7 @@ public class GeotoolsQueryExample
 
 		final String ACCUMULO_USER = "root";
 		final String ACCUMULO_PASSWORD = "Ge0wave";
+		final String TABLE_NAMESPACE = "";
 
 		tempAccumuloDir = Files.createTempDir();
 
@@ -130,9 +131,11 @@ public class GeotoolsQueryExample
 
 		dataStore = new AccumuloDataStore(
 				new BasicAccumuloOperations(
-						accumulo.getConnector(
-								ACCUMULO_USER,
-								ACCUMULO_PASSWORD)));
+						accumulo.getZooKeepers(),
+						accumulo.getInstanceName(),
+						ACCUMULO_USER,
+						ACCUMULO_PASSWORD,
+						TABLE_NAMESPACE));
 	}
 
 	private static void ingestCannedData() {
