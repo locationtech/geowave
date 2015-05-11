@@ -89,6 +89,7 @@ mil.nga.giat.geowave.datastore.accumulo.query
 mil.nga.giat.geowave.datastore.accumulo.util
 mil.nga.giat.geowave.examples.ingest
 mil.nga.giat.geowave.examples.ingest.bulk
+mil.nga.giat.geowave.examples.query
 mil.nga.giat.geowave.format.geolife
 mil.nga.giat.geowave.format.geotools.raster
 mil.nga.giat.geowave.format.geotools.vector
