@@ -19,7 +19,7 @@ mv $WORKSPACE/deploy/target/*-tools.jar $WORKSPACE/deploy/target/geowave-tools.j
 
 # Build the jace artifacts (release, debug, source) and include geotools-vector ingest tool to support testing
 mkdir -p $WORKSPACE/deploy/target/jace
-mvn package -pl deploy -am -P generate-jace-proxies,linux-amd64-gcc-debug $BUILD_ARGS "$@"
+mvn package -P generate-jace-proxies,linux-amd64-gcc-debug $BUILD_ARGS "$@"
 mv $WORKSPACE/deploy/target/*-jace.jar $WORKSPACE/deploy/target/jace/geowave-jace.jar
 mv $WORKSPACE/deploy/target/dependency/jace-core-runtime-*.jar $WORKSPACE/deploy/target/jace/jace-core-runtime.jar
 cp $WORKSPACE/extensions/formats/geotools-vector/target/*-tools.jar $WORKSPACE/deploy/target/jace/geowave-ingest.jar
@@ -30,7 +30,7 @@ tar -czf $WORKSPACE/deploy/target/jace/jace-linux-amd64-debug.tar.gz \
     $WORKSPACE/deploy/target/dependency/jace/libjace.so \
     -C $WORKSPACE/deploy/target/dependency/jace/include
 
-mvn package -pl deploy -am -P generate-jace-proxies,linux-amd64-gcc-release $BUILD_ARGS "$@"
+mvn package -P generate-jace-proxies,linux-amd64-gcc-release $BUILD_ARGS "$@"
 tar -czf $WORKSPACE/deploy/target/jace/jace-linux-amd64-release.tar.gz \
     $WORKSPACE/deploy/target/jace/geowave-ingest.jar \
     $WORKSPACE/deploy/target/jace/geowave-jace.jar \
