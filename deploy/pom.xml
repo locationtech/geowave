@@ -420,7 +420,7 @@
 										<artifactItem>
 											<groupId>com.googlecode.jace</groupId>
 											<artifactId>jace-core-cpp</artifactId>
-											<version>1.2.22</version>
+											<version>1.3.0</version>
 											<classifier>sources</classifier>
 											<outputDirectory>${project.build.directory}/dependency/jace</outputDirectory>
 										</artifactItem>
@@ -438,7 +438,7 @@
 										<artifactItem>
 											<groupId>com.googlecode.jace</groupId>
 											<artifactId>jace-core-runtime</artifactId>
-											<version>1.2.22</version>
+											<version>1.3.0</version>
 											<outputDirectory>${project.build.directory}/dependency</outputDirectory>
 										</artifactItem>
 									</artifactItems>
@@ -481,7 +481,7 @@
 					<plugin>
 						<groupId>com.googlecode.jace</groupId>
 						<artifactId>jace-maven-plugin</artifactId>
-						<version>1.2.22</version>
+						<version>1.3.0</version>
 						<executions>
 							<execution>
 								<id>generate-proxies</id>
@@ -507,25 +507,6 @@
 									<exportSymbols>true</exportSymbols>
 
 									<minimizeDependencies>true</minimizeDependencies>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-					<plugin>
-						<artifactId>maven-antrun-plugin</artifactId>
-						<version>1.7</version>
-						<executions>
-							<execution>
-								<id>copy-patch-files</id>
-								<phase>package</phase>
-								<goals>
-									<goal>run</goal>
-								</goals>
-								<configuration>
-									<target name="copy-patch-files">
-										<copy file="${basedir}/jace/CMakeLists.txt"
-											tofile="${project.build.directory}/dependency/jace/CMakeLists.txt" />
-									</target>
 								</configuration>
 							</execution>
 						</executions>
@@ -633,24 +614,6 @@
 												<goals>
 													<goal>
 														generate-cpp-proxies
-													</goal>
-												</goals>
-											</pluginExecutionFilter>
-											<action>
-												<ignore></ignore>
-											</action>
-										</pluginExecution>
-										<pluginExecution>
-											<pluginExecutionFilter>
-												<artifactId>
-													maven-antrun-plugin
-												</artifactId>
-												<versionRange>
-													[1.7,)
-												</versionRange>
-												<goals>
-													<goal>
-														run
 													</goal>
 												</goals>
 											</pluginExecutionFilter>
