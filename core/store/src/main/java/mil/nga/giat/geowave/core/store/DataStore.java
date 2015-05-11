@@ -9,6 +9,7 @@ import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.core.store.data.VisibilityWriter;
 import mil.nga.giat.geowave.core.store.index.Index;
 import mil.nga.giat.geowave.core.store.query.Query;
+import mil.nga.giat.geowave.core.store.query.QueryOptions;
 
 /**
  * A DataStore can both ingest and query data based on persisted indices and
@@ -264,6 +265,29 @@ public interface DataStore
 	public <T> CloseableIterator<T> query(
 			Index index,
 			final Query query );
+
+	/**
+	 * Returns all data in this data store that matches the query parameter
+	 * within the index described by the index passed in. All data types that
+	 * match the query will be returned as an instance of the native data type
+	 * that was originally ingested. Additional query options will be applied to
+	 * results
+	 * 
+	 * @param index
+	 *            The index information to query against. All data within the
+	 *            index of this index ID will be queried and returned.
+	 * @param query
+	 *            The description of the query to be performed
+	 * @param queryOptions
+	 *            Additional options to be applied to the query results
+	 * @return An iterator on all results that match the query. The iterator
+	 *         implements Closeable and it is best practice to close the
+	 *         iterator after it is no longer needed.
+	 */
+	public <T> CloseableIterator<T> query(
+			Index index,
+			final Query query,
+			final QueryOptions queryOptions );
 
 	/**
 	 * Returns all data in this data store that matches the query parameter
