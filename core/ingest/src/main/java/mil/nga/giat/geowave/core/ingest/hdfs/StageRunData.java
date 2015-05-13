@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import mil.nga.giat.geowave.core.ingest.avro.StageToAvroPlugin;
+
 import org.apache.avro.file.CodecFactory;
 import org.apache.avro.file.DataFileWriter;
 import org.apache.avro.generic.GenericDatumWriter;
@@ -32,7 +34,7 @@ public class StageRunData
 
 	public DataFileWriter getWriter(
 			final String typeName,
-			final StageToHdfsPlugin plugin ) {
+			final StageToAvroPlugin plugin ) {
 		return getDataWriterCreateIfNull(
 				typeName,
 				plugin);
@@ -40,7 +42,7 @@ public class StageRunData
 
 	private synchronized DataFileWriter getDataWriterCreateIfNull(
 			final String typeName,
-			final StageToHdfsPlugin plugin ) {
+			final StageToAvroPlugin plugin ) {
 		if (!cachedWriters.containsKey(typeName)) {
 			FSDataOutputStream out = null;
 			final DataFileWriter dfw = new DataFileWriter(

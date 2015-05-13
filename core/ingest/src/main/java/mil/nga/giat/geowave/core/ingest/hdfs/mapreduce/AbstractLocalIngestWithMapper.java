@@ -9,8 +9,8 @@ import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.ingest.GeoWaveData;
-import mil.nga.giat.geowave.core.ingest.hdfs.AbstractStageFileToHdfs;
-import mil.nga.giat.geowave.core.ingest.hdfs.HdfsFile;
+import mil.nga.giat.geowave.core.ingest.avro.AbstractStageWholeFileToAvro;
+import mil.nga.giat.geowave.core.ingest.avro.WholeFile;
 import mil.nga.giat.geowave.core.ingest.local.LocalFileIngestPlugin;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
@@ -25,9 +25,9 @@ import com.google.common.collect.Iterators;
  * file to HDFS and then ingesting it within the map phase of a map-reduce job.
  */
 abstract public class AbstractLocalIngestWithMapper<T> extends
-		AbstractStageFileToHdfs implements
+		AbstractStageWholeFileToAvro implements
 		LocalFileIngestPlugin<T>,
-		IngestFromHdfsPlugin<HdfsFile, T>
+		IngestFromHdfsPlugin<WholeFile, T>
 {
 	private final static Logger LOGGER = Logger.getLogger(AbstractLocalIngestWithMapper.class);
 
@@ -37,7 +37,7 @@ abstract public class AbstractLocalIngestWithMapper<T> extends
 	}
 
 	@Override
-	public IngestWithMapper<HdfsFile, T> ingestWithMapper() {
+	public IngestWithMapper<WholeFile, T> ingestWithMapper() {
 		return new InternalIngestWithMapper<T>(
 				this);
 	}
@@ -69,12 +69,12 @@ abstract public class AbstractLocalIngestWithMapper<T> extends
 			final String globalVisibility );
 
 	@Override
-	public IngestWithReducer<HdfsFile, ?, ?, T> ingestWithReducer() {
+	public IngestWithReducer<WholeFile, ?, ?, T> ingestWithReducer() {
 		return null;
 	}
 
 	private static class InternalIngestWithMapper<T> implements
-			IngestWithMapper<HdfsFile, T>
+			IngestWithMapper<WholeFile, T>
 	{
 		private AbstractLocalIngestWithMapper parentPlugin;
 
@@ -93,7 +93,7 @@ abstract public class AbstractLocalIngestWithMapper<T> extends
 
 		@Override
 		public CloseableIterator<GeoWaveData<T>> toGeoWaveData(
-				final HdfsFile input,
+				final WholeFile input,
 				final ByteArrayId primaryIndexId,
 				final String globalVisibility ) {
 			final InputStream inputStream = new ByteBufferBackedInputStream(

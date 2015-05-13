@@ -20,7 +20,7 @@ import mil.nga.giat.geowave.core.geotime.IndexType;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.ingest.GeoWaveData;
-import mil.nga.giat.geowave.core.ingest.hdfs.HdfsFile;
+import mil.nga.giat.geowave.core.ingest.avro.WholeFile;
 import mil.nga.giat.geowave.core.ingest.hdfs.mapreduce.IngestWithMapper;
 import mil.nga.giat.geowave.core.ingest.hdfs.mapreduce.IngestWithReducer;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
@@ -42,7 +42,7 @@ import com.vividsolutions.jts.geom.Coordinate;
 /*
  */
 public class GeoLifeIngestPlugin extends
-		AbstractSimpleFeatureIngestPlugin<HdfsFile>
+		AbstractSimpleFeatureIngestPlugin<WholeFile>
 {
 
 	private final static Logger LOGGER = Logger.getLogger(GeoLifeIngestPlugin.class);
@@ -120,26 +120,26 @@ public class GeoLifeIngestPlugin extends
 
 	@Override
 	public Schema getAvroSchemaForHdfsType() {
-		return HdfsFile.getClassSchema();
+		return WholeFile.getClassSchema();
 	}
 
 	@Override
-	public HdfsFile[] toHdfsObjects(
+	public WholeFile[] toAvroObjects(
 			final File input ) {
-		final HdfsFile hfile = new HdfsFile();
-		hfile.setOriginalFilePath(input.getAbsolutePath());
+		final WholeFile avroFile = new WholeFile();
+		avroFile.setOriginalFilePath(input.getAbsolutePath());
 		try {
-			hfile.setOriginalFile(ByteBuffer.wrap(Files.readAllBytes(input.toPath())));
+			avroFile.setOriginalFile(ByteBuffer.wrap(Files.readAllBytes(input.toPath())));
 		}
 		catch (final IOException e) {
 			LOGGER.warn(
 					"Unable to read GeoLife file: " + input.getAbsolutePath(),
 					e);
-			return new HdfsFile[] {};
+			return new WholeFile[] {};
 		}
 
-		return new HdfsFile[] {
-			hfile
+		return new WholeFile[] {
+			avroFile
 		};
 	}
 
@@ -149,13 +149,13 @@ public class GeoLifeIngestPlugin extends
 	}
 
 	@Override
-	public IngestWithMapper<HdfsFile, SimpleFeature> ingestWithMapper() {
+	public IngestWithMapper<WholeFile, SimpleFeature> ingestWithMapper() {
 		return new IngestGeoLifeFromHdfs(
 				this);
 	}
 
 	@Override
-	public IngestWithReducer<HdfsFile, ?, ?, SimpleFeature> ingestWithReducer() {
+	public IngestWithReducer<WholeFile, ?, ?, SimpleFeature> ingestWithReducer() {
 		// unsupported right now
 		throw new UnsupportedOperationException(
 				"GeoLife tracks cannot be ingested with a reducer");
@@ -163,7 +163,7 @@ public class GeoLifeIngestPlugin extends
 
 	@Override
 	protected CloseableIterator<GeoWaveData<SimpleFeature>> toGeoWaveDataInternal(
-			final HdfsFile hfile,
+			final WholeFile hfile,
 			final ByteArrayId primaryIndexId,
 			final String globalVisibility ) {
 
@@ -289,7 +289,7 @@ public class GeoLifeIngestPlugin extends
 	}
 
 	public static class IngestGeoLifeFromHdfs extends
-			AbstractIngestSimpleFeatureWithMapper<HdfsFile>
+			AbstractIngestSimpleFeatureWithMapper<WholeFile>
 	{
 		public IngestGeoLifeFromHdfs() {
 			this(

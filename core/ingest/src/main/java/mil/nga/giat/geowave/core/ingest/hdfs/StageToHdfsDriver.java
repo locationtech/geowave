@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import mil.nga.giat.geowave.core.ingest.IngestFormatPluginProviderSpi;
+import mil.nga.giat.geowave.core.ingest.avro.StageToAvroPlugin;
 import mil.nga.giat.geowave.core.ingest.local.AbstractLocalFileDriver;
 
 import org.apache.avro.file.DataFileWriter;
@@ -23,7 +24,7 @@ import org.apache.log4j.Logger;
  * available type plugin providers that are discovered through SPI.
  */
 public class StageToHdfsDriver extends
-		AbstractLocalFileDriver<StageToHdfsPlugin<?>, StageRunData>
+		AbstractLocalFileDriver<StageToAvroPlugin<?>, StageRunData>
 {
 	private final static Logger LOGGER = Logger.getLogger(StageToHdfsDriver.class);
 	private HdfsCommandLineOptions hdfsOptions;
@@ -53,13 +54,13 @@ public class StageToHdfsDriver extends
 	protected void processFile(
 			final File file,
 			final String typeName,
-			final StageToHdfsPlugin<?> plugin,
+			final StageToAvroPlugin<?> plugin,
 			final StageRunData runData ) {
 		final DataFileWriter writer = runData.getWriter(
 				typeName,
 				plugin);
 		if (writer != null) {
-			final Object[] objs = plugin.toHdfsObjects(file);
+			final Object[] objs = plugin.toAvroObjects(file);
 			for (final Object obj : objs) {
 				try {
 					writer.append(obj);
@@ -79,11 +80,11 @@ public class StageToHdfsDriver extends
 			final List<IngestFormatPluginProviderSpi<?, ?>> pluginProviders ) {
 
 		// first collect the stage to hdfs plugins
-		final Map<String, StageToHdfsPlugin<?>> stageToHdfsPlugins = new HashMap<String, StageToHdfsPlugin<?>>();
+		final Map<String, StageToAvroPlugin<?>> stageToHdfsPlugins = new HashMap<String, StageToAvroPlugin<?>>();
 		for (final IngestFormatPluginProviderSpi<?, ?> pluginProvider : pluginProviders) {
-			StageToHdfsPlugin<?> stageToHdfsPlugin = null;
+			StageToAvroPlugin<?> stageToHdfsPlugin = null;
 			try {
-				stageToHdfsPlugin = pluginProvider.getStageToHdfsPlugin();
+				stageToHdfsPlugin = pluginProvider.getStageToAvroPlugin();
 
 				if (stageToHdfsPlugin == null) {
 					LOGGER.warn("Plugin provider for ingest type '" + pluginProvider.getIngestFormatName() + "' does not support staging to HDFS");

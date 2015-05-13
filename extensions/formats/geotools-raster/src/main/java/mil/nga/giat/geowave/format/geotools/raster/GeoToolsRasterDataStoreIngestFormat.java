@@ -2,7 +2,7 @@ package mil.nga.giat.geowave.format.geotools.raster;
 
 import mil.nga.giat.geowave.core.ingest.IngestFormatOptionProvider;
 import mil.nga.giat.geowave.core.ingest.IngestFormatPluginProviderSpi;
-import mil.nga.giat.geowave.core.ingest.hdfs.StageToHdfsPlugin;
+import mil.nga.giat.geowave.core.ingest.avro.StageToAvroPlugin;
 import mil.nga.giat.geowave.core.ingest.hdfs.mapreduce.IngestFromHdfsPlugin;
 import mil.nga.giat.geowave.core.ingest.local.LocalFileIngestPlugin;
 
@@ -18,11 +18,11 @@ public class GeoToolsRasterDataStoreIngestFormat implements
 {
 
 	@Override
-	public StageToHdfsPlugin<Object> getStageToHdfsPlugin()
+	public StageToAvroPlugin<Object> getStageToAvroPlugin()
 			throws UnsupportedOperationException {
 		// unsupported right now
 		throw new UnsupportedOperationException(
-				"GeoTools raster files cannot be ingested from HDFS");
+				"GeoTools raster files cannot be ingested using intermediate avro files");
 	}
 
 	@Override

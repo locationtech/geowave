@@ -44,6 +44,9 @@
 		<hadoop.scope>compile</hadoop.scope>
 		<zookeeper.version>3.4.6</zookeeper.version>
 		<jersey.version>2.14</jersey.version>
+		<kafka.artifact>kafka_2.10</kafka.artifact>
+		<kafka.version>0.8.2.1</kafka.version>		
+		<curator.version>2.7.1</curator.version>	
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<sonar.language>java</sonar.language>

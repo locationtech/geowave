@@ -2,7 +2,7 @@ package mil.nga.giat.geowave.adapter.vector.ingest;
 
 import mil.nga.giat.geowave.core.ingest.IngestFormatOptionProvider;
 import mil.nga.giat.geowave.core.ingest.IngestFormatPluginProviderSpi;
-import mil.nga.giat.geowave.core.ingest.hdfs.StageToHdfsPlugin;
+import mil.nga.giat.geowave.core.ingest.avro.StageToAvroPlugin;
 import mil.nga.giat.geowave.core.ingest.hdfs.mapreduce.IngestFromHdfsPlugin;
 import mil.nga.giat.geowave.core.ingest.local.LocalFileIngestPlugin;
 
@@ -25,7 +25,7 @@ abstract public class AbstractSimpleFeatureIngestFormat<I> implements
 	abstract protected AbstractSimpleFeatureIngestPlugin<I> newPluginInstance();
 
 	@Override
-	public StageToHdfsPlugin<I> getStageToHdfsPlugin() {
+	public StageToAvroPlugin<I> getStageToAvroPlugin() {
 		return getInstance();
 	}
 
