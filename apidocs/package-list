@@ -64,8 +64,10 @@ mil.nga.giat.geowave.core.index.sfc.hilbert
 mil.nga.giat.geowave.core.index.sfc.tiered
 mil.nga.giat.geowave.core.index.sfc.zorder
 mil.nga.giat.geowave.core.ingest
+mil.nga.giat.geowave.core.ingest.avro
 mil.nga.giat.geowave.core.ingest.hdfs
 mil.nga.giat.geowave.core.ingest.hdfs.mapreduce
+mil.nga.giat.geowave.core.ingest.kafka
 mil.nga.giat.geowave.core.ingest.local
 mil.nga.giat.geowave.core.store
 mil.nga.giat.geowave.core.store.adapter
@@ -99,5 +101,6 @@ mil.nga.giat.geowave.service
 mil.nga.giat.geowave.service.client
 mil.nga.giat.geowave.service.impl
 mil.nga.giat.geowave.test
+mil.nga.giat.geowave.test.kafka
 mil.nga.giat.geowave.test.mapreduce
 mil.nga.giat.geowave.test.service
