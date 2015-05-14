@@ -100,7 +100,7 @@ public class FeatureWritable implements
 	public void write(
 			final DataOutput output )
 			throws IOException {
-		output.writeUTF(featureType.getName().getNamespaceURI());
+		output.writeUTF(featureType.getName().getNamespaceURI() == null ? "" : featureType.getName().getNamespaceURI());
 		output.writeUTF(featureType.getTypeName());
 		output.writeUTF(DataUtilities.encodeType(featureType));
 		output.writeUTF(FeatureDataUtils.getAxis(featureType.getCoordinateReferenceSystem()));

@@ -325,6 +325,8 @@ public class FeatureDataAdapter extends
 			namespaceBytes = new byte[0];
 		}
 		final byte[] encodedTypeBytes = StringUtils.stringToBinary(encodedType);
+		// 25 bytes is the 6 four byte length fields and one byte for the
+		// version
 		final ByteBuffer buf = ByteBuffer.allocate(encodedTypeBytes.length + typeNameBytes.length + namespaceBytes.length + fieldVisibilityAtributeNameBytes.length + visibilityManagementClassNameBytes.length + timeAndRangeBytes.length + axisBytes.length + 25);
 		buf.put(VERSION);
 		buf.putInt(typeNameBytes.length);
@@ -381,7 +383,8 @@ public class FeatureDataAdapter extends
 					"Cannot instantiate " + visibilityManagementClassName,
 					ex);
 		}
-
+		// 25 bytes is the 6 four byte length fields and one byte for the
+		// version
 		final byte[] encodedTypeBytes = new byte[bytes.length - axisBytes.length - typeNameBytes.length - namespaceBytes.length - fieldVisibilityAtributeNameBytes.length - visibilityManagementClassNameBytes.length - timeAndRangeBytes.length - 25];
 		buf.get(encodedTypeBytes);
 
