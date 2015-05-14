@@ -7,9 +7,10 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import mil.nga.giat.geowave.core.ingest.AbstractIngestCommandLineDriver;
-import mil.nga.giat.geowave.core.ingest.AccumuloCommandLineOptions;
+import mil.nga.giat.geowave.core.ingest.IngestCommandLineOptions;
 import mil.nga.giat.geowave.core.ingest.IngestFormatPluginProviderSpi;
 import mil.nga.giat.geowave.core.ingest.hdfs.HdfsCommandLineOptions;
+import mil.nga.giat.geowave.datastore.accumulo.AccumuloCommandLineOptions;
 import mil.nga.giat.geowave.datastore.accumulo.mapreduce.GeoWaveConfiguratorBase;
 
 import org.apache.commons.cli.CommandLine;
@@ -33,6 +34,7 @@ public class IngestFromHdfsDriver extends
 	private final static int DAYS_TO_AWAIT_COMPLETION = 999;
 	private HdfsCommandLineOptions hdfsOptions;
 	private AccumuloCommandLineOptions accumuloOptions;
+	private IngestCommandLineOptions ingestOptions;
 	private MapReduceCommandLineOptions mapReduceOptions;
 	private static ExecutorService singletonExecutor;
 
@@ -87,8 +89,8 @@ public class IngestFromHdfsDriver extends
 						LOGGER.warn("Plugin provider for ingest type '" + pluginProvider.getIngestFormatName() + "' does not support ingest from HDFS");
 						continue;
 					}
-					if (!accumuloOptions.isSupported(ingestFromHdfsPlugin.getSupportedIndices())) {
-						LOGGER.warn("HDFS file ingest plugin for ingest type '" + pluginProvider.getIngestFormatName() + "' does not support dimensionality '" + accumuloOptions.getDimensionalityType() + "'");
+					if (!ingestOptions.isSupported(ingestFromHdfsPlugin.getSupportedIndices())) {
+						LOGGER.warn("HDFS file ingest plugin for ingest type '" + pluginProvider.getIngestFormatName() + "' does not support dimensionality '" + ingestOptions.getDimensionalityType() + "'");
 						continue;
 					}
 				}
@@ -130,6 +132,7 @@ public class IngestFromHdfsDriver extends
 				if (ingestWithReducer != null) {
 					jobRunner = new IngestWithReducerJobRunner(
 							accumuloOptions,
+							ingestOptions,
 							inputFile,
 							pluginProvider.getIngestFormatName(),
 							ingestFromHdfsPlugin,
@@ -139,6 +142,7 @@ public class IngestFromHdfsDriver extends
 				else if (ingestWithMapper != null) {
 					jobRunner = new IngestWithMapperJobRunner(
 							accumuloOptions,
+							ingestOptions,
 							inputFile,
 							pluginProvider.getIngestFormatName(),
 							ingestFromHdfsPlugin,
@@ -217,6 +221,7 @@ public class IngestFromHdfsDriver extends
 			final CommandLine commandLine )
 			throws ParseException {
 		accumuloOptions = AccumuloCommandLineOptions.parseOptions(commandLine);
+		ingestOptions = IngestCommandLineOptions.parseOptions(commandLine);
 		hdfsOptions = HdfsCommandLineOptions.parseOptions(commandLine);
 		mapReduceOptions = MapReduceCommandLineOptions.parseOptions(commandLine);
 	}
@@ -225,6 +230,7 @@ public class IngestFromHdfsDriver extends
 	protected void applyOptionsInternal(
 			final Options allOptions ) {
 		AccumuloCommandLineOptions.applyOptions(allOptions);
+		IngestCommandLineOptions.applyOptions(allOptions);
 		HdfsCommandLineOptions.applyOptions(allOptions);
 		MapReduceCommandLineOptions.applyOptions(allOptions);
 	}

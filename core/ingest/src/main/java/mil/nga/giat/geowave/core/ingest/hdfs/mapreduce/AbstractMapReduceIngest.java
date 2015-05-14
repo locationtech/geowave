@@ -4,10 +4,11 @@ import mil.nga.giat.geowave.core.index.ByteArrayUtils;
 import mil.nga.giat.geowave.core.index.Persistable;
 import mil.nga.giat.geowave.core.index.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.StringUtils;
-import mil.nga.giat.geowave.core.ingest.AccumuloCommandLineOptions;
 import mil.nga.giat.geowave.core.ingest.DataAdapterProvider;
+import mil.nga.giat.geowave.core.ingest.IngestCommandLineOptions;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.core.store.index.Index;
+import mil.nga.giat.geowave.datastore.accumulo.AccumuloCommandLineOptions;
 import mil.nga.giat.geowave.datastore.accumulo.mapreduce.output.GeoWaveOutputFormat;
 
 import org.apache.avro.mapreduce.AvroJob;
@@ -37,6 +38,7 @@ abstract public class AbstractMapReduceIngest<T extends Persistable & DataAdapte
 	public static final String PRIMARY_INDEX_ID_KEY = "PRIMARY_INDEX_ID";
 	private static String JOB_NAME = "%s ingest from %s to namespace %s (%s)";
 	protected final AccumuloCommandLineOptions accumuloOptions;
+	protected final IngestCommandLineOptions ingestOptions;
 	protected final Path inputFile;
 	protected final String typeName;
 	protected final IngestFromHdfsPlugin parentPlugin;
@@ -44,11 +46,13 @@ abstract public class AbstractMapReduceIngest<T extends Persistable & DataAdapte
 
 	public AbstractMapReduceIngest(
 			final AccumuloCommandLineOptions accumuloOptions,
+			final IngestCommandLineOptions ingestOptions,
 			final Path inputFile,
 			final String typeName,
 			final IngestFromHdfsPlugin parentPlugin,
 			final T ingestPlugin ) {
 		this.accumuloOptions = accumuloOptions;
+		this.ingestOptions = ingestOptions;
 		this.inputFile = inputFile;
 		this.typeName = typeName;
 		this.parentPlugin = parentPlugin;
@@ -74,12 +78,12 @@ abstract public class AbstractMapReduceIngest<T extends Persistable & DataAdapte
 		conf.set(
 				INGEST_PLUGIN_KEY,
 				ByteArrayUtils.byteArrayToString(PersistenceUtils.toBinary(ingestPlugin)));
-		if (accumuloOptions.getVisibility() != null) {
+		if (ingestOptions.getVisibility() != null) {
 			conf.set(
 					GLOBAL_VISIBILITY_KEY,
-					accumuloOptions.getVisibility());
+					ingestOptions.getVisibility());
 		}
-		final Index primaryIndex = accumuloOptions.getIndex(parentPlugin.getSupportedIndices());
+		final Index primaryIndex = ingestOptions.getIndex(parentPlugin.getSupportedIndices());
 		if (primaryIndex != null) {
 			conf.set(
 					PRIMARY_INDEX_ID_KEY,
@@ -113,7 +117,7 @@ abstract public class AbstractMapReduceIngest<T extends Persistable & DataAdapte
 				accumuloOptions.getPassword(), // accumuloPass
 				accumuloOptions.getNamespace()); // geowaveNamespace
 
-		final WritableDataAdapter<?>[] dataAdapters = ingestPlugin.getDataAdapters(accumuloOptions.getVisibility());
+		final WritableDataAdapter<?>[] dataAdapters = ingestPlugin.getDataAdapters(ingestOptions.getVisibility());
 		for (final WritableDataAdapter<?> dataAdapter : dataAdapters) {
 			GeoWaveOutputFormat.addDataAdapter(
 					job.getConfiguration(),

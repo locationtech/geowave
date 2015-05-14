@@ -1,7 +1,8 @@
 package mil.nga.giat.geowave.core.ingest.hdfs.mapreduce;
 
-import mil.nga.giat.geowave.core.ingest.AccumuloCommandLineOptions;
+import mil.nga.giat.geowave.core.ingest.IngestCommandLineOptions;
 import mil.nga.giat.geowave.core.store.filter.GenericTypeResolver;
+import mil.nga.giat.geowave.datastore.accumulo.AccumuloCommandLineOptions;
 
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.mapreduce.Job;
@@ -15,12 +16,14 @@ public class IngestWithReducerJobRunner extends
 {
 	public IngestWithReducerJobRunner(
 			final AccumuloCommandLineOptions accumuloOptions,
+			final IngestCommandLineOptions ingestOptions,
 			final Path inputFile,
 			final String typeName,
 			final IngestFromHdfsPlugin parentPlugin,
 			final IngestWithReducer ingestPlugin ) {
 		super(
 				accumuloOptions,
+				ingestOptions,
 				inputFile,
 				typeName,
 				parentPlugin,
