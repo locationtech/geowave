@@ -3,14 +3,19 @@ package mil.nga.giat.geowave.adapter.vector.util;
 import mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveGTDataStore;
 
 import org.apache.log4j.Logger;
+import org.geotools.data.DataUtilities;
+import org.geotools.feature.SchemaException;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
+import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.geotools.geometry.jts.JTS;
 import org.geotools.referencing.CRS;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.referencing.FactoryException;
+import org.opengis.referencing.NoSuchAuthorityCodeException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.cs.CoordinateSystem;
 import org.opengis.referencing.operation.MathTransform;
 import org.opengis.referencing.operation.TransformException;
 
@@ -75,5 +80,53 @@ public class FeatureDataUtils
 			}
 		}
 		return defaultCRSEntry;
+	}
+
+	public static String getAxis(
+			final CoordinateReferenceSystem crs ) {
+		final CoordinateSystem cs = crs == null ? null : crs.getCoordinateSystem();
+		if (cs != null && cs.getDimension() > 0) return cs.getAxis(
+				0).getDirection().name().toString();
+		return "";
+	}
+
+	public static SimpleFeatureType decodeType(
+			final String nameSpace,
+			final String typeName,
+			final String typeDescriptor,
+			final String axis )
+			throws SchemaException {
+
+		SimpleFeatureType featureType = DataUtilities.createType(
+				nameSpace,
+				typeName,
+				typeDescriptor);
+
+		final String lCaseAxis = axis.toLowerCase();
+		final CoordinateReferenceSystem crs = featureType.getCoordinateReferenceSystem();
+		final String typeAxis = getAxis(crs);
+		// Default for EPSG:4326 is lat/long, If the provided type was
+		// long/lat, then re-establish the order
+		if (crs != null && crs.getIdentifiers().toString().contains(
+				"EPSG:4326") && !lCaseAxis.equalsIgnoreCase(
+				typeAxis)) {
+			SimpleFeatureTypeBuilder builder = new SimpleFeatureTypeBuilder();
+			builder.init(featureType);
+
+			try {
+				featureType = SimpleFeatureTypeBuilder.retype(
+						featureType,
+						CRS.decode(
+								"urn:ogc:def:crs:EPSG:6.6:4326",
+								lCaseAxis.equals("east")));
+			}
+			catch (FactoryException e) {
+				throw new SchemaException(
+						"Cannot decode EPSG:4326",
+						e);
+			}
+		}
+		return featureType;
+
 	}
 }

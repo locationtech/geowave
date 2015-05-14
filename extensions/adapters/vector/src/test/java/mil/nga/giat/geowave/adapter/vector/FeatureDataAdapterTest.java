@@ -12,6 +12,7 @@ import java.util.UUID;
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import mil.nga.giat.geowave.adapter.vector.FeatureTimeRangeHandler;
 import mil.nga.giat.geowave.adapter.vector.FeatureTimestampHandler;
+import mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveGTDataStore;
 import mil.nga.giat.geowave.adapter.vector.utils.DateUtilities;
 import mil.nga.giat.geowave.core.store.adapter.IndexFieldHandler;
 import mil.nga.giat.geowave.core.store.data.visibility.GlobalVisibilityHandler;
@@ -22,6 +23,7 @@ import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.geotools.data.DataUtilities;
 import org.geotools.feature.SchemaException;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
+import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.geotools.filter.text.cql2.CQLException;
 import org.junit.Before;
 import org.junit.Test;
@@ -31,6 +33,7 @@ import org.opengis.feature.type.AttributeDescriptor;
 
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.GeometryFactory;
+import com.vividsolutions.jts.geom.Point;
 import com.vividsolutions.jts.geom.PrecisionModel;
 
 public class FeatureDataAdapterTest
@@ -362,6 +365,43 @@ public class FeatureDataAdapterTest
 		}
 
 		assertTrue(found);
+	}
+
+	@Test
+	public void testCRSProjecttioin() {
+
+		final SimpleFeatureTypeBuilder typeBuilder = new SimpleFeatureTypeBuilder();
+		typeBuilder.setName("test");
+		typeBuilder.setCRS(GeoWaveGTDataStore.DEFAULT_CRS); // <- Coordinate
+		// reference
+		// add attributes in order
+		typeBuilder.add(
+				"geom",
+				Point.class);
+		typeBuilder.add(
+				"name",
+				String.class);
+		typeBuilder.add(
+				"count",
+				Long.class);
+
+		// build the type
+		SimpleFeatureBuilder builder = new SimpleFeatureBuilder(
+				typeBuilder.buildFeatureType());
+
+		FeatureDataAdapter dataAdapter = new FeatureDataAdapter(
+				builder.getFeatureType(),
+				new GlobalVisibilityHandler<SimpleFeature, Object>(
+						"default"));
+
+		byte[] binary = dataAdapter.toBinary();
+
+		FeatureDataAdapter dataAdapterCopy = new FeatureDataAdapter();
+		dataAdapterCopy.fromBinary(binary);
+
+		assertEquals(
+				dataAdapterCopy.getType().getCoordinateReferenceSystem().getCoordinateSystem(),
+				GeoWaveGTDataStore.DEFAULT_CRS.getCoordinateSystem());
 	}
 
 }

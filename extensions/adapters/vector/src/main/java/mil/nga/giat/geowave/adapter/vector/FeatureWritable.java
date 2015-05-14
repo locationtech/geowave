@@ -9,6 +9,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Date;
 
+import mil.nga.giat.geowave.adapter.vector.util.FeatureDataUtils;
+
 import org.apache.hadoop.io.Writable;
 import org.geotools.data.DataUtilities;
 import org.geotools.feature.SchemaException;
@@ -32,6 +34,10 @@ public class FeatureWritable implements
 		Writable,
 		java.io.Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 286616522680871139L;
 	private SimpleFeatureType featureType;
 	private SimpleFeature feature;
 
@@ -62,10 +68,11 @@ public class FeatureWritable implements
 	public void readFields(
 			final DataInput input )
 			throws IOException {
-		final String typeName = input.readUTF();
 		try {
-			featureType = DataUtilities.createType(
-					typeName,
+			featureType = FeatureDataUtils.decodeType(
+					input.readUTF(),
+					input.readUTF(),
+					input.readUTF(),
 					input.readUTF());
 		}
 		catch (final SchemaException e) {
@@ -93,8 +100,11 @@ public class FeatureWritable implements
 	public void write(
 			final DataOutput output )
 			throws IOException {
+		output.writeUTF(featureType.getName().getNamespaceURI());
 		output.writeUTF(featureType.getTypeName());
 		output.writeUTF(DataUtilities.encodeType(featureType));
+		output.writeUTF(FeatureDataUtils.getAxis(featureType.getCoordinateReferenceSystem()));
+
 		// write feature id
 		output.writeUTF(feature.getID());
 		// write the attributes
