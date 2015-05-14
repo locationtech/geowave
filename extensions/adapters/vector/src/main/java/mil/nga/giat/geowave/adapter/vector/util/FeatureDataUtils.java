@@ -9,6 +9,7 @@ import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.geotools.geometry.jts.JTS;
 import org.geotools.referencing.CRS;
+import org.geotools.referencing.factory.DirectAuthorityFactory;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.geometry.MismatchedDimensionException;
@@ -108,16 +109,17 @@ public class FeatureDataUtils
 		// Default for EPSG:4326 is lat/long, If the provided type was
 		// long/lat, then re-establish the order
 		if (crs != null && crs.getIdentifiers().toString().contains(
-				"EPSG:4326") && !lCaseAxis.equalsIgnoreCase(
-				typeAxis)) {
+				"EPSG:4326") && !lCaseAxis.equalsIgnoreCase(typeAxis)) {
 			SimpleFeatureTypeBuilder builder = new SimpleFeatureTypeBuilder();
 			builder.init(featureType);
 
 			try {
+				// truely no way to force lat first
+				// but it is the default in later versions of GeoTools.
 				featureType = SimpleFeatureTypeBuilder.retype(
 						featureType,
 						CRS.decode(
-								"urn:ogc:def:crs:EPSG:6.6:4326",
+								"EPSG:4326",
 								lCaseAxis.equals("east")));
 			}
 			catch (FactoryException e) {

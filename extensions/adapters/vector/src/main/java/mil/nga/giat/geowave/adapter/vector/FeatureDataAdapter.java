@@ -100,9 +100,10 @@ public class FeatureDataAdapter extends
 	private VisibilityManagement<SimpleFeature> fieldVisibilityManagement;
 	private TimeDescriptors timeDescriptors = null;
 
-	// should change this anytime the serialized image changes.  Stay negative. so 0xa0, 0xa1, 0xa2 etc.
+	// should change this anytime the serialized image changes. Stay negative.
+	// so 0xa0, 0xa1, 0xa2 etc.
 	final static byte VERSION = (byte) 0xa0;
-	
+
 	protected FeatureDataAdapter() {}
 
 	public FeatureDataAdapter(
@@ -301,8 +302,6 @@ public class FeatureDataAdapter extends
 				visibilityAttributeName);
 	}
 
-
-
 	@Override
 	protected byte[] defaultTypeDataToBinary() {
 		// serialize the feature type
@@ -352,26 +351,19 @@ public class FeatureDataAdapter extends
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
 		// for now...do a gentle migration
 		final byte versionId = buf.get();
-		final boolean supportsAxis = (versionId < 0);
 		if (versionId != VERSION) LOGGER.warn("Mismatched Feature Data Adapter version");
 		final byte[] typeNameBytes = new byte[buf.getInt()];
 		final byte[] namespaceBytes = new byte[buf.getInt()];
 		final byte[] fieldVisibilityAtributeNameBytes = new byte[buf.getInt()];
 		final byte[] visibilityManagementClassNameBytes = new byte[buf.getInt()];
 		final byte[] timeAndRangeBytes = new byte[buf.getInt()];
-		final byte[] axisBytes = supportsAxis ? new byte[buf.getInt()] : new byte[0];
+		final byte[] axisBytes = new byte[buf.getInt()];
 		buf.get(typeNameBytes);
 		buf.get(namespaceBytes);
 		buf.get(fieldVisibilityAtributeNameBytes);
 		buf.get(visibilityManagementClassNameBytes);
 		buf.get(timeAndRangeBytes);
-		int lengthOfInts = 25;
-		if (supportsAxis) {
-			buf.get(axisBytes);
-		}
-		else {
-			lengthOfInts = 20;
-		}
+		buf.get(axisBytes);
 
 		final String typeName = StringUtils.stringFromBinary(typeNameBytes);
 		String namespace = StringUtils.stringFromBinary(namespaceBytes);
@@ -390,7 +382,7 @@ public class FeatureDataAdapter extends
 					ex);
 		}
 
-		final byte[] encodedTypeBytes = new byte[bytes.length - axisBytes.length - typeNameBytes.length - namespaceBytes.length - fieldVisibilityAtributeNameBytes.length - visibilityManagementClassNameBytes.length - timeAndRangeBytes.length - lengthOfInts];
+		final byte[] encodedTypeBytes = new byte[bytes.length - axisBytes.length - typeNameBytes.length - namespaceBytes.length - fieldVisibilityAtributeNameBytes.length - visibilityManagementClassNameBytes.length - timeAndRangeBytes.length - 25];
 		buf.get(encodedTypeBytes);
 
 		final String encodedType = StringUtils.stringFromBinary(encodedTypeBytes);
