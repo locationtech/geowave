@@ -128,7 +128,7 @@ public class GeoWaveGTDataStore extends
 	private final ColumnVisibilityManagement<SimpleFeature> visibilityManagement = VisibilityManagementHelper.loadVisibilityManagement();
 
 	private final AuthorizationSPI authorizationSPI;
-	final private TransactionsAllocater transactionsAllocater;
+	private final TransactionsAllocater transactionsAllocater;
 	private URI featureNameSpaceURI;
 
 	/**
@@ -883,70 +883,5 @@ public class GeoWaveGTDataStore extends
 		return new NameImpl(
 				featureNameSpaceURI.toString(),
 				typeName);
-	}
-
-	private static void printHelp(
-			final Options options ) {
-		final HelpFormatter formatter = new HelpFormatter();
-		formatter.printHelp(
-				"GeoWaveGTDateStore",
-				"\nOptions:",
-				options,
-				"");
-	}
-
-	public static void main(
-			final String args[] )
-			throws ParseException,
-			GeoWavePluginException,
-			IOException,
-			AccumuloException,
-			AccumuloSecurityException {
-		final Options options = new Options();
-		final OptionGroup baseOptionGroup = new OptionGroup();
-		baseOptionGroup.setRequired(false);
-		baseOptionGroup.addOption(new Option(
-				"h",
-				"help",
-				false,
-				"Display help"));
-		options.addOptionGroup(baseOptionGroup);
-		options.addOption(new Option(
-				"m",
-				"maximum",
-				true,
-				"Maximum number of simulataneous transactions"));
-		options.addOption(new Option(
-				"r",
-				"recipient",
-				true,
-				"Recipient application user account for the set of transactions"));
-		GeoWavePluginConfig.applyOptions(options);
-
-		final BasicParser parser = new BasicParser();
-		final CommandLine commandLine = parser.parse(
-				options,
-				args);
-		if (commandLine.hasOption("h")) {
-			printHelp(options);
-			System.exit(0);
-		}
-		else {
-			try {
-				final GeoWavePluginConfig plugin = GeoWavePluginConfig.buildFromOptions(commandLine);
-				final int maximum = Integer.parseInt(commandLine.getOptionValue('m'));
-				final GeoWaveGTDataStore dataStore = new GeoWaveGTDataStore(
-						plugin);
-				((ZooKeeperTransactionsAllocater) dataStore.transactionsAllocater).preallocateTransactionIDs(
-						maximum,
-						commandLine.getOptionValue('r'));
-			}
-			catch (final Exception ex) {
-				LOGGER.error(
-						"Failed to pre-allocate transaction ID set",
-						ex);
-				System.exit(-1);
-			}
-		}
 	}
 }
