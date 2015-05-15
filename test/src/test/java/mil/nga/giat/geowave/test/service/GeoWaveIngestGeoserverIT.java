@@ -24,6 +24,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.log4j.Logger;
 import org.geotools.feature.SchemaException;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
+import org.geotools.resources.image.ImageUtilities;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -155,7 +156,7 @@ public class GeoWaveIngestGeoserverIT extends
 
 		Assert.assertNotNull(geoserverVersion);
 
-		if (geoserverVersion.startsWith("2.5")) {
+		if (geoserverVersion.startsWith("2.5") || geoserverVersion.equals("2.6.0") || geoserverVersion.equals("2.6.1")) {
 			ref = ImageIO.read(new File(
 					REFERENCE_25_WMS_IMAGE_PATH));
 		}
