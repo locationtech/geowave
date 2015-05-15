@@ -519,8 +519,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#jace-jni-proxies-2">Jace JNI Proxies</a>
 <ul class="sectlevel2">
-<li><a href="#prepackaged-rpm-setup">Prepackaged RPM Setup</a></li>
-<li><a href="#manual-setup">Manual Setup</a></li>
+<li><a href="#prepackaged-source-and-binaries">Prepackaged Source and Binaries</a></li>
+<li><a href="#generate-proxies-and-build-from-source">Generate Proxies and Build from Source</a></li>
 <li><a href="#mapnik-plugin-configuration">Mapnik Plugin Configuration</a></li>
 <li><a href="#pdal-plugin-configuration">PDAL Plugin Configuration</a></li>
 </ul>
@@ -3057,38 +3057,52 @@ location of the cygpath binary provided by cygwin then is should work. Eclipse a
 <div class="paragraph">
 <p>Using Jace, we are able to create JNI proxy classes for GeoWave which can be used in C/C++ applications.</p>
 </div>
-<div class="sect2">
-<h3 id="prepackaged-rpm-setup"><a class="anchor" href="#prepackaged-rpm-setup"></a>Prepackaged RPM Setup</h3>
 <div class="paragraph">
-<p>Coming Soon&#8230;&#8203;</p>
-</div>
-<div class="paragraph">
-<p>For a quick and easy setup, you can grab one of our prepackaged RPMs.</p>
-</div>
+<p>Boost is required when using the Jace bindings.</p>
 </div>
 <div class="sect2">
-<h3 id="manual-setup"><a class="anchor" href="#manual-setup"></a>Manual Setup</h3>
+<h3 id="prepackaged-source-and-binaries"><a class="anchor" href="#prepackaged-source-and-binaries"></a>Prepackaged Source and Binaries</h3>
 <div class="paragraph">
-<p>If you want to integrate with the latest version of GeoWave or perhaps a specific branch, you can build the Jace proxies yourself.</p>
+<p>There is a public <a href="http://ngageoint.github.io/geowave/packages.html">GeoWave RPM Repo</a> where you can download a tarball for the GeoWave Jace bindings for your desired platform.  If your platform is not available, there is a source tarball which can be used in conjunction with CMake to build the GeoWave Jace bindings for your desired platform.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="generate-proxies-and-build-from-source"><a class="anchor" href="#generate-proxies-and-build-from-source"></a>Generate Proxies and Build from Source</h3>
+<div class="paragraph">
+<p>If you want, you can generate and build the Jace proxies yourself.</p>
 </div>
 <div class="sect3">
-<h4 id="step-1-checkout-geowave"><a class="anchor" href="#step-1-checkout-geowave"></a>Step 1 - Checkout GeoWave</h4>
+<h4 id="step-1-checkout-jace-and-geowave"><a class="anchor" href="#step-1-checkout-jace-and-geowave"></a>Step 1 - Checkout Jace and GeoWave</h4>
 <div class="paragraph">
-<p>First, we need to clone GeoWave.</p>
+<p>First, we need to clone Jace and GeoWave.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">$ git clone git@github.com:ngageoint/geowave.git</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">$ git clone git@github.com:jwomeara/jace.git
+$ git clone git@github.com:ngageoint/geowave.git</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note: We are using a non-standard Jace implementation.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="step-2-install-jace"><a class="anchor" href="#step-2-install-jace"></a>Step 2 - Install Jace</h4>
+<div class="paragraph">
+<p>First, we need to install Jace v1.3.0.  This is the software which is used to generate the C++ proxy classes.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">$ cd jace
+$ git checkout tags/v1.3.0
+$ mvn clean install -Dsources</code></pre>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="step-2-build-geowave"><a class="anchor" href="#step-2-build-geowave"></a>Step 2 - Build GeoWave</h4>
+<h4 id="step-3-build-geowave"><a class="anchor" href="#step-3-build-geowave"></a>Step 3 - Build GeoWave</h4>
 <div class="paragraph">
-<p>In order to generate the Jace proxies, we need to build GeoWave using Maven.</p>
-</div>
-<div class="paragraph">
-<p>We will also specify two Maven profiles; one which specifies our target platform, and another to specify that we are building Jace proxies.</p>
+<p>Here, we will specify two Maven profiles; one which specifies that we are building jace proxies, and another to specify our target platform.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -3097,7 +3111,7 @@ $ mvn clean package -pl deploy -am -P generate-jace-proxies,linux-amd64-gcc-debu
 </div>
 </div>
 <div class="paragraph">
-<p>Note, to build static libraries use -DBUILD_SHARED_LIBS=OFF</p>
+<p>Note: To build static libraries use -DBUILD_SHARED_LIBS=OFF</p>
 </div>
 <div class="paragraph">
 <p>Refer to the table below to select the platform most applicable to your needs.</p>
@@ -3154,17 +3168,14 @@ $ mvn clean package -pl deploy -am -P generate-jace-proxies,linux-amd64-gcc-debu
 <p><a href="http://mapnik.org/">Mapnik</a> is an open source toolkit for developing mapping applications.
 GeoWave is supported as a plugin for Mapnik for reading vector data from Accumulo.</p>
 </div>
+<div class="paragraph">
+<p>Note: These instructions assume that you are using prepackaged binaries.</p>
+</div>
 </div>
 <div class="sect3">
 <h4 id="configure-scons-for-mapnik"><a class="anchor" href="#configure-scons-for-mapnik"></a>Configure Scons for Mapnik</h4>
 <div class="paragraph">
-<p>Using the manual process described above, you will have generated all of the required artifacts for running GeoWave as a Mapnik plugin.  The artifacts can be found in the target folder within geowave-deploy.</p>
-</div>
-<div class="paragraph">
-<p>Now that the GeoWave plugin artifacts have been generated, we need to use Scons to configure Mapnik to build with our plugin.</p>
-</div>
-<div class="paragraph">
-<p>To configure Mapnik to run with GeoWave, there are a few SCons options which need to be configured.  Refer to the table below to get an idea for how these options would be configured using GeoWave v0.8.5 on Ubuntu 14.04 LTS.</p>
+<p>To configure Mapnik to run with GeoWave, there are a few SCons options which need to be configured.  Refer to the table below to get an idea for how these options would be configured on Ubuntu 14.04 LTS.</p>
 </div>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
@@ -3180,19 +3191,19 @@ GeoWave is supported as a plugin for Mapnik for reading vector data from Accumul
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">GEOWAVE_RUNTIME_JAR</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">/path/to/geowave/deploy/target/geowave-deploy-0.8.7-jace.jar</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">/path/to/geowave/geowave-jace.jar</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">GEOWAVE_JACE_RUNTIME_JAR</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">/path/to/geowave/deploy/target/dependency/jace-core-runtime-1.2.22.jar</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">/path/to/geowave/jace-core-runtime.jar</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">GEOWAVE_INCLUDES</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">/path/to/geowave/deploy/target/dependency/jace/include</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">/path/to/geowave/include</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">GEOWAVE_LIBS</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">/path/to/geowave/deploy/target/dependency/jace</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">/path/to/geowave</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">JAVA_AWT_INCLUDE_PATH</p></td>
@@ -3216,6 +3227,9 @@ GeoWave is supported as a plugin for Mapnik for reading vector data from Accumul
 </tr>
 </tbody>
 </table>
+<div class="paragraph">
+<p>Note: As Boost is a Mapnik dependency, it should already be included.</p>
+</div>
 </div>
 <div class="sect3">
 <h4 id="build-mapnik"><a class="anchor" href="#build-mapnik"></a>Build Mapnik</h4>
@@ -3233,9 +3247,12 @@ GeoWave is supported as a plugin for Mapnik for reading vector data from Accumul
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">$ export GEOWAVE_RUNTIME_JAR=/path/to/geowave/deploy/target/geowave-deploy-0.8.7-jace.jar
-$ export GEOWAVE_INGEST_JAR=/path/to/geowave/extensions/formats/geotools-vector/target/geowave-format-vector-0.8.7-tools.jar</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">$ export GEOWAVE_RUNTIME_JAR=/path/to/geowave/geowave-jace.jar
+$ export GEOWAVE_INGEST_JAR=/path/to/geowave/geowave-ingest.jar</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>Note: The geowave-ingest jar included in the tarball only works for the geotools-vector format.</p>
 </div>
 </div>
 </div>
@@ -3248,17 +3265,14 @@ $ export GEOWAVE_INGEST_JAR=/path/to/geowave/extensions/formats/geotools-vector/
 and manipulating point cloud data of various formats.  GeoWave is supported as a plugin for PDAL for both reading
 and writing data to Accumulo.</p>
 </div>
+<div class="paragraph">
+<p>Note: These instructions assume that you are using prepackaged binaries.</p>
+</div>
 </div>
 <div class="sect3">
 <h4 id="configure-cmake-for-pdal"><a class="anchor" href="#configure-cmake-for-pdal"></a>Configure CMake for PDAL</h4>
 <div class="paragraph">
-<p>Using the manual process described above, you will have generated all of the required artifacts for running GeoWave as a PDAL plugin.  The artifacts can be found in the target folder within geowave-deploy.</p>
-</div>
-<div class="paragraph">
-<p>Now that the GeoWave plugin artifacts have been generated, we need to use CMake to configure PDAL to build with our plugin.</p>
-</div>
-<div class="paragraph">
-<p>To configure PDAL to run with GeoWave, there are a few CMake options which need to be configured.  While some of the options (namely the JAVA options) may configure automatically, some will need to be set manually.  Refer to the table below to get an idea for how these options would be configured using GeoWave v0.8.5 on Ubuntu 14.04 LTS.</p>
+<p>To configure PDAL to run with GeoWave, there are a few CMake options which need to be configured.  While some of the options (namely the JAVA options) may configure automatically, some will need to be set manually.  Refer to the table below to get an idea for how these options would be configured on Ubuntu 14.04 LTS.</p>
 </div>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
@@ -3281,22 +3295,22 @@ and writing data to Accumulo.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">GEOWAVE_RUNTIME_JAR</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">/path/to/geowave/deploy/target/geowave-deploy-0.8.7-jace.jar</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">/path/to/geowave/geowave-jace.jar</p></td>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">JACE_RUNTIME_JAR</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">/path/to/geowave/deploy/target/dependency/jace-core-runtime-1.2.22.jar</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">/path/to/geowave/jace-core-runtime.jar</p></td>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">JACE_INCLUDE_DIR</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">/path/to/geowave/deploy/target/dependency/jace/include</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">/path/to/geowave/include</p></td>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">JACE_LIBRARY</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">/path/to/geowave/deploy/target/dependency/jace/libjace.so</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">/path/to/geowave/libjace.so</p></td>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
@@ -3326,6 +3340,9 @@ and writing data to Accumulo.</p>
 </tr>
 </tbody>
 </table>
+<div class="paragraph">
+<p>Note: As Boost is a PDAL dependency, it should already be included.</p>
+</div>
 </div>
 <div class="sect3">
 <h4 id="build-pdal"><a class="anchor" href="#build-pdal"></a>Build PDAL</h4>
@@ -3588,7 +3605,7 @@ yum install geowave-cdh5-puppet</code></pre>
 <div class="sect2">
 <h3 id="version"><a class="anchor" href="#version"></a>Version</h3>
 <div class="paragraph">
-<p>This documentation was generated for GeoWave version 0.8.7-SNAPSHOT from commit 3785f058c65ac4a11035dc9673564212b53341df.</p>
+<p>This documentation was generated for GeoWave version 0.8.7-SNAPSHOT from commit b6089af0b6903c2378c0f2bf2cbf29a5ae553b3b.</p>
 </div>
 <div style="page-break-after: always;"></div>
 </div>
@@ -3640,7 +3657,7 @@ yum install geowave-cdh5-puppet</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-05-14 18:38:17 UTC
+Last updated 2015-05-15 20:09:15 UTC
 </div>
 </div>
 </body>
