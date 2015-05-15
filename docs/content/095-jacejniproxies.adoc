@@ -2,33 +2,44 @@
 <<<
 == Jace JNI Proxies
 
-Using Jace, we are able to create JNI proxy classes for GeoWave which can be used in C/C++ applications.
+Using Jace, we are able to create JNI proxy classes for GeoWave which can be used in C/C++ applications.  
 
-=== Prepackaged RPM Setup
+Boost is required when using the Jace bindings.  
 
-Coming Soon...
+=== Prepackaged Source and Binaries
 
-For a quick and easy setup, you can grab one of our prepackaged RPMs.
+There is a public http://ngageoint.github.io/geowave/packages.html[GeoWave RPM Repo] where you can download a tarball for the GeoWave Jace bindings for your desired platform.  If your platform is not available, there is a source tarball which can be used in conjunction with CMake to build the GeoWave Jace bindings for your desired platform.  
 
+=== Generate Proxies and Build from Source
 
-=== Manual Setup
+If you want, you can generate and build the Jace proxies yourself.  
 
-If you want to integrate with the latest version of GeoWave or perhaps a specific branch, you can build the Jace proxies yourself.
+==== Step 1 - Checkout Jace and GeoWave
 
-==== Step 1 - Checkout GeoWave
-
-First, we need to clone GeoWave.
+First, we need to clone Jace and GeoWave.
 
 [source, bash]
 ----
+$ git clone git@github.com:jwomeara/jace.git
 $ git clone git@github.com:ngageoint/geowave.git
 ----
 
-==== Step 2 - Build GeoWave
+Note: We are using a non-standard Jace implementation.
 
-In order to generate the Jace proxies, we need to build GeoWave using Maven.
+==== Step 2 - Install Jace
 
-We will also specify two Maven profiles; one which specifies our target platform, and another to specify that we are building Jace proxies.
+First, we need to install Jace v1.3.0.  This is the software which is used to generate the C++ proxy classes.
+
+[source, bash]
+----
+$ cd jace
+$ git checkout tags/v1.3.0
+$ mvn clean install -Dsources
+----
+
+==== Step 3 - Build GeoWave
+
+Here, we will specify two Maven profiles; one which specifies that we are building jace proxies, and another to specify our target platform.
 
 [source, bash]
 ----
@@ -36,7 +47,7 @@ $ cd geowave
 $ mvn clean package -pl deploy -am -P generate-jace-proxies,linux-amd64-gcc-debug -DBUILD_SHARED_LIBS=ON -DskipTests
 ----
 
-Note, to build static libraries use -DBUILD_SHARED_LIBS=OFF
+Note: To build static libraries use -DBUILD_SHARED_LIBS=OFF
 
 Refer to the table below to select the platform most applicable to your needs.
 
@@ -75,13 +86,11 @@ Refer to the table below to select the platform most applicable to your needs.
 http://mapnik.org/[Mapnik] is an open source toolkit for developing mapping applications.
 GeoWave is supported as a plugin for Mapnik for reading vector data from Accumulo.
 
+Note: These instructions assume that you are using prepackaged binaries.  
+
 ==== Configure Scons for Mapnik
 
-Using the manual process described above, you will have generated all of the required artifacts for running GeoWave as a Mapnik plugin.  The artifacts can be found in the target folder within geowave-deploy.
-
-Now that the GeoWave plugin artifacts have been generated, we need to use Scons to configure Mapnik to build with our plugin.
-
-To configure Mapnik to run with GeoWave, there are a few SCons options which need to be configured.  Refer to the table below to get an idea for how these options would be configured using GeoWave v0.8.5 on Ubuntu 14.04 LTS.
+To configure Mapnik to run with GeoWave, there are a few SCons options which need to be configured.  Refer to the table below to get an idea for how these options would be configured on Ubuntu 14.04 LTS.
 
 [cols="2*", options="header"]
 |===
@@ -89,16 +98,16 @@ To configure Mapnik to run with GeoWave, there are a few SCons options which nee
 |Value
 
 |GEOWAVE_RUNTIME_JAR
-|/path/to/geowave/deploy/target/geowave-deploy-0.8.7-jace.jar
+|/path/to/geowave/geowave-jace.jar
 
 |GEOWAVE_JACE_RUNTIME_JAR
-|/path/to/geowave/deploy/target/dependency/jace-core-runtime-1.2.22.jar
+|/path/to/geowave/jace-core-runtime.jar
 
 |GEOWAVE_INCLUDES
-|/path/to/geowave/deploy/target/dependency/jace/include
+|/path/to/geowave/include
 
 |GEOWAVE_LIBS
-|/path/to/geowave/deploy/target/dependency/jace
+|/path/to/geowave
 
 |JAVA_AWT_INCLUDE_PATH
 |/usr/lib/jvm/java-7-oracle/include
@@ -116,6 +125,8 @@ To configure Mapnik to run with GeoWave, there are a few SCons options which nee
 |/usr/lib/jvm/java-7-oracle/jre/lib/amd64/server
 |===
 
+Note: As Boost is a Mapnik dependency, it should already be included.
+
 ==== Build Mapnik
 
 Once SCons is configured, you can proceed with your normal Mapnik build process.
@@ -128,9 +139,11 @@ In order to run the GeoWave integration test located in python-mapnik, you need 
 
 [source, bash]
 ----
-$ export GEOWAVE_RUNTIME_JAR=/path/to/geowave/deploy/target/geowave-deploy-0.8.7-jace.jar
-$ export GEOWAVE_INGEST_JAR=/path/to/geowave/extensions/formats/geotools-vector/target/geowave-format-vector-0.8.7-tools.jar
+$ export GEOWAVE_RUNTIME_JAR=/path/to/geowave/geowave-jace.jar
+$ export GEOWAVE_INGEST_JAR=/path/to/geowave/geowave-ingest.jar
 ----
+
+Note: The geowave-ingest jar included in the tarball only works for the geotools-vector format.
 
 === PDAL Plugin Configuration
 
@@ -140,13 +153,11 @@ The Point Data Abstraction Library http://www.pdal.io/index.html[PDAL] is a BSD 
 and manipulating point cloud data of various formats.  GeoWave is supported as a plugin for PDAL for both reading
 and writing data to Accumulo.  
 
+Note: These instructions assume that you are using prepackaged binaries.  
+
 ==== Configure CMake for PDAL
 
-Using the manual process described above, you will have generated all of the required artifacts for running GeoWave as a PDAL plugin.  The artifacts can be found in the target folder within geowave-deploy.
-
-Now that the GeoWave plugin artifacts have been generated, we need to use CMake to configure PDAL to build with our plugin.
-
-To configure PDAL to run with GeoWave, there are a few CMake options which need to be configured.  While some of the options (namely the JAVA options) may configure automatically, some will need to be set manually.  Refer to the table below to get an idea for how these options would be configured using GeoWave v0.8.5 on Ubuntu 14.04 LTS.
+To configure PDAL to run with GeoWave, there are a few CMake options which need to be configured.  While some of the options (namely the JAVA options) may configure automatically, some will need to be set manually.  Refer to the table below to get an idea for how these options would be configured on Ubuntu 14.04 LTS.
 
 [cols="3*", options="header"]
 |===
@@ -159,19 +170,19 @@ To configure PDAL to run with GeoWave, there are a few CMake options which need 
 |
 
 |GEOWAVE_RUNTIME_JAR
-|/path/to/geowave/deploy/target/geowave-deploy-0.8.7-jace.jar
+|/path/to/geowave/geowave-jace.jar
 |
 
 |JACE_RUNTIME_JAR
-|/path/to/geowave/deploy/target/dependency/jace-core-runtime-1.2.22.jar
+|/path/to/geowave/jace-core-runtime.jar
 |
 
 |JACE_INCLUDE_DIR
-|/path/to/geowave/deploy/target/dependency/jace/include
+|/path/to/geowave/include
 |
 
 |JACE_LIBRARY
-|/path/to/geowave/deploy/target/dependency/jace/libjace.so
+|/path/to/geowave/libjace.so
 |
 
 |JAVA_AWT_INCLUDE_PATH
@@ -194,6 +205,8 @@ To configure PDAL to run with GeoWave, there are a few CMake options which need 
 |/usr/lib/jvm/java-7-oracle/jre/lib/amd64/server/libjvm.so
 |X
 |===
+
+Note: As Boost is a PDAL dependency, it should already be included.
 
 ==== Build PDAL
 
