@@ -32,7 +32,7 @@ echo '###### Build rpm'
 
 ./rpm.sh \
     --command build \
-    --rpmname ${ARGS[rpmname]} \
+    --vendor-version ${ARGS[vendor-version]} \
     --buildarg ba # ba = build all (binary and source rpms)
 
 echo '###### Build tarball distribution archive'
@@ -58,7 +58,7 @@ tar xzf site.tar.gz --strip-components=1  site/documentation.pdf
 cd ..
 githash=$(cat geowave/build.properties | grep project.scm.revision | sed -e 's/project.scm.revision=//g')
 version=$(cat geowave/build.properties | grep project.version | sed -e 's/project.version=//g')
-tar cvzf geowave-$version-${githash:0:7}.tar.gz geowave
+tar cvzf geowave-${ARGS[vendor-version]}-$version-${githash:0:7}.tar.gz geowave
 
 # Push our compiled docs to S3 if aws command has been installed
 if command -v aws >/dev/null 2>&1 ; then

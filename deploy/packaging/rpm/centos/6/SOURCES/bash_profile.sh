@@ -11,6 +11,6 @@ if [ "x" == "x$GEOSERVER_DATA_DIR" ]; then
 fi
 
 # Sourcing of this file does not always work with default profile settings so we'll ensure with this
-if [ -f /etc/bash_completion.d/geowave-ingest-cmd-completion.sh ] && ! shopt -oq posix; then
-    . /etc/bash_completion.d/geowave-ingest-cmd-completion.sh
+if [ -f /etc/bash_completion.d/geowave-tools-cmd-completion.sh ] && ! shopt -oq posix; then
+    . /etc/bash_completion.d/geowave-tools-cmd-completion.sh
 fi
