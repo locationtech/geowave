@@ -1,20 +1,27 @@
-%define timestamp   %(date +%Y%m%d%H%M)
-%define name        %{?_name}%{!?_name: geowave}
-%define version     %{?_version}%{!?_version: UNKNOWN}
-%define buildroot   %{_topdir}/BUILDROOT/%{name}-%{version}-root
-%define __jar_repack %{nil}
+%define timestamp           %(date +%Y%m%d%H%M)
+%define version             %{?_version}%{!?_version: UNKNOWN}
+%define vendor_version      %{?_vendor_version}%{!?_vendor_version: UNKNOWN}
+%define base_name           geowave
+%define name                %{base_name}-%{vendor_version}
+%define versioned_app_name  %{base_name}-%{version}-%{vendor_version}
+%define buildroot           %{_topdir}/BUILDROOT/%{versioned_app_name}-root
+%define installpriority     %{_priority} # Used by alternatives for concurrents version installs
+%define __jar_repack        %{nil}
+%define _rpmfilename        %%{ARCH}/%%{NAME}.%%{RELEASE}.%%{ARCH}.rpm
 
-%define geowave_home /usr/local/geowave
-%define geowave_accumulo_home %{geowave_home}/accumulo
-%define geowave_docs_home %{geowave_home}/docs
-%define geowave_geoserver_home %{geowave_home}/geoserver
-%define geowave_tools_home %{geowave_home}/tools
+%define geowave_home           /usr/local/geowave
+%define geowave_install        /usr/local/%{versioned_app_name}
+%define geowave_accumulo_home  %{geowave_install}/accumulo
+%define geowave_docs_home      %{geowave_install}/docs
+%define geowave_geoserver_home %{geowave_install}/geoserver
+%define geowave_tools_home     %{geowave_install}/tools
+%define geowave_plugins_home   %{geowave_tools_home}/plugins
 %define geowave_geoserver_libs %{geowave_geoserver_home}/webapps/geoserver/WEB-INF/lib
 %define geowave_geoserver_data %{geowave_geoserver_home}/data_dir
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Name:           %{name}
+Name:           %{base_name}
 Version:        %{version}
 Release:        %{timestamp}
 BuildRoot:      %{buildroot}
@@ -36,6 +43,7 @@ Source10:       geowave-tools.jar
 Source11:       site.tar.gz
 Source12:       puppet-scripts.tar.gz
 Source13:       manpages.tar.gz
+Source14:       plugins.tar.gz
 BuildRequires:  unzip
 BuildRequires:  zip
 BuildRequires:  xmlto
@@ -45,12 +53,12 @@ BuildRequires:  asciidoc
 GeoWave provides geospatial and temporal indexing on top of Accumulo.
 
 %prep
-rm -rf %{_rpmdir}/%{buildarch}/%{name}*
-rm -rf %{_srcrpmdir}/%{name}*
+rm -rf %{_rpmdir}/%{buildarch}/%{versioned_app_name}*
+rm -rf %{_srcrpmdir}/%{versioned_app_name}*
 
 %build
 rm -fr %{_builddir}
-mkdir -p %{_builddir}/%{name}
+mkdir -p %{_builddir}/%{versioned_app_name}
 
 %clean
 rm -fr %{buildroot}
@@ -67,7 +75,7 @@ cp %{SOURCE0} %{SOURCE1} %{buildroot}%{geowave_accumulo_home}
 unzip -p %{SOURCE0} build.properties > %{buildroot}%{geowave_accumulo_home}/geowave-accumulo-build.properties
 
 # Unpack and rename prepackaged jetty/geoserver
-unzip -qq  %{SOURCE2} -d %{buildroot}%{geowave_home}
+unzip -qq  %{SOURCE2} -d %{buildroot}%{geowave_install}
 mv %{buildroot}%{geowave_geoserver_home}-* %{buildroot}%{geowave_geoserver_home}
 
 # patch some config settings
@@ -98,17 +106,18 @@ cp %{SOURCE8} %{buildroot}%{geowave_geoserver_data}/workspaces/geowave
 cp %{SOURCE9} %{buildroot}%{geowave_geoserver_data}/workspaces/geowave
 
 # Stage geowave tools
-mkdir -p %{buildroot}%{geowave_tools_home}/plugins
+mkdir -p %{buildroot}%{geowave_plugins_home}
 cp %{SOURCE10} %{buildroot}%{geowave_tools_home}
 cp %{buildroot}%{geowave_accumulo_home}/geowave-accumulo-build.properties %{buildroot}%{geowave_tools_home}/build.properties
 pushd %{buildroot}%{geowave_tools_home}
-zip -g %{buildroot}%{geowave_tools_home}/geowave-tools.jar build.properties
+zip -qg %{buildroot}%{geowave_tools_home}/geowave-tools.jar build.properties
 popd
 mv %{buildroot}%{geowave_tools_home}/build.properties %{buildroot}%{geowave_tools_home}/geowave-tools-build.properties
 unzip -p %{SOURCE10} geowave-tools.sh > %{buildroot}%{geowave_tools_home}/geowave-tools.sh
-# TODO: Add bash completion back for new geowave tool
-#mkdir -p %{buildroot}/etc/bash_completion.d
-#unzip -p %{SOURCE10} geowave-tools-cmd-completion.sh > %{buildroot}/etc/bash_completion.d/geowave-tools-cmd-completion.sh
+tar xzf %{SOURCE14} -C %{buildroot}%{geowave_plugins_home}
+
+mkdir -p %{buildroot}/etc/bash_completion.d
+unzip -p %{SOURCE10} geowave-tools-cmd-completion.sh > %{buildroot}/etc/bash_completion.d/geowave-tools-cmd-completion.sh
 
 # Copy documentation into place
 mkdir -p %{buildroot}%{geowave_docs_home}
@@ -126,37 +135,47 @@ tar -xzf %{SOURCE12} -C %{buildroot}/etc/puppet/modules
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-%package        single-host
+%package -n     %{versioned_app_name}-single-host
 Summary:        All GeoWave Components
 Group:          Applications/Internet
-Requires:       %{name}-accumulo
-Requires:       %{name}-jetty
-Requires:       %{name}-tools
+Requires:       %{versioned_app_name}-accumulo = %{version}
+Requires:       %{versioned_app_name}-jetty = %{version}
+Requires:       %{versioned_app_name}-tools = %{version}
 
-%description single-host
+%description -n %{versioned_app_name}-single-host
 GeoWave provides geospatial and temporal indexing on top of Accumulo.
 This package installs the accumulo, geoserver and tools components and
 would likely be useful for dev environments
 
-%files single-host
+%files -n %{versioned_app_name}-single-host
 # This is a meta-package and only exists to install other packages
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-%package        accumulo
+%package -n     %{versioned_app_name}-accumulo
 Summary:        GeoWave Accumulo Components
 Group:          Applications/Internet
-Provides:       %{name}-accumulo = %{version}
-Requires:       %{name}-core
+Provides:       %{versioned_app_name}-accumulo = %{version}
+Requires:       core
 
-%description accumulo
+%description -n %{versioned_app_name}-accumulo
 GeoWave provides geospatial and temporal indexing on top of Accumulo.
 This package installs the Accumulo components of GeoWave
 
-%post accumulo
+%post -n %{versioned_app_name}-accumulo
 /bin/bash %{geowave_accumulo_home}/deploy-geowave-to-hdfs.sh >> %{geowave_accumulo_home}/geowave-to-hdfs.log 2>&1
+# Alternatives link is being managed in the acccumulo rpm as core can now be shared amoung multiple vendor/version installs
+alternatives --install %{geowave_home} geowave-home %{geowave_install} %{installpriority}
 
-%files accumulo
+%postun -n %{versioned_app_name}-accumulo
+if [ $1 -eq 0 ]; then
+  alternatives --remove geowave-home %{geowave_install}
+fi
+
+%files -n %{versioned_app_name}-accumulo
+%defattr(644, geowave, geowave, 755)
+%dir %{geowave_install}
+
 %attr(755, hdfs, hdfs) %{geowave_accumulo_home}
 %attr(644, hdfs, hdfs) %{geowave_accumulo_home}/geowave-accumulo.jar
 %attr(755, hdfs, hdfs) %{geowave_accumulo_home}/deploy-geowave-to-hdfs.sh
@@ -166,7 +185,7 @@ This package installs the Accumulo components of GeoWave
 %package        core
 Summary:        GeoWave Core
 Group:          Applications/Internet
-Provides:       %{name}-core = %{version}
+Provides:       core = %{version}
 
 %description core
 GeoWave provides geospatial and temporal indexing on top of Accumulo.
@@ -182,9 +201,6 @@ if [ $1 -eq 0 ]; then
 fi
 
 %files core
-%defattr(644, geowave, geowave, 755)
-%dir %{geowave_home}
-
 %attr(644, root, root) /etc/profile.d/geowave.sh
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -192,8 +208,9 @@ fi
 %package        docs
 Summary:        GeoWave Documentation
 Group:          Applications/Internet
-Provides:       %{name}-docs = %{version}
-Requires:       %{name}-core
+Provides:       %{versioned_app_name}-docs = %{version}
+Requires:       %{versioned_app_name}-accumulo = %{version}
+Requires:       core
 
 %description docs
 GeoWave provides geospatial and temporal indexing on top of Accumulo.
@@ -212,26 +229,27 @@ This package installs the GeoWave documentation into the GeoWave directory
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-%package        jetty
+%package -n     %{versioned_app_name}-jetty
 Summary:        GeoWave GeoServer Components
 Group:          Applications/Internet
-Provides:       %{name}-jetty = %{version}
-Requires:       %{name}-core
+Provides:       %{versioned_app_name}-jetty = %{version}
+Requires:       %{versioned_app_name}-accumulo = %{version}
+Requires:       core
 
-%description jetty
+%description -n %{versioned_app_name}-jetty
 GeoWave provides geospatial and temporal indexing on top of Accumulo.
 This package installs the Accumulo components of GeoWave
 
-%post jetty
+%post -n %{versioned_app_name}-jetty
 /sbin/chkconfig --add geowave
 chown -R geowave:geowave /usr/local/geowave
 exit 0
 
-%preun jetty
+%preun -n %{versioned_app_name}-jetty
 /sbin/service geowave stop >/dev/null 2>&1
 exit 0
 
-%files jetty
+%files -n %{versioned_app_name}-jetty
 %defattr(644, geowave, geowave, 755) 
 %{geowave_geoserver_home}
 
@@ -248,37 +266,40 @@ exit 0
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-%package        tools
+%package -n     %{versioned_app_name}-tools
 Summary:        GeoWave Tools
 Group:          Applications/Internet
-Provides:       %{name}-tools = %{version}
-Requires:       %{name}-core
+Provides:       %{versioned_app_name}-tools = %{version}
+Requires:       %{versioned_app_name}-accumulo = %{version}
+Requires:       core
 
-%description tools
+%description -n %{versioned_app_name}-tools
 GeoWave provides geospatial and temporal indexing on top of Accumulo.
 This package installs GeoWave tools utility
 
-%post tools
+%post -n %{versioned_app_name}-tools
 ln -fs /usr/local/geowave/tools/geowave-tools.sh /usr/local/bin/geowave
+ln -fs /usr/local/geowave/tools/geowave-tools.sh /usr/local/sbin/geowave
 
-%postun tools
+%postun -n %{versioned_app_name}-tools
 if [ $1 -eq 0 ]; then
   rm -f /usr/local/bin/geowave
+  rm -f /usr/local/sbin/geowave
 fi
 
-%files tools
+%files -n %{versioned_app_name}-tools
 %defattr(644, geowave, geowave, 755)
 %{geowave_tools_home}
 
 %attr(755, geowave, geowave) %{geowave_tools_home}/geowave-tools.sh
-# %attr(644, root, root) /etc/bash_completion.d/geowave-tools-cmd-completion.sh
+%attr(644, root, root) /etc/bash_completion.d/geowave-tools-cmd-completion.sh
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 %package        puppet
 Summary:        GeoWave Puppet Scripts
 Group:          Applications/Internet
-Requires:       puppet-server
+Requires:       puppet
 
 %description puppet
 This package installs the geowave Puppet module to /etc/puppet/modules
@@ -291,7 +312,7 @@ This package installs the geowave Puppet module to /etc/puppet/modules
 
 %changelog
 * Thu May 7 2015 Andrew Spohn <andrew.e.spohn.ctr@nga.mil> - 0.8.7
-- Use alternatives to support parallel version installs
+- Use alternatives to support parallel version and vendor installs
 - Replace geowave-ingest with geowave-tools
 * Thu Jan 15 2015 Andrew Spohn <andrew.e.spohn.ctr@nga.mil> - 0.8.2-3
 - Added man pages

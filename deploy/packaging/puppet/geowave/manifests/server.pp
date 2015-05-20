@@ -2,14 +2,14 @@ class geowave::server {
 
   $http_port = $geowave::http_port
 
-  package { "geowave-${geowave::hadoop_vendor_version}-jetty":
+  package { "geowave-${geowave::geowave_version}-${geowave::hadoop_vendor_version}-jetty":
     ensure => latest,
     tag    => 'geowave-package',
     notify => Service['geowave']
   }
 
-  if !defined(Package["geowave-${geowave::hadoop_vendor_version}-core"]) {
-    package { "geowave-${geowave::hadoop_vendor_version}-core":
+  if !defined(Package["geowave-core"]) {
+    package { "geowave-core":
       ensure => latest,
       tag    => 'geowave-package',
     }
@@ -21,7 +21,7 @@ class geowave::server {
     owner   => 'geowave',
     group   => 'geowave',
     mode    => '644',
-    require => Package["geowave-${geowave::hadoop_vendor_version}-jetty"],
+    require => Package["geowave-${geowave::geowave_version}-${geowave::hadoop_vendor_version}-jetty"],
     notify  => Service['geowave']
   }
 

@@ -65,6 +65,27 @@ parseVersion() {
     echo $(unzip -p SOURCES/geowave-accumulo.jar build.properties | grep "project.version=" | sed -e 's/"//g' -e 's/-SNAPSHOT//g' -e 's/project.version=//g')
 }
 
+# Given a version string, remove all dots and patch version dash labels, then take the first three sets of digits
+# and interpret as an integer to determine the install priority number used by alternatives in an automated way
+parsePriorityFromVersion() {
+    # Drop trailing bug fix or pre-release labels (0.8.8-alpha2 or 0.8.8-1)
+    VERSION=${1%-*}
+
+    # Truncate the version string after the first three groups delimited by dots
+    VERSION=$(echo $VERSION | cut -d '.' -f1-3)
+
+    # Remove non digits (dots)
+    VERSION=$(echo ${VERSION//[^0-9]/})
+
+    # If empty or not a number is the result return a low priority
+    if [ -z "$VERSION" ] || [ "$VERSION" -ne "$VERSION" ] ; then
+        echo 1
+    else
+        # Interpret as a base 10 number (drop leading zeros)
+        echo $(( 10#$VERSION ))
+    fi
+}
+
 # Default build function, should be overridden by local script if more complex
 build() {
 	# Create the rpms

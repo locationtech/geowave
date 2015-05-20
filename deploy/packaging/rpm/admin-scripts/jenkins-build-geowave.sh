@@ -6,6 +6,13 @@
 
 cd $WORKSPACE/deploy
 
+# Create an archive of all the ingest format plugins
+mkdir -p target/plugins >/dev/null 2>&1
+pushd target/plugins
+find $WORKSPACE/extensions/formats -name "*.jar" -exec cp {} . \;
+tar cvzf ../plugins.tar.gz *.jar
+popd
+
 # Build each of the "fat jar" artifacts and rename to remove any version strings in the file name
 
 mvn package -P geotools-container-singlejar $BUILD_ARGS "$@"
