@@ -1,19 +1,33 @@
 package mil.nga.giat.geowave.adapter.vector.util;
 
-import mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveGTDataStore;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
+import mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveGTDataStore;
+import mil.nga.giat.geowave.core.index.ByteArrayId;
+
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.log4j.Logger;
+import org.geotools.data.DataUtilities;
+import org.geotools.feature.SchemaException;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
+import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.geotools.geometry.jts.JTS;
 import org.geotools.referencing.CRS;
+import org.geotools.referencing.factory.DirectAuthorityFactory;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
+import org.opengis.feature.type.AttributeDescriptor;
 import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.referencing.FactoryException;
+import org.opengis.referencing.NoSuchAuthorityCodeException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.cs.CoordinateSystem;
 import org.opengis.referencing.operation.MathTransform;
 import org.opengis.referencing.operation.TransformException;
 
+import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 
 public class FeatureDataUtils
@@ -76,4 +90,81 @@ public class FeatureDataUtils
 		}
 		return defaultCRSEntry;
 	}
+
+	public static String getAxis(
+			final CoordinateReferenceSystem crs ) {
+		// Some geometries do not have a CRS provided. Thus we default to
+		// urn:ogc:def:crs:EPSG::4326
+		final CoordinateSystem cs = crs == null ? null : crs.getCoordinateSystem();
+		if (cs != null && cs.getDimension() > 0) return cs.getAxis(
+				0).getDirection().name().toString();
+		return "EAST";
+	}
+
+	public static SimpleFeatureType decodeType(
+			final String nameSpace,
+			final String typeName,
+			final String typeDescriptor,
+			final String axis )
+			throws SchemaException {
+
+		SimpleFeatureType featureType = nameSpace != null && nameSpace.length() > 0 ? DataUtilities.createType(
+				nameSpace,
+				typeName,
+				typeDescriptor) : DataUtilities.createType(
+				typeName,
+				typeDescriptor);
+
+		final String lCaseAxis = axis.toLowerCase();
+		final CoordinateReferenceSystem crs = featureType.getCoordinateReferenceSystem();
+		final String typeAxis = getAxis(crs);
+		// Default for EPSG:4326 is lat/long, If the provided type was
+		// long/lat, then re-establish the order
+		if (crs != null && crs.getIdentifiers().toString().contains(
+				"EPSG:4326") && !lCaseAxis.equalsIgnoreCase(typeAxis)) {
+			SimpleFeatureTypeBuilder builder = new SimpleFeatureTypeBuilder();
+			builder.init(featureType);
+
+			try {
+				// truely no way to force lat first
+				// but it is the default in later versions of GeoTools.
+				// this all depends on the authority at the time of creation
+				featureType = SimpleFeatureTypeBuilder.retype(
+						featureType,
+						CRS.decode(
+								"EPSG:4326",
+								lCaseAxis.equals("east")));
+			}
+			catch (FactoryException e) {
+				throw new SchemaException(
+						"Cannot decode EPSG:4326",
+						e);
+			}
+		}
+		return featureType;
+
+	}
+
+	public static SimpleFeature buildFeature(
+			SimpleFeatureType featureType,
+			Pair<String, Object>[] entries ) {
+
+		List<AttributeDescriptor> descriptors = featureType.getAttributeDescriptors();
+		Object[] defaults = new Object[descriptors.size()];
+		int p = 0;
+		for (AttributeDescriptor descriptor : descriptors) {
+			defaults[p++] = descriptor.getDefaultValue();
+		}
+		final SimpleFeature newFeature = SimpleFeatureBuilder.build(
+				featureType,
+				defaults,
+				UUID.randomUUID().toString());
+		for (Pair<String, Object> entry : entries) {
+			newFeature.setAttribute(
+					entry.getKey(),
+					entry.getValue());
+		}
+		return newFeature;
+	}
+
 }
