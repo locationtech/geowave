@@ -2,6 +2,7 @@ package mil.nga.giat.geowave.core.ingest.kafka;
 
 import kafka.serializer.Encoder;
 import kafka.utils.VerifiableProperties;
+import mil.nga.giat.geowave.core.ingest.avro.GenericAvroSerializer;
 
 import org.apache.avro.specific.SpecificRecordBase;
 

@@ -1,7 +1,8 @@
 package mil.nga.giat.geowave.core.ingest.hdfs.mapreduce;
 
-import mil.nga.giat.geowave.core.ingest.avro.AvroPluginBase;
 import mil.nga.giat.geowave.core.store.index.Index;
+
+import org.apache.avro.Schema;
 
 /**
  * This is the main plugin interface for ingesting intermediate data into
@@ -18,8 +19,7 @@ import mil.nga.giat.geowave.core.store.index.Index;
  * @param <O>
  *            the type that represents each data entry being ingested
  */
-public interface IngestFromHdfsPlugin<I, O> extends
-		AvroPluginBase
+public interface IngestFromHdfsPlugin<I, O>
 {
 	/**
 	 * Returns a flag indicating to the ingestion framework whether it should
@@ -80,5 +80,7 @@ public interface IngestFromHdfsPlugin<I, O> extends
 	 *         implementation
 	 */
 	public Index[] getRequiredIndices();
+
+	public Schema getAvroSchemaForHdfsType();
 
 }

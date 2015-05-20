@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import mil.nga.giat.geowave.core.ingest.IngestFormatPluginProviderSpi;
-import mil.nga.giat.geowave.core.ingest.avro.StageToAvroPlugin;
+import mil.nga.giat.geowave.core.ingest.avro.AvroFormatPlugin;
 import mil.nga.giat.geowave.core.ingest.local.AbstractLocalFileDriver;
 
 import org.apache.avro.file.DataFileWriter;
@@ -24,7 +24,7 @@ import org.apache.log4j.Logger;
  * available type plugin providers that are discovered through SPI.
  */
 public class StageToHdfsDriver extends
-		AbstractLocalFileDriver<StageToAvroPlugin<?>, StageRunData>
+		AbstractLocalFileDriver<AvroFormatPlugin<?, ?>, StageRunData>
 {
 	private final static Logger LOGGER = Logger.getLogger(StageToHdfsDriver.class);
 	private HdfsCommandLineOptions hdfsOptions;
@@ -54,7 +54,7 @@ public class StageToHdfsDriver extends
 	protected void processFile(
 			final File file,
 			final String typeName,
-			final StageToAvroPlugin<?> plugin,
+			final AvroFormatPlugin<?, ?> plugin,
 			final StageRunData runData ) {
 		final DataFileWriter writer = runData.getWriter(
 				typeName,
@@ -80,11 +80,11 @@ public class StageToHdfsDriver extends
 			final List<IngestFormatPluginProviderSpi<?, ?>> pluginProviders ) {
 
 		// first collect the stage to hdfs plugins
-		final Map<String, StageToAvroPlugin<?>> stageToHdfsPlugins = new HashMap<String, StageToAvroPlugin<?>>();
+		final Map<String, AvroFormatPlugin<?, ?>> stageToHdfsPlugins = new HashMap<String, AvroFormatPlugin<?, ?>>();
 		for (final IngestFormatPluginProviderSpi<?, ?> pluginProvider : pluginProviders) {
-			StageToAvroPlugin<?> stageToHdfsPlugin = null;
+			AvroFormatPlugin<?, ?> stageToHdfsPlugin = null;
 			try {
-				stageToHdfsPlugin = pluginProvider.getStageToAvroPlugin();
+				stageToHdfsPlugin = pluginProvider.getAvroFormatPlugin();
 
 				if (stageToHdfsPlugin == null) {
 					LOGGER.warn("Plugin provider for ingest type '" + pluginProvider.getIngestFormatName() + "' does not support staging to HDFS");

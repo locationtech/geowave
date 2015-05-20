@@ -2,7 +2,8 @@ package mil.nga.giat.geowave.format.geotools.raster;
 
 import mil.nga.giat.geowave.core.ingest.IngestFormatOptionProvider;
 import mil.nga.giat.geowave.core.ingest.IngestFormatPluginProviderSpi;
-import mil.nga.giat.geowave.core.ingest.avro.StageToAvroPlugin;
+import mil.nga.giat.geowave.core.ingest.IngestPluginBase;
+import mil.nga.giat.geowave.core.ingest.avro.AvroFormatPlugin;
 import mil.nga.giat.geowave.core.ingest.hdfs.mapreduce.IngestFromHdfsPlugin;
 import mil.nga.giat.geowave.core.ingest.local.LocalFileIngestPlugin;
 
@@ -18,7 +19,7 @@ public class GeoToolsRasterDataStoreIngestFormat implements
 {
 
 	@Override
-	public StageToAvroPlugin<Object> getStageToAvroPlugin()
+	public AvroFormatPlugin<Object,GridCoverage> getAvroFormatPlugin()
 			throws UnsupportedOperationException {
 		// unsupported right now
 		throw new UnsupportedOperationException(

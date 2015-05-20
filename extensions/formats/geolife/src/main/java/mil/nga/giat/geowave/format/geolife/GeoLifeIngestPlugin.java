@@ -21,6 +21,7 @@ import mil.nga.giat.geowave.core.geotime.IndexType;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.ingest.GeoWaveData;
+import mil.nga.giat.geowave.core.ingest.IngestPluginBase;
 import mil.nga.giat.geowave.core.ingest.avro.WholeFile;
 import mil.nga.giat.geowave.core.ingest.hdfs.mapreduce.IngestWithMapper;
 import mil.nga.giat.geowave.core.ingest.hdfs.mapreduce.IngestWithReducer;
@@ -133,8 +134,13 @@ public class GeoLifeIngestPlugin extends
 	}
 
 	@Override
-	public Schema getAvroSchemaForHdfsType() {
+	public Schema getAvroSchema() {
 		return WholeFile.getClassSchema();
+	}
+
+	@Override
+	public Schema getAvroSchemaForHdfsType() {
+		return getAvroSchema();
 	}
 
 	@Override
@@ -313,6 +319,12 @@ public class GeoLifeIngestPlugin extends
 		return new Index[] {};
 	}
 
+	@Override
+	public IngestPluginBase<WholeFile, SimpleFeature> getIngestWithAvroPlugin() {
+		return new IngestGeoLifeFromHdfs(
+				this);
+	}
+	
 	public static class IngestGeoLifeFromHdfs extends
 			AbstractIngestSimpleFeatureWithMapper<WholeFile>
 	{
@@ -327,4 +339,6 @@ public class GeoLifeIngestPlugin extends
 					parentPlugin);
 		}
 	}
+
+
 }

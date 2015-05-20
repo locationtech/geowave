@@ -12,13 +12,13 @@ import org.apache.log4j.Logger;
  * This class can be sub-classed as a general-purpose recipe for parallelizing
  * ingestion of files by directly staging the binary of the file to Avro.
  */
-abstract public class AbstractStageWholeFileToAvro implements
-		StageToAvroPlugin<WholeFile>
+abstract public class AbstractStageWholeFileToAvro<O> implements
+		AvroFormatPlugin<WholeFile, O>
 {
 	private final static Logger LOGGER = Logger.getLogger(AbstractStageWholeFileToAvro.class);
 
 	@Override
-	public Schema getAvroSchemaForHdfsType() {
+	public Schema getAvroSchema() {
 		return WholeFile.getClassSchema();
 	}
 

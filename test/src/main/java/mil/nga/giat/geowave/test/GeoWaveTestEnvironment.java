@@ -263,7 +263,7 @@ abstract public class GeoWaveTestEnvironment
 						// hold
 						// on the log files and there is no hook to get notified
 						// when it is completely stopped
-						Thread.sleep(1000);
+						Thread.sleep(2000);
 						FileUtils.deleteDirectory(TEMP_DIR);
 						TEMP_DIR = null;
 					}
@@ -273,6 +273,7 @@ abstract public class GeoWaveTestEnvironment
 								e);
 					}
 				}
+
 			}
 		}
 	}
@@ -305,7 +306,7 @@ abstract public class GeoWaveTestEnvironment
 		@SuppressFBWarnings({
 			"URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD"
 		})
-		protected ExpectedResults(
+		public ExpectedResults(
 				final Set<Long> hashedCentroids,
 				final int count ) {
 			this.hashedCentroids = hashedCentroids;
