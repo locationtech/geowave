@@ -2,6 +2,7 @@ package mil.nga.giat.geowave.adapter.vector.plugin;
 
 import mil.nga.giat.geowave.core.geotime.GeometryUtils;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.log4j.Logger;
 import org.geotools.filter.visitor.NullFilterVisitor;
 import org.geotools.geometry.jts.ReferencedEnvelope;
@@ -307,13 +308,29 @@ public class ExtractGeometryFilterVisitor extends
 		if (geom == null) {
 			return infinity();
 		}
-		geom = geom.buffer(filter.getDistance());
+		Pair<Geometry, Double> geometryAndDegrees;
+		try {
+			geometryAndDegrees = mil.nga.giat.geowave.adapter.vector.utils.GeometryUtils.buffer(
+					crs,
+					geom,
+					filter.getDistanceUnits(),
+					filter.getDistance());
+		}
+		catch (TransformException e) {
+			LOGGER.error(
+					"Cannot transform geometry to CRS",
+					e);
+			geometryAndDegrees = Pair.of(
+					geom,
+					filter.getDistance());
+		}
 
 		if (bbox != null) {
-			return geom.union(bbox);
+			return geometryAndDegrees.getLeft().union(
+					bbox);
 		}
 		else {
-			return geom;
+			return geometryAndDegrees.getLeft();
 		}
 	}
 
