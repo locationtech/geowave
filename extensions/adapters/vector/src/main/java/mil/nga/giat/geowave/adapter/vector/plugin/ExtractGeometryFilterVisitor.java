@@ -1,10 +1,15 @@
 package mil.nga.giat.geowave.adapter.vector.plugin;
 
+import java.awt.geom.Point2D;
+import java.util.Arrays;
+import java.util.Collections;
+
 import mil.nga.giat.geowave.core.geotime.GeometryUtils;
 
 import org.apache.log4j.Logger;
 import org.geotools.filter.visitor.NullFilterVisitor;
 import org.geotools.geometry.jts.ReferencedEnvelope;
+import org.geotools.referencing.GeodeticCalculator;
 import org.opengis.filter.And;
 import org.opengis.filter.ExcludeFilter;
 import org.opengis.filter.Filter;
@@ -44,9 +49,11 @@ import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.operation.TransformException;
 
+import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Envelope;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
+import com.vividsolutions.jts.geom.Point;
 
 /**
  * This class can be used to get Geometry from an OpenGIS filter object. GeoWave
@@ -307,7 +314,9 @@ public class ExtractGeometryFilterVisitor extends
 		if (geom == null) {
 			return infinity();
 		}
-		geom = geom.buffer(filter.getDistance());
+		geom = geom.buffer(distanceToDegrees(
+				geom,
+				filter.getDistance()));
 
 		if (bbox != null) {
 			return geom.union(bbox);
@@ -315,6 +324,67 @@ public class ExtractGeometryFilterVisitor extends
 		else {
 			return geom;
 		}
+	}
+
+	/**
+	 * Convert meters to decimal degrees based on widest point
+	 */
+	private static double distanceToDegrees(
+			Geometry geometry,
+			double meters ) {
+		final GeometryFactory factory = geometry.getFactory();
+		return (geometry instanceof Point) ? geometry.distance(farthestPoint(
+				(Point) geometry,
+				meters)) : distanceToDegrees(
+				geometry.getEnvelopeInternal(),
+				factory == null ? new GeometryFactory() : factory,
+				meters);
+	}
+
+	private static double distanceToDegrees(
+			Envelope env,
+			GeometryFactory factory,
+			double meters ) {
+		return Collections.max(Arrays.asList(
+				distanceToDegrees(
+						factory.createPoint(new Coordinate(
+								env.getMaxX(),
+								env.getMaxY())),
+						meters),
+				distanceToDegrees(
+						factory.createPoint(new Coordinate(
+								env.getMaxX(),
+								env.getMinY())),
+						meters),
+				distanceToDegrees(
+						factory.createPoint(new Coordinate(
+								env.getMinX(),
+								env.getMinY())),
+						meters),
+				distanceToDegrees(
+						factory.createPoint(new Coordinate(
+								env.getMinX(),
+								env.getMaxY())),
+						meters)));
+	}
+
+	/** farther point in longitudinal axis given a latitude */
+
+	private static Point farthestPoint(
+			Point point,
+			double meters ) {
+		final GeodeticCalculator calc = new GeodeticCalculator();
+		calc.setStartingGeographicPoint(
+				point.getX(),
+				point.getY());
+		calc.setDirection(
+				90,
+				meters);
+		Point2D dest2D = calc.getDestinationGeographicPoint();
+		return point.getFactory().createPoint(
+				new Coordinate(
+						dest2D.getX(),
+						dest2D.getY()));
 	}
 
 	@Override
