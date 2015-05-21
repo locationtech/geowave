@@ -8,14 +8,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import mil.nga.giat.geowave.core.ingest.AccumuloCommandLineOptions;
 import mil.nga.giat.geowave.core.ingest.GeoWaveData;
+import mil.nga.giat.geowave.core.ingest.IngestCommandLineOptions;
 import mil.nga.giat.geowave.core.ingest.IngestFormatPluginProviderSpi;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.core.store.index.Index;
+import mil.nga.giat.geowave.datastore.accumulo.AccumuloCommandLineOptions;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStore;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations;
 
@@ -35,6 +36,7 @@ public class LocalFileIngestDriver extends
 {
 	private final static Logger LOGGER = Logger.getLogger(LocalFileIngestDriver.class);
 	protected AccumuloCommandLineOptions accumulo;
+	protected IngestCommandLineOptions ingest;
 
 	public LocalFileIngestDriver(
 			final String operation ) {
@@ -47,6 +49,7 @@ public class LocalFileIngestDriver extends
 			final CommandLine commandLine )
 			throws ParseException {
 		accumulo = AccumuloCommandLineOptions.parseOptions(commandLine);
+		ingest = IngestCommandLineOptions.parseOptions(commandLine);
 		super.parseOptionsInternal(commandLine);
 	}
 
@@ -54,6 +57,7 @@ public class LocalFileIngestDriver extends
 	protected void applyOptionsInternal(
 			final Options allOptions ) {
 		AccumuloCommandLineOptions.applyOptions(allOptions);
+		IngestCommandLineOptions.applyOptions(allOptions);
 		super.applyOptionsInternal(allOptions);
 	}
 
@@ -80,15 +84,15 @@ public class LocalFileIngestDriver extends
 						e);
 				continue;
 			}
-			final boolean indexSupported = (accumulo.getIndex(localFileIngestPlugin.getSupportedIndices()) != null);
+			final boolean indexSupported = (ingest.getIndex(localFileIngestPlugin.getSupportedIndices()) != null);
 			if (!indexSupported) {
-				LOGGER.warn("Local file ingest plugin for ingest type '" + pluginProvider.getIngestFormatName() + "' does not support dimensionality type '" + accumulo.getDimensionalityType() + "'");
+				LOGGER.warn("Local file ingest plugin for ingest type '" + pluginProvider.getIngestFormatName() + "' does not support dimensionality type '" + ingest.getDimensionalityType() + "'");
 				continue;
 			}
 			localFileIngestPlugins.put(
 					pluginProvider.getIngestFormatName(),
 					localFileIngestPlugin);
-			adapters.addAll(Arrays.asList(localFileIngestPlugin.getDataAdapters(accumulo.getVisibility())));
+			adapters.addAll(Arrays.asList(localFileIngestPlugin.getDataAdapters(ingest.getVisibility())));
 		}
 
 		AccumuloOperations operations;
@@ -130,7 +134,7 @@ public class LocalFileIngestDriver extends
 			final IngestRunData ingestRunData )
 			throws IOException {
 
-		final Index supportedIndex = accumulo.getIndex(plugin.getSupportedIndices());
+		final Index supportedIndex = ingest.getIndex(plugin.getSupportedIndices());
 		if (supportedIndex == null) {
 			LOGGER.error("Could not get index instance, getIndex() returned null;");
 			throw new IOException(
@@ -146,7 +150,7 @@ public class LocalFileIngestDriver extends
 		try (CloseableIterator<GeoWaveData<?>> geowaveDataIt = plugin.toGeoWaveData(
 				file,
 				idx.getId(),
-				accumulo.getVisibility())) {
+				ingest.getVisibility())) {
 			while (geowaveDataIt.hasNext()) {
 				final GeoWaveData<?> geowaveData = geowaveDataIt.next();
 				final WritableDataAdapter adapter = ingestRunData.getDataAdapter(geowaveData);
