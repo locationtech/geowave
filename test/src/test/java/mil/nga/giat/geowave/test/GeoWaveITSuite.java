@@ -3,13 +3,13 @@ package mil.nga.giat.geowave.test;
 import mil.nga.giat.geowave.test.mapreduce.BasicMapReduceIT;
 import mil.nga.giat.geowave.test.mapreduce.GeoWaveKMeansIT;
 import mil.nga.giat.geowave.test.mapreduce.KDERasterResizeIT;
+import mil.nga.giat.geowave.test.query.AttributesSubsetQueryIT;
 import mil.nga.giat.geowave.test.service.GeoServerIT;
 import mil.nga.giat.geowave.test.service.GeoWaveIngestGeoserverIT;
 import mil.nga.giat.geowave.test.service.GeoWaveServicesIT;
 import mil.nga.giat.geowave.test.service.ServicesTestEnvironment;
 
 import org.junit.AfterClass;
-import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
@@ -25,7 +25,8 @@ import org.junit.runners.Suite.SuiteClasses;
 	GeoWaveKMeansIT.class,
 	GeoServerIT.class,
 	GeoWaveServicesIT.class,
-	GeoWaveIngestGeoserverIT.class
+	GeoWaveIngestGeoserverIT.class,
+	AttributesSubsetQueryIT.class
 })
 public class GeoWaveITSuite
 {
