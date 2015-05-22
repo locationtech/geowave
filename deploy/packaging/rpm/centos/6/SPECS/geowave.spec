@@ -156,6 +156,7 @@ would likely be useful for dev environments
 Summary:        GeoWave Accumulo Components
 Group:          Applications/Internet
 Provides:       %{versioned_app_name}-accumulo = %{version}
+Requires:       %{versioned_app_name}-tools = %{version}
 Requires:       core
 
 %description -n %{versioned_app_name}-accumulo
@@ -164,13 +165,6 @@ This package installs the Accumulo components of GeoWave
 
 %post -n %{versioned_app_name}-accumulo
 /bin/bash %{geowave_accumulo_home}/deploy-geowave-to-hdfs.sh >> %{geowave_accumulo_home}/geowave-to-hdfs.log 2>&1
-# Alternatives link is being managed in the acccumulo rpm as core can now be shared amoung multiple vendor/version installs
-alternatives --install %{geowave_home} geowave-home %{geowave_install} %{installpriority}
-
-%postun -n %{versioned_app_name}-accumulo
-if [ $1 -eq 0 ]; then
-  alternatives --remove geowave-home %{geowave_install}
-fi
 
 %files -n %{versioned_app_name}-accumulo
 %defattr(644, geowave, geowave, 755)
@@ -209,7 +203,7 @@ fi
 Summary:        GeoWave Documentation
 Group:          Applications/Internet
 Provides:       %{versioned_app_name}-docs = %{version}
-Requires:       %{versioned_app_name}-accumulo = %{version}
+Requires:       %{versioned_app_name}-tools = %{version}
 Requires:       core
 
 %description docs
@@ -220,12 +214,8 @@ This package installs the GeoWave documentation into the GeoWave directory
 %defattr(644, geowave, geowave, 755)
 %doc %{geowave_docs_home}
 
-%doc %attr(644 root, root) /usr/local/share/man/man1/geowave-ingest.1
-%doc %attr(644 root, root) /usr/local/share/man/man1/geowave-ingest-clear.1
-%doc %attr(644 root, root) /usr/local/share/man/man1/geowave-ingest-hdfsingest.1
-%doc %attr(644 root, root) /usr/local/share/man/man1/geowave-ingest-hdfsstage.1
-%doc %attr(644 root, root) /usr/local/share/man/man1/geowave-ingest-localingest.1
-%doc %attr(644 root, root) /usr/local/share/man/man1/geowave-ingest-poststage.1
+%doc %defattr(644 root, root, 755)
+/usr/local/share/man/man1/
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -233,7 +223,7 @@ This package installs the GeoWave documentation into the GeoWave directory
 Summary:        GeoWave GeoServer Components
 Group:          Applications/Internet
 Provides:       %{versioned_app_name}-jetty = %{version}
-Requires:       %{versioned_app_name}-accumulo = %{version}
+Requires:       %{versioned_app_name}-tools = %{version}
 Requires:       core
 
 %description -n %{versioned_app_name}-jetty
@@ -270,7 +260,6 @@ exit 0
 Summary:        GeoWave Tools
 Group:          Applications/Internet
 Provides:       %{versioned_app_name}-tools = %{version}
-Requires:       %{versioned_app_name}-accumulo = %{version}
 Requires:       core
 
 %description -n %{versioned_app_name}-tools
@@ -278,6 +267,7 @@ GeoWave provides geospatial and temporal indexing on top of Accumulo.
 This package installs GeoWave tools utility
 
 %post -n %{versioned_app_name}-tools
+alternatives --install %{geowave_home} geowave-home %{geowave_install} %{installpriority}
 ln -fs /usr/local/geowave/tools/geowave-tools.sh /usr/local/bin/geowave
 ln -fs /usr/local/geowave/tools/geowave-tools.sh /usr/local/sbin/geowave
 
@@ -285,6 +275,7 @@ ln -fs /usr/local/geowave/tools/geowave-tools.sh /usr/local/sbin/geowave
 if [ $1 -eq 0 ]; then
   rm -f /usr/local/bin/geowave
   rm -f /usr/local/sbin/geowave
+  alternatives --remove geowave-home %{geowave_install}
 fi
 
 %files -n %{versioned_app_name}-tools
@@ -311,7 +302,7 @@ This package installs the geowave Puppet module to /etc/puppet/modules
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 %changelog
-* Thu May 7 2015 Andrew Spohn <andrew.e.spohn.ctr@nga.mil> - 0.8.7
+* Fri May 22 2015 Andrew Spohn <andrew.e.spohn.ctr@nga.mil> - 0.8.7
 - Use alternatives to support parallel version and vendor installs
 - Replace geowave-ingest with geowave-tools
 * Thu Jan 15 2015 Andrew Spohn <andrew.e.spohn.ctr@nga.mil> - 0.8.2-3

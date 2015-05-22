@@ -14,7 +14,7 @@ Example build args:
 
 [source, bash]
 ----
-export BUILD_ARGS="-Daccumulo.version=1.6.0 -Dhadoop.version=2.5.0-cdh5.3.0 -Dgeotools.version=13.0 -Dgeoserver.version=2.7.0 -P cloudera"
+export BUILD_ARGS="-Daccumulo.version=1.6.0 -Dhadoop.version=2.5.0-cdh5.3.0 -Dgeotools.version=13.0 -Dgeoserver.version=2.7.0 -Dvender.version=cdh5 -P cloudera"
 ----
 
 ==== GeoServer Install
@@ -23,8 +23,7 @@ First we need to build the GeoServer plugin - from the GeoWave root directory:
 
 [source, bash]
 ----
-$ cd geowave-deploy
-$ mvn package -P geotools-container-singlejar $BUILD_ARGS
+mvn package -P geotools-container-singlejar $BUILD_ARGS
 ----
 
 let's assume you have GeoServer deployed in a Tomcat container in
@@ -32,7 +31,7 @@ let's assume you have GeoServer deployed in a Tomcat container in
 
 [source, bash]
 ----
-$ cp geowave-deploy/target/*-geoserver-singlejar.jar /opt/tomcat/webapps/geoserver/WEB-INF/lib/
+cp deploy/target/*-geoserver-singlejar.jar /opt/tomcat/webapps/geoserver/WEB-INF/lib/
 ----
 
 and re-start Tomcat
@@ -41,15 +40,12 @@ and re-start Tomcat
 
 ==== Accumulo Versions
 
-GeoWave has been tested and works against accumulo 1.5.0, 1.5.1, and 1.6.0. If you wish to build against a different
-version simply change the value in the pom.
+GeoWave has been tested and works against accumulo 1.5.0, 1.5.1, 1.6.0 and 1.6.1 Ensure you've set the desired
+version in the BUILD_ARGS environment variable
 
 ==== Accumulo Install
 
-This should be very familiar by now; from the geowave root directory:
-
 [source, bash]
 ----
-$ cd geowave-deploy
-$ mvn package -P accumulo-container-singlejar $BUILD_ARGS
+mvn package -P accumulo-container-singlejar $BUILD_ARGS
 ----

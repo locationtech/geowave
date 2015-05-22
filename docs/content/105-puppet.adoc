@@ -14,8 +14,12 @@ Puppet runs to do the initial install.
 
 === Options
 
+geowave_version::
+The desired version of GeoWave to install, ex: '0.8.7' we support concurrent installs but only one will be active at a time
+
 hadoop_vendor_version::
-The Hadoop framework vendor and version against which GeoWave was built. Currently only cdh5 is supported
+The Hadoop framework vendor and version against which GeoWave was built. Examples would be cdh5 or hdp2, check the
+http://ngageoint.github.io/geowave/packages.html[available packages^] site for currently supported hadoop distributions.
 
 install_accumulo::
 Install the GeoWave Accumulo Iterator on this node and upload it into HDFS. This node must have a working HDFS client.

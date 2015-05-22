@@ -1,5 +1,5 @@
-[[ingest-standalone]]
-=== Standalone
+[[ingest-new-formats]]
+=== New Formats
 
 There are multiple ways to get data into GeoWave. In other sections we will discuss higher order frameworks, mapreduce
 interfaces, etc. The intent here is "just the basics" - what's the least framework intensive way that one can load

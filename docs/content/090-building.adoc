@@ -30,13 +30,18 @@ Required repositories not in Maven Central have been added to the parent POM. Sp
 
 === Build Process
 
-Checkout geowave, and run a maven install.
+Checkout geowave, set your preferred dependencies as build arguments and then run maven install.
 
 [source, bash]
-------------------------------------------------
-$ git clone git@github.com:ngageoint/geowave.git
-$ cd geowave && mvn install 
-------------------------------------------------
+----
+export BUILD_ARGS="-Daccumulo.version=1.6.0-cdh5.1.4 -Dhadoop.version=2.6.0-cdh5.4.0 -Dgeotools.version=13.0 -Dgeoserver.version=2.7.0 -Dvendor.version=cdh5 -P cloudera" <1>
+git clone https://github.com/ngageoint/geowave.git <2>
+cd geowave
+mvn install $BUILD_ARGS <3>
+----
+<1> Examples of current build args can be seen in the top level .travis.yml file in the env/matrix section
+<2> If you don't need the complete history and want to speed up the clone you can limit the depth of your checkout with --depth NUM_COMMITS
+<3> You can speed up the build by skipping tests by adding -Dfindbugs.skip=true -DskipFormat=true -DskipITs=true -DskipTests=true
 
 [NOTE]
 ====
@@ -45,6 +50,3 @@ Integration Tests: Windows
 Integration tests are currently not working on Windows out of the box. If you install cygwin and set the environmental variable CYGPATH to the
 location of the cygpath binary provided by cygwin then is should work. Eclipse and Avro generated files
 ====
-
-=== Avro
-There are Avro generated sources in the geowave-types project and geowave-ingest.  They can be created by running "mvn generate-sources" (and are compiled as part of the standard maven lifecycle normally).  Unfortunately, I can't seem to make eclipse run this portion of the lifecycle on import with the M2E plugin.   On first import simply type "mvn generate-sources" at the command line and then refresh your eclipse project.
