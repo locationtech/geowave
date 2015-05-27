@@ -100,26 +100,17 @@ To configure Mapnik to run with GeoWave, there are a few SCons options which nee
 |GEOWAVE_RUNTIME_JAR
 |/path/to/geowave/geowave-jace.jar
 
-|GEOWAVE_JACE_RUNTIME_JAR
-|/path/to/geowave/jace-core-runtime.jar
-
 |GEOWAVE_INCLUDES
 |/path/to/geowave/include
 
 |GEOWAVE_LIBS
 |/path/to/geowave
 
-|JAVA_AWT_INCLUDE_PATH
-|/usr/lib/jvm/java-7-oracle/include
-
 |JAVA_INCLUDE_PATH
 |/usr/lib/jvm/java-7-oracle/include
 
 |JAVA_INCLUDE_PATH2
 |/usr/lib/jvm/java-7-oracle/include/linux
-
-|JAVA_AWT_LIB
-|/usr/lib/jvm/java-7-oracle/jre/lib/amd64
 
 |JAVA_JVM_LIB
 |/usr/lib/jvm/java-7-oracle/jre/lib/amd64/server
@@ -171,10 +162,6 @@ To configure PDAL to run with GeoWave, there are a few CMake options which need 
 
 |GEOWAVE_RUNTIME_JAR
 |/path/to/geowave/geowave-jace.jar
-|
-
-|JACE_RUNTIME_JAR
-|/path/to/geowave/jace-core-runtime.jar
 |
 
 |JACE_INCLUDE_DIR
