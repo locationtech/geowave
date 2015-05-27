@@ -1,22 +1,21 @@
-//:geowave-ingest-localingest(1)
-//:=============================
+//:geowave-localingest(1)
+//:======================
 //::doctype: manpage
 
 NAME
 //:----
 
-geowave-ingest-localingest - Load content from local file system
+geowave-localingest - Load content from local file system
 
 SYNOPSIS
 //:--------
 
-*geowave-ingest -localingest* <options>
+*geowave -localingest* <options>
 
 DESCRIPTION
 //:-----------
 
-The geowave-ingest -localingest(1) operator will run the ingest code (parse to features, load features to accumulo)
-against local file system content.
+The geowave -localingest(1) operator will run the ingest code (parse to features, load features to accumulo) against local file system content.
 
 OPTIONS
 //:-------
@@ -29,6 +28,9 @@ Clear ALL data stored with the same prefix as this namespace (optional; default 
 
 -dim, --dimensionality <arg>::
 The dimensionality type for the index, either 'spatial' or 'spatial-temporal' (optional; default is 'spatial')
+
+-f,--formats <arg>::
+Explicitly set the ingest formats by name (or multiple comma-delimited formats), if not set all available ingest formats will be used
 
 -h, --help::
 Display help
@@ -44,9 +46,6 @@ The table namespace (optional; default is no namespace)
 
 -p, --password <arg>::
 The password for the user
-
--t, --types <arg>::
-Explicitly set the ingest type by name (or multiple comma-delimited types), if not set all available ingest types will be used
 
 -u, --user <arg>::
 A valid Accumulo user ID
@@ -75,8 +74,6 @@ characters and "_" (underscore) you will be fine.
 
 The extensions argument allows you to override the plugin types, narrowing the scope of what is passed to the plugins
 
-The types argument allows you to explicitly only use certain plugins.
-
 Finally, the base directory is the root directory that will be scanned on the local system for files to ingest. The
 process will scan all subdirectories under the provided directory.
 
@@ -85,7 +82,7 @@ EXAMPLES
 
 List all of the currently registered as ingest type plugins:
 
-*geowave-ingest -localingest --list*::
+*geowave -localingest --list*::
 
 geotools-vector:
      all file-based vector datastores supported within geotools
@@ -103,4 +100,12 @@ geotools-raster:
      all file-based raster formats supported within geotools
 
 Load some load data::
-geowave-ingest -localingest -b ./ingest -i instance -n adminborders -p pass -t geotools-vector -u user -z zoo-1:2181
+
+geowave -localingest \
+     -b ./ingest \
+     -i instance \
+     -n geowave.50m_admin_0_countries \
+     -f geotools-vector \
+     -u USERNAME
+     -p PASSWORD \
+     -z ZOOKEEPER_HOST_NAME:2181
