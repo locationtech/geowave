@@ -49,10 +49,10 @@ After an update of the components you must restart Accumulo to get vfs to downlo
 [source, bash]
 ----
 [spohnae@c1-master ~]$ rpm -qa | grep geowave
-geowave-cdh5-ingest-0.8.4-201503252335.noarch
-geowave-cdh5-core-0.8.4-201503252335.noarch
-geowave-cdh5-accumulo-0.8.4-201503252335.noarch
-geowave-cdh5-docs-0.8.4-201503252335.noarch
+geowave-0.8.7-hdp2-core-0.8.7-201505131644.noarch
+geowave-0.8.7-hdp2-jetty-0.8.7-201505131644.noarch
+geowave-0.8.7-hdp2-accumulo-0.8.7-201505131644.noarch
+geowave-0.8.7-hdp2-tools-0.8.7-201505131644.noarch
 ----
 
 ==== Advanced
@@ -65,8 +65,9 @@ this artifact.
 .Commit hash of the jar in HDFS
 [source, bash]
 ----
-sudo -u hdfs hadoop fs -cat /accumulo/classpath/geowave/geowave-accumulo-build.properties | grep scm.revision | sed s/project.scm.revision=//
+sudo -u hdfs hadoop fs -cat /accumulo/classpath/geowave/geowave-accumulo-build.properties | grep scm.revision | sed s/project.scm.revision=// <1>
 ----
+<1> The root directory of Accumulo in various distributions can vary, check with hadoop fs -ls / first to ensure you have the correct initial path
 
 .Compare with the versions downloaded locally
 [source, bash]

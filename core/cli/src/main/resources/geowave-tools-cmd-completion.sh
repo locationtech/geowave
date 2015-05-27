@@ -8,7 +8,7 @@ __geowave() {
   local prev_arg=${COMP_WORDS[COMP_CWORD - 1]}
   case ${COMP_CWORD} in
   1)
-    COMPREPLY=( $(compgen -W '-clear -hdfsingest -hdfsstage -kafkastage -localingest -poststage -zkTx' -- $curr_arg ) )
+    COMPREPLY=( $(compgen -W '-clear -hdfsingest -hdfsstage -kafkastage -localingest -poststage -stats -zkTx' -- $curr_arg ) )
     ;;
   2)
      case ${prev_arg} in
@@ -29,6 +29,9 @@ __geowave() {
             ;;
         -poststage)
             COMPREPLY=( $(compgen -W '-c --clear -dim --dimensionality -f --formats -h --help -hdfs -hdfsbase -i --instance-id -jobtracker -l --list -n --namespace -p --password -resourceman -u --user -v --visibility -z --zookeepers' -- $curr_arg ) )
+            ;;
+        -stats)
+            COMPREPLY=( $(compgen -W '-i --instance-id -u --user -p --password -n --namespace -v --visibility -z --zookeepers -type -auth' -- $curr_arg ) )
             ;;
         -zkTx)
             COMPREPLY=( $(compgen -W '-h --help -i --instance-id -m --maximum -n --namespace -p --password -r --recipient -u --user -z --zookeepers' -- $curr_arg ) )

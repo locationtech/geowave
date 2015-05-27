@@ -1,11 +1,11 @@
 [[ingest-plugins]]
 === Ingest plugins
 
-The geowave-types project comes with several plugins out of the box
+The geowave command line utility comes  with several plugins out of the box
 
 [source, bash]
 ----
-$ geowave-ingest -localingest --list
+geowave -localingest --list
 Available ingest types currently registered as plugins:
 
 tdrive:

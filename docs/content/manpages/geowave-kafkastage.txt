@@ -1,0 +1,42 @@
+//:geowave-kafkastage(1)
+//:=====================
+//::doctype: manpage
+
+NAME
+//:----
+
+geowave-kafkastage - Stage supported files in local file system to a Kafka topic
+
+SYNOPSIS
+//:--------
+
+*geowave -kafkastage* <options>
+
+DESCRIPTION
+//:-----------
+
+The geowave -kafkastage(1) operator will stage supported files in local file system to a Kafka topic
+
+OPTIONS
+//:-------
+
+-b, --base <arg>::
+Base input file or directory to crawl with one of the supported ingest types
+
+-f,--formats <arg>::
+Explicitly set the ingest formats by name (or multiple comma-delimited formats), if not set all available ingest formats will be used
+
+-h, --help::
+Display help
+
+-kafkaprops <arg>::
+Properties file containing Kafka properties
+
+-kafkatopic <arg>::
+Kafka topic name where data will be emitted to
+
+-l, --list::
+List the available ingest types
+
+-x, --extension <arg>::
+Individual or comma-delimited set of file extensions to accept (optional)
