@@ -60,6 +60,7 @@ class { 'geowave::repo':
   repo_refresh_md => 0,
 } ->
 class { 'geowave':
+  geowave_version       => '0.8.7',
   hadoop_vendor_version => 'cdh5',
   install_accumulo      => true,
   install_app           => true,
@@ -79,6 +80,7 @@ node 'c1-master' {
     repo_enabled    => 1,
   } ->
   class { 'geowave':
+    geowave_version       => '0.8.7',
     hadoop_vendor_version => 'cdh5',
     install_accumulo      => true,
     install_app           => true,
@@ -92,6 +94,7 @@ node 'c1-app-01' {
     repo_enabled    => 1,
   } ->
   class { 'geowave':
+    geowave_version       => '0.8.7',
     hadoop_vendor_version => 'cdh5',
     install_app_server    => true,
     http_port             => '8888',

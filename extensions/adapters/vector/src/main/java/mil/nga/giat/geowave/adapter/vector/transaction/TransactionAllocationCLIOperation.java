@@ -54,7 +54,7 @@ public class TransactionAllocationCLIOperation implements
 				"m",
 				"maximum",
 				true,
-				"Maximum number of simulataneous transactions"));
+				"Maximum number of simultaneous transactions"));
 		options.addOption(new Option(
 				"r",
 				"recipient",
