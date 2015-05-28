@@ -11,6 +11,12 @@ package mil.nga.giat.geowave.adapter.vector.query.cql;
 import java.util.Iterator;
 import java.util.List;
 
+import mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveGTDataStore;
+
+import org.apache.commons.lang3.tuple.Pair;
+import org.apache.log4j.Logger;
+import org.geotools.filter.LiteralExpressionImpl;
+import org.geotools.filter.spatial.IntersectsImpl;
 import org.geotools.filter.text.commons.ExpressionToText;
 import org.geotools.filter.text.commons.FilterToTextUtil;
 import org.opengis.filter.And;
@@ -34,6 +40,7 @@ import org.opengis.filter.PropertyIsNull;
 import org.opengis.filter.expression.Expression;
 import org.opengis.filter.expression.Function;
 import org.opengis.filter.expression.Literal;
+import org.opengis.filter.expression.PropertyName;
 import org.opengis.filter.identity.Identifier;
 import org.opengis.filter.spatial.BBOX;
 import org.opengis.filter.spatial.Beyond;
@@ -60,39 +67,44 @@ import org.opengis.filter.temporal.OverlappedBy;
 import org.opengis.filter.temporal.TContains;
 import org.opengis.filter.temporal.TEquals;
 import org.opengis.filter.temporal.TOverlaps;
+import org.opengis.referencing.operation.TransformException;
+
+import com.vividsolutions.jts.geom.Geometry;
 
 public class FilterToECQLExtension implements
 		FilterVisitor
 {
 
+	private static Logger LOGGER = Logger.getLogger(FilterToECQLExtension.class);
+
 	ExpressionToText expressionVisitor = new ExpressionToText();
 
 	@Override
 	public Object visitNullFilter(
-			Object extraData ) {
+			final Object extraData ) {
 		throw new NullPointerException(
 				"Cannot encode null as a Filter");
 	}
 
 	@Override
 	public Object visit(
-			ExcludeFilter filter,
-			Object extraData ) {
+			final ExcludeFilter filter,
+			final Object extraData ) {
 
 		return FilterToTextUtil.buildExclude(extraData);
 	}
 
 	@Override
 	public Object visit(
-			IncludeFilter filter,
-			Object extraData ) {
+			final IncludeFilter filter,
+			final Object extraData ) {
 		return FilterToTextUtil.buildInclude(extraData);
 	}
 
 	@Override
 	public Object visit(
-			And filter,
-			Object extraData ) {
+			final And filter,
+			final Object extraData ) {
 		return FilterToTextUtil.buildBinaryLogicalOperator(
 				"AND",
 				this,
@@ -105,20 +117,20 @@ public class FilterToECQLExtension implements
 	 */
 	@Override
 	public Object visit(
-			Id filter,
-			Object extraData ) {
+			final Id filter,
+			final Object extraData ) {
 
-		StringBuilder ecql = FilterToTextUtil.asStringBuilder(extraData);
+		final StringBuilder ecql = FilterToTextUtil.asStringBuilder(extraData);
 		ecql.append("IN (");
 
-		Iterator<Identifier> iter = filter.getIdentifiers().iterator();
+		final Iterator<Identifier> iter = filter.getIdentifiers().iterator();
 		while (iter.hasNext()) {
-			Identifier identifier = iter.next();
-			String id = identifier.toString();
+			final Identifier identifier = iter.next();
+			final String id = identifier.toString();
 
 			// CHANGE FROM GEOTOOLS: look for identifiers with non-alphanumeric
 			// characters
-			boolean needsQuotes = id.matches(".*(\\.|\\-|\\+|\\*|\\/).*");
+			final boolean needsQuotes = id.matches(".*(\\.|\\-|\\+|\\*|\\/).*");
 
 			if (needsQuotes) {
 				ecql.append('\'');
@@ -141,8 +153,8 @@ public class FilterToECQLExtension implements
 	 */
 	@Override
 	public Object visit(
-			Not filter,
-			Object extraData ) {
+			final Not filter,
+			final Object extraData ) {
 		return FilterToTextUtil.buildNot(
 				this,
 				filter,
@@ -157,8 +169,8 @@ public class FilterToECQLExtension implements
 	 */
 	@Override
 	public Object visit(
-			Or filter,
-			Object extraData ) {
+			final Or filter,
+			final Object extraData ) {
 		if (isInFilter(filter)) {
 			return buildIN(
 					filter,
@@ -174,14 +186,14 @@ public class FilterToECQLExtension implements
 
 	/** Check if this is an encoding of ECQL IN */
 	private boolean isInFilter(
-			Or filter ) {
+			final Or filter ) {
 		if (filter.getChildren() == null) {
 			return false;
 		}
 		Expression left = null;
-		for (Filter child : filter.getChildren()) {
+		for (final Filter child : filter.getChildren()) {
 			if (child instanceof PropertyIsEqualTo) {
-				PropertyIsEqualTo equal = (PropertyIsEqualTo) child;
+				final PropertyIsEqualTo equal = (PropertyIsEqualTo) child;
 				if (left == null) {
 					left = equal.getExpression1();
 				}
@@ -197,20 +209,20 @@ public class FilterToECQLExtension implements
 	}
 
 	private Object buildIN(
-			Or filter,
-			Object extraData ) {
-		StringBuilder output = FilterToTextUtil.asStringBuilder(extraData);
-		List<Filter> children = filter.getChildren();
-		PropertyIsEqualTo first = (PropertyIsEqualTo) filter.getChildren().get(
+			final Or filter,
+			final Object extraData ) {
+		final StringBuilder output = FilterToTextUtil.asStringBuilder(extraData);
+		final List<Filter> children = filter.getChildren();
+		final PropertyIsEqualTo first = (PropertyIsEqualTo) filter.getChildren().get(
 				0);
-		Expression left = first.getExpression1();
+		final Expression left = first.getExpression1();
 		left.accept(
 				expressionVisitor,
 				output);
 		output.append(" IN (");
-		for (Iterator<Filter> i = children.iterator(); i.hasNext();) {
-			PropertyIsEqualTo child = (PropertyIsEqualTo) i.next();
-			Expression right = child.getExpression2();
+		for (final Iterator<Filter> i = children.iterator(); i.hasNext();) {
+			final PropertyIsEqualTo child = (PropertyIsEqualTo) i.next();
+			final Expression right = child.getExpression2();
 			right.accept(
 					expressionVisitor,
 					output);
@@ -227,8 +239,8 @@ public class FilterToECQLExtension implements
 	 */
 	@Override
 	public Object visit(
-			PropertyIsBetween filter,
-			Object extraData ) {
+			final PropertyIsBetween filter,
+			final Object extraData ) {
 		return FilterToTextUtil.buildBetween(
 				filter,
 				extraData);
@@ -239,9 +251,9 @@ public class FilterToECQLExtension implements
 	 */
 	@Override
 	public Object visit(
-			PropertyIsEqualTo filter,
-			Object extraData ) {
-		StringBuilder output = FilterToTextUtil.asStringBuilder(extraData);
+			final PropertyIsEqualTo filter,
+			final Object extraData ) {
+		final StringBuilder output = FilterToTextUtil.asStringBuilder(extraData);
 		if (isRelateOperation(filter)) {
 			return buildRelate(
 					filter,
@@ -263,17 +275,17 @@ public class FilterToECQLExtension implements
 
 	/** Check if this is an encoding of ECQL geospatial operation */
 	private boolean isFunctionTrue(
-			PropertyIsEqualTo filter,
-			String operation,
-			int numberOfArguments ) {
+			final PropertyIsEqualTo filter,
+			final String operation,
+			final int numberOfArguments ) {
 		if (filter.getExpression1() instanceof Function) {
-			Function function = (Function) filter.getExpression1();
-			List<Expression> parameters = function.getParameters();
+			final Function function = (Function) filter.getExpression1();
+			final List<Expression> parameters = function.getParameters();
 			if (parameters == null) {
 				return false;
 			}
-			String name = function.getName();
-			if (!operation.equalsIgnoreCase(name) || parameters.size() != numberOfArguments) {
+			final String name = function.getName();
+			if (!operation.equalsIgnoreCase(name) || (parameters.size() != numberOfArguments)) {
 				return false;
 			}
 		}
@@ -281,11 +293,11 @@ public class FilterToECQLExtension implements
 			return false;
 		}
 		if (filter.getExpression2() instanceof Literal) {
-			Literal literal = (Literal) filter.getExpression2();
-			Boolean value = literal.evaluate(
+			final Literal literal = (Literal) filter.getExpression2();
+			final Boolean value = literal.evaluate(
 					null,
 					Boolean.class);
-			if (value == null || value == false) {
+			if ((value == null) || (value == false)) {
 				return false;
 			}
 		}
@@ -296,11 +308,11 @@ public class FilterToECQLExtension implements
 	}
 
 	private Object buildExists(
-			PropertyIsEqualTo filter,
-			StringBuilder output ) {
-		Function function = (Function) filter.getExpression1();
-		List<Expression> parameters = function.getParameters();
-		Literal arg = (Literal) parameters.get(0);
+			final PropertyIsEqualTo filter,
+			final StringBuilder output ) {
+		final Function function = (Function) filter.getExpression1();
+		final List<Expression> parameters = function.getParameters();
+		final Literal arg = (Literal) parameters.get(0);
 
 		output.append(arg.getValue());
 		output.append(" EXISTS");
@@ -309,17 +321,17 @@ public class FilterToECQLExtension implements
 
 	/** Check if this is an encoding of ECQL geospatial operation */
 	private boolean isRelateOperation(
-			PropertyIsEqualTo filter ) {
+			final PropertyIsEqualTo filter ) {
 		if (isFunctionTrue(
 				filter,
 				"relatePattern",
 				3)) {
-			Function function = (Function) filter.getExpression1();
-			List<Expression> parameters = function.getParameters();
-			Expression param3 = parameters.get(2);
+			final Function function = (Function) filter.getExpression1();
+			final List<Expression> parameters = function.getParameters();
+			final Expression param3 = parameters.get(2);
 			if (param3 instanceof Literal) {
-				Literal literal = (Literal) param3;
-				Object value = literal.getValue();
+				final Literal literal = (Literal) param3;
+				final Object value = literal.getValue();
 				if (!(value instanceof String)) {
 					return false; // not a relate
 				}
@@ -332,14 +344,14 @@ public class FilterToECQLExtension implements
 	}
 
 	private Object buildRelate(
-			PropertyIsEqualTo filter,
-			StringBuilder output ) {
-		Function operation = (Function) filter.getExpression1();
+			final PropertyIsEqualTo filter,
+			final StringBuilder output ) {
+		final Function operation = (Function) filter.getExpression1();
 		output.append("RELATE(");
-		List<Expression> parameters = operation.getParameters();
-		Expression arg1 = parameters.get(0);
-		Expression arg2 = parameters.get(1);
-		Literal arg3 = (Literal) parameters.get(2);
+		final List<Expression> parameters = operation.getParameters();
+		final Expression arg1 = parameters.get(0);
+		final Expression arg2 = parameters.get(1);
+		final Literal arg3 = (Literal) parameters.get(2);
 
 		arg1.accept(
 				expressionVisitor,
@@ -356,8 +368,8 @@ public class FilterToECQLExtension implements
 
 	@Override
 	public Object visit(
-			PropertyIsNotEqualTo filter,
-			Object extraData ) {
+			final PropertyIsNotEqualTo filter,
+			final Object extraData ) {
 
 		// CHANGE FROM GEOTOOLS: <> instead of !=
 		return FilterToTextUtil.buildComparison(
@@ -368,8 +380,8 @@ public class FilterToECQLExtension implements
 
 	@Override
 	public Object visit(
-			PropertyIsGreaterThan filter,
-			Object extraData ) {
+			final PropertyIsGreaterThan filter,
+			final Object extraData ) {
 		return FilterToTextUtil.buildComparison(
 				filter,
 				extraData,
@@ -378,8 +390,8 @@ public class FilterToECQLExtension implements
 
 	@Override
 	public Object visit(
-			PropertyIsGreaterThanOrEqualTo filter,
-			Object extraData ) {
+			final PropertyIsGreaterThanOrEqualTo filter,
+			final Object extraData ) {
 		return FilterToTextUtil.buildComparison(
 				filter,
 				extraData,
@@ -388,8 +400,8 @@ public class FilterToECQLExtension implements
 
 	@Override
 	public Object visit(
-			PropertyIsLessThan filter,
-			Object extraData ) {
+			final PropertyIsLessThan filter,
+			final Object extraData ) {
 		return FilterToTextUtil.buildComparison(
 				filter,
 				extraData,
@@ -398,8 +410,8 @@ public class FilterToECQLExtension implements
 
 	@Override
 	public Object visit(
-			PropertyIsLessThanOrEqualTo filter,
-			Object extraData ) {
+			final PropertyIsLessThanOrEqualTo filter,
+			final Object extraData ) {
 		return FilterToTextUtil.buildComparison(
 				filter,
 				extraData,
@@ -408,8 +420,8 @@ public class FilterToECQLExtension implements
 
 	@Override
 	public Object visit(
-			PropertyIsLike filter,
-			Object extraData ) {
+			final PropertyIsLike filter,
+			final Object extraData ) {
 		return FilterToTextUtil.buildIsLike(
 				filter,
 				extraData);
@@ -417,8 +429,8 @@ public class FilterToECQLExtension implements
 
 	@Override
 	public Object visit(
-			PropertyIsNull filter,
-			Object extraData ) {
+			final PropertyIsNull filter,
+			final Object extraData ) {
 		return FilterToTextUtil.buildIsNull(
 				filter,
 				extraData);
@@ -426,16 +438,16 @@ public class FilterToECQLExtension implements
 
 	@Override
 	public Object visit(
-			PropertyIsNil filter,
-			Object extraData ) {
+			final PropertyIsNil filter,
+			final Object extraData ) {
 		throw new UnsupportedOperationException(
 				"PropertyIsNil not supported");
 	}
 
 	@Override
 	public Object visit(
-			BBOX filter,
-			Object extraData ) {
+			final BBOX filter,
+			final Object extraData ) {
 		return FilterToTextUtil.buildBBOX(
 				filter,
 				extraData);
@@ -443,8 +455,8 @@ public class FilterToECQLExtension implements
 
 	@Override
 	public Object visit(
-			Beyond filter,
-			Object extraData ) {
+			final Beyond filter,
+			final Object extraData ) {
 		return FilterToTextUtil.buildDistanceBufferOperation(
 				"BEYOND",
 				filter,
@@ -453,8 +465,8 @@ public class FilterToECQLExtension implements
 
 	@Override
 	public Object visit(
-			Contains filter,
-			Object extraData ) {
+			final Contains filter,
+			final Object extraData ) {
 		return FilterToTextUtil.buildBinarySpatialOperator(
 				"CONTAINS",
 				filter,
@@ -463,8 +475,8 @@ public class FilterToECQLExtension implements
 
 	@Override
 	public Object visit(
-			Crosses filter,
-			Object extraData ) {
+			final Crosses filter,
+			final Object extraData ) {
 		return FilterToTextUtil.buildBinarySpatialOperator(
 				"CROSSES",
 				filter,
@@ -473,27 +485,73 @@ public class FilterToECQLExtension implements
 
 	@Override
 	public Object visit(
-			Disjoint filter,
-			Object extraData ) {
+			final Disjoint filter,
+			final Object extraData ) {
 		return FilterToTextUtil.buildBinarySpatialOperator(
 				"DISJOINT",
 				filter,
 				extraData);
 	}
 
+	/**
+	 * DWithin spatial operator will find out if a feature in a datalayer is
+	 * within X meters of a point, line, or polygon.
+	 */
 	@Override
 	public Object visit(
-			DWithin filter,
-			Object extraData ) {
-		return FilterToTextUtil.buildDWithin(
-				filter,
+			final DWithin filter,
+			final Object extraData ) {
+		IntersectsImpl newWithImpl = null;
+		try {
+			if ((filter.getExpression1() instanceof PropertyName) && (filter.getExpression2() instanceof Literal)) {
+				Pair<Geometry, Double> geometryAndDegrees;
+
+				geometryAndDegrees = mil.nga.giat.geowave.adapter.vector.utils.GeometryUtils.buffer(
+						GeoWaveGTDataStore.DEFAULT_CRS,
+						filter.getExpression2().evaluate(
+								extraData,
+								Geometry.class),
+						filter.getDistanceUnits(),
+						filter.getDistance());
+
+				newWithImpl = new IntersectsImpl(
+						filter.getExpression1(),
+						new LiteralExpressionImpl(
+								geometryAndDegrees.getLeft()));
+
+			}
+			else if ((filter.getExpression2() instanceof PropertyName) && (filter.getExpression1() instanceof Literal)) {
+				final Pair<Geometry, Double> geometryAndDegrees = mil.nga.giat.geowave.adapter.vector.utils.GeometryUtils.buffer(
+						GeoWaveGTDataStore.DEFAULT_CRS,
+						filter.getExpression1().evaluate(
+								extraData,
+								Geometry.class),
+						filter.getDistanceUnits(),
+						filter.getDistance());
+				newWithImpl = new IntersectsImpl(
+						new LiteralExpressionImpl(
+								geometryAndDegrees.getLeft()),
+						filter.getExpression2());
+			}
+		}
+		catch (TransformException e) {
+			LOGGER.error(
+					"Cannot transform geoemetry to support provide distance",
+					e);
+			return FilterToTextUtil.buildDWithin(
+					filter,
+					extraData);
+		}
+		return FilterToTextUtil.buildBinarySpatialOperator(
+				"INTERSECTS",
+				newWithImpl,
 				extraData);
 	}
 
 	@Override
 	public Object visit(
-			Equals filter,
-			Object extraData ) {
+			final Equals filter,
+			final Object extraData ) {
 		return FilterToTextUtil.buildBinarySpatialOperator(
 				"EQUALS",
 				filter,
@@ -502,8 +560,8 @@ public class FilterToECQLExtension implements
 
 	@Override
 	public Object visit(
-			Intersects filter,
-			Object extraData ) {
+			final Intersects filter,
+			final Object extraData ) {
 		return FilterToTextUtil.buildBinarySpatialOperator(
 				"INTERSECTS",
 				filter,
@@ -512,8 +570,8 @@ public class FilterToECQLExtension implements
 
 	@Override
 	public Object visit(
-			Overlaps filter,
-			Object extraData ) {
+			final Overlaps filter,
+			final Object extraData ) {
 		return FilterToTextUtil.buildBinarySpatialOperator(
 				"OVERLAPS",
 				filter,
@@ -522,8 +580,8 @@ public class FilterToECQLExtension implements
 
 	@Override
 	public Object visit(
-			Touches filter,
-			Object extraData ) {
+			final Touches filter,
+			final Object extraData ) {
 		return FilterToTextUtil.buildBinarySpatialOperator(
 				"TOUCHES",
 				filter,
@@ -532,8 +590,8 @@ public class FilterToECQLExtension implements
 
 	@Override
 	public Object visit(
-			Within filter,
-			Object extraData ) {
+			final Within filter,
+			final Object extraData ) {
 		return FilterToTextUtil.buildBinarySpatialOperator(
 				"WITHIN",
 				filter,
@@ -542,8 +600,8 @@ public class FilterToECQLExtension implements
 
 	@Override
 	public Object visit(
-			After after,
-			Object extraData ) {
+			final After after,
+			final Object extraData ) {
 		return FilterToTextUtil.buildBinaryTemporalOperator(
 				"AFTER",
 				after,
@@ -552,8 +610,8 @@ public class FilterToECQLExtension implements
 
 	@Override
 	public Object visit(
-			Before before,
-			Object extraData ) {
+			final Before before,
+			final Object extraData ) {
 		return FilterToTextUtil.buildBinaryTemporalOperator(
 				"BEFORE",
 				before,
@@ -562,22 +620,22 @@ public class FilterToECQLExtension implements
 
 	@Override
 	public Object visit(
-			AnyInteracts anyInteracts,
-			Object extraData ) {
+			final AnyInteracts anyInteracts,
+			final Object extraData ) {
 		throw ecqlUnsupported("AnyInteracts");
 	}
 
 	@Override
 	public Object visit(
-			Begins begins,
-			Object extraData ) {
+			final Begins begins,
+			final Object extraData ) {
 		throw ecqlUnsupported("Begins");
 	}
 
 	@Override
 	public Object visit(
-			BegunBy begunBy,
-			Object extraData ) {
+			final BegunBy begunBy,
+			final Object extraData ) {
 		throw ecqlUnsupported("BegunBy");
 	}
 
@@ -596,8 +654,8 @@ public class FilterToECQLExtension implements
 
 	@Override
 	public Object visit(
-			During during,
-			Object extraData ) {
+			final During during,
+			final Object extraData ) {
 		return FilterToTextUtil.buildDuring(
 				during,
 				extraData);
@@ -605,57 +663,57 @@ public class FilterToECQLExtension implements
 
 	@Override
 	public Object visit(
-			EndedBy endedBy,
-			Object extraData ) {
+			final EndedBy endedBy,
+			final Object extraData ) {
 		throw ecqlUnsupported("EndedBy");
 	}
 
 	@Override
 	public Object visit(
-			Ends ends,
-			Object extraData ) {
+			final Ends ends,
+			final Object extraData ) {
 		throw ecqlUnsupported("EndedBy");
 	}
 
 	@Override
 	public Object visit(
-			Meets meets,
-			Object extraData ) {
+			final Meets meets,
+			final Object extraData ) {
 		throw ecqlUnsupported("Meets");
 	}
 
 	@Override
 	public Object visit(
-			MetBy metBy,
-			Object extraData ) {
+			final MetBy metBy,
+			final Object extraData ) {
 		throw ecqlUnsupported("MetBy");
 	}
 
 	@Override
 	public Object visit(
-			OverlappedBy overlappedBy,
-			Object extraData ) {
+			final OverlappedBy overlappedBy,
+			final Object extraData ) {
 		throw ecqlUnsupported("OverlappedBy");
 	}
 
 	@Override
 	public Object visit(
-			TContains contains,
-			Object extraData ) {
+			final TContains contains,
+			final Object extraData ) {
 		throw ecqlUnsupported("TContains");
 	}
 
 	@Override
 	public Object visit(
-			TEquals equals,
-			Object extraData ) {
+			final TEquals equals,
+			final Object extraData ) {
 		throw ecqlUnsupported("TContains");
 	}
 
 	@Override
 	public Object visit(
-			TOverlaps contains,
-			Object extraData ) {
+			final TOverlaps contains,
+			final Object extraData ) {
 		throw ecqlUnsupported("TContains");
 	}
 }

@@ -14,6 +14,5 @@ public class FilterToCQLTool
 				new StringBuilder());
 
 		return output.toString();
-
 	}
 }
