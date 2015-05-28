@@ -2873,12 +2873,6 @@ version in the BUILD_ARGS environment variable</p>
 <div class="sect2">
 <h3 id="overview-6"><a class="anchor" href="#overview-6"></a>Overview</h3>
 <div class="paragraph">
-<p>The two high level tasks to configure Accumulo for use with GeoWave are to ensure the memory allocations for the master
-and tablet server processes are adequate and to add the GeoWave Accumulo iterator to a classloader. The iterator is a rather
-large file so ensure the Accumulo Master process has at least 512m of heap space and the Tablet Server processes have at least
-1g of heap space.</p>
-</div>
-<div class="paragraph">
 <p>The recommended Accumulo configuration for GeoWave requires several manual configuration steps but isolates the GeoWave
 libraries in application specific classpath(s) reducing the possibility of dependency conflict issues. A single user for
 all of geowave data or a user per data type are two of the many local configuration options just ensure each namespace
@@ -2900,6 +2894,9 @@ containing GeoWave tables is configured to pick up the geowave-accumulo.jar.</p>
 <li>
 <p>Configure all tables within the namespace to use the application classpath</p>
 </li>
+<li>
+<p>Configure GeoWave transaction support</p>
+</li>
 </ol>
 </div>
 <div class="listingblock">
@@ -2907,10 +2904,12 @@ containing GeoWave tables is configured to pick up the geowave-accumulo.jar.</p>
 <pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">accumulo shell -u root
 createuser geowave <i class="conum" data-value="1"></i><b>(1)</b>
 createnamespace geowave
-grant NameSpace.CREATE_TABLE -ns geowave -u geowave <i class="conum" data-value="2"></i><b>(2)</b>
-config -s general.vfs.context.classpath.geowave=hdfs://NAME_NODE_FQDN:8020/ACCUMULO_ROOT/classpath/geowave/VERSION_AND_VENDOR_VERSION/[^.].*.jar <i class="conum" data-value="3"></i><b>(3)</b>
-config -ns geowave -s table.classpath.context=geowave <i class="conum" data-value="4"></i><b>(4)</b>
-exit</code></pre>
+grant NameSpace.CREATE_TABLE -ns geowave -u geowave
+config -s general.vfs.context.classpath.geowave=hdfs://NAME_NODE_FQDN:8020/accumulo/classpath/geowave/[^.].*.jar
+config -ns geowave -s table.classpath.context=geowave
+exit <i class="conum" data-value="2"></i><b>(2)</b>
+# From the node with the GeoWave application server installed
+java -cp "/usr/local/geowave/geoserver/webapps/geoserver/WEB-INF/lib/*" mil.nga.giat.geowave.vector.plugin.GeoWaveGTDataStore -z ZOOKEEPER_NODE:2181 -i accumulo -u root -p ROOT_PASSWORD -n geowave -m 20 -r geowave</code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -2921,21 +2920,13 @@ exit</code></pre>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>Ensure the user has ownership of all tables created within the namespace</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="3"></i><b>3</b></td>
-<td>The Accumulo root path in HDFS varies between hadoop vendors. Cloudera is /accumulo and Hortonworks is /apps/accumulo</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="4"></i><b>4</b></td>
-<td>Link the namespace with the application classpath, adjust the labels as needed if you&#8217;ve used different user or appilcation names</td>
+<td>Done with Accumulo specific configs</td>
 </tr>
 </table>
 </div>
 <div class="paragraph">
-<p>These manual configuration steps have to be performed before attempting to create GeoWave index tables. After the initial configuration
-you may elect to do further user and namespace creation and configuring to provide isolation between groups and data sets.</p>
+<p>These manual configuration steps have to be performed once after the first install of GeoWave. After the initial install you
+may elect to do further user and namespace creation and configuring to provide isolation between groups and data sets</p>
 </div>
 </div>
 </div>
@@ -2993,7 +2984,7 @@ this artifact.</p>
 <div class="listingblock">
 <div class="title">Example</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">[spohnae@c1-node-03 ~]$ sudo -u hdfs hadoop fs -cat /ACCUMULO_ROOT/classpath/geowave/VERSION_AND_VENDOR_VERSION/geowave-accumulo-build.properties | grep scm.revision | sed s/project.scm.revision=//
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">[spohnae@c1-node-03 ~]$ sudo -u hdfs hadoop fs -cat /accumulo/classpath/geowave/geowave-accumulo-build.properties | grep scm.revision | sed s/project.scm.revision=//
 294ffb267e6691de3b9edc80e312bf5af7b2d23f <i class="conum" data-value="1"></i><b>(1)</b>
 [spohnae@c1-node-03 ~]$ sudo find /tmp -name "*geowave-accumulo.jar" -exec unzip -p {} build.properties  \; | grep scm.revision | sed s/project.scm.revision=//
 294ffb267e6691de3b9edc80e312bf5af7b2d23f <i class="conum" data-value="2"></i><b>(2)</b>
@@ -3586,7 +3577,6 @@ class { 'geowave::repo':
   repo_refresh_md =&gt; 0,
 } -&gt;
 class { 'geowave':
-  geowave_version       =&gt; '0.8.7',
   hadoop_vendor_version =&gt; 'cdh5',
   install_accumulo      =&gt; true,
   install_app           =&gt; true,
@@ -3611,7 +3601,6 @@ node 'c1-master' {
     repo_enabled    =&gt; 1,
   } -&gt;
   class { 'geowave':
-    geowave_version       =&gt; '0.8.7',
     hadoop_vendor_version =&gt; 'cdh5',
     install_accumulo      =&gt; true,
     install_app           =&gt; true,
@@ -3625,7 +3614,6 @@ node 'c1-app-01' {
     repo_enabled    =&gt; 1,
   } -&gt;
   class { 'geowave':
-    geowave_version       =&gt; '0.8.7',
     hadoop_vendor_version =&gt; 'cdh5',
     install_app_server    =&gt; true,
     http_port             =&gt; '8888',
@@ -3672,7 +3660,7 @@ yum install geowave-cdh5-puppet</code></pre>
 <div class="sect2">
 <h3 id="version"><a class="anchor" href="#version"></a>Version</h3>
 <div class="paragraph">
-<p>This documentation was generated for GeoWave version 0.8.7-SNAPSHOT from commit 7d7525abf89944460d762c6aa8f04a825f5f6f80.</p>
+<p>This documentation was generated for GeoWave version 0.8.7-SNAPSHOT from commit 8918fbf41063b43813127b239909b35568cba5e1.</p>
 </div>
 <div style="page-break-after: always;"></div>
 </div>
@@ -3724,7 +3712,7 @@ yum install geowave-cdh5-puppet</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-05-28 15:40:27 UTC
+Last updated 2015-05-28 15:44:01 UTC
 </div>
 </div>
 </body>
