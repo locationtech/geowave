@@ -15,7 +15,7 @@ import java.util.List;
 
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import mil.nga.giat.geowave.adapter.vector.ingest.AbstractSimpleFeatureIngestPlugin;
-import mil.nga.giat.geowave.core.geotime.GeometryUtils;
+import mil.nga.giat.geowave.adapter.vector.utils.GeometryUtils;
 import mil.nga.giat.geowave.core.geotime.IndexType;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.StringUtils;
@@ -34,10 +34,14 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
+import org.geotools.referencing.CRS;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
+import org.opengis.referencing.FactoryException;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.GeometryFactory;
 
 /*
  */
@@ -58,6 +62,8 @@ public class GeoLifeIngestPlugin extends
 
 	private final Index[] supportedIndices;
 
+	private CoordinateReferenceSystem crs;
+
 	public GeoLifeIngestPlugin() {
 		geolifePointType = GeoLifeUtils.createGeoLifePointDataType();
 		pointKey = new ByteArrayId(
@@ -75,7 +81,14 @@ public class GeoLifeIngestPlugin extends
 			IndexType.SPATIAL_VECTOR.createDefaultIndex(),
 			IndexType.SPATIAL_TEMPORAL_VECTOR.createDefaultIndex()
 		};
-
+		try {
+			crs = CRS.decode("EPSG:4326");
+		}
+		catch (FactoryException e) {
+			LOGGER.error(
+					"Unable to decode Coordinate Reference System authority code!",
+					e);
+		}
 	}
 
 	@Override
@@ -183,6 +196,9 @@ public class GeoLifeIngestPlugin extends
 		Date startTimeStamp = null;
 		Date endTimeStamp = null;
 		String timestring = "";
+		GeometryFactory geometryFactory = new GeometryFactory();
+		double currLat;
+		double currLng;
 		try {
 			while ((line = br.readLine()) != null) {
 
@@ -191,13 +207,21 @@ public class GeoLifeIngestPlugin extends
 					continue;
 				}
 
-				final Coordinate cord = new Coordinate(
+				currLat = GeometryUtils.adjustCoordinateDimensionToRange(
+						Double.parseDouble(vals[0]),
+						crs,
+						1);
+				currLng = GeometryUtils.adjustCoordinateDimensionToRange(
 						Double.parseDouble(vals[1]),
-						Double.parseDouble(vals[0]));
+						crs,
+						0);
+				final Coordinate cord = new Coordinate(
+						currLng,
+						currLat);
 				pts.add(cord);
 				geolifePointBuilder.set(
 						"geometry",
-						GeometryUtils.GEOMETRY_FACTORY.createPoint(cord));
+						geometryFactory.createPoint(cord));
 				geolifePointBuilder.set(
 						"trackid",
 						trackId);
@@ -218,10 +242,10 @@ public class GeoLifeIngestPlugin extends
 
 				geolifePointBuilder.set(
 						"Latitude",
-						Double.parseDouble(vals[0]));
+						currLat);
 				geolifePointBuilder.set(
 						"Longitude",
-						Double.parseDouble(vals[1]));
+						currLng);
 
 				Double elevation = Double.parseDouble(vals[3]);
 				if (elevation == -777) {
@@ -238,7 +262,7 @@ public class GeoLifeIngestPlugin extends
 
 			geolifeTrackBuilder.set(
 					"geometry",
-					GeometryUtils.GEOMETRY_FACTORY.createLineString(pts.toArray(new Coordinate[pts.size()])));
+					geometryFactory.createLineString(pts.toArray(new Coordinate[pts.size()])));
 
 			geolifeTrackBuilder.set(
 					"StartTimeStamp",
