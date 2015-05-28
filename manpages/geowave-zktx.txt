@@ -1,0 +1,63 @@
+//:geowave-zktx(1)
+//:===============
+//::doctype: manpage
+
+NAME
+//:----
+
+geowave-zktx - Reserve transaction IDs for long running WFS-T transactions
+
+SYNOPSIS
+//:--------
+
+*geowave -zkTx* <options>
+
+DESCRIPTION
+//:-----------
+
+The geowave-zkTx(1) operator will create the specified number of transaction IDs for use with long running WFS-T transactions with auto-commit turned off.
+These transaction IDs are used as visibility labels in Accumulo to hide ongoing changes until a commit point when the label is removed.
+
+OPTIONS
+//:-------
+
+-h,--help::
+Display help
+
+-i, --instance-id <arg>::
+The Accumulo instance ID
+
+-m,--maximum <arg>::
+Maximum number of simultaneous transactions
+
+-n, --namespace <arg>::
+The table namespace (optional; default is no namespace)
+
+-p, --password <arg>::
+The password for the user
+
+-r,--recipient <arg>::
+Recipient application user account for the set of transactions
+
+-u, --user <arg>::
+A valid Accumulo user ID
+
+-z, --zookeepers <arg>::
+A comma-separated list of zookeeper servers that an Accumulo instance is using
+
+EXAMPLES
+//:--------
+
+geowave -zkTx \
+    -i hdp-accumulo-instance \
+    -m NUM_SIMULTANEOUS_TRANSACTIONS \
+    -n NAMESPACE \
+    -r NAMESPACE_USER \
+    -u root \
+    -p ROOT_PWD \
+    -z ZK_SERVER:2181
+
+This command should output a logging message stating if it added transaction IDs ex: "Added 20 useable transaction IDs". If transactions
+have already been allocated it may return a message like "Added 0 useable transactions IDs" which absent any error messages is OK. You
+can verify the transactions have been created using a zookeeper client with a command like, "zookeeper-client -server c3-master:2181 ls /geowave/tx"
+which should return a list of transaction IDs (guids)
