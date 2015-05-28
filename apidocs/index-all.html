@@ -606,6 +606,16 @@
 <dd>
 <div class="block">Add the field ID/value pair to this data set.</div>
 </dd>
+<dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/utils/GeometryUtils.html#adjustCoordinateToFitInRange(org.opengis.referencing.crs.CoordinateReferenceSystem,%20com.vividsolutions.jts.geom.Coordinate)">adjustCoordinateToFitInRange(CoordinateReferenceSystem, Coordinate)</a></span> - Static method in class mil.nga.giat.geowave.adapter.vector.utils.<a href="./mil/nga/giat/geowave/adapter/vector/utils/GeometryUtils.html" title="class in mil.nga.giat.geowave.adapter.vector.utils">GeometryUtils</a></dt>
+<dd>
+<div class="block">Make sure the coordinate falls in the range of provided coordinate
+ reference systems's coordinate system.</div>
+</dd>
+<dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/utils/GeometryUtils.html#adjustGeo(org.opengis.referencing.crs.CoordinateReferenceSystem,%20com.vividsolutions.jts.geom.Geometry)">adjustGeo(CoordinateReferenceSystem, Geometry)</a></span> - Static method in class mil.nga.giat.geowave.adapter.vector.utils.<a href="./mil/nga/giat/geowave/adapter/vector/utils/GeometryUtils.html" title="class in mil.nga.giat.geowave.adapter.vector.utils">GeometryUtils</a></dt>
+<dd>
+<div class="block">Consume a geometry that may be over the ranges of the CRS (e.g date-line
+ crossing).</div>
+</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/wms/accumulo/ServerRenderOptions.html#advancedProjectionHandlingEnabled">advancedProjectionHandlingEnabled</a></span> - Variable in class mil.nga.giat.geowave.adapter.vector.wms.accumulo.<a href="./mil/nga/giat/geowave/adapter/vector/wms/accumulo/ServerRenderOptions.html" title="class in mil.nga.giat.geowave.adapter.vector.wms.accumulo">ServerRenderOptions</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/datastore/accumulo/util/AccumuloUtils.html#ALT_INDEX_TABLE">ALT_INDEX_TABLE</a></span> - Static variable in class mil.nga.giat.geowave.datastore.accumulo.util.<a href="./mil/nga/giat/geowave/datastore/accumulo/util/AccumuloUtils.html" title="class in mil.nga.giat.geowave.datastore.accumulo.util">AccumuloUtils</a></dt>
@@ -1092,6 +1102,10 @@
 <dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/core/geotime/store/statistics/BoundingBoxDataStatistics.html#BoundingBoxDataStatistics(mil.nga.giat.geowave.core.index.ByteArrayId,%20mil.nga.giat.geowave.core.index.ByteArrayId)">BoundingBoxDataStatistics(ByteArrayId, ByteArrayId)</a></span> - Constructor for class mil.nga.giat.geowave.core.geotime.store.statistics.<a href="./mil/nga/giat/geowave/core/geotime/store/statistics/BoundingBoxDataStatistics.html" title="class in mil.nga.giat.geowave.core.geotime.store.statistics">BoundingBoxDataStatistics</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/utils/GeometryUtils.html#buffer(org.opengis.referencing.crs.CoordinateReferenceSystem,%20com.vividsolutions.jts.geom.Geometry,%20java.lang.String,%20double)">buffer(CoordinateReferenceSystem, Geometry, String, double)</a></span> - Static method in class mil.nga.giat.geowave.adapter.vector.utils.<a href="./mil/nga/giat/geowave/adapter/vector/utils/GeometryUtils.html" title="class in mil.nga.giat.geowave.adapter.vector.utils">GeometryUtils</a></dt>
+<dd>
+<div class="block">Build a buffer around a geometry</div>
+</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/analytic/db/BasicAccumuloOperationsFactory.html#build(java.lang.String,%20java.lang.String,%20java.lang.String,%20java.lang.String,%20java.lang.String)">build(String, String, String, String, String)</a></span> - Method in interface mil.nga.giat.geowave.analytic.db.<a href="./mil/nga/giat/geowave/analytic/db/BasicAccumuloOperationsFactory.html" title="interface in mil.nga.giat.geowave.analytic.db">BasicAccumuloOperationsFactory</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/analytic/db/DirectBasicAccumuloOperationsFactory.html#build(java.lang.String,%20java.lang.String,%20java.lang.String,%20java.lang.String,%20java.lang.String)">build(String, String, String, String, String)</a></span> - Method in class mil.nga.giat.geowave.analytic.db.<a href="./mil/nga/giat/geowave/analytic/db/DirectBasicAccumuloOperationsFactory.html" title="class in mil.nga.giat.geowave.analytic.db">DirectBasicAccumuloOperationsFactory</a></dt>
@@ -1747,6 +1761,11 @@
 <dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/analytic/mapreduce/kmeans/runner/StripWeakCentroidsRunner.html#constructCentroidManager(org.apache.hadoop.conf.Configuration,%20mil.nga.giat.geowave.analytic.PropertyManagement)">constructCentroidManager(Configuration, PropertyManagement)</a></span> - Method in class mil.nga.giat.geowave.analytic.mapreduce.kmeans.runner.<a href="./mil/nga/giat/geowave/analytic/mapreduce/kmeans/runner/StripWeakCentroidsRunner.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.kmeans.runner">StripWeakCentroidsRunner</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/utils/GeometryUtils.html#constructGeometriesOverMapRegions(com.vividsolutions.jts.geom.Coordinate,%20com.vividsolutions.jts.geom.Geometry)">constructGeometriesOverMapRegions(Coordinate, Geometry)</a></span> - Static method in class mil.nga.giat.geowave.adapter.vector.utils.<a href="./mil/nga/giat/geowave/adapter/vector/utils/GeometryUtils.html" title="class in mil.nga.giat.geowave.adapter.vector.utils">GeometryUtils</a></dt>
+<dd>
+<div class="block">Produce a set of polygons for each region of the map corrected for date
+ line and hemisphere crossings.</div>
+</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/datastore/accumulo/util/AccumuloKeyValuePairGenerator.html#constructKeyValuePairs(byte[],%20T)">constructKeyValuePairs(byte[], T)</a></span> - Method in class mil.nga.giat.geowave.datastore.accumulo.util.<a href="./mil/nga/giat/geowave/datastore/accumulo/util/AccumuloKeyValuePairGenerator.html" title="class in mil.nga.giat.geowave.datastore.accumulo.util">AccumuloKeyValuePairGenerator</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/query/FixedCardinalitySkippingIterator.html#consume()">consume()</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.query.<a href="./mil/nga/giat/geowave/adapter/vector/query/FixedCardinalitySkippingIterator.html" title="class in mil.nga.giat.geowave.adapter.vector.query">FixedCardinalitySkippingIterator</a></dt>
@@ -3418,6 +3437,10 @@
 <dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/query/FixedCardinalitySkippingIterator.html#FixedCardinalitySkippingIterator(org.apache.accumulo.core.iterators.SortedKeyValueIterator,%20java.lang.Integer,%20java.util.Collection,%20boolean)">FixedCardinalitySkippingIterator(SortedKeyValueIterator&lt;Key, Value&gt;, Integer, Collection&lt;ByteSequence&gt;, boolean)</a></span> - Constructor for class mil.nga.giat.geowave.adapter.vector.query.<a href="./mil/nga/giat/geowave/adapter/vector/query/FixedCardinalitySkippingIterator.html" title="class in mil.nga.giat.geowave.adapter.vector.query">FixedCardinalitySkippingIterator</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/utils/GeometryUtils.html#fixRangeOfCoordinates(org.opengis.referencing.crs.CoordinateReferenceSystem,%20com.vividsolutions.jts.geom.Geometry)">fixRangeOfCoordinates(CoordinateReferenceSystem, Geometry)</a></span> - Static method in class mil.nga.giat.geowave.adapter.vector.utils.<a href="./mil/nga/giat/geowave/adapter/vector/utils/GeometryUtils.html" title="class in mil.nga.giat.geowave.adapter.vector.utils">GeometryUtils</a></dt>
+<dd>
+<div class="block">Adjust geometry so that coordinates fit into long/lat bounds.</div>
+</dd>
 <dt><a href="./mil/nga/giat/geowave/core/store/data/field/base/FloatArraySerializationProvider.html" title="class in mil.nga.giat.geowave.core.store.data.field.base"><span class="strong">FloatArraySerializationProvider</span></a> - Class in <a href="./mil/nga/giat/geowave/core/store/data/field/base/package-summary.html">mil.nga.giat.geowave.core.store.data.field.base</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/core/store/data/field/base/FloatArraySerializationProvider.html#FloatArraySerializationProvider()">FloatArraySerializationProvider()</a></span> - Constructor for class mil.nga.giat.geowave.core.store.data.field.base.<a href="./mil/nga/giat/geowave/core/store/data/field/base/FloatArraySerializationProvider.html" title="class in mil.nga.giat.geowave.core.store.data.field.base">FloatArraySerializationProvider</a></dt>
@@ -3711,6 +3734,10 @@
 <dd>
 <div class="block">Converts a JTS geometry to binary using JTS a Well Known Binary writer</div>
 </dd>
+<dt><a href="./mil/nga/giat/geowave/adapter/vector/utils/GeometryUtils.html" title="class in mil.nga.giat.geowave.adapter.vector.utils"><span class="strong">GeometryUtils</span></a> - Class in <a href="./mil/nga/giat/geowave/adapter/vector/utils/package-summary.html">mil.nga.giat.geowave.adapter.vector.utils</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/utils/GeometryUtils.html#GeometryUtils()">GeometryUtils()</a></span> - Constructor for class mil.nga.giat.geowave.adapter.vector.utils.<a href="./mil/nga/giat/geowave/adapter/vector/utils/GeometryUtils.html" title="class in mil.nga.giat.geowave.adapter.vector.utils">GeometryUtils</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="./mil/nga/giat/geowave/core/geotime/GeometryUtils.html" title="class in mil.nga.giat.geowave.core.geotime"><span class="strong">GeometryUtils</span></a> - Class in <a href="./mil/nga/giat/geowave/core/geotime/package-summary.html">mil.nga.giat.geowave.core.geotime</a></dt>
 <dd>
 <div class="block">This class contains a set of Geometry utility methods that are generally
@@ -13361,6 +13388,8 @@
 <dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/core/index/sfc/data/NumericValue.html#toString()">toString()</a></span> - Method in class mil.nga.giat.geowave.core.index.sfc.data.<a href="./mil/nga/giat/geowave/core/index/sfc/data/NumericValue.html" title="class in mil.nga.giat.geowave.core.index.sfc.data">NumericValue</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="strong"><a href="./mil/nga/giat/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#toString()">toString()</a></span> - Method in class mil.nga.giat.geowave.core.store.adapter.statistics.<a href="./mil/nga/giat/geowave/core/store/adapter/statistics/AbstractDataStatistics.html" title="class in mil.nga.giat.geowave.core.store.adapter.statistics">AbstractDataStatistics</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/datastore/accumulo/mapreduce/NativeMapContext.html#toString()">toString()</a></span> - Method in class mil.nga.giat.geowave.datastore.accumulo.mapreduce.<a href="./mil/nga/giat/geowave/datastore/accumulo/mapreduce/NativeMapContext.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce">NativeMapContext</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/datastore/accumulo/mapreduce/NativeReduceContext.html#toString()">toString()</a></span> - Method in class mil.nga.giat.geowave.datastore.accumulo.mapreduce.<a href="./mil/nga/giat/geowave/datastore/accumulo/mapreduce/NativeReduceContext.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce">NativeReduceContext</a></dt>
@@ -14174,7 +14203,10 @@ the order they are declared.</div>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/query/cql/FilterToECQLExtension.html#visit(org.opengis.filter.spatial.Disjoint,%20java.lang.Object)">visit(Disjoint, Object)</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.query.cql.<a href="./mil/nga/giat/geowave/adapter/vector/query/cql/FilterToECQLExtension.html" title="class in mil.nga.giat.geowave.adapter.vector.query.cql">FilterToECQLExtension</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/query/cql/FilterToECQLExtension.html#visit(org.opengis.filter.spatial.DWithin,%20java.lang.Object)">visit(DWithin, Object)</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.query.cql.<a href="./mil/nga/giat/geowave/adapter/vector/query/cql/FilterToECQLExtension.html" title="class in mil.nga.giat.geowave.adapter.vector.query.cql">FilterToECQLExtension</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">DWithin spatial operator will find out if a feature in a datalayer is
+ within X meters of a point, line, or polygon.</div>
+</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/query/cql/FilterToECQLExtension.html#visit(org.opengis.filter.spatial.Equals,%20java.lang.Object)">visit(Equals, Object)</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.query.cql.<a href="./mil/nga/giat/geowave/adapter/vector/query/cql/FilterToECQLExtension.html" title="class in mil.nga.giat.geowave.adapter.vector.query.cql">FilterToECQLExtension</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/query/cql/FilterToECQLExtension.html#visit(org.opengis.filter.spatial.Intersects,%20java.lang.Object)">visit(Intersects, Object)</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.query.cql.<a href="./mil/nga/giat/geowave/adapter/vector/query/cql/FilterToECQLExtension.html" title="class in mil.nga.giat.geowave.adapter.vector.query.cql">FilterToECQLExtension</a></dt>
@@ -14260,6 +14292,11 @@ the order they are declared.</div>
 <dt><a href="./mil/nga/giat/geowave/core/ingest/avro/WholeFile.Builder.html" title="class in mil.nga.giat.geowave.core.ingest.avro"><span class="strong">WholeFile.Builder</span></a> - Class in <a href="./mil/nga/giat/geowave/core/ingest/avro/package-summary.html">mil.nga.giat.geowave.core.ingest.avro</a></dt>
 <dd>
 <div class="block">RecordBuilder for WholeFile instances.</div>
+</dd>
+<dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/utils/GeometryUtils.html#world(com.vividsolutions.jts.geom.GeometryFactory,%20org.opengis.referencing.crs.CoordinateReferenceSystem)">world(GeometryFactory, CoordinateReferenceSystem)</a></span> - Static method in class mil.nga.giat.geowave.adapter.vector.utils.<a href="./mil/nga/giat/geowave/adapter/vector/utils/GeometryUtils.html" title="class in mil.nga.giat.geowave.adapter.vector.utils">GeometryUtils</a></dt>
+<dd>
+<div class="block">Return a multi-polygon representing the bounded map regions split by the
+ axis</div>
 </dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/query/CqlQueryRenderIterator.html#wrappedIterator">wrappedIterator</a></span> - Variable in class mil.nga.giat.geowave.adapter.vector.query.<a href="./mil/nga/giat/geowave/adapter/vector/query/CqlQueryRenderIterator.html" title="class in mil.nga.giat.geowave.adapter.vector.query">CqlQueryRenderIterator</a></dt>
 <dd>&nbsp;</dd>
