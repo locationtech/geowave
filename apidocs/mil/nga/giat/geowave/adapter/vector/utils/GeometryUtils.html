@@ -133,6 +133,15 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>static double</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/utils/GeometryUtils.html#adjustCoordinateDimensionToRange(double,%20org.opengis.referencing.crs.CoordinateReferenceSystem,%20int)">adjustCoordinateDimensionToRange</a></strong>(double&nbsp;val,
+                                org.opengis.referencing.crs.CoordinateReferenceSystem&nbsp;crs,
+                                int&nbsp;axis)</code>
+<div class="block">This is perhaps a brain dead approach to do this, but it does handle wrap
+ around cases.</div>
+</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>static com.vividsolutions.jts.geom.Coordinate</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/utils/GeometryUtils.html#adjustCoordinateToFitInRange(org.opengis.referencing.crs.CoordinateReferenceSystem,%20com.vividsolutions.jts.geom.Coordinate)">adjustCoordinateToFitInRange</a></strong>(org.opengis.referencing.crs.CoordinateReferenceSystem&nbsp;crs,
                             com.vividsolutions.jts.geom.Coordinate&nbsp;coord)</code>
@@ -140,7 +149,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
  reference systems's coordinate system.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static com.vividsolutions.jts.geom.Geometry</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/utils/GeometryUtils.html#adjustGeo(org.opengis.referencing.crs.CoordinateReferenceSystem,%20com.vividsolutions.jts.geom.Geometry)">adjustGeo</a></strong>(org.opengis.referencing.crs.CoordinateReferenceSystem&nbsp;crs,
          com.vividsolutions.jts.geom.Geometry&nbsp;geometry)</code>
@@ -148,7 +157,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
  crossing).</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static org.apache.commons.lang3.tuple.Pair&lt;com.vividsolutions.jts.geom.Geometry,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/utils/GeometryUtils.html#buffer(org.opengis.referencing.crs.CoordinateReferenceSystem,%20com.vividsolutions.jts.geom.Geometry,%20java.lang.String,%20double)">buffer</a></strong>(org.opengis.referencing.crs.CoordinateReferenceSystem&nbsp;crs,
       com.vividsolutions.jts.geom.Geometry&nbsp;geometry,
@@ -157,7 +166,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <div class="block">Build a buffer around a geometry</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;com.vividsolutions.jts.geom.Polygon&gt;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/utils/GeometryUtils.html#constructGeometriesOverMapRegions(com.vividsolutions.jts.geom.Coordinate,%20com.vividsolutions.jts.geom.Geometry)">constructGeometriesOverMapRegions</a></strong>(com.vividsolutions.jts.geom.Coordinate&nbsp;modifier,
                                  com.vividsolutions.jts.geom.Geometry&nbsp;geometry)</code>
@@ -165,14 +174,14 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
  line and hemisphere crossings.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;com.vividsolutions.jts.geom.Polygon&gt;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/utils/GeometryUtils.html#fixRangeOfCoordinates(org.opengis.referencing.crs.CoordinateReferenceSystem,%20com.vividsolutions.jts.geom.Geometry)">fixRangeOfCoordinates</a></strong>(org.opengis.referencing.crs.CoordinateReferenceSystem&nbsp;crs,
                      com.vividsolutions.jts.geom.Geometry&nbsp;geometry)</code>
 <div class="block">Adjust geometry so that coordinates fit into long/lat bounds.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static com.vividsolutions.jts.geom.Geometry</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/utils/GeometryUtils.html#world(com.vividsolutions.jts.geom.GeometryFactory,%20org.opengis.referencing.crs.CoordinateReferenceSystem)">world</a></strong>(com.vividsolutions.jts.geom.GeometryFactory&nbsp;factory,
      org.opengis.referencing.crs.CoordinateReferenceSystem&nbsp;crs)</code>
@@ -303,6 +312,22 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
  date line. 'y' and 'z' coordinate are clipped. At some point, this
  function will be adjusted to project 'y' appropriately.</div>
 <dl><dt><span class="strong">Parameters:</span></dt><dd><code>crs</code> - </dd><dd><code>coord</code> - </dd>
+<dt><span class="strong">Returns:</span></dt><dd></dd></dl>
+</li>
+</ul>
+<a name="adjustCoordinateDimensionToRange(double, org.opengis.referencing.crs.CoordinateReferenceSystem, int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>adjustCoordinateDimensionToRange</h4>
+<pre>public static&nbsp;double&nbsp;adjustCoordinateDimensionToRange(double&nbsp;val,
+                                      org.opengis.referencing.crs.CoordinateReferenceSystem&nbsp;crs,
+                                      int&nbsp;axis)</pre>
+<div class="block">This is perhaps a brain dead approach to do this, but it does handle wrap
+ around cases. Also supports cases where the wrap around occurs many
+ times.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>val</code> - the value</dd><dd><code>crs</code> - </dd><dd><code>axis</code> - the coordinate axis</dd>
 <dt><span class="strong">Returns:</span></dt><dd></dd></dl>
 </li>
 </ul>
