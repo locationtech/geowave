@@ -212,10 +212,9 @@ public class GeometryUtils
 
 	/**
 	 * Make sure the coordinate falls in the range of provided coordinate
-	 * reference systems's coordinate system.  
-	 * 'x' coordinate is wrapped around date line.
-	 * 'y' and 'z' coordinate are clipped.  At some point, this function
-	 * will be adjusted to project 'y' appropriately.
+	 * reference systems's coordinate system. 'x' coordinate is wrapped around
+	 * date line. 'y' and 'z' coordinate are clipped. At some point, this
+	 * function will be adjusted to project 'y' appropriately.
 	 * 
 	 * @param crs
 	 * @param coord
@@ -339,7 +338,7 @@ public class GeometryUtils
 	 *            the coordinate axis
 	 * @return
 	 */
-	private static double adjustCoordinateDimensionToRange(
+	public static double adjustCoordinateDimensionToRange(
 			final double val,
 			final CoordinateReferenceSystem crs,
 			final int axis ) {
