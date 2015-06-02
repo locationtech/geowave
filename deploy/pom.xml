@@ -145,6 +145,63 @@
 			</build>
 		</profile>
 		<profile>
+			<id>hbase-container</id>
+			<dependencyManagement>
+				<dependencies>
+					<dependency>
+						<!-- because distributable packages are built from this module, this 
+							is here to override the scope supplied by geowave-accumulo -->
+						<groupId>org.apache.hbase</groupId>
+						<artifactId>hbase-client</artifactId>
+						<version>${hbase.version}</version>
+						<scope>${hbase.scope}</scope>
+						<exclusions>
+							<exclusion>
+								<artifactId>maven-scm-provider-svnexe</artifactId>
+								<groupId>org.apache.maven.scm</groupId>
+							</exclusion>
+							<exclusion>
+								<artifactId>maven-scm-api</artifactId>
+								<groupId>org.apache.maven.scm</groupId>
+							</exclusion>
+							<exclusion>
+								<artifactId>httpclient</artifactId>
+								<groupId>org.apache.httpcomponents</groupId>
+							</exclusion>
+							<exclusion>
+								<artifactId>httpcore</artifactId>
+								<groupId>org.apache.httpcomponents</groupId>
+							</exclusion>
+							<exclusion>
+								<artifactId>commons-lang</artifactId>
+								<groupId>commons-lang</groupId>
+							</exclusion>
+						</exclusions>
+					</dependency>
+					<dependency>
+						<groupId>org.apache.hadoop</groupId>
+						<artifactId>hadoop-common</artifactId>
+						<version>${hadoop.version}</version>
+						<scope>${hadoop.scope}</scope>
+					</dependency>
+				</dependencies>
+			</dependencyManagement>
+			<build>
+				<plugins>
+					<plugin>
+						<artifactId>maven-assembly-plugin</artifactId>
+						<version>2.2.1</version>
+						<configuration>
+							<descriptors>
+								<descriptor>src/main/assembly/assembly${container.extension}.xml</descriptor>
+							</descriptors>
+							<finalName>${project.build.finalName}${container.extension}</finalName>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
 			<id>geotools-container</id>
 			<dependencyManagement>
 				<dependencies>
@@ -378,6 +435,70 @@
 									<createDependencyReducedPom>false</createDependencyReducedPom>
 									<minimizeJar>false</minimizeJar>
 									<finalName>${project.build.finalName}-accumulo-singlejar</finalName>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>hbase-container-singlejar</id>
+			<dependencyManagement>
+				<dependencies>
+					<dependency>
+						<!-- because distributable packages are built from this module, this 
+							is here to override the scope supplied by geowave-hbase -->
+						<groupId>org.apache.hbase</groupId>
+						<artifactId>hbase-client</artifactId>
+						<version>${hbase.version}</version>
+						<scope>provided</scope>
+					</dependency>
+					<dependency>
+						<groupId>org.apache.hadoop</groupId>
+						<artifactId>hadoop-common</artifactId>
+						<version>${hadoop.version}</version>
+						<scope>provided</scope>
+					</dependency>
+				</dependencies>
+			</dependencyManagement>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-shade-plugin</artifactId>
+						<version>2.2</version>
+						<executions>
+							<execution>
+								<phase>package</phase>
+								<goals>
+									<goal>shade</goal>
+								</goals>
+								<configuration>
+									<artifactSet>
+										<excludes>
+											<exclude>org.slf4j:*</exclude>
+											<exclude>org.jruby:*</exclude>
+											<exclude>jline:*</exclude>
+										</excludes>
+									</artifactSet>
+									<filters>
+										<filter>
+											<artifact>*:*</artifact>
+											<excludes>
+												<exclude>META-INF/*.SF</exclude>
+												<exclude>META-INF/*.DSA</exclude>
+												<exclude>META-INF/*.RSA</exclude>
+											</excludes>
+										</filter>
+									</filters>
+									<transformers>
+										<transformer
+											implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
+									</transformers>
+									<createDependencyReducedPom>false</createDependencyReducedPom>
+									<minimizeJar>false</minimizeJar>
+									<finalName>${project.build.finalName}-hbase-singlejar</finalName>
 								</configuration>
 							</execution>
 						</executions>

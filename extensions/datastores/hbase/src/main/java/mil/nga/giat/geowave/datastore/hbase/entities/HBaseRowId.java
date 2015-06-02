@@ -1,52 +1,38 @@
-package mil.nga.giat.geowave.datastore.accumulo;
+/**
+ * 
+ */
+package mil.nga.giat.geowave.datastore.hbase.entities;
 
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 
-import org.apache.accumulo.core.data.Key;
-
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-
 /**
- * This class encapsulates the elements that compose the row ID in Accumulo, and
- * can serialize and deserialize the individual elements to/from the row ID. The
- * row ID consists of the index ID, followed by an adapter ID, followed by a
- * data ID, followed by data ID length and adapter ID length, and lastly the
- * number of duplicate row IDs for this entry. The data ID must be unique for an
- * adapter, so the combination of adapter ID and data ID is intended to
- * guarantee uniqueness for this row ID.
- * 
+ * @author viggy Functionality similar to <code> AccumuloRowId </code>
  */
-@SuppressFBWarnings(value = "EI_EXPOSE_REP", justification = "private class only accessed internally")
-public class AccumuloRowId
+public class HBaseRowId
 {
-	private final byte[] insertionId;
-	private final byte[] dataId;
-	private final byte[] adapterId;
-	private final int numberOfDuplicates;
 
-	public AccumuloRowId(
-			final Key key ) {
-		this(
-				key.getRow().copyBytes());
-	}
+	private byte[] insertionId;
+	private byte[] dataId;
+	private byte[] adapterId;
+	private int numberOfDuplicates;
 
-	public AccumuloRowId(
-			final byte[] accumuloRowId ) {
+	public HBaseRowId(
+			final byte[] hbaseRowId ) {
 		final byte[] metadata = Arrays.copyOfRange(
-				accumuloRowId,
-				accumuloRowId.length - 12,
-				accumuloRowId.length);
+				hbaseRowId,
+				hbaseRowId.length - 12,
+				hbaseRowId.length);
 		final ByteBuffer metadataBuf = ByteBuffer.wrap(metadata);
 		final int adapterIdLength = metadataBuf.getInt();
 		final int dataIdLength = metadataBuf.getInt();
 		final int numberOfDuplicates = metadataBuf.getInt();
 
 		final ByteBuffer buf = ByteBuffer.wrap(
-				accumuloRowId,
+				hbaseRowId,
 				0,
-				accumuloRowId.length - 12);
-		final byte[] insertionId = new byte[accumuloRowId.length - 12 - adapterIdLength - dataIdLength];
+				hbaseRowId.length - 12);
+		final byte[] insertionId = new byte[hbaseRowId.length - 12 - adapterIdLength - dataIdLength];
 		final byte[] adapterId = new byte[adapterIdLength];
 		final byte[] dataId = new byte[dataIdLength];
 		buf.get(insertionId);
@@ -58,7 +44,7 @@ public class AccumuloRowId
 		this.numberOfDuplicates = numberOfDuplicates;
 	}
 
-	public AccumuloRowId(
+	public HBaseRowId(
 			final byte[] indexId,
 			final byte[] dataId,
 			final byte[] adapterId,

@@ -515,79 +515,6 @@ public class AccumuloUtils
 	}
 
 	/**
-	 * This method combines all FieldInfos that share a common visibility into a
-	 * single FieldInfo
-	 * 
-	 * @param originalList
-	 * @param index
-	 * @return a new list of composite FieldInfos
-	 */
-	private static <T> List<FieldInfo<?>> composeFlattenedFields(
-			final List<FieldInfo<?>> originalList,
-			final PrimaryIndex index ) {
-		final List<FieldInfo<?>> retVal = new ArrayList<>();
-		final Map<ByteArrayId, List<FieldInfo<?>>> vizToFieldMap = new HashMap<>();
-		boolean sharedVisibility = false;
-		// organize FieldInfos by unique visibility
-		for (final FieldInfo<?> fieldInfo : originalList) {
-			final ByteArrayId currViz = new ByteArrayId(
-					fieldInfo.getVisibility());
-			if (vizToFieldMap.containsKey(currViz)) {
-				sharedVisibility = true;
-				final List<FieldInfo<?>> listForViz = vizToFieldMap.get(currViz);
-				final FieldReader<CommonIndexValue> fieldReader = index.getIndexModel().getReader(
-						fieldInfo.getDataValue().getId());
-				if (fieldReader != null) {
-					// put common index values up front
-					listForViz.add(
-							0,
-							fieldInfo);
-				}
-				else {
-					listForViz.add(fieldInfo);
-				}
-			}
-			else {
-				final List<FieldInfo<?>> listForViz = new ArrayList<>();
-				listForViz.add(fieldInfo);
-				vizToFieldMap.put(
-						currViz,
-						listForViz);
-			}
-		}
-		if (!sharedVisibility) {
-			return originalList;
-		}
-		for (final Entry<ByteArrayId, List<FieldInfo<?>>> entry : vizToFieldMap.entrySet()) {
-			final List<byte[]> fieldInfoBytesList = new ArrayList<>();
-			int totalLength = 0;
-			for (final FieldInfo<?> fieldInfo : entry.getValue()) {
-				final byte[] fieldIdBytes = fieldInfo.getDataValue().getId().getBytes();
-				final ByteBuffer fieldInfoBytes = ByteBuffer.allocate(8 + fieldIdBytes.length + fieldInfo.getWrittenValue().length);
-				fieldInfoBytes.putInt(fieldIdBytes.length);
-				fieldInfoBytes.put(fieldIdBytes);
-				fieldInfoBytes.putInt(fieldInfo.getWrittenValue().length);
-				fieldInfoBytes.put(fieldInfo.getWrittenValue());
-				fieldInfoBytesList.add(fieldInfoBytes.array());
-				totalLength += fieldInfoBytes.array().length;
-			}
-			final ByteBuffer allFields = ByteBuffer.allocate(4 + totalLength);
-			allFields.putInt(entry.getValue().size());
-			for (final byte[] bytes : fieldInfoBytesList) {
-				allFields.put(bytes);
-			}
-			final FieldInfo<?> composite = new FieldInfo<T>(
-					new PersistentValue<T>(
-							COMPOSITE_CQ,
-							null), // unnecessary
-					allFields.array(),
-					entry.getKey().getBytes());
-			retVal.add(composite);
-		}
-		return retVal;
-	}
-
-	/**
 	 * 
 	 * @param dataWriter
 	 * @param index
@@ -1060,7 +987,7 @@ public class AccumuloUtils
 	}
 
 	/**
-	 * * Get number of entries per index.
+	 * Get number of entries per index.
 	 * 
 	 * @param namespace
 	 * @param index
@@ -1098,6 +1025,37 @@ public class AccumuloUtils
 							operations),
 					null,
 					null);
+			while (iterator.hasNext()) {
+				counter++;
+				iterator.next();
+			}
+			iterator.close();
+		}
+		return counter;
+	}
+
+	/**
+	 * Get number of entries per namespace.
+	 * 
+	 * @param namespace
+	 * @return
+	 * @throws AccumuloException
+	 * @throws AccumuloSecurityException
+	 * @throws IOException
+	 */
+	public static long getEntries(
+			final Connector connector,
+			final String namespace )
+			throws AccumuloException,
+			AccumuloSecurityException,
+			IOException {
+		long counter = 0L;
+		final AccumuloDataStore dataStore = new AccumuloDataStore(
+				new BasicAccumuloOperations(
+						connector,
+						namespace));
+		if (dataStore != null) {
+			final CloseableIterator<?> iterator = dataStore.query((Query) null);
 			while (iterator.hasNext()) {
 				counter++;
 				iterator.next();

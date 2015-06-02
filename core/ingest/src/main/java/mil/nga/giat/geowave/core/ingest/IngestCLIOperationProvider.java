@@ -4,10 +4,13 @@ import mil.nga.giat.geowave.core.cli.CLIOperation;
 import mil.nga.giat.geowave.core.cli.CLIOperationCategory;
 import mil.nga.giat.geowave.core.cli.CLIOperationProviderSpi;
 import mil.nga.giat.geowave.core.ingest.hdfs.StageToHdfsDriver;
+import mil.nga.giat.geowave.core.ingest.hdfs.StageToHdfsHBaseDriver;
 import mil.nga.giat.geowave.core.ingest.hdfs.mapreduce.IngestFromHdfsDriver;
 import mil.nga.giat.geowave.core.ingest.kafka.IngestFromKafkaDriver;
+import mil.nga.giat.geowave.core.ingest.hdfs.mapreduce.hbase.IngestFromHBaseHdfsDriver;
 import mil.nga.giat.geowave.core.ingest.kafka.StageToKafkaDriver;
 import mil.nga.giat.geowave.core.ingest.local.LocalFileIngestDriver;
+import mil.nga.giat.geowave.core.ingest.local.LocalFileIngestHBaseDriver;
 
 public class IngestCLIOperationProvider implements
 		CLIOperationProviderSpi
@@ -29,15 +32,30 @@ public class IngestCLIOperationProvider implements
 				new LocalFileIngestDriver(
 						"localingest")),
 		new CLIOperation(
+				"localhbaseingest",
+				"ingest supported files in local file system directly, without using HDFS through HBase",
+				new LocalFileIngestHBaseDriver(
+						"localhbaseingest")),
+		new CLIOperation(
 				"hdfsstage",
 				"stage supported files in local file system to HDFS",
 				new StageToHdfsDriver(
 						"hdfsstage")),
 		new CLIOperation(
+				"hdfshbasestage",
+				"stage supported files in local file system to HDFS",
+				new StageToHdfsHBaseDriver(
+						"hdfshbasestage")),
+		new CLIOperation(
 				"poststage",
 				"ingest supported files that already exist in HDFS",
 				new IngestFromHdfsDriver(
 						"poststage")),
+		new CLIOperation(
+				"posthbasestage",
+				"ingest supported files that already exist in HDFS",
+				new IngestFromHBaseHdfsDriver(
+						"posthbasestage")),
 		new CLIOperation(
 				"hdfsingest",
 				"copy supported files from local file system to HDFS and ingest from HDFS",
@@ -48,6 +66,17 @@ public class IngestCLIOperationProvider implements
 									"hdfsingest"),
 							new IngestFromHdfsDriver(
 									"hdfsingest")
+						})),
+		new CLIOperation(
+				"hdfshbaseingest",
+				"copy supported files from local file system to HDFS and ingest from HDFS",
+				new MultiStageHBaseCommandLineDriver(
+						"hdfshbaseingest",
+						new AbstractIngestHBaseCommandLineDriver[] {
+							new StageToHdfsHBaseDriver(
+									"hdfshbaseingest"),
+							new IngestFromHBaseHdfsDriver(
+									"hdfshbaseingest")
 						})),
 		new CLIOperation(
 				"kafkastage",

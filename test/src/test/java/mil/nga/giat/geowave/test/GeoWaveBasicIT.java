@@ -997,9 +997,10 @@ public class GeoWaveBasicIT extends
 				final Object obj = actualResults.next();
 				if (obj instanceof SimpleFeature) {
 					final SimpleFeature result = (SimpleFeature) obj;
+				long hashCentroid = hashCentroid((Geometry) result.getDefaultGeometry());
 					Assert.assertTrue(
 							"Actual result '" + result.toString() + "' not found in expected result set",
-							expectedResults.hashedCentroids.contains(hashCentroid((Geometry) result.getDefaultGeometry())));
+						expectedResults.hashedCentroids.contains(hashCentroid));
 					totalResults++;
 				}
 				else {

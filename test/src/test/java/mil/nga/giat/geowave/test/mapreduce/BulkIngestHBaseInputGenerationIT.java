@@ -1,0 +1,200 @@
+package mil.nga.giat.geowave.test.mapreduce;
+
+import java.io.IOException;
+
+import mil.nga.giat.geowave.examples.ingest.bulk.GeonamesDataFileInputFormat;
+import mil.nga.giat.geowave.examples.ingest.bulk.SimpleFeatureToHBaseKeyValueMapper;
+
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.conf.Configured;
+import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.LocatedFileStatus;
+import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.fs.RemoteIterator;
+import org.apache.hadoop.hbase.io.ImmutableBytesWritable;
+import org.apache.hadoop.mapreduce.Job;
+import org.apache.hadoop.mapreduce.Reducer;
+import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
+import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+import org.apache.hadoop.mapreduce.lib.output.SequenceFileOutputFormat;
+import org.apache.hadoop.util.Tool;
+import org.apache.hadoop.util.ToolRunner;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+import org.junit.Assert;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+public class BulkIngestHBaseInputGenerationIT
+{
+
+	private static final Logger LOGGER = Logger.getLogger(BulkIngestHBaseInputGenerationIT.class);
+	private static final String TEST_DATA_LOCATION = "src/test/resources/mil/nga/giat/geowave/test/geonames/barbados";
+	private static final long NUM_GEONAMES_RECORDS = 834; // (see BB.txt)
+	private static final String OUTPUT_PATH = "target/tmp_bulkIngestTest";
+	private static long mapInputRecords;
+	private static long mapOutputRecords;
+
+	@BeforeClass
+	public static void setUp() {
+		Logger.getRootLogger().setLevel(
+				Level.INFO);
+	}
+
+	@Test
+	public void testMapReduceJobSuccess()
+			throws Exception {
+
+		LOGGER.info("Running Bulk Ingest Input Generation MapReduce job...");
+
+		int exitCode = ToolRunner.run(
+				new BulkIngestInputGenerationJobRunner(),
+				null);
+
+		LOGGER.info("Job completed with exit code: " + exitCode);
+
+		// verify exitCode = 0
+		Assert.assertEquals(
+				exitCode,
+				0);
+
+		verifyNumInputRecords();
+
+		verifyNumAccumuloKeyValuePairs();
+
+		verifyJobOutput();
+	}
+
+	private void verifyNumInputRecords() {
+		Assert.assertEquals(
+				mapInputRecords,
+				NUM_GEONAMES_RECORDS);
+	}
+
+	private void verifyNumAccumuloKeyValuePairs() {
+		final int accumuloEntriesPerKey = 4;
+		Assert.assertEquals(
+				mapOutputRecords,
+				(NUM_GEONAMES_RECORDS * accumuloEntriesPerKey));
+	}
+
+	private void verifyJobOutput()
+			throws IOException {
+
+		final String _SUCCESS = "_SUCCESS";
+		final String REDUCER_OUTPUT = "part-r-";
+		boolean wasSuccessful = false;
+		boolean reducerOutputExists = false;
+		FileSystem fs = FileSystem.getLocal(new Configuration());
+		RemoteIterator<LocatedFileStatus> iterator = fs.listFiles(
+				new Path(
+						OUTPUT_PATH),
+				false);
+		LocatedFileStatus fileStatus = null;
+		String fileName = null;
+
+		while (iterator.hasNext()) {
+			fileStatus = iterator.next();
+			fileName = fileStatus.getPath().getName();
+
+			if (fileName.contains(_SUCCESS)) {
+				wasSuccessful = true;
+			}
+			if (fileName.contains(REDUCER_OUTPUT)) {
+				reducerOutputExists = true;
+			}
+		}
+
+		// verify presence of _SUCCESS file
+		Assert.assertEquals(
+				wasSuccessful,
+				true);
+
+		// verify presence of Reducer output
+		Assert.assertEquals(
+				reducerOutputExists,
+				true);
+	}
+
+	private static class BulkIngestInputGenerationJobRunner extends
+			Configured implements
+			Tool
+	{
+		private static final String JOB_NAME = "BulkIngestInputGenerationITJob";
+		private static final String TASK_COUNTER_GROUP_NAME = "org.apache.hadoop.mapreduce.TaskCounter";
+		private static final String MAP_INPUT_RECORDS = "MAP_INPUT_RECORDS";
+		private static final String MAP_OUTPUT_RECORDS = "MAP_OUTPUT_RECORDS";
+
+		@Override
+		public int run(
+				String[] args )
+				throws Exception {
+
+			final Configuration conf = getConf();
+			conf.set(
+					"fs.defaultFS",
+					"file:///");
+
+			final Job job = Job.getInstance(
+					conf,
+					JOB_NAME);
+			job.setJarByClass(getClass());
+
+			FileInputFormat.setInputPaths(
+					job,
+					new Path(
+							TEST_DATA_LOCATION));
+			FileOutputFormat.setOutputPath(
+					job,
+					cleanPathForReuse(
+							conf,
+							OUTPUT_PATH));
+
+			job.setMapperClass(SimpleFeatureToHBaseKeyValueMapper.class);
+			job.setReducerClass(Reducer.class); // (Identity Reducer)
+
+			job.setInputFormatClass(GeonamesDataFileInputFormat.class);
+			job.setOutputFormatClass(SequenceFileOutputFormat.class);
+
+			job.setMapOutputKeyClass(ImmutableBytesWritable.class);
+			job.setMapOutputValueClass(ImmutableBytesWritable.class);
+			job.setOutputKeyClass(ImmutableBytesWritable.class);
+			job.setOutputValueClass(ImmutableBytesWritable.class);
+
+			job.setNumReduceTasks(1);
+			job.setSpeculativeExecution(false);
+
+			boolean result = job.waitForCompletion(true);
+
+			mapInputRecords = job.getCounters().findCounter(
+					TASK_COUNTER_GROUP_NAME,
+					MAP_INPUT_RECORDS).getValue();
+
+			mapOutputRecords = job.getCounters().findCounter(
+					TASK_COUNTER_GROUP_NAME,
+					MAP_OUTPUT_RECORDS).getValue();
+
+			return result ? 0 : 1;
+		}
+
+		private Path cleanPathForReuse(
+				Configuration conf,
+				String pathString )
+				throws IOException {
+
+			final FileSystem fs = FileSystem.get(conf);
+			final Path path = new Path(
+					pathString);
+
+			if (fs.exists(path)) {
+				LOGGER.info("Deleting '" + pathString + "' for reuse.");
+				fs.delete(
+						path,
+						true);
+			}
+
+			return path;
+		}
+	}
+
+}
