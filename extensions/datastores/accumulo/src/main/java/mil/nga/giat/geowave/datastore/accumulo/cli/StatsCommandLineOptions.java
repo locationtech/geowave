@@ -1,17 +1,12 @@
-package mil.nga.giat.geowave.datastore.accumulo.util;
-
-import mil.nga.giat.geowave.datastore.accumulo.AccumuloCommandLineOptions;
+package mil.nga.giat.geowave.datastore.accumulo.cli;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class StatsCommandLineOptions
 {
-	private final static Logger LOGGER = LoggerFactory.getLogger(AccumuloCommandLineOptions.class);
 	private final String typeName;
 	private final String authorizations;
 
@@ -44,12 +39,13 @@ public class StatsCommandLineOptions
 	}
 
 	public static void applyOptions(
-			final Options allOptions ) {
+			final Options allOptions,
+			boolean typeRequired ) {
 		final Option type = new Option(
 				"type",
 				true,
 				"The name of the feature type to run stats on");
-		type.setRequired(true);
+		type.setRequired(typeRequired);
 		allOptions.addOption(type);
 
 		final Option auth = new Option(

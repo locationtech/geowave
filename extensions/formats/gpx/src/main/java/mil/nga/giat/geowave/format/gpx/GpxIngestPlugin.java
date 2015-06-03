@@ -16,6 +16,7 @@ import javax.xml.stream.XMLStreamException;
 
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import mil.nga.giat.geowave.adapter.vector.ingest.AbstractSimpleFeatureIngestPlugin;
+import mil.nga.giat.geowave.adapter.vector.utils.SimpleFeatureUserDataConfigurationSet;
 import mil.nga.giat.geowave.core.geotime.IndexType;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.ingest.GeoWaveData;
@@ -139,16 +140,16 @@ public class GpxIngestPlugin extends
 				globalVisibility) : null;
 		return new WritableDataAdapter[] {
 			new FeatureDataAdapter(
-					GPXConsumer.pointType,
+					SimpleFeatureUserDataConfigurationSet.configureType(GPXConsumer.pointType),
 					fieldVisiblityHandler),
 			new FeatureDataAdapter(
-					GPXConsumer.waypointType,
+					SimpleFeatureUserDataConfigurationSet.configureType(GPXConsumer.waypointType),
 					fieldVisiblityHandler),
 			new FeatureDataAdapter(
-					GPXConsumer.trackType,
+					SimpleFeatureUserDataConfigurationSet.configureType(GPXConsumer.trackType),
 					fieldVisiblityHandler),
 			new FeatureDataAdapter(
-					GPXConsumer.routeType,
+					SimpleFeatureUserDataConfigurationSet.configureType(GPXConsumer.routeType),
 					fieldVisiblityHandler)
 		};
 	}

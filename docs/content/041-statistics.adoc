@@ -27,7 +27,8 @@ image::stats.png[scaledwidth="100%",alt="Statistics Structure"]
 
 Re-computation of statistics is required in three circumstances:
 
-1. As indexed items are removed from the adapter store, the range and envelope statistics may lose their accuracy if the removed item
+. As indexed items are removed from the adapter store, the range and envelope statistics may lose their accuracy if the removed item
 contains an attribute that represents the minimum or maximum value for the population. 
-1. New statistics added to the statistics store after data items are ingested.  These new statistics do not reflect the entire population.
-1. Software changes invalidate prior stored images of statistics.
+. New statistics added to the statistics store after data items are ingested.  These new statistics do not reflect the entire population.
+. Software changes invalidate prior stored images of statistics.
+

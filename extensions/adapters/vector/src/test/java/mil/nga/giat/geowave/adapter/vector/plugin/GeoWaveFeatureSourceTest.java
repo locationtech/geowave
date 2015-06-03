@@ -116,7 +116,7 @@ public class GeoWaveFeatureSourceTest
 		FeatureNumericRangeStatistics popStats = null;
 		while (stats.hasNext()) {
 			final DataStatistics<?> statsData = stats.next();
-			System.out.println(statsData.getStatisticsId().getString());
+			System.out.println(statsData.toString());
 			if (statsData instanceof BoundingBoxDataStatistics) {
 				bboxStats = (BoundingBoxDataStatistics<SimpleFeature>) statsData;
 			}
@@ -133,7 +133,7 @@ public class GeoWaveFeatureSourceTest
 		}
 
 		assertEquals(
-				4,
+				6,
 				count);
 
 		assertEquals(

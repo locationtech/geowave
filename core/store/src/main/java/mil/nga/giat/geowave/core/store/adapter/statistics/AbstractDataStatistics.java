@@ -97,7 +97,7 @@ abstract public class AbstractDataStatistics<T> implements
 		newStats.fromBinary(toBinary());
 		return newStats;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "AbstractDataStatistics [dataAdapterId=" + dataAdapterId.getString() + ", statisticsId=" + statisticsId.getString() + "]";

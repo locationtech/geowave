@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 /**
  * This class encapsulates all of the options and parsed values specific to
  * setting up GeoWave to appropriately connect to Accumulo.
- *
+ * 
  */
 public class AccumuloCommandLineOptions
 {

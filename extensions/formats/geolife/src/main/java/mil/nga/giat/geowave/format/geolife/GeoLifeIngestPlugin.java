@@ -16,6 +16,7 @@ import java.util.List;
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import mil.nga.giat.geowave.adapter.vector.ingest.AbstractSimpleFeatureIngestPlugin;
 import mil.nga.giat.geowave.adapter.vector.utils.GeometryUtils;
+import mil.nga.giat.geowave.adapter.vector.utils.SimpleFeatureUserDataConfigurationSet;
 import mil.nga.giat.geowave.core.geotime.IndexType;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.StringUtils;
@@ -122,10 +123,10 @@ public class GeoLifeIngestPlugin extends
 				globalVisibility) : null;
 		return new WritableDataAdapter[] {
 			new FeatureDataAdapter(
-					geolifePointType,
+					SimpleFeatureUserDataConfigurationSet.configureType(geolifePointType),
 					fieldVisiblityHandler),
 			new FeatureDataAdapter(
-					geolifeTrackType,
+					SimpleFeatureUserDataConfigurationSet.configureType(geolifeTrackType),
 					fieldVisiblityHandler)
 
 		};
