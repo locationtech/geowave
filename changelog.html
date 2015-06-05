@@ -11,12 +11,22 @@
 <h1 id="change-log">Change Log</h1>
 <h2 id="unreleased"><a href="https://github.com/ngageoint/geowave/tree/HEAD">Unreleased</a></h2>
 <p><a href="https://github.com/ngageoint/geowave/compare/v0.8.7...HEAD">Full Changelog</a></p>
+<p><strong>Implemented enhancements:</strong></p>
+<ul>
+<li>RPM package refactoring <a href="https://github.com/ngageoint/geowave/issues/370">#370</a></li>
+</ul>
+<p><strong>Fixed bugs:</strong></p>
+<ul>
+<li>Handle longitude wrapping on ingest for geolife longitude values (180 -&gt; 400 ) <a href="https://github.com/ngageoint/geowave/issues/53">#53</a></li>
+</ul>
 <p><strong>Closed issues:</strong></p>
 <ul>
-<li>Kryo throws NullPointerException during RDD.collect() in Spark <a href="https://github.com/ngageoint/geowave/issues/399">#399</a></li>
+<li><p>&quot;geowave-*-accumulo&quot; post-install script fails inappropriately on &quot;type hadoop&quot; check <a href="https://github.com/ngageoint/geowave/issues/414">#414</a></p></li>
+<li><p>Kryo throws NullPointerException during RDD.collect() in Spark <a href="https://github.com/ngageoint/geowave/issues/399">#399</a></p></li>
 </ul>
 <p><strong>Merged pull requests:</strong></p>
 <ul>
+<li><p>Corrected one command and added a tip on inspecting configs <a href="https://github.com/ngageoint/geowave/pull/418">#418</a> (<a href="https://github.com/spohnan">spohnan</a>)</p></li>
 <li><p>Roll to 0.8.8-SNAPSHOT <a href="https://github.com/ngageoint/geowave/pull/413">#413</a> (<a href="https://github.com/spohnan">spohnan</a>)</p></li>
 <li><p>Geolife Ingest handling of bad coordinates <a href="https://github.com/ngageoint/geowave/pull/411">#411</a> (<a href="https://github.com/dcy2003">dcy2003</a>)</p></li>
 </ul>

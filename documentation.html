@@ -512,6 +512,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#accumulo-configuration">Accumulo Configuration</a>
 <ul class="sectlevel2">
 <li><a href="#overview-6">Overview</a></li>
+<li><a href="#managing">Managing</a></li>
 <li><a href="#versioning">Versioning</a></li>
 </ul>
 </li>
@@ -2940,6 +2941,22 @@ you may elect to do further user and namespace creation and configuring to provi
 </div>
 </div>
 <div class="sect2">
+<h3 id="managing"><a class="anchor" href="#managing"></a>Managing</h3>
+<div class="paragraph">
+<p>After installing a number of different iterators you may want to figure out which iterators have been configured.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash"># Print all configuration and grep for line containing vfs.context configuration and also show the following line
+accumulo shell -u root -p ROOT_PWD -e "config -np" | grep -A 1 general.vfs.context.classpath</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You will get back a listing of context classpath override configurations which map the application or user context you configured to
+a specific iterator jar in HDFS.</p>
+</div>
+</div>
+<div class="sect2">
 <h3 id="versioning"><a class="anchor" href="#versioning"></a>Versioning</h3>
 <div class="paragraph">
 <p>It&#8217;s of critical importance to ensure that the various GeoWave components are all the same version and that your client is of the same version
@@ -3657,7 +3674,7 @@ rest of the cluster using Puppet.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">rpm -Uvh http://s3.amazonaws.com/geowave-rpms/release/noarch/geowave-repo-1.0-3.noarch.rpm
-yum install geowave-cdh5-puppet</code></pre>
+yum --enablerepo=geowave install geowave-puppet</code></pre>
 </div>
 </div>
 <div style="page-break-after: always;"></div>
@@ -3672,7 +3689,7 @@ yum install geowave-cdh5-puppet</code></pre>
 <div class="sect2">
 <h3 id="version"><a class="anchor" href="#version"></a>Version</h3>
 <div class="paragraph">
-<p>This documentation was generated for GeoWave version 0.8.8-SNAPSHOT from commit 9aaf5413f9a53c65ff2db0e26a36f6641c1fdee4.</p>
+<p>This documentation was generated for GeoWave version 0.8.8-SNAPSHOT from commit c2843d0a0872d223c006c7d32829738db2696f0a.</p>
 </div>
 <div style="page-break-after: always;"></div>
 </div>
@@ -3724,7 +3741,7 @@ yum install geowave-cdh5-puppet</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-05-30 16:09:18 UTC
+Last updated 2015-06-05 18:06:54 UTC
 </div>
 </div>
 </body>
