@@ -49,7 +49,10 @@ wait_for_start() {
 start() {
   echo -n "Starting $DISPLAY_NAME: "
   if ! is_running; then
-  	runuser -l geowave -c "$GEOWAVE_HOME/geoserver/bin/startup.sh &" > /dev/null 2>&1
+    if [ -f /etc/geowave/geowave.config ]; then
+      SOURCE_CMD="source /etc/geowave/geowave.config;"
+    fi
+  	runuser -l geowave -c "$SOURCE_CMD $GEOWAVE_HOME/geoserver/bin/startup.sh &" > /dev/null 2>&1
     wait_for_start
     handle_return_value_and_exit $?
   else
