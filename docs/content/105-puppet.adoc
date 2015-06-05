@@ -121,5 +121,5 @@ rest of the cluster using Puppet.
 [source, bash]
 ----
 rpm -Uvh http://s3.amazonaws.com/geowave-rpms/release/noarch/geowave-repo-1.0-3.noarch.rpm
-yum install geowave-cdh5-puppet
+yum --enablerepo=geowave install geowave-puppet
 ----

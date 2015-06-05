@@ -39,6 +39,19 @@ exit
 These manual configuration steps have to be performed before attempting to create GeoWave index tables. After the initial configuration
 you may elect to do further user and namespace creation and configuring to provide isolation between groups and data sets.
 
+=== Managing
+
+After installing a number of different iterators you may want to figure out which iterators have been configured.
+
+[source, bash]
+----
+# Print all configuration and grep for line containing vfs.context configuration and also show the following line
+accumulo shell -u root -p ROOT_PWD -e "config -np" | grep -A 1 general.vfs.context.classpath
+----
+
+You will get back a listing of context classpath override configurations which map the application or user context you configured to
+a specific iterator jar in HDFS.
+
 === Versioning
 
 It's of critical importance to ensure that the various GeoWave components are all the same version and that your client is of the same version
