@@ -2,6 +2,9 @@
 #
 # Upload geowave-accumulo.jar into HDFS
 # Use a naming convention within the HDFS directory structure to differentiate versions
+# Attempt to use a variety of common HDFS root usernames an optional user arg will override
+#
+# deploy-geowave-to-hdfs.sh [--user HDFS_ROOT_USERNAME]
 #
 
 # Test for installed apps required to run this script
@@ -21,9 +24,21 @@ dependency_tests
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 ACCUMULO_USER=accumulo
 
+# Parse any arguments passed to the script
+declare -A ARGS
+while [ $# -gt 0 ]; do
+    case "$1" in
+        *) NAME="${1:2}"; shift; ARGS[$NAME]="$1" ;;
+    esac
+    shift
+done
+
 determine_hdfs_user() {
     # Various usernames distros configure to be the one with "root" HDFS permissions
-    HADOOP_USERS=('hdfs' 'hadoop')
+    HADOOP_USERS=('hdfs' 'hadoop' 'cloudera-scm')
+    if [ ! -z ${ARGS[user]} ]; then # Use custom user if provided
+        HADOOP_USERS=( ${ARGS[user]} )
+    fi
     HADOOP_USER=
     for user in "${HADOOP_USERS[@]}"
     do
