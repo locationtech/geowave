@@ -18,6 +18,7 @@
 %define geowave_plugins_home   %{geowave_tools_home}/plugins
 %define geowave_geoserver_libs %{geowave_geoserver_home}/webapps/geoserver/WEB-INF/lib
 %define geowave_geoserver_data %{geowave_geoserver_home}/data_dir
+%define geowave_config         /etc/geowave
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -66,6 +67,7 @@ rm -fr %{_builddir}/*
 
 %install
 rm -fr %{buildroot}
+mkdir -p %{buildroot}%{geowave_config}
 mkdir -p %{buildroot}%{geowave_accumulo_home}
 
 # Copy Accumulo library and deployment script onto local file system
@@ -197,6 +199,9 @@ fi
 %files core
 %attr(644, root, root) /etc/profile.d/geowave.sh
 
+%defattr(644, geowave, geowave, 755)
+%dir %{geowave_config}
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 %package        docs
@@ -302,6 +307,8 @@ This package installs the geowave Puppet module to /etc/puppet/modules
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 %changelog
+* Fri Jun 5 2015 Andrew Spohn <andrew.e.spohn.ctr@nga.mil> - 0.8.7-1
+- Add external config file
 * Fri May 22 2015 Andrew Spohn <andrew.e.spohn.ctr@nga.mil> - 0.8.7
 - Use alternatives to support parallel version and vendor installs
 - Replace geowave-ingest with geowave-tools
