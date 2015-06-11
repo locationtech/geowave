@@ -10,7 +10,7 @@ geowave-stats - Calculate the statistics of an existing GeoWave dataset
 SYNOPSIS
 //:--------
 
-*geowave -clear* <options>
+*geowave -stats* <options>
 
 DESCRIPTION
 //:-----------

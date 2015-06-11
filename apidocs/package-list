@@ -82,6 +82,7 @@ mil.nga.giat.geowave.core.store.index
 mil.nga.giat.geowave.core.store.query
 mil.nga.giat.geowave.datastore.accumulo
 mil.nga.giat.geowave.datastore.accumulo.app
+mil.nga.giat.geowave.datastore.accumulo.cli
 mil.nga.giat.geowave.datastore.accumulo.mapreduce
 mil.nga.giat.geowave.datastore.accumulo.mapreduce.dedupe
 mil.nga.giat.geowave.datastore.accumulo.mapreduce.input

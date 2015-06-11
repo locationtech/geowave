@@ -1,0 +1,57 @@
+//:geowave-statsdump(1)
+//:====================
+//::doctype: manpage
+
+NAME
+//:----
+
+geowave-statsdump - Dump the statistics of an existing GeoWave dataset to standard output
+
+SYNOPSIS
+//:--------
+
+*geowave -statsdump* <options>
+
+DESCRIPTION
+//:-----------
+
+The geowave -statsdump(1) operator will remove all statistics for an adapter, scan the entire data set and reconstruct statistics.
+
+OPTIONS
+//:-------
+
+-i, --instance-id <arg>::
+The Accumulo instance ID
+
+-n, --namespace <arg>::
+The table namespace (optional; default is no namespace)
+
+-p, --password <arg>::
+The password for the user
+
+-u, --user <arg>::
+A valid Accumulo user ID
+
+-v, --visibility <arg>::
+The visibility of the data ingested (optional; default is 'public')
+
+-z, --zookeepers <arg>::
+A comma-separated list of zookeeper servers that an Accumulo instance is using
+
+-type <arg>::
+The name of the feature type to run stats on (optional; default is all types)
+
+
+EXAMPLES
+//:--------
+
+Given the data we loaded in the geowave -localingest example we could look at the GeoServer Layers list to obtain the feature type name and
+dump statistics using a command such as the one shown below.
+
+geowave -statsdump \
+    -i accumulo \
+    -n geowave.50m_admin_0_countries \
+    -type ne_50m_admin_0_countries \
+    -u USERNAME \
+    -p PASSWORD \
+    -z ZOOKEEPER_HOST_NAME:2181

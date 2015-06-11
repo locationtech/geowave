@@ -35,7 +35,7 @@
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/stats/FeatureTimeRangeStatistics.html" title="class in mil.nga.giat.geowave.adapter.vector.stats"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/stats/StatsConfigurationCollection.SimpleFeatureStatsConfigurationCollection.html" title="class in mil.nga.giat.geowave.adapter.vector.stats"><span class="strong">Prev Class</span></a></li>
 <li>Next Class</li>
 </ul>
 <ul class="navList">
@@ -140,15 +140,22 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/stats/StatsManager.html#addStats(mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics,%20mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsVisibilityHandler)">addStats</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;stats,
+        <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatisticsVisibilityHandler.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatisticsVisibilityHandler</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;visibilityHandler)</code>
+<div class="block">Supports replacement.</div>
+</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/stats/StatsManager.html#createDataStatistics(mil.nga.giat.geowave.core.store.adapter.DataAdapter,%20mil.nga.giat.geowave.core.index.ByteArrayId)">createDataStatistics</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;dataAdapter,
                     <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;statisticsId)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>[]</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/stats/StatsManager.html#getSupportedStatisticsIds()">getSupportedStatisticsIds</a></strong>()</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatisticsVisibilityHandler.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatisticsVisibilityHandler</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/stats/StatsManager.html#getVisibilityHandler(mil.nga.giat.geowave.core.index.ByteArrayId)">getVisibilityHandler</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;statisticsId)</code>&nbsp;</td>
 </tr>
@@ -223,6 +230,18 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatisticsVisibilityHandler.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatisticsVisibilityHandler</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;getVisibilityHandler(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;statisticsId)</pre>
 </li>
 </ul>
+<a name="addStats(mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics, mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsVisibilityHandler)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>addStats</h4>
+<pre>public&nbsp;void&nbsp;addStats(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;stats,
+            <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatisticsVisibilityHandler.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatisticsVisibilityHandler</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;visibilityHandler)</pre>
+<div class="block">Supports replacement.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>stats</code> - </dd><dd><code>visibilityHandler</code> - </dd></dl>
+</li>
+</ul>
 <a name="getSupportedStatisticsIds()">
 <!--   -->
 </a>
@@ -258,7 +277,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/stats/FeatureTimeRangeStatistics.html" title="class in mil.nga.giat.geowave.adapter.vector.stats"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/stats/StatsConfigurationCollection.SimpleFeatureStatsConfigurationCollection.html" title="class in mil.nga.giat.geowave.adapter.vector.stats"><span class="strong">Prev Class</span></a></li>
 <li>Next Class</li>
 </ul>
 <ul class="navList">

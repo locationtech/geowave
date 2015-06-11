@@ -186,19 +186,6 @@
 </a>
 <h3>Uses of <a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a> in <a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/package-summary.html">mil.nga.giat.geowave.adapter.vector.plugin</a></h3>
 <table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
-<caption><span>Methods in <a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/package-summary.html">mil.nga.giat.geowave.adapter.vector.plugin</a> that return <a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Method and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colFirst"><code>protected <a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></td>
-<td class="colLast"><span class="strong">GeoWaveFeatureReader.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureReader.html#getStatsFor(java.lang.String)">getStatsFor</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name)</code>&nbsp;</td>
-</tr>
-</tbody>
-</table>
-<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
 <caption><span>Methods in <a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/package-summary.html">mil.nga.giat.geowave.adapter.vector.plugin</a> that return types with arguments of type <a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a></span><span class="tabEnd">&nbsp;</span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
@@ -208,6 +195,10 @@
 <tr class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>,<a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&gt;</code></td>
 <td class="colLast"><span class="strong">GeoWaveDataStoreComponents.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveDataStoreComponents.html#getDataStatistics(mil.nga.giat.geowave.adapter.vector.plugin.transaction.GeoWaveTransaction)">getDataStatistics</a></strong>(<a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/transaction/GeoWaveTransaction.html" title="interface in mil.nga.giat.geowave.adapter.vector.plugin.transaction">GeoWaveTransaction</a>&nbsp;transaction)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&gt;</code></td>
+<td class="colLast"><span class="strong">GeoWaveFeatureReader.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureReader.html#getStatsFor(java.lang.String)">getStatsFor</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -229,6 +220,33 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/stats/FeatureCountMinSketchStatistics.html" title="class in mil.nga.giat.geowave.adapter.vector.stats">FeatureCountMinSketchStatistics</a></strong></code>
+<div class="block">Maintains an estimate of how may of each attribute value occurs in a set of
+ data.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/stats/FeatureFixedBinNumericStatistics.html" title="class in mil.nga.giat.geowave.adapter.vector.stats">FeatureFixedBinNumericStatistics</a></strong></code>
+<div class="block">Fixed number of bins for a histogram.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/stats/FeatureHyperLogLogStatistics.html" title="class in mil.nga.giat.geowave.adapter.vector.stats">FeatureHyperLogLogStatistics</a></strong></code>
+<div class="block">Hyperloglog provides an estimated cardinality of the number of unique values
+ for an attribute.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/stats/FeatureNumericHistogramStatistics.html" title="class in mil.nga.giat.geowave.adapter.vector.stats">FeatureNumericHistogramStatistics</a></strong></code>
+<div class="block">Dynamic histogram provide very high accuracy for CDF and quantiles over the a
+ numeric attribute.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/stats/FeatureNumericRangeStatistics.html" title="class in mil.nga.giat.geowave.adapter.vector.stats">FeatureNumericRangeStatistics</a></strong></code>&nbsp;</td>
 </tr>
 <tr class="altColor">
@@ -246,20 +264,82 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></td>
+<td class="colLast"><span class="strong">FeatureFixedBinNumericStatistics.FeatureFixedBinConfig.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/stats/FeatureFixedBinNumericStatistics.FeatureFixedBinConfig.html#create(mil.nga.giat.geowave.core.index.ByteArrayId,%20java.lang.String)">create</a></strong>(<a href="../../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;dataAdapterId,
+      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></td>
+<td class="colLast"><span class="strong">FeatureNumericHistogramStatistics.FeatureNumericHistogramConfig.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/stats/FeatureNumericHistogramStatistics.FeatureNumericHistogramConfig.html#create(mil.nga.giat.geowave.core.index.ByteArrayId,%20java.lang.String)">create</a></strong>(<a href="../../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;dataAdapterId,
+      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></td>
+<td class="colLast"><span class="strong">FeatureHyperLogLogStatistics.FeatureHyperLogLogConfig.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/stats/FeatureHyperLogLogStatistics.FeatureHyperLogLogConfig.html#create(mil.nga.giat.geowave.core.index.ByteArrayId,%20java.lang.String)">create</a></strong>(<a href="../../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;dataAdapterId,
+      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></td>
+<td class="colLast"><span class="strong">FeatureNumericRangeStatistics.FeatureNumericRangeConfig.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/stats/FeatureNumericRangeStatistics.FeatureNumericRangeConfig.html#create(mil.nga.giat.geowave.core.index.ByteArrayId,%20java.lang.String)">create</a></strong>(<a href="../../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;dataAdapterId,
+      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></td>
+<td class="colLast"><span class="strong">FeatureCountMinSketchStatistics.FeatureCountMinSketchConfig.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/stats/FeatureCountMinSketchStatistics.FeatureCountMinSketchConfig.html#create(mil.nga.giat.geowave.core.index.ByteArrayId,%20java.lang.String)">create</a></strong>(<a href="../../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;dataAdapterId,
+      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;<a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/stats/StatsConfig.html" title="type parameter in StatsConfig">T</a>&gt;</code></td>
+<td class="colLast"><span class="strong">StatsConfig.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/stats/StatsConfig.html#create(mil.nga.giat.geowave.core.index.ByteArrayId,%20java.lang.String)">create</a></strong>(<a href="../../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;dataAdapterId,
+      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></td>
 <td class="colLast"><span class="strong">StatsManager.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/stats/StatsManager.html#createDataStatistics(mil.nga.giat.geowave.core.store.adapter.DataAdapter,%20mil.nga.giat.geowave.core.index.ByteArrayId)">createDataStatistics</a></strong>(<a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;dataAdapter,
                     <a href="../../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;statisticsId)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></td>
-<td class="colLast"><span class="strong">FeatureTimeRangeStatistics.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/stats/FeatureTimeRangeStatistics.html#duplicate()">duplicate</a></strong>()</code>&nbsp;</td>
+<td class="colLast"><span class="strong">FeatureFixedBinNumericStatistics.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/stats/FeatureFixedBinNumericStatistics.html#duplicate()">duplicate</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></td>
+<td class="colLast"><span class="strong">FeatureNumericHistogramStatistics.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/stats/FeatureNumericHistogramStatistics.html#duplicate()">duplicate</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></td>
+<td class="colLast"><span class="strong">FeatureHyperLogLogStatistics.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/stats/FeatureHyperLogLogStatistics.html#duplicate()">duplicate</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></td>
+<td class="colLast"><span class="strong">FeatureTimeRangeStatistics.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/stats/FeatureTimeRangeStatistics.html#duplicate()">duplicate</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></td>
 <td class="colLast"><span class="strong">FeatureNumericRangeStatistics.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/stats/FeatureNumericRangeStatistics.html#duplicate()">duplicate</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></td>
+<td class="colLast"><span class="strong">FeatureCountMinSketchStatistics.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/stats/FeatureCountMinSketchStatistics.html#duplicate()">duplicate</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></td>
 <td class="colLast"><span class="strong">FeatureBoundingBoxStatistics.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/stats/FeatureBoundingBoxStatistics.html#duplicate()">duplicate</a></strong>()</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/stats/package-summary.html">mil.nga.giat.geowave.adapter.vector.stats</a> with parameters of type <a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><span class="strong">StatsManager.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/stats/StatsManager.html#addStats(mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics,%20mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsVisibilityHandler)">addStats</a></strong>(<a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;stats,
+        <a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatisticsVisibilityHandler.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatisticsVisibilityHandler</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;visibilityHandler)</code>
+<div class="block">Supports replacement.</div>
+</td>
 </tr>
 </tbody>
 </table>

@@ -461,6 +461,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#statistics">Statistics</a>
 <ul class="sectlevel2">
 <li><a href="#table-structure-in-accumulo">Table Structure in Accumulo</a></li>
+</ul>
+</li>
+<li><a href="#ingest-overview">Ingest</a>
+<ul class="sectlevel2">
 <li><a href="#overview-2">Overview</a></li>
 </ul>
 </li>
@@ -474,8 +478,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#geowave-localingest">geowave -localingest</a></li>
 <li><a href="#geowave-poststage">geowave -poststage</a></li>
 <li><a href="#geowave-stats">geowave -stats</a></li>
+<li><a href="#geowave-statsdump">geowave -statsdump</a></li>
 <li><a href="#ingest-example">Ingest Example</a></li>
 <li><a href="#ingest-plugins">Ingest plugins</a></li>
+<li><a href="#ingest-statistics">Ingest Statistics and Time Dimension Configuration</a></li>
 <li><a href="#ingest-new-formats">New Formats</a></li>
 </ul>
 </li>
@@ -1314,14 +1320,17 @@ contains an attribute that represents the minimum or maximum value for the popul
 <p>New statistics added to the statistics store after data items are ingested.  These new statistics do not reflect the entire population.</p>
 </li>
 <li>
-<p>Software changes invalidate prior stored images of statistics.
-&lt;&lt;&lt;
-== Ingest</p>
+<p>Software changes invalidate prior stored images of statistics.</p>
 </li>
 </ol>
 </div>
 </div>
 </div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="ingest-overview"><a class="anchor" href="#ingest-overview"></a>Ingest</h2>
+<div class="sectionbody">
 <div class="sect2">
 <h3 id="overview-2"><a class="anchor" href="#overview-2"></a>Overview</h3>
 <div class="imageblock">
@@ -1961,7 +1970,7 @@ been staged in an HDFS file system</p>
 <p>SYNOPSIS</p>
 </div>
 <div class="paragraph">
-<p><strong>geowave -clear</strong> &lt;options&gt;</p>
+<p><strong>geowave -stats</strong> &lt;options&gt;</p>
 </div>
 <div class="paragraph">
 <p>DESCRIPTION</p>
@@ -2026,6 +2035,78 @@ recalculate statistics using a command such as the one shown below.</p>
 </div>
 </div>
 <div class="sect2">
+<h3 id="geowave-statsdump"><a class="anchor" href="#geowave-statsdump"></a>geowave -statsdump</h3>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave-statsdump - Dump the statistics of an existing GeoWave dataset to standard output</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p><strong>geowave -statsdump</strong> &lt;options&gt;</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>The geowave -statsdump(1) operator will remove all statistics for an adapter, scan the entire data set and reconstruct statistics.</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">-i, --instance-id &lt;arg&gt;</dt>
+<dd>
+<p>The Accumulo instance ID</p>
+</dd>
+<dt class="hdlist1">-n, --namespace &lt;arg&gt;</dt>
+<dd>
+<p>The table namespace (optional; default is no namespace)</p>
+</dd>
+<dt class="hdlist1">-p, --password &lt;arg&gt;</dt>
+<dd>
+<p>The password for the user</p>
+</dd>
+<dt class="hdlist1">-u, --user &lt;arg&gt;</dt>
+<dd>
+<p>A valid Accumulo user ID</p>
+</dd>
+<dt class="hdlist1">-v, --visibility &lt;arg&gt;</dt>
+<dd>
+<p>The visibility of the data ingested (optional; default is 'public')</p>
+</dd>
+<dt class="hdlist1">-z, --zookeepers &lt;arg&gt;</dt>
+<dd>
+<p>A comma-separated list of zookeeper servers that an Accumulo instance is using</p>
+</dd>
+<dt class="hdlist1">-type &lt;arg&gt;</dt>
+<dd>
+<p>The name of the feature type to run stats on (optional; default is all types)</p>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p>EXAMPLES</p>
+</div>
+<div class="paragraph">
+<p>Given the data we loaded in the geowave -localingest example we could look at the GeoServer Layers list to obtain the feature type name and
+dump statistics using a command such as the one shown below.</p>
+</div>
+<div class="paragraph">
+<p>geowave -statsdump \
+    -i accumulo \
+    -n geowave.50m_admin_0_countries \
+    -type ne_50m_admin_0_countries \
+    -u USERNAME \
+    -p PASSWORD \
+    -z ZOOKEEPER_HOST_NAME:2181</p>
+</div>
+</div>
+<div class="sect2">
 <h3 id="ingest-example"><a class="anchor" href="#ingest-example"></a>Ingest Example</h3>
 <div class="paragraph">
 <p>We can ingest any data type that has been listed as an ingest plugin. Let&#8217;s start out with the GeoTools datastore; this
@@ -2079,7 +2160,7 @@ $ geowave -localingest \
 <div class="sect2">
 <h3 id="ingest-plugins"><a class="anchor" href="#ingest-plugins"></a>Ingest plugins</h3>
 <div class="paragraph">
-<p>The geowave command line utility comes  with several plugins out of the box</p>
+<p>The geowave command line utility comes with several plugins out of the box</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2097,6 +2178,147 @@ geolife:
 
 gpx:
      xml files adhering to the schema of gps exchange format</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="ingest-statistics"><a class="anchor" href="#ingest-statistics"></a>Ingest Statistics and Time Dimension Configuration</h3>
+<div class="paragraph">
+<p>The available plugins for vector support adjustments to their configuration via the command line.
+The system property 'SIMPLE_FEATURE_CONFIG_FILE' may be assigned to the name of a locally accessible JSON file defining
+the configuration.</p>
+</div>
+<div class="sect3">
+<h4 id="example"><a class="anchor" href="#example"></a>Example</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code>geowave -DSIMPLE_FEATURE_CONFIG_FILE=myconfigfile.json -localingest</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Configuration consists of two parts:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Selecting temporal attributes for a temporal index.</p>
+</li>
+<li>
+<p>Assigning to each attribute the type of statistics to be captured within the Statistics Store</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>The JSON file is made up of configurations.   Each configuration is defined by a class name and a set of attributes</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="temporal-configuration"><a class="anchor" href="#temporal-configuration"></a>Temporal Configuration</h4>
+<div class="paragraph">
+<p>There are three attributes for the temporal configuration:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>timeName</p>
+</li>
+<li>
+<p>startRangeName</p>
+</li>
+<li>
+<p>endRangeName</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>These attributes are associated with the name of a simple feature type attribute that references a time value.  To index by a single time attribute,
+set <code><em>timeName</em></code> to the name of the single attribute.  To index by a range, set both <code><em>startRangeName</em></code> and <code><em>endRangeName</em></code> to the
+names of the simple feature type attributes that define start and end time values.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="statistics-configuration"><a class="anchor" href="#statistics-configuration"></a>Statistics Configuration</h4>
+<div class="paragraph">
+<p>Each simple feature type attribute may have several assigned statistics.  Bounding box and range statistics are automatically captured for Geometry and temporal attributes.</p>
+</div>
+<table class="tableblock frame-topbot grid-all spread">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Attribute Type</th>
+<th class="tableblock halign-left valign-top">Statistic Name</th>
+<th class="tableblock halign-left valign-top">Statistic Configuration Attributes (with default values)</th>
+<th class="tableblock halign-left valign-top">Statistic Class</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top" rowspan="3"><p class="tableblock">Numeric</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Fixed Bin Histogram</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">minValue=-&#8734;,maxValue=&#8734;,bins=32</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">mil.nga.giat.geowave.adapter.vector.stats.FeatureFixedBinNumericStatistics$FeatureFixedBinConfig</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Dynamic Histogram</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">mil.nga.giat.geowave.adapter.vector.stats.FeatureNumericHistogramStatistics$FeatureNumericHistogramConfig</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Numeric Range</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">mil.nga.giat.geowave.adapter.vector.stats.FeatureNumericRangeStatistics$FeatureNumericRangeConfig</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" rowspan="2"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Count Min Sketch</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">errorFactor=0.001,probabilityOfCorrectness=0.98</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">mil.nga.giat.geowave.adapter.vector.stats.FeatureCountMinSketchStatistics$FeatureCountMinSketchConfig</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Hyper Log Log</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">precision=16</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">mil.nga.giat.geowave.adapter.vector.stats.FeatureHyperLogLogStatistics$FeatureHyperLogLogConfig</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="example-2"><a class="anchor" href="#example-2"></a>Example</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code>{
+  "configurations": [
+     {"@class":"mil.nga.giat.geowave.adapter.vector.utils.TimeDescriptors$TimeDescriptorConfiguration",
+      "startRangeName":null,
+      "endRangeName":null,
+      "timeName":"captureTime"
+     },
+     {"@class":"mil.nga.giat.geowave.adapter.vector.stats.StatsConfigurationCollection$SimpleFeatureStatsConfigurationCollection",
+      "attConfig" : {
+        "population" : {
+          "configurationsForAttribute" :  [
+            {"@class" : "mil.nga.giat.geowave.adapter.vector.stats.FeatureFixedBinNumericStatistics$FeatureFixedBinConfig","bins" : 24}
+           ]
+          },
+        "country" : {
+          "configurationsForAttribute" :  [
+           {"@class" : "mil.nga.giat.geowave.adapter.vector.stats.FeatureCountMinSketchStatistics$FeatureCountMinSketchConfig",
+            "probabilityOfCorrectness" : 0.98,
+            "errorFactor" :0.001
+           },
+           {"@class" : "mil.nga.giat.geowave.adapter.vector.stats.FeatureHyperLogLogStatistics$FeatureHyperLogLogConfig"}
+          ]
+        }
+      }
+    }
+  ]
+}</code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -3689,7 +3911,7 @@ yum --enablerepo=geowave install geowave-puppet</code></pre>
 <div class="sect2">
 <h3 id="version"><a class="anchor" href="#version"></a>Version</h3>
 <div class="paragraph">
-<p>This documentation was generated for GeoWave version 0.8.8-SNAPSHOT from commit d32f627a6ba8a6b95a01e4a2eb85f96cb504a7af.</p>
+<p>This documentation was generated for GeoWave version 0.8.8-SNAPSHOT from commit aa021f8036e624cce777b0e8d5ef55ce765d4cc9.</p>
 </div>
 <div style="page-break-after: always;"></div>
 </div>
@@ -3741,7 +3963,7 @@ yum --enablerepo=geowave install geowave-puppet</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-06-10 01:01:49 UTC
+Last updated 2015-06-11 20:19:10 UTC
 </div>
 </div>
 </body>

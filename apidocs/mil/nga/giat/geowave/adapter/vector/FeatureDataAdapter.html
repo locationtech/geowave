@@ -137,7 +137,16 @@ implements <a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/st
  used for a range index.
  
  If the feature type contains a UserData property 'time' for *all* time
- attributes with Boolean.FALSE, then a temporal index is not used.</div>
+ attributes with Boolean.FALSE, then a temporal index is not used.
+ 
+ Statistics configurations are maintained in UserData. Each attribute may have
+ a UserData property called 'stats'. The associated value is an instance of
+ <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/stats/StatsConfigurationCollection.html" title="class in mil.nga.giat.geowave.adapter.vector.stats"><code>StatsConfigurationCollection</code></a>
+ . The collection maintains a set of
+ <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/stats/StatsConfig.html" title="interface in mil.nga.giat.geowave.adapter.vector.stats"><code>StatsConfig</code></a>, one for each
+ type of statistic. The default statistics for geometry and temporal
+ constraints cannot be changed, as they are critical components to the
+ efficiency of query processing.</div>
 </li>
 </ul>
 </div>
