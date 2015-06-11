@@ -13,6 +13,7 @@ import java.util.List;
 
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import mil.nga.giat.geowave.adapter.vector.ingest.AbstractSimpleFeatureIngestPlugin;
+import mil.nga.giat.geowave.adapter.vector.utils.SimpleFeatureUserDataConfigurationSet;
 import mil.nga.giat.geowave.core.geotime.GeometryUtils;
 import mil.nga.giat.geowave.core.geotime.IndexType;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
@@ -97,7 +98,7 @@ public class TdriveIngestPlugin extends
 				globalVisibility) : null;
 		return new WritableDataAdapter[] {
 			new FeatureDataAdapter(
-					tdrivepointType,
+					SimpleFeatureUserDataConfigurationSet.configureType(tdrivepointType),
 					fieldVisiblityHandler)
 		};
 	}

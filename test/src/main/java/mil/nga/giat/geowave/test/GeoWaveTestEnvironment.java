@@ -91,6 +91,23 @@ abstract public class GeoWaveTestEnvironment
 				"-localingest -f geotools-vector -b " + ingestFilePath + " -z " + zookeeper + " -i " + accumuloInstance + " -u " + accumuloUser + " -p " + accumuloPassword + " -n " + TEST_NAMESPACE + " -dim " + (indexType.equals(IndexType.SPATIAL_VECTOR) ? "spatial" : "spatial-temporal"),
 				' ');
 		GeoWaveMain.main(args);
+		verifyStats();
+	}
+
+	private void verifyStats() {
+		GeoWaveMain.main(new String[] {
+			"-statsdump",
+			"-z",
+			zookeeper,
+			"-n",
+			TEST_NAMESPACE,
+			"-u",
+			accumuloUser,
+			"-p",
+			accumuloPassword,
+			"-i",
+			accumuloInstance
+		});
 	}
 
 	@BeforeClass

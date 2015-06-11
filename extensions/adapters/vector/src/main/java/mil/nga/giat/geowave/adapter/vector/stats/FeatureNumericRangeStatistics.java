@@ -58,4 +58,40 @@ public class FeatureNumericRangeStatistics extends
 				getFieldName());
 	}
 
+	public String toString() {
+		StringBuffer buffer = new StringBuffer();
+		buffer.append(
+				"range[adapter=").append(
+				super.getDataAdapterId().getString());
+		buffer.append(
+				", field=").append(
+				getFieldName());
+		if (isSet()) {
+			buffer.append(", min=").append(getMin());
+			buffer.append(", max=").append(getMax());
+		}
+		else {
+			buffer.append(", No Values");
+		}
+		buffer.append("]");
+		return buffer.toString();
+	}
+
+	public static class FeatureNumericRangeConfig implements
+			StatsConfig<SimpleFeature>
+	{
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 6309383518148391565L;
+
+		@Override
+		public DataStatistics<SimpleFeature> create(
+				final ByteArrayId dataAdapterId,
+				final String fieldName ) {
+			return new FeatureNumericRangeStatistics(
+					dataAdapterId,
+					fieldName);
+		}
+	}
 }

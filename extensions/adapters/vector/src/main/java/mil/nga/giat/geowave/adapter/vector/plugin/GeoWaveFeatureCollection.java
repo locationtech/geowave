@@ -378,21 +378,19 @@ public class GeoWaveFeatureCollection extends
 					null);
 			int acceptedCount = 0;
 			for (final String attr : attrs) {
-				final DataStatistics<SimpleFeature> stat = reader.getStatsFor(attr);
-				if (stat == null) {
-					continue;
-				}
-				else if (stat instanceof FeatureTimeRangeStatistics) {
-					minVisitor.setValue(reader.convertToType(
-							attr,
-							((FeatureTimeRangeStatistics) stat).getMinTime()));
-					acceptedCount++;
-				}
-				else if (stat instanceof FeatureNumericRangeStatistics) {
-					minVisitor.setValue(reader.convertToType(
-							attr,
-							((FeatureNumericRangeStatistics) stat).getMin()));
-					acceptedCount++;
+				for (DataStatistics<SimpleFeature> stat : reader.getStatsFor(attr)) {
+					if (stat instanceof FeatureTimeRangeStatistics) {
+						minVisitor.setValue(reader.convertToType(
+								attr,
+								((FeatureTimeRangeStatistics) stat).getMinTime()));
+						acceptedCount++;
+					}
+					else if (stat instanceof FeatureNumericRangeStatistics) {
+						minVisitor.setValue(reader.convertToType(
+								attr,
+								((FeatureNumericRangeStatistics) stat).getMin()));
+						acceptedCount++;
+					}
 				}
 			}
 
@@ -412,21 +410,19 @@ public class GeoWaveFeatureCollection extends
 					null);
 			int acceptedCount = 0;
 			for (final String attr : attrs) {
-				final DataStatistics<SimpleFeature> stat = reader.getStatsFor(attr);
-				if (stat == null) {
-					continue;
-				}
-				else if (stat instanceof FeatureTimeRangeStatistics) {
-					maxVisitor.setValue(reader.convertToType(
-							attr,
-							((FeatureTimeRangeStatistics) stat).getMaxTime()));
-					acceptedCount++;
-				}
-				else if (stat instanceof FeatureNumericRangeStatistics) {
-					maxVisitor.setValue(reader.convertToType(
-							attr,
-							((FeatureNumericRangeStatistics) stat).getMax()));
-					acceptedCount++;
+				for (DataStatistics<SimpleFeature> stat : reader.getStatsFor(attr)) {
+					if (stat instanceof FeatureTimeRangeStatistics) {
+						maxVisitor.setValue(reader.convertToType(
+								attr,
+								((FeatureTimeRangeStatistics) stat).getMaxTime()));
+						acceptedCount++;
+					}
+					else if (stat instanceof FeatureNumericRangeStatistics) {
+						maxVisitor.setValue(reader.convertToType(
+								attr,
+								((FeatureNumericRangeStatistics) stat).getMax()));
+						acceptedCount++;
+					}
 				}
 			}
 

@@ -3,7 +3,7 @@ package mil.nga.giat.geowave.adapter.vector.utils;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import mil.nga.giat.geowave.adapter.vector.utils.TimeDescriptors;
+import mil.nga.giat.geowave.adapter.vector.utils.TimeDescriptors.TimeDescriptorConfiguration;
 
 import org.geotools.data.DataUtilities;
 import org.geotools.feature.SchemaException;
@@ -19,30 +19,20 @@ public class TimeDescriptorsTest
 		SimpleFeatureType schema = DataUtilities.createType(
 				"sp.geostuff",
 				"geometry:Geometry:srid=4326,pop:java.lang.Long,when:Date,whennot:Date,pid:String");
-		TimeDescriptors td = new TimeDescriptors();
-		td.inferType(schema);
+
+		final TimeDescriptorConfiguration timeConfig = new TimeDescriptorConfiguration();
+		timeConfig.configureFromType(schema);
+
+		TimeDescriptors td = new TimeDescriptors(
+				schema,
+				timeConfig);
 		assertEquals(
 				"when",
 				td.getTime().getLocalName());
 		assertNull(td.getStartRange());
 		assertNull(td.getEndRange());
 		assertTrue(td.hasTime());
-		testSerialization(
-				schema,
-				td);
 
-	}
-
-	private void testSerialization(
-			SimpleFeatureType schema,
-			TimeDescriptors td ) {
-		TimeDescriptors tdnew = new TimeDescriptors();
-		tdnew.fromBinary(
-				schema,
-				td.toBinary());
-		assertEquals(
-				tdnew,
-				td);
 	}
 
 	@Test
@@ -51,8 +41,12 @@ public class TimeDescriptorsTest
 		SimpleFeatureType schema = DataUtilities.createType(
 				"sp.geostuff",
 				"geometry:Geometry:srid=4326,pop:java.lang.Long,start:Date,end:Date,pid:String");
-		TimeDescriptors td = new TimeDescriptors();
-		td.inferType(schema);
+		final TimeDescriptorConfiguration timeConfig = new TimeDescriptorConfiguration();
+		timeConfig.configureFromType(schema);
+
+		TimeDescriptors td = new TimeDescriptors(
+				schema,
+				timeConfig);
 		assertEquals(
 				"start",
 				td.getStartRange().getLocalName());
@@ -61,9 +55,7 @@ public class TimeDescriptorsTest
 				td.getEndRange().getLocalName());
 		assertNull(td.getTime());
 		assertTrue(td.hasTime());
-		testSerialization(
-				schema,
-				td);
+
 	}
 
 	@Test
@@ -72,8 +64,11 @@ public class TimeDescriptorsTest
 		SimpleFeatureType schema = DataUtilities.createType(
 				"sp.geostuff",
 				"geometry:Geometry:srid=4326,pop:java.lang.Long,when:Date,start:Date,end:Date,pid:String");
-		TimeDescriptors td = new TimeDescriptors();
-		td.inferType(schema);
+		final TimeDescriptorConfiguration timeConfig = new TimeDescriptorConfiguration();
+		timeConfig.configureFromType(schema);
+		TimeDescriptors td = new TimeDescriptors(
+				schema,
+				timeConfig);
 		assertEquals(
 				"start",
 				td.getStartRange().getLocalName());
@@ -82,9 +77,7 @@ public class TimeDescriptorsTest
 				td.getEndRange().getLocalName());
 		assertNull(td.getTime());
 		assertTrue(td.hasTime());
-		testSerialization(
-				schema,
-				td);
+
 	}
 
 	@Test
@@ -93,17 +86,18 @@ public class TimeDescriptorsTest
 		SimpleFeatureType schema = DataUtilities.createType(
 				"sp.geostuff",
 				"geometry:Geometry:srid=4326,pop:java.lang.Long,start:Date,pid:String");
-		TimeDescriptors td = new TimeDescriptors();
-		td.inferType(schema);
+		final TimeDescriptorConfiguration timeConfig = new TimeDescriptorConfiguration();
+		timeConfig.configureFromType(schema);
+		TimeDescriptors td = new TimeDescriptors(
+				schema,
+				timeConfig);
 		assertEquals(
 				"start",
 				td.getTime().getLocalName());
 		assertNull(td.getStartRange());
 		assertNull(td.getEndRange());
 		assertTrue(td.hasTime());
-		testSerialization(
-				schema,
-				td);
+
 	}
 
 	@Test
@@ -112,17 +106,18 @@ public class TimeDescriptorsTest
 		SimpleFeatureType schema = DataUtilities.createType(
 				"sp.geostuff",
 				"geometry:Geometry:srid=4326,pop:java.lang.Long,end:Date,pid:String");
-		TimeDescriptors td = new TimeDescriptors();
-		td.inferType(schema);
+		final TimeDescriptorConfiguration timeConfig = new TimeDescriptorConfiguration();
+		timeConfig.configureFromType(schema);
+		TimeDescriptors td = new TimeDescriptors(
+				schema,
+				timeConfig);
 		assertEquals(
 				"end",
 				td.getTime().getLocalName());
 		assertNull(td.getStartRange());
 		assertNull(td.getEndRange());
 		assertTrue(td.hasTime());
-		testSerialization(
-				schema,
-				td);
+
 	}
 
 	@Test
@@ -131,17 +126,18 @@ public class TimeDescriptorsTest
 		SimpleFeatureType schema = DataUtilities.createType(
 				"sp.geostuff",
 				"geometry:Geometry:srid=4326,pop:java.lang.Long,when:Date,end:Date,pid:String");
-		TimeDescriptors td = new TimeDescriptors();
-		td.inferType(schema);
+		final TimeDescriptorConfiguration timeConfig = new TimeDescriptorConfiguration();
+		timeConfig.configureFromType(schema);
+		TimeDescriptors td = new TimeDescriptors(
+				schema,
+				timeConfig);
 		assertEquals(
 				"when",
 				td.getTime().getLocalName());
 		assertNull(td.getStartRange());
 		assertNull(td.getEndRange());
 		assertTrue(td.hasTime());
-		testSerialization(
-				schema,
-				td);
+
 	}
 
 	@Test
@@ -150,17 +146,18 @@ public class TimeDescriptorsTest
 		SimpleFeatureType schema = DataUtilities.createType(
 				"sp.geostuff",
 				"geometry:Geometry:srid=4326,pop:java.lang.Long,when:Date,start:Date,pid:String");
-		TimeDescriptors td = new TimeDescriptors();
-		td.inferType(schema);
+		final TimeDescriptorConfiguration timeConfig = new TimeDescriptorConfiguration();
+		timeConfig.configureFromType(schema);
+		TimeDescriptors td = new TimeDescriptors(
+				schema,
+				timeConfig);
 		assertEquals(
 				"when",
 				td.getTime().getLocalName());
 		assertNull(td.getStartRange());
 		assertNull(td.getEndRange());
 		assertTrue(td.hasTime());
-		testSerialization(
-				schema,
-				td);
+
 	}
 
 }

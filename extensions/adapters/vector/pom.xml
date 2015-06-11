@@ -62,6 +62,16 @@
 		<dependency>
 			<groupId>org.geotools</groupId>
 			<artifactId>gt-epsg-wkt</artifactId>
+				</dependency>
+		<dependency>
+			<groupId>com.clearspring.analytics</groupId>
+			<artifactId>stream</artifactId>
+			<version>2.9.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hdrhistogram</groupId>
+			<artifactId>HdrHistogram</artifactId>
+			<version>2.1.4</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>

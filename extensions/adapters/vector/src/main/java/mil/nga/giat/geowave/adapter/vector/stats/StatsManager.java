@@ -77,35 +77,100 @@ public class StatsManager
 			final SimpleFeatureType reprojectedType,
 			final MathTransform transform ) {
 		for (final AttributeDescriptor descriptor : persistedType.getAttributeDescriptors()) {
+			// for temporal and geometry because there is a dependency on these
+			// stats
+			// for optimizations within the GeoServer adapter.
 			if (TimeUtils.isTemporal(descriptor.getType().getBinding())) {
-				statsList.add(new FeatureTimeRangeStatistics(
-						dataAdapter.getAdapterId(),
-						descriptor.getLocalName()));
-			}
-			else if (Number.class.isAssignableFrom(descriptor.getType().getBinding())) {
-				statsList.add(new FeatureNumericRangeStatistics(
-						dataAdapter.getAdapterId(),
-						descriptor.getLocalName()));
+				addStats(
+						new FeatureTimeRangeStatistics(
+								dataAdapter.getAdapterId(),
+								descriptor.getLocalName()),
+						new FieldIdStatisticVisibility(
+								new ByteArrayId(
+										descriptor.getLocalName())));
 			}
 			else if (Geometry.class.isAssignableFrom(descriptor.getType().getBinding())) {
-				statsList.add(new FeatureBoundingBoxStatistics(
-						dataAdapter.getAdapterId(),
-						descriptor.getLocalName(),
-						persistedType,
-						reprojectedType,
-						transform));
+				addStats(
+						new FeatureBoundingBoxStatistics(
+								dataAdapter.getAdapterId(),
+								descriptor.getLocalName(),
+								persistedType,
+								reprojectedType,
+								transform),
+						new FieldIdStatisticVisibility(
+								new ByteArrayId(
+										descriptor.getLocalName())));
 			}
-			else {
-				continue;
+
+			if (descriptor.getUserData().containsKey(
+					"stats")) {
+				final StatsConfigurationCollection statsConfigurations = (StatsConfigurationCollection) descriptor.getUserData().get(
+						"stats");
+				for (StatsConfig<SimpleFeature> statConfig : statsConfigurations.getConfigurationsForAttribute()) {
+					addStats(
+							statConfig.create(
+									dataAdapter.getAdapterId(),
+									descriptor.getLocalName()),
+							new FieldIdStatisticVisibility(
+									new ByteArrayId(
+											descriptor.getLocalName())));
+				}
+
 			}
-			// last one added to set visibility
-			visibilityHandlers.put(
-					statsList.get(
-							statsList.size() - 1).getStatisticsId(),
-					new FieldIdStatisticVisibility(
-							new ByteArrayId(
-									descriptor.getLocalName())));
+			else if (Number.class.isAssignableFrom(descriptor.getType().getBinding())) {
+				addStats(
+						new FeatureNumericRangeStatistics(
+								dataAdapter.getAdapterId(),
+								descriptor.getLocalName()),
+						new FieldIdStatisticVisibility(
+								new ByteArrayId(
+										descriptor.getLocalName())));
+
+				addStats(
+						new FeatureFixedBinNumericStatistics(
+								dataAdapter.getAdapterId(),
+								descriptor.getLocalName()),
+						new FieldIdStatisticVisibility(
+								new ByteArrayId(
+										descriptor.getLocalName())));
+
+			}
+			else if (String.class.isAssignableFrom(descriptor.getType().getBinding())) {
+				addStats(
+						new FeatureHyperLogLogStatistics(
+								dataAdapter.getAdapterId(),
+								descriptor.getLocalName(),
+								16),
+						new FieldIdStatisticVisibility(
+								new ByteArrayId(
+										descriptor.getLocalName())));
+			}
+
 		}
+	}
+
+	/**
+	 * Supports replacement.
+	 * 
+	 * @param stats
+	 * @param visibilityHandler
+	 */
+	public void addStats(
+			DataStatistics<SimpleFeature> stats,
+			DataStatisticsVisibilityHandler<SimpleFeature> visibilityHandler ) {
+		int replaceStat = 0;
+		for (DataStatistics<SimpleFeature> currentStat : statsList) {
+			if (currentStat.getStatisticsId().equals(
+					stats.getStatisticsId())) {
+				break;
+			}
+			replaceStat++;
+		}
+		if (replaceStat < statsList.size()) this.statsList.remove(replaceStat);
+		this.statsList.add(stats);
+		this.visibilityHandlers.put(
+				stats.getStatisticsId(),
+				visibilityHandler);
 	}
 
 	public ByteArrayId[] getSupportedStatisticsIds() {
