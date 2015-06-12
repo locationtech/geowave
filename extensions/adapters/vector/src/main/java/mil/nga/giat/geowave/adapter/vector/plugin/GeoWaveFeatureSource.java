@@ -5,109 +5,50 @@ import java.util.Map;
 
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import mil.nga.giat.geowave.adapter.vector.plugin.transaction.GeoWaveEmptyTransaction;
-import mil.nga.giat.geowave.adapter.vector.plugin.transaction.GeoWaveTransaction;
+import mil.nga.giat.geowave.adapter.vector.plugin.transaction.GeoWaveTransactionState;
 import mil.nga.giat.geowave.adapter.vector.stats.FeatureBoundingBoxStatistics;
 import mil.nga.giat.geowave.core.geotime.store.statistics.BoundingBoxDataStatistics;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.adapter.statistics.CountDataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 
-import org.geotools.data.AbstractFeatureLocking;
-import org.geotools.data.DataSourceException;
-import org.geotools.data.DataStore;
-import org.geotools.data.FeatureListener;
 import org.geotools.data.FeatureReader;
+import org.geotools.data.FeatureWriter;
 import org.geotools.data.Query;
-import org.geotools.data.QueryCapabilities;
-import org.geotools.data.ResourceInfo;
-import org.geotools.data.simple.SimpleFeatureCollection;
-import org.geotools.data.simple.SimpleFeatureSource;
-import org.geotools.data.store.EmptyFeatureCollection;
+import org.geotools.data.store.ContentEntry;
+import org.geotools.data.store.ContentFeatureStore;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
-import org.opengis.feature.type.Name;
 import org.opengis.filter.Filter;
 import org.opengis.geometry.BoundingBox;
-import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
-/**
- * This is directly used by GeoWave's GeoTools DataStore to get a GeoTools data
- * reader or feature collection for a specific feature type (defined by a
- * GeoWave FeatureDataAdapter). This uses EPSG:4326 as the default CRS.
- * 
- */
 @SuppressWarnings("unchecked")
 public class GeoWaveFeatureSource extends
-		AbstractFeatureLocking implements
-		SimpleFeatureSource
+		ContentFeatureStore
 {
 	private final GeoWaveDataStoreComponents components;
-	private final GeoWaveQueryCaps queryCaps = new GeoWaveQueryCaps();
-	private final GeoWaveResourceInfo info;
 
 	public GeoWaveFeatureSource(
-			final GeoWaveGTDataStore store,
+			final ContentEntry entry,
+			final Query query,
 			final FeatureDataAdapter adapter ) {
+		super(
+				entry,
+				query);
 		components = new GeoWaveDataStoreComponents(
-				store.getDataStore(),
-				store.getStatsDataStore(),
-				store,
+				this.getDataStore().getDataStore(),
+				this.getDataStore(),
 				adapter,
-				store.getTransactionsAllocater());
-		info = new GeoWaveResourceInfo(
-				this);
-	}
-
-	public CoordinateReferenceSystem getCRS() {
-		return GeoWaveGTDataStore.DEFAULT_CRS;
+				this.getDataStore().getTransactionsAllocater());
 	}
 
 	public GeoWaveDataStoreComponents getComponents() {
 		return components;
 	}
 
-	protected FeatureDataAdapter getStatsAdapter(
-			final String typeName ) {
-		return components.getGTstore().getStatsAdapter(
-				typeName);
-	}
-
-	@Override
-	public SimpleFeatureCollection getFeatures(
-			final Query query )
-			throws IOException {
-		final Query q = query;
-
-		final SimpleFeatureType schema = getSchema();
-		final String typeName = schema.getTypeName();
-
-		if (query.getTypeName() == null) { // typeName unspecified we will "any"
-											// use a default
-			// q = new DefaultQuery(query);
-			q.setTypeName(typeName);
-		}
-		else if (!typeName.equals(query.getTypeName())) {
-			return new EmptyFeatureCollection(
-					schema);
-		}
-
-		final QueryCapabilities queryCapabilities = getQueryCapabilities();
-		if (!queryCapabilities.supportsSorting(query.getSortBy())) {
-			throw new DataSourceException(
-					"DataStore cannot provide the requested sort order");
-		}
-
-		final GeoWaveFeatureReader reader = new GeoWaveFeatureReader(
-				query,
-				new GeoWaveEmptyTransaction(
-						components),
-				components);
-
-		return reader.getFeatureCollection();
-	}
-
 	@SuppressWarnings("rawtypes")
+	@Override
 	protected ReferencedEnvelope getBoundsInternal(
 			final Query query )
 			throws IOException {
@@ -166,6 +107,7 @@ public class GeoWaveFeatureSource extends
 	}
 
 	@SuppressWarnings("rawtypes")
+	@Override
 	protected int getCountInternal(
 			final Query query )
 			throws IOException {
@@ -193,106 +135,84 @@ public class GeoWaveFeatureSource extends
 
 	}
 
-	@Override
-	public QueryCapabilities getQueryCapabilities() {
-		return queryCaps;
-	}
-
-	@Override
-	public ResourceInfo getInfo() {
-		return info;
-	}
-
-	@Override
-	public Name getName() {
-		return components.getAdapter().getType().getName();
-	}
-
 	public SimpleFeatureType getFeatureType() {
 		return components.getAdapter().getType();
 	}
 
-	protected GeoWaveFeatureReader getReaderInternal(
-			final Query query,
-			final GeoWaveTransaction transaction ) {
+	@Override
+	protected FeatureReader<SimpleFeatureType, SimpleFeature> getReaderInternal(
+			final Query query )
+			throws IOException {
+		final GeoWaveTransactionState state = this.getDataStore().getMyTransactionState(
+				transaction,
+				this);
 		return new GeoWaveFeatureReader(
 				query,
-				transaction,
+				state.getGeoWaveTransaction(query.getTypeName()),
 				components);
-
 	}
 
-	protected GeoWaveFeatureWriter getWriterInternal(
-			final GeoWaveTransaction transaction ) {
-
+	@Override
+	protected FeatureWriter<SimpleFeatureType, SimpleFeature> getWriterInternal(
+			Query query,
+			int flags )
+			throws IOException {
+		final GeoWaveTransactionState state = this.getDataStore().getMyTransactionState(
+				transaction,
+				this);
 		return new GeoWaveFeatureWriter(
 				components,
-				transaction,
-				null);
-	}
-
-	protected GeoWaveFeatureWriter getWriterInternal(
-			final GeoWaveTransaction transaction,
-			final Filter filter ) {
-		final String typeName = components.getAdapter().getType().getTypeName();
-		final Query query = new Query(
-				typeName,
-				filter);
-		final GeoWaveFeatureReader myReader = getReaderInternal(
-				query,
-				transaction);
-		return new GeoWaveFeatureWriter(
-				components,
-				transaction,
-				myReader);
+				state.getGeoWaveTransaction(query.getTypeName()),
+				(GeoWaveFeatureReader) getReaderInternal(query));
 	}
 
 	@Override
-	public ReferencedEnvelope getBounds()
+	protected SimpleFeatureType buildFeatureType()
 			throws IOException {
-		final Query query = new Query(
-				getSchema().getTypeName(),
-				Filter.INCLUDE);
-		return this.getBounds(query);
-	}
-
-	@Override
-	public ReferencedEnvelope getBounds(
-			final Query query )
-			throws IOException {
-		return getBoundsInternal(query);
-	}
-
-	@Override
-	public int getCount(
-			final Query query )
-			throws IOException {
-		return getCountInternal(query);
-	}
-
-	@Override
-	public DataStore getDataStore() {
-		return components.getGTstore();
-	}
-
-	@Override
-	public SimpleFeatureType getSchema() {
 		return components.getAdapter().getType();
 	}
 
 	@Override
-	public void addFeatureListener(
-			final FeatureListener listener ) {
-		components.getGTstore().getListenerManager().addFeatureListener(
-				this,
-				listener);
+	public GeoWaveGTDataStore getDataStore() {
+		// type narrow this method to prevent a lot of casts resulting in more
+		// readable code.
+		return (GeoWaveGTDataStore) super.getDataStore();
 	}
 
 	@Override
-	public void removeFeatureListener(
-			final FeatureListener listener ) {
-		components.getGTstore().getListenerManager().removeFeatureListener(
-				this,
-				listener);
+	protected boolean canTransact() {
+		// tell GeoTools that we natively handle this
+		return true;
 	}
+
+	@Override
+	protected boolean canLock() {
+		// tell GeoTools that we natively handle this
+		return true;
+	}
+
+	@Override
+	protected void doLockInternal(
+			String typeName,
+			SimpleFeature feature )
+			throws IOException {
+		getDataStore().getLockingManager().lockFeatureID(
+				typeName,
+				feature.getID(),
+				transaction,
+				lock);
+	}
+
+	@Override
+	protected void doUnlockInternal(
+			String typeName,
+			SimpleFeature feature )
+			throws IOException {
+		getDataStore().getLockingManager().unLockFeatureID(
+				typeName,
+				feature.getID(),
+				transaction,
+				lock);
+	}
+
 }

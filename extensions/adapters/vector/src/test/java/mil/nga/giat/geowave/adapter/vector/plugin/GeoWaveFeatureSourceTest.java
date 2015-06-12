@@ -215,7 +215,6 @@ public class GeoWaveFeatureSourceTest
 
 		final FeatureWriter<SimpleFeatureType, SimpleFeature> writer = dataStore.getFeatureWriter(
 				type.getTypeName(),
-				Filter.EXCLUDE,
 				transaction1);
 		assertFalse(writer.hasNext());
 		SimpleFeature newFeature = writer.next();

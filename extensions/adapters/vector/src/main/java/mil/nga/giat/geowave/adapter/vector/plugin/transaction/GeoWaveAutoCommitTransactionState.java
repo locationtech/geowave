@@ -18,6 +18,7 @@ public class GeoWaveAutoCommitTransactionState implements
 		this.components = source.getComponents();
 	}
 
+	@Override
 	public void setTransaction(
 			Transaction transaction ) {}
 
@@ -45,6 +46,7 @@ public class GeoWaveAutoCommitTransactionState implements
 	/**
 	 * @see org.geotools.data.Transaction.State#rollback()
 	 */
+	@Override
 	public void rollback()
 			throws IOException {
 

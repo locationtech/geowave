@@ -26,7 +26,6 @@ public class GeoWaveDataStoreComponents
 {
 	private final FeatureDataAdapter adapter;
 	private final VectorDataStore dataStore;
-	private final VectorDataStore statsDataStore;
 	private final GeoWaveGTDataStore GTstore;
 	private final TransactionsAllocater transactionsAllocater;
 
@@ -34,13 +33,11 @@ public class GeoWaveDataStoreComponents
 
 	public GeoWaveDataStoreComponents(
 			final VectorDataStore dataStore,
-			final VectorDataStore statsDataStore,
 			final GeoWaveGTDataStore GTstore,
 			final FeatureDataAdapter adapter,
 			final TransactionsAllocater transactionsAllocater ) {
 		this.adapter = adapter;
 		this.dataStore = dataStore;
-		this.statsDataStore = statsDataStore;
 		this.GTstore = GTstore;
 		this.currentIndex = GTstore.getIndex(adapter);
 		this.transactionsAllocater = transactionsAllocater;
@@ -52,10 +49,6 @@ public class GeoWaveDataStoreComponents
 
 	public VectorDataStore getDataStore() {
 		return dataStore;
-	}
-
-	public VectorDataStore getStatsDataStore() {
-		return statsDataStore;
 	}
 
 	public GeoWaveGTDataStore getGTstore() {

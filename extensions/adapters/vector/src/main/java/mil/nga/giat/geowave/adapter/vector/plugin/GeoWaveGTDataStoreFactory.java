@@ -1,14 +1,17 @@
 package mil.nga.giat.geowave.adapter.vector.plugin;
 
+import java.awt.RenderingHints.Key;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.geotools.data.AbstractDataStoreFactory;
+import org.apache.log4j.Logger;
 import org.geotools.data.DataStore;
+import org.geotools.data.DataStoreFactorySpi;
 
 /**
  * This factory is injected by GeoTools using Java SPI and is used to expose
@@ -17,8 +20,8 @@ import org.geotools.data.DataStore;
  * GeoTools.
  * 
  */
-public class GeoWaveGTDataStoreFactory extends
-		AbstractDataStoreFactory
+public class GeoWaveGTDataStoreFactory implements
+		DataStoreFactorySpi
 {
 	private static class DataStoreCacheEntry
 	{
@@ -33,7 +36,14 @@ public class GeoWaveGTDataStoreFactory extends
 		}
 	}
 
+	private static final Logger LOGGER = Logger.getLogger(GeoWaveGTDataStoreFactory.class);
 	private final List<DataStoreCacheEntry> dataStoreCache = new ArrayList<DataStoreCacheEntry>();
+
+	/**
+	 * Public "no argument" constructor called by Factory Service Provider (SPI)
+	 * entry listed in META-INF/services/org.geotools.data.DataStoreFactorySPI
+	 */
+	public GeoWaveGTDataStoreFactory() {}
 
 	// GeoServer seems to call this several times so we should cache a
 	// connection if the parameters are the same, I'm not sure this is entirely
@@ -113,4 +123,44 @@ public class GeoWaveGTDataStoreFactory extends
 		final List<Param> params = GeoWavePluginConfig.getPluginParams();
 		return params.toArray(new Param[params.size()]);
 	}
+
+	@Override
+	public boolean canProcess(
+			Map<String, Serializable> params ) {
+		try {
+			// rely on validation in GeoWavePluginConfig's constructor
+			new GeoWavePluginConfig(
+					params);
+			return true;
+		}
+		catch (GeoWavePluginException e) {
+			LOGGER.error(
+					"Invalid parameters",
+					e);
+			return false;
+		}
+	}
+
+	private static Boolean isAvailable = null;
+
+	@Override
+	public synchronized boolean isAvailable() {
+		if (isAvailable == null) {
+			try {
+				Class.forName("mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveGTDataStore");
+				isAvailable = true;
+			}
+			catch (ClassNotFoundException e) {
+				isAvailable = false;
+			}
+		}
+		return isAvailable;
+	}
+
+	@Override
+	public Map<Key, ?> getImplementationHints() {
+		// No implementation hints required at this time
+		return Collections.emptyMap();
+	}
+
 }

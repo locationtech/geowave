@@ -47,6 +47,7 @@ public class GeoWaveTransactionManagementState implements
 		this.txID = components.getTransaction();
 	}
 
+	@Override
 	public synchronized void setTransaction(
 			Transaction transaction ) {
 		if (transaction != null) {
@@ -95,7 +96,8 @@ public class GeoWaveTransactionManagementState implements
 	}
 
 	boolean exists(
-			String typeName ) {
+			String typeName )
+			throws IOException {
 		String[] types;
 		types = components.getGTstore().getTypeNames();
 		Arrays.sort(types);
@@ -108,6 +110,7 @@ public class GeoWaveTransactionManagementState implements
 	/**
 	 * @see org.geotools.data.Transaction.State#addAuthorization(java.lang.String)
 	 */
+	@Override
 	public synchronized void addAuthorization(
 			String AuthID )
 			throws IOException {
@@ -119,6 +122,7 @@ public class GeoWaveTransactionManagementState implements
 	 * 
 	 * @see org.geotools.data.Transaction.State#commit()
 	 */
+	@Override
 	public synchronized void commit()
 			throws IOException {
 
@@ -213,6 +217,7 @@ public class GeoWaveTransactionManagementState implements
 	/**
 	 * @see org.geotools.data.Transaction.State#rollback()
 	 */
+	@Override
 	public synchronized void rollback()
 			throws IOException {
 		Entry<String, GeoWaveTransactionManagement> entry;

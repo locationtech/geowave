@@ -45,7 +45,8 @@ public class WFSSpatialTest
 			throws AccumuloException,
 			AccumuloSecurityException,
 			SchemaException,
-			CQLException {
+			CQLException,
+			IOException {
 		dataStore = new GeoWaveGTMemDataStore();
 		type = DataUtilities.createType(
 				"geostuff",
