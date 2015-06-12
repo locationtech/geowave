@@ -2934,13 +2934,18 @@ Current `best' version is /usr/local/geowave-0.8.7-hdp2.</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>geowave-cdh5-accumulo: This RPM will install the GeoWave Accumulo iterator into the local file system and then upload
+<p>geowave-*-accumulo: This RPM will install the GeoWave Accumulo iterator into the local file system and then upload
 it into HDFS using the <code>hadoop fs -put</code> command. This means of deployment requires that the RPM is installed on a node that
-has the correct binaries and configuration in place to push files to HDFS, like your namenode.</p>
+has the correct binaries and configuration in place to push files to HDFS, like your namenode. We also need to set the ownership
+and permissions correctly within HDFS and as such need to execute the script as a user that has superuser permisisons in HDFS.
+This user varies by Hadoop distribution vendor. If the Accumulo RPM installation fails, check the install log located at
+<code>/usr/local/geowave/accumulo/geowave-to-hdfs.log</code> for errors. The script can be re-run manually if there was a problem that
+can be corrected like the HDFS service was not started. If a non-default user was used to install Hadoop you can specify a user
+that has permissions to upload with the --user argument <code>/usr/local/geowave/accumulo/deploy-to-geowave-to-hdfs.sh --user my-hadoop-user</code></p>
 </div>
 <div class="paragraph">
-<p>With the exception of the Accumulo RPM mentioned above you can install the rest of the RPMs all on a single node or
-a mix of nodes depending on your cluster configuration. All GeoWave files get installed into the `/usr/local/geowave/' directory</p>
+<p>With the exception of the Accumulo RPM mentioned above there are no restrictions on where you install RPMs. You can install
+the rest of the RPMs all on a single node for development use or a mix of nodes depending on your cluster configuration.</p>
 </div>
 <div style="page-break-after: always;"></div>
 </div>
@@ -3911,7 +3916,7 @@ yum --enablerepo=geowave install geowave-puppet</code></pre>
 <div class="sect2">
 <h3 id="version"><a class="anchor" href="#version"></a>Version</h3>
 <div class="paragraph">
-<p>This documentation was generated for GeoWave version 0.8.8-SNAPSHOT from commit aa021f8036e624cce777b0e8d5ef55ce765d4cc9.</p>
+<p>This documentation was generated for GeoWave version 0.8.8-SNAPSHOT from commit 98f5da8f8ac0ac750fd4e019cb7f5ce146fdca75.</p>
 </div>
 <div style="page-break-after: always;"></div>
 </div>
@@ -3963,7 +3968,7 @@ yum --enablerepo=geowave install geowave-puppet</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-06-11 20:21:01 UTC
+Last updated 2015-06-12 13:11:18 UTC
 </div>
 </div>
 </body>
