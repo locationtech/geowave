@@ -195,10 +195,10 @@ public class ZooKeeperTransactionAllocaterTest
 						Thread.sleep(200 + (Math.abs(random.nextInt()) % 200));
 					}
 					catch (InterruptedException e) {}
-					allocater.releaseTransaction(txID);
 					synchronized (activeTX) {
 						activeTX.remove(txID);
 					}
+					allocater.releaseTransaction(txID);
 				}
 				catch (Throwable e) {
 					synchronized (failures) {

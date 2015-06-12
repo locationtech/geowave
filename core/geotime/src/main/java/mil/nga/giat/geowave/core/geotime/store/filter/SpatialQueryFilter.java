@@ -2,6 +2,7 @@ package mil.nga.giat.geowave.core.geotime.store.filter;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -21,6 +22,8 @@ import mil.nga.giat.geowave.core.store.filter.BasicQueryFilter;
 import mil.nga.giat.geowave.core.store.filter.GenericTypeResolver;
 
 import com.vividsolutions.jts.geom.Geometry;
+import com.vividsolutions.jts.geom.prep.PreparedGeometry;
+import com.vividsolutions.jts.geom.prep.PreparedGeometryFactory;
 
 /**
  * This filter can perform fine-grained acceptance testing (intersection test
@@ -31,9 +34,9 @@ public class SpatialQueryFilter extends
 		BasicQueryFilter
 {
 
-	private static final Interner<Geometry> geometryInterner = Interners.newWeakInterner();
-
-	private Geometry queryGeometry;
+	private static final Interner<GeometryImage> geometryImageInterner = Interners.newWeakInterner();
+	public static final PreparedGeometryFactory FACTORY = new PreparedGeometryFactory();
+	private GeometryImage preparedGeometryImage;
 
 	private Set<ByteArrayId> geometryFieldIds;
 
@@ -59,7 +62,8 @@ public class SpatialQueryFilter extends
 		super(
 				strippedGeometry.strippedQuery,
 				strippedGeometry.strippedDimensionDefinitions);
-		this.queryGeometry = queryGeometry;
+		preparedGeometryImage = new GeometryImage(
+				FACTORY.create(queryGeometry));
 		geometryFieldIds = strippedGeometry.geometryFieldIds;
 	}
 
@@ -115,7 +119,7 @@ public class SpatialQueryFilter extends
 	@Override
 	public boolean accept(
 			final IndexedPersistenceEncoding persistenceEncoding ) {
-		if (queryGeometry == null) {
+		if (preparedGeometryImage == null) {
 			return true;
 		}
 		// we can actually get the geometry for the data and test the
@@ -149,7 +153,10 @@ public class SpatialQueryFilter extends
 		if (dataGeometry == null) {
 			return false;
 		}
-		return dataGeometry.intersects(queryGeometry);
+		if (preparedGeometryImage != null) {
+			return preparedGeometryImage.preparedGeometry.intersects(dataGeometry);
+		}
+		return false;
 	}
 
 	protected boolean isSpatialOnly() {
@@ -158,7 +165,7 @@ public class SpatialQueryFilter extends
 
 	@Override
 	public byte[] toBinary() {
-		final byte[] geometryBinary = GeometryUtils.geometryToBinary(queryGeometry);
+		final byte[] geometryBinary = preparedGeometryImage.geometryBinary;
 		int geometryFieldIdByteSize = 4;
 		for (final ByteArrayId id : geometryFieldIds) {
 			geometryFieldIdByteSize += (4 + id.getBytes().length);
@@ -196,8 +203,82 @@ public class SpatialQueryFilter extends
 					fieldId));
 		}
 		buf.get(theRest);
-		queryGeometry = geometryInterner.intern(GeometryUtils.geometryFromBinary(geometryBinary));
+		preparedGeometryImage = geometryImageInterner.intern(new GeometryImage(
+				geometryBinary));
+		// build the the PreparedGeometry and underling Geometry if not
+		// reconstituted yet; most likely occurs if this thread constructed the
+		// image.
+		preparedGeometryImage.init();
 
 		super.fromBinary(theRest);
+	}
+
+	/**
+	 * This class is used for interning a PreparedGeometry. Prepared geometries
+	 * cannot be interned since they do not extend Object.hashCode().
+	 * 
+	 * Interning a geometry assumes a geometry is already constructed on the
+	 * heap at the time interning begins. The byte image of geometry provides a
+	 * more efficient component to hash and associate with a single image of the
+	 * geometry.
+	 * 
+	 * The approach of interning the Geometry prior to construction of a
+	 * PreparedGeometry lead to excessive memory use. Thus, this class is
+	 * constructed to hold the prepared geometry and prevent reconstruction of
+	 * the underlying geometry from a byte array if the Geometry has been
+	 * interned.
+	 * 
+	 * Using this approach increased performance of a large query unit test by
+	 * 40% and reduced heap memory consumption by roughly 50%.
+	 * 
+	 */
+	public static class GeometryImage
+	{
+
+		byte[] geometryBinary;
+		PreparedGeometry preparedGeometry = null;
+
+		public GeometryImage(
+				PreparedGeometry preparedGeometry ) {
+			super();
+			this.preparedGeometry = preparedGeometry;
+			geometryBinary = GeometryUtils.geometryToBinary(preparedGeometry.getGeometry());
+		}
+
+		public GeometryImage(
+				byte[] geometryBinary ) {
+			super();
+			this.geometryBinary = geometryBinary;
+		}
+
+		public synchronized void init() {
+			if (preparedGeometry == null) preparedGeometry = FACTORY.create(GeometryUtils.geometryFromBinary(geometryBinary));
+		}
+
+		public PreparedGeometry getGeometry() {
+			return preparedGeometry;
+		}
+
+		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = 1;
+			result = prime * result + Arrays.hashCode(geometryBinary);
+			return result;
+		}
+
+		@Override
+		public boolean equals(
+				Object obj ) {
+			if (this == obj) return true;
+			if (obj == null) return false;
+			if (getClass() != obj.getClass()) return false;
+			GeometryImage other = (GeometryImage) obj;
+			if (!Arrays.equals(
+					geometryBinary,
+					other.geometryBinary)) return false;
+			return true;
+		}
+
 	}
 }
