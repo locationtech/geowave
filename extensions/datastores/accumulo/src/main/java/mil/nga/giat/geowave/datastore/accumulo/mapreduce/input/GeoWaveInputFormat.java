@@ -6,7 +6,6 @@ import java.net.InetAddress;
 import java.util.*;
 import java.util.Map.Entry;
 
-import com.google.common.base.*;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
@@ -23,12 +22,22 @@ import mil.nga.giat.geowave.datastore.accumulo.mapreduce.input.GeoWaveInputConfi
 import mil.nga.giat.geowave.datastore.accumulo.mapreduce.input.GeoWaveInputFormat.IntermediateSplitInfo.RangeLocationPair;
 import mil.nga.giat.geowave.datastore.accumulo.util.AccumuloUtils;
 
+// @formatter:off
+/*if[ACCUMULO_API_1.6]
+import org.apache.accumulo.core.security.Credentials;
+else[ACCUMULO_1.6]*/
+import org.apache.accumulo.core.client.ClientConfiguration;
+import org.apache.accumulo.core.client.impl.ClientContext;
+/*end[ACCUMULO_1.6]*/
+// @formatter:on
+
 import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.apache.accumulo.core.client.Instance;
 import org.apache.accumulo.core.client.TableDeletedException;
 import org.apache.accumulo.core.client.TableNotFoundException;
 import org.apache.accumulo.core.client.TableOfflineException;
+
 import org.apache.accumulo.core.client.impl.Tables;
 import org.apache.accumulo.core.client.impl.TabletLocator;
 import org.apache.accumulo.core.client.mapreduce.lib.util.ConfiguratorBase;
@@ -40,7 +49,7 @@ import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.KeyExtent;
 import org.apache.accumulo.core.data.Range;
 import org.apache.accumulo.core.master.state.tables.TableState;
-import org.apache.accumulo.core.security.Credentials;
+
 import org.apache.accumulo.core.util.UtilWaitThread;
 import org.apache.commons.collections.IteratorUtils;
 import org.apache.commons.collections.Transformer;
@@ -55,14 +64,7 @@ import org.apache.hadoop.mapreduce.TaskAttemptContext;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
-// @formatter:off
-/*if[ACCUMULO_1.5.2]
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
-import java.nio.ByteBuffer;
-import org.apache.accumulo.core.security.thrift.TCredentials;
-end[ACCUMULO_1.5.2]*/
-// @formatter:on
+
 
 public class GeoWaveInputFormat<T> extends
 		InputFormat<GeoWaveInputKey, T>
@@ -139,7 +141,7 @@ public class GeoWaveInputFormat<T> extends
 	/**
 	 * Add an adapter specific to the input format
 	 * 
-	 * @param job
+	 * @param config
 	 * @param adapter
 	 */
 	public static void addDataAdapter(
@@ -265,20 +267,18 @@ public class GeoWaveInputFormat<T> extends
 			throws TableNotFoundException {
 		TabletLocator tabletLocator;
 		// @formatter:off
-		/*if[ACCUMULO_1.5.2]
-		tabletLocator = TabletLocator.getInstance(
-				instance,
-				new Text(
-						Tables.getTableId(
-								instance,
-								tableName)));
-
-  		else[ACCUMULO_1.5.2]*/
+		/*if[ACCUMULO_API_1.6]
 		tabletLocator = TabletLocator.getLocator(
 				instance,
 				new Text(
 						tableId));
-		/*end[ACCUMULO_1.5.2]*/
+		else[ACCUMULO_API_1.6]*/
+		tabletLocator = TabletLocator.getLocator(
+				//ToDo: need to pass ClientContext instead of instance
+				new ClientContext(instance, null, new ClientConfiguration()),
+				new Text(
+						tableId));
+		/*end[ACCUMULO_API_1.6]*/
 		// @formatter:on
 		return tabletLocator;
 	}
@@ -295,24 +295,7 @@ public class GeoWaveInputFormat<T> extends
 			TableNotFoundException,
 			IOException {
 		// @formatter:off
-		/*if[ACCUMULO_1.5.2]
-		final ByteArrayOutputStream backingByteArray = new ByteArrayOutputStream();
-		final DataOutputStream output = new DataOutputStream(
-				backingByteArray);
-		new PasswordToken(
-				password).write(output);
-		output.close();
-		final ByteBuffer buffer = ByteBuffer.wrap(backingByteArray.toByteArray());
-		final TCredentials credentials = new TCredentials(
-				userName,
-				PasswordToken.class.getCanonicalName(),
-				buffer,
-				instanceId);
-		return tabletLocator.binRanges(
-				rangeList,
-				tserverBinnedRanges,
-				credentials).isEmpty();
-  		else[ACCUMULO_1.5.2]*/
+		/*if[ACCUMULO_API_1.6]
 		return tabletLocator.binRanges(
 				new Credentials(
 						userName,
@@ -320,7 +303,15 @@ public class GeoWaveInputFormat<T> extends
 								password)),
 				rangeList,
 				tserverBinnedRanges).isEmpty();
-  		/*end[ACCUMULO_1.5.2]*/
+  		else[ACCUMULO_API_1.6]*/
+		return tabletLocator.binRanges(
+				new Credentials(
+						userName,
+						new PasswordToken(
+								password)),
+				rangeList,
+				tserverBinnedRanges).isEmpty();
+  		/*end[ACCUMULO_API_1.6]*/
 		// @formatter:on
 	}
 

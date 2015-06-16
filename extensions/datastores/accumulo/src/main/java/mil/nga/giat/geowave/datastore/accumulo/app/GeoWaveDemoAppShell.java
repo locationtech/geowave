@@ -1,6 +1,6 @@
 package mil.nga.giat.geowave.datastore.accumulo.app;
 
-import org.apache.accumulo.core.util.shell.Shell;
+import org.apache.accumulo.shell.Shell;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 

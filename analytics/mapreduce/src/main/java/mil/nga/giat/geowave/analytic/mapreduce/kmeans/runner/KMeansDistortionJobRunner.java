@@ -18,12 +18,7 @@ import mil.nga.giat.geowave.datastore.accumulo.mapreduce.GeoWaveConfiguratorBase
 import mil.nga.giat.geowave.datastore.accumulo.mapreduce.input.GeoWaveInputFormat;
 import mil.nga.giat.geowave.datastore.accumulo.util.AccumuloUtils;
 
-//@formatter:off
-/*if[ACCUMULO_1.5.2]
- else[ACCUMULO_1.5.2]*/
 import org.apache.accumulo.core.client.ClientConfiguration;
-/*end[ACCUMULO_1.5.2]*/
-//@formatter:on
 import org.apache.accumulo.core.client.mapreduce.AccumuloOutputFormat;
 import org.apache.accumulo.core.client.security.tokens.AuthenticationToken;
 import org.apache.accumulo.core.client.security.tokens.PasswordToken;
@@ -130,18 +125,12 @@ public class KMeansDistortionJobRunner extends
 				userName,
 				authToken);
 
-		// @formatter:off
-		/* if[ACCUMULO_1.5.2]
-		AccumuloOutputFormat.setZooKeeperInstance(job, instanceName, zookeeper);
-		else[ACCUMULO_1.5.2]*/
 		final ClientConfiguration config = new ClientConfiguration().withZkHosts(
 				zookeeper).withInstance(
 				instanceName);
 		AccumuloOutputFormat.setZooKeeperInstance(
 				job,
 				config);
-		/* end[ACCUMULO_1.5.2] */
-		// @formatter:on
 
 		AccumuloOutputFormat.setDefaultTableName(
 				job,
