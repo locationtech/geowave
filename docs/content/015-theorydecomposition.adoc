@@ -22,6 +22,7 @@ actually is – so the unit cell size might not be 1, but instead 64, 128, 1024,
 achieve high precision when selection windows are small, but not spend an inordinate amount of time fully decomposing
 for large selection windows.
 
+
 image::hilbertdecomp2.png[scaledwidth="100%",alt="Hilbert Decomposition"]
 
 ==== Consider a region query asking for all data from:
