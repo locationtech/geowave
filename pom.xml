@@ -399,50 +399,6 @@
 		</pluginManagement>
 		<plugins>
 			<plugin>
-				<groupId>org.codehaus.gmavenplus</groupId>
-				<artifactId>gmavenplus-plugin</artifactId>
-				<version>1.4</version>
-				<inherited>false</inherited>
-				<executions>
-					<execution>
-						<phase>validate</phase>
-						<goals>
-							<goal>execute</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<scripts>
-						<script><![CDATA[
-			                import org.apache.maven.plugin.MojoExecutionException
-			                if (System.properties["accumulo.version"]){
-			                    String accumVer = System.properties["accumulo.version"]
-			                    if (accumVer.substring(0,3) == "1.5"){
-			                       if (!System.properties["accumulo.legacy"])
-			                          throw new MojoExecutionException("Error: When defining -Daccumulo.version=" + accumVer + ", you must also define -Daccumulo.legacy")
-			                    }
-			                    else {
-			                       if (System.properties["accumulo.legacy"])
-			                          throw new MojoExecutionException("Error: When defining -Daccumulo.version=" + accumVer + ", you should not define -Daccumulo.legacy")
-			                    }
-			                }
-			                else {
-			                    if (System.properties["accumulo.legacy"])
-			                        throw new MojoExecutionException("Error: For default builds, you should not define -Daccumulo.legacy")
-			                }
-                    ]]></script>
-					</scripts>
-				</configuration>
-				<dependencies>
-					<dependency>
-						<groupId>org.codehaus.groovy</groupId>
-						<artifactId>groovy-all</artifactId>
-						<version>1.5.0</version>
-						<scope>runtime</scope>
-					</dependency>
-				</dependencies>
-			</plugin>
-			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
 				<version>${jacoco.version}</version>
