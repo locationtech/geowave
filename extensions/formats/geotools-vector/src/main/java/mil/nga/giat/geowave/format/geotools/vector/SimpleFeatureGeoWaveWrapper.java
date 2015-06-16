@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
+import mil.nga.giat.geowave.adapter.vector.utils.SimpleFeatureUserDataConfigurationSet;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.ingest.GeoWaveData;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
@@ -53,7 +54,7 @@ public class SimpleFeatureGeoWaveWrapper implements
 			this.filter = filter;
 			featureIterator = featureCollection.features();
 			final SimpleFeatureType originalSchema = featureCollection.getSchema();
-			SimpleFeatureType retypedSchema = originalSchema;
+			SimpleFeatureType retypedSchema = SimpleFeatureUserDataConfigurationSet.configureType(originalSchema);
 			if (retypingPlugin != null) {
 				source = retypingPlugin.getRetypingSource(originalSchema);
 				if (source != null) {

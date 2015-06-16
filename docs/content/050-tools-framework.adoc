@@ -59,6 +59,10 @@ include::manpages/geowave-poststage.txt[]
 
 include::manpages/geowave-stats.txt[]
 
+=== geowave -statsdump
+
+include::manpages/geowave-statsdump.txt[]
+
 === Ingest Example
 
 We can ingest any data type that has been listed as an ingest plugin. Let's start out with the GeoTools datastore; this

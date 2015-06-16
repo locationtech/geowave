@@ -1,20 +1,17 @@
-package mil.nga.giat.geowave.datastore.accumulo.util;
+package mil.nga.giat.geowave.datastore.accumulo.cli;
 
 import mil.nga.giat.geowave.core.cli.CLIOperation;
 import mil.nga.giat.geowave.core.cli.CLIOperationCategory;
 import mil.nga.giat.geowave.core.cli.CLIOperationProviderSpi;
-import mil.nga.giat.geowave.core.cli.CustomOperationCategory;
 
 public class StatsOperationCLIProvider implements
 		CLIOperationProviderSpi
 {
+	private static final CLIOperationCategory CATEGORY = new StatsOperationCategory();
 
 	@Override
 	public CLIOperationCategory getCategory() {
-		return new CustomOperationCategory(
-				"stats",
-				"Statistics",
-				"Calculate the statistics of an existing GeoWave dataset");
+		return CATEGORY;
 	}
 
 	@Override
@@ -23,7 +20,11 @@ public class StatsOperationCLIProvider implements
 			new CLIOperation(
 					"stats",
 					"Calculate the statistics of an existing GeoWave dataset",
-					new StatsOperation())
+					new ReCalculateStatsOperation()),
+			new CLIOperation(
+					"statsdump",
+					"Print statistics of an existing GeoWave dataset to standard output",
+					new DumpStatsOperation())
 		};
 	}
 }

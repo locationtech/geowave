@@ -1,0 +1,14 @@
+{
+  "configurations": [
+     {"@class":"mil.nga.giat.geowave.adapter.vector.stats.StatsConfigurationCollection$SimpleFeatureStatsConfigurationCollection",
+      "attConfig" : {
+        "pop" : { 
+         "configurationsForAttribute" :  [ 
+          {"@class" : "mil.nga.giat.geowave.adapter.vector.stats.FeatureFixedBinNumericStatistics$FeatureFixedBinConfig","bins" : 24} 
+          ]
+         }
+       }
+    }]
+}
+
+

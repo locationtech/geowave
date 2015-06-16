@@ -10,13 +10,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveGTDataStore;
 import mil.nga.giat.geowave.adapter.vector.stats.FeatureBoundingBoxStatistics;
 import mil.nga.giat.geowave.adapter.vector.stats.FeatureTimeRangeStatistics;
 import mil.nga.giat.geowave.adapter.vector.util.FeatureDataUtils;
 import mil.nga.giat.geowave.adapter.vector.util.QueryIndexHelper;
-import mil.nga.giat.geowave.adapter.vector.utils.DateUtilities;
-import mil.nga.giat.geowave.adapter.vector.utils.TimeDescriptors;
+import mil.nga.giat.geowave.adapter.vector.utils.TimeDescriptors.TimeDescriptorConfiguration;
 import mil.nga.giat.geowave.core.geotime.IndexType;
 import mil.nga.giat.geowave.core.geotime.store.query.TemporalConstraints;
 import mil.nga.giat.geowave.core.geotime.store.query.TemporalConstraintsSet;
@@ -100,8 +98,16 @@ public class QueryIndexHelperTest
 				geoType.getCoordinateReferenceSystem(),
 				true);
 
-		rangeTimeDescriptors.inferType(rangeType);
-		singleTimeDescriptors.inferType(singleType);
+		final TimeDescriptorConfiguration rangeConfig = new TimeDescriptorConfiguration();
+		rangeConfig.configureFromType(rangeType);
+		rangeTimeDescriptors.update(
+				rangeType,
+				rangeConfig);
+		final TimeDescriptorConfiguration singleTimeConfig = new TimeDescriptorConfiguration();
+		singleTimeConfig.configureFromType(singleType);
+		singleTimeDescriptors.update(
+				singleType,
+				singleTimeConfig);
 
 		List<AttributeDescriptor> descriptors = rangeType.getAttributeDescriptors();
 		rangeDefaults = new Object[descriptors.size()];

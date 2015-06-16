@@ -79,4 +79,33 @@ public class FeatureTimeRangeStatistics extends
 				this.dataAdapterId,
 				getFieldName());
 	}
+
+	public String toString() {
+		StringBuffer buffer = new StringBuffer();
+		Calendar c = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+		c.setTimeInMillis((long) getMin());
+		Date min = c.getTime();
+		c.setTimeInMillis((long) getMax());
+		Date max = c.getTime();
+		buffer.append(
+				"range[adapter=").append(
+				super.getDataAdapterId().getString());
+		buffer.append(
+				", field=").append(
+				getFieldName());
+		if (isSet()) {
+			buffer.append(
+					", min=").append(
+					min);
+			buffer.append(
+					", max=").append(
+					max);
+
+		}
+		else {
+			buffer.append(", No Values");
+		}
+		buffer.append("]");
+		return buffer.toString();
+	}
 }

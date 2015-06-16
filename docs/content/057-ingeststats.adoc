@@ -1,0 +1,82 @@
+[[ingest-statistics]]
+=== Ingest Statistics and Time Dimension Configuration
+
+The available plugins for vector support adjustments to their configuration via the command line. 
+The system property 'SIMPLE_FEATURE_CONFIG_FILE' may be assigned to the name of a locally accessible JSON file defining
+the configuration.
+
+==== Example
+[source]
+----
+geowave -DSIMPLE_FEATURE_CONFIG_FILE=myconfigfile.json -localingest
+----
+ 
+Configuration consists of two parts:
+[arabic] 
+. Selecting temporal attributes for a temporal index.
+. Assigning to each attribute the type of statistics to be captured within the Statistics Store
+ 
+The JSON file is made up of configurations.   Each configuration is defined by a class name and a set of attributes  
+
+==== Temporal Configuration
+
+There are three attributes for the temporal configuration:
+[arabic]
+. timeName
+. startRangeName
+. endRangeName
+
+These attributes are associated with the name of a simple feature type attribute that references a time value.  To index by a single time attribute, 
+set `_timeName_` to the name of the single attribute.  To index by a range, set both `_startRangeName_` and `_endRangeName_` to the
+names of the simple feature type attributes that define start and end time values.
+
+==== Statistics Configuration
+
+Each simple feature type attribute may have several assigned statistics.  Bounding box and range statistics are automatically captured for Geometry and temporal attributes.
+  
+[frame="topbot",options="header"]  
+|===
+
+|Attribute Type |Statistic Name|Statistic Configuration Attributes (with default values)|Statistic Class
+.3+|Numeric
+|Fixed Bin Histogram|minValue=-&#8734;,maxValue=&#8734;,bins=32|mil.nga.giat.geowave.adapter.vector.stats.FeatureFixedBinNumericStatistics$FeatureFixedBinConfig
+|Dynamic Histogram||mil.nga.giat.geowave.adapter.vector.stats.FeatureNumericHistogramStatistics$FeatureNumericHistogramConfig
+|Numeric Range||mil.nga.giat.geowave.adapter.vector.stats.FeatureNumericRangeStatistics$FeatureNumericRangeConfig
+.2+|String
+|Count Min Sketch|errorFactor=0.001,probabilityOfCorrectness=0.98|mil.nga.giat.geowave.adapter.vector.stats.FeatureCountMinSketchStatistics$FeatureCountMinSketchConfig
+|Hyper Log Log|precision=16|mil.nga.giat.geowave.adapter.vector.stats.FeatureHyperLogLogStatistics$FeatureHyperLogLogConfig
+
+|===
+
+==== Example
+[source]
+----
+{
+  "configurations": [
+     {"@class":"mil.nga.giat.geowave.adapter.vector.utils.TimeDescriptors$TimeDescriptorConfiguration",
+      "startRangeName":null,
+      "endRangeName":null,
+      "timeName":"captureTime"
+     },
+     {"@class":"mil.nga.giat.geowave.adapter.vector.stats.StatsConfigurationCollection$SimpleFeatureStatsConfigurationCollection",
+      "attConfig" : {
+        "population" : { 
+          "configurationsForAttribute" :  [ 
+            {"@class" : "mil.nga.giat.geowave.adapter.vector.stats.FeatureFixedBinNumericStatistics$FeatureFixedBinConfig","bins" : 24} 
+           ]
+          },
+        "country" : { 
+          "configurationsForAttribute" :  [ 
+           {"@class" : "mil.nga.giat.geowave.adapter.vector.stats.FeatureCountMinSketchStatistics$FeatureCountMinSketchConfig",
+            "probabilityOfCorrectness" : 0.98,
+            "errorFactor" :0.001 
+           },
+           {"@class" : "mil.nga.giat.geowave.adapter.vector.stats.FeatureHyperLogLogStatistics$FeatureHyperLogLogConfig"}
+          ]
+        }
+      }
+    }
+  ]
+}
+
+----

@@ -1,5 +1,4 @@
 [[ingest-overview]]
-<<<
 == Ingest
 
 === Overview

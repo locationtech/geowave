@@ -1,5 +1,6 @@
 package mil.nga.giat.geowave.adapter.vector;
 
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
@@ -7,9 +8,12 @@ import java.util.List;
 import mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveGTDataStore;
 import mil.nga.giat.geowave.adapter.vector.plugin.visibility.AdaptorProxyFieldLevelVisibilityHandler;
 import mil.nga.giat.geowave.adapter.vector.plugin.visibility.JsonDefinitionColumnVisibilityManagement;
+import mil.nga.giat.geowave.adapter.vector.stats.StatsConfigurationCollection.SimpleFeatureStatsConfigurationCollection;
 import mil.nga.giat.geowave.adapter.vector.stats.StatsManager;
 import mil.nga.giat.geowave.adapter.vector.util.FeatureDataUtils;
+import mil.nga.giat.geowave.adapter.vector.utils.SimpleFeatureUserDataConfigurationSet;
 import mil.nga.giat.geowave.adapter.vector.utils.TimeDescriptors;
+import mil.nga.giat.geowave.adapter.vector.utils.TimeDescriptors.TimeDescriptorConfiguration;
 import mil.nga.giat.geowave.core.geotime.store.dimension.Time;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.StringUtils;
@@ -47,7 +51,7 @@ import org.opengis.referencing.operation.MathTransform;
  * This data adapter will handle all reading/writing concerns for storing and
  * retrieving GeoTools SimpleFeature objects to and from a GeoWave persistent
  * store in Accumulo.
- * 
+ *
  * If the implementor needs to write rows with particular visibility, this can
  * be done by providing a FieldVisibilityHandler to a constructor or a
  * VisibilityManagement to a constructor. When using VisibilityManagement, the
@@ -57,26 +61,34 @@ import org.opengis.referencing.operation.MathTransform;
  * attribute that contains the visibility meta-data.
  * persistedType.getDescriptor("someAttributeName").getUserData().put(
  * "visibility", Boolean.TRUE)
- * 
- * 
+ *
+ *
  * The adapter will use the SimpleFeature's default geometry for spatial
  * indexing.
- * 
+ *
  * The adaptor will use the first temporal attribute (a Calendar or Date object)
  * as the timestamp of a temporal index.
- * 
+ *
  * If the feature type contains a UserData property 'time' for a specific time
  * attribute with Boolean.TRUE, then the attribute is used as the timestamp of a
  * temporal index.
- * 
+ *
  * If the feature type contains UserData properties 'start' and 'end' for two
  * different time attributes with value Boolean.TRUE, then the attributes are
  * used for a range index.
- * 
+ *
  * If the feature type contains a UserData property 'time' for *all* time
  * attributes with Boolean.FALSE, then a temporal index is not used.
- * 
- * 
+ *
+ * Statistics configurations are maintained in UserData. Each attribute may have
+ * a UserData property called 'stats'. The associated value is an instance of
+ * {@link mil.nga.giat.geowave.adapter.vector.stats.StatsConfigurationCollection}
+ * . The collection maintains a set of
+ * {@link mil.nga.giat.geowave.adapter.vector.stats.StatsConfig}, one for each
+ * type of statistic. The default statistics for geometry and temporal
+ * constraints cannot be changed, as they are critical components to the
+ * efficiency of query processing.
+ *
  */
 @SuppressWarnings("unchecked")
 public class FeatureDataAdapter extends
@@ -312,9 +324,22 @@ public class FeatureDataAdapter extends
 		final byte[] fieldVisibilityAtributeNameBytes = StringUtils.stringToBinary(visibilityAttributeName);
 		final byte[] visibilityManagementClassNameBytes = StringUtils.stringToBinary(fieldVisibilityManagement.getClass().getCanonicalName());
 		final byte[] axisBytes = StringUtils.stringToBinary(axis);
+		byte[] attrBytes = new byte[0];
 
-		final TimeDescriptors timeDescriptors = getTimeDescriptors();
-		final byte[] timeAndRangeBytes = timeDescriptors.toBinary();
+		final SimpleFeatureUserDataConfigurationSet userDataConfiguration = new SimpleFeatureUserDataConfigurationSet();
+		userDataConfiguration.addConfigurations(new TimeDescriptorConfiguration(
+				persistedType));
+		userDataConfiguration.addConfigurations(new SimpleFeatureStatsConfigurationCollection(
+				persistedType));
+		try {
+			attrBytes = StringUtils.stringToBinary(userDataConfiguration.asJsonString());
+		}
+		catch (final IOException e) {
+			LOGGER.error(
+					"Failure to encode simple feature user data configuration",
+					e);
+		}
+
 		final String namespace = reprojectedType.getName().getNamespaceURI();
 
 		byte[] namespaceBytes;
@@ -327,19 +352,19 @@ public class FeatureDataAdapter extends
 		final byte[] encodedTypeBytes = StringUtils.stringToBinary(encodedType);
 		// 25 bytes is the 6 four byte length fields and one byte for the
 		// version
-		final ByteBuffer buf = ByteBuffer.allocate(encodedTypeBytes.length + typeNameBytes.length + namespaceBytes.length + fieldVisibilityAtributeNameBytes.length + visibilityManagementClassNameBytes.length + timeAndRangeBytes.length + axisBytes.length + 25);
+		final ByteBuffer buf = ByteBuffer.allocate(encodedTypeBytes.length + typeNameBytes.length + namespaceBytes.length + fieldVisibilityAtributeNameBytes.length + visibilityManagementClassNameBytes.length + attrBytes.length + axisBytes.length + 25);
 		buf.put(VERSION);
 		buf.putInt(typeNameBytes.length);
 		buf.putInt(namespaceBytes.length);
 		buf.putInt(fieldVisibilityAtributeNameBytes.length);
 		buf.putInt(visibilityManagementClassNameBytes.length);
-		buf.putInt(timeAndRangeBytes.length);
+		buf.putInt(attrBytes.length);
 		buf.putInt(axisBytes.length);
 		buf.put(typeNameBytes);
 		buf.put(namespaceBytes);
 		buf.put(fieldVisibilityAtributeNameBytes);
 		buf.put(visibilityManagementClassNameBytes);
-		buf.put(timeAndRangeBytes);
+		buf.put(attrBytes);
 		buf.put(axisBytes);
 		buf.put(encodedTypeBytes);
 
@@ -353,18 +378,20 @@ public class FeatureDataAdapter extends
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
 		// for now...do a gentle migration
 		final byte versionId = buf.get();
-		if (versionId != VERSION) LOGGER.warn("Mismatched Feature Data Adapter version");
+		if (versionId != VERSION) {
+			LOGGER.warn("Mismatched Feature Data Adapter version");
+		}
 		final byte[] typeNameBytes = new byte[buf.getInt()];
 		final byte[] namespaceBytes = new byte[buf.getInt()];
 		final byte[] fieldVisibilityAtributeNameBytes = new byte[buf.getInt()];
 		final byte[] visibilityManagementClassNameBytes = new byte[buf.getInt()];
-		final byte[] timeAndRangeBytes = new byte[buf.getInt()];
+		final byte[] attrBytes = new byte[buf.getInt()];
 		final byte[] axisBytes = new byte[buf.getInt()];
 		buf.get(typeNameBytes);
 		buf.get(namespaceBytes);
 		buf.get(fieldVisibilityAtributeNameBytes);
 		buf.get(visibilityManagementClassNameBytes);
-		buf.get(timeAndRangeBytes);
+		buf.get(attrBytes);
 		buf.get(axisBytes);
 
 		final String typeName = StringUtils.stringFromBinary(typeNameBytes);
@@ -385,7 +412,7 @@ public class FeatureDataAdapter extends
 		}
 		// 25 bytes is the 6 four byte length fields and one byte for the
 		// version
-		final byte[] encodedTypeBytes = new byte[bytes.length - axisBytes.length - typeNameBytes.length - namespaceBytes.length - fieldVisibilityAtributeNameBytes.length - visibilityManagementClassNameBytes.length - timeAndRangeBytes.length - 25];
+		final byte[] encodedTypeBytes = new byte[bytes.length - axisBytes.length - typeNameBytes.length - namespaceBytes.length - fieldVisibilityAtributeNameBytes.length - visibilityManagementClassNameBytes.length - attrBytes.length - 25];
 		buf.get(encodedTypeBytes);
 
 		final String encodedType = StringUtils.stringFromBinary(encodedTypeBytes);
@@ -396,12 +423,22 @@ public class FeatureDataAdapter extends
 					encodedType,
 					StringUtils.stringFromBinary(axisBytes));
 
-			final TimeDescriptors timeDescriptors = new TimeDescriptors();
-			timeDescriptors.fromBinary(
-					myType,
-					timeAndRangeBytes);
-			// {@link DataUtilities#createType} looses the meta-data.
-			timeDescriptors.updateType(myType);
+			final SimpleFeatureUserDataConfigurationSet userDataConfiguration = new SimpleFeatureUserDataConfigurationSet();
+			userDataConfiguration.addConfigurations(new TimeDescriptorConfiguration(
+					myType));
+			userDataConfiguration.addConfigurations(new SimpleFeatureStatsConfigurationCollection(
+					myType));
+			try {
+				userDataConfiguration.fromJsonString(
+						StringUtils.stringFromBinary(attrBytes),
+						myType);
+
+			}
+			catch (final IOException e) {
+				LOGGER.error(
+						"Failure to decode simple feature user data configuration",
+						e);
+			}
 			setFeatureType(myType);
 			if (persistedType.getDescriptor(visibilityAttributeName) != null) {
 				persistedType.getDescriptor(
@@ -409,6 +446,7 @@ public class FeatureDataAdapter extends
 						"visibility",
 						Boolean.TRUE);
 			}
+
 			// advertise the reprojected type externally
 			return reprojectedType;
 		}
@@ -508,12 +546,16 @@ public class FeatureDataAdapter extends
 	 */
 	protected static final TimeDescriptors inferTimeAttributeDescriptor(
 			final SimpleFeatureType persistType ) {
-		final TimeDescriptors timeDescriptors = new TimeDescriptors();
-		timeDescriptors.inferType(persistType);
+		final TimeDescriptorConfiguration config = new TimeDescriptorConfiguration(
+				persistType);
+		final TimeDescriptors timeDescriptors = new TimeDescriptors(
+				persistType,
+				config);
+
 		// Up the meta-data so that it is clear and visible any inference that
 		// has occurred here. Also, this is critical to
 		// serialization/deserialization
-		timeDescriptors.updateType(persistType);
+		config.updateType(persistType);
 		return timeDescriptors;
 	}
 
