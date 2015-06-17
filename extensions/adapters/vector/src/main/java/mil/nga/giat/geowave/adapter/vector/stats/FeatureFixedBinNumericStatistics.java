@@ -244,8 +244,13 @@ public class FeatureFixedBinNumericStatistics extends
 		if (o == null) {
 			return;
 		}
-		if (o instanceof Date) add (1,((Date)o).getTime());
-		else if (o instanceof Number) add(1,((Number)o).doubleValue());
+		if (o instanceof Date)
+			add(
+					1,
+					((Date) o).getTime());
+		else if (o instanceof Number) add(
+				1,
+				((Number) o).doubleValue());
 	}
 
 	private void add(

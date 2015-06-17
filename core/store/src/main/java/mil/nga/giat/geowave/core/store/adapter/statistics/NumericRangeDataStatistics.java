@@ -8,7 +8,8 @@ import mil.nga.giat.geowave.core.index.sfc.data.NumericRange;
 import mil.nga.giat.geowave.core.store.DataStoreEntryInfo;
 
 abstract public class NumericRangeDataStatistics<T> extends
-		AbstractDataStatistics<T> {
+		AbstractDataStatistics<T>
+{
 
 	private double min = Double.MAX_VALUE;
 	private double max = -Double.MAX_VALUE;
@@ -17,9 +18,12 @@ abstract public class NumericRangeDataStatistics<T> extends
 		super();
 	}
 
-	public NumericRangeDataStatistics(final ByteArrayId dataAdapterId,
-			final ByteArrayId statisticsId) {
-		super(dataAdapterId, statisticsId);
+	public NumericRangeDataStatistics(
+			final ByteArrayId dataAdapterId,
+			final ByteArrayId statisticsId ) {
+		super(
+				dataAdapterId,
+				statisticsId);
 	}
 
 	public boolean isSet() {
@@ -50,42 +54,59 @@ abstract public class NumericRangeDataStatistics<T> extends
 	}
 
 	@Override
-	public void fromBinary(final byte[] bytes) {
+	public void fromBinary(
+			final byte[] bytes ) {
 		final ByteBuffer buffer = super.binaryBuffer(bytes);
 		min = buffer.getDouble();
 		max = buffer.getDouble();
 	}
 
 	@Override
-	public void entryIngested(final DataStoreEntryInfo entryInfo, final T entry) {
+	public void entryIngested(
+			final DataStoreEntryInfo entryInfo,
+			final T entry ) {
 		final NumericRange range = getRange(entry);
 		if (range != null) {
-			min = Math.min(min, range.getMin());
-			max = Math.max(max, range.getMax());
+			min = Math.min(
+					min,
+					range.getMin());
+			max = Math.max(
+					max,
+					range.getMax());
 		}
 	}
 
-	abstract protected NumericRange getRange(final T entry);
+	abstract protected NumericRange getRange(
+			final T entry );
 
 	@Override
-	public void merge(final Mergeable statistics) {
-		if ((statistics != null)
-				&& (statistics instanceof NumericRangeDataStatistics)) {
+	public void merge(
+			final Mergeable statistics ) {
+		if ((statistics != null) && (statistics instanceof NumericRangeDataStatistics)) {
 			final NumericRangeDataStatistics<T> stats = (NumericRangeDataStatistics<T>) statistics;
 			if (stats.isSet()) {
-				min = Math.min(min, stats.getMin());
-				max = Math.max(max, stats.getMax());
+				min = Math.min(
+						min,
+						stats.getMin());
+				max = Math.max(
+						max,
+						stats.getMax());
 			}
 		}
 	}
 
 	public String toString() {
 		StringBuffer buffer = new StringBuffer();
-		buffer.append("range[adapter=").append(
+		buffer.append(
+				"range[adapter=").append(
 				super.getDataAdapterId().getString());
 		if (isSet()) {
-			buffer.append(", min=").append(getMin());
-			buffer.append(", max=").append(getMax());
+			buffer.append(
+					", min=").append(
+					getMin());
+			buffer.append(
+					", max=").append(
+					getMax());
 		}
 		else {
 			buffer.append(", No Values");
