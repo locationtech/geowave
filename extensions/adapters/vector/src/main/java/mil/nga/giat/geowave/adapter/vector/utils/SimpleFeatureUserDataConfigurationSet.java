@@ -14,10 +14,10 @@ import org.codehaus.jackson.map.SerializationConfig;
 import org.opengis.feature.simple.SimpleFeatureType;
 
 /**
- *
+ * 
  * Represents a set of configurations maintained within the user data of a
  * simple feature type.
- *
+ * 
  */
 public class SimpleFeatureUserDataConfigurationSet
 {

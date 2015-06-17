@@ -3,16 +3,11 @@ package mil.nga.giat.geowave.datastore.accumulo.app;
 import java.io.File;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.accumulo.minicluster.MiniAccumuloCluster;
-import org.apache.accumulo.minicluster.MiniAccumuloConfig;
-// @formatter:off
-/*if_not[ACCUMULO_1.5.2]
 import org.apache.accumulo.core.conf.Property;
 import org.apache.accumulo.minicluster.impl.MiniAccumuloClusterImpl;
 import org.apache.accumulo.minicluster.impl.MiniAccumuloConfigImpl;
 import org.apache.accumulo.monitor.Monitor;
-end[ACCUMULO_1.5.2]*/
-// @formatter:on
+
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
@@ -32,8 +27,6 @@ public class GeoWaveDemoApp
 		final String password = (System.getProperty("password") != null) ? System.getProperty("password") : "password";
 
 		final File tempDir = Files.createTempDir();
-		// @formatter:off
-		/*if_not[ACCUMULO_1.5.2]
 		final String instanceName = (System.getProperty("instanceName") != null) ? System.getProperty("instanceName") : "geowave";
 		final MiniAccumuloConfigImpl miniAccumuloConfig = new MiniAccumuloConfigImpl(
 				tempDir,
@@ -48,21 +41,9 @@ public class GeoWaveDemoApp
 
 		final MiniAccumuloClusterImpl accumulo = new MiniAccumuloClusterImpl(
 				miniAccumuloConfig);
-  		else[ACCUMULO_1.5.2]*/
-		final MiniAccumuloCluster accumulo = new MiniAccumuloCluster(
-				new MiniAccumuloConfig(
-						tempDir,
-						password).setNumTservers(
-						2));
-		/*end[ACCUMULO_1.5.2]*/
-		// @formatter:on
 		accumulo.start();
 
-		// @formatter:off
-		/*if_not[ACCUMULO_1.5.2]
 		accumulo.exec(Monitor.class);
-		end[ACCUMULO_1.5.2]*/
-		// @formatter:on
 
 		System.out.println("starting up ...");
 		Thread.sleep(3000);

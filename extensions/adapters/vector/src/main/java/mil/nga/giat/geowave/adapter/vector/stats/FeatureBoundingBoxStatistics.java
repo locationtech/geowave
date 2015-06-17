@@ -123,18 +123,18 @@ public class FeatureBoundingBoxStatistics extends
 				", field=").append(
 				getFieldName());
 		if (isSet()) {
-		buffer.append(
-				", minX=").append(
-				minX);
-		buffer.append(
-				", maxX=").append(
-				maxX);
-		buffer.append(
-				", minY=").append(
-				minY);
-		buffer.append(
-				", maxY=").append(
-				maxY);
+			buffer.append(
+					", minX=").append(
+					minX);
+			buffer.append(
+					", maxX=").append(
+					maxX);
+			buffer.append(
+					", minY=").append(
+					minY);
+			buffer.append(
+					", maxY=").append(
+					maxY);
 		}
 		else {
 			buffer.append(", No Values");

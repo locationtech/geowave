@@ -6,7 +6,6 @@ import java.net.InetAddress;
 import java.util.*;
 import java.util.Map.Entry;
 
-
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
@@ -23,12 +22,13 @@ import mil.nga.giat.geowave.datastore.accumulo.mapreduce.input.GeoWaveInputForma
 import mil.nga.giat.geowave.datastore.accumulo.util.AccumuloUtils;
 
 // @formatter:off
-/*if[ACCUMULO_API_1.6]
+/*if[accumulo.api=1.6]
 import org.apache.accumulo.core.security.Credentials;
-else[ACCUMULO_1.6]*/
+else[accumulo.api=1.6]*/
 import org.apache.accumulo.core.client.ClientConfiguration;
 import org.apache.accumulo.core.client.impl.ClientContext;
-/*end[ACCUMULO_1.6]*/
+
+/*end[accumulo.api=1.6]*/
 // @formatter:on
 
 import org.apache.accumulo.core.client.AccumuloException;
@@ -63,8 +63,6 @@ import org.apache.hadoop.mapreduce.RecordReader;
 import org.apache.hadoop.mapreduce.TaskAttemptContext;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-
-
 
 public class GeoWaveInputFormat<T> extends
 		InputFormat<GeoWaveInputKey, T>
@@ -265,20 +263,22 @@ public class GeoWaveInputFormat<T> extends
 			final String tableName,
 			final String tableId )
 			throws TableNotFoundException {
-		TabletLocator tabletLocator;
+		TabletLocator tabletLocator = null;
 		// @formatter:off
-		/*if[ACCUMULO_API_1.6]
+		/*if[accumulo.api=1.6]
 		tabletLocator = TabletLocator.getLocator(
 				instance,
 				new Text(
 						tableId));
-		else[ACCUMULO_API_1.6]*/
+		else[accumulo.api=1.6]*/
+
 		tabletLocator = TabletLocator.getLocator(
 				//ToDo: need to pass ClientContext instead of instance
 				new ClientContext(instance, null, new ClientConfiguration()),
 				new Text(
 						tableId));
-		/*end[ACCUMULO_API_1.6]*/
+
+		/*end[accumulo.api=1.6]*/
 		// @formatter:on
 		return tabletLocator;
 	}
@@ -294,8 +294,8 @@ public class GeoWaveInputFormat<T> extends
 			AccumuloSecurityException,
 			TableNotFoundException,
 			IOException {
-		// @formatter:off
-		/*if[ACCUMULO_API_1.6]
+// @formatter:off
+		/*if[accumulo.api=1.6]
 		return tabletLocator.binRanges(
 				new Credentials(
 						userName,
@@ -303,7 +303,9 @@ public class GeoWaveInputFormat<T> extends
 								password)),
 				rangeList,
 				tserverBinnedRanges).isEmpty();
-  		else[ACCUMULO_API_1.6]*/
+  		else[accumulo.api=1.6]*/
+		//ToDo  - pass ClientContext & uncomment
+		/*
 		return tabletLocator.binRanges(
 				new Credentials(
 						userName,
@@ -311,7 +313,9 @@ public class GeoWaveInputFormat<T> extends
 								password)),
 				rangeList,
 				tserverBinnedRanges).isEmpty();
-  		/*end[ACCUMULO_API_1.6]*/
+				*/
+		return true;
+  		/*end[accumulo.api=1.6]*/
 		// @formatter:on
 	}
 
@@ -1068,7 +1072,7 @@ public class GeoWaveInputFormat<T> extends
 	/**
 	 * Sets the log level for this job.
 	 * 
-	 * @param job
+	 * @param config
 	 *            the Hadoop job instance to be configured
 	 * @param level
 	 *            the logging level

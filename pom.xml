@@ -36,6 +36,7 @@
 		<hadoop.env.classifier>hadoop2</hadoop.env.classifier>
 		<geoserver.version>2.7.1</geoserver.version>
 		<accumulo.version>1.7.0</accumulo.version>
+		<accumulo.api>1.7</accumulo.api>
 		<hadoop.version>2.6.0</hadoop.version>
 		<avro.version>1.7.6</avro.version>
 		<commons.cli.version>1.2</commons.cli.version>
@@ -398,6 +399,47 @@
 			</plugins>
 		</pluginManagement>
 		<plugins>
+			<plugin>
+				<groupId>org.codehaus.gmavenplus</groupId>
+				<artifactId>gmavenplus-plugin</artifactId>
+				<version>1.4</version>
+				<inherited>false</inherited>
+				<executions>
+					<execution>
+						<phase>validate</phase>
+						<goals>
+							<goal>execute</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<scripts>
+						<script><![CDATA[
+			                import org.apache.maven.plugin.MojoExecutionException
+			                String accumuloVersion = System.getProperties().getProperty("accumulo.version")
+							String accumuloAPI = System.getProperties().getProperty("accumulo.api")
+							if (accumuloVersion != null){
+			                	String apiVersion = accumuloVersion.substring(0,3)
+			                	if (accumuloAPI == null) {
+			                		throw new MojoExecutionException("Error: When defining -Daccumulo.version=" + accumuloVersion + ", you must also define -Daccumulo.api=" + apiVersion)
+			                	} else if (!accumuloAPI.equals(apiVersion)) {
+			                		throw new MojoExecutionException("Error: Setting -Daccumulo.version=" + accumuloVersion + ", is not the same API version as set in -Daccumulo.api=" + accumuloAPI + "; value should be: " + apiVersion)
+			                	}
+			                } else if (accumuloAPI != null) {
+			                		throw new MojoExecutionException("Error: When defining -Daccumulo.api=" + accumuloAPI + ", you must also define -Daccumulo.version equal to a version compatible with that api")
+			                }
+                    ]]></script>
+					</scripts>
+				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>org.codehaus.groovy</groupId>
+						<artifactId>groovy-all</artifactId>
+						<version>1.5.0</version>
+						<scope>runtime</scope>
+					</dependency>
+				</dependencies>
+			</plugin>
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>

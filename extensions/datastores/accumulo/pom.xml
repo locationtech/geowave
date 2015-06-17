@@ -90,7 +90,7 @@
                             <goal>munge</goal>
                         </goals>
                         <configuration>
-                            <symbols>ACCUMULO_${accumulo.version}</symbols>
+                            <symbols>accumulo.api=${accumulo.api}</symbols>
                         </configuration>
                     </execution>
                 </executions>

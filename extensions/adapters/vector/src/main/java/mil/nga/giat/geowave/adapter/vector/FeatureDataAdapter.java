@@ -51,7 +51,7 @@ import org.opengis.referencing.operation.MathTransform;
  * This data adapter will handle all reading/writing concerns for storing and
  * retrieving GeoTools SimpleFeature objects to and from a GeoWave persistent
  * store in Accumulo.
- *
+ * 
  * If the implementor needs to write rows with particular visibility, this can
  * be done by providing a FieldVisibilityHandler to a constructor or a
  * VisibilityManagement to a constructor. When using VisibilityManagement, the
@@ -61,25 +61,25 @@ import org.opengis.referencing.operation.MathTransform;
  * attribute that contains the visibility meta-data.
  * persistedType.getDescriptor("someAttributeName").getUserData().put(
  * "visibility", Boolean.TRUE)
- *
- *
+ * 
+ * 
  * The adapter will use the SimpleFeature's default geometry for spatial
  * indexing.
- *
+ * 
  * The adaptor will use the first temporal attribute (a Calendar or Date object)
  * as the timestamp of a temporal index.
- *
+ * 
  * If the feature type contains a UserData property 'time' for a specific time
  * attribute with Boolean.TRUE, then the attribute is used as the timestamp of a
  * temporal index.
- *
+ * 
  * If the feature type contains UserData properties 'start' and 'end' for two
  * different time attributes with value Boolean.TRUE, then the attributes are
  * used for a range index.
- *
+ * 
  * If the feature type contains a UserData property 'time' for *all* time
  * attributes with Boolean.FALSE, then a temporal index is not used.
- *
+ * 
  * Statistics configurations are maintained in UserData. Each attribute may have
  * a UserData property called 'stats'. The associated value is an instance of
  * {@link mil.nga.giat.geowave.adapter.vector.stats.StatsConfigurationCollection}
@@ -88,7 +88,7 @@ import org.opengis.referencing.operation.MathTransform;
  * type of statistic. The default statistics for geometry and temporal
  * constraints cannot be changed, as they are critical components to the
  * efficiency of query processing.
- *
+ * 
  */
 @SuppressWarnings("unchecked")
 public class FeatureDataAdapter extends
