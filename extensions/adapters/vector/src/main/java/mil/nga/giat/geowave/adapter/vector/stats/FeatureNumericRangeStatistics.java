@@ -67,8 +67,12 @@ public class FeatureNumericRangeStatistics extends
 				", field=").append(
 				getFieldName());
 		if (isSet()) {
-			buffer.append(", min=").append(getMin());
-			buffer.append(", max=").append(getMax());
+			buffer.append(
+					", min=").append(
+					getMin());
+			buffer.append(
+					", max=").append(
+					getMax());
 		}
 		else {
 			buffer.append(", No Values");

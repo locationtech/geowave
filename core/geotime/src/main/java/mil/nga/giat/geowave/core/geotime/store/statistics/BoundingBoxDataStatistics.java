@@ -18,8 +18,10 @@ import mil.nga.giat.geowave.core.store.query.BasicQuery.Constraints;
 import com.vividsolutions.jts.geom.Envelope;
 
 abstract public class BoundingBoxDataStatistics<T> extends
-		AbstractDataStatistics<T> {
-	public final static ByteArrayId STATS_ID = new ByteArrayId("BOUNDING_BOX");
+		AbstractDataStatistics<T>
+{
+	public final static ByteArrayId STATS_ID = new ByteArrayId(
+			"BOUNDING_BOX");
 
 	protected double minX = Double.MAX_VALUE;
 	protected double minY = Double.MAX_VALUE;
@@ -30,18 +32,23 @@ abstract public class BoundingBoxDataStatistics<T> extends
 		super();
 	}
 
-	public BoundingBoxDataStatistics(final ByteArrayId dataAdapterId) {
-		super(dataAdapterId, STATS_ID);
+	public BoundingBoxDataStatistics(
+			final ByteArrayId dataAdapterId ) {
+		super(
+				dataAdapterId,
+				STATS_ID);
 	}
 
-	public BoundingBoxDataStatistics(final ByteArrayId dataAdapterId,
-			final ByteArrayId staticticsId) {
-		super(dataAdapterId, staticticsId);
+	public BoundingBoxDataStatistics(
+			final ByteArrayId dataAdapterId,
+			final ByteArrayId staticticsId ) {
+		super(
+				dataAdapterId,
+				staticticsId);
 	}
 
 	public boolean isSet() {
-		if ((minX == Double.MAX_VALUE) || (minY == Double.MAX_VALUE)
-				|| (maxX == -Double.MAX_VALUE) || (maxY == -Double.MAX_VALUE)) {
+		if ((minX == Double.MAX_VALUE) || (minY == Double.MAX_VALUE) || (maxX == -Double.MAX_VALUE) || (maxY == -Double.MAX_VALUE)) {
 			return false;
 		}
 		return true;
@@ -82,7 +89,8 @@ abstract public class BoundingBoxDataStatistics<T> extends
 	}
 
 	@Override
-	public void fromBinary(final byte[] bytes) {
+	public void fromBinary(
+			final byte[] bytes ) {
 		final ByteBuffer buffer = super.binaryBuffer(bytes);
 		minX = buffer.getDouble();
 		minY = buffer.getDouble();
@@ -91,59 +99,99 @@ abstract public class BoundingBoxDataStatistics<T> extends
 	}
 
 	@Override
-	public void entryIngested(final DataStoreEntryInfo entryInfo, final T entry) {
+	public void entryIngested(
+			final DataStoreEntryInfo entryInfo,
+			final T entry ) {
 		final Envelope env = getEnvelope(entry);
 		if (env != null) {
-			minX = Math.min(minX, env.getMinX());
-			minY = Math.min(minY, env.getMinY());
-			maxX = Math.max(maxX, env.getMaxX());
-			maxY = Math.max(maxY, env.getMaxY());
+			minX = Math.min(
+					minX,
+					env.getMinX());
+			minY = Math.min(
+					minY,
+					env.getMinY());
+			maxX = Math.max(
+					maxX,
+					env.getMaxX());
+			maxY = Math.max(
+					maxY,
+					env.getMaxY());
 		}
 	}
 
 	public Constraints getConstraints() {
 		// Create a NumericRange object using the x axis
-		final NumericRange rangeLongitude = new NumericRange(minX, maxX);
+		final NumericRange rangeLongitude = new NumericRange(
+				minX,
+				maxX);
 
 		// Create a NumericRange object using the y axis
-		final NumericRange rangeLatitude = new NumericRange(minY, maxY);
+		final NumericRange rangeLatitude = new NumericRange(
+				minY,
+				maxY);
 
 		final Map<Class<? extends NumericDimensionDefinition>, ConstraintData> constraintsPerDimension = new HashMap<Class<? extends NumericDimensionDefinition>, ConstraintData>();
 		// Create and return a new IndexRange array with an x and y axis
 		// range
-		constraintsPerDimension.put(LongitudeDefinition.class,
-				new ConstraintData(rangeLongitude, true));
-		constraintsPerDimension.put(LatitudeDefinition.class,
-				new ConstraintData(rangeLatitude, true));
-		return new Constraints(constraintsPerDimension);
+		constraintsPerDimension.put(
+				LongitudeDefinition.class,
+				new ConstraintData(
+						rangeLongitude,
+						true));
+		constraintsPerDimension.put(
+				LatitudeDefinition.class,
+				new ConstraintData(
+						rangeLatitude,
+						true));
+		return new Constraints(
+				constraintsPerDimension);
 	}
 
-	abstract protected Envelope getEnvelope(final T entry);
+	abstract protected Envelope getEnvelope(
+			final T entry );
 
 	@Override
-	public void merge(final Mergeable statistics) {
-		if ((statistics != null)
-				&& (statistics instanceof BoundingBoxDataStatistics)) {
+	public void merge(
+			final Mergeable statistics ) {
+		if ((statistics != null) && (statistics instanceof BoundingBoxDataStatistics)) {
 			final BoundingBoxDataStatistics<T> bboxStats = (BoundingBoxDataStatistics<T>) statistics;
 			if (bboxStats.isSet()) {
-				minX = Math.min(minX, bboxStats.minX);
-				minY = Math.min(minY, bboxStats.minY);
-				maxX = Math.max(maxX, bboxStats.maxX);
-				maxY = Math.max(maxY, bboxStats.maxY);
+				minX = Math.min(
+						minX,
+						bboxStats.minX);
+				minY = Math.min(
+						minY,
+						bboxStats.minY);
+				maxX = Math.max(
+						maxX,
+						bboxStats.maxX);
+				maxY = Math.max(
+						maxY,
+						bboxStats.maxY);
 			}
 		}
 	}
 
 	public String toString() {
 		StringBuffer buffer = new StringBuffer();
-		buffer.append("bbox[adapter=").append(
+		buffer.append(
+				"bbox[adapter=").append(
 				super.getDataAdapterId().getString());
 		if (isSet()) {
-			buffer.append(", minX=").append(minX);
-			buffer.append(", maxX=").append(maxX);
-			buffer.append(", minY=").append(minY);
-			buffer.append(", maxY=").append(maxY);
-		} else {
+			buffer.append(
+					", minX=").append(
+					minX);
+			buffer.append(
+					", maxX=").append(
+					maxX);
+			buffer.append(
+					", minY=").append(
+					minY);
+			buffer.append(
+					", maxY=").append(
+					maxY);
+		}
+		else {
 			buffer.append(", No Values");
 		}
 		buffer.append("]");
