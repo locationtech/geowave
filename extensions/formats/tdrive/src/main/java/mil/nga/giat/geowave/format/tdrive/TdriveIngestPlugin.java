@@ -208,7 +208,7 @@ public class TdriveIngestPlugin extends
 				new Date(
 						tdrivePoint.getTimestamp()));
 		tdrivepointBuilder.set(
-				"Latsitude",
+				"Latitude",
 				tdrivePoint.getLatitude());
 		tdrivepointBuilder.set(
 				"Longitude",
