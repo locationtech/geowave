@@ -7,21 +7,21 @@ public class GroupIDText extends
 {
 
 	public void set(
-			String groupID,
-			String id ) {
+			final String groupID,
+			final String id ) {
 		super.set((groupID == null ? "##" : groupID) + "," + id);
 	}
 
 	public String getGroupID() {
-		String t = toString();
-		String groupID = t.substring(
+		final String t = toString();
+		final String groupID = t.substring(
 				0,
 				t.indexOf(','));
 		return ("##".equals(groupID)) ? null : groupID;
 	}
 
 	public String getID() {
-		String t = toString();
+		final String t = toString();
 		return t.substring(t.indexOf(',') + 1);
 	}
 }

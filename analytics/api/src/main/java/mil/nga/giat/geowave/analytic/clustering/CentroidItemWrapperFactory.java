@@ -88,7 +88,7 @@ public class CentroidItemWrapperFactory<T> implements
 							}
 						});
 			}
-			catch (IOException e) {
+			catch (final IOException e) {
 				LOGGER.error("Cannot resolve paired centroid for " + wrappedItem.getID());
 				centroidItem = wrappedItem;
 			}

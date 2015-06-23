@@ -1,0 +1,95 @@
+[[analytics-overview]]
+== Analytics
+
+=== Overview
+
+Analytics embody algorithms tailored to geospatial data.  Most analytics leverage Hadoop MapReduce for bulk computation.  
+Results of analytic jobs consist of vector or raster data stored in GeoWave.  The analytics infrastructure provides tools to 
+build algorithms in Spark.  For example, a Kryo serializer/deserializer enables exchange of SimpleFeatures and the GeoWaveInputFormat
+supplies data to the Hadoop RDD <1>.  
+
+[NOTE]
+<1> GeoWaveInputFormat does not remove duplicate features that reference polygons spanning multiple index regions.
+
+The following algorithms are provided.
+ 
+
+[width="80%",cols="2,10",options="header"]
+|=========================================================
+|Name |Description
+|KMeans++|
+A K-Means implementation to find K centroids over the population of data. 
+A set of preliminary sampling iterations find an optimal value of K and the an initial set of K centroids.
+The algorithm produces K centroids and their associated polygons.  Each polygon represents the concave hull 
+containing all features associated with a centroid.
+The algorithm supports drilling down multiple levels. At each level, the set centroids are determined 
+from the set of features associated the same centroid from the previous level.   
+|KMeans Jump|
+Uses KMeans++ over a range of k, choosing an optimal k using an information theoretic based measurement.
+|DBScan|
+The Density Based Scanner algorithm produces a set of convex polygons for each region meeting density criteria.  
+Density of region is measured by a minimum cardinality of enclosed features within a specified distance from each other. 
+|Nearest Neighbors|
+A infrastructure component that produces all the neighbors of a feature within a specific distance.  
+|=========================================================
+
+=== Building
+
+First build the main project, specifying the dependency versions.
+
+[source, bash]
+----
+export BUILD_ARGS="-Daccumulo.version=1.6.0-cdh5.1.4 -Dhadoop.version=2.6.0-cdh5.4.0 -Dgeotools.version=13.0 -Dgeoserver.version=2.7.0 -Dvendor.version=cdh5 -P cloudera" 
+git clone https://github.com/ngageoint/geowave.git
+cd geowave
+mvn install -Dfindbugs.skip=true -DskipFormat=true -DskipITs=true -DskipTests=true $BUILD_ARGS
+----
+
+Next, build the analytics tool framework.
+
+[source, bash]
+----
+cd analytics/mapreduce
+mvn package -P analytics-singlejar -Dfindbugs.skip=true -DskipFormat=true -DskipITs=true -DskipTests=true $BUILD_ARGS
+----
+
+=== Running
+
+The 'singlejar' jar file is located in the analytics/mapreduce/target/munged.   The jar is executed by Yarn. 
+
+[source, bash]
+----
+yarn jar geowave-analytic-mapreduce-0.8.8-SNAPSHOT-analytics-singlejar.jar  -dbscan  -n rwgdrummer.gpx -u rwgdrummer -p rwgdrummer -z zookeeper-master:2181 -i accumulo -emn 2 -emx 6 -pd 1000 -pc mil.nga.giat.geowave.analytic.partitioner.OrthodromicDistancePartitioner -cms 10 -orc 4 -hdfsbase /user/rwgdrummer -b bdb4 -eit gpxpoint
+----
+
+===== Parameters
+
+This set of parameters is not complete. There are many parameters that permit customizations such as distance functions, partitioning and sampling.
+
+[width="80%",cols="2,10",options="header"]
+|=========================================================
+|Argument|Description
+|-n|Namespace
+|-u|Accumulo User
+|-p|Accumulo User Password
+|-z|Zookeeper host and port
+|-i|Accumulo instance name
+|-emn|Minimum input splits
+|-emx|Maximum input splits (controls the number of Hadoop Mappers).
+|-eit|The type name of the input features to analyze.
+|-eot|The type name of the output features (e.g. cluster polygons and points).
+|-eq|A CQL query string to constrain the extracted data from GeoWave for analysis.
+|-pd|Maximum distance in meters for features in a cluster.
+|-pc|Partitioning algorithm for Nearest Neighbors and DBScan algorithms. 
+|-sms|Minimum sample size (e.g. for choosing K)
+|-sxs|Maximum sample size (e.g. for choosing K.)
+|-ssi|Minumum number of sample iterations.
+|-jrc|Comma separated range of centroids (e.g. 2,10) for KMeans-Jump.
+|-jkp|The minimum sample size (within the range provide by jrc parameter, where KMeans++ performs sampling, rather than using a single random sample.
+|-cms|Minimum density of a cluster.
+|-cmi|Maximum number of KMeans clustering iterations.  KMeans usually converges on a solution with this constraint.  A value of between 3 and 10 is often sufficient.
+|-crc|Number of reducers to process extracted data in KMeans.
+|-orc|Number of reducers to load clusters into GeoWave. 
+|-hdfsbase|Location in HBase to store intermediate results.
+|-b|Batch Identifier.  Each algorithm can be run within multiple configurations, each representing a different batch.
+|-zl|The number of 'zoom' levels in KMeans Clustering algorithms.

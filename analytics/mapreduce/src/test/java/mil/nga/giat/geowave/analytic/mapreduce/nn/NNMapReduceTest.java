@@ -1,7 +1,7 @@
 package mil.nga.giat.geowave.analytic.mapreduce.nn;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
@@ -17,7 +17,6 @@ import mil.nga.giat.geowave.analytic.clustering.ClusteringUtils;
 import mil.nga.giat.geowave.analytic.distance.DistanceFn;
 import mil.nga.giat.geowave.analytic.distance.FeatureCentroidOrthodromicDistanceFn;
 import mil.nga.giat.geowave.analytic.mapreduce.kmeans.SimpleFeatureImplSerialization;
-import mil.nga.giat.geowave.analytic.mapreduce.nn.NNMapReduce;
 import mil.nga.giat.geowave.analytic.mapreduce.nn.NNMapReduce.PartitionDataWritable;
 import mil.nga.giat.geowave.analytic.param.ClusteringParameters;
 import mil.nga.giat.geowave.analytic.param.CommonParameters;
@@ -50,7 +49,7 @@ import com.vividsolutions.jts.geom.GeometryFactory;
 public class NNMapReduceTest
 {
 
-	MapDriver<GeoWaveInputKey, SimpleFeature, PartitionDataWritable, AdapterWithObjectWritable> mapDriver;
+	MapDriver<GeoWaveInputKey, Object, PartitionDataWritable, AdapterWithObjectWritable> mapDriver;
 	ReduceDriver<PartitionDataWritable, AdapterWithObjectWritable, Text, Text> reduceDriver;
 	SimpleFeatureType ftype;
 	final GeometryFactory factory = new GeometryFactory();
@@ -167,56 +166,87 @@ public class NNMapReduceTest
 				-179.9999999999,
 				30.0000001));
 
-		final GeoWaveInputKey inputKey = new GeoWaveInputKey();
-		inputKey.setAccumuloKey(accumuloKey);
-		inputKey.setAdapterId(new ByteArrayId(
+		final GeoWaveInputKey inputKey1 = new GeoWaveInputKey();
+		inputKey1.setAccumuloKey(accumuloKey);
+		inputKey1.setAdapterId(new ByteArrayId(
 				ftype.getTypeName()));
-		inputKey.setDataId(new ByteArrayId(
+		inputKey1.setDataId(new ByteArrayId(
 				feature1.getID()));
 
+		final GeoWaveInputKey inputKey2 = new GeoWaveInputKey();
+		inputKey2.setAccumuloKey(accumuloKey);
+		inputKey2.setAdapterId(new ByteArrayId(
+				ftype.getTypeName()));
+		inputKey2.setDataId(new ByteArrayId(
+				feature2.getID()));
+
+		final GeoWaveInputKey inputKey3 = new GeoWaveInputKey();
+		inputKey3.setAccumuloKey(accumuloKey);
+		inputKey3.setAdapterId(new ByteArrayId(
+				ftype.getTypeName()));
+		inputKey3.setDataId(new ByteArrayId(
+				feature4.getID()));
+
+		final GeoWaveInputKey inputKey4 = new GeoWaveInputKey();
+		inputKey4.setAccumuloKey(accumuloKey);
+		inputKey4.setAdapterId(new ByteArrayId(
+				ftype.getTypeName()));
+		inputKey4.setDataId(new ByteArrayId(
+				feature4.getID()));
+
 		mapDriver.addInput(
-				inputKey,
+				inputKey1,
 				feature1);
 		mapDriver.addInput(
-				inputKey,
+				inputKey2,
 				feature2);
 		mapDriver.addInput(
-				inputKey,
+				inputKey3,
 				feature3);
 		mapDriver.addInput(
-				inputKey,
+				inputKey4,
 				feature4);
 
 		final List<Pair<PartitionDataWritable, AdapterWithObjectWritable>> mapperResults = mapDriver.run();
 		assertEquals(
-				6,
+				10, // includes overlap
 				mapperResults.size());
-		assertNotNull(getPartitionDataFor(
+		assertFalse(getPartitionDataFor(
 				mapperResults,
 				feature1.getID(),
-				true));
-		assertNotNull(getPartitionDataFor(
+				true).isEmpty());
+		assertFalse(getPartitionDataFor(
 				mapperResults,
 				feature2.getID(),
-				true));
-		assertNotNull(getPartitionDataFor(
+				true).isEmpty());
+		assertFalse(getPartitionDataFor(
 				mapperResults,
 				feature2.getID(),
-				false));
-		assertNotNull(getPartitionDataFor(
+				false).isEmpty());
+		assertFalse(getPartitionDataFor(
 				mapperResults,
 				feature3.getID(),
-				true));
+				true).isEmpty());
 
-		assertEquals(
+		assertTrue(intersects(
 				getPartitionDataFor(
 						mapperResults,
 						feature1.getID(),
-						true).getId(),
+						true),
 				getPartitionDataFor(
 						mapperResults,
 						feature3.getID(),
-						true).getId());
+						true)));
+
+		assertTrue(intersects(
+				getPartitionDataFor(
+						mapperResults,
+						feature2.getID(),
+						false),
+				getPartitionDataFor(
+						mapperResults,
+						feature4.getID(),
+						false)));
 
 		final List<Pair<PartitionDataWritable, List<AdapterWithObjectWritable>>> partitions = getReducerDataFromMapperInput(mapperResults);
 		assertEquals(
@@ -336,17 +366,30 @@ public class NNMapReduceTest
 		return newPairList;
 	}
 
-	private PartitionData getPartitionDataFor(
+	private boolean intersects(
+			List<PartitionData> setOne,
+			List<PartitionData> setTwo ) {
+		for (PartitionData pdOne : setOne) {
+			for (PartitionData pdTwo : setTwo) {
+				if (pdOne.getId().equals(
+						pdTwo.getId())) return true;
+			}
+		}
+		return false;
+	}
+
+	private List<PartitionData> getPartitionDataFor(
 			final List<Pair<PartitionDataWritable, AdapterWithObjectWritable>> mapperResults,
 			final String id,
 			final boolean primary ) {
+		final ArrayList<PartitionData> results = new ArrayList<PartitionData>();
 		for (final Pair<PartitionDataWritable, AdapterWithObjectWritable> pair : mapperResults) {
 			if (((FeatureWritable) pair.getSecond().getObjectWritable().get()).getFeature().getID().equals(
 					id) && (pair.getFirst().partitionData.isPrimary() == primary)) {
-				return pair.getFirst().partitionData;
+				results.add(pair.getFirst().partitionData);
 			}
 		}
-		return null;
+		return results;
 	}
 
 }

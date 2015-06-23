@@ -1,5 +1,6 @@
 package mil.nga.giat.geowave.datastore.accumulo.query;
 
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -8,6 +9,7 @@ import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.filter.FilterList;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
 import mil.nga.giat.geowave.core.store.index.Index;
+import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations;
 import mil.nga.giat.geowave.datastore.accumulo.util.InputFormatIteratorWrapper;
 
@@ -38,6 +40,7 @@ public class InputFormatAccumuloRangeQuery extends
 			final Range accumuloRange,
 			final List<QueryFilter> queryFilters,
 			final boolean isOutputWritable,
+			final QueryOptions queryOptions,
 			final String[] authorizations ) {
 		super(
 				adapterIds,
@@ -45,8 +48,11 @@ public class InputFormatAccumuloRangeQuery extends
 				null,
 				queryFilters,
 				authorizations);
+
 		this.accumuloRange = accumuloRange;
 		this.isOutputWritable = isOutputWritable;
+
+		setFieldIds(queryOptions != null ? queryOptions.getFieldIds() : Collections.<String> emptyList());
 	}
 
 	@Override

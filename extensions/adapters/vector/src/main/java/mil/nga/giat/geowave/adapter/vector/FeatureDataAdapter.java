@@ -578,13 +578,10 @@ public class FeatureDataAdapter extends
 	private static class FeatureWritableSerializer implements
 			HadoopWritableSerializer<SimpleFeature, FeatureWritable>
 	{
-
-		private final SimpleFeatureType type;
 		private final FeatureWritable writable;
 
 		FeatureWritableSerializer(
 				final SimpleFeatureType type ) {
-			this.type = type;
 			writable = new FeatureWritable(
 					type);
 		}

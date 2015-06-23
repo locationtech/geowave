@@ -5,8 +5,6 @@ import static org.junit.Assert.assertEquals;
 import java.util.List;
 import java.util.UUID;
 
-import mil.nga.giat.geowave.analytic.kryo.FeatureSerializer;
-
 import org.geotools.data.DataUtilities;
 import org.geotools.feature.SchemaException;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
@@ -30,23 +28,23 @@ public class FeatureSerializationTest
 	@Test
 	public void test()
 			throws SchemaException {
-		Kryo kryo = new Kryo();
+		final Kryo kryo = new Kryo();
 
 		kryo.register(
 				SimpleFeatureImpl.class,
 				new FeatureSerializer());
 
-		SimpleFeatureType schema = DataUtilities.createType(
+		final SimpleFeatureType schema = DataUtilities.createType(
 				"testGeo",
 				"location:Point:srid=4326,name:String");
-		List<AttributeDescriptor> descriptors = schema.getAttributeDescriptors();
-		Object[] defaults = new Object[descriptors.size()];
+		final List<AttributeDescriptor> descriptors = schema.getAttributeDescriptors();
+		final Object[] defaults = new Object[descriptors.size()];
 		int p = 0;
-		for (AttributeDescriptor descriptor : descriptors) {
+		for (final AttributeDescriptor descriptor : descriptors) {
 			defaults[p++] = descriptor.getDefaultValue();
 		}
 
-		SimpleFeature feature = SimpleFeatureBuilder.build(
+		final SimpleFeature feature = SimpleFeatureBuilder.build(
 				schema,
 				defaults,
 				UUID.randomUUID().toString());
@@ -57,15 +55,15 @@ public class FeatureSerializationTest
 				geoFactory.createPoint(new Coordinate(
 						-45,
 						45)));
-		Output output = new OutputChunked();
+		final Output output = new OutputChunked();
 		kryo.getSerializer(
 				SimpleFeatureImpl.class).write(
 				kryo,
 				output,
 				feature);
-		Input input = new InputChunked();
+		final Input input = new InputChunked();
 		input.setBuffer(output.getBuffer());
-		SimpleFeature f2 = (SimpleFeature) kryo.getSerializer(
+		final SimpleFeature f2 = (SimpleFeature) kryo.getSerializer(
 				SimpleFeatureImpl.class).read(
 				kryo,
 				input,

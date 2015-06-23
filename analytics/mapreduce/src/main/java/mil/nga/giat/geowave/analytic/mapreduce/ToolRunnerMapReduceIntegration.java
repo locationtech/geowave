@@ -5,6 +5,7 @@ import java.io.IOException;
 import mil.nga.giat.geowave.analytic.PropertyManagement;
 
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.mapreduce.Counters;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
@@ -34,12 +35,14 @@ public class ToolRunnerMapReduceIntegration implements
 	}
 
 	@Override
-	public boolean waitForCompletion(
-			Job job )
+	public Counters waitForCompletion(
+			final Job job )
 			throws ClassNotFoundException,
 			InterruptedException,
 			Exception {
-		return job.waitForCompletion(true);
+		final boolean status = job.waitForCompletion(true);
+		return status ? job.getCounters() : null;
+
 	}
 
 }

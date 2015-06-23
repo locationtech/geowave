@@ -19,6 +19,7 @@ import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
 import mil.nga.giat.geowave.core.store.index.Index;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
+import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations;
 import mil.nga.giat.geowave.datastore.accumulo.mapreduce.JobContextAdapterStore;
 import mil.nga.giat.geowave.datastore.accumulo.query.InputFormatAccumuloRangeQuery;
@@ -148,6 +149,7 @@ public class GeoWaveRecordReader<T> extends
 					attempt,
 					operations);
 			final DistributableQuery query = GeoWaveInputFormat.getQuery(attempt);
+			final QueryOptions queryOptions = GeoWaveInputFormat.getQueryOptions(attempt);
 			final String[] additionalAuthorizations = GeoWaveInputFormat.getAuthorizations(attempt);
 
 			numKeysRead = 0;
@@ -173,6 +175,7 @@ public class GeoWaveRecordReader<T> extends
 									r,
 									queryFilters,
 									isOutputWritable,
+									queryOptions,
 									additionalAuthorizations).query(
 									operations,
 									adapterStore,

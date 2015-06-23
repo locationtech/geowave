@@ -6,6 +6,7 @@ import mil.nga.giat.geowave.core.index.ByteArrayUtils;
 import mil.nga.giat.geowave.core.index.PersistenceUtils;
 import mil.nga.giat.geowave.core.store.index.Index;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
+import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.datastore.accumulo.mapreduce.GeoWaveConfiguratorBase;
 import mil.nga.giat.geowave.datastore.accumulo.mapreduce.JobContextIndexStore;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloIndexStore;
@@ -27,6 +28,7 @@ public class GeoWaveInputConfigurator extends
 {
 	protected static enum InputConfig {
 		QUERY,
+		QUERY_OPTIONS,
 		AUTHORIZATION,
 		MIN_SPLITS,
 		MAX_SPLITS,
@@ -47,6 +49,23 @@ public class GeoWaveInputConfigurator extends
 			return PersistenceUtils.fromBinary(
 					queryBytes,
 					DistributableQuery.class);
+		}
+		return null;
+	}
+
+	private static QueryOptions getQueryOptionsInternal(
+			final Class<?> implementingClass,
+			final Configuration configuration ) {
+		final String queryStr = configuration.get(
+				enumToConfKey(
+						implementingClass,
+						InputConfig.QUERY_OPTIONS),
+				"");
+		if ((queryStr != null) && !queryStr.isEmpty()) {
+			final byte[] queryBytes = ByteArrayUtils.byteArrayFromString(queryStr);
+			return PersistenceUtils.fromBinary(
+					queryBytes,
+					QueryOptions.class);
 		}
 		return null;
 	}
@@ -108,6 +127,32 @@ public class GeoWaveInputConfigurator extends
 			config.unset(enumToConfKey(
 					implementingClass,
 					InputConfig.QUERY));
+		}
+	}
+
+	public static QueryOptions getQueryOptions(
+			final Class<?> implementingClass,
+			final JobContext context ) {
+		return getQueryOptionsInternal(
+				implementingClass,
+				getConfiguration(context));
+	}
+
+	public static void setQueryOptions(
+			final Class<?> implementingClass,
+			final Configuration config,
+			final QueryOptions queryOptions ) {
+		if (queryOptions != null) {
+			config.set(
+					enumToConfKey(
+							implementingClass,
+							InputConfig.QUERY_OPTIONS),
+					ByteArrayUtils.byteArrayToString(PersistenceUtils.toBinary(queryOptions)));
+		}
+		else {
+			config.unset(enumToConfKey(
+					implementingClass,
+					InputConfig.QUERY_OPTIONS));
 		}
 	}
 

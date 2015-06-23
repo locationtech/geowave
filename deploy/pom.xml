@@ -13,7 +13,7 @@
 		<maven.build.timestamp.format>yyyy-MM-dd'T'HH:mm:ssZ</maven.build.timestamp.format>
 		<build.timestamp>${maven.build.timestamp}</build.timestamp>
 		<BUILD_SHARED_LIBS>ON</BUILD_SHARED_LIBS>
-        <Boost_NO_BOOST_CMAKE>ON</Boost_NO_BOOST_CMAKE>
+		<Boost_NO_BOOST_CMAKE>ON</Boost_NO_BOOST_CMAKE>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -534,7 +534,7 @@
 									<options>
 										<option>-DCMAKE_BUILD_TYPE:string=${CMAKE_BUILD_TYPE}</option>
 										<option>-DBUILD_SHARED_LIBS:bool=${BUILD_SHARED_LIBS}</option>
-                                        <option>-DBoost_NO_BOOST_CMAKE:bool=${Boost_NO_BOOST_CMAKE}</option>
+										<option>-DBoost_NO_BOOST_CMAKE:bool=${Boost_NO_BOOST_CMAKE}</option>
 									</options>
 								</configuration>
 							</execution>

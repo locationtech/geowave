@@ -118,13 +118,13 @@ public class DistortionGroupManagement
 		final List<Pair<Integer, Double>> clusterCountToDistortion = new ArrayList<Pair<Integer, Double>>();
 
 		public DistortionGroup(
-				String groupID ) {
+				final String groupID ) {
 			this.groupID = groupID;
 		}
 
 		public void addPair(
-				Integer count,
-				Double distortation ) {
+				final Integer count,
+				final Double distortation ) {
 			clusterCountToDistortion.add(Pair.of(
 					count,
 					distortation));
@@ -141,8 +141,8 @@ public class DistortionGroupManagement
 
 						@Override
 						public int compare(
-								Pair<Integer, Double> arg0,
-								Pair<Integer, Double> arg1 ) {
+								final Pair<Integer, Double> arg0,
+								final Pair<Integer, Double> arg1 ) {
 							return arg0.getKey().compareTo(
 									arg1.getKey());
 						}

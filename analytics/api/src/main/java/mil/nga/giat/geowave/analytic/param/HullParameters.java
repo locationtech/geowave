@@ -29,6 +29,10 @@ public class HullParameters
 				CentroidExtractor.class),
 		WRAPPER_FACTORY_CLASS(
 				AnalyticItemWrapperFactory.class),
+		ITERATION(
+				Integer.class),
+		HULL_BUILDER(
+				Projection.class),
 		ZOOM_LEVEL(
 				Integer.class);
 

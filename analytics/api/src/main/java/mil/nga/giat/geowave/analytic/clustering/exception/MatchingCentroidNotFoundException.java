@@ -14,10 +14,10 @@ public class MatchingCentroidNotFoundException extends
 	}
 
 	public MatchingCentroidNotFoundException(
-			String arg0,
-			Throwable arg1,
-			boolean arg2,
-			boolean arg3 ) {
+			final String arg0,
+			final Throwable arg1,
+			final boolean arg2,
+			final boolean arg3 ) {
 		super(
 				arg0,
 				arg1,
@@ -26,21 +26,21 @@ public class MatchingCentroidNotFoundException extends
 	}
 
 	public MatchingCentroidNotFoundException(
-			String arg0,
-			Throwable arg1 ) {
+			final String arg0,
+			final Throwable arg1 ) {
 		super(
 				arg0,
 				arg1);
 	}
 
 	public MatchingCentroidNotFoundException(
-			String arg0 ) {
+			final String arg0 ) {
 		super(
 				arg0);
 	}
 
 	public MatchingCentroidNotFoundException(
-			Throwable arg0 ) {
+			final Throwable arg0 ) {
 		super(
 				arg0);
 	}

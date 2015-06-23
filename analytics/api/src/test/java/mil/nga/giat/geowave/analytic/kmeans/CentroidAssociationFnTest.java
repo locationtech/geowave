@@ -70,6 +70,11 @@ public class CentroidAssociationFnTest
 	public void test() {
 		final CentroidAssociationFn<Long> fn = new CentroidAssociationFn<Long>();
 		fn.setDistanceFunction(new DistanceFn<Long>() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			public double measure(
 					final Long x,

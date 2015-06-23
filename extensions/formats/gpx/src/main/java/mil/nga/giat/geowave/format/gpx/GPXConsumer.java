@@ -790,7 +790,7 @@ public class GPXConsumer implements
 							inputID.length() > 0 ? inputID : element.composeID(
 									"",
 									false,
-									true));					
+									true));
 					return buildGeoWaveDataInstance(
 							element.composeID(
 									inputID,
