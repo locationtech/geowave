@@ -3,12 +3,8 @@ package mil.nga.giat.geowave.adapter.vector.plugin;
 import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import mil.nga.giat.geowave.adapter.vector.AccumuloDataStatisticsStoreExt;
@@ -19,7 +15,6 @@ import mil.nga.giat.geowave.adapter.vector.auth.EmptyAuthorizationProvider;
 import mil.nga.giat.geowave.adapter.vector.plugin.lock.LockingManagement;
 import mil.nga.giat.geowave.adapter.vector.plugin.lock.MemoryLockManager;
 import mil.nga.giat.geowave.adapter.vector.plugin.transaction.GeoWaveAutoCommitTransactionState;
-import mil.nga.giat.geowave.adapter.vector.plugin.transaction.GeoWaveEmptyTransaction;
 import mil.nga.giat.geowave.adapter.vector.plugin.transaction.GeoWaveTransactionManagementState;
 import mil.nga.giat.geowave.adapter.vector.plugin.transaction.GeoWaveTransactionState;
 import mil.nga.giat.geowave.adapter.vector.plugin.visibility.ColumnVisibilityManagement;
@@ -41,67 +36,34 @@ import mil.nga.giat.geowave.core.store.dimension.DimensionField;
 import mil.nga.giat.geowave.core.store.index.Index;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations;
 import mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations;
-import mil.nga.giat.geowave.datastore.accumulo.metadata.AbstractAccumuloPersistence;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloAdapterStore;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloIndexStore;
 
 import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
-import org.apache.commons.cli.BasicParser;
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.HelpFormatter;
-import org.apache.commons.cli.Option;
-import org.apache.commons.cli.OptionGroup;
-import org.apache.commons.cli.Options;
-import org.apache.commons.cli.ParseException;
 import org.apache.log4j.Logger;
-import org.geotools.data.AbstractDataStore;
-import org.geotools.data.DataSourceException;
-import org.geotools.data.DataStore;
-import org.geotools.data.DataUtilities;
-import org.geotools.data.DefaultServiceInfo;
-import org.geotools.data.EmptyFeatureReader;
-import org.geotools.data.FeatureListener;
 import org.geotools.data.FeatureListenerManager;
-import org.geotools.data.FeatureReader;
-import org.geotools.data.FeatureSource;
-import org.geotools.data.FeatureWriter;
-import org.geotools.data.FilteringFeatureReader;
-import org.geotools.data.FilteringFeatureWriter;
-import org.geotools.data.MaxFeatureReader;
 import org.geotools.data.Query;
-import org.geotools.data.ReTypeFeatureReader;
-import org.geotools.data.ServiceInfo;
 import org.geotools.data.Transaction;
-import org.geotools.data.TransactionStateDiff;
-import org.geotools.data.simple.SimpleFeatureSource;
+import org.geotools.data.store.ContentDataStore;
+import org.geotools.data.store.ContentEntry;
+import org.geotools.data.store.ContentFeatureSource;
 import org.geotools.feature.NameImpl;
-import org.geotools.feature.SchemaException;
-import org.geotools.feature.simple.SimpleFeatureTypeImpl;
 import org.geotools.referencing.CRS;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
-import org.opengis.feature.type.AttributeDescriptor;
 import org.opengis.feature.type.Name;
-import org.opengis.filter.Filter;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
-/**
- * This is the main entry point for exposing GeoWave as a DataStore to GeoTools.
- * GeoTools uses Java SPI (see
- * META-INF/services/org.geotools.data.DataStoreFactorySpi) to inject this
- * datastore.
- * 
- */
 public class GeoWaveGTDataStore extends
-		AbstractDataStore implements
-		DataStore,
+		ContentDataStore implements
 		TransactionNotification
 {
 	/** Package logger */
 	private final static Logger LOGGER = Logger.getLogger(GeoWaveGTDataStore.class);
 	public static final CoordinateReferenceSystem DEFAULT_CRS;
+
 	static {
 		try {
 			DEFAULT_CRS = CRS.decode(
@@ -119,22 +81,14 @@ public class GeoWaveGTDataStore extends
 	}
 
 	private FeatureListenerManager listenerManager = null;
-	private AdapterStore adapterStore;
+	protected AdapterStore adapterStore;
 	protected VectorDataStore dataStore;
-	protected VectorDataStore statsDataStore;
-	protected AccumuloOperations statsOperations;
 	protected AccumuloOperations storeOperations;
 	private final Map<String, Index> preferredIndexes = new ConcurrentHashMap<String, Index>();
 	private final ColumnVisibilityManagement<SimpleFeature> visibilityManagement = VisibilityManagementHelper.loadVisibilityManagement();
-
 	private final AuthorizationSPI authorizationSPI;
 	private final TransactionsAllocater transactionsAllocater;
 	private URI featureNameSpaceURI;
-
-	/**
-	 * Manages InProcess locks for FeatureLocking implementations.
-	 */
-	private final LockingManagement lockingManager;
 
 	public GeoWaveGTDataStore(
 			final TransactionsAllocater transactionsAllocater ) {
@@ -161,7 +115,6 @@ public class GeoWaveGTDataStore extends
 			AccumuloException,
 			AccumuloSecurityException {
 		listenerManager = new FeatureListenerManager();
-
 		lockingManager = config.getLockingManagementFactory().createLockingManager(
 				config);
 		authorizationSPI = config.getAuthorizationFactory().create(
@@ -171,72 +124,20 @@ public class GeoWaveGTDataStore extends
 				config.getZookeeperServers(),
 				config.getUserName(),
 				this);
-
 		featureNameSpaceURI = config.getFeatureNamespace();
 
-	}
-
-	@Override
-	public void dispose() {
-		// TODO are there any native resources we need to dispose of
 	}
 
 	public AuthorizationSPI getAuthorizationSPI() {
 		return authorizationSPI;
 	}
 
-	public ColumnVisibilityManagement<SimpleFeature> getVisibilityManagement() {
-		return visibilityManagement;
-	}
-
 	public FeatureListenerManager getListenerManager() {
 		return listenerManager;
 	}
 
-	protected void setListenerManager(
-			final FeatureListenerManager listenerMgr ) {
-		listenerManager = listenerMgr;
-	}
-
-	protected AdapterStore getAdapterStore() {
-		return adapterStore;
-	}
-
-	protected void setAdapterStore(
-			final AdapterStore adapterStore ) {
-		this.adapterStore = adapterStore;
-	}
-
-	protected VectorDataStore getDataStore() {
+	public VectorDataStore getDataStore() {
 		return dataStore;
-	}
-
-	protected void setDataStore(
-			final VectorDataStore dataStore ) {
-		this.dataStore = dataStore;
-	}
-
-	protected VectorDataStore getStatsDataStore() {
-		return statsDataStore;
-	}
-
-	protected void setStatsDataStore(
-			final VectorDataStore statsDataStore ) {
-		this.statsDataStore = statsDataStore;
-	}
-
-	protected AccumuloOperations getStatsOperations() {
-		return statsOperations;
-	}
-
-	protected void setStoreOperations(
-			final AccumuloOperations storeOperations ) {
-		this.storeOperations = storeOperations;
-	}
-
-	protected void setStatsOperations(
-			final AccumuloOperations statsOperations ) {
-		this.statsOperations = statsOperations;
 	}
 
 	public void init(
@@ -251,7 +152,6 @@ public class GeoWaveGTDataStore extends
 				config.getAccumuloNamespace());
 		final AccumuloIndexStore indexStore = new AccumuloIndexStore(
 				storeOperations);
-
 		final DataStatisticsStore statisticsStore = new AccumuloDataStatisticsStoreExt(
 				storeOperations);
 		adapterStore = new AccumuloAdapterStore(
@@ -261,38 +161,11 @@ public class GeoWaveGTDataStore extends
 				adapterStore,
 				statisticsStore,
 				storeOperations);
-
-		statsOperations = new BasicAccumuloOperations(
-				config.getZookeeperServers(),
-				config.getInstanceName(),
-				config.getUserName(),
-				config.getPassword(),
-				config.getAccumuloNamespace() + "_stats");
-
-		statsDataStore = new VectorDataStore(
-				statsOperations);
 	}
 
 	protected Index getIndex(
 			final FeatureDataAdapter adapter ) {
 		return getPreferredIndex(adapter);
-	}
-
-	public void addListener(
-			final FeatureSource<?, ?> src,
-			final FeatureListener listener ) {
-		listenerManager.addFeatureListener(
-				src,
-				listener);
-
-	}
-
-	public void removeListener(
-			final FeatureSource<?, ?> src,
-			final FeatureListener listener ) {
-		listenerManager.removeFeatureListener(
-				src,
-				listener);
 	}
 
 	@Override
@@ -304,7 +177,7 @@ public class GeoWaveGTDataStore extends
 		}
 		final FeatureDataAdapter adapter = new FeatureDataAdapter(
 				featureType,
-				getVisibilityManagement());
+				visibilityManagement);
 		if (featureNameSpaceURI != null) {
 			adapter.setNamespace(featureNameSpaceURI.toString());
 		}
@@ -313,424 +186,90 @@ public class GeoWaveGTDataStore extends
 		getPreferredIndex(adapter);
 	}
 
-	@Override
-	public ServiceInfo getInfo() {
-		final DefaultServiceInfo info = new DefaultServiceInfo();
-		info.setTitle("GeoWave Data Store");
-		info.setDescription("Features from GeoWave");
-		return info;
-	}
-
-	@Override
-	public List<Name> getNames() {
-		final String[] typeNames = getTypeNames();
-		final List<Name> names = new ArrayList<Name>(
-				typeNames.length);
-		for (final String typeName : typeNames) {
-			names.add(new NameImpl(
-					typeName));
-		}
-		return names;
-	}
-
-	@Override
-	public SimpleFeatureType getSchema(
-			final Name name ) {
-		return getSchema(name.getLocalPart());
-
-	}
-
-	@Override
-	protected FeatureReader<SimpleFeatureType, SimpleFeature> getFeatureReader(
-			final String typeName,
-			final Query query )
-			throws IOException {
-		final FeatureDataAdapter adapter = getAdapter(query.getTypeName());
-
-		if (adapter == null) {
-			LOGGER.warn("GeoWave Feature Data Adapter of type '" + query.getTypeName() + "' not found.  Cannot create Feature Reader.");
-			return null;
-		}
-		final GeoWaveFeatureSource source = new GeoWaveFeatureSource(
-				this,
-				adapter);
-		return source.getReaderInternal(
-				query,
-				new GeoWaveEmptyTransaction(
-						source.getComponents()));
-	}
-
-	@Override
-	protected FeatureReader<SimpleFeatureType, SimpleFeature> getFeatureReader(
-			final String typeName )
-			throws IOException {
-		throw new UnsupportedOperationException(
-				"Should not get here");
-	}
-
-	@Override
-	public SimpleFeatureSource getFeatureSource(
-			final String typeName ) {
-
-		final FeatureDataAdapter adapter = getAdapter(typeName);
-		if (adapter == null) {
-			LOGGER.warn("GeoWave Feature Data Adapter of type '" + typeName + "' not found.  Cannot create Feature Source.");
-			return null;
-		}
-		return new GeoWaveFeatureSource(
-				this,
-				adapter);
-	}
-
 	public TransactionsAllocater getTransactionsAllocater() {
 		return transactionsAllocater;
 	}
 
-	@Override
-	public SimpleFeatureSource getFeatureSource(
-			final Name name )
-			throws IOException {
-		return getFeatureSource(name.getLocalPart());
-	}
-
-	public SimpleFeatureSource getFeatureSource(
-			final Name name,
-			final Transaction transaction )
-			throws IOException {
-		return getFeatureSource(name.getLocalPart());
-	}
-
-	@Override
-	protected FeatureWriter<SimpleFeatureType, SimpleFeature> createFeatureWriter(
-			final String typeName,
-			final Transaction transaction )
-			throws IOException {
-		return getFeatureWriter(
-				typeName,
-				Filter.INCLUDE,
-				transaction);
-
-	}
-
-	@Override
-	public LockingManagement getLockingManager() {
-		return lockingManager;
-	}
-
-	/**
-	 * Need to override this to handle the custom transaction state. This a
-	 * really bummer. It would have been easier if GeoTools had exposed
-	 * 'applyDiff' on the TransactionDiffState.
-	 */
-	@Override
-	public FeatureReader<SimpleFeatureType, SimpleFeature> getFeatureReader(
-			final Query query,
-			final Transaction transaction )
-			throws IOException {
-		final Filter filter = query.getFilter();
-		final String typeName = query.getTypeName();
-		final String propertyNames[] = query.getPropertyNames();
-
-		if (filter == null) {
-			throw new NullPointerException(
-					"getFeatureReader requires Filter: " + "did you mean Filter.INCLUDE?");
-		}
-		if (typeName == null) {
-			throw new NullPointerException(
-					"getFeatureReader requires typeName: " + "use getTypeNames() for a list of available types");
-		}
-		if (transaction == null) {
-			throw new NullPointerException(
-					"getFeatureReader requires Transaction: " + "did you mean to use Transaction.AUTO_COMMIT?");
-		}
-		SimpleFeatureType featureType = getSchema(query.getTypeName());
-		final GeoWaveFeatureSource source = (GeoWaveFeatureSource) getFeatureSource(typeName);
-
-		if ((propertyNames != null) || (query.getCoordinateSystem() != null)) {
-			try {
-				featureType = DataUtilities.createSubType(
-						featureType,
-						propertyNames,
-						query.getCoordinateSystem());
-			}
-			catch (final SchemaException e) {
-				throw new DataSourceException(
-						"Could not create Feature Type for query",
-						e);
-
-			}
-		}
-		if ((filter == Filter.EXCLUDE) || filter.equals(Filter.EXCLUDE)) {
-			return new EmptyFeatureReader<SimpleFeatureType, SimpleFeature>(
-					featureType);
-		}
-
-		final GeoWaveTransactionState state = getMyTransactionState(
-				transaction,
-				source);
-
-		FeatureReader<SimpleFeatureType, SimpleFeature> reader = source.getReaderInternal(
-				query,
-				state.getGeoWaveTransaction(typeName));
-
-		if (!filter.equals(Filter.INCLUDE)) {
-			reader = new FilteringFeatureReader<SimpleFeatureType, SimpleFeature>(
-					reader,
-					filter);
-		}
-
-		if (!featureType.equals(reader.getFeatureType())) {
-			reader = new ReTypeFeatureReader(
-					reader,
-					featureType,
-					false);
-		}
-
-		if (query.getMaxFeatures() != Query.DEFAULT_MAX) {
-			reader = new MaxFeatureReader<SimpleFeatureType, SimpleFeature>(
-					reader,
-					query.getMaxFeatures());
-		}
-
-		return reader;
-	}
-
-	@Override
-	public FeatureWriter<SimpleFeatureType, SimpleFeature> getFeatureWriter(
-			final String typeName,
-			final Filter filter,
-			final Transaction transaction )
-			throws IOException {
-
-		final GeoWaveFeatureSource source = (GeoWaveFeatureSource) getFeatureSource(typeName);
-
-		if (filter == null) {
-			throw new NullPointerException(
-					"getFeatureReader requires Filter: " + "did you mean Filter.INCLUDE?");
-		}
-
-		if (transaction == null) {
-			throw new NullPointerException(
-					"getFeatureWriter requires Transaction: " + "did you mean to use Transaction.AUTO_COMMIT?");
-		}
-
-		final GeoWaveTransactionState state = getMyTransactionState(
-				transaction,
-				source);
-
-		if (filter == Filter.EXCLUDE) {
-			return source.getWriterInternal(state.getGeoWaveTransaction(typeName));
-		}
-
-		FeatureWriter<SimpleFeatureType, SimpleFeature> writer;
-
-		writer = source.getWriterInternal(
-				state.getGeoWaveTransaction(typeName),
-				filter);
-
-		if (filter != Filter.INCLUDE) {
-			writer = new FilteringFeatureWriter(
-					writer,
-					filter);
-		}
-
-		return writer;
-	}
-
-	@Override
-	public FeatureWriter<SimpleFeatureType, SimpleFeature> getFeatureWriterAppend(
-			final String typeName,
-			final Transaction transaction )
-			throws IOException {
-		return this.getFeatureWriter(
-				typeName,
-				Filter.EXCLUDE,
-				transaction);
-	}
-
 	private FeatureDataAdapter getAdapter(
 			final String typeName ) {
-		final SimpleFeatureType statsFeatureType = getDefaultSchema(typeName);
 		final FeatureDataAdapter featureAdapter;
-		if (statsFeatureType != null) {
-			featureAdapter = new FeatureDataAdapter(
-					statsFeatureType,
-					getVisibilityManagement());
+		final DataAdapter<?> adapter = adapterStore.getAdapter(new ByteArrayId(
+				StringUtils.stringToBinary(typeName)));
+		if ((adapter == null) || !(adapter instanceof FeatureDataAdapter)) {
+			return null;
 		}
-		else {
-			final DataAdapter<?> adapter = adapterStore.getAdapter(new ByteArrayId(
-					StringUtils.stringToBinary(typeName)));
-			if ((adapter == null) || !(adapter instanceof FeatureDataAdapter)) {
-				return null;
-			}
-			featureAdapter = (FeatureDataAdapter) adapter;
-		}
+		featureAdapter = (FeatureDataAdapter) adapter;
 		if (featureNameSpaceURI != null) {
 			featureAdapter.setNamespace(featureNameSpaceURI.toString());
 		}
-		// else
-		// featureAdapter.setNamespace(null);
 		return featureAdapter;
 	}
 
 	@Override
-	public SimpleFeatureType getSchema(
-			final String typeName ) {
-		final SimpleFeatureType type = getDefaultSchema(typeName);
-		if (type != null) {
-			return type;
-		}
-		final FeatureDataAdapter adapter = getAdapter(typeName);
-		if (adapter == null) {
-			return null;
-		}
-		return adapter.getType();
-	}
-
-	private SimpleFeatureType getDefaultSchema(
-			final String typeName ) {
-		// TODO add some basic "global" types such as all spatial, or all
-		// spatial temporal
-		final FeatureDataAdapter adapter = getStatsAdapter(typeName);
-		if (adapter != null) {
-			final SimpleFeatureType type = adapter.getType();
-			final String nameSpace = featureNameSpaceURI != null ? featureNameSpaceURI.toString() : type.getName().getNamespaceURI();
-
-			return new SimpleFeatureTypeImpl(
-					new NameImpl(
-							nameSpace,
-							type.getName().getSeparator(),
-							typeName),
-					type.getAttributeDescriptors(),
-					type.getGeometryDescriptor(),
-					type.isAbstract(),
-					type.getRestrictions(),
-					type.getSuper(),
-					type.getDescription());
-		}
-		return null;
-	}
-
-	protected FeatureDataAdapter getStatsAdapter(
-			final String typeName ) {
-		// TODO add some basic "global" types such as all spatial, or all
-		// spatial temporal
-		if (typeName.startsWith("heatmap_")) {
-			if (statsOperations.tableExists(AbstractAccumuloPersistence.METADATA_TABLE)) {
-				final AdapterStore adapterStore = new AccumuloAdapterStore(
-						statsOperations);
-				final DataAdapter<?> adapter = adapterStore.getAdapter(new ByteArrayId(
-						StringUtils.stringToBinary("l0_stats" + typeName.substring(8))));
-				if (adapter instanceof FeatureDataAdapter) {
-					return (FeatureDataAdapter) adapter;
-				}
+	protected List<Name> createTypeNames()
+			throws IOException {
+		List<Name> names = new ArrayList<>();
+		final CloseableIterator<DataAdapter<?>> adapters = adapterStore.getAdapters();
+		while (adapters.hasNext()) {
+			final DataAdapter<?> adapter = adapters.next();
+			if (adapter instanceof FeatureDataAdapter) {
+				names.add(new NameImpl(
+						((FeatureDataAdapter) adapter).getType().getTypeName()));
 			}
 		}
-		return null;
-	}
-
-	private String[] getDefaultTypeNames() {
-		if (statsOperations.tableExists(AbstractAccumuloPersistence.METADATA_TABLE)) {
-			final AdapterStore adapterStore = new AccumuloAdapterStore(
-					statsOperations);
-			try (final CloseableIterator<DataAdapter<?>> adapters = adapterStore.getAdapters()) {
-				final Set<String> typeNames = new HashSet<String>();
-				while (adapters.hasNext()) {
-					final DataAdapter<?> adapter = adapters.next();
-					typeNames.add(StringUtils.stringFromBinary(adapter.getAdapterId().getBytes()));
-				}
-				final Set<String> statsNames = getStatsNamesFromTypeNames(typeNames);
-				final String[] defaultTypeNames = new String[statsNames.size()];
-				final Iterator<String> statsIt = statsNames.iterator();
-				int i = 0;
-				while (statsIt.hasNext()) {
-					defaultTypeNames[i++] = "heatmap_" + statsIt.next();
-				}
-				return defaultTypeNames;
-			}
-			catch (final IOException e) {
-				LOGGER.warn(
-						"unable to close adapters store iterator",
-						e);
-			}
-		}
-		return new String[] {};
-	}
-
-	private static Set<String> getStatsNamesFromTypeNames(
-			final Set<String> typeNames ) {
-		final Set<String> statsNames = new HashSet<String>();
-		for (final String typeName : typeNames) {
-			try {
-				statsNames.add(typeName.substring(typeName.indexOf("_stats") + 6));
-			}
-			catch (final Exception e) {
-				LOGGER.warn(
-						"Unable to parse name from stats adapter store",
-						e);
-			}
-		}
-		return statsNames;
+		adapters.close();
+		return names;
 	}
 
 	@Override
-	public String[] getTypeNames() {
-		try (final CloseableIterator<DataAdapter<?>> it = adapterStore.getAdapters()) {
-			final List<String> typeNames = new ArrayList<String>();
-			typeNames.addAll(Arrays.asList(getDefaultTypeNames()));
-			while (it.hasNext()) {
-				final DataAdapter<?> adapter = it.next();
-				if (adapter instanceof FeatureDataAdapter) {
-					typeNames.add(((FeatureDataAdapter) adapter).getType().getTypeName());
-				}
-			}
-			return typeNames.toArray(new String[typeNames.size()]);
-		}
-		catch (final IOException e) {
-			LOGGER.warn(
-					"unable to close adapter store",
-					e);
-			return new String[] {};
-		}
+	public ContentFeatureSource getFeatureSource(
+			String typeName )
+			throws IOException {
+		return getFeatureSource(
+				typeName,
+				Transaction.AUTO_COMMIT);
 	}
 
 	@Override
-	public void updateSchema(
-			final Name name,
-			final SimpleFeatureType featureType ) {
-		updateSchema(
-				name.getLocalPart(),
-				featureType);
+	public ContentFeatureSource getFeatureSource(
+			String typeName,
+			Transaction tx )
+			throws IOException {
+		return super.getFeatureSource(
+				new NameImpl(
+						null,
+						typeName),
+				tx);
 	}
 
 	@Override
-	public void updateSchema(
-			final String typeName,
-			final SimpleFeatureType featureType ) {
-		if (featureType.getGeometryDescriptor() == null) {
-			throw new UnsupportedOperationException(
-					"Schema modification not supported");
-		}
-		final FeatureDataAdapter oldAdaptor = getAdapter(typeName);
-		if (oldAdaptor == null) {
-			LOGGER.error("could not get adapter for type: " + typeName);
-			throw new UnsupportedOperationException(
-					"Can not update schema for invalid type");
-		}
-		final SimpleFeatureType oldFeatureType = oldAdaptor.getType();
-		for (final AttributeDescriptor descriptor : oldFeatureType.getAttributeDescriptors()) {
-			final AttributeDescriptor newDescriptor = featureType.getDescriptor(descriptor.getLocalName());
-			if ((newDescriptor == null) || !newDescriptor.getType().equals(
-					descriptor.getType())) {
-				throw new UnsupportedOperationException(
-						"Removal or changing the type of schema attributes is not supported");
-			}
-		}
-		final FeatureDataAdapter adapter = new FeatureDataAdapter(
-				featureType,
-				getVisibilityManagement());
+	public ContentFeatureSource getFeatureSource(
+			Name typeName,
+			Transaction tx )
+			throws IOException {
+		return getFeatureSource(
+				typeName.getLocalPart(),
+				tx);
 
-		adapterStore.addAdapter(adapter);
+	}
+
+	@Override
+	public ContentFeatureSource getFeatureSource(
+			Name typeName )
+			throws IOException {
+		return getFeatureSource(
+				typeName.getLocalPart(),
+				Transaction.AUTO_COMMIT);
+	}
+
+	@Override
+	protected ContentFeatureSource createFeatureSource(
+			final ContentEntry entry )
+			throws IOException {
+		return new GeoWaveFeatureSource(
+				entry,
+				Query.ALL,
+				getAdapter(entry.getTypeName()));
 	}
 
 	@Override
@@ -790,7 +329,7 @@ public class GeoWaveGTDataStore extends
 
 							source.getComponents(),
 							transaction,
-							lockingManager);
+							(LockingManagement) lockingManager);
 					transaction.putState(
 							this,
 							state);
@@ -798,12 +337,6 @@ public class GeoWaveGTDataStore extends
 			}
 			return state;
 		}
-	}
-
-	@Override
-	protected TransactionStateDiff state(
-			final Transaction transaction ) {
-		return null;
 	}
 
 	private Index getPreferredIndex(
@@ -878,10 +411,4 @@ public class GeoWaveGTDataStore extends
 		}
 	}
 
-	Name getTypeName(
-			final String typeName ) {
-		return new NameImpl(
-				featureNameSpaceURI.toString(),
-				typeName);
-	}
 }

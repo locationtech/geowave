@@ -24,7 +24,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
-import org.opengis.filter.Filter;
 
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.GeometryFactory;
@@ -48,7 +47,8 @@ public class WFSBoundedSpatialQueryTest
 			throws AccumuloException,
 			AccumuloSecurityException,
 			SchemaException,
-			CQLException {
+			CQLException,
+			IOException {
 		dataStore = new GeoWaveGTMemDataStore();
 		type = DataUtilities.createType(
 				"geostuff",
@@ -70,7 +70,6 @@ public class WFSBoundedSpatialQueryTest
 
 		final FeatureWriter<SimpleFeatureType, SimpleFeature> writer = dataStore.getFeatureWriter(
 				type.getTypeName(),
-				Filter.EXCLUDE,
 				transaction1);
 		assertFalse(writer.hasNext());
 		SimpleFeature newFeature = writer.next();

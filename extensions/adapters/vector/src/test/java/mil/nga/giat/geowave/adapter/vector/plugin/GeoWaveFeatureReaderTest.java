@@ -11,13 +11,13 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
-import mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveFeatureReader;
 import mil.nga.giat.geowave.adapter.vector.utils.DateUtilities;
 
 import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.geotools.data.DataUtilities;
 import org.geotools.data.DefaultTransaction;
+import org.geotools.data.DelegatingFeatureReader;
 import org.geotools.data.FeatureReader;
 import org.geotools.data.FeatureWriter;
 import org.geotools.data.Query;
@@ -135,9 +135,9 @@ public class GeoWaveFeatureReaderTest
 			NoSuchElementException,
 			IOException,
 			CQLException {
-		final FeatureReader reader = dataStore.getFeatureReader(
-				type.getTypeName(),
-				query);
+		final FeatureReader<SimpleFeatureType, SimpleFeature> reader = dataStore.getFeatureReader(
+				query,
+				Transaction.AUTO_COMMIT);
 		int count = 0;
 		while (reader.hasNext()) {
 			final SimpleFeature feature = (SimpleFeature) reader.next();
@@ -167,9 +167,9 @@ public class GeoWaveFeatureReaderTest
 					"pid"
 				});
 
-		final FeatureReader reader = dataStore.getFeatureReader(
-				type.getTypeName(),
-				query);
+		final FeatureReader<SimpleFeatureType, SimpleFeature> reader = dataStore.getFeatureReader(
+				query,
+				Transaction.AUTO_COMMIT);
 		int count = 0;
 		while (reader.hasNext()) {
 			final SimpleFeature feature = (SimpleFeature) reader.next();
@@ -185,9 +185,9 @@ public class GeoWaveFeatureReaderTest
 			throws IllegalArgumentException,
 			NoSuchElementException,
 			IOException {
-		final FeatureReader reader = dataStore.getFeatureReader(
-				type.getTypeName(),
-				query);
+		final FeatureReader<SimpleFeatureType, SimpleFeature> reader = dataStore.getFeatureReader(
+				query,
+				Transaction.AUTO_COMMIT);
 		int count = 0;
 		while (reader.hasNext()) {
 			final SimpleFeature feature = (SimpleFeature) reader.next();
@@ -217,9 +217,9 @@ public class GeoWaveFeatureReaderTest
 					"geometry",
 					"pid"
 				});
-		final FeatureReader reader = dataStore.getFeatureReader(
-				type.getTypeName(),
-				query);
+		final FeatureReader<SimpleFeatureType, SimpleFeature> reader = dataStore.getFeatureReader(
+				query,
+				Transaction.AUTO_COMMIT);
 		int count = 0;
 		while (reader.hasNext()) {
 			final SimpleFeature feature = (SimpleFeature) reader.next();
@@ -237,13 +237,14 @@ public class GeoWaveFeatureReaderTest
 			throws IllegalArgumentException,
 			NoSuchElementException,
 			IOException {
-		final GeoWaveFeatureReader reader = (GeoWaveFeatureReader) dataStore.getFeatureReader(
-				type.getTypeName(),
-				query);
+		final FeatureReader<SimpleFeatureType, SimpleFeature> reader = dataStore.getFeatureReader(
+				query,
+				Transaction.AUTO_COMMIT);
 		final MaxVisitor visitor = new MaxVisitor(
 				"start",
 				type);
-		reader.getFeatureCollection().accepts(
+		unwrapDelegatingFeatureReader(
+				reader).getFeatureCollection().accepts(
 				visitor,
 				null);
 		assertTrue(visitor.getMax().equals(
@@ -256,17 +257,29 @@ public class GeoWaveFeatureReaderTest
 			throws IllegalArgumentException,
 			NoSuchElementException,
 			IOException {
-		final GeoWaveFeatureReader reader = (GeoWaveFeatureReader) dataStore.getFeatureReader(
-				type.getTypeName(),
-				query);
+		final FeatureReader<SimpleFeatureType, SimpleFeature> reader = dataStore.getFeatureReader(
+				query,
+				Transaction.AUTO_COMMIT);
 		final MinVisitor visitor = new MinVisitor(
 				"start",
 				type);
-		reader.getFeatureCollection().accepts(
+		unwrapDelegatingFeatureReader(
+				reader).getFeatureCollection().accepts(
 				visitor,
 				null);
 		assertTrue(visitor.getMin().equals(
 				stime));
 
+	}
+
+	private GeoWaveFeatureReader unwrapDelegatingFeatureReader(
+			final FeatureReader<SimpleFeatureType, SimpleFeature> reader ) {
+		// GeoTools uses decorator pattern to wrap FeatureReaders
+		// we need to get down to the inner GeoWaveFeatureReader
+		FeatureReader<SimpleFeatureType, SimpleFeature> currReader = reader;
+		while (!(currReader instanceof GeoWaveFeatureReader)) {
+			currReader = ((DelegatingFeatureReader<SimpleFeatureType, SimpleFeature>) currReader).getDelegate();
+		}
+		return (GeoWaveFeatureReader) currReader;
 	}
 }

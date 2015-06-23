@@ -6,7 +6,6 @@ import java.util.UUID;
 import mil.nga.giat.geowave.adapter.vector.AccumuloDataStatisticsStoreExt;
 import mil.nga.giat.geowave.adapter.vector.VectorDataStore;
 import mil.nga.giat.geowave.adapter.vector.auth.AuthorizationFactorySPI;
-import mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveGTDataStore;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloAdapterStore;
@@ -83,29 +82,14 @@ public class GeoWaveGTMemDataStore extends
 		final DataStatisticsStore statisticsStore = new AccumuloDataStatisticsStoreExt(
 				dataOps);
 
-		super.setAdapterStore(new AccumuloAdapterStore(
-				dataOps));
-		super.setDataStore(new VectorDataStore(
+		adapterStore = new AccumuloAdapterStore(
+				dataOps);
+		dataStore = new VectorDataStore(
 				indexStore,
-				super.getAdapterStore(),
+				adapterStore,
 				statisticsStore,
-				dataOps));
-
-		super.setAdapterStore(new AccumuloAdapterStore(
-				dataOps));
-		super.setDataStore(new VectorDataStore(
-				indexStore,
-				super.getAdapterStore(),
-				statisticsStore,
-				dataOps));
-
-		super.setStatsOperations(dataOps);
-		super.setStatsDataStore(new VectorDataStore(
-				indexStore,
-				super.getAdapterStore(),
-				statisticsStore,
-				dataOps));
-		super.setStoreOperations(dataOps);
+				dataOps);
+		storeOperations = dataOps;
 
 	}
 }

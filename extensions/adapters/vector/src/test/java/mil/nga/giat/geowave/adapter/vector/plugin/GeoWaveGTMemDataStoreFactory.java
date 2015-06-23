@@ -1,14 +1,14 @@
 package mil.nga.giat.geowave.adapter.vector.plugin;
 
+import java.awt.RenderingHints.Key;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import mil.nga.giat.geowave.adapter.vector.plugin.GeoWavePluginConfig;
-
-import org.geotools.data.AbstractDataStoreFactory;
 import org.geotools.data.DataStore;
+import org.geotools.data.DataStoreFactorySpi;
 
 /**
  * This factory is injected by GeoTools using Java SPI and is used to expose
@@ -17,8 +17,8 @@ import org.geotools.data.DataStore;
  * GeoTools.
  * 
  */
-public class GeoWaveGTMemDataStoreFactory extends
-		AbstractDataStoreFactory
+public class GeoWaveGTMemDataStoreFactory implements
+		DataStoreFactorySpi
 {
 
 	// GeoServer seems to call this several times so we should cache a
@@ -76,5 +76,27 @@ public class GeoWaveGTMemDataStoreFactory extends
 	public Param[] getParametersInfo() {
 		final List<Param> params = GeoWavePluginConfig.getAuthPluginParams();
 		return params.toArray(new Param[params.size()]);
+	}
+
+	private static Boolean isAvailable = null;
+
+	@Override
+	public synchronized boolean isAvailable() {
+		if (isAvailable == null) {
+			try {
+				Class.forName("mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveGTDataStore");
+				isAvailable = true;
+			}
+			catch (ClassNotFoundException e) {
+				isAvailable = false;
+			}
+		}
+		return isAvailable;
+	}
+
+	@Override
+	public Map<Key, ?> getImplementationHints() {
+		// No implementation hints required at this time
+		return Collections.emptyMap();
 	}
 }
