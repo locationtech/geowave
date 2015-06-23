@@ -14,6 +14,15 @@
     <name>GeoWave Documentation</name>
     <packaging>pom</packaging>
 
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	<asciidoctor.epub.version>1.5.0-alpha.4</asciidoctor.epub.version>
+        <asciidoctor.maven.plugin.version>1.5.2.1</asciidoctor.maven.plugin.version>
+	<asciidoctorj.pdf.version>1.5.0-alpha.7</asciidoctorj.pdf.version>
+	<asciidoctor.pdf.version>1.5.0.alpha.7</asciidoctor.pdf.version>
+        <jruby.version>1.7.20.1</jruby.version>
+    </properties>
+
     <repositories>
         <repository>
             <id>rubygems-proxy-releases</id>
@@ -27,11 +36,12 @@
             </snapshots>
         </repository>
     </repositories>
+
     <dependencies>
         <dependency>
             <groupId>rubygems</groupId>
             <artifactId>asciidoctor-pdf</artifactId>
-            <version>1.5.0.alpha.6</version>
+            <version>${asciidoctor.pdf.version}</version>
             <type>gem</type>
             <scope>provided</scope>
             <exclusions>
@@ -42,6 +52,7 @@
             </exclusions>
         </dependency>
     </dependencies>
+
     <build>
         <plugins>
             <plugin>
@@ -89,23 +100,6 @@
                 </executions>
             </plugin>
             <plugin>
-                <groupId>de.saumya.mojo</groupId>
-                <artifactId>gem-maven-plugin</artifactId>
-                <version>1.0.5</version>
-                <configuration>
-                    <jrubyVersion>1.7.9</jrubyVersion>
-                    <gemHome>${project.build.directory}/gems</gemHome>
-                    <gemPath>${project.build.directory}/gems</gemPath>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>initialize</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
                 <artifactId>maven-antrun-plugin</artifactId>
                 <version>1.7</version>
                 <executions>
@@ -133,17 +127,17 @@
             <plugin>
                 <groupId>org.asciidoctor</groupId>
                 <artifactId>asciidoctor-maven-plugin</artifactId>
-                <version>1.5.2</version>
+                <version>${asciidoctor.maven.plugin.version}</version>
                 <dependencies>
                     <dependency>
                         <groupId>org.asciidoctor</groupId>
                         <artifactId>asciidoctorj-epub3</artifactId>
-                        <version>1.5.0-alpha.4</version>
+                        <version>${asciidoctor.epub.version}</version>
                     </dependency>
                     <dependency>
                         <groupId>org.asciidoctor</groupId>
                         <artifactId>asciidoctorj-pdf</artifactId>
-                        <version>1.5.0-alpha.6</version>
+                        <version>${asciidoctorj.pdf.version}</version>
                     </dependency>
                 </dependencies>
                 <configuration>

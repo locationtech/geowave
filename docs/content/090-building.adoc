@@ -12,6 +12,7 @@ This _ultra_ quickstart assumes you have installed and configured:
 * http://git-scm.com/[Git]
 * http://www.oracle.com/technetwork/java/javase/downloads/index.html[Java JDK] (>= 1.7). The OracleJDK is the most thoroughly tested, but there
 are no known issues with OpenJDK.
+* https://maven.apache.org/[Maven] >= 3.2.1
 * http://geoserver.org/[GeoServer] instance >= 2.5.2 (due to: http://jira.codehaus.org/browse/GEOT-4587[GEOT-4587])
 * http://projects.apache.org/projects/accumulo.html[Apache Accumulo] version 1.5 or greater is required. 1.5.0, 1.5.1, and 1.6.0 have all
 been tested.
