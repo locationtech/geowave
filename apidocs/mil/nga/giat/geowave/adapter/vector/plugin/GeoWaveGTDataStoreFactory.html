@@ -86,12 +86,7 @@
 <li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
 <li>
 <ul class="inheritance">
-<li>org.geotools.data.AbstractDataStoreFactory</li>
-<li>
-<ul class="inheritance">
 <li>mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveGTDataStoreFactory</li>
-</ul>
-</li>
 </ul>
 </li>
 </ul>
@@ -105,7 +100,8 @@
 <hr>
 <br>
 <pre>public class <span class="strong">GeoWaveGTDataStoreFactory</span>
-extends org.geotools.data.AbstractDataStoreFactory</pre>
+extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
+implements org.geotools.data.DataStoreFactorySpi</pre>
 <div class="block">This factory is injected by GeoTools using Java SPI and is used to expose
  GeoWave as a DataStore to GeoTools. It should be defined within a file
  META-INF/services/org.geotools.data.DataStoreFactorySpi to inject this into
@@ -143,7 +139,10 @@ extends org.geotools.data.AbstractDataStoreFactory</pre>
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStoreFactory.html#GeoWaveGTDataStoreFactory()">GeoWaveGTDataStoreFactory</a></strong>()</code>&nbsp;</td>
+<td class="colOne"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStoreFactory.html#GeoWaveGTDataStoreFactory()">GeoWaveGTDataStoreFactory</a></strong>()</code>
+<div class="block">Public "no argument" constructor called by Factory Service Provider (SPI)
+ entry listed in META-INF/services/org.geotools.data.DataStoreFactorySPI</div>
+</td>
 </tr>
 </table>
 </li>
@@ -161,33 +160,38 @@ extends org.geotools.data.AbstractDataStoreFactory</pre>
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStoreFactory.html#canProcess(java.util.Map)">canProcess</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a>&gt;&nbsp;params)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>org.geotools.data.DataStore</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStoreFactory.html#createDataStore(java.util.Map)">createDataStore</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a>&gt;&nbsp;params)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>org.geotools.data.DataStore</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStoreFactory.html#createNewDataStore(java.util.Map)">createNewDataStore</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a>&gt;&nbsp;params)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStoreFactory.html#getDescription()">getDescription</a></strong>()</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStoreFactory.html#getDisplayName()">getDisplayName</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/awt/RenderingHints.Key.html?is-external=true" title="class or interface in java.awt">RenderingHints.Key</a>,?&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStoreFactory.html#getImplementationHints()">getImplementationHints</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>org.geotools.data.DataAccessFactory.Param[]</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStoreFactory.html#getParametersInfo()">getParametersInfo</a></strong>()</code>&nbsp;</td>
 </tr>
+<tr class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStoreFactory.html#isAvailable()">isAvailable</a></strong>()</code>&nbsp;</td>
+</tr>
 </table>
-<ul class="blockList">
-<li class="blockList"><a name="methods_inherited_from_class_org.geotools.data.AbstractDataStoreFactory">
-<!--   -->
-</a>
-<h3>Methods inherited from class&nbsp;org.geotools.data.AbstractDataStoreFactory</h3>
-<code>canProcess, getImplementationHints, getParameters, isAvailable</code></li>
-</ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods_inherited_from_class_java.lang.Object">
 <!--   -->
@@ -216,6 +220,8 @@ extends org.geotools.data.AbstractDataStoreFactory</pre>
 <li class="blockList">
 <h4>GeoWaveGTDataStoreFactory</h4>
 <pre>public&nbsp;GeoWaveGTDataStoreFactory()</pre>
+<div class="block">Public "no argument" constructor called by Factory Service Provider (SPI)
+ entry listed in META-INF/services/org.geotools.data.DataStoreFactorySPI</div>
 </li>
 </ul>
 </li>
@@ -234,7 +240,12 @@ extends org.geotools.data.AbstractDataStoreFactory</pre>
 <h4>createDataStore</h4>
 <pre>public&nbsp;org.geotools.data.DataStore&nbsp;createDataStore(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a>&gt;&nbsp;params)
                                             throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
-<dl><dt><span class="strong">Throws:</span></dt>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code>createDataStore</code>&nbsp;in interface&nbsp;<code>org.geotools.data.DataAccessFactory</code></dd>
+<dt><strong>Specified by:</strong></dt>
+<dd><code>createDataStore</code>&nbsp;in interface&nbsp;<code>org.geotools.data.DataStoreFactorySpi</code></dd>
+<dt><span class="strong">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd></dl>
 </li>
 </ul>
@@ -246,7 +257,10 @@ extends org.geotools.data.AbstractDataStoreFactory</pre>
 <h4>createNewDataStore</h4>
 <pre>public&nbsp;org.geotools.data.DataStore&nbsp;createNewDataStore(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a>&gt;&nbsp;params)
                                                throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
-<dl><dt><span class="strong">Throws:</span></dt>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code>createNewDataStore</code>&nbsp;in interface&nbsp;<code>org.geotools.data.DataStoreFactorySpi</code></dd>
+<dt><span class="strong">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd></dl>
 </li>
 </ul>
@@ -260,8 +274,6 @@ extends org.geotools.data.AbstractDataStoreFactory</pre>
 <dl>
 <dt><strong>Specified by:</strong></dt>
 <dd><code>getDisplayName</code>&nbsp;in interface&nbsp;<code>org.geotools.data.DataAccessFactory</code></dd>
-<dt><strong>Overrides:</strong></dt>
-<dd><code>getDisplayName</code>&nbsp;in class&nbsp;<code>org.geotools.data.AbstractDataStoreFactory</code></dd>
 </dl>
 </li>
 </ul>
@@ -272,15 +284,62 @@ extends org.geotools.data.AbstractDataStoreFactory</pre>
 <li class="blockList">
 <h4>getDescription</h4>
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getDescription()</pre>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code>getDescription</code>&nbsp;in interface&nbsp;<code>org.geotools.data.DataAccessFactory</code></dd>
+</dl>
 </li>
 </ul>
 <a name="getParametersInfo()">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>getParametersInfo</h4>
 <pre>public&nbsp;org.geotools.data.DataAccessFactory.Param[]&nbsp;getParametersInfo()</pre>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code>getParametersInfo</code>&nbsp;in interface&nbsp;<code>org.geotools.data.DataAccessFactory</code></dd>
+</dl>
+</li>
+</ul>
+<a name="canProcess(java.util.Map)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>canProcess</h4>
+<pre>public&nbsp;boolean&nbsp;canProcess(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a>&gt;&nbsp;params)</pre>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code>canProcess</code>&nbsp;in interface&nbsp;<code>org.geotools.data.DataAccessFactory</code></dd>
+</dl>
+</li>
+</ul>
+<a name="isAvailable()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isAvailable</h4>
+<pre>public&nbsp;boolean&nbsp;isAvailable()</pre>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code>isAvailable</code>&nbsp;in interface&nbsp;<code>org.geotools.data.DataAccessFactory</code></dd>
+</dl>
+</li>
+</ul>
+<a name="getImplementationHints()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>getImplementationHints</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/awt/RenderingHints.Key.html?is-external=true" title="class or interface in java.awt">RenderingHints.Key</a>,?&gt;&nbsp;getImplementationHints()</pre>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code>getImplementationHints</code>&nbsp;in interface&nbsp;<code>org.geotools.factory.Factory</code></dd>
+</dl>
 </li>
 </ul>
 </li>
