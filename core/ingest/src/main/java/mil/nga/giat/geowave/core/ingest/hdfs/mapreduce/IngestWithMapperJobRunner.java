@@ -11,7 +11,7 @@ import org.apache.hadoop.mapreduce.Job;
  * This will run the mapper only ingest process.
  */
 public class IngestWithMapperJobRunner extends
-		AbstractMapReduceIngest<IngestWithMapper>
+		AbstractMapReduceIngest<IngestWithMapper<?, ?>>
 {
 
 	public IngestWithMapperJobRunner(
@@ -19,8 +19,8 @@ public class IngestWithMapperJobRunner extends
 			final IngestCommandLineOptions ingestOptions,
 			final Path inputFile,
 			final String typeName,
-			final IngestFromHdfsPlugin plugin,
-			final IngestWithMapper mapperIngest ) {
+			final IngestFromHdfsPlugin<?, ?> plugin,
+			final IngestWithMapper<?, ?> mapperIngest ) {
 		super(
 				accumuloOptions,
 				ingestOptions,

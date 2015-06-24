@@ -20,6 +20,8 @@ import mil.nga.giat.geowave.adapter.vector.utils.SimpleFeatureUserDataConfigurat
 import mil.nga.giat.geowave.core.geotime.IndexType;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.ingest.GeoWaveData;
+import mil.nga.giat.geowave.core.ingest.IngestPluginBase;
+import mil.nga.giat.geowave.core.ingest.avro.GenericAvroSerializer;
 import mil.nga.giat.geowave.core.ingest.hdfs.mapreduce.IngestWithMapper;
 import mil.nga.giat.geowave.core.ingest.hdfs.mapreduce.IngestWithReducer;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
@@ -155,8 +157,13 @@ public class GpxIngestPlugin extends
 	}
 
 	@Override
-	public Schema getAvroSchemaForHdfsType() {
+	public Schema getAvroSchema() {
 		return GpxTrack.getClassSchema();
+	}
+
+	@Override
+	public Schema getAvroSchemaForHdfsType() {
+		return getAvroSchema();
 	}
 
 	@Override
@@ -216,13 +223,21 @@ public class GpxIngestPlugin extends
 			final String globalVisibility ) {
 		final InputStream in = new ByteArrayInputStream(
 				gpxTrack.getGpxfile().array());
-		return new GPXConsumer(
-				in,
-				primaryIndexId,
-				gpxTrack.getTrackid() == null ? "" : gpxTrack.getTrackid().toString(),
-				getAdditionalData(gpxTrack),
-				false, // waypoints, even dups, are unique, due to QGis behavior
-				globalVisibility);
+//		LOGGER.debug("Processing track [" + gpxTrack.getTimestamp() + "]");
+		try {
+			return new GPXConsumer(
+					in,
+					primaryIndexId,
+					gpxTrack.getTrackid() == null ? "" : gpxTrack.getTrackid().toString(),
+					getAdditionalData(gpxTrack),
+					false, // waypoints, even dups, are unique, due to QGis
+							// behavior
+					globalVisibility);
+		}
+		catch (Exception e) {
+			LOGGER.warn("Unable to convert GpxTrack to GeoWaveData: " + e.getMessage());
+			return null;
+		}
 	}
 
 	@Override
@@ -289,6 +304,12 @@ public class GpxIngestPlugin extends
 			super(
 					parentPlugin);
 		}
+	}
+
+	@Override
+	public IngestPluginBase<GpxTrack, SimpleFeature> getIngestWithAvroPlugin() {
+		return new IngestGpxTrackFromHdfs(
+				this);
 	}
 
 }

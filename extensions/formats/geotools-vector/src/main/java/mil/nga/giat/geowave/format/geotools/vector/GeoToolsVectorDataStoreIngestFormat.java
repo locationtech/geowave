@@ -3,7 +3,7 @@ package mil.nga.giat.geowave.format.geotools.vector;
 import mil.nga.giat.geowave.adapter.vector.ingest.CQLFilterOptionProvider;
 import mil.nga.giat.geowave.core.ingest.IngestFormatOptionProvider;
 import mil.nga.giat.geowave.core.ingest.IngestFormatPluginProviderSpi;
-import mil.nga.giat.geowave.core.ingest.avro.StageToAvroPlugin;
+import mil.nga.giat.geowave.core.ingest.avro.AvroFormatPlugin;
 import mil.nga.giat.geowave.core.ingest.hdfs.mapreduce.IngestFromHdfsPlugin;
 import mil.nga.giat.geowave.core.ingest.local.LocalFileIngestPlugin;
 
@@ -20,7 +20,7 @@ public class GeoToolsVectorDataStoreIngestFormat implements
 	protected final CQLFilterOptionProvider cqlFilterOptionProvider = new CQLFilterOptionProvider();
 
 	@Override
-	public StageToAvroPlugin<Object> getStageToAvroPlugin() {
+	public AvroFormatPlugin<Object, SimpleFeature> getAvroFormatPlugin() {
 		// unsupported right now
 		throw new UnsupportedOperationException(
 				"GeoTools vector files cannot be ingested using intermediate avro files");
