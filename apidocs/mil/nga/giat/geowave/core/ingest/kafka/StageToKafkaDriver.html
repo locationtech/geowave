@@ -89,7 +89,7 @@
 <li><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/AbstractIngestCommandLineDriver.html" title="class in mil.nga.giat.geowave.core.ingest">mil.nga.giat.geowave.core.ingest.AbstractIngestCommandLineDriver</a></li>
 <li>
 <ul class="inheritance">
-<li><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/AbstractLocalFileDriver.html" title="class in mil.nga.giat.geowave.core.ingest.local">mil.nga.giat.geowave.core.ingest.local.AbstractLocalFileDriver</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/StageToAvroPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">StageToAvroPlugin</a>&lt;?&gt;,<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/StageKafkaData.html" title="class in mil.nga.giat.geowave.core.ingest.kafka">StageKafkaData</a>&lt;?&gt;&gt;</li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/AbstractLocalFileDriver.html" title="class in mil.nga.giat.geowave.core.ingest.local">mil.nga.giat.geowave.core.ingest.local.AbstractLocalFileDriver</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroFormatPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">AvroFormatPlugin</a>&lt;?,?&gt;,<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/StageKafkaData.html" title="class in mil.nga.giat.geowave.core.ingest.kafka">StageKafkaData</a>&lt;?&gt;&gt;</li>
 <li>
 <ul class="inheritance">
 <li>mil.nga.giat.geowave.core.ingest.kafka.StageToKafkaDriver&lt;T&gt;</li>
@@ -110,7 +110,7 @@
 <hr>
 <br>
 <pre>public class <span class="strong">StageToKafkaDriver&lt;T extends org.apache.avro.specific.SpecificRecordBase&gt;</span>
-extends <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/AbstractLocalFileDriver.html" title="class in mil.nga.giat.geowave.core.ingest.local">AbstractLocalFileDriver</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/StageToAvroPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">StageToAvroPlugin</a>&lt;?&gt;,<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/StageKafkaData.html" title="class in mil.nga.giat.geowave.core.ingest.kafka">StageKafkaData</a>&lt;?&gt;&gt;</pre>
+extends <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/AbstractLocalFileDriver.html" title="class in mil.nga.giat.geowave.core.ingest.local">AbstractLocalFileDriver</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroFormatPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">AvroFormatPlugin</a>&lt;?,?&gt;,<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/StageKafkaData.html" title="class in mil.nga.giat.geowave.core.ingest.kafka">StageKafkaData</a>&lt;?&gt;&gt;</pre>
 <div class="block">This class actually executes the staging of data to a Kafka topic based on
  the available type plugin providers that are discovered through SPI.</div>
 </li>
@@ -180,9 +180,9 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/Abs
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>protected void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/StageToKafkaDriver.html#processFile(java.io.File,%20java.lang.String,%20mil.nga.giat.geowave.core.ingest.avro.StageToAvroPlugin,%20mil.nga.giat.geowave.core.ingest.kafka.StageKafkaData)">processFile</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;file,
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/StageToKafkaDriver.html#processFile(java.io.File,%20java.lang.String,%20mil.nga.giat.geowave.core.ingest.avro.AvroFormatPlugin,%20mil.nga.giat.geowave.core.ingest.kafka.StageKafkaData)">processFile</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;file,
            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
-           <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/StageToAvroPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">StageToAvroPlugin</a>&lt;?&gt;&nbsp;plugin,
+           <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroFormatPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">AvroFormatPlugin</a>&lt;?,?&gt;&nbsp;plugin,
            <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/StageKafkaData.html" title="class in mil.nga.giat.geowave.core.ingest.kafka">StageKafkaData</a>&lt;?&gt;&nbsp;runData)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
@@ -253,7 +253,7 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/Abs
                              throws org.apache.commons.cli.ParseException</pre>
 <dl>
 <dt><strong>Overrides:</strong></dt>
-<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/AbstractLocalFileDriver.html#parseOptionsInternal(org.apache.commons.cli.CommandLine)">parseOptionsInternal</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/AbstractLocalFileDriver.html" title="class in mil.nga.giat.geowave.core.ingest.local">AbstractLocalFileDriver</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/StageToAvroPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">StageToAvroPlugin</a>&lt;?&gt;,<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/StageKafkaData.html" title="class in mil.nga.giat.geowave.core.ingest.kafka">StageKafkaData</a>&lt;?&gt;&gt;</code></dd>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/AbstractLocalFileDriver.html#parseOptionsInternal(org.apache.commons.cli.CommandLine)">parseOptionsInternal</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/AbstractLocalFileDriver.html" title="class in mil.nga.giat.geowave.core.ingest.local">AbstractLocalFileDriver</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroFormatPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">AvroFormatPlugin</a>&lt;?,?&gt;,<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/StageKafkaData.html" title="class in mil.nga.giat.geowave.core.ingest.kafka">StageKafkaData</a>&lt;?&gt;&gt;</code></dd>
 <dt><span class="strong">Throws:</span></dt>
 <dd><code>org.apache.commons.cli.ParseException</code></dd></dl>
 </li>
@@ -267,11 +267,11 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/Abs
 <pre>protected&nbsp;void&nbsp;applyOptionsInternal(org.apache.commons.cli.Options&nbsp;allOptions)</pre>
 <dl>
 <dt><strong>Overrides:</strong></dt>
-<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/AbstractLocalFileDriver.html#applyOptionsInternal(org.apache.commons.cli.Options)">applyOptionsInternal</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/AbstractLocalFileDriver.html" title="class in mil.nga.giat.geowave.core.ingest.local">AbstractLocalFileDriver</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/StageToAvroPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">StageToAvroPlugin</a>&lt;?&gt;,<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/StageKafkaData.html" title="class in mil.nga.giat.geowave.core.ingest.kafka">StageKafkaData</a>&lt;?&gt;&gt;</code></dd>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/AbstractLocalFileDriver.html#applyOptionsInternal(org.apache.commons.cli.Options)">applyOptionsInternal</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/AbstractLocalFileDriver.html" title="class in mil.nga.giat.geowave.core.ingest.local">AbstractLocalFileDriver</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroFormatPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">AvroFormatPlugin</a>&lt;?,?&gt;,<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/StageKafkaData.html" title="class in mil.nga.giat.geowave.core.ingest.kafka">StageKafkaData</a>&lt;?&gt;&gt;</code></dd>
 </dl>
 </li>
 </ul>
-<a name="processFile(java.io.File, java.lang.String, mil.nga.giat.geowave.core.ingest.avro.StageToAvroPlugin, mil.nga.giat.geowave.core.ingest.kafka.StageKafkaData)">
+<a name="processFile(java.io.File, java.lang.String, mil.nga.giat.geowave.core.ingest.avro.AvroFormatPlugin, mil.nga.giat.geowave.core.ingest.kafka.StageKafkaData)">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -279,11 +279,11 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/Abs
 <h4>processFile</h4>
 <pre>protected&nbsp;void&nbsp;processFile(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;file,
                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
-               <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/StageToAvroPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">StageToAvroPlugin</a>&lt;?&gt;&nbsp;plugin,
+               <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroFormatPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">AvroFormatPlugin</a>&lt;?,?&gt;&nbsp;plugin,
                <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/StageKafkaData.html" title="class in mil.nga.giat.geowave.core.ingest.kafka">StageKafkaData</a>&lt;?&gt;&nbsp;runData)</pre>
 <dl>
 <dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/AbstractLocalFileDriver.html#processFile(java.io.File,%20java.lang.String,%20P,%20R)">processFile</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/AbstractLocalFileDriver.html" title="class in mil.nga.giat.geowave.core.ingest.local">AbstractLocalFileDriver</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/StageToAvroPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">StageToAvroPlugin</a>&lt;?&gt;,<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/StageKafkaData.html" title="class in mil.nga.giat.geowave.core.ingest.kafka">StageKafkaData</a>&lt;?&gt;&gt;</code></dd>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/AbstractLocalFileDriver.html#processFile(java.io.File,%20java.lang.String,%20P,%20R)">processFile</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/AbstractLocalFileDriver.html" title="class in mil.nga.giat.geowave.core.ingest.local">AbstractLocalFileDriver</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroFormatPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">AvroFormatPlugin</a>&lt;?,?&gt;,<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/StageKafkaData.html" title="class in mil.nga.giat.geowave.core.ingest.kafka">StageKafkaData</a>&lt;?&gt;&gt;</code></dd>
 </dl>
 </li>
 </ul>

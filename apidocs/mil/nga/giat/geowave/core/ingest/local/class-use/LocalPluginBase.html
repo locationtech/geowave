@@ -146,10 +146,10 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>interface&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/avro/StageToAvroPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">StageToAvroPlugin</a>&lt;T&gt;</strong></code>
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroFormatPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">AvroFormatPlugin</a>&lt;I,O&gt;</strong></code>
 <div class="block">This is the main plugin interface for reading from a local file system, and
- staging intermediate data (for example, to HDFS or to Kafka for further
- processing or ingest) from any file that is supported.</div>
+ formatting intermediate data (for example, to HDFS or to Kafka for further
+ processing or ingest) from any file that is supported to Avro.</div>
 </td>
 </tr>
 </tbody>
@@ -163,7 +163,7 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AbstractStageWholeFileToAvro.html" title="class in mil.nga.giat.geowave.core.ingest.avro">AbstractStageWholeFileToAvro</a></strong></code>
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AbstractStageWholeFileToAvro.html" title="class in mil.nga.giat.geowave.core.ingest.avro">AbstractStageWholeFileToAvro</a>&lt;O&gt;</strong></code>
 <div class="block">This class can be sub-classed as a general-purpose recipe for parallelizing
  ingestion of files by directly staging the binary of the file to Avro.</div>
 </td>

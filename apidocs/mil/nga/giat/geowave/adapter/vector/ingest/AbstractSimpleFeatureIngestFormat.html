@@ -165,12 +165,20 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/Ingest
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroFormatPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">AvroFormatPlugin</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestFormat.html" title="type parameter in AbstractSimpleFeatureIngestFormat">I</a>,org.opengis.feature.simple.SimpleFeature&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestFormat.html#getAvroFormatPlugin()">getAvroFormatPlugin</a></strong>()</code>
+<div class="block">This plugin will be used by the ingestion framework to stage intermediate
+ data from a local filesystem (for example to HDFS for map reduce ingest
+ or to kafka for kafka ingest).</div>
+</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/IngestFormatOptionProvider.html" title="interface in mil.nga.giat.geowave.core.ingest">IngestFormatOptionProvider</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestFormat.html#getIngestFormatOptionProvider()">getIngestFormatOptionProvider</a></strong>()</code>
 <div class="block">This is a means for a plugin to provide custom command-line options.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/IngestFromHdfsPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.hdfs.mapreduce">IngestFromHdfsPlugin</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestFormat.html" title="type parameter in AbstractSimpleFeatureIngestFormat">I</a>,org.opengis.feature.simple.SimpleFeature&gt;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestFormat.html#getIngestFromHdfsPlugin()">getIngestFromHdfsPlugin</a></strong>()</code>
 <div class="block">This plugin will be used by the ingestion framework to read data from
@@ -178,20 +186,12 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/Ingest
  intermediate data into the data entries that will be written in GeoWave.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalFileIngestPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.local">LocalFileIngestPlugin</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestFormat.html#getLocalFileIngestPlugin()">getLocalFileIngestPlugin</a></strong>()</code>
 <div class="block">This plugin will be used by the ingestion framework to read data from a
  local file system, and translate supported files into the data entries
  that will be written directly in GeoWave.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/StageToAvroPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">StageToAvroPlugin</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestFormat.html" title="type parameter in AbstractSimpleFeatureIngestFormat">I</a>&gt;</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestFormat.html#getStageToAvroPlugin()">getStageToAvroPlugin</a></strong>()</code>
-<div class="block">This plugin will be used by the ingestion framework to stage intermediate
- data from a local filesystem (for example to HDFS for map reduce ingest
- or to kafka for kafka ingest).</div>
 </td>
 </tr>
 <tr class="altColor">
@@ -279,20 +279,20 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/Ingest
 <pre>protected abstract&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html" title="class in mil.nga.giat.geowave.adapter.vector.ingest">AbstractSimpleFeatureIngestPlugin</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestFormat.html" title="type parameter in AbstractSimpleFeatureIngestFormat">I</a>&gt;&nbsp;newPluginInstance()</pre>
 </li>
 </ul>
-<a name="getStageToAvroPlugin()">
+<a name="getAvroFormatPlugin()">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>getStageToAvroPlugin</h4>
-<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/StageToAvroPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">StageToAvroPlugin</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestFormat.html" title="type parameter in AbstractSimpleFeatureIngestFormat">I</a>&gt;&nbsp;getStageToAvroPlugin()</pre>
-<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/IngestFormatPluginProviderSpi.html#getStageToAvroPlugin()">IngestFormatPluginProviderSpi</a></code></strong></div>
+<h4>getAvroFormatPlugin</h4>
+<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroFormatPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">AvroFormatPlugin</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestFormat.html" title="type parameter in AbstractSimpleFeatureIngestFormat">I</a>,org.opengis.feature.simple.SimpleFeature&gt;&nbsp;getAvroFormatPlugin()</pre>
+<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/IngestFormatPluginProviderSpi.html#getAvroFormatPlugin()">IngestFormatPluginProviderSpi</a></code></strong></div>
 <div class="block">This plugin will be used by the ingestion framework to stage intermediate
  data from a local filesystem (for example to HDFS for map reduce ingest
  or to kafka for kafka ingest).</div>
 <dl>
 <dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/IngestFormatPluginProviderSpi.html#getStageToAvroPlugin()">getStageToAvroPlugin</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/IngestFormatPluginProviderSpi.html" title="interface in mil.nga.giat.geowave.core.ingest">IngestFormatPluginProviderSpi</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestFormat.html" title="type parameter in AbstractSimpleFeatureIngestFormat">I</a>,org.opengis.feature.simple.SimpleFeature&gt;</code></dd>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/IngestFormatPluginProviderSpi.html#getAvroFormatPlugin()">getAvroFormatPlugin</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/IngestFormatPluginProviderSpi.html" title="interface in mil.nga.giat.geowave.core.ingest">IngestFormatPluginProviderSpi</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestFormat.html" title="type parameter in AbstractSimpleFeatureIngestFormat">I</a>,org.opengis.feature.simple.SimpleFeature&gt;</code></dd>
 <dt><span class="strong">Returns:</span></dt><dd>The plugin for staging to avro if it is supported</dd></dl>
 </li>
 </ul>

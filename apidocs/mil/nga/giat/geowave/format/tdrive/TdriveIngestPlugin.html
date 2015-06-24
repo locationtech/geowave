@@ -100,7 +100,7 @@
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><a href="../../../../../../mil/nga/giat/geowave/core/index/Persistable.html" title="interface in mil.nga.giat.geowave.core.index">Persistable</a>, <a href="../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">AvroPluginBase</a>, <a href="../../../../../../mil/nga/giat/geowave/core/ingest/avro/StageToAvroPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">StageToAvroPlugin</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/format/tdrive/TdrivePoint.html" title="class in mil.nga.giat.geowave.format.tdrive">TdrivePoint</a>&gt;, <a href="../../../../../../mil/nga/giat/geowave/core/ingest/DataAdapterProvider.html" title="interface in mil.nga.giat.geowave.core.ingest">DataAdapterProvider</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;, <a href="../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/IngestFromHdfsPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.hdfs.mapreduce">IngestFromHdfsPlugin</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/format/tdrive/TdrivePoint.html" title="class in mil.nga.giat.geowave.format.tdrive">TdrivePoint</a>,org.opengis.feature.simple.SimpleFeature&gt;, <a href="../../../../../../mil/nga/giat/geowave/core/ingest/IngestPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest">IngestPluginBase</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>,org.opengis.feature.simple.SimpleFeature&gt;, <a href="../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalFileIngestPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.local">LocalFileIngestPlugin</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;, <a href="../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest.local">LocalPluginBase</a></dd>
+<dd><a href="../../../../../../mil/nga/giat/geowave/core/index/Persistable.html" title="interface in mil.nga.giat.geowave.core.index">Persistable</a>, <a href="../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroFormatPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">AvroFormatPlugin</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/format/tdrive/TdrivePoint.html" title="class in mil.nga.giat.geowave.format.tdrive">TdrivePoint</a>,org.opengis.feature.simple.SimpleFeature&gt;, <a href="../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">AvroPluginBase</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/format/tdrive/TdrivePoint.html" title="class in mil.nga.giat.geowave.format.tdrive">TdrivePoint</a>&gt;, <a href="../../../../../../mil/nga/giat/geowave/core/ingest/DataAdapterProvider.html" title="interface in mil.nga.giat.geowave.core.ingest">DataAdapterProvider</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;, <a href="../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/IngestFromHdfsPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.hdfs.mapreduce">IngestFromHdfsPlugin</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/format/tdrive/TdrivePoint.html" title="class in mil.nga.giat.geowave.format.tdrive">TdrivePoint</a>,org.opengis.feature.simple.SimpleFeature&gt;, <a href="../../../../../../mil/nga/giat/geowave/core/ingest/IngestPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest">IngestPluginBase</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>,org.opengis.feature.simple.SimpleFeature&gt;, <a href="../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalFileIngestPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.local">LocalFileIngestPlugin</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;, <a href="../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest.local">LocalPluginBase</a></dd>
 </dl>
 <hr>
 <br>
@@ -184,18 +184,31 @@ extends <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/Ab
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>org.apache.avro.Schema</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/format/tdrive/TdriveIngestPlugin.html#getAvroSchemaForHdfsType()">getAvroSchemaForHdfsType</a></strong>()</code>&nbsp;</td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/format/tdrive/TdriveIngestPlugin.html#getAvroSchema()">getAvroSchema</a></strong>()</code>
+<div class="block">Returns the Avro schema for the plugin</div>
+</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>org.apache.avro.Schema</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/format/tdrive/TdriveIngestPlugin.html#getAvroSchemaForHdfsType()">getAvroSchemaForHdfsType</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">WritableDataAdapter</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;[]</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/format/tdrive/TdriveIngestPlugin.html#getDataAdapters(java.lang.String)">getDataAdapters</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;globalVisibility)</code>
 <div class="block">Get all writable adapters used by this plugin</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/format/tdrive/TdriveIngestPlugin.html#getFileExtensionFilters()">getFileExtensionFilters</a></strong>()</code>
 <div class="block">Gets a list of file extensions that this plugin supports.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/core/ingest/IngestPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest">IngestPluginBase</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/format/tdrive/TdrivePoint.html" title="class in mil.nga.giat.geowave.format.tdrive">TdrivePoint</a>,org.opengis.feature.simple.SimpleFeature&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/format/tdrive/TdriveIngestPlugin.html#getIngestWithAvroPlugin()">getIngestWithAvroPlugin</a></strong>()</code>
+<div class="block">An implementation of ingestion that ingests Avro Java objects into
+ GeoWave</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -255,8 +268,7 @@ extends <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/Ab
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/format/tdrive/TdrivePoint.html" title="class in mil.nga.giat.geowave.format.tdrive">TdrivePoint</a>[]</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/format/tdrive/TdriveIngestPlugin.html#toAvroObjects(java.io.File)">toAvroObjects</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;input)</code>
-<div class="block">Read a file from the local file system and emit an array of intermediate
- data elements that will be serialized.</div>
+<div class="block">Converts the supported file into an Avro encoded Java object.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -388,6 +400,18 @@ extends <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/Ab
 <dt><span class="strong">Returns:</span></dt><dd>An array of adapters that may be used by this plugin</dd></dl>
 </li>
 </ul>
+<a name="getAvroSchema()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getAvroSchema</h4>
+<pre>public&nbsp;org.apache.avro.Schema&nbsp;getAvroSchema()</pre>
+<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroPluginBase.html#getAvroSchema()">AvroPluginBase</a></code></strong></div>
+<div class="block">Returns the Avro schema for the plugin</div>
+<dl><dt><span class="strong">Returns:</span></dt><dd>the Avro schema for the intermediate data</dd></dl>
+</li>
+</ul>
 <a name="getAvroSchemaForHdfsType()">
 <!--   -->
 </a>
@@ -404,11 +428,10 @@ extends <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/Ab
 <li class="blockList">
 <h4>toAvroObjects</h4>
 <pre>public&nbsp;<a href="../../../../../../mil/nga/giat/geowave/format/tdrive/TdrivePoint.html" title="class in mil.nga.giat.geowave.format.tdrive">TdrivePoint</a>[]&nbsp;toAvroObjects(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;input)</pre>
-<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/ingest/avro/StageToAvroPlugin.html#toAvroObjects(java.io.File)">StageToAvroPlugin</a></code></strong></div>
-<div class="block">Read a file from the local file system and emit an array of intermediate
- data elements that will be serialized.</div>
-<dl><dt><span class="strong">Parameters:</span></dt><dd><code>input</code> - a local file that is supported by this plugin</dd>
-<dt><span class="strong">Returns:</span></dt><dd>an array of intermediate data objects that will be serialized</dd></dl>
+<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroPluginBase.html#toAvroObjects(java.io.File)">AvroPluginBase</a></code></strong></div>
+<div class="block">Converts the supported file into an Avro encoded Java object.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>input</code> - The file to convert to Avro</dd>
+<dt><span class="strong">Returns:</span></dt><dd>The Avro encoded Java object</dd></dl>
 </li>
 </ul>
 <a name="isUseReducerPreferred()">
@@ -479,7 +502,7 @@ extends <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/Ab
 <a name="getRequiredIndices()">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>getRequiredIndices</h4>
 <pre>public&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>[]&nbsp;getRequiredIndices()</pre>
@@ -493,6 +516,19 @@ extends <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/Ab
  required by the ingestion process that is not the primary index.</div>
 <dl><dt><span class="strong">Returns:</span></dt><dd>the array of indices that are supported by this ingestion
          implementation</dd></dl>
+</li>
+</ul>
+<a name="getIngestWithAvroPlugin()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>getIngestWithAvroPlugin</h4>
+<pre>public&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/ingest/IngestPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest">IngestPluginBase</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/format/tdrive/TdrivePoint.html" title="class in mil.nga.giat.geowave.format.tdrive">TdrivePoint</a>,org.opengis.feature.simple.SimpleFeature&gt;&nbsp;getIngestWithAvroPlugin()</pre>
+<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroFormatPlugin.html#getIngestWithAvroPlugin()">AvroFormatPlugin</a></code></strong></div>
+<div class="block">An implementation of ingestion that ingests Avro Java objects into
+ GeoWave</div>
+<dl><dt><span class="strong">Returns:</span></dt><dd>The implementation for ingestion from Avro</dd></dl>
 </li>
 </ul>
 </li>

@@ -134,10 +134,10 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>interface&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/avro/StageToAvroPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">StageToAvroPlugin</a>&lt;T&gt;</strong></code>
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroFormatPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">AvroFormatPlugin</a>&lt;I,O&gt;</strong></code>
 <div class="block">This is the main plugin interface for reading from a local file system, and
- staging intermediate data (for example, to HDFS or to Kafka for further
- processing or ingest) from any file that is supported.</div>
+ formatting intermediate data (for example, to HDFS or to Kafka for further
+ processing or ingest) from any file that is supported to Avro.</div>
 </td>
 </tr>
 </tbody>
@@ -151,7 +151,7 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AbstractStageWholeFileToAvro.html" title="class in mil.nga.giat.geowave.core.ingest.avro">AbstractStageWholeFileToAvro</a></strong></code>
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AbstractStageWholeFileToAvro.html" title="class in mil.nga.giat.geowave.core.ingest.avro">AbstractStageWholeFileToAvro</a>&lt;O&gt;</strong></code>
 <div class="block">This class can be sub-classed as a general-purpose recipe for parallelizing
  ingestion of files by directly staging the binary of the file to Avro.</div>
 </td>
@@ -163,22 +163,6 @@
 <!--   -->
 </a>
 <h3>Uses of <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">AvroPluginBase</a> in <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/package-summary.html">mil.nga.giat.geowave.core.ingest.hdfs.mapreduce</a></h3>
-<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing subinterfaces, and an explanation">
-<caption><span>Subinterfaces of <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">AvroPluginBase</a> in <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/package-summary.html">mil.nga.giat.geowave.core.ingest.hdfs.mapreduce</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Interface and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colFirst"><code>interface&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/IngestFromHdfsPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.hdfs.mapreduce">IngestFromHdfsPlugin</a>&lt;I,O&gt;</strong></code>
-<div class="block">This is the main plugin interface for ingesting intermediate data into
- Geowave that has previously been staged in HDFS.</div>
-</td>
-</tr>
-</tbody>
-</table>
 <table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
 <caption><span>Classes in <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/package-summary.html">mil.nga.giat.geowave.core.ingest.hdfs.mapreduce</a> that implement <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">AvroPluginBase</a></span><span class="tabEnd">&nbsp;</span></caption>
 <tr>

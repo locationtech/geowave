@@ -160,13 +160,21 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/Ingest
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroFormatPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">AvroFormatPlugin</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>,org.opengis.feature.simple.SimpleFeature&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/format/geotools/vector/GeoToolsVectorDataStoreIngestFormat.html#getAvroFormatPlugin()">getAvroFormatPlugin</a></strong>()</code>
+<div class="block">This plugin will be used by the ingestion framework to stage intermediate
+ data from a local filesystem (for example to HDFS for map reduce ingest
+ or to kafka for kafka ingest).</div>
+</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/format/geotools/vector/GeoToolsVectorDataStoreIngestFormat.html#getIngestFormatDescription()">getIngestFormatDescription</a></strong>()</code>
 <div class="block">This is a user-friendly full description of the data format that this
  plugin provider supports.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/format/geotools/vector/GeoToolsVectorDataStoreIngestFormat.html#getIngestFormatName()">getIngestFormatName</a></strong>()</code>
 <div class="block">This will represent the name for the format that is registered with the
@@ -174,13 +182,13 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/Ingest
  commandline.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/IngestFormatOptionProvider.html" title="interface in mil.nga.giat.geowave.core.ingest">IngestFormatOptionProvider</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/format/geotools/vector/GeoToolsVectorDataStoreIngestFormat.html#getIngestFormatOptionProvider()">getIngestFormatOptionProvider</a></strong>()</code>
 <div class="block">This is a means for a plugin to provide custom command-line options.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/IngestFromHdfsPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.hdfs.mapreduce">IngestFromHdfsPlugin</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>,org.opengis.feature.simple.SimpleFeature&gt;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/format/geotools/vector/GeoToolsVectorDataStoreIngestFormat.html#getIngestFromHdfsPlugin()">getIngestFromHdfsPlugin</a></strong>()</code>
 <div class="block">This plugin will be used by the ingestion framework to read data from
@@ -188,20 +196,12 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/Ingest
  intermediate data into the data entries that will be written in GeoWave.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalFileIngestPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.local">LocalFileIngestPlugin</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/format/geotools/vector/GeoToolsVectorDataStoreIngestFormat.html#getLocalFileIngestPlugin()">getLocalFileIngestPlugin</a></strong>()</code>
 <div class="block">This plugin will be used by the ingestion framework to read data from a
  local file system, and translate supported files into the data entries
  that will be written directly in GeoWave.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/StageToAvroPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">StageToAvroPlugin</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/format/geotools/vector/GeoToolsVectorDataStoreIngestFormat.html#getStageToAvroPlugin()">getStageToAvroPlugin</a></strong>()</code>
-<div class="block">This plugin will be used by the ingestion framework to stage intermediate
- data from a local filesystem (for example to HDFS for map reduce ingest
- or to kafka for kafka ingest).</div>
 </td>
 </tr>
 </table>
@@ -260,20 +260,20 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/Ingest
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="getStageToAvroPlugin()">
+<a name="getAvroFormatPlugin()">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>getStageToAvroPlugin</h4>
-<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/StageToAvroPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">StageToAvroPlugin</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;getStageToAvroPlugin()</pre>
-<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/IngestFormatPluginProviderSpi.html#getStageToAvroPlugin()">IngestFormatPluginProviderSpi</a></code></strong></div>
+<h4>getAvroFormatPlugin</h4>
+<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroFormatPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">AvroFormatPlugin</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>,org.opengis.feature.simple.SimpleFeature&gt;&nbsp;getAvroFormatPlugin()</pre>
+<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/IngestFormatPluginProviderSpi.html#getAvroFormatPlugin()">IngestFormatPluginProviderSpi</a></code></strong></div>
 <div class="block">This plugin will be used by the ingestion framework to stage intermediate
  data from a local filesystem (for example to HDFS for map reduce ingest
  or to kafka for kafka ingest).</div>
 <dl>
 <dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/IngestFormatPluginProviderSpi.html#getStageToAvroPlugin()">getStageToAvroPlugin</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/IngestFormatPluginProviderSpi.html" title="interface in mil.nga.giat.geowave.core.ingest">IngestFormatPluginProviderSpi</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>,org.opengis.feature.simple.SimpleFeature&gt;</code></dd>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/IngestFormatPluginProviderSpi.html#getAvroFormatPlugin()">getAvroFormatPlugin</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/IngestFormatPluginProviderSpi.html" title="interface in mil.nga.giat.geowave.core.ingest">IngestFormatPluginProviderSpi</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>,org.opengis.feature.simple.SimpleFeature&gt;</code></dd>
 <dt><span class="strong">Returns:</span></dt><dd>The plugin for staging to avro if it is supported</dd></dl>
 </li>
 </ul>

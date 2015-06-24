@@ -79,7 +79,7 @@
 <!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle">mil.nga.giat.geowave.test.kafka</div>
-<h2 title="Class KafkaTestEnvironment" class="title">Class KafkaTestEnvironment</h2>
+<h2 title="Class KafkaTestEnvironment" class="title">Class KafkaTestEnvironment&lt;I&gt;</h2>
 </div>
 <div class="contentContainer">
 <ul class="inheritance">
@@ -89,7 +89,7 @@
 <li><a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironment.html" title="class in mil.nga.giat.geowave.test">mil.nga.giat.geowave.test.GeoWaveTestEnvironment</a></li>
 <li>
 <ul class="inheritance">
-<li>mil.nga.giat.geowave.test.kafka.KafkaTestEnvironment</li>
+<li>mil.nga.giat.geowave.test.kafka.KafkaTestEnvironment&lt;I&gt;</li>
 </ul>
 </li>
 </ul>
@@ -100,7 +100,7 @@
 <li class="blockList">
 <hr>
 <br>
-<pre>public abstract class <span class="strong">KafkaTestEnvironment</span>
+<pre>public abstract class <span class="strong">KafkaTestEnvironment&lt;I&gt;</span>
 extends <a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironment.html" title="class in mil.nga.giat.geowave.test">GeoWaveTestEnvironment</a></pre>
 </li>
 </ul>
@@ -136,20 +136,12 @@ extends <a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironm
 <th class="colLast" scope="col">Field and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>protected static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/test/kafka/KafkaTestEnvironment.html#KAFKA_TEST_TOPIC">KAFKA_TEST_TOPIC</a></strong></code>&nbsp;</td>
+<td class="colFirst"><code>protected static <a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/test/kafka/KafkaTestEnvironment.html#DEFAULT_LOG_DIR">DEFAULT_LOG_DIR</a></strong></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>protected static kafka.server.KafkaServerStartable</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/test/kafka/KafkaTestEnvironment.html#kafkaServer">kafkaServer</a></strong></code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>protected static org.I0Itec.zkclient.ZkClient</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/test/kafka/KafkaTestEnvironment.html#zkClient">zkClient</a></strong></code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>protected static org.apache.curator.test.TestingServer</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/test/kafka/KafkaTestEnvironment.html#zkServer">zkServer</a></strong></code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -195,8 +187,17 @@ extends <a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironm
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/test/kafka/KafkaTestEnvironment.html#setupKafkaServer()">setupKafkaServer</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>protected kafka.javaapi.producer.Producer&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="../../../../../../mil/nga/giat/geowave/test/kafka/KafkaTestEnvironment.html" title="type parameter in KafkaTestEnvironment">I</a>&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/test/kafka/KafkaTestEnvironment.html#setupProducer()">setupProducer</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/test/kafka/KafkaTestEnvironment.html#stopKafkaServer()">stopKafkaServer</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/test/kafka/KafkaTestEnvironment.html#testKafkaIngest(mil.nga.giat.geowave.core.geotime.IndexType,%20java.lang.String)">testKafkaIngest</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/core/geotime/IndexType.html" title="enum in mil.nga.giat.geowave.core.geotime">IndexType</a>&nbsp;indexType,
+               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;ingestFilePath)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>protected void</code></td>
@@ -231,15 +232,6 @@ extends <a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironm
 <!--   -->
 </a>
 <h3>Field Detail</h3>
-<a name="KAFKA_TEST_TOPIC">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>KAFKA_TEST_TOPIC</h4>
-<pre>protected static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> KAFKA_TEST_TOPIC</pre>
-</li>
-</ul>
 <a name="kafkaServer">
 <!--   -->
 </a>
@@ -249,22 +241,13 @@ extends <a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironm
 <pre>protected static&nbsp;kafka.server.KafkaServerStartable kafkaServer</pre>
 </li>
 </ul>
-<a name="zkServer">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>zkServer</h4>
-<pre>protected static&nbsp;org.apache.curator.test.TestingServer zkServer</pre>
-</li>
-</ul>
-<a name="zkClient">
+<a name="DEFAULT_LOG_DIR">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>zkClient</h4>
-<pre>protected static&nbsp;org.I0Itec.zkclient.ZkClient zkClient</pre>
+<h4>DEFAULT_LOG_DIR</h4>
+<pre>protected static final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a> DEFAULT_LOG_DIR</pre>
 </li>
 </ul>
 </li>
@@ -301,6 +284,16 @@ extends <a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironm
 <pre>protected&nbsp;void&nbsp;testKafkaStage(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;ingestFilePath)</pre>
 </li>
 </ul>
+<a name="testKafkaIngest(mil.nga.giat.geowave.core.geotime.IndexType, java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>testKafkaIngest</h4>
+<pre>protected&nbsp;void&nbsp;testKafkaIngest(<a href="../../../../../../mil/nga/giat/geowave/core/geotime/IndexType.html" title="enum in mil.nga.giat.geowave.core.geotime">IndexType</a>&nbsp;indexType,
+                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;ingestFilePath)</pre>
+</li>
+</ul>
 <a name="setupKafkaServer()">
 <!--   -->
 </a>
@@ -311,6 +304,15 @@ extends <a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironm
                              throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></pre>
 <dl><dt><span class="strong">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></code></dd></dl>
+</li>
+</ul>
+<a name="setupProducer()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setupProducer</h4>
+<pre>protected&nbsp;kafka.javaapi.producer.Producer&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="../../../../../../mil/nga/giat/geowave/test/kafka/KafkaTestEnvironment.html" title="type parameter in KafkaTestEnvironment">I</a>&gt;&nbsp;setupProducer()</pre>
 </li>
 </ul>
 <a name="stopKafkaServer()">

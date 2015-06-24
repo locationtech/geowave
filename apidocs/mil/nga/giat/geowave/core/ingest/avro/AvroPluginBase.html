@@ -35,8 +35,8 @@
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AbstractStageWholeFileToAvro.html" title="class in mil.nga.giat.geowave.core.ingest.avro"><span class="strong">Prev Class</span></a></li>
-<li><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/StageToAvroPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.avro"><span class="strong">Next Class</span></a></li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroFormatPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.avro"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/GenericAvroSerializer.html" title="class in mil.nga.giat.geowave.core.ingest.avro"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../../index.html?mil/nga/giat/geowave/core/ingest/avro/AvroPluginBase.html" target="_top">Frames</a></li>
@@ -79,7 +79,7 @@
 <!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle">mil.nga.giat.geowave.core.ingest.avro</div>
-<h2 title="Interface AvroPluginBase" class="title">Interface AvroPluginBase</h2>
+<h2 title="Interface AvroPluginBase" class="title">Interface AvroPluginBase&lt;T&gt;</h2>
 </div>
 <div class="contentContainer">
 <div class="description">
@@ -87,7 +87,7 @@
 <li class="blockList">
 <dl>
 <dt>All Known Subinterfaces:</dt>
-<dd><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/IngestFromHdfsPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.hdfs.mapreduce">IngestFromHdfsPlugin</a>&lt;I,O&gt;, <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/StageToAvroPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">StageToAvroPlugin</a>&lt;T&gt;</dd>
+<dd><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroFormatPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">AvroFormatPlugin</a>&lt;I,O&gt;</dd>
 </dl>
 <dl>
 <dt>All Known Implementing Classes:</dt>
@@ -95,7 +95,7 @@
 </dl>
 <hr>
 <br>
-<pre>public interface <span class="strong">AvroPluginBase</span></pre>
+<pre>public interface <span class="strong">AvroPluginBase&lt;T&gt;</span></pre>
 <div class="block">All plugins based off of staged intermediate data (either reading or writing)
  must implement this interface. For handling intermediate data, the GeoWave
  ingestion framework has standardized on Avro for java object serialization
@@ -120,7 +120,15 @@
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>org.apache.avro.Schema</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroPluginBase.html#getAvroSchemaForHdfsType()">getAvroSchemaForHdfsType</a></strong>()</code>&nbsp;</td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroPluginBase.html#getAvroSchema()">getAvroSchema</a></strong>()</code>
+<div class="block">Returns the Avro schema for the plugin</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroPluginBase.html" title="type parameter in AvroPluginBase">T</a>[]</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroPluginBase.html#toAvroObjects(java.io.File)">toAvroObjects</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;file)</code>
+<div class="block">Converts the supported file into an Avro encoded Java object.</div>
+</td>
 </tr>
 </table>
 </li>
@@ -137,13 +145,27 @@
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="getAvroSchemaForHdfsType()">
+<a name="getAvroSchema()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getAvroSchema</h4>
+<pre>org.apache.avro.Schema&nbsp;getAvroSchema()</pre>
+<div class="block">Returns the Avro schema for the plugin</div>
+<dl><dt><span class="strong">Returns:</span></dt><dd>the Avro schema for the intermediate data</dd></dl>
+</li>
+</ul>
+<a name="toAvroObjects(java.io.File)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>getAvroSchemaForHdfsType</h4>
-<pre>org.apache.avro.Schema&nbsp;getAvroSchemaForHdfsType()</pre>
+<h4>toAvroObjects</h4>
+<pre><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroPluginBase.html" title="type parameter in AvroPluginBase">T</a>[]&nbsp;toAvroObjects(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;file)</pre>
+<div class="block">Converts the supported file into an Avro encoded Java object.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>file</code> - The file to convert to Avro</dd>
+<dt><span class="strong">Returns:</span></dt><dd>The Avro encoded Java object</dd></dl>
 </li>
 </ul>
 </li>
@@ -172,8 +194,8 @@
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AbstractStageWholeFileToAvro.html" title="class in mil.nga.giat.geowave.core.ingest.avro"><span class="strong">Prev Class</span></a></li>
-<li><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/StageToAvroPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.avro"><span class="strong">Next Class</span></a></li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroFormatPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.avro"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/GenericAvroSerializer.html" title="class in mil.nga.giat.geowave.core.ingest.avro"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../../index.html?mil/nga/giat/geowave/core/ingest/avro/AvroPluginBase.html" target="_top">Frames</a></li>

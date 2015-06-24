@@ -88,17 +88,12 @@
 <dl><dt><span class="strong">Type Parameters:</span></dt><dd><code>I</code> - the type for intermediate data, it must match the type supported
             by the Avro schema</dd><dd><code>O</code> - the type that represents each data entry being ingested</dd></dl>
 <dl>
-<dt>All Superinterfaces:</dt>
-<dd><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">AvroPluginBase</a></dd>
-</dl>
-<dl>
 <dt>All Known Implementing Classes:</dt>
 <dd><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/AbstractLocalIngestWithMapper.html" title="class in mil.nga.giat.geowave.core.ingest.hdfs.mapreduce">AbstractLocalIngestWithMapper</a>, <a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html" title="class in mil.nga.giat.geowave.adapter.vector.ingest">AbstractSimpleFeatureIngestPlugin</a>, <a href="../../../../../../../../mil/nga/giat/geowave/format/geolife/GeoLifeIngestPlugin.html" title="class in mil.nga.giat.geowave.format.geolife">GeoLifeIngestPlugin</a>, <a href="../../../../../../../../mil/nga/giat/geowave/format/gpx/GpxIngestPlugin.html" title="class in mil.nga.giat.geowave.format.gpx">GpxIngestPlugin</a>, <a href="../../../../../../../../mil/nga/giat/geowave/format/tdrive/TdriveIngestPlugin.html" title="class in mil.nga.giat.geowave.format.tdrive">TdriveIngestPlugin</a></dd>
 </dl>
 <hr>
 <br>
-<pre>public interface <span class="strong">IngestFromHdfsPlugin&lt;I,O&gt;</span>
-extends <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">AvroPluginBase</a></pre>
+<pre>public interface <span class="strong">IngestFromHdfsPlugin&lt;I,O&gt;</span></pre>
 <div class="block">This is the main plugin interface for ingesting intermediate data into
  Geowave that has previously been staged in HDFS. Although both of the
  available map-reduce ingestion techniques can be implemented (one that simply
@@ -125,20 +120,24 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/avro/A
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>org.apache.avro.Schema</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/IngestFromHdfsPlugin.html#getAvroSchemaForHdfsType()">getAvroSchemaForHdfsType</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>[]</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/IngestFromHdfsPlugin.html#getRequiredIndices()">getRequiredIndices</a></strong>()</code>
 <div class="block">Get an array of indices that are required by this ingestion
  implementation.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>[]</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/IngestFromHdfsPlugin.html#getSupportedIndices()">getSupportedIndices</a></strong>()</code>
 <div class="block">Get an array of indices that are supported by this ingestion
  implementation.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/IngestWithMapper.html" title="interface in mil.nga.giat.geowave.core.ingest.hdfs.mapreduce">IngestWithMapper</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/IngestFromHdfsPlugin.html" title="type parameter in IngestFromHdfsPlugin">I</a>,<a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/IngestFromHdfsPlugin.html" title="type parameter in IngestFromHdfsPlugin">O</a>&gt;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/IngestFromHdfsPlugin.html#ingestWithMapper()">ingestWithMapper</a></strong>()</code>
 <div class="block">An implementation of ingestion that can be persisted to a mapper within
@@ -146,7 +145,7 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/avro/A
  GeoWave from intermediate data</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/IngestWithReducer.html" title="interface in mil.nga.giat.geowave.core.ingest.hdfs.mapreduce">IngestWithReducer</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/IngestFromHdfsPlugin.html" title="type parameter in IngestFromHdfsPlugin">I</a>,?,?,<a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/IngestFromHdfsPlugin.html" title="type parameter in IngestFromHdfsPlugin">O</a>&gt;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/IngestFromHdfsPlugin.html#ingestWithReducer()">ingestWithReducer</a></strong>()</code>
 <div class="block">An implementation of ingestion that can be persisted to a mapper and
@@ -155,7 +154,7 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/avro/A
  GeoWave from the key-value pairs emitted by the mapper.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/IngestFromHdfsPlugin.html#isUseReducerPreferred()">isUseReducerPreferred</a></strong>()</code>
 <div class="block">Returns a flag indicating to the ingestion framework whether it should
@@ -165,13 +164,6 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/avro/A
 </td>
 </tr>
 </table>
-<ul class="blockList">
-<li class="blockList"><a name="methods_inherited_from_class_mil.nga.giat.geowave.core.ingest.avro.AvroPluginBase">
-<!--   -->
-</a>
-<h3>Methods inherited from interface&nbsp;mil.nga.giat.geowave.core.ingest.avro.<a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">AvroPluginBase</a></h3>
-<code><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroPluginBase.html#getAvroSchemaForHdfsType()">getAvroSchemaForHdfsType</a></code></li>
-</ul>
 </li>
 </ul>
 </li>
@@ -251,7 +243,7 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/avro/A
 <a name="getRequiredIndices()">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>getRequiredIndices</h4>
 <pre><a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>[]&nbsp;getRequiredIndices()</pre>
@@ -264,6 +256,15 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/avro/A
  required by the ingestion process that is not the primary index.</div>
 <dl><dt><span class="strong">Returns:</span></dt><dd>the array of indices that are supported by this ingestion
          implementation</dd></dl>
+</li>
+</ul>
+<a name="getAvroSchemaForHdfsType()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>getAvroSchemaForHdfsType</h4>
+<pre>org.apache.avro.Schema&nbsp;getAvroSchemaForHdfsType()</pre>
 </li>
 </ul>
 </li>

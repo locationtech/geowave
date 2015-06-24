@@ -35,7 +35,7 @@
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/GenericAvroSerializer.html" title="class in mil.nga.giat.geowave.core.ingest.kafka"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/IngestFromKafkaDriver.html" title="class in mil.nga.giat.geowave.core.ingest.kafka"><span class="strong">Prev Class</span></a></li>
 <li><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/StageKafkaData.html" title="class in mil.nga.giat.geowave.core.ingest.kafka"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">
@@ -116,6 +116,14 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <th class="colLast" scope="col">Field and Description</th>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/KafkaCommandLineOptions.html#DEFAULT_NUM_CONCURRENT_CONSUMERS">DEFAULT_NUM_CONCURRENT_CONSUMERS</a></strong></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/KafkaCommandLineOptions.html#MAX_MESSAGE_FETCH_SIZE">MAX_MESSAGE_FETCH_SIZE</a></strong></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>protected static <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Properties.html?is-external=true" title="class or interface in java.util">Properties</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/KafkaCommandLineOptions.html#properties">properties</a></strong></code>&nbsp;</td>
 </tr>
@@ -134,8 +142,9 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/KafkaCommandLineOptions.html#KafkaCommandLineOptions(java.lang.String,%20java.lang.String)">KafkaCommandLineOptions</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;kafkaTopic,
-                       <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;kafkaPropertiesPath)</code>&nbsp;</td>
+<td class="colOne"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/KafkaCommandLineOptions.html#KafkaCommandLineOptions(java.lang.String,%20java.lang.Integer,%20java.lang.Integer)">KafkaCommandLineOptions</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;kafkaPropertiesPath,
+                       <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;kafkaNumConsumers,
+                       <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;kafkaConsumerTimeout)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -157,18 +166,22 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/KafkaCommandLineOptions.html#applyOptions(org.apache.commons.cli.Options)">applyOptions</a></strong>(org.apache.commons.cli.Options&nbsp;allOptions)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/KafkaCommandLineOptions.html#getKafkaConsumerTimeout()">getKafkaConsumerTimeout</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/KafkaCommandLineOptions.html#getKafkaNumConsumers()">getKafkaNumConsumers</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/KafkaCommandLineOptions.html#getKafkaPropertiesPath()">getKafkaPropertiesPath</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/KafkaCommandLineOptions.html#getKafkaTopic()">getKafkaTopic</a></strong>()</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Properties.html?is-external=true" title="class or interface in java.util">Properties</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/KafkaCommandLineOptions.html#getProperties()">getProperties</a></strong>()</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/KafkaCommandLineOptions.html" title="class in mil.nga.giat.geowave.core.ingest.kafka">KafkaCommandLineOptions</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/KafkaCommandLineOptions.html#parseOptions(org.apache.commons.cli.CommandLine)">parseOptions</a></strong>(org.apache.commons.cli.CommandLine&nbsp;commandLine)</code>&nbsp;</td>
 </tr>
@@ -194,6 +207,25 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <!--   -->
 </a>
 <h3>Field Detail</h3>
+<a name="DEFAULT_NUM_CONCURRENT_CONSUMERS">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>DEFAULT_NUM_CONCURRENT_CONSUMERS</h4>
+<pre>public static final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a> DEFAULT_NUM_CONCURRENT_CONSUMERS</pre>
+</li>
+</ul>
+<a name="MAX_MESSAGE_FETCH_SIZE">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>MAX_MESSAGE_FETCH_SIZE</h4>
+<pre>public static final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> MAX_MESSAGE_FETCH_SIZE</pre>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../../../constant-values.html#mil.nga.giat.geowave.core.ingest.kafka.KafkaCommandLineOptions.MAX_MESSAGE_FETCH_SIZE">Constant Field Values</a></dd></dl>
+</li>
+</ul>
 <a name="properties">
 <!--   -->
 </a>
@@ -211,14 +243,15 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="KafkaCommandLineOptions(java.lang.String, java.lang.String)">
+<a name="KafkaCommandLineOptions(java.lang.String, java.lang.Integer, java.lang.Integer)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>KafkaCommandLineOptions</h4>
-<pre>public&nbsp;KafkaCommandLineOptions(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;kafkaTopic,
-                       <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;kafkaPropertiesPath)</pre>
+<pre>public&nbsp;KafkaCommandLineOptions(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;kafkaPropertiesPath,
+                       <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;kafkaNumConsumers,
+                       <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;kafkaConsumerTimeout)</pre>
 </li>
 </ul>
 </li>
@@ -238,15 +271,6 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <pre>public static&nbsp;void&nbsp;applyOptions(org.apache.commons.cli.Options&nbsp;allOptions)</pre>
 </li>
 </ul>
-<a name="getKafkaTopic()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getKafkaTopic</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getKafkaTopic()</pre>
-</li>
-</ul>
 <a name="getKafkaPropertiesPath()">
 <!--   -->
 </a>
@@ -263,6 +287,24 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>getProperties</h4>
 <pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Properties.html?is-external=true" title="class or interface in java.util">Properties</a>&nbsp;getProperties()</pre>
+</li>
+</ul>
+<a name="getKafkaNumConsumers()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getKafkaNumConsumers</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;getKafkaNumConsumers()</pre>
+</li>
+</ul>
+<a name="getKafkaConsumerTimeout()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getKafkaConsumerTimeout</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;getKafkaConsumerTimeout()</pre>
 </li>
 </ul>
 <a name="parseOptions(org.apache.commons.cli.CommandLine)">
@@ -303,7 +345,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/GenericAvroSerializer.html" title="class in mil.nga.giat.geowave.core.ingest.kafka"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/IngestFromKafkaDriver.html" title="class in mil.nga.giat.geowave.core.ingest.kafka"><span class="strong">Prev Class</span></a></li>
 <li><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/StageKafkaData.html" title="class in mil.nga.giat.geowave.core.ingest.kafka"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">
