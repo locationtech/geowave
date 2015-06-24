@@ -61,7 +61,7 @@
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li><a href="#fields_inherited_from_class_org.geotools.data.AbstractFeatureStore">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#fields_inherited_from_class_org.geotools.data.store.ContentFeatureStore">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method_summary">Method</a></li>
 </ul>
@@ -86,18 +86,13 @@
 <li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
 <li>
 <ul class="inheritance">
-<li>org.geotools.data.AbstractFeatureSource</li>
+<li>org.geotools.data.store.ContentFeatureSource</li>
 <li>
 <ul class="inheritance">
-<li>org.geotools.data.AbstractFeatureStore</li>
-<li>
-<ul class="inheritance">
-<li>org.geotools.data.AbstractFeatureLocking</li>
+<li>org.geotools.data.store.ContentFeatureStore</li>
 <li>
 <ul class="inheritance">
 <li>mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveFeatureSource</li>
-</ul>
-</li>
 </ul>
 </li>
 </ul>
@@ -115,11 +110,7 @@
 <hr>
 <br>
 <pre>public class <span class="strong">GeoWaveFeatureSource</span>
-extends org.geotools.data.AbstractFeatureLocking
-implements org.geotools.data.simple.SimpleFeatureSource</pre>
-<div class="block">This is directly used by GeoWave's GeoTools DataStore to get a GeoTools data
- reader or feature collection for a specific feature type (defined by a
- GeoWave FeatureDataAdapter). This uses EPSG:4326 as the default CRS.</div>
+extends org.geotools.data.store.ContentFeatureStore</pre>
 </li>
 </ul>
 </div>
@@ -148,18 +139,18 @@ implements org.geotools.data.simple.SimpleFeatureSource</pre>
 </a>
 <h3>Field Summary</h3>
 <ul class="blockList">
-<li class="blockList"><a name="fields_inherited_from_class_org.geotools.data.AbstractFeatureStore">
+<li class="blockList"><a name="fields_inherited_from_class_org.geotools.data.store.ContentFeatureStore">
 <!--   -->
 </a>
-<h3>Fields inherited from class&nbsp;org.geotools.data.AbstractFeatureStore</h3>
-<code>transaction</code></li>
+<h3>Fields inherited from class&nbsp;org.geotools.data.store.ContentFeatureStore</h3>
+<code>WRITER_ADD, WRITER_COMMIT, WRITER_UPDATE</code></li>
 </ul>
 <ul class="blockList">
-<li class="blockList"><a name="fields_inherited_from_class_org.geotools.data.AbstractFeatureSource">
+<li class="blockList"><a name="fields_inherited_from_class_org.geotools.data.store.ContentFeatureSource">
 <!--   -->
 </a>
-<h3>Fields inherited from class&nbsp;org.geotools.data.AbstractFeatureSource</h3>
-<code>hints, queryCapabilities</code></li>
+<h3>Fields inherited from class&nbsp;org.geotools.data.store.ContentFeatureSource</h3>
+<code>entry, hints, lock, query, queryCapabilities, schema, transaction</code></li>
 </ul>
 </li>
 </ul>
@@ -175,7 +166,8 @@ implements org.geotools.data.simple.SimpleFeatureSource</pre>
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html#GeoWaveFeatureSource(mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveGTDataStore,%20mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter)">GeoWaveFeatureSource</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveGTDataStore</a>&nbsp;store,
+<td class="colOne"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html#GeoWaveFeatureSource(org.geotools.data.store.ContentEntry,%20org.geotools.data.Query,%20mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter)">GeoWaveFeatureSource</a></strong>(org.geotools.data.store.ContentEntry&nbsp;entry,
+                    org.geotools.data.Query&nbsp;query,
                     <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureDataAdapter.html" title="class in mil.nga.giat.geowave.adapter.vector">FeatureDataAdapter</a>&nbsp;adapter)</code>&nbsp;</td>
 </tr>
 </table>
@@ -194,16 +186,26 @@ implements org.geotools.data.simple.SimpleFeatureSource</pre>
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html#addFeatureListener(org.geotools.data.FeatureListener)">addFeatureListener</a></strong>(org.geotools.data.FeatureListener&nbsp;listener)</code>&nbsp;</td>
+<td class="colFirst"><code>protected org.opengis.feature.simple.SimpleFeatureType</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html#buildFeatureType()">buildFeatureType</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>org.geotools.geometry.jts.ReferencedEnvelope</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html#getBounds()">getBounds</a></strong>()</code>&nbsp;</td>
+<td class="colFirst"><code>protected boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html#canLock()">canLock</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>org.geotools.geometry.jts.ReferencedEnvelope</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html#getBounds(org.geotools.data.Query)">getBounds</a></strong>(org.geotools.data.Query&nbsp;query)</code>&nbsp;</td>
+<td class="colFirst"><code>protected boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html#canTransact()">canTransact</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html#doLockInternal(java.lang.String,%20org.opengis.feature.simple.SimpleFeature)">doLockInternal</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
+              org.opengis.feature.simple.SimpleFeature&nbsp;feature)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html#doUnlockInternal(java.lang.String,%20org.opengis.feature.simple.SimpleFeature)">doUnlockInternal</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
+                org.opengis.feature.simple.SimpleFeature&nbsp;feature)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>protected org.geotools.geometry.jts.ReferencedEnvelope</code></td>
@@ -214,88 +216,40 @@ implements org.geotools.data.simple.SimpleFeatureSource</pre>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html#getComponents()">getComponents</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>int</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html#getCount(org.geotools.data.Query)">getCount</a></strong>(org.geotools.data.Query&nbsp;query)</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
 <td class="colFirst"><code>protected int</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html#getCountInternal(org.geotools.data.Query)">getCountInternal</a></strong>(org.geotools.data.Query&nbsp;query)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
-<td class="colFirst"><code>org.opengis.referencing.crs.CoordinateReferenceSystem</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html#getCRS()">getCRS</a></strong>()</code>&nbsp;</td>
-</tr>
 <tr class="altColor">
-<td class="colFirst"><code>org.geotools.data.DataStore</code></td>
+<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveGTDataStore</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html#getDataStore()">getDataStore</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>org.geotools.data.simple.SimpleFeatureCollection</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html#getFeatures(org.geotools.data.Query)">getFeatures</a></strong>(org.geotools.data.Query&nbsp;query)</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
 <td class="colFirst"><code>org.opengis.feature.simple.SimpleFeatureType</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html#getFeatureType()">getFeatureType</a></strong>()</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
-<td class="colFirst"><code>org.geotools.data.ResourceInfo</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html#getInfo()">getInfo</a></strong>()</code>&nbsp;</td>
-</tr>
 <tr class="altColor">
-<td class="colFirst"><code>org.opengis.feature.type.Name</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html#getName()">getName</a></strong>()</code>&nbsp;</td>
+<td class="colFirst"><code>protected org.geotools.data.FeatureReader&lt;org.opengis.feature.simple.SimpleFeatureType,org.opengis.feature.simple.SimpleFeature&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html#getReaderInternal(org.geotools.data.Query)">getReaderInternal</a></strong>(org.geotools.data.Query&nbsp;query)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>org.geotools.data.QueryCapabilities</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html#getQueryCapabilities()">getQueryCapabilities</a></strong>()</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureReader.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveFeatureReader</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html#getReaderInternal(org.geotools.data.Query,%20mil.nga.giat.geowave.adapter.vector.plugin.transaction.GeoWaveTransaction)">getReaderInternal</a></strong>(org.geotools.data.Query&nbsp;query,
-                 <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/transaction/GeoWaveTransaction.html" title="interface in mil.nga.giat.geowave.adapter.vector.plugin.transaction">GeoWaveTransaction</a>&nbsp;transaction)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>org.opengis.feature.simple.SimpleFeatureType</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html#getSchema()">getSchema</a></strong>()</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureDataAdapter.html" title="class in mil.nga.giat.geowave.adapter.vector">FeatureDataAdapter</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html#getStatsAdapter(java.lang.String)">getStatsAdapter</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureWriter.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveFeatureWriter</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html#getWriterInternal(mil.nga.giat.geowave.adapter.vector.plugin.transaction.GeoWaveTransaction)">getWriterInternal</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/transaction/GeoWaveTransaction.html" title="interface in mil.nga.giat.geowave.adapter.vector.plugin.transaction">GeoWaveTransaction</a>&nbsp;transaction)</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureWriter.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveFeatureWriter</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html#getWriterInternal(mil.nga.giat.geowave.adapter.vector.plugin.transaction.GeoWaveTransaction,%20org.opengis.filter.Filter)">getWriterInternal</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/transaction/GeoWaveTransaction.html" title="interface in mil.nga.giat.geowave.adapter.vector.plugin.transaction">GeoWaveTransaction</a>&nbsp;transaction,
-                 org.opengis.filter.Filter&nbsp;filter)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html#removeFeatureListener(org.geotools.data.FeatureListener)">removeFeatureListener</a></strong>(org.geotools.data.FeatureListener&nbsp;listener)</code>&nbsp;</td>
+<td class="colFirst"><code>protected org.geotools.data.FeatureWriter&lt;org.opengis.feature.simple.SimpleFeatureType,org.opengis.feature.simple.SimpleFeature&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html#getWriterInternal(org.geotools.data.Query,%20int)">getWriterInternal</a></strong>(org.geotools.data.Query&nbsp;query,
+                 int&nbsp;flags)</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
-<li class="blockList"><a name="methods_inherited_from_class_org.geotools.data.AbstractFeatureLocking">
+<li class="blockList"><a name="methods_inherited_from_class_org.geotools.data.store.ContentFeatureStore">
 <!--   -->
 </a>
-<h3>Methods inherited from class&nbsp;org.geotools.data.AbstractFeatureLocking</h3>
-<code>lockFeatures, lockFeatures, lockFeatures, setFeatureLock, unLockFeatures, unLockFeatures, unLockFeatures</code></li>
+<h3>Methods inherited from class&nbsp;org.geotools.data.store.ContentFeatureStore</h3>
+<code>addFeatures, addFeatures, getWriter, getWriter, getWriter, getWriter, modifyFeatures, modifyFeatures, modifyFeatures, modifyFeatures, modifyFeatures, modifyFeatures, removeFeatures, setFeatures</code></li>
 </ul>
 <ul class="blockList">
-<li class="blockList"><a name="methods_inherited_from_class_org.geotools.data.AbstractFeatureStore">
+<li class="blockList"><a name="methods_inherited_from_class_org.geotools.data.store.ContentFeatureSource">
 <!--   -->
 </a>
-<h3>Methods inherited from class&nbsp;org.geotools.data.AbstractFeatureStore</h3>
-<code>addFeatures, addFeatures, getTransaction, modifyFeatures, modifyFeatures, modifyFeatures, modifyFeatures, modifyFeatures, modifyFeatures, removeFeatures, setFeatures, setTransaction</code></li>
-</ul>
-<ul class="blockList">
-<li class="blockList"><a name="methods_inherited_from_class_org.geotools.data.AbstractFeatureSource">
-<!--   -->
-</a>
-<h3>Methods inherited from class&nbsp;org.geotools.data.AbstractFeatureSource</h3>
-<code>getFeatures, getFeatures, getSupportedHints, namedQuery</code></li>
+<h3>Methods inherited from class&nbsp;org.geotools.data.store.ContentFeatureSource</h3>
+<code>accepts, addFeatureListener, addHints, buildQueryCapabilities, canEvent, canFilter, canLimit, canOffset, canReproject, canRetype, canSort, getAbsoluteSchema, getBounds, getBounds, getCount, getEntry, getFeatures, getFeatures, getFeatures, getInfo, getName, getQueryCapabilities, getReader, getReader, getReader, getSchema, getState, getSupportedHints, getTransaction, getView, getView, handleVisitor, isView, joinQuery, lockFeatures, lockFeatures, lockFeatures, processLock, removeFeatureListener, resolvePropertyNames, resolvePropertyNames, setFeatureLock, setTransaction, unLockFeatures, unLockFeatures, unLockFeatures</code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods_inherited_from_class_java.lang.Object">
@@ -305,32 +259,32 @@ implements org.geotools.data.simple.SimpleFeatureSource</pre>
 <code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#clone()" title="class or interface in java.lang">clone</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.lang">equals</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#finalize()" title="class or interface in java.lang">finalize</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang">getClass</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#hashCode()" title="class or interface in java.lang">hashCode</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang">notify</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang">notifyAll</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#toString()" title="class or interface in java.lang">toString</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait(long,%20int)" title="class or interface in java.lang">wait</a></code></li>
 </ul>
 <ul class="blockList">
-<li class="blockList"><a name="methods_inherited_from_class_org.geotools.data.simple.SimpleFeatureSource">
-<!--   -->
-</a>
-<h3>Methods inherited from interface&nbsp;org.geotools.data.simple.SimpleFeatureSource</h3>
-<code>getFeatures, getFeatures</code></li>
-</ul>
-<ul class="blockList">
-<li class="blockList"><a name="methods_inherited_from_class_org.geotools.data.FeatureSource">
-<!--   -->
-</a>
-<h3>Methods inherited from interface&nbsp;org.geotools.data.FeatureSource</h3>
-<code>getSupportedHints</code></li>
-</ul>
-<ul class="blockList">
 <li class="blockList"><a name="methods_inherited_from_class_org.geotools.data.simple.SimpleFeatureStore">
 <!--   -->
 </a>
 <h3>Methods inherited from interface&nbsp;org.geotools.data.simple.SimpleFeatureStore</h3>
-<code>getFeatures, getFeatures, modifyFeatures, modifyFeatures</code></li>
+<code>getFeatures, getFeatures, getFeatures</code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_org.geotools.data.FeatureLocking">
+<!--   -->
+</a>
+<h3>Methods inherited from interface&nbsp;org.geotools.data.FeatureLocking</h3>
+<code>lockFeatures, lockFeatures, lockFeatures, setFeatureLock, unLockFeatures, unLockFeatures, unLockFeatures</code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods_inherited_from_class_org.geotools.data.FeatureStore">
 <!--   -->
 </a>
 <h3>Methods inherited from interface&nbsp;org.geotools.data.FeatureStore</h3>
-<code>addFeatures, getTransaction, modifyFeatures, modifyFeatures, modifyFeatures, modifyFeatures, removeFeatures, setFeatures, setTransaction</code></li>
+<code>getTransaction, setTransaction</code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_org.geotools.data.FeatureSource">
+<!--   -->
+</a>
+<h3>Methods inherited from interface&nbsp;org.geotools.data.FeatureSource</h3>
+<code>addFeatureListener, getBounds, getBounds, getCount, getInfo, getName, getQueryCapabilities, getSchema, getSupportedHints, removeFeatureListener</code></li>
 </ul>
 </li>
 </ul>
@@ -346,13 +300,14 @@ implements org.geotools.data.simple.SimpleFeatureSource</pre>
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="GeoWaveFeatureSource(mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveGTDataStore, mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter)">
+<a name="GeoWaveFeatureSource(org.geotools.data.store.ContentEntry, org.geotools.data.Query, mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>GeoWaveFeatureSource</h4>
-<pre>public&nbsp;GeoWaveFeatureSource(<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveGTDataStore</a>&nbsp;store,
+<pre>public&nbsp;GeoWaveFeatureSource(org.geotools.data.store.ContentEntry&nbsp;entry,
+                    org.geotools.data.Query&nbsp;query,
                     <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureDataAdapter.html" title="class in mil.nga.giat.geowave.adapter.vector">FeatureDataAdapter</a>&nbsp;adapter)</pre>
 </li>
 </ul>
@@ -364,15 +319,6 @@ implements org.geotools.data.simple.SimpleFeatureSource</pre>
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="getCRS()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getCRS</h4>
-<pre>public&nbsp;org.opengis.referencing.crs.CoordinateReferenceSystem&nbsp;getCRS()</pre>
-</li>
-</ul>
 <a name="getComponents()">
 <!--   -->
 </a>
@@ -380,36 +326,6 @@ implements org.geotools.data.simple.SimpleFeatureSource</pre>
 <li class="blockList">
 <h4>getComponents</h4>
 <pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveDataStoreComponents.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveDataStoreComponents</a>&nbsp;getComponents()</pre>
-</li>
-</ul>
-<a name="getStatsAdapter(java.lang.String)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getStatsAdapter</h4>
-<pre>protected&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureDataAdapter.html" title="class in mil.nga.giat.geowave.adapter.vector">FeatureDataAdapter</a>&nbsp;getStatsAdapter(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName)</pre>
-</li>
-</ul>
-<a name="getFeatures(org.geotools.data.Query)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getFeatures</h4>
-<pre>public&nbsp;org.geotools.data.simple.SimpleFeatureCollection&nbsp;getFeatures(org.geotools.data.Query&nbsp;query)
-                                                             throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
-<dl>
-<dt><strong>Specified by:</strong></dt>
-<dd><code>getFeatures</code>&nbsp;in interface&nbsp;<code>org.geotools.data.FeatureSource&lt;org.opengis.feature.simple.SimpleFeatureType,org.opengis.feature.simple.SimpleFeature&gt;</code></dd>
-<dt><strong>Specified by:</strong></dt>
-<dd><code>getFeatures</code>&nbsp;in interface&nbsp;<code>org.geotools.data.simple.SimpleFeatureSource</code></dd>
-<dt><strong>Specified by:</strong></dt>
-<dd><code>getFeatures</code>&nbsp;in interface&nbsp;<code>org.geotools.data.simple.SimpleFeatureStore</code></dd>
-<dt><strong>Overrides:</strong></dt>
-<dd><code>getFeatures</code>&nbsp;in class&nbsp;<code>org.geotools.data.AbstractFeatureSource</code></dd>
-<dt><span class="strong">Throws:</span></dt>
-<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd></dl>
 </li>
 </ul>
 <a name="getBoundsInternal(org.geotools.data.Query)">
@@ -420,7 +336,10 @@ implements org.geotools.data.simple.SimpleFeatureSource</pre>
 <h4>getBoundsInternal</h4>
 <pre>protected&nbsp;org.geotools.geometry.jts.ReferencedEnvelope&nbsp;getBoundsInternal(org.geotools.data.Query&nbsp;query)
                                                                   throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
-<dl><dt><span class="strong">Throws:</span></dt>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code>getBoundsInternal</code>&nbsp;in class&nbsp;<code>org.geotools.data.store.ContentFeatureSource</code></dd>
+<dt><span class="strong">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd></dl>
 </li>
 </ul>
@@ -432,53 +351,11 @@ implements org.geotools.data.simple.SimpleFeatureSource</pre>
 <h4>getCountInternal</h4>
 <pre>protected&nbsp;int&nbsp;getCountInternal(org.geotools.data.Query&nbsp;query)
                         throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
-<dl><dt><span class="strong">Throws:</span></dt>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code>getCountInternal</code>&nbsp;in class&nbsp;<code>org.geotools.data.store.ContentFeatureSource</code></dd>
+<dt><span class="strong">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd></dl>
-</li>
-</ul>
-<a name="getQueryCapabilities()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getQueryCapabilities</h4>
-<pre>public&nbsp;org.geotools.data.QueryCapabilities&nbsp;getQueryCapabilities()</pre>
-<dl>
-<dt><strong>Specified by:</strong></dt>
-<dd><code>getQueryCapabilities</code>&nbsp;in interface&nbsp;<code>org.geotools.data.FeatureSource&lt;org.opengis.feature.simple.SimpleFeatureType,org.opengis.feature.simple.SimpleFeature&gt;</code></dd>
-<dt><strong>Overrides:</strong></dt>
-<dd><code>getQueryCapabilities</code>&nbsp;in class&nbsp;<code>org.geotools.data.AbstractFeatureSource</code></dd>
-</dl>
-</li>
-</ul>
-<a name="getInfo()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getInfo</h4>
-<pre>public&nbsp;org.geotools.data.ResourceInfo&nbsp;getInfo()</pre>
-<dl>
-<dt><strong>Specified by:</strong></dt>
-<dd><code>getInfo</code>&nbsp;in interface&nbsp;<code>org.geotools.data.FeatureSource&lt;org.opengis.feature.simple.SimpleFeatureType,org.opengis.feature.simple.SimpleFeature&gt;</code></dd>
-<dt><strong>Overrides:</strong></dt>
-<dd><code>getInfo</code>&nbsp;in class&nbsp;<code>org.geotools.data.AbstractFeatureSource</code></dd>
-</dl>
-</li>
-</ul>
-<a name="getName()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getName</h4>
-<pre>public&nbsp;org.opengis.feature.type.Name&nbsp;getName()</pre>
-<dl>
-<dt><strong>Specified by:</strong></dt>
-<dd><code>getName</code>&nbsp;in interface&nbsp;<code>org.geotools.data.FeatureSource&lt;org.opengis.feature.simple.SimpleFeatureType,org.opengis.feature.simple.SimpleFeature&gt;</code></dd>
-<dt><strong>Overrides:</strong></dt>
-<dd><code>getName</code>&nbsp;in class&nbsp;<code>org.geotools.data.AbstractFeatureSource</code></dd>
-</dl>
 </li>
 </ul>
 <a name="getFeatureType()">
@@ -490,82 +367,48 @@ implements org.geotools.data.simple.SimpleFeatureSource</pre>
 <pre>public&nbsp;org.opengis.feature.simple.SimpleFeatureType&nbsp;getFeatureType()</pre>
 </li>
 </ul>
-<a name="getReaderInternal(org.geotools.data.Query, mil.nga.giat.geowave.adapter.vector.plugin.transaction.GeoWaveTransaction)">
+<a name="getReaderInternal(org.geotools.data.Query)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>getReaderInternal</h4>
-<pre>protected&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureReader.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveFeatureReader</a>&nbsp;getReaderInternal(org.geotools.data.Query&nbsp;query,
-                                     <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/transaction/GeoWaveTransaction.html" title="interface in mil.nga.giat.geowave.adapter.vector.plugin.transaction">GeoWaveTransaction</a>&nbsp;transaction)</pre>
+<pre>protected&nbsp;org.geotools.data.FeatureReader&lt;org.opengis.feature.simple.SimpleFeatureType,org.opengis.feature.simple.SimpleFeature&gt;&nbsp;getReaderInternal(org.geotools.data.Query&nbsp;query)
+                                                                                                                                            throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code>getReaderInternal</code>&nbsp;in class&nbsp;<code>org.geotools.data.store.ContentFeatureSource</code></dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd></dl>
 </li>
 </ul>
-<a name="getWriterInternal(mil.nga.giat.geowave.adapter.vector.plugin.transaction.GeoWaveTransaction)">
+<a name="getWriterInternal(org.geotools.data.Query, int)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>getWriterInternal</h4>
-<pre>protected&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureWriter.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveFeatureWriter</a>&nbsp;getWriterInternal(<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/transaction/GeoWaveTransaction.html" title="interface in mil.nga.giat.geowave.adapter.vector.plugin.transaction">GeoWaveTransaction</a>&nbsp;transaction)</pre>
-</li>
-</ul>
-<a name="getWriterInternal(mil.nga.giat.geowave.adapter.vector.plugin.transaction.GeoWaveTransaction, org.opengis.filter.Filter)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getWriterInternal</h4>
-<pre>protected&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureWriter.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveFeatureWriter</a>&nbsp;getWriterInternal(<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/transaction/GeoWaveTransaction.html" title="interface in mil.nga.giat.geowave.adapter.vector.plugin.transaction">GeoWaveTransaction</a>&nbsp;transaction,
-                                     org.opengis.filter.Filter&nbsp;filter)</pre>
-</li>
-</ul>
-<a name="getBounds()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getBounds</h4>
-<pre>public&nbsp;org.geotools.geometry.jts.ReferencedEnvelope&nbsp;getBounds()
-                                                       throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+<pre>protected&nbsp;org.geotools.data.FeatureWriter&lt;org.opengis.feature.simple.SimpleFeatureType,org.opengis.feature.simple.SimpleFeature&gt;&nbsp;getWriterInternal(org.geotools.data.Query&nbsp;query,
+                                                                                                                                       int&nbsp;flags)
+                                                                                                                                            throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
 <dl>
 <dt><strong>Specified by:</strong></dt>
-<dd><code>getBounds</code>&nbsp;in interface&nbsp;<code>org.geotools.data.FeatureSource&lt;org.opengis.feature.simple.SimpleFeatureType,org.opengis.feature.simple.SimpleFeature&gt;</code></dd>
-<dt><strong>Overrides:</strong></dt>
-<dd><code>getBounds</code>&nbsp;in class&nbsp;<code>org.geotools.data.AbstractFeatureSource</code></dd>
+<dd><code>getWriterInternal</code>&nbsp;in class&nbsp;<code>org.geotools.data.store.ContentFeatureStore</code></dd>
 <dt><span class="strong">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd></dl>
 </li>
 </ul>
-<a name="getBounds(org.geotools.data.Query)">
+<a name="buildFeatureType()">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>getBounds</h4>
-<pre>public&nbsp;org.geotools.geometry.jts.ReferencedEnvelope&nbsp;getBounds(org.geotools.data.Query&nbsp;query)
-                                                       throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+<h4>buildFeatureType</h4>
+<pre>protected&nbsp;org.opengis.feature.simple.SimpleFeatureType&nbsp;buildFeatureType()
+                                                                 throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
 <dl>
 <dt><strong>Specified by:</strong></dt>
-<dd><code>getBounds</code>&nbsp;in interface&nbsp;<code>org.geotools.data.FeatureSource&lt;org.opengis.feature.simple.SimpleFeatureType,org.opengis.feature.simple.SimpleFeature&gt;</code></dd>
-<dt><strong>Overrides:</strong></dt>
-<dd><code>getBounds</code>&nbsp;in class&nbsp;<code>org.geotools.data.AbstractFeatureSource</code></dd>
-<dt><span class="strong">Throws:</span></dt>
-<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd></dl>
-</li>
-</ul>
-<a name="getCount(org.geotools.data.Query)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getCount</h4>
-<pre>public&nbsp;int&nbsp;getCount(org.geotools.data.Query&nbsp;query)
-             throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
-<dl>
-<dt><strong>Specified by:</strong></dt>
-<dd><code>getCount</code>&nbsp;in interface&nbsp;<code>org.geotools.data.FeatureSource&lt;org.opengis.feature.simple.SimpleFeatureType,org.opengis.feature.simple.SimpleFeature&gt;</code></dd>
-<dt><strong>Overrides:</strong></dt>
-<dd><code>getCount</code>&nbsp;in class&nbsp;<code>org.geotools.data.AbstractFeatureSource</code></dd>
+<dd><code>buildFeatureType</code>&nbsp;in class&nbsp;<code>org.geotools.data.store.ContentFeatureSource</code></dd>
 <dt><span class="strong">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd></dl>
 </li>
@@ -576,52 +419,71 @@ implements org.geotools.data.simple.SimpleFeatureSource</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>getDataStore</h4>
-<pre>public&nbsp;org.geotools.data.DataStore&nbsp;getDataStore()</pre>
+<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveGTDataStore</a>&nbsp;getDataStore()</pre>
 <dl>
 <dt><strong>Specified by:</strong></dt>
 <dd><code>getDataStore</code>&nbsp;in interface&nbsp;<code>org.geotools.data.FeatureSource&lt;org.opengis.feature.simple.SimpleFeatureType,org.opengis.feature.simple.SimpleFeature&gt;</code></dd>
 <dt><strong>Overrides:</strong></dt>
-<dd><code>getDataStore</code>&nbsp;in class&nbsp;<code>org.geotools.data.AbstractFeatureSource</code></dd>
+<dd><code>getDataStore</code>&nbsp;in class&nbsp;<code>org.geotools.data.store.ContentFeatureSource</code></dd>
 </dl>
 </li>
 </ul>
-<a name="getSchema()">
+<a name="canTransact()">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>getSchema</h4>
-<pre>public&nbsp;org.opengis.feature.simple.SimpleFeatureType&nbsp;getSchema()</pre>
+<h4>canTransact</h4>
+<pre>protected&nbsp;boolean&nbsp;canTransact()</pre>
 <dl>
-<dt><strong>Specified by:</strong></dt>
-<dd><code>getSchema</code>&nbsp;in interface&nbsp;<code>org.geotools.data.FeatureSource&lt;org.opengis.feature.simple.SimpleFeatureType,org.opengis.feature.simple.SimpleFeature&gt;</code></dd>
+<dt><strong>Overrides:</strong></dt>
+<dd><code>canTransact</code>&nbsp;in class&nbsp;<code>org.geotools.data.store.ContentFeatureSource</code></dd>
 </dl>
 </li>
 </ul>
-<a name="addFeatureListener(org.geotools.data.FeatureListener)">
+<a name="canLock()">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>addFeatureListener</h4>
-<pre>public&nbsp;void&nbsp;addFeatureListener(org.geotools.data.FeatureListener&nbsp;listener)</pre>
+<h4>canLock</h4>
+<pre>protected&nbsp;boolean&nbsp;canLock()</pre>
 <dl>
-<dt><strong>Specified by:</strong></dt>
-<dd><code>addFeatureListener</code>&nbsp;in interface&nbsp;<code>org.geotools.data.FeatureSource&lt;org.opengis.feature.simple.SimpleFeatureType,org.opengis.feature.simple.SimpleFeature&gt;</code></dd>
+<dt><strong>Overrides:</strong></dt>
+<dd><code>canLock</code>&nbsp;in class&nbsp;<code>org.geotools.data.store.ContentFeatureSource</code></dd>
 </dl>
 </li>
 </ul>
-<a name="removeFeatureListener(org.geotools.data.FeatureListener)">
+<a name="doLockInternal(java.lang.String, org.opengis.feature.simple.SimpleFeature)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>doLockInternal</h4>
+<pre>protected&nbsp;void&nbsp;doLockInternal(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
+                  org.opengis.feature.simple.SimpleFeature&nbsp;feature)
+                       throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+<dl>
+<dt><strong>Overrides:</strong></dt>
+<dd><code>doLockInternal</code>&nbsp;in class&nbsp;<code>org.geotools.data.store.ContentFeatureSource</code></dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd></dl>
+</li>
+</ul>
+<a name="doUnlockInternal(java.lang.String, org.opengis.feature.simple.SimpleFeature)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>removeFeatureListener</h4>
-<pre>public&nbsp;void&nbsp;removeFeatureListener(org.geotools.data.FeatureListener&nbsp;listener)</pre>
+<h4>doUnlockInternal</h4>
+<pre>protected&nbsp;void&nbsp;doUnlockInternal(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
+                    org.opengis.feature.simple.SimpleFeature&nbsp;feature)
+                         throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
 <dl>
-<dt><strong>Specified by:</strong></dt>
-<dd><code>removeFeatureListener</code>&nbsp;in interface&nbsp;<code>org.geotools.data.FeatureSource&lt;org.opengis.feature.simple.SimpleFeatureType,org.opengis.feature.simple.SimpleFeature&gt;</code></dd>
-</dl>
+<dt><strong>Overrides:</strong></dt>
+<dd><code>doUnlockInternal</code>&nbsp;in class&nbsp;<code>org.geotools.data.store.ContentFeatureSource</code></dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd></dl>
 </li>
 </ul>
 </li>
@@ -676,7 +538,7 @@ implements org.geotools.data.simple.SimpleFeatureSource</pre>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li><a href="#fields_inherited_from_class_org.geotools.data.AbstractFeatureStore">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#fields_inherited_from_class_org.geotools.data.store.ContentFeatureStore">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method_summary">Method</a></li>
 </ul>
