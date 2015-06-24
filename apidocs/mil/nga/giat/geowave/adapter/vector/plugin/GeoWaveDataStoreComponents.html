@@ -115,7 +115,8 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveDataStoreComponents.html#GeoWaveDataStoreComponents(mil.nga.giat.geowave.adapter.vector.VectorDataStore,%20mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveGTDataStore,%20mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter,%20mil.nga.giat.geowave.adapter.vector.transaction.TransactionsAllocater)">GeoWaveDataStoreComponents</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/VectorDataStore.html" title="class in mil.nga.giat.geowave.adapter.vector">VectorDataStore</a>&nbsp;dataStore,
+<td class="colOne"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveDataStoreComponents.html#GeoWaveDataStoreComponents(mil.nga.giat.geowave.adapter.vector.VectorDataStore,%20mil.nga.giat.geowave.adapter.vector.VectorDataStore,%20mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveGTDataStore,%20mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter,%20mil.nga.giat.geowave.adapter.vector.transaction.TransactionsAllocater)">GeoWaveDataStoreComponents</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/VectorDataStore.html" title="class in mil.nga.giat.geowave.adapter.vector">VectorDataStore</a>&nbsp;dataStore,
+                          <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/VectorDataStore.html" title="class in mil.nga.giat.geowave.adapter.vector">VectorDataStore</a>&nbsp;statsDataStore,
                           <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveGTDataStore</a>&nbsp;GTstore,
                           <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureDataAdapter.html" title="class in mil.nga.giat.geowave.adapter.vector">FeatureDataAdapter</a>&nbsp;adapter,
                           <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/transaction/TransactionsAllocater.html" title="interface in mil.nga.giat.geowave.adapter.vector.transaction">TransactionsAllocater</a>&nbsp;transactionsAllocater)</code>&nbsp;</td>
@@ -156,40 +157,44 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveDataStoreComponents.html#getGTstore()">getGTstore</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/VectorDataStore.html" title="class in mil.nga.giat.geowave.adapter.vector">VectorDataStore</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveDataStoreComponents.html#getStatsDataStore()">getStatsDataStore</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveDataStoreComponents.html#getTransaction()">getTransaction</a></strong>()</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveDataStoreComponents.html#releaseTransaction(java.lang.String)">releaseTransaction</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;txID)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveDataStoreComponents.html#remove(org.opengis.feature.simple.SimpleFeature,%20mil.nga.giat.geowave.adapter.vector.plugin.transaction.GeoWaveTransaction)">remove</a></strong>(org.opengis.feature.simple.SimpleFeature&nbsp;feature,
       <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/transaction/GeoWaveTransaction.html" title="interface in mil.nga.giat.geowave.adapter.vector.plugin.transaction">GeoWaveTransaction</a>&nbsp;transaction)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveDataStoreComponents.html#remove(java.lang.String,%20mil.nga.giat.geowave.adapter.vector.plugin.transaction.GeoWaveTransaction)">remove</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fid,
       <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/transaction/GeoWaveTransaction.html" title="interface in mil.nga.giat.geowave.adapter.vector.plugin.transaction">GeoWaveTransaction</a>&nbsp;transaction)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveDataStoreComponents.html#replaceDataVisibility(mil.nga.giat.geowave.adapter.vector.plugin.transaction.GeoWaveTransaction,%20java.util.Collection,%20mil.nga.giat.geowave.datastore.accumulo.util.VisibilityTransformer)">replaceDataVisibility</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/transaction/GeoWaveTransaction.html" title="interface in mil.nga.giat.geowave.adapter.vector.plugin.transaction">GeoWaveTransaction</a>&nbsp;transaction,
                      <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;rowIDs,
                      <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/VisibilityTransformer.html" title="class in mil.nga.giat.geowave.datastore.accumulo.util">VisibilityTransformer</a>&nbsp;transformer)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveDataStoreComponents.html#replaceStatsVisibility(mil.nga.giat.geowave.adapter.vector.plugin.transaction.GeoWaveTransaction,%20mil.nga.giat.geowave.datastore.accumulo.util.VisibilityTransformer)">replaceStatsVisibility</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/transaction/GeoWaveTransaction.html" title="interface in mil.nga.giat.geowave.adapter.vector.plugin.transaction">GeoWaveTransaction</a>&nbsp;transaction,
                       <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/VisibilityTransformer.html" title="class in mil.nga.giat.geowave.datastore.accumulo.util">VisibilityTransformer</a>&nbsp;transformer)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveDataStoreComponents.html#write(org.opengis.feature.simple.SimpleFeature,%20mil.nga.giat.geowave.adapter.vector.plugin.transaction.GeoWaveTransaction)">write</a></strong>(org.opengis.feature.simple.SimpleFeature&nbsp;feature,
      <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/transaction/GeoWaveTransaction.html" title="interface in mil.nga.giat.geowave.adapter.vector.plugin.transaction">GeoWaveTransaction</a>&nbsp;transaction)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveDataStoreComponents.html#writeCommit(org.opengis.feature.simple.SimpleFeature,%20mil.nga.giat.geowave.adapter.vector.plugin.transaction.GeoWaveTransaction)">writeCommit</a></strong>(org.opengis.feature.simple.SimpleFeature&nbsp;feature,
            <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/transaction/GeoWaveTransaction.html" title="interface in mil.nga.giat.geowave.adapter.vector.plugin.transaction">GeoWaveTransaction</a>&nbsp;transaction)</code>&nbsp;</td>
@@ -216,13 +221,14 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="GeoWaveDataStoreComponents(mil.nga.giat.geowave.adapter.vector.VectorDataStore, mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveGTDataStore, mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter, mil.nga.giat.geowave.adapter.vector.transaction.TransactionsAllocater)">
+<a name="GeoWaveDataStoreComponents(mil.nga.giat.geowave.adapter.vector.VectorDataStore, mil.nga.giat.geowave.adapter.vector.VectorDataStore, mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveGTDataStore, mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter, mil.nga.giat.geowave.adapter.vector.transaction.TransactionsAllocater)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>GeoWaveDataStoreComponents</h4>
 <pre>public&nbsp;GeoWaveDataStoreComponents(<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/VectorDataStore.html" title="class in mil.nga.giat.geowave.adapter.vector">VectorDataStore</a>&nbsp;dataStore,
+                          <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/VectorDataStore.html" title="class in mil.nga.giat.geowave.adapter.vector">VectorDataStore</a>&nbsp;statsDataStore,
                           <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveGTDataStore</a>&nbsp;GTstore,
                           <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureDataAdapter.html" title="class in mil.nga.giat.geowave.adapter.vector">FeatureDataAdapter</a>&nbsp;adapter,
                           <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/transaction/TransactionsAllocater.html" title="interface in mil.nga.giat.geowave.adapter.vector.transaction">TransactionsAllocater</a>&nbsp;transactionsAllocater)</pre>
@@ -252,6 +258,15 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>getDataStore</h4>
 <pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/VectorDataStore.html" title="class in mil.nga.giat.geowave.adapter.vector">VectorDataStore</a>&nbsp;getDataStore()</pre>
+</li>
+</ul>
+<a name="getStatsDataStore()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getStatsDataStore</h4>
+<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/VectorDataStore.html" title="class in mil.nga.giat.geowave.adapter.vector">VectorDataStore</a>&nbsp;getStatsDataStore()</pre>
 </li>
 </ul>
 <a name="getGTstore()">

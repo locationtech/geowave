@@ -86,7 +86,7 @@
 <li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
 <li>
 <ul class="inheritance">
-<li>org.geotools.data.store.ContentDataStore</li>
+<li>org.geotools.data.AbstractDataStore</li>
 <li>
 <ul class="inheritance">
 <li>mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveGTDataStore</li>
@@ -105,8 +105,12 @@
 <hr>
 <br>
 <pre>public class <span class="strong">GeoWaveGTDataStore</span>
-extends org.geotools.data.store.ContentDataStore
-implements <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/transaction/TransactionNotification.html" title="interface in mil.nga.giat.geowave.adapter.vector.transaction">TransactionNotification</a></pre>
+extends org.geotools.data.AbstractDataStore
+implements org.geotools.data.DataStore, <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/transaction/TransactionNotification.html" title="interface in mil.nga.giat.geowave.adapter.vector.transaction">TransactionNotification</a></pre>
+<div class="block">This is the main entry point for exposing GeoWave as a DataStore to GeoTools.
+ GeoTools uses Java SPI (see
+ META-INF/services/org.geotools.data.DataStoreFactorySpi) to inject this
+ datastore.</div>
 </li>
 </ul>
 </div>
@@ -126,28 +130,32 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/tra
 <th class="colLast" scope="col">Field and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#adapterStore">adapterStore</a></strong></code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
 <td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/VectorDataStore.html" title="class in mil.nga.giat.geowave.adapter.vector">VectorDataStore</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#dataStore">dataStore</a></strong></code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static org.opengis.referencing.crs.CoordinateReferenceSystem</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#DEFAULT_CRS">DEFAULT_CRS</a></strong></code>&nbsp;</td>
 </tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/VectorDataStore.html" title="class in mil.nga.giat.geowave.adapter.vector">VectorDataStore</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#statsDataStore">statsDataStore</a></strong></code>&nbsp;</td>
+</tr>
 <tr class="rowColor">
+<td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOperations.html" title="interface in mil.nga.giat.geowave.datastore.accumulo">AccumuloOperations</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#statsOperations">statsOperations</a></strong></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOperations.html" title="interface in mil.nga.giat.geowave.datastore.accumulo">AccumuloOperations</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#storeOperations">storeOperations</a></strong></code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
-<li class="blockList"><a name="fields_inherited_from_class_org.geotools.data.store.ContentDataStore">
+<li class="blockList"><a name="fields_inherited_from_class_org.geotools.data.AbstractDataStore">
 <!--   -->
 </a>
-<h3>Fields inherited from class&nbsp;org.geotools.data.store.ContentDataStore</h3>
-<code>dataStoreFactory, entries, featureFactory, filterFactory, geometryFactory, lockingManager, namespaceURI, typeFactory, WRITER_ADD, WRITER_UPDATE</code></li>
+<h3>Fields inherited from class&nbsp;org.geotools.data.AbstractDataStore</h3>
+<code>isWriteable</code></li>
 </ul>
 </li>
 </ul>
@@ -188,50 +196,90 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/tra
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>protected org.geotools.data.store.ContentFeatureSource</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#createFeatureSource(org.geotools.data.store.ContentEntry)">createFeatureSource</a></strong>(org.geotools.data.store.ContentEntry&nbsp;entry)</code>&nbsp;</td>
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#addListener(org.geotools.data.FeatureSource,%20org.geotools.data.FeatureListener)">addListener</a></strong>(org.geotools.data.FeatureSource&lt;?,?&gt;&nbsp;src,
+           org.geotools.data.FeatureListener&nbsp;listener)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>protected org.geotools.data.FeatureWriter&lt;org.opengis.feature.simple.SimpleFeatureType,org.opengis.feature.simple.SimpleFeature&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#createFeatureWriter(java.lang.String,%20org.geotools.data.Transaction)">createFeatureWriter</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
+                   org.geotools.data.Transaction&nbsp;transaction)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#createSchema(org.opengis.feature.simple.SimpleFeatureType)">createSchema</a></strong>(org.opengis.feature.simple.SimpleFeatureType&nbsp;featureType)</code>&nbsp;</td>
 </tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#dispose()">dispose</a></strong>()</code>&nbsp;</td>
+</tr>
 <tr class="altColor">
-<td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;org.opengis.feature.type.Name&gt;</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#createTypeNames()">createTypeNames</a></strong>()</code>&nbsp;</td>
+<td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#getAdapterStore()">getAdapterStore</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/auth/AuthorizationSPI.html" title="interface in mil.nga.giat.geowave.adapter.vector.auth">AuthorizationSPI</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#getAuthorizationSPI()">getAuthorizationSPI</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/VectorDataStore.html" title="class in mil.nga.giat.geowave.adapter.vector">VectorDataStore</a></code></td>
+<td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/VectorDataStore.html" title="class in mil.nga.giat.geowave.adapter.vector">VectorDataStore</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#getDataStore()">getDataStore</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>org.geotools.data.store.ContentFeatureSource</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#getFeatureSource(org.opengis.feature.type.Name)">getFeatureSource</a></strong>(org.opengis.feature.type.Name&nbsp;typeName)</code>&nbsp;</td>
+<td class="colFirst"><code>org.geotools.data.FeatureReader&lt;org.opengis.feature.simple.SimpleFeatureType,org.opengis.feature.simple.SimpleFeature&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#getFeatureReader(org.geotools.data.Query,%20org.geotools.data.Transaction)">getFeatureReader</a></strong>(org.geotools.data.Query&nbsp;query,
+                org.geotools.data.Transaction&nbsp;transaction)</code>
+<div class="block">Need to override this to handle the custom transaction state.</div>
+</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>org.geotools.data.store.ContentFeatureSource</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#getFeatureSource(org.opengis.feature.type.Name,%20org.geotools.data.Transaction)">getFeatureSource</a></strong>(org.opengis.feature.type.Name&nbsp;typeName,
-                org.geotools.data.Transaction&nbsp;tx)</code>&nbsp;</td>
+<td class="colFirst"><code>protected org.geotools.data.FeatureReader&lt;org.opengis.feature.simple.SimpleFeatureType,org.opengis.feature.simple.SimpleFeature&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#getFeatureReader(java.lang.String)">getFeatureReader</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>org.geotools.data.store.ContentFeatureSource</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#getFeatureSource(java.lang.String)">getFeatureSource</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName)</code>&nbsp;</td>
+<td class="colFirst"><code>protected org.geotools.data.FeatureReader&lt;org.opengis.feature.simple.SimpleFeatureType,org.opengis.feature.simple.SimpleFeature&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#getFeatureReader(java.lang.String,%20org.geotools.data.Query)">getFeatureReader</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
+                org.geotools.data.Query&nbsp;query)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>org.geotools.data.store.ContentFeatureSource</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#getFeatureSource(java.lang.String,%20org.geotools.data.Transaction)">getFeatureSource</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
-                org.geotools.data.Transaction&nbsp;tx)</code>&nbsp;</td>
+<td class="colFirst"><code>org.geotools.data.simple.SimpleFeatureSource</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#getFeatureSource(org.opengis.feature.type.Name)">getFeatureSource</a></strong>(org.opengis.feature.type.Name&nbsp;name)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>org.geotools.data.simple.SimpleFeatureSource</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#getFeatureSource(org.opengis.feature.type.Name,%20org.geotools.data.Transaction)">getFeatureSource</a></strong>(org.opengis.feature.type.Name&nbsp;name,
+                org.geotools.data.Transaction&nbsp;transaction)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>org.geotools.data.simple.SimpleFeatureSource</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#getFeatureSource(java.lang.String)">getFeatureSource</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>org.geotools.data.FeatureWriter&lt;org.opengis.feature.simple.SimpleFeatureType,org.opengis.feature.simple.SimpleFeature&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#getFeatureWriter(java.lang.String,%20org.opengis.filter.Filter,%20org.geotools.data.Transaction)">getFeatureWriter</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
+                org.opengis.filter.Filter&nbsp;filter,
+                org.geotools.data.Transaction&nbsp;transaction)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>org.geotools.data.FeatureWriter&lt;org.opengis.feature.simple.SimpleFeatureType,org.opengis.feature.simple.SimpleFeature&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#getFeatureWriterAppend(java.lang.String,%20org.geotools.data.Transaction)">getFeatureWriterAppend</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
+                      org.geotools.data.Transaction&nbsp;transaction)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#getIndex(mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter)">getIndex</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureDataAdapter.html" title="class in mil.nga.giat.geowave.adapter.vector">FeatureDataAdapter</a>&nbsp;adapter)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>org.geotools.data.ServiceInfo</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#getInfo()">getInfo</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>org.geotools.data.FeatureListenerManager</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#getListenerManager()">getListenerManager</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/lock/LockingManagement.html" title="interface in mil.nga.giat.geowave.adapter.vector.plugin.lock">LockingManagement</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#getLockingManager()">getLockingManager</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/transaction/GeoWaveTransactionState.html" title="interface in mil.nga.giat.geowave.adapter.vector.plugin.transaction">GeoWaveTransactionState</a></code></td>
@@ -241,8 +289,40 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/tra
 </td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;org.opengis.feature.type.Name&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#getNames()">getNames</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>org.opengis.feature.simple.SimpleFeatureType</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#getSchema(org.opengis.feature.type.Name)">getSchema</a></strong>(org.opengis.feature.type.Name&nbsp;name)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>org.opengis.feature.simple.SimpleFeatureType</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#getSchema(java.lang.String)">getSchema</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureDataAdapter.html" title="class in mil.nga.giat.geowave.adapter.vector">FeatureDataAdapter</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#getStatsAdapter(java.lang.String)">getStatsAdapter</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/VectorDataStore.html" title="class in mil.nga.giat.geowave.adapter.vector">VectorDataStore</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#getStatsDataStore()">getStatsDataStore</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOperations.html" title="interface in mil.nga.giat.geowave.datastore.accumulo">AccumuloOperations</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#getStatsOperations()">getStatsOperations</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/transaction/TransactionsAllocater.html" title="interface in mil.nga.giat.geowave.adapter.vector.transaction">TransactionsAllocater</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#getTransactionsAllocater()">getTransactionsAllocater</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#getTypeNames()">getTypeNames</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/visibility/ColumnVisibilityManagement.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin.visibility">ColumnVisibilityManagement</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#getVisibilityManagement()">getVisibilityManagement</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
@@ -250,24 +330,67 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/tra
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#removeSchema(org.opengis.feature.type.Name)">removeSchema</a></strong>(org.opengis.feature.type.Name&nbsp;typeName)</code>&nbsp;</td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#removeListener(org.geotools.data.FeatureSource,%20org.geotools.data.FeatureListener)">removeListener</a></strong>(org.geotools.data.FeatureSource&lt;?,?&gt;&nbsp;src,
+              org.geotools.data.FeatureListener&nbsp;listener)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#removeSchema(org.opengis.feature.type.Name)">removeSchema</a></strong>(org.opengis.feature.type.Name&nbsp;typeName)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#removeSchema(java.lang.String)">removeSchema</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#setAdapterStore(mil.nga.giat.geowave.core.store.adapter.AdapterStore)">setAdapterStore</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;adapterStore)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#setDataStore(mil.nga.giat.geowave.adapter.vector.VectorDataStore)">setDataStore</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/VectorDataStore.html" title="class in mil.nga.giat.geowave.adapter.vector">VectorDataStore</a>&nbsp;dataStore)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#setListenerManager(org.geotools.data.FeatureListenerManager)">setListenerManager</a></strong>(org.geotools.data.FeatureListenerManager&nbsp;listenerMgr)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#setStatsDataStore(mil.nga.giat.geowave.adapter.vector.VectorDataStore)">setStatsDataStore</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/VectorDataStore.html" title="class in mil.nga.giat.geowave.adapter.vector">VectorDataStore</a>&nbsp;statsDataStore)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#setStatsOperations(mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations)">setStatsOperations</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOperations.html" title="interface in mil.nga.giat.geowave.datastore.accumulo">AccumuloOperations</a>&nbsp;statsOperations)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#setStoreOperations(mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations)">setStoreOperations</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOperations.html" title="interface in mil.nga.giat.geowave.datastore.accumulo">AccumuloOperations</a>&nbsp;storeOperations)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected org.geotools.data.TransactionStateDiff</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#state(org.geotools.data.Transaction)">state</a></strong>(org.geotools.data.Transaction&nbsp;transaction)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#transactionCreated(java.lang.String,%20java.lang.String)">transactionCreated</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;clientID,
                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;txID)</code>&nbsp;</td>
 </tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#updateSchema(org.opengis.feature.type.Name,%20org.opengis.feature.simple.SimpleFeatureType)">updateSchema</a></strong>(org.opengis.feature.type.Name&nbsp;name,
+            org.opengis.feature.simple.SimpleFeatureType&nbsp;featureType)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#updateSchema(java.lang.String,%20org.opengis.feature.simple.SimpleFeatureType)">updateSchema</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
+            org.opengis.feature.simple.SimpleFeatureType&nbsp;featureType)</code>&nbsp;</td>
+</tr>
 </table>
 <ul class="blockList">
-<li class="blockList"><a name="methods_inherited_from_class_org.geotools.data.store.ContentDataStore">
+<li class="blockList"><a name="methods_inherited_from_class_org.geotools.data.AbstractDataStore">
 <!--   -->
 </a>
-<h3>Methods inherited from class&nbsp;org.geotools.data.store.ContentDataStore</h3>
-<code>createContentState, dispose, ensureEntry, ensureFeatureStore, entry, getDataStoreFactory, getEntry, getFeatureFactory, getFeatureReader, getFeatureTypeFactory, getFeatureWriter, getFeatureWriter, getFeatureWriterAppend, getFilterFactory, getGeometryFactory, getInfo, getLockingManager, getLogger, getNames, getNamespaceURI, getSchema, getSchema, getTypeNames, name, removeEntry, setDataStoreFactory, setFeatureFactory, setFeatureTypeFactory, setFilterFactory, setGeometryFactory, setNamespaceURI, updateSchema, updateSchema</code></li>
+<h3>Methods inherited from class&nbsp;org.geotools.data.AbstractDataStore</h3>
+<code>createLockingManager, createMetadata, getBounds, getCount, getFeatureWriter, getSupportedHints, getUnsupportedFilter</code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods_inherited_from_class_java.lang.Object">
@@ -275,6 +398,13 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/tra
 </a>
 <h3>Methods inherited from class&nbsp;java.lang.<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></h3>
 <code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#clone()" title="class or interface in java.lang">clone</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.lang">equals</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#finalize()" title="class or interface in java.lang">finalize</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang">getClass</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#hashCode()" title="class or interface in java.lang">hashCode</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang">notify</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang">notifyAll</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#toString()" title="class or interface in java.lang">toString</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait(long,%20int)" title="class or interface in java.lang">wait</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_org.geotools.data.DataStore">
+<!--   -->
+</a>
+<h3>Methods inherited from interface&nbsp;org.geotools.data.DataStore</h3>
+<code>getFeatureWriter</code></li>
 </ul>
 </li>
 </ul>
@@ -299,15 +429,6 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/tra
 <pre>public static final&nbsp;org.opengis.referencing.crs.CoordinateReferenceSystem DEFAULT_CRS</pre>
 </li>
 </ul>
-<a name="adapterStore">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>adapterStore</h4>
-<pre>protected&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a> adapterStore</pre>
-</li>
-</ul>
 <a name="dataStore">
 <!--   -->
 </a>
@@ -315,6 +436,24 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/tra
 <li class="blockList">
 <h4>dataStore</h4>
 <pre>protected&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/VectorDataStore.html" title="class in mil.nga.giat.geowave.adapter.vector">VectorDataStore</a> dataStore</pre>
+</li>
+</ul>
+<a name="statsDataStore">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>statsDataStore</h4>
+<pre>protected&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/VectorDataStore.html" title="class in mil.nga.giat.geowave.adapter.vector">VectorDataStore</a> statsDataStore</pre>
+</li>
+</ul>
+<a name="statsOperations">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>statsOperations</h4>
+<pre>protected&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOperations.html" title="interface in mil.nga.giat.geowave.datastore.accumulo">AccumuloOperations</a> statsOperations</pre>
 </li>
 </ul>
 <a name="storeOperations">
@@ -377,6 +516,21 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/tra
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a name="dispose()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>dispose</h4>
+<pre>public&nbsp;void&nbsp;dispose()</pre>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code>dispose</code>&nbsp;in interface&nbsp;<code>org.geotools.data.DataAccess&lt;org.opengis.feature.simple.SimpleFeatureType,org.opengis.feature.simple.SimpleFeature&gt;</code></dd>
+<dt><strong>Overrides:</strong></dt>
+<dd><code>dispose</code>&nbsp;in class&nbsp;<code>org.geotools.data.AbstractDataStore</code></dd>
+</dl>
+</li>
+</ul>
 <a name="getAuthorizationSPI()">
 <!--   -->
 </a>
@@ -384,6 +538,15 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/tra
 <li class="blockList">
 <h4>getAuthorizationSPI</h4>
 <pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/auth/AuthorizationSPI.html" title="interface in mil.nga.giat.geowave.adapter.vector.auth">AuthorizationSPI</a>&nbsp;getAuthorizationSPI()</pre>
+</li>
+</ul>
+<a name="getVisibilityManagement()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getVisibilityManagement</h4>
+<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/visibility/ColumnVisibilityManagement.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin.visibility">ColumnVisibilityManagement</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;getVisibilityManagement()</pre>
 </li>
 </ul>
 <a name="getListenerManager()">
@@ -395,13 +558,94 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/tra
 <pre>public&nbsp;org.geotools.data.FeatureListenerManager&nbsp;getListenerManager()</pre>
 </li>
 </ul>
+<a name="setListenerManager(org.geotools.data.FeatureListenerManager)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setListenerManager</h4>
+<pre>protected&nbsp;void&nbsp;setListenerManager(org.geotools.data.FeatureListenerManager&nbsp;listenerMgr)</pre>
+</li>
+</ul>
+<a name="getAdapterStore()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getAdapterStore</h4>
+<pre>protected&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;getAdapterStore()</pre>
+</li>
+</ul>
+<a name="setAdapterStore(mil.nga.giat.geowave.core.store.adapter.AdapterStore)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setAdapterStore</h4>
+<pre>protected&nbsp;void&nbsp;setAdapterStore(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;adapterStore)</pre>
+</li>
+</ul>
 <a name="getDataStore()">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>getDataStore</h4>
-<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/VectorDataStore.html" title="class in mil.nga.giat.geowave.adapter.vector">VectorDataStore</a>&nbsp;getDataStore()</pre>
+<pre>protected&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/VectorDataStore.html" title="class in mil.nga.giat.geowave.adapter.vector">VectorDataStore</a>&nbsp;getDataStore()</pre>
+</li>
+</ul>
+<a name="setDataStore(mil.nga.giat.geowave.adapter.vector.VectorDataStore)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setDataStore</h4>
+<pre>protected&nbsp;void&nbsp;setDataStore(<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/VectorDataStore.html" title="class in mil.nga.giat.geowave.adapter.vector">VectorDataStore</a>&nbsp;dataStore)</pre>
+</li>
+</ul>
+<a name="getStatsDataStore()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getStatsDataStore</h4>
+<pre>protected&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/VectorDataStore.html" title="class in mil.nga.giat.geowave.adapter.vector">VectorDataStore</a>&nbsp;getStatsDataStore()</pre>
+</li>
+</ul>
+<a name="setStatsDataStore(mil.nga.giat.geowave.adapter.vector.VectorDataStore)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setStatsDataStore</h4>
+<pre>protected&nbsp;void&nbsp;setStatsDataStore(<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/VectorDataStore.html" title="class in mil.nga.giat.geowave.adapter.vector">VectorDataStore</a>&nbsp;statsDataStore)</pre>
+</li>
+</ul>
+<a name="getStatsOperations()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getStatsOperations</h4>
+<pre>protected&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOperations.html" title="interface in mil.nga.giat.geowave.datastore.accumulo">AccumuloOperations</a>&nbsp;getStatsOperations()</pre>
+</li>
+</ul>
+<a name="setStoreOperations(mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setStoreOperations</h4>
+<pre>protected&nbsp;void&nbsp;setStoreOperations(<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOperations.html" title="interface in mil.nga.giat.geowave.datastore.accumulo">AccumuloOperations</a>&nbsp;storeOperations)</pre>
+</li>
+</ul>
+<a name="setStatsOperations(mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setStatsOperations</h4>
+<pre>protected&nbsp;void&nbsp;setStatsOperations(<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOperations.html" title="interface in mil.nga.giat.geowave.datastore.accumulo">AccumuloOperations</a>&nbsp;statsOperations)</pre>
 </li>
 </ul>
 <a name="init(mil.nga.giat.geowave.adapter.vector.plugin.GeoWavePluginConfig)">
@@ -427,6 +671,26 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/tra
 <pre>protected&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;getIndex(<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureDataAdapter.html" title="class in mil.nga.giat.geowave.adapter.vector">FeatureDataAdapter</a>&nbsp;adapter)</pre>
 </li>
 </ul>
+<a name="addListener(org.geotools.data.FeatureSource, org.geotools.data.FeatureListener)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>addListener</h4>
+<pre>public&nbsp;void&nbsp;addListener(org.geotools.data.FeatureSource&lt;?,?&gt;&nbsp;src,
+               org.geotools.data.FeatureListener&nbsp;listener)</pre>
+</li>
+</ul>
+<a name="removeListener(org.geotools.data.FeatureSource, org.geotools.data.FeatureListener)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>removeListener</h4>
+<pre>public&nbsp;void&nbsp;removeListener(org.geotools.data.FeatureSource&lt;?,?&gt;&nbsp;src,
+                  org.geotools.data.FeatureListener&nbsp;listener)</pre>
+</li>
+</ul>
 <a name="createSchema(org.opengis.feature.simple.SimpleFeatureType)">
 <!--   -->
 </a>
@@ -438,7 +702,98 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/tra
 <dt><strong>Specified by:</strong></dt>
 <dd><code>createSchema</code>&nbsp;in interface&nbsp;<code>org.geotools.data.DataAccess&lt;org.opengis.feature.simple.SimpleFeatureType,org.opengis.feature.simple.SimpleFeature&gt;</code></dd>
 <dt><strong>Overrides:</strong></dt>
-<dd><code>createSchema</code>&nbsp;in class&nbsp;<code>org.geotools.data.store.ContentDataStore</code></dd>
+<dd><code>createSchema</code>&nbsp;in class&nbsp;<code>org.geotools.data.AbstractDataStore</code></dd>
+</dl>
+</li>
+</ul>
+<a name="getInfo()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getInfo</h4>
+<pre>public&nbsp;org.geotools.data.ServiceInfo&nbsp;getInfo()</pre>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code>getInfo</code>&nbsp;in interface&nbsp;<code>org.geotools.data.DataAccess&lt;org.opengis.feature.simple.SimpleFeatureType,org.opengis.feature.simple.SimpleFeature&gt;</code></dd>
+<dt><strong>Overrides:</strong></dt>
+<dd><code>getInfo</code>&nbsp;in class&nbsp;<code>org.geotools.data.AbstractDataStore</code></dd>
+</dl>
+</li>
+</ul>
+<a name="getNames()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getNames</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;org.opengis.feature.type.Name&gt;&nbsp;getNames()</pre>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code>getNames</code>&nbsp;in interface&nbsp;<code>org.geotools.data.DataAccess&lt;org.opengis.feature.simple.SimpleFeatureType,org.opengis.feature.simple.SimpleFeature&gt;</code></dd>
+<dt><strong>Overrides:</strong></dt>
+<dd><code>getNames</code>&nbsp;in class&nbsp;<code>org.geotools.data.AbstractDataStore</code></dd>
+</dl>
+</li>
+</ul>
+<a name="getSchema(org.opengis.feature.type.Name)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getSchema</h4>
+<pre>public&nbsp;org.opengis.feature.simple.SimpleFeatureType&nbsp;getSchema(org.opengis.feature.type.Name&nbsp;name)</pre>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code>getSchema</code>&nbsp;in interface&nbsp;<code>org.geotools.data.DataAccess&lt;org.opengis.feature.simple.SimpleFeatureType,org.opengis.feature.simple.SimpleFeature&gt;</code></dd>
+<dt><strong>Overrides:</strong></dt>
+<dd><code>getSchema</code>&nbsp;in class&nbsp;<code>org.geotools.data.AbstractDataStore</code></dd>
+</dl>
+</li>
+</ul>
+<a name="getFeatureReader(java.lang.String, org.geotools.data.Query)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getFeatureReader</h4>
+<pre>protected&nbsp;org.geotools.data.FeatureReader&lt;org.opengis.feature.simple.SimpleFeatureType,org.opengis.feature.simple.SimpleFeature&gt;&nbsp;getFeatureReader(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
+                                                                                                                                      org.geotools.data.Query&nbsp;query)
+                                                                                                                                           throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+<dl>
+<dt><strong>Overrides:</strong></dt>
+<dd><code>getFeatureReader</code>&nbsp;in class&nbsp;<code>org.geotools.data.AbstractDataStore</code></dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd></dl>
+</li>
+</ul>
+<a name="getFeatureReader(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getFeatureReader</h4>
+<pre>protected&nbsp;org.geotools.data.FeatureReader&lt;org.opengis.feature.simple.SimpleFeatureType,org.opengis.feature.simple.SimpleFeature&gt;&nbsp;getFeatureReader(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName)
+                                                                                                                                           throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code>getFeatureReader</code>&nbsp;in class&nbsp;<code>org.geotools.data.AbstractDataStore</code></dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd></dl>
+</li>
+</ul>
+<a name="getFeatureSource(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getFeatureSource</h4>
+<pre>public&nbsp;org.geotools.data.simple.SimpleFeatureSource&nbsp;getFeatureSource(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName)</pre>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code>getFeatureSource</code>&nbsp;in interface&nbsp;<code>org.geotools.data.DataStore</code></dd>
+<dt><strong>Overrides:</strong></dt>
+<dd><code>getFeatureSource</code>&nbsp;in class&nbsp;<code>org.geotools.data.AbstractDataStore</code></dd>
 </dl>
 </li>
 </ul>
@@ -451,50 +806,21 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/tra
 <pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/transaction/TransactionsAllocater.html" title="interface in mil.nga.giat.geowave.adapter.vector.transaction">TransactionsAllocater</a>&nbsp;getTransactionsAllocater()</pre>
 </li>
 </ul>
-<a name="createTypeNames()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>createTypeNames</h4>
-<pre>protected&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;org.opengis.feature.type.Name&gt;&nbsp;createTypeNames()
-                                                       throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
-<dl>
-<dt><strong>Specified by:</strong></dt>
-<dd><code>createTypeNames</code>&nbsp;in class&nbsp;<code>org.geotools.data.store.ContentDataStore</code></dd>
-<dt><span class="strong">Throws:</span></dt>
-<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd></dl>
-</li>
-</ul>
-<a name="getFeatureSource(java.lang.String)">
+<a name="getFeatureSource(org.opengis.feature.type.Name)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>getFeatureSource</h4>
-<pre>public&nbsp;org.geotools.data.store.ContentFeatureSource&nbsp;getFeatureSource(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName)
+<pre>public&nbsp;org.geotools.data.simple.SimpleFeatureSource&nbsp;getFeatureSource(org.opengis.feature.type.Name&nbsp;name)
                                                               throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
 <dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code>getFeatureSource</code>&nbsp;in interface&nbsp;<code>org.geotools.data.DataAccess&lt;org.opengis.feature.simple.SimpleFeatureType,org.opengis.feature.simple.SimpleFeature&gt;</code></dd>
 <dt><strong>Specified by:</strong></dt>
 <dd><code>getFeatureSource</code>&nbsp;in interface&nbsp;<code>org.geotools.data.DataStore</code></dd>
 <dt><strong>Overrides:</strong></dt>
-<dd><code>getFeatureSource</code>&nbsp;in class&nbsp;<code>org.geotools.data.store.ContentDataStore</code></dd>
-<dt><span class="strong">Throws:</span></dt>
-<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd></dl>
-</li>
-</ul>
-<a name="getFeatureSource(java.lang.String, org.geotools.data.Transaction)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getFeatureSource</h4>
-<pre>public&nbsp;org.geotools.data.store.ContentFeatureSource&nbsp;getFeatureSource(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
-                                                            org.geotools.data.Transaction&nbsp;tx)
-                                                              throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
-<dl>
-<dt><strong>Overrides:</strong></dt>
-<dd><code>getFeatureSource</code>&nbsp;in class&nbsp;<code>org.geotools.data.store.ContentDataStore</code></dd>
+<dd><code>getFeatureSource</code>&nbsp;in class&nbsp;<code>org.geotools.data.AbstractDataStore</code></dd>
 <dt><span class="strong">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd></dl>
 </li>
@@ -505,48 +831,171 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/tra
 <ul class="blockList">
 <li class="blockList">
 <h4>getFeatureSource</h4>
-<pre>public&nbsp;org.geotools.data.store.ContentFeatureSource&nbsp;getFeatureSource(org.opengis.feature.type.Name&nbsp;typeName,
-                                                            org.geotools.data.Transaction&nbsp;tx)
+<pre>public&nbsp;org.geotools.data.simple.SimpleFeatureSource&nbsp;getFeatureSource(org.opengis.feature.type.Name&nbsp;name,
+                                                            org.geotools.data.Transaction&nbsp;transaction)
                                                               throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
-<dl>
-<dt><strong>Overrides:</strong></dt>
-<dd><code>getFeatureSource</code>&nbsp;in class&nbsp;<code>org.geotools.data.store.ContentDataStore</code></dd>
-<dt><span class="strong">Throws:</span></dt>
+<dl><dt><span class="strong">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd></dl>
 </li>
 </ul>
-<a name="getFeatureSource(org.opengis.feature.type.Name)">
+<a name="createFeatureWriter(java.lang.String, org.geotools.data.Transaction)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>getFeatureSource</h4>
-<pre>public&nbsp;org.geotools.data.store.ContentFeatureSource&nbsp;getFeatureSource(org.opengis.feature.type.Name&nbsp;typeName)
-                                                              throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+<h4>createFeatureWriter</h4>
+<pre>protected&nbsp;org.geotools.data.FeatureWriter&lt;org.opengis.feature.simple.SimpleFeatureType,org.opengis.feature.simple.SimpleFeature&gt;&nbsp;createFeatureWriter(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
+                                                                                                                                         org.geotools.data.Transaction&nbsp;transaction)
+                                                                                                                                              throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
 <dl>
-<dt><strong>Specified by:</strong></dt>
-<dd><code>getFeatureSource</code>&nbsp;in interface&nbsp;<code>org.geotools.data.DataAccess&lt;org.opengis.feature.simple.SimpleFeatureType,org.opengis.feature.simple.SimpleFeature&gt;</code></dd>
-<dt><strong>Specified by:</strong></dt>
-<dd><code>getFeatureSource</code>&nbsp;in interface&nbsp;<code>org.geotools.data.DataStore</code></dd>
 <dt><strong>Overrides:</strong></dt>
-<dd><code>getFeatureSource</code>&nbsp;in class&nbsp;<code>org.geotools.data.store.ContentDataStore</code></dd>
+<dd><code>createFeatureWriter</code>&nbsp;in class&nbsp;<code>org.geotools.data.AbstractDataStore</code></dd>
 <dt><span class="strong">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd></dl>
 </li>
 </ul>
-<a name="createFeatureSource(org.geotools.data.store.ContentEntry)">
+<a name="getLockingManager()">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>createFeatureSource</h4>
-<pre>protected&nbsp;org.geotools.data.store.ContentFeatureSource&nbsp;createFeatureSource(org.geotools.data.store.ContentEntry&nbsp;entry)
-                                                                    throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+<h4>getLockingManager</h4>
+<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/lock/LockingManagement.html" title="interface in mil.nga.giat.geowave.adapter.vector.plugin.lock">LockingManagement</a>&nbsp;getLockingManager()</pre>
 <dl>
 <dt><strong>Specified by:</strong></dt>
-<dd><code>createFeatureSource</code>&nbsp;in class&nbsp;<code>org.geotools.data.store.ContentDataStore</code></dd>
+<dd><code>getLockingManager</code>&nbsp;in interface&nbsp;<code>org.geotools.data.DataStore</code></dd>
+<dt><strong>Overrides:</strong></dt>
+<dd><code>getLockingManager</code>&nbsp;in class&nbsp;<code>org.geotools.data.AbstractDataStore</code></dd>
+</dl>
+</li>
+</ul>
+<a name="getFeatureReader(org.geotools.data.Query, org.geotools.data.Transaction)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getFeatureReader</h4>
+<pre>public&nbsp;org.geotools.data.FeatureReader&lt;org.opengis.feature.simple.SimpleFeatureType,org.opengis.feature.simple.SimpleFeature&gt;&nbsp;getFeatureReader(org.geotools.data.Query&nbsp;query,
+                                                                                                                                      org.geotools.data.Transaction&nbsp;transaction)
+                                                                                                                                        throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+<div class="block">Need to override this to handle the custom transaction state. This a
+ really bummer. It would have been easier if GeoTools had exposed
+ 'applyDiff' on the TransactionDiffState.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code>getFeatureReader</code>&nbsp;in interface&nbsp;<code>org.geotools.data.DataStore</code></dd>
+<dt><strong>Overrides:</strong></dt>
+<dd><code>getFeatureReader</code>&nbsp;in class&nbsp;<code>org.geotools.data.AbstractDataStore</code></dd>
 <dt><span class="strong">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd></dl>
+</li>
+</ul>
+<a name="getFeatureWriter(java.lang.String, org.opengis.filter.Filter, org.geotools.data.Transaction)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getFeatureWriter</h4>
+<pre>public&nbsp;org.geotools.data.FeatureWriter&lt;org.opengis.feature.simple.SimpleFeatureType,org.opengis.feature.simple.SimpleFeature&gt;&nbsp;getFeatureWriter(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
+                                                                                                                                      org.opengis.filter.Filter&nbsp;filter,
+                                                                                                                                      org.geotools.data.Transaction&nbsp;transaction)
+                                                                                                                                        throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code>getFeatureWriter</code>&nbsp;in interface&nbsp;<code>org.geotools.data.DataStore</code></dd>
+<dt><strong>Overrides:</strong></dt>
+<dd><code>getFeatureWriter</code>&nbsp;in class&nbsp;<code>org.geotools.data.AbstractDataStore</code></dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd></dl>
+</li>
+</ul>
+<a name="getFeatureWriterAppend(java.lang.String, org.geotools.data.Transaction)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getFeatureWriterAppend</h4>
+<pre>public&nbsp;org.geotools.data.FeatureWriter&lt;org.opengis.feature.simple.SimpleFeatureType,org.opengis.feature.simple.SimpleFeature&gt;&nbsp;getFeatureWriterAppend(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
+                                                                                                                                            org.geotools.data.Transaction&nbsp;transaction)
+                                                                                                                                              throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code>getFeatureWriterAppend</code>&nbsp;in interface&nbsp;<code>org.geotools.data.DataStore</code></dd>
+<dt><strong>Overrides:</strong></dt>
+<dd><code>getFeatureWriterAppend</code>&nbsp;in class&nbsp;<code>org.geotools.data.AbstractDataStore</code></dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd></dl>
+</li>
+</ul>
+<a name="getSchema(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getSchema</h4>
+<pre>public&nbsp;org.opengis.feature.simple.SimpleFeatureType&nbsp;getSchema(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName)</pre>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code>getSchema</code>&nbsp;in interface&nbsp;<code>org.geotools.data.DataStore</code></dd>
+<dt><strong>Specified by:</strong></dt>
+<dd><code>getSchema</code>&nbsp;in class&nbsp;<code>org.geotools.data.AbstractDataStore</code></dd>
+</dl>
+</li>
+</ul>
+<a name="getStatsAdapter(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getStatsAdapter</h4>
+<pre>protected&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureDataAdapter.html" title="class in mil.nga.giat.geowave.adapter.vector">FeatureDataAdapter</a>&nbsp;getStatsAdapter(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName)</pre>
+</li>
+</ul>
+<a name="getTypeNames()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getTypeNames</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;getTypeNames()</pre>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code>getTypeNames</code>&nbsp;in interface&nbsp;<code>org.geotools.data.DataStore</code></dd>
+<dt><strong>Specified by:</strong></dt>
+<dd><code>getTypeNames</code>&nbsp;in class&nbsp;<code>org.geotools.data.AbstractDataStore</code></dd>
+</dl>
+</li>
+</ul>
+<a name="updateSchema(org.opengis.feature.type.Name, org.opengis.feature.simple.SimpleFeatureType)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>updateSchema</h4>
+<pre>public&nbsp;void&nbsp;updateSchema(org.opengis.feature.type.Name&nbsp;name,
+                org.opengis.feature.simple.SimpleFeatureType&nbsp;featureType)</pre>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code>updateSchema</code>&nbsp;in interface&nbsp;<code>org.geotools.data.DataAccess&lt;org.opengis.feature.simple.SimpleFeatureType,org.opengis.feature.simple.SimpleFeature&gt;</code></dd>
+<dt><strong>Overrides:</strong></dt>
+<dd><code>updateSchema</code>&nbsp;in class&nbsp;<code>org.geotools.data.AbstractDataStore</code></dd>
+</dl>
+</li>
+</ul>
+<a name="updateSchema(java.lang.String, org.opengis.feature.simple.SimpleFeatureType)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>updateSchema</h4>
+<pre>public&nbsp;void&nbsp;updateSchema(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
+                org.opengis.feature.simple.SimpleFeatureType&nbsp;featureType)</pre>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code>updateSchema</code>&nbsp;in interface&nbsp;<code>org.geotools.data.DataStore</code></dd>
+<dt><strong>Overrides:</strong></dt>
+<dd><code>updateSchema</code>&nbsp;in class&nbsp;<code>org.geotools.data.AbstractDataStore</code></dd>
+</dl>
 </li>
 </ul>
 <a name="removeSchema(org.opengis.feature.type.Name)">
@@ -561,7 +1010,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/tra
 <dt><strong>Specified by:</strong></dt>
 <dd><code>removeSchema</code>&nbsp;in interface&nbsp;<code>org.geotools.data.DataAccess&lt;org.opengis.feature.simple.SimpleFeatureType,org.opengis.feature.simple.SimpleFeature&gt;</code></dd>
 <dt><strong>Overrides:</strong></dt>
-<dd><code>removeSchema</code>&nbsp;in class&nbsp;<code>org.geotools.data.store.ContentDataStore</code></dd>
+<dd><code>removeSchema</code>&nbsp;in class&nbsp;<code>org.geotools.data.AbstractDataStore</code></dd>
 <dt><span class="strong">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd></dl>
 </li>
@@ -578,7 +1027,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/tra
 <dt><strong>Specified by:</strong></dt>
 <dd><code>removeSchema</code>&nbsp;in interface&nbsp;<code>org.geotools.data.DataStore</code></dd>
 <dt><strong>Overrides:</strong></dt>
-<dd><code>removeSchema</code>&nbsp;in class&nbsp;<code>org.geotools.data.store.ContentDataStore</code></dd>
+<dd><code>removeSchema</code>&nbsp;in class&nbsp;<code>org.geotools.data.AbstractDataStore</code></dd>
 <dt><span class="strong">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd></dl>
 </li>
@@ -599,6 +1048,19 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/tra
          differences</dd>
 <dt><span class="strong">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd></dl>
+</li>
+</ul>
+<a name="state(org.geotools.data.Transaction)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>state</h4>
+<pre>protected&nbsp;org.geotools.data.TransactionStateDiff&nbsp;state(org.geotools.data.Transaction&nbsp;transaction)</pre>
+<dl>
+<dt><strong>Overrides:</strong></dt>
+<dd><code>state</code>&nbsp;in class&nbsp;<code>org.geotools.data.AbstractDataStore</code></dd>
+</dl>
 </li>
 </ul>
 <a name="transactionCreated(java.lang.String, java.lang.String)">

@@ -450,8 +450,6 @@
 <dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/datastore/accumulo/mapreduce/GeoWaveJobRunner.html#adapters">adapters</a></span> - Variable in class mil.nga.giat.geowave.datastore.accumulo.mapreduce.<a href="./mil/nga/giat/geowave/datastore/accumulo/mapreduce/GeoWaveJobRunner.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce">GeoWaveJobRunner</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#adapterStore">adapterStore</a></span> - Variable in class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveGTDataStore</a></dt>
-<dd>&nbsp;</dd>
 <dt><a href="./mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter"><span class="strong">AdapterStore</span></a> - Interface in <a href="./mil/nga/giat/geowave/core/store/adapter/package-summary.html">mil.nga.giat.geowave.core.store.adapter</a></dt>
 <dd>
 <div class="block">This is responsible for persisting data adapters (either in memory or to disk
@@ -541,6 +539,8 @@
 <dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/datastore/accumulo/mapreduce/output/GeoWaveOutputFormat.html#addDataAdapter(org.apache.hadoop.conf.Configuration,%20mil.nga.giat.geowave.core.store.adapter.DataAdapter)">addDataAdapter(Configuration, DataAdapter&lt;?&gt;)</a></span> - Static method in class mil.nga.giat.geowave.datastore.accumulo.mapreduce.output.<a href="./mil/nga/giat/geowave/datastore/accumulo/mapreduce/output/GeoWaveOutputFormat.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce.output">GeoWaveOutputFormat</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html#addFeatureListener(org.geotools.data.FeatureListener)">addFeatureListener(FeatureListener)</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveFeatureSource</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/analytic/mapreduce/GeoWaveAnalyticJobRunner.html#addIndex(org.apache.hadoop.conf.Configuration,%20mil.nga.giat.geowave.core.store.index.Index)">addIndex(Configuration, Index)</a></span> - Static method in class mil.nga.giat.geowave.analytic.mapreduce.<a href="./mil/nga/giat/geowave/analytic/mapreduce/GeoWaveAnalyticJobRunner.html" title="class in mil.nga.giat.geowave.analytic.mapreduce">GeoWaveAnalyticJobRunner</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/analytic/mapreduce/GeoWaveInputFormatConfiguration.html#addIndex(mil.nga.giat.geowave.core.store.index.Index)">addIndex(Index)</a></span> - Method in class mil.nga.giat.geowave.analytic.mapreduce.<a href="./mil/nga/giat/geowave/analytic/mapreduce/GeoWaveInputFormatConfiguration.html" title="class in mil.nga.giat.geowave.analytic.mapreduce">GeoWaveInputFormatConfiguration</a></dt>
@@ -562,6 +562,8 @@
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/datastore/accumulo/mapreduce/output/GeoWaveOutputFormat.html#addIndex(org.apache.hadoop.conf.Configuration,%20mil.nga.giat.geowave.core.store.index.Index)">addIndex(Configuration, Index)</a></span> - Static method in class mil.nga.giat.geowave.datastore.accumulo.mapreduce.output.<a href="./mil/nga/giat/geowave/datastore/accumulo/mapreduce/output/GeoWaveOutputFormat.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce.output">GeoWaveOutputFormat</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/datastore/accumulo/metadata/AccumuloIndexStore.html#addIndex(mil.nga.giat.geowave.core.store.index.Index)">addIndex(Index)</a></span> - Method in class mil.nga.giat.geowave.datastore.accumulo.metadata.<a href="./mil/nga/giat/geowave/datastore/accumulo/metadata/AccumuloIndexStore.html" title="class in mil.nga.giat.geowave.datastore.accumulo.metadata">AccumuloIndexStore</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#addListener(org.geotools.data.FeatureSource,%20org.geotools.data.FeatureListener)">addListener(FeatureSource&lt;?, ?&gt;, FeatureListener)</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveGTDataStore</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/datastore/accumulo/AccumuloOperations.html#addLocalityGroup(java.lang.String,%20byte[])">addLocalityGroup(String, byte[])</a></span> - Method in interface mil.nga.giat.geowave.datastore.accumulo.<a href="./mil/nga/giat/geowave/datastore/accumulo/AccumuloOperations.html" title="interface in mil.nga.giat.geowave.datastore.accumulo">AccumuloOperations</a></dt>
 <dd>
@@ -1133,8 +1135,6 @@
 <dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/util/FeatureDataUtils.html#buildFeature(org.opengis.feature.simple.SimpleFeatureType,%20org.apache.commons.lang3.tuple.Pair[])">buildFeature(SimpleFeatureType, Pair&lt;String, Object&gt;[])</a></span> - Static method in class mil.nga.giat.geowave.adapter.vector.util.<a href="./mil/nga/giat/geowave/adapter/vector/util/FeatureDataUtils.html" title="class in mil.nga.giat.geowave.adapter.vector.util">FeatureDataUtils</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html#buildFeatureType()">buildFeatureType()</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveFeatureSource</a></dt>
-<dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWavePluginConfig.html#buildFromOptions(org.apache.commons.cli.CommandLine)">buildFromOptions(CommandLine)</a></span> - Static method in class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWavePluginConfig.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWavePluginConfig</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/analytic/PropertyManagement.html#buildFromOptions(org.apache.commons.cli.CommandLine)">buildFromOptions(CommandLine)</a></span> - Method in class mil.nga.giat.geowave.analytic.<a href="./mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a></dt>
@@ -1252,12 +1252,6 @@
 <div class="block">General configuration keys</div>
 </dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/datastore/accumulo/mapreduce/output/GeoWaveOutputConfigurator.html#canCreateTables(java.lang.Class,%20org.apache.hadoop.mapreduce.JobContext)">canCreateTables(Class&lt;?&gt;, JobContext)</a></span> - Static method in class mil.nga.giat.geowave.datastore.accumulo.mapreduce.output.<a href="./mil/nga/giat/geowave/datastore/accumulo/mapreduce/output/GeoWaveOutputConfigurator.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce.output">GeoWaveOutputConfigurator</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html#canLock()">canLock()</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveFeatureSource</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStoreFactory.html#canProcess(java.util.Map)">canProcess(Map&lt;String, Serializable&gt;)</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStoreFactory.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveGTDataStoreFactory</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html#canTransact()">canTransact()</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveFeatureSource</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/stats/FeatureHyperLogLogStatistics.html#cardinality()">cardinality()</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.stats.<a href="./mil/nga/giat/geowave/adapter/vector/stats/FeatureHyperLogLogStatistics.html" title="class in mil.nga.giat.geowave.adapter.vector.stats">FeatureHyperLogLogStatistics</a></dt>
 <dd>&nbsp;</dd>
@@ -2082,7 +2076,7 @@
 <dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/core/index/sfc/tiered/TieredSFCIndexFactory.html#createEqualIntervalPrecisionTieredStrategy(mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition[],%20int[],%20mil.nga.giat.geowave.core.index.sfc.SFCFactory.SFCType,%20int)">createEqualIntervalPrecisionTieredStrategy(NumericDimensionDefinition[], int[], SFCFactory.SFCType, int)</a></span> - Static method in class mil.nga.giat.geowave.core.index.sfc.tiered.<a href="./mil/nga/giat/geowave/core/index/sfc/tiered/TieredSFCIndexFactory.html" title="class in mil.nga.giat.geowave.core.index.sfc.tiered">TieredSFCIndexFactory</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#createFeatureSource(org.geotools.data.store.ContentEntry)">createFeatureSource(ContentEntry)</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveGTDataStore</a></dt>
+<dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#createFeatureWriter(java.lang.String,%20org.geotools.data.Transaction)">createFeatureWriter(String, Transaction)</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveGTDataStore</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/core/store/query/BasicQuery.html#createFilters(mil.nga.giat.geowave.core.store.index.CommonIndexModel)">createFilters(CommonIndexModel)</a></span> - Method in class mil.nga.giat.geowave.core.store.query.<a href="./mil/nga/giat/geowave/core/store/query/BasicQuery.html" title="class in mil.nga.giat.geowave.core.store.query">BasicQuery</a></dt>
 <dd>&nbsp;</dd>
@@ -2235,8 +2229,6 @@
 <dd>
 <div class="block">Creates a math transform using the information provided.</div>
 </dd>
-<dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#createTypeNames()">createTypeNames()</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveGTDataStore</a></dt>
-<dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/visibility/JsonDefinitionColumnVisibilityManagement.html#createVisibilityHandler(java.lang.String,%20mil.nga.giat.geowave.core.store.data.field.FieldVisibilityHandler,%20java.lang.String)">createVisibilityHandler(String, FieldVisibilityHandler&lt;T, Object&gt;, String)</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.plugin.visibility.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/visibility/JsonDefinitionColumnVisibilityManagement.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin.visibility">JsonDefinitionColumnVisibilityManagement</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/core/store/data/visibility/VisibilityManagement.html#createVisibilityHandler(java.lang.String,%20mil.nga.giat.geowave.core.store.data.field.FieldVisibilityHandler,%20java.lang.String)">createVisibilityHandler(String, FieldVisibilityHandler&lt;T, Object&gt;, String)</a></span> - Method in interface mil.nga.giat.geowave.core.store.data.visibility.<a href="./mil/nga/giat/geowave/core/store/data/visibility/VisibilityManagement.html" title="interface in mil.nga.giat.geowave.core.store.data.visibility">VisibilityManagement</a></dt>
@@ -2658,6 +2650,8 @@
 <dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/analytic/db/DirectBasicAccumuloOperationsFactory.html#DirectBasicAccumuloOperationsFactory()">DirectBasicAccumuloOperationsFactory()</a></span> - Constructor for class mil.nga.giat.geowave.analytic.db.<a href="./mil/nga/giat/geowave/analytic/db/DirectBasicAccumuloOperationsFactory.html" title="class in mil.nga.giat.geowave.analytic.db">DirectBasicAccumuloOperationsFactory</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#dispose()">dispose()</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveGTDataStore</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/wms/DelayedBackbufferGraphic.html#dispose()">dispose()</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.wms.<a href="./mil/nga/giat/geowave/adapter/vector/wms/DelayedBackbufferGraphic.html" title="class in mil.nga.giat.geowave.adapter.vector.wms">DelayedBackbufferGraphic</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/analytic/GeoObjectDimensionValues.html#distance">distance</a></span> - Variable in class mil.nga.giat.geowave.analytic.<a href="./mil/nga/giat/geowave/analytic/GeoObjectDimensionValues.html" title="class in mil.nga.giat.geowave.analytic">GeoObjectDimensionValues</a></dt>
@@ -2714,8 +2708,6 @@
 <dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/query/DistributedRenderQuery.html#DistributedRenderQuery(java.util.List,%20mil.nga.giat.geowave.core.store.index.Index,%20mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData,%20java.util.List,%20org.opengis.filter.Filter,%20mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter,%20mil.nga.giat.geowave.adapter.vector.wms.DistributableRenderer,%20java.lang.String...)">DistributedRenderQuery(List&lt;ByteArrayId&gt;, Index, MultiDimensionalNumericData, List&lt;QueryFilter&gt;, Filter, FeatureDataAdapter, DistributableRenderer, String...)</a></span> - Constructor for class mil.nga.giat.geowave.adapter.vector.query.<a href="./mil/nga/giat/geowave/adapter/vector/query/DistributedRenderQuery.html" title="class in mil.nga.giat.geowave.adapter.vector.query">DistributedRenderQuery</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html#doLockInternal(java.lang.String,%20org.opengis.feature.simple.SimpleFeature)">doLockInternal(String, SimpleFeature)</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveFeatureSource</a></dt>
-<dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/analytic/mapreduce/MapReduceJobController.html#DoNothingTask">DoNothingTask</a></span> - Static variable in class mil.nga.giat.geowave.analytic.mapreduce.<a href="./mil/nga/giat/geowave/analytic/mapreduce/MapReduceJobController.html" title="class in mil.nga.giat.geowave.analytic.mapreduce">MapReduceJobController</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="./mil/nga/giat/geowave/core/store/data/field/base/DoubleArraySerializationProvider.html" title="class in mil.nga.giat.geowave.core.store.data.field.base"><span class="strong">DoubleArraySerializationProvider</span></a> - Class in <a href="./mil/nga/giat/geowave/core/store/data/field/base/package-summary.html">mil.nga.giat.geowave.core.store.data.field.base</a></dt>
@@ -2745,8 +2737,6 @@
 <dt><a href="./mil/nga/giat/geowave/core/store/data/field/base/DoubleSerializationProvider.DoubleWriter.html" title="class in mil.nga.giat.geowave.core.store.data.field.base"><span class="strong">DoubleSerializationProvider.DoubleWriter</span></a> - Class in <a href="./mil/nga/giat/geowave/core/store/data/field/base/package-summary.html">mil.nga.giat.geowave.core.store.data.field.base</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/core/store/data/field/base/DoubleSerializationProvider.DoubleWriter.html#DoubleSerializationProvider.DoubleWriter()">DoubleSerializationProvider.DoubleWriter()</a></span> - Constructor for class mil.nga.giat.geowave.core.store.data.field.base.<a href="./mil/nga/giat/geowave/core/store/data/field/base/DoubleSerializationProvider.DoubleWriter.html" title="class in mil.nga.giat.geowave.core.store.data.field.base">DoubleSerializationProvider.DoubleWriter</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html#doUnlockInternal(java.lang.String,%20org.opengis.feature.simple.SimpleFeature)">doUnlockInternal(String, SimpleFeature)</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveFeatureSource</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/datastore/accumulo/cli/DumpStatsOperation.html#doWork(mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloDataStatisticsStore,%20mil.nga.giat.geowave.core.store.DataStore,%20mil.nga.giat.geowave.core.store.index.IndexStore,%20mil.nga.giat.geowave.core.store.adapter.DataAdapter,%20java.lang.String[])">doWork(AccumuloDataStatisticsStore, DataStore, IndexStore, DataAdapter&lt;?&gt;, String[])</a></span> - Method in class mil.nga.giat.geowave.datastore.accumulo.cli.<a href="./mil/nga/giat/geowave/datastore/accumulo/cli/DumpStatsOperation.html" title="class in mil.nga.giat.geowave.datastore.accumulo.cli">DumpStatsOperation</a></dt>
 <dd>&nbsp;</dd>
@@ -4084,7 +4074,7 @@
 <dd>&nbsp;</dd>
 <dt><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveDataStoreComponents.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin"><span class="strong">GeoWaveDataStoreComponents</span></a> - Class in <a href="./mil/nga/giat/geowave/adapter/vector/plugin/package-summary.html">mil.nga.giat.geowave.adapter.vector.plugin</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveDataStoreComponents.html#GeoWaveDataStoreComponents(mil.nga.giat.geowave.adapter.vector.VectorDataStore,%20mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveGTDataStore,%20mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter,%20mil.nga.giat.geowave.adapter.vector.transaction.TransactionsAllocater)">GeoWaveDataStoreComponents(VectorDataStore, GeoWaveGTDataStore, FeatureDataAdapter, TransactionsAllocater)</a></span> - Constructor for class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveDataStoreComponents.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveDataStoreComponents</a></dt>
+<dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveDataStoreComponents.html#GeoWaveDataStoreComponents(mil.nga.giat.geowave.adapter.vector.VectorDataStore,%20mil.nga.giat.geowave.adapter.vector.VectorDataStore,%20mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveGTDataStore,%20mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter,%20mil.nga.giat.geowave.adapter.vector.transaction.TransactionsAllocater)">GeoWaveDataStoreComponents(VectorDataStore, VectorDataStore, GeoWaveGTDataStore, FeatureDataAdapter, TransactionsAllocater)</a></span> - Constructor for class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveDataStoreComponents.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveDataStoreComponents</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="./mil/nga/giat/geowave/datastore/accumulo/mapreduce/dedupe/GeoWaveDedupeCombiner.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce.dedupe"><span class="strong">GeoWaveDedupeCombiner</span></a> - Class in <a href="./mil/nga/giat/geowave/datastore/accumulo/mapreduce/dedupe/package-summary.html">mil.nga.giat.geowave.datastore.accumulo.mapreduce.dedupe</a></dt>
 <dd>
@@ -4147,8 +4137,12 @@
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureReader.html#GeoWaveFeatureReader(org.geotools.data.Query,%20mil.nga.giat.geowave.adapter.vector.plugin.transaction.GeoWaveTransaction,%20mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveDataStoreComponents)">GeoWaveFeatureReader(Query, GeoWaveTransaction, GeoWaveDataStoreComponents)</a></span> - Constructor for class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureReader.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveFeatureReader</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin"><span class="strong">GeoWaveFeatureSource</span></a> - Class in <a href="./mil/nga/giat/geowave/adapter/vector/plugin/package-summary.html">mil.nga.giat.geowave.adapter.vector.plugin</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html#GeoWaveFeatureSource(org.geotools.data.store.ContentEntry,%20org.geotools.data.Query,%20mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter)">GeoWaveFeatureSource(ContentEntry, Query, FeatureDataAdapter)</a></span> - Constructor for class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveFeatureSource</a></dt>
+<dd>
+<div class="block">This is directly used by GeoWave's GeoTools DataStore to get a GeoTools data
+ reader or feature collection for a specific feature type (defined by a
+ GeoWave FeatureDataAdapter).</div>
+</dd>
+<dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html#GeoWaveFeatureSource(mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveGTDataStore,%20mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter)">GeoWaveFeatureSource(GeoWaveGTDataStore, FeatureDataAdapter)</a></span> - Constructor for class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveFeatureSource</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureWriter.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin"><span class="strong">GeoWaveFeatureWriter</span></a> - Class in <a href="./mil/nga/giat/geowave/adapter/vector/plugin/package-summary.html">mil.nga.giat.geowave.adapter.vector.plugin</a></dt>
 <dd>
@@ -4166,7 +4160,9 @@
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGSProcessFactory.html#GeoWaveGSProcessFactory()">GeoWaveGSProcessFactory()</a></span> - Constructor for class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGSProcessFactory.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveGSProcessFactory</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin"><span class="strong">GeoWaveGTDataStore</span></a> - Class in <a href="./mil/nga/giat/geowave/adapter/vector/plugin/package-summary.html">mil.nga.giat.geowave.adapter.vector.plugin</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">This is the main entry point for exposing GeoWave as a DataStore to GeoTools.</div>
+</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#GeoWaveGTDataStore(mil.nga.giat.geowave.adapter.vector.transaction.TransactionsAllocater)">GeoWaveGTDataStore(TransactionsAllocater)</a></span> - Constructor for class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveGTDataStore</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#GeoWaveGTDataStore(mil.nga.giat.geowave.adapter.vector.transaction.TransactionsAllocater,%20mil.nga.giat.geowave.adapter.vector.auth.AuthorizationSPI)">GeoWaveGTDataStore(TransactionsAllocater, AuthorizationSPI)</a></span> - Constructor for class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveGTDataStore</a></dt>
@@ -4179,10 +4175,7 @@
  GeoWave as a DataStore to GeoTools.</div>
 </dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStoreFactory.html#GeoWaveGTDataStoreFactory()">GeoWaveGTDataStoreFactory()</a></span> - Constructor for class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStoreFactory.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveGTDataStoreFactory</a></dt>
-<dd>
-<div class="block">Public "no argument" constructor called by Factory Service Provider (SPI)
- entry listed in META-INF/services/org.geotools.data.DataStoreFactorySPI</div>
-</dd>
+<dd>&nbsp;</dd>
 <dt><a href="./mil/nga/giat/geowave/adapter/raster/plugin/GeoWaveGTRasterFormat.html" title="class in mil.nga.giat.geowave.adapter.raster.plugin"><span class="strong">GeoWaveGTRasterFormat</span></a> - Class in <a href="./mil/nga/giat/geowave/adapter/raster/plugin/package-summary.html">mil.nga.giat.geowave.adapter.raster.plugin</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/raster/plugin/GeoWaveGTRasterFormat.html#GeoWaveGTRasterFormat()">GeoWaveGTRasterFormat()</a></span> - Constructor for class mil.nga.giat.geowave.adapter.raster.plugin.<a href="./mil/nga/giat/geowave/adapter/raster/plugin/GeoWaveGTRasterFormat.html" title="class in mil.nga.giat.geowave.adapter.raster.plugin">GeoWaveGTRasterFormat</a></dt>
@@ -4363,6 +4356,12 @@
 </dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/datastore/accumulo/mapreduce/GeoWaveReducer.html#GeoWaveReducer()">GeoWaveReducer()</a></span> - Constructor for class mil.nga.giat.geowave.datastore.accumulo.mapreduce.<a href="./mil/nga/giat/geowave/datastore/accumulo/mapreduce/GeoWaveReducer.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce">GeoWaveReducer</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveResourceInfo.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin"><span class="strong">GeoWaveResourceInfo</span></a> - Class in <a href="./mil/nga/giat/geowave/adapter/vector/plugin/package-summary.html">mil.nga.giat.geowave.adapter.vector.plugin</a></dt>
+<dd>
+<div class="block">An informational container to self-describe a GeoWave source.</div>
+</dd>
+<dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveResourceInfo.html#GeoWaveResourceInfo(mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveFeatureSource)">GeoWaveResourceInfo(GeoWaveFeatureSource)</a></span> - Constructor for class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveResourceInfo.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveResourceInfo</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/analytic/PropertyManagement.html#GeoWaveRunnerArguments">GeoWaveRunnerArguments</a></span> - Static variable in class mil.nga.giat.geowave.analytic.<a href="./mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a></dt>
 <dd>
 <div class="block">Arguments, in the correct order, passed to <a href="./mil/nga/giat/geowave/datastore/accumulo/mapreduce/GeoWaveJobRunner.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce"><code>GeoWaveJobRunner</code></a></div>
@@ -4535,6 +4534,8 @@
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/service/impl/InfoServiceImpl.html#getAdapters(java.lang.String)">getAdapters(String)</a></span> - Method in class mil.nga.giat.geowave.service.impl.<a href="./mil/nga/giat/geowave/service/impl/InfoServiceImpl.html" title="class in mil.nga.giat.geowave.service.impl">InfoServiceImpl</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/service/InfoService.html#getAdapters(java.lang.String)">getAdapters(String)</a></span> - Method in interface mil.nga.giat.geowave.service.<a href="./mil/nga/giat/geowave/service/InfoService.html" title="interface in mil.nga.giat.geowave.service">InfoService</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#getAdapterStore()">getAdapterStore()</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveGTDataStore</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/analytic/db/AccumuloAdapterStoreFactory.html#getAdapterStore(mil.nga.giat.geowave.analytic.ConfigurationWrapper)">getAdapterStore(ConfigurationWrapper)</a></span> - Method in class mil.nga.giat.geowave.analytic.db.<a href="./mil/nga/giat/geowave/analytic/db/AccumuloAdapterStoreFactory.html" title="class in mil.nga.giat.geowave.analytic.db">AccumuloAdapterStoreFactory</a></dt>
 <dd>&nbsp;</dd>
@@ -4750,6 +4751,12 @@
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/analytic/GeometryDataSetGenerator.html#getBoundingRegion()">getBoundingRegion()</a></span> - Method in class mil.nga.giat.geowave.analytic.<a href="./mil/nga/giat/geowave/analytic/GeometryDataSetGenerator.html" title="class in mil.nga.giat.geowave.analytic">GeometryDataSetGenerator</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureCollection.html#getBounds()">getBounds()</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureCollection.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveFeatureCollection</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html#getBounds()">getBounds()</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveFeatureSource</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html#getBounds(org.geotools.data.Query)">getBounds(Query)</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveFeatureSource</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveResourceInfo.html#getBounds()">getBounds()</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveResourceInfo.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveResourceInfo</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/util/FitToIndexDefaultFeatureCollection.html#getBounds()">getBounds()</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.util.<a href="./mil/nga/giat/geowave/adapter/vector/util/FitToIndexDefaultFeatureCollection.html" title="class in mil.nga.giat.geowave.adapter.vector.util">FitToIndexDefaultFeatureCollection</a></dt>
 <dd>&nbsp;</dd>
@@ -5003,6 +5010,8 @@
 <dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureCollection.html#getCount()">getCount()</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureCollection.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveFeatureCollection</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html#getCount(org.geotools.data.Query)">getCount(Query)</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveFeatureSource</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/util/FitToIndexDefaultFeatureCollection.html#getCount()">getCount()</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.util.<a href="./mil/nga/giat/geowave/adapter/vector/util/FitToIndexDefaultFeatureCollection.html" title="class in mil.nga.giat.geowave.adapter.vector.util">FitToIndexDefaultFeatureCollection</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/analytic/GeoObjectDimensionValues.html#getCount()">getCount()</a></span> - Method in class mil.nga.giat.geowave.analytic.<a href="./mil/nga/giat/geowave/analytic/GeoObjectDimensionValues.html" title="class in mil.nga.giat.geowave.analytic">GeoObjectDimensionValues</a></dt>
@@ -5038,6 +5047,10 @@
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/datastore/accumulo/mapreduce/NativeMapContext.html#getCredentials()">getCredentials()</a></span> - Method in class mil.nga.giat.geowave.datastore.accumulo.mapreduce.<a href="./mil/nga/giat/geowave/datastore/accumulo/mapreduce/NativeMapContext.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce">NativeMapContext</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/datastore/accumulo/mapreduce/NativeReduceContext.html#getCredentials()">getCredentials()</a></span> - Method in class mil.nga.giat.geowave.datastore.accumulo.mapreduce.<a href="./mil/nga/giat/geowave/datastore/accumulo/mapreduce/NativeReduceContext.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce">NativeReduceContext</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html#getCRS()">getCRS()</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveFeatureSource</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveResourceInfo.html#getCRS()">getCRS()</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveResourceInfo.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveResourceInfo</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/wms/accumulo/ServerMapArea.html#getCRS()">getCRS()</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.wms.accumulo.<a href="./mil/nga/giat/geowave/adapter/vector/wms/accumulo/ServerMapArea.html" title="class in mil.nga.giat.geowave.adapter.vector.wms.accumulo">ServerMapArea</a></dt>
 <dd>&nbsp;</dd>
@@ -5240,6 +5253,8 @@
  the ranges, this will calculate the original unbinned range.</div>
 </dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStoreFactory.html#getDescription()">getDescription()</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStoreFactory.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveGTDataStoreFactory</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveResourceInfo.html#getDescription()">getDescription()</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveResourceInfo.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveResourceInfo</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/core/cli/CLIOperation.html#getDescription()">getDescription()</a></span> - Method in class mil.nga.giat.geowave.core.cli.<a href="./mil/nga/giat/geowave/core/cli/CLIOperation.html" title="class in mil.nga.giat.geowave.core.cli">CLIOperation</a></dt>
 <dd>&nbsp;</dd>
@@ -5455,13 +5470,21 @@
 <dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWavePluginConfig.html#getFeatureNamespace()">getFeatureNamespace()</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWavePluginConfig.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWavePluginConfig</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#getFeatureReader(java.lang.String,%20org.geotools.data.Query)">getFeatureReader(String, Query)</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveGTDataStore</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#getFeatureReader(java.lang.String)">getFeatureReader(String)</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveGTDataStore</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#getFeatureReader(org.geotools.data.Query,%20org.geotools.data.Transaction)">getFeatureReader(Query, Transaction)</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveGTDataStore</a></dt>
+<dd>
+<div class="block">Need to override this to handle the custom transaction state.</div>
+</dd>
+<dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html#getFeatures(org.geotools.data.Query)">getFeatures(Query)</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveFeatureSource</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#getFeatureSource(java.lang.String)">getFeatureSource(String)</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveGTDataStore</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#getFeatureSource(java.lang.String,%20org.geotools.data.Transaction)">getFeatureSource(String, Transaction)</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveGTDataStore</a></dt>
+<dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#getFeatureSource(org.opengis.feature.type.Name)">getFeatureSource(Name)</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveGTDataStore</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#getFeatureSource(org.opengis.feature.type.Name,%20org.geotools.data.Transaction)">getFeatureSource(Name, Transaction)</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveGTDataStore</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#getFeatureSource(org.opengis.feature.type.Name)">getFeatureSource(Name)</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveGTDataStore</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/util/RedistributeConfig.html#getFeaturesPerEntry()">getFeaturesPerEntry()</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.util.<a href="./mil/nga/giat/geowave/adapter/vector/util/RedistributeConfig.html" title="class in mil.nga.giat.geowave.adapter.vector.util">RedistributeConfig</a></dt>
 <dd>&nbsp;</dd>
@@ -5474,6 +5497,10 @@
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/util/RedistributeConfig.html#getFeatureType()">getFeatureType()</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.util.<a href="./mil/nga/giat/geowave/adapter/vector/util/RedistributeConfig.html" title="class in mil.nga.giat.geowave.adapter.vector.util">RedistributeConfig</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/util/SimpleFeatureWrapper.html#getFeatureType()">getFeatureType()</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.util.<a href="./mil/nga/giat/geowave/adapter/vector/util/SimpleFeatureWrapper.html" title="class in mil.nga.giat.geowave.adapter.vector.util">SimpleFeatureWrapper</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#getFeatureWriter(java.lang.String,%20org.opengis.filter.Filter,%20org.geotools.data.Transaction)">getFeatureWriter(String, Filter, Transaction)</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveGTDataStore</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#getFeatureWriterAppend(java.lang.String,%20org.geotools.data.Transaction)">getFeatureWriterAppend(String, Transaction)</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveGTDataStore</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/FeatureCollectionDataAdapter.html#getFieldHandler(mil.nga.giat.geowave.core.store.dimension.DimensionField)">getFieldHandler(DimensionField&lt;? extends CommonIndexValue&gt;)</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.<a href="./mil/nga/giat/geowave/adapter/vector/FeatureCollectionDataAdapter.html" title="class in mil.nga.giat.geowave.adapter.vector">FeatureCollectionDataAdapter</a></dt>
 <dd>&nbsp;</dd>
@@ -5950,8 +5977,6 @@
 <dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/raster/plugin/GeoWaveRasterFormatFactory.html#getImplementationHints()">getImplementationHints()</a></span> - Method in class mil.nga.giat.geowave.adapter.raster.plugin.<a href="./mil/nga/giat/geowave/adapter/raster/plugin/GeoWaveRasterFormatFactory.html" title="class in mil.nga.giat.geowave.adapter.raster.plugin">GeoWaveRasterFormatFactory</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStoreFactory.html#getImplementationHints()">getImplementationHints()</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStoreFactory.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveGTDataStoreFactory</a></dt>
-<dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#getIndex(mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter)">getIndex(FeatureDataAdapter)</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveGTDataStore</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/analytic/partitioner/AbstractPartitioner.html#getIndex()">getIndex()</a></span> - Method in class mil.nga.giat.geowave.analytic.partitioner.<a href="./mil/nga/giat/geowave/analytic/partitioner/AbstractPartitioner.html" title="class in mil.nga.giat.geowave.analytic.partitioner">AbstractPartitioner</a></dt>
@@ -6049,6 +6074,10 @@
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/service/impl/InfoServiceImpl.html#getIndices(java.lang.String)">getIndices(String)</a></span> - Method in class mil.nga.giat.geowave.service.impl.<a href="./mil/nga/giat/geowave/service/impl/InfoServiceImpl.html" title="class in mil.nga.giat.geowave.service.impl">InfoServiceImpl</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/service/InfoService.html#getIndices(java.lang.String)">getIndices(String)</a></span> - Method in interface mil.nga.giat.geowave.service.<a href="./mil/nga/giat/geowave/service/InfoService.html" title="interface in mil.nga.giat.geowave.service">InfoService</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html#getInfo()">getInfo()</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveFeatureSource</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#getInfo()">getInfo()</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveGTDataStore</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/AbstractMapReduceIngest.html#getIngestDescription()">getIngestDescription()</a></span> - Method in class mil.nga.giat.geowave.core.ingest.hdfs.mapreduce.<a href="./mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/AbstractMapReduceIngest.html" title="class in mil.nga.giat.geowave.core.ingest.hdfs.mapreduce">AbstractMapReduceIngest</a></dt>
 <dd>&nbsp;</dd>
@@ -6326,6 +6355,8 @@
 <dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/datastore/accumulo/query/ElementsToArrayIterator.html#getKeyPrefix()">getKeyPrefix()</a></span> - Method in class mil.nga.giat.geowave.datastore.accumulo.query.<a href="./mil/nga/giat/geowave/datastore/accumulo/query/ElementsToArrayIterator.html" title="class in mil.nga.giat.geowave.datastore.accumulo.query">ElementsToArrayIterator</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveResourceInfo.html#getKeywords()">getKeywords()</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveResourceInfo.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveResourceInfo</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/format/tdrive/TdrivePoint.Builder.html#getLatitude()">getLatitude()</a></span> - Method in class mil.nga.giat.geowave.format.tdrive.<a href="./mil/nga/giat/geowave/format/tdrive/TdrivePoint.Builder.html" title="class in mil.nga.giat.geowave.format.tdrive">TdrivePoint.Builder</a></dt>
 <dd>
 <div class="block">Gets the value of the 'latitude' field</div>
@@ -6380,6 +6411,8 @@
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/lock/AuthorizedLock.html#getLockingManagement()">getLockingManagement()</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.plugin.lock.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/lock/AuthorizedLock.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin.lock">AuthorizedLock</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWavePluginConfig.html#getLockingManagementFactory()">getLockingManagementFactory()</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWavePluginConfig.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWavePluginConfig</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#getLockingManager()">getLockingManager()</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveGTDataStore</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/analytic/mapreduce/GeoWaveAnalyticJobRunner.html#getLogger()">getLogger()</a></span> - Static method in class mil.nga.giat.geowave.analytic.mapreduce.<a href="./mil/nga/giat/geowave/analytic/mapreduce/GeoWaveAnalyticJobRunner.html" title="class in mil.nga.giat.geowave.analytic.mapreduce">GeoWaveAnalyticJobRunner</a></dt>
 <dd>&nbsp;</dd>
@@ -6537,6 +6570,10 @@
 <dd>
 <div class="block">Used to retrieve the TransactionStateDiff for this transaction.</div>
 </dd>
+<dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html#getName()">getName()</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveFeatureSource</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveResourceInfo.html#getName()">getName()</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveResourceInfo.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveResourceInfo</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/util/SimpleFeatureWrapper.html#getName()">getName()</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.util.<a href="./mil/nga/giat/geowave/adapter/vector/util/SimpleFeatureWrapper.html" title="class in mil.nga.giat.geowave.adapter.vector.util">SimpleFeatureWrapper</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/analytic/AnalyticItemWrapper.html#getName()">getName()</a></span> - Method in interface mil.nga.giat.geowave.analytic.<a href="./mil/nga/giat/geowave/analytic/AnalyticItemWrapper.html" title="interface in mil.nga.giat.geowave.analytic">AnalyticItemWrapper</a></dt>
@@ -6552,6 +6589,8 @@
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/core/cli/CustomOperationCategory.html#getName()">getName()</a></span> - Method in class mil.nga.giat.geowave.core.cli.<a href="./mil/nga/giat/geowave/core/cli/CustomOperationCategory.html" title="class in mil.nga.giat.geowave.core.cli">CustomOperationCategory</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/core/geotime/store/query/TemporalConstraints.html#getName()">getName()</a></span> - Method in class mil.nga.giat.geowave.core.geotime.store.query.<a href="./mil/nga/giat/geowave/core/geotime/store/query/TemporalConstraints.html" title="class in mil.nga.giat.geowave.core.geotime.store.query">TemporalConstraints</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#getNames()">getNames()</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveGTDataStore</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/datastore/accumulo/AccumuloCommandLineOptions.html#getNamespace()">getNamespace()</a></span> - Method in class mil.nga.giat.geowave.datastore.accumulo.<a href="./mil/nga/giat/geowave/datastore/accumulo/AccumuloCommandLineOptions.html" title="class in mil.nga.giat.geowave.datastore.accumulo">AccumuloCommandLineOptions</a></dt>
 <dd>&nbsp;</dd>
@@ -6978,6 +7017,8 @@
 <dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/datastore/accumulo/mapreduce/input/GeoWaveInputFormat.html#getQuery(org.apache.hadoop.mapreduce.JobContext)">getQuery(JobContext)</a></span> - Static method in class mil.nga.giat.geowave.datastore.accumulo.mapreduce.input.<a href="./mil/nga/giat/geowave/datastore/accumulo/mapreduce/input/GeoWaveInputFormat.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce.input">GeoWaveInputFormat</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html#getQueryCapabilities()">getQueryCapabilities()</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveFeatureSource</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/core/geotime/store/query/SpatialQuery.html#getQueryGeometry()">getQueryGeometry()</a></span> - Method in class mil.nga.giat.geowave.core.geotime.store.query.<a href="./mil/nga/giat/geowave/core/geotime/store/query/SpatialQuery.html" title="class in mil.nga.giat.geowave.core.geotime.store.query">SpatialQuery</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/core/index/NullNumericIndexStrategy.html#getQueryRanges(mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData)">getQueryRanges(MultiDimensionalNumericData)</a></span> - Method in class mil.nga.giat.geowave.core.index.<a href="./mil/nga/giat/geowave/core/index/NullNumericIndexStrategy.html" title="class in mil.nga.giat.geowave.core.index">NullNumericIndexStrategy</a></dt>
@@ -7109,7 +7150,7 @@
 </dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/core/store/index/BasicIndexModel.html#getReader(mil.nga.giat.geowave.core.index.ByteArrayId)">getReader(ByteArrayId)</a></span> - Method in class mil.nga.giat.geowave.core.store.index.<a href="./mil/nga/giat/geowave/core/store/index/BasicIndexModel.html" title="class in mil.nga.giat.geowave.core.store.index">BasicIndexModel</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html#getReaderInternal(org.geotools.data.Query)">getReaderInternal(Query)</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveFeatureSource</a></dt>
+<dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html#getReaderInternal(org.geotools.data.Query,%20mil.nga.giat.geowave.adapter.vector.plugin.transaction.GeoWaveTransaction)">getReaderInternal(Query, GeoWaveTransaction)</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveFeatureSource</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/raster/plugin/GeoWaveRasterReader.html#getReadingResolutions(org.geotools.coverage.grid.io.OverviewPolicy,%20double[])">getReadingResolutions(OverviewPolicy, double[])</a></span> - Method in class mil.nga.giat.geowave.adapter.raster.plugin.<a href="./mil/nga/giat/geowave/adapter/raster/plugin/GeoWaveRasterReader.html" title="class in mil.nga.giat.geowave.adapter.raster.plugin">GeoWaveRasterReader</a></dt>
 <dd>&nbsp;</dd>
@@ -7236,6 +7277,14 @@
 <dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureCollection.html#getSchema()">getSchema()</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureCollection.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveFeatureCollection</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html#getSchema()">getSchema()</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveFeatureSource</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#getSchema(org.opengis.feature.type.Name)">getSchema(Name)</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveGTDataStore</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#getSchema(java.lang.String)">getSchema(String)</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveGTDataStore</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveResourceInfo.html#getSchema()">getSchema()</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveResourceInfo.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveResourceInfo</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/util/FitToIndexDefaultFeatureCollection.html#getSchema()">getSchema()</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.util.<a href="./mil/nga/giat/geowave/adapter/vector/util/FitToIndexDefaultFeatureCollection.html" title="class in mil.nga.giat.geowave.adapter.vector.util">FitToIndexDefaultFeatureCollection</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/core/ingest/avro/WholeFile.html#getSchema()">getSchema()</a></span> - Method in class mil.nga.giat.geowave.core.ingest.avro.<a href="./mil/nga/giat/geowave/core/ingest/avro/WholeFile.html" title="class in mil.nga.giat.geowave.core.ingest.avro">WholeFile</a></dt>
@@ -7326,7 +7375,17 @@
 <dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/analytic/kmeans/serial/StatsMap.html#getStats(mil.nga.giat.geowave.analytic.kmeans.serial.AnalyticStats.StatValue)">getStats(AnalyticStats.StatValue)</a></span> - Method in class mil.nga.giat.geowave.analytic.kmeans.serial.<a href="./mil/nga/giat/geowave/analytic/kmeans/serial/StatsMap.html" title="class in mil.nga.giat.geowave.analytic.kmeans.serial">StatsMap</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html#getStatsAdapter(java.lang.String)">getStatsAdapter(String)</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveFeatureSource</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#getStatsAdapter(java.lang.String)">getStatsAdapter(String)</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveGTDataStore</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveDataStoreComponents.html#getStatsDataStore()">getStatsDataStore()</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveDataStoreComponents.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveDataStoreComponents</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#getStatsDataStore()">getStatsDataStore()</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveGTDataStore</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureReader.html#getStatsFor(java.lang.String)">getStatsFor(String)</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureReader.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveFeatureReader</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#getStatsOperations()">getStatsOperations()</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveGTDataStore</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureCollection.html#getStatsQueryName()">getStatsQueryName()</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureCollection.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveFeatureCollection</a></dt>
 <dd>&nbsp;</dd>
@@ -7482,6 +7541,8 @@
 <div class="block">Instantiates the class type as a new object with the temporal value being
  the longVal interpreted as milliseconds since the epoch in GMT</div>
 </dd>
+<dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveResourceInfo.html#getTitle()">getTitle()</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveResourceInfo.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveResourceInfo</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/query/CqlQueryRenderIterator.html#getTopKey()">getTopKey()</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.query.<a href="./mil/nga/giat/geowave/adapter/vector/query/CqlQueryRenderIterator.html" title="class in mil.nga.giat.geowave.adapter.vector.query">CqlQueryRenderIterator</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/query/FixedCardinalitySkippingIterator.html#getTopKey()">getTopKey()</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.query.<a href="./mil/nga/giat/geowave/adapter/vector/query/FixedCardinalitySkippingIterator.html" title="class in mil.nga.giat.geowave.adapter.vector.query">FixedCardinalitySkippingIterator</a></dt>
@@ -7519,6 +7580,8 @@
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/analytic/AnalyticFeature.ClusterFeatureAttribute.html#getType()">getType()</a></span> - Method in enum mil.nga.giat.geowave.analytic.<a href="./mil/nga/giat/geowave/analytic/AnalyticFeature.ClusterFeatureAttribute.html" title="enum in mil.nga.giat.geowave.analytic">AnalyticFeature.ClusterFeatureAttribute</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/datastore/accumulo/cli/StatsCommandLineOptions.html#getTypeName()">getTypeName()</a></span> - Method in class mil.nga.giat.geowave.datastore.accumulo.cli.<a href="./mil/nga/giat/geowave/datastore/accumulo/cli/StatsCommandLineOptions.html" title="class in mil.nga.giat.geowave.datastore.accumulo.cli">StatsCommandLineOptions</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#getTypeNames()">getTypeNames()</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveGTDataStore</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/core/store/filter/GenericTypeResolver.html#getTypeVariableMap(java.lang.Class)">getTypeVariableMap(Class&lt;?&gt;)</a></span> - Static method in class mil.nga.giat.geowave.core.store.filter.<a href="./mil/nga/giat/geowave/core/store/filter/GenericTypeResolver.html" title="class in mil.nga.giat.geowave.core.store.filter">GenericTypeResolver</a></dt>
 <dd>
@@ -7683,6 +7746,8 @@
 <dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/core/store/adapter/statistics/StatisticalDataAdapter.html#getVisibilityHandler(mil.nga.giat.geowave.core.index.ByteArrayId)">getVisibilityHandler(ByteArrayId)</a></span> - Method in interface mil.nga.giat.geowave.core.store.adapter.statistics.<a href="./mil/nga/giat/geowave/core/store/adapter/statistics/StatisticalDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">StatisticalDataAdapter</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#getVisibilityManagement()">getVisibilityManagement()</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveGTDataStore</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/wms/accumulo/ServerPaintArea.html#getWidth()">getWidth()</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.wms.accumulo.<a href="./mil/nga/giat/geowave/adapter/vector/wms/accumulo/ServerPaintArea.html" title="class in mil.nga.giat.geowave.adapter.vector.wms.accumulo">ServerPaintArea</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/core/geotime/store/statistics/BoundingBoxDataStatistics.html#getWidth()">getWidth()</a></span> - Method in class mil.nga.giat.geowave.core.geotime.store.statistics.<a href="./mil/nga/giat/geowave/core/geotime/store/statistics/BoundingBoxDataStatistics.html" title="class in mil.nga.giat.geowave.core.geotime.store.statistics">BoundingBoxDataStatistics</a></dt>
@@ -7739,7 +7804,9 @@
 </dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/core/store/index/BasicIndexModel.html#getWriter(mil.nga.giat.geowave.core.index.ByteArrayId)">getWriter(ByteArrayId)</a></span> - Method in class mil.nga.giat.geowave.core.store.index.<a href="./mil/nga/giat/geowave/core/store/index/BasicIndexModel.html" title="class in mil.nga.giat.geowave.core.store.index">BasicIndexModel</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html#getWriterInternal(org.geotools.data.Query,%20int)">getWriterInternal(Query, int)</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveFeatureSource</a></dt>
+<dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html#getWriterInternal(mil.nga.giat.geowave.adapter.vector.plugin.transaction.GeoWaveTransaction)">getWriterInternal(GeoWaveTransaction)</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveFeatureSource</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html#getWriterInternal(mil.nga.giat.geowave.adapter.vector.plugin.transaction.GeoWaveTransaction,%20org.opengis.filter.Filter)">getWriterInternal(GeoWaveTransaction, Filter)</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveFeatureSource</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/core/store/DataStoreEntryInfo.FieldInfo.html#getWrittenValue()">getWrittenValue()</a></span> - Method in class mil.nga.giat.geowave.core.store.<a href="./mil/nga/giat/geowave/core/store/DataStoreEntryInfo.FieldInfo.html" title="class in mil.nga.giat.geowave.core.store">DataStoreEntryInfo.FieldInfo</a></dt>
 <dd>&nbsp;</dd>
@@ -8749,8 +8816,6 @@
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/raster/plugin/GeoWaveGTRasterFormatFactory.html#isAvailable()">isAvailable()</a></span> - Method in class mil.nga.giat.geowave.adapter.raster.plugin.<a href="./mil/nga/giat/geowave/adapter/raster/plugin/GeoWaveGTRasterFormatFactory.html" title="class in mil.nga.giat.geowave.adapter.raster.plugin">GeoWaveGTRasterFormatFactory</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/raster/plugin/GeoWaveRasterFormatFactory.html#isAvailable()">isAvailable()</a></span> - Method in class mil.nga.giat.geowave.adapter.raster.plugin.<a href="./mil/nga/giat/geowave/adapter/raster/plugin/GeoWaveRasterFormatFactory.html" title="class in mil.nga.giat.geowave.adapter.raster.plugin">GeoWaveRasterFormatFactory</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStoreFactory.html#isAvailable()">isAvailable()</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStoreFactory.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveGTDataStoreFactory</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/core/ingest/IngestCommandLineOptions.html#isClearNamespace()">isClearNamespace()</a></span> - Method in class mil.nga.giat.geowave.core.ingest.<a href="./mil/nga/giat/geowave/core/ingest/IngestCommandLineOptions.html" title="class in mil.nga.giat.geowave.core.ingest">IngestCommandLineOptions</a></dt>
 <dd>&nbsp;</dd>
@@ -11423,7 +11488,11 @@
 <dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/core/geotime/store/query/TemporalConstraintsSet.html#removeAllConstraintsExcept(java.lang.String...)">removeAllConstraintsExcept(String...)</a></span> - Method in class mil.nga.giat.geowave.core.geotime.store.query.<a href="./mil/nga/giat/geowave/core/geotime/store/query/TemporalConstraintsSet.html" title="class in mil.nga.giat.geowave.core.geotime.store.query">TemporalConstraintsSet</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html#removeFeatureListener(org.geotools.data.FeatureListener)">removeFeatureListener(FeatureListener)</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveFeatureSource</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/datastore/accumulo/util/AccumuloUtils.html#removeFromAltIndex(mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter,%20java.util.List,%20T,%20mil.nga.giat.geowave.datastore.accumulo.Writer)">removeFromAltIndex(WritableDataAdapter&lt;T&gt;, List&lt;ByteArrayId&gt;, T, Writer)</a></span> - Static method in class mil.nga.giat.geowave.datastore.accumulo.util.<a href="./mil/nga/giat/geowave/datastore/accumulo/util/AccumuloUtils.html" title="class in mil.nga.giat.geowave.datastore.accumulo.util">AccumuloUtils</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#removeListener(org.geotools.data.FeatureSource,%20org.geotools.data.FeatureListener)">removeListener(FeatureSource&lt;?, ?&gt;, FeatureListener)</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveGTDataStore</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/analytic/PropertyManagement.html#removeOption(java.util.Set,%20mil.nga.giat.geowave.analytic.param.ParameterEnum)">removeOption(Set&lt;Option&gt;, ParameterEnum)</a></span> - Static method in class mil.nga.giat.geowave.analytic.<a href="./mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a></dt>
 <dd>&nbsp;</dd>
@@ -11921,6 +11990,8 @@
 <dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/datastore/accumulo/mapreduce/GeoWaveKey.html#setAdapterId(mil.nga.giat.geowave.core.index.ByteArrayId)">setAdapterId(ByteArrayId)</a></span> - Method in class mil.nga.giat.geowave.datastore.accumulo.mapreduce.<a href="./mil/nga/giat/geowave/datastore/accumulo/mapreduce/GeoWaveKey.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce">GeoWaveKey</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#setAdapterStore(mil.nga.giat.geowave.core.store.adapter.AdapterStore)">setAdapterStore(AdapterStore)</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveGTDataStore</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/stats/StatsConfigurationCollection.SimpleFeatureStatsConfigurationCollection.html#setAttConfig(java.util.Map)">setAttConfig(Map&lt;String, StatsConfigurationCollection&gt;)</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.stats.<a href="./mil/nga/giat/geowave/adapter/vector/stats/StatsConfigurationCollection.SimpleFeatureStatsConfigurationCollection.html" title="class in mil.nga.giat.geowave.adapter.vector.stats">StatsConfigurationCollection.SimpleFeatureStatsConfigurationCollection</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/util/SimpleFeatureWrapper.html#setAttribute(java.lang.String,%20java.lang.Object)">setAttribute(String, Object)</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.util.<a href="./mil/nga/giat/geowave/adapter/vector/util/SimpleFeatureWrapper.html" title="class in mil.nga.giat.geowave.adapter.vector.util">SimpleFeatureWrapper</a></dt>
@@ -12030,6 +12101,8 @@
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/analytic/mapreduce/SequenceFileOutputFormatConfiguration.html#setDataIsWritable(boolean)">setDataIsWritable(boolean)</a></span> - Method in class mil.nga.giat.geowave.analytic.mapreduce.<a href="./mil/nga/giat/geowave/analytic/mapreduce/SequenceFileOutputFormatConfiguration.html" title="class in mil.nga.giat.geowave.analytic.mapreduce">SequenceFileOutputFormatConfiguration</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/analytic/param/FormatConfiguration.html#setDataIsWritable(boolean)">setDataIsWritable(boolean)</a></span> - Method in interface mil.nga.giat.geowave.analytic.param.<a href="./mil/nga/giat/geowave/analytic/param/FormatConfiguration.html" title="interface in mil.nga.giat.geowave.analytic.param">FormatConfiguration</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#setDataStore(mil.nga.giat.geowave.adapter.vector.VectorDataStore)">setDataStore(VectorDataStore)</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveGTDataStore</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/util/SimpleFeatureWrapper.html#setDefaultGeometry(java.lang.Object)">setDefaultGeometry(Object)</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.util.<a href="./mil/nga/giat/geowave/adapter/vector/util/SimpleFeatureWrapper.html" title="class in mil.nga.giat.geowave.adapter.vector.util">SimpleFeatureWrapper</a></dt>
 <dd>&nbsp;</dd>
@@ -12143,6 +12216,8 @@
 <dd>
 <div class="block">Sets the value of the 'latitude' field.</div>
 </dd>
+<dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#setListenerManager(org.geotools.data.FeatureListenerManager)">setListenerManager(FeatureListenerManager)</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveGTDataStore</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/datastore/accumulo/util/AccumuloUtils.html#setLocalityGroup(org.apache.accumulo.core.client.Connector,%20java.lang.String,%20mil.nga.giat.geowave.core.store.index.Index,%20mil.nga.giat.geowave.core.store.adapter.DataAdapter)">setLocalityGroup(Connector, String, Index, DataAdapter&lt;?&gt;)</a></span> - Static method in class mil.nga.giat.geowave.datastore.accumulo.util.<a href="./mil/nga/giat/geowave/datastore/accumulo/util/AccumuloUtils.html" title="class in mil.nga.giat.geowave.datastore.accumulo.util">AccumuloUtils</a></dt>
 <dd>
 <div class="block">Set locality group.</div>
@@ -12373,9 +12448,15 @@
 </dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/datastore/accumulo/metadata/AccumuloDataStatisticsStore.html#setStatistics(mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics)">setStatistics(DataStatistics&lt;?&gt;)</a></span> - Method in class mil.nga.giat.geowave.datastore.accumulo.metadata.<a href="./mil/nga/giat/geowave/datastore/accumulo/metadata/AccumuloDataStatisticsStore.html" title="class in mil.nga.giat.geowave.datastore.accumulo.metadata">AccumuloDataStatisticsStore</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#setStatsDataStore(mil.nga.giat.geowave.adapter.vector.VectorDataStore)">setStatsDataStore(VectorDataStore)</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveGTDataStore</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#setStatsOperations(mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations)">setStatsOperations(AccumuloOperations)</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveGTDataStore</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/datastore/accumulo/mapreduce/NativeMapContext.html#setStatus(java.lang.String)">setStatus(String)</a></span> - Method in class mil.nga.giat.geowave.datastore.accumulo.mapreduce.<a href="./mil/nga/giat/geowave/datastore/accumulo/mapreduce/NativeMapContext.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce">NativeMapContext</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/datastore/accumulo/mapreduce/NativeReduceContext.html#setStatus(java.lang.String)">setStatus(String)</a></span> - Method in class mil.nga.giat.geowave.datastore.accumulo.mapreduce.<a href="./mil/nga/giat/geowave/datastore/accumulo/mapreduce/NativeReduceContext.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce">NativeReduceContext</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#setStoreOperations(mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations)">setStoreOperations(AccumuloOperations)</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveGTDataStore</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/wms/DelayedBackbufferGraphic.html#setStroke(java.awt.Stroke)">setStroke(Stroke)</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.wms.<a href="./mil/nga/giat/geowave/adapter/vector/wms/DelayedBackbufferGraphic.html" title="class in mil.nga.giat.geowave.adapter.vector.wms">DelayedBackbufferGraphic</a></dt>
 <dd>&nbsp;</dd>
@@ -12953,6 +13034,8 @@
 <dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/test/service/ServicesTestEnvironment.html#startServices()">startServices()</a></span> - Static method in class mil.nga.giat.geowave.test.service.<a href="./mil/nga/giat/geowave/test/service/ServicesTestEnvironment.html" title="class in mil.nga.giat.geowave.test.service">ServicesTestEnvironment</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#state(org.geotools.data.Transaction)">state(Transaction)</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveGTDataStore</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="./mil/nga/giat/geowave/core/store/adapter/statistics/StatisticalDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics"><span class="strong">StatisticalDataAdapter</span></a>&lt;<a href="./mil/nga/giat/geowave/core/store/adapter/statistics/StatisticalDataAdapter.html" title="type parameter in StatisticalDataAdapter">T</a>&gt; - Interface in <a href="./mil/nga/giat/geowave/core/store/adapter/statistics/package-summary.html">mil.nga.giat.geowave.core.store.adapter.statistics</a></dt>
 <dd>
 <div class="block">This interface allows for a data adapter to define a set of statistics that
@@ -13016,6 +13099,8 @@
 <dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/stats/StatsConfigurationCollection.SimpleFeatureStatsConfigurationCollection.html#StatsConfigurationCollection.SimpleFeatureStatsConfigurationCollection(org.opengis.feature.simple.SimpleFeatureType)">StatsConfigurationCollection.SimpleFeatureStatsConfigurationCollection(SimpleFeatureType)</a></span> - Constructor for class mil.nga.giat.geowave.adapter.vector.stats.<a href="./mil/nga/giat/geowave/adapter/vector/stats/StatsConfigurationCollection.SimpleFeatureStatsConfigurationCollection.html" title="class in mil.nga.giat.geowave.adapter.vector.stats">StatsConfigurationCollection.SimpleFeatureStatsConfigurationCollection</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#statsDataStore">statsDataStore</a></span> - Variable in class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveGTDataStore</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="./mil/nga/giat/geowave/adapter/vector/stats/StatsManager.html" title="class in mil.nga.giat.geowave.adapter.vector.stats"><span class="strong">StatsManager</span></a> - Class in <a href="./mil/nga/giat/geowave/adapter/vector/stats/package-summary.html">mil.nga.giat.geowave.adapter.vector.stats</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/stats/StatsManager.html#StatsManager(mil.nga.giat.geowave.core.store.adapter.DataAdapter,%20org.opengis.feature.simple.SimpleFeatureType)">StatsManager(DataAdapter&lt;SimpleFeature&gt;, SimpleFeatureType)</a></span> - Constructor for class mil.nga.giat.geowave.adapter.vector.stats.<a href="./mil/nga/giat/geowave/adapter/vector/stats/StatsManager.html" title="class in mil.nga.giat.geowave.adapter.vector.stats">StatsManager</a></dt>
@@ -13041,6 +13126,8 @@
 <dt><a href="./mil/nga/giat/geowave/datastore/accumulo/cli/StatsOperationCLIProvider.html" title="class in mil.nga.giat.geowave.datastore.accumulo.cli"><span class="strong">StatsOperationCLIProvider</span></a> - Class in <a href="./mil/nga/giat/geowave/datastore/accumulo/cli/package-summary.html">mil.nga.giat.geowave.datastore.accumulo.cli</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/datastore/accumulo/cli/StatsOperationCLIProvider.html#StatsOperationCLIProvider()">StatsOperationCLIProvider()</a></span> - Constructor for class mil.nga.giat.geowave.datastore.accumulo.cli.<a href="./mil/nga/giat/geowave/datastore/accumulo/cli/StatsOperationCLIProvider.html" title="class in mil.nga.giat.geowave.datastore.accumulo.cli">StatsOperationCLIProvider</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#statsOperations">statsOperations</a></span> - Variable in class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveGTDataStore</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/test/kafka/KafkaTestEnvironment.html#stopKafkaServer()">stopKafkaServer()</a></span> - Static method in class mil.nga.giat.geowave.test.kafka.<a href="./mil/nga/giat/geowave/test/kafka/KafkaTestEnvironment.html" title="class in mil.nga.giat.geowave.test.kafka">KafkaTestEnvironment</a></dt>
 <dd>&nbsp;</dd>
@@ -13878,6 +13965,10 @@
 <dt><a href="./mil/nga/giat/geowave/analytic/mapreduce/kmeans/UpdateCentroidCostMapReduce.UpdateCentroidCostReducer.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.kmeans"><span class="strong">UpdateCentroidCostMapReduce.UpdateCentroidCostReducer</span></a> - Class in <a href="./mil/nga/giat/geowave/analytic/mapreduce/kmeans/package-summary.html">mil.nga.giat.geowave.analytic.mapreduce.kmeans</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/analytic/mapreduce/kmeans/UpdateCentroidCostMapReduce.UpdateCentroidCostReducer.html#UpdateCentroidCostMapReduce.UpdateCentroidCostReducer()">UpdateCentroidCostMapReduce.UpdateCentroidCostReducer()</a></span> - Constructor for class mil.nga.giat.geowave.analytic.mapreduce.kmeans.<a href="./mil/nga/giat/geowave/analytic/mapreduce/kmeans/UpdateCentroidCostMapReduce.UpdateCentroidCostReducer.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.kmeans">UpdateCentroidCostMapReduce.UpdateCentroidCostReducer</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#updateSchema(org.opengis.feature.type.Name,%20org.opengis.feature.simple.SimpleFeatureType)">updateSchema(Name, SimpleFeatureType)</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveGTDataStore</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#updateSchema(java.lang.String,%20org.opengis.feature.simple.SimpleFeatureType)">updateSchema(String, SimpleFeatureType)</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.plugin.<a href="./mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveGTDataStore</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="strong"><a href="./mil/nga/giat/geowave/adapter/vector/stats/StatsConfigurationCollection.SimpleFeatureStatsConfigurationCollection.html#updateType(org.opengis.feature.simple.SimpleFeatureType)">updateType(SimpleFeatureType)</a></span> - Method in class mil.nga.giat.geowave.adapter.vector.stats.<a href="./mil/nga/giat/geowave/adapter/vector/stats/StatsConfigurationCollection.SimpleFeatureStatsConfigurationCollection.html" title="class in mil.nga.giat.geowave.adapter.vector.stats">StatsConfigurationCollection.SimpleFeatureStatsConfigurationCollection</a></dt>
 <dd>&nbsp;</dd>
