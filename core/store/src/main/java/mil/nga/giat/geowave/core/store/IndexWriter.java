@@ -18,4 +18,6 @@ public interface IndexWriter extends
 			final WritableDataAdapter<T> writableAdapter );
 
 	public Index getIndex();
+
+	public void flush();
 }

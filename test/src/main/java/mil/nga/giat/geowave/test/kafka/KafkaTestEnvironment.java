@@ -1,15 +1,13 @@
 package mil.nga.giat.geowave.test.kafka;
 
 import java.io.File;
+import java.net.UnknownHostException;
 import java.util.Properties;
 
-import kafka.javaapi.producer.Producer;
-import kafka.producer.ProducerConfig;
 import kafka.server.KafkaConfig;
 import kafka.server.KafkaServerStartable;
 import mil.nga.giat.geowave.core.cli.GeoWaveMain;
 import mil.nga.giat.geowave.core.geotime.IndexType;
-import mil.nga.giat.geowave.core.ingest.kafka.KafkaCommandLineOptions;
 import mil.nga.giat.geowave.test.GeoWaveTestEnvironment;
 
 import org.apache.commons.lang.StringUtils;
@@ -22,6 +20,7 @@ abstract public class KafkaTestEnvironment<I> extends
 
 {
 	private final static Logger LOGGER = Logger.getLogger(KafkaTestEnvironment.class);
+	private final static String MAX_MESSAGE_BYTES = "5000000";
 
 	protected static KafkaServerStartable kafkaServer;
 	protected static final File DEFAULT_LOG_DIR = new File(
@@ -32,10 +31,17 @@ abstract public class KafkaTestEnvironment<I> extends
 			final String ingestFilePath ) {
 		LOGGER.warn("Staging '" + ingestFilePath + "' to a Kafka topic - this may take several minutes...");
 		String[] args = null;
+		String localhost = "localhost";
+		try {
+			localhost = java.net.InetAddress.getLocalHost().getCanonicalHostName();
+		}
+		catch (final UnknownHostException e) {
+			LOGGER.warn(
+					"unable to get canonical hostname for localhost",
+					e);
+		}
 		synchronized (MUTEX) {
-			args = StringUtils.split(
-					"-kafkastage -f gpx -b " + ingestFilePath,
-					' ');
+			args = StringUtils.split("-kafkastage -f gpx -b " + ingestFilePath + " -metadataBrokerList " + localhost + ":9092 -requestRequiredAcks 1 -producerType sync -retryBackoffMs 1000 -serializerClass mil.nga.giat.geowave.core.ingest.kafka.AvroKafkaEncoder" + ' ');
 		}
 
 		GeoWaveMain.main(args);
@@ -44,10 +50,9 @@ abstract public class KafkaTestEnvironment<I> extends
 	protected void testKafkaIngest(
 			final IndexType indexType,
 			final String ingestFilePath ) {
-
 		LOGGER.warn("Ingesting '" + ingestFilePath + "' - this may take several minutes...");
 		final String[] args = StringUtils.split(
-				"-kafkaingest -f gpx -z " + zookeeper + " -i " + accumuloInstance + " -u " + accumuloUser + " -p " + accumuloPassword + " -n " + TEST_NAMESPACE + " -dim " + (indexType.equals(IndexType.SPATIAL_VECTOR) ? "spatial" : "spatial-temporal"),
+				"-kafkaingest -f gpx -consumerTimeoutMs 5000 -reconnectOnTimeout -groupId testGroup -autoOffsetReset smallest -fetchMessageMaxBytes " + MAX_MESSAGE_BYTES + " -zookeeperConnect " + zookeeper + " -z " + zookeeper + " -i " + accumuloInstance + " -u " + accumuloUser + " -p " + accumuloPassword + " -n " + TEST_NAMESPACE + " -dim " + (indexType.equals(IndexType.SPATIAL_VECTOR) ? "spatial" : "spatial-temporal"),
 				' ');
 		GeoWaveMain.main(args);
 	}
@@ -56,64 +61,43 @@ abstract public class KafkaTestEnvironment<I> extends
 	public static void setupKafkaServer()
 			throws Exception {
 		LOGGER.info("Starting up Kafka Server...");
-		final String zkConnection = miniAccumulo.getZooKeepers();
 		final boolean success = DEFAULT_LOG_DIR.mkdir();
 		if (!success) {
 			LOGGER.warn("Unable to create Kafka log dir [" + DEFAULT_LOG_DIR.getAbsolutePath() + "]");
 		}
-		final KafkaConfig config = getKafkaBrokerConfig(zkConnection);
+		final KafkaConfig config = getKafkaBrokerConfig();
 		kafkaServer = new KafkaServerStartable(
 				config);
 
 		kafkaServer.startup();
-
-		// setup producer props
-		setupKafkaProducerProps(zkConnection);
+		Thread.sleep(3000);
 	}
 
-	private static KafkaConfig getKafkaBrokerConfig(
-			final String zkConnectString ) {
-
+	private static KafkaConfig getKafkaBrokerConfig() {
 		final Properties props = new Properties();
 		props.put(
 				"log.dirs",
 				DEFAULT_LOG_DIR.getAbsolutePath());
 		props.put(
 				"zookeeper.connect",
-				zkConnectString);
+				zookeeper);
 		props.put(
 				"broker.id",
 				"0");
 		props.put(
+				"port",
+				"9092");
+		props.put(
 				"message.max.bytes",
-				"5000000");
+				MAX_MESSAGE_BYTES);
 		props.put(
 				"replica.fetch.max.bytes",
-				"5000000");
-		props.put(
-				"log.flush.interval.messages",
-				"1");
+				MAX_MESSAGE_BYTES);
 		props.put(
 				"num.partitions",
 				"1");
 		return new KafkaConfig(
 				props);
-	}
-
-	protected Producer<String, I> setupProducer() {
-		final Properties props = new Properties();
-		props.put(
-				"metadata.broker.list",
-				"localhost:9092");
-
-		props.put(
-				"serializer.class",
-				"mil.nga.giat.geowave.core.ingest.kafka.AvroKafkaEncoder");
-		final ProducerConfig config = new ProducerConfig(
-				props);
-
-		return new Producer<String, I>(
-				config);
 	}
 
 	@AfterClass
@@ -127,34 +111,4 @@ abstract public class KafkaTestEnvironment<I> extends
 			LOGGER.warn("Unable to delete Kafka log dir [" + DEFAULT_LOG_DIR.getAbsolutePath() + "]");
 		}
 	}
-
-	private static void setupKafkaProducerProps(
-			final String zkConnectString ) {
-		System.getProperties().put(
-				"metadata.broker.list",
-				"localhost:9092");
-		System.getProperties().put(
-				"zookeeper.connect",
-				zkConnectString);
-		System.getProperties().put(
-				"message.max.bytes",
-				"5000000");
-		System.getProperties().put(
-				"serializer.class",
-				"mil.nga.giat.geowave.core.ingest.kafka.AvroKafkaEncoder");
-
-		KafkaCommandLineOptions.getProperties().put(
-				"metadata.broker.list",
-				"localhost:9092");
-		KafkaCommandLineOptions.getProperties().put(
-				"zookeeper.connect",
-				zkConnectString);
-		KafkaCommandLineOptions.getProperties().put(
-				"max.message.size",
-				"5000000");
-		KafkaCommandLineOptions.getProperties().put(
-				"serializer.class",
-				"mil.nga.giat.geowave.core.ingest.kafka.AvroKafkaEncoder");
-	}
-
 }

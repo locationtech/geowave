@@ -26,7 +26,7 @@ public class BatchWriterWrapper implements
 	}
 
 	public void setBatchWriter(
-			org.apache.accumulo.core.client.BatchWriter batchWriter ) {
+			final org.apache.accumulo.core.client.BatchWriter batchWriter ) {
 		this.batchWriter = batchWriter;
 	}
 
@@ -36,7 +36,7 @@ public class BatchWriterWrapper implements
 		try {
 			batchWriter.addMutations(mutations);
 		}
-		catch (MutationsRejectedException e) {
+		catch (final MutationsRejectedException e) {
 			LOGGER.error(
 					"Unable to close batch writer",
 					e);
@@ -49,7 +49,7 @@ public class BatchWriterWrapper implements
 		try {
 			batchWriter.addMutation(mutation);
 		}
-		catch (MutationsRejectedException e) {
+		catch (final MutationsRejectedException e) {
 			LOGGER.error(
 					"Unable to write batch writer",
 					e);
@@ -61,9 +61,21 @@ public class BatchWriterWrapper implements
 		try {
 			batchWriter.close();
 		}
-		catch (MutationsRejectedException e) {
+		catch (final MutationsRejectedException e) {
 			LOGGER.error(
 					"Unable to close batch writer",
+					e);
+		}
+	}
+
+	@Override
+	public void flush() {
+		try {
+			batchWriter.flush();
+		}
+		catch (final MutationsRejectedException e) {
+			LOGGER.error(
+					"Unable to flush batch writer",
 					e);
 		}
 	}

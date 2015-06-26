@@ -110,11 +110,6 @@ public class TdriveIngestPlugin extends
 	}
 
 	@Override
-	public Schema getAvroSchemaForHdfsType() {
-		return getAvroSchema();
-	}
-
-	@Override
 	public TdrivePoint[] toAvroObjects(
 			final File input ) {
 		BufferedReader fr = null;

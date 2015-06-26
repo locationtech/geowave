@@ -1,185 +1,95 @@
 package mil.nga.giat.geowave.test.kafka;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.TimeUnit;
-
-import kafka.javaapi.producer.Producer;
-import kafka.producer.KeyedMessage;
-import kafka.producer.ProducerConfig;
+import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
+import mil.nga.giat.geowave.adapter.vector.stats.FeatureBoundingBoxStatistics;
 import mil.nga.giat.geowave.core.geotime.IndexType;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
-import mil.nga.giat.geowave.core.ingest.kafka.IngestFromKafkaDriver;
+import mil.nga.giat.geowave.core.geotime.store.statistics.BoundingBoxDataStatistics;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
+import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.statistics.CountDataStatistics;
+import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.core.store.index.Index;
-import mil.nga.giat.geowave.core.store.query.DistributableQuery;
+import mil.nga.giat.geowave.core.store.query.Query;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStore;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloAdapterStore;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloDataStatisticsStore;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloIndexStore;
-import mil.nga.giat.geowave.format.gpx.GPXConsumer;
-import mil.nga.giat.geowave.format.gpx.GpxIngestFormat;
 import mil.nga.giat.geowave.format.gpx.GpxTrack;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.log4j.Logger;
-import org.junit.Assert;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.opengis.feature.simple.SimpleFeature;
 
+import com.vividsolutions.jts.geom.Envelope;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
-import com.vividsolutions.jts.geom.LineString;
 
 public class BasicKafkaIT extends
 		KafkaTestBase<GpxTrack>
 {
-	private final static Logger LOGGER = Logger.getLogger(BasicKafkaIT.class);
-
 	private static final Index INDEX = IndexType.SPATIAL_VECTOR.createDefaultIndex();
-	private static final GpxIngestFormat gpxIngestFormat = new GpxIngestFormat();
-	private static final ArrayList<GpxTrack> gpxTracksList = new ArrayList<GpxTrack>();
-	private static final Map<Long, GPXConsumer> trackGeometriesMap = new HashMap<Long, GPXConsumer>();
 
-	@BeforeClass
-	static public void setupGpxTracks()
-			throws Exception {
-
-		final File gpxInputDir = new File(
-				OSM_GPX_INPUT_DIR);
-
-		final GpxIngestPluginUtil gpxIngestPlugin = new GpxIngestPluginUtil();
-		gpxIngestPlugin.init(gpxInputDir);
-
-		final String[] extensions = gpxIngestPlugin.getFileExtensionFilters();
-		final Collection<File> gpxFiles = FileUtils.listFiles(
-				gpxInputDir,
-				extensions,
-				true);
-
-		for (final File gpxFile : gpxFiles) {
-			final GpxTrack[] tracks = gpxIngestPlugin.toAvroObjects(gpxFile);
-			for (final GpxTrack track : tracks) {
-				GPXConsumer gpxConsumer;
-				try {
-					gpxConsumer = gpxIngestPlugin.toGPXConsumer(
-							track,
-							INDEX.getId(),
-							null);
-				}
-				catch (final Exception e) {
-					continue;
-				}
-
-				trackGeometriesMap.put(
-						track.getTrackid(),
-						gpxConsumer);
-
-				gpxTracksList.add(track);
-			}
-		}
-	}
-
+	@SuppressWarnings("unchecked")
 	@Test
 	public void testBasicIngestGpx()
 			throws Exception {
-
-		final ExecutorService es = IngestFromKafkaDriver.getExecutorService();
-		es.execute(new Runnable() {
-
-			@Override
-			public void run() {
-				testKafkaIngest(
-						IndexType.SPATIAL_VECTOR,
-						OSM_GPX_INPUT_DIR);
-			}
-		});
-
-		boolean proceedWithTest = true;
-
-		int waitCounter = 0;
-		while (!IngestFromKafkaDriver.allPluginsConfiguredAndListening()) {
-			if (waitCounter > 30) {
-				proceedWithTest = false;
-				break;
-			}
-			Thread.sleep(1000);
-			waitCounter++;
-		}
-
-		if (!proceedWithTest) {
-			Assert.fail("Kafka topic consumers not completely configured, check configuration...");
-		}
-
-		Thread.sleep(2000);
-
-		es.execute(new Runnable() {
-			@Override
-			public void run() {
-				final Properties props = new Properties();
-				props.put(
-						"metadata.broker.list",
-						"localhost:9092");
-				props.put(
-						"serializer.class",
-						"mil.nga.giat.geowave.core.ingest.kafka.AvroKafkaEncoder");
-				final ProducerConfig config = new ProducerConfig(
-						props);
-
-				final Producer<String, GpxTrack> producer = new Producer<String, GpxTrack>(
-						config);
-
-				try {
-					Thread.sleep(1000);
-					for (final GpxTrack track : gpxTracksList) {
-						final KeyedMessage<String, GpxTrack> gpxKafkaMessage = new KeyedMessage<String, GpxTrack>(
-								gpxIngestFormat.getIngestFormatName(),
-								track);
-						LOGGER.debug("Sending message... [" + track.getTimestamp() + "]");
-						producer.send(gpxKafkaMessage);
-					}
-				}
-				catch (final Exception ex) {
-					LOGGER.warn(
-							"Error sending messages to Kafka topic",
-							ex);
-				}
-				finally {
-					producer.close();
-				}
-			}
-		});
-
-		Thread.sleep(3000);
-
-		es.awaitTermination(
-				60,
-				TimeUnit.SECONDS);
-
-		final List<String> receivedMessages = testQuery();
-		assertNotNull(receivedMessages);
-		assertTrue(receivedMessages.size() > 0);
-	}
-
-	@Test
-	public void testBasicStageGpx()
-			throws Exception {
 		testKafkaStage(OSM_GPX_INPUT_DIR);
+		testKafkaIngest(
+				IndexType.SPATIAL_VECTOR,
+				OSM_GPX_INPUT_DIR);
+		// wait a sufficient time for consumers to ingest all of the data
+		Thread.sleep(60000);
+		final DataStatisticsStore statsStore = new AccumuloDataStatisticsStore(
+				accumuloOperations);
+		final AdapterStore adapterStore = new AccumuloAdapterStore(
+				accumuloOperations);
+		boolean atLeastOneAdapter = false;
+		try (CloseableIterator<DataAdapter<?>> adapterIterator = adapterStore.getAdapters()) {
+			while (adapterIterator.hasNext()) {
+				final FeatureDataAdapter adapter = (FeatureDataAdapter) adapterIterator.next();
+
+				// query by the full bounding box, make sure there is more than
+				// 0 count and make sure the count matches the number of results
+				final BoundingBoxDataStatistics<?> bboxStat = (BoundingBoxDataStatistics<SimpleFeature>) statsStore.getDataStatistics(
+						adapter.getAdapterId(),
+						FeatureBoundingBoxStatistics.composeId(adapter.getType().getGeometryDescriptor().getLocalName()));
+				final CountDataStatistics<?> countStat = (CountDataStatistics<SimpleFeature>) statsStore.getDataStatistics(
+						adapter.getAdapterId(),
+						CountDataStatistics.STATS_ID);
+				// then query it
+				final GeometryFactory factory = new GeometryFactory();
+				final Envelope env = new Envelope(
+						bboxStat.getMinX(),
+						bboxStat.getMaxX(),
+						bboxStat.getMinY(),
+						bboxStat.getMaxY());
+				final Geometry spatialFilter = factory.toGeometry(env);
+				final Query query = new SpatialQuery(
+						spatialFilter);
+				final int resultCount = testQuery(
+						adapter,
+						query);
+				assertTrue(
+						"'" + adapter.getAdapterId().getString() + "' adapter must have at least one element in its statistic",
+						countStat.getCount() > 0);
+				assertEquals(
+						"'" + adapter.getAdapterId().getString() + "' adapter should have the same results from a spatial query of '" + env + "' as its total count statistic",
+						countStat.getCount(),
+						resultCount);
+				atLeastOneAdapter = true;
+			}
+		}
+		assertTrue(
+				"There should be at least one adapter",
+				atLeastOneAdapter);
 	}
 
-	private List<String> testQuery()
+	private int testQuery(
+			final DataAdapter<?> adapter,
+			final Query query )
 			throws Exception {
 		final mil.nga.giat.geowave.core.store.DataStore geowaveStore = new AccumuloDataStore(
 				new AccumuloIndexStore(
@@ -190,70 +100,20 @@ public class BasicKafkaIT extends
 						accumuloOperations),
 				accumuloOperations);
 
-		final List<String> receivedMessagesList = new ArrayList<String>();
+		final CloseableIterator<?> accumuloResults = geowaveStore.query(
+				adapter,
+				INDEX,
+				query);
 
-		final Set<Long> trackIds = trackGeometriesMap.keySet();
-		final Iterator<Long> trackIterator = trackIds.iterator();
-		while (trackIterator.hasNext()) {
-			final Long trackId = trackIterator.next();
-			final GPXConsumer gpxConsumer = trackGeometriesMap.get(trackId);
-			final List<Geometry> expectedTrackPoints = getTrackPoints(gpxConsumer);
-			LOGGER.debug("[" + trackId + "] has [" + expectedTrackPoints.size() + "] geometries");
+		int resultCount = 0;
+		while (accumuloResults.hasNext()) {
+			accumuloResults.next();
 
-			final GeometryFactory factory = new GeometryFactory();
-			final Geometry spatialFilter = factory.buildGeometry(
-					expectedTrackPoints).getEnvelope();
-
-			final DistributableQuery query = new SpatialQuery(
-					spatialFilter);
-
-			final CloseableIterator<?> accumuloResults = geowaveStore.query(
-					INDEX,
-					query);
-
-			SimpleFeature accumuloResultSimpleFeature = null;
-			while (accumuloResults.hasNext()) {
-				final Object obj = accumuloResults.next();
-				if ((accumuloResultSimpleFeature == null) && (obj instanceof SimpleFeature)) {
-					accumuloResultSimpleFeature = (SimpleFeature) obj;
-
-					final Object accumuloResultTrackIdObj = accumuloResultSimpleFeature.getAttribute("TrackId");
-					if (accumuloResultTrackIdObj == null) {
-						continue;
-					}
-					final Long accumuloResultTrackIdLong = Long.parseLong(accumuloResultTrackIdObj.toString());
-					// verifying at least some of the messages sent were
-					// received and ingested into GeoWave
-					if (accumuloResultTrackIdLong.longValue() == trackId.longValue()) {
-						final Object defaultGeometry = accumuloResultSimpleFeature.getDefaultGeometry();
-						Integer accumuloResultTrackPoints = 0;
-						if (defaultGeometry instanceof LineString) {
-							final LineString accumuloResultLineString = (LineString) defaultGeometry;
-							accumuloResultTrackPoints = accumuloResultLineString.getCoordinates().length;
-						}
-
-						LOGGER.debug("[" + accumuloResultTrackIdLong + "] message successfully ingested into Accumulo with [" + accumuloResultTrackPoints + "] geometries");
-						receivedMessagesList.add(accumuloResultTrackIdObj.toString());
-					}
-				}
-			}
-			accumuloResults.close();
+			resultCount++;
 		}
+		accumuloResults.close();
 
-		LOGGER.info("[" + receivedMessagesList + "] Kafka messages [total: " + receivedMessagesList.size() + "] ingested into Accumulo");
-		return receivedMessagesList;
+		return resultCount;
 
-	}
-
-	static private List<Geometry> getTrackPoints(
-			final GPXConsumer gpxConsumer ) {
-		final List<Geometry> trackGeometries = new ArrayList<Geometry>();
-
-		while (gpxConsumer.hasNext()) {
-			final Geometry pointGeom = (Geometry) gpxConsumer.next().getValue().getDefaultGeometry();
-			trackGeometries.add(pointGeom);
-		}
-
-		return trackGeometries;
 	}
 }

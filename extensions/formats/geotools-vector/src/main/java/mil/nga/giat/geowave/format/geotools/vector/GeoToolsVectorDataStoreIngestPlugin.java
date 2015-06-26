@@ -122,7 +122,7 @@ public class GeoToolsVectorDataStoreIngestPlugin implements
 					"Unable to ingest data source for file '" + input.getAbsolutePath() + "'",
 					e);
 		}
-		if (names == null || dataStore == null) {
+		if ((names == null) || (dataStore == null)) {
 			LOGGER.error("Unable to get datatore name");
 			return null;
 		}
@@ -151,5 +151,10 @@ public class GeoToolsVectorDataStoreIngestPlugin implements
 	@Override
 	public Index[] getSupportedIndices() {
 		return supportedIndices;
+	}
+
+	@Override
+	public Index[] getRequiredIndices() {
+		return new Index[] {};
 	}
 }

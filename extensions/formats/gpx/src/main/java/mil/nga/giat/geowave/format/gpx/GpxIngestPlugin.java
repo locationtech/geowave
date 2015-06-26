@@ -21,7 +21,6 @@ import mil.nga.giat.geowave.core.geotime.IndexType;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.ingest.GeoWaveData;
 import mil.nga.giat.geowave.core.ingest.IngestPluginBase;
-import mil.nga.giat.geowave.core.ingest.avro.GenericAvroSerializer;
 import mil.nga.giat.geowave.core.ingest.hdfs.mapreduce.IngestWithMapper;
 import mil.nga.giat.geowave.core.ingest.hdfs.mapreduce.IngestWithReducer;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
@@ -162,11 +161,6 @@ public class GpxIngestPlugin extends
 	}
 
 	@Override
-	public Schema getAvroSchemaForHdfsType() {
-		return getAvroSchema();
-	}
-
-	@Override
 	public GpxTrack[] toAvroObjects(
 			final File input ) {
 		GpxTrack track = null;
@@ -223,7 +217,7 @@ public class GpxIngestPlugin extends
 			final String globalVisibility ) {
 		final InputStream in = new ByteArrayInputStream(
 				gpxTrack.getGpxfile().array());
-//		LOGGER.debug("Processing track [" + gpxTrack.getTimestamp() + "]");
+		// LOGGER.debug("Processing track [" + gpxTrack.getTimestamp() + "]");
 		try {
 			return new GPXConsumer(
 					in,
@@ -234,8 +228,10 @@ public class GpxIngestPlugin extends
 							// behavior
 					globalVisibility);
 		}
-		catch (Exception e) {
-			LOGGER.warn("Unable to convert GpxTrack to GeoWaveData: " + e.getMessage());
+		catch (final Exception e) {
+			LOGGER.warn(
+					"Unable to convert GpxTrack to GeoWaveData",
+					e);
 			return null;
 		}
 	}

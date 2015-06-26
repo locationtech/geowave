@@ -86,7 +86,7 @@ public class GeoLifeIngestPlugin extends
 		try {
 			crs = CRS.decode("EPSG:4326");
 		}
-		catch (FactoryException e) {
+		catch (final FactoryException e) {
 			LOGGER.error(
 					"Unable to decode Coordinate Reference System authority code!",
 					e);
@@ -136,11 +136,6 @@ public class GeoLifeIngestPlugin extends
 	@Override
 	public Schema getAvroSchema() {
 		return WholeFile.getClassSchema();
-	}
-
-	@Override
-	public Schema getAvroSchemaForHdfsType() {
-		return getAvroSchema();
 	}
 
 	@Override
@@ -203,7 +198,7 @@ public class GeoLifeIngestPlugin extends
 		Date startTimeStamp = null;
 		Date endTimeStamp = null;
 		String timestring = "";
-		GeometryFactory geometryFactory = new GeometryFactory();
+		final GeometryFactory geometryFactory = new GeometryFactory();
 		double currLat;
 		double currLng;
 		try {
@@ -324,7 +319,7 @@ public class GeoLifeIngestPlugin extends
 		return new IngestGeoLifeFromHdfs(
 				this);
 	}
-	
+
 	public static class IngestGeoLifeFromHdfs extends
 			AbstractIngestSimpleFeatureWithMapper<WholeFile>
 	{
@@ -339,6 +334,5 @@ public class GeoLifeIngestPlugin extends
 					parentPlugin);
 		}
 	}
-
 
 }
