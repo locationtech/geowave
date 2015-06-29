@@ -31,7 +31,7 @@ import org.apache.log4j.Logger;
 public abstract class StatsOperation implements
 		CLIOperationDriver
 {
-	protected static final Logger LOGGER = Logger.getLogger(StatsOperationCLIProvider.class);
+	protected static final Logger LOGGER = Logger.getLogger(StatsOperation.class);
 
 	public boolean runOperation(
 			final AccumuloOperations accumuloOperations,
