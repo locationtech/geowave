@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import mil.nga.giat.geowave.adapter.vector.plugin.transaction.GeoWaveTransaction;
 
+import org.apache.log4j.Logger;
 import org.geotools.data.FeatureWriter;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.geotools.util.Utilities;
@@ -99,9 +100,12 @@ public class GeoWaveFeatureWriter implements
 				live);
 	}
 
+	private final static Logger LOGGER = Logger.getLogger(GeoWaveFeatureWriter.class);
+
 	public void write()
 			throws IOException {
 		if (live == null) {
+			LOGGER.error("Unable to process transaction " + this.transaction.toString());
 			throw new IOException(
 					"No current feature to write");
 		}

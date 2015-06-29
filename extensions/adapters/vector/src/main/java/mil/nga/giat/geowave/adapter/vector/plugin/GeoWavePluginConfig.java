@@ -45,6 +45,7 @@ public class GeoWavePluginConfig
 	protected static final String LOCK_MGT_KEY = "Lock Management";
 	protected static final String AUTH_MGT_KEY = "Authorization Management Provider";
 	protected static final String AUTH_URL_KEY = "Authorization Data URL";
+	protected static final String TRANSACTION_BUFFER_SIZE = "Transaction Buffer Size";
 
 	private static final Param ZOOKEEPER_SERVERS = new Param(
 			ZOOKEEPER_SERVERS_KEY,
@@ -75,6 +76,11 @@ public class GeoWavePluginConfig
 			String.class,
 			"The table namespace associated with this data store",
 			true);
+	private static final Param TRANSACTION_BUFFER_SIZE_PARAM = new Param(
+			TRANSACTION_BUFFER_SIZE,
+			Integer.class,
+			"Number of buffered buffered insertions before flush to the datastore.",
+			false);
 
 	/*
 	 * private static final Param FEATURE_NAMESPACE = new Param(
@@ -114,6 +120,7 @@ public class GeoWavePluginConfig
 	private final LockingManagementFactory lockingManagementFactory;
 	private final AuthorizationFactorySPI authorizationFactory;
 	private final URL authorizationURL;
+	private final Integer transactionBufferSize;
 
 	private static List<Param> accumuloParams = null;
 
@@ -137,6 +144,7 @@ public class GeoWavePluginConfig
 			accumuloParams.add(LOCK_MGT);
 			accumuloParams.add(AUTH_MGT);
 			accumuloParams.add(AUTH_URL);
+			accumuloParams.add(TRANSACTION_BUFFER_SIZE_PARAM);
 		}
 		return accumuloParams;
 	}
@@ -193,6 +201,18 @@ public class GeoWavePluginConfig
 			}
 		}
 		featureNameSpaceURI = namespaceURI;
+
+		param = params.get(TRANSACTION_BUFFER_SIZE);
+		Integer bufferSizeFromParam = 10000;
+		if (param != null) {
+			try {
+				bufferSizeFromParam = param instanceof Integer ? (Integer) param : Integer.parseInt(param.toString());
+			}
+			catch (final Exception e) {
+				LOGGER.error("Malformed buffer size : " + param);
+			}
+		}
+		transactionBufferSize = bufferSizeFromParam;
 
 		param = params.get(LOCK_MGT_KEY);
 
@@ -284,6 +304,10 @@ public class GeoWavePluginConfig
 
 	public URI getFeatureNamespace() {
 		return featureNameSpaceURI;
+	}
+
+	public Integer getTransactionBufferSize() {
+		return transactionBufferSize;
 	}
 
 	private static Map<String, List<String>> getLockMgtOptions() {
@@ -381,4 +405,5 @@ public class GeoWavePluginConfig
 				params);
 
 	}
+
 }

@@ -64,9 +64,15 @@ public class GeoWaveFeatureReader implements
 	public GeoWaveFeatureReader(
 			final Query query,
 			final GeoWaveTransaction transaction,
-			final GeoWaveDataStoreComponents components ) {
+			final GeoWaveDataStoreComponents components )
+			throws IOException {
 		this.components = components;
 		this.transaction = transaction;
+		// make sure the the buffer cache is flushed to the underlying datastore
+		// the case where pending additions have not been committed is not
+		// supported under the WFS-T spec, but the geotools API
+		// does not prevent it.
+		transaction.flush();
 		featureCollection = new GeoWaveFeatureCollection(
 				this,
 				query);
@@ -441,7 +447,7 @@ public class GeoWaveFeatureReader implements
 
 	protected List<DataStatistics<SimpleFeature>> getStatsFor(
 			final String name ) {
-		List<DataStatistics<SimpleFeature>> stats = new LinkedList<DataStatistics<SimpleFeature>>();
+		final List<DataStatistics<SimpleFeature>> stats = new LinkedList<DataStatistics<SimpleFeature>>();
 		final Map<ByteArrayId, DataStatistics<SimpleFeature>> statsMap = components.getDataStatistics(transaction);
 		for (final Map.Entry<ByteArrayId, DataStatistics<SimpleFeature>> stat : statsMap.entrySet()) {
 			if ((stat.getValue() instanceof FeatureStatistic) && ((FeatureStatistic) stat.getValue()).getFieldName().endsWith(
