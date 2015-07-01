@@ -10,6 +10,11 @@ import mil.nga.giat.geowave.core.index.sfc.data.BasicNumericDataset;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericData;
 
+/**
+ * Class that implements a compound index strategy. It's a wrapper around two
+ * NumericIndexStrategy objects that can externally be treated as a
+ * multi-dimensional NumericIndexStrategy.
+ */
 public class CompoundIndexStrategy implements
 		NumericIndexStrategy
 {
@@ -79,6 +84,11 @@ public class CompoundIndexStrategy implements
 				getNumberOfDimensions()));
 	}
 
+	/**
+	 * Get the number of dimensions of each sub-strategy
+	 *
+	 * @return an array with the number of dimensions for each sub-strategy
+	 */
 	public int[] getNumberOfDimensionsPerIndexStrategy() {
 		return new int[] {
 			subStrategy1.getOrderedDimensionDefinitions().length,
@@ -86,10 +96,24 @@ public class CompoundIndexStrategy implements
 		};
 	}
 
+	/**
+	 * Get the total number of dimensions from all sub-strategies
+	 *
+	 * @return the number of dimensions
+	 */
 	public int getNumberOfDimensions() {
 		return baseDefinitions.length;
 	}
 
+	/**
+	 * Create a compound ByteArrayId
+	 *
+	 * @param id1
+	 *            ByteArrayId for the first sub-strategy
+	 * @param id2
+	 *            ByteArrayId for the second sub-strategy
+	 * @return the ByteArrayId for the compound strategy
+	 */
 	public ByteArrayId composeByteArrayId(
 			final ByteArrayId id1,
 			final ByteArrayId id2 ) {
@@ -102,6 +126,14 @@ public class CompoundIndexStrategy implements
 				bytes);
 	}
 
+	/**
+	 * Get the ByteArrayId for each sub-strategy from the ByteArrayId for the
+	 * compound index strategy
+	 *
+	 * @param id
+	 *            the compound ByteArrayId
+	 * @return the ByteArrayId for each sub-strategy
+	 */
 	public ByteArrayId[] decomposeByteArrayId(
 			final ByteArrayId id ) {
 		final ByteBuffer buf = ByteBuffer.wrap(id.getBytes());
