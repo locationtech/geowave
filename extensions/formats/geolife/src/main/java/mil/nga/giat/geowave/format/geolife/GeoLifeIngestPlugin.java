@@ -324,7 +324,7 @@ public class GeoLifeIngestPlugin extends
 		return new IngestGeoLifeFromHdfs(
 				this);
 	}
-	
+
 	public static class IngestGeoLifeFromHdfs extends
 			AbstractIngestSimpleFeatureWithMapper<WholeFile>
 	{
@@ -339,6 +339,5 @@ public class GeoLifeIngestPlugin extends
 					parentPlugin);
 		}
 	}
-
 
 }

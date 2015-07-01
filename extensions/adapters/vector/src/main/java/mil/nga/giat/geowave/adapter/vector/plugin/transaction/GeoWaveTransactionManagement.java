@@ -447,18 +447,10 @@ public class GeoWaveTransactionManagement implements
 						feature = modRecord.newFeature;
 					}
 					else if ((oldFeatures != null) && !oldFeatures.isEmpty()) {
-						// need
-						// to
-						// check
-						// if
-						// the
-						// removed
-						// feature
-						// was
-						// just
-						// moved
-						// meaning its original matches the boundaries of this
-						// 'feature'. matchesOne(oldFeatures, feature))
+						// need to check if the removed feature
+						// was just moved meaning its original matches the
+						// boundaries of this 'feature'. matchesOne(oldFeatures,
+						// feature))
 						feature = null;
 					}
 
