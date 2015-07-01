@@ -11,4 +11,4 @@ fi
 CLASSPATH="/usr/local/geowave/tools/geowave-tools.jar:/usr/local/geowave/tools/plugins/*"
 
 # Using -cp and the classname instead of -jar because Java 7 and below fail to auto-launch jars with more than 65k files
-exec $JAVA -cp $CLASSPATH mil.nga.giat.geowave.core.cli.GeoWaveMain "$@"
+exec $JAVA $GEOWAVE_TOOL_JAVA_OPT -cp $CLASSPATH mil.nga.giat.geowave.core.cli.GeoWaveMain "$@"
