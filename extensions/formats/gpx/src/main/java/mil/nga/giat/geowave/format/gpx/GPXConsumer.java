@@ -233,6 +233,9 @@ public class GPXConsumer implements
 					currentElement = currentElementStack.peek();
 					// currentElement.removeChild(child);
 				}
+				else if (currentElementStack.size() == 1) {
+					top.children.remove(child);
+				}
 			}
 		}
 		return newFeature;
@@ -469,6 +472,7 @@ public class GPXConsumer implements
 		List<GPXDataElement> children = null;
 		GPXDataElement parent;
 		long id = 0;
+		int childIdCounter = 0;
 
 		public GPXDataElement(
 				final String myElType ) {
@@ -504,7 +508,7 @@ public class GPXConsumer implements
 			}
 			children.add(child);
 			child.parent = this;
-			child.id = children.size();
+			child.id = ++childIdCounter;
 		}
 
 		public String composeID(
@@ -786,7 +790,7 @@ public class GPXConsumer implements
 							inputID.length() > 0 ? inputID : element.composeID(
 									"",
 									false,
-									true));
+									true));					
 					return buildGeoWaveDataInstance(
 							element.composeID(
 									inputID,
