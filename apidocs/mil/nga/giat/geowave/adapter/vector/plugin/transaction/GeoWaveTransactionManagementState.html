@@ -121,7 +121,8 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/transaction/GeoWaveTransactionManagementState.html#GeoWaveTransactionManagementState(mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveDataStoreComponents,%20org.geotools.data.Transaction,%20mil.nga.giat.geowave.adapter.vector.plugin.lock.LockingManagement)">GeoWaveTransactionManagementState</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveDataStoreComponents.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveDataStoreComponents</a>&nbsp;components,
+<td class="colOne"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/transaction/GeoWaveTransactionManagementState.html#GeoWaveTransactionManagementState(int,%20mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveDataStoreComponents,%20org.geotools.data.Transaction,%20mil.nga.giat.geowave.adapter.vector.plugin.lock.LockingManagement)">GeoWaveTransactionManagementState</a></strong>(int&nbsp;transactionBufferSize,
+                                 <a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveDataStoreComponents.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveDataStoreComponents</a>&nbsp;components,
                                  org.geotools.data.Transaction&nbsp;transaction,
                                  <a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/lock/LockingManagement.html" title="interface in mil.nga.giat.geowave.adapter.vector.plugin.lock">LockingManagement</a>&nbsp;lockingManager)</code>&nbsp;</td>
 </tr>
@@ -162,13 +163,17 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/transaction/GeoWaveTransactionManagementState.html#setTransaction(org.geotools.data.Transaction)">setTransaction</a></strong>(org.geotools.data.Transaction&nbsp;transaction)</code>&nbsp;</td>
 </tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/transaction/GeoWaveTransactionManagementState.html#toString()">toString</a></strong>()</code>&nbsp;</td>
+</tr>
 </table>
 <ul class="blockList">
 <li class="blockList"><a name="methods_inherited_from_class_java.lang.Object">
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;java.lang.<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></h3>
-<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#clone()" title="class or interface in java.lang">clone</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.lang">equals</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#finalize()" title="class or interface in java.lang">finalize</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang">getClass</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#hashCode()" title="class or interface in java.lang">hashCode</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang">notify</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang">notifyAll</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#toString()" title="class or interface in java.lang">toString</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait(long,%20int)" title="class or interface in java.lang">wait</a></code></li>
+<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#clone()" title="class or interface in java.lang">clone</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.lang">equals</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#finalize()" title="class or interface in java.lang">finalize</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang">getClass</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#hashCode()" title="class or interface in java.lang">hashCode</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang">notify</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang">notifyAll</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait(long,%20int)" title="class or interface in java.lang">wait</a></code></li>
 </ul>
 </li>
 </ul>
@@ -184,13 +189,14 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="GeoWaveTransactionManagementState(mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveDataStoreComponents, org.geotools.data.Transaction, mil.nga.giat.geowave.adapter.vector.plugin.lock.LockingManagement)">
+<a name="GeoWaveTransactionManagementState(int, mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveDataStoreComponents, org.geotools.data.Transaction, mil.nga.giat.geowave.adapter.vector.plugin.lock.LockingManagement)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>GeoWaveTransactionManagementState</h4>
-<pre>public&nbsp;GeoWaveTransactionManagementState(<a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveDataStoreComponents.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveDataStoreComponents</a>&nbsp;components,
+<pre>public&nbsp;GeoWaveTransactionManagementState(int&nbsp;transactionBufferSize,
+                                 <a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveDataStoreComponents.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveDataStoreComponents</a>&nbsp;components,
                                  org.geotools.data.Transaction&nbsp;transaction,
                                  <a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/lock/LockingManagement.html" title="interface in mil.nga.giat.geowave.adapter.vector.plugin.lock">LockingManagement</a>&nbsp;lockingManager)
                                   throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
@@ -268,7 +274,7 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/
 <a name="rollback()">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>rollback</h4>
 <pre>public&nbsp;void&nbsp;rollback()
@@ -278,6 +284,19 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/
 <dd><code>rollback</code>&nbsp;in interface&nbsp;<code>org.geotools.data.Transaction.State</code></dd>
 <dt><span class="strong">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd><dt><span class="strong">See Also:</span></dt><dd><code>Transaction.State.rollback()</code></dd></dl>
+</li>
+</ul>
+<a name="toString()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>toString</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;toString()</pre>
+<dl>
+<dt><strong>Overrides:</strong></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#toString()" title="class or interface in java.lang">toString</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
+</dl>
 </li>
 </ul>
 </li>

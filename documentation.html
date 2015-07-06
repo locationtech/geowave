@@ -2718,17 +2718,30 @@ data store type called 'GeoWave Datastore'.</p>
 <td class="tableblock halign-left valign-top"><p class="tableblock">The URL for an external supporting service or configuration file.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">The interpretation of the URL depends on the selected provider.</p></td>
 </tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Transaction Buffer Size</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The maximum number of newly inserted features per transaction buffered in memory prior to transaction completion.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Considerations include system memory, size of typical transactions, the expected number of simultaneous transactions and the average size of a new feature.</p></td>
+</tr>
 </tbody>
 </table>
 <div class="sect4">
 <h5 id="transactions"><a class="anchor" href="#transactions"></a>Transactions</h5>
 <div class="paragraph">
-<p>Most operations under WFS-T use an auto-commit transaction. WFS-T does support long running transactions across multiple
-requests by using a lock request followed by subsequent use of a provided lock ID. The Geowave implementation supports
+<p>Transactions are initiated through a Transaction operation, containing inserts, updates and deletes to features.
+WFS-T supports feature locks across multiple requests by using a lock request followed by subsequent
+use of a provided lock ID. The Geowave implementation supports
 transaction isolation. Consistency during a commit is not fully supported. Thus, a failure during a commit of a
 transaction may leave the affected data in an intermediary state&#8212;&#8203;some deletions, updates or insertions may not be
 processed. The client application must implement its on compensation logic upon receiving a commit-time error response.
 As expected with Accumulo, operations on a single feature instances are atomic.</p>
+</div>
+<div class="paragraph">
+<p>Inserted features are buffered prior to commit.  The features are bulk fed to the data store
+when the buffer size is exceeded and when the transaction is committed.  In support of atomicity and isolation,
+flushed features, prior to commit, are marked in a transient state, only visible to the controlling
+transaction.   Upon commit, these features are 'unmarked'. The overhead incurred by this operation is avoided
+by increasing the buffer size to avoid pre-commit flushes.</p>
 </div>
 </div>
 <div class="sect4">
@@ -3919,7 +3932,7 @@ yum --enablerepo=geowave install geowave-puppet</code></pre>
 <div class="sect2">
 <h3 id="version"><a class="anchor" href="#version"></a>Version</h3>
 <div class="paragraph">
-<p>This documentation was generated for GeoWave version 0.8.8-SNAPSHOT from commit ba78a439ed1914273abde908508d202ca002422d.</p>
+<p>This documentation was generated for GeoWave version 0.8.8-SNAPSHOT from commit ff3f0c9e7a2af33cd52708524984cbfe6a4f3954.</p>
 </div>
 <div style="page-break-after: always;"></div>
 </div>
@@ -3971,7 +3984,7 @@ yum --enablerepo=geowave install geowave-puppet</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-07-02 18:52:36 UTC
+Last updated 2015-07-06 15:05:50 UTC
 </div>
 </div>
 </body>
