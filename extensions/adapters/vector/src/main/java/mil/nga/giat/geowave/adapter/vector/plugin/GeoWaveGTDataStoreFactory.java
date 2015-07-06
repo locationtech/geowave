@@ -134,9 +134,8 @@ public class GeoWaveGTDataStoreFactory implements
 			return true;
 		}
 		catch (GeoWavePluginException e) {
-			LOGGER.error(
-					"Invalid parameters",
-					e);
+			// supplied map does not contain all necessary parameters to
+			// construct GeoWaveGTDataStore
 			return false;
 		}
 	}
