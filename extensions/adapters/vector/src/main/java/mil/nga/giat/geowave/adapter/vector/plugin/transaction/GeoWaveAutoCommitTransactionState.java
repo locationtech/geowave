@@ -60,4 +60,8 @@ public class GeoWaveAutoCommitTransactionState implements
 				components);
 	}
 
+	@Override
+	public String toString() {
+		return "GeoWaveAutoCommitTransactionState";
+	}
 }

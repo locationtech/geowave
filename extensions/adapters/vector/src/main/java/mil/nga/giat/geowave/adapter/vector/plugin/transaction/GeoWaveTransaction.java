@@ -17,6 +17,12 @@ public interface GeoWaveTransaction
 {
 
 	/**
+	 * Flush in memory records to store for query processing.
+	 */
+	public void flush()
+			throws IOException;
+
+	/**
 	 * 
 	 * @return true if transaction is empty
 	 */

@@ -19,7 +19,7 @@ public class GeoToolsRasterDataStoreIngestFormat implements
 {
 
 	@Override
-	public AvroFormatPlugin<Object,GridCoverage> getAvroFormatPlugin()
+	public AvroFormatPlugin<Object, GridCoverage> getAvroFormatPlugin()
 			throws UnsupportedOperationException {
 		// unsupported right now
 		throw new UnsupportedOperationException(

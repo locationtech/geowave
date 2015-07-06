@@ -89,6 +89,7 @@ public class GeoWaveGTDataStore extends
 	private final AuthorizationSPI authorizationSPI;
 	private final TransactionsAllocater transactionsAllocater;
 	private URI featureNameSpaceURI;
+	private int transactionBufferSize = 10000;
 
 	public GeoWaveGTDataStore(
 			final TransactionsAllocater transactionsAllocater ) {
@@ -125,6 +126,7 @@ public class GeoWaveGTDataStore extends
 				config.getUserName(),
 				this);
 		featureNameSpaceURI = config.getFeatureNamespace();
+		transactionBufferSize = config.getTransactionBufferSize();
 
 	}
 
@@ -326,7 +328,7 @@ public class GeoWaveGTDataStore extends
 				state = (GeoWaveTransactionState) transaction.getState(this);
 				if (state == null) {
 					state = new GeoWaveTransactionManagementState(
-
+							transactionBufferSize,
 							source.getComponents(),
 							transaction,
 							(LockingManagement) lockingManager);

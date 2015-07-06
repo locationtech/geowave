@@ -223,7 +223,7 @@ public class GpxIngestPlugin extends
 			final String globalVisibility ) {
 		final InputStream in = new ByteArrayInputStream(
 				gpxTrack.getGpxfile().array());
-//		LOGGER.debug("Processing track [" + gpxTrack.getTimestamp() + "]");
+		// LOGGER.debug("Processing track [" + gpxTrack.getTimestamp() + "]");
 		try {
 			return new GPXConsumer(
 					in,
