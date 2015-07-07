@@ -37,19 +37,14 @@ import org.apache.commons.cli.ParseException;
 import org.apache.log4j.Logger;
 
 /**
- * /** This class executes the ingestion of intermediate data from a Kafka topic
+ * This class executes the ingestion of intermediate data from a Kafka topic
  * into GeoWave.
  *
- * @param <I>
- *            The type for the input data
- * @param <O>
- *            The type that represents each data entry being ingested
  */
 public class IngestFromKafkaDriver extends
 		AbstractIngestCommandLineDriver
 {
 	private final static Logger LOGGER = Logger.getLogger(IngestFromKafkaDriver.class);
-	private static final int BATCH_SIZE = 1000;
 
 	private KafkaConsumerCommandLineOptions kafkaOptions;
 	private AccumuloCommandLineOptions accumuloOptions;
@@ -103,7 +98,9 @@ public class IngestFromKafkaDriver extends
 				Thread.sleep(1000);
 			}
 			catch (final InterruptedException e) {
-				LOGGER.error(e);
+				LOGGER.error(
+						"Thread interrupted",
+						e);
 			}
 			counter++;
 		}
@@ -219,7 +216,7 @@ public class IngestFromKafkaDriver extends
 					"Kafka consumer connector is null, unable to create message streams");
 		}
 		try {
-			LOGGER.info("Kafka consumer setup for format [" + formatPluginName + "] against topic [" + formatPluginName + "]");
+			LOGGER.debug("Kafka consumer setup for format [" + formatPluginName + "] against topic [" + formatPluginName + "]");
 			final Map<String, Integer> topicCount = new HashMap<>();
 			topicCount.put(
 					formatPluginName,
@@ -246,6 +243,7 @@ public class IngestFromKafkaDriver extends
 			final IngestRunData ingestRunData,
 			final KafkaStream<byte[], byte[]> stream ) {
 		int currentBatchId = 0;
+		final int batchSize = kafkaOptions.getBatchSize();
 		try {
 			final ConsumerIterator<byte[], byte[]> messageIterator = stream.iterator();
 			while (messageIterator.hasNext()) {
@@ -261,7 +259,7 @@ public class IngestFromKafkaDriver extends
 								dataRecord,
 								ingestRunData,
 								avroFormatPlugin);
-						if (++currentBatchId > BATCH_SIZE) {
+						if (++currentBatchId > batchSize) {
 							ingestRunData.flush();
 							currentBatchId = 0;
 						}
