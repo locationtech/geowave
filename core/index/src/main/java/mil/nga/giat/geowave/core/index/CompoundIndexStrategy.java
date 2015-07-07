@@ -183,7 +183,7 @@ public class CompoundIndexStrategy implements
 			final List<ByteArrayRange> ranges1,
 			final List<ByteArrayRange> ranges2 ) {
 		final List<ByteArrayRange> ranges = new ArrayList<>(
-				ranges1.size() + ranges2.size());
+				ranges1.size() * ranges2.size());
 		for (final ByteArrayRange range1 : ranges1) {
 			for (final ByteArrayRange range2 : ranges2) {
 				final ByteArrayRange range = composeByteArrayRange(
@@ -198,27 +198,32 @@ public class CompoundIndexStrategy implements
 	@Override
 	public List<ByteArrayRange> getQueryRanges(
 			final MultiDimensionalNumericData indexedRange ) {
-		final MultiDimensionalNumericData[] ranges = getRangesForIndexedRange(indexedRange);
-		final List<ByteArrayRange> rangeForStrategy1 = subStrategy1.getQueryRanges(ranges[0]);
-		final List<ByteArrayRange> rangeForStrategy2 = subStrategy2.getQueryRanges(ranges[1]);
-		final List<ByteArrayRange> range = getByteArrayRanges(
-				rangeForStrategy1,
-				rangeForStrategy2);
-		return range;
+		return getQueryRanges(
+				indexedRange,
+				-1);
 	}
 
 	@Override
 	public List<ByteArrayRange> getQueryRanges(
 			final MultiDimensionalNumericData indexedRange,
 			final int maxEstimatedRangeDecomposition ) {
-		final int maxEstRangeDecompositionPerStrategy = (int) Math.ceil(Math.sqrt(maxEstimatedRangeDecomposition));
 		final MultiDimensionalNumericData[] ranges = getRangesForIndexedRange(indexedRange);
-		final List<ByteArrayRange> rangeForStrategy1 = subStrategy1.getQueryRanges(
-				ranges[0],
-				maxEstRangeDecompositionPerStrategy);
-		final List<ByteArrayRange> rangeForStrategy2 = subStrategy2.getQueryRanges(
-				ranges[1],
-				maxEstRangeDecompositionPerStrategy);
+		final List<ByteArrayRange> rangeForStrategy1;
+		final List<ByteArrayRange> rangeForStrategy2;
+		if (maxEstimatedRangeDecomposition < 1) {
+			rangeForStrategy1 = subStrategy1.getQueryRanges(ranges[0]);
+			rangeForStrategy2 = subStrategy2.getQueryRanges(ranges[1]);
+		}
+		else {
+			final int maxEstRangeDecompositionPerStrategy = (int) Math.ceil(Math.sqrt(maxEstimatedRangeDecomposition));
+			rangeForStrategy1 = subStrategy1.getQueryRanges(
+					ranges[0],
+					maxEstRangeDecompositionPerStrategy);
+			final int maxEstRangeDecompositionStrategy2 = maxEstimatedRangeDecomposition / rangeForStrategy1.size();
+			rangeForStrategy2 = subStrategy2.getQueryRanges(
+					ranges[1],
+					maxEstRangeDecompositionStrategy2);
+		}
 		final List<ByteArrayRange> range = getByteArrayRanges(
 				rangeForStrategy1,
 				rangeForStrategy2);
@@ -237,14 +242,15 @@ public class CompoundIndexStrategy implements
 	public List<ByteArrayId> getInsertionIds(
 			final MultiDimensionalNumericData indexedData,
 			final int maxEstimatedDuplicateIds ) {
-		final int maxEstDuplicatesPerStrategy = (int) Math.ceil(Math.sqrt(maxEstimatedDuplicateIds));
+		final int maxEstDuplicatesPerStrategy = (int) Math.sqrt(maxEstimatedDuplicateIds);
 		final MultiDimensionalNumericData[] ranges = getRangesForIndexedRange(indexedData);
 		final List<ByteArrayId> rangeForStrategy1 = subStrategy1.getInsertionIds(
 				ranges[0],
 				maxEstDuplicatesPerStrategy);
+		final int maxEstDuplicatesStrategy2 = maxEstimatedDuplicateIds / rangeForStrategy1.size();
 		final List<ByteArrayId> rangeForStrategy2 = subStrategy2.getInsertionIds(
 				ranges[1],
-				maxEstDuplicatesPerStrategy);
+				maxEstDuplicatesStrategy2);
 		final List<ByteArrayId> range = composeByteArrayIds(
 				rangeForStrategy1,
 				rangeForStrategy2);

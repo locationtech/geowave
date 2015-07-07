@@ -162,9 +162,10 @@ public class CompoundIndexStrategyTest
 		final List<ByteArrayRange> simpleIndexRanges = simpleIndexStrategy.getQueryRanges(
 				simpleIndexedRange,
 				3);
+		final int maxRangesStrategy2 = 8 / simpleIndexRanges.size();
 		final List<ByteArrayRange> sfcIndexRanges = sfcIndexStrategy.getQueryRanges(
 				sfcIndexedRange,
-				3);
+				maxRangesStrategy2);
 		final List<ByteArrayRange> ranges = new ArrayList<>(
 				simpleIndexRanges.size() * sfcIndexRanges.size());
 		for (final ByteArrayRange r1 : simpleIndexRanges) {
@@ -196,9 +197,10 @@ public class CompoundIndexStrategyTest
 		final List<ByteArrayId> ids1 = simpleIndexStrategy.getInsertionIds(
 				simpleIndexedRange,
 				3);
+		final int maxEstDuplicatesStrategy2 = 8 / ids1.size();
 		final List<ByteArrayId> ids2 = sfcIndexStrategy.getInsertionIds(
 				sfcIndexedRange,
-				3);
+				maxEstDuplicatesStrategy2);
 		for (final ByteArrayId id1 : ids1) {
 			for (final ByteArrayId id2 : ids2) {
 				ids.add(compoundIndexStrategy.composeByteArrayId(
@@ -214,6 +216,38 @@ public class CompoundIndexStrategyTest
 						8));
 		Assert.assertTrue(testIds.containsAll(compoundIndexIds));
 		Assert.assertTrue(compoundIndexIds.containsAll(testIds));
+	}
+
+	@Test
+	public void testGetCoordinatesPerDimension() {
+		final ByteArrayId compoundIndexInsertionId = new ByteArrayId(
+				new byte[] {
+					16,
+					0,
+					-125,
+					16,
+					-46,
+					-93,
+					-110,
+					-31,
+					0,
+					0,
+					0,
+					3
+				});
+		final ByteArrayId[] insertionIds = compoundIndexStrategy.decomposeByteArrayId(compoundIndexInsertionId);
+		final long[] simpleIndexCoordinatesPerDim = simpleIndexStrategy.getCoordinatesPerDimension(insertionIds[0]);
+		final long[] sfcIndexCoordinatesPerDim = sfcIndexStrategy.getCoordinatesPerDimension(insertionIds[1]);
+		final long[] coordinatesPerDim = compoundIndexStrategy.getCoordinatesPerDimension(compoundIndexInsertionId);
+		Assert.assertTrue(Double.compare(
+				simpleIndexCoordinatesPerDim[0],
+				coordinatesPerDim[0]) == 0);
+		Assert.assertTrue(Double.compare(
+				sfcIndexCoordinatesPerDim[0],
+				coordinatesPerDim[1]) == 0);
+		Assert.assertTrue(Double.compare(
+				sfcIndexCoordinatesPerDim[1],
+				coordinatesPerDim[2]) == 0);
 	}
 
 	@Test
@@ -264,38 +298,6 @@ public class CompoundIndexStrategyTest
 		Assert.assertTrue(Double.compare(
 				sfcIndexRange.getMaxValuesPerDimension()[1],
 				range.getMaxValuesPerDimension()[2]) == 0);
-	}
-
-	@Test
-	public void testGetCoordinatesPerDimension() {
-		final ByteArrayId compoundIndexInsertionId = new ByteArrayId(
-				new byte[] {
-					16,
-					0,
-					-125,
-					16,
-					-46,
-					-93,
-					-110,
-					-31,
-					0,
-					0,
-					0,
-					3
-				});
-		final ByteArrayId[] insertionIds = compoundIndexStrategy.decomposeByteArrayId(compoundIndexInsertionId);
-		final long[] simpleIndexCoordinatesPerDim = simpleIndexStrategy.getCoordinatesPerDimension(insertionIds[0]);
-		final long[] sfcIndexCoordinatesPerDim = sfcIndexStrategy.getCoordinatesPerDimension(insertionIds[1]);
-		final long[] coordinatesPerDim = compoundIndexStrategy.getCoordinatesPerDimension(compoundIndexInsertionId);
-		Assert.assertTrue(Double.compare(
-				simpleIndexCoordinatesPerDim[0],
-				coordinatesPerDim[0]) == 0);
-		Assert.assertTrue(Double.compare(
-				sfcIndexCoordinatesPerDim[0],
-				coordinatesPerDim[1]) == 0);
-		Assert.assertTrue(Double.compare(
-				sfcIndexCoordinatesPerDim[1],
-				coordinatesPerDim[2]) == 0);
 	}
 
 	@Test
