@@ -212,19 +212,23 @@ implements <a href="../../../../../../mil/nga/giat/geowave/core/store/IndexWrite
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloIndexWriter.html#close()">close</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloIndexWriter.html#flush()">flush</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloIndexWriter.html#getIndex()">getIndex</a></strong>()</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloIndexWriter.html#setupAdapter(mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter)">setupAdapter</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">WritableDataAdapter</a>&lt;T&gt;&nbsp;writableAdapter)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloIndexWriter.html#write(mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter,%20T)">write</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">WritableDataAdapter</a>&lt;T&gt;&nbsp;writableAdapter,
      T&nbsp;entry)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloIndexWriter.html#writeInternal(mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter,%20T)">writeInternal</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">WritableDataAdapter</a>&lt;T&gt;&nbsp;writableAdapter,
              T&nbsp;entry)</code>&nbsp;</td>
@@ -448,13 +452,26 @@ implements <a href="../../../../../../mil/nga/giat/geowave/core/store/IndexWrite
 <a name="setupAdapter(mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter)">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>setupAdapter</h4>
 <pre>public&nbsp;&lt;T&gt;&nbsp;void&nbsp;setupAdapter(<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">WritableDataAdapter</a>&lt;T&gt;&nbsp;writableAdapter)</pre>
 <dl>
 <dt><strong>Specified by:</strong></dt>
 <dd><code><a href="../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html#setupAdapter(mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter)">setupAdapter</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="flush()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>flush</h4>
+<pre>public&nbsp;void&nbsp;flush()</pre>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html#flush()">flush</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a></code></dd>
 </dl>
 </li>
 </ul>

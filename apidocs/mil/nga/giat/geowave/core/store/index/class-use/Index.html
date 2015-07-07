@@ -119,14 +119,6 @@
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><a href="#mil.nga.giat.geowave.core.ingest.avro">mil.nga.giat.geowave.core.ingest.avro</a></td>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><a href="#mil.nga.giat.geowave.core.ingest.hdfs.mapreduce">mil.nga.giat.geowave.core.ingest.hdfs.mapreduce</a></td>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="rowColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.core.ingest.local">mil.nga.giat.geowave.core.ingest.local</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -658,6 +650,18 @@
 <td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a></code></td>
 <td class="colLast"><span class="strong">IngestCommandLineOptions.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/IngestCommandLineOptions.html#getIndex(mil.nga.giat.geowave.core.store.index.Index[])">getIndex</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>[]&nbsp;supportedIndices)</code>&nbsp;</td>
 </tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>[]</code></td>
+<td class="colLast"><span class="strong">IndexProvider.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/IndexProvider.html#getRequiredIndices()">getRequiredIndices</a></strong>()</code>
+<div class="block">Get an array of indices that are required by this ingest implementation.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>[]</code></td>
+<td class="colLast"><span class="strong">IndexProvider.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/IndexProvider.html#getSupportedIndices()">getSupportedIndices</a></strong>()</code>
+<div class="block">Get an array of indices that are supported by this ingest implementation.</div>
+</td>
+</tr>
 </tbody>
 </table>
 <table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
@@ -684,75 +688,10 @@
 </tbody>
 </table>
 </li>
-<li class="blockList"><a name="mil.nga.giat.geowave.core.ingest.avro">
-<!--   -->
-</a>
-<h3>Uses of <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a> in <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/avro/package-summary.html">mil.nga.giat.geowave.core.ingest.avro</a></h3>
-<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
-<caption><span>Methods in <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/avro/package-summary.html">mil.nga.giat.geowave.core.ingest.avro</a> that return <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Method and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>[]</code></td>
-<td class="colLast"><span class="strong">AvroFormatPlugin.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroFormatPlugin.html#getSupportedIndices()">getSupportedIndices</a></strong>()</code>
-<div class="block">Get an array of indices that are supported by this ingestion
- implementation.</div>
-</td>
-</tr>
-</tbody>
-</table>
-</li>
-<li class="blockList"><a name="mil.nga.giat.geowave.core.ingest.hdfs.mapreduce">
-<!--   -->
-</a>
-<h3>Uses of <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a> in <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/package-summary.html">mil.nga.giat.geowave.core.ingest.hdfs.mapreduce</a></h3>
-<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
-<caption><span>Methods in <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/package-summary.html">mil.nga.giat.geowave.core.ingest.hdfs.mapreduce</a> that return <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Method and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>[]</code></td>
-<td class="colLast"><span class="strong">IngestFromHdfsPlugin.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/IngestFromHdfsPlugin.html#getRequiredIndices()">getRequiredIndices</a></strong>()</code>
-<div class="block">Get an array of indices that are required by this ingestion
- implementation.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>[]</code></td>
-<td class="colLast"><span class="strong">IngestFromHdfsPlugin.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/IngestFromHdfsPlugin.html#getSupportedIndices()">getSupportedIndices</a></strong>()</code>
-<div class="block">Get an array of indices that are supported by this ingestion
- implementation.</div>
-</td>
-</tr>
-</tbody>
-</table>
-</li>
 <li class="blockList"><a name="mil.nga.giat.geowave.core.ingest.local">
 <!--   -->
 </a>
 <h3>Uses of <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a> in <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/local/package-summary.html">mil.nga.giat.geowave.core.ingest.local</a></h3>
-<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
-<caption><span>Methods in <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/local/package-summary.html">mil.nga.giat.geowave.core.ingest.local</a> that return <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Method and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>[]</code></td>
-<td class="colLast"><span class="strong">LocalFileIngestPlugin.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalFileIngestPlugin.html#getSupportedIndices()">getSupportedIndices</a></strong>()</code>
-<div class="block">Get an array of indices that are supported by this ingestion
- implementation.</div>
-</td>
-</tr>
-</tbody>
-</table>
 <table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
 <caption><span>Methods in <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/local/package-summary.html">mil.nga.giat.geowave.core.ingest.local</a> with parameters of type <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a></span><span class="tabEnd">&nbsp;</span></caption>
 <tr>
@@ -1954,6 +1893,10 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>[]</code></td>
+<td class="colLast"><span class="strong">GeoToolsRasterDataStoreIngestPlugin.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/format/geotools/raster/GeoToolsRasterDataStoreIngestPlugin.html#getRequiredIndices()">getRequiredIndices</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>[]</code></td>
 <td class="colLast"><span class="strong">GeoToolsRasterDataStoreIngestPlugin.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/format/geotools/raster/GeoToolsRasterDataStoreIngestPlugin.html#getSupportedIndices()">getSupportedIndices</a></strong>()</code>&nbsp;</td>
 </tr>
 </tbody>
@@ -1971,6 +1914,10 @@
 </tr>
 <tbody>
 <tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>[]</code></td>
+<td class="colLast"><span class="strong">GeoToolsVectorDataStoreIngestPlugin.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/format/geotools/vector/GeoToolsVectorDataStoreIngestPlugin.html#getRequiredIndices()">getRequiredIndices</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>[]</code></td>
 <td class="colLast"><span class="strong">GeoToolsVectorDataStoreIngestPlugin.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/format/geotools/vector/GeoToolsVectorDataStoreIngestPlugin.html#getSupportedIndices()">getSupportedIndices</a></strong>()</code>&nbsp;</td>
 </tr>

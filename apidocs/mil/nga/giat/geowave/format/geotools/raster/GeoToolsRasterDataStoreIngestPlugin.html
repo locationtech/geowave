@@ -95,7 +95,7 @@
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/DataAdapterProvider.html" title="interface in mil.nga.giat.geowave.core.ingest">DataAdapterProvider</a>&lt;org.opengis.coverage.grid.GridCoverage&gt;, <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/IngestPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest">IngestPluginBase</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>,org.opengis.coverage.grid.GridCoverage&gt;, <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalFileIngestPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.local">LocalFileIngestPlugin</a>&lt;org.opengis.coverage.grid.GridCoverage&gt;, <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest.local">LocalPluginBase</a></dd>
+<dd><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/DataAdapterProvider.html" title="interface in mil.nga.giat.geowave.core.ingest">DataAdapterProvider</a>&lt;org.opengis.coverage.grid.GridCoverage&gt;, <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/IndexProvider.html" title="interface in mil.nga.giat.geowave.core.ingest">IndexProvider</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/IngestPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest">IngestPluginBase</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>,org.opengis.coverage.grid.GridCoverage&gt;, <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalFileIngestPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.local">LocalFileIngestPlugin</a>&lt;org.opengis.coverage.grid.GridCoverage&gt;, <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest.local">LocalPluginBase</a></dd>
 </dl>
 <hr>
 <br>
@@ -156,26 +156,31 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>[]</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/format/geotools/raster/GeoToolsRasterDataStoreIngestPlugin.html#getSupportedIndices()">getSupportedIndices</a></strong>()</code>
-<div class="block">Get an array of indices that are supported by this ingestion
- implementation.</div>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/format/geotools/raster/GeoToolsRasterDataStoreIngestPlugin.html#getRequiredIndices()">getRequiredIndices</a></strong>()</code>
+<div class="block">Get an array of indices that are required by this ingest implementation.</div>
 </td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>[]</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/format/geotools/raster/GeoToolsRasterDataStoreIngestPlugin.html#getSupportedIndices()">getSupportedIndices</a></strong>()</code>
+<div class="block">Get an array of indices that are supported by this ingest implementation.</div>
+</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/format/geotools/raster/GeoToolsRasterDataStoreIngestPlugin.html#init(java.io.File)">init</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;baseDirectory)</code>
 <div class="block">Initialize the plugin and give it the base directory that is provided by
  the user.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/format/geotools/raster/GeoToolsRasterDataStoreIngestPlugin.html#supportsFile(java.io.File)">supportsFile</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;file)</code>
 <div class="block">This method will be called for every file that matches the given
  extensions.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/GeoWaveData.html" title="class in mil.nga.giat.geowave.core.ingest">GeoWaveData</a>&lt;org.opengis.coverage.grid.GridCoverage&gt;&gt;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/format/geotools/raster/GeoToolsRasterDataStoreIngestPlugin.html#toGeoWaveData(java.io.File,%20mil.nga.giat.geowave.core.index.ByteArrayId,%20java.lang.String)">toGeoWaveData</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;input,
              <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;primaryIndexId,
@@ -324,19 +329,41 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/
 <a name="getSupportedIndices()">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>getSupportedIndices</h4>
 <pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>[]&nbsp;getSupportedIndices()</pre>
-<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalFileIngestPlugin.html#getSupportedIndices()">LocalFileIngestPlugin</a></code></strong></div>
-<div class="block">Get an array of indices that are supported by this ingestion
- implementation. This should be the full set of possible indices to use
- for this ingest type (for example both spatial and spatial-temporal, or
- perhaps just one).</div>
+<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/IndexProvider.html#getSupportedIndices()">IndexProvider</a></code></strong></div>
+<div class="block">Get an array of indices that are supported by this ingest implementation.
+ This should be the full set of possible indices to use for this ingest
+ type (for example both spatial and spatial-temporal, or perhaps just
+ one).</div>
 <dl>
 <dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalFileIngestPlugin.html#getSupportedIndices()">getSupportedIndices</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalFileIngestPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.local">LocalFileIngestPlugin</a>&lt;org.opengis.coverage.grid.GridCoverage&gt;</code></dd>
-<dt><span class="strong">Returns:</span></dt><dd>the array of indices that are supported by this ingestion
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/IndexProvider.html#getSupportedIndices()">getSupportedIndices</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/IndexProvider.html" title="interface in mil.nga.giat.geowave.core.ingest">IndexProvider</a></code></dd>
+<dt><span class="strong">Returns:</span></dt><dd>the array of indices that are supported by this ingest
+         implementation</dd></dl>
+</li>
+</ul>
+<a name="getRequiredIndices()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>getRequiredIndices</h4>
+<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>[]&nbsp;getRequiredIndices()</pre>
+<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/IndexProvider.html#getRequiredIndices()">IndexProvider</a></code></strong></div>
+<div class="block">Get an array of indices that are required by this ingest implementation.
+ This should be a subset of supported indices. All of these indices will
+ automatically be persisted with GeoWave's metadata store (and in the job
+ configuration if run as a job), whereas indices that are just "supported"
+ will not automatically be persisted (only if they are the primary index).
+ This is primarily useful if there is a supplemental index required by the
+ ingest process that is not the primary index.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/IndexProvider.html#getRequiredIndices()">getRequiredIndices</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/IndexProvider.html" title="interface in mil.nga.giat.geowave.core.ingest">IndexProvider</a></code></dd>
+<dt><span class="strong">Returns:</span></dt><dd>the array of indices that are supported by this ingest
          implementation</dd></dl>
 </li>
 </ul>

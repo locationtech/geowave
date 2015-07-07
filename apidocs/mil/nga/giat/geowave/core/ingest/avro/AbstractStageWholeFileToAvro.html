@@ -95,7 +95,7 @@
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroFormatPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">AvroFormatPlugin</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/WholeFile.html" title="class in mil.nga.giat.geowave.core.ingest.avro">WholeFile</a>,O&gt;, <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">AvroPluginBase</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/WholeFile.html" title="class in mil.nga.giat.geowave.core.ingest.avro">WholeFile</a>&gt;, <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest.local">LocalPluginBase</a></dd>
+<dd><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroFormatPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">AvroFormatPlugin</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/WholeFile.html" title="class in mil.nga.giat.geowave.core.ingest.avro">WholeFile</a>,O&gt;, <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">AvroPluginBase</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/WholeFile.html" title="class in mil.nga.giat.geowave.core.ingest.avro">WholeFile</a>&gt;, <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroSchemaProvider.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">AvroSchemaProvider</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/IndexProvider.html" title="interface in mil.nga.giat.geowave.core.ingest">IndexProvider</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest.local">LocalPluginBase</a></dd>
 </dl>
 <dl>
 <dt>Direct Known Subclasses:</dt>
@@ -168,7 +168,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/A
 <!--   -->
 </a>
 <h3>Methods inherited from interface&nbsp;mil.nga.giat.geowave.core.ingest.avro.<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroFormatPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">AvroFormatPlugin</a></h3>
-<code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroFormatPlugin.html#getIngestWithAvroPlugin()">getIngestWithAvroPlugin</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroFormatPlugin.html#getSupportedIndices()">getSupportedIndices</a></code></li>
+<code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroFormatPlugin.html#getIngestWithAvroPlugin()">getIngestWithAvroPlugin</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods_inherited_from_class_mil.nga.giat.geowave.core.ingest.local.LocalPluginBase">
@@ -176,6 +176,13 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/A
 </a>
 <h3>Methods inherited from interface&nbsp;mil.nga.giat.geowave.core.ingest.local.<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest.local">LocalPluginBase</a></h3>
 <code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalPluginBase.html#getFileExtensionFilters()">getFileExtensionFilters</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalPluginBase.html#init(java.io.File)">init</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalPluginBase.html#supportsFile(java.io.File)">supportsFile</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_mil.nga.giat.geowave.core.ingest.IndexProvider">
+<!--   -->
+</a>
+<h3>Methods inherited from interface&nbsp;mil.nga.giat.geowave.core.ingest.<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/IndexProvider.html" title="interface in mil.nga.giat.geowave.core.ingest">IndexProvider</a></h3>
+<code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/IndexProvider.html#getRequiredIndices()">getRequiredIndices</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/IndexProvider.html#getSupportedIndices()">getSupportedIndices</a></code></li>
 </ul>
 </li>
 </ul>
@@ -215,11 +222,11 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/A
 <li class="blockList">
 <h4>getAvroSchema</h4>
 <pre>public&nbsp;org.apache.avro.Schema&nbsp;getAvroSchema()</pre>
-<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroPluginBase.html#getAvroSchema()">AvroPluginBase</a></code></strong></div>
+<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroSchemaProvider.html#getAvroSchema()">AvroSchemaProvider</a></code></strong></div>
 <div class="block">Returns the Avro schema for the plugin</div>
 <dl>
 <dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroPluginBase.html#getAvroSchema()">getAvroSchema</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">AvroPluginBase</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/WholeFile.html" title="class in mil.nga.giat.geowave.core.ingest.avro">WholeFile</a>&gt;</code></dd>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroSchemaProvider.html#getAvroSchema()">getAvroSchema</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroSchemaProvider.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">AvroSchemaProvider</a></code></dd>
 <dt><span class="strong">Returns:</span></dt><dd>the Avro schema for the intermediate data</dd></dl>
 </li>
 </ul>

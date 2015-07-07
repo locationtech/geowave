@@ -245,7 +245,7 @@
 </li>
 <li type="circle">mil.nga.giat.geowave.core.ingest.<a href="mil/nga/giat/geowave/core/ingest/ClearNamespaceDriver.html" title="class in mil.nga.giat.geowave.core.ingest"><span class="strong">ClearNamespaceDriver</span></a></li>
 <li type="circle">mil.nga.giat.geowave.core.ingest.hdfs.mapreduce.<a href="mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/IngestFromHdfsDriver.html" title="class in mil.nga.giat.geowave.core.ingest.hdfs.mapreduce"><span class="strong">IngestFromHdfsDriver</span></a></li>
-<li type="circle">mil.nga.giat.geowave.core.ingest.kafka.<a href="mil/nga/giat/geowave/core/ingest/kafka/IngestFromKafkaDriver.html" title="class in mil.nga.giat.geowave.core.ingest.kafka"><span class="strong">IngestFromKafkaDriver</span></a>&lt;I,O&gt;</li>
+<li type="circle">mil.nga.giat.geowave.core.ingest.kafka.<a href="mil/nga/giat/geowave/core/ingest/kafka/IngestFromKafkaDriver.html" title="class in mil.nga.giat.geowave.core.ingest.kafka"><span class="strong">IngestFromKafkaDriver</span></a></li>
 <li type="circle">mil.nga.giat.geowave.core.ingest.<a href="mil/nga/giat/geowave/core/ingest/MultiStageCommandLineDriver.html" title="class in mil.nga.giat.geowave.core.ingest"><span class="strong">MultiStageCommandLineDriver</span></a></li>
 </ul>
 </li>
@@ -523,7 +523,7 @@
 </li>
 <li type="circle">org.geotools.data.store.ContentFeatureSource (implements org.geotools.data.simple.SimpleFeatureSource)
 <ul>
-<li type="circle">org.geotools.data.store.ContentFeatureStore (implements org.geotools.data.simple.SimpleFeatureLocking, org.geotools.data.simple.SimpleFeatureStore)
+<li type="circle">org.geotools.data.store.ContentFeatureStore (implements org.geotools.data.FeatureLocking&lt;T,F&gt;, org.geotools.data.simple.SimpleFeatureStore)
 <ul>
 <li type="circle">mil.nga.giat.geowave.adapter.vector.plugin.<a href="mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin"><span class="strong">GeoWaveFeatureSource</span></a></li>
 </ul>
@@ -758,6 +758,7 @@
 <li type="circle">mil.nga.giat.geowave.core.ingest.local.<a href="mil/nga/giat/geowave/core/ingest/local/IngestRunData.html" title="class in mil.nga.giat.geowave.core.ingest.local"><span class="strong">IngestRunData</span></a> (implements java.io.<a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.html?is-external=true" title="class or interface in java.io">Closeable</a>)</li>
 <li type="circle">mil.nga.giat.geowave.service.client.<a href="mil/nga/giat/geowave/service/client/IngestServiceClient.html" title="class in mil.nga.giat.geowave.service.client"><span class="strong">IngestServiceClient</span></a></li>
 <li type="circle">mil.nga.giat.geowave.service.impl.<a href="mil/nga/giat/geowave/service/impl/IngestServiceImpl.html" title="class in mil.nga.giat.geowave.service.impl"><span class="strong">IngestServiceImpl</span></a> (implements mil.nga.giat.geowave.service.<a href="mil/nga/giat/geowave/service/IngestService.html" title="interface in mil.nga.giat.geowave.service">IngestService</a>)</li>
+<li type="circle">mil.nga.giat.geowave.core.ingest.<a href="mil/nga/giat/geowave/core/ingest/IngestUtils.html" title="class in mil.nga.giat.geowave.core.ingest"><span class="strong">IngestUtils</span></a></li>
 <li type="circle">org.apache.hadoop.mapreduce.InputFormat&lt;K,V&gt;
 <ul>
 <li type="circle">org.apache.hadoop.mapreduce.lib.input.FileInputFormat&lt;K,V&gt;
@@ -798,7 +799,10 @@
 <li type="circle">mil.nga.giat.geowave.adapter.vector.auth.<a href="mil/nga/giat/geowave/adapter/vector/auth/JsonFileAuthorizationFactory.html" title="class in mil.nga.giat.geowave.adapter.vector.auth"><span class="strong">JsonFileAuthorizationFactory</span></a> (implements mil.nga.giat.geowave.adapter.vector.auth.<a href="mil/nga/giat/geowave/adapter/vector/auth/AuthorizationFactorySPI.html" title="interface in mil.nga.giat.geowave.adapter.vector.auth">AuthorizationFactorySPI</a>)</li>
 <li type="circle">mil.nga.giat.geowave.adapter.vector.auth.<a href="mil/nga/giat/geowave/adapter/vector/auth/JsonFileAuthorizationProvider.html" title="class in mil.nga.giat.geowave.adapter.vector.auth"><span class="strong">JsonFileAuthorizationProvider</span></a> (implements mil.nga.giat.geowave.adapter.vector.auth.<a href="mil/nga/giat/geowave/adapter/vector/auth/AuthorizationSPI.html" title="interface in mil.nga.giat.geowave.adapter.vector.auth">AuthorizationSPI</a>)</li>
 <li type="circle">mil.nga.giat.geowave.analytic.param.<a href="mil/nga/giat/geowave/analytic/param/JumpParameters.html" title="class in mil.nga.giat.geowave.analytic.param"><span class="strong">JumpParameters</span></a></li>
+<li type="circle">mil.nga.giat.geowave.core.ingest.kafka.<a href="mil/nga/giat/geowave/core/ingest/kafka/KafkaCommandLineArgument.html" title="class in mil.nga.giat.geowave.core.ingest.kafka"><span class="strong">KafkaCommandLineArgument</span></a></li>
 <li type="circle">mil.nga.giat.geowave.core.ingest.kafka.<a href="mil/nga/giat/geowave/core/ingest/kafka/KafkaCommandLineOptions.html" title="class in mil.nga.giat.geowave.core.ingest.kafka"><span class="strong">KafkaCommandLineOptions</span></a></li>
+<li type="circle">mil.nga.giat.geowave.core.ingest.kafka.<a href="mil/nga/giat/geowave/core/ingest/kafka/KafkaConsumerCommandLineOptions.html" title="class in mil.nga.giat.geowave.core.ingest.kafka"><span class="strong">KafkaConsumerCommandLineOptions</span></a></li>
+<li type="circle">mil.nga.giat.geowave.core.ingest.kafka.<a href="mil/nga/giat/geowave/core/ingest/kafka/KafkaProducerCommandLineOptions.html" title="class in mil.nga.giat.geowave.core.ingest.kafka"><span class="strong">KafkaProducerCommandLineOptions</span></a></li>
 <li type="circle">org.apache.accumulo.core.data.Key (implements java.lang.<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Cloneable.html?is-external=true" title="class or interface in java.lang">Cloneable</a>, org.apache.hadoop.io.WritableComparable&lt;T&gt;)
 <ul>
 <li type="circle">mil.nga.giat.geowave.datastore.accumulo.util.<a href="mil/nga/giat/geowave/datastore/accumulo/util/IteratorUtils.SkeletonKey.html" title="class in mil.nga.giat.geowave.datastore.accumulo.util"><span class="strong">IteratorUtils.SkeletonKey</span></a></li>
@@ -1079,20 +1083,6 @@
 <li type="circle">mil.nga.giat.geowave.adapter.vector.query.<a href="mil/nga/giat/geowave/adapter/vector/query/RenderIteratorWrapper.html" title="class in mil.nga.giat.geowave.adapter.vector.query"><span class="strong">RenderIteratorWrapper</span></a> (implements java.util.<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;E&gt;)</li>
 <li type="circle">mil.nga.giat.geowave.adapter.raster.<a href="mil/nga/giat/geowave/adapter/raster/Resolution.html" title="class in mil.nga.giat.geowave.adapter.raster"><span class="strong">Resolution</span></a> (implements java.lang.<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Comparable.html?is-external=true" title="class or interface in java.lang">Comparable</a>&lt;T&gt;, mil.nga.giat.geowave.core.index.<a href="mil/nga/giat/geowave/core/index/Persistable.html" title="interface in mil.nga.giat.geowave.core.index">Persistable</a>)</li>
 <li type="circle">mil.nga.giat.geowave.adapter.raster.adapter.merge.<a href="mil/nga/giat/geowave/adapter/raster/adapter/merge/RootMergeStrategy.html" title="class in mil.nga.giat.geowave.adapter.raster.adapter.merge"><span class="strong">RootMergeStrategy</span></a>&lt;T&gt; (implements mil.nga.giat.geowave.core.index.<a href="mil/nga/giat/geowave/core/index/Mergeable.html" title="interface in mil.nga.giat.geowave.core.index">Mergeable</a>)</li>
-<li type="circle">org.apache.accumulo.core.iterators.user.RowEncodingIterator (implements org.apache.accumulo.core.iterators.SortedKeyValueIterator&lt;K,V&gt;)
-<ul>
-<li type="circle">org.apache.accumulo.core.iterators.user.WholeRowIterator
-<ul>
-<li type="circle">mil.nga.giat.geowave.adapter.vector.query.<a href="mil/nga/giat/geowave/adapter/vector/query/CqlQueryFilterIterator.html" title="class in mil.nga.giat.geowave.adapter.vector.query"><span class="strong">CqlQueryFilterIterator</span></a>
-<ul>
-<li type="circle">mil.nga.giat.geowave.adapter.vector.query.<a href="mil/nga/giat/geowave/adapter/vector/query/CqlQueryRenderIterator.html" title="class in mil.nga.giat.geowave.adapter.vector.query"><span class="strong">CqlQueryRenderIterator</span></a></li>
-</ul>
-</li>
-<li type="circle">mil.nga.giat.geowave.datastore.accumulo.query.<a href="mil/nga/giat/geowave/datastore/accumulo/query/QueryFilterIterator.html" title="class in mil.nga.giat.geowave.datastore.accumulo.query"><span class="strong">QueryFilterIterator</span></a></li>
-</ul>
-</li>
-</ul>
-</li>
 <li type="circle">mil.nga.giat.geowave.adapter.vector.query.row.<a href="mil/nga/giat/geowave/adapter/vector/query/row/RowProviderSkippingIterator.html" title="class in mil.nga.giat.geowave.adapter.vector.query.row"><span class="strong">RowProviderSkippingIterator</span></a></li>
 <li type="circle">mil.nga.giat.geowave.analytic.<a href="mil/nga/giat/geowave/analytic/RunnerUtils.html" title="class in mil.nga.giat.geowave.analytic"><span class="strong">RunnerUtils</span></a></li>
 <li type="circle">mil.nga.giat.geowave.analytic.param.<a href="mil/nga/giat/geowave/analytic/param/SampleParameters.html" title="class in mil.nga.giat.geowave.analytic.param"><span class="strong">SampleParameters</span></a></li>
@@ -1221,6 +1211,16 @@
 <li type="circle">mil.nga.giat.geowave.adapter.vector.plugin.visibility.<a href="mil/nga/giat/geowave/adapter/vector/plugin/visibility/VisibilityManagementHelper.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin.visibility"><span class="strong">VisibilityManagementHelper</span></a></li>
 <li type="circle">mil.nga.giat.geowave.adapter.vector.<a href="mil/nga/giat/geowave/adapter/vector/VisibilityQueryFilter.html" title="class in mil.nga.giat.geowave.adapter.vector"><span class="strong">VisibilityQueryFilter</span></a> (implements mil.nga.giat.geowave.core.store.filter.<a href="mil/nga/giat/geowave/core/store/filter/DistributableQueryFilter.html" title="interface in mil.nga.giat.geowave.core.store.filter">DistributableQueryFilter</a>)</li>
 <li type="circle">mil.nga.giat.geowave.datastore.accumulo.util.<a href="mil/nga/giat/geowave/datastore/accumulo/util/VisibilityTransformer.html" title="class in mil.nga.giat.geowave.datastore.accumulo.util"><span class="strong">VisibilityTransformer</span></a> (implements mil.nga.giat.geowave.datastore.accumulo.util.<a href="mil/nga/giat/geowave/datastore/accumulo/util/Transformer.html" title="interface in mil.nga.giat.geowave.datastore.accumulo.util">Transformer</a>)</li>
+<li type="circle">org.apache.accumulo.core.iterators.user.WholeRowIterator (implements org.apache.accumulo.core.iterators.SortedKeyValueIterator&lt;K,V&gt;)
+<ul>
+<li type="circle">mil.nga.giat.geowave.adapter.vector.query.<a href="mil/nga/giat/geowave/adapter/vector/query/CqlQueryFilterIterator.html" title="class in mil.nga.giat.geowave.adapter.vector.query"><span class="strong">CqlQueryFilterIterator</span></a>
+<ul>
+<li type="circle">mil.nga.giat.geowave.adapter.vector.query.<a href="mil/nga/giat/geowave/adapter/vector/query/CqlQueryRenderIterator.html" title="class in mil.nga.giat.geowave.adapter.vector.query"><span class="strong">CqlQueryRenderIterator</span></a></li>
+</ul>
+</li>
+<li type="circle">mil.nga.giat.geowave.datastore.accumulo.query.<a href="mil/nga/giat/geowave/datastore/accumulo/query/QueryFilterIterator.html" title="class in mil.nga.giat.geowave.datastore.accumulo.query"><span class="strong">QueryFilterIterator</span></a></li>
+</ul>
+</li>
 <li type="circle">org.apache.accumulo.core.iterators.WrappingIterator (implements org.apache.accumulo.core.iterators.SortedKeyValueIterator&lt;K,V&gt;)
 <ul>
 <li type="circle">org.apache.accumulo.core.iterators.Combiner (implements org.apache.accumulo.core.iterators.OptionDescriber)
@@ -1290,9 +1290,15 @@
 <li type="circle">mil.nga.giat.geowave.core.store.<a href="mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store"><span class="strong">IndexWriter</span></a></li>
 </ul>
 </li>
+<li type="circle">mil.nga.giat.geowave.core.ingest.avro.<a href="mil/nga/giat/geowave/core/ingest/avro/AvroSchemaProvider.html" title="interface in mil.nga.giat.geowave.core.ingest.avro"><span class="strong">AvroSchemaProvider</span></a>
+<ul>
+<li type="circle">mil.nga.giat.geowave.core.ingest.avro.<a href="mil/nga/giat/geowave/core/ingest/avro/AvroFormatPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.avro"><span class="strong">AvroFormatPlugin</span></a>&lt;I,O&gt; (also extends mil.nga.giat.geowave.core.ingest.avro.<a href="mil/nga/giat/geowave/core/ingest/avro/AvroPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">AvroPluginBase</a>&lt;T&gt;, mil.nga.giat.geowave.core.ingest.<a href="mil/nga/giat/geowave/core/ingest/IndexProvider.html" title="interface in mil.nga.giat.geowave.core.ingest">IndexProvider</a>, mil.nga.giat.geowave.core.ingest.local.<a href="mil/nga/giat/geowave/core/ingest/local/LocalPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest.local">LocalPluginBase</a>)</li>
 <li type="circle">mil.nga.giat.geowave.core.ingest.avro.<a href="mil/nga/giat/geowave/core/ingest/avro/AvroPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest.avro"><span class="strong">AvroPluginBase</span></a>&lt;T&gt;
 <ul>
-<li type="circle">mil.nga.giat.geowave.core.ingest.avro.<a href="mil/nga/giat/geowave/core/ingest/avro/AvroFormatPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.avro"><span class="strong">AvroFormatPlugin</span></a>&lt;I,O&gt; (also extends mil.nga.giat.geowave.core.ingest.local.<a href="mil/nga/giat/geowave/core/ingest/local/LocalPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest.local">LocalPluginBase</a>)</li>
+<li type="circle">mil.nga.giat.geowave.core.ingest.avro.<a href="mil/nga/giat/geowave/core/ingest/avro/AvroFormatPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.avro"><span class="strong">AvroFormatPlugin</span></a>&lt;I,O&gt; (also extends mil.nga.giat.geowave.core.ingest.<a href="mil/nga/giat/geowave/core/ingest/IndexProvider.html" title="interface in mil.nga.giat.geowave.core.ingest">IndexProvider</a>, mil.nga.giat.geowave.core.ingest.local.<a href="mil/nga/giat/geowave/core/ingest/local/LocalPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest.local">LocalPluginBase</a>)</li>
+</ul>
+</li>
+<li type="circle">mil.nga.giat.geowave.core.ingest.hdfs.mapreduce.<a href="mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/IngestFromHdfsPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.hdfs.mapreduce"><span class="strong">IngestFromHdfsPlugin</span></a>&lt;I,O&gt; (also extends mil.nga.giat.geowave.core.ingest.<a href="mil/nga/giat/geowave/core/ingest/IndexProvider.html" title="interface in mil.nga.giat.geowave.core.ingest">IndexProvider</a>)</li>
 </ul>
 </li>
 <li type="circle">mil.nga.giat.geowave.analytic.db.<a href="mil/nga/giat/geowave/analytic/db/BasicAccumuloOperationsFactory.html" title="interface in mil.nga.giat.geowave.analytic.db"><span class="strong">BasicAccumuloOperationsFactory</span></a></li>
@@ -1314,12 +1320,12 @@
 <li type="circle">mil.nga.giat.geowave.core.ingest.<a href="mil/nga/giat/geowave/core/ingest/IngestPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest"><span class="strong">IngestPluginBase</span></a>&lt;I,O&gt;
 <ul>
 <li type="circle">mil.nga.giat.geowave.core.ingest.hdfs.mapreduce.<a href="mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/IngestWithMapper.html" title="interface in mil.nga.giat.geowave.core.ingest.hdfs.mapreduce"><span class="strong">IngestWithMapper</span></a>&lt;I,O&gt; (also extends mil.nga.giat.geowave.core.index.<a href="mil/nga/giat/geowave/core/index/Persistable.html" title="interface in mil.nga.giat.geowave.core.index">Persistable</a>)</li>
-<li type="circle">mil.nga.giat.geowave.core.ingest.local.<a href="mil/nga/giat/geowave/core/ingest/local/LocalFileIngestPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.local"><span class="strong">LocalFileIngestPlugin</span></a>&lt;O&gt; (also extends mil.nga.giat.geowave.core.ingest.local.<a href="mil/nga/giat/geowave/core/ingest/local/LocalPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest.local">LocalPluginBase</a>)</li>
+<li type="circle">mil.nga.giat.geowave.core.ingest.local.<a href="mil/nga/giat/geowave/core/ingest/local/LocalFileIngestPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.local"><span class="strong">LocalFileIngestPlugin</span></a>&lt;O&gt; (also extends mil.nga.giat.geowave.core.ingest.<a href="mil/nga/giat/geowave/core/ingest/IndexProvider.html" title="interface in mil.nga.giat.geowave.core.ingest">IndexProvider</a>, mil.nga.giat.geowave.core.ingest.local.<a href="mil/nga/giat/geowave/core/ingest/local/LocalPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest.local">LocalPluginBase</a>)</li>
 </ul>
 </li>
 <li type="circle">mil.nga.giat.geowave.core.ingest.hdfs.mapreduce.<a href="mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/IngestWithMapper.html" title="interface in mil.nga.giat.geowave.core.ingest.hdfs.mapreduce"><span class="strong">IngestWithMapper</span></a>&lt;I,O&gt; (also extends mil.nga.giat.geowave.core.ingest.<a href="mil/nga/giat/geowave/core/ingest/IngestPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest">IngestPluginBase</a>&lt;I,O&gt;, mil.nga.giat.geowave.core.index.<a href="mil/nga/giat/geowave/core/index/Persistable.html" title="interface in mil.nga.giat.geowave.core.index">Persistable</a>)</li>
 <li type="circle">mil.nga.giat.geowave.core.ingest.hdfs.mapreduce.<a href="mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/IngestWithReducer.html" title="interface in mil.nga.giat.geowave.core.ingest.hdfs.mapreduce"><span class="strong">IngestWithReducer</span></a>&lt;I,K,V,O&gt; (also extends mil.nga.giat.geowave.core.index.<a href="mil/nga/giat/geowave/core/index/Persistable.html" title="interface in mil.nga.giat.geowave.core.index">Persistable</a>)</li>
-<li type="circle">mil.nga.giat.geowave.core.ingest.local.<a href="mil/nga/giat/geowave/core/ingest/local/LocalFileIngestPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.local"><span class="strong">LocalFileIngestPlugin</span></a>&lt;O&gt; (also extends mil.nga.giat.geowave.core.ingest.<a href="mil/nga/giat/geowave/core/ingest/IngestPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest">IngestPluginBase</a>&lt;I,O&gt;, mil.nga.giat.geowave.core.ingest.local.<a href="mil/nga/giat/geowave/core/ingest/local/LocalPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest.local">LocalPluginBase</a>)</li>
+<li type="circle">mil.nga.giat.geowave.core.ingest.local.<a href="mil/nga/giat/geowave/core/ingest/local/LocalFileIngestPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.local"><span class="strong">LocalFileIngestPlugin</span></a>&lt;O&gt; (also extends mil.nga.giat.geowave.core.ingest.<a href="mil/nga/giat/geowave/core/ingest/IndexProvider.html" title="interface in mil.nga.giat.geowave.core.ingest">IndexProvider</a>, mil.nga.giat.geowave.core.ingest.<a href="mil/nga/giat/geowave/core/ingest/IngestPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest">IngestPluginBase</a>&lt;I,O&gt;, mil.nga.giat.geowave.core.ingest.local.<a href="mil/nga/giat/geowave/core/ingest/local/LocalPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest.local">LocalPluginBase</a>)</li>
 </ul>
 </li>
 <li type="circle">mil.nga.giat.geowave.core.store.data.<a href="mil/nga/giat/geowave/core/store/data/DataReader.html" title="interface in mil.nga.giat.geowave.core.store.data"><span class="strong">DataReader</span></a>&lt;FieldType&gt;
@@ -1429,6 +1435,13 @@
 </ul>
 </li>
 <li type="circle">mil.nga.giat.geowave.analytic.model.<a href="mil/nga/giat/geowave/analytic/model/IndexModelBuilder.html" title="interface in mil.nga.giat.geowave.analytic.model"><span class="strong">IndexModelBuilder</span></a></li>
+<li type="circle">mil.nga.giat.geowave.core.ingest.<a href="mil/nga/giat/geowave/core/ingest/IndexProvider.html" title="interface in mil.nga.giat.geowave.core.ingest"><span class="strong">IndexProvider</span></a>
+<ul>
+<li type="circle">mil.nga.giat.geowave.core.ingest.avro.<a href="mil/nga/giat/geowave/core/ingest/avro/AvroFormatPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.avro"><span class="strong">AvroFormatPlugin</span></a>&lt;I,O&gt; (also extends mil.nga.giat.geowave.core.ingest.avro.<a href="mil/nga/giat/geowave/core/ingest/avro/AvroPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">AvroPluginBase</a>&lt;T&gt;, mil.nga.giat.geowave.core.ingest.local.<a href="mil/nga/giat/geowave/core/ingest/local/LocalPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest.local">LocalPluginBase</a>)</li>
+<li type="circle">mil.nga.giat.geowave.core.ingest.hdfs.mapreduce.<a href="mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/IngestFromHdfsPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.hdfs.mapreduce"><span class="strong">IngestFromHdfsPlugin</span></a>&lt;I,O&gt; (also extends mil.nga.giat.geowave.core.ingest.avro.<a href="mil/nga/giat/geowave/core/ingest/avro/AvroSchemaProvider.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">AvroSchemaProvider</a>)</li>
+<li type="circle">mil.nga.giat.geowave.core.ingest.local.<a href="mil/nga/giat/geowave/core/ingest/local/LocalFileIngestPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.local"><span class="strong">LocalFileIngestPlugin</span></a>&lt;O&gt; (also extends mil.nga.giat.geowave.core.ingest.<a href="mil/nga/giat/geowave/core/ingest/IngestPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest">IngestPluginBase</a>&lt;I,O&gt;, mil.nga.giat.geowave.core.ingest.local.<a href="mil/nga/giat/geowave/core/ingest/local/LocalPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest.local">LocalPluginBase</a>)</li>
+</ul>
+</li>
 <li type="circle">mil.nga.giat.geowave.core.store.index.<a href="mil/nga/giat/geowave/core/store/index/IndexStore.html" title="interface in mil.nga.giat.geowave.core.store.index"><span class="strong">IndexStore</span></a></li>
 <li type="circle">mil.nga.giat.geowave.analytic.db.<a href="mil/nga/giat/geowave/analytic/db/IndexStoreFactory.html" title="interface in mil.nga.giat.geowave.analytic.db"><span class="strong">IndexStoreFactory</span></a></li>
 <li type="circle">mil.nga.giat.geowave.service.<a href="mil/nga/giat/geowave/service/InfoService.html" title="interface in mil.nga.giat.geowave.service"><span class="strong">InfoService</span></a></li>
@@ -1440,7 +1453,6 @@
 <li type="circle">mil.nga.giat.geowave.core.ingest.<a href="mil/nga/giat/geowave/core/ingest/IngestDimensionalityTypeProviderSpi.html" title="interface in mil.nga.giat.geowave.core.ingest"><span class="strong">IngestDimensionalityTypeProviderSpi</span></a></li>
 <li type="circle">mil.nga.giat.geowave.core.ingest.<a href="mil/nga/giat/geowave/core/ingest/IngestFormatOptionProvider.html" title="interface in mil.nga.giat.geowave.core.ingest"><span class="strong">IngestFormatOptionProvider</span></a></li>
 <li type="circle">mil.nga.giat.geowave.core.ingest.<a href="mil/nga/giat/geowave/core/ingest/IngestFormatPluginProviderSpi.html" title="interface in mil.nga.giat.geowave.core.ingest"><span class="strong">IngestFormatPluginProviderSpi</span></a>&lt;I,O&gt;</li>
-<li type="circle">mil.nga.giat.geowave.core.ingest.hdfs.mapreduce.<a href="mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/IngestFromHdfsPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.hdfs.mapreduce"><span class="strong">IngestFromHdfsPlugin</span></a>&lt;I,O&gt;</li>
 <li type="circle">mil.nga.giat.geowave.service.<a href="mil/nga/giat/geowave/service/IngestService.html" title="interface in mil.nga.giat.geowave.service"><span class="strong">IngestService</span></a></li>
 <li type="circle">java.util.<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util"><span class="strong">Iterator</span></a>&lt;E&gt;
 <ul>
@@ -1451,8 +1463,8 @@
 <li type="circle">mil.nga.giat.geowave.datastore.accumulo.util.<a href="mil/nga/giat/geowave/datastore/accumulo/util/IteratorWrapper.Converter.html" title="interface in mil.nga.giat.geowave.datastore.accumulo.util"><span class="strong">IteratorWrapper.Converter</span></a>&lt;InputType,ConvertedType&gt;</li>
 <li type="circle">mil.nga.giat.geowave.core.ingest.local.<a href="mil/nga/giat/geowave/core/ingest/local/LocalPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest.local"><span class="strong">LocalPluginBase</span></a>
 <ul>
-<li type="circle">mil.nga.giat.geowave.core.ingest.avro.<a href="mil/nga/giat/geowave/core/ingest/avro/AvroFormatPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.avro"><span class="strong">AvroFormatPlugin</span></a>&lt;I,O&gt; (also extends mil.nga.giat.geowave.core.ingest.avro.<a href="mil/nga/giat/geowave/core/ingest/avro/AvroPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">AvroPluginBase</a>&lt;T&gt;)</li>
-<li type="circle">mil.nga.giat.geowave.core.ingest.local.<a href="mil/nga/giat/geowave/core/ingest/local/LocalFileIngestPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.local"><span class="strong">LocalFileIngestPlugin</span></a>&lt;O&gt; (also extends mil.nga.giat.geowave.core.ingest.<a href="mil/nga/giat/geowave/core/ingest/IngestPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest">IngestPluginBase</a>&lt;I,O&gt;)</li>
+<li type="circle">mil.nga.giat.geowave.core.ingest.avro.<a href="mil/nga/giat/geowave/core/ingest/avro/AvroFormatPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.avro"><span class="strong">AvroFormatPlugin</span></a>&lt;I,O&gt; (also extends mil.nga.giat.geowave.core.ingest.avro.<a href="mil/nga/giat/geowave/core/ingest/avro/AvroPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">AvroPluginBase</a>&lt;T&gt;, mil.nga.giat.geowave.core.ingest.<a href="mil/nga/giat/geowave/core/ingest/IndexProvider.html" title="interface in mil.nga.giat.geowave.core.ingest">IndexProvider</a>)</li>
+<li type="circle">mil.nga.giat.geowave.core.ingest.local.<a href="mil/nga/giat/geowave/core/ingest/local/LocalFileIngestPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.local"><span class="strong">LocalFileIngestPlugin</span></a>&lt;O&gt; (also extends mil.nga.giat.geowave.core.ingest.<a href="mil/nga/giat/geowave/core/ingest/IndexProvider.html" title="interface in mil.nga.giat.geowave.core.ingest">IndexProvider</a>, mil.nga.giat.geowave.core.ingest.<a href="mil/nga/giat/geowave/core/ingest/IngestPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest">IngestPluginBase</a>&lt;I,O&gt;)</li>
 </ul>
 </li>
 <li type="circle">mil.nga.giat.geowave.adapter.vector.plugin.lock.<a href="mil/nga/giat/geowave/adapter/vector/plugin/lock/LockingManagementFactory.html" title="interface in mil.nga.giat.geowave.adapter.vector.plugin.lock"><span class="strong">LockingManagementFactory</span></a></li>

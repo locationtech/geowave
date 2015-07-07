@@ -146,18 +146,22 @@ implements <a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/Wr
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/BatchWriterWrapper.html#close()">close</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/BatchWriterWrapper.html#flush()">flush</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>org.apache.accumulo.core.client.BatchWriter</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/BatchWriterWrapper.html#getBatchWriter()">getBatchWriter</a></strong>()</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/BatchWriterWrapper.html#setBatchWriter(org.apache.accumulo.core.client.BatchWriter)">setBatchWriter</a></strong>(org.apache.accumulo.core.client.BatchWriter&nbsp;batchWriter)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/BatchWriterWrapper.html#write(java.lang.Iterable)">write</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;org.apache.accumulo.core.data.Mutation&gt;&nbsp;mutations)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/BatchWriterWrapper.html#write(org.apache.accumulo.core.data.Mutation)">write</a></strong>(org.apache.accumulo.core.data.Mutation&nbsp;mutation)</code>&nbsp;</td>
 </tr>
@@ -247,13 +251,26 @@ implements <a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/Wr
 <a name="close()">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>close</h4>
 <pre>public&nbsp;void&nbsp;close()</pre>
 <dl>
 <dt><strong>Specified by:</strong></dt>
 <dd><code><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/Writer.html#close()">close</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/Writer.html" title="interface in mil.nga.giat.geowave.datastore.accumulo">Writer</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="flush()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>flush</h4>
+<pre>public&nbsp;void&nbsp;flush()</pre>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/Writer.html#flush()">flush</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/Writer.html" title="interface in mil.nga.giat.geowave.datastore.accumulo">Writer</a></code></dd>
 </dl>
 </li>
 </ul>

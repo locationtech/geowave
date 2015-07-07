@@ -63,13 +63,13 @@
 <li>Nested&nbsp;|&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
 <li>Constr&nbsp;|&nbsp;</li>
-<li><a href="#method_summary">Method</a></li>
+<li>Method</li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
 <li>Constr&nbsp;|&nbsp;</li>
-<li><a href="#method_detail">Method</a></li>
+<li>Method</li>
 </ul>
 </div>
 <a name="skip-navbar_top">
@@ -88,7 +88,7 @@
 <dl><dt><span class="strong">Type Parameters:</span></dt><dd><code>O</code> - The type of data to write to GeoWave</dd></dl>
 <dl>
 <dt>All Superinterfaces:</dt>
-<dd><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/DataAdapterProvider.html" title="interface in mil.nga.giat.geowave.core.ingest">DataAdapterProvider</a>&lt;O&gt;, <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/IngestPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest">IngestPluginBase</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>,O&gt;, <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest.local">LocalPluginBase</a></dd>
+<dd><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/DataAdapterProvider.html" title="interface in mil.nga.giat.geowave.core.ingest">DataAdapterProvider</a>&lt;O&gt;, <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/IndexProvider.html" title="interface in mil.nga.giat.geowave.core.ingest">IndexProvider</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/IngestPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest">IngestPluginBase</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>,O&gt;, <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest.local">LocalPluginBase</a></dd>
 </dl>
 <dl>
 <dt>All Known Implementing Classes:</dt>
@@ -97,7 +97,7 @@
 <hr>
 <br>
 <pre>public interface <span class="strong">LocalFileIngestPlugin&lt;O&gt;</span>
-extends <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest.local">LocalPluginBase</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/IngestPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest">IngestPluginBase</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>,O&gt;</pre>
+extends <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest.local">LocalPluginBase</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/IngestPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest">IngestPluginBase</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>,O&gt;, <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/IndexProvider.html" title="interface in mil.nga.giat.geowave.core.ingest">IndexProvider</a></pre>
 <div class="block">This is the primary plugin for directly ingesting data to GeoWave from local
  files. It will write any GeoWaveData that is emitted for any supported file.</div>
 </li>
@@ -112,20 +112,6 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/Loc
 <!--   -->
 </a>
 <h3>Method Summary</h3>
-<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Method Summary table, listing methods, and an explanation">
-<caption><span>Methods</span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Method and Description</th>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>[]</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalFileIngestPlugin.html#getSupportedIndices()">getSupportedIndices</a></strong>()</code>
-<div class="block">Get an array of indices that are supported by this ingestion
- implementation.</div>
-</td>
-</tr>
-</table>
 <ul class="blockList">
 <li class="blockList"><a name="methods_inherited_from_class_mil.nga.giat.geowave.core.ingest.local.LocalPluginBase">
 <!--   -->
@@ -147,34 +133,12 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/Loc
 <h3>Methods inherited from interface&nbsp;mil.nga.giat.geowave.core.ingest.<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/DataAdapterProvider.html" title="interface in mil.nga.giat.geowave.core.ingest">DataAdapterProvider</a></h3>
 <code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/DataAdapterProvider.html#getDataAdapters(java.lang.String)">getDataAdapters</a></code></li>
 </ul>
-</li>
-</ul>
-</li>
-</ul>
-</div>
-<div class="details">
 <ul class="blockList">
-<li class="blockList">
-<!-- ============ METHOD DETAIL ========== -->
-<ul class="blockList">
-<li class="blockList"><a name="method_detail">
+<li class="blockList"><a name="methods_inherited_from_class_mil.nga.giat.geowave.core.ingest.IndexProvider">
 <!--   -->
 </a>
-<h3>Method Detail</h3>
-<a name="getSupportedIndices()">
-<!--   -->
-</a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>getSupportedIndices</h4>
-<pre><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>[]&nbsp;getSupportedIndices()</pre>
-<div class="block">Get an array of indices that are supported by this ingestion
- implementation. This should be the full set of possible indices to use
- for this ingest type (for example both spatial and spatial-temporal, or
- perhaps just one).</div>
-<dl><dt><span class="strong">Returns:</span></dt><dd>the array of indices that are supported by this ingestion
-         implementation</dd></dl>
-</li>
+<h3>Methods inherited from interface&nbsp;mil.nga.giat.geowave.core.ingest.<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/IndexProvider.html" title="interface in mil.nga.giat.geowave.core.ingest">IndexProvider</a></h3>
+<code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/IndexProvider.html#getRequiredIndices()">getRequiredIndices</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/IndexProvider.html#getSupportedIndices()">getSupportedIndices</a></code></li>
 </ul>
 </li>
 </ul>
@@ -230,13 +194,13 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/Loc
 <li>Nested&nbsp;|&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
 <li>Constr&nbsp;|&nbsp;</li>
-<li><a href="#method_summary">Method</a></li>
+<li>Method</li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
 <li>Constr&nbsp;|&nbsp;</li>
-<li><a href="#method_detail">Method</a></li>
+<li>Method</li>
 </ul>
 </div>
 <a name="skip-navbar_bottom">

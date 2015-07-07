@@ -145,10 +145,14 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.h
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/IngestRunData.html#close()">close</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/IngestRunData.html#flush()">flush</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">WritableDataAdapter</a>&lt;?&gt;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/IngestRunData.html#getDataAdapter(mil.nga.giat.geowave.core.ingest.GeoWaveData)">getDataAdapter</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/GeoWaveData.html" title="class in mil.nga.giat.geowave.core.ingest">GeoWaveData</a>&lt;?&gt;&nbsp;data)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/IngestRunData.html#getIndexWriter(mil.nga.giat.geowave.core.store.index.Index)">getIndexWriter</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index)</code>&nbsp;</td>
 </tr>
@@ -213,7 +217,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.h
 <a name="close()">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>close</h4>
 <pre>public&nbsp;void&nbsp;close()
@@ -225,6 +229,15 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.h
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/AutoCloseable.html?is-external=true#close()" title="class or interface in java.lang">close</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/AutoCloseable.html?is-external=true" title="class or interface in java.lang">AutoCloseable</a></code></dd>
 <dt><span class="strong">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd></dl>
+</li>
+</ul>
+<a name="flush()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>flush</h4>
+<pre>public&nbsp;void&nbsp;flush()</pre>
 </li>
 </ul>
 </li>
