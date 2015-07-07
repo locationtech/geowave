@@ -136,4 +136,9 @@ public class GeoToolsRasterDataStoreIngestPlugin implements
 		return supportedIndices;
 	}
 
+	@Override
+	public Index[] getRequiredIndices() {
+		return new Index[] {};
+	}
+
 }

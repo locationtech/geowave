@@ -23,7 +23,7 @@ import org.apache.hadoop.util.Tool;
 /**
  * This class can be sub-classed to run map-reduce jobs within the ingest
  * framework using plugins provided by types that are discovered through SPI.
- * 
+ *
  * @param <T>
  *            The type of map-reduce ingest plugin that can be persisted to the
  *            map-reduce job configuration and used by the mapper and/or reducer
@@ -98,7 +98,7 @@ abstract public class AbstractMapReduceIngest<T extends Persistable & DataAdapte
 		job.setInputFormatClass(AvroKeyInputFormat.class);
 		AvroJob.setInputKeySchema(
 				job,
-				parentPlugin.getAvroSchemaForHdfsType());
+				parentPlugin.getAvroSchema());
 		FileInputFormat.setInputPaths(
 				job,
 				inputFile);

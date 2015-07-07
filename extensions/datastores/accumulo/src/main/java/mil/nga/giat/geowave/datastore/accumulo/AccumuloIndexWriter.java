@@ -31,7 +31,7 @@ import org.apache.log4j.Logger;
  * This class can write many entries for a single index by retaining a single
  * open writer. The first entry that is written will open a writer and it is the
  * responsibility of the caller to close this writer when complete.
- * 
+ *
  */
 public class AccumuloIndexWriter implements
 		IndexWriter
@@ -259,7 +259,7 @@ public class AccumuloIndexWriter implements
 		// thread safe close
 		closeInternal();
 
-		// write the statistics
+		// write the statistics and clear it
 		if (persistStats) {
 			final List<DataStatistics> accumulatedStats = new ArrayList<DataStatistics>();
 			synchronized (this) {
@@ -273,13 +273,14 @@ public class AccumuloIndexWriter implements
 						}
 					}
 				}
-			}
-			if (!accumulatedStats.isEmpty()) {
-				final DataStatisticsStore statsStore = new AccumuloDataStatisticsStore(
-						accumuloOperations);
-				for (final DataStatistics s : accumulatedStats) {
-					statsStore.incorporateStatistics(s);
+				if (!accumulatedStats.isEmpty()) {
+					final DataStatisticsStore statsStore = new AccumuloDataStatisticsStore(
+							accumuloOperations);
+					for (final DataStatistics s : accumulatedStats) {
+						statsStore.incorporateStatistics(s);
+					}
 				}
+				statsMap.clear();
 			}
 		}
 	}
@@ -314,6 +315,42 @@ public class AccumuloIndexWriter implements
 			LOGGER.error(
 					"Unable to determine existence of locality group [" + writableAdapter.getAdapterId().getString() + "]",
 					e);
+		}
+	}
+
+	@Override
+	public synchronized void flush() {
+		// thread safe flush of the writers
+		if (writer != null) {
+			writer.flush();
+		}
+		if (useAltIndex && (altIdxWriter != null)) {
+			altIdxWriter.flush();
+		}
+
+		// write the statistics and clear it
+		if (persistStats) {
+			final List<DataStatistics> accumulatedStats = new ArrayList<DataStatistics>();
+			synchronized (this) {
+				for (final List<DataStatisticsBuilder> builders : statsMap.values()) {
+					if ((builders != null) && !builders.isEmpty()) {
+						for (final DataStatisticsBuilder builder : builders) {
+							final Collection<DataStatistics> s = builder.getStatistics();
+							if ((s != null) && !s.isEmpty()) {
+								accumulatedStats.addAll(s);
+							}
+						}
+					}
+				}
+				if (!accumulatedStats.isEmpty()) {
+					final DataStatisticsStore statsStore = new AccumuloDataStatisticsStore(
+							accumuloOperations);
+					for (final DataStatistics s : accumulatedStats) {
+						statsStore.incorporateStatistics(s);
+					}
+				}
+				statsMap.clear();
+			}
 		}
 	}
 }

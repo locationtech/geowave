@@ -20,8 +20,12 @@ public class StageKafkaData<T extends SpecificRecordBase>
 
 	private final static Logger LOGGER = Logger.getLogger(StageKafkaData.class);
 	private final Map<String, Producer<String, T>> cachedProducers = new HashMap<String, Producer<String, T>>();
+	private final Properties properties;
 
-	public StageKafkaData() {}
+	public StageKafkaData(
+			final Properties properties ) {
+		this.properties = properties;
+	}
 
 	public Producer<String, T> getProducer(
 			final String typeName,
@@ -35,9 +39,8 @@ public class StageKafkaData<T extends SpecificRecordBase>
 			final String typeName,
 			final AvroFormatPlugin<?, ?> plugin ) {
 		if (!cachedProducers.containsKey(typeName)) {
-			final Properties props = KafkaCommandLineOptions.getProperties();
 			final ProducerConfig producerConfig = new ProducerConfig(
-					props);
+					properties);
 
 			final Producer<String, T> producer = new Producer<String, T>(
 					producerConfig);

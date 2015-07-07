@@ -26,7 +26,7 @@ public class StageToKafkaDriver<T extends SpecificRecordBase> extends
 		AbstractLocalFileDriver<AvroFormatPlugin<?, ?>, StageKafkaData<?>>
 {
 	private final static Logger LOGGER = Logger.getLogger(StageToKafkaDriver.class);
-	private KafkaCommandLineOptions kafkaOptions;
+	private KafkaProducerCommandLineOptions kafkaOptions;
 
 	public StageToKafkaDriver(
 			final String operation ) {
@@ -38,14 +38,14 @@ public class StageToKafkaDriver<T extends SpecificRecordBase> extends
 	protected void parseOptionsInternal(
 			final CommandLine commandLine )
 			throws ParseException {
-		kafkaOptions = KafkaCommandLineOptions.parseOptions(commandLine);
+		kafkaOptions = KafkaProducerCommandLineOptions.parseOptions(commandLine);
 		super.parseOptionsInternal(commandLine);
 	}
 
 	@Override
 	protected void applyOptionsInternal(
 			final Options allOptions ) {
-		KafkaCommandLineOptions.applyOptions(allOptions);
+		KafkaProducerCommandLineOptions.applyOptions(allOptions);
 		super.applyOptionsInternal(allOptions);
 
 	}
@@ -102,7 +102,8 @@ public class StageToKafkaDriver<T extends SpecificRecordBase> extends
 		}
 
 		try {
-			final StageKafkaData<T> runData = new StageKafkaData<T>();
+			final StageKafkaData<T> runData = new StageKafkaData<T>(
+					kafkaOptions.getProperties());
 			processInput(
 					stageToKafkaPlugins,
 					runData);

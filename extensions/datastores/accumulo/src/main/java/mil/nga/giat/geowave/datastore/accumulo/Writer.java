@@ -17,4 +17,6 @@ public interface Writer
 			Mutation mutation );
 
 	public void close();
+	
+	public void flush();
 }

@@ -62,4 +62,12 @@ public class IngestRunData implements
 		}
 	}
 
+	public void flush() {
+		synchronized (this) {
+			for (final IndexWriter indexWriter : indexIdToWriterCache.values()) {
+				indexWriter.flush();
+			}
+		}
+	}
+
 }

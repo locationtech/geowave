@@ -260,11 +260,12 @@ abstract public class GeoWaveTestEnvironment
 				if (TEMP_DIR != null) {
 					try {
 						// sleep because mini accumulo processes still have a
-						// hold
-						// on the log files and there is no hook to get notified
-						// when it is completely stopped
+						// hold on the log files and there is no hook to get
+						// notified when it is completely stopped
+
 						Thread.sleep(2000);
 						FileUtils.deleteDirectory(TEMP_DIR);
+
 						TEMP_DIR = null;
 					}
 					catch (final IOException | InterruptedException e) {
@@ -273,7 +274,6 @@ abstract public class GeoWaveTestEnvironment
 								e);
 					}
 				}
-
 			}
 		}
 	}
@@ -473,7 +473,7 @@ abstract public class GeoWaveTestEnvironment
 	/**
 	 * Unzips the contents of a zip file to a target output directory, deleting
 	 * anything that existed beforehand
-	 * 
+	 *
 	 * @param zipInput
 	 *            input zip file
 	 * @param outputFolder

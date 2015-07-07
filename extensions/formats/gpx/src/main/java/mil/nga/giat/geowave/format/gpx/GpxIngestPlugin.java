@@ -161,11 +161,6 @@ public class GpxIngestPlugin extends
 	}
 
 	@Override
-	public Schema getAvroSchemaForHdfsType() {
-		return getAvroSchema();
-	}
-
-	@Override
 	public GpxTrack[] toAvroObjects(
 			final File input ) {
 		GpxTrack track = null;
@@ -233,8 +228,10 @@ public class GpxIngestPlugin extends
 							// behavior
 					globalVisibility);
 		}
-		catch (Exception e) {
-			LOGGER.warn("Unable to convert GpxTrack to GeoWaveData: " + e.getMessage());
+		catch (final Exception e) {
+			LOGGER.warn(
+					"Unable to convert GpxTrack to GeoWaveData",
+					e);
 			return null;
 		}
 	}

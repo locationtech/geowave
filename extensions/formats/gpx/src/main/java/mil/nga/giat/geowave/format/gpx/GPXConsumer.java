@@ -37,17 +37,17 @@ import com.vividsolutions.jts.geom.Coordinate;
  * Consumes a GPX file. The consumer is an iterator, parsing the input stream
  * and returning results as the stream is parsed. Data is emitted for each
  * element at the 'end' tag.
- * 
+ *
  * Caution: Developers should maintain the cohesiveness of attribute names
  * associated with each feature type defined in {@link GpxUtils}.
- * 
+ *
  * Route way points and way points are treated similarly except way points do
  * not include the parent ID information in their ID. The assumption is that the
  * name, lat and lon attributes are globally unique. In contrast, Route way
  * points include the file name and parent route name as part of their ID.
  * Routes are not assumed to be global.
- * 
- * 
+ *
+ *
  */
 public class GPXConsumer implements
 		CloseableIterator<GeoWaveData<SimpleFeature>>
@@ -94,7 +94,7 @@ public class GPXConsumer implements
 	GeoWaveData<SimpleFeature> nextFeature = null;
 
 	/**
-	 * 
+	 *
 	 * @param fileStream
 	 * @param primaryIndexId
 	 * @param inputID
@@ -107,7 +107,7 @@ public class GPXConsumer implements
 	 *            if true, waypoints are globally unique, otherwise are unique
 	 *            to this file and should have inputID and other components
 	 *            added to the identifier
-	 * 
+	 *
 	 * @param globalVisibility
 	 */
 	public GPXConsumer(
@@ -135,7 +135,12 @@ public class GPXConsumer implements
 		try {
 			eventReader = inputFactory.createXMLEventReader(fileStream);
 			init();
-			nextFeature = getNext();
+			if (!currentElementStack.isEmpty()) {
+				nextFeature = getNext();
+			}
+			else {
+				nextFeature = null;
+			}
 		}
 		catch (IOException | XMLStreamException e) {
 			LOGGER.error(
