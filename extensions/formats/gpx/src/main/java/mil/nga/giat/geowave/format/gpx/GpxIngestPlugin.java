@@ -21,7 +21,6 @@ import mil.nga.giat.geowave.core.geotime.IndexType;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.ingest.GeoWaveData;
 import mil.nga.giat.geowave.core.ingest.IngestPluginBase;
-import mil.nga.giat.geowave.core.ingest.avro.GenericAvroSerializer;
 import mil.nga.giat.geowave.core.ingest.hdfs.mapreduce.IngestWithMapper;
 import mil.nga.giat.geowave.core.ingest.hdfs.mapreduce.IngestWithReducer;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
