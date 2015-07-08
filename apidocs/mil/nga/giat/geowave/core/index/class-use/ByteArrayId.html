@@ -1391,6 +1391,20 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a></code></td>
+<td class="colLast"><span class="strong">CompoundIndexStrategy.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/index/CompoundIndexStrategy.html#composeByteArrayId(mil.nga.giat.geowave.core.index.ByteArrayId,%20mil.nga.giat.geowave.core.index.ByteArrayId)">composeByteArrayId</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;id1,
+                  <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;id2)</code>
+<div class="block">Create a compound ByteArrayId</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>[]</code></td>
+<td class="colLast"><span class="strong">CompoundIndexStrategy.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/index/CompoundIndexStrategy.html#decomposeByteArrayId(mil.nga.giat.geowave.core.index.ByteArrayId)">decomposeByteArrayId</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;id)</code>
+<div class="block">Get the ByteArrayId for each sub-strategy from the ByteArrayId for the
+ compound index strategy</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a></code></td>
 <td class="colLast"><span class="strong">ByteArrayRange.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayRange.html#getEnd()">getEnd</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
@@ -1408,17 +1422,26 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;</code></td>
-<td class="colLast"><span class="strong">NullNumericIndexStrategy.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/index/NullNumericIndexStrategy.html#getInsertionIds(mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData)">getInsertionIds</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;indexedData)</code>&nbsp;</td>
+<td class="colLast"><span class="strong">CompoundIndexStrategy.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/index/CompoundIndexStrategy.html#getInsertionIds(mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData)">getInsertionIds</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;indexedData)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;</code></td>
+<td class="colLast"><span class="strong">NullNumericIndexStrategy.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/index/NullNumericIndexStrategy.html#getInsertionIds(mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData)">getInsertionIds</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;indexedData)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;</code></td>
 <td class="colLast"><span class="strong">NumericIndexStrategy.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/index/NumericIndexStrategy.html#getInsertionIds(mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData)">getInsertionIds</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;indexedData)</code>
 <div class="block">Returns a list of id's for insertion.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;</code></td>
 <td class="colLast"><span class="strong">NumericIndexStrategyWrapper.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/index/NumericIndexStrategyWrapper.html#getInsertionIds(mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData)">getInsertionIds</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;indexedData)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;</code></td>
+<td class="colLast"><span class="strong">CompoundIndexStrategy.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/index/CompoundIndexStrategy.html#getInsertionIds(mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData,%20int)">getInsertionIds</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;indexedData,
+               int&nbsp;maxEstimatedDuplicateIds)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;</code></td>
@@ -1447,18 +1470,40 @@
 </tr>
 <tbody>
 <tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a></code></td>
+<td class="colLast"><span class="strong">CompoundIndexStrategy.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/index/CompoundIndexStrategy.html#composeByteArrayId(mil.nga.giat.geowave.core.index.ByteArrayId,%20mil.nga.giat.geowave.core.index.ByteArrayId)">composeByteArrayId</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;id1,
+                  <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;id2)</code>
+<div class="block">Create a compound ByteArrayId</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>[]</code></td>
+<td class="colLast"><span class="strong">CompoundIndexStrategy.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/index/CompoundIndexStrategy.html#decomposeByteArrayId(mil.nga.giat.geowave.core.index.ByteArrayId)">decomposeByteArrayId</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;id)</code>
+<div class="block">Get the ByteArrayId for each sub-strategy from the ByteArrayId for the
+ compound index strategy</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>long[]</code></td>
+<td class="colLast"><span class="strong">CompoundIndexStrategy.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/index/CompoundIndexStrategy.html#getCoordinatesPerDimension(mil.nga.giat.geowave.core.index.ByteArrayId)">getCoordinatesPerDimension</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;insertionId)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>long[]</code></td>
 <td class="colLast"><span class="strong">NullNumericIndexStrategy.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/index/NullNumericIndexStrategy.html#getCoordinatesPerDimension(mil.nga.giat.geowave.core.index.ByteArrayId)">getCoordinatesPerDimension</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;insertionId)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>long[]</code></td>
 <td class="colLast"><span class="strong">NumericIndexStrategy.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/index/NumericIndexStrategy.html#getCoordinatesPerDimension(mil.nga.giat.geowave.core.index.ByteArrayId)">getCoordinatesPerDimension</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;insertionId)</code>
 <div class="block">Return an integer coordinate in each dimension for the given insertion ID</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>long[]</code></td>
 <td class="colLast"><span class="strong">NumericIndexStrategyWrapper.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/index/NumericIndexStrategyWrapper.html#getCoordinatesPerDimension(mil.nga.giat.geowave.core.index.ByteArrayId)">getCoordinatesPerDimension</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;insertionId)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a></code></td>
+<td class="colLast"><span class="strong">CompoundIndexStrategy.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/index/CompoundIndexStrategy.html#getRangeForId(mil.nga.giat.geowave.core.index.ByteArrayId)">getRangeForId</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;insertionId)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a></code></td>

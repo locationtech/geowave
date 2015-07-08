@@ -298,12 +298,18 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/index/CompoundIndexStrategy.html" title="class in mil.nga.giat.geowave.core.index">CompoundIndexStrategy</a></strong></code>
+<div class="block">Class that implements a compound index strategy.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/index/NullNumericIndexStrategy.html" title="class in mil.nga.giat.geowave.core.index">NullNumericIndexStrategy</a></strong></code>
 <div class="block">This is a completely empty numeric index strategy representing no dimensions,
  and always returning empty IDs and ranges.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/index/NumericIndexStrategyWrapper.html" title="class in mil.nga.giat.geowave.core.index">NumericIndexStrategyWrapper</a></strong></code>&nbsp;</td>
 </tr>
@@ -319,6 +325,10 @@
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/index/NumericIndexStrategy.html" title="interface in mil.nga.giat.geowave.core.index">NumericIndexStrategy</a></code></td>
 <td class="colLast"><span class="strong">HierarchicalNumericIndexStrategy.SubStrategy.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/index/HierarchicalNumericIndexStrategy.SubStrategy.html#getIndexStrategy()">getIndexStrategy</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/index/NumericIndexStrategy.html" title="interface in mil.nga.giat.geowave.core.index">NumericIndexStrategy</a>[]</code></td>
+<td class="colLast"><span class="strong">CompoundIndexStrategy.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/index/CompoundIndexStrategy.html#getSubStrategies()">getSubStrategies</a></strong>()</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -342,10 +352,15 @@
 </tr>
 <tbody>
 <tr class="altColor">
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/index/CompoundIndexStrategy.html#CompoundIndexStrategy(java.lang.String,%20mil.nga.giat.geowave.core.index.NumericIndexStrategy,%20mil.nga.giat.geowave.core.index.NumericIndexStrategy)">CompoundIndexStrategy</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;id,
+                     <a href="../../../../../../../mil/nga/giat/geowave/core/index/NumericIndexStrategy.html" title="interface in mil.nga.giat.geowave.core.index">NumericIndexStrategy</a>&nbsp;subStrategy1,
+                     <a href="../../../../../../../mil/nga/giat/geowave/core/index/NumericIndexStrategy.html" title="interface in mil.nga.giat.geowave.core.index">NumericIndexStrategy</a>&nbsp;subStrategy2)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/index/HierarchicalNumericIndexStrategy.SubStrategy.html#HierarchicalNumericIndexStrategy.SubStrategy(mil.nga.giat.geowave.core.index.NumericIndexStrategy,%20byte[])">HierarchicalNumericIndexStrategy.SubStrategy</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/NumericIndexStrategy.html" title="interface in mil.nga.giat.geowave.core.index">NumericIndexStrategy</a>&nbsp;indexStrategy,
                                             byte[]&nbsp;prefix)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/index/NumericIndexStrategyWrapper.html#NumericIndexStrategyWrapper(java.lang.String,%20mil.nga.giat.geowave.core.index.NumericIndexStrategy)">NumericIndexStrategyWrapper</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;id,
                            <a href="../../../../../../../mil/nga/giat/geowave/core/index/NumericIndexStrategy.html" title="interface in mil.nga.giat.geowave.core.index">NumericIndexStrategy</a>&nbsp;indexStrategy)</code>&nbsp;</td>
 </tr>
