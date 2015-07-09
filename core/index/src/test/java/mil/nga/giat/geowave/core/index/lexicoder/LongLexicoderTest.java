@@ -16,10 +16,12 @@ public class LongLexicoderTest
 
 	@Test
 	public void testRanges() {
-		Assert.assertTrue(longLexicoder.getMinimumValue().equals(
-				Long.MIN_VALUE));
-		Assert.assertTrue(longLexicoder.getMaximumValue().equals(
-				Long.MAX_VALUE));
+		Assert.assertTrue(
+				longLexicoder.getMinimumValue().equals(
+						Long.MIN_VALUE));
+		Assert.assertTrue(
+				longLexicoder.getMaximumValue().equals(
+						Long.MAX_VALUE));
 	}
 
 	@Test
@@ -33,17 +35,24 @@ public class LongLexicoderTest
 		final List<byte[]> byteArrays = new ArrayList<>(
 				values.size());
 		for (final long value : values) {
-			byteArrays.add(longLexicoder.toByteArray(value));
+			byteArrays.add(
+					longLexicoder.toByteArray(
+							value));
 		}
 		Collections.sort(
 				byteArrays,
 				UnsignedBytes.lexicographicalComparator());
-		Collections.sort(values);
+		Collections.sort(
+				values);
 		final List<Long> convertedBytes = new ArrayList<>(
 				byteArrays.size());
 		for (final byte[] bytes : byteArrays) {
-			convertedBytes.add(longLexicoder.fromByteArray(bytes));
+			convertedBytes.add(
+					longLexicoder.fromByteArray(
+							bytes));
 		}
-		Assert.assertTrue(values.equals(convertedBytes));
+		Assert.assertTrue(
+				values.equals(
+						convertedBytes));
 	}
 }

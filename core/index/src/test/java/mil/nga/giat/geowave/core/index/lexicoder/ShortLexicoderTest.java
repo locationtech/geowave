@@ -16,10 +16,12 @@ public class ShortLexicoderTest
 
 	@Test
 	public void testRanges() {
-		Assert.assertTrue(shortLexicoder.getMinimumValue().equals(
-				Short.MIN_VALUE));
-		Assert.assertTrue(shortLexicoder.getMaximumValue().equals(
-				Short.MAX_VALUE));
+		Assert.assertTrue(
+				shortLexicoder.getMinimumValue().equals(
+						Short.MIN_VALUE));
+		Assert.assertTrue(
+				shortLexicoder.getMaximumValue().equals(
+						Short.MAX_VALUE));
 	}
 
 	@Test
@@ -33,17 +35,24 @@ public class ShortLexicoderTest
 		final List<byte[]> byteArrays = new ArrayList<>(
 				values.size());
 		for (final short value : values) {
-			byteArrays.add(shortLexicoder.toByteArray(value));
+			byteArrays.add(
+					shortLexicoder.toByteArray(
+							value));
 		}
 		Collections.sort(
 				byteArrays,
 				UnsignedBytes.lexicographicalComparator());
-		Collections.sort(values);
+		Collections.sort(
+				values);
 		final List<Short> convertedBytes = new ArrayList<>(
 				byteArrays.size());
 		for (final byte[] bytes : byteArrays) {
-			convertedBytes.add(shortLexicoder.fromByteArray(bytes));
+			convertedBytes.add(
+					shortLexicoder.fromByteArray(
+							bytes));
 		}
-		Assert.assertTrue(values.equals(convertedBytes));
+		Assert.assertTrue(
+				values.equals(
+						convertedBytes));
 	}
 }
