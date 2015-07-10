@@ -161,7 +161,7 @@ abstract public class AbstractAccumuloPersistence<T extends Persistable>
 		// the secondaryId is optional so check for null
 		if (secondaryId != null) {
 			return new ByteArrayId(
-					primaryId.getString() + "_" + secondaryId.getString());
+					this.accumuloOperations.getTableNameSpace() + "_" + primaryId.getString() + "_" + secondaryId.getString());
 		}
 		return primaryId;
 	}
