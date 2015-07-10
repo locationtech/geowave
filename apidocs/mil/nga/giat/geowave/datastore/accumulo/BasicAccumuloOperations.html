@@ -308,17 +308,21 @@ implements <a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/Ac
            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;additionalAuthorizations)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/BasicAccumuloOperations.html#getTableNameSpace()">getTableNameSpace</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>long</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/BasicAccumuloOperations.html#getTimeoutMillis()">getTimeoutMillis</a></strong>()</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/BasicAccumuloOperations.html#insureAuthorization(java.lang.String,%20java.lang.String...)">insureAuthorization</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;clientUser,
                    <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</code>
 <div class="block">Insure user has the given operations.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/BasicAccumuloOperations.html#localityGroupExists(java.lang.String,%20byte[])">localityGroupExists</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableName,
                    byte[]&nbsp;localityGroup)</code>
@@ -326,11 +330,11 @@ implements <a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/Ac
  within the table of the given name</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/BasicAccumuloOperations.html#setCacheTimeoutMillis(long)">setCacheTimeoutMillis</a></strong>(long&nbsp;cacheTimeoutMillis)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/BasicAccumuloOperations.html#tableExists(java.lang.String)">tableExists</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableName)</code>
 <div class="block">Checks for the existence of the table with the given name</div>
@@ -592,6 +596,19 @@ implements <a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/Ac
             to prefix this name</dd>
 <dt><span class="strong">Returns:</span></dt><dd>Returns true if the table was found and dropped, false if it was
          not found or not dropped successfully</dd></dl>
+</li>
+</ul>
+<a name="getTableNameSpace()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getTableNameSpace</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getTableNameSpace()</pre>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOperations.html#getTableNameSpace()">getTableNameSpace</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOperations.html" title="interface in mil.nga.giat.geowave.datastore.accumulo">AccumuloOperations</a></code></dd>
+<dt><span class="strong">Returns:</span></dt><dd>Table Name Space, Empty string if not applicable.</dd></dl>
 </li>
 </ul>
 <a name="deleteAll()">
