@@ -212,27 +212,38 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo
         org.apache.hadoop.mapreduce.JobContext&nbsp;context)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/QueryOptions.html" title="class in mil.nga.giat.geowave.core.store.query">QueryOptions</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/input/GeoWaveInputConfigurator.html#getQueryOptions(java.lang.Class,%20org.apache.hadoop.mapreduce.JobContext)">getQueryOptions</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;implementingClass,
+               org.apache.hadoop.mapreduce.JobContext&nbsp;context)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>[]</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/input/GeoWaveInputConfigurator.html#searchForIndices(java.lang.Class,%20org.apache.hadoop.mapreduce.JobContext)">searchForIndices</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;implementingClass,
                 org.apache.hadoop.mapreduce.JobContext&nbsp;context)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/input/GeoWaveInputConfigurator.html#setMaximumSplitCount(java.lang.Class,%20org.apache.hadoop.conf.Configuration,%20java.lang.Integer)">setMaximumSplitCount</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;implementingClass,
                     org.apache.hadoop.conf.Configuration&nbsp;config,
                     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;maxSplits)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/input/GeoWaveInputConfigurator.html#setMinimumSplitCount(java.lang.Class,%20org.apache.hadoop.conf.Configuration,%20java.lang.Integer)">setMinimumSplitCount</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;implementingClass,
                     org.apache.hadoop.conf.Configuration&nbsp;config,
                     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;minSplits)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/input/GeoWaveInputConfigurator.html#setQuery(java.lang.Class,%20org.apache.hadoop.conf.Configuration,%20mil.nga.giat.geowave.core.store.query.DistributableQuery)">setQuery</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;implementingClass,
         org.apache.hadoop.conf.Configuration&nbsp;config,
         <a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/DistributableQuery.html" title="interface in mil.nga.giat.geowave.core.store.query">DistributableQuery</a>&nbsp;query)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/input/GeoWaveInputConfigurator.html#setQueryOptions(java.lang.Class,%20org.apache.hadoop.conf.Configuration,%20mil.nga.giat.geowave.core.store.query.QueryOptions)">setQueryOptions</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;implementingClass,
+               org.apache.hadoop.conf.Configuration&nbsp;config,
+               <a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/QueryOptions.html" title="class in mil.nga.giat.geowave.core.store.query">QueryOptions</a>&nbsp;queryOptions)</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -299,6 +310,27 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo
 <pre>public static&nbsp;void&nbsp;setQuery(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;implementingClass,
             org.apache.hadoop.conf.Configuration&nbsp;config,
             <a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/DistributableQuery.html" title="interface in mil.nga.giat.geowave.core.store.query">DistributableQuery</a>&nbsp;query)</pre>
+</li>
+</ul>
+<a name="getQueryOptions(java.lang.Class, org.apache.hadoop.mapreduce.JobContext)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getQueryOptions</h4>
+<pre>public static&nbsp;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/QueryOptions.html" title="class in mil.nga.giat.geowave.core.store.query">QueryOptions</a>&nbsp;getQueryOptions(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;implementingClass,
+                           org.apache.hadoop.mapreduce.JobContext&nbsp;context)</pre>
+</li>
+</ul>
+<a name="setQueryOptions(java.lang.Class, org.apache.hadoop.conf.Configuration, mil.nga.giat.geowave.core.store.query.QueryOptions)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setQueryOptions</h4>
+<pre>public static&nbsp;void&nbsp;setQueryOptions(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;implementingClass,
+                   org.apache.hadoop.conf.Configuration&nbsp;config,
+                   <a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/QueryOptions.html" title="class in mil.nga.giat.geowave.core.store.query">QueryOptions</a>&nbsp;queryOptions)</pre>
 </li>
 </ul>
 <a name="getMinimumSplitCount(java.lang.Class, org.apache.hadoop.mapreduce.JobContext)">

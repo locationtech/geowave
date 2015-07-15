@@ -136,7 +136,7 @@ implements <a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/
 <!--   -->
 </a>
 <h3>Nested classes/interfaces inherited from interface&nbsp;mil.nga.giat.geowave.analytic.partitioner.<a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/Partitioner.html" title="interface in mil.nga.giat.geowave.analytic.partitioner">Partitioner</a></h3>
-<code><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/Partitioner.PartitionData.html" title="class in mil.nga.giat.geowave.analytic.partitioner">Partitioner.PartitionData</a></code></li>
+<code><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/Partitioner.PartitionData.html" title="class in mil.nga.giat.geowave.analytic.partitioner">Partitioner.PartitionData</a>, <a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/Partitioner.PartitionDataCallback.html" title="interface in mil.nga.giat.geowave.analytic.partitioner">Partitioner.PartitionDataCallback</a></code></li>
 </ul>
 </li>
 </ul>
@@ -195,27 +195,42 @@ implements <a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/AbstractPartitioner.html#getDistancePerDimension()">getDistancePerDimension</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>static double[]</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/AbstractPartitioner.html#getDistances(mil.nga.giat.geowave.analytic.ConfigurationWrapper,%20java.lang.Class)">getDistances</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/analytic/ConfigurationWrapper.html" title="interface in mil.nga.giat.geowave.analytic">ConfigurationWrapper</a>&nbsp;config,
+            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;classContext)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>protected <a href="../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/AbstractPartitioner.html#getIndex()">getIndex</a></strong>()</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>protected abstract <a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/AbstractPartitioner.NumericDataHolder.html" title="class in mil.nga.giat.geowave.analytic.partitioner">AbstractPartitioner.NumericDataHolder</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/AbstractPartitioner.html#getNumericData(T)">getNumericData</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/AbstractPartitioner.html" title="type parameter in AbstractPartitioner">T</a>&nbsp;entry)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/AbstractPartitioner.html#getRangesForPartition(mil.nga.giat.geowave.analytic.partitioner.Partitioner.PartitionData)">getRangesForPartition</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/Partitioner.PartitionData.html" title="class in mil.nga.giat.geowave.analytic.partitioner">Partitioner.PartitionData</a>&nbsp;partitionData)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/AbstractPartitioner.html#initialize(mil.nga.giat.geowave.analytic.ConfigurationWrapper)">initialize</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/analytic/ConfigurationWrapper.html" title="interface in mil.nga.giat.geowave.analytic">ConfigurationWrapper</a>&nbsp;context)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/AbstractPartitioner.html#initIndex(mil.nga.giat.geowave.core.store.index.CommonIndexModel,%20double[])">initIndex</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexModel.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexModel</a>&nbsp;indexModel,
          double[]&nbsp;distancePerDimensionForIndex)</code>&nbsp;</td>
 </tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/AbstractPartitioner.html#partition(T,%20mil.nga.giat.geowave.analytic.partitioner.Partitioner.PartitionDataCallback)">partition</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/AbstractPartitioner.html" title="type parameter in AbstractPartitioner">T</a>&nbsp;entry,
+         <a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/Partitioner.PartitionDataCallback.html" title="interface in mil.nga.giat.geowave.analytic.partitioner">Partitioner.PartitionDataCallback</a>&nbsp;callback)</code>&nbsp;</td>
+</tr>
 <tr class="rowColor">
+<td class="colFirst"><code>static void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/AbstractPartitioner.html#putDistances(mil.nga.giat.geowave.analytic.PropertyManagement,%20double[])">putDistances</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a>&nbsp;config,
+            double[]&nbsp;distances)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/AbstractPartitioner.html#setup(mil.nga.giat.geowave.analytic.PropertyManagement,%20org.apache.hadoop.conf.Configuration)">setup</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties,
      org.apache.hadoop.conf.Configuration&nbsp;configuration)</code>&nbsp;</td>
@@ -311,6 +326,24 @@ implements <a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/
 </dl>
 </li>
 </ul>
+<a name="partition(java.lang.Object,mil.nga.giat.geowave.analytic.partitioner.Partitioner.PartitionDataCallback)">
+<!--   -->
+</a><a name="partition(T, mil.nga.giat.geowave.analytic.partitioner.Partitioner.PartitionDataCallback)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>partition</h4>
+<pre>public&nbsp;void&nbsp;partition(<a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/AbstractPartitioner.html" title="type parameter in AbstractPartitioner">T</a>&nbsp;entry,
+             <a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/Partitioner.PartitionDataCallback.html" title="interface in mil.nga.giat.geowave.analytic.partitioner">Partitioner.PartitionDataCallback</a>&nbsp;callback)
+               throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></pre>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/Partitioner.html#partition(T,%20mil.nga.giat.geowave.analytic.partitioner.Partitioner.PartitionDataCallback)">partition</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/Partitioner.html" title="interface in mil.nga.giat.geowave.analytic.partitioner">Partitioner</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/AbstractPartitioner.html" title="type parameter in AbstractPartitioner">T</a>&gt;</code></dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></code></dd></dl>
+</li>
+</ul>
 <a name="getNumericData(java.lang.Object)">
 <!--   -->
 </a><a name="getNumericData(T)">
@@ -340,6 +373,26 @@ implements <a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/
 <pre>protected&nbsp;void&nbsp;addPartitions(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/Partitioner.PartitionData.html" title="class in mil.nga.giat.geowave.analytic.partitioner">Partitioner.PartitionData</a>&gt;&nbsp;masterList,
                  <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;addList,
                  boolean&nbsp;isPrimary)</pre>
+</li>
+</ul>
+<a name="putDistances(mil.nga.giat.geowave.analytic.PropertyManagement, double[])">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>putDistances</h4>
+<pre>public static&nbsp;void&nbsp;putDistances(<a href="../../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a>&nbsp;config,
+                double[]&nbsp;distances)</pre>
+</li>
+</ul>
+<a name="getDistances(mil.nga.giat.geowave.analytic.ConfigurationWrapper, java.lang.Class)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getDistances</h4>
+<pre>public static&nbsp;double[]&nbsp;getDistances(<a href="../../../../../../mil/nga/giat/geowave/analytic/ConfigurationWrapper.html" title="interface in mil.nga.giat.geowave.analytic">ConfigurationWrapper</a>&nbsp;config,
+                    <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;classContext)</pre>
 </li>
 </ul>
 <a name="initialize(mil.nga.giat.geowave.analytic.ConfigurationWrapper)">

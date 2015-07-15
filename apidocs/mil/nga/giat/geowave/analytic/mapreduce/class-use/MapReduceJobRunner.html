@@ -83,10 +83,14 @@
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><a href="#mil.nga.giat.geowave.analytic.mapreduce.kmeans.runner">mil.nga.giat.geowave.analytic.mapreduce.kmeans.runner</a></td>
+<td class="colFirst"><a href="#mil.nga.giat.geowave.analytic.mapreduce.dbscan">mil.nga.giat.geowave.analytic.mapreduce.dbscan</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><a href="#mil.nga.giat.geowave.analytic.mapreduce.kmeans.runner">mil.nga.giat.geowave.analytic.mapreduce.kmeans.runner</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.analytic.mapreduce.nn">mil.nga.giat.geowave.analytic.mapreduce.nn</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -191,23 +195,57 @@
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/clustering/runner/GeoWaveInputLoadJobRunner.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.clustering.runner">GeoWaveInputLoadJobRunner</a></strong></code>
+<div class="block">Run a map reduce job to extract a population of data from GeoWave (Accumulo),
+ remove duplicates, and output a SimpleFeature with the ID and the extracted
+ geometry from each of the GeoWave data item.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/clustering/runner/GroupAssigmentJobRunner.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.clustering.runner">GroupAssigmentJobRunner</a></strong></code>
 <div class="block">Assign group IDs to input items based on centroids.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/clustering/runner/MultiLevelClusteringJobRunner.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.clustering.runner">MultiLevelClusteringJobRunner</a></strong></code>
 <div class="block">Runs a clustering at multiple levels.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/clustering/runner/MultiLevelJumpKMeansClusteringJobRunner.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.clustering.runner">MultiLevelJumpKMeansClusteringJobRunner</a></strong></code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/clustering/runner/MultiLevelKMeansClusteringJobRunner.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.clustering.runner">MultiLevelKMeansClusteringJobRunner</a></strong></code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="mil.nga.giat.geowave.analytic.mapreduce.dbscan">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/MapReduceJobRunner.html" title="interface in mil.nga.giat.geowave.analytic.mapreduce">MapReduceJobRunner</a> in <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/package-summary.html">mil.nga.giat.geowave.analytic.mapreduce.dbscan</a></h3>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
+<caption><span>Classes in <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/package-summary.html">mil.nga.giat.geowave.analytic.mapreduce.dbscan</a> that implement <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/MapReduceJobRunner.html" title="interface in mil.nga.giat.geowave.analytic.mapreduce">MapReduceJobRunner</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Class and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/DBScanIterationsJobRunner.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.dbscan">DBScanIterationsJobRunner</a></strong></code>
+<div class="block">DBScan involves multiple iterations.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/DBScanJobRunner.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.dbscan">DBScanJobRunner</a></strong></code>
+<div class="block">Run a single DBScan job producing micro clusters over a set of neighbors</div>
+</td>
 </tr>
 </tbody>
 </table>
@@ -315,6 +353,10 @@
 </tr>
 <tbody>
 <tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/GeoWaveExtractNNJobRunner.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.nn">GeoWaveExtractNNJobRunner</a></strong></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NNJobRunner.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.nn">NNJobRunner</a></strong></code>&nbsp;</td>
 </tr>

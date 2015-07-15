@@ -35,7 +35,7 @@
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NNMapReduce.NNReducer.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.nn"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NNMapReduce.NNReducer.LocalDistanceProfileGenerateFn.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.nn"><span class="strong">Prev Class</span></a></li>
 <li><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NNMapReduce.PartitionDataWritable.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.nn"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">
@@ -60,7 +60,7 @@
 <div>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
-<li><a href="#nested_classes_inherited_from_class_org.apache.hadoop.mapreduce.Reducer">Nested</a>&nbsp;|&nbsp;</li>
+<li><a href="#nested_classes_inherited_from_class_mil.nga.giat.geowave.analytic.mapreduce.nn.NNMapReduce.NNReducer">Nested</a>&nbsp;|&nbsp;</li>
 <li><a href="#fields_inherited_from_class_mil.nga.giat.geowave.analytic.mapreduce.nn.NNMapReduce.NNReducer">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method_summary">Method</a></li>
@@ -124,6 +124,13 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn
 </a>
 <h3>Nested Class Summary</h3>
 <ul class="blockList">
+<li class="blockList"><a name="nested_classes_inherited_from_class_mil.nga.giat.geowave.analytic.mapreduce.nn.NNMapReduce.NNReducer">
+<!--   -->
+</a>
+<h3>Nested classes/interfaces inherited from class&nbsp;mil.nga.giat.geowave.analytic.mapreduce.nn.<a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NNMapReduce.NNReducer.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.nn">NNMapReduce.NNReducer</a></h3>
+<code><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NNMapReduce.NNReducer.LocalDistanceProfileGenerateFn.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.nn">NNMapReduce.NNReducer.LocalDistanceProfileGenerateFn</a></code></li>
+</ul>
+<ul class="blockList">
 <li class="blockList"><a name="nested_classes_inherited_from_class_org.apache.hadoop.mapreduce.Reducer">
 <!--   -->
 </a>
@@ -143,7 +150,7 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn
 <!--   -->
 </a>
 <h3>Fields inherited from class&nbsp;mil.nga.giat.geowave.analytic.mapreduce.nn.<a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NNMapReduce.NNReducer.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.nn">NNMapReduce.NNReducer</a></h3>
-<code><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NNMapReduce.NNReducer.html#distanceFn">distanceFn</a>, <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NNMapReduce.NNReducer.html#maxDistance">maxDistance</a>, <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NNMapReduce.NNReducer.html#maxNeighbors">maxNeighbors</a>, <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NNMapReduce.NNReducer.html#serializationTool">serializationTool</a></code></li>
+<code><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NNMapReduce.NNReducer.html#distanceFn">distanceFn</a>, <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NNMapReduce.NNReducer.html#distanceProfileFn">distanceProfileFn</a>, <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NNMapReduce.NNReducer.html#maxDistance">maxDistance</a>, <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NNMapReduce.NNReducer.html#maxNeighbors">maxNeighbors</a>, <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NNMapReduce.NNReducer.html#serializationTool">serializationTool</a>, <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NNMapReduce.NNReducer.html#typeConverter">typeConverter</a></code></li>
 </ul>
 </li>
 </ul>
@@ -182,14 +189,17 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NNMapReduce.NNSimpleFeatureIDOutputReducer.html#processNeighbors(org.opengis.feature.simple.SimpleFeature,%20java.util.Set,%20org.apache.hadoop.mapreduce.Reducer.Context,%20java.lang.Boolean)">processNeighbors</a></strong>(org.opengis.feature.simple.SimpleFeature&nbsp;primary,
-                <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NNData.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.nn">NNData</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&gt;&nbsp;neighbors,
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NNMapReduce.NNSimpleFeatureIDOutputReducer.html#processNeighbors(mil.nga.giat.geowave.analytic.partitioner.Partitioner.PartitionData,%20mil.nga.giat.geowave.core.index.ByteArrayId,%20org.opengis.feature.simple.SimpleFeature,%20mil.nga.giat.geowave.analytic.mapreduce.nn.NeighborList,%20org.apache.hadoop.mapreduce.Reducer.Context,%20java.lang.Boolean)">processNeighbors</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/analytic/partitioner/Partitioner.PartitionData.html" title="class in mil.nga.giat.geowave.analytic.partitioner">Partitioner.PartitionData</a>&nbsp;partitionData,
+                <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;primaryId,
+                org.opengis.feature.simple.SimpleFeature&nbsp;primary,
+                <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NeighborList.html" title="interface in mil.nga.giat.geowave.analytic.mapreduce.nn">NeighborList</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;neighbors,
                 org.apache.hadoop.mapreduce.Reducer.Context&nbsp;context,
                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;summary)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>protected void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NNMapReduce.NNSimpleFeatureIDOutputReducer.html#processSummary(java.lang.Boolean,%20org.apache.hadoop.mapreduce.Reducer.Context)">processSummary</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;summary,
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NNMapReduce.NNSimpleFeatureIDOutputReducer.html#processSummary(mil.nga.giat.geowave.analytic.partitioner.Partitioner.PartitionData,%20java.lang.Boolean,%20org.apache.hadoop.mapreduce.Reducer.Context)">processSummary</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/analytic/partitioner/Partitioner.PartitionData.html" title="class in mil.nga.giat.geowave.analytic.partitioner">Partitioner.PartitionData</a>&nbsp;partitionData,
+              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;summary,
               org.apache.hadoop.mapreduce.Reducer.Context&nbsp;context)</code>
 <div class="block">Allow extended classes to do some final processing for the partition.</div>
 </td>
@@ -200,7 +210,7 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;mil.nga.giat.geowave.analytic.mapreduce.nn.<a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NNMapReduce.NNReducer.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.nn">NNMapReduce.NNReducer</a></h3>
-<code><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NNMapReduce.NNReducer.html#createSetForNeighbors(boolean)">createSetForNeighbors</a>, <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NNMapReduce.NNReducer.html#reduce(mil.nga.giat.geowave.analytic.mapreduce.nn.NNMapReduce.PartitionDataWritable,%20java.lang.Iterable,%20org.apache.hadoop.mapreduce.Reducer.Context)">reduce</a>, <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NNMapReduce.NNReducer.html#setup(org.apache.hadoop.mapreduce.Reducer.Context)">setup</a></code></li>
+<code><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NNMapReduce.NNReducer.html#createNeighborsListFactory(PARTITION_SUMMARY)">createNeighborsListFactory</a>, <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NNMapReduce.NNReducer.html#reduce(mil.nga.giat.geowave.analytic.mapreduce.nn.NNMapReduce.PartitionDataWritable,%20java.lang.Iterable,%20org.apache.hadoop.mapreduce.Reducer.Context)">reduce</a>, <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NNMapReduce.NNReducer.html#setup(org.apache.hadoop.mapreduce.Reducer.Context)">setup</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods_inherited_from_class_org.apache.hadoop.mapreduce.Reducer">
@@ -247,21 +257,23 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="processNeighbors(org.opengis.feature.simple.SimpleFeature, java.util.Set, org.apache.hadoop.mapreduce.Reducer.Context, java.lang.Boolean)">
+<a name="processNeighbors(mil.nga.giat.geowave.analytic.partitioner.Partitioner.PartitionData, mil.nga.giat.geowave.core.index.ByteArrayId, org.opengis.feature.simple.SimpleFeature, mil.nga.giat.geowave.analytic.mapreduce.nn.NeighborList, org.apache.hadoop.mapreduce.Reducer.Context, java.lang.Boolean)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>processNeighbors</h4>
-<pre>protected&nbsp;void&nbsp;processNeighbors(org.opengis.feature.simple.SimpleFeature&nbsp;primary,
-                    <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NNData.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.nn">NNData</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&gt;&nbsp;neighbors,
+<pre>protected&nbsp;void&nbsp;processNeighbors(<a href="../../../../../../../mil/nga/giat/geowave/analytic/partitioner/Partitioner.PartitionData.html" title="class in mil.nga.giat.geowave.analytic.partitioner">Partitioner.PartitionData</a>&nbsp;partitionData,
+                    <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;primaryId,
+                    org.opengis.feature.simple.SimpleFeature&nbsp;primary,
+                    <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NeighborList.html" title="interface in mil.nga.giat.geowave.analytic.mapreduce.nn">NeighborList</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;neighbors,
                     org.apache.hadoop.mapreduce.Reducer.Context&nbsp;context,
                     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;summary)
                          throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a>,
                                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
 <dl>
 <dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NNMapReduce.NNReducer.html#processNeighbors(VALUEIN,%20java.util.Set,%20org.apache.hadoop.mapreduce.Reducer.Context,%20PARTITION_SUMMARY)">processNeighbors</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NNMapReduce.NNReducer.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.nn">NNMapReduce.NNReducer</a>&lt;org.opengis.feature.simple.SimpleFeature,org.apache.hadoop.io.Text,org.apache.hadoop.io.Text,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&gt;</code></dd>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NNMapReduce.NNReducer.html#processNeighbors(mil.nga.giat.geowave.analytic.partitioner.Partitioner.PartitionData,%20mil.nga.giat.geowave.core.index.ByteArrayId,%20VALUEIN,%20mil.nga.giat.geowave.analytic.mapreduce.nn.NeighborList,%20org.apache.hadoop.mapreduce.Reducer.Context,%20PARTITION_SUMMARY)">processNeighbors</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NNMapReduce.NNReducer.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.nn">NNMapReduce.NNReducer</a>&lt;org.opengis.feature.simple.SimpleFeature,org.apache.hadoop.io.Text,org.apache.hadoop.io.Text,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&gt;</code></dd>
 <dt><span class="strong">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></code></dd></dl>
@@ -280,19 +292,20 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn
 </dl>
 </li>
 </ul>
-<a name="processSummary(java.lang.Boolean, org.apache.hadoop.mapreduce.Reducer.Context)">
+<a name="processSummary(mil.nga.giat.geowave.analytic.partitioner.Partitioner.PartitionData, java.lang.Boolean, org.apache.hadoop.mapreduce.Reducer.Context)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>processSummary</h4>
-<pre>protected&nbsp;void&nbsp;processSummary(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;summary,
+<pre>protected&nbsp;void&nbsp;processSummary(<a href="../../../../../../../mil/nga/giat/geowave/analytic/partitioner/Partitioner.PartitionData.html" title="class in mil.nga.giat.geowave.analytic.partitioner">Partitioner.PartitionData</a>&nbsp;partitionData,
+                  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;summary,
                   org.apache.hadoop.mapreduce.Reducer.Context&nbsp;context)</pre>
-<div class="block"><strong>Description copied from class:&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NNMapReduce.NNReducer.html#processSummary(PARTITION_SUMMARY,%20org.apache.hadoop.mapreduce.Reducer.Context)">NNMapReduce.NNReducer</a></code></strong></div>
+<div class="block"><strong>Description copied from class:&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NNMapReduce.NNReducer.html#processSummary(mil.nga.giat.geowave.analytic.partitioner.Partitioner.PartitionData,%20PARTITION_SUMMARY,%20org.apache.hadoop.mapreduce.Reducer.Context)">NNMapReduce.NNReducer</a></code></strong></div>
 <div class="block">Allow extended classes to do some final processing for the partition.</div>
 <dl>
 <dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NNMapReduce.NNReducer.html#processSummary(PARTITION_SUMMARY,%20org.apache.hadoop.mapreduce.Reducer.Context)">processSummary</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NNMapReduce.NNReducer.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.nn">NNMapReduce.NNReducer</a>&lt;org.opengis.feature.simple.SimpleFeature,org.apache.hadoop.io.Text,org.apache.hadoop.io.Text,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&gt;</code></dd>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NNMapReduce.NNReducer.html#processSummary(mil.nga.giat.geowave.analytic.partitioner.Partitioner.PartitionData,%20PARTITION_SUMMARY,%20org.apache.hadoop.mapreduce.Reducer.Context)">processSummary</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NNMapReduce.NNReducer.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.nn">NNMapReduce.NNReducer</a>&lt;org.opengis.feature.simple.SimpleFeature,org.apache.hadoop.io.Text,org.apache.hadoop.io.Text,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&gt;</code></dd>
 </dl>
 </li>
 </ul>
@@ -322,7 +335,7 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NNMapReduce.NNReducer.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.nn"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NNMapReduce.NNReducer.LocalDistanceProfileGenerateFn.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.nn"><span class="strong">Prev Class</span></a></li>
 <li><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NNMapReduce.PartitionDataWritable.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.nn"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">
@@ -347,7 +360,7 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn
 <div>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
-<li><a href="#nested_classes_inherited_from_class_org.apache.hadoop.mapreduce.Reducer">Nested</a>&nbsp;|&nbsp;</li>
+<li><a href="#nested_classes_inherited_from_class_mil.nga.giat.geowave.analytic.mapreduce.nn.NNMapReduce.NNReducer">Nested</a>&nbsp;|&nbsp;</li>
 <li><a href="#fields_inherited_from_class_mil.nga.giat.geowave.analytic.mapreduce.nn.NNMapReduce.NNReducer">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method_summary">Method</a></li>

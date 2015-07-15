@@ -485,80 +485,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#ingest-new-formats">New Formats</a></li>
 </ul>
 </li>
-<li><a href="#query">Query</a>
+<li><a href="#analytics-overview">Analytics</a>
 <ul class="sectlevel2">
 <li><a href="#overview-3">Overview</a></li>
-</ul>
-</li>
-<li><a href="#third-party">Third Party</a>
-<ul class="sectlevel2">
-<li><a href="#geoserver">GeoServer</a></li>
-</ul>
-</li>
-<li><a href="#installation-from-rpm">Installation from RPM</a>
-<ul class="sectlevel2">
-<li><a href="#overview-4">Overview</a></li>
-<li><a href="#examples">Examples</a></li>
-<li><a href="#rpm-installation-notes">RPM Installation Notes</a></li>
-</ul>
-</li>
-<li><a href="#maven-repositories-2">Maven Repositories</a>
-<ul class="sectlevel2">
-<li><a href="#overview-5">Overview</a></li>
-<li><a href="#maven-pom-fragments">Maven POM fragments</a></li>
-<li><a href="#maven-settings-xml-fragments">Maven settings.xml fragments</a></li>
-</ul>
-</li>
-<li><a href="#installation-from-source">Installation from Source</a>
-<ul class="sectlevel2">
-<li><a href="#geoserver-2">GeoServer</a></li>
-<li><a href="#accumulo">Accumulo</a></li>
-</ul>
-</li>
-<li><a href="#accumulo-configuration">Accumulo Configuration</a>
-<ul class="sectlevel2">
-<li><a href="#overview-6">Overview</a></li>
-<li><a href="#managing">Managing</a></li>
-<li><a href="#versioning">Versioning</a></li>
-</ul>
-</li>
-<li><a href="#building-2">Building</a>
-<ul class="sectlevel2">
-<li><a href="#application-dependencies">Application Dependencies</a></li>
-<li><a href="#maven-dependencies">Maven dependencies</a></li>
-<li><a href="#build-process">Build Process</a></li>
-</ul>
-</li>
-<li><a href="#jace-jni-proxies-2">Jace JNI Proxies</a>
-<ul class="sectlevel2">
-<li><a href="#prepackaged-source-and-binaries">Prepackaged Source and Binaries</a></li>
-<li><a href="#generate-proxies-and-build-from-source">Generate Proxies and Build from Source</a></li>
-<li><a href="#mapnik-plugin-configuration">Mapnik Plugin Configuration</a></li>
-<li><a href="#pdal-plugin-configuration">PDAL Plugin Configuration</a></li>
-</ul>
-</li>
-<li><a href="#documentation-2">Documentation</a>
-<ul class="sectlevel2">
-<li><a href="#overview-7">Overview</a></li>
-<li><a href="#ordering">Ordering</a></li>
-<li><a href="#preview">Preview</a></li>
-<li><a href="#transformation">Transformation</a></li>
-<li><a href="#site">Site</a></li>
-</ul>
-</li>
-<li><a href="#puppet-2">Puppet</a>
-<ul class="sectlevel2">
-<li><a href="#overview-8">Overview</a></li>
-<li><a href="#options">Options</a></li>
-<li><a href="#examples-2">Examples</a></li>
-<li><a href="#clustered">Clustered</a></li>
-<li><a href="#puppet-script-management">Puppet script management</a></li>
-</ul>
-</li>
-<li><a href="#appendices-2">Appendices</a>
-<ul class="sectlevel2">
-<li><a href="#version">Version</a></li>
-<li><a href="#topics-in-need-of-documentation">Topics in need of documentation</a></li>
+<li><a href="#building-2">Building</a></li>
+<li><a href="#running">Running</a></li>
 </ul>
 </li>
 </ul>
@@ -2603,427 +2534,515 @@ above is the suggested pattern - it&#8217;s demonstrated in SimpleIngestIndexWri
 <p>The other methods displayed work, but are either more complicated than necessary (SimpleIngestProducerConsumer.java) or
 not very efficient (SimpleIngest.java).</p>
 </div>
-<div style="page-break-after: always;"></div>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="query"><a class="anchor" href="#query"></a>Query</h2>
+<h2 id="analytics-overview"><a class="anchor" href="#analytics-overview"></a>Analytics</h2>
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="overview-3"><a class="anchor" href="#overview-3"></a>Overview</h3>
-<div class="imageblock">
-<div class="content">
-<img src="./images/queryoverview1.png" alt="Query Architecture">
+<div class="paragraph">
+<p>Analytics embody algorithms tailored to geospatial data.  Most analytics leverage Hadoop MapReduce for bulk computation.
+Results of analytic jobs consist of vector or raster data stored in GeoWave.  The analytics infrastructure provides tools to
+build algorithms in Spark.  For example, a Kryo serializer/deserializer enables exchange of SimpleFeatures and the GeoWaveInputFormat
+supplies data to the Hadoop RDD &lt;1&gt;.</p>
 </div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>GeoWaveInputFormat does not remove duplicate features that reference polygons spanning multiple index regions.</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
-<p>A query in GeoWave currently consists of a set of ranges on the dimensions of the primary index. Up to 3 dimensions
-(plus temporal optionally) can take advantage of any complex OGC geometry for the query window. For dimensions of 4
-or greater the query can only be a set of ranges on each dimension (i.e. hyper-rectangle, etc.).</p>
+<p>The following algorithms are provided.</p>
 </div>
-<div class="paragraph">
-<p>The query geometry is decomposed by GeoWave into a series of ranges on a one dimensional number line - based on a compact
-Hilbert space filling curve ordering. These ranges are sent through an Accumulo batch scanner to all the tablet servers.
-These ranges represent the coarse grain filtering.</p>
-</div>
-<div class="paragraph">
-<p>At the same time the query geometry has been serialized and sent to custom Accumulo iterators. These iterators then do
-a second stage filtering on each feature for an exact intersection test. Only if the stored geometry and the query
-geometry intersect does the processing chain continue.</p>
-</div>
-<div class="paragraph">
-<p>A second order filter can then be applied - this is used to remove features based on additional attributes - typically
-time or other feature attributes. These operators can only exclude items from the set defined by the range - they cannot
-include additional features. Think "AND" operators - not "OR".</p>
-</div>
-<div class="paragraph">
-<p>A final filter is possible on the client set - after all the returned results have been aggregated together. Currently
-this is only used for final deduplication. Whenever possible the distributed filter options should be used - as it splits
-the work load among all the tablet servers.</p>
-</div>
-<div style="page-break-after: always;"></div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="third-party"><a class="anchor" href="#third-party"></a>Third Party</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="geoserver"><a class="anchor" href="#geoserver"></a>GeoServer</h3>
-<div class="paragraph">
-<p>Geowave supports both raster images and vector data exposed through Geoserver.</p>
-</div>
-<div class="sect3">
-<h4 id="wfs-t"><a class="anchor" href="#wfs-t"></a>WFS-T</h4>
-<div class="paragraph">
-<p>Extending Geotools, Geowave supports WFS-T for vector data. After following the deployment steps, Geowave appears as a
-data store type called 'GeoWave Datastore'.</p>
-</div>
-<div class="paragraph">
-<p>On the Geowave data store creation tab, the system prompts for the following properties.</p>
-</div>
-<table class="tableblock frame-topbot grid-all spread">
+<table class="tableblock frame-all grid-all" style="width: 80%;">
 <colgroup>
-<col style="width: 33%;">
-<col style="width: 33%;">
-<col style="width: 33%;">
+<col style="width: 16%;">
+<col style="width: 83%;">
 </colgroup>
 <thead>
 <tr>
 <th class="tableblock halign-left valign-top">Name</th>
 <th class="tableblock halign-left valign-top">Description</th>
-<th class="tableblock halign-left valign-top">Constraints</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">ZookeeperServers</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Comma-separated list of Zookeeper host and port.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Host and port are separated by a colon (host:port).</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">KMeans++</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A K-Means implementation to find K centroids over the population of data.
+A set of preliminary sampling iterations find an optimal value of K and the an initial set of K centroids.
+The algorithm produces K centroids and their associated polygons.  Each polygon represents the concave hull
+containing all features associated with a centroid.
+The algorithm supports drilling down multiple levels. At each level, the set centroids are determined
+from the set of features associated the same centroid from the previous level.</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">KMeans Jump</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Uses KMeans++ over a range of k, choosing an optimal k using an information theoretic based measurement.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">DBScan</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The Density Based Scanner algorithm produces a set of convex polygons for each region meeting density criteria.
+Density of region is measured by a minimum cardinality of enclosed features within a specified distance from each other.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Nearest Neighbors</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A infrastructure component that produces all the neighbors of a feature within a specific distance.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="building-2"><a class="anchor" href="#building-2"></a>Building</h3>
+<div class="paragraph">
+<p>First build the main project, specifying the dependency versions.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">export BUILD_ARGS="-Daccumulo.version=1.6.0-cdh5.1.4 -Dhadoop.version=2.6.0-cdh5.4.0 -Dgeotools.version=13.0 -Dgeoserver.version=2.7.0 -Dvendor.version=cdh5 -P cloudera"
+git clone https://github.com/ngageoint/geowave.git
+cd geowave
+mvn install -Dfindbugs.skip=true -DskipFormat=true -DskipITs=true -DskipTests=true $BUILD_ARGS</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Next, build the analytics tool framework.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">cd analytics/mapreduce
+mvn package -P analytics-singlejar -Dfindbugs.skip=true -DskipFormat=true -DskipITs=true -DskipTests=true $BUILD_ARGS</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="running"><a class="anchor" href="#running"></a>Running</h3>
+<div class="paragraph">
+<p>The 'singlejar' jar file is located in the analytics/mapreduce/target/munged.   The jar is executed by Yarn.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">yarn jar geowave-analytic-mapreduce-0.8.8-SNAPSHOT-analytics-singlejar.jar  -dbscan  -n rwgdrummer.gpx -u rwgdrummer -p rwgdrummer -z zookeeper-master:2181 -i accumulo -emn 2 -emx 6 -pd 1000 -pc mil.nga.giat.geowave.analytic.partitioner.OrthodromicDistancePartitioner -cms 10 -orc 4 -hdfsbase /user/rwgdrummer -b bdb4 -eit gpxpoint</code></pre>
+</div>
+</div>
+<div class="sect4">
+<h5 id="parameters"><a class="anchor" href="#parameters"></a>Parameters</h5>
+<div class="paragraph">
+<p>This set of parameters is not complete. There are many parameters that permit customizations such as distance functions, partitioning and sampling.</p>
+</div>
+<table class="tableblock frame-all grid-all" style="width: 80%;">
+<colgroup>
+<col style="width: 16%;">
+<col style="width: 83%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Argument</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-n</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Namespace</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-u</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Accumulo User</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-p</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Accumulo User Password</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-z</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Zookeeper host and port</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-i</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Accumulo instance name</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-emn</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Minimum input splits</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-emx</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Maximum input splits (controls the number of Hadoop Mappers).</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-eit</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The type name of the input features to analyze.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-eot</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The type name of the output features (e.g. cluster polygons and points).</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-eq</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A CQL query string to constrain the extracted data from GeoWave for analysis.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-pd</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Maximum distance in meters for features in a cluster.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-pc</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Partitioning algorithm for Nearest Neighbors and DBScan algorithms.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-sms</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Minimum sample size (e.g. for choosing K)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-sxs</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Maximum sample size (e.g. for choosing K.)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-ssi</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Minumum number of sample iterations.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-jrc</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Comma separated range of centroids (e.g. 2,10) for KMeans-Jump.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-jkp</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The minimum sample size (within the range provide by jrc parameter, where KMeans++ performs sampling, rather than using a single random sample.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-cms</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Minimum density of a cluster.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-cmi</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Maximum number of KMeans clustering iterations.  KMeans usually converges on a solution with this constraint.  A value of between 3 and 10 is often sufficient.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-crc</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Number of reducers to process extracted data in KMeans.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-orc</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Number of reducers to load clusters into GeoWave.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-hdfsbase</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Location in HBase to store intermediate results.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-b</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Batch Identifier.  Each algorithm can be run within multiple configurations, each representing a different batch.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-zl</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The number of 'zoom' levels in KMeans Clustering algorithms.
+<a id="query-overview"></a>
+&lt;&lt;&lt;
+== Query
+</p><p class="tableblock">=== Overview
+</p><p class="tableblock">image::queryoverview1.png[scaledwidth="100%",alt="Query Architecture"]
+</p><p class="tableblock">A query in GeoWave currently consists of a set of ranges on the dimensions of the primary index. Up to 3 dimensions
+(plus temporal optionally) can take advantage of any complex OGC geometry for the query window. For dimensions of 4
+or greater the query can only be a set of ranges on each dimension (i.e. hyper-rectangle, etc.).
+</p><p class="tableblock">The query geometry is decomposed by GeoWave into a series of ranges on a one dimensional number line - based on a compact
+Hilbert space filling curve ordering. These ranges are sent through an Accumulo batch scanner to all the tablet servers.
+These ranges represent the coarse grain filtering.
+</p><p class="tableblock">At the same time the query geometry has been serialized and sent to custom Accumulo iterators. These iterators then do
+a second stage filtering on each feature for an exact intersection test. Only if the stored geometry and the query
+geometry intersect does the processing chain continue.
+</p><p class="tableblock">A second order filter can then be applied - this is used to remove features based on additional attributes - typically
+time or other feature attributes. These operators can only exclude items from the set defined by the range - they cannot
+include additional features. Think "AND" operators - not "OR".
+</p><p class="tableblock">A final filter is possible on the client set - after all the returned results have been aggregated together. Currently
+this is only used for final deduplication. Whenever possible the distributed filter options should be used - as it splits
+the work load among all the tablet servers.
+[third-party]
+&lt;&lt;&lt;
+== Third Party
+</p><p class="tableblock">=== GeoServer
+</p><p class="tableblock">Geowave supports both raster images and vector data exposed through Geoserver.
+</p><p class="tableblock">==== WFS-T
+</p><p class="tableblock">Extending Geotools, Geowave supports WFS-T for vector data. After following the deployment steps, Geowave appears as a
+data store type called 'GeoWave Datastore'.
+</p><p class="tableblock">On the Geowave data store creation tab, the system prompts for the following properties.
+</p><p class="tableblock">[frame="topbot",options="header"]</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">======================</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Name</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Description</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Constraints</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ZookeeperServers</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Comma-separated list of Zookeeper host and port.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Host and port are separated by a colon (host:port).</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">InstanceName</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">The Accumulo tablet server&#8217;s instance name.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">The name matches the one configured in Zookeeper.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">UserName</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">The Accumulo user name.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The user should have administrative privileges to add and remove authorized visibility constraints.</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The user should have administrative privileges to add and remove authorized visibility constraints.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Password</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Accumulo user&#8217;s password.</p></td>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Namespace</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">The table namespace associated with this Accumlo data store</p></td>
-<td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Lock Management</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Select one from a list of lock managers.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Zookeeper is required with a multiple Geoserver architecture.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Authorization Management Provider</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Select from a list of providers.</p></td>
-<td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Authorization Data URL</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">The URL for an external supporting service or configuration file.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">The interpretation of the URL depends on the selected provider.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Transaction Buffer Size</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">The maximum number of newly inserted features per transaction buffered in memory prior to transaction completion.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Considerations include system memory, size of typical transactions, the expected number of simultaneous transactions and the average size of a new feature.</p></td>
 </tr>
-</tbody>
-</table>
-<div class="sect4">
-<h5 id="transactions"><a class="anchor" href="#transactions"></a>Transactions</h5>
-<div class="paragraph">
-<p>Transactions are initiated through a Transaction operation, containing inserts, updates and deletes to features.
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Considerations include system memory, size of typical transactions, the expected number of simultaneous transactions and the average size of a new feature.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">======================
+</p><p class="tableblock">===== Transactions
+</p><p class="tableblock">Transactions are initiated through a Transaction operation, containing inserts, updates and deletes to features.
 WFS-T supports feature locks across multiple requests by using a lock request followed by subsequent
 use of a provided lock ID. The Geowave implementation supports
 transaction isolation. Consistency during a commit is not fully supported. Thus, a failure during a commit of a
 transaction may leave the affected data in an intermediary state&#8212;&#8203;some deletions, updates or insertions may not be
 processed. The client application must implement its on compensation logic upon receiving a commit-time error response.
-As expected with Accumulo, operations on a single feature instances are atomic.</p>
-</div>
-<div class="paragraph">
-<p>Inserted features are buffered prior to commit.  The features are bulk fed to the data store
+As expected with Accumulo, operations on a single feature instances are atomic.
+</p><p class="tableblock">Inserted features are buffered prior to commit.  The features are bulk fed to the data store
 when the buffer size is exceeded and when the transaction is committed.  In support of atomicity and isolation,
 flushed features, prior to commit, are marked in a transient state, only visible to the controlling
 transaction.   Upon commit, these features are 'unmarked'. The overhead incurred by this operation is avoided
-by increasing the buffer size to avoid pre-commit flushes.</p>
-</div>
-</div>
-<div class="sect4">
-<h5 id="lock-management"><a class="anchor" href="#lock-management"></a>Lock Management</h5>
-<div class="paragraph">
-<p>Lock management supports life-limited locks on feature instances. There are only two supported lock managers: in memory
-and Zookeeper. Memory is suitable for single Geoserver instance installations.</p>
-</div>
-</div>
-<div class="sect4">
-<h5 id="index-selection"><a class="anchor" href="#index-selection"></a>Index Selection</h5>
-<div class="paragraph">
-<p>Data written through WFS-T is indexed within a single index.  The adapter inspects existing indices, finding one that matches
+by increasing the buffer size to avoid pre-commit flushes.
+</p><p class="tableblock">===== Lock Management
+</p><p class="tableblock">Lock management supports life-limited locks on feature instances. There are only two supported lock managers: in memory
+and Zookeeper. Memory is suitable for single Geoserver instance installations.
+</p><p class="tableblock">===== Index Selection
+</p><p class="tableblock">Data written through WFS-T is indexed within a single index.  The adapter inspects existing indices, finding one that matches
 the data requirements.  A geo-temporal index is chosen for features with temporal attributes.  The adapter creates a geo-spatial index
 upon failure of finding a suitable index.  Geo-temporal index is not created, regardless of the existence of temporal attributes.  Currently,
-geo-temporal indices lead to poor performance for queries requesting vectors over large spans of time.</p>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="authorization-management"><a class="anchor" href="#authorization-management"></a>Authorization Management</h4>
-<div class="paragraph">
-<p>Authorization Management provides the set of credentials compared against the security labels attached to each cell.
+geo-temporal indices lead to poor performance for queries requesting vectors over large spans of time.
+</p><p class="tableblock">==== Authorization Management
+</p><p class="tableblock">Authorization Management provides the set of credentials compared against the security labels attached to each cell.
 Authorization Management determines the set of authorizations associated with each WFS-T request. The available
 Authorization Management strategies are registered through the Server Provider model, within the file
-<code>META-INF/services/mil.nga.giat.geowave.vector.auth.AuthorizationFactorySPI</code>.</p>
-</div>
-<div class="paragraph">
-<p>The provided implementations include the following:
+<code>META-INF/services/mil.nga.giat.geowave.vector.auth.AuthorizationFactorySPI</code>.
+</p><p class="tableblock">The provided implementations include the following:
 . Empty - Each request is processed without additional authorization.
 . JSON - The requester user name, extracted from the Security Context, is used as a key to find the user&#8217;s set of
 authorizations from a JSON file. The location of the JSON file is determined by the associated <em>Authorization Data URL</em>
-(e.g. <a href="file://opt/config/auth.json" class="bare">file://opt/config/auth.json</a>). An example of the contents of the JSON file is given below.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-json" data-lang="json">    {
+(e.g. <a href="file://opt/config/auth.json" class="bare">file://opt/config/auth.json</a>). An example of the contents of the JSON file is given below.
+</p><p class="tableblock">[source, json]
+----
+    {
       "authorizationSet": {
          "fred" : ["1","2","3"],
          "barney" : ["a"]
       }
-    }</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Fred has three authorization labels. Barney has one.</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="visibility-management"><a class="anchor" href="#visibility-management"></a>Visibility Management</h4>
-<div class="paragraph">
-<p>Visibility constraints, applied to feature instances during insertions, are ultimately determined a
+    }
+----
+</p><p class="tableblock">Fred has three authorization labels. Barney has one.
+</p><p class="tableblock">==== Visibility Management
+</p><p class="tableblock">Visibility constraints, applied to feature instances during insertions, are ultimately determined a
 <code>mil.nga.giat.geowave.store.data.field.FieldWriter</code>, of which there are writers for each supported data type in
 Geoserver. By default, the set visibility expression attached to each feature property is empty. Visibility Management
 supports selection of a strategy by wrapping each writer to provide visibility. This alleviates the need to extend the
-type specific FieldWriters.</p>
-</div>
-<div class="paragraph">
-<p>The visibility management strategy is registered through the Java Server Provider model, within in the file
+type specific FieldWriters.
+</p><p class="tableblock">The visibility management strategy is registered through the Java Server Provider model, within in the file
 <code>META-INF/services/mil.nga.giat.geowave.vector.plugin.visibility.ColumnVisibilityManagement</code>. The only provided
 implementation is the <code>JsonDefinitionColumnVisibilityManagement</code>. The implementation expects an property within each
 feature instance to contain a JSON string describing how to set the visibility for each property of the feature
-instance. This approach allows each instance to determine its own visibility criteria.</p>
-</div>
-<div class="paragraph">
-<p>Each name/value pair within the JSON structure defines the visibility for the associated feature property with the same
-name. In the following example, the <em>geometry</em> property is given a visibility <code>S</code>; the eventName is given a visibility <code>TS</code>.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-json" data-lang="json">{ "geometry" : "S", "eventName": "TS" }</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>JSON attributes can be regular expressions, matching more than one feature property name. In the example, all properties
-except for those that start with 'geo' have visibility <code>TS</code>.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-json" data-lang="json">{ "geo.*" : "S", ".*" : "TS" }</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>The order of the name/value pairs must be considered if one rule is more general than another, as shown in the example.
-The rule <code>.<strong></code> matches all properties. The more specific rule <code>geo.</strong></code> must be ordered first.</p>
-</div>
-<div class="paragraph">
-<p>The system extracts the JSON visibility string from a feature instance property named <code>GEOWAVE_VISIBILITY</code>. Selection
-of an alternate property is achieved by setting the associated attribute descriptor 'visibility' to the boolean value TRUE.</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="statistics-2"><a class="anchor" href="#statistics-2"></a>Statistics</h4>
-<div class="paragraph">
-<p>The adapter captures statistics for each numeric, temporal and geo-spatial attribute.  Statistics are used to constrain queries and
-answer inquiries by GeoServer for data ranges, as required for map requests and calibration of zoom levels in Open Layers.</p>
-</div>
-<div style="page-break-after: always;"></div>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="installation-from-rpm"><a class="anchor" href="#installation-from-rpm"></a>Installation from RPM</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="overview-4"><a class="anchor" href="#overview-4"></a>Overview</h3>
-<div class="paragraph">
-<p>There is a public <a href="http://ngageoint.github.io/geowave/packages.html">GeoWave RPM Repo</a> available with the following packages.
+instance. This approach allows each instance to determine its own visibility criteria.
+</p><p class="tableblock">Each name/value pair within the JSON structure defines the visibility for the associated feature property with the same
+name. In the following example, the <em>geometry</em> property is given a visibility <code>S</code>; the eventName is given a visibility <code>TS</code>.
+</p><p class="tableblock">[source, json]
+----
+{ "geometry" : "S", "eventName": "TS" }
+----
+</p><p class="tableblock">JSON attributes can be regular expressions, matching more than one feature property name. In the example, all properties
+except for those that start with 'geo' have visibility <code>TS</code>.
+</p><p class="tableblock">[source, json]
+----
+{ "geo.<strong>" : "S", ".</strong>" : "TS" }
+----
+</p><p class="tableblock">The order of the name/value pairs must be considered if one rule is more general than another, as shown in the example.
+The rule <code>.<strong></code> matches all properties. The more specific rule <code>geo.</strong></code> must be ordered first.
+</p><p class="tableblock">The system extracts the JSON visibility string from a feature instance property named <code>GEOWAVE_VISIBILITY</code>. Selection
+of an alternate property is achieved by setting the associated attribute descriptor 'visibility' to the boolean value TRUE.
+</p><p class="tableblock">==== Statistics
+</p><p class="tableblock">The adapter captures statistics for each numeric, temporal and geo-spatial attribute.  Statistics are used to constrain queries and
+answer inquiries by GeoServer for data ranges, as required for map requests and calibration of zoom levels in Open Layers.
+<a id="install-from-rpm"></a>
+&lt;&lt;&lt;
+== Installation from RPM
+</p><p class="tableblock">=== Overview
+</p><p class="tableblock">There is a public <a href="http://ngageoint.github.io/geowave/packages.html">GeoWave RPM Repo</a> available with the following packages.
 As you&#8217;ll need to coordinate a restart of Accumulo to pick up changes to the GeoWave iterator classes the repos default to
 be disabled so you can keep auto updates enabled. When ready to do an update simply add <code>--enablerepo=geowave</code> to your
 command. The packages are built for a number of different hadoop distributions (Cloudera, Hortonworks and Apache) the RPMs
-have the vendor name embedded as the second portion of the rpm name (geowave-apache-accumulo, geowave-hdp2-accumulo or geowave-cdh5-accumulo)</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="examples"><a class="anchor" href="#examples"></a>Examples</h3>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash"># Use GeoWave repo RPM to configure a host and search for GeoWave RPMs to install
+have the vendor name embedded as the second portion of the rpm name (geowave-apache-accumulo, geowave-hdp2-accumulo or geowave-cdh5-accumulo)
+</p><p class="tableblock">=== Examples
+</p><p class="tableblock">[source, bash]
+----
+# Use GeoWave repo RPM to configure a host and search for GeoWave RPMs to install
 # Several of the rpms (accumulo, jetty and tools) are both GeoWave version and vendor version specific
 # In the examples below the rpm name geowave-$VERSION-VENDOR_VERSION would be adjusted as needed
-rpm -Uvh http://s3.amazonaws.com/geowave-rpms/release/noarch/geowave-repo-1.0-3.noarch.rpm
+rpm -Uvh <a href="http://s3.amazonaws.com/geowave-rpms/release/noarch/geowave-repo-1.0-3.noarch.rpm" class="bare">http://s3.amazonaws.com/geowave-rpms/release/noarch/geowave-repo-1.0-3.noarch.rpm</a>
 yum --enablerepo=geowave search geowave-0.8.7-cdh5
-
-# Install GeoWave Accumulo iterator on a host (probably a namenode)
+</p><p class="tableblock"># Install GeoWave Accumulo iterator on a host (probably a namenode)
 yum --enablerepo=geowave install geowave-0.8.7-cdh5-accumulo
-
-# Update
-yum --enablerepo=geowave install geowave-0.8.7-cdh5-*</code></pre>
-</div>
-</div>
-<table class="tableblock frame-all grid-all spread">
-<caption class="title">Table 1. GeoWave RPMs</caption>
-<colgroup>
-<col style="width: 50%;">
-<col style="width: 50%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Name</th>
-<th class="tableblock halign-left valign-top">Description</th>
+</p><p class="tableblock"># Update
+yum --enablerepo=geowave install geowave-0.8.7-cdh5-*
+----
+</p><p class="tableblock">.GeoWave RPMs
+[cols="2*", options="header"]</p></td>
 </tr>
-</thead>
-<tbody>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">===</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Name</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Description</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">geowave-*-accumulo</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Accumulo Components</p></td>
-</tr>
-<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">geowave-*-core</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Core (home directory and geowave user)</p></td>
-</tr>
-<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">geowave-*-docs</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Documentation (HTML, PDF and man pages)</p></td>
-</tr>
-<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">geowave-*-tools</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Command Line Tools (ingest, etc.)</p></td>
-</tr>
-<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">geowave-*-jetty</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">GeoServer components installed into /usr/local/geowave/geoserver and available at <a href="http://FQDN:8080/geoserver" class="bare">http://FQDN:8080/geoserver</a></p></td>
-</tr>
-<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">geowave-*-puppet</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Puppet Scripts</p></td>
-</tr>
-<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">geowave-*-single-host</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">All GeoWave Components installed on a single host (sometimes useful for development)</p></td>
-</tr>
-<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">geowave-repo</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">GeoWave RPM Repo config file</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">GeoWave RPM Repo config file</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">geowave-repo-dev</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">GeoWave Development RPM Repo config file</p></td>
 </tr>
-</tbody>
-</table>
-</div>
-<div class="sect2">
-<h3 id="rpm-installation-notes"><a class="anchor" href="#rpm-installation-notes"></a>RPM Installation Notes</h3>
-<div class="paragraph">
-<p>RPM names contain the version in the name so support concurrent installations of multiple GeoWave and/or vendor versions.
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">GeoWave Development RPM Repo config file</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">===
+</p><p class="tableblock"></p><p class="tableblock">=== RPM Installation Notes
+</p><p class="tableblock">RPM names contain the version in the name so support concurrent installations of multiple GeoWave and/or vendor versions.
 A versioned /usr/local/geowave-$GEOWAVE_VERSION-$VENDOR_VERSION directory is linked to /usr/local/geowave using alternatives
 ex: /usr/local/geowave &#8594; /usr/local/geowave-0.8.7-hdp2 but there could also be another /usr/local/geowave-0.8.6-cdh5 still
-installed but not the current default.</p>
-</div>
-<div class="sect3">
-<h4 id="view-geowave-home-installed-and-default-using-alternatives"><a class="anchor" href="#view-geowave-home-installed-and-default-using-alternatives"></a>View geowave-home installed and default using alternatives</h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">alternatives --display geowave-home
+installed but not the current default.
+</p><p class="tableblock">==== View geowave-home installed and default using alternatives
+</p><p class="tableblock">[source, bash]
+----
+alternatives --display geowave-home
 geowave-home - status is auto.
  link currently points to /usr/local/geowave-0.8.7-hdp2
 /usr/local/geowave-0.8.7-hdp2 - priority 87
 /usr/local/geowave-0.8.6-cdh5 - priority 86
-Current `best' version is /usr/local/geowave-0.8.7-hdp2.</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>geowave-*-accumulo: This RPM will install the GeoWave Accumulo iterator into the local file system and then upload
-it into HDFS using the <code>hadoop fs -put</code> command. This means of deployment requires that the RPM is installed on a node that
+Current <code>best' version is /usr/local/geowave-0.8.7-hdp2.
+----
+</p><p class="tableblock">geowave-<strong>-accumulo: This RPM will install the GeoWave Accumulo iterator into the local file system and then upload
+it into HDFS using the `hadoop fs -put</code> command. This means of deployment requires that the RPM is installed on a node that
 has the correct binaries and configuration in place to push files to HDFS, like your namenode. We also need to set the ownership
 and permissions correctly within HDFS and as such need to execute the script as a user that has superuser permisisons in HDFS.
 This user varies by Hadoop distribution vendor. If the Accumulo RPM installation fails, check the install log located at
 <code>/usr/local/geowave/accumulo/geowave-to-hdfs.log</code> for errors. The script can be re-run manually if there was a problem that
 can be corrected like the HDFS service was not started. If a non-default user was used to install Hadoop you can specify a user
-that has permissions to upload with the --user argument <code>/usr/local/geowave/accumulo/deploy-to-geowave-to-hdfs.sh --user my-hadoop-user</code></p>
-</div>
-<div class="paragraph">
-<p>With the exception of the Accumulo RPM mentioned above there are no restrictions on where you install RPMs. You can install
-the rest of the RPMs all on a single node for development use or a mix of nodes depending on your cluster configuration.</p>
-</div>
-<div style="page-break-after: always;"></div>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="maven-repositories-2"><a class="anchor" href="#maven-repositories-2"></a>Maven Repositories</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="overview-5"><a class="anchor" href="#overview-5"></a>Overview</h3>
-<div class="paragraph">
-<p>There are public maven repositories available for both release and snapshot geowave artifacts (no transitive dependencies).
-Automated deployment is available, but requires a S3 access key (typically added to your ~/.m2/settings.xml)</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="maven-pom-fragments"><a class="anchor" href="#maven-pom-fragments"></a>Maven POM fragments</h3>
-<div class="sect3">
-<h4 id="releases"><a class="anchor" href="#releases"></a>Releases</h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">    &lt;repository&gt;
+that has permissions to upload with the --user argument <code>/usr/local/geowave/accumulo/deploy-to-geowave-to-hdfs.sh --user my-hadoop-user</code>
+</p><p class="tableblock">With the exception of the Accumulo RPM mentioned above there are no restrictions on where you install RPMs. You can install
+the rest of the RPMs all on a single node for development use or a mix of nodes depending on your cluster configuration.
+<a id="maven-repositories"></a>
+&lt;&lt;&lt;
+== Maven Repositories
+</p><p class="tableblock">=== Overview
+</p><p class="tableblock">There are public maven repositories available for both release and snapshot geowave artifacts (no transitive dependencies).
+Automated deployment is available, but requires a S3 access key (typically added to your ~/.m2/settings.xml)
+</p><p class="tableblock">=== Maven POM fragments
+==== Releases
+[source, xml]
+----
+    &lt;repository&gt;
         &lt;id&gt;geowave-maven-releases&lt;/id&gt;
         &lt;name&gt;GeoWave AWS Release Repository&lt;/name&gt;
-        &lt;url&gt;http://geowave-maven.s3-website-us-east-1.amazonaws.com/release&lt;/url&gt;
+        &lt;url&gt;<a href="http://geowave-maven.s3-website-us-east-1.amazonaws.com/release&lt;/url&gt" class="bare">http://geowave-maven.s3-website-us-east-1.amazonaws.com/release&lt;/url&gt</a>;
         &lt;releases&gt;
             &lt;enabled&gt;true&lt;/enabled&gt;
         &lt;/releases&gt;
         &lt;snapshots&gt;
             &lt;enabled&gt;false&lt;/enabled&gt;
         &lt;/snapshots&gt;
-    &lt;/repository&gt;</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="snapshots"><a class="anchor" href="#snapshots"></a>Snapshots</h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">    &lt;repository&gt;
+    &lt;/repository&gt;
+----
+</p><p class="tableblock">==== Snapshots
+[source, xml]
+----
+    &lt;repository&gt;
         &lt;id&gt;geowave-maven-snapshot&lt;/id&gt;
         &lt;name&gt;GeoWave AWS Snapshot Repository&lt;/name&gt;
-        &lt;url&gt;http://geowave-maven.s3-website-us-east-1.amazonaws.com/snapshot&lt;/url&gt;
+        &lt;url&gt;<a href="http://geowave-maven.s3-website-us-east-1.amazonaws.com/snapshot&lt;/url&gt" class="bare">http://geowave-maven.s3-website-us-east-1.amazonaws.com/snapshot&lt;/url&gt</a>;
         &lt;releases&gt;
             &lt;enabled&gt;false&lt;/enabled&gt;
         &lt;/releases&gt;
         &lt;snapshots&gt;
             &lt;enabled&gt;true&lt;/enabled&gt;
         &lt;/snapshots&gt;
-    &lt;/repository&gt;</code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="maven-settings-xml-fragments"><a class="anchor" href="#maven-settings-xml-fragments"></a>Maven settings.xml fragments</h3>
-<div class="paragraph">
-<p>(you probably don&#8217;t need this unless you are deploying official GeoWave artifacts)</p>
-</div>
-<div class="sect3">
-<h4 id="snapshots-2"><a class="anchor" href="#snapshots-2"></a>Snapshots</h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">  &lt;servers&gt;
+    &lt;/repository&gt;
+----
+</p><p class="tableblock">=== Maven settings.xml fragments
+(you probably don&#8217;t need this unless you are deploying official GeoWave artifacts)
+</p><p class="tableblock">==== Snapshots
+[source, xml]
+----
+  &lt;servers&gt;
     &lt;server&gt;
       &lt;id&gt;geowave-maven-releases&lt;/id&gt;
       &lt;username&gt;ACCESS_KEY_ID&lt;/username&gt;
@@ -3034,949 +3053,568 @@ Automated deployment is available, but requires a S3 access key (typically added
       &lt;username&gt;ACCESS_KEY_ID&lt;/username&gt;
       &lt;password&gt;SECRET_ACCESS_KEY&lt;/password&gt;
     &lt;/server&gt;
-  &lt;/servers&gt;</code></pre>
-</div>
-</div>
-<div style="page-break-after: always;"></div>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="installation-from-source"><a class="anchor" href="#installation-from-source"></a>Installation from Source</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="geoserver-2"><a class="anchor" href="#geoserver-2"></a>GeoServer</h3>
-<div class="sect3">
-<h4 id="geoserver-versions"><a class="anchor" href="#geoserver-versions"></a>GeoServer Versions</h4>
-<div class="paragraph">
-<p>GeoWave has to be built against specific versions of GeoWave and GeoTools. To see the currently supported versions look at
+  &lt;/servers&gt;
+----
+</p><p class="tableblock"></p><p class="tableblock"><a id="install-from-source"></a>
+&lt;&lt;&lt;
+== Installation from Source
+</p><p class="tableblock">=== GeoServer
+</p><p class="tableblock">==== GeoServer Versions
+</p><p class="tableblock">GeoWave has to be built against specific versions of GeoWave and GeoTools. To see the currently supported versions look at
 the build matrix section of the .travis.yml file in the root directory of the project. All of the examples below use the variable
-$BUILD_ARGS to represent your choice of all the dependency versions.</p>
-</div>
-<div class="paragraph">
-<p>Example build args:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">export BUILD_ARGS="-Daccumulo.version=1.6.0 -Dhadoop.version=2.5.0-cdh5.3.0 -Dgeotools.version=13.0 -Dgeoserver.version=2.7.0 -Dvender.version=cdh5 -P cloudera"</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="geoserver-install"><a class="anchor" href="#geoserver-install"></a>GeoServer Install</h4>
-<div class="paragraph">
-<p>First we need to build the GeoServer plugin - from the GeoWave root directory:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">mvn package -P geotools-container-singlejar $BUILD_ARGS</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>let&#8217;s assume you have GeoServer deployed in a Tomcat container in
-/opt/tomcat</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">cp deploy/target/*-geoserver-singlejar.jar /opt/tomcat/webapps/geoserver/WEB-INF/lib/</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>and re-start Tomcat</p>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="accumulo"><a class="anchor" href="#accumulo"></a>Accumulo</h3>
-<div class="sect3">
-<h4 id="accumulo-versions"><a class="anchor" href="#accumulo-versions"></a>Accumulo Versions</h4>
-<div class="paragraph">
-<p>GeoWave has been tested and works against accumulo 1.5.0, 1.5.1, 1.6.0 and 1.6.1 Ensure you&#8217;ve set the desired
-version in the BUILD_ARGS environment variable</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="accumulo-install"><a class="anchor" href="#accumulo-install"></a>Accumulo Install</h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">mvn package -P accumulo-container-singlejar $BUILD_ARGS</code></pre>
-</div>
-</div>
-<div style="page-break-after: always;"></div>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="accumulo-configuration"><a class="anchor" href="#accumulo-configuration"></a>Accumulo Configuration</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="overview-6"><a class="anchor" href="#overview-6"></a>Overview</h3>
-<div class="paragraph">
-<p>The two high level tasks to configure Accumulo for use with GeoWave are to ensure the memory allocations for the master
+$BUILD_ARGS to represent your choice of all the dependency versions.
+</p><p class="tableblock">Example build args:
+</p><p class="tableblock">[source, bash]
+----
+export BUILD_ARGS="-Daccumulo.version=1.6.0 -Dhadoop.version=2.5.0-cdh5.3.0 -Dgeotools.version=13.0 -Dgeoserver.version=2.7.0 -Dvender.version=cdh5 -P cloudera"
+----
+</p><p class="tableblock">==== GeoServer Install
+</p><p class="tableblock">First we need to build the GeoServer plugin - from the GeoWave root directory:
+</p><p class="tableblock">[source, bash]
+----
+mvn package -P geotools-container-singlejar $BUILD_ARGS
+----
+</p><p class="tableblock">let&#8217;s assume you have GeoServer deployed in a Tomcat container in
+/opt/tomcat
+</p><p class="tableblock">[source, bash]
+----
+cp deploy/target/</strong>-geoserver-singlejar.jar /opt/tomcat/webapps/geoserver/WEB-INF/lib/
+----
+</p><p class="tableblock">and re-start Tomcat
+</p><p class="tableblock">=== Accumulo
+</p><p class="tableblock">==== Accumulo Versions
+</p><p class="tableblock">GeoWave has been tested and works against accumulo 1.5.0, 1.5.1, 1.6.0 and 1.6.1 Ensure you&#8217;ve set the desired
+version in the BUILD_ARGS environment variable
+</p><p class="tableblock">==== Accumulo Install
+</p><p class="tableblock">[source, bash]
+----
+mvn package -P accumulo-container-singlejar $BUILD_ARGS
+----
+<a id="accumulo-config"></a>
+&lt;&lt;&lt;
+== Accumulo Configuration
+</p><p class="tableblock">=== Overview
+</p><p class="tableblock">The two high level tasks to configure Accumulo for use with GeoWave are to ensure the memory allocations for the master
 and tablet server processes are adequate and to add the GeoWave Accumulo iterator to a classloader. The iterator is a rather
 large file so ensure the Accumulo Master process has at least 512m of heap space and the Tablet Server processes have at least
-1g of heap space.</p>
-</div>
-<div class="paragraph">
-<p>The recommended Accumulo configuration for GeoWave requires several manual configuration steps but isolates the GeoWave
+1g of heap space.
+</p><p class="tableblock">The recommended Accumulo configuration for GeoWave requires several manual configuration steps but isolates the GeoWave
 libraries in application specific classpath(s) reducing the possibility of dependency conflict issues. A single user for
 all of geowave data or a user per data type are two of the many local configuration options just ensure each namespace
-containing GeoWave tables is configured to pick up the geowave-accumulo.jar.</p>
-</div>
-<div class="sect3">
-<h4 id="procedure"><a class="anchor" href="#procedure"></a>Procedure</h4>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Create a user and namespace</p>
-</li>
-<li>
-<p>Grant the user ownership permissions on all tables created within the application namespace</p>
-</li>
-<li>
-<p>Create an application or data set specific classpath</p>
-</li>
-<li>
-<p>Configure all tables within the namespace to use the application classpath</p>
-</li>
-</ol>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">accumulo shell -u root
-createuser geowave <i class="conum" data-value="1"></i><b>(1)</b>
+containing GeoWave tables is configured to pick up the geowave-accumulo.jar.
+</p><p class="tableblock">==== Procedure
+</p><p class="tableblock">. Create a user and namespace
+. Grant the user ownership permissions on all tables created within the application namespace
+. Create an application or data set specific classpath
+. Configure all tables within the namespace to use the application classpath
+</p><p class="tableblock">[source, bash]
+----
+accumulo shell -u root
+createuser geowave // &lt;1&gt;
 createnamespace geowave
-grant NameSpace.CREATE_TABLE -ns geowave -u geowave <i class="conum" data-value="2"></i><b>(2)</b>
-config -s general.vfs.context.classpath.geowave=hdfs://NAME_NODE_FQDN:8020/ACCUMULO_ROOT/classpath/geowave/VERSION_AND_VENDOR_VERSION/[^.].*.jar <i class="conum" data-value="3"></i><b>(3)</b>
-config -ns geowave -s table.classpath.context=geowave <i class="conum" data-value="4"></i><b>(4)</b>
-exit</code></pre>
-</div>
-</div>
-<div class="colist arabic">
-<table>
-<tr>
-<td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>You&#8217;ll be prompted for a password</td>
+grant NameSpace.CREATE_TABLE -ns geowave -u geowave &lt;2&gt;
+config -s general.vfs.context.classpath.geowave=hdfs://NAME_NODE_FQDN:8020/ACCUMULO_ROOT/classpath/geowave/VERSION_AND_VENDOR_VERSION/[^.].*.jar &lt;3&gt;
+config -ns geowave -s table.classpath.context=geowave &lt;4&gt;
+exit
+----
+&lt;1&gt; You&#8217;ll be prompted for a password
+&lt;2&gt; Ensure the user has ownership of all tables created within the namespace
+&lt;3&gt; The Accumulo root path in HDFS varies between hadoop vendors. Cloudera is /accumulo and Hortonworks is /apps/accumulo
+&lt;4&gt; Link the namespace with the application classpath, adjust the labels as needed if you&#8217;ve used different user or appilcation names
+</p><p class="tableblock">These manual configuration steps have to be performed before attempting to create GeoWave index tables. After the initial configuration
+you may elect to do further user and namespace creation and configuring to provide isolation between groups and data sets.
+</p><p class="tableblock">=== Managing
+</p><p class="tableblock">After installing a number of different iterators you may want to figure out which iterators have been configured.
+</p><p class="tableblock">[source, bash]
+----
+# Print all configuration and grep for line containing vfs.context configuration and also show the following line
+accumulo shell -u root -p ROOT_PWD -e "config -np"</p></td>
 </tr>
 <tr>
-<td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>Ensure the user has ownership of all tables created within the namespace</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="3"></i><b>3</b></td>
-<td>The Accumulo root path in HDFS varies between hadoop vendors. Cloudera is /accumulo and Hortonworks is /apps/accumulo</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="4"></i><b>4</b></td>
-<td>Link the namespace with the application classpath, adjust the labels as needed if you&#8217;ve used different user or appilcation names</td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p>These manual configuration steps have to be performed before attempting to create GeoWave index tables. After the initial configuration
-you may elect to do further user and namespace creation and configuring to provide isolation between groups and data sets.</p>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="managing"><a class="anchor" href="#managing"></a>Managing</h3>
-<div class="paragraph">
-<p>After installing a number of different iterators you may want to figure out which iterators have been configured.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash"># Print all configuration and grep for line containing vfs.context configuration and also show the following line
-accumulo shell -u root -p ROOT_PWD -e "config -np" | grep -A 1 general.vfs.context.classpath</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>You will get back a listing of context classpath override configurations which map the application or user context you configured to
-a specific iterator jar in HDFS.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="versioning"><a class="anchor" href="#versioning"></a>Versioning</h3>
-<div class="paragraph">
-<p>It&#8217;s of critical importance to ensure that the various GeoWave components are all the same version and that your client is of the same version
-that was used to write the data.</p>
-</div>
-<div class="sect3">
-<h4 id="basic"><a class="anchor" href="#basic"></a>Basic</h4>
-<div class="paragraph">
-<p>The RPM packaged version of GeoWave puts a timestamp in the name so it&#8217;s pretty easy to verify that you have a matched set of RPMs installed.
-After an update of the components you must restart Accumulo to get vfs to download the new versions and this should keep everything synched.</p>
-</div>
-<div class="listingblock">
-<div class="title">Compare version and timestamps of installed RPMs</div>
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">[spohnae@c1-master ~]$ rpm -qa | grep geowave
+<td class="tableblock halign-left valign-top"><p class="tableblock">grep -A 1 general.vfs.context.classpath
+----
+</p><p class="tableblock">You will get back a listing of context classpath override configurations which map the application or user context you configured to
+a specific iterator jar in HDFS.
+</p><p class="tableblock">=== Versioning
+</p><p class="tableblock">It&#8217;s of critical importance to ensure that the various GeoWave components are all the same version and that your client is of the same version
+that was used to write the data.
+</p><p class="tableblock">==== Basic
+</p><p class="tableblock">The RPM packaged version of GeoWave puts a timestamp in the name so it&#8217;s pretty easy to verify that you have a matched set of RPMs installed.
+After an update of the components you must restart Accumulo to get vfs to download the new versions and this should keep everything synched.
+</p><p class="tableblock">.Compare version and timestamps of installed RPMs
+[source, bash]
+----
+[spohnae@c1-master ~]$ rpm -qa</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">grep geowave
 geowave-0.8.7-hdp2-core-0.8.7-201505131644.noarch
 geowave-0.8.7-hdp2-jetty-0.8.7-201505131644.noarch
 geowave-0.8.7-hdp2-accumulo-0.8.7-201505131644.noarch
-geowave-0.8.7-hdp2-tools-0.8.7-201505131644.noarch</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="advanced"><a class="anchor" href="#advanced"></a>Advanced</h4>
-<div class="paragraph">
-<p>When GeoWave tables are first accessed on a tablet server the vfs classpath tells Accumulo where to download the jar file from HDFS.
+geowave-0.8.7-hdp2-tools-0.8.7-201505131644.noarch
+----
+</p><p class="tableblock">==== Advanced
+</p><p class="tableblock">When GeoWave tables are first accessed on a tablet server the vfs classpath tells Accumulo where to download the jar file from HDFS.
 The jar file is copied into the local /tmp directory (the default general.vfs.cache.dir setting anyway) and loaded onto the classpath.
 If there is ever doubt as to if these versions match you can use the commands below from a tablet server node to verify the version of
-this artifact.</p>
-</div>
-<div class="listingblock">
-<div class="title">Commit hash of the jar in HDFS</div>
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">sudo -u hdfs hadoop fs -cat /accumulo/classpath/geowave/geowave-accumulo-build.properties | grep scm.revision | sed s/project.scm.revision=<i class="conum" data-value="1"></i><b>(1)</b></code></pre>
-</div>
-</div>
-<div class="colist arabic">
-<table>
-<tr>
-<td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>The root directory of Accumulo in various distributions can vary, check with hadoop fs -ls / first to ensure you have the correct initial path</td>
-</tr>
-</table>
-</div>
-<div class="listingblock">
-<div class="title">Compare with the versions downloaded locally</div>
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">sudo find /tmp -name "*geowave-accumulo.jar" -exec unzip -p {} build.properties  \; | grep scm.revision | sed s/project.scm.revision=//</code></pre>
-</div>
-</div>
-<div class="listingblock">
-<div class="title">Example</div>
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">[spohnae@c1-node-03 ~]$ sudo -u hdfs hadoop fs -cat /ACCUMULO_ROOT/classpath/geowave/VERSION_AND_VENDOR_VERSION/geowave-accumulo-build.properties | grep scm.revision | sed s/project.scm.revision=//
-294ffb267e6691de3b9edc80e312bf5af7b2d23f <i class="conum" data-value="1"></i><b>(1)</b>
-[spohnae@c1-node-03 ~]$ sudo find /tmp -name "*geowave-accumulo.jar" -exec unzip -p {} build.properties  \; | grep scm.revision | sed s/project.scm.revision=//
-294ffb267e6691de3b9edc80e312bf5af7b2d23f <i class="conum" data-value="2"></i><b>(2)</b>
-294ffb267e6691de3b9edc80e312bf5af7b2d23f <i class="conum" data-value="2"></i><b>(2)</b>
-25cf0f895bd0318ce4071a4680d6dd85e0b34f6b</code></pre>
-</div>
-</div>
-<div class="colist arabic">
-<table>
-<tr>
-<td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>This is the version loaded into hdfs and should be present on all tablet servers once Accumulo has been restarted</td>
+this artifact.
+</p><p class="tableblock">.Commit hash of the jar in HDFS
+[source, bash]
+----
+sudo -u hdfs hadoop fs -cat /accumulo/classpath/geowave/geowave-accumulo-build.properties</p></td>
 </tr>
 <tr>
-<td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>The find command will probably locate a number of different versions depending on how often you clean out /tmp.</td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">grep scm.revision</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">sed s/project.scm.revision=// &lt;1&gt;
+----
+&lt;1&gt; The root directory of Accumulo in various distributions can vary, check with hadoop fs -ls / first to ensure you have the correct initial path
+</p><p class="tableblock">.Compare with the versions downloaded locally
+[source, bash]
+----
+sudo find /tmp -name "*geowave-accumulo.jar" -exec unzip -p {} build.properties  \;</p></td>
 </tr>
-</table>
-</div>
-<div class="paragraph">
-<p>There may be multiple versions copies present, one per JVM, the error scenario is when a tablet server is missing the correct iterator jar.</p>
-</div>
-<div style="page-break-after: always;"></div>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="building-2"><a class="anchor" href="#building-2"></a>Building</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>GeoWave will shortly be available in maven central (for tagged releases), but until then - or to get the latest
-features - building GeoWave from source is the best bet.</p>
-</div>
-<div class="sect2">
-<h3 id="application-dependencies"><a class="anchor" href="#application-dependencies"></a>Application Dependencies</h3>
-<div class="paragraph">
-<p>This <em>ultra</em> quickstart assumes you have installed and configured:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><a href="http://git-scm.com/">Git</a></p>
-</li>
-<li>
-<p><a href="http://www.oracle.com/technetwork/java/javase/downloads/index.html">Java JDK</a> (&gt;= 1.7). The OracleJDK is the most thoroughly tested, but there
-are no known issues with OpenJDK.</p>
-</li>
-<li>
-<p><a href="https://maven.apache.org/">Maven</a> &gt;= 3.2.1</p>
-</li>
-<li>
-<p><a href="http://geoserver.org/">GeoServer</a> instance &gt;= 2.5.2 (due to: <a href="http://jira.codehaus.org/browse/GEOT-4587">GEOT-4587</a>)</p>
-</li>
-<li>
-<p><a href="http://projects.apache.org/projects/accumulo.html">Apache Accumulo</a> version 1.5 or greater is required. 1.5.0, 1.5.1, and 1.6.0 have all
-been tested.</p>
-</li>
-<li>
-<p><a href="http://hadoop.apache.org/">Apache Hadoop</a> versions 1.x and 2.x <em>should</em> all work. The software has specifically been run on:</p>
-</li>
-<li>
-<p><a href="http://cloudera.com/content/cloudera/en/home.html">Cloudera</a> CDH4 and CDH5 (MR1)</p>
-</li>
-<li>
-<p><a href="http://hortonworks.com/hdp/">Hortonworks Data Platform</a> 2.1.<br></p>
-</li>
-<li>
-<p>MapReduce 1 with the new API (org.apache.hadoop.mapreduce.*) is used. Testing is underway against YARN / MR2 and seems to be positive, but
-well, it&#8217;s still underway.</p>
-</li>
-<li>
-<p><a href="http://download.java.net/media/jai/builds/release/1_1_3/">Java Advanced Imaging</a> and <a href="http://download.java.net/media/jai-imageio/builds/release/1.1/">Java
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">grep scm.revision</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">sed s/project.scm.revision=//
+----
+</p><p class="tableblock">.Example
+[source, bash]
+----
+[spohnae@c1-node-03 ~]$ sudo -u hdfs hadoop fs -cat /ACCUMULO_ROOT/classpath/geowave/VERSION_AND_VENDOR_VERSION/geowave-accumulo-build.properties</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">grep scm.revision</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">sed s/project.scm.revision=//
+294ffb267e6691de3b9edc80e312bf5af7b2d23f &lt;1&gt;
+[spohnae@c1-node-03 ~]$ sudo find /tmp -name "*geowave-accumulo.jar" -exec unzip -p {} build.properties  \;</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">grep scm.revision</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">sed s/project.scm.revision=//
+294ffb267e6691de3b9edc80e312bf5af7b2d23f &lt;2&gt;
+294ffb267e6691de3b9edc80e312bf5af7b2d23f &lt;2&gt;
+25cf0f895bd0318ce4071a4680d6dd85e0b34f6b
+----
+&lt;1&gt; This is the version loaded into hdfs and should be present on all tablet servers once Accumulo has been restarted
+&lt;2&gt; The find command will probably locate a number of different versions depending on how often you clean out /tmp.
+</p><p class="tableblock">There may be multiple versions copies present, one per JVM, the error scenario is when a tablet server is missing the correct iterator jar.
+<a id="building"></a>
+&lt;&lt;&lt;
+== Building
+</p><p class="tableblock">GeoWave will shortly be available in maven central (for tagged releases), but until then - or to get the latest
+features - building GeoWave from source is the best bet.
+</p><p class="tableblock">=== Application Dependencies
+</p><p class="tableblock">This <em>ultra</em> quickstart assumes you have installed and configured:
+</p><p class="tableblock">* <a href="http://git-scm.com/">Git</a>
+* <a href="http://www.oracle.com/technetwork/java/javase/downloads/index.html">Java JDK</a> (&gt;= 1.7). The OracleJDK is the most thoroughly tested, but there
+are no known issues with OpenJDK.
+* <a href="https://maven.apache.org/">Maven</a> &gt;= 3.2.1
+* <a href="http://geoserver.org/">GeoServer</a> instance &gt;= 2.5.2 (due to: <a href="http://jira.codehaus.org/browse/GEOT-4587">GEOT-4587</a>)
+* <a href="http://projects.apache.org/projects/accumulo.html">Apache Accumulo</a> version 1.5 or greater is required. 1.5.0, 1.5.1, and 1.6.0 have all
+been tested.
+* <a href="http://hadoop.apache.org/">Apache Hadoop</a> versions 1.x and 2.x <em>should</em> all work. The software has specifically been run on:
+* <a href="http://cloudera.com/content/cloudera/en/home.html">Cloudera</a> CDH4 and CDH5 (MR1)
+* <a href="http://hortonworks.com/hdp/">Hortonworks Data Platform</a> 2.1.<br>
+* MapReduce 1 with the new API (org.apache.hadoop.mapreduce.<strong>) is used. Testing is underway against YARN / MR2 and seems to be positive, but
+well, it&#8217;s still underway.
+* <a href="http://download.java.net/media/jai/builds/release/1_1_3/">Java Advanced Imaging</a> and <a href="http://download.java.net/media/jai-imageio/builds/release/1.1/">Java
 Image I/O</a> are also both required to be installed on the GeoServer instance(s) <em>as well</em> as on the Accumulo nodes. The Accumulo support is
-only required for certain functions (distributed rendering) - so this may be skipped in some cases.</p>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect2">
-<h3 id="maven-dependencies"><a class="anchor" href="#maven-dependencies"></a>Maven dependencies</h3>
-<div class="paragraph">
-<p>Required repositories not in Maven Central have been added to the parent POM. Specifically the cloudera and opengeo repos.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="build-process"><a class="anchor" href="#build-process"></a>Build Process</h3>
-<div class="paragraph">
-<p>Checkout geowave, set your preferred dependencies as build arguments and then run maven install.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">export BUILD_ARGS="-Daccumulo.version=1.6.0-cdh5.1.4 -Dhadoop.version=2.6.0-cdh5.4.0 -Dgeotools.version=13.0 -Dgeoserver.version=2.7.0 -Dvendor.version=cdh5 -P cloudera" <i class="conum" data-value="1"></i><b>(1)</b>
-git clone https://github.com/ngageoint/geowave.git <i class="conum" data-value="2"></i><b>(2)</b>
+only required for certain functions (distributed rendering) - so this may be skipped in some cases.
+</p><p class="tableblock">=== Maven dependencies
+</p><p class="tableblock">Required repositories not in Maven Central have been added to the parent POM. Specifically the cloudera and opengeo repos.
+</p><p class="tableblock">=== Build Process
+</p><p class="tableblock">Checkout geowave, set your preferred dependencies as build arguments and then run maven install.
+</p><p class="tableblock">[source, bash]
+----
+export BUILD_ARGS="-Daccumulo.version=1.6.0-cdh5.1.4 -Dhadoop.version=2.6.0-cdh5.4.0 -Dgeotools.version=13.0 -Dgeoserver.version=2.7.0 -Dvendor.version=cdh5 -P cloudera" &lt;1&gt;
+git clone <a href="https://github.com/ngageoint/geowave.git" class="bare">https://github.com/ngageoint/geowave.git</a> &lt;2&gt;
 cd geowave
-mvn install $BUILD_ARGS <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
-</div>
-</div>
-<div class="colist arabic">
-<table>
-<tr>
-<td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>Examples of current build args can be seen in the top level .travis.yml file in the env/matrix section</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>If you don&#8217;t need the complete history and want to speed up the clone you can limit the depth of your checkout with --depth NUM_COMMITS</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="3"></i><b>3</b></td>
-<td>You can speed up the build by skipping tests by adding -Dfindbugs.skip=true -DskipFormat=true -DskipITs=true -DskipTests=true</td>
-</tr>
-</table>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-<div class="paragraph">
-<p>Integration Tests: Windows</p>
-</div>
-<div class="paragraph">
-<p>Integration tests are currently not working on Windows out of the box. If you install cygwin and set the environmental variable CYGPATH to the
-location of the cygpath binary provided by cygwin then is should work. Eclipse and Avro generated files</p>
-</div>
-</td>
-</tr>
-</table>
-</div>
-<div style="page-break-after: always;"></div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="jace-jni-proxies-2"><a class="anchor" href="#jace-jni-proxies-2"></a>Jace JNI Proxies</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Using Jace, we are able to create JNI proxy classes for GeoWave which can be used in C/C++ applications.</p>
-</div>
-<div class="paragraph">
-<p>Boost is required when using the Jace bindings.</p>
-</div>
-<div class="sect2">
-<h3 id="prepackaged-source-and-binaries"><a class="anchor" href="#prepackaged-source-and-binaries"></a>Prepackaged Source and Binaries</h3>
-<div class="paragraph">
-<p>There is a public <a href="http://ngageoint.github.io/geowave/packages.html">GeoWave RPM Repo</a> where you can download a tarball for the GeoWave Jace bindings for your desired platform.  If your platform is not available, there is a source tarball which can be used in conjunction with CMake to build the GeoWave Jace bindings for your desired platform.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="generate-proxies-and-build-from-source"><a class="anchor" href="#generate-proxies-and-build-from-source"></a>Generate Proxies and Build from Source</h3>
-<div class="paragraph">
-<p>If you want, you can generate and build the Jace proxies yourself.</p>
-</div>
-<div class="sect3">
-<h4 id="step-1-checkout-jace-and-geowave"><a class="anchor" href="#step-1-checkout-jace-and-geowave"></a>Step 1 - Checkout Jace and GeoWave</h4>
-<div class="paragraph">
-<p>First, we need to clone Jace and GeoWave.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">$ git clone git@github.com:jwomeara/jace.git
-$ git clone git@github.com:ngageoint/geowave.git</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Note: We are using a non-standard Jace implementation.</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="step-2-install-jace"><a class="anchor" href="#step-2-install-jace"></a>Step 2 - Install Jace</h4>
-<div class="paragraph">
-<p>First, we need to install Jace v1.3.0.  This is the software which is used to generate the C++ proxy classes.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">$ cd jace
+mvn install $BUILD_ARGS &lt;3&gt;
+----
+&lt;1&gt; Examples of current build args can be seen in the top level .travis.yml file in the env/matrix section
+&lt;2&gt; If you don&#8217;t need the complete history and want to speed up the clone you can limit the depth of your checkout with --depth NUM_COMMITS
+&lt;3&gt; You can speed up the build by skipping tests by adding -Dfindbugs.skip=true -DskipFormat=true -DskipITs=true -DskipTests=true
+</p><p class="tableblock">[NOTE]
+====
+Integration Tests: Windows
+</p><p class="tableblock">Integration tests are currently not working on Windows out of the box. If you install cygwin and set the environmental variable CYGPATH to the
+location of the cygpath binary provided by cygwin then is should work. Eclipse and Avro generated files
+====
+<a id="jace-jni-proxies"></a>
+&lt;&lt;&lt;
+== Jace JNI Proxies
+</p><p class="tableblock">Using Jace, we are able to create JNI proxy classes for GeoWave which can be used in C/C applications.
+</p><p class="tableblock">Boost is required when using the Jace bindings.
+</p><p class="tableblock">=== Prepackaged Source and Binaries
+</p><p class="tableblock">There is a public http://ngageoint.github.io/geowave/packages.html[GeoWave RPM Repo] where you can download a tarball for the GeoWave Jace bindings for your desired platform.  If your platform is not available, there is a source tarball which can be used in conjunction with CMake to build the GeoWave Jace bindings for your desired platform.
+</p><p class="tableblock">=== Generate Proxies and Build from Source
+</p><p class="tableblock">If you want, you can generate and build the Jace proxies yourself.
+</p><p class="tableblock">==== Step 1 - Checkout Jace and GeoWave
+</p><p class="tableblock">First, we need to clone Jace and GeoWave.
+</p><p class="tableblock">[source, bash]
+----
+$ git clone git@github.com:jwomeara/jace.git
+$ git clone git@github.com:ngageoint/geowave.git
+----
+</p><p class="tableblock">Note: We are using a non-standard Jace implementation.
+</p><p class="tableblock">==== Step 2 - Install Jace
+</p><p class="tableblock">First, we need to install Jace v1.3.0.  This is the software which is used to generate the C proxy classes.
+</p><p class="tableblock">[source, bash]
+----
+$ cd jace
 $ git checkout tags/v1.3.0
-$ mvn clean install -Dsources</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="step-3-build-geowave"><a class="anchor" href="#step-3-build-geowave"></a>Step 3 - Build GeoWave</h4>
-<div class="paragraph">
-<p>Here, we will specify two Maven profiles; one which specifies that we are building jace proxies, and another to specify our target platform.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">$ cd geowave
-$ mvn clean package -pl deploy -am -P generate-jace-proxies,linux-amd64-gcc-debug -DBUILD_SHARED_LIBS=ON -DskipTests</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Note: To build static libraries use -DBUILD_SHARED_LIBS=OFF</p>
-</div>
-<div class="paragraph">
-<p>Refer to the table below to select the platform most applicable to your needs.</p>
-</div>
-<table class="tableblock frame-all grid-all spread">
-<colgroup>
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Profile</th>
-<th class="tableblock halign-left valign-top">Generator</th>
-<th class="tableblock halign-left valign-top">Config</th>
-<th class="tableblock halign-left valign-top">Architecture</th>
+$ mvn clean install -Dsources
+----
+</p><p class="tableblock">==== Step 3 - Build GeoWave
+</p><p class="tableblock">Here, we will specify two Maven profiles; one which specifies that we are building jace proxies, and another to specify our target platform.
+</p><p class="tableblock">[source, bash]
+----
+$ cd geowave
+$ mvn clean package -pl deploy -am -P generate-jace-proxies,linux-amd64-gcc-debug -DBUILD_SHARED_LIBS=ON -DskipTests
+----
+</p><p class="tableblock">Note: To build static libraries use -DBUILD_SHARED_LIBS=OFF
+</p><p class="tableblock">Refer to the table below to select the platform most applicable to your needs.
+</p><p class="tableblock">[cols="4</strong>", options="header"]</p></td>
 </tr>
-</thead>
-<tbody>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">===</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Profile</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Generator</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Config</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Architecture</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">windows-amd64-vc11-debug</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Visual Studio 11 Win64</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Debug-x64</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">amd64</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">amd64</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">windows-amd64-vc11-release</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Visual Studio 11 Win64</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Release-x64</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">amd64</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">amd64</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">linux-amd64-gcc-debug</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Unix Makefiles</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Debug</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">amd64</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">amd64</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">linux-amd64-gcc-release</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Unix Makefiles</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Release</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">amd64</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">===
+</p><p class="tableblock">=== Mapnik Plugin Configuration
+</p><p class="tableblock">==== Mapnik
+</p><p class="tableblock"><a href="http://mapnik.org/">Mapnik</a> is an open source toolkit for developing mapping applications.
+GeoWave is supported as a plugin for Mapnik for reading vector data from Accumulo.
+</p><p class="tableblock">Note: These instructions assume that you are using prepackaged binaries.
+</p><p class="tableblock">==== Configure Scons for Mapnik
+</p><p class="tableblock">To configure Mapnik to run with GeoWave, there are a few SCons options which need to be configured.  Refer to the table below to get an idea for how these options would be configured on Ubuntu 14.04 LTS.
+</p><p class="tableblock">[cols="2*", options="header"]</p></td>
 </tr>
-</tbody>
-</table>
-</div>
-</div>
-<div class="sect2">
-<h3 id="mapnik-plugin-configuration"><a class="anchor" href="#mapnik-plugin-configuration"></a>Mapnik Plugin Configuration</h3>
-<div class="sect3">
-<h4 id="mapnik"><a class="anchor" href="#mapnik"></a>Mapnik</h4>
-<div class="paragraph">
-<p><a href="http://mapnik.org/">Mapnik</a> is an open source toolkit for developing mapping applications.
-GeoWave is supported as a plugin for Mapnik for reading vector data from Accumulo.</p>
-</div>
-<div class="paragraph">
-<p>Note: These instructions assume that you are using prepackaged binaries.</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="configure-scons-for-mapnik"><a class="anchor" href="#configure-scons-for-mapnik"></a>Configure Scons for Mapnik</h4>
-<div class="paragraph">
-<p>To configure Mapnik to run with GeoWave, there are a few SCons options which need to be configured.  Refer to the table below to get an idea for how these options would be configured on Ubuntu 14.04 LTS.</p>
-</div>
-<table class="tableblock frame-all grid-all spread">
-<colgroup>
-<col style="width: 50%;">
-<col style="width: 50%;">
-</colgroup>
-<thead>
 <tr>
-<th class="tableblock halign-left valign-top">Option</th>
-<th class="tableblock halign-left valign-top">Value</th>
+<td class="tableblock halign-left valign-top"><p class="tableblock">===</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Option</p></td>
 </tr>
-</thead>
-<tbody>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Value</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">GEOWAVE_RUNTIME_JAR</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">/path/to/geowave/geowave-jace.jar</p></td>
-</tr>
-<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">GEOWAVE_INCLUDES</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">/path/to/geowave/include</p></td>
-</tr>
-<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">GEOWAVE_LIBS</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">/path/to/geowave</p></td>
-</tr>
-<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">JAVA_INCLUDE_PATH</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">/usr/lib/jvm/java-7-oracle/include</p></td>
-</tr>
-<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">JAVA_INCLUDE_PATH2</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">/usr/lib/jvm/java-7-oracle/include/linux</p></td>
-</tr>
-<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">JAVA_JVM_LIB</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">/usr/lib/jvm/java-7-oracle/jre/lib/amd64/server</p></td>
 </tr>
-</tbody>
-</table>
-<div class="paragraph">
-<p>Note: As Boost is a Mapnik dependency, it should already be included.</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="build-mapnik"><a class="anchor" href="#build-mapnik"></a>Build Mapnik</h4>
-<div class="paragraph">
-<p>Once SCons is configured, you can proceed with your normal Mapnik build process.</p>
-</div>
-<div class="paragraph">
-<p>Last, but not least, you should ensure that the libraries specified above are available either via PATH or LD_LIBRARY_PATH.</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="mapnik-python-tests"><a class="anchor" href="#mapnik-python-tests"></a>Mapnik Python Tests</h4>
-<div class="paragraph">
-<p>In order to run the GeoWave integration test located in python-mapnik, you need to set environment variables defining the locations of the GeoWave runtime and ingest jars.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">$ export GEOWAVE_RUNTIME_JAR=/path/to/geowave/geowave-jace.jar
-$ export GEOWAVE_INGEST_JAR=/path/to/geowave/geowave-ingest.jar</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Note: The geowave-ingest jar included in the tarball only works for the geotools-vector format.</p>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="pdal-plugin-configuration"><a class="anchor" href="#pdal-plugin-configuration"></a>PDAL Plugin Configuration</h3>
-<div class="sect3">
-<h4 id="pdal"><a class="anchor" href="#pdal"></a>PDAL</h4>
-<div class="paragraph">
-<p>The Point Data Abstraction Library <a href="http://www.pdal.io/index.html">PDAL</a> is a BSD licensed library for translating
-and manipulating point cloud data of various formats.  GeoWave is supported as a plugin for PDAL for both reading
-and writing data to Accumulo.</p>
-</div>
-<div class="paragraph">
-<p>Note: These instructions assume that you are using prepackaged binaries.</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="configure-cmake-for-pdal"><a class="anchor" href="#configure-cmake-for-pdal"></a>Configure CMake for PDAL</h4>
-<div class="paragraph">
-<p>To configure PDAL to run with GeoWave, there are a few CMake options which need to be configured.  While some of the options (namely the JAVA options) may configure automatically, some will need to be set manually.  Refer to the table below to get an idea for how these options would be configured on Ubuntu 14.04 LTS.</p>
-</div>
-<table class="tableblock frame-all grid-all spread">
-<colgroup>
-<col style="width: 33%;">
-<col style="width: 33%;">
-<col style="width: 33%;">
-</colgroup>
-<thead>
 <tr>
-<th class="tableblock halign-left valign-top">Option</th>
-<th class="tableblock halign-left valign-top">Value</th>
-<th class="tableblock halign-left valign-top">Automatically Configured?</th>
+<td class="tableblock halign-left valign-top"><p class="tableblock">/usr/lib/jvm/java-7-oracle/jre/lib/amd64/server</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">===
+</p><p class="tableblock">Note: As Boost is a Mapnik dependency, it should already be included.
+</p><p class="tableblock">==== Build Mapnik
+</p><p class="tableblock">Once SCons is configured, you can proceed with your normal Mapnik build process.
+</p><p class="tableblock">Last, but not least, you should ensure that the libraries specified above are available either via PATH or LD_LIBRARY_PATH.
+</p><p class="tableblock">==== Mapnik Python Tests
+</p><p class="tableblock">In order to run the GeoWave integration test located in python-mapnik, you need to set environment variables defining the locations of the GeoWave runtime and ingest jars.
+</p><p class="tableblock">[source, bash]
+----
+$ export GEOWAVE_RUNTIME_JAR=/path/to/geowave/geowave-jace.jar
+$ export GEOWAVE_INGEST_JAR=/path/to/geowave/geowave-ingest.jar
+----
+</p><p class="tableblock">Note: The geowave-ingest jar included in the tarball only works for the geotools-vector format.
+</p><p class="tableblock">=== PDAL Plugin Configuration
+</p><p class="tableblock">==== PDAL
+</p><p class="tableblock">The Point Data Abstraction Library <a href="http://www.pdal.io/index.html">PDAL</a> is a BSD licensed library for translating
+and manipulating point cloud data of various formats.  GeoWave is supported as a plugin for PDAL for both reading
+and writing data to Accumulo.
+</p><p class="tableblock">Note: These instructions assume that you are using prepackaged binaries.
+</p><p class="tableblock">==== Configure CMake for PDAL
+</p><p class="tableblock">To configure PDAL to run with GeoWave, there are a few CMake options which need to be configured.  While some of the options (namely the JAVA options) may configure automatically, some will need to be set manually.  Refer to the table below to get an idea for how these options would be configured on Ubuntu 14.04 LTS.
+</p><p class="tableblock">[cols="3*", options="header"]</p></td>
 </tr>
-</thead>
-<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">===</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Option</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Value</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Automatically Configured?</p></td>
+</tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">BUILD_PLUGIN_GEOWAVE</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">ON</p></td>
-<td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">GEOWAVE_RUNTIME_JAR</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">/path/to/geowave/geowave-jace.jar</p></td>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">JACE_INCLUDE_DIR</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">/path/to/geowave/include</p></td>
-<td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">JACE_LIBRARY</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">/path/to/geowave/libjace.so</p></td>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">JAVA_AWT_INCLUDE_PATH</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">/usr/lib/jvm/java-7-oracle/include</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">X</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">X</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">JAVA_INCLUDE_PATH</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">/usr/lib/jvm/java-7-oracle/include</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">X</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">JAVA_INCLUDE_PATH2</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">/usr/lib/jvm/java-7-oracle/include/linux</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">X</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">X</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">JAVA_AWT_LIBRARY</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">/usr/lib/jvm/java-7-oracle/jre/lib/amd64/libjawt.so</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">X</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">JAVA_JVM_LIBRARY</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">/usr/lib/jvm/java-7-oracle/jre/lib/amd64/server/libjvm.so</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">X</p></td>
 </tr>
-</tbody>
-</table>
-<div class="paragraph">
-<p>Note: As Boost is a PDAL dependency, it should already be included.</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="build-pdal"><a class="anchor" href="#build-pdal"></a>Build PDAL</h4>
-<div class="paragraph">
-<p>Once CMake is configured, you can proceed with your normal PDAL build process.</p>
-</div>
-<div class="paragraph">
-<p>Last, but not least, when building shared libraries you should ensure that the libraries specified above are available via PATH or LD_LIBRARY_PATH.</p>
-</div>
-<div class="paragraph">
-<p>Within the PDAL documentation, you can see examples of how GeoWave can be used as both a
-<a href="http://www.pdal.io/stages/readers.geowave.html">reader</a> and <a href="http://www.pdal.io/stages/writers.geowave.html">writer</a>.</p>
-</div>
-<div style="page-break-after: always;"></div>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="documentation-2"><a class="anchor" href="#documentation-2"></a>Documentation</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="overview-7"><a class="anchor" href="#overview-7"></a>Overview</h3>
-<div class="paragraph">
-<p>The documentation is writen in <a href="http://en.wikipedia.org/wiki/AsciiDoc" target="_blank">AsciiDoc</a> which is a plain-text markup format that
-can be created using any text editor and read “as-is”, or rendered to several other formats like HTML, PDF or EPUB.</p>
-</div>
-<div class="paragraph">
-<p>Helpful Links:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><a href="http://asciidoctor.org/docs/what-is-asciidoc/" target="_blank">What is Asciidoc?</a></p>
-</li>
-<li>
-<p><a href="http://asciidoctor.org/docs/asciidoc-writers-guide/" target="_blank">Writer&#8217;s Guide</a></p>
-</li>
-<li>
-<p><a href="http://asciidoctor.org/docs/asciidoc-syntax-quick-reference/" target="_blank">AsciiDoc Syntax Reference</a></p>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect2">
-<h3 id="ordering"><a class="anchor" href="#ordering"></a>Ordering</h3>
-<div class="paragraph">
-<p>All of the content stored in the <code>docs/content</code> directory of this project will be rendered into a single web page with
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">===
+</p><p class="tableblock">Note: As Boost is a PDAL dependency, it should already be included.
+</p><p class="tableblock">==== Build PDAL
+</p><p class="tableblock">Once CMake is configured, you can proceed with your normal PDAL build process.
+</p><p class="tableblock">Last, but not least, when building shared libraries you should ensure that the libraries specified above are available via PATH or LD_LIBRARY_PATH.
+</p><p class="tableblock">Within the PDAL documentation, you can see examples of how GeoWave can be used as both a
+<a href="http://www.pdal.io/stages/readers.geowave.html">reader</a> and <a href="http://www.pdal.io/stages/writers.geowave.html">writer</a>.
+<a id="documentation"></a>
+&lt;&lt;&lt;
+== Documentation
+</p><p class="tableblock">=== Overview
+</p><p class="tableblock">The documentation is writen in <a href="http://en.wikipedia.org/wiki/AsciiDoc" target="_blank">AsciiDoc</a> which is a plain-text markup format that
+can be created using any text editor and read “as-is”, or rendered to several other formats like HTML, PDF or EPUB.
+</p><p class="tableblock">Helpful Links:
+</p><p class="tableblock">* <a href="http://asciidoctor.org/docs/what-is-asciidoc/" target="_blank">What is Asciidoc?</a>
+* <a href="http://asciidoctor.org/docs/asciidoc-writers-guide/" target="_blank">Writer&#8217;s Guide</a>
+* <a href="http://asciidoctor.org/docs/asciidoc-syntax-quick-reference/" target="_blank">AsciiDoc Syntax Reference</a>
+</p><p class="tableblock"></p><p class="tableblock">=== Ordering
+</p><p class="tableblock">All of the content stored in the <code>docs/content</code> directory of this project will be rendered into a single web page with
 an auto-generated table of contents and a PDF. The order in which the pages appear is determined by the sort order of
 the file names given to the ASCIIDOC files in the <code>docs/content</code> directory so a numeric prefix has been given to each
 file. Gaps can be left in between the numbers (only the sort order is important) to allow for future edits without having
-to renumber other documents that will appear after the new content.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="preview"><a class="anchor" href="#preview"></a>Preview</h3>
-<div class="paragraph">
-<p>To preview markup as HTML before making a commit there are plugins available various text editors and IDEs that
+to renumber other documents that will appear after the new content.
+</p><p class="tableblock">=== Preview
+</p><p class="tableblock">To preview markup as HTML before making a commit there are plugins available various text editors and IDEs that
 can be used while editing. If your preferred text editor has no plugin available there&#8217;s a
 <a href="https://github.com/asciidoctor/asciidoctor-firefox-addon" target="_blank">Firefox AsciiDoc Plugin</a> available which allows for previewing
-with a quick refresh of the browser.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="transformation"><a class="anchor" href="#transformation"></a>Transformation</h3>
-<div class="paragraph">
-<p>To preview the entire finished page web page or see the generated PDF you&#8217;ll need to run the transformation process.</p>
-</div>
-<div class="listingblock">
-<div class="title">Generate Documentation</div>
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash"> cd geowave
- mvn -P docs -pl docs install <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
-</div>
-</div>
-<div class="colist arabic">
-<table>
-<tr>
-<td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>-pl docs = Process <em>only</em> the docs module. Skips the javadoc generation step.</td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p>The source documents will be transformed and will be available for inspection in the <code>geowave/target/site/</code> directory.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="site"><a class="anchor" href="#site"></a>Site</h3>
-<div class="paragraph">
-<p>To build all the content used for the <a href="https://ngageoint.github.io/geowave/">GeoWave website</a> use the following command. The
-entire site, including both docs and javadocs, will be available for inspection in the <code>geowave/target/site/</code> directory.</p>
-</div>
-<div class="listingblock">
-<div class="title">Generate Website</div>
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">cd geowave
-mvn -P docs install</code></pre>
-</div>
-</div>
-<div style="page-break-after: always;"></div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="puppet-2"><a class="anchor" href="#puppet-2"></a>Puppet</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="overview-8"><a class="anchor" href="#overview-8"></a>Overview</h3>
-<div class="paragraph">
-<p>A GeoWave <a href="http://puppetlabs.com/" target="_blank">Puppet module</a> has been provided as part of both the tar.gz archive bundle and as an
+with a quick refresh of the browser.
+</p><p class="tableblock"></p><p class="tableblock">=== Transformation
+</p><p class="tableblock">To preview the entire finished page web page or see the generated PDF you&#8217;ll need to run the transformation process.
+</p><p class="tableblock">[source, bash]
+.Generate Documentation
+----
+ cd geowave
+ mvn -P docs -pl docs install &lt;1&gt;
+----
+&lt;1&gt; -pl docs = Process <em>only</em> the docs module. Skips the javadoc generation step.
+</p><p class="tableblock">The source documents will be transformed and will be available for inspection in the <code>geowave/target/site/</code> directory.
+</p><p class="tableblock">=== Site
+</p><p class="tableblock">To build all the content used for the <a href="https://ngageoint.github.io/geowave/">GeoWave website</a> use the following command. The
+entire site, including both docs and javadocs, will be available for inspection in the <code>geowave/target/site/</code> directory.
+</p><p class="tableblock">[source, bash]
+.Generate Website
+----
+cd geowave
+mvn -P docs install
+----
+</p><p class="tableblock"><a id="puppet"></a>
+&lt;&lt;&lt;
+== Puppet
+</p><p class="tableblock">=== Overview
+</p><p class="tableblock">A GeoWave <a href="http://puppetlabs.com/" target="_blank">Puppet module</a> has been provided as part of both the tar.gz archive bundle and as an
 RPM. This module can be used to install the various GeoWave services onto separate nodes in a cluster or all onto a single
-node for development.</p>
-</div>
-<div class="paragraph">
-<p>There are a couple of different RPM repo settings that may need setting. As the repo is disabled by default to avoid picking
+node for development.
+</p><p class="tableblock">There are a couple of different RPM repo settings that may need setting. As the repo is disabled by default to avoid picking
 up new Accumulo iterator jars without coordinating a service restart you&#8217;ll have to enable and then disable in consecutive
-Puppet runs to do the initial install.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="options"><a class="anchor" href="#options"></a>Options</h3>
-<div class="dlist">
-<dl>
-<dt class="hdlist1">geowave_version</dt>
-<dd>
-<p>The desired version of GeoWave to install, ex: '0.8.7' we support concurrent installs but only one will be active at a time</p>
-</dd>
-<dt class="hdlist1">hadoop_vendor_version</dt>
-<dd>
-<p>The Hadoop framework vendor and version against which GeoWave was built. Examples would be cdh5 or hdp2, check the
-<a href="http://ngageoint.github.io/geowave/packages.html" target="_blank">available packages</a> site for currently supported hadoop distributions.</p>
-</dd>
-<dt class="hdlist1">install_accumulo</dt>
-<dd>
-<p>Install the GeoWave Accumulo Iterator on this node and upload it into HDFS. This node must have a working HDFS client.</p>
-</dd>
-<dt class="hdlist1">install_app</dt>
-<dd>
-<p>Install the GeoWave ingest utility on this node. This node must have a working HDFS client.</p>
-</dd>
-<dt class="hdlist1">install_app_server</dt>
-<dd>
-<p>Install Jetty with Geoserver and GeoWave plugin on this node.</p>
-</dd>
-<dt class="hdlist1">http_port</dt>
-<dd>
-<p>The port on which the Jetty application server will run, defaults to 8080.</p>
-</dd>
-<dt class="hdlist1">repo_base_url</dt>
-<dd>
-<p>Used with the optional geowave::repo class to point the local package management system at a source for GeoWave RPMs.
-The default location is <a href="http://s3.amazonaws.com/geowave-rpms/release/noarch/" class="bare">http://s3.amazonaws.com/geowave-rpms/release/noarch/</a></p>
-</dd>
-<dt class="hdlist1">repo_enabled</dt>
-<dd>
-<p>To pick up an updated Accumulo iterator you&#8217;ll need to restart the Accumulo service. As we don&#8217;t want to pick up new
-RPMs with something like a yum-cron job without coordinating a restart so the repo is disabled by default.</p>
-</dd>
-<dt class="hdlist1">repo_refresh_md</dt>
-<dd>
-<p>The number of seconds before checking for new RPMs. On a production system the default of every 6 hours should be sufficient
+Puppet runs to do the initial install.
+</p><p class="tableblock">=== Options
+</p><p class="tableblock">geowave_version::
+The desired version of GeoWave to install, ex: '0.8.7' we support concurrent installs but only one will be active at a time
+</p><p class="tableblock">hadoop_vendor_version::
+The Hadoop framework vendor and version against which GeoWave was built. Examples would be cdh5 or hdp2, check the
+<a href="http://ngageoint.github.io/geowave/packages.html" target="_blank">available packages</a> site for currently supported hadoop distributions.
+</p><p class="tableblock">install_accumulo::
+Install the GeoWave Accumulo Iterator on this node and upload it into HDFS. This node must have a working HDFS client.
+</p><p class="tableblock">install_app::
+Install the GeoWave ingest utility on this node. This node must have a working HDFS client.
+</p><p class="tableblock">install_app_server::
+Install Jetty with Geoserver and GeoWave plugin on this node.
+</p><p class="tableblock">http_port::
+The port on which the Jetty application server will run, defaults to 8080.
+</p><p class="tableblock">repo_base_url::
+Used with the optional geowave::repo class to point the local package management system at a source for GeoWave RPMs.
+The default location is <a href="http://s3.amazonaws.com/geowave-rpms/release/noarch/" class="bare">http://s3.amazonaws.com/geowave-rpms/release/noarch/</a>
+</p><p class="tableblock">repo_enabled::
+To pick up an updated Accumulo iterator you&#8217;ll need to restart the Accumulo service. As we don&#8217;t want to pick up new
+RPMs with something like a yum-cron job without coordinating a restart so the repo is disabled by default.
+</p><p class="tableblock">repo_refresh_md::
+The number of seconds before checking for new RPMs. On a production system the default of every 6 hours should be sufficient
 but you can lower this down to 0 for a development system on which you wish to pick up new packages as soon as they are
-made available.</p>
-</dd>
-</dl>
-</div>
-</div>
-<div class="sect2">
-<h3 id="examples-2"><a class="anchor" href="#examples-2"></a>Examples</h3>
-<div class="sect3">
-<h4 id="development"><a class="anchor" href="#development"></a>Development</h4>
-<div class="paragraph">
-<p>Install everything on a one node development system, use the GeoWave Development RPM Repo and force a check for new RPMs
-with every pull (don&#8217;t use cached metadata)</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-ruby" data-lang="ruby"># Dev VM
+made available.
+</p><p class="tableblock">=== Examples
+</p><p class="tableblock">==== Development
+Install everything on a one node development system, use the GeoWave Development RPM Repo and force a check for new RPMs
+with every pull (don&#8217;t use cached metadata)
+</p><p class="tableblock">[source, ruby]
+----
+# Dev VM
 class { 'geowave::repo':
-  repo_enabled    =&gt; 1,
-  repo_refresh_md =&gt; 0,
-} -&gt;
+  repo_enabled    &#8658; 1,
+  repo_refresh_md &#8658; 0,
+} &#8594;
 class { 'geowave':
-  geowave_version       =&gt; '0.8.7',
-  hadoop_vendor_version =&gt; 'cdh5',
-  install_accumulo      =&gt; true,
-  install_app           =&gt; true,
-  install_app_server    =&gt; true,
-}</code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="clustered"><a class="anchor" href="#clustered"></a>Clustered</h3>
-<div class="paragraph">
-<p>Run the application server on a different node, use a locally maintained rpm repo vs. the one available on the Internet and
-run the app server on an alternate port so as not to conflict with another service running on that host.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-ruby" data-lang="ruby"># Master Node
+  geowave_version       &#8658; '0.8.7',
+  hadoop_vendor_version &#8658; 'cdh5',
+  install_accumulo      &#8658; true,
+  install_app           &#8658; true,
+  install_app_server    &#8658; true,
+}
+----
+</p><p class="tableblock">=== Clustered
+Run the application server on a different node, use a locally maintained rpm repo vs. the one available on the Internet and
+run the app server on an alternate port so as not to conflict with another service running on that host.
+[source, ruby]
+----
+# Master Node
 node 'c1-master' {
   class { 'geowave::repo':
-    repo_base_url   =&gt; 'http://my-local-rpm-repo/geowave-rpms/dev/noarch/',
-    repo_enabled    =&gt; 1,
-  } -&gt;
+    repo_base_url   &#8658; 'http://my-local-rpm-repo/geowave-rpms/dev/noarch/',
+    repo_enabled    &#8658; 1,
+  } &#8594;
   class { 'geowave':
-    geowave_version       =&gt; '0.8.7',
-    hadoop_vendor_version =&gt; 'cdh5',
-    install_accumulo      =&gt; true,
-    install_app           =&gt; true,
+    geowave_version       &#8658; '0.8.7',
+    hadoop_vendor_version &#8658; 'cdh5',
+    install_accumulo      &#8658; true,
+    install_app           &#8658; true,
   }
 }
-
-# App server node
+</p><p class="tableblock"># App server node
 node 'c1-app-01' {
   class { 'geowave::repo':
-    repo_base_url   =&gt; 'http://my-local-rpm-repo/geowave-rpms/dev/noarch/',
-    repo_enabled    =&gt; 1,
-  } -&gt;
+    repo_base_url   &#8658; 'http://my-local-rpm-repo/geowave-rpms/dev/noarch/',
+    repo_enabled    &#8658; 1,
+  } &#8594;
   class { 'geowave':
-    geowave_version       =&gt; '0.8.7',
-    hadoop_vendor_version =&gt; 'cdh5',
-    install_app_server    =&gt; true,
-    http_port             =&gt; '8888',
+    geowave_version       &#8658; '0.8.7',
+    hadoop_vendor_version &#8658; 'cdh5',
+    install_app_server    &#8658; true,
+    http_port             &#8658; '8888',
   }
-}</code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="puppet-script-management"><a class="anchor" href="#puppet-script-management"></a>Puppet script management</h3>
-<div class="paragraph">
-<p>As mentioned in the overview the scripts are available from within the <a href="http://ngageoint.github.io/geowave/packages.html" target="_blank">GeoWave source tar bundle</a>
-(Search for gz to filter the list) or you could use the RPM package to install and pick up future updates on your puppet server.</p>
-</div>
-<div class="sect3">
-<h4 id="source-archive"><a class="anchor" href="#source-archive"></a>Source Archive</h4>
-<div class="paragraph">
-<p>Unzip the source archive, locate puppet-scripts.tar.gz and manage the scripts yourself on your Puppet Server</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="rpm"><a class="anchor" href="#rpm"></a>RPM</h4>
-<div class="paragraph">
-<p>There&#8217;s a bit of a boostrap issue when first configuring the Puppet server to use the geowave puppet RPM as yum won&#8217;t know
+}
+----
+</p><p class="tableblock">=== Puppet script management
+</p><p class="tableblock">As mentioned in the overview the scripts are available from within the <a href="http://ngageoint.github.io/geowave/packages.html" target="_blank">GeoWave source tar bundle</a>
+(Search for gz to filter the list) or you could use the RPM package to install and pick up future updates on your puppet server.
+</p><p class="tableblock">==== Source Archive
+</p><p class="tableblock">Unzip the source archive, locate puppet-scripts.tar.gz and manage the scripts yourself on your Puppet Server
+</p><p class="tableblock">==== RPM
+</p><p class="tableblock">There&#8217;s a bit of a boostrap issue when first configuring the Puppet server to use the geowave puppet RPM as yum won&#8217;t know
 about the rpm repo and the GeoWave Repo Puppet class hasn&#8217;t been installed yet. There is an RPM available that will set
 up the yum repo config after which you should install geowave-cdh-puppet manually and proceed to configure GeoWave on the
-rest of the cluster using Puppet.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">rpm -Uvh http://s3.amazonaws.com/geowave-rpms/release/noarch/geowave-repo-1.0-3.noarch.rpm
-yum --enablerepo=geowave install geowave-puppet</code></pre>
-</div>
-</div>
-<div style="page-break-after: always;"></div>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="appendices-2"><a class="anchor" href="#appendices-2"></a>Appendices</h2>
-<div class="sectionbody">
-<div style="page-break-after: always;"></div>
-<div class="sect2">
-<h3 id="version"><a class="anchor" href="#version"></a>Version</h3>
-<div class="paragraph">
-<p>This documentation was generated for GeoWave version 0.8.8-SNAPSHOT from commit 421c42adc2ef4fd34f15a2a9259989b66e30c431.</p>
-</div>
-<div style="page-break-after: always;"></div>
-</div>
-<div class="sect2">
-<h3 id="topics-in-need-of-documentation"><a class="anchor" href="#topics-in-need-of-documentation"></a>Topics in need of documentation</h3>
-<div class="ulist">
-<ul>
-<li>
-<p>Ingest Examples</p>
-</li>
-<li>
-<p>Query Iterators</p>
-</li>
-<li>
-<p>Query CQL</p>
-</li>
-<li>
-<p>MapReduce Input Format</p>
-</li>
-<li>
-<p>Analytics - Kernel Density</p>
-</li>
-<li>
-<p>Analytics - K-Means Clustering</p>
-</li>
-<li>
-<p>Examples - Shapefile</p>
-</li>
-<li>
-<p>Examples - OSM GPX Data</p>
-</li>
-<li>
-<p>Examples - OSM Feature Data</p>
-</li>
-<li>
-<p>Index Tuning</p>
-</li>
-<li>
-<p>Supported Types</p>
-</li>
-<li>
-<p>Editing from GitHub</p>
-</li>
-</ul>
+rest of the cluster using Puppet.
+</p><p class="tableblock">[source, bash]
+----
+rpm -Uvh <a href="http://s3.amazonaws.com/geowave-rpms/release/noarch/geowave-repo-1.0-3.noarch.rpm" class="bare">http://s3.amazonaws.com/geowave-rpms/release/noarch/geowave-repo-1.0-3.noarch.rpm</a>
+yum --enablerepo=geowave install geowave-puppet
+----
+<a id="appendices"></a>
+&lt;&lt;&lt;
+== Appendices
+</p><p class="tableblock"><a id="version-appendix"></a>
+[appendix]
+&lt;&lt;&lt;
+=== Version
+</p><p class="tableblock">This documentation was generated for GeoWave version 0.8.8-SNAPSHOT from commit 8c0e977d0d21e17688c66ae975219a0996c95b24.
+</p><p class="tableblock"><a id="todo-appendix"></a>
+[appendix]
+&lt;&lt;&lt;
+=== Topics in need of documentation
+</p><p class="tableblock">* Ingest Examples
+* Query Iterators
+* Query CQL
+* MapReduce Input Format
+* Analytics - Kernel Density
+* Analytics - K-Means Clustering
+* Examples - Shapefile
+* Examples - OSM GPX Data
+* Examples - OSM Feature Data
+* Index Tuning
+* Supported Types
+* Editing from GitHub</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 </div>
@@ -3984,7 +3622,7 @@ yum --enablerepo=geowave install geowave-puppet</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-07-10 21:28:53 UTC
+Last updated 2015-07-15 20:59:23 UTC
 </div>
 </div>
 </body>

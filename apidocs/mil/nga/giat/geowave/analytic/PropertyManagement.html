@@ -163,6 +163,10 @@ implements <a href="../../../../../mil/nga/giat/geowave/analytic/ConfigurationWr
 <td class="colFirst"><code>static class&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.QueryConverter.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement.QueryConverter</a></strong></code>&nbsp;</td>
 </tr>
+<tr class="altColor">
+<td class="colFirst"><code>static class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.QueryOptionsConverter.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement.QueryOptionsConverter</a></strong></code>&nbsp;</td>
+</tr>
 </table>
 </li>
 </ul>
@@ -210,6 +214,9 @@ implements <a href="../../../../../mil/nga/giat/geowave/analytic/ConfigurationWr
                   <a href="../../../../../mil/nga/giat/geowave/analytic/param/ParameterEnum.html" title="interface in mil.nga.giat.geowave.analytic.param">ParameterEnum</a>[]&nbsp;names,
                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>[]&nbsp;values)</code>&nbsp;</td>
 </tr>
+<tr class="rowColor">
+<td class="colOne"><code><strong><a href="../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html#PropertyManagement(mil.nga.giat.geowave.analytic.PropertyManagement)">PropertyManagement</a></strong>(<a href="../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a>&nbsp;pm)</code>&nbsp;</td>
+</tr>
 </table>
 </li>
 </ul>
@@ -245,104 +252,112 @@ implements <a href="../../../../../mil/nga/giat/geowave/analytic/ConfigurationWr
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html#fromInput(java.io.InputStream)">fromInput</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/InputStream.html?is-external=true" title="class or interface in java.io">InputStream</a>&nbsp;is)</code>&nbsp;</td>
+<td class="colLast"><code><strong><a href="../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html#dump()">dump</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html#fromProperties(java.util.Properties)">fromProperties</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Properties.html?is-external=true" title="class or interface in java.util">Properties</a>&nbsp;properties)</code>&nbsp;</td>
+<td class="colLast"><code><strong><a href="../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html#fromInput(java.io.InputStream)">fromInput</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/InputStream.html?is-external=true" title="class or interface in java.io">InputStream</a>&nbsp;is)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html#fromProperties(java.util.Properties)">fromProperties</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Properties.html?is-external=true" title="class or interface in java.util">Properties</a>&nbsp;properties)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html#get(mil.nga.giat.geowave.analytic.param.ParameterEnum)">get</a></strong>(<a href="../../../../../mil/nga/giat/geowave/analytic/param/ParameterEnum.html" title="interface in mil.nga.giat.geowave.analytic.param">ParameterEnum</a>&nbsp;propertyName)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>byte[]</code></td>
 <td class="colLast"><code><strong><a href="../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html#getBytes(java.lang.Enum,%20java.lang.Class)">getBytes</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Enum.html?is-external=true" title="class or interface in java.lang">Enum</a>&lt;?&gt;&nbsp;property,
         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;scope)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;T</code></td>
 <td class="colLast"><code><strong><a href="../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html#getClassInstance(mil.nga.giat.geowave.analytic.param.ParameterEnum,%20java.lang.Class,%20java.lang.Class)">getClassInstance</a></strong>(<a href="../../../../../mil/nga/giat/geowave/analytic/param/ParameterEnum.html" title="interface in mil.nga.giat.geowave.analytic.param">ParameterEnum</a>&nbsp;property,
                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;T&gt;&nbsp;iface,
                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;defaultClass)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>double</code></td>
 <td class="colLast"><code><strong><a href="../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html#getDouble(java.lang.Enum,%20java.lang.Class,%20double)">getDouble</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Enum.html?is-external=true" title="class or interface in java.lang">Enum</a>&lt;?&gt;&nbsp;property,
          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;scope,
          double&nbsp;defaultValue)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;T</code></td>
 <td class="colLast"><code><strong><a href="../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html#getInstance(java.lang.Enum,%20java.lang.Class,%20java.lang.Class,%20java.lang.Class)">getInstance</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Enum.html?is-external=true" title="class or interface in java.lang">Enum</a>&lt;?&gt;&nbsp;property,
            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;scope,
            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;T&gt;&nbsp;iface,
            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;? extends T&gt;&nbsp;defaultValue)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><strong><a href="../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html#getInt(java.lang.Enum,%20java.lang.Class,%20int)">getInt</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Enum.html?is-external=true" title="class or interface in java.lang">Enum</a>&lt;?&gt;&nbsp;property,
       <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;scope,
       int&nbsp;defaultValue)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html#getProperty(mil.nga.giat.geowave.analytic.param.ParameterEnum)">getProperty</a></strong>(<a href="../../../../../mil/nga/giat/geowave/analytic/param/ParameterEnum.html" title="interface in mil.nga.giat.geowave.analytic.param">ParameterEnum</a>&nbsp;property)</code>
 <div class="block">Returns the value as, without conversion from the properties.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;T</code></td>
 <td class="colLast"><code><strong><a href="../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html#getProperty(mil.nga.giat.geowave.analytic.param.ParameterEnum,%20mil.nga.giat.geowave.analytic.PropertyManagement.PropertyConverter)">getProperty</a></strong>(<a href="../../../../../mil/nga/giat/geowave/analytic/param/ParameterEnum.html" title="interface in mil.nga.giat.geowave.analytic.param">ParameterEnum</a>&nbsp;property,
            <a href="../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.PropertyConverter.html" title="interface in mil.nga.giat.geowave.analytic">PropertyManagement.PropertyConverter</a>&lt;T&gt;&nbsp;converter)</code>
 <div class="block">Returns the value after conversion.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html#getPropertyAsBoolean(mil.nga.giat.geowave.analytic.param.ParameterEnum,%20java.lang.Boolean)">getPropertyAsBoolean</a></strong>(<a href="../../../../../mil/nga/giat/geowave/analytic/param/ParameterEnum.html" title="interface in mil.nga.giat.geowave.analytic.param">ParameterEnum</a>&nbsp;property,
                     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;defaultValue)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>byte[]</code></td>
 <td class="colLast"><code><strong><a href="../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html#getPropertyAsBytes(mil.nga.giat.geowave.analytic.param.ParameterEnum)">getPropertyAsBytes</a></strong>(<a href="../../../../../mil/nga/giat/geowave/analytic/param/ParameterEnum.html" title="interface in mil.nga.giat.geowave.analytic.param">ParameterEnum</a>&nbsp;property)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html#getPropertyAsClass(mil.nga.giat.geowave.analytic.param.ParameterEnum)">getPropertyAsClass</a></strong>(<a href="../../../../../mil/nga/giat/geowave/analytic/param/ParameterEnum.html" title="interface in mil.nga.giat.geowave.analytic.param">ParameterEnum</a>&nbsp;property)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;? extends T&gt;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html#getPropertyAsClass(mil.nga.giat.geowave.analytic.param.ParameterEnum,%20java.lang.Class,%20java.lang.Class)">getPropertyAsClass</a></strong>(<a href="../../../../../mil/nga/giat/geowave/analytic/param/ParameterEnum.html" title="interface in mil.nga.giat.geowave.analytic.param">ParameterEnum</a>&nbsp;property,
                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;? extends T&gt;&nbsp;iface,
                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;? extends T&gt;&nbsp;defaultClass)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;T&gt;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html#getPropertyAsClass(mil.nga.giat.geowave.analytic.param.ParameterEnum,%20java.lang.Class)">getPropertyAsClass</a></strong>(<a href="../../../../../mil/nga/giat/geowave/analytic/param/ParameterEnum.html" title="interface in mil.nga.giat.geowave.analytic.param">ParameterEnum</a>&nbsp;property,
                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;T&gt;&nbsp;iface)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html#getPropertyAsDouble(mil.nga.giat.geowave.analytic.param.ParameterEnum,%20double)">getPropertyAsDouble</a></strong>(<a href="../../../../../mil/nga/giat/geowave/analytic/param/ParameterEnum.html" title="interface in mil.nga.giat.geowave.analytic.param">ParameterEnum</a>&nbsp;property,
                    double&nbsp;defaultValue)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html#getPropertyAsInt(mil.nga.giat.geowave.analytic.param.ParameterEnum,%20int)">getPropertyAsInt</a></strong>(<a href="../../../../../mil/nga/giat/geowave/analytic/param/ParameterEnum.html" title="interface in mil.nga.giat.geowave.analytic.param">ParameterEnum</a>&nbsp;property,
                 int&nbsp;defaultValue)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>org.apache.hadoop.fs.Path</code></td>
 <td class="colLast"><code><strong><a href="../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html#getPropertyAsPath(mil.nga.giat.geowave.analytic.param.ParameterEnum)">getPropertyAsPath</a></strong>(<a href="../../../../../mil/nga/giat/geowave/analytic/param/ParameterEnum.html" title="interface in mil.nga.giat.geowave.analytic.param">ParameterEnum</a>&nbsp;property)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../mil/nga/giat/geowave/core/index/Persistable.html" title="interface in mil.nga.giat.geowave.core.index">Persistable</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html#getPropertyAsPersistable(mil.nga.giat.geowave.analytic.param.ParameterEnum)">getPropertyAsPersistable</a></strong>(<a href="../../../../../mil/nga/giat/geowave/analytic/param/ParameterEnum.html" title="interface in mil.nga.giat.geowave.analytic.param">ParameterEnum</a>&nbsp;property)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../mil/nga/giat/geowave/core/store/query/DistributableQuery.html" title="interface in mil.nga.giat.geowave.core.store.query">DistributableQuery</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html#getPropertyAsQuery(mil.nga.giat.geowave.analytic.param.ParameterEnum)">getPropertyAsQuery</a></strong>(<a href="../../../../../mil/nga/giat/geowave/analytic/param/ParameterEnum.html" title="interface in mil.nga.giat.geowave.analytic.param">ParameterEnum</a>&nbsp;property)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../mil/nga/giat/geowave/core/store/query/QueryOptions.html" title="class in mil.nga.giat.geowave.core.store.query">QueryOptions</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html#getPropertyAsQueryOptions(mil.nga.giat.geowave.analytic.param.ParameterEnum)">getPropertyAsQueryOptions</a></strong>(<a href="../../../../../mil/nga/giat/geowave/analytic/param/ParameterEnum.html" title="interface in mil.nga.giat.geowave.analytic.param">ParameterEnum</a>&nbsp;property)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../mil/nga/giat/geowave/core/index/sfc/data/NumericRange.html" title="class in mil.nga.giat.geowave.core.index.sfc.data">NumericRange</a></code></td>
@@ -483,11 +498,20 @@ implements <a href="../../../../../mil/nga/giat/geowave/analytic/ConfigurationWr
 <a name="PropertyManagement(mil.nga.giat.geowave.analytic.param.ParameterEnum[], java.lang.Object[])">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>PropertyManagement</h4>
 <pre>public&nbsp;PropertyManagement(<a href="../../../../../mil/nga/giat/geowave/analytic/param/ParameterEnum.html" title="interface in mil.nga.giat.geowave.analytic.param">ParameterEnum</a>[]&nbsp;names,
                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>[]&nbsp;values)</pre>
+</li>
+</ul>
+<a name="PropertyManagement(mil.nga.giat.geowave.analytic.PropertyManagement)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>PropertyManagement</h4>
+<pre>public&nbsp;PropertyManagement(<a href="../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a>&nbsp;pm)</pre>
 </li>
 </ul>
 </li>
@@ -744,6 +768,18 @@ implements <a href="../../../../../mil/nga/giat/geowave/analytic/ConfigurationWr
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></code></dd></dl>
 </li>
 </ul>
+<a name="getPropertyAsQueryOptions(mil.nga.giat.geowave.analytic.param.ParameterEnum)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getPropertyAsQueryOptions</h4>
+<pre>public&nbsp;<a href="../../../../../mil/nga/giat/geowave/core/store/query/QueryOptions.html" title="class in mil.nga.giat.geowave.core.store.query">QueryOptions</a>&nbsp;getPropertyAsQueryOptions(<a href="../../../../../mil/nga/giat/geowave/analytic/param/ParameterEnum.html" title="interface in mil.nga.giat.geowave.analytic.param">ParameterEnum</a>&nbsp;property)
+                                       throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></pre>
+<dl><dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></code></dd></dl>
+</li>
+</ul>
 <a name="getPropertyAsPath(mil.nga.giat.geowave.analytic.param.ParameterEnum)">
 <!--   -->
 </a>
@@ -909,6 +945,15 @@ implements <a href="../../../../../mil/nga/giat/geowave/analytic/ConfigurationWr
               throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
 <dl><dt><span class="strong">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd></dl>
+</li>
+</ul>
+<a name="dump()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>dump</h4>
+<pre>public&nbsp;void&nbsp;dump()</pre>
 </li>
 </ul>
 <a name="fromInput(java.io.InputStream)">

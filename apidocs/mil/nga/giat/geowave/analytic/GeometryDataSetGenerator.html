@@ -36,7 +36,7 @@
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../mil/nga/giat/geowave/analytic/GeometryCalculations.html" title="class in mil.nga.giat.geowave.analytic"><span class="strong">Prev Class</span></a></li>
-<li><a href="../../../../../mil/nga/giat/geowave/analytic/GeoObjectDimensionValues.html" title="class in mil.nga.giat.geowave.analytic"><span class="strong">Next Class</span></a></li>
+<li><a href="../../../../../mil/nga/giat/geowave/analytic/GeometryDataSetGenerator.CurvedDensityDataGeneratorTool.html" title="class in mil.nga.giat.geowave.analytic"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../index.html?mil/nga/giat/geowave/analytic/GeometryDataSetGenerator.html" target="_top">Frames</a></li>
@@ -60,7 +60,7 @@
 <div>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
-<li>Nested&nbsp;|&nbsp;</li>
+<li><a href="#nested_class_summary">Nested</a>&nbsp;|&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method_summary">Method</a></li>
@@ -104,6 +104,25 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <div class="summary">
 <ul class="blockList">
 <li class="blockList">
+<!-- ======== NESTED CLASS SUMMARY ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="nested_class_summary">
+<!--   -->
+</a>
+<h3>Nested Class Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Nested Class Summary table, listing nested classes, and an explanation">
+<caption><span>Nested Classes</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Class and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../mil/nga/giat/geowave/analytic/GeometryDataSetGenerator.CurvedDensityDataGeneratorTool.html" title="class in mil.nga.giat.geowave.analytic">GeometryDataSetGenerator.CurvedDensityDataGeneratorTool</a></strong></code>&nbsp;</td>
+</tr>
+</table>
+</li>
+</ul>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
 <ul class="blockList">
 <li class="blockList"><a name="constructor_summary">
@@ -158,12 +177,22 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
                 double[]&nbsp;maxAxis)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../mil/nga/giat/geowave/analytic/GeometryDataSetGenerator.html#generatePointSet(com.vividsolutions.jts.geom.LineString,%20double,%20int)">generatePointSet</a></strong>(com.vividsolutions.jts.geom.LineString&nbsp;line,
+                double&nbsp;distanceFactor,
+                int&nbsp;points)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>com.vividsolutions.jts.geom.Geometry</code></td>
 <td class="colLast"><code><strong><a href="../../../../../mil/nga/giat/geowave/analytic/GeometryDataSetGenerator.html#getBoundingRegion()">getBoundingRegion</a></strong>()</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>org.opengis.feature.simple.SimpleFeature</code></td>
 <td class="colLast"><code><strong><a href="../../../../../mil/nga/giat/geowave/analytic/GeometryDataSetGenerator.html#getCorner()">getCorner</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>com.vividsolutions.jts.geom.GeometryFactory</code></td>
+<td class="colLast"><code><strong><a href="../../../../../mil/nga/giat/geowave/analytic/GeometryDataSetGenerator.html#getFactory()">getFactory</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
@@ -291,6 +320,17 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
                                                               int&nbsp;minSetSize)</pre>
 </li>
 </ul>
+<a name="generatePointSet(com.vividsolutions.jts.geom.LineString, double, int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>generatePointSet</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;generatePointSet(com.vividsolutions.jts.geom.LineString&nbsp;line,
+                                                              double&nbsp;distanceFactor,
+                                                              int&nbsp;points)</pre>
+</li>
+</ul>
 <a name="generatePointSet(double, double, int, int, double[], double[])">
 <!--   -->
 </a>
@@ -317,6 +357,15 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
                                                                   double[]&nbsp;maxAxis)</pre>
 </li>
 </ul>
+<a name="getFactory()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getFactory</h4>
+<pre>public&nbsp;com.vividsolutions.jts.geom.GeometryFactory&nbsp;getFactory()</pre>
+</li>
+</ul>
 <a name="main(java.lang.String[])">
 <!--   -->
 </a>
@@ -324,9 +373,9 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>main</h4>
 <pre>public static&nbsp;void&nbsp;main(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;args)
-                 throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+                 throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></pre>
 <dl><dt><span class="strong">Throws:</span></dt>
-<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd></dl>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></code></dd></dl>
 </li>
 </ul>
 </li>
@@ -356,7 +405,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../mil/nga/giat/geowave/analytic/GeometryCalculations.html" title="class in mil.nga.giat.geowave.analytic"><span class="strong">Prev Class</span></a></li>
-<li><a href="../../../../../mil/nga/giat/geowave/analytic/GeoObjectDimensionValues.html" title="class in mil.nga.giat.geowave.analytic"><span class="strong">Next Class</span></a></li>
+<li><a href="../../../../../mil/nga/giat/geowave/analytic/GeometryDataSetGenerator.CurvedDensityDataGeneratorTool.html" title="class in mil.nga.giat.geowave.analytic"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../index.html?mil/nga/giat/geowave/analytic/GeometryDataSetGenerator.html" target="_top">Frames</a></li>
@@ -380,7 +429,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <div>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
-<li>Nested&nbsp;|&nbsp;</li>
+<li><a href="#nested_class_summary">Nested</a>&nbsp;|&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method_summary">Method</a></li>

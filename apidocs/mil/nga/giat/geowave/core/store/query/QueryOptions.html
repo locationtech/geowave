@@ -93,14 +93,20 @@
 <div class="description">
 <ul class="blockList">
 <li class="blockList">
+<dl>
+<dt>All Implemented Interfaces:</dt>
+<dd><a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/index/Persistable.html" title="interface in mil.nga.giat.geowave.core.index">Persistable</a></dd>
+</dl>
 <hr>
 <br>
 <pre>public class <span class="strong">QueryOptions</span>
-extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></pre>
+extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
+implements <a href="../../../../../../../mil/nga/giat/geowave/core/index/Persistable.html" title="interface in mil.nga.giat.geowave.core.index">Persistable</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a></pre>
 <div class="block">Container object that encapsulates additional options to be applied to a
  <a href="../../../../../../../mil/nga/giat/geowave/core/store/query/Query.html" title="interface in mil.nga.giat.geowave.core.store.query"><code>Query</code></a></div>
 <dl><dt><span class="strong">Since:</span></dt>
-  <dd>0.8.7</dd></dl>
+  <dd>0.8.7</dd>
+<dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../../../serialized-form.html#mil.nga.giat.geowave.core.store.query.QueryOptions">Serialized Form</a></dd></dl>
 </li>
 </ul>
 </div>
@@ -119,7 +125,13 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
+<td class="colOne"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/QueryOptions.html#QueryOptions()">QueryOptions</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colOne"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/QueryOptions.html#QueryOptions(java.util.Collection)">QueryOptions</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;fieldIds)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colOne"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/QueryOptions.html#QueryOptions(java.lang.String)">QueryOptions</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldIds)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -137,12 +149,20 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/QueryOptions.html#fromBinary(byte[])">fromBinary</a></strong>(byte[]&nbsp;bytes)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/QueryOptions.html#getFieldIds()">getFieldIds</a></strong>()</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/QueryOptions.html#setFieldIds(java.util.Collection)">setFieldIds</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;fieldIds)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>byte[]</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/QueryOptions.html#toBinary()">toBinary</a></strong>()</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -169,11 +189,30 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <a name="QueryOptions(java.util.Collection)">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>QueryOptions</h4>
 <pre>public&nbsp;QueryOptions(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;fieldIds)</pre>
 <dl><dt><span class="strong">Parameters:</span></dt><dd><code>fieldIds</code> - the desired subset of fieldIds to be included in query results</dd></dl>
+</li>
+</ul>
+<a name="QueryOptions()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>QueryOptions</h4>
+<pre>public&nbsp;QueryOptions()</pre>
+</li>
+</ul>
+<a name="QueryOptions(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>QueryOptions</h4>
+<pre>public&nbsp;QueryOptions(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldIds)</pre>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>fieldIds</code> - comma-separated list of field IDS</dd></dl>
 </li>
 </ul>
 </li>
@@ -197,11 +236,37 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <a name="setFieldIds(java.util.Collection)">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>setFieldIds</h4>
 <pre>public&nbsp;void&nbsp;setFieldIds(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;fieldIds)</pre>
 <dl><dt><span class="strong">Parameters:</span></dt><dd><code>fieldIds</code> - the desired subset of fieldIds to be included in query results</dd></dl>
+</li>
+</ul>
+<a name="toBinary()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>toBinary</h4>
+<pre>public&nbsp;byte[]&nbsp;toBinary()</pre>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/index/Persistable.html#toBinary()">toBinary</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/index/Persistable.html" title="interface in mil.nga.giat.geowave.core.index">Persistable</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="fromBinary(byte[])">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>fromBinary</h4>
+<pre>public&nbsp;void&nbsp;fromBinary(byte[]&nbsp;bytes)</pre>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/index/Persistable.html#fromBinary(byte[])">fromBinary</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/index/Persistable.html" title="interface in mil.nga.giat.geowave.core.index">Persistable</a></code></dd>
+</dl>
 </li>
 </ul>
 </li>

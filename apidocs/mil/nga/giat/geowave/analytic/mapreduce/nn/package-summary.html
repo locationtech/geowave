@@ -67,6 +67,36 @@
 <div class="contentContainer">
 <ul class="blockList">
 <li class="blockList">
+<table class="packageSummary" border="0" cellpadding="3" cellspacing="0" summary="Interface Summary table, listing interfaces, and an explanation">
+<caption><span>Interface Summary</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Interface</th>
+<th class="colLast" scope="col">Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/DistanceProfileGenerateFn.html" title="interface in mil.nga.giat.geowave.analytic.mapreduce.nn">DistanceProfileGenerateFn</a>&lt;CONTEXT,ITEM&gt;</td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NeighborList.html" title="interface in mil.nga.giat.geowave.analytic.mapreduce.nn">NeighborList</a>&lt;NNTYPE&gt;</td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NeighborListFactory.html" title="interface in mil.nga.giat.geowave.analytic.mapreduce.nn">NeighborListFactory</a>&lt;NNTYPE&gt;</td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/TypeConverter.html" title="interface in mil.nga.giat.geowave.analytic.mapreduce.nn">TypeConverter</a>&lt;TYPE&gt;</td>
+<td class="colLast">
+<div class="block">Convert object consumed by NN to a 'smaller' object pertinent to any subclass
+ algorithms</div>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList">
 <table class="packageSummary" border="0" cellpadding="3" cellspacing="0" summary="Class Summary table, listing classes, and an explanation">
 <caption><span>Class Summary</span><span class="tabEnd">&nbsp;</span></caption>
 <tr>
@@ -75,26 +105,51 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NNData.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.nn">NNData</a>&lt;T&gt;</td>
+<td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/DefaultNeighborList.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.nn">DefaultNeighborList</a>&lt;NNTYPE&gt;</td>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NNJobRunner.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.nn">NNJobRunner</a></td>
+<td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/DefaultNeighborList.DefaultNeighborListFactory.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.nn">DefaultNeighborList.DefaultNeighborListFactory</a>&lt;NNTYPE&gt;</td>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/DistanceProfile.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.nn">DistanceProfile</a>&lt;CONTEXT_TYPE&gt;</td>
+<td class="colLast">
+<div class="block">Retain distance information.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/GeoWaveExtractNNJobRunner.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.nn">GeoWaveExtractNNJobRunner</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NeighborIndex.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.nn">NeighborIndex</a>&lt;NNTYPE&gt;</td>
+<td class="colLast">
+<div class="block">Maintain an association between an ID of any item and its neighbors, as they
+ are discovered.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NNData.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.nn">NNData</a>&lt;T&gt;</td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NNJobRunner.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.nn">NNJobRunner</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NNMapReduce.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.nn">NNMapReduce</a></td>
 <td class="colLast">
 <div class="block">Find the nearest neighbors to a each item.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NNMapReduce.NNMapper.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.nn">NNMapReduce.NNMapper</a>&lt;T&gt;</td>
 <td class="colLast">
 <div class="block">Nearest neighbors...take one</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NNMapReduce.NNReducer.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.nn">NNMapReduce.NNReducer</a>&lt;VALUEIN,KEYOUT,VALUEOUT,PARTITION_SUMMARY&gt;</td>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -104,6 +159,10 @@
 </tr>
 <tr class="altColor">
 <td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NNMapReduce.PartitionDataWritable.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.nn">NNMapReduce.PartitionDataWritable</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NullList.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.nn">NullList</a>&lt;NNTYPE&gt;</td>
 <td class="colLast">&nbsp;</td>
 </tr>
 </tbody>

@@ -453,12 +453,16 @@
 <h3>Serialized Fields</h3>
 <ul class="blockList">
 <li class="blockList">
-<h4>properties</h4>
-<pre><a href="http://docs.oracle.com/javase/7/docs/api/java/util/HashMap.html?is-external=true" title="class or interface in java.util">HashMap</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/HashMap.html?is-external=true" title="class or interface in java.util">K</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/util/HashMap.html?is-external=true" title="class or interface in java.util">V</a>&gt; properties</pre>
+<h4>localProperties</h4>
+<pre><a href="http://docs.oracle.com/javase/7/docs/api/java/util/HashMap.html?is-external=true" title="class or interface in java.util">HashMap</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/HashMap.html?is-external=true" title="class or interface in java.util">K</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/util/HashMap.html?is-external=true" title="class or interface in java.util">V</a>&gt; localProperties</pre>
 </li>
-<li class="blockListLast">
+<li class="blockList">
 <h4>converters</h4>
 <pre><a href="http://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">E</a>&gt; converters</pre>
+</li>
+<li class="blockListLast">
+<h4>nestProperties</h4>
+<pre><a href="mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a> nestProperties</pre>
 </li>
 </ul>
 </li>
@@ -486,6 +490,15 @@
 <!--   -->
 </a>
 <h3>Class <a href="mil/nga/giat/geowave/analytic/PropertyManagement.QueryConverter.html" title="class in mil.nga.giat.geowave.analytic">mil.nga.giat.geowave.analytic.PropertyManagement.QueryConverter</a> extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+</li>
+<li class="blockList"><a name="mil.nga.giat.geowave.analytic.PropertyManagement.QueryOptionsConverter">
+<!--   -->
+</a>
+<h3>Class <a href="mil/nga/giat/geowave/analytic/PropertyManagement.QueryOptionsConverter.html" title="class in mil.nga.giat.geowave.analytic">mil.nga.giat.geowave.analytic.PropertyManagement.QueryOptionsConverter</a> extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
 <dl class="nameValue">
 <dt>serialVersionUID:</dt>
 <dd>1L</dd>
@@ -606,6 +619,50 @@
 <dd>-9077135292765517738L</dd>
 </dl>
 </li>
+<li class="blockList"><a name="mil.nga.giat.geowave.analytic.distance.FeatureDistanceFn">
+<!--   -->
+</a>
+<h3>Class <a href="mil/nga/giat/geowave/analytic/distance/FeatureDistanceFn.html" title="class in mil.nga.giat.geowave.analytic.distance">mil.nga.giat.geowave.analytic.distance.FeatureDistanceFn</a> extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>3824608959408031752L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList"><a name="serializedForm">
+<!--   -->
+</a>
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockListLast">
+<h4>coordinateDistanceFunction</h4>
+<pre><a href="mil/nga/giat/geowave/analytic/distance/DistanceFn.html" title="interface in mil.nga.giat.geowave.analytic.distance">DistanceFn</a>&lt;<a href="mil/nga/giat/geowave/analytic/distance/DistanceFn.html" title="type parameter in DistanceFn">T</a>&gt; coordinateDistanceFunction</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="blockList"><a name="mil.nga.giat.geowave.analytic.distance.FeatureGeometryDistanceFn">
+<!--   -->
+</a>
+<h3>Class <a href="mil/nga/giat/geowave/analytic/distance/FeatureGeometryDistanceFn.html" title="class in mil.nga.giat.geowave.analytic.distance">mil.nga.giat.geowave.analytic.distance.FeatureGeometryDistanceFn</a> extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>3824608959408031752L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList"><a name="serializedForm">
+<!--   -->
+</a>
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockListLast">
+<h4>coordinateDistanceFunction</h4>
+<pre><a href="mil/nga/giat/geowave/analytic/distance/DistanceFn.html" title="interface in mil.nga.giat.geowave.analytic.distance">DistanceFn</a>&lt;<a href="mil/nga/giat/geowave/analytic/distance/DistanceFn.html" title="type parameter in DistanceFn">T</a>&gt; coordinateDistanceFunction</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="blockList"><a name="mil.nga.giat.geowave.analytic.distance.GeometryCentroidDistanceFn">
 <!--   -->
 </a>
@@ -637,6 +694,37 @@
 <!--   -->
 </a>
 <h3>Class <a href="mil/nga/giat/geowave/analytic/mapreduce/CountofDoubleWritable.Comparator.html" title="class in mil.nga.giat.geowave.analytic.mapreduce">mil.nga.giat.geowave.analytic.mapreduce.CountofDoubleWritable.Comparator</a> extends org.apache.hadoop.io.WritableComparator implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+</li>
+</ul>
+</li>
+<li class="blockList">
+<h2 title="Package">Package&nbsp;mil.nga.giat.geowave.analytic.mapreduce.dbscan</h2>
+<ul class="blockList">
+<li class="blockList"><a name="mil.nga.giat.geowave.analytic.mapreduce.dbscan.ClusterItemDistanceFn">
+<!--   -->
+</a>
+<h3>Class <a href="mil/nga/giat/geowave/analytic/mapreduce/dbscan/ClusterItemDistanceFn.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.dbscan">mil.nga.giat.geowave.analytic.mapreduce.dbscan.ClusterItemDistanceFn</a> extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>3824608959408031752L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList"><a name="serializedForm">
+<!--   -->
+</a>
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockListLast">
+<h4>coordinateDistanceFunction</h4>
+<pre><a href="mil/nga/giat/geowave/analytic/distance/DistanceFn.html" title="interface in mil.nga.giat.geowave.analytic.distance">DistanceFn</a>&lt;<a href="mil/nga/giat/geowave/analytic/distance/DistanceFn.html" title="type parameter in DistanceFn">T</a>&gt; coordinateDistanceFunction</pre>
+</li>
+</ul>
+</li>
+</ul>
 </li>
 </ul>
 </li>
@@ -690,6 +778,10 @@
 <li class="blockList">
 <h4>id</h4>
 <pre><a href="mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a> id</pre>
+</li>
+<li class="blockList">
+<h4>groupId</h4>
+<pre><a href="mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a> groupId</pre>
 </li>
 <li class="blockListLast">
 <h4>isPrimary</h4>
@@ -816,6 +908,33 @@
 <li class="blockListLast">
 <h4>adapterMap</h4>
 <pre><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">K</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">V</a>&gt; adapterMap</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="blockList">
+<h2 title="Package">Package&nbsp;mil.nga.giat.geowave.core.store.query</h2>
+<ul class="blockList">
+<li class="blockList"><a name="mil.nga.giat.geowave.core.store.query.QueryOptions">
+<!--   -->
+</a>
+<h3>Class <a href="mil/nga/giat/geowave/core/store/query/QueryOptions.html" title="class in mil.nga.giat.geowave.core.store.query">mil.nga.giat.geowave.core.store.query.QueryOptions</a> extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>544085046847603372L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList"><a name="serializedForm">
+<!--   -->
+</a>
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockListLast">
+<h4>fieldIds</h4>
+<pre><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">E</a>&gt; fieldIds</pre>
 </li>
 </ul>
 </li>

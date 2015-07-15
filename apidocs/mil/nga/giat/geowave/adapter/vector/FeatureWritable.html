@@ -105,7 +105,10 @@ implements org.apache.hadoop.io.Writable, <a href="http://docs.oracle.com/javase
 <div class="block">This class is used by FeatureDataAdapter to persist SimpleFeature and its
  SimpleFeatureType. The attribute types of the feature must be understood
  before the feature can be deserialized so therefore each SimpleFeature
- serializes its type.</div>
+ serializes its type.
+ 
+ NOTE: This class caches feature type information. If the feature type
+ changes, then the cache should be emptied using the clearCache() method.</div>
 <dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../../serialized-form.html#mil.nga.giat.geowave.adapter.vector.FeatureWritable">Serialized Form</a></dd></dl>
 </li>
 </ul>
@@ -148,6 +151,14 @@ implements org.apache.hadoop.io.Writable, <a href="http://docs.oracle.com/javase
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureWritable.html#cache(org.opengis.feature.simple.SimpleFeatureType)">cache</a></strong>(org.opengis.feature.simple.SimpleFeatureType&nbsp;featureType)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureWritable.html#clearCache()">clearCache</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>org.opengis.feature.simple.SimpleFeature</code></td>
@@ -259,7 +270,7 @@ implements org.apache.hadoop.io.Writable, <a href="http://docs.oracle.com/javase
 <a name="write(java.io.DataOutput)">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>write</h4>
 <pre>public&nbsp;void&nbsp;write(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/DataOutput.html?is-external=true" title="class or interface in java.io">DataOutput</a>&nbsp;output)
@@ -269,6 +280,24 @@ implements org.apache.hadoop.io.Writable, <a href="http://docs.oracle.com/javase
 <dd><code>write</code>&nbsp;in interface&nbsp;<code>org.apache.hadoop.io.Writable</code></dd>
 <dt><span class="strong">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd></dl>
+</li>
+</ul>
+<a name="clearCache()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>clearCache</h4>
+<pre>public static final&nbsp;void&nbsp;clearCache()</pre>
+</li>
+</ul>
+<a name="cache(org.opengis.feature.simple.SimpleFeatureType)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>cache</h4>
+<pre>public static final&nbsp;void&nbsp;cache(org.opengis.feature.simple.SimpleFeatureType&nbsp;featureType)</pre>
 </li>
 </ul>
 </li>

@@ -148,7 +148,7 @@ implements <a href="../../../../../../mil/nga/giat/geowave/analytic/mapreduce/Ma
       <a href="../../../../../../mil/nga/giat/geowave/analytic/mapreduce/GeoWaveAnalyticJobRunner.html" title="class in mil.nga.giat.geowave.analytic.mapreduce">GeoWaveAnalyticJobRunner</a>&nbsp;tool)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>boolean</code></td>
+<td class="colFirst"><code>org.apache.hadoop.mapreduce.Counters</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/mapreduce/ToolRunnerMapReduceIntegration.html#waitForCompletion(org.apache.hadoop.mapreduce.Job)">waitForCompletion</a></strong>(org.apache.hadoop.mapreduce.Job&nbsp;job)</code>&nbsp;</td>
 </tr>
 </table>
@@ -228,10 +228,10 @@ implements <a href="../../../../../../mil/nga/giat/geowave/analytic/mapreduce/Ma
 <ul class="blockListLast">
 <li class="blockList">
 <h4>waitForCompletion</h4>
-<pre>public&nbsp;boolean&nbsp;waitForCompletion(org.apache.hadoop.mapreduce.Job&nbsp;job)
-                          throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/ClassNotFoundException.html?is-external=true" title="class or interface in java.lang">ClassNotFoundException</a>,
-                                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a>,
-                                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></pre>
+<pre>public&nbsp;org.apache.hadoop.mapreduce.Counters&nbsp;waitForCompletion(org.apache.hadoop.mapreduce.Job&nbsp;job)
+                                                       throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/ClassNotFoundException.html?is-external=true" title="class or interface in java.lang">ClassNotFoundException</a>,
+                                                              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a>,
+                                                              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></pre>
 <dl>
 <dt><strong>Specified by:</strong></dt>
 <dd><code><a href="../../../../../../mil/nga/giat/geowave/analytic/mapreduce/MapReduceIntegration.html#waitForCompletion(org.apache.hadoop.mapreduce.Job)">waitForCompletion</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/analytic/mapreduce/MapReduceIntegration.html" title="interface in mil.nga.giat.geowave.analytic.mapreduce">MapReduceIntegration</a></code></dd>

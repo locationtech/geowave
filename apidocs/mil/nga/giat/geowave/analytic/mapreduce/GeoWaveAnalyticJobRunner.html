@@ -104,7 +104,7 @@
 </dl>
 <dl>
 <dt>Direct Known Subclasses:</dt>
-<dd><a href="../../../../../../mil/nga/giat/geowave/analytic/mapreduce/clustering/runner/ConvexHullJobRunner.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.clustering.runner">ConvexHullJobRunner</a>, <a href="../../../../../../mil/nga/giat/geowave/analytic/mapreduce/clustering/runner/GroupAssigmentJobRunner.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.clustering.runner">GroupAssigmentJobRunner</a>, <a href="../../../../../../mil/nga/giat/geowave/analytic/mapreduce/kmeans/runner/KMeansDistortionJobRunner.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.kmeans.runner">KMeansDistortionJobRunner</a>, <a href="../../../../../../mil/nga/giat/geowave/analytic/mapreduce/kmeans/runner/KMeansJobRunner.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.kmeans.runner">KMeansJobRunner</a>, <a href="../../../../../../mil/nga/giat/geowave/analytic/mapreduce/kmeans/runner/KSamplerJobRunner.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.kmeans.runner">KSamplerJobRunner</a>, <a href="../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NNJobRunner.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.nn">NNJobRunner</a>, <a href="../../../../../../mil/nga/giat/geowave/analytic/mapreduce/kmeans/runner/UpdateCentroidCostJobRunner.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.kmeans.runner">UpdateCentroidCostJobRunner</a></dd>
+<dd><a href="../../../../../../mil/nga/giat/geowave/analytic/mapreduce/clustering/runner/ConvexHullJobRunner.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.clustering.runner">ConvexHullJobRunner</a>, <a href="../../../../../../mil/nga/giat/geowave/analytic/mapreduce/clustering/runner/GeoWaveInputLoadJobRunner.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.clustering.runner">GeoWaveInputLoadJobRunner</a>, <a href="../../../../../../mil/nga/giat/geowave/analytic/mapreduce/clustering/runner/GroupAssigmentJobRunner.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.clustering.runner">GroupAssigmentJobRunner</a>, <a href="../../../../../../mil/nga/giat/geowave/analytic/mapreduce/kmeans/runner/KMeansDistortionJobRunner.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.kmeans.runner">KMeansDistortionJobRunner</a>, <a href="../../../../../../mil/nga/giat/geowave/analytic/mapreduce/kmeans/runner/KMeansJobRunner.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.kmeans.runner">KMeansJobRunner</a>, <a href="../../../../../../mil/nga/giat/geowave/analytic/mapreduce/kmeans/runner/KSamplerJobRunner.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.kmeans.runner">KSamplerJobRunner</a>, <a href="../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NNJobRunner.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.nn">NNJobRunner</a>, <a href="../../../../../../mil/nga/giat/geowave/analytic/mapreduce/kmeans/runner/UpdateCentroidCostJobRunner.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.kmeans.runner">UpdateCentroidCostJobRunner</a></dd>
 </dl>
 <hr>
 <br>
@@ -210,71 +210,87 @@ implements org.apache.hadoop.util.Tool, <a href="../../../../../../mil/nga/giat/
         <a href="../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/mapreduce/GeoWaveAnalyticJobRunner.html#checkIndex(mil.nga.giat.geowave.analytic.PropertyManagement,%20mil.nga.giat.geowave.analytic.param.ParameterEnum,%20java.lang.String)">checkIndex</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties,
+          <a href="../../../../../../mil/nga/giat/geowave/analytic/param/ParameterEnum.html" title="interface in mil.nga.giat.geowave.analytic.param">ParameterEnum</a>&nbsp;indexIdEnum,
+          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;defaultIdxName)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>abstract void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/mapreduce/GeoWaveAnalyticJobRunner.html#configure(org.apache.hadoop.mapreduce.Job)">configure</a></strong>(org.apache.hadoop.mapreduce.Job&nbsp;job)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/mapreduce/GeoWaveAnalyticJobRunner.html#fillOptions(java.util.Set)">fillOptions</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;org.apache.commons.cli.Option&gt;&nbsp;options)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected <a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/mapreduce/GeoWaveAnalyticJobRunner.html#getAdapter(mil.nga.giat.geowave.analytic.PropertyManagement,%20mil.nga.giat.geowave.analytic.param.ParameterEnum,%20mil.nga.giat.geowave.analytic.param.ParameterEnum)">getAdapter</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties,
+          <a href="../../../../../../mil/nga/giat/geowave/analytic/param/ParameterEnum.html" title="interface in mil.nga.giat.geowave.analytic.param">ParameterEnum</a>&nbsp;dataTypeEnum,
+          <a href="../../../../../../mil/nga/giat/geowave/analytic/param/ParameterEnum.html" title="interface in mil.nga.giat.geowave.analytic.param">ParameterEnum</a>&nbsp;dataNameSpaceEnum)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/mapreduce/GeoWaveAnalyticJobRunner.html#getAdapterStore(mil.nga.giat.geowave.analytic.PropertyManagement)">getAdapterStore</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>long</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/mapreduce/GeoWaveAnalyticJobRunner.html#getCounterValue(java.lang.Enum)">getCounterValue</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Enum.html?is-external=true" title="class or interface in java.lang">Enum</a>&lt;?&gt;&nbsp;counterEnum)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/core/store/index/IndexStore.html" title="interface in mil.nga.giat.geowave.core.store.index">IndexStore</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/mapreduce/GeoWaveAnalyticJobRunner.html#getIndexStore(mil.nga.giat.geowave.analytic.PropertyManagement)">getIndexStore</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/analytic/param/FormatConfiguration.html" title="interface in mil.nga.giat.geowave.analytic.param">FormatConfiguration</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/mapreduce/GeoWaveAnalyticJobRunner.html#getInputFormatConfiguration()">getInputFormatConfiguration</a></strong>()</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>protected static org.slf4j.Logger</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/mapreduce/GeoWaveAnalyticJobRunner.html#getLogger()">getLogger</a></strong>()</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/analytic/mapreduce/MapReduceIntegration.html" title="interface in mil.nga.giat.geowave.analytic.mapreduce">MapReduceIntegration</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/mapreduce/GeoWaveAnalyticJobRunner.html#getMapReduceIntegrater()">getMapReduceIntegrater</a></strong>()</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/analytic/param/FormatConfiguration.html" title="interface in mil.nga.giat.geowave.analytic.param">FormatConfiguration</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/mapreduce/GeoWaveAnalyticJobRunner.html#getOutputFormatConfiguration()">getOutputFormatConfiguration</a></strong>()</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/mapreduce/GeoWaveAnalyticJobRunner.html#getReducerCount()">getReducerCount</a></strong>()</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/mapreduce/GeoWaveAnalyticJobRunner.html#getScope()">getScope</a></strong>()</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/mapreduce/GeoWaveAnalyticJobRunner.html#run(org.apache.hadoop.conf.Configuration,%20mil.nga.giat.geowave.analytic.PropertyManagement)">run</a></strong>(org.apache.hadoop.conf.Configuration&nbsp;configuration,
    <a href="../../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/mapreduce/GeoWaveAnalyticJobRunner.html#run(mil.nga.giat.geowave.analytic.PropertyManagement)">run</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/mapreduce/GeoWaveAnalyticJobRunner.html#run(java.lang.String[])">run</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;args)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/mapreduce/GeoWaveAnalyticJobRunner.html#setInputFormatConfiguration(mil.nga.giat.geowave.analytic.param.FormatConfiguration)">setInputFormatConfiguration</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/analytic/param/FormatConfiguration.html" title="interface in mil.nga.giat.geowave.analytic.param">FormatConfiguration</a>&nbsp;inputFormat)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/mapreduce/GeoWaveAnalyticJobRunner.html#setMapReduceIntegrater(mil.nga.giat.geowave.analytic.mapreduce.MapReduceIntegration)">setMapReduceIntegrater</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/analytic/mapreduce/MapReduceIntegration.html" title="interface in mil.nga.giat.geowave.analytic.mapreduce">MapReduceIntegration</a>&nbsp;mapReduceIntegrater)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/mapreduce/GeoWaveAnalyticJobRunner.html#setOutputFormatConfiguration(mil.nga.giat.geowave.analytic.param.FormatConfiguration)">setOutputFormatConfiguration</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/analytic/param/FormatConfiguration.html" title="interface in mil.nga.giat.geowave.analytic.param">FormatConfiguration</a>&nbsp;outputFormat)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/mapreduce/GeoWaveAnalyticJobRunner.html#setReducerCount(int)">setReducerCount</a></strong>(int&nbsp;reducerCount)</code>&nbsp;</td>
 </tr>
@@ -563,6 +579,15 @@ implements org.apache.hadoop.util.Tool, <a href="../../../../../../mil/nga/giat/
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></code></dd></dl>
 </li>
 </ul>
+<a name="getCounterValue(java.lang.Enum)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getCounterValue</h4>
+<pre>public&nbsp;long&nbsp;getCounterValue(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Enum.html?is-external=true" title="class or interface in java.lang">Enum</a>&lt;?&gt;&nbsp;counterEnum)</pre>
+</li>
+</ul>
 <a name="configure(org.apache.hadoop.mapreduce.Job)">
 <!--   -->
 </a>
@@ -591,7 +616,7 @@ implements org.apache.hadoop.util.Tool, <a href="../../../../../../mil/nga/giat/
 <a name="run(mil.nga.giat.geowave.analytic.PropertyManagement)">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>run</h4>
 <pre>public&nbsp;int&nbsp;run(<a href="../../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties)
@@ -600,6 +625,34 @@ implements org.apache.hadoop.util.Tool, <a href="../../../../../../mil/nga/giat/
 <dt><strong>Specified by:</strong></dt>
 <dd><code><a href="../../../../../../mil/nga/giat/geowave/analytic/IndependentJobRunner.html#run(mil.nga.giat.geowave.analytic.PropertyManagement)">run</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/analytic/IndependentJobRunner.html" title="interface in mil.nga.giat.geowave.analytic">IndependentJobRunner</a></code></dd>
 <dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></code></dd></dl>
+</li>
+</ul>
+<a name="getAdapter(mil.nga.giat.geowave.analytic.PropertyManagement, mil.nga.giat.geowave.analytic.param.ParameterEnum, mil.nga.giat.geowave.analytic.param.ParameterEnum)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getAdapter</h4>
+<pre>protected&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&nbsp;getAdapter(<a href="../../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties,
+                        <a href="../../../../../../mil/nga/giat/geowave/analytic/param/ParameterEnum.html" title="interface in mil.nga.giat.geowave.analytic.param">ParameterEnum</a>&nbsp;dataTypeEnum,
+                        <a href="../../../../../../mil/nga/giat/geowave/analytic/param/ParameterEnum.html" title="interface in mil.nga.giat.geowave.analytic.param">ParameterEnum</a>&nbsp;dataNameSpaceEnum)
+                             throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></pre>
+<dl><dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></code></dd></dl>
+</li>
+</ul>
+<a name="checkIndex(mil.nga.giat.geowave.analytic.PropertyManagement, mil.nga.giat.geowave.analytic.param.ParameterEnum, java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>checkIndex</h4>
+<pre>protected&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;checkIndex(<a href="../../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties,
+                <a href="../../../../../../mil/nga/giat/geowave/analytic/param/ParameterEnum.html" title="interface in mil.nga.giat.geowave.analytic.param">ParameterEnum</a>&nbsp;indexIdEnum,
+                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;defaultIdxName)
+                     throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></pre>
+<dl><dt><span class="strong">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></code></dd></dl>
 </li>
 </ul>

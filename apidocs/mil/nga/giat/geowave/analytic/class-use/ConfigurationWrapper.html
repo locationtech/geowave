@@ -87,14 +87,18 @@
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><a href="#mil.nga.giat.geowave.analytic.mapreduce">mil.nga.giat.geowave.analytic.mapreduce</a></td>
+<td class="colFirst"><a href="#mil.nga.giat.geowave.analytic.log">mil.nga.giat.geowave.analytic.log</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><a href="#mil.nga.giat.geowave.analytic.partitioner">mil.nga.giat.geowave.analytic.partitioner</a></td>
+<td class="colFirst"><a href="#mil.nga.giat.geowave.analytic.mapreduce">mil.nga.giat.geowave.analytic.mapreduce</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><a href="#mil.nga.giat.geowave.analytic.partitioner">mil.nga.giat.geowave.analytic.partitioner</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.analytic.sample.function">mil.nga.giat.geowave.analytic.sample.function</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -211,6 +215,36 @@
 </tbody>
 </table>
 </li>
+<li class="blockList"><a name="mil.nga.giat.geowave.analytic.log">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../mil/nga/giat/geowave/analytic/ConfigurationWrapper.html" title="interface in mil.nga.giat.geowave.analytic">ConfigurationWrapper</a> in <a href="../../../../../../mil/nga/giat/geowave/analytic/log/package-summary.html">mil.nga.giat.geowave.analytic.log</a></h3>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
+<caption><span>Classes in <a href="../../../../../../mil/nga/giat/geowave/analytic/log/package-summary.html">mil.nga.giat.geowave.analytic.log</a> that implement <a href="../../../../../../mil/nga/giat/geowave/analytic/ConfigurationWrapper.html" title="interface in mil.nga.giat.geowave.analytic">ConfigurationWrapper</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Class and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/log/LoggingConfigurationWrapper.html" title="class in mil.nga.giat.geowave.analytic.log">LoggingConfigurationWrapper</a></strong></code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing constructors, and an explanation">
+<caption><span>Constructors in <a href="../../../../../../mil/nga/giat/geowave/analytic/log/package-summary.html">mil.nga.giat.geowave.analytic.log</a> with parameters of type <a href="../../../../../../mil/nga/giat/geowave/analytic/ConfigurationWrapper.html" title="interface in mil.nga.giat.geowave.analytic">ConfigurationWrapper</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/log/LoggingConfigurationWrapper.html#LoggingConfigurationWrapper(org.slf4j.Logger,%20mil.nga.giat.geowave.analytic.ConfigurationWrapper)">LoggingConfigurationWrapper</a></strong>(org.slf4j.Logger&nbsp;logger,
+                           <a href="../../../../../../mil/nga/giat/geowave/analytic/ConfigurationWrapper.html" title="interface in mil.nga.giat.geowave.analytic">ConfigurationWrapper</a>&nbsp;wrapper)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
 <li class="blockList"><a name="mil.nga.giat.geowave.analytic.mapreduce">
 <!--   -->
 </a>
@@ -245,22 +279,27 @@
 <td class="colLast"><span class="strong">FeatureDataAdapterStoreFactory.</span><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/FeatureDataAdapterStoreFactory.html#getAdapterStore(mil.nga.giat.geowave.analytic.ConfigurationWrapper)">getAdapterStore</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/analytic/ConfigurationWrapper.html" title="interface in mil.nga.giat.geowave.analytic">ConfigurationWrapper</a>&nbsp;context)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>static double[]</code></td>
+<td class="colLast"><span class="strong">AbstractPartitioner.</span><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/AbstractPartitioner.html#getDistances(mil.nga.giat.geowave.analytic.ConfigurationWrapper,%20java.lang.Class)">getDistances</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/analytic/ConfigurationWrapper.html" title="interface in mil.nga.giat.geowave.analytic">ConfigurationWrapper</a>&nbsp;config,
+            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;classContext)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/core/store/index/IndexStore.html" title="interface in mil.nga.giat.geowave.core.store.index">IndexStore</a></code></td>
 <td class="colLast"><span class="strong">MemoryIndexStoreFactory.</span><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/MemoryIndexStoreFactory.html#getIndexStore(mil.nga.giat.geowave.analytic.ConfigurationWrapper)">getIndexStore</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/analytic/ConfigurationWrapper.html" title="interface in mil.nga.giat.geowave.analytic">ConfigurationWrapper</a>&nbsp;context)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><span class="strong">OrthodromicDistancePartitioner.</span><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/OrthodromicDistancePartitioner.html#initialize(mil.nga.giat.geowave.analytic.ConfigurationWrapper)">initialize</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/analytic/ConfigurationWrapper.html" title="interface in mil.nga.giat.geowave.analytic">ConfigurationWrapper</a>&nbsp;context)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><span class="strong">Partitioner.</span><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/Partitioner.html#initialize(mil.nga.giat.geowave.analytic.ConfigurationWrapper)">initialize</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/analytic/ConfigurationWrapper.html" title="interface in mil.nga.giat.geowave.analytic">ConfigurationWrapper</a>&nbsp;context)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><span class="strong">AbstractPartitioner.</span><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/AbstractPartitioner.html#initialize(mil.nga.giat.geowave.analytic.ConfigurationWrapper)">initialize</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/analytic/ConfigurationWrapper.html" title="interface in mil.nga.giat.geowave.analytic">ConfigurationWrapper</a>&nbsp;context)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><span class="strong">AdapterBasedPartitioner.</span><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/AdapterBasedPartitioner.html#initialize(mil.nga.giat.geowave.analytic.ConfigurationWrapper)">initialize</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/analytic/ConfigurationWrapper.html" title="interface in mil.nga.giat.geowave.analytic">ConfigurationWrapper</a>&nbsp;context)</code>&nbsp;</td>
 </tr>

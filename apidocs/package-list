@@ -32,9 +32,11 @@ mil.nga.giat.geowave.analytic.extract
 mil.nga.giat.geowave.analytic.kmeans
 mil.nga.giat.geowave.analytic.kmeans.serial
 mil.nga.giat.geowave.analytic.kryo
+mil.nga.giat.geowave.analytic.log
 mil.nga.giat.geowave.analytic.mapreduce
 mil.nga.giat.geowave.analytic.mapreduce.clustering
 mil.nga.giat.geowave.analytic.mapreduce.clustering.runner
+mil.nga.giat.geowave.analytic.mapreduce.dbscan
 mil.nga.giat.geowave.analytic.mapreduce.kde
 mil.nga.giat.geowave.analytic.mapreduce.kde.compare
 mil.nga.giat.geowave.analytic.mapreduce.kmeans
