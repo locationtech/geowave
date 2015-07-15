@@ -7,6 +7,7 @@ import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.geotools.feature.type.BasicFeatureTypes;
+import org.geotools.referencing.CRS;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.AttributeDescriptor;
@@ -87,20 +88,26 @@ public class AnalyticFeature
 		return newFeature;
 	}
 
-	public static FeatureDataAdapter createGeometryFeatureAdapter(
+	public static FeatureDataAdapter createFeatureAdapter(
 			final String centroidDataTypeId,
 			final String[] extraNumericDimensions,
 			final String namespaceURI,
-			final String SRID ) {
+			final String SRID,
+			final ClusterFeatureAttribute[] attributes,
+			final Class<? extends Geometry> geometryClass ) {
 		try {
 			final SimpleFeatureTypeBuilder builder = new SimpleFeatureTypeBuilder();
 			builder.setName(centroidDataTypeId);
 			builder.setNamespaceURI(namespaceURI == null ? BasicFeatureTypes.DEFAULT_NAMESPACE : namespaceURI);
 			builder.setSRS(SRID);
-			for (final ClusterFeatureAttribute attrVal : ClusterFeatureAttribute.values()) {
+			builder.setCRS(CRS.decode(
+					SRID,
+					true));
+
+			for (final ClusterFeatureAttribute attrVal : attributes) {
 				builder.add(
 						attrVal.name,
-						attrVal.type);
+						attrVal.equals(ClusterFeatureAttribute.GEOMETRY) ? geometryClass : attrVal.type);
 			}
 			for (final String extraDim : extraNumericDimensions) {
 				builder.add(
@@ -117,6 +124,20 @@ public class AnalyticFeature
 		}
 
 		return null;
+	}
+
+	public static FeatureDataAdapter createGeometryFeatureAdapter(
+			final String centroidDataTypeId,
+			final String[] extraNumericDimensions,
+			final String namespaceURI,
+			final String SRID ) {
+		return createFeatureAdapter(
+				centroidDataTypeId,
+				extraNumericDimensions,
+				namespaceURI,
+				SRID,
+				ClusterFeatureAttribute.values(),
+				Geometry.class);
 	}
 
 	public static enum ClusterFeatureAttribute {

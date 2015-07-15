@@ -17,6 +17,12 @@ public class OutputParameters
 				Integer.class),
 		OUTPUT_FORMAT(
 				FormatConfiguration.class),
+		INDEX_ID(
+				String.class),
+		DATA_TYPE_ID(
+				String.class),
+		DATA_NAMESPACE_URI(
+				String.class),
 		HDFS_OUTPUT_PATH(
 				Path.class);
 		private final Class<?> baseClass;
@@ -59,7 +65,33 @@ public class OutputParameters
 					"Number of Reducers For Output",
 					true));
 		}
-
+		if (contains(
+				params,
+				Output.INDEX_ID)) {
+			options.add(PropertyManagement.newOption(
+					Output.INDEX_ID,
+					"oid",
+					"Output Index ID assigned to GeoWave destined objects",
+					true));
+		}
+		if (contains(
+				params,
+				Output.DATA_TYPE_ID)) {
+			options.add(PropertyManagement.newOption(
+					Output.DATA_TYPE_ID,
+					"odt",
+					"Output Data ID assigned to GeoWave destined objects",
+					true));
+		}
+		if (contains(
+				params,
+				Output.DATA_NAMESPACE_URI)) {
+			options.add(PropertyManagement.newOption(
+					Output.DATA_NAMESPACE_URI,
+					"ons",
+					"Output Data ID assigned to GeoWave destined objects",
+					true));
+		}
 		if (contains(
 				params,
 				Output.OUTPUT_FORMAT)) {

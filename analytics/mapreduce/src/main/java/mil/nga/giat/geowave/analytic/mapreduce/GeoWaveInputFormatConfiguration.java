@@ -14,6 +14,7 @@ import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.index.Index;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
+import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.datastore.accumulo.mapreduce.input.GeoWaveInputFormat;
 
 import org.apache.commons.cli.Option;
@@ -93,13 +94,22 @@ public class GeoWaveInputFormatConfiguration implements
 					adapter);
 		}
 
-		DistributableQuery query = runTimeProperties.getPropertyAsQuery(ExtractParameters.Extract.QUERY);
+		final DistributableQuery query = runTimeProperties.getPropertyAsQuery(ExtractParameters.Extract.QUERY);
 
 		if (query != null) {
 			GeoWaveInputFormat.setQuery(
 					configuration,
 					query);
 		}
+
+		final QueryOptions queryoptions = runTimeProperties.getPropertyAsQueryOptions(ExtractParameters.Extract.QUERY_OPTIONS);
+
+		if (queryoptions != null) {
+			GeoWaveInputFormat.setQueryOptions(
+					configuration,
+					queryoptions);
+		}
+
 		final int minInputSplits = runTimeProperties.getPropertyAsInt(
 				ExtractParameters.Extract.MIN_INPUT_SPLIT,
 				-1);
@@ -168,6 +178,7 @@ public class GeoWaveInputFormatConfiguration implements
 					ExtractParameters.Extract.INDEX_ID,
 					ExtractParameters.Extract.ADAPTER_ID,
 					ExtractParameters.Extract.QUERY,
+					ExtractParameters.Extract.QUERY_OPTIONS,
 					ExtractParameters.Extract.MAX_INPUT_SPLIT,
 					ExtractParameters.Extract.MIN_INPUT_SPLIT
 				});

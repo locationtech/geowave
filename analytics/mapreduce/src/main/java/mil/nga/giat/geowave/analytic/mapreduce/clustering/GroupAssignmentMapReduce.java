@@ -69,7 +69,7 @@ public class GroupAssignmentMapReduce
 		protected ObjectWritable outputValWritable = new ObjectWritable();
 		protected CentroidExtractor<Object> centroidExtractor;
 		protected AnalyticItemWrapperFactory<Object> itemWrapperFactory;
-		private Map<String, AtomicInteger> logCounts = new HashMap<String, AtomicInteger>();
+		private final Map<String, AtomicInteger> logCounts = new HashMap<String, AtomicInteger>();
 
 		@Override
 		protected void mapNativeValue(
@@ -125,7 +125,7 @@ public class GroupAssignmentMapReduce
 				throws IOException,
 				InterruptedException {
 
-			for (Entry<String, AtomicInteger> e : logCounts.entrySet()) {
+			for (final Entry<String, AtomicInteger> e : logCounts.entrySet()) {
 				GroupAssignmentMapReduce.LOGGER.info(e.getKey() + " = " + e.getValue());
 			}
 			super.cleanup(context);

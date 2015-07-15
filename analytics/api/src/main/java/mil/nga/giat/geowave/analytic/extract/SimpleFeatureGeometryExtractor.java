@@ -6,6 +6,7 @@ import mil.nga.giat.geowave.adapter.vector.FeatureGeometryHandler;
 
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.referencing.ReferenceIdentifier;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.vividsolutions.jts.geom.Geometry;
 
@@ -32,7 +33,11 @@ public class SimpleFeatureGeometryExtractor extends
 
 	protected static int getSRID(
 			final SimpleFeature geometryFeature ) {
-		final ReferenceIdentifier id = getFirst(geometryFeature.getDefaultGeometryProperty().getDescriptor().getCoordinateReferenceSystem().getIdentifiers());
+		final CoordinateReferenceSystem crs = geometryFeature.getDefaultGeometryProperty().getDescriptor().getCoordinateReferenceSystem();
+		if (crs == null) {
+			return 4326;
+		}
+		final ReferenceIdentifier id = getFirst(crs.getIdentifiers());
 		if (id == null) {
 			return 4326;
 		}
@@ -41,7 +46,9 @@ public class SimpleFeatureGeometryExtractor extends
 
 	protected static final <T> ReferenceIdentifier getFirst(
 			final Iterable<ReferenceIdentifier> iterable ) {
-		if (iterable == null) return null;
+		if (iterable == null) {
+			return null;
+		}
 		final Iterator<ReferenceIdentifier> it = iterable.iterator();
 		if (it.hasNext()) {
 			final ReferenceIdentifier id = it.next();
@@ -55,7 +62,7 @@ public class SimpleFeatureGeometryExtractor extends
 	@Override
 	public String getGroupID(
 			SimpleFeature anObject ) {
-		Object v = anObject.getAttribute("GroupID");
+		final Object v = anObject.getAttribute("GroupID");
 		return v == null ? null : v.toString();
 	}
 

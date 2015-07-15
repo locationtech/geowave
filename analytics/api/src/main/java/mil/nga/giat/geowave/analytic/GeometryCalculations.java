@@ -15,6 +15,7 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
+import com.vividsolutions.jts.geom.PrecisionModel;
 
 public class GeometryCalculations
 {
@@ -25,7 +26,9 @@ public class GeometryCalculations
 
 	public GeometryCalculations(
 			CoordinateReferenceSystem crs ) {
-		factory = new GeometryFactory();
+		factory = new GeometryFactory(
+				new PrecisionModel(),
+				4326);
 		this.crs = crs;
 		xMin = crs.getCoordinateSystem().getAxis(
 				0).getMinimumValue();

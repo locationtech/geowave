@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
@@ -20,6 +21,7 @@ import mil.nga.giat.geowave.core.index.Persistable;
 import mil.nga.giat.geowave.core.index.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericRange;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
+import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.datastore.accumulo.mapreduce.GeoWaveJobRunner;
 
 import org.apache.commons.cli.CommandLine;
@@ -72,8 +74,9 @@ public class PropertyManagement implements
 	private static final long serialVersionUID = -4186468044516636362L;
 	final static Logger LOGGER = LoggerFactory.getLogger(PropertyManagement.class);
 
-	private final HashMap<String, Serializable> properties = new HashMap<String, Serializable>();
+	private final HashMap<String, Serializable> localProperties = new HashMap<String, Serializable>();
 	private final ArrayList<PropertyConverter<?>> converters = new ArrayList<PropertyConverter<?>>();
+	private PropertyManagement nestProperties = null;
 
 	public static final Option newOption(
 			final ParameterEnum e,
@@ -96,6 +99,7 @@ public class PropertyManagement implements
 
 	public PropertyManagement() {
 		converters.add(new QueryConverter());
+		converters.add(new QueryOptionsConverter());
 		converters.add(new PathConverter());
 		converters.add(new PersistableConverter());
 	}
@@ -105,6 +109,7 @@ public class PropertyManagement implements
 			final ParameterEnum[] names,
 			final Object[] values ) {
 		this.converters.add(new QueryConverter());
+		this.converters.add(new QueryOptionsConverter());
 		this.converters.add(new PathConverter());
 		this.converters.add(new PersistableConverter());
 		for (final PropertyConverter<?> converter : converters) {
@@ -119,6 +124,7 @@ public class PropertyManagement implements
 			final ParameterEnum[] names,
 			final Object[] values ) {
 		converters.add(new QueryConverter());
+		converters.add(new QueryOptionsConverter());
 		converters.add(new PathConverter());
 		converters.add(new PersistableConverter());
 		store(
@@ -126,9 +132,15 @@ public class PropertyManagement implements
 				values);
 	}
 
+	public PropertyManagement(
+			final PropertyManagement pm ) {
+		nestProperties = pm;
+		converters.addAll(pm.converters);
+	}
+
 	public Serializable get(
 			final ParameterEnum propertyName ) {
-		return properties.get(toPropertyName(propertyName));
+		return getPropertyValue(toPropertyName(propertyName));
 	}
 
 	public synchronized <T> void store(
@@ -149,7 +161,7 @@ public class PropertyManagement implements
 							e.getLocalizedMessage()),
 					e);
 		}
-		properties.put(
+		localProperties.put(
 				toPropertyName(property),
 				convertedValue);
 		addConverter(converter);
@@ -172,7 +184,7 @@ public class PropertyManagement implements
 							value.toString(),
 							e.getLocalizedMessage()));
 		}
-		properties.put(
+		localProperties.put(
 				toPropertyName(property),
 				convertedValue);
 	}
@@ -186,7 +198,7 @@ public class PropertyManagement implements
 			final ParameterEnum propertyName,
 			final Serializable value ) {
 		final String pName = toPropertyName(propertyName);
-		if (!properties.containsKey(pName)) {
+		if (!containsPropertyValue(pName) && (value != null)) {
 			LOGGER.info(
 					"Setting parameter : {} to {}",
 					pName,
@@ -196,16 +208,16 @@ public class PropertyManagement implements
 					value);
 			return value;
 		}
-		return properties.get(pName);
+		return getPropertyValue(pName);
 	}
 
 	public synchronized void copy(
 			final ParameterEnum propertyNameFrom,
 			final ParameterEnum propertyNameTo ) {
-		if (properties.containsKey(toPropertyName(propertyNameFrom))) {
-			properties.put(
+		if (containsPropertyValue(toPropertyName(propertyNameFrom))) {
+			localProperties.put(
 					toPropertyName(propertyNameTo),
-					properties.get(toPropertyName(propertyNameFrom)));
+					getPropertyValue(toPropertyName(propertyNameFrom)));
 		}
 	}
 
@@ -231,7 +243,7 @@ public class PropertyManagement implements
 			final Class<T> iface,
 			final Class<?> defaultClass )
 			throws InstantiationException {
-		final Object o = properties.get(toPropertyName(property));
+		final Object o = getPropertyValue(toPropertyName(property));
 
 		try {
 			final Class<?> clazz = o == null ? defaultClass : (o instanceof Class) ? (Class<?>) o : Class.forName(o.toString());
@@ -266,7 +278,7 @@ public class PropertyManagement implements
 
 	public synchronized boolean hasProperty(
 			final ParameterEnum property ) {
-		return properties.containsKey(toPropertyName(property));
+		return containsPropertyValue(toPropertyName(property));
 	}
 
 	public String getPropertyAsString(
@@ -289,7 +301,7 @@ public class PropertyManagement implements
 			final ParameterEnum property )
 			throws Exception {
 
-		final Serializable value = properties.get(toPropertyName(property));
+		final Serializable value = getPropertyValue(toPropertyName(property));
 		if (!Serializable.class.isAssignableFrom(property.getBaseClass())) {
 			for (final PropertyConverter converter : converters) {
 				if (property.getBaseClass().isAssignableFrom(
@@ -319,13 +331,13 @@ public class PropertyManagement implements
 			final PropertyConverter<T> converter )
 			throws Exception {
 
-		final Serializable value = properties.get(toPropertyName(property));
-		return converter.convert(value);
+		final Serializable val = getPropertyValue(toPropertyName(property));
+		return converter.convert(val);
 	}
 
 	public byte[] getPropertyAsBytes(
 			final ParameterEnum property ) {
-		final Object val = properties.get(toPropertyName(property));
+		final Object val = getPropertyValue(toPropertyName(property));
 		if (val != null) {
 			if (val instanceof byte[]) {
 				return (byte[]) val;
@@ -338,9 +350,8 @@ public class PropertyManagement implements
 	public String getPropertyAsString(
 			final ParameterEnum property,
 			final String defaultValue ) {
-		final String name = toPropertyName(property);
 		// not using containsKey to avoid synchronization
-		final Object value = properties.get(name);
+		final Object value = getPropertyValue(toPropertyName(property));
 		return (String) validate(
 				property,
 				value == null ? defaultValue : value.toString());
@@ -349,7 +360,7 @@ public class PropertyManagement implements
 	public Boolean getPropertyAsBoolean(
 			final ParameterEnum property,
 			final Boolean defaultValue ) {
-		final Object val = properties.get(toPropertyName(property));
+		final Object val = getPropertyValue(toPropertyName(property));
 		if (val != null) {
 			return Boolean.valueOf(val.toString());
 		}
@@ -360,7 +371,7 @@ public class PropertyManagement implements
 	public Integer getPropertyAsInt(
 			final ParameterEnum property,
 			final int defaultValue ) {
-		final Object val = properties.get(toPropertyName(property));
+		final Object val = getPropertyValue(toPropertyName(property));
 		if (val != null) {
 			if (val instanceof Integer) {
 				return (Integer) val;
@@ -376,7 +387,7 @@ public class PropertyManagement implements
 	public Double getPropertyAsDouble(
 			final ParameterEnum property,
 			final double defaultValue ) {
-		final Object val = properties.get(toPropertyName(property));
+		final Object val = getPropertyValue(toPropertyName(property));
 		if (val != null) {
 			if (val instanceof Double) {
 				return (Double) val;
@@ -390,7 +401,7 @@ public class PropertyManagement implements
 	public NumericRange getPropertyAsRange(
 			final ParameterEnum property,
 			final NumericRange defaultValue ) {
-		final Object val = properties.get(toPropertyName(property));
+		final Object val = getPropertyValue(toPropertyName(property));
 		if (val != null) {
 			if (val instanceof NumericRange) {
 				return (NumericRange) val;
@@ -420,7 +431,7 @@ public class PropertyManagement implements
 
 	public Class<?> getPropertyAsClass(
 			final ParameterEnum property ) {
-		final Object val = properties.get(toPropertyName(property));
+		final Object val = getPropertyValue(toPropertyName(property));
 		if (val != null) {
 			if (val instanceof Class) {
 				return validate(
@@ -450,7 +461,7 @@ public class PropertyManagement implements
 			final ParameterEnum property,
 			final Class<T> iface )
 			throws ClassNotFoundException {
-		final Object val = properties.get(toPropertyName(property));
+		final Object val = getPropertyValue(toPropertyName(property));
 		if (val != null) {
 			if (val instanceof Class) {
 				return validate(
@@ -485,7 +496,7 @@ public class PropertyManagement implements
 			final ParameterEnum property,
 			final Class<? extends T> iface,
 			final Class<? extends T> defaultClass ) {
-		final Object val = properties.get(toPropertyName(property));
+		final Object val = getPropertyValue(toPropertyName(property));
 		if (val != null) {
 			if (val instanceof Class) {
 				return validate(
@@ -526,7 +537,7 @@ public class PropertyManagement implements
 	public DistributableQuery getPropertyAsQuery(
 			final ParameterEnum property )
 			throws Exception {
-		final Serializable val = properties.get(toPropertyName(property));
+		final Serializable val = getPropertyValue(toPropertyName(property));
 		if (val != null) {
 			return (DistributableQuery) validate(
 					property,
@@ -535,10 +546,22 @@ public class PropertyManagement implements
 		return null;
 	}
 
+	public QueryOptions getPropertyAsQueryOptions(
+			final ParameterEnum property )
+			throws Exception {
+		final Serializable val = getPropertyValue(toPropertyName(property));
+		if (val != null) {
+			return (QueryOptions) validate(
+					property,
+					new QueryOptionsConverter().convert(val));
+		}
+		return null;
+	}
+
 	public Path getPropertyAsPath(
 			final ParameterEnum property )
 			throws Exception {
-		final Serializable val = properties.get(toPropertyName(property));
+		final Serializable val = getPropertyValue(toPropertyName(property));
 		if (val != null) {
 			return (Path) validate(
 					property,
@@ -551,7 +574,7 @@ public class PropertyManagement implements
 			final ParameterEnum property )
 			throws Exception {
 
-		final Serializable val = properties.get(toPropertyName(property));
+		final Serializable val = getPropertyValue(toPropertyName(property));
 		if (val != null) {
 			return (Persistable) validate(
 					property,
@@ -599,12 +622,12 @@ public class PropertyManagement implements
 			throws ParseException {
 		for (final Option option : commandLine.getOptions()) {
 			if (!option.hasArg()) {
-				properties.put(
+				localProperties.put(
 						option.getLongOpt(),
 						Boolean.TRUE);
 			}
 			else {
-				properties.put(
+				localProperties.put(
 						option.getLongOpt(),
 						option.getValue());
 			}
@@ -691,8 +714,26 @@ public class PropertyManagement implements
 			throws IOException {
 		try (ObjectOutputStream oos = new ObjectOutputStream(
 				os)) {
-			oos.writeObject(properties);
+			oos.writeObject(localProperties);
 		}
+		if (nestProperties != null) {
+			os.write(1);
+			nestProperties.toOutput(os);
+		}
+		else {
+			os.write(2);
+		}
+	}
+
+	public void dump() {
+		LOGGER.info("Properties : ");
+		for (final Map.Entry<String, Serializable> prop : localProperties.entrySet()) {
+			LOGGER.info(
+					"{} = {}",
+					prop.getKey(),
+					prop.getValue());
+		}
+		nestProperties.dump();
 	}
 
 	public void fromInput(
@@ -701,16 +742,20 @@ public class PropertyManagement implements
 			ClassNotFoundException {
 		try (ObjectInputStream ois = new ObjectInputStream(
 				is)) {
-			properties.clear();
-			properties.putAll((HashMap<String, Serializable>) ois.readObject());
+			localProperties.clear();
+			localProperties.putAll((HashMap<String, Serializable>) ois.readObject());
+		}
+		if (is.read() == 1) {
+			nestProperties = new PropertyManagement();
+			nestProperties.fromInput(is);
 		}
 	}
 
 	public void fromProperties(
 			final Properties properties ) {
-		this.properties.clear();
+		localProperties.clear();
 		for (final Object key : properties.keySet()) {
-			this.properties.put(
+			localProperties.put(
 					key.toString(),
 					properties.getProperty(key.toString()));
 		}
@@ -866,6 +911,52 @@ public class PropertyManagement implements
 		}
 	}
 
+	public static class QueryOptionsConverter implements
+			PropertyConverter<QueryOptions>
+	{
+
+		/**
+ * 
+ */
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		public Serializable convert(
+				final QueryOptions ob ) {
+			try {
+				return toBytes(ob);
+			}
+			catch (final UnsupportedEncodingException e) {
+				throw new IllegalArgumentException(
+						String.format(
+								"Cannot convert %s to a QueryOptions: %s",
+								ob.toString(),
+								e.getLocalizedMessage()));
+			}
+		}
+
+		@Override
+		public QueryOptions convert(
+				final Serializable ob )
+				throws Exception {
+			if (ob instanceof byte[]) {
+				return (QueryOptions) PropertyManagement.fromBytes(
+						(byte[]) ob,
+						QueryOptions.class);
+			}
+			else if (ob instanceof QueryOptions) {
+				return (QueryOptions) ob;
+			}
+			return new QueryOptions(
+					ob.toString());
+		}
+
+		@Override
+		public Class<QueryOptions> baseClass() {
+			return QueryOptions.class;
+		}
+	}
+
 	public static class PathConverter implements
 			PropertyConverter<Path>
 	{
@@ -938,5 +1029,19 @@ public class PropertyManagement implements
 			return Persistable.class;
 		}
 
+	}
+
+	private boolean containsPropertyValue(
+			final String name ) {
+		return ((nestProperties != null) && nestProperties.containsPropertyValue(name)) || localProperties.containsKey(name);
+	}
+
+	private Serializable getPropertyValue(
+			final String name ) {
+		final Serializable val = localProperties != null ? localProperties.get(name) : null;
+		if (val == null) {
+			return nestProperties != null ? nestProperties.getPropertyValue(name) : null;
+		}
+		return val;
 	}
 }

@@ -76,20 +76,20 @@ public class GeometryWrapper implements
 		return geometry.getFactory().createPolygon(
 				new Coordinate[] {
 					new Coordinate(
-							rangeData[longPosition].getMin()-DOUBLE_TOLERANCE,
-							rangeData[latPosition].getMin()-DOUBLE_TOLERANCE),
+							rangeData[longPosition].getMin() - DOUBLE_TOLERANCE,
+							rangeData[latPosition].getMin() - DOUBLE_TOLERANCE),
 					new Coordinate(
-							rangeData[longPosition].getMin()-DOUBLE_TOLERANCE,
-							rangeData[latPosition].getMax()+DOUBLE_TOLERANCE),
+							rangeData[longPosition].getMin() - DOUBLE_TOLERANCE,
+							rangeData[latPosition].getMax() + DOUBLE_TOLERANCE),
 					new Coordinate(
-							rangeData[longPosition].getMax()+DOUBLE_TOLERANCE,
-							rangeData[latPosition].getMax()+DOUBLE_TOLERANCE),
+							rangeData[longPosition].getMax() + DOUBLE_TOLERANCE,
+							rangeData[latPosition].getMax() + DOUBLE_TOLERANCE),
 					new Coordinate(
-							rangeData[longPosition].getMax()+DOUBLE_TOLERANCE,
-							rangeData[latPosition].getMin()-DOUBLE_TOLERANCE),
+							rangeData[longPosition].getMax() + DOUBLE_TOLERANCE,
+							rangeData[latPosition].getMin() - DOUBLE_TOLERANCE),
 					new Coordinate(
-							rangeData[longPosition].getMin()-DOUBLE_TOLERANCE,
-							rangeData[latPosition].getMin()-DOUBLE_TOLERANCE)
+							rangeData[longPosition].getMin() - DOUBLE_TOLERANCE,
+							rangeData[latPosition].getMin() - DOUBLE_TOLERANCE)
 				}).intersects(
 				geometry);
 	}

@@ -67,7 +67,7 @@ public class GeoWaveAnalyticExtractJobRunner extends
 			final Job job )
 			throws Exception {
 
-		JobContextConfigurationWrapper configWrapper = new JobContextConfigurationWrapper(
+		final JobContextConfigurationWrapper configWrapper = new JobContextConfigurationWrapper(
 				job);
 
 		reducerCount = Math.max(

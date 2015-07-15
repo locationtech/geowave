@@ -4,7 +4,8 @@ import mil.nga.giat.geowave.analytic.AnalyticCLIOperationDriver;
 import mil.nga.giat.geowave.analytic.AnalyticOperationCategory;
 import mil.nga.giat.geowave.analytic.mapreduce.clustering.runner.MultiLevelJumpKMeansClusteringJobRunner;
 import mil.nga.giat.geowave.analytic.mapreduce.clustering.runner.MultiLevelKMeansClusteringJobRunner;
-import mil.nga.giat.geowave.analytic.mapreduce.nn.NNJobRunner;
+import mil.nga.giat.geowave.analytic.mapreduce.dbscan.DBScanIterationsJobRunner;
+import mil.nga.giat.geowave.analytic.mapreduce.nn.GeoWaveExtractNNJobRunner;
 import mil.nga.giat.geowave.core.cli.CLIOperation;
 import mil.nga.giat.geowave.core.cli.CLIOperationCategory;
 import mil.nga.giat.geowave.core.cli.CLIOperationProviderSpi;
@@ -18,7 +19,7 @@ public class MapReduceAnalyticOperationCLIProvider implements
 	 */
 	private static final CLIOperation[] MR_ANALYTIC_OPERATIONS = new CLIOperation[] {
 		new CLIOperation(
-				"kmeans-parallel",
+				"kmeansparallel",
 				"KMeans Parallel Clustering",
 				new AnalyticCLIOperationDriver(
 						new MultiLevelKMeansClusteringJobRunner())),
@@ -26,9 +27,14 @@ public class MapReduceAnalyticOperationCLIProvider implements
 				"nn",
 				"Nearest Neighbors",
 				new AnalyticCLIOperationDriver(
-						new NNJobRunner())),
+						new GeoWaveExtractNNJobRunner())),
 		new CLIOperation(
-				"kmeans-jump",
+				"dbscan",
+				"Density Based Scanner",
+				new AnalyticCLIOperationDriver(
+						new DBScanIterationsJobRunner())),
+		new CLIOperation(
+				"kmeansjump",
 				"KMeans Clustering using Jump Method",
 				new AnalyticCLIOperationDriver(
 						new MultiLevelJumpKMeansClusteringJobRunner()))

@@ -2,6 +2,8 @@ package mil.nga.giat.geowave.analytic;
 
 import java.io.IOException;
 
+import org.apache.hadoop.conf.Configuration;
+
 import com.vividsolutions.jts.geom.Geometry;
 
 /**
@@ -18,4 +20,8 @@ public interface Projection<T>
 	public void initialize(
 			ConfigurationWrapper context )
 			throws IOException;
+
+	public void setup(
+			PropertyManagement runTimeProperties,
+			Configuration configuration );
 }

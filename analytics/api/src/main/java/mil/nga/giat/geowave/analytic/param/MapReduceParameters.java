@@ -21,7 +21,7 @@ public class MapReduceParameters
 		YARN_RESOURCE_MANAGER(
 				String.class),
 		JOBTRACKER_HOST_PORT(
-				Integer.class);
+				String.class);
 
 		private final Class<?> baseClass;
 

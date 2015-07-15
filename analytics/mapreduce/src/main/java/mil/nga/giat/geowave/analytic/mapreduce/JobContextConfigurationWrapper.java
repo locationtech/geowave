@@ -4,6 +4,7 @@ import mil.nga.giat.geowave.analytic.ConfigurationWrapper;
 import mil.nga.giat.geowave.core.index.ByteArrayUtils;
 import mil.nga.giat.geowave.datastore.accumulo.mapreduce.GeoWaveConfiguratorBase;
 
+import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.mapreduce.JobContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,20 +14,27 @@ public class JobContextConfigurationWrapper implements
 {
 	protected static final Logger LOGGER = LoggerFactory.getLogger(JobContextConfigurationWrapper.class);
 
-	private final JobContext context;
+	private final Configuration configuration;
+
 	private Logger logger = LOGGER;
 
 	public JobContextConfigurationWrapper(
 			final JobContext context ) {
 		super();
-		this.context = context;
+		configuration = GeoWaveConfiguratorBase.getConfiguration(context);
+	}
+
+	public JobContextConfigurationWrapper(
+			final Configuration configuration ) {
+		super();
+		this.configuration = configuration;
 	}
 
 	public JobContextConfigurationWrapper(
 			final JobContext context,
 			final Logger logger ) {
 		super();
-		this.context = context;
+		configuration = GeoWaveConfiguratorBase.getConfiguration(context);
 		this.logger = logger;
 	}
 
@@ -38,9 +46,10 @@ public class JobContextConfigurationWrapper implements
 		final String propName = GeoWaveConfiguratorBase.enumToConfKey(
 				scope,
 				property);
-		if (context.getConfiguration().getRaw(
-				propName) == null) logger.warn("Using default for property " + propName);
-		int v = context.getConfiguration().getInt(
+		if (configuration.getRaw(propName) == null) {
+			logger.warn("Using default for property " + propName);
+		}
+		final int v = configuration.getInt(
 				propName,
 				defaultValue);
 		return v;
@@ -54,9 +63,10 @@ public class JobContextConfigurationWrapper implements
 		final String propName = GeoWaveConfiguratorBase.enumToConfKey(
 				scope,
 				property);
-		if (context.getConfiguration().getRaw(
-				propName) == null) logger.warn("Using default for property " + propName);
-		return context.getConfiguration().get(
+		if (configuration.getRaw(propName) == null) {
+			logger.warn("Using default for property " + propName);
+		}
+		return configuration.get(
 				propName,
 				defaultValue);
 	}
@@ -73,17 +83,18 @@ public class JobContextConfigurationWrapper implements
 			final String propName = GeoWaveConfiguratorBase.enumToConfKey(
 					scope,
 					property);
-			if (context.getConfiguration().getRaw(
-					propName) == null) {
-				if (defaultValue == null) return null;
+			if (configuration.getRaw(propName) == null) {
+				if (defaultValue == null) {
+					return null;
+				}
 				logger.warn("Using default for property " + propName);
 			}
-			return GeoWaveConfiguratorBase.getInstance(
-					scope,
-					property,
-					context,
-					iface,
-					defaultValue);
+			return configuration.getClass(
+					GeoWaveConfiguratorBase.enumToConfKey(
+							scope,
+							property),
+					defaultValue,
+					iface).newInstance();
 		}
 		catch (final Exception ex) {
 			logger.error("Cannot instantiate " + GeoWaveConfiguratorBase.enumToConfKey(
@@ -95,29 +106,31 @@ public class JobContextConfigurationWrapper implements
 
 	@Override
 	public double getDouble(
-			Enum<?> property,
-			Class<?> scope,
-			double defaultValue ) {
+			final Enum<?> property,
+			final Class<?> scope,
+			final double defaultValue ) {
 		final String propName = GeoWaveConfiguratorBase.enumToConfKey(
 				scope,
 				property);
-		if (context.getConfiguration().getRaw(
-				propName) == null) logger.warn("Using default for property " + propName);
-		return context.getConfiguration().getDouble(
+		if (configuration.getRaw(propName) == null) {
+			logger.warn("Using default for property " + propName);
+		}
+		return configuration.getDouble(
 				propName,
 				defaultValue);
 	}
 
 	@Override
 	public byte[] getBytes(
-			Enum<?> property,
-			Class<?> scope ) {
+			final Enum<?> property,
+			final Class<?> scope ) {
 		final String propName = GeoWaveConfiguratorBase.enumToConfKey(
 				scope,
 				property);
-		String data = context.getConfiguration().getRaw(
-				propName);
-		if (data == null) logger.error(propName + " not found ");
+		final String data = configuration.getRaw(propName);
+		if (data == null) {
+			logger.error(propName + " not found ");
+		}
 		return ByteArrayUtils.byteArrayFromString(data);
 	}
 
