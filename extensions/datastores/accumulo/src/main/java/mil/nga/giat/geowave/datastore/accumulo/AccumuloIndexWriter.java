@@ -1,7 +1,6 @@
 package mil.nga.giat.geowave.datastore.accumulo;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -14,9 +13,8 @@ import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.adapter.IndexDependentDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
-import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsBuilder;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
-import mil.nga.giat.geowave.core.store.adapter.statistics.StatisticalDataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.statistics.StatsCompositionTool;
 import mil.nga.giat.geowave.core.store.index.Index;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloDataStatisticsStore;
 import mil.nga.giat.geowave.datastore.accumulo.util.AccumuloUtils;
@@ -31,7 +29,7 @@ import org.apache.log4j.Logger;
  * This class can write many entries for a single index by retaining a single
  * open writer. The first entry that is written will open a writer and it is the
  * responsibility of the caller to close this writer when complete.
- *
+ * 
  */
 public class AccumuloIndexWriter implements
 		IndexWriter
@@ -49,7 +47,7 @@ public class AccumuloIndexWriter implements
 	protected String altIdxTableName;
 
 	protected boolean persistStats;
-	protected final Map<ByteArrayId, List<DataStatisticsBuilder>> statsMap = new HashMap<ByteArrayId, List<DataStatisticsBuilder>>();
+	protected final Map<ByteArrayId, StatsCompositionTool<?>> statsMap = new HashMap<ByteArrayId, StatsCompositionTool<?>>();
 
 	public AccumuloIndexWriter(
 			final Index index,
@@ -215,40 +213,20 @@ public class AccumuloIndexWriter implements
 						altIdxWriter);
 			}
 			if (persistStats) {
-				List<DataStatisticsBuilder> stats;
-				if (statsMap.containsKey(adapterIdObj)) {
-					stats = statsMap.get(adapterIdObj);
-				}
-				else {
-					if (writableAdapter instanceof StatisticalDataAdapter) {
-						final ByteArrayId[] statisticsIds = ((StatisticalDataAdapter<T>) writableAdapter).getSupportedStatisticsIds();
-						stats = new ArrayList<DataStatisticsBuilder>(
-								statisticsIds.length);
-						for (final ByteArrayId id : statisticsIds) {
-							stats.add(new DataStatisticsBuilder<T>(
-									(StatisticalDataAdapter) writableAdapter,
-									id));
-						}
-						if ((stats != null) && stats.isEmpty()) {
-							// if its an empty list, for simplicity just set it
-							// to null
-							stats = null;
-						}
-					}
-					else {
-						stats = null;
-					}
+				StatsCompositionTool<T> tool = (StatsCompositionTool<T>) statsMap.get(adapterIdObj);
+				if (tool == null) {
+					tool = new StatsCompositionTool<T>(
+							new DataAdapterStatsWrapper<T>(
+									index,
+									writableAdapter));
 					statsMap.put(
 							adapterIdObj,
-							stats);
+							tool);
 				}
-				if (stats != null) {
-					for (final DataStatisticsBuilder<T> s : stats) {
-						s.entryIngested(
-								entryInfo,
-								entry);
-					}
-				}
+				tool.entryIngested(
+						entryInfo,
+						entry);
+
 			}
 		}
 		return entryInfo.getRowIds();
@@ -260,28 +238,15 @@ public class AccumuloIndexWriter implements
 		closeInternal();
 
 		// write the statistics and clear it
-		if (persistStats) {
-			final List<DataStatistics> accumulatedStats = new ArrayList<DataStatistics>();
-			synchronized (this) {
-				for (final List<DataStatisticsBuilder> builders : statsMap.values()) {
-					if ((builders != null) && !builders.isEmpty()) {
-						for (final DataStatisticsBuilder builder : builders) {
-							final Collection<DataStatistics> s = builder.getStatistics();
-							if ((s != null) && !s.isEmpty()) {
-								accumulatedStats.addAll(s);
-							}
-						}
-					}
-				}
-				if (!accumulatedStats.isEmpty()) {
-					final DataStatisticsStore statsStore = new AccumuloDataStatisticsStore(
-							accumuloOperations);
-					for (final DataStatistics s : accumulatedStats) {
-						statsStore.incorporateStatistics(s);
-					}
-				}
-				statsMap.clear();
+
+		if (!statsMap.isEmpty()) {
+			final DataStatisticsStore statsStore = new AccumuloDataStatisticsStore(
+					accumuloOperations);
+			for (StatsCompositionTool<?> tool : this.statsMap.values()) {
+				tool.setStatisticsStore(statsStore);
+				tool.flush();
 			}
+			statsMap.clear();
 		}
 	}
 
@@ -330,27 +295,13 @@ public class AccumuloIndexWriter implements
 
 		// write the statistics and clear it
 		if (persistStats) {
-			final List<DataStatistics> accumulatedStats = new ArrayList<DataStatistics>();
-			synchronized (this) {
-				for (final List<DataStatisticsBuilder> builders : statsMap.values()) {
-					if ((builders != null) && !builders.isEmpty()) {
-						for (final DataStatisticsBuilder builder : builders) {
-							final Collection<DataStatistics> s = builder.getStatistics();
-							if ((s != null) && !s.isEmpty()) {
-								accumulatedStats.addAll(s);
-							}
-						}
-					}
-				}
-				if (!accumulatedStats.isEmpty()) {
-					final DataStatisticsStore statsStore = new AccumuloDataStatisticsStore(
-							accumuloOperations);
-					for (final DataStatistics s : accumulatedStats) {
-						statsStore.incorporateStatistics(s);
-					}
-				}
-				statsMap.clear();
+			final DataStatisticsStore statsStore = new AccumuloDataStatisticsStore(
+					accumuloOperations);
+			for (StatsCompositionTool<?> tool : this.statsMap.values()) {
+				tool.setStatisticsStore(statsStore);
+				tool.flush();
 			}
+			statsMap.clear();
 		}
 	}
 }
