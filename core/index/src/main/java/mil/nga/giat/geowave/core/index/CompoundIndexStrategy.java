@@ -19,17 +19,14 @@ public class CompoundIndexStrategy implements
 		NumericIndexStrategy
 {
 
-	private String id;
 	private NumericIndexStrategy subStrategy1;
 	private NumericIndexStrategy subStrategy2;
 	private NumericDimensionDefinition[] baseDefinitions;
 	private int defaultNumberOfRanges;
 
 	public CompoundIndexStrategy(
-			final String id,
 			final NumericIndexStrategy subStrategy1,
 			final NumericIndexStrategy subStrategy2 ) {
-		this.id = id;
 		this.subStrategy1 = subStrategy1;
 		this.subStrategy2 = subStrategy2;
 		baseDefinitions = createNumericDimensionDefinitions();
@@ -37,6 +34,8 @@ public class CompoundIndexStrategy implements
 				2,
 				getNumberOfDimensions()));
 	}
+
+	protected CompoundIndexStrategy() {}
 
 	public NumericIndexStrategy[] getSubStrategies() {
 		return new NumericIndexStrategy[] {
@@ -47,12 +46,9 @@ public class CompoundIndexStrategy implements
 
 	@Override
 	public byte[] toBinary() {
-		final byte[] idBinary = StringUtils.stringToBinary(id);
 		final byte[] delegateBinary1 = PersistenceUtils.toBinary(subStrategy1);
 		final byte[] delegateBinary2 = PersistenceUtils.toBinary(subStrategy2);
-		final ByteBuffer buf = ByteBuffer.allocate(8 + idBinary.length + delegateBinary1.length + delegateBinary2.length);
-		buf.putInt(idBinary.length);
-		buf.put(idBinary);
+		final ByteBuffer buf = ByteBuffer.allocate(4 + delegateBinary1.length + delegateBinary2.length);
 		buf.putInt(delegateBinary1.length);
 		buf.put(delegateBinary1);
 		buf.put(delegateBinary2);
@@ -63,15 +59,11 @@ public class CompoundIndexStrategy implements
 	public void fromBinary(
 			final byte[] bytes ) {
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
-		final int idBinaryLength = buf.getInt();
-		final byte[] idBinary = new byte[idBinaryLength];
-		buf.get(idBinary);
 		final int delegateBinary1Length = buf.getInt();
 		final byte[] delegateBinary1 = new byte[delegateBinary1Length];
 		buf.get(delegateBinary1);
-		final byte[] delegateBinary2 = new byte[bytes.length - idBinaryLength - delegateBinary1Length - 8];
+		final byte[] delegateBinary2 = new byte[bytes.length - delegateBinary1Length - 4];
 		buf.get(delegateBinary2);
-		id = StringUtils.stringFromBinary(idBinary);
 		subStrategy1 = PersistenceUtils.fromBinary(
 				delegateBinary1,
 				NumericIndexStrategy.class);
@@ -357,7 +349,7 @@ public class CompoundIndexStrategy implements
 
 	@Override
 	public String getId() {
-		return id;
+		return StringUtils.intToString(hashCode());
 	}
 
 	@Override

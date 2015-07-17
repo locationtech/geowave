@@ -51,7 +51,6 @@ public class CompoundIndexStrategyTest
 			SFCType.HILBERT);
 
 	private static final CompoundIndexStrategy compoundIndexStrategy = new CompoundIndexStrategy(
-			"compound_idx",
 			simpleIndexStrategy,
 			sfcIndexStrategy);
 
@@ -82,13 +81,11 @@ public class CompoundIndexStrategyTest
 
 	@Test
 	public void testBinaryEncoding() {
-		final byte[] bytes = compoundIndexStrategy.toBinary();
-		final CompoundIndexStrategy deserializedStrategy = new CompoundIndexStrategy(
-				null,
-				new NullNumericIndexStrategy(),
-				new NullNumericIndexStrategy());
-		deserializedStrategy.fromBinary(bytes);
-		final byte[] bytes2 = deserializedStrategy.toBinary();
+		final byte[] bytes = PersistenceUtils.toBinary(compoundIndexStrategy);
+		final CompoundIndexStrategy deserializedStrategy = PersistenceUtils.fromBinary(
+				bytes,
+				CompoundIndexStrategy.class);
+		final byte[] bytes2 = PersistenceUtils.toBinary(deserializedStrategy);
 		Assert.assertArrayEquals(
 				bytes,
 				bytes2);
