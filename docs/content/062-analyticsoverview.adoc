@@ -67,7 +67,7 @@ yarn jar geowave-analytic-mapreduce-0.8.8-SNAPSHOT-analytics-singlejar.jar  -dbs
 This set of parameters is not complete. There are many parameters that permit customizations such as distance functions, partitioning and sampling.
 
 [width="80%",cols="2,10",options="header"]
-|=========================================================
+|===
 |Argument|Description
 |-n|Namespace
 |-u|Accumulo User
@@ -93,3 +93,4 @@ This set of parameters is not complete. There are many parameters that permit cu
 |-hdfsbase|Location in HBase to store intermediate results.
 |-b|Batch Identifier.  Each algorithm can be run within multiple configurations, each representing a different batch.
 |-zl|The number of 'zoom' levels in KMeans Clustering algorithms.
+|===
