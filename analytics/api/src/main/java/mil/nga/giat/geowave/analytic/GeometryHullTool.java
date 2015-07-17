@@ -167,7 +167,8 @@ public class GeometryHullTool
 	}
 
 	/*
-	 * Generate a concave hull, if possible, given a geometry and a set of additional points.
+	 * Generate a concave hull, if possible, given a geometry and a set of
+	 * additional points.
 	 * 
 	 * @param fast expedite processing allowing for some outliers.
 	 */
