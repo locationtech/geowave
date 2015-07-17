@@ -51,8 +51,10 @@ public class GpxUtils
 	private static final String SCHEMA_GPX_1_0_LOCATION = SCHEMA_RESOURCE_PACKAGE + "gpx-1_0.xsd";
 	private static final String SCHEMA_GPX_1_1_LOCATION = SCHEMA_RESOURCE_PACKAGE + "gpx-1_1.xsd";
 
-	private static final URL SCHEMA_GPX_1_0_URL = GpxUtils.class.getResource(SCHEMA_GPX_1_0_LOCATION);
-	private static final URL SCHEMA_GPX_1_1_URL = GpxUtils.class.getResource(SCHEMA_GPX_1_1_LOCATION);
+	private static final URL SCHEMA_GPX_1_0_URL = GpxUtils.class.getClassLoader().getResource(
+			SCHEMA_GPX_1_0_LOCATION);
+	private static final URL SCHEMA_GPX_1_1_URL = GpxUtils.class.getClassLoader().getResource(
+			SCHEMA_GPX_1_1_LOCATION);
 	private static final Validator SCHEMA_GPX_1_0_VALIDATOR = getSchemaValidator(SCHEMA_GPX_1_0_URL);
 	private static final Validator SCHEMA_GPX_1_1_VALIDATOR = getSchemaValidator(SCHEMA_GPX_1_1_URL);
 	public static final String GPX_POINT_FEATURE = "gpxpoint";

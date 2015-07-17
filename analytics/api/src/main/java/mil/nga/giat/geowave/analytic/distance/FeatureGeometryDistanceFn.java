@@ -7,8 +7,7 @@ import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.operation.distance.DistanceOp;
 
 /**
- * Calculate distance between two SimpleFeatures, assuming each
- * has a Geometry.
+ * Calculate distance between two SimpleFeatures, assuming each has a Geometry.
  * 
  * @see org.opengis.feature.simple.SimpleFeature
  * 
