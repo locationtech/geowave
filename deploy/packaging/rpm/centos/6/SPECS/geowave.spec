@@ -45,6 +45,7 @@ Source11:       site.tar.gz
 Source12:       puppet-scripts.tar.gz
 Source13:       manpages.tar.gz
 Source14:       plugins.tar.gz
+Source15:       geowave-analytic-mapreduce.jar
 BuildRequires:  unzip
 BuildRequires:  zip
 BuildRequires:  xmlto
@@ -117,6 +118,8 @@ popd
 mv %{buildroot}%{geowave_tools_home}/build.properties %{buildroot}%{geowave_tools_home}/geowave-tools-build.properties
 unzip -p %{SOURCE10} geowave-tools.sh > %{buildroot}%{geowave_tools_home}/geowave-tools.sh
 tar xzf %{SOURCE14} -C %{buildroot}%{geowave_plugins_home}
+
+cp %{SOURCE15} %{buildroot}%{geowave_tools_home}
 
 mkdir -p %{buildroot}/etc/bash_completion.d
 unzip -p %{SOURCE10} geowave-tools-cmd-completion.sh > %{buildroot}/etc/bash_completion.d/geowave-tools-cmd-completion.sh
