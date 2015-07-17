@@ -11,7 +11,7 @@ import mil.nga.giat.geowave.core.ingest.avro.AvroSchemaProvider;
  * framework will choose only one based on this plugin's preference, so it is
  * unnecessary to implement both (in this case returning null is expected if its
  * not implemented).
- *
+ * 
  * @param <I>
  *            the type for intermediate data, it must match the type supported
  *            by the Avro schema
@@ -27,7 +27,7 @@ public interface IngestFromHdfsPlugin<I, O> extends
 	 * try to use the ingestWithMapper() implementation or the
 	 * ingestWithReducer() implementation in the case that both implementations
 	 * are non-null.
-	 *
+	 * 
 	 * @return If true, the framework will use ingestWithReducer() and only fall
 	 *         back to ingestWithMapper() if necessary, otherwise the behavior
 	 *         will be the reverse
@@ -38,7 +38,7 @@ public interface IngestFromHdfsPlugin<I, O> extends
 	 * An implementation of ingestion that can be persisted to a mapper within
 	 * the map-reduce job configuration to perform an ingest of data into
 	 * GeoWave from intermediate data
-	 *
+	 * 
 	 * @return The implementation for ingestion with only a mapper
 	 */
 	public IngestWithMapper<I, O> ingestWithMapper();
@@ -48,7 +48,7 @@ public interface IngestFromHdfsPlugin<I, O> extends
 	 * reducer within the map-reduce job configuration to aggregate intermediate
 	 * data by defined keys within a reducer and perform an ingest of data into
 	 * GeoWave from the key-value pairs emitted by the mapper.
-	 *
+	 * 
 	 * @return The implementation for ingestion with a mapper and reducer. It is
 	 *         important to provide the correct concrete implementation of Key
 	 *         and Value classes within the appropriate generics because the

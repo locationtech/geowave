@@ -13,7 +13,7 @@ public interface AvroPluginBase<T> extends
 {
 	/**
 	 * Converts the supported file into an Avro encoded Java object.
-	 *
+	 * 
 	 * @param file
 	 *            The file to convert to Avro
 	 * @return The Avro encoded Java object
