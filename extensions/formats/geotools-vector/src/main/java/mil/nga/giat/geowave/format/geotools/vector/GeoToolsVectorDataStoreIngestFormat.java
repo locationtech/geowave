@@ -1,11 +1,14 @@
 package mil.nga.giat.geowave.format.geotools.vector;
 
 import mil.nga.giat.geowave.adapter.vector.ingest.CQLFilterOptionProvider;
+import mil.nga.giat.geowave.core.ingest.CompoundIngestFormatOptionProvider;
 import mil.nga.giat.geowave.core.ingest.IngestFormatOptionProvider;
 import mil.nga.giat.geowave.core.ingest.IngestFormatPluginProviderSpi;
 import mil.nga.giat.geowave.core.ingest.avro.AvroFormatPlugin;
 import mil.nga.giat.geowave.core.ingest.hdfs.mapreduce.IngestFromHdfsPlugin;
 import mil.nga.giat.geowave.core.ingest.local.LocalFileIngestPlugin;
+import mil.nga.giat.geowave.format.geotools.vector.retyping.date.DateFieldOptionProvider;
+import mil.nga.giat.geowave.format.geotools.vector.retyping.date.DateFieldRetypingPlugin;
 
 import org.opengis.feature.simple.SimpleFeature;
 
@@ -18,6 +21,7 @@ public class GeoToolsVectorDataStoreIngestFormat implements
 		IngestFormatPluginProviderSpi<Object, SimpleFeature>
 {
 	protected final CQLFilterOptionProvider cqlFilterOptionProvider = new CQLFilterOptionProvider();
+	protected final DateFieldOptionProvider dateFieldOptionProvider = new DateFieldOptionProvider();
 
 	@Override
 	public AvroFormatPlugin<Object, SimpleFeature> getAvroFormatPlugin() {
@@ -36,6 +40,8 @@ public class GeoToolsVectorDataStoreIngestFormat implements
 	@Override
 	public LocalFileIngestPlugin<SimpleFeature> getLocalFileIngestPlugin() {
 		return new GeoToolsVectorDataStoreIngestPlugin(
+				new DateFieldRetypingPlugin(
+						dateFieldOptionProvider),
 				cqlFilterOptionProvider);
 	}
 
@@ -51,7 +57,9 @@ public class GeoToolsVectorDataStoreIngestFormat implements
 
 	@Override
 	public IngestFormatOptionProvider getIngestFormatOptionProvider() {
-		return cqlFilterOptionProvider;
+		return new CompoundIngestFormatOptionProvider().add(
+				cqlFilterOptionProvider).add(
+				dateFieldOptionProvider);
 	}
 
 }
