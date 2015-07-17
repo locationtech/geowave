@@ -7,8 +7,8 @@ import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.operation.distance.DistanceOp;
 
 /**
- * Calculate distance between two SimpleFeatures. The distance is planar distance
- * between to two closest sides.
+ * Calculate distance between two SimpleFeatures. The distance is planar
+ * distance between to two closest sides.
  * 
  * @see org.opengis.feature.simple.SimpleFeature
  * 
