@@ -60,11 +60,13 @@ mil.nga.giat.geowave.core.geotime.store.statistics
 mil.nga.giat.geowave.core.index
 mil.nga.giat.geowave.core.index.dimension
 mil.nga.giat.geowave.core.index.dimension.bin
+mil.nga.giat.geowave.core.index.lexicoder
 mil.nga.giat.geowave.core.index.sfc
 mil.nga.giat.geowave.core.index.sfc.data
 mil.nga.giat.geowave.core.index.sfc.hilbert
 mil.nga.giat.geowave.core.index.sfc.tiered
 mil.nga.giat.geowave.core.index.sfc.zorder
+mil.nga.giat.geowave.core.index.simple
 mil.nga.giat.geowave.core.ingest
 mil.nga.giat.geowave.core.ingest.avro
 mil.nga.giat.geowave.core.ingest.hdfs

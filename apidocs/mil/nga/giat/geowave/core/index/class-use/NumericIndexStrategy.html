@@ -103,14 +103,18 @@
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><a href="#mil.nga.giat.geowave.core.store.index">mil.nga.giat.geowave.core.store.index</a></td>
+<td class="colFirst"><a href="#mil.nga.giat.geowave.core.index.simple">mil.nga.giat.geowave.core.index.simple</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><a href="#mil.nga.giat.geowave.core.store.query">mil.nga.giat.geowave.core.store.query</a></td>
+<td class="colFirst"><a href="#mil.nga.giat.geowave.core.store.index">mil.nga.giat.geowave.core.store.index</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><a href="#mil.nga.giat.geowave.core.store.query">mil.nga.giat.geowave.core.store.query</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.datastore.accumulo.util">mil.nga.giat.geowave.datastore.accumulo.util</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -389,6 +393,49 @@
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/index/sfc/tiered/TieredSFCIndexStrategy.html" title="class in mil.nga.giat.geowave.core.index.sfc.tiered">TieredSFCIndexStrategy</a></strong></code>
 <div class="block">This class uses multiple SpaceFillingCurve objects, one per tier, to
  represent a single cohesive index strategy with multiple precisions</div>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="mil.nga.giat.geowave.core.index.simple">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../../mil/nga/giat/geowave/core/index/NumericIndexStrategy.html" title="interface in mil.nga.giat.geowave.core.index">NumericIndexStrategy</a> in <a href="../../../../../../../mil/nga/giat/geowave/core/index/simple/package-summary.html">mil.nga.giat.geowave.core.index.simple</a></h3>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
+<caption><span>Classes in <a href="../../../../../../../mil/nga/giat/geowave/core/index/simple/package-summary.html">mil.nga.giat.geowave.core.index.simple</a> that implement <a href="../../../../../../../mil/nga/giat/geowave/core/index/NumericIndexStrategy.html" title="interface in mil.nga.giat.geowave.core.index">NumericIndexStrategy</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Class and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/index/simple/SimpleIntegerIndexStrategy.html" title="class in mil.nga.giat.geowave.core.index.simple">SimpleIntegerIndexStrategy</a></strong></code>
+<div class="block">A simple 1-dimensional NumericIndexStrategy that represents an index of
+ signed integer values.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/index/simple/SimpleLongIndexStrategy.html" title="class in mil.nga.giat.geowave.core.index.simple">SimpleLongIndexStrategy</a></strong></code>
+<div class="block">A simple 1-dimensional NumericIndexStrategy that represents an index of
+ signed long values.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/index/simple/SimpleNumericIndexStrategy.html" title="class in mil.nga.giat.geowave.core.index.simple">SimpleNumericIndexStrategy</a>&lt;T extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Number.html?is-external=true" title="class or interface in java.lang">Number</a>&gt;</strong></code>
+<div class="block">A simple 1-dimensional NumericIndexStrategy that represents an index of
+ signed integer values (currently supports 16 bit, 32 bit, and 64 bit
+ integers).</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/index/simple/SimpleShortIndexStrategy.html" title="class in mil.nga.giat.geowave.core.index.simple">SimpleShortIndexStrategy</a></strong></code>
+<div class="block">A simple 1-dimensional NumericIndexStrategy that represents an index of
+ signed short values.</div>
 </td>
 </tr>
 </tbody>
