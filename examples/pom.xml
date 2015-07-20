@@ -5,7 +5,7 @@
     <parent>
         <groupId>mil.nga.giat</groupId>
         <artifactId>geowave-parent</artifactId>
-        <version>0.8.8</version>
+        <version>0.8.8.1</version>
     </parent>
     <artifactId>geowave-example</artifactId>
     <name>GeoWave Examples</name>
