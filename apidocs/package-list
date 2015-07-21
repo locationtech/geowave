@@ -100,6 +100,7 @@ mil.nga.giat.geowave.examples.query
 mil.nga.giat.geowave.format.geolife
 mil.nga.giat.geowave.format.geotools.raster
 mil.nga.giat.geowave.format.geotools.vector
+mil.nga.giat.geowave.format.geotools.vector.retyping.date
 mil.nga.giat.geowave.format.gpx
 mil.nga.giat.geowave.format.tdrive
 mil.nga.giat.geowave.service

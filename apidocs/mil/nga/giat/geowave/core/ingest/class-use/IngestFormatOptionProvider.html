@@ -90,6 +90,10 @@
 <td class="colFirst"><a href="#mil.nga.giat.geowave.format.geotools.vector">mil.nga.giat.geowave.format.geotools.vector</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
+<tr class="altColor">
+<td class="colFirst"><a href="#mil.nga.giat.geowave.format.geotools.vector.retyping.date">mil.nga.giat.geowave.format.geotools.vector.retyping.date</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
 </tbody>
 </table>
 </li>
@@ -130,6 +134,19 @@
 <!--   -->
 </a>
 <h3>Uses of <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/IngestFormatOptionProvider.html" title="interface in mil.nga.giat.geowave.core.ingest">IngestFormatOptionProvider</a> in <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/package-summary.html">mil.nga.giat.geowave.core.ingest</a></h3>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
+<caption><span>Classes in <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/package-summary.html">mil.nga.giat.geowave.core.ingest</a> that implement <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/IngestFormatOptionProvider.html" title="interface in mil.nga.giat.geowave.core.ingest">IngestFormatOptionProvider</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Class and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/CompoundIngestFormatOptionProvider.html" title="class in mil.nga.giat.geowave.core.ingest">CompoundIngestFormatOptionProvider</a></strong></code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
 <table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
 <caption><span>Methods in <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/package-summary.html">mil.nga.giat.geowave.core.ingest</a> that return <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/IngestFormatOptionProvider.html" title="interface in mil.nga.giat.geowave.core.ingest">IngestFormatOptionProvider</a></span><span class="tabEnd">&nbsp;</span></caption>
 <tr>
@@ -142,6 +159,30 @@
 <td class="colLast"><span class="strong">IngestFormatPluginProviderSpi.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/IngestFormatPluginProviderSpi.html#getIngestFormatOptionProvider()">getIngestFormatOptionProvider</a></strong>()</code>
 <div class="block">This is a means for a plugin to provide custom command-line options.</div>
 </td>
+</tr>
+</tbody>
+</table>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/package-summary.html">mil.nga.giat.geowave.core.ingest</a> with parameters of type <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/IngestFormatOptionProvider.html" title="interface in mil.nga.giat.geowave.core.ingest">IngestFormatOptionProvider</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/CompoundIngestFormatOptionProvider.html" title="class in mil.nga.giat.geowave.core.ingest">CompoundIngestFormatOptionProvider</a></code></td>
+<td class="colLast"><span class="strong">CompoundIngestFormatOptionProvider.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/CompoundIngestFormatOptionProvider.html#add(mil.nga.giat.geowave.core.ingest.IngestFormatOptionProvider)">add</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/IngestFormatOptionProvider.html" title="interface in mil.nga.giat.geowave.core.ingest">IngestFormatOptionProvider</a>&nbsp;provider)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing constructors, and an explanation">
+<caption><span>Constructor parameters in <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/package-summary.html">mil.nga.giat.geowave.core.ingest</a> with type arguments of type <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/IngestFormatOptionProvider.html" title="interface in mil.nga.giat.geowave.core.ingest">IngestFormatOptionProvider</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/CompoundIngestFormatOptionProvider.html#CompoundIngestFormatOptionProvider(java.util.List)">CompoundIngestFormatOptionProvider</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/IngestFormatOptionProvider.html" title="interface in mil.nga.giat.geowave.core.ingest">IngestFormatOptionProvider</a>&gt;&nbsp;providers)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -178,6 +219,24 @@
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/IngestFormatOptionProvider.html" title="interface in mil.nga.giat.geowave.core.ingest">IngestFormatOptionProvider</a></code></td>
 <td class="colLast"><span class="strong">GeoToolsVectorDataStoreIngestFormat.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/format/geotools/vector/GeoToolsVectorDataStoreIngestFormat.html#getIngestFormatOptionProvider()">getIngestFormatOptionProvider</a></strong>()</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="mil.nga.giat.geowave.format.geotools.vector.retyping.date">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/IngestFormatOptionProvider.html" title="interface in mil.nga.giat.geowave.core.ingest">IngestFormatOptionProvider</a> in <a href="../../../../../../../mil/nga/giat/geowave/format/geotools/vector/retyping/date/package-summary.html">mil.nga.giat.geowave.format.geotools.vector.retyping.date</a></h3>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
+<caption><span>Classes in <a href="../../../../../../../mil/nga/giat/geowave/format/geotools/vector/retyping/date/package-summary.html">mil.nga.giat.geowave.format.geotools.vector.retyping.date</a> that implement <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/IngestFormatOptionProvider.html" title="interface in mil.nga.giat.geowave.core.ingest">IngestFormatOptionProvider</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Class and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/format/geotools/vector/retyping/date/DateFieldOptionProvider.html" title="class in mil.nga.giat.geowave.format.geotools.vector.retyping.date">DateFieldOptionProvider</a></strong></code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
