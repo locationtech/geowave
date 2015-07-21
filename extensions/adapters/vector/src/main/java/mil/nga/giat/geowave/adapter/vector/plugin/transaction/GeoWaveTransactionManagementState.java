@@ -25,7 +25,7 @@ public class GeoWaveTransactionManagementState implements
 	private final LockingManagement lockingManager;
 	private Transaction transaction;
 	private final String txID;
-
+	private final int transactionBufferSize;
 	/**
 	 * Map of differences by typeName.
 	 * 
@@ -34,22 +34,24 @@ public class GeoWaveTransactionManagementState implements
 	 * commit() or rollback().
 	 * </p>
 	 */
-	private Map<String, GeoWaveTransactionManagement> typeNameDiff = new HashMap<String, GeoWaveTransactionManagement>();
+	private final Map<String, GeoWaveTransactionManagement> typeNameDiff = new HashMap<String, GeoWaveTransactionManagement>();
 
 	public GeoWaveTransactionManagementState(
-			GeoWaveDataStoreComponents components,
-			Transaction transaction,
-			LockingManagement lockingManager )
+			final int transactionBufferSize,
+			final GeoWaveDataStoreComponents components,
+			final Transaction transaction,
+			final LockingManagement lockingManager )
 			throws IOException {
+		this.transactionBufferSize = transactionBufferSize;
 		this.components = components;
 		this.transaction = transaction;
 		this.lockingManager = lockingManager;
-		this.txID = components.getTransaction();
+		txID = components.getTransaction();
 	}
 
 	@Override
 	public synchronized void setTransaction(
-			Transaction transaction ) {
+			final Transaction transaction ) {
 		if (transaction != null) {
 			// configure
 			this.transaction = transaction;
@@ -58,8 +60,8 @@ public class GeoWaveTransactionManagementState implements
 			this.transaction = null;
 
 			if (typeNameDiff != null) {
-				for (Iterator<GeoWaveTransactionManagement> i = typeNameDiff.values().iterator(); i.hasNext();) {
-					GeoWaveTransactionManagement diff = (GeoWaveTransactionManagement) i.next();
+				for (final Iterator<GeoWaveTransactionManagement> i = typeNameDiff.values().iterator(); i.hasNext();) {
+					final GeoWaveTransactionManagement diff = i.next();
 					diff.clear();
 				}
 
@@ -70,7 +72,7 @@ public class GeoWaveTransactionManagementState implements
 
 	@Override
 	public synchronized GeoWaveTransactionManagement getGeoWaveTransaction(
-			String typeName )
+			final String typeName )
 			throws IOException {
 		if (!exists(typeName)) {
 			throw new RuntimeException(
@@ -78,10 +80,11 @@ public class GeoWaveTransactionManagementState implements
 		}
 
 		if (typeNameDiff.containsKey(typeName)) {
-			return (GeoWaveTransactionManagement) typeNameDiff.get(typeName);
+			return typeNameDiff.get(typeName);
 		}
 		else {
-			GeoWaveTransactionManagement transX = new GeoWaveTransactionManagement(
+			final GeoWaveTransactionManagement transX = new GeoWaveTransactionManagement(
+					transactionBufferSize,
 					components,
 					typeName,
 					transaction,
@@ -96,7 +99,7 @@ public class GeoWaveTransactionManagementState implements
 	}
 
 	boolean exists(
-			String typeName )
+			final String typeName )
 			throws IOException {
 		String[] types;
 		types = components.getGTstore().getTypeNames();
@@ -112,7 +115,7 @@ public class GeoWaveTransactionManagementState implements
 	 */
 	@Override
 	public synchronized void addAuthorization(
-			String AuthID )
+			final String AuthID )
 			throws IOException {
 		// not required
 	}
@@ -127,11 +130,11 @@ public class GeoWaveTransactionManagementState implements
 			throws IOException {
 
 		try {
-			for (Iterator<Entry<String, GeoWaveTransactionManagement>> i = typeNameDiff.entrySet().iterator(); i.hasNext();) {
+			for (final Iterator<Entry<String, GeoWaveTransactionManagement>> i = typeNameDiff.entrySet().iterator(); i.hasNext();) {
 				final Map.Entry<String, GeoWaveTransactionManagement> entry = i.next();
 
 				final String typeName = entry.getKey();
-				GeoWaveTransactionManagement diff = entry.getValue();
+				final GeoWaveTransactionManagement diff = entry.getValue();
 				applyDiff(
 						typeName,
 						diff);
@@ -139,7 +142,7 @@ public class GeoWaveTransactionManagementState implements
 			}
 		}
 		finally {
-			this.components.releaseTransaction(txID);
+			components.releaseTransaction(txID);
 		}
 	}
 
@@ -178,8 +181,8 @@ public class GeoWaveTransactionManagementState implements
 	 *             If the entire diff cannot be writen out
 	 */
 	void applyDiff(
-			String typeName,
-			GeoWaveTransactionManagement diff )
+			final String typeName,
+			final GeoWaveTransactionManagement diff )
 			throws IOException {
 		IOException cause = null;
 		if (diff.isEmpty()) {
@@ -188,11 +191,11 @@ public class GeoWaveTransactionManagementState implements
 		try {
 			diff.commit();
 		}
-		catch (IOException e) {
+		catch (final IOException e) {
 			cause = e;
 			throw e;
 		}
-		catch (RuntimeException e) {
+		catch (final RuntimeException e) {
 			cause = new IOException(
 					e);
 			throw e;
@@ -205,7 +208,7 @@ public class GeoWaveTransactionManagementState implements
 						true);
 				diff.clear();
 			}
-			catch (RuntimeException e) {
+			catch (final RuntimeException e) {
 				if (cause != null) {
 					e.initCause(cause);
 				}
@@ -223,11 +226,11 @@ public class GeoWaveTransactionManagementState implements
 		Entry<String, GeoWaveTransactionManagement> entry;
 
 		try {
-			for (Iterator<Entry<String, GeoWaveTransactionManagement>> i = typeNameDiff.entrySet().iterator(); i.hasNext();) {
+			for (final Iterator<Entry<String, GeoWaveTransactionManagement>> i = typeNameDiff.entrySet().iterator(); i.hasNext();) {
 				entry = i.next();
 
-				String typeName = (String) entry.getKey();
-				GeoWaveTransactionManagement diff = (GeoWaveTransactionManagement) entry.getValue();
+				final String typeName = entry.getKey();
+				final GeoWaveTransactionManagement diff = entry.getValue();
 				diff.rollback();
 
 				components.getGTstore().getListenerManager().fireChanged(
@@ -237,8 +240,13 @@ public class GeoWaveTransactionManagementState implements
 			}
 		}
 		finally {
-			this.components.releaseTransaction(txID);
+			components.releaseTransaction(txID);
 		}
+	}
+
+	@Override
+	public String toString() {
+		return "GeoWaveTransactionManagementState [components=" + components + ", lockingManager=" + lockingManager + ", transaction=" + transaction + ", txID=" + txID + ", typeNameDiff=" + typeNameDiff + "]";
 	}
 
 }

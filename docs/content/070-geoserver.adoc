@@ -24,17 +24,25 @@ On the Geowave data store creation tab, the system prompts for the following pro
 | Lock Management | Select one from a list of lock managers. | Zookeeper is required with a multiple Geoserver architecture.
 | Authorization Management Provider | Select from a list of providers. |
 | Authorization Data URL | The URL for an external supporting service or configuration file. | The interpretation of the URL depends on the selected provider.
+| Transaction Buffer Size | The maximum number of newly inserted features per transaction buffered in memory prior to transaction completion.  | Considerations include system memory, size of typical transactions, the expected number of simultaneous transactions and the average size of a new feature.  
 |======================
 
 ===== Transactions
 
-Most operations under WFS-T use an auto-commit transaction. WFS-T does support long running transactions across multiple
-requests by using a lock request followed by subsequent use of a provided lock ID. The Geowave implementation supports
+Transactions are initiated through a Transaction operation, containing inserts, updates and deletes to features.
+WFS-T supports feature locks across multiple requests by using a lock request followed by subsequent 
+use of a provided lock ID. The Geowave implementation supports
 transaction isolation. Consistency during a commit is not fully supported. Thus, a failure during a commit of a
 transaction may leave the affected data in an intermediary state--some deletions, updates or insertions may not be
 processed. The client application must implement its on compensation logic upon receiving a commit-time error response.
 As expected with Accumulo, operations on a single feature instances are atomic.
 
+Inserted features are buffered prior to commit.  The features are bulk fed to the data store 
+when the buffer size is exceeded and when the transaction is committed.  In support of atomicity and isolation,
+flushed features, prior to commit, are marked in a transient state, only visible to the controlling
+transaction.   Upon commit, these features are 'unmarked'. The overhead incurred by this operation is avoided
+by increasing the buffer size to avoid pre-commit flushes.
+  
 ===== Lock Management
 
 Lock management supports life-limited locks on feature instances. There are only two supported lock managers: in memory

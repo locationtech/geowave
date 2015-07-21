@@ -17,6 +17,8 @@ public class ClusteringParameters
 				Integer.class),
 		RETAIN_GROUP_ASSIGNMENTS(
 				Boolean.class),
+		MINIMUM_SIZE(
+				Integer.class),
 		MAX_ITERATIONS(
 				Integer.class),
 		CONVERGANCE_TOLERANCE(
@@ -56,6 +58,15 @@ public class ClusteringParameters
 					Clustering.ZOOM_LEVELS,
 					"zl",
 					"Number of Zoom Levels to Process",
+					true));
+		}
+		if (contains(
+				params,
+				Clustering.MINIMUM_SIZE)) {
+			options.add(PropertyManagement.newOption(
+					Clustering.MINIMUM_SIZE,
+					"cms",
+					"Minimum Cluster Size",
 					true));
 		}
 		if (contains(

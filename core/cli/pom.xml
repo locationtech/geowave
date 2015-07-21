@@ -5,7 +5,7 @@
 		<groupId>mil.nga.giat</groupId>
 		<artifactId>geowave-core-parent</artifactId>
 		<relativePath>../</relativePath>
-		<version>0.8.8-SNAPSHOT</version>
+		<version>0.8.9-SNAPSHOT</version>
 	</parent>
 	<artifactId>geowave-core-cli</artifactId>
 	<name>GeoWave CLI</name>
@@ -16,13 +16,17 @@
 			<artifactId>commons-cli</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>mil.nga.giat</groupId>
-			<artifactId>geowave-core-index</artifactId>
-			<version>${project.version}</version>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-lang3</artifactId>
-		</dependency>
+			<dependency>
+				<groupId>mil.nga.giat</groupId>
+				<artifactId>geowave-core-index</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-lang3</artifactId>
+			</dependency>
 	</dependencies>
 </project>

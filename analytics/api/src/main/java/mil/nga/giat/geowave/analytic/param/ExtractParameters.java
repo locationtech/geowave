@@ -6,6 +6,7 @@ import java.util.Set;
 import mil.nga.giat.geowave.analytic.PropertyManagement;
 import mil.nga.giat.geowave.analytic.extract.DimensionExtractor;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
+import mil.nga.giat.geowave.core.store.query.QueryOptions;
 
 import org.apache.commons.cli.Option;
 
@@ -24,6 +25,8 @@ public class ExtractParameters
 				DimensionExtractor.class),
 		QUERY(
 				DistributableQuery.class),
+		QUERY_OPTIONS(
+				QueryOptions.class),
 		MAX_INPUT_SPLIT(
 				Integer.class),
 		MIN_INPUT_SPLIT(
@@ -98,6 +101,15 @@ public class ExtractParameters
 					Extract.QUERY,
 					"eq",
 					"Query",
+					true));
+		}
+		if (contains(
+				params,
+				Extract.QUERY_OPTIONS)) {
+			options.add(PropertyManagement.newOption(
+					Extract.QUERY_OPTIONS,
+					"eqf",
+					"Restricted extracted field list (comma-separated list of field ids)",
 					true));
 		}
 		if (contains(

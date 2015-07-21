@@ -302,6 +302,11 @@ public class BasicAccumuloOperations implements
 		return false;
 	}
 
+	@Override
+	public String getTableNameSpace() {
+		return tableNamespace;
+	}
+
 	private String getQualifiedTableName(
 			final String unqualifiedTableName ) {
 		return AccumuloUtils.getQualifiedTableName(

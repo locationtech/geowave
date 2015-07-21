@@ -2,11 +2,16 @@ package mil.nga.giat.geowave.test.kafka;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import mil.nga.giat.geowave.adapter.vector.stats.FeatureBoundingBoxStatistics;
 import mil.nga.giat.geowave.core.geotime.IndexType;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
 import mil.nga.giat.geowave.core.geotime.store.statistics.BoundingBoxDataStatistics;
+import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
@@ -31,6 +36,17 @@ public class BasicKafkaIT extends
 		KafkaTestBase<GpxTrack>
 {
 	private static final Index INDEX = IndexType.SPATIAL_VECTOR.createDefaultIndex();
+	private static final Map<ByteArrayId, Integer> EXPECTED_COUNT_PER_ADAPTER_ID = new HashMap<ByteArrayId, Integer>();
+	static {
+		EXPECTED_COUNT_PER_ADAPTER_ID.put(
+				new ByteArrayId(
+						"gpxpoint"),
+				137291);
+		EXPECTED_COUNT_PER_ADAPTER_ID.put(
+				new ByteArrayId(
+						"gpxtrack"),
+				257);
+	}
 
 	@SuppressWarnings("unchecked")
 	@Test
@@ -46,7 +62,7 @@ public class BasicKafkaIT extends
 				accumuloOperations);
 		final AdapterStore adapterStore = new AccumuloAdapterStore(
 				accumuloOperations);
-		boolean atLeastOneAdapter = false;
+		int adapterCount = 0;
 		try (CloseableIterator<DataAdapter<?>> adapterIterator = adapterStore.getAdapters()) {
 			while (adapterIterator.hasNext()) {
 				final FeatureDataAdapter adapter = (FeatureDataAdapter) adapterIterator.next();
@@ -79,12 +95,17 @@ public class BasicKafkaIT extends
 						"'" + adapter.getAdapterId().getString() + "' adapter should have the same results from a spatial query of '" + env + "' as its total count statistic",
 						countStat.getCount(),
 						resultCount);
-				atLeastOneAdapter = true;
+				assertEquals(
+						"'" + adapter.getAdapterId().getString() + "' adapter entries ingested does not match expected count",
+						EXPECTED_COUNT_PER_ADAPTER_ID.get(adapter.getAdapterId()),
+						new Integer(
+								resultCount));
+				adapterCount++;
 			}
 		}
 		assertTrue(
-				"There should be at least one adapter",
-				atLeastOneAdapter);
+				"There should be exactly two adapters",
+				(adapterCount == 2));
 	}
 
 	private int testQuery(

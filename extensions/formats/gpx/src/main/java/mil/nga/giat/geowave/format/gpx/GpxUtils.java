@@ -30,7 +30,6 @@ import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.log4j.Logger;
 import org.geotools.feature.AttributeTypeBuilder;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
@@ -38,6 +37,8 @@ import org.opengis.feature.simple.SimpleFeatureType;
 import org.xml.sax.SAXException;
 
 import com.vividsolutions.jts.geom.Geometry;
+
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 /**
  * This is a convenience class for performing common GPX static utility methods
@@ -50,8 +51,10 @@ public class GpxUtils
 	private static final String SCHEMA_GPX_1_0_LOCATION = SCHEMA_RESOURCE_PACKAGE + "gpx-1_0.xsd";
 	private static final String SCHEMA_GPX_1_1_LOCATION = SCHEMA_RESOURCE_PACKAGE + "gpx-1_1.xsd";
 
-	private static final URL SCHEMA_GPX_1_0_URL = ClassLoader.getSystemResource(SCHEMA_GPX_1_0_LOCATION);
-	private static final URL SCHEMA_GPX_1_1_URL = ClassLoader.getSystemResource(SCHEMA_GPX_1_1_LOCATION);
+	private static final URL SCHEMA_GPX_1_0_URL = GpxUtils.class.getClassLoader().getResource(
+			SCHEMA_GPX_1_0_LOCATION);
+	private static final URL SCHEMA_GPX_1_1_URL = GpxUtils.class.getClassLoader().getResource(
+			SCHEMA_GPX_1_1_LOCATION);
 	private static final Validator SCHEMA_GPX_1_0_VALIDATOR = getSchemaValidator(SCHEMA_GPX_1_0_URL);
 	private static final Validator SCHEMA_GPX_1_1_VALIDATOR = getSchemaValidator(SCHEMA_GPX_1_1_URL);
 	public static final String GPX_POINT_FEATURE = "gpxpoint";
@@ -76,14 +79,14 @@ public class GpxUtils
 	};
 
 	public static Date parseDateSeconds(
-			String source )
+			final String source )
 			throws ParseException {
 		return dateFormatSeconds.get().parse(
 				source);
 	}
 
 	public static Date parseDateMillis(
-			String source )
+			final String source )
 			throws ParseException {
 		return dateFormatMillis.get().parse(
 				source);

@@ -3,10 +3,17 @@ package mil.nga.giat.geowave.datastore.accumulo.mapreduce.input;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.net.InetAddress;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
-
-import com.google.common.base.*;
+import java.util.Random;
+import java.util.Set;
+import java.util.TreeSet;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
@@ -15,6 +22,7 @@ import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.index.Index;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
+import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations;
 import mil.nga.giat.geowave.datastore.accumulo.mapreduce.GeoWaveConfiguratorBase;
 import mil.nga.giat.geowave.datastore.accumulo.mapreduce.JobContextAdapterStore;
@@ -204,6 +212,22 @@ public class GeoWaveInputFormat<T> extends
 	protected static DistributableQuery getQuery(
 			final JobContext context ) {
 		return GeoWaveInputConfigurator.getQuery(
+				CLASS,
+				context);
+	}
+
+	public static void setQueryOptions(
+			final Configuration config,
+			final QueryOptions queryOptions ) {
+		GeoWaveInputConfigurator.setQueryOptions(
+				CLASS,
+				config,
+				queryOptions);
+	}
+
+	protected static QueryOptions getQueryOptions(
+			final JobContext context ) {
+		return GeoWaveInputConfigurator.getQueryOptions(
 				CLASS,
 				context);
 	}

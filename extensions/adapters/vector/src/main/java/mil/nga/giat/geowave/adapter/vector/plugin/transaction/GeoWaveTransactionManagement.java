@@ -45,12 +45,14 @@ public class GeoWaveTransactionManagement implements
 
 	/** Map of modified features; by feature id */
 	private final Map<String, ModifiedFeature> modifiedFeatures = new ConcurrentHashMap<String, ModifiedFeature>();
+	private final Map<String, SimpleFeature> addedFeatures = new ConcurrentHashMap<String, SimpleFeature>();
 	private final Multimap<String, SimpleFeature> removedFeatures = LinkedListMultimap.create();
 
 	/** List of added feature ids; values stored in added above */
 	private final Map<String, List<ByteArrayId>> addedFidList = new HashMap<String, List<ByteArrayId>>();
 
 	private final GeoWaveDataStoreComponents components;
+	private int maxAdditionBufferSize = 10000;
 
 	private final LockingManagement lockingManager;
 
@@ -65,7 +67,7 @@ public class GeoWaveTransactionManagement implements
 		public ModifiedFeature(
 				final SimpleFeature oldFeature,
 				final SimpleFeature newFeature,
-				boolean alreadyWritten ) {
+				final boolean alreadyWritten ) {
 			super();
 			this.newFeature = newFeature;
 			this.oldFeature = oldFeature;
@@ -87,12 +89,14 @@ public class GeoWaveTransactionManagement implements
 	 * @throws IOException
 	 */
 	public GeoWaveTransactionManagement(
+			final int maxAdditionBufferSize,
 			final GeoWaveDataStoreComponents components,
 			final String typeName,
 			final Transaction transaction,
-			LockingManagement lockingManager,
-			String txID )
+			final LockingManagement lockingManager,
+			final String txID )
 			throws IOException {
+		this.maxAdditionBufferSize = maxAdditionBufferSize;
 		this.components = components;
 		mutex = this;
 		this.typeName = typeName;
@@ -109,7 +113,7 @@ public class GeoWaveTransactionManagement implements
 	@Override
 	public boolean isEmpty() {
 		synchronized (mutex) {
-			return modifiedFeatures.isEmpty() && addedFidList.isEmpty() && this.removedFeatures.isEmpty();
+			return modifiedFeatures.isEmpty() && addedFidList.isEmpty() && removedFeatures.isEmpty() && addedFeatures.isEmpty();
 		}
 	}
 
@@ -121,6 +125,7 @@ public class GeoWaveTransactionManagement implements
 			addedFidList.clear();
 			modifiedFeatures.clear();
 			removedFeatures.clear();
+			addedFeatures.clear();
 		}
 	}
 
@@ -133,9 +138,9 @@ public class GeoWaveTransactionManagement implements
 	 */
 	@Override
 	public void modify(
-			String fid,
-			SimpleFeature original,
-			SimpleFeature updated )
+			final String fid,
+			final SimpleFeature original,
+			final SimpleFeature updated )
 			throws IOException {
 
 		lockingManager.lock(
@@ -158,7 +163,7 @@ public class GeoWaveTransactionManagement implements
 		// record, if it has moved outside
 		// the query space. oh well!
 
-		ModifiedFeature modRecord = modifiedFeatures.get(fid);
+		final ModifiedFeature modRecord = modifiedFeatures.get(fid);
 
 		if (!updated.getBounds().equals(
 				original.getBounds())) {
@@ -166,13 +171,13 @@ public class GeoWaveTransactionManagement implements
 			// retain original--original position is removed later.
 			// The original feature needs to be excluded in a query
 			// and removed at commit
-			this.removedFeatures.put(
+			removedFeatures.put(
 					fid,
 					original);
 
 		}
-		if ((modRecord != null && modRecord.alreadyWritten) || addedFidList.containsKey(fid)) {
-			this.components.writeCommit(
+		if (((modRecord != null) && modRecord.alreadyWritten) || addedFidList.containsKey(fid)) {
+			components.writeCommit(
 					updated,
 					this);
 			synchronized (mutex) {
@@ -199,7 +204,7 @@ public class GeoWaveTransactionManagement implements
 								false));
 			}
 		}
-		ReferencedEnvelope bounds = new ReferencedEnvelope(
+		final ReferencedEnvelope bounds = new ReferencedEnvelope(
 				(CoordinateReferenceSystem) null);
 		bounds.include(original.getBounds());
 		bounds.include(updated.getBounds());
@@ -213,15 +218,15 @@ public class GeoWaveTransactionManagement implements
 
 	@Override
 	public void add(
-			String fid,
-			SimpleFeature feature )
+			final String fid,
+			final SimpleFeature feature )
 			throws IOException {
 		feature.getUserData().put(
 				Hints.USE_PROVIDED_FID,
 				true);
 		if (feature.getUserData().containsKey(
 				Hints.PROVIDED_FID)) {
-			String providedFid = (String) feature.getUserData().get(
+			final String providedFid = (String) feature.getUserData().get(
 					Hints.PROVIDED_FID);
 			feature.getUserData().put(
 					Hints.PROVIDED_FID,
@@ -232,15 +237,12 @@ public class GeoWaveTransactionManagement implements
 					Hints.PROVIDED_FID,
 					feature.getID());
 		}
-		List<ByteArrayId> rowIDS = this.components.write(
-				feature,
-				this);
-		synchronized (mutex) {
-			addedFidList.put(
-					fid,
-					rowIDS); // preserve order features are added
-								// in
+		if (addedFeatures.size() == maxAdditionBufferSize) {
+			flushAddsToStore(false);
 		}
+		addedFeatures.put(
+				fid,
+				feature);
 		components.getGTstore().getListenerManager().fireFeaturesAdded(
 				components.getAdapter().getType().getTypeName(),
 				transaction,
@@ -250,15 +252,17 @@ public class GeoWaveTransactionManagement implements
 
 	@Override
 	public void remove(
-			String fid,
-			SimpleFeature feature )
+			final String fid,
+			final SimpleFeature feature )
 			throws IOException {
 		synchronized (mutex) {
-			if (addedFidList.remove(fid) != null)
-				this.components.remove(
+			if (addedFidList.remove(fid) != null) {
+				components.remove(
 						feature,
 						this);
+			}
 			else {
+				addedFeatures.remove(fid);
 				// will remove at the end of the transaction, except ones
 				// created in the transaction.
 				removedFeatures.put(
@@ -276,17 +280,17 @@ public class GeoWaveTransactionManagement implements
 
 	public void rollback()
 			throws IOException {
-		for (String fid : this.addedFidList.keySet()) {
+		for (final String fid : addedFidList.keySet()) {
 			components.remove(
 					fid,
 					this);
 		}
-		this.clear();
+		clear();
 	}
 
 	@Override
 	public String[] composeAuthorizations() {
-		final String[] initialAuths = this.components.getGTstore().getAuthorizationSPI().getAuthorizations();
+		final String[] initialAuths = components.getGTstore().getAuthorizationSPI().getAuthorizations();
 		final String[] newAuths = new String[initialAuths.length + 1];
 		System.arraycopy(
 				initialAuths,
@@ -294,52 +298,77 @@ public class GeoWaveTransactionManagement implements
 				newAuths,
 				0,
 				initialAuths.length);
-		newAuths[initialAuths.length] = this.txID;
+		newAuths[initialAuths.length] = txID;
 		return newAuths;
 	}
 
 	@Override
 	public String composeVisibility() {
-		return this.txID;
+		return txID;
 	}
 
 	public String getID() {
 		return txID;
 	}
 
+	@Override
+	public void flush()
+			throws IOException {
+		flushAddsToStore(false);
+	}
+
+	private void flushAddsToStore(
+			final boolean autoCommitAdds )
+			throws IOException {
+		final Map<String, List<ByteArrayId>> captureList = autoCommitAdds ? new HashMap<String, List<ByteArrayId>>() : addedFidList;
+		components.write(
+				addedFeatures.values().iterator(),
+				captureList,
+				autoCommitAdds ? new GeoWaveEmptyTransaction(
+						components) : this);
+		addedFeatures.clear();
+	}
+
 	public void commit()
 			throws IOException {
+
+		flushAddsToStore(true);
+
 		final Iterator<Pair<SimpleFeature, SimpleFeature>> updateIt = getUpdates();
 
-		final String transId = "\\(?" + txID + "\\)?";
-		VisibilityTransformer visibilityTransformer = new VisibilityTransformer(
-				"&?" + transId,
-				"");
-		for (Collection<ByteArrayId> rowIDs : this.addedFidList.values()) {
-			this.components.replaceDataVisibility(
+		if (addedFidList.size() > 0) {
+			final String transId = "\\(?" + txID + "\\)?";
+			final VisibilityTransformer visibilityTransformer = new VisibilityTransformer(
+					"&?" + transId,
+					"");
+			for (final Collection<ByteArrayId> rowIDs : addedFidList.values()) {
+				components.replaceDataVisibility(
+						this,
+						rowIDs,
+						visibilityTransformer);
+			}
+
+			components.replaceStatsVisibility(
 					this,
-					rowIDs,
 					visibilityTransformer);
 		}
 
-		this.components.replaceStatsVisibility(
-				this,
-				visibilityTransformer);
-
-		final Iterator<SimpleFeature> removeIt = this.removedFeatures.values().iterator();
+		final Iterator<SimpleFeature> removeIt = removedFeatures.values().iterator();
 
 		while (removeIt.hasNext()) {
 			final SimpleFeature delFeatured = removeIt.next();
 			components.remove(
 					delFeatured,
 					this);
-			ModifiedFeature modFeature = this.modifiedFeatures.get(delFeatured.getID());
+			final ModifiedFeature modFeature = modifiedFeatures.get(delFeatured.getID());
 			// only want notify updates to existing (not new) features
-			if (modFeature == null || modFeature.alreadyWritten) components.getGTstore().getListenerManager().fireFeaturesRemoved(
-					typeName,
-					transaction,
-					ReferencedEnvelope.reference(delFeatured.getBounds()),
-					true);
+			if ((modFeature == null) || modFeature.alreadyWritten) {
+				components.getGTstore().getListenerManager().fireFeaturesRemoved(
+						typeName,
+						transaction,
+						ReferencedEnvelope.reference(delFeatured.getBounds()),
+						true);
+			}
 		}
 
 		while (updateIt.hasNext()) {
@@ -347,7 +376,7 @@ public class GeoWaveTransactionManagement implements
 			components.writeCommit(
 					pair.getRight(),
 					this);
-			ReferencedEnvelope bounds = new ReferencedEnvelope(
+			final ReferencedEnvelope bounds = new ReferencedEnvelope(
 					(CoordinateReferenceSystem) null);
 			bounds.include(pair.getLeft().getBounds());
 			bounds.include(pair.getRight().getBounds());
@@ -361,21 +390,23 @@ public class GeoWaveTransactionManagement implements
 	}
 
 	private Iterator<Pair<SimpleFeature, SimpleFeature>> getUpdates() {
-		final Iterator<Entry<String, ModifiedFeature>> entries = this.modifiedFeatures.entrySet().iterator();
+		final Iterator<Entry<String, ModifiedFeature>> entries = modifiedFeatures.entrySet().iterator();
 		return new Iterator<Pair<SimpleFeature, SimpleFeature>>() {
 
 			Pair<SimpleFeature, SimpleFeature> pair = null;
 
 			@Override
 			public boolean hasNext() {
-				while (entries.hasNext() && pair == null) {
-					Entry<String, ModifiedFeature> entry = entries.next();
-					if (!entry.getValue().alreadyWritten)
+				while (entries.hasNext() && (pair == null)) {
+					final Entry<String, ModifiedFeature> entry = entries.next();
+					if (!entry.getValue().alreadyWritten) {
 						pair = Pair.of(
 								entry.getValue().oldFeature,
 								entry.getValue().newFeature);
-					else
+					}
+					else {
 						pair = null;
+					}
 				}
 				return pair != null;
 			}
@@ -383,7 +414,9 @@ public class GeoWaveTransactionManagement implements
 			@Override
 			public Pair<SimpleFeature, SimpleFeature> next()
 					throws NoSuchElementException {
-				if (pair == null) throw new NoSuchElementException();
+				if (pair == null) {
+					throw new NoSuchElementException();
+				}
 				final Pair<SimpleFeature, SimpleFeature> retVal = pair;
 				pair = null;
 				return retVal;
@@ -403,29 +436,23 @@ public class GeoWaveTransactionManagement implements
 
 			@Override
 			public boolean hasNext() {
-				while (it.hasNext() && feature == null) {
+				while (it.hasNext() && (feature == null)) {
 					feature = it.next();
-					ModifiedFeature modRecord = GeoWaveTransactionManagement.this.modifiedFeatures.get(feature.getID());
+					final ModifiedFeature modRecord = modifiedFeatures.get(feature.getID());
 					// exclude removed features
 					// and include updated features not written yet.
-					Collection<SimpleFeature> oldFeatures = GeoWaveTransactionManagement.this.removedFeatures.get(feature.getID());
+					final Collection<SimpleFeature> oldFeatures = removedFeatures.get(feature.getID());
 
-					if (modRecord != null)
+					if (modRecord != null) {
 						feature = modRecord.newFeature;
-					else if (oldFeatures != null && !oldFeatures.isEmpty()) // TODO:
-																			// need
-																			// to
-																			// check
-																			// if
-																			// the
-																			// removed
-																			// feature
-																			// was
-																			// just
-																			// moved
-						// meaning its original matches the boundaries of this
-						// 'feature'. matchesOne(oldFeatures, feature))
+					}
+					else if ((oldFeatures != null) && !oldFeatures.isEmpty()) {
+						// need to check if the removed feature
+						// was just moved meaning its original matches the
+						// boundaries of this 'feature'. matchesOne(oldFeatures,
+						// feature))
 						feature = null;
+					}
 
 				}
 				return feature != null;
@@ -434,7 +461,9 @@ public class GeoWaveTransactionManagement implements
 			@Override
 			public SimpleFeature next()
 					throws NoSuchElementException {
-				if (feature == null) throw new NoSuchElementException();
+				if (feature == null) {
+					throw new NoSuchElementException();
+				}
 				final SimpleFeature retVal = feature;
 				feature = null;
 				return retVal;
@@ -442,7 +471,7 @@ public class GeoWaveTransactionManagement implements
 
 			@Override
 			public void remove() {
-				GeoWaveTransactionManagement.this.removedFeatures.put(
+				removedFeatures.put(
 						feature.getID(),
 						feature);
 			}

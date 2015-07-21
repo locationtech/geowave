@@ -8,7 +8,6 @@ import org.apache.commons.cli.ParseException;
 
 public class KafkaProducerCommandLineOptions
 {
-	private final static String KAFKA_PROPS_KEY = "producer";
 	private static final KafkaCommandLineArgument[] KAFKA_PRODUCER_ARGS = new KafkaCommandLineArgument[] {
 		new KafkaCommandLineArgument(
 				"metadataBrokerList",

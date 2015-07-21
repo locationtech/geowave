@@ -30,20 +30,27 @@ public class CoordinateCircleDistanceFn implements
 		}
 	}
 
+	private static final double EPSILON = 0.0000000001;
+
 	@Override
 	public double measure(
-			final Coordinate x,
-			final Coordinate y ) {
+			final Coordinate c1,
+			final Coordinate c2 ) {
 		try {
 			return JTS.orthodromicDistance(
-					x,
-					y,
+					c1,
+					c2,
 					getCRS());
 		}
 		catch (TransformException e) {
 			throw new RuntimeException(
 					"Failed to transform coordinates to provided CRS",
 					e);
+		}
+		catch (java.lang.AssertionError ae) {
+			// wierd error with orthodromic distance
+			if ((Math.abs(c1.x - c2.x) < EPSILON) && (Math.abs(c1.y - c2.y) < EPSILON)) return 0.0;
+			throw ae;
 		}
 
 	}

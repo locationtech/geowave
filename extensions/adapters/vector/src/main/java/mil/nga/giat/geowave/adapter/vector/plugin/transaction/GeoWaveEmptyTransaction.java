@@ -35,6 +35,12 @@ public class GeoWaveEmptyTransaction implements
 		return true;
 	}
 
+	@Override
+	public void flush()
+			throws IOException {
+
+	}
+
 	/**
 	 * Record a modification to the indicated fid
 	 * 

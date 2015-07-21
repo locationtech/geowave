@@ -15,6 +15,7 @@ public class AdapterWithObjectWritable implements
 {
 	private ObjectWritable objectWritable;
 	private ByteArrayId adapterId;
+	private ByteArrayId dataId;
 	private boolean isPrimary;
 
 	public void setObject(
@@ -40,6 +41,15 @@ public class AdapterWithObjectWritable implements
 		this.adapterId = adapterId;
 	}
 
+	public ByteArrayId getDataId() {
+		return dataId;
+	}
+
+	public void setDataId(
+			final ByteArrayId dataId ) {
+		this.dataId = dataId;
+	}
+
 	public boolean isPrimary() {
 		return isPrimary;
 	}
@@ -58,6 +68,15 @@ public class AdapterWithObjectWritable implements
 		input.readFully(adapterIdBinary);
 		adapterId = new ByteArrayId(
 				adapterIdBinary);
+
+		final int dataIdLength = input.readInt();
+		if (dataIdLength > 0) {
+			final byte[] dataIdBinary = new byte[dataIdLength];
+			input.readFully(dataIdBinary);
+			dataId = new ByteArrayId(
+					dataIdBinary);
+		}
+
 		isPrimary = input.readBoolean();
 		if (objectWritable == null) {
 			objectWritable = new ObjectWritable();
@@ -72,18 +91,31 @@ public class AdapterWithObjectWritable implements
 		final byte[] adapterIdBinary = adapterId.getBytes();
 		output.writeInt(adapterIdBinary.length);
 		output.write(adapterIdBinary);
+
+		if (dataId != null) {
+			final byte[] dataIdBinary = dataId.getBytes();
+			output.writeInt(dataIdBinary.length);
+			output.write(dataIdBinary);
+		}
+		else {
+			output.writeInt(0);
+		}
+
 		output.writeBoolean(isPrimary);
 		objectWritable.write(output);
+
 	}
 
 	public static void fillWritableWithAdapter(
 			final HadoopWritableSerializationTool serializationTool,
 			final AdapterWithObjectWritable writableToFill,
 			final ByteArrayId adapterID,
+			final ByteArrayId dataId,
 			final boolean isPrimary,
 			final Object entry ) {
 		writableToFill.setAdapterId(adapterID);
 		writableToFill.setPrimary(isPrimary);
+		writableToFill.setDataId(dataId);
 		writableToFill.setObject(serializationTool.toWritable(
 				adapterID,
 				entry));
@@ -97,6 +129,11 @@ public class AdapterWithObjectWritable implements
 		return (innerObj instanceof Writable) ? serializationTool.getHadoopWritableSerializerForAdapter(
 				adapterID).fromWritable(
 				(Writable) innerObj) : innerObj;
+	}
+
+	@Override
+	public String toString() {
+		return "AdapterWithObjectWritable [ adapterId=" + adapterId + ", dataId=" + dataId + ", isPrimary=" + isPrimary + "]";
 	}
 
 }

@@ -186,7 +186,9 @@ public class GPXConsumerTest
 
 		while (consumer.hasNext()) {
 			GeoWaveData<SimpleFeature> data = consumer.next();
-			expectedSet.remove(data.getValue().getID());
+			if (!expectedSet.remove(data.getValue().getID())) {
+				System.out.println("Missing match:" + data.getValue().getID());
+			}
 			ValidateObject<SimpleFeature> tester = expectedResults.get(data.getValue().getID());
 			if (tester != null) {
 				assertTrue(

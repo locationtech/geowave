@@ -26,8 +26,8 @@ public class CountofDoubleWritable implements
 	}
 
 	public CountofDoubleWritable(
-			double value,
-			double count ) {
+			final double value,
+			final double count ) {
 		set(
 				value,
 				count);
@@ -35,7 +35,7 @@ public class CountofDoubleWritable implements
 
 	@Override
 	public void readFields(
-			DataInput in )
+			final DataInput in )
 			throws IOException {
 		value = in.readDouble();
 		count = in.readDouble();
@@ -43,15 +43,15 @@ public class CountofDoubleWritable implements
 
 	@Override
 	public void write(
-			DataOutput out )
+			final DataOutput out )
 			throws IOException {
 		out.writeDouble(value);
 		out.writeDouble(count);
 	}
 
 	public void set(
-			double value,
-			double count ) {
+			final double value,
+			final double count ) {
 		this.value = value;
 		this.count = count;
 	}
@@ -69,11 +69,11 @@ public class CountofDoubleWritable implements
 	 */
 	@Override
 	public boolean equals(
-			Object o ) {
+			final Object o ) {
 		if (!(o instanceof CountofDoubleWritable)) {
 			return false;
 		}
-		return this.compareTo(o) == 0;
+		return compareTo(o) == 0;
 	}
 
 	@Override
@@ -83,12 +83,13 @@ public class CountofDoubleWritable implements
 
 	@Override
 	public int compareTo(
-			Object o ) {
-		CountofDoubleWritable other = (CountofDoubleWritable) o;
+			final Object o ) {
+		final CountofDoubleWritable other = (CountofDoubleWritable) o;
 		final double diff = (value / count) - (other.value / other.count);
 		return (Math.abs(diff) < 0.0000001) ? 0 : (diff < 0 ? -1 : 0);
 	}
 
+	@Override
 	public String toString() {
 		return Double.toString(value) + "/" + Double.toString(count);
 	}
@@ -98,22 +99,28 @@ public class CountofDoubleWritable implements
 			WritableComparator implements
 			Serializable
 	{
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
 		public Comparator() {
 			super(
 					CountofDoubleWritable.class);
 		}
 
+		@Override
 		public int compare(
-				byte[] b1,
-				int s1,
-				int l1,
-				byte[] b2,
-				int s2,
-				int l2 ) {
-			double thisValue = readDouble(
+				final byte[] b1,
+				final int s1,
+				final int l1,
+				final byte[] b2,
+				final int s2,
+				final int l2 ) {
+			final double thisValue = readDouble(
 					b1,
 					s1);
-			double thatValue = readDouble(
+			final double thatValue = readDouble(
 					b2,
 					s2);
 			return Double.compare(

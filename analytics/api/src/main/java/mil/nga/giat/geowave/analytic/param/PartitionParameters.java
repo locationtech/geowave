@@ -15,6 +15,8 @@ public class PartitionParameters
 			ParameterEnum {
 		PARTITION_DISTANCE(
 				Double.class),
+		PARTITION_PRECISION(
+				Double.class),
 		MAX_MEMBER_SELECTION(
 				Integer.class),
 		PARTITIONER_CLASS(

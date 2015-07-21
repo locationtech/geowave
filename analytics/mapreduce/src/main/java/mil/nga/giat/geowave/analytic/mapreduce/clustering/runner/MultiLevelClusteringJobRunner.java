@@ -11,15 +11,13 @@ import mil.nga.giat.geowave.analytic.mapreduce.SequenceFileInputFormatConfigurat
 import mil.nga.giat.geowave.analytic.mapreduce.SequenceFileOutputFormatConfiguration;
 import mil.nga.giat.geowave.analytic.param.CentroidParameters;
 import mil.nga.giat.geowave.analytic.param.ClusteringParameters;
+import mil.nga.giat.geowave.analytic.param.ClusteringParameters.Clustering;
 import mil.nga.giat.geowave.analytic.param.CommonParameters;
 import mil.nga.giat.geowave.analytic.param.ExtractParameters;
 import mil.nga.giat.geowave.analytic.param.GlobalParameters;
-import mil.nga.giat.geowave.analytic.param.HullParameters;
-import mil.nga.giat.geowave.analytic.param.InputParameters;
-import mil.nga.giat.geowave.analytic.param.MapReduceParameters;
-import mil.nga.giat.geowave.analytic.param.OutputParameters;
-import mil.nga.giat.geowave.analytic.param.ClusteringParameters.Clustering;
 import mil.nga.giat.geowave.analytic.param.GlobalParameters.Global;
+import mil.nga.giat.geowave.analytic.param.HullParameters;
+import mil.nga.giat.geowave.analytic.param.MapReduceParameters;
 import mil.nga.giat.geowave.core.geotime.IndexType;
 
 import org.apache.commons.cli.Option;

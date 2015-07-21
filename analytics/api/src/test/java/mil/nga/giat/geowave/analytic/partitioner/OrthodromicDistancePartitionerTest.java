@@ -15,7 +15,7 @@ import mil.nga.giat.geowave.analytic.param.ClusteringParameters;
 import mil.nga.giat.geowave.analytic.param.CommonParameters;
 import mil.nga.giat.geowave.analytic.param.ExtractParameters;
 import mil.nga.giat.geowave.analytic.param.GlobalParameters;
-import mil.nga.giat.geowave.analytic.partitioner.OrthodromicDistancePartitioner;
+import mil.nga.giat.geowave.analytic.param.PartitionParameters.Partition;
 import mil.nga.giat.geowave.analytic.partitioner.Partitioner.PartitionData;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 
@@ -76,11 +76,16 @@ public class OrthodromicDistancePartitionerTest
 				1,
 				0);
 
-		PropertyManagement propertyManagement = new PropertyManagement();
+		final PropertyManagement propertyManagement = new PropertyManagement();
 
-		propertyManagement.store(
-				ClusteringParameters.Clustering.DISTANCE_THRESHOLDS,
-				"111.321");
+		AbstractPartitioner.putDistances(
+				propertyManagement,
+				new double[] {
+					propertyManagement.getPropertyAsDouble(
+							Partition.PARTITION_DISTANCE,
+							10000)
+				});
+
 		propertyManagement.store(
 				CommonParameters.Common.INDEX_MODEL_BUILDER_CLASS,
 				SpatialIndexModelBuilder.class);
@@ -96,9 +101,9 @@ public class OrthodromicDistancePartitionerTest
 				"EPSG:4326");
 		propertyManagement.store(
 				ClusteringParameters.Clustering.GEOMETRIC_DISTANCE_UNIT,
-				"km");
+				"m");
 
-		OrthodromicDistancePartitioner<SimpleFeature> partitioner = new OrthodromicDistancePartitioner<SimpleFeature>();
+		final OrthodromicDistancePartitioner<SimpleFeature> partitioner = new OrthodromicDistancePartitioner<SimpleFeature>();
 
 		partitioner.initialize(propertyManagement);
 
@@ -108,7 +113,7 @@ public class OrthodromicDistancePartitionerTest
 				partitions.size());
 		assertTrue(hasOnePrimary(partitions));
 
-		for (PartitionData partition : partitions) {
+		for (final PartitionData partition : partitions) {
 			final MultiDimensionalNumericData ranges = partitioner.getRangesForPartition(partition);
 			assertTrue(ranges.getDataPerDimension()[0].getMin() < 0.0000000001);
 			assertTrue(ranges.getDataPerDimension()[0].getMax() > -0.0000000001);
@@ -164,14 +169,14 @@ public class OrthodromicDistancePartitionerTest
 
 		partitions = partitioner.getCubeIdentifiers(feature);
 		assertEquals(
-				4,
+				2,
 				partitions.size());
 		assertTrue(hasOnePrimary(partitions));
 		double maxX = 0;
 		double minX = 0;
 		double maxY = 0;
 		double minY = 0;
-		for (PartitionData partition : partitions) {
+		for (final PartitionData partition : partitions) {
 			final MultiDimensionalNumericData ranges = partitioner.getRangesForPartition(partition);
 			// System.out.println(ranges.getDataPerDimension()[0] + "; "
 			// +ranges.getDataPerDimension()[1] + " = " + partition.isPrimary);
@@ -196,9 +201,9 @@ public class OrthodromicDistancePartitionerTest
 	}
 
 	private boolean hasOnePrimary(
-			List<PartitionData> data ) {
+			final List<PartitionData> data ) {
 		int count = 0;
-		for (PartitionData dataitem : data) {
+		for (final PartitionData dataitem : data) {
 			count += (dataitem.isPrimary() ? 1 : 0);
 		}
 		return count == 1;

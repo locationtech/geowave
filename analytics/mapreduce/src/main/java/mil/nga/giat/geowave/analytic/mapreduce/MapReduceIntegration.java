@@ -5,6 +5,7 @@ import java.io.IOException;
 import mil.nga.giat.geowave.analytic.PropertyManagement;
 
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.mapreduce.Counters;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.util.Tool;
 
@@ -16,7 +17,7 @@ public interface MapReduceIntegration
 			final GeoWaveAnalyticJobRunner tool )
 			throws Exception;
 
-	public boolean waitForCompletion(
+	public Counters waitForCompletion(
 			Job job )
 			throws InterruptedException,
 			Exception;

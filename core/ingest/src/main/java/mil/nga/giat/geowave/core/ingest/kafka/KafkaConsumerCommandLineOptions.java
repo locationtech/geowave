@@ -6,9 +6,11 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import org.apache.log4j.Logger;
 
 public class KafkaConsumerCommandLineOptions
 {
+	private final static Logger LOGGER = Logger.getLogger(KafkaConsumerCommandLineOptions.class);
 	private static final KafkaCommandLineArgument[] KAFKA_CONSUMER_ARGS = new KafkaCommandLineArgument[] {
 		new KafkaCommandLineArgument(
 				"groupId",
@@ -36,15 +38,20 @@ public class KafkaConsumerCommandLineOptions
 				"consumer.timeout.ms",
 				false)
 	};
+	private static final int DEFAULT_BATCH_SIZE = 10000;
 	private final static String RECONNECT_ON_TIMEOUT_KEY = "reconnectOnTimeout";
+	private final static String BATCH_SIZE_KEY = "batchSize";
 	private final Properties kafkaProperties;
 	private final boolean flushAndReconnect;
+	private final int batchSize;
 
 	public KafkaConsumerCommandLineOptions(
 			final Properties kafkaProperties,
-			final boolean flushAndReconnect ) {
+			final boolean flushAndReconnect,
+			final int batchSize ) {
 		this.kafkaProperties = kafkaProperties;
 		this.flushAndReconnect = flushAndReconnect;
+		this.batchSize = batchSize;
 	}
 
 	public Properties getProperties() {
@@ -53,6 +60,10 @@ public class KafkaConsumerCommandLineOptions
 
 	public boolean isFlushAndReconnect() {
 		return flushAndReconnect;
+	}
+
+	public int getBatchSize() {
+		return batchSize;
 	}
 
 	public static void applyOptions(
@@ -69,6 +80,13 @@ public class KafkaConsumerCommandLineOptions
 		reconnectOnTimeoutOption.setRequired(false);
 
 		allOptions.addOption(reconnectOnTimeoutOption);
+
+		final Option batchSizeOption = new Option(
+				BATCH_SIZE_KEY,
+				true,
+				"The data will automatically flush after this number of entries (default is '" + DEFAULT_BATCH_SIZE + "')");
+		batchSizeOption.setRequired(false);
+		allOptions.addOption(batchSizeOption);
 	}
 
 	public static KafkaConsumerCommandLineOptions parseOptions(
@@ -78,8 +96,21 @@ public class KafkaConsumerCommandLineOptions
 				commandLine,
 				KAFKA_CONSUMER_ARGS);
 		final boolean flushAndReconnect = commandLine.hasOption(RECONNECT_ON_TIMEOUT_KEY);
+		int batchSize = DEFAULT_BATCH_SIZE;
+		if (commandLine.hasOption(BATCH_SIZE_KEY)) {
+			try {
+				final String value = commandLine.getOptionValue(BATCH_SIZE_KEY);
+				batchSize = Integer.parseInt(value);
+			}
+			catch (final Exception e) {
+				LOGGER.error(
+						"Error parsing '" + BATCH_SIZE_KEY + "' as an integer",
+						e);
+			}
+		}
 		return new KafkaConsumerCommandLineOptions(
 				baseOptions.getProperties(),
-				flushAndReconnect);
+				flushAndReconnect,
+				batchSize);
 	}
 }

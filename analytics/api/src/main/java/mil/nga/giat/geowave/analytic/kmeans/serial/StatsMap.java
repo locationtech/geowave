@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import mil.nga.giat.geowave.analytic.kmeans.serial.AnalyticStats.StatValue;
-
 public class StatsMap implements
 		AnalyticStats
 {

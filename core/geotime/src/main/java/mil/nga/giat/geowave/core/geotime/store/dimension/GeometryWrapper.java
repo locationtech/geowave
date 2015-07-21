@@ -76,22 +76,21 @@ public class GeometryWrapper implements
 		return geometry.getFactory().createPolygon(
 				new Coordinate[] {
 					new Coordinate(
-							rangeData[longPosition].getMin(),
-							rangeData[latPosition].getMin()),
+							rangeData[longPosition].getMin() - DOUBLE_TOLERANCE,
+							rangeData[latPosition].getMin() - DOUBLE_TOLERANCE),
 					new Coordinate(
-							rangeData[longPosition].getMin(),
-							rangeData[latPosition].getMax()),
+							rangeData[longPosition].getMin() - DOUBLE_TOLERANCE,
+							rangeData[latPosition].getMax() + DOUBLE_TOLERANCE),
 					new Coordinate(
-							rangeData[longPosition].getMax(),
-							rangeData[latPosition].getMax()),
+							rangeData[longPosition].getMax() + DOUBLE_TOLERANCE,
+							rangeData[latPosition].getMax() + DOUBLE_TOLERANCE),
 					new Coordinate(
-							rangeData[longPosition].getMax(),
-							rangeData[latPosition].getMin()),
+							rangeData[longPosition].getMax() + DOUBLE_TOLERANCE,
+							rangeData[latPosition].getMin() - DOUBLE_TOLERANCE),
 					new Coordinate(
-							rangeData[longPosition].getMin(),
-							rangeData[latPosition].getMin())
-				}).buffer(
-				DOUBLE_TOLERANCE).intersects(
+							rangeData[longPosition].getMin() - DOUBLE_TOLERANCE,
+							rangeData[latPosition].getMin() - DOUBLE_TOLERANCE)
+				}).intersects(
 				geometry);
 	}
 }
