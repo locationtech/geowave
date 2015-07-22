@@ -45,6 +45,10 @@ public class ByteSerializationProvider implements
 		@Override
 		public byte[] writeField(
 				final Byte fieldValue ) {
+			if (fieldValue == null) {
+				return new byte[] {};
+			}
+
 			return new byte[] {
 				fieldValue
 			};

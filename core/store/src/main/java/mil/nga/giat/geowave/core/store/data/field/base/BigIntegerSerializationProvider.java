@@ -40,6 +40,9 @@ public class BigIntegerSerializationProvider implements
 		@Override
 		public byte[] writeField(
 				final BigInteger fieldValue ) {
+			if (fieldValue == null) {
+				return new byte[] {};
+			}
 			return fieldValue.toByteArray();
 		}
 

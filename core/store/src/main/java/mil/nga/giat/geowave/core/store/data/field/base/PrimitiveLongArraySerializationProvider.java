@@ -48,6 +48,9 @@ public class PrimitiveLongArraySerializationProvider implements
 		@Override
 		public byte[] writeField(
 				final long[] fieldValue ) {
+			if (fieldValue == null) {
+				return new byte[] {};
+			}
 			final ByteBuffer buf = ByteBuffer.allocate(8 * fieldValue.length);
 			for (final long value : fieldValue) {
 				buf.putLong(value);

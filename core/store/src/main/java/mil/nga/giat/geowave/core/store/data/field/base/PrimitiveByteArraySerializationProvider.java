@@ -26,6 +26,9 @@ public class PrimitiveByteArraySerializationProvider implements
 		@Override
 		public byte[] readField(
 				final byte[] fieldData ) {
+			if ((fieldData == null) || (fieldData.length < 1)) {
+				return null;
+			}
 			return Arrays.copyOf(
 					fieldData,
 					fieldData.length);

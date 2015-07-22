@@ -44,6 +44,10 @@ public class LongSerializationProvider implements
 		@Override
 		public byte[] writeField(
 				final Long fieldValue ) {
+			if (fieldValue == null) {
+				return new byte[] {};
+			}
+
 			final ByteBuffer buf = ByteBuffer.allocate(8);
 			buf.putLong(fieldValue);
 			return buf.array();

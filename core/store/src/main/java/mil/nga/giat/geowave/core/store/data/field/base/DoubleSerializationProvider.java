@@ -40,6 +40,10 @@ public class DoubleSerializationProvider implements
 		@Override
 		public byte[] writeField(
 				final Double fieldValue ) {
+			if (fieldValue == null) {
+				return new byte[] {};
+			}
+
 			final ByteBuffer buf = ByteBuffer.allocate(8);
 			buf.putDouble(fieldValue);
 			return buf.array();

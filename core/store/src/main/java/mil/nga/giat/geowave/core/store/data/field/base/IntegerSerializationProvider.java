@@ -42,6 +42,10 @@ public class IntegerSerializationProvider implements
 		@Override
 		public byte[] writeField(
 				final Integer fieldValue ) {
+			if (fieldValue == null) {
+				return new byte[] {};
+			}
+
 			final ByteBuffer buf = ByteBuffer.allocate(4);
 			buf.putInt(fieldValue);
 			return buf.array();

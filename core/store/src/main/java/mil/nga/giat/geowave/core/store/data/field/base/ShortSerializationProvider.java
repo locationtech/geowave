@@ -41,6 +41,10 @@ public class ShortSerializationProvider implements
 		@Override
 		public byte[] writeField(
 				final Short fieldValue ) {
+			if (fieldValue == null) {
+				return new byte[] {};
+			}
+
 			final ByteBuffer buf = ByteBuffer.allocate(2);
 			buf.putShort(fieldValue);
 			return buf.array();
