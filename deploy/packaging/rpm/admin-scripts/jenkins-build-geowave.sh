@@ -24,6 +24,11 @@ mv $WORKSPACE/deploy/target/*-accumulo-singlejar.jar $WORKSPACE/deploy/target/ge
 mvn package -P geowave-tools-singlejar $BUILD_ARGS "$@"
 mv $WORKSPACE/deploy/target/*-tools.jar $WORKSPACE/deploy/target/geowave-tools.jar
 
+pushd $WORKSPACE/analytics/mapreduce
+mvn package -P analytics-singlejar $BUILD_ARGS "$@"
+mv $WORKSPACE/analytics/mapreduce/target/munged/geowave-analytic-mapreduce-*-analytics-singlejar.jar $WORKSPACE/deploy/target/geowave-analytic-mapreduce.jar
+popd
+
 # Build the jace artifacts (release, debug, source) and include geotools-vector ingest tool to support testing
 mkdir -p $WORKSPACE/deploy/target/jace
 
