@@ -26,7 +26,7 @@ public class StatsCompositionTool<T> implements
 		DeleteCallback<T>,
 		AutoCloseable
 {
-	final DataStatisticsStore statisticsStore;
+	DataStatisticsStore statisticsStore;
 	List<DataStatisticsBuilder<T>> statisticsBuilders = null;
 	final boolean persistStats;
 	final Object MUTEX = new Object();
@@ -37,10 +37,22 @@ public class StatsCompositionTool<T> implements
 	}
 
 	public StatsCompositionTool(
+			final DataAdapter<T> dataAdapter ) {
+		this.persistStats = true;
+		this.statisticsStore = null;
+		this.init(dataAdapter);
+	}
+
+	public StatsCompositionTool(
 			final DataAdapter<T> dataAdapter,
 			final DataStatisticsStore statisticsStore ) {
 		this.statisticsStore = statisticsStore;
 		persistStats = (dataAdapter instanceof StatisticalDataAdapter) && (statisticsStore != null);
+		this.init(dataAdapter);
+	}
+
+	private void init(
+			final DataAdapter<T> dataAdapter ) {
 		if (persistStats) {
 			final ByteArrayId[] statisticsIds = ((StatisticalDataAdapter<T>) dataAdapter).getSupportedStatisticsIds();
 			statisticsBuilders = new ArrayList<DataStatisticsBuilder<T>>(
@@ -148,6 +160,11 @@ public class StatsCompositionTool<T> implements
 	public void close()
 			throws Exception {
 		flush();
+	}
+
+	public void setStatisticsStore(
+			DataStatisticsStore statisticsStore ) {
+		this.statisticsStore = statisticsStore;
 	}
 
 }

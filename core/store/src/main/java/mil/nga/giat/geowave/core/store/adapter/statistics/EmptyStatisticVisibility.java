@@ -16,7 +16,7 @@ public class EmptyStatisticVisibility<T> implements
 	public byte[] getVisibility(
 			final DataStoreEntryInfo entryInfo,
 			final T entry ) {
-		return null;
+		return new byte[0];
 	}
 
 }
