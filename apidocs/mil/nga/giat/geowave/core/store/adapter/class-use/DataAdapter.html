@@ -581,6 +581,9 @@
 </tr>
 <tbody>
 <tr class="altColor">
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/StatsCompositionTool.html#StatsCompositionTool(mil.nga.giat.geowave.core.store.adapter.DataAdapter)">StatsCompositionTool</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/StatsCompositionTool.html" title="type parameter in StatsCompositionTool">T</a>&gt;&nbsp;dataAdapter)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/StatsCompositionTool.html#StatsCompositionTool(mil.nga.giat.geowave.core.store.adapter.DataAdapter,%20mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore)">StatsCompositionTool</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/StatsCompositionTool.html" title="type parameter in StatsCompositionTool">T</a>&gt;&nbsp;dataAdapter,
                     <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatisticsStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatisticsStore</a>&nbsp;statisticsStore)</code>&nbsp;</td>
 </tr>
@@ -605,6 +608,32 @@
 <tr class="rowColor">
 <td class="colFirst"><code>interface&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/ModelConvertingDataAdapter.html" title="interface in mil.nga.giat.geowave.datastore.accumulo">ModelConvertingDataAdapter</a>&lt;T&gt;</strong></code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
+<caption><span>Classes in <a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/package-summary.html">mil.nga.giat.geowave.datastore.accumulo</a> that implement <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Class and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/DataAdapterStatsWrapper.html" title="class in mil.nga.giat.geowave.datastore.accumulo">DataAdapterStatsWrapper</a>&lt;T&gt;</strong></code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/package-summary.html">mil.nga.giat.geowave.datastore.accumulo</a> that return <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/DataAdapterStatsWrapper.html" title="type parameter in DataAdapterStatsWrapper">T</a>&gt;</code></td>
+<td class="colLast"><span class="strong">DataAdapterStatsWrapper.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/DataAdapterStatsWrapper.html#getAdapter()">getAdapter</a></strong>()</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -665,6 +694,18 @@
 <tr class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><span class="strong">AccumuloDataStore.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloDataStore.html#store(mil.nga.giat.geowave.core.store.adapter.DataAdapter)">store</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&nbsp;adapter)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing constructors, and an explanation">
+<caption><span>Constructors in <a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/package-summary.html">mil.nga.giat.geowave.datastore.accumulo</a> with parameters of type <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/DataAdapterStatsWrapper.html#DataAdapterStatsWrapper(mil.nga.giat.geowave.core.store.index.Index,%20mil.nga.giat.geowave.core.store.adapter.DataAdapter)">DataAdapterStatsWrapper</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index,
+                       <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/DataAdapterStatsWrapper.html" title="type parameter in DataAdapterStatsWrapper">T</a>&gt;&nbsp;adapter)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
