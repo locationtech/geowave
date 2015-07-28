@@ -25,6 +25,7 @@ import mil.nga.giat.geowave.core.store.adapter.statistics.CountDataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsVisibilityHandler;
 import mil.nga.giat.geowave.core.store.adapter.statistics.FieldTypeStatisticVisibility;
+import mil.nga.giat.geowave.core.store.adapter.statistics.RowRangeDataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.StatisticalDataAdapter;
 import mil.nga.giat.geowave.core.store.data.PersistentValue;
 import mil.nga.giat.geowave.core.store.data.VisibilityWriter;
@@ -38,6 +39,7 @@ import mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStore;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloOptions;
 import mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations;
+import mil.nga.giat.geowave.datastore.accumulo.mapreduce.input.GeoWaveInputFormat;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloAdapterStore;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloDataStatisticsStore;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloIndexStore;
@@ -420,6 +422,13 @@ public class AccumuloDataStoreStatsTest
 				CountDataStatistics.STATS_ID,
 				"bbb");
 		assertNull(countStats);
+
+		RowRangeDataStatistics rowStats = (RowRangeDataStatistics) statsStore.getDataStatistics(
+				null,
+				RowRangeDataStatistics.getId(index.getId()),
+				"bbb");
+
+		assertTrue(rowStats != null);
 
 	}
 

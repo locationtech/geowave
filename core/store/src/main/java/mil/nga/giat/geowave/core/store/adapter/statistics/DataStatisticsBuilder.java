@@ -21,7 +21,6 @@ public class DataStatisticsBuilder<T> implements
 	private final Map<ByteArrayId, DataStatistics<T>> statisticsMap = new HashMap<ByteArrayId, DataStatistics<T>>();
 	private final ByteArrayId statisticsId;
 	private final DataStatisticsVisibilityHandler<T> visibilityHandler;
-	private static final Logger LOGGER = Logger.getLogger(DataStatistics.class);
 
 	public DataStatisticsBuilder(
 			final StatisticalDataAdapter<T> adapter,

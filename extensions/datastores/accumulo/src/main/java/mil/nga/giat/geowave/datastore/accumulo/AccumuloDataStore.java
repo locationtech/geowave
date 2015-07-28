@@ -28,6 +28,7 @@ import mil.nga.giat.geowave.core.store.adapter.MemoryAdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
+import mil.nga.giat.geowave.core.store.adapter.statistics.RowRangeDataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.StatsCompositionTool;
 import mil.nga.giat.geowave.core.store.data.VisibilityWriter;
 import mil.nga.giat.geowave.core.store.data.visibility.UnconstrainedVisibilityHandler;
@@ -234,7 +235,9 @@ public class AccumuloDataStore implements
 				}
 			}
 
-			statisticsTool = getStatsCompositionTool(writableAdapter);
+			statisticsTool = getStatsCompositionTool(
+					index,
+					writableAdapter);
 
 			writer = accumuloOperations.createWriter(
 					indexName,
@@ -460,7 +463,9 @@ public class AccumuloDataStore implements
 						altIdxWriter,
 						dataWriter));
 			}
-			final StatsCompositionTool<T> statsCompositionTool = this.getStatsCompositionTool(dataWriter);
+			final StatsCompositionTool<T> statsCompositionTool = this.getStatsCompositionTool(
+					index,
+					dataWriter);
 			callbacks.add(statsCompositionTool);
 
 			if (ingestCallback != null) {
@@ -656,7 +661,9 @@ public class AccumuloDataStore implements
 				Integer.MAX_VALUE,
 				authorizations);
 
-		final StatsCompositionTool<Object> statsCompositionTool = getStatsCompositionTool(adapter);
+		final StatsCompositionTool<Object> statsCompositionTool = getStatsCompositionTool(
+				index,
+				adapter);
 		final boolean success = (rows.size() > 0) && deleteRowsForSingleEntry(
 				tableName,
 				rows,
@@ -1092,8 +1099,22 @@ public class AccumuloDataStore implements
 	public CloseableIterator<?> query(
 			final Query query ) {
 		return query(
-				(List<ByteArrayId>) null,
-				query);
+				null,
+				query,
+				adapterStore,
+				null,
+				null);
+	}
+
+	public CloseableIterator<?> query(
+			final Query query,
+			final ScanCallback<?> scanCallback ) {
+		return query(
+				null,
+				query,
+				adapterStore,
+				null,
+				scanCallback);
 	}
 
 	@Override
@@ -1258,9 +1279,12 @@ public class AccumuloDataStore implements
 	}
 
 	private <T> StatsCompositionTool<T> getStatsCompositionTool(
+			final Index index,
 			final DataAdapter<T> adapter ) {
 		return new StatsCompositionTool<T>(
-				adapter,
+				new DataAdapterStatsWrapper<T>(
+						index,
+						adapter),
 				accumuloOptions.isPersistDataStatistics() ? statisticsStore : null);
 	}
 

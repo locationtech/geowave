@@ -55,7 +55,7 @@ public class StatsManager
 
 	public DataStatisticsVisibilityHandler<SimpleFeature> getVisibilityHandler(
 			final ByteArrayId statisticsId ) {
-		if (statisticsId.equals(CountDataStatistics.STATS_ID)) {
+		if (statisticsId.equals(CountDataStatistics.STATS_ID) || !visibilityHandlers.containsKey(statisticsId)) {
 			return GEOMETRY_VISIBILITY_HANDLER;
 		}
 		return visibilityHandlers.get(statisticsId);

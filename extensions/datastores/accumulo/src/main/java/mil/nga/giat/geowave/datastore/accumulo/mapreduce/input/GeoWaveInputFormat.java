@@ -20,6 +20,7 @@ import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.statistics.RowRangeDataStatistics;
 import mil.nga.giat.geowave.core.store.index.Index;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
@@ -29,6 +30,7 @@ import mil.nga.giat.geowave.datastore.accumulo.mapreduce.JobContextAdapterStore;
 import mil.nga.giat.geowave.datastore.accumulo.mapreduce.JobContextIndexStore;
 import mil.nga.giat.geowave.datastore.accumulo.mapreduce.input.GeoWaveInputConfigurator.InputConfig;
 import mil.nga.giat.geowave.datastore.accumulo.mapreduce.input.GeoWaveInputFormat.IntermediateSplitInfo.RangeLocationPair;
+import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloDataStatisticsStore;
 import mil.nga.giat.geowave.datastore.accumulo.util.AccumuloUtils;
 
 import org.apache.accumulo.core.client.AccumuloException;
@@ -432,6 +434,49 @@ public class GeoWaveInputFormat<T> extends
 		return retVal;
 	}
 
+	private static final BigInteger ONE = new BigInteger("1");
+	private Range getRangeMax(
+			final Index index,
+			final JobContext context ) {
+		try {
+			final AccumuloOperations operations = GeoWaveInputFormat.getAccumuloOperations(context);
+			final AccumuloDataStatisticsStore store = new AccumuloDataStatisticsStore(
+					operations);
+			final RowRangeDataStatistics<?> stats = (RowRangeDataStatistics<?>) store.getDataStatistics(
+					null,
+					RowRangeDataStatistics.getId(index.getId()),
+					GeoWaveInputFormat.getAuthorizations(context));
+
+			final int cardinality = Math.max(
+					stats.getMin().length,
+					stats.getMax().length);
+			return new Range(
+					new Key(
+							new Text(
+									this.getKeyFromBigInteger(
+											new BigInteger(
+													stats.getMin()).subtract(ONE),
+											cardinality))),
+					true,
+					new Key(
+							new Text(
+									this.getKeyFromBigInteger(
+											new BigInteger(
+													stats.getMax()).add(ONE),
+											cardinality))),
+					true);
+		}
+		catch (AccumuloException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		catch (AccumuloSecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return new Range();
+	}
+
 	private TreeSet<IntermediateSplitInfo> getIntermediateSplits(
 			final JobContext context,
 			final Integer maxSplits )
@@ -466,7 +511,11 @@ public class GeoWaveInputFormat<T> extends
 			}
 			else {
 				ranges = new TreeSet<Range>();
-				ranges.add(new Range());
+				final Range fullrange = getRangeMax(
+						index,
+						context);
+				ranges.add(fullrange);
+				if (LOGGER.isTraceEnabled()) LOGGER.trace("Protected range: " + fullrange);
 			}
 			// get the metadata information for these ranges
 			final Map<String, Map<KeyExtent, List<Range>>> tserverBinnedRanges = new HashMap<String, Map<KeyExtent, List<Range>>>();
@@ -543,6 +592,7 @@ public class GeoWaveInputFormat<T> extends
 						rangeList.add(new RangeLocationPair(
 								keyExtent.clip(range),
 								location));
+						if (LOGGER.isTraceEnabled()) LOGGER.warn("Clipped range: " + rangeList.get(rangeList.size() - 1).range);
 					}
 					splitInfo.put(
 							index,

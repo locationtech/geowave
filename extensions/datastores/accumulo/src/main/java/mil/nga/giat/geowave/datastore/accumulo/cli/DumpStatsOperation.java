@@ -26,8 +26,8 @@ public class DumpStatsOperation extends
 		try (CloseableIterator<DataStatistics<?>> statsIt = statsStore.getAllDataStatistics(authorizations)) {
 			while (statsIt.hasNext()) {
 				final DataStatistics<?> stats = statsIt.next();
-				if (adapter != null && !stats.getDataAdapterId().equals(
-						adapter.getAdapterId())) continue;
+				if (adapter != null && !adapter.getAdapterId().equals(
+						stats.getDataAdapterId())) continue;
 				try {
 					System.out.println(stats.toString());
 				}
