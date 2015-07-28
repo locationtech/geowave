@@ -26,6 +26,9 @@ public class ByteArraySerializationProvider implements
 		@Override
 		public Byte[] readField(
 				final byte[] fieldData ) {
+			if (fieldData == null || fieldData.length < 1) {
+				return null;
+			}
 			return ArrayUtils.toObject(fieldData);
 		}
 	}

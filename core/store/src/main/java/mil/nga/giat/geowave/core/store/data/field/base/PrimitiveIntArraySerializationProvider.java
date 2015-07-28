@@ -44,6 +44,9 @@ public class PrimitiveIntArraySerializationProvider implements
 		@Override
 		public byte[] writeField(
 				final int[] fieldValue ) {
+			if (fieldValue == null) {
+				return new byte[] {};
+			}
 			final ByteBuffer buf = ByteBuffer.allocate(4 * fieldValue.length);
 			for (final int value : fieldValue) {
 				buf.putInt(value);

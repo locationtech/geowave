@@ -48,6 +48,9 @@ public class BigDecimalSerializationProvider implements
 		@Override
 		public byte[] writeField(
 				final BigDecimal fieldValue ) {
+			if (fieldValue == null) {
+				return new byte[] {};
+			}
 			final byte[] unscaled = fieldValue.unscaledValue().toByteArray();
 			final ByteBuffer buf = ByteBuffer.allocate(4 + unscaled.length);
 			buf.putInt(fieldValue.scale());

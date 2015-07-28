@@ -40,6 +40,9 @@ public class FloatSerializationProvider implements
 		@Override
 		public byte[] writeField(
 				final Float fieldValue ) {
+			if (fieldValue == null) {
+				return new byte[] {};
+			}
 			final ByteBuffer buf = ByteBuffer.allocate(4);
 			buf.putFloat(fieldValue);
 			return buf.array();

@@ -44,6 +44,9 @@ public class PrimitiveFloatArraySerializationProvider implements
 		@Override
 		public byte[] writeField(
 				final float[] fieldValue ) {
+			if (fieldValue == null) {
+				return new byte[] {};
+			}
 			final ByteBuffer buf = ByteBuffer.allocate(4 * fieldValue.length);
 			for (final float value : fieldValue) {
 				buf.putFloat(value);

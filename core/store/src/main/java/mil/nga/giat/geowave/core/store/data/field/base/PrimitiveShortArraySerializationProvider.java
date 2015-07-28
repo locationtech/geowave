@@ -45,6 +45,10 @@ public class PrimitiveShortArraySerializationProvider implements
 		@Override
 		public byte[] writeField(
 				final short[] fieldValue ) {
+			if (fieldValue == null) {
+				return new byte[] {};
+			}
+
 			final ByteBuffer buf = ByteBuffer.allocate(2 * fieldValue.length);
 			for (final short value : fieldValue) {
 				buf.putShort(value);

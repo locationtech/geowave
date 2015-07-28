@@ -45,6 +45,9 @@ public class PrimitiveDoubleArraySerializationProvider implements
 		@Override
 		public byte[] writeField(
 				final double[] fieldValue ) {
+			if (fieldValue == null) {
+				return new byte[] {};
+			}
 			final ByteBuffer buf = ByteBuffer.allocate(8 * fieldValue.length);
 			for (final double value : fieldValue) {
 				buf.putDouble(value);

@@ -49,6 +49,10 @@ abstract public class ArrayWriter<RowType, FieldType> implements
 	protected byte[] writeFixedSizeField(
 			final FieldType[] fieldValue ) {
 
+		if (fieldValue == null) {
+			return new byte[] {};
+		}
+
 		final byte[][] byteData = getBytes(fieldValue);
 
 		final ByteBuffer buf = ByteBuffer.allocate(5 + (int) Math.ceil(fieldValue.length / 8.0) + getLength(byteData));
@@ -95,6 +99,10 @@ abstract public class ArrayWriter<RowType, FieldType> implements
 
 	protected byte[] writeVariableSizeField(
 			final FieldType[] fieldValue ) {
+		if (fieldValue == null) {
+			return new byte[] {};
+		}
+
 		final byte[][] bytes = getBytes(fieldValue);
 		final ByteBuffer buf = ByteBuffer.allocate(1 + (4 * fieldValue.length) + getLength(bytes));
 
@@ -127,6 +135,7 @@ abstract public class ArrayWriter<RowType, FieldType> implements
 
 	private byte[][] getBytes(
 			final FieldType[] fieldData ) {
+
 		final byte[][] bytes = new byte[fieldData.length][];
 		for (int i = 0; i < fieldData.length; i++) {
 			if (fieldData[i] == null) {
