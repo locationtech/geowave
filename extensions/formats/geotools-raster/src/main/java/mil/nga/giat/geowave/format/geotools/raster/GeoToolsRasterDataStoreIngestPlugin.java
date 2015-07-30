@@ -37,12 +37,20 @@ public class GeoToolsRasterDataStoreIngestPlugin implements
 {
 	private final static Logger LOGGER = Logger.getLogger(GeoToolsRasterDataStoreIngestPlugin.class);
 	private final Index[] supportedIndices;
+	private final RasterOptionProvider optionProvider;
 
 	public GeoToolsRasterDataStoreIngestPlugin() {
+		this(
+				new RasterOptionProvider());
+	}
+
+	public GeoToolsRasterDataStoreIngestPlugin(
+			final RasterOptionProvider optionProvider ) {
 		supportedIndices = new Index[] {
 			IndexType.SPATIAL_RASTER.createDefaultIndex(),
 			IndexType.SPATIAL_TEMPORAL_RASTER.createDefaultIndex()
 		};
+		this.optionProvider = optionProvider;
 	}
 
 	@Override
@@ -96,7 +104,9 @@ public class GeoToolsRasterDataStoreIngestPlugin implements
 				final RasterDataAdapter adapter = new RasterDataAdapter(
 						input.getName(),
 						metadata,
-						coverage);
+						coverage,
+						optionProvider.getTileSize(),
+						optionProvider.isBuildPyramid());
 				final List<GeoWaveData<GridCoverage>> coverages = new ArrayList<GeoWaveData<GridCoverage>>();
 				coverages.add(new GeoWaveData<GridCoverage>(
 						adapter,
