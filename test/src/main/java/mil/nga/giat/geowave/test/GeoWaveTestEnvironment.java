@@ -473,7 +473,7 @@ abstract public class GeoWaveTestEnvironment
 	/**
 	 * Unzips the contents of a zip file to a target output directory, deleting
 	 * anything that existed beforehand
-	 *
+	 * 
 	 * @param zipInput
 	 *            input zip file
 	 * @param outputFolder

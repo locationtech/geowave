@@ -2,7 +2,7 @@ package mil.nga.giat.geowave.core.index.lexicoder;
 
 /**
  * A class containing instances of lexicoders.
- *
+ * 
  */
 public class Lexicoders
 {

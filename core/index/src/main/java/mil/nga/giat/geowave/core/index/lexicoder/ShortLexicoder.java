@@ -7,7 +7,7 @@ import com.google.common.primitives.Shorts;
  * Short.MAX_VALUE). Does an exclusive or on the most significant bit to invert
  * the sign, so that lexicographic ordering of the byte arrays matches the
  * natural order of the numbers.
- *
+ * 
  */
 public class ShortLexicoder implements
 		NumberLexicoder<Short>
@@ -18,15 +18,13 @@ public class ShortLexicoder implements
 	@Override
 	public byte[] toByteArray(
 			final Short value ) {
-		return Shorts.toByteArray(
-				(short) (value ^ 0x8000));
+		return Shorts.toByteArray((short) (value ^ 0x8000));
 	}
 
 	@Override
 	public Short fromByteArray(
 			final byte[] bytes ) {
-		final short value = Shorts.fromByteArray(
-				bytes);
+		final short value = Shorts.fromByteArray(bytes);
 		return (short) (value ^ 0x8000);
 	}
 
