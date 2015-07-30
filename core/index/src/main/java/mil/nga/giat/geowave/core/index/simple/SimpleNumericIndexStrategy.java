@@ -22,7 +22,7 @@ import mil.nga.giat.geowave.core.index.sfc.data.NumericValue;
  * integers). The strategy doesn't use any binning. The ids are simply the byte
  * arrays of the value. This index strategy will not perform well for inserting
  * ranges because there will be too much replication of data.
- *
+ * 
  */
 public abstract class SimpleNumericIndexStrategy<T extends Number> implements
 		NumericIndexStrategy
@@ -47,7 +47,7 @@ public abstract class SimpleNumericIndexStrategy<T extends Number> implements
 
 	/**
 	 * Cast a double into the type T
-	 *
+	 * 
 	 * @param value
 	 *            a double value
 	 * @return the value represented as a T
@@ -79,22 +79,16 @@ public abstract class SimpleNumericIndexStrategy<T extends Number> implements
 	public List<ByteArrayRange> getQueryRanges(
 			final MultiDimensionalNumericData indexedRange,
 			final int maxEstimatedRangeDecomposition ) {
-		final T min = cast(
-				indexedRange.getMinValuesPerDimension()[0]);
+		final T min = cast(indexedRange.getMinValuesPerDimension()[0]);
 		final ByteArrayId start = new ByteArrayId(
-				lexicoder.toByteArray(
-						min));
-		final T max = cast(
-				Math.ceil(
-						indexedRange.getMaxValuesPerDimension()[0]));
+				lexicoder.toByteArray(min));
+		final T max = cast(Math.ceil(indexedRange.getMaxValuesPerDimension()[0]));
 		final ByteArrayId end = new ByteArrayId(
-				lexicoder.toByteArray(
-						max));
+				lexicoder.toByteArray(max));
 		final ByteArrayRange range = new ByteArrayRange(
 				start,
 				end);
-		return Collections.singletonList(
-				range);
+		return Collections.singletonList(range);
 	}
 
 	/**
@@ -102,7 +96,7 @@ public abstract class SimpleNumericIndexStrategy<T extends Number> implements
 	 * doensn't use binning, it will return the ByteArrayId of every value in
 	 * the range (i.e. if you are storing a range using this index strategy,
 	 * your data will be replicated for every integer value in the range).
-	 *
+	 * 
 	 * {@inheritDoc}
 	 */
 	@Override
@@ -118,7 +112,7 @@ public abstract class SimpleNumericIndexStrategy<T extends Number> implements
 	 * doensn't use binning, it will return the ByteArrayId of every value in
 	 * the range (i.e. if you are storing a range using this index strategy,
 	 * your data will be replicated for every integer value in the range).
-	 *
+	 * 
 	 * {@inheritDoc}
 	 */
 	@Override
@@ -126,16 +120,12 @@ public abstract class SimpleNumericIndexStrategy<T extends Number> implements
 			final MultiDimensionalNumericData indexedData,
 			final int maxEstimatedDuplicateIds ) {
 		final long min = (long) indexedData.getMinValuesPerDimension()[0];
-		final long max = (long) Math.ceil(
-				indexedData.getMaxValuesPerDimension()[0]);
+		final long max = (long) Math.ceil(indexedData.getMaxValuesPerDimension()[0]);
 		final List<ByteArrayId> insertionIds = new ArrayList<>(
 				(int) (max - min) + 1);
 		for (long i = min; i <= max; i++) {
-			insertionIds.add(
-					new ByteArrayId(
-							lexicoder.toByteArray(
-									cast(
-											i))));
+			insertionIds.add(new ByteArrayId(
+					lexicoder.toByteArray(cast(i))));
 		}
 		return insertionIds;
 	}
@@ -148,9 +138,7 @@ public abstract class SimpleNumericIndexStrategy<T extends Number> implements
 	@Override
 	public MultiDimensionalNumericData getRangeForId(
 			final ByteArrayId insertionId ) {
-		final long value = Long.class.cast(
-				lexicoder.fromByteArray(
-						insertionId.getBytes()));
+		final long value = Long.class.cast(lexicoder.fromByteArray(insertionId.getBytes()));
 		final NumericData[] dataPerDimension = new NumericData[] {
 			new NumericValue(
 					value)
@@ -163,9 +151,7 @@ public abstract class SimpleNumericIndexStrategy<T extends Number> implements
 	public long[] getCoordinatesPerDimension(
 			final ByteArrayId insertionId ) {
 		return new long[] {
-			Long.class.cast(
-					lexicoder.fromByteArray(
-							insertionId.getBytes()))
+			Long.class.cast(lexicoder.fromByteArray(insertionId.getBytes()))
 		};
 	}
 
@@ -178,8 +164,7 @@ public abstract class SimpleNumericIndexStrategy<T extends Number> implements
 
 	@Override
 	public String getId() {
-		return StringUtils.intToString(
-				hashCode());
+		return StringUtils.intToString(hashCode());
 	}
 
 }

@@ -7,7 +7,7 @@ import com.google.common.primitives.Ints;
  * Integer.MAX_VALUE). Does an exclusive or on the most significant bit to
  * invert the sign, so that lexicographic ordering of the byte arrays matches
  * the natural order of the numbers.
- *
+ * 
  * See Apache Accumulo
  * (org.apache.accumulo.core.client.lexicoder.IntegerLexicoder)
  */
@@ -20,15 +20,13 @@ public class IntegerLexicoder implements
 	@Override
 	public byte[] toByteArray(
 			final Integer value ) {
-		return Ints.toByteArray(
-				value ^ 0x80000000);
+		return Ints.toByteArray(value ^ 0x80000000);
 	}
 
 	@Override
 	public Integer fromByteArray(
 			final byte[] bytes ) {
-		final int value = Ints.fromByteArray(
-				bytes);
+		final int value = Ints.fromByteArray(bytes);
 		return value ^ 0x80000000;
 	}
 

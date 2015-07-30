@@ -434,7 +434,9 @@ public class GeoWaveInputFormat<T> extends
 		return retVal;
 	}
 
-	private static final BigInteger ONE = new BigInteger("1");
+	private static final BigInteger ONE = new BigInteger(
+			"1");
+
 	private Range getRangeMax(
 			final Index index,
 			final JobContext context ) {
