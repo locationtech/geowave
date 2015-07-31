@@ -1,6 +1,8 @@
 package mil.nga.giat.geowave.analytic.mapreduce.kde;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 import mil.nga.giat.geowave.adapter.raster.RasterUtils;
 import mil.nga.giat.geowave.adapter.vector.plugin.ExtractGeometryFilterVisitor;
@@ -25,7 +27,6 @@ import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloAdapterStore;
 import org.apache.accumulo.core.client.IteratorSetting;
 import org.apache.accumulo.core.client.mapreduce.InputFormatBase;
 import org.apache.accumulo.core.iterators.user.WholeRowIterator;
-import org.apache.commons.io.IOUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.fs.FileSystem;
@@ -33,6 +34,10 @@ import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.DoubleWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.mapreduce.Job;
+import org.apache.hadoop.mapreduce.Mapper;
+import org.apache.hadoop.mapreduce.OutputFormat;
+import org.apache.hadoop.mapreduce.Partitioner;
+import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.input.SequenceFileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
@@ -50,6 +55,7 @@ public class KDEJobRunner extends
 		Tool
 {
 
+	public static final String GEOWAVE_CLASSPATH_JARS = "geowave.classpath.jars";
 	public static final String MAX_LEVEL_KEY = "MAX_LEVEL";
 	public static final String MIN_LEVEL_KEY = "MIN_LEVEL";
 	public static final String COVERAGE_NAME_KEY = "COVERAGE_NAME";
@@ -148,6 +154,9 @@ public class KDEJobRunner extends
 				conf);
 
 		job.setJarByClass(this.getClass());
+		addJobClasspathDependencies(
+				job,
+				conf);
 
 		job.setJobName(getJob1Name());
 
@@ -232,6 +241,10 @@ public class KDEJobRunner extends
 			final Job statsReducer = new Job(
 					conf);
 			statsReducer.setJarByClass(this.getClass());
+			addJobClasspathDependencies(
+					statsReducer,
+					conf);
+
 			statsReducer.setJobName(getJob2Name());
 			statsReducer.setMapperClass(IdentityMapper.class);
 			statsReducer.setPartitionerClass(getJob2Partitioner());
@@ -294,23 +307,23 @@ public class KDEJobRunner extends
 		return true;
 	}
 
-	protected Class getJob2OutputFormatClass() {
+	protected Class<? extends OutputFormat<?, ?>> getJob2OutputFormatClass() {
 		return GeoWaveOutputFormat.class;
 	}
 
-	protected Class getJob2OutputKeyClass() {
+	protected Class<?> getJob2OutputKeyClass() {
 		return GeoWaveOutputKey.class;
 	}
 
-	protected Class getJob2OutputValueClass() {
+	protected Class<?> getJob2OutputValueClass() {
 		return GridCoverage.class;
 	}
 
-	protected Class getJob2Reducer() {
+	protected Class<? extends Reducer<?, ?, ?, ?>> getJob2Reducer() {
 		return AccumuloKDEReducer.class;
 	}
 
-	protected Class getJob2Partitioner() {
+	protected Class<? extends Partitioner<?, ?>> getJob2Partitioner() {
 		return DoubleLevelPartitioner.class;
 	}
 
@@ -319,11 +332,11 @@ public class KDEJobRunner extends
 		return numLevels;
 	}
 
-	protected Class getJob1Mapper() {
+	protected Class<? extends Mapper<?, ?, ?, ?>> getJob1Mapper() {
 		return GaussianCellMapper.class;
 	}
 
-	protected Class getJob1Reducer() {
+	protected Class<? extends Reducer<?, ?, ?, ?>> getJob1Reducer() {
 		return CellSummationReducer.class;
 	}
 
@@ -431,4 +444,19 @@ public class KDEJobRunner extends
 		return 15;
 	}
 
+	protected void addJobClasspathDependencies(
+			final Job job,
+			final Configuration conf )
+			throws IOException,
+			URISyntaxException {
+		final String[] jars = conf.getTrimmedStrings(GEOWAVE_CLASSPATH_JARS);
+
+		if (jars != null) {
+			for (final String jarPath : jars) {
+				job.addArchiveToClassPath(new Path(
+						new URI(
+								jarPath)));
+			}
+		}
+	}
 }
