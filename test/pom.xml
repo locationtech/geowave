@@ -70,12 +70,7 @@
 					<artifactId>*</artifactId>
 				</exclusion>
 			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.kafka</groupId>
-			<artifactId>${kafka.artifact}</artifactId>
-			<version>${kafka.version}</version>	
-		</dependency>		
+		</dependency>	
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>

@@ -1,5 +1,13 @@
 package mil.nga.giat.geowave.adapter.raster;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import geotrellis.raster.ArrayMultiBandTile;
+import geotrellis.raster.DoubleArrayTile;
+import geotrellis.raster.MultiBandTile;
+import geotrellis.raster.RasterExtent;
+import geotrellis.raster.Tile;
+import geotrellis.vector.Extent;
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -18,8 +26,6 @@ import java.awt.image.Raster;
 import java.awt.image.RenderedImage;
 import java.awt.image.SampleModel;
 import java.awt.image.WritableRaster;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -28,7 +34,6 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.imageio.ImageIO;
 import javax.media.jai.BorderExtender;
 import javax.media.jai.Histogram;
 import javax.media.jai.Interpolation;
@@ -40,7 +45,6 @@ import javax.media.jai.RenderedOp;
 import javax.media.jai.TiledImage;
 import javax.media.jai.operator.ScaleDescriptor;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import mil.nga.giat.geowave.adapter.raster.adapter.RasterDataAdapter;
 import mil.nga.giat.geowave.adapter.raster.adapter.merge.nodata.NoDataMergeStrategy;
 import mil.nga.giat.geowave.adapter.raster.plugin.GeoWaveGTRasterFormat;
@@ -53,6 +57,7 @@ import org.geotools.coverage.GridSampleDimension;
 import org.geotools.coverage.TypeMap;
 import org.geotools.coverage.grid.GridCoverage2D;
 import org.geotools.coverage.grid.GridCoverageFactory;
+import org.geotools.coverage.grid.GridGeometry2D;
 import org.geotools.geometry.DirectPosition2D;
 import org.geotools.geometry.Envelope2D;
 import org.geotools.geometry.GeneralEnvelope;
@@ -69,6 +74,7 @@ import org.geotools.resources.image.ImageUtilities;
 import org.geotools.util.NumberRange;
 import org.opengis.coverage.SampleDimensionType;
 import org.opengis.coverage.grid.GridCoverage;
+import org.opengis.coverage.grid.GridEnvelope;
 import org.opengis.geometry.Envelope;
 import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.referencing.FactoryException;
@@ -89,6 +95,117 @@ public class RasterUtils
 	private static final int MIN_SEGMENTS = 5;
 	private static final int MAX_SEGMENTS = 500;
 	private static final double SIMPLIFICATION_MAX_DEGREES = 0.0001;
+
+	public static MultiBandTile getMultiBandTileAsDoubleArrays(
+			final GridCoverage coverage ) {
+		final Tile[] bands = new Tile[coverage.getNumSampleDimensions()];
+		final Raster raster = coverage.getRenderedImage().getData();
+		final int cols = raster.getWidth();
+		final int rows = raster.getHeight();
+		final int colOffset = raster.getMinX();
+		final int rowOffset = raster.getMinY();
+		for (int b = 0; b < bands.length; b++) {
+			final double[] array = new double[rows * cols];
+			bands[b] = new DoubleArrayTile(
+					array,
+					raster.getWidth(),
+					raster.getHeight());
+
+			for (int x = 0; x < cols; x++) {
+				for (int y = 0; y < (raster.getMinY() + raster.getHeight()); y++) {
+					array[(cols * y) + x] = raster.getSampleDouble(
+							x + colOffset,
+							y + rowOffset,
+							b);
+				}
+			}
+		}
+		return new ArrayMultiBandTile(
+				bands);
+	}
+
+	public static GridCoverage2D resample(
+			final String coverageName,
+			final GridCoverage original,
+			final GridGeometry2D targetGeometry ) {
+		final MultiBandTile origMultiBandTile = getMultiBandTileAsDoubleArrays(original);
+		final Tile[] targetTiles = new Tile[origMultiBandTile.bandCount()];
+		for (int b = 0; b < targetTiles.length; b++) {
+			targetTiles[b] = origMultiBandTile.band(
+					b).resample(
+					envelopeToExtent(original.getEnvelope()),
+					envelopeToRasterExtent(
+							targetGeometry.getGridRange2D(),
+							targetGeometry.getEnvelope()));
+		}
+		final MultiBandTile targetMultiBandTile = new ArrayMultiBandTile(
+				targetTiles);
+		return getGridCoverageFromMultiBandTile(
+				coverageName,
+				original,
+				targetMultiBandTile);
+	}
+
+	public static Extent envelopeToExtent(
+			final Envelope env ) {
+		return new Extent(
+				env.getMinimum(0),
+
+				env.getMinimum(1),
+
+				env.getMaximum(0),
+
+				env.getMaximum(1));
+	}
+
+	public static RasterExtent envelopeToRasterExtent(
+			final GridEnvelope gridEnv,
+			final Envelope env ) {
+		final double cellWidth = env.getSpan(0) / gridEnv.getSpan(0);
+
+		final double cellHeight = env.getSpan(1) / gridEnv.getSpan(1);
+		return new RasterExtent(
+				envelopeToExtent(env),
+				cellWidth,
+				cellHeight,
+				gridEnv.getSpan(0),
+				gridEnv.getSpan(1));
+	}
+
+	public static GridCoverage2D getGridCoverageFromMultiBandTile(
+			final String coverageName,
+			final GridCoverage original,
+			final MultiBandTile tile ) {
+		final Envelope env = original.getEnvelope();
+
+		final WritableRaster raster = RasterUtils.createRasterTypeDouble(
+				tile.bandCount(),
+				tile.cols(),
+				tile.rows());
+
+		for (int b = 0; b < tile.bandCount(); b++) {
+			final Tile t = tile.band(b);
+			for (int x = 0; x < tile.cols(); x++) {
+				for (int y = 0; y < tile.rows(); y++) {
+					final double s = t.getDouble(
+							x,
+							y);
+					raster.setSample(
+							x,
+							y,
+							b,
+							s);
+				}
+			}
+		}
+		return createCoverageTypeDouble(
+				coverageName,
+				env.getMinimum(0),
+				env.getMaximum(0),
+				env.getMinimum(1),
+				env.getMaximum(1),
+				raster);
+	}
 
 	public static Geometry getFootprint(
 			final ReferencedEnvelope projectedReferenceEnvelope,
@@ -580,7 +697,7 @@ public class RasterUtils
 	}
 
 	private static BufferedImage rescaleImageViaPlanarImage(
-			Interpolation interpolation,
+			final Interpolation interpolation,
 			final double rescaleX,
 			final double rescaleY,
 			final BufferedImage image ) {
@@ -681,6 +798,29 @@ public class RasterUtils
 				0,
 				tileSize,
 				tileSize,
+				defaultValues);
+		return raster;
+	}
+
+	public static WritableRaster createRasterTypeDouble(
+			final int numBands,
+			final int cols,
+			final int rows ) {
+		final WritableRaster raster = RasterFactory.createBandedRaster(
+				DataBuffer.TYPE_DOUBLE,
+				cols,
+				rows,
+				numBands,
+				null);
+		final double[] defaultValues = new double[cols * rows * numBands];
+		Arrays.fill(
+				defaultValues,
+				Double.NaN);
+		raster.setDataElements(
+				0,
+				0,
+				cols,
+				rows,
 				defaultValues);
 		return raster;
 	}
