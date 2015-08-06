@@ -1,5 +1,8 @@
 package mil.nga.giat.geowave.datastore.accumulo;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.apache.commons.cli.CommandLine;
@@ -85,25 +88,37 @@ public class AccumuloCommandLineOptions
 		final String namespace = commandLine.getOptionValue(
 				"n",
 				"");
+
+		List<String> errors = new ArrayList<String>();
 		if (zookeepers == null) {
 			success = false;
-			LOGGER.error("Zookeeper URL not set");
+			errors.add("Zookeeper URL");
 		}
 		if (instanceId == null) {
 			success = false;
-			LOGGER.error("Accumulo instance ID not set");
+			errors.add("Accumulo instance ID");
 		}
 		if (user == null) {
 			success = false;
-			LOGGER.error("Accumulo user ID not set");
+			errors.add("Accumulo user ID");
 		}
 		if (password == null) {
 			success = false;
-			LOGGER.error("Accumulo password not set");
+			errors.add("Accumulo password");
 		}
 		if (!success) {
+			StringBuilder errorString = new StringBuilder(
+					"Error: missing required arguments (");
+			for (String error : errors) {
+				errorString.append(error);
+				errorString.append(", ");
+			}
+			if (errorString.length() > 0) {
+				errorString.setLength(errorString.length() - 2);
+			}
+			errorString.append(")");
 			throw new ParseException(
-					"Required option is missing");
+					errorString.toString());
 		}
 		try {
 			return new AccumuloCommandLineOptions(
