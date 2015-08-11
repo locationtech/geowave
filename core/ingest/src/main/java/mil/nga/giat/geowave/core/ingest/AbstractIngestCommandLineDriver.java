@@ -177,9 +177,7 @@ abstract public class AbstractIngestCommandLineDriver implements
 			parseOptionsInternal(commandLine);
 		}
 		catch (final ParseException e) {
-			LOGGER.fatal(
-					"",
-					e);
+			LOGGER.fatal(e.getMessage());
 			printHelp(
 					options,
 					operation);
