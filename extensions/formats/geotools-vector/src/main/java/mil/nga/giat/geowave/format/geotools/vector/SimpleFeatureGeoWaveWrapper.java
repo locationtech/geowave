@@ -14,18 +14,13 @@ import mil.nga.giat.geowave.core.store.data.visibility.GlobalVisibilityHandler;
 import mil.nga.giat.geowave.format.geotools.vector.RetypingVectorDataPlugin.RetypingVectorDataSource;
 
 import org.apache.log4j.Logger;
-import org.geoserver.feature.RetypingFeatureCollection;
 import org.geotools.data.DataStore;
 import org.geotools.data.simple.SimpleFeatureCollection;
 import org.geotools.data.simple.SimpleFeatureIterator;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
-import org.opengis.feature.IllegalAttributeException;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
-import org.opengis.feature.type.AttributeDescriptor;
-import org.opengis.feature.type.Name;
 import org.opengis.filter.Filter;
-import org.opengis.filter.identity.FeatureId;
 
 /**
  * This is a wrapper for a GeoTools SimpleFeatureCollection as a convenience to
@@ -70,7 +65,7 @@ public class SimpleFeatureGeoWaveWrapper implements
 			else {
 				dataAdapter = new FeatureDataAdapter(
 						retypedSchema,
-						new GlobalVisibilityHandler(
+						new GlobalVisibilityHandler<SimpleFeature, Object>(
 								visibility));
 			}
 		}
@@ -97,39 +92,6 @@ public class SimpleFeatureGeoWaveWrapper implements
 			return retVal;
 		}
 
-		private SimpleFeature retype(
-				final SimpleFeature original )
-				throws IllegalAttributeException {
-			final SimpleFeatureType target = builder.getFeatureType();
-			for (int i = 0; i < target.getAttributeCount(); i++) {
-				final AttributeDescriptor attributeType = target.getDescriptor(i);
-				Object value = null;
-
-				if (original.getFeatureType().getDescriptor(
-						attributeType.getName()) != null) {
-					final Name name = attributeType.getName();
-					value = source.retypeAttributeValue(
-							original.getAttribute(name),
-							name);
-				}
-
-				builder.add(value);
-			}
-			String featureId = source.getFeatureId(original);
-			if (featureId == null) {
-				// a null ID will default to use the original
-				final FeatureId id = RetypingFeatureCollection.reTypeId(
-						original.getIdentifier(),
-						original.getFeatureType(),
-						target);
-				featureId = id.getID();
-			}
-			final SimpleFeature retyped = builder.buildFeature(featureId);
-			retyped.getUserData().putAll(
-					original.getUserData());
-			return retyped;
-		}
-
 		private synchronized boolean nextData() {
 			SimpleFeature nextAcceptedFeature;
 			do {
@@ -138,7 +100,9 @@ public class SimpleFeatureGeoWaveWrapper implements
 				}
 				nextAcceptedFeature = featureIterator.next();
 				if (builder != null) {
-					nextAcceptedFeature = retype(nextAcceptedFeature);
+					nextAcceptedFeature = source.getRetypedSimpleFeature(
+							builder,
+							nextAcceptedFeature);
 				}
 			}
 			while (!filter.evaluate(nextAcceptedFeature));

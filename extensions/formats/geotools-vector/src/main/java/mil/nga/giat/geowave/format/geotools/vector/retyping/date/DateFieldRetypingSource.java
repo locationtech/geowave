@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import mil.nga.giat.geowave.format.geotools.vector.RetypingVectorDataPlugin.RetypingVectorDataSource;
+import mil.nga.giat.geowave.format.geotools.vector.AbstractFieldRetypingSource;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -17,8 +17,8 @@ import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.AttributeDescriptor;
 import org.opengis.feature.type.Name;
 
-public class DateFieldRetypingSource implements
-		RetypingVectorDataSource
+public class DateFieldRetypingSource extends
+		AbstractFieldRetypingSource
 {
 	private final static Logger LOGGER = Logger.getLogger(DateFieldRetypingSource.class);
 
