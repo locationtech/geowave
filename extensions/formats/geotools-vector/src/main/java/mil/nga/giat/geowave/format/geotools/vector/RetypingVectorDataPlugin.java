@@ -1,8 +1,8 @@
 package mil.nga.giat.geowave.format.geotools.vector;
 
+import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
-import org.opengis.feature.type.Name;
 
 public interface RetypingVectorDataPlugin
 {
@@ -13,11 +13,8 @@ public interface RetypingVectorDataPlugin
 	{
 		public SimpleFeatureType getRetypedSimpleFeatureType();
 
-		public Object retypeAttributeValue(
-				Object value,
-				Name attributeName );
-
-		public String getFeatureId(
+		public SimpleFeature getRetypedSimpleFeature(
+				SimpleFeatureBuilder retypeBuilder,
 				SimpleFeature original );
 	}
 }
