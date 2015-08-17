@@ -86,7 +86,12 @@
 <li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
 <li>
 <ul class="inheritance">
+<li><a href="../../../../../../../../../mil/nga/giat/geowave/format/geotools/vector/AbstractFieldRetypingSource.html" title="class in mil.nga.giat.geowave.format.geotools.vector">mil.nga.giat.geowave.format.geotools.vector.AbstractFieldRetypingSource</a></li>
+<li>
+<ul class="inheritance">
 <li>mil.nga.giat.geowave.format.geotools.vector.retyping.date.DateFieldRetypingSource</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -100,8 +105,7 @@
 <hr>
 <br>
 <pre>public class <span class="strong">DateFieldRetypingSource</span>
-extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
-implements <a href="../../../../../../../../../mil/nga/giat/geowave/format/geotools/vector/RetypingVectorDataPlugin.RetypingVectorDataSource.html" title="interface in mil.nga.giat.geowave.format.geotools.vector">RetypingVectorDataPlugin.RetypingVectorDataSource</a></pre>
+extends <a href="../../../../../../../../../mil/nga/giat/geowave/format/geotools/vector/AbstractFieldRetypingSource.html" title="class in mil.nga.giat.geowave.format.geotools.vector">AbstractFieldRetypingSource</a></pre>
 </li>
 </ul>
 </div>
@@ -153,6 +157,13 @@ implements <a href="../../../../../../../../../mil/nga/giat/geowave/format/geoto
 </tr>
 </table>
 <ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_mil.nga.giat.geowave.format.geotools.vector.AbstractFieldRetypingSource">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;mil.nga.giat.geowave.format.geotools.vector.<a href="../../../../../../../../../mil/nga/giat/geowave/format/geotools/vector/AbstractFieldRetypingSource.html" title="class in mil.nga.giat.geowave.format.geotools.vector">AbstractFieldRetypingSource</a></h3>
+<code><a href="../../../../../../../../../mil/nga/giat/geowave/format/geotools/vector/AbstractFieldRetypingSource.html#getRetypedSimpleFeature(org.geotools.feature.simple.SimpleFeatureBuilder,%20org.opengis.feature.simple.SimpleFeature)">getRetypedSimpleFeature</a></code></li>
+</ul>
+<ul class="blockList">
 <li class="blockList"><a name="methods_inherited_from_class_java.lang.Object">
 <!--   -->
 </a>
@@ -201,7 +212,7 @@ implements <a href="../../../../../../../../../mil/nga/giat/geowave/format/geoto
                           org.opengis.feature.type.Name&nbsp;attributeName)</pre>
 <dl>
 <dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../../../../mil/nga/giat/geowave/format/geotools/vector/RetypingVectorDataPlugin.RetypingVectorDataSource.html#retypeAttributeValue(java.lang.Object,%20org.opengis.feature.type.Name)">retypeAttributeValue</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../../../mil/nga/giat/geowave/format/geotools/vector/RetypingVectorDataPlugin.RetypingVectorDataSource.html" title="interface in mil.nga.giat.geowave.format.geotools.vector">RetypingVectorDataPlugin.RetypingVectorDataSource</a></code></dd>
+<dd><code><a href="../../../../../../../../../mil/nga/giat/geowave/format/geotools/vector/AbstractFieldRetypingSource.html#retypeAttributeValue(java.lang.Object,%20org.opengis.feature.type.Name)">retypeAttributeValue</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../../../mil/nga/giat/geowave/format/geotools/vector/AbstractFieldRetypingSource.html" title="class in mil.nga.giat.geowave.format.geotools.vector">AbstractFieldRetypingSource</a></code></dd>
 </dl>
 </li>
 </ul>
@@ -212,10 +223,6 @@ implements <a href="../../../../../../../../../mil/nga/giat/geowave/format/geoto
 <li class="blockList">
 <h4>getRetypedSimpleFeatureType</h4>
 <pre>public&nbsp;org.opengis.feature.simple.SimpleFeatureType&nbsp;getRetypedSimpleFeatureType()</pre>
-<dl>
-<dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../../../../mil/nga/giat/geowave/format/geotools/vector/RetypingVectorDataPlugin.RetypingVectorDataSource.html#getRetypedSimpleFeatureType()">getRetypedSimpleFeatureType</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../../../mil/nga/giat/geowave/format/geotools/vector/RetypingVectorDataPlugin.RetypingVectorDataSource.html" title="interface in mil.nga.giat.geowave.format.geotools.vector">RetypingVectorDataPlugin.RetypingVectorDataSource</a></code></dd>
-</dl>
 </li>
 </ul>
 <a name="getFeatureId(org.opengis.feature.simple.SimpleFeature)">
@@ -227,7 +234,7 @@ implements <a href="../../../../../../../../../mil/nga/giat/geowave/format/geoto
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getFeatureId(org.opengis.feature.simple.SimpleFeature&nbsp;original)</pre>
 <dl>
 <dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../../../../mil/nga/giat/geowave/format/geotools/vector/RetypingVectorDataPlugin.RetypingVectorDataSource.html#getFeatureId(org.opengis.feature.simple.SimpleFeature)">getFeatureId</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../../../mil/nga/giat/geowave/format/geotools/vector/RetypingVectorDataPlugin.RetypingVectorDataSource.html" title="interface in mil.nga.giat.geowave.format.geotools.vector">RetypingVectorDataPlugin.RetypingVectorDataSource</a></code></dd>
+<dd><code><a href="../../../../../../../../../mil/nga/giat/geowave/format/geotools/vector/AbstractFieldRetypingSource.html#getFeatureId(org.opengis.feature.simple.SimpleFeature)">getFeatureId</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../../../mil/nga/giat/geowave/format/geotools/vector/AbstractFieldRetypingSource.html" title="class in mil.nga.giat.geowave.format.geotools.vector">AbstractFieldRetypingSource</a></code></dd>
 </dl>
 </li>
 </ul>

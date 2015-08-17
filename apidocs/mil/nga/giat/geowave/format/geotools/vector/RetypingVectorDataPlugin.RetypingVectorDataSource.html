@@ -87,7 +87,7 @@
 <li class="blockList">
 <dl>
 <dt>All Known Implementing Classes:</dt>
-<dd><a href="../../../../../../../mil/nga/giat/geowave/format/geotools/vector/retyping/date/DateFieldRetypingSource.html" title="class in mil.nga.giat.geowave.format.geotools.vector.retyping.date">DateFieldRetypingSource</a></dd>
+<dd><a href="../../../../../../../mil/nga/giat/geowave/format/geotools/vector/AbstractFieldRetypingSource.html" title="class in mil.nga.giat.geowave.format.geotools.vector">AbstractFieldRetypingSource</a>, <a href="../../../../../../../mil/nga/giat/geowave/format/geotools/vector/retyping/date/DateFieldRetypingSource.html" title="class in mil.nga.giat.geowave.format.geotools.vector.retyping.date">DateFieldRetypingSource</a></dd>
 </dl>
 <dl>
 <dt>Enclosing interface:</dt>
@@ -115,17 +115,13 @@
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/format/geotools/vector/RetypingVectorDataPlugin.RetypingVectorDataSource.html#getFeatureId(org.opengis.feature.simple.SimpleFeature)">getFeatureId</a></strong>(org.opengis.feature.simple.SimpleFeature&nbsp;original)</code>&nbsp;</td>
+<td class="colFirst"><code>org.opengis.feature.simple.SimpleFeature</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/format/geotools/vector/RetypingVectorDataPlugin.RetypingVectorDataSource.html#getRetypedSimpleFeature(org.geotools.feature.simple.SimpleFeatureBuilder,%20org.opengis.feature.simple.SimpleFeature)">getRetypedSimpleFeature</a></strong>(org.geotools.feature.simple.SimpleFeatureBuilder&nbsp;retypeBuilder,
+                       org.opengis.feature.simple.SimpleFeature&nbsp;original)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>org.opengis.feature.simple.SimpleFeatureType</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/format/geotools/vector/RetypingVectorDataPlugin.RetypingVectorDataSource.html#getRetypedSimpleFeatureType()">getRetypedSimpleFeatureType</a></strong>()</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/format/geotools/vector/RetypingVectorDataPlugin.RetypingVectorDataSource.html#retypeAttributeValue(java.lang.Object,%20org.opengis.feature.type.Name)">retypeAttributeValue</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;value,
-                    org.opengis.feature.type.Name&nbsp;attributeName)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -151,23 +147,14 @@
 <pre>org.opengis.feature.simple.SimpleFeatureType&nbsp;getRetypedSimpleFeatureType()</pre>
 </li>
 </ul>
-<a name="retypeAttributeValue(java.lang.Object, org.opengis.feature.type.Name)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>retypeAttributeValue</h4>
-<pre><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;retypeAttributeValue(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;value,
-                          org.opengis.feature.type.Name&nbsp;attributeName)</pre>
-</li>
-</ul>
-<a name="getFeatureId(org.opengis.feature.simple.SimpleFeature)">
+<a name="getRetypedSimpleFeature(org.geotools.feature.simple.SimpleFeatureBuilder, org.opengis.feature.simple.SimpleFeature)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>getFeatureId</h4>
-<pre><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getFeatureId(org.opengis.feature.simple.SimpleFeature&nbsp;original)</pre>
+<h4>getRetypedSimpleFeature</h4>
+<pre>org.opengis.feature.simple.SimpleFeature&nbsp;getRetypedSimpleFeature(org.geotools.feature.simple.SimpleFeatureBuilder&nbsp;retypeBuilder,
+                                                               org.opengis.feature.simple.SimpleFeature&nbsp;original)</pre>
 </li>
 </ul>
 </li>
