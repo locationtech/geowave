@@ -7,9 +7,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.google.common.collect.Interner;
-import com.google.common.collect.Interners;
-
 import mil.nga.giat.geowave.core.geotime.GeometryUtils;
 import mil.nga.giat.geowave.core.geotime.store.dimension.GeometryWrapper;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
@@ -21,6 +18,8 @@ import mil.nga.giat.geowave.core.store.dimension.DimensionField;
 import mil.nga.giat.geowave.core.store.filter.BasicQueryFilter;
 import mil.nga.giat.geowave.core.store.filter.GenericTypeResolver;
 
+import com.google.common.collect.Interner;
+import com.google.common.collect.Interners;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.prep.PreparedGeometry;
 import com.vividsolutions.jts.geom.prep.PreparedGeometryFactory;
@@ -38,6 +37,49 @@ public class SpatialQueryFilter extends
 	public static final PreparedGeometryFactory FACTORY = new PreparedGeometryFactory();
 	private GeometryImage preparedGeometryImage;
 
+	protected interface SpatialQueryCompareOp
+	{
+		public boolean compare(
+				final Geometry dataGeometry,
+				final PreparedGeometry constraintGeometry );
+
+		public BasicQueryCompareOperation getBaseCompareOp();
+	}
+
+	public enum CompareOperation
+			implements
+			SpatialQueryCompareOp {
+		OVERLAPS {
+
+			@Override
+			public boolean compare(
+					Geometry dataGeometry,
+					PreparedGeometry constraintGeometry ) {
+				return constraintGeometry.intersects(dataGeometry);
+			}
+
+			@Override
+			public BasicQueryCompareOperation getBaseCompareOp() {
+				return BasicQueryCompareOperation.OVERLAPS;
+			}
+		},
+		CONTAINS {
+			@Override
+			public boolean compare(
+					Geometry dataGeometry,
+					PreparedGeometry constraintGeometry ) {
+				return constraintGeometry.contains(dataGeometry);
+			}
+
+			@Override
+			public BasicQueryCompareOperation getBaseCompareOp() {
+				return BasicQueryCompareOperation.CONTAINS;
+			}
+		}
+	};
+
+	private CompareOperation compareOp = CompareOperation.OVERLAPS;
+
 	private Set<ByteArrayId> geometryFieldIds;
 
 	protected SpatialQueryFilter() {
@@ -47,24 +89,28 @@ public class SpatialQueryFilter extends
 	public SpatialQueryFilter(
 			final MultiDimensionalNumericData query,
 			final DimensionField<?>[] dimensionDefinitions,
-			final Geometry queryGeometry ) {
+			final Geometry queryGeometry,
+			final CompareOperation compareOp ) {
 		this(
 				stripGeometry(
 						query,
 						dimensionDefinitions),
-				queryGeometry);
-
+				queryGeometry,
+				compareOp);
 	}
 
 	private SpatialQueryFilter(
 			final StrippedGeometry strippedGeometry,
-			final Geometry queryGeometry ) {
+			final Geometry queryGeometry,
+			CompareOperation compareOp ) {
 		super(
 				strippedGeometry.strippedQuery,
-				strippedGeometry.strippedDimensionDefinitions);
+				strippedGeometry.strippedDimensionDefinitions,
+				compareOp.getBaseCompareOp());
 		preparedGeometryImage = new GeometryImage(
 				FACTORY.create(queryGeometry));
 		geometryFieldIds = strippedGeometry.geometryFieldIds;
+		this.compareOp = compareOp;
 	}
 
 	private static class StrippedGeometry
@@ -154,7 +200,7 @@ public class SpatialQueryFilter extends
 			return false;
 		}
 		if (preparedGeometryImage != null) {
-			return preparedGeometryImage.preparedGeometry.intersects(dataGeometry);
+			return  compareOp.compare(dataGeometry, preparedGeometryImage.preparedGeometry);
 		}
 		return false;
 	}
@@ -177,12 +223,13 @@ public class SpatialQueryFilter extends
 			geometryFieldIdBuffer.put(id.getBytes());
 		}
 		final byte[] theRest = super.toBinary();
-		final ByteBuffer buf = ByteBuffer.allocate(8 + geometryBinary.length + geometryFieldIdByteSize + theRest.length);
+		final ByteBuffer buf = ByteBuffer.allocate(12 + geometryBinary.length + geometryFieldIdByteSize + theRest.length);
+		buf.putInt(compareOp.ordinal());
 		buf.putInt(geometryBinary.length);
 		buf.putInt(geometryFieldIdByteSize);
 		buf.put(geometryBinary);
 		buf.put(geometryFieldIdBuffer.array());
-		buf.put(theRest);
+		buf.put(theRest);		
 		return buf.array();
 	}
 
@@ -190,8 +237,9 @@ public class SpatialQueryFilter extends
 	public void fromBinary(
 			final byte[] bytes ) {
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
+		compareOp = CompareOperation.values()[buf.getInt()];
 		final byte[] geometryBinary = new byte[buf.getInt()];
-		final byte[] theRest = new byte[bytes.length - geometryBinary.length - buf.getInt() - 8];
+		final byte[] theRest = new byte[bytes.length - geometryBinary.length - buf.getInt() - 12];
 		buf.get(geometryBinary);
 		final int fieldIdSize = buf.getInt();
 		geometryFieldIds = new HashSet<ByteArrayId>(

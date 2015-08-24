@@ -17,7 +17,7 @@ public class GeometryAdapter implements
 		FieldReader<GeometryWrapper>,
 		FieldWriter<Object, GeometryWrapper>
 {
-	protected final static ByteArrayId DEFAULT_GEOMETRY_FIELD_ID = new ByteArrayId(
+	public final static ByteArrayId DEFAULT_GEOMETRY_FIELD_ID = new ByteArrayId(
 			ByteArrayUtils.combineArrays(
 					StringUtils.stringToBinary("geom"),
 					new byte[] {

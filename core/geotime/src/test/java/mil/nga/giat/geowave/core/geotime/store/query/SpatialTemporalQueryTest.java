@@ -1,11 +1,17 @@
 package mil.nga.giat.geowave.core.geotime.store.query;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import mil.nga.giat.geowave.core.geotime.IndexType;
+import mil.nga.giat.geowave.core.geotime.index.dimension.TemporalBinningStrategy.Unit;
 import mil.nga.giat.geowave.core.geotime.store.dimension.GeometryAdapter;
 import mil.nga.giat.geowave.core.geotime.store.dimension.GeometryWrapper;
+import mil.nga.giat.geowave.core.geotime.store.dimension.Time.TimeRange;
+import mil.nga.giat.geowave.core.geotime.store.dimension.TimeField;
 import mil.nga.giat.geowave.core.geotime.store.filter.SpatialQueryFilter.CompareOperation;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.data.IndexedPersistenceEncoding;
@@ -19,12 +25,18 @@ import org.junit.Test;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.GeometryFactory;
 
-public class SpatialQueryTest
+public class SpatialTemporalQueryTest
 {
+	SimpleDateFormat df = new SimpleDateFormat(
+			"yyyy-MM-dd'T'HH:mm:ssz");
+
 	@Test
-	public void test() {
+	public void test()
+			throws ParseException {
 		final GeometryFactory factory = new GeometryFactory();
-		final SpatialQuery query = new SpatialQuery(
+		final SpatialTemporalQuery query = new SpatialTemporalQuery(
+				df.parse("2005-05-17T19:32:56GMT-00:00"),
+				df.parse("2005-05-17T22:32:56GMT-00:00"),
 				factory.createPolygon(new Coordinate[] {
 					new Coordinate(
 							24,
@@ -42,7 +54,7 @@ public class SpatialQueryTest
 							24,
 							33)
 				}));
-		final SpatialQuery queryCopy = new SpatialQuery();
+		final SpatialTemporalQuery queryCopy = new SpatialTemporalQuery();
 		queryCopy.fromBinary(query.toBinary());
 		assertEquals(
 				queryCopy.getQueryGeometry(),
@@ -50,6 +62,8 @@ public class SpatialQueryTest
 	}
 
 	private IndexedPersistenceEncoding createData(
+			Date start,
+			Date end,
 			Coordinate[] coordinates ) {
 		GeometryFactory factory = new GeometryFactory();
 		final PersistentDataset<CommonIndexValue> commonData = new PersistentDataset<CommonIndexValue>();
@@ -58,6 +72,13 @@ public class SpatialQueryTest
 				GeometryAdapter.DEFAULT_GEOMETRY_FIELD_ID,
 				new GeometryWrapper(
 						factory.createLineString(coordinates))));
+		commonData.addOrUpdateValue(new PersistentValue<CommonIndexValue>(
+				new TimeField(
+						Unit.YEAR).getFieldId(),
+				new TimeRange(
+						start.getTime(),
+						end.getTime(),
+						new byte[0])));
 
 		return new IndexedPersistenceEncoding(
 				new ByteArrayId(
@@ -72,9 +93,12 @@ public class SpatialQueryTest
 
 	public void performOp(
 			CompareOperation op,
-			boolean[] expectedResults ) {
+			boolean[] expectedResults )
+			throws ParseException {
 		final GeometryFactory factory = new GeometryFactory();
-		final SpatialQuery query = new SpatialQuery(
+		final SpatialTemporalQuery query = new SpatialTemporalQuery(
+				df.parse("2005-05-17T19:32:56GMT-00:00"),
+				df.parse("2005-05-17T22:32:56GMT-00:00"),
 				factory.createPolygon(new Coordinate[] {
 					new Coordinate(
 							24,
@@ -97,55 +121,80 @@ public class SpatialQueryTest
 		queryCopy.fromBinary(query.toBinary());
 
 		IndexedPersistenceEncoding[] data = new IndexedPersistenceEncoding[] {
-			createData(new Coordinate[] {
-				new Coordinate(
-						22,
-						32),
-				new Coordinate(
-						25,
-						36)
-			}),
-			createData(new Coordinate[] {
-				new Coordinate(
-						25,
-						33.5),
-				new Coordinate(
-						26,
-						34)
-			}),
-			createData(new Coordinate[] {
-				new Coordinate(
-						21,
-						33.5),
-				new Coordinate(
-						23,
-						34)
-			}),
-			createData(new Coordinate[] {
-				new Coordinate(
-						29,
-						33.5),
-				new Coordinate(
-						30,
-						34)
-			})
+			createData(
+					df.parse("2005-05-17T19:32:56GMT-00:00"),
+					df.parse("2005-05-17T22:32:56GMT-00:00"),
+					new Coordinate[] {
+						new Coordinate(
+								25,
+								33.5),
+						new Coordinate(
+								26,
+								34)
+					}),
+			createData(
+					df.parse("2005-05-17T17:32:56GMT-00:00"),
+					df.parse("2005-05-17T21:32:56GMT-00:00"),
+					new Coordinate[] {
+						new Coordinate(
+								25,
+								33.5),
+						new Coordinate(
+								26,
+								34)
+					}),
+			createData(
+					df.parse("2005-05-17T19:33:56GMT-00:00"),
+					df.parse("2005-05-17T20:32:56GMT-00:00"),
+					new Coordinate[] {
+						new Coordinate(
+								25,
+								33.5),
+						new Coordinate(
+								26,
+								34)
+					}),
+			createData(
+					df.parse("2005-05-17T16:32:56GMT-00:00"),
+					df.parse("2005-05-17T21:32:56GMT-00:00"),
+					new Coordinate[] {
+						new Coordinate(
+								25,
+								33.5),
+						new Coordinate(
+								26,
+								34)
+					}),
+			createData(
+					df.parse("2005-05-17T22:33:56GMT-00:00"),
+					df.parse("2005-05-17T22:34:56GMT-00:00"),
+					new Coordinate[] {
+						new Coordinate(
+								25,
+								33.5),
+						new Coordinate(
+								26,
+								34)
+					})
 		};
 
 		int pos = 0;
 		for (IndexedPersistenceEncoding dataItem : data)
-			for (QueryFilter filter : queryCopy.createFilters(IndexType.SPATIAL_VECTOR.getDefaultIndexModel())) {
+			for (QueryFilter filter : queryCopy.createFilters(IndexType.SPATIAL_TEMPORAL_VECTOR.getDefaultIndexModel())) {
 				assertEquals(
-						"result: " + pos,
+						"result: " + (pos + 1),
 						expectedResults[pos++],
 						filter.accept(dataItem));
 			}
 	}
 
 	@Test
-	public void testContains() {
+	public void testContains()
+			throws ParseException {
 		performOp(
 				CompareOperation.CONTAINS,
 				new boolean[] {
+					true,
 					false,
 					true,
 					false,
@@ -154,13 +203,15 @@ public class SpatialQueryTest
 	}
 
 	@Test
-	public void testOverlaps() {
+	public void testOverlaps()
+			throws ParseException {
 		performOp(
 				CompareOperation.OVERLAPS,
 				new boolean[] {
 					true,
 					true,
-					false,
+					true,
+					true,
 					false
 				});
 	}
