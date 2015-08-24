@@ -37,7 +37,8 @@ public class GeoToolsRasterDataStoreIngestFormat implements
 	@Override
 	public LocalFileIngestPlugin<GridCoverage> getLocalFileIngestPlugin()
 			throws UnsupportedOperationException {
-		return new GeoToolsRasterDataStoreIngestPlugin(optionProvider);
+		return new GeoToolsRasterDataStoreIngestPlugin(
+				optionProvider);
 	}
 
 	@Override

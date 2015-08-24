@@ -26,16 +26,16 @@ public class GeoWaveInputSplit extends
 		InputSplit implements
 		Writable
 {
-	private Map<Index, List<Range>> ranges;
+	private Map<Index, List<RangeLocationPair>> ranges;
 	private String[] locations;
 
 	protected GeoWaveInputSplit() {
-		ranges = new HashMap<Index, List<Range>>();
+		ranges = new HashMap<Index, List<RangeLocationPair>>();
 		locations = new String[] {};
 	}
 
 	protected GeoWaveInputSplit(
-			final Map<Index, List<Range>> ranges,
+			final Map<Index, List<RangeLocationPair>> ranges,
 			final String[] locations ) {
 		this.ranges = ranges;
 		this.locations = locations;
@@ -45,7 +45,7 @@ public class GeoWaveInputSplit extends
 		return ranges.keySet();
 	}
 
-	public List<Range> getRanges(
+	public List<RangeLocationPair> getRanges(
 			final Index index ) {
 		return ranges.get(index);
 	}
@@ -58,35 +58,12 @@ public class GeoWaveInputSplit extends
 	public long getLength()
 			throws IOException {
 		long diff = 0;
-		for (final Entry<Index, List<Range>> indexEntry : ranges.entrySet()) {
-			for (final Range range : indexEntry.getValue()) {
-				final Text startRow = range.isInfiniteStartKey() ? new Text(
-						new byte[] {
-							Byte.MIN_VALUE
-						}) : range.getStartKey().getRow();
-				final Text stopRow = range.isInfiniteStopKey() ? new Text(
-						new byte[] {
-							Byte.MAX_VALUE
-						}) : range.getEndKey().getRow();
-				final int maxCommon = Math.min(
-						7,
-						Math.min(
-								startRow.getLength(),
-								stopRow.getLength()));
-
-				final byte[] start = startRow.getBytes();
-				final byte[] stop = stopRow.getBytes();
-				for (int i = 0; i < maxCommon; ++i) {
-					diff |= 0xff & (start[i] ^ stop[i]);
-					diff <<= Byte.SIZE;
-				}
-
-				if (startRow.getLength() != stopRow.getLength()) {
-					diff |= 0xff;
-				}
+		for (final Entry<Index, List<RangeLocationPair>> indexEntry : ranges.entrySet()) {
+			for (final RangeLocationPair range : indexEntry.getValue()) {
+				diff += (long) range.getCardinality();
 			}
 		}
-		return diff + 1;
+		return diff;
 	}
 
 	@Override
@@ -100,7 +77,7 @@ public class GeoWaveInputSplit extends
 			final DataInput in )
 			throws IOException {
 		final int numIndices = in.readInt();
-		ranges = new HashMap<Index, List<Range>>(
+		ranges = new HashMap<Index, List<RangeLocationPair>>(
 				numIndices);
 		for (int i = 0; i < numIndices; i++) {
 			final int indexLength = in.readInt();
@@ -110,12 +87,12 @@ public class GeoWaveInputSplit extends
 					indexBytes,
 					Index.class);
 			final int numRanges = in.readInt();
-			final List<Range> rangeList = new ArrayList<Range>(
+			final List<RangeLocationPair> rangeList = new ArrayList<RangeLocationPair>(
 					numRanges);
 
 			for (int j = 0; j < numRanges; j++) {
 				try {
-					final Range range = Range.class.newInstance();
+					final RangeLocationPair range = new RangeLocationPair();
 					range.readFields(in);
 					rangeList.add(range);
 				}
@@ -141,13 +118,13 @@ public class GeoWaveInputSplit extends
 			final DataOutput out )
 			throws IOException {
 		out.writeInt(ranges.size());
-		for (final Entry<Index, List<Range>> range : ranges.entrySet()) {
+		for (final Entry<Index, List<RangeLocationPair>> range : ranges.entrySet()) {
 			final byte[] indexBytes = PersistenceUtils.toBinary(range.getKey());
 			out.writeInt(indexBytes.length);
 			out.write(indexBytes);
-			final List<Range> rangeList = range.getValue();
+			final List<RangeLocationPair> rangeList = range.getValue();
 			out.writeInt(rangeList.size());
-			for (final Range r : rangeList) {
+			for (final RangeLocationPair r : rangeList) {
 				r.write(out);
 			}
 		}

@@ -200,7 +200,9 @@ public class SpatialQueryFilter extends
 			return false;
 		}
 		if (preparedGeometryImage != null) {
-			return  compareOp.compare(dataGeometry, preparedGeometryImage.preparedGeometry);
+			return compareOp.compare(
+					dataGeometry,
+					preparedGeometryImage.preparedGeometry);
 		}
 		return false;
 	}
@@ -229,7 +231,7 @@ public class SpatialQueryFilter extends
 		buf.putInt(geometryFieldIdByteSize);
 		buf.put(geometryBinary);
 		buf.put(geometryFieldIdBuffer.array());
-		buf.put(theRest);		
+		buf.put(theRest);
 		return buf.array();
 	}
 

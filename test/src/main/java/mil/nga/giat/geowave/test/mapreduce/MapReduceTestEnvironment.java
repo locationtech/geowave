@@ -23,8 +23,8 @@ abstract public class MapReduceTestEnvironment extends
 	protected static final String HDFS_BASE_DIRECTORY = "test_tmp";
 	protected static final String DEFAULT_JOB_TRACKER = "local";
 	protected static final String EXPECTED_RESULTS_KEY = "EXPECTED_RESULTS";
-	protected static final int MIN_INPUT_SPLITS = 2;
-	protected static final int MAX_INPUT_SPLITS = 4;
+	protected static final int MIN_INPUT_SPLITS = 3;
+	protected static final int MAX_INPUT_SPLITS = 5;
 	protected static String jobtracker;
 	protected static String hdfs;
 	protected static boolean hdfsProtocol;

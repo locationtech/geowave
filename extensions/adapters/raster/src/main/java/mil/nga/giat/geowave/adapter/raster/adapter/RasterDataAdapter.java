@@ -878,7 +878,7 @@ public class RasterDataAdapter implements
 	/**
 	 * This method is responsible for creating a coverage from the supplied
 	 * {@link RenderedImage}.
-	 *
+	 * 
 	 * @param image
 	 * @return
 	 * @throws IOException

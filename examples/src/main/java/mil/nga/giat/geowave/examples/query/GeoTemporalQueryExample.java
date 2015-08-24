@@ -203,12 +203,12 @@ public class GeoTemporalQueryExample
 		//
 		// To compose the polygon, this query creates a characteristic 'circle'
 		// around center given a distance.
-		
+
 		// The method Geometry.buffer() works in degrees; a helper
-		// method is available that uses metric units.  The helper method
+		// method is available that uses metric units. The helper method
 		// looses accuracy as the distance from the centroid grows and
 		// the centroid moves closer the poles.
-		
+
 		SpatialTemporalQuery query = new SpatialTemporalQuery(
 				DateUtilities.parseISO("2005-05-17T19:32:56Z"),
 				DateUtilities.parseISO("2005-05-17T22:32:56Z"),

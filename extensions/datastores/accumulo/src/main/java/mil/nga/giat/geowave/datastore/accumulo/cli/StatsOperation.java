@@ -1,6 +1,7 @@
 package mil.nga.giat.geowave.datastore.accumulo.cli;
 
 import java.io.IOException;
+import java.util.Iterator;
 
 import mil.nga.giat.geowave.core.cli.CLIOperationDriver;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
@@ -51,9 +52,18 @@ public abstract class StatsOperation implements
 				accumuloOperations);
 		DataAdapter<?> adapter = null;
 		if (adapterId != null) {
-			adapterStore.getAdapter(adapterId);
+			adapter = adapterStore.getAdapter(adapterId);
 			if (adapter == null) {
 				LOGGER.error("Unknown adapter " + adapterId);
+				Iterator<DataAdapter<?>> it = adapterStore.getAdapters();
+				StringBuffer buffer = new StringBuffer();
+				while (it.hasNext()) {
+					adapter = it.next();
+					buffer.append(
+							adapter.getAdapterId().getString()).append(
+							' ');
+				}
+				LOGGER.info("Available adapters: " + buffer.toString());
 				return false;
 			}
 		}
