@@ -14,7 +14,8 @@ import org.apache.hadoop.io.WritableComparator;
  * responsible for persisting the adapter ID
  */
 public abstract class GeoWaveKey implements
-		WritableComparable<GeoWaveKey>
+		WritableComparable<GeoWaveKey>,
+		java.io.Serializable
 {
 	protected ByteArrayId adapterId;
 

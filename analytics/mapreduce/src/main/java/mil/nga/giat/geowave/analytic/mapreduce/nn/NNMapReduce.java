@@ -667,6 +667,11 @@ public class NNMapReduce
 			Partitioner<T>
 	{
 
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = -1022316020113365561L;
+
 		@Override
 		public void initialize(
 				ConfigurationWrapper context )

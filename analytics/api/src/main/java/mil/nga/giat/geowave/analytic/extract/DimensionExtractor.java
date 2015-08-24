@@ -7,7 +7,8 @@ import com.vividsolutions.jts.geom.Geometry;
  * 
  * @param <T>
  */
-public interface DimensionExtractor<T>
+public interface DimensionExtractor<T> extends
+		java.io.Serializable
 {
 	/**
 	 * 
