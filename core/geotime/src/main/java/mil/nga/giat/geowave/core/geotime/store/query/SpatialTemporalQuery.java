@@ -4,10 +4,8 @@ import java.util.Date;
 
 import mil.nga.giat.geowave.core.geotime.GeometryUtils;
 import mil.nga.giat.geowave.core.geotime.index.dimension.TimeDefinition;
+import mil.nga.giat.geowave.core.geotime.store.filter.SpatialQueryFilter.CompareOperation;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericRange;
-import mil.nga.giat.geowave.core.store.query.BasicQuery;
-import mil.nga.giat.geowave.core.store.query.BasicQuery.ConstraintData;
-import mil.nga.giat.geowave.core.store.query.BasicQuery.Constraints;
 
 import com.vividsolutions.jts.geom.Geometry;
 
@@ -43,6 +41,32 @@ public class SpatialTemporalQuery extends
 						constraints,
 						queryGeometry),
 				queryGeometry);
+	}
+
+	public SpatialTemporalQuery(
+			final Date startTime,
+			final Date endTime,
+			final Geometry queryGeometry,
+			final CompareOperation compareOp ) {
+		super(
+				createSpatialTemporalConstraints(
+						startTime,
+						endTime,
+						queryGeometry),
+				queryGeometry,
+				compareOp);
+	}
+
+	public SpatialTemporalQuery(
+			final TemporalConstraints constraints,
+			final Geometry queryGeometry,
+			final CompareOperation compareOp ) {
+		super(
+				createSpatialTemporalConstraints(
+						constraints,
+						queryGeometry),
+				queryGeometry,
+				compareOp);
 	}
 
 	public static Constraints createConstraints(
