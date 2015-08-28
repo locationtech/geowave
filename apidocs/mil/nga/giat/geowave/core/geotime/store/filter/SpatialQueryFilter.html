@@ -36,7 +36,7 @@
 <div class="subNav">
 <ul class="navList">
 <li>Prev Class</li>
-<li><a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/filter/SpatialQueryFilter.GeometryImage.html" title="class in mil.nga.giat.geowave.core.geotime.store.filter"><span class="strong">Next Class</span></a></li>
+<li><a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/filter/SpatialQueryFilter.CompareOperation.html" title="enum in mil.nga.giat.geowave.core.geotime.store.filter"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../../../index.html?mil/nga/giat/geowave/core/geotime/store/filter/SpatialQueryFilter.html" target="_top">Frames</a></li>
@@ -128,11 +128,26 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/core/store/filter/
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>static class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/filter/SpatialQueryFilter.CompareOperation.html" title="enum in mil.nga.giat.geowave.core.geotime.store.filter">SpatialQueryFilter.CompareOperation</a></strong></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static class&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/filter/SpatialQueryFilter.GeometryImage.html" title="class in mil.nga.giat.geowave.core.geotime.store.filter">SpatialQueryFilter.GeometryImage</a></strong></code>
 <div class="block">This class is used for interning a PreparedGeometry.</div>
 </td>
 </tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected static interface&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/filter/SpatialQueryFilter.SpatialQueryCompareOp.html" title="interface in mil.nga.giat.geowave.core.geotime.store.filter">SpatialQueryFilter.SpatialQueryCompareOp</a></strong></code>&nbsp;</td>
+</tr>
 </table>
+<ul class="blockList">
+<li class="blockList"><a name="nested_classes_inherited_from_class_mil.nga.giat.geowave.core.store.filter.BasicQueryFilter">
+<!--   -->
+</a>
+<h3>Nested classes/interfaces inherited from class&nbsp;mil.nga.giat.geowave.core.store.filter.<a href="../../../../../../../../mil/nga/giat/geowave/core/store/filter/BasicQueryFilter.html" title="class in mil.nga.giat.geowave.core.store.filter">BasicQueryFilter</a></h3>
+<code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/filter/BasicQueryFilter.BasicQueryCompareOp.html" title="interface in mil.nga.giat.geowave.core.store.filter">BasicQueryFilter.BasicQueryCompareOp</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/filter/BasicQueryFilter.BasicQueryCompareOperation.html" title="enum in mil.nga.giat.geowave.core.store.filter">BasicQueryFilter.BasicQueryCompareOperation</a></code></li>
+</ul>
 </li>
 </ul>
 <!-- =========== FIELD SUMMARY =========== -->
@@ -179,9 +194,10 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/core/store/filter/
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/filter/SpatialQueryFilter.html#SpatialQueryFilter(mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData,%20mil.nga.giat.geowave.core.store.dimension.DimensionField[],%20com.vividsolutions.jts.geom.Geometry)">SpatialQueryFilter</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;query,
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/filter/SpatialQueryFilter.html#SpatialQueryFilter(mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData,%20mil.nga.giat.geowave.core.store.dimension.DimensionField[],%20com.vividsolutions.jts.geom.Geometry,%20mil.nga.giat.geowave.core.geotime.store.filter.SpatialQueryFilter.CompareOperation)">SpatialQueryFilter</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;query,
                   <a href="../../../../../../../../mil/nga/giat/geowave/core/store/dimension/DimensionField.html" title="interface in mil.nga.giat.geowave.core.store.dimension">DimensionField</a>&lt;?&gt;[]&nbsp;dimensionDefinitions,
-                  com.vividsolutions.jts.geom.Geometry&nbsp;queryGeometry)</code>&nbsp;</td>
+                  com.vividsolutions.jts.geom.Geometry&nbsp;queryGeometry,
+                  <a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/filter/SpatialQueryFilter.CompareOperation.html" title="enum in mil.nga.giat.geowave.core.geotime.store.filter">SpatialQueryFilter.CompareOperation</a>&nbsp;compareOp)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -224,7 +240,7 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/core/store/filter/
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;mil.nga.giat.geowave.core.store.filter.<a href="../../../../../../../../mil/nga/giat/geowave/core/store/filter/BasicQueryFilter.html" title="class in mil.nga.giat.geowave.core.store.filter">BasicQueryFilter</a></h3>
-<code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/filter/BasicQueryFilter.html#overlaps(mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData,%20mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData)">overlaps</a></code></li>
+<code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/filter/BasicQueryFilter.html#validateConstraints(mil.nga.giat.geowave.core.store.filter.BasicQueryFilter.BasicQueryCompareOp,%20mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData,%20mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData)">validateConstraints</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods_inherited_from_class_java.lang.Object">
@@ -273,7 +289,7 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/core/store/filter/
 <pre>protected&nbsp;SpatialQueryFilter()</pre>
 </li>
 </ul>
-<a name="SpatialQueryFilter(mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData, mil.nga.giat.geowave.core.store.dimension.DimensionField[], com.vividsolutions.jts.geom.Geometry)">
+<a name="SpatialQueryFilter(mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData, mil.nga.giat.geowave.core.store.dimension.DimensionField[], com.vividsolutions.jts.geom.Geometry, mil.nga.giat.geowave.core.geotime.store.filter.SpatialQueryFilter.CompareOperation)">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -281,7 +297,8 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/core/store/filter/
 <h4>SpatialQueryFilter</h4>
 <pre>public&nbsp;SpatialQueryFilter(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;query,
                   <a href="../../../../../../../../mil/nga/giat/geowave/core/store/dimension/DimensionField.html" title="interface in mil.nga.giat.geowave.core.store.dimension">DimensionField</a>&lt;?&gt;[]&nbsp;dimensionDefinitions,
-                  com.vividsolutions.jts.geom.Geometry&nbsp;queryGeometry)</pre>
+                  com.vividsolutions.jts.geom.Geometry&nbsp;queryGeometry,
+                  <a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/filter/SpatialQueryFilter.CompareOperation.html" title="enum in mil.nga.giat.geowave.core.geotime.store.filter">SpatialQueryFilter.CompareOperation</a>&nbsp;compareOp)</pre>
 </li>
 </ul>
 </li>
@@ -382,7 +399,7 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/core/store/filter/
 <div class="subNav">
 <ul class="navList">
 <li>Prev Class</li>
-<li><a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/filter/SpatialQueryFilter.GeometryImage.html" title="class in mil.nga.giat.geowave.core.geotime.store.filter"><span class="strong">Next Class</span></a></li>
+<li><a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/filter/SpatialQueryFilter.CompareOperation.html" title="enum in mil.nga.giat.geowave.core.geotime.store.filter"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../../../index.html?mil/nga/giat/geowave/core/geotime/store/filter/SpatialQueryFilter.html" target="_top">Frames</a></li>

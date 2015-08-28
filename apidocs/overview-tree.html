@@ -546,7 +546,7 @@
 </li>
 <li type="circle">org.geotools.data.store.ContentFeatureSource (implements org.geotools.data.simple.SimpleFeatureSource)
 <ul>
-<li type="circle">org.geotools.data.store.ContentFeatureStore (implements org.geotools.data.simple.SimpleFeatureLocking, org.geotools.data.simple.SimpleFeatureStore)
+<li type="circle">org.geotools.data.store.ContentFeatureStore (implements org.geotools.data.FeatureLocking&lt;T,F&gt;, org.geotools.data.simple.SimpleFeatureStore)
 <ul>
 <li type="circle">mil.nga.giat.geowave.adapter.vector.plugin.<a href="mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin"><span class="strong">GeoWaveFeatureSource</span></a></li>
 </ul>
@@ -710,6 +710,7 @@
 <li type="circle">mil.nga.giat.geowave.analytic.<a href="mil/nga/giat/geowave/analytic/GeoObjectDimensionValues.html" title="class in mil.nga.giat.geowave.analytic"><span class="strong">GeoObjectDimensionValues</span></a> (implements mil.nga.giat.geowave.core.index.<a href="mil/nga/giat/geowave/core/index/Persistable.html" title="interface in mil.nga.giat.geowave.core.index">Persistable</a>)</li>
 <li type="circle">mil.nga.giat.geowave.service.client.<a href="mil/nga/giat/geowave/service/client/GeoserverServiceClient.html" title="class in mil.nga.giat.geowave.service.client"><span class="strong">GeoserverServiceClient</span></a></li>
 <li type="circle">mil.nga.giat.geowave.service.impl.<a href="mil/nga/giat/geowave/service/impl/GeoserverServiceImpl.html" title="class in mil.nga.giat.geowave.service.impl"><span class="strong">GeoserverServiceImpl</span></a> (implements mil.nga.giat.geowave.service.<a href="mil/nga/giat/geowave/service/GeoserverService.html" title="interface in mil.nga.giat.geowave.service">GeoserverService</a>)</li>
+<li type="circle">mil.nga.giat.geowave.examples.query.<a href="mil/nga/giat/geowave/examples/query/GeoTemporalQueryExample.html" title="class in mil.nga.giat.geowave.examples.query"><span class="strong">GeoTemporalQueryExample</span></a></li>
 <li type="circle">mil.nga.giat.geowave.examples.query.<a href="mil/nga/giat/geowave/examples/query/GeotoolsQueryExample.html" title="class in mil.nga.giat.geowave.examples.query"><span class="strong">GeotoolsQueryExample</span></a></li>
 <li type="circle">mil.nga.giat.geowave.format.geotools.raster.<a href="mil/nga/giat/geowave/format/geotools/raster/GeoToolsRasterDataStoreIngestFormat.html" title="class in mil.nga.giat.geowave.format.geotools.raster"><span class="strong">GeoToolsRasterDataStoreIngestFormat</span></a> (implements mil.nga.giat.geowave.core.ingest.<a href="mil/nga/giat/geowave/core/ingest/IngestFormatPluginProviderSpi.html" title="interface in mil.nga.giat.geowave.core.ingest">IngestFormatPluginProviderSpi</a>&lt;I,O&gt;)</li>
 <li type="circle">mil.nga.giat.geowave.format.geotools.raster.<a href="mil/nga/giat/geowave/format/geotools/raster/GeoToolsRasterDataStoreIngestPlugin.html" title="class in mil.nga.giat.geowave.format.geotools.raster"><span class="strong">GeoToolsRasterDataStoreIngestPlugin</span></a> (implements mil.nga.giat.geowave.core.ingest.local.<a href="mil/nga/giat/geowave/core/ingest/local/LocalFileIngestPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.local">LocalFileIngestPlugin</a>&lt;O&gt;)</li>
@@ -1142,20 +1143,6 @@
 <li type="circle">mil.nga.giat.geowave.adapter.vector.query.<a href="mil/nga/giat/geowave/adapter/vector/query/RenderIteratorWrapper.html" title="class in mil.nga.giat.geowave.adapter.vector.query"><span class="strong">RenderIteratorWrapper</span></a> (implements java.util.<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;E&gt;)</li>
 <li type="circle">mil.nga.giat.geowave.adapter.raster.<a href="mil/nga/giat/geowave/adapter/raster/Resolution.html" title="class in mil.nga.giat.geowave.adapter.raster"><span class="strong">Resolution</span></a> (implements java.lang.<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Comparable.html?is-external=true" title="class or interface in java.lang">Comparable</a>&lt;T&gt;, mil.nga.giat.geowave.core.index.<a href="mil/nga/giat/geowave/core/index/Persistable.html" title="interface in mil.nga.giat.geowave.core.index">Persistable</a>)</li>
 <li type="circle">mil.nga.giat.geowave.adapter.raster.adapter.merge.<a href="mil/nga/giat/geowave/adapter/raster/adapter/merge/RootMergeStrategy.html" title="class in mil.nga.giat.geowave.adapter.raster.adapter.merge"><span class="strong">RootMergeStrategy</span></a>&lt;T&gt; (implements mil.nga.giat.geowave.core.index.<a href="mil/nga/giat/geowave/core/index/Mergeable.html" title="interface in mil.nga.giat.geowave.core.index">Mergeable</a>)</li>
-<li type="circle">org.apache.accumulo.core.iterators.user.RowEncodingIterator (implements org.apache.accumulo.core.iterators.SortedKeyValueIterator&lt;K,V&gt;)
-<ul>
-<li type="circle">org.apache.accumulo.core.iterators.user.WholeRowIterator
-<ul>
-<li type="circle">mil.nga.giat.geowave.adapter.vector.query.<a href="mil/nga/giat/geowave/adapter/vector/query/CqlQueryFilterIterator.html" title="class in mil.nga.giat.geowave.adapter.vector.query"><span class="strong">CqlQueryFilterIterator</span></a>
-<ul>
-<li type="circle">mil.nga.giat.geowave.adapter.vector.query.<a href="mil/nga/giat/geowave/adapter/vector/query/CqlQueryRenderIterator.html" title="class in mil.nga.giat.geowave.adapter.vector.query"><span class="strong">CqlQueryRenderIterator</span></a></li>
-</ul>
-</li>
-<li type="circle">mil.nga.giat.geowave.datastore.accumulo.query.<a href="mil/nga/giat/geowave/datastore/accumulo/query/QueryFilterIterator.html" title="class in mil.nga.giat.geowave.datastore.accumulo.query"><span class="strong">QueryFilterIterator</span></a></li>
-</ul>
-</li>
-</ul>
-</li>
 <li type="circle">mil.nga.giat.geowave.adapter.vector.query.row.<a href="mil/nga/giat/geowave/adapter/vector/query/row/RowProviderSkippingIterator.html" title="class in mil.nga.giat.geowave.adapter.vector.query.row"><span class="strong">RowProviderSkippingIterator</span></a></li>
 <li type="circle">mil.nga.giat.geowave.analytic.<a href="mil/nga/giat/geowave/analytic/RunnerUtils.html" title="class in mil.nga.giat.geowave.analytic"><span class="strong">RunnerUtils</span></a></li>
 <li type="circle">mil.nga.giat.geowave.analytic.param.<a href="mil/nga/giat/geowave/analytic/param/SampleParameters.html" title="class in mil.nga.giat.geowave.analytic.param"><span class="strong">SampleParameters</span></a></li>
@@ -1294,6 +1281,16 @@
 <li type="circle">mil.nga.giat.geowave.adapter.vector.plugin.visibility.<a href="mil/nga/giat/geowave/adapter/vector/plugin/visibility/VisibilityManagementHelper.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin.visibility"><span class="strong">VisibilityManagementHelper</span></a></li>
 <li type="circle">mil.nga.giat.geowave.adapter.vector.<a href="mil/nga/giat/geowave/adapter/vector/VisibilityQueryFilter.html" title="class in mil.nga.giat.geowave.adapter.vector"><span class="strong">VisibilityQueryFilter</span></a> (implements mil.nga.giat.geowave.core.store.filter.<a href="mil/nga/giat/geowave/core/store/filter/DistributableQueryFilter.html" title="interface in mil.nga.giat.geowave.core.store.filter">DistributableQueryFilter</a>)</li>
 <li type="circle">mil.nga.giat.geowave.datastore.accumulo.util.<a href="mil/nga/giat/geowave/datastore/accumulo/util/VisibilityTransformer.html" title="class in mil.nga.giat.geowave.datastore.accumulo.util"><span class="strong">VisibilityTransformer</span></a> (implements mil.nga.giat.geowave.datastore.accumulo.util.<a href="mil/nga/giat/geowave/datastore/accumulo/util/Transformer.html" title="interface in mil.nga.giat.geowave.datastore.accumulo.util">Transformer</a>)</li>
+<li type="circle">org.apache.accumulo.core.iterators.user.WholeRowIterator (implements org.apache.accumulo.core.iterators.SortedKeyValueIterator&lt;K,V&gt;)
+<ul>
+<li type="circle">mil.nga.giat.geowave.adapter.vector.query.<a href="mil/nga/giat/geowave/adapter/vector/query/CqlQueryFilterIterator.html" title="class in mil.nga.giat.geowave.adapter.vector.query"><span class="strong">CqlQueryFilterIterator</span></a>
+<ul>
+<li type="circle">mil.nga.giat.geowave.adapter.vector.query.<a href="mil/nga/giat/geowave/adapter/vector/query/CqlQueryRenderIterator.html" title="class in mil.nga.giat.geowave.adapter.vector.query"><span class="strong">CqlQueryRenderIterator</span></a></li>
+</ul>
+</li>
+<li type="circle">mil.nga.giat.geowave.datastore.accumulo.query.<a href="mil/nga/giat/geowave/datastore/accumulo/query/QueryFilterIterator.html" title="class in mil.nga.giat.geowave.datastore.accumulo.query"><span class="strong">QueryFilterIterator</span></a></li>
+</ul>
+</li>
 <li type="circle">org.apache.accumulo.core.iterators.WrappingIterator (implements org.apache.accumulo.core.iterators.SortedKeyValueIterator&lt;K,V&gt;)
 <ul>
 <li type="circle">org.apache.accumulo.core.iterators.Combiner (implements org.apache.accumulo.core.iterators.OptionDescriber)
@@ -1375,6 +1372,7 @@
 </ul>
 </li>
 <li type="circle">mil.nga.giat.geowave.analytic.db.<a href="mil/nga/giat/geowave/analytic/db/BasicAccumuloOperationsFactory.html" title="interface in mil.nga.giat.geowave.analytic.db"><span class="strong">BasicAccumuloOperationsFactory</span></a></li>
+<li type="circle">mil.nga.giat.geowave.core.store.filter.<a href="mil/nga/giat/geowave/core/store/filter/BasicQueryFilter.BasicQueryCompareOp.html" title="interface in mil.nga.giat.geowave.core.store.filter"><span class="strong">BasicQueryFilter.BasicQueryCompareOp</span></a></li>
 <li type="circle">mil.nga.giat.geowave.analytic.mapreduce.kde.<a href="mil/nga/giat/geowave/analytic/mapreduce/kde/CellCounter.html" title="interface in mil.nga.giat.geowave.analytic.mapreduce.kde"><span class="strong">CellCounter</span></a></li>
 <li type="circle">mil.nga.giat.geowave.analytic.extract.<a href="mil/nga/giat/geowave/analytic/extract/CentroidExtractor.html" title="interface in mil.nga.giat.geowave.analytic.extract"><span class="strong">CentroidExtractor</span></a>&lt;T&gt;</li>
 <li type="circle">mil.nga.giat.geowave.analytic.clustering.<a href="mil/nga/giat/geowave/analytic/clustering/CentroidManager.html" title="interface in mil.nga.giat.geowave.analytic.clustering"><span class="strong">CentroidManager</span></a>&lt;T&gt;</li>
@@ -1690,6 +1688,7 @@
 <li type="circle">mil.nga.giat.geowave.adapter.vector.stats.<a href="mil/nga/giat/geowave/adapter/vector/stats/StatsConfig.html" title="interface in mil.nga.giat.geowave.adapter.vector.stats"><span class="strong">StatsConfig</span></a>&lt;T&gt;</li>
 </ul>
 </li>
+<li type="circle">mil.nga.giat.geowave.core.geotime.store.filter.<a href="mil/nga/giat/geowave/core/geotime/store/filter/SpatialQueryFilter.SpatialQueryCompareOp.html" title="interface in mil.nga.giat.geowave.core.geotime.store.filter"><span class="strong">SpatialQueryFilter.SpatialQueryCompareOp</span></a></li>
 <li type="circle">mil.nga.giat.geowave.analytic.mapreduce.kmeans.runner.<a href="mil/nga/giat/geowave/analytic/mapreduce/kmeans/runner/StripWeakCentroidsRunner.BreakStrategy.html" title="interface in mil.nga.giat.geowave.analytic.mapreduce.kmeans.runner"><span class="strong">StripWeakCentroidsRunner.BreakStrategy</span></a>&lt;T&gt;</li>
 <li type="circle">org.geotools.data.Transaction.State
 <ul>
@@ -1713,10 +1712,12 @@
 <ul>
 <li type="circle">mil.nga.giat.geowave.core.index.sfc.<a href="mil/nga/giat/geowave/core/index/sfc/SFCFactory.SFCType.html" title="enum in mil.nga.giat.geowave.core.index.sfc"><span class="strong">SFCFactory.SFCType</span></a></li>
 <li type="circle">mil.nga.giat.geowave.core.store.data.field.<a href="mil/nga/giat/geowave/core/store/data/field/ArrayWriter.Encoding.html" title="enum in mil.nga.giat.geowave.core.store.data.field"><span class="strong">ArrayWriter.Encoding</span></a></li>
+<li type="circle">mil.nga.giat.geowave.core.store.filter.<a href="mil/nga/giat/geowave/core/store/filter/BasicQueryFilter.BasicQueryCompareOperation.html" title="enum in mil.nga.giat.geowave.core.store.filter"><span class="strong">BasicQueryFilter.BasicQueryCompareOperation</span></a> (implements mil.nga.giat.geowave.core.store.filter.<a href="mil/nga/giat/geowave/core/store/filter/BasicQueryFilter.BasicQueryCompareOp.html" title="interface in mil.nga.giat.geowave.core.store.filter">BasicQueryFilter.BasicQueryCompareOp</a>)</li>
 <li type="circle">mil.nga.giat.geowave.core.geotime.<a href="mil/nga/giat/geowave/core/geotime/IndexType.html" title="enum in mil.nga.giat.geowave.core.geotime"><span class="strong">IndexType</span></a></li>
 <li type="circle">mil.nga.giat.geowave.core.geotime.<a href="mil/nga/giat/geowave/core/geotime/DimensionalityType.html" title="enum in mil.nga.giat.geowave.core.geotime"><span class="strong">DimensionalityType</span></a></li>
 <li type="circle">mil.nga.giat.geowave.core.geotime.index.<a href="mil/nga/giat/geowave/core/geotime/index/NumericIndexStrategyFactory.DataType.html" title="enum in mil.nga.giat.geowave.core.geotime.index"><span class="strong">NumericIndexStrategyFactory.DataType</span></a></li>
 <li type="circle">mil.nga.giat.geowave.core.geotime.index.dimension.<a href="mil/nga/giat/geowave/core/geotime/index/dimension/TemporalBinningStrategy.Unit.html" title="enum in mil.nga.giat.geowave.core.geotime.index.dimension"><span class="strong">TemporalBinningStrategy.Unit</span></a></li>
+<li type="circle">mil.nga.giat.geowave.core.geotime.store.filter.<a href="mil/nga/giat/geowave/core/geotime/store/filter/SpatialQueryFilter.CompareOperation.html" title="enum in mil.nga.giat.geowave.core.geotime.store.filter"><span class="strong">SpatialQueryFilter.CompareOperation</span></a> (implements mil.nga.giat.geowave.core.geotime.store.filter.<a href="mil/nga/giat/geowave/core/geotime/store/filter/SpatialQueryFilter.SpatialQueryCompareOp.html" title="interface in mil.nga.giat.geowave.core.geotime.store.filter">SpatialQueryFilter.SpatialQueryCompareOp</a>)</li>
 <li type="circle">mil.nga.giat.geowave.datastore.accumulo.mapreduce.<a href="mil/nga/giat/geowave/datastore/accumulo/mapreduce/GeoWaveConfiguratorBase.GeoWaveMetaStore.html" title="enum in mil.nga.giat.geowave.datastore.accumulo.mapreduce"><span class="strong">GeoWaveConfiguratorBase.GeoWaveMetaStore</span></a></li>
 <li type="circle">mil.nga.giat.geowave.datastore.accumulo.mapreduce.<a href="mil/nga/giat/geowave/datastore/accumulo/mapreduce/GeoWaveConfiguratorBase.AccumuloOperationsConfig.html" title="enum in mil.nga.giat.geowave.datastore.accumulo.mapreduce"><span class="strong">GeoWaveConfiguratorBase.AccumuloOperationsConfig</span></a></li>
 <li type="circle">mil.nga.giat.geowave.datastore.accumulo.mapreduce.<a href="mil/nga/giat/geowave/datastore/accumulo/mapreduce/GeoWaveConfiguratorBase.GeneralConfig.html" title="enum in mil.nga.giat.geowave.datastore.accumulo.mapreduce"><span class="strong">GeoWaveConfiguratorBase.GeneralConfig</span></a></li>

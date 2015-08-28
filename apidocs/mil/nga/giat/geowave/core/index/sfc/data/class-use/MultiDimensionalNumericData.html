@@ -320,9 +320,10 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colLast"><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/core/geotime/store/filter/SpatialQueryFilter.html#SpatialQueryFilter(mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData,%20mil.nga.giat.geowave.core.store.dimension.DimensionField[],%20com.vividsolutions.jts.geom.Geometry)">SpatialQueryFilter</a></strong>(<a href="../../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;query,
+<td class="colLast"><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/core/geotime/store/filter/SpatialQueryFilter.html#SpatialQueryFilter(mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData,%20mil.nga.giat.geowave.core.store.dimension.DimensionField[],%20com.vividsolutions.jts.geom.Geometry,%20mil.nga.giat.geowave.core.geotime.store.filter.SpatialQueryFilter.CompareOperation)">SpatialQueryFilter</a></strong>(<a href="../../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;query,
                   <a href="../../../../../../../../../mil/nga/giat/geowave/core/store/dimension/DimensionField.html" title="interface in mil.nga.giat.geowave.core.store.dimension">DimensionField</a>&lt;?&gt;[]&nbsp;dimensionDefinitions,
-                  com.vividsolutions.jts.geom.Geometry&nbsp;queryGeometry)</code>&nbsp;</td>
+                  com.vividsolutions.jts.geom.Geometry&nbsp;queryGeometry,
+                  <a href="../../../../../../../../../mil/nga/giat/geowave/core/geotime/store/filter/SpatialQueryFilter.CompareOperation.html" title="enum in mil.nga.giat.geowave.core.geotime.store.filter">SpatialQueryFilter.CompareOperation</a>&nbsp;compareOp)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -910,8 +911,9 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>protected boolean</code></td>
-<td class="colLast"><span class="strong">BasicQueryFilter.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/filter/BasicQueryFilter.html#overlaps(mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData,%20mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData)">overlaps</a></strong>(<a href="../../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;queryRange,
-        <a href="../../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;dataRange)</code>&nbsp;</td>
+<td class="colLast"><span class="strong">BasicQueryFilter.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/filter/BasicQueryFilter.html#validateConstraints(mil.nga.giat.geowave.core.store.filter.BasicQueryFilter.BasicQueryCompareOp,%20mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData,%20mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData)">validateConstraints</a></strong>(<a href="../../../../../../../../../mil/nga/giat/geowave/core/store/filter/BasicQueryFilter.BasicQueryCompareOp.html" title="interface in mil.nga.giat.geowave.core.store.filter">BasicQueryFilter.BasicQueryCompareOp</a>&nbsp;op,
+                   <a href="../../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;queryRange,
+                   <a href="../../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;dataRange)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -924,6 +926,11 @@
 <tr class="altColor">
 <td class="colLast"><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/filter/BasicQueryFilter.html#BasicQueryFilter(mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData,%20mil.nga.giat.geowave.core.store.dimension.DimensionField[])">BasicQueryFilter</a></strong>(<a href="../../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;constraints,
                 <a href="../../../../../../../../../mil/nga/giat/geowave/core/store/dimension/DimensionField.html" title="interface in mil.nga.giat.geowave.core.store.dimension">DimensionField</a>&lt;?&gt;[]&nbsp;dimensionFields)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colLast"><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/filter/BasicQueryFilter.html#BasicQueryFilter(mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData,%20mil.nga.giat.geowave.core.store.dimension.DimensionField[],%20mil.nga.giat.geowave.core.store.filter.BasicQueryFilter.BasicQueryCompareOperation)">BasicQueryFilter</a></strong>(<a href="../../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;constraints,
+                <a href="../../../../../../../../../mil/nga/giat/geowave/core/store/dimension/DimensionField.html" title="interface in mil.nga.giat.geowave.core.store.dimension">DimensionField</a>&lt;?&gt;[]&nbsp;dimensionFields,
+                <a href="../../../../../../../../../mil/nga/giat/geowave/core/store/filter/BasicQueryFilter.BasicQueryCompareOperation.html" title="enum in mil.nga.giat.geowave.core.store.filter">BasicQueryFilter.BasicQueryCompareOperation</a>&nbsp;compareOp)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>

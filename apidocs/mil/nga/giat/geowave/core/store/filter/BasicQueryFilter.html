@@ -36,7 +36,7 @@
 <div class="subNav">
 <ul class="navList">
 <li>Prev Class</li>
-<li><a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/DedupeFilter.html" title="class in mil.nga.giat.geowave.core.store.filter"><span class="strong">Next Class</span></a></li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/BasicQueryFilter.BasicQueryCompareOp.html" title="interface in mil.nga.giat.geowave.core.store.filter"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../../index.html?mil/nga/giat/geowave/core/store/filter/BasicQueryFilter.html" target="_top">Frames</a></li>
@@ -60,7 +60,7 @@
 <div>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
-<li>Nested&nbsp;|&nbsp;</li>
+<li><a href="#nested_class_summary">Nested</a>&nbsp;|&nbsp;</li>
 <li><a href="#field_summary">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method_summary">Method</a></li>
@@ -115,6 +115,29 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/
 <div class="summary">
 <ul class="blockList">
 <li class="blockList">
+<!-- ======== NESTED CLASS SUMMARY ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="nested_class_summary">
+<!--   -->
+</a>
+<h3>Nested Class Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Nested Class Summary table, listing nested classes, and an explanation">
+<caption><span>Nested Classes</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Class and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected static interface&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/BasicQueryFilter.BasicQueryCompareOp.html" title="interface in mil.nga.giat.geowave.core.store.filter">BasicQueryFilter.BasicQueryCompareOp</a></strong></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/BasicQueryFilter.BasicQueryCompareOperation.html" title="enum in mil.nga.giat.geowave.core.store.filter">BasicQueryFilter.BasicQueryCompareOperation</a></strong></code>&nbsp;</td>
+</tr>
+</table>
+</li>
+</ul>
 <!-- =========== FIELD SUMMARY =========== -->
 <ul class="blockList">
 <li class="blockList"><a name="field_summary">
@@ -132,10 +155,14 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/BasicQueryFilter.html#binnedConstraints">binnedConstraints</a></strong></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/BasicQueryFilter.BasicQueryCompareOperation.html" title="enum in mil.nga.giat.geowave.core.store.filter">BasicQueryFilter.BasicQueryCompareOperation</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/BasicQueryFilter.html#compareOp">compareOp</a></strong></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/BasicQueryFilter.html#constraints">constraints</a></strong></code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/DimensionField.html" title="interface in mil.nga.giat.geowave.core.store.dimension">DimensionField</a>&lt;?&gt;[]</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/BasicQueryFilter.html#dimensionFields">dimensionFields</a></strong></code>&nbsp;</td>
 </tr>
@@ -163,6 +190,12 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/BasicQueryFilter.html#BasicQueryFilter(mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData,%20mil.nga.giat.geowave.core.store.dimension.DimensionField[])">BasicQueryFilter</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;constraints,
                 <a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/DimensionField.html" title="interface in mil.nga.giat.geowave.core.store.dimension">DimensionField</a>&lt;?&gt;[]&nbsp;dimensionFields)</code>&nbsp;</td>
 </tr>
+<tr class="altColor">
+<td class="colFirst"><code>&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/BasicQueryFilter.html#BasicQueryFilter(mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData,%20mil.nga.giat.geowave.core.store.dimension.DimensionField[],%20mil.nga.giat.geowave.core.store.filter.BasicQueryFilter.BasicQueryCompareOperation)">BasicQueryFilter</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;constraints,
+                <a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/DimensionField.html" title="interface in mil.nga.giat.geowave.core.store.dimension">DimensionField</a>&lt;?&gt;[]&nbsp;dimensionFields,
+                <a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/BasicQueryFilter.BasicQueryCompareOperation.html" title="enum in mil.nga.giat.geowave.core.store.filter">BasicQueryFilter.BasicQueryCompareOperation</a>&nbsp;compareOp)</code>&nbsp;</td>
+</tr>
 </table>
 </li>
 </ul>
@@ -187,13 +220,14 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/BasicQueryFilter.html#fromBinary(byte[])">fromBinary</a></strong>(byte[]&nbsp;bytes)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>protected boolean</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/BasicQueryFilter.html#overlaps(mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData,%20mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData)">overlaps</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;queryRange,
-        <a href="../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;dataRange)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
 <td class="colFirst"><code>byte[]</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/BasicQueryFilter.html#toBinary()">toBinary</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/BasicQueryFilter.html#validateConstraints(mil.nga.giat.geowave.core.store.filter.BasicQueryFilter.BasicQueryCompareOp,%20mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData,%20mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData)">validateConstraints</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/BasicQueryFilter.BasicQueryCompareOp.html" title="interface in mil.nga.giat.geowave.core.store.filter">BasicQueryFilter.BasicQueryCompareOp</a>&nbsp;op,
+                   <a href="../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;queryRange,
+                   <a href="../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;dataRange)</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -238,10 +272,19 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/
 <a name="constraints">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>constraints</h4>
 <pre>protected&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a> constraints</pre>
+</li>
+</ul>
+<a name="compareOp">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>compareOp</h4>
+<pre>protected&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/BasicQueryFilter.BasicQueryCompareOperation.html" title="enum in mil.nga.giat.geowave.core.store.filter">BasicQueryFilter.BasicQueryCompareOperation</a> compareOp</pre>
 </li>
 </ul>
 </li>
@@ -264,11 +307,22 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/
 <a name="BasicQueryFilter(mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData, mil.nga.giat.geowave.core.store.dimension.DimensionField[])">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>BasicQueryFilter</h4>
 <pre>public&nbsp;BasicQueryFilter(<a href="../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;constraints,
                 <a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/DimensionField.html" title="interface in mil.nga.giat.geowave.core.store.dimension">DimensionField</a>&lt;?&gt;[]&nbsp;dimensionFields)</pre>
+</li>
+</ul>
+<a name="BasicQueryFilter(mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData, mil.nga.giat.geowave.core.store.dimension.DimensionField[], mil.nga.giat.geowave.core.store.filter.BasicQueryFilter.BasicQueryCompareOperation)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>BasicQueryFilter</h4>
+<pre>public&nbsp;BasicQueryFilter(<a href="../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;constraints,
+                <a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/DimensionField.html" title="interface in mil.nga.giat.geowave.core.store.dimension">DimensionField</a>&lt;?&gt;[]&nbsp;dimensionFields,
+                <a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/BasicQueryFilter.BasicQueryCompareOperation.html" title="enum in mil.nga.giat.geowave.core.store.filter">BasicQueryFilter.BasicQueryCompareOperation</a>&nbsp;compareOp)</pre>
 </li>
 </ul>
 </li>
@@ -279,14 +333,15 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="overlaps(mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData, mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData)">
+<a name="validateConstraints(mil.nga.giat.geowave.core.store.filter.BasicQueryFilter.BasicQueryCompareOp, mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData, mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>overlaps</h4>
-<pre>protected&nbsp;boolean&nbsp;overlaps(<a href="../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;queryRange,
-               <a href="../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;dataRange)</pre>
+<h4>validateConstraints</h4>
+<pre>protected&nbsp;boolean&nbsp;validateConstraints(<a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/BasicQueryFilter.BasicQueryCompareOp.html" title="interface in mil.nga.giat.geowave.core.store.filter">BasicQueryFilter.BasicQueryCompareOp</a>&nbsp;op,
+                          <a href="../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;queryRange,
+                          <a href="../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;dataRange)</pre>
 </li>
 </ul>
 <a name="accept(mil.nga.giat.geowave.core.store.data.IndexedPersistenceEncoding)">
@@ -355,7 +410,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/
 <div class="subNav">
 <ul class="navList">
 <li>Prev Class</li>
-<li><a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/DedupeFilter.html" title="class in mil.nga.giat.geowave.core.store.filter"><span class="strong">Next Class</span></a></li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/BasicQueryFilter.BasicQueryCompareOp.html" title="interface in mil.nga.giat.geowave.core.store.filter"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../../index.html?mil/nga/giat/geowave/core/store/filter/BasicQueryFilter.html" target="_top">Frames</a></li>
@@ -379,7 +434,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/
 <div>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
-<li>Nested&nbsp;|&nbsp;</li>
+<li><a href="#nested_class_summary">Nested</a>&nbsp;|&nbsp;</li>
 <li><a href="#field_summary">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method_summary">Method</a></li>
