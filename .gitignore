@@ -8,3 +8,4 @@ dependency-reduced-pom.xml
 *.imls
 *.iml
 .idea/
+.DS_Store
