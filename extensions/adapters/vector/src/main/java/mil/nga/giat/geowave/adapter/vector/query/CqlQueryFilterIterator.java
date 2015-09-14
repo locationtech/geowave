@@ -19,6 +19,7 @@ import mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter;
 import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 import mil.nga.giat.geowave.core.store.index.Index;
+import mil.nga.giat.geowave.core.store.spi.SPIServiceRegistry;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloRowId;
 
 import org.apache.accumulo.core.data.Key;
@@ -226,14 +227,16 @@ public class CqlQueryFilterIterator extends
 					fileUrls[i] = new URL(
 							fileObjs[i].toString());
 				}
-				GeoTools.addClassLoader(java.security.AccessController.doPrivileged(new java.security.PrivilegedAction<URLClassLoader>() {
+				final ClassLoader urlCL = java.security.AccessController.doPrivileged(new java.security.PrivilegedAction<URLClassLoader>() {
 					public URLClassLoader run() {
 						final URLClassLoader ucl = new URLClassLoader(
 								fileUrls,
 								cl);
 						return ucl;
 					}
-				}));
+				});
+				GeoTools.addClassLoader(urlCL);
+				SPIServiceRegistry.registerClassLoader(urlCL);
 
 			}
 			classLoaderInitialized = true;
