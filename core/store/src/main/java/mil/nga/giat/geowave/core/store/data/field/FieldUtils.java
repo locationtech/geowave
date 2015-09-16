@@ -8,6 +8,7 @@ import java.util.Map.Entry;
 import java.util.ServiceLoader;
 
 import mil.nga.giat.geowave.core.store.filter.GenericTypeResolver;
+import mil.nga.giat.geowave.core.store.spi.SPIServiceRegistry;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,8 +41,8 @@ public class FieldUtils
 	private static synchronized void initRegistry() {
 		fieldReaderRegistry = new HashMap<Class<?>, FieldReader<?>>();
 		fieldWriterRegistry = new HashMap<Class<?>, FieldWriter<?, ?>>();
-		final Iterator<FieldSerializationProviderSpi> serializationProviders = ServiceLoader.load(
-				FieldSerializationProviderSpi.class).iterator();
+		final Iterator<FieldSerializationProviderSpi> serializationProviders = new SPIServiceRegistry(
+				FieldSerializationProviderSpi.class).load(FieldSerializationProviderSpi.class);
 		while (serializationProviders.hasNext()) {
 			final FieldSerializationProviderSpi<?> serializationProvider = serializationProviders.next();
 			if (serializationProvider != null) {
