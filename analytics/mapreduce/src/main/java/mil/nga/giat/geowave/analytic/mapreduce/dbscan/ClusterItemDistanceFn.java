@@ -3,8 +3,8 @@ package mil.nga.giat.geowave.analytic.mapreduce.dbscan;
 import mil.nga.giat.geowave.analytic.distance.CoordinateCircleDistanceFn;
 import mil.nga.giat.geowave.analytic.distance.DistanceFn;
 import mil.nga.giat.geowave.analytic.mapreduce.dbscan.ClusterItemDistanceFn.ClusterProfileContext;
-import mil.nga.giat.geowave.analytic.mapreduce.nn.DistanceProfile;
-import mil.nga.giat.geowave.analytic.mapreduce.nn.DistanceProfileGenerateFn;
+import mil.nga.giat.geowave.analytic.nn.DistanceProfile;
+import mil.nga.giat.geowave.analytic.nn.DistanceProfileGenerateFn;
 
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;

@@ -12,7 +12,6 @@ import mil.nga.giat.geowave.core.store.DataStoreEntryInfo;
 import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.adapter.IndexDependentDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
-import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.core.store.adapter.statistics.StatsCompositionTool;
 import mil.nga.giat.geowave.core.store.index.Index;
@@ -47,6 +46,10 @@ public class AccumuloIndexWriter implements
 	protected String altIdxTableName;
 
 	protected boolean persistStats;
+	protected int statsFlushCount = 0;
+	protected boolean skipFlush = false;
+	// just need a reasonable threshold.
+	public static final int FLUSH_STATS_THRESHOLD = 16384;
 	protected final Map<ByteArrayId, StatsCompositionTool<?>> statsMap = new HashMap<ByteArrayId, StatsCompositionTool<?>>();
 
 	public AccumuloIndexWriter(
@@ -91,6 +94,17 @@ public class AccumuloIndexWriter implements
 					LOGGER.warn("Deleting current alternate index table [" + altIdxTableName + "] as main table does not yet exist.");
 				}
 			}
+		}
+
+		try {
+			Object v = System.getProperty("AccumuloIndexWriter.skipFlush");
+			skipFlush = (v != null && v.toString().equalsIgnoreCase(
+					"true"));
+		}
+		catch (Exception ex) {
+			LOGGER.error(
+					"Unable to determine property AccumuloIndexWriter.skipFlush",
+					ex);
 		}
 	}
 
@@ -213,20 +227,11 @@ public class AccumuloIndexWriter implements
 						altIdxWriter);
 			}
 			if (persistStats) {
-				StatsCompositionTool<T> tool = (StatsCompositionTool<T>) statsMap.get(adapterIdObj);
-				if (tool == null) {
-					tool = new StatsCompositionTool<T>(
-							new DataAdapterStatsWrapper<T>(
-									index,
-									writableAdapter));
-					statsMap.put(
-							adapterIdObj,
-							tool);
-				}
-				tool.entryIngested(
+				recordStats(
+						adapterIdObj,
 						entryInfo,
+						writableAdapter,
 						entry);
-
 			}
 		}
 		return entryInfo.getRowIds();
@@ -238,16 +243,7 @@ public class AccumuloIndexWriter implements
 		closeInternal();
 
 		// write the statistics and clear it
-
-		if (!statsMap.isEmpty()) {
-			final DataStatisticsStore statsStore = new AccumuloDataStatisticsStore(
-					accumuloOperations);
-			for (StatsCompositionTool<?> tool : this.statsMap.values()) {
-				tool.setStatisticsStore(statsStore);
-				tool.flush();
-			}
-			statsMap.clear();
-		}
+		flushStats();
 	}
 
 	@Override
@@ -292,7 +288,11 @@ public class AccumuloIndexWriter implements
 		if (useAltIndex && (altIdxWriter != null)) {
 			altIdxWriter.flush();
 		}
+		flushStats();
 
+	}
+
+	private synchronized void flushStats() {
 		// write the statistics and clear it
 		if (persistStats) {
 			final DataStatisticsStore statsStore = new AccumuloDataStatisticsStore(
@@ -302,6 +302,32 @@ public class AccumuloIndexWriter implements
 				tool.flush();
 			}
 			statsMap.clear();
+		}
+	}
+
+	private synchronized <T> void recordStats(
+			final ByteArrayId adapterIdObj,
+			final DataStoreEntryInfo entryInfo,
+			final WritableDataAdapter<T> writableAdapter,
+			final T entry ) {
+
+		StatsCompositionTool<T> tool = (StatsCompositionTool<T>) statsMap.get(adapterIdObj);
+		if (tool == null) {
+			tool = new StatsCompositionTool<T>(
+					new DataAdapterStatsWrapper<T>(
+							index,
+							writableAdapter));
+			statsMap.put(
+					adapterIdObj,
+					tool);
+		}
+		tool.entryIngested(
+				entryInfo,
+				entry);
+		statsFlushCount++;
+		if (!skipFlush && statsFlushCount > FLUSH_STATS_THRESHOLD) {
+			statsFlushCount = 0;
+			flushStats();
 		}
 	}
 }

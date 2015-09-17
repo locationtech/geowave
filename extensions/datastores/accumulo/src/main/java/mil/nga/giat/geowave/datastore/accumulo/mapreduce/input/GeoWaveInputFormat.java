@@ -782,7 +782,7 @@ public class GeoWaveInputFormat<T> extends
 					final double targetCardinality ) {
 
 				if (stats == null) return null;
-				
+
 				final double thisCardinalty = rangeLocationPair.getCardinality();
 				final double fraction = (targetCardinality - currentCardinality) / thisCardinalty;
 				final int splitCardinality = (int) (thisCardinalty * fraction);

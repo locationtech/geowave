@@ -1,4 +1,4 @@
-package mil.nga.giat.geowave.analytic.mapreduce.nn;
+package mil.nga.giat.geowave.analytic.nn;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -40,34 +40,40 @@ public class NeighborIndex<NNTYPE>
 	 * @return
 	 */
 	public NeighborList<NNTYPE> init(
-			final Map.Entry<ByteArrayId, NNTYPE> node ) {
-		NeighborList<NNTYPE> neighbors = index.get(node.getKey());
+			ByteArrayId id,
+			NNTYPE value ) {
+		NeighborList<NNTYPE> neighbors = index.get(id);
 		if (neighbors == null) {
 			neighbors = listFactory.buildNeighborList(
-					node.getKey(),
-					node.getValue());
+					id,
+					value);
 			index.put(
-					node.getKey(),
+					id,
 					neighbors);
 		}
-		neighbors.init();
 		return neighbors;
 	}
 
 	public void add(
 			final DistanceProfile<?> distanceProfile,
-			final Map.Entry<ByteArrayId, NNTYPE> node,
-			final Map.Entry<ByteArrayId, NNTYPE> neighbor,
+			ByteArrayId centerId,
+			NNTYPE centerValue,
+			ByteArrayId neighborId,
+			NNTYPE neighborValue,
 			final boolean addReciprical ) {
 		this.addToList(
 				distanceProfile,
-				node,
-				neighbor);
+				centerId,
+				centerValue,
+				neighborId,
+				neighborValue);
 		if (addReciprical) {
 			this.addToList(
 					distanceProfile,
-					neighbor,
-					node);
+					neighborId,
+					neighborValue,
+					centerId,
+					centerValue);
 		}
 	}
 
@@ -80,20 +86,23 @@ public class NeighborIndex<NNTYPE>
 
 	private void addToList(
 			final DistanceProfile<?> distanceProfile,
-			final Map.Entry<ByteArrayId, NNTYPE> center,
-			final Map.Entry<ByteArrayId, NNTYPE> neighbor ) {
-		NeighborList<NNTYPE> neighbors = index.get(center.getKey());
+			ByteArrayId centerId,
+			NNTYPE centerValue,
+			ByteArrayId neighborId,
+			NNTYPE neighborValue ) {
+		NeighborList<NNTYPE> neighbors = index.get(centerId);
 		if (neighbors == null) {
 			neighbors = listFactory.buildNeighborList(
-					center.getKey(),
-					center.getValue());
+					centerId,
+					centerValue);
 			index.put(
-					center.getKey(),
+					centerId,
 					neighbors);
 		}
 		neighbors.add(
 				distanceProfile,
-				neighbor);
+				neighborId,
+				neighborValue);
 	}
 
 }

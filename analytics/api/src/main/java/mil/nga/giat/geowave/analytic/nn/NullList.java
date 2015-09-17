@@ -1,4 +1,4 @@
-package mil.nga.giat.geowave.analytic.mapreduce.nn;
+package mil.nga.giat.geowave.analytic.nn;
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -13,15 +13,17 @@ public class NullList<NNTYPE> implements
 
 	@Override
 	public boolean add(
-			final DistanceProfile<?> distanceProfile,
-			final Entry<ByteArrayId, NNTYPE> entry ) {
+			DistanceProfile<?> distanceProfile,
+			ByteArrayId id,
+			NNTYPE value ) {
 		return false;
 	}
 
 	@Override
-	public boolean contains(
-			final ByteArrayId key ) {
-		return false;
+	public InferType infer(
+			ByteArrayId id,
+			NNTYPE value ) {
+		return InferType.SKIP;
 	}
 
 	@Override
@@ -42,11 +44,6 @@ public class NullList<NNTYPE> implements
 	@Override
 	public boolean isEmpty() {
 		return true;
-	}
-
-	@Override
-	public void init() {
-
 	}
 
 }

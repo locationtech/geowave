@@ -8,17 +8,28 @@ import com.vividsolutions.jts.geom.Geometry;
 public class ClusterItem
 {
 	private final String id;
-	private final Geometry geometry;
-	private final long count;
+	private Geometry geometry;
+	private long count;
+	private boolean compressed = false;
 
 	public ClusterItem(
 			final String id,
 			final Geometry geometry,
-			final long count ) {
+			final long count,
+			final boolean compressed ) {
 		super();
 		this.id = id;
 		this.geometry = geometry;
 		this.count = count;
+		this.compressed = compressed;
+	}
+
+	public void setCompressed() {
+		this.compressed = true;
+	}
+
+	protected boolean isCompressed() {
+		return this.compressed;
 	}
 
 	protected String getId() {
@@ -58,6 +69,16 @@ public class ClusterItem
 	@Override
 	public String toString() {
 		return "ClusterItem [id=" + id + ", geometry=" + geometry + ", count=" + count + "]";
+	}
+
+	public void setGeometry(
+			Geometry geometry ) {
+		this.geometry = geometry;
+	}
+
+	public void setCount(
+			long count ) {
+		this.count = count;
 	}
 
 }

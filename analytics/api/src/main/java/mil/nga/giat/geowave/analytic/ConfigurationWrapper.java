@@ -28,4 +28,5 @@ public interface ConfigurationWrapper
 			Class<? extends T> defaultValue )
 			throws InstantiationException,
 			IllegalAccessException;
+
 }
