@@ -1,6 +1,5 @@
 package mil.nga.giat.geowave.core.store.adapter.statistics;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 

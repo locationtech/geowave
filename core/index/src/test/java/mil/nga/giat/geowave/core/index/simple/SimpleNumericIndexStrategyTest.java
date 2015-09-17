@@ -50,13 +50,13 @@ public class SimpleNumericIndexStrategyTest
 	private static long castToLong(
 			final Number n ) {
 		if (n instanceof Short) {
-			return ((short) n);
+			return ((short) n.shortValue());
 		}
 		else if (n instanceof Integer) {
-			return ((int) n);
+			return ((int) n.intValue());
 		}
 		else if (n instanceof Long) {
-			return (long) n;
+			return (long) n.longValue();
 		}
 		else {
 			throw new UnsupportedOperationException(

@@ -11,6 +11,7 @@ import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsVisibilityHandler;
 import mil.nga.giat.geowave.core.store.adapter.statistics.EmptyStatisticVisibility;
 import mil.nga.giat.geowave.core.store.adapter.statistics.RowRangeDataStatistics;
+import mil.nga.giat.geowave.core.store.adapter.statistics.RowRangeHistogramStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.StatisticalDataAdapter;
 import mil.nga.giat.geowave.core.store.data.field.FieldReader;
 import mil.nga.giat.geowave.core.store.data.field.FieldWriter;
@@ -95,8 +96,9 @@ public class DataAdapterStatsWrapper<T> implements
 		final ByteArrayId[] idsFromAdapter = (adapter instanceof StatisticalDataAdapter) ? ((StatisticalDataAdapter) adapter).getSupportedStatisticsIds() : new ByteArrayId[0];
 		final ByteArrayId[] newSet = Arrays.copyOf(
 				idsFromAdapter,
-				idsFromAdapter.length + 1);
+				idsFromAdapter.length + 2);
 		newSet[idsFromAdapter.length] = RowRangeDataStatistics.STATS_ID;
+		newSet[idsFromAdapter.length + 1] = RowRangeHistogramStatistics.STATS_ID;
 		return newSet;
 	}
 
@@ -105,6 +107,10 @@ public class DataAdapterStatsWrapper<T> implements
 			ByteArrayId statisticsId ) {
 		if (statisticsId.equals(RowRangeDataStatistics.STATS_ID)) return new RowRangeDataStatistics(
 				index.getId());
+		if (statisticsId.equals(RowRangeHistogramStatistics.STATS_ID)) return new RowRangeHistogramStatistics(
+				adapter.getAdapterId(),
+				index.getId(),
+				1024);
 		return (adapter instanceof StatisticalDataAdapter) ? ((StatisticalDataAdapter) adapter).createDataStatistics(statisticsId) : null;
 	}
 

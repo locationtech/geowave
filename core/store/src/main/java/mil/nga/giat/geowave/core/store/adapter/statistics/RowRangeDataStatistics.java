@@ -28,7 +28,7 @@ public class RowRangeDataStatistics<T> extends
 	public RowRangeDataStatistics(
 			ByteArrayId indexId ) {
 		super(
-				null,
+				indexId,
 				getId(indexId));
 	}
 

@@ -120,7 +120,7 @@ public class SpatialQuery extends
 		buf.putInt(superBinary.length);
 		buf.put(superBinary);
 		buf.put(geometryBinary);
-		
+
 		return buf.array();
 	}
 
