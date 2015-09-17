@@ -76,6 +76,7 @@ mil.nga.giat.geowave.core.ingest.local
 mil.nga.giat.geowave.core.store
 mil.nga.giat.geowave.core.store.adapter
 mil.nga.giat.geowave.core.store.adapter.statistics
+mil.nga.giat.geowave.core.store.adapter.statistics.histogram
 mil.nga.giat.geowave.core.store.data
 mil.nga.giat.geowave.core.store.data.field
 mil.nga.giat.geowave.core.store.data.field.base

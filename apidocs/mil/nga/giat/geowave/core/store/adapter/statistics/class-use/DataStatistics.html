@@ -469,11 +469,24 @@
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/NumericRangeDataStatistics.html" title="class in mil.nga.giat.geowave.core.store.adapter.statistics">NumericRangeDataStatistics</a>&lt;T&gt;</strong></code>&nbsp;</td>
+<td class="colLast"><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/FixedBinNumericStatistics.html" title="class in mil.nga.giat.geowave.core.store.adapter.statistics">FixedBinNumericStatistics</a>&lt;T&gt;</strong></code>
+<div class="block">Fixed number of bins for a histogram.</div>
+</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/NumericRangeDataStatistics.html" title="class in mil.nga.giat.geowave.core.store.adapter.statistics">NumericRangeDataStatistics</a>&lt;T&gt;</strong></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/RowRangeDataStatistics.html" title="class in mil.nga.giat.geowave.core.store.adapter.statistics">RowRangeDataStatistics</a>&lt;T&gt;</strong></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/RowRangeHistogramStatistics.html" title="class in mil.nga.giat.geowave.core.store.adapter.statistics">RowRangeHistogramStatistics</a>&lt;T&gt;</strong></code>
+<div class="block">Dynamic histogram provide very high accuracy for CDF and quantiles over the a
+ numeric attribute.</div>
+</td>
 </tr>
 </tbody>
 </table>
@@ -489,10 +502,14 @@
 <td class="colLast"><span class="strong">StatisticalDataAdapter.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/StatisticalDataAdapter.html#createDataStatistics(mil.nga.giat.geowave.core.index.ByteArrayId)">createDataStatistics</a></strong>(<a href="../../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;statisticsId)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;<a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/RowRangeHistogramStatistics.html" title="type parameter in RowRangeHistogramStatistics">T</a>&gt;</code></td>
+<td class="colLast"><span class="strong">RowRangeHistogramStatistics.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/RowRangeHistogramStatistics.html#duplicate()">duplicate</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;<a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/AbstractDataStatistics.html" title="type parameter in AbstractDataStatistics">T</a>&gt;</code></td>
 <td class="colLast"><span class="strong">AbstractDataStatistics.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#duplicate()">duplicate</a></strong>()</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;?&gt;</code></td>
 <td class="colLast"><span class="strong">DataStatisticsStore.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatisticsStore.html#getDataStatistics(mil.nga.giat.geowave.core.index.ByteArrayId,%20mil.nga.giat.geowave.core.index.ByteArrayId,%20java.lang.String...)">getDataStatistics</a></strong>(<a href="../../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;adapterId,
                  <a href="../../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;statisticsId,

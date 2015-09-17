@@ -36,7 +36,7 @@
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/input/GeoWaveInputFormat.IntermediateSplitInfo.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce.input"><span class="strong">Prev Class</span></a></li>
-<li><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/input/GeoWaveInputFormat.IntermediateSplitInfo.RangeLocationPair.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce.input"><span class="strong">Next Class</span></a></li>
+<li><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce.input"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../../../index.html?mil/nga/giat/geowave/datastore/accumulo/mapreduce/input/GeoWaveInputFormat.IntermediateSplitInfo.IndexRangeLocation.html" target="_top">Frames</a></li>
@@ -63,13 +63,13 @@
 <li>Nested&nbsp;|&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
-<li><a href="#methods_inherited_from_class_java.lang.Object">Method</a></li>
+<li><a href="#method_summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor_detail">Constr</a>&nbsp;|&nbsp;</li>
-<li>Method</li>
+<li><a href="#method_detail">Method</a></li>
 </ul>
 </div>
 <a name="skip-navbar_top">
@@ -119,7 +119,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/input/GeoWaveInputFormat.IntermediateSplitInfo.IndexRangeLocation.html#GeoWaveInputFormat.IntermediateSplitInfo.IndexRangeLocation(mil.nga.giat.geowave.datastore.accumulo.mapreduce.input.GeoWaveInputFormat.IntermediateSplitInfo.RangeLocationPair,%20mil.nga.giat.geowave.core.store.index.Index)">GeoWaveInputFormat.IntermediateSplitInfo.IndexRangeLocation</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/input/GeoWaveInputFormat.IntermediateSplitInfo.RangeLocationPair.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce.input">GeoWaveInputFormat.IntermediateSplitInfo.RangeLocationPair</a>&nbsp;rangeLocationPair,
+<td class="colOne"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/input/GeoWaveInputFormat.IntermediateSplitInfo.IndexRangeLocation.html#GeoWaveInputFormat.IntermediateSplitInfo.IndexRangeLocation(mil.nga.giat.geowave.datastore.accumulo.mapreduce.input.RangeLocationPair,%20mil.nga.giat.geowave.core.store.index.Index)">GeoWaveInputFormat.IntermediateSplitInfo.IndexRangeLocation</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/input/RangeLocationPair.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce.input">RangeLocationPair</a>&nbsp;rangeLocationPair,
                                                            <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index)</code>&nbsp;</td>
 </tr>
 </table>
@@ -131,6 +131,19 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <!--   -->
 </a>
 <h3>Method Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Method Summary table, listing methods, and an explanation">
+<caption><span>Methods</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/input/GeoWaveInputFormat.IntermediateSplitInfo.IndexRangeLocation.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce.input">GeoWaveInputFormat.IntermediateSplitInfo.IndexRangeLocation</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/input/GeoWaveInputFormat.IntermediateSplitInfo.IndexRangeLocation.html#split(mil.nga.giat.geowave.core.store.adapter.statistics.RowRangeHistogramStatistics,%20double,%20double)">split</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/RowRangeHistogramStatistics.html" title="class in mil.nga.giat.geowave.core.store.adapter.statistics">RowRangeHistogramStatistics</a>&lt;?&gt;&nbsp;stats,
+     double&nbsp;currentCardinality,
+     double&nbsp;targetCardinality)</code>&nbsp;</td>
+</tr>
+</table>
 <ul class="blockList">
 <li class="blockList"><a name="methods_inherited_from_class_java.lang.Object">
 <!--   -->
@@ -152,14 +165,33 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="GeoWaveInputFormat.IntermediateSplitInfo.IndexRangeLocation(mil.nga.giat.geowave.datastore.accumulo.mapreduce.input.GeoWaveInputFormat.IntermediateSplitInfo.RangeLocationPair, mil.nga.giat.geowave.core.store.index.Index)">
+<a name="GeoWaveInputFormat.IntermediateSplitInfo.IndexRangeLocation(mil.nga.giat.geowave.datastore.accumulo.mapreduce.input.RangeLocationPair, mil.nga.giat.geowave.core.store.index.Index)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>GeoWaveInputFormat.IntermediateSplitInfo.IndexRangeLocation</h4>
-<pre>public&nbsp;GeoWaveInputFormat.IntermediateSplitInfo.IndexRangeLocation(<a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/input/GeoWaveInputFormat.IntermediateSplitInfo.RangeLocationPair.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce.input">GeoWaveInputFormat.IntermediateSplitInfo.RangeLocationPair</a>&nbsp;rangeLocationPair,
+<pre>public&nbsp;GeoWaveInputFormat.IntermediateSplitInfo.IndexRangeLocation(<a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/input/RangeLocationPair.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce.input">RangeLocationPair</a>&nbsp;rangeLocationPair,
                                                            <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index)</pre>
+</li>
+</ul>
+</li>
+</ul>
+<!-- ============ METHOD DETAIL ========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_detail">
+<!--   -->
+</a>
+<h3>Method Detail</h3>
+<a name="split(mil.nga.giat.geowave.core.store.adapter.statistics.RowRangeHistogramStatistics, double, double)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>split</h4>
+<pre>public&nbsp;<a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/input/GeoWaveInputFormat.IntermediateSplitInfo.IndexRangeLocation.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce.input">GeoWaveInputFormat.IntermediateSplitInfo.IndexRangeLocation</a>&nbsp;split(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/RowRangeHistogramStatistics.html" title="class in mil.nga.giat.geowave.core.store.adapter.statistics">RowRangeHistogramStatistics</a>&lt;?&gt;&nbsp;stats,
+                                                                double&nbsp;currentCardinality,
+                                                                double&nbsp;targetCardinality)</pre>
 </li>
 </ul>
 </li>
@@ -189,7 +221,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/input/GeoWaveInputFormat.IntermediateSplitInfo.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce.input"><span class="strong">Prev Class</span></a></li>
-<li><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/input/GeoWaveInputFormat.IntermediateSplitInfo.RangeLocationPair.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce.input"><span class="strong">Next Class</span></a></li>
+<li><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce.input"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../../../index.html?mil/nga/giat/geowave/datastore/accumulo/mapreduce/input/GeoWaveInputFormat.IntermediateSplitInfo.IndexRangeLocation.html" target="_top">Frames</a></li>
@@ -216,13 +248,13 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li>Nested&nbsp;|&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
-<li><a href="#methods_inherited_from_class_java.lang.Object">Method</a></li>
+<li><a href="#method_summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor_detail">Constr</a>&nbsp;|&nbsp;</li>
-<li>Method</li>
+<li><a href="#method_detail">Method</a></li>
 </ul>
 </div>
 <a name="skip-navbar_bottom">

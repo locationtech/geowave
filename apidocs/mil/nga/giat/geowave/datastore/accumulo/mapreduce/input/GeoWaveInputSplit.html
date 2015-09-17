@@ -133,7 +133,7 @@ implements org.apache.hadoop.io.Writable</pre>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>protected </code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/input/GeoWaveInputSplit.html#GeoWaveInputSplit(java.util.Map,%20java.lang.String[])">GeoWaveInputSplit</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;org.apache.accumulo.core.data.Range&gt;&gt;&nbsp;ranges,
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/input/GeoWaveInputSplit.html#GeoWaveInputSplit(java.util.Map,%20java.lang.String[])">GeoWaveInputSplit</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/input/RangeLocationPair.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce.input">RangeLocationPair</a>&gt;&gt;&nbsp;ranges,
                  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;locations)</code>&nbsp;</td>
 </tr>
 </table>
@@ -167,7 +167,7 @@ implements org.apache.hadoop.io.Writable</pre>
 <td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/input/GeoWaveInputSplit.html#getLocations()">getLocations</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;org.apache.accumulo.core.data.Range&gt;</code></td>
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/input/RangeLocationPair.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce.input">RangeLocationPair</a>&gt;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/input/GeoWaveInputSplit.html#getRanges(mil.nga.giat.geowave.core.store.index.Index)">getRanges</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
@@ -222,7 +222,7 @@ implements org.apache.hadoop.io.Writable</pre>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>GeoWaveInputSplit</h4>
-<pre>protected&nbsp;GeoWaveInputSplit(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;org.apache.accumulo.core.data.Range&gt;&gt;&nbsp;ranges,
+<pre>protected&nbsp;GeoWaveInputSplit(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/input/RangeLocationPair.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce.input">RangeLocationPair</a>&gt;&gt;&nbsp;ranges,
                  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;locations)</pre>
 </li>
 </ul>
@@ -249,7 +249,7 @@ implements org.apache.hadoop.io.Writable</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>getRanges</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;org.apache.accumulo.core.data.Range&gt;&nbsp;getRanges(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index)</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/input/RangeLocationPair.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce.input">RangeLocationPair</a>&gt;&nbsp;getRanges(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index)</pre>
 </li>
 </ul>
 <a name="getLength()">
