@@ -522,6 +522,10 @@ public class GeoWaveInputFormat<T> extends
 				index.getId(),
 				RowRangeDataStatistics.getId(index.getId()),
 				GeoWaveInputFormat.getAuthorizations(context));
+		if (stats == null) {
+			LOGGER.warn("Could not determine range of data from 'RowRangeDataStatistics'.  Range will not be clipped. This may result in some splits being empty.");
+			return new Range();
+		}
 
 		final int cardinality = Math.max(
 				stats.getMin().length,
@@ -782,7 +786,7 @@ public class GeoWaveInputFormat<T> extends
 					final double targetCardinality ) {
 
 				if (stats == null) return null;
-				
+
 				final double thisCardinalty = rangeLocationPair.getCardinality();
 				final double fraction = (targetCardinality - currentCardinality) / thisCardinalty;
 				final int splitCardinality = (int) (thisCardinalty * fraction);
