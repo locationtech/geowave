@@ -35,7 +35,7 @@
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/DBScanMapReduce.SimpleFeatureToClusterItemConverter.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.dbscan"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/PreProcessSingleItemClusterList.PreProcessSingleItemClusterListFactory.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.dbscan"><span class="strong">Prev Class</span></a></li>
 <li><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/SingleItemClusterList.SingleItemClusterListFactory.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.dbscan"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">
@@ -61,13 +61,13 @@
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li><a href="#nested_class_summary">Nested</a>&nbsp;|&nbsp;</li>
-<li><a href="#field_summary">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#fields_inherited_from_class_mil.nga.giat.geowave.analytic.mapreduce.dbscan.DBScanClusterList">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method_summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
-<li><a href="#field_detail">Field</a>&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor_detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method_detail">Method</a></li>
 </ul>
@@ -100,19 +100,20 @@
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util">Map.Entry</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>,<a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/ClusterItem.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.dbscan">ClusterItem</a>&gt;&gt;, <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/Cluster.html" title="interface in mil.nga.giat.geowave.analytic.mapreduce.dbscan">Cluster</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/ClusterItem.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.dbscan">ClusterItem</a>&gt;, <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/CompressingCluster.html" title="interface in mil.nga.giat.geowave.analytic.mapreduce.dbscan">CompressingCluster</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/ClusterItem.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.dbscan">ClusterItem</a>,com.vividsolutions.jts.geom.Geometry&gt;, <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NeighborList.html" title="interface in mil.nga.giat.geowave.analytic.mapreduce.nn">NeighborList</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/ClusterItem.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.dbscan">ClusterItem</a>&gt;</dd>
+<dd><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util">Map.Entry</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>,<a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/ClusterItem.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.dbscan">ClusterItem</a>&gt;&gt;, <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/Cluster.html" title="interface in mil.nga.giat.geowave.analytic.mapreduce.dbscan">Cluster</a>, <a href="../../../../../../../mil/nga/giat/geowave/analytic/nn/NeighborList.html" title="interface in mil.nga.giat.geowave.analytic.nn">NeighborList</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/ClusterItem.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.dbscan">ClusterItem</a>&gt;</dd>
+</dl>
+<dl>
+<dt>Direct Known Subclasses:</dt>
+<dd><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/PreProcessSingleItemClusterList.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.dbscan">PreProcessSingleItemClusterList</a></dd>
 </dl>
 <hr>
 <br>
 <pre>public class <span class="strong">SingleItemClusterList</span>
 extends <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/DBScanClusterList.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.dbscan">DBScanClusterList</a>
-implements <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/CompressingCluster.html" title="interface in mil.nga.giat.geowave.analytic.mapreduce.dbscan">CompressingCluster</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/ClusterItem.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.dbscan">ClusterItem</a>,com.vividsolutions.jts.geom.Geometry&gt;</pre>
+implements <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/Cluster.html" title="interface in mil.nga.giat.geowave.analytic.mapreduce.dbscan">Cluster</a></pre>
 <div class="block">Maintains a single hull around a set of points.
  
- Intended to run in a single thread. Not Thread Safe.
- 
- 
- TODO: connectGeometryTool.connect(</div>
+ Intended to run in a single thread. Not Thread Safe.</div>
 </li>
 </ul>
 </div>
@@ -136,6 +137,13 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/SingleItemClusterList.SingleItemClusterListFactory.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.dbscan">SingleItemClusterList.SingleItemClusterListFactory</a></strong></code>&nbsp;</td>
 </tr>
 </table>
+<ul class="blockList">
+<li class="blockList"><a name="nested_classes_inherited_from_class_mil.nga.giat.geowave.analytic.nn.NeighborList">
+<!--   -->
+</a>
+<h3>Nested classes/interfaces inherited from interface&nbsp;mil.nga.giat.geowave.analytic.nn.<a href="../../../../../../../mil/nga/giat/geowave/analytic/nn/NeighborList.html" title="interface in mil.nga.giat.geowave.analytic.nn">NeighborList</a></h3>
+<code><a href="../../../../../../../mil/nga/giat/geowave/analytic/nn/NeighborList.InferType.html" title="enum in mil.nga.giat.geowave.analytic.nn">NeighborList.InferType</a></code></li>
+</ul>
 </li>
 </ul>
 <!-- =========== FIELD SUMMARY =========== -->
@@ -144,23 +152,12 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce
 <!--   -->
 </a>
 <h3>Field Summary</h3>
-<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Field Summary table, listing fields, and an explanation">
-<caption><span>Fields</span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Field and Description</th>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>protected static org.slf4j.Logger</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/SingleItemClusterList.html#LOGGER">LOGGER</a></strong></code>&nbsp;</td>
-</tr>
-</table>
 <ul class="blockList">
 <li class="blockList"><a name="fields_inherited_from_class_mil.nga.giat.geowave.analytic.mapreduce.dbscan.DBScanClusterList">
 <!--   -->
 </a>
 <h3>Fields inherited from class&nbsp;mil.nga.giat.geowave.analytic.mapreduce.dbscan.<a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/DBScanClusterList.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.dbscan">DBScanClusterList</a></h3>
-<code><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/DBScanClusterList.html#ONE">ONE</a>, <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/DBScanClusterList.html#ZERO">ZERO</a></code></li>
+<code><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/DBScanClusterList.html#clusterGeo">clusterGeo</a>, <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/DBScanClusterList.html#index">index</a>, <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/DBScanClusterList.html#itemCount">itemCount</a>, <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/DBScanClusterList.html#LOGGER">LOGGER</a></code></li>
 </ul>
 </li>
 </ul>
@@ -176,10 +173,10 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/SingleItemClusterList.html#SingleItemClusterList(mil.nga.giat.geowave.analytic.distance.DistanceFn,%20mil.nga.giat.geowave.core.index.ByteArrayId,%20mil.nga.giat.geowave.analytic.mapreduce.dbscan.ClusterItem,%20java.util.Map)">SingleItemClusterList</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/analytic/distance/DistanceFn.html" title="interface in mil.nga.giat.geowave.analytic.distance">DistanceFn</a>&lt;com.vividsolutions.jts.geom.Coordinate&gt;&nbsp;distanceFnForCoordinate,
-                     <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;centerId,
+<td class="colOne"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/SingleItemClusterList.html#SingleItemClusterList(mil.nga.giat.geowave.core.index.ByteArrayId,%20mil.nga.giat.geowave.analytic.mapreduce.dbscan.ClusterItem,%20mil.nga.giat.geowave.analytic.nn.NeighborListFactory,%20java.util.Map)">SingleItemClusterList</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;centerId,
                      <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/ClusterItem.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.dbscan">ClusterItem</a>&nbsp;center,
-                     <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>,<a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/Cluster.html" title="interface in mil.nga.giat.geowave.analytic.mapreduce.dbscan">Cluster</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/ClusterItem.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.dbscan">ClusterItem</a>&gt;&gt;&nbsp;index)</code>&nbsp;</td>
+                     <a href="../../../../../../../mil/nga/giat/geowave/analytic/nn/NeighborListFactory.html" title="interface in mil.nga.giat.geowave.analytic.nn">NeighborListFactory</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/ClusterItem.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.dbscan">ClusterItem</a>&gt;&nbsp;factory,
+                     <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>,<a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/Cluster.html" title="interface in mil.nga.giat.geowave.analytic.mapreduce.dbscan">Cluster</a>&gt;&nbsp;index)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -197,15 +194,16 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>protected boolean</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/SingleItemClusterList.html#add(mil.nga.giat.geowave.analytic.mapreduce.nn.DistanceProfile,%20mil.nga.giat.geowave.core.index.ByteArrayId,%20mil.nga.giat.geowave.analytic.mapreduce.dbscan.ClusterItem)">add</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/DistanceProfile.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.nn">DistanceProfile</a>&lt;?&gt;&nbsp;distanceProfile,
-   <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;id,
-   <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/ClusterItem.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.dbscan">ClusterItem</a>&nbsp;newInstance)</code>&nbsp;</td>
+<td class="colFirst"><code>protected long</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/SingleItemClusterList.html#addAndFetchCount(mil.nga.giat.geowave.core.index.ByteArrayId,%20mil.nga.giat.geowave.analytic.mapreduce.dbscan.ClusterItem,%20mil.nga.giat.geowave.analytic.nn.DistanceProfile)">addAndFetchCount</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;id,
+                <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/ClusterItem.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.dbscan">ClusterItem</a>&nbsp;newInstance,
+                <a href="../../../../../../../mil/nga/giat/geowave/analytic/nn/DistanceProfile.html" title="class in mil.nga.giat.geowave.analytic.nn">DistanceProfile</a>&lt;?&gt;&nbsp;distanceProfile)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Long.html?is-external=true" title="class or interface in java.lang">Long</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/SingleItemClusterList.html#addAndFetchCount(mil.nga.giat.geowave.core.index.ByteArrayId,%20mil.nga.giat.geowave.analytic.mapreduce.dbscan.ClusterItem)">addAndFetchCount</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;id,
-                <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/ClusterItem.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.dbscan">ClusterItem</a>&nbsp;newInstance)</code>&nbsp;</td>
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/SingleItemClusterList.html#clear()">clear</a></strong>()</code>
+<div class="block">Clear the contents.</div>
+</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>protected com.vividsolutions.jts.geom.Geometry</code></td>
@@ -213,7 +211,19 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/SingleItemClusterList.html#merge(mil.nga.giat.geowave.analytic.mapreduce.dbscan.Cluster)">merge</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/Cluster.html" title="interface in mil.nga.giat.geowave.analytic.mapreduce.dbscan">Cluster</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/ClusterItem.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.dbscan">ClusterItem</a>&gt;&nbsp;cluster)</code>&nbsp;</td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/SingleItemClusterList.html#finish()">finish</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;com.vividsolutions.jts.geom.Coordinate&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/SingleItemClusterList.html#getClusterPoints(boolean)">getClusterPoints</a></strong>(boolean&nbsp;allowUpdates)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/SingleItemClusterList.html#isCompressed()">isCompressed</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/SingleItemClusterList.html#merge(mil.nga.giat.geowave.analytic.mapreduce.dbscan.Cluster)">merge</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/Cluster.html" title="interface in mil.nga.giat.geowave.analytic.mapreduce.dbscan">Cluster</a>&nbsp;cluster)</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -221,35 +231,28 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;mil.nga.giat.geowave.analytic.mapreduce.dbscan.<a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/DBScanClusterList.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.dbscan">DBScanClusterList</a></h3>
-<code><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/DBScanClusterList.html#add(mil.nga.giat.geowave.core.index.ByteArrayId,%20mil.nga.giat.geowave.analytic.mapreduce.dbscan.ClusterItem)">add</a>, <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/DBScanClusterList.html#add(mil.nga.giat.geowave.analytic.mapreduce.nn.DistanceProfile,%20java.util.Map.Entry)">add</a>, <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/DBScanClusterList.html#clear()">clear</a>, <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/DBScanClusterList.html#clusteredIds()">clusteredIds</a>, <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/DBScanClusterList.html#contains(mil.nga.giat.geowave.core.index.ByteArrayId)">contains</a>, <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/DBScanClusterList.html#equals(java.lang.Object)">equals</a>, <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/DBScanClusterList.html#get()">get</a>, <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/DBScanClusterList.html#getCount(mil.nga.giat.geowave.core.index.ByteArrayId)">getCount</a>, <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/DBScanClusterList.html#getId()">getId</a>, <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/DBScanClusterList.html#getLinkedClusters()">getLinkedClusters</a>, <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/DBScanClusterList.html#hashCode()">hashCode</a>, <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/DBScanClusterList.html#init()">init</a>, <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/DBScanClusterList.html#interpolateAddCount(mil.nga.giat.geowave.analytic.mapreduce.dbscan.DBScanClusterList)">interpolateAddCount</a>, <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/DBScanClusterList.html#isEmpty()">isEmpty</a>, <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/DBScanClusterList.html#iterator()">iterator</a>, <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/DBScanClusterList.html#putCount(mil.nga.giat.geowave.core.index.ByteArrayId,%20java.lang.Long,%20boolean)">putCount</a>, <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/DBScanClusterList.html#size()">size</a></code></li>
+<code><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/DBScanClusterList.html#add(mil.nga.giat.geowave.analytic.nn.DistanceProfile,%20mil.nga.giat.geowave.core.index.ByteArrayId,%20mil.nga.giat.geowave.analytic.mapreduce.dbscan.ClusterItem)">add</a>, <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/DBScanClusterList.html#currentLinkSetSize()">currentLinkSetSize</a>, <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/DBScanClusterList.html#equals(java.lang.Object)">equals</a>, <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/DBScanClusterList.html#getGeometry()">getGeometry</a>, <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/DBScanClusterList.html#getHullTool()">getHullTool</a>, <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/DBScanClusterList.html#getId()">getId</a>, <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/DBScanClusterList.html#getIds(boolean)">getIds</a>, <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/DBScanClusterList.html#getLinkedClusters()">getLinkedClusters</a>, <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/DBScanClusterList.html#getLinkedClusters(boolean)">getLinkedClusters</a>, <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/DBScanClusterList.html#hashCode()">hashCode</a>, <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/DBScanClusterList.html#incrementItemCount(long)">incrementItemCount</a>, <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/DBScanClusterList.html#infer(mil.nga.giat.geowave.core.index.ByteArrayId,%20mil.nga.giat.geowave.analytic.mapreduce.dbscan.ClusterItem)">infer</a>, <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/DBScanClusterList.html#interpolateFactor(com.vividsolutions.jts.geom.Geometry)">interpolateFactor</a>, <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/DBScanClusterList.html#invalidate()">invalidate</a>, <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/DBScanClusterList.html#isEmpty()">isEmpty</a>, <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/DBScanClusterList.html#iterator()">iterator</a>, <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/DBScanClusterList.html#mergeLinks(boolean)">mergeLinks</a>, <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/DBScanClusterList.html#setMergeSize(int)">setMergeSize</a>, <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/DBScanClusterList.html#size()">size</a>, <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/DBScanClusterList.html#toString()">toString</a>, <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/DBScanClusterList.html#union(com.vividsolutions.jts.geom.Geometry)">union</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods_inherited_from_class_java.lang.Object">
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;java.lang.<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></h3>
-<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#clone()" title="class or interface in java.lang">clone</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#finalize()" title="class or interface in java.lang">finalize</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang">getClass</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang">notify</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang">notifyAll</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#toString()" title="class or interface in java.lang">toString</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait(long,%20int)" title="class or interface in java.lang">wait</a></code></li>
-</ul>
-<ul class="blockList">
-<li class="blockList"><a name="methods_inherited_from_class_mil.nga.giat.geowave.analytic.mapreduce.dbscan.CompressingCluster">
-<!--   -->
-</a>
-<h3>Methods inherited from interface&nbsp;mil.nga.giat.geowave.analytic.mapreduce.dbscan.<a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/CompressingCluster.html" title="interface in mil.nga.giat.geowave.analytic.mapreduce.dbscan">CompressingCluster</a></h3>
-<code><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/CompressingCluster.html#get()">get</a></code></li>
+<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#clone()" title="class or interface in java.lang">clone</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#finalize()" title="class or interface in java.lang">finalize</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang">getClass</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang">notify</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang">notifyAll</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait(long,%20int)" title="class or interface in java.lang">wait</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods_inherited_from_class_mil.nga.giat.geowave.analytic.mapreduce.dbscan.Cluster">
 <!--   -->
 </a>
 <h3>Methods inherited from interface&nbsp;mil.nga.giat.geowave.analytic.mapreduce.dbscan.<a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/Cluster.html" title="interface in mil.nga.giat.geowave.analytic.mapreduce.dbscan">Cluster</a></h3>
-<code><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/Cluster.html#clusteredIds()">clusteredIds</a>, <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/Cluster.html#getId()">getId</a>, <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/Cluster.html#getLinkedClusters()">getLinkedClusters</a></code></li>
+<code><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/Cluster.html#currentLinkSetSize()">currentLinkSetSize</a>, <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/Cluster.html#getGeometry()">getGeometry</a>, <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/Cluster.html#getId()">getId</a>, <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/Cluster.html#getLinkedClusters()">getLinkedClusters</a>, <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/Cluster.html#invalidate()">invalidate</a></code></li>
 </ul>
 <ul class="blockList">
-<li class="blockList"><a name="methods_inherited_from_class_mil.nga.giat.geowave.analytic.mapreduce.nn.NeighborList">
+<li class="blockList"><a name="methods_inherited_from_class_mil.nga.giat.geowave.analytic.nn.NeighborList">
 <!--   -->
 </a>
-<h3>Methods inherited from interface&nbsp;mil.nga.giat.geowave.analytic.mapreduce.nn.<a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NeighborList.html" title="interface in mil.nga.giat.geowave.analytic.mapreduce.nn">NeighborList</a></h3>
-<code><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NeighborList.html#add(mil.nga.giat.geowave.analytic.mapreduce.nn.DistanceProfile,%20java.util.Map.Entry)">add</a>, <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NeighborList.html#clear()">clear</a>, <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NeighborList.html#contains(mil.nga.giat.geowave.core.index.ByteArrayId)">contains</a>, <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NeighborList.html#init()">init</a>, <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NeighborList.html#isEmpty()">isEmpty</a>, <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NeighborList.html#size()">size</a></code></li>
+<h3>Methods inherited from interface&nbsp;mil.nga.giat.geowave.analytic.nn.<a href="../../../../../../../mil/nga/giat/geowave/analytic/nn/NeighborList.html" title="interface in mil.nga.giat.geowave.analytic.nn">NeighborList</a></h3>
+<code><a href="../../../../../../../mil/nga/giat/geowave/analytic/nn/NeighborList.html#add(mil.nga.giat.geowave.analytic.nn.DistanceProfile,%20mil.nga.giat.geowave.core.index.ByteArrayId,%20NNTYPE)">add</a>, <a href="../../../../../../../mil/nga/giat/geowave/analytic/nn/NeighborList.html#infer(mil.nga.giat.geowave.core.index.ByteArrayId,%20NNTYPE)">infer</a>, <a href="../../../../../../../mil/nga/giat/geowave/analytic/nn/NeighborList.html#isEmpty()">isEmpty</a>, <a href="../../../../../../../mil/nga/giat/geowave/analytic/nn/NeighborList.html#size()">size</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods_inherited_from_class_java.lang.Iterable">
@@ -266,39 +269,22 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce
 <div class="details">
 <ul class="blockList">
 <li class="blockList">
-<!-- ============ FIELD DETAIL =========== -->
-<ul class="blockList">
-<li class="blockList"><a name="field_detail">
-<!--   -->
-</a>
-<h3>Field Detail</h3>
-<a name="LOGGER">
-<!--   -->
-</a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>LOGGER</h4>
-<pre>protected static final&nbsp;org.slf4j.Logger LOGGER</pre>
-</li>
-</ul>
-</li>
-</ul>
 <!-- ========= CONSTRUCTOR DETAIL ======== -->
 <ul class="blockList">
 <li class="blockList"><a name="constructor_detail">
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="SingleItemClusterList(mil.nga.giat.geowave.analytic.distance.DistanceFn, mil.nga.giat.geowave.core.index.ByteArrayId, mil.nga.giat.geowave.analytic.mapreduce.dbscan.ClusterItem, java.util.Map)">
+<a name="SingleItemClusterList(mil.nga.giat.geowave.core.index.ByteArrayId, mil.nga.giat.geowave.analytic.mapreduce.dbscan.ClusterItem, mil.nga.giat.geowave.analytic.nn.NeighborListFactory, java.util.Map)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>SingleItemClusterList</h4>
-<pre>public&nbsp;SingleItemClusterList(<a href="../../../../../../../mil/nga/giat/geowave/analytic/distance/DistanceFn.html" title="interface in mil.nga.giat.geowave.analytic.distance">DistanceFn</a>&lt;com.vividsolutions.jts.geom.Coordinate&gt;&nbsp;distanceFnForCoordinate,
-                     <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;centerId,
+<pre>public&nbsp;SingleItemClusterList(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;centerId,
                      <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/ClusterItem.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.dbscan">ClusterItem</a>&nbsp;center,
-                     <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>,<a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/Cluster.html" title="interface in mil.nga.giat.geowave.analytic.mapreduce.dbscan">Cluster</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/ClusterItem.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.dbscan">ClusterItem</a>&gt;&gt;&nbsp;index)</pre>
+                     <a href="../../../../../../../mil/nga/giat/geowave/analytic/nn/NeighborListFactory.html" title="interface in mil.nga.giat.geowave.analytic.nn">NeighborListFactory</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/ClusterItem.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.dbscan">ClusterItem</a>&gt;&nbsp;factory,
+                     <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>,<a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/Cluster.html" title="interface in mil.nga.giat.geowave.analytic.mapreduce.dbscan">Cluster</a>&gt;&nbsp;index)</pre>
 </li>
 </ul>
 </li>
@@ -309,32 +295,46 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="addAndFetchCount(mil.nga.giat.geowave.core.index.ByteArrayId, mil.nga.giat.geowave.analytic.mapreduce.dbscan.ClusterItem)">
+<a name="getClusterPoints(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getClusterPoints</h4>
+<pre>protected&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;com.vividsolutions.jts.geom.Coordinate&gt;&nbsp;getClusterPoints(boolean&nbsp;allowUpdates)</pre>
+</li>
+</ul>
+<a name="clear()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>clear</h4>
+<pre>public&nbsp;void&nbsp;clear()</pre>
+<div class="block"><strong>Description copied from class:&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/DBScanClusterList.html#clear()">DBScanClusterList</a></code></strong></div>
+<div class="block">Clear the contents. Invoked when the contents of a cluster are merged
+ with another cluster. This method is supportive for GC, not serving any
+ algorithm logic.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/analytic/nn/NeighborList.html#clear()">clear</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/analytic/nn/NeighborList.html" title="interface in mil.nga.giat.geowave.analytic.nn">NeighborList</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/ClusterItem.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.dbscan">ClusterItem</a>&gt;</code></dd>
+<dt><strong>Overrides:</strong></dt>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/DBScanClusterList.html#clear()">clear</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/DBScanClusterList.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.dbscan">DBScanClusterList</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="addAndFetchCount(mil.nga.giat.geowave.core.index.ByteArrayId, mil.nga.giat.geowave.analytic.mapreduce.dbscan.ClusterItem, mil.nga.giat.geowave.analytic.nn.DistanceProfile)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>addAndFetchCount</h4>
-<pre>protected&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Long.html?is-external=true" title="class or interface in java.lang">Long</a>&nbsp;addAndFetchCount(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;id,
-                    <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/ClusterItem.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.dbscan">ClusterItem</a>&nbsp;newInstance)</pre>
+<pre>protected&nbsp;long&nbsp;addAndFetchCount(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;id,
+                    <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/ClusterItem.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.dbscan">ClusterItem</a>&nbsp;newInstance,
+                    <a href="../../../../../../../mil/nga/giat/geowave/analytic/nn/DistanceProfile.html" title="class in mil.nga.giat.geowave.analytic.nn">DistanceProfile</a>&lt;?&gt;&nbsp;distanceProfile)</pre>
 <dl>
 <dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/DBScanClusterList.html#addAndFetchCount(mil.nga.giat.geowave.core.index.ByteArrayId,%20mil.nga.giat.geowave.analytic.mapreduce.dbscan.ClusterItem)">addAndFetchCount</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/DBScanClusterList.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.dbscan">DBScanClusterList</a></code></dd>
-</dl>
-</li>
-</ul>
-<a name="add(mil.nga.giat.geowave.analytic.mapreduce.nn.DistanceProfile, mil.nga.giat.geowave.core.index.ByteArrayId, mil.nga.giat.geowave.analytic.mapreduce.dbscan.ClusterItem)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>add</h4>
-<pre>protected&nbsp;boolean&nbsp;add(<a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/DistanceProfile.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.nn">DistanceProfile</a>&lt;?&gt;&nbsp;distanceProfile,
-          <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;id,
-          <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/ClusterItem.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.dbscan">ClusterItem</a>&nbsp;newInstance)</pre>
-<dl>
-<dt><strong>Overrides:</strong></dt>
-<dd><code><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/DBScanClusterList.html#add(mil.nga.giat.geowave.analytic.mapreduce.nn.DistanceProfile,%20mil.nga.giat.geowave.core.index.ByteArrayId,%20mil.nga.giat.geowave.analytic.mapreduce.dbscan.ClusterItem)">add</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/DBScanClusterList.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.dbscan">DBScanClusterList</a></code></dd>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/DBScanClusterList.html#addAndFetchCount(mil.nga.giat.geowave.core.index.ByteArrayId,%20mil.nga.giat.geowave.analytic.mapreduce.dbscan.ClusterItem,%20mil.nga.giat.geowave.analytic.nn.DistanceProfile)">addAndFetchCount</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/DBScanClusterList.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.dbscan">DBScanClusterList</a></code></dd>
 </dl>
 </li>
 </ul>
@@ -344,12 +344,42 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce
 <ul class="blockList">
 <li class="blockList">
 <h4>merge</h4>
-<pre>public&nbsp;void&nbsp;merge(<a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/Cluster.html" title="interface in mil.nga.giat.geowave.analytic.mapreduce.dbscan">Cluster</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/ClusterItem.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.dbscan">ClusterItem</a>&gt;&nbsp;cluster)</pre>
+<pre>public&nbsp;void&nbsp;merge(<a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/Cluster.html" title="interface in mil.nga.giat.geowave.analytic.mapreduce.dbscan">Cluster</a>&nbsp;cluster)</pre>
 <dl>
 <dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/Cluster.html#merge(mil.nga.giat.geowave.analytic.mapreduce.dbscan.Cluster)">merge</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/Cluster.html" title="interface in mil.nga.giat.geowave.analytic.mapreduce.dbscan">Cluster</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/ClusterItem.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.dbscan">ClusterItem</a>&gt;</code></dd>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/Cluster.html#merge(mil.nga.giat.geowave.analytic.mapreduce.dbscan.Cluster)">merge</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/Cluster.html" title="interface in mil.nga.giat.geowave.analytic.mapreduce.dbscan">Cluster</a></code></dd>
 <dt><strong>Overrides:</strong></dt>
 <dd><code><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/DBScanClusterList.html#merge(mil.nga.giat.geowave.analytic.mapreduce.dbscan.Cluster)">merge</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/DBScanClusterList.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.dbscan">DBScanClusterList</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="isCompressed()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isCompressed</h4>
+<pre>public&nbsp;boolean&nbsp;isCompressed()</pre>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/Cluster.html#isCompressed()">isCompressed</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/Cluster.html" title="interface in mil.nga.giat.geowave.analytic.mapreduce.dbscan">Cluster</a></code></dd>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/DBScanClusterList.html#isCompressed()">isCompressed</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/DBScanClusterList.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.dbscan">DBScanClusterList</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="finish()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>finish</h4>
+<pre>public&nbsp;void&nbsp;finish()</pre>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/Cluster.html#finish()">finish</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/Cluster.html" title="interface in mil.nga.giat.geowave.analytic.mapreduce.dbscan">Cluster</a></code></dd>
+<dt><strong>Overrides:</strong></dt>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/DBScanClusterList.html#finish()">finish</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/DBScanClusterList.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.dbscan">DBScanClusterList</a></code></dd>
 </dl>
 </li>
 </ul>
@@ -392,7 +422,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/DBScanMapReduce.SimpleFeatureToClusterItemConverter.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.dbscan"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/PreProcessSingleItemClusterList.PreProcessSingleItemClusterListFactory.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.dbscan"><span class="strong">Prev Class</span></a></li>
 <li><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/SingleItemClusterList.SingleItemClusterListFactory.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.dbscan"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">
@@ -418,13 +448,13 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li><a href="#nested_class_summary">Nested</a>&nbsp;|&nbsp;</li>
-<li><a href="#field_summary">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#fields_inherited_from_class_mil.nga.giat.geowave.analytic.mapreduce.dbscan.DBScanClusterList">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method_summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
-<li><a href="#field_detail">Field</a>&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor_detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method_detail">Method</a></li>
 </ul>

@@ -43,6 +43,7 @@ mil.nga.giat.geowave.analytic.mapreduce.kmeans
 mil.nga.giat.geowave.analytic.mapreduce.kmeans.runner
 mil.nga.giat.geowave.analytic.mapreduce.nn
 mil.nga.giat.geowave.analytic.model
+mil.nga.giat.geowave.analytic.nn
 mil.nga.giat.geowave.analytic.param
 mil.nga.giat.geowave.analytic.partitioner
 mil.nga.giat.geowave.analytic.sample

@@ -83,6 +83,10 @@
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><a href="#mil.nga.giat.geowave.analytic.nn">mil.nga.giat.geowave.analytic.nn</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.analytic.partitioner">mil.nga.giat.geowave.analytic.partitioner</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -104,17 +108,17 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>protected void</code></td>
-<td class="colLast"><span class="strong">DBScanMapReduce.DBScanMapReducer.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/DBScanMapReduce.DBScanMapReducer.html#processNeighbors(mil.nga.giat.geowave.analytic.partitioner.Partitioner.PartitionData,%20mil.nga.giat.geowave.core.index.ByteArrayId,%20VALUEIN,%20mil.nga.giat.geowave.analytic.mapreduce.nn.NeighborList,%20org.apache.hadoop.mapreduce.Reducer.Context,%20java.util.Map)">processNeighbors</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/analytic/partitioner/Partitioner.PartitionData.html" title="class in mil.nga.giat.geowave.analytic.partitioner">Partitioner.PartitionData</a>&nbsp;partitionData,
+<td class="colLast"><span class="strong">DBScanMapReduce.DBScanMapReducer.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/DBScanMapReduce.DBScanMapReducer.html#processNeighbors(mil.nga.giat.geowave.analytic.partitioner.Partitioner.PartitionData,%20mil.nga.giat.geowave.core.index.ByteArrayId,%20mil.nga.giat.geowave.analytic.mapreduce.dbscan.ClusterItem,%20mil.nga.giat.geowave.analytic.nn.NeighborList,%20org.apache.hadoop.mapreduce.Reducer.Context,%20java.util.Map)">processNeighbors</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/analytic/partitioner/Partitioner.PartitionData.html" title="class in mil.nga.giat.geowave.analytic.partitioner">Partitioner.PartitionData</a>&nbsp;partitionData,
                 <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;primaryId,
-                <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/DBScanMapReduce.DBScanMapReducer.html" title="type parameter in DBScanMapReduce.DBScanMapReducer">VALUEIN</a>&nbsp;primary,
-                <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NeighborList.html" title="interface in mil.nga.giat.geowave.analytic.mapreduce.nn">NeighborList</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/DBScanMapReduce.DBScanMapReducer.html" title="type parameter in DBScanMapReduce.DBScanMapReducer">VALUEIN</a>&gt;&nbsp;neighbors,
+                <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/ClusterItem.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.dbscan">ClusterItem</a>&nbsp;primary,
+                <a href="../../../../../../../mil/nga/giat/geowave/analytic/nn/NeighborList.html" title="interface in mil.nga.giat.geowave.analytic.nn">NeighborList</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/ClusterItem.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.dbscan">ClusterItem</a>&gt;&nbsp;neighbors,
                 org.apache.hadoop.mapreduce.Reducer.Context&nbsp;context,
-                <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>,<a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/Cluster.html" title="interface in mil.nga.giat.geowave.analytic.mapreduce.dbscan">Cluster</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/DBScanMapReduce.DBScanMapReducer.html" title="type parameter in DBScanMapReduce.DBScanMapReducer">VALUEIN</a>&gt;&gt;&nbsp;summary)</code>&nbsp;</td>
+                <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>,<a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/Cluster.html" title="interface in mil.nga.giat.geowave.analytic.mapreduce.dbscan">Cluster</a>&gt;&nbsp;index)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><span class="strong">DBScanMapReduce.DBScanMapHullReducer.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/DBScanMapReduce.DBScanMapHullReducer.html#processSummary(mil.nga.giat.geowave.analytic.partitioner.Partitioner.PartitionData,%20java.util.Map,%20org.apache.hadoop.mapreduce.Reducer.Context)">processSummary</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/analytic/partitioner/Partitioner.PartitionData.html" title="class in mil.nga.giat.geowave.analytic.partitioner">Partitioner.PartitionData</a>&nbsp;partitionData,
-              <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>,<a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/Cluster.html" title="interface in mil.nga.giat.geowave.analytic.mapreduce.dbscan">Cluster</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/ClusterItem.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.dbscan">ClusterItem</a>&gt;&gt;&nbsp;summary,
+              <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>,<a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/dbscan/Cluster.html" title="interface in mil.nga.giat.geowave.analytic.mapreduce.dbscan">Cluster</a>&gt;&nbsp;summary,
               org.apache.hadoop.mapreduce.Reducer.Context&nbsp;context)</code>&nbsp;</td>
 </tr>
 </tbody>
@@ -159,19 +163,19 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>protected void</code></td>
-<td class="colLast"><span class="strong">NNMapReduce.NNSimpleFeatureIDOutputReducer.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NNMapReduce.NNSimpleFeatureIDOutputReducer.html#processNeighbors(mil.nga.giat.geowave.analytic.partitioner.Partitioner.PartitionData,%20mil.nga.giat.geowave.core.index.ByteArrayId,%20org.opengis.feature.simple.SimpleFeature,%20mil.nga.giat.geowave.analytic.mapreduce.nn.NeighborList,%20org.apache.hadoop.mapreduce.Reducer.Context,%20java.lang.Boolean)">processNeighbors</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/analytic/partitioner/Partitioner.PartitionData.html" title="class in mil.nga.giat.geowave.analytic.partitioner">Partitioner.PartitionData</a>&nbsp;partitionData,
+<td class="colLast"><span class="strong">NNMapReduce.NNSimpleFeatureIDOutputReducer.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NNMapReduce.NNSimpleFeatureIDOutputReducer.html#processNeighbors(mil.nga.giat.geowave.analytic.partitioner.Partitioner.PartitionData,%20mil.nga.giat.geowave.core.index.ByteArrayId,%20org.opengis.feature.simple.SimpleFeature,%20mil.nga.giat.geowave.analytic.nn.NeighborList,%20org.apache.hadoop.mapreduce.Reducer.Context,%20java.lang.Boolean)">processNeighbors</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/analytic/partitioner/Partitioner.PartitionData.html" title="class in mil.nga.giat.geowave.analytic.partitioner">Partitioner.PartitionData</a>&nbsp;partitionData,
                 <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;primaryId,
                 org.opengis.feature.simple.SimpleFeature&nbsp;primary,
-                <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NeighborList.html" title="interface in mil.nga.giat.geowave.analytic.mapreduce.nn">NeighborList</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;neighbors,
+                <a href="../../../../../../../mil/nga/giat/geowave/analytic/nn/NeighborList.html" title="interface in mil.nga.giat.geowave.analytic.nn">NeighborList</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;neighbors,
                 org.apache.hadoop.mapreduce.Reducer.Context&nbsp;context,
                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;summary)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>protected abstract void</code></td>
-<td class="colLast"><span class="strong">NNMapReduce.NNReducer.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NNMapReduce.NNReducer.html#processNeighbors(mil.nga.giat.geowave.analytic.partitioner.Partitioner.PartitionData,%20mil.nga.giat.geowave.core.index.ByteArrayId,%20VALUEIN,%20mil.nga.giat.geowave.analytic.mapreduce.nn.NeighborList,%20org.apache.hadoop.mapreduce.Reducer.Context,%20PARTITION_SUMMARY)">processNeighbors</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/analytic/partitioner/Partitioner.PartitionData.html" title="class in mil.nga.giat.geowave.analytic.partitioner">Partitioner.PartitionData</a>&nbsp;partitionData,
+<td class="colLast"><span class="strong">NNMapReduce.NNReducer.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NNMapReduce.NNReducer.html#processNeighbors(mil.nga.giat.geowave.analytic.partitioner.Partitioner.PartitionData,%20mil.nga.giat.geowave.core.index.ByteArrayId,%20VALUEIN,%20mil.nga.giat.geowave.analytic.nn.NeighborList,%20org.apache.hadoop.mapreduce.Reducer.Context,%20PARTITION_SUMMARY)">processNeighbors</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/analytic/partitioner/Partitioner.PartitionData.html" title="class in mil.nga.giat.geowave.analytic.partitioner">Partitioner.PartitionData</a>&nbsp;partitionData,
                 <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;primaryId,
                 <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NNMapReduce.NNReducer.html" title="type parameter in NNMapReduce.NNReducer">VALUEIN</a>&nbsp;primary,
-                <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NeighborList.html" title="interface in mil.nga.giat.geowave.analytic.mapreduce.nn">NeighborList</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NNMapReduce.NNReducer.html" title="type parameter in NNMapReduce.NNReducer">VALUEIN</a>&gt;&nbsp;neighbors,
+                <a href="../../../../../../../mil/nga/giat/geowave/analytic/nn/NeighborList.html" title="interface in mil.nga.giat.geowave.analytic.nn">NeighborList</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NNMapReduce.NNReducer.html" title="type parameter in NNMapReduce.NNReducer">VALUEIN</a>&gt;&nbsp;neighbors,
                 org.apache.hadoop.mapreduce.Reducer.Context&nbsp;context,
                 <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NNMapReduce.NNReducer.html" title="type parameter in NNMapReduce.NNReducer">PARTITION_SUMMARY</a>&nbsp;summary)</code>&nbsp;</td>
 </tr>
@@ -203,6 +207,39 @@
 <tbody>
 <tr class="altColor">
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NNMapReduce.PartitionDataWritable.html#NNMapReduce.PartitionDataWritable(mil.nga.giat.geowave.analytic.partitioner.Partitioner.PartitionData)">NNMapReduce.PartitionDataWritable</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/analytic/partitioner/Partitioner.PartitionData.html" title="class in mil.nga.giat.geowave.analytic.partitioner">Partitioner.PartitionData</a>&nbsp;partitionData)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="mil.nga.giat.geowave.analytic.nn">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../../mil/nga/giat/geowave/analytic/partitioner/Partitioner.PartitionData.html" title="class in mil.nga.giat.geowave.analytic.partitioner">Partitioner.PartitionData</a> in <a href="../../../../../../../mil/nga/giat/geowave/analytic/nn/package-summary.html">mil.nga.giat.geowave.analytic.nn</a></h3>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing fields, and an explanation">
+<caption><span>Fields in <a href="../../../../../../../mil/nga/giat/geowave/analytic/nn/package-summary.html">mil.nga.giat.geowave.analytic.nn</a> declared as <a href="../../../../../../../mil/nga/giat/geowave/analytic/partitioner/Partitioner.PartitionData.html" title="class in mil.nga.giat.geowave.analytic.partitioner">Partitioner.PartitionData</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Field and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/analytic/partitioner/Partitioner.PartitionData.html" title="class in mil.nga.giat.geowave.analytic.partitioner">Partitioner.PartitionData</a></code></td>
+<td class="colLast"><span class="strong">NNProcessor.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/nn/NNProcessor.html#parentPartition">parentPartition</a></strong></code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing constructors, and an explanation">
+<caption><span>Constructors in <a href="../../../../../../../mil/nga/giat/geowave/analytic/nn/package-summary.html">mil.nga.giat.geowave.analytic.nn</a> with parameters of type <a href="../../../../../../../mil/nga/giat/geowave/analytic/partitioner/Partitioner.PartitionData.html" title="class in mil.nga.giat.geowave.analytic.partitioner">Partitioner.PartitionData</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/nn/NNProcessor.html#NNProcessor(mil.nga.giat.geowave.analytic.partitioner.Partitioner,%20mil.nga.giat.geowave.analytic.nn.TypeConverter,%20mil.nga.giat.geowave.analytic.nn.DistanceProfileGenerateFn,%20double,%20mil.nga.giat.geowave.analytic.partitioner.Partitioner.PartitionData)">NNProcessor</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/analytic/partitioner/Partitioner.html" title="interface in mil.nga.giat.geowave.analytic.partitioner">Partitioner</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;partitioner,
+           <a href="../../../../../../../mil/nga/giat/geowave/analytic/nn/TypeConverter.html" title="interface in mil.nga.giat.geowave.analytic.nn">TypeConverter</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/analytic/nn/NNProcessor.html" title="type parameter in NNProcessor">STORE_VALUE</a>&gt;&nbsp;typeConverter,
+           <a href="../../../../../../../mil/nga/giat/geowave/analytic/nn/DistanceProfileGenerateFn.html" title="interface in mil.nga.giat.geowave.analytic.nn">DistanceProfileGenerateFn</a>&lt;?,<a href="../../../../../../../mil/nga/giat/geowave/analytic/nn/NNProcessor.html" title="type parameter in NNProcessor">STORE_VALUE</a>&gt;&nbsp;distanceProfileFn,
+           double&nbsp;maxDistance,
+           <a href="../../../../../../../mil/nga/giat/geowave/analytic/partitioner/Partitioner.PartitionData.html" title="class in mil.nga.giat.geowave.analytic.partitioner">Partitioner.PartitionData</a>&nbsp;parentPartition)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>

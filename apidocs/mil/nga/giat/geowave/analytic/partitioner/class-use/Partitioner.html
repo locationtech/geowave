@@ -79,6 +79,10 @@
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><a href="#mil.nga.giat.geowave.analytic.nn">mil.nga.giat.geowave.analytic.nn</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.analytic.partitioner">mil.nga.giat.geowave.analytic.partitioner</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -101,6 +105,43 @@
 <tr class="altColor">
 <td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/analytic/partitioner/Partitioner.html" title="interface in mil.nga.giat.geowave.analytic.partitioner">Partitioner</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NNMapReduce.NNMapper.html" title="type parameter in NNMapReduce.NNMapper">T</a>&gt;</code></td>
 <td class="colLast"><span class="strong">NNMapReduce.NNMapper.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NNMapReduce.NNMapper.html#partitioner">partitioner</a></strong></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/analytic/partitioner/Partitioner.html" title="interface in mil.nga.giat.geowave.analytic.partitioner">Partitioner</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></td>
+<td class="colLast"><span class="strong">NNMapReduce.NNReducer.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NNMapReduce.NNReducer.html#partitioner">partitioner</a></strong></code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="mil.nga.giat.geowave.analytic.nn">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../../mil/nga/giat/geowave/analytic/partitioner/Partitioner.html" title="interface in mil.nga.giat.geowave.analytic.partitioner">Partitioner</a> in <a href="../../../../../../../mil/nga/giat/geowave/analytic/nn/package-summary.html">mil.nga.giat.geowave.analytic.nn</a></h3>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing fields, and an explanation">
+<caption><span>Fields in <a href="../../../../../../../mil/nga/giat/geowave/analytic/nn/package-summary.html">mil.nga.giat.geowave.analytic.nn</a> declared as <a href="../../../../../../../mil/nga/giat/geowave/analytic/partitioner/Partitioner.html" title="interface in mil.nga.giat.geowave.analytic.partitioner">Partitioner</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Field and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/analytic/partitioner/Partitioner.html" title="interface in mil.nga.giat.geowave.analytic.partitioner">Partitioner</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></td>
+<td class="colLast"><span class="strong">NNProcessor.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/nn/NNProcessor.html#partitioner">partitioner</a></strong></code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing constructors, and an explanation">
+<caption><span>Constructors in <a href="../../../../../../../mil/nga/giat/geowave/analytic/nn/package-summary.html">mil.nga.giat.geowave.analytic.nn</a> with parameters of type <a href="../../../../../../../mil/nga/giat/geowave/analytic/partitioner/Partitioner.html" title="interface in mil.nga.giat.geowave.analytic.partitioner">Partitioner</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/nn/NNProcessor.html#NNProcessor(mil.nga.giat.geowave.analytic.partitioner.Partitioner,%20mil.nga.giat.geowave.analytic.nn.TypeConverter,%20mil.nga.giat.geowave.analytic.nn.DistanceProfileGenerateFn,%20double,%20mil.nga.giat.geowave.analytic.partitioner.Partitioner.PartitionData)">NNProcessor</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/analytic/partitioner/Partitioner.html" title="interface in mil.nga.giat.geowave.analytic.partitioner">Partitioner</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;partitioner,
+           <a href="../../../../../../../mil/nga/giat/geowave/analytic/nn/TypeConverter.html" title="interface in mil.nga.giat.geowave.analytic.nn">TypeConverter</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/analytic/nn/NNProcessor.html" title="type parameter in NNProcessor">STORE_VALUE</a>&gt;&nbsp;typeConverter,
+           <a href="../../../../../../../mil/nga/giat/geowave/analytic/nn/DistanceProfileGenerateFn.html" title="interface in mil.nga.giat.geowave.analytic.nn">DistanceProfileGenerateFn</a>&lt;?,<a href="../../../../../../../mil/nga/giat/geowave/analytic/nn/NNProcessor.html" title="type parameter in NNProcessor">STORE_VALUE</a>&gt;&nbsp;distanceProfileFn,
+           double&nbsp;maxDistance,
+           <a href="../../../../../../../mil/nga/giat/geowave/analytic/partitioner/Partitioner.PartitionData.html" title="class in mil.nga.giat.geowave.analytic.partitioner">Partitioner.PartitionData</a>&nbsp;parentPartition)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>

@@ -106,6 +106,10 @@
 <pre>public static class <span class="strong">Partitioner.PartitionData</span>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a>, org.apache.hadoop.io.Writable</pre>
+<div class="block">Represents a partition associated with a specific item. The partition is
+ marked as primary or secondary. A secondary partition is a neighboring
+ partition to an item. The intent is inspect neighbor partitions to handle
+ edge cases.</div>
 <dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../../serialized-form.html#mil.nga.giat.geowave.analytic.partitioner.Partitioner.PartitionData">Serialized Form</a></dd></dl>
 </li>
 </ul>
@@ -175,10 +179,14 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/Partitioner.PartitionData.html#setGroupId(mil.nga.giat.geowave.core.index.ByteArrayId)">setGroupId</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;groupId)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/Partitioner.PartitionData.html#setPrimary(boolean)">setPrimary</a></strong>(boolean&nbsp;isPrimary)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/Partitioner.PartitionData.html#toString()">toString</a></strong>()</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/Partitioner.PartitionData.html#write(java.io.DataOutput)">write</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/DataOutput.html?is-external=true" title="class or interface in java.io">DataOutput</a>&nbsp;dOutput)</code>&nbsp;</td>
 </tr>
@@ -324,7 +332,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <a name="write(java.io.DataOutput)">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>write</h4>
 <pre>public&nbsp;void&nbsp;write(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/DataOutput.html?is-external=true" title="class or interface in java.io">DataOutput</a>&nbsp;dOutput)
@@ -334,6 +342,15 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <dd><code>write</code>&nbsp;in interface&nbsp;<code>org.apache.hadoop.io.Writable</code></dd>
 <dt><span class="strong">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd></dl>
+</li>
+</ul>
+<a name="setPrimary(boolean)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>setPrimary</h4>
+<pre>public&nbsp;void&nbsp;setPrimary(boolean&nbsp;isPrimary)</pre>
 </li>
 </ul>
 </li>
