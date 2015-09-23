@@ -1,8 +1,8 @@
-package mil.nga.giat.geowave.analytic.mapreduce.nn;
+package mil.nga.giat.geowave.analytic.nn;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
@@ -10,14 +10,19 @@ import mil.nga.giat.geowave.core.index.ByteArrayId;
 public class DefaultNeighborList<NNTYPE> implements
 		NeighborList<NNTYPE>
 {
-	private final List<Entry<ByteArrayId, NNTYPE>> list = new ArrayList<Entry<ByteArrayId, NNTYPE>>();
+	private final Map<ByteArrayId, NNTYPE> list = new HashMap<ByteArrayId, NNTYPE>();
 
 	@Override
 	public boolean add(
 			final DistanceProfile<?> distanceProfile,
-			final Entry<ByteArrayId, NNTYPE> entry ) {
-		if (!contains(entry.getKey())) {
-			list.add(entry);
+			final ByteArrayId id,
+			final NNTYPE value ) {
+		if (infer(
+				id,
+				value) == InferType.NONE) {
+			list.put(
+					id,
+					value);
 			return true;
 		}
 		return false;
@@ -25,15 +30,13 @@ public class DefaultNeighborList<NNTYPE> implements
 	}
 
 	@Override
-	public boolean contains(
-			final ByteArrayId key ) {
-		for (final Entry<ByteArrayId, NNTYPE> entry : list) {
-			if (entry.getKey().equals(
-					key)) {
-				return true;
-			}
+	public InferType infer(
+			final ByteArrayId id,
+			final NNTYPE value ) {
+		if (list.containsKey(id)) {
+			return InferType.SKIP;
 		}
-		return false;
+		return InferType.NONE;
 	}
 
 	@Override
@@ -43,7 +46,7 @@ public class DefaultNeighborList<NNTYPE> implements
 
 	@Override
 	public Iterator<Entry<ByteArrayId, NNTYPE>> iterator() {
-		return list.iterator();
+		return list.entrySet().iterator();
 	}
 
 	@Override
@@ -69,18 +72,7 @@ public class DefaultNeighborList<NNTYPE> implements
 
 	public NNTYPE get(
 			final ByteArrayId key ) {
-		for (final Entry<ByteArrayId, NNTYPE> entry : list) {
-			if (entry.getKey().equals(
-					key)) {
-				return entry.getValue();
-			}
-		}
-		return null;
-	}
-
-	@Override
-	public void init() {
-
+		return list.get(key);
 	}
 
 }

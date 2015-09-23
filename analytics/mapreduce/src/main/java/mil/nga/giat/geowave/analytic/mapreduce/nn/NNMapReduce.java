@@ -4,18 +4,30 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.HashMap;
-import java.util.Iterator;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import mil.nga.giat.geowave.analytic.AdapterWithObjectWritable;
 import mil.nga.giat.geowave.analytic.ConfigurationWrapper;
+import mil.nga.giat.geowave.analytic.PropertyManagement;
 import mil.nga.giat.geowave.analytic.distance.DistanceFn;
 import mil.nga.giat.geowave.analytic.distance.FeatureGeometryDistanceFn;
 import mil.nga.giat.geowave.analytic.log.LoggingConfigurationWrapper;
 import mil.nga.giat.geowave.analytic.mapreduce.JobContextConfigurationWrapper;
+import mil.nga.giat.geowave.analytic.nn.DefaultNeighborList;
+import mil.nga.giat.geowave.analytic.nn.DistanceProfile;
+import mil.nga.giat.geowave.analytic.nn.DistanceProfileGenerateFn;
+import mil.nga.giat.geowave.analytic.nn.NNProcessor;
+import mil.nga.giat.geowave.analytic.nn.NNProcessor.CompleteNotifier;
+import mil.nga.giat.geowave.analytic.nn.NeighborList;
+import mil.nga.giat.geowave.analytic.nn.NeighborListFactory;
+import mil.nga.giat.geowave.analytic.nn.TypeConverter;
+import mil.nga.giat.geowave.analytic.param.ClusteringParameters;
 import mil.nga.giat.geowave.analytic.param.CommonParameters;
 import mil.nga.giat.geowave.analytic.param.PartitionParameters;
+import mil.nga.giat.geowave.analytic.partitioner.AbstractPartitioner;
 import mil.nga.giat.geowave.analytic.partitioner.OrthodromicDistancePartitioner;
 import mil.nga.giat.geowave.analytic.partitioner.Partitioner;
 import mil.nga.giat.geowave.analytic.partitioner.Partitioner.PartitionData;
@@ -28,6 +40,8 @@ import mil.nga.giat.geowave.datastore.accumulo.mapreduce.input.GeoWaveInputKey;
 
 import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
+import org.apache.commons.cli.Option;
+import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.io.ObjectWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.Writable;
@@ -53,7 +67,7 @@ import com.google.common.primitives.SignedBytes;
  * 
  * The reducer has four extension points:
  * 
- * @Formatter:off
+ * @formatter:off
  * 
  *                (1) createSetForNeighbors() create a set for primary and
  *                secondary neighbor lists. The set implementation can control
@@ -72,7 +86,7 @@ import com.google.common.primitives.SignedBytes;
  *                (4) processSummary() permits the reducer to produce an output
  *                from the summary object
  * 
- * @Formatter:on
+ * @formatter:on
  * 
  *               * Properties:
  * 
@@ -94,7 +108,7 @@ import com.google.common.primitives.SignedBytes;
  *                between item and its neighbors. (double)
  * 
  * 
- * @Formatter:on
+ * @formatter:on
  */
 public class NNMapReduce
 {
@@ -158,9 +172,6 @@ public class NNMapReduce
 						e);
 			}
 
-			// System.out.println(((SimpleFeature)unwrappedValue).getDefaultGeometry().toString()
-			// + " = " + partitionData.toString());
-
 		}
 
 		@SuppressWarnings("unchecked")
@@ -210,6 +221,8 @@ public class NNMapReduce
 		protected DistanceFn<VALUEIN> distanceFn;
 		protected double maxDistance = 1.0;
 		protected int maxNeighbors = Integer.MAX_VALUE;
+		protected Partitioner<Object> partitioner;
+
 		protected TypeConverter<VALUEIN> typeConverter = new TypeConverter<VALUEIN>() {
 
 			@SuppressWarnings("unchecked")
@@ -231,93 +244,54 @@ public class NNMapReduce
 				final Reducer<PartitionDataWritable, AdapterWithObjectWritable, KEYOUT, VALUEOUT>.Context context )
 				throws IOException,
 				InterruptedException {
-			final Map<ByteArrayId, VALUEIN> primaries = new HashMap<ByteArrayId, VALUEIN>();
-			final Map<ByteArrayId, VALUEIN> others = new HashMap<ByteArrayId, VALUEIN>();
+
+			final NNProcessor<Object, VALUEIN> processor = new NNProcessor<Object, VALUEIN>(
+					partitioner,
+					typeConverter,
+					distanceProfileFn,
+					maxDistance,
+					key.partitionData);
 			final PARTITION_SUMMARY summary = createSummary();
 
 			for (final AdapterWithObjectWritable inputValue : values) {
 
-				final VALUEIN unwrappedValue = typeConverter.convert(
+				final Object value = AdapterWithObjectWritable.fromWritableWithAdapter(
+						serializationTool,
+						inputValue);
+
+				processor.add(
 						inputValue.getDataId(),
-						AdapterWithObjectWritable.fromWritableWithAdapter(
-								serializationTool,
-								inputValue));
-				if (inputValue.isPrimary()) {
-					primaries.put(
-							inputValue.getDataId(),
-							unwrappedValue);
-				}
-				else {
-					if (!primaries.containsKey(inputValue.getDataId())) {
-						others.put(
-								inputValue.getDataId(),
-								unwrappedValue);
-					}
-				}
+						key.partitionData.isPrimary(),
+						value);
 			}
 
-			LOGGER.warn("Processing " + key.toString() + " with primary = " + primaries.size() + " and other = " + others.size());
+			preprocess(
+					context,
+					processor,
+					summary);
 
-			final NeighborIndex<VALUEIN> index = new NeighborIndex<VALUEIN>(
-					this.createNeighborsListFactory(summary));
-
-			final Iterator<Map.Entry<ByteArrayId, VALUEIN>> primaryIt = primaries.entrySet().iterator();
-			while (primaryIt.hasNext()) {
-				final Map.Entry<ByteArrayId, VALUEIN> primary = primaryIt.next();
-				final NeighborList<VALUEIN> primaryList = index.init(primary);
-				for (final Map.Entry<ByteArrayId, VALUEIN> anotherPrimary : primaries.entrySet()) {
-					if (anotherPrimary.getKey().equals(
-							primary.getKey())) {
-						continue;
-					}
-					if (!primaryList.contains(anotherPrimary.getKey())) {
-						final DistanceProfile<?> distanceProfile = distanceProfileFn.computeProfile(
-								primary.getValue(),
-								anotherPrimary.getValue());
-						if (distanceProfile.getDistance() <= maxDistance) {
-							index.add(
-									distanceProfile,
-									primary,
-									anotherPrimary,
-									true);
+			processor.process(
+					this.createNeighborsListFactory(summary),
+					new CompleteNotifier<VALUEIN>() {
+						@Override
+						public void complete(
+								ByteArrayId id,
+								VALUEIN value,
+								NeighborList<VALUEIN> primaryList )
+								throws IOException,
+								InterruptedException {
+							context.progress();
+							processNeighbors(
+									key.partitionData,
+									id,
+									value,
+									primaryList,
+									context,
+									summary);
+							processor.remove(id);
 						}
-					}
-				}
-				context.progress();
-				for (final Map.Entry<ByteArrayId, VALUEIN> anOther : others.entrySet()) {
-					if (anOther.getKey().equals(
-							primary.getKey())) {
-						continue;
-					}
-					if (!primaryList.contains(anOther.getKey())) {
-						final DistanceProfile<?> distanceProfile = distanceProfileFn.computeProfile(
-								primary.getValue(),
-								anOther.getValue());
-						if (distanceProfile.getDistance() <= maxDistance) {
-							index.add(
-									distanceProfile,
-									primary,
-									anOther,
-									false);
-						}
-					}
-				}
-				context.progress();
-				processNeighbors(
-						key.partitionData,
-						primary.getKey(),
-						primary.getValue(),
-						primaryList,
-						context,
-						summary);
 
-				// the list is not needed once the primary has been thoroughly
-				// processed.
-				// child classes may use there on collections to retain neighbor
-				// list, if needed.
-				index.empty(primary.getKey());
-				primaryIt.remove();
-			}
+					});
 
 			processSummary(
 					key.partitionData,
@@ -329,6 +303,21 @@ public class NNMapReduce
 				PARTITION_SUMMARY summary ) {
 			return new DefaultNeighborList.DefaultNeighborListFactory<VALUEIN>();
 		}
+
+		/**
+		 * 
+		 * @param primaries
+		 * @param others
+		 * @param summary
+		 * @param startingPoint
+		 * @return alternate startingPoint
+		 */
+		protected void preprocess(
+				final Reducer<PartitionDataWritable, AdapterWithObjectWritable, KEYOUT, VALUEOUT>.Context context,
+				final NNProcessor<Object, VALUEIN> processor,
+				final PARTITION_SUMMARY summary )
+				throws IOException,
+				InterruptedException {}
 
 		/**
 		 * 
@@ -399,6 +388,133 @@ public class NNMapReduce
 					PartitionParameters.Partition.PARTITION_DISTANCE,
 					NNMapReduce.class,
 					1.0);
+
+			final double[] distances = AbstractPartitioner.getDistances(
+					config,
+					NNMapReduce.class);
+
+			boolean repartition = true;
+			for (double dist : distances) {
+				repartition &= (dist > (maxDistance / 3.0));
+			}
+			if (repartition) {
+				try {
+					LOGGER.info("Using secondary partitioning");
+					partitioner = config.getInstance(
+							PartitionParameters.Partition.PARTITIONER_CLASS,
+							NNMapReduce.class,
+							Partitioner.class,
+							OrthodromicDistancePartitioner.class);
+
+					partitioner.initialize(new ConfigurationWrapper() {
+
+						@Override
+						public int getInt(
+								Enum<?> property,
+								Class<?> scope,
+								int defaultValue ) {
+							return config.getInt(
+									property,
+									scope,
+									defaultValue);
+						}
+
+						@Override
+						public double getDouble(
+								Enum<?> property,
+								Class<?> scope,
+								double defaultValue ) {
+							return config.getDouble(
+									property,
+									scope,
+									defaultValue);
+						}
+
+						@Override
+						public String getString(
+								Enum<?> property,
+								Class<?> scope,
+								String defaultValue ) {
+							if (property == ClusteringParameters.Clustering.DISTANCE_THRESHOLDS) return Double.toString(maxDistance);
+							return config.getString(
+									property,
+									scope,
+									defaultValue);
+						}
+
+						@Override
+						public byte[] getBytes(
+								Enum<?> property,
+								Class<?> scope ) {
+							return config.getBytes(
+									property,
+									scope);
+						}
+
+						@Override
+						public <T> T getInstance(
+								Enum<?> property,
+								Class<?> scope,
+								Class<T> iface,
+								Class<? extends T> defaultValue )
+								throws InstantiationException,
+								IllegalAccessException {
+							return config.getInstance(
+									property,
+									scope,
+									iface,
+									defaultValue);
+						}
+
+					});
+				}
+				catch (final Exception e1) {
+					throw new IOException(
+							e1);
+				}
+
+			}
+			else {
+				final List<PartitionData> Singleton = Collections.singletonList(new PartitionData(
+						new ByteArrayId(
+								"1"),
+						true));
+				this.partitioner = new Partitioner<Object>() {
+
+					@Override
+					public void initialize(
+							ConfigurationWrapper context )
+							throws IOException {
+
+					}
+
+					@Override
+					public List<mil.nga.giat.geowave.analytic.partitioner.Partitioner.PartitionData> getCubeIdentifiers(
+							Object entry ) {
+						return Singleton;
+					}
+
+					@Override
+					public void partition(
+							Object entry,
+							mil.nga.giat.geowave.analytic.partitioner.Partitioner.PartitionDataCallback callback )
+							throws Exception {
+						callback.partitionWith(Singleton.get(0));
+					}
+
+					@Override
+					public void fillOptions(
+							Set<Option> options ) {
+
+					}
+
+					@Override
+					public void setup(
+							PropertyManagement runTimeProperties,
+							Configuration configuration ) {}
+
+				};
+			}
 
 			maxNeighbors = config.getInt(
 					PartitionParameters.Partition.MAX_MEMBER_SELECTION,

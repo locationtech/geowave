@@ -1,4 +1,4 @@
-package mil.nga.giat.geowave.analytic.mapreduce.nn;
+package mil.nga.giat.geowave.analytic.nn;
 
 import java.util.Map.Entry;
 
@@ -7,6 +7,12 @@ import mil.nga.giat.geowave.core.index.ByteArrayId;
 public interface NeighborList<NNTYPE> extends
 		Iterable<Entry<ByteArrayId, NNTYPE>>
 {
+	public enum InferType {
+		NONE,
+		SKIP, // distance measure is skipped
+		REMOVE // skipped and removed from future selection
+	};
+
 	/**
 	 * May be called prior to init() when discovered by entry itself.
 	 * 
@@ -15,10 +21,18 @@ public interface NeighborList<NNTYPE> extends
 	 */
 	public boolean add(
 			DistanceProfile<?> distanceProfile,
-			Entry<ByteArrayId, NNTYPE> entry );
+			ByteArrayId id,
+			NNTYPE value );
 
-	public boolean contains(
-			ByteArrayId key );
+	/**
+	 * See if the entries relationships have already been inferred
+	 * 
+	 * @param entry
+	 * @return
+	 */
+	public InferType infer(
+			final ByteArrayId id,
+			final NNTYPE value );
 
 	/**
 	 * Clear the contents.
@@ -29,9 +43,4 @@ public interface NeighborList<NNTYPE> extends
 
 	public boolean isEmpty();
 
-	/**
-	 * Called when the driving code begins a search for neighbors of associated
-	 * item.
-	 */
-	public void init();
 }

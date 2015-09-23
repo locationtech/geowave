@@ -287,8 +287,10 @@ public class KDERasterResizeIT extends
 						else {
 							Assert.assertEquals(
 									"The sample does not match the expected sample value for the coverage " + i + " at x=" + x + ",y=" + y + ",b=" + b,
-									new Double(expectedResults[x][y][b]),
-									new Double(sample));
+									new Double(
+											expectedResults[x][y][b]),
+									new Double(
+											sample));
 						}
 					}
 				}

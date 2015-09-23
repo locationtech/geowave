@@ -23,6 +23,7 @@ import com.vividsolutions.jts.algorithm.CGAlgorithms;
 import com.vividsolutions.jts.algorithm.ConvexHull;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
+import com.vividsolutions.jts.geom.GeometryFactory;
 
 /**
  * 
@@ -181,23 +182,25 @@ public class GeometryHullTool
 		if (additionalPoints.isEmpty()) return clusterGeometry;
 		final Set<Coordinate> batchCoords = new HashSet<Coordinate>();
 
-		for (final Coordinate coordinate : clusterGeometry.getCoordinates()) {
-			batchCoords.add(coordinate);
+		if (clusterGeometry != null) {
+			for (final Coordinate coordinate : clusterGeometry.getCoordinates()) {
+				batchCoords.add(coordinate);
+			}
 		}
 		for (final Coordinate coordinate : additionalPoints) {
 			batchCoords.add(coordinate);
 		}
 
+		GeometryFactory factory = clusterGeometry == null ? new GeometryFactory() : clusterGeometry.getFactory();
 		final Coordinate[] actualCoords = batchCoords.toArray(new Coordinate[batchCoords.size()]);
 
 		if (batchCoords.size() == 2) {
-			return clusterGeometry.getFactory().createLineString(
-					actualCoords);
+			return factory.createLineString(actualCoords);
 		}
 
 		final ConvexHull convexHull = new ConvexHull(
 				actualCoords,
-				clusterGeometry.getFactory());
+				factory);
 
 		final Geometry convexHullGeo = convexHull.getConvexHull();
 
@@ -210,7 +213,7 @@ public class GeometryHullTool
 						batchCoords) : this.concaveHullParkOhMethod(
 						convexHullGeo,
 						batchCoords);
-				if (!concaveHull.isSimple()) {
+				if (fast && !concaveHull.isSimple()) {
 					LOGGER.warn(
 							"Produced non simple hull",
 							concaveHull.toText());

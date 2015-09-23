@@ -135,7 +135,7 @@ public class DBScanIterationsJobRunner implements
 		int iteration = 2;
 		long lastRecordCount = 0;
 		double precisionFactor = 0.9;
-		while (maxIterationCount > 0) {
+		while (maxIterationCount > 0 && precisionFactor > 0) {
 
 			// context does not mater in this case
 
@@ -217,7 +217,7 @@ public class DBScanIterationsJobRunner implements
 			lastRecordCount = currentOutputCount;
 			startPath = nextPath;
 			maxIterationCount--;
-			precisionFactor -= 0.1;
+			precisionFactor -= 0.15;
 			iteration++;
 		}
 		final PropertyManagement localScopeProperties = new PropertyManagement(

@@ -101,6 +101,7 @@ public class GeoWaveBasicIT extends
 
 	@Test
 	public void testIngestAndQuerySpatialPointsAndLines() {
+		System.getProperties().put("AccumuloIndexWriter.skipFlush", "true");
 		final Index spatialIndex = IndexType.SPATIAL_VECTOR.createDefaultIndex();
 		// ingest both lines and points
 		testLocalIngest(
@@ -346,6 +347,7 @@ public class GeoWaveBasicIT extends
 					// if the stats are the same, their binary serialization
 					// should be the same
 					Assert.assertArrayEquals(
+							actualStats.toString() + " = " + expectedStat.toString(),
 							expectedStat.toBinary(),
 							actualStats.toBinary());
 				}
@@ -394,6 +396,7 @@ public class GeoWaveBasicIT extends
 
 	@Test
 	public void testIngestAndQuerySpatialTemporalPointsAndLines() {
+		System.getProperties().put("AccumuloIndexWriter.skipFlush", "true");
 		final Index spatialTemporalIndex = IndexType.SPATIAL_VECTOR.createDefaultIndex();
 		// ingest both lines and points
 		testLocalIngest(

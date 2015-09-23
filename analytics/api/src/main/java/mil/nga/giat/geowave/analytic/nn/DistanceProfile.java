@@ -1,4 +1,4 @@
-package mil.nga.giat.geowave.analytic.mapreduce.nn;
+package mil.nga.giat.geowave.analytic.nn;
 
 /**
  * Retain distance information.
