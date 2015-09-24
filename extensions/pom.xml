@@ -20,5 +20,7 @@
 		<module>formats/geotools-vector</module>
 		<module>formats/gpx</module>
 		<module>formats/tdrive</module>
+		<module>formats/stanag4676/format</module>
+		<module>formats/stanag4676/service</module>
 	</modules>
 </project>
