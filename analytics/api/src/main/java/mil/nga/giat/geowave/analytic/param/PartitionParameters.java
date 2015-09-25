@@ -17,6 +17,8 @@ public class PartitionParameters
 				Double.class),
 		PARTITION_PRECISION(
 				Double.class),
+		PARTITION_DECREASE_RATE(
+				Double.class),
 		MAX_MEMBER_SELECTION(
 				Integer.class),
 		PARTITIONER_CLASS(
@@ -59,6 +61,24 @@ public class PartitionParameters
 					Partition.MAX_MEMBER_SELECTION,
 					"pms",
 					"Maximum number of members selected from a partition",
+					true));
+		}
+		if (contains(
+				params,
+				Partition.PARTITION_DECREASE_RATE)) {
+			options.add(PropertyManagement.newOption(
+					Partition.PARTITION_DECREASE_RATE,
+					"pdr",
+					"Rate of decrease for precision(within (0,1])",
+					true));
+		}
+		if (contains(
+				params,
+				Partition.PARTITION_PRECISION)) {
+			options.add(PropertyManagement.newOption(
+					Partition.PARTITION_PRECISION,
+					"ppa",
+					"Precision value within (0.0,1.0]",
 					true));
 		}
 		if (contains(

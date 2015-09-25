@@ -203,10 +203,11 @@ public class NNProcessor<PARTITION_VALUE, STORE_VALUE>
 	public int size() {
 		return primaries.size() + others.size();
 	}
-	
+
 	/**
 	 * 
-	 * @param size the minimum size of a partition to be processed
+	 * @param size
+	 *            the minimum size of a partition to be processed
 	 * @return true if all partitions are emptt
 	 */
 	public boolean trimSmallPartitions(
@@ -218,7 +219,7 @@ public class NNProcessor<PARTITION_VALUE, STORE_VALUE>
 				for (ByteArrayId id : entry.getValue()) {
 					final Set<PartitionData> partitionsForId = idsToPartition.get(id);
 					partitionsForId.remove(entry.getKey());
-					if(partitionsForId.isEmpty()) {
+					if (partitionsForId.isEmpty()) {
 						this.primaries.remove(id);
 						this.others.remove(id);
 					}
@@ -226,7 +227,7 @@ public class NNProcessor<PARTITION_VALUE, STORE_VALUE>
 				it.remove();
 			}
 		}
-		return partitionsToIds.isEmpty(); 
+		return partitionsToIds.isEmpty();
 	}
 
 	public void process(

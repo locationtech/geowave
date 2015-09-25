@@ -14,7 +14,7 @@ import mil.nga.giat.geowave.analytic.mapreduce.SequenceFileInputFormatConfigurat
 import mil.nga.giat.geowave.analytic.mapreduce.SequenceFileOutputFormatConfiguration;
 import mil.nga.giat.geowave.analytic.mapreduce.clustering.runner.GeoWaveInputLoadJobRunner;
 import mil.nga.giat.geowave.analytic.param.ClusteringParameters;
-import mil.nga.giat.geowave.analytic.param.ExtractParameters.Extract;
+import mil.nga.giat.geowave.analytic.param.ClusteringParameters.Clustering;
 import mil.nga.giat.geowave.analytic.param.FormatConfiguration;
 import mil.nga.giat.geowave.analytic.param.GlobalParameters;
 import mil.nga.giat.geowave.analytic.param.HullParameters;
@@ -134,7 +134,15 @@ public class DBScanIterationsJobRunner implements
 
 		int iteration = 2;
 		long lastRecordCount = 0;
-		double precisionFactor = 0.9;
+
+		final double precisionDecreaseRate = runTimeProperties.getPropertyAsDouble(
+				Partition.PARTITION_DECREASE_RATE,
+				0.15);
+
+		double precisionFactor = runTimeProperties.getPropertyAsDouble(
+				Partition.PARTITION_PRECISION,
+				1.0) - precisionDecreaseRate;
+
 		while (maxIterationCount > 0 && precisionFactor > 0) {
 
 			// context does not mater in this case
@@ -217,7 +225,7 @@ public class DBScanIterationsJobRunner implements
 			lastRecordCount = currentOutputCount;
 			startPath = nextPath;
 			maxIterationCount--;
-			precisionFactor -= 0.15;
+			precisionFactor -= precisionDecreaseRate;
 			iteration++;
 		}
 		final PropertyManagement localScopeProperties = new PropertyManagement(
@@ -248,6 +256,17 @@ public class DBScanIterationsJobRunner implements
 	@Override
 	public void fillOptions(
 			final Set<Option> options ) {
+		ClusteringParameters.fillOptions(
+				options,
+				new Clustering[] {
+					Clustering.MAX_ITERATIONS
+				});
+		PartitionParameters.fillOptions(
+				options,
+				new PartitionParameters.Partition[] {
+					Partition.PARTITION_PRECISION,
+					Partition.PARTITION_DECREASE_RATE
+				});
 		jobRunner.fillOptions(options);
 		inputLoadRunner.fillOptions(options);
 	}

@@ -23,6 +23,7 @@ import mil.nga.giat.geowave.analytic.param.MapReduceParameters;
 import mil.nga.giat.geowave.analytic.param.OutputParameters;
 import mil.nga.giat.geowave.analytic.param.ParameterEnum;
 import mil.nga.giat.geowave.analytic.param.PartitionParameters;
+import mil.nga.giat.geowave.analytic.param.PartitionParameters.Partition;
 import mil.nga.giat.geowave.analytic.partitioner.OrthodromicDistancePartitioner;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
@@ -110,7 +111,9 @@ public class DBScanIT extends
 							MapReduceParameters.MRConfig.HDFS_BASE_DIR,
 							OutputParameters.Output.REDUCER_COUNT,
 							InputParameters.Input.INPUT_FORMAT,
-							GlobalParameters.Global.BATCH_ID
+							GlobalParameters.Global.BATCH_ID,
+							Partition.PARTITION_DECREASE_RATE,
+							Partition.PARTITION_PRECISION
 						},
 						new Object[] {
 							query,
@@ -129,7 +132,9 @@ public class DBScanIT extends
 							hdfsBaseDirectory + "/t1",
 							2,
 							GeoWaveInputFormatConfiguration.class,
-							"bx5"
+							"bx5",
+							0.15,
+							0.95
 						}));
 
 		Assert.assertEquals(
