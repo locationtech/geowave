@@ -193,7 +193,7 @@ public class NNProcessorTest
 					}
 				});
 	}
-	
+
 	@Test
 	public void testTrimOp()
 			throws IOException,
