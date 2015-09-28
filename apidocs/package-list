@@ -105,6 +105,11 @@ mil.nga.giat.geowave.format.geotools.raster
 mil.nga.giat.geowave.format.geotools.vector
 mil.nga.giat.geowave.format.geotools.vector.retyping.date
 mil.nga.giat.geowave.format.gpx
+mil.nga.giat.geowave.format.stanag4676
+mil.nga.giat.geowave.format.stanag4676.image
+mil.nga.giat.geowave.format.stanag4676.parser
+mil.nga.giat.geowave.format.stanag4676.parser.model
+mil.nga.giat.geowave.format.stanag4676.parser.util
 mil.nga.giat.geowave.format.tdrive
 mil.nga.giat.geowave.service
 mil.nga.giat.geowave.service.client
@@ -113,3 +118,5 @@ mil.nga.giat.geowave.test
 mil.nga.giat.geowave.test.kafka
 mil.nga.giat.geowave.test.mapreduce
 mil.nga.giat.geowave.test.service
+mil.nga.giat.geowave.types.stanag4676.service
+mil.nga.giat.geowave.types.stanag4676.service.rest

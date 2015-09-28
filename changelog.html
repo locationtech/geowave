@@ -19,6 +19,7 @@
 <p><strong>Fixed bugs:</strong></p>
 <ul>
 <li>fix to geotools raster format options provider <a href="https://github.com/ngageoint/geowave/issues/490">#490</a></li>
+<li>DBScanMapReduceTest fails on Java 8 <a href="https://github.com/ngageoint/geowave/issues/480">#480</a></li>
 <li>Check for null in all field writers <a href="https://github.com/ngageoint/geowave/issues/473">#473</a></li>
 <li>Ensure that fieldreaders and fieldwriters properly support null values <a href="https://github.com/ngageoint/geowave/issues/472">#472</a></li>
 <li>GPX Schema should use correct classloader <a href="https://github.com/ngageoint/geowave/issues/462">#462</a></li>
@@ -35,9 +36,11 @@
 <li>Add command-line argument to raster format to toggle building image pyramid and set tile size <a href="https://github.com/ngageoint/geowave/issues/481">#481</a></li>
 <li>Capture statistics at the index level (e.g. per table). <a href="https://github.com/ngageoint/geowave/issues/457">#457</a></li>
 <li>Local file ingest to support multiple indices for the same adapter <a href="https://github.com/ngageoint/geowave/issues/436">#436</a></li>
+<li>Provide statistic and example for a histogram over a numeric range of data. <a href="https://github.com/ngageoint/geowave/issues/374">#374</a></li>
 </ul>
 <p><strong>Merged pull requests:</strong></p>
 <ul>
+<li>adding support for stanag4676 format (issue #515) <a href="https://github.com/ngageoint/geowave/pull/516">#516</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>Issue #513. Handle RowRangeDataStatistics not found gracefully, witho… <a href="https://github.com/ngageoint/geowave/pull/514">#514</a> (<a href="https://github.com/rwgdrummer">rwgdrummer</a>)</li>
 <li>Bumped HdrHistogram from v2.1.4 to v2.1.7 due to serialization bug di… <a href="https://github.com/ngageoint/geowave/pull/512">#512</a> (<a href="https://github.com/dcy2003">dcy2003</a>)</li>
 <li>Issue # 480. JAVA 8 unit test failure in DBSCAN. DBSCAN performed <a href="https://github.com/ngageoint/geowave/pull/510">#510</a> (<a href="https://github.com/rwgdrummer">rwgdrummer</a>)</li>
