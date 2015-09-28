@@ -188,8 +188,10 @@ public class DBScanMapReduce
 		private boolean firstIteration = true;
 
 		protected int calculateCondensingMinimum() {
-			return Math.max(
-					200,
+			return Math.min(
+					Math.max(
+							minOwners,
+							200),
 					minOwners * 10);
 		}
 
@@ -214,12 +216,10 @@ public class DBScanMapReduce
 			if (!this.firstIteration) return;
 
 			processor.trimSmallPartitions(calculateTossMinimum());
-			// twice minimum compression size.
+			// 2.0 times minimum compression size.
 			// if compression is not likely to increase
-			// performance, then pre-processing does not but much performance
-			if (processor.size() < Math.min(
-					200,
-					calculateCondensingMinimum() * 2)) return;
+			// performance, then pre-processing does not buy much performance
+			if (processor.size() < calculateCondensingMinimum() * 2.0) return;
 
 			processor.process(
 					new ClusterNeighborListFactory(

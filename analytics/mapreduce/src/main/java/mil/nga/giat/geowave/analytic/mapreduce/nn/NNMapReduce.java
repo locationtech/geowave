@@ -27,6 +27,7 @@ import mil.nga.giat.geowave.analytic.nn.TypeConverter;
 import mil.nga.giat.geowave.analytic.param.ClusteringParameters;
 import mil.nga.giat.geowave.analytic.param.CommonParameters;
 import mil.nga.giat.geowave.analytic.param.PartitionParameters;
+import mil.nga.giat.geowave.analytic.param.PartitionParameters.Partition;
 import mil.nga.giat.geowave.analytic.partitioner.AbstractPartitioner;
 import mil.nga.giat.geowave.analytic.partitioner.OrthodromicDistancePartitioner;
 import mil.nga.giat.geowave.analytic.partitioner.Partitioner;
@@ -389,131 +390,79 @@ public class NNMapReduce
 					NNMapReduce.class,
 					1.0);
 
-			final double[] distances = AbstractPartitioner.getDistances(
-					config,
-					NNMapReduce.class);
+			try {
+				LOGGER.info("Using secondary partitioning");
+				partitioner = config.getInstance(
+						PartitionParameters.Partition.SECONDARY_PARTITIONER_CLASS,
+						NNMapReduce.class,
+						Partitioner.class,
+						PassthruPartitioner.class);
 
-			boolean repartition = true;
-			for (double dist : distances) {
-				repartition &= (dist > (maxDistance / 3.0));
+				partitioner.initialize(new ConfigurationWrapper() {
+
+					@Override
+					public int getInt(
+							Enum<?> property,
+							Class<?> scope,
+							int defaultValue ) {
+						return config.getInt(
+								property,
+								scope,
+								defaultValue);
+					}
+
+					@Override
+					public double getDouble(
+							Enum<?> property,
+							Class<?> scope,
+							double defaultValue ) {
+						if (property == Partition.PARTITION_PRECISION) return 1.0;
+						return config.getDouble(
+								property,
+								scope,
+								defaultValue);
+					}
+
+					@Override
+					public String getString(
+							Enum<?> property,
+							Class<?> scope,
+							String defaultValue ) {
+						return config.getString(
+								property,
+								scope,
+								defaultValue);
+					}
+
+					@Override
+					public byte[] getBytes(
+							Enum<?> property,
+							Class<?> scope ) {
+						return config.getBytes(
+								property,
+								scope);
+					}
+
+					@Override
+					public <T> T getInstance(
+							Enum<?> property,
+							Class<?> scope,
+							Class<T> iface,
+							Class<? extends T> defaultValue )
+							throws InstantiationException,
+							IllegalAccessException {
+						return config.getInstance(
+								property,
+								scope,
+								iface,
+								defaultValue);
+					}
+
+				});
 			}
-			if (repartition) {
-				try {
-					LOGGER.info("Using secondary partitioning");
-					partitioner = config.getInstance(
-							PartitionParameters.Partition.PARTITIONER_CLASS,
-							NNMapReduce.class,
-							Partitioner.class,
-							OrthodromicDistancePartitioner.class);
-
-					partitioner.initialize(new ConfigurationWrapper() {
-
-						@Override
-						public int getInt(
-								Enum<?> property,
-								Class<?> scope,
-								int defaultValue ) {
-							return config.getInt(
-									property,
-									scope,
-									defaultValue);
-						}
-
-						@Override
-						public double getDouble(
-								Enum<?> property,
-								Class<?> scope,
-								double defaultValue ) {
-							return config.getDouble(
-									property,
-									scope,
-									defaultValue);
-						}
-
-						@Override
-						public String getString(
-								Enum<?> property,
-								Class<?> scope,
-								String defaultValue ) {
-							if (property == ClusteringParameters.Clustering.DISTANCE_THRESHOLDS) return Double.toString(maxDistance);
-							return config.getString(
-									property,
-									scope,
-									defaultValue);
-						}
-
-						@Override
-						public byte[] getBytes(
-								Enum<?> property,
-								Class<?> scope ) {
-							return config.getBytes(
-									property,
-									scope);
-						}
-
-						@Override
-						public <T> T getInstance(
-								Enum<?> property,
-								Class<?> scope,
-								Class<T> iface,
-								Class<? extends T> defaultValue )
-								throws InstantiationException,
-								IllegalAccessException {
-							return config.getInstance(
-									property,
-									scope,
-									iface,
-									defaultValue);
-						}
-
-					});
-				}
-				catch (final Exception e1) {
-					throw new IOException(
-							e1);
-				}
-
-			}
-			else {
-				final List<PartitionData> Singleton = Collections.singletonList(new PartitionData(
-						new ByteArrayId(
-								"1"),
-						true));
-				this.partitioner = new Partitioner<Object>() {
-
-					@Override
-					public void initialize(
-							ConfigurationWrapper context )
-							throws IOException {
-
-					}
-
-					@Override
-					public List<mil.nga.giat.geowave.analytic.partitioner.Partitioner.PartitionData> getCubeIdentifiers(
-							Object entry ) {
-						return Singleton;
-					}
-
-					@Override
-					public void partition(
-							Object entry,
-							mil.nga.giat.geowave.analytic.partitioner.Partitioner.PartitionDataCallback callback )
-							throws Exception {
-						callback.partitionWith(Singleton.get(0));
-					}
-
-					@Override
-					public void fillOptions(
-							Set<Option> options ) {
-
-					}
-
-					@Override
-					public void setup(
-							PropertyManagement runTimeProperties,
-							Configuration configuration ) {}
-
-				};
+			catch (final Exception e1) {
+				throw new IOException(
+						e1);
 			}
 
 			maxNeighbors = config.getInt(
@@ -714,4 +663,46 @@ public class NNMapReduce
 		}
 	}
 
+	public static class PassthruPartitioner<T> implements
+			Partitioner<T>
+	{
+
+		@Override
+		public void initialize(
+				ConfigurationWrapper context )
+				throws IOException {}
+
+		private static final List<PartitionData> FixedPartition = Collections.singletonList(new PartitionData(
+				new ByteArrayId(
+						"1"),
+				true));
+
+		@Override
+		public List<PartitionData> getCubeIdentifiers(
+				T entry ) {
+			return FixedPartition;
+		}
+
+		@Override
+		public void partition(
+				T entry,
+				PartitionDataCallback callback )
+				throws Exception {
+			callback.partitionWith(FixedPartition.get(0));
+		}
+
+		@Override
+		public void fillOptions(
+				Set<Option> options ) {
+
+		}
+
+		@Override
+		public void setup(
+				PropertyManagement runTimeProperties,
+				Configuration configuration ) {
+
+		}
+
+	}
 }

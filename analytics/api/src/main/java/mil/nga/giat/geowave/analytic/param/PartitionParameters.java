@@ -21,6 +21,8 @@ public class PartitionParameters
 				Double.class),
 		MAX_MEMBER_SELECTION(
 				Integer.class),
+		SECONDARY_PARTITIONER_CLASS(
+				Partitioner.class),
 		PARTITIONER_CLASS(
 				Partitioner.class);
 
@@ -62,6 +64,15 @@ public class PartitionParameters
 					"pms",
 					"Maximum number of members selected from a partition",
 					true));
+		}
+		if (contains(
+				params,
+				Partition.SECONDARY_PARTITIONER_CLASS)) {
+			options.add(PropertyManagement.newOption(
+					Partition.SECONDARY_PARTITIONER_CLASS,
+					"psp",
+					"Perform secondary partitioning with the provided class",
+					false));
 		}
 		if (contains(
 				params,
