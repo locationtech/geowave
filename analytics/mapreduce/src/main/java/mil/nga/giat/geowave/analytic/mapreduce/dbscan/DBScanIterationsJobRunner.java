@@ -13,6 +13,7 @@ import mil.nga.giat.geowave.analytic.mapreduce.MapReduceJobRunner;
 import mil.nga.giat.geowave.analytic.mapreduce.SequenceFileInputFormatConfiguration;
 import mil.nga.giat.geowave.analytic.mapreduce.SequenceFileOutputFormatConfiguration;
 import mil.nga.giat.geowave.analytic.mapreduce.clustering.runner.GeoWaveInputLoadJobRunner;
+import mil.nga.giat.geowave.analytic.mapreduce.nn.NNMapReduce.PassthruPartitioner;
 import mil.nga.giat.geowave.analytic.param.ClusteringParameters;
 import mil.nga.giat.geowave.analytic.param.ClusteringParameters.Clustering;
 import mil.nga.giat.geowave.analytic.param.FormatConfiguration;
@@ -103,12 +104,53 @@ public class DBScanIterationsJobRunner implements
 					true);
 		}
 
+		runTimeProperties.storeIfEmpty(
+				Partition.PARTITIONER_CLASS,
+				OrthodromicDistancePartitioner.class);
+
+		final double maxDistance = runTimeProperties.getPropertyAsDouble(
+				Partition.PARTITION_DISTANCE,
+				10);
+
+		final double precisionDecreaseRate = runTimeProperties.getPropertyAsDouble(
+				Partition.PARTITION_DECREASE_RATE,
+				0.15);
+
+		double precisionFactor = runTimeProperties.getPropertyAsDouble(
+				Partition.PARTITION_PRECISION,
+				1.0);
+
+		if (!runTimeProperties.hasProperty(Clustering.DISTANCE_THRESHOLDS)) {
+			runTimeProperties.copy(
+					Partition.PARTITION_DISTANCE,
+					Clustering.DISTANCE_THRESHOLDS);
+		}
+
+		final boolean overrideSecondary = runTimeProperties.hasProperty(Partition.SECONDARY_PARTITIONER_CLASS);
+
+		if (!overrideSecondary) {
+			final double[] distances = AbstractPartitioner.getDistances(
+					runTimeProperties,
+					AbstractPartitioner.class);
+			boolean secondary = precisionFactor < 1.0;
+			double total = 1.0;
+			for (double dist : distances) {
+				total *= dist;
+			}
+			secondary |= (total >= (Math.pow(
+					maxDistance,
+					distances.length) * 2.0));
+			if (secondary) {
+				runTimeProperties.copy(
+						Partition.PARTITIONER_CLASS,
+						Partition.SECONDARY_PARTITIONER_CLASS);
+			}
+		}
+
 		AbstractPartitioner.putDistances(
 				runTimeProperties,
 				new double[] {
-					runTimeProperties.getPropertyAsDouble(
-							Partition.PARTITION_DISTANCE,
-							10)
+					maxDistance
 				});
 
 		jobRunner.setInputFormatConfiguration(inputFormatConfiguration);
@@ -128,20 +170,14 @@ public class DBScanIterationsJobRunner implements
 			return initialStatus;
 		}
 
+		precisionFactor = precisionFactor - precisionDecreaseRate;
+
 		int maxIterationCount = runTimeProperties.getPropertyAsInt(
 				ClusteringParameters.Clustering.MAX_ITERATIONS,
 				15);
 
 		int iteration = 2;
 		long lastRecordCount = 0;
-
-		final double precisionDecreaseRate = runTimeProperties.getPropertyAsDouble(
-				Partition.PARTITION_DECREASE_RATE,
-				0.15);
-
-		double precisionFactor = runTimeProperties.getPropertyAsDouble(
-				Partition.PARTITION_PRECISION,
-				1.0) - precisionDecreaseRate;
 
 		while (maxIterationCount > 0 && precisionFactor > 0) {
 
@@ -169,6 +205,21 @@ public class DBScanIterationsJobRunner implements
 
 			final PropertyManagement localScopeProperties = new PropertyManagement(
 					runTimeProperties);
+
+			/**
+			 * Re-partitioning the fat geometries can force a large number of
+			 * partitions. The geometries end up being represented in multiple
+			 * partitions. Better to skip secondary partitioning. 0.9 is a bit
+			 * of a magic number. Ideally, it is based on the area of the max
+			 * distance cube divided by the area as defined by threshold
+			 * distances. However, looking up the partition dimension space or
+			 * assuming only two dimensions were both undesirable.
+			 */
+			if (precisionFactor <= 0.9 && !overrideSecondary) {
+				localScopeProperties.store(
+						Partition.SECONDARY_PARTITIONER_CLASS,
+						PassthruPartitioner.class);
+			}
 
 			localScopeProperties.store(
 					Partition.PARTITION_PRECISION,

@@ -100,6 +100,16 @@ public class NNJobRunnerTest
 							OrthodromicDistancePartitioner.class,
 							wrapper.getClass());
 
+					final Partitioner<?> secondary = configWrapper.getInstance(
+							Partition.SECONDARY_PARTITIONER_CLASS,
+							NNMapReduce.class,
+							Partitioner.class,
+							null);
+
+					Assert.assertEquals(
+							OrthodromicDistancePartitioner.class,
+							secondary.getClass());
+
 					final DistanceFn<?> distancFn = configWrapper.getInstance(
 							CommonParameters.Common.DISTANCE_FUNCTION_CLASS,
 							NNMapReduce.class,
@@ -170,6 +180,10 @@ public class NNJobRunnerTest
 
 		runTimeProperties.store(
 				Partition.PARTITIONER_CLASS,
+				OrthodromicDistancePartitioner.class);
+
+		runTimeProperties.store(
+				Partition.SECONDARY_PARTITIONER_CLASS,
 				OrthodromicDistancePartitioner.class);
 
 		runTimeProperties.store(

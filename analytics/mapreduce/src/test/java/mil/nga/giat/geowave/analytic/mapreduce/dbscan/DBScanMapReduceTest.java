@@ -443,7 +443,7 @@ public class DBScanMapReduceTest
 				ftype.getTypeName());
 		Random r = new Random(
 				3434);
-		for (int i = 0; i < 50000; i++) {
+		for (int i = 0; i < 10000; i++) {
 			final SimpleFeature feature = createTestFeature(
 					"f" + i,
 					new Coordinate(
