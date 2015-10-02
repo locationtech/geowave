@@ -415,7 +415,8 @@ public class GeometryHullToolTest
 				39.6),
 		new Coordinate(
 				40.3,
-				39.8), // selected bottom(5)
+				39.8), // selected
+						// bottom(5)
 		new Coordinate(
 				40.2,
 				40)
@@ -463,17 +464,14 @@ public class GeometryHullToolTest
 		cg.setDistanceFnForCoordinate(new CoordinateCircleDistanceFn());
 		final Iterator<Geometry> it1 = GeometryGenerator.generate(
 				1000,
-				Arrays.asList(
-						0.9,
-						0.75,
-						1.1),
+				Arrays.asList(1.0),
 				new DistortationFn() {
 					final Random r = new Random(
 							7777);
 
 					@Override
 					public double distort() {
-						return r.nextDouble();
+						return 0.5 + (0.5 * r.nextDouble());
 					}
 
 				},
@@ -485,30 +483,33 @@ public class GeometryHullToolTest
 						45));
 		final Iterator<Geometry> it2 = GeometryGenerator.generate(
 				1000,
-				Arrays.asList(
-						0.9,
-						0.75,
-						1.1),
+				Arrays.asList(1.0),
 				new DistortationFn() {
 					final Random r = new Random(
 							7777);
 
 					@Override
 					public double distort() {
-						return r.nextDouble();
+						return 0.5 + (0.5 * r.nextDouble());
 					}
 
 				},
 				5,
 				new Envelope(
-						05,
-						15,
-						80,
-						90));
+						30,
+						47,
+						20,
+						37));
 
 		while (it1.hasNext()) {
-			final Geometry rightShape = it1.next();
-			final Geometry leftShape = it2.next();
+			Geometry rightShape = it1.next();
+			Geometry leftShape = it2.next();
+
+			if (rightShape.intersects(leftShape)) {
+				Geometry inter = rightShape.intersection(leftShape);
+				rightShape = rightShape.difference(inter);
+				leftShape = leftShape.difference(inter);
+			}
 
 			ShapefileTool.writeShape(
 					"test_random",

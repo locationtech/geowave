@@ -1,6 +1,7 @@
 package mil.nga.giat.geowave.analytic;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -24,6 +25,8 @@ import com.vividsolutions.jts.algorithm.ConvexHull;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
+import com.vividsolutions.jts.geom.Polygon;
+import com.vividsolutions.jts.operation.union.UnaryUnionOp;
 
 /**
  * 
@@ -214,10 +217,14 @@ public class GeometryHullTool
 						convexHullGeo,
 						batchCoords);
 				if (fast && !concaveHull.isSimple()) {
+
 					LOGGER.warn(
 							"Produced non simple hull",
 							concaveHull.toText());
-					return convexHullGeo;
+					return this.concaveHullParkOhMethod(
+							convexHullGeo,
+							batchCoords);
+
 				}
 				return concaveHull;
 			}
@@ -604,14 +611,26 @@ public class GeometryHullTool
 	public Geometry connect(
 			final Geometry shape1,
 			final Geometry shape2 ) {
-		if (shape1.intersects(shape2)) return shape1.union(shape2);
-		return connect(
+
+		try {
+			if (shape1 instanceof Polygon && shape2 instanceof Polygon && !shape1.intersects(shape2)) return connect(
+					shape1,
+					shape2,
+					getClosestPoints(
+							shape1,
+							shape2,
+							distanceFnForCoordinate));
+			return UnaryUnionOp.union(Arrays.asList(
+					shape1,
+					shape2));
+		}
+		catch (Exception ex) {
+			// ex.printStackTrace();
+		}
+		return createHullFromGeometry(
 				shape1,
-				shape2,
-				getClosestPoints(
-						shape1,
-						shape2,
-						distanceFnForCoordinate));
+				Arrays.asList(shape2.getCoordinates()),
+				false);
 	}
 
 	protected Geometry connect(
