@@ -9,7 +9,7 @@ cd $WORKSPACE/deploy
 # Create an archive of all the ingest format plugins
 mkdir -p target/plugins >/dev/null 2>&1
 pushd target/plugins
-find $WORKSPACE/extensions/formats -name "*.jar" -exec cp {} . \;
+find $WORKSPACE/extensions/formats -name "*.jar" -not -path "*/service/target/*" -exec cp {} . \;
 tar cvzf ../plugins.tar.gz *.jar
 popd
 
