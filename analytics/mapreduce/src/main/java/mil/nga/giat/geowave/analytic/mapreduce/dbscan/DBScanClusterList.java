@@ -320,10 +320,14 @@ public abstract class DBScanClusterList implements
 				clusterGeo = otherGeo;
 			}
 			else if (clusterGeo instanceof Point) {
-				clusterGeo = otherGeo.union(clusterGeo);
+				clusterGeo = connectGeometryTool.connect(
+						otherGeo,
+						clusterGeo);
 			}
 			else {
-				clusterGeo = clusterGeo.union(otherGeo);
+				clusterGeo = connectGeometryTool.connect(
+						clusterGeo,
+						otherGeo);
 			}
 		}
 		catch (TopologyException ex) {

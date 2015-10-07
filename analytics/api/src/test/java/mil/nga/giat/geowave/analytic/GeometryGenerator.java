@@ -47,18 +47,19 @@ public class GeometryGenerator
 				double cx = env.centre().x * distortationFn.distort();
 				double cy = env.centre().y * distortationFn.distort();
 
-				double dx = env.getWidth();
-				double dy = env.getHeight();
+				double dx = env.getWidth() * distortationFn.distort();
+				double dy = env.getHeight() * distortationFn.distort();
 
-				// We will use a coordinate list to build the linearring
+				// We will use a coordinate list to build the linear ring
 				CoordinateList clist = new CoordinateList();
 				double angle = 0.0;
-				for (int i = 0; angle < 360; angle += (delta * distortationFn.distort() + delta), i++) {
-					double a = distanceactors.get(i % distanceactors.size()) * 0.5 * dx;
-					double b = distanceactors.get(i % distanceactors.size()) * 0.5 * dy;
+				for (int i = 0; angle < 360; angle += delta * distortationFn.distort() + delta, i++) {
+					double a = distanceactors.get(i % distanceactors.size()) * dx * distortationFn.distort();
+					// double b = distanceactors.get(i % distanceactors.size())
+					// * dy * distortationFn.distort();
 					clist.add(new Coordinate(
 							cx + a * Math.sin(Math.toRadians(angle)),
-							cy + b * Math.cos(Math.toRadians(angle))));
+							cy + a * Math.cos(Math.toRadians(angle))));
 
 				}
 
