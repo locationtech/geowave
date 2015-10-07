@@ -3,8 +3,10 @@ package mil.nga.giat.geowave.adapter.vector.plugin.transaction;
 import java.io.IOException;
 
 import mil.nga.giat.geowave.core.store.CloseableIterator;
+import mil.nga.giat.geowave.core.store.query.BasicQuery;
 
 import org.opengis.feature.simple.SimpleFeature;
+import org.opengis.filter.Filter;
 
 /**
  * Represent the Writer's pluggable strategy of a transaction
@@ -56,5 +58,7 @@ public interface GeoWaveTransaction
 	public String composeVisibility();
 
 	public CloseableIterator<SimpleFeature> interweaveTransaction(
-			CloseableIterator<SimpleFeature> it );
+			final Integer limit,
+			final Filter filter,
+			final CloseableIterator<SimpleFeature> it );
 }
