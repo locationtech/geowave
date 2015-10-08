@@ -68,11 +68,7 @@ public class GeoWaveFeatureReader implements
 			throws IOException {
 		this.components = components;
 		this.transaction = transaction;
-		// make sure the the buffer cache is flushed to the underlying datastore
-		// the case where pending additions have not been committed is not
-		// supported under the WFS-T spec, but the geotools API
-		// does not prevent it.
-		transaction.flush();
+
 		featureCollection = new GeoWaveFeatureCollection(
 				this,
 				query);
@@ -198,17 +194,21 @@ public class GeoWaveFeatureReader implements
 					"unable to close index iterator for query",
 					e);
 		}
-		return interweaveTransaction(new CloseableIteratorWrapper<SimpleFeature>(
-				new Closeable() {
-					@Override
-					public void close()
-							throws IOException {
-						for (final CloseableIterator<SimpleFeature> result : results) {
-							result.close();
-						}
-					}
-				},
-				Iterators.concat(results.iterator())));
+		return interweaveTransaction(
+				issuer.getLimit(),
+				issuer.getFilter(),
+				new CloseableIteratorWrapper<SimpleFeature>(
+
+						new Closeable() {
+							@Override
+							public void close()
+									throws IOException {
+								for (final CloseableIterator<SimpleFeature> result : results) {
+									result.close();
+								}
+							}
+						},
+						Iterators.concat(results.iterator())));
 	}
 
 	private class BaseIssuer implements
@@ -238,6 +238,14 @@ public class GeoWaveFeatureReader implements
 					filter,
 					(limit != null) && (limit >= 0) ? limit : null,
 					transaction.composeAuthorizations());
+		}
+
+		public Filter getFilter() {
+			return filter;
+		}
+
+		public Integer getLimit() {
+			return limit;
 		}
 	}
 
@@ -440,8 +448,13 @@ public class GeoWaveFeatureReader implements
 	}
 
 	private CloseableIterator<SimpleFeature> interweaveTransaction(
+			final Integer limit,
+			final Filter filter,
 			final CloseableIterator<SimpleFeature> it ) {
-		return transaction.interweaveTransaction(it);
+		return transaction.interweaveTransaction(
+				limit,
+				filter,
+				it);
 
 	}
 

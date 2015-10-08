@@ -14,6 +14,7 @@ import mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveDataStoreComponents;
 import mil.nga.giat.geowave.adapter.vector.plugin.lock.LockingManagement;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
+import mil.nga.giat.geowave.core.store.query.BasicQuery;
 import mil.nga.giat.geowave.datastore.accumulo.util.VisibilityTransformer;
 
 import org.apache.commons.lang3.tuple.Pair;
@@ -22,6 +23,7 @@ import org.geotools.data.Transaction;
 import org.geotools.factory.Hints;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.opengis.feature.simple.SimpleFeature;
+import org.opengis.filter.Filter;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.google.common.collect.LinkedListMultimap;
@@ -429,13 +431,22 @@ public class GeoWaveTransactionManagement implements
 
 	@Override
 	public CloseableIterator<SimpleFeature> interweaveTransaction(
+			final Integer limit,
+			final Filter filter,
 			final CloseableIterator<SimpleFeature> it ) {
 		return new CloseableIterator<SimpleFeature>() {
 
+			Iterator<SimpleFeature> addedIt = addedFeatures.values().iterator();
 			SimpleFeature feature = null;
+			long count = 0;
 
 			@Override
 			public boolean hasNext() {
+				if (limit != null && limit.intValue() > 0 && count > limit) return false;
+				while (addedIt.hasNext() && (feature == null)) {
+					feature = addedIt.next();
+					if (!filter.evaluate(feature)) feature = null;
+				}
 				while (it.hasNext() && (feature == null)) {
 					feature = it.next();
 					final ModifiedFeature modRecord = modifiedFeatures.get(feature.getID());
@@ -466,6 +477,7 @@ public class GeoWaveTransactionManagement implements
 				}
 				final SimpleFeature retVal = feature;
 				feature = null;
+				count++;
 				return retVal;
 			}
 
