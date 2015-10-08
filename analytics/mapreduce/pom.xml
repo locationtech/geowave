@@ -5,7 +5,7 @@
 		<artifactId>geowave-analytic-parent</artifactId>
 		<groupId>mil.nga.giat</groupId>
 		<relativePath>../</relativePath>
-		<version>0.8.9-SNAPSHOT</version>
+		<version>0.8.9</version>
 	</parent>
 	<artifactId>geowave-analytic-mapreduce</artifactId>
 	<name>GeoWave MapReduce Analytics</name>
