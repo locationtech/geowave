@@ -11,9 +11,6 @@ ADMIN_SCRIPTS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 # When sourcing this script the directory of the calling script is passed
 CALLING_SCRIPT_DIR=$1
 
-# All of these apps need to be installed on a system to run this script
-REQUIRED_APPS=('awk' 'curl' 'sed' 'unzip' 'rpmbuild' 'rpm2cpio')
-
 about() {
 	echo "Usage: $0 --command [clean|update|build]"
 	echo "	clean  - Removes build files and RPMs"
@@ -101,14 +98,6 @@ clean() {
     rm -rf $CALLING_SCRIPT_DIR/TARBALL/*
 }
 
-# Test for installed apps required to run this script
-dependency_tests() {
-	for app in "${REQUIRED_APPS[@]}"
-	do
-		type $app >/dev/null 2>&1 || { echo >&2 "$0 needs the $app command to be installed.  Aborting."; exit 1; }	
-	done
-}
-
 # All configurable strings should be externalized to a props file
 source_props() {
 	. $ADMIN_SCRIPTS_DIR/default-props.sh
@@ -153,8 +142,6 @@ update_artifact() {
  		echo $CMD # If under test environment
  	fi
 }
-
-dependency_tests
 
 if [ ! -d "$CALLING_SCRIPT_DIR" ]; then
 	echo >&2 "Usage: . $0 [calling script directory]"

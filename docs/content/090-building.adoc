@@ -51,3 +51,14 @@ Integration Tests: Windows
 Integration tests are currently not working on Windows out of the box. If you install cygwin and set the environmental variable CYGPATH to the
 location of the cygpath binary provided by cygwin then is should work. Eclipse and Avro generated files
 ====
+
+=== Docker Build Process
+
+We have preliminary support for building both the GeoWave jar artifacts and RPMs from Docker containers. This capability is
+useful for a number of different situations:
+
+* Jenkins build workers can run Docker on a variety of host operating systems and build for others
+* Anyone running Docker will be able to duplicate our build and packaging environments
+* Will allow us to build on existing container clusters instead of single purpose build VMs
+
+If building artifacts using Docker containers interests you check out the README in `deploy/packaging/docker`
