@@ -1,7 +1,7 @@
 class geowave::app {
 
   $geowave_base_app_rpms = [
-    "geowave-docs",
+    "geowave-${geowave::geowave_version}-${geowave::hadoop_vendor_version}-docs",
     "geowave-${geowave::geowave_version}-${geowave::hadoop_vendor_version}-tools",
   ]
 

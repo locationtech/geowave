@@ -5,7 +5,7 @@
 %define name                %{base_name}-%{vendor_version}
 %define versioned_app_name  %{base_name}-%{version}-%{vendor_version}
 %define buildroot           %{_topdir}/BUILDROOT/%{versioned_app_name}-root
-%define installpriority     %{_priority} # Used by alternatives for concurrents version installs
+%define installpriority     %{_priority} # Used by alternatives for concurrent version installs
 %define __jar_repack        %{nil}
 %define _rpmfilename        %%{ARCH}/%%{NAME}.%%{RELEASE}.%%{ARCH}.rpm
 
@@ -207,18 +207,18 @@ fi
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-%package        docs
+%package -n     %{versioned_app_name}-docs
 Summary:        GeoWave Documentation
 Group:          Applications/Internet
 Provides:       %{versioned_app_name}-docs = %{version}
 Requires:       %{versioned_app_name}-tools = %{version}
 Requires:       core
 
-%description docs
+%description -n %{versioned_app_name}-docs
 GeoWave provides geospatial and temporal indexing on top of Accumulo.
 This package installs the GeoWave documentation into the GeoWave directory
 
-%files docs
+%files -n       %{versioned_app_name}-docs
 %defattr(644, geowave, geowave, 755)
 %doc %{geowave_docs_home}
 
