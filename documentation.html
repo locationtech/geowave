@@ -534,6 +534,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#application-dependencies">Application Dependencies</a></li>
 <li><a href="#maven-dependencies">Maven dependencies</a></li>
 <li><a href="#build-process">Build Process</a></li>
+<li><a href="#docker-build-process">Docker Build Process</a></li>
 </ul>
 </li>
 <li><a href="#jace-jni-proxies-2">Jace JNI Proxies</a>
@@ -3601,6 +3602,29 @@ location of the cygpath binary provided by cygwin then is should work. Eclipse a
 </tr>
 </table>
 </div>
+</div>
+<div class="sect2">
+<h3 id="docker-build-process"><a class="anchor" href="#docker-build-process"></a>Docker Build Process</h3>
+<div class="paragraph">
+<p>We have preliminary support for building both the GeoWave jar artifacts and RPMs from Docker containers. This capability is
+useful for a number of different situations:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Jenkins build workers can run Docker on a variety of host operating systems and build for others</p>
+</li>
+<li>
+<p>Anyone running Docker will be able to duplicate our build and packaging environments</p>
+</li>
+<li>
+<p>Will allow us to build on existing container clusters instead of single purpose build VMs</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>If building artifacts using Docker containers interests you check out the README in <code>deploy/packaging/docker</code></p>
+</div>
 <div style="page-break-after: always;"></div>
 </div>
 </div>
@@ -4150,7 +4174,7 @@ yum --enablerepo=geowave install geowave-puppet</code></pre>
 <div class="sect2">
 <h3 id="version"><a class="anchor" href="#version"></a>Version</h3>
 <div class="paragraph">
-<p>This documentation was generated for GeoWave version 0.9.0-SNAPSHOT from commit ade2e39605ec4ba6d190189e893ca8e13839e6b3.</p>
+<p>This documentation was generated for GeoWave version 0.9.0-SNAPSHOT from commit 260675633c84b7e639a6b36d0a309ad623d05bf6.</p>
 </div>
 <div style="page-break-after: always;"></div>
 </div>
@@ -4202,7 +4226,7 @@ yum --enablerepo=geowave install geowave-puppet</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-10-23 14:13:10 UTC
+Last updated 2015-10-23 14:56:34 UTC
 </div>
 </div>
 </body>
