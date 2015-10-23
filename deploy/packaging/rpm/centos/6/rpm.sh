@@ -3,8 +3,10 @@
 # RPM build script
 #
 
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
 # Source all our reusable functionality, argument is the location of this script.
-. ../../admin-scripts/rpm-functions.sh "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+. "$SCRIPT_DIR/../../admin-scripts/rpm-functions.sh" "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 declare -A ARGS
 while [ $# -gt 0 ]; do

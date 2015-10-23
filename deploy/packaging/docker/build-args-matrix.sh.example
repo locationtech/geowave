@@ -1,0 +1,8 @@
+#!/bin/bash
+#
+# Custom build args matrix config file
+# Remove the .example from the name of the file and add/remove/update the build args as desired
+
+BUILD_ARGS_MATRIX=(
+  "-Daccumulo.version=1.6.0-cdh5.1.4 -Dhadoop.version=2.6.0-cdh5.4.0 -Dgeotools.version=13.0 -Dgeoserver.version=2.7.0 -Dvendor.version=cdh5 -P cloudera"
+)
