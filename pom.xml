@@ -657,7 +657,7 @@
 			</snapshots>
 			<id>boundlessgeo</id>
 			<name>BoundlessGeo Maven Repository</name>
-			<url>http://repo.boundlessgeo.com/main</url>
+			<url>https://boundless.artifactoryonline.com/boundless/main</url>
 		</repository>
 		<repository>
 			<id>osgeo</id>
