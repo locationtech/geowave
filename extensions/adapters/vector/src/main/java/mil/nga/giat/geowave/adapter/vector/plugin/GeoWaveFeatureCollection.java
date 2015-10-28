@@ -79,8 +79,7 @@ public class GeoWaveFeatureCollection extends
 		if (query.getFilter().equals(
 				Filter.INCLUDE)) {
 			// GEOWAVE-60 optimization
-			final Map<ByteArrayId, DataStatistics<SimpleFeature>> statsMap = reader.getComponents().getDataStatistics(
-					reader.getTransaction());
+			final Map<ByteArrayId, DataStatistics<SimpleFeature>> statsMap = reader.getTransaction().getDataStatistics();
 			if (statsMap.containsKey(CountDataStatistics.STATS_ID)) {
 				final CountDataStatistics stats = (CountDataStatistics) statsMap.get(CountDataStatistics.STATS_ID);
 				if ((stats != null) && stats.isSet()) {
@@ -117,8 +116,7 @@ public class GeoWaveFeatureCollection extends
 		double minx = Double.MAX_VALUE, maxx = -Double.MAX_VALUE, miny = Double.MAX_VALUE, maxy = -Double.MAX_VALUE;
 		try {
 			// GEOWAVE-60 optimization
-			final Map<ByteArrayId, DataStatistics<SimpleFeature>> statsMap = reader.getComponents().getDataStatistics(
-					reader.getTransaction());
+			final Map<ByteArrayId, DataStatistics<SimpleFeature>> statsMap = reader.getTransaction().getDataStatistics();
 			final ByteArrayId statId = FeatureBoundingBoxStatistics.composeId(reader.getFeatureType().getGeometryDescriptor().getLocalName());
 			if (statsMap.containsKey(statId)) {
 				final BoundingBoxDataStatistics<SimpleFeature> stats = (BoundingBoxDataStatistics<SimpleFeature>) statsMap.get(statId);

@@ -1,9 +1,11 @@
 package mil.nga.giat.geowave.adapter.vector.plugin.transaction;
 
 import java.io.IOException;
+import java.util.Map;
 
+import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
-import mil.nga.giat.geowave.core.store.query.BasicQuery;
+import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.filter.Filter;
@@ -56,6 +58,8 @@ public interface GeoWaveTransaction
 	public String[] composeAuthorizations();
 
 	public String composeVisibility();
+
+	public Map<ByteArrayId, DataStatistics<SimpleFeature>> getDataStatistics();
 
 	public CloseableIterator<SimpleFeature> interweaveTransaction(
 			final Integer limit,

@@ -57,8 +57,8 @@ public class GeoWaveFeatureSource extends
 		DataStatistics<SimpleFeature> bboxStats = null;
 		if (query.getFilter().equals(
 				Filter.INCLUDE)) {
-			final Map<ByteArrayId, DataStatistics<SimpleFeature>> stats = components.getDataStatistics(new GeoWaveEmptyTransaction(
-					components));
+			final Map<ByteArrayId, DataStatistics<SimpleFeature>> stats = new GeoWaveEmptyTransaction(
+					components).getDataStatistics();
 			bboxStats = stats.get(FeatureBoundingBoxStatistics.composeId(this.getFeatureType().getGeometryDescriptor().getLocalName()));
 		}
 		if (bboxStats != null) {
@@ -111,8 +111,8 @@ public class GeoWaveFeatureSource extends
 	protected int getCountInternal(
 			final Query query )
 			throws IOException {
-		final Map<ByteArrayId, DataStatistics<SimpleFeature>> stats = components.getDataStatistics(new GeoWaveEmptyTransaction(
-				components));
+		final Map<ByteArrayId, DataStatistics<SimpleFeature>> stats = new GeoWaveEmptyTransaction(
+				components).getDataStatistics();
 		final DataStatistics<SimpleFeature> countStats = stats.get(CountDataStatistics.STATS_ID);
 		if ((countStats != null) && query.getFilter().equals(
 				Filter.INCLUDE)) {

@@ -14,7 +14,7 @@ public interface QueryIssuer
 			Query constraints );
 
 	Filter getFilter();
-	
+
 	Integer getLimit();
 
 }
