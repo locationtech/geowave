@@ -132,7 +132,7 @@ public class GeoWaveFeatureReader implements
 			final QueryIssuer issuer ) {
 
 		final List<CloseableIterator<SimpleFeature>> results = new ArrayList<CloseableIterator<SimpleFeature>>();
-		final Map<ByteArrayId, DataStatistics<SimpleFeature>> statsMap = components.getDataStatistics(transaction);
+		final Map<ByteArrayId, DataStatistics<SimpleFeature>> statsMap = transaction.getDataStatistics();
 
 		try (CloseableIterator<Index> indexIt = getComponents().getDataStore().getIndices()) {
 			while (indexIt.hasNext()) {
@@ -461,7 +461,7 @@ public class GeoWaveFeatureReader implements
 	protected List<DataStatistics<SimpleFeature>> getStatsFor(
 			final String name ) {
 		final List<DataStatistics<SimpleFeature>> stats = new LinkedList<DataStatistics<SimpleFeature>>();
-		final Map<ByteArrayId, DataStatistics<SimpleFeature>> statsMap = components.getDataStatistics(transaction);
+		final Map<ByteArrayId, DataStatistics<SimpleFeature>> statsMap = transaction.getDataStatistics();
 		for (final Map.Entry<ByteArrayId, DataStatistics<SimpleFeature>> stat : statsMap.entrySet()) {
 			if ((stat.getValue() instanceof FeatureStatistic) && ((FeatureStatistic) stat.getValue()).getFieldName().endsWith(
 					name)) {
@@ -474,7 +474,7 @@ public class GeoWaveFeatureReader implements
 	protected TemporalConstraintsSet clipIndexedTemporalConstraints(
 			final TemporalConstraintsSet constraintsSet ) {
 		return QueryIndexHelper.clipIndexedTemporalConstraints(
-				components.getDataStatistics(transaction),
+				transaction.getDataStatistics(),
 				components.getAdapter().getTimeDescriptors(),
 				constraintsSet);
 	}
@@ -484,7 +484,7 @@ public class GeoWaveFeatureReader implements
 		return QueryIndexHelper.clipIndexedBBOXConstraints(
 				getFeatureType(),
 				bbox,
-				components.getDataStatistics(transaction));
+				transaction.getDataStatistics());
 	}
 
 	private BasicQuery composeQuery(
@@ -495,7 +495,7 @@ public class GeoWaveFeatureReader implements
 		if ((geoConstraints == null) && (temporalConstraints != null)) {
 			final Constraints statBasedGeoConstraints = QueryIndexHelper.getBBOXIndexConstraints(
 					getFeatureType(),
-					components.getDataStatistics(transaction));
+					transaction.getDataStatistics());
 			return new BasicQuery(
 					statBasedGeoConstraints.merge(temporalConstraints));
 		}

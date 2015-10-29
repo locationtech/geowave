@@ -17,16 +17,16 @@ import org.opengis.filter.Filter;
  * @source $URL$
  */
 
-public class GeoWaveEmptyTransaction implements
+public class GeoWaveEmptyTransaction extends
+		AbstractTransactionManagement implements
 		GeoWaveTransaction
 {
-
-	private final GeoWaveDataStoreComponents components;
 
 	/** Create an empty Diff */
 	public GeoWaveEmptyTransaction(
 			GeoWaveDataStoreComponents components ) {
-		this.components = components;
+		super(
+				components);
 	}
 
 	/**

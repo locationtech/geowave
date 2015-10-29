@@ -9,6 +9,7 @@ import mil.nga.giat.geowave.core.store.DataStoreEntryInfo;
 import mil.nga.giat.geowave.core.store.adapter.statistics.AbstractDataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 
+import org.apache.log4j.Logger;
 import org.opengis.feature.simple.SimpleFeature;
 
 import com.clearspring.analytics.stream.cardinality.HyperLogLogPlus;
@@ -23,6 +24,7 @@ public class FeatureHyperLogLogStatistics extends
 		AbstractDataStatistics<SimpleFeature> implements
 		FeatureStatistic
 {
+	private final static Logger LOGGER = Logger.getLogger(FeatureHyperLogLogStatistics.class);
 	public static final String STATS_TYPE = "ATT_HYPERLLP";
 
 	private HyperLogLogPlus loglog;
@@ -106,8 +108,9 @@ public class FeatureHyperLogLogStatistics extends
 			return buffer.array();
 		}
 		catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOGGER.error(
+					"Exception while writing statistic",
+					e);
 		}
 		return new byte[0];
 	}
@@ -122,8 +125,9 @@ public class FeatureHyperLogLogStatistics extends
 			loglog = HyperLogLogPlus.Builder.build(data);
 		}
 		catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOGGER.error(
+					"Exception while reading statistic",
+					e);
 		}
 	}
 
