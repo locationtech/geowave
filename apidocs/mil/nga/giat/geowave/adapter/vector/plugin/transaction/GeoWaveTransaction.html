@@ -87,7 +87,7 @@
 <li class="blockList">
 <dl>
 <dt>All Known Implementing Classes:</dt>
-<dd><a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/transaction/GeoWaveEmptyTransaction.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin.transaction">GeoWaveEmptyTransaction</a>, <a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/transaction/GeoWaveTransactionManagement.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin.transaction">GeoWaveTransactionManagement</a></dd>
+<dd><a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/transaction/AbstractTransactionManagement.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin.transaction">AbstractTransactionManagement</a>, <a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/transaction/GeoWaveEmptyTransaction.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin.transaction">GeoWaveEmptyTransaction</a>, <a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/transaction/GeoWaveTransactionManagement.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin.transaction">GeoWaveTransactionManagement</a></dd>
 </dl>
 <hr>
 <br>
@@ -131,16 +131,20 @@
 </td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>,<a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/transaction/GeoWaveTransaction.html#getDataStatistics()">getDataStatistics</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/transaction/GeoWaveTransaction.html#interweaveTransaction(java.lang.Integer,%20org.opengis.filter.Filter,%20mil.nga.giat.geowave.core.store.CloseableIterator)">interweaveTransaction</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;limit,
                      org.opengis.filter.Filter&nbsp;filter,
                      <a href="../../../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;it)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/transaction/GeoWaveTransaction.html#isEmpty()">isEmpty</a></strong>()</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/transaction/GeoWaveTransaction.html#modify(java.lang.String,%20org.opengis.feature.simple.SimpleFeature,%20org.opengis.feature.simple.SimpleFeature)">modify</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fid,
       org.opengis.feature.simple.SimpleFeature&nbsp;old,
@@ -148,7 +152,7 @@
 <div class="block">Record a modification to the indicated fid</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/transaction/GeoWaveTransaction.html#remove(java.lang.String,%20org.opengis.feature.simple.SimpleFeature)">remove</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fid,
       org.opengis.feature.simple.SimpleFeature&nbsp;feature)</code>&nbsp;</td>
@@ -249,6 +253,15 @@
 <li class="blockList">
 <h4>composeVisibility</h4>
 <pre><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;composeVisibility()</pre>
+</li>
+</ul>
+<a name="getDataStatistics()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getDataStatistics</h4>
+<pre><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>,<a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&gt;&nbsp;getDataStatistics()</pre>
 </li>
 </ul>
 <a name="interweaveTransaction(java.lang.Integer, org.opengis.filter.Filter, mil.nga.giat.geowave.core.store.CloseableIterator)">
