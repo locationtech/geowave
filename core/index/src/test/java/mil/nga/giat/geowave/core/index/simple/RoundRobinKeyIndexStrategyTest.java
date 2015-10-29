@@ -1,9 +1,13 @@
 package mil.nga.giat.geowave.core.index.simple;
 
+import static org.junit.Assert.assertEquals;
+
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
@@ -23,7 +27,7 @@ import mil.nga.giat.geowave.core.index.sfc.tiered.TieredSFCIndexFactory;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class BalanceIndexStrategyTest
+public class RoundRobinKeyIndexStrategyTest
 {
 
 	private static final NumericDimensionDefinition[] SPATIAL_DIMENSIONS = new NumericDimensionDefinition[] {
@@ -44,7 +48,7 @@ public class BalanceIndexStrategyTest
 			SFCType.HILBERT);
 
 	private static final CompoundIndexStrategy compoundIndexStrategy = new CompoundIndexStrategy(
-			new BalanceIndexStrategy(),
+			new RoundRobinKeyIndexStrategy(),
 			sfcIndexStrategy);
 
 	private static final NumericRange dimension1Range = new NumericRange(
@@ -119,6 +123,34 @@ public class BalanceIndexStrategyTest
 				compoundIndexStrategy.getQueryRanges(sfcIndexedRange));
 		Assert.assertTrue(testRanges.containsAll(compoundIndexRanges));
 		Assert.assertTrue(compoundIndexRanges.containsAll(testRanges));
+	}
+
+	@Test
+	public void testUniformityAndLargeKeySet() {
+		final RoundRobinKeyIndexStrategy strategy = new RoundRobinKeyIndexStrategy(
+				512);
+		Map<ByteArrayId, Integer> countMap = new HashMap<ByteArrayId, Integer>();
+		for (int i = 0; i < 2048; i++) {
+			List<ByteArrayId> ids = strategy.getInsertionIds(sfcIndexedRange);
+			assertEquals(
+					1,
+					ids.size());
+			final ByteArrayId key = ids.get(0);
+			if (countMap.containsKey(key))
+				countMap.put(
+						key,
+						countMap.get(key) + 1);
+			else
+				countMap.put(
+						key,
+						1);
+
+		}
+		for (Integer i : countMap.values()) {
+			assertEquals(
+					4,
+					i.intValue());
+		}
 	}
 
 	@Test
