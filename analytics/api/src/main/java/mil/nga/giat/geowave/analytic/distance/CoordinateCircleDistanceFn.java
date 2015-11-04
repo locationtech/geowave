@@ -2,6 +2,8 @@ package mil.nga.giat.geowave.analytic.distance;
 
 import org.geotools.geometry.jts.JTS;
 import org.geotools.referencing.CRS;
+import org.geotools.referencing.GeodeticCalculator;
+import org.geotools.referencing.datum.DefaultEllipsoid;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.operation.TransformException;
@@ -30,29 +32,24 @@ public class CoordinateCircleDistanceFn implements
 		}
 	}
 
-	private static final double EPSILON = 0.0000000001;
-
 	@Override
 	public double measure(
 			final Coordinate c1,
 			final Coordinate c2 ) {
 		try {
-			return JTS.orthodromicDistance(
-					c1,
-					c2,
-					getCRS());
-		}
-		catch (TransformException e) {
-			throw new RuntimeException(
-					"Failed to transform coordinates to provided CRS",
-					e);
-		}
-		catch (java.lang.AssertionError ae) {
-			// wierd error with orthodromic distance
-			if ((Math.abs(c1.x - c2.x) < EPSILON) && (Math.abs(c1.y - c2.y) < EPSILON)) return 0.0;
-			throw ae;
-		}
+			return JTS.orthodromicDistance(c1, c2, getCRS());
+		} catch (final TransformException e) {
+			throw new RuntimeException("Failed to transform coordinates to provided CRS", e);
+		} catch (final java.lang.AssertionError ae) {
+			// weird error with orthodromic distance..when distance is too close (0.05 meter), it fails the tolerance test
 
+			final GeodeticCalculator calc = new GeodeticCalculator(getCRS());
+			calc.setStartingGeographicPoint(c1.x, c1.y);
+			calc.setDestinationGeographicPoint(c2.x, c1.y);
+			return ((DefaultEllipsoid) calc.getEllipsoid()).orthodromicDistance(
+					calc.getStartingGeographicPoint().getX(), calc.getStartingGeographicPoint().getY(),
+					calc.getDestinationGeographicPoint().getX(), calc.getDestinationGeographicPoint().getY());
+		}
 	}
 
 	protected CoordinateReferenceSystem getCRS() {
