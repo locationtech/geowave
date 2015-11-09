@@ -429,10 +429,11 @@ public class RasterDataAdapter implements
 				}
 			}
 
-			final MultiDimensionalNumericData bounds = GeometryUtils.basicConstraintsFromEnvelope(
+			final MultiDimensionalNumericData bounds = GeometryUtils.basicConstraintSetFromEnvelope(
 					projectedReferenceEnvelope).getIndexConstraints(
 					index.getIndexStrategy());
 			final GridEnvelope gridEnvelope = gridCoverage.getGridGeometry().getGridRange();
+			// only one set of constraints..hence reference '0' element
 			final double[] tileRangePerDimension = new double[bounds.getDimensionCount()];
 			final double[] maxValuesPerDimension = bounds.getMaxValuesPerDimension();
 			final double[] minValuesPerDimension = bounds.getMinValuesPerDimension();

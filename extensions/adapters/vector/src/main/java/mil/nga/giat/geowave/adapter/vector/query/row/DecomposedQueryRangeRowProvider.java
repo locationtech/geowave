@@ -35,7 +35,9 @@ public class DecomposedQueryRangeRowProvider extends
 			final Envelope envelope ) {
 		final Constraints constraints = GeometryUtils.basicConstraintsFromEnvelope(envelope);
 		if (constraints != null) {
-			final List<ByteArrayRange> byteArrayRanges = indexStrategy.getQueryRanges(constraints.getIndexConstraints(indexStrategy));
+			final List<ByteArrayRange> byteArrayRanges = AccumuloUtils.constraintsToByteArrayRanges(
+					constraints.getIndexConstraints(indexStrategy),
+					indexStrategy);
 			ranges = AccumuloUtils.byteArrayRangesToAccumuloRanges(byteArrayRanges);
 		}
 		else {

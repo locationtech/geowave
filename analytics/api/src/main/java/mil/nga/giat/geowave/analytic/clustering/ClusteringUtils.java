@@ -26,6 +26,7 @@ import mil.nga.giat.geowave.core.store.index.Index;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations;
 import mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloIndexStore;
+import mil.nga.giat.geowave.datastore.accumulo.util.AccumuloUtils;
 
 import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
@@ -204,9 +205,10 @@ public class ClusteringUtils
 			final Polygon polygon ) {
 
 		final Index index = IndexType.SPATIAL_VECTOR.createDefaultIndex();
-		final List<ByteArrayRange> ranges = index.getIndexStrategy().getQueryRanges(
+		final List<ByteArrayRange> ranges = AccumuloUtils.constraintsToByteArrayRanges(
 				new SpatialQuery(
-						polygon).getIndexConstraints(index.getIndexStrategy()));
+						polygon).getIndexConstraints(index.getIndexStrategy()),
+				index.getIndexStrategy());
 
 		return ranges;
 	}

@@ -14,11 +14,24 @@ public class FilterList<T extends QueryFilter> implements
 		QueryFilter
 {
 	protected List<T> filters;
+	protected boolean logicalAnd = true;
 
 	protected FilterList() {}
 
+	protected FilterList(
+			boolean logicalAnd ) {
+		this.logicalAnd = logicalAnd;
+	}
+
 	public FilterList(
 			final List<T> filters ) {
+		this.filters = filters;
+	}
+
+	public FilterList(
+			boolean logicalAnd,
+			final List<T> filters ) {
+		this.logicalAnd = logicalAnd;
 		this.filters = filters;
 	}
 
@@ -26,11 +39,12 @@ public class FilterList<T extends QueryFilter> implements
 	public boolean accept(
 			final IndexedPersistenceEncoding entry ) {
 		for (final QueryFilter filter : filters) {
-			if (!filter.accept(entry)) {
-				return false;
-			}
+			final boolean ok = filter.accept(entry);
+			if (!ok && logicalAnd) return false;
+			if (ok && !logicalAnd) return true;
+
 		}
-		return true;
+		return logicalAnd;
 	}
 
 }

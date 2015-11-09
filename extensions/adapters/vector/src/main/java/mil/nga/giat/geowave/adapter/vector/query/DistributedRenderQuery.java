@@ -63,7 +63,7 @@ public class DistributedRenderQuery extends
 		super(
 				(List<ByteArrayId>) null, // adaptor ids
 				index,
-				(MultiDimensionalNumericData) null,
+				(List<MultiDimensionalNumericData>) null,
 				(List<QueryFilter>) null,
 				authorizations);
 		this.renderer = renderer;
@@ -81,7 +81,7 @@ public class DistributedRenderQuery extends
 		super(
 				adapterIds,
 				index,
-				(MultiDimensionalNumericData) null,
+				(List<MultiDimensionalNumericData>) null,
 				(List<QueryFilter>) null,
 				authorizations);
 		this.renderer = renderer;
@@ -91,7 +91,7 @@ public class DistributedRenderQuery extends
 
 	public DistributedRenderQuery(
 			final Index index,
-			final MultiDimensionalNumericData constraints,
+			final List<MultiDimensionalNumericData> constraints,
 			final List<QueryFilter> queryFilters,
 			final Filter cqlFilter,
 			final FeatureDataAdapter dataAdapter,
@@ -111,7 +111,7 @@ public class DistributedRenderQuery extends
 	public DistributedRenderQuery(
 			final List<ByteArrayId> adapterIds,
 			final Index index,
-			final MultiDimensionalNumericData constraints,
+			final List<MultiDimensionalNumericData> constraints,
 			final List<QueryFilter> queryFilters,
 			final Filter cqlFilter,
 			final FeatureDataAdapter dataAdapter,

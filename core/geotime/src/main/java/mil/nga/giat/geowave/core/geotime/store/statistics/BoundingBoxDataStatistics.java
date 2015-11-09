@@ -4,6 +4,8 @@ import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.vividsolutions.jts.geom.Envelope;
+
 import mil.nga.giat.geowave.core.geotime.index.dimension.LatitudeDefinition;
 import mil.nga.giat.geowave.core.geotime.index.dimension.LongitudeDefinition;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
@@ -13,9 +15,8 @@ import mil.nga.giat.geowave.core.index.sfc.data.NumericRange;
 import mil.nga.giat.geowave.core.store.DataStoreEntryInfo;
 import mil.nga.giat.geowave.core.store.adapter.statistics.AbstractDataStatistics;
 import mil.nga.giat.geowave.core.store.query.BasicQuery.ConstraintData;
+import mil.nga.giat.geowave.core.store.query.BasicQuery.ConstraintSet;
 import mil.nga.giat.geowave.core.store.query.BasicQuery.Constraints;
-
-import com.vividsolutions.jts.geom.Envelope;
 
 abstract public class BoundingBoxDataStatistics<T> extends
 		AbstractDataStatistics<T>
@@ -119,7 +120,7 @@ abstract public class BoundingBoxDataStatistics<T> extends
 		}
 	}
 
-	public Constraints getConstraints() {
+	public ConstraintSet getConstraints() {
 		// Create a NumericRange object using the x axis
 		final NumericRange rangeLongitude = new NumericRange(
 				minX,
@@ -143,7 +144,7 @@ abstract public class BoundingBoxDataStatistics<T> extends
 				new ConstraintData(
 						rangeLatitude,
 						true));
-		return new Constraints(
+		return new ConstraintSet(
 				constraintsPerDimension);
 	}
 

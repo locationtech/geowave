@@ -1,16 +1,9 @@
 package mil.nga.giat.geowave.core.geotime;
 
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
-
-import mil.nga.giat.geowave.core.geotime.index.dimension.LatitudeDefinition;
-import mil.nga.giat.geowave.core.geotime.index.dimension.LongitudeDefinition;
-import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
-import mil.nga.giat.geowave.core.index.sfc.data.NumericData;
-import mil.nga.giat.geowave.core.index.sfc.data.NumericRange;
-import mil.nga.giat.geowave.core.index.sfc.data.NumericValue;
-import mil.nga.giat.geowave.core.store.query.BasicQuery.ConstraintData;
-import mil.nga.giat.geowave.core.store.query.BasicQuery.Constraints;
 
 import org.apache.log4j.Logger;
 
@@ -21,6 +14,16 @@ import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.io.ParseException;
 import com.vividsolutions.jts.io.WKBReader;
 import com.vividsolutions.jts.io.WKBWriter;
+
+import mil.nga.giat.geowave.core.geotime.index.dimension.LatitudeDefinition;
+import mil.nga.giat.geowave.core.geotime.index.dimension.LongitudeDefinition;
+import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
+import mil.nga.giat.geowave.core.index.sfc.data.NumericData;
+import mil.nga.giat.geowave.core.index.sfc.data.NumericRange;
+import mil.nga.giat.geowave.core.index.sfc.data.NumericValue;
+import mil.nga.giat.geowave.core.store.query.BasicQuery.ConstraintData;
+import mil.nga.giat.geowave.core.store.query.BasicQuery.ConstraintSet;
+import mil.nga.giat.geowave.core.store.query.BasicQuery.Constraints;
 
 /**
  * This class contains a set of Geometry utility methods that are generally
@@ -42,9 +45,39 @@ public class GeometryUtils
 	public static Constraints basicConstraintsFromGeometry(
 			final Geometry geometry ) {
 
+		List<ConstraintSet> set = new LinkedList<ConstraintSet>();
+		constructListOfConstraintSetsFromGeometry(
+				geometry,
+				set);
+
+		return new Constraints(
+				set);
+	}
+
+	/**
+	 * Recursively decompose geometry into a set of envelopes to create a single
+	 * set.
+	 * 
+	 * @param geometry
+	 * @param destinationListOfSets
+	 */
+	private static void constructListOfConstraintSetsFromGeometry(
+			final Geometry geometry,
+			final List<ConstraintSet> destinationListOfSets ) {
+
 		// Get the envelope of the geometry being held
-		final Envelope env = geometry.getEnvelopeInternal();
-		return basicConstraintsFromEnvelope(env);
+		int n = geometry.getNumGeometries();
+		if (n > 1) {
+			for (int gi = 0; gi < n; gi++) {
+				constructListOfConstraintSetsFromGeometry(
+						geometry.getGeometryN(gi),
+						destinationListOfSets);
+			}
+		}
+		else {
+			final Envelope env = geometry.getEnvelopeInternal();
+			destinationListOfSets.add(basicConstraintSetFromEnvelope(env));
+		}
 	}
 
 	/**
@@ -54,7 +87,7 @@ public class GeometryUtils
 	 * @return Constraints as a mapping of NumericData objects representing
 	 *         ranges for a latitude dimension and a longitude dimension
 	 */
-	public static Constraints basicConstraintsFromEnvelope(
+	public static ConstraintSet basicConstraintSetFromEnvelope(
 			final Envelope env ) {
 		// Create a NumericRange object using the x axis
 		final NumericRange rangeLongitude = new NumericRange(
@@ -79,7 +112,7 @@ public class GeometryUtils
 				new ConstraintData(
 						rangeLatitude,
 						false));
-		return new Constraints(
+		return new ConstraintSet(
 				constraintsPerDimension);
 	}
 
@@ -90,7 +123,21 @@ public class GeometryUtils
 	 * @return Constraints as a mapping of NumericData objects representing
 	 *         ranges for a latitude dimension and a longitude dimension
 	 */
-	public static Constraints basicConstraintsFromPoint(
+	public static Constraints basicConstraintsFromEnvelope(
+			final Envelope env ) {
+
+		return new Constraints(
+				basicConstraintSetFromEnvelope(env));
+	}
+
+	/**
+	 * This utility method will convert a JTS envelope to that can be used in a
+	 * GeoWave query.
+	 * 
+	 * @return Constraints as a mapping of NumericData objects representing
+	 *         ranges for a latitude dimension and a longitude dimension
+	 */
+	public static ConstraintSet basicConstraintsFromPoint(
 			final double latitudeDegrees,
 			final double longitudeDegrees ) {
 		// Create a NumericData object using the x axis
@@ -114,7 +161,7 @@ public class GeometryUtils
 				new ConstraintData(
 						latitude,
 						false));
-		return new Constraints(
+		return new ConstraintSet(
 				constraintsPerDimension);
 	}
 

@@ -53,6 +53,6 @@ public interface Query
 	 * @return A multi-dimensional numeric data set that represents the
 	 *         constraints for the index
 	 */
-	public MultiDimensionalNumericData getIndexConstraints(
+	public List<MultiDimensionalNumericData> getIndexConstraints(
 			NumericIndexStrategy indexStrategy );
 }
