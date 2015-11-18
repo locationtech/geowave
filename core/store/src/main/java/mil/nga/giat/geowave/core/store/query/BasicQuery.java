@@ -26,7 +26,6 @@ import mil.nga.giat.geowave.core.store.dimension.DimensionField;
 import mil.nga.giat.geowave.core.store.filter.BasicQueryFilter;
 import mil.nga.giat.geowave.core.store.filter.DistributableFilterList;
 import mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter;
-import mil.nga.giat.geowave.core.store.filter.FilterFactory;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
 import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
@@ -37,8 +36,7 @@ import mil.nga.giat.geowave.core.store.index.Index;
  * that match the Constraints passed into the constructor
  */
 public class BasicQuery implements
-		DistributableQuery,
-		FilterFactory
+		DistributableQuery
 {
 	private final static double DOUBLE_TOLERANCE = 1E-12d;
 	private final static Logger LOGGER = Logger.getLogger(BasicQuery.class);
@@ -191,9 +189,9 @@ public class BasicQuery implements
 			return true;
 		}
 
-		public DistributableQueryFilter createFilter(
+		protected DistributableQueryFilter createFilter(
 				final CommonIndexModel indexModel,
-				FilterFactory filterFactory ) {
+				final BasicQuery basicQuery ) {
 			final DimensionField<?>[] dimensionFields = indexModel.getDimensions();
 			final NumericData[] orderedConstraintsPerDimension = new NumericData[dimensionFields.length];
 			for (int d = 0; d < dimensionFields.length; d++) {
@@ -205,7 +203,7 @@ public class BasicQuery implements
 					orderedConstraintsPerDimension[d] = constraintsPerTypeOfDimensionDefinition.get(dimensionFields[d].getBaseDefinition().getClass()).range;
 				}
 			}
-			return filterFactory.createQueryFilter(
+			return basicQuery.createQueryFilter(
 					new BasicNumericDataset(
 							orderedConstraintsPerDimension),
 					dimensionFields);
@@ -541,7 +539,7 @@ public class BasicQuery implements
 		return Collections.emptyList();
 	}
 
-	public DistributableQueryFilter createQueryFilter(
+	protected DistributableQueryFilter createQueryFilter(
 			final MultiDimensionalNumericData constraints,
 			final DimensionField<?>[] dimensionFields ) {
 		return new BasicQueryFilter(

@@ -172,7 +172,7 @@ public class GeoTemporalQueryExample
 					fedexField,
 					DateUtilities.parseISO("2005-05-18T19:32:56Z"),
 					DateUtilities.parseISO("2005-05-18T20:45:56Z")));
-			
+
 			points.add(buildSimpleFeature(
 					"White House 3",
 					whiteHouse,
@@ -250,7 +250,7 @@ public class GeoTemporalQueryExample
 						new TemporalRange(
 								DateUtilities.parseISO("2005-05-19T19:32:56Z"),
 								DateUtilities.parseISO("2005-05-19T22:32:56Z"))),
-				"ignored");  // the name is not used in this case
+				"ignored"); // the name is not used in this case
 
 		SpatialTemporalQuery query2 = new SpatialTemporalQuery(
 				tempotalIndexConstraints,

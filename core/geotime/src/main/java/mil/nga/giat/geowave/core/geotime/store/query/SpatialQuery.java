@@ -101,7 +101,7 @@ public class SpatialQuery extends
 	}
 
 	@Override
-	public DistributableQueryFilter createQueryFilter(
+	protected DistributableQueryFilter createQueryFilter(
 			final MultiDimensionalNumericData constraints,
 			final DimensionField<?>[] dimensionFields ) {
 		return new SpatialQueryFilter(
