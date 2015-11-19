@@ -96,7 +96,20 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;? extends <a href="../../../../../../../../mil/nga/giat/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in mil.nga.giat.geowave.core.index.dimension">NumericDimensionDefinition</a>&gt;,<a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.ConstraintData.html" title="class in mil.nga.giat.geowave.core.store.query">BasicQuery.ConstraintData</a>&gt;</code></td>
-<td class="colLast"><span class="strong">BasicQuery.Constraints.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.Constraints.html#constraintsPerTypeOfDimensionDefinition">constraintsPerTypeOfDimensionDefinition</a></strong></code>&nbsp;</td>
+<td class="colLast"><span class="strong">BasicQuery.ConstraintSet.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.ConstraintSet.html#constraintsPerTypeOfDimensionDefinition">constraintsPerTypeOfDimensionDefinition</a></strong></code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/package-summary.html">mil.nga.giat.geowave.core.store.query</a> that return <a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.ConstraintData.html" title="class in mil.nga.giat.geowave.core.store.query">BasicQuery.ConstraintData</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.ConstraintData.html" title="class in mil.nga.giat.geowave.core.store.query">BasicQuery.ConstraintData</a></code></td>
+<td class="colLast"><span class="strong">BasicQuery.ConstraintData.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.ConstraintData.html#merge(mil.nga.giat.geowave.core.store.query.BasicQuery.ConstraintData)">merge</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.ConstraintData.html" title="class in mil.nga.giat.geowave.core.store.query">BasicQuery.ConstraintData</a>&nbsp;cd)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -109,8 +122,34 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><span class="strong">BasicQuery.Constraints.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.Constraints.html#addConstraint(java.lang.Class,%20mil.nga.giat.geowave.core.store.query.BasicQuery.ConstraintData)">addConstraint</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;? extends <a href="../../../../../../../../mil/nga/giat/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in mil.nga.giat.geowave.core.index.dimension">NumericDimensionDefinition</a>&gt;&nbsp;dimDefinition,
+<td class="colLast"><span class="strong">BasicQuery.ConstraintSet.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.ConstraintSet.html#addConstraint(java.lang.Class,%20mil.nga.giat.geowave.core.store.query.BasicQuery.ConstraintData)">addConstraint</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;? extends <a href="../../../../../../../../mil/nga/giat/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in mil.nga.giat.geowave.core.index.dimension">NumericDimensionDefinition</a>&gt;&nbsp;dimDefinition,
              <a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.ConstraintData.html" title="class in mil.nga.giat.geowave.core.store.query">BasicQuery.ConstraintData</a>&nbsp;constraintData)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><span class="strong">BasicQuery.ConstraintData.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.ConstraintData.html#intersects(mil.nga.giat.geowave.core.store.query.BasicQuery.ConstraintData)">intersects</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.ConstraintData.html" title="class in mil.nga.giat.geowave.core.store.query">BasicQuery.ConstraintData</a>&nbsp;cd)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><span class="strong">BasicQuery.ConstraintData.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.ConstraintData.html#matches(mil.nga.giat.geowave.core.store.query.BasicQuery.ConstraintData)">matches</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.ConstraintData.html" title="class in mil.nga.giat.geowave.core.store.query">BasicQuery.ConstraintData</a>&nbsp;other)</code>
+<div class="block">Ignores 'default' indicator</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.ConstraintData.html" title="class in mil.nga.giat.geowave.core.store.query">BasicQuery.ConstraintData</a></code></td>
+<td class="colLast"><span class="strong">BasicQuery.ConstraintData.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.ConstraintData.html#merge(mil.nga.giat.geowave.core.store.query.BasicQuery.ConstraintData)">merge</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.ConstraintData.html" title="class in mil.nga.giat.geowave.core.store.query">BasicQuery.ConstraintData</a>&nbsp;cd)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing constructors, and an explanation">
+<caption><span>Constructors in <a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/package-summary.html">mil.nga.giat.geowave.core.store.query</a> with parameters of type <a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.ConstraintData.html" title="class in mil.nga.giat.geowave.core.store.query">BasicQuery.ConstraintData</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.ConstraintSet.html#BasicQuery.ConstraintSet(java.lang.Class,%20mil.nga.giat.geowave.core.store.query.BasicQuery.ConstraintData)">BasicQuery.ConstraintSet</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;? extends <a href="../../../../../../../../mil/nga/giat/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in mil.nga.giat.geowave.core.index.dimension">NumericDimensionDefinition</a>&gt;&nbsp;dimDefinition,
+                        <a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.ConstraintData.html" title="class in mil.nga.giat.geowave.core.store.query">BasicQuery.ConstraintData</a>&nbsp;constraintData)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -121,7 +160,7 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.Constraints.html#BasicQuery.Constraints(java.util.Map)">BasicQuery.Constraints</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;? extends <a href="../../../../../../../../mil/nga/giat/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in mil.nga.giat.geowave.core.index.dimension">NumericDimensionDefinition</a>&gt;,<a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.ConstraintData.html" title="class in mil.nga.giat.geowave.core.store.query">BasicQuery.ConstraintData</a>&gt;&nbsp;constraintsPerTypeOfDimensionDefinition)</code>&nbsp;</td>
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.ConstraintSet.html#BasicQuery.ConstraintSet(java.util.Map)">BasicQuery.ConstraintSet</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;? extends <a href="../../../../../../../../mil/nga/giat/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in mil.nga.giat.geowave.core.index.dimension">NumericDimensionDefinition</a>&gt;,<a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.ConstraintData.html" title="class in mil.nga.giat.geowave.core.store.query">BasicQuery.ConstraintData</a>&gt;&nbsp;constraintsPerTypeOfDimensionDefinition)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>

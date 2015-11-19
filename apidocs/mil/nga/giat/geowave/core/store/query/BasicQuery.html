@@ -106,8 +106,8 @@
 <pre>public class <span class="strong">BasicQuery</span>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/query/DistributableQuery.html" title="interface in mil.nga.giat.geowave.core.store.query">DistributableQuery</a></pre>
-<div class="block">The Basic Query class represent a hyper-cube query across all dimensions that
- match the Constraints passed into the constructor</div>
+<div class="block">The Basic Query class represent a hyper-cube(s) query across all dimensions
+ that match the Constraints passed into the constructor</div>
 </li>
 </ul>
 </div>
@@ -132,7 +132,15 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/query/D
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>static class&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.Constraints.html" title="class in mil.nga.giat.geowave.core.store.query">BasicQuery.Constraints</a></strong></code>&nbsp;</td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.Constraints.html" title="class in mil.nga.giat.geowave.core.store.query">BasicQuery.Constraints</a></strong></code>
+<div class="block">A list of Constraint Sets.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.ConstraintSet.html" title="class in mil.nga.giat.geowave.core.store.query">BasicQuery.ConstraintSet</a></strong></code>
+<div class="block">A set of constraints, one range per dimension</div>
+</td>
 </tr>
 </table>
 </li>
@@ -180,7 +188,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/query/D
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/QueryFilter.html" title="interface in mil.nga.giat.geowave.core.store.filter">QueryFilter</a></code></td>
+<td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/DistributableQueryFilter.html" title="interface in mil.nga.giat.geowave.core.store.filter">DistributableQueryFilter</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.html#createQueryFilter(mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData,%20mil.nga.giat.geowave.core.store.dimension.DimensionField[])">createQueryFilter</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;constraints,
                  <a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/DimensionField.html" title="interface in mil.nga.giat.geowave.core.store.dimension">DimensionField</a>&lt;?&gt;[]&nbsp;dimensionFields)</code>&nbsp;</td>
 </tr>
@@ -189,7 +197,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/query/D
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.html#fromBinary(byte[])">fromBinary</a></strong>(byte[]&nbsp;bytes)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a></code></td>
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&gt;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.html#getIndexConstraints(mil.nga.giat.geowave.core.index.NumericIndexStrategy)">getIndexConstraints</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/NumericIndexStrategy.html" title="interface in mil.nga.giat.geowave.core.index">NumericIndexStrategy</a>&nbsp;indexStrategy)</code>
 <div class="block">Return a set of constraints to apply to the primary index based on the
  indexing strategy used.</div>
@@ -281,8 +289,8 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/query/D
 <ul class="blockList">
 <li class="blockList">
 <h4>createQueryFilter</h4>
-<pre>protected&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/QueryFilter.html" title="interface in mil.nga.giat.geowave.core.store.filter">QueryFilter</a>&nbsp;createQueryFilter(<a href="../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;constraints,
-                            <a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/DimensionField.html" title="interface in mil.nga.giat.geowave.core.store.dimension">DimensionField</a>&lt;?&gt;[]&nbsp;dimensionFields)</pre>
+<pre>protected&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/DistributableQueryFilter.html" title="interface in mil.nga.giat.geowave.core.store.filter">DistributableQueryFilter</a>&nbsp;createQueryFilter(<a href="../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;constraints,
+                                         <a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/DimensionField.html" title="interface in mil.nga.giat.geowave.core.store.dimension">DimensionField</a>&lt;?&gt;[]&nbsp;dimensionFields)</pre>
 </li>
 </ul>
 <a name="isSupported(mil.nga.giat.geowave.core.store.index.Index)">
@@ -309,7 +317,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/query/D
 <ul class="blockList">
 <li class="blockList">
 <h4>getIndexConstraints</h4>
-<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;getIndexConstraints(<a href="../../../../../../../mil/nga/giat/geowave/core/index/NumericIndexStrategy.html" title="interface in mil.nga.giat.geowave.core.index">NumericIndexStrategy</a>&nbsp;indexStrategy)</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&gt;&nbsp;getIndexConstraints(<a href="../../../../../../../mil/nga/giat/geowave/core/index/NumericIndexStrategy.html" title="interface in mil.nga.giat.geowave.core.index">NumericIndexStrategy</a>&nbsp;indexStrategy)</pre>
 <div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/Query.html#getIndexConstraints(mil.nga.giat.geowave.core.index.NumericIndexStrategy)">Query</a></code></strong></div>
 <div class="block">Return a set of constraints to apply to the primary index based on the
  indexing strategy used. The ordering of dimensions within the index

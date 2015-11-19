@@ -36,7 +36,7 @@
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.ConstraintData.html" title="class in mil.nga.giat.geowave.core.store.query"><span class="strong">Prev Class</span></a></li>
-<li><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/DistributableQuery.html" title="interface in mil.nga.giat.geowave.core.store.query"><span class="strong">Next Class</span></a></li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.ConstraintSet.html" title="class in mil.nga.giat.geowave.core.store.query"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../../index.html?mil/nga/giat/geowave/core/store/query/BasicQuery.Constraints.html" target="_top">Frames</a></li>
@@ -61,13 +61,13 @@
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li><a href="#field_summary">Field</a>&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method_summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
-<li><a href="#field_detail">Field</a>&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor_detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method_detail">Method</a></li>
 </ul>
@@ -101,31 +101,14 @@
 <br>
 <pre>public static class <span class="strong">BasicQuery.Constraints</span>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></pre>
+<div class="block">A list of Constraint Sets. Each Constraint Set is an individual
+ hyper-cube query.</div>
 </li>
 </ul>
 </div>
 <div class="summary">
 <ul class="blockList">
 <li class="blockList">
-<!-- =========== FIELD SUMMARY =========== -->
-<ul class="blockList">
-<li class="blockList"><a name="field_summary">
-<!--   -->
-</a>
-<h3>Field Summary</h3>
-<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Field Summary table, listing fields, and an explanation">
-<caption><span>Fields</span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Field and Description</th>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;? extends <a href="../../../../../../../mil/nga/giat/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in mil.nga.giat.geowave.core.index.dimension">NumericDimensionDefinition</a>&gt;,<a href="../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.ConstraintData.html" title="class in mil.nga.giat.geowave.core.store.query">BasicQuery.ConstraintData</a>&gt;</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.Constraints.html#constraintsPerTypeOfDimensionDefinition">constraintsPerTypeOfDimensionDefinition</a></strong></code>&nbsp;</td>
-</tr>
-</table>
-</li>
-</ul>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
 <ul class="blockList">
 <li class="blockList"><a name="constructor_summary">
@@ -141,7 +124,10 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <td class="colOne"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.Constraints.html#BasicQuery.Constraints()">BasicQuery.Constraints</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.Constraints.html#BasicQuery.Constraints(java.util.Map)">BasicQuery.Constraints</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;? extends <a href="../../../../../../../mil/nga/giat/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in mil.nga.giat.geowave.core.index.dimension">NumericDimensionDefinition</a>&gt;,<a href="../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.ConstraintData.html" title="class in mil.nga.giat.geowave.core.store.query">BasicQuery.ConstraintData</a>&gt;&nbsp;constraintsPerTypeOfDimensionDefinition)</code>&nbsp;</td>
+<td class="colOne"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.Constraints.html#BasicQuery.Constraints(mil.nga.giat.geowave.core.store.query.BasicQuery.ConstraintSet)">BasicQuery.Constraints</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.ConstraintSet.html" title="class in mil.nga.giat.geowave.core.store.query">BasicQuery.ConstraintSet</a>&nbsp;constraintSet)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colOne"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.Constraints.html#BasicQuery.Constraints(java.util.List)">BasicQuery.Constraints</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.ConstraintSet.html" title="class in mil.nga.giat.geowave.core.store.query">BasicQuery.ConstraintSet</a>&gt;&nbsp;constraintSets)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -159,29 +145,36 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.Constraints.html#addConstraint(java.lang.Class,%20mil.nga.giat.geowave.core.store.query.BasicQuery.ConstraintData)">addConstraint</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;? extends <a href="../../../../../../../mil/nga/giat/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in mil.nga.giat.geowave.core.index.dimension">NumericDimensionDefinition</a>&gt;&nbsp;dimDefinition,
-             <a href="../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.ConstraintData.html" title="class in mil.nga.giat.geowave.core.store.query">BasicQuery.ConstraintData</a>&nbsp;constraintData)</code>&nbsp;</td>
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.Constraints.html#equals(java.lang.Object)">equals</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;obj)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a></code></td>
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&gt;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.Constraints.html#getIndexConstraints(mil.nga.giat.geowave.core.index.NumericIndexStrategy)">getIndexConstraints</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/NumericIndexStrategy.html" title="interface in mil.nga.giat.geowave.core.index">NumericIndexStrategy</a>&nbsp;indexStrategy)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.Constraints.html#hashCode()">hashCode</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.Constraints.html#isEmpty()">isEmpty</a></strong>()</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.Constraints.html#isSupported(mil.nga.giat.geowave.core.store.index.Index)">isSupported</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.Constraints.html#matches(mil.nga.giat.geowave.core.store.query.BasicQuery.Constraints)">matches</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.Constraints.html" title="class in mil.nga.giat.geowave.core.store.query">BasicQuery.Constraints</a>&nbsp;constraints)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.Constraints.html" title="class in mil.nga.giat.geowave.core.store.query">BasicQuery.Constraints</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.Constraints.html#merge(mil.nga.giat.geowave.core.store.query.BasicQuery.Constraints)">merge</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.Constraints.html" title="class in mil.nga.giat.geowave.core.store.query">BasicQuery.Constraints</a>&nbsp;constraints)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.Constraints.html" title="class in mil.nga.giat.geowave.core.store.query">BasicQuery.Constraints</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.Constraints.html#merge(java.util.List)">merge</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.ConstraintSet.html" title="class in mil.nga.giat.geowave.core.store.query">BasicQuery.ConstraintSet</a>&gt;&nbsp;otherConstraintSets)</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -189,7 +182,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;java.lang.<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></h3>
-<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#clone()" title="class or interface in java.lang">clone</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.lang">equals</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#finalize()" title="class or interface in java.lang">finalize</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang">getClass</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#hashCode()" title="class or interface in java.lang">hashCode</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang">notify</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang">notifyAll</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#toString()" title="class or interface in java.lang">toString</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait(long,%20int)" title="class or interface in java.lang">wait</a></code></li>
+<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#clone()" title="class or interface in java.lang">clone</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#finalize()" title="class or interface in java.lang">finalize</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang">getClass</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang">notify</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang">notifyAll</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#toString()" title="class or interface in java.lang">toString</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait(long,%20int)" title="class or interface in java.lang">wait</a></code></li>
 </ul>
 </li>
 </ul>
@@ -199,23 +192,6 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <div class="details">
 <ul class="blockList">
 <li class="blockList">
-<!-- ============ FIELD DETAIL =========== -->
-<ul class="blockList">
-<li class="blockList"><a name="field_detail">
-<!--   -->
-</a>
-<h3>Field Detail</h3>
-<a name="constraintsPerTypeOfDimensionDefinition">
-<!--   -->
-</a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>constraintsPerTypeOfDimensionDefinition</h4>
-<pre>protected final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;? extends <a href="../../../../../../../mil/nga/giat/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in mil.nga.giat.geowave.core.index.dimension">NumericDimensionDefinition</a>&gt;,<a href="../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.ConstraintData.html" title="class in mil.nga.giat.geowave.core.store.query">BasicQuery.ConstraintData</a>&gt; constraintsPerTypeOfDimensionDefinition</pre>
-</li>
-</ul>
-</li>
-</ul>
 <!-- ========= CONSTRUCTOR DETAIL ======== -->
 <ul class="blockList">
 <li class="blockList"><a name="constructor_detail">
@@ -231,13 +207,22 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <pre>public&nbsp;BasicQuery.Constraints()</pre>
 </li>
 </ul>
-<a name="BasicQuery.Constraints(java.util.Map)">
+<a name="BasicQuery.Constraints(mil.nga.giat.geowave.core.store.query.BasicQuery.ConstraintSet)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>BasicQuery.Constraints</h4>
+<pre>public&nbsp;BasicQuery.Constraints(<a href="../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.ConstraintSet.html" title="class in mil.nga.giat.geowave.core.store.query">BasicQuery.ConstraintSet</a>&nbsp;constraintSet)</pre>
+</li>
+</ul>
+<a name="BasicQuery.Constraints(java.util.List)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>BasicQuery.Constraints</h4>
-<pre>public&nbsp;BasicQuery.Constraints(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;? extends <a href="../../../../../../../mil/nga/giat/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in mil.nga.giat.geowave.core.index.dimension">NumericDimensionDefinition</a>&gt;,<a href="../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.ConstraintData.html" title="class in mil.nga.giat.geowave.core.store.query">BasicQuery.ConstraintData</a>&gt;&nbsp;constraintsPerTypeOfDimensionDefinition)</pre>
+<pre>public&nbsp;BasicQuery.Constraints(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.ConstraintSet.html" title="class in mil.nga.giat.geowave.core.store.query">BasicQuery.ConstraintSet</a>&gt;&nbsp;constraintSets)</pre>
 </li>
 </ul>
 </li>
@@ -257,14 +242,13 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.Constraints.html" title="class in mil.nga.giat.geowave.core.store.query">BasicQuery.Constraints</a>&nbsp;merge(<a href="../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.Constraints.html" title="class in mil.nga.giat.geowave.core.store.query">BasicQuery.Constraints</a>&nbsp;constraints)</pre>
 </li>
 </ul>
-<a name="addConstraint(java.lang.Class, mil.nga.giat.geowave.core.store.query.BasicQuery.ConstraintData)">
+<a name="merge(java.util.List)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>addConstraint</h4>
-<pre>public&nbsp;void&nbsp;addConstraint(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;? extends <a href="../../../../../../../mil/nga/giat/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in mil.nga.giat.geowave.core.index.dimension">NumericDimensionDefinition</a>&gt;&nbsp;dimDefinition,
-                 <a href="../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.ConstraintData.html" title="class in mil.nga.giat.geowave.core.store.query">BasicQuery.ConstraintData</a>&nbsp;constraintData)</pre>
+<h4>merge</h4>
+<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.Constraints.html" title="class in mil.nga.giat.geowave.core.store.query">BasicQuery.Constraints</a>&nbsp;merge(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.ConstraintSet.html" title="class in mil.nga.giat.geowave.core.store.query">BasicQuery.ConstraintSet</a>&gt;&nbsp;otherConstraintSets)</pre>
 </li>
 </ul>
 <a name="isEmpty()">
@@ -285,13 +269,39 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <pre>public&nbsp;boolean&nbsp;matches(<a href="../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.Constraints.html" title="class in mil.nga.giat.geowave.core.store.query">BasicQuery.Constraints</a>&nbsp;constraints)</pre>
 </li>
 </ul>
+<a name="hashCode()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>hashCode</h4>
+<pre>public&nbsp;int&nbsp;hashCode()</pre>
+<dl>
+<dt><strong>Overrides:</strong></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#hashCode()" title="class or interface in java.lang">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="equals(java.lang.Object)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>equals</h4>
+<pre>public&nbsp;boolean&nbsp;equals(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;obj)</pre>
+<dl>
+<dt><strong>Overrides:</strong></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.lang">equals</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
+</dl>
+</li>
+</ul>
 <a name="getIndexConstraints(mil.nga.giat.geowave.core.index.NumericIndexStrategy)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>getIndexConstraints</h4>
-<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;getIndexConstraints(<a href="../../../../../../../mil/nga/giat/geowave/core/index/NumericIndexStrategy.html" title="interface in mil.nga.giat.geowave.core.index">NumericIndexStrategy</a>&nbsp;indexStrategy)</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&gt;&nbsp;getIndexConstraints(<a href="../../../../../../../mil/nga/giat/geowave/core/index/NumericIndexStrategy.html" title="interface in mil.nga.giat.geowave.core.index">NumericIndexStrategy</a>&nbsp;indexStrategy)</pre>
 </li>
 </ul>
 <a name="isSupported(mil.nga.giat.geowave.core.store.index.Index)">
@@ -301,6 +311,10 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>isSupported</h4>
 <pre>public&nbsp;boolean&nbsp;isSupported(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index)</pre>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>index</code> - </dd>
+<dt><span class="strong">Returns:</span></dt><dd>true if all constrain sets match the index
+ 
+         TODO: Should we allow each constraint target each index?</dd></dl>
 </li>
 </ul>
 </li>
@@ -330,7 +344,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.ConstraintData.html" title="class in mil.nga.giat.geowave.core.store.query"><span class="strong">Prev Class</span></a></li>
-<li><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/DistributableQuery.html" title="interface in mil.nga.giat.geowave.core.store.query"><span class="strong">Next Class</span></a></li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.ConstraintSet.html" title="class in mil.nga.giat.geowave.core.store.query"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../../index.html?mil/nga/giat/geowave/core/store/query/BasicQuery.Constraints.html" target="_top">Frames</a></li>
@@ -355,13 +369,13 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li><a href="#field_summary">Field</a>&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method_summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
-<li><a href="#field_detail">Field</a>&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor_detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method_detail">Method</a></li>
 </ul>

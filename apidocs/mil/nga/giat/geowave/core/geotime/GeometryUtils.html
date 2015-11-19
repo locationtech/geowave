@@ -154,53 +154,60 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.ConstraintSet.html" title="class in mil.nga.giat.geowave.core.store.query">BasicQuery.ConstraintSet</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/geotime/GeometryUtils.html#basicConstraintSetFromEnvelope(com.vividsolutions.jts.geom.Envelope)">basicConstraintSetFromEnvelope</a></strong>(com.vividsolutions.jts.geom.Envelope&nbsp;env)</code>
+<div class="block">This utility method will convert a JTS envelope to contraints that can be
+ used in a GeoWave query.</div>
+</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.Constraints.html" title="class in mil.nga.giat.geowave.core.store.query">BasicQuery.Constraints</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/geotime/GeometryUtils.html#basicConstraintsFromEnvelope(com.vividsolutions.jts.geom.Envelope)">basicConstraintsFromEnvelope</a></strong>(com.vividsolutions.jts.geom.Envelope&nbsp;env)</code>
 <div class="block">This utility method will convert a JTS envelope to contraints that can be
  used in a GeoWave query.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.Constraints.html" title="class in mil.nga.giat.geowave.core.store.query">BasicQuery.Constraints</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/geotime/GeometryUtils.html#basicConstraintsFromGeometry(com.vividsolutions.jts.geom.Geometry)">basicConstraintsFromGeometry</a></strong>(com.vividsolutions.jts.geom.Geometry&nbsp;geometry)</code>
 <div class="block">This utility method will convert a JTS geometry to contraints that can be
  used in a GeoWave query.</div>
 </td>
 </tr>
-<tr class="altColor">
-<td class="colFirst"><code>static <a href="../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.Constraints.html" title="class in mil.nga.giat.geowave.core.store.query">BasicQuery.Constraints</a></code></td>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.ConstraintSet.html" title="class in mil.nga.giat.geowave.core.store.query">BasicQuery.ConstraintSet</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/geotime/GeometryUtils.html#basicConstraintsFromPoint(double,%20double)">basicConstraintsFromPoint</a></strong>(double&nbsp;latitudeDegrees,
                          double&nbsp;longitudeDegrees)</code>
-<div class="block">This utility method will convert a JTS envelope to contraints that can be
- used in a GeoWave query.</div>
+<div class="block">This utility method will convert a JTS envelope to that can be used in a
+ GeoWave query.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static com.vividsolutions.jts.geom.Geometry</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/geotime/GeometryUtils.html#geometryFromBinary(byte[])">geometryFromBinary</a></strong>(byte[]&nbsp;binary)</code>
 <div class="block">Converts a byte array as well-known binary to a JTS geometry</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static byte[]</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/geotime/GeometryUtils.html#geometryToBinary(com.vividsolutions.jts.geom.Geometry)">geometryToBinary</a></strong>(com.vividsolutions.jts.geom.Geometry&nbsp;geometry)</code>
 <div class="block">Converts a JTS geometry to binary using JTS a Well Known Binary writer</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static com.vividsolutions.jts.geom.Geometry</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/geotime/GeometryUtils.html#infinity()">infinity</a></strong>()</code>
 <div class="block">This mehtod returns an envelope between negative infinite and positive
  inifinity in both x and y</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../../mil/nga/giat/geowave/core/index/sfc/data/NumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">NumericData</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/geotime/GeometryUtils.html#latitudeRangeFromGeometry(com.vividsolutions.jts.geom.Geometry)">latitudeRangeFromGeometry</a></strong>(com.vividsolutions.jts.geom.Geometry&nbsp;geometry)</code>
 <div class="block">Generate a latitude range from a JTS geometry</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../../mil/nga/giat/geowave/core/index/sfc/data/NumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">NumericData</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/geotime/GeometryUtils.html#longitudeRangeFromGeometry(com.vividsolutions.jts.geom.Geometry)">longitudeRangeFromGeometry</a></strong>(com.vividsolutions.jts.geom.Geometry&nbsp;geometry)</code>
 <div class="block">Generate a longitude range from a JTS geometry</div>
@@ -275,6 +282,19 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
          ranges for a latitude dimension and a longitude dimension</dd></dl>
 </li>
 </ul>
+<a name="basicConstraintSetFromEnvelope(com.vividsolutions.jts.geom.Envelope)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>basicConstraintSetFromEnvelope</h4>
+<pre>public static&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.ConstraintSet.html" title="class in mil.nga.giat.geowave.core.store.query">BasicQuery.ConstraintSet</a>&nbsp;basicConstraintSetFromEnvelope(com.vividsolutions.jts.geom.Envelope&nbsp;env)</pre>
+<div class="block">This utility method will convert a JTS envelope to contraints that can be
+ used in a GeoWave query.</div>
+<dl><dt><span class="strong">Returns:</span></dt><dd>Constraints as a mapping of NumericData objects representing
+         ranges for a latitude dimension and a longitude dimension</dd></dl>
+</li>
+</ul>
 <a name="basicConstraintsFromEnvelope(com.vividsolutions.jts.geom.Envelope)">
 <!--   -->
 </a>
@@ -294,10 +314,10 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>basicConstraintsFromPoint</h4>
-<pre>public static&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.Constraints.html" title="class in mil.nga.giat.geowave.core.store.query">BasicQuery.Constraints</a>&nbsp;basicConstraintsFromPoint(double&nbsp;latitudeDegrees,
-                                               double&nbsp;longitudeDegrees)</pre>
-<div class="block">This utility method will convert a JTS envelope to contraints that can be
- used in a GeoWave query.</div>
+<pre>public static&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.ConstraintSet.html" title="class in mil.nga.giat.geowave.core.store.query">BasicQuery.ConstraintSet</a>&nbsp;basicConstraintsFromPoint(double&nbsp;latitudeDegrees,
+                                                 double&nbsp;longitudeDegrees)</pre>
+<div class="block">This utility method will convert a JTS envelope to that can be used in a
+ GeoWave query.</div>
 <dl><dt><span class="strong">Returns:</span></dt><dd>Constraints as a mapping of NumericData objects representing
          ranges for a latitude dimension and a longitude dimension</dd></dl>
 </li>
