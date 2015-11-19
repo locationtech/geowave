@@ -47,7 +47,8 @@ public class WFSTemporalQueryTest
 			CQLException,
 			IOException {
 		dataStore = new GeoWaveGTMemDataStore();
-		dataStore.dataStore.getIndexStore().addIndex(IndexType.SPATIAL_TEMPORAL_VECTOR.createDefaultIndex());
+		dataStore.dataStore.getIndexStore().addIndex(
+				IndexType.SPATIAL_TEMPORAL_VECTOR.createDefaultIndex());
 		type = DataUtilities.createType(
 				"geostuff",
 				"geometry:Geometry:srid=4326,pop:java.lang.Long,pid:String,start:Date,end:Date");

@@ -17,6 +17,19 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.TimeZone;
 
+import org.apache.log4j.Logger;
+import org.geotools.data.FeatureReader;
+import org.geotools.data.Query;
+import org.geotools.filter.FidFilterImpl;
+import org.geotools.geometry.jts.ReferencedEnvelope;
+import org.opengis.feature.simple.SimpleFeature;
+import org.opengis.feature.simple.SimpleFeatureType;
+import org.opengis.feature.type.AttributeDescriptor;
+import org.opengis.filter.Filter;
+
+import com.google.common.collect.Iterators;
+import com.vividsolutions.jts.geom.Geometry;
+
 import mil.nga.giat.geowave.adapter.vector.plugin.transaction.GeoWaveTransaction;
 import mil.nga.giat.geowave.adapter.vector.stats.FeatureStatistic;
 import mil.nga.giat.geowave.adapter.vector.util.QueryIndexHelper;
@@ -30,21 +43,9 @@ import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.index.Index;
 import mil.nga.giat.geowave.core.store.query.BasicQuery;
+import mil.nga.giat.geowave.core.store.query.BasicQuery.ConstraintSet;
 import mil.nga.giat.geowave.core.store.query.BasicQuery.Constraints;
 import mil.nga.giat.geowave.datastore.accumulo.util.CloseableIteratorWrapper;
-
-import org.apache.log4j.Logger;
-import org.geotools.data.FeatureReader;
-import org.geotools.data.Query;
-import org.geotools.filter.FidFilterImpl;
-import org.geotools.geometry.jts.ReferencedEnvelope;
-import org.opengis.feature.simple.SimpleFeature;
-import org.opengis.feature.simple.SimpleFeatureType;
-import org.opengis.feature.type.AttributeDescriptor;
-import org.opengis.filter.Filter;
-
-import com.google.common.collect.Iterators;
-import com.vividsolutions.jts.geom.Geometry;
 
 /**
  * This class wraps a geotools data store as well as one for statistics (for
@@ -493,11 +494,12 @@ public class GeoWaveFeatureReader implements
 			final Constraints temporalConstraints ) {
 
 		if ((geoConstraints == null) && (temporalConstraints != null)) {
-			final Constraints statBasedGeoConstraints = QueryIndexHelper.getBBOXIndexConstraints(
+			final ConstraintSet statBasedGeoConstraints = QueryIndexHelper.getBBOXIndexConstraintsFromIndex(
 					getFeatureType(),
 					transaction.getDataStatistics());
 			return new BasicQuery(
-					statBasedGeoConstraints.merge(temporalConstraints));
+					new Constraints(
+							statBasedGeoConstraints).merge(temporalConstraints));
 		}
 		else if ((jtsBounds != null) && (temporalConstraints == null)) {
 			return new SpatialQuery(

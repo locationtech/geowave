@@ -1,5 +1,7 @@
 package mil.nga.giat.geowave.core.index.sfc.data;
 
+import java.util.Arrays;
+
 /**
  * The Basic Index Result class creates an object associated with a generic
  * query. This class can be used when the dimensions and/or axis are generic.
@@ -88,6 +90,27 @@ public class BasicNumericDataset implements
 	@Override
 	public boolean isEmpty() {
 		return this.dataPerDimension == null || this.dataPerDimension.length == 0;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + Arrays.hashCode(dataPerDimension);
+		return result;
+	}
+
+	@Override
+	public boolean equals(
+			Object obj ) {
+		if (this == obj) return true;
+		if (obj == null) return false;
+		if (getClass() != obj.getClass()) return false;
+		BasicNumericDataset other = (BasicNumericDataset) obj;
+		if (!Arrays.equals(
+				dataPerDimension,
+				other.dataPerDimension)) return false;
+		return true;
 	}
 
 }

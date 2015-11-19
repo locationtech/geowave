@@ -1,10 +1,14 @@
 package mil.nga.giat.geowave.core.index;
 
+import java.util.Collections;
+import java.util.List;
+
 /***
  * Defines a unit interval on a number line
  * 
  */
-public class ByteArrayRange
+public class ByteArrayRange implements
+		Comparable<ByteArrayRange>
 {
 	private final ByteArrayId start;
 	private final ByteArrayId end;
@@ -81,6 +85,49 @@ public class ByteArrayRange
 		}
 		else if (!start.equals(other.start)) return false;
 		return true;
+	}
+
+	public boolean intersects(
+			ByteArrayRange other ) {
+		return ((getStart().compareTo(other.getEnd())) <= 0 && (getEnd().compareTo(other.getStart())) >= 0);
+	}
+
+	public ByteArrayRange merge(
+			ByteArrayRange other ) {
+		return new ByteArrayRange(
+				this.start.compareTo(other.start) <= 0 ? this.start : other.start,
+				this.end.compareTo(other.end) >= 0 ? this.end : other.end);
+	}
+
+	@Override
+	public int compareTo(
+			ByteArrayRange other ) {
+		final int diff = getStart().compareTo(
+				other.getStart());
+		return diff != 0 ? diff : getEnd().compareTo(
+				other.getEnd());
+	}
+
+	public static final void mergeIntersections(
+			List<ByteArrayRange> ranges,
+			int maxRanges ) {
+		// sort order so the first range can consume following ranges
+		Collections.<ByteArrayRange> sort(ranges);
+		// merge in place
+		for (int i = 0; i < ranges.size(); i++) {
+			ByteArrayRange r1 = ranges.get(i);
+			for (int j = i + 1; j < ranges.size(); j++) {
+				final ByteArrayRange r2 = ranges.get(j);
+				if (r1.intersects(r2)) {
+					r1 = r1.merge(r2);
+					ranges.remove(j);
+					j--;
+					ranges.set(
+							i,
+							r1);
+				}
+			}
+		}
 	}
 
 }

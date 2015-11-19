@@ -83,7 +83,8 @@ public class NumericRange implements
 			Object obj ) {
 		if (this == obj) return true;
 		if (obj == null) return false;
-		if (getClass() != obj.getClass()) return false;
+		// changing this check will fail some unit tests.
+		if (!NumericRange.class.isAssignableFrom(obj.getClass())) return false;
 		NumericRange other = (NumericRange) obj;
 		return (Math.abs(max - other.max) < NumericValue.EPSILON) && (Math.abs(min - other.min) < NumericValue.EPSILON);
 	}

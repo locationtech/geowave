@@ -3,6 +3,13 @@ package mil.nga.giat.geowave.adapter.vector.util;
 import java.util.Date;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+import org.opengis.feature.simple.SimpleFeature;
+import org.opengis.feature.simple.SimpleFeatureType;
+import org.opengis.feature.type.AttributeDescriptor;
+
+import com.vividsolutions.jts.geom.Geometry;
+
 import mil.nga.giat.geowave.adapter.vector.stats.FeatureBoundingBoxStatistics;
 import mil.nga.giat.geowave.adapter.vector.stats.FeatureTimeRangeStatistics;
 import mil.nga.giat.geowave.adapter.vector.utils.TimeDescriptors;
@@ -14,19 +21,11 @@ import mil.nga.giat.geowave.core.geotime.store.query.TemporalRange;
 import mil.nga.giat.geowave.core.geotime.store.statistics.BoundingBoxDataStatistics;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
+import mil.nga.giat.geowave.core.store.query.BasicQuery.ConstraintSet;
 import mil.nga.giat.geowave.core.store.query.BasicQuery.Constraints;
-
-import org.apache.log4j.Logger;
-import org.opengis.feature.simple.SimpleFeature;
-import org.opengis.feature.simple.SimpleFeatureType;
-import org.opengis.feature.type.AttributeDescriptor;
-
-import com.vividsolutions.jts.geom.Geometry;
 
 public class QueryIndexHelper
 {
-
-	private static final Logger LOGGER = Logger.getLogger(QueryIndexHelper.class);
 
 	private static TemporalRange getStatsRange(
 			final Map<ByteArrayId, DataStatistics<SimpleFeature>> statsMap,
@@ -132,7 +131,7 @@ public class QueryIndexHelper
 		return bbox;
 	}
 
-	public static Constraints getTimeConstraintsFromIndex(
+	public static ConstraintSet getTimeConstraintsFromIndex(
 			final TimeDescriptors timeDescriptors,
 			final Map<ByteArrayId, DataStatistics<SimpleFeature>> stats ) {
 
@@ -165,10 +164,10 @@ public class QueryIndexHelper
 						true);
 			}
 		}
-		return new Constraints();
+		return new ConstraintSet();
 	}
 
-	public static Constraints getBBOXIndexConstraints(
+	public static ConstraintSet getBBOXIndexConstraintsFromIndex(
 			final SimpleFeatureType featureType,
 			final Map<ByteArrayId, DataStatistics<SimpleFeature>> statsMap ) {
 
@@ -176,7 +175,7 @@ public class QueryIndexHelper
 
 		final ByteArrayId statId = FeatureBoundingBoxStatistics.composeId(geoAttrName);
 		final BoundingBoxDataStatistics<SimpleFeature> bboxStats = (BoundingBoxDataStatistics<SimpleFeature>) statsMap.get(statId);
-		return (bboxStats != null) ? bboxStats.getConstraints() : new Constraints();
+		return (bboxStats != null) ? bboxStats.getConstraints() : new ConstraintSet();
 	}
 
 	public static TemporalConstraints getTemporalConstraintsForIndex(
@@ -218,9 +217,10 @@ public class QueryIndexHelper
 				timeBoundsSet);
 		return timeBounds != null ? SpatialTemporalQuery.createConstraints(
 				timeBounds,
-				false) : getTimeConstraintsFromIndex(
-				timeDescriptors,
-				statsMap);
+				false) : new Constraints(
+				getTimeConstraintsFromIndex(
+						timeDescriptors,
+						statsMap));
 	}
 
 	/**
@@ -239,15 +239,18 @@ public class QueryIndexHelper
 			final TimeDescriptors timeDescriptors,
 			final Map<ByteArrayId, DataStatistics<SimpleFeature>> statsMap,
 			final TemporalConstraintsSet timeBoundsSet ) {
-		final Constraints indexTimeConstraints = QueryIndexHelper.getTimeConstraintsFromIndex(
-				timeDescriptors,
-				statsMap);
 		// full table scan case?
 		if (timeBoundsSet == null || timeBoundsSet.isEmpty() || !timeDescriptors.hasTime()) return new Constraints();
+
+		final Constraints indexTimeConstraints = new Constraints(
+				QueryIndexHelper.getTimeConstraintsFromIndex(
+						timeDescriptors,
+						statsMap));
 
 		final TemporalConstraints boundsTemporalConstraints = QueryIndexHelper.getTemporalConstraintsForIndex(
 				timeDescriptors,
 				timeBoundsSet);
+
 		final Constraints boundsTimeConstraints = boundsTemporalConstraints == null ? indexTimeConstraints : SpatialTemporalQuery.createConstraints(
 				boundsTemporalConstraints,
 				false);
@@ -269,14 +272,15 @@ public class QueryIndexHelper
 			final SimpleFeatureType featureType,
 			final Map<ByteArrayId, DataStatistics<SimpleFeature>> statsMap,
 			final Geometry jtsBounds ) {
-		return jtsBounds != null ? GeometryUtils.basicConstraintsFromGeometry(jtsBounds) : getBBOXIndexConstraints(
-				featureType,
-				statsMap);
+		return jtsBounds != null ? GeometryUtils.basicConstraintsFromGeometry(jtsBounds) : new Constraints(
+				getBBOXIndexConstraintsFromIndex(
+						featureType,
+						statsMap));
 	}
 
 	/**
 	 * Compose a query from the set of constraints. When the provided
-	 * constraints do not fulfill the indexed dimensions, compose consraints
+	 * constraints do not fulfill the indexed dimensions, compose constraints
 	 * from statistics.
 	 * 
 	 * @param featureType

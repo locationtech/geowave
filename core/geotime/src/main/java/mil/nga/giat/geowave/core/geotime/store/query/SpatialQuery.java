@@ -2,20 +2,20 @@ package mil.nga.giat.geowave.core.geotime.store.query;
 
 import java.nio.ByteBuffer;
 
-import mil.nga.giat.geowave.core.geotime.GeometryUtils;
-import mil.nga.giat.geowave.core.geotime.store.filter.SpatialQueryFilter;
-import mil.nga.giat.geowave.core.geotime.store.filter.SpatialQueryFilter.CompareOperation;
-import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
-import mil.nga.giat.geowave.core.store.dimension.DimensionField;
-import mil.nga.giat.geowave.core.store.filter.QueryFilter;
-import mil.nga.giat.geowave.core.store.query.BasicQuery;
-
 import org.apache.log4j.Logger;
 
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.io.ParseException;
 import com.vividsolutions.jts.io.WKBReader;
 import com.vividsolutions.jts.io.WKBWriter;
+
+import mil.nga.giat.geowave.core.geotime.GeometryUtils;
+import mil.nga.giat.geowave.core.geotime.store.filter.SpatialQueryFilter;
+import mil.nga.giat.geowave.core.geotime.store.filter.SpatialQueryFilter.CompareOperation;
+import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
+import mil.nga.giat.geowave.core.store.dimension.DimensionField;
+import mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter;
+import mil.nga.giat.geowave.core.store.query.BasicQuery;
 
 /**
  * The Spatial Query class represents a query in two dimensions. The constraint
@@ -101,7 +101,7 @@ public class SpatialQuery extends
 	}
 
 	@Override
-	protected QueryFilter createQueryFilter(
+	protected DistributableQueryFilter createQueryFilter(
 			final MultiDimensionalNumericData constraints,
 			final DimensionField<?>[] dimensionFields ) {
 		return new SpatialQueryFilter(

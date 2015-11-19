@@ -1,13 +1,13 @@
 package mil.nga.giat.geowave.core.geotime.store.query;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 import mil.nga.giat.geowave.core.geotime.index.dimension.TimeDefinition;
-import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericRange;
 import mil.nga.giat.geowave.core.store.query.BasicQuery;
 import mil.nga.giat.geowave.core.store.query.BasicQuery.ConstraintData;
+import mil.nga.giat.geowave.core.store.query.BasicQuery.ConstraintSet;
 import mil.nga.giat.geowave.core.store.query.BasicQuery.Constraints;
 
 /**
@@ -32,24 +32,19 @@ public class TemporalQuery extends
 	}
 
 	private static Constraints createTemporalConstraints(
-			final TemporalConstraints contraints ) {
-		final Map<Class<? extends NumericDimensionDefinition>, ConstraintData> constraintsPerDimension = new HashMap<Class<? extends NumericDimensionDefinition>, ConstraintData>();
-		// Create and return a new IndexRange array with an x and y axis
-		// range
-		for (final TemporalRange range : contraints.getRanges()) {
-			constraintsPerDimension.put(
+			final TemporalConstraints temporalConstraints ) {
+		final List<ConstraintSet> constraints = new ArrayList<ConstraintSet>();
+		for (final TemporalRange range : temporalConstraints.getRanges()) {
+			constraints.add(new ConstraintSet(
 					TimeDefinition.class,
 					new ConstraintData(
 							new NumericRange(
 									range.getStartTime().getTime(),
 									range.getEndTime().getTime()),
-							false));
+							false)));
 		}
-
-		final Constraints constraints = new Constraints(
-				constraintsPerDimension);
-
-		return constraints;
+		return new Constraints(
+				constraints);
 	}
 
 }

@@ -86,7 +86,7 @@ public class SpatialDecimationQuery extends
 
 	public SpatialDecimationQuery(
 			final Index index,
-			final MultiDimensionalNumericData constraints,
+			final List<MultiDimensionalNumericData> constraints,
 			final List<QueryFilter> queryFilters,
 			final int width,
 			final int height,
@@ -111,7 +111,7 @@ public class SpatialDecimationQuery extends
 	public SpatialDecimationQuery(
 			final List<ByteArrayId> adapterIds,
 			final Index index,
-			final MultiDimensionalNumericData constraints,
+			final List<MultiDimensionalNumericData> constraints,
 			final List<QueryFilter> queryFilters,
 			final int width,
 			final int height,

@@ -41,7 +41,6 @@ public class VectorDataStore extends
 		AccumuloDataStore
 {
 
-	
 	public VectorDataStore(
 			final IndexStore indexStore,
 			final AdapterStore adapterStore,
@@ -93,7 +92,7 @@ public class VectorDataStore extends
 	public IndexStore getIndexStore() {
 		return super.indexStore;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public CloseableIterator<SimpleFeature> query(
 			final FeatureDataAdapter adapter,

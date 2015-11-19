@@ -502,7 +502,7 @@ public class FeatureCollectionRedistributor
 		}
 	}
 
-	private MultiDimensionalNumericData getSlimBounds(
+	private List<MultiDimensionalNumericData> getSlimBounds(
 			final MultiDimensionalNumericData bounds ) {
 		// Ideally: smallest dimension range / (4*max bins per dimension {i.e.
 		// 2^31})
@@ -518,8 +518,8 @@ public class FeatureCollectionRedistributor
 				bounds.getDataPerDimension()[1].getMin() + epsilon,
 				bounds.getDataPerDimension()[1].getMax() - epsilon);
 
-		return new BasicNumericDataset(
-				slimRanges);
+		return Collections.<MultiDimensionalNumericData> singletonList(new BasicNumericDataset(
+				slimRanges));
 	}
 
 	private Geometry createBoundingBox(

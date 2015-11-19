@@ -101,7 +101,9 @@ public class GeoWaveBasicIT extends
 
 	@Test
 	public void testIngestAndQuerySpatialPointsAndLines() {
-		System.getProperties().put("AccumuloIndexWriter.skipFlush", "true");
+		System.getProperties().put(
+				"AccumuloIndexWriter.skipFlush",
+				"true");
 		final Index spatialIndex = IndexType.SPATIAL_VECTOR.createDefaultIndex();
 		// ingest both lines and points
 		testLocalIngest(
@@ -396,7 +398,9 @@ public class GeoWaveBasicIT extends
 
 	@Test
 	public void testIngestAndQuerySpatialTemporalPointsAndLines() {
-		System.getProperties().put("AccumuloIndexWriter.skipFlush", "true");
+		System.getProperties().put(
+				"AccumuloIndexWriter.skipFlush",
+				"true");
 		final Index spatialTemporalIndex = IndexType.SPATIAL_VECTOR.createDefaultIndex();
 		// ingest both lines and points
 		testLocalIngest(

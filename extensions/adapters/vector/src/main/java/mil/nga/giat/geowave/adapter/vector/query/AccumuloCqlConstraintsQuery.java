@@ -39,7 +39,7 @@ public class AccumuloCqlConstraintsQuery extends
 		super(
 				Arrays.asList(dataAdapter.getAdapterId()),
 				index,
-				(MultiDimensionalNumericData) null,
+				(List<MultiDimensionalNumericData>) null,
 				(List<QueryFilter>) new LinkedList<QueryFilter>(),
 				authorizations);
 		this.cqlFilter = cqlFilter;
@@ -55,7 +55,7 @@ public class AccumuloCqlConstraintsQuery extends
 		super(
 				(List<ByteArrayId>) adapterIds,
 				index,
-				(MultiDimensionalNumericData) null,
+				(List<MultiDimensionalNumericData>) null,
 				(List<QueryFilter>) new LinkedList<QueryFilter>(),
 				authorizations);
 		this.cqlFilter = cqlFilter;
@@ -64,7 +64,7 @@ public class AccumuloCqlConstraintsQuery extends
 
 	public AccumuloCqlConstraintsQuery(
 			final Index index,
-			final MultiDimensionalNumericData constraints,
+			final List<MultiDimensionalNumericData> constraints,
 			final List<QueryFilter> queryFilters,
 			final Filter cqlFilter,
 			final FeatureDataAdapter dataAdapter,
@@ -72,7 +72,7 @@ public class AccumuloCqlConstraintsQuery extends
 		super(
 				(List<ByteArrayId>) new LinkedList<ByteArrayId>(),
 				index,
-				(MultiDimensionalNumericData) constraints,
+				(List<MultiDimensionalNumericData>) constraints,
 				(List<QueryFilter>) queryFilters,
 				authorizations);
 		this.cqlFilter = cqlFilter;
@@ -82,7 +82,7 @@ public class AccumuloCqlConstraintsQuery extends
 	public AccumuloCqlConstraintsQuery(
 			final List<ByteArrayId> adapterIds,
 			final Index index,
-			final MultiDimensionalNumericData constraints,
+			final List<MultiDimensionalNumericData> constraints,
 			final List<QueryFilter> queryFilters,
 			final Filter cqlFilter,
 			final FeatureDataAdapter dataAdapter,

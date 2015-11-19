@@ -7,7 +7,8 @@ import java.util.Arrays;
  * operations use the values of the bytes rather than explicit object identity
  */
 public class ByteArrayId implements
-		java.io.Serializable
+		java.io.Serializable,
+		Comparable<ByteArrayId>
 {
 	private final byte[] id;
 
@@ -18,7 +19,8 @@ public class ByteArrayId implements
 
 	public ByteArrayId(
 			final String id ) {
-		this.id = StringUtils.stringToBinary(id);
+		this.id = StringUtils.stringToBinary(
+				id);
 	}
 
 	public byte[] getBytes() {
@@ -26,7 +28,8 @@ public class ByteArrayId implements
 	}
 
 	public String getString() {
-		return StringUtils.stringFromBinary(id);
+		return StringUtils.stringFromBinary(
+				id);
 	}
 
 	@Override
@@ -38,7 +41,8 @@ public class ByteArrayId implements
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = (prime * result) + Arrays.hashCode(id);
+		result = (prime * result) + Arrays.hashCode(
+				id);
 		return result;
 	}
 
@@ -58,5 +62,20 @@ public class ByteArrayId implements
 		return Arrays.equals(
 				id,
 				other.id);
+	}
+
+	@Override
+	public int compareTo(
+			ByteArrayId o ) {
+
+		for (int i = 0, j = 0; i < id.length && j < o.id.length; i++, j++) {
+			int a = (id[i] & 0xff);
+			int b = (o.id[j] & 0xff);
+			if (a != b) {
+				return a - b;
+			}
+		}
+		return id.length - o.id.length;
+
 	}
 }

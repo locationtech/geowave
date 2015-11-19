@@ -44,7 +44,7 @@ public class GeoWaveTransactionManagement extends
 		GeoWaveTransaction
 {
 
-	private static final Logger LOGGER = Logger.getLogger(GeoWaveTransactionManagement.class);
+	protected static final Logger LOGGER = Logger.getLogger(GeoWaveTransactionManagement.class);
 
 	/** Map of modified features; by feature id */
 	private final Map<String, ModifiedFeature> modifiedFeatures = new ConcurrentHashMap<String, ModifiedFeature>();

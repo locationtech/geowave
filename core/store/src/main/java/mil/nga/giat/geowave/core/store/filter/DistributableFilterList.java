@@ -26,9 +26,17 @@ public class DistributableFilterList extends
 				filters);
 	}
 
+	public DistributableFilterList(
+			final boolean logicalAnd,
+			final List<DistributableQueryFilter> filters ) {
+		super(
+				logicalAnd,
+				filters);
+	}
+
 	@Override
 	public byte[] toBinary() {
-		int byteBufferLength = 4;
+		int byteBufferLength = 8;
 		final List<byte[]> filterBinaries = new ArrayList<byte[]>(
 				filters.size());
 		for (final DistributableQueryFilter filter : filters) {
@@ -37,6 +45,7 @@ public class DistributableFilterList extends
 			filterBinaries.add(filterBinary);
 		}
 		final ByteBuffer buf = ByteBuffer.allocate(byteBufferLength);
+		buf.putInt(this.logicalAnd ? 1 : 0);
 		buf.putInt(filters.size());
 		for (final byte[] filterBinary : filterBinaries) {
 			buf.putInt(filterBinary.length);
@@ -49,6 +58,7 @@ public class DistributableFilterList extends
 	public void fromBinary(
 			final byte[] bytes ) {
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
+		this.logicalAnd = buf.getInt() > 0;
 		final int numFilters = buf.getInt();
 		filters = new ArrayList<DistributableQueryFilter>(
 				numFilters);
