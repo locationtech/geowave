@@ -86,6 +86,9 @@
 <li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
 <li>
 <ul class="inheritance">
+<li>org.apache.accumulo.core.iterators.user.RowEncodingIterator</li>
+<li>
+<ul class="inheritance">
 <li>org.apache.accumulo.core.iterators.user.WholeRowIterator</li>
 <li>
 <ul class="inheritance">
@@ -93,6 +96,8 @@
 <li>
 <ul class="inheritance">
 <li>mil.nga.giat.geowave.adapter.vector.query.CqlQueryRenderIterator</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -170,6 +175,13 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/query/
 </a>
 <h3>Fields inherited from class&nbsp;mil.nga.giat.geowave.adapter.vector.query.<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/query/CqlQueryFilterIterator.html" title="class in mil.nga.giat.geowave.adapter.vector.query">CqlQueryFilterIterator</a></h3>
 <code><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/query/CqlQueryFilterIterator.html#CQL_FILTER">CQL_FILTER</a>, <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/query/CqlQueryFilterIterator.html#CQL_QUERY_ITERATOR_NAME">CQL_QUERY_ITERATOR_NAME</a>, <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/query/CqlQueryFilterIterator.html#CQL_QUERY_ITERATOR_PRIORITY">CQL_QUERY_ITERATOR_PRIORITY</a>, <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/query/CqlQueryFilterIterator.html#DATA_ADAPTER">DATA_ADAPTER</a>, <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/query/CqlQueryFilterIterator.html#GEOWAVE_FILTER">GEOWAVE_FILTER</a>, <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/query/CqlQueryFilterIterator.html#MODEL">MODEL</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="fields_inherited_from_class_org.apache.accumulo.core.iterators.user.RowEncodingIterator">
+<!--   -->
+</a>
+<h3>Fields inherited from class&nbsp;org.apache.accumulo.core.iterators.user.RowEncodingIterator</h3>
+<code>sourceIter</code></li>
 </ul>
 </li>
 </ul>
@@ -265,7 +277,7 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/query/
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;org.apache.accumulo.core.iterators.user.WholeRowIterator</h3>
-<code>decodeRow, deepCopy, encodeRow</code></li>
+<code>decodeRow, deepCopy, encodeRow, rowDecoder, rowEncoder</code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods_inherited_from_class_java.lang.Object">
@@ -415,7 +427,7 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/query/
 <dt><strong>Specified by:</strong></dt>
 <dd><code>getTopKey</code>&nbsp;in interface&nbsp;<code>org.apache.accumulo.core.iterators.SortedKeyValueIterator&lt;org.apache.accumulo.core.data.Key,org.apache.accumulo.core.data.Value&gt;</code></dd>
 <dt><strong>Overrides:</strong></dt>
-<dd><code>getTopKey</code>&nbsp;in class&nbsp;<code>org.apache.accumulo.core.iterators.user.WholeRowIterator</code></dd>
+<dd><code>getTopKey</code>&nbsp;in class&nbsp;<code>org.apache.accumulo.core.iterators.user.RowEncodingIterator</code></dd>
 </dl>
 </li>
 </ul>
@@ -430,7 +442,7 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/query/
 <dt><strong>Specified by:</strong></dt>
 <dd><code>getTopValue</code>&nbsp;in interface&nbsp;<code>org.apache.accumulo.core.iterators.SortedKeyValueIterator&lt;org.apache.accumulo.core.data.Key,org.apache.accumulo.core.data.Value&gt;</code></dd>
 <dt><strong>Overrides:</strong></dt>
-<dd><code>getTopValue</code>&nbsp;in class&nbsp;<code>org.apache.accumulo.core.iterators.user.WholeRowIterator</code></dd>
+<dd><code>getTopValue</code>&nbsp;in class&nbsp;<code>org.apache.accumulo.core.iterators.user.RowEncodingIterator</code></dd>
 </dl>
 </li>
 </ul>
@@ -445,7 +457,7 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/query/
 <dt><strong>Specified by:</strong></dt>
 <dd><code>hasTop</code>&nbsp;in interface&nbsp;<code>org.apache.accumulo.core.iterators.SortedKeyValueIterator&lt;org.apache.accumulo.core.data.Key,org.apache.accumulo.core.data.Value&gt;</code></dd>
 <dt><strong>Overrides:</strong></dt>
-<dd><code>hasTop</code>&nbsp;in class&nbsp;<code>org.apache.accumulo.core.iterators.user.WholeRowIterator</code></dd>
+<dd><code>hasTop</code>&nbsp;in class&nbsp;<code>org.apache.accumulo.core.iterators.user.RowEncodingIterator</code></dd>
 </dl>
 </li>
 </ul>
@@ -461,7 +473,7 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/query/
 <dt><strong>Specified by:</strong></dt>
 <dd><code>next</code>&nbsp;in interface&nbsp;<code>org.apache.accumulo.core.iterators.SortedKeyValueIterator&lt;org.apache.accumulo.core.data.Key,org.apache.accumulo.core.data.Value&gt;</code></dd>
 <dt><strong>Overrides:</strong></dt>
-<dd><code>next</code>&nbsp;in class&nbsp;<code>org.apache.accumulo.core.iterators.user.WholeRowIterator</code></dd>
+<dd><code>next</code>&nbsp;in class&nbsp;<code>org.apache.accumulo.core.iterators.user.RowEncodingIterator</code></dd>
 <dt><span class="strong">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd></dl>
 </li>
@@ -512,7 +524,7 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/query/
 <dt><strong>Specified by:</strong></dt>
 <dd><code>seek</code>&nbsp;in interface&nbsp;<code>org.apache.accumulo.core.iterators.SortedKeyValueIterator&lt;org.apache.accumulo.core.data.Key,org.apache.accumulo.core.data.Value&gt;</code></dd>
 <dt><strong>Overrides:</strong></dt>
-<dd><code>seek</code>&nbsp;in class&nbsp;<code>org.apache.accumulo.core.iterators.user.WholeRowIterator</code></dd>
+<dd><code>seek</code>&nbsp;in class&nbsp;<code>org.apache.accumulo.core.iterators.user.RowEncodingIterator</code></dd>
 <dt><span class="strong">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd></dl>
 </li>
