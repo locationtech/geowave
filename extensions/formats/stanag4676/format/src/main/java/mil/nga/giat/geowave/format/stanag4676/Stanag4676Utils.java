@@ -7,6 +7,7 @@ import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.opengis.feature.simple.SimpleFeatureType;
 
 import com.vividsolutions.jts.geom.Geometry;
+import com.vividsolutions.jts.geom.LineString;
 
 public class Stanag4676Utils
 {
@@ -136,7 +137,7 @@ public class Stanag4676Utils
 		final AttributeTypeBuilder attributeTypeBuilder = new AttributeTypeBuilder();
 
 		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
-				Geometry.class).buildDescriptor(
+				LineString.class).buildDescriptor(
 				"geometry"));
 		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
 				String.class).buildDescriptor(
