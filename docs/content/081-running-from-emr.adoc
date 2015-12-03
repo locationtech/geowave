@@ -1,0 +1,71 @@
+[[running-from-emr]]
+<<<
+== Running from EMR
+
+=== Provisioning
+
+The configuration files needed to use GeoWave from EMR are stored under the deploy/emr/4 directory. EMR expects that all
+config files are available from S3 so the first step would be to create a bucket if needed and then copy the two scripts
+into the S3 bucket adjusting the path used in the command as needed.
+
+The command below is an example of using the API to launch an EMR cluster, you could also provide this same information
+from the console. There are a number of fields that are unique to each deployment most of which you'll see with a placeholder
+like YOUR_KEYNAME in the command below. If running from a bash script you can use variable replacement to collect and
+substitute value such as the number of worker instances. Use the command below as a starting point, it will not work
+if you try to cut and paste.
+
+Once the process of cluster initialization has started you will see the cluster appear in the EMR console immediately.
+The GeoWave portion of the process does not occur until the Hadoop and Spark portions of the initializations have completed
+which takes approximately 4-5 minutes. Once the GeoWave components have been installed there is an optional volume
+initialization step that will read every block of each volume to clear any initialization flags that may have been set.
+This option should be used when you want to benchmark an operation but can probably be skipped if you're primarily interested
+in quickly setting up a cluster to test some capability.
+
+[source, bash]
+----
+aws emr create-cluster \
+  --name "geowave-emr" \
+  --instance-groups InstanceGroupType=MASTER,InstanceCount=1,InstanceType=m3.xlarge InstanceGroupType=CORE,InstanceCount=${NUM_WORKERS},InstanceType=m3.xlarge \
+  --ec2-attributes "KeyName=YOUR_KEYNAME,SubnetId=YOUR_SUBNET_ID" \
+  --region YOUR_REGION \
+  --release-label emr-4.2.0 \
+  --applications Name=Ganglia Name=Hadoop Name=Hue Name=Spark \
+  --use-default-roles \
+  --no-auto-terminate \
+  --bootstrap-actions Path=s3://YOUR_S3_BUCKET/emr/4/bootstrap-geowave.sh,Name=Bootstrap_GeoWave_Node \
+  --tags "Name=geowave-emr-worker"
+----
+
+=== Connecting
+
+To connect to the cluster you'd use ssh to connect to the console and another ssh connection setting up a SOCKS proxy
+to connect via a web browser to the various web consoles. The key you'd use in both cases would be the one you specified
+in the ec2-attributes KeyName portion of the command.
+
+* Example SSH Console connection: ```ssh -i YOUR_KEYFILE ec2-user@MASTER_FQDN```
+* Example SOCKS Proxy connection: ```ssh -i YOUR_KEYFILE -ND 5556 ec2-user@MASTER_FQDN```
+
+After establishing the SOCKS proxy you'd then configure your browser to use the port you specified. A more detailed
+explanation can be found in the AWS docs: https://docs.aws.amazon.com/ElasticMapReduce/latest/ManagementGuide/emr-ssh-tunnel.html
+
+
+=== Links
+
+After setting up a SOCKS proxy to the master node you should be able to connect to any of the following web consoles
+hosted from the cluster. The name of the master node can be found in the description of the EMR job in the AWS console.
+Example: Master public DNS: ec2-52-91-31-196.compute-1.amazonaws.com
+
+* Accumulo: http://MASTER_FQDN:50095
+* Ganglia Monitoring: http://MASTER_FQDN/ganglia/
+* GeoWave GeoServer: http://MASTER_FQDN:8000/geoserver/
+* HDFS: http://MASTER_FQDN:50070
+* HUE: http://MASTER_FQDN:8888
+* YARN: http://MASTER_FQDN:8088
+
+=== Configuration
+
+After the cluster has finished initializing you should be able to ssh into the master node and perform the final bits of
+project specific GeoWave configuration. The root password for Accumulo is set at the top of the bootstrap-geowave.sh script.
+You'd want to log into Accumulo and perform steps listed in the Accumulo Configuration section of the documentation. The
+latest iterator built for Apache Hadoop will have been uploaded into HDFS but no user accounts, namespaces or VFS contexts
+will have been configured. All of these are described with examples in both the GeoWave and Accumulo documentation.
