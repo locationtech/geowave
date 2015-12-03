@@ -522,6 +522,14 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#accumulo">Accumulo</a></li>
 </ul>
 </li>
+<li><a href="#running-from-emr-2">Running from EMR</a>
+<ul class="sectlevel2">
+<li><a href="#provisioning">Provisioning</a></li>
+<li><a href="#connecting">Connecting</a></li>
+<li><a href="#links-2">Links</a></li>
+<li><a href="#configuration">Configuration</a></li>
+</ul>
+</li>
 <li><a href="#accumulo-configuration">Accumulo Configuration</a>
 <ul class="sectlevel2">
 <li><a href="#overview-7">Overview</a></li>
@@ -3328,6 +3336,112 @@ version in the BUILD_ARGS environment variable</p>
 </div>
 </div>
 <div class="sect1">
+<h2 id="running-from-emr-2"><a class="anchor" href="#running-from-emr-2"></a>Running from EMR</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="provisioning"><a class="anchor" href="#provisioning"></a>Provisioning</h3>
+<div class="paragraph">
+<p>The configuration files needed to use GeoWave from EMR are stored under the deploy/emr/4 directory. EMR expects that all
+config files are available from S3 so the first step would be to create a bucket if needed and then copy the two scripts
+into the S3 bucket adjusting the path used in the command as needed.</p>
+</div>
+<div class="paragraph">
+<p>The command below is an example of using the API to launch an EMR cluster, you could also provide this same information
+from the console. There are a number of fields that are unique to each deployment most of which you&#8217;ll see with a placeholder
+like YOUR_KEYNAME in the command below. If running from a bash script you can use variable replacement to collect and
+substitute value such as the number of worker instances. Use the command below as a starting point, it will not work
+if you try to cut and paste.</p>
+</div>
+<div class="paragraph">
+<p>Once the process of cluster initialization has started you will see the cluster appear in the EMR console immediately.
+The GeoWave portion of the process does not occur until the Hadoop and Spark portions of the initializations have completed
+which takes approximately 4-5 minutes. Once the GeoWave components have been installed there is an optional volume
+initialization step that will read every block of each volume to clear any initialization flags that may have been set.
+This option should be used when you want to benchmark an operation but can probably be skipped if you&#8217;re primarily interested
+in quickly setting up a cluster to test some capability.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">aws emr create-cluster \
+  --name "geowave-emr" \
+  --instance-groups InstanceGroupType=MASTER,InstanceCount=1,InstanceType=m3.xlarge InstanceGroupType=CORE,InstanceCount=${NUM_WORKERS},InstanceType=m3.xlarge \
+  --ec2-attributes "KeyName=YOUR_KEYNAME,SubnetId=YOUR_SUBNET_ID" \
+  --region YOUR_REGION \
+  --release-label emr-4.2.0 \
+  --applications Name=Ganglia Name=Hadoop Name=Hue Name=Spark \
+  --use-default-roles \
+  --no-auto-terminate \
+  --bootstrap-actions Path=s3://YOUR_S3_BUCKET/emr/4/bootstrap-geowave.sh,Name=Bootstrap_GeoWave_Node \
+  --tags "Name=geowave-emr-worker"</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="connecting"><a class="anchor" href="#connecting"></a>Connecting</h3>
+<div class="paragraph">
+<p>To connect to the cluster you&#8217;d use ssh to connect to the console and another ssh connection setting up a SOCKS proxy
+to connect via a web browser to the various web consoles. The key you&#8217;d use in both cases would be the one you specified
+in the ec2-attributes KeyName portion of the command.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Example SSH Console connection: <code><code>ssh -i YOUR_KEYFILE ec2-user@MASTER_FQDN</code></code></p>
+</li>
+<li>
+<p>Example SOCKS Proxy connection: <code><code>ssh -i YOUR_KEYFILE -ND 5556 ec2-user@MASTER_FQDN</code></code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>After establishing the SOCKS proxy you&#8217;d then configure your browser to use the port you specified. A more detailed
+explanation can be found in the AWS docs: <a href="https://docs.aws.amazon.com/ElasticMapReduce/latest/ManagementGuide/emr-ssh-tunnel.html" class="bare">https://docs.aws.amazon.com/ElasticMapReduce/latest/ManagementGuide/emr-ssh-tunnel.html</a></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="links-2"><a class="anchor" href="#links-2"></a>Links</h3>
+<div class="paragraph">
+<p>After setting up a SOCKS proxy to the master node you should be able to connect to any of the following web consoles
+hosted from the cluster. The name of the master node can be found in the description of the EMR job in the AWS console.
+Example: Master public DNS: ec2-52-91-31-196.compute-1.amazonaws.com</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Accumulo: <a href="http://MASTER_FQDN:50095" class="bare">http://MASTER_FQDN:50095</a></p>
+</li>
+<li>
+<p>Ganglia Monitoring: <a href="http://MASTER_FQDN/ganglia/" class="bare">http://MASTER_FQDN/ganglia/</a></p>
+</li>
+<li>
+<p>GeoWave GeoServer: <a href="http://MASTER_FQDN:8000/geoserver/" class="bare">http://MASTER_FQDN:8000/geoserver/</a></p>
+</li>
+<li>
+<p>HDFS: <a href="http://MASTER_FQDN:50070" class="bare">http://MASTER_FQDN:50070</a></p>
+</li>
+<li>
+<p>HUE: <a href="http://MASTER_FQDN:8888" class="bare">http://MASTER_FQDN:8888</a></p>
+</li>
+<li>
+<p>YARN: <a href="http://MASTER_FQDN:8088" class="bare">http://MASTER_FQDN:8088</a></p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="configuration"><a class="anchor" href="#configuration"></a>Configuration</h3>
+<div class="paragraph">
+<p>After the cluster has finished initializing you should be able to ssh into the master node and perform the final bits of
+project specific GeoWave configuration. The root password for Accumulo is set at the top of the bootstrap-geowave.sh script.
+You&#8217;d want to log into Accumulo and perform steps listed in the Accumulo Configuration section of the documentation. The
+latest iterator built for Apache Hadoop will have been uploaded into HDFS but no user accounts, namespaces or VFS contexts
+will have been configured. All of these are described with examples in both the GeoWave and Accumulo documentation.</p>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="accumulo-configuration"><a class="anchor" href="#accumulo-configuration"></a>Accumulo Configuration</h2>
 <div class="sectionbody">
 <div class="sect2">
@@ -4174,7 +4288,7 @@ yum --enablerepo=geowave install geowave-puppet</code></pre>
 <div class="sect2">
 <h3 id="version"><a class="anchor" href="#version"></a>Version</h3>
 <div class="paragraph">
-<p>This documentation was generated for GeoWave version 0.9.0-SNAPSHOT from commit a73fbd28265e20394b8877d4970c177942c4f881.</p>
+<p>This documentation was generated for GeoWave version 0.9.0-SNAPSHOT from commit 753ee9982927fa33104f17d96b72d5d89e5a8022.</p>
 </div>
 <div style="page-break-after: always;"></div>
 </div>
@@ -4226,7 +4340,7 @@ yum --enablerepo=geowave install geowave-puppet</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-12-03 20:59:04 UTC
+Last updated 2015-12-03 21:39:54 UTC
 </div>
 </div>
 </body>
