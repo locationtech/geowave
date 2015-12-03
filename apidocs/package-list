@@ -17,6 +17,7 @@ mil.nga.giat.geowave.adapter.vector.plugin.visibility
 mil.nga.giat.geowave.adapter.vector.query
 mil.nga.giat.geowave.adapter.vector.query.cql
 mil.nga.giat.geowave.adapter.vector.query.row
+mil.nga.giat.geowave.adapter.vector.simpleFeature.avro
 mil.nga.giat.geowave.adapter.vector.stats
 mil.nga.giat.geowave.adapter.vector.transaction
 mil.nga.giat.geowave.adapter.vector.util
