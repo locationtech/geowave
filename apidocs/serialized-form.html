@@ -688,6 +688,26 @@
 </ul>
 </li>
 <li class="blockList">
+<h2 title="Package">Package&nbsp;mil.nga.giat.geowave.analytic.extract</h2>
+<ul class="blockList">
+<li class="blockList"><a name="mil.nga.giat.geowave.analytic.extract.EmptyDimensionExtractor">
+<!--   -->
+</a>
+<h3>Class <a href="mil/nga/giat/geowave/analytic/extract/EmptyDimensionExtractor.html" title="class in mil.nga.giat.geowave.analytic.extract">mil.nga.giat.geowave.analytic.extract.EmptyDimensionExtractor</a> extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
+</li>
+<li class="blockList"><a name="mil.nga.giat.geowave.analytic.extract.SimpleFeatureGeometryExtractor">
+<!--   -->
+</a>
+<h3>Class <a href="mil/nga/giat/geowave/analytic/extract/SimpleFeatureGeometryExtractor.html" title="class in mil.nga.giat.geowave.analytic.extract">mil.nga.giat.geowave.analytic.extract.SimpleFeatureGeometryExtractor</a> extends <a href="mil/nga/giat/geowave/analytic/extract/EmptyDimensionExtractor.html" title="class in mil.nga.giat.geowave.analytic.extract">EmptyDimensionExtractor</a>&lt;org.opengis.feature.simple.SimpleFeature&gt; implements Serializable</h3>
+</li>
+<li class="blockList"><a name="mil.nga.giat.geowave.analytic.extract.TimeDimensionExtractor">
+<!--   -->
+</a>
+<h3>Class <a href="mil/nga/giat/geowave/analytic/extract/TimeDimensionExtractor.html" title="class in mil.nga.giat.geowave.analytic.extract">mil.nga.giat.geowave.analytic.extract.TimeDimensionExtractor</a> extends <a href="mil/nga/giat/geowave/analytic/extract/SimpleFeatureGeometryExtractor.html" title="class in mil.nga.giat.geowave.analytic.extract">SimpleFeatureGeometryExtractor</a> implements Serializable</h3>
+</li>
+</ul>
+</li>
+<li class="blockList">
 <h2 title="Package">Package&nbsp;mil.nga.giat.geowave.analytic.mapreduce</h2>
 <ul class="blockList">
 <li class="blockList"><a name="mil.nga.giat.geowave.analytic.mapreduce.CountofDoubleWritable.Comparator">
@@ -729,8 +749,27 @@
 </ul>
 </li>
 <li class="blockList">
+<h2 title="Package">Package&nbsp;mil.nga.giat.geowave.analytic.mapreduce.nn</h2>
+<ul class="blockList">
+<li class="blockList"><a name="mil.nga.giat.geowave.analytic.mapreduce.nn.NNMapReduce.PassthruPartitioner">
+<!--   -->
+</a>
+<h3>Class <a href="mil/nga/giat/geowave/analytic/mapreduce/nn/NNMapReduce.PassthruPartitioner.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.nn">mil.nga.giat.geowave.analytic.mapreduce.nn.NNMapReduce.PassthruPartitioner</a> extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>-1022316020113365561L</dd>
+</dl>
+</li>
+</ul>
+</li>
+<li class="blockList">
 <h2 title="Package">Package&nbsp;mil.nga.giat.geowave.analytic.partitioner</h2>
 <ul class="blockList">
+<li class="blockList"><a name="mil.nga.giat.geowave.analytic.partitioner.AbstractPartitioner">
+<!--   -->
+</a>
+<h3>Class <a href="mil/nga/giat/geowave/analytic/partitioner/AbstractPartitioner.html" title="class in mil.nga.giat.geowave.analytic.partitioner">mil.nga.giat.geowave.analytic.partitioner.AbstractPartitioner</a> extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
+</li>
 <li class="blockList"><a name="mil.nga.giat.geowave.analytic.partitioner.AdapterBasedPartitioner">
 <!--   -->
 </a>
@@ -756,6 +795,44 @@
 <li class="blockListLast">
 <h4>adapterStore</h4>
 <pre><a href="mil/nga/giat/geowave/analytic/SerializableAdapterStore.html" title="class in mil.nga.giat.geowave.analytic">SerializableAdapterStore</a> adapterStore</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="blockList"><a name="mil.nga.giat.geowave.analytic.partitioner.OrthodromicDistancePartitioner">
+<!--   -->
+</a>
+<h3>Class <a href="mil/nga/giat/geowave/analytic/partitioner/OrthodromicDistancePartitioner.html" title="class in mil.nga.giat.geowave.analytic.partitioner">mil.nga.giat.geowave.analytic.partitioner.OrthodromicDistancePartitioner</a> extends <a href="mil/nga/giat/geowave/analytic/partitioner/AbstractPartitioner.html" title="class in mil.nga.giat.geowave.analytic.partitioner">AbstractPartitioner</a>&lt;<a href="mil/nga/giat/geowave/analytic/partitioner/OrthodromicDistancePartitioner.html" title="type parameter in OrthodromicDistancePartitioner">T</a>&gt; implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList"><a name="serializedForm">
+<!--   -->
+</a>
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockList">
+<h4>geometricDistanceUnit</h4>
+<pre>javax.measure.unit.Unit&lt;Q extends javax.measure.quantity.Quantity&gt; geometricDistanceUnit</pre>
+</li>
+<li class="blockList">
+<h4>crsName</h4>
+<pre><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> crsName</pre>
+</li>
+<li class="blockList">
+<h4>dimensionExtractor</h4>
+<pre><a href="mil/nga/giat/geowave/analytic/extract/DimensionExtractor.html" title="interface in mil.nga.giat.geowave.analytic.extract">DimensionExtractor</a>&lt;<a href="mil/nga/giat/geowave/analytic/extract/DimensionExtractor.html" title="type parameter in DimensionExtractor">T</a>&gt; dimensionExtractor</pre>
+</li>
+<li class="blockList">
+<h4>latDimensionPosition</h4>
+<pre>int latDimensionPosition</pre>
+</li>
+<li class="blockListLast">
+<h4>longDimensionPosition</h4>
+<pre>int longDimensionPosition</pre>
 </li>
 </ul>
 </li>
@@ -935,6 +1012,79 @@
 <li class="blockListLast">
 <h4>fieldIds</h4>
 <pre><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">E</a>&gt; fieldIds</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="blockList">
+<h2 title="Package">Package&nbsp;mil.nga.giat.geowave.datastore.accumulo.mapreduce</h2>
+<ul class="blockList">
+<li class="blockList"><a name="mil.nga.giat.geowave.datastore.accumulo.mapreduce.GeoWaveKey">
+<!--   -->
+</a>
+<h3>Class <a href="mil/nga/giat/geowave/datastore/accumulo/mapreduce/GeoWaveKey.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce">mil.nga.giat.geowave.datastore.accumulo.mapreduce.GeoWaveKey</a> extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
+<ul class="blockList">
+<li class="blockList"><a name="serializedForm">
+<!--   -->
+</a>
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockListLast">
+<h4>adapterId</h4>
+<pre><a href="mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a> adapterId</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="blockList">
+<h2 title="Package">Package&nbsp;mil.nga.giat.geowave.datastore.accumulo.mapreduce.input</h2>
+<ul class="blockList">
+<li class="blockList"><a name="mil.nga.giat.geowave.datastore.accumulo.mapreduce.input.GeoWaveInputKey">
+<!--   -->
+</a>
+<h3>Class <a href="mil/nga/giat/geowave/datastore/accumulo/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce.input">mil.nga.giat.geowave.datastore.accumulo.mapreduce.input.GeoWaveInputKey</a> extends <a href="mil/nga/giat/geowave/datastore/accumulo/mapreduce/GeoWaveKey.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce">GeoWaveKey</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList"><a name="serializedForm">
+<!--   -->
+</a>
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockListLast">
+<h4>dataId</h4>
+<pre><a href="mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a> dataId</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="blockList">
+<h2 title="Package">Package&nbsp;mil.nga.giat.geowave.datastore.accumulo.mapreduce.output</h2>
+<ul class="blockList">
+<li class="blockList"><a name="mil.nga.giat.geowave.datastore.accumulo.mapreduce.output.GeoWaveOutputKey">
+<!--   -->
+</a>
+<h3>Class <a href="mil/nga/giat/geowave/datastore/accumulo/mapreduce/output/GeoWaveOutputKey.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce.output">mil.nga.giat.geowave.datastore.accumulo.mapreduce.output.GeoWaveOutputKey</a> extends <a href="mil/nga/giat/geowave/datastore/accumulo/mapreduce/GeoWaveKey.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce">GeoWaveKey</a> implements Serializable</h3>
+<ul class="blockList">
+<li class="blockList"><a name="serializedForm">
+<!--   -->
+</a>
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockListLast">
+<h4>indexId</h4>
+<pre><a href="mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a> indexId</pre>
 </li>
 </ul>
 </li>
