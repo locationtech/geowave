@@ -14,5 +14,6 @@
 	<modules>
 		<module>api</module>
 		<module>mapreduce</module>
+		<module>spark</module>
 	</modules>
 </project>
