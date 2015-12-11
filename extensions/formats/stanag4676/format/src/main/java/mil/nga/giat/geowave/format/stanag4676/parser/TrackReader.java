@@ -2,7 +2,7 @@ package mil.nga.giat.geowave.format.stanag4676.parser;
 
 import java.io.IOException;
 
-import mil.nga.giat.geowave.format.stanag4676.parser.model.TrackMessage;
+import mil.nga.giat.geowave.format.stanag4676.parser.model.NATO4676Message;
 import mil.nga.giat.geowave.format.stanag4676.parser.model.TrackRun;
 
 public interface TrackReader
@@ -13,7 +13,7 @@ public interface TrackReader
 				TrackRun run );
 
 		public void notify(
-				TrackMessage msg )
+				NATO4676Message msg )
 				throws InterruptedException,
 				IOException;
 

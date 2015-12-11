@@ -16,6 +16,7 @@ import mil.nga.giat.geowave.format.stanag4676.parser.model.ExerciseIndicator;
 import mil.nga.giat.geowave.format.stanag4676.parser.model.GeodeticPosition;
 import mil.nga.giat.geowave.format.stanag4676.parser.model.IDdata;
 import mil.nga.giat.geowave.format.stanag4676.parser.model.MotionImagery;
+import mil.nga.giat.geowave.format.stanag4676.parser.model.NATO4676Message;
 import mil.nga.giat.geowave.format.stanag4676.parser.model.Security;
 import mil.nga.giat.geowave.format.stanag4676.parser.model.SimulationIndicator;
 import mil.nga.giat.geowave.format.stanag4676.parser.model.TrackClassification;
@@ -91,8 +92,9 @@ public class NATO4676Encoder implements
 	}
 
 	/**
-	 * A TrackRun will be encoded as a single TrackMessage even though there may
-	 * be multiple messages inside it. The LAST TrackMessage should be used.
+	 * A TrackRun will be encoded as a single NATO4676Message even though there
+	 * may be multiple messages inside it. The LAST NATO4676Message should be
+	 * used.
 	 * 
 	 * 
 	 * @param run
@@ -107,26 +109,29 @@ public class NATO4676Encoder implements
 			printout.write(GetXMLOpen());
 			printout.write("<TrackMessage xmlns=\"urn:int:nato:stanag4676:0.14\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" schemaVersion=\"0.14\">\n");
 			indentLevel++;
-			for (final TrackMessage msg : run.getMessages()) {
-				if (firstMessage) {
-					printout.write(indent() + "<stanagVersion>" + stanagVersion + "</stanagVersion>\n");
+			for (final NATO4676Message msg : run.getMessages()) {
+				if (msg instanceof TrackMessage) {
+					TrackMessage trackMsg = (TrackMessage) msg;
+					if (firstMessage) {
+						printout.write(indent() + "<stanagVersion>" + stanagVersion + "</stanagVersion>\n");
 
-					printout.write(indent() + "<messageSecurity>");
-					Encode(msg.getSecurity());
-					printout.write("</messageSecurity>\n");
+						printout.write(indent() + "<messageSecurity>");
+						Encode(trackMsg.getSecurity());
+						printout.write("</messageSecurity>\n");
 
-					printout.write(indent() + "<msgCreatedTime>" + EncodeTime(msg.getMessageTime()) + "</msgCreatedTime>\n");
+						printout.write(indent() + "<msgCreatedTime>" + EncodeTime(trackMsg.getMessageTime()) + "</msgCreatedTime>\n");
 
-					printout.write(indent() + "<senderId>");
-					Encode(msg.getSenderID());
-					printout.write("</senderId>\n");
+						printout.write(indent() + "<senderId>");
+						Encode(trackMsg.getSenderID());
+						printout.write("</senderId>\n");
 
-					firstMessage = false;
-				}
-				for (final TrackEvent trackevent : msg.getTracks()) {
-					printout.write(indent() + "<tracks>");
-					Encode(trackevent);
-					printout.write("</tracks>\n");
+						firstMessage = false;
+					}
+					for (final TrackEvent trackevent : trackMsg.getTracks()) {
+						printout.write(indent() + "<tracks>");
+						Encode(trackevent);
+						printout.write("</tracks>\n");
+					}
 				}
 			}
 			indentLevel--;

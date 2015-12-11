@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.UUID;
 
 import mil.nga.giat.geowave.format.stanag4676.parser.model.IDdata;
-import mil.nga.giat.geowave.format.stanag4676.parser.model.TrackMessage;
+import mil.nga.giat.geowave.format.stanag4676.parser.model.NATO4676Message;
 import mil.nga.giat.geowave.format.stanag4676.parser.model.TrackRun;
 
 import org.slf4j.Logger;
@@ -134,7 +134,7 @@ public class TrackFileReader implements
 		final IDdata sender = new IDdata();
 		sender.setStationId("GeoWave");
 		sender.setNationality("US");
-		TrackMessage msg = null;
+		NATO4676Message msg = null;
 		boolean finished = false;
 		while (!finished) {
 			msg = decoder.readNext(is);

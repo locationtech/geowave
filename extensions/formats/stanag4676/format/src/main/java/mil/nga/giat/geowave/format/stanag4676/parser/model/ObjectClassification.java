@@ -45,19 +45,19 @@ public enum ObjectClassification {
 	 * A strike aircraft
 	 */
 	AIRCRAFT_STRIKE(
-			"AIRCRAFT_STRIKE"),
+			"AIRCRAFT - STRIKE"),
 
 	/**
 	 * A transport aircraft
 	 */
 	AIRCRAFT_TRANSPORT(
-			"AIRCRAFT_TRANSPORT"),
+			"AIRCRAFT - TRANSPORT"),
 
 	/**
 	 * A commercial aircraft
 	 */
 	AIRCRAFT_COMMERCIAL(
-			"AIRCRAFT_COMMERCIAL"),
+			"AIRCRAFT - COMMERCIAL"),
 
 	/**
 	 * A general watercraft
@@ -69,25 +69,25 @@ public enum ObjectClassification {
 	 * A "go-fast" watercraft
 	 */
 	WATERCRAFT_GOFAST(
-			"WATERCRAFT_GOFAST"),
+			"WATERCRAFT - GOFAST"),
 
 	/**
 	 * A pleasure watercraft
 	 */
 	WATERCRAFT_PLEASURE(
-			"WATERCRAFT_PLEASURE"),
+			"WATERCRAFT - PLEASURE"),
 
 	/**
 	 * A naval watercraft
 	 */
 	WATERCRAFT_NAVAL(
-			"WATERCRAFT_NAVAL"),
+			"WATERCRAFT - NAVAL"),
 
 	/**
 	 * A cargo watercraft
 	 */
 	WATERCRAFT_CARGO(
-			"WATERCRAFT_CARGO"),
+			"WATERCRAFT - CARGO"),
 
 	/**
 	 * A car or sedan
@@ -96,28 +96,40 @@ public enum ObjectClassification {
 			"CAR"),
 
 	/**
+	 * A motorcycle
+	 */
+	MOTORCYCLE(
+			"MOTORCYCLE"),
+
+	/**
 	 * A "pickup" type truck
 	 */
 	TRUCK_PICKUP(
-			"TRUCK_PICKUP"),
+			"TRUCK - PICKUP"),
 
 	/**
 	 * A tractor-trailer type truck
 	 */
 	TRUCK_TRACTOR_TRAILER(
-			"TRUCK_TRACTOR_TRAILER"),
+			"TRUCK - TRACTOR-TRAILER"),
+
+	/**
+	 * A box type truck
+	 */
+	TRUCK_BOX(
+			"TRUCK - BOX"),
 
 	/**
 	 * A "Humvee" type truck
 	 */
 	TRUCK_HUMVEE(
-			"TRUCK_HUMVEE"),
+			"TRUCK - HUMVEE"),
 
 	/**
 	 * An emergency vehicle
 	 */
 	EMERGENCY_VEHICLE(
-			"EMERGENCY_VEHICLE"),
+			"EMERGENCY - VEHICLE"),
 
 	/**
 	 * A general dismount
@@ -129,31 +141,31 @@ public enum ObjectClassification {
 	 * A combatant dismount
 	 */
 	DISMOUNT_COMBATANT(
-			"DISMOUNT_COMBATANT"),
+			"DISMOUNT - COMBATANT"),
 
 	/**
 	 * A non-combatant dismount
 	 */
 	DISMOUNT_NONCOMBATANT(
-			"DISMOUNT_NONCOMBATANT"),
+			"DISMOUNT - NONCOMBATANT"),
 
 	/**
 	 * A male dismount
 	 */
 	DISMOUNT_MALE(
-			"DISMOUNT_MALE"),
+			"DISMOUNT - MALE"),
 
 	/**
 	 * A female dismount
 	 */
 	DISMOUNT_FEMALE(
-			"DISMOUNT_FEMALE"),
+			"DISMOUNT - FEMALE"),
 
 	/**
 	 * A group of dismounts
 	 */
 	DISMOUNT_GROUP(
-			"DISMOUNT_GROUP");
+			"DISMOUNT - GROUP");
 
 	private String value;
 
