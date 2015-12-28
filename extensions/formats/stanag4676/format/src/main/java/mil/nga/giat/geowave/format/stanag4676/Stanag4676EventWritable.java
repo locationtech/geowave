@@ -328,7 +328,7 @@ public class Stanag4676EventWritable implements
 		TimeStamp = new LongWritable(
 				timeStamp);
 		EndTimeStamp = new LongWritable(
-				timeStamp);
+				endTimeStamp);
 		TrackClassification = new Text(
 				classification);
 		ObjectClass = new Text(
