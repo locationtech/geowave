@@ -6,8 +6,8 @@ import org.geotools.feature.AttributeTypeBuilder;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.opengis.feature.simple.SimpleFeatureType;
 
-import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.LineString;
+import com.vividsolutions.jts.geom.Point;
 import com.vividsolutions.jts.geom.Polygon;
 
 public class Stanag4676Utils
@@ -26,7 +26,7 @@ public class Stanag4676Utils
 		final AttributeTypeBuilder attributeTypeBuilder = new AttributeTypeBuilder();
 
 		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
-				Geometry.class).buildDescriptor(
+				Point.class).buildDescriptor(
 				"geometry"));
 		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
 				String.class).buildDescriptor(
@@ -86,7 +86,7 @@ public class Stanag4676Utils
 		final AttributeTypeBuilder attributeTypeBuilder = new AttributeTypeBuilder();
 
 		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
-				Geometry.class).buildDescriptor(
+				Point.class).buildDescriptor(
 				"geometry"));
 		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
 				String.class).buildDescriptor(
