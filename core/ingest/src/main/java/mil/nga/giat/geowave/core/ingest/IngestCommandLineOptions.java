@@ -1,5 +1,20 @@
 package mil.nga.giat.geowave.core.ingest;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.ServiceLoader;
+import java.util.SortedSet;
+import java.util.TreeSet;
+
+import mil.nga.giat.geowave.core.cli.DataAdapterProvider;
+import mil.nga.giat.geowave.core.ingest.index.IndexOptionProviderSpi;
+import mil.nga.giat.geowave.core.ingest.index.IngestDimensionalityTypeProviderSpi;
+
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
@@ -40,6 +55,41 @@ public class IngestCommandLineOptions
 	public boolean isClearNamespace() {
 		return clearNamespace;
 	}
+
+
+	public boolean isSupported(
+			final DataAdapterProvider<?> adapterProvider,
+			final String[] args ) {
+		return (getIndex(
+				adapterProvider,
+				args) != null);
+	}
+
+	private static synchronized String getDimensionalityTypeOptionDescription() {
+		if (registeredDimensionalityTypes == null) {
+			initDimensionalityTypeRegistry();
+		}
+		if (registeredDimensionalityTypes.isEmpty()) {
+			return "There are no registered dimensionality types.  The supported index listed first for any given data type will be used.";
+		}
+		final StringBuilder builder = ConfigUtils.getOptions(registeredDimensionalityTypes.keySet());
+		builder.append(
+				"(optional; default is '").append(
+				defaultDimensionalityType).append(
+				"')");
+		return builder.toString();
+	}
+
+	private static String getDefaultDimensionalityType() {
+		if (registeredDimensionalityTypes == null) {
+			initDimensionalityTypeRegistry();
+		}
+		if (defaultDimensionalityType == null) {
+			return "";
+		}
+		return defaultDimensionalityType;
+	}
+
 
 	public static IngestCommandLineOptions parseOptions(
 			final CommandLine commandLine )

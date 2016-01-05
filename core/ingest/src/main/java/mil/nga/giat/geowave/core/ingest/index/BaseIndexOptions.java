@@ -64,7 +64,7 @@ public class BaseIndexOptions
 
 			if (convertedValue == null) {
 				throw new ParameterException(
-						"Value " + value + "can not be converted to an partition strategy. " + "Available values are: " + StringUtils.join(
+						"Value '" + value + "' can not be converted to a partition strategy. " + "Available values are: " + StringUtils.join(
 								PartitionStrategy.values(),
 								", ").toLowerCase());
 			}

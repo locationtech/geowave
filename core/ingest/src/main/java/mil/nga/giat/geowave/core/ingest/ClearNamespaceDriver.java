@@ -12,10 +12,14 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.log4j.Logger;
 
+import com.beust.jcommander.JCommander;
+import com.beust.jcommander.Parameters;
+
 /**
  * This simply executes an operation to clear a given namespace. It will delete
  * all tables prefixed by the given namespace.
  */
+@Parameters(commandDescription="clear ALL data from a GeoWave namespace, this actually deletes Accumulo tables prefixed by the given namespace")
 public class ClearNamespaceDriver extends
 		AbstractIngestCommandLineDriver
 {
@@ -27,6 +31,18 @@ public class ClearNamespaceDriver extends
 			final String operation ) {
 		super(
 				operation);
+	}
+
+	@Override
+	public String getOperationName() {
+		return "clear";
+	}
+
+	@Override
+	protected boolean initInternal(
+			JCommander commander ) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 	@Override
@@ -53,7 +69,6 @@ public class ClearNamespaceDriver extends
 
 	@Override
 	protected boolean runInternal(
-			final String[] args,
 			final List<IngestFormatPluginProviderSpi<?, ?>> pluginProviders ) {
 		// just check if the flag to clear namespaces is set, and even if it is
 		// not, clear it, but only if a namespace is provided

@@ -25,17 +25,18 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.beust.jcommander.Parameter;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 
 abstract public class GenericStoreCommandLineOptions<T>
 {
+	public final static String NAMESPACE_OPTION_KEY = "gwNamespace";
 	private final static Logger LOGGER = LoggerFactory.getLogger(GenericStoreCommandLineOptions.class);
 	protected final GenericStoreFactory<T> factory;
 	protected final Map<String, Object> configOptions;
+	@Parameter(names=NAMESPACE_OPTION_KEY, description="The geowave namespace (optional; default is no namespace)")
 	protected final String namespace;
-	public static String NAMESPACE_OPTION_KEY = "gwNamespace";
-	public static String CONNECTION_OPTION_KEY = "connectionParams";
 
 	public GenericStoreCommandLineOptions(
 			final GenericStoreFactory<T> factory,
@@ -216,7 +217,7 @@ abstract public class GenericStoreCommandLineOptions<T>
 		final Option namespace = new Option(
 				prefix != null ? prefix + NAMESPACE_OPTION_KEY : NAMESPACE_OPTION_KEY,
 				true,
-				"The geowave namespace (optional; default is no namespace)");
+				);
 		namespace.setRequired(false);
 		allOptions.addOption(namespace);
 		final Option connectionString = new Option(

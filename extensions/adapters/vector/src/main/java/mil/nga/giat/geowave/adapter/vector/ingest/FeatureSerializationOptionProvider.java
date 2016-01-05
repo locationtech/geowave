@@ -1,55 +1,43 @@
 package mil.nga.giat.geowave.adapter.vector.ingest;
 
 import mil.nga.giat.geowave.core.index.Persistable;
-import mil.nga.giat.geowave.core.ingest.IngestFormatOptionProvider;
+import mil.nga.giat.geowave.core.ingest.index.BaseIndexOptions.PartitionStrategyConverter;
 
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.Options;
+import org.apache.commons.lang3.StringUtils;
+
+import com.beust.jcommander.IStringConverter;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParameterException;
 
 public class FeatureSerializationOptionProvider implements
-		IngestFormatOptionProvider,
 		Persistable
 {
-	private boolean whole = false;
+	@Parameter(names = {
+		"-serializer"
+	}, required = false, description = "The serialization format to use.  Default will be serialization per attribute.", converter = PartitionStrategyConverter.class)
+	protected SerializationFormat serializationFormat = SerializationFormat.ATTRIBUTE;
 
-	private boolean avro = false;
-
-	@Override
-	public void applyOptions(
-			final Options allOptions ) {
-		allOptions.addOption(
-				"whole",
-				false,
-				"A flag to indicate whether whole feature serialization should be used");
-		allOptions.addOption(
-				"avro",
-				false,
-				"A flag to indicate whether avro feature serialization should be used");
-	}
-
-	@Override
-	public void parseOptions(
-			final CommandLine commandLine ) {
-		if (commandLine.hasOption("whole")) {
-			whole = true;
-		}
-		if (commandLine.hasOption("avro")) {
-			avro = true;
-		}
-	}
-
-	public boolean isWhole() {
-		return whole;
-	}
-
-	public boolean isAvro() {
-		return avro;
+	public SerializationFormat getSerializationFormat() {
+		return serializationFormat;
 	}
 
 	@Override
 	public byte[] toBinary() {
+		byte singleByteVal;
+		switch (serializationFormat) {
+			case AVRO:
+				singleByteVal = (byte) 2;
+				break;
+			case FEATURE:
+				singleByteVal = (byte) 1;
+				break;
+			default:
+			case ATTRIBUTE:
+				singleByteVal = (byte) 0;
+				break;
+		}
 		return new byte[] {
-			whole ? (byte) 1 : avro ? (byte) 2 : (byte) 0
+			singleByteVal
 		};
 	}
 
@@ -58,11 +46,50 @@ public class FeatureSerializationOptionProvider implements
 			final byte[] bytes ) {
 		if ((bytes != null) && (bytes.length > 0)) {
 			if (bytes[0] == 1) {
-				whole = true;
+				serializationFormat = SerializationFormat.FEATURE;
 			}
 			if (bytes[0] == 2) {
-				avro = true;
+				serializationFormat = SerializationFormat.AVRO;
 			}
 		}
+		serializationFormat = SerializationFormat.ATTRIBUTE;
+	}
+
+	protected static enum SerializationFormat {
+		ATTRIBUTE,
+		FEATURE,
+		AVRO;
+		// converter that will be used later
+		public static SerializationFormat fromString(
+				final String code ) {
+
+			for (final SerializationFormat output : SerializationFormat.values()) {
+				if (output.toString().equalsIgnoreCase(
+						code)) {
+					return output;
+				}
+			}
+
+			return null;
+		}
+	}
+
+	public static class SerializationFormatConverter implements
+			IStringConverter<SerializationFormat>
+	{
+		@Override
+		public SerializationFormat convert(
+				final String value ) {
+			final SerializationFormat convertedValue = SerializationFormat.fromString(value);
+
+			if (convertedValue == null) {
+				throw new ParameterException(
+						"Value '" + value + "' can not be converted to a serialization format. " + "Available values are: " + StringUtils.join(
+								SerializationFormat.values(),
+								", ").toLowerCase());
+			}
+			return convertedValue;
+		}
+
 	}
 }

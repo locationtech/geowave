@@ -1,14 +1,14 @@
 package mil.nga.giat.geowave.format.geotools.raster;
 
 import mil.nga.giat.geowave.adapter.raster.adapter.RasterDataAdapter;
-import mil.nga.giat.geowave.core.ingest.IngestFormatOptionProvider;
+import mil.nga.giat.geowave.core.ingest.IngestFormatOptions;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 
 public class RasterOptionProvider implements
-		IngestFormatOptionProvider
+		IngestFormatOptions
 {
 	private final static String BUILD_PYRAMID = "pyramid";
 	private final static String TILE_SIZE = "tileSize";

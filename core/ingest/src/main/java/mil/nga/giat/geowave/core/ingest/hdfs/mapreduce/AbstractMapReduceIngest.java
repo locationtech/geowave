@@ -1,14 +1,12 @@
 package mil.nga.giat.geowave.core.ingest.hdfs.mapreduce;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import mil.nga.giat.geowave.core.cli.DataAdapterProvider;
 import mil.nga.giat.geowave.core.cli.DataStoreCommandLineOptions;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayUtils;
 import mil.nga.giat.geowave.core.index.Persistable;
 import mil.nga.giat.geowave.core.index.PersistenceUtils;
-import mil.nga.giat.geowave.core.ingest.DataAdapterProvider;
+import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.ingest.IngestCommandLineOptions;
 import mil.nga.giat.geowave.core.ingest.IngestUtils;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;

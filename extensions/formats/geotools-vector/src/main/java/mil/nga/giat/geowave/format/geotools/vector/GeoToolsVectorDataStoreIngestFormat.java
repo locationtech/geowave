@@ -1,8 +1,6 @@
 package mil.nga.giat.geowave.format.geotools.vector;
 
 import mil.nga.giat.geowave.adapter.vector.ingest.CQLFilterOptionProvider;
-import mil.nga.giat.geowave.core.ingest.CompoundIngestFormatOptionProvider;
-import mil.nga.giat.geowave.core.ingest.IngestFormatOptionProvider;
 import mil.nga.giat.geowave.core.ingest.IngestFormatPluginProviderSpi;
 import mil.nga.giat.geowave.core.ingest.avro.AvroFormatPlugin;
 import mil.nga.giat.geowave.core.ingest.hdfs.mapreduce.IngestFromHdfsPlugin;
@@ -56,10 +54,11 @@ public class GeoToolsVectorDataStoreIngestFormat implements
 	}
 
 	@Override
-	public IngestFormatOptionProvider getIngestFormatOptionProvider() {
-		return new CompoundIngestFormatOptionProvider().add(
-				cqlFilterOptionProvider).add(
-				dateFieldOptionProvider);
+	public Object[] getIngestFormatOptions() {
+		return new Object[] {
+			cqlFilterOptionProvider,
+			dateFieldOptionProvider
+		};
 	}
 
 }

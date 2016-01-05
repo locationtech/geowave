@@ -103,17 +103,20 @@ abstract public class AbstractSimpleFeatureIngestPlugin<I> implements
 			final SimpleFeatureType type,
 			final FieldVisibilityHandler<SimpleFeature, Object> fieldVisiblityHandler ) {
 		// TODO: assign other adapters based on serialization option
-		if (serializationFormatOptionProvider.isWhole()) {
-			return new WholeFeatureDataAdapter(
-					type);
+		switch (serializationFormatOptionProvider.getSerializationFormat()) {
+			case FEATURE:
+				return new WholeFeatureDataAdapter(
+						type);
+			case AVRO:
+				return new AvroFeatureDataAdapter(
+						type,
+						fieldVisiblityHandler);
+			default:
+			case ATTRIBUTE:
+				return new FeatureDataAdapter(
+						type,
+						fieldVisiblityHandler);
 		}
-		else if (serializationFormatOptionProvider.isAvro()) {
-			return new AvroFeatureDataAdapter(
-					type);
-		}
-		return new FeatureDataAdapter(
-				type,
-				fieldVisiblityHandler);
 	}
 
 	abstract protected SimpleFeatureType[] getTypes();

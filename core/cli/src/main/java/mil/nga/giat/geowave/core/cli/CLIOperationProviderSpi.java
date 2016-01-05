@@ -2,7 +2,7 @@ package mil.nga.giat.geowave.core.cli;
 
 public interface CLIOperationProviderSpi
 {
-	public CLIOperation[] getOperations();
+	public CLIOperation[] createOperations();
 
-	public CLIOperationCategory getCategory();
+	public CommandObject getOperationCategory();
 }

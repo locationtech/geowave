@@ -1,0 +1,21 @@
+package mil.nga.giat.geowave.core.cli.config;
+
+import mil.nga.giat.geowave.core.cli.CLIOperation;
+import mil.nga.giat.geowave.core.cli.CLIOperationProviderSpi;
+import mil.nga.giat.geowave.core.cli.CommandObject;
+
+public class ConfigOperationProvider implements
+		CLIOperationProviderSpi
+{
+
+	@Override
+	public CLIOperation[] createOperations() {
+		return null;
+	}
+
+	@Override
+	public CommandObject getOperationCategory() {
+		return new ConfigOperationCategory();
+	}
+
+}

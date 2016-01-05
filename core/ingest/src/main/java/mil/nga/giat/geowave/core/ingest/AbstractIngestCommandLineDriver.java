@@ -10,20 +10,15 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.ServiceLoader;
 
-import mil.nga.giat.geowave.core.cli.CLIOperationDriver;
+import mil.nga.giat.geowave.core.cli.CLIOperation;
 import mil.nga.giat.geowave.core.index.StringUtils;
-import mil.nga.giat.geowave.core.store.DataStoreFactorySpi;
-import mil.nga.giat.geowave.core.store.GeoWaveStoreFinder;
 import mil.nga.giat.geowave.core.store.config.ConfigUtils;
 
-import org.apache.commons.cli.BasicParser;
-import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.HelpFormatter;
-import org.apache.commons.cli.Option;
-import org.apache.commons.cli.OptionGroup;
-import org.apache.commons.cli.Options;
-import org.apache.commons.cli.ParseException;
 import org.apache.log4j.Logger;
+
+import com.beust.jcommander.JCommander;
+import com.beust.jcommander.Parameter;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
@@ -32,11 +27,19 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  * of ingest format plugins and using them to drive an ingestion process. The
  * class is sub-classed to perform the specific ingestion required based on the
  * operation set by the user.
- * 
+ *
  */
 abstract public class AbstractIngestCommandLineDriver implements
-		CLIOperationDriver
+		CLIOperation
 {
+	@Parameter(names = "--list-formats", description = "List the available ingest formats", help = true)
+	private final boolean listFormats = false;
+	@Parameter(names = {
+		"-f",
+		"-format"
+	}, description = "Explicitly set the ingest formats by name (or multiple comma-delimited formats), if not set all available ingest formats will be used")
+	private final List<String> formats = new ArrayList<String>();
+
 	private final static Logger LOGGER = Logger.getLogger(AbstractIngestCommandLineDriver.class);
 	final protected Map<String, IngestFormatPluginProviderSpi<?, ?>> pluginProviderRegistry;
 	private final String operation;
@@ -61,161 +64,99 @@ abstract public class AbstractIngestCommandLineDriver implements
 	}
 
 	@Override
-	public boolean runOperation(
-			final String[] args )
-			throws ParseException {
-		final List<IngestFormatPluginProviderSpi<?, ?>> pluginProviders = applyArguments(args);
-		final boolean retVal = runInternal(
-				args,
-				pluginProviders);
+	public boolean doOperation(
+			final JCommander commander ) {
+		if (listFormats) {
+			printFormats(pluginProviderRegistry);
+			return true;
+		}
+		final List<IngestFormatPluginProviderSpi<?, ?>> pluginProviders = processFormatPlugins(commander);
+		final boolean retVal = runInternal(pluginProviders);
 		return retVal;
 	}
 
 	@SuppressFBWarnings(value = "DM_EXIT", justification = "Exiting JVM with System.exit(0) is intentional")
-	protected List<IngestFormatPluginProviderSpi<?, ?>> applyArguments(
-			final String[] args ) {
+	protected List<IngestFormatPluginProviderSpi<?, ?>> processFormatPlugins(
+			final JCommander commander ) {
 		List<IngestFormatPluginProviderSpi<?, ?>> selectedPluginProviders = new ArrayList<IngestFormatPluginProviderSpi<?, ?>>();
-		final Options options = new Options();
-		final OptionGroup baseOptionGroup = new OptionGroup();
-		baseOptionGroup.setRequired(false);
-		baseOptionGroup.addOption(new Option(
-				"h",
-				"help",
-				false,
-				"Display help"));
-		baseOptionGroup.addOption(new Option(
-				"l",
-				"list",
-				false,
-				"List the available ingest formats and available data stores"));
-		baseOptionGroup.addOption(new Option(
-				"f",
-				"formats",
-				true,
-				"Explicitly set the ingest formats by name (or multiple comma-delimited formats), if not set all available ingest formats will be used"));
-		options.addOptionGroup(baseOptionGroup);
-		applyOptionsInternal(options);
-		final int optionCount = options.getOptions().size();
-		final BasicParser parser = new BasicParser();
-		try {
-			CommandLine commandLine = parser.parse(
-					options,
-					args,
-					true);
-			if (commandLine.hasOption("h")) {
-				printHelp(
-						options,
-						operation);
-				System.exit(0);
+		initInternal(commander);
+		if (!formats.isEmpty()) {
+			try {
+				selectedPluginProviders = getPluginProviders();
 			}
-			else if (commandLine.hasOption("l")) {
-				final HelpFormatter formatter = new HelpFormatter();
-				final PrintWriter pw = new PrintWriter(
-						new OutputStreamWriter(
-								System.out,
-								StringUtils.GEOWAVE_CHAR_SET));
-				pw.println("Available ingest formats currently registered as plugins:\n");
-				for (final Entry<String, IngestFormatPluginProviderSpi<?, ?>> pluginProviderEntry : pluginProviderRegistry.entrySet()) {
-					final IngestFormatPluginProviderSpi<?, ?> pluginProvider = pluginProviderEntry.getValue();
-					final String desc = pluginProvider.getIngestFormatDescription() == null ? "no description" : pluginProvider.getIngestFormatDescription();
-					final String text = pluginProviderEntry.getKey() + ":\n" + desc;
-
-					formatter.printWrapped(
-							pw,
-							formatter.getWidth(),
-							5,
-							text);
-					pw.println();
-				}
-				pw.println("Available datastores currently registered:\n");
-				final Map<String, DataStoreFactorySpi> dataStoreFactories = GeoWaveStoreFinder.getRegisteredDataStoreFactories();
-				for (final Entry<String, DataStoreFactorySpi> dataStoreFactoryEntry : dataStoreFactories.entrySet()) {
-					final DataStoreFactorySpi dataStoreFactory = dataStoreFactoryEntry.getValue();
-					final String desc = dataStoreFactory.getDescription() == null ? "no description" : dataStoreFactory.getDescription();
-					final String text = dataStoreFactory.getName() + ":\n" + desc;
-
-					formatter.printWrapped(
-							pw,
-							formatter.getWidth(),
-							5,
-							text);
-					pw.println();
-				}
-				pw.flush();
-				System.exit(0);
+			catch (final Exception e) {
+				LOGGER.fatal(
+						"Error parsing plugins",
+						e);
+				System.exit(-3);
 			}
-			else if (commandLine.hasOption("f")) {
-				try {
-					selectedPluginProviders = getPluginProviders(commandLine);
-				}
-				catch (final Exception e) {
-					LOGGER.fatal(
-							"Error parsing plugins",
-							e);
-					System.exit(-3);
-				}
-			}
-			else {
-				selectedPluginProviders.addAll(pluginProviderRegistry.values());
-				if (selectedPluginProviders.isEmpty()) {
-					LOGGER.fatal("There were no ingest format plugin providers found");
-					System.exit(-3);
-				}
-			}
-			applyAdditionalOptions(
-					selectedPluginProviders,
-					commandLine,
-					options);
-			if (options.getOptions().size() > optionCount) {
-				// custom options have been added, reparse the commandline
-				// arguments with the new set of options
-				commandLine = parser.parse(
-						options,
-						args,
-						true);
-				for (final IngestFormatPluginProviderSpi<?, ?> plugin : selectedPluginProviders) {
-					final IngestFormatOptionProvider optionProvider = plugin.getIngestFormatOptionProvider();
-					if (optionProvider != null) {
-						optionProvider.parseOptions(commandLine);
-					}
-				}
-			}
-			parseOptionsInternal(
-					options,
-					commandLine);
 		}
-		catch (final ParseException e) {
-			LOGGER.fatal(
-					"Error parsing commandline",
-					e);
-			printHelp(
-					options,
-					operation);
-			System.exit(-1);
+		else {
+			selectedPluginProviders.addAll(pluginProviderRegistry.values());
+			if (selectedPluginProviders.isEmpty()) {
+				LOGGER.fatal("There were no ingest format plugin providers found");
+				System.exit(-3);
+			}
 		}
+		applyAdditionalOptions(
+				selectedPluginProviders,
+				commander);
 		return selectedPluginProviders;
 	}
 
-	private void applyAdditionalOptions(
-			final List<IngestFormatPluginProviderSpi<?, ?>> selectedPluginProviders,
-			final CommandLine commandLine,
-			final Options options )
-			throws ParseException {
-		for (final IngestFormatPluginProviderSpi<?, ?> plugin : selectedPluginProviders) {
-			final IngestFormatOptionProvider optionProvider = plugin.getIngestFormatOptionProvider();
-			if (optionProvider != null) {
-				optionProvider.applyOptions(options);
-			}
+	private static void printFormats(
+			final Map<String, IngestFormatPluginProviderSpi<?, ?>> pluginProviderRegistry ) {
+		final HelpFormatter formatter = new HelpFormatter();
+		final PrintWriter pw = new PrintWriter(
+				new OutputStreamWriter(
+						System.out,
+						StringUtils.UTF8_CHAR_SET));
+		pw.println("Available ingest formats currently registered as plugins:\n");
+		for (final Entry<String, IngestFormatPluginProviderSpi<?, ?>> pluginProviderEntry : pluginProviderRegistry.entrySet()) {
+			final IngestFormatPluginProviderSpi<?, ?> pluginProvider = pluginProviderEntry.getValue();
+			final String desc = pluginProvider.getIngestFormatDescription() == null ? "no description" : pluginProvider.getIngestFormatDescription();
+			final String text = pluginProviderEntry.getKey() + ":\n" + desc;
+
+			formatter.printWrapped(
+					pw,
+					formatter.getWidth(),
+					5,
+					text);
+			pw.println();
 		}
 	}
 
-	private List<IngestFormatPluginProviderSpi<?, ?>> getPluginProviders(
-			final CommandLine commandLine ) {
+	private boolean applyAdditionalOptions(
+			final List<IngestFormatPluginProviderSpi<?, ?>> selectedPluginProviders,
+			final JCommander commander ) {
+		boolean retVal = false;
+		final JCommander additionalParameters = new JCommander();
+		for (final IngestFormatPluginProviderSpi<?, ?> plugin : selectedPluginProviders) {
+			final Object[] additionalOptions = plugin.getIngestFormatOptions();
+			if ((additionalOptions != null) && (additionalOptions.length > 0)) {
+				retVal = true;
+				for (final Object option : additionalOptions) {
+					additionalParameters.addObject(option);
+				}
+			}
+		}
+		additionalParameters.setAcceptUnknownOptions(true);
+		additionalParameters.parse(commander.getUnknownOptions().toArray(
+				new String[] {}));
+		return retVal;
+		// final DataStoreFactorySpi dataStoreFactory =
+		// DataStoreCommandLineOptions.getSelectedStore(new CommandLineWrapper(
+		// commandLine));
+		// if (dataStoreFactory != null) {
+		// GenericStoreCommandLineOptions.applyStoreOptions(
+		// dataStoreFactory,
+		// options);
+		// }
+	}
+
+	private List<IngestFormatPluginProviderSpi<?, ?>> getPluginProviders() {
 		final List<IngestFormatPluginProviderSpi<?, ?>> selectedPluginProviders = new ArrayList<IngestFormatPluginProviderSpi<?, ?>>();
-		final String[] pluginProviderNames = commandLine.getOptionValue(
-				"f").split(
-				",");
-		for (final String pluginProviderName : pluginProviderNames) {
+		for (final String pluginProviderName : formats) {
 			final IngestFormatPluginProviderSpi<?, ?> pluginProvider = pluginProviderRegistry.get(pluginProviderName);
 			if (pluginProvider == null) {
 				throw new IllegalArgumentException(
@@ -230,26 +171,27 @@ abstract public class AbstractIngestCommandLineDriver implements
 		return selectedPluginProviders;
 	}
 
-	private static void printHelp(
-			final Options options,
-			final String operation ) {
-		final HelpFormatter formatter = new HelpFormatter();
-		formatter.printHelp(
-				"-" + operation + " <options>",
-				"\nOptions:",
-				options,
-				"");
+	//
+	// private static void printHelp(
+	// final Options options,
+	// final String operation ) {
+	// final HelpFormatter formatter = new HelpFormatter();
+	// formatter.printHelp(
+	// "-" + operation + " <options>",
+	// "\nOptions:",
+	// options,
+	// "");
+	// }
+
+	@Override
+	public void init(
+			final JCommander commander ) {
+
 	}
 
-	abstract protected void parseOptionsInternal(
-			Options options,
-			final CommandLine commandLine )
-			throws ParseException;
-
-	abstract protected void applyOptionsInternal(
-			final Options allOptions );
+	abstract protected boolean initInternal(
+			final JCommander commander );
 
 	abstract protected boolean runInternal(
-			String[] args,
 			List<IngestFormatPluginProviderSpi<?, ?>> pluginProviders );
 }

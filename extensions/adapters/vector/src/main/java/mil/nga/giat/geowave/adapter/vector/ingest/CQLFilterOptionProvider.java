@@ -2,42 +2,26 @@ package mil.nga.giat.geowave.adapter.vector.ingest;
 
 import mil.nga.giat.geowave.core.index.Persistable;
 import mil.nga.giat.geowave.core.index.StringUtils;
-import mil.nga.giat.geowave.core.ingest.IngestFormatOptionProvider;
 
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.Options;
 import org.apache.log4j.Logger;
 import org.geotools.filter.text.cql2.CQL;
 import org.geotools.filter.text.cql2.CQLException;
 import org.opengis.filter.Filter;
 import org.opengis.filter.FilterVisitor;
 
+import com.beust.jcommander.Parameter;
+
 public class CQLFilterOptionProvider implements
-		IngestFormatOptionProvider,
 		Filter,
 		Persistable
 {
 	private final static Logger LOGGER = Logger.getLogger(CQLFilterOptionProvider.class);
+
+	@Parameter(names = {
+		"-cql"
+	}, required = false, description = "A CQL filter, only data matching this filter will be ingested")
 	private String cqlFilterString = null;
 	private Filter filter;
-
-	@Override
-	public void applyOptions(
-			final Options allOptions ) {
-		allOptions.addOption(
-				"cql",
-				true,
-				"A CQL filter, only data matching this filter will be ingested");
-	}
-
-	@Override
-	public void parseOptions(
-			final CommandLine commandLine ) {
-		if (commandLine.hasOption("cql")) {
-			cqlFilterString = commandLine.getOptionValue("cql");
-			resolveCQLStrToFilter();
-		}
-	}
 
 	public String getCqlFilterString() {
 		return cqlFilterString;

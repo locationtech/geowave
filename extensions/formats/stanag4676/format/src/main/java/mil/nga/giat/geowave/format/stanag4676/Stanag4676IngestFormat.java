@@ -1,6 +1,6 @@
 package mil.nga.giat.geowave.format.stanag4676;
 
-import mil.nga.giat.geowave.core.ingest.IngestFormatOptionProvider;
+import mil.nga.giat.geowave.core.ingest.IngestFormatOptions;
 import mil.nga.giat.geowave.core.ingest.IngestFormatPluginProviderSpi;
 import mil.nga.giat.geowave.core.ingest.avro.AvroFormatPlugin;
 import mil.nga.giat.geowave.core.ingest.avro.WholeFile;
@@ -48,7 +48,7 @@ public class Stanag4676IngestFormat implements
 	}
 
 	@Override
-	public IngestFormatOptionProvider getIngestFormatOptionProvider() {
+	public IngestFormatOptions getIngestFormatOptionProvider() {
 		// for now don't support filtering
 		return null;
 	}

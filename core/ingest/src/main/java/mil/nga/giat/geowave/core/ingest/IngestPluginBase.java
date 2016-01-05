@@ -1,7 +1,6 @@
 package mil.nga.giat.geowave.core.ingest;
 
-import java.util.Collection;
-
+import mil.nga.giat.geowave.core.cli.DataAdapterProvider;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 

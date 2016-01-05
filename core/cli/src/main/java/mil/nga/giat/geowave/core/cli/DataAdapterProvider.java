@@ -1,4 +1,4 @@
-package mil.nga.giat.geowave.core.ingest;
+package mil.nga.giat.geowave.core.cli;
 
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
