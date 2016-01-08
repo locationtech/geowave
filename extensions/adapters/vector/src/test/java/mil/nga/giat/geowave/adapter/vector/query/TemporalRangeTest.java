@@ -8,14 +8,14 @@ import java.util.Calendar;
 import java.util.TimeZone;
 import java.util.UUID;
 
-import mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveGTMemDataStore;
+import mil.nga.giat.geowave.adapter.vector.BaseDataStoreTest;
+import mil.nga.giat.geowave.adapter.vector.plugin.GeoWavePluginException;
 import mil.nga.giat.geowave.adapter.vector.stats.FeatureTimeRangeStatistics;
 import mil.nga.giat.geowave.adapter.vector.utils.DateUtilities;
 import mil.nga.giat.geowave.core.geotime.store.query.TemporalRange;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 
-import org.apache.accumulo.core.client.AccumuloException;
-import org.apache.accumulo.core.client.AccumuloSecurityException;
+import org.geotools.data.DataStore;
 import org.geotools.data.DataUtilities;
 import org.geotools.data.DefaultTransaction;
 import org.geotools.data.FeatureWriter;
@@ -31,9 +31,10 @@ import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.PrecisionModel;
 
-public class TemporalRangeTest
+public class TemporalRangeTest extends
+		BaseDataStoreTest
 {
-	GeoWaveGTMemDataStore dataStore;
+	DataStore dataStore;
 	SimpleFeatureType type;
 	GeometryFactory factory = new GeometryFactory(
 			new PrecisionModel(
@@ -41,12 +42,11 @@ public class TemporalRangeTest
 
 	@Before
 	public void setup()
-			throws AccumuloException,
-			AccumuloSecurityException,
-			SchemaException,
+			throws SchemaException,
 			CQLException,
-			IOException {
-		dataStore = new GeoWaveGTMemDataStore();
+			IOException,
+			GeoWavePluginException {
+		dataStore = createDataStore();
 		type = DataUtilities.createType(
 				"geostuff",
 				"geometry:Geometry:srid=4326,pop:java.lang.Long,pid:String,when:Date");
@@ -58,13 +58,13 @@ public class TemporalRangeTest
 	public void test()
 			throws ParseException,
 			IOException {
-		Calendar gmt = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
-		Calendar local = Calendar.getInstance(TimeZone.getTimeZone("EDT"));
+		final Calendar gmt = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+		final Calendar local = Calendar.getInstance(TimeZone.getTimeZone("EDT"));
 		local.setTimeInMillis(gmt.getTimeInMillis());
-		TemporalRange rGmt = new TemporalRange(
+		final TemporalRange rGmt = new TemporalRange(
 				gmt.getTime(),
 				gmt.getTime());
-		TemporalRange rLocal = new TemporalRange(
+		final TemporalRange rLocal = new TemporalRange(
 				local.getTime(),
 				local.getTime());
 		rGmt.fromBinary(rGmt.toBinary());
@@ -78,12 +78,12 @@ public class TemporalRangeTest
 				rLocal.getEndTime().getTime(),
 				rGmt.getEndTime().getTime());
 
-		Transaction transaction1 = new DefaultTransaction();
+		final Transaction transaction1 = new DefaultTransaction();
 
-		FeatureWriter<SimpleFeatureType, SimpleFeature> writer = dataStore.getFeatureWriter(
+		final FeatureWriter<SimpleFeatureType, SimpleFeature> writer = dataStore.getFeatureWriter(
 				type.getTypeName(),
 				transaction1);
-		SimpleFeature newFeature = writer.next();
+		final SimpleFeature newFeature = writer.next();
 		newFeature.setAttribute(
 				"pop",
 				Long.valueOf(77));
@@ -99,7 +99,7 @@ public class TemporalRangeTest
 						43.454,
 						28.232)));
 
-		FeatureTimeRangeStatistics stats = new FeatureTimeRangeStatistics(
+		final FeatureTimeRangeStatistics stats = new FeatureTimeRangeStatistics(
 				new ByteArrayId(
 						"a"),
 				"when");

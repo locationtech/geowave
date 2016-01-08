@@ -13,7 +13,6 @@ import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.ingest.GeoWaveData;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
-import mil.nga.giat.geowave.datastore.accumulo.util.AccumuloUtils;
 import mil.nga.giat.geowave.format.gpx.GpxIngestPlugin;
 import mil.nga.giat.geowave.types.HelperClass;
 import mil.nga.giat.geowave.types.ValidateObject;
@@ -35,7 +34,7 @@ public class GPXIngestPluginTest
 				new ValidateObject<SimpleFeature>() {
 					@Override
 					public boolean validate(
-							SimpleFeature feature ) {
+							final SimpleFeature feature ) {
 						return feature.getAttribute(
 								"Tags").toString().equals(
 								"tag1 ||| tag2") && feature.getAttribute(
@@ -48,7 +47,7 @@ public class GPXIngestPluginTest
 								"NumberPoints").toString().equals(
 								"7") && feature.getAttribute(
 								"Duration").toString().equals(
-								"251000") && feature.getAttribute("EndTimeStamp") != null && feature.getAttribute("StartTimeStamp") != null;
+								"251000") && (feature.getAttribute("EndTimeStamp") != null) && (feature.getAttribute("StartTimeStamp") != null);
 					}
 				});
 	}
@@ -56,14 +55,14 @@ public class GPXIngestPluginTest
 	@Test
 	public void test()
 			throws IOException {
-		Set<String> expectedSet = HelperClass.buildSet(expectedResults);
+		final Set<String> expectedSet = HelperClass.buildSet(expectedResults);
 
-		GpxIngestPlugin pluggin = new GpxIngestPlugin();
+		final GpxIngestPlugin pluggin = new GpxIngestPlugin();
 		pluggin.init(new File(
 				this.getClass().getClassLoader().getResource(
 						"metadata.xml").getPath()).getParentFile());
 
-		CloseableIterator<GeoWaveData<SimpleFeature>> consumer = pluggin.toGeoWaveData(
+		final CloseableIterator<GeoWaveData<SimpleFeature>> consumer = pluggin.toGeoWaveData(
 				new File(
 						this.getClass().getClassLoader().getResource(
 								"12345.xml").getPath()),
@@ -73,9 +72,9 @@ public class GPXIngestPluginTest
 
 		int totalCount = 0;
 		while (consumer.hasNext()) {
-			GeoWaveData<SimpleFeature> data = consumer.next();
+			final GeoWaveData<SimpleFeature> data = consumer.next();
 			expectedSet.remove(data.getValue().getID());
-			ValidateObject<SimpleFeature> tester = expectedResults.get(data.getValue().getID());
+			final ValidateObject<SimpleFeature> tester = expectedResults.get(data.getValue().getID());
 			if (tester != null) {
 				assertTrue(
 						data.getValue().toString(),

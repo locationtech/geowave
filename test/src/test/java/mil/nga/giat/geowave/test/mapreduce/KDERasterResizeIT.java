@@ -6,15 +6,19 @@ import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.Map;
 
 import javax.media.jai.Interpolation;
 
 import mil.nga.giat.geowave.adapter.raster.plugin.GeoWaveGTRasterFormat;
 import mil.nga.giat.geowave.adapter.raster.plugin.GeoWaveRasterConfig;
 import mil.nga.giat.geowave.adapter.raster.plugin.GeoWaveRasterReader;
+import mil.nga.giat.geowave.adapter.raster.resize.RasterTileResizeCommandLineOptions;
 import mil.nga.giat.geowave.adapter.raster.resize.RasterTileResizeJobRunner;
+import mil.nga.giat.geowave.analytic.mapreduce.kde.KDECommandLineOptions;
 import mil.nga.giat.geowave.analytic.mapreduce.kde.KDEJobRunner;
-import mil.nga.giat.geowave.core.geotime.IndexType;
+import mil.nga.giat.geowave.core.cli.GenericStoreCommandLineOptions;
+import mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations;
 import mil.nga.giat.geowave.datastore.accumulo.util.ConnectorPool;
 import mil.nga.giat.geowave.test.GeoWaveTestEnvironment;
 
@@ -25,7 +29,6 @@ import org.apache.hadoop.util.ToolRunner;
 import org.geotools.geometry.GeneralEnvelope;
 import org.junit.Assert;
 import org.junit.BeforeClass;
-import org.junit.Test;
 import org.opengis.coverage.grid.GridCoverage;
 
 public class KDERasterResizeIT extends
@@ -57,12 +60,12 @@ public class KDERasterResizeIT extends
 				TEST_CASE_BASE);
 	}
 
-	@Test
+	// @Test
 	public void testKDEAndRasterResize()
 			throws Exception {
 		accumuloOperations.deleteAll();
 		testLocalIngest(
-				IndexType.SPATIAL_VECTOR,
+				false,
 				KDE_SHAPEFILE_FILE);
 		// use the min level to define the request boundary because it is the
 		// most coarse grain
@@ -91,28 +94,56 @@ public class KDERasterResizeIT extends
 			ToolRunner.run(
 					new KDEJobRunner(),
 					new String[] {
-						zookeeper,
-						accumuloInstance,
-						accumuloUser,
-						accumuloPassword,
-						TEST_NAMESPACE,
+						"-" + KDECommandLineOptions.FEATURE_TYPE_KEY,
 						KDE_FEATURE_TYPE_NAME,
+						"-" + KDECommandLineOptions.MIN_LEVEL_KEY,
 						new Integer(
 								BASE_MIN_LEVEL - i).toString(),
+						"-" + KDECommandLineOptions.MAX_LEVEL_KEY,
 						new Integer(
 								BASE_MAX_LEVEL - i).toString(),
+						"-" + KDECommandLineOptions.MIN_SPLITS_KEY,
 						new Integer(
 								MIN_INPUT_SPLITS).toString(),
+						"-" + KDECommandLineOptions.MAX_SPLITS_KEY,
 						new Integer(
 								MAX_INPUT_SPLITS).toString(),
+						"-" + KDECommandLineOptions.COVERAGE_NAME_KEY,
 						tileSizeCoverageName,
+						"-" + KDECommandLineOptions.HDFS_HOST_PORT_KEY,
 						hdfs,
+						"-" + KDECommandLineOptions.JOB_TRACKER_HOST_PORT_KEY,
 						jobtracker,
-						TEST_COVERAGE_NAMESPACE,
+						"-" + KDECommandLineOptions.TILE_SIZE_KEY,
 						new Integer(
 								(int) Math.pow(
 										2,
-										i)).toString()
+										i)).toString(),
+						"-input_" + GenericStoreCommandLineOptions.NAMESPACE_OPTION_KEY,
+						TEST_NAMESPACE,
+						"-input_datastore",
+						"accumulo",
+						"-input_" + BasicAccumuloOperations.ZOOKEEPER_CONFIG_NAME,
+						zookeeper,
+						"-input_" + BasicAccumuloOperations.INSTANCE_CONFIG_NAME,
+						accumuloInstance,
+						"-input_" + BasicAccumuloOperations.USER_CONFIG_NAME,
+						accumuloUser,
+						"-input_" + BasicAccumuloOperations.PASSWORD_CONFIG_NAME,
+						accumuloPassword,
+						"-output_" + GenericStoreCommandLineOptions.NAMESPACE_OPTION_KEY,
+						TEST_COVERAGE_NAMESPACE,
+						"-output_datastore",
+						"accumulo",
+						"-output_" + BasicAccumuloOperations.ZOOKEEPER_CONFIG_NAME,
+						zookeeper,
+						"-output_" + BasicAccumuloOperations.INSTANCE_CONFIG_NAME,
+						accumuloInstance,
+						"-output_" + BasicAccumuloOperations.USER_CONFIG_NAME,
+						accumuloUser,
+						"-output_" + BasicAccumuloOperations.PASSWORD_CONFIG_NAME,
+						accumuloPassword
+
 					});
 		}
 		final int numLevels = (BASE_MAX_LEVEL - BASE_MIN_LEVEL) + 1;
@@ -138,7 +169,7 @@ public class KDERasterResizeIT extends
 				accumuloUser,
 				accumuloPassword);
 		conn.tableOperations().compact(
-				TEST_COVERAGE_NAMESPACE + "_" + IndexType.SPATIAL_RASTER.createDefaultIndex().getId().getString(),
+				TEST_COVERAGE_NAMESPACE + "_" + DEFAULT_ALLTIER_SPATIAL_INDEX.getId().getString(),
 				null,
 				null,
 				true,
@@ -163,24 +194,51 @@ public class KDERasterResizeIT extends
 			ToolRunner.run(
 					new RasterTileResizeJobRunner(),
 					new String[] {
-						zookeeper,
-						accumuloInstance,
-						accumuloUser,
-						accumuloPassword,
-						TEST_COVERAGE_NAMESPACE,
+						"-" + RasterTileResizeCommandLineOptions.INPUT_COVERAGE_NAME_KEY,
 						originalTileSizeCoverageName,
+						"-" + RasterTileResizeCommandLineOptions.MIN_SPLITS_KEY,
 						new Integer(
 								MIN_INPUT_SPLITS).toString(),
+						"-" + RasterTileResizeCommandLineOptions.MAX_SPLITS_KEY,
 						new Integer(
 								MAX_INPUT_SPLITS).toString(),
+						"-" + RasterTileResizeCommandLineOptions.HDFS_HOST_PORT_KEY,
 						hdfs,
+						"-" + RasterTileResizeCommandLineOptions.JOB_TRACKER_HOST_PORT_KEY,
 						jobtracker,
+						"-" + RasterTileResizeCommandLineOptions.OUTPUT_COVERAGE_NAME_KEY,
 						resizeTileSizeCoverageName,
-						TEST_COVERAGE_NAMESPACE,
+						"-" + RasterTileResizeCommandLineOptions.INDEX_ID_KEY,
+						DEFAULT_ALLTIER_SPATIAL_INDEX.getId().getString(),
+						"-" + RasterTileResizeCommandLineOptions.TILE_SIZE_KEY,
 						new Integer(
 								(int) Math.pow(
 										2,
-										MAX_TILE_SIZE_POWER_OF_2 - i)).toString()
+										MAX_TILE_SIZE_POWER_OF_2 - i)).toString(),
+						"-input_" + GenericStoreCommandLineOptions.NAMESPACE_OPTION_KEY,
+						TEST_COVERAGE_NAMESPACE,
+						"-input_datastore",
+						"accumulo",
+						"-input_" + BasicAccumuloOperations.ZOOKEEPER_CONFIG_NAME,
+						zookeeper,
+						"-input_" + BasicAccumuloOperations.INSTANCE_CONFIG_NAME,
+						accumuloInstance,
+						"-input_" + BasicAccumuloOperations.USER_CONFIG_NAME,
+						accumuloUser,
+						"-input_" + BasicAccumuloOperations.PASSWORD_CONFIG_NAME,
+						accumuloPassword,
+						"-output_" + GenericStoreCommandLineOptions.NAMESPACE_OPTION_KEY,
+						TEST_COVERAGE_NAMESPACE,
+						"-output_datastore",
+						"accumulo",
+						"-output_" + BasicAccumuloOperations.ZOOKEEPER_CONFIG_NAME,
+						zookeeper,
+						"-output_" + BasicAccumuloOperations.INSTANCE_CONFIG_NAME,
+						accumuloInstance,
+						"-output_" + BasicAccumuloOperations.USER_CONFIG_NAME,
+						accumuloUser,
+						"-output_" + BasicAccumuloOperations.PASSWORD_CONFIG_NAME,
+						accumuloPassword,
 					});
 		}
 
@@ -200,7 +258,7 @@ public class KDERasterResizeIT extends
 		}
 
 		conn.tableOperations().compact(
-				TEST_COVERAGE_NAMESPACE + "_" + IndexType.SPATIAL_RASTER.createDefaultIndex().getId().getString(),
+				TEST_COVERAGE_NAMESPACE + "_" + DEFAULT_ALLTIER_SPATIAL_INDEX.getId().getString(),
 				null,
 				null,
 				true,
@@ -230,12 +288,11 @@ public class KDERasterResizeIT extends
 			throws IOException,
 			AccumuloException,
 			AccumuloSecurityException {
+		final Map<String, String> options = getAccumuloConfigOptions();
+
 		final GeoWaveRasterReader reader = new GeoWaveRasterReader(
 				GeoWaveRasterConfig.createConfig(
-						zookeeper,
-						accumuloInstance,
-						accumuloUser,
-						accumuloPassword,
+						options,
 						TEST_COVERAGE_NAMESPACE,
 						false,
 						Interpolation.INTERP_NEAREST));

@@ -11,7 +11,7 @@ public class AccumuloOptions
 	protected boolean persistDataStatistics = true;
 	protected boolean createTable = true;
 	protected boolean useLocalityGroups = true;
-	protected boolean useAltIndex = true;
+	protected boolean useAltIndex = false;
 
 	public boolean isPersistDataStatistics() {
 		return persistDataStatistics;

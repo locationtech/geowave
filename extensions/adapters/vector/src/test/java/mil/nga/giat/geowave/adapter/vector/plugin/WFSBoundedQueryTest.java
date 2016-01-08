@@ -7,10 +7,10 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.UUID;
 
+import mil.nga.giat.geowave.adapter.vector.BaseDataStoreTest;
 import mil.nga.giat.geowave.adapter.vector.utils.DateUtilities;
 
-import org.apache.accumulo.core.client.AccumuloException;
-import org.apache.accumulo.core.client.AccumuloSecurityException;
+import org.geotools.data.DataStore;
 import org.geotools.data.DataUtilities;
 import org.geotools.data.DefaultTransaction;
 import org.geotools.data.FeatureReader;
@@ -29,9 +29,10 @@ import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.PrecisionModel;
 
-public class WFSBoundedQueryTest
+public class WFSBoundedQueryTest extends
+		BaseDataStoreTest
 {
-	GeoWaveGTMemDataStore dataStore;
+	DataStore dataStore;
 	SimpleFeatureType schema;
 	SimpleFeatureType type;
 	final GeometryFactory factory = new GeometryFactory(
@@ -40,12 +41,11 @@ public class WFSBoundedQueryTest
 
 	@Before
 	public void setup()
-			throws AccumuloException,
-			AccumuloSecurityException,
-			SchemaException,
+			throws SchemaException,
 			CQLException,
-			IOException {
-		dataStore = new GeoWaveGTMemDataStore();
+			IOException,
+			GeoWavePluginException {
+		dataStore = createDataStore();
 		type = DataUtilities.createType(
 				"geostuff",
 				"geometry:Geometry:srid=4326,pop:java.lang.Long,pid:String,when:Date");

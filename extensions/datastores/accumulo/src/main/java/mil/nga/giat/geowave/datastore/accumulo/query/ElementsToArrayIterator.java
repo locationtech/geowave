@@ -18,7 +18,7 @@ import mil.nga.giat.geowave.core.store.data.field.FieldWriter;
 import mil.nga.giat.geowave.core.store.data.field.ArrayWriter.Encoding;
 import mil.nga.giat.geowave.core.store.data.field.ArrayWriter.FixedSizeObjectArrayWriter;
 import mil.nga.giat.geowave.core.store.data.field.ArrayWriter.VariableSizeObjectArrayWriter;
-import mil.nga.giat.geowave.core.store.dimension.DimensionField;
+import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;
 import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloRowId;
 import mil.nga.giat.geowave.datastore.accumulo.util.IteratorUtils;
@@ -145,8 +145,8 @@ public class ElementsToArrayIterator extends
 
 						// save the encoding if we haven't already
 						if (!encodingMap.containsKey(fieldId)) {
-							final DimensionField<?>[] dimFields = model.getDimensions();
-							for (final DimensionField<?> dimField : dimFields) {
+							final NumericDimensionField<?>[] dimFields = model.getDimensions();
+							for (final NumericDimensionField<?> dimField : dimFields) {
 								if (dimField.getFieldId().equals(
 										fieldId)) {
 									if (dimField instanceof SpatialField) {
