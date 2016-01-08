@@ -17,7 +17,7 @@ public class TrackRun
 	private Long sourceGmtiMissionUid;
 	private UUID sourceGmtiMissionUuid;
 	private List<TrackRunParameter> parameters = new ArrayList<TrackRunParameter>();
-	private List<TrackMessage> messages = new ArrayList<TrackMessage>();
+	private List<NATO4676Message> messages = new ArrayList<NATO4676Message>();
 
 	public Long getId() {
 		return id;
@@ -109,12 +109,12 @@ public class TrackRun
 		this.parameters = parameters;
 	}
 
-	public List<TrackMessage> getMessages() {
+	public List<NATO4676Message> getMessages() {
 		return messages;
 	}
 
 	public void setMessages(
-			List<TrackMessage> messages ) {
+			List<NATO4676Message> messages ) {
 		this.messages = messages;
 	}
 
@@ -142,16 +142,16 @@ public class TrackRun
 	}
 
 	public void addMessage(
-			TrackMessage message ) {
+			NATO4676Message message ) {
 		if (this.messages == null) {
-			this.messages = new ArrayList<TrackMessage>();
+			this.messages = new ArrayList<NATO4676Message>();
 		}
 		this.messages.add(message);
 	}
 
 	public void clearMessages() {
 		if (this.messages == null) {
-			this.messages = new ArrayList<TrackMessage>();
+			this.messages = new ArrayList<NATO4676Message>();
 		}
 		this.messages.clear();
 	}

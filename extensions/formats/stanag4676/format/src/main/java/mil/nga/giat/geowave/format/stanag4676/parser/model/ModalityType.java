@@ -11,21 +11,21 @@ public enum ModalityType {
 	 * Doppler source
 	 */
 	DOPPLER_SIGNATURE(
-			"DOPPLER_SIGNATURE"),
+			"DOPPLER SIGNATURE"),
 
 	/**
 	 * the information, estimate, or determination is derived from a radar High
 	 * Range Resolution source.
 	 */
 	HRR_SIGNATURE(
-			"HRR_SIGNATURE"),
+			"HRR SIGNATURE"),
 
 	/**
 	 * the information, estimate, or determination is derived from a Still or
 	 * Video source.
 	 */
 	IMAGE_SIGNATURE(
-			"IMAGE_SIGNATURE"),
+			"IMAGE SIGNATURE"),
 
 	/**
 	 * the information, estimate, or determination is derived from a Human
@@ -53,14 +53,14 @@ public enum ModalityType {
 	 * Communications Intelligence Externals source.
 	 */
 	COMINT_EXTERNALS(
-			"COMINT_EXTERNALS"),
+			"COMINT EXTERNALS"),
 
 	/**
 	 * the information, estimate, or determination is derived from a
 	 * Communications Intelligence Internals source.
 	 */
 	COMINT_INTERNALS(
-			"COMINT_INTERNALS"),
+			"COMINT INTERNALS"),
 
 	/**
 	 * the information, estimate, or determination is derived from a Open Source

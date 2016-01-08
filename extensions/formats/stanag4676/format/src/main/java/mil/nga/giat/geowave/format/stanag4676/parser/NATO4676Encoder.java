@@ -10,12 +10,20 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.TimeZone;
 
+import mil.nga.giat.geowave.format.stanag4676.parser.model.Area;
+import mil.nga.giat.geowave.format.stanag4676.parser.model.ClassificationCredibility;
 import mil.nga.giat.geowave.format.stanag4676.parser.model.ClassificationLevel;
 import mil.nga.giat.geowave.format.stanag4676.parser.model.CovarianceMatrix;
 import mil.nga.giat.geowave.format.stanag4676.parser.model.ExerciseIndicator;
 import mil.nga.giat.geowave.format.stanag4676.parser.model.GeodeticPosition;
 import mil.nga.giat.geowave.format.stanag4676.parser.model.IDdata;
+import mil.nga.giat.geowave.format.stanag4676.parser.model.MissionFrame;
+import mil.nga.giat.geowave.format.stanag4676.parser.model.MissionSummary;
+import mil.nga.giat.geowave.format.stanag4676.parser.model.MissionSummaryMessage;
+import mil.nga.giat.geowave.format.stanag4676.parser.model.ModalityType;
 import mil.nga.giat.geowave.format.stanag4676.parser.model.MotionImagery;
+import mil.nga.giat.geowave.format.stanag4676.parser.model.NATO4676Message;
+import mil.nga.giat.geowave.format.stanag4676.parser.model.ObjectClassification;
 import mil.nga.giat.geowave.format.stanag4676.parser.model.Security;
 import mil.nga.giat.geowave.format.stanag4676.parser.model.SimulationIndicator;
 import mil.nga.giat.geowave.format.stanag4676.parser.model.TrackClassification;
@@ -36,8 +44,12 @@ public class NATO4676Encoder implements
 	private SimulationIndicator defaultSimulationIndicator;
 	private int indentLevel = 0;
 	private final String stanagVersion;
-	private OutputStream out = null;
-	private PrintWriter printout = null;
+	private PrintWriter pw = null;
+	private OutputStream trackOut = null;
+	private OutputStream missionOut = null;
+
+	private PrintWriter pwTrack = null;
+	private PrintWriter pwMission = null;
 
 	private String indent() {
 		if (indentLevel == 0) {
@@ -70,15 +82,29 @@ public class NATO4676Encoder implements
 	}
 
 	@Override
-	public void setOutputStream(
-			final OutputStream os ) {
-		out = os;
-		final OutputStreamWriter osw = new OutputStreamWriter(
-				os,
+	public void setOutputStreams(
+			final OutputStream trackOut,
+			final OutputStream missionOut ) {
+
+		this.trackOut = trackOut;
+		this.missionOut = missionOut;
+		final OutputStreamWriter trackOsw = new OutputStreamWriter(
+				this.trackOut,
 				UTF_8);
-		printout = new PrintWriter(
+		final OutputStreamWriter missionOsw = new OutputStreamWriter(
+				this.missionOut,
+				UTF_8);
+
+		pwTrack = new PrintWriter(
 				new BufferedWriter(
-						osw,
+						trackOsw,
+						8192));
+
+		pw = pwTrack;
+
+		pwMission = new PrintWriter(
+				new BufferedWriter(
+						missionOsw,
 						8192));
 	}
 
@@ -91,8 +117,9 @@ public class NATO4676Encoder implements
 	}
 
 	/**
-	 * A TrackRun will be encoded as a single TrackMessage even though there may
-	 * be multiple messages inside it. The LAST TrackMessage should be used.
+	 * A TrackRun will be encoded as a single NATO4676Message even though there
+	 * may be multiple messages inside it. The LAST NATO4676Message should be
+	 * used.
 	 * 
 	 * 
 	 * @param run
@@ -101,68 +128,97 @@ public class NATO4676Encoder implements
 	@Override
 	public void Encode(
 			final TrackRun run ) {
-		// make sure no one interrupts your stream
-		synchronized (out) {
-			boolean firstMessage = true;
-			printout.write(GetXMLOpen());
-			printout.write("<TrackMessage xmlns=\"urn:int:nato:stanag4676:0.14\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" schemaVersion=\"0.14\">\n");
-			indentLevel++;
-			for (final TrackMessage msg : run.getMessages()) {
-				if (firstMessage) {
-					printout.write(indent() + "<stanagVersion>" + stanagVersion + "</stanagVersion>\n");
-
-					printout.write(indent() + "<messageSecurity>");
-					Encode(msg.getSecurity());
-					printout.write("</messageSecurity>\n");
-
-					printout.write(indent() + "<msgCreatedTime>" + EncodeTime(msg.getMessageTime()) + "</msgCreatedTime>\n");
-
-					printout.write(indent() + "<senderId>");
-					Encode(msg.getSenderID());
-					printout.write("</senderId>\n");
-
-					firstMessage = false;
+		boolean firstTrackMessage = true;
+		boolean trackMessagesExist = false;
+		for (final NATO4676Message msg : run.getMessages()) {
+			indentLevel = 0;
+			if (msg instanceof TrackMessage) {
+				TrackMessage trackMsg = (TrackMessage) msg;
+				if (firstTrackMessage) {
+					pw.write(GetXMLOpen());
+					pw.write("<TrackMessage xmlns=\"urn:int:nato:stanag4676:0.14\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" schemaVersion=\"0.14\">\n");
+					indentLevel++;
+					EncodeMsgMetadata(msg);
+					indentLevel--;
+					firstTrackMessage = false;
+					trackMessagesExist = true;
 				}
-				for (final TrackEvent trackevent : msg.getTracks()) {
-					printout.write(indent() + "<tracks>");
-					Encode(trackevent);
-					printout.write("</tracks>\n");
+				Encode(trackMsg);
+			}
+			else if (msg instanceof MissionSummaryMessage) {
+				pw = pwMission;
+				MissionSummaryMessage msMsg = (MissionSummaryMessage) msg;
+				MissionSummary ms = msMsg.getMissionSummary();
+				if (ms != null) {
+					pw.write(GetXMLOpen());
+					pw.write("<MissionSummary xmlns=\"http://siginnovations.com/MissionSummarySIG\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n");
+					indentLevel++;
+					EncodeMsgMetadata(msg);
+					pw.write(indent() + "<Name>" + ms.getName() + "</Name>\n");
+					pw.write(indent() + "<missionID>" + ms.getMissionId() + "</missionID>\n");
+					pw.write(indent() + "<StartTime>" + EncodeTime(ms.getStartTime()) + "</StartTime>\n");
+					pw.write(indent() + "<EndTime>" + EncodeTime(ms.getEndTime()) + "</EndTime>\n");
+					Area area = ms.getCoverageArea();
+					if (area != null) {
+						pw.write(indent() + "<CoverageArea xsi:type=\"PolygonArea\">\n");
+						Encode(area);
+						pw.write(indent() + "</CoverageArea>\n");
+					}
+					if (ms.getClassifications().size() > 0) {
+						pw.write(indent() + "<ActiveObjectClassifications>\n");
+						indentLevel++;
+						for (ObjectClassification oc : ms.getClassifications()) {
+							pw.write(indent() + "<classification>" + oc.name() + "</classification>\n");
+						}
+						indentLevel--;
+						pw.write(indent() + "</ActiveObjectClassifications>\n");
+					}
+					indentLevel--;
+					Encode(msMsg);
+					pw.write("</MissionSummary>\n");
+					pw.flush();
+					pw = pwTrack;
 				}
 			}
-			indentLevel--;
-			printout.write("</TrackMessage>\n");
-			printout.flush();
+		}
+		if (trackMessagesExist) {
+			pw.write("</TrackMessage>\n");
+			pw.flush();
 		}
 	}
 
-	@Override
-	public void Encode(
+	private void Encode(
 			final TrackMessage msg ) {
-		// make sure no one interrupts your stream
-		synchronized (out) {
-			printout.write(GetXMLOpen());
-			printout.write("<TrackMessage xmlns=\"urn:int:nato:stanag4676:0.14\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" schemaVersion=\"0.14\">\n");
-			indentLevel++;
-			printout.write(indent() + "<stanagVersion>" + stanagVersion + "</stanagVersion>\n");
-
-			printout.write(indent() + "<messageSecurity>");
-			Encode(msg.getSecurity());
-			printout.write("</messageSecurity>\n");
-
-			printout.write(indent() + "<msgCreatedTime>" + EncodeTime(msg.getMessageTime()) + "</msgCreatedTime>\n");
-
-			printout.write(indent() + "<senderId>");
-			Encode(msg.getSenderID());
-			printout.write("</senderId>\n");
-			for (final TrackEvent trackevent : msg.getTracks()) {
-				printout.write(indent() + "<tracks>");
-				Encode(trackevent);
-				printout.write("</tracks>\n");
-			}
-			indentLevel--;
-			printout.write("</TrackMessage>\n");
-			printout.flush();
+		indentLevel++;
+		for (final TrackEvent trackevent : msg.getTracks()) {
+			pw.write(indent() + "<tracks>\n");
+			Encode(trackevent);
+			pw.write(indent() + "</tracks>\n");
 		}
+		indentLevel--;
+	}
+
+	private void Encode(
+			final MissionSummaryMessage msg ) {
+		indentLevel++;
+		for (final MissionFrame frame : msg.getMissionSummary().getFrames()) {
+			pw.write(indent() + "<FrameInformation>\n");
+			Encode(frame);
+			pw.write(indent() + "</FrameInformation>\n");
+		}
+		indentLevel--;
+	}
+
+	private void EncodeMsgMetadata(
+			final NATO4676Message msg ) {
+		pw.write(indent() + "<stanagVersion>" + stanagVersion + "</stanagVersion>\n");
+		pw.write(indent() + "<messageSecurity>\n");
+		Encode(msg.getSecurity());
+		pw.write(indent() + "</messageSecurity>\n");
+		pw.write(indent() + "<msgCreatedTime>" + EncodeTime(msg.getMessageTime()) + "</msgCreatedTime>\n");
+		pw.write(indent() + "<senderId>\n");
+		Encode(msg.getSenderID());
+		pw.write(indent() + "</senderId>\n");
 	}
 
 	private void Encode(
@@ -170,140 +226,147 @@ public class NATO4676Encoder implements
 		if (sec == null) {
 			sec = defaultSecurity;
 		}
-		printout.write("\n");
 		indentLevel++;
-		printout.write(indent() + "<securityClassification>" + sec.getClassification() + "</securityClassification>\n");
-		printout.write(indent() + "<securityPolicyName>" + sec.getPolicyName() + "</securityPolicyName>\n");
+		pw.write(indent() + "<securityClassification>" + sec.getClassification() + "</securityClassification>\n");
+		pw.write(indent() + "<securityPolicyName>" + sec.getPolicyName() + "</securityPolicyName>\n");
 		if (sec.getControlSystem() != null) {
-			printout.write(indent() + "<securityControlSystem>" + sec.getControlSystem() + "</securityControlSystem>\n");
+			pw.write(indent() + "<securityControlSystem>" + sec.getControlSystem() + "</securityControlSystem>\n");
 		}
 		if (sec.getDissemination() != null) {
-			printout.write(indent() + "<securityDissemination>" + sec.getDissemination() + "</securityDissemination>\n");
+			pw.write(indent() + "<securityDissemination>" + sec.getDissemination() + "</securityDissemination>\n");
 		}
 		if (sec.getReleasability() != null) {
-			printout.write(indent() + "<securityReleasability>" + sec.getReleasability() + "</securityReleasability>\n");
+			pw.write(indent() + "<securityReleasability>" + sec.getReleasability() + "</securityReleasability>\n");
 		}
 		indentLevel--;
-		printout.write(indent());
 	}
 
 	private void Encode(
 			final IDdata id ) {
-		printout.write("\n");
 		indentLevel++;
-		printout.write(indent() + "<stationID>" + id.getStationId() + "</stationID>\n");
-		printout.write(indent() + "<nationality>" + id.getNationality() + "</nationality>\n");
+		pw.write(indent() + "<stationID>" + id.getStationId() + "</stationID>\n");
+		pw.write(indent() + "<nationality>" + id.getNationality() + "</nationality>\n");
 		indentLevel--;
-		printout.write(indent());
 	}
 
 	private void Encode(
 			final TrackEvent event ) {
-		printout.write("\n");
 		indentLevel++;
-		printout.write(indent() + "<trackUUID>" + event.getUuid() + "</trackUUID>\n");
-		printout.write(indent() + "<trackNumber>" + event.getTrackNumber() + "</trackNumber>\n");
+		pw.write(indent() + "<trackUUID>" + event.getUuid() + "</trackUUID>\n");
+		pw.write(indent() + "<trackNumber>" + event.getTrackNumber() + "</trackNumber>\n");
 		if (event.getStatus() != null) {
-			printout.write(indent() + "<trackStatus>" + event.getStatus() + "</trackStatus>\n");
+			pw.write(indent() + "<trackStatus>" + event.getStatus() + "</trackStatus>\n");
 		}
-		printout.write(indent() + "<trackSecurity>");
+		pw.write(indent() + "<trackSecurity>\n");
 		Encode(event.getSecurity());
-		printout.write("</trackSecurity>\n");
+		pw.write(indent() + "</trackSecurity>\n");
 		if (event.getComment() != null) {
-			printout.write(indent() + "<trackComment>" + event.getComment() + "</trackComment>\n");
+			pw.write(indent() + "<trackComment>" + event.getComment() + "</trackComment>\n");
 		}
 		if (event.getMissionId() != null) {
-			printout.write(indent() + "<missionID>" + event.getMissionId() + "</missionID>\n");
+			pw.write(indent() + "<missionID>" + event.getMissionId() + "</missionID>\n");
 		}
 		if (event.getExerciseIndicator() != null) {
-			printout.write(indent() + "<exerciseIndicator>" + event.getExerciseIndicator() + "</exerciseIndicator>\n");
+			pw.write(indent() + "<exerciseIndicator>" + event.getExerciseIndicator() + "</exerciseIndicator>\n");
 		}
 		else {
-			printout.write(indent() + "<exerciseIndicator>" + defaultExerciseIndicator + "</exerciseIndicator>\n");
+			pw.write(indent() + "<exerciseIndicator>" + defaultExerciseIndicator + "</exerciseIndicator>\n");
 		}
 		if (event.getSimulationIndicator() != null) {
-			printout.write(indent() + "<simulationIndicator>" + event.getSimulationIndicator() + "</simulationIndicator>\n");
+			pw.write(indent() + "<simulationIndicator>" + event.getSimulationIndicator() + "</simulationIndicator>\n");
 		}
 		else {
-			printout.write(indent() + "<simulationIndicator>" + defaultSimulationIndicator + "</simulationIndicator>\n");
+			pw.write(indent() + "<simulationIndicator>" + defaultSimulationIndicator + "</simulationIndicator>\n");
 		}
 		for (final TrackPoint point : event.getPoints().values()) {
-			printout.write(indent() + "<items xsi:type=\"TrackPoint\">");
+			pw.write(indent() + "<items xsi:type=\"TrackPoint\">\n");
 			Encode(point);
-			printout.write("</items>\n");
+			pw.write(indent() + "</items>\n");
 		}
 		for (final TrackIdentity identity : event.getIdentities()) {
-			printout.write(indent() + "<items xsi:type=\"TrackIdentityInformation\">");
+			pw.write(indent() + "<items xsi:type=\"TrackIdentityInformation\">\n");
 			Encode(identity);
-			printout.write("</items>\n");
+			pw.write(indent() + "</items>\n");
 		}
-		for (final TrackClassification classification : event.getClassifications()) {
-			printout.write(indent() + "<items xsi:type=\"TrackClassificationInformation\">");
-			Encode(classification);
-			printout.write("</items>\n");
+		for (final TrackClassification tc : event.getClassifications()) {
+			pw.write(indent() + "<items xsi:type=\"TrackClassificationInformation\">\n");
+			Encode(tc);
+			pw.write(indent() + "</items>\n");
 		}
 		for (final TrackManagement management : event.getManagements()) {
-			printout.write(indent() + "<items xsi:type=\"TrackManagementInformation\">");
+			pw.write(indent() + "<items xsi:type=\"TrackManagementInformation\">\n");
 			Encode(management);
-			printout.write("</items>\n");
+			pw.write(indent() + "</items>\n");
 		}
 
 		for (final MotionImagery image : event.getMotionImages()) {
-			printout.write(indent() + "<items xsi:type=\"MotionImageryInformation\">");
+			pw.write(indent() + "<items xsi:type=\"MotionImageryInformation\">\n");
 			Encode(image);
-			printout.write("</items>\n");
+			pw.write(indent() + "</items>\n");
 		}
 		// TODO: ESMInformation
 		// TODO: TrackLineageInformation
 		indentLevel--;
-		printout.write(indent());
 	}
 
 	private void Encode(
 			final TrackPoint point ) {
-		printout.write("\n");
 		indentLevel++;
-		printout.write(indent() + "<trackItemUUID>" + point.getUuid() + "</trackItemUUID>\n");
+		pw.write(indent() + "<trackItemUUID>" + point.getUuid() + "</trackItemUUID>\n");
 
-		printout.write(indent() + "<trackItemSecurity>");
+		pw.write(indent() + "<trackItemSecurity>\n");
 		Encode(point.getSecurity());
-		printout.write("</trackItemSecurity>\n");
+		pw.write(indent() + "</trackItemSecurity>\n");
 
-		printout.write(indent() + "<trackItemTime>");
-		printout.write(EncodeTime(point.getEventTime()));
-		printout.write("</trackItemTime>\n");
+		pw.write(indent() + "<trackItemTime>\n");
+		pw.write(EncodeTime(point.getEventTime()));
+		pw.write(indent() + "</trackItemTime>\n");
 
 		if (point.getTrackItemSource() != null) {
-			printout.write(indent() + "<trackItemSource>" + point.getTrackItemSource() + "</trackItemSource>\n");
+			pw.write(indent() + "<trackItemSource>" + point.getTrackItemSource() + "</trackItemSource>\n");
 		}
 		if (point.getTrackItemComment() != null) {
-			printout.write(indent() + "<trackItemComment>" + point.getTrackItemComment() + "</trackItemComment>\n");
+			pw.write(indent() + "<trackItemComment>" + point.getTrackItemComment() + "</trackItemComment>\n");
 		}
 
-		printout.write(indent() + "<trackPointPosition>");
+		pw.write(indent() + "<trackPointPosition>\n");
 		Encode(point.getLocation());
-		printout.write("</trackPointPosition>\n");
+		pw.write(indent() + "</trackPointPosition>\n");
 
 		if (point.getSpeed() != null) {
-			printout.write(indent() + "<trackPointSpeed>" + point.getSpeed().intValue() + "</trackPointSpeed>\n");
+			pw.write(indent() + "<trackPointSpeed>" + point.getSpeed().intValue() + "</trackPointSpeed>\n");
 		}
 		if (point.getCourse() != null) {
-			printout.write(indent() + "<trackPointCourse>" + point.getCourse() + "</trackPointCourse>\n");
+			pw.write(indent() + "<trackPointCourse>" + point.getCourse() + "</trackPointCourse>\n");
 		}
 		if (point.getTrackPointType() != null) {
-			printout.write(indent() + "<trackPointType>" + point.getTrackPointType() + "</trackPointType>\n");
+			pw.write(indent() + "<trackPointType>" + point.getTrackPointType() + "</trackPointType>\n");
 		}
 		if (point.getTrackPointSource() != null) {
-			printout.write(indent() + "<trackPointSource>" + point.getTrackPointSource() + "</trackPointSource>\n");
+			pw.write(indent() + "<trackPointSource>" + point.getTrackPointSource() + "</trackPointSource>\n");
 		}
 		// TODO: need objectMask here
 		if (point.getDetail() != null) {
-			printout.write(indent() + "<TrackPointDetail>");
+			pw.write(indent() + "<TrackPointDetail>\n");
 			Encode(point.getDetail());
-			printout.write("</TrackPointDetail>\n");
+			pw.write(indent() + "</TrackPointDetail>\n");
 		}
 		indentLevel--;
-		printout.write(indent());
+	}
+
+	private void Encode(
+			final MissionFrame frame ) {
+		indentLevel++;
+		pw.write(indent() + "<frameNumber>" + frame.getFrameNumber() + "</frameNumber>\n");
+		pw.write(indent() + "<frameTimestamp>" + EncodeTime(frame.getFrameTime()) + "</frameTimestamp>\n");
+		Area area = frame.getCoverageArea();
+		if (area != null) {
+			pw.write(indent() + "<frameCoverageArea xsi:type=\"PolygonArea\">\n");
+			Encode(frame.getCoverageArea());
+			pw.write(indent() + "</frameCoverageArea>\n");
+		}
+		pw.write(indent() + "<hasFault>false</hasFault>\n");
+		indentLevel--;
 	}
 
 	private void Encode(
@@ -312,8 +375,35 @@ public class NATO4676Encoder implements
 	}
 
 	private void Encode(
-			final TrackClassification classification ) {
-		// TODO: Encode TrackClassification
+			final TrackClassification tc ) {
+		indentLevel++;
+		pw.write(indent() + "<trackItemUUID>" + tc.getUuid() + "</trackItemUUID>\n");
+
+		pw.write(indent() + "<trackItemSecurity>\n");
+		Encode(tc.getSecurity());
+		pw.write(indent() + "</trackItemSecurity>\n");
+
+		pw.write(indent() + "<trackItemTime>" + EncodeTime(tc.getTime()) + "</trackItemTime>\n");
+		pw.write(indent() + "<numberofObjects>" + tc.getNumObjects() + "</numberofObjects>\n");
+
+		ObjectClassification oc = tc.getClassification();
+		if (oc != null) {
+			pw.write(indent() + "<classification>" + oc.name() + "</classification>\n");
+			ModalityType mt = ModalityType.fromString(tc.getSource());
+			if (mt != null) {
+				pw.write(indent() + "<classificationSource>" + mt.toString() + "</classificationSource>\n");
+			}
+		}
+		ClassificationCredibility cred = tc.getCredibility();
+		if (cred != null) {
+			pw.write(indent() + "<classificationCredibility>\n");
+			indentLevel++;
+			pw.write(indent() + "<valueConfidence>" + cred.getValueConfidence() + "</valueConfidence>\n");
+			pw.write(indent() + "<sourceReliability>" + cred.getSourceReliability() + "</sourceReliability>\n");
+			indentLevel--;
+			pw.write(indent() + "</classificationCredibility>\n");
+		}
+		indentLevel--;
 	}
 
 	private void Encode(
@@ -323,30 +413,27 @@ public class NATO4676Encoder implements
 
 	private void Encode(
 			final MotionImagery image ) {
-		printout.write("\n");
+		pw.write("\n");
 		indentLevel++;
 		if (image.getBand() != null) {
-			printout.write(indent() + "<band>" + image.getBand().toString() + "</band>\n");
+			pw.write(indent() + "<band>" + image.getBand().toString() + "</band>\n");
 		}
 		if (image.getImageReference() != null) {
-			printout.write(indent() + "<imageReference>" + image.getImageReference() + "</imageReference>\n");
+			pw.write(indent() + "<imageReference>" + image.getImageReference() + "</imageReference>\n");
 		}
 		if (image.getImageChip() != null) {
-			printout.write(indent() + "<imageChip>");
+			pw.write(indent() + "<imageChip>\n");
 			EncodeImage(image.getImageChip());
-			printout.write("</imageChip>\n");
+			pw.write(indent() + "</imageChip>\n");
 		}
 		indentLevel--;
-		printout.write(indent());
 	}
 
 	private void EncodeImage(
 			final String base64imageChip ) {
-		printout.write("\n");
 		indentLevel++;
-		printout.write(indent() + "<![CDATA[" + base64imageChip + "]]>\n");
+		pw.write(indent() + "<![CDATA[" + base64imageChip + "]]>\n");
 		indentLevel--;
-		printout.write(indent());
 	}
 
 	private String EncodeTime(
@@ -362,147 +449,153 @@ public class NATO4676Encoder implements
 
 	private void Encode(
 			final GeodeticPosition pos ) {
-		printout.write("\n");
 		indentLevel++;
-		printout.write(indent() + "<latitude>" + pos.latitude + "</latitude>\n");
-		printout.write(indent() + "<longitude>" + pos.longitude + "</longitude>\n");
+		pw.write(indent() + "<latitude>" + pos.latitude + "</latitude>\n");
+		pw.write(indent() + "<longitude>" + pos.longitude + "</longitude>\n");
 		if (pos.elevation != null) {
-			printout.write(indent() + "<elevation>" + pos.elevation + "</elevation>\n");
+			pw.write(indent() + "<elevation>" + pos.elevation + "</elevation>\n");
 		}
 		indentLevel--;
-		printout.write(indent());
+	}
+
+	private void Encode(
+			final Area coverageArea ) {
+		indentLevel++;
+		if (coverageArea != null) {
+			for (GeodeticPosition pos : coverageArea.getPoints()) {
+				pw.write(indent() + "<areaBoundaryPoints xsi:type=\"GeodeticPosition\">\n");
+				Encode(pos);
+				pw.write(indent() + "</areaBoundaryPoints>\n");
+			}
+		}
+		indentLevel--;
 	}
 
 	private void Encode(
 			final TrackPointDetail detail ) {
-		printout.write("\n");
 		indentLevel++;
-		printout.write(indent() + "<pointDetailPosition xsi:type=\"GeodeticPosition\">");
+		pw.write(indent() + "<pointDetailPosition xsi:type=\"GeodeticPosition\">\n");
 		Encode(detail.getLocation());
-		printout.write("</pointDetailPosition>\n");
+		pw.write(indent() + "</pointDetailPosition>\n");
 
 		if ((detail.getVelocityX() != null) || (detail.getVelocityY() != null) || (detail.getVelocityZ() != null)) {
-			printout.write(indent() + "<pointDetailVelocity xsi:type=\"LocalCartesianVelocity\">\n");
+			pw.write(indent() + "<pointDetailVelocity xsi:type=\"LocalCartesianVelocity\">\n");
 			indentLevel++;
 			if (detail.getVelocityX() != null) {
-				printout.write(indent() + "<velx>" + detail.getVelocityX() + "</velx>\n");
+				pw.write(indent() + "<velx>" + detail.getVelocityX() + "</velx>\n");
 			}
 			else {
-				printout.write(indent() + "<velx>0</velx>\n");
+				pw.write(indent() + "<velx>0</velx>\n");
 			}
 			if (detail.getVelocityY() != null) {
-				printout.write(indent() + "<vely>" + detail.getVelocityY() + "</vely>\n");
+				pw.write(indent() + "<vely>" + detail.getVelocityY() + "</vely>\n");
 			}
 			else {
-				printout.write(indent() + "<vely>0</vely>\n");
+				pw.write(indent() + "<vely>0</vely>\n");
 			}
 			if (detail.getVelocityZ() != null) {
-				printout.write(indent() + "<velz>" + detail.getVelocityZ() + "</velz>\n");
+				pw.write(indent() + "<velz>" + detail.getVelocityZ() + "</velz>\n");
 			}
 			else {
-				printout.write(indent() + "<velz>0</velz>\n");
+				pw.write(indent() + "<velz>0</velz>\n");
 			}
 			indentLevel--;
-			printout.write(indent() + "</pointDetailVelocity>\n");
+			pw.write(indent() + "</pointDetailVelocity>\n");
 		}
 		if ((detail.getAccelerationX() != null) || (detail.getAccelerationY() != null) || (detail.getAccelerationZ() != null)) {
-			printout.write(indent() + "<pointDetailAcceleration xsi:type=\"LocalCartesianAcceleration\">\n");
+			pw.write(indent() + "<pointDetailAcceleration xsi:type=\"LocalCartesianAcceleration\">\n");
 			indentLevel++;
 			if (detail.getAccelerationX() != null) {
-				printout.write(indent() + "<accx>" + detail.getAccelerationX() + "</accx>\n");
+				pw.write(indent() + "<accx>" + detail.getAccelerationX() + "</accx>\n");
 			}
 			else {
-				printout.write(indent() + "<accx>0</accx>\n");
+				pw.write(indent() + "<accx>0</accx>\n");
 			}
 			if (detail.getAccelerationY() != null) {
-				printout.write(indent() + "<accy>" + detail.getAccelerationY() + "</accy>\n");
+				pw.write(indent() + "<accy>" + detail.getAccelerationY() + "</accy>\n");
 			}
 			else {
-				printout.write(indent() + "<accy>0</accy>\n");
+				pw.write(indent() + "<accy>0</accy>\n");
 			}
 			if (detail.getAccelerationZ() != null) {
-				printout.write(indent() + "<accz>" + detail.getAccelerationZ() + "</accz>\n");
+				pw.write(indent() + "<accz>" + detail.getAccelerationZ() + "</accz>\n");
 			}
 			else {
-				printout.write(indent() + "<accz>0</accz>\n");
+				pw.write(indent() + "<accz>0</accz>\n");
 			}
 			indentLevel--;
-			printout.write(indent() + "</pointDetailAcceleration>\n");
+			pw.write(indent() + "</pointDetailAcceleration>\n");
 		}
-		printout.write(indent() + "<pointDetailCovarianceMatrix xsi:type=\"CovarianceMatrixPositionVelocity\">");
+		pw.write(indent() + "<pointDetailCovarianceMatrix xsi:type=\"CovarianceMatrixPositionVelocity\">");
 		Encode(detail.getCovarianceMatrix());
-		printout.write("</pointDetailCovarianceMatrix>\n");
+		pw.write(indent() + "</pointDetailCovarianceMatrix>\n");
 		indentLevel--;
-		printout.write(indent());
 	}
 
 	private void Encode(
 			final CovarianceMatrix cov ) {
-		printout.write("\n");
 		indentLevel++;
-		printout.write(indent() + "<covPosxPosx>" + cov.getCovPosXPosX() + "</covPosxPosx>\n");
-		printout.write(indent() + "<covPosyPosy>" + cov.getCovPosYPosY() + "</covPosyPosy>\n");
+		pw.write(indent() + "<covPosxPosx>" + cov.getCovPosXPosX() + "</covPosxPosx>\n");
+		pw.write(indent() + "<covPosyPosy>" + cov.getCovPosYPosY() + "</covPosyPosy>\n");
 		if (cov.getCovPosZPosZ() != null) {
-			printout.write(indent() + "<covPoszPosz>" + cov.getCovPosZPosZ() + "</covPoszPosz>\n");
+			pw.write(indent() + "<covPoszPosz>" + cov.getCovPosZPosZ() + "</covPoszPosz>\n");
 		}
 		if (cov.getCovPosXPosY() != null) {
-			printout.write(indent() + "<covPosxPosy>" + cov.getCovPosXPosY() + "</covPosxPosy>\n");
+			pw.write(indent() + "<covPosxPosy>" + cov.getCovPosXPosY() + "</covPosxPosy>\n");
 		}
 		if (cov.getCovPosXPosZ() != null) {
-			printout.write(indent() + "<covPosxPosz>" + cov.getCovPosXPosZ() + "</covPosxPosz>\n");
+			pw.write(indent() + "<covPosxPosz>" + cov.getCovPosXPosZ() + "</covPosxPosz>\n");
 		}
 		if (cov.getCovPosYPosZ() != null) {
-			printout.write(indent() + "<covPosyPosz>" + cov.getCovPosYPosZ() + "</covPosyPosz>\n");
+			pw.write(indent() + "<covPosyPosz>" + cov.getCovPosYPosZ() + "</covPosyPosz>\n");
 		}
 		// these are also optional
 		if (cov.getCovVelXVelX() != null) {
-			printout.write(indent() + "<covVelxVelx>" + cov.getCovVelXVelX() + "</covVelxVelx>\n");
+			pw.write(indent() + "<covVelxVelx>" + cov.getCovVelXVelX() + "</covVelxVelx>\n");
 		}
 		if (cov.getCovVelYVelY() != null) {
-			printout.write(indent() + "<covVelyVely>" + cov.getCovVelYVelY() + "</covVelyVely>\n");
+			pw.write(indent() + "<covVelyVely>" + cov.getCovVelYVelY() + "</covVelyVely>\n");
 		}
 		//
 		if (cov.getCovVelZVelZ() != null) {
-			printout.write(indent() + "<covVelzVelz>" + cov.getCovVelZVelZ() + "</covVelzVelz>\n");
+			pw.write(indent() + "<covVelzVelz>" + cov.getCovVelZVelZ() + "</covVelzVelz>\n");
 		}
 		if (cov.getCovPosXVelX() != null) {
-			printout.write(indent() + "<covPosxVelx>" + cov.getCovPosXVelX() + "</covPosxVelx>\n");
+			pw.write(indent() + "<covPosxVelx>" + cov.getCovPosXVelX() + "</covPosxVelx>\n");
 		}
 		if (cov.getCovPosXVelY() != null) {
-			printout.write(indent() + "<covPosxVely>" + cov.getCovPosXVelY() + "</covPosxVely>\n");
+			pw.write(indent() + "<covPosxVely>" + cov.getCovPosXVelY() + "</covPosxVely>\n");
 		}
 		if (cov.getCovPosXVelZ() != null) {
-			printout.write(indent() + "<covPosxVelz>" + cov.getCovPosXVelZ() + "</covPosxVelz>\n");
+			pw.write(indent() + "<covPosxVelz>" + cov.getCovPosXVelZ() + "</covPosxVelz>\n");
 		}
 		if (cov.getCovPosYVelX() != null) {
-			printout.write(indent() + "<covPosyVelx>" + cov.getCovPosYVelX() + "</covPosyVelx>\n");
+			pw.write(indent() + "<covPosyVelx>" + cov.getCovPosYVelX() + "</covPosyVelx>\n");
 		}
 		if (cov.getCovPosYVelY() != null) {
-			printout.write(indent() + "<covPosyVely>" + cov.getCovPosYVelY() + "</covPosyVely>\n");
+			pw.write(indent() + "<covPosyVely>" + cov.getCovPosYVelY() + "</covPosyVely>\n");
 		}
 		if (cov.getCovPosYVelZ() != null) {
-			printout.write(indent() + "<covPosyVelz>" + cov.getCovPosYVelZ() + "</covPosyVelz>\n");
+			pw.write(indent() + "<covPosyVelz>" + cov.getCovPosYVelZ() + "</covPosyVelz>\n");
 		}
 		if (cov.getCovPosZVelX() != null) {
-			printout.write(indent() + "<covPoszVelx>" + cov.getCovPosZVelX() + "</covPoszVelx>\n");
+			pw.write(indent() + "<covPoszVelx>" + cov.getCovPosZVelX() + "</covPoszVelx>\n");
 		}
 		if (cov.getCovPosZVelY() != null) {
-			printout.write(indent() + "<covPoszVely>" + cov.getCovPosZVelY() + "</covPoszVely>\n");
+			pw.write(indent() + "<covPoszVely>" + cov.getCovPosZVelY() + "</covPoszVely>\n");
 		}
 		if (cov.getCovPosZVelZ() != null) {
-			printout.write(indent() + "<covPoszVelz>" + cov.getCovPosZVelZ() + "</covPoszVelz>\n");
+			pw.write(indent() + "<covPoszVelz>" + cov.getCovPosZVelZ() + "</covPoszVelz>\n");
 		}
 		if (cov.getCovVelXVelY() != null) {
-			printout.write(indent() + "<covVelxVely>" + cov.getCovVelXVelY() + "</covVelxVely>\n");
+			pw.write(indent() + "<covVelxVely>" + cov.getCovVelXVelY() + "</covVelxVely>\n");
 		}
 		if (cov.getCovVelXVelZ() != null) {
-			printout.write(indent() + "<covVelxVelz>" + cov.getCovVelXVelZ() + "</covVelxVelz>\n");
+			pw.write(indent() + "<covVelxVelz>" + cov.getCovVelXVelZ() + "</covVelxVelz>\n");
 		}
 		if (cov.getCovVelYVelZ() != null) {
-			printout.write(indent() + "<covVelyVelz>" + cov.getCovVelYVelZ() + "</covVelyVelz>\n");
+			pw.write(indent() + "<covVelyVelz>" + cov.getCovVelYVelZ() + "</covVelyVelz>\n");
 		}
 		indentLevel--;
-		printout.write(indent());
 	}
-
 }

@@ -3,8 +3,8 @@ package mil.nga.giat.geowave.format.stanag4676;
 import java.io.Serializable;
 import java.util.Comparator;
 
-public class ComparatorTrackEventWritable implements
-		Comparator<TrackEventWritable>,
+public class ComparatorStanag4676EventWritable implements
+		Comparator<Stanag4676EventWritable>,
 		Serializable
 {
 
@@ -15,8 +15,8 @@ public class ComparatorTrackEventWritable implements
 
 	@Override
 	public int compare(
-			final TrackEventWritable obj1,
-			final TrackEventWritable obj2 ) {
+			final Stanag4676EventWritable obj1,
+			final Stanag4676EventWritable obj2 ) {
 		return obj1.TimeStamp.compareTo(obj2.TimeStamp);
 	}
 }

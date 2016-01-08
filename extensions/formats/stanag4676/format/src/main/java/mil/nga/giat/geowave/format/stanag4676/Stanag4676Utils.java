@@ -6,14 +6,17 @@ import org.geotools.feature.AttributeTypeBuilder;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.opengis.feature.simple.SimpleFeatureType;
 
-import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.LineString;
+import com.vividsolutions.jts.geom.Point;
+import com.vividsolutions.jts.geom.Polygon;
 
 public class Stanag4676Utils
 {
 	public static final String TRACK_POINT = "track_point";
 	public static final String MOTION_POINT = "motion_point";
 	public static final String TRACK = "track";
+	public static final String MISSION_SUMMARY = "mission_summary";
+	public static final String MISSION_FRAME = "mission_frame";
 
 	public static SimpleFeatureType createPointDataType() {
 
@@ -23,7 +26,7 @@ public class Stanag4676Utils
 		final AttributeTypeBuilder attributeTypeBuilder = new AttributeTypeBuilder();
 
 		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
-				Geometry.class).buildDescriptor(
+				Point.class).buildDescriptor(
 				"geometry"));
 		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
 				String.class).buildDescriptor(
@@ -37,6 +40,9 @@ public class Stanag4676Utils
 		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
 				String.class).buildDescriptor(
 				"TrackItemUUID"));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
+				String.class).buildDescriptor(
+				"TrackPointSource"));
 		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
 				Date.class).buildDescriptor(
 				"TimeStamp"));
@@ -80,7 +86,7 @@ public class Stanag4676Utils
 		final AttributeTypeBuilder attributeTypeBuilder = new AttributeTypeBuilder();
 
 		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
-				Geometry.class).buildDescriptor(
+				Point.class).buildDescriptor(
 				"geometry"));
 		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
 				String.class).buildDescriptor(
@@ -208,8 +214,78 @@ public class Stanag4676Utils
 		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
 				String.class).buildDescriptor(
 				"Classification"));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
+				String.class).buildDescriptor(
+				"ObjectClass"));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
+				String.class).buildDescriptor(
+				"ObjectClassConf"));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
+				String.class).buildDescriptor(
+				"ObjectClassRel"));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
+				String.class).buildDescriptor(
+				"ObjectClassTime"));
+
+		return simpleFeatureTypeBuilder.buildFeatureType();
+	}
+
+	public static SimpleFeatureType createMissionSummaryDataType() {
+
+		final SimpleFeatureTypeBuilder simpleFeatureTypeBuilder = new SimpleFeatureTypeBuilder();
+		simpleFeatureTypeBuilder.setName(MISSION_SUMMARY);
+
+		final AttributeTypeBuilder attributeTypeBuilder = new AttributeTypeBuilder();
+
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
+				Polygon.class).buildDescriptor(
+				"geometry"));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
+				String.class).buildDescriptor(
+				"Mission"));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
+				Date.class).buildDescriptor(
+				"StartTime"));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
+				Date.class).buildDescriptor(
+				"EndTime"));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
+				Integer.class).buildDescriptor(
+				"NumberOfFrames"));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
+				String.class).buildDescriptor(
+				"Name"));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
+				String.class).buildDescriptor(
+				"Security"));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
+				String.class).buildDescriptor(
+				"ActiveObjectClass"));
 
 		return simpleFeatureTypeBuilder.buildFeatureType();
 
+	}
+
+	public static SimpleFeatureType createMissionFrameDataType() {
+
+		final SimpleFeatureTypeBuilder simpleFeatureTypeBuilder = new SimpleFeatureTypeBuilder();
+		simpleFeatureTypeBuilder.setName(MISSION_FRAME);
+
+		final AttributeTypeBuilder attributeTypeBuilder = new AttributeTypeBuilder();
+
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
+				Polygon.class).buildDescriptor(
+				"geometry"));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
+				String.class).buildDescriptor(
+				"Mission"));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
+				Date.class).buildDescriptor(
+				"TimeStamp"));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
+				Integer.class).buildDescriptor(
+				"FrameNumber"));
+
+		return simpleFeatureTypeBuilder.buildFeatureType();
 	}
 }

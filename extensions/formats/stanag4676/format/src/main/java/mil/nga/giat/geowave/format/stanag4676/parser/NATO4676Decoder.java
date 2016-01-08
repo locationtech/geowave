@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -13,16 +14,21 @@ import java.util.TimeZone;
 import java.util.UUID;
 
 import mil.nga.giat.geowave.format.stanag4676.parser.model.Area;
+import mil.nga.giat.geowave.format.stanag4676.parser.model.ClassificationCredibility;
 import mil.nga.giat.geowave.format.stanag4676.parser.model.ClassificationLevel;
 import mil.nga.giat.geowave.format.stanag4676.parser.model.CovarianceMatrix;
 import mil.nga.giat.geowave.format.stanag4676.parser.model.ExerciseIndicator;
+import mil.nga.giat.geowave.format.stanag4676.parser.model.MissionFrame;
 import mil.nga.giat.geowave.format.stanag4676.parser.model.GeodeticPosition;
 import mil.nga.giat.geowave.format.stanag4676.parser.model.IDdata;
 import mil.nga.giat.geowave.format.stanag4676.parser.model.Identity;
 import mil.nga.giat.geowave.format.stanag4676.parser.model.LineageRelation;
+import mil.nga.giat.geowave.format.stanag4676.parser.model.MissionSummary;
+import mil.nga.giat.geowave.format.stanag4676.parser.model.MissionSummaryMessage;
 import mil.nga.giat.geowave.format.stanag4676.parser.model.ModalityType;
 import mil.nga.giat.geowave.format.stanag4676.parser.model.MotionEventPoint;
 import mil.nga.giat.geowave.format.stanag4676.parser.model.MotionImagery;
+import mil.nga.giat.geowave.format.stanag4676.parser.model.NATO4676Message;
 import mil.nga.giat.geowave.format.stanag4676.parser.model.ObjectClassification;
 import mil.nga.giat.geowave.format.stanag4676.parser.model.Security;
 import mil.nga.giat.geowave.format.stanag4676.parser.model.SimulationIndicator;
@@ -73,9 +79,9 @@ public class NATO4676Decoder implements
 	}
 
 	@Override
-	public TrackMessage readNext(
+	public NATO4676Message readNext(
 			final InputStream is ) {
-		TrackMessage msg = null;
+		NATO4676Message msg = null;
 		try {
 			if (printNotParse) {
 				final String trackStr = IOUtils.toString(
@@ -89,11 +95,19 @@ public class NATO4676Decoder implements
 
 				final Element rootEl = doc.getRootElement();
 				final Namespace xmlns = rootEl.getNamespace();
-				msg = readTrackMessage(
-						rootEl,
-						xmlns);
 
-				LOGGER.info("TrackMessage read " + trackStatsNumTracks + " Tracks and " + trackStatsNumDots + " TrackPoints.");
+				String name = rootEl.getName();
+				if ("TrackMessage".equals(name)) {
+					msg = readTrackMessage(
+							rootEl,
+							xmlns);
+					LOGGER.info("TrackMessage read " + trackStatsNumTracks + " Tracks and " + trackStatsNumDots + " TrackPoints.");
+				}
+				else if ("MissionSummary".equals(name)) {
+					msg = readMissionSummaryMessage(
+							rootEl,
+							xmlns);
+				}
 			}
 		}
 		catch (final IOException ioe) {
@@ -105,6 +119,107 @@ public class NATO4676Decoder implements
 		}
 
 		return msg;
+	}
+
+	private MissionSummaryMessage readMissionSummaryMessage(
+			final Element element,
+			final Namespace xmlns ) {
+		final MissionSummaryMessage msg = new MissionSummaryMessage();
+		MissionSummary missionSummary = msg.getMissionSummary();
+		final List<Element> children = element.getChildren();
+		final Iterator<Element> childIter = children.iterator();
+		while (childIter.hasNext()) {
+			final Element child = childIter.next();
+			final String childName = child.getName();
+			final String childValue = child.getValue();
+			if ("missionID".equals(childName)) {
+				missionSummary.setMissionId(childValue);
+			}
+			else if ("Name".equals(childName)) {
+				missionSummary.setName(childValue);
+			}
+			else if ("Security".equals(childName)) {
+				msg.setSecurity(readSecurity(
+						child,
+						xmlns));
+				missionSummary.setSecurity(msg.getSecurity().getClassification().toString());
+			}
+			else if ("msgCreatedTime".equals(childName)) {
+				msg.setMessageTime(DateStringToLong(childValue));
+			}
+			else if ("senderId".equals(childName)) {
+				msg.setSenderID(readIDdata(
+						child,
+						xmlns));
+			}
+			else if ("StartTime".equals(childName)) {
+				missionSummary.setStartTime(DateStringToLong(childValue));
+			}
+			else if ("EndTime".equals(childName)) {
+				missionSummary.setEndTime(DateStringToLong(childValue));
+			}
+			else if ("FrameInformation".equals(childName)) {
+				missionSummary.addFrame(readFrame(
+						child,
+						xmlns));
+			}
+			else if ("CoverageArea".equals(childName)) {
+				missionSummary.setCoverageArea(readCoverageArea(
+						child,
+						xmlns));
+			}
+			else if ("ActiveObjectClassifications".equals(childName)) {
+				missionSummary.setClassifications(readObjectClassifications(
+						child,
+						xmlns));
+			}
+		}
+		return msg;
+	}
+
+	private List<ObjectClassification> readObjectClassifications(
+			final Element element,
+			final Namespace xmlns ) {
+		final List<ObjectClassification> objClassList = new ArrayList<ObjectClassification>();
+		final List<Element> children = element.getChildren();
+		final Iterator<Element> childIter = children.iterator();
+		while (childIter.hasNext()) {
+			final Element child = childIter.next();
+			final String childName = child.getName();
+			final String childValue = child.getValue();
+
+			if ("classification".equals(childName)) {
+				ObjectClassification classification = ObjectClassification.fromString(childValue);
+				if (classification != null) objClassList.add(classification);
+			}
+		}
+
+		return objClassList;
+	}
+
+	private MissionFrame readFrame(
+			final Element element,
+			final Namespace xmlns ) {
+		final MissionFrame frame = new MissionFrame();
+		final List<Element> children = element.getChildren();
+		final Iterator<Element> childIter = children.iterator();
+		while (childIter.hasNext()) {
+			final Element child = childIter.next();
+			final String childName = child.getName();
+			final String childValue = child.getValue();
+			if ("frameNumber".equals(childName)) {
+				frame.setFrameNumber(Integer.parseInt(childValue));
+			}
+			else if ("frameTimestamp".equals(childName)) {
+				frame.setFrameTime(DateStringToLong(childValue));
+			}
+			else if ("frameCoverageArea".equals(childName)) {
+				frame.setCoverageArea(readCoverageArea(
+						child,
+						xmlns));
+			}
+		}
+		return frame;
 	}
 
 	private TrackMessage readTrackMessage(
@@ -390,12 +505,7 @@ public class NATO4676Decoder implements
 				}
 			}
 			else if ("trackPointSource".equals(childName)) {
-				try {
-					trackPoint.trackPointSource = ModalityType.valueOf(childValue);
-				}
-				catch (final IllegalArgumentException iae) {
-					trackPoint.trackPointSource = null;
-				}
+				trackPoint.trackPointSource = ModalityType.fromString(childValue);
 			}
 			else if ("trackPointObjectMask".equals(childName)) {
 				trackPoint.objectMask = readArea(
@@ -535,15 +645,36 @@ public class NATO4676Decoder implements
 			final Element child = childIter.next();
 			final String childName = child.getName();
 			final String childValue = child.getValue();
-			if ("classification".equals(childName)) {
+			if ("trackItemUUID".equals(childName)) {
 				try {
-					trackClassification.classification = ObjectClassification.valueOf(childValue);
+					trackClassification.setUuid(UUID.fromString(childValue));
 				}
 				catch (final IllegalArgumentException iae) {
-					trackClassification.classification = null;
+					trackClassification.setUuid(null);
 				}
 			}
-			// TODO: Track Classification
+			else if ("trackItemSecurity".equals(childName)) {
+				trackClassification.setSecurity(readSecurity(
+						child,
+						xmlns));
+			}
+			else if ("trackItemTime".equals(childName)) {
+				trackClassification.setTime(DateStringToLong(childValue));
+			}
+			else if ("trackItemSource".equals(childName)) {
+				trackClassification.setSource(childValue);
+			}
+			else if ("classification".equals(childName)) {
+				trackClassification.classification = ObjectClassification.fromString(childValue);
+			}
+			else if ("classificationCredibility".equals(childName)) {
+				trackClassification.credibility = readClassificationCredibility(
+						child,
+						xmlns);
+			}
+			else if ("numObjects".equals(childName)) {
+				trackClassification.setNumObjects(Integer.parseInt(child.getText()));
+			}
 		}
 		return trackClassification;
 	}
@@ -712,6 +843,32 @@ public class NATO4676Decoder implements
 		return relation;
 	}
 
+	private ClassificationCredibility readClassificationCredibility(
+			final Element element,
+			final Namespace xmlns ) {
+		final ClassificationCredibility credibility = new ClassificationCredibility();
+		final List<Element> children = element.getChildren();
+		final Iterator<Element> childIter = children.iterator();
+		while (childIter.hasNext()) {
+			final Element child = childIter.next();
+			final String childName = child.getName();
+			final String childValue = child.getValue();
+			if ("valueConfidence".equals(childName)) {
+				try {
+					credibility.setValueConfidence(Integer.parseInt(childValue));
+				}
+				catch (final NumberFormatException nfe) {}
+			}
+			else if ("sourceReliability".equals(childName)) {
+				try {
+					credibility.setSourceReliability(Integer.parseInt(childValue));
+				}
+				catch (final NumberFormatException nfe) {}
+			}
+		}
+		return credibility;
+	}
+
 	private GeodeticPosition readGeodeticPosition(
 			final Element element,
 			final Namespace xmlns ) {
@@ -763,6 +920,27 @@ public class NATO4676Decoder implements
 			if ("xxx".equals(childName)) {
 				// area.setXXX(childValue);
 				// TODO: Area , CircularArea, PolygonArea, etc...
+			}
+		}
+		return area;
+	}
+
+	private Area readCoverageArea(
+			final Element element,
+			final Namespace xmlns ) {
+		final Area area = new Area();
+		final List<Element> children = element.getChildren();
+		final Iterator<Element> childIter = children.iterator();
+		while (childIter.hasNext()) {
+			final Element child = childIter.next();
+			final String childName = child.getName();
+			final String childValue = child.getValue();
+			if ("areaBoundaryPoints".equals(childName)) {
+				GeodeticPosition pos = readGeodeticPosition(
+						child,
+						xmlns);
+				area.getPoints().add(
+						pos);
 			}
 		}
 		return area;

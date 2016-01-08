@@ -31,7 +31,16 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.io.BaseEncoding;
 import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.Polygon;
 import com.vividsolutions.jts.io.WKBWriter;
+
+import mil.nga.giat.geowave.format.stanag4676.parser.model.MissionFrame;
+import mil.nga.giat.geowave.format.stanag4676.parser.model.MissionSummary;
+import mil.nga.giat.geowave.format.stanag4676.parser.model.MissionSummaryMessage;
+import mil.nga.giat.geowave.format.stanag4676.parser.model.ModalityType;
+import mil.nga.giat.geowave.format.stanag4676.parser.model.NATO4676Message;
+import mil.nga.giat.geowave.format.stanag4676.parser.model.ObjectClassification;
+import mil.nga.giat.geowave.format.stanag4676.parser.model.TrackClassification;
 
 public class IngestMessageHandler implements
 		ProcessMessage
@@ -40,11 +49,11 @@ public class IngestMessageHandler implements
 	private final WKBWriter wkbWriter = new WKBWriter(
 			3);
 	private final static String DEFAULT_IMAGE_FORMAT = "jpg";
-	private final List<KeyValueData<Text, TrackEventWritable>> intermediateData = new ArrayList<KeyValueData<Text, TrackEventWritable>>();
+	private final List<KeyValueData<Text, Stanag4676EventWritable>> intermediateData = new ArrayList<KeyValueData<Text, Stanag4676EventWritable>>();
 
 	public IngestMessageHandler() {}
 
-	public List<KeyValueData<Text, TrackEventWritable>> getIntermediateData() {
+	public List<KeyValueData<Text, Stanag4676EventWritable>> getIntermediateData() {
 		return intermediateData;
 	}
 
@@ -53,24 +62,31 @@ public class IngestMessageHandler implements
 	// reducer
 	@Override
 	public void notify(
-			final TrackMessage msg )
+			final NATO4676Message msg )
 			throws IOException,
 			InterruptedException {
-		if ((msg != null) && (msg.getTracks() != null)) {
-			for (final TrackEvent evt : msg.getTracks()) {
+
+		if (msg == null) {
+			LOGGER.error("Received null msg");
+			return;
+		}
+
+		if (msg instanceof TrackMessage) {
+			TrackMessage trackMessage = (TrackMessage) msg;
+			for (final TrackEvent evt : trackMessage.getTracks()) {
 				if (evt.getPoints().size() > 0) {
 					final String trackUuid = evt.getUuid().toString();
-					String mission = evt.getMissionId();
+					String missionUUID = evt.getMissionId();
 					final String comment = evt.getComment();
-					if ((mission == null) && (comment != null)) {
-						mission = comment;
+					if ((missionUUID == null) && (comment != null)) {
+						missionUUID = comment;
 					}
-					if (mission == null) {
+					if (missionUUID == null) {
 						/* TODO: parse mission from filename? - can provide here */
-						mission = "";
+						missionUUID = "";
 					}
 					else {
-						mission = mission.replaceAll(
+						missionUUID = missionUUID.replaceAll(
 								"Mission:",
 								"").trim();
 					}
@@ -85,8 +101,6 @@ public class IngestMessageHandler implements
 					if ((evt.getSecurity() != null) && (evt.getSecurity().getClassification() != null)) {
 						trackClassification = evt.getSecurity().getClassification().name();
 					}
-
-					int eventType = 0; // track point
 
 					final TreeMap<Long, ImageChipInfo> timesWithImageChips = new TreeMap<Long, ImageChipInfo>();
 					final List<MotionImagery> images = evt.getMotionImages();
@@ -151,13 +165,11 @@ public class IngestMessageHandler implements
 					}
 
 					for (final TrackPoint pt : evt.getPoints().values()) {
-						eventType = 0; // track point
-
 						final byte[] geometry = wkbWriter.write(GeometryUtils.GEOMETRY_FACTORY.createPoint(new Coordinate(
 								pt.getLocation().longitude,
 								pt.getLocation().latitude)));
 
-						final String trackItemUUID = pt.getUuid().toString();
+						final String trackItemUUID = pt.getUuid();
 						final long timeStamp = pt.getEventTime();
 						final long endTimeStamp = -1L;
 						final double speed = pt.getSpeed();
@@ -166,6 +178,8 @@ public class IngestMessageHandler implements
 						if ((pt.getSecurity() != null) && (pt.getSecurity().getClassification() != null)) {
 							trackItemClassification = pt.getSecurity().getClassification().name();
 						}
+						ModalityType mt = pt.getTrackPointSource();
+						final String trackPointSource = (mt != null) ? mt.toString() : "";
 						final double latitude = pt.getLocation().latitude;
 						final double longitude = pt.getLocation().longitude;
 						final double elevation = pt.getLocation().elevation;
@@ -180,18 +194,17 @@ public class IngestMessageHandler implements
 							frameNumber = chipInfo.getFrameNumber();
 							imageBytes = chipInfo.getImageBytes();
 						}
-						final String motionEvent = "";
-
-						final TrackEventWritable tw = new TrackEventWritable(
-								eventType,
+						Stanag4676EventWritable sw = new Stanag4676EventWritable();
+						sw.setTrackPointData(
 								geometry,
 								imageBytes,
-								mission,
+								missionUUID,
 								trackNumber,
 								trackUuid,
 								trackStatus,
 								trackClassification,
 								trackItemUUID,
+								trackPointSource,
 								timeStamp,
 								endTimeStamp,
 								speed,
@@ -202,23 +215,19 @@ public class IngestMessageHandler implements
 								elevation,
 								pixelRow,
 								pixelColumn,
-								motionEvent,
 								frameNumber);
 
-						intermediateData.add(new KeyValueData<Text, TrackEventWritable>(
+						intermediateData.add(new KeyValueData<Text, Stanag4676EventWritable>(
 								new Text(
 										trackUuid),
-								tw));
+								sw));
 					}
 
 					for (final MotionEventPoint pt : evt.getMotionPoints().values()) {
-						eventType = 1; // motion track point
-
 						final byte[] geometry = wkbWriter.write(GeometryUtils.GEOMETRY_FACTORY.createPoint(new Coordinate(
 								pt.getLocation().longitude,
 								pt.getLocation().latitude)));
-
-						final String trackItemUUID = pt.getUuid().toString();
+						final String trackItemUUID = pt.getUuid();
 						final long timeStamp = pt.getEventTime();
 						final long endTimeStamp = pt.getEndTime();
 						final double speed = pt.getSpeed();
@@ -230,6 +239,8 @@ public class IngestMessageHandler implements
 						final double latitude = pt.getLocation().latitude;
 						final double longitude = pt.getLocation().longitude;
 						final double elevation = pt.getLocation().elevation;
+						ModalityType mt = pt.getTrackPointSource();
+						final String trackPointSource = (mt != null) ? mt.toString() : "";
 						final ImageChipInfo chipInfo = timesWithImageChips.get(timeStamp);
 						int pixelRow = -1;
 						int pixelColumn = -1;
@@ -243,16 +254,17 @@ public class IngestMessageHandler implements
 						}
 						final String motionEvent = pt.motionEvent;
 
-						final TrackEventWritable tw = new TrackEventWritable(
-								eventType,
+						Stanag4676EventWritable sw = new Stanag4676EventWritable();
+						sw.setMotionPointData(
 								geometry,
 								imageBytes,
-								mission,
+								missionUUID,
 								trackNumber,
 								trackUuid,
 								trackStatus,
 								trackClassification,
 								trackItemUUID,
+								trackPointSource,
 								timeStamp,
 								endTimeStamp,
 								speed,
@@ -263,14 +275,88 @@ public class IngestMessageHandler implements
 								elevation,
 								pixelRow,
 								pixelColumn,
-								motionEvent,
-								frameNumber);
+								frameNumber,
+								motionEvent);
 
 						// motion events emitted, grouped by track
-						intermediateData.add(new KeyValueData<Text, TrackEventWritable>(
+						intermediateData.add(new KeyValueData<Text, Stanag4676EventWritable>(
 								new Text(
 										trackUuid),
-								tw));
+								sw));
+					}
+
+					for (TrackClassification tc : evt.getClassifications()) {
+						long objectClassTime = tc.getTime();
+						String objectClass = tc.classification.toString();
+						int objectClassConf = tc.credibility.getValueConfidence();
+						int objectClassRel = tc.credibility.getSourceReliability();
+
+						Stanag4676EventWritable sw = new Stanag4676EventWritable();
+						sw.setTrackObjectClassData(
+								objectClassTime,
+								objectClass,
+								objectClassConf,
+								objectClassRel);
+
+						intermediateData.add(new KeyValueData<Text, Stanag4676EventWritable>(
+								new Text(
+										trackUuid),
+								sw));
+					}
+				}
+			}
+		}
+
+		if (msg instanceof MissionSummaryMessage) {
+			MissionSummaryMessage missionSummaryMessage = (MissionSummaryMessage) msg;
+			MissionSummary missionSummary = missionSummaryMessage.getMissionSummary();
+			if (missionSummary != null && missionSummary.getCoverageArea() != null) {
+				Polygon missionPolygon = missionSummary.getCoverageArea().getPolygon();
+				final byte[] missionGeometry = wkbWriter.write(missionPolygon);
+				String missionUUID = missionSummary.getMissionId();
+				String missionName = missionSummary.getName();
+				int missionNumFrames = missionSummary.getFrames().size();
+				long missionStartTime = missionSummary.getStartTime();
+				long missionEndTime = missionSummary.getEndTime();
+				String missionClassification = missionSummary.getSecurity();
+				StringBuilder sb = new StringBuilder();
+				for (final ObjectClassification oc : missionSummary.getClassifications()) {
+					if (sb.length() > 0) sb.append(",");
+					sb.append(oc.toString());
+				}
+				String activeObjectClass = sb.toString();
+				Stanag4676EventWritable msw = new Stanag4676EventWritable();
+				msw.setMissionSummaryData(
+						missionGeometry,
+						missionUUID,
+						missionName,
+						missionNumFrames,
+						missionStartTime,
+						missionEndTime,
+						missionClassification,
+						activeObjectClass);
+
+				intermediateData.add(new KeyValueData<Text, Stanag4676EventWritable>(
+						new Text(
+								missionUUID),
+						msw));
+
+				for (MissionFrame frame : missionSummary.getFrames()) {
+					if (frame != null && frame.getCoverageArea() != null) {
+						Polygon framePolygon = frame.getCoverageArea().getPolygon();
+						final byte[] frameGeometry = wkbWriter.write(framePolygon);
+						long frameTimeStamp = frame.getFrameTime();
+						int frameNumber = frame.getFrameNumber();
+						Stanag4676EventWritable fsw = new Stanag4676EventWritable();
+						fsw.setMissionFrameData(
+								frameGeometry,
+								missionUUID,
+								frameNumber,
+								frameTimeStamp);
+						intermediateData.add(new KeyValueData<Text, Stanag4676EventWritable>(
+								new Text(
+										missionUUID),
+								fsw));
 					}
 				}
 			}
