@@ -2,12 +2,24 @@ package mil.nga.giat.geowave.adapter.raster.plugin;
 
 import java.io.InputStream;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
 
 import javax.media.jai.Interpolation;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+
+import mil.nga.giat.geowave.core.store.DataStore;
+import mil.nga.giat.geowave.core.store.DataStoreFactorySpi;
+import mil.nga.giat.geowave.core.store.GeoWaveStoreFinder;
+import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.AdapterStoreFactorySpi;
+import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
+import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStoreFactorySpi;
+import mil.nga.giat.geowave.core.store.config.ConfigUtils;
+import mil.nga.giat.geowave.core.store.index.IndexStore;
+import mil.nga.giat.geowave.core.store.index.IndexStoreFactorySpi;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -20,14 +32,6 @@ public class GeoWaveRasterConfig
 	static private final Map<String, GeoWaveRasterConfig> CONFIG_CACHE = new Hashtable<String, GeoWaveRasterConfig>();
 
 	protected static enum ConfigParameter {
-		ZOOKEEPER_URLS(
-				"zookeeperUrls"),
-		INSTANCE_ID(
-				"instanceId"),
-		USERNAME(
-				"username"),
-		PASSWORD(
-				"password"),
 		NAMESPACE(
 				"namespace"),
 		// the following two are optional parameters that will override the
@@ -49,16 +53,16 @@ public class GeoWaveRasterConfig
 	}
 
 	private String xmlUrl;
-
-	private String zookeeperUrls;
-
-	private String accumuloInstanceId;
-
-	private String accumuloUsername;
-
-	private String accumuloPassword;
-
 	private String geowaveNamespace;
+	private Map<String, Object> storeConfigObj;
+	private DataStoreFactorySpi dataStoreFactory;
+	private IndexStoreFactorySpi indexStoreFactory;
+	private AdapterStoreFactorySpi adapterStoreFactory;
+	private DataStatisticsStoreFactorySpi dataStatisticsStoreFactory;
+	private DataStore dataStore;
+	private IndexStore indexStore;
+	private AdapterStore adapterStore;
+	private DataStatisticsStore dataStatisticsStore;
 
 	private Boolean equalizeHistogramOverride = null;
 
@@ -67,37 +71,31 @@ public class GeoWaveRasterConfig
 	protected GeoWaveRasterConfig() {}
 
 	public static GeoWaveRasterConfig createConfig(
-			final String zookeeperUrl,
-			final String accumuloInstanceId,
-			final String accumuloUsername,
-			final String accumuloPassword,
+			final Map<String, String> dataStoreConfig,
 			final String geowaveNamespace ) {
 		return createConfig(
-				zookeeperUrl,
-				accumuloInstanceId,
-				accumuloUsername,
-				accumuloPassword,
+				dataStoreConfig,
 				geowaveNamespace,
 				null,
 				null);
 	}
 
 	public static GeoWaveRasterConfig createConfig(
-			final String zookeeperUrl,
-			final String accumuloInstanceId,
-			final String accumuloUsername,
-			final String accumuloPassword,
+			final Map<String, String> dataStoreConfig,
 			final String geowaveNamespace,
 			final Boolean equalizeHistogramOverride,
 			final Integer interpolationOverride ) {
 		final GeoWaveRasterConfig result = new GeoWaveRasterConfig();
-		result.zookeeperUrls = zookeeperUrl;
-		result.accumuloInstanceId = accumuloInstanceId;
-		result.accumuloUsername = accumuloUsername;
-		result.accumuloPassword = accumuloPassword;
-		result.geowaveNamespace = geowaveNamespace;
 		result.equalizeHistogramOverride = equalizeHistogramOverride;
 		result.interpolationOverride = interpolationOverride;
+		synchronized (result) {
+			result.geowaveNamespace = geowaveNamespace;
+			result.storeConfigObj = ConfigUtils.valuesFromStrings(dataStoreConfig);
+			result.dataStoreFactory = GeoWaveStoreFinder.findDataStoreFactory(result.storeConfigObj);
+			result.indexStoreFactory = GeoWaveStoreFinder.findIndexStoreFactory(result.storeConfigObj);
+			result.adapterStoreFactory = GeoWaveStoreFinder.findAdapterStoreFactory(result.storeConfigObj);
+			result.dataStatisticsStoreFactory = GeoWaveStoreFinder.findDataStatisticsStoreFactory(result.storeConfigObj);
+		}
 		return result;
 	}
 
@@ -127,22 +125,35 @@ public class GeoWaveRasterConfig
 		result = new GeoWaveRasterConfig();
 
 		result.xmlUrl = xmlURL.toString();
-
-		result.zookeeperUrls = readValueString(
-				dom,
-				ConfigParameter.ZOOKEEPER_URLS.getConfigName());
-		result.accumuloInstanceId = readValueString(
-				dom,
-				ConfigParameter.INSTANCE_ID.getConfigName());
-		result.accumuloUsername = readValueString(
-				dom,
-				ConfigParameter.USERNAME.getConfigName());
-		result.accumuloPassword = readValueString(
-				dom,
-				ConfigParameter.PASSWORD.getConfigName());
-		result.geowaveNamespace = readValueString(
-				dom,
-				ConfigParameter.NAMESPACE.getConfigName());
+		final NodeList children = dom.getChildNodes();
+		final Map<String, String> storeConfig = new HashMap<String, String>();
+		for (int i = 0; i < children.getLength(); i++) {
+			final Node child = children.item(i);
+			boolean isConfigParameter = false;
+			for (final ConfigParameter p : ConfigParameter.values()) {
+				if (child.getNodeName().equalsIgnoreCase(
+						p.getConfigName())) {
+					isConfigParameter = true;
+					break;
+				}
+			}
+			if (!isConfigParameter) {
+				storeConfig.put(
+						child.getNodeName(),
+						child.getNodeValue());
+			}
+		}
+		// findbugs complaint requires this synchronization
+		synchronized (result) {
+			result.geowaveNamespace = readValueString(
+					dom,
+					ConfigParameter.NAMESPACE.getConfigName());
+			result.storeConfigObj = ConfigUtils.valuesFromStrings(storeConfig);
+			result.dataStoreFactory = GeoWaveStoreFinder.findDataStoreFactory(result.storeConfigObj);
+			result.indexStoreFactory = GeoWaveStoreFinder.findIndexStoreFactory(result.storeConfigObj);
+			result.adapterStoreFactory = GeoWaveStoreFinder.findAdapterStoreFactory(result.storeConfigObj);
+			result.dataStatisticsStoreFactory = GeoWaveStoreFinder.findDataStatisticsStoreFactory(result.storeConfigObj);
+		}
 		final String equalizeHistogram = readValueString(
 				dom,
 				ConfigParameter.EQUALIZE_HISTOGRAM.getConfigName());
@@ -165,28 +176,44 @@ public class GeoWaveRasterConfig
 		return result;
 	}
 
+	public synchronized DataStore getDataStore() {
+		if (dataStore == null) {
+			dataStore = dataStoreFactory.createStore(
+					storeConfigObj,
+					geowaveNamespace);
+		}
+		return dataStore;
+	}
+
+	public synchronized AdapterStore getAdapterStore() {
+		if (adapterStore == null) {
+			adapterStore = adapterStoreFactory.createStore(
+					storeConfigObj,
+					geowaveNamespace);
+		}
+		return adapterStore;
+	}
+
+	public synchronized IndexStore getIndexStore() {
+		if (indexStore == null) {
+			indexStore = indexStoreFactory.createStore(
+					storeConfigObj,
+					geowaveNamespace);
+		}
+		return indexStore;
+	}
+
+	public synchronized DataStatisticsStore getDataStatisticsStore() {
+		if (dataStatisticsStore == null) {
+			dataStatisticsStore = dataStatisticsStoreFactory.createStore(
+					storeConfigObj,
+					geowaveNamespace);
+		}
+		return dataStatisticsStore;
+	}
+
 	public String getXmlUrl() {
 		return xmlUrl;
-	}
-
-	public String getZookeeperUrls() {
-		return zookeeperUrls;
-	}
-
-	public String getAccumuloInstanceId() {
-		return accumuloInstanceId;
-	}
-
-	public String getAccumuloUsername() {
-		return accumuloUsername;
-	}
-
-	public String getAccumuloPassword() {
-		return accumuloPassword;
-	}
-
-	public String getGeowaveNamespace() {
-		return geowaveNamespace;
 	}
 
 	public boolean isInterpolationOverrideSet() {

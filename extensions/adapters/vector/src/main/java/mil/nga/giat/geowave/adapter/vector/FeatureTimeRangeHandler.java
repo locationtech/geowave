@@ -2,12 +2,12 @@ package mil.nga.giat.geowave.adapter.vector;
 
 import java.util.Arrays;
 
+import mil.nga.giat.geowave.core.geotime.TimeUtils;
 import mil.nga.giat.geowave.core.geotime.store.dimension.Time;
 import mil.nga.giat.geowave.core.geotime.store.dimension.Time.TimeRange;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayUtils;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericData;
-import mil.nga.giat.geowave.core.store.TimeUtils;
 import mil.nga.giat.geowave.core.store.adapter.IndexFieldHandler;
 import mil.nga.giat.geowave.core.store.data.PersistentValue;
 import mil.nga.giat.geowave.core.store.data.field.FieldVisibilityHandler;
@@ -26,6 +26,7 @@ public class FeatureTimeRangeHandler implements
 	private final FeatureAttributeHandler nativeStartTimeHandler;
 	private final FeatureAttributeHandler nativeEndTimeHandler;
 	private final FieldVisibilityHandler<SimpleFeature, Object> visibilityHandler;
+	private final ByteArrayId[] nativeFieldIds;
 
 	public FeatureTimeRangeHandler(
 			final FeatureAttributeHandler nativeStartTimeHandler,
@@ -43,14 +44,15 @@ public class FeatureTimeRangeHandler implements
 		this.nativeStartTimeHandler = nativeStartTimeHandler;
 		this.nativeEndTimeHandler = nativeEndTimeHandler;
 		this.visibilityHandler = visibilityHandler;
+		nativeFieldIds = new ByteArrayId[] {
+			nativeStartTimeHandler.getFieldId(),
+			nativeEndTimeHandler.getFieldId()
+		};
 	}
 
 	@Override
 	public ByteArrayId[] getNativeFieldIds() {
-		return new ByteArrayId[] {
-			nativeStartTimeHandler.getFieldId(),
-			nativeEndTimeHandler.getFieldId()
-		};
+		return nativeFieldIds;
 	}
 
 	@Override

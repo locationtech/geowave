@@ -17,5 +17,6 @@
 		<module>geotime</module>
 		<module>cli</module>
 		<module>ingest</module>
+		<module>mapreduce</module>
 	</modules>
 </project>

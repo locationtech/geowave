@@ -20,18 +20,13 @@
 			<artifactId>commons-math</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.hadoop</groupId>
-			<artifactId>hadoop-client</artifactId>
-			<exclusions>
-				<exclusion>
-					<artifactId>jdk.tools</artifactId>
-					<groupId>jdk.tools</groupId>
-				</exclusion>
-			</exclusions>
+			<groupId>mil.nga.giat</groupId>
+			<artifactId>geowave-core-mapreduce</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>mil.nga.giat</groupId>
-			<artifactId>geowave-datastore-accumulo</artifactId>
+			<artifactId>geowave-core-geotime</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

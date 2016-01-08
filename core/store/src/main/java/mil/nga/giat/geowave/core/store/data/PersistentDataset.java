@@ -27,6 +27,12 @@ public class PersistentDataset<T>
 	}
 
 	public PersistentDataset(
+			final PersistentValue<T> value ) {
+		this();
+		addValue(value);
+	}
+
+	public PersistentDataset(
 			final Map<ByteArrayId, T> fieldIdToValueMap ) {
 		this.fieldIdToValueMap = fieldIdToValueMap;
 	}

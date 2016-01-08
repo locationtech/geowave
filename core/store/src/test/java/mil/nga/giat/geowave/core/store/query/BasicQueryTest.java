@@ -11,8 +11,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.junit.Test;
+import java.util.Set;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
@@ -23,17 +22,20 @@ import mil.nga.giat.geowave.core.index.sfc.data.BasicNumericDataset;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericData;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericRange;
-import mil.nga.giat.geowave.core.store.data.IndexedPersistenceEncoding;
+import mil.nga.giat.geowave.core.store.data.CommonIndexedPersistenceEncoding;
 import mil.nga.giat.geowave.core.store.data.PersistentDataset;
 import mil.nga.giat.geowave.core.store.data.field.FieldReader;
 import mil.nga.giat.geowave.core.store.data.field.FieldWriter;
-import mil.nga.giat.geowave.core.store.dimension.DimensionField;
+import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
 import mil.nga.giat.geowave.core.store.index.BasicIndexModel;
+import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 import mil.nga.giat.geowave.core.store.query.BasicQuery.ConstraintData;
 import mil.nga.giat.geowave.core.store.query.BasicQuery.ConstraintSet;
 import mil.nga.giat.geowave.core.store.query.BasicQuery.Constraints;
+
+import org.junit.Test;
 
 public class BasicQueryTest
 {
@@ -183,8 +185,8 @@ public class BasicQueryTest
 				expectedResults,
 				query.getIndexConstraints(new ExampleNumericIndexStrategy()));
 
-		List<QueryFilter> filters = query.createFilters(new BasicIndexModel(
-				new DimensionField[] {
+		final List<QueryFilter> filters = query.createFilters(new BasicIndexModel(
+				new NumericDimensionField[] {
 					new ExampleDimensionOne(),
 					new ExampleDimensionTwo()
 				}));
@@ -206,9 +208,12 @@ public class BasicQueryTest
 				new ConstrainedIndexValue(
 						0.5,
 						0.5));
+
+		final CommonIndexModel model = null;
 		assertTrue(filters.get(
 				0).accept(
-				new IndexedPersistenceEncoding(
+				model,
+				new CommonIndexedPersistenceEncoding(
 						new ByteArrayId(
 								"adapter"),
 						new ByteArrayId(
@@ -217,7 +222,8 @@ public class BasicQueryTest
 								"index"),
 						1, // duplicate count
 						new PersistentDataset(
-								fieldIdToValueMap))));
+								fieldIdToValueMap),
+						null)));
 		fieldIdToValueMap.put(
 				new ByteArrayId(
 						"one"),
@@ -226,7 +232,8 @@ public class BasicQueryTest
 						0.1));
 		assertFalse(filters.get(
 				0).accept(
-				new IndexedPersistenceEncoding(
+				model,
+				new CommonIndexedPersistenceEncoding(
 						new ByteArrayId(
 								"adapter"),
 						new ByteArrayId(
@@ -235,7 +242,8 @@ public class BasicQueryTest
 								"index"),
 						1, // duplicate count
 						new PersistentDataset(
-								fieldIdToValueMap))));
+								fieldIdToValueMap),
+						null)));
 
 		fieldIdToValueMap.put(
 				new ByteArrayId(
@@ -251,7 +259,8 @@ public class BasicQueryTest
 						5.0));
 		assertFalse(filters.get(
 				0).accept(
-				new IndexedPersistenceEncoding(
+				model,
+				new CommonIndexedPersistenceEncoding(
 						new ByteArrayId(
 								"adapter"),
 						new ByteArrayId(
@@ -260,7 +269,8 @@ public class BasicQueryTest
 								"index"),
 						1, // duplicate count
 						new PersistentDataset(
-								fieldIdToValueMap))));
+								fieldIdToValueMap),
+						null)));
 
 		/**
 		 * Tests the 'OR' Case
@@ -273,7 +283,8 @@ public class BasicQueryTest
 						3.5));
 		assertTrue(filters.get(
 				0).accept(
-				new IndexedPersistenceEncoding(
+				model,
+				new CommonIndexedPersistenceEncoding(
 						new ByteArrayId(
 								"adapter"),
 						new ByteArrayId(
@@ -282,7 +293,8 @@ public class BasicQueryTest
 								"index"),
 						1, // duplicate count
 						new PersistentDataset(
-								fieldIdToValueMap))));
+								fieldIdToValueMap),
+						null)));
 
 	}
 
@@ -355,6 +367,11 @@ public class BasicQueryTest
 			return null;
 		}
 
+		@Override
+		public Set<ByteArrayId> getNaturalSplits() {
+			return null;
+		}
+
 	}
 
 	public static class ConstrainedIndexValue extends
@@ -389,7 +406,7 @@ public class BasicQueryTest
 
 		@Override
 		public boolean overlaps(
-				final DimensionField[] field,
+				final NumericDimensionField[] field,
 				final NumericData[] rangeData ) {
 			return false;
 		}
@@ -397,7 +414,7 @@ public class BasicQueryTest
 	}
 
 	public static class ExampleDimensionOne implements
-			DimensionField<ConstrainedIndexValue>
+			NumericDimensionField<ConstrainedIndexValue>
 	{
 
 		public ExampleDimensionOne() {
@@ -454,12 +471,6 @@ public class BasicQueryTest
 			return new NumericRange(
 					0,
 					10);
-		}
-
-		@Override
-		public boolean isCompatibleDefinition(
-				final NumericDimensionDefinition otherDimensionDefinition ) {
-			return false;
 		}
 
 		@Override

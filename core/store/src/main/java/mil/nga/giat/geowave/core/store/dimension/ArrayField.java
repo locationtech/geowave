@@ -12,12 +12,12 @@ import mil.nga.giat.geowave.core.store.data.field.FieldWriter;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 
 abstract public class ArrayField<T extends CommonIndexValue> implements
-		DimensionField<ArrayWrapper<T>>
+		NumericDimensionField<ArrayWrapper<T>>
 {
-	protected DimensionField<T> elementField;
+	protected NumericDimensionField<T> elementField;
 
 	public ArrayField(
-			final DimensionField<T> elementField ) {
+			final NumericDimensionField<T> elementField ) {
 		this.elementField = elementField;
 	}
 
@@ -33,7 +33,7 @@ abstract public class ArrayField<T extends CommonIndexValue> implements
 			final byte[] bytes ) {
 		elementField = PersistenceUtils.fromBinary(
 				bytes,
-				DimensionField.class);
+				NumericDimensionField.class);
 	}
 
 	@Override

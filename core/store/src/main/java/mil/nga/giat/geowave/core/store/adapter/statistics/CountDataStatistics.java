@@ -1,6 +1,7 @@
 package mil.nga.giat.geowave.core.store.adapter.statistics;
 
 import java.nio.ByteBuffer;
+import java.util.HashSet;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.Mergeable;
@@ -84,14 +85,22 @@ public class CountDataStatistics<T> extends
 		}
 	}
 
+	/**
+	 * This is expensive, but necessary since there may be duplicates
+	 */
+	private transient HashSet<ByteArrayId> ids = new HashSet<ByteArrayId>();
+
 	@Override
 	public void entryDeleted(
 			final DataStoreEntryInfo entryInfo,
 			final T entry ) {
-		if (!isSet()) {
-			count = 0;
+		if (ids.add(new ByteArrayId(
+				entryInfo.getDataId()))) {
+			if (!isSet()) {
+				count = 0;
+			}
+			count -= 1;
 		}
-		count -= 1;
 
 	}
 

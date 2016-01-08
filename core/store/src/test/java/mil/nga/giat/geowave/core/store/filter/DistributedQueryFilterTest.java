@@ -7,15 +7,15 @@ import static org.junit.Assert.assertTrue;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Test;
-
 import mil.nga.giat.geowave.core.index.sfc.data.BasicNumericDataset;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericData;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericRange;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericValue;
-import mil.nga.giat.geowave.core.store.dimension.DimensionField;
+import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;
 import mil.nga.giat.geowave.core.store.filter.BasicQueryFilter.BasicQueryCompareOperation;
 import mil.nga.giat.geowave.core.store.query.BasicQueryTest;
+
+import org.junit.Test;
 
 public class DistributedQueryFilterTest
 {
@@ -29,7 +29,7 @@ public class DistributedQueryFilterTest
 							new NumericValue(
 									0.4)
 						}),
-				new DimensionField[] {
+				new NumericDimensionField[] {
 					new BasicQueryTest.ExampleDimensionOne()
 				},
 				BasicQueryCompareOperation.CONTAINS));
@@ -58,7 +58,7 @@ public class DistributedQueryFilterTest
 							new NumericValue(
 									0.5)
 						}),
-				new DimensionField[] {
+				new NumericDimensionField[] {
 					new BasicQueryTest.ExampleDimensionOne()
 				},
 				BasicQueryCompareOperation.OVERLAPS));

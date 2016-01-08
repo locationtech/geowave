@@ -11,19 +11,34 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.ServiceLoader;
 
-import mil.nga.giat.geowave.adapter.vector.auth.AuthorizationFactorySPI;
-import mil.nga.giat.geowave.adapter.vector.auth.EmptyAuthorizationFactory;
-import mil.nga.giat.geowave.adapter.vector.plugin.lock.LockingManagementFactory;
-
-import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
-import org.apache.commons.cli.ParseException;
 import org.apache.log4j.Logger;
 import org.geotools.data.DataAccessFactory.Param;
 import org.geotools.data.Parameter;
+
+import com.google.common.base.Function;
+import com.google.common.collect.Lists;
+
+import mil.nga.giat.geowave.adapter.vector.auth.AuthorizationFactorySPI;
+import mil.nga.giat.geowave.adapter.vector.auth.EmptyAuthorizationFactory;
+import mil.nga.giat.geowave.adapter.vector.index.ChooseBestMatchIndexQueryStrategy;
+import mil.nga.giat.geowave.adapter.vector.index.ChooseHeuristicMatchIndexQueryStrategy;
+import mil.nga.giat.geowave.adapter.vector.index.IndexQueryStrategySPI;
+import mil.nga.giat.geowave.adapter.vector.plugin.lock.LockingManagementFactory;
+import mil.nga.giat.geowave.core.store.DataStore;
+import mil.nga.giat.geowave.core.store.GeoWaveStoreFinder;
+import mil.nga.giat.geowave.core.store.StoreFactoryFamilySpi;
+import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
+import mil.nga.giat.geowave.core.store.config.AbstractConfigOption;
+import mil.nga.giat.geowave.core.store.config.ConfigUtils;
+import mil.nga.giat.geowave.core.store.config.PasswordConfigOption;
+import mil.nga.giat.geowave.core.store.filter.GenericTypeResolver;
+import mil.nga.giat.geowave.core.store.index.IndexStore;
 
 /**
  * This class encapsulates the parameterized configuration that can be provided
@@ -35,51 +50,24 @@ public class GeoWavePluginConfig
 {
 	private final static Logger LOGGER = Logger.getLogger(GeoWavePluginConfig.class);
 
-	protected static final String ZOOKEEPER_SERVERS_KEY = "ZookeeperServers";
-	protected static final String INSTANCE_NAME_KEY = "InstanceName";
-	protected static final String USERNAME_KEY = "UserName";
-	protected static final String PASSWORD_KEY = "Password";
-	protected static final String ACCUMULO_NAMESPACE_KEY = "Namespace";
+	public static final String GEOWAVE_NAMESPACE_KEY = "gwNamespace";
 	// name matches the workspace parameter provided to the factory
 	protected static final String FEATURE_NAMESPACE_KEY = "namespace";
 	protected static final String LOCK_MGT_KEY = "Lock Management";
 	protected static final String AUTH_MGT_KEY = "Authorization Management Provider";
 	protected static final String AUTH_URL_KEY = "Authorization Data URL";
 	protected static final String TRANSACTION_BUFFER_SIZE = "Transaction Buffer Size";
+	public static final String QUERY_INDEX_STRATEGY_KEY = "Query Index Strategy";
 
-	private static final Param ZOOKEEPER_SERVERS = new Param(
-			ZOOKEEPER_SERVERS_KEY,
-			String.class,
-			"A comma delimited list of zookeeper servers, as host:port",
-			true);
-	private static final Param INSTANCE_NAME = new Param(
-			INSTANCE_NAME_KEY,
-			String.class,
-			"The Instance Name",
-			true);
-	private static final Param USERNAME = new Param(
-			USERNAME_KEY,
-			String.class,
-			"The Username",
-			true);
-	private static final Param PASSWORD = new Param(
-			PASSWORD_KEY,
-			String.class,
-			"The Password",
-			true,
-			"mypassword",
-			Collections.singletonMap(
-					Parameter.IS_PASSWORD,
-					Boolean.TRUE));
-	private static final Param ACCUMULO_NAMESPACE = new Param(
-			ACCUMULO_NAMESPACE_KEY,
+	private static final Param GEOWAVE_NAMESPACE = new Param(
+			GEOWAVE_NAMESPACE_KEY,
 			String.class,
 			"The table namespace associated with this data store",
 			true);
 	private static final Param TRANSACTION_BUFFER_SIZE_PARAM = new Param(
 			TRANSACTION_BUFFER_SIZE,
 			Integer.class,
-			"Number of buffered buffered insertions before flush to the datastore.",
+			"Number of buffered feature insertions before flushing to the datastore.",
 			false);
 
 	/*
@@ -111,18 +99,27 @@ public class GeoWavePluginConfig
 			"The providers data URL.",
 			false);
 
-	private final String zookeeperServers;
-	private final String instanceName;
-	private final String userName;
-	private final String password;
-	private final String namespace;
+	private static final Param QUERY_INDEX_STRATEGY = new Param(
+			QUERY_INDEX_STRATEGY_KEY,
+			String.class,
+			"Strategy to choose an index during query processing.",
+			true,
+			null,
+			getIndexQueryStrategyOptions());
+
+	private final AdapterStore adapterStore;
+	private final DataStore dataStore;
+	private final IndexStore indexStore;
+	private final DataStatisticsStore dataStatisticsStore;
+	private final String name;
 	private final URI featureNameSpaceURI;
 	private final LockingManagementFactory lockingManagementFactory;
 	private final AuthorizationFactorySPI authorizationFactory;
 	private final URL authorizationURL;
 	private final Integer transactionBufferSize;
+	private final IndexQueryStrategySPI indexQueryStrategy;
 
-	private static List<Param> accumuloParams = null;
+	private static Map<String, List<Param>> paramMap = new HashMap<String, List<Param>>();
 
 	public static List<Param> getAuthPluginParams() {
 		final List<Param> accumuloParams = new ArrayList<Param>();
@@ -131,63 +128,49 @@ public class GeoWavePluginConfig
 		return accumuloParams;
 	}
 
-	public synchronized static List<Param> getPluginParams() {
-		if (accumuloParams == null) {
-			accumuloParams = new ArrayList<Param>();
-			accumuloParams.add(ZOOKEEPER_SERVERS);
-			accumuloParams.add(INSTANCE_NAME);
-			accumuloParams.add(USERNAME);
-			accumuloParams.add(PASSWORD);
-			accumuloParams.add(ACCUMULO_NAMESPACE);
-			// is pulled from the workspace
-			// accumuloParams.add(FEATURE_NAMESPACE);
-			accumuloParams.add(LOCK_MGT);
-			accumuloParams.add(AUTH_MGT);
-			accumuloParams.add(AUTH_URL);
-			accumuloParams.add(TRANSACTION_BUFFER_SIZE_PARAM);
+	public synchronized static List<Param> getPluginParams(
+			final StoreFactoryFamilySpi storeFactoryFamily ) {
+		List<Param> params = paramMap.get(storeFactoryFamily.getName());
+		if (params == null) {
+			final AbstractConfigOption<?>[] configOptions = GeoWaveStoreFinder.getAllOptions(storeFactoryFamily);
+			params = new ArrayList<Param>(
+					Lists.transform(
+							Lists.newArrayList(configOptions),
+							new GeoWaveConfigOptionToGeoToolsConfigOption()));
+			params.add(GEOWAVE_NAMESPACE);
+			params.add(LOCK_MGT);
+			params.add(AUTH_MGT);
+			params.add(AUTH_URL);
+			params.add(TRANSACTION_BUFFER_SIZE_PARAM);
+			params.add(QUERY_INDEX_STRATEGY);
+			paramMap.put(
+					storeFactoryFamily.getName(),
+					params);
 		}
-		return accumuloParams;
+		return params;
 	}
 
 	public GeoWavePluginConfig(
+			final StoreFactoryFamilySpi storeFactoryFamily,
 			final Map<String, Serializable> params )
 			throws GeoWavePluginException {
 
-		Serializable param = params.get(ZOOKEEPER_SERVERS_KEY);
+		Serializable param = params.get(GEOWAVE_NAMESPACE_KEY);
 		if (param == null) {
 			throw new GeoWavePluginException(
-					"Accumulo Plugin: Missing zookeeper servers param");
+					"GeoWave Plugin: Missing namespace param");
 		}
-
-		zookeeperServers = param.toString();
-		param = params.get(INSTANCE_NAME_KEY);
-		if (param == null) {
-			throw new GeoWavePluginException(
-					"Accumulo Plugin: Missing instance name param");
+		final String namespace = param.toString();
+		name = storeFactoryFamily.getName() + "_" + namespace;
+		final Map<String, String> paramStrs = new HashMap<String, String>();
+		// first converts serializable objects to String to avoid any issue if
+		// there's a difference how geotools is converting objects to how
+		// geowave intends to convert objects
+		for (final Entry<String, Serializable> e : params.entrySet()) {
+			paramStrs.put(
+					e.getKey(),
+					e.getValue() == null ? null : e.getValue().toString());
 		}
-		instanceName = param.toString();
-
-		param = params.get(USERNAME_KEY);
-		if (param == null) {
-			throw new GeoWavePluginException(
-					"Accumulo Plugin: Missing username param");
-		}
-
-		userName = param.toString();
-
-		param = params.get(PASSWORD_KEY);
-		if (param == null) {
-			throw new GeoWavePluginException(
-					"Accumulo Plugin: Missing password param");
-		}
-		password = param.toString();
-
-		param = params.get(ACCUMULO_NAMESPACE_KEY);
-		if (param == null) {
-			throw new GeoWavePluginException(
-					"Accumulo Plugin: Missing namespace param");
-		}
-		namespace = param.toString();
 
 		param = params.get(FEATURE_NAMESPACE_KEY);
 		URI namespaceURI = null;
@@ -225,10 +208,39 @@ public class GeoWavePluginConfig
 				break;
 			}
 		}
+
+		adapterStore = storeFactoryFamily.getAdapterStoreFactory().createStore(
+				ConfigUtils.valuesFromStrings(
+						paramStrs,
+						storeFactoryFamily.getAdapterStoreFactory().getOptions()),
+				namespace);
+
+		dataStore = storeFactoryFamily.getDataStoreFactory().createStore(
+				ConfigUtils.valuesFromStrings(
+						paramStrs,
+						storeFactoryFamily.getDataStoreFactory().getOptions()),
+				namespace);
+
+		dataStatisticsStore = storeFactoryFamily.getDataStatisticsStoreFactory().createStore(
+				ConfigUtils.valuesFromStrings(
+						paramStrs,
+						storeFactoryFamily.getDataStatisticsStoreFactory().getOptions()),
+				namespace);
+
+		indexStore = storeFactoryFamily.getIndexStoreFactory().createStore(
+				ConfigUtils.valuesFromStrings(
+						paramStrs,
+						storeFactoryFamily.getIndexStoreFactory().getOptions()),
+				namespace);
 		lockingManagementFactory = factory;
 
 		authorizationFactory = getAuthorizationFactory(params);
 		authorizationURL = getAuthorizationURL(params);
+		indexQueryStrategy = getIndexQueryStrategy(params);
+	}
+
+	public String getName() {
+		return name;
 	}
 
 	public static AuthorizationFactorySPI getAuthorizationFactory(
@@ -246,6 +258,42 @@ public class GeoWavePluginConfig
 			}
 		}
 		return authFactory;
+	}
+
+	public IndexQueryStrategySPI getIndexQueryStrategy() {
+		return indexQueryStrategy;
+	}
+
+	public AdapterStore getAdapterStore() {
+		return adapterStore;
+	}
+
+	public DataStore getDataStore() {
+		return dataStore;
+	}
+
+	public IndexStore getIndexStore() {
+		return indexStore;
+	}
+
+	public DataStatisticsStore getDataStatisticsStore() {
+		return dataStatisticsStore;
+	}
+
+	public static IndexQueryStrategySPI getIndexQueryStrategy(
+			final Map<String, Serializable> params )
+			throws GeoWavePluginException {
+		final Serializable param = params.get(QUERY_INDEX_STRATEGY_KEY);
+		if (param != null) {
+			final Iterator<IndexQueryStrategySPI> it = getInxexQueryStrategyList();
+			while (it.hasNext()) {
+				IndexQueryStrategySPI spi = it.next();
+				if (spi.toString().equals(
+						param.toString())) return spi;
+			}
+
+		}
+		return new ChooseHeuristicMatchIndexQueryStrategy();
 	}
 
 	public static URL getAuthorizationURL(
@@ -282,26 +330,6 @@ public class GeoWavePluginConfig
 		return lockingManagementFactory;
 	}
 
-	public String getZookeeperServers() {
-		return zookeeperServers;
-	}
-
-	public String getInstanceName() {
-		return instanceName;
-	}
-
-	public String getUserName() {
-		return userName;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public String getAccumuloNamespace() {
-		return namespace;
-	}
-
 	public URI getFeatureNamespace() {
 		return featureNameSpaceURI;
 	}
@@ -313,6 +341,20 @@ public class GeoWavePluginConfig
 	private static Map<String, List<String>> getLockMgtOptions() {
 		final List<String> options = new ArrayList<String>();
 		final Iterator<LockingManagementFactory> it = getLockManagementFactoryList();
+		while (it.hasNext()) {
+			options.add(it.next().toString());
+		}
+		final Map<String, List<String>> map = new HashMap<String, List<String>>();
+		map.put(
+				Parameter.OPTIONS,
+				options);
+		return map;
+	}
+
+	private static Map<String, List<String>> getIndexQueryStrategyOptions() {
+		final List<String> options = new ArrayList<String>();
+
+		final Iterator<IndexQueryStrategySPI> it = getInxexQueryStrategyList();
 		while (it.hasNext()) {
 			options.add(it.next().toString());
 		}
@@ -343,6 +385,11 @@ public class GeoWavePluginConfig
 
 	private static Iterator<AuthorizationFactorySPI> getAuthorizationFactoryList() {
 		final ServiceLoader<AuthorizationFactorySPI> ldr = ServiceLoader.load(AuthorizationFactorySPI.class);
+		return ldr.iterator();
+	}
+
+	private static Iterator<IndexQueryStrategySPI> getInxexQueryStrategyList() {
+		final ServiceLoader<IndexQueryStrategySPI> ldr = ServiceLoader.load(IndexQueryStrategySPI.class);
 		return ldr.iterator();
 	}
 
@@ -381,29 +428,31 @@ public class GeoWavePluginConfig
 		allOptions.addOption(namespace);
 	}
 
-	public static GeoWavePluginConfig buildFromOptions(
-			final CommandLine commandLine )
-			throws ParseException,
-			GeoWavePluginException {
-		final Map<String, Serializable> params = new HashMap<String, Serializable>();
-		params.put(
-				ZOOKEEPER_SERVERS_KEY,
-				commandLine.getOptionValue("z"));
-		params.put(
-				INSTANCE_NAME_KEY,
-				commandLine.getOptionValue("i"));
-		params.put(
-				USERNAME_KEY,
-				commandLine.getOptionValue("u"));
-		params.put(
-				PASSWORD_KEY,
-				commandLine.getOptionValue("p"));
-		params.put(
-				ACCUMULO_NAMESPACE_KEY,
-				commandLine.getOptionValue("n"));
-		return new GeoWavePluginConfig(
-				params);
+	private static class GeoWaveConfigOptionToGeoToolsConfigOption implements
+			Function<AbstractConfigOption<?>, Param>
+	{
 
+		@Override
+		public Param apply(
+				final AbstractConfigOption<?> input ) {
+			if (input instanceof PasswordConfigOption) {
+				return new Param(
+						input.getName(),
+						String.class,
+						input.getDescription(),
+						!input.isOptional(),
+						Collections.singletonMap(
+								Parameter.IS_PASSWORD,
+								Boolean.TRUE));
+			}
+			return new Param(
+					input.getName(),
+					GenericTypeResolver.resolveTypeArgument(
+							input.getClass(),
+							AbstractConfigOption.class),
+					input.getDescription(),
+					!input.isOptional());
+		}
 	}
 
 }

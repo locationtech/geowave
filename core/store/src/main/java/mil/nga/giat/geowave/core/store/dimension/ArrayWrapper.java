@@ -38,7 +38,7 @@ public class ArrayWrapper<T> implements
 
 	@Override
 	public boolean overlaps(
-			DimensionField[] field,
+			NumericDimensionField[] field,
 			NumericData[] rangeData ) {
 		// TODO Auto-generated method stub
 		return true;

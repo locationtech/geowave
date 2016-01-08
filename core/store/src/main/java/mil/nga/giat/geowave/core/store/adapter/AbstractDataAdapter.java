@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
+
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.Persistable;
 import mil.nga.giat.geowave.core.index.PersistenceUtils;
@@ -19,13 +21,11 @@ import mil.nga.giat.geowave.core.store.data.PersistentDataset;
 import mil.nga.giat.geowave.core.store.data.PersistentValue;
 import mil.nga.giat.geowave.core.store.data.field.FieldUtils;
 import mil.nga.giat.geowave.core.store.data.field.FieldVisibilityHandler;
-import mil.nga.giat.geowave.core.store.dimension.DimensionField;
+import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;
 import mil.nga.giat.geowave.core.store.filter.GenericTypeResolver;
 import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
-import mil.nga.giat.geowave.core.store.index.Index;
-
-import org.apache.log4j.Logger;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 
 /**
  * This class generically supports most of the operations necessary to implement
@@ -131,7 +131,7 @@ abstract public class AbstractDataAdapter<T> implements
 			final CommonIndexModel indexModel ) {
 		final PersistentDataset<CommonIndexValue> indexData = new PersistentDataset<CommonIndexValue>();
 		final Set<ByteArrayId> nativeFieldsInIndex = new HashSet<ByteArrayId>();
-		for (final DimensionField<? extends CommonIndexValue> dimension : indexModel.getDimensions()) {
+		for (final NumericDimensionField<? extends CommonIndexValue> dimension : indexModel.getDimensions()) {
 			final IndexFieldHandler<T, ? extends CommonIndexValue, Object> fieldHandler = getFieldHandler(dimension);
 			if (fieldHandler == null) {
 				LOGGER.warn("Unable to find field handler for data adapter '" + StringUtils.stringFromBinary(getAdapterId().getBytes()) + "' and indexed field '" + StringUtils.stringFromBinary(dimension.getFieldId().getBytes()));
@@ -145,14 +145,16 @@ abstract public class AbstractDataAdapter<T> implements
 		}
 		final PersistentDataset<Object> extendedData = new PersistentDataset<Object>();
 		// now for the other data
-		for (final NativeFieldHandler<T, Object> fieldHandler : nativeFieldHandlers) {
-			final ByteArrayId fieldId = fieldHandler.getFieldId();
-			if (nativeFieldsInIndex.contains(fieldId)) {
-				continue;
+		if (nativeFieldHandlers != null) {
+			for (final NativeFieldHandler<T, Object> fieldHandler : nativeFieldHandlers) {
+				final ByteArrayId fieldId = fieldHandler.getFieldId();
+				if (nativeFieldsInIndex.contains(fieldId)) {
+					continue;
+				}
+				extendedData.addValue(new PersistentValue<Object>(
+						fieldId,
+						fieldHandler.getFieldValue(entry)));
 			}
-			extendedData.addValue(new PersistentValue<Object>(
-					fieldId,
-					fieldHandler.getFieldValue(entry)));
 		}
 		return new AdapterPersistenceEncoding(
 				getAdapterId(),
@@ -165,10 +167,10 @@ abstract public class AbstractDataAdapter<T> implements
 	@Override
 	public T decode(
 			final IndexedAdapterPersistenceEncoding data,
-			final Index index ) {
+			final PrimaryIndex index ) {
 		final RowBuilder<T, Object> builder = newBuilder();
 		final CommonIndexModel indexModel = index.getIndexModel();
-		for (final DimensionField<? extends CommonIndexValue> dimension : indexModel.getDimensions()) {
+		for (final NumericDimensionField<? extends CommonIndexValue> dimension : indexModel.getDimensions()) {
 			final IndexFieldHandler<T, CommonIndexValue, Object> fieldHandler = (IndexFieldHandler<T, CommonIndexValue, Object>) getFieldHandler(dimension);
 			if (fieldHandler == null) {
 				LOGGER.warn("Unable to find field handler for data adapter '" + StringUtils.stringFromBinary(getAdapterId().getBytes()) + "' and indexed field '" + StringUtils.stringFromBinary(dimension.getFieldId().getBytes()));
@@ -195,7 +197,7 @@ abstract public class AbstractDataAdapter<T> implements
 	abstract protected RowBuilder<T, Object> newBuilder();
 
 	protected IndexFieldHandler<T, ? extends CommonIndexValue, Object> getFieldHandler(
-			final DimensionField<? extends CommonIndexValue> dimension ) {
+			final NumericDimensionField<? extends CommonIndexValue> dimension ) {
 		// first try explicit dimension matching
 		IndexFieldHandler<T, ? extends CommonIndexValue, Object> fieldHandler = dimensionMatchingFieldHandlers.get(dimension.getFieldId());
 		if (fieldHandler == null) {
@@ -203,8 +205,11 @@ abstract public class AbstractDataAdapter<T> implements
 			fieldHandler = FieldUtils.getAssignableValueFromClassMap(
 					GenericTypeResolver.resolveTypeArgument(
 							dimension.getClass(),
-							DimensionField.class),
+							NumericDimensionField.class),
 					typeMatchingFieldHandlers);
+			dimensionMatchingFieldHandlers.put(
+					dimension.getFieldId(),
+					fieldHandler);
 		}
 		return fieldHandler;
 	}

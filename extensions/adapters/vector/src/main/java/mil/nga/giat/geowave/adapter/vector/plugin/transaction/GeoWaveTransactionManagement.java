@@ -2,12 +2,12 @@ package mil.nga.giat.geowave.adapter.vector.plugin.transaction;
 
 import java.io.IOException;
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.NoSuchElementException;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveDataStoreComponents;
@@ -15,7 +15,6 @@ import mil.nga.giat.geowave.adapter.vector.plugin.lock.LockingManagement;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
-import mil.nga.giat.geowave.datastore.accumulo.util.VisibilityTransformer;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.log4j.Logger;
@@ -54,7 +53,7 @@ public class GeoWaveTransactionManagement extends
 	private Map<ByteArrayId, DataStatistics<SimpleFeature>> statsCache = null;
 
 	/** List of added feature ids; values stored in added above */
-	private final Map<String, List<ByteArrayId>> addedFidList = new HashMap<String, List<ByteArrayId>>();
+	private final Set<String> addedFidList = new HashSet<String>();
 
 	private int maxAdditionBufferSize = 10000;
 
@@ -181,7 +180,7 @@ public class GeoWaveTransactionManagement extends
 					original);
 
 		}
-		if (((modRecord != null) && modRecord.alreadyWritten) || addedFidList.containsKey(fid)) {
+		if (((modRecord != null) && modRecord.alreadyWritten) || addedFidList.contains(fid)) {
 			components.writeCommit(
 					updated,
 					this);
@@ -242,8 +241,8 @@ public class GeoWaveTransactionManagement extends
 					Hints.PROVIDED_FID,
 					feature.getID());
 		}
-		if (addedFeatures.size() == maxAdditionBufferSize) {
-			flushAddsToStore(false);
+		if (addedFeatures.size() >= maxAdditionBufferSize) {
+			flushAddsToStore(true);
 		}
 		addedFeatures.put(
 				fid,
@@ -261,7 +260,7 @@ public class GeoWaveTransactionManagement extends
 			final SimpleFeature feature )
 			throws IOException {
 		synchronized (mutex) {
-			if (addedFidList.remove(fid) != null) {
+			if (addedFidList.remove(fid)) {
 				components.remove(
 						feature,
 						this);
@@ -286,7 +285,7 @@ public class GeoWaveTransactionManagement extends
 	public void rollback()
 			throws IOException {
 		statsCache = null;
-		for (final String fid : addedFidList.keySet()) {
+		for (final String fid : addedFidList) {
 			components.remove(
 					fid,
 					this);
@@ -296,16 +295,7 @@ public class GeoWaveTransactionManagement extends
 
 	@Override
 	public String[] composeAuthorizations() {
-		final String[] initialAuths = components.getGTstore().getAuthorizationSPI().getAuthorizations();
-		final String[] newAuths = new String[initialAuths.length + 1];
-		System.arraycopy(
-				initialAuths,
-				0,
-				newAuths,
-				0,
-				initialAuths.length);
-		newAuths[initialAuths.length] = txID;
-		return newAuths;
+		return components.getGTstore().getAuthorizationSPI().getAuthorizations();
 	}
 
 	@Override
@@ -320,13 +310,13 @@ public class GeoWaveTransactionManagement extends
 	@Override
 	public void flush()
 			throws IOException {
-		flushAddsToStore(false);
+		flushAddsToStore(true);
 	}
 
 	private void flushAddsToStore(
 			final boolean autoCommitAdds )
 			throws IOException {
-		final Map<String, List<ByteArrayId>> captureList = autoCommitAdds ? new HashMap<String, List<ByteArrayId>>() : addedFidList;
+		final Set<String> captureList = autoCommitAdds ? new HashSet<String>() : addedFidList;
 		components.write(
 				addedFeatures.values().iterator(),
 				captureList,
@@ -342,22 +332,23 @@ public class GeoWaveTransactionManagement extends
 
 		final Iterator<Pair<SimpleFeature, SimpleFeature>> updateIt = getUpdates();
 
-		if (addedFidList.size() > 0) {
-			final String transId = "\\(?" + txID + "\\)?";
-			final VisibilityTransformer visibilityTransformer = new VisibilityTransformer(
-					"&?" + transId,
-					"");
-			for (final Collection<ByteArrayId> rowIDs : addedFidList.values()) {
-				components.replaceDataVisibility(
-						this,
-						rowIDs,
-						visibilityTransformer);
-			}
-
-			components.replaceStatsVisibility(
-					this,
-					visibilityTransformer);
-		}
+		// if (addedFidList.size() > 0) {
+		// final String transId = "\\(?" + txID + "\\)?";
+		// final VisibilityTransformer visibilityTransformer = new
+		// VisibilityTransformer(
+		// "&?" + transId,
+		// "");
+		// for (final Collection<ByteArrayId> rowIDs : addedFidList.values()) {
+		// components.replaceDataVisibility(
+		// this,
+		// rowIDs,
+		// visibilityTransformer);
+		// }
+		//
+		// components.replaceStatsVisibility(
+		// this,
+		// visibilityTransformer);
+		// }
 
 		final Iterator<SimpleFeature> removeIt = removedFeatures.values().iterator();
 
@@ -381,7 +372,8 @@ public class GeoWaveTransactionManagement extends
 			final Pair<SimpleFeature, SimpleFeature> pair = updateIt.next();
 			components.writeCommit(
 					pair.getRight(),
-					this);
+					new GeoWaveEmptyTransaction(
+							components));
 			final ReferencedEnvelope bounds = new ReferencedEnvelope(
 					(CoordinateReferenceSystem) null);
 			bounds.include(pair.getLeft().getBounds());

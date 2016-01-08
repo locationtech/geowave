@@ -1,189 +1,178 @@
 package mil.nga.giat.geowave.adapter.vector.plugin;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
-import mil.nga.giat.geowave.adapter.vector.AccumuloDataStatisticsStoreExt;
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
-import mil.nga.giat.geowave.adapter.vector.VectorDataStore;
+import mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
 import mil.nga.giat.geowave.adapter.vector.plugin.transaction.GeoWaveTransaction;
-import mil.nga.giat.geowave.adapter.vector.query.TransformingVisibilityQuery;
-import mil.nga.giat.geowave.adapter.vector.transaction.TransactionsAllocater;
+import mil.nga.giat.geowave.adapter.vector.plugin.transaction.TransactionsAllocator;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.StringUtils;
-import mil.nga.giat.geowave.core.store.DataStoreEntryInfo;
-import mil.nga.giat.geowave.core.store.IngestCallback;
+import mil.nga.giat.geowave.core.store.CloseableIterator;
+import mil.nga.giat.geowave.core.store.DataStore;
+import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
+import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.core.store.data.visibility.GlobalVisibilityHandler;
 import mil.nga.giat.geowave.core.store.data.visibility.UniformVisibilityWriter;
 import mil.nga.giat.geowave.core.store.index.Index;
-import mil.nga.giat.geowave.datastore.accumulo.util.VisibilityTransformer;
+import mil.nga.giat.geowave.core.store.index.IndexStore;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.core.store.query.BasicQuery.Constraints;
+import mil.nga.giat.geowave.core.store.query.BasicQuery;
+import mil.nga.giat.geowave.core.store.query.DataIdQuery;
+import mil.nga.giat.geowave.core.store.query.QueryOptions;
 
 import org.opengis.feature.simple.SimpleFeature;
 
 public class GeoWaveDataStoreComponents
 {
-	private final FeatureDataAdapter adapter;
-	private final VectorDataStore dataStore;
-	private final GeoWaveGTDataStore GTstore;
-	private final TransactionsAllocater transactionsAllocater;
+	private final GeotoolsFeatureDataAdapter adapter;
+	private final DataStore dataStore;
+	private final IndexStore indexStore;
+	private final DataStatisticsStore dataStatisticsStore;
+	private final GeoWaveGTDataStore gtStore;
+	private final TransactionsAllocator transactionAllocator;
 
-	private Index currentIndex;
+	private final List<PrimaryIndex> writeIndices;
 
 	public GeoWaveDataStoreComponents(
-			final VectorDataStore dataStore,
-			final GeoWaveGTDataStore GTstore,
-			final FeatureDataAdapter adapter,
-			final TransactionsAllocater transactionsAllocater ) {
+			final DataStore dataStore,
+			final DataStatisticsStore dataStatisticsStore,
+			final IndexStore indexStore,
+			final GeotoolsFeatureDataAdapter adapter,
+			final GeoWaveGTDataStore gtStore,
+			final TransactionsAllocator transactionAllocator ) {
 		this.adapter = adapter;
 		this.dataStore = dataStore;
-		this.GTstore = GTstore;
-		this.currentIndex = GTstore.getIndex(adapter);
-		this.transactionsAllocater = transactionsAllocater;
+		this.indexStore = indexStore;
+		this.dataStatisticsStore = dataStatisticsStore;
+		this.gtStore = gtStore;
+		writeIndices = gtStore.getWriteIndices(adapter);
+		this.transactionAllocator = transactionAllocator;
 	}
 
-	public FeatureDataAdapter getAdapter() {
+	public IndexStore getIndexStore() {
+		return indexStore;
+	}
+
+	public GeotoolsFeatureDataAdapter getAdapter() {
 		return adapter;
 	}
 
-	public VectorDataStore getDataStore() {
+	public DataStore getDataStore() {
 		return dataStore;
 	}
 
 	public GeoWaveGTDataStore getGTstore() {
-		return GTstore;
+		return gtStore;
 	}
 
-	public Index getCurrentIndex() {
-		return currentIndex;
+	public List<PrimaryIndex> getWriteIndices() {
+		return writeIndices;
 	}
 
-	public void replaceDataVisibility(
-			GeoWaveTransaction transaction,
-			Collection<ByteArrayId> rowIDs,
-			VisibilityTransformer transformer ) {
-		dataStore.query(new TransformingVisibilityQuery(
-				transformer,
-				currentIndex,
-				rowIDs,
-				transaction.composeAuthorizations()));
+	public DataStatisticsStore getStatsStore() {
+		return dataStatisticsStore;
 	}
 
-	public void replaceStatsVisibility(
-			GeoWaveTransaction transaction,
-			VisibilityTransformer transformer ) {
-		((AccumuloDataStatisticsStoreExt) dataStore.getStatsStore()).transformVisibility(
-				this.adapter.getAdapterId(),
-				transformer,
-				transaction.composeAuthorizations());
-	}
-
-	@SuppressWarnings("unchecked")
-	public Map<ByteArrayId, DataStatistics<SimpleFeature>> getDataStatistics(
-			GeoWaveTransaction transaction ) {
-		final Map<ByteArrayId, DataStatistics<SimpleFeature>> stats = new HashMap<ByteArrayId, DataStatistics<SimpleFeature>>();
-
-		for (ByteArrayId statsId : adapter.getSupportedStatisticsIds()) {
-			@SuppressWarnings("unused")
-			DataStatistics<SimpleFeature> put = stats.put(
-					statsId,
-					(DataStatistics<SimpleFeature>) dataStore.getStatsStore().getDataStatistics(
-							this.adapter.getAdapterId(),
-							statsId,
-							transaction.composeAuthorizations()));
-		}
-		return stats;
+	public CloseableIterator<Index<?, ?>> getIndices(
+			final Map<ByteArrayId, DataStatistics<SimpleFeature>> stats,
+			final BasicQuery query ) {
+		return getGTstore().getIndexQueryStrategy().getIndices(
+				stats,
+				query,
+				getIndexStore().getIndices());
 	}
 
 	public void remove(
-			SimpleFeature feature,
-			GeoWaveTransaction transaction )
+			final SimpleFeature feature,
+			final GeoWaveTransaction transaction )
 			throws IOException {
 
-		this.dataStore.deleteEntry(
-				this.currentIndex,
-				adapter.getDataId(feature),
-				adapter.getAdapterId(),
-				transaction.composeAuthorizations());
+		final QueryOptions options = new QueryOptions(
+				adapter);
+		options.setAuthorizations(transaction.composeAuthorizations());
+		options.setIndices(writeIndices.toArray(new Index[writeIndices.size()]));
+
+		dataStore.delete(
+				options,
+				new DataIdQuery(
+						adapter.getAdapterId(),
+						adapter.getDataId(feature)));
 	}
 
 	public void remove(
-			String fid,
-			GeoWaveTransaction transaction )
+			final String fid,
+			final GeoWaveTransaction transaction )
 			throws IOException {
 
-		this.dataStore.deleteEntry(
-				this.currentIndex,
-				new ByteArrayId(
-						StringUtils.stringToBinary(fid)),
-				adapter.getAdapterId(),
-				transaction.composeAuthorizations());
-	}
+		final QueryOptions options = new QueryOptions(
+				adapter);
+		options.setAuthorizations(transaction.composeAuthorizations());
+		options.setIndices(writeIndices.toArray(new Index[writeIndices.size()]));
 
-	@SuppressWarnings("unchecked")
-	public List<ByteArrayId> write(
-			SimpleFeature feature,
-			GeoWaveTransaction transaction )
-			throws IOException {
-		return this.dataStore.ingest(
-				this.adapter,
-				this.currentIndex,
-				feature,
-				new UniformVisibilityWriter<SimpleFeature>(
-						new GlobalVisibilityHandler(
-								transaction.composeVisibility())));
+		dataStore.delete(
+				options,
+				new DataIdQuery(
+						new ByteArrayId(
+								StringUtils.stringToBinary(fid)),
+						adapter.getAdapterId()));
+
 	}
 
 	@SuppressWarnings("unchecked")
 	public void write(
 			final Iterator<SimpleFeature> featureIt,
-			final Map<String, List<ByteArrayId>> fidList,
+			final Set<String> fidList,
 			final GeoWaveTransaction transaction )
 			throws IOException {
-		this.dataStore.ingest(
-				this.adapter,
-				this.currentIndex,
-				featureIt,
-				new IngestCallback<SimpleFeature>() {
-
-					@Override
-					public void entryIngested(
-							DataStoreEntryInfo entryInfo,
-							SimpleFeature entry ) {
-						fidList.put(
-								entry.getID(),
-								entryInfo.getRowIds());
-					}
-
-				},
-				new UniformVisibilityWriter<SimpleFeature>(
-						new GlobalVisibilityHandler(
-								transaction.composeVisibility())));
+		for (PrimaryIndex currentIndex : this.writeIndices) {
+			try (IndexWriter indexWriter = dataStore.createIndexWriter(
+					currentIndex,
+					new UniformVisibilityWriter<SimpleFeature>(
+							new GlobalVisibilityHandler(
+									transaction.composeVisibility())))) {
+				while (featureIt.hasNext()) {
+					final SimpleFeature feature = featureIt.next();
+					fidList.add(feature.getID());
+					indexWriter.write(
+							adapter,
+							feature);
+				}
+			}
+		}
 	}
 
-	public List<ByteArrayId> writeCommit(
-			SimpleFeature feature,
-			GeoWaveTransaction transaction )
+	public void writeCommit(
+			final SimpleFeature feature,
+			final GeoWaveTransaction transaction )
 			throws IOException {
-		return this.dataStore.ingest(
-				this.adapter,
-				this.currentIndex,
-				feature);
+		for (PrimaryIndex currentIndex : this.writeIndices) {
+			try (IndexWriter indexWriter = dataStore.createIndexWriter(
+					currentIndex,
+					new UniformVisibilityWriter<SimpleFeature>(
+							new GlobalVisibilityHandler(
+									transaction.composeVisibility())))) {
+				indexWriter.write(
+						adapter,
+						feature);
+			}
+		}
 	}
 
 	public String getTransaction()
 			throws IOException {
-		return transactionsAllocater.getTransaction();
+		return transactionAllocator.getTransaction();
 	}
 
 	public void releaseTransaction(
-			String txID )
+			final String txID )
 			throws IOException {
-		transactionsAllocater.releaseTransaction(txID);
+		transactionAllocator.releaseTransaction(txID);
 	}
 }

@@ -17,6 +17,28 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.TimeZone;
 
+import mil.nga.giat.geowave.adapter.vector.plugin.transaction.GeoWaveTransaction;
+import mil.nga.giat.geowave.adapter.vector.query.cql.CQLQuery;
+import mil.nga.giat.geowave.adapter.vector.render.DistributableRenderer;
+import mil.nga.giat.geowave.adapter.vector.stats.FeatureStatistic;
+import mil.nga.giat.geowave.adapter.vector.util.QueryIndexHelper;
+import mil.nga.giat.geowave.core.geotime.index.dimension.LatitudeDefinition;
+import mil.nga.giat.geowave.core.geotime.index.dimension.TimeDefinition;
+import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
+import mil.nga.giat.geowave.core.geotime.store.query.TemporalConstraintsSet;
+import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.index.StringUtils;
+import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
+import mil.nga.giat.geowave.core.store.CloseableIterator;
+import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
+import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
+import mil.nga.giat.geowave.core.store.index.Index;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.core.store.query.BasicQuery;
+import mil.nga.giat.geowave.core.store.query.BasicQuery.Constraints;
+import mil.nga.giat.geowave.core.store.query.DataIdQuery;
+import mil.nga.giat.geowave.core.store.query.QueryOptions;
+
 import org.apache.log4j.Logger;
 import org.geotools.data.FeatureReader;
 import org.geotools.data.Query;
@@ -29,23 +51,6 @@ import org.opengis.filter.Filter;
 
 import com.google.common.collect.Iterators;
 import com.vividsolutions.jts.geom.Geometry;
-
-import mil.nga.giat.geowave.adapter.vector.plugin.transaction.GeoWaveTransaction;
-import mil.nga.giat.geowave.adapter.vector.stats.FeatureStatistic;
-import mil.nga.giat.geowave.adapter.vector.util.QueryIndexHelper;
-import mil.nga.giat.geowave.adapter.vector.wms.DistributableRenderer;
-import mil.nga.giat.geowave.core.geotime.DimensionalityType;
-import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
-import mil.nga.giat.geowave.core.geotime.store.query.TemporalConstraintsSet;
-import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.StringUtils;
-import mil.nga.giat.geowave.core.store.CloseableIterator;
-import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
-import mil.nga.giat.geowave.core.store.index.Index;
-import mil.nga.giat.geowave.core.store.query.BasicQuery;
-import mil.nga.giat.geowave.core.store.query.BasicQuery.ConstraintSet;
-import mil.nga.giat.geowave.core.store.query.BasicQuery.Constraints;
-import mil.nga.giat.geowave.datastore.accumulo.util.CloseableIteratorWrapper;
 
 /**
  * This class wraps a geotools data store as well as one for statistics (for
@@ -69,7 +74,6 @@ public class GeoWaveFeatureReader implements
 			throws IOException {
 		this.components = components;
 		this.transaction = transaction;
-
 		featureCollection = new GeoWaveFeatureCollection(
 				this,
 				query);
@@ -104,6 +108,11 @@ public class GeoWaveFeatureReader implements
 			throws IOException {
 		Iterator<SimpleFeature> it = featureCollection.getOpenIterator();
 		if (it != null) {
+			// protect againt GeoTools forgetting to call close()
+			// on this FeatureReader, which causes a resource leak
+			if (!it.hasNext()) {
+				((CloseableIterator<?>) it).close();
+			}
 			return it.hasNext();
 		}
 		it = featureCollection.openIterator();
@@ -135,59 +144,36 @@ public class GeoWaveFeatureReader implements
 		final List<CloseableIterator<SimpleFeature>> results = new ArrayList<CloseableIterator<SimpleFeature>>();
 		final Map<ByteArrayId, DataStatistics<SimpleFeature>> statsMap = transaction.getDataStatistics();
 
-		try (CloseableIterator<Index> indexIt = getComponents().getDataStore().getIndices()) {
+		final Constraints timeConstraints = QueryIndexHelper.composeTimeBoundedConstraints(
+				components.getAdapter().getType(),
+				components.getAdapter().getTimeDescriptors(),
+				statsMap,
+				timeBounds);
+
+		final Constraints geoConstraints = QueryIndexHelper.composeGeometricConstraints(
+				getFeatureType(),
+				transaction.getDataStatistics(),
+				jtsBounds);
+
+		/**
+		 * NOTE: query to an index that requires a constraint and the constraint
+		 * is missing equates to a full table scan. @see BasicQuery
+		 */
+
+		final BasicQuery query = composeQuery(
+				jtsBounds,
+				geoConstraints,
+				timeConstraints);
+
+		try (CloseableIterator<Index<?, ?>> indexIt = getComponents().getIndices(
+				statsMap,
+				query)) {
 			while (indexIt.hasNext()) {
-				final Index index = indexIt.next();
+				final PrimaryIndex index = (PrimaryIndex) indexIt.next();
+				results.add(issuer.query(
+						index,
+						query));
 
-				final Constraints timeConstraints = QueryIndexHelper.composeTimeBoundedConstraints(
-						components.getAdapter().getType(),
-						components.getAdapter().getTimeDescriptors(),
-						statsMap,
-						timeBounds);
-
-				/*
-				 * Inspect for SPATIAL_TEMPORAL type index. Most queries issued
-				 * from GeoServer, where time is an 'enabled' dimension, provide
-				 * time constraints. Often they only an upper bound. The
-				 * statistics were used to clip the bounds prior to this point.
-				 * However, the range may be still too wide. Ideally, spatial
-				 * temporal indexing should not be used in these cases.
-				 * Eventually all this logic should be replaced by a
-				 * QueryPlanner that takes the full set of constraints and has
-				 * in-depth knowledge of each indices capabilities.
-				 */
-				if ((jtsBounds == null) || (DimensionalityType.SPATIAL_TEMPORAL.isCompatible(index) && timeConstraints.isEmpty())) {
-					// full table scan
-					results.add(issuer.query(
-							index,
-							null));
-				}
-				else {
-
-					final Constraints geoConstraints = QueryIndexHelper.composeGeometricConstraints(
-							components.getAdapter().getType(),
-							statsMap,
-							jtsBounds);
-
-					if (timeConstraints.isSupported(index)) {
-
-						results.add(issuer.query(
-								index,
-								composeQuery(
-										jtsBounds,
-										geoConstraints,
-										timeConstraints)));
-					}
-					else {
-						// just geo
-						results.add(issuer.query(
-								index,
-								composeQuery(
-										jtsBounds,
-										geoConstraints,
-										null)));
-					}
-				}
 			}
 		}
 		catch (final IOException e) {
@@ -212,6 +198,37 @@ public class GeoWaveFeatureReader implements
 						Iterators.concat(results.iterator())));
 	}
 
+	protected static boolean hasAtLeastSpatial(
+			final PrimaryIndex index ) {
+		if ((index == null) || (index.getIndexStrategy() == null) || (index.getIndexStrategy().getOrderedDimensionDefinitions() == null)) {
+			return false;
+		}
+		boolean hasLatitude = false;
+		boolean hasLongitude = false;
+		for (final NumericDimensionDefinition dimension : index.getIndexStrategy().getOrderedDimensionDefinitions()) {
+			if (dimension instanceof LatitudeDefinition) {
+				hasLatitude = true;
+			}
+			if (dimension instanceof LatitudeDefinition) {
+				hasLongitude = true;
+			}
+		}
+		return hasLatitude && hasLongitude;
+	}
+
+	protected static boolean hasTime(
+			final PrimaryIndex index ) {
+		if ((index == null) || (index.getIndexStrategy() == null) || (index.getIndexStrategy().getOrderedDimensionDefinitions() == null)) {
+			return false;
+		}
+		for (final NumericDimensionDefinition dimension : index.getIndexStrategy().getOrderedDimensionDefinitions()) {
+			if (dimension instanceof TimeDefinition) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	private class BaseIssuer implements
 			QueryIssuer
 	{
@@ -230,27 +247,33 @@ public class GeoWaveFeatureReader implements
 
 		@Override
 		public CloseableIterator<SimpleFeature> query(
-				final Index index,
+				final PrimaryIndex index,
 				final mil.nga.giat.geowave.core.store.query.Query query ) {
 			return components.getDataStore().query(
-					components.getAdapter(),
-					index,
-					query,
-					filter,
-					(limit != null) && (limit >= 0) ? limit : null,
-					transaction.composeAuthorizations());
+					new QueryOptions(
+							components.getAdapter(),
+							index,
+							limit,
+							null,
+							transaction.composeAuthorizations()),
+					new CQLQuery(
+							query,
+							filter,
+							components.getAdapter()));
 		}
 
+		@Override
 		public Filter getFilter() {
 			return filter;
 		}
 
+		@Override
 		public Integer getLimit() {
 			return limit;
 		}
 	}
 
-	private class EnvelopQueryIssuer extends
+	private class EnvelopeQueryIssuer extends
 			BaseIssuer implements
 			QueryIssuer
 	{
@@ -259,7 +282,7 @@ public class GeoWaveFeatureReader implements
 		final int height;
 		final double pixelSize;
 
-		public EnvelopQueryIssuer(
+		public EnvelopeQueryIssuer(
 				final int width,
 				final int height,
 				final double pixelSize,
@@ -278,19 +301,23 @@ public class GeoWaveFeatureReader implements
 
 		@Override
 		public CloseableIterator<SimpleFeature> query(
-				final Index index,
+				final PrimaryIndex index,
 				final mil.nga.giat.geowave.core.store.query.Query query ) {
 			return components.getDataStore().query(
-					components.getAdapter(),
-					index,
-					query,
-					width,
-					height,
-					pixelSize,
-					filter,
-					envelope,
-					limit,
-					transaction.composeAuthorizations());
+					new QueryOptions(
+							components.getAdapter(),
+							index,
+							transaction.composeAuthorizations()),
+					new CQLQuery(
+							query,
+							filter,
+							components.getAdapter()));
+			// TODO: Added back SpatialDecimationQuery
+			// width,
+			// height,
+			// pixelSize,
+			// envelope,
+			// limit,
 		}
 
 	}
@@ -313,17 +340,20 @@ public class GeoWaveFeatureReader implements
 
 		@Override
 		public CloseableIterator<SimpleFeature> query(
-				final Index index,
+				final PrimaryIndex index,
 				final mil.nga.giat.geowave.core.store.query.Query query ) {
 			return components.getDataStore().query(
-					components.getAdapter(),
-					index,
-					query,
-					filter,
-					renderer,
-					transaction.composeAuthorizations());
+					new QueryOptions(
+							components.getAdapter(),
+							index,
+							transaction.composeAuthorizations()),
+					new CQLQuery(
+							query,
+							filter,
+							components.getAdapter()));
+			// TODO: ? need to figure out how to add back CqlQueryRenderIterator
+			// renderer,
 		}
-
 	}
 
 	private class IdQueryIssuer extends
@@ -344,12 +374,19 @@ public class GeoWaveFeatureReader implements
 		@SuppressWarnings("unchecked")
 		@Override
 		public CloseableIterator<SimpleFeature> query(
-				final Index index,
+				final PrimaryIndex index,
 				final mil.nga.giat.geowave.core.store.query.Query query ) {
+			return components.getDataStore().query(
+					new QueryOptions(
+							components.getAdapter(),
+							index,
+							limit,
+							null,
+							transaction.composeAuthorizations()),
+					new DataIdQuery(
+							components.getAdapter().getAdapterId(),
+							ids));
 
-			return (CloseableIterator<SimpleFeature>) components.getDataStore().query(
-					ids,
-					query);
 		}
 
 	}
@@ -379,7 +416,7 @@ public class GeoWaveFeatureReader implements
 		return issueQuery(
 				jtsBounds,
 				timeBounds,
-				new EnvelopQueryIssuer(
+				new EnvelopeQueryIssuer(
 						width,
 						height,
 						pixelSize,
@@ -407,18 +444,26 @@ public class GeoWaveFeatureReader implements
 			final Filter filter,
 			final Integer limit ) {
 		if (filter instanceof FidFilterImpl) {
-			final List<SimpleFeature> retVal = new ArrayList<SimpleFeature>();
 			final Set<String> fids = ((FidFilterImpl) filter).getIDs();
+			final List<ByteArrayId> ids = new ArrayList<ByteArrayId>();
 			for (final String fid : fids) {
-				retVal.add((SimpleFeature) components.getDataStore().getEntry(
-						components.getCurrentIndex(),
-						new ByteArrayId(
-								fid),
-						components.getAdapter().getAdapterId(),
-						transaction.composeAuthorizations()));
+				ids.add(new ByteArrayId(
+						fid));
 			}
-			return new CloseableIterator.Wrapper(
-					retVal.iterator());
+
+			final List<PrimaryIndex> writeIndices = components.getWriteIndices();
+			PrimaryIndex queryIndex = (writeIndices != null && writeIndices.size() > 0) ? writeIndices.get(0) : null;
+
+			return components.getDataStore().query(
+					new QueryOptions(
+							components.getAdapter(),
+							queryIndex,
+							limit,
+							null,
+							transaction.composeAuthorizations()),
+					new DataIdQuery(
+							components.getAdapter().getAdapterId(),
+							ids));
 		}
 		return issueQuery(
 				jtsBounds,
@@ -493,25 +538,15 @@ public class GeoWaveFeatureReader implements
 			final Constraints geoConstraints,
 			final Constraints temporalConstraints ) {
 
-		if ((geoConstraints == null) && (temporalConstraints != null)) {
-			final ConstraintSet statBasedGeoConstraints = QueryIndexHelper.getBBOXIndexConstraintsFromIndex(
-					getFeatureType(),
-					transaction.getDataStatistics());
+		if (jtsBounds == null) {
 			return new BasicQuery(
-					new Constraints(
-							statBasedGeoConstraints).merge(temporalConstraints));
+					geoConstraints.merge(temporalConstraints));
 		}
-		else if ((jtsBounds != null) && (temporalConstraints == null)) {
-			return new SpatialQuery(
-					geoConstraints,
-					jtsBounds);
-		}
-		else if ((jtsBounds != null) && (temporalConstraints != null)) {
+		else {
 			return new SpatialQuery(
 					geoConstraints.merge(temporalConstraints),
 					jtsBounds);
 		}
-		return null;
 	}
 
 	public Object convertToType(

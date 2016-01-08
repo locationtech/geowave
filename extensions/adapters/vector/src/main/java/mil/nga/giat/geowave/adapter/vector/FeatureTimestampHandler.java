@@ -1,15 +1,15 @@
 package mil.nga.giat.geowave.adapter.vector;
 
-import org.opengis.feature.simple.SimpleFeature;
-import org.opengis.feature.type.AttributeDescriptor;
-
+import mil.nga.giat.geowave.core.geotime.TimeUtils;
 import mil.nga.giat.geowave.core.geotime.store.dimension.Time;
 import mil.nga.giat.geowave.core.geotime.store.dimension.Time.Timestamp;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.store.TimeUtils;
 import mil.nga.giat.geowave.core.store.adapter.IndexFieldHandler;
 import mil.nga.giat.geowave.core.store.data.PersistentValue;
 import mil.nga.giat.geowave.core.store.data.field.FieldVisibilityHandler;
+
+import org.opengis.feature.simple.SimpleFeature;
+import org.opengis.feature.type.AttributeDescriptor;
 
 /**
  * This class handles the internal responsibility of persisting single timestamp
@@ -23,33 +23,35 @@ public class FeatureTimestampHandler implements
 {
 	private final FeatureAttributeHandler nativeTimestampHandler;
 	private final FieldVisibilityHandler<SimpleFeature, Object> visibilityHandler;
+	private final ByteArrayId[] nativeFieldIds;
 
 	public FeatureTimestampHandler(
-			AttributeDescriptor timestampAttrDesc ) {
+			final AttributeDescriptor timestampAttrDesc ) {
 		this(
 				timestampAttrDesc,
 				null);
 	}
 
 	public FeatureTimestampHandler(
-			AttributeDescriptor timestampAttrDesc,
-			FieldVisibilityHandler<SimpleFeature, Object> visibilityHandler ) {
-		this.nativeTimestampHandler = new FeatureAttributeHandler(
+			final AttributeDescriptor timestampAttrDesc,
+			final FieldVisibilityHandler<SimpleFeature, Object> visibilityHandler ) {
+		nativeTimestampHandler = new FeatureAttributeHandler(
 				timestampAttrDesc);
 		this.visibilityHandler = visibilityHandler;
-	}
-
-	@Override
-	public ByteArrayId[] getNativeFieldIds() {
-		return new ByteArrayId[] {
+		nativeFieldIds = new ByteArrayId[] {
 			nativeTimestampHandler.getFieldId()
 		};
 	}
 
 	@Override
+	public ByteArrayId[] getNativeFieldIds() {
+		return nativeFieldIds;
+	}
+
+	@Override
 	public Time toIndexValue(
-			SimpleFeature row ) {
-		Object object = nativeTimestampHandler.getFieldValue(row);
+			final SimpleFeature row ) {
+		final Object object = nativeTimestampHandler.getFieldValue(row);
 		byte[] visibility;
 		if (visibilityHandler != null) {
 			visibility = visibilityHandler.getVisibility(
@@ -68,9 +70,9 @@ public class FeatureTimestampHandler implements
 	@SuppressWarnings("unchecked")
 	@Override
 	public PersistentValue<Object>[] toNativeValues(
-			Time indexValue ) {
-		Class<?> bindingClass = nativeTimestampHandler.attrDesc.getType().getBinding();
-		Object obj = TimeUtils.getTimeValue(
+			final Time indexValue ) {
+		final Class<?> bindingClass = nativeTimestampHandler.attrDesc.getType().getBinding();
+		final Object obj = TimeUtils.getTimeValue(
 				bindingClass,
 				(long) indexValue.toNumericData().getCentroid());
 		return new PersistentValue[] {

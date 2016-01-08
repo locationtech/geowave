@@ -1,6 +1,7 @@
 package mil.nga.giat.geowave.core.store.adapter.statistics;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.store.EntryVisibilityHandler;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
 
 /**
@@ -19,6 +20,6 @@ public interface StatisticalDataAdapter<T> extends
 	public DataStatistics<T> createDataStatistics(
 			ByteArrayId statisticsId );
 
-	public DataStatisticsVisibilityHandler<T> getVisibilityHandler(
+	public EntryVisibilityHandler<T> getVisibilityHandler(
 			ByteArrayId statisticsId );
 }

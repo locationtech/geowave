@@ -65,12 +65,14 @@ public class GeoWaveEmptyTransaction extends
 					this);
 			this.components.writeCommit(
 					updated,
-					this);
+					new GeoWaveEmptyTransaction(
+							components));
 		}
 		else {
 			this.components.writeCommit(
 					updated,
-					this);
+					new GeoWaveEmptyTransaction(
+							components));
 		}
 
 		ReferencedEnvelope bounds = new ReferencedEnvelope();
