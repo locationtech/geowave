@@ -86,7 +86,12 @@
 <li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
 <li>
 <ul class="inheritance">
+<li><a href="../../../../../../../../mil/nga/giat/geowave/format/stanag4676/parser/model/TrackItem.html" title="class in mil.nga.giat.geowave.format.stanag4676.parser.model">mil.nga.giat.geowave.format.stanag4676.parser.model.TrackItem</a></li>
+<li>
+<ul class="inheritance">
 <li>mil.nga.giat.geowave.format.stanag4676.parser.model.TrackClassification</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -96,7 +101,7 @@
 <hr>
 <br>
 <pre>public class <span class="strong">TrackClassification</span>
-extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></pre>
+extends <a href="../../../../../../../../mil/nga/giat/geowave/format/stanag4676/parser/model/TrackItem.html" title="class in mil.nga.giat.geowave.format.stanag4676.parser.model">TrackItem</a></pre>
 </li>
 </ul>
 </div>
@@ -122,28 +127,15 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/format/stanag4676/parser/model/ClassificationCredibility.html" title="class in mil.nga.giat.geowave.format.stanag4676.parser.model">ClassificationCredibility</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/format/stanag4676/parser/model/TrackClassification.html#credibility">credibility</a></strong></code>
+<div class="block">credibility of classification</div>
+</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/format/stanag4676/parser/model/TrackClassification.html#numObjects">numObjects</a></strong></code>
 <div class="block">the estimated number of objects or entities represented by the track.</div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/format/stanag4676/parser/model/ModalityType.html" title="enum in mil.nga.giat.geowave.format.stanag4676.parser.model">ModalityType</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/format/stanag4676/parser/model/TrackClassification.html#source">source</a></strong></code>
-<div class="block">the source(s) used to determine/estimate the classification</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>int</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/format/stanag4676/parser/model/TrackClassification.html#sourceReliability">sourceReliability</a></strong></code>
-<div class="block">A measure of reliability of the source used to determine/estimate the
- classification</div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>int</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/format/stanag4676/parser/model/TrackClassification.html#valueConfidence">valueConfidence</a></strong></code>
-<div class="block">A measure of confidence that a correct object classification is made.</div>
 </td>
 </tr>
 </table>
@@ -183,50 +175,33 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/format/stanag4676/parser/model/TrackClassification.html#getClassification()">getClassification</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Long.html?is-external=true" title="class or interface in java.lang">Long</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/format/stanag4676/parser/model/TrackClassification.html#getId()">getId</a></strong>()</code>&nbsp;</td>
+<td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/format/stanag4676/parser/model/ClassificationCredibility.html" title="class in mil.nga.giat.geowave.format.stanag4676.parser.model">ClassificationCredibility</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/format/stanag4676/parser/model/TrackClassification.html#getCredibility()">getCredibility</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/format/stanag4676/parser/model/TrackClassification.html#getNumObjects()">getNumObjects</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/format/stanag4676/parser/model/ModalityType.html" title="enum in mil.nga.giat.geowave.format.stanag4676.parser.model">ModalityType</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/format/stanag4676/parser/model/TrackClassification.html#getSource()">getSource</a></strong>()</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>int</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/format/stanag4676/parser/model/TrackClassification.html#getSourceReliability()">getSourceReliability</a></strong>()</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>int</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/format/stanag4676/parser/model/TrackClassification.html#getValueConfidence()">getValueConfidence</a></strong>()</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/format/stanag4676/parser/model/TrackClassification.html#setClassification(mil.nga.giat.geowave.format.stanag4676.parser.model.ObjectClassification)">setClassification</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/format/stanag4676/parser/model/ObjectClassification.html" title="enum in mil.nga.giat.geowave.format.stanag4676.parser.model">ObjectClassification</a>&nbsp;classification)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/format/stanag4676/parser/model/TrackClassification.html#setId(java.lang.Long)">setId</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Long.html?is-external=true" title="class or interface in java.lang">Long</a>&nbsp;id)</code>&nbsp;</td>
-</tr>
 <tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/format/stanag4676/parser/model/TrackClassification.html#setCredibility(mil.nga.giat.geowave.format.stanag4676.parser.model.ClassificationCredibility)">setCredibility</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/format/stanag4676/parser/model/ClassificationCredibility.html" title="class in mil.nga.giat.geowave.format.stanag4676.parser.model">ClassificationCredibility</a>&nbsp;credibility)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/format/stanag4676/parser/model/TrackClassification.html#setNumObjects(int)">setNumObjects</a></strong>(int&nbsp;numObjects)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/format/stanag4676/parser/model/TrackClassification.html#setSource(mil.nga.giat.geowave.format.stanag4676.parser.model.ModalityType)">setSource</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/format/stanag4676/parser/model/ModalityType.html" title="enum in mil.nga.giat.geowave.format.stanag4676.parser.model">ModalityType</a>&nbsp;source)</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/format/stanag4676/parser/model/TrackClassification.html#setSourceReliability(int)">setSourceReliability</a></strong>(int&nbsp;sourceReliability)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/format/stanag4676/parser/model/TrackClassification.html#setValueConfidence(int)">setValueConfidence</a></strong>(int&nbsp;valueConfidence)</code>&nbsp;</td>
-</tr>
 </table>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_mil.nga.giat.geowave.format.stanag4676.parser.model.TrackItem">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;mil.nga.giat.geowave.format.stanag4676.parser.model.<a href="../../../../../../../../mil/nga/giat/geowave/format/stanag4676/parser/model/TrackItem.html" title="class in mil.nga.giat.geowave.format.stanag4676.parser.model">TrackItem</a></h3>
+<code><a href="../../../../../../../../mil/nga/giat/geowave/format/stanag4676/parser/model/TrackItem.html#getComment()">getComment</a>, <a href="../../../../../../../../mil/nga/giat/geowave/format/stanag4676/parser/model/TrackItem.html#getSecurity()">getSecurity</a>, <a href="../../../../../../../../mil/nga/giat/geowave/format/stanag4676/parser/model/TrackItem.html#getSource()">getSource</a>, <a href="../../../../../../../../mil/nga/giat/geowave/format/stanag4676/parser/model/TrackItem.html#getTime()">getTime</a>, <a href="../../../../../../../../mil/nga/giat/geowave/format/stanag4676/parser/model/TrackItem.html#getUuid()">getUuid</a>, <a href="../../../../../../../../mil/nga/giat/geowave/format/stanag4676/parser/model/TrackItem.html#setComment(java.lang.String)">setComment</a>, <a href="../../../../../../../../mil/nga/giat/geowave/format/stanag4676/parser/model/TrackItem.html#setSecurity(mil.nga.giat.geowave.format.stanag4676.parser.model.Security)">setSecurity</a>, <a href="../../../../../../../../mil/nga/giat/geowave/format/stanag4676/parser/model/TrackItem.html#setSource(java.lang.String)">setSource</a>, <a href="../../../../../../../../mil/nga/giat/geowave/format/stanag4676/parser/model/TrackItem.html#setTime(long)">setTime</a>, <a href="../../../../../../../../mil/nga/giat/geowave/format/stanag4676/parser/model/TrackItem.html#setUuid(java.util.UUID)">setUuid</a></code></li>
+</ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods_inherited_from_class_java.lang.Object">
 <!--   -->
@@ -258,58 +233,14 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <div class="block">an estimate of the classification of an object being tracked</div>
 </li>
 </ul>
-<a name="source">
+<a name="credibility">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>source</h4>
-<pre>public&nbsp;<a href="../../../../../../../../mil/nga/giat/geowave/format/stanag4676/parser/model/ModalityType.html" title="enum in mil.nga.giat.geowave.format.stanag4676.parser.model">ModalityType</a> source</pre>
-<div class="block">the source(s) used to determine/estimate the classification</div>
-</li>
-</ul>
-<a name="valueConfidence">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>valueConfidence</h4>
-<pre>public&nbsp;int valueConfidence</pre>
-<div class="block">A measure of confidence that a correct object classification is made.
- <p>
- NOTE: This value is set only when the classification is not UNKNOWN
- <p>
- Provides a level of confidence or certainty. Allowed values are 0 to 100,
- indicating a percentage of certainty. No guidance is imposed on how this
- percentage is calculated, as it will vary depending on the class from
- which the enumeration is called. The value 0 indicates no confidence; a
- value of 100 indicates the highest possible confidence. This field is
- intended to be analogous to credibility (of information) criteria
- specified in AJP 2.1, whose values range from 1 to 6, but no assignment
- of qualitative confidence statements is imposed on specific ranges of
- percentages.</div>
-</li>
-</ul>
-<a name="sourceReliability">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>sourceReliability</h4>
-<pre>public&nbsp;int sourceReliability</pre>
-<div class="block">A measure of reliability of the source used to determine/estimate the
- classification
- <p>
- NOTE: This value is set only when the classification is not UNKNOWN
- <p>
- Provides a measure of confidence in the reliability of the source that
- generated the confidence value. Source may be a person, algorithm,
- exploitation/tracker system, or unit/organization. Allowed values are 0
- to 100. The value 0 indicates no reliability; a value of 100 indicates
- the highest possible reliability. This field is intended to be analogous
- to reliability (of source) criteria specified in AJP 2.1, whose values
- range from A to F, but no assignment of qualitative reliability
- statements is imposed on specific ranges of percentages.</div>
+<h4>credibility</h4>
+<pre>public&nbsp;<a href="../../../../../../../../mil/nga/giat/geowave/format/stanag4676/parser/model/ClassificationCredibility.html" title="class in mil.nga.giat.geowave.format.stanag4676.parser.model">ClassificationCredibility</a> credibility</pre>
+<div class="block">credibility of classification</div>
 </li>
 </ul>
 <a name="numObjects">
@@ -350,24 +281,6 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="getId()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getId</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Long.html?is-external=true" title="class or interface in java.lang">Long</a>&nbsp;getId()</pre>
-</li>
-</ul>
-<a name="setId(java.lang.Long)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>setId</h4>
-<pre>public&nbsp;void&nbsp;setId(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Long.html?is-external=true" title="class or interface in java.lang">Long</a>&nbsp;id)</pre>
-</li>
-</ul>
 <a name="getClassification()">
 <!--   -->
 </a>
@@ -386,58 +299,22 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <pre>public&nbsp;void&nbsp;setClassification(<a href="../../../../../../../../mil/nga/giat/geowave/format/stanag4676/parser/model/ObjectClassification.html" title="enum in mil.nga.giat.geowave.format.stanag4676.parser.model">ObjectClassification</a>&nbsp;classification)</pre>
 </li>
 </ul>
-<a name="getSource()">
+<a name="getCredibility()">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>getSource</h4>
-<pre>public&nbsp;<a href="../../../../../../../../mil/nga/giat/geowave/format/stanag4676/parser/model/ModalityType.html" title="enum in mil.nga.giat.geowave.format.stanag4676.parser.model">ModalityType</a>&nbsp;getSource()</pre>
+<h4>getCredibility</h4>
+<pre>public&nbsp;<a href="../../../../../../../../mil/nga/giat/geowave/format/stanag4676/parser/model/ClassificationCredibility.html" title="class in mil.nga.giat.geowave.format.stanag4676.parser.model">ClassificationCredibility</a>&nbsp;getCredibility()</pre>
 </li>
 </ul>
-<a name="setSource(mil.nga.giat.geowave.format.stanag4676.parser.model.ModalityType)">
+<a name="setCredibility(mil.nga.giat.geowave.format.stanag4676.parser.model.ClassificationCredibility)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>setSource</h4>
-<pre>public&nbsp;void&nbsp;setSource(<a href="../../../../../../../../mil/nga/giat/geowave/format/stanag4676/parser/model/ModalityType.html" title="enum in mil.nga.giat.geowave.format.stanag4676.parser.model">ModalityType</a>&nbsp;source)</pre>
-</li>
-</ul>
-<a name="getValueConfidence()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getValueConfidence</h4>
-<pre>public&nbsp;int&nbsp;getValueConfidence()</pre>
-</li>
-</ul>
-<a name="setValueConfidence(int)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>setValueConfidence</h4>
-<pre>public&nbsp;void&nbsp;setValueConfidence(int&nbsp;valueConfidence)</pre>
-</li>
-</ul>
-<a name="getSourceReliability()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getSourceReliability</h4>
-<pre>public&nbsp;int&nbsp;getSourceReliability()</pre>
-</li>
-</ul>
-<a name="setSourceReliability(int)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>setSourceReliability</h4>
-<pre>public&nbsp;void&nbsp;setSourceReliability(int&nbsp;sourceReliability)</pre>
+<h4>setCredibility</h4>
+<pre>public&nbsp;void&nbsp;setCredibility(<a href="../../../../../../../../mil/nga/giat/geowave/format/stanag4676/parser/model/ClassificationCredibility.html" title="class in mil.nga.giat.geowave.format.stanag4676.parser.model">ClassificationCredibility</a>&nbsp;credibility)</pre>
 </li>
 </ul>
 <a name="getNumObjects()">
@@ -525,6 +402,6 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <!--   -->
 </a></div>
 <!-- ======== END OF BOTTOM NAVBAR ======= -->
-<p class="legalCopy"><small>Copyright &#169; 2015. All rights reserved.</small></p>
+<p class="legalCopy"><small>Copyright &#169; 2016. All rights reserved.</small></p>
 </body>
 </html>

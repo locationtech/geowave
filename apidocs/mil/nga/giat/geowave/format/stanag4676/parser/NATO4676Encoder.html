@@ -139,26 +139,23 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/format/stanag4676/
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/format/stanag4676/parser/NATO4676Encoder.html#Encode(mil.nga.giat.geowave.format.stanag4676.parser.model.TrackMessage)">Encode</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/format/stanag4676/parser/model/TrackMessage.html" title="class in mil.nga.giat.geowave.format.stanag4676.parser.model">TrackMessage</a>&nbsp;msg)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/format/stanag4676/parser/NATO4676Encoder.html#Encode(mil.nga.giat.geowave.format.stanag4676.parser.model.TrackRun)">Encode</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/format/stanag4676/parser/model/TrackRun.html" title="class in mil.nga.giat.geowave.format.stanag4676.parser.model">TrackRun</a>&nbsp;run)</code>
-<div class="block">A TrackRun will be encoded as a single TrackMessage even though there may
- be multiple messages inside it.</div>
+<div class="block">A TrackRun will be encoded as a single NATO4676Message even though there
+ may be multiple messages inside it.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/format/stanag4676/parser/NATO4676Encoder.html#setDefaultSecurityLevel(java.lang.String)">setDefaultSecurityLevel</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;level)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/format/stanag4676/parser/NATO4676Encoder.html#setDefaultSimulationString(java.lang.String)">setDefaultSimulationString</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;simString)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/format/stanag4676/parser/NATO4676Encoder.html#setOutputStream(java.io.OutputStream)">setOutputStream</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/OutputStream.html?is-external=true" title="class or interface in java.io">OutputStream</a>&nbsp;os)</code>&nbsp;</td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/format/stanag4676/parser/NATO4676Encoder.html#setOutputStreams(java.io.OutputStream,%20java.io.OutputStream)">setOutputStreams</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/OutputStream.html?is-external=true" title="class or interface in java.io">OutputStream</a>&nbsp;trackOut,
+                <a href="http://docs.oracle.com/javase/7/docs/api/java/io/OutputStream.html?is-external=true" title="class or interface in java.io">OutputStream</a>&nbsp;missionOut)</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -217,45 +214,34 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/format/stanag4676/
 <pre>public&nbsp;void&nbsp;setDefaultSimulationString(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;simString)</pre>
 </li>
 </ul>
-<a name="setOutputStream(java.io.OutputStream)">
+<a name="setOutputStreams(java.io.OutputStream, java.io.OutputStream)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>setOutputStream</h4>
-<pre>public&nbsp;void&nbsp;setOutputStream(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/OutputStream.html?is-external=true" title="class or interface in java.io">OutputStream</a>&nbsp;os)</pre>
+<h4>setOutputStreams</h4>
+<pre>public&nbsp;void&nbsp;setOutputStreams(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/OutputStream.html?is-external=true" title="class or interface in java.io">OutputStream</a>&nbsp;trackOut,
+                    <a href="http://docs.oracle.com/javase/7/docs/api/java/io/OutputStream.html?is-external=true" title="class or interface in java.io">OutputStream</a>&nbsp;missionOut)</pre>
 <dl>
 <dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../../mil/nga/giat/geowave/format/stanag4676/parser/TrackEncoder.html#setOutputStream(java.io.OutputStream)">setOutputStream</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/format/stanag4676/parser/TrackEncoder.html" title="interface in mil.nga.giat.geowave.format.stanag4676.parser">TrackEncoder</a></code></dd>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/format/stanag4676/parser/TrackEncoder.html#setOutputStreams(java.io.OutputStream,%20java.io.OutputStream)">setOutputStreams</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/format/stanag4676/parser/TrackEncoder.html" title="interface in mil.nga.giat.geowave.format.stanag4676.parser">TrackEncoder</a></code></dd>
 </dl>
 </li>
 </ul>
 <a name="Encode(mil.nga.giat.geowave.format.stanag4676.parser.model.TrackRun)">
 <!--   -->
 </a>
-<ul class="blockList">
+<ul class="blockListLast">
 <li class="blockList">
 <h4>Encode</h4>
 <pre>public&nbsp;void&nbsp;Encode(<a href="../../../../../../../mil/nga/giat/geowave/format/stanag4676/parser/model/TrackRun.html" title="class in mil.nga.giat.geowave.format.stanag4676.parser.model">TrackRun</a>&nbsp;run)</pre>
-<div class="block">A TrackRun will be encoded as a single TrackMessage even though there may
- be multiple messages inside it. The LAST TrackMessage should be used.</div>
+<div class="block">A TrackRun will be encoded as a single NATO4676Message even though there
+ may be multiple messages inside it. The LAST NATO4676Message should be
+ used.</div>
 <dl>
 <dt><strong>Specified by:</strong></dt>
 <dd><code><a href="../../../../../../../mil/nga/giat/geowave/format/stanag4676/parser/TrackEncoder.html#Encode(mil.nga.giat.geowave.format.stanag4676.parser.model.TrackRun)">Encode</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/format/stanag4676/parser/TrackEncoder.html" title="interface in mil.nga.giat.geowave.format.stanag4676.parser">TrackEncoder</a></code></dd>
 <dt><span class="strong">Parameters:</span></dt><dd><code>run</code> - </dd></dl>
-</li>
-</ul>
-<a name="Encode(mil.nga.giat.geowave.format.stanag4676.parser.model.TrackMessage)">
-<!--   -->
-</a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>Encode</h4>
-<pre>public&nbsp;void&nbsp;Encode(<a href="../../../../../../../mil/nga/giat/geowave/format/stanag4676/parser/model/TrackMessage.html" title="class in mil.nga.giat.geowave.format.stanag4676.parser.model">TrackMessage</a>&nbsp;msg)</pre>
-<dl>
-<dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../../mil/nga/giat/geowave/format/stanag4676/parser/TrackEncoder.html#Encode(mil.nga.giat.geowave.format.stanag4676.parser.model.TrackMessage)">Encode</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/format/stanag4676/parser/TrackEncoder.html" title="interface in mil.nga.giat.geowave.format.stanag4676.parser">TrackEncoder</a></code></dd>
-</dl>
 </li>
 </ul>
 </li>
@@ -325,6 +311,6 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/format/stanag4676/
 <!--   -->
 </a></div>
 <!-- ======== END OF BOTTOM NAVBAR ======= -->
-<p class="legalCopy"><small>Copyright &#169; 2015. All rights reserved.</small></p>
+<p class="legalCopy"><small>Copyright &#169; 2016. All rights reserved.</small></p>
 </body>
 </html>
