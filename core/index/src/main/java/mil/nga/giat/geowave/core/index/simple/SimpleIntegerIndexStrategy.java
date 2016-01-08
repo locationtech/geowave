@@ -32,5 +32,4 @@ public class SimpleIntegerIndexStrategy extends
 			final double value ) {
 		return (int) value;
 	}
-
 }

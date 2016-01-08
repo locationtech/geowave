@@ -1,6 +1,9 @@
 package mil.nga.giat.geowave.core.index;
 
+import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Convenience methods for converting to and from strings. The encoding and
@@ -12,7 +15,7 @@ import java.nio.charset.Charset;
  */
 public class StringUtils
 {
-	public static final Charset UTF8_CHAR_SET = Charset.forName("UTF-8");
+	public static final Charset UTF8_CHAR_SET = Charset.forName("ISO-8859-1");
 
 	/**
 	 * Utility to convert a String to bytes
@@ -27,6 +30,32 @@ public class StringUtils
 	}
 
 	/**
+	 * Utility to convert a String to bytes
+	 * 
+	 * @param string
+	 *            incoming String to convert
+	 * @return a byte array
+	 */
+	public static byte[] stringsToBinary(
+			final String strings[] ) {
+		int len = 4;
+		final List<byte[]> strsBytes = new ArrayList<byte[]>();
+		for (final String str : strings) {
+			final byte[] strByte = str.getBytes(UTF8_CHAR_SET);
+			strsBytes.add(strByte);
+			len += (strByte.length + 4);
+
+		}
+		final ByteBuffer buf = ByteBuffer.allocate(len);
+		buf.putInt(strings.length);
+		for (final byte[] str : strsBytes) {
+			buf.putInt(str.length);
+			buf.put(str);
+		}
+		return buf.array();
+	}
+
+	/**
 	 * Utility to convert bytes to a String
 	 * 
 	 * @param binary
@@ -38,6 +67,29 @@ public class StringUtils
 		return new String(
 				binary,
 				UTF8_CHAR_SET);
+	}
+
+	/**
+	 * Utility to convert bytes to a String
+	 * 
+	 * @param binary
+	 *            a byte array to convert to a String
+	 * @return a String representation of the byte array
+	 */
+	public static String[] stringsFromBinary(
+			final byte[] binary ) {
+		final ByteBuffer buf = ByteBuffer.wrap(binary);
+		final int count = buf.getInt();
+		final String[] result = new String[count];
+		for (int i = 0; i < count; i++) {
+			final int size = buf.getInt();
+			final byte[] strBytes = new byte[size];
+			buf.get(strBytes);
+			result[i] = new String(
+					strBytes,
+					UTF8_CHAR_SET);
+		}
+		return result;
 	}
 
 	/**

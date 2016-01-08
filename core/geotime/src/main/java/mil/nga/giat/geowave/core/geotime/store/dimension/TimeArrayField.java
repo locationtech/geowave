@@ -1,23 +1,22 @@
 package mil.nga.giat.geowave.core.geotime.store.dimension;
 
-import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
-import mil.nga.giat.geowave.core.store.data.field.FieldReader;
-import mil.nga.giat.geowave.core.store.data.field.FieldWriter;
 import mil.nga.giat.geowave.core.store.data.field.ArrayReader.FixedSizeObjectArrayReader;
 import mil.nga.giat.geowave.core.store.data.field.ArrayWriter.FixedSizeObjectArrayWriter;
+import mil.nga.giat.geowave.core.store.data.field.FieldReader;
+import mil.nga.giat.geowave.core.store.data.field.FieldWriter;
 import mil.nga.giat.geowave.core.store.dimension.ArrayAdapter;
 import mil.nga.giat.geowave.core.store.dimension.ArrayField;
 import mil.nga.giat.geowave.core.store.dimension.ArrayWrapper;
-import mil.nga.giat.geowave.core.store.dimension.DimensionField;
+import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;
 
 public class TimeArrayField extends
 		ArrayField<Time> implements
-		DimensionField<ArrayWrapper<Time>>
+		NumericDimensionField<ArrayWrapper<Time>>
 {
 	private ArrayAdapter<Time> adapter;
 
 	public TimeArrayField(
-			final DimensionField<Time> elementField ) {
+			final NumericDimensionField<Time> elementField ) {
 		super(
 				elementField);
 		adapter = new ArrayAdapter<Time>(
@@ -48,11 +47,5 @@ public class TimeArrayField extends
 						elementField.getReader()),
 				new FixedSizeObjectArrayWriter(
 						elementField.getWriter()));
-	}
-
-	@Override
-	public boolean isCompatibleDefinition(
-			NumericDimensionDefinition otherDimensionDefinition ) {
-		return equals(otherDimensionDefinition);
 	}
 }

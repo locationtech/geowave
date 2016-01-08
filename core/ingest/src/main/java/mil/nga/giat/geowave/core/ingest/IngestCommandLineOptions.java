@@ -1,11 +1,21 @@
 package mil.nga.giat.geowave.core.ingest;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.ServiceLoader;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
-import mil.nga.giat.geowave.core.store.index.Index;
+import mil.nga.giat.geowave.core.ingest.index.IndexOptionProviderSpi;
+import mil.nga.giat.geowave.core.ingest.index.IngestDimensionalityTypeProviderSpi;
+import mil.nga.giat.geowave.core.store.config.ConfigUtils;
+import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
@@ -14,11 +24,14 @@ import org.apache.commons.cli.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.beust.jcommander.JCommander;
+
 public class IngestCommandLineOptions
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(IngestCommandLineOptions.class);
 
-	private static Map<String, IndexCompatibilityVisitor> registeredDimensionalityTypes = null;
+	private static Map<String, IngestDimensionalityTypeProviderSpi> registeredDimensionalityTypes = null;
+	private static SortedSet<IndexOptionProviderSpi> registeredIndexOptions = null;
 	private static String defaultDimensionalityType;
 	private final String visibility;
 	private final boolean clearNamespace;
@@ -45,20 +58,36 @@ public class IngestCommandLineOptions
 		return clearNamespace;
 	}
 
-	public Index getIndex(
-			final Index[] supportedIndices ) {
-		final IndexCompatibilityVisitor compatibilityVisitor = getSelectedIndexCompatibility(getDimensionalityType());
-		for (final Index i : supportedIndices) {
-			if (compatibilityVisitor.isCompatible(i)) {
-				return i;
+	public PrimaryIndex getIndex(
+			final DataAdapterProvider<?> adapterProvider,
+			final String[] args ) {
+		final IngestDimensionalityTypeProviderSpi dimensionalityType = getSelectedDimensionalityProvider(getDimensionalityType());
+
+		if (isCompatible(
+				adapterProvider,
+				dimensionalityType)) {
+			final JCommander commander = new JCommander();
+			commander.addObject(dimensionalityType.getOptions());
+
+			final List<Object> options = getIndexOptions();
+			for (final Object opt : options) {
+				commander.addObject(opt);
 			}
+			commander.setAcceptUnknownOptions(true);
+			commander.parse(args);
+			final PrimaryIndex index = dimensionalityType.createPrimaryIndex();
+			return wrapIndexWithOptions(index);
+
 		}
 		return null;
 	}
 
 	public boolean isSupported(
-			final Index[] supportedIndices ) {
-		return (getIndex(supportedIndices) != null);
+			final DataAdapterProvider<?> adapterProvider,
+			final String[] args ) {
+		return (getIndex(
+				adapterProvider,
+				args) != null);
 	}
 
 	private static synchronized String getDimensionalityTypeOptionDescription() {
@@ -68,19 +97,7 @@ public class IngestCommandLineOptions
 		if (registeredDimensionalityTypes.isEmpty()) {
 			return "There are no registered dimensionality types.  The supported index listed first for any given data type will be used.";
 		}
-		final StringBuilder builder = new StringBuilder();
-		for (final String dimType : registeredDimensionalityTypes.keySet()) {
-			if (builder.length() > 0) {
-				builder.append(",");
-			}
-			else {
-				builder.append("Options include: ");
-			}
-			builder.append(
-					"'").append(
-					dimType).append(
-					"'");
-		}
+		final StringBuilder builder = ConfigUtils.getOptions(registeredDimensionalityTypes.keySet());
 		builder.append(
 				"(optional; default is '").append(
 				defaultDimensionalityType).append(
@@ -98,27 +115,71 @@ public class IngestCommandLineOptions
 		return defaultDimensionalityType;
 	}
 
-	private static IndexCompatibilityVisitor getSelectedIndexCompatibility(
+	private static synchronized List<Object> getIndexOptions() {
+		if (registeredIndexOptions == null) {
+			initIndexOptionRegistry();
+		}
+		final List<Object> options = new ArrayList<Object>();
+		for (final IndexOptionProviderSpi optionProvider : registeredIndexOptions) {
+			final Object optionsObj = optionProvider.getOptions();
+			if (optionsObj != null) {
+				options.add(optionsObj);
+			}
+		}
+		return options;
+	}
+
+	private static PrimaryIndex wrapIndexWithOptions(
+			final PrimaryIndex index ) {
+		PrimaryIndex retVal = index;
+		for (final IndexOptionProviderSpi optionProvider : registeredIndexOptions) {
+			retVal = optionProvider.wrapIndexWithOptions(retVal);
+		}
+		return retVal;
+	}
+
+	private static IngestDimensionalityTypeProviderSpi getSelectedDimensionalityProvider(
 			final String dimensionalityType ) {
 		if (registeredDimensionalityTypes == null) {
 			initDimensionalityTypeRegistry();
 		}
-		final IndexCompatibilityVisitor compatibilityVisitor = registeredDimensionalityTypes.get(dimensionalityType);
-		if (compatibilityVisitor == null) {
-			return new IndexCompatibilityVisitor() {
 
-				@Override
-				public boolean isCompatible(
-						final Index index ) {
-					return true;
-				}
-			};
+		return registeredDimensionalityTypes.get(dimensionalityType);
+	}
+
+	/**
+	 * Determine whether an index is compatible with the visitor
+	 * 
+	 * @param index
+	 *            an index that an ingest type supports
+	 * @return whether the adapter is compatible with the common index model
+	 */
+	public static boolean isCompatible(
+			final DataAdapterProvider<?> adapterProvider,
+			final IngestDimensionalityTypeProviderSpi dimensionalityProvider ) {
+		final Class<? extends CommonIndexValue>[] supportedTypes = adapterProvider.getSupportedIndexableTypes();
+		if ((supportedTypes == null) || (supportedTypes.length == 0)) {
+			return false;
 		}
-		return compatibilityVisitor;
+		final Class<? extends CommonIndexValue>[] requiredTypes = dimensionalityProvider.getRequiredIndexTypes();
+		for (final Class<? extends CommonIndexValue> requiredType : requiredTypes) {
+			boolean fieldFound = false;
+			for (final Class<? extends CommonIndexValue> supportedType : supportedTypes) {
+				if (requiredType.isAssignableFrom(supportedType)) {
+					fieldFound = true;
+					break;
+				}
+			}
+			if (!fieldFound) {
+				return false;
+			}
+		}
+		return true;
+
 	}
 
 	private static synchronized void initDimensionalityTypeRegistry() {
-		registeredDimensionalityTypes = new HashMap<String, IndexCompatibilityVisitor>();
+		registeredDimensionalityTypes = new HashMap<String, IngestDimensionalityTypeProviderSpi>();
 		final Iterator<IngestDimensionalityTypeProviderSpi> dimensionalityTypesProviders = ServiceLoader.load(
 				IngestDimensionalityTypeProviderSpi.class).iterator();
 		int currentDefaultPriority = Integer.MIN_VALUE;
@@ -130,7 +191,7 @@ public class IngestCommandLineOptions
 			else {
 				registeredDimensionalityTypes.put(
 						dimensionalityTypeProvider.getDimensionalityTypeName(),
-						dimensionalityTypeProvider.getCompatibilityVisitor());
+						dimensionalityTypeProvider);
 				if (dimensionalityTypeProvider.getPriority() > currentDefaultPriority) {
 					currentDefaultPriority = dimensionalityTypeProvider.getPriority();
 					defaultDimensionalityType = dimensionalityTypeProvider.getDimensionalityTypeName();
@@ -139,11 +200,22 @@ public class IngestCommandLineOptions
 		}
 	}
 
+	private static synchronized void initIndexOptionRegistry() {
+		registeredIndexOptions = new TreeSet<IndexOptionProviderSpi>(
+				new IndexOptionComparator());
+		final Iterator<IndexOptionProviderSpi> indexOptionProviders = ServiceLoader.load(
+				IndexOptionProviderSpi.class).iterator();
+		while (indexOptionProviders.hasNext()) {
+			registeredIndexOptions.add(indexOptionProviders.next());
+		}
+	}
+
 	public static IngestCommandLineOptions parseOptions(
 			final CommandLine commandLine )
 			throws ParseException {
 		final boolean success = true;
 		boolean clearNamespace = false;
+		final int randomPartitions = -1;
 		if (commandLine.hasOption("c")) {
 			clearNamespace = true;
 		}
@@ -184,5 +256,26 @@ public class IngestCommandLineOptions
 				"clear",
 				false,
 				"Clear ALL data stored with the same prefix as this namespace (optional; default is to append data to the namespace if it exists)"));
+	}
+
+	private static class IndexOptionComparator implements
+			Comparator<IndexOptionProviderSpi>,
+			Serializable
+	{
+
+		/**
+		 *
+		 */
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		public int compare(
+				final IndexOptionProviderSpi arg0,
+				final IndexOptionProviderSpi arg1 ) {
+			return Integer.compare(
+					arg0.getResolutionOrder(),
+					arg1.getResolutionOrder());
+		}
+
 	}
 }

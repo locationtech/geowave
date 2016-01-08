@@ -88,6 +88,7 @@ public class UnboundedHilbertSFCOperations implements
 					dimensionDefinitions[i],
 					values[i],
 					binsPerDimension[i],
+					false,
 					false));
 		}
 
@@ -157,7 +158,8 @@ public class UnboundedHilbertSFCOperations implements
 			final SFCDimensionDefinition boundedDimensionDefinition,
 			final double value,
 			final BigDecimal bins,
-			final boolean isMin )
+			final boolean isMin,
+			final boolean overInclusiveOnEdge )
 			throws IllegalArgumentException {
 		final double normalizedValue = boundedDimensionDefinition.normalize(value);
 		if ((normalizedValue < 0) || (normalizedValue > 1)) {
@@ -167,7 +169,7 @@ public class UnboundedHilbertSFCOperations implements
 		final BigDecimal val = BigDecimal.valueOf(normalizedValue);
 		// scale it to a value within the bits of precision
 		final BigDecimal valueScaledWithinPrecision = val.multiply(bins);
-		if (isMin) {
+		if ((isMin && !overInclusiveOnEdge) || (!isMin && overInclusiveOnEdge)) {
 			// round it down, and make sure it isn't above bins - 1 (exactly 1
 			// for the normalized value could produce a bit shifted value equal
 			// to bins without this check)
@@ -279,8 +281,10 @@ public class UnboundedHilbertSFCOperations implements
 			final SFCDimensionDefinition[] dimensionDefinitions,
 			final int totalPrecision,
 			final int maxFilteredIndexedRanges,
-			final boolean removeVacuum ) {// List of query range minimum and
-											// maximum
+			final boolean removeVacuum,
+			final boolean overInclusiveOnEdge ) {// List of query range minimum
+													// and
+		// maximum
 		// values
 		final List<BigInteger> minRangeList = new ArrayList<BigInteger>();
 		final List<BigInteger> maxRangeList = new ArrayList<BigInteger>();
@@ -295,12 +299,14 @@ public class UnboundedHilbertSFCOperations implements
 					dimensionDefinitions[d],
 					rangePerDimension[d].getMin(),
 					binsPerDimension[d],
-					true);
+					true,
+					overInclusiveOnEdge);
 			BigInteger normalizedMax = normalizeDimension(
 					dimensionDefinitions[d],
 					rangePerDimension[d].getMax(),
 					binsPerDimension[d],
-					false);
+					false,
+					overInclusiveOnEdge);
 			if (normalizedMin.compareTo(normalizedMax) > 0) {
 				// if they're both equal, which is possible because we treat max
 				// as exclusive, set bin max to bin min (ie. treat it as
@@ -453,11 +459,13 @@ public class UnboundedHilbertSFCOperations implements
 					dimensionDefinitions[d],
 					mins[d],
 					binsPerDimension[d],
-					true);
+					true,
+					false);
 			BigInteger binMax = normalizeDimension(
 					dimensionDefinitions[d],
 					maxes[d],
 					binsPerDimension[d],
+					false,
 					false);
 			if (binMin.compareTo(binMax) > 0) {
 				// if they're both equal, which is possible because we treat max

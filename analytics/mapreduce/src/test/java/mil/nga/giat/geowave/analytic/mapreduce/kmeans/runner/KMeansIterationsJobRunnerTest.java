@@ -2,13 +2,11 @@ package mil.nga.giat.geowave.analytic.mapreduce.kmeans.runner;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -23,18 +21,14 @@ import mil.nga.giat.geowave.analytic.clustering.CentroidManager;
 import mil.nga.giat.geowave.analytic.clustering.ClusteringUtils;
 import mil.nga.giat.geowave.analytic.clustering.exception.MatchingCentroidNotFoundException;
 import mil.nga.giat.geowave.analytic.distance.FeatureCentroidDistanceFn;
-import mil.nga.giat.geowave.analytic.mapreduce.kmeans.runner.KMeansIterationsJobRunner;
 import mil.nga.giat.geowave.analytic.param.CentroidParameters;
 import mil.nga.giat.geowave.analytic.param.ClusteringParameters;
 import mil.nga.giat.geowave.analytic.param.CommonParameters;
 import mil.nga.giat.geowave.analytic.param.GlobalParameters;
-import mil.nga.giat.geowave.analytic.param.ClusteringParameters.Clustering;
-import mil.nga.giat.geowave.analytic.param.InputParameters.Input;
-import mil.nga.giat.geowave.core.geotime.IndexType;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.StringUtils;
 
-import org.apache.commons.cli.Option;
 import org.apache.hadoop.conf.Configuration;
 import org.geotools.feature.type.BasicFeatureTypes;
 import org.junit.Before;
@@ -71,7 +65,7 @@ public class KMeansIterationsJobRunnerTest
 				"centroid");
 		propertyMgt.store(
 				CentroidParameters.Centroid.INDEX_ID,
-				IndexType.SPATIAL_VECTOR.getDefaultId());
+				new SpatialDimensionalityTypeProvider().createPrimaryIndex().getId().getString());
 		propertyMgt.store(
 				ClusteringParameters.Clustering.CONVERGANCE_TOLERANCE,
 				new Double(
@@ -82,23 +76,6 @@ public class KMeansIterationsJobRunnerTest
 		propertyMgt.store(
 				CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS,
 				SimpleFeatureItemWrapperFactory.class);
-	}
-
-	@Test
-	public void testArgs() {
-		final HashSet<Option> options = new HashSet<Option>();
-		jobRunner.fillOptions(options);
-		assertTrue(options.size() >= 14);
-		options.contains(PropertyManagement.newOption(
-				Input.HDFS_INPUT_PATH,
-				"eip",
-				"HDFS Input Path",
-				true));
-		options.contains(PropertyManagement.newOption(
-				Clustering.CONVERGANCE_TOLERANCE,
-				"cct",
-				"Convergence Tolerance",
-				true));
 	}
 
 	@Test
@@ -292,22 +269,23 @@ public class KMeansIterationsJobRunnerTest
 
 				@Override
 				public ByteArrayId getIndexId() {
-					return new ByteArrayId(
-							StringUtils.stringToBinary(IndexType.SPATIAL_VECTOR.getDefaultId()));
+					return new SpatialDimensionalityTypeProvider().createPrimaryIndex().getId();
 				}
 
 				@Override
 				public AnalyticItemWrapper<SimpleFeature> getCentroidById(
-						String id,
-						String groupID )
+						final String id,
+						final String groupID )
 						throws IOException,
 						MatchingCentroidNotFoundException {
-					Iterator<AnalyticItemWrapper<SimpleFeature>> it = this.getCentroidsForGroup(
+					final Iterator<AnalyticItemWrapper<SimpleFeature>> it = this.getCentroidsForGroup(
 							groupID).iterator();
 					while (it.hasNext()) {
-						AnalyticItemWrapper<SimpleFeature> feature = (it.next());
+						final AnalyticItemWrapper<SimpleFeature> feature = (it.next());
 						if (feature.getID().equals(
-								id)) return feature;
+								id)) {
+							return feature;
+						}
 					}
 					throw new MatchingCentroidNotFoundException(
 							id);

@@ -2,8 +2,11 @@ package mil.nga.giat.geowave.analytic.mapreduce.kmeans.runner;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -13,9 +16,9 @@ import mil.nga.giat.geowave.analytic.IndependentJobRunner;
 import mil.nga.giat.geowave.analytic.PropertyManagement;
 import mil.nga.giat.geowave.analytic.SimpleFeatureItemWrapperFactory;
 import mil.nga.giat.geowave.analytic.clustering.CentroidManager;
+import mil.nga.giat.geowave.analytic.clustering.CentroidManager.CentroidProcessingFn;
 import mil.nga.giat.geowave.analytic.clustering.CentroidManagerGeoWave;
 import mil.nga.giat.geowave.analytic.clustering.NestedGroupCentroidAssignment;
-import mil.nga.giat.geowave.analytic.clustering.CentroidManager.CentroidProcessingFn;
 import mil.nga.giat.geowave.analytic.distance.DistanceFn;
 import mil.nga.giat.geowave.analytic.distance.FeatureCentroidDistanceFn;
 import mil.nga.giat.geowave.analytic.extract.SimpleFeatureCentroidExtractor;
@@ -25,10 +28,8 @@ import mil.nga.giat.geowave.analytic.param.CentroidParameters;
 import mil.nga.giat.geowave.analytic.param.ClusteringParameters;
 import mil.nga.giat.geowave.analytic.param.CommonParameters;
 import mil.nga.giat.geowave.analytic.param.FormatConfiguration;
+import mil.nga.giat.geowave.analytic.param.ParameterEnum;
 
-import org.apache.accumulo.core.client.AccumuloException;
-import org.apache.accumulo.core.client.AccumuloSecurityException;
-import org.apache.commons.cli.Option;
 import org.apache.hadoop.conf.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,14 +55,8 @@ public class KMeansIterationsJobRunner<T> implements
 			final Configuration config,
 			final PropertyManagement runTimeProperties )
 			throws IOException {
-		try {
-			return new CentroidManagerGeoWave<T>(
-					runTimeProperties);
-		}
-		catch (AccumuloException | AccumuloSecurityException e) {
-			throw new IOException(
-					e);
-		}
+		return new CentroidManagerGeoWave<T>(
+				runTimeProperties);
 	}
 
 	public void setInputFormatConfiguration(
@@ -255,33 +250,24 @@ public class KMeansIterationsJobRunner<T> implements
 	}
 
 	@Override
-	public void fillOptions(
-			final Set<Option> options ) {
-		CentroidParameters.fillOptions(
-				options,
-				new CentroidParameters.Centroid[] {
-					CentroidParameters.Centroid.INDEX_ID,
-					CentroidParameters.Centroid.DATA_TYPE_ID,
-					CentroidParameters.Centroid.DATA_NAMESPACE_URI,
-					CentroidParameters.Centroid.EXTRACTOR_CLASS,
-					CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS
-				});
-		ClusteringParameters.fillOptions(
-				options,
-				new ClusteringParameters.Clustering[] {
-					ClusteringParameters.Clustering.MAX_REDUCER_COUNT,
-					ClusteringParameters.Clustering.MAX_ITERATIONS,
-					ClusteringParameters.Clustering.CONVERGANCE_TOLERANCE
-				});
-		CommonParameters.fillOptions(
-				options,
-				new CommonParameters.Common[] {
-					CommonParameters.Common.DISTANCE_FUNCTION_CLASS
-				});
+	public Collection<ParameterEnum<?>> getParameters() {
+		final Set<ParameterEnum<?>> params = new HashSet<ParameterEnum<?>>();
+		params.addAll(Arrays.asList(new ParameterEnum<?>[] {
+			CentroidParameters.Centroid.INDEX_ID,
+			CentroidParameters.Centroid.DATA_TYPE_ID,
+			CentroidParameters.Centroid.DATA_NAMESPACE_URI,
+			CentroidParameters.Centroid.EXTRACTOR_CLASS,
+			CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS,
+			ClusteringParameters.Clustering.MAX_REDUCER_COUNT,
+			ClusteringParameters.Clustering.MAX_ITERATIONS,
+			ClusteringParameters.Clustering.CONVERGANCE_TOLERANCE,
+			CommonParameters.Common.DISTANCE_FUNCTION_CLASS
+		}));
 
-		CentroidManagerGeoWave.fillOptions(options);
-		NestedGroupCentroidAssignment.fillOptions(options);
-		jobRunner.fillOptions(options);
+		params.addAll(CentroidManagerGeoWave.getParameters());
+		params.addAll(NestedGroupCentroidAssignment.getParameters());
+		params.addAll(jobRunner.getParameters());
+		return params;
 	}
 
 	@Override

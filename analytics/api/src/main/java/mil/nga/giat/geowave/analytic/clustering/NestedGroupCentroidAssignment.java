@@ -1,13 +1,15 @@
 package mil.nga.giat.geowave.analytic.clustering;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import mil.nga.giat.geowave.analytic.AnalyticItemWrapper;
-import mil.nga.giat.geowave.analytic.ConfigurationWrapper;
 import mil.nga.giat.geowave.analytic.PropertyManagement;
-import mil.nga.giat.geowave.analytic.RunnerUtils;
+import mil.nga.giat.geowave.analytic.ScopedJobConfiguration;
 import mil.nga.giat.geowave.analytic.distance.DistanceFn;
 import mil.nga.giat.geowave.analytic.distance.FeatureCentroidDistanceFn;
 import mil.nga.giat.geowave.analytic.kmeans.AssociationNotification;
@@ -17,10 +19,9 @@ import mil.nga.giat.geowave.analytic.param.CommonParameters;
 import mil.nga.giat.geowave.analytic.param.GlobalParameters;
 import mil.nga.giat.geowave.analytic.param.ParameterEnum;
 
-import org.apache.accumulo.core.client.AccumuloException;
-import org.apache.accumulo.core.client.AccumuloSecurityException;
-import org.apache.commons.cli.Option;
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.mapreduce.JobContext;
+import org.slf4j.Logger;
 
 /**
  * 
@@ -78,6 +79,37 @@ public class NestedGroupCentroidAssignment<T>
 		this.associationdFunction.setDistanceFunction(distanceFunction);
 	}
 
+	public NestedGroupCentroidAssignment(
+			final JobContext context,
+			final Class<?> scope,
+			final Logger logger )
+			throws InstantiationException,
+			IllegalAccessException,
+			IOException {
+		final ScopedJobConfiguration config = new ScopedJobConfiguration(
+				context.getConfiguration(),
+				scope,
+				logger);
+		endZoomLevel = config.getInt(
+				CentroidParameters.Centroid.ZOOM_LEVEL,
+				1);
+		parentBatchID = config.getString(
+				GlobalParameters.Global.PARENT_BATCH_ID,
+				config.getString(
+						GlobalParameters.Global.BATCH_ID,
+						null));
+		@SuppressWarnings("unchecked")
+		final DistanceFn<T> distanceFunction = config.getInstance(
+				CommonParameters.Common.DISTANCE_FUNCTION_CLASS,
+				DistanceFn.class,
+				FeatureCentroidDistanceFn.class);
+		this.associationdFunction.setDistanceFunction(distanceFunction);
+		centroidManager = new CentroidManagerGeoWave<T>(
+				context,
+				scope);
+
+	}
+
 	/**
 	 * Override zoomLevel from parameters
 	 * 
@@ -87,16 +119,12 @@ public class NestedGroupCentroidAssignment<T>
 	 */
 	public static void setZoomLevel(
 			final Configuration config,
+			final Class<?> scope,
 			final int zoomLevel ) {
-		RunnerUtils.setParameter(
+		CentroidParameters.Centroid.ZOOM_LEVEL.getHelper().setValue(
 				config,
-				NestedGroupCentroidAssignment.class,
-				new Object[] {
-					zoomLevel
-				},
-				new ParameterEnum[] {
-					CentroidParameters.Centroid.ZOOM_LEVEL
-				});
+				scope,
+				zoomLevel);
 	}
 
 	/**
@@ -108,69 +136,24 @@ public class NestedGroupCentroidAssignment<T>
 	 */
 	public static void setParentBatchID(
 			final Configuration config,
+			final Class<?> scope,
 			final String parentID ) {
-		RunnerUtils.setParameter(
+		GlobalParameters.Global.PARENT_BATCH_ID.getHelper().setValue(
 				config,
-				NestedGroupCentroidAssignment.class,
-				new Object[] {
-					parentID
-				},
-				new ParameterEnum[] {
-					GlobalParameters.Global.PARENT_BATCH_ID
-				});
+				scope,
+				parentID);
 	}
 
-	public static void fillOptions(
-			final Set<Option> options ) {
-		CentroidManagerGeoWave.fillOptions(options);
+	public static Collection<ParameterEnum<?>> getParameters() {
+		final Set<ParameterEnum<?>> params = new HashSet<ParameterEnum<?>>();
+		params.addAll(CentroidManagerGeoWave.getParameters());
 
-		GlobalParameters.fillOptions(
-				options,
-				new GlobalParameters.Global[] {
-					GlobalParameters.Global.PARENT_BATCH_ID
-				});
-
-		CommonParameters.fillOptions(
-				options,
-				new CommonParameters.Common[] {
-					CommonParameters.Common.DISTANCE_FUNCTION_CLASS
-				});
-
-		CentroidParameters.fillOptions(
-				options,
-				new CentroidParameters.Centroid[] {
-					CentroidParameters.Centroid.ZOOM_LEVEL
-				});
-	}
-
-	public NestedGroupCentroidAssignment(
-			final ConfigurationWrapper wrapper )
-			throws InstantiationException,
-			IllegalAccessException,
-			AccumuloException,
-			IOException,
-			AccumuloSecurityException {
-		endZoomLevel = wrapper.getInt(
-				CentroidParameters.Centroid.ZOOM_LEVEL,
-				NestedGroupCentroidAssignment.class,
-				1);
-		parentBatchID = wrapper.getString(
-				GlobalParameters.Global.PARENT_BATCH_ID,
-				NestedGroupCentroidAssignment.class,
-				wrapper.getString(
-						GlobalParameters.Global.BATCH_ID,
-						NestedGroupCentroidAssignment.class,
-						null));
-		@SuppressWarnings("unchecked")
-		final DistanceFn<T> distanceFunction = wrapper.getInstance(
-				CommonParameters.Common.DISTANCE_FUNCTION_CLASS,
-				NestedGroupCentroidAssignment.class,
-				DistanceFn.class,
-				FeatureCentroidDistanceFn.class);
-		this.associationdFunction.setDistanceFunction(distanceFunction);
-		centroidManager = new CentroidManagerGeoWave<T>(
-				wrapper);
-
+		params.addAll(Arrays.asList(new ParameterEnum<?>[] {
+			CentroidParameters.Centroid.ZOOM_LEVEL,
+			GlobalParameters.Global.PARENT_BATCH_ID,
+			CommonParameters.Common.DISTANCE_FUNCTION_CLASS
+		}));
+		return params;
 	}
 
 	public List<AnalyticItemWrapper<T>> getCentroidsForGroup(
@@ -261,21 +244,22 @@ public class NestedGroupCentroidAssignment<T>
 
 	public static void setParameters(
 			final Configuration config,
+			final Class<?> scope,
 			final PropertyManagement runTimeProperties ) {
 		CentroidManagerGeoWave.setParameters(
 				config,
+				scope,
 				runTimeProperties);
 
-		RunnerUtils.setParameter(
-				config,
-				NestedGroupCentroidAssignment.class,
-				runTimeProperties,
+		runTimeProperties.setConfig(
 				new ParameterEnum[] {
 					CommonParameters.Common.DISTANCE_FUNCTION_CLASS,
 					CentroidParameters.Centroid.ZOOM_LEVEL,
 					GlobalParameters.Global.BATCH_ID,
 					GlobalParameters.Global.PARENT_BATCH_ID
-				});
+				},
+				config,
+				scope);
 	}
 
 	private class GroupHolder

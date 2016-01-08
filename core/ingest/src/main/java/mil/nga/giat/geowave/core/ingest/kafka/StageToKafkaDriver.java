@@ -36,10 +36,13 @@ public class StageToKafkaDriver<T extends SpecificRecordBase> extends
 
 	@Override
 	protected void parseOptionsInternal(
+			final Options options,
 			final CommandLine commandLine )
 			throws ParseException {
 		kafkaOptions = KafkaProducerCommandLineOptions.parseOptions(commandLine);
-		super.parseOptionsInternal(commandLine);
+		super.parseOptionsInternal(
+				options,
+				commandLine);
 	}
 
 	@Override
@@ -75,7 +78,7 @@ public class StageToKafkaDriver<T extends SpecificRecordBase> extends
 	}
 
 	@Override
-	protected void runInternal(
+	protected boolean runInternal(
 			final String[] args,
 			final List<IngestFormatPluginProviderSpi<?, ?>> pluginProviders ) {
 
@@ -108,11 +111,13 @@ public class StageToKafkaDriver<T extends SpecificRecordBase> extends
 					stageToKafkaPlugins,
 					runData);
 			runData.close();
+			return true;
 		}
 		catch (final IOException e) {
 			LOGGER.error(
 					"Unable to process input",
 					e);
+			return false;
 		}
 
 	}

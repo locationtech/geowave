@@ -7,9 +7,11 @@ import javax.vecmath.Point2d;
 
 import mil.nga.giat.geowave.adapter.raster.RasterUtils;
 import mil.nga.giat.geowave.analytic.mapreduce.kde.KDEJobRunner;
-import mil.nga.giat.geowave.core.geotime.IndexType;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.datastore.accumulo.mapreduce.output.GeoWaveOutputKey;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.mapreduce.JobContextIndexStore;
+import mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputKey;
 
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.mapreduce.Reducer;
@@ -48,6 +50,7 @@ public class ComparisonAccumuloStatsReducer extends
 	private int numYPosts;
 	private String coverageName;
 	private int tileSize;
+	protected ByteArrayId indexId;
 
 	@Override
 	protected void reduce(
@@ -91,8 +94,7 @@ public class ComparisonAccumuloStatsReducer extends
 					new GeoWaveOutputKey(
 							new ByteArrayId(
 									coverageName),
-							new ByteArrayId(
-									IndexType.SPATIAL_VECTOR.getDefaultId())),
+							indexId),
 					RasterUtils.createCoverageTypeDouble(
 							coverageName,
 							bbox[0].x,
@@ -155,5 +157,12 @@ public class ComparisonAccumuloStatsReducer extends
 		totalKeys = context.getConfiguration().getLong(
 				"Entries per level.level" + level,
 				10);
+		final PrimaryIndex[] indices = JobContextIndexStore.getIndices(context);
+		if ((indices != null) && (indices.length > 0)) {
+			indexId = indices[0].getId();
+		}
+		else {
+			indexId = new SpatialDimensionalityTypeProvider().createPrimaryIndex().getId();
+		}
 	}
 }

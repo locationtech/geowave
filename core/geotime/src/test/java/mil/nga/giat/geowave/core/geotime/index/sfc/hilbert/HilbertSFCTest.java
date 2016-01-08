@@ -7,8 +7,8 @@ import mil.nga.giat.geowave.core.geotime.index.dimension.LongitudeDefinition;
 import mil.nga.giat.geowave.core.index.sfc.RangeDecomposition;
 import mil.nga.giat.geowave.core.index.sfc.SFCDimensionDefinition;
 import mil.nga.giat.geowave.core.index.sfc.SFCFactory;
-import mil.nga.giat.geowave.core.index.sfc.SpaceFillingCurve;
 import mil.nga.giat.geowave.core.index.sfc.SFCFactory.SFCType;
+import mil.nga.giat.geowave.core.index.sfc.SpaceFillingCurve;
 import mil.nga.giat.geowave.core.index.sfc.data.BasicNumericDataset;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericData;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericRange;
@@ -25,16 +25,16 @@ public class HilbertSFCTest
 	public void testGetId_2DSpatialMaxValue()
 			throws Exception {
 
-		int LATITUDE_BITS = 31;
-		int LONGITUDE_BITS = 31;
+		final int LATITUDE_BITS = 31;
+		final int LONGITUDE_BITS = 31;
 
-		double[] testValues = new double[] {
+		final double[] testValues = new double[] {
 			90,
 			180
 		};
-		long expectedID = 3074457345618258602L;
+		final long expectedID = 3074457345618258602L;
 
-		SFCDimensionDefinition[] SPATIAL_DIMENSIONS = new SFCDimensionDefinition[] {
+		final SFCDimensionDefinition[] SPATIAL_DIMENSIONS = new SFCDimensionDefinition[] {
 			new SFCDimensionDefinition(
 					new LatitudeDefinition(),
 					LATITUDE_BITS),
@@ -43,7 +43,7 @@ public class HilbertSFCTest
 					LONGITUDE_BITS)
 		};
 
-		SpaceFillingCurve hilbertSFC = SFCFactory.createSpaceFillingCurve(
+		final SpaceFillingCurve hilbertSFC = SFCFactory.createSpaceFillingCurve(
 				SPATIAL_DIMENSIONS,
 				SFCType.HILBERT);
 		Assert.assertEquals(
@@ -57,16 +57,16 @@ public class HilbertSFCTest
 	public void testGetId_2DSpatialMinValue()
 			throws Exception {
 
-		int LATITUDE_BITS = 31;
-		int LONGITUDE_BITS = 31;
+		final int LATITUDE_BITS = 31;
+		final int LONGITUDE_BITS = 31;
 
-		double[] testValues = new double[] {
+		final double[] testValues = new double[] {
 			-90,
 			-180
 		};
-		long expectedID = 0L;
+		final long expectedID = 0L;
 
-		SFCDimensionDefinition[] SPATIAL_DIMENSIONS = new SFCDimensionDefinition[] {
+		final SFCDimensionDefinition[] SPATIAL_DIMENSIONS = new SFCDimensionDefinition[] {
 			new SFCDimensionDefinition(
 					new LatitudeDefinition(),
 					LATITUDE_BITS),
@@ -75,7 +75,7 @@ public class HilbertSFCTest
 					LONGITUDE_BITS)
 		};
 
-		SpaceFillingCurve hilbertSFC = SFCFactory.createSpaceFillingCurve(
+		final SpaceFillingCurve hilbertSFC = SFCFactory.createSpaceFillingCurve(
 				SPATIAL_DIMENSIONS,
 				SFCType.HILBERT);
 
@@ -90,16 +90,16 @@ public class HilbertSFCTest
 	public void testGetId_2DSpatialCentroidValue()
 			throws Exception {
 
-		int LATITUDE_BITS = 31;
-		int LONGITUDE_BITS = 31;
+		final int LATITUDE_BITS = 31;
+		final int LONGITUDE_BITS = 31;
 
-		double[] testValues = new double[] {
+		final double[] testValues = new double[] {
 			0,
 			0
 		};
-		long expectedID = 768614336404564650L;
+		final long expectedID = 768614336404564650L;
 
-		SFCDimensionDefinition[] SPATIAL_DIMENSIONS = new SFCDimensionDefinition[] {
+		final SFCDimensionDefinition[] SPATIAL_DIMENSIONS = new SFCDimensionDefinition[] {
 			new SFCDimensionDefinition(
 					new LatitudeDefinition(),
 					LATITUDE_BITS),
@@ -108,7 +108,7 @@ public class HilbertSFCTest
 					LONGITUDE_BITS)
 		};
 
-		SpaceFillingCurve hilbertSFC = SFCFactory.createSpaceFillingCurve(
+		final SpaceFillingCurve hilbertSFC = SFCFactory.createSpaceFillingCurve(
 				SPATIAL_DIMENSIONS,
 				SFCType.HILBERT);
 		Assert.assertEquals(
@@ -122,19 +122,19 @@ public class HilbertSFCTest
 	public void testGetId_2DSpatialLexicographicOrdering()
 			throws Exception {
 
-		int LATITUDE_BITS = 31;
-		int LONGITUDE_BITS = 31;
+		final int LATITUDE_BITS = 31;
+		final int LONGITUDE_BITS = 31;
 
-		double[] minValue = new double[] {
+		final double[] minValue = new double[] {
 			-90,
 			-180
 		};
-		double[] maxValue = new double[] {
+		final double[] maxValue = new double[] {
 			90,
 			180
 		};
 
-		SFCDimensionDefinition[] SPATIAL_DIMENSIONS = new SFCDimensionDefinition[] {
+		final SFCDimensionDefinition[] SPATIAL_DIMENSIONS = new SFCDimensionDefinition[] {
 			new SFCDimensionDefinition(
 					new LatitudeDefinition(),
 					LATITUDE_BITS),
@@ -143,7 +143,7 @@ public class HilbertSFCTest
 					LONGITUDE_BITS)
 		};
 
-		SpaceFillingCurve hilbertSFC = SFCFactory.createSpaceFillingCurve(
+		final SpaceFillingCurve hilbertSFC = SFCFactory.createSpaceFillingCurve(
 				SPATIAL_DIMENSIONS,
 				SFCType.HILBERT);
 
@@ -157,16 +157,16 @@ public class HilbertSFCTest
 	public void testGetId_2DSpatialIllegalArgument()
 			throws Exception {
 
-		int LATITUDE_BITS = 31;
-		int LONGITUDE_BITS = 31;
+		final int LATITUDE_BITS = 31;
+		final int LONGITUDE_BITS = 31;
 
-		double[] testValues = new double[] {
+		final double[] testValues = new double[] {
 			-100,
 			-180
 		};
-		long expectedID = 0L;
+		final long expectedID = 0L;
 
-		SFCDimensionDefinition[] SPATIAL_DIMENSIONS = new SFCDimensionDefinition[] {
+		final SFCDimensionDefinition[] SPATIAL_DIMENSIONS = new SFCDimensionDefinition[] {
 			new SFCDimensionDefinition(
 					new LatitudeDefinition(),
 					LATITUDE_BITS),
@@ -175,7 +175,7 @@ public class HilbertSFCTest
 					LONGITUDE_BITS)
 		};
 
-		SpaceFillingCurve hilbertSFC = SFCFactory.createSpaceFillingCurve(
+		final SpaceFillingCurve hilbertSFC = SFCFactory.createSpaceFillingCurve(
 				SPATIAL_DIMENSIONS,
 				SFCType.HILBERT);
 
@@ -189,10 +189,10 @@ public class HilbertSFCTest
 	@Test
 	public void testDecomposeQuery_2DSpatialOneIndexFilter() {
 
-		int LATITUDE_BITS = 31;
-		int LONGITUDE_BITS = 31;
+		final int LATITUDE_BITS = 31;
+		final int LONGITUDE_BITS = 31;
 
-		SFCDimensionDefinition[] SPATIAL_DIMENSIONS = new SFCDimensionDefinition[] {
+		final SFCDimensionDefinition[] SPATIAL_DIMENSIONS = new SFCDimensionDefinition[] {
 			new SFCDimensionDefinition(
 					new LongitudeDefinition(),
 					LONGITUDE_BITS),
@@ -201,7 +201,7 @@ public class HilbertSFCTest
 					LATITUDE_BITS)
 		};
 
-		SpaceFillingCurve hilbertSFC = SFCFactory.createSpaceFillingCurve(
+		final SpaceFillingCurve hilbertSFC = SFCFactory.createSpaceFillingCurve(
 				SPATIAL_DIMENSIONS,
 				SFCType.HILBERT);
 
@@ -214,14 +214,15 @@ public class HilbertSFCTest
 		final NumericRange rangeY = new NumericRange(
 				25,
 				27);
-		BasicNumericDataset spatialQuery = new BasicNumericDataset(
+		final BasicNumericDataset spatialQuery = new BasicNumericDataset(
 				new NumericData[] {
 					rangeX,
 					rangeY
 				});
 
-		RangeDecomposition rangeDecomposition = hilbertSFC.decomposeQuery(
+		final RangeDecomposition rangeDecomposition = hilbertSFC.decomposeRange(
 				spatialQuery,
+				true,
 				1);
 
 		Assert.assertEquals(
@@ -233,10 +234,10 @@ public class HilbertSFCTest
 	@Test
 	public void testDecomposeQuery_2DSpatialTwentyIndexFilters() {
 
-		int LATITUDE_BITS = 31;
-		int LONGITUDE_BITS = 31;
+		final int LATITUDE_BITS = 31;
+		final int LONGITUDE_BITS = 31;
 
-		SFCDimensionDefinition[] SPATIAL_DIMENSIONS = new SFCDimensionDefinition[] {
+		final SFCDimensionDefinition[] SPATIAL_DIMENSIONS = new SFCDimensionDefinition[] {
 			new SFCDimensionDefinition(
 					new LongitudeDefinition(),
 					LONGITUDE_BITS),
@@ -245,7 +246,7 @@ public class HilbertSFCTest
 					LATITUDE_BITS)
 		};
 
-		SpaceFillingCurve hilbertSFC = SFCFactory.createSpaceFillingCurve(
+		final SpaceFillingCurve hilbertSFC = SFCFactory.createSpaceFillingCurve(
 				SPATIAL_DIMENSIONS,
 				SFCType.HILBERT);
 		// Create a IndexRange object using the x axis
@@ -257,14 +258,15 @@ public class HilbertSFCTest
 		final NumericRange rangeY = new NumericRange(
 				25,
 				50);
-		BasicNumericDataset spatialQuery = new BasicNumericDataset(
+		final BasicNumericDataset spatialQuery = new BasicNumericDataset(
 				new NumericData[] {
 					rangeX,
 					rangeY
 				});
 
-		RangeDecomposition rangeDecomposition = hilbertSFC.decomposeQuery(
+		final RangeDecomposition rangeDecomposition = hilbertSFC.decomposeRange(
 				spatialQuery,
+				true,
 				20);
 
 		Assert.assertEquals(

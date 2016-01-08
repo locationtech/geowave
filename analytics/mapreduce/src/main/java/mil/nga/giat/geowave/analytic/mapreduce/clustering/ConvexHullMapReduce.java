@@ -9,23 +9,22 @@ import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import mil.nga.giat.geowave.analytic.AnalyticFeature;
 import mil.nga.giat.geowave.analytic.AnalyticItemWrapper;
 import mil.nga.giat.geowave.analytic.AnalyticItemWrapperFactory;
-import mil.nga.giat.geowave.analytic.ConfigurationWrapper;
 import mil.nga.giat.geowave.analytic.Projection;
+import mil.nga.giat.geowave.analytic.ScopedJobConfiguration;
 import mil.nga.giat.geowave.analytic.SimpleFeatureItemWrapperFactory;
 import mil.nga.giat.geowave.analytic.SimpleFeatureProjection;
 import mil.nga.giat.geowave.analytic.clustering.CentroidManager;
 import mil.nga.giat.geowave.analytic.clustering.CentroidManagerGeoWave;
 import mil.nga.giat.geowave.analytic.clustering.ClusteringUtils;
 import mil.nga.giat.geowave.analytic.clustering.NestedGroupCentroidAssignment;
-import mil.nga.giat.geowave.analytic.mapreduce.JobContextConfigurationWrapper;
 import mil.nga.giat.geowave.analytic.param.HullParameters;
-import mil.nga.giat.geowave.core.geotime.IndexType;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.StringUtils;
-import mil.nga.giat.geowave.datastore.accumulo.mapreduce.GeoWaveWritableInputMapper;
-import mil.nga.giat.geowave.datastore.accumulo.mapreduce.GeoWaveWritableInputReducer;
-import mil.nga.giat.geowave.datastore.accumulo.mapreduce.input.GeoWaveInputKey;
-import mil.nga.giat.geowave.datastore.accumulo.mapreduce.output.GeoWaveOutputKey;
+import mil.nga.giat.geowave.mapreduce.GeoWaveWritableInputMapper;
+import mil.nga.giat.geowave.mapreduce.GeoWaveWritableInputReducer;
+import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
+import mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputKey;
 
 import org.apache.hadoop.io.ObjectWritable;
 import org.apache.hadoop.mapreduce.Mapper;
@@ -112,6 +111,7 @@ public class ConvexHullMapReduce
 			outputKey.setAdapterId(key.getAdapterId());
 			outputKey.setDataId(new ByteArrayId(
 					StringUtils.stringToBinary(nestedGroupCentroidAssigner.getGroupForLevel(wrapper))));
+			outputKey.setInsertionId(key.getInsertionId());
 			context.write(
 					outputKey,
 					currentValue);
@@ -125,17 +125,20 @@ public class ConvexHullMapReduce
 				InterruptedException {
 			super.setup(context);
 
-			final ConfigurationWrapper config = new JobContextConfigurationWrapper(
-					context,
+			final ScopedJobConfiguration config = new ScopedJobConfiguration(
+					context.getConfiguration(),
+					ConvexHullMapReduce.class,
 					ConvexHullMapReduce.LOGGER);
 			try {
 				itemWrapperFactory = config.getInstance(
 						HullParameters.Hull.WRAPPER_FACTORY_CLASS,
-						ConvexHullMapReduce.class,
 						AnalyticItemWrapperFactory.class,
 						SimpleFeatureItemWrapperFactory.class);
 
-				itemWrapperFactory.initialize(config);
+				itemWrapperFactory.initialize(
+						context,
+						ConvexHullMapReduce.class,
+						ConvexHullMapReduce.LOGGER);
 			}
 			catch (final Exception e1) {
 
@@ -145,7 +148,9 @@ public class ConvexHullMapReduce
 
 			try {
 				nestedGroupCentroidAssigner = new NestedGroupCentroidAssignment<T>(
-						config);
+						context,
+						ConvexHullMapReduce.class,
+						ConvexHullMapReduce.LOGGER);
 			}
 			catch (final Exception e1) {
 				throw new IOException(
@@ -263,12 +268,16 @@ public class ConvexHullMapReduce
 				throws IOException,
 				InterruptedException {
 
-			final ConfigurationWrapper config = new JobContextConfigurationWrapper(
-					context);
+			final ScopedJobConfiguration config = new ScopedJobConfiguration(
+					context.getConfiguration(),
+					ConvexHullMapReduce.class,
+					ConvexHullMapReduce.LOGGER);
 			super.setup(context);
 			try {
 				centroidManager = new CentroidManagerGeoWave<T>(
-						config);
+						context,
+						ConvexHullMapReduce.class,
+						ConvexHullMapReduce.LOGGER);
 			}
 			catch (final Exception e) {
 				ConvexHullMapReduce.LOGGER.warn(
@@ -281,11 +290,12 @@ public class ConvexHullMapReduce
 			try {
 				projectionFunction = config.getInstance(
 						HullParameters.Hull.PROJECTION_CLASS,
-						ConvexHullMapReduce.class,
 						Projection.class,
 						SimpleFeatureProjection.class);
 
-				projectionFunction.initialize(config);
+				projectionFunction.initialize(
+						context,
+						ConvexHullMapReduce.class);
 			}
 			catch (final Exception e1) {
 				throw new IOException(
@@ -294,7 +304,6 @@ public class ConvexHullMapReduce
 
 			final String polygonDataTypeId = config.getString(
 					HullParameters.Hull.DATA_TYPE_ID,
-					ConvexHullMapReduce.class,
 					"convex_hull");
 
 			outputAdapter = AnalyticFeature.createGeometryFeatureAdapter(
@@ -302,15 +311,13 @@ public class ConvexHullMapReduce
 					new String[0],
 					config.getString(
 							HullParameters.Hull.DATA_NAMESPACE_URI,
-							ConvexHullMapReduce.class,
 							BasicFeatureTypes.DEFAULT_NAMESPACE),
 					ClusteringUtils.CLUSTERING_CRS);
 
 			indexId = new ByteArrayId(
 					StringUtils.stringToBinary(config.getString(
 							HullParameters.Hull.INDEX_ID,
-							ConvexHullMapReduce.class,
-							IndexType.SPATIAL_VECTOR.getDefaultId())));
+							new SpatialDimensionalityTypeProvider().createPrimaryIndex().getId().getString())));
 
 		}
 	}

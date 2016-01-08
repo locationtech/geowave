@@ -2,6 +2,9 @@ package mil.nga.giat.geowave.analytic;
 
 import java.io.IOException;
 
+import org.apache.hadoop.mapreduce.JobContext;
+import org.slf4j.Logger;
+
 import com.vividsolutions.jts.geom.Coordinate;
 
 /**
@@ -39,6 +42,8 @@ public interface AnalyticItemWrapperFactory<T>
 			final double[] extraValues );
 
 	public void initialize(
-			final ConfigurationWrapper context )
+			final JobContext context,
+			Class<?> scope,
+			Logger logger )
 			throws IOException;
 }

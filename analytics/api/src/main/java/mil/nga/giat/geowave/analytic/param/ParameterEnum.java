@@ -1,8 +1,11 @@
 package mil.nga.giat.geowave.analytic.param;
 
-public interface ParameterEnum
-{
-	Class<?> getBaseClass();
+import java.io.Serializable;
 
-	Enum<?> self();
+public interface ParameterEnum<T> extends
+		Serializable
+{
+	public ParameterHelper<T> getHelper();
+
+	public Enum<?> self();
 }

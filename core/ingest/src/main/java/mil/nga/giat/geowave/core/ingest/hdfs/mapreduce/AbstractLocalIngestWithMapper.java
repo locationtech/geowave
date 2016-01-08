@@ -14,6 +14,7 @@ import mil.nga.giat.geowave.core.ingest.avro.WholeFile;
 import mil.nga.giat.geowave.core.ingest.local.LocalFileIngestPlugin;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
+import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 
 import org.apache.log4j.Logger;
 
@@ -115,6 +116,11 @@ abstract public class AbstractLocalIngestWithMapper<T> extends
 			parentPlugin = PersistenceUtils.classFactory(
 					StringUtils.stringFromBinary(bytes),
 					AbstractLocalIngestWithMapper.class);
+		}
+
+		@Override
+		public Class<? extends CommonIndexValue>[] getSupportedIndexableTypes() {
+			return parentPlugin.getSupportedIndexableTypes();
 		}
 	}
 

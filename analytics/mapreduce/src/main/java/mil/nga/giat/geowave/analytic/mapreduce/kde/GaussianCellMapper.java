@@ -4,8 +4,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStore;
-import mil.nga.giat.geowave.datastore.accumulo.mapreduce.input.GeoWaveInputKey;
+import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
 
 import org.apache.hadoop.io.DoubleWritable;
 import org.apache.hadoop.io.LongWritable;
@@ -22,7 +21,7 @@ import com.vividsolutions.jts.geom.Point;
 public class GaussianCellMapper extends
 		Mapper<GeoWaveInputKey, SimpleFeature, LongWritable, DoubleWritable>
 {
-	private final static Logger LOGGER = Logger.getLogger(AccumuloDataStore.class);
+	private final static Logger LOGGER = Logger.getLogger(GaussianCellMapper.class);
 	protected static final String CQL_FILTER_KEY = "CQL_FILTER";
 	protected int minLevel;
 	protected int maxLevel;

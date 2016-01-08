@@ -2,8 +2,8 @@ package mil.nga.giat.geowave.core.ingest.local;
 
 import java.io.File;
 
-import mil.nga.giat.geowave.core.ingest.IndexProvider;
 import mil.nga.giat.geowave.core.ingest.IngestPluginBase;
+import mil.nga.giat.geowave.core.ingest.index.IndexProvider;
 
 /**
  * This is the primary plugin for directly ingesting data to GeoWave from local

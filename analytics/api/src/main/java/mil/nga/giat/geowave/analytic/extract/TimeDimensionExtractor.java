@@ -3,7 +3,7 @@ package mil.nga.giat.geowave.analytic.extract;
 import java.util.Calendar;
 import java.util.Date;
 
-import mil.nga.giat.geowave.core.store.TimeUtils;
+import mil.nga.giat.geowave.core.geotime.TimeUtils;
 
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.type.AttributeDescriptor;

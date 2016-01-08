@@ -7,7 +7,7 @@ import mil.nga.giat.geowave.core.index.ByteArrayUtils;
 import mil.nga.giat.geowave.core.index.PersistenceUtils;
 import mil.nga.giat.geowave.core.ingest.GeoWaveData;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
-import mil.nga.giat.geowave.datastore.accumulo.mapreduce.output.GeoWaveOutputKey;
+import mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputKey;
 
 import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.io.WritableComparable;

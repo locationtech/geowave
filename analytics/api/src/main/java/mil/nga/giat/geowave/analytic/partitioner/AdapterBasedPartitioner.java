@@ -6,15 +6,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import mil.nga.giat.geowave.analytic.ConfigurationWrapper;
 import mil.nga.giat.geowave.analytic.PropertyManagement;
-import mil.nga.giat.geowave.analytic.RunnerUtils;
 import mil.nga.giat.geowave.analytic.SerializableAdapterStore;
-import mil.nga.giat.geowave.analytic.db.AccumuloAdapterStoreFactory;
-import mil.nga.giat.geowave.analytic.db.AdapterStoreFactory;
-import mil.nga.giat.geowave.analytic.param.CommonParameters;
 import mil.nga.giat.geowave.analytic.param.ParameterEnum;
+import mil.nga.giat.geowave.analytic.param.StoreParameters;
 import mil.nga.giat.geowave.analytic.partitioner.AdapterBasedPartitioner.AdapterDataEntry;
+import mil.nga.giat.geowave.analytic.store.PersistableAdapterStore;
 import mil.nga.giat.geowave.core.geotime.index.dimension.LongitudeDefinition;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
@@ -28,6 +25,7 @@ import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.mapreduce.JobContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,7 +43,7 @@ import org.slf4j.LoggerFactory;
  * This class depends on an AdapterStore. Since an AdapterStore is not
  * Serializable, the dependency is transient requiring initialization after
  * serialization
- * {@link AdapterBasedPartitioner#initialize(ConfigurationWrapper)
+ * {@link AdapterBasedPartitioner#initialize(ConfigurationWrapper)
  * 
  * 
  */
@@ -131,40 +129,37 @@ public class AdapterBasedPartitioner extends
 
 	@Override
 	public void initialize(
-			final ConfigurationWrapper context )
+			final JobContext context,
+			final Class<?> scope )
 			throws IOException {
-		super.initialize(context);
-		try {
-			adapterStore = new SerializableAdapterStore(
-					context.getInstance(
-							CommonParameters.Common.ADAPTER_STORE_FACTORY,
-							this.getClass(),
-							AdapterStoreFactory.class,
-							AccumuloAdapterStoreFactory.class).getAdapterStore(
-							context));
-		}
-		catch (InstantiationException | IllegalAccessException e) {
-			throw new IOException(
-					"Cannot instantiate and connect to the adapter data store",
-					e);
-		}
+		super.initialize(
+				context,
+				scope);
+		adapterStore = new SerializableAdapterStore(
+				((PersistableAdapterStore) StoreParameters.StoreParam.ADAPTER_STORE.getHelper().getValue(
+						context,
+						scope,
+						null)).getCliOptions().createStore());
+
 		init();
 	}
 
 	@Override
 	public void setup(
 			final PropertyManagement runTimeProperties,
+			final Class<?> scope,
 			final Configuration configuration ) {
 		super.setup(
 				runTimeProperties,
+				scope,
 				configuration);
-		RunnerUtils.setParameter(
+		final ParameterEnum[] params = new ParameterEnum[] {
+			StoreParameters.StoreParam.ADAPTER_STORE
+		};
+		runTimeProperties.setConfig(
+				params,
 				configuration,
-				getClass(),
-				runTimeProperties,
-				new ParameterEnum[] {
-					CommonParameters.Common.ADAPTER_STORE_FACTORY
-				});
+				scope);
 	}
 
 	protected MultiDimensionalNumericData[] querySet(

@@ -77,13 +77,4 @@ public interface NumericDimensionDefinition extends
 	 */
 	public NumericData getFullRange();
 
-	/**
-	 * Check whether another dimension definition is compatible with this one
-	 * 
-	 * @return a flag indicating whether another dimension definition is
-	 *         compatible with this one
-	 */
-	public boolean isCompatibleDefinition(
-			NumericDimensionDefinition otherDimensionDefinition );
-
 }

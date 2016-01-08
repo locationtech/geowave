@@ -1,6 +1,7 @@
 package mil.nga.giat.geowave.core.geotime.store.query;
 
 import java.nio.ByteBuffer;
+import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -141,7 +142,7 @@ public class TemporalConstraints
 	}
 
 	public List<TemporalRange> getRanges() {
-		return constraints;
+		return constraints == null ? Collections.<TemporalRange> emptyList() : constraints;
 	}
 
 	public static final TemporalConstraints findIntersections(

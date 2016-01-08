@@ -25,6 +25,16 @@
 			<groupId>com.google.code.findbugs</groupId>
 			<artifactId>annotations</artifactId>
 		</dependency>
+		  <dependency>
+        	<groupId>org.apache.lucene</groupId>
+        	<artifactId>lucene-core</artifactId>
+        	<version>5.0.0</version>
+        </dependency>
+        <dependency>
+        	<groupId>org.apache.lucene</groupId>
+        	<artifactId>lucene-analyzers-common</artifactId>
+        	<version>5.0.0</version>
+        </dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>

@@ -20,9 +20,25 @@ public class LatitudeField extends
 	}
 
 	public LatitudeField(
+			final boolean useHalfRange ) {
+		this(
+				useHalfRange,
+				GeometryAdapter.DEFAULT_GEOMETRY_FIELD_ID);
+	}
+
+	public LatitudeField(
 			final ByteArrayId fieldId ) {
 		this(
-				new LatitudeDefinition(),
+				false,
+				fieldId);
+	}
+
+	public LatitudeField(
+			final boolean useHalfRange,
+			final ByteArrayId fieldId ) {
+		this(
+				new LatitudeDefinition(
+						useHalfRange),
 				fieldId);
 	}
 

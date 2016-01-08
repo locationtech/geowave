@@ -13,12 +13,11 @@ import mil.nga.giat.geowave.analytic.PropertyManagement;
 import mil.nga.giat.geowave.analytic.clustering.CentroidManager;
 import mil.nga.giat.geowave.analytic.clustering.LongCentroid;
 import mil.nga.giat.geowave.analytic.clustering.exception.MatchingCentroidNotFoundException;
-import mil.nga.giat.geowave.analytic.mapreduce.kmeans.runner.StripWeakCentroidsRunner;
 import mil.nga.giat.geowave.analytic.mapreduce.kmeans.runner.StripWeakCentroidsRunner.MaxChangeBreakStrategy;
 import mil.nga.giat.geowave.analytic.mapreduce.kmeans.runner.StripWeakCentroidsRunner.StableChangeBreakStrategy;
 import mil.nga.giat.geowave.analytic.mapreduce.kmeans.runner.StripWeakCentroidsRunner.TailMaxBreakStrategy;
 import mil.nga.giat.geowave.analytic.mapreduce.kmeans.runner.StripWeakCentroidsRunner.TailStableChangeBreakStrategy;
-import mil.nga.giat.geowave.core.geotime.IndexType;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.StringUtils;
 
@@ -274,8 +273,7 @@ public class StripWeakCentroidsRunnerTest
 
 				@Override
 				public ByteArrayId getIndexId() {
-					return new ByteArrayId(
-							StringUtils.stringToBinary(IndexType.SPATIAL_VECTOR.getDefaultId()));
+					return new SpatialDimensionalityTypeProvider().createPrimaryIndex().getId();
 				}
 
 				@Override
@@ -412,8 +410,7 @@ public class StripWeakCentroidsRunnerTest
 
 				@Override
 				public ByteArrayId getIndexId() {
-					return new ByteArrayId(
-							StringUtils.stringToBinary(IndexType.SPATIAL_VECTOR.getDefaultId()));
+					return new SpatialDimensionalityTypeProvider().createPrimaryIndex().getId();
 				}
 
 				@Override

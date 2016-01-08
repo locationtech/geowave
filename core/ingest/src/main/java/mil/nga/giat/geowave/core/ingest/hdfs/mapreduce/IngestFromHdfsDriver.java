@@ -6,12 +6,13 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import mil.nga.giat.geowave.core.cli.CommandLineResult;
+import mil.nga.giat.geowave.core.cli.DataStoreCommandLineOptions;
 import mil.nga.giat.geowave.core.ingest.AbstractIngestCommandLineDriver;
 import mil.nga.giat.geowave.core.ingest.IngestCommandLineOptions;
 import mil.nga.giat.geowave.core.ingest.IngestFormatPluginProviderSpi;
 import mil.nga.giat.geowave.core.ingest.hdfs.HdfsCommandLineOptions;
-import mil.nga.giat.geowave.datastore.accumulo.AccumuloCommandLineOptions;
-import mil.nga.giat.geowave.datastore.accumulo.mapreduce.GeoWaveConfiguratorBase;
+import mil.nga.giat.geowave.mapreduce.GeoWaveConfiguratorBase;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Options;
@@ -33,7 +34,7 @@ public class IngestFromHdfsDriver extends
 	private final static int NUM_CONCURRENT_JOBS = 5;
 	private final static int DAYS_TO_AWAIT_COMPLETION = 999;
 	private HdfsCommandLineOptions hdfsOptions;
-	private AccumuloCommandLineOptions accumuloOptions;
+	private DataStoreCommandLineOptions dataStoreOptions;
 	private IngestCommandLineOptions ingestOptions;
 	private MapReduceCommandLineOptions mapReduceOptions;
 	private static ExecutorService singletonExecutor;
@@ -52,7 +53,7 @@ public class IngestFromHdfsDriver extends
 	}
 
 	@Override
-	protected void runInternal(
+	protected boolean runInternal(
 			final String[] args,
 			final List<IngestFormatPluginProviderSpi<?, ?>> pluginProviders ) {
 
@@ -67,7 +68,7 @@ public class IngestFromHdfsDriver extends
 			final FileSystem fs = FileSystem.get(conf);
 			if (!fs.exists(hdfsBaseDirectory)) {
 				LOGGER.fatal("HDFS base directory " + hdfsBaseDirectory + " does not exist");
-				return;
+				return false;
 			}
 			for (final IngestFormatPluginProviderSpi<?, ?> pluginProvider : pluginProviders) {
 				// if an appropriate sequence file does not exist, continue
@@ -89,10 +90,7 @@ public class IngestFromHdfsDriver extends
 						LOGGER.warn("Plugin provider for ingest type '" + pluginProvider.getIngestFormatName() + "' does not support ingest from HDFS");
 						continue;
 					}
-					if (!ingestOptions.isSupported(ingestFromHdfsPlugin.getSupportedIndices())) {
-						LOGGER.warn("HDFS file ingest plugin for ingest type '" + pluginProvider.getIngestFormatName() + "' does not support dimensionality '" + ingestOptions.getDimensionalityType() + "'");
-						continue;
-					}
+
 				}
 				catch (final UnsupportedOperationException e) {
 					LOGGER.warn(
@@ -130,8 +128,14 @@ public class IngestFromHdfsDriver extends
 
 				AbstractMapReduceIngest jobRunner = null;
 				if (ingestWithReducer != null) {
+					if (!ingestOptions.isSupported(
+							ingestWithReducer,
+							args)) {
+						LOGGER.warn("HDFS file ingest plugin for ingest type '" + pluginProvider.getIngestFormatName() + "' does not support dimensionality '" + ingestOptions.getDimensionalityType() + "'");
+						continue;
+					}
 					jobRunner = new IngestWithReducerJobRunner(
-							accumuloOptions,
+							dataStoreOptions,
 							ingestOptions,
 							inputFile,
 							pluginProvider.getIngestFormatName(),
@@ -140,8 +144,14 @@ public class IngestFromHdfsDriver extends
 
 				}
 				else if (ingestWithMapper != null) {
+					if (!ingestOptions.isSupported(
+							ingestWithMapper,
+							args)) {
+						LOGGER.warn("HDFS file ingest plugin for ingest type '" + pluginProvider.getIngestFormatName() + "' does not support dimensionality '" + ingestOptions.getDimensionalityType() + "'");
+						continue;
+					}
 					jobRunner = new IngestWithMapperJobRunner(
-							accumuloOptions,
+							dataStoreOptions,
 							ingestOptions,
 							inputFile,
 							pluginProvider.getIngestFormatName(),
@@ -160,6 +170,7 @@ public class IngestFromHdfsDriver extends
 						LOGGER.warn(
 								"Error running ingest job",
 								e);
+						return false;
 					}
 				}
 			}
@@ -168,8 +179,10 @@ public class IngestFromHdfsDriver extends
 			LOGGER.warn(
 					"Error in accessing HDFS file system",
 					e);
+			return false;
 		}
 		finally {
+
 			final ExecutorService executorService = getSingletonExecutorService();
 			executorService.shutdown();
 			// do we want to just exit once our jobs are submitted or wait?
@@ -186,6 +199,8 @@ public class IngestFromHdfsDriver extends
 						e);
 			}
 		}
+		// we really do not know if the service failed...bummer
+		return true;
 	}
 
 	private void runJob(
@@ -218,9 +233,16 @@ public class IngestFromHdfsDriver extends
 
 	@Override
 	protected void parseOptionsInternal(
-			final CommandLine commandLine )
+			final Options options,
+			CommandLine commandLine )
 			throws ParseException {
-		accumuloOptions = AccumuloCommandLineOptions.parseOptions(commandLine);
+		final CommandLineResult<DataStoreCommandLineOptions> dataStoreOptionsResult = DataStoreCommandLineOptions.parseOptions(
+				options,
+				commandLine);
+		dataStoreOptions = dataStoreOptionsResult.getResult();
+		if (dataStoreOptionsResult.isCommandLineChange()) {
+			commandLine = dataStoreOptionsResult.getCommandLine();
+		}
 		ingestOptions = IngestCommandLineOptions.parseOptions(commandLine);
 		hdfsOptions = HdfsCommandLineOptions.parseOptions(commandLine);
 		mapReduceOptions = MapReduceCommandLineOptions.parseOptions(commandLine);
@@ -229,7 +251,7 @@ public class IngestFromHdfsDriver extends
 	@Override
 	protected void applyOptionsInternal(
 			final Options allOptions ) {
-		AccumuloCommandLineOptions.applyOptions(allOptions);
+		DataStoreCommandLineOptions.applyOptions(allOptions);
 		IngestCommandLineOptions.applyOptions(allOptions);
 		HdfsCommandLineOptions.applyOptions(allOptions);
 		MapReduceCommandLineOptions.applyOptions(allOptions);

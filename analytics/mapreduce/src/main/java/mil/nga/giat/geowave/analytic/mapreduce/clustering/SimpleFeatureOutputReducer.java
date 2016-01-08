@@ -6,17 +6,16 @@ import java.util.UUID;
 
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import mil.nga.giat.geowave.analytic.AnalyticFeature;
-import mil.nga.giat.geowave.analytic.ConfigurationWrapper;
+import mil.nga.giat.geowave.analytic.ScopedJobConfiguration;
 import mil.nga.giat.geowave.analytic.clustering.ClusteringUtils;
 import mil.nga.giat.geowave.analytic.extract.DimensionExtractor;
 import mil.nga.giat.geowave.analytic.extract.EmptyDimensionExtractor;
-import mil.nga.giat.geowave.analytic.mapreduce.JobContextConfigurationWrapper;
 import mil.nga.giat.geowave.analytic.param.ExtractParameters;
 import mil.nga.giat.geowave.analytic.param.GlobalParameters;
 import mil.nga.giat.geowave.core.index.StringUtils;
-import mil.nga.giat.geowave.datastore.accumulo.mapreduce.GeoWaveConfiguratorBase;
-import mil.nga.giat.geowave.datastore.accumulo.mapreduce.GeoWaveReducer;
-import mil.nga.giat.geowave.datastore.accumulo.mapreduce.input.GeoWaveInputKey;
+import mil.nga.giat.geowave.mapreduce.GeoWaveConfiguratorBase;
+import mil.nga.giat.geowave.mapreduce.GeoWaveReducer;
+import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
 
 import org.apache.hadoop.io.ObjectWritable;
 import org.apache.hadoop.mapreduce.ReduceContext;
@@ -120,28 +119,25 @@ public class SimpleFeatureOutputReducer extends
 			throws IOException,
 			InterruptedException {
 		super.setup(context);
-		final ConfigurationWrapper config = new JobContextConfigurationWrapper(
-				context);
+		final ScopedJobConfiguration config = new ScopedJobConfiguration(
+				context.getConfiguration(),
+				SimpleFeatureOutputReducer.class);
 
 		outputDataTypeID = config.getString(
 				ExtractParameters.Extract.OUTPUT_DATA_TYPE_ID,
-				SimpleFeatureOutputReducer.class,
 				"reduced_features");
 
 		batchID = config.getString(
 				GlobalParameters.Global.BATCH_ID,
-				SimpleFeatureOutputReducer.class,
 				UUID.randomUUID().toString());
 
 		groupID = config.getString(
 				ExtractParameters.Extract.GROUP_ID,
-				SimpleFeatureOutputReducer.class,
 				UUID.randomUUID().toString());
 
 		try {
 			dimExtractor = config.getInstance(
 					ExtractParameters.Extract.DIMENSION_EXTRACT_CLASS,
-					SimpleFeatureOutputReducer.class,
 					DimensionExtractor.class,
 					EmptyDimensionExtractor.class);
 		}
@@ -162,7 +158,6 @@ public class SimpleFeatureOutputReducer extends
 				dimExtractor.getDimensionNames(),
 				config.getString(
 						ExtractParameters.Extract.DATA_NAMESPACE_URI,
-						SimpleFeatureOutputReducer.class,
 						BasicFeatureTypes.DEFAULT_NAMESPACE),
 				ClusteringUtils.CLUSTERING_CRS);
 

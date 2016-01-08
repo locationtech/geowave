@@ -9,16 +9,14 @@ import java.io.ByteArrayInputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Properties;
-import java.util.Set;
 
-import mil.nga.giat.geowave.analytic.PropertyManagement;
 import mil.nga.giat.geowave.analytic.extract.EmptyDimensionExtractor;
+import mil.nga.giat.geowave.analytic.param.BasicParameterHelper;
 import mil.nga.giat.geowave.analytic.param.ExtractParameters;
-import mil.nga.giat.geowave.analytic.param.GlobalParameters;
-import mil.nga.giat.geowave.analytic.param.ParameterEnum;
 import mil.nga.giat.geowave.analytic.param.InputParameters.Input;
+import mil.nga.giat.geowave.analytic.param.ParameterEnum;
+import mil.nga.giat.geowave.analytic.param.ParameterHelper;
+import mil.nga.giat.geowave.core.cli.CommandLineResult;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
 
@@ -28,7 +26,9 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.io.output.ByteArrayOutputStream;
+import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.mapreduce.JobContext;
 import org.junit.Test;
 
 import com.vividsolutions.jts.geom.Coordinate;
@@ -44,7 +44,7 @@ public class PropertyManagementTest
 			throws Exception {
 		final PropertyManagement pm = new PropertyManagement();
 
-		pm.store(
+		pm.storeAll(
 				new ParameterEnum[] {
 					ExtractParameters.Extract.DATA_NAMESPACE_URI
 				},
@@ -59,7 +59,7 @@ public class PropertyManagementTest
 			throws Exception {
 		final PropertyManagement pm = new PropertyManagement();
 
-		pm.store(
+		pm.storeAll(
 				new ParameterEnum[] {
 					ExtractParameters.Extract.DIMENSION_EXTRACT_CLASS
 				},
@@ -75,7 +75,7 @@ public class PropertyManagementTest
 	@Test(expected = IllegalArgumentException.class)
 	public void testClassFailure() {
 		final PropertyManagement pm = new PropertyManagement();
-		pm.store(
+		pm.storeAll(
 
 				new ParameterEnum[] {
 					ExtractParameters.Extract.DIMENSION_EXTRACT_CLASS
@@ -152,26 +152,6 @@ public class PropertyManagementTest
 				pm.getPropertyAsPath(Input.HDFS_INPUT_PATH));
 	}
 
-	@Test
-	public void testOption() {
-		final Set<Option> options = new HashSet<Option>();
-
-		GlobalParameters.fillOptions(
-				options,
-				new GlobalParameters.Global[] {
-					GlobalParameters.Global.ACCUMULO_INSTANCE
-				});
-		assertEquals(
-				4,
-				options.size());
-		PropertyManagement.removeOption(
-				options,
-				GlobalParameters.Global.ACCUMULO_INSTANCE);
-		assertEquals(
-				3,
-				options.size());
-	}
-
 	public static class NonSerializableExample
 	{
 		int v = 1;
@@ -184,13 +164,60 @@ public class PropertyManagementTest
 		ARG1;
 
 		@Override
-		public Class<?> getBaseClass() {
-			return NonSerializableExample.class;
+		public Enum<?> self() {
+			return this;
 		}
 
 		@Override
-		public Enum<?> self() {
-			return this;
+		public ParameterHelper getHelper() {
+			return new ParameterHelper<NonSerializableExample>() {
+
+				@Override
+				public Class<NonSerializableExample> getBaseClass() {
+					return NonSerializableExample.class;
+				}
+
+				@Override
+				public Option[] getOptions() {
+					return null;
+				}
+
+				@Override
+				public CommandLineResult<NonSerializableExample> getValue(
+						final Options allOptions,
+						final CommandLine commandline )
+						throws ParseException {
+					return new CommandLineResult<NonSerializableExample>(
+							null);
+				}
+
+				@Override
+				public void setValue(
+						final Configuration config,
+						final Class<?> scope,
+						final NonSerializableExample value ) {}
+
+				@Override
+				public NonSerializableExample getValue(
+						final JobContext context,
+						final Class<?> scope,
+						final NonSerializableExample defaultValue ) {
+					return null;
+				}
+
+				@Override
+				public NonSerializableExample getValue(
+						final PropertyManagement propertyManagement ) {
+					return null;
+				}
+
+				@Override
+				public void setValue(
+						final PropertyManagement propertyManagement,
+						final NonSerializableExample value ) {
+
+				}
+			};
 		}
 	}
 
@@ -200,7 +227,7 @@ public class PropertyManagementTest
 		final PropertyManagement.PropertyConverter<NonSerializableExample> converter = new PropertyManagement.PropertyConverter<NonSerializableExample>() {
 
 			/**
-			 * 
+			 *
 			 */
 			private static final long serialVersionUID = 1L;
 
@@ -280,17 +307,39 @@ public class PropertyManagementTest
 			implements
 			ParameterEnum {
 
-		BOOLEAN_ARG1,
-		BOOLEAN_ARG2;
+		BOOLEAN_ARG1(
+				Boolean.class,
+				"mi",
+				"test id",
+				false),
+		BOOLEAN_ARG2(
+				Boolean.class,
+				"rd",
+				"test id",
+				false);
+		private final ParameterHelper<Object> helper;
 
-		@Override
-		public Class<?> getBaseClass() {
-			return Boolean.class;
+		MyLocalBoolEnum(
+				final Class baseClass,
+				final String name,
+				final String description,
+				final boolean hasArg ) {
+			helper = new BasicParameterHelper(
+					this,
+					baseClass,
+					name,
+					description,
+					hasArg);
 		}
 
 		@Override
 		public Enum<?> self() {
 			return this;
+		}
+
+		@Override
+		public ParameterHelper getHelper() {
+			return helper;
 		}
 	}
 
@@ -298,31 +347,37 @@ public class PropertyManagementTest
 	public void testCommandLine()
 			throws ParseException {
 		final PropertyManagement pm = new PropertyManagement();
+		// PropertyManagement.fillOptions(
+		// optionSet,
+		final ParameterEnum<?>[] params = new ParameterEnum<?>[] {
+			ExtractParameters.Extract.ADAPTER_ID,
+			MyLocalBoolEnum.BOOLEAN_ARG1,
+			MyLocalBoolEnum.BOOLEAN_ARG2
+		};
+
 		final Options options = new Options();
-		options.addOption(PropertyManagement.newOption(
-				ExtractParameters.Extract.ADAPTER_ID,
-				"id",
-				"test id",
-				true));
-		options.addOption(PropertyManagement.newOption(
-				MyLocalBoolEnum.BOOLEAN_ARG1,
-				"mi",
-				"test id",
-				false));
-		options.addOption(PropertyManagement.newOption(
-				MyLocalBoolEnum.BOOLEAN_ARG2,
-				"rd",
-				"test id",
-				false));
+		for (final ParameterEnum<?> param : params) {
+			final Option[] opts = param.getHelper().getOptions();
+			for (final Option opt : opts) {
+				options.addOption(opt);
+			}
+		}
 		final BasicParser parser = new BasicParser();
 		final CommandLine commandLine = parser.parse(
 				options,
 				new String[] {
-					"-id",
+					"-eit",
 					"y",
 					"-rd"
 				});
-		pm.buildFromOptions(commandLine);
+
+		for (final ParameterEnum<?> param : params) {
+			((ParameterEnum<Object>) param).getHelper().setValue(
+					pm,
+					param.getHelper().getValue(
+							options,
+							commandLine).getResult());
+		}
 
 		assertTrue(pm.getPropertyAsBoolean(
 				MyLocalBoolEnum.BOOLEAN_ARG2,
@@ -364,11 +419,9 @@ public class PropertyManagementTest
 		final Path path1 = new Path(
 				"http://java.sun.com/j2se/1.3/foo");
 
-		final Properties props = new Properties();
-		props.put(
-				"input-hdfs-input-path",
-				path1.toUri().toString());
-		pm.fromProperties(props);
+		pm.store(
+				Input.HDFS_INPUT_PATH,
+				path1);
 		final Path path2 = pm.getPropertyAsPath(Input.HDFS_INPUT_PATH);
 		assertEquals(
 				path1,

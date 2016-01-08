@@ -117,8 +117,9 @@ public class ZOrderSFC implements
 	 * {@inheritDoc}
 	 */
 	@Override
-	public RangeDecomposition decomposeQuery(
+	public RangeDecomposition decomposeRange(
 			final MultiDimensionalNumericData query,
+			final boolean overInclusiveOnEdge,
 			final int maxFilteredIndexedRanges ) {
 		// TODO: Because the research and benchmarking show Hilbert to
 		// outperform Z-Order
@@ -154,10 +155,11 @@ public class ZOrderSFC implements
 	 * {@inheritDoc}
 	 */
 	@Override
-	public RangeDecomposition decomposeQueryFully(
+	public RangeDecomposition decomposeRangeFully(
 			final MultiDimensionalNumericData query ) {
-		return decomposeQuery(
+		return decomposeRange(
 				query,
+				true,
 				-1);
 	}
 

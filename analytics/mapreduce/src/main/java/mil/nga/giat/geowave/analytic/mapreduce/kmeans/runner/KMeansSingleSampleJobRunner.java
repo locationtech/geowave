@@ -1,5 +1,8 @@
 package mil.nga.giat.geowave.analytic.mapreduce.kmeans.runner;
 
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -19,14 +22,15 @@ import mil.nga.giat.geowave.analytic.param.CommonParameters;
 import mil.nga.giat.geowave.analytic.param.FormatConfiguration;
 import mil.nga.giat.geowave.analytic.param.GlobalParameters;
 import mil.nga.giat.geowave.analytic.param.MapReduceParameters;
+import mil.nga.giat.geowave.analytic.param.ParameterEnum;
 import mil.nga.giat.geowave.analytic.param.SampleParameters;
+import mil.nga.giat.geowave.analytic.param.StoreParameters;
 
-import org.apache.commons.cli.Option;
 import org.apache.hadoop.conf.Configuration;
 
 /**
- * 
- * 
+ *
+ *
  */
 public class KMeansSingleSampleJobRunner<T> extends
 		MapReduceJobController implements
@@ -112,64 +116,32 @@ public class KMeansSingleSampleJobRunner<T> extends
 	}
 
 	@Override
-	public void fillOptions(
-			final Set<Option> options ) {
-		kmeansJobRunner.fillOptions(options);
-		ClusteringParameters.fillOptions(
-				options,
-				new ClusteringParameters.Clustering[] {
-					ClusteringParameters.Clustering.MAX_REDUCER_COUNT
-				});
-		SampleParameters.fillOptions(
-				options,
-				new SampleParameters.Sample[] {
-					SampleParameters.Sample.SAMPLE_SIZE,
-					SampleParameters.Sample.SAMPLE_RANK_FUNCTION
-				});
-		CentroidParameters.fillOptions(
-				options,
-				new CentroidParameters.Centroid[] {
-					CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS,
-					CentroidParameters.Centroid.INDEX_ID,
-					CentroidParameters.Centroid.DATA_TYPE_ID,
-					CentroidParameters.Centroid.DATA_NAMESPACE_URI,
-					CentroidParameters.Centroid.EXTRACTOR_CLASS,
-				});
-		CommonParameters.fillOptions(
-				options,
-				new CommonParameters.Common[] {
-					CommonParameters.Common.DISTANCE_FUNCTION_CLASS,
-					CommonParameters.Common.DIMENSION_EXTRACT_CLASS
-				});
-		GlobalParameters.fillOptions(
-				options,
-				new GlobalParameters.Global[] {
-					GlobalParameters.Global.ZOOKEEKER,
-					GlobalParameters.Global.ACCUMULO_INSTANCE,
-					GlobalParameters.Global.ACCUMULO_PASSWORD,
-					GlobalParameters.Global.ACCUMULO_USER,
-					GlobalParameters.Global.ACCUMULO_NAMESPACE,
-					GlobalParameters.Global.BATCH_ID
-				});
-		MapReduceParameters.fillOptions(options);
-		ClusteringParameters.fillOptions(
-				options,
-				new ClusteringParameters.Clustering[] {
-					ClusteringParameters.Clustering.MAX_REDUCER_COUNT
-				});
-
-		NestedGroupCentroidAssignment.fillOptions(options);
+	public Collection<ParameterEnum<?>> getParameters() {
+		final Set<ParameterEnum<?>> params = new HashSet<ParameterEnum<?>>();
+		params.addAll(kmeansJobRunner.getParameters());
+		params.addAll(Arrays.asList(new ParameterEnum<?>[] {
+			ClusteringParameters.Clustering.MAX_REDUCER_COUNT,
+			SampleParameters.Sample.SAMPLE_SIZE,
+			SampleParameters.Sample.SAMPLE_RANK_FUNCTION,
+			CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS,
+			CentroidParameters.Centroid.INDEX_ID,
+			CentroidParameters.Centroid.DATA_TYPE_ID,
+			CentroidParameters.Centroid.DATA_NAMESPACE_URI,
+			CentroidParameters.Centroid.EXTRACTOR_CLASS,
+			CommonParameters.Common.DISTANCE_FUNCTION_CLASS,
+			CommonParameters.Common.DIMENSION_EXTRACT_CLASS,
+			StoreParameters.StoreParam.DATA_STORE,
+			GlobalParameters.Global.BATCH_ID,
+			ClusteringParameters.Clustering.MAX_REDUCER_COUNT
+		}));
+		params.addAll(MapReduceParameters.getParameters());
+		params.addAll(NestedGroupCentroidAssignment.getParameters());
 
 		// override
-		PropertyManagement.removeOption(
-				options,
-				CentroidParameters.Centroid.ZOOM_LEVEL);
-		PropertyManagement.removeOption(
-				options,
-				SampleParameters.Sample.DATA_TYPE_ID);
-		PropertyManagement.removeOption(
-				options,
-				SampleParameters.Sample.INDEX_ID);
+		params.remove(CentroidParameters.Centroid.ZOOM_LEVEL);
+		params.remove(SampleParameters.Sample.DATA_TYPE_ID);
+		params.remove(SampleParameters.Sample.INDEX_ID);
+		return params;
 	}
 
 }

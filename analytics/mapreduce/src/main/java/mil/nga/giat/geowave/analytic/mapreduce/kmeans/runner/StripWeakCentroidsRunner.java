@@ -10,12 +10,10 @@ import java.util.List;
 import mil.nga.giat.geowave.analytic.AnalyticItemWrapper;
 import mil.nga.giat.geowave.analytic.PropertyManagement;
 import mil.nga.giat.geowave.analytic.clustering.CentroidManager;
-import mil.nga.giat.geowave.analytic.clustering.CentroidManagerGeoWave;
 import mil.nga.giat.geowave.analytic.clustering.CentroidManager.CentroidProcessingFn;
+import mil.nga.giat.geowave.analytic.clustering.CentroidManagerGeoWave;
 import mil.nga.giat.geowave.analytic.mapreduce.MapReduceJobRunner;
 
-import org.apache.accumulo.core.client.AccumuloException;
-import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.apache.commons.math3.stat.descriptive.moment.StandardDeviation;
 import org.apache.hadoop.conf.Configuration;
 import org.slf4j.Logger;
@@ -70,14 +68,8 @@ public class StripWeakCentroidsRunner<T> implements
 			final Configuration config,
 			final PropertyManagement runTimeProperties )
 			throws IOException {
-		try {
-			return new CentroidManagerGeoWave<T>(
-					runTimeProperties);
-		}
-		catch (AccumuloException | AccumuloSecurityException e) {
-			throw new IOException(
-					e);
-		}
+		return new CentroidManagerGeoWave<T>(
+				runTimeProperties);
 	}
 
 	@Override

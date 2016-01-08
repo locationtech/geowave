@@ -114,7 +114,8 @@ public interface HilbertSFCOperations
 			SFCDimensionDefinition[] dimensionDefinitions,
 			int totalPrecision,
 			int maxFilteredIndexedRanges,
-			boolean removeVacuum );
+			boolean removeVacuum,
+			boolean overInclusiveOnEdge );
 
 	/**
 	 * Get a quick (minimal complexity calculation) estimate of the total row

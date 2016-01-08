@@ -1,10 +1,7 @@
 package mil.nga.giat.geowave.analytic.param;
 
-import java.util.Set;
-
-import mil.nga.giat.geowave.analytic.PropertyManagement;
-
-import org.apache.commons.cli.Option;
+import java.util.Arrays;
+import java.util.Collection;
 
 public class MapReduceParameters
 {
@@ -13,67 +10,64 @@ public class MapReduceParameters
 			implements
 			ParameterEnum {
 		CONFIG_FILE(
-				String.class),
+				String.class,
+				"conf",
+				"MapReduce Configuration",
+				true),
 		HDFS_HOST_PORT(
-				String.class),
+				String.class,
+				"hdfs",
+				"HDFS hostname and port in the format hostname:port",
+				true),
 		HDFS_BASE_DIR(
-				String.class),
+				String.class,
+				"hdfsbase",
+				"Fully qualified path to the base directory in hdfs",
+				true),
 		YARN_RESOURCE_MANAGER(
-				String.class),
+				String.class,
+				"resourceman",
+				"Yarn resource manager hostname and port in the format hostname:port",
+				true),
 		JOBTRACKER_HOST_PORT(
-				String.class);
+				String.class,
+				"jobtracker",
+				"Hadoop job tracker hostname and port in the format hostname:port",
+				true);
 
-		private final Class<?> baseClass;
+		private final ParameterHelper<?> helper;
 
-		MRConfig(
-				final Class<?> baseClass ) {
-			this.baseClass = baseClass;
-		}
-
-		@Override
-		public Class<?> getBaseClass() {
-			return baseClass;
+		private MRConfig(
+				final Class baseClass,
+				final String name,
+				final String description,
+				final boolean hasArg ) {
+			helper = new BasicParameterHelper(
+					this,
+					baseClass,
+					name,
+					description,
+					hasArg);
 		}
 
 		@Override
 		public Enum<?> self() {
 			return this;
 		}
+
+		@Override
+		public ParameterHelper<?> getHelper() {
+			return helper;
+		}
 	}
 
-	public static final void fillOptions(
-			final Set<Option> options ) {
-
-		options.add(PropertyManagement.newOption(
-				MRConfig.CONFIG_FILE,
-				"conf",
-				"MapReduce Configuration",
-				true));
-
-		options.add(PropertyManagement.newOption(
-				MRConfig.HDFS_HOST_PORT,
-				"hdfs",
-				"HDFS hostname and port in the format hostname:port",
-				true));
-
-		options.add(PropertyManagement.newOption(
-				MRConfig.HDFS_BASE_DIR,
-				"hdfsbase",
-				"Fully qualified path to the base directory in hdfs",
-				true));
-
-		options.add(PropertyManagement.newOption(
-				MRConfig.JOBTRACKER_HOST_PORT,
-				"jobtracker",
-				"Hadoop job tracker hostname and port in the format hostname:port",
-				true));
-
-		options.add(PropertyManagement.newOption(
-				MRConfig.YARN_RESOURCE_MANAGER,
-				"resourceman",
-				"Yarn resource manager hostname and port in the format hostname:port",
-				true));
-
+	public static final Collection<ParameterEnum<?>> getParameters() {
+		return Arrays.asList(new ParameterEnum<?>[] {
+			MRConfig.CONFIG_FILE,
+			MRConfig.HDFS_BASE_DIR,
+			MRConfig.HDFS_HOST_PORT,
+			MRConfig.JOBTRACKER_HOST_PORT,
+			MRConfig.YARN_RESOURCE_MANAGER
+		});
 	}
-
 }

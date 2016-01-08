@@ -1,12 +1,12 @@
 package mil.nga.giat.geowave.analytic.mapreduce.dbscan;
 
-import java.util.Set;
+import java.util.Arrays;
+import java.util.Collection;
 
 import mil.nga.giat.geowave.analytic.AdapterWithObjectWritable;
 import mil.nga.giat.geowave.analytic.AnalyticFeature;
 import mil.nga.giat.geowave.analytic.Projection;
 import mil.nga.giat.geowave.analytic.PropertyManagement;
-import mil.nga.giat.geowave.analytic.RunnerUtils;
 import mil.nga.giat.geowave.analytic.SimpleFeatureProjection;
 import mil.nga.giat.geowave.analytic.clustering.ClusteringUtils;
 import mil.nga.giat.geowave.analytic.mapreduce.nn.NNJobRunner;
@@ -19,12 +19,10 @@ import mil.nga.giat.geowave.analytic.param.GlobalParameters.Global;
 import mil.nga.giat.geowave.analytic.param.HullParameters;
 import mil.nga.giat.geowave.analytic.param.HullParameters.Hull;
 import mil.nga.giat.geowave.analytic.param.ParameterEnum;
-import mil.nga.giat.geowave.analytic.param.PartitionParameters;
 import mil.nga.giat.geowave.analytic.param.PartitionParameters.Partition;
-import mil.nga.giat.geowave.datastore.accumulo.mapreduce.JobContextAdapterStore;
-import mil.nga.giat.geowave.datastore.accumulo.mapreduce.input.GeoWaveInputKey;
+import mil.nga.giat.geowave.mapreduce.JobContextAdapterStore;
+import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
 
-import org.apache.commons.cli.Option;
 import org.apache.hadoop.conf.Configurable;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.io.ObjectWritable;
@@ -83,16 +81,16 @@ public class DBScanJobRunner extends
 
 		Class<? extends CompressionCodec> bestCodecClass = org.apache.hadoop.io.compress.DefaultCodec.class;
 		int rank = 0;
-		for (Class<? extends CompressionCodec> codecClass : CompressionCodecFactory.getCodecClasses(conf)) {
+		for (final Class<? extends CompressionCodec> codecClass : CompressionCodecFactory.getCodecClasses(conf)) {
 			int r = 1;
-			for (String codecs : CodecsRank) {
+			for (final String codecs : CodecsRank) {
 				if (codecClass.getName().contains(
 						codecs)) {
 					break;
 				}
 				r++;
 			}
-			if (rank < r && r <= CodecsRank.length) {
+			if ((rank < r) && (r <= CodecsRank.length)) {
 				try {
 					final CompressionCodec codec = codecClass.newInstance();
 					if (Configurable.class.isAssignableFrom(codecClass)) {
@@ -103,7 +101,7 @@ public class DBScanJobRunner extends
 					bestCodecClass = codecClass;
 					rank = r;
 				}
-				catch (Throwable ex) {
+				catch (final Throwable ex) {
 					// occurs when codec is not installed.
 				}
 			}
@@ -123,12 +121,12 @@ public class DBScanJobRunner extends
 	}
 
 	public void setMemoryInMB(
-			long memInMB ) {
+			final long memInMB ) {
 		this.memInMB = memInMB;
 	}
 
 	protected void setFirstIteration(
-			boolean firstIteration ) {
+			final boolean firstIteration ) {
 		this.firstIteration = firstIteration;
 	}
 
@@ -163,12 +161,10 @@ public class DBScanJobRunner extends
 
 		projectionFunction.setup(
 				runTimeProperties,
+				getScope(),
 				config);
 
-		RunnerUtils.setParameter(
-				config,
-				getScope(),
-				runTimeProperties,
+		runTimeProperties.setConfig(
 				new ParameterEnum[] {
 					HullParameters.Hull.PROJECTION_CLASS,
 					GlobalParameters.Global.BATCH_ID,
@@ -177,8 +173,11 @@ public class DBScanJobRunner extends
 					HullParameters.Hull.ITERATION,
 					HullParameters.Hull.DATA_TYPE_ID,
 					HullParameters.Hull.DATA_NAMESPACE_URI,
-					ClusteringParameters.Clustering.MINIMUM_SIZE
-				});
+					ClusteringParameters.Clustering.MINIMUM_SIZE,
+					Partition.MAX_MEMBER_SELECTION
+				},
+				config,
+				getScope());
 
 		return super.run(
 				config,
@@ -187,39 +186,21 @@ public class DBScanJobRunner extends
 	}
 
 	@Override
-	public void fillOptions(
-			final Set<Option> options ) {
-		super.fillOptions(options);
-
-		PartitionParameters.fillOptions(
-				options,
-				new PartitionParameters.Partition[] {
-					Partition.PARTITIONER_CLASS,
-					Partition.PARTITION_DISTANCE,
-					Partition.MAX_MEMBER_SELECTION
-				});
-
-		GlobalParameters.fillOptions(
-				options,
-				new GlobalParameters.Global[] {
-					Global.BATCH_ID
-				});
-
-		HullParameters.fillOptions(
-				options,
-				new HullParameters.Hull[] {
-					Hull.HULL_BUILDER,
-					Hull.DATA_TYPE_ID,
-					Hull.PROJECTION_CLASS
-				});
-
-		ClusteringParameters.fillOptions(
-				options,
-				new ClusteringParameters.Clustering[] {
-					Clustering.MINIMUM_SIZE,
-					Clustering.GEOMETRIC_DISTANCE_UNIT,
-					Clustering.DISTANCE_THRESHOLDS
-				});
+	public Collection<ParameterEnum<?>> getParameters() {
+		final Collection<ParameterEnum<?>> params = super.getParameters();
+		params.addAll(Arrays.asList(new ParameterEnum<?>[] {
+			Partition.PARTITIONER_CLASS,
+			Partition.PARTITION_DISTANCE,
+			Partition.MAX_MEMBER_SELECTION,
+			Global.BATCH_ID,
+			Hull.HULL_BUILDER,
+			Hull.DATA_TYPE_ID,
+			Hull.PROJECTION_CLASS,
+			Clustering.MINIMUM_SIZE,
+			Clustering.GEOMETRIC_DISTANCE_UNIT,
+			Clustering.DISTANCE_THRESHOLDS
+		}));
+		return params;
 	}
 
 }

@@ -1,23 +1,22 @@
 package mil.nga.giat.geowave.core.geotime.store.dimension;
 
-import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
-import mil.nga.giat.geowave.core.store.data.field.FieldReader;
-import mil.nga.giat.geowave.core.store.data.field.FieldWriter;
 import mil.nga.giat.geowave.core.store.data.field.ArrayReader.VariableSizeObjectArrayReader;
 import mil.nga.giat.geowave.core.store.data.field.ArrayWriter.VariableSizeObjectArrayWriter;
+import mil.nga.giat.geowave.core.store.data.field.FieldReader;
+import mil.nga.giat.geowave.core.store.data.field.FieldWriter;
 import mil.nga.giat.geowave.core.store.dimension.ArrayAdapter;
 import mil.nga.giat.geowave.core.store.dimension.ArrayField;
 import mil.nga.giat.geowave.core.store.dimension.ArrayWrapper;
-import mil.nga.giat.geowave.core.store.dimension.DimensionField;
+import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;
 
 public class SpatialArrayField extends
 		ArrayField<GeometryWrapper> implements
-		DimensionField<ArrayWrapper<GeometryWrapper>>
+		NumericDimensionField<ArrayWrapper<GeometryWrapper>>
 {
 	private ArrayAdapter<GeometryWrapper> adapter;
 
 	public SpatialArrayField(
-			final DimensionField<GeometryWrapper> elementField ) {
+			final NumericDimensionField<GeometryWrapper> elementField ) {
 		super(
 				elementField);
 		adapter = new ArrayAdapter<GeometryWrapper>(
@@ -41,18 +40,12 @@ public class SpatialArrayField extends
 
 	@Override
 	public void fromBinary(
-			byte[] bytes ) {
+			final byte[] bytes ) {
 		super.fromBinary(bytes);
 		adapter = new ArrayAdapter<GeometryWrapper>(
 				new VariableSizeObjectArrayReader(
 						elementField.getReader()),
 				new VariableSizeObjectArrayWriter(
 						elementField.getWriter()));
-	}
-
-	@Override
-	public boolean isCompatibleDefinition(
-			NumericDimensionDefinition otherDimensionDefinition ) {
-		return equals(otherDimensionDefinition);
 	}
 }

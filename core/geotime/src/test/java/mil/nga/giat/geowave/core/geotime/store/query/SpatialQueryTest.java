@@ -1,9 +1,7 @@
 package mil.nga.giat.geowave.core.geotime.store.query;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import mil.nga.giat.geowave.core.geotime.IndexType;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import mil.nga.giat.geowave.core.geotime.store.dimension.GeometryAdapter;
 import mil.nga.giat.geowave.core.geotime.store.dimension.GeometryWrapper;
 import mil.nga.giat.geowave.core.geotime.store.filter.SpatialQueryFilter.CompareOperation;
@@ -12,6 +10,7 @@ import mil.nga.giat.geowave.core.store.data.IndexedPersistenceEncoding;
 import mil.nga.giat.geowave.core.store.data.PersistentDataset;
 import mil.nga.giat.geowave.core.store.data.PersistentValue;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
+import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 
 import org.junit.Test;
@@ -50,8 +49,8 @@ public class SpatialQueryTest
 	}
 
 	private IndexedPersistenceEncoding createData(
-			Coordinate[] coordinates ) {
-		GeometryFactory factory = new GeometryFactory();
+			final Coordinate[] coordinates ) {
+		final GeometryFactory factory = new GeometryFactory();
 		final PersistentDataset<CommonIndexValue> commonData = new PersistentDataset<CommonIndexValue>();
 
 		commonData.addOrUpdateValue(new PersistentValue<CommonIndexValue>(
@@ -67,12 +66,13 @@ public class SpatialQueryTest
 				new ByteArrayId(
 						"1"),
 				1,
-				commonData);
+				commonData,
+				new PersistentDataset<byte[]>());
 	}
 
 	public void performOp(
-			CompareOperation op,
-			boolean[] expectedResults ) {
+			final CompareOperation op,
+			final boolean[] expectedResults ) {
 		final GeometryFactory factory = new GeometryFactory();
 		final SpatialQuery query = new SpatialQuery(
 				factory.createPolygon(new Coordinate[] {
@@ -96,7 +96,7 @@ public class SpatialQueryTest
 		final SpatialQuery queryCopy = new SpatialQuery();
 		queryCopy.fromBinary(query.toBinary());
 
-		IndexedPersistenceEncoding[] data = new IndexedPersistenceEncoding[] {
+		final IndexedPersistenceEncoding[] data = new IndexedPersistenceEncoding[] {
 			createData(new Coordinate[] {
 				new Coordinate(
 						22,
@@ -132,13 +132,17 @@ public class SpatialQueryTest
 		};
 
 		int pos = 0;
-		for (IndexedPersistenceEncoding dataItem : data)
-			for (QueryFilter filter : queryCopy.createFilters(IndexType.SPATIAL_VECTOR.getDefaultIndexModel())) {
+		final CommonIndexModel model = new SpatialDimensionalityTypeProvider().createPrimaryIndex().getIndexModel();
+		for (final IndexedPersistenceEncoding dataItem : data) {
+			for (final QueryFilter filter : queryCopy.createFilters(model)) {
 				assertEquals(
 						"result: " + pos,
 						expectedResults[pos++],
-						filter.accept(dataItem));
+						filter.accept(
+								model,
+								dataItem));
 			}
+		}
 	}
 
 	@Test
