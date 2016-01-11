@@ -1,4 +1,4 @@
-package mil.nga.giat.geowave.cli.scratch;
+package mil.nga.giat.geowave.cli.debug;
 
 import java.io.IOException;
 
@@ -12,11 +12,14 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.geotools.filter.text.cql2.CQLException;
+import org.geotools.filter.text.ecql.ECQL;
+import org.opengis.feature.simple.SimpleFeature;
+import org.opengis.filter.Filter;
 
-public class CQLQuery extends
+public class ClientSideCQLQuery extends
 		AbstractGeoWaveQuery
 {
-	private String cqlStr;
+	private Filter filter;
 
 	@Override
 	protected void applyOptions(
@@ -32,8 +35,14 @@ public class CQLQuery extends
 	@Override
 	protected void parseOptions(
 			final CommandLine commandLine ) {
-		cqlStr = commandLine.getOptionValue(
-				"cql").toString();
+		try {
+			filter = ECQL.toFilter(commandLine.getOptionValue(
+					"cql").toString());
+		}
+		catch (final CQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -44,29 +53,24 @@ public class CQLQuery extends
 			final boolean debug ) {
 		long count = 0;
 		try (final CloseableIterator<Object> it = dataStore.query(
-				new QueryOptions(
-						adapterId,
-						null),
-				new mil.nga.giat.geowave.adapter.vector.query.cql.CQLQuery(
-						cqlStr,
-						adapter))) {
+				new QueryOptions(),
+				null)) {
 			while (it.hasNext()) {
-				if (debug) {
-					System.out.println(it.next());
+				final Object o = it.next();
+				if (o instanceof SimpleFeature) {
+					if (filter.evaluate(o)) {
+						if (debug) {
+							System.out.println(o);
+						}
+						count++;
+					}
 				}
-				else {
-					it.next();
-				}
-				count++;
 			}
 		}
 		catch (final IOException e) {
 			e.printStackTrace();
 		}
-		catch (final CQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
 		return count;
 	}
+
 }
