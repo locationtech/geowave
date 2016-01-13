@@ -28,7 +28,6 @@ import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.GeometryFactory;
 
 import mil.nga.giat.geowave.adapter.vector.ingest.AbstractSimpleFeatureIngestPlugin;
-import mil.nga.giat.geowave.adapter.vector.utils.GeometryUtils;
 import mil.nga.giat.geowave.adapter.vector.utils.SimpleFeatureUserDataConfigurationSet;
 import mil.nga.giat.geowave.core.geotime.store.dimension.GeometryWrapper;
 import mil.nga.giat.geowave.core.geotime.store.dimension.Time;
@@ -162,11 +161,22 @@ public class GDELTIngestPlugin extends
 
 		final List<GeoWaveData<SimpleFeature>> featureData = new ArrayList<GeoWaveData<SimpleFeature>>();
 
-		final InputStream in = new ZipInputStream(
-				new ByteArrayInputStream(
-						hfile.getOriginalFile().array()));
+		final InputStream in = new ByteArrayInputStream(
+				hfile.getOriginalFile().array());
+		final ZipInputStream zip = new ZipInputStream(
+				in);
+		try {
+			// Expected input is zipped single files (exactly one entry)
+			zip.getNextEntry();
+		}
+		catch (final IOException e) {
+			LOGGER.error(
+					"Failed to read ZipEntry from GDELT input file: " + hfile.getOriginalFilePath(),
+					e);
+		}
+
 		final InputStreamReader isr = new InputStreamReader(
-				in,
+				zip,
 				StringUtils.UTF8_CHAR_SET);
 		final BufferedReader br = new BufferedReader(
 				isr);
@@ -176,33 +186,44 @@ public class GDELTIngestPlugin extends
 		Date timeStamp = null;
 		String timestring = "";
 		String eventId = "";
-		double lat;
-		double lon;
+		int actionGeoType;
+		final double lat = 0;
+		final double lon = 0;
 
 		String line;
+		int lineNumber = 0;
 		try {
 			while ((line = br.readLine()) != null) {
+				lineNumber++;
 
 				final String[] vals = line.split(
 						"\t");
 				if ((vals.length < GDELTUtils.GDELT_MIN_COLUMNS) || (vals.length > GDELTUtils.GDELT_MAX_COLUMNS)) {
 					LOGGER.warn(
-							"Invalid GDELT line length: " + vals.length + " tokens found.");
+							"Invalid GDELT line length: " + vals.length + " tokens found on line " + lineNumber + " of " + hfile.getOriginalFilePath());
+					continue;
+				}
+
+				actionGeoType = Integer.parseInt(
+						vals[GDELTUtils.GDELT_ACTION_GEO_TYPE_COLUMN_ID]);
+				if (actionGeoType == 0) {
+					// No geo associated with this event
 					continue;
 				}
 
 				eventId = vals[GDELTUtils.GDELT_EVENT_ID_COLUMN_ID];
 
-				lat = GeometryUtils.adjustCoordinateDimensionToRange(
-						Double.parseDouble(
-								vals[GDELTUtils.GDELT_LATITUDE_COLUMN_ID]),
-						crs,
-						1);
-				lon = GeometryUtils.adjustCoordinateDimensionToRange(
-						Double.parseDouble(
-								vals[GDELTUtils.GDELT_LONGITUDE_COLUMN_ID]),
-						crs,
-						0);
+				try {
+					GDELTUtils.parseLatLon(
+							vals,
+							crs);
+				}
+				catch (final Exception e) {
+					LOGGER.warn(
+							"Error reading GDELT lat/lon on line " + lineNumber + " of " + hfile.getOriginalFilePath());
+					continue;
+				}
+
 				final Coordinate cord = new Coordinate(
 						lat,
 						lon);
@@ -241,7 +262,7 @@ public class GDELTIngestPlugin extends
 		}
 		catch (final IOException e) {
 			LOGGER.warn(
-					"Error reading line from file: " + hfile.getOriginalFilePath(),
+					"Error reading line from GDELT file: " + hfile.getOriginalFilePath(),
 					e);
 		}
 		catch (final ParseException e) {
