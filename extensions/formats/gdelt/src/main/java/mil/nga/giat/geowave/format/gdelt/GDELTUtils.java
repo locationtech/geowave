@@ -12,7 +12,7 @@ import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
-import com.vividsolutions.jts.geom.Geometry;
+import com.vividsolutions.jts.geom.Point;
 
 import mil.nga.giat.geowave.adapter.vector.utils.GeometryUtils;
 
@@ -77,7 +77,7 @@ public class GDELTUtils
 		simpleFeatureTypeBuilder.add(
 				attributeTypeBuilder
 						.binding(
-								Geometry.class)
+								Point.class)
 						.nillable(
 								false)
 						.buildDescriptor(
