@@ -2,9 +2,9 @@ package mil.nga.giat.geowave.adapter.raster.resize;
 
 import java.io.IOException;
 
-import mil.nga.giat.geowave.datastore.accumulo.mapreduce.GeoWaveWritableInputReducer;
-import mil.nga.giat.geowave.datastore.accumulo.mapreduce.input.GeoWaveInputKey;
-import mil.nga.giat.geowave.datastore.accumulo.mapreduce.output.GeoWaveOutputKey;
+import mil.nga.giat.geowave.mapreduce.GeoWaveWritableInputReducer;
+import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
+import mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputKey;
 
 import org.apache.hadoop.io.ObjectWritable;
 import org.apache.hadoop.mapreduce.Reducer;

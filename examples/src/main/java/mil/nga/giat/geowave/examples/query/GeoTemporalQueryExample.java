@@ -9,17 +9,20 @@ import java.util.Date;
 import java.util.List;
 
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
-import mil.nga.giat.geowave.adapter.vector.VectorDataStore;
 import mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveGTDataStore;
 import mil.nga.giat.geowave.adapter.vector.utils.DateUtilities;
 import mil.nga.giat.geowave.core.geotime.GeometryUtils;
-import mil.nga.giat.geowave.core.geotime.IndexType;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialTemporalDimensionalityTypeProvider;
 import mil.nga.giat.geowave.core.geotime.store.filter.SpatialQueryFilter.CompareOperation;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialTemporalQuery;
 import mil.nga.giat.geowave.core.geotime.store.query.TemporalConstraints;
 import mil.nga.giat.geowave.core.geotime.store.query.TemporalRange;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
-import mil.nga.giat.geowave.core.store.index.Index;
+import mil.nga.giat.geowave.core.store.IndexWriter;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.core.store.memory.DataStoreUtils;
+import mil.nga.giat.geowave.core.store.query.QueryOptions;
+import mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStore;
 import mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations;
 
 import org.apache.accumulo.core.client.AccumuloException;
@@ -50,9 +53,9 @@ public class GeoTemporalQueryExample
 {
 	private static File tempAccumuloDir;
 	private static MiniAccumuloCluster accumulo;
-	private static VectorDataStore dataStore;
+	private static AccumuloDataStore dataStore;
 
-	private static final Index index = IndexType.SPATIAL_TEMPORAL_VECTOR.createDefaultIndex();
+	private static final PrimaryIndex index = new SpatialTemporalDimensionalityTypeProvider().createPrimaryIndex();
 
 	// Points (to be ingested into GeoWave Data Store)
 	private static final Coordinate washingtonMonument = new Coordinate(
@@ -68,7 +71,7 @@ public class GeoTemporalQueryExample
 	public GeoTemporalQueryExample() {}
 
 	public static void main(
-			String[] args )
+			final String[] args )
 			throws AccumuloException,
 			AccumuloSecurityException,
 			InterruptedException,
@@ -120,7 +123,7 @@ public class GeoTemporalQueryExample
 
 		accumulo.start();
 
-		dataStore = new VectorDataStore(
+		dataStore = new AccumuloDataStore(
 				new BasicAccumuloOperations(
 						accumulo.getZooKeepers(),
 						accumulo.getInstanceName(),
@@ -130,7 +133,8 @@ public class GeoTemporalQueryExample
 
 	}
 
-	private void ingestCannedData() {
+	private void ingestCannedData()
+			throws IOException {
 
 		final List<SimpleFeature> points = new ArrayList<>();
 
@@ -180,17 +184,26 @@ public class GeoTemporalQueryExample
 					DateUtilities.parseISO("2005-05-19T20:45:56Z")));
 
 		}
-		catch (Exception ex) {
+		catch (final Exception ex) {
 			ex.printStackTrace();
 		}
 
 		System.out.println("Ingesting canned data...");
 
-		dataStore.ingest(
-				new FeatureDataAdapter(
-						getPointSimpleFeatureType()),
+		final FeatureDataAdapter adapter = new FeatureDataAdapter(
+				getPointSimpleFeatureType());
+
+		try (IndexWriter indexWriter = dataStore.createIndexWriter(
 				index,
-				points.iterator());
+				DataStoreUtils.DEFAULT_VISIBILITY)) {
+			for (final SimpleFeature sf : points) {
+				//
+				indexWriter.write(
+						adapter,
+						sf);
+
+			}
+		}
 
 		System.out.println("Ingest complete.");
 	}
@@ -218,7 +231,7 @@ public class GeoTemporalQueryExample
 		// looses accuracy as the distance from the centroid grows and
 		// the centroid moves closer the poles.
 
-		SpatialTemporalQuery query = new SpatialTemporalQuery(
+		final SpatialTemporalQuery query = new SpatialTemporalQuery(
 				DateUtilities.parseISO("2005-05-17T19:32:56Z"),
 				DateUtilities.parseISO("2005-05-17T22:32:56Z"),
 				mil.nga.giat.geowave.adapter.vector.utils.GeometryUtils.buffer(
@@ -233,7 +246,8 @@ public class GeoTemporalQueryExample
 		System.out.println("Executing query, expecting to match three points...");
 
 		final CloseableIterator<SimpleFeature> iterator = dataStore.query(
-				index,
+				new QueryOptions(
+						index),
 				query);
 
 		while (iterator.hasNext()) {
@@ -266,7 +280,8 @@ public class GeoTemporalQueryExample
 		System.out.println("Executing query # 2 with multiple time ranges, expecting to match four points...");
 
 		final CloseableIterator<SimpleFeature> iterator2 = dataStore.query(
-				index,
+				new QueryOptions(
+						index),
 				query2);
 
 		while (iterator2.hasNext()) {
@@ -315,10 +330,10 @@ public class GeoTemporalQueryExample
 	}
 
 	private static SimpleFeature buildSimpleFeature(
-			String locationName,
-			Coordinate coordinate,
-			Date startTime,
-			Date endTime ) {
+			final String locationName,
+			final Coordinate coordinate,
+			final Date startTime,
+			final Date endTime ) {
 
 		final SimpleFeatureBuilder builder = new SimpleFeatureBuilder(
 				getPointSimpleFeatureType());

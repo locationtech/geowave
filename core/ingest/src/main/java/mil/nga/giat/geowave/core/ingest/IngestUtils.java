@@ -5,11 +5,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.ingest.index.IndexProvider;
 import mil.nga.giat.geowave.core.ingest.local.IngestRunData;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
-import mil.nga.giat.geowave.core.store.index.Index;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,24 +26,26 @@ public class IngestUtils
 			final IndexProvider indexProvider,
 			final IngestRunData ingestRunData )
 			throws IOException {
-		final Index primaryIndex = ingestOptions.getIndex(indexProvider.getSupportedIndices());
+		final PrimaryIndex primaryIndex = ingestOptions.getIndex(
+				ingestPlugin,
+				ingestRunData.getArgs());
 		if (primaryIndex == null) {
 			LOGGER.error("Could not get index instance, getIndex() returned null;");
 			throw new IOException(
 					"Could not get index instance, getIndex() returned null");
 		}
 		final IndexWriter primaryIndexWriter = ingestRunData.getIndexWriter(primaryIndex);
-		final Index idx = primaryIndexWriter.getIndex();
+		final PrimaryIndex idx = primaryIndexWriter.getIndex();
 		if (idx == null) {
 			LOGGER.error("Could not get index instance, getIndex() returned null;");
 			throw new IOException(
 					"Could not get index instance, getIndex() returned null");
 		}
 
-		final Map<ByteArrayId, Index> requiredIndexMap = new HashMap<ByteArrayId, Index>();
-		final Index[] requiredIndices = indexProvider.getRequiredIndices();
+		final Map<ByteArrayId, PrimaryIndex> requiredIndexMap = new HashMap<ByteArrayId, PrimaryIndex>();
+		final PrimaryIndex[] requiredIndices = indexProvider.getRequiredIndices();
 		if ((requiredIndices != null) && (requiredIndices.length > 0)) {
-			for (final Index requiredIndex : requiredIndices) {
+			for (final PrimaryIndex requiredIndex : requiredIndices) {
 				requiredIndexMap.put(
 						requiredIndex.getId(),
 						requiredIndex);
@@ -65,7 +68,7 @@ public class IngestUtils
 					indexWriter = primaryIndexWriter;
 				}
 				else {
-					final Index index = requiredIndexMap.get(geowaveData.getIndexId());
+					final PrimaryIndex index = requiredIndexMap.get(geowaveData.getIndexId());
 					if (index == null) {
 						LOGGER.warn("Index '" + geowaveData.getIndexId().getString() + "' not found for " + geowaveData.getValue());
 						continue;

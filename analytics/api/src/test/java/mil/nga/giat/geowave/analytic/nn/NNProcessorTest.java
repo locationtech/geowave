@@ -1,32 +1,31 @@
 package mil.nga.giat.geowave.analytic.nn;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 
-import junit.framework.Assert;
-import mil.nga.giat.geowave.analytic.ConfigurationWrapper;
 import mil.nga.giat.geowave.analytic.PropertyManagement;
 import mil.nga.giat.geowave.analytic.nn.NNProcessor.CompleteNotifier;
+import mil.nga.giat.geowave.analytic.param.ParameterEnum;
 import mil.nga.giat.geowave.analytic.partitioner.Partitioner;
 import mil.nga.giat.geowave.analytic.partitioner.Partitioner.PartitionData;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 
-import org.apache.commons.cli.Option;
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.mapreduce.JobContext;
 import org.junit.Before;
 import org.junit.Test;
-
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-import static org.junit.Assert.assertNotNull;
 
 public class NNProcessorTest
 {
@@ -80,12 +79,13 @@ public class NNProcessorTest
 
 					@Override
 					public void initialize(
-							ConfigurationWrapper context )
+							final JobContext context,
+							final Class<?> scope )
 							throws IOException {}
 
 					@Override
 					public List<mil.nga.giat.geowave.analytic.partitioner.Partitioner.PartitionData> getCubeIdentifiers(
-							Object entry ) {
+							final Object entry ) {
 						return Collections.singletonList(new PartitionData(
 								NNProcessorTest.partition((Integer) entry),
 								true));
@@ -93,32 +93,31 @@ public class NNProcessorTest
 
 					@Override
 					public void partition(
-							Object entry,
-							mil.nga.giat.geowave.analytic.partitioner.Partitioner.PartitionDataCallback callback )
+							final Object entry,
+							final mil.nga.giat.geowave.analytic.partitioner.Partitioner.PartitionDataCallback callback )
 							throws Exception {
-						for (PartitionData pd : getCubeIdentifiers(entry))
+						for (final PartitionData pd : getCubeIdentifiers(entry)) {
 							callback.partitionWith(pd);
+						}
 
 					}
 
 					@Override
-					public void fillOptions(
-							Set<Option> options ) {
-
+					public Collection<ParameterEnum<?>> getParameters() {
+						return Collections.emptyList();
 					}
 
 					@Override
 					public void setup(
-							PropertyManagement runTimeProperties,
-							Configuration configuration ) {
-
-					}
+							final PropertyManagement runTimeProperties,
+							final Class<?> scope,
+							final Configuration configuration ) {}
 				},
 				new TypeConverter<Integer>() {
 					@Override
 					public Integer convert(
-							ByteArrayId id,
-							Object o ) {
+							final ByteArrayId id,
+							final Object o ) {
 						return (Integer) o;
 					}
 
@@ -127,8 +126,8 @@ public class NNProcessorTest
 
 					@Override
 					public DistanceProfile<Integer> computeProfile(
-							Integer item1,
-							Integer item2 ) {
+							final Integer item1,
+							final Integer item2 ) {
 						return new DistanceProfile<Integer>(
 								Math.abs(item1.doubleValue() - item2.doubleValue()),
 								item1);
@@ -152,17 +151,17 @@ public class NNProcessorTest
 
 					@Override
 					public void complete(
-							ByteArrayId id,
-							Integer value,
-							NeighborList<Integer> list )
+							final ByteArrayId id,
+							final Integer value,
+							final NeighborList<Integer> list )
 							throws IOException,
 							InterruptedException {
-						Iterator<Entry<ByteArrayId, Integer>> it = list.iterator();
-						List<Integer> expectedResultSet = new ArrayList<Integer>(
+						final Iterator<Entry<ByteArrayId, Integer>> it = list.iterator();
+						final List<Integer> expectedResultSet = new ArrayList<Integer>(
 								expectedResults.get(value));
 						assertNotNull(expectedResultSet);
 						while (it.hasNext()) {
-							Integer result = it.next().getValue();
+							final Integer result = it.next().getValue();
 							assertTrue(
 									"" + value + " with " + result,
 									expectedResultSet.remove(result));
@@ -184,9 +183,9 @@ public class NNProcessorTest
 
 					@Override
 					public void complete(
-							ByteArrayId id,
-							Integer value,
-							NeighborList<Integer> list )
+							final ByteArrayId id,
+							final Integer value,
+							final NeighborList<Integer> list )
 							throws IOException,
 							InterruptedException {
 						processor.remove(id);
@@ -229,8 +228,8 @@ public class NNProcessorTest
 
 					@Override
 					public NeighborList<Integer> buildNeighborList(
-							ByteArrayId cnterId,
-							Integer center ) {
+							final ByteArrayId cnterId,
+							final Integer center ) {
 						return new DefaultNeighborList<Integer>();
 					}
 
@@ -239,9 +238,9 @@ public class NNProcessorTest
 
 					@Override
 					public void complete(
-							ByteArrayId id,
-							Integer value,
-							NeighborList<Integer> list )
+							final ByteArrayId id,
+							final Integer value,
+							final NeighborList<Integer> list )
 							throws IOException,
 							InterruptedException {
 						fail("Should not get here");
@@ -250,8 +249,8 @@ public class NNProcessorTest
 	}
 
 	private void runProcess(
-			NNProcessor<Integer, Integer> processor,
-			CompleteNotifier<Integer> notifier )
+			final NNProcessor<Integer, Integer> processor,
+			final CompleteNotifier<Integer> notifier )
 			throws IOException,
 			InterruptedException {
 
@@ -285,8 +284,8 @@ public class NNProcessorTest
 
 					@Override
 					public NeighborList<Integer> buildNeighborList(
-							ByteArrayId cnterId,
-							Integer center ) {
+							final ByteArrayId cnterId,
+							final Integer center ) {
 						return new DefaultNeighborList<Integer>();
 					}
 
@@ -296,14 +295,14 @@ public class NNProcessorTest
 	}
 
 	private static ByteArrayId partition(
-			Integer v ) {
+			final Integer v ) {
 		return new ByteArrayId(
 				Integer.toString((v.intValue() / 300)));
 	}
 
 	private void addToProcess(
-			NNProcessor<Integer, Integer> processor,
-			Integer v )
+			final NNProcessor<Integer, Integer> processor,
+			final Integer v )
 			throws IOException {
 		processor.add(
 				new ByteArrayId(

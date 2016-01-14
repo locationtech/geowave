@@ -2,7 +2,9 @@ package mil.nga.giat.geowave.examples.ingest;
 
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import mil.nga.giat.geowave.core.store.DataStore;
-import mil.nga.giat.geowave.core.store.index.Index;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.core.store.IndexWriter;
+import mil.nga.giat.geowave.core.store.memory.DataStoreUtils;
 import mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations;
 
 import org.apache.log4j.Logger;
@@ -10,6 +12,7 @@ import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -55,7 +58,6 @@ public class SimpleIngestProducerConsumer extends
 	 * Here we will change the ingest mechanism to use a producer/consumer
 	 * pattern
 	 */
-	@Override
 	protected void generateGrid(
 			final DataStore geowaveDataStore ) {
 
@@ -72,16 +74,26 @@ public class SimpleIngestProducerConsumer extends
 		final FeatureDataAdapter adapter = createDataAdapter(point);
 
 		// This describes how to index the data
-		final Index index = createSpatialIndex();
+		final PrimaryIndex index = createSpatialIndex();
 
 		final Thread ingestThread = new Thread(
 				new Runnable() {
 					@Override
 					public void run() {
-						geowaveDataStore.ingest(
-								adapter,
+						try (IndexWriter writer = geowaveDataStore.createIndexWriter(
 								index,
-								features);
+								DataStoreUtils.DEFAULT_VISIBILITY)) {
+							while (features.hasNext()) {
+								final SimpleFeature sft = features.next();
+								writer.write(
+										adapter,
+										sft);
+							}
+						}
+						catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 					}
 				},
 				"Ingestion Thread");

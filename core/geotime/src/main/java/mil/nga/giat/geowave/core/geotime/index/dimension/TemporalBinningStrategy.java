@@ -7,13 +7,13 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.TimeZone;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.index.dimension.bin.BinRange;
 import mil.nga.giat.geowave.core.index.dimension.bin.BinValue;
 import mil.nga.giat.geowave.core.index.dimension.bin.BinningStrategy;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericData;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericRange;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 /**
  * This class is useful for establishing a consistent binning strategy using a
@@ -57,6 +57,20 @@ public class TemporalBinningStrategy implements
 			}
 			throw new IllegalArgumentException(
 					"Calendar enum '" + calendarEnum + "' not found as a valid unit ");
+		}
+
+		// converter that will be used later
+		public static Unit fromString(
+				final String code ) {
+
+			for (final Unit output : Unit.values()) {
+				if (output.toString().equalsIgnoreCase(
+						code)) {
+					return output;
+				}
+			}
+
+			return null;
 		}
 	}
 

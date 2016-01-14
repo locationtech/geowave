@@ -4,18 +4,18 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import mil.nga.giat.geowave.analytic.AdapterWithObjectWritable;
-import mil.nga.giat.geowave.analytic.ConfigurationWrapper;
 import mil.nga.giat.geowave.analytic.PropertyManagement;
+import mil.nga.giat.geowave.analytic.ScopedJobConfiguration;
 import mil.nga.giat.geowave.analytic.distance.DistanceFn;
 import mil.nga.giat.geowave.analytic.distance.FeatureGeometryDistanceFn;
-import mil.nga.giat.geowave.analytic.log.LoggingConfigurationWrapper;
-import mil.nga.giat.geowave.analytic.mapreduce.JobContextConfigurationWrapper;
 import mil.nga.giat.geowave.analytic.nn.DefaultNeighborList;
 import mil.nga.giat.geowave.analytic.nn.DistanceProfile;
 import mil.nga.giat.geowave.analytic.nn.DistanceProfileGenerateFn;
@@ -24,29 +24,26 @@ import mil.nga.giat.geowave.analytic.nn.NNProcessor.CompleteNotifier;
 import mil.nga.giat.geowave.analytic.nn.NeighborList;
 import mil.nga.giat.geowave.analytic.nn.NeighborListFactory;
 import mil.nga.giat.geowave.analytic.nn.TypeConverter;
-import mil.nga.giat.geowave.analytic.param.ClusteringParameters;
 import mil.nga.giat.geowave.analytic.param.CommonParameters;
+import mil.nga.giat.geowave.analytic.param.ParameterEnum;
+import mil.nga.giat.geowave.analytic.param.ParameterHelper;
 import mil.nga.giat.geowave.analytic.param.PartitionParameters;
 import mil.nga.giat.geowave.analytic.param.PartitionParameters.Partition;
-import mil.nga.giat.geowave.analytic.partitioner.AbstractPartitioner;
 import mil.nga.giat.geowave.analytic.partitioner.OrthodromicDistancePartitioner;
 import mil.nga.giat.geowave.analytic.partitioner.Partitioner;
 import mil.nga.giat.geowave.analytic.partitioner.Partitioner.PartitionData;
 import mil.nga.giat.geowave.analytic.partitioner.Partitioner.PartitionDataCallback;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.datastore.accumulo.mapreduce.HadoopWritableSerializationTool;
-import mil.nga.giat.geowave.datastore.accumulo.mapreduce.JobContextAdapterStore;
-import mil.nga.giat.geowave.datastore.accumulo.mapreduce.input.GeoWaveInputFormat;
-import mil.nga.giat.geowave.datastore.accumulo.mapreduce.input.GeoWaveInputKey;
+import mil.nga.giat.geowave.mapreduce.HadoopWritableSerializationTool;
+import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputFormat;
+import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
 
-import org.apache.accumulo.core.client.AccumuloException;
-import org.apache.accumulo.core.client.AccumuloSecurityException;
-import org.apache.commons.cli.Option;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.io.ObjectWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.io.WritableComparable;
+import org.apache.hadoop.mapreduce.JobContext;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Reducer;
 import org.opengis.feature.simple.SimpleFeature;
@@ -92,14 +89,14 @@ import com.google.common.primitives.SignedBytes;
  *               * Properties:
  * 
  * @formatter:off "NNMapReduce.Partition.PartitionerClass" ->
- *                {@link mil.nga.giat.geowave.analytics.tools.partitioners.Partitioner}
+ *                {@link mil.nga.giat.geowave.analytic.partitioner.Partitioner}
  *                <p/>
  *                "NNMapReduce.Common.DistanceFunctionClass" -> Used to
  *                determine distance to between simple features
- *                {@link mil.nga.giat.geowave.analytics.distance.DistanceFn}
+ *                {@link mil.nga.giat.geowave.analytic.distance.DistanceFn}
  *                <p/>
  *                "NNMapReduce.Partition.PartitionerClass" ->
- *                {@link mil.nga.giat.geowave.analytics.tools.partitioners.Partitioner}
+ *                {@link mil.nga.giat.geowave.analytic.partitioner.Partitioner}
  *                <p/>
  *                "NNMapReduce.Partition.MaxMemberSelection" -> Maximum number
  *                of neighbors (pick the top K closest, where this variable is
@@ -182,31 +179,21 @@ public class NNMapReduce
 				throws IOException,
 				InterruptedException {
 			super.setup(context);
-			LOGGER.info("Running NNMapper");
-			final ConfigurationWrapper config = new LoggingConfigurationWrapper(
-					LOGGER,
-					new JobContextConfigurationWrapper(
-							context,
-							LOGGER));
-			try {
-				serializationTool = new HadoopWritableSerializationTool(
-						new JobContextAdapterStore(
-								context,
-								GeoWaveInputFormat.getAccumuloOperations(context)));
-			}
-			catch (AccumuloException | AccumuloSecurityException e) {
-				LOGGER.warn(
-						"Unable to get GeoWave adapter store from job context",
-						e);
-			}
+			final ScopedJobConfiguration config = new ScopedJobConfiguration(
+					context.getConfiguration(),
+					NNMapReduce.class,
+					LOGGER);
+			serializationTool = new HadoopWritableSerializationTool(
+					GeoWaveInputFormat.getJobContextAdapterStore(context));
 			try {
 				partitioner = config.getInstance(
 						PartitionParameters.Partition.PARTITIONER_CLASS,
-						NNMapReduce.class,
 						Partitioner.class,
 						OrthodromicDistancePartitioner.class);
 
-				partitioner.initialize(config);
+				partitioner.initialize(
+						context,
+						NNMapReduce.class);
 			}
 			catch (final Exception e1) {
 				throw new IOException(
@@ -252,6 +239,9 @@ public class NNMapReduce
 					distanceProfileFn,
 					maxDistance,
 					key.partitionData);
+
+			processor.setUpperBoundPerPartition(maxNeighbors);
+
 			final PARTITION_SUMMARY summary = createSummary();
 
 			for (final AdapterWithObjectWritable inputValue : values) {
@@ -276,9 +266,9 @@ public class NNMapReduce
 					new CompleteNotifier<VALUEIN>() {
 						@Override
 						public void complete(
-								ByteArrayId id,
-								VALUEIN value,
-								NeighborList<VALUEIN> primaryList )
+								final ByteArrayId id,
+								final VALUEIN value,
+								final NeighborList<VALUEIN> primaryList )
 								throws IOException,
 								InterruptedException {
 							context.progress();
@@ -301,7 +291,7 @@ public class NNMapReduce
 		}
 
 		public NeighborListFactory<VALUEIN> createNeighborsListFactory(
-				PARTITION_SUMMARY summary ) {
+				final PARTITION_SUMMARY summary ) {
 			return new DefaultNeighborList.DefaultNeighborListFactory<VALUEIN>();
 		}
 
@@ -340,6 +330,16 @@ public class NNMapReduce
 				throws IOException,
 				InterruptedException;
 
+		/**
+		 * 
+		 * allow the extending classes to return sets with constraints and
+		 * management algorithms
+		 */
+		protected Set<VALUEIN> createSetForNeighbors(
+				final boolean isSetForPrimary ) {
+			return new HashSet<VALUEIN>();
+		}
+
 		protected abstract void processNeighbors(
 				PartitionData partitionData,
 				ByteArrayId primaryId,
@@ -357,26 +357,17 @@ public class NNMapReduce
 				throws IOException,
 				InterruptedException {
 
-			final ConfigurationWrapper config = new JobContextConfigurationWrapper(
-					context,
+			final ScopedJobConfiguration config = new ScopedJobConfiguration(
+					context.getConfiguration(),
+					NNMapReduce.class,
 					NNMapReduce.LOGGER);
 
-			try {
-				serializationTool = new HadoopWritableSerializationTool(
-						new JobContextAdapterStore(
-								context,
-								GeoWaveInputFormat.getAccumuloOperations(context)));
-			}
-			catch (AccumuloException | AccumuloSecurityException e) {
-				LOGGER.warn(
-						"Unable to get GeoWave adapter store from job context",
-						e);
-			}
+			serializationTool = new HadoopWritableSerializationTool(
+					GeoWaveInputFormat.getJobContextAdapterStore(context));
 
 			try {
 				distanceFn = config.getInstance(
 						CommonParameters.Common.DISTANCE_FUNCTION_CLASS,
-						NNMapReduce.class,
 						DistanceFn.class,
 						FeatureGeometryDistanceFn.class);
 			}
@@ -387,78 +378,23 @@ public class NNMapReduce
 
 			maxDistance = config.getDouble(
 					PartitionParameters.Partition.PARTITION_DISTANCE,
-					NNMapReduce.class,
+
 					1.0);
 
 			try {
 				LOGGER.info("Using secondary partitioning");
 				partitioner = config.getInstance(
 						PartitionParameters.Partition.SECONDARY_PARTITIONER_CLASS,
-						NNMapReduce.class,
 						Partitioner.class,
 						PassthruPartitioner.class);
-
-				partitioner.initialize(new ConfigurationWrapper() {
-
-					@Override
-					public int getInt(
-							Enum<?> property,
-							Class<?> scope,
-							int defaultValue ) {
-						return config.getInt(
-								property,
-								scope,
-								defaultValue);
-					}
-
-					@Override
-					public double getDouble(
-							Enum<?> property,
-							Class<?> scope,
-							double defaultValue ) {
-						if (property == Partition.PARTITION_PRECISION) return 1.0;
-						return config.getDouble(
-								property,
-								scope,
-								defaultValue);
-					}
-
-					@Override
-					public String getString(
-							Enum<?> property,
-							Class<?> scope,
-							String defaultValue ) {
-						return config.getString(
-								property,
-								scope,
-								defaultValue);
-					}
-
-					@Override
-					public byte[] getBytes(
-							Enum<?> property,
-							Class<?> scope ) {
-						return config.getBytes(
-								property,
-								scope);
-					}
-
-					@Override
-					public <T> T getInstance(
-							Enum<?> property,
-							Class<?> scope,
-							Class<T> iface,
-							Class<? extends T> defaultValue )
-							throws InstantiationException,
-							IllegalAccessException {
-						return config.getInstance(
-								property,
-								scope,
-								iface,
-								defaultValue);
-					}
-
-				});
+				((ParameterHelper<Double>) Partition.PARTITION_PRECISION.getHelper()).setValue(
+						context.getConfiguration(),
+						NNMapReduce.class,
+						new Double(
+								1.0));
+				partitioner.initialize(
+						context,
+						NNMapReduce.class);
 			}
 			catch (final Exception e1) {
 				throw new IOException(
@@ -467,8 +403,7 @@ public class NNMapReduce
 
 			maxNeighbors = config.getInt(
 					PartitionParameters.Partition.MAX_MEMBER_SELECTION,
-					NNMapReduce.class,
-					Integer.MAX_VALUE);
+					NNProcessor.DEFAULT_UPPER_BOUND_PARTIION_SIZE);
 
 			LOGGER.info(
 					"Maximum Neighbors = {}",
@@ -484,8 +419,8 @@ public class NNMapReduce
 
 			@Override
 			public DistanceProfile<Object> computeProfile(
-					VALUEIN item1,
-					VALUEIN item2 ) {
+					final VALUEIN item1,
+					final VALUEIN item2 ) {
 				singleNotThreadSafeImage.setDistance(distanceFn.measure(
 						item1,
 						item2));
@@ -674,7 +609,8 @@ public class NNMapReduce
 
 		@Override
 		public void initialize(
-				ConfigurationWrapper context )
+				final JobContext context,
+				final Class<?> scope )
 				throws IOException {}
 
 		private static final List<PartitionData> FixedPartition = Collections.singletonList(new PartitionData(
@@ -684,30 +620,28 @@ public class NNMapReduce
 
 		@Override
 		public List<PartitionData> getCubeIdentifiers(
-				T entry ) {
+				final T entry ) {
 			return FixedPartition;
 		}
 
 		@Override
 		public void partition(
-				T entry,
-				PartitionDataCallback callback )
+				final T entry,
+				final PartitionDataCallback callback )
 				throws Exception {
 			callback.partitionWith(FixedPartition.get(0));
 		}
 
 		@Override
-		public void fillOptions(
-				Set<Option> options ) {
-
+		public Collection<ParameterEnum<?>> getParameters() {
+			return Collections.emptyList();
 		}
 
 		@Override
 		public void setup(
-				PropertyManagement runTimeProperties,
-				Configuration configuration ) {
-
-		}
+				final PropertyManagement runTimeProperties,
+				final Class<?> scope,
+				final Configuration configuration ) {}
 
 	}
 }

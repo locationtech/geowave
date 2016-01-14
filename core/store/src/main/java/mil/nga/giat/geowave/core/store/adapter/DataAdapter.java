@@ -4,7 +4,7 @@ import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.Persistable;
 import mil.nga.giat.geowave.core.store.data.DataReader;
 import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
-import mil.nga.giat.geowave.core.store.index.Index;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 
 /**
  * This interface should be implemented by any custom data type that must be
@@ -35,7 +35,7 @@ public interface DataAdapter<T> extends
 
 	public T decode(
 			IndexedAdapterPersistenceEncoding data,
-			Index index );
+			PrimaryIndex index );
 
 	public AdapterPersistenceEncoding encode(
 			T entry,

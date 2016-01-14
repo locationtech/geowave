@@ -2,7 +2,8 @@ package mil.nga.giat.geowave.analytic.sample.function;
 
 import java.io.IOException;
 
-import mil.nga.giat.geowave.analytic.ConfigurationWrapper;
+import org.apache.hadoop.mapreduce.JobContext;
+import org.slf4j.Logger;
 
 /**
  * Used by {@link KSamplerMapReduce} to rank an object for selection in the
@@ -13,7 +14,9 @@ import mil.nga.giat.geowave.analytic.ConfigurationWrapper;
 public interface SamplingRankFunction<T>
 {
 	public void initialize(
-			final ConfigurationWrapper context )
+			final JobContext context,
+			Class<?> scope,
+			Logger logger )
 			throws IOException;
 
 	public double rank(

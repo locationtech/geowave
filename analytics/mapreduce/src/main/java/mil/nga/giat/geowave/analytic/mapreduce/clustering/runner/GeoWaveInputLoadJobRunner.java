@@ -1,10 +1,10 @@
 package mil.nga.giat.geowave.analytic.mapreduce.clustering.runner;
 
-import java.util.Set;
+import java.util.Arrays;
+import java.util.Collection;
 
 import mil.nga.giat.geowave.analytic.IndependentJobRunner;
 import mil.nga.giat.geowave.analytic.PropertyManagement;
-import mil.nga.giat.geowave.analytic.RunnerUtils;
 import mil.nga.giat.geowave.analytic.mapreduce.GeoWaveAnalyticJobRunner;
 import mil.nga.giat.geowave.analytic.mapreduce.GeoWaveInputFormatConfiguration;
 import mil.nga.giat.geowave.analytic.mapreduce.MapReduceJobRunner;
@@ -14,10 +14,9 @@ import mil.nga.giat.geowave.analytic.param.CentroidParameters;
 import mil.nga.giat.geowave.analytic.param.MapReduceParameters;
 import mil.nga.giat.geowave.analytic.param.OutputParameters;
 import mil.nga.giat.geowave.analytic.param.ParameterEnum;
-import mil.nga.giat.geowave.datastore.accumulo.mapreduce.input.GeoWaveInputKey;
-import mil.nga.giat.geowave.datastore.accumulo.mapreduce.output.GeoWaveOutputKey;
+import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
+import mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputKey;
 
-import org.apache.commons.cli.Option;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.io.ObjectWritable;
 import org.apache.hadoop.mapreduce.Job;
@@ -54,7 +53,7 @@ public class GeoWaveInputLoadJobRunner extends
 		job.setOutputValueClass(Object.class);
 		job.setSpeculativeExecution(false);
 
-		job.setJobName("GeoWave Input to Output (" + namespace + ")");
+		job.setJobName("GeoWave Input to Output");
 		job.setReduceSpeculativeExecution(false);
 
 	}
@@ -69,21 +68,16 @@ public class GeoWaveInputLoadJobRunner extends
 			final Configuration config,
 			final PropertyManagement runTimeProperties )
 			throws Exception {
-
-		RunnerUtils.setParameter(
+		final String indexId = checkIndex(
+				runTimeProperties,
+				OutputParameters.Output.INDEX_ID,
+				runTimeProperties.getPropertyAsString(
+						CentroidParameters.Centroid.INDEX_ID,
+						"hull_idx"));
+		OutputParameters.Output.INDEX_ID.getHelper().setValue(
 				config,
 				getScope(),
-				new Object[] {
-					checkIndex(
-							runTimeProperties,
-							OutputParameters.Output.INDEX_ID,
-							runTimeProperties.getPropertyAsString(
-									CentroidParameters.Centroid.INDEX_ID,
-									"hull_idx")),
-				},
-				new ParameterEnum[] {
-					OutputParameters.Output.INDEX_ID
-				});
+				indexId);
 
 		addDataAdapter(
 				config,
@@ -91,38 +85,33 @@ public class GeoWaveInputLoadJobRunner extends
 						runTimeProperties,
 						OutputParameters.Output.DATA_TYPE_ID,
 						OutputParameters.Output.DATA_NAMESPACE_URI));
-
-		RunnerUtils.setParameter(
-				config,
-				getScope(),
-				runTimeProperties,
+		runTimeProperties.setConfig(
 				new ParameterEnum[] {
 					OutputParameters.Output.DATA_TYPE_ID,
 					OutputParameters.Output.DATA_NAMESPACE_URI,
 					OutputParameters.Output.INDEX_ID
-				});
-
+				},
+				config,
+				getScope());
 		return super.run(
 				config,
 				runTimeProperties);
 	}
 
 	@Override
-	public void fillOptions(
-			final Set<Option> options ) {
-
-		OutputParameters.fillOptions(
-				options,
-				new OutputParameters.Output[] {
-					OutputParameters.Output.INDEX_ID,
-					OutputParameters.Output.DATA_TYPE_ID,
-					OutputParameters.Output.DATA_NAMESPACE_URI
-				});
-
-		MapReduceParameters.fillOptions(options);
-
-		super.fillOptions(options);
-
+	public Collection<ParameterEnum<?>> getParameters() {
+		final Collection<ParameterEnum<?>> params = super.getParameters();
+		params.addAll(Arrays.asList(new OutputParameters.Output[] {
+			OutputParameters.Output.INDEX_ID,
+			OutputParameters.Output.DATA_TYPE_ID,
+			OutputParameters.Output.DATA_NAMESPACE_URI
+		}));
+		params.addAll(MapReduceParameters.getParameters());
+		return params;
 	}
 
+	@Override
+	protected String getJobName() {
+		return "Input Load";
+	}
 }

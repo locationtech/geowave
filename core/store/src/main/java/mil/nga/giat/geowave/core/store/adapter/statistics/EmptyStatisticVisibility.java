@@ -1,6 +1,7 @@
 package mil.nga.giat.geowave.core.store.adapter.statistics;
 
 import mil.nga.giat.geowave.core.store.DataStoreEntryInfo;
+import mil.nga.giat.geowave.core.store.EntryVisibilityHandler;
 
 /**
  * 
@@ -9,7 +10,7 @@ import mil.nga.giat.geowave.core.store.DataStoreEntryInfo;
  * @param <T>
  */
 public class EmptyStatisticVisibility<T> implements
-		DataStatisticsVisibilityHandler<T>
+		EntryVisibilityHandler<T>
 {
 
 	@Override

@@ -1,6 +1,7 @@
 package mil.nga.giat.geowave.datastore.accumulo;
 
 import java.util.List;
+import java.util.Set;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 
@@ -8,6 +9,8 @@ import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.apache.accumulo.core.client.BatchDeleter;
 import org.apache.accumulo.core.client.BatchScanner;
+import org.apache.accumulo.core.client.Connector;
+import org.apache.accumulo.core.client.Instance;
 import org.apache.accumulo.core.client.Scanner;
 import org.apache.accumulo.core.client.TableNotFoundException;
 
@@ -136,6 +139,41 @@ public interface AccumuloOperations
 			throws TableNotFoundException;
 
 	/**
+	 * Creates a new writer that can be used by an index. The basic
+	 * implementation uses a BatchWriter but other implementations can be
+	 * replaced such as a context-based writer for bulk ingest within a
+	 * map-reduce job. This will use the createTable flag to determine if the
+	 * table should be created if it does not exist. This will also use the
+	 * enableVersioning flag to determine if the versioning iterator should be
+	 * used. Additionally it will add the provided splits on creation of the
+	 * table only.
+	 * 
+	 * @param tableName
+	 *            The basic name of the table. Note that that basic
+	 *            implementation of the factory will allow for a table namespace
+	 *            to prefix this name
+	 * @param createTable
+	 *            If true and the table does not exist, it will be created. If
+	 *            false and the table does not exist, a TableNotFoundException
+	 *            will be thrown.
+	 * @param enableVersioning
+	 *            If true the versioning iterator will be used.
+	 * @param splits
+	 *            If the table is created, these splits will be added as
+	 *            partition keys. Null can be used to imply not to add any
+	 *            splits.
+	 * @return The appropriate writer
+	 * @throws TableNotFoundException
+	 *             The table does not exist in this Accumulo instance
+	 */
+	public Writer createWriter(
+			final String tableName,
+			final boolean createTable,
+			final boolean enableVersioning,
+			final Set<ByteArrayId> splits )
+			throws TableNotFoundException;
+
+	/**
 	 * Attaches the iterators to the specified table. This will check if the
 	 * scope is the same and if the options are the same. If the options are
 	 * different, it will use the implementation of
@@ -158,8 +196,32 @@ public interface AccumuloOperations
 	public boolean attachIterators(
 			final String tableName,
 			final boolean createTable,
-			final IteratorConfig[] iterators )
+			final IteratorConfig... iterators )
 			throws TableNotFoundException;
+
+	/**
+	 * Add the splits to the specified table. This will use the createTable flag
+	 * to determine if the table should be created if it does not exist.
+	 * 
+	 * @param tableName
+	 *            The basic name of the table. Note that that basic
+	 *            implementation of the factory will allow for a table namespace
+	 *            to prefix this name
+	 * @param createTable
+	 *            If true and the table does not exist, it will be created. If
+	 *            false and the table does not exist, a TableNotFoundException
+	 *            will be thrown.
+	 * @param splits
+	 *            the splits to add to the given table
+	 * 
+	 */
+	public void addSplits(
+			final String tableName,
+			final boolean createTable,
+			final Set<ByteArrayId> splits )
+			throws TableNotFoundException,
+			AccumuloException,
+			AccumuloSecurityException;
 
 	/**
 	 * Drops the table with the given name (the basic implementation will use a
@@ -324,4 +386,14 @@ public interface AccumuloOperations
 			final String... authorizations )
 			throws AccumuloException,
 			AccumuloSecurityException;
+
+	public String getGeoWaveNamespace();
+
+	public String getUsername();
+
+	public String getPassword();
+
+	public Instance getInstance();
+
+	public Connector getConnector();
 }

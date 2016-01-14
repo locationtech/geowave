@@ -1,6 +1,7 @@
 package mil.nga.giat.geowave.adapter.vector.plugin;
 
 import mil.nga.giat.geowave.core.geotime.GeometryUtils;
+import mil.nga.giat.geowave.core.geotime.store.query.TemporalConstraintsSet;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.log4j.Logger;
@@ -70,9 +71,33 @@ public class ExtractGeometryFilterVisitor extends
 	 * order to reuse this functionality in your own FilterVisitor
 	 * implementation.
 	 */
-	protected ExtractGeometryFilterVisitor(
+	public ExtractGeometryFilterVisitor(
 			final CoordinateReferenceSystem crs ) {
 		this.crs = crs;
+	}
+
+	/**
+	 * 
+	 * @param filter
+	 * @param crs
+	 * @return null if empty constraint (infinite not supported)
+	 */
+	public static Geometry getConstraints(
+			final Filter filter,
+			CoordinateReferenceSystem crs ) {
+		final Geometry geo = (Geometry) filter.accept(
+				new ExtractGeometryFilterVisitor(
+						crs),
+				null);
+		if ((geo == null) || geo.isEmpty()) {
+			return null;
+		}
+		final double area = geo.getArea();
+		if (Double.isInfinite(area) || Double.isNaN(area)) {
+			return null;
+		}
+		return geo;
+
 	}
 
 	/**

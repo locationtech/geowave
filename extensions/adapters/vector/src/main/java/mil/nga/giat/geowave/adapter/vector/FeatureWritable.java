@@ -76,24 +76,12 @@ public class FeatureWritable implements
 			final DataInput input )
 			throws IOException {
 		try {
-			final String nameSpace = input.readUTF();
-			final String name = input.readUTF();
-			final String descriptor = input.readUTF();
-			final String crs = input.readUTF();
-			final Pair<String, String> id = Pair.of(
-					nameSpace,
-					name);
-			featureType = FeatureTypeCache.get(id);
-			if (featureType == null) {
-				featureType = FeatureDataUtils.decodeType(
-						nameSpace,
-						name,
-						descriptor,
-						crs);
-				FeatureTypeCache.put(
-						id,
-						featureType);
-			}
+			String ns = input.readUTF();
+			featureType = FeatureDataUtils.decodeType(
+					"-".equals(ns) ? "" : ns,
+					input.readUTF(),
+					input.readUTF(),
+					input.readUTF());
 		}
 		catch (final SchemaException e) {
 			throw new IOException(
@@ -120,7 +108,7 @@ public class FeatureWritable implements
 	public void write(
 			final DataOutput output )
 			throws IOException {
-		output.writeUTF(featureType.getName().getNamespaceURI() == null ? "" : featureType.getName().getNamespaceURI());
+		output.writeUTF(featureType.getName().getNamespaceURI() == null ? "-" : featureType.getName().getNamespaceURI());
 		output.writeUTF(featureType.getTypeName());
 		output.writeUTF(DataUtilities.encodeType(featureType));
 		output.writeUTF(FeatureDataUtils.getAxis(featureType.getCoordinateReferenceSystem()));

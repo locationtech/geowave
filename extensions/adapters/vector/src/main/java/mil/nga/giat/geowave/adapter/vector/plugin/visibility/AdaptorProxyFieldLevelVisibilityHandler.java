@@ -1,8 +1,10 @@
 package mil.nga.giat.geowave.adapter.vector.plugin.visibility;
 
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
+import mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.data.field.FieldVisibilityHandler;
+import mil.nga.giat.geowave.core.store.data.visibility.VisibilityManagement;
 
 import org.opengis.feature.simple.SimpleFeature;
 
@@ -24,7 +26,7 @@ public class AdaptorProxyFieldLevelVisibilityHandler implements
 {
 
 	private final String fieldName;
-	private final FeatureDataAdapter adapter;
+	private final GeotoolsFeatureDataAdapter adapter;
 	private FieldVisibilityHandler<SimpleFeature, Object> myDeferredHandler = null;
 
 	/**
@@ -36,7 +38,7 @@ public class AdaptorProxyFieldLevelVisibilityHandler implements
 	 */
 	public AdaptorProxyFieldLevelVisibilityHandler(
 			final String fieldName,
-			final FeatureDataAdapter adapter ) {
+			final GeotoolsFeatureDataAdapter adapter ) {
 		super();
 		this.fieldName = fieldName;
 		this.adapter = adapter;
@@ -44,15 +46,19 @@ public class AdaptorProxyFieldLevelVisibilityHandler implements
 
 	@Override
 	public byte[] getVisibility(
-			SimpleFeature rowValue,
-			ByteArrayId fieldId,
-			Object fieldValue ) {
+			final SimpleFeature rowValue,
+			final ByteArrayId fieldId,
+			final Object fieldValue ) {
+
+		final FieldVisibilityHandler<SimpleFeature, Object> fieldVisibilityHandler = adapter.getFieldVisiblityHandler();
+		final String visibiityAttributeName = adapter.getVisibilityAttributeName();
+		final VisibilityManagement<SimpleFeature> fieldVisibilityManagement = adapter.getFieldVisibilityManagement();
 
 		if (myDeferredHandler == null) {
-			myDeferredHandler = adapter.getFieldVisibilityManagement().createVisibilityHandler(
+			myDeferredHandler = fieldVisibilityManagement.createVisibilityHandler(
 					fieldName,
-					adapter.getFieldVisiblityHandler(),
-					adapter.getVisibilityAttributeName());
+					fieldVisibilityHandler,
+					visibiityAttributeName);
 		}
 		return myDeferredHandler.getVisibility(
 				rowValue,

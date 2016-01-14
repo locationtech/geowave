@@ -5,7 +5,7 @@ import java.util.List;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.index.StringUtils;
-import mil.nga.giat.geowave.core.store.index.Index;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations;
 import mil.nga.giat.geowave.datastore.accumulo.util.AccumuloUtils;
 
@@ -26,12 +26,12 @@ abstract public class AccumuloQuery
 {
 	private final static Logger LOGGER = Logger.getLogger(AccumuloQuery.class);
 	protected final List<ByteArrayId> adapterIds;
-	protected final Index index;
+	protected final PrimaryIndex index;
 
 	private final String[] authorizations;
 
 	public AccumuloQuery(
-			final Index index,
+			final PrimaryIndex index,
 			final String... authorizations ) {
 		this(
 				null,
@@ -41,7 +41,7 @@ abstract public class AccumuloQuery
 
 	public AccumuloQuery(
 			final List<ByteArrayId> adapterIds,
-			final Index index,
+			final PrimaryIndex index,
 			final String... authorizations ) {
 		this.adapterIds = adapterIds;
 		this.index = index;

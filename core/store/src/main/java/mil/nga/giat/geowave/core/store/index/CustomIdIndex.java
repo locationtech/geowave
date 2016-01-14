@@ -6,7 +6,7 @@ import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
 
 public class CustomIdIndex extends
-		Index
+		PrimaryIndex
 {
 	private ByteArrayId id;
 

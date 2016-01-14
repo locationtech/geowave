@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import junit.framework.Assert;
 import mil.nga.giat.geowave.core.geotime.index.dimension.LatitudeDefinition;
@@ -238,6 +239,11 @@ public class GeometryUtilsTest
 
 		@Override
 		public double[] getHighestPrecisionIdRangePerDimension() {
+			return null;
+		}
+
+		@Override
+		public Set<ByteArrayId> getNaturalSplits() {
 			return null;
 		}
 

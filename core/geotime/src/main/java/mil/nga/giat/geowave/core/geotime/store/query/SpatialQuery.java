@@ -1,6 +1,7 @@
 package mil.nga.giat.geowave.core.geotime.store.query;
 
 import java.nio.ByteBuffer;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 
@@ -12,9 +13,11 @@ import com.vividsolutions.jts.io.WKBWriter;
 import mil.nga.giat.geowave.core.geotime.GeometryUtils;
 import mil.nga.giat.geowave.core.geotime.store.filter.SpatialQueryFilter;
 import mil.nga.giat.geowave.core.geotime.store.filter.SpatialQueryFilter.CompareOperation;
+import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
-import mil.nga.giat.geowave.core.store.dimension.DimensionField;
+import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;
 import mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter;
+import mil.nga.giat.geowave.core.store.index.FilterableConstraints;
 import mil.nga.giat.geowave.core.store.query.BasicQuery;
 
 /**
@@ -49,6 +52,14 @@ public class SpatialQuery extends
 		super(
 				constraints);
 		this.queryGeometry = queryGeometry;
+	}
+
+	public SpatialQuery(
+			final Geometry queryGeometry,
+			Map<ByteArrayId, FilterableConstraints> additionalConstraints ) {
+		super(
+				GeometryUtils.basicConstraintsFromGeometry(queryGeometry),
+				additionalConstraints);
 	}
 
 	/**
@@ -103,7 +114,7 @@ public class SpatialQuery extends
 	@Override
 	protected DistributableQueryFilter createQueryFilter(
 			final MultiDimensionalNumericData constraints,
-			final DimensionField<?>[] dimensionFields ) {
+			final NumericDimensionField<?>[] dimensionFields ) {
 		return new SpatialQueryFilter(
 				constraints,
 				dimensionFields,

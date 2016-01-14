@@ -1,17 +1,18 @@
 package mil.nga.giat.geowave.examples.ingest;
 
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.GeometryFactory;
-import com.vividsolutions.jts.geom.Point;
+import java.util.Set;
+import java.util.TreeSet;
 
 import mil.nga.giat.geowave.core.geotime.GeometryUtils;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.query.BasicQuery;
+import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStore;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloOptions;
 import mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations;
+import mil.nga.giat.geowave.datastore.accumulo.index.secondary.AccumuloSecondaryIndexDataStore;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloAdapterStore;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloDataStatisticsStore;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloIndexStore;
@@ -22,14 +23,13 @@ import org.apache.accumulo.core.client.Connector;
 import org.apache.accumulo.core.client.mock.MockInstance;
 import org.apache.accumulo.core.client.security.tokens.PasswordToken;
 import org.apache.log4j.Logger;
-import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Test;
 import org.opengis.feature.simple.SimpleFeature;
 
-import java.util.Set;
-import java.util.TreeSet;
+import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.GeometryFactory;
+import com.vividsolutions.jts.geom.Point;
 
 public class SimpleIngestTest
 {
@@ -76,6 +76,8 @@ public class SimpleIngestTest
 				indexStore,
 				adapterStore,
 				statsStore,
+				new AccumuloSecondaryIndexDataStore(
+						accumuloOperations),
 				accumuloOperations,
 				accumuloOptions);
 
@@ -99,8 +101,10 @@ public class SimpleIngestTest
 
 	protected static Set<Point> getStoredPointSet(
 			DataStore ds ) {
-		CloseableIterator itr = ds.query(new BasicQuery(
-				new BasicQuery.Constraints()));
+		CloseableIterator itr = ds.query(
+				new QueryOptions(),
+				new BasicQuery(
+						new BasicQuery.Constraints()));
 		Set<Point> readPoints = new TreeSet<Point>();
 		while (itr.hasNext()) {
 			Object n = itr.next();
@@ -119,13 +123,6 @@ public class SimpleIngestTest
 		Set<Point> calcPoints = getCalcedPointSet();
 
 		Assert.assertTrue(readPoints.equals(calcPoints));
-	}
-
-	@Test
-	public void TestIngest() {
-		final SimpleIngest si = new SimpleIngest();
-		si.generateGrid(mockDataStore);
-		validate(mockDataStore);
 	}
 
 }

@@ -12,10 +12,14 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.StringUtils;
+import mil.nga.giat.geowave.core.store.config.AbstractConfigOption;
+import mil.nga.giat.geowave.core.store.config.PasswordConfigOption;
+import mil.nga.giat.geowave.core.store.config.StringConfigOption;
 import mil.nga.giat.geowave.datastore.accumulo.util.AccumuloUtils;
 import mil.nga.giat.geowave.datastore.accumulo.util.ConnectorPool;
 
@@ -25,6 +29,7 @@ import org.apache.accumulo.core.client.BatchDeleter;
 import org.apache.accumulo.core.client.BatchScanner;
 import org.apache.accumulo.core.client.BatchWriterConfig;
 import org.apache.accumulo.core.client.Connector;
+import org.apache.accumulo.core.client.Instance;
 import org.apache.accumulo.core.client.IteratorSetting;
 import org.apache.accumulo.core.client.MutationsRejectedException;
 import org.apache.accumulo.core.client.RowIterator;
@@ -49,6 +54,25 @@ public class BasicAccumuloOperations implements
 		AccumuloOperations
 {
 	private final static Logger LOGGER = Logger.getLogger(BasicAccumuloOperations.class);
+	public static final String ZOOKEEPER_CONFIG_NAME = "zookeeper";
+	public static final String INSTANCE_CONFIG_NAME = "instance";
+	public static final String USER_CONFIG_NAME = "user";
+	public static final String PASSWORD_CONFIG_NAME = "password";
+	private static final AbstractConfigOption<?>[] CONFIG_OPTIONS = new AbstractConfigOption[] {
+		new StringConfigOption(
+				ZOOKEEPER_CONFIG_NAME,
+				"A comma-separated list of zookeeper servers that an Accumulo instance is using"),
+		new StringConfigOption(
+				INSTANCE_CONFIG_NAME,
+				"The Accumulo instance ID"),
+		new StringConfigOption(
+				USER_CONFIG_NAME,
+				"A valid Accumulo user ID"),
+		new PasswordConfigOption(
+				PASSWORD_CONFIG_NAME,
+				"The password for the user")
+	};
+
 	private static final int DEFAULT_NUM_THREADS = 16;
 	private static final long DEFAULT_TIMEOUT_MILLIS = 1000L; // 1 second
 	private static final long DEFAULT_BYTE_BUFFER_SIZE = 1048576L; // 1 MB
@@ -62,6 +86,7 @@ public class BasicAccumuloOperations implements
 	protected Connector connector;
 	private final Map<String, Long> locGrpCache;
 	private long cacheTimeoutMillis;
+	private String password;
 
 	/**
 	 * This is will create an Accumulo connector based on passed in connection
@@ -98,6 +123,7 @@ public class BasicAccumuloOperations implements
 		this(
 				null,
 				tableNamespace);
+		this.password = password;
 
 		connector = ConnectorPool.getInstance().getConnector(
 				zookeeperUrl,
@@ -126,6 +152,8 @@ public class BasicAccumuloOperations implements
 	 * 
 	 * @param connector
 	 *            The connector to use for all operations
+	 * @param password
+	 *            An optional string that is prefixed to any of the table names
 	 * @param tableNamespace
 	 *            An optional string that is prefixed to any of the table names
 	 */
@@ -188,6 +216,7 @@ public class BasicAccumuloOperations implements
 		return byteBufferSize;
 	}
 
+	@Override
 	public Connector getConnector() {
 		return connector;
 	}
@@ -215,12 +244,37 @@ public class BasicAccumuloOperations implements
 			final String tableName,
 			final boolean createTable )
 			throws TableNotFoundException {
+		return createWriter(
+				tableName,
+				createTable,
+				true,
+				null);
+	}
+
+	@Override
+	public Writer createWriter(
+			final String tableName,
+			final boolean createTable,
+			final boolean enableVersioning,
+			final Set<ByteArrayId> splits )
+			throws TableNotFoundException {
 		final String qName = getQualifiedTableName(tableName);
 		if (createTable && !connector.tableOperations().exists(
 				qName)) {
 			try {
 				connector.tableOperations().create(
-						qName);
+						qName,
+						enableVersioning);
+				if ((splits != null) && !splits.isEmpty()) {
+					final SortedSet<Text> partitionKeys = new TreeSet<Text>();
+					for (final ByteArrayId split : splits) {
+						partitionKeys.add(new Text(
+								split.getBytes()));
+					}
+					connector.tableOperations().addSplits(
+							qName,
+							partitionKeys);
+				}
 			}
 			catch (AccumuloException | AccumuloSecurityException | TableExistsException e) {
 				LOGGER.warn(
@@ -228,12 +282,16 @@ public class BasicAccumuloOperations implements
 						e);
 			}
 		}
+		final BatchWriterConfig config = new BatchWriterConfig();
+		config.setMaxMemory(byteBufferSize);
+		config.setMaxLatency(
+				timeoutMillis,
+				TimeUnit.MILLISECONDS);
+		config.setMaxWriteThreads(numThreads);
 		return new mil.nga.giat.geowave.datastore.accumulo.BatchWriterWrapper(
 				connector.createBatchWriter(
 						qName,
-						byteBufferSize,
-						timeoutMillis,
-						numThreads));
+						config));
 	}
 
 	@Override
@@ -245,7 +303,7 @@ public class BasicAccumuloOperations implements
 			try {
 				connector.tableOperations().create(
 						qName,
-						false);
+						true);
 			}
 			catch (AccumuloException | AccumuloSecurityException | TableExistsException e) {
 				LOGGER.warn(
@@ -629,10 +687,9 @@ public class BasicAccumuloOperations implements
 				final Map<String, EnumSet<IteratorScope>> iteratorScopes = connector.tableOperations().listIterators(
 						qName);
 				for (final IteratorConfig iteratorConfig : iterators) {
-					final IteratorSetting iteratorSetting = iteratorConfig.getIteratorSettings();
 					boolean mustDelete = false;
 					boolean exists = false;
-					final EnumSet<IteratorScope> existingScopes = iteratorScopes.get(iteratorSetting.getName());
+					final EnumSet<IteratorScope> existingScopes = iteratorScopes.get(iteratorConfig.getIteratorName());
 					EnumSet<IteratorScope> configuredScopes;
 					if (iteratorConfig.getScopes() == null) {
 						configuredScopes = EnumSet.allOf(IteratorScope.class);
@@ -640,6 +697,7 @@ public class BasicAccumuloOperations implements
 					else {
 						configuredScopes = iteratorConfig.getScopes();
 					}
+					Map<String, String> configuredOptions = null;
 					if (existingScopes != null) {
 						if (existingScopes.size() == configuredScopes.size()) {
 							exists = true;
@@ -648,7 +706,7 @@ public class BasicAccumuloOperations implements
 									// this iterator exists with the wrong
 									// scope, we will assume we want to remove
 									// it and add the new configuration
-									LOGGER.warn("found iterator '" + iteratorSetting.getName() + "' missing scope '" + s.name() + "', removing it and re-attaching");
+									LOGGER.warn("found iterator '" + iteratorConfig.getIteratorName() + "' missing scope '" + s.name() + "', removing it and re-attaching");
 
 									mustDelete = true;
 									break;
@@ -659,71 +717,21 @@ public class BasicAccumuloOperations implements
 							// see if the options are the same, if they are not
 							// the same, apply a merge with the existing options
 							// and the configured options
-							Iterator<IteratorScope> it = existingScopes.iterator();
+							final Iterator<IteratorScope> it = existingScopes.iterator();
 							while (it.hasNext()) {
-								IteratorScope scope = it.next();
+								final IteratorScope scope = it.next();
 								final IteratorSetting setting = connector.tableOperations().getIteratorSetting(
 										qName,
-										iteratorSetting.getName(),
+										iteratorConfig.getIteratorName(),
 										scope);
 								if (setting != null) {
 									final Map<String, String> existingOptions = setting.getOptions();
-									final Map<String, String> configuredOptions = iteratorSetting.getOptions();
-									for (final Entry<String, String> e : existingOptions.entrySet()) {
-										final String configuredValue = configuredOptions.get(e.getKey());
-										if ((e.getValue() == null) && (configuredValue == null)) {
-											continue;
-										}
-										else if ((e.getValue() == null) || ((e.getValue() != null) && !e.getValue().equals(
-												configuredValue))) {
-											final String newValue = iteratorConfig.mergeOption(
-													e.getKey(),
-													e.getValue(),
-													configuredValue);
-											if ((newValue != null) && newValue.equals(e.getValue())) {
-												// once merged the value didn't
-												// change,
-												// so just continue
-												continue;
-											}
-											mustDelete = true;
-											if (newValue == null) {
-												iteratorSetting.removeOption(e.getKey());
-											}
-											else {
-												iteratorSetting.addOption(
-														e.getKey(),
-														newValue);
-											}
-										}
-									}
-									for (final Entry<String, String> e : configuredOptions.entrySet()) {
-										if (!existingOptions.containsKey(e.getKey())) {
-											// existing value should be null
-											// because
-											// this key is contained in the
-											// merged
-											// set
-											if (e.getValue() == null) {
-												continue;
-											}
-											else {
-												final String newValue = iteratorConfig.mergeOption(
-														e.getKey(),
-														null,
-														e.getValue());
-												mustDelete = true;
-												if (newValue == null) {
-													iteratorSetting.removeOption(e.getKey());
-												}
-												else {
-													iteratorSetting.addOption(
-															e.getKey(),
-															newValue);
-												}
-											}
-										}
-									}
+									configuredOptions = iteratorConfig.getOptions(existingOptions);
+									// we found the setting existing in one
+									// scope, assume the options are the same
+									// for each scope
+									mustDelete = true;
+									break;
 								}
 							}
 						}
@@ -731,14 +739,21 @@ public class BasicAccumuloOperations implements
 					if (mustDelete) {
 						connector.tableOperations().removeIterator(
 								qName,
-								iteratorSetting.getName(),
+								iteratorConfig.getIteratorName(),
 								existingScopes);
 						exists = false;
 					}
 					if (!exists) {
+						if (configuredOptions == null) {
+							configuredOptions = iteratorConfig.getOptions(new HashMap<String, String>());
+						}
 						connector.tableOperations().attachIterator(
 								qName,
-								iteratorSetting,
+								new IteratorSetting(
+										iteratorConfig.getIteratorPriority(),
+										iteratorConfig.getIteratorName(),
+										iteratorConfig.getIteratorClass(),
+										configuredOptions),
 								configuredScopes);
 					}
 				}
@@ -750,5 +765,103 @@ public class BasicAccumuloOperations implements
 					e);
 		}
 		return false;
+	}
+
+	public static AbstractConfigOption<?>[] getOptions() {
+		return CONFIG_OPTIONS;
+	}
+
+	public static BasicAccumuloOperations createOperations(
+			final Map<String, Object> configOptions,
+			final String namespace )
+			throws AccumuloException,
+			AccumuloSecurityException {
+		return new BasicAccumuloOperations(
+				configOptions.get(
+						ZOOKEEPER_CONFIG_NAME).toString(),
+				configOptions.get(
+						INSTANCE_CONFIG_NAME).toString(),
+				configOptions.get(
+						USER_CONFIG_NAME).toString(),
+				configOptions.get(
+						PASSWORD_CONFIG_NAME).toString(),
+				namespace);
+	}
+
+	public static Connector getConnector(
+			final Map<String, Object> configOptions )
+			throws AccumuloException,
+			AccumuloSecurityException {
+		return createOperations(
+				configOptions,
+				null).connector;
+	}
+
+	public static String getUsername(
+			final Map<String, Object> configOptions )
+			throws AccumuloException,
+			AccumuloSecurityException {
+		return configOptions.get(
+				USER_CONFIG_NAME).toString();
+	}
+
+	public static String getPassword(
+			final Map<String, Object> configOptions )
+			throws AccumuloException,
+			AccumuloSecurityException {
+		return configOptions.get(
+				PASSWORD_CONFIG_NAME).toString();
+	}
+
+	@Override
+	public String getGeoWaveNamespace() {
+		return tableNamespace;
+	}
+
+	@Override
+	public String getUsername() {
+		return connector.whoami();
+	}
+
+	@Override
+	public String getPassword() {
+		return password;
+	}
+
+	@Override
+	public Instance getInstance() {
+		return connector.getInstance();
+	}
+
+	@Override
+	public void addSplits(
+			final String tableName,
+			final boolean createTable,
+			final Set<ByteArrayId> splits )
+			throws TableNotFoundException,
+			AccumuloException,
+			AccumuloSecurityException {
+		final String qName = getQualifiedTableName(tableName);
+		if (createTable && !connector.tableOperations().exists(
+				qName)) {
+			try {
+				connector.tableOperations().create(
+						qName,
+						true);
+			}
+			catch (AccumuloException | AccumuloSecurityException | TableExistsException e) {
+				LOGGER.warn(
+						"Unable to create table '" + qName + "'",
+						e);
+			}
+		}
+		final SortedSet<Text> partitionKeys = new TreeSet<Text>();
+		for (final ByteArrayId split : splits) {
+			partitionKeys.add(new Text(
+					split.getBytes()));
+		}
+		connector.tableOperations().addSplits(
+				qName,
+				partitionKeys);
 	}
 }

@@ -9,14 +9,15 @@ import java.util.List;
 import java.util.Map;
 
 import mil.nga.giat.geowave.adapter.raster.adapter.RasterDataAdapter;
-import mil.nga.giat.geowave.core.geotime.IndexType;
+import mil.nga.giat.geowave.core.geotime.store.dimension.GeometryWrapper;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.ingest.GeoWaveData;
 import mil.nga.giat.geowave.core.ingest.local.LocalFileIngestPlugin;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.CloseableIterator.Wrapper;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
-import mil.nga.giat.geowave.core.store.index.Index;
+import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 
 import org.apache.log4j.Logger;
 import org.geotools.coverage.grid.GridCoverage2D;
@@ -36,7 +37,6 @@ public class GeoToolsRasterDataStoreIngestPlugin implements
 		LocalFileIngestPlugin<GridCoverage>
 {
 	private final static Logger LOGGER = Logger.getLogger(GeoToolsRasterDataStoreIngestPlugin.class);
-	private final Index[] supportedIndices;
 	private final RasterOptionProvider optionProvider;
 
 	public GeoToolsRasterDataStoreIngestPlugin() {
@@ -46,10 +46,6 @@ public class GeoToolsRasterDataStoreIngestPlugin implements
 
 	public GeoToolsRasterDataStoreIngestPlugin(
 			final RasterOptionProvider optionProvider ) {
-		supportedIndices = new Index[] {
-			IndexType.SPATIAL_RASTER.createDefaultIndex(),
-			IndexType.SPATIAL_TEMPORAL_RASTER.createDefaultIndex()
-		};
 		this.optionProvider = optionProvider;
 	}
 
@@ -142,13 +138,14 @@ public class GeoToolsRasterDataStoreIngestPlugin implements
 	}
 
 	@Override
-	public Index[] getSupportedIndices() {
-		return supportedIndices;
+	public PrimaryIndex[] getRequiredIndices() {
+		return new PrimaryIndex[] {};
 	}
 
 	@Override
-	public Index[] getRequiredIndices() {
-		return new Index[] {};
+	public Class<? extends CommonIndexValue>[] getSupportedIndexableTypes() {
+		return new Class[] {
+			GeometryWrapper.class
+		};
 	}
-
 }

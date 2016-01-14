@@ -1,7 +1,6 @@
 package mil.nga.giat.geowave.adapter.vector;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.adapter.NativeFieldHandler.RowBuilder;
 import mil.nga.giat.geowave.core.store.data.PersistentValue;
 
@@ -30,14 +29,14 @@ public class FeatureRowBuilder implements
 	@Override
 	public SimpleFeature buildRow(
 			final ByteArrayId dataId ) {
-		return builder.buildFeature(StringUtils.stringFromBinary(dataId.getBytes()));
+		return builder.buildFeature(dataId.getString());
 	}
 
 	@Override
 	public void setField(
 			final PersistentValue<Object> fieldValue ) {
 		builder.set(
-				StringUtils.stringFromBinary(fieldValue.getId().getBytes()),
+				fieldValue.getId().getString(),
 				fieldValue.getValue());
 	}
 

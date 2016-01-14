@@ -6,6 +6,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
@@ -14,9 +15,7 @@ import java.util.Map;
 
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import mil.nga.giat.geowave.adapter.vector.stats.FeatureBoundingBoxStatistics;
-import mil.nga.giat.geowave.core.cli.GeoWaveMain;
 import mil.nga.giat.geowave.core.geotime.GeometryUtils;
-import mil.nga.giat.geowave.core.geotime.IndexType;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
 import mil.nga.giat.geowave.core.geotime.store.statistics.BoundingBoxDataStatistics;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
@@ -24,10 +23,10 @@ import mil.nga.giat.geowave.core.ingest.GeoWaveData;
 import mil.nga.giat.geowave.core.ingest.local.LocalFileIngestPlugin;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.DataStoreEntryInfo;
+import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.IngestCallback;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
-import mil.nga.giat.geowave.core.store.adapter.MemoryAdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
@@ -35,20 +34,22 @@ import mil.nga.giat.geowave.core.store.adapter.statistics.RowRangeHistogramStati
 import mil.nga.giat.geowave.core.store.adapter.statistics.StatisticalDataAdapter;
 import mil.nga.giat.geowave.core.store.data.visibility.GlobalVisibilityHandler;
 import mil.nga.giat.geowave.core.store.data.visibility.UniformVisibilityWriter;
-import mil.nga.giat.geowave.core.store.index.Index;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.core.store.memory.DataStoreUtils;
+import mil.nga.giat.geowave.core.store.memory.MemoryAdapterStore;
+import mil.nga.giat.geowave.core.store.query.DataIdQuery;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
+import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStore;
+import mil.nga.giat.geowave.datastore.accumulo.index.secondary.AccumuloSecondaryIndexDataStore;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloAdapterStore;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloDataStatisticsStore;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloIndexStore;
-import mil.nga.giat.geowave.datastore.accumulo.util.AccumuloUtils;
 import mil.nga.giat.geowave.format.geotools.vector.GeoToolsVectorDataStoreIngestPlugin;
 
 import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.apache.accumulo.core.client.TableNotFoundException;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.math.util.MathUtils;
 import org.apache.log4j.Logger;
 import org.geotools.feature.AttributeTypeBuilder;
@@ -104,13 +105,12 @@ public class GeoWaveBasicIT extends
 		System.getProperties().put(
 				"AccumuloIndexWriter.skipFlush",
 				"true");
-		final Index spatialIndex = IndexType.SPATIAL_VECTOR.createDefaultIndex();
 		// ingest both lines and points
 		testLocalIngest(
-				IndexType.SPATIAL_VECTOR,
+				false,
 				HAIL_SHAPEFILE_FILE);
 		testLocalIngest(
-				IndexType.SPATIAL_VECTOR,
+				false,
 				TORNADO_TRACKS_SHAPEFILE_FILE);
 
 		try {
@@ -123,7 +123,7 @@ public class GeoWaveBasicIT extends
 						new File(
 								TORNADO_TRACKS_EXPECTED_BOX_FILTER_RESULTS_FILE).toURI().toURL()
 					},
-					spatialIndex,
+					DEFAULT_SPATIAL_INDEX,
 					"bounding box constraint only");
 		}
 		catch (final Exception e) {
@@ -149,7 +149,7 @@ public class GeoWaveBasicIT extends
 						new File(
 								TORNADO_TRACKS_EXPECTED_POLYGON_FILTER_RESULTS_FILE).toURI().toURL()
 					},
-					spatialIndex,
+					DEFAULT_SPATIAL_INDEX,
 					"polygon constraint only");
 		}
 		catch (final Exception e) {
@@ -172,7 +172,7 @@ public class GeoWaveBasicIT extends
 						new File(
 								TORNADO_TRACKS_SHAPEFILE_FILE)
 					},
-					spatialIndex);
+					DEFAULT_SPATIAL_INDEX);
 		}
 		catch (final Exception e) {
 			e.printStackTrace();
@@ -190,7 +190,7 @@ public class GeoWaveBasicIT extends
 			testDelete(
 					new File(
 							TEST_POLYGON_FILTER_FILE).toURI().toURL(),
-					IndexType.SPATIAL_VECTOR);
+					DEFAULT_SPATIAL_INDEX);
 		}
 		catch (final Exception e) {
 			e.printStackTrace();
@@ -267,7 +267,7 @@ public class GeoWaveBasicIT extends
 
 	public void testStats(
 			final File[] inputFiles,
-			final Index index ) {
+			final PrimaryIndex index ) {
 		final LocalFileIngestPlugin<SimpleFeature> localFileIngest = new GeoToolsVectorDataStoreIngestPlugin(
 				Filter.INCLUDE);
 		final Map<ByteArrayId, StatisticsCache> statsCache = new HashMap<ByteArrayId, StatisticsCache>();
@@ -292,7 +292,7 @@ public class GeoWaveBasicIT extends
 									adapter.getAdapterId(),
 									cachedValues);
 						}
-						final DataStoreEntryInfo entryInfo = AccumuloUtils.getIngestInfo(
+						final DataStoreEntryInfo entryInfo = DataStoreUtils.getIngestInfo(
 								adapter,
 								index,
 								data.getValue(),
@@ -331,8 +331,10 @@ public class GeoWaveBasicIT extends
 				try (CloseableIterator<DataStatistics<?>> statsIterator = statsStore.getDataStatistics(adapter.getAdapterId())) {
 					int statsCount = 0;
 					while (statsIterator.hasNext()) {
-						DataStatistics<?> nextStats = statsIterator.next();
-						if (nextStats instanceof RowRangeHistogramStatistics) continue;
+						final DataStatistics<?> nextStats = statsIterator.next();
+						if (nextStats instanceof RowRangeHistogramStatistics) {
+							continue;
+						}
 						statsCount++;
 					}
 					Assert.assertEquals(
@@ -401,13 +403,12 @@ public class GeoWaveBasicIT extends
 		System.getProperties().put(
 				"AccumuloIndexWriter.skipFlush",
 				"true");
-		final Index spatialTemporalIndex = IndexType.SPATIAL_VECTOR.createDefaultIndex();
 		// ingest both lines and points
 		testLocalIngest(
-				IndexType.SPATIAL_TEMPORAL_VECTOR,
+				true,
 				HAIL_SHAPEFILE_FILE);
 		testLocalIngest(
-				IndexType.SPATIAL_TEMPORAL_VECTOR,
+				true,
 				TORNADO_TRACKS_SHAPEFILE_FILE);
 		try {
 			testQuery(
@@ -465,7 +466,7 @@ public class GeoWaveBasicIT extends
 						new File(
 								TORNADO_TRACKS_SHAPEFILE_FILE)
 					},
-					spatialTemporalIndex);
+					DEFAULT_SPATIAL_TEMPORAL_INDEX);
 		}
 		catch (final Exception e) {
 			e.printStackTrace();
@@ -483,7 +484,7 @@ public class GeoWaveBasicIT extends
 			testDelete(
 					new File(
 							TEST_POLYGON_TEMPORAL_FILTER_FILE).toURI().toURL(),
-					IndexType.SPATIAL_TEMPORAL_VECTOR);
+					DEFAULT_SPATIAL_TEMPORAL_INDEX);
 		}
 		catch (final Exception e) {
 			e.printStackTrace();
@@ -508,7 +509,8 @@ public class GeoWaveBasicIT extends
 	}
 
 	@Test
-	public void testFeatureSerialization() {
+	public void testFeatureSerialization()
+			throws IOException {
 
 		final Map<Class, Object> args = new HashMap<>();
 		args.put(
@@ -623,7 +625,6 @@ public class GeoWaveBasicIT extends
 				serTestType);
 		final FeatureDataAdapter serAdapter = new FeatureDataAdapter(
 				serTestType);
-		final Index index = IndexType.SPATIAL_VECTOR.createDefaultIndex();
 
 		for (final Map.Entry<Class, Object> arg : args.entrySet()) {
 			serBuilder.set(
@@ -638,91 +639,96 @@ public class GeoWaveBasicIT extends
 						accumuloOperations),
 				new AccumuloDataStatisticsStore(
 						accumuloOperations),
+				new AccumuloSecondaryIndexDataStore(
+						accumuloOperations),
 				accumuloOperations);
 
 		final SimpleFeature sf = serBuilder.buildFeature("343");
-		geowaveStore.ingest(
-				serAdapter,
-				index,
-				sf);
+		try (IndexWriter writer = geowaveStore.createIndexWriter(
+				DEFAULT_SPATIAL_INDEX,
+				DataStoreUtils.DEFAULT_VISIBILITY)) {
+			writer.write(
+					serAdapter,
+					sf);
+		}
 		final DistributableQuery q = new SpatialQuery(
 				((Geometry) args.get(Geometry.class)).buffer(0.5d));
-		final CloseableIterator<?> iter = geowaveStore.query(q);
-		boolean foundFeat = false;
-		while (iter.hasNext()) {
-			final Object maybeFeat = iter.next();
-			Assert.assertTrue(
-					"Iterator should return simple feature in this test",
-					maybeFeat instanceof SimpleFeature);
-			foundFeat = true;
-			final SimpleFeature isFeat = (SimpleFeature) maybeFeat;
-			for (final Property p : isFeat.getProperties()) {
-				final Object before = args.get(p.getType().getBinding());
-				final Object after = isFeat.getAttribute(p.getType().getName().toString());
+		try (final CloseableIterator<?> iter = geowaveStore.query(
+				new QueryOptions(/* TODO do I need to pass 'index'? */),
+				q)) {
+			boolean foundFeat = false;
+			while (iter.hasNext()) {
+				final Object maybeFeat = iter.next();
+				Assert.assertTrue(
+						"Iterator should return simple feature in this test",
+						maybeFeat instanceof SimpleFeature);
+				foundFeat = true;
+				final SimpleFeature isFeat = (SimpleFeature) maybeFeat;
+				for (final Property p : isFeat.getProperties()) {
+					final Object before = args.get(p.getType().getBinding());
+					final Object after = isFeat.getAttribute(p.getType().getName().toString());
 
-				if (before instanceof double[]) {
-					Assert.assertArrayEquals(
-							(double[]) before,
-							(double[]) after,
-							1e-12d);
-				}
-				else if (before instanceof boolean[]) {
-					final boolean[] b = (boolean[]) before;
-					final boolean[] a = (boolean[]) after;
-					Assert.assertTrue(a.length == b.length);
-					for (int i = 0; i < b.length; i++) {
-						Assert.assertTrue(b[i] == a[i]);
+					if (before instanceof double[]) {
+						Assert.assertTrue(Arrays.equals(
+								(double[]) before,
+								(double[]) after));
+					}
+					else if (before instanceof boolean[]) {
+						final boolean[] b = (boolean[]) before;
+						final boolean[] a = (boolean[]) after;
+						Assert.assertTrue(a.length == b.length);
+						for (int i = 0; i < b.length; i++) {
+							Assert.assertTrue(b[i] == a[i]);
+						}
+					}
+					else if (before instanceof byte[]) {
+						Assert.assertArrayEquals(
+								(byte[]) before,
+								(byte[]) after);
+					}
+					else if (before instanceof char[]) {
+						Assert.assertArrayEquals(
+								(char[]) before,
+								(char[]) after);
+					}
+					else if (before instanceof float[]) {
+						Assert.assertTrue(Arrays.equals(
+								(float[]) before,
+								(float[]) after));
+					}
+					else if (before instanceof int[]) {
+						Assert.assertArrayEquals(
+								(int[]) before,
+								(int[]) after);
+					}
+					else if (before instanceof long[]) {
+						Assert.assertArrayEquals(
+								(long[]) before,
+								(long[]) after);
+					}
+					else if (before instanceof short[]) {
+						Assert.assertArrayEquals(
+								(short[]) before,
+								(short[]) after);
+					}
+					else if (before.getClass().isArray()) {
+						Assert.assertArrayEquals(
+								returnArray(
+										p.getType().getBinding(),
+										before),
+								returnArray(
+										p.getType().getBinding(),
+										after));
+					}
+					else {
+						Assert.assertTrue(before.equals(after));
 					}
 				}
-				else if (before instanceof byte[]) {
-					Assert.assertArrayEquals(
-							(byte[]) before,
-							(byte[]) after);
-				}
-				else if (before instanceof char[]) {
-					Assert.assertArrayEquals(
-							(char[]) before,
-							(char[]) after);
-				}
-				else if (before instanceof float[]) {
-					Assert.assertArrayEquals(
-							(float[]) before,
-							(float[]) after,
-							1e-12f);
-				}
-				else if (before instanceof int[]) {
-					Assert.assertArrayEquals(
-							(int[]) before,
-							(int[]) after);
-				}
-				else if (before instanceof long[]) {
-					Assert.assertArrayEquals(
-							(long[]) before,
-							(long[]) after);
-				}
-				else if (before instanceof short[]) {
-					Assert.assertArrayEquals(
-							(short[]) before,
-							(short[]) after);
-				}
-				else if (before.getClass().isArray()) {
-					Assert.assertArrayEquals(
-							returnArray(
-									p.getType().getBinding(),
-									before),
-							returnArray(
-									p.getType().getBinding(),
-									after));
-				}
-				else {
-					Assert.assertTrue(before.equals(after));
-				}
 			}
+			Assert.assertTrue(
+					"One feature should be found",
+					foundFeat);
 		}
-		IOUtils.closeQuietly(iter);
-		Assert.assertTrue(
-				"One feature should be found",
-				foundFeat);
 		try {
 			accumuloOperations.deleteAll();
 		}
@@ -737,18 +743,6 @@ public class GeoWaveBasicIT extends
 			final Class<T> clazz,
 			final Object o ) {
 		return (T[]) o;
-	}
-
-	private void testIngest(
-			final IndexType indexType,
-			final String ingestFilePath ) {
-		// ingest a shapefile (geotools type) directly into GeoWave using the
-		// ingest framework's main method and pre-defined commandline arguments
-		LOGGER.warn("Ingesting '" + ingestFilePath + "' - this may take several minutes...");
-		final String[] args = StringUtils.split(
-				"-localingest -f geotools-vector -b " + ingestFilePath + " -z " + zookeeper + " -i " + accumuloInstance + " -u " + accumuloUser + " -p " + accumuloPassword + " -n " + TEST_NAMESPACE + " -dim " + (indexType.equals(IndexType.SPATIAL_VECTOR) ? "spatial" : "spatial-temporal"),
-				' ');
-		GeoWaveMain.main(args);
 	}
 
 	private void testQuery(
@@ -767,7 +761,7 @@ public class GeoWaveBasicIT extends
 	private void testQuery(
 			final URL savedFilterResource,
 			final URL[] expectedResultsResources,
-			final Index index,
+			final PrimaryIndex index,
 			final String queryDescription )
 			throws Exception {
 		LOGGER.info("querying " + queryDescription);
@@ -779,31 +773,42 @@ public class GeoWaveBasicIT extends
 						accumuloOperations),
 				new AccumuloDataStatisticsStore(
 						accumuloOperations),
+				new AccumuloSecondaryIndexDataStore(
+						accumuloOperations),
 				accumuloOperations);
 		// this file is the filtered dataset (using the previous file as a
 		// filter) so use it to ensure the query worked
 		final DistributableQuery query = resourceToQuery(savedFilterResource);
-		final CloseableIterator<?> actualResults;
-		if (index == null) {
-			actualResults = geowaveStore.query(query);
-		}
-		else {
-			actualResults = geowaveStore.query(
-					index,
-					query);
-		}
-		final ExpectedResults expectedResults = getExpectedResults(expectedResultsResources);
-		int totalResults = 0;
-		while (actualResults.hasNext()) {
-			final Object obj = actualResults.next();
-			if (obj instanceof SimpleFeature) {
-				final SimpleFeature result = (SimpleFeature) obj;
-				Assert.assertTrue(
-						"Actual result '" + result.toString() + "' not found in expected result set",
-						expectedResults.hashedCentroids.contains(hashCentroid((Geometry) result.getDefaultGeometry())));
-				totalResults++;
+		try (final CloseableIterator<?> actualResults = (index == null) ? geowaveStore.query(
+				new QueryOptions(),
+				query) : geowaveStore.query(
+				new QueryOptions(
+						index),
+				query)) {
+			final ExpectedResults expectedResults = getExpectedResults(expectedResultsResources);
+			int totalResults = 0;
+			while (actualResults.hasNext()) {
+				final Object obj = actualResults.next();
+				if (obj instanceof SimpleFeature) {
+					final SimpleFeature result = (SimpleFeature) obj;
+					Assert.assertTrue(
+							"Actual result '" + result.toString() + "' not found in expected result set",
+							expectedResults.hashedCentroids.contains(hashCentroid((Geometry) result.getDefaultGeometry())));
+					totalResults++;
+				}
+				else {
+					try {
+						accumuloOperations.deleteAll();
+					}
+					catch (TableNotFoundException | AccumuloSecurityException | AccumuloException ex) {
+						LOGGER.error(
+								"Unable to clear accumulo namespace",
+								ex);
+					}
+					Assert.fail("Actual result '" + obj.toString() + "' is not of type Simple Feature.");
+				}
 			}
-			else {
+			if (expectedResults.count != totalResults) {
 				try {
 					accumuloOperations.deleteAll();
 				}
@@ -811,33 +816,21 @@ public class GeoWaveBasicIT extends
 					LOGGER.error(
 							"Unable to clear accumulo namespace",
 							ex);
+					Assert.fail("Unable to clear accumulo namespace");
 				}
-				Assert.fail("Actual result '" + obj.toString() + "' is not of type Simple Feature.");
 			}
+			Assert.assertEquals(
+					expectedResults.count,
+					totalResults);
 		}
-		if (expectedResults.count != totalResults) {
-			try {
-				accumuloOperations.deleteAll();
-			}
-			catch (TableNotFoundException | AccumuloSecurityException | AccumuloException ex) {
-				LOGGER.error(
-						"Unable to clear accumulo namespace",
-						ex);
-				Assert.fail("Unable to clear accumulo namespace");
-			}
-		}
-		Assert.assertEquals(
-				expectedResults.count,
-				totalResults);
-		actualResults.close();
 	}
 
 	private void testDelete(
 			final URL savedFilterResource,
-			final IndexType indexType )
+			final PrimaryIndex index )
 			throws Exception {
-		LOGGER.info("deleting from " + indexType.toString() + " index");
-		System.out.println("deleting from " + indexType.toString() + " index");
+		LOGGER.info("deleting from " + index.getId() + " index");
+		System.out.println("deleting from " + index.getId() + " index");
 		boolean success = false;
 		final mil.nga.giat.geowave.core.store.DataStore geowaveStore = new AccumuloDataStore(
 				new AccumuloIndexStore(
@@ -846,13 +839,15 @@ public class GeoWaveBasicIT extends
 						accumuloOperations),
 				new AccumuloDataStatisticsStore(
 						accumuloOperations),
+				new AccumuloSecondaryIndexDataStore(
+						accumuloOperations),
 				accumuloOperations);
 		final DistributableQuery query = resourceToQuery(savedFilterResource);
-		final Index index = indexType.createDefaultIndex();
 		final CloseableIterator<?> actualResults;
 
 		actualResults = geowaveStore.query(
-				index,
+				new QueryOptions(
+						index),
 				query);
 
 		SimpleFeature testFeature = null;
@@ -870,17 +865,21 @@ public class GeoWaveBasicIT extends
 			final ByteArrayId adapterId = new ByteArrayId(
 					testFeature.getFeatureType().getTypeName());
 
-			if (geowaveStore.deleteEntry(
-					index,
-					dataId,
-					adapterId)) {
+			if (geowaveStore.delete(
+					new QueryOptions(
+							adapterId,
+							index.getId()),
+					new DataIdQuery(
+							adapterId,
+							dataId))) {
 
-				if (geowaveStore.getEntry(
-						index,
-						dataId,
-						adapterId) == null) {
-					success = true;
-				}
+				success = !hasAtLeastOne(geowaveStore.query(
+						new QueryOptions(
+								adapterId,
+								index.getId()),
+						new DataIdQuery(
+								adapterId,
+								dataId)));
 			}
 		}
 		Assert.assertTrue(
@@ -888,4 +887,18 @@ public class GeoWaveBasicIT extends
 				success);
 	}
 
+	private boolean hasAtLeastOne(
+			final CloseableIterator<?> it ) {
+		try {
+			return it.hasNext();
+		}
+		finally {
+			try {
+				it.close();
+			}
+			catch (final IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 }

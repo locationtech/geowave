@@ -4,6 +4,7 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
 import mil.nga.giat.geowave.core.index.sfc.data.BasicNumericDataset;
@@ -348,6 +349,57 @@ public class CompoundIndexStrategy implements
 	}
 
 	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = (prime * result) + Arrays.hashCode(baseDefinitions);
+		result = (prime * result) + defaultNumberOfRanges;
+		result = (prime * result) + ((subStrategy1 == null) ? 0 : subStrategy1.hashCode());
+		result = (prime * result) + ((subStrategy2 == null) ? 0 : subStrategy2.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(
+			final Object obj ) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		final CompoundIndexStrategy other = (CompoundIndexStrategy) obj;
+		if (!Arrays.equals(
+				baseDefinitions,
+				other.baseDefinitions)) {
+			return false;
+		}
+		if (defaultNumberOfRanges != other.defaultNumberOfRanges) {
+			return false;
+		}
+		if (subStrategy1 == null) {
+			if (other.subStrategy1 != null) {
+				return false;
+			}
+		}
+		else if (!subStrategy1.equals(other.subStrategy1)) {
+			return false;
+		}
+		if (subStrategy2 == null) {
+			if (other.subStrategy2 != null) {
+				return false;
+			}
+		}
+		else if (!subStrategy2.equals(other.subStrategy2)) {
+			return false;
+		}
+		return true;
+	}
+
+	@Override
 	public String getId() {
 		return StringUtils.intToString(hashCode());
 	}
@@ -370,6 +422,13 @@ public class CompoundIndexStrategy implements
 				strategy1HighestPrecision.length,
 				strategy2HighestPrecision.length);
 		return highestPrecision;
+	}
+
+	@Override
+	public Set<ByteArrayId> getNaturalSplits() {
+		// because substrategy one is prefixing substrategy2, just use the
+		// splits associated with substrategy1
+		return subStrategy1.getNaturalSplits();
 	}
 
 }

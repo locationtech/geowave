@@ -12,12 +12,11 @@ import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import mil.nga.giat.geowave.adapter.vector.FeatureWritable;
 import mil.nga.giat.geowave.analytic.AdapterWithObjectWritable;
 import mil.nga.giat.geowave.analytic.AnalyticFeature;
-import mil.nga.giat.geowave.analytic.ConfigurationWrapper;
 import mil.nga.giat.geowave.analytic.Projection;
+import mil.nga.giat.geowave.analytic.ScopedJobConfiguration;
 import mil.nga.giat.geowave.analytic.SimpleFeatureProjection;
 import mil.nga.giat.geowave.analytic.clustering.ClusteringUtils;
 import mil.nga.giat.geowave.analytic.distance.CoordinateCircleDistanceFn;
-import mil.nga.giat.geowave.analytic.mapreduce.JobContextConfigurationWrapper;
 import mil.nga.giat.geowave.analytic.mapreduce.dbscan.ClusterNeighborList.ClusterNeighborListFactory;
 import mil.nga.giat.geowave.analytic.mapreduce.dbscan.ClusterUnionList.ClusterUnionListFactory;
 import mil.nga.giat.geowave.analytic.mapreduce.dbscan.PreProcessSingleItemClusterList.PreProcessSingleItemClusterListFactory;
@@ -25,7 +24,6 @@ import mil.nga.giat.geowave.analytic.mapreduce.dbscan.SingleItemClusterList.Sing
 import mil.nga.giat.geowave.analytic.mapreduce.nn.NNMapReduce;
 import mil.nga.giat.geowave.analytic.mapreduce.nn.NNMapReduce.NNReducer;
 import mil.nga.giat.geowave.analytic.mapreduce.nn.NNMapReduce.PartitionDataWritable;
-import mil.nga.giat.geowave.analytic.nn.DistanceProfileGenerateFn;
 import mil.nga.giat.geowave.analytic.nn.NNProcessor;
 import mil.nga.giat.geowave.analytic.nn.NNProcessor.CompleteNotifier;
 import mil.nga.giat.geowave.analytic.nn.NeighborList;
@@ -36,8 +34,8 @@ import mil.nga.giat.geowave.analytic.param.GlobalParameters;
 import mil.nga.giat.geowave.analytic.param.HullParameters;
 import mil.nga.giat.geowave.analytic.partitioner.Partitioner.PartitionData;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.datastore.accumulo.mapreduce.HadoopWritableSerializer;
-import mil.nga.giat.geowave.datastore.accumulo.mapreduce.input.GeoWaveInputKey;
+import mil.nga.giat.geowave.mapreduce.HadoopWritableSerializer;
+import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
 
 import org.apache.hadoop.io.ObjectWritable;
 import org.apache.hadoop.mapreduce.Reducer;
@@ -114,8 +112,10 @@ public class DBScanMapReduce
 			if (neighbors == null) {
 				return;
 			}
-			Cluster cluster = ((ClusterNeighborList) neighbors).getCluster();
-			if (cluster == null) return;
+			final Cluster cluster = ((ClusterNeighborList) neighbors).getCluster();
+			if (cluster == null) {
+				return;
+			}
 			if (cluster.size() < minOwners) {
 				LOGGER.trace(
 						"Invalidate {} ",
@@ -132,13 +132,13 @@ public class DBScanMapReduce
 				throws IOException,
 				InterruptedException {
 			super.setup(context);
-			final ConfigurationWrapper config = new JobContextConfigurationWrapper(
-					context);
+			final ScopedJobConfiguration config = new ScopedJobConfiguration(
+					context.getConfiguration(),
+					NNMapReduce.class);
 
 			// first run must at least form a triangle
 			minOwners = config.getInt(
 					ClusteringParameters.Clustering.MINIMUM_SIZE,
-					NNMapReduce.class,
 					2);
 
 			LOGGER.info(
@@ -156,7 +156,7 @@ public class DBScanMapReduce
 		final Projection<SimpleFeature> projection;
 
 		public SimpleFeatureToClusterItemConverter(
-				Projection<SimpleFeature> projection ) {
+				final Projection<SimpleFeature> projection ) {
 			super();
 			this.projection = projection;
 		}
@@ -166,7 +166,7 @@ public class DBScanMapReduce
 				final ByteArrayId id,
 				final Object o ) {
 			final SimpleFeature feature = (SimpleFeature) o;
-			Long count = (Long) feature.getAttribute(AnalyticFeature.ClusterFeatureAttribute.COUNT.attrName());
+			final Long count = (Long) feature.getAttribute(AnalyticFeature.ClusterFeatureAttribute.COUNT.attrName());
 
 			return new ClusterItem(
 					feature.getID(),
@@ -213,13 +213,17 @@ public class DBScanMapReduce
 				final Map<ByteArrayId, Cluster> index )
 				throws IOException,
 				InterruptedException {
-			if (!this.firstIteration) return;
+			if (!firstIteration) {
+				return;
+			}
 
 			processor.trimSmallPartitions(calculateTossMinimum());
 			// 2.0 times minimum compression size.
 			// if compression is not likely to increase
 			// performance, then pre-processing does not buy much performance
-			if (processor.size() < calculateCondensingMinimum() * 2.0) return;
+			if (processor.size() < (calculateCondensingMinimum() * 2.0)) {
+				return;
+			}
 
 			processor.process(
 					new ClusterNeighborListFactory(
@@ -233,10 +237,10 @@ public class DBScanMapReduce
 
 						@Override
 						public void complete(
-								ByteArrayId id,
-								ClusterItem value,
-								NeighborList<ClusterItem> list ) {
-							Cluster cluster = ((ClusterNeighborList) list).getCluster();
+								final ByteArrayId id,
+								final ClusterItem value,
+								final NeighborList<ClusterItem> list ) {
+							final Cluster cluster = ((ClusterNeighborList) list).getCluster();
 							// this basically excludes points that cannot
 							// contribute to extending the network.
 							// may be a BAD idea.
@@ -249,9 +253,9 @@ public class DBScanMapReduce
 								value.setGeometry(cluster.getGeometry());
 								value.setCount(list.size());
 								value.setCompressed();
-								Iterator<ByteArrayId> it = cluster.getLinkedClusters().iterator();
+								final Iterator<ByteArrayId> it = cluster.getLinkedClusters().iterator();
 								while (it.hasNext()) {
-									ByteArrayId idToRemove = it.next();
+									final ByteArrayId idToRemove = it.next();
 									processor.remove(idToRemove);
 									it.remove();
 								}
@@ -294,9 +298,11 @@ public class DBScanMapReduce
 							iteration,
 							cluster.size());
 					output.set(serializer.toWritable(newPolygonFeature));
-					if (LOGGER.isTraceEnabled()) LOGGER.trace(
-							"Generating {}",
-							newPolygonFeature.toString());
+					if (LOGGER.isTraceEnabled()) {
+						LOGGER.trace(
+								"Generating {}",
+								newPolygonFeature.toString());
+					}
 					// ShapefileTool.writeShape(
 					// cluster.getId().getString() + iteration,
 					// new File(
@@ -315,8 +321,9 @@ public class DBScanMapReduce
 			}
 		}
 
+		@Override
 		public NeighborListFactory<ClusterItem> createNeighborsListFactory(
-				Map<ByteArrayId, Cluster> summary ) {
+				final Map<ByteArrayId, Cluster> summary ) {
 			return new ClusterNeighborListFactory(
 					(firstIteration) ? new SingleItemClusterListFactory(
 							summary) : new ClusterUnionListFactory(
@@ -332,28 +339,26 @@ public class DBScanMapReduce
 				throws IOException,
 				InterruptedException {
 
-			final ConfigurationWrapper config = new JobContextConfigurationWrapper(
-					context);
+			final ScopedJobConfiguration config = new ScopedJobConfiguration(
+					context.getConfiguration(),
+					NNMapReduce.class);
 
 			super.setup(context);
 
 			DBScanClusterList.getHullTool().setDistanceFnForCoordinate(
 					new CoordinateCircleDistanceFn());
-			DBScanClusterList.setMergeSize(this.minOwners);
+			DBScanClusterList.setMergeSize(minOwners);
 
 			batchID = config.getString(
 					GlobalParameters.Global.BATCH_ID,
-					NNMapReduce.class,
 					UUID.randomUUID().toString());
 
 			zoomLevel = config.getInt(
 					HullParameters.Hull.ZOOM_LEVEL,
-					NNMapReduce.class,
 					1);
 
 			iteration = config.getInt(
 					HullParameters.Hull.ITERATION,
-					NNMapReduce.class,
 					1);
 
 			firstIteration = context.getConfiguration().getBoolean(
@@ -362,7 +367,6 @@ public class DBScanMapReduce
 
 			final String polygonDataTypeId = config.getString(
 					HullParameters.Hull.DATA_TYPE_ID,
-					NNMapReduce.class,
 					"concave_hull");
 
 			outputAdapter = AnalyticFeature.createGeometryFeatureAdapter(
@@ -370,7 +374,6 @@ public class DBScanMapReduce
 					new String[0],
 					config.getString(
 							HullParameters.Hull.DATA_NAMESPACE_URI,
-							NNMapReduce.class,
 							BasicFeatureTypes.DEFAULT_NAMESPACE),
 					ClusteringUtils.CLUSTERING_CRS);
 
@@ -378,7 +381,6 @@ public class DBScanMapReduce
 			try {
 				projectionFunction = config.getInstance(
 						HullParameters.Hull.PROJECTION_CLASS,
-						NNMapReduce.class,
 						Projection.class,
 						SimpleFeatureProjection.class);
 			}
@@ -390,7 +392,7 @@ public class DBScanMapReduce
 			super.typeConverter = new SimpleFeatureToClusterItemConverter(
 					projectionFunction);
 
-			distanceProfileFn = (DistanceProfileGenerateFn<?, ClusterItem>) new ClusterItemDistanceFn();
+			distanceProfileFn = new ClusterItemDistanceFn();
 
 			super.distanceFn = new ClusterItemDistanceFn();
 

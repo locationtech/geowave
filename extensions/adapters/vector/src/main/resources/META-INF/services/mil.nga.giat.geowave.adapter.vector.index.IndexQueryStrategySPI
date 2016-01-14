@@ -1,0 +1,3 @@
+mil.nga.giat.geowave.adapter.vector.index.ChooseHeuristicMatchIndexQueryStrategy
+mil.nga.giat.geowave.adapter.vector.index.ChooseBestMatchIndexQueryStrategy
+

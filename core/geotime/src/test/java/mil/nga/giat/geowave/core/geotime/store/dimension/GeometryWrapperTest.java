@@ -7,7 +7,7 @@ import mil.nga.giat.geowave.core.geotime.store.dimension.LatitudeField;
 import mil.nga.giat.geowave.core.geotime.store.dimension.LongitudeField;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericData;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericRange;
-import mil.nga.giat.geowave.core.store.dimension.DimensionField;
+import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;
 
 import org.junit.Test;
 
@@ -25,7 +25,7 @@ public class GeometryWrapperTest
 
 	@Test
 	public void testLatitutde() {
-		DimensionField[] fields = new DimensionField[] {
+		NumericDimensionField[] fields = new NumericDimensionField[] {
 			new LatitudeField()
 		};
 
@@ -82,7 +82,7 @@ public class GeometryWrapperTest
 
 	@Test
 	public void testLongitude() {
-		DimensionField[] fields = new DimensionField[] {
+		NumericDimensionField[] fields = new NumericDimensionField[] {
 			new LongitudeField()
 		};
 

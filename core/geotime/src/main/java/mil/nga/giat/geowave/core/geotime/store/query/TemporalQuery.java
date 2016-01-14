@@ -6,9 +6,6 @@ import java.util.List;
 import mil.nga.giat.geowave.core.geotime.index.dimension.TimeDefinition;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericRange;
 import mil.nga.giat.geowave.core.store.query.BasicQuery;
-import mil.nga.giat.geowave.core.store.query.BasicQuery.ConstraintData;
-import mil.nga.giat.geowave.core.store.query.BasicQuery.ConstraintSet;
-import mil.nga.giat.geowave.core.store.query.BasicQuery.Constraints;
 
 /**
  * The Spatial Temporal Query class represents a query in three dimensions. The

@@ -14,8 +14,8 @@ import mil.nga.giat.geowave.core.store.data.field.FieldReader;
 import mil.nga.giat.geowave.core.store.data.field.FieldUtils;
 import mil.nga.giat.geowave.core.store.data.field.FieldWriter;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
-import mil.nga.giat.geowave.datastore.accumulo.mapreduce.HadoopDataAdapter;
-import mil.nga.giat.geowave.datastore.accumulo.mapreduce.HadoopWritableSerializer;
+import mil.nga.giat.geowave.mapreduce.HadoopDataAdapter;
+import mil.nga.giat.geowave.mapreduce.HadoopWritableSerializer;
 
 import com.vividsolutions.jts.geom.Geometry;
 

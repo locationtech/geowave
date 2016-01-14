@@ -10,11 +10,14 @@ import java.util.Map.Entry;
 
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import mil.nga.giat.geowave.core.geotime.GeometryUtils;
-import mil.nga.giat.geowave.core.geotime.IndexType;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.DataStore;
-import mil.nga.giat.geowave.core.store.index.Index;
+import mil.nga.giat.geowave.core.store.IndexWriter;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.core.store.memory.DataStoreUtils;
+import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStore;
 import mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations;
 
@@ -48,7 +51,7 @@ public class GeotoolsQueryExample
 	private static MiniAccumuloCluster accumulo;
 	private static DataStore dataStore;
 
-	private static final Index index = IndexType.SPATIAL_VECTOR.createDefaultIndex();
+	private static final PrimaryIndex index = new SpatialDimensionalityTypeProvider().createPrimaryIndex();
 
 	// Points (to be ingested into GeoWave Data Store)
 	private static final Coordinate washingtonMonument = new Coordinate(
@@ -86,8 +89,11 @@ public class GeotoolsQueryExample
 				fedexField);
 	}
 
+	final static FeatureDataAdapter ADAPTER = new FeatureDataAdapter(
+			getPointSimpleFeatureType());
+
 	public static void main(
-			String[] args )
+			final String[] args )
 			throws AccumuloException,
 			AccumuloSecurityException,
 			InterruptedException,
@@ -138,13 +144,14 @@ public class GeotoolsQueryExample
 						TABLE_NAMESPACE));
 	}
 
-	private static void ingestCannedData() {
+	private static void ingestCannedData()
+			throws IOException {
 
 		final List<SimpleFeature> points = new ArrayList<>();
 
 		System.out.println("Building SimpleFeatures from canned data set...");
 
-		for (Entry<String, Coordinate> entry : cannedData.entrySet()) {
+		for (final Entry<String, Coordinate> entry : cannedData.entrySet()) {
 			System.out.println("Added point: " + entry.getKey());
 			points.add(buildSimpleFeature(
 					entry.getKey(),
@@ -153,11 +160,17 @@ public class GeotoolsQueryExample
 
 		System.out.println("Ingesting canned data...");
 
-		dataStore.ingest(
-				new FeatureDataAdapter(
-						getPointSimpleFeatureType()),
+		try (IndexWriter indexWriter = dataStore.createIndexWriter(
 				index,
-				points.iterator());
+				DataStoreUtils.DEFAULT_VISIBILITY)) {
+			for (final SimpleFeature sf : points) {
+				//
+				indexWriter.write(
+						ADAPTER,
+						sf);
+
+			}
+		}
 
 		System.out.println("Ingest complete.");
 	}
@@ -173,16 +186,17 @@ public class GeotoolsQueryExample
 
 		System.out.println("Executing query, expecting to match ALL points...");
 
-		final CloseableIterator<SimpleFeature> iterator = dataStore.query(
-				index,
+		try (final CloseableIterator<SimpleFeature> iterator = dataStore.query(
+				new QueryOptions(
+						index),
 				new SpatialQuery(
-						boundingBox));
+						boundingBox))) {
 
-		while (iterator.hasNext()) {
-			System.out.println("Query match: " + iterator.next().getID());
+			while (iterator.hasNext()) {
+				System.out.println("Query match: " + iterator.next().getID());
+			}
 		}
 
-		iterator.close();
 	}
 
 	private static void executePolygonQuery()
@@ -199,16 +213,23 @@ public class GeotoolsQueryExample
 
 		System.out.println("Executing query, expecting to match ALL points...");
 
-		final CloseableIterator<SimpleFeature> closableIterator = dataStore.query(
-				index,
+		/**
+		 * NOTICE: In this query, the adapter is added to the query options. If
+		 * an index has data from more than one adapter, the data associated
+		 * with a specific adapter can be selected.
+		 */
+		try (final CloseableIterator<SimpleFeature> closableIterator = dataStore.query(
+				new QueryOptions(
+						ADAPTER,
+						index),
 				new SpatialQuery(
-						polygon));
+						polygon))) {
 
-		while (closableIterator.hasNext()) {
-			System.out.println("Query match: " + closableIterator.next().getID());
+			while (closableIterator.hasNext()) {
+				System.out.println("Query match: " + closableIterator.next().getID());
+			}
 		}
 
-		closableIterator.close();
 	}
 
 	private static void cleanup()
@@ -242,8 +263,8 @@ public class GeotoolsQueryExample
 	}
 
 	private static SimpleFeature buildSimpleFeature(
-			String locationName,
-			Coordinate coordinate ) {
+			final String locationName,
+			final Coordinate coordinate ) {
 
 		final SimpleFeatureBuilder builder = new SimpleFeatureBuilder(
 				getPointSimpleFeatureType());

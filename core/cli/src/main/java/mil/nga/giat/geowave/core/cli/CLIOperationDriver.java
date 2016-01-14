@@ -4,7 +4,7 @@ import org.apache.commons.cli.ParseException;
 
 public interface CLIOperationDriver
 {
-	public void run(
+	public boolean runOperation(
 			final String[] args )
 			throws ParseException;
 }

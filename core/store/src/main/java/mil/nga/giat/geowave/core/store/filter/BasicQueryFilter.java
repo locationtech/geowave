@@ -13,8 +13,10 @@ import mil.nga.giat.geowave.core.index.sfc.data.BinnedNumericDataset;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericData;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericRange;
+import mil.nga.giat.geowave.core.store.data.CommonIndexedPersistenceEncoding;
 import mil.nga.giat.geowave.core.store.data.IndexedPersistenceEncoding;
-import mil.nga.giat.geowave.core.store.dimension.DimensionField;
+import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;
+import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 
 /**
  * This filter can perform fine-grained acceptance testing on generic
@@ -61,7 +63,7 @@ public class BasicQueryFilter implements
 	};
 
 	protected Map<ByteArrayId, List<MultiDimensionalNumericData>> binnedConstraints;
-	protected DimensionField<?>[] dimensionFields;
+	protected NumericDimensionField<?>[] dimensionFields;
 	// this is referenced for serialization purposes only
 	protected MultiDimensionalNumericData constraints;
 	protected BasicQueryCompareOperation compareOp = BasicQueryCompareOperation.OVERLAPS;
@@ -70,7 +72,7 @@ public class BasicQueryFilter implements
 
 	public BasicQueryFilter(
 			final MultiDimensionalNumericData constraints,
-			final DimensionField<?>[] dimensionFields ) {
+			final NumericDimensionField<?>[] dimensionFields ) {
 		init(
 				constraints,
 				dimensionFields);
@@ -78,7 +80,7 @@ public class BasicQueryFilter implements
 
 	public BasicQueryFilter(
 			final MultiDimensionalNumericData constraints,
-			final DimensionField<?>[] dimensionFields,
+			final NumericDimensionField<?>[] dimensionFields,
 			final BasicQueryCompareOperation compareOp ) {
 		init(
 				constraints,
@@ -88,7 +90,7 @@ public class BasicQueryFilter implements
 
 	private void init(
 			final MultiDimensionalNumericData constraints,
-			final DimensionField<?>[] dimensionFields ) {
+			final NumericDimensionField<?>[] dimensionFields ) {
 		this.dimensionFields = dimensionFields;
 
 		binnedConstraints = new HashMap<ByteArrayId, List<MultiDimensionalNumericData>>();
@@ -130,9 +132,11 @@ public class BasicQueryFilter implements
 
 	@Override
 	public boolean accept(
-			final IndexedPersistenceEncoding persistenceEncoding ) {
+			final CommonIndexModel indexModel,
+			final IndexedPersistenceEncoding<?> persistenceEncoding ) {
+		if (!(persistenceEncoding instanceof CommonIndexedPersistenceEncoding)) return false;
 		final BinnedNumericDataset[] dataRanges = BinnedNumericDataset.applyBins(
-				persistenceEncoding.getNumericData(dimensionFields),
+				((CommonIndexedPersistenceEncoding) persistenceEncoding).getNumericData(dimensionFields),
 				dimensionFields);
 		// check that at least one data range overlaps at least one query range
 		for (final BinnedNumericDataset dataRange : dataRanges) {
@@ -162,7 +166,7 @@ public class BasicQueryFilter implements
 				dimensions);
 		final NumericData[] dataPerDimension = constraints.getDataPerDimension();
 		for (int d = 0; d < dimensions; d++) {
-			final DimensionField<?> dimension = dimensionFields[d];
+			final NumericDimensionField<?> dimension = dimensionFields[d];
 			final NumericData data = dataPerDimension[d];
 			final byte[] dimensionBinary = PersistenceUtils.toBinary(dimension);
 			final int currentDimensionByteBufferLength = (20 + dimensionBinary.length);
@@ -190,7 +194,7 @@ public class BasicQueryFilter implements
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
 		this.compareOp = BasicQueryCompareOperation.values()[buf.getInt()];
 		final int numDimensions = buf.getInt();
-		dimensionFields = new DimensionField<?>[numDimensions];
+		dimensionFields = new NumericDimensionField<?>[numDimensions];
 		final NumericData[] data = new NumericData[numDimensions];
 		for (int d = 0; d < numDimensions; d++) {
 			final byte[] field = new byte[buf.getInt()];
@@ -200,7 +204,7 @@ public class BasicQueryFilter implements
 			buf.get(field);
 			dimensionFields[d] = PersistenceUtils.fromBinary(
 					field,
-					DimensionField.class);
+					NumericDimensionField.class);
 		}
 		constraints = new BasicNumericDataset(
 				data);

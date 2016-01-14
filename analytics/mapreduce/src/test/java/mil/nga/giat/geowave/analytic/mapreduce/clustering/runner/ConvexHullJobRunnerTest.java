@@ -1,37 +1,39 @@
 package mil.nga.giat.geowave.analytic.mapreduce.clustering.runner;
 
-import static org.junit.Assert.assertTrue;
-
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
 
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import mil.nga.giat.geowave.analytic.AnalyticFeature;
 import mil.nga.giat.geowave.analytic.Projection;
 import mil.nga.giat.geowave.analytic.PropertyManagement;
+import mil.nga.giat.geowave.analytic.ScopedJobConfiguration;
 import mil.nga.giat.geowave.analytic.SimpleFeatureProjection;
 import mil.nga.giat.geowave.analytic.clustering.ClusteringUtils;
-import mil.nga.giat.geowave.analytic.clustering.NestedGroupCentroidAssignment;
-import mil.nga.giat.geowave.analytic.db.AccumuloAdapterStoreFactory;
-import mil.nga.giat.geowave.analytic.db.AdapterStoreFactory;
 import mil.nga.giat.geowave.analytic.mapreduce.GeoWaveAnalyticJobRunner;
-import mil.nga.giat.geowave.analytic.mapreduce.JobContextConfigurationWrapper;
 import mil.nga.giat.geowave.analytic.mapreduce.MapReduceIntegration;
 import mil.nga.giat.geowave.analytic.mapreduce.SequenceFileInputFormatConfiguration;
 import mil.nga.giat.geowave.analytic.mapreduce.clustering.ConvexHullMapReduce;
 import mil.nga.giat.geowave.analytic.param.CentroidParameters;
-import mil.nga.giat.geowave.analytic.param.CommonParameters;
 import mil.nga.giat.geowave.analytic.param.GlobalParameters;
 import mil.nga.giat.geowave.analytic.param.HullParameters;
 import mil.nga.giat.geowave.analytic.param.InputParameters;
-import mil.nga.giat.geowave.analytic.param.MapReduceParameters;
 import mil.nga.giat.geowave.analytic.param.MapReduceParameters.MRConfig;
-import mil.nga.giat.geowave.analytic.partitioner.FeatureDataAdapterStoreFactory;
-import mil.nga.giat.geowave.analytic.partitioner.MemoryIndexStoreFactory;
+import mil.nga.giat.geowave.analytic.param.ParameterHelper;
+import mil.nga.giat.geowave.analytic.param.StoreParameters.StoreParam;
+import mil.nga.giat.geowave.analytic.store.PersistableAdapterStore;
+import mil.nga.giat.geowave.analytic.store.PersistableDataStore;
+import mil.nga.giat.geowave.analytic.store.PersistableIndexStore;
+import mil.nga.giat.geowave.core.cli.AdapterStoreCommandLineOptions;
+import mil.nga.giat.geowave.core.cli.DataStoreCommandLineOptions;
+import mil.nga.giat.geowave.core.cli.IndexStoreCommandLineOptions;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
+import mil.nga.giat.geowave.core.store.index.IndexStore;
+import mil.nga.giat.geowave.core.store.memory.MemoryAdapterStoreFactory;
+import mil.nga.giat.geowave.core.store.memory.MemoryDataStoreFactory;
+import mil.nga.giat.geowave.core.store.memory.MemoryIndexStoreFactory;
 
-import org.apache.commons.cli.Option;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.mapreduce.Counters;
@@ -46,8 +48,9 @@ import org.opengis.feature.simple.SimpleFeatureType;
 
 public class ConvexHullJobRunnerTest
 {
-	final ConvexHullJobRunner hullRunner = new ConvexHullJobRunner();
-	final PropertyManagement runTimeProperties = new PropertyManagement();
+	private final ConvexHullJobRunner hullRunner = new ConvexHullJobRunner();
+	private final PropertyManagement runTimeProperties = new PropertyManagement();
+	private static final String TEST_NAMESPACE = "test";
 
 	@Before
 	public void init() {
@@ -67,10 +70,12 @@ public class ConvexHullJobRunnerTest
 					final GeoWaveAnalyticJobRunner tool )
 					throws Exception {
 				tool.setConf(configuration);
-				FeatureDataAdapterStoreFactory.transferState(
+				((ParameterHelper<Object>) StoreParam.ADAPTER_STORE.getHelper()).setValue(
 						configuration,
-						runTimeProperties);
-				return tool.run(runTimeProperties.toGeoWaveRunnerArguments());
+						ConvexHullMapReduce.class,
+						StoreParam.ADAPTER_STORE.getHelper().getValue(
+								runTimeProperties));
+				return tool.run(new String[] {});
 			}
 
 			@Override
@@ -86,38 +91,33 @@ public class ConvexHullJobRunnerTest
 				Assert.assertEquals(
 						10,
 						job.getNumReduceTasks());
-				final JobContextConfigurationWrapper configWrapper = new JobContextConfigurationWrapper(
-						job);
+				final ScopedJobConfiguration configWrapper = new ScopedJobConfiguration(
+						job.getConfiguration(),
+						ConvexHullMapReduce.class);
 				Assert.assertEquals(
 						"file://foo/bin",
 						job.getConfiguration().get(
 								"mapred.input.dir"));
-
-				final MemoryIndexStoreFactory factory = new MemoryIndexStoreFactory();
+				final PersistableIndexStore persistableIndexStore = (PersistableIndexStore) StoreParam.INDEX_STORE.getHelper().getValue(
+						job,
+						ConvexHullMapReduce.class,
+						null);
+				final IndexStore indexStore = persistableIndexStore.getCliOptions().createStore();
 				try {
-					Assert.assertTrue(factory.getIndexStore(
-							configWrapper).indexExists(
-							new ByteArrayId(
-									"spatial")));
+					Assert.assertTrue(indexStore.indexExists(new ByteArrayId(
+							"spatial")));
 
-					final AdapterStoreFactory adapterStoreFactory = configWrapper.getInstance(
-							CommonParameters.Common.ADAPTER_STORE_FACTORY,
+					final PersistableAdapterStore persistableAdapterStore = (PersistableAdapterStore) StoreParam.ADAPTER_STORE.getHelper().getValue(
+							job,
 							ConvexHullMapReduce.class,
-							AdapterStoreFactory.class,
-							AccumuloAdapterStoreFactory.class);
+							null);
+					final AdapterStore adapterStore = persistableAdapterStore.getCliOptions().createStore();
 
-					Assert.assertEquals(
-							FeatureDataAdapterStoreFactory.class,
-							adapterStoreFactory.getClass());
-
-					Assert.assertTrue(adapterStoreFactory.getAdapterStore(
-							configWrapper).adapterExists(
-							new ByteArrayId(
-									"centroidtest")));
+					Assert.assertTrue(adapterStore.adapterExists(new ByteArrayId(
+							"centroidtest")));
 
 					final Projection<?> projection = configWrapper.getInstance(
 							HullParameters.Hull.PROJECTION_CLASS,
-							ConvexHullMapReduce.class,
 							Projection.class,
 							SimpleFeatureProjection.class);
 
@@ -144,7 +144,6 @@ public class ConvexHullJobRunnerTest
 						2,
 						configWrapper.getInt(
 								CentroidParameters.Centroid.ZOOM_LEVEL,
-								NestedGroupCentroidAssignment.class,
 								-1));
 				return new Counters();
 			}
@@ -155,6 +154,13 @@ public class ConvexHullJobRunnerTest
 					throws IOException {
 				return new Job(
 						tool.getConf());
+			}
+
+			@Override
+			public Configuration getConfiguration(
+					final PropertyManagement runTimeProperties )
+					throws IOException {
+				return new Configuration();
 			}
 		});
 		hullRunner.setInputFormatConfiguration(new SequenceFileInputFormatConfiguration());
@@ -167,21 +173,6 @@ public class ConvexHullJobRunnerTest
 				new Path(
 						"file://foo/bin"));
 		runTimeProperties.store(
-				GlobalParameters.Global.ZOOKEEKER,
-				"localhost:3000");
-		runTimeProperties.store(
-				GlobalParameters.Global.ACCUMULO_INSTANCE,
-				"accumulo");
-		runTimeProperties.store(
-				GlobalParameters.Global.ACCUMULO_USER,
-				"root");
-		runTimeProperties.store(
-				GlobalParameters.Global.ACCUMULO_PASSWORD,
-				"pwd");
-		runTimeProperties.store(
-				GlobalParameters.Global.ACCUMULO_NAMESPACE,
-				"test");
-		runTimeProperties.store(
 				GlobalParameters.Global.BATCH_ID,
 				"b1234");
 		runTimeProperties.store(
@@ -193,92 +184,35 @@ public class ConvexHullJobRunnerTest
 		runTimeProperties.store(
 				HullParameters.Hull.INDEX_ID,
 				"spatial");
-		runTimeProperties.store(
-				CommonParameters.Common.ADAPTER_STORE_FACTORY,
-				FeatureDataAdapterStoreFactory.class);
 
 		runTimeProperties.store(
-				CommonParameters.Common.INDEX_STORE_FACTORY,
-				MemoryIndexStoreFactory.class);
+				StoreParam.DATA_STORE,
+				new PersistableDataStore(
+						new DataStoreCommandLineOptions(
+								new MemoryDataStoreFactory(),
+								new HashMap<String, Object>(),
+								TEST_NAMESPACE)));
+		final MemoryAdapterStoreFactory adapterStoreFactory = new MemoryAdapterStoreFactory();
+		runTimeProperties.store(
+				StoreParam.ADAPTER_STORE,
+				new PersistableAdapterStore(
+						new AdapterStoreCommandLineOptions(
+								adapterStoreFactory,
+								new HashMap<String, Object>(),
+								TEST_NAMESPACE)));
 
-		FeatureDataAdapterStoreFactory.saveState(
+		runTimeProperties.store(
+				StoreParam.INDEX_STORE,
+				new PersistableIndexStore(
+						new IndexStoreCommandLineOptions(
+								new MemoryIndexStoreFactory(),
+								new HashMap<String, Object>(),
+								TEST_NAMESPACE)));
+		adapterStoreFactory.createStore(
+				new HashMap<String, Object>(),
+				TEST_NAMESPACE).addAdapter(
 				new FeatureDataAdapter(
-						ftype),
-				runTimeProperties);
-	}
-
-	@Test
-	public void testOptions() {
-		final Set<Option> options = new HashSet<Option>();
-		hullRunner.fillOptions(options);
-
-		assertTrue(PropertyManagement.hasOption(
-				options,
-				CommonParameters.Common.ADAPTER_STORE_FACTORY));
-		assertTrue(PropertyManagement.hasOption(
-				options,
-				CommonParameters.Common.INDEX_STORE_FACTORY));
-
-		assertTrue(PropertyManagement.hasOption(
-				options,
-				InputParameters.Input.HDFS_INPUT_PATH));
-		assertTrue(PropertyManagement.hasOption(
-				options,
-				HullParameters.Hull.WRAPPER_FACTORY_CLASS));
-		assertTrue(PropertyManagement.hasOption(
-				options,
-				HullParameters.Hull.PROJECTION_CLASS));
-		assertTrue(PropertyManagement.hasOption(
-				options,
-				HullParameters.Hull.REDUCER_COUNT));
-		assertTrue(PropertyManagement.hasOption(
-				options,
-				HullParameters.Hull.DATA_TYPE_ID));
-		assertTrue(PropertyManagement.hasOption(
-				options,
-				HullParameters.Hull.DATA_NAMESPACE_URI));
-		assertTrue(PropertyManagement.hasOption(
-				options,
-				HullParameters.Hull.INDEX_ID));
-
-		assertTrue(PropertyManagement.hasOption(
-				options,
-				MapReduceParameters.MRConfig.CONFIG_FILE));
-		assertTrue(PropertyManagement.hasOption(
-				options,
-				MapReduceParameters.MRConfig.HDFS_HOST_PORT));
-		assertTrue(PropertyManagement.hasOption(
-				options,
-				MapReduceParameters.MRConfig.HDFS_BASE_DIR));
-		assertTrue(PropertyManagement.hasOption(
-				options,
-				MapReduceParameters.MRConfig.YARN_RESOURCE_MANAGER));
-		assertTrue(PropertyManagement.hasOption(
-				options,
-				MapReduceParameters.MRConfig.JOBTRACKER_HOST_PORT));
-
-		assertTrue(PropertyManagement.hasOption(
-				options,
-				CentroidParameters.Centroid.ZOOM_LEVEL));
-
-		assertTrue(PropertyManagement.hasOption(
-				options,
-				GlobalParameters.Global.ZOOKEEKER));
-		assertTrue(PropertyManagement.hasOption(
-				options,
-				GlobalParameters.Global.ACCUMULO_INSTANCE));
-		assertTrue(PropertyManagement.hasOption(
-				options,
-				GlobalParameters.Global.ACCUMULO_USER));
-		assertTrue(PropertyManagement.hasOption(
-				options,
-				GlobalParameters.Global.ACCUMULO_PASSWORD));
-		assertTrue(PropertyManagement.hasOption(
-				options,
-				GlobalParameters.Global.BATCH_ID));
-		assertTrue(PropertyManagement.hasOption(
-				options,
-				GlobalParameters.Global.ACCUMULO_NAMESPACE));
+						ftype));
 	}
 
 	@Test

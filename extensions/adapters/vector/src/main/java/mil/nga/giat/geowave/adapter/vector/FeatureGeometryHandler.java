@@ -21,6 +21,7 @@ public class FeatureGeometryHandler implements
 {
 	private final FeatureAttributeHandler nativeGeometryHandler;
 	private final FieldVisibilityHandler<SimpleFeature, Object> visibilityHandler;
+	private final ByteArrayId[] nativeFieldIds;
 
 	public FeatureGeometryHandler(
 			final AttributeDescriptor geometryAttrDesc ) {
@@ -35,13 +36,14 @@ public class FeatureGeometryHandler implements
 		nativeGeometryHandler = new FeatureAttributeHandler(
 				geometryAttrDesc);
 		this.visibilityHandler = visibilityHandler;
+		nativeFieldIds = new ByteArrayId[] {
+			nativeGeometryHandler.getFieldId()
+		};
 	}
 
 	@Override
 	public ByteArrayId[] getNativeFieldIds() {
-		return new ByteArrayId[] {
-			nativeGeometryHandler.getFieldId()
-		};
+		return nativeFieldIds;
 	}
 
 	@Override

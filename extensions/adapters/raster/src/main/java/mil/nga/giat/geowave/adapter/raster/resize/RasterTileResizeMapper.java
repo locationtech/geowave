@@ -3,16 +3,16 @@ package mil.nga.giat.geowave.adapter.raster.resize;
 import java.io.IOException;
 import java.util.Iterator;
 
-import mil.nga.giat.geowave.adapter.raster.FitToIndexGridCoverage;
-import mil.nga.giat.geowave.adapter.raster.adapter.RasterDataAdapter;
-import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
-import mil.nga.giat.geowave.datastore.accumulo.mapreduce.GeoWaveWritableOutputMapper;
-import mil.nga.giat.geowave.datastore.accumulo.mapreduce.input.GeoWaveInputKey;
-
 import org.apache.hadoop.io.ObjectWritable;
 import org.apache.hadoop.mapreduce.MapContext;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.opengis.coverage.grid.GridCoverage;
+
+import mil.nga.giat.geowave.adapter.raster.FitToIndexGridCoverage;
+import mil.nga.giat.geowave.adapter.raster.adapter.RasterDataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.mapreduce.GeoWaveWritableOutputMapper;
+import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
 
 public class RasterTileResizeMapper extends
 		GeoWaveWritableOutputMapper<GeoWaveInputKey, GridCoverage>
@@ -40,10 +40,12 @@ public class RasterTileResizeMapper extends
 					// it should be a FitToIndexGridCoverage because it was just
 					// converted above
 					if (c instanceof FitToIndexGridCoverage) {
+						final GeoWaveInputKey inputKey = new GeoWaveInputKey(
+								helper.getNewCoverageId(),
+								((FitToIndexGridCoverage) c).getInsertionId());
+						inputKey.setInsertionId(((FitToIndexGridCoverage) c).getInsertionId());
 						context.write(
-								new GeoWaveInputKey(
-										helper.getNewCoverageId(),
-										((FitToIndexGridCoverage) c).getInsertionId()),
+								inputKey,
 								c);
 					}
 				}

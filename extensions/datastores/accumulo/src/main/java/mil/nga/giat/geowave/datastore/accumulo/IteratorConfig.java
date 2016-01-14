@@ -1,34 +1,55 @@
 package mil.nga.giat.geowave.datastore.accumulo;
 
 import java.util.EnumSet;
+import java.util.Map;
 
-import org.apache.accumulo.core.client.IteratorSetting;
 import org.apache.accumulo.core.iterators.IteratorUtil.IteratorScope;
 
 public class IteratorConfig
 {
-	private final IteratorSetting iteratorSettings;
 	private final EnumSet<IteratorScope> scopes;
+	private final int iteratorPriority;
+	private final String iteratorName;
+	private final String iteratorClass;
+	private final OptionProvider optionProvider;
 
 	public IteratorConfig(
-			final IteratorSetting iteratorSettings,
-			final EnumSet<IteratorScope> scopes ) {
-		this.iteratorSettings = iteratorSettings;
+			final EnumSet<IteratorScope> scopes,
+			final int iteratorPriority,
+			final String iteratorName,
+			final String iteratorClass,
+			final OptionProvider optionProvider ) {
 		this.scopes = scopes;
+		this.iteratorPriority = iteratorPriority;
+		this.iteratorName = iteratorName;
+		this.iteratorClass = iteratorClass;
+		this.optionProvider = optionProvider;
 	}
 
 	public EnumSet<IteratorScope> getScopes() {
 		return scopes;
 	}
 
-	public IteratorSetting getIteratorSettings() {
-		return iteratorSettings;
+	public int getIteratorPriority() {
+		return iteratorPriority;
 	}
 
-	public String mergeOption(
-			final String optionKey,
-			final String currentValue,
-			final String nextValue ) {
-		return nextValue;
+	public String getIteratorName() {
+		return iteratorName;
+	}
+
+	public String getIteratorClass() {
+		return iteratorClass;
+	}
+
+	public Map<String, String> getOptions(
+			final Map<String, String> existingOptions ) {
+		return optionProvider.getOptions(existingOptions);
+	}
+
+	public static interface OptionProvider
+	{
+		public Map<String, String> getOptions(
+				Map<String, String> existingOptions );
 	}
 }

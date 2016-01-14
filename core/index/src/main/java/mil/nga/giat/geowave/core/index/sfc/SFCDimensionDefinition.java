@@ -154,10 +154,4 @@ public class SFCDimensionDefinition implements
 		}
 		return true;
 	}
-
-	@Override
-	public boolean isCompatibleDefinition(
-			final NumericDimensionDefinition otherDimensionDefinition ) {
-		return equals(otherDimensionDefinition);
-	}
 }

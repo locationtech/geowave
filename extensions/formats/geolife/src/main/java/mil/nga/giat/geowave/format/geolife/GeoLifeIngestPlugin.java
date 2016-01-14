@@ -13,11 +13,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import mil.nga.giat.geowave.adapter.vector.ingest.AbstractSimpleFeatureIngestPlugin;
 import mil.nga.giat.geowave.adapter.vector.utils.GeometryUtils;
 import mil.nga.giat.geowave.adapter.vector.utils.SimpleFeatureUserDataConfigurationSet;
-import mil.nga.giat.geowave.core.geotime.IndexType;
+import mil.nga.giat.geowave.core.geotime.store.dimension.GeometryWrapper;
+import mil.nga.giat.geowave.core.geotime.store.dimension.Time;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.ingest.GeoWaveData;
@@ -26,10 +26,8 @@ import mil.nga.giat.geowave.core.ingest.avro.WholeFile;
 import mil.nga.giat.geowave.core.ingest.hdfs.mapreduce.IngestWithMapper;
 import mil.nga.giat.geowave.core.ingest.hdfs.mapreduce.IngestWithReducer;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
-import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
-import mil.nga.giat.geowave.core.store.data.field.FieldVisibilityHandler;
-import mil.nga.giat.geowave.core.store.data.visibility.GlobalVisibilityHandler;
-import mil.nga.giat.geowave.core.store.index.Index;
+import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 
 import org.apache.avro.Schema;
 import org.apache.commons.io.FilenameUtils;
@@ -62,8 +60,6 @@ public class GeoLifeIngestPlugin extends
 	private final ByteArrayId pointKey;
 	private final ByteArrayId trackKey;
 
-	private final Index[] supportedIndices;
-
 	private CoordinateReferenceSystem crs;
 
 	public GeoLifeIngestPlugin() {
@@ -78,11 +74,6 @@ public class GeoLifeIngestPlugin extends
 				StringUtils.stringToBinary(GeoLifeUtils.GEOLIFE_TRACK_FEATURE));
 		geolifeTrackBuilder = new SimpleFeatureBuilder(
 				geolifeTrackType);
-
-		supportedIndices = new Index[] {
-			IndexType.SPATIAL_VECTOR.createDefaultIndex(),
-			IndexType.SPATIAL_TEMPORAL_VECTOR.createDefaultIndex()
-		};
 		try {
 			crs = CRS.decode("EPSG:4326");
 		}
@@ -91,6 +82,14 @@ public class GeoLifeIngestPlugin extends
 					"Unable to decode Coordinate Reference System authority code!",
 					e);
 		}
+	}
+
+	@Override
+	protected SimpleFeatureType[] getTypes() {
+		return new SimpleFeatureType[] {
+			SimpleFeatureUserDataConfigurationSet.configureType(geolifePointType),
+			SimpleFeatureUserDataConfigurationSet.configureType(geolifeTrackType)
+		};
 	}
 
 	@Override
@@ -110,27 +109,6 @@ public class GeoLifeIngestPlugin extends
 	public boolean supportsFile(
 			final File file ) {
 		return GeoLifeUtils.validate(file);
-	}
-
-	@Override
-	public Index[] getSupportedIndices() {
-		return supportedIndices;
-	}
-
-	@Override
-	public WritableDataAdapter<SimpleFeature>[] getDataAdapters(
-			final String globalVisibility ) {
-		final FieldVisibilityHandler<SimpleFeature, Object> fieldVisiblityHandler = ((globalVisibility != null) && !globalVisibility.isEmpty()) ? new GlobalVisibilityHandler<SimpleFeature, Object>(
-				globalVisibility) : null;
-		return new WritableDataAdapter[] {
-			new FeatureDataAdapter(
-					SimpleFeatureUserDataConfigurationSet.configureType(geolifePointType),
-					fieldVisiblityHandler),
-			new FeatureDataAdapter(
-					SimpleFeatureUserDataConfigurationSet.configureType(geolifeTrackType),
-					fieldVisiblityHandler)
-
-		};
 	}
 
 	@Override
@@ -310,8 +288,8 @@ public class GeoLifeIngestPlugin extends
 	}
 
 	@Override
-	public Index[] getRequiredIndices() {
-		return new Index[] {};
+	public PrimaryIndex[] getRequiredIndices() {
+		return new PrimaryIndex[] {};
 	}
 
 	@Override
@@ -335,4 +313,11 @@ public class GeoLifeIngestPlugin extends
 		}
 	}
 
+	@Override
+	public Class<? extends CommonIndexValue>[] getSupportedIndexableTypes() {
+		return new Class[] {
+			GeometryWrapper.class,
+			Time.class
+		};
+	}
 }

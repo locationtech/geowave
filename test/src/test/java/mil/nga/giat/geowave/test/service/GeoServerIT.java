@@ -13,11 +13,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.ws.rs.core.Response.Status;
 
+import mil.nga.giat.geowave.datastore.accumulo.AccumuloStoreFactoryFamily;
 import mil.nga.giat.geowave.service.client.GeoserverServiceClient;
 
 import org.apache.accumulo.core.client.AccumuloException;
@@ -69,10 +71,9 @@ public class GeoServerIT extends
 	private static String update;
 
 	@BeforeClass
-	public static void setUp()
+	public static void initialize()
 			throws ClientProtocolException,
 			IOException {
-		ServicesTestEnvironment.startServices();
 		try {
 			accumuloOperations.deleteAll();
 		}
@@ -112,18 +113,15 @@ public class GeoServerIT extends
 		// enable wfs & wms
 		success &= enableWfs();
 		success &= enableWms();
-
+		final Map<String, String> configOptions = getAccumuloConfigOptions();
+		configOptions.put(
+				"gwNamespace",
+				TEST_NAMESPACE);
 		// create the datastore
 		success &= geoserverServiceClient.publishDatastore(
-				zookeeper,
-				accumuloUser,
-				accumuloPassword,
-				accumuloInstance,
-				TEST_NAMESPACE,
-				null,
-				null,
-				null,
-				TEST_WORKSPACE);
+				new AccumuloStoreFactoryFamily().getName(),
+				configOptions,
+				TEST_NAMESPACE);
 
 		// make sure the datastore exists
 		success &= (null != geoserverServiceClient.getDatastore(
@@ -138,7 +136,7 @@ public class GeoServerIT extends
 	}
 
 	@AfterClass
-	public static void cleanup() {
+	public static void cleanupWorkspace() {
 		assertTrue(geoserverServiceClient.deleteWorkspace(TEST_WORKSPACE));
 	}
 

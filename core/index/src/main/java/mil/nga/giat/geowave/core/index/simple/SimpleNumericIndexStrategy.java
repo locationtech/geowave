@@ -1,8 +1,10 @@
 package mil.nga.giat.geowave.core.index.simple;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
@@ -165,6 +167,49 @@ public abstract class SimpleNumericIndexStrategy<T extends Number> implements
 	@Override
 	public String getId() {
 		return StringUtils.intToString(hashCode());
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = (prime * result) + Arrays.hashCode(definitions);
+		result = (prime * result) + ((lexicoder == null) ? 0 : lexicoder.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(
+			final Object obj ) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		final SimpleNumericIndexStrategy other = (SimpleNumericIndexStrategy) obj;
+		if (!Arrays.equals(
+				definitions,
+				other.definitions)) {
+			return false;
+		}
+		if (lexicoder == null) {
+			if (other.lexicoder != null) {
+				return false;
+			}
+		}
+		else if (!lexicoder.equals(other.lexicoder)) {
+			return false;
+		}
+		return true;
+	}
+
+	@Override
+	public Set<ByteArrayId> getNaturalSplits() {
+		return null;
 	}
 
 }

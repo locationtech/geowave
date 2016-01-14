@@ -13,12 +13,17 @@ import java.util.Set;
 import java.util.TimeZone;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import mil.nga.giat.geowave.core.cli.GenericStoreCommandLineOptions;
 import mil.nga.giat.geowave.core.cli.GeoWaveMain;
-import mil.nga.giat.geowave.core.geotime.IndexType;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider.SpatialIndexBuilder;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialTemporalDimensionalityTypeProvider;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialTemporalQuery;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
+import mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStoreFactory;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations;
 import mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations;
 import net.lingala.zip4j.core.ZipFile;
@@ -63,14 +68,20 @@ abstract public class GeoWaveTestEnvironment
 	protected static final String HADOOP_WINDOWS_UTIL = "winutils.exe";
 	protected static final Object MUTEX = new Object();
 	protected static AccumuloOperations accumuloOperations;
-	protected static String zookeeper;
-	protected static String accumuloInstance;
-	protected static String accumuloUser;
-	protected static String accumuloPassword;
+	protected static String zookeeper = "z";
+	protected static String accumuloInstance = "i";
+	protected static String accumuloUser = "u";
+	protected static String accumuloPassword = "p";
 	protected static MiniAccumuloCluster miniAccumulo;
 	protected static File TEMP_DIR = new File(
 			"./target/accumulo_temp"); // breaks on windows if temp directory
 										// isn't on same drive as project
+
+	protected static final PrimaryIndex DEFAULT_SPATIAL_INDEX = new SpatialDimensionalityTypeProvider().createPrimaryIndex();
+	protected static final PrimaryIndex DEFAULT_ALLTIER_SPATIAL_INDEX = new SpatialIndexBuilder().setAllTiers(
+			true).createIndex();
+
+	protected static final PrimaryIndex DEFAULT_SPATIAL_TEMPORAL_INDEX = new SpatialTemporalDimensionalityTypeProvider().createPrimaryIndex();
 
 	protected static final AtomicBoolean DEFER_CLEANUP = new AtomicBoolean(
 			false);
@@ -82,30 +93,32 @@ abstract public class GeoWaveTestEnvironment
 	}
 
 	protected void testLocalIngest(
-			final IndexType indexType,
+			final boolean spatialTemporal,
 			final String ingestFilePath ) {
 		// ingest a shapefile (geotools type) directly into GeoWave using the
 		// ingest framework's main method and pre-defined commandline arguments
 		LOGGER.warn("Ingesting '" + ingestFilePath + "' - this may take several minutes...");
 		final String[] args = StringUtils.split(
-				"-localingest -f geotools-vector -b " + ingestFilePath + " -z " + zookeeper + " -i " + accumuloInstance + " -u " + accumuloUser + " -p " + accumuloPassword + " -n " + TEST_NAMESPACE + " -dim " + (indexType.equals(IndexType.SPATIAL_VECTOR) ? "spatial" : "spatial-temporal"),
+				"-localingest -datastore " + new AccumuloDataStoreFactory().getName() + " -f geotools-vector -b " + ingestFilePath + " -" + GenericStoreCommandLineOptions.NAMESPACE_OPTION_KEY + " " + TEST_NAMESPACE + " -dim " + (spatialTemporal ? "spatial-temporal" : "spatial") + " -" + BasicAccumuloOperations.ZOOKEEPER_CONFIG_NAME + " " + zookeeper + " -" + BasicAccumuloOperations.INSTANCE_CONFIG_NAME + " " + accumuloInstance + " -" + BasicAccumuloOperations.USER_CONFIG_NAME + " " + accumuloUser + " -" + BasicAccumuloOperations.PASSWORD_CONFIG_NAME + " " + accumuloPassword,
 				' ');
-		GeoWaveMain.main(args);
+		GeoWaveMain.run(args);
 		verifyStats();
 	}
 
 	private void verifyStats() {
-		GeoWaveMain.main(new String[] {
+		GeoWaveMain.run(new String[] {
 			"-statsdump",
-			"-z",
-			zookeeper,
-			"-n",
+			"-" + GenericStoreCommandLineOptions.NAMESPACE_OPTION_KEY,
 			TEST_NAMESPACE,
-			"-u",
+			"-datastore",
+			new AccumuloDataStoreFactory().getName(),
+			"-" + BasicAccumuloOperations.ZOOKEEPER_CONFIG_NAME,
+			zookeeper,
+			"-" + BasicAccumuloOperations.USER_CONFIG_NAME,
 			accumuloUser,
-			"-p",
+			"-" + BasicAccumuloOperations.PASSWORD_CONFIG_NAME,
 			accumuloPassword,
-			"-i",
+			"-" + BasicAccumuloOperations.INSTANCE_CONFIG_NAME,
 			accumuloInstance
 		});
 	}

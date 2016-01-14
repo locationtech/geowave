@@ -17,12 +17,14 @@ import mil.nga.giat.geowave.adapter.raster.adapter.RasterTile;
 import mil.nga.giat.geowave.adapter.raster.adapter.merge.RasterTileMergeStrategy;
 import mil.nga.giat.geowave.adapter.raster.adapter.merge.SimpleAbstractMergeStrategy;
 import mil.nga.giat.geowave.adapter.raster.query.IndexOnlySpatialQuery;
-import mil.nga.giat.geowave.core.geotime.IndexType;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.Persistable;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.DataStore;
-import mil.nga.giat.geowave.core.store.index.Index;
+import mil.nga.giat.geowave.core.store.IndexWriter;
+import mil.nga.giat.geowave.core.store.memory.DataStoreUtils;
+import mil.nga.giat.geowave.core.store.query.EverythingQuery;
+import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStore;
 import mil.nga.giat.geowave.datastore.accumulo.util.ConnectorPool;
 
@@ -143,7 +145,7 @@ public class GeoWaveRasterIT extends
 				accumuloUser,
 				accumuloPassword);
 		connector.tableOperations().compact(
-				TEST_NAMESPACE + "_" + IndexType.SPATIAL_RASTER.createDefaultIndex().getId().getString(),
+				TEST_NAMESPACE + "_" + DEFAULT_ALLTIER_SPATIAL_INDEX.getId().getString(),
 				null,
 				null,
 				true,
@@ -204,7 +206,7 @@ public class GeoWaveRasterIT extends
 				accumuloUser,
 				accumuloPassword);
 		connector.tableOperations().compact(
-				TEST_NAMESPACE + "_" + IndexType.SPATIAL_RASTER.createDefaultIndex().getId().getString(),
+				TEST_NAMESPACE + "_" + DEFAULT_ALLTIER_SPATIAL_INDEX.getId().getString(),
 				null,
 				null,
 				true,
@@ -223,12 +225,14 @@ public class GeoWaveRasterIT extends
 			IOException {
 		final DataStore dataStore = new AccumuloDataStore(
 				accumuloOperations);
-		final List<ByteArrayId> ids = new ArrayList<ByteArrayId>();
-		ids.add(new ByteArrayId(
-				coverageName));
+
 		try (CloseableIterator<?> it = dataStore.query(
-				ids,
-				null)) {
+				new QueryOptions(
+						new ByteArrayId(
+								coverageName),
+						null),
+				new EverythingQuery())) {
+
 			// the expected outcome is:
 			// band 1,2,3,4,5,6 has every value set correctly, band 0 has every
 			// even row set correctly and every odd row should be NaN, and band
@@ -318,7 +322,8 @@ public class GeoWaveRasterIT extends
 			final double westLon,
 			final double eastLon,
 			final double southLat,
-			final double northLat ) {
+			final double northLat )
+			throws IOException {
 		final int numBands = 8;
 		final DataStore dataStore = new AccumuloDataStore(
 				accumuloOperations);
@@ -494,26 +499,28 @@ public class GeoWaveRasterIT extends
 			}
 		}
 
-		dataStore.ingest(
-				adapter,
-				IndexType.SPATIAL_RASTER.createDefaultIndex(),
-				RasterUtils.createCoverageTypeDouble(
-						coverageName,
-						westLon,
-						eastLon,
-						southLat,
-						northLat,
-						raster1));
-		dataStore.ingest(
-				adapter,
-				IndexType.SPATIAL_RASTER.createDefaultIndex(),
-				RasterUtils.createCoverageTypeDouble(
-						coverageName,
-						westLon,
-						eastLon,
-						southLat,
-						northLat,
-						raster2));
+		try (IndexWriter writer = dataStore.createIndexWriter(
+				DEFAULT_ALLTIER_SPATIAL_INDEX,
+				DataStoreUtils.DEFAULT_VISIBILITY)) {
+			writer.write(
+					adapter,
+					RasterUtils.createCoverageTypeDouble(
+							coverageName,
+							westLon,
+							eastLon,
+							southLat,
+							northLat,
+							raster1));
+			writer.write(
+					adapter,
+					RasterUtils.createCoverageTypeDouble(
+							coverageName,
+							westLon,
+							eastLon,
+							southLat,
+							northLat,
+							raster2));
+		}
 	}
 
 	private void ingestGeneralPurpose(
@@ -525,7 +532,8 @@ public class GeoWaveRasterIT extends
 			final double northLat,
 			final int numBands,
 			final int numRasters,
-			final RasterTileMergeStrategy<?> mergeStrategy ) {
+			final RasterTileMergeStrategy<?> mergeStrategy )
+			throws IOException {
 
 		// just ingest a number of rasters
 		final DataStore dataStore = new AccumuloDataStore(
@@ -538,37 +546,39 @@ public class GeoWaveRasterIT extends
 				basicAdapter,
 				coverageName,
 				mergeStrategy);
-		final Index index = IndexType.SPATIAL_RASTER.createDefaultIndex();
-		for (int r = 0; r < numRasters; r++) {
-			final WritableRaster raster = RasterUtils.createRasterTypeDouble(
-					numBands,
-					tileSize);
-			for (int x = 0; x < tileSize; x++) {
-				for (int y = 0; y < tileSize; y++) {
-					for (int b = 0; b < numBands; b++) {
-						raster.setSample(
-								x,
-								y,
-								b,
-								getValue(
-										x,
-										y,
-										b,
-										r,
-										tileSize));
+		try (IndexWriter writer = dataStore.createIndexWriter(
+				DEFAULT_ALLTIER_SPATIAL_INDEX,
+				DataStoreUtils.DEFAULT_VISIBILITY)) {
+			for (int r = 0; r < numRasters; r++) {
+				final WritableRaster raster = RasterUtils.createRasterTypeDouble(
+						numBands,
+						tileSize);
+				for (int x = 0; x < tileSize; x++) {
+					for (int y = 0; y < tileSize; y++) {
+						for (int b = 0; b < numBands; b++) {
+							raster.setSample(
+									x,
+									y,
+									b,
+									getValue(
+											x,
+											y,
+											b,
+											r,
+											tileSize));
+						}
 					}
 				}
+				writer.write(
+						mergeStrategyOverriddenAdapter,
+						RasterUtils.createCoverageTypeDouble(
+								coverageName,
+								westLon,
+								eastLon,
+								southLat,
+								northLat,
+								raster));
 			}
-			dataStore.ingest(
-					mergeStrategyOverriddenAdapter,
-					index,
-					RasterUtils.createCoverageTypeDouble(
-							coverageName,
-							westLon,
-							eastLon,
-							southLat,
-							northLat,
-							raster));
 		}
 	}
 
@@ -635,11 +645,12 @@ public class GeoWaveRasterIT extends
 		final DataStore dataStore = new AccumuloDataStore(
 				accumuloOperations);
 		final List<ByteArrayId> ids = new ArrayList<ByteArrayId>();
-		ids.add(new ByteArrayId(
-				coverageName));
 
 		try (CloseableIterator<?> it = dataStore.query(
-				ids,
+				new QueryOptions(
+						new ByteArrayId(
+								coverageName),
+						null),
 				new IndexOnlySpatialQuery(
 						new GeometryFactory().toGeometry(new Envelope(
 								westLon,

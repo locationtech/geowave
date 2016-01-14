@@ -1,6 +1,7 @@
 package mil.nga.giat.geowave.adapter.vector.utils;
 
-import mil.nga.giat.geowave.core.store.TimeUtils;
+import mil.nga.giat.geowave.core.geotime.TimeUtils;
+import mil.nga.giat.geowave.core.index.StringUtils;
 
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.AttributeDescriptor;

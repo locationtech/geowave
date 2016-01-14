@@ -13,8 +13,6 @@ import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.data.visibility.GlobalVisibilityHandler;
 
-import org.apache.accumulo.core.client.AccumuloException;
-import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.geotools.data.DataUtilities;
 import org.geotools.feature.SchemaException;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
@@ -40,9 +38,7 @@ public class FeatureFixedBinNumericStaticticsTest
 
 	@Before
 	public void setup()
-			throws AccumuloException,
-			AccumuloSecurityException,
-			SchemaException,
+			throws SchemaException,
 			CQLException,
 			ParseException {
 		schema = DataUtilities.createType(
@@ -123,8 +119,8 @@ public class FeatureFixedBinNumericStaticticsTest
 				"pop");
 
 		next += 1000;
-		final double skewvalue = next + (double) (1000 * rand.nextDouble());
-		SimpleFeature skewedFeature = create(skewvalue);
+		final double skewvalue = next + (1000 * rand.nextDouble());
+		final SimpleFeature skewedFeature = create(skewvalue);
 		for (int i = 0; i < 10000; i++) {
 			stat2.entryIngested(
 					null,
@@ -134,7 +130,7 @@ public class FeatureFixedBinNumericStaticticsTest
 		next += 1000;
 		double max = 0;
 		for (long i = 0; i < 10000; i++) {
-			final double val = next + (double) (1000 * rand.nextDouble());
+			final double val = next + (1000 * rand.nextDouble());
 			stat2.entryIngested(
 					null,
 					create(val));
@@ -143,7 +139,7 @@ public class FeatureFixedBinNumericStaticticsTest
 					max);
 		}
 
-		byte[] b = stat2.toBinary();
+		final byte[] b = stat2.toBinary();
 		stat2.fromBinary(b);
 		assertEquals(
 				1.0,
@@ -186,7 +182,7 @@ public class FeatureFixedBinNumericStaticticsTest
 				7777);
 		double next = 1;
 		for (int i = 0; i < 10000; i++) {
-			next = next + rand.nextDouble() * 100.0;
+			next = next + (rand.nextDouble() * 100.0);
 			stat1.entryIngested(
 					null,
 					create(next));
@@ -199,7 +195,7 @@ public class FeatureFixedBinNumericStaticticsTest
 
 		next = 4839434.547854578;
 		for (long i = 0; i < 10000; i++) {
-			final double val = next + 1000.0 * rand.nextDouble();
+			final double val = next + (1000.0 * rand.nextDouble());
 			stat2.entryIngested(
 					null,
 					create(val));
@@ -331,7 +327,7 @@ public class FeatureFixedBinNumericStaticticsTest
 		final Random rand = new Random(
 				7777);
 
-		double min = 0;
+		final double min = 0;
 		double max = 0;
 
 		double next = 0;

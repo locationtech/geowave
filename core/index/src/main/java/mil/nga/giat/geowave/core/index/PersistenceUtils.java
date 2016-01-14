@@ -84,6 +84,7 @@ public class PersistenceUtils
 
 		final String className = StringUtils.stringFromBinary(classNameBinary);
 
+		if (LOGGER.isTraceEnabled()) LOGGER.trace("Loading class " + className);
 		final T retVal = classFactory(
 				className,
 				expectedType);

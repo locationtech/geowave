@@ -4,17 +4,17 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
-import mil.nga.giat.geowave.analytic.ConfigurationWrapper;
 import mil.nga.giat.geowave.analytic.PropertyManagement;
+import mil.nga.giat.geowave.analytic.param.ParameterEnum;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 
-import org.apache.commons.cli.Option;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.io.Writable;
+import org.apache.hadoop.mapreduce.JobContext;
 
 /**
  * Provide a partition for a data item.
@@ -36,7 +36,8 @@ public interface Partitioner<T> extends
 {
 
 	public void initialize(
-			final ConfigurationWrapper context )
+			final JobContext context,
+			final Class<?> scope )
 			throws IOException;
 
 	public List<PartitionData> getCubeIdentifiers(
@@ -47,11 +48,11 @@ public interface Partitioner<T> extends
 			PartitionDataCallback callback )
 			throws Exception;
 
-	public void fillOptions(
-			Set<Option> options );
+	public Collection<ParameterEnum<?>> getParameters();
 
 	public void setup(
 			PropertyManagement runTimeProperties,
+			Class<?> scope,
 			Configuration configuration );
 
 	public static interface PartitionDataCallback
@@ -73,7 +74,7 @@ public interface Partitioner<T> extends
 			Writable
 	{
 		/**
-		 * 
+		 *
 		 */
 		private static final long serialVersionUID = 1L;
 
@@ -117,7 +118,6 @@ public interface Partitioner<T> extends
 		public int hashCode() {
 			final int prime = 31;
 			int result = 1;
-			result = (prime * result) + ((groupId == null) ? 0 : groupId.hashCode());
 			result = (prime * result) + ((id == null) ? 0 : id.hashCode());
 			return result;
 		}
@@ -135,14 +135,6 @@ public interface Partitioner<T> extends
 				return false;
 			}
 			final PartitionData other = (PartitionData) obj;
-			if (groupId == null) {
-				if (other.groupId != null) {
-					return false;
-				}
-			}
-			else if (!groupId.equals(other.groupId)) {
-				return false;
-			}
 			if (id == null) {
 				if (other.id != null) {
 					return false;

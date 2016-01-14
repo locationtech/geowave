@@ -26,6 +26,11 @@
 			<artifactId>geowave-adapter-raster</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>mil.nga.giat</groupId>
+			<artifactId>geowave-datastore-accumulo</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<resources>

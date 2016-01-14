@@ -13,9 +13,9 @@ import mil.nga.giat.geowave.core.store.filter.DedupeFilter;
 import mil.nga.giat.geowave.core.store.filter.DistributableFilterList;
 import mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
-import mil.nga.giat.geowave.core.store.index.Index;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.core.store.memory.DataStoreUtils;
 import mil.nga.giat.geowave.core.store.query.Query;
-import mil.nga.giat.geowave.datastore.accumulo.util.AccumuloUtils;
 
 import org.apache.accumulo.core.client.IteratorSetting;
 import org.apache.accumulo.core.client.ScannerBase;
@@ -34,55 +34,28 @@ public class AccumuloConstraintsQuery extends
 	protected boolean queryFiltersEnabled;
 
 	public AccumuloConstraintsQuery(
-			final Index index,
-			final Query query ) {
+			final List<ByteArrayId> adapterIds,
+			final PrimaryIndex index,
+			final Query query,
+			final DedupeFilter clientDedupeFilter,
+			final ScanCallback<?> scanCallback,
+			final String[] authorizations ) {
 		this(
-				null,
+				adapterIds,
 				index,
-				query.getIndexConstraints(index.getIndexStrategy()),
-				query.createFilters(index.getIndexModel()),
-				new String[0]);
-		if (!query.isSupported(index)) {
+				query != null ? query.getIndexConstraints(index.getIndexStrategy()) : null,
+				query != null ? query.createFilters(index.getIndexModel()) : null,
+				clientDedupeFilter,
+				scanCallback,
+				authorizations);
+		if ((query != null) && !query.isSupported(index)) {
 			throw new IllegalArgumentException(
 					"Index does not support the query");
 		}
 	}
 
 	public AccumuloConstraintsQuery(
-			final Index index ) {
-		this(
-				null,
-				index);
-	}
-
-	public AccumuloConstraintsQuery(
-			final List<ByteArrayId> adapterIds,
-			final Index index ) {
-		this(
-				adapterIds,
-				index,
-				null,
-				null);
-	}
-
-	public AccumuloConstraintsQuery(
-			final List<ByteArrayId> adapterIds,
-			final Index index,
-			final DedupeFilter clientDedupeFilter,
-			final ScanCallback<?> scanCallback,
-			final String... authorizations ) {
-		this(
-				adapterIds,
-				index,
-				null,
-				null,
-				clientDedupeFilter,
-				scanCallback,
-				authorizations);
-	}
-
-	public AccumuloConstraintsQuery(
-			final Index index,
+			final PrimaryIndex index,
 			final List<MultiDimensionalNumericData> constraints,
 			final List<QueryFilter> queryFilters ) {
 		this(
@@ -95,7 +68,7 @@ public class AccumuloConstraintsQuery extends
 
 	public AccumuloConstraintsQuery(
 			final List<ByteArrayId> adapterIds,
-			final Index index,
+			final PrimaryIndex index,
 			final List<MultiDimensionalNumericData> constraints,
 			final List<QueryFilter> queryFilters ) {
 		this(
@@ -103,15 +76,15 @@ public class AccumuloConstraintsQuery extends
 				index,
 				constraints,
 				queryFilters,
-				null,
-				null,
+				(DedupeFilter) null,
+				(ScanCallback<?>) null,
 				new String[0]);
 
 	}
 
 	public AccumuloConstraintsQuery(
 			final List<ByteArrayId> adapterIds,
-			final Index index,
+			final PrimaryIndex index,
 			final List<MultiDimensionalNumericData> constraints,
 			final List<QueryFilter> queryFilters,
 			final String[] authorizations ) {
@@ -120,15 +93,15 @@ public class AccumuloConstraintsQuery extends
 				index,
 				constraints,
 				queryFilters,
-				null,
-				null,
+				(DedupeFilter) null,
+				(ScanCallback<?>) null,
 				authorizations);
 
 	}
 
 	public AccumuloConstraintsQuery(
 			final List<ByteArrayId> adapterIds,
-			final Index index,
+			final PrimaryIndex index,
 			final List<MultiDimensionalNumericData> constraints,
 			final List<QueryFilter> queryFilters,
 			final DedupeFilter clientDedupeFilter,
@@ -145,17 +118,18 @@ public class AccumuloConstraintsQuery extends
 		// add dedupe filters to the front of both lists so that the
 		// de-duplication is performed before any more complex filtering
 		// operations, use the supplied client dedupe filter if possible
-		clientFilters.add(
-				0,
-				clientDedupeFilter != null ? clientDedupeFilter : new DedupeFilter());
+		if (clientDedupeFilter != null) {
+			clientFilters.add(
+					0,
+					clientDedupeFilter);
+		}
 		super.setClientFilters(clientFilters);
 		distributableFilters = lists.distributableFilters;
-		// we are assuming we always have to ensure no duplicates
-		// and that the deduplication is the least expensive filter so we add it
-		// first
-		distributableFilters.add(
-				0,
-				new DedupeFilter());
+		if (!distributableFilters.isEmpty() && (clientDedupeFilter != null)) {
+			distributableFilters.add(
+					0,
+					clientDedupeFilter);
+		}
 		queryFiltersEnabled = true;
 	}
 
@@ -189,7 +163,7 @@ public class AccumuloConstraintsQuery extends
 
 	@Override
 	protected List<ByteArrayRange> getRanges() {
-		return AccumuloUtils.constraintsToByteArrayRanges(
+		return DataStoreUtils.constraintsToByteArrayRanges(
 				constraints,
 				index.getIndexStrategy(),
 				MAX_RANGE_DECOMPOSITION);
@@ -200,7 +174,7 @@ public class AccumuloConstraintsQuery extends
 	}
 
 	public void setQueryFiltersEnabled(
-			boolean queryFiltersEnabled ) {
+			final boolean queryFiltersEnabled ) {
 		this.queryFiltersEnabled = queryFiltersEnabled;
 	}
 

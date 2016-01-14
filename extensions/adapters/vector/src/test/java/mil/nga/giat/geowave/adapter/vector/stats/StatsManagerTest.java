@@ -20,8 +20,6 @@ import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.data.visibility.GlobalVisibilityHandler;
 
-import org.apache.accumulo.core.client.AccumuloException;
-import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.apache.commons.lang.ArrayUtils;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -41,9 +39,7 @@ public class StatsManagerTest
 
 	@Before
 	public void setup()
-			throws AccumuloException,
-			AccumuloSecurityException,
-			SchemaException,
+			throws SchemaException,
 			CQLException,
 			ParseException {
 		schema = DataUtilities.createType(
@@ -92,7 +88,7 @@ public class StatsManagerTest
 				dataAdapter,
 				FeatureBoundingBoxStatistics.composeId("somewhere")));
 
-		FeatureBoundingBoxStatistics newStat = new FeatureBoundingBoxStatistics();
+		final FeatureBoundingBoxStatistics newStat = new FeatureBoundingBoxStatistics();
 		newStat.fromBinary(stat.toBinary());
 		assertEquals(
 				newStat.getMaxY(),
@@ -127,7 +123,7 @@ public class StatsManagerTest
 			JsonMappingException,
 			IndexOutOfBoundsException,
 			IOException {
-		SimpleFeatureType schema = DataUtilities.createType(
+		final SimpleFeatureType schema = DataUtilities.createType(
 				"sp.geostuff",
 				"geometry:Geometry:srid=4326,pop:java.lang.Long,when:Date,whennot:Date,somewhere:Polygon,pid:String");
 
@@ -151,7 +147,7 @@ public class StatsManagerTest
 										0.97),
 								new FeatureHyperLogLogConfig(
 										24))));
-		FeatureDataAdapter dataAdapter = new FeatureDataAdapter(
+		final FeatureDataAdapter dataAdapter = new FeatureDataAdapter(
 				schema,
 				new GlobalVisibilityHandler<SimpleFeature, Object>(
 						"default"));
@@ -190,7 +186,7 @@ public class StatsManagerTest
 	}
 
 	private String dump(
-			String value ) {
+			final String value ) {
 		System.out.println(value);
 		return value;
 	}

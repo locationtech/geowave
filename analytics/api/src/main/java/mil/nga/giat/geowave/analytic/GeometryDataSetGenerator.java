@@ -11,25 +11,26 @@ import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import mil.nga.giat.geowave.analytic.distance.CoordinateCircleDistanceFn;
 import mil.nga.giat.geowave.analytic.distance.DistanceFn;
 import mil.nga.giat.geowave.analytic.distance.FeatureCentroidDistanceFn;
-import mil.nga.giat.geowave.core.geotime.IndexType;
+import mil.nga.giat.geowave.core.cli.CommandLineResult;
+import mil.nga.giat.geowave.core.cli.DataStoreCommandLineOptions;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import mil.nga.giat.geowave.core.store.DataStore;
-import mil.nga.giat.geowave.core.store.index.Index;
-import mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStore;
-import mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations;
+import mil.nga.giat.geowave.core.store.IndexWriter;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.core.store.memory.DataStoreUtils;
 
-import org.apache.accumulo.core.client.AccumuloException;
-import org.apache.accumulo.core.client.AccumuloSecurityException;
-import org.apache.accumulo.core.client.Connector;
-import org.apache.accumulo.core.client.Instance;
-import org.apache.accumulo.core.client.ZooKeeperInstance;
-import org.apache.accumulo.core.client.security.tokens.PasswordToken;
+import org.apache.commons.cli.BasicParser;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 /**
  * Generate clusters of geometries.
- * 
+ *
  */
 import org.geotools.referencing.CRS;
 import org.opengis.feature.simple.SimpleFeature;
@@ -168,53 +169,31 @@ public class GeometryDataSetGenerator
 	}
 
 	public void writeToGeoWave(
-			final String zookeeper,
-			final String instance,
-			final String user,
-			final String password,
-			final String namespace,
+			final DataStore dataStore,
 			final List<SimpleFeature> featureData )
 			throws IOException {
-		final Instance zookeeperInstance = new ZooKeeperInstance(
-				instance,
-				zookeeper);
-		try {
-			final Connector accumuloConnector = zookeeperInstance.getConnector(
-					user,
-					new PasswordToken(
-							password));
+		final PrimaryIndex index = new SpatialDimensionalityTypeProvider().createPrimaryIndex();
+		final FeatureDataAdapter adapter = new FeatureDataAdapter(
+				featureData.get(
+						0).getFeatureType());
+		final SimpleFeatureBuilder featureBuilder = new SimpleFeatureBuilder(
+				featureData.get(
+						0).getFeatureType());
 
-			final DataStore dataStore = new AccumuloDataStore(
-					new BasicAccumuloOperations(
-							accumuloConnector,
-							namespace));
-			final Index index = IndexType.SPATIAL_VECTOR.createDefaultIndex();
-			final FeatureDataAdapter adapter = new FeatureDataAdapter(
-					featureData.get(
-							0).getFeatureType());
-			final SimpleFeatureBuilder featureBuilder = new SimpleFeatureBuilder(
-					featureData.get(
-							0).getFeatureType());
-
-			LOGGER.info("Accumulo " + zookeeper + " instance " + instance + " namespace " + namespace);
-			LOGGER.info("Writing " + featureData.size() + " records to " + adapter.getType().getTypeName());
-			Integer idCounter = 0;
+		LOGGER.info("Writing " + featureData.size() + " records to " + adapter.getType().getTypeName());
+		Integer idCounter = 0;
+		try (IndexWriter writer = dataStore.createIndexWriter(
+				index,
+				DataStoreUtils.DEFAULT_VISIBILITY)) {
+			writer.setupAdapter(adapter);
 			for (final SimpleFeature feature : featureData) {
-
-				dataStore.ingest(
+				writer.write(
 						adapter,
-						index,
 						feature);
 				featureBuilder.reset();
 
 				idCounter++;
 			}
-
-		}
-		catch (AccumuloException | AccumuloSecurityException e) {
-			throw new IOException(
-					"Cannot write to " + instance,
-					e);
 		}
 	}
 
@@ -396,7 +375,7 @@ public class GeometryDataSetGenerator
 			final double minCenterDistanceFactor,
 			final double minAxis[],
 			final double maxAxis[] ) {
-		assert (minCenterDistanceFactor > 0.001);
+		// assert (minCenterDistanceFactor > 0.001);
 		assert (minCenterDistanceFactor < 0.75);
 
 		final int dims = coordSystem.getDimension();
@@ -517,20 +496,35 @@ public class GeometryDataSetGenerator
 	public static void main(
 			final String args[] )
 			throws Exception {
+		final Options allOptions = new Options();
+		DataStoreCommandLineOptions.applyOptions(allOptions);
+		final Option typeNameOption = new Option(
+				"typename",
+				true,
+				"a name for the feature type (required)");
+		typeNameOption.setRequired(true);
+		allOptions.addOption(typeNameOption);
+		CommandLine commandLine = new BasicParser().parse(
+				allOptions,
+				args);
+
+		final CommandLineResult<DataStoreCommandLineOptions> dataStoreOption = DataStoreCommandLineOptions.parseOptions(
+				allOptions,
+				commandLine);
+		if (dataStoreOption.isCommandLineChange()) {
+			commandLine = dataStoreOption.getCommandLine();
+		}
+		else {
+			throw new ParseException(
+					"Unable to parse data store from command line");
+		}
+		final DataStore dataStore = dataStoreOption.getResult().createStore();
+		final String typeName = commandLine.getOptionValue("typename");
 		final GeometryDataSetGenerator dataGenerator = new GeometryDataSetGenerator(
 				new FeatureCentroidDistanceFn(),
-				getBuilder(args[5]));
-		final String zookeeper = args[0].trim();
-		final String instance = args[1].trim();
-		final String user = args[2];
-		final String password = args[3];
-		final String namespace = args[4].trim();
+				getBuilder(typeName));
 		dataGenerator.writeToGeoWave(
-				zookeeper,
-				instance,
-				user,
-				password,
-				namespace,
+				dataStore,
 				dataGenerator.generatePointSet(
 						0.2,
 						0.2,
@@ -545,11 +539,7 @@ public class GeometryDataSetGenerator
 							-35
 						}));
 		dataGenerator.writeToGeoWave(
-				zookeeper,
-				instance,
-				user,
-				password,
-				namespace,
+				dataStore,
 				dataGenerator.generatePointSet(
 						0.2,
 						0.2,
@@ -564,11 +554,7 @@ public class GeometryDataSetGenerator
 							10
 						}));
 		dataGenerator.writeToGeoWave(
-				zookeeper,
-				instance,
-				user,
-				password,
-				namespace,
+				dataStore,
 				dataGenerator.addRandomNoisePoints(
 						dataGenerator.generatePointSet(
 								0.2,

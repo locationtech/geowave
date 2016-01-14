@@ -91,6 +91,7 @@ public class PrimitiveHilbertSFCOperations implements
 					dimensionDefinitions[i],
 					values[i],
 					binsPerDimension[i],
+					false,
 					false));
 		}
 
@@ -227,7 +228,8 @@ public class PrimitiveHilbertSFCOperations implements
 			final SFCDimensionDefinition boundedDimensionDefinition,
 			final double value,
 			final long bins,
-			final boolean isMin )
+			final boolean isMin,
+			final boolean overInclusiveOnEdge )
 			throws IllegalArgumentException {
 		final double normalizedValue = boundedDimensionDefinition.normalize(value);
 		if ((normalizedValue < 0) || (normalizedValue > 1)) {
@@ -237,13 +239,14 @@ public class PrimitiveHilbertSFCOperations implements
 		// scale it to a value within the bits of precision,
 		// because max is handled as exclusive and min is inclusive, we need to
 		// handle the edge differently
-		if (isMin) {
+		if ((isMin && !overInclusiveOnEdge) || (!isMin && overInclusiveOnEdge)) {
+			// this will round up on the edge
 			return (long) Math.min(
 					Math.floor(normalizedValue * bins),
 					bins - 1);
-
 		}
 		else {
+			// this will round down on the edge
 			return (long) Math.max(
 					Math.ceil(normalizedValue * bins) - 1L,
 					0);
@@ -299,8 +302,10 @@ public class PrimitiveHilbertSFCOperations implements
 			final SFCDimensionDefinition[] dimensionDefinitions,
 			final int totalPrecision,
 			final int maxFilteredIndexedRanges,
-			final boolean removeVacuum ) {// List of query range minimum and
-											// maximum
+			final boolean removeVacuum,
+			final boolean overInclusiveOnEdge ) {// List of query range minimum
+													// and
+		// maximum
 		// values
 		final List<Long> minRangeList = new ArrayList<Long>();
 		final List<Long> maxRangeList = new ArrayList<Long>();
@@ -315,12 +320,14 @@ public class PrimitiveHilbertSFCOperations implements
 					dimensionDefinitions[d],
 					rangePerDimension[d].getMin(),
 					binsPerDimension[d],
-					true);
+					true,
+					overInclusiveOnEdge);
 			long normalizedMax = normalizeDimension(
 					dimensionDefinitions[d],
 					rangePerDimension[d].getMax(),
 					binsPerDimension[d],
-					false);
+					false,
+					overInclusiveOnEdge);
 			if (normalizedMin > normalizedMax) {
 				// if they're both equal, which is possible because we treat max
 				// as exclusive, set bin max to bin min (ie. treat it as
@@ -481,11 +488,13 @@ public class PrimitiveHilbertSFCOperations implements
 					dimensionDefinitions[d],
 					mins[d],
 					binsPerDimension[d],
-					true);
+					true,
+					false);
 			long binMax = normalizeDimension(
 					dimensionDefinitions[d],
 					maxes[d],
 					binsPerDimension[d],
+					false,
 					false);
 			if (binMin > binMax) {
 				// if they're both equal, which is possible because we treat max

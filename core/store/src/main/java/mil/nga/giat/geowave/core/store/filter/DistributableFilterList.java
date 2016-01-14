@@ -70,5 +70,4 @@ public class DistributableFilterList extends
 					DistributableQueryFilter.class));
 		}
 	}
-
 }

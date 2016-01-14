@@ -1,6 +1,9 @@
 package mil.nga.giat.geowave.analytic.mapreduce.dbscan;
 
 import java.io.IOException;
+import java.io.Serializable;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -21,16 +24,16 @@ import mil.nga.giat.geowave.analytic.param.GlobalParameters;
 import mil.nga.giat.geowave.analytic.param.HullParameters;
 import mil.nga.giat.geowave.analytic.param.MapReduceParameters;
 import mil.nga.giat.geowave.analytic.param.OutputParameters;
+import mil.nga.giat.geowave.analytic.param.ParameterEnum;
 import mil.nga.giat.geowave.analytic.param.PartitionParameters;
 import mil.nga.giat.geowave.analytic.param.PartitionParameters.Partition;
-import mil.nga.giat.geowave.analytic.partitioner.AbstractPartitioner;
 import mil.nga.giat.geowave.analytic.partitioner.OrthodromicDistancePartitioner;
 import mil.nga.giat.geowave.analytic.partitioner.Partitioner;
 
-import org.apache.commons.cli.Option;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.TaskCounter;
 import org.geotools.feature.type.BasicFeatureTypes;
 import org.slf4j.Logger;
@@ -97,7 +100,7 @@ public class DBScanIterationsJobRunner implements
 				"/tmp");
 
 		Path startPath = new Path(
-				outputBaseDir + "/" + runTimeProperties.getPropertyAsString(GlobalParameters.Global.ACCUMULO_NAMESPACE) + "_level_0");
+				outputBaseDir + "/level_0");
 		if (fs.exists(startPath)) {
 			fs.delete(
 					startPath,
@@ -120,26 +123,37 @@ public class DBScanIterationsJobRunner implements
 				Partition.PARTITION_PRECISION,
 				1.0);
 
-		if (!runTimeProperties.hasProperty(Clustering.DISTANCE_THRESHOLDS)) {
-			runTimeProperties.copy(
-					Partition.PARTITION_DISTANCE,
-					Clustering.DISTANCE_THRESHOLDS);
-		}
+		runTimeProperties.storeIfEmpty(
+				Clustering.DISTANCE_THRESHOLDS,
+				Double.toString(maxDistance));
 
 		final boolean overrideSecondary = runTimeProperties.hasProperty(Partition.SECONDARY_PARTITIONER_CLASS);
 
 		if (!overrideSecondary) {
-			final double[] distances = AbstractPartitioner.getDistances(
-					runTimeProperties,
-					AbstractPartitioner.class);
+			final Serializable distances = runTimeProperties.get(ClusteringParameters.Clustering.DISTANCE_THRESHOLDS);
+			String dstStr;
+			if (distances == null) {
+				dstStr = "0.000001";
+			}
+			else {
+				dstStr = distances.toString();
+			}
+			final String distancesArray[] = dstStr.split(",");
+			final double[] distancePerDimension = new double[distancesArray.length];
+			{
+				int i = 0;
+				for (final String eachDistance : distancesArray) {
+					distancePerDimension[i++] = Double.valueOf(eachDistance);
+				}
+			}
 			boolean secondary = precisionFactor < 1.0;
 			double total = 1.0;
-			for (double dist : distances) {
+			for (final double dist : distancePerDimension) {
 				total *= dist;
 			}
 			secondary |= (total >= (Math.pow(
 					maxDistance,
-					distances.length) * 2.0));
+					distancePerDimension.length) * 2.0));
 			if (secondary) {
 				runTimeProperties.copy(
 						Partition.PARTITIONER_CLASS,
@@ -147,21 +161,13 @@ public class DBScanIterationsJobRunner implements
 			}
 		}
 
-		AbstractPartitioner.putDistances(
-				runTimeProperties,
-				new double[] {
-					maxDistance
-				});
-
 		jobRunner.setInputFormatConfiguration(inputFormatConfiguration);
 		jobRunner.setOutputFormatConfiguration(new SequenceFileOutputFormatConfiguration(
 				startPath));
 
 		LOGGER.info(
 				"Running with partition distance {}",
-				runTimeProperties.getPropertyAsDouble(
-						Partition.PARTITION_DISTANCE,
-						10.0));
+				maxDistance);
 		final int initialStatus = jobRunner.run(
 				config,
 				runTimeProperties);
@@ -179,7 +185,7 @@ public class DBScanIterationsJobRunner implements
 		int iteration = 2;
 		long lastRecordCount = 0;
 
-		while (maxIterationCount > 0 && precisionFactor > 0) {
+		while ((maxIterationCount > 0) && (precisionFactor > 0)) {
 
 			// context does not mater in this case
 
@@ -189,7 +195,9 @@ public class DBScanIterationsJobRunner implements
 						Partitioner.class,
 						OrthodromicDistancePartitioner.class);
 
-				partitioner.initialize(runTimeProperties);
+				partitioner.initialize(
+						Job.getInstance(config),
+						partitioner.getClass());
 			}
 			catch (final IllegalArgumentException argEx) {
 				// this occurs if the partitioner decides that the distance is
@@ -215,7 +223,7 @@ public class DBScanIterationsJobRunner implements
 			 * distances. However, looking up the partition dimension space or
 			 * assuming only two dimensions were both undesirable.
 			 */
-			if (precisionFactor <= 0.9 && !overrideSecondary) {
+			if ((precisionFactor <= 0.9) && !overrideSecondary) {
 				localScopeProperties.store(
 						Partition.SECONDARY_PARTITIONER_CLASS,
 						PassthruPartitioner.class);
@@ -251,7 +259,7 @@ public class DBScanIterationsJobRunner implements
 					0);
 
 			final Path nextPath = new Path(
-					outputBaseDir + "/" + runTimeProperties.getPropertyAsString(GlobalParameters.Global.ACCUMULO_NAMESPACE) + "_level_" + iteration);
+					outputBaseDir + "/level_" + iteration);
 
 			if (fs.exists(nextPath)) {
 				fs.delete(
@@ -305,21 +313,14 @@ public class DBScanIterationsJobRunner implements
 	}
 
 	@Override
-	public void fillOptions(
-			final Set<Option> options ) {
-		ClusteringParameters.fillOptions(
-				options,
-				new Clustering[] {
-					Clustering.MAX_ITERATIONS
-				});
-		PartitionParameters.fillOptions(
-				options,
-				new PartitionParameters.Partition[] {
-					Partition.PARTITION_PRECISION,
-					Partition.PARTITION_DECREASE_RATE
-				});
-		jobRunner.fillOptions(options);
-		inputLoadRunner.fillOptions(options);
+	public Collection<ParameterEnum<?>> getParameters() {
+		final Set<ParameterEnum<?>> params = new HashSet<ParameterEnum<?>>();
+		params.addAll(jobRunner.getParameters());
+		params.addAll(inputLoadRunner.getParameters());
+		params.add(Clustering.MAX_ITERATIONS);
+		params.add(Partition.PARTITION_DECREASE_RATE);
+		params.add(Partition.PARTITION_PRECISION);
+		return params;
 	}
 
 	@Override

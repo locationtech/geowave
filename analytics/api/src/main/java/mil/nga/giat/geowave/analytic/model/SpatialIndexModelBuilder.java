@@ -1,6 +1,6 @@
 package mil.nga.giat.geowave.analytic.model;
 
-import mil.nga.giat.geowave.core.geotime.IndexType;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 
 /**
@@ -14,7 +14,7 @@ public class SpatialIndexModelBuilder implements
 
 	@Override
 	public CommonIndexModel buildModel() {
-		return IndexType.SPATIAL_VECTOR.getDefaultIndexModel();
+		return new SpatialDimensionalityTypeProvider().createPrimaryIndex().getIndexModel();
 	}
 
 }

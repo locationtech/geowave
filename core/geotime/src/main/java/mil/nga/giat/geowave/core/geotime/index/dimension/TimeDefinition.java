@@ -1,7 +1,6 @@
 package mil.nga.giat.geowave.core.geotime.index.dimension;
 
 import mil.nga.giat.geowave.core.geotime.index.dimension.TemporalBinningStrategy.Unit;
-import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
 import mil.nga.giat.geowave.core.index.dimension.UnboundedDimensionDefinition;
 import mil.nga.giat.geowave.core.index.dimension.bin.BinningStrategy;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericData;
@@ -46,13 +45,6 @@ public class TimeDefinition extends
 			final BinningStrategy binningStrategy ) {
 		super(
 				binningStrategy);
-	}
-
-	@Override
-	public boolean isCompatibleDefinition(
-			final NumericDimensionDefinition otherDimensionDefinition ) {
-		// time is compatible regardless of unit or binning strategy
-		return otherDimensionDefinition instanceof TimeDefinition;
 	}
 
 	@Override

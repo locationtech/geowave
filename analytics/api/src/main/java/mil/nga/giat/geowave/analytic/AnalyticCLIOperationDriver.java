@@ -1,9 +1,10 @@
 package mil.nga.giat.geowave.analytic;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Collection;
 
+import mil.nga.giat.geowave.analytic.param.ParameterEnum;
 import mil.nga.giat.geowave.core.cli.CLIOperationDriver;
+import mil.nga.giat.geowave.core.cli.CommandLineResult;
 
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
@@ -28,7 +29,7 @@ public class AnalyticCLIOperationDriver implements
 	}
 
 	@Override
-	public void run(
+	public boolean runOperation(
 			final String[] args )
 			throws ParseException {
 		final Options options = new Options();
@@ -41,33 +42,82 @@ public class AnalyticCLIOperationDriver implements
 				"Display help"));
 		options.addOptionGroup(baseOptionGroup);
 
-		final Set<Option> optionSet = new HashSet<Option>();
-		jobRunner.fillOptions(optionSet);
-		for (final Option option : optionSet) {
-			options.addOption(option);
+		final Collection<ParameterEnum<?>> params = jobRunner.getParameters();
+
+		for (final ParameterEnum<?> param : params) {
+			final Option[] paramOptions = param.getHelper().getOptions();
+			for (final Option o : paramOptions) {
+				options.addOption(o);
+			}
 		}
 
 		final BasicParser parser = new BasicParser();
-		final CommandLine commandLine = parser.parse(
-				options,
-				args);
-		if (commandLine.hasOption("h")) {
-			printHelp(options);
-			return;
+
+		Exception exception = null;
+		CommandLine commandLine = null;
+		try {
+			commandLine = parser.parse(
+					options,
+					args,
+					true);
 		}
-		else {
-			final PropertyManagement pm = new PropertyManagement();
-			pm.buildFromOptions(commandLine);
-			try {
-				jobRunner.run(pm);
-			}
-			catch (final Exception e) {
-				LOGGER.error(
-						"Unable to run analytic job",
-						e);
-				return;
-			}
+		catch (final Exception e) {
+			exception = e;
 		}
+		try {
+			final PropertyManagement properties = new PropertyManagement();
+			// if the command-line changes on the first parameter, we do not
+			// need to reparse
+			boolean first = true;
+			boolean newCommandLine = false;
+			do {
+				if (commandLine != null && commandLine.hasOption("h")) {
+					printHelp(options);
+					return true;
+				}
+				if (!params.isEmpty()) {
+					newCommandLine = false;
+					exception = null;
+					first = true;
+					for (final ParameterEnum<?> param : params) {
+						CommandLineResult value = null;
+						try {
+							value = param.getHelper().getValue(
+									options,
+									commandLine);
+						}
+						catch (final Exception e) {
+							exception = e;
+						}
+						if ((value != null) && value.isCommandLineChange()) {
+							commandLine = value.getCommandLine();
+							if (!first) {
+								newCommandLine = true;
+								break;
+							}
+						}
+						first = false;
+						if (value != null) {
+							((ParameterEnum<Object>) param).getHelper().setValue(
+									properties,
+									value.getResult());
+						}
+					}
+				}
+			}
+			while (newCommandLine);
+			if (exception != null) {
+				throw exception;
+			}
+			return jobRunner.run(properties) >= 0;
+		}
+		catch (final Exception e) {
+			LOGGER.error(
+					"Unable to run analytic job",
+					e);
+			return false;
+		}
+
 	}
 
 	private static void printHelp(

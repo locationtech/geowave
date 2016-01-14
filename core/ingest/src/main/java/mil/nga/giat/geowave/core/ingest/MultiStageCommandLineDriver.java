@@ -25,22 +25,28 @@ public class MultiStageCommandLineDriver extends
 	}
 
 	@Override
-	protected void runInternal(
+	protected boolean runInternal(
 			final String[] args,
 			final List<IngestFormatPluginProviderSpi<?, ?>> pluginProviders ) {
 		for (final AbstractIngestCommandLineDriver stage : orderedStages) {
-			stage.runInternal(
+			if (!stage.runInternal(
 					args,
-					pluginProviders);
+					pluginProviders)) {
+				return false;
+			}
 		}
+		return true;
 	}
 
 	@Override
 	public void parseOptionsInternal(
+			final Options options,
 			final CommandLine commandLine )
 			throws ParseException {
 		for (final AbstractIngestCommandLineDriver stage : orderedStages) {
-			stage.parseOptionsInternal(commandLine);
+			stage.parseOptionsInternal(
+					options,
+					commandLine);
 		}
 	}
 
