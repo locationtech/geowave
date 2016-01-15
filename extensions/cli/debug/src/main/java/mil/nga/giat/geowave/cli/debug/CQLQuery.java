@@ -1,4 +1,4 @@
-package mil.nga.giat.geowave.cli.scratch;
+package mil.nga.giat.geowave.cli.debug;
 
 import java.io.IOException;
 
@@ -9,19 +9,32 @@ import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 
 import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
+import org.geotools.filter.text.cql2.CQLException;
 
-public class FullTableScan extends
+public class CQLQuery extends
 		AbstractGeoWaveQuery
 {
+	private String cqlStr;
 
 	@Override
 	protected void applyOptions(
-			final Options options ) {}
+			final Options options ) {
+		final Option cql = new Option(
+				"cql",
+				true,
+				"CQL Filter executed client side");
+		cql.setRequired(true);
+		options.addOption(cql);
+	}
 
 	@Override
 	protected void parseOptions(
-			final CommandLine commandLine ) {}
+			final CommandLine commandLine ) {
+		cqlStr = commandLine.getOptionValue(
+				"cql").toString();
+	}
 
 	@Override
 	protected long runQuery(
@@ -34,7 +47,9 @@ public class FullTableScan extends
 				new QueryOptions(
 						adapterId,
 						null),
-				null)) {
+				new mil.nga.giat.geowave.adapter.vector.query.cql.CQLQuery(
+						cqlStr,
+						adapter))) {
 			while (it.hasNext()) {
 				if (debug) {
 					System.out.println(it.next());
@@ -44,12 +59,14 @@ public class FullTableScan extends
 				}
 				count++;
 			}
-
 		}
 		catch (final IOException e) {
 			e.printStackTrace();
 		}
+		catch (final CQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		return count;
 	}
-
 }
