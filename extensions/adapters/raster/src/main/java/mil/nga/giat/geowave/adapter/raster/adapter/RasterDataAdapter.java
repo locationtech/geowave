@@ -42,6 +42,53 @@ import javax.media.jai.PlanarImage;
 import javax.media.jai.remote.SerializableState;
 import javax.media.jai.remote.SerializerFactory;
 
+import mil.nga.giat.geowave.adapter.raster.FitToIndexGridCoverage;
+import mil.nga.giat.geowave.adapter.raster.RasterUtils;
+import mil.nga.giat.geowave.adapter.raster.Resolution;
+import mil.nga.giat.geowave.adapter.raster.adapter.merge.RasterTileMergeStrategy;
+import mil.nga.giat.geowave.adapter.raster.adapter.merge.RasterTileRowTransform;
+import mil.nga.giat.geowave.adapter.raster.adapter.merge.RootMergeStrategy;
+import mil.nga.giat.geowave.adapter.raster.adapter.merge.nodata.NoDataMergeStrategy;
+import mil.nga.giat.geowave.adapter.raster.plugin.GeoWaveGTRasterFormat;
+import mil.nga.giat.geowave.adapter.raster.stats.HistogramConfig;
+import mil.nga.giat.geowave.adapter.raster.stats.HistogramStatistics;
+import mil.nga.giat.geowave.adapter.raster.stats.OverviewStatistics;
+import mil.nga.giat.geowave.adapter.raster.stats.RasterBoundingBoxStatistics;
+import mil.nga.giat.geowave.adapter.raster.stats.RasterFootprintStatistics;
+import mil.nga.giat.geowave.core.geotime.GeometryUtils;
+import mil.nga.giat.geowave.core.geotime.index.dimension.LatitudeDefinition;
+import mil.nga.giat.geowave.core.geotime.index.dimension.LongitudeDefinition;
+import mil.nga.giat.geowave.core.geotime.store.statistics.BoundingBoxDataStatistics;
+import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.index.ByteArrayUtils;
+import mil.nga.giat.geowave.core.index.HierarchicalNumericIndexStrategy;
+import mil.nga.giat.geowave.core.index.HierarchicalNumericIndexStrategy.SubStrategy;
+import mil.nga.giat.geowave.core.index.PersistenceUtils;
+import mil.nga.giat.geowave.core.index.StringUtils;
+import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
+import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
+import mil.nga.giat.geowave.core.store.EntryVisibilityHandler;
+import mil.nga.giat.geowave.core.store.IteratorWrapper;
+import mil.nga.giat.geowave.core.store.IteratorWrapper.Converter;
+import mil.nga.giat.geowave.core.store.adapter.AdapterPersistenceEncoding;
+import mil.nga.giat.geowave.core.store.adapter.FitToIndexPersistenceEncoding;
+import mil.nga.giat.geowave.core.store.adapter.IndexDependentDataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding;
+import mil.nga.giat.geowave.core.store.adapter.RowMergingDataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.statistics.CountDataStatistics;
+import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
+import mil.nga.giat.geowave.core.store.adapter.statistics.FieldIdStatisticVisibility;
+import mil.nga.giat.geowave.core.store.adapter.statistics.StatisticalDataAdapter;
+import mil.nga.giat.geowave.core.store.data.PersistentDataset;
+import mil.nga.giat.geowave.core.store.data.PersistentValue;
+import mil.nga.giat.geowave.core.store.data.field.FieldReader;
+import mil.nga.giat.geowave.core.store.data.field.FieldWriter;
+import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
+import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.mapreduce.HadoopDataAdapter;
+import mil.nga.giat.geowave.mapreduce.HadoopWritableSerializer;
+
 import org.apache.commons.math.util.MathUtils;
 import org.apache.log4j.Logger;
 import org.geotools.coverage.Category;
@@ -79,54 +126,6 @@ import org.opengis.util.InternationalString;
 
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
-
-import mil.nga.giat.geowave.adapter.raster.FitToIndexGridCoverage;
-import mil.nga.giat.geowave.adapter.raster.RasterUtils;
-import mil.nga.giat.geowave.adapter.raster.Resolution;
-import mil.nga.giat.geowave.adapter.raster.adapter.merge.RasterTileMergeStrategy;
-import mil.nga.giat.geowave.adapter.raster.adapter.merge.RasterTileRowTransform;
-import mil.nga.giat.geowave.adapter.raster.adapter.merge.RootMergeStrategy;
-import mil.nga.giat.geowave.adapter.raster.adapter.merge.nodata.NoDataMergeStrategy;
-import mil.nga.giat.geowave.adapter.raster.plugin.GeoWaveGTRasterFormat;
-import mil.nga.giat.geowave.adapter.raster.stats.HistogramConfig;
-import mil.nga.giat.geowave.adapter.raster.stats.HistogramStatistics;
-import mil.nga.giat.geowave.adapter.raster.stats.OverviewStatistics;
-import mil.nga.giat.geowave.adapter.raster.stats.RasterBoundingBoxStatistics;
-import mil.nga.giat.geowave.adapter.raster.stats.RasterFootprintStatistics;
-import mil.nga.giat.geowave.core.geotime.GeometryUtils;
-import mil.nga.giat.geowave.core.geotime.index.dimension.LatitudeDefinition;
-import mil.nga.giat.geowave.core.geotime.index.dimension.LongitudeDefinition;
-import mil.nga.giat.geowave.core.geotime.store.dimension.GeometryWrapper;
-import mil.nga.giat.geowave.core.geotime.store.statistics.BoundingBoxDataStatistics;
-import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.ByteArrayUtils;
-import mil.nga.giat.geowave.core.index.HierarchicalNumericIndexStrategy;
-import mil.nga.giat.geowave.core.index.HierarchicalNumericIndexStrategy.SubStrategy;
-import mil.nga.giat.geowave.core.index.PersistenceUtils;
-import mil.nga.giat.geowave.core.index.StringUtils;
-import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
-import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
-import mil.nga.giat.geowave.core.store.EntryVisibilityHandler;
-import mil.nga.giat.geowave.core.store.IteratorWrapper;
-import mil.nga.giat.geowave.core.store.IteratorWrapper.Converter;
-import mil.nga.giat.geowave.core.store.adapter.AdapterPersistenceEncoding;
-import mil.nga.giat.geowave.core.store.adapter.FitToIndexPersistenceEncoding;
-import mil.nga.giat.geowave.core.store.adapter.IndexDependentDataAdapter;
-import mil.nga.giat.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding;
-import mil.nga.giat.geowave.core.store.adapter.RowMergingDataAdapter;
-import mil.nga.giat.geowave.core.store.adapter.statistics.CountDataStatistics;
-import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
-import mil.nga.giat.geowave.core.store.adapter.statistics.FieldIdStatisticVisibility;
-import mil.nga.giat.geowave.core.store.adapter.statistics.StatisticalDataAdapter;
-import mil.nga.giat.geowave.core.store.data.PersistentDataset;
-import mil.nga.giat.geowave.core.store.data.PersistentValue;
-import mil.nga.giat.geowave.core.store.data.field.FieldReader;
-import mil.nga.giat.geowave.core.store.data.field.FieldWriter;
-import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
-import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
-import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.mapreduce.HadoopDataAdapter;
-import mil.nga.giat.geowave.mapreduce.HadoopWritableSerializer;
 
 public class RasterDataAdapter implements
 		StatisticalDataAdapter<GridCoverage>,
@@ -871,7 +870,7 @@ public class RasterDataAdapter implements
 	/**
 	 * This method is responsible for creating a coverage from the supplied
 	 * {@link RenderedImage}.
-	 * 
+	 *
 	 * @param image
 	 * @return
 	 * @throws IOException
@@ -1057,19 +1056,26 @@ public class RasterDataAdapter implements
 
 	public MergeableRasterTile<?> getRasterTileFromCoverage(
 			final GridCoverage entry ) {
-		final SampleModel sm = sampleModel.createCompatibleSampleModel(
-				tileSize,
-				tileSize);
 		return new MergeableRasterTile(
-				entry.getRenderedImage().copyData(
-						new InternalWritableRaster(
-								sm,
-								new Point())).getDataBuffer(),
+				getRaster(
+						entry).getDataBuffer(),
 				mergeStrategy.getMetadata(
 						entry,
 						this),
 				mergeStrategy,
 				getAdapterId());
+	}
+
+	public Raster getRaster(
+			final GridCoverage entry ) {
+		final SampleModel sm = sampleModel.createCompatibleSampleModel(
+				tileSize,
+				tileSize);
+
+		return entry.getRenderedImage().copyData(
+				new InternalWritableRaster(
+						sm,
+						new Point()));
 	}
 
 	@Override

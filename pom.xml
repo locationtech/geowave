@@ -32,9 +32,9 @@
 		<connection>scm:git:git@github.com:ngageoint/geowave.git</connection>
 	</scm>
 	<properties>
-		<geotools.version>12.5</geotools.version>
+		<geotools.version>13.2</geotools.version>
 		<hadoop.env.classifier>hadoop2</hadoop.env.classifier>
-		<geoserver.version>2.6.5</geoserver.version>
+		<geoserver.version>2.7.2</geoserver.version>
 		<accumulo.version>1.6.4</accumulo.version>
 		<hadoop.version>2.6.0</hadoop.version>
 		<avro.version>1.7.6</avro.version>

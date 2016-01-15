@@ -207,14 +207,6 @@ abstract public class AbstractIngestCommandLineDriver implements
 				optionProvider.applyOptions(options);
 			}
 		}
-		// final DataStoreFactorySpi dataStoreFactory =
-		// DataStoreCommandLineOptions.getSelectedStore(new CommandLineWrapper(
-		// commandLine));
-		// if (dataStoreFactory != null) {
-		// GenericStoreCommandLineOptions.applyStoreOptions(
-		// dataStoreFactory,
-		// options);
-		// }
 	}
 
 	private List<IngestFormatPluginProviderSpi<?, ?>> getPluginProviders(
