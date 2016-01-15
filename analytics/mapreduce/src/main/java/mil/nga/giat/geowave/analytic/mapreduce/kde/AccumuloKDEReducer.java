@@ -2,6 +2,8 @@ package mil.nga.giat.geowave.analytic.mapreduce.kde;
 
 import java.awt.image.WritableRaster;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import mil.nga.giat.geowave.adapter.raster.RasterUtils;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
@@ -117,7 +119,7 @@ public class AccumuloKDEReducer extends
 	private int numYTiles;
 	private String coverageName;
 	private int tileSize;
-	protected ByteArrayId indexId;
+	protected List<ByteArrayId> indexList;
 
 	@Override
 	protected void reduce(
@@ -165,7 +167,7 @@ public class AccumuloKDEReducer extends
 						new GeoWaveOutputKey(
 								new ByteArrayId(
 										coverageName),
-								indexId),
+								indexList),
 						RasterUtils.createCoverageTypeDouble(
 								coverageName,
 								tileInfo.tileWestLon,
@@ -240,11 +242,16 @@ public class AccumuloKDEReducer extends
 				"Entries per level.level" + level,
 				10);
 		final PrimaryIndex[] indices = JobContextIndexStore.getIndices(context);
+		indexList = new ArrayList<ByteArrayId>();
 		if ((indices != null) && (indices.length > 0)) {
-			indexId = indices[0].getId();
+			for (final PrimaryIndex index : indices) {
+				indexList.add(index.getId());
+			}
+
 		}
 		else {
-			indexId = new SpatialDimensionalityTypeProvider().createPrimaryIndex().getId();
+			indexList.add(new SpatialDimensionalityTypeProvider.SpatialIndexBuilder().setAllTiers(
+					true).createIndex().getId());
 		}
 	}
 }

@@ -4,10 +4,10 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-import org.apache.hadoop.io.WritableComparator;
-
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.mapreduce.GeoWaveKey;
+
+import org.apache.hadoop.io.WritableComparator;
 
 /**
  * This class encapsulates the unique identifier for GeoWave input data using a
@@ -18,7 +18,7 @@ public class GeoWaveInputKey extends
 		GeoWaveKey
 {
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 	private ByteArrayId dataId;
@@ -77,8 +77,7 @@ public class GeoWaveInputKey extends
 	@Override
 	public int hashCode() {
 		final int prime = 31;
-		int result = 1;
-		result = (prime * result) + ((adapterId == null) ? 0 : adapterId.hashCode());
+		int result = super.hashCode();
 		result = (prime * result) + ((dataId == null) ? 0 : dataId.hashCode());
 		return result;
 	}
@@ -89,21 +88,13 @@ public class GeoWaveInputKey extends
 		if (this == obj) {
 			return true;
 		}
-		if (obj == null) {
+		if (!super.equals(obj)) {
 			return false;
 		}
 		if (getClass() != obj.getClass()) {
 			return false;
 		}
 		final GeoWaveInputKey other = (GeoWaveInputKey) obj;
-		if (adapterId == null) {
-			if (other.adapterId != null) {
-				return false;
-			}
-		}
-		else if (!adapterId.equals(other.adapterId)) {
-			return false;
-		}
 		if (dataId == null) {
 			if (other.dataId != null) {
 				return false;

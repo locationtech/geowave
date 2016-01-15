@@ -11,6 +11,7 @@ import mil.nga.giat.geowave.core.cli.DataStoreCommandLineOptions;
 import mil.nga.giat.geowave.core.ingest.AbstractIngestCommandLineDriver;
 import mil.nga.giat.geowave.core.ingest.IngestCommandLineOptions;
 import mil.nga.giat.geowave.core.ingest.IngestFormatPluginProviderSpi;
+import mil.nga.giat.geowave.core.ingest.IngestUtils;
 import mil.nga.giat.geowave.core.ingest.hdfs.HdfsCommandLineOptions;
 import mil.nga.giat.geowave.mapreduce.GeoWaveConfiguratorBase;
 
@@ -128,10 +129,11 @@ public class IngestFromHdfsDriver extends
 
 				AbstractMapReduceIngest jobRunner = null;
 				if (ingestWithReducer != null) {
-					if (!ingestOptions.isSupported(
+					if (!IngestUtils.isSupported(
 							ingestWithReducer,
-							args)) {
-						LOGGER.warn("HDFS file ingest plugin for ingest type '" + pluginProvider.getIngestFormatName() + "' does not support dimensionality '" + ingestOptions.getDimensionalityType() + "'");
+							args,
+							ingestOptions.getDimensionalityTypes())) {
+						LOGGER.warn("HDFS file ingest plugin for ingest type '" + pluginProvider.getIngestFormatName() + "' does not support dimensionality '" + ingestOptions.getDimensionalityTypeArgument() + "'");
 						continue;
 					}
 					jobRunner = new IngestWithReducerJobRunner(
@@ -144,10 +146,11 @@ public class IngestFromHdfsDriver extends
 
 				}
 				else if (ingestWithMapper != null) {
-					if (!ingestOptions.isSupported(
+					if (!IngestUtils.isSupported(
 							ingestWithMapper,
-							args)) {
-						LOGGER.warn("HDFS file ingest plugin for ingest type '" + pluginProvider.getIngestFormatName() + "' does not support dimensionality '" + ingestOptions.getDimensionalityType() + "'");
+							args,
+							ingestOptions.getDimensionalityTypes())) {
+						LOGGER.warn("HDFS file ingest plugin for ingest type '" + pluginProvider.getIngestFormatName() + "' does not support dimensionality '" + ingestOptions.getDimensionalityTypeArgument() + "'");
 						continue;
 					}
 					jobRunner = new IngestWithMapperJobRunner(

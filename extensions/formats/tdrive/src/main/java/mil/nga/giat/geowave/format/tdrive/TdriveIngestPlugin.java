@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -103,7 +104,7 @@ public class TdriveIngestPlugin extends
 					new InputStreamReader(
 							new FileInputStream(
 									input),
-							StringUtils.UTF8_CHAR_SET));
+							StringUtils.GEOWAVE_CHAR_SET));
 			br = new BufferedReader(
 					fr);
 			String line;
@@ -169,7 +170,7 @@ public class TdriveIngestPlugin extends
 	@Override
 	protected CloseableIterator<GeoWaveData<SimpleFeature>> toGeoWaveDataInternal(
 			final TdrivePoint tdrivePoint,
-			final ByteArrayId primaryIndexId,
+			final Collection<ByteArrayId> primaryIndexIds,
 			final String globalVisibility ) {
 
 		final List<GeoWaveData<SimpleFeature>> featureData = new ArrayList<GeoWaveData<SimpleFeature>>();
@@ -198,7 +199,7 @@ public class TdriveIngestPlugin extends
 				tdrivePoint.getLongitude());
 		featureData.add(new GeoWaveData<SimpleFeature>(
 				pointKey,
-				primaryIndexId,
+				primaryIndexIds,
 				tdrivepointBuilder.buildFeature(tdrivePoint.getTaxiid() + "_" + tdrivePoint.getPointinstance())));
 
 		return new CloseableIterator.Wrapper<GeoWaveData<SimpleFeature>>(

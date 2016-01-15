@@ -59,6 +59,26 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 abstract public class GeoWaveTestEnvironment
 {
 	private final static Logger LOGGER = Logger.getLogger(GeoWaveTestEnvironment.class);
+
+	protected static enum DimensionalityType {
+		SPATIAL(
+				"spatial"),
+		SPATIAL_TEMPORAL(
+				"spatial-temporal"),
+		ALL(
+				"spatial,spatial-temporal");
+		private final String dimensionalityArg;
+
+		private DimensionalityType(
+				final String dimensionalityArg ) {
+			this.dimensionalityArg = dimensionalityArg;
+		}
+
+		public String getDimensionalityArg() {
+			return dimensionalityArg;
+		}
+	}
+
 	protected static final String TEST_FILTER_START_TIME_ATTRIBUTE_NAME = "StartTime";
 	protected static final String TEST_FILTER_END_TIME_ATTRIBUTE_NAME = "EndTime";
 	protected static final String TEST_NAMESPACE = "mil_nga_giat_geowave_test";
@@ -93,13 +113,13 @@ abstract public class GeoWaveTestEnvironment
 	}
 
 	protected void testLocalIngest(
-			final boolean spatialTemporal,
+			final DimensionalityType dimensionalityType,
 			final String ingestFilePath ) {
 		// ingest a shapefile (geotools type) directly into GeoWave using the
 		// ingest framework's main method and pre-defined commandline arguments
 		LOGGER.warn("Ingesting '" + ingestFilePath + "' - this may take several minutes...");
 		final String[] args = StringUtils.split(
-				"-localingest -datastore " + new AccumuloDataStoreFactory().getName() + " -f geotools-vector -b " + ingestFilePath + " -" + GenericStoreCommandLineOptions.NAMESPACE_OPTION_KEY + " " + TEST_NAMESPACE + " -dim " + (spatialTemporal ? "spatial-temporal" : "spatial") + " -" + BasicAccumuloOperations.ZOOKEEPER_CONFIG_NAME + " " + zookeeper + " -" + BasicAccumuloOperations.INSTANCE_CONFIG_NAME + " " + accumuloInstance + " -" + BasicAccumuloOperations.USER_CONFIG_NAME + " " + accumuloUser + " -" + BasicAccumuloOperations.PASSWORD_CONFIG_NAME + " " + accumuloPassword,
+				"-localingest -datastore " + new AccumuloDataStoreFactory().getName() + " -f geotools-vector -b " + ingestFilePath + " -" + GenericStoreCommandLineOptions.NAMESPACE_OPTION_KEY + " " + TEST_NAMESPACE + " -dim " + dimensionalityType.getDimensionalityArg() + " -" + BasicAccumuloOperations.ZOOKEEPER_CONFIG_NAME + " " + zookeeper + " -" + BasicAccumuloOperations.INSTANCE_CONFIG_NAME + " " + accumuloInstance + " -" + BasicAccumuloOperations.USER_CONFIG_NAME + " " + accumuloUser + " -" + BasicAccumuloOperations.PASSWORD_CONFIG_NAME + " " + accumuloPassword,
 				' ');
 		GeoWaveMain.run(args);
 		verifyStats();

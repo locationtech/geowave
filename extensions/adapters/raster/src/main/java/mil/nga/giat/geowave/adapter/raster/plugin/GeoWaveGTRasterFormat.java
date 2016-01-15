@@ -162,7 +162,7 @@ public class GeoWaveGTRasterFormat extends
 		}
 		final String xmlStr;
 		try {
-			xmlStr = out.toString(StringUtils.UTF8_CHAR_SET.toString());
+			xmlStr = out.toString(StringUtils.GEOWAVE_CHAR_SET.toString());
 		}
 		catch (UnsupportedEncodingException e) {
 			LOGGER.error(

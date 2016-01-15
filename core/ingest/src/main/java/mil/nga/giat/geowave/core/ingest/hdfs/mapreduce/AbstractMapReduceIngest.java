@@ -1,12 +1,16 @@
 package mil.nga.giat.geowave.core.ingest.hdfs.mapreduce;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import mil.nga.giat.geowave.core.cli.DataStoreCommandLineOptions;
+import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayUtils;
 import mil.nga.giat.geowave.core.index.Persistable;
 import mil.nga.giat.geowave.core.index.PersistenceUtils;
-import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.ingest.DataAdapterProvider;
 import mil.nga.giat.geowave.core.ingest.IngestCommandLineOptions;
+import mil.nga.giat.geowave.core.ingest.IngestUtils;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.core.store.config.ConfigUtils;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
@@ -36,7 +40,7 @@ abstract public class AbstractMapReduceIngest<T extends Persistable & DataAdapte
 {
 	public static final String INGEST_PLUGIN_KEY = "INGEST_PLUGIN";
 	public static final String GLOBAL_VISIBILITY_KEY = "GLOBAL_VISIBILITY";
-	public static final String PRIMARY_INDEX_ID_KEY = "PRIMARY_INDEX_ID";
+	public static final String PRIMARY_INDEX_IDS_KEY = "PRIMARY_INDEX_IDS";
 	private static String JOB_NAME = "%s ingest from %s to namespace %s (%s)";
 	protected final DataStoreCommandLineOptions dataStoreOptions;
 	protected final IngestCommandLineOptions ingestOptions;
@@ -71,6 +75,20 @@ abstract public class AbstractMapReduceIngest<T extends Persistable & DataAdapte
 
 	abstract protected String getIngestDescription();
 
+	protected static List<ByteArrayId> getPrimaryIndexIds(
+			final Configuration conf ) {
+		final String primaryIndexIdStr = conf.get(AbstractMapReduceIngest.PRIMARY_INDEX_IDS_KEY);
+		final List<ByteArrayId> primaryIndexIds = new ArrayList<ByteArrayId>();
+		if ((primaryIndexIdStr != null) && !primaryIndexIdStr.isEmpty()) {
+			final String[] indexIds = primaryIndexIdStr.split(",");
+			for (final String indexId : indexIds) {
+				primaryIndexIds.add(new ByteArrayId(
+						indexId));
+			}
+		}
+		return primaryIndexIds;
+	}
+
 	@Override
 	public int run(
 			final String[] args )
@@ -84,17 +102,30 @@ abstract public class AbstractMapReduceIngest<T extends Persistable & DataAdapte
 					GLOBAL_VISIBILITY_KEY,
 					ingestOptions.getVisibility());
 		}
-		final PrimaryIndex primaryIndex = ingestOptions.getIndex(
-				ingestPlugin,
-				args);
-		if (primaryIndex != null) {
-			conf.set(
-					PRIMARY_INDEX_ID_KEY,
-					StringUtils.stringFromBinary(primaryIndex.getId().getBytes()));
-		}
 		final Job job = new Job(
 				conf,
 				getJobName());
+		final StringBuilder indexIds = new StringBuilder();
+		for (final String dim : ingestOptions.getDimensionalityTypes()) {
+			final PrimaryIndex primaryIndex = IngestUtils.getIndex(
+					ingestPlugin,
+					args,
+					dim);
+			if (primaryIndex != null) {
+				// add index
+				GeoWaveOutputFormat.addIndex(
+						job.getConfiguration(),
+						primaryIndex);
+				if (indexIds.length() != 0) {
+					indexIds.append(",");
+				}
+				indexIds.append(primaryIndex.getId().getString());
+			}
+		}
+
+		job.getConfiguration().set(
+				PRIMARY_INDEX_IDS_KEY,
+				indexIds.toString());
 
 		job.setJarByClass(AbstractMapReduceIngest.class);
 
@@ -131,11 +162,6 @@ abstract public class AbstractMapReduceIngest<T extends Persistable & DataAdapte
 		}
 
 		job.setSpeculativeExecution(false);
-
-		// add primary index
-		GeoWaveOutputFormat.addIndex(
-				job.getConfiguration(),
-				primaryIndex);
 
 		// add required indices
 		final PrimaryIndex[] requiredIndices = parentPlugin.getRequiredIndices();

@@ -1,5 +1,7 @@
 package mil.nga.giat.geowave.core.ingest;
 
+import java.util.Collection;
+
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
@@ -19,16 +21,16 @@ public class GeoWaveData<T>
 {
 	private final static Logger LOGGER = Logger.getLogger(GeoWaveData.class);
 	private final ByteArrayId adapterId;
-	private final ByteArrayId indexId;
+	private final Collection<ByteArrayId> indexIds;
 	private final WritableDataAdapter<T> adapter;
 	private final T data;
 
 	public GeoWaveData(
 			final ByteArrayId adapterId,
-			final ByteArrayId indexId,
+			final Collection<ByteArrayId> indexIds,
 			final T data ) {
 		this.adapterId = adapterId;
-		this.indexId = indexId;
+		this.indexIds = indexIds;
 		this.data = data;
 
 		// in this case the actual adapter is meant to be looked up using the ID
@@ -37,11 +39,11 @@ public class GeoWaveData<T>
 
 	public GeoWaveData(
 			final WritableDataAdapter<T> adapter,
-			final ByteArrayId indexId,
+			final Collection<ByteArrayId> indexIds,
 			final T data ) {
 		this.adapter = adapter;
 		this.data = data;
-		this.indexId = indexId;
+		this.indexIds = indexIds;
 
 		this.adapterId = adapter.getAdapterId();
 	}
@@ -59,14 +61,14 @@ public class GeoWaveData<T>
 		return null;
 	}
 
-	public ByteArrayId getIndexId() {
-		return indexId;
+	public Collection<ByteArrayId> getIndexIds() {
+		return indexIds;
 	}
 
 	public GeoWaveOutputKey getKey() {
 		return new GeoWaveOutputKey(
 				adapterId,
-				indexId);
+				indexIds);
 	}
 
 	public T getValue() {

@@ -1,6 +1,8 @@
 package mil.nga.giat.geowave.analytic.mapreduce.kmeans;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import mil.nga.giat.geowave.analytic.AnalyticItemWrapper;
 import mil.nga.giat.geowave.analytic.AnalyticItemWrapperFactory;
@@ -17,7 +19,7 @@ import mil.nga.giat.geowave.analytic.extract.SimpleFeatureCentroidExtractor;
 import mil.nga.giat.geowave.analytic.kmeans.AssociationNotification;
 import mil.nga.giat.geowave.analytic.mapreduce.GroupIDText;
 import mil.nga.giat.geowave.analytic.param.CentroidParameters;
-import mil.nga.giat.geowave.analytic.param.GlobalParameters;
+import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.mapreduce.GeoWaveWritableInputMapper;
 import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
 import mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputKey;
@@ -202,6 +204,7 @@ public class KMeansMapReduce
 
 		protected CentroidManager<Object> centroidManager;
 		private final GeoObjectDimensionValues geoObject = new GeoObjectDimensionValues();
+		private List<ByteArrayId> indexIds;
 
 		@Override
 		public void reduce(
@@ -265,7 +268,7 @@ public class KMeansMapReduce
 			context.write(
 					new GeoWaveOutputKey(
 							centroidManager.getDataTypeId(),
-							centroidManager.getIndexId()),
+							indexIds),
 					nextCentroid.getWrappedItem());
 
 		}
@@ -291,6 +294,8 @@ public class KMeansMapReduce
 						context,
 						KMeansMapReduce.class,
 						KMeansMapReduce.LOGGER);
+				indexIds = new ArrayList<ByteArrayId>();
+				indexIds.add(centroidManager.getIndexId());
 			}
 			catch (final Exception e) {
 				throw new IOException(

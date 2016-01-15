@@ -254,7 +254,7 @@ public class KMeansDistortionMapReduce
 				context.write(
 						new GeoWaveOutputKey(
 								DistortionDataAdapter.ADAPTER_ID,
-								DistortionGroupManagement.DISTORTIONS_INDEX.getId()),
+								DistortionGroupManagement.DISTORTIONS_INDEX_LIST),
 						entry);
 			}
 		}

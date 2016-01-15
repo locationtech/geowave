@@ -495,7 +495,7 @@ public class AccumuloUtils
 						new Text(
 								rowId.getBytes()),
 						new Value(
-								"".getBytes(StringUtils.UTF8_CHAR_SET)));
+								"".getBytes(StringUtils.GEOWAVE_CHAR_SET)));
 
 				mutations.add(mutation);
 			}

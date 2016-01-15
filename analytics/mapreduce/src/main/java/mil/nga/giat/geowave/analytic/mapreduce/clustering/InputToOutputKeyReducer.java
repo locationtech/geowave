@@ -1,6 +1,8 @@
 package mil.nga.giat.geowave.analytic.mapreduce.clustering;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import mil.nga.giat.geowave.analytic.ScopedJobConfiguration;
 import mil.nga.giat.geowave.analytic.param.OutputParameters;
@@ -51,12 +53,15 @@ public class InputToOutputKeyReducer extends
 				context.getConfiguration(),
 				InputToOutputKeyReducer.class,
 				LOGGER);
+		final ByteArrayId indexId = new ByteArrayId(
+				config.getString(
+						OutputParameters.Output.INDEX_ID,
+						"na"));
+		final List<ByteArrayId> indexIds = new ArrayList<ByteArrayId>();
+		indexIds.add(indexId);
 		outputKey = new GeoWaveOutputKey(
 				new ByteArrayId(
 						"na"),
-				new ByteArrayId(
-						config.getString(
-								OutputParameters.Output.INDEX_ID,
-								"na")));
+				indexIds);
 	}
 }

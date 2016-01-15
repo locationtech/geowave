@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.file.Files;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -188,7 +189,7 @@ public class GpxIngestPlugin extends
 	@Override
 	protected CloseableIterator<GeoWaveData<SimpleFeature>> toGeoWaveDataInternal(
 			final GpxTrack gpxTrack,
-			final ByteArrayId primaryIndexId,
+			final Collection<ByteArrayId> primaryIndexIds,
 			final String globalVisibility ) {
 		final InputStream in = new ByteArrayInputStream(
 				gpxTrack.getGpxfile().array());
@@ -196,7 +197,7 @@ public class GpxIngestPlugin extends
 		try {
 			return new GPXConsumer(
 					in,
-					primaryIndexId,
+					primaryIndexIds,
 					gpxTrack.getTrackid() == null ? "" : gpxTrack.getTrackid().toString(),
 					getAdditionalData(gpxTrack),
 					false, // waypoints, even dups, are unique, due to QGis

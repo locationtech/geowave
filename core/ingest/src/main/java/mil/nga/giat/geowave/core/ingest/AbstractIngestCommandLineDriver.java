@@ -113,7 +113,7 @@ abstract public class AbstractIngestCommandLineDriver implements
 				final PrintWriter pw = new PrintWriter(
 						new OutputStreamWriter(
 								System.out,
-								StringUtils.UTF8_CHAR_SET));
+								StringUtils.GEOWAVE_CHAR_SET));
 				pw.println("Available ingest formats currently registered as plugins:\n");
 				for (final Entry<String, IngestFormatPluginProviderSpi<?, ?>> pluginProviderEntry : pluginProviderRegistry.entrySet()) {
 					final IngestFormatPluginProviderSpi<?, ?> pluginProvider = pluginProviderEntry.getValue();

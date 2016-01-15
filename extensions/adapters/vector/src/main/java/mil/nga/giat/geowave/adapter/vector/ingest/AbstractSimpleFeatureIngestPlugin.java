@@ -2,6 +2,7 @@ package mil.nga.giat.geowave.adapter.vector.ingest;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
@@ -111,14 +112,14 @@ abstract public class AbstractSimpleFeatureIngestPlugin<I> implements
 	@Override
 	public CloseableIterator<GeoWaveData<SimpleFeature>> toGeoWaveData(
 			final File input,
-			final ByteArrayId primaryIndexId,
+			final Collection<ByteArrayId> primaryIndexIds,
 			final String globalVisibility ) {
 		final I[] hdfsObjects = toAvroObjects(input);
 		final List<CloseableIterator<GeoWaveData<SimpleFeature>>> allData = new ArrayList<CloseableIterator<GeoWaveData<SimpleFeature>>>();
 		for (final I hdfsObject : hdfsObjects) {
 			final CloseableIterator<GeoWaveData<SimpleFeature>> geowaveData = toGeoWaveDataInternal(
 					hdfsObject,
-					primaryIndexId,
+					primaryIndexIds,
 					globalVisibility);
 			if (filterOptionProvider != null) {
 				final Iterator<GeoWaveData<SimpleFeature>> it = Iterators.filter(
@@ -142,7 +143,7 @@ abstract public class AbstractSimpleFeatureIngestPlugin<I> implements
 
 	abstract protected CloseableIterator<GeoWaveData<SimpleFeature>> toGeoWaveDataInternal(
 			final I hdfsObject,
-			final ByteArrayId primaryIndexId,
+			final Collection<ByteArrayId> primaryIndexIds,
 			final String globalVisibility );
 
 	abstract public static class AbstractIngestSimpleFeatureWithMapper<I> implements
@@ -164,11 +165,11 @@ abstract public class AbstractSimpleFeatureIngestPlugin<I> implements
 		@Override
 		public CloseableIterator<GeoWaveData<SimpleFeature>> toGeoWaveData(
 				final I input,
-				final ByteArrayId primaryIndexId,
+				final Collection<ByteArrayId> primaryIndexIds,
 				final String globalVisibility ) {
 			return parentPlugin.toGeoWaveDataInternal(
 					input,
-					primaryIndexId,
+					primaryIndexIds,
 					globalVisibility);
 		}
 
