@@ -7,6 +7,7 @@ import java.net.URISyntaxException;
 import mil.nga.giat.geowave.adapter.raster.RasterUtils;
 import mil.nga.giat.geowave.adapter.vector.plugin.ExtractGeometryFilterVisitor;
 import mil.nga.giat.geowave.core.cli.AdapterStoreCommandLineOptions;
+import mil.nga.giat.geowave.core.cli.CLIOperationDriver;
 import mil.nga.giat.geowave.core.cli.CommandLineResult;
 import mil.nga.giat.geowave.core.cli.DataStoreCommandLineOptions;
 import mil.nga.giat.geowave.core.geotime.GeometryUtils;
@@ -27,6 +28,7 @@ import mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputKey;
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.fs.FileSystem;
@@ -47,14 +49,17 @@ import org.apache.hadoop.util.ToolRunner;
 import org.geotools.filter.text.ecql.ECQL;
 import org.opengis.coverage.grid.GridCoverage;
 import org.opengis.filter.Filter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.vividsolutions.jts.geom.Geometry;
 
 public class KDEJobRunner extends
 		Configured implements
-		Tool
+		Tool,
+		CLIOperationDriver
 {
-
+	private static final Logger LOGGER = LoggerFactory.getLogger(KDEJobRunner.class);
 	public static final String GEOWAVE_CLASSPATH_JARS = "geowave.classpath.jars";
 	public static final String MAX_LEVEL_KEY = "MAX_LEVEL";
 	public static final String MIN_LEVEL_KEY = "MIN_LEVEL";
@@ -472,6 +477,21 @@ public class KDEJobRunner extends
 						new URI(
 								jarPath)));
 			}
+		}
+	}
+
+	@Override
+	public boolean runOperation(
+			final String[] args )
+			throws ParseException {
+		try {
+			return run(args) == 0;
+		}
+		catch (final Exception e) {
+			LOGGER.warn(
+					"Unable to run operation",
+					e);
+			return false;
 		}
 	}
 }
