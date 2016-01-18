@@ -12,6 +12,7 @@ abstract public class AbstractSimpleFeatureIngestFormat<I> implements
 		IngestFormatPluginProviderSpi<I, SimpleFeature>
 {
 	protected final CQLFilterOptionProvider cqlFilterOptionProvider = new CQLFilterOptionProvider();
+	protected final TypeNameOptionProvider typeNameOptionProvider = new TypeNameOptionProvider();
 	protected final FeatureSerializationOptionProvider serializationFormatOptionProvider = new FeatureSerializationOptionProvider();
 	protected AbstractSimpleFeatureIngestPlugin<I> myInstance;
 
@@ -19,6 +20,7 @@ abstract public class AbstractSimpleFeatureIngestFormat<I> implements
 		if (myInstance == null) {
 			myInstance = newPluginInstance();
 			myInstance.setFilterProvider(cqlFilterOptionProvider);
+			myInstance.setTypeNameProvider(typeNameOptionProvider);
 			myInstance.setSerializationFormatProvider(serializationFormatOptionProvider);
 		}
 		return myInstance;
@@ -48,6 +50,7 @@ abstract public class AbstractSimpleFeatureIngestFormat<I> implements
 					// TODO: because other formats are not yet implemented,
 					// don't expose the options to the user
 					serializationFormatOptionProvider,
+					typeNameOptionProvider,
 					cqlFilterOptionProvider
 				});
 	}
