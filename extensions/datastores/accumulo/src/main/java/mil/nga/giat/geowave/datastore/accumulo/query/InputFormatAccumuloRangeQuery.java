@@ -77,6 +77,7 @@ public class InputFormatAccumuloRangeQuery extends
 	@Override
 	protected ScannerBase getScanner(
 			final AccumuloOperations accumuloOperations,
+			final double[] maxResolutionSubsamplingPerDimension,
 			final Integer limit ) {
 		final String tableName = index.getId().getString();
 		Scanner scanner;
