@@ -10,7 +10,7 @@ import mil.nga.giat.geowave.core.cli.AdapterStoreCommandLineOptions;
 import mil.nga.giat.geowave.core.cli.CommandLineResult;
 import mil.nga.giat.geowave.core.cli.DataStoreCommandLineOptions;
 import mil.nga.giat.geowave.core.geotime.GeometryUtils;
-import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider.SpatialIndexBuilder;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.IndexWriter;
@@ -297,7 +297,8 @@ public class KDEJobRunner extends
 			final Job statsReducer,
 			final String statsNamespace )
 			throws Exception {
-		final PrimaryIndex index = new SpatialDimensionalityTypeProvider().createPrimaryIndex();
+		final PrimaryIndex index = new SpatialIndexBuilder().setAllTiers(
+				true).createIndex();
 		final WritableDataAdapter<?> adapter = RasterUtils.createDataAdapterTypeDouble(
 				kdeCommandLineOptions.getCoverageName(),
 				AccumuloKDEReducer.NUM_BANDS,

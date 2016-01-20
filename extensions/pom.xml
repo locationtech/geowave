@@ -12,7 +12,6 @@
 	<description>The set of extended capabilities supported for GeoWave</description>	
 	<packaging>pom</packaging>
 	<modules>
-	    <module>cli/stats</module>
 		<module>adapters/raster</module>
 		<module>adapters/vector</module>
 		<module>datastores/accumulo</module>
@@ -23,6 +22,7 @@
 		<module>formats/tdrive</module>
 		<module>formats/stanag4676/format</module>
 		<module>formats/stanag4676/service</module>
-		<module>cli/scratch</module>
+		<module>cli/debug</module>
+		<module>cli/stats</module>
 	</modules>
 </project>

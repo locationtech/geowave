@@ -1,4 +1,4 @@
-package mil.nga.giat.geowave.cli.scratch;
+package mil.nga.giat.geowave.cli.debug;
 
 import java.util.Collections;
 import java.util.Iterator;

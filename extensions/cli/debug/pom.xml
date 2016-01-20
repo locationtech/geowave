@@ -8,9 +8,9 @@
 		<relativePath>../../</relativePath>
 		<version>0.9.0-SNAPSHOT</version>
 	</parent>
-	<artifactId>geowave-cli-scratch</artifactId>
-	<name>GeoWave Ad-Hoc CLI Tool</name>
-	<description>Placeholder for ad-hoc tools applied to GeoWave data</description>
+	<artifactId>geowave-cli-debug</artifactId>
+	<name>GeoWave Debug Commandline Tools</name>
+	<description>A set of ad-hoc debug tools available through the command line that can be applied to GeoWave data</description>
 	<dependencies>
 		<dependency>
 			<groupId>mil.nga.giat</groupId>

@@ -16,7 +16,6 @@ import mil.nga.giat.geowave.core.store.filter.GenericTypeResolver;
 
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineUtils;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
@@ -35,6 +34,7 @@ abstract public class GenericStoreCommandLineOptions<T>
 	protected final Map<String, Object> configOptions;
 	protected final String namespace;
 	public static String NAMESPACE_OPTION_KEY = "gwNamespace";
+	public static String CONNECTION_OPTION_KEY = "connectionParams";
 
 	public GenericStoreCommandLineOptions(
 			final GenericStoreFactory<T> factory,
@@ -86,16 +86,54 @@ abstract public class GenericStoreCommandLineOptions<T>
 				AbstractConfigOption.class);
 		final boolean isBoolean = Boolean.class.isAssignableFrom(cls);
 		final Option cliOption = new Option(
-				ConfigUtils.cleanOptionName(prefix != null ? prefix + storeOption.getName() : storeOption.getName()),
+				getCleanedOptionName(
+						prefix,
+						storeOption.getName()),
 				!isBoolean,
 				storeOption.getDescription());
 		cliOption.setRequired(!storeOption.isOptional() && !isBoolean);
 		return cliOption;
 	}
 
+	private static String getCleanedOptionName(
+			final String prefix,
+			final String originalOptionName ) {
+		return ConfigUtils.cleanOptionName(prefix != null ? prefix + originalOptionName : originalOptionName);
+	}
+
+	private static String[] getArgs(
+			final String[] existingArgs,
+			final String prefix,
+			final Map<String, String> connectionParams ) {
+		if ((connectionParams == null) || connectionParams.isEmpty()) {
+			return existingArgs;
+		}
+		final List<String> argsWithConnectionParams = new ArrayList<String>(
+				Arrays.asList(existingArgs));
+		for (final Entry<String, String> connectionParam : connectionParams.entrySet()) {
+			final String key = getCleanedOptionName(
+					prefix,
+					connectionParam.getKey());
+			if (connectionParam.getValue().equalsIgnoreCase(
+					"true")) {
+				argsWithConnectionParams.add("-" + key);
+			}
+			else if (connectionParam.getValue().equalsIgnoreCase(
+					"false")) {
+				continue;
+			}
+			else {
+				argsWithConnectionParams.add("-" + key);
+				argsWithConnectionParams.add(connectionParam.getValue());
+			}
+		}
+		return argsWithConnectionParams.toArray(new String[] {});
+	}
+
 	public static Pair<Map<String, Object>, CommandLine> getConfigOptionsForStoreFactory(
 			final String prefix,
 			final Options currentOptions,
+			final Map<String, String> connectionParams,
 			final CommandLineOptions currentCommandLine,
 			final GenericStoreFactory<?> genericStoreFactory )
 			throws Exception {
@@ -112,14 +150,17 @@ abstract public class GenericStoreCommandLineOptions<T>
 			}
 		}
 		final BasicParser parser = new BasicParser();
+
+		final String[] args = getArgs(
+				currentCommandLine.getArgs(),
+				prefix,
+				connectionParams);
 		// parse the datastore options
 		final CommandLine commandLineWithStoreOptions = parser.parse(
 				cliOptions,
-				currentCommandLine.getArgs(),
+				args,
 				true);
-		// CommandLineUtils.addOptions(
-		// commandLineWithStoreOptions,
-		// currentCommandLine.getOptions());
+
 		final Map<String, Object> configOptions = new HashMap<String, Object>();
 		for (final AbstractConfigOption<?> option : storeOptions) {
 			final String cliOptionName = ConfigUtils.cleanOptionName(prefix != null ? prefix + option.getName() : option.getName());
@@ -139,6 +180,11 @@ abstract public class GenericStoreCommandLineOptions<T>
 						option.getName(),
 						option.valueFromString(optionValueStr));
 			}
+			else if (connectionParams.containsKey(option.getName())) {
+				configOptions.put(
+						option.getName(),
+						option.valueFromString(connectionParams.get(option.getName())));
+			}
 		}
 		final Option[] newOptions = commandLineWithStoreOptions.getOptions();
 		final Option[] prevOptions = currentCommandLine.getOptions();
@@ -155,42 +201,6 @@ abstract public class GenericStoreCommandLineOptions<T>
 				unchanged ? null : commandLineWithStoreOptions);
 	}
 
-	//@formatter:off
-//	protected static Map<String, Object> getConfigOptionsForStoreFactory(
-//			final String prefix,
-//			final CommandLineOptions commandLine,
-//			final GenericStoreFactory<?> genericStoreFactory )
-//			throws Exception {
-//		final AbstractConfigOption<?>[] storeOptions = genericStoreFactory.getOptions();
-//		final Options cliOptions = storeOptionsToCliOptions(storeOptions);
-//		final BasicParser parser = new BasicParser();
-//		// parse the datastore options
-//		final CommandLine dataStoreCommandLine = parser.parse(
-//				cliOptions,
-//				commandLine.getArgs(),true);
-//		final Map<String, Object> configOptions = new HashMap<String, Object>();
-//		for (final AbstractConfigOption<?> option : storeOptions) {
-//			final String cliOptionName = ConfigUtils.cleanOptionName(option.getName());
-//			final Class<?> cls = GenericTypeResolver.resolveTypeArgument(
-//					option.getClass(),
-//					AbstractConfigOption.class);
-//			final boolean isBoolean = Boolean.class.isAssignableFrom(cls);
-//			final boolean hasOption = dataStoreCommandLine.hasOption(cliOptionName);
-//			if (isBoolean) {
-//				configOptions.put(
-//						option.getName(),
-//						option.valueFromString(hasOption ? "true" : "false"));
-//			}
-//			else if (hasOption) {
-//				final String optionValueStr = dataStoreCommandLine.getOptionValue(cliOptionName);
-//				configOptions.put(
-//						option.getName(),
-//						option.valueFromString(optionValueStr));
-//			}
-//		}
-//		return configOptions;
-//	}
-	//@formatter:on
 	public static <T, F extends GenericStoreFactory<T>> void applyOptions(
 			final String prefix,
 			final Options allOptions,
@@ -208,6 +218,12 @@ abstract public class GenericStoreCommandLineOptions<T>
 				"The geowave namespace (optional; default is no namespace)");
 		namespace.setRequired(false);
 		allOptions.addOption(namespace);
+		final Option connectionString = new Option(
+				prefix != null ? prefix + CONNECTION_OPTION_KEY : CONNECTION_OPTION_KEY,
+				true,
+				"A semicolon delimited set of <key>=<value> pairs of connection parameters that fully describes how to connect to the desired " + optionName + ". For example to connect to accumulo an example would be 'zookeeper=zookeeperhost:2181;user=accumulouser;password=mypassword;instance=accumuloinstance'");
+		connectionString.setRequired(false);
+		allOptions.addOption(connectionString);
 	}
 
 	public static <T, F extends GenericStoreFactory<T>> CommandLineResult<GenericStoreCommandLineOptions<T>> parseOptions(
@@ -258,100 +274,24 @@ abstract public class GenericStoreCommandLineOptions<T>
 		}
 	}
 
-//@formatter:off
-//	public static <T, F extends GenericStoreFactory<T>> GenericStoreCommandLineOptions<T> parseOptions(
-//			final String prefix,
-//			final CommandLineOptions commandLine,
-//			final CommandLineHelper<T, F> helper )
-//			throws ParseException {
-//		final String optionName = prefix != null ? prefix + helper.getOptionName() : helper.getOptionName();
-//		final String namespace = commandLine.getOptionValue(
-//				prefix != null ? prefix + NAMESPACE_OPTION_KEY : NAMESPACE_OPTION_KEY,
-//				"");
-//		final F selectedStoreFactory = getSelectedStore(
-//				optionName,
-//				commandLine,
-//				helper);
-//
-//		if (selectedStoreFactory != null) {
-//			Map<String, Object> configOptions;
-//			try {
-//				configOptions = getConfigOptionsForStoreFactory(
-//						prefix,
-//						commandLine,
-//						selectedStoreFactory);
-//				return helper.createCommandLineOptions(
-//						selectedStoreFactory,
-//						configOptions,
-//						namespace);
-//			}
-//			catch (final Exception e) {
-//				LOGGER.error(
-//						"Unable to parse config options for " + optionName + " '" + selectedStoreFactory.getName() + "'",
-//						e);
-//				throw new ParseException(
-//						"Unable to parse config options for  " + optionName + " '" + selectedStoreFactory.getName() + "'; " + e.getMessage());
-//			}
-//		}
-//		// if data store is not given, go through all available data stores
-//		// until one matches the config options
-//		final Map<String, F> factories = helper.getRegisteredFactories();
-//		final Map<String, Exception> exceptionsPerDataStoreFactory = new HashMap<String, Exception>();
-//		int matchingCommandLineOptionCount = -1;
-//		GenericStoreCommandLineOptions<T> matchingCommandLineOptions = null;
-//		boolean matchingCommandLineOptionsHaveSameOptionCount = false;
-//		// if the hint is not provided, the parser will attempt to find
-//		// a factory that does not have any missing options; if multiple
-//		// factories will match, the one with the most options will be used with
-//		// the assumption that it has the most specificity and closest match of
-//		// the arguments; if there are multiple factories that match and have
-//		// the same number of options, arbitrarily the last one will be chosen
-//		// and a warning message will be logged
-//
-//		for (final Entry<String, F> factoryEntry : factories.entrySet()) {
-//			final Map<String, Object> configOptions;
-//			try {
-//				configOptions = getConfigOptionsForStoreFactory(
-//						prefix,
-//						commandLine,
-//						factoryEntry.getValue());
-//				final GenericStoreCommandLineOptions<T> commandLineOptions = helper.createCommandLineOptions(
-//						factoryEntry.getValue(),
-//						configOptions,
-//						namespace);
-//				if (commandLineOptions.getFactory().getOptions().length >= matchingCommandLineOptionCount) {
-//					matchingCommandLineOptions = commandLineOptions;
-//					matchingCommandLineOptionsHaveSameOptionCount = (commandLineOptions.getFactory().getOptions().length == matchingCommandLineOptionCount);
-//					matchingCommandLineOptionCount = commandLineOptions.getFactory().getOptions().length;
-//				}
-//			}
-//			catch (final Exception e) {
-//				// it just means this store is not compatible with the
-//				// options, add it to a list and we'll log it only if no store
-//				// is compatible
-//				exceptionsPerDataStoreFactory.put(
-//						factoryEntry.getKey(),
-//						e);
-//			}
-//		}
-//		if (matchingCommandLineOptions == null) {
-//			// just log all the exceptions so that it is apparent where the
-//			// commandline incompatibility might be
-//			for (final Entry<String, Exception> exceptionEntry : exceptionsPerDataStoreFactory.entrySet()) {
-//				LOGGER.error(
-//						"Could not parse commandline for " + optionName + " '" + exceptionEntry.getKey() + "'",
-//						exceptionEntry.getValue());
-//			}
-//			throw new ParseException(
-//					"No compatible " + optionName + " found");
-//		}
-//		else if (matchingCommandLineOptionsHaveSameOptionCount) {
-//			LOGGER.warn("Multiple valid stores found with equal specificity for " + helper.getOptionName() + " store");
-//			LOGGER.warn(matchingCommandLineOptions.getFactory().getName() + " will be automatically chosen");
-//		}
-//		return matchingCommandLineOptions;
-//	}
-	//@formatter:on
+	private static Map<String, String> parseConnectionParams(
+			final String connectionParams )
+			throws Exception {
+		final Map<String, String> connectionParamsMap = new HashMap<String, String>();
+		final String[] params = connectionParams.split(";");
+		for (final String param : params) {
+			final String[] keyValue = param.split("=");
+			if (keyValue.length != 2) {
+				LOGGER.warn("Unable to parse connection param '" + param + "'");
+				continue;
+			}
+			connectionParamsMap.put(
+					keyValue[0].trim(),
+					keyValue[1].trim());
+		}
+		return connectionParamsMap;
+	}
+
 	public static <T, F extends GenericStoreFactory<T>> CommandLineResult<GenericStoreCommandLineOptions<T>> parseOptions(
 			final String prefix,
 			final Options options,
@@ -362,6 +302,24 @@ abstract public class GenericStoreCommandLineOptions<T>
 		final String namespace = commandLine.getOptionValue(
 				prefix != null ? prefix + NAMESPACE_OPTION_KEY : NAMESPACE_OPTION_KEY,
 				"");
+		final String connectionParams = commandLine.getOptionValue(
+				prefix != null ? prefix + CONNECTION_OPTION_KEY : CONNECTION_OPTION_KEY,
+				"");
+		Map<String, String> connectionParamsMap;
+		if ((connectionParams != null) && !connectionParams.isEmpty()) {
+			try {
+				connectionParamsMap = parseConnectionParams(connectionParams);
+			}
+			catch (final Exception e) {
+				LOGGER.error(
+						"Unable to correctly parse connection params '" + connectionParams + "': Ignoring " + CONNECTION_OPTION_KEY,
+						e);
+				connectionParamsMap = new HashMap<String, String>();
+			}
+		}
+		else {
+			connectionParamsMap = new HashMap<String, String>();
+		}
 		if (commandLine.hasOption(optionName)) {
 			// if data store is given, make sure the commandline options
 			// properly match the options for this store
@@ -376,31 +334,14 @@ abstract public class GenericStoreCommandLineOptions<T>
 			}
 
 			try {
-				// final String[] newArgs;
-				// if ((prefix != null) && !prefix.isEmpty()) {
-				// newArgs = new String[args.length];
-				// int i = 0;
-				// final String hyphenPrefix = "-" + prefix;
-				// for (final String a : args) {
-				// if (a.startsWith(hyphenPrefix)) {
-				// newArgs[i] = "-" + a.substring(hyphenPrefix.length());
-				// }
-				// else {
-				// newArgs[i] = a;
-				// }
-				// i++;
-				// }
-				// }
-				// else {
-				// newArgs = args;
-				// }
 
+				// if (connectionParamsMap == null) {
 				final Pair<Map<String, Object>, CommandLine> configOptionsCmdLinePair = getConfigOptionsForStoreFactory(
 						prefix,
 						options,
+						connectionParamsMap,
 						commandLine,
 						selectedStoreFactory);
-
 				return new CommandLineResult<GenericStoreCommandLineOptions<T>>(
 						helper.createCommandLineOptions(
 								selectedStoreFactory,
@@ -408,6 +349,17 @@ abstract public class GenericStoreCommandLineOptions<T>
 								namespace),
 						configOptionsCmdLinePair.getRight() != null,
 						configOptionsCmdLinePair.getRight());
+				// }
+				// else {
+				// return new
+				// CommandLineResult<GenericStoreCommandLineOptions<T>>(
+				// helper.createCommandLineOptions(
+				// selectedStoreFactory,
+				// configOptions,
+				// namespace),
+				// false,
+				// null);
+				// }
 			}
 			catch (final Exception e) {
 				LOGGER.error(
@@ -437,8 +389,10 @@ abstract public class GenericStoreCommandLineOptions<T>
 				final Pair<Map<String, Object>, CommandLine> configOptionsCmdLinePair = getConfigOptionsForStoreFactory(
 						prefix,
 						options,
+						connectionParamsMap,
 						commandLine,
 						factoryEntry.getValue());
+
 				final GenericStoreCommandLineOptions<T> commandLineOptions = helper.createCommandLineOptions(
 						factoryEntry.getValue(),
 						configOptionsCmdLinePair.getLeft(),

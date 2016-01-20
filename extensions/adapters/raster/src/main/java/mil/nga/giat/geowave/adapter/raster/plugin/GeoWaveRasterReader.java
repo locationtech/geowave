@@ -27,6 +27,7 @@ import mil.nga.giat.geowave.adapter.raster.query.IndexOnlySpatialQuery;
 import mil.nga.giat.geowave.adapter.raster.stats.HistogramStatistics;
 import mil.nga.giat.geowave.adapter.raster.stats.OverviewStatistics;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider.SpatialIndexBuilder;
 import mil.nga.giat.geowave.core.geotime.store.statistics.BoundingBoxDataStatistics;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.HierarchicalNumericIndexStrategy;
@@ -175,7 +176,7 @@ public class GeoWaveRasterReader extends
 		geowaveAdapterStore = config.getAdapterStore();
 		geowaveStatisticsStore = config.getDataStatisticsStore();
 
-		rasterIndex = new SpatialDimensionalityTypeProvider().createPrimaryIndex();
+		rasterIndex = new SpatialIndexBuilder().setAllTiers(true).createIndex();
 		crs = GeoWaveGTRasterFormat.DEFAULT_CRS;
 	}
 

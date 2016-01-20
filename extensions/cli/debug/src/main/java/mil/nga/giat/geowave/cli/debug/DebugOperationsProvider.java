@@ -1,11 +1,11 @@
-package mil.nga.giat.geowave.cli.scratch;
+package mil.nga.giat.geowave.cli.debug;
 
 import mil.nga.giat.geowave.core.cli.CLIOperation;
 import mil.nga.giat.geowave.core.cli.CLIOperationCategory;
 import mil.nga.giat.geowave.core.cli.CLIOperationProviderSpi;
 import mil.nga.giat.geowave.core.cli.CustomOperationCategory;
 
-public class ScratchOperationsProvider implements
+public class DebugOperationsProvider implements
 		CLIOperationProviderSpi
 {
 

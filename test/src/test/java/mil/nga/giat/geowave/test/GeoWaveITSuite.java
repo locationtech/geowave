@@ -5,6 +5,7 @@ import mil.nga.giat.geowave.test.mapreduce.BulkIngestInputGenerationIT;
 import mil.nga.giat.geowave.test.mapreduce.DBScanIT;
 import mil.nga.giat.geowave.test.mapreduce.GeoWaveKMeansIT;
 import mil.nga.giat.geowave.test.mapreduce.GeoWaveNNIT;
+import mil.nga.giat.geowave.test.mapreduce.KDERasterResizeIT;
 import mil.nga.giat.geowave.test.mapreduce.MapReduceTestEnvironment;
 import mil.nga.giat.geowave.test.query.AttributesSubsetQueryIT;
 import mil.nga.giat.geowave.test.query.SecondaryIndexingDriverIT;
@@ -26,7 +27,7 @@ import org.junit.runners.Suite.SuiteClasses;
 	GeoWaveRasterIT.class,
 	BasicMapReduceIT.class,
 	BulkIngestInputGenerationIT.class,
-	// KDERasterResizeIT.class,
+	KDERasterResizeIT.class,
 	GeoWaveKMeansIT.class,
 	GeoWaveNNIT.class,
 	GeoServerIT.class,
