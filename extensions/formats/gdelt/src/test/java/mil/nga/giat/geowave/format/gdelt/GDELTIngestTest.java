@@ -27,7 +27,7 @@ public class GDELTIngestTest
 				null);
 
 		filePath = "20130401.export.CSV.zip";
-		expectedCount = 27187;
+		expectedCount = 14056;
 	}
 
 	@Test
