@@ -155,6 +155,6 @@ public class GDELTUtils
 
 	public static boolean validate(
 			final File file ) {
-		return true;
+		return file.getName().toLowerCase().matches("\\d{8}\\.export\\.csv\\.zip") || file.getName().toLowerCase().matches("\\d{6}\\.zip");
 	}
 }
