@@ -155,10 +155,22 @@ public class HashKeyIndexStrategyTest
 			assertTrue(coords[0] > 0);
 			assertTrue(coords[1] > 0);
 			MultiDimensionalNumericData nd = compoundIndexStrategy.getRangeForId(id);
-			assertEquals(20.02,nd.getMaxValuesPerDimension()[0],0.1);
-			assertEquals(30.59,nd.getMaxValuesPerDimension()[1],0.2);
-			assertEquals(20.01,nd.getMinValuesPerDimension()[0],0.1);
-			assertEquals(30.57,nd.getMinValuesPerDimension()[1],0.2);
+			assertEquals(
+					20.02,
+					nd.getMaxValuesPerDimension()[0],
+					0.1);
+			assertEquals(
+					30.59,
+					nd.getMaxValuesPerDimension()[1],
+					0.2);
+			assertEquals(
+					20.01,
+					nd.getMinValuesPerDimension()[0],
+					0.1);
+			assertEquals(
+					30.57,
+					nd.getMinValuesPerDimension()[1],
+					0.2);
 		}
 	}
 

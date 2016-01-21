@@ -112,8 +112,6 @@ public class HashKeyIndexStrategy implements
 
 	/**
 	 * Always returns all possible ranges
-	 * 
-	 * {@inheritDoc}
 	 */
 	@Override
 	public List<ByteArrayRange> getQueryRanges(
@@ -123,12 +121,8 @@ public class HashKeyIndexStrategy implements
 	}
 
 	/**
-	 * Returns all of the insertion ids for the range. Since this index strategy
-	 * does not use binning, it will return the ByteArrayId of every value in
-	 * the range (i.e. if you are storing a range using this index strategy,
-	 * your data will be replicated for every integer value in the range).
-	 * 
-	 * {@inheritDoc}
+     * Returns an insertion id selected round-robin from a predefined pool
+     *   
 	 */
 	@Override
 	public List<ByteArrayId> getInsertionIds(
@@ -204,7 +198,7 @@ public class HashKeyIndexStrategy implements
 		final ByteBuffer buf = ByteBuffer.allocate(8 + this.definitions.length * 4 + count);
 
 		buf.putInt(keySet.size());
-		
+
 		buf.putInt(definitionBytes.length);
 		for (int j = 0; j < definitionBytes.length; j++) {
 			buf.putInt(((byte[]) definitionBytes[j]).length);
@@ -250,8 +244,7 @@ public class HashKeyIndexStrategy implements
 		}
 		return result;
 	}
-	
-	
+
 	@Override
 	public int getByteOffsetFromDimensionalIndex() {
 		if ((keySet != null) && !keySet.isEmpty()) {
