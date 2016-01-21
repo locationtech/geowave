@@ -17,7 +17,7 @@ import org.apache.log4j.Logger;
 /**
  * Represents a query operation by an Accumulo row. This abstraction is
  * re-usable for both exact row ID queries and row prefix queries.
- * 
+ *
  */
 abstract public class AbstractAccumuloRowQuery<T> extends
 		AccumuloQuery
@@ -30,15 +30,18 @@ abstract public class AbstractAccumuloRowQuery<T> extends
 			final String[] authorizations,
 			final ScanCallback<T> scanCallback ) {
 		super(
-				index);
+				index,
+				authorizations);
 		this.scanCallback = scanCallback;
 	}
 
 	public CloseableIterator<T> query(
 			final AccumuloOperations accumuloOperations,
+			final double[] maxResolutionSubsamplingPerDimension,
 			final AdapterStore adapterStore ) {
 		final ScannerBase scanner = getScanner(
 				accumuloOperations,
+				maxResolutionSubsamplingPerDimension,
 				getScannerLimit());
 		if (scanner == null) {
 			LOGGER.error("Unable to get a new scanner instance, getScanner returned null");

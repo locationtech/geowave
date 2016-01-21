@@ -19,30 +19,30 @@ import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 /**
  * Used to create determined, uniform row id prefix as one possible approach to
  * prevent hot spotting.
- * 
+ *
  * Before using this class, one should consider balancing options for the
  * specific data store. Can one pre-split using a component of another index
  * strategy (e.g. bin identifier)? How about ingest first and then do major
  * compaction?
- * 
+ *
  * Consider that Accumulo 1.7 supports two balancers
  * org.apache.accumulo.server.master.balancer.RegexGroupBalancer and
  * org.apache.accumulo.server.master.balancer.GroupBalancer.
- * 
+ *
  * This class should be used with a CompoundIndexStrategy. In addition, tablets
  * should be pre-split on the number of prefix IDs. Without splits, the splits
  * are at the mercy of the Big Table servers default. For example, Accumulo
  * fills up one tablet before splitting, regardless of the partitioning.
- * 
+ *
  * The key set size does not need to be large. For example, using two times the
  * number of tablet servers (for growth) and presplitting, two keys per server.
  * The default is 3.
- * 
+ *
  * There is a cost to using this approach: queries must span all prefixes. The
  * number of prefixes should initially be at least the number of tablet servers.
- * 
- * 
- * 
+ *
+ *
+ *
  */
 public class RoundRobinKeyIndexStrategy implements
 		NumericIndexStrategy
@@ -95,7 +95,7 @@ public class RoundRobinKeyIndexStrategy implements
 
 	/**
 	 * Always returns all possible ranges
-	 * 
+	 *
 	 * {@inheritDoc}
 	 */
 	@Override
@@ -106,7 +106,7 @@ public class RoundRobinKeyIndexStrategy implements
 
 	/**
 	 * Always returns all possible ranges
-	 * 
+	 *
 	 * {@inheritDoc}
 	 */
 	@Override
@@ -121,7 +121,7 @@ public class RoundRobinKeyIndexStrategy implements
 	 * doensn't use binning, it will return the ByteArrayId of every value in
 	 * the range (i.e. if you are storing a range using this index strategy,
 	 * your data will be replicated for every integer value in the range).
-	 * 
+	 *
 	 * {@inheritDoc}
 	 */
 	@Override
@@ -137,7 +137,7 @@ public class RoundRobinKeyIndexStrategy implements
 	 * doensn't use binning, it will return the ByteArrayId of every value in
 	 * the range (i.e. if you are storing a range using this index strategy,
 	 * your data will be replicated for every integer value in the range).
-	 * 
+	 *
 	 * {@inheritDoc}
 	 */
 	@Override
@@ -198,5 +198,14 @@ public class RoundRobinKeyIndexStrategy implements
 			naturalSplits.add(range.getStart());
 		}
 		return naturalSplits;
+	}
+
+	@Override
+	public int getByteOffsetFromDimensionalIndex() {
+		if ((keySet != null) && !keySet.isEmpty()) {
+			return keySet.get(
+					0).getStart().getBytes().length;
+		}
+		return 0;
 	}
 }

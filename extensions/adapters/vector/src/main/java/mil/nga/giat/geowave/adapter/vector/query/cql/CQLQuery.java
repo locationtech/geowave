@@ -131,7 +131,7 @@ public class CQLQuery implements
 			return baseQuery.isSupported(index);
 		}
 		// TODO: this should interrogate strategy to see if constraint are
-		// processed by stratey
+		// processed by strategy
 		return true;
 	}
 

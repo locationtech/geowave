@@ -29,16 +29,16 @@ import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
  * configured to persist indices or adapters, it is advised to always provide
  * adapters and indices to a QueryOptions. This maximizes the reuse of the code
  * making the query.
- * 
+ *
  * If no index is provided, all indices are checked. The data store is expected
  * to use statistics to determine which the indices that index data for the any
  * given adapter.
- * 
+ *
  * If queries are made across multiple indices, the default is to de-duplicate.
- * 
+ *
  * Container object that encapsulates additional options to be applied to a
  * {@link Query}
- * 
+ *
  * @since 0.8.7
  */
 
@@ -49,7 +49,7 @@ public class QueryOptions implements
 		Serializable
 {
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 544085046847603372L;
 
@@ -73,6 +73,7 @@ public class QueryOptions implements
 	private List<ByteArrayId> adapterIds = null;
 	private List<ByteArrayId> indexIds = null;
 	private Integer limit = -1;
+	private double[] maxResolutionSubsamplingPerDimension = null;
 	private transient ScanCallback<?> scanCallback = DEFAULT_CALLBACK;
 	private String[] authorizations = new String[0];
 	private Boolean dedupAcrossIndices = null;
@@ -82,8 +83,8 @@ public class QueryOptions implements
 			final ByteArrayId indexId ) {
 		adapters = null;
 		indices = null;
-		this.adapterIds = adapterId == null ? Collections.<ByteArrayId> emptyList() : Collections.singletonList(adapterId);
-		this.indexIds = indexId == null ? Collections.<ByteArrayId> emptyList() : Collections.singletonList(indexId);
+		adapterIds = adapterId == null ? Collections.<ByteArrayId> emptyList() : Collections.singletonList(adapterId);
+		indexIds = indexId == null ? Collections.<ByteArrayId> emptyList() : Collections.singletonList(indexId);
 	}
 
 	public QueryOptions(
@@ -132,7 +133,7 @@ public class QueryOptions implements
 	}
 
 	/**
-	 * 
+	 *
 	 * @param adapter
 	 * @param index
 	 * @param limit
@@ -158,19 +159,19 @@ public class QueryOptions implements
 	public QueryOptions() {}
 
 	public boolean isDedupAcrossIndices() {
-		return dedupAcrossIndices == null ? (this.indexIds == null || this.indexIds.size() > 0) : dedupAcrossIndices;
+		return dedupAcrossIndices == null ? ((indexIds == null) || (indexIds.size() > 0)) : dedupAcrossIndices;
 	}
 
 	public void setAdapterIds(
 			final List<ByteArrayId> adapterIds ) {
-		this.adapters = null;
+		adapters = null;
 		this.adapterIds = adapterIds == null ? Collections.<ByteArrayId> emptyList() : adapterIds;
 	}
 
 	public void setAdapter(
 			final DataAdapter<?> adapter ) {
 		if (adapter != null) {
-			this.adapters = Collections.<DataAdapter<Object>> singletonList((DataAdapter<Object>) adapter);
+			adapters = Collections.<DataAdapter<Object>> singletonList((DataAdapter<Object>) adapter);
 			adapterIds = Collections.singletonList(adapter.getAdapterId());
 		}
 		else {
@@ -179,13 +180,22 @@ public class QueryOptions implements
 		}
 	}
 
+	public void setMaxResolutionSubsamplingPerDimension(
+			final double[] maxResolutionSubsamplingPerDimension ) {
+		this.maxResolutionSubsamplingPerDimension = maxResolutionSubsamplingPerDimension;
+	}
+
+	public double[] getMaxResolutionSubsamplingPerDimension() {
+		return maxResolutionSubsamplingPerDimension;
+	}
+
 	/**
 	 * @param index
 	 */
 	public void setIndex(
 			final PrimaryIndex index ) {
 		if (index != null) {
-			this.indices = Collections.<Index<?, ?>> singletonList(index);
+			indices = Collections.<Index<?, ?>> singletonList(index);
 			indexIds = Collections.singletonList(index.getId());
 		}
 		else {
@@ -195,16 +205,16 @@ public class QueryOptions implements
 	}
 
 	public void setDedupAcrosssIndices(
-			boolean dedupAcrossIndices ) {
+			final boolean dedupAcrossIndices ) {
 		this.dedupAcrossIndices = dedupAcrossIndices;
 	}
 
 	public void setIndices(
 			final Index<?, ?>[] indices ) {
 		this.indices = indices == null ? Collections.<Index<?, ?>> emptyList() : new ArrayList<Index<?, ?>>();
-		this.indexIds = new ArrayList<ByteArrayId>();
+		indexIds = new ArrayList<ByteArrayId>();
 		if (indices != null) {
-			for (Index<?, ?> index : indices) {
+			for (final Index<?, ?> index : indices) {
 				indexIds.add(index.getId());
 				this.indices.add(index);
 			}
@@ -212,7 +222,7 @@ public class QueryOptions implements
 	}
 
 	/**
-	 * 
+	 *
 	 * @return Limit the number of data items to return
 	 */
 	public Integer getLimit() {
@@ -221,7 +231,7 @@ public class QueryOptions implements
 
 	/**
 	 * a value <= 0 or null indicates no limits
-	 * 
+	 *
 	 * @param limit
 	 */
 	public void setLimit(
@@ -233,7 +243,7 @@ public class QueryOptions implements
 	}
 
 	public boolean isAllAdaptersAndIndices() {
-		return (indexIds == null || indexIds.isEmpty()) && (adapterIds == null || adapterIds.isEmpty());
+		return ((indexIds == null) || indexIds.isEmpty()) && ((adapterIds == null) || adapterIds.isEmpty());
 	}
 
 	public ScanCallback<?> getScanCallback() {
@@ -251,7 +261,7 @@ public class QueryOptions implements
 	}
 
 	/**
-	 * 
+	 *
 	 * @return authorizations to apply to the query in addition to the
 	 *         authorizations assigned to the data store as a whole.
 	 */
@@ -266,12 +276,14 @@ public class QueryOptions implements
 
 	public CloseableIterator<Index<?, ?>> getIndices(
 			final IndexStore indexStore ) {
-		if (indexIds != null && !indexIds.isEmpty()) {
-			if (indices == null || indices.isEmpty()) {
+		if ((indexIds != null) && !indexIds.isEmpty()) {
+			if ((indices == null) || indices.isEmpty()) {
 				indices = new ArrayList<Index<?, ?>>();
-				for (ByteArrayId id : indexIds) {
+				for (final ByteArrayId id : indexIds) {
 					final PrimaryIndex index = (PrimaryIndex) indexStore.getIndex(id);
-					if (index != null) indices.add(index);
+					if (index != null) {
+						indices.add(index);
+					}
 				}
 			}
 			return new CloseableIterator.Wrapper<Index<?, ?>>(
@@ -282,12 +294,14 @@ public class QueryOptions implements
 
 	public CloseableIterator<DataAdapter<?>> getAdapters(
 			final AdapterStore adapterStore ) {
-		if (adapterIds != null && !adapterIds.isEmpty()) {
-			if (adapters == null || adapters.isEmpty()) {
+		if ((adapterIds != null) && !adapterIds.isEmpty()) {
+			if ((adapters == null) || adapters.isEmpty()) {
 				adapters = new ArrayList<DataAdapter<Object>>();
-				for (ByteArrayId id : adapterIds) {
+				for (final ByteArrayId id : adapterIds) {
 					final DataAdapter<Object> adapter = (DataAdapter<Object>) adapterStore.getAdapter(id);
-					if (adapter != null) adapters.add(adapter);
+					if (adapter != null) {
+						adapters.add(adapter);
+					}
 				}
 			}
 			return new CloseableIterator.Wrapper(
@@ -299,18 +313,20 @@ public class QueryOptions implements
 	public DataAdapter[] getAdaptersArray(
 			final AdapterStore adapterStore )
 			throws IOException {
-		if (adapterIds != null && !adapterIds.isEmpty()) {
-			if (adapters == null || adapters.isEmpty()) {
+		if ((adapterIds != null) && !adapterIds.isEmpty()) {
+			if ((adapters == null) || adapters.isEmpty()) {
 				adapters = new ArrayList<DataAdapter<Object>>();
-				for (ByteArrayId id : adapterIds) {
+				for (final ByteArrayId id : adapterIds) {
 					final DataAdapter<Object> adapter = (DataAdapter<Object>) adapterStore.getAdapter(id);
-					if (adapter != null) adapters.add(adapter);
+					if (adapter != null) {
+						adapters.add(adapter);
+					}
 				}
 			}
 			return adapters.toArray(new DataAdapter[adapters.size()]);
 
 		}
-		List<DataAdapter> list = new ArrayList<DataAdapter>();
+		final List<DataAdapter> list = new ArrayList<DataAdapter>();
 		try (CloseableIterator<DataAdapter<?>> it = adapterStore.getAdapters()) {
 			while (it.hasNext()) {
 				list.add(it.next());
@@ -323,7 +339,7 @@ public class QueryOptions implements
 			final AdapterStore adapterStore )
 			throws IOException {
 		final List<ByteArrayId> ids = new ArrayList<ByteArrayId>();
-		if (this.adapterIds == null || adapterIds.isEmpty()) {
+		if ((adapterIds == null) || adapterIds.isEmpty()) {
 			try (CloseableIterator<DataAdapter<?>> it = getAdapters(adapterStore)) {
 				while (it.hasNext()) {
 					ids.add(it.next().getAdapterId());
@@ -331,7 +347,7 @@ public class QueryOptions implements
 			}
 		}
 		else {
-			ids.addAll(this.adapterIds);
+			ids.addAll(adapterIds);
 		}
 		return ids;
 	}
@@ -345,15 +361,15 @@ public class QueryOptions implements
 
 		final byte[] authBytes = StringUtils.stringsToBinary(getAuthorizations());
 		int iSize = 4;
-		if (indexIds != null && !indexIds.isEmpty()) {
-			for (ByteArrayId id : indexIds) {
+		if ((indexIds != null) && !indexIds.isEmpty()) {
+			for (final ByteArrayId id : indexIds) {
 				iSize += id.getBytes().length + 4;
 			}
 		}
 
 		int aSize = 4;
-		if (adapterIds != null && !adapterIds.isEmpty()) {
-			for (ByteArrayId id : adapterIds) {
+		if ((adapterIds != null) && !adapterIds.isEmpty()) {
+			for (final ByteArrayId id : adapterIds) {
 				aSize += id.getBytes().length + 4;
 			}
 		}
@@ -365,8 +381,8 @@ public class QueryOptions implements
 		buf.put(authBytes);
 
 		buf.putInt(indexIds == null ? 0 : indexIds.size());
-		if (indexIds != null && !indexIds.isEmpty()) {
-			for (ByteArrayId id : indexIds) {
+		if ((indexIds != null) && !indexIds.isEmpty()) {
+			for (final ByteArrayId id : indexIds) {
 				final byte[] idBytes = id.getBytes();
 				buf.putInt(idBytes.length);
 				buf.put(idBytes);
@@ -374,8 +390,8 @@ public class QueryOptions implements
 		}
 
 		buf.putInt(adapterIds == null ? 0 : adapterIds.size());
-		if (adapterIds != null && !adapterIds.isEmpty()) {
-			for (ByteArrayId id : adapterIds) {
+		if ((adapterIds != null) && !adapterIds.isEmpty()) {
+			for (final ByteArrayId id : adapterIds) {
 				final byte[] idBytes = id.getBytes();
 				buf.putInt(idBytes.length);
 				buf.put(idBytes);
@@ -390,7 +406,7 @@ public class QueryOptions implements
 			final byte[] bytes ) {
 
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
-		int dedupCode = buf.getInt();
+		final int dedupCode = buf.getInt();
 
 		dedupAcrossIndices = null;
 		if (dedupCode >= 0) {

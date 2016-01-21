@@ -192,9 +192,9 @@ public class AccumuloDataStore implements
 	/*
 	 * Since this general-purpose method crosses multiple adapters, the type of
 	 * result cannot be assumed.
-	 * 
+	 *
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * mil.nga.giat.geowave.core.store.DataStore#query(mil.nga.giat.geowave.
 	 * core.store.query.QueryOptions,
@@ -234,6 +234,7 @@ public class AccumuloDataStore implements
 						results.add(q.query(
 								accumuloOperations,
 								tempAdapterStore,
+								sanitizedQueryOptions.getMaxResolutionSubsamplingPerDimension(),
 								-1));
 						continue;
 					}
@@ -246,6 +247,7 @@ public class AccumuloDataStore implements
 								filter,
 								(ScanCallback<Object>) sanitizedQueryOptions.getScanCallback(),
 								sanitizedQueryOptions.getAuthorizations(),
+								sanitizedQueryOptions.getMaxResolutionSubsamplingPerDimension(),
 								true));
 						continue;
 					}
@@ -259,6 +261,7 @@ public class AccumuloDataStore implements
 								sanitizedQueryOptions.getAuthorizations());
 						results.add(prefixQuery.query(
 								accumuloOperations,
+								sanitizedQueryOptions.getMaxResolutionSubsamplingPerDimension(),
 								tempAdapterStore));
 						continue;
 					}
@@ -273,6 +276,7 @@ public class AccumuloDataStore implements
 						results.add(accumuloQuery.query(
 								accumuloOperations,
 								tempAdapterStore,
+								sanitizedQueryOptions.getMaxResolutionSubsamplingPerDimension(),
 								sanitizedQueryOptions.getLimit(),
 								true));
 						continue;
@@ -305,6 +309,7 @@ public class AccumuloDataStore implements
 							results.add(accumuloQuery.query(
 									accumuloOperations,
 									tempAdapterStore,
+									sanitizedQueryOptions.getMaxResolutionSubsamplingPerDimension(),
 									sanitizedQueryOptions.getLimit(),
 									true));
 						}
@@ -416,6 +421,7 @@ public class AccumuloDataStore implements
 			final DedupeFilter dedupeFilter,
 			final ScanCallback<Object> callback,
 			final String[] authorizations,
+			final double[] maxResolutionSubsamplingPerDimension,
 			final boolean limit )
 			throws IOException {
 		final String altIdxTableName = index.getId().getString() + AccumuloUtils.ALT_INDEX_TABLE;
@@ -446,6 +452,7 @@ public class AccumuloDataStore implements
 				return q.query(
 						accumuloOperations,
 						tempAdapterStore,
+						maxResolutionSubsamplingPerDimension,
 						(limit || (rowIds.size() < 2)) ? 1 : -1);
 			}
 		}
@@ -527,11 +534,11 @@ public class AccumuloDataStore implements
 
 	/*
 	 * Perhaps a use for this optimization with DataIdQuery ?
-	 * 
+	 *
 	 * private List<Entry<Key, Value>> getEntryRowWithRowIds( final String
 	 * tableName, final List<ByteArrayId> rowIds, final ByteArrayId adapterId,
 	 * final String... authorizations ) {
-	 * 
+	 *
 	 * final List<Entry<Key, Value>> resultList = new ArrayList<Entry<Key,
 	 * Value>>(); if ((rowIds == null) || rowIds.isEmpty()) { return resultList;
 	 * } final List<ByteArrayRange> ranges = new ArrayList<ByteArrayRange>();
@@ -541,18 +548,18 @@ public class AccumuloDataStore implements
 	 * ((BatchScanner)
 	 * scanner).setRanges(AccumuloUtils.byteArrayRangesToAccumuloRanges
 	 * (ranges));
-	 * 
+	 *
 	 * final IteratorSetting iteratorSettings = new IteratorSetting(
 	 * QueryFilterIterator.WHOLE_ROW_ITERATOR_PRIORITY,
 	 * QueryFilterIterator.WHOLE_ROW_ITERATOR_NAME, WholeRowIterator.class);
 	 * scanner.addScanIterator(iteratorSettings);
-	 * 
+	 *
 	 * final Iterator<Map.Entry<Key, Value>> iterator = scanner.iterator();
 	 * while (iterator.hasNext()) { resultList.add(iterator.next()); } } catch
 	 * (final TableNotFoundException e) { LOGGER.warn( "Unable to query table '"
 	 * + tableName + "'.  Table does not exist.", e); } finally { if (scanner !=
 	 * null) { scanner.close(); } }
-	 * 
+	 *
 	 * return resultList; }
 	 */
 
@@ -705,6 +712,7 @@ public class AccumuloDataStore implements
 									dataIt = q.query(
 											accumuloOperations,
 											adapterStore,
+											null,
 											-1);
 								}
 								else if (query instanceof DataIdQuery) {
@@ -716,6 +724,7 @@ public class AccumuloDataStore implements
 											null,
 											callback,
 											queryOptions.getAuthorizations(),
+											null,
 											false);
 								}
 								else if (query instanceof PrefixIdQuery) {
@@ -726,6 +735,7 @@ public class AccumuloDataStore implements
 											null,
 											queryOptions.getAuthorizations()).query(
 											accumuloOperations,
+											null,
 											adapterStore);
 
 								}
@@ -739,6 +749,7 @@ public class AccumuloDataStore implements
 											queryOptions.getAuthorizations()).query(
 											accumuloOperations,
 											adapterStore,
+											null,
 											null);
 								}
 
