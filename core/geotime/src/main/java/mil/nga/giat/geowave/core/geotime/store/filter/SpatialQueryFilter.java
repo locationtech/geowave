@@ -22,8 +22,12 @@ import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import com.google.common.collect.Interner;
 import com.google.common.collect.Interners;
 import com.vividsolutions.jts.geom.Geometry;
+import com.vividsolutions.jts.geom.Point;
+import com.vividsolutions.jts.geom.Polygon;
 import com.vividsolutions.jts.geom.prep.PreparedGeometry;
 import com.vividsolutions.jts.geom.prep.PreparedGeometryFactory;
+import com.vividsolutions.jts.geom.prep.PreparedPoint;
+import com.vividsolutions.jts.geom.prep.PreparedPolygon;
 
 /**
  * This filter can perform fine-grained acceptance testing (intersection test
@@ -56,7 +60,19 @@ public class SpatialQueryFilter extends
 			public boolean compare(
 					Geometry dataGeometry,
 					PreparedGeometry constraintGeometry ) {
-				return constraintGeometry.intersects(dataGeometry);
+				// GEOWAVE-564 - Temporary fix to prevent intersects method
+				// from returning false when used with linestrings in a
+				// multi-threaded environment.
+				boolean doesIntersect = false;
+				if ((dataGeometry instanceof Point || dataGeometry instanceof Polygon) && (constraintGeometry instanceof PreparedPoint || constraintGeometry instanceof PreparedPolygon)) {
+					doesIntersect = constraintGeometry.intersects(dataGeometry);
+				}
+				else {
+					synchronized (constraintGeometry) {
+						doesIntersect = constraintGeometry.intersects(dataGeometry);
+					}
+				}
+				return doesIntersect;
 			}
 
 			@Override
