@@ -1,9 +1,9 @@
 package mil.nga.giat.geowave.core.index.simple;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -137,6 +137,32 @@ public class HashKeyIndexStrategyTest
 	}
 
 	@Test
+	public void testGetCoordinatesPerDimension() {
+
+		final NumericRange dimension1Range = new NumericRange(
+				20.01,
+				20.02);
+		final NumericRange dimension2Range = new NumericRange(
+				30.51,
+				30.59);
+		final MultiDimensionalNumericData sfcIndexedRange = new BasicNumericDataset(
+				new NumericData[] {
+					dimension1Range,
+					dimension2Range
+				});
+		for (ByteArrayId id : compoundIndexStrategy.getInsertionIds(sfcIndexedRange)) {
+			long[] coords = compoundIndexStrategy.getCoordinatesPerDimension(id);
+			assertTrue(coords[0] > 0);
+			assertTrue(coords[1] > 0);
+			MultiDimensionalNumericData nd = compoundIndexStrategy.getRangeForId(id);
+			assertEquals(20.02,nd.getMaxValuesPerDimension()[0],0.1);
+			assertEquals(30.59,nd.getMaxValuesPerDimension()[1],0.2);
+			assertEquals(20.01,nd.getMinValuesPerDimension()[0],0.1);
+			assertEquals(30.57,nd.getMinValuesPerDimension()[1],0.2);
+		}
+	}
+
+	@Test
 	public void testGetQueryRangesWithMaximumNumberOfRanges() {
 		final List<ByteArrayRange> sfcIndexRanges = sfcIndexStrategy.getQueryRanges(sfcIndexedRange);
 		final List<ByteArrayRange> ranges = new ArrayList<>();
@@ -165,40 +191,6 @@ public class HashKeyIndexStrategyTest
 				compoundIndexStrategy.getQueryRanges(sfcIndexedRange));
 		Assert.assertTrue(testRanges.containsAll(compoundIndexRanges));
 		Assert.assertTrue(compoundIndexRanges.containsAll(testRanges));
-	}
-
-	@Test
-	public void testGetInsertionIds() {
-		final List<ByteArrayId> ids = new ArrayList<>();
-
-		final List<ByteArrayId> ids2 = sfcIndexStrategy.getInsertionIds(
-				sfcIndexedRange,
-				1);
-		for (int i = 0; i < 3; i++) {
-			for (final ByteArrayId id2 : ids2) {
-				ids.add(compoundIndexStrategy.composeByteArrayId(
-						new ByteArrayId(
-								new byte[] {
-									(byte) i
-								}),
-						id2));
-			}
-		}
-		final Set<ByteArrayId> testIds = new HashSet<>(
-				ids);
-		final Set<ByteArrayId> compoundIndexIds = new HashSet<>(
-				compoundIndexStrategy.getInsertionIds(
-						sfcIndexedRange,
-						8));
-		Assert.assertTrue(testIds.containsAll(compoundIndexIds));
-		// Assert.assertTrue(compoundIndexIds.containsAll(testIds));
-
-		final long[] sfcIndexCoordinatesPerDim = sfcIndexStrategy.getCoordinatesPerDimension(ids2.get(0));
-		final long[] coordinatesPerDim = compoundIndexStrategy.getCoordinatesPerDimension(ids.get(0));
-
-		Assert.assertTrue(Arrays.equals(
-				sfcIndexCoordinatesPerDim,
-				coordinatesPerDim));
 	}
 
 }

@@ -11,10 +11,13 @@ import java.util.Set;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
+import mil.nga.giat.geowave.core.index.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
 import mil.nga.giat.geowave.core.index.sfc.data.BasicNumericDataset;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
+import mil.nga.giat.geowave.core.index.sfc.data.NumericData;
+import mil.nga.giat.geowave.core.index.sfc.data.NumericValue;
 
 /**
  * Used to create determined, uniform row id prefix as one possible approach to
@@ -49,15 +52,13 @@ public class HashKeyIndexStrategy implements
 {
 
 	private final List<ByteArrayRange> keySet = new ArrayList<ByteArrayRange>();
-	private final NumericDimensionDefinition[] definitions;
+	private NumericDimensionDefinition[] definitions;
 	private double[] higestPrecision;
 
-	/**
-	 * Default initial key set size is 3.
-	 */
 	public HashKeyIndexStrategy() {
-		init(3);
-		definitions = new NumericDimensionDefinition[0];
+		this(
+				new NumericDimensionDefinition[0],
+				3);
 	}
 
 	public HashKeyIndexStrategy(
@@ -166,13 +167,19 @@ public class HashKeyIndexStrategy implements
 	@Override
 	public MultiDimensionalNumericData getRangeForId(
 			final ByteArrayId insertionId ) {
-		return new BasicNumericDataset();
+		return new BasicNumericDataset(
+				new NumericData[] {
+					new NumericValue(
+							0),
+					new NumericValue(
+							0)
+				});
 	}
 
 	@Override
 	public long[] getCoordinatesPerDimension(
 			final ByteArrayId insertionId ) {
-		return new long[0];
+		return new long[this.definitions.length];
 	}
 
 	@Override
@@ -187,8 +194,22 @@ public class HashKeyIndexStrategy implements
 
 	@Override
 	public byte[] toBinary() {
-		final ByteBuffer buf = ByteBuffer.allocate(4);
+		final Object[] definitionBytes = new Object[this.definitions.length];
+		int i = 0;
+		int count = 0;
+		for (NumericDimensionDefinition def : this.definitions) {
+			definitionBytes[i] = PersistenceUtils.toBinary(def);
+			count += ((byte[]) definitionBytes[i++]).length;
+		}
+		final ByteBuffer buf = ByteBuffer.allocate(8 + this.definitions.length * 4 + count);
+
 		buf.putInt(keySet.size());
+		
+		buf.putInt(definitionBytes.length);
+		for (int j = 0; j < definitionBytes.length; j++) {
+			buf.putInt(((byte[]) definitionBytes[j]).length);
+			buf.put((byte[]) definitionBytes[j]);
+		}
 		return buf.array();
 
 	}
@@ -198,6 +219,15 @@ public class HashKeyIndexStrategy implements
 			final byte[] bytes ) {
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
 		init(buf.getInt());
+		definitions = new NumericDimensionDefinition[buf.getInt()];
+		for (int i = 0; i < definitions.length; i++) {
+			final byte[] data = new byte[buf.getInt()];
+			buf.get(data);
+			definitions[i] = PersistenceUtils.fromBinary(
+					data,
+					NumericDimensionDefinition.class);
+		}
+		this.higestPrecision = new double[definitions.length];
 	}
 
 	@Override
@@ -219,5 +249,15 @@ public class HashKeyIndexStrategy implements
 			result = 31 * result + (long) (bits ^ (bits >>> 32));
 		}
 		return result;
+	}
+	
+	
+	@Override
+	public int getByteOffsetFromDimensionalIndex() {
+		if ((keySet != null) && !keySet.isEmpty()) {
+			return keySet.get(
+					0).getStart().getBytes().length;
+		}
+		return 0;
 	}
 }
