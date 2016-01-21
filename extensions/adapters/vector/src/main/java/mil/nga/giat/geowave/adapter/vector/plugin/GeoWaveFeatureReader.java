@@ -1,5 +1,7 @@
 package mil.nga.giat.geowave.adapter.vector.plugin;
 
+import java.awt.Rectangle;
+import java.awt.geom.AffineTransform;
 import java.io.Closeable;
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -43,20 +45,29 @@ import org.apache.log4j.Logger;
 import org.geotools.data.FeatureReader;
 import org.geotools.data.Query;
 import org.geotools.filter.FidFilterImpl;
+import org.geotools.geometry.jts.Decimator;
 import org.geotools.geometry.jts.ReferencedEnvelope;
+import org.geotools.referencing.CRS;
+import org.geotools.referencing.operation.transform.ProjectiveTransform;
+import org.geotools.renderer.lite.RendererUtilities;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.AttributeDescriptor;
 import org.opengis.filter.Filter;
+import org.opengis.geometry.MismatchedDimensionException;
+import org.opengis.referencing.FactoryException;
+import org.opengis.referencing.operation.MathTransform2D;
+import org.opengis.referencing.operation.TransformException;
 
 import com.google.common.collect.Iterators;
+import com.vividsolutions.jts.geom.Envelope;
 import com.vividsolutions.jts.geom.Geometry;
 
 /**
  * This class wraps a geotools data store as well as one for statistics (for
  * example to display Heatmaps) into a GeoTools FeatureReader for simple feature
  * data. It acts as a helper for GeoWave's GeoTools data store.
- * 
+ *
  */
 public class GeoWaveFeatureReader implements
 		FeatureReader<SimpleFeatureType, SimpleFeature>
@@ -303,23 +314,58 @@ public class GeoWaveFeatureReader implements
 		public CloseableIterator<SimpleFeature> query(
 				final PrimaryIndex index,
 				final mil.nga.giat.geowave.core.store.query.Query query ) {
-			return components.getDataStore().query(
-					new QueryOptions(
-							components.getAdapter(),
-							index,
-							transaction.composeAuthorizations()),
-					new CQLQuery(
-							query,
-							filter,
-							components.getAdapter()));
-			// TODO: Added back SpatialDecimationQuery
-			// width,
-			// height,
-			// pixelSize,
-			// envelope,
-			// limit,
-		}
 
+			final QueryOptions options = new QueryOptions(
+					components.getAdapter(),
+					index,
+					transaction.composeAuthorizations());
+			options.setLimit(limit);
+			final double east = envelope.getMaxX();
+			final double west = envelope.getMinX();
+			final double north = envelope.getMaxY();
+			final double south = envelope.getMinY();
+
+			try {
+				final AffineTransform worldToScreen = RendererUtilities.worldToScreenTransform(
+						new ReferencedEnvelope(
+								new Envelope(
+										west,
+										east,
+										south,
+										north),
+								CRS.decode("EPSG:4326")),
+						new Rectangle(
+								width,
+								height));
+				final MathTransform2D fullTransform = (MathTransform2D) ProjectiveTransform.create(worldToScreen);
+				// calculate spans
+				try {
+					final double[] spans = Decimator.computeGeneralizationDistances(
+							fullTransform.inverse(),
+							new Rectangle(
+									width,
+									height),
+							pixelSize);
+					options.setMaxResolutionSubsamplingPerDimension(spans);
+					return components.getDataStore().query(
+							options,
+							new CQLQuery(
+									query,
+									filter,
+									components.getAdapter()));
+				}
+				catch (final TransformException e) {
+					throw new IllegalArgumentException(
+							"Unable to compute generalization distance",
+							e);
+				}
+			}
+			catch (MismatchedDimensionException | FactoryException e) {
+				throw new IllegalArgumentException(
+						"Unable to decode CRS EPSG:4326",
+						e);
+			}
+		}
 	}
 
 	private class RenderQueryIssuer extends
@@ -452,7 +498,7 @@ public class GeoWaveFeatureReader implements
 			}
 
 			final List<PrimaryIndex> writeIndices = components.getWriteIndices();
-			PrimaryIndex queryIndex = (writeIndices != null && writeIndices.size() > 0) ? writeIndices.get(0) : null;
+			final PrimaryIndex queryIndex = ((writeIndices != null) && (writeIndices.size() > 0)) ? writeIndices.get(0) : null;
 
 			return components.getDataStore().query(
 					new QueryOptions(

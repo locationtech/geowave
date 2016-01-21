@@ -16,24 +16,6 @@ import java.util.SortedMap;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import org.apache.accumulo.core.client.AccumuloException;
-import org.apache.accumulo.core.client.AccumuloSecurityException;
-import org.apache.accumulo.core.client.BatchScanner;
-import org.apache.accumulo.core.client.Connector;
-import org.apache.accumulo.core.client.IteratorSetting;
-import org.apache.accumulo.core.client.ScannerBase;
-import org.apache.accumulo.core.client.TableNotFoundException;
-import org.apache.accumulo.core.data.Key;
-import org.apache.accumulo.core.data.Mutation;
-import org.apache.accumulo.core.data.Range;
-import org.apache.accumulo.core.data.Value;
-import org.apache.accumulo.core.iterators.IteratorUtil.IteratorScope;
-import org.apache.accumulo.core.iterators.user.WholeRowIterator;
-import org.apache.accumulo.core.security.ColumnVisibility;
-import org.apache.commons.lang3.tuple.Pair;
-import org.apache.hadoop.io.Text;
-import org.apache.log4j.Logger;
-
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.index.StringUtils;
@@ -78,11 +60,29 @@ import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloAdapterStore;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloIndexStore;
 import mil.nga.giat.geowave.datastore.accumulo.query.AccumuloConstraintsQuery;
 
+import org.apache.accumulo.core.client.AccumuloException;
+import org.apache.accumulo.core.client.AccumuloSecurityException;
+import org.apache.accumulo.core.client.BatchScanner;
+import org.apache.accumulo.core.client.Connector;
+import org.apache.accumulo.core.client.IteratorSetting;
+import org.apache.accumulo.core.client.ScannerBase;
+import org.apache.accumulo.core.client.TableNotFoundException;
+import org.apache.accumulo.core.data.Key;
+import org.apache.accumulo.core.data.Mutation;
+import org.apache.accumulo.core.data.Range;
+import org.apache.accumulo.core.data.Value;
+import org.apache.accumulo.core.iterators.IteratorUtil.IteratorScope;
+import org.apache.accumulo.core.iterators.user.WholeRowIterator;
+import org.apache.accumulo.core.security.ColumnVisibility;
+import org.apache.commons.lang3.tuple.Pair;
+import org.apache.hadoop.io.Text;
+import org.apache.log4j.Logger;
+
 /**
  * A set of convenience methods for common operations on Accumulo within
  * GeoWave, such as conversions between GeoWave objects and corresponding
  * Accumulo objects.
- * 
+ *
  */
 public class AccumuloUtils
 {
@@ -559,7 +559,7 @@ public class AccumuloUtils
 	/**
 	 * This method combines all FieldInfos that share a common visibility into a
 	 * single FieldInfo
-	 * 
+	 *
 	 * @param originalList
 	 * @param index
 	 * @return a new list of composite FieldInfos
@@ -633,7 +633,7 @@ public class AccumuloUtils
 	 * Takes a byte array representing a serialized composite group of
 	 * FieldInfos sharing a common visibility and returns a List of the
 	 * individual FieldInfos
-	 * 
+	 *
 	 * @param model
 	 * @param flattenedValue
 	 *            the serialized composite FieldInfo
@@ -675,7 +675,7 @@ public class AccumuloUtils
 	}
 
 	/**
-	 * 
+	 *
 	 * @param dataWriter
 	 * @param index
 	 * @param entry
@@ -706,7 +706,7 @@ public class AccumuloUtils
 
 	/**
 	 * Get Namespaces
-	 * 
+	 *
 	 * @param connector
 	 */
 	public static List<String> getNamespaces(
@@ -726,7 +726,7 @@ public class AccumuloUtils
 
 	/**
 	 * Get list of data adapters associated with the given namespace
-	 * 
+	 *
 	 * @param connector
 	 * @param namespace
 	 */
@@ -757,7 +757,7 @@ public class AccumuloUtils
 
 	/**
 	 * Get list of indices associated with the given namespace
-	 * 
+	 *
 	 * @param connector
 	 * @param namespace
 	 */
@@ -788,7 +788,7 @@ public class AccumuloUtils
 
 	/**
 	 * Set splits on a table based on a partition ID
-	 * 
+	 *
 	 * @param namespace
 	 * @param index
 	 * @param randomParitions
@@ -830,7 +830,7 @@ public class AccumuloUtils
 	/**
 	 * Set splits on a table based on quantile distribution and fixed number of
 	 * splits
-	 * 
+	 *
 	 * @param namespace
 	 * @param index
 	 * @param quantile
@@ -894,7 +894,7 @@ public class AccumuloUtils
 	/**
 	 * Set splits on table based on equal interval distribution and fixed number
 	 * of splits.
-	 * 
+	 *
 	 * @param namespace
 	 * @param index
 	 * @param numberSplits
@@ -976,7 +976,7 @@ public class AccumuloUtils
 
 	/**
 	 * Set splits on table based on fixed number of rows per split.
-	 * 
+	 *
 	 * @param namespace
 	 * @param index
 	 * @param numberRows
@@ -1033,7 +1033,7 @@ public class AccumuloUtils
 
 	/**
 	 * Check if locality group is set.
-	 * 
+	 *
 	 * @param namespace
 	 * @param index
 	 * @param adapter
@@ -1064,7 +1064,7 @@ public class AccumuloUtils
 
 	/**
 	 * Set locality group.
-	 * 
+	 *
 	 * @param namespace
 	 * @param index
 	 * @param adapter
@@ -1094,7 +1094,7 @@ public class AccumuloUtils
 
 	/**
 	 * Get number of entries for a data adapter in an index.
-	 * 
+	 *
 	 * @param namespace
 	 * @param index
 	 * @param adapter
@@ -1133,6 +1133,7 @@ public class AccumuloUtils
 					operations,
 					new AccumuloAdapterStore(
 							operations),
+					null,
 					null);
 			while (iterator.hasNext()) {
 				counter++;
@@ -1145,7 +1146,7 @@ public class AccumuloUtils
 
 	/**
 	 * * Get number of entries per index.
-	 * 
+	 *
 	 * @param namespace
 	 * @param index
 	 * @return
@@ -1178,6 +1179,7 @@ public class AccumuloUtils
 					operations,
 					new AccumuloAdapterStore(
 							operations),
+					null,
 					null);
 			while (iterator.hasNext()) {
 				counter++;

@@ -79,7 +79,7 @@ public class CompoundIndexStrategy implements
 
 	/**
 	 * Get the number of dimensions of each sub-strategy
-	 * 
+	 *
 	 * @return an array with the number of dimensions for each sub-strategy
 	 */
 	public int[] getNumberOfDimensionsPerIndexStrategy() {
@@ -91,7 +91,7 @@ public class CompoundIndexStrategy implements
 
 	/**
 	 * Get the total number of dimensions from all sub-strategies
-	 * 
+	 *
 	 * @return the number of dimensions
 	 */
 	public int getNumberOfDimensions() {
@@ -100,7 +100,7 @@ public class CompoundIndexStrategy implements
 
 	/**
 	 * Create a compound ByteArrayId
-	 * 
+	 *
 	 * @param id1
 	 *            ByteArrayId for the first sub-strategy
 	 * @param id2
@@ -122,7 +122,7 @@ public class CompoundIndexStrategy implements
 	/**
 	 * Get the ByteArrayId for each sub-strategy from the ByteArrayId for the
 	 * compound index strategy
-	 * 
+	 *
 	 * @param id
 	 *            the compound ByteArrayId
 	 * @return the ByteArrayId for each sub-strategy
@@ -429,6 +429,13 @@ public class CompoundIndexStrategy implements
 		// because substrategy one is prefixing substrategy2, just use the
 		// splits associated with substrategy1
 		return subStrategy1.getNaturalSplits();
+	}
+
+	@Override
+	public int getByteOffsetFromDimensionalIndex() {
+		// TODO: this only makes sense if substrategy 1 contributes no
+		// dimensional index component
+		return subStrategy1.getByteOffsetFromDimensionalIndex() + subStrategy2.getByteOffsetFromDimensionalIndex();
 	}
 
 }
