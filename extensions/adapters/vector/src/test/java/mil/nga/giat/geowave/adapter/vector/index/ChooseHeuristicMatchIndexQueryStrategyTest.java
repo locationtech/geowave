@@ -47,41 +47,10 @@ public class ChooseHeuristicMatchIndexQueryStrategyTest
 	public void testChooseTemporalWithoutStatsHouseHour() {
 		final ChooseHeuristicMatchIndexQueryStrategy strategy = new ChooseHeuristicMatchIndexQueryStrategy();
 
-		final ConstraintSet cs1 = new ConstraintSet();
-		cs1.addConstraint(
-				LatitudeDefinition.class,
-				new ConstraintData(
-						new ConstrainedIndexValue(
-								0,
-								HOUSE),
-						true));
-
-		cs1.addConstraint(
-				LongitudeDefinition.class,
-				new ConstraintData(
-						new ConstrainedIndexValue(
-								0,
-								HOUSE),
-						true));
-
-		final ConstraintSet cs2a = new ConstraintSet();
-		cs2a.addConstraint(
-				TimeDefinition.class,
-				new ConstraintData(
-						new ConstrainedIndexValue(
-								0,
-								HOUR),
-						true));
-
-		final Constraints constraints = new Constraints(
-				Arrays.asList(cs2a)).merge(Collections.singletonList(cs1));
-
-		final BasicQuery query = new BasicQuery(
-				constraints);
-
 		final Iterator<Index<?, ?>> it = getIndices(
 				new HashMap<ByteArrayId, DataStatistics<SimpleFeature>>(),
-				query,
+				new BasicQuery(
+						createConstraints(HOUSE, HOUSE, HOUR)),
 				strategy);
 		assertTrue(it.hasNext());
 		assertEquals(
@@ -95,41 +64,10 @@ public class ChooseHeuristicMatchIndexQueryStrategyTest
 	public void testChooseSpatialWithoutStatsHouseDay() {
 		final ChooseHeuristicMatchIndexQueryStrategy strategy = new ChooseHeuristicMatchIndexQueryStrategy();
 
-		final ConstraintSet cs1 = new ConstraintSet();
-		cs1.addConstraint(
-				LatitudeDefinition.class,
-				new ConstraintData(
-						new ConstrainedIndexValue(
-								0,
-								HOUSE),
-						true));
-
-		cs1.addConstraint(
-				LongitudeDefinition.class,
-				new ConstraintData(
-						new ConstrainedIndexValue(
-								0,
-								HOUSE),
-						true));
-
-		final ConstraintSet cs2a = new ConstraintSet();
-		cs2a.addConstraint(
-				TimeDefinition.class,
-				new ConstraintData(
-						new ConstrainedIndexValue(
-								0,
-								DAY),
-						true));
-
-		final Constraints constraints = new Constraints(
-				Arrays.asList(cs2a)).merge(Collections.singletonList(cs1));
-
-		final BasicQuery query = new BasicQuery(
-				constraints);
-
 		final Iterator<Index<?, ?>> it = getIndices(
 				new HashMap<ByteArrayId, DataStatistics<SimpleFeature>>(),
-				query,
+				new BasicQuery(
+						createConstraints(HOUSE, HOUSE, DAY)),
 				strategy);
 		assertTrue(it.hasNext());
 		assertEquals(
@@ -143,41 +81,11 @@ public class ChooseHeuristicMatchIndexQueryStrategyTest
 	public void testChooseSpatialWithoutStatsHouseWeek() {
 		final ChooseHeuristicMatchIndexQueryStrategy strategy = new ChooseHeuristicMatchIndexQueryStrategy();
 
-		final ConstraintSet cs1 = new ConstraintSet();
-		cs1.addConstraint(
-				LatitudeDefinition.class,
-				new ConstraintData(
-						new ConstrainedIndexValue(
-								0,
-								HOUSE),
-						true));
-
-		cs1.addConstraint(
-				LongitudeDefinition.class,
-				new ConstraintData(
-						new ConstrainedIndexValue(
-								0,
-								HOUSE),
-						true));
-
-		final ConstraintSet cs2a = new ConstraintSet();
-		cs2a.addConstraint(
-				TimeDefinition.class,
-				new ConstraintData(
-						new ConstrainedIndexValue(
-								0,
-								WEEK),
-						true));
-
-		final Constraints constraints = new Constraints(
-				Arrays.asList(cs2a)).merge(Collections.singletonList(cs1));
-
-		final BasicQuery query = new BasicQuery(
-				constraints);
 
 		final Iterator<Index<?, ?>> it = getIndices(
 				new HashMap<ByteArrayId, DataStatistics<SimpleFeature>>(),
-				query,
+				new BasicQuery(
+						createConstraints(HOUSE, HOUSE, WEEK)),
 				strategy);
 		assertTrue(it.hasNext());
 		assertEquals(
@@ -191,41 +99,10 @@ public class ChooseHeuristicMatchIndexQueryStrategyTest
 	public void testChooseTemporalWithoutStatsBlockHour() {
 		final ChooseHeuristicMatchIndexQueryStrategy strategy = new ChooseHeuristicMatchIndexQueryStrategy();
 
-		final ConstraintSet cs1 = new ConstraintSet();
-		cs1.addConstraint(
-				LatitudeDefinition.class,
-				new ConstraintData(
-						new ConstrainedIndexValue(
-								0,
-								BLOCK),
-						true));
-
-		cs1.addConstraint(
-				LongitudeDefinition.class,
-				new ConstraintData(
-						new ConstrainedIndexValue(
-								0,
-								BLOCK),
-						true));
-
-		final ConstraintSet cs2a = new ConstraintSet();
-		cs2a.addConstraint(
-				TimeDefinition.class,
-				new ConstraintData(
-						new ConstrainedIndexValue(
-								0,
-								HOUR),
-						true));
-
-		final Constraints constraints = new Constraints(
-				Arrays.asList(cs2a)).merge(Collections.singletonList(cs1));
-
-		final BasicQuery query = new BasicQuery(
-				constraints);
-
 		final Iterator<Index<?, ?>> it = getIndices(
 				new HashMap<ByteArrayId, DataStatistics<SimpleFeature>>(),
-				query,
+				new BasicQuery(
+						createConstraints(BLOCK, BLOCK, HOUR)),
 				strategy);
 		assertTrue(it.hasNext());
 		assertEquals(
@@ -239,41 +116,10 @@ public class ChooseHeuristicMatchIndexQueryStrategyTest
 	public void testChooseSpatialWithoutStatsBlockDay() {
 		final ChooseHeuristicMatchIndexQueryStrategy strategy = new ChooseHeuristicMatchIndexQueryStrategy();
 
-		final ConstraintSet cs1 = new ConstraintSet();
-		cs1.addConstraint(
-				LatitudeDefinition.class,
-				new ConstraintData(
-						new ConstrainedIndexValue(
-								0,
-								BLOCK),
-						true));
-
-		cs1.addConstraint(
-				LongitudeDefinition.class,
-				new ConstraintData(
-						new ConstrainedIndexValue(
-								0,
-								BLOCK),
-						true));
-
-		final ConstraintSet cs2a = new ConstraintSet();
-		cs2a.addConstraint(
-				TimeDefinition.class,
-				new ConstraintData(
-						new ConstrainedIndexValue(
-								0,
-								DAY),
-						true));
-
-		final Constraints constraints = new Constraints(
-				Arrays.asList(cs2a)).merge(Collections.singletonList(cs1));
-
-		final BasicQuery query = new BasicQuery(
-				constraints);
-
 		final Iterator<Index<?, ?>> it = getIndices(
 				new HashMap<ByteArrayId, DataStatistics<SimpleFeature>>(),
-				query,
+				new BasicQuery(
+						createConstraints(BLOCK, BLOCK, DAY)),
 				strategy);
 		assertTrue(it.hasNext());
 		assertEquals(
@@ -287,41 +133,10 @@ public class ChooseHeuristicMatchIndexQueryStrategyTest
 	public void testChooseSpatialWithoutStatsBlockWeek() {
 		final ChooseHeuristicMatchIndexQueryStrategy strategy = new ChooseHeuristicMatchIndexQueryStrategy();
 
-		final ConstraintSet cs1 = new ConstraintSet();
-		cs1.addConstraint(
-				LatitudeDefinition.class,
-				new ConstraintData(
-						new ConstrainedIndexValue(
-								0,
-								BLOCK),
-						true));
-
-		cs1.addConstraint(
-				LongitudeDefinition.class,
-				new ConstraintData(
-						new ConstrainedIndexValue(
-								0,
-								BLOCK),
-						true));
-
-		final ConstraintSet cs2a = new ConstraintSet();
-		cs2a.addConstraint(
-				TimeDefinition.class,
-				new ConstraintData(
-						new ConstrainedIndexValue(
-								0,
-								WEEK),
-						true));
-
-		final Constraints constraints = new Constraints(
-				Arrays.asList(cs2a)).merge(Collections.singletonList(cs1));
-
-		final BasicQuery query = new BasicQuery(
-				constraints);
-
 		final Iterator<Index<?, ?>> it = getIndices(
 				new HashMap<ByteArrayId, DataStatistics<SimpleFeature>>(),
-				query,
+				new BasicQuery(
+						createConstraints(BLOCK, BLOCK, WEEK)),
 				strategy);
 		assertTrue(it.hasNext());
 		assertEquals(
@@ -335,41 +150,10 @@ public class ChooseHeuristicMatchIndexQueryStrategyTest
 	public void testChooseTemporalWithoutStatsCityHour() {
 		final ChooseHeuristicMatchIndexQueryStrategy strategy = new ChooseHeuristicMatchIndexQueryStrategy();
 
-		final ConstraintSet cs1 = new ConstraintSet();
-		cs1.addConstraint(
-				LatitudeDefinition.class,
-				new ConstraintData(
-						new ConstrainedIndexValue(
-								0,
-								CITY),
-						true));
-
-		cs1.addConstraint(
-				LongitudeDefinition.class,
-				new ConstraintData(
-						new ConstrainedIndexValue(
-								0,
-								CITY),
-						true));
-
-		final ConstraintSet cs2a = new ConstraintSet();
-		cs2a.addConstraint(
-				TimeDefinition.class,
-				new ConstraintData(
-						new ConstrainedIndexValue(
-								0,
-								HOUR),
-						true));
-
-		final Constraints constraints = new Constraints(
-				Arrays.asList(cs2a)).merge(Collections.singletonList(cs1));
-
-		final BasicQuery query = new BasicQuery(
-				constraints);
-
 		final Iterator<Index<?, ?>> it = getIndices(
 				new HashMap<ByteArrayId, DataStatistics<SimpleFeature>>(),
-				query,
+				new BasicQuery(
+						createConstraints(CITY, CITY, HOUR)),
 				strategy);
 		assertTrue(it.hasNext());
 		assertEquals(
@@ -383,41 +167,10 @@ public class ChooseHeuristicMatchIndexQueryStrategyTest
 	public void testChooseTemporalWithoutStatsCityDay() {
 		final ChooseHeuristicMatchIndexQueryStrategy strategy = new ChooseHeuristicMatchIndexQueryStrategy();
 
-		final ConstraintSet cs1 = new ConstraintSet();
-		cs1.addConstraint(
-				LatitudeDefinition.class,
-				new ConstraintData(
-						new ConstrainedIndexValue(
-								0,
-								CITY),
-						true));
-
-		cs1.addConstraint(
-				LongitudeDefinition.class,
-				new ConstraintData(
-						new ConstrainedIndexValue(
-								0,
-								CITY),
-						true));
-
-		final ConstraintSet cs2a = new ConstraintSet();
-		cs2a.addConstraint(
-				TimeDefinition.class,
-				new ConstraintData(
-						new ConstrainedIndexValue(
-								0,
-								DAY),
-						true));
-
-		final Constraints constraints = new Constraints(
-				Arrays.asList(cs2a)).merge(Collections.singletonList(cs1));
-
-		final BasicQuery query = new BasicQuery(
-				constraints);
-
 		final Iterator<Index<?, ?>> it = getIndices(
 				new HashMap<ByteArrayId, DataStatistics<SimpleFeature>>(),
-				query,
+				new BasicQuery(
+						createConstraints(CITY, CITY, DAY)),
 				strategy);
 		assertTrue(it.hasNext());
 		assertEquals(
@@ -431,41 +184,10 @@ public class ChooseHeuristicMatchIndexQueryStrategyTest
 	public void testChooseSpatialWithoutStatsCityWeek() {
 		final ChooseHeuristicMatchIndexQueryStrategy strategy = new ChooseHeuristicMatchIndexQueryStrategy();
 
-		final ConstraintSet cs1 = new ConstraintSet();
-		cs1.addConstraint(
-				LatitudeDefinition.class,
-				new ConstraintData(
-						new ConstrainedIndexValue(
-								0,
-								CITY),
-						true));
-
-		cs1.addConstraint(
-				LongitudeDefinition.class,
-				new ConstraintData(
-						new ConstrainedIndexValue(
-								0,
-								CITY),
-						true));
-
-		final ConstraintSet cs2a = new ConstraintSet();
-		cs2a.addConstraint(
-				TimeDefinition.class,
-				new ConstraintData(
-						new ConstrainedIndexValue(
-								0,
-								WEEK),
-						true));
-
-		final Constraints constraints = new Constraints(
-				Arrays.asList(cs2a)).merge(Collections.singletonList(cs1));
-
-		final BasicQuery query = new BasicQuery(
-				constraints);
-
 		final Iterator<Index<?, ?>> it = getIndices(
 				new HashMap<ByteArrayId, DataStatistics<SimpleFeature>>(),
-				query,
+				new BasicQuery(
+						createConstraints(CITY, CITY, WEEK)),
 				strategy);
 		assertTrue(it.hasNext());
 		assertEquals(
@@ -532,5 +254,39 @@ public class ChooseHeuristicMatchIndexQueryStrategyTest
 			return false;
 		}
 
+	}
+
+	private Constraints createConstraints(
+			double lat,
+			double lon,
+			double time ) {
+		final ConstraintSet cs1 = new ConstraintSet();
+		cs1.addConstraint(
+				LatitudeDefinition.class,
+				new ConstraintData(
+						new ConstrainedIndexValue(
+								0,
+								lat),
+						true));
+
+		cs1.addConstraint(
+				LongitudeDefinition.class,
+				new ConstraintData(
+						new ConstrainedIndexValue(
+								0,
+								lon),
+						true));
+
+		final ConstraintSet cs2a = new ConstraintSet();
+		cs2a.addConstraint(
+				TimeDefinition.class,
+				new ConstraintData(
+						new ConstrainedIndexValue(
+								0,
+								time),
+						true));
+
+		return new Constraints(
+				Arrays.asList(cs2a)).merge(Collections.singletonList(cs1));
 	}
 }

@@ -37,7 +37,7 @@ public class ChooseHeuristicMatchIndexQueryStrategy implements
 
 			@Override
 			public boolean hasNext() {
-				double min = -1;
+				double indexMax = -1;
 				PrimaryIndex bestIdx = null;
 				while (!done && indices.hasNext()) {
 					final Index<?, ?> nextChoosenIdx = indices.next();
@@ -62,8 +62,8 @@ public class ChooseHeuristicMatchIndexQueryStrategy implements
 										nextIdx.getIndexStrategy(),
 										dataRangePerDimension);
 							}
-							if (totalMax > min) {
-								min = totalMax;
+							if (totalMax > indexMax) {
+								indexMax = totalMax;
 								bestIdx = nextIdx;
 							}
 						}
