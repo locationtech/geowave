@@ -3,7 +3,12 @@ package mil.nga.giat.geowave.core.index;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Convenience methods for converting to and from strings. The encoding and
@@ -15,6 +20,7 @@ import java.util.List;
  */
 public class StringUtils
 {
+	private static final Logger LOGGER = LoggerFactory.getLogger(StringUtils.class);
 	public static final Charset UTF8_CHAR_SET = Charset.forName("ISO-8859-1");
 
 	/**
@@ -108,4 +114,21 @@ public class StringUtils
 				"_");
 	}
 
+	public static Map<String, String> parseParams(
+			final String params )
+			throws Exception {
+		final Map<String, String> paramsMap = new HashMap<String, String>();
+		final String[] paramsSplit = params.split(";");
+		for (final String param : paramsSplit) {
+			final String[] keyValue = param.split("=");
+			if (keyValue.length != 2) {
+				LOGGER.warn("Unable to parse param '" + param + "'");
+				continue;
+			}
+			paramsMap.put(
+					keyValue[0].trim(),
+					keyValue[1].trim());
+		}
+		return paramsMap;
+	}
 }
