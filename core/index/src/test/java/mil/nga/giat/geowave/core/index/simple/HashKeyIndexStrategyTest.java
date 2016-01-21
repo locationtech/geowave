@@ -135,6 +135,31 @@ public class HashKeyIndexStrategyTest
 				2,
 				numDimensions);
 	}
+	
+	
+	
+	
+	@Test
+	public void testGetCoordinatesPerDimension() {
+		
+		final NumericRange dimension1Range = new NumericRange(
+				20.01,
+				20.02);
+		final NumericRange dimension2Range = new NumericRange(
+				30.51,
+				30.59);
+		final MultiDimensionalNumericData sfcIndexedRange = new BasicNumericDataset(
+				new NumericData[] {
+					dimension1Range,
+					dimension2Range
+				});
+		for (ByteArrayId id : compoundIndexStrategy.getInsertionIds(sfcIndexedRange)) {
+			long [] coords = compoundIndexStrategy.getCoordinatesPerDimension(id);
+			assertTrue(coords[0] > 0);
+			assertTrue(coords[1] > 0);
+			MultiDimensionalNumericData nd = compoundIndexStrategy.getRangeForId(id);
+		}
+	}
 
 	@Test
 	public void testGetCoordinatesPerDimension() {
