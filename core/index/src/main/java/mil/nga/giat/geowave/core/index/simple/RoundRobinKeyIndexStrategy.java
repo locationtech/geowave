@@ -117,10 +117,7 @@ public class RoundRobinKeyIndexStrategy implements
 	}
 
 	/**
-	 * Returns all of the insertion ids for the range. Since this index strategy
-	 * doensn't use binning, it will return the ByteArrayId of every value in
-	 * the range (i.e. if you are storing a range using this index strategy,
-	 * your data will be replicated for every integer value in the range).
+	 * Returns an insertion id selected round-robin from a predefined pool
 	 *
 	 * {@inheritDoc}
 	 */
