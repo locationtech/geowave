@@ -17,6 +17,10 @@ import org.apache.hadoop.io.WritableComparator;
 public class GeoWaveOutputKey extends
 		GeoWaveKey
 {
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = 1L;
 	private ByteArrayId indexId;
 
 	protected GeoWaveOutputKey() {

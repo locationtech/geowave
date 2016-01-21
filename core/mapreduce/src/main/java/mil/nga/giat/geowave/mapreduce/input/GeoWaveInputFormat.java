@@ -6,16 +6,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.collections.IteratorUtils;
-import org.apache.commons.collections.Transformer;
-import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.mapreduce.InputFormat;
-import org.apache.hadoop.mapreduce.InputSplit;
-import org.apache.hadoop.mapreduce.JobContext;
-import org.apache.hadoop.mapreduce.RecordReader;
-import org.apache.hadoop.mapreduce.TaskAttemptContext;
-import org.apache.log4j.Logger;
-
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.DataStore;
@@ -35,6 +25,16 @@ import mil.nga.giat.geowave.mapreduce.JobContextIndexStore;
 import mil.nga.giat.geowave.mapreduce.MapReduceDataStore;
 import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputConfigurator.InputConfig;
 
+import org.apache.commons.collections.IteratorUtils;
+import org.apache.commons.collections.Transformer;
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.mapreduce.InputFormat;
+import org.apache.hadoop.mapreduce.InputSplit;
+import org.apache.hadoop.mapreduce.JobContext;
+import org.apache.hadoop.mapreduce.RecordReader;
+import org.apache.hadoop.mapreduce.TaskAttemptContext;
+import org.apache.log4j.Logger;
+
 public class GeoWaveInputFormat<T> extends
 		InputFormat<GeoWaveInputKey, T>
 {
@@ -43,7 +43,7 @@ public class GeoWaveInputFormat<T> extends
 
 	/**
 	 * Add an adapter specific to the input format
-	 * 
+	 *
 	 * @param job
 	 * @param adapter
 	 */
@@ -282,7 +282,7 @@ public class GeoWaveInputFormat<T> extends
 	/**
 	 * Check whether a configuration is fully configured to be used with an
 	 * Accumulo {@link org.apache.hadoop.mapreduce.InputFormat}.
-	 * 
+	 *
 	 * @param context
 	 *            the Hadoop context for the configured job
 	 * @throws IOException
@@ -377,7 +377,7 @@ public class GeoWaveInputFormat<T> extends
 
 	/**
 	 * First look for input-specific adapters
-	 * 
+	 *
 	 * @param context
 	 * @param adapterStore
 	 * @return
@@ -392,7 +392,7 @@ public class GeoWaveInputFormat<T> extends
 		List<ByteArrayId> retVal = null;
 		if ((userAdapters == null) || (userAdapters.length <= 0)) {
 			try (CloseableIterator<DataAdapter<?>> adapters = adapterStore.getAdapters()) {
-				Iterator<?> transformed = IteratorUtils.transformedIterator(
+				final Iterator<?> transformed = IteratorUtils.transformedIterator(
 						adapters,
 						new Transformer() {
 
@@ -407,7 +407,7 @@ public class GeoWaveInputFormat<T> extends
 						});
 				retVal = IteratorUtils.toList(transformed);
 			}
-			catch (IOException e) {
+			catch (final IOException e) {
 				LOGGER.warn("Unable to close iterator" + e);
 			}
 		}

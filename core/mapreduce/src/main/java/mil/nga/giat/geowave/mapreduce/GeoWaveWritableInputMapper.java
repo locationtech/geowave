@@ -52,7 +52,7 @@ public abstract class GeoWaveWritableInputMapper<KEYOUT, VALUEOUT> extends
 	/**
 	 * Helper method to create an object writable from a value managed by the
 	 * adapter.
-	 * 
+	 *
 	 * @param key
 	 * @param value
 	 * @return

@@ -5,6 +5,7 @@ import java.util.Map;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndexDataStore;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndexDataStoreFactorySpi;
 import mil.nga.giat.geowave.datastore.accumulo.AbstractAccumuloStoreFactory;
+import mil.nga.giat.geowave.datastore.accumulo.AccumuloOptions;
 
 public class AccumuloSecondaryIndexDataStoreFactory extends
 		AbstractAccumuloStoreFactory<SecondaryIndexDataStore> implements
@@ -13,11 +14,12 @@ public class AccumuloSecondaryIndexDataStoreFactory extends
 
 	@Override
 	public SecondaryIndexDataStore createStore(
-			Map<String, Object> configOptions,
-			String namespace ) {
+			final Map<String, Object> configOptions,
+			final String namespace ) {
 		return new AccumuloSecondaryIndexDataStore(
 				createOperations(
 						configOptions,
-						namespace));
+						namespace),
+				new AccumuloOptions());
 	}
 }
