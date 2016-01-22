@@ -36,6 +36,7 @@ import org.apache.accumulo.core.client.RowIterator;
 import org.apache.accumulo.core.client.Scanner;
 import org.apache.accumulo.core.client.TableExistsException;
 import org.apache.accumulo.core.client.TableNotFoundException;
+import org.apache.accumulo.core.conf.Property;
 import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.Range;
 import org.apache.accumulo.core.data.Value;
@@ -92,7 +93,7 @@ public class BasicAccumuloOperations implements
 	 * This is will create an Accumulo connector based on passed in connection
 	 * information and credentials for convenience convenience. It will also use
 	 * reasonable defaults for unspecified parameters.
-	 * 
+	 *
 	 * @param zookeeperUrl
 	 *            The comma-delimited URLs for all zookeeper servers, this will
 	 *            be directly used to instantiate a ZookeeperInstance
@@ -135,7 +136,7 @@ public class BasicAccumuloOperations implements
 	/**
 	 * This constructor uses reasonable defaults and only requires an Accumulo
 	 * connector
-	 * 
+	 *
 	 * @param connector
 	 *            The connector to use for all operations
 	 */
@@ -149,7 +150,7 @@ public class BasicAccumuloOperations implements
 	/**
 	 * This constructor uses reasonable defaults and requires an Accumulo
 	 * connector and table namespace
-	 * 
+	 *
 	 * @param connector
 	 *            The connector to use for all operations
 	 * @param password
@@ -172,7 +173,7 @@ public class BasicAccumuloOperations implements
 	/**
 	 * This is the full constructor for the operation factory and should be used
 	 * if any of the defaults are insufficient.
-	 * 
+	 *
 	 * @param numThreads
 	 *            The number of threads to use for a batch scanner and batch
 	 *            writer
@@ -248,6 +249,7 @@ public class BasicAccumuloOperations implements
 				tableName,
 				createTable,
 				true,
+				true,
 				null);
 	}
 
@@ -256,6 +258,7 @@ public class BasicAccumuloOperations implements
 			final String tableName,
 			final boolean createTable,
 			final boolean enableVersioning,
+			final boolean enableBlockCache,
 			final Set<ByteArrayId> splits )
 			throws TableNotFoundException {
 		final String qName = getQualifiedTableName(tableName);
@@ -265,6 +268,12 @@ public class BasicAccumuloOperations implements
 				connector.tableOperations().create(
 						qName,
 						enableVersioning);
+				if (enableBlockCache) {
+					connector.tableOperations().setProperty(
+							qName,
+							Property.TABLE_BLOCKCACHE_ENABLED.getKey(),
+							"true");
+				}
 				if ((splits != null) && !splits.isEmpty()) {
 					final SortedSet<Text> partitionKeys = new TreeSet<Text>();
 					for (final ByteArrayId split : splits) {

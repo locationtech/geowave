@@ -10,6 +10,7 @@ import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvide
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStore;
+import mil.nga.giat.geowave.datastore.accumulo.AccumuloOptions;
 import mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations;
 import mil.nga.giat.geowave.datastore.accumulo.index.secondary.AccumuloSecondaryIndexDataStore;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloAdapterStore;
@@ -71,7 +72,7 @@ public class SimpleIngest
 	 * DataStore is essentially the controller that take the accumulo
 	 * information, geowave configuration, and data type, and inserts/queries
 	 * from accumulo
-	 * 
+	 *
 	 * @param instance
 	 *            Accumulo instance configuration
 	 * @return DataStore object for the particular accumulo instance
@@ -98,7 +99,7 @@ public class SimpleIngest
 	/***
 	 * The class tells geowave about the accumulo instance it should connect to,
 	 * as well as what tables it should create/store it's data in
-	 * 
+	 *
 	 * @param zookeepers
 	 *            Zookeepers associated with the accumulo instance, comma
 	 *            separate
@@ -136,7 +137,7 @@ public class SimpleIngest
 	 * The dataadapter interface describes how to serialize a data type. Here we
 	 * are using an implementation that understands how to serialize OGC
 	 * SimpleFeature types.
-	 * 
+	 *
 	 * @param sft
 	 *            simple feature type you want to generate an adapter from
 	 * @return data adapter that handles serialization of the sft simple feature
@@ -154,7 +155,7 @@ public class SimpleIngest
 	 * range of the index (min/max values) -The range type (bounded/unbounded)
 	 * -The number of "levels" (different precisions, needed when the values
 	 * indexed has ranges on any dimension)
-	 * 
+	 *
 	 * @return GeoWave index for a default SPATIAL index
 	 */
 	public static PrimaryIndex createSpatialIndex() {
@@ -174,7 +175,7 @@ public class SimpleIngest
 	 * what our data looks like so the serializer (FeatureDataAdapter for this
 	 * case) can know how to store it. Features/Attributes are also a general
 	 * convention of GIS systems in general.
-	 * 
+	 *
 	 * @return Simple Feature definition for our demo point feature
 	 */
 	public static SimpleFeatureType createPointFeatureType() {

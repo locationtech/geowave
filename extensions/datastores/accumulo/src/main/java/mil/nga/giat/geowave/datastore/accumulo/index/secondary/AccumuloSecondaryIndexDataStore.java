@@ -22,6 +22,7 @@ import mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndex;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndexDataStore;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations;
+import mil.nga.giat.geowave.datastore.accumulo.AccumuloOptions;
 import mil.nga.giat.geowave.datastore.accumulo.Closable;
 import mil.nga.giat.geowave.datastore.accumulo.Writer;
 import mil.nga.giat.geowave.datastore.accumulo.query.SecondaryIndexQueryFilterIterator;
@@ -44,12 +45,22 @@ public class AccumuloSecondaryIndexDataStore implements
 	private final static Logger LOGGER = Logger.getLogger(AccumuloSecondaryIndexDataStore.class);
 	private static final String TABLE_PREFIX = "GEOWAVE_2ND_IDX_";
 	private final AccumuloOperations accumuloOperations;
+	private final AccumuloOptions accumuloOptions;
 	private final Map<String, Writer> writerCache = new HashMap<>();
 
 	public AccumuloSecondaryIndexDataStore(
 			final AccumuloOperations accumuloOperations ) {
+		this(
+				accumuloOperations,
+				new AccumuloOptions());
+	}
+
+	public AccumuloSecondaryIndexDataStore(
+			final AccumuloOperations accumuloOperations,
+			final AccumuloOptions accumuloOptions ) {
 		super();
 		this.accumuloOperations = accumuloOperations;
+		this.accumuloOptions = accumuloOptions;
 	}
 
 	private Writer getWriter(
@@ -64,6 +75,7 @@ public class AccumuloSecondaryIndexDataStore implements
 					TABLE_PREFIX + secondaryIndexName,
 					true,
 					false,
+					accumuloOptions.isEnableBlockCache(),
 					secondaryIndex.getIndexStrategy().getNaturalSplits());
 			writerCache.put(
 					secondaryIndexName,

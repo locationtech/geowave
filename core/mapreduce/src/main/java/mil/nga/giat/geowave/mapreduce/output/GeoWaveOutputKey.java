@@ -28,6 +28,7 @@ public class GeoWaveOutputKey extends
 	private static final long serialVersionUID = 1L;
 	private Collection<ByteArrayId> indexIds;
 
+
 	protected GeoWaveOutputKey() {
 		super();
 	}

@@ -16,14 +16,14 @@ import org.apache.hadoop.io.Writable;
  * maintaining single set of Writable instances. By the nature of holding single
  * instances of Writable instances by the serializers, this class and its
  * contents may be only accessed by one 'worker' (at a time).
- * 
+ *
  * The helper methods assume all Writable instances are wrapped in an
  * ObjectWritable. The reason for this approach, consistent with other support
  * classes in this package, is to allow mappers and reducers to use the generic
  * ObjectWritable since entry inputs maybe be associated with different
  * adapters, and thus have different associated Writable instances.
  * Configuration of Hadoop Mappers and Reducers requires a specific type.
- * 
+ *
  */
 public class HadoopWritableSerializationTool
 {
@@ -42,8 +42,8 @@ public class HadoopWritableSerializationTool
 	}
 
 	public DataAdapter<?> getAdapter(
-			ByteArrayId adapterId ) {
-		return this.adapterStore.getAdapter(adapterId);
+			final ByteArrayId adapterId ) {
+		return adapterStore.getAdapter(adapterId);
 	}
 
 	public HadoopWritableSerializer<Object, Writable> getHadoopWritableSerializerForAdapter(

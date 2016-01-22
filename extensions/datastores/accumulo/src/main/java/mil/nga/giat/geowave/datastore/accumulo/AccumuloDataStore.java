@@ -126,7 +126,8 @@ public class AccumuloDataStore implements
 				new AccumuloDataStatisticsStore(
 						accumuloOperations),
 				new AccumuloSecondaryIndexDataStore(
-						accumuloOperations),
+						accumuloOperations,
+						accumuloOptions),
 				accumuloOperations,
 				accumuloOptions);
 	}
