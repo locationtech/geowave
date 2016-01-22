@@ -7,7 +7,7 @@ import mil.nga.giat.geowave.core.index.lexicoder.Lexicoders;
  * signed short values. The strategy doesn't use any binning. The ids are simply
  * the byte arrays of the value. This index strategy will not perform well for
  * inserting ranges because there will be too much replication of data.
- * 
+ *
  */
 public class SimpleShortIndexStrategy extends
 		SimpleNumericIndexStrategy<Short>
@@ -31,6 +31,11 @@ public class SimpleShortIndexStrategy extends
 	protected Short cast(
 			final double value ) {
 		return (short) value;
+	}
+
+	@Override
+	public int getByteOffsetFromDimensionalIndex() {
+		return 0;
 	}
 
 }

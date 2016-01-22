@@ -1,9 +1,9 @@
 package mil.nga.giat.geowave.core.index.simple;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -27,7 +27,7 @@ import mil.nga.giat.geowave.core.index.sfc.tiered.TieredSFCIndexFactory;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class RoundRobinKeyIndexStrategyTest
+public class HashKeyIndexStrategyTest
 {
 
 	private static final NumericDimensionDefinition[] SPATIAL_DIMENSIONS = new NumericDimensionDefinition[] {
@@ -47,8 +47,11 @@ public class RoundRobinKeyIndexStrategyTest
 			},
 			SFCType.HILBERT);
 
+	private static final HashKeyIndexStrategy hashIdexStrategy = new HashKeyIndexStrategy(
+			sfcIndexStrategy.getOrderedDimensionDefinitions(),
+			3);
 	private static final CompoundIndexStrategy compoundIndexStrategy = new CompoundIndexStrategy(
-			new RoundRobinKeyIndexStrategy(),
+			hashIdexStrategy,
 			sfcIndexStrategy);
 
 	private static final NumericRange dimension1Range = new NumericRange(
@@ -62,6 +65,45 @@ public class RoundRobinKeyIndexStrategyTest
 				dimension1Range,
 				dimension2Range
 			});
+
+	@Test
+	public void testDistribution() {
+		final Map<ByteArrayId, Long> counts = new HashMap<ByteArrayId, Long>();
+		int total = 0;
+		for (double x = 90; x < 180; x += 0.05) {
+			for (double y = 50; y < 90; y += 0.5) {
+				final NumericRange dimension1Range = new NumericRange(
+						x,
+						x + 0.002);
+				final NumericRange dimension2Range = new NumericRange(
+						y - 0.002,
+						y);
+				final MultiDimensionalNumericData sfcIndexedRange = new BasicNumericDataset(
+						new NumericData[] {
+							dimension1Range,
+							dimension2Range
+						});
+				for (ByteArrayId id : hashIdexStrategy.getInsertionIds(sfcIndexedRange)) {
+					Long count = counts.get(id);
+					long nextcount = count == null ? 1 : count + 1;
+					counts.put(
+							id,
+							nextcount);
+					total++;
+				}
+			}
+		}
+
+		double mean = total / counts.size();
+		double diff = 0.0;
+		for (Long count : counts.values()) {
+			diff += Math.pow(
+					mean - count,
+					2);
+		}
+		double sd = Math.sqrt(diff / counts.size());
+		assertTrue(sd < mean * 0.18);
+	}
 
 	@Test
 	public void testBinaryEncoding() {
@@ -79,7 +121,7 @@ public class RoundRobinKeyIndexStrategyTest
 	public void testNumberOfDimensionsPerIndexStrategy() {
 		final int[] numDimensionsPerStrategy = compoundIndexStrategy.getNumberOfDimensionsPerIndexStrategy();
 		Assert.assertEquals(
-				0,
+				2,
 				numDimensionsPerStrategy[0]);
 		Assert.assertEquals(
 				2,
@@ -92,6 +134,44 @@ public class RoundRobinKeyIndexStrategyTest
 		Assert.assertEquals(
 				2,
 				numDimensions);
+	}
+
+	@Test
+	public void testGetCoordinatesPerDimension() {
+
+		final NumericRange dimension1Range = new NumericRange(
+				20.01,
+				20.02);
+		final NumericRange dimension2Range = new NumericRange(
+				30.51,
+				30.59);
+		final MultiDimensionalNumericData sfcIndexedRange = new BasicNumericDataset(
+				new NumericData[] {
+					dimension1Range,
+					dimension2Range
+				});
+		for (ByteArrayId id : compoundIndexStrategy.getInsertionIds(sfcIndexedRange)) {
+			long[] coords = compoundIndexStrategy.getCoordinatesPerDimension(id);
+			assertTrue(coords[0] > 0);
+			assertTrue(coords[1] > 0);
+			MultiDimensionalNumericData nd = compoundIndexStrategy.getRangeForId(id);
+			assertEquals(
+					20.02,
+					nd.getMaxValuesPerDimension()[0],
+					0.1);
+			assertEquals(
+					30.59,
+					nd.getMaxValuesPerDimension()[1],
+					0.2);
+			assertEquals(
+					20.01,
+					nd.getMinValuesPerDimension()[0],
+					0.1);
+			assertEquals(
+					30.57,
+					nd.getMinValuesPerDimension()[1],
+					0.2);
+		}
 	}
 
 	@Test
@@ -123,67 +203,6 @@ public class RoundRobinKeyIndexStrategyTest
 				compoundIndexStrategy.getQueryRanges(sfcIndexedRange));
 		Assert.assertTrue(testRanges.containsAll(compoundIndexRanges));
 		Assert.assertTrue(compoundIndexRanges.containsAll(testRanges));
-	}
-
-	@Test
-	public void testUniformityAndLargeKeySet() {
-		final RoundRobinKeyIndexStrategy strategy = new RoundRobinKeyIndexStrategy(
-				512);
-		Map<ByteArrayId, Integer> countMap = new HashMap<ByteArrayId, Integer>();
-		for (int i = 0; i < 2048; i++) {
-			List<ByteArrayId> ids = strategy.getInsertionIds(sfcIndexedRange);
-			assertEquals(
-					1,
-					ids.size());
-			final ByteArrayId key = ids.get(0);
-			if (countMap.containsKey(key))
-				countMap.put(
-						key,
-						countMap.get(key) + 1);
-			else
-				countMap.put(
-						key,
-						1);
-
-		}
-		for (Integer i : countMap.values()) {
-			assertEquals(
-					4,
-					i.intValue());
-		}
-	}
-
-	@Test
-	public void testGetInsertionIds() {
-		final List<ByteArrayId> ids = new ArrayList<>();
-
-		final List<ByteArrayId> ids2 = sfcIndexStrategy.getInsertionIds(
-				sfcIndexedRange,
-				1);
-		for (int i = 0; i < 3; i++) {
-			for (final ByteArrayId id2 : ids2) {
-				ids.add(compoundIndexStrategy.composeByteArrayId(
-						new ByteArrayId(
-								new byte[] {
-									(byte) i
-								}),
-						id2));
-			}
-		}
-		final Set<ByteArrayId> testIds = new HashSet<>(
-				ids);
-		final Set<ByteArrayId> compoundIndexIds = new HashSet<>(
-				compoundIndexStrategy.getInsertionIds(
-						sfcIndexedRange,
-						8));
-		Assert.assertTrue(testIds.containsAll(compoundIndexIds));
-
-		final long[] sfcIndexCoordinatesPerDim = sfcIndexStrategy.getCoordinatesPerDimension(ids2.get(0));
-		final long[] coordinatesPerDim = compoundIndexStrategy.getCoordinatesPerDimension(ids.get(0));
-
-		Assert.assertTrue(Arrays.equals(
-				sfcIndexCoordinatesPerDim,
-				coordinatesPerDim));
 	}
 
 }

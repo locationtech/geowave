@@ -1,5 +1,6 @@
 package mil.nga.giat.geowave.adapter.raster.plugin;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.HashMap;
@@ -9,7 +10,9 @@ import java.util.Map;
 import javax.media.jai.Interpolation;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
+import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.DataStoreFactorySpi;
 import mil.nga.giat.geowave.core.store.GeoWaveStoreFinder;
@@ -25,6 +28,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 public class GeoWaveRasterConfig
 {
@@ -52,7 +56,6 @@ public class GeoWaveRasterConfig
 		}
 	}
 
-	private String xmlUrl;
 	private String geowaveNamespace;
 	private Map<String, Object> storeConfigObj;
 	private DataStoreFactorySpi dataStoreFactory;
@@ -99,7 +102,28 @@ public class GeoWaveRasterConfig
 		return result;
 	}
 
-	public static GeoWaveRasterConfig readFrom(
+	public static GeoWaveRasterConfig readFromConfigParams(
+			final String configParams )
+			throws Exception {
+		GeoWaveRasterConfig result = CONFIG_CACHE.get(configParams);
+
+		if (result != null) {
+			return result;
+		}
+		result = new GeoWaveRasterConfig();
+		CONFIG_CACHE.put(
+				configParams,
+				result);
+		final Map<String, String> params = StringUtils.parseParams(configParams);
+
+		parseParamsIntoRasterConfig(
+				result,
+				params);
+
+		return result;
+	}
+
+	public static GeoWaveRasterConfig readFromURL(
 			final URL xmlURL )
 			throws Exception {
 		GeoWaveRasterConfig result = CONFIG_CACHE.get(xmlURL.toString());
@@ -108,6 +132,25 @@ public class GeoWaveRasterConfig
 			return result;
 		}
 
+		result = new GeoWaveRasterConfig();
+
+		CONFIG_CACHE.put(
+				xmlURL.toString(),
+				result);
+
+		final Map<String, String> params = getParamsFromURL(xmlURL);
+		parseParamsIntoRasterConfig(
+				result,
+				params);
+
+		return result;
+	}
+
+	private static Map<String, String> getParamsFromURL(
+			final URL xmlURL )
+			throws IOException,
+			ParserConfigurationException,
+			SAXException {
 		final InputStream in = xmlURL.openStream();
 		final InputSource input = new InputSource(
 				xmlURL.toString());
@@ -122,11 +165,8 @@ public class GeoWaveRasterConfig
 		final Document dom = db.parse(input);
 		in.close();
 
-		result = new GeoWaveRasterConfig();
-
-		result.xmlUrl = xmlURL.toString();
 		final NodeList children = dom.getChildNodes();
-		final Map<String, String> storeConfig = new HashMap<String, String>();
+		final Map<String, String> configParams = new HashMap<String, String>();
 		for (int i = 0; i < children.getLength(); i++) {
 			final Node child = children.item(i);
 			boolean isConfigParameter = false;
@@ -138,25 +178,33 @@ public class GeoWaveRasterConfig
 				}
 			}
 			if (!isConfigParameter) {
-				storeConfig.put(
+				configParams.put(
 						child.getNodeName(),
 						child.getNodeValue());
 			}
 		}
+		return configParams;
+	}
+
+	private static void parseParamsIntoRasterConfig(
+			final GeoWaveRasterConfig result,
+			final Map<String, String> params ) {
+		final Map<String, String> storeParams = new HashMap<String, String>(
+				params);
+		// isolate just the dynamic store params
+		for (final ConfigParameter param : ConfigParameter.values()) {
+			storeParams.remove(param.getConfigName());
+		}
 		// findbugs complaint requires this synchronization
 		synchronized (result) {
-			result.geowaveNamespace = readValueString(
-					dom,
-					ConfigParameter.NAMESPACE.getConfigName());
-			result.storeConfigObj = ConfigUtils.valuesFromStrings(storeConfig);
+			result.geowaveNamespace = params.get(ConfigParameter.NAMESPACE.getConfigName());
+			result.storeConfigObj = ConfigUtils.valuesFromStrings(storeParams);
 			result.dataStoreFactory = GeoWaveStoreFinder.findDataStoreFactory(result.storeConfigObj);
 			result.indexStoreFactory = GeoWaveStoreFinder.findIndexStoreFactory(result.storeConfigObj);
 			result.adapterStoreFactory = GeoWaveStoreFinder.findAdapterStoreFactory(result.storeConfigObj);
 			result.dataStatisticsStoreFactory = GeoWaveStoreFinder.findDataStatisticsStoreFactory(result.storeConfigObj);
 		}
-		final String equalizeHistogram = readValueString(
-				dom,
-				ConfigParameter.EQUALIZE_HISTOGRAM.getConfigName());
+		final String equalizeHistogram = params.get(ConfigParameter.EQUALIZE_HISTOGRAM.getConfigName());
 		if (equalizeHistogram != null) {
 			if (equalizeHistogram.trim().toLowerCase().equals(
 					"true")) {
@@ -166,14 +214,9 @@ public class GeoWaveRasterConfig
 				result.equalizeHistogramOverride = false;
 			}
 		}
-		result.interpolationOverride = readValueInteger(
-				dom,
-				ConfigParameter.INTERPOLATION.getConfigName());
-		CONFIG_CACHE.put(
-				xmlURL.toString(),
-				result);
-
-		return result;
+		if (params.containsKey(ConfigParameter.INTERPOLATION.getConfigName())) {
+			result.interpolationOverride = Integer.parseInt(params.get(ConfigParameter.INTERPOLATION.getConfigName()));
+		}
 	}
 
 	public synchronized DataStore getDataStore() {
@@ -212,10 +255,6 @@ public class GeoWaveRasterConfig
 		return dataStatisticsStore;
 	}
 
-	public String getXmlUrl() {
-		return xmlUrl;
-	}
-
 	public boolean isInterpolationOverrideSet() {
 		return (interpolationOverride != null);
 	}
@@ -239,42 +278,5 @@ public class GeoWaveRasterConfig
 					"Equalize Histogram is not set for this config");
 		}
 		return equalizeHistogramOverride;
-	}
-
-	static private String readValueString(
-			final Document dom,
-			final String elemName ) {
-		final Node n = getNodeByName(
-				dom,
-				elemName);
-
-		if (n == null) {
-			return null;
-		}
-
-		return n.getTextContent();
-	}
-
-	static private Integer readValueInteger(
-			final Document dom,
-			final String elemName ) {
-		final Node n = getNodeByName(
-				dom,
-				elemName);
-
-		if (n == null) {
-			return null;
-		}
-
-		return Integer.valueOf(n.getTextContent());
-	}
-
-	static private Node getNodeByName(
-			final Document dom,
-			final String elemName ) {
-		final NodeList list = dom.getElementsByTagName(elemName);
-		final Node n = list.item(0);
-
-		return n;
 	}
 }

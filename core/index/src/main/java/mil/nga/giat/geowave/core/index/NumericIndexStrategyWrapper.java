@@ -109,4 +109,9 @@ public class NumericIndexStrategyWrapper implements
 	public Set<ByteArrayId> getNaturalSplits() {
 		return indexStrategy.getNaturalSplits();
 	}
+
+	@Override
+	public int getByteOffsetFromDimensionalIndex() {
+		return indexStrategy.getByteOffsetFromDimensionalIndex();
+	}
 }

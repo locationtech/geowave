@@ -20,7 +20,7 @@ import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
  * This class wraps a single SpaceFillingCurve implementation with a tiered
  * approach to indexing (an SFC with a tier ID). This can be utilized by an
  * overall HierarchicalNumericIndexStrategy as an encapsulated sub-strategy.
- * 
+ *
  */
 public class SingleTierSubStrategy implements
 		NumericIndexStrategy
@@ -221,5 +221,17 @@ public class SingleTierSubStrategy implements
 	@Override
 	public Set<ByteArrayId> getNaturalSplits() {
 		return null;
+	}
+
+	@Override
+	public int getByteOffsetFromDimensionalIndex() {
+		int rowIdOffset = 1;
+		for (int dimensionIdx = 0; dimensionIdx < baseDefinitions.length; dimensionIdx++) {
+			final int binSize = baseDefinitions[dimensionIdx].getFixedBinIdSize();
+			if (binSize > 0) {
+				rowIdOffset += binSize;
+			}
+		}
+		return rowIdOffset;
 	}
 }

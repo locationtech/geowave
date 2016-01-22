@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import mil.nga.giat.geowave.core.cli.CommandLineOptions.CommandLineWrapper;
+import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.GenericStoreFactory;
 import mil.nga.giat.geowave.core.store.config.AbstractConfigOption;
 import mil.nga.giat.geowave.core.store.config.ConfigUtils;
@@ -274,24 +275,6 @@ abstract public class GenericStoreCommandLineOptions<T>
 		}
 	}
 
-	private static Map<String, String> parseConnectionParams(
-			final String connectionParams )
-			throws Exception {
-		final Map<String, String> connectionParamsMap = new HashMap<String, String>();
-		final String[] params = connectionParams.split(";");
-		for (final String param : params) {
-			final String[] keyValue = param.split("=");
-			if (keyValue.length != 2) {
-				LOGGER.warn("Unable to parse connection param '" + param + "'");
-				continue;
-			}
-			connectionParamsMap.put(
-					keyValue[0].trim(),
-					keyValue[1].trim());
-		}
-		return connectionParamsMap;
-	}
-
 	public static <T, F extends GenericStoreFactory<T>> CommandLineResult<GenericStoreCommandLineOptions<T>> parseOptions(
 			final String prefix,
 			final Options options,
@@ -308,7 +291,7 @@ abstract public class GenericStoreCommandLineOptions<T>
 		Map<String, String> connectionParamsMap;
 		if ((connectionParams != null) && !connectionParams.isEmpty()) {
 			try {
-				connectionParamsMap = parseConnectionParams(connectionParams);
+				connectionParamsMap = StringUtils.parseParams(connectionParams);
 			}
 			catch (final Exception e) {
 				LOGGER.error(

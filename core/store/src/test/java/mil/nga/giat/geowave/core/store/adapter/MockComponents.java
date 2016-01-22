@@ -622,6 +622,12 @@ public class MockComponents
 			return null;
 		}
 
+		@Override
+		public int getByteOffsetFromDimensionalIndex() {
+			// TODO Auto-generated method stub
+			return 0;
+		}
+
 	}
 
 	// *************************************************************************

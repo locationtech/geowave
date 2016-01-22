@@ -111,16 +111,20 @@ public class IngestMessageHandler implements
 					int height = -1;
 					for (final MotionImagery imagery : images) {
 						try {
-							final byte[] binary = BaseEncoding.base64().decode(
-									imagery.getImageChip());
-							final ImageInputStream stream = ImageIO.createImageInputStream(new ByteArrayInputStream(
-									binary));
-							final BufferedImage img = ImageIO.read(stream);
-							if ((width < 0) || (img.getWidth() > width)) {
-								width = img.getWidth();
-							}
-							if ((height < 0) || (img.getHeight() > height)) {
-								height = img.getHeight();
+							String imageChip = imagery.getImageChip();
+							BufferedImage img = null;
+							if (imageChip != null && imageChip.length() > 0) {
+								final byte[] binary = BaseEncoding.base64().decode(
+										imageChip);
+								final ImageInputStream stream = ImageIO.createImageInputStream(new ByteArrayInputStream(
+										binary));
+								img = ImageIO.read(stream);
+								if ((width < 0) || (img.getWidth() > width)) {
+									width = img.getWidth();
+								}
+								if ((height < 0) || (img.getHeight() > height)) {
+									height = img.getHeight();
+								}
 							}
 							timesWithImageChips.put(
 									imagery.getTime(),
@@ -139,28 +143,29 @@ public class IngestMessageHandler implements
 
 					for (final Entry<Long, ImageChipInfo> chipInfo : timesWithImageChips.entrySet()) {
 						final BufferedImage img = chipInfo.getValue().getImage();
-
-						final BufferedImage scaledImage = toBufferedImage(
-								img.getScaledInstance(
-										width,
-										height,
-										Image.SCALE_SMOOTH),
-								BufferedImage.TYPE_3BYTE_BGR);
-						chipInfo.getValue().setImage(
-								scaledImage);
-						try (final ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
-							ImageIO.write(
-									scaledImage,
-									DEFAULT_IMAGE_FORMAT,
-									baos);
-							baos.flush();
-							chipInfo.getValue().setImageBytes(
-									baos.toByteArray());
-						}
-						catch (final Exception e) {
-							LOGGER.warn(
-									"Unable to write image chip to file",
-									e);
+						if (img != null) {
+							final BufferedImage scaledImage = toBufferedImage(
+									img.getScaledInstance(
+											width,
+											height,
+											Image.SCALE_SMOOTH),
+									BufferedImage.TYPE_3BYTE_BGR);
+							chipInfo.getValue().setImage(
+									scaledImage);
+							try (final ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+								ImageIO.write(
+										scaledImage,
+										DEFAULT_IMAGE_FORMAT,
+										baos);
+								baos.flush();
+								chipInfo.getValue().setImageBytes(
+										baos.toByteArray());
+							}
+							catch (final Exception e) {
+								LOGGER.warn(
+										"Unable to write image chip to file",
+										e);
+							}
 						}
 					}
 

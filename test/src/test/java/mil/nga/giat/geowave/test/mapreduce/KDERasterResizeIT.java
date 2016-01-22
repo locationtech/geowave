@@ -4,9 +4,9 @@ import java.awt.Rectangle;
 import java.awt.image.Raster;
 import java.awt.image.RenderedImage;
 import java.io.File;
-import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.media.jai.Interpolation;
 
@@ -22,8 +22,6 @@ import mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations;
 import mil.nga.giat.geowave.datastore.accumulo.util.ConnectorPool;
 import mil.nga.giat.geowave.test.GeoWaveTestEnvironment;
 
-import org.apache.accumulo.core.client.AccumuloException;
-import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.apache.accumulo.core.client.Connector;
 import org.apache.hadoop.util.ToolRunner;
 import org.geotools.geometry.GeneralEnvelope;
@@ -261,17 +259,24 @@ public class KDERasterResizeIT extends
 			final GeneralEnvelope queryEnvelope,
 			final Rectangle pixelDimensions,
 			double[][][] expectedResults )
-			throws IOException,
-			AccumuloException,
-			AccumuloSecurityException {
+			throws Exception {
 		final Map<String, String> options = getAccumuloConfigOptions();
+		final StringBuilder str = new StringBuilder(
+				"namespace=").append(
+				TEST_COVERAGE_NAMESPACE).append(
+				";equalizeHistogramOverride=false;interpolationOverride=").append(
+				Interpolation.INTERP_NEAREST);
+
+		for (final Entry<String, String> entry : options.entrySet()) {
+			str.append(
+					";").append(
+					entry.getKey()).append(
+					"=").append(
+					entry.getValue());
+		}
 
 		final GeoWaveRasterReader reader = new GeoWaveRasterReader(
-				GeoWaveRasterConfig.createConfig(
-						options,
-						TEST_COVERAGE_NAMESPACE,
-						false,
-						Interpolation.INTERP_NEAREST));
+				GeoWaveRasterConfig.readFromConfigParams(str.toString()));
 
 		queryEnvelope.setCoordinateReferenceSystem(GeoWaveGTRasterFormat.DEFAULT_CRS);
 		final Raster[] rasters = new Raster[numCoverages];

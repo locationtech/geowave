@@ -372,6 +372,12 @@ public class BasicQueryTest
 			return null;
 		}
 
+		@Override
+		public int getByteOffsetFromDimensionalIndex() {
+			// TODO Auto-generated method stub
+			return 0;
+		}
+
 	}
 
 	public static class ConstrainedIndexValue extends

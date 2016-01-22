@@ -247,6 +247,12 @@ public class GeometryUtilsTest
 			return null;
 		}
 
+		@Override
+		public int getByteOffsetFromDimensionalIndex() {
+			// TODO Auto-generated method stub
+			return 0;
+		}
+
 	}
 
 }
