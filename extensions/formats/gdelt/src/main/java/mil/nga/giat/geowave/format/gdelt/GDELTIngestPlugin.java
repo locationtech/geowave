@@ -10,22 +10,10 @@ import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.zip.ZipInputStream;
-
-import org.apache.avro.Schema;
-import org.apache.commons.io.IOUtils;
-import org.apache.log4j.Logger;
-import org.geotools.feature.simple.SimpleFeatureBuilder;
-import org.geotools.referencing.CRS;
-import org.opengis.feature.simple.SimpleFeature;
-import org.opengis.feature.simple.SimpleFeatureType;
-import org.opengis.referencing.FactoryException;
-import org.opengis.referencing.crs.CoordinateReferenceSystem;
-
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.GeometryFactory;
 
 import mil.nga.giat.geowave.adapter.vector.ingest.AbstractSimpleFeatureIngestPlugin;
 import mil.nga.giat.geowave.adapter.vector.ingest.DataSchemaOptionProvider;
@@ -43,14 +31,26 @@ import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 
+import org.apache.avro.Schema;
+import org.apache.commons.io.IOUtils;
+import org.apache.log4j.Logger;
+import org.geotools.feature.simple.SimpleFeatureBuilder;
+import org.geotools.referencing.CRS;
+import org.opengis.feature.simple.SimpleFeature;
+import org.opengis.feature.simple.SimpleFeatureType;
+import org.opengis.referencing.FactoryException;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+
+import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.GeometryFactory;
+
 /*
  */
 public class GDELTIngestPlugin extends
 		AbstractSimpleFeatureIngestPlugin<WholeFile>
 {
 
-	private final static Logger LOGGER = Logger.getLogger(
-			GDELTIngestPlugin.class);
+	private final static Logger LOGGER = Logger.getLogger(GDELTIngestPlugin.class);
 
 	private SimpleFeatureBuilder gdeltEventBuilder;
 	private SimpleFeatureType gdeltEventType;
@@ -67,16 +67,13 @@ public class GDELTIngestPlugin extends
 	public GDELTIngestPlugin() {
 
 		// default to reduced data format
-		setIncludeSupplementalFields(
-				false);
+		setIncludeSupplementalFields(false);
 
 		eventKey = new ByteArrayId(
-				StringUtils.stringToBinary(
-						GDELTUtils.GDELT_EVENT_FEATURE));
+				StringUtils.stringToBinary(GDELTUtils.GDELT_EVENT_FEATURE));
 
 		try {
-			crs = CRS.decode(
-					CRS_AUTHORITY);
+			crs = CRS.decode(CRS_AUTHORITY);
 		}
 		catch (final FactoryException e) {
 			LOGGER.error(
@@ -89,8 +86,7 @@ public class GDELTIngestPlugin extends
 			final boolean includeSupplementalFields ) {
 		this.includeSupplementalFields = includeSupplementalFields;
 
-		gdeltEventType = GDELTUtils.createGDELTEventDataType(
-				includeSupplementalFields);
+		gdeltEventType = GDELTUtils.createGDELTEventDataType(includeSupplementalFields);
 		gdeltEventBuilder = new SimpleFeatureBuilder(
 				gdeltEventType);
 	}
@@ -98,15 +94,13 @@ public class GDELTIngestPlugin extends
 	public void setDataSchemaOptionProvider(
 			final DataSchemaOptionProvider dataSchemaOptionProvider ) {
 		this.dataSchemaOptionProvider = dataSchemaOptionProvider;
-		setIncludeSupplementalFields(
-				dataSchemaOptionProvider.includeSupplementalFields());
+		setIncludeSupplementalFields(dataSchemaOptionProvider.includeSupplementalFields());
 	}
 
 	@Override
 	protected SimpleFeatureType[] getTypes() {
 		return new SimpleFeatureType[] {
-			SimpleFeatureUserDataConfigurationSet.configureType(
-					gdeltEventType)
+			SimpleFeatureUserDataConfigurationSet.configureType(gdeltEventType)
 		};
 	}
 
@@ -126,8 +120,7 @@ public class GDELTIngestPlugin extends
 	@Override
 	public boolean supportsFile(
 			final File file ) {
-		return GDELTUtils.validate(
-				file);
+		return GDELTUtils.validate(file);
 	}
 
 	@Override
@@ -139,13 +132,9 @@ public class GDELTIngestPlugin extends
 	public WholeFile[] toAvroObjects(
 			final File input ) {
 		final WholeFile avroFile = new WholeFile();
-		avroFile.setOriginalFilePath(
-				input.getAbsolutePath());
+		avroFile.setOriginalFilePath(input.getAbsolutePath());
 		try {
-			avroFile.setOriginalFile(
-					ByteBuffer.wrap(
-							Files.readAllBytes(
-									input.toPath())));
+			avroFile.setOriginalFile(ByteBuffer.wrap(Files.readAllBytes(input.toPath())));
 		}
 		catch (final IOException e) {
 			LOGGER.warn(
@@ -180,7 +169,7 @@ public class GDELTIngestPlugin extends
 	@Override
 	protected CloseableIterator<GeoWaveData<SimpleFeature>> toGeoWaveDataInternal(
 			final WholeFile hfile,
-			final ByteArrayId primaryIndexId,
+			final Collection<ByteArrayId> primaryIndexIds,
 			final String globalVisibility ) {
 
 		final List<GeoWaveData<SimpleFeature>> featureData = new ArrayList<GeoWaveData<SimpleFeature>>();
@@ -230,16 +219,13 @@ public class GDELTIngestPlugin extends
 			while ((line = br.readLine()) != null) {
 				lineNumber++;
 
-				final String[] vals = line.split(
-						"\t");
+				final String[] vals = line.split("\t");
 				if ((vals.length < GDELTUtils.GDELT_MIN_COLUMNS) || (vals.length > GDELTUtils.GDELT_MAX_COLUMNS)) {
-					LOGGER.warn(
-							"Invalid GDELT line length: " + vals.length + " tokens found on line " + lineNumber + " of " + hfile.getOriginalFilePath());
+					LOGGER.warn("Invalid GDELT line length: " + vals.length + " tokens found on line " + lineNumber + " of " + hfile.getOriginalFilePath());
 					continue;
 				}
 
-				actionGeoType = Integer.parseInt(
-						vals[GDELTUtils.GDELT_ACTION_GEO_TYPE_COLUMN_ID]);
+				actionGeoType = Integer.parseInt(vals[GDELTUtils.GDELT_ACTION_GEO_TYPE_COLUMN_ID]);
 				if (actionGeoType == 0) {
 					// No geo associated with this event
 					continue;
@@ -253,8 +239,7 @@ public class GDELTIngestPlugin extends
 							crs);
 				}
 				catch (final Exception e) {
-					LOGGER.warn(
-							"Error reading GDELT lat/lon on line " + lineNumber + " of " + hfile.getOriginalFilePath());
+					LOGGER.warn("Error reading GDELT lat/lon on line " + lineNumber + " of " + hfile.getOriginalFilePath());
 					continue;
 				}
 
@@ -264,16 +249,14 @@ public class GDELTIngestPlugin extends
 
 				gdeltEventBuilder.set(
 						GDELTUtils.GDELT_GEOMETRY_ATTRIBUTE,
-						geometryFactory.createPoint(
-								cord));
+						geometryFactory.createPoint(cord));
 
 				gdeltEventBuilder.set(
 						GDELTUtils.GDELT_EVENT_ID_ATTRIBUTE,
 						eventId);
 
 				timestring = vals[GDELTUtils.GDELT_TIMESTAMP_COLUMN_ID];
-				timeStamp = GDELTUtils.parseDate(
-						timestring);
+				timeStamp = GDELTUtils.parseDate(timestring);
 				gdeltEventBuilder.set(
 						GDELTUtils.GDELT_TIMESTAMP_ATTRIBUTE,
 						timeStamp);
@@ -333,41 +316,35 @@ public class GDELTIngestPlugin extends
 					if ((numMentions != null) && !numMentions.isEmpty()) {
 						gdeltEventBuilder.set(
 								GDELTUtils.NUM_MENTIONS_ATTRIBUTE,
-								Integer.parseInt(
-										numMentions));
+								Integer.parseInt(numMentions));
 					}
 
 					numSources = vals[GDELTUtils.NUM_SOURCES_COLUMN_ID];
 					if ((numSources != null) && !numSources.isEmpty()) {
 						gdeltEventBuilder.set(
 								GDELTUtils.NUM_SOURCES_ATTRIBUTE,
-								Integer.parseInt(
-										numSources));
+								Integer.parseInt(numSources));
 					}
 
 					numArticles = vals[GDELTUtils.NUM_ARTICLES_COLUMN_ID];
 					if ((numArticles != null) && !numArticles.isEmpty()) {
 						gdeltEventBuilder.set(
 								GDELTUtils.NUM_ARTICLES_ATTRIBUTE,
-								Integer.parseInt(
-										numArticles));
+								Integer.parseInt(numArticles));
 					}
 
 					avgTone = vals[GDELTUtils.AVG_TONE_COLUMN_ID];
 					if ((avgTone != null) && !avgTone.isEmpty()) {
 						gdeltEventBuilder.set(
 								GDELTUtils.AVG_TONE_ATTRIBUTE,
-								Double.parseDouble(
-										avgTone));
+								Double.parseDouble(avgTone));
 					}
 				}
 
-				featureData.add(
-						new GeoWaveData<SimpleFeature>(
-								eventKey,
-								primaryIndexId,
-								gdeltEventBuilder.buildFeature(
-										eventId)));
+				featureData.add(new GeoWaveData<SimpleFeature>(
+						eventKey,
+						primaryIndexIds,
+						gdeltEventBuilder.buildFeature(eventId)));
 			}
 
 		}
@@ -382,12 +359,9 @@ public class GDELTIngestPlugin extends
 					e);
 		}
 		finally {
-			IOUtils.closeQuietly(
-					br);
-			IOUtils.closeQuietly(
-					isr);
-			IOUtils.closeQuietly(
-					in);
+			IOUtils.closeQuietly(br);
+			IOUtils.closeQuietly(isr);
+			IOUtils.closeQuietly(in);
 		}
 
 		return new CloseableIterator.Wrapper<GeoWaveData<SimpleFeature>>(

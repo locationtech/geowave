@@ -34,7 +34,7 @@ public class GDELTUtils
 
 	public static Date parseDate(
 			final String source )
-					throws ParseException {
+			throws ParseException {
 		return dateFormat.get().parse(
 				source);
 	}
@@ -98,132 +98,71 @@ public class GDELTUtils
 			final boolean includeSupplementalFields ) {
 
 		final SimpleFeatureTypeBuilder simpleFeatureTypeBuilder = new SimpleFeatureTypeBuilder();
-		simpleFeatureTypeBuilder.setName(
-				GDELT_EVENT_FEATURE);
+		simpleFeatureTypeBuilder.setName(GDELT_EVENT_FEATURE);
 
 		final AttributeTypeBuilder attributeTypeBuilder = new AttributeTypeBuilder();
 
-		simpleFeatureTypeBuilder.add(
-				attributeTypeBuilder
-						.binding(
-								Point.class)
-						.nillable(
-								false)
-						.buildDescriptor(
-								GDELT_GEOMETRY_ATTRIBUTE));
-		simpleFeatureTypeBuilder.add(
-				attributeTypeBuilder
-						.binding(
-								Integer.class)
-						.nillable(
-								false)
-						.buildDescriptor(
-								GDELT_EVENT_ID_ATTRIBUTE));
-		simpleFeatureTypeBuilder.add(
-				attributeTypeBuilder
-						.binding(
-								Date.class)
-						.nillable(
-								false)
-						.buildDescriptor(
-								GDELT_TIMESTAMP_ATTRIBUTE));
-		simpleFeatureTypeBuilder.add(
-				attributeTypeBuilder
-						.binding(
-								Double.class)
-						.nillable(
-								false)
-						.buildDescriptor(
-								GDELT_LATITUDE_ATTRIBUTE));
-		simpleFeatureTypeBuilder.add(
-				attributeTypeBuilder
-						.binding(
-								Double.class)
-						.nillable(
-								false)
-						.buildDescriptor(
-								GDELT_LONGITUDE_ATTRIBUTE));
-		simpleFeatureTypeBuilder.add(
-				attributeTypeBuilder
-						.binding(
-								String.class)
-						.nillable(
-								true)
-						.buildDescriptor(
-								ACTOR_1_NAME_ATTRIBUTE));
-		simpleFeatureTypeBuilder.add(
-				attributeTypeBuilder
-						.binding(
-								String.class)
-						.nillable(
-								true)
-						.buildDescriptor(
-								ACTOR_2_NAME_ATTRIBUTE));
-		simpleFeatureTypeBuilder.add(
-				attributeTypeBuilder
-						.binding(
-								String.class)
-						.nillable(
-								true)
-						.buildDescriptor(
-								ACTION_COUNTRY_CODE_ATTRIBUTE));
-		simpleFeatureTypeBuilder.add(
-				attributeTypeBuilder
-						.binding(
-								String.class)
-						.nillable(
-								true)
-						.buildDescriptor(
-								SOURCE_URL_ATTRIBUTE));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
+				Point.class).nillable(
+				false).buildDescriptor(
+				GDELT_GEOMETRY_ATTRIBUTE));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
+				Integer.class).nillable(
+				false).buildDescriptor(
+				GDELT_EVENT_ID_ATTRIBUTE));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
+				Date.class).nillable(
+				false).buildDescriptor(
+				GDELT_TIMESTAMP_ATTRIBUTE));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
+				Double.class).nillable(
+				false).buildDescriptor(
+				GDELT_LATITUDE_ATTRIBUTE));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
+				Double.class).nillable(
+				false).buildDescriptor(
+				GDELT_LONGITUDE_ATTRIBUTE));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
+				String.class).nillable(
+				true).buildDescriptor(
+				ACTOR_1_NAME_ATTRIBUTE));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
+				String.class).nillable(
+				true).buildDescriptor(
+				ACTOR_2_NAME_ATTRIBUTE));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
+				String.class).nillable(
+				true).buildDescriptor(
+				ACTION_COUNTRY_CODE_ATTRIBUTE));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
+				String.class).nillable(
+				true).buildDescriptor(
+				SOURCE_URL_ATTRIBUTE));
 		if (includeSupplementalFields) {
-			simpleFeatureTypeBuilder.add(
-					attributeTypeBuilder
-							.binding(
-									String.class)
-							.nillable(
-									true)
-							.buildDescriptor(
-									ACTOR_1_COUNTRY_CODE_ATTRIBUTE));
-			simpleFeatureTypeBuilder.add(
-					attributeTypeBuilder
-							.binding(
-									String.class)
-							.nillable(
-									true)
-							.buildDescriptor(
-									ACTOR_2_COUNTRY_CODE_ATTRIBUTE));
-			simpleFeatureTypeBuilder.add(
-					attributeTypeBuilder
-							.binding(
-									Integer.class)
-							.nillable(
-									false)
-							.buildDescriptor(
-									NUM_MENTIONS_ATTRIBUTE));
-			simpleFeatureTypeBuilder.add(
-					attributeTypeBuilder
-							.binding(
-									Integer.class)
-							.nillable(
-									false)
-							.buildDescriptor(
-									NUM_SOURCES_ATTRIBUTE));
-			simpleFeatureTypeBuilder.add(
-					attributeTypeBuilder
-							.binding(
-									Integer.class)
-							.nillable(
-									false)
-							.buildDescriptor(
-									NUM_ARTICLES_ATTRIBUTE));
-			simpleFeatureTypeBuilder.add(
-					attributeTypeBuilder
-							.binding(
-									Double.class)
-							.nillable(
-									false)
-							.buildDescriptor(
-									AVG_TONE_ATTRIBUTE));
+			simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
+					String.class).nillable(
+					true).buildDescriptor(
+					ACTOR_1_COUNTRY_CODE_ATTRIBUTE));
+			simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
+					String.class).nillable(
+					true).buildDescriptor(
+					ACTOR_2_COUNTRY_CODE_ATTRIBUTE));
+			simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
+					Integer.class).nillable(
+					false).buildDescriptor(
+					NUM_MENTIONS_ATTRIBUTE));
+			simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
+					Integer.class).nillable(
+					false).buildDescriptor(
+					NUM_SOURCES_ATTRIBUTE));
+			simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
+					Integer.class).nillable(
+					false).buildDescriptor(
+					NUM_ARTICLES_ATTRIBUTE));
+			simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
+					Double.class).nillable(
+					false).buildDescriptor(
+					AVG_TONE_ATTRIBUTE));
 		}
 
 		return simpleFeatureTypeBuilder.buildFeatureType();
@@ -248,13 +187,11 @@ public class GDELTUtils
 		}
 
 		final Double lat = GeometryUtils.adjustCoordinateDimensionToRange(
-				Double.parseDouble(
-						latString),
+				Double.parseDouble(latString),
 				crs,
 				1);
 		final Double lon = GeometryUtils.adjustCoordinateDimensionToRange(
-				Double.parseDouble(
-						lonString),
+				Double.parseDouble(lonString),
 				crs,
 				0);
 
@@ -267,8 +204,7 @@ public class GDELTUtils
 	public static boolean validate(
 			final File file ) {
 		return file.getName().toLowerCase().matches(
-				"\\d{8}\\.export\\.csv\\.zip")
-				|| file.getName().toLowerCase().matches(
-						"\\d{4,6}\\.zip");
+				"\\d{8}\\.export\\.csv\\.zip") || file.getName().toLowerCase().matches(
+				"\\d{4,6}\\.zip");
 	}
 }

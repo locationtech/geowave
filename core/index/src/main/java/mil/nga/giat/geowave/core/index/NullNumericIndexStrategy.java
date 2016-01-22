@@ -12,7 +12,7 @@ import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
  * and always returning empty IDs and ranges. It can be used in cases when the
  * data is "indexed" by another means, and not using multi-dimensional numeric
  * data.
- *
+ * 
  */
 public class NullNumericIndexStrategy implements
 		NumericIndexStrategy

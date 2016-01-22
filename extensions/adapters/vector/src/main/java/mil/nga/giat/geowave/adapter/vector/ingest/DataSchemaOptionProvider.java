@@ -26,8 +26,7 @@ public class DataSchemaOptionProvider implements
 	@Override
 	public void parseOptions(
 			final CommandLine commandLine ) {
-		if (commandLine.hasOption(
-				SUPPLEMENTAL_OPTION)) {
+		if (commandLine.hasOption(SUPPLEMENTAL_OPTION)) {
 			includeSupplementalFields = true;
 		}
 	}

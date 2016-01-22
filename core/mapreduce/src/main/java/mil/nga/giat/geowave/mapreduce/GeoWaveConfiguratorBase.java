@@ -52,14 +52,14 @@ public class GeoWaveConfiguratorBase
 	/**
 	 * Provides a configuration key for a given feature enum, prefixed by the
 	 * implementingClass, and suffixed by a custom String
-	 *
+	 * 
 	 * @param implementingClass
 	 *            the class whose name will be used as a prefix for the property
 	 *            configuration key
 	 * @param e
 	 *            the enum used to provide the unique part of the configuration
 	 *            key
-	 *
+	 * 
 	 * @param suffix
 	 *            the custom suffix to be used in the configuration key
 	 * @return the configuration key
@@ -76,7 +76,7 @@ public class GeoWaveConfiguratorBase
 	/**
 	 * Provides a configuration key for a given feature enum, prefixed by the
 	 * implementingClass
-	 *
+	 * 
 	 * @param implementingClass
 	 *            the class whose name will be used as a prefix for the property
 	 *            configuration key

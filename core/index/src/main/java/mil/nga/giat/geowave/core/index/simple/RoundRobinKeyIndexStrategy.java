@@ -128,7 +128,7 @@ public class RoundRobinKeyIndexStrategy implements
 	}
 
 	/**
-     * Returns an insertion id selected round-robin from a predefined pool
+	 * Returns an insertion id selected round-robin from a predefined pool
 	 * 
 	 */
 	@Override

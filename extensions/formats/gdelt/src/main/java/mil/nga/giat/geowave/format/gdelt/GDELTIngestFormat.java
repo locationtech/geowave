@@ -37,13 +37,11 @@ public class GDELTIngestFormat extends
 
 	@Override
 	public void setPluginInstanceOptionProviders() {
-		((GDELTIngestPlugin) myInstance).setDataSchemaOptionProvider(
-				dataSchemaOptionProvider);
+		((GDELTIngestPlugin) myInstance).setDataSchemaOptionProvider(dataSchemaOptionProvider);
 	}
 
 	@Override
 	public Collection<? extends IngestFormatOptionProvider> internalGetIngestFormatOptionProviders() {
-		return Collections.singleton(
-				dataSchemaOptionProvider);
+		return Collections.singleton(dataSchemaOptionProvider);
 	}
 }

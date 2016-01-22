@@ -60,14 +60,10 @@ abstract public class AbstractSimpleFeatureIngestFormat<I> implements
 		// TODO: because other formats are not yet implemented,
 		// don't expose the options to the user
 		final List<IngestFormatOptionProvider> providers = new ArrayList<IngestFormatOptionProvider>();
-		providers.add(
-				serializationFormatOptionProvider);
-		providers.add(
-				cqlFilterOptionProvider);
-		providers.add(
-				typeNameOptionProvider);
-		providers.addAll(
-				internalGetIngestFormatOptionProviders());
+		providers.add(serializationFormatOptionProvider);
+		providers.add(cqlFilterOptionProvider);
+		providers.add(typeNameOptionProvider);
+		providers.addAll(internalGetIngestFormatOptionProviders());
 
 		return providers;
 	}
