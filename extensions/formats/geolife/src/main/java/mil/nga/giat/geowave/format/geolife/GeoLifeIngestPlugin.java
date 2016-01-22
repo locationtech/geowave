@@ -10,6 +10,7 @@ import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -157,7 +158,7 @@ public class GeoLifeIngestPlugin extends
 	@Override
 	protected CloseableIterator<GeoWaveData<SimpleFeature>> toGeoWaveDataInternal(
 			final WholeFile hfile,
-			final ByteArrayId primaryIndexId,
+			final Collection<ByteArrayId> primaryIndexIds,
 			final String globalVisibility ) {
 
 		final List<GeoWaveData<SimpleFeature>> featureData = new ArrayList<GeoWaveData<SimpleFeature>>();
@@ -166,7 +167,7 @@ public class GeoLifeIngestPlugin extends
 				hfile.getOriginalFile().array());
 		final InputStreamReader isr = new InputStreamReader(
 				in,
-				StringUtils.UTF8_CHAR_SET);
+				StringUtils.GEOWAVE_CHAR_SET);
 		final BufferedReader br = new BufferedReader(
 				isr);
 		int pointInstance = 0;
@@ -236,7 +237,7 @@ public class GeoLifeIngestPlugin extends
 						elevation);
 				featureData.add(new GeoWaveData<SimpleFeature>(
 						pointKey,
-						primaryIndexId,
+						primaryIndexIds,
 						geolifePointBuilder.buildFeature(trackId + "_" + pointInstance)));
 			}
 
@@ -263,7 +264,7 @@ public class GeoLifeIngestPlugin extends
 					trackId);
 			featureData.add(new GeoWaveData<SimpleFeature>(
 					trackKey,
-					primaryIndexId,
+					primaryIndexIds,
 					geolifeTrackBuilder.buildFeature(trackId)));
 
 		}

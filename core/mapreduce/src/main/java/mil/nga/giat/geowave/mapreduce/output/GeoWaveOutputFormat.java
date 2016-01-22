@@ -313,14 +313,16 @@ public class GeoWaveOutputFormat extends
 				throws IOException {
 			final DataAdapter<?> adapter = adapterStore.getAdapter(ingestKey.getAdapterId());
 			if (adapter instanceof WritableDataAdapter) {
-				final IndexWriter indexWriter = getIndexWriter(ingestKey.getIndexId());
-				if (indexWriter != null) {
-					indexWriter.write(
-							(WritableDataAdapter) adapter,
-							object);
-				}
-				else {
-					LOGGER.warn("Cannot write to index '" + StringUtils.stringFromBinary(ingestKey.getAdapterId().getBytes()) + "'");
+				for (final ByteArrayId indexId : ingestKey.getIndexIds()) {
+					final IndexWriter indexWriter = getIndexWriter(indexId);
+					if (indexWriter != null) {
+						indexWriter.write(
+								(WritableDataAdapter) adapter,
+								object);
+					}
+					else {
+						LOGGER.warn("Cannot write to index '" + StringUtils.stringFromBinary(ingestKey.getAdapterId().getBytes()) + "'");
+					}
 				}
 			}
 			else {

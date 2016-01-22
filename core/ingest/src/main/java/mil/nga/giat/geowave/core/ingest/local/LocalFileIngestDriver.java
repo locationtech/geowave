@@ -87,11 +87,12 @@ public class LocalFileIngestDriver extends
 						e);
 				continue;
 			}
-			final boolean indexSupported = (ingestOptions.getIndex(
+			final boolean indexSupported = (IngestUtils.isSupported(
 					localFileIngestPlugin,
-					args) != null);
+					args,
+					ingestOptions.getDimensionalityTypes()));
 			if (!indexSupported) {
-				LOGGER.warn("Local file ingest plugin for ingest type '" + pluginProvider.getIngestFormatName() + "' does not support dimensionality type '" + ingestOptions.getDimensionalityType() + "'");
+				LOGGER.warn("Local file ingest plugin for ingest type '" + pluginProvider.getIngestFormatName() + "' does not support dimensionality type '" + ingestOptions.getDimensionalityTypeArgument() + "'");
 				continue;
 			}
 			localFileIngestPlugins.put(

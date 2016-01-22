@@ -1,6 +1,7 @@
 package mil.nga.giat.geowave.core.ingest.hdfs.mapreduce;
 
 import java.io.IOException;
+import java.util.List;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayUtils;
@@ -22,7 +23,7 @@ public class IngestReducer extends
 {
 	private IngestWithReducer ingestWithReducer;
 	private String globalVisibility;
-	private ByteArrayId primaryIndexId;
+	private List<ByteArrayId> primaryIndexIds;
 
 	@Override
 	protected void reduce(
@@ -33,7 +34,7 @@ public class IngestReducer extends
 			InterruptedException {
 		try (CloseableIterator<GeoWaveData> data = ingestWithReducer.toGeoWaveData(
 				key,
-				primaryIndexId,
+				primaryIndexIds,
 				globalVisibility,
 				values)) {
 			while (data.hasNext()) {
@@ -60,12 +61,7 @@ public class IngestReducer extends
 					IngestWithReducer.class);
 			globalVisibility = context.getConfiguration().get(
 					AbstractMapReduceIngest.GLOBAL_VISIBILITY_KEY);
-			final String primaryIndexIdStr = context.getConfiguration().get(
-					AbstractMapReduceIngest.PRIMARY_INDEX_ID_KEY);
-			if (primaryIndexIdStr != null) {
-				primaryIndexId = new ByteArrayId(
-						primaryIndexIdStr);
-			}
+			primaryIndexIds = AbstractMapReduceIngest.getPrimaryIndexIds(context.getConfiguration());
 		}
 		catch (final Exception e) {
 			throw new IllegalArgumentException(

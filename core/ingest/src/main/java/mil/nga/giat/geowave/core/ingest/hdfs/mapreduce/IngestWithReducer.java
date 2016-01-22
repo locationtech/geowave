@@ -1,5 +1,7 @@
 package mil.nga.giat.geowave.core.ingest.hdfs.mapreduce;
 
+import java.util.Collection;
+
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.Persistable;
 import mil.nga.giat.geowave.core.ingest.DataAdapterProvider;
@@ -40,7 +42,7 @@ public interface IngestWithReducer<I, K extends WritableComparable<?>, V extends
 
 	public CloseableIterator<GeoWaveData<O>> toGeoWaveData(
 			K key,
-			ByteArrayId primaryIndexId,
+			Collection<ByteArrayId> primaryIndexIds,
 			String globalVisibility,
 			Iterable<V> values );
 }

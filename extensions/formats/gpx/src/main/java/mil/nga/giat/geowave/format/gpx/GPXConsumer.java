@@ -6,6 +6,7 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -75,7 +76,7 @@ public class GPXConsumer implements
 			StringUtils.stringToBinary(GpxUtils.GPX_ROUTE_FEATURE));
 
 	final InputStream fileStream;
-	final ByteArrayId primaryIndexId;
+	final Collection<ByteArrayId> primaryIndexIds;
 	final String inputID;
 	final String globalVisibility;
 	final Map<String, Map<String, String>> additionalData;
@@ -112,14 +113,14 @@ public class GPXConsumer implements
 	 */
 	public GPXConsumer(
 			final InputStream fileStream,
-			final ByteArrayId primaryIndexId,
+			final Collection<ByteArrayId> primaryIndexIds,
 			final String inputID,
 			final Map<String, Map<String, String>> additionalData,
 			final boolean uniqueWayPoints,
 			final String globalVisibility ) {
 		super();
 		this.fileStream = fileStream;
-		this.primaryIndexId = primaryIndexId;
+		this.primaryIndexIds = primaryIndexIds;
 		this.inputID = inputID != null ? inputID : "";
 		this.uniqueWayPoints = uniqueWayPoints;
 		this.additionalData = additionalData;
@@ -801,7 +802,7 @@ public class GPXConsumer implements
 									inputID,
 									false,
 									true),
-							primaryIndexId,
+							primaryIndexIds,
 							trackKey,
 							trackBuilder,
 							additionalData.get(element.getPath()));
@@ -822,7 +823,7 @@ public class GPXConsumer implements
 									inputID,
 									false,
 									true),
-							primaryIndexId,
+							primaryIndexIds,
 							routeKey,
 							routeBuilder,
 							additionalData.get(element.getPath()));
@@ -837,7 +838,7 @@ public class GPXConsumer implements
 									uniqueWayPoints ? "" : inputID,
 									true,
 									!uniqueWayPoints),
-							primaryIndexId,
+							primaryIndexIds,
 							waypointKey,
 							waypointBuilder,
 							additionalData.get(element.getPath()));
@@ -851,7 +852,7 @@ public class GPXConsumer implements
 									inputID,
 									true,
 									true),
-							primaryIndexId,
+							primaryIndexIds,
 							waypointKey,
 							waypointBuilder,
 							additionalData.get(element.getPath()));
@@ -874,7 +875,7 @@ public class GPXConsumer implements
 									inputID,
 									false,
 									true),
-							primaryIndexId,
+							primaryIndexIds,
 							pointKey,
 							pointBuilder,
 							additionalData.get(element.getPath()));
@@ -899,7 +900,7 @@ public class GPXConsumer implements
 
 	private static GeoWaveData<SimpleFeature> buildGeoWaveDataInstance(
 			final String id,
-			final ByteArrayId primaryIndexId,
+			final Collection<ByteArrayId> primaryIndexIds,
 			final ByteArrayId key,
 			final SimpleFeatureBuilder builder,
 			final Map<String, String> additionalDataSet ) {
@@ -913,7 +914,7 @@ public class GPXConsumer implements
 		}
 		return new GeoWaveData<SimpleFeature>(
 				key,
-				primaryIndexId,
+				primaryIndexIds,
 				builder.buildFeature(id));
 	}
 

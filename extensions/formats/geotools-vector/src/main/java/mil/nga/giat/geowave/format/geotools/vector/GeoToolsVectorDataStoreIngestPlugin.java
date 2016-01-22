@@ -3,6 +3,7 @@ package mil.nga.giat.geowave.format.geotools.vector;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -97,7 +98,7 @@ public class GeoToolsVectorDataStoreIngestPlugin implements
 	@Override
 	public CloseableIterator<GeoWaveData<SimpleFeature>> toGeoWaveData(
 			final File input,
-			final ByteArrayId primaryIndexId,
+			final Collection<ByteArrayId> primaryIndexIds,
 			final String visibility ) {
 		DataStore dataStore = null;
 		List<Name> names = null;
@@ -138,7 +139,7 @@ public class GeoToolsVectorDataStoreIngestPlugin implements
 		}
 		return new SimpleFeatureGeoWaveWrapper(
 				featureCollections,
-				primaryIndexId,
+				primaryIndexIds,
 				visibility,
 				dataStore,
 				retypingPlugin,

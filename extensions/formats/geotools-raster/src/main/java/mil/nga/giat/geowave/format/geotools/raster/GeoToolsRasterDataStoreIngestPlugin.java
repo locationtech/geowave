@@ -3,6 +3,7 @@ package mil.nga.giat.geowave.format.geotools.raster;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -72,7 +73,7 @@ public class GeoToolsRasterDataStoreIngestPlugin implements
 	@Override
 	public CloseableIterator<GeoWaveData<GridCoverage>> toGeoWaveData(
 			final File input,
-			final ByteArrayId primaryIndexId,
+			final Collection<ByteArrayId> primaryIndexIds,
 			final String globalVisibility ) {
 
 		final AbstractGridFormat format = GridFormatFinder.findFormat(input);
@@ -106,7 +107,7 @@ public class GeoToolsRasterDataStoreIngestPlugin implements
 				final List<GeoWaveData<GridCoverage>> coverages = new ArrayList<GeoWaveData<GridCoverage>>();
 				coverages.add(new GeoWaveData<GridCoverage>(
 						adapter,
-						primaryIndexId,
+						primaryIndexIds,
 						coverage));
 				return new Wrapper(
 						coverages.iterator()) {

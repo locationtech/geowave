@@ -3,10 +3,15 @@ package mil.nga.giat.geowave.mapreduce.output;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Iterator;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.mapreduce.GeoWaveKey;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.hadoop.io.WritableComparator;
 
 /**
@@ -17,7 +22,11 @@ import org.apache.hadoop.io.WritableComparator;
 public class GeoWaveOutputKey extends
 		GeoWaveKey
 {
-	private ByteArrayId indexId;
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = 1L;
+	private Collection<ByteArrayId> indexIds;
 
 	protected GeoWaveOutputKey() {
 		super();
@@ -28,11 +37,19 @@ public class GeoWaveOutputKey extends
 			final ByteArrayId indexId ) {
 		super(
 				adapterId);
-		this.indexId = indexId;
+		this.indexIds = Arrays.asList(indexId);
 	}
 
-	public ByteArrayId getIndexId() {
-		return indexId;
+	public GeoWaveOutputKey(
+			final ByteArrayId adapterId,
+			final Collection<ByteArrayId> indexIds ) {
+		super(
+				adapterId);
+		this.indexIds = indexIds;
+	}
+
+	public Collection<ByteArrayId> getIndexIds() {
+		return indexIds;
 	}
 
 	@Override
@@ -44,23 +61,37 @@ public class GeoWaveOutputKey extends
 		}
 		if (o instanceof GeoWaveOutputKey) {
 			final GeoWaveOutputKey other = (GeoWaveOutputKey) o;
+			final byte[] thisIndex = getConcatenatedIndexId();
+			final byte[] otherIndex = other.getConcatenatedIndexId();
 			return WritableComparator.compareBytes(
-					indexId.getBytes(),
+					thisIndex,
 					0,
-					indexId.getBytes().length,
-					other.indexId.getBytes(),
+					thisIndex.length,
+					otherIndex,
 					0,
-					other.indexId.getBytes().length);
+					otherIndex.length);
 		}
 		return 1;
+	}
+
+	private byte[] getConcatenatedIndexId() {
+		final Iterator<ByteArrayId> iterator = indexIds.iterator();
+		byte[] bytes = iterator.next().getBytes();
+		if (indexIds.size() > 1) {
+			while (iterator.hasNext()) {
+				bytes = ArrayUtils.addAll(
+						bytes,
+						iterator.next().getBytes());
+			}
+		}
+		return bytes;
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
-		int result = 1;
-		result = (prime * result) + ((adapterId == null) ? 0 : adapterId.hashCode());
-		result = (prime * result) + ((indexId == null) ? 0 : indexId.hashCode());
+		int result = super.hashCode();
+		result = (prime * result) + ((indexIds == null) ? 0 : indexIds.hashCode());
 		return result;
 	}
 
@@ -70,27 +101,19 @@ public class GeoWaveOutputKey extends
 		if (this == obj) {
 			return true;
 		}
-		if (obj == null) {
+		if (!super.equals(obj)) {
 			return false;
 		}
 		if (getClass() != obj.getClass()) {
 			return false;
 		}
 		final GeoWaveOutputKey other = (GeoWaveOutputKey) obj;
-		if (adapterId == null) {
-			if (other.adapterId != null) {
+		if (indexIds == null) {
+			if (other.indexIds != null) {
 				return false;
 			}
 		}
-		else if (!adapterId.equals(other.adapterId)) {
-			return false;
-		}
-		if (indexId == null) {
-			if (other.indexId != null) {
-				return false;
-			}
-		}
-		else if (!indexId.equals(other.indexId)) {
+		else if (!indexIds.equals(other.indexIds)) {
 			return false;
 		}
 		return true;
@@ -101,11 +124,15 @@ public class GeoWaveOutputKey extends
 			final DataInput input )
 			throws IOException {
 		super.readFields(input);
-		final int indexIdLength = input.readInt();
-		final byte[] indexIdBytes = new byte[indexIdLength];
-		input.readFully(indexIdBytes);
-		indexId = new ByteArrayId(
-				indexIdBytes);
+		final byte indexIdCount = input.readByte();
+		indexIds = new ArrayList<ByteArrayId>();
+		for (int i = 0; i < indexIdCount; i++) {
+			final int indexIdLength = input.readInt();
+			final byte[] indexIdBytes = new byte[indexIdLength];
+			input.readFully(indexIdBytes);
+			indexIds.add(new ByteArrayId(
+					indexIdBytes));
+		}
 	}
 
 	@Override
@@ -113,7 +140,10 @@ public class GeoWaveOutputKey extends
 			final DataOutput output )
 			throws IOException {
 		super.write(output);
-		output.writeInt(indexId.getBytes().length);
-		output.write(indexId.getBytes());
+		output.writeByte(indexIds.size());
+		for (final ByteArrayId indexId : indexIds) {
+			output.writeInt(indexId.getBytes().length);
+			output.write(indexId.getBytes());
+		}
 	}
 }
