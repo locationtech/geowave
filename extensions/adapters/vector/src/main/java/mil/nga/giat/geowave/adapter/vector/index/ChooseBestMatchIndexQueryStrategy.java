@@ -123,7 +123,7 @@ public class ChooseBestMatchIndexQueryStrategy implements
 			return false;
 		}
 		final NumericDimensionDefinition[] dimensions = index.getIndexStrategy().getOrderedDimensionDefinitions();
-		if (dimensions.length != 3) {
+		if (dimensions.length < 3) {
 			return false;
 		}
 		boolean hasLat = false, hasLon = false, hasTime = false;

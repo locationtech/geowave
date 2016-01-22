@@ -2,6 +2,7 @@ package mil.nga.giat.geowave.core.ingest.index;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.CompoundIndexStrategy;
+import mil.nga.giat.geowave.core.index.simple.HashKeyIndexStrategy;
 import mil.nga.giat.geowave.core.index.simple.RoundRobinKeyIndexStrategy;
 import mil.nga.giat.geowave.core.ingest.index.BaseIndexOptions.PartitionStrategy;
 import mil.nga.giat.geowave.core.store.index.CustomIdIndex;
@@ -25,8 +26,18 @@ public class BaseIndexOptionProvider implements
 	public PrimaryIndex wrapIndexWithOptions(
 			final PrimaryIndex index ) {
 		PrimaryIndex retVal = index;
-		if ((options.numPartitions > 1) && !options.partitionStrategy.equals(PartitionStrategy.NONE)) {
-			// TODO add random partition strategy
+		if ((options.numPartitions > 1) && !options.partitionStrategy.equals(PartitionStrategy.HASH)) {
+			retVal = new CustomIdIndex(
+					new CompoundIndexStrategy(
+							new HashKeyIndexStrategy(
+									index.getIndexStrategy().getOrderedDimensionDefinitions(),
+									options.numPartitions),
+							index.getIndexStrategy()),
+					index.getIndexModel(),
+					new ByteArrayId(
+							index.getId().getString() + "_" + options.partitionStrategy.name() + "_" + options.numPartitions));
+		}
+		else if ((options.numPartitions > 1) && !options.partitionStrategy.equals(PartitionStrategy.ROUND_ROBIN)) {
 			retVal = new CustomIdIndex(
 					new CompoundIndexStrategy(
 							new RoundRobinKeyIndexStrategy(

@@ -37,7 +37,7 @@ public class BaseIndexOptions
 
 	protected static enum PartitionStrategy {
 		NONE,
-		RANDOM,
+		HASH,
 		ROUND_ROBIN;
 		// converter that will be used later
 		public static PartitionStrategy fromString(
