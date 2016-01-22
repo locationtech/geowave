@@ -17,6 +17,10 @@ public abstract class GeoWaveKey implements
 		WritableComparable<GeoWaveKey>,
 		java.io.Serializable
 {
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = 1L;
 	protected ByteArrayId adapterId;
 
 	protected GeoWaveKey() {}
@@ -31,7 +35,7 @@ public abstract class GeoWaveKey implements
 	}
 
 	public void setAdapterId(
-			ByteArrayId adapterId ) {
+			final ByteArrayId adapterId ) {
 		this.adapterId = adapterId;
 	}
 

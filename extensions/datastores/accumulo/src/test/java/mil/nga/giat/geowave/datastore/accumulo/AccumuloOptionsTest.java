@@ -98,7 +98,8 @@ public class AccumuloOptionsTest
 				accumuloOperations);
 
 		secondaryIndexDataStore = new AccumuloSecondaryIndexDataStore(
-				accumuloOperations);
+				accumuloOperations,
+				new AccumuloOptions());
 
 		mockDataStore = new AccumuloDataStore(
 				indexStore,
