@@ -30,7 +30,7 @@ import org.apache.log4j.Logger;
  * This class can write many entries for a single index by retaining a single
  * open writer. The first entry that is written will open a writer and it is the
  * responsibility of the caller to close this writer when complete.
- * 
+ *
  */
 public class AccumuloIndexWriter implements
 		IndexWriter
@@ -119,6 +119,7 @@ public class AccumuloIndexWriter implements
 						StringUtils.stringFromBinary(index.getId().getBytes()),
 						accumuloOptions.isCreateTable(),
 						true,
+						accumuloOptions.isEnableBlockCache(),
 						index.getIndexStrategy().getNaturalSplits());
 			}
 			catch (final TableNotFoundException e) {
@@ -133,6 +134,7 @@ public class AccumuloIndexWriter implements
 						altIdxTableName,
 						accumuloOptions.isCreateTable(),
 						true,
+						accumuloOptions.isEnableBlockCache(),
 						index.getIndexStrategy().getNaturalSplits());
 			}
 			catch (final TableNotFoundException e) {
