@@ -28,6 +28,7 @@ import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.GeometryFactory;
 
 import mil.nga.giat.geowave.adapter.vector.ingest.AbstractSimpleFeatureIngestPlugin;
+import mil.nga.giat.geowave.adapter.vector.ingest.DataSchemaOptionProvider;
 import mil.nga.giat.geowave.adapter.vector.utils.SimpleFeatureUserDataConfigurationSet;
 import mil.nga.giat.geowave.core.geotime.store.dimension.GeometryWrapper;
 import mil.nga.giat.geowave.core.geotime.store.dimension.Time;
@@ -51,21 +52,27 @@ public class GDELTIngestPlugin extends
 	private final static Logger LOGGER = Logger.getLogger(
 			GDELTIngestPlugin.class);
 
-	private final SimpleFeatureBuilder gdeltEventBuilder;
-	private final SimpleFeatureType gdeltEventType;
+	private SimpleFeatureBuilder gdeltEventBuilder;
+	private SimpleFeatureType gdeltEventType;
 
 	private final ByteArrayId eventKey;
 
 	private CoordinateReferenceSystem crs;
 	private final static String CRS_AUTHORITY = "EPSG:4326";
 
+	private boolean includeSupplementalFields;
+
+	private DataSchemaOptionProvider dataSchemaOptionProvider;
+
 	public GDELTIngestPlugin() {
-		gdeltEventType = GDELTUtils.createGDELTEventDataType();
+
+		// default to reduced data format
+		setIncludeSupplementalFields(
+				false);
+
 		eventKey = new ByteArrayId(
 				StringUtils.stringToBinary(
 						GDELTUtils.GDELT_EVENT_FEATURE));
-		gdeltEventBuilder = new SimpleFeatureBuilder(
-				gdeltEventType);
 
 		try {
 			crs = CRS.decode(
@@ -76,6 +83,23 @@ public class GDELTIngestPlugin extends
 					"Unable to decode Coordinate Reference System authority code!",
 					e);
 		}
+	}
+
+	private void setIncludeSupplementalFields(
+			final boolean includeSupplementalFields ) {
+		this.includeSupplementalFields = includeSupplementalFields;
+
+		gdeltEventType = GDELTUtils.createGDELTEventDataType(
+				includeSupplementalFields);
+		gdeltEventBuilder = new SimpleFeatureBuilder(
+				gdeltEventType);
+	}
+
+	public void setDataSchemaOptionProvider(
+			final DataSchemaOptionProvider dataSchemaOptionProvider ) {
+		this.dataSchemaOptionProvider = dataSchemaOptionProvider;
+		setIncludeSupplementalFields(
+				dataSchemaOptionProvider.includeSupplementalFields());
 	}
 
 	@Override
@@ -189,6 +213,16 @@ public class GDELTIngestPlugin extends
 		int actionGeoType;
 		final double lat = 0;
 		final double lon = 0;
+		String actor1Name = "";
+		String actor2Name = "";
+		String countryCode = "";
+		String sourceUrl = "";
+		String actor1CC = "";
+		String actor2CC = "";
+		String numMentions = "";
+		String numSources = "";
+		String numArticles = "";
+		String avgTone = "";
 
 		String line;
 		int lineNumber = 0;
@@ -250,6 +284,83 @@ public class GDELTIngestPlugin extends
 				gdeltEventBuilder.set(
 						GDELTUtils.GDELT_LONGITUDE_ATTRIBUTE,
 						lon);
+
+				actor1Name = vals[GDELTUtils.ACTOR_1_NAME_COLUMN_ID];
+				if ((actor1Name != null) && !actor1Name.isEmpty()) {
+					gdeltEventBuilder.set(
+							GDELTUtils.ACTOR_1_NAME_ATTRIBUTE,
+							actor1Name);
+				}
+
+				actor2Name = vals[GDELTUtils.ACTOR_2_NAME_COLUMN_ID];
+				if ((actor2Name != null) && !actor2Name.isEmpty()) {
+					gdeltEventBuilder.set(
+							GDELTUtils.ACTOR_2_NAME_ATTRIBUTE,
+							actor2Name);
+				}
+
+				countryCode = vals[GDELTUtils.ACTION_COUNTRY_CODE_COLUMN_ID];
+				if ((countryCode != null) && !countryCode.isEmpty()) {
+					gdeltEventBuilder.set(
+							GDELTUtils.ACTION_COUNTRY_CODE_ATTRIBUTE,
+							countryCode);
+				}
+
+				sourceUrl = vals[GDELTUtils.SOURCE_URL_COLUMN_ID];
+				if ((sourceUrl != null) && !sourceUrl.isEmpty()) {
+					gdeltEventBuilder.set(
+							GDELTUtils.SOURCE_URL_ATTRIBUTE,
+							sourceUrl);
+				}
+
+				if (includeSupplementalFields) {
+
+					actor1CC = vals[GDELTUtils.ACTOR_1_COUNTRY_CODE_COLUMN_ID];
+					if ((actor1CC != null) && !actor1CC.isEmpty()) {
+						gdeltEventBuilder.set(
+								GDELTUtils.ACTOR_1_COUNTRY_CODE_ATTRIBUTE,
+								actor1CC);
+					}
+
+					actor2CC = vals[GDELTUtils.ACTOR_2_COUNTRY_CODE_COLUMN_ID];
+					if ((actor2CC != null) && !actor2CC.isEmpty()) {
+						gdeltEventBuilder.set(
+								GDELTUtils.ACTOR_2_COUNTRY_CODE_ATTRIBUTE,
+								actor2CC);
+					}
+
+					numMentions = vals[GDELTUtils.NUM_MENTIONS_COLUMN_ID];
+					if ((numMentions != null) && !numMentions.isEmpty()) {
+						gdeltEventBuilder.set(
+								GDELTUtils.NUM_MENTIONS_ATTRIBUTE,
+								Integer.parseInt(
+										numMentions));
+					}
+
+					numSources = vals[GDELTUtils.NUM_SOURCES_COLUMN_ID];
+					if ((numSources != null) && !numSources.isEmpty()) {
+						gdeltEventBuilder.set(
+								GDELTUtils.NUM_SOURCES_ATTRIBUTE,
+								Integer.parseInt(
+										numSources));
+					}
+
+					numArticles = vals[GDELTUtils.NUM_ARTICLES_COLUMN_ID];
+					if ((numArticles != null) && !numArticles.isEmpty()) {
+						gdeltEventBuilder.set(
+								GDELTUtils.NUM_ARTICLES_ATTRIBUTE,
+								Integer.parseInt(
+										numArticles));
+					}
+
+					avgTone = vals[GDELTUtils.AVG_TONE_COLUMN_ID];
+					if ((avgTone != null) && !avgTone.isEmpty()) {
+						gdeltEventBuilder.set(
+								GDELTUtils.AVG_TONE_ATTRIBUTE,
+								Double.parseDouble(
+										avgTone));
+					}
+				}
 
 				featureData.add(
 						new GeoWaveData<SimpleFeature>(

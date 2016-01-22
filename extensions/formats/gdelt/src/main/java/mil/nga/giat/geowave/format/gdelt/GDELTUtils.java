@@ -39,8 +39,12 @@ public class GDELTUtils
 				source);
 	}
 
+	public static final int GDELT_MIN_COLUMNS = 57;
+	public static final int GDELT_MAX_COLUMNS = 58;
+
 	public static final String GDELT_EVENT_FEATURE = "gdeltevent";
 
+	// "Core" fields
 	public static final String GDELT_GEOMETRY_ATTRIBUTE = "geometry";
 
 	public static final String GDELT_EVENT_ID_ATTRIBUTE = "eventid";
@@ -51,22 +55,47 @@ public class GDELTUtils
 
 	public static final String GDELT_LATITUDE_ATTRIBUTE = "Latitude";
 	public static final String GDELT_LONGITUDE_ATTRIBUTE = "Longitude";
-
+	public static final int GDELT_ACTION_GEO_TYPE_COLUMN_ID = 49;
 	private static final int GDELT_ACTION_LATITUDE_COLUMN_ID = 53;
 	private static final int GDELT_ACTION_LONGITUDE_COLUMN_ID = 54;
-
 	private static final int GDELT_ACTOR1_LATITUDE_COLUMN_ID = 39;
 	private static final int GDELT_ACTOR1_LONGITUDE_COLUMN_ID = 40;
-
 	private static final int GDELT_ACTOR2_LATITUDE_COLUMN_ID = 46;
 	private static final int GDELT_ACTOR2_LONGITUDE_COLUMN_ID = 47;
 
-	public static final int GDELT_ACTION_GEO_TYPE_COLUMN_ID = 49;
+	public static final String ACTOR_1_NAME_ATTRIBUTE = "actor1Name";
+	public static final int ACTOR_1_NAME_COLUMN_ID = 6;
 
-	public static final int GDELT_MIN_COLUMNS = 57;
-	public static final int GDELT_MAX_COLUMNS = 58;
+	public static final String ACTOR_2_NAME_ATTRIBUTE = "actor2Name";
+	public static final int ACTOR_2_NAME_COLUMN_ID = 16;
 
-	public static SimpleFeatureType createGDELTEventDataType() {
+	public static final String ACTION_COUNTRY_CODE_ATTRIBUTE = "countryCode";
+	public static final int ACTION_COUNTRY_CODE_COLUMN_ID = 51;
+
+	public static final String SOURCE_URL_ATTRIBUTE = "sourceUrl";
+	public static final int SOURCE_URL_COLUMN_ID = 57;
+
+	// "Supplemental" fields
+	public static final String ACTOR_1_COUNTRY_CODE_ATTRIBUTE = "actor1CountryCode";
+	public static final int ACTOR_1_COUNTRY_CODE_COLUMN_ID = 37;
+
+	public static final String ACTOR_2_COUNTRY_CODE_ATTRIBUTE = "actor2CountryCode";
+	public static final int ACTOR_2_COUNTRY_CODE_COLUMN_ID = 44;
+
+	public static final String NUM_MENTIONS_ATTRIBUTE = "numMentions";
+	public static final int NUM_MENTIONS_COLUMN_ID = 31;
+
+	public static final String NUM_SOURCES_ATTRIBUTE = "numSources";
+	public static final int NUM_SOURCES_COLUMN_ID = 32;
+
+	public static final String NUM_ARTICLES_ATTRIBUTE = "numArticles";
+	public static final int NUM_ARTICLES_COLUMN_ID = 33;
+
+	public static final String AVG_TONE_ATTRIBUTE = "avgTone";
+	public static final int AVG_TONE_COLUMN_ID = 34;
+
+	public static SimpleFeatureType createGDELTEventDataType(
+			final boolean includeSupplementalFields ) {
 
 		final SimpleFeatureTypeBuilder simpleFeatureTypeBuilder = new SimpleFeatureTypeBuilder();
 		simpleFeatureTypeBuilder.setName(
@@ -95,7 +124,7 @@ public class GDELTUtils
 						.binding(
 								Date.class)
 						.nillable(
-								true)
+								false)
 						.buildDescriptor(
 								GDELT_TIMESTAMP_ATTRIBUTE));
 		simpleFeatureTypeBuilder.add(
@@ -103,7 +132,7 @@ public class GDELTUtils
 						.binding(
 								Double.class)
 						.nillable(
-								true)
+								false)
 						.buildDescriptor(
 								GDELT_LATITUDE_ATTRIBUTE));
 		simpleFeatureTypeBuilder.add(
@@ -111,9 +140,91 @@ public class GDELTUtils
 						.binding(
 								Double.class)
 						.nillable(
-								true)
+								false)
 						.buildDescriptor(
 								GDELT_LONGITUDE_ATTRIBUTE));
+		simpleFeatureTypeBuilder.add(
+				attributeTypeBuilder
+						.binding(
+								String.class)
+						.nillable(
+								true)
+						.buildDescriptor(
+								ACTOR_1_NAME_ATTRIBUTE));
+		simpleFeatureTypeBuilder.add(
+				attributeTypeBuilder
+						.binding(
+								String.class)
+						.nillable(
+								true)
+						.buildDescriptor(
+								ACTOR_2_NAME_ATTRIBUTE));
+		simpleFeatureTypeBuilder.add(
+				attributeTypeBuilder
+						.binding(
+								String.class)
+						.nillable(
+								true)
+						.buildDescriptor(
+								ACTION_COUNTRY_CODE_ATTRIBUTE));
+		simpleFeatureTypeBuilder.add(
+				attributeTypeBuilder
+						.binding(
+								String.class)
+						.nillable(
+								true)
+						.buildDescriptor(
+								SOURCE_URL_ATTRIBUTE));
+		if (includeSupplementalFields) {
+			simpleFeatureTypeBuilder.add(
+					attributeTypeBuilder
+							.binding(
+									String.class)
+							.nillable(
+									true)
+							.buildDescriptor(
+									ACTOR_1_COUNTRY_CODE_ATTRIBUTE));
+			simpleFeatureTypeBuilder.add(
+					attributeTypeBuilder
+							.binding(
+									String.class)
+							.nillable(
+									true)
+							.buildDescriptor(
+									ACTOR_2_COUNTRY_CODE_ATTRIBUTE));
+			simpleFeatureTypeBuilder.add(
+					attributeTypeBuilder
+							.binding(
+									Integer.class)
+							.nillable(
+									false)
+							.buildDescriptor(
+									NUM_MENTIONS_ATTRIBUTE));
+			simpleFeatureTypeBuilder.add(
+					attributeTypeBuilder
+							.binding(
+									Integer.class)
+							.nillable(
+									false)
+							.buildDescriptor(
+									NUM_SOURCES_ATTRIBUTE));
+			simpleFeatureTypeBuilder.add(
+					attributeTypeBuilder
+							.binding(
+									Integer.class)
+							.nillable(
+									false)
+							.buildDescriptor(
+									NUM_ARTICLES_ATTRIBUTE));
+			simpleFeatureTypeBuilder.add(
+					attributeTypeBuilder
+							.binding(
+									Double.class)
+							.nillable(
+									false)
+							.buildDescriptor(
+									AVG_TONE_ATTRIBUTE));
+		}
 
 		return simpleFeatureTypeBuilder.buildFeatureType();
 
@@ -155,6 +266,9 @@ public class GDELTUtils
 
 	public static boolean validate(
 			final File file ) {
-		return file.getName().toLowerCase().matches("\\d{8}\\.export\\.csv\\.zip") || file.getName().toLowerCase().matches("\\d{6}\\.zip");
+		return file.getName().toLowerCase().matches(
+				"\\d{8}\\.export\\.csv\\.zip")
+				|| file.getName().toLowerCase().matches(
+						"\\d{4,6}\\.zip");
 	}
 }

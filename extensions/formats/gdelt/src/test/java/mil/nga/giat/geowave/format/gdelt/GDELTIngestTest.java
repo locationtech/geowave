@@ -34,10 +34,16 @@ public class GDELTIngestTest
 	public void testIngest()
 			throws IOException {
 
+		final File toIngest = new File(
+				this.getClass().getClassLoader().getResource(
+						filePath).getPath());
+
+		assertTrue(
+				GDELTUtils.validate(
+						toIngest));
+
 		final CloseableIterator<GeoWaveData<SimpleFeature>> features = ingester.toGeoWaveData(
-				new File(
-						this.getClass().getClassLoader().getResource(
-								filePath).getPath()),
+				toIngest,
 				new ByteArrayId(
 						"123".getBytes(
 								StringUtils.UTF8_CHAR_SET)),

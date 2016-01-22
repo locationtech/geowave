@@ -1,7 +1,12 @@
 package mil.nga.giat.geowave.format.gdelt;
 
+import java.util.Collection;
+import java.util.Collections;
+
 import mil.nga.giat.geowave.adapter.vector.ingest.AbstractSimpleFeatureIngestFormat;
 import mil.nga.giat.geowave.adapter.vector.ingest.AbstractSimpleFeatureIngestPlugin;
+import mil.nga.giat.geowave.adapter.vector.ingest.DataSchemaOptionProvider;
+import mil.nga.giat.geowave.core.ingest.IngestFormatOptionProvider;
 import mil.nga.giat.geowave.core.ingest.avro.WholeFile;
 
 /**
@@ -12,6 +17,8 @@ import mil.nga.giat.geowave.core.ingest.avro.WholeFile;
 public class GDELTIngestFormat extends
 		AbstractSimpleFeatureIngestFormat<WholeFile>
 {
+
+	protected final DataSchemaOptionProvider dataSchemaOptionProvider = new DataSchemaOptionProvider();
 
 	@Override
 	protected AbstractSimpleFeatureIngestPlugin<WholeFile> newPluginInstance() {
@@ -26,5 +33,17 @@ public class GDELTIngestFormat extends
 	@Override
 	public String getIngestFormatDescription() {
 		return "files from Google Ideas GDELT data set";
+	}
+
+	@Override
+	public void setPluginInstanceOptionProviders() {
+		((GDELTIngestPlugin) myInstance).setDataSchemaOptionProvider(
+				dataSchemaOptionProvider);
+	}
+
+	@Override
+	public Collection<? extends IngestFormatOptionProvider> internalGetIngestFormatOptionProviders() {
+		return Collections.singleton(
+				dataSchemaOptionProvider);
 	}
 }

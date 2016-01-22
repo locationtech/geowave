@@ -1,12 +1,16 @@
 package mil.nga.giat.geowave.adapter.vector.ingest;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+import org.opengis.feature.simple.SimpleFeature;
+
 import mil.nga.giat.geowave.core.ingest.IngestFormatOptionProvider;
 import mil.nga.giat.geowave.core.ingest.IngestFormatPluginProviderSpi;
 import mil.nga.giat.geowave.core.ingest.avro.AvroFormatPlugin;
 import mil.nga.giat.geowave.core.ingest.hdfs.mapreduce.IngestFromHdfsPlugin;
 import mil.nga.giat.geowave.core.ingest.local.LocalFileIngestPlugin;
-
-import org.opengis.feature.simple.SimpleFeature;
 
 abstract public class AbstractSimpleFeatureIngestFormat<I> implements
 		IngestFormatPluginProviderSpi<I, SimpleFeature>
@@ -18,13 +22,18 @@ abstract public class AbstractSimpleFeatureIngestFormat<I> implements
 	private synchronized AbstractSimpleFeatureIngestPlugin<I> getInstance() {
 		if (myInstance == null) {
 			myInstance = newPluginInstance();
-			myInstance.setFilterProvider(cqlFilterOptionProvider);
-			myInstance.setSerializationFormatProvider(serializationFormatOptionProvider);
+			myInstance.setFilterProvider(
+					cqlFilterOptionProvider);
+			myInstance.setSerializationFormatProvider(
+					serializationFormatOptionProvider);
+			setPluginInstanceOptionProviders();
 		}
 		return myInstance;
 	}
 
 	abstract protected AbstractSimpleFeatureIngestPlugin<I> newPluginInstance();
+
+	protected void setPluginInstanceOptionProviders() {}
 
 	@Override
 	public AvroFormatPlugin<I, SimpleFeature> getAvroFormatPlugin() {
@@ -44,12 +53,26 @@ abstract public class AbstractSimpleFeatureIngestFormat<I> implements
 	@Override
 	public IngestFormatOptionProvider getIngestFormatOptionProvider() {
 		return new MultiOptionProvider(
-				new IngestFormatOptionProvider[] {
-					// TODO: because other formats are not yet implemented,
-					// don't expose the options to the user
-					serializationFormatOptionProvider,
-					cqlFilterOptionProvider
-				});
+				(IngestFormatOptionProvider[]) getIngestFormatOptionProviders().toArray());
+	}
+
+	private List<IngestFormatOptionProvider> getIngestFormatOptionProviders() {
+		// TODO: because other formats are not yet implemented,
+		// don't expose the options to the user
+		final List<IngestFormatOptionProvider> providers = new ArrayList<IngestFormatOptionProvider>();
+		providers.add(
+				serializationFormatOptionProvider);
+		providers.add(
+				cqlFilterOptionProvider);
+
+		providers.addAll(
+				internalGetIngestFormatOptionProviders());
+
+		return providers;
+	}
+
+	protected Collection<? extends IngestFormatOptionProvider> internalGetIngestFormatOptionProviders() {
+		return new ArrayList<IngestFormatOptionProvider>();
 	}
 
 }
