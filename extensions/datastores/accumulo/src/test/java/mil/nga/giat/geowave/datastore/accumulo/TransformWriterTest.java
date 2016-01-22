@@ -65,7 +65,7 @@ public class TransformWriterTest
 			String value ) {
 		Mutation m = new Mutation(
 				new Text(
-						id.getBytes(StringUtils.UTF8_CHAR_SET)));
+						id.getBytes(StringUtils.GEOWAVE_CHAR_SET)));
 		m.put(
 				new Text(
 						cf),
@@ -74,7 +74,7 @@ public class TransformWriterTest
 				new ColumnVisibility(
 						vis),
 				new Value(
-						value.getBytes(StringUtils.UTF8_CHAR_SET)));
+						value.getBytes(StringUtils.GEOWAVE_CHAR_SET)));
 		writer.write(m);
 	}
 
@@ -166,10 +166,10 @@ public class TransformWriterTest
 		check(
 				scanner.iterator(),
 				new Expect(
-						"1234".getBytes(StringUtils.UTF8_CHAR_SET),
+						"1234".getBytes(StringUtils.GEOWAVE_CHAR_SET),
 						2),
 				new Expect(
-						"1235".getBytes(StringUtils.UTF8_CHAR_SET),
+						"1235".getBytes(StringUtils.GEOWAVE_CHAR_SET),
 						2));
 		scanner.close();
 
@@ -180,10 +180,10 @@ public class TransformWriterTest
 		check(
 				scanner.iterator(),
 				new Expect(
-						"1234".getBytes(StringUtils.UTF8_CHAR_SET),
+						"1234".getBytes(StringUtils.GEOWAVE_CHAR_SET),
 						0),
 				new Expect(
-						"1235".getBytes(StringUtils.UTF8_CHAR_SET),
+						"1235".getBytes(StringUtils.GEOWAVE_CHAR_SET),
 						0));
 		scanner.close();
 

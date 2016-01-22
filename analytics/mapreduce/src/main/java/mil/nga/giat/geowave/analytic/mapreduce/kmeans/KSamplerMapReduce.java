@@ -2,8 +2,10 @@ package mil.nga.giat.geowave.analytic.mapreduce.kmeans;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -230,7 +232,7 @@ public class KSamplerMapReduce
 		private CentroidExtractor<T> centroidExtractor;
 		private AnalyticItemWrapperFactory<T> itemWrapperFactory;
 		private ByteArrayId sampleDataTypeId = null;
-		private ByteArrayId indexId;
+		private List<ByteArrayId> indexIds;
 		private int zoomLevel = 1;
 		private String batchID;
 		private final Map<String, Integer> outputCounts = new HashMap<String, Integer>();
@@ -258,7 +260,7 @@ public class KSamplerMapReduce
 						context.write(
 								new GeoWaveOutputKey(
 										sampleDataTypeId,
-										indexId),
+										indexIds),
 								centroid.getWrappedItem());
 						outputCount++;
 						outputCounts.put(
@@ -316,11 +318,12 @@ public class KSamplerMapReduce
 					GlobalParameters.Global.BATCH_ID,
 					UUID.randomUUID().toString());
 
-			indexId = new ByteArrayId(
+			final ByteArrayId indexId = new ByteArrayId(
 					StringUtils.stringToBinary(config.getString(
 							SampleParameters.Sample.INDEX_ID,
 							new SpatialDimensionalityTypeProvider().createPrimaryIndex().getId().getString())));
-
+			indexIds = new ArrayList<ByteArrayId>();
+			indexIds.add(indexId);
 			try {
 				centroidExtractor = config.getInstance(
 						CentroidParameters.Centroid.EXTRACTOR_CLASS,
@@ -385,7 +388,7 @@ public class KSamplerMapReduce
 				final byte[] data ) {
 			return new String(
 					getGroup(data),
-					StringUtils.UTF8_CHAR_SET);
+					StringUtils.GEOWAVE_CHAR_SET);
 		}
 
 		private static byte[] getGroup(
@@ -404,7 +407,7 @@ public class KSamplerMapReduce
 				final double weight,
 				final byte[] dataIdBytes ) {
 			keyBuffer.rewind();
-			final byte[] groupIDBytes = groupID.getBytes(StringUtils.UTF8_CHAR_SET);
+			final byte[] groupIDBytes = groupID.getBytes(StringUtils.GEOWAVE_CHAR_SET);
 			// try to reuse
 			final int size = dataIdBytes.length + 16 + groupIDBytes.length;
 			if (keyBuffer.capacity() < size) {

@@ -58,7 +58,7 @@ abstract public class ServicesTestEnvironment extends
 		try {
 			final PrintWriter writer = new PrintWriter(
 					configFile,
-					StringUtils.UTF8_CHAR_SET.toString());
+					StringUtils.GEOWAVE_CHAR_SET.toString());
 			writer.println("datastore=accumulo");
 			writer.println("zookeeper=" + zookeeper);
 			writer.println("instance=" + accumuloInstance);

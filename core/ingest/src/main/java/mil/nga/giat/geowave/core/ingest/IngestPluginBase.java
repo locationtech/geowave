@@ -1,5 +1,7 @@
 package mil.nga.giat.geowave.core.ingest;
 
+import java.util.Collection;
+
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 
@@ -22,9 +24,9 @@ public interface IngestPluginBase<I, O> extends
 	 * 
 	 * @param input
 	 *            The expected input.
-	 * @param primaryIndexId
-	 *            The index ID specified via a commandline argument (this is
-	 *            typically either the default spatial index or default
+	 * @param primaryIndexIds
+	 *            The set of index IDs specified via a commandline argument
+	 *            (this is typically either the default spatial index or default
 	 *            spatial-temporal index)
 	 * @param globalVisibility
 	 *            If on the command-line the user specifies a global visibility
@@ -36,6 +38,6 @@ public interface IngestPluginBase<I, O> extends
 	 */
 	public CloseableIterator<GeoWaveData<O>> toGeoWaveData(
 			I input,
-			ByteArrayId primaryIndexId,
+			Collection<ByteArrayId> primaryIndexIds,
 			String globalVisibility );
 }

@@ -82,7 +82,7 @@ public class TdriveUtils
 		try {
 			scanner = new Scanner(
 					file,
-					StringUtils.UTF8_CHAR_SET.toString());
+					StringUtils.GEOWAVE_CHAR_SET.toString());
 			if (scanner.hasNextLine()) {
 				final String line = scanner.nextLine();
 				return line.split(",").length == 4;

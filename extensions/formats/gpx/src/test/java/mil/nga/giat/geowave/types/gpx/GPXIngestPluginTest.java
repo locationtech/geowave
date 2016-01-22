@@ -5,6 +5,8 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -62,12 +64,15 @@ public class GPXIngestPluginTest
 				this.getClass().getClassLoader().getResource(
 						"metadata.xml").getPath()).getParentFile());
 
+		final ByteArrayId indexId = new ByteArrayId(
+				"123".getBytes(StringUtils.GEOWAVE_CHAR_SET));
+		final Collection<ByteArrayId> indexIds = new ArrayList<ByteArrayId>();
+		indexIds.add(indexId);
 		final CloseableIterator<GeoWaveData<SimpleFeature>> consumer = pluggin.toGeoWaveData(
 				new File(
 						this.getClass().getClassLoader().getResource(
 								"12345.xml").getPath()),
-				new ByteArrayId(
-						"123".getBytes(StringUtils.UTF8_CHAR_SET)),
+				indexIds,
 				"");
 
 		int totalCount = 0;

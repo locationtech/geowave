@@ -6,6 +6,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
@@ -107,10 +108,10 @@ public class GeoWaveBasicIT extends
 				"true");
 		// ingest both lines and points
 		testLocalIngest(
-				false,
+				DimensionalityType.SPATIAL,
 				HAIL_SHAPEFILE_FILE);
 		testLocalIngest(
-				false,
+				DimensionalityType.SPATIAL,
 				TORNADO_TRACKS_SHAPEFILE_FILE);
 
 		try {
@@ -271,11 +272,13 @@ public class GeoWaveBasicIT extends
 		final LocalFileIngestPlugin<SimpleFeature> localFileIngest = new GeoToolsVectorDataStoreIngestPlugin(
 				Filter.INCLUDE);
 		final Map<ByteArrayId, StatisticsCache> statsCache = new HashMap<ByteArrayId, StatisticsCache>();
+		final Collection<ByteArrayId> indexIds = new ArrayList<ByteArrayId>();
+		indexIds.add(index.getId());
 		for (final File inputFile : inputFiles) {
 			LOGGER.warn("Calculating stats from file '" + inputFile.getName() + "' - this may take several minutes...");
 			try (final CloseableIterator<GeoWaveData<SimpleFeature>> dataIterator = localFileIngest.toGeoWaveData(
 					inputFile,
-					index.getId(),
+					indexIds,
 					null)) {
 				final AdapterStore adapterCache = new MemoryAdapterStore(
 						localFileIngest.getDataAdapters(null));
@@ -405,10 +408,10 @@ public class GeoWaveBasicIT extends
 				"true");
 		// ingest both lines and points
 		testLocalIngest(
-				true,
+				DimensionalityType.SPATIAL_TEMPORAL,
 				HAIL_SHAPEFILE_FILE);
 		testLocalIngest(
-				true,
+				DimensionalityType.SPATIAL_TEMPORAL,
 				TORNADO_TRACKS_SHAPEFILE_FILE);
 		try {
 			testQuery(

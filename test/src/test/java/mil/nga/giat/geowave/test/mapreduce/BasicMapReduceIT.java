@@ -85,7 +85,7 @@ public class BasicMapReduceIT extends
 			Assert.fail("Index not deleted successfully");
 		}
 		testMapReduceIngest(
-				false,
+				DimensionalityType.SPATIAL,
 				GENERAL_GPX_INPUT_GPX_DIR);
 		final File gpxInputDir = new File(
 				GENERAL_GPX_INPUT_GPX_DIR);
@@ -160,10 +160,7 @@ public class BasicMapReduceIT extends
 		// ingest the data set into multiple indices and then try several query
 		// methods, by adapter and by index
 		testMapReduceIngest(
-				true,
-				OSM_GPX_INPUT_DIR);
-		testMapReduceIngest(
-				false,
+				DimensionalityType.ALL,
 				OSM_GPX_INPUT_DIR);
 		final WritableDataAdapter<SimpleFeature>[] adapters = new GpxIngestPlugin().getDataAdapters(null);
 

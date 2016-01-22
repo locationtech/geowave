@@ -20,8 +20,11 @@ import org.slf4j.LoggerFactory;
  */
 public class StringUtils
 {
+
+	public static final Charset GEOWAVE_CHAR_SET = Charset.forName("ISO-8859-1");
+	public static final Charset UTF8_CHAR_SET = Charset.forName("UTF-8");
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(StringUtils.class);
-	public static final Charset UTF8_CHAR_SET = Charset.forName("ISO-8859-1");
 
 	/**
 	 * Utility to convert a String to bytes
@@ -32,7 +35,7 @@ public class StringUtils
 	 */
 	public static byte[] stringToBinary(
 			final String string ) {
-		return string.getBytes(UTF8_CHAR_SET);
+		return string.getBytes(GEOWAVE_CHAR_SET);
 	}
 
 	/**
@@ -47,7 +50,7 @@ public class StringUtils
 		int len = 4;
 		final List<byte[]> strsBytes = new ArrayList<byte[]>();
 		for (final String str : strings) {
-			final byte[] strByte = str.getBytes(UTF8_CHAR_SET);
+			final byte[] strByte = str.getBytes(GEOWAVE_CHAR_SET);
 			strsBytes.add(strByte);
 			len += (strByte.length + 4);
 
@@ -72,7 +75,7 @@ public class StringUtils
 			final byte[] binary ) {
 		return new String(
 				binary,
-				UTF8_CHAR_SET);
+				GEOWAVE_CHAR_SET);
 	}
 
 	/**
@@ -93,7 +96,7 @@ public class StringUtils
 			buf.get(strBytes);
 			result[i] = new String(
 					strBytes,
-					UTF8_CHAR_SET);
+					GEOWAVE_CHAR_SET);
 		}
 		return result;
 	}

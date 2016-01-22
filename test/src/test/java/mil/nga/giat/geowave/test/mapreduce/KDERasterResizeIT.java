@@ -64,7 +64,7 @@ public class KDERasterResizeIT extends
 			throws Exception {
 		accumuloOperations.deleteAll();
 		testLocalIngest(
-				false,
+				DimensionalityType.SPATIAL,
 				KDE_SHAPEFILE_FILE);
 		// use the min level to define the request boundary because it is the
 		// most coarse grain

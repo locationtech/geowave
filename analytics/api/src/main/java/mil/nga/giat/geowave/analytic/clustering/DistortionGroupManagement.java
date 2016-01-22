@@ -4,6 +4,7 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -14,7 +15,6 @@ import mil.nga.giat.geowave.analytic.AnalyticItemWrapperFactory;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
 import mil.nga.giat.geowave.core.index.StringUtils;
-import mil.nga.giat.geowave.core.index.sfc.data.BasicNumericDataset;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.DataStore;
@@ -63,6 +63,7 @@ public class DistortionGroupManagement
 	final static Logger LOGGER = LoggerFactory.getLogger(DistortionGroupManagement.class);
 	public final static PrimaryIndex DISTORTIONS_INDEX = new NullIndex(
 			"DISTORTIONS");
+	public final static List<ByteArrayId> DISTORTIONS_INDEX_LIST = Arrays.asList(DISTORTIONS_INDEX.getId());
 
 	final DataStore dataStore;
 	final IndexStore indexStore;
@@ -89,18 +90,18 @@ public class DistortionGroupManagement
 		}
 
 		public BatchIdFilter(
-				String batchId ) {
+				final String batchId ) {
 			super();
 			this.batchId = batchId;
 		}
 
 		@Override
 		public boolean accept(
-				CommonIndexModel indexModel,
-				IndexedPersistenceEncoding<?> persistenceEncoding ) {
+				final CommonIndexModel indexModel,
+				final IndexedPersistenceEncoding<?> persistenceEncoding ) {
 			return new DistortionEntry(
 					persistenceEncoding.getDataId(),
-					(Double) 0.0).batchId.equals(batchId);
+					0.0).batchId.equals(batchId);
 		}
 
 		@Override
@@ -110,7 +111,7 @@ public class DistortionGroupManagement
 
 		@Override
 		public void fromBinary(
-				byte[] bytes ) {
+				final byte[] bytes ) {
 			batchId = StringUtils.stringFromBinary(bytes);
 		}
 	}
@@ -123,27 +124,27 @@ public class DistortionGroupManagement
 		public BatchIdQuery() {}
 
 		public BatchIdQuery(
-				String batchId ) {
+				final String batchId ) {
 			super();
 			this.batchId = batchId;
 		}
 
 		@Override
 		public List<QueryFilter> createFilters(
-				CommonIndexModel indexModel ) {
+				final CommonIndexModel indexModel ) {
 			return Collections.<QueryFilter> singletonList(new BatchIdFilter(
 					batchId));
 		}
 
 		@Override
 		public boolean isSupported(
-				Index<?, ?> index ) {
+				final Index<?, ?> index ) {
 			return index instanceof NullIndex;
 		}
 
 		@Override
 		public List<MultiDimensionalNumericData> getIndexConstraints(
-				NumericIndexStrategy indexStrategy ) {
+				final NumericIndexStrategy indexStrategy ) {
 			return Collections.emptyList();
 		}
 

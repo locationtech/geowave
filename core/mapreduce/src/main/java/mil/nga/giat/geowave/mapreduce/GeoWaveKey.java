@@ -52,6 +52,28 @@ public abstract class GeoWaveKey implements
 	}
 
 	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((adapterId == null) ? 0 : adapterId.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(
+			Object obj ) {
+		if (this == obj) return true;
+		if (obj == null) return false;
+		if (getClass() != obj.getClass()) return false;
+		GeoWaveKey other = (GeoWaveKey) obj;
+		if (adapterId == null) {
+			if (other.adapterId != null) return false;
+		}
+		else if (!adapterId.equals(other.adapterId)) return false;
+		return true;
+	}
+
+	@Override
 	public void readFields(
 			final DataInput input )
 			throws IOException {

@@ -1,6 +1,7 @@
 package mil.nga.giat.geowave.format.geotools.vector;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
@@ -108,7 +109,7 @@ public class SimpleFeatureGeoWaveWrapper implements
 			while (!filter.evaluate(nextAcceptedFeature));
 			currentData = new GeoWaveData<SimpleFeature>(
 					dataAdapter,
-					primaryIndexId,
+					primaryIndexIds,
 					nextAcceptedFeature);
 			return true;
 		}
@@ -125,7 +126,7 @@ public class SimpleFeatureGeoWaveWrapper implements
 	}
 
 	private final List<SimpleFeatureCollection> featureCollections;
-	private final ByteArrayId primaryIndexId;
+	private final Collection<ByteArrayId> primaryIndexIds;
 	private InternalIterator currentIterator = null;
 	private final String visibility;
 	private final DataStore dataStore;
@@ -134,14 +135,14 @@ public class SimpleFeatureGeoWaveWrapper implements
 
 	public SimpleFeatureGeoWaveWrapper(
 			final List<SimpleFeatureCollection> featureCollections,
-			final ByteArrayId primaryIndexId,
+			final Collection<ByteArrayId> primaryIndexIds,
 			final String visibility,
 			final DataStore dataStore,
 			final RetypingVectorDataPlugin retypingPlugin,
 			final Filter filter ) {
 		this.featureCollections = featureCollections;
 		this.visibility = visibility;
-		this.primaryIndexId = primaryIndexId;
+		this.primaryIndexIds = primaryIndexIds;
 		this.dataStore = dataStore;
 		this.retypingPlugin = retypingPlugin;
 		this.filter = filter;
