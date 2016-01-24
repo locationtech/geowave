@@ -10,7 +10,7 @@ import org.apache.hadoop.io.Writable;
  * representation of the objects. This allow for generally applicable map reduce
  * jobs to be written using base classes for the mapper that can handle
  * translations.
- *
+ * 
  * @param <T>
  *            the native type
  * @param <W>

@@ -23,12 +23,6 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 
-//@formatter:off
-/*if[ACCUMULO_1.5.2]
- else[ACCUMULO_1.5.2]*/
-/*end[ACCUMULO_1.5.2]*/
-//@formatter:on
-
 /**
  * 
  * Calculate the distortation.

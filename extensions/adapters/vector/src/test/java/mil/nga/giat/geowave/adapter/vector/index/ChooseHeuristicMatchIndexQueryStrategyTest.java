@@ -50,7 +50,10 @@ public class ChooseHeuristicMatchIndexQueryStrategyTest
 		final Iterator<Index<?, ?>> it = getIndices(
 				new HashMap<ByteArrayId, DataStatistics<SimpleFeature>>(),
 				new BasicQuery(
-						createConstraints(HOUSE, HOUSE, HOUR)),
+						createConstraints(
+								HOUSE,
+								HOUSE,
+								HOUR)),
 				strategy);
 		assertTrue(it.hasNext());
 		assertEquals(
@@ -67,7 +70,10 @@ public class ChooseHeuristicMatchIndexQueryStrategyTest
 		final Iterator<Index<?, ?>> it = getIndices(
 				new HashMap<ByteArrayId, DataStatistics<SimpleFeature>>(),
 				new BasicQuery(
-						createConstraints(HOUSE, HOUSE, DAY)),
+						createConstraints(
+								HOUSE,
+								HOUSE,
+								DAY)),
 				strategy);
 		assertTrue(it.hasNext());
 		assertEquals(
@@ -81,11 +87,13 @@ public class ChooseHeuristicMatchIndexQueryStrategyTest
 	public void testChooseSpatialWithoutStatsHouseWeek() {
 		final ChooseHeuristicMatchIndexQueryStrategy strategy = new ChooseHeuristicMatchIndexQueryStrategy();
 
-
 		final Iterator<Index<?, ?>> it = getIndices(
 				new HashMap<ByteArrayId, DataStatistics<SimpleFeature>>(),
 				new BasicQuery(
-						createConstraints(HOUSE, HOUSE, WEEK)),
+						createConstraints(
+								HOUSE,
+								HOUSE,
+								WEEK)),
 				strategy);
 		assertTrue(it.hasNext());
 		assertEquals(
@@ -102,7 +110,10 @@ public class ChooseHeuristicMatchIndexQueryStrategyTest
 		final Iterator<Index<?, ?>> it = getIndices(
 				new HashMap<ByteArrayId, DataStatistics<SimpleFeature>>(),
 				new BasicQuery(
-						createConstraints(BLOCK, BLOCK, HOUR)),
+						createConstraints(
+								BLOCK,
+								BLOCK,
+								HOUR)),
 				strategy);
 		assertTrue(it.hasNext());
 		assertEquals(
@@ -119,7 +130,10 @@ public class ChooseHeuristicMatchIndexQueryStrategyTest
 		final Iterator<Index<?, ?>> it = getIndices(
 				new HashMap<ByteArrayId, DataStatistics<SimpleFeature>>(),
 				new BasicQuery(
-						createConstraints(BLOCK, BLOCK, DAY)),
+						createConstraints(
+								BLOCK,
+								BLOCK,
+								DAY)),
 				strategy);
 		assertTrue(it.hasNext());
 		assertEquals(
@@ -136,7 +150,10 @@ public class ChooseHeuristicMatchIndexQueryStrategyTest
 		final Iterator<Index<?, ?>> it = getIndices(
 				new HashMap<ByteArrayId, DataStatistics<SimpleFeature>>(),
 				new BasicQuery(
-						createConstraints(BLOCK, BLOCK, WEEK)),
+						createConstraints(
+								BLOCK,
+								BLOCK,
+								WEEK)),
 				strategy);
 		assertTrue(it.hasNext());
 		assertEquals(
@@ -153,7 +170,10 @@ public class ChooseHeuristicMatchIndexQueryStrategyTest
 		final Iterator<Index<?, ?>> it = getIndices(
 				new HashMap<ByteArrayId, DataStatistics<SimpleFeature>>(),
 				new BasicQuery(
-						createConstraints(CITY, CITY, HOUR)),
+						createConstraints(
+								CITY,
+								CITY,
+								HOUR)),
 				strategy);
 		assertTrue(it.hasNext());
 		assertEquals(
@@ -170,7 +190,10 @@ public class ChooseHeuristicMatchIndexQueryStrategyTest
 		final Iterator<Index<?, ?>> it = getIndices(
 				new HashMap<ByteArrayId, DataStatistics<SimpleFeature>>(),
 				new BasicQuery(
-						createConstraints(CITY, CITY, DAY)),
+						createConstraints(
+								CITY,
+								CITY,
+								DAY)),
 				strategy);
 		assertTrue(it.hasNext());
 		assertEquals(
@@ -187,7 +210,10 @@ public class ChooseHeuristicMatchIndexQueryStrategyTest
 		final Iterator<Index<?, ?>> it = getIndices(
 				new HashMap<ByteArrayId, DataStatistics<SimpleFeature>>(),
 				new BasicQuery(
-						createConstraints(CITY, CITY, WEEK)),
+						createConstraints(
+								CITY,
+								CITY,
+								WEEK)),
 				strategy);
 		assertTrue(it.hasNext());
 		assertEquals(

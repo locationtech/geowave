@@ -35,7 +35,7 @@
 		<geotools.version>13.2</geotools.version>
 		<hadoop.env.classifier>hadoop2</hadoop.env.classifier>
 		<geoserver.version>2.7.2</geoserver.version>
-		<accumulo.version>1.6.4</accumulo.version>
+		<accumulo.version>1.7.0</accumulo.version>
 		<hadoop.version>2.6.0</hadoop.version>
 		<avro.version>1.7.6</avro.version>
 		<commons.cli.version>1.2</commons.cli.version>
@@ -415,20 +415,17 @@
 					<scripts>
 						<script><![CDATA[
 			                import org.apache.maven.plugin.MojoExecutionException
-			                if (System.properties["accumulo.version"]){
-			                    String accumVer = System.properties["accumulo.version"]
-			                    if (accumVer.substring(0,3) == "1.5"){
-			                       if (!System.properties["accumulo.legacy"])
-			                          throw new MojoExecutionException("Error: When defining -Daccumulo.version=" + accumVer + ", you must also define -Daccumulo.legacy")
-			                    }
-			                    else {
-			                       if (System.properties["accumulo.legacy"])
-			                          throw new MojoExecutionException("Error: When defining -Daccumulo.version=" + accumVer + ", you should not define -Daccumulo.legacy")
-			                    }
-			                }
-			                else {
-			                    if (System.properties["accumulo.legacy"])
-			                        throw new MojoExecutionException("Error: For default builds, you should not define -Daccumulo.legacy")
+			                String accumuloVersion = System.getProperties().getProperty("accumulo.version")
+							String accumuloAPI = System.getProperties().getProperty("accumulo.api")
+							if (accumuloVersion != null){
+			                	String apiVersion = accumuloVersion.substring(0,3)
+			                	if (accumuloAPI == null) {
+			                		throw new MojoExecutionException("Error: When defining -Daccumulo.version=" + accumuloVersion + ", you must also define -Daccumulo.api=" + apiVersion)
+			                	} else if (!accumuloAPI.equals(apiVersion)) {
+			                		throw new MojoExecutionException("Error: Setting -Daccumulo.version=" + accumuloVersion + ", is not the same API version as set in -Daccumulo.api=" + accumuloAPI + "; value should be: " + apiVersion)
+			                	}
+			                } else if (accumuloAPI != null) {
+			                		throw new MojoExecutionException("Error: When defining -Daccumulo.api=" + accumuloAPI + ", you must also define -Daccumulo.version equal to a version compatible with that api")
 			                }
                     ]]></script>
 					</scripts>

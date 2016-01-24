@@ -17,7 +17,7 @@ import org.apache.log4j.Logger;
 /**
  * Represents a query operation by an Accumulo row. This abstraction is
  * re-usable for both exact row ID queries and row prefix queries.
- *
+ * 
  */
 abstract public class AbstractAccumuloRowQuery<T> extends
 		AccumuloQuery
