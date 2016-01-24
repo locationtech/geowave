@@ -81,11 +81,9 @@ abstract public class AccumuloQuery
 					}
 					else {
 
-						final int cardinalityToSubsample = (int) Math.round(
-								IndexUtils.getDimensionalBitsUsed(
-										index.getIndexStrategy(),
-										maxResolutionSubsamplingPerDimension)
-								 + (8 * index.getIndexStrategy().getByteOffsetFromDimensionalIndex()));
+						final int cardinalityToSubsample = (int) Math.round(IndexUtils.getDimensionalBitsUsed(
+								index.getIndexStrategy(),
+								maxResolutionSubsamplingPerDimension) + (8 * index.getIndexStrategy().getByteOffsetFromDimensionalIndex()));
 
 						final IteratorSetting iteratorSettings = new IteratorSetting(
 								FixedCardinalitySkippingIterator.CARDINALITY_SKIPPING_ITERATOR_PRIORITY,

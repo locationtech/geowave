@@ -27,7 +27,7 @@ import org.apache.hadoop.security.Credentials;
  * This class wraps an existing reduce context that will write hadoop writable
  * objects as a reduce context that writes the native object for ease of
  * implementing mapreduce jobs.
- *
+ * 
  * @param <KEYIN>
  *            The reduce context's input type
  * @param <VALUEIN>

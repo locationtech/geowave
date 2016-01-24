@@ -39,8 +39,10 @@ public class IndexUtils
 					bitsUsed,
 					result);
 		}
-		// The least constraining dimension uses the least amount of bits of fixed bits from the left.
-		// For example, half of the world latitude is 1 bit, 1/4 of the world is 2 bits etc.
+		// The least constraining dimension uses the least amount of bits of
+		// fixed bits from the left.
+		// For example, half of the world latitude is 1 bit, 1/4 of the world is
+		// 2 bits etc.
 		// Use the least constraining dimension, but multiply by the
 		// # of dimensions.
 		return result * cellRangePerDimension.length;

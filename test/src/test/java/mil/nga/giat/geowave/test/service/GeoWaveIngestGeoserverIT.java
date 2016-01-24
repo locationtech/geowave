@@ -125,7 +125,7 @@ public class GeoWaveIngestGeoserverIT extends
 				WORKSPACE));
 		Assert.assertTrue(geoserverServiceClient.publishLayer(
 				TEST_NAMESPACE,
-				"default_point",
+				"point",
 				SimpleIngest.FEATURE_NAME,
 				WORKSPACE));
 
@@ -135,7 +135,7 @@ public class GeoWaveIngestGeoserverIT extends
 				-90,
 				90,
 				"GridPoint",
-				"",
+				"point",
 				920,
 				360,
 				null);

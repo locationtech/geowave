@@ -35,7 +35,7 @@ import com.google.common.collect.ImmutableBiMap.Builder;
 /**
  * This class uses multiple SpaceFillingCurve objects, one per tier, to
  * represent a single cohesive index strategy with multiple precisions
- *
+ * 
  */
 public class TieredSFCIndexStrategy implements
 		HierarchicalNumericIndexStrategy
@@ -53,7 +53,7 @@ public class TieredSFCIndexStrategy implements
 
 	/**
 	 * Constructor used to create a Tiered Index Strategy.
-	 *
+	 * 
 	 * @param baseDefinitions
 	 *            the dimension definitions of the space filling curve
 	 * @param orderedSfcs
@@ -139,7 +139,7 @@ public class TieredSFCIndexStrategy implements
 
 	/**
 	 * Returns a list of query ranges for an specified numeric range.
-	 *
+	 * 
 	 * @param indexedRange
 	 *            defines the numeric range for the query
 	 * @return a List of query ranges
@@ -154,7 +154,7 @@ public class TieredSFCIndexStrategy implements
 
 	/**
 	 * Returns a list of id's for insertion.
-	 *
+	 * 
 	 * @param indexedData
 	 *            defines the numeric data to be indexed
 	 * @return a List of insertion ID's

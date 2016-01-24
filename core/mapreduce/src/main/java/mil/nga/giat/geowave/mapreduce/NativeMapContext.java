@@ -28,7 +28,7 @@ import org.apache.hadoop.security.Credentials;
  * This class wraps an existing map context that will write hadoop writable
  * objects as a map context that writes the native object for ease of
  * implementing mapreduce jobs.
- *
+ * 
  * @param <KEYIN>
  *            The map context's input type
  * @param <VALUEIN>

@@ -29,16 +29,16 @@ import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
  * configured to persist indices or adapters, it is advised to always provide
  * adapters and indices to a QueryOptions. This maximizes the reuse of the code
  * making the query.
- *
+ * 
  * If no index is provided, all indices are checked. The data store is expected
  * to use statistics to determine which the indices that index data for the any
  * given adapter.
- *
+ * 
  * If queries are made across multiple indices, the default is to de-duplicate.
- *
+ * 
  * Container object that encapsulates additional options to be applied to a
  * {@link Query}
- *
+ * 
  * @since 0.8.7
  */
 
@@ -133,7 +133,7 @@ public class QueryOptions implements
 	}
 
 	/**
-	 *
+	 * 
 	 * @param adapter
 	 * @param index
 	 * @param limit
@@ -222,7 +222,7 @@ public class QueryOptions implements
 	}
 
 	/**
-	 *
+	 * 
 	 * @return Limit the number of data items to return
 	 */
 	public Integer getLimit() {
@@ -231,7 +231,7 @@ public class QueryOptions implements
 
 	/**
 	 * a value <= 0 or null indicates no limits
-	 *
+	 * 
 	 * @param limit
 	 */
 	public void setLimit(
@@ -261,7 +261,7 @@ public class QueryOptions implements
 	}
 
 	/**
-	 *
+	 * 
 	 * @return authorizations to apply to the query in addition to the
 	 *         authorizations assigned to the data store as a whole.
 	 */
