@@ -23,9 +23,12 @@ abstract public class AbstractSimpleFeatureIngestFormat<I> implements
 	private synchronized AbstractSimpleFeatureIngestPlugin<I> getInstance() {
 		if (myInstance == null) {
 			myInstance = newPluginInstance();
-			myInstance.setFilterProvider(cqlFilterOptionProvider);
-			myInstance.setTypeNameProvider(typeNameOptionProvider);
-			myInstance.setSerializationFormatProvider(serializationFormatOptionProvider);
+			myInstance.setFilterProvider(
+					cqlFilterOptionProvider);
+			myInstance.setTypeNameProvider(
+					typeNameOptionProvider);
+			myInstance.setSerializationFormatProvider(
+					serializationFormatOptionProvider);
 			setPluginInstanceOptionProviders();
 		}
 		return myInstance;
@@ -53,17 +56,22 @@ abstract public class AbstractSimpleFeatureIngestFormat<I> implements
 	@Override
 	public IngestFormatOptionProvider getIngestFormatOptionProvider() {
 		return new MultiOptionProvider(
-				(IngestFormatOptionProvider[]) getIngestFormatOptionProviders().toArray());
+				getIngestFormatOptionProviders().toArray(
+						new IngestFormatOptionProvider[] {}));
 	}
 
 	private List<IngestFormatOptionProvider> getIngestFormatOptionProviders() {
 		// TODO: because other formats are not yet implemented,
 		// don't expose the options to the user
 		final List<IngestFormatOptionProvider> providers = new ArrayList<IngestFormatOptionProvider>();
-		providers.add(serializationFormatOptionProvider);
-		providers.add(cqlFilterOptionProvider);
-		providers.add(typeNameOptionProvider);
-		providers.addAll(internalGetIngestFormatOptionProviders());
+		providers.add(
+				serializationFormatOptionProvider);
+		providers.add(
+				cqlFilterOptionProvider);
+		providers.add(
+				typeNameOptionProvider);
+		providers.addAll(
+				internalGetIngestFormatOptionProviders());
 
 		return providers;
 	}
