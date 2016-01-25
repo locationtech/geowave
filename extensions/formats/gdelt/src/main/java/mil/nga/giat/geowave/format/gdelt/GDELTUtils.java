@@ -10,11 +10,8 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.geotools.feature.AttributeTypeBuilder;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.opengis.feature.simple.SimpleFeatureType;
-import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.vividsolutions.jts.geom.Point;
-
-import mil.nga.giat.geowave.adapter.vector.utils.GeometryUtils;
 
 /**
  * This is a convenience class for performing common GDELT static utility
@@ -170,30 +167,25 @@ public class GDELTUtils
 	}
 
 	public static Pair<Double, Double> parseLatLon(
-			final String[] vals,
-			final CoordinateReferenceSystem crs ) {
+			final String[] vals ) {
 
 		String latString = vals[GDELTUtils.GDELT_ACTION_LATITUDE_COLUMN_ID];
 		String lonString = vals[GDELTUtils.GDELT_ACTION_LONGITUDE_COLUMN_ID];
 
-		if ((latString == null) || (lonString == null) || (latString.length() < 1) || (lonString.length() < 1)) {
+		if ((latString == null) || (lonString == null) || latString.trim().isEmpty() || lonString.trim().isEmpty()) {
 			latString = vals[GDELTUtils.GDELT_ACTOR1_LATITUDE_COLUMN_ID];
 			lonString = vals[GDELTUtils.GDELT_ACTOR1_LONGITUDE_COLUMN_ID];
 		}
 
-		if ((latString == null) || (lonString == null) || (latString.length() < 1) || (lonString.length() < 1)) {
+		if ((latString == null) || (lonString == null) || latString.trim().isEmpty() || lonString.trim().isEmpty()) {
 			latString = vals[GDELTUtils.GDELT_ACTOR2_LATITUDE_COLUMN_ID];
 			lonString = vals[GDELTUtils.GDELT_ACTOR2_LONGITUDE_COLUMN_ID];
 		}
-
-		final Double lat = GeometryUtils.adjustCoordinateDimensionToRange(
-				Double.parseDouble(latString),
-				crs,
-				1);
-		final Double lon = GeometryUtils.adjustCoordinateDimensionToRange(
-				Double.parseDouble(lonString),
-				crs,
-				0);
+		if ((latString == null) || (lonString == null) || latString.trim().isEmpty() || lonString.trim().isEmpty()) {
+			return null;
+		}
+		final Double lat = Double.parseDouble(latString);
+		final Double lon = Double.parseDouble(lonString);
 
 		return Pair.of(
 				lat,

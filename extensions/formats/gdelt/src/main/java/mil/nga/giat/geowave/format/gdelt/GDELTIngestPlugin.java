@@ -15,6 +15,18 @@ import java.util.Date;
 import java.util.List;
 import java.util.zip.ZipInputStream;
 
+import org.apache.avro.Schema;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.tuple.Pair;
+import org.apache.log4j.Logger;
+import org.geotools.feature.simple.SimpleFeatureBuilder;
+import org.opengis.feature.simple.SimpleFeature;
+import org.opengis.feature.simple.SimpleFeatureType;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+
+import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.GeometryFactory;
+
 import mil.nga.giat.geowave.adapter.vector.ingest.AbstractSimpleFeatureIngestPlugin;
 import mil.nga.giat.geowave.adapter.vector.ingest.DataSchemaOptionProvider;
 import mil.nga.giat.geowave.adapter.vector.utils.SimpleFeatureUserDataConfigurationSet;
@@ -31,19 +43,6 @@ import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 
-import org.apache.avro.Schema;
-import org.apache.commons.io.IOUtils;
-import org.apache.log4j.Logger;
-import org.geotools.feature.simple.SimpleFeatureBuilder;
-import org.geotools.referencing.CRS;
-import org.opengis.feature.simple.SimpleFeature;
-import org.opengis.feature.simple.SimpleFeatureType;
-import org.opengis.referencing.FactoryException;
-import org.opengis.referencing.crs.CoordinateReferenceSystem;
-
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.GeometryFactory;
-
 /*
  */
 public class GDELTIngestPlugin extends
@@ -58,7 +57,6 @@ public class GDELTIngestPlugin extends
 	private final ByteArrayId eventKey;
 
 	private CoordinateReferenceSystem crs;
-	private final static String CRS_AUTHORITY = "EPSG:4326";
 
 	private boolean includeSupplementalFields;
 
@@ -71,15 +69,6 @@ public class GDELTIngestPlugin extends
 
 		eventKey = new ByteArrayId(
 				StringUtils.stringToBinary(GDELTUtils.GDELT_EVENT_FEATURE));
-
-		try {
-			crs = CRS.decode(CRS_AUTHORITY);
-		}
-		catch (final FactoryException e) {
-			LOGGER.error(
-					"Unable to decode Coordinate Reference System authority code!",
-					e);
-		}
 	}
 
 	private void setIncludeSupplementalFields(
@@ -200,8 +189,8 @@ public class GDELTIngestPlugin extends
 		String timestring = "";
 		String eventId = "";
 		int actionGeoType;
-		final double lat = 0;
-		final double lon = 0;
+		double lat = 0;
+		double lon = 0;
 		String actor1Name = "";
 		String actor2Name = "";
 		String countryCode = "";
@@ -234,18 +223,24 @@ public class GDELTIngestPlugin extends
 				eventId = vals[GDELTUtils.GDELT_EVENT_ID_COLUMN_ID];
 
 				try {
-					GDELTUtils.parseLatLon(
-							vals,
-							crs);
+					final Pair<Double, Double> latLon = GDELTUtils.parseLatLon(vals);
+					if (latLon == null) {
+						LOGGER.warn("No spatial data on line " + lineNumber + " of " + hfile.getOriginalFilePath());
+						continue;
+					}
+					lat = latLon.getLeft();
+					lon = latLon.getRight();
 				}
 				catch (final Exception e) {
-					LOGGER.warn("Error reading GDELT lat/lon on line " + lineNumber + " of " + hfile.getOriginalFilePath());
+					LOGGER.warn(
+							"Error reading GDELT lat/lon on line " + lineNumber + " of " + hfile.getOriginalFilePath(),
+							e);
 					continue;
 				}
 
 				final Coordinate cord = new Coordinate(
-						lat,
-						lon);
+						lon,
+						lat);
 
 				gdeltEventBuilder.set(
 						GDELTUtils.GDELT_GEOMETRY_ATTRIBUTE,
@@ -288,8 +283,9 @@ public class GDELTIngestPlugin extends
 							GDELTUtils.ACTION_COUNTRY_CODE_ATTRIBUTE,
 							countryCode);
 				}
-
-				sourceUrl = vals[GDELTUtils.SOURCE_URL_COLUMN_ID];
+				if (vals.length > GDELTUtils.SOURCE_URL_COLUMN_ID) {
+					sourceUrl = vals[GDELTUtils.SOURCE_URL_COLUMN_ID];
+				}
 				if ((sourceUrl != null) && !sourceUrl.isEmpty()) {
 					gdeltEventBuilder.set(
 							GDELTUtils.SOURCE_URL_ATTRIBUTE,
