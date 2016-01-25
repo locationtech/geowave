@@ -87,12 +87,14 @@ public class SpatialTemporalDimensionalityTypeProvider implements
 							new int[][] {
 								new int[] {
 									0,
-									0,
-									0
+									options.bias.getSpatialPrecision()
 								},
 								new int[] {
-									options.bias.getSpatialPrecision(),
-									options.bias.getSpatialPrecision(),
+									0,
+									options.bias.getSpatialPrecision()
+								},
+								new int[] {
+									0,
 									options.bias.getTemporalPrecision()
 								}
 							},
@@ -128,16 +130,16 @@ public class SpatialTemporalDimensionalityTypeProvider implements
 	private static class SpatialTemporalOptions
 	{
 		@Parameter(names = {
-			"period"
+			"-period"
 		}, required = false, description = "The periodicity of the temporal dimension.  Because time is continuous, it is binned at this interval.", converter = UnitConverter.class)
 		protected Unit periodicity = Unit.YEAR;
 
 		@Parameter(names = {
-			"bias"
+			"-bias"
 		}, required = false, description = "The bias of the spatial-temporal index. There can be more precision given to time or space if necessary.", converter = BiasConverter.class)
 		protected Bias bias = Bias.BALANCED;
 		@Parameter(names = {
-			"pointTimestampOnly"
+			"-pointTimestampOnly"
 		}, required = false, description = "The index will only be good at handling points and timestamps and will not be optimized for handling lines/polys or time ranges.  The default behavior is to handle any geometry and time ranges well.")
 		protected boolean pointOnly = false;
 	}
