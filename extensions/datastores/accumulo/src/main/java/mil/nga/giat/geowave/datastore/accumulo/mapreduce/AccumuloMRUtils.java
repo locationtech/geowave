@@ -18,24 +18,21 @@ import java.util.TreeSet;
 
 import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
-//@formatter:off
-/*if[accumulo.api=1.6]
-import org.apache.accumulo.core.security.Credentials;
-else[accumulo.api=1.6]*/
+
+import org.apache.accumulo.core.client.impl.Tables;
+import org.apache.accumulo.core.client.impl.TabletLocator;
+import org.apache.accumulo.core.client.mock.MockInstance;
+import org.apache.accumulo.core.client.security.tokens.PasswordToken;
+import org.apache.accumulo.core.data.ArrayByteSequence;
+import org.apache.accumulo.core.data.ByteSequence;
+import org.apache.accumulo.core.data.Key;
+import org.apache.accumulo.core.data.Range;
+
 import org.apache.accumulo.core.client.ClientConfiguration;
 import org.apache.accumulo.core.client.Instance;
 import org.apache.accumulo.core.client.TableDeletedException;
 import org.apache.accumulo.core.client.TableNotFoundException;
 import org.apache.accumulo.core.client.TableOfflineException;
-import org.apache.accumulo.core.client.impl.ClientContext;
-import org.apache.accumulo.core.client.impl.Tables;
-import org.apache.accumulo.core.client.impl.TabletLocator;
-import org.apache.accumulo.core.client.mock.MockInstance;
-import org.apache.accumulo.core.data.ArrayByteSequence;
-import org.apache.accumulo.core.data.ByteSequence;
-import org.apache.accumulo.core.data.Key;
-import org.apache.accumulo.core.data.KeyExtent;
-import org.apache.accumulo.core.data.Range;
 import org.apache.accumulo.core.master.state.tables.TableState;
 import org.apache.accumulo.core.util.UtilWaitThread;
 import org.apache.hadoop.io.Text;
@@ -59,7 +56,14 @@ import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations;
 import mil.nga.giat.geowave.datastore.accumulo.mapreduce.input.RangeLocationPair;
 import mil.nga.giat.geowave.datastore.accumulo.util.AccumuloUtils;
-
+//@formatter:off
+/*if[accumulo.api=1.6]
+import org.apache.accumulo.core.security.Credentials;
+import org.apache.accumulo.core.data.KeyExtent;
+else[accumulo.api=1.6]*/
+import org.apache.accumulo.core.client.impl.ClientContext;
+import org.apache.accumulo.core.client.impl.Credentials;
+import org.apache.accumulo.core.data.impl.KeyExtent;
 /*end[accumulo.api=1.6]*/
 //@formatter:on
 
@@ -294,24 +298,40 @@ public class AccumuloMRUtils
 				final String tableId = Tables.getTableId(
 						instance,
 						tableName);
+
+				Credentials credentials = new Credentials(
+						operations.getUsername(),
+						new PasswordToken(
+								operations.getPassword()));
+
+				// @formatter:off
+				/*if[accumulo.api=1.6]
 				tl = getTabletLocator(
 						instance,
-						tableName,
 						tableId);
+				Object clientContextOrCredentials = credentials;
+				else[accumulo.api=1.6]*/
+				ClientContext clientContext = new ClientContext(
+						instance,credentials,
+						new ClientConfiguration());
+				tl = getTabletLocator(
+						clientContext,
+						tableId);
+
+				Object clientContextOrCredentials = clientContext;
+				/*end[accumulo.api=1.6]*/
+				// @formatter:on
 				// its possible that the cache could contain complete, but
 				// old information about a tables tablets... so clear it
 				tl.invalidateCache();
-				final String instanceId = instance.getInstanceID();
 				final List<Range> rangeList = new ArrayList<Range>(
 						ranges);
 				final Random r = new Random();
 				while (!binRanges(
 						rangeList,
-						operations.getUsername(),
-						operations.getPassword(),
+						clientContextOrCredentials,
 						tserverBinnedRanges,
-						tl,
-						instanceId)) {
+						tl)) {
 					if (!(instance instanceof MockInstance)) {
 						if (!Tables.exists(
 								instance,
@@ -829,25 +849,23 @@ public class AccumuloMRUtils
 	 * @return an Accumulo tablet locator
 	 * @throws TableNotFoundException
 	 *             if the table name set on the configuration doesn't exist
-	 * @since 1.5.0
+	 * 
 	 */
 	protected static TabletLocator getTabletLocator(
-			final Instance instance,
-			final String tableName,
+			final Object clientContextOrInstance,
 			final String tableId )
 			throws TableNotFoundException {
 		TabletLocator tabletLocator = null;
 		// @formatter:off
 		/*if[accumulo.api=1.6]
 		tabletLocator = TabletLocator.getLocator(
-				instance,
+				(Instance) clientContextOrInstance,
 				new Text(
 						tableId));
 		else[accumulo.api=1.6]*/
 
 		tabletLocator = TabletLocator.getLocator(
-				//ToDo: need to pass ClientContext instead of instance
-				new ClientContext(instance, null, new ClientConfiguration()),
+				(ClientContext) clientContextOrInstance,
 				new Text(
 						tableId));
 
@@ -858,36 +876,26 @@ public class AccumuloMRUtils
 
 	protected static boolean binRanges(
 			final List<Range> rangeList,
-			final String userName,
-			final String password,
+			final Object clientContextOrCredentials,
 			final Map<String, Map<KeyExtent, List<Range>>> tserverBinnedRanges,
-			final TabletLocator tabletLocator,
-			final String instanceId )
+			final TabletLocator tabletLocator )
 			throws AccumuloException,
 			AccumuloSecurityException,
 			TableNotFoundException,
 			IOException {
-// @formatter:off
+		// @formatter:off
 		/*if[accumulo.api=1.6]
 		return tabletLocator.binRanges(
-				new Credentials(
-						userName,
-						new PasswordToken(
-								password)),
+				(Credentials) clientContextOrCredentials,
 				rangeList,
 				tserverBinnedRanges).isEmpty();
   		else[accumulo.api=1.6]*/
-		//ToDo  - pass ClientContext & uncomment
-		/*
+		
 		return tabletLocator.binRanges(
-				new Credentials(
-						userName,
-						new PasswordToken(
-								password)),
+				(ClientContext) clientContextOrCredentials,
 				rangeList,
 				tserverBinnedRanges).isEmpty();
-				*/
-		return true;
+				
   		/*end[accumulo.api=1.6]*/
 		// @formatter:on
 	}
