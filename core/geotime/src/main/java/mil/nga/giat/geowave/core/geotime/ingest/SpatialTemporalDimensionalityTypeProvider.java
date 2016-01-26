@@ -31,8 +31,6 @@ public class SpatialTemporalDimensionalityTypeProvider implements
 {
 	private final SpatialTemporalOptions options = new SpatialTemporalOptions();
 	private static final String DEFAULT_SPATIAL_TEMPORAL_ID_STR = "SPATIAL_TEMPORAL_IDX";
-	private static final ByteArrayId DEFAULT_SPATIAL_TEMPORAL_ID = new ByteArrayId(
-			DEFAULT_SPATIAL_TEMPORAL_ID_STR);
 
 	public SpatialTemporalDimensionalityTypeProvider() {}
 
