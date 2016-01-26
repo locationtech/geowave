@@ -58,8 +58,7 @@ public class SpatialTemporalDimensionalityTypeProvider implements
 
 	@Override
 	public PrimaryIndex createPrimaryIndex() {
-		return internalCreatePrimaryIndex(
-				options);
+		return internalCreatePrimaryIndex(options);
 	}
 
 	private static PrimaryIndex internalCreatePrimaryIndex(
@@ -89,16 +88,16 @@ public class SpatialTemporalDimensionalityTypeProvider implements
 								new int[] {
 									0,
 									options.bias.getSpatialPrecision()
-				},
+								},
 								new int[] {
 									0,
 									options.bias.getSpatialPrecision()
-				},
+								},
 								new int[] {
 									0,
 									options.bias.getTemporalPrecision()
-				}
-			},
+								}
+							},
 							SFCType.HILBERT),
 					new BasicIndexModel(
 							fields),
@@ -113,7 +112,7 @@ public class SpatialTemporalDimensionalityTypeProvider implements
 								options.bias.getSpatialPrecision(),
 								options.bias.getSpatialPrecision(),
 								options.bias.getTemporalPrecision()
-			},
+							},
 							SFCType.HILBERT),
 					new BasicIndexModel(
 							fields),
@@ -196,8 +195,7 @@ public class SpatialTemporalDimensionalityTypeProvider implements
 		@Override
 		public Bias convert(
 				final String value ) {
-			final Bias convertedValue = Bias.fromString(
-					value);
+			final Bias convertedValue = Bias.fromString(value);
 
 			if (convertedValue == null) {
 				throw new ParameterException(
@@ -217,8 +215,7 @@ public class SpatialTemporalDimensionalityTypeProvider implements
 		@Override
 		public Unit convert(
 				final String value ) {
-			final Unit convertedValue = Unit.fromString(
-					value);
+			final Unit convertedValue = Unit.fromString(value);
 
 			if (convertedValue == null) {
 				throw new ParameterException(
@@ -265,8 +262,7 @@ public class SpatialTemporalDimensionalityTypeProvider implements
 		}
 
 		public PrimaryIndex createIndex() {
-			return internalCreatePrimaryIndex(
-					options);
+			return internalCreatePrimaryIndex(options);
 		}
 	}
 }

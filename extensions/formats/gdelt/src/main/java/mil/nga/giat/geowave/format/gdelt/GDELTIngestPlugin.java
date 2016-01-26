@@ -336,8 +336,7 @@ public class GDELTIngestPlugin extends
 					featureData.add(new GeoWaveData<SimpleFeature>(
 							eventKey,
 							primaryIndexIds,
-									gdeltEventBuilder.buildFeature(
-											eventId)));
+							gdeltEventBuilder.buildFeature(eventId)));
 				}
 				catch (final Exception e) {
 
