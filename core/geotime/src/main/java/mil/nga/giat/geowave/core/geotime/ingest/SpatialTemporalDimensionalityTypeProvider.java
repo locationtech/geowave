@@ -30,8 +30,9 @@ public class SpatialTemporalDimensionalityTypeProvider implements
 		IngestDimensionalityTypeProviderSpi
 {
 	private final SpatialTemporalOptions options = new SpatialTemporalOptions();
+	private static final String DEFAULT_SPATIAL_TEMPORAL_ID_STR = "SPATIAL_TEMPORAL_IDX";
 	private static final ByteArrayId DEFAULT_SPATIAL_TEMPORAL_ID = new ByteArrayId(
-			"SPATIAL_TEMPORAL_IDX");
+			DEFAULT_SPATIAL_TEMPORAL_ID_STR);
 
 	public SpatialTemporalDimensionalityTypeProvider() {}
 
@@ -59,7 +60,8 @@ public class SpatialTemporalDimensionalityTypeProvider implements
 
 	@Override
 	public PrimaryIndex createPrimaryIndex() {
-		return internalCreatePrimaryIndex(options);
+		return internalCreatePrimaryIndex(
+				options);
 	}
 
 	private static PrimaryIndex internalCreatePrimaryIndex(
@@ -80,6 +82,7 @@ public class SpatialTemporalDimensionalityTypeProvider implements
 			new TimeDefinition(
 					options.periodicity)
 		};
+		final String combinedId = DEFAULT_SPATIAL_TEMPORAL_ID_STR + "_" + options.bias + "_" + options.periodicity;
 		if (options.pointOnly) {
 			return new CustomIdIndex(
 					TieredSFCIndexFactory.createDefinedPrecisionTieredStrategy(
@@ -88,20 +91,21 @@ public class SpatialTemporalDimensionalityTypeProvider implements
 								new int[] {
 									0,
 									options.bias.getSpatialPrecision()
-								},
+				},
 								new int[] {
 									0,
 									options.bias.getSpatialPrecision()
-								},
+				},
 								new int[] {
 									0,
 									options.bias.getTemporalPrecision()
-								}
-							},
+				}
+			},
 							SFCType.HILBERT),
 					new BasicIndexModel(
 							fields),
-					DEFAULT_SPATIAL_TEMPORAL_ID);
+					new ByteArrayId(
+							options.pointOnly ? combinedId + "_POINTONLY" : combinedId));
 		}
 		else {
 			return new CustomIdIndex(
@@ -111,11 +115,12 @@ public class SpatialTemporalDimensionalityTypeProvider implements
 								options.bias.getSpatialPrecision(),
 								options.bias.getSpatialPrecision(),
 								options.bias.getTemporalPrecision()
-							},
+			},
 							SFCType.HILBERT),
 					new BasicIndexModel(
 							fields),
-					DEFAULT_SPATIAL_TEMPORAL_ID);
+					new ByteArrayId(
+							combinedId));
 		}
 	}
 
@@ -193,7 +198,8 @@ public class SpatialTemporalDimensionalityTypeProvider implements
 		@Override
 		public Bias convert(
 				final String value ) {
-			final Bias convertedValue = Bias.fromString(value);
+			final Bias convertedValue = Bias.fromString(
+					value);
 
 			if (convertedValue == null) {
 				throw new ParameterException(
@@ -213,7 +219,8 @@ public class SpatialTemporalDimensionalityTypeProvider implements
 		@Override
 		public Unit convert(
 				final String value ) {
-			final Unit convertedValue = Unit.fromString(value);
+			final Unit convertedValue = Unit.fromString(
+					value);
 
 			if (convertedValue == null) {
 				throw new ParameterException(
@@ -260,7 +267,8 @@ public class SpatialTemporalDimensionalityTypeProvider implements
 		}
 
 		public PrimaryIndex createIndex() {
-			return internalCreatePrimaryIndex(options);
+			return internalCreatePrimaryIndex(
+					options);
 		}
 	}
 }
