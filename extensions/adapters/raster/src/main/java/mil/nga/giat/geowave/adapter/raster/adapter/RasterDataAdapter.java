@@ -1018,7 +1018,7 @@ public class RasterDataAdapter implements
 					max,
 					1, // no scale
 					0, // no offset
-					null).geophysics(true);
+					null);
 		}
 		final AffineTransform worldToScreenTransform = RendererUtilities.worldToScreenTransform(
 				mapExtent,
@@ -1597,16 +1597,11 @@ public class RasterDataAdapter implements
 					!Double.isNaN(nodata) ? new Category[] {
 						new Category(
 								Vocabulary.formatInternational(VocabularyKeys.NODATA),
-								new Color[] {
-									new Color(
-											0,
-											0,
-											0,
-											0)
-								},
-								NumberRange.create(
-										nodata,
-										nodata),
+								new Color(
+										0,
+										0,
+										0,
+										0),
 								NumberRange.create(
 										nodata,
 										nodata))
@@ -1661,11 +1656,6 @@ public class RasterDataAdapter implements
 		}
 
 		@Override
-		public MathTransform1D getSampleToGeophysics() {
-			return super.getSampleToGeophysics();
-		}
-
-		@Override
 		public Unit<?> getUnits() {
 			return unit;
 		}
@@ -1678,11 +1668,6 @@ public class RasterDataAdapter implements
 		@Override
 		public ColorInterpretation getColorInterpretation() {
 			return color;
-		}
-
-		@Override
-		public Category getBackground() {
-			return bkg;
 		}
 
 		@Override

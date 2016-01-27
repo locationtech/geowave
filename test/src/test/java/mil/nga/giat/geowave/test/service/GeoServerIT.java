@@ -19,9 +19,6 @@ import java.util.regex.Pattern;
 
 import javax.ws.rs.core.Response.Status;
 
-import mil.nga.giat.geowave.datastore.accumulo.AccumuloStoreFactoryFamily;
-import mil.nga.giat.geowave.service.client.GeoserverServiceClient;
-
 import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.apache.accumulo.core.client.TableNotFoundException;
@@ -50,10 +47,14 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import mil.nga.giat.geowave.datastore.accumulo.AccumuloStoreFactoryFamily;
+import mil.nga.giat.geowave.service.client.GeoserverServiceClient;
+
 public class GeoServerIT extends
 		ServicesTestEnvironment
 {
-	private static final Logger LOGGER = LoggerFactory.getLogger(GeoServerIT.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(
+			GeoServerIT.class);
 	private static final String WFS_URL_PREFIX = JETTY_BASE_URL + "/geoserver/wfs";
 
 	private static final String GEOSTUFF_LAYER_FILE = "src/test/resources/wfs-requests/geostuff_layer.xml";
@@ -81,34 +82,40 @@ public class GeoServerIT extends
 			LOGGER.error(
 					"Unable to clear accumulo namespace",
 					ex);
-			Assert.fail("Index not deleted successfully");
+			Assert.fail(
+					"Index not deleted successfully");
 		}
 		// setup the wfs-requests
 		geostuff_layer = MessageFormat.format(
-				IOUtils.toString(new FileInputStream(
-						GEOSTUFF_LAYER_FILE)),
+				IOUtils.toString(
+						new FileInputStream(
+								GEOSTUFF_LAYER_FILE)),
 				TEST_WORKSPACE);
 
 		insert = MessageFormat.format(
-				IOUtils.toString(new FileInputStream(
-						INSERT_FILE)),
+				IOUtils.toString(
+						new FileInputStream(
+								INSERT_FILE)),
 				TEST_WORKSPACE);
 
 		lock = MessageFormat.format(
-				IOUtils.toString(new FileInputStream(
-						LOCK_FILE)),
+				IOUtils.toString(
+						new FileInputStream(
+								LOCK_FILE)),
 				TEST_WORKSPACE);
 
 		query = MessageFormat.format(
-				IOUtils.toString(new FileInputStream(
-						QUERY_FILE)),
+				IOUtils.toString(
+						new FileInputStream(
+								QUERY_FILE)),
 				TEST_WORKSPACE);
 
 		geoserverServiceClient = new GeoserverServiceClient(
 				GEOWAVE_BASE_URL);
 
 		// create the workspace
-		boolean success = geoserverServiceClient.createWorkspace(TEST_WORKSPACE);
+		boolean success = geoserverServiceClient.createWorkspace(
+				TEST_WORKSPACE);
 
 		// enable wfs & wms
 		success &= enableWfs();
@@ -131,33 +138,44 @@ public class GeoServerIT extends
 		success &= createLayers();
 
 		if (!success) {
-			LOGGER.error("Geoserver WFS setup failed.");
+			LOGGER.error(
+					"Geoserver WFS setup failed.");
 		}
 	}
 
 	@AfterClass
 	public static void cleanupWorkspace() {
-		assertTrue(geoserverServiceClient.deleteWorkspace(TEST_WORKSPACE));
+		assertTrue(
+				geoserverServiceClient.deleteWorkspace(
+						TEST_WORKSPACE));
 	}
 
 	@Test
 	public void test()
 			throws Exception {
-		assertTrue(createPoint());
+		assertTrue(
+				createPoint());
 		final String lockID = lockPoint();
 
 		// setup the lock and update messages
 		update = MessageFormat.format(
-				IOUtils.toString(new FileInputStream(
-						UPDATE_FILE)),
+				IOUtils.toString(
+						new FileInputStream(
+								UPDATE_FILE)),
 				TEST_WORKSPACE,
 				lockID);
 
-		assertNotNull(lockID);
-		assertTrue(updatePoint(lockID));
-		assertTrue(queryPoint());
-		assertTrue(queryFindPointWithTime());
-		assertTrue(queryFindPointBeyondTime());
+		assertNotNull(
+				lockID);
+		assertTrue(
+				updatePoint(
+						lockID));
+		assertTrue(
+				queryPoint());
+		assertTrue(
+				queryFindPointWithTime());
+		assertTrue(
+				queryFindPointBeyondTime());
 	}
 
 	public static boolean enableWfs()
@@ -169,11 +187,17 @@ public class GeoServerIT extends
 		command.setHeader(
 				"Content-type",
 				"text/xml");
-		command.setEntity(EntityBuilder.create().setFile(
-				new File(
-						"src/test/resources/wfs-requests/wfs.xml")).setContentType(
-				ContentType.TEXT_XML).build());
-		final HttpResponse r = httpclient.execute(command);
+		command.setEntity(
+				EntityBuilder
+						.create()
+						.setFile(
+								new File(
+										"src/test/resources/wfs-requests/wfs.xml"))
+						.setContentType(
+								ContentType.TEXT_XML)
+						.build());
+		final HttpResponse r = httpclient.execute(
+				command);
 		return r.getStatusLine().getStatusCode() == Status.OK.getStatusCode();
 	}
 
@@ -186,11 +210,17 @@ public class GeoServerIT extends
 		command.setHeader(
 				"Content-type",
 				"text/xml");
-		command.setEntity(EntityBuilder.create().setFile(
-				new File(
-						"src/test/resources/wfs-requests/wms.xml")).setContentType(
-				ContentType.TEXT_XML).build());
-		final HttpResponse r = httpclient.execute(command);
+		command.setEntity(
+				EntityBuilder
+						.create()
+						.setFile(
+								new File(
+										"src/test/resources/wfs-requests/wms.xml"))
+						.setContentType(
+								ContentType.TEXT_XML)
+						.build());
+		final HttpResponse r = httpclient.execute(
+				command);
 		return r.getStatusLine().getStatusCode() == Status.OK.getStatusCode();
 	}
 
@@ -203,10 +233,16 @@ public class GeoServerIT extends
 		command.setHeader(
 				"Content-type",
 				"text/xml");
-		command.setEntity(EntityBuilder.create().setText(
-				geostuff_layer).setContentType(
-				ContentType.TEXT_XML).build());
-		final HttpResponse r = httpclient.execute(command);
+		command.setEntity(
+				EntityBuilder
+						.create()
+						.setText(
+								geostuff_layer)
+						.setContentType(
+								ContentType.TEXT_XML)
+						.build());
+		final HttpResponse r = httpclient.execute(
+				command);
 		return r.getStatusLine().getStatusCode() == Status.CREATED.getStatusCode();
 	}
 
@@ -226,23 +262,26 @@ public class GeoServerIT extends
 			final HttpClient httpclient,
 			final String version,
 			final BasicNameValuePair... paramTuples )
-			throws Exception {
+					throws Exception {
 		final HttpPost command = new HttpPost(
 				WFS_URL_PREFIX + "/Transaction");
 
 		final ArrayList<BasicNameValuePair> postParameters = new ArrayList<BasicNameValuePair>();
-		postParameters.add(new BasicNameValuePair(
-				"version",
-				version));
-		postParameters.add(new BasicNameValuePair(
-				"typename",
-				TEST_WORKSPACE + ":geostuff"));
+		postParameters.add(
+				new BasicNameValuePair(
+						"version",
+						version));
+		postParameters.add(
+				new BasicNameValuePair(
+						"typename",
+						TEST_WORKSPACE + ":geostuff"));
 		Collections.addAll(
 				postParameters,
 				paramTuples);
 
-		command.setEntity(new UrlEncodedFormEntity(
-				postParameters));
+		command.setEntity(
+				new UrlEncodedFormEntity(
+						postParameters));
 
 		command.setHeader(
 				"Content-type",
@@ -261,36 +300,48 @@ public class GeoServerIT extends
 		final StringBuilder buf = new StringBuilder();
 
 		final List<BasicNameValuePair> localParams = new LinkedList<BasicNameValuePair>();
-		localParams.add(new BasicNameValuePair(
-				"version",
-				version));
-		localParams.add(new BasicNameValuePair(
-				"request",
-				"GetFeature"));
-		localParams.add(new BasicNameValuePair(
-				"typeNames",
-				TEST_WORKSPACE + ":geostuff"));
-		localParams.add(new BasicNameValuePair(
-				"service",
-				"WFS"));
+		localParams.add(
+				new BasicNameValuePair(
+						"version",
+						version));
+		localParams.add(
+				new BasicNameValuePair(
+						"request",
+						"GetFeature"));
+		localParams.add(
+				new BasicNameValuePair(
+						"typeNames",
+						TEST_WORKSPACE + ":geostuff"));
+		localParams.add(
+				new BasicNameValuePair(
+						"service",
+						"WFS"));
 
 		for (final BasicNameValuePair aParam : paramTuples) {
 			if (buf.length() > 0) {
-				buf.append('&');
+				buf.append(
+						'&');
 			}
-			buf.append(
-					aParam.getName()).append(
-					'=').append(
-					aParam.getValue());
+			buf
+					.append(
+							aParam.getName())
+					.append(
+							'=')
+					.append(
+							aParam.getValue());
 		}
 		for (final BasicNameValuePair aParam : localParams) {
 			if (buf.length() > 0) {
-				buf.append('&');
+				buf.append(
+						'&');
 			}
-			buf.append(
-					aParam.getName()).append(
-					'=').append(
-					aParam.getValue());
+			buf
+					.append(
+							aParam.getName())
+					.append(
+							'=')
+					.append(
+							aParam.getValue());
 		}
 		final HttpGet command = new HttpGet(
 				WFS_URL_PREFIX + "?" + buf.toString());
@@ -305,16 +356,22 @@ public class GeoServerIT extends
 		final HttpPost command = createWFSTransaction(
 				httpclient,
 				"1.1.0");
-		command.setEntity(EntityBuilder.create().setText(
-				insert).setContentType(
-				ContentType.TEXT_XML).build());
-		final HttpResponse r = httpclient.execute(command);
+		command.setEntity(
+				EntityBuilder
+						.create()
+						.setText(
+								insert)
+						.setContentType(
+								ContentType.TEXT_XML)
+						.build());
+		final HttpResponse r = httpclient.execute(
+				command);
 		return r.getStatusLine().getStatusCode() == Status.OK.getStatusCode();
 	}
 
 	private String getContent(
 			final HttpResponse r )
-			throws IOException {
+					throws IOException {
 		final InputStream is = r.getEntity().getContent();
 		final Header encoding = r.getEntity().getContentEncoding();
 		final String encodingName = encoding == null ? "UTF-8" : encoding.getName();
@@ -333,20 +390,30 @@ public class GeoServerIT extends
 		final HttpPost command = createWFSTransaction(
 				httpclient,
 				"1.1.0");
-		command.setEntity(EntityBuilder.create().setText(
-				lock).setContentType(
-				ContentType.TEXT_XML).build());
-		final HttpResponse r = httpclient.execute(command);
+		command.setEntity(
+				EntityBuilder
+						.create()
+						.setText(
+								lock)
+						.setContentType(
+								ContentType.TEXT_XML)
+						.build());
+		final HttpResponse r = httpclient.execute(
+				command);
 		final boolean result = r.getStatusLine().getStatusCode() == Status.OK.getStatusCode();
 		if (result) {
-			final String content = getContent(r);
+			final String content = getContent(
+					r);
 			final String pattern = "lockId=\"([^\"]+)\"";
 
 			// Create a Pattern object
-			final Pattern compiledPattern = Pattern.compile(pattern);
-			final Matcher matcher = compiledPattern.matcher(content);
+			final Pattern compiledPattern = Pattern.compile(
+					pattern);
+			final Matcher matcher = compiledPattern.matcher(
+					content);
 			if (matcher.find()) {
-				return matcher.group(1);
+				return matcher.group(
+						1);
 			}
 			return content;
 		}
@@ -363,37 +430,52 @@ public class GeoServerIT extends
 		final HttpPost command = createWFSTransaction(
 				httpclient,
 				"1.1.0");
-		command.setEntity(EntityBuilder.create().setText(
-				query).setContentType(
-				ContentType.TEXT_XML).build());
-		final HttpResponse r = httpclient.execute(command);
+		command.setEntity(
+				EntityBuilder
+						.create()
+						.setText(
+								query)
+						.setContentType(
+								ContentType.TEXT_XML)
+						.build());
+		final HttpResponse r = httpclient.execute(
+				command);
 		final boolean result = r.getStatusLine().getStatusCode() == Status.OK.getStatusCode();
 		if (result) {
-			final String content = getContent(r);
-			final String pattern = "34.68158180311274 35.1828408241272";
-
+			final String content = getContent(
+					r);
+			final String patternX = "34.6815818";
+			final String patternY = "35.1828408";
 			// name space check as well
-			return content.contains(pattern) && content.contains(TEST_WORKSPACE + ":geometry");
+			return content.contains(
+					patternX)
+					&& content.contains(
+							patternY)
+					&& content.contains(
+							TEST_WORKSPACE + ":geometry");
 		}
 		return false;
 	}
 
 	public boolean updatePoint(
 			final String lockID )
-			throws Exception {
+					throws Exception {
 		final HttpClient httpclient = createClient();
 		final HttpPost command = createWFSTransaction(
 				httpclient,
 				"1.1.0");
-		command.setEntity(new StringEntity(
-				update));
+		command.setEntity(
+				new StringEntity(
+						update));
 		final LinkedList<HttpResponse> capturedResponse = new LinkedList<HttpResponse>();
 		run(
 				new Runnable() {
 					@Override
 					public void run() {
 						try {
-							capturedResponse.add(httpclient.execute(command));
+							capturedResponse.add(
+									httpclient.execute(
+											command));
 						}
 						catch (final Exception e) {
 							throw new RuntimeException(
@@ -426,10 +508,16 @@ public class GeoServerIT extends
 				new BasicNameValuePair(
 						"srsName",
 						"EPSG:4326"));
-		final HttpResponse r = httpclient.execute(command);
-		final String content = getContent(r);
-		System.out.println(content);
-		return content.contains("numberOfFeatures=") && !content.contains("numberOfFeatures=\"0\"");
+		final HttpResponse r = httpclient.execute(
+				command);
+		final String content = getContent(
+				r);
+		System.out.println(
+				content);
+		return content.contains(
+				"numberOfFeatures=")
+				&& !content.contains(
+						"numberOfFeatures=\"0\"");
 	}
 
 	public boolean queryFindPointBeyondTime()
@@ -446,18 +534,22 @@ public class GeoServerIT extends
 				new BasicNameValuePair(
 						"srsName",
 						"EPSG:4326"));
-		final HttpResponse r = httpclient.execute(command);
-		final String content = getContent(r);
-		return content.contains("numberOfFeatures=\"0\"");
+		final HttpResponse r = httpclient.execute(
+				command);
+		final String content = getContent(
+				r);
+		return content.contains(
+				"numberOfFeatures=\"0\"");
 	}
 
 	public static void run(
 			final Runnable run,
 			final long waitTime )
-			throws InterruptedException {
+					throws InterruptedException {
 		final Thread thread = new Thread(
 				run);
 		thread.start();
-		thread.join(waitTime);
+		thread.join(
+				waitTime);
 	}
 }

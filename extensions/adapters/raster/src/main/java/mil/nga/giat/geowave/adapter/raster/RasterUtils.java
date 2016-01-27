@@ -449,7 +449,7 @@ public class RasterUtils
 					imageWidth,
 					imageHeight,
 					backgroundColor,
-					null,// the transparent color will be used later
+					null, // the transparent color will be used later
 					defaultColorModel);
 		}
 
@@ -934,30 +934,37 @@ public class RasterUtils
 		 * values. Even if the current image doesn't have NaN values, it could
 		 * have NaN later if the image uses a writable raster.
 		 */
-		NumberRange sourceRange = TypeMap.getRange(sourceType);
 		for (int b = 0; b < numBands; b++) {
-			if (needScaling) {
-				sourceRange = NumberRange.create(
-						min[b],
-						max[b]).castTo(
-						sourceRange.getElementClass());
-				categories[0] = new Category(
-						name[b],
-						null,
-						targetRange,
-						sourceRange);
-			}
-			else {
-				categories[0] = new Category(
-						name[b],
-						null,
-						targetRange,
-						LinearTransform1D.IDENTITY);
-			}
+			// if (needScaling) {
+			// sourceRange = NumberRange.create(
+			// min[b],
+			// max[b]).castTo(
+			// sourceRange.getElementClass());
+			// categories[0] = new Category(
+			// name[b],
+			// null,
+			// targetRange,
+			// sourceRange);
+			// }
+			// else {
+			// categories[0] = new Category(
+			// name[b],
+			// null,
+			// targetRange,
+			// LinearTransform1D.IDENTITY);
+			// }
+			// dst[b] = new GridSampleDimension(
+			// name[b],
+			// categories,
+			// null);
+			categories[0] = new Category(
+					name[b],
+					(Color) null,
+					targetRange);
 			dst[b] = new GridSampleDimension(
 					name[b],
 					categories,
-					null).geophysics(true);
+					null);
 		}
 	}
 }
