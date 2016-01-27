@@ -14,17 +14,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.zip.ZipInputStream;
 
-import org.apache.avro.Schema;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.tuple.Pair;
-import org.apache.log4j.Logger;
-import org.geotools.feature.simple.SimpleFeatureBuilder;
-import org.opengis.feature.simple.SimpleFeature;
-import org.opengis.feature.simple.SimpleFeatureType;
-
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.GeometryFactory;
-
 import mil.nga.giat.geowave.adapter.vector.ingest.AbstractSimpleFeatureIngestPlugin;
 import mil.nga.giat.geowave.adapter.vector.ingest.DataSchemaOptionProvider;
 import mil.nga.giat.geowave.adapter.vector.utils.SimpleFeatureUserDataConfigurationSet;
@@ -40,6 +29,19 @@ import mil.nga.giat.geowave.core.ingest.hdfs.mapreduce.IngestWithReducer;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+
+import org.apache.avro.Schema;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.tuple.Pair;
+import org.apache.log4j.Logger;
+import org.geotools.feature.simple.SimpleFeatureBuilder;
+import org.opengis.feature.simple.SimpleFeature;
+import org.opengis.feature.simple.SimpleFeatureType;
+
+import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.GeometryFactory;
+
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 /*
  */
@@ -152,6 +154,9 @@ public class GDELTIngestPlugin extends
 	}
 
 	@Override
+	@SuppressFBWarnings(value = {
+		"REC_CATCH_EXCEPTION"
+	}, justification = "Intentionally catching any possible exception as there may be unknown format issues in a file and we don't want to error partially through parsing")
 	protected CloseableIterator<GeoWaveData<SimpleFeature>> toGeoWaveDataInternal(
 			final WholeFile hfile,
 			final Collection<ByteArrayId> primaryIndexIds,
