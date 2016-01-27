@@ -25,7 +25,7 @@ public class GeoWaveMain
 
 	public static int run(
 			final String[] args ) {
-		if (args.length < 1) {
+		if (args.length < 1 || args[0].trim().equals("--help")) {
 			OperationCommandLineOptions.printHelp();
 		}
 

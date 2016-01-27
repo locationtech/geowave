@@ -55,10 +55,6 @@ public class GDELTUtils
 	public static final int GDELT_ACTION_GEO_TYPE_COLUMN_ID = 49;
 	private static final int GDELT_ACTION_LATITUDE_COLUMN_ID = 53;
 	private static final int GDELT_ACTION_LONGITUDE_COLUMN_ID = 54;
-//	private static final int GDELT_ACTOR1_LATITUDE_COLUMN_ID = 39;
-//	private static final int GDELT_ACTOR1_LONGITUDE_COLUMN_ID = 40;
-//	private static final int GDELT_ACTOR2_LATITUDE_COLUMN_ID = 46;
-//	private static final int GDELT_ACTOR2_LONGITUDE_COLUMN_ID = 47;
 
 	public static final String ACTOR_1_NAME_ATTRIBUTE = "actor1Name";
 	public static final int ACTOR_1_NAME_COLUMN_ID = 6;
@@ -171,18 +167,6 @@ public class GDELTUtils
 
 		final String latString = vals[GDELTUtils.GDELT_ACTION_LATITUDE_COLUMN_ID];
 		final String lonString = vals[GDELTUtils.GDELT_ACTION_LONGITUDE_COLUMN_ID];
-		// TODO should we ingest actor locations?
-		// if ((latString == null) || (lonString == null) ||
-		// latString.trim().isEmpty() || lonString.trim().isEmpty()) {
-		// latString = vals[GDELTUtils.GDELT_ACTOR1_LATITUDE_COLUMN_ID];
-		// lonString = vals[GDELTUtils.GDELT_ACTOR1_LONGITUDE_COLUMN_ID];
-		// }
-		//
-		// if ((latString == null) || (lonString == null) ||
-		// latString.trim().isEmpty() || lonString.trim().isEmpty()) {
-		// latString = vals[GDELTUtils.GDELT_ACTOR2_LATITUDE_COLUMN_ID];
-		// lonString = vals[GDELTUtils.GDELT_ACTOR2_LONGITUDE_COLUMN_ID];
-		// }
 		if ((latString == null) || (lonString == null) || latString.trim().isEmpty() || lonString.trim().isEmpty()) {
 			return null;
 		}
