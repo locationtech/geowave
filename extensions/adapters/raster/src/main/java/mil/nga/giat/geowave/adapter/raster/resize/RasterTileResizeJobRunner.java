@@ -63,7 +63,11 @@ public class RasterTileResizeJobRunner extends
 	 */
 	public int runJob()
 			throws Exception {
-		final Configuration conf = super.getConf();
+		Configuration conf = super.getConf();
+		if (conf == null) {
+			conf = new Configuration();
+			setConf(conf);
+		}
 		GeoWaveConfiguratorBase.setRemoteInvocationParams(
 				rasterResizeOptions.getHdfsHostPort(),
 				rasterResizeOptions.getJobTrackerOrResourceManHostPort(),
