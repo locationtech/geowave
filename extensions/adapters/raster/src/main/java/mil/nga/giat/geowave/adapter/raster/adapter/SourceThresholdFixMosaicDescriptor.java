@@ -75,9 +75,11 @@ public class SourceThresholdFixMosaicDescriptor extends
 			final OperationRegistry registry = JAI.getDefaultInstance().getOperationRegistry();
 			registry.unregisterDescriptor(new MosaicDescriptor());
 			registry.registerDescriptor(new SourceThresholdFixMosaicDescriptor());
+			// there seems to be a bug in jai-ext, line 1211 of
+			// concurrentoperationregistry null pointer exception
 			registry.registerFactory(
 					"rendered",
-					"mosaic",
+					"Mosaic",
 					"com.sun.media.jai",
 					new MosaicRIF());
 			registered = true;
