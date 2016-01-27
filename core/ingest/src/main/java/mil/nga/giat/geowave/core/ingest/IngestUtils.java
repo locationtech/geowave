@@ -200,7 +200,7 @@ public class IngestUtils
 
 	/**
 	 * Determine whether an index is compatible with the visitor
-	 *
+	 * 
 	 * @param index
 	 *            an index that an ingest type supports
 	 * @return whether the adapter is compatible with the common index model

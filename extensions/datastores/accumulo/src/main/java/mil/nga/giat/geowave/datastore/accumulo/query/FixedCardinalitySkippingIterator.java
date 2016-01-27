@@ -21,7 +21,7 @@ import org.apache.hadoop.io.Text;
  * This class is an Accumulo Iterator that can support skipping by a fixed
  * cardinality on a Space Filling Curve (skipping by incrementing a fixed bit
  * position of the row ID).
- *
+ * 
  */
 public class FixedCardinalitySkippingIterator extends
 		SkippingIterator implements

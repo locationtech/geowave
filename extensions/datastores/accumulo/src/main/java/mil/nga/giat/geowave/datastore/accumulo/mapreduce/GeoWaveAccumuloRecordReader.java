@@ -44,7 +44,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 /**
  * This class is used by the GeoWaveInputFormat to read data from an Accumulo
  * data store.
- *
+ * 
  * @param <T>
  *            The native type for the reader
  */

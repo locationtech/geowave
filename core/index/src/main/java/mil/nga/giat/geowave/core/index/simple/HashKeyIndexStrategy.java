@@ -121,8 +121,8 @@ public class HashKeyIndexStrategy implements
 	}
 
 	/**
-     * Returns an insertion id selected round-robin from a predefined pool
-     *   
+	 * Returns an insertion id selected round-robin from a predefined pool
+	 * 
 	 */
 	@Override
 	public List<ByteArrayId> getInsertionIds(

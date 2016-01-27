@@ -3,12 +3,12 @@ package mil.nga.giat.geowave.mapreduce;
 import org.apache.hadoop.io.Writable;
 
 /**
- *
+ * 
  * @param <T>
  *            the native type
  * @param <W>
  *            the writable type
- *
+ * 
  */
 public interface HadoopWritableSerializer<T, W extends Writable>
 {

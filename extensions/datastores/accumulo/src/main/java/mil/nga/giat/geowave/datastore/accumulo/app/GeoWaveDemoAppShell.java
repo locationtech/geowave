@@ -1,6 +1,12 @@
 package mil.nga.giat.geowave.datastore.accumulo.app;
 
+// @formatter:off
+/*if[accumulo.api=1.6]
 import org.apache.accumulo.core.util.shell.Shell;
+else[accumulo.api=1.6]*/
+import org.apache.accumulo.shell.Shell;
+/*end[accumulo.api=1.6]*/
+// @formatter:on
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 

@@ -30,7 +30,7 @@ import org.apache.log4j.Logger;
  * This class can write many entries for a single index by retaining a single
  * open writer. The first entry that is written will open a writer and it is the
  * responsibility of the caller to close this writer when complete.
- *
+ * 
  */
 public class AccumuloIndexWriter implements
 		IndexWriter
