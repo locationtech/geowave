@@ -21,10 +21,9 @@ import org.slf4j.LoggerFactory;
 public class StringUtils
 {
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(StringUtils.class);
 	public static final Charset GEOWAVE_CHAR_SET = Charset.forName("ISO-8859-1");
 	public static final Charset UTF8_CHAR_SET = Charset.forName("UTF-8");
-
-	private static final Logger LOGGER = LoggerFactory.getLogger(StringUtils.class);
 
 	/**
 	 * Utility to convert a String to bytes

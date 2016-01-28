@@ -46,10 +46,12 @@
 		<jersey.version>2.14</jersey.version>
 		<kafka.artifact>kafka_2.10</kafka.artifact>
 		<kafka.version>0.8.2.1</kafka.version>
-		<jcommander.version>1.48</jcommander.version>				
+		<snappy.version>1.0.5</snappy.version>
+		<jcommander.version>1.48</jcommander.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<sonar.language>java</sonar.language>
+		<container.extension></container.extension>
 		<!-- Feed Sonar with the JaCoCo integration tests coverage report (that 
 			you have previously generated) -->
 		<jacoco.it.reportPath>${project.build.directory}/coverage-reports/jacoco-it.exec</jacoco.it.reportPath>
@@ -131,6 +133,11 @@
 				<groupId>org.apache.commons</groupId>
 				<artifactId>commons-math</artifactId>
 				<version>2.1</version>
+			</dependency>
+			<dependency>
+				<groupId>org.xerial.snappy</groupId>
+				<artifactId>snappy-java</artifactId>
+				<version>1.0.5</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.accumulo</groupId>

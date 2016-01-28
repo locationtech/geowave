@@ -30,8 +30,7 @@ public class SpatialTemporalDimensionalityTypeProvider implements
 		IngestDimensionalityTypeProviderSpi
 {
 	private final SpatialTemporalOptions options = new SpatialTemporalOptions();
-	private static final ByteArrayId DEFAULT_SPATIAL_TEMPORAL_ID = new ByteArrayId(
-			"SPATIAL_TEMPORAL_IDX");
+	private static final String DEFAULT_SPATIAL_TEMPORAL_ID_STR = "SPATIAL_TEMPORAL_IDX";
 
 	public SpatialTemporalDimensionalityTypeProvider() {}
 
@@ -80,6 +79,7 @@ public class SpatialTemporalDimensionalityTypeProvider implements
 			new TimeDefinition(
 					options.periodicity)
 		};
+		final String combinedId = DEFAULT_SPATIAL_TEMPORAL_ID_STR + "_" + options.bias + "_" + options.periodicity;
 		if (options.pointOnly) {
 			return new CustomIdIndex(
 					TieredSFCIndexFactory.createDefinedPrecisionTieredStrategy(
@@ -87,19 +87,22 @@ public class SpatialTemporalDimensionalityTypeProvider implements
 							new int[][] {
 								new int[] {
 									0,
-									0,
-									0
+									options.bias.getSpatialPrecision()
 								},
 								new int[] {
-									options.bias.getSpatialPrecision(),
-									options.bias.getSpatialPrecision(),
+									0,
+									options.bias.getSpatialPrecision()
+								},
+								new int[] {
+									0,
 									options.bias.getTemporalPrecision()
 								}
 							},
 							SFCType.HILBERT),
 					new BasicIndexModel(
 							fields),
-					DEFAULT_SPATIAL_TEMPORAL_ID);
+					new ByteArrayId(
+							options.pointOnly ? combinedId + "_POINTONLY" : combinedId));
 		}
 		else {
 			return new CustomIdIndex(
@@ -113,7 +116,8 @@ public class SpatialTemporalDimensionalityTypeProvider implements
 							SFCType.HILBERT),
 					new BasicIndexModel(
 							fields),
-					DEFAULT_SPATIAL_TEMPORAL_ID);
+					new ByteArrayId(
+							combinedId));
 		}
 	}
 
@@ -128,16 +132,16 @@ public class SpatialTemporalDimensionalityTypeProvider implements
 	private static class SpatialTemporalOptions
 	{
 		@Parameter(names = {
-			"period"
+			"-period"
 		}, required = false, description = "The periodicity of the temporal dimension.  Because time is continuous, it is binned at this interval.", converter = UnitConverter.class)
 		protected Unit periodicity = Unit.YEAR;
 
 		@Parameter(names = {
-			"bias"
+			"-bias"
 		}, required = false, description = "The bias of the spatial-temporal index. There can be more precision given to time or space if necessary.", converter = BiasConverter.class)
 		protected Bias bias = Bias.BALANCED;
 		@Parameter(names = {
-			"pointTimestampOnly"
+			"-pointTimestampOnly"
 		}, required = false, description = "The index will only be good at handling points and timestamps and will not be optimized for handling lines/polys or time ranges.  The default behavior is to handle any geometry and time ranges well.")
 		protected boolean pointOnly = false;
 	}

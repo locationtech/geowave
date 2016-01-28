@@ -46,7 +46,6 @@ public class IngestCommandLineOptions
 			throws ParseException {
 		final boolean success = true;
 		boolean clearNamespace = false;
-		final int randomPartitions = -1;
 		if (commandLine.hasOption("c")) {
 			clearNamespace = true;
 		}

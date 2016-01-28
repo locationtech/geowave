@@ -135,11 +135,11 @@ public class SpatialDimensionalityTypeProvider implements
 	private static class SpatialOptions
 	{
 		@Parameter(names = {
-			"pointOnly"
+			"-pointOnly"
 		}, required = false, description = "The index will only be good at handling pointsand will not be optimized for handling lines/polys.  The default behavior is to handle any geometry.")
 		protected boolean pointOnly = false;
 		@Parameter(names = {
-			"allTiers"
+			"-allTiers"
 		}, required = false, description = "The index will represent all tiers.  Typically for vector data we only need a subset of the tiers to minimize query decomposition, but for raster data typically all tiers is better.")
 		protected boolean allTiers = false;
 	}
