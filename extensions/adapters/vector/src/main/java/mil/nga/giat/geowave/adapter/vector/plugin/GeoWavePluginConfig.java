@@ -441,6 +441,7 @@ public class GeoWavePluginConfig
 						String.class,
 						input.getDescription(),
 						!input.isOptional(),
+						"mypassword",
 						Collections.singletonMap(
 								Parameter.IS_PASSWORD,
 								Boolean.TRUE));
