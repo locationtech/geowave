@@ -12,6 +12,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import mil.nga.giat.geowave.core.cli.GenericStoreCommandLineOptions;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.DataStoreFactorySpi;
@@ -37,7 +38,7 @@ public class GeoWaveRasterConfig
 
 	protected static enum ConfigParameter {
 		NAMESPACE(
-				"namespace"),
+				GenericStoreCommandLineOptions.NAMESPACE_OPTION_KEY),
 		// the following two are optional parameters that will override the
 		// behavior of tile mosaicing that is already set within each adapter
 		INTERPOLATION(
@@ -165,25 +166,39 @@ public class GeoWaveRasterConfig
 		final Document dom = db.parse(input);
 		in.close();
 
-		final NodeList children = dom.getChildNodes();
+		final NodeList children = dom.getChildNodes().item(
+				0).getChildNodes();
 		final Map<String, String> configParams = new HashMap<String, String>();
 		for (int i = 0; i < children.getLength(); i++) {
 			final Node child = children.item(i);
-			boolean isConfigParameter = false;
-			for (final ConfigParameter p : ConfigParameter.values()) {
-				if (child.getNodeName().equalsIgnoreCase(
-						p.getConfigName())) {
-					isConfigParameter = true;
-					break;
-				}
-			}
-			if (!isConfigParameter) {
-				configParams.put(
-						child.getNodeName(),
-						child.getNodeValue());
-			}
+			configParams.put(
+					child.getNodeName(),
+					child.getTextContent());
 		}
 		return configParams;
+	}
+
+	static private String readValueString(
+			final Document dom,
+			final String elemName ) {
+		final Node n = getNodeByName(
+				dom,
+				elemName);
+
+		if (n == null) {
+			return null;
+		}
+
+		return n.getTextContent();
+	}
+
+	static private Node getNodeByName(
+			final Document dom,
+			final String elemName ) {
+		final NodeList list = dom.getElementsByTagName(elemName);
+		final Node n = list.item(0);
+
+		return n;
 	}
 
 	private static void parseParamsIntoRasterConfig(
