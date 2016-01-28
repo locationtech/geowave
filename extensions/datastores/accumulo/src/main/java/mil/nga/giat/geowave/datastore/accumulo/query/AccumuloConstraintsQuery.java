@@ -1,7 +1,9 @@
 package mil.nga.giat.geowave.datastore.accumulo.query;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map.Entry;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
@@ -9,6 +11,9 @@ import mil.nga.giat.geowave.core.index.ByteArrayUtils;
 import mil.nga.giat.geowave.core.index.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.core.store.ScanCallback;
+import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.filter.DedupeFilter;
 import mil.nga.giat.geowave.core.store.filter.DistributableFilterList;
 import mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter;
@@ -19,7 +24,12 @@ import mil.nga.giat.geowave.core.store.query.Query;
 
 import org.apache.accumulo.core.client.IteratorSetting;
 import org.apache.accumulo.core.client.ScannerBase;
+import org.apache.accumulo.core.data.Key;
+import org.apache.accumulo.core.data.Value;
 import org.apache.accumulo.core.iterators.user.WholeRowIterator;
+import org.apache.commons.lang3.tuple.Pair;
+
+import com.google.common.collect.Iterators;
 
 /**
  * This class represents basic numeric contraints applied to an Accumulo Query
@@ -33,12 +43,15 @@ public class AccumuloConstraintsQuery extends
 	protected final List<DistributableQueryFilter> distributableFilters;
 	protected boolean queryFiltersEnabled;
 
+	protected final Pair<DataAdapter<?>, DataStatistics<?>> computeStats;
+
 	public AccumuloConstraintsQuery(
 			final List<ByteArrayId> adapterIds,
 			final PrimaryIndex index,
 			final Query query,
 			final DedupeFilter clientDedupeFilter,
 			final ScanCallback<?> scanCallback,
+			final Pair<DataAdapter<?>, DataStatistics<?>> computeStats,
 			final String[] authorizations ) {
 		this(
 				adapterIds,
@@ -47,6 +60,7 @@ public class AccumuloConstraintsQuery extends
 				query != null ? query.createFilters(index.getIndexModel()) : null,
 				clientDedupeFilter,
 				scanCallback,
+				computeStats,
 				authorizations);
 		// TODO determine what to do with isSupported() - this at one
 		// point
@@ -86,6 +100,7 @@ public class AccumuloConstraintsQuery extends
 				queryFilters,
 				(DedupeFilter) null,
 				(ScanCallback<?>) null,
+				null,
 				new String[0]);
 
 	}
@@ -103,6 +118,7 @@ public class AccumuloConstraintsQuery extends
 				queryFilters,
 				(DedupeFilter) null,
 				(ScanCallback<?>) null,
+				null,
 				authorizations);
 
 	}
@@ -114,6 +130,7 @@ public class AccumuloConstraintsQuery extends
 			final List<QueryFilter> queryFilters,
 			final DedupeFilter clientDedupeFilter,
 			final ScanCallback<?> scanCallback,
+			final Pair<DataAdapter<?>, DataStatistics<?>> computeStats,
 			final String[] authorizations ) {
 		super(
 				adapterIds,
@@ -121,6 +138,7 @@ public class AccumuloConstraintsQuery extends
 				scanCallback,
 				authorizations);
 		this.constraints = constraints;
+		this.computeStats = computeStats;
 		final SplitFilterLists lists = splitList(queryFilters);
 		final List<QueryFilter> clientFilters = lists.clientFilters;
 		// add dedupe filters to the front of both lists so that the
@@ -141,14 +159,35 @@ public class AccumuloConstraintsQuery extends
 		queryFiltersEnabled = true;
 	}
 
+	protected boolean statsOnly() {
+		return ((computeStats != null) && (computeStats.getLeft() != null) && (computeStats.getRight() != null));
+
+	}
+
 	@Override
 	protected void addScanIteratorSettings(
 			final ScannerBase scanner ) {
 		if ((distributableFilters != null) && !distributableFilters.isEmpty() && queryFiltersEnabled) {
-			final IteratorSetting iteratorSettings = new IteratorSetting(
-					QueryFilterIterator.QUERY_ITERATOR_PRIORITY,
-					QueryFilterIterator.QUERY_ITERATOR_NAME,
-					QueryFilterIterator.class);
+
+			final IteratorSetting iteratorSettings;
+			if (statsOnly()) {
+				iteratorSettings = new IteratorSetting(
+						QueryFilterIterator.QUERY_ITERATOR_PRIORITY,
+						QueryFilterIterator.QUERY_ITERATOR_NAME,
+						StatisticComputingIterator.class);
+				iteratorSettings.addOption(
+						StatisticComputingIterator.ADAPTER_OPTION_NAME,
+						ByteArrayUtils.byteArrayToString(PersistenceUtils.toBinary(computeStats.getLeft())));
+				iteratorSettings.addOption(
+						StatisticComputingIterator.STATISTICS_OPTION_NAME,
+						ByteArrayUtils.byteArrayToString(PersistenceUtils.toBinary(computeStats.getRight())));
+			}
+			else {
+				iteratorSettings = new IteratorSetting(
+						QueryFilterIterator.QUERY_ITERATOR_PRIORITY,
+						QueryFilterIterator.QUERY_ITERATOR_NAME,
+						QueryFilterIterator.class);
+			}
 			final DistributableQueryFilter filterList = new DistributableFilterList(
 					distributableFilters);
 			iteratorSettings.addOption(
@@ -159,7 +198,9 @@ public class AccumuloConstraintsQuery extends
 					ByteArrayUtils.byteArrayToString(PersistenceUtils.toBinary(index.getIndexModel())));
 			scanner.addScanIterator(iteratorSettings);
 		}
-		else {
+		else
+
+		{
 			// we have to at least use a whole row iterator
 			final IteratorSetting iteratorSettings = new IteratorSetting(
 					QueryFilterIterator.WHOLE_ROW_ITERATOR_PRIORITY,
@@ -167,6 +208,7 @@ public class AccumuloConstraintsQuery extends
 					WholeRowIterator.class);
 			scanner.addScanIterator(iteratorSettings);
 		}
+
 	}
 
 	@Override
@@ -184,6 +226,45 @@ public class AccumuloConstraintsQuery extends
 	public void setQueryFiltersEnabled(
 			final boolean queryFiltersEnabled ) {
 		this.queryFiltersEnabled = queryFiltersEnabled;
+	}
+
+	@Override
+	protected Iterator initIterator(
+			final AdapterStore adapterStore,
+			final ScannerBase scanner ) {
+		if (statsOnly()) {
+			// aggregate the stats to a single value here
+
+			final Iterator<Entry<Key, Value>> it = scanner.iterator();
+
+			DataStatistics aggregatedStat = null;
+			if (!it.hasNext()) {
+				aggregatedStat = computeStats.getRight();
+			}
+			else {
+				while (it.hasNext()) {
+					final Entry<Key, Value> input = it.next();
+					if (input.getValue() != null) {
+						if (aggregatedStat == null) {
+							aggregatedStat = PersistenceUtils.fromBinary(
+									input.getValue().get(),
+									DataStatistics.class);
+						}
+						else {
+							aggregatedStat.merge(PersistenceUtils.fromBinary(
+									input.getValue().get(),
+									DataStatistics.class));
+						}
+					}
+				}
+			}
+			return Iterators.singletonIterator(aggregatedStat);
+		}
+		else {
+			return super.initIterator(
+					adapterStore,
+					scanner);
+		}
 	}
 
 	private static SplitFilterLists splitList(

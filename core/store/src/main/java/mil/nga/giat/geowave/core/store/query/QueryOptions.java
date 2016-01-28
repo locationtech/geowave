@@ -16,9 +16,13 @@ import mil.nga.giat.geowave.core.store.DataStoreEntryInfo;
 import mil.nga.giat.geowave.core.store.ScanCallback;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.index.Index;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 
 /**
  * Directs a query to restrict searches to specific adapters, indices, etc.. For
@@ -72,6 +76,7 @@ public class QueryOptions implements
 
 	private List<ByteArrayId> adapterIds = null;
 	private List<ByteArrayId> indexIds = null;
+	private Pair<DataAdapter<?>, DataStatistics<?>> computeStat;
 	private Integer limit = -1;
 	private double[] maxResolutionSubsamplingPerDimension = null;
 	private transient ScanCallback<?> scanCallback = DEFAULT_CALLBACK;
@@ -439,6 +444,18 @@ public class QueryOptions implements
 			count--;
 		}
 
+	}
+
+	public Pair<DataAdapter<?>, DataStatistics<?>> getComputeStatistics() {
+		return computeStat;
+	}
+
+	public void setComputeStatistics(
+			final DataAdapter<?> adapter,
+			final DataStatistics<?> statistic ) {
+		computeStat = new ImmutablePair<DataAdapter<?>, DataStatistics<?>>(
+				adapter,
+				statistic);
 	}
 
 	@Override

@@ -7,6 +7,7 @@ import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.DataStore;
+import mil.nga.giat.geowave.core.store.adapter.statistics.CountDataStatistics;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 
 import org.apache.commons.cli.CommandLine;
@@ -21,6 +22,7 @@ public class BBOXQuery extends
 		AbstractGeoWaveQuery
 {
 	private Geometry geom;
+	private boolean useStats = false;
 
 	@Override
 	protected void applyOptions(
@@ -51,6 +53,13 @@ public class BBOXQuery extends
 		options.addOption(east);
 		options.addOption(north);
 		options.addOption(south);
+
+		final Option stats = new Option(
+				"useStats",
+				false,
+				"Compute count on the server side");
+		stats.setRequired(false);
+		options.addOption(stats);
 	}
 
 	@Override
@@ -65,6 +74,7 @@ public class BBOXQuery extends
 				east,
 				south,
 				north));
+		useStats = commandLine.hasOption("useStats");
 	}
 
 	@Override
@@ -74,24 +84,44 @@ public class BBOXQuery extends
 			final DataStore dataStore,
 			final boolean debug ) {
 		long count = 0;
-		try (final CloseableIterator<Object> it = dataStore.query(
-				new QueryOptions(
-						adapterId,
-						null),
-				new SpatialQuery(
-						geom))) {
-			while (it.hasNext()) {
-				if (debug) {
-					System.out.println(it.next());
-				}
-				else {
-					it.next();
-				}
-				count++;
+		if (useStats) {
+			final QueryOptions options = new QueryOptions(
+					adapterId,
+					null);
+			options.setComputeStatistics(
+					adapter,
+					new CountDataStatistics(
+							adapterId));
+			try (final CloseableIterator<Object> it = dataStore.query(
+					options,
+					new SpatialQuery(
+							geom))) {
+				count += ((CountDataStatistics) (it.next())).getCount();
+			}
+			catch (final IOException e) {
+				e.printStackTrace();
 			}
 		}
-		catch (final IOException e) {
-			e.printStackTrace();
+		else {
+			try (final CloseableIterator<Object> it = dataStore.query(
+					new QueryOptions(
+							adapterId,
+							null),
+					new SpatialQuery(
+							geom))) {
+				while (it.hasNext()) {
+					if (debug) {
+						System.out.println(it.next());
+					}
+					else {
+						it.next();
+					}
+					count++;
+				}
+			}
+			catch (final IOException e) {
+				e.printStackTrace();
+			}
 		}
 		return count;
 	}

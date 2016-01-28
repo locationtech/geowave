@@ -6,15 +6,6 @@ import java.net.URL;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.accumulo.core.data.Key;
-import org.apache.accumulo.core.data.Value;
-import org.apache.accumulo.core.iterators.IteratorEnvironment;
-import org.apache.accumulo.core.iterators.SortedKeyValueIterator;
-import org.apache.accumulo.core.iterators.user.WholeRowIterator;
-import org.apache.hadoop.fs.FsUrlStreamHandlerFactory;
-import org.apache.hadoop.io.Text;
-import org.apache.log4j.Logger;
-
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayUtils;
 import mil.nga.giat.geowave.core.index.PersistenceUtils;
@@ -28,6 +19,15 @@ import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloRowId;
 import mil.nga.giat.geowave.datastore.accumulo.util.AccumuloUtils;
+
+import org.apache.accumulo.core.data.Key;
+import org.apache.accumulo.core.data.Value;
+import org.apache.accumulo.core.iterators.IteratorEnvironment;
+import org.apache.accumulo.core.iterators.SortedKeyValueIterator;
+import org.apache.accumulo.core.iterators.user.WholeRowIterator;
+import org.apache.hadoop.fs.FsUrlStreamHandlerFactory;
+import org.apache.hadoop.io.Text;
+import org.apache.log4j.Logger;
 
 /**
  * This iterator wraps a DistributableQueryFilter which is deserialized from a
@@ -159,13 +159,27 @@ public class QueryFilterIterator extends
 					rowId.getNumberOfDuplicates(),
 					commonData,
 					unknownData);
-			return filter.accept(
+			return accept(
+					currentRow,
+					keys,
+					values,
 					model,
 					encoding);
 		}
 		// if the query filter or index model did not get sent to this iterator,
 		// it'll just have to accept everything
 		return true;
+	}
+
+	protected boolean accept(
+			final Text currentRow,
+			final List<Key> keys,
+			final List<Value> values,
+			final CommonIndexModel model,
+			final CommonIndexedPersistenceEncoding encoding ) {
+		return filter.accept(
+				model,
+				encoding);
 	}
 
 	@Override

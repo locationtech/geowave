@@ -29,6 +29,7 @@ import mil.nga.giat.geowave.core.store.IngestCallback;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.statistics.CountDataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.core.store.adapter.statistics.RowRangeHistogramStatistics;
@@ -825,6 +826,37 @@ public class GeoWaveBasicIT extends
 			Assert.assertEquals(
 					expectedResults.count,
 					totalResults);
+
+			final AdapterStore adapterStore = new AccumuloAdapterStore(
+					accumuloOperations);
+			long statisticsResult = 0;
+			try (CloseableIterator<DataAdapter<?>> adapterIt = adapterStore.getAdapters()) {
+				while (adapterIt.hasNext()) {
+					final QueryOptions queryOptions = (index == null) ? new QueryOptions() : new QueryOptions(
+							index);
+					final DataAdapter<?> adapter = adapterIt.next();
+					queryOptions.setComputeStatistics(
+							adapter,
+							new CountDataStatistics(
+									adapter.getAdapterId()));
+					queryOptions.setAdapter(adapter);
+					try (final CloseableIterator<?> countResult = geowaveStore.query(
+							queryOptions,
+							query)) {
+						// results should already be aggregated, there should be
+						// exactly one value in this iterator
+						Assert.assertTrue(countResult.hasNext());
+						final Object result = countResult.next();
+						Assert.assertTrue(result instanceof CountDataStatistics);
+						statisticsResult += ((CountDataStatistics) result).getCount();
+						Assert.assertFalse(countResult.hasNext());
+					}
+				}
+			}
+
+			Assert.assertEquals(
+					expectedResults.count,
+					statisticsResult);
 		}
 	}
 

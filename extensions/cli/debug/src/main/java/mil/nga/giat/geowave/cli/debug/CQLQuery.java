@@ -6,6 +6,7 @@ import mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.DataStore;
+import mil.nga.giat.geowave.core.store.adapter.statistics.CountDataStatistics;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 
 import org.apache.commons.cli.CommandLine;
@@ -17,6 +18,7 @@ public class CQLQuery extends
 		AbstractGeoWaveQuery
 {
 	private String cqlStr;
+	private boolean useStats = false;
 
 	@Override
 	protected void applyOptions(
@@ -27,6 +29,13 @@ public class CQLQuery extends
 				"CQL Filter executed client side");
 		cql.setRequired(true);
 		options.addOption(cql);
+
+		final Option stats = new Option(
+				"useStats",
+				false,
+				"Compute count on the server side");
+		stats.setRequired(false);
+		options.addOption(stats);
 	}
 
 	@Override
@@ -34,6 +43,7 @@ public class CQLQuery extends
 			final CommandLine commandLine ) {
 		cqlStr = commandLine.getOptionValue(
 				"cql").toString();
+		useStats = commandLine.hasOption("useStats");
 	}
 
 	@Override
@@ -43,30 +53,56 @@ public class CQLQuery extends
 			final DataStore dataStore,
 			final boolean debug ) {
 		long count = 0;
-		try (final CloseableIterator<Object> it = dataStore.query(
-				new QueryOptions(
-						adapterId,
-						null),
-				new mil.nga.giat.geowave.adapter.vector.query.cql.CQLQuery(
-						cqlStr,
-						adapter))) {
-			while (it.hasNext()) {
-				if (debug) {
-					System.out.println(it.next());
-				}
-				else {
-					it.next();
-				}
-				count++;
+		if (useStats) {
+			final QueryOptions options = new QueryOptions(
+					adapterId,
+					null);
+			options.setComputeStatistics(
+					adapter,
+					new CountDataStatistics(
+							adapterId));
+			try (final CloseableIterator<Object> it = dataStore.query(
+					options,
+					new mil.nga.giat.geowave.adapter.vector.query.cql.CQLQuery(
+							cqlStr,
+							adapter))) {
+				count += ((CountDataStatistics) (it.next())).getCount();
 			}
+			catch (final IOException e) {
+				e.printStackTrace();
+			}
+			catch (final CQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			return count;
 		}
-		catch (final IOException e) {
-			e.printStackTrace();
+		else {
+			try (final CloseableIterator<Object> it = dataStore.query(
+					new QueryOptions(
+							adapterId,
+							null),
+					new mil.nga.giat.geowave.adapter.vector.query.cql.CQLQuery(
+							cqlStr,
+							adapter))) {
+				while (it.hasNext()) {
+					if (debug) {
+						System.out.println(it.next());
+					}
+					else {
+						it.next();
+					}
+					count++;
+				}
+			}
+			catch (final IOException e) {
+				e.printStackTrace();
+			}
+			catch (final CQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			return count;
 		}
-		catch (final CQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		return count;
 	}
 }
