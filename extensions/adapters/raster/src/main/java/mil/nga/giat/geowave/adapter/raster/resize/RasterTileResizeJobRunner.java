@@ -5,6 +5,7 @@ import java.io.IOException;
 import mil.nga.giat.geowave.adapter.raster.adapter.RasterDataAdapter;
 import mil.nga.giat.geowave.adapter.raster.adapter.merge.nodata.NoDataMergeStrategy;
 import mil.nga.giat.geowave.core.cli.AdapterStoreCommandLineOptions;
+import mil.nga.giat.geowave.core.cli.CLIOperationDriver;
 import mil.nga.giat.geowave.core.cli.CommandLineResult;
 import mil.nga.giat.geowave.core.cli.DataStoreCommandLineOptions;
 import mil.nga.giat.geowave.core.cli.IndexStoreCommandLineOptions;
@@ -30,6 +31,7 @@ import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.io.ObjectWritable;
@@ -41,7 +43,8 @@ import org.opengis.coverage.grid.GridCoverage;
 
 public class RasterTileResizeJobRunner extends
 		Configured implements
-		Tool
+		Tool,
+		CLIOperationDriver
 {
 	private static final Logger LOGGER = Logger.getLogger(RasterTileResizeJobRunner.class);
 
@@ -317,5 +320,20 @@ public class RasterTileResizeJobRunner extends
 		inputIndexStoreOptions = inputIndexStoreOptionsResult.getResult();
 		outputDataStoreOptions = outputDataStoreOptionsResult.getResult();
 		return runJob();
+	}
+
+	@Override
+	public boolean runOperation(
+			final String[] args )
+			throws ParseException {
+		try {
+			return run(args) == 0;
+		}
+		catch (final Exception e) {
+			LOGGER.warn(
+					"Unable to run operation",
+					e);
+			return false;
+		}
 	}
 }
