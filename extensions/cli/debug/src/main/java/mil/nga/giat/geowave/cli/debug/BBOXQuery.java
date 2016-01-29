@@ -7,8 +7,8 @@ import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.DataStore;
-import mil.nga.giat.geowave.core.store.adapter.statistics.CountDataStatistics;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
+import mil.nga.giat.geowave.core.store.query.aggregate.CountAggregation;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
@@ -22,7 +22,7 @@ public class BBOXQuery extends
 		AbstractGeoWaveQuery
 {
 	private Geometry geom;
-	private boolean useStats = false;
+	private boolean useAggregation = false;
 
 	@Override
 	protected void applyOptions(
@@ -55,7 +55,7 @@ public class BBOXQuery extends
 		options.addOption(south);
 
 		final Option stats = new Option(
-				"useStats",
+				"useAggregation",
 				false,
 				"Compute count on the server side");
 		stats.setRequired(false);
@@ -74,29 +74,29 @@ public class BBOXQuery extends
 				east,
 				south,
 				north));
-		useStats = commandLine.hasOption("useStats");
+		useAggregation = commandLine.hasOption("useAggregation");
 	}
 
 	@Override
 	protected long runQuery(
 			final GeotoolsFeatureDataAdapter adapter,
 			final ByteArrayId adapterId,
+			final ByteArrayId indexId,
 			final DataStore dataStore,
 			final boolean debug ) {
 		long count = 0;
-		if (useStats) {
+		if (useAggregation) {
 			final QueryOptions options = new QueryOptions(
 					adapterId,
-					null);
-			options.setComputeStatistics(
-					adapter,
-					new CountDataStatistics(
-							adapterId));
+					indexId);
+			options.setAggregation(
+					new CountAggregation(),
+					adapter);
 			try (final CloseableIterator<Object> it = dataStore.query(
 					options,
 					new SpatialQuery(
 							geom))) {
-				count += ((CountDataStatistics) (it.next())).getCount();
+				count += ((CountAggregation) (it.next())).getCount();
 			}
 			catch (final IOException e) {
 				e.printStackTrace();
@@ -106,7 +106,7 @@ public class BBOXQuery extends
 			try (final CloseableIterator<Object> it = dataStore.query(
 					new QueryOptions(
 							adapterId,
-							null),
+							indexId),
 					new SpatialQuery(
 							geom))) {
 				while (it.hasNext()) {

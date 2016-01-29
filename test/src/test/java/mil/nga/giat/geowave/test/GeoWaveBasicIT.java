@@ -29,7 +29,6 @@ import mil.nga.giat.geowave.core.store.IngestCallback;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
-import mil.nga.giat.geowave.core.store.adapter.statistics.CountDataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.core.store.adapter.statistics.RowRangeHistogramStatistics;
@@ -42,6 +41,7 @@ import mil.nga.giat.geowave.core.store.memory.MemoryAdapterStore;
 import mil.nga.giat.geowave.core.store.query.DataIdQuery;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
+import mil.nga.giat.geowave.core.store.query.aggregate.CountAggregation;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStore;
 import mil.nga.giat.geowave.datastore.accumulo.index.secondary.AccumuloSecondaryIndexDataStore;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloAdapterStore;
@@ -835,10 +835,9 @@ public class GeoWaveBasicIT extends
 					final QueryOptions queryOptions = (index == null) ? new QueryOptions() : new QueryOptions(
 							index);
 					final DataAdapter<?> adapter = adapterIt.next();
-					queryOptions.setComputeStatistics(
-							adapter,
-							new CountDataStatistics(
-									adapter.getAdapterId()));
+					queryOptions.setAggregation(
+							new CountAggregation(),
+							adapter);
 					queryOptions.setAdapter(adapter);
 					try (final CloseableIterator<?> countResult = geowaveStore.query(
 							queryOptions,
@@ -847,8 +846,8 @@ public class GeoWaveBasicIT extends
 						// exactly one value in this iterator
 						Assert.assertTrue(countResult.hasNext());
 						final Object result = countResult.next();
-						Assert.assertTrue(result instanceof CountDataStatistics);
-						statisticsResult += ((CountDataStatistics) result).getCount();
+						Assert.assertTrue(result instanceof CountAggregation);
+						statisticsResult += ((CountAggregation) result).getCount();
 						Assert.assertFalse(countResult.hasNext());
 					}
 				}

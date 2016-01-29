@@ -6,8 +6,8 @@ import mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.DataStore;
-import mil.nga.giat.geowave.core.store.adapter.statistics.CountDataStatistics;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
+import mil.nga.giat.geowave.core.store.query.aggregate.CountAggregation;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
@@ -18,7 +18,7 @@ public class CQLQuery extends
 		AbstractGeoWaveQuery
 {
 	private String cqlStr;
-	private boolean useStats = false;
+	private boolean useAggregation = false;
 
 	@Override
 	protected void applyOptions(
@@ -30,12 +30,12 @@ public class CQLQuery extends
 		cql.setRequired(true);
 		options.addOption(cql);
 
-		final Option stats = new Option(
-				"useStats",
+		final Option aggregation = new Option(
+				"useAggregation",
 				false,
 				"Compute count on the server side");
-		stats.setRequired(false);
-		options.addOption(stats);
+		aggregation.setRequired(false);
+		options.addOption(aggregation);
 	}
 
 	@Override
@@ -43,30 +43,30 @@ public class CQLQuery extends
 			final CommandLine commandLine ) {
 		cqlStr = commandLine.getOptionValue(
 				"cql").toString();
-		useStats = commandLine.hasOption("useStats");
+		useAggregation = commandLine.hasOption("useAggregation");
 	}
 
 	@Override
 	protected long runQuery(
 			final GeotoolsFeatureDataAdapter adapter,
 			final ByteArrayId adapterId,
+			final ByteArrayId indexId,
 			final DataStore dataStore,
 			final boolean debug ) {
 		long count = 0;
-		if (useStats) {
+		if (useAggregation) {
 			final QueryOptions options = new QueryOptions(
 					adapterId,
-					null);
-			options.setComputeStatistics(
-					adapter,
-					new CountDataStatistics(
-							adapterId));
+					indexId);
+			options.setAggregation(
+					new CountAggregation(),
+					adapter);
 			try (final CloseableIterator<Object> it = dataStore.query(
 					options,
 					new mil.nga.giat.geowave.adapter.vector.query.cql.CQLQuery(
 							cqlStr,
 							adapter))) {
-				count += ((CountDataStatistics) (it.next())).getCount();
+				count += ((CountAggregation) (it.next())).getCount();
 			}
 			catch (final IOException e) {
 				e.printStackTrace();
@@ -81,7 +81,7 @@ public class CQLQuery extends
 			try (final CloseableIterator<Object> it = dataStore.query(
 					new QueryOptions(
 							adapterId,
-							null),
+							indexId),
 					new mil.nga.giat.geowave.adapter.vector.query.cql.CQLQuery(
 							cqlStr,
 							adapter))) {

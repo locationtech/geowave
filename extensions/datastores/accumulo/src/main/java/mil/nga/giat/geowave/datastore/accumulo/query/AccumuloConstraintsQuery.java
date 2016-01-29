@@ -13,7 +13,6 @@ import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.core.store.ScanCallback;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
-import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.filter.DedupeFilter;
 import mil.nga.giat.geowave.core.store.filter.DistributableFilterList;
 import mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter;
@@ -21,6 +20,7 @@ import mil.nga.giat.geowave.core.store.filter.QueryFilter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.memory.DataStoreUtils;
 import mil.nga.giat.geowave.core.store.query.Query;
+import mil.nga.giat.geowave.core.store.query.aggregate.Aggregation;
 
 import org.apache.accumulo.core.client.IteratorSetting;
 import org.apache.accumulo.core.client.ScannerBase;
@@ -43,7 +43,7 @@ public class AccumuloConstraintsQuery extends
 	protected final List<DistributableQueryFilter> distributableFilters;
 	protected boolean queryFiltersEnabled;
 
-	protected final Pair<DataAdapter<?>, DataStatistics<?>> computeStats;
+	protected final Pair<DataAdapter<?>, Aggregation<?>> aggregation;
 
 	public AccumuloConstraintsQuery(
 			final List<ByteArrayId> adapterIds,
@@ -51,7 +51,7 @@ public class AccumuloConstraintsQuery extends
 			final Query query,
 			final DedupeFilter clientDedupeFilter,
 			final ScanCallback<?> scanCallback,
-			final Pair<DataAdapter<?>, DataStatistics<?>> computeStats,
+			final Pair<DataAdapter<?>, Aggregation<?>> aggregation,
 			final String[] authorizations ) {
 		this(
 				adapterIds,
@@ -60,15 +60,14 @@ public class AccumuloConstraintsQuery extends
 				query != null ? query.createFilters(index.getIndexModel()) : null,
 				clientDedupeFilter,
 				scanCallback,
-				computeStats,
+				aggregation,
 				authorizations);
 		// TODO determine what to do with isSupported() - this at one
-		// point
-		// acted as rudimentary query planning but it seems like a
-		// responsibility of higher level query planning logic
-		// for example, sometimes a spatial index is better at handling
-		// a spatial-temporal query than a spatial-temporal index, if
-		// the constraints are much more restrictive spatially
+		// point acted as rudimentary query planning but it seems like a
+		// responsibility of higher level query planning logic for example,
+		// sometimes a spatial index is better at handling a spatial-temporal
+		// query than a spatial-temporal index, if the constraints are much more
+		// restrictive spatially
 
 		// if ((query != null) && !query.isSupported(index)) {
 		// throw new IllegalArgumentException(
@@ -130,7 +129,7 @@ public class AccumuloConstraintsQuery extends
 			final List<QueryFilter> queryFilters,
 			final DedupeFilter clientDedupeFilter,
 			final ScanCallback<?> scanCallback,
-			final Pair<DataAdapter<?>, DataStatistics<?>> computeStats,
+			final Pair<DataAdapter<?>, Aggregation<?>> aggregation,
 			final String[] authorizations ) {
 		super(
 				adapterIds,
@@ -138,7 +137,7 @@ public class AccumuloConstraintsQuery extends
 				scanCallback,
 				authorizations);
 		this.constraints = constraints;
-		this.computeStats = computeStats;
+		this.aggregation = aggregation;
 		final SplitFilterLists lists = splitList(queryFilters);
 		final List<QueryFilter> clientFilters = lists.clientFilters;
 		// add dedupe filters to the front of both lists so that the
@@ -159,8 +158,8 @@ public class AccumuloConstraintsQuery extends
 		queryFiltersEnabled = true;
 	}
 
-	protected boolean statsOnly() {
-		return ((computeStats != null) && (computeStats.getLeft() != null) && (computeStats.getRight() != null));
+	protected boolean isAggregation() {
+		return ((aggregation != null) && (aggregation.getLeft() != null) && (aggregation.getRight() != null));
 
 	}
 
@@ -170,17 +169,17 @@ public class AccumuloConstraintsQuery extends
 		if ((distributableFilters != null) && !distributableFilters.isEmpty() && queryFiltersEnabled) {
 
 			final IteratorSetting iteratorSettings;
-			if (statsOnly()) {
+			if (isAggregation()) {
 				iteratorSettings = new IteratorSetting(
 						QueryFilterIterator.QUERY_ITERATOR_PRIORITY,
 						QueryFilterIterator.QUERY_ITERATOR_NAME,
-						StatisticComputingIterator.class);
+						AggregationIterator.class);
 				iteratorSettings.addOption(
-						StatisticComputingIterator.ADAPTER_OPTION_NAME,
-						ByteArrayUtils.byteArrayToString(PersistenceUtils.toBinary(computeStats.getLeft())));
+						AggregationIterator.ADAPTER_OPTION_NAME,
+						ByteArrayUtils.byteArrayToString(PersistenceUtils.toBinary(aggregation.getLeft())));
 				iteratorSettings.addOption(
-						StatisticComputingIterator.STATISTICS_OPTION_NAME,
-						ByteArrayUtils.byteArrayToString(PersistenceUtils.toBinary(computeStats.getRight())));
+						AggregationIterator.AGGREGATION_OPTION_NAME,
+						ByteArrayUtils.byteArrayToString(PersistenceUtils.toBinary(aggregation.getRight())));
 			}
 			else {
 				iteratorSettings = new IteratorSetting(
@@ -232,33 +231,33 @@ public class AccumuloConstraintsQuery extends
 	protected Iterator initIterator(
 			final AdapterStore adapterStore,
 			final ScannerBase scanner ) {
-		if (statsOnly()) {
+		if (isAggregation()) {
 			// aggregate the stats to a single value here
 
 			final Iterator<Entry<Key, Value>> it = scanner.iterator();
 
-			DataStatistics aggregatedStat = null;
+			Aggregation mergedAggregation = null;
 			if (!it.hasNext()) {
-				aggregatedStat = computeStats.getRight();
+				mergedAggregation = aggregation.getRight();
 			}
 			else {
 				while (it.hasNext()) {
 					final Entry<Key, Value> input = it.next();
 					if (input.getValue() != null) {
-						if (aggregatedStat == null) {
-							aggregatedStat = PersistenceUtils.fromBinary(
+						if (mergedAggregation == null) {
+							mergedAggregation = PersistenceUtils.fromBinary(
 									input.getValue().get(),
-									DataStatistics.class);
+									Aggregation.class);
 						}
 						else {
-							aggregatedStat.merge(PersistenceUtils.fromBinary(
+							mergedAggregation.merge(PersistenceUtils.fromBinary(
 									input.getValue().get(),
-									DataStatistics.class));
+									Aggregation.class));
 						}
 					}
 				}
 			}
-			return Iterators.singletonIterator(aggregatedStat);
+			return Iterators.singletonIterator(mergedAggregation);
 		}
 		else {
 			return super.initIterator(

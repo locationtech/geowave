@@ -16,10 +16,10 @@ import mil.nga.giat.geowave.core.store.DataStoreEntryInfo;
 import mil.nga.giat.geowave.core.store.ScanCallback;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
-import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.index.Index;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.core.store.query.aggregate.Aggregation;
 
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
@@ -76,7 +76,7 @@ public class QueryOptions implements
 
 	private List<ByteArrayId> adapterIds = null;
 	private List<ByteArrayId> indexIds = null;
-	private Pair<DataAdapter<?>, DataStatistics<?>> computeStat;
+	private Pair<DataAdapter<?>, Aggregation<?>> aggregationAdapterPair;
 	private Integer limit = -1;
 	private double[] maxResolutionSubsamplingPerDimension = null;
 	private transient ScanCallback<?> scanCallback = DEFAULT_CALLBACK;
@@ -446,16 +446,16 @@ public class QueryOptions implements
 
 	}
 
-	public Pair<DataAdapter<?>, DataStatistics<?>> getComputeStatistics() {
-		return computeStat;
+	public Pair<DataAdapter<?>, Aggregation<?>> getAggregation() {
+		return aggregationAdapterPair;
 	}
 
-	public void setComputeStatistics(
-			final DataAdapter<?> adapter,
-			final DataStatistics<?> statistic ) {
-		computeStat = new ImmutablePair<DataAdapter<?>, DataStatistics<?>>(
+	public void setAggregation(
+			final Aggregation<?> aggregation,
+			final DataAdapter<?> adapter ) {
+		aggregationAdapterPair = new ImmutablePair<DataAdapter<?>, Aggregation<?>>(
 				adapter,
-				statistic);
+				aggregation);
 	}
 
 	@Override

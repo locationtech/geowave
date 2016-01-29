@@ -273,7 +273,7 @@ public class AccumuloDataStore implements
 								sanitizedQuery,
 								filter,
 								sanitizedQueryOptions.getScanCallback(),
-								queryOptions.getComputeStatistics(),
+								queryOptions.getAggregation(),
 								sanitizedQueryOptions.getAuthorizations());
 						results.add(accumuloQuery.query(
 								accumuloOperations,
@@ -306,7 +306,7 @@ public class AccumuloDataStore implements
 									sanitizedQuery,
 									filter,
 									sanitizedQueryOptions.getScanCallback(),
-									queryOptions.getComputeStatistics(),
+									queryOptions.getAggregation(),
 									sanitizedQueryOptions.getAuthorizations());
 
 							results.add(accumuloQuery.query(
