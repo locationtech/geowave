@@ -35,6 +35,7 @@ public class AccumuloRowIdsQuery<T> extends
 				(Query) null,
 				dedupFilter,
 				scanCallback,
+				null,
 				authorizations);
 		this.rows = rows;
 	}
@@ -52,6 +53,7 @@ public class AccumuloRowIdsQuery<T> extends
 				(Query) null,
 				dedupFilter,
 				scanCallback,
+				null,
 				authorizations);
 		this.rows = rows;
 	}
@@ -59,11 +61,12 @@ public class AccumuloRowIdsQuery<T> extends
 	@Override
 	protected List<ByteArrayRange> getRanges() {
 		final List<ByteArrayRange> ranges = new ArrayList<ByteArrayRange>();
-		for (ByteArrayId row : rows)
+		for (final ByteArrayId row : rows) {
 			ranges.add(new ByteArrayRange(
 					row,
 					row,
 					true));
+		}
 		return ranges;
 	}
 }

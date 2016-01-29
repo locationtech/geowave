@@ -43,7 +43,7 @@ public class InputFormatAccumuloRangeQuery extends
 		try {
 			return queryOptions.getAdapterIds(adapterStore);
 		}
-		catch (IOException e) {
+		catch (final IOException e) {
 			LOGGER.error(
 					"Adapter IDs not set and unattainable from the AdapterStore",
 					e);
@@ -68,6 +68,7 @@ public class InputFormatAccumuloRangeQuery extends
 				queryFilters,
 				(DedupeFilter) null,
 				queryOptions.getScanCallback(),
+				null,
 				queryOptions.getAuthorizations());
 
 		this.accumuloRange = accumuloRange;

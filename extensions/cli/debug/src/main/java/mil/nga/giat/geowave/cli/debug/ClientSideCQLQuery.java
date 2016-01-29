@@ -49,11 +49,14 @@ public class ClientSideCQLQuery extends
 	protected long runQuery(
 			final GeotoolsFeatureDataAdapter adapter,
 			final ByteArrayId adapterId,
+			final ByteArrayId indexId,
 			final DataStore dataStore,
 			final boolean debug ) {
 		long count = 0;
 		try (final CloseableIterator<Object> it = dataStore.query(
-				new QueryOptions(),
+				new QueryOptions(
+						adapterId,
+						indexId),
 				null)) {
 			while (it.hasNext()) {
 				final Object o = it.next();

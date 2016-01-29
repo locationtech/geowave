@@ -48,6 +48,13 @@ abstract public class AbstractGeoWaveQuery implements
 				"Print out additional info for debug purposes");
 		debugOpt.setRequired(false);
 		allOptions.addOption(debugOpt);
+
+		final Option indexIdOpt = new Option(
+				"indexId",
+				true,
+				"The name of the index (optional)");
+		indexIdOpt.setRequired(false);
+		allOptions.addOption(indexIdOpt);
 		final BasicParser parser = new BasicParser();
 		final CommandLine commandLine = parser.parse(
 				allOptions,
@@ -60,6 +67,11 @@ abstract public class AbstractGeoWaveQuery implements
 					commandLine.getOptionValue("adapterId"));
 		}
 		final boolean debug = commandLine.hasOption("debug");
+		ByteArrayId indexId = null;
+		if (commandLine.hasOption("indexId")) {
+			indexId = new ByteArrayId(
+					commandLine.getOptionValue("indexId"));
+		}
 
 		DataStore dataStore;
 		AdapterStore adapterStore;
@@ -85,6 +97,7 @@ abstract public class AbstractGeoWaveQuery implements
 			final long results = runQuery(
 					adapter,
 					adapterId,
+					indexId,
 					dataStore,
 					debug);
 			stopWatch.stop();
@@ -107,6 +120,7 @@ abstract public class AbstractGeoWaveQuery implements
 	abstract protected long runQuery(
 			final GeotoolsFeatureDataAdapter adapter,
 			final ByteArrayId adapterId,
+			final ByteArrayId indexId,
 			DataStore dataStore,
 			boolean debug );
 
