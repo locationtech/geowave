@@ -91,9 +91,7 @@
 </dl>
 <hr>
 <br>
-<pre>@Produces(value="application/json")
-@Path(value="/ingest")
-public interface <span class="strong">IngestService</span></pre>
+<pre>public interface <span class="strong">IngestService</span></pre>
 </li>
 </ul>
 </div>
@@ -141,11 +139,7 @@ public interface <span class="strong">IngestService</span></pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>localIngest</h4>
-<pre>@POST
-@Path(value="/local")
-@Consumes(value="multipart/form-data")
-@Produces(value="application/json")
-javax.ws.rs.core.Response&nbsp;localIngest(org.glassfish.jersey.media.multipart.FormDataMultiPart&nbsp;multiPart)</pre>
+<pre>javax.ws.rs.core.Response&nbsp;localIngest(org.glassfish.jersey.media.multipart.FormDataMultiPart&nbsp;multiPart)</pre>
 </li>
 </ul>
 <a name="hdfsIngest(org.glassfish.jersey.media.multipart.FormDataMultiPart)">
@@ -154,11 +148,7 @@ javax.ws.rs.core.Response&nbsp;localIngest(org.glassfish.jersey.media.multipart.
 <ul class="blockListLast">
 <li class="blockList">
 <h4>hdfsIngest</h4>
-<pre>@POST
-@Path(value="/hdfs")
-@Consumes(value="multipart/form-data")
-@Produces(value="application/json")
-javax.ws.rs.core.Response&nbsp;hdfsIngest(org.glassfish.jersey.media.multipart.FormDataMultiPart&nbsp;multiPart)</pre>
+<pre>javax.ws.rs.core.Response&nbsp;hdfsIngest(org.glassfish.jersey.media.multipart.FormDataMultiPart&nbsp;multiPart)</pre>
 </li>
 </ul>
 </li>
