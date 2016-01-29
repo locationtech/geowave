@@ -91,7 +91,10 @@
 </dl>
 <hr>
 <br>
-<pre>public interface <span class="strong">InfoService</span></pre>
+<pre>@Produces(value="application/json")
+@Consumes(value="application/json")
+@Path(value="/info")
+public interface <span class="strong">InfoService</span></pre>
 </li>
 </ul>
 </div>
@@ -139,7 +142,11 @@
 <ul class="blockList">
 <li class="blockList">
 <h4>getIndices</h4>
-<pre>javax.ws.rs.core.Response&nbsp;getIndices(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace)</pre>
+<pre>@GET
+@Produces(value="application/json")
+@Path(value="/namespaces/{namespace}/indices")
+javax.ws.rs.core.Response&nbsp;getIndices(@PathParam(value="namespace")
+                                                     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace)</pre>
 </li>
 </ul>
 <a name="getAdapters(java.lang.String)">
@@ -148,7 +155,11 @@
 <ul class="blockListLast">
 <li class="blockList">
 <h4>getAdapters</h4>
-<pre>javax.ws.rs.core.Response&nbsp;getAdapters(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace)</pre>
+<pre>@GET
+@Produces(value="application/json")
+@Path(value="/namespaces/{namespace}/adapters")
+javax.ws.rs.core.Response&nbsp;getAdapters(@PathParam(value="namespace")
+                                                      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace)</pre>
 </li>
 </ul>
 </li>
