@@ -99,7 +99,7 @@
 </dl>
 <dl>
 <dt>Direct Known Subclasses:</dt>
-<dd><a href="../../../../../../../mil/nga/giat/geowave/format/geolife/GeoLifeIngestFormat.html" title="class in mil.nga.giat.geowave.format.geolife">GeoLifeIngestFormat</a>, <a href="../../../../../../../mil/nga/giat/geowave/format/gpx/GpxIngestFormat.html" title="class in mil.nga.giat.geowave.format.gpx">GpxIngestFormat</a>, <a href="../../../../../../../mil/nga/giat/geowave/format/tdrive/TdriveIngestFormat.html" title="class in mil.nga.giat.geowave.format.tdrive">TdriveIngestFormat</a></dd>
+<dd><a href="../../../../../../../mil/nga/giat/geowave/format/gdelt/GDELTIngestFormat.html" title="class in mil.nga.giat.geowave.format.gdelt">GDELTIngestFormat</a>, <a href="../../../../../../../mil/nga/giat/geowave/format/geolife/GeoLifeIngestFormat.html" title="class in mil.nga.giat.geowave.format.geolife">GeoLifeIngestFormat</a>, <a href="../../../../../../../mil/nga/giat/geowave/format/gpx/GpxIngestFormat.html" title="class in mil.nga.giat.geowave.format.gpx">GpxIngestFormat</a>, <a href="../../../../../../../mil/nga/giat/geowave/format/tdrive/TdriveIngestFormat.html" title="class in mil.nga.giat.geowave.format.tdrive">TdriveIngestFormat</a></dd>
 </dl>
 <hr>
 <br>
@@ -131,6 +131,14 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/Ingest
 <tr class="rowColor">
 <td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html" title="class in mil.nga.giat.geowave.adapter.vector.ingest">AbstractSimpleFeatureIngestPlugin</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestFormat.html" title="type parameter in AbstractSimpleFeatureIngestFormat">I</a>&gt;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestFormat.html#myInstance">myInstance</a></strong></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/FeatureSerializationOptionProvider.html" title="class in mil.nga.giat.geowave.adapter.vector.ingest">FeatureSerializationOptionProvider</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestFormat.html#serializationFormatOptionProvider">serializationFormatOptionProvider</a></strong></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/TypeNameOptionProvider.html" title="class in mil.nga.giat.geowave.adapter.vector.ingest">TypeNameOptionProvider</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestFormat.html#typeNameOptionProvider">typeNameOptionProvider</a></strong></code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -195,8 +203,16 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/Ingest
 </td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;? extends <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/IngestFormatOptionProvider.html" title="interface in mil.nga.giat.geowave.core.ingest">IngestFormatOptionProvider</a>&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestFormat.html#internalGetIngestFormatOptionProviders()">internalGetIngestFormatOptionProviders</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>protected abstract <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html" title="class in mil.nga.giat.geowave.adapter.vector.ingest">AbstractSimpleFeatureIngestPlugin</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestFormat.html" title="type parameter in AbstractSimpleFeatureIngestFormat">I</a>&gt;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestFormat.html#newPluginInstance()">newPluginInstance</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestFormat.html#setPluginInstanceOptionProviders()">setPluginInstanceOptionProviders</a></strong>()</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -234,6 +250,24 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/Ingest
 <li class="blockList">
 <h4>cqlFilterOptionProvider</h4>
 <pre>protected final&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/CQLFilterOptionProvider.html" title="class in mil.nga.giat.geowave.adapter.vector.ingest">CQLFilterOptionProvider</a> cqlFilterOptionProvider</pre>
+</li>
+</ul>
+<a name="typeNameOptionProvider">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>typeNameOptionProvider</h4>
+<pre>protected final&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/TypeNameOptionProvider.html" title="class in mil.nga.giat.geowave.adapter.vector.ingest">TypeNameOptionProvider</a> typeNameOptionProvider</pre>
+</li>
+</ul>
+<a name="serializationFormatOptionProvider">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>serializationFormatOptionProvider</h4>
+<pre>protected final&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/FeatureSerializationOptionProvider.html" title="class in mil.nga.giat.geowave.adapter.vector.ingest">FeatureSerializationOptionProvider</a> serializationFormatOptionProvider</pre>
 </li>
 </ul>
 <a name="myInstance">
@@ -277,6 +311,15 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/Ingest
 <li class="blockList">
 <h4>newPluginInstance</h4>
 <pre>protected abstract&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html" title="class in mil.nga.giat.geowave.adapter.vector.ingest">AbstractSimpleFeatureIngestPlugin</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestFormat.html" title="type parameter in AbstractSimpleFeatureIngestFormat">I</a>&gt;&nbsp;newPluginInstance()</pre>
+</li>
+</ul>
+<a name="setPluginInstanceOptionProviders()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setPluginInstanceOptionProviders</h4>
+<pre>protected&nbsp;void&nbsp;setPluginInstanceOptionProviders()</pre>
 </li>
 </ul>
 <a name="getAvroFormatPlugin()">
@@ -334,7 +377,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/Ingest
 <a name="getIngestFormatOptionProvider()">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>getIngestFormatOptionProvider</h4>
 <pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/IngestFormatOptionProvider.html" title="interface in mil.nga.giat.geowave.core.ingest">IngestFormatOptionProvider</a>&nbsp;getIngestFormatOptionProvider()</pre>
@@ -345,6 +388,15 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/Ingest
 <dt><strong>Specified by:</strong></dt>
 <dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/IngestFormatPluginProviderSpi.html#getIngestFormatOptionProvider()">getIngestFormatOptionProvider</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/IngestFormatPluginProviderSpi.html" title="interface in mil.nga.giat.geowave.core.ingest">IngestFormatPluginProviderSpi</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestFormat.html" title="type parameter in AbstractSimpleFeatureIngestFormat">I</a>,org.opengis.feature.simple.SimpleFeature&gt;</code></dd>
 <dt><span class="strong">Returns:</span></dt><dd>The ingest format's option provider or null for no custom options</dd></dl>
+</li>
+</ul>
+<a name="internalGetIngestFormatOptionProviders()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>internalGetIngestFormatOptionProviders</h4>
+<pre>protected&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;? extends <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/IngestFormatOptionProvider.html" title="interface in mil.nga.giat.geowave.core.ingest">IngestFormatOptionProvider</a>&gt;&nbsp;internalGetIngestFormatOptionProviders()</pre>
 </li>
 </ul>
 </li>

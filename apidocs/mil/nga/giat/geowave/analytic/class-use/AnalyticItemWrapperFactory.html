@@ -161,41 +161,16 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><code>static &lt;T&gt;&nbsp;int</code></td>
-<td class="colLast"><span class="strong">DistortionGroupManagement.</span><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/clustering/DistortionGroupManagement.html#retainBestGroups(mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations,%20mil.nga.giat.geowave.analytic.AnalyticItemWrapperFactory,%20java.lang.String,%20java.lang.String,%20java.lang.String,%20java.lang.String,%20int)">retainBestGroups</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/BasicAccumuloOperations.html" title="class in mil.nga.giat.geowave.datastore.accumulo">BasicAccumuloOperations</a>&nbsp;ops,
-                <a href="../../../../../../mil/nga/giat/geowave/analytic/AnalyticItemWrapperFactory.html" title="interface in mil.nga.giat.geowave.analytic">AnalyticItemWrapperFactory</a>&lt;T&gt;&nbsp;itemWrapperFactory,
+<td class="colFirst"><code>&lt;T&gt;&nbsp;int</code></td>
+<td class="colLast"><span class="strong">DistortionGroupManagement.</span><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/clustering/DistortionGroupManagement.html#retainBestGroups(mil.nga.giat.geowave.analytic.AnalyticItemWrapperFactory,%20java.lang.String,%20java.lang.String,%20java.lang.String,%20int)">retainBestGroups</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/analytic/AnalyticItemWrapperFactory.html" title="interface in mil.nga.giat.geowave.analytic">AnalyticItemWrapperFactory</a>&lt;T&gt;&nbsp;itemWrapperFactory,
                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;dataTypeId,
                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexId,
-                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;distortationTableName,
-                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;parentBatchId,
+                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;batchId,
                 int&nbsp;level)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><span class="strong">CentroidItemWrapperFactory.</span><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/clustering/CentroidItemWrapperFactory.html#setItemFactory(mil.nga.giat.geowave.analytic.AnalyticItemWrapperFactory)">setItemFactory</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/analytic/AnalyticItemWrapperFactory.html" title="interface in mil.nga.giat.geowave.analytic">AnalyticItemWrapperFactory</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/analytic/clustering/CentroidItemWrapperFactory.html" title="type parameter in CentroidItemWrapperFactory">T</a>&gt;&nbsp;itemFactory)</code>&nbsp;</td>
-</tr>
-</tbody>
-</table>
-<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
-<caption><span>Method parameters in <a href="../../../../../../mil/nga/giat/geowave/analytic/clustering/package-summary.html">mil.nga.giat.geowave.analytic.clustering</a> with type arguments of type <a href="../../../../../../mil/nga/giat/geowave/analytic/AnalyticItemWrapperFactory.html" title="interface in mil.nga.giat.geowave.analytic">AnalyticItemWrapperFactory</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Method and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colFirst"><code>static void</code></td>
-<td class="colLast"><span class="strong">CentroidManagerGeoWave.</span><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/clustering/CentroidManagerGeoWave.html#setParameters(org.apache.hadoop.conf.Configuration,%20java.lang.String,%20java.lang.String,%20java.lang.String,%20java.lang.String,%20java.lang.String,%20java.lang.Class,%20java.lang.String,%20java.lang.String,%20java.lang.String,%20int)">setParameters</a></strong>(org.apache.hadoop.conf.Configuration&nbsp;config,
-             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;zookeeperUrl,
-             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;instanceName,
-             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;userName,
-             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;password,
-             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableNamespace,
-             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;? extends <a href="../../../../../../mil/nga/giat/geowave/analytic/AnalyticItemWrapperFactory.html" title="interface in mil.nga.giat.geowave.analytic">AnalyticItemWrapperFactory</a>&gt;&nbsp;centroidFactory,
-             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;centroidDataTypeId,
-             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexId,
-             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;batchId,
-             int&nbsp;level)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -206,19 +181,9 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/clustering/CentroidManagerGeoWave.html#CentroidManagerGeoWave(mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations,%20mil.nga.giat.geowave.analytic.AnalyticItemWrapperFactory,%20java.lang.String,%20java.lang.String,%20java.lang.String,%20int)">CentroidManagerGeoWave</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/BasicAccumuloOperations.html" title="class in mil.nga.giat.geowave.datastore.accumulo">BasicAccumuloOperations</a>&nbsp;basicAccumuloOperations,
-                      <a href="../../../../../../mil/nga/giat/geowave/analytic/AnalyticItemWrapperFactory.html" title="interface in mil.nga.giat.geowave.analytic">AnalyticItemWrapperFactory</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/analytic/clustering/CentroidManagerGeoWave.html" title="type parameter in CentroidManagerGeoWave">T</a>&gt;&nbsp;centroidFactory,
-                      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;centroidDataTypeId,
-                      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexId,
-                      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;batchId,
-                      int&nbsp;level)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/clustering/CentroidManagerGeoWave.html#CentroidManagerGeoWave(java.lang.String,%20java.lang.String,%20java.lang.String,%20java.lang.String,%20java.lang.String,%20mil.nga.giat.geowave.analytic.AnalyticItemWrapperFactory,%20java.lang.String,%20java.lang.String,%20java.lang.String,%20int)">CentroidManagerGeoWave</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;zookeeperUrl,
-                      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;instanceName,
-                      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;userName,
-                      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;password,
-                      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableNamespace,
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/clustering/CentroidManagerGeoWave.html#CentroidManagerGeoWave(mil.nga.giat.geowave.core.store.DataStore,%20mil.nga.giat.geowave.core.store.index.IndexStore,%20mil.nga.giat.geowave.core.store.adapter.AdapterStore,%20mil.nga.giat.geowave.analytic.AnalyticItemWrapperFactory,%20java.lang.String,%20java.lang.String,%20java.lang.String,%20int)">CentroidManagerGeoWave</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a>&nbsp;dataStore,
+                      <a href="../../../../../../mil/nga/giat/geowave/core/store/index/IndexStore.html" title="interface in mil.nga.giat.geowave.core.store.index">IndexStore</a>&nbsp;indexStore,
+                      <a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;adapterStore,
                       <a href="../../../../../../mil/nga/giat/geowave/analytic/AnalyticItemWrapperFactory.html" title="interface in mil.nga.giat.geowave.analytic">AnalyticItemWrapperFactory</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/analytic/clustering/CentroidManagerGeoWave.html" title="type parameter in CentroidManagerGeoWave">T</a>&gt;&nbsp;centroidFactory,
                       <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;centroidDataTypeId,
                       <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexId,

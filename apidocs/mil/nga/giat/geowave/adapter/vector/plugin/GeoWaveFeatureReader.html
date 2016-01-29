@@ -215,8 +215,16 @@ implements org.geotools.data.FeatureReader&lt;org.opengis.feature.simple.SimpleF
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureReader.html#getTransaction()">getTransaction</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>protected static boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureReader.html#hasAtLeastSpatial(mil.nga.giat.geowave.core.store.index.PrimaryIndex)">hasAtLeastSpatial</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureReader.html#hasNext()">hasNext</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected static boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureReader.html#hasTime(mil.nga.giat.geowave.core.store.index.PrimaryIndex)">hasTime</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></td>
@@ -230,10 +238,10 @@ implements org.geotools.data.FeatureReader&lt;org.opengis.feature.simple.SimpleF
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureReader.html#renderData(com.vividsolutions.jts.geom.Geometry,%20mil.nga.giat.geowave.core.geotime.store.query.TemporalConstraintsSet,%20org.opengis.filter.Filter,%20mil.nga.giat.geowave.adapter.vector.wms.DistributableRenderer)">renderData</a></strong>(com.vividsolutions.jts.geom.Geometry&nbsp;jtsBounds,
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureReader.html#renderData(com.vividsolutions.jts.geom.Geometry,%20mil.nga.giat.geowave.core.geotime.store.query.TemporalConstraintsSet,%20org.opengis.filter.Filter,%20mil.nga.giat.geowave.adapter.vector.render.DistributableRenderer)">renderData</a></strong>(com.vividsolutions.jts.geom.Geometry&nbsp;jtsBounds,
           <a href="../../../../../../../mil/nga/giat/geowave/core/geotime/store/query/TemporalConstraintsSet.html" title="class in mil.nga.giat.geowave.core.geotime.store.query">TemporalConstraintsSet</a>&nbsp;timeBounds,
           org.opengis.filter.Filter&nbsp;filter,
-          <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/wms/DistributableRenderer.html" title="interface in mil.nga.giat.geowave.adapter.vector.wms">DistributableRenderer</a>&nbsp;renderer)</code>&nbsp;</td>
+          <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/render/DistributableRenderer.html" title="interface in mil.nga.giat.geowave.adapter.vector.render">DistributableRenderer</a>&nbsp;renderer)</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -383,7 +391,25 @@ implements org.geotools.data.FeatureReader&lt;org.opengis.feature.simple.SimpleF
                                                                      <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/QueryIssuer.html" title="interface in mil.nga.giat.geowave.adapter.vector.plugin">QueryIssuer</a>&nbsp;issuer)</pre>
 </li>
 </ul>
-<a name="renderData(com.vividsolutions.jts.geom.Geometry, mil.nga.giat.geowave.core.geotime.store.query.TemporalConstraintsSet, org.opengis.filter.Filter, mil.nga.giat.geowave.adapter.vector.wms.DistributableRenderer)">
+<a name="hasAtLeastSpatial(mil.nga.giat.geowave.core.store.index.PrimaryIndex)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>hasAtLeastSpatial</h4>
+<pre>protected static&nbsp;boolean&nbsp;hasAtLeastSpatial(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index)</pre>
+</li>
+</ul>
+<a name="hasTime(mil.nga.giat.geowave.core.store.index.PrimaryIndex)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>hasTime</h4>
+<pre>protected static&nbsp;boolean&nbsp;hasTime(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index)</pre>
+</li>
+</ul>
+<a name="renderData(com.vividsolutions.jts.geom.Geometry, mil.nga.giat.geowave.core.geotime.store.query.TemporalConstraintsSet, org.opengis.filter.Filter, mil.nga.giat.geowave.adapter.vector.render.DistributableRenderer)">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -392,7 +418,7 @@ implements org.geotools.data.FeatureReader&lt;org.opengis.feature.simple.SimpleF
 <pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;renderData(com.vividsolutions.jts.geom.Geometry&nbsp;jtsBounds,
                                                                      <a href="../../../../../../../mil/nga/giat/geowave/core/geotime/store/query/TemporalConstraintsSet.html" title="class in mil.nga.giat.geowave.core.geotime.store.query">TemporalConstraintsSet</a>&nbsp;timeBounds,
                                                                      org.opengis.filter.Filter&nbsp;filter,
-                                                                     <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/wms/DistributableRenderer.html" title="interface in mil.nga.giat.geowave.adapter.vector.wms">DistributableRenderer</a>&nbsp;renderer)</pre>
+                                                                     <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/render/DistributableRenderer.html" title="interface in mil.nga.giat.geowave.adapter.vector.render">DistributableRenderer</a>&nbsp;renderer)</pre>
 </li>
 </ul>
 <a name="getData(com.vividsolutions.jts.geom.Geometry, mil.nga.giat.geowave.core.geotime.store.query.TemporalConstraintsSet, int, int, double, org.opengis.filter.Filter, org.geotools.geometry.jts.ReferencedEnvelope, java.lang.Integer)">

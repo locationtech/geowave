@@ -86,7 +86,7 @@
 <li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
 <li>
 <ul class="inheritance">
-<li>org.apache.hadoop.mapreduce.Reducer&lt;org.apache.hadoop.io.DoubleWritable,org.apache.hadoop.io.LongWritable,<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/output/GeoWaveOutputKey.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce.output">GeoWaveOutputKey</a>,org.opengis.coverage.grid.GridCoverage&gt;</li>
+<li>org.apache.hadoop.mapreduce.Reducer&lt;org.apache.hadoop.io.DoubleWritable,org.apache.hadoop.io.LongWritable,<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/output/GeoWaveOutputKey.html" title="class in mil.nga.giat.geowave.mapreduce.output">GeoWaveOutputKey</a>,org.opengis.coverage.grid.GridCoverage&gt;</li>
 <li>
 <ul class="inheritance">
 <li>mil.nga.giat.geowave.analytic.mapreduce.kde.AccumuloKDEReducer</li>
@@ -101,7 +101,7 @@
 <hr>
 <br>
 <pre>public class <span class="strong">AccumuloKDEReducer</span>
-extends org.apache.hadoop.mapreduce.Reducer&lt;org.apache.hadoop.io.DoubleWritable,org.apache.hadoop.io.LongWritable,<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/output/GeoWaveOutputKey.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce.output">GeoWaveOutputKey</a>,org.opengis.coverage.grid.GridCoverage&gt;</pre>
+extends org.apache.hadoop.mapreduce.Reducer&lt;org.apache.hadoop.io.DoubleWritable,org.apache.hadoop.io.LongWritable,<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/output/GeoWaveOutputKey.html" title="class in mil.nga.giat.geowave.mapreduce.output">GeoWaveOutputKey</a>,org.opengis.coverage.grid.GridCoverage&gt;</pre>
 </li>
 </ul>
 </div>
@@ -136,18 +136,22 @@ extends org.apache.hadoop.mapreduce.Reducer&lt;org.apache.hadoop.io.DoubleWritab
 <th class="colLast" scope="col">Field and Description</th>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/kde/AccumuloKDEReducer.html#indexList">indexList</a></strong></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>protected static double[]</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/kde/AccumuloKDEReducer.html#MAXES_PER_BAND">MAXES_PER_BAND</a></strong></code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>protected static double[]</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/kde/AccumuloKDEReducer.html#MINS_PER_BAND">MINS_PER_BAND</a></strong></code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>protected static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/kde/AccumuloKDEReducer.html#NAME_PER_BAND">NAME_PER_BAND</a></strong></code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static int</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/kde/AccumuloKDEReducer.html#NUM_BANDS">NUM_BANDS</a></strong></code>&nbsp;</td>
 </tr>
@@ -253,10 +257,19 @@ extends org.apache.hadoop.mapreduce.Reducer&lt;org.apache.hadoop.io.DoubleWritab
 <a name="MAXES_PER_BAND">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>MAXES_PER_BAND</h4>
 <pre>protected static final&nbsp;double[] MAXES_PER_BAND</pre>
+</li>
+</ul>
+<a name="indexList">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>indexList</h4>
+<pre>protected&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt; indexList</pre>
 </li>
 </ul>
 </li>
@@ -297,7 +310,7 @@ extends org.apache.hadoop.mapreduce.Reducer&lt;org.apache.hadoop.io.DoubleWritab
                       <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
 <dl>
 <dt><strong>Overrides:</strong></dt>
-<dd><code>reduce</code>&nbsp;in class&nbsp;<code>org.apache.hadoop.mapreduce.Reducer&lt;org.apache.hadoop.io.DoubleWritable,org.apache.hadoop.io.LongWritable,<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/output/GeoWaveOutputKey.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce.output">GeoWaveOutputKey</a>,org.opengis.coverage.grid.GridCoverage&gt;</code></dd>
+<dd><code>reduce</code>&nbsp;in class&nbsp;<code>org.apache.hadoop.mapreduce.Reducer&lt;org.apache.hadoop.io.DoubleWritable,org.apache.hadoop.io.LongWritable,<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/output/GeoWaveOutputKey.html" title="class in mil.nga.giat.geowave.mapreduce.output">GeoWaveOutputKey</a>,org.opengis.coverage.grid.GridCoverage&gt;</code></dd>
 <dt><span class="strong">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></code></dd></dl>
@@ -314,7 +327,7 @@ extends org.apache.hadoop.mapreduce.Reducer&lt;org.apache.hadoop.io.DoubleWritab
                      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
 <dl>
 <dt><strong>Overrides:</strong></dt>
-<dd><code>setup</code>&nbsp;in class&nbsp;<code>org.apache.hadoop.mapreduce.Reducer&lt;org.apache.hadoop.io.DoubleWritable,org.apache.hadoop.io.LongWritable,<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/output/GeoWaveOutputKey.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce.output">GeoWaveOutputKey</a>,org.opengis.coverage.grid.GridCoverage&gt;</code></dd>
+<dd><code>setup</code>&nbsp;in class&nbsp;<code>org.apache.hadoop.mapreduce.Reducer&lt;org.apache.hadoop.io.DoubleWritable,org.apache.hadoop.io.LongWritable,<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/output/GeoWaveOutputKey.html" title="class in mil.nga.giat.geowave.mapreduce.output">GeoWaveOutputKey</a>,org.opengis.coverage.grid.GridCoverage&gt;</code></dd>
 <dt><span class="strong">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></code></dd></dl>

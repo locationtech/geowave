@@ -175,7 +175,7 @@ extends org.apache.hadoop.mapreduce.Reducer&lt;<a href="../../../../../../../mil
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NNMapReduce.NNReducer.html#partitioner">partitioner</a></strong></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/HadoopWritableSerializationTool.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce">HadoopWritableSerializationTool</a></code></td>
+<td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/mapreduce/HadoopWritableSerializationTool.html" title="class in mil.nga.giat.geowave.mapreduce">HadoopWritableSerializationTool</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NNMapReduce.NNReducer.html#serializationTool">serializationTool</a></strong></code>&nbsp;</td>
 </tr>
 <tr class="altColor">
@@ -219,16 +219,23 @@ extends org.apache.hadoop.mapreduce.Reducer&lt;<a href="../../../../../../../mil
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NNMapReduce.NNReducer.html#createNeighborsListFactory(PARTITION_SUMMARY)">createNeighborsListFactory</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NNMapReduce.NNReducer.html" title="type parameter in NNMapReduce.NNReducer">PARTITION_SUMMARY</a>&nbsp;summary)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NNMapReduce.NNReducer.html" title="type parameter in NNMapReduce.NNReducer">VALUEIN</a>&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NNMapReduce.NNReducer.html#createSetForNeighbors(boolean)">createSetForNeighbors</a></strong>(boolean&nbsp;isSetForPrimary)</code>
+<div class="block">allow the extending classes to return sets with constraints and
+ management algorithms</div>
+</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>protected abstract <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NNMapReduce.NNReducer.html" title="type parameter in NNMapReduce.NNReducer">PARTITION_SUMMARY</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NNMapReduce.NNReducer.html#createSummary()">createSummary</a></strong>()</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NNMapReduce.NNReducer.html#preprocess(org.apache.hadoop.mapreduce.Reducer.Context,%20mil.nga.giat.geowave.analytic.nn.NNProcessor,%20PARTITION_SUMMARY)">preprocess</a></strong>(org.apache.hadoop.mapreduce.Reducer.Context&nbsp;context,
           <a href="../../../../../../../mil/nga/giat/geowave/analytic/nn/NNProcessor.html" title="class in mil.nga.giat.geowave.analytic.nn">NNProcessor</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>,<a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NNMapReduce.NNReducer.html" title="type parameter in NNMapReduce.NNReducer">VALUEIN</a>&gt;&nbsp;processor,
           <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NNMapReduce.NNReducer.html" title="type parameter in NNMapReduce.NNReducer">PARTITION_SUMMARY</a>&nbsp;summary)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>protected abstract void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NNMapReduce.NNReducer.html#processNeighbors(mil.nga.giat.geowave.analytic.partitioner.Partitioner.PartitionData,%20mil.nga.giat.geowave.core.index.ByteArrayId,%20VALUEIN,%20mil.nga.giat.geowave.analytic.nn.NeighborList,%20org.apache.hadoop.mapreduce.Reducer.Context,%20PARTITION_SUMMARY)">processNeighbors</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/analytic/partitioner/Partitioner.PartitionData.html" title="class in mil.nga.giat.geowave.analytic.partitioner">Partitioner.PartitionData</a>&nbsp;partitionData,
                 <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;primaryId,
@@ -237,7 +244,7 @@ extends org.apache.hadoop.mapreduce.Reducer&lt;<a href="../../../../../../../mil
                 org.apache.hadoop.mapreduce.Reducer.Context&nbsp;context,
                 <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NNMapReduce.NNReducer.html" title="type parameter in NNMapReduce.NNReducer">PARTITION_SUMMARY</a>&nbsp;summary)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>protected abstract void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NNMapReduce.NNReducer.html#processSummary(mil.nga.giat.geowave.analytic.partitioner.Partitioner.PartitionData,%20PARTITION_SUMMARY,%20org.apache.hadoop.mapreduce.Reducer.Context)">processSummary</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/analytic/partitioner/Partitioner.PartitionData.html" title="class in mil.nga.giat.geowave.analytic.partitioner">Partitioner.PartitionData</a>&nbsp;partitionData,
               <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NNMapReduce.NNReducer.html" title="type parameter in NNMapReduce.NNReducer">PARTITION_SUMMARY</a>&nbsp;summary,
@@ -245,13 +252,13 @@ extends org.apache.hadoop.mapreduce.Reducer&lt;<a href="../../../../../../../mil
 <div class="block">Allow extended classes to do some final processing for the partition.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NNMapReduce.NNReducer.html#reduce(mil.nga.giat.geowave.analytic.mapreduce.nn.NNMapReduce.PartitionDataWritable,%20java.lang.Iterable,%20org.apache.hadoop.mapreduce.Reducer.Context)">reduce</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NNMapReduce.PartitionDataWritable.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.nn">NNMapReduce.PartitionDataWritable</a>&nbsp;key,
       <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/analytic/AdapterWithObjectWritable.html" title="class in mil.nga.giat.geowave.analytic">AdapterWithObjectWritable</a>&gt;&nbsp;values,
       org.apache.hadoop.mapreduce.Reducer.Context&nbsp;context)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NNMapReduce.NNReducer.html#setup(org.apache.hadoop.mapreduce.Reducer.Context)">setup</a></strong>(org.apache.hadoop.mapreduce.Reducer.Context&nbsp;context)</code>&nbsp;</td>
 </tr>
@@ -290,7 +297,7 @@ extends org.apache.hadoop.mapreduce.Reducer&lt;<a href="../../../../../../../mil
 <ul class="blockList">
 <li class="blockList">
 <h4>serializationTool</h4>
-<pre>protected&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/HadoopWritableSerializationTool.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce">HadoopWritableSerializationTool</a> serializationTool</pre>
+<pre>protected&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/HadoopWritableSerializationTool.html" title="class in mil.nga.giat.geowave.mapreduce">HadoopWritableSerializationTool</a> serializationTool</pre>
 </li>
 </ul>
 <a name="distanceFn">
@@ -448,6 +455,17 @@ extends org.apache.hadoop.mapreduce.Reducer&lt;<a href="../../../../../../../mil
 <dt><span class="strong">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></code></dd></dl>
+</li>
+</ul>
+<a name="createSetForNeighbors(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>createSetForNeighbors</h4>
+<pre>protected&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NNMapReduce.NNReducer.html" title="type parameter in NNMapReduce.NNReducer">VALUEIN</a>&gt;&nbsp;createSetForNeighbors(boolean&nbsp;isSetForPrimary)</pre>
+<div class="block">allow the extending classes to return sets with constraints and
+ management algorithms</div>
 </li>
 </ul>
 <a name="processNeighbors(mil.nga.giat.geowave.analytic.partitioner.Partitioner.PartitionData,mil.nga.giat.geowave.core.index.ByteArrayId,java.lang.Object,mil.nga.giat.geowave.analytic.nn.NeighborList,org.apache.hadoop.mapreduce.Reducer.Context,java.lang.Object)">

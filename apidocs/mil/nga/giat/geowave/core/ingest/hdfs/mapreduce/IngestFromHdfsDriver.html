@@ -164,10 +164,11 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/Abstra
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/IngestFromHdfsDriver.html#parseOptionsInternal(org.apache.commons.cli.CommandLine)">parseOptionsInternal</a></strong>(org.apache.commons.cli.CommandLine&nbsp;commandLine)</code>&nbsp;</td>
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/IngestFromHdfsDriver.html#parseOptionsInternal(org.apache.commons.cli.Options,%20org.apache.commons.cli.CommandLine)">parseOptionsInternal</a></strong>(org.apache.commons.cli.Options&nbsp;options,
+                    org.apache.commons.cli.CommandLine&nbsp;commandLine)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>protected void</code></td>
+<td class="colFirst"><code>protected boolean</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/IngestFromHdfsDriver.html#runInternal(java.lang.String[],%20java.util.List)">runInternal</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;args,
            <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/IngestFormatPluginProviderSpi.html" title="interface in mil.nga.giat.geowave.core.ingest">IngestFormatPluginProviderSpi</a>&lt;?,?&gt;&gt;&nbsp;pluginProviders)</code>&nbsp;</td>
 </tr>
@@ -177,7 +178,7 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/Abstra
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;mil.nga.giat.geowave.core.ingest.<a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/AbstractIngestCommandLineDriver.html" title="class in mil.nga.giat.geowave.core.ingest">AbstractIngestCommandLineDriver</a></h3>
-<code><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/AbstractIngestCommandLineDriver.html#applyArguments(java.lang.String[])">applyArguments</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/AbstractIngestCommandLineDriver.html#run(java.lang.String[])">run</a></code></li>
+<code><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/AbstractIngestCommandLineDriver.html#applyArguments(java.lang.String[])">applyArguments</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/AbstractIngestCommandLineDriver.html#runOperation(java.lang.String[])">runOperation</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods_inherited_from_class_java.lang.Object">
@@ -223,25 +224,26 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/Abstra
 <ul class="blockList">
 <li class="blockList">
 <h4>runInternal</h4>
-<pre>protected&nbsp;void&nbsp;runInternal(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;args,
-               <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/IngestFormatPluginProviderSpi.html" title="interface in mil.nga.giat.geowave.core.ingest">IngestFormatPluginProviderSpi</a>&lt;?,?&gt;&gt;&nbsp;pluginProviders)</pre>
+<pre>protected&nbsp;boolean&nbsp;runInternal(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;args,
+                  <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/IngestFormatPluginProviderSpi.html" title="interface in mil.nga.giat.geowave.core.ingest">IngestFormatPluginProviderSpi</a>&lt;?,?&gt;&gt;&nbsp;pluginProviders)</pre>
 <dl>
 <dt><strong>Specified by:</strong></dt>
 <dd><code><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/AbstractIngestCommandLineDriver.html#runInternal(java.lang.String[],%20java.util.List)">runInternal</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/AbstractIngestCommandLineDriver.html" title="class in mil.nga.giat.geowave.core.ingest">AbstractIngestCommandLineDriver</a></code></dd>
 </dl>
 </li>
 </ul>
-<a name="parseOptionsInternal(org.apache.commons.cli.CommandLine)">
+<a name="parseOptionsInternal(org.apache.commons.cli.Options, org.apache.commons.cli.CommandLine)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>parseOptionsInternal</h4>
-<pre>protected&nbsp;void&nbsp;parseOptionsInternal(org.apache.commons.cli.CommandLine&nbsp;commandLine)
+<pre>protected&nbsp;void&nbsp;parseOptionsInternal(org.apache.commons.cli.Options&nbsp;options,
+                        org.apache.commons.cli.CommandLine&nbsp;commandLine)
                              throws org.apache.commons.cli.ParseException</pre>
 <dl>
 <dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/AbstractIngestCommandLineDriver.html#parseOptionsInternal(org.apache.commons.cli.CommandLine)">parseOptionsInternal</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/AbstractIngestCommandLineDriver.html" title="class in mil.nga.giat.geowave.core.ingest">AbstractIngestCommandLineDriver</a></code></dd>
+<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/AbstractIngestCommandLineDriver.html#parseOptionsInternal(org.apache.commons.cli.Options,%20org.apache.commons.cli.CommandLine)">parseOptionsInternal</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/AbstractIngestCommandLineDriver.html" title="class in mil.nga.giat.geowave.core.ingest">AbstractIngestCommandLineDriver</a></code></dd>
 <dt><span class="strong">Throws:</span></dt>
 <dd><code>org.apache.commons.cli.ParseException</code></dd></dl>
 </li>

@@ -35,7 +35,7 @@
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/TransformerWriter.html" title="class in mil.nga.giat.geowave.datastore.accumulo"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/RowMergingVisibilityCombiner.html" title="class in mil.nga.giat.geowave.datastore.accumulo"><span class="strong">Prev Class</span></a></li>
 <li>Next Class</li>
 </ul>
 <ul class="navList">
@@ -86,12 +86,17 @@
 <ul class="blockList">
 <li class="blockList">
 <dl>
+<dt>All Superinterfaces:</dt>
+<dd><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/Closable.html" title="interface in mil.nga.giat.geowave.datastore.accumulo">Closable</a></dd>
+</dl>
+<dl>
 <dt>All Known Implementing Classes:</dt>
 <dd><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/BatchWriterWrapper.html" title="class in mil.nga.giat.geowave.datastore.accumulo">BatchWriterWrapper</a></dd>
 </dl>
 <hr>
 <br>
-<pre>public interface <span class="strong">Writer</span></pre>
+<pre>public interface <span class="strong">Writer</span>
+extends <a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/Closable.html" title="interface in mil.nga.giat.geowave.datastore.accumulo">Closable</a></pre>
 <div class="block">This interface is returned by AccumuloOperations and useful for general
  purpose writing of entries. The default implementation of AccumuloOperations
  will wrap this interface with a BatchWriter but can be overridden for other
@@ -116,21 +121,24 @@
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/Writer.html#close()">close</a></strong>()</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/Writer.html#flush()">flush</a></strong>()</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/Writer.html#write(java.lang.Iterable)">write</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;org.apache.accumulo.core.data.Mutation&gt;&nbsp;mutations)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/Writer.html#write(org.apache.accumulo.core.data.Mutation)">write</a></strong>(org.apache.accumulo.core.data.Mutation&nbsp;mutation)</code>&nbsp;</td>
 </tr>
 </table>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_mil.nga.giat.geowave.datastore.accumulo.Closable">
+<!--   -->
+</a>
+<h3>Methods inherited from interface&nbsp;mil.nga.giat.geowave.datastore.accumulo.<a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/Closable.html" title="interface in mil.nga.giat.geowave.datastore.accumulo">Closable</a></h3>
+<code><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/Closable.html#close()">close</a></code></li>
+</ul>
 </li>
 </ul>
 </li>
@@ -161,15 +169,6 @@
 <li class="blockList">
 <h4>write</h4>
 <pre>void&nbsp;write(org.apache.accumulo.core.data.Mutation&nbsp;mutation)</pre>
-</li>
-</ul>
-<a name="close()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>close</h4>
-<pre>void&nbsp;close()</pre>
 </li>
 </ul>
 <a name="flush()">
@@ -207,7 +206,7 @@
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/TransformerWriter.html" title="class in mil.nga.giat.geowave.datastore.accumulo"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/RowMergingVisibilityCombiner.html" title="class in mil.nga.giat.geowave.datastore.accumulo"><span class="strong">Prev Class</span></a></li>
 <li>Next Class</li>
 </ul>
 <ul class="navList">

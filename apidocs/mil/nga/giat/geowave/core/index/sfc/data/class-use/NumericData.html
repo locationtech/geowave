@@ -256,17 +256,17 @@
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><span class="strong">Time.TimeRange.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/core/geotime/store/dimension/Time.TimeRange.html#overlaps(mil.nga.giat.geowave.core.store.dimension.DimensionField[],%20mil.nga.giat.geowave.core.index.sfc.data.NumericData[])">overlaps</a></strong>(<a href="../../../../../../../../../mil/nga/giat/geowave/core/store/dimension/DimensionField.html" title="interface in mil.nga.giat.geowave.core.store.dimension">DimensionField</a>[]&nbsp;field,
+<td class="colLast"><span class="strong">Time.TimeRange.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/core/geotime/store/dimension/Time.TimeRange.html#overlaps(mil.nga.giat.geowave.core.store.dimension.NumericDimensionField[],%20mil.nga.giat.geowave.core.index.sfc.data.NumericData[])">overlaps</a></strong>(<a href="../../../../../../../../../mil/nga/giat/geowave/core/store/dimension/NumericDimensionField.html" title="interface in mil.nga.giat.geowave.core.store.dimension">NumericDimensionField</a>[]&nbsp;field,
         <a href="../../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/NumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">NumericData</a>[]&nbsp;rangeData)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><span class="strong">Time.Timestamp.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/core/geotime/store/dimension/Time.Timestamp.html#overlaps(mil.nga.giat.geowave.core.store.dimension.DimensionField[],%20mil.nga.giat.geowave.core.index.sfc.data.NumericData[])">overlaps</a></strong>(<a href="../../../../../../../../../mil/nga/giat/geowave/core/store/dimension/DimensionField.html" title="interface in mil.nga.giat.geowave.core.store.dimension">DimensionField</a>[]&nbsp;field,
+<td class="colLast"><span class="strong">Time.Timestamp.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/core/geotime/store/dimension/Time.Timestamp.html#overlaps(mil.nga.giat.geowave.core.store.dimension.NumericDimensionField[],%20mil.nga.giat.geowave.core.index.sfc.data.NumericData[])">overlaps</a></strong>(<a href="../../../../../../../../../mil/nga/giat/geowave/core/store/dimension/NumericDimensionField.html" title="interface in mil.nga.giat.geowave.core.store.dimension">NumericDimensionField</a>[]&nbsp;field,
         <a href="../../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/NumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">NumericData</a>[]&nbsp;rangeData)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><span class="strong">GeometryWrapper.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/core/geotime/store/dimension/GeometryWrapper.html#overlaps(mil.nga.giat.geowave.core.store.dimension.DimensionField[],%20mil.nga.giat.geowave.core.index.sfc.data.NumericData[])">overlaps</a></strong>(<a href="../../../../../../../../../mil/nga/giat/geowave/core/store/dimension/DimensionField.html" title="interface in mil.nga.giat.geowave.core.store.dimension">DimensionField</a>[]&nbsp;fields,
+<td class="colLast"><span class="strong">GeometryWrapper.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/core/geotime/store/dimension/GeometryWrapper.html#overlaps(mil.nga.giat.geowave.core.store.dimension.NumericDimensionField[],%20mil.nga.giat.geowave.core.index.sfc.data.NumericData[])">overlaps</a></strong>(<a href="../../../../../../../../../mil/nga/giat/geowave/core/store/dimension/NumericDimensionField.html" title="interface in mil.nga.giat.geowave.core.store.dimension">NumericDimensionField</a>[]&nbsp;fields,
         <a href="../../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/NumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">NumericData</a>[]&nbsp;rangeData)</code>
 <div class="block">Expects Longitude before Latitude</div>
 </td>
@@ -467,30 +467,33 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../../mil/nga/giat/geowave/core/index/sfc/RangeDecomposition.html" title="class in mil.nga.giat.geowave.core.index.sfc">RangeDecomposition</a></code></td>
-<td class="colLast"><span class="strong">UnboundedHilbertSFCOperations.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/core/index/sfc/hilbert/UnboundedHilbertSFCOperations.html#decomposeRange(mil.nga.giat.geowave.core.index.sfc.data.NumericData[],%20com.google.uzaygezen.core.CompactHilbertCurve,%20mil.nga.giat.geowave.core.index.sfc.SFCDimensionDefinition[],%20int,%20int,%20boolean)">decomposeRange</a></strong>(<a href="../../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/NumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">NumericData</a>[]&nbsp;rangePerDimension,
+<td class="colLast"><span class="strong">UnboundedHilbertSFCOperations.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/core/index/sfc/hilbert/UnboundedHilbertSFCOperations.html#decomposeRange(mil.nga.giat.geowave.core.index.sfc.data.NumericData[],%20com.google.uzaygezen.core.CompactHilbertCurve,%20mil.nga.giat.geowave.core.index.sfc.SFCDimensionDefinition[],%20int,%20int,%20boolean,%20boolean)">decomposeRange</a></strong>(<a href="../../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/NumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">NumericData</a>[]&nbsp;rangePerDimension,
               com.google.uzaygezen.core.CompactHilbertCurve&nbsp;compactHilbertCurve,
               <a href="../../../../../../../../../mil/nga/giat/geowave/core/index/sfc/SFCDimensionDefinition.html" title="class in mil.nga.giat.geowave.core.index.sfc">SFCDimensionDefinition</a>[]&nbsp;dimensionDefinitions,
               int&nbsp;totalPrecision,
               int&nbsp;maxFilteredIndexedRanges,
-              boolean&nbsp;removeVacuum)</code>&nbsp;</td>
+              boolean&nbsp;removeVacuum,
+              boolean&nbsp;overInclusiveOnEdge)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../../../mil/nga/giat/geowave/core/index/sfc/RangeDecomposition.html" title="class in mil.nga.giat.geowave.core.index.sfc">RangeDecomposition</a></code></td>
-<td class="colLast"><span class="strong">PrimitiveHilbertSFCOperations.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/core/index/sfc/hilbert/PrimitiveHilbertSFCOperations.html#decomposeRange(mil.nga.giat.geowave.core.index.sfc.data.NumericData[],%20com.google.uzaygezen.core.CompactHilbertCurve,%20mil.nga.giat.geowave.core.index.sfc.SFCDimensionDefinition[],%20int,%20int,%20boolean)">decomposeRange</a></strong>(<a href="../../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/NumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">NumericData</a>[]&nbsp;rangePerDimension,
+<td class="colLast"><span class="strong">PrimitiveHilbertSFCOperations.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/core/index/sfc/hilbert/PrimitiveHilbertSFCOperations.html#decomposeRange(mil.nga.giat.geowave.core.index.sfc.data.NumericData[],%20com.google.uzaygezen.core.CompactHilbertCurve,%20mil.nga.giat.geowave.core.index.sfc.SFCDimensionDefinition[],%20int,%20int,%20boolean,%20boolean)">decomposeRange</a></strong>(<a href="../../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/NumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">NumericData</a>[]&nbsp;rangePerDimension,
               com.google.uzaygezen.core.CompactHilbertCurve&nbsp;compactHilbertCurve,
               <a href="../../../../../../../../../mil/nga/giat/geowave/core/index/sfc/SFCDimensionDefinition.html" title="class in mil.nga.giat.geowave.core.index.sfc">SFCDimensionDefinition</a>[]&nbsp;dimensionDefinitions,
               int&nbsp;totalPrecision,
               int&nbsp;maxFilteredIndexedRanges,
-              boolean&nbsp;removeVacuum)</code>&nbsp;</td>
+              boolean&nbsp;removeVacuum,
+              boolean&nbsp;overInclusiveOnEdge)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../../mil/nga/giat/geowave/core/index/sfc/RangeDecomposition.html" title="class in mil.nga.giat.geowave.core.index.sfc">RangeDecomposition</a></code></td>
-<td class="colLast"><span class="strong">HilbertSFCOperations.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/core/index/sfc/hilbert/HilbertSFCOperations.html#decomposeRange(mil.nga.giat.geowave.core.index.sfc.data.NumericData[],%20com.google.uzaygezen.core.CompactHilbertCurve,%20mil.nga.giat.geowave.core.index.sfc.SFCDimensionDefinition[],%20int,%20int,%20boolean)">decomposeRange</a></strong>(<a href="../../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/NumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">NumericData</a>[]&nbsp;rangePerDimension,
+<td class="colLast"><span class="strong">HilbertSFCOperations.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/core/index/sfc/hilbert/HilbertSFCOperations.html#decomposeRange(mil.nga.giat.geowave.core.index.sfc.data.NumericData[],%20com.google.uzaygezen.core.CompactHilbertCurve,%20mil.nga.giat.geowave.core.index.sfc.SFCDimensionDefinition[],%20int,%20int,%20boolean,%20boolean)">decomposeRange</a></strong>(<a href="../../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/NumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">NumericData</a>[]&nbsp;rangePerDimension,
               com.google.uzaygezen.core.CompactHilbertCurve&nbsp;compactHilbertCurve,
               <a href="../../../../../../../../../mil/nga/giat/geowave/core/index/sfc/SFCDimensionDefinition.html" title="class in mil.nga.giat.geowave.core.index.sfc">SFCDimensionDefinition</a>[]&nbsp;dimensionDefinitions,
               int&nbsp;totalPrecision,
               int&nbsp;maxFilteredIndexedRanges,
-              boolean&nbsp;removeVacuum)</code>
+              boolean&nbsp;removeVacuum,
+              boolean&nbsp;overInclusiveOnEdge)</code>
 <div class="block">Decompose the raw range per dimension values into an optimal set of
  compact Hilbert SFC ranges</div>
 </td>
@@ -511,8 +514,8 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>protected boolean</code></td>
-<td class="colLast"><span class="strong">PersistenceEncoding.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/data/PersistenceEncoding.html#overlaps(mil.nga.giat.geowave.core.index.sfc.data.NumericData[],%20mil.nga.giat.geowave.core.store.index.Index)">overlaps</a></strong>(<a href="../../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/NumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">NumericData</a>[]&nbsp;insertTileRange,
-        <a href="../../../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index)</code>&nbsp;</td>
+<td class="colLast"><span class="strong">CommonIndexedPersistenceEncoding.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/data/CommonIndexedPersistenceEncoding.html#overlaps(mil.nga.giat.geowave.core.index.sfc.data.NumericData[],%20mil.nga.giat.geowave.core.store.index.PrimaryIndex)">overlaps</a></strong>(<a href="../../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/NumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">NumericData</a>[]&nbsp;insertTileRange,
+        <a href="../../../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -538,7 +541,7 @@
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/NumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">NumericData</a></code></td>
-<td class="colLast"><span class="strong">DimensionField.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/dimension/DimensionField.html#getNumericData(T)">getNumericData</a></strong>(<a href="../../../../../../../../../mil/nga/giat/geowave/core/store/dimension/DimensionField.html" title="type parameter in DimensionField">T</a>&nbsp;dataElement)</code>
+<td class="colLast"><span class="strong">NumericDimensionField.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/dimension/NumericDimensionField.html#getNumericData(T)">getNumericData</a></strong>(<a href="../../../../../../../../../mil/nga/giat/geowave/core/store/dimension/NumericDimensionField.html" title="type parameter in NumericDimensionField">T</a>&nbsp;dataElement)</code>
 <div class="block">Decode a numeric value or range from the raw field value</div>
 </td>
 </tr>
@@ -557,7 +560,7 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><span class="strong">ArrayWrapper.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/dimension/ArrayWrapper.html#overlaps(mil.nga.giat.geowave.core.store.dimension.DimensionField[],%20mil.nga.giat.geowave.core.index.sfc.data.NumericData[])">overlaps</a></strong>(<a href="../../../../../../../../../mil/nga/giat/geowave/core/store/dimension/DimensionField.html" title="interface in mil.nga.giat.geowave.core.store.dimension">DimensionField</a>[]&nbsp;field,
+<td class="colLast"><span class="strong">ArrayWrapper.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/dimension/ArrayWrapper.html#overlaps(mil.nga.giat.geowave.core.store.dimension.NumericDimensionField[],%20mil.nga.giat.geowave.core.index.sfc.data.NumericData[])">overlaps</a></strong>(<a href="../../../../../../../../../mil/nga/giat/geowave/core/store/dimension/NumericDimensionField.html" title="interface in mil.nga.giat.geowave.core.store.dimension">NumericDimensionField</a>[]&nbsp;field,
         <a href="../../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/NumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">NumericData</a>[]&nbsp;rangeData)</code>&nbsp;</td>
 </tr>
 </tbody>
@@ -576,7 +579,7 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><span class="strong">CommonIndexValue.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexValue.html#overlaps(mil.nga.giat.geowave.core.store.dimension.DimensionField[],%20mil.nga.giat.geowave.core.index.sfc.data.NumericData[])">overlaps</a></strong>(<a href="../../../../../../../../../mil/nga/giat/geowave/core/store/dimension/DimensionField.html" title="interface in mil.nga.giat.geowave.core.store.dimension">DimensionField</a>[]&nbsp;field,
+<td class="colLast"><span class="strong">CommonIndexValue.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexValue.html#overlaps(mil.nga.giat.geowave.core.store.dimension.NumericDimensionField[],%20mil.nga.giat.geowave.core.index.sfc.data.NumericData[])">overlaps</a></strong>(<a href="../../../../../../../../../mil/nga/giat/geowave/core/store/dimension/NumericDimensionField.html" title="interface in mil.nga.giat.geowave.core.store.dimension">NumericDimensionField</a>[]&nbsp;field,
         <a href="../../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/NumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">NumericData</a>[]&nbsp;rangeData)</code>&nbsp;</td>
 </tr>
 </tbody>

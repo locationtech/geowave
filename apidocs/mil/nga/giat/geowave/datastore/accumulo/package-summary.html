@@ -82,11 +82,11 @@
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AttachedIteratorDataAdapter.html" title="interface in mil.nga.giat.geowave.datastore.accumulo">AttachedIteratorDataAdapter</a>&lt;T&gt;</td>
+<td class="colFirst"><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/Closable.html" title="interface in mil.nga.giat.geowave.datastore.accumulo">Closable</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/ModelConvertingDataAdapter.html" title="interface in mil.nga.giat.geowave.datastore.accumulo">ModelConvertingDataAdapter</a>&lt;T&gt;</td>
+<td class="colFirst"><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/IteratorConfig.OptionProvider.html" title="interface in mil.nga.giat.geowave.datastore.accumulo">IteratorConfig.OptionProvider</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
@@ -108,37 +108,50 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloCommandLineOptions.html" title="class in mil.nga.giat.geowave.datastore.accumulo">AccumuloCommandLineOptions</a></td>
-<td class="colLast">
-<div class="block">This class encapsulates all of the options and parsed values specific to
- setting up GeoWave to appropriately connect to Accumulo.</div>
-</td>
+<td class="colFirst"><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AbstractAccumuloFactory.html" title="class in mil.nga.giat.geowave.datastore.accumulo">AbstractAccumuloFactory</a></td>
+<td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AbstractAccumuloStoreFactory.html" title="class in mil.nga.giat.geowave.datastore.accumulo">AbstractAccumuloStoreFactory</a>&lt;T&gt;</td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloDataStore.html" title="class in mil.nga.giat.geowave.datastore.accumulo">AccumuloDataStore</a></td>
 <td class="colLast">
 <div class="block">This is the Accumulo implementation of the data store.</div>
 </td>
 </tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloDataStore.CastIterator.html" title="class in mil.nga.giat.geowave.datastore.accumulo">AccumuloDataStore.CastIterator</a>&lt;T&gt;</td>
+<td class="colLast">&nbsp;</td>
+</tr>
 <tr class="altColor">
+<td class="colFirst"><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloDataStoreFactory.html" title="class in mil.nga.giat.geowave.datastore.accumulo">AccumuloDataStoreFactory</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloIndexWriter.html" title="class in mil.nga.giat.geowave.datastore.accumulo">AccumuloIndexWriter</a></td>
 <td class="colLast">
 <div class="block">This class can write many entries for a single index by retaining a single
  open writer.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOptions.html" title="class in mil.nga.giat.geowave.datastore.accumulo">AccumuloOptions</a></td>
 <td class="colLast">
 <div class="block">This class can be used to modify the behavior of the Accumulo Data Store.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloRowId.html" title="class in mil.nga.giat.geowave.datastore.accumulo">AccumuloRowId</a></td>
 <td class="colLast">
 <div class="block">This class encapsulates the elements that compose the row ID in Accumulo, and
  can serialize and deserialize the individual elements to/from the row ID.</div>
 </td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloStoreFactoryFamily.html" title="class in mil.nga.giat.geowave.datastore.accumulo">AccumuloStoreFactoryFamily</a></td>
+<td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/BasicAccumuloOperations.html" title="class in mil.nga.giat.geowave.datastore.accumulo">BasicAccumuloOperations</a></td>
@@ -149,16 +162,16 @@
 </td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/BasicOptionProvider.html" title="class in mil.nga.giat.geowave.datastore.accumulo">BasicOptionProvider</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/BatchWriterWrapper.html" title="class in mil.nga.giat.geowave.datastore.accumulo">BatchWriterWrapper</a></td>
 <td class="colLast">
 <div class="block">This is a basic wrapper around the Accumulo batch writer so that write
  operations will use an interface that can be implemented differently for
  different purposes.</div>
 </td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/DataAdapterStatsWrapper.html" title="class in mil.nga.giat.geowave.datastore.accumulo">DataAdapterStatsWrapper</a>&lt;T&gt;</td>
-<td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/IteratorConfig.html" title="class in mil.nga.giat.geowave.datastore.accumulo">IteratorConfig</a></td>
@@ -173,7 +186,15 @@
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/TransformerWriter.html" title="class in mil.nga.giat.geowave.datastore.accumulo">TransformerWriter</a></td>
+<td class="colFirst"><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/RowMergingAdapterOptionProvider.html" title="class in mil.nga.giat.geowave.datastore.accumulo">RowMergingAdapterOptionProvider</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/RowMergingCombiner.html" title="class in mil.nga.giat.geowave.datastore.accumulo">RowMergingCombiner</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/RowMergingVisibilityCombiner.html" title="class in mil.nga.giat.geowave.datastore.accumulo">RowMergingVisibilityCombiner</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
 </tbody>

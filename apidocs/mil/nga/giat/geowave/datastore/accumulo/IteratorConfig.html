@@ -35,8 +35,8 @@
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/DataAdapterStatsWrapper.html" title="class in mil.nga.giat.geowave.datastore.accumulo"><span class="strong">Prev Class</span></a></li>
-<li><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/MergingCombiner.html" title="class in mil.nga.giat.geowave.datastore.accumulo"><span class="strong">Next Class</span></a></li>
+<li><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/Closable.html" title="interface in mil.nga.giat.geowave.datastore.accumulo"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/IteratorConfig.OptionProvider.html" title="interface in mil.nga.giat.geowave.datastore.accumulo"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../index.html?mil/nga/giat/geowave/datastore/accumulo/IteratorConfig.html" target="_top">Frames</a></li>
@@ -60,7 +60,7 @@
 <div>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
-<li>Nested&nbsp;|&nbsp;</li>
+<li><a href="#nested_class_summary">Nested</a>&nbsp;|&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method_summary">Method</a></li>
@@ -93,10 +93,6 @@
 <div class="description">
 <ul class="blockList">
 <li class="blockList">
-<dl>
-<dt>Direct Known Subclasses:</dt>
-<dd><a href="../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/merge/RasterTileCombinerConfig.html" title="class in mil.nga.giat.geowave.adapter.raster.adapter.merge">RasterTileCombinerConfig</a></dd>
-</dl>
 <hr>
 <br>
 <pre>public class <span class="strong">IteratorConfig</span>
@@ -107,6 +103,25 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <div class="summary">
 <ul class="blockList">
 <li class="blockList">
+<!-- ======== NESTED CLASS SUMMARY ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="nested_class_summary">
+<!--   -->
+</a>
+<h3>Nested Class Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Nested Class Summary table, listing nested classes, and an explanation">
+<caption><span>Nested Classes</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Class and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static interface&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/IteratorConfig.OptionProvider.html" title="interface in mil.nga.giat.geowave.datastore.accumulo">IteratorConfig.OptionProvider</a></strong></code>&nbsp;</td>
+</tr>
+</table>
+</li>
+</ul>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
 <ul class="blockList">
 <li class="blockList"><a name="constructor_summary">
@@ -119,8 +134,11 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/IteratorConfig.html#IteratorConfig(org.apache.accumulo.core.client.IteratorSetting,%20java.util.EnumSet)">IteratorConfig</a></strong>(org.apache.accumulo.core.client.IteratorSetting&nbsp;iteratorSettings,
-              <a href="http://docs.oracle.com/javase/7/docs/api/java/util/EnumSet.html?is-external=true" title="class or interface in java.util">EnumSet</a>&lt;org.apache.accumulo.core.iterators.IteratorUtil.IteratorScope&gt;&nbsp;scopes)</code>&nbsp;</td>
+<td class="colOne"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/IteratorConfig.html#IteratorConfig(java.util.EnumSet,%20int,%20java.lang.String,%20java.lang.String,%20mil.nga.giat.geowave.datastore.accumulo.IteratorConfig.OptionProvider)">IteratorConfig</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/EnumSet.html?is-external=true" title="class or interface in java.util">EnumSet</a>&lt;org.apache.accumulo.core.iterators.IteratorUtil.IteratorScope&gt;&nbsp;scopes,
+              int&nbsp;iteratorPriority,
+              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;iteratorName,
+              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;iteratorClass,
+              <a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/IteratorConfig.OptionProvider.html" title="interface in mil.nga.giat.geowave.datastore.accumulo">IteratorConfig.OptionProvider</a>&nbsp;optionProvider)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -138,18 +156,24 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>org.apache.accumulo.core.client.IteratorSetting</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/IteratorConfig.html#getIteratorSettings()">getIteratorSettings</a></strong>()</code>&nbsp;</td>
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/IteratorConfig.html#getIteratorClass()">getIteratorClass</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/EnumSet.html?is-external=true" title="class or interface in java.util">EnumSet</a>&lt;org.apache.accumulo.core.iterators.IteratorUtil.IteratorScope&gt;</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/IteratorConfig.html#getScopes()">getScopes</a></strong>()</code>&nbsp;</td>
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/IteratorConfig.html#getIteratorName()">getIteratorName</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/IteratorConfig.html#mergeOption(java.lang.String,%20java.lang.String,%20java.lang.String)">mergeOption</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;optionKey,
-           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;currentValue,
-           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;nextValue)</code>&nbsp;</td>
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/IteratorConfig.html#getIteratorPriority()">getIteratorPriority</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/IteratorConfig.html#getOptions(java.util.Map)">getOptions</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;existingOptions)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/EnumSet.html?is-external=true" title="class or interface in java.util">EnumSet</a>&lt;org.apache.accumulo.core.iterators.IteratorUtil.IteratorScope&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/IteratorConfig.html#getScopes()">getScopes</a></strong>()</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -173,14 +197,17 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="IteratorConfig(org.apache.accumulo.core.client.IteratorSetting, java.util.EnumSet)">
+<a name="IteratorConfig(java.util.EnumSet, int, java.lang.String, java.lang.String, mil.nga.giat.geowave.datastore.accumulo.IteratorConfig.OptionProvider)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>IteratorConfig</h4>
-<pre>public&nbsp;IteratorConfig(org.apache.accumulo.core.client.IteratorSetting&nbsp;iteratorSettings,
-              <a href="http://docs.oracle.com/javase/7/docs/api/java/util/EnumSet.html?is-external=true" title="class or interface in java.util">EnumSet</a>&lt;org.apache.accumulo.core.iterators.IteratorUtil.IteratorScope&gt;&nbsp;scopes)</pre>
+<pre>public&nbsp;IteratorConfig(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/EnumSet.html?is-external=true" title="class or interface in java.util">EnumSet</a>&lt;org.apache.accumulo.core.iterators.IteratorUtil.IteratorScope&gt;&nbsp;scopes,
+              int&nbsp;iteratorPriority,
+              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;iteratorName,
+              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;iteratorClass,
+              <a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/IteratorConfig.OptionProvider.html" title="interface in mil.nga.giat.geowave.datastore.accumulo">IteratorConfig.OptionProvider</a>&nbsp;optionProvider)</pre>
 </li>
 </ul>
 </li>
@@ -200,24 +227,40 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/EnumSet.html?is-external=true" title="class or interface in java.util">EnumSet</a>&lt;org.apache.accumulo.core.iterators.IteratorUtil.IteratorScope&gt;&nbsp;getScopes()</pre>
 </li>
 </ul>
-<a name="getIteratorSettings()">
+<a name="getIteratorPriority()">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>getIteratorSettings</h4>
-<pre>public&nbsp;org.apache.accumulo.core.client.IteratorSetting&nbsp;getIteratorSettings()</pre>
+<h4>getIteratorPriority</h4>
+<pre>public&nbsp;int&nbsp;getIteratorPriority()</pre>
 </li>
 </ul>
-<a name="mergeOption(java.lang.String, java.lang.String, java.lang.String)">
+<a name="getIteratorName()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getIteratorName</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getIteratorName()</pre>
+</li>
+</ul>
+<a name="getIteratorClass()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getIteratorClass</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getIteratorClass()</pre>
+</li>
+</ul>
+<a name="getOptions(java.util.Map)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>mergeOption</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;mergeOption(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;optionKey,
-                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;currentValue,
-                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;nextValue)</pre>
+<h4>getOptions</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;getOptions(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;existingOptions)</pre>
 </li>
 </ul>
 </li>
@@ -246,8 +289,8 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/DataAdapterStatsWrapper.html" title="class in mil.nga.giat.geowave.datastore.accumulo"><span class="strong">Prev Class</span></a></li>
-<li><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/MergingCombiner.html" title="class in mil.nga.giat.geowave.datastore.accumulo"><span class="strong">Next Class</span></a></li>
+<li><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/Closable.html" title="interface in mil.nga.giat.geowave.datastore.accumulo"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/IteratorConfig.OptionProvider.html" title="interface in mil.nga.giat.geowave.datastore.accumulo"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../index.html?mil/nga/giat/geowave/datastore/accumulo/IteratorConfig.html" target="_top">Frames</a></li>
@@ -271,7 +314,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <div>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
-<li>Nested&nbsp;|&nbsp;</li>
+<li><a href="#nested_class_summary">Nested</a>&nbsp;|&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method_summary">Method</a></li>

@@ -35,7 +35,7 @@
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/BasicQueryFilter.BasicQueryCompareOperation.html" title="enum in mil.nga.giat.geowave.core.store.filter"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/DataIdQueryFilter.html" title="class in mil.nga.giat.geowave.core.store.filter"><span class="strong">Prev Class</span></a></li>
 <li><a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/DistributableFilterList.html" title="class in mil.nga.giat.geowave.core.store.filter"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">
@@ -97,10 +97,6 @@
 <dt>All Implemented Interfaces:</dt>
 <dd><a href="../../../../../../../mil/nga/giat/geowave/core/index/Persistable.html" title="interface in mil.nga.giat.geowave.core.index">Persistable</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/DistributableQueryFilter.html" title="interface in mil.nga.giat.geowave.core.store.filter">DistributableQueryFilter</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/QueryFilter.html" title="interface in mil.nga.giat.geowave.core.store.filter">QueryFilter</a></dd>
 </dl>
-<dl>
-<dt>Direct Known Subclasses:</dt>
-<dd><a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/MultiIndexDedupeFilter.html" title="class in mil.nga.giat.geowave.core.store.filter">MultiIndexDedupeFilter</a></dd>
-</dl>
 <hr>
 <br>
 <pre>public class <span class="strong">DedupeFilter</span>
@@ -146,17 +142,22 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/DedupeFilter.html#accept(mil.nga.giat.geowave.core.store.data.IndexedPersistenceEncoding)">accept</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/data/IndexedPersistenceEncoding.html" title="class in mil.nga.giat.geowave.core.store.data">IndexedPersistenceEncoding</a>&nbsp;persistenceEncoding)</code>&nbsp;</td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/DedupeFilter.html#accept(mil.nga.giat.geowave.core.store.index.CommonIndexModel,%20mil.nga.giat.geowave.core.store.data.IndexedPersistenceEncoding)">accept</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexModel.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexModel</a>&nbsp;indexModel,
+      <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/IndexedPersistenceEncoding.html" title="class in mil.nga.giat.geowave.core.store.data">IndexedPersistenceEncoding</a>&lt;?&gt;&nbsp;persistenceEncoding)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/DedupeFilter.html#fromBinary(byte[])">fromBinary</a></strong>(byte[]&nbsp;bytes)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>protected boolean</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/DedupeFilter.html#supportsMultipleIndices()">supportsMultipleIndices</a></strong>()</code>&nbsp;</td>
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/DedupeFilter.html#isDedupAcrossIndices()">isDedupAcrossIndices</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/DedupeFilter.html#setDedupAcrossIndices(boolean)">setDedupAcrossIndices</a></strong>(boolean&nbsp;dedupAcrossIndices)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>byte[]</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/DedupeFilter.html#toBinary()">toBinary</a></strong>()</code>&nbsp;</td>
 </tr>
@@ -199,26 +200,36 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="accept(mil.nga.giat.geowave.core.store.data.IndexedPersistenceEncoding)">
+<a name="accept(mil.nga.giat.geowave.core.store.index.CommonIndexModel, mil.nga.giat.geowave.core.store.data.IndexedPersistenceEncoding)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>accept</h4>
-<pre>public&nbsp;boolean&nbsp;accept(<a href="../../../../../../../mil/nga/giat/geowave/core/store/data/IndexedPersistenceEncoding.html" title="class in mil.nga.giat.geowave.core.store.data">IndexedPersistenceEncoding</a>&nbsp;persistenceEncoding)</pre>
+<pre>public&nbsp;boolean&nbsp;accept(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexModel.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexModel</a>&nbsp;indexModel,
+             <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/IndexedPersistenceEncoding.html" title="class in mil.nga.giat.geowave.core.store.data">IndexedPersistenceEncoding</a>&lt;?&gt;&nbsp;persistenceEncoding)</pre>
 <dl>
 <dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/QueryFilter.html#accept(mil.nga.giat.geowave.core.store.data.IndexedPersistenceEncoding)">accept</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/QueryFilter.html" title="interface in mil.nga.giat.geowave.core.store.filter">QueryFilter</a></code></dd>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/QueryFilter.html#accept(mil.nga.giat.geowave.core.store.index.CommonIndexModel,%20mil.nga.giat.geowave.core.store.data.IndexedPersistenceEncoding)">accept</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/QueryFilter.html" title="interface in mil.nga.giat.geowave.core.store.filter">QueryFilter</a></code></dd>
 </dl>
 </li>
 </ul>
-<a name="supportsMultipleIndices()">
+<a name="setDedupAcrossIndices(boolean)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>supportsMultipleIndices</h4>
-<pre>protected&nbsp;boolean&nbsp;supportsMultipleIndices()</pre>
+<h4>setDedupAcrossIndices</h4>
+<pre>public&nbsp;void&nbsp;setDedupAcrossIndices(boolean&nbsp;dedupAcrossIndices)</pre>
+</li>
+</ul>
+<a name="isDedupAcrossIndices()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isDedupAcrossIndices</h4>
+<pre>public&nbsp;boolean&nbsp;isDedupAcrossIndices()</pre>
 </li>
 </ul>
 <a name="toBinary()">
@@ -273,7 +284,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/BasicQueryFilter.BasicQueryCompareOperation.html" title="enum in mil.nga.giat.geowave.core.store.filter"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/DataIdQueryFilter.html" title="class in mil.nga.giat.geowave.core.store.filter"><span class="strong">Prev Class</span></a></li>
 <li><a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/DistributableFilterList.html" title="class in mil.nga.giat.geowave.core.store.filter"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">

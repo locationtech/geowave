@@ -103,12 +103,12 @@
 <pre>public class <span class="strong">AdaptorProxyFieldLevelVisibilityHandler</span>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements <a href="../../../../../../../../mil/nga/giat/geowave/core/store/data/field/FieldVisibilityHandler.html" title="interface in mil.nga.giat.geowave.core.store.data.field">FieldVisibilityHandler</a>&lt;org.opengis.feature.simple.SimpleFeature,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</pre>
-<div class="block">Works with <code>VisibilityManagement</code> instance to define the visibility for
+<div class="block">Works with <a href="../../../../../../../../mil/nga/giat/geowave/core/store/data/visibility/VisibilityManagement.html" title="interface in mil.nga.giat.geowave.core.store.data.visibility"><code>VisibilityManagement</code></a> instance to define the visibility for
  a specific field of a data row object. Performs the same function as
  <code>FieldLevelVisibiltyHandler</code>. However, this class is linked directly to
  a <a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureDataAdapter.html" title="class in mil.nga.giat.geowave.adapter.vector"><code>FeatureDataAdapter</code></a>. The setup of the handlers in
  <a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureDataAdapter.html" title="class in mil.nga.giat.geowave.adapter.vector"><code>FeatureDataAdapter</code></a> occurs prior to the resolution of the
- <code>VisibilityManagement</code>. Referencing the <a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureDataAdapter.html" title="class in mil.nga.giat.geowave.adapter.vector"><code>FeatureDataAdapter</code></a>
+ <a href="../../../../../../../../mil/nga/giat/geowave/core/store/data/visibility/VisibilityManagement.html" title="interface in mil.nga.giat.geowave.core.store.data.visibility"><code>VisibilityManagement</code></a>. Referencing the <a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureDataAdapter.html" title="class in mil.nga.giat.geowave.adapter.vector"><code>FeatureDataAdapter</code></a>
  removes the initialization order constraint.</div>
 </li>
 </ul>
@@ -128,8 +128,8 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/store/data
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/visibility/AdaptorProxyFieldLevelVisibilityHandler.html#AdaptorProxyFieldLevelVisibilityHandler(java.lang.String,%20mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter)">AdaptorProxyFieldLevelVisibilityHandler</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName,
-                                       <a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureDataAdapter.html" title="class in mil.nga.giat.geowave.adapter.vector">FeatureDataAdapter</a>&nbsp;adapter)</code>
+<td class="colOne"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/visibility/AdaptorProxyFieldLevelVisibilityHandler.html#AdaptorProxyFieldLevelVisibilityHandler(java.lang.String,%20mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter)">AdaptorProxyFieldLevelVisibilityHandler</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName,
+                                       <a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/GeotoolsFeatureDataAdapter.html" title="interface in mil.nga.giat.geowave.adapter.vector">GeotoolsFeatureDataAdapter</a>&nbsp;adapter)</code>
 <div class="block">Used when acting with an Index adaptor as a visibility handler.</div>
 </td>
 </tr>
@@ -178,14 +178,14 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/store/data
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="AdaptorProxyFieldLevelVisibilityHandler(java.lang.String, mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter)">
+<a name="AdaptorProxyFieldLevelVisibilityHandler(java.lang.String, mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>AdaptorProxyFieldLevelVisibilityHandler</h4>
 <pre>public&nbsp;AdaptorProxyFieldLevelVisibilityHandler(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName,
-                                       <a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureDataAdapter.html" title="class in mil.nga.giat.geowave.adapter.vector">FeatureDataAdapter</a>&nbsp;adapter)</pre>
+                                       <a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/GeotoolsFeatureDataAdapter.html" title="interface in mil.nga.giat.geowave.adapter.vector">GeotoolsFeatureDataAdapter</a>&nbsp;adapter)</pre>
 <div class="block">Used when acting with an Index adaptor as a visibility handler. This</div>
 <dl><dt><span class="strong">Parameters:</span></dt><dd><code>fieldVisiblityHandler</code> - </dd><dd><code>visibilityAttribute</code> - </dd><dd><code>visibilityManagement</code> - </dd></dl>
 </li>

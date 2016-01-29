@@ -142,7 +142,9 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/analytic/sample/fu
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/sample/function/RandomSamplingRankFunction.html#initialize(mil.nga.giat.geowave.analytic.ConfigurationWrapper)">initialize</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/analytic/ConfigurationWrapper.html" title="interface in mil.nga.giat.geowave.analytic">ConfigurationWrapper</a>&nbsp;wrapper)</code>&nbsp;</td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/sample/function/RandomSamplingRankFunction.html#initialize(org.apache.hadoop.mapreduce.JobContext,%20java.lang.Class,%20org.slf4j.Logger)">initialize</a></strong>(org.apache.hadoop.mapreduce.JobContext&nbsp;context,
+          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;scope,
+          org.slf4j.Logger&nbsp;logger)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>double</code></td>
@@ -188,17 +190,19 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/analytic/sample/fu
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="initialize(mil.nga.giat.geowave.analytic.ConfigurationWrapper)">
+<a name="initialize(org.apache.hadoop.mapreduce.JobContext, java.lang.Class, org.slf4j.Logger)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>initialize</h4>
-<pre>public&nbsp;void&nbsp;initialize(<a href="../../../../../../../mil/nga/giat/geowave/analytic/ConfigurationWrapper.html" title="interface in mil.nga.giat.geowave.analytic">ConfigurationWrapper</a>&nbsp;wrapper)
+<pre>public&nbsp;void&nbsp;initialize(org.apache.hadoop.mapreduce.JobContext&nbsp;context,
+              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;scope,
+              org.slf4j.Logger&nbsp;logger)
                 throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
 <dl>
 <dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../../mil/nga/giat/geowave/analytic/sample/function/SamplingRankFunction.html#initialize(mil.nga.giat.geowave.analytic.ConfigurationWrapper)">initialize</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/analytic/sample/function/SamplingRankFunction.html" title="interface in mil.nga.giat.geowave.analytic.sample.function">SamplingRankFunction</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/analytic/sample/function/RandomSamplingRankFunction.html" title="type parameter in RandomSamplingRankFunction">T</a>&gt;</code></dd>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/analytic/sample/function/SamplingRankFunction.html#initialize(org.apache.hadoop.mapreduce.JobContext,%20java.lang.Class,%20org.slf4j.Logger)">initialize</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/analytic/sample/function/SamplingRankFunction.html" title="interface in mil.nga.giat.geowave.analytic.sample.function">SamplingRankFunction</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/analytic/sample/function/RandomSamplingRankFunction.html" title="type parameter in RandomSamplingRankFunction">T</a>&gt;</code></dd>
 <dt><span class="strong">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd></dl>
 </li>

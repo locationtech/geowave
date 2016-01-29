@@ -123,50 +123,68 @@
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOperations.html#attachIterators(java.lang.String,%20boolean,%20mil.nga.giat.geowave.datastore.accumulo.IteratorConfig[])">attachIterators</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableName,
-               boolean&nbsp;createTable,
-               <a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/IteratorConfig.html" title="class in mil.nga.giat.geowave.datastore.accumulo">IteratorConfig</a>[]&nbsp;iterators)</code>
-<div class="block">Attaches the iterators to the specified table.</div>
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOperations.html#addSplits(java.lang.String,%20boolean,%20java.util.Set)">addSplits</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableName,
+         boolean&nbsp;createTable,
+         <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;splits)</code>
+<div class="block">Add the splits to the specified table.</div>
 </td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOperations.html#attachIterators(java.lang.String,%20boolean,%20mil.nga.giat.geowave.datastore.accumulo.IteratorConfig...)">attachIterators</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableName,
+               boolean&nbsp;createTable,
+               <a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/IteratorConfig.html" title="class in mil.nga.giat.geowave.datastore.accumulo">IteratorConfig</a>...&nbsp;iterators)</code>
+<div class="block">Attaches the iterators to the specified table.</div>
+</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>org.apache.accumulo.core.client.BatchDeleter</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOperations.html#createBatchDeleter(java.lang.String,%20java.lang.String...)">createBatchDeleter</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableName,
                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;additionalAuthorizations)</code>
 <div class="block">Creates a new batch deleter that can be used by an index</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>org.apache.accumulo.core.client.BatchScanner</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOperations.html#createBatchScanner(java.lang.String,%20java.lang.String...)">createBatchScanner</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableName,
                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;additionalAuthorizations)</code>
 <div class="block">Creates a new batch scanner that can be used by an index</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>org.apache.accumulo.core.client.Scanner</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOperations.html#createScanner(java.lang.String,%20java.lang.String...)">createScanner</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableName,
              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;additionalAuthorizations)</code>
 <div class="block">Creates a new scanner that can be used by an index</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOperations.html#createTable(java.lang.String)">createTable</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableName)</code>
 <div class="block">Creates a table for an index</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/Writer.html" title="interface in mil.nga.giat.geowave.datastore.accumulo">Writer</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOperations.html#createWriter(java.lang.String)">createWriter</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableName)</code>
 <div class="block">Creates a new writer that can be used by an index.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/Writer.html" title="interface in mil.nga.giat.geowave.datastore.accumulo">Writer</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOperations.html#createWriter(java.lang.String,%20boolean)">createWriter</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableName,
             boolean&nbsp;createTable)</code>
+<div class="block">Creates a new writer that can be used by an index.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/Writer.html" title="interface in mil.nga.giat.geowave.datastore.accumulo">Writer</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOperations.html#createWriter(java.lang.String,%20boolean,%20boolean,%20boolean,%20java.util.Set)">createWriter</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableName,
+            boolean&nbsp;createTable,
+            boolean&nbsp;enableVersioning,
+            boolean&nbsp;enableBlockCache,
+            <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;splits)</code>
 <div class="block">Creates a new writer that can be used by an index.</div>
 </td>
 </tr>
@@ -211,6 +229,22 @@
 </td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>org.apache.accumulo.core.client.Connector</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOperations.html#getConnector()">getConnector</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOperations.html#getGeoWaveNamespace()">getGeoWaveNamespace</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>org.apache.accumulo.core.client.Instance</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOperations.html#getInstance()">getInstance</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOperations.html#getPassword()">getPassword</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>long</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOperations.html#getRowCount(java.lang.String,%20java.lang.String...)">getRowCount</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableName,
            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;additionalAuthorizations)</code>&nbsp;</td>
@@ -220,13 +254,17 @@
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOperations.html#getTableNameSpace()">getTableNameSpace</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOperations.html#getUsername()">getUsername</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOperations.html#insureAuthorization(java.lang.String,%20java.lang.String...)">insureAuthorization</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;clientUser,
                    <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</code>
 <div class="block">Insure user has the given operations.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOperations.html#localityGroupExists(java.lang.String,%20byte[])">localityGroupExists</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableName,
                    byte[]&nbsp;localityGroup)</code>
@@ -234,7 +272,7 @@
  within the table of the given name</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOperations.html#tableExists(java.lang.String)">tableExists</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableName)</code>
 <div class="block">Checks for the existence of the table with the given name</div>
@@ -379,7 +417,40 @@
 <dd><code>org.apache.accumulo.core.client.TableNotFoundException</code> - The table does not exist in this Accumulo instance</dd></dl>
 </li>
 </ul>
-<a name="attachIterators(java.lang.String, boolean, mil.nga.giat.geowave.datastore.accumulo.IteratorConfig[])">
+<a name="createWriter(java.lang.String, boolean, boolean, boolean, java.util.Set)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>createWriter</h4>
+<pre><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/Writer.html" title="interface in mil.nga.giat.geowave.datastore.accumulo">Writer</a>&nbsp;createWriter(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableName,
+                  boolean&nbsp;createTable,
+                  boolean&nbsp;enableVersioning,
+                  boolean&nbsp;enableBlockCache,
+                  <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;splits)
+                    throws org.apache.accumulo.core.client.TableNotFoundException</pre>
+<div class="block">Creates a new writer that can be used by an index. The basic
+ implementation uses a BatchWriter but other implementations can be
+ replaced such as a context-based writer for bulk ingest within a
+ map-reduce job. This will use the createTable flag to determine if the
+ table should be created if it does not exist. This will also use the
+ enableVersioning flag to determine if the versioning iterator should be
+ used. Additionally it will add the provided splits on creation of the
+ table only.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>tableName</code> - The basic name of the table. Note that that basic
+            implementation of the factory will allow for a table namespace
+            to prefix this name</dd><dd><code>createTable</code> - If true and the table does not exist, it will be created. If
+            false and the table does not exist, a TableNotFoundException
+            will be thrown.</dd><dd><code>enableVersioning</code> - If true the versioning iterator will be used.</dd><dd><code>enableBlockCache</code> - Will set the default property for accumulo block cache if the
+            table is created</dd><dd><code>splits</code> - If the table is created, these splits will be added as
+            partition keys. Null can be used to imply not to add any
+            splits.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>The appropriate writer</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code>org.apache.accumulo.core.client.TableNotFoundException</code> - The table does not exist in this Accumulo instance</dd></dl>
+</li>
+</ul>
+<a name="attachIterators(java.lang.String, boolean, mil.nga.giat.geowave.datastore.accumulo.IteratorConfig...)">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -387,7 +458,7 @@
 <h4>attachIterators</h4>
 <pre>boolean&nbsp;attachIterators(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableName,
                       boolean&nbsp;createTable,
-                      <a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/IteratorConfig.html" title="class in mil.nga.giat.geowave.datastore.accumulo">IteratorConfig</a>[]&nbsp;iterators)
+                      <a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/IteratorConfig.html" title="class in mil.nga.giat.geowave.datastore.accumulo">IteratorConfig</a>...&nbsp;iterators)
                         throws org.apache.accumulo.core.client.TableNotFoundException</pre>
 <div class="block">Attaches the iterators to the specified table. This will check if the
  scope is the same and if the options are the same. If the options are
@@ -403,6 +474,31 @@
 <dt><span class="strong">Returns:</span></dt><dd>A flag indicating whether the iterator was successfully attached.</dd>
 <dt><span class="strong">Throws:</span></dt>
 <dd><code>org.apache.accumulo.core.client.TableNotFoundException</code> - The table does not exist in this Accumulo instance</dd></dl>
+</li>
+</ul>
+<a name="addSplits(java.lang.String, boolean, java.util.Set)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>addSplits</h4>
+<pre>void&nbsp;addSplits(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableName,
+             boolean&nbsp;createTable,
+             <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;splits)
+               throws org.apache.accumulo.core.client.TableNotFoundException,
+                      org.apache.accumulo.core.client.AccumuloException,
+                      org.apache.accumulo.core.client.AccumuloSecurityException</pre>
+<div class="block">Add the splits to the specified table. This will use the createTable flag
+ to determine if the table should be created if it does not exist.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>tableName</code> - The basic name of the table. Note that that basic
+            implementation of the factory will allow for a table namespace
+            to prefix this name</dd><dd><code>createTable</code> - If true and the table does not exist, it will be created. If
+            false and the table does not exist, a TableNotFoundException
+            will be thrown.</dd><dd><code>splits</code> - the splits to add to the given table</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code>org.apache.accumulo.core.client.TableNotFoundException</code></dd>
+<dd><code>org.apache.accumulo.core.client.AccumuloException</code></dd>
+<dd><code>org.apache.accumulo.core.client.AccumuloSecurityException</code></dd></dl>
 </li>
 </ul>
 <a name="deleteTable(java.lang.String)">
@@ -570,7 +666,7 @@
 <a name="insureAuthorization(java.lang.String, java.lang.String...)">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>insureAuthorization</h4>
 <pre>void&nbsp;insureAuthorization(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;clientUser,
@@ -581,6 +677,51 @@
 <dl><dt><span class="strong">Throws:</span></dt>
 <dd><code>org.apache.accumulo.core.client.AccumuloException</code></dd>
 <dd><code>org.apache.accumulo.core.client.AccumuloSecurityException</code></dd></dl>
+</li>
+</ul>
+<a name="getGeoWaveNamespace()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getGeoWaveNamespace</h4>
+<pre><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getGeoWaveNamespace()</pre>
+</li>
+</ul>
+<a name="getUsername()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getUsername</h4>
+<pre><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getUsername()</pre>
+</li>
+</ul>
+<a name="getPassword()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getPassword</h4>
+<pre><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getPassword()</pre>
+</li>
+</ul>
+<a name="getInstance()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getInstance</h4>
+<pre>org.apache.accumulo.core.client.Instance&nbsp;getInstance()</pre>
+</li>
+</ul>
+<a name="getConnector()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>getConnector</h4>
+<pre>org.apache.accumulo.core.client.Connector&nbsp;getConnector()</pre>
 </li>
 </ul>
 </li>

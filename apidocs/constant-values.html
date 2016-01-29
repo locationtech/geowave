@@ -103,7 +103,7 @@
 <ul class="blockList">
 <li class="blockList">
 <table border="0" cellpadding="3" cellspacing="0" summary="Constant Field Values table, listing constant fields, and values">
-<caption><span>mil.nga.giat.geowave.adapter.raster.adapter.merge.<a href="mil/nga/giat/geowave/adapter/raster/adapter/merge/RasterTileCombiner.html" title="class in mil.nga.giat.geowave.adapter.raster.adapter.merge">RasterTileCombiner</a></span><span class="tabEnd">&nbsp;</span></caption>
+<caption><span>mil.nga.giat.geowave.adapter.raster.adapter.merge.<a href="mil/nga/giat/geowave/adapter/raster/adapter/merge/RasterTileRowTransform.html" title="class in mil.nga.giat.geowave.adapter.raster.adapter.merge">RasterTileRowTransform</a>&lt;<a href="mil/nga/giat/geowave/adapter/raster/adapter/merge/RasterTileRowTransform.html" title="type parameter in RasterTileRowTransform">T</a> extends <a href="mil/nga/giat/geowave/core/index/Persistable.html" title="interface in mil.nga.giat.geowave.core.index">Persistable</a>&gt;</span><span class="tabEnd">&nbsp;</span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th scope="col">Constant Field</th>
@@ -111,29 +111,10 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><a name="mil.nga.giat.geowave.adapter.raster.adapter.merge.RasterTileCombiner.COLUMNS_KEY">
+<td class="colFirst"><a name="mil.nga.giat.geowave.adapter.raster.adapter.merge.RasterTileRowTransform.MERGE_STRATEGY_KEY">
 <!--   -->
 </a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td><code><a href="mil/nga/giat/geowave/adapter/raster/adapter/merge/RasterTileCombiner.html#COLUMNS_KEY">COLUMNS_KEY</a></code></td>
-<td class="colLast"><code>"columns"</code></td>
-</tr>
-</tbody>
-</table>
-</li>
-<li class="blockList">
-<table border="0" cellpadding="3" cellspacing="0" summary="Constant Field Values table, listing constant fields, and values">
-<caption><span>mil.nga.giat.geowave.adapter.raster.adapter.merge.<a href="mil/nga/giat/geowave/adapter/raster/adapter/merge/RasterTileCombinerHelper.html" title="class in mil.nga.giat.geowave.adapter.raster.adapter.merge">RasterTileCombinerHelper</a>&lt;<a href="mil/nga/giat/geowave/adapter/raster/adapter/merge/RasterTileCombinerHelper.html" title="type parameter in RasterTileCombinerHelper">T</a> extends <a href="mil/nga/giat/geowave/core/index/Persistable.html" title="interface in mil.nga.giat.geowave.core.index">Persistable</a>&gt;</span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th scope="col">Constant Field</th>
-<th class="colLast" scope="col">Value</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colFirst"><a name="mil.nga.giat.geowave.adapter.raster.adapter.merge.RasterTileCombinerHelper.MERGE_STRATEGY_KEY">
-<!--   -->
-</a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td><code><a href="mil/nga/giat/geowave/adapter/raster/adapter/merge/RasterTileCombinerHelper.html#MERGE_STRATEGY_KEY">MERGE_STRATEGY_KEY</a></code></td>
+<td><code><a href="mil/nga/giat/geowave/adapter/raster/adapter/merge/RasterTileRowTransform.html#MERGE_STRATEGY_KEY">MERGE_STRATEGY_KEY</a></code></td>
 <td class="colLast"><code>"MERGE_STRATEGY"</code></td>
 </tr>
 </tbody>
@@ -141,6 +122,74 @@
 </li>
 </ul>
 <ul class="blockList">
+<li class="blockList">
+<table border="0" cellpadding="3" cellspacing="0" summary="Constant Field Values table, listing constant fields, and values">
+<caption><span>mil.nga.giat.geowave.adapter.raster.resize.<a href="mil/nga/giat/geowave/adapter/raster/resize/RasterTileResizeCommandLineOptions.html" title="class in mil.nga.giat.geowave.adapter.raster.resize">RasterTileResizeCommandLineOptions</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th scope="col">Constant Field</th>
+<th class="colLast" scope="col">Value</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.adapter.raster.resize.RasterTileResizeCommandLineOptions.HDFS_HOST_PORT_KEY">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td><code><a href="mil/nga/giat/geowave/adapter/raster/resize/RasterTileResizeCommandLineOptions.html#HDFS_HOST_PORT_KEY">HDFS_HOST_PORT_KEY</a></code></td>
+<td class="colLast"><code>"hdfsHostPort"</code></td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.adapter.raster.resize.RasterTileResizeCommandLineOptions.INDEX_ID_KEY">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td><code><a href="mil/nga/giat/geowave/adapter/raster/resize/RasterTileResizeCommandLineOptions.html#INDEX_ID_KEY">INDEX_ID_KEY</a></code></td>
+<td class="colLast"><code>"indexId"</code></td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.adapter.raster.resize.RasterTileResizeCommandLineOptions.INPUT_COVERAGE_NAME_KEY">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td><code><a href="mil/nga/giat/geowave/adapter/raster/resize/RasterTileResizeCommandLineOptions.html#INPUT_COVERAGE_NAME_KEY">INPUT_COVERAGE_NAME_KEY</a></code></td>
+<td class="colLast"><code>"inputCoverageName"</code></td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.adapter.raster.resize.RasterTileResizeCommandLineOptions.JOB_TRACKER_HOST_PORT_KEY">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td><code><a href="mil/nga/giat/geowave/adapter/raster/resize/RasterTileResizeCommandLineOptions.html#JOB_TRACKER_HOST_PORT_KEY">JOB_TRACKER_HOST_PORT_KEY</a></code></td>
+<td class="colLast"><code>"jobSubmissionHostPort"</code></td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.adapter.raster.resize.RasterTileResizeCommandLineOptions.MAX_SPLITS_KEY">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td><code><a href="mil/nga/giat/geowave/adapter/raster/resize/RasterTileResizeCommandLineOptions.html#MAX_SPLITS_KEY">MAX_SPLITS_KEY</a></code></td>
+<td class="colLast"><code>"maxSplits"</code></td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.adapter.raster.resize.RasterTileResizeCommandLineOptions.MIN_SPLITS_KEY">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td><code><a href="mil/nga/giat/geowave/adapter/raster/resize/RasterTileResizeCommandLineOptions.html#MIN_SPLITS_KEY">MIN_SPLITS_KEY</a></code></td>
+<td class="colLast"><code>"minSplits"</code></td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.adapter.raster.resize.RasterTileResizeCommandLineOptions.OUTPUT_COVERAGE_NAME_KEY">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td><code><a href="mil/nga/giat/geowave/adapter/raster/resize/RasterTileResizeCommandLineOptions.html#OUTPUT_COVERAGE_NAME_KEY">OUTPUT_COVERAGE_NAME_KEY</a></code></td>
+<td class="colLast"><code>"outputCoverageName"</code></td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.adapter.raster.resize.RasterTileResizeCommandLineOptions.TILE_SIZE_KEY">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td><code><a href="mil/nga/giat/geowave/adapter/raster/resize/RasterTileResizeCommandLineOptions.html#TILE_SIZE_KEY">TILE_SIZE_KEY</a></code></td>
+<td class="colLast"><code>"outputTileSize"</code></td>
+</tr>
+</tbody>
+</table>
+</li>
 <li class="blockList">
 <table border="0" cellpadding="3" cellspacing="0" summary="Constant Field Values table, listing constant fields, and values">
 <caption><span>mil.nga.giat.geowave.adapter.raster.resize.<a href="mil/nga/giat/geowave/adapter/raster/resize/RasterTileResizeJobRunner.html" title="class in mil.nga.giat.geowave.adapter.raster.resize">RasterTileResizeJobRunner</a></span><span class="tabEnd">&nbsp;</span></caption>
@@ -171,7 +220,7 @@
 <ul class="blockList">
 <li class="blockList">
 <table border="0" cellpadding="3" cellspacing="0" summary="Constant Field Values table, listing constant fields, and values">
-<caption><span>mil.nga.giat.geowave.adapter.vector.<a href="mil/nga/giat/geowave/adapter/vector/FeatureCollectionDataAdapter.html" title="class in mil.nga.giat.geowave.adapter.vector">FeatureCollectionDataAdapter</a></span><span class="tabEnd">&nbsp;</span></caption>
+<caption><span>mil.nga.giat.geowave.adapter.vector.index.<a href="mil/nga/giat/geowave/adapter/vector/index/ChooseBestMatchIndexQueryStrategy.html" title="class in mil.nga.giat.geowave.adapter.vector.index">ChooseBestMatchIndexQueryStrategy</a></span><span class="tabEnd">&nbsp;</span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th scope="col">Constant Field</th>
@@ -179,38 +228,131 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><a name="mil.nga.giat.geowave.adapter.vector.FeatureCollectionDataAdapter.ARRAY_TO_ELEMENTS_PRIORITY">
+<td class="colFirst"><a name="mil.nga.giat.geowave.adapter.vector.index.ChooseBestMatchIndexQueryStrategy.NAME">
 <!--   -->
-</a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
-<td><code><a href="mil/nga/giat/geowave/adapter/vector/FeatureCollectionDataAdapter.html#ARRAY_TO_ELEMENTS_PRIORITY">ARRAY_TO_ELEMENTS_PRIORITY</a></code></td>
-<td class="colLast"><code>5</code></td>
+</a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td><code><a href="mil/nga/giat/geowave/adapter/vector/index/ChooseBestMatchIndexQueryStrategy.html#NAME">NAME</a></code></td>
+<td class="colLast"><code>"Best Match"</code></td>
 </tr>
-<tr class="rowColor">
-<td class="colFirst"><a name="mil.nga.giat.geowave.adapter.vector.FeatureCollectionDataAdapter.DEFAULT_FEATURES_PER_ENTRY">
-<!--   -->
-</a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
-<td><code><a href="mil/nga/giat/geowave/adapter/vector/FeatureCollectionDataAdapter.html#DEFAULT_FEATURES_PER_ENTRY">DEFAULT_FEATURES_PER_ENTRY</a></code></td>
-<td class="colLast"><code>5000</code></td>
+</tbody>
+</table>
+</li>
+<li class="blockList">
+<table border="0" cellpadding="3" cellspacing="0" summary="Constant Field Values table, listing constant fields, and values">
+<caption><span>mil.nga.giat.geowave.adapter.vector.index.<a href="mil/nga/giat/geowave/adapter/vector/index/ChooseHeuristicMatchIndexQueryStrategy.html" title="class in mil.nga.giat.geowave.adapter.vector.index">ChooseHeuristicMatchIndexQueryStrategy</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th scope="col">Constant Field</th>
+<th class="colLast" scope="col">Value</th>
 </tr>
+<tbody>
 <tr class="altColor">
-<td class="colFirst"><a name="mil.nga.giat.geowave.adapter.vector.FeatureCollectionDataAdapter.ELEMENTS_TO_ARRAY_PRIORITY">
+<td class="colFirst"><a name="mil.nga.giat.geowave.adapter.vector.index.ChooseHeuristicMatchIndexQueryStrategy.NAME">
 <!--   -->
-</a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
-<td><code><a href="mil/nga/giat/geowave/adapter/vector/FeatureCollectionDataAdapter.html#ELEMENTS_TO_ARRAY_PRIORITY">ELEMENTS_TO_ARRAY_PRIORITY</a></code></td>
-<td class="colLast"><code>15</code></td>
+</a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td><code><a href="mil/nga/giat/geowave/adapter/vector/index/ChooseHeuristicMatchIndexQueryStrategy.html#NAME">NAME</a></code></td>
+<td class="colLast"><code>"Heuristic Match"</code></td>
 </tr>
-<tr class="rowColor">
-<td class="colFirst"><a name="mil.nga.giat.geowave.adapter.vector.FeatureCollectionDataAdapter.FEATURE_COLLECTION_COMBINER_PRIORITY">
+</tbody>
+</table>
+</li>
+<li class="blockList">
+<table border="0" cellpadding="3" cellspacing="0" summary="Constant Field Values table, listing constant fields, and values">
+<caption><span>mil.nga.giat.geowave.adapter.vector.index.<a href="mil/nga/giat/geowave/adapter/vector/index/NumericSecondaryIndexConfiguration.html" title="class in mil.nga.giat.geowave.adapter.vector.index">NumericSecondaryIndexConfiguration</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th scope="col">Constant Field</th>
+<th class="colLast" scope="col">Value</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.adapter.vector.index.NumericSecondaryIndexConfiguration.INDEX_KEY">
 <!--   -->
-</a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
-<td><code><a href="mil/nga/giat/geowave/adapter/vector/FeatureCollectionDataAdapter.html#FEATURE_COLLECTION_COMBINER_PRIORITY">FEATURE_COLLECTION_COMBINER_PRIORITY</a></code></td>
-<td class="colLast"><code>4</code></td>
+</a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td><code><a href="mil/nga/giat/geowave/adapter/vector/index/NumericSecondaryIndexConfiguration.html#INDEX_KEY">INDEX_KEY</a></code></td>
+<td class="colLast"><code>"2ND_IDX_NUMERIC"</code></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList">
+<table border="0" cellpadding="3" cellspacing="0" summary="Constant Field Values table, listing constant fields, and values">
+<caption><span>mil.nga.giat.geowave.adapter.vector.index.<a href="mil/nga/giat/geowave/adapter/vector/index/SimpleFeaturePrimaryIndexConfiguration.html" title="class in mil.nga.giat.geowave.adapter.vector.index">SimpleFeaturePrimaryIndexConfiguration</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th scope="col">Constant Field</th>
+<th class="colLast" scope="col">Value</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.adapter.vector.index.SimpleFeaturePrimaryIndexConfiguration.INDEX_NAME">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td><code><a href="mil/nga/giat/geowave/adapter/vector/index/SimpleFeaturePrimaryIndexConfiguration.html#INDEX_NAME">INDEX_NAME</a></code></td>
+<td class="colLast"><code>"PrimaryIndexName"</code></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList">
+<table border="0" cellpadding="3" cellspacing="0" summary="Constant Field Values table, listing constant fields, and values">
+<caption><span>mil.nga.giat.geowave.adapter.vector.index.<a href="mil/nga/giat/geowave/adapter/vector/index/TemporalSecondaryIndexConfiguration.html" title="class in mil.nga.giat.geowave.adapter.vector.index">TemporalSecondaryIndexConfiguration</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th scope="col">Constant Field</th>
+<th class="colLast" scope="col">Value</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.adapter.vector.index.TemporalSecondaryIndexConfiguration.INDEX_KEY">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td><code><a href="mil/nga/giat/geowave/adapter/vector/index/TemporalSecondaryIndexConfiguration.html#INDEX_KEY">INDEX_KEY</a></code></td>
+<td class="colLast"><code>"2ND_IDX_TEMPORAL"</code></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList">
+<table border="0" cellpadding="3" cellspacing="0" summary="Constant Field Values table, listing constant fields, and values">
+<caption><span>mil.nga.giat.geowave.adapter.vector.index.<a href="mil/nga/giat/geowave/adapter/vector/index/TextSecondaryIndexConfiguration.html" title="class in mil.nga.giat.geowave.adapter.vector.index">TextSecondaryIndexConfiguration</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th scope="col">Constant Field</th>
+<th class="colLast" scope="col">Value</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.adapter.vector.index.TextSecondaryIndexConfiguration.INDEX_KEY">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td><code><a href="mil/nga/giat/geowave/adapter/vector/index/TextSecondaryIndexConfiguration.html#INDEX_KEY">INDEX_KEY</a></code></td>
+<td class="colLast"><code>"2ND_IDX_TEXT"</code></td>
 </tr>
 </tbody>
 </table>
 </li>
 </ul>
 <ul class="blockList">
+<li class="blockList">
+<table border="0" cellpadding="3" cellspacing="0" summary="Constant Field Values table, listing constant fields, and values">
+<caption><span>mil.nga.giat.geowave.adapter.vector.plugin.<a href="mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStoreFactory.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveGTDataStoreFactory</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th scope="col">Constant Field</th>
+<th class="colLast" scope="col">Value</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveGTDataStoreFactory.DISPLAY_NAME_PREFIX">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td><code><a href="mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStoreFactory.html#DISPLAY_NAME_PREFIX">DISPLAY_NAME_PREFIX</a></code></td>
+<td class="colLast"><code>"GeoWave Datastore - "</code></td>
+</tr>
+</tbody>
+</table>
+</li>
 <li class="blockList">
 <table border="0" cellpadding="3" cellspacing="0" summary="Constant Field Values table, listing constant fields, and values">
 <caption><span>mil.nga.giat.geowave.adapter.vector.plugin.<a href="mil/nga/giat/geowave/adapter/vector/plugin/GeoWavePluginConfig.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWavePluginConfig</a></span><span class="tabEnd">&nbsp;</span></caption>
@@ -221,74 +363,53 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><a name="mil.nga.giat.geowave.adapter.vector.plugin.GeoWavePluginConfig.ACCUMULO_NAMESPACE_KEY">
-<!--   -->
-</a><code>protected&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td><code><a href="mil/nga/giat/geowave/adapter/vector/plugin/GeoWavePluginConfig.html#ACCUMULO_NAMESPACE_KEY">ACCUMULO_NAMESPACE_KEY</a></code></td>
-<td class="colLast"><code>"Namespace"</code></td>
-</tr>
-<tr class="rowColor">
 <td class="colFirst"><a name="mil.nga.giat.geowave.adapter.vector.plugin.GeoWavePluginConfig.AUTH_MGT_KEY">
 <!--   -->
 </a><code>protected&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td><code><a href="mil/nga/giat/geowave/adapter/vector/plugin/GeoWavePluginConfig.html#AUTH_MGT_KEY">AUTH_MGT_KEY</a></code></td>
 <td class="colLast"><code>"Authorization Management Provider"</code></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a name="mil.nga.giat.geowave.adapter.vector.plugin.GeoWavePluginConfig.AUTH_URL_KEY">
 <!--   -->
 </a><code>protected&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td><code><a href="mil/nga/giat/geowave/adapter/vector/plugin/GeoWavePluginConfig.html#AUTH_URL_KEY">AUTH_URL_KEY</a></code></td>
 <td class="colLast"><code>"Authorization Data URL"</code></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a name="mil.nga.giat.geowave.adapter.vector.plugin.GeoWavePluginConfig.FEATURE_NAMESPACE_KEY">
 <!--   -->
 </a><code>protected&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td><code><a href="mil/nga/giat/geowave/adapter/vector/plugin/GeoWavePluginConfig.html#FEATURE_NAMESPACE_KEY">FEATURE_NAMESPACE_KEY</a></code></td>
 <td class="colLast"><code>"namespace"</code></td>
 </tr>
-<tr class="altColor">
-<td class="colFirst"><a name="mil.nga.giat.geowave.adapter.vector.plugin.GeoWavePluginConfig.INSTANCE_NAME_KEY">
-<!--   -->
-</a><code>protected&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td><code><a href="mil/nga/giat/geowave/adapter/vector/plugin/GeoWavePluginConfig.html#INSTANCE_NAME_KEY">INSTANCE_NAME_KEY</a></code></td>
-<td class="colLast"><code>"InstanceName"</code></td>
-</tr>
 <tr class="rowColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.adapter.vector.plugin.GeoWavePluginConfig.GEOWAVE_NAMESPACE_KEY">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td><code><a href="mil/nga/giat/geowave/adapter/vector/plugin/GeoWavePluginConfig.html#GEOWAVE_NAMESPACE_KEY">GEOWAVE_NAMESPACE_KEY</a></code></td>
+<td class="colLast"><code>"gwNamespace"</code></td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><a name="mil.nga.giat.geowave.adapter.vector.plugin.GeoWavePluginConfig.LOCK_MGT_KEY">
 <!--   -->
 </a><code>protected&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td><code><a href="mil/nga/giat/geowave/adapter/vector/plugin/GeoWavePluginConfig.html#LOCK_MGT_KEY">LOCK_MGT_KEY</a></code></td>
 <td class="colLast"><code>"Lock Management"</code></td>
 </tr>
-<tr class="altColor">
-<td class="colFirst"><a name="mil.nga.giat.geowave.adapter.vector.plugin.GeoWavePluginConfig.PASSWORD_KEY">
-<!--   -->
-</a><code>protected&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td><code><a href="mil/nga/giat/geowave/adapter/vector/plugin/GeoWavePluginConfig.html#PASSWORD_KEY">PASSWORD_KEY</a></code></td>
-<td class="colLast"><code>"Password"</code></td>
-</tr>
 <tr class="rowColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.adapter.vector.plugin.GeoWavePluginConfig.QUERY_INDEX_STRATEGY_KEY">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td><code><a href="mil/nga/giat/geowave/adapter/vector/plugin/GeoWavePluginConfig.html#QUERY_INDEX_STRATEGY_KEY">QUERY_INDEX_STRATEGY_KEY</a></code></td>
+<td class="colLast"><code>"Query Index Strategy"</code></td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><a name="mil.nga.giat.geowave.adapter.vector.plugin.GeoWavePluginConfig.TRANSACTION_BUFFER_SIZE">
 <!--   -->
 </a><code>protected&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td><code><a href="mil/nga/giat/geowave/adapter/vector/plugin/GeoWavePluginConfig.html#TRANSACTION_BUFFER_SIZE">TRANSACTION_BUFFER_SIZE</a></code></td>
 <td class="colLast"><code>"Transaction Buffer Size"</code></td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><a name="mil.nga.giat.geowave.adapter.vector.plugin.GeoWavePluginConfig.USERNAME_KEY">
-<!--   -->
-</a><code>protected&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td><code><a href="mil/nga/giat/geowave/adapter/vector/plugin/GeoWavePluginConfig.html#USERNAME_KEY">USERNAME_KEY</a></code></td>
-<td class="colLast"><code>"UserName"</code></td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><a name="mil.nga.giat.geowave.adapter.vector.plugin.GeoWavePluginConfig.ZOOKEEPER_SERVERS_KEY">
-<!--   -->
-</a><code>protected&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td><code><a href="mil/nga/giat/geowave/adapter/vector/plugin/GeoWavePluginConfig.html#ZOOKEEPER_SERVERS_KEY">ZOOKEEPER_SERVERS_KEY</a></code></td>
-<td class="colLast"><code>"ZookeeperServers"</code></td>
 </tr>
 </tbody>
 </table>
@@ -310,147 +431,6 @@
 </a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td><code><a href="mil/nga/giat/geowave/adapter/vector/plugin/lock/AbstractLockingManagement.html#LOCKING_MANAGEMENT_CLASS">LOCKING_MANAGEMENT_CLASS</a></code></td>
 <td class="colLast"><code>"GEOWAVE_LM"</code></td>
-</tr>
-</tbody>
-</table>
-</li>
-</ul>
-<ul class="blockList">
-<li class="blockList">
-<table border="0" cellpadding="3" cellspacing="0" summary="Constant Field Values table, listing constant fields, and values">
-<caption><span>mil.nga.giat.geowave.adapter.vector.query.<a href="mil/nga/giat/geowave/adapter/vector/query/CqlQueryFilterIterator.html" title="class in mil.nga.giat.geowave.adapter.vector.query">CqlQueryFilterIterator</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th scope="col">Constant Field</th>
-<th class="colLast" scope="col">Value</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colFirst"><a name="mil.nga.giat.geowave.adapter.vector.query.CqlQueryFilterIterator.CQL_FILTER">
-<!--   -->
-</a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td><code><a href="mil/nga/giat/geowave/adapter/vector/query/CqlQueryFilterIterator.html#CQL_FILTER">CQL_FILTER</a></code></td>
-<td class="colLast"><code>"cql_filter"</code></td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><a name="mil.nga.giat.geowave.adapter.vector.query.CqlQueryFilterIterator.CQL_QUERY_ITERATOR_NAME">
-<!--   -->
-</a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td><code><a href="mil/nga/giat/geowave/adapter/vector/query/CqlQueryFilterIterator.html#CQL_QUERY_ITERATOR_NAME">CQL_QUERY_ITERATOR_NAME</a></code></td>
-<td class="colLast"><code>"GEOWAVE_CQL_QUERY_FILTER"</code></td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><a name="mil.nga.giat.geowave.adapter.vector.query.CqlQueryFilterIterator.CQL_QUERY_ITERATOR_PRIORITY">
-<!--   -->
-</a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
-<td><code><a href="mil/nga/giat/geowave/adapter/vector/query/CqlQueryFilterIterator.html#CQL_QUERY_ITERATOR_PRIORITY">CQL_QUERY_ITERATOR_PRIORITY</a></code></td>
-<td class="colLast"><code>10</code></td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><a name="mil.nga.giat.geowave.adapter.vector.query.CqlQueryFilterIterator.DATA_ADAPTER">
-<!--   -->
-</a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td><code><a href="mil/nga/giat/geowave/adapter/vector/query/CqlQueryFilterIterator.html#DATA_ADAPTER">DATA_ADAPTER</a></code></td>
-<td class="colLast"><code>"data_adapter"</code></td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><a name="mil.nga.giat.geowave.adapter.vector.query.CqlQueryFilterIterator.GEOWAVE_FILTER">
-<!--   -->
-</a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td><code><a href="mil/nga/giat/geowave/adapter/vector/query/CqlQueryFilterIterator.html#GEOWAVE_FILTER">GEOWAVE_FILTER</a></code></td>
-<td class="colLast"><code>"geowave_filter"</code></td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><a name="mil.nga.giat.geowave.adapter.vector.query.CqlQueryFilterIterator.MODEL">
-<!--   -->
-</a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td><code><a href="mil/nga/giat/geowave/adapter/vector/query/CqlQueryFilterIterator.html#MODEL">MODEL</a></code></td>
-<td class="colLast"><code>"model"</code></td>
-</tr>
-</tbody>
-</table>
-</li>
-<li class="blockList">
-<table border="0" cellpadding="3" cellspacing="0" summary="Constant Field Values table, listing constant fields, and values">
-<caption><span>mil.nga.giat.geowave.adapter.vector.query.<a href="mil/nga/giat/geowave/adapter/vector/query/CqlQueryRenderIterator.html" title="class in mil.nga.giat.geowave.adapter.vector.query">CqlQueryRenderIterator</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th scope="col">Constant Field</th>
-<th class="colLast" scope="col">Value</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colFirst"><a name="mil.nga.giat.geowave.adapter.vector.query.CqlQueryRenderIterator.CQL_QUERY_RENDER_ITERATOR_NAME">
-<!--   -->
-</a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td><code><a href="mil/nga/giat/geowave/adapter/vector/query/CqlQueryRenderIterator.html#CQL_QUERY_RENDER_ITERATOR_NAME">CQL_QUERY_RENDER_ITERATOR_NAME</a></code></td>
-<td class="colLast"><code>"GEOWAVE_CQL_RENDER_QUERY_FILTER"</code></td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><a name="mil.nga.giat.geowave.adapter.vector.query.CqlQueryRenderIterator.CQL_QUERY_RENDER_ITERATOR_PRIORITY">
-<!--   -->
-</a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
-<td><code><a href="mil/nga/giat/geowave/adapter/vector/query/CqlQueryRenderIterator.html#CQL_QUERY_RENDER_ITERATOR_PRIORITY">CQL_QUERY_RENDER_ITERATOR_PRIORITY</a></code></td>
-<td class="colLast"><code>10</code></td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><a name="mil.nga.giat.geowave.adapter.vector.query.CqlQueryRenderIterator.INDEX_STRATEGY">
-<!--   -->
-</a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td><code><a href="mil/nga/giat/geowave/adapter/vector/query/CqlQueryRenderIterator.html#INDEX_STRATEGY">INDEX_STRATEGY</a></code></td>
-<td class="colLast"><code>"index-strategy"</code></td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><a name="mil.nga.giat.geowave.adapter.vector.query.CqlQueryRenderIterator.RENDERER">
-<!--   -->
-</a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td><code><a href="mil/nga/giat/geowave/adapter/vector/query/CqlQueryRenderIterator.html#RENDERER">RENDERER</a></code></td>
-<td class="colLast"><code>"renderer"</code></td>
-</tr>
-</tbody>
-</table>
-</li>
-<li class="blockList">
-<table border="0" cellpadding="3" cellspacing="0" summary="Constant Field Values table, listing constant fields, and values">
-<caption><span>mil.nga.giat.geowave.adapter.vector.query.<a href="mil/nga/giat/geowave/adapter/vector/query/FixedCardinalitySkippingIterator.html" title="class in mil.nga.giat.geowave.adapter.vector.query">FixedCardinalitySkippingIterator</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th scope="col">Constant Field</th>
-<th class="colLast" scope="col">Value</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colFirst"><a name="mil.nga.giat.geowave.adapter.vector.query.FixedCardinalitySkippingIterator.CARDINALITY_SKIP_INTERVAL">
-<!--   -->
-</a><code>protected&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td><code><a href="mil/nga/giat/geowave/adapter/vector/query/FixedCardinalitySkippingIterator.html#CARDINALITY_SKIP_INTERVAL">CARDINALITY_SKIP_INTERVAL</a></code></td>
-<td class="colLast"><code>"cardinality"</code></td>
-</tr>
-</tbody>
-</table>
-</li>
-<li class="blockList">
-<table border="0" cellpadding="3" cellspacing="0" summary="Constant Field Values table, listing constant fields, and values">
-<caption><span>mil.nga.giat.geowave.adapter.vector.query.<a href="mil/nga/giat/geowave/adapter/vector/query/SpatialDecimationQuery.html" title="class in mil.nga.giat.geowave.adapter.vector.query">SpatialDecimationQuery</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th scope="col">Constant Field</th>
-<th class="colLast" scope="col">Value</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colFirst"><a name="mil.nga.giat.geowave.adapter.vector.query.SpatialDecimationQuery.CARDINALITY_SKIPPING_ITERATOR_NAME">
-<!--   -->
-</a><code>protected&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td><code><a href="mil/nga/giat/geowave/adapter/vector/query/SpatialDecimationQuery.html#CARDINALITY_SKIPPING_ITERATOR_NAME">CARDINALITY_SKIPPING_ITERATOR_NAME</a></code></td>
-<td class="colLast"><code>"CARDINALITY_SKIPPING_ITERATOR"</code></td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><a name="mil.nga.giat.geowave.adapter.vector.query.SpatialDecimationQuery.CARDINALITY_SKIPPING_ITERATOR_PRIORITY">
-<!--   -->
-</a><code>protected&nbsp;static&nbsp;final&nbsp;int</code></td>
-<td><code><a href="mil/nga/giat/geowave/adapter/vector/query/SpatialDecimationQuery.html#CARDINALITY_SKIPPING_ITERATOR_PRIORITY">CARDINALITY_SKIPPING_ITERATOR_PRIORITY</a></code></td>
-<td class="colLast"><code>15</code></td>
 </tr>
 </tbody>
 </table>
@@ -617,6 +597,88 @@
 </li>
 <li class="blockList">
 <table border="0" cellpadding="3" cellspacing="0" summary="Constant Field Values table, listing constant fields, and values">
+<caption><span>mil.nga.giat.geowave.analytic.mapreduce.kde.<a href="mil/nga/giat/geowave/analytic/mapreduce/kde/KDECommandLineOptions.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.kde">KDECommandLineOptions</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th scope="col">Constant Field</th>
+<th class="colLast" scope="col">Value</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.analytic.mapreduce.kde.KDECommandLineOptions.COVERAGE_NAME_KEY">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td><code><a href="mil/nga/giat/geowave/analytic/mapreduce/kde/KDECommandLineOptions.html#COVERAGE_NAME_KEY">COVERAGE_NAME_KEY</a></code></td>
+<td class="colLast"><code>"coverageName"</code></td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.analytic.mapreduce.kde.KDECommandLineOptions.CQL_FILTER_KEY">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td><code><a href="mil/nga/giat/geowave/analytic/mapreduce/kde/KDECommandLineOptions.html#CQL_FILTER_KEY">CQL_FILTER_KEY</a></code></td>
+<td class="colLast"><code>"cqlFilter"</code></td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.analytic.mapreduce.kde.KDECommandLineOptions.FEATURE_TYPE_KEY">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td><code><a href="mil/nga/giat/geowave/analytic/mapreduce/kde/KDECommandLineOptions.html#FEATURE_TYPE_KEY">FEATURE_TYPE_KEY</a></code></td>
+<td class="colLast"><code>"featureType"</code></td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.analytic.mapreduce.kde.KDECommandLineOptions.HDFS_HOST_PORT_KEY">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td><code><a href="mil/nga/giat/geowave/analytic/mapreduce/kde/KDECommandLineOptions.html#HDFS_HOST_PORT_KEY">HDFS_HOST_PORT_KEY</a></code></td>
+<td class="colLast"><code>"hdfsHostPort"</code></td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.analytic.mapreduce.kde.KDECommandLineOptions.JOB_TRACKER_HOST_PORT_KEY">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td><code><a href="mil/nga/giat/geowave/analytic/mapreduce/kde/KDECommandLineOptions.html#JOB_TRACKER_HOST_PORT_KEY">JOB_TRACKER_HOST_PORT_KEY</a></code></td>
+<td class="colLast"><code>"jobSubmissionHostPort"</code></td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.analytic.mapreduce.kde.KDECommandLineOptions.MAX_LEVEL_KEY">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td><code><a href="mil/nga/giat/geowave/analytic/mapreduce/kde/KDECommandLineOptions.html#MAX_LEVEL_KEY">MAX_LEVEL_KEY</a></code></td>
+<td class="colLast"><code>"maxLevel"</code></td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.analytic.mapreduce.kde.KDECommandLineOptions.MAX_SPLITS_KEY">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td><code><a href="mil/nga/giat/geowave/analytic/mapreduce/kde/KDECommandLineOptions.html#MAX_SPLITS_KEY">MAX_SPLITS_KEY</a></code></td>
+<td class="colLast"><code>"maxSplits"</code></td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.analytic.mapreduce.kde.KDECommandLineOptions.MIN_LEVEL_KEY">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td><code><a href="mil/nga/giat/geowave/analytic/mapreduce/kde/KDECommandLineOptions.html#MIN_LEVEL_KEY">MIN_LEVEL_KEY</a></code></td>
+<td class="colLast"><code>"minLevel"</code></td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.analytic.mapreduce.kde.KDECommandLineOptions.MIN_SPLITS_KEY">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td><code><a href="mil/nga/giat/geowave/analytic/mapreduce/kde/KDECommandLineOptions.html#MIN_SPLITS_KEY">MIN_SPLITS_KEY</a></code></td>
+<td class="colLast"><code>"minSplits"</code></td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.analytic.mapreduce.kde.KDECommandLineOptions.TILE_SIZE_KEY">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td><code><a href="mil/nga/giat/geowave/analytic/mapreduce/kde/KDECommandLineOptions.html#TILE_SIZE_KEY">TILE_SIZE_KEY</a></code></td>
+<td class="colLast"><code>"tileSize"</code></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList">
+<table border="0" cellpadding="3" cellspacing="0" summary="Constant Field Values table, listing constant fields, and values">
 <caption><span>mil.nga.giat.geowave.analytic.mapreduce.kde.<a href="mil/nga/giat/geowave/analytic/mapreduce/kde/KDEJobRunner.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.kde">KDEJobRunner</a></span><span class="tabEnd">&nbsp;</span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
@@ -706,7 +768,7 @@
 <ul class="blockList">
 <li class="blockList">
 <table border="0" cellpadding="3" cellspacing="0" summary="Constant Field Values table, listing constant fields, and values">
-<caption><span>mil.nga.giat.geowave.core.geotime.index.<a href="mil/nga/giat/geowave/core/geotime/index/NumericIndexStrategyFactory.SpatialFactory.html" title="class in mil.nga.giat.geowave.core.geotime.index">NumericIndexStrategyFactory.SpatialFactory</a></span><span class="tabEnd">&nbsp;</span></caption>
+<caption><span>mil.nga.giat.geowave.analytic.nn.<a href="mil/nga/giat/geowave/analytic/nn/NNProcessor.html" title="class in mil.nga.giat.geowave.analytic.nn">NNProcessor</a>&lt;<a href="mil/nga/giat/geowave/analytic/nn/NNProcessor.html" title="type parameter in NNProcessor">PARTITION_VALUE</a>,<a href="mil/nga/giat/geowave/analytic/nn/NNProcessor.html" title="type parameter in NNProcessor">STORE_VALUE</a>&gt;</span><span class="tabEnd">&nbsp;</span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th scope="col">Constant Field</th>
@@ -714,18 +776,89 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><a name="mil.nga.giat.geowave.core.geotime.index.NumericIndexStrategyFactory.SpatialFactory.LATITUDE_BITS">
+<td class="colFirst"><a name="mil.nga.giat.geowave.analytic.nn.NNProcessor.DEFAULT_UPPER_BOUND_PARTIION_SIZE">
 <!--   -->
 </a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
-<td><code><a href="mil/nga/giat/geowave/core/geotime/index/NumericIndexStrategyFactory.SpatialFactory.html#LATITUDE_BITS">LATITUDE_BITS</a></code></td>
-<td class="colLast"><code>31</code></td>
+<td><code><a href="mil/nga/giat/geowave/analytic/nn/NNProcessor.html#DEFAULT_UPPER_BOUND_PARTIION_SIZE">DEFAULT_UPPER_BOUND_PARTIION_SIZE</a></code></td>
+<td class="colLast"><code>75000</code></td>
 </tr>
-<tr class="rowColor">
-<td class="colFirst"><a name="mil.nga.giat.geowave.core.geotime.index.NumericIndexStrategyFactory.SpatialFactory.LONGITUDE_BITS">
+</tbody>
+</table>
+</li>
+</ul>
+<ul class="blockList">
+<li class="blockList">
+<table border="0" cellpadding="3" cellspacing="0" summary="Constant Field Values table, listing constant fields, and values">
+<caption><span>mil.nga.giat.geowave.core.cli.<a href="mil/nga/giat/geowave/core/cli/AdapterStoreCommandLineOptions.html" title="class in mil.nga.giat.geowave.core.cli">AdapterStoreCommandLineOptions</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th scope="col">Constant Field</th>
+<th class="colLast" scope="col">Value</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.core.cli.AdapterStoreCommandLineOptions.ADAPTER_STORE_NAME_KEY">
 <!--   -->
-</a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
-<td><code><a href="mil/nga/giat/geowave/core/geotime/index/NumericIndexStrategyFactory.SpatialFactory.html#LONGITUDE_BITS">LONGITUDE_BITS</a></code></td>
-<td class="colLast"><code>31</code></td>
+</a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td><code><a href="mil/nga/giat/geowave/core/cli/AdapterStoreCommandLineOptions.html#ADAPTER_STORE_NAME_KEY">ADAPTER_STORE_NAME_KEY</a></code></td>
+<td class="colLast"><code>"adapterstore"</code></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList">
+<table border="0" cellpadding="3" cellspacing="0" summary="Constant Field Values table, listing constant fields, and values">
+<caption><span>mil.nga.giat.geowave.core.cli.<a href="mil/nga/giat/geowave/core/cli/DataStatisticsStoreCommandLineOptions.html" title="class in mil.nga.giat.geowave.core.cli">DataStatisticsStoreCommandLineOptions</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th scope="col">Constant Field</th>
+<th class="colLast" scope="col">Value</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.core.cli.DataStatisticsStoreCommandLineOptions.DATA_STATISTICS_STORE_NAME_KEY">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td><code><a href="mil/nga/giat/geowave/core/cli/DataStatisticsStoreCommandLineOptions.html#DATA_STATISTICS_STORE_NAME_KEY">DATA_STATISTICS_STORE_NAME_KEY</a></code></td>
+<td class="colLast"><code>"statstore"</code></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList">
+<table border="0" cellpadding="3" cellspacing="0" summary="Constant Field Values table, listing constant fields, and values">
+<caption><span>mil.nga.giat.geowave.core.cli.<a href="mil/nga/giat/geowave/core/cli/DataStoreCommandLineOptions.html" title="class in mil.nga.giat.geowave.core.cli">DataStoreCommandLineOptions</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th scope="col">Constant Field</th>
+<th class="colLast" scope="col">Value</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.core.cli.DataStoreCommandLineOptions.DATA_STORE_NAME_KEY">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td><code><a href="mil/nga/giat/geowave/core/cli/DataStoreCommandLineOptions.html#DATA_STORE_NAME_KEY">DATA_STORE_NAME_KEY</a></code></td>
+<td class="colLast"><code>"datastore"</code></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList">
+<table border="0" cellpadding="3" cellspacing="0" summary="Constant Field Values table, listing constant fields, and values">
+<caption><span>mil.nga.giat.geowave.core.cli.<a href="mil/nga/giat/geowave/core/cli/IndexStoreCommandLineOptions.html" title="class in mil.nga.giat.geowave.core.cli">IndexStoreCommandLineOptions</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th scope="col">Constant Field</th>
+<th class="colLast" scope="col">Value</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.core.cli.IndexStoreCommandLineOptions.INDEX_STORE_NAME_KEY">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td><code><a href="mil/nga/giat/geowave/core/cli/IndexStoreCommandLineOptions.html#INDEX_STORE_NAME_KEY">INDEX_STORE_NAME_KEY</a></code></td>
+<td class="colLast"><code>"indexstore"</code></td>
 </tr>
 </tbody>
 </table>
@@ -840,11 +973,32 @@
 <td class="colLast"><code>"INGEST_PLUGIN"</code></td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><a name="mil.nga.giat.geowave.core.ingest.hdfs.mapreduce.AbstractMapReduceIngest.PRIMARY_INDEX_ID_KEY">
+<td class="colFirst"><a name="mil.nga.giat.geowave.core.ingest.hdfs.mapreduce.AbstractMapReduceIngest.PRIMARY_INDEX_IDS_KEY">
 <!--   -->
 </a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td><code><a href="mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/AbstractMapReduceIngest.html#PRIMARY_INDEX_ID_KEY">PRIMARY_INDEX_ID_KEY</a></code></td>
-<td class="colLast"><code>"PRIMARY_INDEX_ID"</code></td>
+<td><code><a href="mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/AbstractMapReduceIngest.html#PRIMARY_INDEX_IDS_KEY">PRIMARY_INDEX_IDS_KEY</a></code></td>
+<td class="colLast"><code>"PRIMARY_INDEX_IDS"</code></td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+<ul class="blockList">
+<li class="blockList">
+<table border="0" cellpadding="3" cellspacing="0" summary="Constant Field Values table, listing constant fields, and values">
+<caption><span>mil.nga.giat.geowave.core.store.<a href="mil/nga/giat/geowave/core/store/DataStoreCallbackManager.html" title="class in mil.nga.giat.geowave.core.store">DataStoreCallbackManager</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th scope="col">Constant Field</th>
+<th class="colLast" scope="col">Value</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.core.store.DataStoreCallbackManager.FLUSH_STATS_THRESHOLD">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
+<td><code><a href="mil/nga/giat/geowave/core/store/DataStoreCallbackManager.html#FLUSH_STATS_THRESHOLD">FLUSH_STATS_THRESHOLD</a></code></td>
+<td class="colLast"><code>16384</code></td>
 </tr>
 </tbody>
 </table>
@@ -870,11 +1024,9 @@
 </tbody>
 </table>
 </li>
-</ul>
-<ul class="blockList">
 <li class="blockList">
 <table border="0" cellpadding="3" cellspacing="0" summary="Constant Field Values table, listing constant fields, and values">
-<caption><span>mil.nga.giat.geowave.datastore.accumulo.<a href="mil/nga/giat/geowave/datastore/accumulo/AccumuloIndexWriter.html" title="class in mil.nga.giat.geowave.datastore.accumulo">AccumuloIndexWriter</a></span><span class="tabEnd">&nbsp;</span></caption>
+<caption><span>mil.nga.giat.geowave.core.store.adapter.statistics.<a href="mil/nga/giat/geowave/core/store/adapter/statistics/StatsCompositionTool.html" title="class in mil.nga.giat.geowave.core.store.adapter.statistics">StatsCompositionTool</a>&lt;<a href="mil/nga/giat/geowave/core/store/adapter/statistics/StatsCompositionTool.html" title="type parameter in StatsCompositionTool">T</a>&gt;</span><span class="tabEnd">&nbsp;</span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th scope="col">Constant Field</th>
@@ -882,18 +1034,102 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><a name="mil.nga.giat.geowave.datastore.accumulo.AccumuloIndexWriter.FLUSH_STATS_THRESHOLD">
+<td class="colFirst"><a name="mil.nga.giat.geowave.core.store.adapter.statistics.StatsCompositionTool.FLUSH_STATS_THRESHOLD">
 <!--   -->
 </a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
-<td><code><a href="mil/nga/giat/geowave/datastore/accumulo/AccumuloIndexWriter.html#FLUSH_STATS_THRESHOLD">FLUSH_STATS_THRESHOLD</a></code></td>
+<td><code><a href="mil/nga/giat/geowave/core/store/adapter/statistics/StatsCompositionTool.html#FLUSH_STATS_THRESHOLD">FLUSH_STATS_THRESHOLD</a></code></td>
 <td class="colLast"><code>16384</code></td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+<ul class="blockList">
+<li class="blockList">
+<table border="0" cellpadding="3" cellspacing="0" summary="Constant Field Values table, listing constant fields, and values">
+<caption><span>mil.nga.giat.geowave.core.store.data.<a href="mil/nga/giat/geowave/core/store/data/PersistenceEncoding.html" title="class in mil.nga.giat.geowave.core.store.data">PersistenceEncoding</a>&lt;<a href="mil/nga/giat/geowave/core/store/data/PersistenceEncoding.html" title="type parameter in PersistenceEncoding">T</a>&gt;</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th scope="col">Constant Field</th>
+<th class="colLast" scope="col">Value</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.core.store.data.PersistenceEncoding.DOUBLE_TOLERANCE">
+<!--   -->
+</a><code>protected&nbsp;static&nbsp;final&nbsp;double</code></td>
+<td><code><a href="mil/nga/giat/geowave/core/store/data/PersistenceEncoding.html#DOUBLE_TOLERANCE">DOUBLE_TOLERANCE</a></code></td>
+<td class="colLast"><code>1.0E-12</code></td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+<ul class="blockList">
+<li class="blockList">
+<table border="0" cellpadding="3" cellspacing="0" summary="Constant Field Values table, listing constant fields, and values">
+<caption><span>mil.nga.giat.geowave.core.store.index.text.<a href="mil/nga/giat/geowave/core/store/index/text/TextIndexStrategy.html" title="class in mil.nga.giat.geowave.core.store.index.text">TextIndexStrategy</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th scope="col">Constant Field</th>
+<th class="colLast" scope="col">Value</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.core.store.index.text.TextIndexStrategy.START_END_MARKER">
+<!--   -->
+</a><code>protected&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td><code><a href="mil/nga/giat/geowave/core/store/index/text/TextIndexStrategy.html#START_END_MARKER">START_END_MARKER</a></code></td>
+<td class="colLast"><code>"\u0001"</code></td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+<ul class="blockList">
+<li class="blockList">
+<table border="0" cellpadding="3" cellspacing="0" summary="Constant Field Values table, listing constant fields, and values">
+<caption><span>mil.nga.giat.geowave.datastore.accumulo.<a href="mil/nga/giat/geowave/datastore/accumulo/BasicAccumuloOperations.html" title="class in mil.nga.giat.geowave.datastore.accumulo">BasicAccumuloOperations</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th scope="col">Constant Field</th>
+<th class="colLast" scope="col">Value</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations.INSTANCE_CONFIG_NAME">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td><code><a href="mil/nga/giat/geowave/datastore/accumulo/BasicAccumuloOperations.html#INSTANCE_CONFIG_NAME">INSTANCE_CONFIG_NAME</a></code></td>
+<td class="colLast"><code>"instance"</code></td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations.PASSWORD_CONFIG_NAME">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td><code><a href="mil/nga/giat/geowave/datastore/accumulo/BasicAccumuloOperations.html#PASSWORD_CONFIG_NAME">PASSWORD_CONFIG_NAME</a></code></td>
+<td class="colLast"><code>"password"</code></td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations.USER_CONFIG_NAME">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td><code><a href="mil/nga/giat/geowave/datastore/accumulo/BasicAccumuloOperations.html#USER_CONFIG_NAME">USER_CONFIG_NAME</a></code></td>
+<td class="colLast"><code>"user"</code></td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations.ZOOKEEPER_CONFIG_NAME">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td><code><a href="mil/nga/giat/geowave/datastore/accumulo/BasicAccumuloOperations.html#ZOOKEEPER_CONFIG_NAME">ZOOKEEPER_CONFIG_NAME</a></code></td>
+<td class="colLast"><code>"zookeeper"</code></td>
 </tr>
 </tbody>
 </table>
 </li>
 <li class="blockList">
 <table border="0" cellpadding="3" cellspacing="0" summary="Constant Field Values table, listing constant fields, and values">
-<caption><span>mil.nga.giat.geowave.datastore.accumulo.<a href="mil/nga/giat/geowave/datastore/accumulo/AttachedIteratorDataAdapter.html" title="interface in mil.nga.giat.geowave.datastore.accumulo">AttachedIteratorDataAdapter</a>&lt;<a href="mil/nga/giat/geowave/datastore/accumulo/AttachedIteratorDataAdapter.html" title="type parameter in AttachedIteratorDataAdapter">T</a>&gt;</span><span class="tabEnd">&nbsp;</span></caption>
+<caption><span>mil.nga.giat.geowave.datastore.accumulo.<a href="mil/nga/giat/geowave/datastore/accumulo/MergingCombiner.html" title="class in mil.nga.giat.geowave.datastore.accumulo">MergingCombiner</a></span><span class="tabEnd">&nbsp;</span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th scope="col">Constant Field</th>
@@ -901,11 +1137,37 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><a name="mil.nga.giat.geowave.datastore.accumulo.AttachedIteratorDataAdapter.ATTACHED_ITERATOR_CACHE_ID">
+<td class="colFirst"><a name="mil.nga.giat.geowave.datastore.accumulo.MergingCombiner.COLUMNS_OPTION">
 <!--   -->
 </a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td><code><a href="mil/nga/giat/geowave/datastore/accumulo/AttachedIteratorDataAdapter.html#ATTACHED_ITERATOR_CACHE_ID">ATTACHED_ITERATOR_CACHE_ID</a></code></td>
-<td class="colLast"><code>"AttachedIterators"</code></td>
+<td><code><a href="mil/nga/giat/geowave/datastore/accumulo/MergingCombiner.html#COLUMNS_OPTION">COLUMNS_OPTION</a></code></td>
+<td class="colLast"><code>"columns"</code></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList">
+<table border="0" cellpadding="3" cellspacing="0" summary="Constant Field Values table, listing constant fields, and values">
+<caption><span>mil.nga.giat.geowave.datastore.accumulo.<a href="mil/nga/giat/geowave/datastore/accumulo/RowMergingAdapterOptionProvider.html" title="class in mil.nga.giat.geowave.datastore.accumulo">RowMergingAdapterOptionProvider</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th scope="col">Constant Field</th>
+<th class="colLast" scope="col">Value</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.datastore.accumulo.RowMergingAdapterOptionProvider.ROW_MERGING_ADAPTER_CACHE_ID">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td><code><a href="mil/nga/giat/geowave/datastore/accumulo/RowMergingAdapterOptionProvider.html#ROW_MERGING_ADAPTER_CACHE_ID">ROW_MERGING_ADAPTER_CACHE_ID</a></code></td>
+<td class="colLast"><code>"ROW_MERGING_ADAPTER"</code></td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.datastore.accumulo.RowMergingAdapterOptionProvider.ROW_TRANSFORM_KEY">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td><code><a href="mil/nga/giat/geowave/datastore/accumulo/RowMergingAdapterOptionProvider.html#ROW_TRANSFORM_KEY">ROW_TRANSFORM_KEY</a></code></td>
+<td class="colLast"><code>"ROW_TRANSFORM"</code></td>
 </tr>
 </tbody>
 </table>
@@ -933,6 +1195,46 @@
 </li>
 </ul>
 <ul class="blockList">
+<li class="blockList">
+<table border="0" cellpadding="3" cellspacing="0" summary="Constant Field Values table, listing constant fields, and values">
+<caption><span>mil.nga.giat.geowave.datastore.accumulo.query.<a href="mil/nga/giat/geowave/datastore/accumulo/query/AggregationIterator.html" title="class in mil.nga.giat.geowave.datastore.accumulo.query">AggregationIterator</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th scope="col">Constant Field</th>
+<th class="colLast" scope="col">Value</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.datastore.accumulo.query.AggregationIterator.ADAPTER_OPTION_NAME">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td><code><a href="mil/nga/giat/geowave/datastore/accumulo/query/AggregationIterator.html#ADAPTER_OPTION_NAME">ADAPTER_OPTION_NAME</a></code></td>
+<td class="colLast"><code>"ADAPTER"</code></td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.datastore.accumulo.query.AggregationIterator.AGGREGATION_OPTION_NAME">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td><code><a href="mil/nga/giat/geowave/datastore/accumulo/query/AggregationIterator.html#AGGREGATION_OPTION_NAME">AGGREGATION_OPTION_NAME</a></code></td>
+<td class="colLast"><code>"AGGREGATION"</code></td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.datastore.accumulo.query.AggregationIterator.AGGREGATION_QUERY_ITERATOR_NAME">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td><code><a href="mil/nga/giat/geowave/datastore/accumulo/query/AggregationIterator.html#AGGREGATION_QUERY_ITERATOR_NAME">AGGREGATION_QUERY_ITERATOR_NAME</a></code></td>
+<td class="colLast"><code>"GEOWAVE_AGGREGATION_ITERATOR"</code></td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.datastore.accumulo.query.AggregationIterator.STATISTICS_QUERY_ITERATOR_PRIORITY">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
+<td><code><a href="mil/nga/giat/geowave/datastore/accumulo/query/AggregationIterator.html#STATISTICS_QUERY_ITERATOR_PRIORITY">STATISTICS_QUERY_ITERATOR_PRIORITY</a></code></td>
+<td class="colLast"><code>10</code></td>
+</tr>
+</tbody>
+</table>
+</li>
 <li class="blockList">
 <table border="0" cellpadding="3" cellspacing="0" summary="Constant Field Values table, listing constant fields, and values">
 <caption><span>mil.nga.giat.geowave.datastore.accumulo.query.<a href="mil/nga/giat/geowave/datastore/accumulo/query/ArrayToElementsIterator.html" title="class in mil.nga.giat.geowave.datastore.accumulo.query">ArrayToElementsIterator</a></span><span class="tabEnd">&nbsp;</span></caption>
@@ -967,6 +1269,39 @@
 </a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td><code><a href="mil/nga/giat/geowave/datastore/accumulo/query/ElementsToArrayIterator.html#MODEL">MODEL</a></code></td>
 <td class="colLast"><code>"model"</code></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList">
+<table border="0" cellpadding="3" cellspacing="0" summary="Constant Field Values table, listing constant fields, and values">
+<caption><span>mil.nga.giat.geowave.datastore.accumulo.query.<a href="mil/nga/giat/geowave/datastore/accumulo/query/FixedCardinalitySkippingIterator.html" title="class in mil.nga.giat.geowave.datastore.accumulo.query">FixedCardinalitySkippingIterator</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th scope="col">Constant Field</th>
+<th class="colLast" scope="col">Value</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.datastore.accumulo.query.FixedCardinalitySkippingIterator.CARDINALITY_SKIP_INTERVAL">
+<!--   -->
+</a><code>protected&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td><code><a href="mil/nga/giat/geowave/datastore/accumulo/query/FixedCardinalitySkippingIterator.html#CARDINALITY_SKIP_INTERVAL">CARDINALITY_SKIP_INTERVAL</a></code></td>
+<td class="colLast"><code>"cardinality"</code></td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.datastore.accumulo.query.FixedCardinalitySkippingIterator.CARDINALITY_SKIPPING_ITERATOR_NAME">
+<!--   -->
+</a><code>protected&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td><code><a href="mil/nga/giat/geowave/datastore/accumulo/query/FixedCardinalitySkippingIterator.html#CARDINALITY_SKIPPING_ITERATOR_NAME">CARDINALITY_SKIPPING_ITERATOR_NAME</a></code></td>
+<td class="colLast"><code>"CARDINALITY_SKIPPING_ITERATOR"</code></td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.datastore.accumulo.query.FixedCardinalitySkippingIterator.CARDINALITY_SKIPPING_ITERATOR_PRIORITY">
+<!--   -->
+</a><code>protected&nbsp;static&nbsp;final&nbsp;int</code></td>
+<td><code><a href="mil/nga/giat/geowave/datastore/accumulo/query/FixedCardinalitySkippingIterator.html#CARDINALITY_SKIPPING_ITERATOR_PRIORITY">CARDINALITY_SKIPPING_ITERATOR_PRIORITY</a></code></td>
+<td class="colLast"><code>15</code></td>
 </tr>
 </tbody>
 </table>
@@ -1027,6 +1362,46 @@
 </li>
 <li class="blockList">
 <table border="0" cellpadding="3" cellspacing="0" summary="Constant Field Values table, listing constant fields, and values">
+<caption><span>mil.nga.giat.geowave.datastore.accumulo.query.<a href="mil/nga/giat/geowave/datastore/accumulo/query/SecondaryIndexQueryFilterIterator.html" title="class in mil.nga.giat.geowave.datastore.accumulo.query">SecondaryIndexQueryFilterIterator</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th scope="col">Constant Field</th>
+<th class="colLast" scope="col">Value</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.datastore.accumulo.query.SecondaryIndexQueryFilterIterator.FILTERS">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td><code><a href="mil/nga/giat/geowave/datastore/accumulo/query/SecondaryIndexQueryFilterIterator.html#FILTERS">FILTERS</a></code></td>
+<td class="colLast"><code>"filters"</code></td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.datastore.accumulo.query.SecondaryIndexQueryFilterIterator.ITERATOR_NAME">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td><code><a href="mil/nga/giat/geowave/datastore/accumulo/query/SecondaryIndexQueryFilterIterator.html#ITERATOR_NAME">ITERATOR_NAME</a></code></td>
+<td class="colLast"><code>"GEOWAVE_2ND_IDX_QUERY_FILTER"</code></td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.datastore.accumulo.query.SecondaryIndexQueryFilterIterator.ITERATOR_PRIORITY">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
+<td><code><a href="mil/nga/giat/geowave/datastore/accumulo/query/SecondaryIndexQueryFilterIterator.html#ITERATOR_PRIORITY">ITERATOR_PRIORITY</a></code></td>
+<td class="colLast"><code>50</code></td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.datastore.accumulo.query.SecondaryIndexQueryFilterIterator.PRIMARY_INDEX_ID">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td><code><a href="mil/nga/giat/geowave/datastore/accumulo/query/SecondaryIndexQueryFilterIterator.html#PRIMARY_INDEX_ID">PRIMARY_INDEX_ID</a></code></td>
+<td class="colLast"><code>"primaryIndexId"</code></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList">
+<table border="0" cellpadding="3" cellspacing="0" summary="Constant Field Values table, listing constant fields, and values">
 <caption><span>mil.nga.giat.geowave.datastore.accumulo.query.<a href="mil/nga/giat/geowave/datastore/accumulo/query/SingleEntryFilterIterator.html" title="class in mil.nga.giat.geowave.datastore.accumulo.query">SingleEntryFilterIterator</a></span><span class="tabEnd">&nbsp;</span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
@@ -1042,11 +1417,11 @@
 <td class="colLast"><code>"adapterid"</code></td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><a name="mil.nga.giat.geowave.datastore.accumulo.query.SingleEntryFilterIterator.DATA_ID">
+<td class="colFirst"><a name="mil.nga.giat.geowave.datastore.accumulo.query.SingleEntryFilterIterator.DATA_IDS">
 <!--   -->
 </a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td><code><a href="mil/nga/giat/geowave/datastore/accumulo/query/SingleEntryFilterIterator.html#DATA_ID">DATA_ID</a></code></td>
-<td class="colLast"><code>"dataid"</code></td>
+<td><code><a href="mil/nga/giat/geowave/datastore/accumulo/query/SingleEntryFilterIterator.html#DATA_IDS">DATA_IDS</a></code></td>
+<td class="colLast"><code>"dataids"</code></td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><a name="mil.nga.giat.geowave.datastore.accumulo.query.SingleEntryFilterIterator.ENTRY_FILTER_ITERATOR_NAME">
@@ -1117,6 +1492,237 @@
 </a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td><code><a href="mil/nga/giat/geowave/examples/ingest/SimpleIngest.html#FEATURE_NAME">FEATURE_NAME</a></code></td>
 <td class="colLast"><code>"GridPoint"</code></td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+<ul class="blockList">
+<li class="blockList">
+<table border="0" cellpadding="3" cellspacing="0" summary="Constant Field Values table, listing constant fields, and values">
+<caption><span>mil.nga.giat.geowave.format.gdelt.<a href="mil/nga/giat/geowave/format/gdelt/GDELTUtils.html" title="class in mil.nga.giat.geowave.format.gdelt">GDELTUtils</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th scope="col">Constant Field</th>
+<th class="colLast" scope="col">Value</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.format.gdelt.GDELTUtils.ACTION_COUNTRY_CODE_ATTRIBUTE">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td><code><a href="mil/nga/giat/geowave/format/gdelt/GDELTUtils.html#ACTION_COUNTRY_CODE_ATTRIBUTE">ACTION_COUNTRY_CODE_ATTRIBUTE</a></code></td>
+<td class="colLast"><code>"countryCode"</code></td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.format.gdelt.GDELTUtils.ACTION_COUNTRY_CODE_COLUMN_ID">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
+<td><code><a href="mil/nga/giat/geowave/format/gdelt/GDELTUtils.html#ACTION_COUNTRY_CODE_COLUMN_ID">ACTION_COUNTRY_CODE_COLUMN_ID</a></code></td>
+<td class="colLast"><code>51</code></td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.format.gdelt.GDELTUtils.ACTOR_1_COUNTRY_CODE_ATTRIBUTE">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td><code><a href="mil/nga/giat/geowave/format/gdelt/GDELTUtils.html#ACTOR_1_COUNTRY_CODE_ATTRIBUTE">ACTOR_1_COUNTRY_CODE_ATTRIBUTE</a></code></td>
+<td class="colLast"><code>"actor1CountryCode"</code></td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.format.gdelt.GDELTUtils.ACTOR_1_COUNTRY_CODE_COLUMN_ID">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
+<td><code><a href="mil/nga/giat/geowave/format/gdelt/GDELTUtils.html#ACTOR_1_COUNTRY_CODE_COLUMN_ID">ACTOR_1_COUNTRY_CODE_COLUMN_ID</a></code></td>
+<td class="colLast"><code>37</code></td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.format.gdelt.GDELTUtils.ACTOR_1_NAME_ATTRIBUTE">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td><code><a href="mil/nga/giat/geowave/format/gdelt/GDELTUtils.html#ACTOR_1_NAME_ATTRIBUTE">ACTOR_1_NAME_ATTRIBUTE</a></code></td>
+<td class="colLast"><code>"actor1Name"</code></td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.format.gdelt.GDELTUtils.ACTOR_1_NAME_COLUMN_ID">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
+<td><code><a href="mil/nga/giat/geowave/format/gdelt/GDELTUtils.html#ACTOR_1_NAME_COLUMN_ID">ACTOR_1_NAME_COLUMN_ID</a></code></td>
+<td class="colLast"><code>6</code></td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.format.gdelt.GDELTUtils.ACTOR_2_COUNTRY_CODE_ATTRIBUTE">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td><code><a href="mil/nga/giat/geowave/format/gdelt/GDELTUtils.html#ACTOR_2_COUNTRY_CODE_ATTRIBUTE">ACTOR_2_COUNTRY_CODE_ATTRIBUTE</a></code></td>
+<td class="colLast"><code>"actor2CountryCode"</code></td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.format.gdelt.GDELTUtils.ACTOR_2_COUNTRY_CODE_COLUMN_ID">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
+<td><code><a href="mil/nga/giat/geowave/format/gdelt/GDELTUtils.html#ACTOR_2_COUNTRY_CODE_COLUMN_ID">ACTOR_2_COUNTRY_CODE_COLUMN_ID</a></code></td>
+<td class="colLast"><code>44</code></td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.format.gdelt.GDELTUtils.ACTOR_2_NAME_ATTRIBUTE">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td><code><a href="mil/nga/giat/geowave/format/gdelt/GDELTUtils.html#ACTOR_2_NAME_ATTRIBUTE">ACTOR_2_NAME_ATTRIBUTE</a></code></td>
+<td class="colLast"><code>"actor2Name"</code></td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.format.gdelt.GDELTUtils.ACTOR_2_NAME_COLUMN_ID">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
+<td><code><a href="mil/nga/giat/geowave/format/gdelt/GDELTUtils.html#ACTOR_2_NAME_COLUMN_ID">ACTOR_2_NAME_COLUMN_ID</a></code></td>
+<td class="colLast"><code>16</code></td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.format.gdelt.GDELTUtils.AVG_TONE_ATTRIBUTE">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td><code><a href="mil/nga/giat/geowave/format/gdelt/GDELTUtils.html#AVG_TONE_ATTRIBUTE">AVG_TONE_ATTRIBUTE</a></code></td>
+<td class="colLast"><code>"avgTone"</code></td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.format.gdelt.GDELTUtils.AVG_TONE_COLUMN_ID">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
+<td><code><a href="mil/nga/giat/geowave/format/gdelt/GDELTUtils.html#AVG_TONE_COLUMN_ID">AVG_TONE_COLUMN_ID</a></code></td>
+<td class="colLast"><code>34</code></td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.format.gdelt.GDELTUtils.GDELT_ACTION_GEO_TYPE_COLUMN_ID">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
+<td><code><a href="mil/nga/giat/geowave/format/gdelt/GDELTUtils.html#GDELT_ACTION_GEO_TYPE_COLUMN_ID">GDELT_ACTION_GEO_TYPE_COLUMN_ID</a></code></td>
+<td class="colLast"><code>49</code></td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.format.gdelt.GDELTUtils.GDELT_EVENT_FEATURE">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td><code><a href="mil/nga/giat/geowave/format/gdelt/GDELTUtils.html#GDELT_EVENT_FEATURE">GDELT_EVENT_FEATURE</a></code></td>
+<td class="colLast"><code>"gdeltevent"</code></td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.format.gdelt.GDELTUtils.GDELT_EVENT_ID_ATTRIBUTE">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td><code><a href="mil/nga/giat/geowave/format/gdelt/GDELTUtils.html#GDELT_EVENT_ID_ATTRIBUTE">GDELT_EVENT_ID_ATTRIBUTE</a></code></td>
+<td class="colLast"><code>"eventid"</code></td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.format.gdelt.GDELTUtils.GDELT_EVENT_ID_COLUMN_ID">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
+<td><code><a href="mil/nga/giat/geowave/format/gdelt/GDELTUtils.html#GDELT_EVENT_ID_COLUMN_ID">GDELT_EVENT_ID_COLUMN_ID</a></code></td>
+<td class="colLast"><code>0</code></td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.format.gdelt.GDELTUtils.GDELT_GEOMETRY_ATTRIBUTE">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td><code><a href="mil/nga/giat/geowave/format/gdelt/GDELTUtils.html#GDELT_GEOMETRY_ATTRIBUTE">GDELT_GEOMETRY_ATTRIBUTE</a></code></td>
+<td class="colLast"><code>"geometry"</code></td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.format.gdelt.GDELTUtils.GDELT_LATITUDE_ATTRIBUTE">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td><code><a href="mil/nga/giat/geowave/format/gdelt/GDELTUtils.html#GDELT_LATITUDE_ATTRIBUTE">GDELT_LATITUDE_ATTRIBUTE</a></code></td>
+<td class="colLast"><code>"Latitude"</code></td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.format.gdelt.GDELTUtils.GDELT_LONGITUDE_ATTRIBUTE">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td><code><a href="mil/nga/giat/geowave/format/gdelt/GDELTUtils.html#GDELT_LONGITUDE_ATTRIBUTE">GDELT_LONGITUDE_ATTRIBUTE</a></code></td>
+<td class="colLast"><code>"Longitude"</code></td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.format.gdelt.GDELTUtils.GDELT_MAX_COLUMNS">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
+<td><code><a href="mil/nga/giat/geowave/format/gdelt/GDELTUtils.html#GDELT_MAX_COLUMNS">GDELT_MAX_COLUMNS</a></code></td>
+<td class="colLast"><code>58</code></td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.format.gdelt.GDELTUtils.GDELT_MIN_COLUMNS">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
+<td><code><a href="mil/nga/giat/geowave/format/gdelt/GDELTUtils.html#GDELT_MIN_COLUMNS">GDELT_MIN_COLUMNS</a></code></td>
+<td class="colLast"><code>57</code></td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.format.gdelt.GDELTUtils.GDELT_TIMESTAMP_ATTRIBUTE">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td><code><a href="mil/nga/giat/geowave/format/gdelt/GDELTUtils.html#GDELT_TIMESTAMP_ATTRIBUTE">GDELT_TIMESTAMP_ATTRIBUTE</a></code></td>
+<td class="colLast"><code>"Timestamp"</code></td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.format.gdelt.GDELTUtils.GDELT_TIMESTAMP_COLUMN_ID">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
+<td><code><a href="mil/nga/giat/geowave/format/gdelt/GDELTUtils.html#GDELT_TIMESTAMP_COLUMN_ID">GDELT_TIMESTAMP_COLUMN_ID</a></code></td>
+<td class="colLast"><code>1</code></td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.format.gdelt.GDELTUtils.NUM_ARTICLES_ATTRIBUTE">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td><code><a href="mil/nga/giat/geowave/format/gdelt/GDELTUtils.html#NUM_ARTICLES_ATTRIBUTE">NUM_ARTICLES_ATTRIBUTE</a></code></td>
+<td class="colLast"><code>"numArticles"</code></td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.format.gdelt.GDELTUtils.NUM_ARTICLES_COLUMN_ID">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
+<td><code><a href="mil/nga/giat/geowave/format/gdelt/GDELTUtils.html#NUM_ARTICLES_COLUMN_ID">NUM_ARTICLES_COLUMN_ID</a></code></td>
+<td class="colLast"><code>33</code></td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.format.gdelt.GDELTUtils.NUM_MENTIONS_ATTRIBUTE">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td><code><a href="mil/nga/giat/geowave/format/gdelt/GDELTUtils.html#NUM_MENTIONS_ATTRIBUTE">NUM_MENTIONS_ATTRIBUTE</a></code></td>
+<td class="colLast"><code>"numMentions"</code></td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.format.gdelt.GDELTUtils.NUM_MENTIONS_COLUMN_ID">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
+<td><code><a href="mil/nga/giat/geowave/format/gdelt/GDELTUtils.html#NUM_MENTIONS_COLUMN_ID">NUM_MENTIONS_COLUMN_ID</a></code></td>
+<td class="colLast"><code>31</code></td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.format.gdelt.GDELTUtils.NUM_SOURCES_ATTRIBUTE">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td><code><a href="mil/nga/giat/geowave/format/gdelt/GDELTUtils.html#NUM_SOURCES_ATTRIBUTE">NUM_SOURCES_ATTRIBUTE</a></code></td>
+<td class="colLast"><code>"numSources"</code></td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.format.gdelt.GDELTUtils.NUM_SOURCES_COLUMN_ID">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
+<td><code><a href="mil/nga/giat/geowave/format/gdelt/GDELTUtils.html#NUM_SOURCES_COLUMN_ID">NUM_SOURCES_COLUMN_ID</a></code></td>
+<td class="colLast"><code>32</code></td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.format.gdelt.GDELTUtils.SOURCE_URL_ATTRIBUTE">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td><code><a href="mil/nga/giat/geowave/format/gdelt/GDELTUtils.html#SOURCE_URL_ATTRIBUTE">SOURCE_URL_ATTRIBUTE</a></code></td>
+<td class="colLast"><code>"sourceUrl"</code></td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.format.gdelt.GDELTUtils.SOURCE_URL_COLUMN_ID">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
+<td><code><a href="mil/nga/giat/geowave/format/gdelt/GDELTUtils.html#SOURCE_URL_COLUMN_ID">SOURCE_URL_COLUMN_ID</a></code></td>
+<td class="colLast"><code>57</code></td>
 </tr>
 </tbody>
 </table>

@@ -122,6 +122,10 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/AccumuloUtils.html#ALT_INDEX_TABLE">ALT_INDEX_TABLE</a></strong></code>&nbsp;</td>
 </tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/AccumuloUtils.html#COMPOSITE_CQ">COMPOSITE_CQ</a></strong></code>&nbsp;</td>
+</tr>
 </table>
 </li>
 </ul>
@@ -155,212 +159,201 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>static void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/AccumuloUtils.html#attachRowMergingIterators(mil.nga.giat.geowave.core.store.adapter.RowMergingDataAdapter,%20mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations,%20java.lang.String,%20boolean)">attachRowMergingIterators</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/RowMergingDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">RowMergingDataAdapter</a>&lt;?,?&gt;&nbsp;adapter,
+                         <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOperations.html" title="interface in mil.nga.giat.geowave.datastore.accumulo">AccumuloOperations</a>&nbsp;operations,
+                         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableName,
+                         boolean&nbsp;createTable)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/util/TreeSet.html?is-external=true" title="class or interface in java.util">TreeSet</a>&lt;org.apache.accumulo.core.data.Range&gt;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/AccumuloUtils.html#byteArrayRangesToAccumuloRanges(java.util.List)">byteArrayRangesToAccumuloRanges</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayRange.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayRange</a>&gt;&nbsp;byteArrayRanges)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static org.apache.accumulo.core.data.Range</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/AccumuloUtils.html#byteArrayRangeToAccumuloRange(mil.nga.giat.geowave.core.index.ByteArrayRange)">byteArrayRangeToAccumuloRange</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayRange.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayRange</a>&nbsp;byteArrayRange)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
-<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayRange.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayRange</a>&gt;</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/AccumuloUtils.html#constraintsToByteArrayRanges(java.util.List,%20mil.nga.giat.geowave.core.index.NumericIndexStrategy)">constraintsToByteArrayRanges</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&gt;&nbsp;constraints,
-                            <a href="../../../../../../../mil/nga/giat/geowave/core/index/NumericIndexStrategy.html" title="interface in mil.nga.giat.geowave.core.index">NumericIndexStrategy</a>&nbsp;indexStrategy)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayRange.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayRange</a>&gt;</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/AccumuloUtils.html#constraintsToByteArrayRanges(java.util.List,%20mil.nga.giat.geowave.core.index.NumericIndexStrategy,%20int)">constraintsToByteArrayRanges</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&gt;&nbsp;constraints,
-                            <a href="../../../../../../../mil/nga/giat/geowave/core/index/NumericIndexStrategy.html" title="interface in mil.nga.giat.geowave.core.index">NumericIndexStrategy</a>&nbsp;indexStrategy,
-                            int&nbsp;maxRanges)</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayRange.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayRange</a>&gt;</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/AccumuloUtils.html#constraintsToByteArrayRanges(mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData,%20mil.nga.giat.geowave.core.index.NumericIndexStrategy)">constraintsToByteArrayRanges</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;constraints,
-                            <a href="../../../../../../../mil/nga/giat/geowave/core/index/NumericIndexStrategy.html" title="interface in mil.nga.giat.geowave.core.index">NumericIndexStrategy</a>&nbsp;indexStrategy)</code>&nbsp;</td>
-</tr>
 <tr class="rowColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/AccumuloUtils.html#decodeRow(org.apache.accumulo.core.data.Key,%20org.apache.accumulo.core.data.Value,%20mil.nga.giat.geowave.datastore.accumulo.AccumuloRowId,%20mil.nga.giat.geowave.core.store.adapter.AdapterStore,%20mil.nga.giat.geowave.core.store.filter.QueryFilter,%20mil.nga.giat.geowave.core.store.index.Index)">decodeRow</a></strong>(org.apache.accumulo.core.data.Key&nbsp;key,
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/AccumuloUtils.html#decodeRow(org.apache.accumulo.core.data.Key,%20org.apache.accumulo.core.data.Value,%20mil.nga.giat.geowave.datastore.accumulo.AccumuloRowId,%20mil.nga.giat.geowave.core.store.adapter.AdapterStore,%20mil.nga.giat.geowave.core.store.filter.QueryFilter,%20mil.nga.giat.geowave.core.store.index.PrimaryIndex)">decodeRow</a></strong>(org.apache.accumulo.core.data.Key&nbsp;key,
          org.apache.accumulo.core.data.Value&nbsp;value,
          <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloRowId.html" title="class in mil.nga.giat.geowave.datastore.accumulo">AccumuloRowId</a>&nbsp;rowId,
          <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;adapterStore,
          <a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/QueryFilter.html" title="interface in mil.nga.giat.geowave.core.store.filter">QueryFilter</a>&nbsp;clientFilter,
-         <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index)</code>&nbsp;</td>
+         <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>static &lt;T&gt;&nbsp;org.apache.commons.lang3.tuple.Pair&lt;T,<a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStoreEntryInfo.html" title="class in mil.nga.giat.geowave.core.store">DataStoreEntryInfo</a>&gt;</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/AccumuloUtils.html#decodeRow(org.apache.accumulo.core.data.Key,%20org.apache.accumulo.core.data.Value,%20mil.nga.giat.geowave.datastore.accumulo.AccumuloRowId,%20mil.nga.giat.geowave.core.store.adapter.DataAdapter,%20mil.nga.giat.geowave.core.store.adapter.AdapterStore,%20mil.nga.giat.geowave.core.store.filter.QueryFilter,%20mil.nga.giat.geowave.core.store.index.Index,%20mil.nga.giat.geowave.core.store.ScanCallback)">decodeRow</a></strong>(org.apache.accumulo.core.data.Key&nbsp;k,
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/AccumuloUtils.html#decodeRow(org.apache.accumulo.core.data.Key,%20org.apache.accumulo.core.data.Value,%20mil.nga.giat.geowave.datastore.accumulo.AccumuloRowId,%20mil.nga.giat.geowave.core.store.adapter.DataAdapter,%20mil.nga.giat.geowave.core.store.adapter.AdapterStore,%20mil.nga.giat.geowave.core.store.filter.QueryFilter,%20mil.nga.giat.geowave.core.store.index.PrimaryIndex,%20mil.nga.giat.geowave.core.store.ScanCallback)">decodeRow</a></strong>(org.apache.accumulo.core.data.Key&nbsp;k,
          org.apache.accumulo.core.data.Value&nbsp;v,
          <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloRowId.html" title="class in mil.nga.giat.geowave.datastore.accumulo">AccumuloRowId</a>&nbsp;rowId,
          <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;T&gt;&nbsp;dataAdapter,
          <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;adapterStore,
          <a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/QueryFilter.html" title="interface in mil.nga.giat.geowave.core.store.filter">QueryFilter</a>&nbsp;clientFilter,
-         <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index,
+         <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
          <a href="../../../../../../../mil/nga/giat/geowave/core/store/ScanCallback.html" title="interface in mil.nga.giat.geowave.core.store">ScanCallback</a>&lt;T&gt;&nbsp;scanCallback)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>static &lt;T&gt;&nbsp;T</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/AccumuloUtils.html#decodeRow(org.apache.accumulo.core.data.Key,%20org.apache.accumulo.core.data.Value,%20mil.nga.giat.geowave.core.store.adapter.AdapterStore,%20mil.nga.giat.geowave.core.store.filter.QueryFilter,%20mil.nga.giat.geowave.core.store.index.Index,%20mil.nga.giat.geowave.core.store.ScanCallback)">decodeRow</a></strong>(org.apache.accumulo.core.data.Key&nbsp;key,
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/AccumuloUtils.html#decodeRow(org.apache.accumulo.core.data.Key,%20org.apache.accumulo.core.data.Value,%20mil.nga.giat.geowave.core.store.adapter.AdapterStore,%20mil.nga.giat.geowave.core.store.filter.QueryFilter,%20mil.nga.giat.geowave.core.store.index.PrimaryIndex,%20mil.nga.giat.geowave.core.store.ScanCallback)">decodeRow</a></strong>(org.apache.accumulo.core.data.Key&nbsp;key,
          org.apache.accumulo.core.data.Value&nbsp;value,
          <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;adapterStore,
          <a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/QueryFilter.html" title="interface in mil.nga.giat.geowave.core.store.filter">QueryFilter</a>&nbsp;clientFilter,
-         <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index,
+         <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
          <a href="../../../../../../../mil/nga/giat/geowave/core/store/ScanCallback.html" title="interface in mil.nga.giat.geowave.core.store">ScanCallback</a>&lt;T&gt;&nbsp;scanCallback)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/AccumuloUtils.html#decodeRow(org.apache.accumulo.core.data.Key,%20org.apache.accumulo.core.data.Value,%20mil.nga.giat.geowave.core.store.adapter.DataAdapter,%20mil.nga.giat.geowave.core.store.index.Index)">decodeRow</a></strong>(org.apache.accumulo.core.data.Key&nbsp;key,
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/AccumuloUtils.html#decodeRow(org.apache.accumulo.core.data.Key,%20org.apache.accumulo.core.data.Value,%20mil.nga.giat.geowave.core.store.adapter.DataAdapter,%20mil.nga.giat.geowave.core.store.index.PrimaryIndex)">decodeRow</a></strong>(org.apache.accumulo.core.data.Key&nbsp;key,
          org.apache.accumulo.core.data.Value&nbsp;value,
          <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&nbsp;adapter,
-         <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index)</code>&nbsp;</td>
+         <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/AccumuloUtils.html#decodeRow(org.apache.accumulo.core.data.Key,%20org.apache.accumulo.core.data.Value,%20mil.nga.giat.geowave.core.store.adapter.DataAdapter,%20mil.nga.giat.geowave.core.store.filter.QueryFilter,%20mil.nga.giat.geowave.core.store.index.Index)">decodeRow</a></strong>(org.apache.accumulo.core.data.Key&nbsp;key,
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/AccumuloUtils.html#decodeRow(org.apache.accumulo.core.data.Key,%20org.apache.accumulo.core.data.Value,%20mil.nga.giat.geowave.core.store.adapter.DataAdapter,%20mil.nga.giat.geowave.core.store.filter.QueryFilter,%20mil.nga.giat.geowave.core.store.index.PrimaryIndex)">decodeRow</a></strong>(org.apache.accumulo.core.data.Key&nbsp;key,
          org.apache.accumulo.core.data.Value&nbsp;value,
          <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&nbsp;adapter,
          <a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/QueryFilter.html" title="interface in mil.nga.giat.geowave.core.store.filter">QueryFilter</a>&nbsp;clientFilter,
-         <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index)</code>&nbsp;</td>
+         <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>static &lt;T&gt;&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStoreEntryInfo.FieldInfo.html" title="class in mil.nga.giat.geowave.core.store">DataStoreEntryInfo.FieldInfo</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/AccumuloUtils.html#decomposeFlattenedFields(mil.nga.giat.geowave.core.store.index.CommonIndexModel,%20byte[],%20byte[])">decomposeFlattenedFields</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexModel.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexModel</a>&nbsp;model,
+                        byte[]&nbsp;flattenedValue,
+                        byte[]&nbsp;commonVisibility)</code>
+<div class="block">Takes a byte array representing a serialized composite group of
+ FieldInfos sharing a common visibility and returns a List of the
+ individual FieldInfos</div>
+</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>static &lt;T&gt;&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;org.apache.accumulo.core.data.Mutation&gt;</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/AccumuloUtils.html#entryToMutations(mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter,%20mil.nga.giat.geowave.core.store.index.Index,%20T,%20mil.nga.giat.geowave.core.store.data.VisibilityWriter)">entryToMutations</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">WritableDataAdapter</a>&lt;T&gt;&nbsp;dataWriter,
-                <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index,
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/AccumuloUtils.html#entryToMutations(mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter,%20mil.nga.giat.geowave.core.store.index.PrimaryIndex,%20T,%20mil.nga.giat.geowave.core.store.data.VisibilityWriter)">entryToMutations</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">WritableDataAdapter</a>&lt;T&gt;&nbsp;dataWriter,
+                <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
                 T&nbsp;entry,
                 <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/VisibilityWriter.html" title="interface in mil.nga.giat.geowave.core.store.data">VisibilityWriter</a>&lt;T&gt;&nbsp;customFieldVisibilityWriter)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&gt;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/AccumuloUtils.html#getDataAdapters(org.apache.accumulo.core.client.Connector,%20java.lang.String)">getDataAdapters</a></strong>(org.apache.accumulo.core.client.Connector&nbsp;connector,
                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace)</code>
 <div class="block">Get list of data adapters associated with the given namespace</div>
 </td>
 </tr>
-<tr class="altColor">
-<td class="colFirst"><code>static long</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/AccumuloUtils.html#getEntries(org.apache.accumulo.core.client.Connector,%20java.lang.String)">getEntries</a></strong>(org.apache.accumulo.core.client.Connector&nbsp;connector,
-          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace)</code>
-<div class="block">Get number of entries per namespace.</div>
-</td>
-</tr>
 <tr class="rowColor">
 <td class="colFirst"><code>static long</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/AccumuloUtils.html#getEntries(org.apache.accumulo.core.client.Connector,%20java.lang.String,%20mil.nga.giat.geowave.core.store.index.Index)">getEntries</a></strong>(org.apache.accumulo.core.client.Connector&nbsp;connector,
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/AccumuloUtils.html#getEntries(org.apache.accumulo.core.client.Connector,%20java.lang.String,%20mil.nga.giat.geowave.core.store.index.PrimaryIndex)">getEntries</a></strong>(org.apache.accumulo.core.client.Connector&nbsp;connector,
           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace,
-          <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index)</code>
-<div class="block">Get number of entries per index.</div>
+          <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index)</code>
+<div class="block">* Get number of entries per index.</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>static long</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/AccumuloUtils.html#getEntries(org.apache.accumulo.core.client.Connector,%20java.lang.String,%20mil.nga.giat.geowave.core.store.index.Index,%20mil.nga.giat.geowave.core.store.adapter.DataAdapter)">getEntries</a></strong>(org.apache.accumulo.core.client.Connector&nbsp;connector,
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/AccumuloUtils.html#getEntries(org.apache.accumulo.core.client.Connector,%20java.lang.String,%20mil.nga.giat.geowave.core.store.index.PrimaryIndex,%20mil.nga.giat.geowave.core.store.adapter.DataAdapter)">getEntries</a></strong>(org.apache.accumulo.core.client.Connector&nbsp;connector,
           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace,
-          <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index,
+          <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
           <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&nbsp;adapter)</code>
 <div class="block">Get number of entries for a data adapter in an index.</div>
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&gt;</code></td>
+<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="interface in mil.nga.giat.geowave.core.store.index">Index</a>&lt;?,?&gt;&gt;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/AccumuloUtils.html#getIndices(org.apache.accumulo.core.client.Connector,%20java.lang.String)">getIndices</a></strong>(org.apache.accumulo.core.client.Connector&nbsp;connector,
           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace)</code>
 <div class="block">Get list of indices associated with the given namespace</div>
 </td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>static &lt;T&gt;&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStoreEntryInfo.html" title="class in mil.nga.giat.geowave.core.store">DataStoreEntryInfo</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/AccumuloUtils.html#getIngestInfo(mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter,%20mil.nga.giat.geowave.core.store.index.Index,%20T,%20mil.nga.giat.geowave.core.store.data.VisibilityWriter)">getIngestInfo</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">WritableDataAdapter</a>&lt;T&gt;&nbsp;dataWriter,
-             <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index,
-             T&nbsp;entry,
-             <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/VisibilityWriter.html" title="interface in mil.nga.giat.geowave.core.store.data">VisibilityWriter</a>&lt;T&gt;&nbsp;customFieldVisibilityWriter)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/AccumuloUtils.html#getNamespaces(org.apache.accumulo.core.client.Connector)">getNamespaces</a></strong>(org.apache.accumulo.core.client.Connector&nbsp;connector)</code>
 <div class="block">Get Namespaces</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/AccumuloUtils.html#getQualifiedTableName(java.lang.String,%20java.lang.String)">getQualifiedTableName</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableNamespace,
                      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;unqualifiedTableName)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static &lt;T&gt;&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/AccumuloUtils.html#getRowIds(mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter,%20mil.nga.giat.geowave.core.store.index.Index,%20T)">getRowIds</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">WritableDataAdapter</a>&lt;T&gt;&nbsp;dataWriter,
-         <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index,
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/AccumuloUtils.html#getRowIds(mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter,%20mil.nga.giat.geowave.core.store.index.PrimaryIndex,%20T)">getRowIds</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">WritableDataAdapter</a>&lt;T&gt;&nbsp;dataWriter,
+         <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
          T&nbsp;entry)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static boolean</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/AccumuloUtils.html#isLocalityGroupSet(org.apache.accumulo.core.client.Connector,%20java.lang.String,%20mil.nga.giat.geowave.core.store.index.Index,%20mil.nga.giat.geowave.core.store.adapter.DataAdapter)">isLocalityGroupSet</a></strong>(org.apache.accumulo.core.client.Connector&nbsp;connector,
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/AccumuloUtils.html#isLocalityGroupSet(org.apache.accumulo.core.client.Connector,%20java.lang.String,%20mil.nga.giat.geowave.core.store.index.PrimaryIndex,%20mil.nga.giat.geowave.core.store.adapter.DataAdapter)">isLocalityGroupSet</a></strong>(org.apache.accumulo.core.client.Connector&nbsp;connector,
                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace,
-                  <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index,
+                  <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
                   <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&nbsp;adapter)</code>
 <div class="block">Check if locality group is set.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static &lt;T&gt;&nbsp;void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/AccumuloUtils.html#removeFromAltIndex(mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter,%20java.util.List,%20T,%20mil.nga.giat.geowave.datastore.accumulo.Writer)">removeFromAltIndex</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">WritableDataAdapter</a>&lt;T&gt;&nbsp;writableAdapter,
                   <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;rowIds,
                   T&nbsp;entry,
                   <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/Writer.html" title="interface in mil.nga.giat.geowave.datastore.accumulo">Writer</a>&nbsp;writer)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/AccumuloUtils.html#setLocalityGroup(org.apache.accumulo.core.client.Connector,%20java.lang.String,%20mil.nga.giat.geowave.core.store.index.Index,%20mil.nga.giat.geowave.core.store.adapter.DataAdapter)">setLocalityGroup</a></strong>(org.apache.accumulo.core.client.Connector&nbsp;connector,
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/AccumuloUtils.html#setLocalityGroup(org.apache.accumulo.core.client.Connector,%20java.lang.String,%20mil.nga.giat.geowave.core.store.index.PrimaryIndex,%20mil.nga.giat.geowave.core.store.adapter.DataAdapter)">setLocalityGroup</a></strong>(org.apache.accumulo.core.client.Connector&nbsp;connector,
                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace,
-                <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index,
+                <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
                 <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&nbsp;adapter)</code>
 <div class="block">Set locality group.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/AccumuloUtils.html#setSplitsByNumRows(org.apache.accumulo.core.client.Connector,%20java.lang.String,%20mil.nga.giat.geowave.core.store.index.Index,%20long)">setSplitsByNumRows</a></strong>(org.apache.accumulo.core.client.Connector&nbsp;connector,
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/AccumuloUtils.html#setSplitsByNumRows(org.apache.accumulo.core.client.Connector,%20java.lang.String,%20mil.nga.giat.geowave.core.store.index.PrimaryIndex,%20long)">setSplitsByNumRows</a></strong>(org.apache.accumulo.core.client.Connector&nbsp;connector,
                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace,
-                  <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index,
+                  <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
                   long&nbsp;numberRows)</code>
 <div class="block">Set splits on table based on fixed number of rows per split.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/AccumuloUtils.html#setSplitsByNumSplits(org.apache.accumulo.core.client.Connector,%20java.lang.String,%20mil.nga.giat.geowave.core.store.index.Index,%20int)">setSplitsByNumSplits</a></strong>(org.apache.accumulo.core.client.Connector&nbsp;connector,
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/AccumuloUtils.html#setSplitsByNumSplits(org.apache.accumulo.core.client.Connector,%20java.lang.String,%20mil.nga.giat.geowave.core.store.index.PrimaryIndex,%20int)">setSplitsByNumSplits</a></strong>(org.apache.accumulo.core.client.Connector&nbsp;connector,
                     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace,
-                    <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index,
-                    int&nbsp;numberSplits)</code>
+                    <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
+                    int&nbsp;numSplits)</code>
 <div class="block">Set splits on table based on equal interval distribution and fixed number
  of splits.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/AccumuloUtils.html#setSplitsByQuantile(org.apache.accumulo.core.client.Connector,%20java.lang.String,%20mil.nga.giat.geowave.core.store.index.Index,%20int)">setSplitsByQuantile</a></strong>(org.apache.accumulo.core.client.Connector&nbsp;connector,
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/AccumuloUtils.html#setSplitsByQuantile(org.apache.accumulo.core.client.Connector,%20java.lang.String,%20mil.nga.giat.geowave.core.store.index.PrimaryIndex,%20int)">setSplitsByQuantile</a></strong>(org.apache.accumulo.core.client.Connector&nbsp;connector,
                    <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace,
-                   <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index,
+                   <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
                    int&nbsp;quantile)</code>
 <div class="block">Set splits on a table based on quantile distribution and fixed number of
  splits</div>
 </td>
 </tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/AccumuloUtils.html#setSplitsByRandomPartitions(org.apache.accumulo.core.client.Connector,%20java.lang.String,%20mil.nga.giat.geowave.core.store.index.PrimaryIndex,%20int)">setSplitsByRandomPartitions</a></strong>(org.apache.accumulo.core.client.Connector&nbsp;connector,
+                           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace,
+                           <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
+                           int&nbsp;randomPartitions)</code>
+<div class="block">Set splits on a table based on a partition ID</div>
+</td>
+</tr>
 <tr class="altColor">
 <td class="colFirst"><code>static &lt;T&gt;&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStoreEntryInfo.html" title="class in mil.nga.giat.geowave.core.store">DataStoreEntryInfo</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/AccumuloUtils.html#write(mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter,%20mil.nga.giat.geowave.core.store.index.Index,%20T,%20mil.nga.giat.geowave.datastore.accumulo.Writer)">write</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">WritableDataAdapter</a>&lt;T&gt;&nbsp;writableAdapter,
-     <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index,
-     T&nbsp;entry,
-     <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/Writer.html" title="interface in mil.nga.giat.geowave.datastore.accumulo">Writer</a>&nbsp;writer)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>static &lt;T&gt;&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStoreEntryInfo.html" title="class in mil.nga.giat.geowave.core.store">DataStoreEntryInfo</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/AccumuloUtils.html#write(mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter,%20mil.nga.giat.geowave.core.store.index.Index,%20T,%20mil.nga.giat.geowave.datastore.accumulo.Writer,%20mil.nga.giat.geowave.core.store.data.VisibilityWriter)">write</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">WritableDataAdapter</a>&lt;T&gt;&nbsp;writableAdapter,
-     <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index,
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/AccumuloUtils.html#write(mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter,%20mil.nga.giat.geowave.core.store.index.PrimaryIndex,%20T,%20mil.nga.giat.geowave.datastore.accumulo.Writer,%20mil.nga.giat.geowave.core.store.data.VisibilityWriter)">write</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">WritableDataAdapter</a>&lt;T&gt;&nbsp;writableAdapter,
+     <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
      T&nbsp;entry,
      <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/Writer.html" title="interface in mil.nga.giat.geowave.datastore.accumulo">Writer</a>&nbsp;writer,
      <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/VisibilityWriter.html" title="interface in mil.nga.giat.geowave.core.store.data">VisibilityWriter</a>&lt;T&gt;&nbsp;customFieldVisibilityWriter)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static &lt;T&gt;&nbsp;void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/AccumuloUtils.html#writeAltIndex(mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter,%20mil.nga.giat.geowave.core.store.DataStoreEntryInfo,%20T,%20mil.nga.giat.geowave.datastore.accumulo.Writer)">writeAltIndex</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">WritableDataAdapter</a>&lt;T&gt;&nbsp;writableAdapter,
              <a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStoreEntryInfo.html" title="class in mil.nga.giat.geowave.core.store">DataStoreEntryInfo</a>&nbsp;entryInfo,
@@ -392,11 +385,20 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <a name="ALT_INDEX_TABLE">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>ALT_INDEX_TABLE</h4>
 <pre>public static final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> ALT_INDEX_TABLE</pre>
 <dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../../../constant-values.html#mil.nga.giat.geowave.datastore.accumulo.util.AccumuloUtils.ALT_INDEX_TABLE">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+<a name="COMPOSITE_CQ">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>COMPOSITE_CQ</h4>
+<pre>public static final&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a> COMPOSITE_CQ</pre>
 </li>
 </ul>
 </li>
@@ -442,37 +444,6 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/TreeSet.html?is-external=true" title="class or interface in java.util">TreeSet</a>&lt;org.apache.accumulo.core.data.Range&gt;&nbsp;byteArrayRangesToAccumuloRanges(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayRange.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayRange</a>&gt;&nbsp;byteArrayRanges)</pre>
 </li>
 </ul>
-<a name="constraintsToByteArrayRanges(mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData, mil.nga.giat.geowave.core.index.NumericIndexStrategy)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>constraintsToByteArrayRanges</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayRange.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayRange</a>&gt;&nbsp;constraintsToByteArrayRanges(<a href="../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;constraints,
-                                                <a href="../../../../../../../mil/nga/giat/geowave/core/index/NumericIndexStrategy.html" title="interface in mil.nga.giat.geowave.core.index">NumericIndexStrategy</a>&nbsp;indexStrategy)</pre>
-</li>
-</ul>
-<a name="constraintsToByteArrayRanges(java.util.List, mil.nga.giat.geowave.core.index.NumericIndexStrategy)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>constraintsToByteArrayRanges</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayRange.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayRange</a>&gt;&nbsp;constraintsToByteArrayRanges(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&gt;&nbsp;constraints,
-                                                <a href="../../../../../../../mil/nga/giat/geowave/core/index/NumericIndexStrategy.html" title="interface in mil.nga.giat.geowave.core.index">NumericIndexStrategy</a>&nbsp;indexStrategy)</pre>
-</li>
-</ul>
-<a name="constraintsToByteArrayRanges(java.util.List, mil.nga.giat.geowave.core.index.NumericIndexStrategy, int)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>constraintsToByteArrayRanges</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayRange.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayRange</a>&gt;&nbsp;constraintsToByteArrayRanges(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&gt;&nbsp;constraints,
-                                                <a href="../../../../../../../mil/nga/giat/geowave/core/index/NumericIndexStrategy.html" title="interface in mil.nga.giat.geowave.core.index">NumericIndexStrategy</a>&nbsp;indexStrategy,
-                                                int&nbsp;maxRanges)</pre>
-</li>
-</ul>
 <a name="getQualifiedTableName(java.lang.String, java.lang.String)">
 <!--   -->
 </a>
@@ -483,7 +454,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
                            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;unqualifiedTableName)</pre>
 </li>
 </ul>
-<a name="decodeRow(org.apache.accumulo.core.data.Key, org.apache.accumulo.core.data.Value, mil.nga.giat.geowave.core.store.adapter.DataAdapter, mil.nga.giat.geowave.core.store.index.Index)">
+<a name="decodeRow(org.apache.accumulo.core.data.Key, org.apache.accumulo.core.data.Value, mil.nga.giat.geowave.core.store.adapter.DataAdapter, mil.nga.giat.geowave.core.store.index.PrimaryIndex)">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -492,10 +463,10 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;decodeRow(org.apache.accumulo.core.data.Key&nbsp;key,
                org.apache.accumulo.core.data.Value&nbsp;value,
                <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&nbsp;adapter,
-               <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index)</pre>
+               <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index)</pre>
 </li>
 </ul>
-<a name="decodeRow(org.apache.accumulo.core.data.Key, org.apache.accumulo.core.data.Value, mil.nga.giat.geowave.core.store.adapter.DataAdapter, mil.nga.giat.geowave.core.store.filter.QueryFilter, mil.nga.giat.geowave.core.store.index.Index)">
+<a name="decodeRow(org.apache.accumulo.core.data.Key, org.apache.accumulo.core.data.Value, mil.nga.giat.geowave.core.store.adapter.DataAdapter, mil.nga.giat.geowave.core.store.filter.QueryFilter, mil.nga.giat.geowave.core.store.index.PrimaryIndex)">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -505,10 +476,10 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
                org.apache.accumulo.core.data.Value&nbsp;value,
                <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&nbsp;adapter,
                <a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/QueryFilter.html" title="interface in mil.nga.giat.geowave.core.store.filter">QueryFilter</a>&nbsp;clientFilter,
-               <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index)</pre>
+               <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index)</pre>
 </li>
 </ul>
-<a name="decodeRow(org.apache.accumulo.core.data.Key, org.apache.accumulo.core.data.Value, mil.nga.giat.geowave.core.store.adapter.AdapterStore, mil.nga.giat.geowave.core.store.filter.QueryFilter, mil.nga.giat.geowave.core.store.index.Index, mil.nga.giat.geowave.core.store.ScanCallback)">
+<a name="decodeRow(org.apache.accumulo.core.data.Key, org.apache.accumulo.core.data.Value, mil.nga.giat.geowave.core.store.adapter.AdapterStore, mil.nga.giat.geowave.core.store.filter.QueryFilter, mil.nga.giat.geowave.core.store.index.PrimaryIndex, mil.nga.giat.geowave.core.store.ScanCallback)">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -518,11 +489,11 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
               org.apache.accumulo.core.data.Value&nbsp;value,
               <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;adapterStore,
               <a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/QueryFilter.html" title="interface in mil.nga.giat.geowave.core.store.filter">QueryFilter</a>&nbsp;clientFilter,
-              <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index,
+              <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
               <a href="../../../../../../../mil/nga/giat/geowave/core/store/ScanCallback.html" title="interface in mil.nga.giat.geowave.core.store">ScanCallback</a>&lt;T&gt;&nbsp;scanCallback)</pre>
 </li>
 </ul>
-<a name="decodeRow(org.apache.accumulo.core.data.Key, org.apache.accumulo.core.data.Value, mil.nga.giat.geowave.datastore.accumulo.AccumuloRowId, mil.nga.giat.geowave.core.store.adapter.AdapterStore, mil.nga.giat.geowave.core.store.filter.QueryFilter, mil.nga.giat.geowave.core.store.index.Index)">
+<a name="decodeRow(org.apache.accumulo.core.data.Key, org.apache.accumulo.core.data.Value, mil.nga.giat.geowave.datastore.accumulo.AccumuloRowId, mil.nga.giat.geowave.core.store.adapter.AdapterStore, mil.nga.giat.geowave.core.store.filter.QueryFilter, mil.nga.giat.geowave.core.store.index.PrimaryIndex)">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -533,10 +504,10 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
                <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloRowId.html" title="class in mil.nga.giat.geowave.datastore.accumulo">AccumuloRowId</a>&nbsp;rowId,
                <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;adapterStore,
                <a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/QueryFilter.html" title="interface in mil.nga.giat.geowave.core.store.filter">QueryFilter</a>&nbsp;clientFilter,
-               <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index)</pre>
+               <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index)</pre>
 </li>
 </ul>
-<a name="decodeRow(org.apache.accumulo.core.data.Key, org.apache.accumulo.core.data.Value, mil.nga.giat.geowave.datastore.accumulo.AccumuloRowId, mil.nga.giat.geowave.core.store.adapter.DataAdapter, mil.nga.giat.geowave.core.store.adapter.AdapterStore, mil.nga.giat.geowave.core.store.filter.QueryFilter, mil.nga.giat.geowave.core.store.index.Index, mil.nga.giat.geowave.core.store.ScanCallback)">
+<a name="decodeRow(org.apache.accumulo.core.data.Key, org.apache.accumulo.core.data.Value, mil.nga.giat.geowave.datastore.accumulo.AccumuloRowId, mil.nga.giat.geowave.core.store.adapter.DataAdapter, mil.nga.giat.geowave.core.store.adapter.AdapterStore, mil.nga.giat.geowave.core.store.filter.QueryFilter, mil.nga.giat.geowave.core.store.index.PrimaryIndex, mil.nga.giat.geowave.core.store.ScanCallback)">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -548,34 +519,20 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
                                                                       <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;T&gt;&nbsp;dataAdapter,
                                                                       <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;adapterStore,
                                                                       <a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/QueryFilter.html" title="interface in mil.nga.giat.geowave.core.store.filter">QueryFilter</a>&nbsp;clientFilter,
-                                                                      <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index,
+                                                                      <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
                                                                       <a href="../../../../../../../mil/nga/giat/geowave/core/store/ScanCallback.html" title="interface in mil.nga.giat.geowave.core.store">ScanCallback</a>&lt;T&gt;&nbsp;scanCallback)</pre>
 </li>
 </ul>
-<a name="write(mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter,mil.nga.giat.geowave.core.store.index.Index,java.lang.Object,mil.nga.giat.geowave.datastore.accumulo.Writer)">
+<a name="write(mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter,mil.nga.giat.geowave.core.store.index.PrimaryIndex,java.lang.Object,mil.nga.giat.geowave.datastore.accumulo.Writer,mil.nga.giat.geowave.core.store.data.VisibilityWriter)">
 <!--   -->
-</a><a name="write(mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter, mil.nga.giat.geowave.core.store.index.Index, T, mil.nga.giat.geowave.datastore.accumulo.Writer)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>write</h4>
-<pre>public static&nbsp;&lt;T&gt;&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStoreEntryInfo.html" title="class in mil.nga.giat.geowave.core.store">DataStoreEntryInfo</a>&nbsp;write(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">WritableDataAdapter</a>&lt;T&gt;&nbsp;writableAdapter,
-                           <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index,
-                           T&nbsp;entry,
-                           <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/Writer.html" title="interface in mil.nga.giat.geowave.datastore.accumulo">Writer</a>&nbsp;writer)</pre>
-</li>
-</ul>
-<a name="write(mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter,mil.nga.giat.geowave.core.store.index.Index,java.lang.Object,mil.nga.giat.geowave.datastore.accumulo.Writer,mil.nga.giat.geowave.core.store.data.VisibilityWriter)">
-<!--   -->
-</a><a name="write(mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter, mil.nga.giat.geowave.core.store.index.Index, T, mil.nga.giat.geowave.datastore.accumulo.Writer, mil.nga.giat.geowave.core.store.data.VisibilityWriter)">
+</a><a name="write(mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter, mil.nga.giat.geowave.core.store.index.PrimaryIndex, T, mil.nga.giat.geowave.datastore.accumulo.Writer, mil.nga.giat.geowave.core.store.data.VisibilityWriter)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>write</h4>
 <pre>public static&nbsp;&lt;T&gt;&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStoreEntryInfo.html" title="class in mil.nga.giat.geowave.core.store">DataStoreEntryInfo</a>&nbsp;write(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">WritableDataAdapter</a>&lt;T&gt;&nbsp;writableAdapter,
-                           <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index,
+                           <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
                            T&nbsp;entry,
                            <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/Writer.html" title="interface in mil.nga.giat.geowave.datastore.accumulo">Writer</a>&nbsp;writer,
                            <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/VisibilityWriter.html" title="interface in mil.nga.giat.geowave.core.store.data">VisibilityWriter</a>&lt;T&gt;&nbsp;customFieldVisibilityWriter)</pre>
@@ -609,47 +566,49 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
                      <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/Writer.html" title="interface in mil.nga.giat.geowave.datastore.accumulo">Writer</a>&nbsp;writer)</pre>
 </li>
 </ul>
-<a name="entryToMutations(mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter,mil.nga.giat.geowave.core.store.index.Index,java.lang.Object,mil.nga.giat.geowave.core.store.data.VisibilityWriter)">
+<a name="entryToMutations(mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter,mil.nga.giat.geowave.core.store.index.PrimaryIndex,java.lang.Object,mil.nga.giat.geowave.core.store.data.VisibilityWriter)">
 <!--   -->
-</a><a name="entryToMutations(mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter, mil.nga.giat.geowave.core.store.index.Index, T, mil.nga.giat.geowave.core.store.data.VisibilityWriter)">
+</a><a name="entryToMutations(mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter, mil.nga.giat.geowave.core.store.index.PrimaryIndex, T, mil.nga.giat.geowave.core.store.data.VisibilityWriter)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>entryToMutations</h4>
 <pre>public static&nbsp;&lt;T&gt;&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;org.apache.accumulo.core.data.Mutation&gt;&nbsp;entryToMutations(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">WritableDataAdapter</a>&lt;T&gt;&nbsp;dataWriter,
-                                                                <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index,
+                                                                <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
                                                                 T&nbsp;entry,
                                                                 <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/VisibilityWriter.html" title="interface in mil.nga.giat.geowave.core.store.data">VisibilityWriter</a>&lt;T&gt;&nbsp;customFieldVisibilityWriter)</pre>
 </li>
 </ul>
-<a name="getRowIds(mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter,mil.nga.giat.geowave.core.store.index.Index,java.lang.Object)">
+<a name="decomposeFlattenedFields(mil.nga.giat.geowave.core.store.index.CommonIndexModel, byte[], byte[])">
 <!--   -->
-</a><a name="getRowIds(mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter, mil.nga.giat.geowave.core.store.index.Index, T)">
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>decomposeFlattenedFields</h4>
+<pre>public static&nbsp;&lt;T&gt;&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStoreEntryInfo.FieldInfo.html" title="class in mil.nga.giat.geowave.core.store">DataStoreEntryInfo.FieldInfo</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&gt;&nbsp;decomposeFlattenedFields(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexModel.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexModel</a>&nbsp;model,
+                                                                      byte[]&nbsp;flattenedValue,
+                                                                      byte[]&nbsp;commonVisibility)</pre>
+<div class="block">Takes a byte array representing a serialized composite group of
+ FieldInfos sharing a common visibility and returns a List of the
+ individual FieldInfos</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>model</code> - </dd><dd><code>flattenedValue</code> - the serialized composite FieldInfo</dd><dd><code>commonVisibility</code> - the shared visibility</dd>
+<dt><span class="strong">Returns:</span></dt><dd></dd></dl>
+</li>
+</ul>
+<a name="getRowIds(mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter,mil.nga.giat.geowave.core.store.index.PrimaryIndex,java.lang.Object)">
+<!--   -->
+</a><a name="getRowIds(mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter, mil.nga.giat.geowave.core.store.index.PrimaryIndex, T)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>getRowIds</h4>
 <pre>public static&nbsp;&lt;T&gt;&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;getRowIds(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">WritableDataAdapter</a>&lt;T&gt;&nbsp;dataWriter,
-                              <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index,
+                              <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
                               T&nbsp;entry)</pre>
 <dl><dt><span class="strong">Parameters:</span></dt><dd><code>dataWriter</code> - </dd><dd><code>index</code> - </dd><dd><code>entry</code> - </dd>
 <dt><span class="strong">Returns:</span></dt><dd>List of zero or more matches</dd></dl>
-</li>
-</ul>
-<a name="getIngestInfo(mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter,mil.nga.giat.geowave.core.store.index.Index,java.lang.Object,mil.nga.giat.geowave.core.store.data.VisibilityWriter)">
-<!--   -->
-</a><a name="getIngestInfo(mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter, mil.nga.giat.geowave.core.store.index.Index, T, mil.nga.giat.geowave.core.store.data.VisibilityWriter)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getIngestInfo</h4>
-<pre>public static&nbsp;&lt;T&gt;&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStoreEntryInfo.html" title="class in mil.nga.giat.geowave.core.store">DataStoreEntryInfo</a>&nbsp;getIngestInfo(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">WritableDataAdapter</a>&lt;T&gt;&nbsp;dataWriter,
-                                   <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index,
-                                   T&nbsp;entry,
-                                   <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/VisibilityWriter.html" title="interface in mil.nga.giat.geowave.core.store.data">VisibilityWriter</a>&lt;T&gt;&nbsp;customFieldVisibilityWriter)</pre>
 </li>
 </ul>
 <a name="getNamespaces(org.apache.accumulo.core.client.Connector)">
@@ -681,13 +640,36 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>getIndices</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&gt;&nbsp;getIndices(org.apache.accumulo.core.client.Connector&nbsp;connector,
-                     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace)</pre>
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="interface in mil.nga.giat.geowave.core.store.index">Index</a>&lt;?,?&gt;&gt;&nbsp;getIndices(org.apache.accumulo.core.client.Connector&nbsp;connector,
+                          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace)</pre>
 <div class="block">Get list of indices associated with the given namespace</div>
 <dl><dt><span class="strong">Parameters:</span></dt><dd><code>connector</code> - </dd><dd><code>namespace</code> - </dd></dl>
 </li>
 </ul>
-<a name="setSplitsByQuantile(org.apache.accumulo.core.client.Connector, java.lang.String, mil.nga.giat.geowave.core.store.index.Index, int)">
+<a name="setSplitsByRandomPartitions(org.apache.accumulo.core.client.Connector, java.lang.String, mil.nga.giat.geowave.core.store.index.PrimaryIndex, int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setSplitsByRandomPartitions</h4>
+<pre>public static&nbsp;void&nbsp;setSplitsByRandomPartitions(org.apache.accumulo.core.client.Connector&nbsp;connector,
+                               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace,
+                               <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
+                               int&nbsp;randomPartitions)
+                                        throws org.apache.accumulo.core.client.AccumuloException,
+                                               org.apache.accumulo.core.client.AccumuloSecurityException,
+                                               <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a>,
+                                               org.apache.accumulo.core.client.TableNotFoundException</pre>
+<div class="block">Set splits on a table based on a partition ID</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>namespace</code> - </dd><dd><code>index</code> - </dd><dd><code>randomParitions</code> - number of partition IDs</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code>org.apache.accumulo.core.client.AccumuloException</code></dd>
+<dd><code>org.apache.accumulo.core.client.AccumuloSecurityException</code></dd>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd>
+<dd><code>org.apache.accumulo.core.client.TableNotFoundException</code></dd></dl>
+</li>
+</ul>
+<a name="setSplitsByQuantile(org.apache.accumulo.core.client.Connector, java.lang.String, mil.nga.giat.geowave.core.store.index.PrimaryIndex, int)">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -695,7 +677,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <h4>setSplitsByQuantile</h4>
 <pre>public static&nbsp;void&nbsp;setSplitsByQuantile(org.apache.accumulo.core.client.Connector&nbsp;connector,
                        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace,
-                       <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index,
+                       <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
                        int&nbsp;quantile)
                                 throws org.apache.accumulo.core.client.AccumuloException,
                                        org.apache.accumulo.core.client.AccumuloSecurityException,
@@ -711,7 +693,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <dd><code>org.apache.accumulo.core.client.TableNotFoundException</code></dd></dl>
 </li>
 </ul>
-<a name="setSplitsByNumSplits(org.apache.accumulo.core.client.Connector, java.lang.String, mil.nga.giat.geowave.core.store.index.Index, int)">
+<a name="setSplitsByNumSplits(org.apache.accumulo.core.client.Connector, java.lang.String, mil.nga.giat.geowave.core.store.index.PrimaryIndex, int)">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -719,8 +701,8 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <h4>setSplitsByNumSplits</h4>
 <pre>public static&nbsp;void&nbsp;setSplitsByNumSplits(org.apache.accumulo.core.client.Connector&nbsp;connector,
                         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace,
-                        <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index,
-                        int&nbsp;numberSplits)
+                        <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
+                        int&nbsp;numSplits)
                                  throws org.apache.accumulo.core.client.AccumuloException,
                                         org.apache.accumulo.core.client.AccumuloSecurityException,
                                         <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a>,
@@ -735,7 +717,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <dd><code>org.apache.accumulo.core.client.TableNotFoundException</code></dd></dl>
 </li>
 </ul>
-<a name="setSplitsByNumRows(org.apache.accumulo.core.client.Connector, java.lang.String, mil.nga.giat.geowave.core.store.index.Index, long)">
+<a name="setSplitsByNumRows(org.apache.accumulo.core.client.Connector, java.lang.String, mil.nga.giat.geowave.core.store.index.PrimaryIndex, long)">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -743,7 +725,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <h4>setSplitsByNumRows</h4>
 <pre>public static&nbsp;void&nbsp;setSplitsByNumRows(org.apache.accumulo.core.client.Connector&nbsp;connector,
                       <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace,
-                      <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index,
+                      <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
                       long&nbsp;numberRows)
                                throws org.apache.accumulo.core.client.AccumuloException,
                                       org.apache.accumulo.core.client.AccumuloSecurityException,
@@ -758,7 +740,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <dd><code>org.apache.accumulo.core.client.TableNotFoundException</code></dd></dl>
 </li>
 </ul>
-<a name="isLocalityGroupSet(org.apache.accumulo.core.client.Connector, java.lang.String, mil.nga.giat.geowave.core.store.index.Index, mil.nga.giat.geowave.core.store.adapter.DataAdapter)">
+<a name="isLocalityGroupSet(org.apache.accumulo.core.client.Connector, java.lang.String, mil.nga.giat.geowave.core.store.index.PrimaryIndex, mil.nga.giat.geowave.core.store.adapter.DataAdapter)">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -766,7 +748,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <h4>isLocalityGroupSet</h4>
 <pre>public static&nbsp;boolean&nbsp;isLocalityGroupSet(org.apache.accumulo.core.client.Connector&nbsp;connector,
                          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace,
-                         <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index,
+                         <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
                          <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&nbsp;adapter)
                                   throws org.apache.accumulo.core.client.AccumuloException,
                                          org.apache.accumulo.core.client.AccumuloSecurityException,
@@ -782,7 +764,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <dd><code>org.apache.accumulo.core.client.TableNotFoundException</code></dd></dl>
 </li>
 </ul>
-<a name="setLocalityGroup(org.apache.accumulo.core.client.Connector, java.lang.String, mil.nga.giat.geowave.core.store.index.Index, mil.nga.giat.geowave.core.store.adapter.DataAdapter)">
+<a name="setLocalityGroup(org.apache.accumulo.core.client.Connector, java.lang.String, mil.nga.giat.geowave.core.store.index.PrimaryIndex, mil.nga.giat.geowave.core.store.adapter.DataAdapter)">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -790,7 +772,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <h4>setLocalityGroup</h4>
 <pre>public static&nbsp;void&nbsp;setLocalityGroup(org.apache.accumulo.core.client.Connector&nbsp;connector,
                     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace,
-                    <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index,
+                    <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
                     <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&nbsp;adapter)
                              throws org.apache.accumulo.core.client.AccumuloException,
                                     org.apache.accumulo.core.client.AccumuloSecurityException,
@@ -805,7 +787,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <dd><code>org.apache.accumulo.core.client.TableNotFoundException</code></dd></dl>
 </li>
 </ul>
-<a name="getEntries(org.apache.accumulo.core.client.Connector, java.lang.String, mil.nga.giat.geowave.core.store.index.Index, mil.nga.giat.geowave.core.store.adapter.DataAdapter)">
+<a name="getEntries(org.apache.accumulo.core.client.Connector, java.lang.String, mil.nga.giat.geowave.core.store.index.PrimaryIndex, mil.nga.giat.geowave.core.store.adapter.DataAdapter)">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -813,7 +795,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <h4>getEntries</h4>
 <pre>public static&nbsp;long&nbsp;getEntries(org.apache.accumulo.core.client.Connector&nbsp;connector,
               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace,
-              <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index,
+              <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
               <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&nbsp;adapter)
                        throws org.apache.accumulo.core.client.AccumuloException,
                               org.apache.accumulo.core.client.AccumuloSecurityException,
@@ -827,7 +809,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd></dl>
 </li>
 </ul>
-<a name="getEntries(org.apache.accumulo.core.client.Connector, java.lang.String, mil.nga.giat.geowave.core.store.index.Index)">
+<a name="getEntries(org.apache.accumulo.core.client.Connector, java.lang.String, mil.nga.giat.geowave.core.store.index.PrimaryIndex)">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -835,11 +817,11 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <h4>getEntries</h4>
 <pre>public static&nbsp;long&nbsp;getEntries(org.apache.accumulo.core.client.Connector&nbsp;connector,
               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace,
-              <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index)
+              <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index)
                        throws org.apache.accumulo.core.client.AccumuloException,
                               org.apache.accumulo.core.client.AccumuloSecurityException,
                               <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
-<div class="block">Get number of entries per index.</div>
+<div class="block">* Get number of entries per index.</div>
 <dl><dt><span class="strong">Parameters:</span></dt><dd><code>namespace</code> - </dd><dd><code>index</code> - </dd>
 <dt><span class="strong">Returns:</span></dt><dd></dd>
 <dt><span class="strong">Throws:</span></dt>
@@ -848,24 +830,19 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd></dl>
 </li>
 </ul>
-<a name="getEntries(org.apache.accumulo.core.client.Connector, java.lang.String)">
+<a name="attachRowMergingIterators(mil.nga.giat.geowave.core.store.adapter.RowMergingDataAdapter, mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations, java.lang.String, boolean)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>getEntries</h4>
-<pre>public static&nbsp;long&nbsp;getEntries(org.apache.accumulo.core.client.Connector&nbsp;connector,
-              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace)
-                       throws org.apache.accumulo.core.client.AccumuloException,
-                              org.apache.accumulo.core.client.AccumuloSecurityException,
-                              <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
-<div class="block">Get number of entries per namespace.</div>
-<dl><dt><span class="strong">Parameters:</span></dt><dd><code>namespace</code> - </dd>
-<dt><span class="strong">Returns:</span></dt><dd></dd>
-<dt><span class="strong">Throws:</span></dt>
-<dd><code>org.apache.accumulo.core.client.AccumuloException</code></dd>
-<dd><code>org.apache.accumulo.core.client.AccumuloSecurityException</code></dd>
-<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd></dl>
+<h4>attachRowMergingIterators</h4>
+<pre>public static&nbsp;void&nbsp;attachRowMergingIterators(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/RowMergingDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">RowMergingDataAdapter</a>&lt;?,?&gt;&nbsp;adapter,
+                             <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOperations.html" title="interface in mil.nga.giat.geowave.datastore.accumulo">AccumuloOperations</a>&nbsp;operations,
+                             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableName,
+                             boolean&nbsp;createTable)
+                                      throws org.apache.accumulo.core.client.TableNotFoundException</pre>
+<dl><dt><span class="strong">Throws:</span></dt>
+<dd><code>org.apache.accumulo.core.client.TableNotFoundException</code></dd></dl>
 </li>
 </ul>
 </li>

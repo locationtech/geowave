@@ -91,26 +91,30 @@
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><a href="#mil.nga.giat.geowave.format.gdelt">mil.nga.giat.geowave.format.gdelt</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.format.geolife">mil.nga.giat.geowave.format.geolife</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.format.geotools.raster">mil.nga.giat.geowave.format.geotools.raster</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.format.geotools.vector">mil.nga.giat.geowave.format.geotools.vector</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.format.gpx">mil.nga.giat.geowave.format.gpx</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.format.stanag4676">mil.nga.giat.geowave.format.stanag4676</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.format.tdrive">mil.nga.giat.geowave.format.tdrive</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -132,21 +136,38 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/GeoWaveData.html" title="class in mil.nga.giat.geowave.core.ingest">GeoWaveData</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&gt;</code></td>
-<td class="colLast"><span class="strong">AbstractSimpleFeatureIngestPlugin.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html#toGeoWaveData(java.io.File,%20mil.nga.giat.geowave.core.index.ByteArrayId,%20java.lang.String)">toGeoWaveData</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;input,
-             <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;primaryIndexId,
+<td class="colLast"><span class="strong">AbstractSimpleFeatureIngestPlugin.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html#toGeoWaveData(java.io.File,%20java.util.Collection,%20java.lang.String)">toGeoWaveData</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;input,
+             <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;primaryIndexIds,
              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;globalVisibility)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/GeoWaveData.html" title="class in mil.nga.giat.geowave.core.ingest">GeoWaveData</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&gt;</code></td>
-<td class="colLast"><span class="strong">AbstractSimpleFeatureIngestPlugin.AbstractIngestSimpleFeatureWithMapper.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.AbstractIngestSimpleFeatureWithMapper.html#toGeoWaveData(I,%20mil.nga.giat.geowave.core.index.ByteArrayId,%20java.lang.String)">toGeoWaveData</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.AbstractIngestSimpleFeatureWithMapper.html" title="type parameter in AbstractSimpleFeatureIngestPlugin.AbstractIngestSimpleFeatureWithMapper">I</a>&nbsp;input,
-             <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;primaryIndexId,
+<td class="colLast"><span class="strong">AbstractSimpleFeatureIngestPlugin.AbstractIngestSimpleFeatureWithMapper.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.AbstractIngestSimpleFeatureWithMapper.html#toGeoWaveData(I,%20java.util.Collection,%20java.lang.String)">toGeoWaveData</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.AbstractIngestSimpleFeatureWithMapper.html" title="type parameter in AbstractSimpleFeatureIngestPlugin.AbstractIngestSimpleFeatureWithMapper">I</a>&nbsp;input,
+             <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;primaryIndexIds,
              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;globalVisibility)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>protected abstract <a href="../../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/GeoWaveData.html" title="class in mil.nga.giat.geowave.core.ingest">GeoWaveData</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&gt;</code></td>
-<td class="colLast"><span class="strong">AbstractSimpleFeatureIngestPlugin.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html#toGeoWaveDataInternal(I,%20mil.nga.giat.geowave.core.index.ByteArrayId,%20java.lang.String)">toGeoWaveDataInternal</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html" title="type parameter in AbstractSimpleFeatureIngestPlugin">I</a>&nbsp;hdfsObject,
-                     <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;primaryIndexId,
+<td class="colLast"><span class="strong">AbstractSimpleFeatureIngestPlugin.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html#toGeoWaveDataInternal(I,%20java.util.Collection,%20java.lang.String)">toGeoWaveDataInternal</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html" title="type parameter in AbstractSimpleFeatureIngestPlugin">I</a>&nbsp;hdfsObject,
+                     <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;primaryIndexIds,
                      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;globalVisibility)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/GeoWaveData.html" title="class in mil.nga.giat.geowave.core.ingest">GeoWaveData</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&gt;</code></td>
+<td class="colLast"><span class="strong">AbstractSimpleFeatureIngestPlugin.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html#wrapIteratorWithFilters(mil.nga.giat.geowave.core.store.CloseableIterator)">wrapIteratorWithFilters</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/GeoWaveData.html" title="class in mil.nga.giat.geowave.core.ingest">GeoWaveData</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&gt;&nbsp;geowaveData)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Method parameters in <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/package-summary.html">mil.nga.giat.geowave.adapter.vector.ingest</a> with type arguments of type <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/GeoWaveData.html" title="class in mil.nga.giat.geowave.core.ingest">GeoWaveData</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/GeoWaveData.html" title="class in mil.nga.giat.geowave.core.ingest">GeoWaveData</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&gt;</code></td>
+<td class="colLast"><span class="strong">AbstractSimpleFeatureIngestPlugin.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html#wrapIteratorWithFilters(mil.nga.giat.geowave.core.store.CloseableIterator)">wrapIteratorWithFilters</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/GeoWaveData.html" title="class in mil.nga.giat.geowave.core.ingest">GeoWaveData</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&gt;&nbsp;geowaveData)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -164,8 +185,8 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/GeoWaveData.html" title="class in mil.nga.giat.geowave.core.ingest">GeoWaveData</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/IngestPluginBase.html" title="type parameter in IngestPluginBase">O</a>&gt;&gt;</code></td>
-<td class="colLast"><span class="strong">IngestPluginBase.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/IngestPluginBase.html#toGeoWaveData(I,%20mil.nga.giat.geowave.core.index.ByteArrayId,%20java.lang.String)">toGeoWaveData</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/IngestPluginBase.html" title="type parameter in IngestPluginBase">I</a>&nbsp;input,
-             <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;primaryIndexId,
+<td class="colLast"><span class="strong">IngestPluginBase.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/IngestPluginBase.html#toGeoWaveData(I,%20java.util.Collection,%20java.lang.String)">toGeoWaveData</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/IngestPluginBase.html" title="type parameter in IngestPluginBase">I</a>&nbsp;input,
+             <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;primaryIndexIds,
              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;globalVisibility)</code>
 <div class="block">Convert from an expected input format to a data format that can be
  directly ingested into GeoWave</div>
@@ -187,21 +208,21 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/GeoWaveData.html" title="class in mil.nga.giat.geowave.core.ingest">GeoWaveData</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/AbstractLocalIngestWithMapper.html" title="type parameter in AbstractLocalIngestWithMapper">T</a>&gt;&gt;</code></td>
-<td class="colLast"><span class="strong">AbstractLocalIngestWithMapper.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/AbstractLocalIngestWithMapper.html#toGeoWaveData(java.io.File,%20mil.nga.giat.geowave.core.index.ByteArrayId,%20java.lang.String)">toGeoWaveData</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;input,
-             <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;primaryIndexId,
+<td class="colLast"><span class="strong">AbstractLocalIngestWithMapper.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/AbstractLocalIngestWithMapper.html#toGeoWaveData(java.io.File,%20java.util.Collection,%20java.lang.String)">toGeoWaveData</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;input,
+             <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;primaryIndexIds,
              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;globalVisibility)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/GeoWaveData.html" title="class in mil.nga.giat.geowave.core.ingest">GeoWaveData</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/IngestWithReducer.html" title="type parameter in IngestWithReducer">O</a>&gt;&gt;</code></td>
-<td class="colLast"><span class="strong">IngestWithReducer.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/IngestWithReducer.html#toGeoWaveData(K,%20mil.nga.giat.geowave.core.index.ByteArrayId,%20java.lang.String,%20java.lang.Iterable)">toGeoWaveData</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/IngestWithReducer.html" title="type parameter in IngestWithReducer">K</a>&nbsp;key,
-             <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;primaryIndexId,
+<td class="colLast"><span class="strong">IngestWithReducer.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/IngestWithReducer.html#toGeoWaveData(K,%20java.util.Collection,%20java.lang.String,%20java.lang.Iterable)">toGeoWaveData</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/IngestWithReducer.html" title="type parameter in IngestWithReducer">K</a>&nbsp;key,
+             <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;primaryIndexIds,
              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;globalVisibility,
              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/IngestWithReducer.html" title="type parameter in IngestWithReducer">V</a>&gt;&nbsp;values)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>protected abstract <a href="../../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/GeoWaveData.html" title="class in mil.nga.giat.geowave.core.ingest">GeoWaveData</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/AbstractLocalIngestWithMapper.html" title="type parameter in AbstractLocalIngestWithMapper">T</a>&gt;&gt;</code></td>
-<td class="colLast"><span class="strong">AbstractLocalIngestWithMapper.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/AbstractLocalIngestWithMapper.html#toGeoWaveDataInternal(java.io.InputStream,%20mil.nga.giat.geowave.core.index.ByteArrayId,%20java.lang.String)">toGeoWaveDataInternal</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/InputStream.html?is-external=true" title="class or interface in java.io">InputStream</a>&nbsp;file,
-                     <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;primaryIndexId,
+<td class="colLast"><span class="strong">AbstractLocalIngestWithMapper.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/AbstractLocalIngestWithMapper.html#toGeoWaveDataInternal(java.io.InputStream,%20java.util.Collection,%20java.lang.String)">toGeoWaveDataInternal</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/InputStream.html?is-external=true" title="class or interface in java.io">InputStream</a>&nbsp;file,
+                     <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;primaryIndexIds,
                      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;globalVisibility)</code>&nbsp;</td>
 </tr>
 </tbody>
@@ -225,6 +246,26 @@
 </tbody>
 </table>
 </li>
+<li class="blockList"><a name="mil.nga.giat.geowave.format.gdelt">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/GeoWaveData.html" title="class in mil.nga.giat.geowave.core.ingest">GeoWaveData</a> in <a href="../../../../../../../mil/nga/giat/geowave/format/gdelt/package-summary.html">mil.nga.giat.geowave.format.gdelt</a></h3>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../mil/nga/giat/geowave/format/gdelt/package-summary.html">mil.nga.giat.geowave.format.gdelt</a> that return types with arguments of type <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/GeoWaveData.html" title="class in mil.nga.giat.geowave.core.ingest">GeoWaveData</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/GeoWaveData.html" title="class in mil.nga.giat.geowave.core.ingest">GeoWaveData</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&gt;</code></td>
+<td class="colLast"><span class="strong">GDELTIngestPlugin.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/format/gdelt/GDELTIngestPlugin.html#toGeoWaveDataInternal(mil.nga.giat.geowave.core.ingest.avro.WholeFile,%20java.util.Collection,%20java.lang.String)">toGeoWaveDataInternal</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/WholeFile.html" title="class in mil.nga.giat.geowave.core.ingest.avro">WholeFile</a>&nbsp;hfile,
+                     <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;primaryIndexIds,
+                     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;globalVisibility)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
 <li class="blockList"><a name="mil.nga.giat.geowave.format.geolife">
 <!--   -->
 </a>
@@ -238,8 +279,8 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/GeoWaveData.html" title="class in mil.nga.giat.geowave.core.ingest">GeoWaveData</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&gt;</code></td>
-<td class="colLast"><span class="strong">GeoLifeIngestPlugin.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/format/geolife/GeoLifeIngestPlugin.html#toGeoWaveDataInternal(mil.nga.giat.geowave.core.ingest.avro.WholeFile,%20mil.nga.giat.geowave.core.index.ByteArrayId,%20java.lang.String)">toGeoWaveDataInternal</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/WholeFile.html" title="class in mil.nga.giat.geowave.core.ingest.avro">WholeFile</a>&nbsp;hfile,
-                     <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;primaryIndexId,
+<td class="colLast"><span class="strong">GeoLifeIngestPlugin.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/format/geolife/GeoLifeIngestPlugin.html#toGeoWaveDataInternal(mil.nga.giat.geowave.core.ingest.avro.WholeFile,%20java.util.Collection,%20java.lang.String)">toGeoWaveDataInternal</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/WholeFile.html" title="class in mil.nga.giat.geowave.core.ingest.avro">WholeFile</a>&nbsp;hfile,
+                     <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;primaryIndexIds,
                      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;globalVisibility)</code>&nbsp;</td>
 </tr>
 </tbody>
@@ -258,8 +299,8 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/GeoWaveData.html" title="class in mil.nga.giat.geowave.core.ingest">GeoWaveData</a>&lt;org.opengis.coverage.grid.GridCoverage&gt;&gt;</code></td>
-<td class="colLast"><span class="strong">GeoToolsRasterDataStoreIngestPlugin.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/format/geotools/raster/GeoToolsRasterDataStoreIngestPlugin.html#toGeoWaveData(java.io.File,%20mil.nga.giat.geowave.core.index.ByteArrayId,%20java.lang.String)">toGeoWaveData</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;input,
-             <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;primaryIndexId,
+<td class="colLast"><span class="strong">GeoToolsRasterDataStoreIngestPlugin.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/format/geotools/raster/GeoToolsRasterDataStoreIngestPlugin.html#toGeoWaveData(java.io.File,%20java.util.Collection,%20java.lang.String)">toGeoWaveData</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;input,
+             <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;primaryIndexIds,
              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;globalVisibility)</code>&nbsp;</td>
 </tr>
 </tbody>
@@ -291,8 +332,8 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/GeoWaveData.html" title="class in mil.nga.giat.geowave.core.ingest">GeoWaveData</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&gt;</code></td>
-<td class="colLast"><span class="strong">GeoToolsVectorDataStoreIngestPlugin.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/format/geotools/vector/GeoToolsVectorDataStoreIngestPlugin.html#toGeoWaveData(java.io.File,%20mil.nga.giat.geowave.core.index.ByteArrayId,%20java.lang.String)">toGeoWaveData</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;input,
-             <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;primaryIndexId,
+<td class="colLast"><span class="strong">GeoToolsVectorDataStoreIngestPlugin.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/format/geotools/vector/GeoToolsVectorDataStoreIngestPlugin.html#toGeoWaveData(java.io.File,%20java.util.Collection,%20java.lang.String)">toGeoWaveData</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;input,
+             <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;primaryIndexIds,
              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;visibility)</code>&nbsp;</td>
 </tr>
 </tbody>
@@ -324,8 +365,8 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/GeoWaveData.html" title="class in mil.nga.giat.geowave.core.ingest">GeoWaveData</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&gt;</code></td>
-<td class="colLast"><span class="strong">GpxIngestPlugin.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/format/gpx/GpxIngestPlugin.html#toGeoWaveDataInternal(mil.nga.giat.geowave.format.gpx.GpxTrack,%20mil.nga.giat.geowave.core.index.ByteArrayId,%20java.lang.String)">toGeoWaveDataInternal</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/format/gpx/GpxTrack.html" title="class in mil.nga.giat.geowave.format.gpx">GpxTrack</a>&nbsp;gpxTrack,
-                     <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;primaryIndexId,
+<td class="colLast"><span class="strong">GpxIngestPlugin.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/format/gpx/GpxIngestPlugin.html#toGeoWaveDataInternal(mil.nga.giat.geowave.format.gpx.GpxTrack,%20java.util.Collection,%20java.lang.String)">toGeoWaveDataInternal</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/format/gpx/GpxTrack.html" title="class in mil.nga.giat.geowave.format.gpx">GpxTrack</a>&nbsp;gpxTrack,
+                     <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;primaryIndexIds,
                      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;globalVisibility)</code>&nbsp;</td>
 </tr>
 </tbody>
@@ -344,8 +385,8 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/GeoWaveData.html" title="class in mil.nga.giat.geowave.core.ingest">GeoWaveData</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&gt;</code></td>
-<td class="colLast"><span class="strong">Stanag4676IngestPlugin.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/format/stanag4676/Stanag4676IngestPlugin.html#toGeoWaveData(java.io.File,%20mil.nga.giat.geowave.core.index.ByteArrayId,%20java.lang.String)">toGeoWaveData</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;file,
-             <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;primaryIndexId,
+<td class="colLast"><span class="strong">Stanag4676IngestPlugin.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/format/stanag4676/Stanag4676IngestPlugin.html#toGeoWaveData(java.io.File,%20java.util.Collection,%20java.lang.String)">toGeoWaveData</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;file,
+             <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;primaryIndexIds,
              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;globalVisibility)</code>&nbsp;</td>
 </tr>
 </tbody>
@@ -364,8 +405,8 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/GeoWaveData.html" title="class in mil.nga.giat.geowave.core.ingest">GeoWaveData</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&gt;</code></td>
-<td class="colLast"><span class="strong">TdriveIngestPlugin.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/format/tdrive/TdriveIngestPlugin.html#toGeoWaveDataInternal(mil.nga.giat.geowave.format.tdrive.TdrivePoint,%20mil.nga.giat.geowave.core.index.ByteArrayId,%20java.lang.String)">toGeoWaveDataInternal</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/format/tdrive/TdrivePoint.html" title="class in mil.nga.giat.geowave.format.tdrive">TdrivePoint</a>&nbsp;tdrivePoint,
-                     <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;primaryIndexId,
+<td class="colLast"><span class="strong">TdriveIngestPlugin.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/format/tdrive/TdriveIngestPlugin.html#toGeoWaveDataInternal(mil.nga.giat.geowave.format.tdrive.TdrivePoint,%20java.util.Collection,%20java.lang.String)">toGeoWaveDataInternal</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/format/tdrive/TdrivePoint.html" title="class in mil.nga.giat.geowave.format.tdrive">TdrivePoint</a>&nbsp;tdrivePoint,
+                     <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;primaryIndexIds,
                      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;globalVisibility)</code>&nbsp;</td>
 </tr>
 </tbody>

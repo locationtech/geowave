@@ -150,7 +150,8 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/RangeDecomposition.html" title="class in mil.nga.giat.geowave.core.index.sfc">RangeDecomposition</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/zorder/ZOrderSFC.html#decomposeQuery(mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData,%20int)">decomposeQuery</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;query,
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/zorder/ZOrderSFC.html#decomposeRange(mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData,%20boolean,%20int)">decomposeRange</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;query,
+              boolean&nbsp;overInclusiveOnEdge,
               int&nbsp;maxFilteredIndexedRanges)</code>
 <div class="block">Returns a collection of ranges on the 1-d space filling curve that
  correspond to the n-dimensional range described in the query parameter.</div>
@@ -158,7 +159,7 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/RangeDecomposition.html" title="class in mil.nga.giat.geowave.core.index.sfc">RangeDecomposition</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/zorder/ZOrderSFC.html#decomposeQueryFully(mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData)">decomposeQueryFully</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;query)</code>
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/zorder/ZOrderSFC.html#decomposeRangeFully(mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData)">decomposeRangeFully</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;query)</code>
 <div class="block">Returns a collection of ranges on the 1-d space filling curve that
  correspond to the n-dimensional range described in the query parameter.</div>
 </td>
@@ -349,13 +350,14 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/
          space filling curve</dd></dl>
 </li>
 </ul>
-<a name="decomposeQuery(mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData, int)">
+<a name="decomposeRange(mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData, boolean, int)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>decomposeQuery</h4>
-<pre>public&nbsp;<a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/RangeDecomposition.html" title="class in mil.nga.giat.geowave.core.index.sfc">RangeDecomposition</a>&nbsp;decomposeQuery(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;query,
+<h4>decomposeRange</h4>
+<pre>public&nbsp;<a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/RangeDecomposition.html" title="class in mil.nga.giat.geowave.core.index.sfc">RangeDecomposition</a>&nbsp;decomposeRange(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;query,
+                                boolean&nbsp;overInclusiveOnEdge,
                                 int&nbsp;maxFilteredIndexedRanges)</pre>
 <div class="block">Returns a collection of ranges on the 1-d space filling curve that
  correspond to the n-dimensional range described in the query parameter.
@@ -365,20 +367,20 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/
  the end of one range and the start of the next.</div>
 <dl>
 <dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/SpaceFillingCurve.html#decomposeQuery(mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData,%20int)">decomposeQuery</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/SpaceFillingCurve.html" title="interface in mil.nga.giat.geowave.core.index.sfc">SpaceFillingCurve</a></code></dd>
+<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/SpaceFillingCurve.html#decomposeRange(mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData,%20boolean,%20int)">decomposeRange</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/SpaceFillingCurve.html" title="interface in mil.nga.giat.geowave.core.index.sfc">SpaceFillingCurve</a></code></dd>
 <dt><span class="strong">Parameters:</span></dt><dd><code>query</code> - describes the n-dimensional query window that will be
             decomposed</dd>
 <dt><span class="strong">Returns:</span></dt><dd>an object containing the ranges on the SFC that overlap the
          parameters supplied in the query object</dd></dl>
 </li>
 </ul>
-<a name="decomposeQueryFully(mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData)">
+<a name="decomposeRangeFully(mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>decomposeQueryFully</h4>
-<pre>public&nbsp;<a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/RangeDecomposition.html" title="class in mil.nga.giat.geowave.core.index.sfc">RangeDecomposition</a>&nbsp;decomposeQueryFully(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;query)</pre>
+<h4>decomposeRangeFully</h4>
+<pre>public&nbsp;<a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/RangeDecomposition.html" title="class in mil.nga.giat.geowave.core.index.sfc">RangeDecomposition</a>&nbsp;decomposeRangeFully(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;query)</pre>
 <div class="block">Returns a collection of ranges on the 1-d space filling curve that
  correspond to the n-dimensional range described in the query parameter.
  
@@ -386,7 +388,7 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/
  interval of 1.</div>
 <dl>
 <dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/SpaceFillingCurve.html#decomposeQueryFully(mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData)">decomposeQueryFully</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/SpaceFillingCurve.html" title="interface in mil.nga.giat.geowave.core.index.sfc">SpaceFillingCurve</a></code></dd>
+<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/SpaceFillingCurve.html#decomposeRangeFully(mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData)">decomposeRangeFully</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/SpaceFillingCurve.html" title="interface in mil.nga.giat.geowave.core.index.sfc">SpaceFillingCurve</a></code></dd>
 <dt><span class="strong">Parameters:</span></dt><dd><code>query</code> - describes the n-dimensional query window that will be
             decomposed</dd>
 <dt><span class="strong">Returns:</span></dt><dd>an object containing the ranges on the SFC that overlap the

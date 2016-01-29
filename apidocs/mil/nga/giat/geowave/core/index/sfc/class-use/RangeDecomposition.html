@@ -104,7 +104,8 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/RangeDecomposition.html" title="class in mil.nga.giat.geowave.core.index.sfc">RangeDecomposition</a></code></td>
-<td class="colLast"><span class="strong">SpaceFillingCurve.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/SpaceFillingCurve.html#decomposeQuery(mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData,%20int)">decomposeQuery</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;query,
+<td class="colLast"><span class="strong">SpaceFillingCurve.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/SpaceFillingCurve.html#decomposeRange(mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData,%20boolean,%20int)">decomposeRange</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;query,
+              boolean&nbsp;overInclusiveOnEdge,
               int&nbsp;maxRanges)</code>
 <div class="block">Returns a collection of ranges on the 1-d space filling curve that
  correspond to the n-dimensional range described in the query parameter.</div>
@@ -112,7 +113,7 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/RangeDecomposition.html" title="class in mil.nga.giat.geowave.core.index.sfc">RangeDecomposition</a></code></td>
-<td class="colLast"><span class="strong">SpaceFillingCurve.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/SpaceFillingCurve.html#decomposeQueryFully(mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData)">decomposeQueryFully</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;query)</code>
+<td class="colLast"><span class="strong">SpaceFillingCurve.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/SpaceFillingCurve.html#decomposeRangeFully(mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData)">decomposeRangeFully</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;query)</code>
 <div class="block">Returns a collection of ranges on the 1-d space filling curve that
  correspond to the n-dimensional range described in the query parameter.</div>
 </td>
@@ -133,7 +134,8 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/RangeDecomposition.html" title="class in mil.nga.giat.geowave.core.index.sfc">RangeDecomposition</a></code></td>
-<td class="colLast"><span class="strong">HilbertSFC.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/hilbert/HilbertSFC.html#decomposeQuery(mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData,%20int)">decomposeQuery</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;query,
+<td class="colLast"><span class="strong">HilbertSFC.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/hilbert/HilbertSFC.html#decomposeRange(mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData,%20boolean,%20int)">decomposeRange</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;query,
+              boolean&nbsp;overInclusiveOnEdge,
               int&nbsp;maxFilteredIndexedRanges)</code>
 <div class="block">Returns a collection of ranges on the 1-d space filling curve that
  correspond to the n-dimensional range described in the query parameter.</div>
@@ -141,39 +143,42 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/RangeDecomposition.html" title="class in mil.nga.giat.geowave.core.index.sfc">RangeDecomposition</a></code></td>
-<td class="colLast"><span class="strong">HilbertSFC.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/hilbert/HilbertSFC.html#decomposeQueryFully(mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData)">decomposeQueryFully</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;query)</code>
-<div class="block">Returns a collection of ranges on the 1-d space filling curve that
- correspond to the n-dimensional range described in the query parameter.</div>
+<td class="colLast"><span class="strong">UnboundedHilbertSFCOperations.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/hilbert/UnboundedHilbertSFCOperations.html#decomposeRange(mil.nga.giat.geowave.core.index.sfc.data.NumericData[],%20com.google.uzaygezen.core.CompactHilbertCurve,%20mil.nga.giat.geowave.core.index.sfc.SFCDimensionDefinition[],%20int,%20int,%20boolean,%20boolean)">decomposeRange</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/NumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">NumericData</a>[]&nbsp;rangePerDimension,
+              com.google.uzaygezen.core.CompactHilbertCurve&nbsp;compactHilbertCurve,
+              <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/SFCDimensionDefinition.html" title="class in mil.nga.giat.geowave.core.index.sfc">SFCDimensionDefinition</a>[]&nbsp;dimensionDefinitions,
+              int&nbsp;totalPrecision,
+              int&nbsp;maxFilteredIndexedRanges,
+              boolean&nbsp;removeVacuum,
+              boolean&nbsp;overInclusiveOnEdge)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/RangeDecomposition.html" title="class in mil.nga.giat.geowave.core.index.sfc">RangeDecomposition</a></code></td>
+<td class="colLast"><span class="strong">PrimitiveHilbertSFCOperations.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/hilbert/PrimitiveHilbertSFCOperations.html#decomposeRange(mil.nga.giat.geowave.core.index.sfc.data.NumericData[],%20com.google.uzaygezen.core.CompactHilbertCurve,%20mil.nga.giat.geowave.core.index.sfc.SFCDimensionDefinition[],%20int,%20int,%20boolean,%20boolean)">decomposeRange</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/NumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">NumericData</a>[]&nbsp;rangePerDimension,
+              com.google.uzaygezen.core.CompactHilbertCurve&nbsp;compactHilbertCurve,
+              <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/SFCDimensionDefinition.html" title="class in mil.nga.giat.geowave.core.index.sfc">SFCDimensionDefinition</a>[]&nbsp;dimensionDefinitions,
+              int&nbsp;totalPrecision,
+              int&nbsp;maxFilteredIndexedRanges,
+              boolean&nbsp;removeVacuum,
+              boolean&nbsp;overInclusiveOnEdge)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/RangeDecomposition.html" title="class in mil.nga.giat.geowave.core.index.sfc">RangeDecomposition</a></code></td>
+<td class="colLast"><span class="strong">HilbertSFCOperations.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/hilbert/HilbertSFCOperations.html#decomposeRange(mil.nga.giat.geowave.core.index.sfc.data.NumericData[],%20com.google.uzaygezen.core.CompactHilbertCurve,%20mil.nga.giat.geowave.core.index.sfc.SFCDimensionDefinition[],%20int,%20int,%20boolean,%20boolean)">decomposeRange</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/NumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">NumericData</a>[]&nbsp;rangePerDimension,
+              com.google.uzaygezen.core.CompactHilbertCurve&nbsp;compactHilbertCurve,
+              <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/SFCDimensionDefinition.html" title="class in mil.nga.giat.geowave.core.index.sfc">SFCDimensionDefinition</a>[]&nbsp;dimensionDefinitions,
+              int&nbsp;totalPrecision,
+              int&nbsp;maxFilteredIndexedRanges,
+              boolean&nbsp;removeVacuum,
+              boolean&nbsp;overInclusiveOnEdge)</code>
+<div class="block">Decompose the raw range per dimension values into an optimal set of
+ compact Hilbert SFC ranges</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/RangeDecomposition.html" title="class in mil.nga.giat.geowave.core.index.sfc">RangeDecomposition</a></code></td>
-<td class="colLast"><span class="strong">UnboundedHilbertSFCOperations.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/hilbert/UnboundedHilbertSFCOperations.html#decomposeRange(mil.nga.giat.geowave.core.index.sfc.data.NumericData[],%20com.google.uzaygezen.core.CompactHilbertCurve,%20mil.nga.giat.geowave.core.index.sfc.SFCDimensionDefinition[],%20int,%20int,%20boolean)">decomposeRange</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/NumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">NumericData</a>[]&nbsp;rangePerDimension,
-              com.google.uzaygezen.core.CompactHilbertCurve&nbsp;compactHilbertCurve,
-              <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/SFCDimensionDefinition.html" title="class in mil.nga.giat.geowave.core.index.sfc">SFCDimensionDefinition</a>[]&nbsp;dimensionDefinitions,
-              int&nbsp;totalPrecision,
-              int&nbsp;maxFilteredIndexedRanges,
-              boolean&nbsp;removeVacuum)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/RangeDecomposition.html" title="class in mil.nga.giat.geowave.core.index.sfc">RangeDecomposition</a></code></td>
-<td class="colLast"><span class="strong">PrimitiveHilbertSFCOperations.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/hilbert/PrimitiveHilbertSFCOperations.html#decomposeRange(mil.nga.giat.geowave.core.index.sfc.data.NumericData[],%20com.google.uzaygezen.core.CompactHilbertCurve,%20mil.nga.giat.geowave.core.index.sfc.SFCDimensionDefinition[],%20int,%20int,%20boolean)">decomposeRange</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/NumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">NumericData</a>[]&nbsp;rangePerDimension,
-              com.google.uzaygezen.core.CompactHilbertCurve&nbsp;compactHilbertCurve,
-              <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/SFCDimensionDefinition.html" title="class in mil.nga.giat.geowave.core.index.sfc">SFCDimensionDefinition</a>[]&nbsp;dimensionDefinitions,
-              int&nbsp;totalPrecision,
-              int&nbsp;maxFilteredIndexedRanges,
-              boolean&nbsp;removeVacuum)</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/RangeDecomposition.html" title="class in mil.nga.giat.geowave.core.index.sfc">RangeDecomposition</a></code></td>
-<td class="colLast"><span class="strong">HilbertSFCOperations.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/hilbert/HilbertSFCOperations.html#decomposeRange(mil.nga.giat.geowave.core.index.sfc.data.NumericData[],%20com.google.uzaygezen.core.CompactHilbertCurve,%20mil.nga.giat.geowave.core.index.sfc.SFCDimensionDefinition[],%20int,%20int,%20boolean)">decomposeRange</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/NumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">NumericData</a>[]&nbsp;rangePerDimension,
-              com.google.uzaygezen.core.CompactHilbertCurve&nbsp;compactHilbertCurve,
-              <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/SFCDimensionDefinition.html" title="class in mil.nga.giat.geowave.core.index.sfc">SFCDimensionDefinition</a>[]&nbsp;dimensionDefinitions,
-              int&nbsp;totalPrecision,
-              int&nbsp;maxFilteredIndexedRanges,
-              boolean&nbsp;removeVacuum)</code>
-<div class="block">Decompose the raw range per dimension values into an optimal set of
- compact Hilbert SFC ranges</div>
+<td class="colLast"><span class="strong">HilbertSFC.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/hilbert/HilbertSFC.html#decomposeRangeFully(mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData)">decomposeRangeFully</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;query)</code>
+<div class="block">Returns a collection of ranges on the 1-d space filling curve that
+ correspond to the n-dimensional range described in the query parameter.</div>
 </td>
 </tr>
 </tbody>
@@ -192,7 +197,8 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/RangeDecomposition.html" title="class in mil.nga.giat.geowave.core.index.sfc">RangeDecomposition</a></code></td>
-<td class="colLast"><span class="strong">ZOrderSFC.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/zorder/ZOrderSFC.html#decomposeQuery(mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData,%20int)">decomposeQuery</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;query,
+<td class="colLast"><span class="strong">ZOrderSFC.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/zorder/ZOrderSFC.html#decomposeRange(mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData,%20boolean,%20int)">decomposeRange</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;query,
+              boolean&nbsp;overInclusiveOnEdge,
               int&nbsp;maxFilteredIndexedRanges)</code>
 <div class="block">Returns a collection of ranges on the 1-d space filling curve that
  correspond to the n-dimensional range described in the query parameter.</div>
@@ -200,7 +206,7 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/RangeDecomposition.html" title="class in mil.nga.giat.geowave.core.index.sfc">RangeDecomposition</a></code></td>
-<td class="colLast"><span class="strong">ZOrderSFC.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/zorder/ZOrderSFC.html#decomposeQueryFully(mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData)">decomposeQueryFully</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;query)</code>
+<td class="colLast"><span class="strong">ZOrderSFC.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/zorder/ZOrderSFC.html#decomposeRangeFully(mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData)">decomposeRangeFully</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;query)</code>
 <div class="block">Returns a collection of ranges on the 1-d space filling curve that
  correspond to the n-dimensional range described in the query parameter.</div>
 </td>

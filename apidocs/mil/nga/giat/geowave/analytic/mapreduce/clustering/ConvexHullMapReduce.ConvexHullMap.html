@@ -86,10 +86,10 @@
 <li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
 <li>
 <ul class="inheritance">
-<li>org.apache.hadoop.mapreduce.Mapper&lt;<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce.input">GeoWaveInputKey</a>,org.apache.hadoop.io.ObjectWritable,KEYOUT,VALUEOUT&gt;</li>
+<li>org.apache.hadoop.mapreduce.Mapper&lt;<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a>,org.apache.hadoop.io.ObjectWritable,KEYOUT,VALUEOUT&gt;</li>
 <li>
 <ul class="inheritance">
-<li><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/GeoWaveWritableInputMapper.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce">mil.nga.giat.geowave.datastore.accumulo.mapreduce.GeoWaveWritableInputMapper</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce.input">GeoWaveInputKey</a>,org.apache.hadoop.io.ObjectWritable&gt;</li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveWritableInputMapper.html" title="class in mil.nga.giat.geowave.mapreduce">mil.nga.giat.geowave.mapreduce.GeoWaveWritableInputMapper</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a>,org.apache.hadoop.io.ObjectWritable&gt;</li>
 <li>
 <ul class="inheritance">
 <li>mil.nga.giat.geowave.analytic.mapreduce.clustering.ConvexHullMapReduce.ConvexHullMap&lt;T&gt;</li>
@@ -110,7 +110,7 @@
 <hr>
 <br>
 <pre>public static class <span class="strong">ConvexHullMapReduce.ConvexHullMap&lt;T&gt;</span>
-extends <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/GeoWaveWritableInputMapper.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce">GeoWaveWritableInputMapper</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce.input">GeoWaveInputKey</a>,org.apache.hadoop.io.ObjectWritable&gt;</pre>
+extends <a href="../../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveWritableInputMapper.html" title="class in mil.nga.giat.geowave.mapreduce">GeoWaveWritableInputMapper</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a>,org.apache.hadoop.io.ObjectWritable&gt;</pre>
 </li>
 </ul>
 </div>
@@ -145,16 +145,16 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/ma
 <th class="colLast" scope="col">Field and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce.input">GeoWaveInputKey</a></code></td>
+<td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/clustering/ConvexHullMapReduce.ConvexHullMap.html#outputKey">outputKey</a></strong></code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
-<li class="blockList"><a name="fields_inherited_from_class_mil.nga.giat.geowave.datastore.accumulo.mapreduce.GeoWaveWritableInputMapper">
+<li class="blockList"><a name="fields_inherited_from_class_mil.nga.giat.geowave.mapreduce.GeoWaveWritableInputMapper">
 <!--   -->
 </a>
-<h3>Fields inherited from class&nbsp;mil.nga.giat.geowave.datastore.accumulo.mapreduce.<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/GeoWaveWritableInputMapper.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce">GeoWaveWritableInputMapper</a></h3>
-<code><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/GeoWaveWritableInputMapper.html#LOGGER">LOGGER</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/GeoWaveWritableInputMapper.html#serializationTool">serializationTool</a></code></li>
+<h3>Fields inherited from class&nbsp;mil.nga.giat.geowave.mapreduce.<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveWritableInputMapper.html" title="class in mil.nga.giat.geowave.mapreduce">GeoWaveWritableInputMapper</a></h3>
+<code><a href="../../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveWritableInputMapper.html#LOGGER">LOGGER</a>, <a href="../../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveWritableInputMapper.html#serializationTool">serializationTool</a></code></li>
 </ul>
 </li>
 </ul>
@@ -189,13 +189,13 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/ma
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>protected void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/clustering/ConvexHullMapReduce.ConvexHullMap.html#mapNativeValue(mil.nga.giat.geowave.datastore.accumulo.mapreduce.input.GeoWaveInputKey,%20java.lang.Object,%20org.apache.hadoop.mapreduce.Mapper.Context)">mapNativeValue</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce.input">GeoWaveInputKey</a>&nbsp;key,
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/clustering/ConvexHullMapReduce.ConvexHullMap.html#mapNativeValue(mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey,%20java.lang.Object,%20org.apache.hadoop.mapreduce.Mapper.Context)">mapNativeValue</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a>&nbsp;key,
               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;value,
               org.apache.hadoop.mapreduce.Mapper.Context&nbsp;context)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/clustering/ConvexHullMapReduce.ConvexHullMap.html#mapWritableValue(mil.nga.giat.geowave.datastore.accumulo.mapreduce.input.GeoWaveInputKey,%20org.apache.hadoop.io.ObjectWritable,%20org.apache.hadoop.mapreduce.Mapper.Context)">mapWritableValue</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce.input">GeoWaveInputKey</a>&nbsp;key,
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/clustering/ConvexHullMapReduce.ConvexHullMap.html#mapWritableValue(mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey,%20org.apache.hadoop.io.ObjectWritable,%20org.apache.hadoop.mapreduce.Mapper.Context)">mapWritableValue</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a>&nbsp;key,
                 org.apache.hadoop.io.ObjectWritable&nbsp;value,
                 org.apache.hadoop.mapreduce.Mapper.Context&nbsp;context)</code>&nbsp;</td>
 </tr>
@@ -205,11 +205,11 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/ma
 </tr>
 </table>
 <ul class="blockList">
-<li class="blockList"><a name="methods_inherited_from_class_mil.nga.giat.geowave.datastore.accumulo.mapreduce.GeoWaveWritableInputMapper">
+<li class="blockList"><a name="methods_inherited_from_class_mil.nga.giat.geowave.mapreduce.GeoWaveWritableInputMapper">
 <!--   -->
 </a>
-<h3>Methods inherited from class&nbsp;mil.nga.giat.geowave.datastore.accumulo.mapreduce.<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/GeoWaveWritableInputMapper.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce">GeoWaveWritableInputMapper</a></h3>
-<code><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/GeoWaveWritableInputMapper.html#map(mil.nga.giat.geowave.datastore.accumulo.mapreduce.input.GeoWaveInputKey,%20org.apache.hadoop.io.ObjectWritable,%20org.apache.hadoop.mapreduce.Mapper.Context)">map</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/GeoWaveWritableInputMapper.html#toWritableValue(mil.nga.giat.geowave.datastore.accumulo.mapreduce.input.GeoWaveInputKey,%20java.lang.Object)">toWritableValue</a></code></li>
+<h3>Methods inherited from class&nbsp;mil.nga.giat.geowave.mapreduce.<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveWritableInputMapper.html" title="class in mil.nga.giat.geowave.mapreduce">GeoWaveWritableInputMapper</a></h3>
+<code><a href="../../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveWritableInputMapper.html#map(mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey,%20org.apache.hadoop.io.ObjectWritable,%20org.apache.hadoop.mapreduce.Mapper.Context)">map</a>, <a href="../../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveWritableInputMapper.html#toWritableValue(mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey,%20java.lang.Object)">toWritableValue</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods_inherited_from_class_org.apache.hadoop.mapreduce.Mapper">
@@ -245,7 +245,7 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/ma
 <ul class="blockListLast">
 <li class="blockList">
 <h4>outputKey</h4>
-<pre>protected&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce.input">GeoWaveInputKey</a> outputKey</pre>
+<pre>protected&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a> outputKey</pre>
 </li>
 </ul>
 </li>
@@ -273,39 +273,39 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/ma
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="mapWritableValue(mil.nga.giat.geowave.datastore.accumulo.mapreduce.input.GeoWaveInputKey, org.apache.hadoop.io.ObjectWritable, org.apache.hadoop.mapreduce.Mapper.Context)">
+<a name="mapWritableValue(mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey, org.apache.hadoop.io.ObjectWritable, org.apache.hadoop.mapreduce.Mapper.Context)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>mapWritableValue</h4>
-<pre>protected&nbsp;void&nbsp;mapWritableValue(<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce.input">GeoWaveInputKey</a>&nbsp;key,
+<pre>protected&nbsp;void&nbsp;mapWritableValue(<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a>&nbsp;key,
                     org.apache.hadoop.io.ObjectWritable&nbsp;value,
                     org.apache.hadoop.mapreduce.Mapper.Context&nbsp;context)
                          throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a>,
                                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
 <dl>
 <dt><strong>Overrides:</strong></dt>
-<dd><code><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/GeoWaveWritableInputMapper.html#mapWritableValue(mil.nga.giat.geowave.datastore.accumulo.mapreduce.input.GeoWaveInputKey,%20org.apache.hadoop.io.ObjectWritable,%20org.apache.hadoop.mapreduce.Mapper.Context)">mapWritableValue</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/GeoWaveWritableInputMapper.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce">GeoWaveWritableInputMapper</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce.input">GeoWaveInputKey</a>,org.apache.hadoop.io.ObjectWritable&gt;</code></dd>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveWritableInputMapper.html#mapWritableValue(mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey,%20org.apache.hadoop.io.ObjectWritable,%20org.apache.hadoop.mapreduce.Mapper.Context)">mapWritableValue</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveWritableInputMapper.html" title="class in mil.nga.giat.geowave.mapreduce">GeoWaveWritableInputMapper</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a>,org.apache.hadoop.io.ObjectWritable&gt;</code></dd>
 <dt><span class="strong">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></code></dd></dl>
 </li>
 </ul>
-<a name="mapNativeValue(mil.nga.giat.geowave.datastore.accumulo.mapreduce.input.GeoWaveInputKey, java.lang.Object, org.apache.hadoop.mapreduce.Mapper.Context)">
+<a name="mapNativeValue(mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey, java.lang.Object, org.apache.hadoop.mapreduce.Mapper.Context)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>mapNativeValue</h4>
-<pre>protected&nbsp;void&nbsp;mapNativeValue(<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce.input">GeoWaveInputKey</a>&nbsp;key,
+<pre>protected&nbsp;void&nbsp;mapNativeValue(<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a>&nbsp;key,
                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;value,
                   org.apache.hadoop.mapreduce.Mapper.Context&nbsp;context)
                        throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a>,
                               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
 <dl>
 <dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/GeoWaveWritableInputMapper.html#mapNativeValue(mil.nga.giat.geowave.datastore.accumulo.mapreduce.input.GeoWaveInputKey,%20java.lang.Object,%20org.apache.hadoop.mapreduce.Mapper.Context)">mapNativeValue</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/GeoWaveWritableInputMapper.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce">GeoWaveWritableInputMapper</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce.input">GeoWaveInputKey</a>,org.apache.hadoop.io.ObjectWritable&gt;</code></dd>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveWritableInputMapper.html#mapNativeValue(mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey,%20java.lang.Object,%20org.apache.hadoop.mapreduce.Mapper.Context)">mapNativeValue</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveWritableInputMapper.html" title="class in mil.nga.giat.geowave.mapreduce">GeoWaveWritableInputMapper</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a>,org.apache.hadoop.io.ObjectWritable&gt;</code></dd>
 <dt><span class="strong">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></code></dd></dl>
@@ -322,7 +322,7 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/ma
                      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
 <dl>
 <dt><strong>Overrides:</strong></dt>
-<dd><code><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/GeoWaveWritableInputMapper.html#setup(org.apache.hadoop.mapreduce.Mapper.Context)">setup</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/GeoWaveWritableInputMapper.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce">GeoWaveWritableInputMapper</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce.input">GeoWaveInputKey</a>,org.apache.hadoop.io.ObjectWritable&gt;</code></dd>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveWritableInputMapper.html#setup(org.apache.hadoop.mapreduce.Mapper.Context)">setup</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveWritableInputMapper.html" title="class in mil.nga.giat.geowave.mapreduce">GeoWaveWritableInputMapper</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a>,org.apache.hadoop.io.ObjectWritable&gt;</code></dd>
 <dt><span class="strong">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></code></dd></dl>

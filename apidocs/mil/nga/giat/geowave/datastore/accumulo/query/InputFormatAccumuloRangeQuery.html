@@ -35,7 +35,7 @@
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/ElementsToArrayIterator.html" title="class in mil.nga.giat.geowave.datastore.accumulo.query"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/FixedCardinalitySkippingIterator.html" title="class in mil.nga.giat.geowave.datastore.accumulo.query"><span class="strong">Prev Class</span></a></li>
 <li><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/QueryFilterIterator.html" title="class in mil.nga.giat.geowave.datastore.accumulo.query"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">
@@ -134,7 +134,7 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/qu
 <!--   -->
 </a>
 <h3>Fields inherited from class&nbsp;mil.nga.giat.geowave.datastore.accumulo.query.<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloConstraintsQuery.html" title="class in mil.nga.giat.geowave.datastore.accumulo.query">AccumuloConstraintsQuery</a></h3>
-<code><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloConstraintsQuery.html#constraints">constraints</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloConstraintsQuery.html#distributableFilters">distributableFilters</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloConstraintsQuery.html#queryFiltersEnabled">queryFiltersEnabled</a></code></li>
+<code><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloConstraintsQuery.html#aggregation">aggregation</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloConstraintsQuery.html#constraints">constraints</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloConstraintsQuery.html#distributableFilters">distributableFilters</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloConstraintsQuery.html#queryFiltersEnabled">queryFiltersEnabled</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="fields_inherited_from_class_mil.nga.giat.geowave.datastore.accumulo.query.AccumuloFilteredIndexQuery">
@@ -164,13 +164,12 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/qu
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/InputFormatAccumuloRangeQuery.html#InputFormatAccumuloRangeQuery(java.util.List,%20mil.nga.giat.geowave.core.store.index.Index,%20org.apache.accumulo.core.data.Range,%20java.util.List,%20boolean,%20mil.nga.giat.geowave.core.store.query.QueryOptions,%20java.lang.String[])">InputFormatAccumuloRangeQuery</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;adapterIds,
-                             <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index,
+<td class="colOne"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/InputFormatAccumuloRangeQuery.html#InputFormatAccumuloRangeQuery(mil.nga.giat.geowave.core.store.adapter.AdapterStore,%20mil.nga.giat.geowave.core.store.index.PrimaryIndex,%20org.apache.accumulo.core.data.Range,%20java.util.List,%20boolean,%20mil.nga.giat.geowave.core.store.query.QueryOptions)">InputFormatAccumuloRangeQuery</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;adapterStore,
+                             <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
                              org.apache.accumulo.core.data.Range&nbsp;accumuloRange,
                              <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/QueryFilter.html" title="interface in mil.nga.giat.geowave.core.store.filter">QueryFilter</a>&gt;&nbsp;queryFilters,
                              boolean&nbsp;isOutputWritable,
-                             <a href="../../../../../../../mil/nga/giat/geowave/core/store/query/QueryOptions.html" title="class in mil.nga.giat.geowave.core.store.query">QueryOptions</a>&nbsp;queryOptions,
-                             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;authorizations)</code>&nbsp;</td>
+                             <a href="../../../../../../../mil/nga/giat/geowave/core/store/query/QueryOptions.html" title="class in mil.nga.giat.geowave.core.store.query">QueryOptions</a>&nbsp;queryOptions)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -189,7 +188,8 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/qu
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>protected org.apache.accumulo.core.client.ScannerBase</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/InputFormatAccumuloRangeQuery.html#getScanner(mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations,%20java.lang.Integer)">getScanner</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOperations.html" title="interface in mil.nga.giat.geowave.datastore.accumulo">AccumuloOperations</a>&nbsp;accumuloOperations,
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/InputFormatAccumuloRangeQuery.html#getScanner(mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations,%20double[],%20java.lang.Integer)">getScanner</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOperations.html" title="interface in mil.nga.giat.geowave.datastore.accumulo">AccumuloOperations</a>&nbsp;accumuloOperations,
+          double[]&nbsp;maxResolutionSubsamplingPerDimension,
           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;limit)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
@@ -203,14 +203,14 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/qu
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;mil.nga.giat.geowave.datastore.accumulo.query.<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloConstraintsQuery.html" title="class in mil.nga.giat.geowave.datastore.accumulo.query">AccumuloConstraintsQuery</a></h3>
-<code><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloConstraintsQuery.html#addScanIteratorSettings(org.apache.accumulo.core.client.ScannerBase)">addScanIteratorSettings</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloConstraintsQuery.html#getRanges()">getRanges</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloConstraintsQuery.html#isQueryFiltersEnabled()">isQueryFiltersEnabled</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloConstraintsQuery.html#setQueryFiltersEnabled(boolean)">setQueryFiltersEnabled</a></code></li>
+<code><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloConstraintsQuery.html#addScanIteratorSettings(org.apache.accumulo.core.client.ScannerBase)">addScanIteratorSettings</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloConstraintsQuery.html#getRanges()">getRanges</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloConstraintsQuery.html#isAggregation()">isAggregation</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloConstraintsQuery.html#isQueryFiltersEnabled()">isQueryFiltersEnabled</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloConstraintsQuery.html#setQueryFiltersEnabled(boolean)">setQueryFiltersEnabled</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods_inherited_from_class_mil.nga.giat.geowave.datastore.accumulo.query.AccumuloFilteredIndexQuery">
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;mil.nga.giat.geowave.datastore.accumulo.query.<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloFilteredIndexQuery.html" title="class in mil.nga.giat.geowave.datastore.accumulo.query">AccumuloFilteredIndexQuery</a></h3>
-<code><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloFilteredIndexQuery.html#getClientFilters()">getClientFilters</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloFilteredIndexQuery.html#getFieldIds()">getFieldIds</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloFilteredIndexQuery.html#query(mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations,%20mil.nga.giat.geowave.core.store.adapter.AdapterStore,%20java.lang.Integer)">query</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloFilteredIndexQuery.html#query(mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations,%20mil.nga.giat.geowave.core.store.adapter.AdapterStore,%20java.lang.Integer,%20boolean)">query</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloFilteredIndexQuery.html#setClientFilters(java.util.List)">setClientFilters</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloFilteredIndexQuery.html#setFieldIds(java.util.Collection)">setFieldIds</a></code></li>
+<code><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloFilteredIndexQuery.html#getClientFilters()">getClientFilters</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloFilteredIndexQuery.html#query(mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations,%20mil.nga.giat.geowave.core.store.adapter.AdapterStore,%20double[],%20java.lang.Integer)">query</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloFilteredIndexQuery.html#query(mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations,%20mil.nga.giat.geowave.core.store.adapter.AdapterStore,%20double[],%20java.lang.Integer,%20boolean)">query</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloFilteredIndexQuery.html#setClientFilters(java.util.List)">setClientFilters</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods_inherited_from_class_mil.nga.giat.geowave.datastore.accumulo.query.AccumuloQuery">
@@ -240,19 +240,18 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/qu
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="InputFormatAccumuloRangeQuery(java.util.List, mil.nga.giat.geowave.core.store.index.Index, org.apache.accumulo.core.data.Range, java.util.List, boolean, mil.nga.giat.geowave.core.store.query.QueryOptions, java.lang.String[])">
+<a name="InputFormatAccumuloRangeQuery(mil.nga.giat.geowave.core.store.adapter.AdapterStore, mil.nga.giat.geowave.core.store.index.PrimaryIndex, org.apache.accumulo.core.data.Range, java.util.List, boolean, mil.nga.giat.geowave.core.store.query.QueryOptions)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>InputFormatAccumuloRangeQuery</h4>
-<pre>public&nbsp;InputFormatAccumuloRangeQuery(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;adapterIds,
-                             <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index,
+<pre>public&nbsp;InputFormatAccumuloRangeQuery(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;adapterStore,
+                             <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
                              org.apache.accumulo.core.data.Range&nbsp;accumuloRange,
                              <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/QueryFilter.html" title="interface in mil.nga.giat.geowave.core.store.filter">QueryFilter</a>&gt;&nbsp;queryFilters,
                              boolean&nbsp;isOutputWritable,
-                             <a href="../../../../../../../mil/nga/giat/geowave/core/store/query/QueryOptions.html" title="class in mil.nga.giat.geowave.core.store.query">QueryOptions</a>&nbsp;queryOptions,
-                             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;authorizations)</pre>
+                             <a href="../../../../../../../mil/nga/giat/geowave/core/store/query/QueryOptions.html" title="class in mil.nga.giat.geowave.core.store.query">QueryOptions</a>&nbsp;queryOptions)</pre>
 </li>
 </ul>
 </li>
@@ -263,17 +262,18 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/qu
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="getScanner(mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations, java.lang.Integer)">
+<a name="getScanner(mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations, double[], java.lang.Integer)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>getScanner</h4>
 <pre>protected&nbsp;org.apache.accumulo.core.client.ScannerBase&nbsp;getScanner(<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOperations.html" title="interface in mil.nga.giat.geowave.datastore.accumulo">AccumuloOperations</a>&nbsp;accumuloOperations,
+                                                     double[]&nbsp;maxResolutionSubsamplingPerDimension,
                                                      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;limit)</pre>
 <dl>
 <dt><strong>Overrides:</strong></dt>
-<dd><code><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloQuery.html#getScanner(mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations,%20java.lang.Integer)">getScanner</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloQuery.html" title="class in mil.nga.giat.geowave.datastore.accumulo.query">AccumuloQuery</a></code></dd>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloQuery.html#getScanner(mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations,%20double[],%20java.lang.Integer)">getScanner</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloQuery.html" title="class in mil.nga.giat.geowave.datastore.accumulo.query">AccumuloQuery</a></code></dd>
 </dl>
 </li>
 </ul>
@@ -287,7 +287,7 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/qu
                     org.apache.accumulo.core.client.ScannerBase&nbsp;scanner)</pre>
 <dl>
 <dt><strong>Overrides:</strong></dt>
-<dd><code><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloFilteredIndexQuery.html#initIterator(mil.nga.giat.geowave.core.store.adapter.AdapterStore,%20org.apache.accumulo.core.client.ScannerBase)">initIterator</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloFilteredIndexQuery.html" title="class in mil.nga.giat.geowave.datastore.accumulo.query">AccumuloFilteredIndexQuery</a></code></dd>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloConstraintsQuery.html#initIterator(mil.nga.giat.geowave.core.store.adapter.AdapterStore,%20org.apache.accumulo.core.client.ScannerBase)">initIterator</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloConstraintsQuery.html" title="class in mil.nga.giat.geowave.datastore.accumulo.query">AccumuloConstraintsQuery</a></code></dd>
 </dl>
 </li>
 </ul>
@@ -317,7 +317,7 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/qu
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/ElementsToArrayIterator.html" title="class in mil.nga.giat.geowave.datastore.accumulo.query"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/FixedCardinalitySkippingIterator.html" title="class in mil.nga.giat.geowave.datastore.accumulo.query"><span class="strong">Prev Class</span></a></li>
 <li><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/QueryFilterIterator.html" title="class in mil.nga.giat.geowave.datastore.accumulo.query"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">

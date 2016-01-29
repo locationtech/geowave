@@ -61,7 +61,7 @@
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li><a href="#nested_classes_inherited_from_class_org.apache.hadoop.mapreduce.Reducer">Nested</a>&nbsp;|&nbsp;</li>
-<li><a href="#fields_inherited_from_class_mil.nga.giat.geowave.datastore.accumulo.mapreduce.GeoWaveWritableInputReducer">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#fields_inherited_from_class_mil.nga.giat.geowave.mapreduce.GeoWaveWritableInputReducer">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method_summary">Method</a></li>
 </ul>
@@ -86,10 +86,10 @@
 <li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
 <li>
 <ul class="inheritance">
-<li>org.apache.hadoop.mapreduce.Reducer&lt;<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce.input">GeoWaveInputKey</a>,org.apache.hadoop.io.ObjectWritable,KEYOUT,VALUEOUT&gt;</li>
+<li>org.apache.hadoop.mapreduce.Reducer&lt;<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a>,org.apache.hadoop.io.ObjectWritable,KEYOUT,VALUEOUT&gt;</li>
 <li>
 <ul class="inheritance">
-<li><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/GeoWaveWritableInputReducer.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce">mil.nga.giat.geowave.datastore.accumulo.mapreduce.GeoWaveWritableInputReducer</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/output/GeoWaveOutputKey.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce.output">GeoWaveOutputKey</a>,org.opengis.coverage.grid.GridCoverage&gt;</li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveWritableInputReducer.html" title="class in mil.nga.giat.geowave.mapreduce">mil.nga.giat.geowave.mapreduce.GeoWaveWritableInputReducer</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/output/GeoWaveOutputKey.html" title="class in mil.nga.giat.geowave.mapreduce.output">GeoWaveOutputKey</a>,org.opengis.coverage.grid.GridCoverage&gt;</li>
 <li>
 <ul class="inheritance">
 <li>mil.nga.giat.geowave.adapter.raster.resize.RasterTileResizeReducer</li>
@@ -106,7 +106,7 @@
 <hr>
 <br>
 <pre>public class <span class="strong">RasterTileResizeReducer</span>
-extends <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/GeoWaveWritableInputReducer.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce">GeoWaveWritableInputReducer</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/output/GeoWaveOutputKey.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce.output">GeoWaveOutputKey</a>,org.opengis.coverage.grid.GridCoverage&gt;</pre>
+extends <a href="../../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveWritableInputReducer.html" title="class in mil.nga.giat.geowave.mapreduce">GeoWaveWritableInputReducer</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/output/GeoWaveOutputKey.html" title="class in mil.nga.giat.geowave.mapreduce.output">GeoWaveOutputKey</a>,org.opengis.coverage.grid.GridCoverage&gt;</pre>
 </li>
 </ul>
 </div>
@@ -135,11 +135,11 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/ma
 </a>
 <h3>Field Summary</h3>
 <ul class="blockList">
-<li class="blockList"><a name="fields_inherited_from_class_mil.nga.giat.geowave.datastore.accumulo.mapreduce.GeoWaveWritableInputReducer">
+<li class="blockList"><a name="fields_inherited_from_class_mil.nga.giat.geowave.mapreduce.GeoWaveWritableInputReducer">
 <!--   -->
 </a>
-<h3>Fields inherited from class&nbsp;mil.nga.giat.geowave.datastore.accumulo.mapreduce.<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/GeoWaveWritableInputReducer.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce">GeoWaveWritableInputReducer</a></h3>
-<code><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/GeoWaveWritableInputReducer.html#LOGGER">LOGGER</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/GeoWaveWritableInputReducer.html#serializationTool">serializationTool</a></code></li>
+<h3>Fields inherited from class&nbsp;mil.nga.giat.geowave.mapreduce.<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveWritableInputReducer.html" title="class in mil.nga.giat.geowave.mapreduce">GeoWaveWritableInputReducer</a></h3>
+<code><a href="../../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveWritableInputReducer.html#LOGGER">LOGGER</a>, <a href="../../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveWritableInputReducer.html#serializationTool">serializationTool</a></code></li>
 </ul>
 </li>
 </ul>
@@ -174,7 +174,7 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/ma
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>protected void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/resize/RasterTileResizeReducer.html#reduceNativeValues(mil.nga.giat.geowave.datastore.accumulo.mapreduce.input.GeoWaveInputKey,%20java.lang.Iterable,%20org.apache.hadoop.mapreduce.Reducer.Context)">reduceNativeValues</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce.input">GeoWaveInputKey</a>&nbsp;key,
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/resize/RasterTileResizeReducer.html#reduceNativeValues(mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey,%20java.lang.Iterable,%20org.apache.hadoop.mapreduce.Reducer.Context)">reduceNativeValues</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a>&nbsp;key,
                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;values,
                   org.apache.hadoop.mapreduce.Reducer.Context&nbsp;context)</code>&nbsp;</td>
 </tr>
@@ -184,11 +184,11 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/ma
 </tr>
 </table>
 <ul class="blockList">
-<li class="blockList"><a name="methods_inherited_from_class_mil.nga.giat.geowave.datastore.accumulo.mapreduce.GeoWaveWritableInputReducer">
+<li class="blockList"><a name="methods_inherited_from_class_mil.nga.giat.geowave.mapreduce.GeoWaveWritableInputReducer">
 <!--   -->
 </a>
-<h3>Methods inherited from class&nbsp;mil.nga.giat.geowave.datastore.accumulo.mapreduce.<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/GeoWaveWritableInputReducer.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce">GeoWaveWritableInputReducer</a></h3>
-<code><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/GeoWaveWritableInputReducer.html#reduce(mil.nga.giat.geowave.datastore.accumulo.mapreduce.input.GeoWaveInputKey,%20java.lang.Iterable,%20org.apache.hadoop.mapreduce.Reducer.Context)">reduce</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/GeoWaveWritableInputReducer.html#reduceWritableValues(mil.nga.giat.geowave.datastore.accumulo.mapreduce.input.GeoWaveInputKey,%20java.lang.Iterable,%20org.apache.hadoop.mapreduce.Reducer.Context)">reduceWritableValues</a></code></li>
+<h3>Methods inherited from class&nbsp;mil.nga.giat.geowave.mapreduce.<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveWritableInputReducer.html" title="class in mil.nga.giat.geowave.mapreduce">GeoWaveWritableInputReducer</a></h3>
+<code><a href="../../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveWritableInputReducer.html#reduce(mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey,%20java.lang.Iterable,%20org.apache.hadoop.mapreduce.Reducer.Context)">reduce</a>, <a href="../../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveWritableInputReducer.html#reduceWritableValues(mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey,%20java.lang.Iterable,%20org.apache.hadoop.mapreduce.Reducer.Context)">reduceWritableValues</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods_inherited_from_class_org.apache.hadoop.mapreduce.Reducer">
@@ -235,20 +235,20 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/ma
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="reduceNativeValues(mil.nga.giat.geowave.datastore.accumulo.mapreduce.input.GeoWaveInputKey, java.lang.Iterable, org.apache.hadoop.mapreduce.Reducer.Context)">
+<a name="reduceNativeValues(mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey, java.lang.Iterable, org.apache.hadoop.mapreduce.Reducer.Context)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>reduceNativeValues</h4>
-<pre>protected&nbsp;void&nbsp;reduceNativeValues(<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce.input">GeoWaveInputKey</a>&nbsp;key,
+<pre>protected&nbsp;void&nbsp;reduceNativeValues(<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a>&nbsp;key,
                       <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;values,
                       org.apache.hadoop.mapreduce.Reducer.Context&nbsp;context)
                            throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a>,
                                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
 <dl>
 <dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/GeoWaveWritableInputReducer.html#reduceNativeValues(mil.nga.giat.geowave.datastore.accumulo.mapreduce.input.GeoWaveInputKey,%20java.lang.Iterable,%20org.apache.hadoop.mapreduce.Reducer.Context)">reduceNativeValues</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/GeoWaveWritableInputReducer.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce">GeoWaveWritableInputReducer</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/output/GeoWaveOutputKey.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce.output">GeoWaveOutputKey</a>,org.opengis.coverage.grid.GridCoverage&gt;</code></dd>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveWritableInputReducer.html#reduceNativeValues(mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey,%20java.lang.Iterable,%20org.apache.hadoop.mapreduce.Reducer.Context)">reduceNativeValues</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveWritableInputReducer.html" title="class in mil.nga.giat.geowave.mapreduce">GeoWaveWritableInputReducer</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/output/GeoWaveOutputKey.html" title="class in mil.nga.giat.geowave.mapreduce.output">GeoWaveOutputKey</a>,org.opengis.coverage.grid.GridCoverage&gt;</code></dd>
 <dt><span class="strong">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></code></dd></dl>
@@ -265,7 +265,7 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/ma
                      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
 <dl>
 <dt><strong>Overrides:</strong></dt>
-<dd><code><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/GeoWaveWritableInputReducer.html#setup(org.apache.hadoop.mapreduce.Reducer.Context)">setup</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/GeoWaveWritableInputReducer.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce">GeoWaveWritableInputReducer</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/output/GeoWaveOutputKey.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce.output">GeoWaveOutputKey</a>,org.opengis.coverage.grid.GridCoverage&gt;</code></dd>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveWritableInputReducer.html#setup(org.apache.hadoop.mapreduce.Reducer.Context)">setup</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveWritableInputReducer.html" title="class in mil.nga.giat.geowave.mapreduce">GeoWaveWritableInputReducer</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/output/GeoWaveOutputKey.html" title="class in mil.nga.giat.geowave.mapreduce.output">GeoWaveOutputKey</a>,org.opengis.coverage.grid.GridCoverage&gt;</code></dd>
 <dt><span class="strong">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></code></dd></dl>
@@ -323,7 +323,7 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/ma
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li><a href="#nested_classes_inherited_from_class_org.apache.hadoop.mapreduce.Reducer">Nested</a>&nbsp;|&nbsp;</li>
-<li><a href="#fields_inherited_from_class_mil.nga.giat.geowave.datastore.accumulo.mapreduce.GeoWaveWritableInputReducer">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#fields_inherited_from_class_mil.nga.giat.geowave.mapreduce.GeoWaveWritableInputReducer">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method_summary">Method</a></li>
 </ul>

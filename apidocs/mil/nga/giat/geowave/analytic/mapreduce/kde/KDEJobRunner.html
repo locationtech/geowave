@@ -35,7 +35,7 @@
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/kde/IdentityMapper.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.kde"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/kde/KDECommandLineOptions.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.kde"><span class="strong">Prev Class</span></a></li>
 <li><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/kde/LevelPartitioner.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.kde"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">
@@ -100,7 +100,7 @@
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd>org.apache.hadoop.conf.Configurable, org.apache.hadoop.util.Tool</dd>
+<dd><a href="../../../../../../../mil/nga/giat/geowave/core/cli/CLIOperationDriver.html" title="interface in mil.nga.giat.geowave.core.cli">CLIOperationDriver</a>, org.apache.hadoop.conf.Configurable, org.apache.hadoop.util.Tool</dd>
 </dl>
 <dl>
 <dt>Direct Known Subclasses:</dt>
@@ -110,7 +110,7 @@
 <br>
 <pre>public class <span class="strong">KDEJobRunner</span>
 extends org.apache.hadoop.conf.Configured
-implements org.apache.hadoop.util.Tool</pre>
+implements org.apache.hadoop.util.Tool, <a href="../../../../../../../mil/nga/giat/geowave/core/cli/CLIOperationDriver.html" title="interface in mil.nga.giat.geowave.core.cli">CLIOperationDriver</a></pre>
 </li>
 </ul>
 </div>
@@ -134,84 +134,36 @@ implements org.apache.hadoop.util.Tool</pre>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/kde/KDEJobRunner.html#COVERAGE_NAME_KEY">COVERAGE_NAME_KEY</a></strong></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/kde/KDEJobRunner.html#coverageName">coverageName</a></strong></code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/kde/KDEJobRunner.html#cqlFilter">cqlFilter</a></strong></code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/kde/KDEJobRunner.html#featureType">featureType</a></strong></code>&nbsp;</td>
-</tr>
-<tr class="altColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/kde/KDEJobRunner.html#GEOWAVE_CLASSPATH_JARS">GEOWAVE_CLASSPATH_JARS</a></strong></code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
-<td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/kde/KDEJobRunner.html#hdfsHostPort">hdfsHostPort</a></strong></code>&nbsp;</td>
-</tr>
 <tr class="altColor">
-<td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/kde/KDEJobRunner.html#instance">instance</a></strong></code>&nbsp;</td>
+<td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/core/cli/AdapterStoreCommandLineOptions.html" title="class in mil.nga.giat.geowave.core.cli">AdapterStoreCommandLineOptions</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/kde/KDEJobRunner.html#inputAdapterStoreOptions">inputAdapterStoreOptions</a></strong></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/kde/KDEJobRunner.html#jobTrackerOrResourceManHostPort">jobTrackerOrResourceManHostPort</a></strong></code>&nbsp;</td>
+<td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/core/cli/DataStoreCommandLineOptions.html" title="class in mil.nga.giat.geowave.core.cli">DataStoreCommandLineOptions</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/kde/KDEJobRunner.html#inputDataStoreOptions">inputDataStoreOptions</a></strong></code>&nbsp;</td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/kde/KDECommandLineOptions.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.kde">KDECommandLineOptions</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/kde/KDEJobRunner.html#kdeCommandLineOptions">kdeCommandLineOptions</a></strong></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/kde/KDEJobRunner.html#MAX_LEVEL_KEY">MAX_LEVEL_KEY</a></strong></code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
-<td class="colFirst"><code>protected int</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/kde/KDEJobRunner.html#maxLevel">maxLevel</a></strong></code>&nbsp;</td>
-</tr>
 <tr class="altColor">
-<td class="colFirst"><code>protected int</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/kde/KDEJobRunner.html#maxSplits">maxSplits</a></strong></code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/kde/KDEJobRunner.html#MIN_LEVEL_KEY">MIN_LEVEL_KEY</a></strong></code>&nbsp;</td>
 </tr>
-<tr class="altColor">
-<td class="colFirst"><code>protected int</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/kde/KDEJobRunner.html#minLevel">minLevel</a></strong></code>&nbsp;</td>
-</tr>
 <tr class="rowColor">
-<td class="colFirst"><code>protected int</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/kde/KDEJobRunner.html#minSplits">minSplits</a></strong></code>&nbsp;</td>
+<td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/core/cli/DataStoreCommandLineOptions.html" title="class in mil.nga.giat.geowave.core.cli">DataStoreCommandLineOptions</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/kde/KDEJobRunner.html#outputDataStoreOptions">outputDataStoreOptions</a></strong></code>&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/kde/KDEJobRunner.html#namespace">namespace</a></strong></code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/kde/KDEJobRunner.html#newNamespace">newNamespace</a></strong></code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/kde/KDEJobRunner.html#password">password</a></strong></code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/kde/KDEJobRunner.html#TILE_SIZE_KEY">TILE_SIZE_KEY</a></strong></code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>protected int</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/kde/KDEJobRunner.html#tileSize">tileSize</a></strong></code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/kde/KDEJobRunner.html#user">user</a></strong></code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/kde/KDEJobRunner.html#zookeeper">zookeeper</a></strong></code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -231,22 +183,9 @@ implements org.apache.hadoop.util.Tool</pre>
 <td class="colOne"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/kde/KDEJobRunner.html#KDEJobRunner()">KDEJobRunner</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/kde/KDEJobRunner.html#KDEJobRunner(java.lang.String,%20java.lang.String,%20java.lang.String,%20java.lang.String,%20java.lang.String,%20java.lang.String,%20int,%20int,%20int,%20int,%20java.lang.String,%20java.lang.String,%20java.lang.String,%20java.lang.String,%20int,%20java.lang.String)">KDEJobRunner</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;zookeeper,
-            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;instance,
-            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;user,
-            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;password,
-            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace,
-            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;featureType,
-            int&nbsp;minLevel,
-            int&nbsp;maxLevel,
-            int&nbsp;minSplits,
-            int&nbsp;maxSplits,
-            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverageName,
-            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;hdfsHostPort,
-            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;jobTrackerOrResourceManHostPort,
-            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;newNamespace,
-            int&nbsp;tileSize,
-            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;cqlFilter)</code>&nbsp;</td>
+<td class="colOne"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/kde/KDEJobRunner.html#KDEJobRunner(mil.nga.giat.geowave.analytic.mapreduce.kde.KDECommandLineOptions,%20mil.nga.giat.geowave.core.cli.DataStoreCommandLineOptions,%20mil.nga.giat.geowave.core.cli.DataStoreCommandLineOptions)">KDEJobRunner</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/kde/KDECommandLineOptions.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.kde">KDECommandLineOptions</a>&nbsp;kdeCommandLineOptions,
+            <a href="../../../../../../../mil/nga/giat/geowave/core/cli/DataStoreCommandLineOptions.html" title="class in mil.nga.giat.geowave.core.cli">DataStoreCommandLineOptions</a>&nbsp;inputDataStoreOptions,
+            <a href="../../../../../../../mil/nga/giat/geowave/core/cli/DataStoreCommandLineOptions.html" title="class in mil.nga.giat.geowave.core.cli">DataStoreCommandLineOptions</a>&nbsp;outputDataStoreOptions)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -269,8 +208,8 @@ implements org.apache.hadoop.util.Tool</pre>
                            org.apache.hadoop.conf.Configuration&nbsp;conf)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>protected int</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/kde/KDEJobRunner.html#getCQLFilterArg()">getCQLFilterArg</a></strong>()</code>&nbsp;</td>
+<td class="colFirst"><code>protected void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/kde/KDEJobRunner.html#applyOptions(org.apache.commons.cli.Options)">applyOptions</a></strong>(org.apache.commons.cli.Options&nbsp;allOptions)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;? extends org.apache.hadoop.mapreduce.Mapper&lt;?,?,?,?&gt;&gt;</code></td>
@@ -317,30 +256,39 @@ implements org.apache.hadoop.util.Tool</pre>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/kde/KDEJobRunner.html#main(java.lang.String[])">main</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;args)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>protected org.apache.commons.cli.CommandLine</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/kde/KDEJobRunner.html#parseOptions(java.lang.String[],%20org.apache.commons.cli.Options)">parseOptions</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;args,
+            org.apache.commons.cli.Options&nbsp;allOptions)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>protected boolean</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/kde/KDEJobRunner.html#postJob2Actions(org.apache.hadoop.conf.Configuration,%20java.lang.String)">postJob2Actions</a></strong>(org.apache.hadoop.conf.Configuration&nbsp;conf,
                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;statsNamespace)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/kde/KDEJobRunner.html#preJob1Setup(org.apache.hadoop.conf.Configuration)">preJob1Setup</a></strong>(org.apache.hadoop.conf.Configuration&nbsp;conf)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/kde/KDEJobRunner.html#run(java.lang.String[])">run</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;args)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/kde/KDEJobRunner.html#runJob()">runJob</a></strong>()</code>
 <div class="block">Main method to execute the MapReduce analytic.</div>
 </td>
 </tr>
+<tr class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/kde/KDEJobRunner.html#runOperation(java.lang.String[])">runOperation</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;args)</code>&nbsp;</td>
+</tr>
 <tr class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/kde/KDEJobRunner.html#setup(org.apache.hadoop.mapreduce.Job,%20java.lang.String,%20mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter,%20mil.nga.giat.geowave.core.store.index.Index)">setup</a></strong>(org.apache.hadoop.mapreduce.Job&nbsp;job,
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/kde/KDEJobRunner.html#setup(org.apache.hadoop.mapreduce.Job,%20java.lang.String,%20mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter,%20mil.nga.giat.geowave.core.store.index.PrimaryIndex)">setup</a></strong>(org.apache.hadoop.mapreduce.Job&nbsp;job,
      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace,
      <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">WritableDataAdapter</a>&lt;?&gt;&nbsp;adapter,
-     <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index)</code>&nbsp;</td>
+     <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>protected void</code></td>
@@ -439,148 +387,40 @@ implements org.apache.hadoop.util.Tool</pre>
 <dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../../../constant-values.html#mil.nga.giat.geowave.analytic.mapreduce.kde.KDEJobRunner.TILE_SIZE_KEY">Constant Field Values</a></dd></dl>
 </li>
 </ul>
-<a name="user">
+<a name="kdeCommandLineOptions">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>user</h4>
-<pre>protected&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> user</pre>
+<h4>kdeCommandLineOptions</h4>
+<pre>protected&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/kde/KDECommandLineOptions.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.kde">KDECommandLineOptions</a> kdeCommandLineOptions</pre>
 </li>
 </ul>
-<a name="password">
+<a name="inputDataStoreOptions">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>password</h4>
-<pre>protected&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> password</pre>
+<h4>inputDataStoreOptions</h4>
+<pre>protected&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/cli/DataStoreCommandLineOptions.html" title="class in mil.nga.giat.geowave.core.cli">DataStoreCommandLineOptions</a> inputDataStoreOptions</pre>
 </li>
 </ul>
-<a name="instance">
+<a name="outputDataStoreOptions">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>instance</h4>
-<pre>protected&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> instance</pre>
+<h4>outputDataStoreOptions</h4>
+<pre>protected&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/cli/DataStoreCommandLineOptions.html" title="class in mil.nga.giat.geowave.core.cli">DataStoreCommandLineOptions</a> outputDataStoreOptions</pre>
 </li>
 </ul>
-<a name="zookeeper">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>zookeeper</h4>
-<pre>protected&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> zookeeper</pre>
-</li>
-</ul>
-<a name="coverageName">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>coverageName</h4>
-<pre>protected&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> coverageName</pre>
-</li>
-</ul>
-<a name="namespace">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>namespace</h4>
-<pre>protected&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> namespace</pre>
-</li>
-</ul>
-<a name="featureType">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>featureType</h4>
-<pre>protected&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> featureType</pre>
-</li>
-</ul>
-<a name="maxLevel">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>maxLevel</h4>
-<pre>protected&nbsp;int maxLevel</pre>
-</li>
-</ul>
-<a name="minLevel">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>minLevel</h4>
-<pre>protected&nbsp;int minLevel</pre>
-</li>
-</ul>
-<a name="minSplits">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>minSplits</h4>
-<pre>protected&nbsp;int minSplits</pre>
-</li>
-</ul>
-<a name="maxSplits">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>maxSplits</h4>
-<pre>protected&nbsp;int maxSplits</pre>
-</li>
-</ul>
-<a name="cqlFilter">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>cqlFilter</h4>
-<pre>protected&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> cqlFilter</pre>
-</li>
-</ul>
-<a name="newNamespace">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>newNamespace</h4>
-<pre>protected&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> newNamespace</pre>
-</li>
-</ul>
-<a name="tileSize">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>tileSize</h4>
-<pre>protected&nbsp;int tileSize</pre>
-</li>
-</ul>
-<a name="hdfsHostPort">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>hdfsHostPort</h4>
-<pre>protected&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> hdfsHostPort</pre>
-</li>
-</ul>
-<a name="jobTrackerOrResourceManHostPort">
+<a name="inputAdapterStoreOptions">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>jobTrackerOrResourceManHostPort</h4>
-<pre>protected&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> jobTrackerOrResourceManHostPort</pre>
+<h4>inputAdapterStoreOptions</h4>
+<pre>protected&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/cli/AdapterStoreCommandLineOptions.html" title="class in mil.nga.giat.geowave.core.cli">AdapterStoreCommandLineOptions</a> inputAdapterStoreOptions</pre>
 </li>
 </ul>
 </li>
@@ -600,28 +440,15 @@ implements org.apache.hadoop.util.Tool</pre>
 <pre>public&nbsp;KDEJobRunner()</pre>
 </li>
 </ul>
-<a name="KDEJobRunner(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, int, int, int, int, java.lang.String, java.lang.String, java.lang.String, java.lang.String, int, java.lang.String)">
+<a name="KDEJobRunner(mil.nga.giat.geowave.analytic.mapreduce.kde.KDECommandLineOptions, mil.nga.giat.geowave.core.cli.DataStoreCommandLineOptions, mil.nga.giat.geowave.core.cli.DataStoreCommandLineOptions)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>KDEJobRunner</h4>
-<pre>public&nbsp;KDEJobRunner(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;zookeeper,
-            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;instance,
-            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;user,
-            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;password,
-            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace,
-            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;featureType,
-            int&nbsp;minLevel,
-            int&nbsp;maxLevel,
-            int&nbsp;minSplits,
-            int&nbsp;maxSplits,
-            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverageName,
-            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;hdfsHostPort,
-            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;jobTrackerOrResourceManHostPort,
-            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;newNamespace,
-            int&nbsp;tileSize,
-            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;cqlFilter)</pre>
+<pre>public&nbsp;KDEJobRunner(<a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/kde/KDECommandLineOptions.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.kde">KDECommandLineOptions</a>&nbsp;kdeCommandLineOptions,
+            <a href="../../../../../../../mil/nga/giat/geowave/core/cli/DataStoreCommandLineOptions.html" title="class in mil.nga.giat.geowave.core.cli">DataStoreCommandLineOptions</a>&nbsp;inputDataStoreOptions,
+            <a href="../../../../../../../mil/nga/giat/geowave/core/cli/DataStoreCommandLineOptions.html" title="class in mil.nga.giat.geowave.core.cli">DataStoreCommandLineOptions</a>&nbsp;outputDataStoreOptions)</pre>
 </li>
 </ul>
 </li>
@@ -784,7 +611,7 @@ implements org.apache.hadoop.util.Tool</pre>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></code></dd></dl>
 </li>
 </ul>
-<a name="setup(org.apache.hadoop.mapreduce.Job, java.lang.String, mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter, mil.nga.giat.geowave.core.store.index.Index)">
+<a name="setup(org.apache.hadoop.mapreduce.Job, java.lang.String, mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter, mil.nga.giat.geowave.core.store.index.PrimaryIndex)">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -793,7 +620,7 @@ implements org.apache.hadoop.util.Tool</pre>
 <pre>protected&nbsp;void&nbsp;setup(org.apache.hadoop.mapreduce.Job&nbsp;job,
          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace,
          <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">WritableDataAdapter</a>&lt;?&gt;&nbsp;adapter,
-         <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index)
+         <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index)
               throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></pre>
 <dl><dt><span class="strong">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></code></dd></dl>
@@ -807,6 +634,28 @@ implements org.apache.hadoop.util.Tool</pre>
 <h4>main</h4>
 <pre>public static&nbsp;void&nbsp;main(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;args)
                  throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></pre>
+<dl><dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></code></dd></dl>
+</li>
+</ul>
+<a name="applyOptions(org.apache.commons.cli.Options)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>applyOptions</h4>
+<pre>protected&nbsp;void&nbsp;applyOptions(org.apache.commons.cli.Options&nbsp;allOptions)</pre>
+</li>
+</ul>
+<a name="parseOptions(java.lang.String[], org.apache.commons.cli.Options)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>parseOptions</h4>
+<pre>protected&nbsp;org.apache.commons.cli.CommandLine&nbsp;parseOptions(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;args,
+                                              org.apache.commons.cli.Options&nbsp;allOptions)
+                                                   throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></pre>
 <dl><dt><span class="strong">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></code></dd></dl>
 </li>
@@ -826,19 +675,10 @@ implements org.apache.hadoop.util.Tool</pre>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></code></dd></dl>
 </li>
 </ul>
-<a name="getCQLFilterArg()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getCQLFilterArg</h4>
-<pre>protected&nbsp;int&nbsp;getCQLFilterArg()</pre>
-</li>
-</ul>
 <a name="addJobClasspathDependencies(org.apache.hadoop.mapreduce.Job, org.apache.hadoop.conf.Configuration)">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>addJobClasspathDependencies</h4>
 <pre>protected&nbsp;void&nbsp;addJobClasspathDependencies(org.apache.hadoop.mapreduce.Job&nbsp;job,
@@ -848,6 +688,21 @@ implements org.apache.hadoop.util.Tool</pre>
 <dl><dt><span class="strong">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/net/URISyntaxException.html?is-external=true" title="class or interface in java.net">URISyntaxException</a></code></dd></dl>
+</li>
+</ul>
+<a name="runOperation(java.lang.String[])">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>runOperation</h4>
+<pre>public&nbsp;boolean&nbsp;runOperation(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;args)
+                     throws org.apache.commons.cli.ParseException</pre>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/cli/CLIOperationDriver.html#runOperation(java.lang.String[])">runOperation</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/cli/CLIOperationDriver.html" title="interface in mil.nga.giat.geowave.core.cli">CLIOperationDriver</a></code></dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code>org.apache.commons.cli.ParseException</code></dd></dl>
 </li>
 </ul>
 </li>
@@ -876,7 +731,7 @@ implements org.apache.hadoop.util.Tool</pre>
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/kde/IdentityMapper.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.kde"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/kde/KDECommandLineOptions.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.kde"><span class="strong">Prev Class</span></a></li>
 <li><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/kde/LevelPartitioner.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.kde"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">

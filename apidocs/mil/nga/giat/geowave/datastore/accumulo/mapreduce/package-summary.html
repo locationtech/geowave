@@ -35,8 +35,8 @@
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/cli/package-summary.html">Prev Package</a></li>
-<li><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/dedupe/package-summary.html">Next Package</a></li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/index/secondary/package-summary.html">Prev Package</a></li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/input/package-summary.html">Next Package</a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../../index.html?mil/nga/giat/geowave/datastore/accumulo/mapreduce/package-summary.html" target="_top">Frames</a></li>
@@ -67,29 +67,6 @@
 <div class="contentContainer">
 <ul class="blockList">
 <li class="blockList">
-<table class="packageSummary" border="0" cellpadding="3" cellspacing="0" summary="Interface Summary table, listing interfaces, and an explanation">
-<caption><span>Interface Summary</span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Interface</th>
-<th class="colLast" scope="col">Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/HadoopDataAdapter.html" title="interface in mil.nga.giat.geowave.datastore.accumulo.mapreduce">HadoopDataAdapter</a>&lt;T,W extends org.apache.hadoop.io.Writable&gt;</td>
-<td class="colLast">
-<div class="block">This is an interface that extends data adapter to allow map reduce jobs to
- easily convert hadoop writable objects to and from the geowave native
- representation of the objects.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/HadoopWritableSerializer.html" title="interface in mil.nga.giat.geowave.datastore.accumulo.mapreduce">HadoopWritableSerializer</a>&lt;T,W extends org.apache.hadoop.io.Writable&gt;</td>
-<td class="colLast">&nbsp;</td>
-</tr>
-</tbody>
-</table>
-</li>
-<li class="blockList">
 <table class="packageSummary" border="0" cellpadding="3" cellspacing="0" summary="Class Summary table, listing classes, and an explanation">
 <caption><span>Class Summary</span><span class="tabEnd">&nbsp;</span></caption>
 <tr>
@@ -98,120 +75,32 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/GeoWaveConfiguratorBase.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce">GeoWaveConfiguratorBase</a></td>
-<td class="colLast">
-<div class="block">This class forms the basis for GeoWave input and output format configuration.</div>
-</td>
+<td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/AccumuloMRUtils.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce">AccumuloMRUtils</a></td>
+<td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/GeoWaveJobRunner.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce">GeoWaveJobRunner</a></td>
-<td class="colLast">
-<div class="block">This class can run a basic job to query GeoWave.</div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/GeoWaveKey.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce">GeoWaveKey</a></td>
-<td class="colLast">
-<div class="block">This is the base class for both GeoWaveInputKey and GeoWaveOutputKey and is
- responsible for persisting the adapter ID</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/GeoWaveMapper.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce">GeoWaveMapper</a></td>
-<td class="colLast">
-<div class="block">This abstract class can be extended by GeoWave analytics.</div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/GeoWaveReducer.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce">GeoWaveReducer</a></td>
-<td class="colLast">
-<div class="block">This abstract class can be extended by GeoWave analytics.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/GeoWaveWritableInputMapper.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce">GeoWaveWritableInputMapper</a>&lt;KEYOUT,VALUEOUT&gt;</td>
-<td class="colLast">
-<div class="block">This abstract class can be extended by GeoWave analytics.</div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/GeoWaveWritableInputReducer.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce">GeoWaveWritableInputReducer</a>&lt;KEYOUT,VALUEOUT&gt;</td>
-<td class="colLast">
-<div class="block">This abstract class can be extended by GeoWave analytics.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/GeoWaveWritableOutputMapper.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce">GeoWaveWritableOutputMapper</a>&lt;KEYIN,VALUEIN&gt;</td>
-<td class="colLast">
-<div class="block">This abstract class can be extended by GeoWave analytics.</div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/GeoWaveWritableOutputReducer.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce">GeoWaveWritableOutputReducer</a>&lt;KEYIN,VALUEIN&gt;</td>
-<td class="colLast">
-<div class="block">This abstract class can be extended by GeoWave analytics.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/HadoopWritableSerializationTool.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce">HadoopWritableSerializationTool</a></td>
-<td class="colLast">
-<div class="block">Use this class to maintain a set of serializers per adapters associated with
- the context of a single mapper or reducer.</div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/JobContextAdapterStore.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce">JobContextAdapterStore</a></td>
-<td class="colLast">
-<div class="block">This class implements an adapter store by first checking the job context for
- an adapter and keeping a local cache of adapters that have been discovered.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/JobContextIndexStore.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce">JobContextIndexStore</a></td>
-<td class="colLast">
-<div class="block">This class implements an index store by first checking the job context for an
- index and keeping a local cache of indices that have been discovered.</div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/NativeMapContext.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce">NativeMapContext</a>&lt;KEYIN,VALUEIN&gt;</td>
-<td class="colLast">
-<div class="block">This class wraps an existing map context that will write hadoop writable
- objects as a map context that writes the native object for ease of
- implementing mapreduce jobs.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/NativeReduceContext.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce">NativeReduceContext</a>&lt;KEYIN,VALUEIN&gt;</td>
-<td class="colLast">
-<div class="block">This class wraps an existing reduce context that will write hadoop writable
- objects as a reduce context that writes the native object for ease of
- implementing mapreduce jobs.</div>
-</td>
-</tr>
-</tbody>
-</table>
-</li>
-<li class="blockList">
-<table class="packageSummary" border="0" cellpadding="3" cellspacing="0" summary="Enum Summary table, listing enums, and an explanation">
-<caption><span>Enum Summary</span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Enum</th>
-<th class="colLast" scope="col">Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/GeoWaveConfiguratorBase.AccumuloOperationsConfig.html" title="enum in mil.nga.giat.geowave.datastore.accumulo.mapreduce">GeoWaveConfiguratorBase.AccumuloOperationsConfig</a></td>
-<td class="colLast">
-<div class="block">Configuration keys for AccumuloOperations configuration.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/GeoWaveConfiguratorBase.GeneralConfig.html" title="enum in mil.nga.giat.geowave.datastore.accumulo.mapreduce">GeoWaveConfiguratorBase.GeneralConfig</a></td>
+<td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/AccumuloMRUtils.IntermediateSplitInfo.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce">AccumuloMRUtils.IntermediateSplitInfo</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/GeoWaveConfiguratorBase.GeoWaveMetaStore.html" title="enum in mil.nga.giat.geowave.datastore.accumulo.mapreduce">GeoWaveConfiguratorBase.GeoWaveMetaStore</a></td>
+<td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/AccumuloMRUtils.IntermediateSplitInfo.IndexRangeLocation.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce">AccumuloMRUtils.IntermediateSplitInfo.IndexRangeLocation</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/GeoWaveAccumuloInputSplit.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce">GeoWaveAccumuloInputSplit</a></td>
+<td class="colLast">
+<div class="block">The Class GeoWaveInputSplit.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/GeoWaveAccumuloRecordReader.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce">GeoWaveAccumuloRecordReader</a>&lt;T&gt;</td>
+<td class="colLast">
+<div class="block">This class is used by the GeoWaveInputFormat to read data from an Accumulo
+ data store.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/GeoWaveAccumuloRecordReader.ProgressPerRange.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce">GeoWaveAccumuloRecordReader.ProgressPerRange</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
 </tbody>
@@ -238,8 +127,8 @@
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/cli/package-summary.html">Prev Package</a></li>
-<li><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/dedupe/package-summary.html">Next Package</a></li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/index/secondary/package-summary.html">Prev Package</a></li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/input/package-summary.html">Next Package</a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../../index.html?mil/nga/giat/geowave/datastore/accumulo/mapreduce/package-summary.html" target="_top">Frames</a></li>

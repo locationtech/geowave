@@ -88,11 +88,27 @@
 </td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStoreFactorySpi.html" title="interface in mil.nga.giat.geowave.core.store">DataStoreFactorySpi</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><a href="../../../../../../mil/nga/giat/geowave/core/store/DeleteCallback.html" title="interface in mil.nga.giat.geowave.core.store">DeleteCallback</a>&lt;T&gt;</td>
 <td class="colLast">
-<div class="block">This interface provides a callback mechanism when ingesting a collection of
- entries to receive the row IDs where each entry is ingested</div>
+<div class="block">This interface provides a callback mechanism when deleting a collection of
+ entries.</div>
 </td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a href="../../../../../../mil/nga/giat/geowave/core/store/EntryVisibilityHandler.html" title="interface in mil.nga.giat.geowave.core.store">EntryVisibilityHandler</a>&lt;T&gt;</td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="../../../../../../mil/nga/giat/geowave/core/store/GenericFactory.html" title="interface in mil.nga.giat.geowave.core.store">GenericFactory</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a href="../../../../../../mil/nga/giat/geowave/core/store/GenericStoreFactory.html" title="interface in mil.nga.giat.geowave.core.store">GenericStoreFactory</a>&lt;T&gt;</td>
+<td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><a href="../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a></td>
@@ -106,10 +122,26 @@
 </td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><a href="../../../../../../mil/nga/giat/geowave/core/store/IteratorWrapper.Callback.html" title="interface in mil.nga.giat.geowave.core.store">IteratorWrapper.Callback</a>&lt;InputType,ConvertedType&gt;</td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a href="../../../../../../mil/nga/giat/geowave/core/store/IteratorWrapper.Converter.html" title="interface in mil.nga.giat.geowave.core.store">IteratorWrapper.Converter</a>&lt;InputType,ConvertedType&gt;</td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="../../../../../../mil/nga/giat/geowave/core/store/NamespaceStore.html" title="interface in mil.nga.giat.geowave.core.store">NamespaceStore</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><a href="../../../../../../mil/nga/giat/geowave/core/store/ScanCallback.html" title="interface in mil.nga.giat.geowave.core.store">ScanCallback</a>&lt;T&gt;</td>
 <td class="colLast">
 <div class="block">This interface provides a callback mechanism when scanning entries</div>
 </td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="../../../../../../mil/nga/giat/geowave/core/store/StoreFactoryFamilySpi.html" title="interface in mil.nga.giat.geowave.core.store">StoreFactoryFamilySpi</a></td>
+<td class="colLast">&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -131,6 +163,18 @@
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><a href="../../../../../../mil/nga/giat/geowave/core/store/CloseableIteratorWrapper.html" title="class in mil.nga.giat.geowave.core.store">CloseableIteratorWrapper</a>&lt;E&gt;</td>
+<td class="colLast">
+<div class="block">This is a simple wrapper around an iterator and a closeable to ensure that
+ the caller can close the closeable when it is finished being used by the
+ iterator.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStoreCallbackManager.html" title="class in mil.nga.giat.geowave.core.store">DataStoreCallbackManager</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStoreEntryInfo.html" title="class in mil.nga.giat.geowave.core.store">DataStoreEntryInfo</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -139,15 +183,29 @@
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><a href="../../../../../../mil/nga/giat/geowave/core/store/DeleteCallbackList.html" title="class in mil.nga.giat.geowave.core.store">DeleteCallbackList</a>&lt;T&gt;</td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="../../../../../../mil/nga/giat/geowave/core/store/GeoWaveStoreFinder.html" title="class in mil.nga.giat.geowave.core.store">GeoWaveStoreFinder</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><a href="../../../../../../mil/nga/giat/geowave/core/store/IngestCallbackList.html" title="class in mil.nga.giat.geowave.core.store">IngestCallbackList</a>&lt;T&gt;</td>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><a href="../../../../../../mil/nga/giat/geowave/core/store/TimeUtils.html" title="class in mil.nga.giat.geowave.core.store">TimeUtils</a></td>
+<td class="colFirst"><a href="../../../../../../mil/nga/giat/geowave/core/store/IteratorWrapper.html" title="class in mil.nga.giat.geowave.core.store">IteratorWrapper</a>&lt;InputType,ConvertedType&gt;</td>
 <td class="colLast">
-<div class="block">This class contains a set of Temporal utility methods that are generally
- useful throughout the GeoWave core codebase.</div>
+<div class="block">This class is used internally within the ingest process of GeoWave to convert
+ each entry into a set of mutations and iterate through them (maintaining a
+ queue of mutations internally in the case where a single entry converts to
+ multiple mutations).</div>
 </td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a href="../../../../../../mil/nga/giat/geowave/core/store/ScanCallbackList.html" title="class in mil.nga.giat.geowave.core.store">ScanCallbackList</a>&lt;T&gt;</td>
+<td class="colLast">&nbsp;</td>
 </tr>
 </tbody>
 </table>

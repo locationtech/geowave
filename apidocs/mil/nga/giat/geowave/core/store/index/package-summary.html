@@ -36,7 +36,7 @@
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/package-summary.html">Prev Package</a></li>
-<li><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/package-summary.html">Next Package</a></li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/numeric/package-summary.html">Next Package</a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../../index.html?mil/nga/giat/geowave/core/store/index/package-summary.html" target="_top">Frames</a></li>
@@ -89,11 +89,42 @@
 </td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/IndexStore.html" title="interface in mil.nga.giat.geowave.core.store.index">IndexStore</a></td>
+<td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/FieldIndexStrategy.html" title="interface in mil.nga.giat.geowave.core.store.index">FieldIndexStrategy</a>&lt;ConstraintType extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/FilterableConstraints.html" title="interface in mil.nga.giat.geowave.core.store.index">FilterableConstraints</a>,FieldType&gt;</td>
 <td class="colLast">
-<div class="block">This is responsible for persisting index configuration (either in memory or
- to disk depending on the implementation).</div>
+<div class="block">Interface which defines an index strategy.</div>
 </td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/FilterableConstraints.html" title="interface in mil.nga.giat.geowave.core.store.index">FilterableConstraints</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="interface in mil.nga.giat.geowave.core.store.index">Index</a>&lt;QueryRangeType extends <a href="../../../../../../../mil/nga/giat/geowave/core/index/QueryConstraints.html" title="interface in mil.nga.giat.geowave.core.index">QueryConstraints</a>,EntryRangeType&gt;</td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/IndexStore.html" title="interface in mil.nga.giat.geowave.core.store.index">IndexStore</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/IndexStoreFactorySpi.html" title="interface in mil.nga.giat.geowave.core.store.index">IndexStoreFactorySpi</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataAdapter</a>&lt;T&gt;</td>
+<td class="colLast">
+<div class="block">This interface allows for a data adapter to define a set of secondary indices</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a></td>
+<td class="colLast">
+<div class="block">This is responsible for persisting secondary index entries</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStoreFactorySpi.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStoreFactorySpi</a></td>
+<td class="colLast">&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -113,27 +144,41 @@
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/CustomIdIndex.html" title="class in mil.nga.giat.geowave.core.store.index">CustomIdIndex</a></td>
+<td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/CompositeConstraints.html" title="class in mil.nga.giat.geowave.core.store.index">CompositeConstraints</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a></td>
+<td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/CustomIdIndex.html" title="class in mil.nga.giat.geowave.core.store.index">CustomIdIndex</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/NullIndex.html" title="class in mil.nga.giat.geowave.core.store.index">NullIndex</a></td>
+<td class="colLast">
+<div class="block">This can be used as a pass-through for an index.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a></td>
 <td class="colLast">
 <div class="block">This class fully describes everything necessary to index data within GeoWave.</div>
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/MemoryIndexStore.html" title="class in mil.nga.giat.geowave.core.store.index">MemoryIndexStore</a></td>
+<td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">SecondaryIndex</a>&lt;T&gt;</td>
 <td class="colLast">
-<div class="block">This is a simple HashMap based in-memory implementation of the IndexStore and
- can be useful if it is undesirable to persist and query objects within
- another storage mechanism such as an accumulo table.</div>
+<div class="block">This class fully describes everything necessary to index data within GeoWave.</div>
 </td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/NullIndex.html" title="class in mil.nga.giat.geowave.core.store.index">NullIndex</a></td>
+<td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataManager.html" title="class in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataManager</a>&lt;T&gt;</td>
 <td class="colLast">
-<div class="block">This can be used as a pass-through for an index.</div>
+<div class="block">One manager associated with each primary index.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexQueryManager.html" title="class in mil.nga.giat.geowave.core.store.index">SecondaryIndexQueryManager</a></td>
+<td class="colLast">
+<div class="block">Manages query the secondary indices given a query.</div>
 </td>
 </tr>
 </tbody>
@@ -161,7 +206,7 @@
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/package-summary.html">Prev Package</a></li>
-<li><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/package-summary.html">Next Package</a></li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/numeric/package-summary.html">Next Package</a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../../index.html?mil/nga/giat/geowave/core/store/index/package-summary.html" target="_top">Frames</a></li>

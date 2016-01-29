@@ -9,8 +9,8 @@
 </head>
 <body>
 <h1 id="change-log">Change Log</h1>
-<h2 id="unreleased"><a href="https://github.com/ngageoint/geowave/tree/HEAD">Unreleased</a></h2>
-<p><a href="https://github.com/ngageoint/geowave/compare/v0.8.9...HEAD">Full Changelog</a></p>
+<h2 id="v0.9.0-2016-01-29"><a href="https://github.com/ngageoint/geowave/tree/v0.9.0">v0.9.0</a> (2016-01-29)</h2>
+<p><a href="https://github.com/ngageoint/geowave/compare/v0.8.9...v0.9.0">Full Changelog</a></p>
 <p><strong>Implemented enhancements:</strong></p>
 <ul>
 <li>Use basic connection string for command line datastore config <a href="https://github.com/ngageoint/geowave/issues/567">#567</a></li>
@@ -18,6 +18,10 @@
 <li>Update AccumuloRowId to minimize storage space <a href="https://github.com/ngageoint/geowave/issues/544">#544</a></li>
 <li>Documentation Packaging Update <a href="https://github.com/ngageoint/geowave/issues/531">#531</a></li>
 <li>Migrate to use ContentDataStore <a href="https://github.com/ngageoint/geowave/issues/235">#235</a></li>
+</ul>
+<p><strong>Fixed bugs:</strong></p>
+<ul>
+<li>Intermittent failure in GeoWaveBasicIT (0.9.0-RC1) <a href="https://github.com/ngageoint/geowave/issues/564">#564</a></li>
 </ul>
 <p><strong>Closed issues:</strong></p>
 <ul>
@@ -27,10 +31,26 @@
 <li>Orthodromic Distance fails if points are close together (within some Epsilon) <a href="https://github.com/ngageoint/geowave/issues/540">#540</a></li>
 <li>Add unit test for a CQL temporal range query <a href="https://github.com/ngageoint/geowave/issues/538">#538</a></li>
 <li>Statistics should be cached in an WFS transaction to avoid frequent database lookups. <a href="https://github.com/ngageoint/geowave/issues/536">#536</a></li>
+<li>Create a numeric index strategy to demonstrate one technique for handling hot spots. <a href="https://github.com/ngageoint/geowave/issues/532">#532</a></li>
 <li>Pre-emptive transaction cache flush causes severe performance issues <a href="https://github.com/ngageoint/geowave/issues/524">#524</a></li>
 </ul>
 <p><strong>Merged pull requests:</strong></p>
 <ul>
+<li>Merging 0.9.0-RC1 to master to prepare to release 0.9.0 <a href="https://github.com/ngageoint/geowave/pull/601">#601</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
+<li>raster config fixes within geoserver plugin <a href="https://github.com/ngageoint/geowave/pull/598">#598</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
+<li>fixed password text box in geoserver to be hidden <a href="https://github.com/ngageoint/geowave/pull/597">#597</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
+<li>GEOWAVE-593: compute stats for a query <a href="https://github.com/ngageoint/geowave/pull/596">#596</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
+<li>Upgrade to GeoTools 14.2 and GeoServer 2.8.2 <a href="https://github.com/ngageoint/geowave/pull/595">#595</a> (<a href="https://github.com/dcy2003">dcy2003</a>)</li>
+<li>Geowave 568 and more <a href="https://github.com/ngageoint/geowave/pull/592">#592</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
+<li>GEOWAVE-415: update to geotools 14.1 <a href="https://github.com/ngageoint/geowave/pull/590">#590</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
+<li>Geowave 422: update to Accumulo 1.7 <a href="https://github.com/ngageoint/geowave/pull/589">#589</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
+<li>GEOWAVE-586: added to accumuloconfig option to always enable block ca… <a href="https://github.com/ngageoint/geowave/pull/588">#588</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
+<li>GEOWAVE-564 - Update SpatialQueryFilter to use synchronized blocks fo… <a href="https://github.com/ngageoint/geowave/pull/587">#587</a> (<a href="https://github.com/datasedai">datasedai</a>)</li>
+<li>Invalid video info when no image chip is available <a href="https://github.com/ngageoint/geowave/pull/585">#585</a> (<a href="https://github.com/mfarwell">mfarwell</a>)</li>
+<li>GEOWAVE-578: raster geotools config uses comma delimited parameters <a href="https://github.com/ngageoint/geowave/pull/584">#584</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
+<li>GEOWAVE-576: added spatial subsampling to general query options <a href="https://github.com/ngageoint/geowave/pull/580">#580</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
+<li>Geowave 532 hash <a href="https://github.com/ngageoint/geowave/pull/577">#577</a> (<a href="https://github.com/rwgdrummer">rwgdrummer</a>)</li>
+<li>GEOWAVE-574: ingest into multiple dimensionality types with one command <a href="https://github.com/ngageoint/geowave/pull/575">#575</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>GEOWAVE-566: typename filter for simple feature ingest <a href="https://github.com/ngageoint/geowave/pull/572">#572</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>GEOWAVE-565: debug commandline tools <a href="https://github.com/ngageoint/geowave/pull/571">#571</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>GEOWAVE-567: added single commandline option for connectionParams <a href="https://github.com/ngageoint/geowave/pull/569">#569</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>

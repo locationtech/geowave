@@ -91,26 +91,30 @@
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><a href="#mil.nga.giat.geowave.format.gdelt">mil.nga.giat.geowave.format.gdelt</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.format.geolife">mil.nga.giat.geowave.format.geolife</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.format.geotools.raster">mil.nga.giat.geowave.format.geotools.raster</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.format.geotools.vector">mil.nga.giat.geowave.format.geotools.vector</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.format.gpx">mil.nga.giat.geowave.format.gpx</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.format.stanag4676">mil.nga.giat.geowave.format.stanag4676</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.format.tdrive">mil.nga.giat.geowave.format.tdrive</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -159,6 +163,40 @@
  expected input format to GeoWave data which can in turn be ingested into the
  system.</div>
 </td>
+</tr>
+</tbody>
+</table>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/package-summary.html">mil.nga.giat.geowave.core.ingest</a> with parameters of type <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/DataAdapterProvider.html" title="interface in mil.nga.giat.geowave.core.ingest">DataAdapterProvider</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a></code></td>
+<td class="colLast"><span class="strong">IngestUtils.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/IngestUtils.html#getIndex(mil.nga.giat.geowave.core.ingest.DataAdapterProvider,%20java.lang.String[],%20java.lang.String)">getIndex</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/DataAdapterProvider.html" title="interface in mil.nga.giat.geowave.core.ingest">DataAdapterProvider</a>&lt;?&gt;&nbsp;adapterProvider,
+        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;args,
+        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;dimensionalityTypeStr)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static boolean</code></td>
+<td class="colLast"><span class="strong">IngestUtils.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/IngestUtils.html#isCompatible(mil.nga.giat.geowave.core.ingest.DataAdapterProvider,%20mil.nga.giat.geowave.core.ingest.index.IngestDimensionalityTypeProviderSpi)">isCompatible</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/DataAdapterProvider.html" title="interface in mil.nga.giat.geowave.core.ingest">DataAdapterProvider</a>&lt;?&gt;&nbsp;adapterProvider,
+            <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/index/IngestDimensionalityTypeProviderSpi.html" title="interface in mil.nga.giat.geowave.core.ingest.index">IngestDimensionalityTypeProviderSpi</a>&nbsp;dimensionalityProvider)</code>
+<div class="block">Determine whether an index is compatible with the visitor</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static boolean</code></td>
+<td class="colLast"><span class="strong">IngestUtils.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/IngestUtils.html#isSupported(mil.nga.giat.geowave.core.ingest.DataAdapterProvider,%20java.lang.String[],%20java.lang.String)">isSupported</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/DataAdapterProvider.html" title="interface in mil.nga.giat.geowave.core.ingest">DataAdapterProvider</a>&lt;?&gt;&nbsp;adapterProvider,
+           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;args,
+           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;dimensionalityTypeStr)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static boolean</code></td>
+<td class="colLast"><span class="strong">IngestUtils.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/IngestUtils.html#isSupported(mil.nga.giat.geowave.core.ingest.DataAdapterProvider,%20java.lang.String[],%20java.lang.String[])">isSupported</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/DataAdapterProvider.html" title="interface in mil.nga.giat.geowave.core.ingest">DataAdapterProvider</a>&lt;?&gt;&nbsp;adapterProvider,
+           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;args,
+           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;dimensionalityTypes)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -242,6 +280,28 @@
 <div class="block">This is the primary plugin for directly ingesting data to GeoWave from local
  files.</div>
 </td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="mil.nga.giat.geowave.format.gdelt">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/DataAdapterProvider.html" title="interface in mil.nga.giat.geowave.core.ingest">DataAdapterProvider</a> in <a href="../../../../../../../mil/nga/giat/geowave/format/gdelt/package-summary.html">mil.nga.giat.geowave.format.gdelt</a></h3>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
+<caption><span>Classes in <a href="../../../../../../../mil/nga/giat/geowave/format/gdelt/package-summary.html">mil.nga.giat.geowave.format.gdelt</a> that implement <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/DataAdapterProvider.html" title="interface in mil.nga.giat.geowave.core.ingest">DataAdapterProvider</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Class and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/format/gdelt/GDELTIngestPlugin.html" title="class in mil.nga.giat.geowave.format.gdelt">GDELTIngestPlugin</a></strong></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/format/gdelt/GDELTIngestPlugin.IngestGDELTFromHdfs.html" title="class in mil.nga.giat.geowave.format.gdelt">GDELTIngestPlugin.IngestGDELTFromHdfs</a></strong></code>&nbsp;</td>
 </tr>
 </tbody>
 </table>

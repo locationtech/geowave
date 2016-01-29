@@ -91,7 +91,7 @@
 </dl>
 <dl>
 <dt>All Known Implementing Classes:</dt>
-<dd><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureCollectionDataAdapter.html" title="class in mil.nga.giat.geowave.adapter.vector">FeatureCollectionDataAdapter</a>, <a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/RasterDataAdapter.html" title="class in mil.nga.giat.geowave.adapter.raster.adapter">RasterDataAdapter</a></dd>
+<dd><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/RasterDataAdapter.html" title="class in mil.nga.giat.geowave.adapter.raster.adapter">RasterDataAdapter</a></dd>
 </dl>
 <hr>
 <br>
@@ -117,7 +117,7 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/Wr
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/IndexDependentDataAdapter.html" title="type parameter in IndexDependentDataAdapter">T</a>&gt;</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/IndexDependentDataAdapter.html#convertToIndex(mil.nga.giat.geowave.core.store.index.Index,%20T)">convertToIndex</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index,
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/IndexDependentDataAdapter.html#convertToIndex(mil.nga.giat.geowave.core.store.index.PrimaryIndex,%20T)">convertToIndex</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
               <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/IndexDependentDataAdapter.html" title="type parameter in IndexDependentDataAdapter">T</a>&nbsp;originalEntry)</code>&nbsp;</td>
 </tr>
 </table>
@@ -126,7 +126,7 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/Wr
 <!--   -->
 </a>
 <h3>Methods inherited from interface&nbsp;mil.nga.giat.geowave.core.store.adapter.<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a></h3>
-<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html#decode(mil.nga.giat.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding,%20mil.nga.giat.geowave.core.store.index.Index)">decode</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html#encode(T,%20mil.nga.giat.geowave.core.store.index.CommonIndexModel)">encode</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html#getAdapterId()">getAdapterId</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html#getDataId(T)">getDataId</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html#isSupported(T)">isSupported</a></code></li>
+<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html#decode(mil.nga.giat.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding,%20mil.nga.giat.geowave.core.store.index.PrimaryIndex)">decode</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html#encode(T,%20mil.nga.giat.geowave.core.store.index.CommonIndexModel)">encode</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html#getAdapterId()">getAdapterId</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html#getDataId(T)">getDataId</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html#isSupported(T)">isSupported</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods_inherited_from_class_mil.nga.giat.geowave.core.store.data.DataReader">
@@ -163,15 +163,15 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/Wr
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="convertToIndex(mil.nga.giat.geowave.core.store.index.Index,java.lang.Object)">
+<a name="convertToIndex(mil.nga.giat.geowave.core.store.index.PrimaryIndex,java.lang.Object)">
 <!--   -->
-</a><a name="convertToIndex(mil.nga.giat.geowave.core.store.index.Index, T)">
+</a><a name="convertToIndex(mil.nga.giat.geowave.core.store.index.PrimaryIndex, T)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>convertToIndex</h4>
-<pre><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/IndexDependentDataAdapter.html" title="type parameter in IndexDependentDataAdapter">T</a>&gt;&nbsp;convertToIndex(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index,
+<pre><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/IndexDependentDataAdapter.html" title="type parameter in IndexDependentDataAdapter">T</a>&gt;&nbsp;convertToIndex(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
                          <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/IndexDependentDataAdapter.html" title="type parameter in IndexDependentDataAdapter">T</a>&nbsp;originalEntry)</pre>
 </li>
 </ul>

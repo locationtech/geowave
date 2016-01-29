@@ -61,7 +61,7 @@
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#fields_inherited_from_class_mil.nga.giat.geowave.core.store.data.PersistenceEncoding">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method_summary">Method</a></li>
 </ul>
@@ -86,13 +86,23 @@
 <li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
 <li>
 <ul class="inheritance">
-<li><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/PersistenceEncoding.html" title="class in mil.nga.giat.geowave.core.store.data">mil.nga.giat.geowave.core.store.data.PersistenceEncoding</a></li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/PersistenceEncoding.html" title="class in mil.nga.giat.geowave.core.store.data">mil.nga.giat.geowave.core.store.data.PersistenceEncoding</a>&lt;T&gt;</li>
+<li>
+<ul class="inheritance">
+<li><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/IndexedPersistenceEncoding.html" title="class in mil.nga.giat.geowave.core.store.data">mil.nga.giat.geowave.core.store.data.IndexedPersistenceEncoding</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexValue.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexValue</a>&gt;</li>
+<li>
+<ul class="inheritance">
+<li><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/CommonIndexedPersistenceEncoding.html" title="class in mil.nga.giat.geowave.core.store.data">mil.nga.giat.geowave.core.store.data.CommonIndexedPersistenceEncoding</a></li>
 <li>
 <ul class="inheritance">
 <li><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterPersistenceEncoding.html" title="class in mil.nga.giat.geowave.core.store.adapter">mil.nga.giat.geowave.core.store.adapter.AdapterPersistenceEncoding</a></li>
 <li>
 <ul class="inheritance">
 <li>mil.nga.giat.geowave.core.store.adapter.FitToIndexPersistenceEncoding</li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -113,6 +123,21 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/Ad
 <div class="summary">
 <ul class="blockList">
 <li class="blockList">
+<!-- =========== FIELD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field_summary">
+<!--   -->
+</a>
+<h3>Field Summary</h3>
+<ul class="blockList">
+<li class="blockList"><a name="fields_inherited_from_class_mil.nga.giat.geowave.core.store.data.PersistenceEncoding">
+<!--   -->
+</a>
+<h3>Fields inherited from class&nbsp;mil.nga.giat.geowave.core.store.data.<a href="../../../../../../../mil/nga/giat/geowave/core/store/data/PersistenceEncoding.html" title="class in mil.nga.giat.geowave.core.store.data">PersistenceEncoding</a></h3>
+<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/PersistenceEncoding.html#commonData">commonData</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/PersistenceEncoding.html#DOUBLE_TOLERANCE">DOUBLE_TOLERANCE</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/PersistenceEncoding.html#LOGGER">LOGGER</a></code></li>
+</ul>
+</li>
+</ul>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
 <ul class="blockList">
 <li class="blockList"><a name="constructor_summary">
@@ -127,7 +152,7 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/Ad
 <tr class="altColor">
 <td class="colOne"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/FitToIndexPersistenceEncoding.html#FitToIndexPersistenceEncoding(mil.nga.giat.geowave.core.index.ByteArrayId,%20mil.nga.giat.geowave.core.index.ByteArrayId,%20mil.nga.giat.geowave.core.store.data.PersistentDataset,%20mil.nga.giat.geowave.core.store.data.PersistentDataset,%20mil.nga.giat.geowave.core.index.ByteArrayId)">FitToIndexPersistenceEncoding</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;adapterId,
                              <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;dataId,
-                             <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/PersistentDataset.html" title="class in mil.nga.giat.geowave.core.store.data">PersistentDataset</a>&lt;? extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexValue.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexValue</a>&gt;&nbsp;commonData,
+                             <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/PersistentDataset.html" title="class in mil.nga.giat.geowave.core.store.data">PersistentDataset</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexValue.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexValue</a>&gt;&nbsp;commonData,
                              <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/PersistentDataset.html" title="class in mil.nga.giat.geowave.core.store.data">PersistentDataset</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;adapterExtendedData,
                              <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;insertionId)</code>&nbsp;</td>
 </tr>
@@ -148,7 +173,7 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/Ad
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/FitToIndexPersistenceEncoding.html#getInsertionIds(mil.nga.giat.geowave.core.store.index.Index)">getInsertionIds</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index)</code>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/FitToIndexPersistenceEncoding.html#getInsertionIds(mil.nga.giat.geowave.core.store.index.PrimaryIndex)">getInsertionIds</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index)</code>
 <div class="block">Given an index, convert this persistent encoding to a set of insertion
  IDs for that index</div>
 </td>
@@ -166,11 +191,25 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/Ad
 <code><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterPersistenceEncoding.html#getAdapterExtendedData()">getAdapterExtendedData</a></code></li>
 </ul>
 <ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_mil.nga.giat.geowave.core.store.data.CommonIndexedPersistenceEncoding">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;mil.nga.giat.geowave.core.store.data.<a href="../../../../../../../mil/nga/giat/geowave/core/store/data/CommonIndexedPersistenceEncoding.html" title="class in mil.nga.giat.geowave.core.store.data">CommonIndexedPersistenceEncoding</a></h3>
+<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/CommonIndexedPersistenceEncoding.html#getNumericData(mil.nga.giat.geowave.core.store.dimension.NumericDimensionField[])">getNumericData</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/CommonIndexedPersistenceEncoding.html#overlaps(mil.nga.giat.geowave.core.index.sfc.data.NumericData[],%20mil.nga.giat.geowave.core.store.index.PrimaryIndex)">overlaps</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_mil.nga.giat.geowave.core.store.data.IndexedPersistenceEncoding">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;mil.nga.giat.geowave.core.store.data.<a href="../../../../../../../mil/nga/giat/geowave/core/store/data/IndexedPersistenceEncoding.html" title="class in mil.nga.giat.geowave.core.store.data">IndexedPersistenceEncoding</a></h3>
+<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/IndexedPersistenceEncoding.html#getDuplicateCount()">getDuplicateCount</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/IndexedPersistenceEncoding.html#getIndexInsertionId()">getIndexInsertionId</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/IndexedPersistenceEncoding.html#isDuplicated()">isDuplicated</a></code></li>
+</ul>
+<ul class="blockList">
 <li class="blockList"><a name="methods_inherited_from_class_mil.nga.giat.geowave.core.store.data.PersistenceEncoding">
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;mil.nga.giat.geowave.core.store.data.<a href="../../../../../../../mil/nga/giat/geowave/core/store/data/PersistenceEncoding.html" title="class in mil.nga.giat.geowave.core.store.data">PersistenceEncoding</a></h3>
-<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/PersistenceEncoding.html#getAdapterId()">getAdapterId</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/PersistenceEncoding.html#getCommonData()">getCommonData</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/PersistenceEncoding.html#getDataId()">getDataId</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/PersistenceEncoding.html#getNumericData(mil.nga.giat.geowave.core.store.dimension.DimensionField[])">getNumericData</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/PersistenceEncoding.html#overlaps(mil.nga.giat.geowave.core.index.sfc.data.NumericData[],%20mil.nga.giat.geowave.core.store.index.Index)">overlaps</a></code></li>
+<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/PersistenceEncoding.html#getAdapterId()">getAdapterId</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/PersistenceEncoding.html#getCommonData()">getCommonData</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/PersistenceEncoding.html#getDataId()">getDataId</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/PersistenceEncoding.html#getUnknownData()">getUnknownData</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods_inherited_from_class_java.lang.Object">
@@ -201,7 +240,7 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/Ad
 <h4>FitToIndexPersistenceEncoding</h4>
 <pre>public&nbsp;FitToIndexPersistenceEncoding(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;adapterId,
                              <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;dataId,
-                             <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/PersistentDataset.html" title="class in mil.nga.giat.geowave.core.store.data">PersistentDataset</a>&lt;? extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexValue.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexValue</a>&gt;&nbsp;commonData,
+                             <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/PersistentDataset.html" title="class in mil.nga.giat.geowave.core.store.data">PersistentDataset</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexValue.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexValue</a>&gt;&nbsp;commonData,
                              <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/PersistentDataset.html" title="class in mil.nga.giat.geowave.core.store.data">PersistentDataset</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;adapterExtendedData,
                              <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;insertionId)</pre>
 </li>
@@ -214,19 +253,19 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/Ad
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="getInsertionIds(mil.nga.giat.geowave.core.store.index.Index)">
+<a name="getInsertionIds(mil.nga.giat.geowave.core.store.index.PrimaryIndex)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>getInsertionIds</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;getInsertionIds(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index)</pre>
-<div class="block"><strong>Description copied from class:&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/PersistenceEncoding.html#getInsertionIds(mil.nga.giat.geowave.core.store.index.Index)">PersistenceEncoding</a></code></strong></div>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;getInsertionIds(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index)</pre>
+<div class="block"><strong>Description copied from class:&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/CommonIndexedPersistenceEncoding.html#getInsertionIds(mil.nga.giat.geowave.core.store.index.PrimaryIndex)">CommonIndexedPersistenceEncoding</a></code></strong></div>
 <div class="block">Given an index, convert this persistent encoding to a set of insertion
  IDs for that index</div>
 <dl>
 <dt><strong>Overrides:</strong></dt>
-<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/PersistenceEncoding.html#getInsertionIds(mil.nga.giat.geowave.core.store.index.Index)">getInsertionIds</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/PersistenceEncoding.html" title="class in mil.nga.giat.geowave.core.store.data">PersistenceEncoding</a></code></dd>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/CommonIndexedPersistenceEncoding.html#getInsertionIds(mil.nga.giat.geowave.core.store.index.PrimaryIndex)">getInsertionIds</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/CommonIndexedPersistenceEncoding.html" title="class in mil.nga.giat.geowave.core.store.data">CommonIndexedPersistenceEncoding</a></code></dd>
 <dt><span class="strong">Parameters:</span></dt><dd><code>index</code> - the index</dd>
 <dt><span class="strong">Returns:</span></dt><dd>The insertions IDs for this object in the index</dd></dl>
 </li>
@@ -240,7 +279,7 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/Ad
 <pre>public&nbsp;boolean&nbsp;isDeduplicationEnabled()</pre>
 <dl>
 <dt><strong>Overrides:</strong></dt>
-<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/PersistenceEncoding.html#isDeduplicationEnabled()">isDeduplicationEnabled</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/PersistenceEncoding.html" title="class in mil.nga.giat.geowave.core.store.data">PersistenceEncoding</a></code></dd>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/IndexedPersistenceEncoding.html#isDeduplicationEnabled()">isDeduplicationEnabled</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/IndexedPersistenceEncoding.html" title="class in mil.nga.giat.geowave.core.store.data">IndexedPersistenceEncoding</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexValue.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexValue</a>&gt;</code></dd>
 </dl>
 </li>
 </ul>
@@ -296,7 +335,7 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/Ad
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#fields_inherited_from_class_mil.nga.giat.geowave.core.store.data.PersistenceEncoding">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method_summary">Method</a></li>
 </ul>

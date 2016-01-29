@@ -133,12 +133,45 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>protected static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/ingest/IngestUtils.html#getDefaultDimensionalityType()">getDefaultDimensionalityType</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/ingest/IngestUtils.html#getDimensionalityTypeOptionDescription()">getDimensionalityTypeOptionDescription</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/ingest/IngestUtils.html#getIndex(mil.nga.giat.geowave.core.ingest.DataAdapterProvider,%20java.lang.String[],%20java.lang.String)">getIndex</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/core/ingest/DataAdapterProvider.html" title="interface in mil.nga.giat.geowave.core.ingest">DataAdapterProvider</a>&lt;?&gt;&nbsp;adapterProvider,
+        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;args,
+        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;dimensionalityTypeStr)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>static &lt;T&gt;&nbsp;void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/ingest/IngestUtils.html#ingest(T,%20mil.nga.giat.geowave.core.ingest.IngestCommandLineOptions,%20mil.nga.giat.geowave.core.ingest.IngestPluginBase,%20mil.nga.giat.geowave.core.ingest.IndexProvider,%20mil.nga.giat.geowave.core.ingest.local.IngestRunData)">ingest</a></strong>(T&nbsp;input,
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/ingest/IngestUtils.html#ingest(T,%20mil.nga.giat.geowave.core.ingest.IngestCommandLineOptions,%20mil.nga.giat.geowave.core.ingest.IngestPluginBase,%20mil.nga.giat.geowave.core.ingest.index.IndexProvider,%20mil.nga.giat.geowave.core.ingest.local.IngestRunData)">ingest</a></strong>(T&nbsp;input,
       <a href="../../../../../../mil/nga/giat/geowave/core/ingest/IngestCommandLineOptions.html" title="class in mil.nga.giat.geowave.core.ingest">IngestCommandLineOptions</a>&nbsp;ingestOptions,
       <a href="../../../../../../mil/nga/giat/geowave/core/ingest/IngestPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest">IngestPluginBase</a>&lt;T,?&gt;&nbsp;ingestPlugin,
-      <a href="../../../../../../mil/nga/giat/geowave/core/ingest/IndexProvider.html" title="interface in mil.nga.giat.geowave.core.ingest">IndexProvider</a>&nbsp;indexProvider,
+      <a href="../../../../../../mil/nga/giat/geowave/core/ingest/index/IndexProvider.html" title="interface in mil.nga.giat.geowave.core.ingest.index">IndexProvider</a>&nbsp;indexProvider,
       <a href="../../../../../../mil/nga/giat/geowave/core/ingest/local/IngestRunData.html" title="class in mil.nga.giat.geowave.core.ingest.local">IngestRunData</a>&nbsp;ingestRunData)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/ingest/IngestUtils.html#isCompatible(mil.nga.giat.geowave.core.ingest.DataAdapterProvider,%20mil.nga.giat.geowave.core.ingest.index.IngestDimensionalityTypeProviderSpi)">isCompatible</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/core/ingest/DataAdapterProvider.html" title="interface in mil.nga.giat.geowave.core.ingest">DataAdapterProvider</a>&lt;?&gt;&nbsp;adapterProvider,
+            <a href="../../../../../../mil/nga/giat/geowave/core/ingest/index/IngestDimensionalityTypeProviderSpi.html" title="interface in mil.nga.giat.geowave.core.ingest.index">IngestDimensionalityTypeProviderSpi</a>&nbsp;dimensionalityProvider)</code>
+<div class="block">Determine whether an index is compatible with the visitor</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/ingest/IngestUtils.html#isSupported(mil.nga.giat.geowave.core.ingest.DataAdapterProvider,%20java.lang.String[],%20java.lang.String)">isSupported</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/core/ingest/DataAdapterProvider.html" title="interface in mil.nga.giat.geowave.core.ingest">DataAdapterProvider</a>&lt;?&gt;&nbsp;adapterProvider,
+           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;args,
+           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;dimensionalityTypeStr)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/ingest/IngestUtils.html#isSupported(mil.nga.giat.geowave.core.ingest.DataAdapterProvider,%20java.lang.String[],%20java.lang.String[])">isSupported</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/core/ingest/DataAdapterProvider.html" title="interface in mil.nga.giat.geowave.core.ingest">DataAdapterProvider</a>&lt;?&gt;&nbsp;adapterProvider,
+           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;args,
+           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;dimensionalityTypes)</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -179,22 +212,86 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="ingest(java.lang.Object,mil.nga.giat.geowave.core.ingest.IngestCommandLineOptions,mil.nga.giat.geowave.core.ingest.IngestPluginBase,mil.nga.giat.geowave.core.ingest.IndexProvider,mil.nga.giat.geowave.core.ingest.local.IngestRunData)">
+<a name="ingest(java.lang.Object,mil.nga.giat.geowave.core.ingest.IngestCommandLineOptions,mil.nga.giat.geowave.core.ingest.IngestPluginBase,mil.nga.giat.geowave.core.ingest.index.IndexProvider,mil.nga.giat.geowave.core.ingest.local.IngestRunData)">
 <!--   -->
-</a><a name="ingest(T, mil.nga.giat.geowave.core.ingest.IngestCommandLineOptions, mil.nga.giat.geowave.core.ingest.IngestPluginBase, mil.nga.giat.geowave.core.ingest.IndexProvider, mil.nga.giat.geowave.core.ingest.local.IngestRunData)">
+</a><a name="ingest(T, mil.nga.giat.geowave.core.ingest.IngestCommandLineOptions, mil.nga.giat.geowave.core.ingest.IngestPluginBase, mil.nga.giat.geowave.core.ingest.index.IndexProvider, mil.nga.giat.geowave.core.ingest.local.IngestRunData)">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>ingest</h4>
 <pre>public static&nbsp;&lt;T&gt;&nbsp;void&nbsp;ingest(T&nbsp;input,
               <a href="../../../../../../mil/nga/giat/geowave/core/ingest/IngestCommandLineOptions.html" title="class in mil.nga.giat.geowave.core.ingest">IngestCommandLineOptions</a>&nbsp;ingestOptions,
               <a href="../../../../../../mil/nga/giat/geowave/core/ingest/IngestPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest">IngestPluginBase</a>&lt;T,?&gt;&nbsp;ingestPlugin,
-              <a href="../../../../../../mil/nga/giat/geowave/core/ingest/IndexProvider.html" title="interface in mil.nga.giat.geowave.core.ingest">IndexProvider</a>&nbsp;indexProvider,
+              <a href="../../../../../../mil/nga/giat/geowave/core/ingest/index/IndexProvider.html" title="interface in mil.nga.giat.geowave.core.ingest.index">IndexProvider</a>&nbsp;indexProvider,
               <a href="../../../../../../mil/nga/giat/geowave/core/ingest/local/IngestRunData.html" title="class in mil.nga.giat.geowave.core.ingest.local">IngestRunData</a>&nbsp;ingestRunData)
                    throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
 <dl><dt><span class="strong">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd></dl>
+</li>
+</ul>
+<a name="getIndex(mil.nga.giat.geowave.core.ingest.DataAdapterProvider, java.lang.String[], java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getIndex</h4>
+<pre>public static&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;getIndex(<a href="../../../../../../mil/nga/giat/geowave/core/ingest/DataAdapterProvider.html" title="interface in mil.nga.giat.geowave.core.ingest">DataAdapterProvider</a>&lt;?&gt;&nbsp;adapterProvider,
+                    <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;args,
+                    <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;dimensionalityTypeStr)</pre>
+</li>
+</ul>
+<a name="isSupported(mil.nga.giat.geowave.core.ingest.DataAdapterProvider, java.lang.String[], java.lang.String[])">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isSupported</h4>
+<pre>public static&nbsp;boolean&nbsp;isSupported(<a href="../../../../../../mil/nga/giat/geowave/core/ingest/DataAdapterProvider.html" title="interface in mil.nga.giat.geowave.core.ingest">DataAdapterProvider</a>&lt;?&gt;&nbsp;adapterProvider,
+                  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;args,
+                  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;dimensionalityTypes)</pre>
+</li>
+</ul>
+<a name="isSupported(mil.nga.giat.geowave.core.ingest.DataAdapterProvider, java.lang.String[], java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isSupported</h4>
+<pre>public static&nbsp;boolean&nbsp;isSupported(<a href="../../../../../../mil/nga/giat/geowave/core/ingest/DataAdapterProvider.html" title="interface in mil.nga.giat.geowave.core.ingest">DataAdapterProvider</a>&lt;?&gt;&nbsp;adapterProvider,
+                  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;args,
+                  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;dimensionalityTypeStr)</pre>
+</li>
+</ul>
+<a name="getDefaultDimensionalityType()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getDefaultDimensionalityType</h4>
+<pre>protected static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getDefaultDimensionalityType()</pre>
+</li>
+</ul>
+<a name="isCompatible(mil.nga.giat.geowave.core.ingest.DataAdapterProvider, mil.nga.giat.geowave.core.ingest.index.IngestDimensionalityTypeProviderSpi)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isCompatible</h4>
+<pre>public static&nbsp;boolean&nbsp;isCompatible(<a href="../../../../../../mil/nga/giat/geowave/core/ingest/DataAdapterProvider.html" title="interface in mil.nga.giat.geowave.core.ingest">DataAdapterProvider</a>&lt;?&gt;&nbsp;adapterProvider,
+                   <a href="../../../../../../mil/nga/giat/geowave/core/ingest/index/IngestDimensionalityTypeProviderSpi.html" title="interface in mil.nga.giat.geowave.core.ingest.index">IngestDimensionalityTypeProviderSpi</a>&nbsp;dimensionalityProvider)</pre>
+<div class="block">Determine whether an index is compatible with the visitor</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>index</code> - an index that an ingest type supports</dd>
+<dt><span class="strong">Returns:</span></dt><dd>whether the adapter is compatible with the common index model</dd></dl>
+</li>
+</ul>
+<a name="getDimensionalityTypeOptionDescription()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>getDimensionalityTypeOptionDescription</h4>
+<pre>protected static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getDimensionalityTypeOptionDescription()</pre>
 </li>
 </ul>
 </li>

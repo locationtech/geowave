@@ -86,12 +86,17 @@
 <ul class="blockList">
 <li class="blockList">
 <dl>
+<dt>All Superinterfaces:</dt>
+<dd><a href="../../../../../../../../mil/nga/giat/geowave/core/index/QueryConstraints.html" title="interface in mil.nga.giat.geowave.core.index">QueryConstraints</a></dd>
+</dl>
+<dl>
 <dt>All Known Implementing Classes:</dt>
 <dd><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/BasicNumericDataset.html" title="class in mil.nga.giat.geowave.core.index.sfc.data">BasicNumericDataset</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/BinnedNumericDataset.html" title="class in mil.nga.giat.geowave.core.index.sfc.data">BinnedNumericDataset</a></dd>
 </dl>
 <hr>
 <br>
-<pre>public interface <span class="strong">MultiDimensionalNumericData</span></pre>
+<pre>public interface <span class="strong">MultiDimensionalNumericData</span>
+extends <a href="../../../../../../../../mil/nga/giat/geowave/core/index/QueryConstraints.html" title="interface in mil.nga.giat.geowave.core.index">QueryConstraints</a></pre>
 <div class="block">Interface which defines the methods associated with a multi-dimensional
  numeric data range.</div>
 </li>
@@ -121,24 +126,21 @@
 <td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html#getDataPerDimension()">getDataPerDimension</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>int</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html#getDimensionCount()">getDimensionCount</a></strong>()</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
 <td class="colFirst"><code>double[]</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html#getMaxValuesPerDimension()">getMaxValuesPerDimension</a></strong>()</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>double[]</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html#getMinValuesPerDimension()">getMinValuesPerDimension</a></strong>()</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
-<td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html#isEmpty()">isEmpty</a></strong>()</code>
-<div class="block">Unconstrained?</div>
-</td>
-</tr>
 </table>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_mil.nga.giat.geowave.core.index.QueryConstraints">
+<!--   -->
+</a>
+<h3>Methods inherited from interface&nbsp;mil.nga.giat.geowave.core.index.<a href="../../../../../../../../mil/nga/giat/geowave/core/index/QueryConstraints.html" title="interface in mil.nga.giat.geowave.core.index">QueryConstraints</a></h3>
+<code><a href="../../../../../../../../mil/nga/giat/geowave/core/index/QueryConstraints.html#getDimensionCount()">getDimensionCount</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/index/QueryConstraints.html#isEmpty()">isEmpty</a></code></li>
+</ul>
 </li>
 </ul>
 </li>
@@ -184,30 +186,10 @@
 <a name="getCentroidPerDimension()">
 <!--   -->
 </a>
-<ul class="blockList">
+<ul class="blockListLast">
 <li class="blockList">
 <h4>getCentroidPerDimension</h4>
 <pre>double[]&nbsp;getCentroidPerDimension()</pre>
-</li>
-</ul>
-<a name="getDimensionCount()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getDimensionCount</h4>
-<pre>int&nbsp;getDimensionCount()</pre>
-</li>
-</ul>
-<a name="isEmpty()">
-<!--   -->
-</a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>isEmpty</h4>
-<pre>boolean&nbsp;isEmpty()</pre>
-<div class="block">Unconstrained?</div>
-<dl><dt><span class="strong">Returns:</span></dt><dd>return if unconstrained on a dimension</dd></dl>
 </li>
 </ul>
 </li>

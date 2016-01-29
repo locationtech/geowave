@@ -100,7 +100,7 @@
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><a href="../../../../../../../../mil/nga/giat/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in mil.nga.giat.geowave.core.index.dimension">NumericDimensionDefinition</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/index/Persistable.html" title="interface in mil.nga.giat.geowave.core.index">Persistable</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/dimension/DimensionField.html" title="interface in mil.nga.giat.geowave.core.store.dimension">DimensionField</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/dimension/GeometryWrapper.html" title="class in mil.nga.giat.geowave.core.geotime.store.dimension">GeometryWrapper</a>&gt;</dd>
+<dd><a href="../../../../../../../../mil/nga/giat/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in mil.nga.giat.geowave.core.index.dimension">NumericDimensionDefinition</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/index/Persistable.html" title="interface in mil.nga.giat.geowave.core.index">Persistable</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/dimension/NumericDimensionField.html" title="interface in mil.nga.giat.geowave.core.store.dimension">NumericDimensionField</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/dimension/GeometryWrapper.html" title="class in mil.nga.giat.geowave.core.geotime.store.dimension">GeometryWrapper</a>&gt;</dd>
 </dl>
 <hr>
 <br>
@@ -127,6 +127,13 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store
 </tr>
 <tr class="altColor">
 <td class="colOne"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/dimension/LatitudeField.html#LatitudeField()">LatitudeField</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/dimension/LatitudeField.html#LatitudeField(boolean)">LatitudeField</a></strong>(boolean&nbsp;useHalfRange)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colOne"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/dimension/LatitudeField.html#LatitudeField(boolean,%20mil.nga.giat.geowave.core.index.ByteArrayId)">LatitudeField</a></strong>(boolean&nbsp;useHalfRange,
+             <a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;fieldId)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colOne"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/dimension/LatitudeField.html#LatitudeField(mil.nga.giat.geowave.core.index.ByteArrayId)">LatitudeField</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;fieldId)</code>&nbsp;</td>
@@ -162,7 +169,7 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;mil.nga.giat.geowave.core.geotime.store.dimension.<a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/dimension/SpatialField.html" title="class in mil.nga.giat.geowave.core.geotime.store.dimension">SpatialField</a></h3>
-<code><a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/dimension/SpatialField.html#denormalize(double)">denormalize</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/dimension/SpatialField.html#equals(java.lang.Object)">equals</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/dimension/SpatialField.html#fromBinary(byte[])">fromBinary</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/dimension/SpatialField.html#getBaseDefinition()">getBaseDefinition</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/dimension/SpatialField.html#getBounds()">getBounds</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/dimension/SpatialField.html#getDenormalizedRange(mil.nga.giat.geowave.core.index.dimension.bin.BinRange)">getDenormalizedRange</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/dimension/SpatialField.html#getFieldId()">getFieldId</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/dimension/SpatialField.html#getFixedBinIdSize()">getFixedBinIdSize</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/dimension/SpatialField.html#getFullRange()">getFullRange</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/dimension/SpatialField.html#getNormalizedRanges(mil.nga.giat.geowave.core.index.sfc.data.NumericData)">getNormalizedRanges</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/dimension/SpatialField.html#getRange()">getRange</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/dimension/SpatialField.html#getReader()">getReader</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/dimension/SpatialField.html#getWriter()">getWriter</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/dimension/SpatialField.html#hashCode()">hashCode</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/dimension/SpatialField.html#isCompatibleDefinition(mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition)">isCompatibleDefinition</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/dimension/SpatialField.html#normalize(double)">normalize</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/dimension/SpatialField.html#toBinary()">toBinary</a></code></li>
+<code><a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/dimension/SpatialField.html#denormalize(double)">denormalize</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/dimension/SpatialField.html#equals(java.lang.Object)">equals</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/dimension/SpatialField.html#fromBinary(byte[])">fromBinary</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/dimension/SpatialField.html#getBaseDefinition()">getBaseDefinition</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/dimension/SpatialField.html#getBounds()">getBounds</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/dimension/SpatialField.html#getDenormalizedRange(mil.nga.giat.geowave.core.index.dimension.bin.BinRange)">getDenormalizedRange</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/dimension/SpatialField.html#getFieldId()">getFieldId</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/dimension/SpatialField.html#getFixedBinIdSize()">getFixedBinIdSize</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/dimension/SpatialField.html#getFullRange()">getFullRange</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/dimension/SpatialField.html#getNormalizedRanges(mil.nga.giat.geowave.core.index.sfc.data.NumericData)">getNormalizedRanges</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/dimension/SpatialField.html#getRange()">getRange</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/dimension/SpatialField.html#getReader()">getReader</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/dimension/SpatialField.html#getWriter()">getWriter</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/dimension/SpatialField.html#hashCode()">hashCode</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/dimension/SpatialField.html#normalize(double)">normalize</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/dimension/SpatialField.html#toBinary()">toBinary</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods_inherited_from_class_java.lang.Object">
@@ -194,6 +201,15 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store
 <pre>public&nbsp;LatitudeField()</pre>
 </li>
 </ul>
+<a name="LatitudeField(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>LatitudeField</h4>
+<pre>public&nbsp;LatitudeField(boolean&nbsp;useHalfRange)</pre>
+</li>
+</ul>
 <a name="LatitudeField(mil.nga.giat.geowave.core.index.ByteArrayId)">
 <!--   -->
 </a>
@@ -201,6 +217,16 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store
 <li class="blockList">
 <h4>LatitudeField</h4>
 <pre>public&nbsp;LatitudeField(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;fieldId)</pre>
+</li>
+</ul>
+<a name="LatitudeField(boolean, mil.nga.giat.geowave.core.index.ByteArrayId)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>LatitudeField</h4>
+<pre>public&nbsp;LatitudeField(boolean&nbsp;useHalfRange,
+             <a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;fieldId)</pre>
 </li>
 </ul>
 <a name="LatitudeField(mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition, mil.nga.giat.geowave.core.index.ByteArrayId)">
@@ -228,7 +254,7 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store
 <li class="blockList">
 <h4>getNumericData</h4>
 <pre>public&nbsp;<a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/NumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">NumericData</a>&nbsp;getNumericData(<a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/dimension/GeometryWrapper.html" title="class in mil.nga.giat.geowave.core.geotime.store.dimension">GeometryWrapper</a>&nbsp;geometry)</pre>
-<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/dimension/DimensionField.html#getNumericData(T)">DimensionField</a></code></strong></div>
+<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/dimension/NumericDimensionField.html#getNumericData(T)">NumericDimensionField</a></code></strong></div>
 <div class="block">Decode a numeric value or range from the raw field value</div>
 <dl><dt><span class="strong">Parameters:</span></dt><dd><code>geometry</code> - the raw field value</dd>
 <dt><span class="strong">Returns:</span></dt><dd>a numeric value or range</dd></dl>

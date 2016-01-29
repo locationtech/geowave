@@ -132,23 +132,18 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>int</code></td>
-<td class="colLast"><span class="strong">IndependentJobRunner.</span><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/IndependentJobRunner.html#run(mil.nga.giat.geowave.analytic.PropertyManagement)">run</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties)</code>&nbsp;</td>
+<td class="colLast"><span class="strong">IndependentJobRunner.</span><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/IndependentJobRunner.html#run(mil.nga.giat.geowave.analytic.PropertyManagement)">run</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a>&nbsp;properties)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>static void</code></td>
-<td class="colLast"><span class="strong">RunnerUtils.</span><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/RunnerUtils.html#setParameter(org.apache.hadoop.conf.Configuration,%20java.lang.Class,%20mil.nga.giat.geowave.analytic.PropertyManagement,%20mil.nga.giat.geowave.analytic.param.ParameterEnum[])">setParameter</a></strong>(org.apache.hadoop.conf.Configuration&nbsp;config,
-            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;clazz,
-            <a href="../../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a>&nbsp;pmt,
-            <a href="../../../../../../mil/nga/giat/geowave/analytic/param/ParameterEnum.html" title="interface in mil.nga.giat.geowave.analytic.param">ParameterEnum</a>[]&nbsp;enums)</code>&nbsp;</td>
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><span class="strong">Projection.</span><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/Projection.html#setup(mil.nga.giat.geowave.analytic.PropertyManagement,%20java.lang.Class,%20org.apache.hadoop.conf.Configuration)">setup</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties,
+     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;scope,
+     org.apache.hadoop.conf.Configuration&nbsp;configuration)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><span class="strong">Projection.</span><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/Projection.html#setup(mil.nga.giat.geowave.analytic.PropertyManagement,%20org.apache.hadoop.conf.Configuration)">setup</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties,
-     org.apache.hadoop.conf.Configuration&nbsp;configuration)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><span class="strong">SimpleFeatureProjection.</span><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/SimpleFeatureProjection.html#setup(mil.nga.giat.geowave.analytic.PropertyManagement,%20org.apache.hadoop.conf.Configuration)">setup</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties,
+<td class="colLast"><span class="strong">SimpleFeatureProjection.</span><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/SimpleFeatureProjection.html#setup(mil.nga.giat.geowave.analytic.PropertyManagement,%20java.lang.Class,%20org.apache.hadoop.conf.Configuration)">setup</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties,
+     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;scope,
      org.apache.hadoop.conf.Configuration&nbsp;configuration)</code>&nbsp;</td>
 </tr>
 </tbody>
@@ -181,29 +176,27 @@
 <td class="colLast"><span class="strong">ClusteringUtils.</span><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/clustering/ClusteringUtils.html#createAdapter(mil.nga.giat.geowave.analytic.PropertyManagement)">createAdapter</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a>&nbsp;propertyManagement)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>static <a href="../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a></code></td>
+<td class="colFirst"><code>static <a href="../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a></code></td>
 <td class="colLast"><span class="strong">ClusteringUtils.</span><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/clustering/ClusteringUtils.html#createIndex(mil.nga.giat.geowave.analytic.PropertyManagement)">createIndex</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a>&nbsp;propertyManagement)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>static <a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/BasicAccumuloOperations.html" title="class in mil.nga.giat.geowave.datastore.accumulo">BasicAccumuloOperations</a></code></td>
-<td class="colLast"><span class="strong">ClusteringUtils.</span><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/clustering/ClusteringUtils.html#createOperations(mil.nga.giat.geowave.analytic.PropertyManagement)">createOperations</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a>&nbsp;propertyManagement)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>[]</code></td>
 <td class="colLast"><span class="strong">ClusteringUtils.</span><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/clustering/ClusteringUtils.html#getAdapters(mil.nga.giat.geowave.analytic.PropertyManagement)">getAdapters</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a>&nbsp;propertyManagement)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
-<td class="colFirst"><code>static <a href="../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>[]</code></td>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>[]</code></td>
 <td class="colLast"><span class="strong">ClusteringUtils.</span><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/clustering/ClusteringUtils.html#getIndices(mil.nga.giat.geowave.analytic.PropertyManagement)">getIndices</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a>&nbsp;propertyManagement)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static void</code></td>
+<td class="colLast"><span class="strong">CentroidManagerGeoWave.</span><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/clustering/CentroidManagerGeoWave.html#setParameters(org.apache.hadoop.conf.Configuration,%20java.lang.Class,%20mil.nga.giat.geowave.analytic.PropertyManagement)">setParameters</a></strong>(org.apache.hadoop.conf.Configuration&nbsp;config,
+             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;scope,
+             <a href="../../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>static void</code></td>
-<td class="colLast"><span class="strong">CentroidManagerGeoWave.</span><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/clustering/CentroidManagerGeoWave.html#setParameters(org.apache.hadoop.conf.Configuration,%20mil.nga.giat.geowave.analytic.PropertyManagement)">setParameters</a></strong>(org.apache.hadoop.conf.Configuration&nbsp;config,
-             <a href="../../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties)</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>static void</code></td>
-<td class="colLast"><span class="strong">NestedGroupCentroidAssignment.</span><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/clustering/NestedGroupCentroidAssignment.html#setParameters(org.apache.hadoop.conf.Configuration,%20mil.nga.giat.geowave.analytic.PropertyManagement)">setParameters</a></strong>(org.apache.hadoop.conf.Configuration&nbsp;config,
+<td class="colLast"><span class="strong">NestedGroupCentroidAssignment.</span><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/clustering/NestedGroupCentroidAssignment.html#setParameters(org.apache.hadoop.conf.Configuration,%20java.lang.Class,%20mil.nga.giat.geowave.analytic.PropertyManagement)">setParameters</a></strong>(org.apache.hadoop.conf.Configuration&nbsp;config,
+             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;scope,
              <a href="../../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties)</code>&nbsp;</td>
 </tr>
 </tbody>
@@ -215,7 +208,7 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/clustering/CentroidManagerGeoWave.html#CentroidManagerGeoWave(mil.nga.giat.geowave.analytic.PropertyManagement)">CentroidManagerGeoWave</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties)</code>&nbsp;</td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/clustering/CentroidManagerGeoWave.html#CentroidManagerGeoWave(mil.nga.giat.geowave.analytic.PropertyManagement)">CentroidManagerGeoWave</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a>&nbsp;properties)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -248,8 +241,16 @@
 <td class="colLast"><span class="strong">GeoWaveAnalyticJobRunner.</span><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/mapreduce/GeoWaveAnalyticJobRunner.html#getAdapterStore(mil.nga.giat.geowave.analytic.PropertyManagement)">getAdapterStore</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>org.apache.hadoop.conf.Configuration</code></td>
+<td class="colLast"><span class="strong">ToolRunnerMapReduceIntegration.</span><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/mapreduce/ToolRunnerMapReduceIntegration.html#getConfiguration(mil.nga.giat.geowave.analytic.PropertyManagement)">getConfiguration</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>static org.apache.hadoop.conf.Configuration</code></td>
 <td class="colLast"><span class="strong">MapReduceJobController.</span><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/mapreduce/MapReduceJobController.html#getConfiguration(mil.nga.giat.geowave.analytic.PropertyManagement)">getConfiguration</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a>&nbsp;pm)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>org.apache.hadoop.conf.Configuration</code></td>
+<td class="colLast"><span class="strong">MapReduceIntegration.</span><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/mapreduce/MapReduceIntegration.html#getConfiguration(mil.nga.giat.geowave.analytic.PropertyManagement)">getConfiguration</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/core/store/index/IndexStore.html" title="interface in mil.nga.giat.geowave.core.store.index">IndexStore</a></code></td>
@@ -336,35 +337,31 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><code>static org.apache.hadoop.fs.Path</code></td>
-<td class="colLast"><span class="strong">GeoWaveAnalyticExtractJobRunner.</span><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/mapreduce/clustering/runner/GeoWaveAnalyticExtractJobRunner.html#getHdfsOutputPath(mil.nga.giat.geowave.analytic.PropertyManagement)">getHdfsOutputPath</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><span class="strong">GeoWaveAnalyticExtractJobRunner.</span><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/mapreduce/clustering/runner/GeoWaveAnalyticExtractJobRunner.html#run(org.apache.hadoop.conf.Configuration,%20mil.nga.giat.geowave.analytic.PropertyManagement)">run</a></strong>(org.apache.hadoop.conf.Configuration&nbsp;config,
    <a href="../../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><span class="strong">MultiLevelClusteringJobRunner.</span><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/mapreduce/clustering/runner/MultiLevelClusteringJobRunner.html#run(org.apache.hadoop.conf.Configuration,%20mil.nga.giat.geowave.analytic.PropertyManagement)">run</a></strong>(org.apache.hadoop.conf.Configuration&nbsp;configuration,
    <a href="../../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a>&nbsp;propertyManagement)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><span class="strong">GeoWaveInputLoadJobRunner.</span><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/mapreduce/clustering/runner/GeoWaveInputLoadJobRunner.html#run(org.apache.hadoop.conf.Configuration,%20mil.nga.giat.geowave.analytic.PropertyManagement)">run</a></strong>(org.apache.hadoop.conf.Configuration&nbsp;config,
    <a href="../../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><span class="strong">ConvexHullJobRunner.</span><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/mapreduce/clustering/runner/ConvexHullJobRunner.html#run(org.apache.hadoop.conf.Configuration,%20mil.nga.giat.geowave.analytic.PropertyManagement)">run</a></strong>(org.apache.hadoop.conf.Configuration&nbsp;config,
    <a href="../../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><span class="strong">GroupAssigmentJobRunner.</span><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/mapreduce/clustering/runner/GroupAssigmentJobRunner.html#run(org.apache.hadoop.conf.Configuration,%20mil.nga.giat.geowave.analytic.PropertyManagement)">run</a></strong>(org.apache.hadoop.conf.Configuration&nbsp;config,
    <a href="../../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><span class="strong">GeoWaveAnalyticExtractJobRunner.</span><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/mapreduce/clustering/runner/GeoWaveAnalyticExtractJobRunner.html#run(mil.nga.giat.geowave.analytic.PropertyManagement)">run</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties)</code>&nbsp;</td>
 </tr>
@@ -510,7 +507,8 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><span class="strong">NNMapReduce.PassthruPartitioner.</span><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NNMapReduce.PassthruPartitioner.html#setup(mil.nga.giat.geowave.analytic.PropertyManagement,%20org.apache.hadoop.conf.Configuration)">setup</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties,
+<td class="colLast"><span class="strong">NNMapReduce.PassthruPartitioner.</span><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NNMapReduce.PassthruPartitioner.html#setup(mil.nga.giat.geowave.analytic.PropertyManagement,%20java.lang.Class,%20org.apache.hadoop.conf.Configuration)">setup</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties,
+     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;scope,
      org.apache.hadoop.conf.Configuration&nbsp;configuration)</code>&nbsp;</td>
 </tr>
 </tbody>
@@ -528,9 +526,63 @@
 </tr>
 <tbody>
 <tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/analytic/store/PersistableDataStatisticsStore.html" title="class in mil.nga.giat.geowave.analytic.store">PersistableDataStatisticsStore</a></code></td>
+<td class="colLast"><span class="strong">DataStatisticsStoreParameterHelper.</span><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/param/DataStatisticsStoreParameterHelper.html#getValue(mil.nga.giat.geowave.analytic.PropertyManagement)">getValue</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a>&nbsp;propertyManagement)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/analytic/store/PersistableAdapterStore.html" title="class in mil.nga.giat.geowave.analytic.store">PersistableAdapterStore</a></code></td>
+<td class="colLast"><span class="strong">AdapterStoreParameterHelper.</span><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/param/AdapterStoreParameterHelper.html#getValue(mil.nga.giat.geowave.analytic.PropertyManagement)">getValue</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a>&nbsp;propertyManagement)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></td>
+<td class="colLast"><span class="strong">BasicParameterHelper.</span><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/param/BasicParameterHelper.html#getValue(mil.nga.giat.geowave.analytic.PropertyManagement)">getValue</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a>&nbsp;propertyManagement)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/analytic/store/PersistableDataStore.html" title="class in mil.nga.giat.geowave.analytic.store">PersistableDataStore</a></code></td>
+<td class="colLast"><span class="strong">DataStoreParameterHelper.</span><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/param/DataStoreParameterHelper.html#getValue(mil.nga.giat.geowave.analytic.PropertyManagement)">getValue</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a>&nbsp;propertyManagement)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/analytic/store/PersistableIndexStore.html" title="class in mil.nga.giat.geowave.analytic.store">PersistableIndexStore</a></code></td>
+<td class="colLast"><span class="strong">IndexStoreParameterHelper.</span><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/param/IndexStoreParameterHelper.html#getValue(mil.nga.giat.geowave.analytic.PropertyManagement)">getValue</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a>&nbsp;propertyManagement)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/analytic/param/ParameterHelper.html" title="type parameter in ParameterHelper">T</a></code></td>
+<td class="colLast"><span class="strong">ParameterHelper.</span><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/param/ParameterHelper.html#getValue(mil.nga.giat.geowave.analytic.PropertyManagement)">getValue</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a>&nbsp;propertyManagement)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><span class="strong">FormatConfiguration.</span><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/param/FormatConfiguration.html#setup(mil.nga.giat.geowave.analytic.PropertyManagement,%20org.apache.hadoop.conf.Configuration)">setup</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties,
      org.apache.hadoop.conf.Configuration&nbsp;configuration)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><span class="strong">BasicParameterHelper.</span><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/param/BasicParameterHelper.html#setValue(mil.nga.giat.geowave.analytic.PropertyManagement,%20java.lang.Object)">setValue</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a>&nbsp;propertyManagement,
+        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;value)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><span class="strong">AdapterStoreParameterHelper.</span><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/param/AdapterStoreParameterHelper.html#setValue(mil.nga.giat.geowave.analytic.PropertyManagement,%20mil.nga.giat.geowave.analytic.store.PersistableAdapterStore)">setValue</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a>&nbsp;propertyManagement,
+        <a href="../../../../../../mil/nga/giat/geowave/analytic/store/PersistableAdapterStore.html" title="class in mil.nga.giat.geowave.analytic.store">PersistableAdapterStore</a>&nbsp;value)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><span class="strong">DataStatisticsStoreParameterHelper.</span><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/param/DataStatisticsStoreParameterHelper.html#setValue(mil.nga.giat.geowave.analytic.PropertyManagement,%20mil.nga.giat.geowave.analytic.store.PersistableDataStatisticsStore)">setValue</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a>&nbsp;propertyManagement,
+        <a href="../../../../../../mil/nga/giat/geowave/analytic/store/PersistableDataStatisticsStore.html" title="class in mil.nga.giat.geowave.analytic.store">PersistableDataStatisticsStore</a>&nbsp;value)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><span class="strong">DataStoreParameterHelper.</span><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/param/DataStoreParameterHelper.html#setValue(mil.nga.giat.geowave.analytic.PropertyManagement,%20mil.nga.giat.geowave.analytic.store.PersistableDataStore)">setValue</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a>&nbsp;propertyManagement,
+        <a href="../../../../../../mil/nga/giat/geowave/analytic/store/PersistableDataStore.html" title="class in mil.nga.giat.geowave.analytic.store">PersistableDataStore</a>&nbsp;value)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><span class="strong">IndexStoreParameterHelper.</span><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/param/IndexStoreParameterHelper.html#setValue(mil.nga.giat.geowave.analytic.PropertyManagement,%20mil.nga.giat.geowave.analytic.store.PersistableIndexStore)">setValue</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a>&nbsp;propertyManagement,
+        <a href="../../../../../../mil/nga/giat/geowave/analytic/store/PersistableIndexStore.html" title="class in mil.nga.giat.geowave.analytic.store">PersistableIndexStore</a>&nbsp;value)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><span class="strong">ParameterHelper.</span><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/param/ParameterHelper.html#setValue(mil.nga.giat.geowave.analytic.PropertyManagement,%20T)">setValue</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a>&nbsp;propertyManagement,
+        <a href="../../../../../../mil/nga/giat/geowave/analytic/param/ParameterHelper.html" title="type parameter in ParameterHelper">T</a>&nbsp;value)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -547,39 +599,28 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><code>static void</code></td>
-<td class="colLast"><span class="strong">AbstractPartitioner.</span><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/AbstractPartitioner.html#putDistances(mil.nga.giat.geowave.analytic.PropertyManagement,%20double[])">putDistances</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a>&nbsp;config,
-            double[]&nbsp;distances)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>static void</code></td>
-<td class="colLast"><span class="strong">FeatureDataAdapterStoreFactory.</span><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/FeatureDataAdapterStoreFactory.html#saveState(mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter,%20mil.nga.giat.geowave.analytic.PropertyManagement)">saveState</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureDataAdapter.html" title="class in mil.nga.giat.geowave.adapter.vector">FeatureDataAdapter</a>&nbsp;dataAdapter,
-         <a href="../../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties)</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><span class="strong">OrthodromicDistancePartitioner.</span><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/OrthodromicDistancePartitioner.html#setup(mil.nga.giat.geowave.analytic.PropertyManagement,%20org.apache.hadoop.conf.Configuration)">setup</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties,
+<td class="colLast"><span class="strong">AdapterBasedPartitioner.</span><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/AdapterBasedPartitioner.html#setup(mil.nga.giat.geowave.analytic.PropertyManagement,%20java.lang.Class,%20org.apache.hadoop.conf.Configuration)">setup</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties,
+     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;scope,
      org.apache.hadoop.conf.Configuration&nbsp;configuration)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><span class="strong">Partitioner.</span><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/Partitioner.html#setup(mil.nga.giat.geowave.analytic.PropertyManagement,%20org.apache.hadoop.conf.Configuration)">setup</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties,
+<td class="colLast"><span class="strong">Partitioner.</span><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/Partitioner.html#setup(mil.nga.giat.geowave.analytic.PropertyManagement,%20java.lang.Class,%20org.apache.hadoop.conf.Configuration)">setup</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties,
+     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;scope,
      org.apache.hadoop.conf.Configuration&nbsp;configuration)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><span class="strong">AbstractPartitioner.</span><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/AbstractPartitioner.html#setup(mil.nga.giat.geowave.analytic.PropertyManagement,%20org.apache.hadoop.conf.Configuration)">setup</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties,
+<td class="colLast"><span class="strong">AbstractPartitioner.</span><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/AbstractPartitioner.html#setup(mil.nga.giat.geowave.analytic.PropertyManagement,%20java.lang.Class,%20org.apache.hadoop.conf.Configuration)">setup</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties,
+     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;scope,
      org.apache.hadoop.conf.Configuration&nbsp;configuration)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><span class="strong">AdapterBasedPartitioner.</span><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/AdapterBasedPartitioner.html#setup(mil.nga.giat.geowave.analytic.PropertyManagement,%20org.apache.hadoop.conf.Configuration)">setup</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties,
+<td class="colLast"><span class="strong">OrthodromicDistancePartitioner.</span><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/OrthodromicDistancePartitioner.html#setup(mil.nga.giat.geowave.analytic.PropertyManagement,%20java.lang.Class,%20org.apache.hadoop.conf.Configuration)">setup</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties,
+     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;scope,
      org.apache.hadoop.conf.Configuration&nbsp;configuration)</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>static void</code></td>
-<td class="colLast"><span class="strong">FeatureDataAdapterStoreFactory.</span><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/FeatureDataAdapterStoreFactory.html#transferState(org.apache.hadoop.conf.Configuration,%20mil.nga.giat.geowave.analytic.PropertyManagement)">transferState</a></strong>(org.apache.hadoop.conf.Configuration&nbsp;configuration,
-             <a href="../../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -597,7 +638,8 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>static void</code></td>
-<td class="colLast"><span class="strong">CentroidDistanceBasedSamplingRankFunction.</span><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/sample/function/CentroidDistanceBasedSamplingRankFunction.html#setParameters(org.apache.hadoop.conf.Configuration,%20mil.nga.giat.geowave.analytic.PropertyManagement)">setParameters</a></strong>(org.apache.hadoop.conf.Configuration&nbsp;config,
+<td class="colLast"><span class="strong">CentroidDistanceBasedSamplingRankFunction.</span><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/sample/function/CentroidDistanceBasedSamplingRankFunction.html#setParameters(org.apache.hadoop.conf.Configuration,%20java.lang.Class,%20mil.nga.giat.geowave.analytic.PropertyManagement)">setParameters</a></strong>(org.apache.hadoop.conf.Configuration&nbsp;config,
+             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;scope,
              <a href="../../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties)</code>&nbsp;</td>
 </tr>
 </tbody>

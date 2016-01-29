@@ -91,7 +91,7 @@
 </dl>
 <dl>
 <dt>All Known Subinterfaces:</dt>
-<dd><a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/DimensionField.html" title="interface in mil.nga.giat.geowave.core.store.dimension">DimensionField</a>&lt;T&gt;</dd>
+<dd><a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/NumericDimensionField.html" title="interface in mil.nga.giat.geowave.core.store.dimension">NumericDimensionField</a>&lt;T&gt;</dd>
 </dl>
 <dl>
 <dt>All Known Implementing Classes:</dt>
@@ -165,12 +165,6 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/index/Persistabl
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/index/dimension/NumericDimensionDefinition.html#getRange()">getRange</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/index/dimension/NumericDimensionDefinition.html#isCompatibleDefinition(mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition)">isCompatibleDefinition</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in mil.nga.giat.geowave.core.index.dimension">NumericDimensionDefinition</a>&nbsp;otherDimensionDefinition)</code>
-<div class="block">Check whether another dimension definition is compatible with this one</div>
-</td>
-</tr>
-<tr class="altColor">
 <td class="colFirst"><code>double</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/index/dimension/NumericDimensionDefinition.html#normalize(double)">normalize</a></strong>(double&nbsp;value)</code>
 <div class="block">Used to normalize a value within the bounds of the range to a percentage
@@ -284,24 +278,12 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/index/Persistabl
 <a name="getFullRange()">
 <!--   -->
 </a>
-<ul class="blockList">
+<ul class="blockListLast">
 <li class="blockList">
 <h4>getFullRange</h4>
 <pre><a href="../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/NumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">NumericData</a>&nbsp;getFullRange()</pre>
 <div class="block">Provide the entire allowed range</div>
 <dl><dt><span class="strong">Returns:</span></dt><dd></dd></dl>
-</li>
-</ul>
-<a name="isCompatibleDefinition(mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition)">
-<!--   -->
-</a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>isCompatibleDefinition</h4>
-<pre>boolean&nbsp;isCompatibleDefinition(<a href="../../../../../../../mil/nga/giat/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in mil.nga.giat.geowave.core.index.dimension">NumericDimensionDefinition</a>&nbsp;otherDimensionDefinition)</pre>
-<div class="block">Check whether another dimension definition is compatible with this one</div>
-<dl><dt><span class="strong">Returns:</span></dt><dd>a flag indicating whether another dimension definition is
-         compatible with this one</dd></dl>
 </li>
 </ul>
 </li>

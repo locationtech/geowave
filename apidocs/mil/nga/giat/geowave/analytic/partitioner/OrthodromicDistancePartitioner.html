@@ -35,7 +35,7 @@
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/MemoryIndexStoreFactory.html" title="class in mil.nga.giat.geowave.analytic.partitioner"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/AdapterBasedPartitioner.AdapterDataEntry.html" title="class in mil.nga.giat.geowave.analytic.partitioner"><span class="strong">Prev Class</span></a></li>
 <li><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/Partitioner.html" title="interface in mil.nga.giat.geowave.analytic.partitioner"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">
@@ -173,16 +173,26 @@ implements <a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/OrthodromicDistancePartitioner.html#fillOptions(java.util.Set)">fillOptions</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;org.apache.commons.cli.Option&gt;&nbsp;options)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
 <td class="colFirst"><code>protected <a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/AbstractPartitioner.NumericDataHolder.html" title="class in mil.nga.giat.geowave.analytic.partitioner">AbstractPartitioner.NumericDataHolder</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/OrthodromicDistancePartitioner.html#getNumericData(T)">getNumericData</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/OrthodromicDistancePartitioner.html" title="type parameter in OrthodromicDistancePartitioner">T</a>&nbsp;entry)</code>&nbsp;</td>
 </tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/analytic/param/ParameterEnum.html" title="interface in mil.nga.giat.geowave.analytic.param">ParameterEnum</a>&lt;?&gt;&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/OrthodromicDistancePartitioner.html#getParameters()">getParameters</a></strong>()</code>&nbsp;</td>
+</tr>
 <tr class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/OrthodromicDistancePartitioner.html#initialize(mil.nga.giat.geowave.analytic.ConfigurationWrapper)">initialize</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/analytic/ConfigurationWrapper.html" title="interface in mil.nga.giat.geowave.analytic">ConfigurationWrapper</a>&nbsp;context)</code>&nbsp;</td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/OrthodromicDistancePartitioner.html#initialize(org.apache.hadoop.conf.Configuration,%20java.lang.Class)">initialize</a></strong>(org.apache.hadoop.conf.Configuration&nbsp;configuration,
+          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;scope)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/OrthodromicDistancePartitioner.html#initialize(org.apache.hadoop.mapreduce.JobContext,%20java.lang.Class)">initialize</a></strong>(org.apache.hadoop.mapreduce.JobContext&nbsp;context,
+          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;scope)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/OrthodromicDistancePartitioner.html#initialize(mil.nga.giat.geowave.analytic.ScopedJobConfiguration)">initialize</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/analytic/ScopedJobConfiguration.html" title="class in mil.nga.giat.geowave.analytic">ScopedJobConfiguration</a>&nbsp;config)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
@@ -191,7 +201,8 @@ implements <a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/OrthodromicDistancePartitioner.html#setup(mil.nga.giat.geowave.analytic.PropertyManagement,%20org.apache.hadoop.conf.Configuration)">setup</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties,
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/OrthodromicDistancePartitioner.html#setup(mil.nga.giat.geowave.analytic.PropertyManagement,%20java.lang.Class,%20org.apache.hadoop.conf.Configuration)">setup</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties,
+     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;scope,
      org.apache.hadoop.conf.Configuration&nbsp;configuration)</code>&nbsp;</td>
 </tr>
 </table>
@@ -200,14 +211,14 @@ implements <a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;mil.nga.giat.geowave.analytic.partitioner.<a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/AbstractPartitioner.html" title="class in mil.nga.giat.geowave.analytic.partitioner">AbstractPartitioner</a></h3>
-<code><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/AbstractPartitioner.html#addPartitions(java.util.Set,%20java.util.List,%20boolean)">addPartitions</a>, <a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/AbstractPartitioner.html#getCubeIdentifiers(T)">getCubeIdentifiers</a>, <a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/AbstractPartitioner.html#getDistancePerDimension()">getDistancePerDimension</a>, <a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/AbstractPartitioner.html#getDistances(mil.nga.giat.geowave.analytic.ConfigurationWrapper,%20java.lang.Class)">getDistances</a>, <a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/AbstractPartitioner.html#getIndex()">getIndex</a>, <a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/AbstractPartitioner.html#getRangesForPartition(mil.nga.giat.geowave.analytic.partitioner.Partitioner.PartitionData)">getRangesForPartition</a>, <a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/AbstractPartitioner.html#partition(T,%20mil.nga.giat.geowave.analytic.partitioner.Partitioner.PartitionDataCallback)">partition</a>, <a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/AbstractPartitioner.html#putDistances(mil.nga.giat.geowave.analytic.PropertyManagement,%20double[])">putDistances</a></code></li>
+<code><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/AbstractPartitioner.html#addPartitions(java.util.Set,%20java.util.List,%20boolean)">addPartitions</a>, <a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/AbstractPartitioner.html#equals(java.lang.Object)">equals</a>, <a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/AbstractPartitioner.html#getCubeIdentifiers(T)">getCubeIdentifiers</a>, <a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/AbstractPartitioner.html#getDistancePerDimension()">getDistancePerDimension</a>, <a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/AbstractPartitioner.html#getIndex()">getIndex</a>, <a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/AbstractPartitioner.html#getRangesForPartition(mil.nga.giat.geowave.analytic.partitioner.Partitioner.PartitionData)">getRangesForPartition</a>, <a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/AbstractPartitioner.html#hashCode()">hashCode</a>, <a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/AbstractPartitioner.html#partition(T,%20mil.nga.giat.geowave.analytic.partitioner.Partitioner.PartitionDataCallback)">partition</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods_inherited_from_class_java.lang.Object">
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;java.lang.<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></h3>
-<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#clone()" title="class or interface in java.lang">clone</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.lang">equals</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#finalize()" title="class or interface in java.lang">finalize</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang">getClass</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#hashCode()" title="class or interface in java.lang">hashCode</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang">notify</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang">notifyAll</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#toString()" title="class or interface in java.lang">toString</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait(long,%20int)" title="class or interface in java.lang">wait</a></code></li>
+<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#clone()" title="class or interface in java.lang">clone</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#finalize()" title="class or interface in java.lang">finalize</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang">getClass</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang">notify</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang">notifyAll</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#toString()" title="class or interface in java.lang">toString</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait(long,%20int)" title="class or interface in java.lang">wait</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods_inherited_from_class_mil.nga.giat.geowave.analytic.partitioner.Partitioner">
@@ -289,51 +300,81 @@ implements <a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/
 </dl>
 </li>
 </ul>
-<a name="initialize(mil.nga.giat.geowave.analytic.ConfigurationWrapper)">
+<a name="initialize(org.apache.hadoop.mapreduce.JobContext, java.lang.Class)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>initialize</h4>
-<pre>public&nbsp;void&nbsp;initialize(<a href="../../../../../../mil/nga/giat/geowave/analytic/ConfigurationWrapper.html" title="interface in mil.nga.giat.geowave.analytic">ConfigurationWrapper</a>&nbsp;context)
+<pre>public&nbsp;void&nbsp;initialize(org.apache.hadoop.mapreduce.JobContext&nbsp;context,
+              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;scope)
                 throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
 <dl>
 <dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/Partitioner.html#initialize(mil.nga.giat.geowave.analytic.ConfigurationWrapper)">initialize</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/Partitioner.html" title="interface in mil.nga.giat.geowave.analytic.partitioner">Partitioner</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/OrthodromicDistancePartitioner.html" title="type parameter in OrthodromicDistancePartitioner">T</a>&gt;</code></dd>
+<dd><code><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/Partitioner.html#initialize(org.apache.hadoop.mapreduce.JobContext,%20java.lang.Class)">initialize</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/Partitioner.html" title="interface in mil.nga.giat.geowave.analytic.partitioner">Partitioner</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/OrthodromicDistancePartitioner.html" title="type parameter in OrthodromicDistancePartitioner">T</a>&gt;</code></dd>
 <dt><strong>Overrides:</strong></dt>
-<dd><code><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/AbstractPartitioner.html#initialize(mil.nga.giat.geowave.analytic.ConfigurationWrapper)">initialize</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/AbstractPartitioner.html" title="class in mil.nga.giat.geowave.analytic.partitioner">AbstractPartitioner</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/OrthodromicDistancePartitioner.html" title="type parameter in OrthodromicDistancePartitioner">T</a>&gt;</code></dd>
+<dd><code><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/AbstractPartitioner.html#initialize(org.apache.hadoop.mapreduce.JobContext,%20java.lang.Class)">initialize</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/AbstractPartitioner.html" title="class in mil.nga.giat.geowave.analytic.partitioner">AbstractPartitioner</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/OrthodromicDistancePartitioner.html" title="type parameter in OrthodromicDistancePartitioner">T</a>&gt;</code></dd>
 <dt><span class="strong">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd></dl>
 </li>
 </ul>
-<a name="fillOptions(java.util.Set)">
+<a name="initialize(org.apache.hadoop.conf.Configuration, java.lang.Class)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>fillOptions</h4>
-<pre>public&nbsp;void&nbsp;fillOptions(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;org.apache.commons.cli.Option&gt;&nbsp;options)</pre>
+<h4>initialize</h4>
+<pre>public&nbsp;void&nbsp;initialize(org.apache.hadoop.conf.Configuration&nbsp;configuration,
+              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;scope)
+                throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+<dl><dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd></dl>
+</li>
+</ul>
+<a name="initialize(mil.nga.giat.geowave.analytic.ScopedJobConfiguration)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>initialize</h4>
+<pre>public&nbsp;void&nbsp;initialize(<a href="../../../../../../mil/nga/giat/geowave/analytic/ScopedJobConfiguration.html" title="class in mil.nga.giat.geowave.analytic">ScopedJobConfiguration</a>&nbsp;config)
+                throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+<dl>
+<dt><strong>Overrides:</strong></dt>
+<dd><code><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/AbstractPartitioner.html#initialize(mil.nga.giat.geowave.analytic.ScopedJobConfiguration)">initialize</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/AbstractPartitioner.html" title="class in mil.nga.giat.geowave.analytic.partitioner">AbstractPartitioner</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/OrthodromicDistancePartitioner.html" title="type parameter in OrthodromicDistancePartitioner">T</a>&gt;</code></dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd></dl>
+</li>
+</ul>
+<a name="getParameters()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getParameters</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/analytic/param/ParameterEnum.html" title="interface in mil.nga.giat.geowave.analytic.param">ParameterEnum</a>&lt;?&gt;&gt;&nbsp;getParameters()</pre>
 <dl>
 <dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/Partitioner.html#fillOptions(java.util.Set)">fillOptions</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/Partitioner.html" title="interface in mil.nga.giat.geowave.analytic.partitioner">Partitioner</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/OrthodromicDistancePartitioner.html" title="type parameter in OrthodromicDistancePartitioner">T</a>&gt;</code></dd>
+<dd><code><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/Partitioner.html#getParameters()">getParameters</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/Partitioner.html" title="interface in mil.nga.giat.geowave.analytic.partitioner">Partitioner</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/OrthodromicDistancePartitioner.html" title="type parameter in OrthodromicDistancePartitioner">T</a>&gt;</code></dd>
 <dt><strong>Overrides:</strong></dt>
-<dd><code><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/AbstractPartitioner.html#fillOptions(java.util.Set)">fillOptions</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/AbstractPartitioner.html" title="class in mil.nga.giat.geowave.analytic.partitioner">AbstractPartitioner</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/OrthodromicDistancePartitioner.html" title="type parameter in OrthodromicDistancePartitioner">T</a>&gt;</code></dd>
+<dd><code><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/AbstractPartitioner.html#getParameters()">getParameters</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/AbstractPartitioner.html" title="class in mil.nga.giat.geowave.analytic.partitioner">AbstractPartitioner</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/OrthodromicDistancePartitioner.html" title="type parameter in OrthodromicDistancePartitioner">T</a>&gt;</code></dd>
 </dl>
 </li>
 </ul>
-<a name="setup(mil.nga.giat.geowave.analytic.PropertyManagement, org.apache.hadoop.conf.Configuration)">
+<a name="setup(mil.nga.giat.geowave.analytic.PropertyManagement, java.lang.Class, org.apache.hadoop.conf.Configuration)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>setup</h4>
 <pre>public&nbsp;void&nbsp;setup(<a href="../../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties,
+         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;scope,
          org.apache.hadoop.conf.Configuration&nbsp;configuration)</pre>
 <dl>
 <dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/Partitioner.html#setup(mil.nga.giat.geowave.analytic.PropertyManagement,%20org.apache.hadoop.conf.Configuration)">setup</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/Partitioner.html" title="interface in mil.nga.giat.geowave.analytic.partitioner">Partitioner</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/OrthodromicDistancePartitioner.html" title="type parameter in OrthodromicDistancePartitioner">T</a>&gt;</code></dd>
+<dd><code><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/Partitioner.html#setup(mil.nga.giat.geowave.analytic.PropertyManagement,%20java.lang.Class,%20org.apache.hadoop.conf.Configuration)">setup</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/Partitioner.html" title="interface in mil.nga.giat.geowave.analytic.partitioner">Partitioner</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/OrthodromicDistancePartitioner.html" title="type parameter in OrthodromicDistancePartitioner">T</a>&gt;</code></dd>
 <dt><strong>Overrides:</strong></dt>
-<dd><code><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/AbstractPartitioner.html#setup(mil.nga.giat.geowave.analytic.PropertyManagement,%20org.apache.hadoop.conf.Configuration)">setup</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/AbstractPartitioner.html" title="class in mil.nga.giat.geowave.analytic.partitioner">AbstractPartitioner</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/OrthodromicDistancePartitioner.html" title="type parameter in OrthodromicDistancePartitioner">T</a>&gt;</code></dd>
+<dd><code><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/AbstractPartitioner.html#setup(mil.nga.giat.geowave.analytic.PropertyManagement,%20java.lang.Class,%20org.apache.hadoop.conf.Configuration)">setup</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/AbstractPartitioner.html" title="class in mil.nga.giat.geowave.analytic.partitioner">AbstractPartitioner</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/OrthodromicDistancePartitioner.html" title="type parameter in OrthodromicDistancePartitioner">T</a>&gt;</code></dd>
 </dl>
 </li>
 </ul>
@@ -363,7 +404,7 @@ implements <a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/MemoryIndexStoreFactory.html" title="class in mil.nga.giat.geowave.analytic.partitioner"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/AdapterBasedPartitioner.AdapterDataEntry.html" title="class in mil.nga.giat.geowave.analytic.partitioner"><span class="strong">Prev Class</span></a></li>
 <li><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/Partitioner.html" title="interface in mil.nga.giat.geowave.analytic.partitioner"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">

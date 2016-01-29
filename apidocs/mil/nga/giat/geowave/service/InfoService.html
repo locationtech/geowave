@@ -91,7 +91,10 @@
 </dl>
 <hr>
 <br>
-<pre>public interface <span class="strong">InfoService</span></pre>
+<pre>@Produces(value="application/json")
+@Consumes(value="application/json")
+@Path(value="/info")
+public interface <span class="strong">InfoService</span></pre>
 </li>
 </ul>
 </div>
@@ -118,10 +121,6 @@
 <td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
 <td class="colLast"><code><strong><a href="../../../../../mil/nga/giat/geowave/service/InfoService.html#getIndices(java.lang.String)">getIndices</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
-<td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
-<td class="colLast"><code><strong><a href="../../../../../mil/nga/giat/geowave/service/InfoService.html#getNamespaces()">getNamespaces</a></strong>()</code>&nbsp;</td>
-</tr>
 </table>
 </li>
 </ul>
@@ -137,22 +136,17 @@
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="getNamespaces()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getNamespaces</h4>
-<pre>javax.ws.rs.core.Response&nbsp;getNamespaces()</pre>
-</li>
-</ul>
 <a name="getIndices(java.lang.String)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>getIndices</h4>
-<pre>javax.ws.rs.core.Response&nbsp;getIndices(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace)</pre>
+<pre>@GET
+@Produces(value="application/json")
+@Path(value="/namespaces/{namespace}/indices")
+javax.ws.rs.core.Response&nbsp;getIndices(@PathParam(value="namespace")
+                                                     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace)</pre>
 </li>
 </ul>
 <a name="getAdapters(java.lang.String)">
@@ -161,7 +155,11 @@
 <ul class="blockListLast">
 <li class="blockList">
 <h4>getAdapters</h4>
-<pre>javax.ws.rs.core.Response&nbsp;getAdapters(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace)</pre>
+<pre>@GET
+@Produces(value="application/json")
+@Path(value="/namespaces/{namespace}/adapters")
+javax.ws.rs.core.Response&nbsp;getAdapters(@PathParam(value="namespace")
+                                                      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace)</pre>
 </li>
 </ul>
 </li>

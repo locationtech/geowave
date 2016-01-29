@@ -61,7 +61,7 @@
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li><a href="#fields_inherited_from_class_mil.nga.giat.geowave.datastore.accumulo.mapreduce.GeoWaveJobRunner">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#fields_inherited_from_class_mil.nga.giat.geowave.mapreduce.AbstractGeoWaveJobRunner">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method_summary">Method</a></li>
 </ul>
@@ -89,10 +89,10 @@
 <li>org.apache.hadoop.conf.Configured</li>
 <li>
 <ul class="inheritance">
-<li><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/GeoWaveJobRunner.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce">mil.nga.giat.geowave.datastore.accumulo.mapreduce.GeoWaveJobRunner</a></li>
+<li><a href="../../../../../../../../mil/nga/giat/geowave/mapreduce/AbstractGeoWaveJobRunner.html" title="class in mil.nga.giat.geowave.mapreduce">mil.nga.giat.geowave.mapreduce.AbstractGeoWaveJobRunner</a></li>
 <li>
 <ul class="inheritance">
-<li><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/dedupe/GeoWaveDedupeJobRunner.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce.dedupe">mil.nga.giat.geowave.datastore.accumulo.mapreduce.dedupe.GeoWaveDedupeJobRunner</a></li>
+<li><a href="../../../../../../../../mil/nga/giat/geowave/mapreduce/dedupe/GeoWaveDedupeJobRunner.html" title="class in mil.nga.giat.geowave.mapreduce.dedupe">mil.nga.giat.geowave.mapreduce.dedupe.GeoWaveDedupeJobRunner</a></li>
 <li>
 <ul class="inheritance">
 <li>mil.nga.giat.geowave.analytic.mapreduce.clustering.runner.GeoWaveAnalyticExtractJobRunner</li>
@@ -110,12 +110,12 @@
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><a href="../../../../../../../../mil/nga/giat/geowave/analytic/IndependentJobRunner.html" title="interface in mil.nga.giat.geowave.analytic">IndependentJobRunner</a>, <a href="../../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/MapReduceJobRunner.html" title="interface in mil.nga.giat.geowave.analytic.mapreduce">MapReduceJobRunner</a>, org.apache.hadoop.conf.Configurable, org.apache.hadoop.util.Tool</dd>
+<dd><a href="../../../../../../../../mil/nga/giat/geowave/analytic/IndependentJobRunner.html" title="interface in mil.nga.giat.geowave.analytic">IndependentJobRunner</a>, <a href="../../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/MapReduceJobRunner.html" title="interface in mil.nga.giat.geowave.analytic.mapreduce">MapReduceJobRunner</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/cli/CLIOperationDriver.html" title="interface in mil.nga.giat.geowave.core.cli">CLIOperationDriver</a>, org.apache.hadoop.conf.Configurable, org.apache.hadoop.util.Tool</dd>
 </dl>
 <hr>
 <br>
 <pre>public class <span class="strong">GeoWaveAnalyticExtractJobRunner</span>
-extends <a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/dedupe/GeoWaveDedupeJobRunner.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce.dedupe">GeoWaveDedupeJobRunner</a>
+extends <a href="../../../../../../../../mil/nga/giat/geowave/mapreduce/dedupe/GeoWaveDedupeJobRunner.html" title="class in mil.nga.giat.geowave.mapreduce.dedupe">GeoWaveDedupeJobRunner</a>
 implements <a href="../../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/MapReduceJobRunner.html" title="interface in mil.nga.giat.geowave.analytic.mapreduce">MapReduceJobRunner</a>, <a href="../../../../../../../../mil/nga/giat/geowave/analytic/IndependentJobRunner.html" title="interface in mil.nga.giat.geowave.analytic">IndependentJobRunner</a></pre>
 <div class="block">Run a map reduce job to extract a population of data from GeoWave (Accumulo),
  remove duplicates, and output a SimpleFeature with the ID and the extracted
@@ -133,11 +133,11 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/analytic/mapred
 </a>
 <h3>Field Summary</h3>
 <ul class="blockList">
-<li class="blockList"><a name="fields_inherited_from_class_mil.nga.giat.geowave.datastore.accumulo.mapreduce.GeoWaveJobRunner">
+<li class="blockList"><a name="fields_inherited_from_class_mil.nga.giat.geowave.mapreduce.AbstractGeoWaveJobRunner">
 <!--   -->
 </a>
-<h3>Fields inherited from class&nbsp;mil.nga.giat.geowave.datastore.accumulo.mapreduce.<a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/GeoWaveJobRunner.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce">GeoWaveJobRunner</a></h3>
-<code><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/GeoWaveJobRunner.html#adapters">adapters</a>, <a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/GeoWaveJobRunner.html#indices">indices</a>, <a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/GeoWaveJobRunner.html#instance">instance</a>, <a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/GeoWaveJobRunner.html#LOGGER">LOGGER</a>, <a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/GeoWaveJobRunner.html#maxInputSplits">maxInputSplits</a>, <a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/GeoWaveJobRunner.html#minInputSplits">minInputSplits</a>, <a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/GeoWaveJobRunner.html#namespace">namespace</a>, <a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/GeoWaveJobRunner.html#password">password</a>, <a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/GeoWaveJobRunner.html#query">query</a>, <a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/GeoWaveJobRunner.html#user">user</a>, <a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/GeoWaveJobRunner.html#zookeeper">zookeeper</a></code></li>
+<h3>Fields inherited from class&nbsp;mil.nga.giat.geowave.mapreduce.<a href="../../../../../../../../mil/nga/giat/geowave/mapreduce/AbstractGeoWaveJobRunner.html" title="class in mil.nga.giat.geowave.mapreduce">AbstractGeoWaveJobRunner</a></h3>
+<code><a href="../../../../../../../../mil/nga/giat/geowave/mapreduce/AbstractGeoWaveJobRunner.html#adapters">adapters</a>, <a href="../../../../../../../../mil/nga/giat/geowave/mapreduce/AbstractGeoWaveJobRunner.html#configOptions">configOptions</a>, <a href="../../../../../../../../mil/nga/giat/geowave/mapreduce/AbstractGeoWaveJobRunner.html#dataStoreFactory">dataStoreFactory</a>, <a href="../../../../../../../../mil/nga/giat/geowave/mapreduce/AbstractGeoWaveJobRunner.html#indices">indices</a>, <a href="../../../../../../../../mil/nga/giat/geowave/mapreduce/AbstractGeoWaveJobRunner.html#LOGGER">LOGGER</a>, <a href="../../../../../../../../mil/nga/giat/geowave/mapreduce/AbstractGeoWaveJobRunner.html#maxInputSplits">maxInputSplits</a>, <a href="../../../../../../../../mil/nga/giat/geowave/mapreduce/AbstractGeoWaveJobRunner.html#minInputSplits">minInputSplits</a>, <a href="../../../../../../../../mil/nga/giat/geowave/mapreduce/AbstractGeoWaveJobRunner.html#namespace">namespace</a>, <a href="../../../../../../../../mil/nga/giat/geowave/mapreduce/AbstractGeoWaveJobRunner.html#query">query</a></code></li>
 </ul>
 </li>
 </ul>
@@ -175,52 +175,52 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/analytic/mapred
 <td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/clustering/runner/GeoWaveAnalyticExtractJobRunner.html#configure(org.apache.hadoop.mapreduce.Job)">configure</a></strong>(org.apache.hadoop.mapreduce.Job&nbsp;job)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/clustering/runner/GeoWaveAnalyticExtractJobRunner.html#fillOptions(java.util.Set)">fillOptions</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;org.apache.commons.cli.Option&gt;&nbsp;options)</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
 <td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/clustering/runner/GeoWaveAnalyticExtractJobRunner.html#getHdfsOutputBase()">getHdfsOutputBase</a></strong>()</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>org.apache.hadoop.fs.Path</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/clustering/runner/GeoWaveAnalyticExtractJobRunner.html#getHdfsOutputPath()">getHdfsOutputPath</a></strong>()</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>static org.apache.hadoop.fs.Path</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/clustering/runner/GeoWaveAnalyticExtractJobRunner.html#getHdfsOutputPath(mil.nga.giat.geowave.analytic.PropertyManagement)">getHdfsOutputPath</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>protected int</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/clustering/runner/GeoWaveAnalyticExtractJobRunner.html#getNumReduceTasks()">getNumReduceTasks</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/analytic/param/ParameterEnum.html" title="interface in mil.nga.giat.geowave.analytic.param">ParameterEnum</a>&lt;?&gt;&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/clustering/runner/GeoWaveAnalyticExtractJobRunner.html#getParameters()">getParameters</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;? extends org.apache.hadoop.mapreduce.Reducer&gt;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/clustering/runner/GeoWaveAnalyticExtractJobRunner.html#getReducer()">getReducer</a></strong>()</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/clustering/runner/GeoWaveAnalyticExtractJobRunner.html#run(org.apache.hadoop.conf.Configuration,%20mil.nga.giat.geowave.analytic.PropertyManagement)">run</a></strong>(org.apache.hadoop.conf.Configuration&nbsp;config,
    <a href="../../../../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/clustering/runner/GeoWaveAnalyticExtractJobRunner.html#run(mil.nga.giat.geowave.analytic.PropertyManagement)">run</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties)</code>&nbsp;</td>
 </tr>
+<tr class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/clustering/runner/GeoWaveAnalyticExtractJobRunner.html#runOperation(java.lang.String[])">runOperation</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;args)</code>&nbsp;</td>
+</tr>
 </table>
 <ul class="blockList">
-<li class="blockList"><a name="methods_inherited_from_class_mil.nga.giat.geowave.datastore.accumulo.mapreduce.dedupe.GeoWaveDedupeJobRunner">
+<li class="blockList"><a name="methods_inherited_from_class_mil.nga.giat.geowave.mapreduce.dedupe.GeoWaveDedupeJobRunner">
 <!--   -->
 </a>
-<h3>Methods inherited from class&nbsp;mil.nga.giat.geowave.datastore.accumulo.mapreduce.dedupe.<a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/dedupe/GeoWaveDedupeJobRunner.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce.dedupe">GeoWaveDedupeJobRunner</a></h3>
-<code><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/dedupe/GeoWaveDedupeJobRunner.html#getOutputFormatClass()">getOutputFormatClass</a>, <a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/dedupe/GeoWaveDedupeJobRunner.html#main(java.lang.String[])">main</a></code></li>
+<h3>Methods inherited from class&nbsp;mil.nga.giat.geowave.mapreduce.dedupe.<a href="../../../../../../../../mil/nga/giat/geowave/mapreduce/dedupe/GeoWaveDedupeJobRunner.html" title="class in mil.nga.giat.geowave.mapreduce.dedupe">GeoWaveDedupeJobRunner</a></h3>
+<code><a href="../../../../../../../../mil/nga/giat/geowave/mapreduce/dedupe/GeoWaveDedupeJobRunner.html#getOutputFormatClass()">getOutputFormatClass</a>, <a href="../../../../../../../../mil/nga/giat/geowave/mapreduce/dedupe/GeoWaveDedupeJobRunner.html#main(java.lang.String[])">main</a></code></li>
 </ul>
 <ul class="blockList">
-<li class="blockList"><a name="methods_inherited_from_class_mil.nga.giat.geowave.datastore.accumulo.mapreduce.GeoWaveJobRunner">
+<li class="blockList"><a name="methods_inherited_from_class_mil.nga.giat.geowave.mapreduce.AbstractGeoWaveJobRunner">
 <!--   -->
 </a>
-<h3>Methods inherited from class&nbsp;mil.nga.giat.geowave.datastore.accumulo.mapreduce.<a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/GeoWaveJobRunner.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce">GeoWaveJobRunner</a></h3>
-<code><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/GeoWaveJobRunner.html#addDataAdapter(mil.nga.giat.geowave.core.store.adapter.DataAdapter)">addDataAdapter</a>, <a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/GeoWaveJobRunner.html#addIndex(mil.nga.giat.geowave.core.store.index.Index)">addIndex</a>, <a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/GeoWaveJobRunner.html#run(java.lang.String[])">run</a>, <a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/GeoWaveJobRunner.html#runJob()">runJob</a>, <a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/GeoWaveJobRunner.html#setMaxInputSplits(int)">setMaxInputSplits</a>, <a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/GeoWaveJobRunner.html#setMinInputSplits(int)">setMinInputSplits</a>, <a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/GeoWaveJobRunner.html#setQuery(mil.nga.giat.geowave.core.store.query.DistributableQuery)">setQuery</a></code></li>
+<h3>Methods inherited from class&nbsp;mil.nga.giat.geowave.mapreduce.<a href="../../../../../../../../mil/nga/giat/geowave/mapreduce/AbstractGeoWaveJobRunner.html" title="class in mil.nga.giat.geowave.mapreduce">AbstractGeoWaveJobRunner</a></h3>
+<code><a href="../../../../../../../../mil/nga/giat/geowave/mapreduce/AbstractGeoWaveJobRunner.html#addDataAdapter(mil.nga.giat.geowave.core.store.adapter.DataAdapter)">addDataAdapter</a>, <a href="../../../../../../../../mil/nga/giat/geowave/mapreduce/AbstractGeoWaveJobRunner.html#addIndex(mil.nga.giat.geowave.core.store.index.PrimaryIndex)">addIndex</a>, <a href="../../../../../../../../mil/nga/giat/geowave/mapreduce/AbstractGeoWaveJobRunner.html#run(java.lang.String[])">run</a>, <a href="../../../../../../../../mil/nga/giat/geowave/mapreduce/AbstractGeoWaveJobRunner.html#runJob()">runJob</a>, <a href="../../../../../../../../mil/nga/giat/geowave/mapreduce/AbstractGeoWaveJobRunner.html#setMaxInputSplits(int)">setMaxInputSplits</a>, <a href="../../../../../../../../mil/nga/giat/geowave/mapreduce/AbstractGeoWaveJobRunner.html#setMinInputSplits(int)">setMinInputSplits</a>, <a href="../../../../../../../../mil/nga/giat/geowave/mapreduce/AbstractGeoWaveJobRunner.html#setQuery(mil.nga.giat.geowave.core.store.query.DistributableQuery)">setQuery</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods_inherited_from_class_org.apache.hadoop.conf.Configured">
@@ -283,7 +283,7 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/analytic/mapred
 <pre>protected&nbsp;int&nbsp;getNumReduceTasks()</pre>
 <dl>
 <dt><strong>Overrides:</strong></dt>
-<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/dedupe/GeoWaveDedupeJobRunner.html#getNumReduceTasks()">getNumReduceTasks</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/dedupe/GeoWaveDedupeJobRunner.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce.dedupe">GeoWaveDedupeJobRunner</a></code></dd>
+<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/mapreduce/dedupe/GeoWaveDedupeJobRunner.html#getNumReduceTasks()">getNumReduceTasks</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/mapreduce/dedupe/GeoWaveDedupeJobRunner.html" title="class in mil.nga.giat.geowave.mapreduce.dedupe">GeoWaveDedupeJobRunner</a></code></dd>
 </dl>
 </li>
 </ul>
@@ -296,7 +296,7 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/analytic/mapred
 <pre>protected&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getHdfsOutputBase()</pre>
 <dl>
 <dt><strong>Overrides:</strong></dt>
-<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/dedupe/GeoWaveDedupeJobRunner.html#getHdfsOutputBase()">getHdfsOutputBase</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/dedupe/GeoWaveDedupeJobRunner.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce.dedupe">GeoWaveDedupeJobRunner</a></code></dd>
+<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/mapreduce/dedupe/GeoWaveDedupeJobRunner.html#getHdfsOutputBase()">getHdfsOutputBase</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/mapreduce/dedupe/GeoWaveDedupeJobRunner.html" title="class in mil.nga.giat.geowave.mapreduce.dedupe">GeoWaveDedupeJobRunner</a></code></dd>
 </dl>
 </li>
 </ul>
@@ -310,18 +310,9 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/analytic/mapred
                   throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></pre>
 <dl>
 <dt><strong>Overrides:</strong></dt>
-<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/dedupe/GeoWaveDedupeJobRunner.html#configure(org.apache.hadoop.mapreduce.Job)">configure</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/dedupe/GeoWaveDedupeJobRunner.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce.dedupe">GeoWaveDedupeJobRunner</a></code></dd>
+<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/mapreduce/dedupe/GeoWaveDedupeJobRunner.html#configure(org.apache.hadoop.mapreduce.Job)">configure</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/mapreduce/dedupe/GeoWaveDedupeJobRunner.html" title="class in mil.nga.giat.geowave.mapreduce.dedupe">GeoWaveDedupeJobRunner</a></code></dd>
 <dt><span class="strong">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></code></dd></dl>
-</li>
-</ul>
-<a name="getHdfsOutputPath(mil.nga.giat.geowave.analytic.PropertyManagement)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getHdfsOutputPath</h4>
-<pre>public static&nbsp;org.apache.hadoop.fs.Path&nbsp;getHdfsOutputPath(<a href="../../../../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties)</pre>
 </li>
 </ul>
 <a name="getHdfsOutputPath()">
@@ -333,7 +324,7 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/analytic/mapred
 <pre>public&nbsp;org.apache.hadoop.fs.Path&nbsp;getHdfsOutputPath()</pre>
 <dl>
 <dt><strong>Overrides:</strong></dt>
-<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/dedupe/GeoWaveDedupeJobRunner.html#getHdfsOutputPath()">getHdfsOutputPath</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/dedupe/GeoWaveDedupeJobRunner.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce.dedupe">GeoWaveDedupeJobRunner</a></code></dd>
+<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/mapreduce/dedupe/GeoWaveDedupeJobRunner.html#getHdfsOutputPath()">getHdfsOutputPath</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/mapreduce/dedupe/GeoWaveDedupeJobRunner.html" title="class in mil.nga.giat.geowave.mapreduce.dedupe">GeoWaveDedupeJobRunner</a></code></dd>
 </dl>
 </li>
 </ul>
@@ -346,7 +337,7 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/analytic/mapred
 <pre>protected&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;? extends org.apache.hadoop.mapreduce.Reducer&gt;&nbsp;getReducer()</pre>
 <dl>
 <dt><strong>Overrides:</strong></dt>
-<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/dedupe/GeoWaveDedupeJobRunner.html#getReducer()">getReducer</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/dedupe/GeoWaveDedupeJobRunner.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce.dedupe">GeoWaveDedupeJobRunner</a></code></dd>
+<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/mapreduce/dedupe/GeoWaveDedupeJobRunner.html#getReducer()">getReducer</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/mapreduce/dedupe/GeoWaveDedupeJobRunner.html" title="class in mil.nga.giat.geowave.mapreduce.dedupe">GeoWaveDedupeJobRunner</a></code></dd>
 </dl>
 </li>
 </ul>
@@ -366,23 +357,23 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/analytic/mapred
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></code></dd></dl>
 </li>
 </ul>
-<a name="fillOptions(java.util.Set)">
+<a name="getParameters()">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>fillOptions</h4>
-<pre>public&nbsp;void&nbsp;fillOptions(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;org.apache.commons.cli.Option&gt;&nbsp;options)</pre>
+<h4>getParameters</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/analytic/param/ParameterEnum.html" title="interface in mil.nga.giat.geowave.analytic.param">ParameterEnum</a>&lt;?&gt;&gt;&nbsp;getParameters()</pre>
 <dl>
 <dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/analytic/IndependentJobRunner.html#fillOptions(java.util.Set)">fillOptions</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/analytic/IndependentJobRunner.html" title="interface in mil.nga.giat.geowave.analytic">IndependentJobRunner</a></code></dd>
+<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/analytic/IndependentJobRunner.html#getParameters()">getParameters</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/analytic/IndependentJobRunner.html" title="interface in mil.nga.giat.geowave.analytic">IndependentJobRunner</a></code></dd>
 </dl>
 </li>
 </ul>
 <a name="run(mil.nga.giat.geowave.analytic.PropertyManagement)">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>run</h4>
 <pre>public&nbsp;int&nbsp;run(<a href="../../../../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties)
@@ -392,6 +383,23 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/analytic/mapred
 <dd><code><a href="../../../../../../../../mil/nga/giat/geowave/analytic/IndependentJobRunner.html#run(mil.nga.giat.geowave.analytic.PropertyManagement)">run</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/analytic/IndependentJobRunner.html" title="interface in mil.nga.giat.geowave.analytic">IndependentJobRunner</a></code></dd>
 <dt><span class="strong">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></code></dd></dl>
+</li>
+</ul>
+<a name="runOperation(java.lang.String[])">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>runOperation</h4>
+<pre>public&nbsp;boolean&nbsp;runOperation(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;args)
+                     throws org.apache.commons.cli.ParseException</pre>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/core/cli/CLIOperationDriver.html#runOperation(java.lang.String[])">runOperation</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/cli/CLIOperationDriver.html" title="interface in mil.nga.giat.geowave.core.cli">CLIOperationDriver</a></code></dd>
+<dt><strong>Overrides:</strong></dt>
+<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/mapreduce/AbstractGeoWaveJobRunner.html#runOperation(java.lang.String[])">runOperation</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/mapreduce/AbstractGeoWaveJobRunner.html" title="class in mil.nga.giat.geowave.mapreduce">AbstractGeoWaveJobRunner</a></code></dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code>org.apache.commons.cli.ParseException</code></dd></dl>
 </li>
 </ul>
 </li>
@@ -446,7 +454,7 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/analytic/mapred
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li><a href="#fields_inherited_from_class_mil.nga.giat.geowave.datastore.accumulo.mapreduce.GeoWaveJobRunner">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#fields_inherited_from_class_mil.nga.giat.geowave.mapreduce.AbstractGeoWaveJobRunner">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method_summary">Method</a></li>
 </ul>

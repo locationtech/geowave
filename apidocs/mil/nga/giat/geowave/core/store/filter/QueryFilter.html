@@ -35,8 +35,8 @@
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/MultiIndexDedupeFilter.html" title="class in mil.nga.giat.geowave.core.store.filter"><span class="strong">Prev Class</span></a></li>
-<li>Next Class</li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/PrefixIdQueryFilter.html" title="class in mil.nga.giat.geowave.core.store.filter"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/RowIdQueryFilter.html" title="class in mil.nga.giat.geowave.core.store.filter"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../../index.html?mil/nga/giat/geowave/core/store/filter/QueryFilter.html" target="_top">Frames</a></li>
@@ -91,7 +91,7 @@
 </dl>
 <dl>
 <dt>All Known Implementing Classes:</dt>
-<dd><a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/BasicQueryFilter.html" title="class in mil.nga.giat.geowave.core.store.filter">BasicQueryFilter</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/DedupeFilter.html" title="class in mil.nga.giat.geowave.core.store.filter">DedupeFilter</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/DistributableFilterList.html" title="class in mil.nga.giat.geowave.core.store.filter">DistributableFilterList</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/FilterList.html" title="class in mil.nga.giat.geowave.core.store.filter">FilterList</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/MultiIndexDedupeFilter.html" title="class in mil.nga.giat.geowave.core.store.filter">MultiIndexDedupeFilter</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/geotime/store/filter/SpatialQueryFilter.html" title="class in mil.nga.giat.geowave.core.geotime.store.filter">SpatialQueryFilter</a>, <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/VisibilityQueryFilter.html" title="class in mil.nga.giat.geowave.adapter.vector">VisibilityQueryFilter</a></dd>
+<dd><a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/AdapterIdQueryFilter.html" title="class in mil.nga.giat.geowave.core.store.filter">AdapterIdQueryFilter</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/BasicQueryFilter.html" title="class in mil.nga.giat.geowave.core.store.filter">BasicQueryFilter</a>, <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/query/cql/CQLQueryFilter.html" title="class in mil.nga.giat.geowave.adapter.vector.query.cql">CQLQueryFilter</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/DataIdQueryFilter.html" title="class in mil.nga.giat.geowave.core.store.filter">DataIdQueryFilter</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/temporal/DateRangeFilter.html" title="class in mil.nga.giat.geowave.core.store.index.temporal">DateRangeFilter</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/DedupeFilter.html" title="class in mil.nga.giat.geowave.core.store.filter">DedupeFilter</a>, <a href="../../../../../../../mil/nga/giat/geowave/analytic/clustering/DistortionGroupManagement.BatchIdFilter.html" title="class in mil.nga.giat.geowave.analytic.clustering">DistortionGroupManagement.BatchIdFilter</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/DistributableFilterList.html" title="class in mil.nga.giat.geowave.core.store.filter">DistributableFilterList</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/FilterList.html" title="class in mil.nga.giat.geowave.core.store.filter">FilterList</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/text/LikeFilter.html" title="class in mil.nga.giat.geowave.core.store.index.text">LikeFilter</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/numeric/NumberRangeFilter.html" title="class in mil.nga.giat.geowave.core.store.index.numeric">NumberRangeFilter</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/PrefixIdQueryFilter.html" title="class in mil.nga.giat.geowave.core.store.filter">PrefixIdQueryFilter</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/RowIdQueryFilter.html" title="class in mil.nga.giat.geowave.core.store.filter">RowIdQueryFilter</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/geotime/store/filter/SpatialQueryFilter.html" title="class in mil.nga.giat.geowave.core.geotime.store.filter">SpatialQueryFilter</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/text/TextRangeFilter.html" title="class in mil.nga.giat.geowave.core.store.index.text">TextRangeFilter</a></dd>
 </dl>
 <hr>
 <br>
@@ -120,7 +120,8 @@
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/QueryFilter.html#accept(mil.nga.giat.geowave.core.store.data.IndexedPersistenceEncoding)">accept</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/data/IndexedPersistenceEncoding.html" title="class in mil.nga.giat.geowave.core.store.data">IndexedPersistenceEncoding</a>&nbsp;persistenceEncoding)</code>&nbsp;</td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/QueryFilter.html#accept(mil.nga.giat.geowave.core.store.index.CommonIndexModel,%20mil.nga.giat.geowave.core.store.data.IndexedPersistenceEncoding)">accept</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexModel.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexModel</a>&nbsp;indexModel,
+      <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/IndexedPersistenceEncoding.html" title="class in mil.nga.giat.geowave.core.store.data">IndexedPersistenceEncoding</a>&lt;?&gt;&nbsp;persistenceEncoding)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -137,13 +138,14 @@
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="accept(mil.nga.giat.geowave.core.store.data.IndexedPersistenceEncoding)">
+<a name="accept(mil.nga.giat.geowave.core.store.index.CommonIndexModel, mil.nga.giat.geowave.core.store.data.IndexedPersistenceEncoding)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>accept</h4>
-<pre>boolean&nbsp;accept(<a href="../../../../../../../mil/nga/giat/geowave/core/store/data/IndexedPersistenceEncoding.html" title="class in mil.nga.giat.geowave.core.store.data">IndexedPersistenceEncoding</a>&nbsp;persistenceEncoding)</pre>
+<pre>boolean&nbsp;accept(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexModel.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexModel</a>&nbsp;indexModel,
+             <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/IndexedPersistenceEncoding.html" title="class in mil.nga.giat.geowave.core.store.data">IndexedPersistenceEncoding</a>&lt;?&gt;&nbsp;persistenceEncoding)</pre>
 </li>
 </ul>
 </li>
@@ -172,8 +174,8 @@
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/MultiIndexDedupeFilter.html" title="class in mil.nga.giat.geowave.core.store.filter"><span class="strong">Prev Class</span></a></li>
-<li>Next Class</li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/PrefixIdQueryFilter.html" title="class in mil.nga.giat.geowave.core.store.filter"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/RowIdQueryFilter.html" title="class in mil.nga.giat.geowave.core.store.filter"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../../index.html?mil/nga/giat/geowave/core/store/filter/QueryFilter.html" target="_top">Frames</a></li>

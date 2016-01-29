@@ -36,7 +36,7 @@
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../../mil/nga/giat/geowave/analytic/param/CommonParameters.html" title="class in mil.nga.giat.geowave.analytic.param"><span class="strong">Prev Class</span></a></li>
-<li><a href="../../../../../../mil/nga/giat/geowave/analytic/param/ExtractParameters.html" title="class in mil.nga.giat.geowave.analytic.param"><span class="strong">Next Class</span></a></li>
+<li><a href="../../../../../../mil/nga/giat/geowave/analytic/param/DataStatisticsStoreParameterHelper.html" title="class in mil.nga.giat.geowave.analytic.param"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../index.html?mil/nga/giat/geowave/analytic/param/CommonParameters.Common.html" target="_top">Frames</a></li>
@@ -129,12 +129,6 @@ implements <a href="../../../../../../mil/nga/giat/geowave/analytic/param/Parame
 <th class="colOne" scope="col">Enum Constant and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/param/CommonParameters.Common.html#ACCUMULO_CONNECT_FACTORY">ACCUMULO_CONNECT_FACTORY</a></strong></code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colOne"><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/param/CommonParameters.Common.html#ADAPTER_STORE_FACTORY">ADAPTER_STORE_FACTORY</a></strong></code>&nbsp;</td>
-</tr>
-<tr class="altColor">
 <td class="colOne"><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/param/CommonParameters.Common.html#DIMENSION_EXTRACT_CLASS">DIMENSION_EXTRACT_CLASS</a></strong></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
@@ -142,9 +136,6 @@ implements <a href="../../../../../../mil/nga/giat/geowave/analytic/param/Parame
 </tr>
 <tr class="altColor">
 <td class="colOne"><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/param/CommonParameters.Common.html#INDEX_MODEL_BUILDER_CLASS">INDEX_MODEL_BUILDER_CLASS</a></strong></code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colOne"><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/param/CommonParameters.Common.html#INDEX_STORE_FACTORY">INDEX_STORE_FACTORY</a></strong></code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -162,8 +153,8 @@ implements <a href="../../../../../../mil/nga/giat/geowave/analytic/param/Parame
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/param/CommonParameters.Common.html#getBaseClass()">getBaseClass</a></strong>()</code>&nbsp;</td>
+<td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/analytic/param/ParameterHelper.html" title="interface in mil.nga.giat.geowave.analytic.param">ParameterHelper</a>&lt;?&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/param/CommonParameters.Common.html#getHelper()">getHelper</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Enum.html?is-external=true" title="class or interface in java.lang">Enum</a>&lt;?&gt;</code></td>
@@ -218,33 +209,6 @@ the order they are declared.</div>
 <li class="blockList">
 <h4>DIMENSION_EXTRACT_CLASS</h4>
 <pre>public static final&nbsp;<a href="../../../../../../mil/nga/giat/geowave/analytic/param/CommonParameters.Common.html" title="enum in mil.nga.giat.geowave.analytic.param">CommonParameters.Common</a> DIMENSION_EXTRACT_CLASS</pre>
-</li>
-</ul>
-<a name="ACCUMULO_CONNECT_FACTORY">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>ACCUMULO_CONNECT_FACTORY</h4>
-<pre>public static final&nbsp;<a href="../../../../../../mil/nga/giat/geowave/analytic/param/CommonParameters.Common.html" title="enum in mil.nga.giat.geowave.analytic.param">CommonParameters.Common</a> ACCUMULO_CONNECT_FACTORY</pre>
-</li>
-</ul>
-<a name="ADAPTER_STORE_FACTORY">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>ADAPTER_STORE_FACTORY</h4>
-<pre>public static final&nbsp;<a href="../../../../../../mil/nga/giat/geowave/analytic/param/CommonParameters.Common.html" title="enum in mil.nga.giat.geowave.analytic.param">CommonParameters.Common</a> ADAPTER_STORE_FACTORY</pre>
-</li>
-</ul>
-<a name="INDEX_STORE_FACTORY">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>INDEX_STORE_FACTORY</h4>
-<pre>public static final&nbsp;<a href="../../../../../../mil/nga/giat/geowave/analytic/param/CommonParameters.Common.html" title="enum in mil.nga.giat.geowave.analytic.param">CommonParameters.Common</a> INDEX_STORE_FACTORY</pre>
 </li>
 </ul>
 <a name="DISTANCE_FUNCTION_CLASS">
@@ -308,29 +272,29 @@ not permitted.)</div>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/NullPointerException.html?is-external=true" title="class or interface in java.lang">NullPointerException</a></code> - if the argument is null</dd></dl>
 </li>
 </ul>
-<a name="getBaseClass()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getBaseClass</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;getBaseClass()</pre>
-<dl>
-<dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../mil/nga/giat/geowave/analytic/param/ParameterEnum.html#getBaseClass()">getBaseClass</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/analytic/param/ParameterEnum.html" title="interface in mil.nga.giat.geowave.analytic.param">ParameterEnum</a></code></dd>
-</dl>
-</li>
-</ul>
 <a name="self()">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>self</h4>
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Enum.html?is-external=true" title="class or interface in java.lang">Enum</a>&lt;?&gt;&nbsp;self()</pre>
 <dl>
 <dt><strong>Specified by:</strong></dt>
 <dd><code><a href="../../../../../../mil/nga/giat/geowave/analytic/param/ParameterEnum.html#self()">self</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/analytic/param/ParameterEnum.html" title="interface in mil.nga.giat.geowave.analytic.param">ParameterEnum</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="getHelper()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>getHelper</h4>
+<pre>public&nbsp;<a href="../../../../../../mil/nga/giat/geowave/analytic/param/ParameterHelper.html" title="interface in mil.nga.giat.geowave.analytic.param">ParameterHelper</a>&lt;?&gt;&nbsp;getHelper()</pre>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../../mil/nga/giat/geowave/analytic/param/ParameterEnum.html#getHelper()">getHelper</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/analytic/param/ParameterEnum.html" title="interface in mil.nga.giat.geowave.analytic.param">ParameterEnum</a></code></dd>
 </dl>
 </li>
 </ul>
@@ -361,7 +325,7 @@ not permitted.)</div>
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../../mil/nga/giat/geowave/analytic/param/CommonParameters.html" title="class in mil.nga.giat.geowave.analytic.param"><span class="strong">Prev Class</span></a></li>
-<li><a href="../../../../../../mil/nga/giat/geowave/analytic/param/ExtractParameters.html" title="class in mil.nga.giat.geowave.analytic.param"><span class="strong">Next Class</span></a></li>
+<li><a href="../../../../../../mil/nga/giat/geowave/analytic/param/DataStatisticsStoreParameterHelper.html" title="class in mil.nga.giat.geowave.analytic.param"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../index.html?mil/nga/giat/geowave/analytic/param/CommonParameters.Common.html" target="_top">Frames</a></li>

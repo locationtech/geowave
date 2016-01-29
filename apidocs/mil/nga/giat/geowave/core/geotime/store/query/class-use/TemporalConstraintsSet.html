@@ -110,6 +110,10 @@
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../../mil/nga/giat/geowave/core/geotime/store/query/TemporalConstraintsSet.html" title="class in mil.nga.giat.geowave.core.geotime.store.query">TemporalConstraintsSet</a></code></td>
+<td class="colLast"><span class="strong">ExtractTimeFilterVisitor.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/ExtractTimeFilterVisitor.html#getConstraints(org.opengis.filter.Filter)">getConstraints</a></strong>(org.opengis.filter.Filter&nbsp;filter)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../../../../mil/nga/giat/geowave/core/geotime/store/query/TemporalConstraintsSet.html" title="class in mil.nga.giat.geowave.core.geotime.store.query">TemporalConstraintsSet</a></code></td>
 <td class="colLast"><span class="strong">ExtractTimeFilterVisitor.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/ExtractTimeFilterVisitor.html#getConstraints(org.geotools.data.Query)">getConstraints</a></strong>(org.geotools.data.Query&nbsp;query)</code>&nbsp;</td>
 </tr>
 </tbody>
@@ -164,10 +168,10 @@
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></td>
-<td class="colLast"><span class="strong">GeoWaveFeatureReader.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureReader.html#renderData(com.vividsolutions.jts.geom.Geometry,%20mil.nga.giat.geowave.core.geotime.store.query.TemporalConstraintsSet,%20org.opengis.filter.Filter,%20mil.nga.giat.geowave.adapter.vector.wms.DistributableRenderer)">renderData</a></strong>(com.vividsolutions.jts.geom.Geometry&nbsp;jtsBounds,
+<td class="colLast"><span class="strong">GeoWaveFeatureReader.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureReader.html#renderData(com.vividsolutions.jts.geom.Geometry,%20mil.nga.giat.geowave.core.geotime.store.query.TemporalConstraintsSet,%20org.opengis.filter.Filter,%20mil.nga.giat.geowave.adapter.vector.render.DistributableRenderer)">renderData</a></strong>(com.vividsolutions.jts.geom.Geometry&nbsp;jtsBounds,
           <a href="../../../../../../../../../mil/nga/giat/geowave/core/geotime/store/query/TemporalConstraintsSet.html" title="class in mil.nga.giat.geowave.core.geotime.store.query">TemporalConstraintsSet</a>&nbsp;timeBounds,
           org.opengis.filter.Filter&nbsp;filter,
-          <a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/wms/DistributableRenderer.html" title="interface in mil.nga.giat.geowave.adapter.vector.wms">DistributableRenderer</a>&nbsp;renderer)</code>&nbsp;</td>
+          <a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/render/DistributableRenderer.html" title="interface in mil.nga.giat.geowave.adapter.vector.render">DistributableRenderer</a>&nbsp;renderer)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -188,8 +192,7 @@
 <td class="colLast"><span class="strong">QueryIndexHelper.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/util/QueryIndexHelper.html#clipIndexedTemporalConstraints(java.util.Map,%20mil.nga.giat.geowave.adapter.vector.utils.TimeDescriptors,%20mil.nga.giat.geowave.core.geotime.store.query.TemporalConstraintsSet)">clipIndexedTemporalConstraints</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>,<a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&gt;&nbsp;statsMap,
                               <a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/utils/TimeDescriptors.html" title="class in mil.nga.giat.geowave.adapter.vector.utils">TimeDescriptors</a>&nbsp;timeDescriptors,
                               <a href="../../../../../../../../../mil/nga/giat/geowave/core/geotime/store/query/TemporalConstraintsSet.html" title="class in mil.nga.giat.geowave.core.geotime.store.query">TemporalConstraintsSet</a>&nbsp;constraintsSet)</code>
-<div class="block">Clip the provided constraint with associated index constraints, if
- available.</div>
+<div class="block">Clip the provided constraints using the statistics, if available.</div>
 </td>
 </tr>
 </tbody>
@@ -206,8 +209,7 @@
 <td class="colLast"><span class="strong">QueryIndexHelper.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/util/QueryIndexHelper.html#clipIndexedTemporalConstraints(java.util.Map,%20mil.nga.giat.geowave.adapter.vector.utils.TimeDescriptors,%20mil.nga.giat.geowave.core.geotime.store.query.TemporalConstraintsSet)">clipIndexedTemporalConstraints</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>,<a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&gt;&nbsp;statsMap,
                               <a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/utils/TimeDescriptors.html" title="class in mil.nga.giat.geowave.adapter.vector.utils">TimeDescriptors</a>&nbsp;timeDescriptors,
                               <a href="../../../../../../../../../mil/nga/giat/geowave/core/geotime/store/query/TemporalConstraintsSet.html" title="class in mil.nga.giat.geowave.core.geotime.store.query">TemporalConstraintsSet</a>&nbsp;constraintsSet)</code>
-<div class="block">Clip the provided constraint with associated index constraints, if
- available.</div>
+<div class="block">Clip the provided constraints using the statistics, if available.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -221,28 +223,36 @@
 </td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../../../../../mil/nga/giat/geowave/core/geotime/store/query/TemporalConstraints.html" title="class in mil.nga.giat.geowave.core.geotime.store.query">TemporalConstraints</a></code></td>
+<td class="colLast"><span class="strong">QueryIndexHelper.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/util/QueryIndexHelper.html#composeRangeTemporalConstraints(mil.nga.giat.geowave.adapter.vector.utils.TimeDescriptors,%20mil.nga.giat.geowave.core.geotime.store.query.TemporalConstraintsSet)">composeRangeTemporalConstraints</a></strong>(<a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/utils/TimeDescriptors.html" title="class in mil.nga.giat.geowave.adapter.vector.utils">TimeDescriptors</a>&nbsp;timeDescriptors,
+                               <a href="../../../../../../../../../mil/nga/giat/geowave/core/geotime/store/query/TemporalConstraintsSet.html" title="class in mil.nga.giat.geowave.core.geotime.store.query">TemporalConstraintsSet</a>&nbsp;constraintsSet)</code>
+<div class="block">Compose temporal constraints given the constraint set and the descriptors
+ for the index.</div>
+</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.Constraints.html" title="class in mil.nga.giat.geowave.core.store.query">BasicQuery.Constraints</a></code></td>
 <td class="colLast"><span class="strong">QueryIndexHelper.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/util/QueryIndexHelper.html#composeTimeBoundedConstraints(org.opengis.feature.simple.SimpleFeatureType,%20mil.nga.giat.geowave.adapter.vector.utils.TimeDescriptors,%20java.util.Map,%20mil.nga.giat.geowave.core.geotime.store.query.TemporalConstraintsSet)">composeTimeBoundedConstraints</a></strong>(org.opengis.feature.simple.SimpleFeatureType&nbsp;featureType,
                              <a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/utils/TimeDescriptors.html" title="class in mil.nga.giat.geowave.adapter.vector.utils">TimeDescriptors</a>&nbsp;timeDescriptors,
                              <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>,<a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&gt;&nbsp;statsMap,
                              <a href="../../../../../../../../../mil/nga/giat/geowave/core/geotime/store/query/TemporalConstraintsSet.html" title="class in mil.nga.giat.geowave.core.geotime.store.query">TemporalConstraintsSet</a>&nbsp;timeBoundsSet)</code>
-<div class="block">If composed constraints matched statistics constraints or are null, then
- return empty constraint set to indicate a full table scan.</div>
+<div class="block">If composed constraints matched statistics constraints, are empty or
+ null, then return empty constraint set.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.Constraints.html" title="class in mil.nga.giat.geowave.core.store.query">BasicQuery.Constraints</a></code></td>
 <td class="colLast"><span class="strong">QueryIndexHelper.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/util/QueryIndexHelper.html#composeTimeConstraints(org.opengis.feature.simple.SimpleFeatureType,%20mil.nga.giat.geowave.adapter.vector.utils.TimeDescriptors,%20java.util.Map,%20mil.nga.giat.geowave.core.geotime.store.query.TemporalConstraintsSet)">composeTimeConstraints</a></strong>(org.opengis.feature.simple.SimpleFeatureType&nbsp;featureType,
                       <a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/utils/TimeDescriptors.html" title="class in mil.nga.giat.geowave.adapter.vector.utils">TimeDescriptors</a>&nbsp;timeDescriptors,
                       <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>,<a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&gt;&nbsp;statsMap,
                       <a href="../../../../../../../../../mil/nga/giat/geowave/core/geotime/store/query/TemporalConstraintsSet.html" title="class in mil.nga.giat.geowave.core.geotime.store.query">TemporalConstraintsSet</a>&nbsp;timeBoundsSet)</code>
-<div class="block">* Compose a time constraints.</div>
+<div class="block">Compose a time constraints.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../../../../../mil/nga/giat/geowave/core/geotime/store/query/TemporalConstraints.html" title="class in mil.nga.giat.geowave.core.geotime.store.query">TemporalConstraints</a></code></td>
-<td class="colLast"><span class="strong">QueryIndexHelper.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/util/QueryIndexHelper.html#getTemporalConstraintsForIndex(mil.nga.giat.geowave.adapter.vector.utils.TimeDescriptors,%20mil.nga.giat.geowave.core.geotime.store.query.TemporalConstraintsSet)">getTemporalConstraintsForIndex</a></strong>(<a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/utils/TimeDescriptors.html" title="class in mil.nga.giat.geowave.adapter.vector.utils">TimeDescriptors</a>&nbsp;timeDescriptors,
-                              <a href="../../../../../../../../../mil/nga/giat/geowave/core/geotime/store/query/TemporalConstraintsSet.html" title="class in mil.nga.giat.geowave.core.geotime.store.query">TemporalConstraintsSet</a>&nbsp;timeBoundsSet)</code>&nbsp;</td>
+<td class="colLast"><span class="strong">QueryIndexHelper.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/util/QueryIndexHelper.html#getTemporalConstraintsForDescriptors(mil.nga.giat.geowave.adapter.vector.utils.TimeDescriptors,%20mil.nga.giat.geowave.core.geotime.store.query.TemporalConstraintsSet)">getTemporalConstraintsForDescriptors</a></strong>(<a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/utils/TimeDescriptors.html" title="class in mil.nga.giat.geowave.adapter.vector.utils">TimeDescriptors</a>&nbsp;timeDescriptors,
+                                    <a href="../../../../../../../../../mil/nga/giat/geowave/core/geotime/store/query/TemporalConstraintsSet.html" title="class in mil.nga.giat.geowave.core.geotime.store.query">TemporalConstraintsSet</a>&nbsp;timeBoundsSet)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>

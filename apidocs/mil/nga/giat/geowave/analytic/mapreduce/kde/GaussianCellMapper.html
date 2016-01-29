@@ -86,7 +86,7 @@
 <li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
 <li>
 <ul class="inheritance">
-<li>org.apache.hadoop.mapreduce.Mapper&lt;<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce.input">GeoWaveInputKey</a>,org.opengis.feature.simple.SimpleFeature,org.apache.hadoop.io.LongWritable,org.apache.hadoop.io.DoubleWritable&gt;</li>
+<li>org.apache.hadoop.mapreduce.Mapper&lt;<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a>,org.opengis.feature.simple.SimpleFeature,org.apache.hadoop.io.LongWritable,org.apache.hadoop.io.DoubleWritable&gt;</li>
 <li>
 <ul class="inheritance">
 <li>mil.nga.giat.geowave.analytic.mapreduce.kde.GaussianCellMapper</li>
@@ -105,7 +105,7 @@
 <hr>
 <br>
 <pre>public class <span class="strong">GaussianCellMapper</span>
-extends org.apache.hadoop.mapreduce.Mapper&lt;<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce.input">GeoWaveInputKey</a>,org.opengis.feature.simple.SimpleFeature,org.apache.hadoop.io.LongWritable,org.apache.hadoop.io.DoubleWritable&gt;</pre>
+extends org.apache.hadoop.mapreduce.Mapper&lt;<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a>,org.opengis.feature.simple.SimpleFeature,org.apache.hadoop.io.LongWritable,org.apache.hadoop.io.DoubleWritable&gt;</pre>
 </li>
 </ul>
 </div>
@@ -214,7 +214,7 @@ extends org.apache.hadoop.mapreduce.Mapper&lt;<a href="../../../../../../../mil/
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/kde/GaussianCellMapper.html#map(mil.nga.giat.geowave.datastore.accumulo.mapreduce.input.GeoWaveInputKey,%20org.opengis.feature.simple.SimpleFeature,%20org.apache.hadoop.mapreduce.Mapper.Context)">map</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce.input">GeoWaveInputKey</a>&nbsp;key,
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/kde/GaussianCellMapper.html#map(mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey,%20org.opengis.feature.simple.SimpleFeature,%20org.apache.hadoop.mapreduce.Mapper.Context)">map</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a>&nbsp;key,
    org.opengis.feature.simple.SimpleFeature&nbsp;value,
    org.apache.hadoop.mapreduce.Mapper.Context&nbsp;context)</code>&nbsp;</td>
 </tr>
@@ -349,7 +349,7 @@ extends org.apache.hadoop.mapreduce.Mapper&lt;<a href="../../../../../../../mil/
                      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
 <dl>
 <dt><strong>Overrides:</strong></dt>
-<dd><code>setup</code>&nbsp;in class&nbsp;<code>org.apache.hadoop.mapreduce.Mapper&lt;<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce.input">GeoWaveInputKey</a>,org.opengis.feature.simple.SimpleFeature,org.apache.hadoop.io.LongWritable,org.apache.hadoop.io.DoubleWritable&gt;</code></dd>
+<dd><code>setup</code>&nbsp;in class&nbsp;<code>org.apache.hadoop.mapreduce.Mapper&lt;<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a>,org.opengis.feature.simple.SimpleFeature,org.apache.hadoop.io.LongWritable,org.apache.hadoop.io.DoubleWritable&gt;</code></dd>
 <dt><span class="strong">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></code></dd></dl>
@@ -367,20 +367,20 @@ extends org.apache.hadoop.mapreduce.Mapper&lt;<a href="../../../../../../../mil/
                       int&nbsp;level)</pre>
 </li>
 </ul>
-<a name="map(mil.nga.giat.geowave.datastore.accumulo.mapreduce.input.GeoWaveInputKey, org.opengis.feature.simple.SimpleFeature, org.apache.hadoop.mapreduce.Mapper.Context)">
+<a name="map(mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey, org.opengis.feature.simple.SimpleFeature, org.apache.hadoop.mapreduce.Mapper.Context)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>map</h4>
-<pre>protected&nbsp;void&nbsp;map(<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce.input">GeoWaveInputKey</a>&nbsp;key,
+<pre>protected&nbsp;void&nbsp;map(<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a>&nbsp;key,
        org.opengis.feature.simple.SimpleFeature&nbsp;value,
        org.apache.hadoop.mapreduce.Mapper.Context&nbsp;context)
             throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a>,
                    <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
 <dl>
 <dt><strong>Overrides:</strong></dt>
-<dd><code>map</code>&nbsp;in class&nbsp;<code>org.apache.hadoop.mapreduce.Mapper&lt;<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce.input">GeoWaveInputKey</a>,org.opengis.feature.simple.SimpleFeature,org.apache.hadoop.io.LongWritable,org.apache.hadoop.io.DoubleWritable&gt;</code></dd>
+<dd><code>map</code>&nbsp;in class&nbsp;<code>org.apache.hadoop.mapreduce.Mapper&lt;<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a>,org.opengis.feature.simple.SimpleFeature,org.apache.hadoop.io.LongWritable,org.apache.hadoop.io.DoubleWritable&gt;</code></dd>
 <dt><span class="strong">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></code></dd></dl>

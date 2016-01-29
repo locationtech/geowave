@@ -191,12 +191,13 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/RangeDecomposition.html" title="class in mil.nga.giat.geowave.core.index.sfc">RangeDecomposition</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/hilbert/UnboundedHilbertSFCOperations.html#decomposeRange(mil.nga.giat.geowave.core.index.sfc.data.NumericData[],%20com.google.uzaygezen.core.CompactHilbertCurve,%20mil.nga.giat.geowave.core.index.sfc.SFCDimensionDefinition[],%20int,%20int,%20boolean)">decomposeRange</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/NumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">NumericData</a>[]&nbsp;rangePerDimension,
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/hilbert/UnboundedHilbertSFCOperations.html#decomposeRange(mil.nga.giat.geowave.core.index.sfc.data.NumericData[],%20com.google.uzaygezen.core.CompactHilbertCurve,%20mil.nga.giat.geowave.core.index.sfc.SFCDimensionDefinition[],%20int,%20int,%20boolean,%20boolean)">decomposeRange</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/NumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">NumericData</a>[]&nbsp;rangePerDimension,
               com.google.uzaygezen.core.CompactHilbertCurve&nbsp;compactHilbertCurve,
               <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/SFCDimensionDefinition.html" title="class in mil.nga.giat.geowave.core.index.sfc">SFCDimensionDefinition</a>[]&nbsp;dimensionDefinitions,
               int&nbsp;totalPrecision,
               int&nbsp;maxFilteredIndexedRanges,
-              boolean&nbsp;removeVacuum)</code>
+              boolean&nbsp;removeVacuum,
+              boolean&nbsp;overInclusiveOnEdge)</code>
 <div class="block">Decompose the raw range per dimension values into an optimal set of
  compact Hilbert SFC ranges</div>
 </td>
@@ -392,7 +393,7 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/
          start and exclusive on end for each range</dd></dl>
 </li>
 </ul>
-<a name="decomposeRange(mil.nga.giat.geowave.core.index.sfc.data.NumericData[], com.google.uzaygezen.core.CompactHilbertCurve, mil.nga.giat.geowave.core.index.sfc.SFCDimensionDefinition[], int, int, boolean)">
+<a name="decomposeRange(mil.nga.giat.geowave.core.index.sfc.data.NumericData[], com.google.uzaygezen.core.CompactHilbertCurve, mil.nga.giat.geowave.core.index.sfc.SFCDimensionDefinition[], int, int, boolean, boolean)">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -403,13 +404,14 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/
                                 <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/SFCDimensionDefinition.html" title="class in mil.nga.giat.geowave.core.index.sfc">SFCDimensionDefinition</a>[]&nbsp;dimensionDefinitions,
                                 int&nbsp;totalPrecision,
                                 int&nbsp;maxFilteredIndexedRanges,
-                                boolean&nbsp;removeVacuum)</pre>
-<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/hilbert/HilbertSFCOperations.html#decomposeRange(mil.nga.giat.geowave.core.index.sfc.data.NumericData[],%20com.google.uzaygezen.core.CompactHilbertCurve,%20mil.nga.giat.geowave.core.index.sfc.SFCDimensionDefinition[],%20int,%20int,%20boolean)">HilbertSFCOperations</a></code></strong></div>
+                                boolean&nbsp;removeVacuum,
+                                boolean&nbsp;overInclusiveOnEdge)</pre>
+<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/hilbert/HilbertSFCOperations.html#decomposeRange(mil.nga.giat.geowave.core.index.sfc.data.NumericData[],%20com.google.uzaygezen.core.CompactHilbertCurve,%20mil.nga.giat.geowave.core.index.sfc.SFCDimensionDefinition[],%20int,%20int,%20boolean,%20boolean)">HilbertSFCOperations</a></code></strong></div>
 <div class="block">Decompose the raw range per dimension values into an optimal set of
  compact Hilbert SFC ranges</div>
 <dl>
 <dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/hilbert/HilbertSFCOperations.html#decomposeRange(mil.nga.giat.geowave.core.index.sfc.data.NumericData[],%20com.google.uzaygezen.core.CompactHilbertCurve,%20mil.nga.giat.geowave.core.index.sfc.SFCDimensionDefinition[],%20int,%20int,%20boolean)">decomposeRange</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/hilbert/HilbertSFCOperations.html" title="interface in mil.nga.giat.geowave.core.index.sfc.hilbert">HilbertSFCOperations</a></code></dd>
+<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/hilbert/HilbertSFCOperations.html#decomposeRange(mil.nga.giat.geowave.core.index.sfc.data.NumericData[],%20com.google.uzaygezen.core.CompactHilbertCurve,%20mil.nga.giat.geowave.core.index.sfc.SFCDimensionDefinition[],%20int,%20int,%20boolean,%20boolean)">decomposeRange</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/hilbert/HilbertSFCOperations.html" title="interface in mil.nga.giat.geowave.core.index.sfc.hilbert">HilbertSFCOperations</a></code></dd>
 <dt><span class="strong">Parameters:</span></dt><dd><code>rangePerDimension</code> - the raw range per dimension</dd><dd><code>compactHilbertCurve</code> - the compact Hilbert curve to use for the conversion</dd><dd><code>dimensionDefinitions</code> - a set of dimension definitions to use to normalize the raw
             values</dd><dd><code>totalPrecision</code> - the total precision of the dimension definitions, for
             convenience</dd><dd><code>maxFilteredIndexedRanges</code> - the maximum number of ranges, if < 0 it will be unlimited</dd><dd><code>removeVacuum</code> - a flag to pass to the compact hilbert curve range

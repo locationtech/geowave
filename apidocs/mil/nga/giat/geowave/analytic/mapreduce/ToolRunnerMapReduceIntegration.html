@@ -138,16 +138,20 @@ implements <a href="../../../../../../mil/nga/giat/geowave/analytic/mapreduce/Ma
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>org.apache.hadoop.conf.Configuration</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/mapreduce/ToolRunnerMapReduceIntegration.html#getConfiguration(mil.nga.giat.geowave.analytic.PropertyManagement)">getConfiguration</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>org.apache.hadoop.mapreduce.Job</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/mapreduce/ToolRunnerMapReduceIntegration.html#getJob(org.apache.hadoop.util.Tool)">getJob</a></strong>(org.apache.hadoop.util.Tool&nbsp;tool)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/mapreduce/ToolRunnerMapReduceIntegration.html#submit(org.apache.hadoop.conf.Configuration,%20mil.nga.giat.geowave.analytic.PropertyManagement,%20mil.nga.giat.geowave.analytic.mapreduce.GeoWaveAnalyticJobRunner)">submit</a></strong>(org.apache.hadoop.conf.Configuration&nbsp;configuration,
       <a href="../../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties,
       <a href="../../../../../../mil/nga/giat/geowave/analytic/mapreduce/GeoWaveAnalyticJobRunner.html" title="class in mil.nga.giat.geowave.analytic.mapreduce">GeoWaveAnalyticJobRunner</a>&nbsp;tool)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>org.apache.hadoop.mapreduce.Counters</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/mapreduce/ToolRunnerMapReduceIntegration.html#waitForCompletion(org.apache.hadoop.mapreduce.Job)">waitForCompletion</a></strong>(org.apache.hadoop.mapreduce.Job&nbsp;job)</code>&nbsp;</td>
 </tr>
@@ -225,7 +229,7 @@ implements <a href="../../../../../../mil/nga/giat/geowave/analytic/mapreduce/Ma
 <a name="waitForCompletion(org.apache.hadoop.mapreduce.Job)">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>waitForCompletion</h4>
 <pre>public&nbsp;org.apache.hadoop.mapreduce.Counters&nbsp;waitForCompletion(org.apache.hadoop.mapreduce.Job&nbsp;job)
@@ -239,6 +243,21 @@ implements <a href="../../../../../../mil/nga/giat/geowave/analytic/mapreduce/Ma
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/ClassNotFoundException.html?is-external=true" title="class or interface in java.lang">ClassNotFoundException</a></code></dd>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></code></dd>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></code></dd></dl>
+</li>
+</ul>
+<a name="getConfiguration(mil.nga.giat.geowave.analytic.PropertyManagement)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>getConfiguration</h4>
+<pre>public&nbsp;org.apache.hadoop.conf.Configuration&nbsp;getConfiguration(<a href="../../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties)
+                                                      throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../../mil/nga/giat/geowave/analytic/mapreduce/MapReduceIntegration.html#getConfiguration(mil.nga.giat.geowave.analytic.PropertyManagement)">getConfiguration</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/analytic/mapreduce/MapReduceIntegration.html" title="interface in mil.nga.giat.geowave.analytic.mapreduce">MapReduceIntegration</a></code></dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd></dl>
 </li>
 </ul>
 </li>

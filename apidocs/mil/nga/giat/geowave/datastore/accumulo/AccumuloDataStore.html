@@ -35,8 +35,8 @@
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloCommandLineOptions.html" title="class in mil.nga.giat.geowave.datastore.accumulo"><span class="strong">Prev Class</span></a></li>
-<li><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloIndexWriter.html" title="class in mil.nga.giat.geowave.datastore.accumulo"><span class="strong">Next Class</span></a></li>
+<li><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AbstractAccumuloStoreFactory.html" title="class in mil.nga.giat.geowave.datastore.accumulo"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloDataStore.CastIterator.html" title="class in mil.nga.giat.geowave.datastore.accumulo"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../index.html?mil/nga/giat/geowave/datastore/accumulo/AccumuloDataStore.html" target="_top">Frames</a></li>
@@ -60,7 +60,7 @@
 <div>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
-<li>Nested&nbsp;|&nbsp;</li>
+<li><a href="#nested_class_summary">Nested</a>&nbsp;|&nbsp;</li>
 <li><a href="#field_summary">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method_summary">Method</a></li>
@@ -95,17 +95,13 @@
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a></dd>
-</dl>
-<dl>
-<dt>Direct Known Subclasses:</dt>
-<dd><a href="../../../../../../mil/nga/giat/geowave/adapter/raster/RasterDataStore.html" title="class in mil.nga.giat.geowave.adapter.raster">RasterDataStore</a>, <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/VectorDataStore.html" title="class in mil.nga.giat.geowave.adapter.vector">VectorDataStore</a></dd>
+<dd><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a>, <a href="../../../../../../mil/nga/giat/geowave/mapreduce/MapReduceDataStore.html" title="interface in mil.nga.giat.geowave.mapreduce">MapReduceDataStore</a></dd>
 </dl>
 <hr>
 <br>
 <pre>public class <span class="strong">AccumuloDataStore</span>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
-implements <a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a></pre>
+implements <a href="../../../../../../mil/nga/giat/geowave/mapreduce/MapReduceDataStore.html" title="interface in mil.nga.giat.geowave.mapreduce">MapReduceDataStore</a></pre>
 <div class="block">This is the Accumulo implementation of the data store. It requires an
  AccumuloOperations instance that describes how to connect (read/write data)
  to Apache Accumulo. It can create default implementations of the IndexStore
@@ -121,6 +117,25 @@ implements <a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.
 <div class="summary">
 <ul class="blockList">
 <li class="blockList">
+<!-- ======== NESTED CLASS SUMMARY ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="nested_class_summary">
+<!--   -->
+</a>
+<h3>Nested Class Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Nested Class Summary table, listing nested classes, and an explanation">
+<caption><span>Nested Classes</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Class and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected static class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloDataStore.CastIterator.html" title="class in mil.nga.giat.geowave.datastore.accumulo">AccumuloDataStore.CastIterator</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloDataStore.CastIterator.html" title="type parameter in AccumuloDataStore.CastIterator">T</a>&gt;</strong></code>&nbsp;</td>
+</tr>
+</table>
+</li>
+</ul>
 <!-- =========== FIELD SUMMARY =========== -->
 <ul class="blockList">
 <li class="blockList"><a name="field_summary">
@@ -150,6 +165,10 @@ implements <a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloDataStore.html#indexStore">indexStore</a></strong></code>&nbsp;</td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>protected <a href="../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloDataStore.html#secondaryIndexDataStore">secondaryIndexDataStore</a></strong></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>protected <a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatisticsStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatisticsStore</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloDataStore.html#statisticsStore">statisticsStore</a></strong></code>&nbsp;</td>
 </tr>
@@ -175,15 +194,17 @@ implements <a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.
                  <a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOptions.html" title="class in mil.nga.giat.geowave.datastore.accumulo">AccumuloOptions</a>&nbsp;accumuloOptions)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloDataStore.html#AccumuloDataStore(mil.nga.giat.geowave.core.store.index.IndexStore,%20mil.nga.giat.geowave.core.store.adapter.AdapterStore,%20mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore,%20mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations)">AccumuloDataStore</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/core/store/index/IndexStore.html" title="interface in mil.nga.giat.geowave.core.store.index">IndexStore</a>&nbsp;indexStore,
+<td class="colOne"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloDataStore.html#AccumuloDataStore(mil.nga.giat.geowave.core.store.index.IndexStore,%20mil.nga.giat.geowave.core.store.adapter.AdapterStore,%20mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore,%20mil.nga.giat.geowave.core.store.index.SecondaryIndexDataStore,%20mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations)">AccumuloDataStore</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/core/store/index/IndexStore.html" title="interface in mil.nga.giat.geowave.core.store.index">IndexStore</a>&nbsp;indexStore,
                  <a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;adapterStore,
                  <a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatisticsStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatisticsStore</a>&nbsp;statisticsStore,
+                 <a href="../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a>&nbsp;secondaryIndexDataStore,
                  <a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOperations.html" title="interface in mil.nga.giat.geowave.datastore.accumulo">AccumuloOperations</a>&nbsp;accumuloOperations)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloDataStore.html#AccumuloDataStore(mil.nga.giat.geowave.core.store.index.IndexStore,%20mil.nga.giat.geowave.core.store.adapter.AdapterStore,%20mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore,%20mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations,%20mil.nga.giat.geowave.datastore.accumulo.AccumuloOptions)">AccumuloDataStore</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/core/store/index/IndexStore.html" title="interface in mil.nga.giat.geowave.core.store.index">IndexStore</a>&nbsp;indexStore,
+<td class="colOne"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloDataStore.html#AccumuloDataStore(mil.nga.giat.geowave.core.store.index.IndexStore,%20mil.nga.giat.geowave.core.store.adapter.AdapterStore,%20mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore,%20mil.nga.giat.geowave.core.store.index.SecondaryIndexDataStore,%20mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations,%20mil.nga.giat.geowave.datastore.accumulo.AccumuloOptions)">AccumuloDataStore</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/core/store/index/IndexStore.html" title="interface in mil.nga.giat.geowave.core.store.index">IndexStore</a>&nbsp;indexStore,
                  <a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;adapterStore,
                  <a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatisticsStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatisticsStore</a>&nbsp;statisticsStore,
+                 <a href="../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a>&nbsp;secondaryIndexDataStore,
                  <a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOperations.html" title="interface in mil.nga.giat.geowave.datastore.accumulo">AccumuloOperations</a>&nbsp;accumuloOperations,
                  <a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOptions.html" title="class in mil.nga.giat.geowave.datastore.accumulo">AccumuloOptions</a>&nbsp;accumuloOptions)</code>&nbsp;</td>
 </tr>
@@ -204,238 +225,71 @@ implements <a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloDataStore.html#createIndexWriter(mil.nga.giat.geowave.core.store.index.Index)">createIndexWriter</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index)</code>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloDataStore.html#createIndexWriter(mil.nga.giat.geowave.core.store.index.PrimaryIndex,%20mil.nga.giat.geowave.core.store.data.VisibilityWriter)">createIndexWriter</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
+                 <a href="../../../../../../mil/nga/giat/geowave/core/store/data/VisibilityWriter.html" title="interface in mil.nga.giat.geowave.core.store.data">VisibilityWriter</a>&lt;T&gt;&nbsp;customFieldVisibilityWriter)</code>
 <div class="block">Returns an index writer to perform batched write operations</div>
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>&lt;T&gt;&nbsp;void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloDataStore.html#deleteEntries(mil.nga.giat.geowave.core.store.adapter.DataAdapter,%20mil.nga.giat.geowave.core.store.index.Index,%20java.lang.String...)">deleteEntries</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;T&gt;&nbsp;adapter,
-             <a href="../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index,
-             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;additionalAuthorizations)</code>&nbsp;</td>
+<td class="colFirst"><code>org.apache.hadoop.mapreduce.RecordReader&lt;<a href="../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a>,?&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloDataStore.html#createRecordReader(mil.nga.giat.geowave.core.store.query.DistributableQuery,%20mil.nga.giat.geowave.core.store.query.QueryOptions,%20mil.nga.giat.geowave.core.store.adapter.AdapterStore,%20mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore,%20mil.nga.giat.geowave.core.store.index.IndexStore,%20boolean,%20org.apache.hadoop.mapreduce.InputSplit)">createRecordReader</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/core/store/query/DistributableQuery.html" title="interface in mil.nga.giat.geowave.core.store.query">DistributableQuery</a>&nbsp;query,
+                  <a href="../../../../../../mil/nga/giat/geowave/core/store/query/QueryOptions.html" title="class in mil.nga.giat.geowave.core.store.query">QueryOptions</a>&nbsp;queryOptions,
+                  <a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;adapterStore,
+                  <a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatisticsStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatisticsStore</a>&nbsp;statsStore,
+                  <a href="../../../../../../mil/nga/giat/geowave/core/store/index/IndexStore.html" title="interface in mil.nga.giat.geowave.core.store.index">IndexStore</a>&nbsp;indexStore,
+                  boolean&nbsp;isOutputWritable,
+                  org.apache.hadoop.mapreduce.InputSplit&nbsp;inputSplit)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloDataStore.html#deleteEntry(mil.nga.giat.geowave.core.store.index.Index,%20mil.nga.giat.geowave.core.index.ByteArrayId,%20mil.nga.giat.geowave.core.index.ByteArrayId,%20java.lang.String...)">deleteEntry</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index,
-           <a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;dataId,
-           <a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;adapterId,
-           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</code>
-<div class="block">Deletes the data element associated with the given data ID and adapter ID
- stored in the given index</div>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloDataStore.html#delete(mil.nga.giat.geowave.core.store.query.QueryOptions,%20mil.nga.giat.geowave.core.store.query.Query)">delete</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/core/store/query/QueryOptions.html" title="class in mil.nga.giat.geowave.core.store.query">QueryOptions</a>&nbsp;queryOptions,
+      <a href="../../../../../../mil/nga/giat/geowave/core/store/query/Query.html" title="interface in mil.nga.giat.geowave.core.store.query">Query</a>&nbsp;query)</code>
+<div class="block">Delete all data in this data store that matches the query parameter
+ within the index described by the index passed in and matches the adapter
+ (the same adapter ID as the ID ingested).</div>
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;?&gt;</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloDataStore.html#getEntriesByPrefix(mil.nga.giat.geowave.core.store.index.Index,%20mil.nga.giat.geowave.core.index.ByteArrayId,%20java.lang.String...)">getEntriesByPrefix</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index,
-                  <a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;rowPrefix,
-                  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;additionalAuthorizations)</code>
-<div class="block">Returns all data with the given row ID prefix stored in the given index</div>
-</td>
+<td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloDataStore.html#getAdapterStore()">getAdapterStore</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>&lt;T&gt;&nbsp;T</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloDataStore.html#getEntry(mil.nga.giat.geowave.core.store.index.Index,%20mil.nga.giat.geowave.core.index.ByteArrayId)">getEntry</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index,
-        <a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;rowId)</code>
-<div class="block"><strong>Deprecated.</strong>&nbsp;</div>
-</td>
+<td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/core/store/index/IndexStore.html" title="interface in mil.nga.giat.geowave.core.store.index">IndexStore</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloDataStore.html#getIndexStore()">getIndexStore</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>&lt;T&gt;&nbsp;T</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloDataStore.html#getEntry(mil.nga.giat.geowave.core.store.index.Index,%20mil.nga.giat.geowave.core.index.ByteArrayId,%20mil.nga.giat.geowave.core.index.ByteArrayId,%20java.lang.String...)">getEntry</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index,
-        <a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;dataId,
-        <a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;adapterId,
-        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;additionalAuthorizations)</code>
-<div class="block">Returns the data element associated with the given data ID and adapter ID
- stored in the given index</div>
-</td>
-</tr>
-<tr class="altColor">
 <td class="colFirst"><code>protected static byte[]</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloDataStore.html#getRowIdBytes(mil.nga.giat.geowave.datastore.accumulo.AccumuloRowId)">getRowIdBytes</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloRowId.html" title="class in mil.nga.giat.geowave.datastore.accumulo">AccumuloRowId</a>&nbsp;rowElements)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>protected static <a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloRowId.html" title="class in mil.nga.giat.geowave.datastore.accumulo">AccumuloRowId</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloDataStore.html#getRowIdObject(byte[])">getRowIdObject</a></strong>(byte[]&nbsp;row)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
-<td class="colFirst"><code>&lt;T&gt;&nbsp;void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloDataStore.html#ingest(mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter,%20mil.nga.giat.geowave.core.store.index.Index,%20java.util.Iterator)">ingest</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">WritableDataAdapter</a>&lt;T&gt;&nbsp;dataWriter,
-      <a href="../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index,
-      <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;T&gt;&nbsp;entryIterator)</code>
-<div class="block">Ingests a collection of entries into the data store described by an
- iterator on the entries</div>
-</td>
-</tr>
 <tr class="rowColor">
-<td class="colFirst"><code>&lt;T&gt;&nbsp;void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloDataStore.html#ingest(mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter,%20mil.nga.giat.geowave.core.store.index.Index,%20java.util.Iterator,%20mil.nga.giat.geowave.core.store.IngestCallback)">ingest</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">WritableDataAdapter</a>&lt;T&gt;&nbsp;dataWriter,
-      <a href="../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index,
-      <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;T&gt;&nbsp;entryIterator,
-      <a href="../../../../../../mil/nga/giat/geowave/core/store/IngestCallback.html" title="interface in mil.nga.giat.geowave.core.store">IngestCallback</a>&lt;T&gt;&nbsp;ingestCallback)</code>
-<div class="block">Ingests a collection of entries into the data store described by an
- iterator on the entries</div>
-</td>
+<td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloDataStore.html#getSecondaryIndexDataStore()">getSecondaryIndexDataStore</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>&lt;T&gt;&nbsp;void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloDataStore.html#ingest(mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter,%20mil.nga.giat.geowave.core.store.index.Index,%20java.util.Iterator,%20mil.nga.giat.geowave.core.store.IngestCallback,%20mil.nga.giat.geowave.core.store.data.VisibilityWriter)">ingest</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">WritableDataAdapter</a>&lt;T&gt;&nbsp;dataWriter,
-      <a href="../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index,
-      <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;T&gt;&nbsp;entryIterator,
-      <a href="../../../../../../mil/nga/giat/geowave/core/store/IngestCallback.html" title="interface in mil.nga.giat.geowave.core.store">IngestCallback</a>&lt;T&gt;&nbsp;ingestCallback,
-      <a href="../../../../../../mil/nga/giat/geowave/core/store/data/VisibilityWriter.html" title="interface in mil.nga.giat.geowave.core.store.data">VisibilityWriter</a>&lt;T&gt;&nbsp;customFieldVisibilityWriter)</code>
-<div class="block">Ingests a collection of entries into the data store described by an
- iterator on the entries</div>
-</td>
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;org.apache.hadoop.mapreduce.InputSplit&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloDataStore.html#getSplits(mil.nga.giat.geowave.core.store.query.DistributableQuery,%20mil.nga.giat.geowave.core.store.query.QueryOptions,%20mil.nga.giat.geowave.core.store.adapter.AdapterStore,%20mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore,%20mil.nga.giat.geowave.core.store.index.IndexStore,%20java.lang.Integer,%20java.lang.Integer)">getSplits</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/core/store/query/DistributableQuery.html" title="interface in mil.nga.giat.geowave.core.store.query">DistributableQuery</a>&nbsp;query,
+         <a href="../../../../../../mil/nga/giat/geowave/core/store/query/QueryOptions.html" title="class in mil.nga.giat.geowave.core.store.query">QueryOptions</a>&nbsp;queryOptions,
+         <a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;adapterStore,
+         <a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatisticsStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatisticsStore</a>&nbsp;statsStore,
+         <a href="../../../../../../mil/nga/giat/geowave/core/store/index/IndexStore.html" title="interface in mil.nga.giat.geowave.core.store.index">IndexStore</a>&nbsp;indexStore,
+         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;minSplits,
+         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;maxSplits)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>&lt;T&gt;&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloDataStore.html#ingest(mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter,%20mil.nga.giat.geowave.core.store.index.Index,%20T)">ingest</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">WritableDataAdapter</a>&lt;T&gt;&nbsp;writableAdapter,
-      <a href="../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index,
-      T&nbsp;entry)</code>
-<div class="block">Ingests a single entry into the data store</div>
-</td>
+<td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatisticsStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatisticsStore</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloDataStore.html#getStatisticsStore()">getStatisticsStore</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>&lt;T&gt;&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloDataStore.html#ingest(mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter,%20mil.nga.giat.geowave.core.store.index.Index,%20T,%20mil.nga.giat.geowave.core.store.data.VisibilityWriter)">ingest</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">WritableDataAdapter</a>&lt;T&gt;&nbsp;writableAdapter,
-      <a href="../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index,
-      T&nbsp;entry,
-      <a href="../../../../../../mil/nga/giat/geowave/core/store/data/VisibilityWriter.html" title="interface in mil.nga.giat.geowave.core.store.data">VisibilityWriter</a>&lt;T&gt;&nbsp;customFieldVisibilityWriter)</code>
-<div class="block">Ingests a single entry into the data store</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>&lt;T&gt;&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloDataStore.html#ingestInternal(mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter,%20mil.nga.giat.geowave.core.store.index.Index,%20T,%20mil.nga.giat.geowave.core.store.data.VisibilityWriter)">ingestInternal</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">WritableDataAdapter</a>&lt;T&gt;&nbsp;writableAdapter,
-              <a href="../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index,
-              T&nbsp;entry,
-              <a href="../../../../../../mil/nga/giat/geowave/core/store/data/VisibilityWriter.html" title="interface in mil.nga.giat.geowave.core.store.data">VisibilityWriter</a>&lt;T&gt;&nbsp;customFieldVisibilityWriter)</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;?&gt;</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloDataStore.html#query(mil.nga.giat.geowave.datastore.accumulo.query.AccumuloFilteredIndexQuery)">query</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloFilteredIndexQuery.html" title="class in mil.nga.giat.geowave.datastore.accumulo.query">AccumuloFilteredIndexQuery</a>&nbsp;query)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;T&gt;</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloDataStore.html#query(mil.nga.giat.geowave.core.store.adapter.DataAdapter,%20mil.nga.giat.geowave.core.store.index.Index,%20mil.nga.giat.geowave.core.store.query.Query)">query</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;T&gt;&nbsp;adapter,
-     <a href="../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index,
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloDataStore.html#query(mil.nga.giat.geowave.core.store.query.QueryOptions,%20mil.nga.giat.geowave.core.store.query.Query)">query</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/core/store/query/QueryOptions.html" title="class in mil.nga.giat.geowave.core.store.query">QueryOptions</a>&nbsp;queryOptions,
      <a href="../../../../../../mil/nga/giat/geowave/core/store/query/Query.html" title="interface in mil.nga.giat.geowave.core.store.query">Query</a>&nbsp;query)</code>
 <div class="block">Returns all data in this data store that matches the query parameter
- within the index described by the index passed in and matches the adapter
- (the same adapter ID as the ID ingested).</div>
+ within the index described within the QueryOptions.</div>
 </td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>&lt;T&gt;&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;T&gt;</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloDataStore.html#query(mil.nga.giat.geowave.core.store.adapter.DataAdapter,%20mil.nga.giat.geowave.core.store.index.Index,%20mil.nga.giat.geowave.core.store.query.Query,%20int)">query</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;T&gt;&nbsp;adapter,
-     <a href="../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index,
-     <a href="../../../../../../mil/nga/giat/geowave/core/store/query/Query.html" title="interface in mil.nga.giat.geowave.core.store.query">Query</a>&nbsp;query,
-     int&nbsp;limit)</code>
-<div class="block">Returns all data in this data store that matches the query parameter
- within the index described by the index passed in and matches the adapter
- (the same adapter ID as the ID ingested).</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>&lt;T&gt;&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;T&gt;</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloDataStore.html#query(mil.nga.giat.geowave.core.store.adapter.DataAdapter,%20mil.nga.giat.geowave.core.store.index.Index,%20mil.nga.giat.geowave.core.store.query.Query,%20java.lang.Integer,%20mil.nga.giat.geowave.core.store.ScanCallback,%20java.lang.String...)">query</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;T&gt;&nbsp;adapter,
-     <a href="../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index,
-     <a href="../../../../../../mil/nga/giat/geowave/core/store/query/Query.html" title="interface in mil.nga.giat.geowave.core.store.query">Query</a>&nbsp;query,
-     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;limit,
-     <a href="../../../../../../mil/nga/giat/geowave/core/store/ScanCallback.html" title="interface in mil.nga.giat.geowave.core.store">ScanCallback</a>&lt;?&gt;&nbsp;scanCallback,
-     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</code>
-<div class="block">Returns all data in this data store that matches the query parameter and
- matches one of the adapter IDs.</div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>&lt;T&gt;&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;T&gt;</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloDataStore.html#query(mil.nga.giat.geowave.core.store.adapter.DataAdapter,%20mil.nga.giat.geowave.core.store.index.Index,%20mil.nga.giat.geowave.core.store.query.Query,%20int,%20java.lang.String...)">query</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;T&gt;&nbsp;adapter,
-     <a href="../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index,
-     <a href="../../../../../../mil/nga/giat/geowave/core/store/query/Query.html" title="interface in mil.nga.giat.geowave.core.store.query">Query</a>&nbsp;query,
-     int&nbsp;limit,
-     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</code>
-<div class="block">Returns all data in this data store that matches the query parameter and
- matches one of the adapter IDs.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>&lt;T&gt;&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;T&gt;</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloDataStore.html#query(mil.nga.giat.geowave.core.store.adapter.DataAdapter,%20mil.nga.giat.geowave.core.store.query.Query)">query</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;T&gt;&nbsp;adapter,
-     <a href="../../../../../../mil/nga/giat/geowave/core/store/query/Query.html" title="interface in mil.nga.giat.geowave.core.store.query">Query</a>&nbsp;query)</code>
-<div class="block">Returns all data in this data store that matches the query parameter and
- matches the adapter (the same adapter ID as the ID ingested).</div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>&lt;T&gt;&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;T&gt;</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloDataStore.html#query(mil.nga.giat.geowave.core.store.adapter.DataAdapter,%20mil.nga.giat.geowave.core.store.query.Query,%20int)">query</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;T&gt;&nbsp;adapter,
-     <a href="../../../../../../mil/nga/giat/geowave/core/store/query/Query.html" title="interface in mil.nga.giat.geowave.core.store.query">Query</a>&nbsp;query,
-     int&nbsp;limit)</code>
-<div class="block">Returns all data in this data store that matches the query parameter and
- matches the adapter (the same adapter ID as the ID ingested).</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>&lt;T&gt;&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;T&gt;</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloDataStore.html#query(mil.nga.giat.geowave.core.store.index.Index,%20mil.nga.giat.geowave.core.store.query.Query)">query</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index,
-     <a href="../../../../../../mil/nga/giat/geowave/core/store/query/Query.html" title="interface in mil.nga.giat.geowave.core.store.query">Query</a>&nbsp;query)</code>
-<div class="block">Returns all data in this data store that matches the query parameter
- within the index described by the index passed in.</div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>&lt;T&gt;&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;T&gt;</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloDataStore.html#query(mil.nga.giat.geowave.core.store.index.Index,%20mil.nga.giat.geowave.core.store.query.Query,%20int)">query</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index,
-     <a href="../../../../../../mil/nga/giat/geowave/core/store/query/Query.html" title="interface in mil.nga.giat.geowave.core.store.query">Query</a>&nbsp;query,
-     int&nbsp;limit)</code>
-<div class="block">Returns all data in this data store that matches the query parameter
- within the index described by the index passed in.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>&lt;T&gt;&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;T&gt;</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloDataStore.html#query(mil.nga.giat.geowave.core.store.index.Index,%20mil.nga.giat.geowave.core.store.query.Query,%20mil.nga.giat.geowave.core.store.query.QueryOptions)">query</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index,
-     <a href="../../../../../../mil/nga/giat/geowave/core/store/query/Query.html" title="interface in mil.nga.giat.geowave.core.store.query">Query</a>&nbsp;query,
-     <a href="../../../../../../mil/nga/giat/geowave/core/store/query/QueryOptions.html" title="class in mil.nga.giat.geowave.core.store.query">QueryOptions</a>&nbsp;queryOptions)</code>
-<div class="block">Returns all data in this data store that matches the query parameter
- within the index described by the index passed in.</div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;?&gt;</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloDataStore.html#query(java.util.List,%20mil.nga.giat.geowave.core.store.query.Query)">query</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;adapterIds,
-     <a href="../../../../../../mil/nga/giat/geowave/core/store/query/Query.html" title="interface in mil.nga.giat.geowave.core.store.query">Query</a>&nbsp;query)</code>
-<div class="block">Returns all data in this data store that matches the query parameter and
- matches one of the adapter IDs.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;?&gt;</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloDataStore.html#query(java.util.List,%20mil.nga.giat.geowave.core.store.query.Query,%20int)">query</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;adapterIds,
-     <a href="../../../../../../mil/nga/giat/geowave/core/store/query/Query.html" title="interface in mil.nga.giat.geowave.core.store.query">Query</a>&nbsp;query,
-     int&nbsp;limit)</code>
-<div class="block">Returns all data in this data store that matches the query parameter and
- matches one of the adapter IDs.</div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;?&gt;</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloDataStore.html#query(mil.nga.giat.geowave.core.store.query.Query)">query</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/core/store/query/Query.html" title="interface in mil.nga.giat.geowave.core.store.query">Query</a>&nbsp;query)</code>
-<div class="block">Returns all data in this data store that matches the query parameter.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;?&gt;</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloDataStore.html#query(mil.nga.giat.geowave.core.store.query.Query,%20int)">query</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/core/store/query/Query.html" title="interface in mil.nga.giat.geowave.core.store.query">Query</a>&nbsp;query,
-     int&nbsp;limit)</code>
-<div class="block">Returns all data in this data store that matches the query parameter.</div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;?&gt;</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloDataStore.html#query(mil.nga.giat.geowave.core.store.query.Query,%20mil.nga.giat.geowave.core.store.ScanCallback)">query</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/core/store/query/Query.html" title="interface in mil.nga.giat.geowave.core.store.query">Query</a>&nbsp;query,
-     <a href="../../../../../../mil/nga/giat/geowave/core/store/ScanCallback.html" title="interface in mil.nga.giat.geowave.core.store">ScanCallback</a>&lt;?&gt;&nbsp;scanCallback)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
@@ -443,7 +297,7 @@ implements <a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>protected void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloDataStore.html#store(mil.nga.giat.geowave.core.store.index.Index)">store</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index)</code>&nbsp;</td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloDataStore.html#store(mil.nga.giat.geowave.core.store.index.PrimaryIndex)">store</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index)</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -494,6 +348,15 @@ implements <a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.
 <pre>protected final&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatisticsStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatisticsStore</a> statisticsStore</pre>
 </li>
 </ul>
+<a name="secondaryIndexDataStore">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>secondaryIndexDataStore</h4>
+<pre>protected final&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a> secondaryIndexDataStore</pre>
+</li>
+</ul>
 <a name="accumuloOperations">
 <!--   -->
 </a>
@@ -539,7 +402,7 @@ implements <a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.
                  <a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOptions.html" title="class in mil.nga.giat.geowave.datastore.accumulo">AccumuloOptions</a>&nbsp;accumuloOptions)</pre>
 </li>
 </ul>
-<a name="AccumuloDataStore(mil.nga.giat.geowave.core.store.index.IndexStore, mil.nga.giat.geowave.core.store.adapter.AdapterStore, mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore, mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations)">
+<a name="AccumuloDataStore(mil.nga.giat.geowave.core.store.index.IndexStore, mil.nga.giat.geowave.core.store.adapter.AdapterStore, mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore, mil.nga.giat.geowave.core.store.index.SecondaryIndexDataStore, mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations)">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -548,10 +411,11 @@ implements <a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.
 <pre>public&nbsp;AccumuloDataStore(<a href="../../../../../../mil/nga/giat/geowave/core/store/index/IndexStore.html" title="interface in mil.nga.giat.geowave.core.store.index">IndexStore</a>&nbsp;indexStore,
                  <a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;adapterStore,
                  <a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatisticsStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatisticsStore</a>&nbsp;statisticsStore,
+                 <a href="../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a>&nbsp;secondaryIndexDataStore,
                  <a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOperations.html" title="interface in mil.nga.giat.geowave.datastore.accumulo">AccumuloOperations</a>&nbsp;accumuloOperations)</pre>
 </li>
 </ul>
-<a name="AccumuloDataStore(mil.nga.giat.geowave.core.store.index.IndexStore, mil.nga.giat.geowave.core.store.adapter.AdapterStore, mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore, mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations, mil.nga.giat.geowave.datastore.accumulo.AccumuloOptions)">
+<a name="AccumuloDataStore(mil.nga.giat.geowave.core.store.index.IndexStore, mil.nga.giat.geowave.core.store.adapter.AdapterStore, mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore, mil.nga.giat.geowave.core.store.index.SecondaryIndexDataStore, mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations, mil.nga.giat.geowave.datastore.accumulo.AccumuloOptions)">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -560,6 +424,7 @@ implements <a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.
 <pre>public&nbsp;AccumuloDataStore(<a href="../../../../../../mil/nga/giat/geowave/core/store/index/IndexStore.html" title="interface in mil.nga.giat.geowave.core.store.index">IndexStore</a>&nbsp;indexStore,
                  <a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;adapterStore,
                  <a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatisticsStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatisticsStore</a>&nbsp;statisticsStore,
+                 <a href="../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a>&nbsp;secondaryIndexDataStore,
                  <a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOperations.html" title="interface in mil.nga.giat.geowave.datastore.accumulo">AccumuloOperations</a>&nbsp;accumuloOperations,
                  <a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOptions.html" title="class in mil.nga.giat.geowave.datastore.accumulo">AccumuloOptions</a>&nbsp;accumuloOptions)</pre>
 </li>
@@ -572,87 +437,22 @@ implements <a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="createIndexWriter(mil.nga.giat.geowave.core.store.index.Index)">
+<a name="createIndexWriter(mil.nga.giat.geowave.core.store.index.PrimaryIndex, mil.nga.giat.geowave.core.store.data.VisibilityWriter)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>createIndexWriter</h4>
-<pre>public&nbsp;&lt;T&gt;&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a>&nbsp;createIndexWriter(<a href="../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index)</pre>
-<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html#createIndexWriter(mil.nga.giat.geowave.core.store.index.Index)">DataStore</a></code></strong></div>
+<pre>public&nbsp;&lt;T&gt;&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a>&nbsp;createIndexWriter(<a href="../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
+                                <a href="../../../../../../mil/nga/giat/geowave/core/store/data/VisibilityWriter.html" title="interface in mil.nga.giat.geowave.core.store.data">VisibilityWriter</a>&lt;T&gt;&nbsp;customFieldVisibilityWriter)</pre>
+<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html#createIndexWriter(mil.nga.giat.geowave.core.store.index.PrimaryIndex,%20mil.nga.giat.geowave.core.store.data.VisibilityWriter)">DataStore</a></code></strong></div>
 <div class="block">Returns an index writer to perform batched write operations</div>
 <dl>
 <dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html#createIndexWriter(mil.nga.giat.geowave.core.store.index.Index)">createIndexWriter</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a></code></dd>
+<dd><code><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html#createIndexWriter(mil.nga.giat.geowave.core.store.index.PrimaryIndex,%20mil.nga.giat.geowave.core.store.data.VisibilityWriter)">createIndexWriter</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a></code></dd>
 <dt><span class="strong">Parameters:</span></dt><dd><code>index</code> - The configuration information for the primary index to use.</dd>
 <dt><span class="strong">Returns:</span></dt><dd>Returns the index writer which can be used for batch write
          operations</dd></dl>
-</li>
-</ul>
-<a name="ingest(mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter,mil.nga.giat.geowave.core.store.index.Index,java.lang.Object)">
-<!--   -->
-</a><a name="ingest(mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter, mil.nga.giat.geowave.core.store.index.Index, T)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>ingest</h4>
-<pre>public&nbsp;&lt;T&gt;&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;ingest(<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">WritableDataAdapter</a>&lt;T&gt;&nbsp;writableAdapter,
-                           <a href="../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index,
-                           T&nbsp;entry)</pre>
-<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html#ingest(mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter,%20mil.nga.giat.geowave.core.store.index.Index,%20T)">DataStore</a></code></strong></div>
-<div class="block">Ingests a single entry into the data store</div>
-<dl>
-<dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html#ingest(mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter,%20mil.nga.giat.geowave.core.store.index.Index,%20T)">ingest</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a></code></dd>
-<dt><span class="strong">Parameters:</span></dt><dd><code>writableAdapter</code> - The writable adapter that allows the data store to translate
-            the entry into a persistable format</dd><dd><code>index</code> - The configuration information for the primary index to use.</dd><dd><code>entry</code> - The entry to ingest</dd>
-<dt><span class="strong">Returns:</span></dt><dd>Returns all row IDs for which the entry is ingested</dd></dl>
-</li>
-</ul>
-<a name="ingest(mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter,mil.nga.giat.geowave.core.store.index.Index,java.lang.Object,mil.nga.giat.geowave.core.store.data.VisibilityWriter)">
-<!--   -->
-</a><a name="ingest(mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter, mil.nga.giat.geowave.core.store.index.Index, T, mil.nga.giat.geowave.core.store.data.VisibilityWriter)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>ingest</h4>
-<pre>public&nbsp;&lt;T&gt;&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;ingest(<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">WritableDataAdapter</a>&lt;T&gt;&nbsp;writableAdapter,
-                           <a href="../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index,
-                           T&nbsp;entry,
-                           <a href="../../../../../../mil/nga/giat/geowave/core/store/data/VisibilityWriter.html" title="interface in mil.nga.giat.geowave.core.store.data">VisibilityWriter</a>&lt;T&gt;&nbsp;customFieldVisibilityWriter)</pre>
-<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html#ingest(mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter,%20mil.nga.giat.geowave.core.store.index.Index,%20T,%20mil.nga.giat.geowave.core.store.data.VisibilityWriter)">DataStore</a></code></strong></div>
-<div class="block">Ingests a single entry into the data store</div>
-<dl>
-<dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html#ingest(mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter,%20mil.nga.giat.geowave.core.store.index.Index,%20T,%20mil.nga.giat.geowave.core.store.data.VisibilityWriter)">ingest</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a></code></dd>
-<dt><span class="strong">Parameters:</span></dt><dd><code>writableAdapter</code> - The writable adapter that allows the data store to translate
-            the entry into a persistable format</dd><dd><code>index</code> - The configuration information for the primary index to use.</dd><dd><code>entry</code> - The entry to ingest</dd><dd><code>customFieldVisibilityWriter</code> - per entry visibility control</dd>
-<dt><span class="strong">Returns:</span></dt><dd>Returns all row IDs for which the entry is ingested</dd></dl>
-</li>
-</ul>
-<a name="ingestInternal(mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter,mil.nga.giat.geowave.core.store.index.Index,java.lang.Object,mil.nga.giat.geowave.core.store.data.VisibilityWriter)">
-<!--   -->
-</a><a name="ingestInternal(mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter, mil.nga.giat.geowave.core.store.index.Index, T, mil.nga.giat.geowave.core.store.data.VisibilityWriter)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>ingestInternal</h4>
-<pre>public&nbsp;&lt;T&gt;&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;ingestInternal(<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">WritableDataAdapter</a>&lt;T&gt;&nbsp;writableAdapter,
-                                   <a href="../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index,
-                                   T&nbsp;entry,
-                                   <a href="../../../../../../mil/nga/giat/geowave/core/store/data/VisibilityWriter.html" title="interface in mil.nga.giat.geowave.core.store.data">VisibilityWriter</a>&lt;T&gt;&nbsp;customFieldVisibilityWriter)</pre>
-</li>
-</ul>
-<a name="query(mil.nga.giat.geowave.datastore.accumulo.query.AccumuloFilteredIndexQuery)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>query</h4>
-<pre>public&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;?&gt;&nbsp;query(<a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloFilteredIndexQuery.html" title="class in mil.nga.giat.geowave.datastore.accumulo.query">AccumuloFilteredIndexQuery</a>&nbsp;query)</pre>
 </li>
 </ul>
 <a name="store(mil.nga.giat.geowave.core.store.adapter.DataAdapter)">
@@ -664,75 +464,38 @@ implements <a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.
 <pre>protected&nbsp;void&nbsp;store(<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&nbsp;adapter)</pre>
 </li>
 </ul>
-<a name="store(mil.nga.giat.geowave.core.store.index.Index)">
+<a name="store(mil.nga.giat.geowave.core.store.index.PrimaryIndex)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>store</h4>
-<pre>protected&nbsp;void&nbsp;store(<a href="../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index)</pre>
+<pre>protected&nbsp;void&nbsp;store(<a href="../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index)</pre>
 </li>
 </ul>
-<a name="ingest(mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter, mil.nga.giat.geowave.core.store.index.Index, java.util.Iterator)">
+<a name="query(mil.nga.giat.geowave.core.store.query.QueryOptions, mil.nga.giat.geowave.core.store.query.Query)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>ingest</h4>
-<pre>public&nbsp;&lt;T&gt;&nbsp;void&nbsp;ingest(<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">WritableDataAdapter</a>&lt;T&gt;&nbsp;dataWriter,
-              <a href="../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index,
-              <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;T&gt;&nbsp;entryIterator)</pre>
-<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html#ingest(mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter,%20mil.nga.giat.geowave.core.store.index.Index,%20java.util.Iterator)">DataStore</a></code></strong></div>
-<div class="block">Ingests a collection of entries into the data store described by an
- iterator on the entries</div>
+<h4>query</h4>
+<pre>public&nbsp;&lt;T&gt;&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;T&gt;&nbsp;query(<a href="../../../../../../mil/nga/giat/geowave/core/store/query/QueryOptions.html" title="class in mil.nga.giat.geowave.core.store.query">QueryOptions</a>&nbsp;queryOptions,
+                             <a href="../../../../../../mil/nga/giat/geowave/core/store/query/Query.html" title="interface in mil.nga.giat.geowave.core.store.query">Query</a>&nbsp;query)</pre>
+<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html#query(mil.nga.giat.geowave.core.store.query.QueryOptions,%20mil.nga.giat.geowave.core.store.query.Query)">DataStore</a></code></strong></div>
+<div class="block">Returns all data in this data store that matches the query parameter
+ within the index described within the QueryOptions. If by the index
+ passed in and matches the adapter (the same adapter ID as the ID
+ ingested). All data that matches the query, adapter ID, and is in the
+ index ID will be returned as an instance of the native data type that
+ this adapter supports. The iterator will only return as many results as
+ the limit passed in.</div>
 <dl>
 <dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html#ingest(mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter,%20mil.nga.giat.geowave.core.store.index.Index,%20java.util.Iterator)">ingest</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a></code></dd>
-<dt><span class="strong">Parameters:</span></dt><dd><code>dataWriter</code> - The writable adapter that allows the data store to translate
-            the entries into a persistable format</dd><dd><code>index</code> - The configuration information for the primary index to use.</dd><dd><code>entryIterator</code> - An iterator on the entries to ingest</dd></dl>
-</li>
-</ul>
-<a name="ingest(mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter, mil.nga.giat.geowave.core.store.index.Index, java.util.Iterator, mil.nga.giat.geowave.core.store.IngestCallback)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>ingest</h4>
-<pre>public&nbsp;&lt;T&gt;&nbsp;void&nbsp;ingest(<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">WritableDataAdapter</a>&lt;T&gt;&nbsp;dataWriter,
-              <a href="../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index,
-              <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;T&gt;&nbsp;entryIterator,
-              <a href="../../../../../../mil/nga/giat/geowave/core/store/IngestCallback.html" title="interface in mil.nga.giat.geowave.core.store">IngestCallback</a>&lt;T&gt;&nbsp;ingestCallback)</pre>
-<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html#ingest(mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter,%20mil.nga.giat.geowave.core.store.index.Index,%20java.util.Iterator,%20mil.nga.giat.geowave.core.store.IngestCallback)">DataStore</a></code></strong></div>
-<div class="block">Ingests a collection of entries into the data store described by an
- iterator on the entries</div>
-<dl>
-<dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html#ingest(mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter,%20mil.nga.giat.geowave.core.store.index.Index,%20java.util.Iterator,%20mil.nga.giat.geowave.core.store.IngestCallback)">ingest</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a></code></dd>
-<dt><span class="strong">Parameters:</span></dt><dd><code>dataWriter</code> - The writable adapter that allows the data store to translate
-            the entries into a persistable format</dd><dd><code>index</code> - The configuration information for the primary index to use.</dd><dd><code>entryIterator</code> - An iterator on the entries to ingest</dd><dd><code>ingestCallback</code> - A callback method to receive feedback such as row IDs for
-            every entry that is successfully ingested</dd></dl>
-</li>
-</ul>
-<a name="ingest(mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter, mil.nga.giat.geowave.core.store.index.Index, java.util.Iterator, mil.nga.giat.geowave.core.store.IngestCallback, mil.nga.giat.geowave.core.store.data.VisibilityWriter)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>ingest</h4>
-<pre>public&nbsp;&lt;T&gt;&nbsp;void&nbsp;ingest(<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">WritableDataAdapter</a>&lt;T&gt;&nbsp;dataWriter,
-              <a href="../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index,
-              <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;T&gt;&nbsp;entryIterator,
-              <a href="../../../../../../mil/nga/giat/geowave/core/store/IngestCallback.html" title="interface in mil.nga.giat.geowave.core.store">IngestCallback</a>&lt;T&gt;&nbsp;ingestCallback,
-              <a href="../../../../../../mil/nga/giat/geowave/core/store/data/VisibilityWriter.html" title="interface in mil.nga.giat.geowave.core.store.data">VisibilityWriter</a>&lt;T&gt;&nbsp;customFieldVisibilityWriter)</pre>
-<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html#ingest(mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter,%20mil.nga.giat.geowave.core.store.index.Index,%20java.util.Iterator,%20mil.nga.giat.geowave.core.store.IngestCallback,%20mil.nga.giat.geowave.core.store.data.VisibilityWriter)">DataStore</a></code></strong></div>
-<div class="block">Ingests a collection of entries into the data store described by an
- iterator on the entries</div>
-<dl>
-<dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html#ingest(mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter,%20mil.nga.giat.geowave.core.store.index.Index,%20java.util.Iterator,%20mil.nga.giat.geowave.core.store.IngestCallback,%20mil.nga.giat.geowave.core.store.data.VisibilityWriter)">ingest</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a></code></dd>
-<dt><span class="strong">Parameters:</span></dt><dd><code>dataWriter</code> - The writable adapter that allows the data store to translate
-            the entries into a persistable format</dd><dd><code>index</code> - The configuration information for the primary index to use.</dd><dd><code>entryIterator</code> - An iterator on the entries to ingest</dd><dd><code>ingestCallback</code> - A callback method to receive feedback such as row IDs for
-            every entry that is successfully ingested</dd><dd><code>customFieldVisibilityWriter</code> - per entry visibility control</dd></dl>
+<dd><code><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html#query(mil.nga.giat.geowave.core.store.query.QueryOptions,%20mil.nga.giat.geowave.core.store.query.Query)">query</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>queryOptions</code> - additional options for the processing the query</dd>
+<dt><span class="strong">Returns:</span></dt><dd>An iterator on all results that match the query. The iterator
+         implements Closeable and it is best practice to close the
+         iterator after it is no longer needed.</dd></dl>
 </li>
 </ul>
 <a name="getRowIdBytes(mil.nga.giat.geowave.datastore.accumulo.AccumuloRowId)">
@@ -753,435 +516,111 @@ implements <a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.
 <pre>protected static&nbsp;<a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloRowId.html" title="class in mil.nga.giat.geowave.datastore.accumulo">AccumuloRowId</a>&nbsp;getRowIdObject(byte[]&nbsp;row)</pre>
 </li>
 </ul>
-<a name="getEntry(mil.nga.giat.geowave.core.store.index.Index, mil.nga.giat.geowave.core.index.ByteArrayId)">
+<a name="delete(mil.nga.giat.geowave.core.store.query.QueryOptions, mil.nga.giat.geowave.core.store.query.Query)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>getEntry</h4>
-<pre><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang">@Deprecated</a>
-public&nbsp;&lt;T&gt;&nbsp;T&nbsp;getEntry(<a href="../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index,
-                        <a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;rowId)</pre>
-<div class="block"><span class="strong">Deprecated.</span>&nbsp;</div>
-<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html#getEntry(mil.nga.giat.geowave.core.store.index.Index,%20mil.nga.giat.geowave.core.index.ByteArrayId)">DataStore</a></code></strong></div>
-<div class="block">Returns the data element associated with the given row ID stored in the
- given index</div>
-<dl>
-<dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html#getEntry(mil.nga.giat.geowave.core.store.index.Index,%20mil.nga.giat.geowave.core.index.ByteArrayId)">getEntry</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a></code></dd>
-<dt><span class="strong">Parameters:</span></dt><dd><code>index</code> - The index to search for the entry.</dd><dd><code>rowId</code> - The full row ID to use as the query.</dd>
-<dt><span class="strong">Returns:</span></dt><dd>The entry that was ingested with the given row ID. This row ID is
-         the one assigned to the entry on ingest into the given index.
-         Null is returned if the row ID does not match any entries in the
-         data store for the given index.</dd></dl>
-</li>
-</ul>
-<a name="getEntry(mil.nga.giat.geowave.core.store.index.Index, mil.nga.giat.geowave.core.index.ByteArrayId, mil.nga.giat.geowave.core.index.ByteArrayId, java.lang.String...)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getEntry</h4>
-<pre>public&nbsp;&lt;T&gt;&nbsp;T&nbsp;getEntry(<a href="../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index,
-             <a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;dataId,
-             <a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;adapterId,
-             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;additionalAuthorizations)</pre>
-<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html#getEntry(mil.nga.giat.geowave.core.store.index.Index,%20mil.nga.giat.geowave.core.index.ByteArrayId,%20mil.nga.giat.geowave.core.index.ByteArrayId,%20java.lang.String...)">DataStore</a></code></strong></div>
-<div class="block">Returns the data element associated with the given data ID and adapter ID
- stored in the given index</div>
-<dl>
-<dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html#getEntry(mil.nga.giat.geowave.core.store.index.Index,%20mil.nga.giat.geowave.core.index.ByteArrayId,%20mil.nga.giat.geowave.core.index.ByteArrayId,%20java.lang.String...)">getEntry</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a></code></dd>
-<dt><span class="strong">Parameters:</span></dt><dd><code>index</code> - The index to search for the entry.</dd><dd><code>dataId</code> - The data ID to use for the query.</dd><dd><code>adapterId</code> - The adapter ID to use for the query.</dd>
-<dt><span class="strong">Returns:</span></dt><dd>The entry that was ingested with the given data ID and adapter
-         ID. This combination of data ID and adapter ID is the one
-         assigned to the entry on ingest into the given index. Null is
-         returned if the data ID and adapter ID do not match any entries
-         in the data store for the given index.</dd></dl>
-</li>
-</ul>
-<a name="deleteEntry(mil.nga.giat.geowave.core.store.index.Index, mil.nga.giat.geowave.core.index.ByteArrayId, mil.nga.giat.geowave.core.index.ByteArrayId, java.lang.String...)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>deleteEntry</h4>
-<pre>public&nbsp;boolean&nbsp;deleteEntry(<a href="../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index,
-                  <a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;dataId,
-                  <a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;adapterId,
-                  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</pre>
-<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html#deleteEntry(mil.nga.giat.geowave.core.store.index.Index,%20mil.nga.giat.geowave.core.index.ByteArrayId,%20mil.nga.giat.geowave.core.index.ByteArrayId,%20java.lang.String...)">DataStore</a></code></strong></div>
-<div class="block">Deletes the data element associated with the given data ID and adapter ID
- stored in the given index</div>
-<dl>
-<dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html#deleteEntry(mil.nga.giat.geowave.core.store.index.Index,%20mil.nga.giat.geowave.core.index.ByteArrayId,%20mil.nga.giat.geowave.core.index.ByteArrayId,%20java.lang.String...)">deleteEntry</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a></code></dd>
-<dt><span class="strong">Parameters:</span></dt><dd><code>index</code> - The index to search for the entry.</dd><dd><code>dataId</code> - The data ID to use for the query.</dd><dd><code>adapterId</code> - The adapter ID to use for the query.</dd><dd><code>authorizations</code> - additional authorizations to delete the entry</dd>
-<dt><span class="strong">Returns:</span></dt><dd>Returns true if the entry was found and deleted successfully.
-         Returns false if the entry could not be found, if the entry could
-         not be deleted, or if the entry in the alternate index could not
-         be deleted.</dd></dl>
-</li>
-</ul>
-<a name="getEntriesByPrefix(mil.nga.giat.geowave.core.store.index.Index, mil.nga.giat.geowave.core.index.ByteArrayId, java.lang.String...)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getEntriesByPrefix</h4>
-<pre>public&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;?&gt;&nbsp;getEntriesByPrefix(<a href="../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index,
-                                      <a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;rowPrefix,
-                                      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;additionalAuthorizations)</pre>
-<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html#getEntriesByPrefix(mil.nga.giat.geowave.core.store.index.Index,%20mil.nga.giat.geowave.core.index.ByteArrayId,%20java.lang.String...)">DataStore</a></code></strong></div>
-<div class="block">Returns all data with the given row ID prefix stored in the given index</div>
-<dl>
-<dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html#getEntriesByPrefix(mil.nga.giat.geowave.core.store.index.Index,%20mil.nga.giat.geowave.core.index.ByteArrayId,%20java.lang.String...)">getEntriesByPrefix</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a></code></dd>
-<dt><span class="strong">Parameters:</span></dt><dd><code>index</code> - The index to search for the entry.</dd><dd><code>rowPrefix</code> - A prefix for the row ID to use as the query.</dd>
-<dt><span class="strong">Returns:</span></dt><dd>All entries that were ingested with a row ID that is prefixed by
-         the given rowPrefix. The "row ID" is the one assigned to the
-         entry on ingest into the given index.</dd></dl>
-</li>
-</ul>
-<a name="query(mil.nga.giat.geowave.core.store.adapter.DataAdapter, mil.nga.giat.geowave.core.store.query.Query)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>query</h4>
-<pre>public&nbsp;&lt;T&gt;&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;T&gt;&nbsp;query(<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;T&gt;&nbsp;adapter,
-                             <a href="../../../../../../mil/nga/giat/geowave/core/store/query/Query.html" title="interface in mil.nga.giat.geowave.core.store.query">Query</a>&nbsp;query)</pre>
-<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html#query(mil.nga.giat.geowave.core.store.adapter.DataAdapter,%20mil.nga.giat.geowave.core.store.query.Query)">DataStore</a></code></strong></div>
-<div class="block">Returns all data in this data store that matches the query parameter and
- matches the adapter (the same adapter ID as the ID ingested). All indices
- that are supported by the query will be queried and returned as an
- instance of the native data type that this adapter supports.</div>
-<dl>
-<dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html#query(mil.nga.giat.geowave.core.store.adapter.DataAdapter,%20mil.nga.giat.geowave.core.store.query.Query)">query</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a></code></dd>
-<dt><span class="strong">Parameters:</span></dt><dd><code>adapter</code> - the data adapter to use for the query</dd><dd><code>query</code> - The description of the query to be performed</dd>
-<dt><span class="strong">Returns:</span></dt><dd>An iterator on all results that match the query. The iterator
-         implements Closeable and it is best practice to close the
-         iterator after it is no longer needed.</dd></dl>
-</li>
-</ul>
-<a name="query(mil.nga.giat.geowave.core.store.adapter.DataAdapter, mil.nga.giat.geowave.core.store.index.Index, mil.nga.giat.geowave.core.store.query.Query, int, java.lang.String...)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>query</h4>
-<pre>public&nbsp;&lt;T&gt;&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;T&gt;&nbsp;query(<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;T&gt;&nbsp;adapter,
-                             <a href="../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index,
-                             <a href="../../../../../../mil/nga/giat/geowave/core/store/query/Query.html" title="interface in mil.nga.giat.geowave.core.store.query">Query</a>&nbsp;query,
-                             int&nbsp;limit,
-                             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</pre>
-<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html#query(mil.nga.giat.geowave.core.store.adapter.DataAdapter,%20mil.nga.giat.geowave.core.store.index.Index,%20mil.nga.giat.geowave.core.store.query.Query,%20int,%20java.lang.String...)">DataStore</a></code></strong></div>
-<div class="block">Returns all data in this data store that matches the query parameter and
- matches one of the adapter IDs. All data types that match the query and
- one of the adapter IDs will be returned as an instance of the native data
- type that was originally ingested. The iterator will only return as many
- results as the limit passed in.</div>
-<dl>
-<dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html#query(mil.nga.giat.geowave.core.store.adapter.DataAdapter,%20mil.nga.giat.geowave.core.store.index.Index,%20mil.nga.giat.geowave.core.store.query.Query,%20int,%20java.lang.String...)">query</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a></code></dd>
-<dd><code>query</code> - The description of the query to be performed</dd><dd><code>limit</code> - The maximum number of entries to return</dd>
-<dt><span class="strong">Returns:</span></dt><dd>An iterator on all results that match the query. The iterator
-         implements Closeable and it is best practice to close the
-         iterator after it is no longer needed.</dd></dl>
-</li>
-</ul>
-<a name="query(mil.nga.giat.geowave.core.store.adapter.DataAdapter, mil.nga.giat.geowave.core.store.query.Query, int)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>query</h4>
-<pre>public&nbsp;&lt;T&gt;&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;T&gt;&nbsp;query(<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;T&gt;&nbsp;adapter,
-                             <a href="../../../../../../mil/nga/giat/geowave/core/store/query/Query.html" title="interface in mil.nga.giat.geowave.core.store.query">Query</a>&nbsp;query,
-                             int&nbsp;limit)</pre>
-<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html#query(mil.nga.giat.geowave.core.store.adapter.DataAdapter,%20mil.nga.giat.geowave.core.store.query.Query,%20int)">DataStore</a></code></strong></div>
-<div class="block">Returns all data in this data store that matches the query parameter and
- matches the adapter (the same adapter ID as the ID ingested). All indices
- that are supported by the query will be queried and returned as an
- instance of the native data type that this adapter supports. The iterator
- will only return as many results as the limit passed in.</div>
-<dl>
-<dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html#query(mil.nga.giat.geowave.core.store.adapter.DataAdapter,%20mil.nga.giat.geowave.core.store.query.Query,%20int)">query</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a></code></dd>
-<dt><span class="strong">Parameters:</span></dt><dd><code>adapter</code> - the data adapter to use for the query</dd><dd><code>query</code> - The description of the query to be performed</dd><dd><code>limit</code> - The maximum number of entries to return</dd>
-<dt><span class="strong">Returns:</span></dt><dd>An iterator on all results that match the query. The iterator
-         implements Closeable and it is best practice to close the
-         iterator after it is no longer needed.</dd></dl>
-</li>
-</ul>
-<a name="query(java.util.List, mil.nga.giat.geowave.core.store.query.Query, int)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>query</h4>
-<pre>public&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;?&gt;&nbsp;query(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;adapterIds,
-                         <a href="../../../../../../mil/nga/giat/geowave/core/store/query/Query.html" title="interface in mil.nga.giat.geowave.core.store.query">Query</a>&nbsp;query,
-                         int&nbsp;limit)</pre>
-<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html#query(java.util.List,%20mil.nga.giat.geowave.core.store.query.Query,%20int)">DataStore</a></code></strong></div>
-<div class="block">Returns all data in this data store that matches the query parameter and
- matches one of the adapter IDs. All data types that match the query and
- one of the adapter IDs will be returned as an instance of the native data
- type that was originally ingested. The iterator will only return as many
- results as the limit passed in.</div>
-<dl>
-<dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html#query(java.util.List,%20mil.nga.giat.geowave.core.store.query.Query,%20int)">query</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a></code></dd>
-<dt><span class="strong">Parameters:</span></dt><dd><code>adapterIds</code> - The data adapter IDs to use for the query - only data that
-            matches one of these adapter IDs will be returned</dd><dd><code>query</code> - The description of the query to be performed</dd><dd><code>limit</code> - The maximum number of entries to return</dd>
-<dt><span class="strong">Returns:</span></dt><dd>An iterator on all results that match the query. The iterator
-         implements Closeable and it is best practice to close the
-         iterator after it is no longer needed.</dd></dl>
-</li>
-</ul>
-<a name="query(java.util.List, mil.nga.giat.geowave.core.store.query.Query)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>query</h4>
-<pre>public&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;?&gt;&nbsp;query(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;adapterIds,
-                         <a href="../../../../../../mil/nga/giat/geowave/core/store/query/Query.html" title="interface in mil.nga.giat.geowave.core.store.query">Query</a>&nbsp;query)</pre>
-<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html#query(java.util.List,%20mil.nga.giat.geowave.core.store.query.Query)">DataStore</a></code></strong></div>
-<div class="block">Returns all data in this data store that matches the query parameter and
- matches one of the adapter IDs. All data types that match the query and
- one of the adapter IDs will be returned as an instance of the native data
- type that was originally ingested.</div>
-<dl>
-<dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html#query(java.util.List,%20mil.nga.giat.geowave.core.store.query.Query)">query</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a></code></dd>
-<dt><span class="strong">Parameters:</span></dt><dd><code>adapterIds</code> - The data adapter IDs to use for the query - only data that
-            matches one of these adapter IDs will be returned</dd><dd><code>query</code> - The description of the query to be performed</dd>
-<dt><span class="strong">Returns:</span></dt><dd>An iterator on all results that match the query. The iterator
-         implements Closeable and it is best practice to close the
-         iterator after it is no longer needed.</dd></dl>
-</li>
-</ul>
-<a name="query(mil.nga.giat.geowave.core.store.query.Query)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>query</h4>
-<pre>public&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;?&gt;&nbsp;query(<a href="../../../../../../mil/nga/giat/geowave/core/store/query/Query.html" title="interface in mil.nga.giat.geowave.core.store.query">Query</a>&nbsp;query)</pre>
-<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html#query(mil.nga.giat.geowave.core.store.query.Query)">DataStore</a></code></strong></div>
-<div class="block">Returns all data in this data store that matches the query parameter. All
- indices that are supported by the query will be queried and all data
- types that match the query will be returned as an instance of the native
- data type that was originally ingested.</div>
-<dl>
-<dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html#query(mil.nga.giat.geowave.core.store.query.Query)">query</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a></code></dd>
-<dt><span class="strong">Parameters:</span></dt><dd><code>query</code> - The description of the query to be performed</dd>
-<dt><span class="strong">Returns:</span></dt><dd>An iterator on all results that match the query. The iterator
-         implements Closeable and it is best practice to close the
-         iterator after it is no longer needed.</dd></dl>
-</li>
-</ul>
-<a name="query(mil.nga.giat.geowave.core.store.query.Query, mil.nga.giat.geowave.core.store.ScanCallback)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>query</h4>
-<pre>public&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;?&gt;&nbsp;query(<a href="../../../../../../mil/nga/giat/geowave/core/store/query/Query.html" title="interface in mil.nga.giat.geowave.core.store.query">Query</a>&nbsp;query,
-                         <a href="../../../../../../mil/nga/giat/geowave/core/store/ScanCallback.html" title="interface in mil.nga.giat.geowave.core.store">ScanCallback</a>&lt;?&gt;&nbsp;scanCallback)</pre>
-</li>
-</ul>
-<a name="query(mil.nga.giat.geowave.core.store.index.Index, mil.nga.giat.geowave.core.store.query.Query)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>query</h4>
-<pre>public&nbsp;&lt;T&gt;&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;T&gt;&nbsp;query(<a href="../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index,
-                             <a href="../../../../../../mil/nga/giat/geowave/core/store/query/Query.html" title="interface in mil.nga.giat.geowave.core.store.query">Query</a>&nbsp;query)</pre>
-<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html#query(mil.nga.giat.geowave.core.store.index.Index,%20mil.nga.giat.geowave.core.store.query.Query)">DataStore</a></code></strong></div>
-<div class="block">Returns all data in this data store that matches the query parameter
- within the index described by the index passed in. All data types that
- match the query will be returned as an instance of the native data type
- that was originally ingested.</div>
-<dl>
-<dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html#query(mil.nga.giat.geowave.core.store.index.Index,%20mil.nga.giat.geowave.core.store.query.Query)">query</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a></code></dd>
-<dt><span class="strong">Parameters:</span></dt><dd><code>index</code> - The index information to query against. All data within the
-            index of this index ID will be queried and returned.</dd><dd><code>query</code> - The description of the query to be performed</dd>
-<dt><span class="strong">Returns:</span></dt><dd>An iterator on all results that match the query. The iterator
-         implements Closeable and it is best practice to close the
-         iterator after it is no longer needed.</dd></dl>
-</li>
-</ul>
-<a name="query(mil.nga.giat.geowave.core.store.index.Index, mil.nga.giat.geowave.core.store.query.Query, mil.nga.giat.geowave.core.store.query.QueryOptions)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>query</h4>
-<pre>public&nbsp;&lt;T&gt;&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;T&gt;&nbsp;query(<a href="../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index,
-                             <a href="../../../../../../mil/nga/giat/geowave/core/store/query/Query.html" title="interface in mil.nga.giat.geowave.core.store.query">Query</a>&nbsp;query,
-                             <a href="../../../../../../mil/nga/giat/geowave/core/store/query/QueryOptions.html" title="class in mil.nga.giat.geowave.core.store.query">QueryOptions</a>&nbsp;queryOptions)</pre>
-<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html#query(mil.nga.giat.geowave.core.store.index.Index,%20mil.nga.giat.geowave.core.store.query.Query,%20mil.nga.giat.geowave.core.store.query.QueryOptions)">DataStore</a></code></strong></div>
-<div class="block">Returns all data in this data store that matches the query parameter
- within the index described by the index passed in. All data types that
- match the query will be returned as an instance of the native data type
- that was originally ingested. Additional query options will be applied to
- results</div>
-<dl>
-<dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html#query(mil.nga.giat.geowave.core.store.index.Index,%20mil.nga.giat.geowave.core.store.query.Query,%20mil.nga.giat.geowave.core.store.query.QueryOptions)">query</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a></code></dd>
-<dt><span class="strong">Parameters:</span></dt><dd><code>index</code> - The index information to query against. All data within the
-            index of this index ID will be queried and returned.</dd><dd><code>query</code> - The description of the query to be performed</dd><dd><code>queryOptions</code> - Additional options to be applied to the query results</dd>
-<dt><span class="strong">Returns:</span></dt><dd>An iterator on all results that match the query. The iterator
-         implements Closeable and it is best practice to close the
-         iterator after it is no longer needed.</dd></dl>
-</li>
-</ul>
-<a name="query(mil.nga.giat.geowave.core.store.index.Index, mil.nga.giat.geowave.core.store.query.Query, int)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>query</h4>
-<pre>public&nbsp;&lt;T&gt;&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;T&gt;&nbsp;query(<a href="../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index,
-                             <a href="../../../../../../mil/nga/giat/geowave/core/store/query/Query.html" title="interface in mil.nga.giat.geowave.core.store.query">Query</a>&nbsp;query,
-                             int&nbsp;limit)</pre>
-<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html#query(mil.nga.giat.geowave.core.store.index.Index,%20mil.nga.giat.geowave.core.store.query.Query,%20int)">DataStore</a></code></strong></div>
-<div class="block">Returns all data in this data store that matches the query parameter
- within the index described by the index passed in. All data types that
- match the query will be returned as an instance of the native data type
- that was originally ingested. The iterator will only return as many
- results as the limit passed in.</div>
-<dl>
-<dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html#query(mil.nga.giat.geowave.core.store.index.Index,%20mil.nga.giat.geowave.core.store.query.Query,%20int)">query</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a></code></dd>
-<dt><span class="strong">Parameters:</span></dt><dd><code>index</code> - The index information to query against. All data within the
-            index of this index ID will be queried and returned.</dd><dd><code>query</code> - The description of the query to be performed</dd><dd><code>limit</code> - The maximum number of entries to return</dd>
-<dt><span class="strong">Returns:</span></dt><dd>An iterator on all results that match the query. The iterator
-         implements Closeable and it is best practice to close the
-         iterator after it is no longer needed.</dd></dl>
-</li>
-</ul>
-<a name="query(mil.nga.giat.geowave.core.store.query.Query, int)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>query</h4>
-<pre>public&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;?&gt;&nbsp;query(<a href="../../../../../../mil/nga/giat/geowave/core/store/query/Query.html" title="interface in mil.nga.giat.geowave.core.store.query">Query</a>&nbsp;query,
-                         int&nbsp;limit)</pre>
-<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html#query(mil.nga.giat.geowave.core.store.query.Query,%20int)">DataStore</a></code></strong></div>
-<div class="block">Returns all data in this data store that matches the query parameter. All
- indices that are supported by the query will be queried and all data
- types that match the query will be returned as an instance of the native
- data type that was originally ingested. The iterator will only return as
- many results as the limit passed in.</div>
-<dl>
-<dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html#query(mil.nga.giat.geowave.core.store.query.Query,%20int)">query</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a></code></dd>
-<dt><span class="strong">Parameters:</span></dt><dd><code>query</code> - The description of the query to be performed</dd><dd><code>limit</code> - The maximum number of entries to return</dd>
-<dt><span class="strong">Returns:</span></dt><dd>An iterator on all results that match the query. The iterator
-         implements Closeable and it is best practice to close the
-         iterator after it is no longer needed.</dd></dl>
-</li>
-</ul>
-<a name="query(mil.nga.giat.geowave.core.store.adapter.DataAdapter, mil.nga.giat.geowave.core.store.index.Index, mil.nga.giat.geowave.core.store.query.Query, int)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>query</h4>
-<pre>public&nbsp;&lt;T&gt;&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;T&gt;&nbsp;query(<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;T&gt;&nbsp;adapter,
-                             <a href="../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index,
-                             <a href="../../../../../../mil/nga/giat/geowave/core/store/query/Query.html" title="interface in mil.nga.giat.geowave.core.store.query">Query</a>&nbsp;query,
-                             int&nbsp;limit)</pre>
-<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html#query(mil.nga.giat.geowave.core.store.adapter.DataAdapter,%20mil.nga.giat.geowave.core.store.index.Index,%20mil.nga.giat.geowave.core.store.query.Query,%20int)">DataStore</a></code></strong></div>
-<div class="block">Returns all data in this data store that matches the query parameter
+<h4>delete</h4>
+<pre>public&nbsp;boolean&nbsp;delete(<a href="../../../../../../mil/nga/giat/geowave/core/store/query/QueryOptions.html" title="class in mil.nga.giat.geowave.core.store.query">QueryOptions</a>&nbsp;queryOptions,
+             <a href="../../../../../../mil/nga/giat/geowave/core/store/query/Query.html" title="interface in mil.nga.giat.geowave.core.store.query">Query</a>&nbsp;query)</pre>
+<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html#delete(mil.nga.giat.geowave.core.store.query.QueryOptions,%20mil.nga.giat.geowave.core.store.query.Query)">DataStore</a></code></strong></div>
+<div class="block">Delete all data in this data store that matches the query parameter
  within the index described by the index passed in and matches the adapter
  (the same adapter ID as the ID ingested). All data that matches the
- query, adapter ID, and is in the index ID will be returned as an instance
- of the native data type that this adapter supports. The iterator will
- only return as many results as the limit passed in.</div>
+ query, adapter ID, and is in the index ID will be deleted.
+ 
+ For ({@link  mil.nga.giat.geowave.core.store.query.AdapterIdQuery), all supporting statistics
+ and secondary indices are also deleted.
+ 
+ Statistics and secondary indices are updated as required for all other types of queries.</div>
 <dl>
 <dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html#query(mil.nga.giat.geowave.core.store.adapter.DataAdapter,%20mil.nga.giat.geowave.core.store.index.Index,%20mil.nga.giat.geowave.core.store.query.Query,%20int)">query</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a></code></dd>
-<dt><span class="strong">Parameters:</span></dt><dd><code>adapter</code> - the data adapter to use for the query</dd><dd><code>index</code> - The index information to query against. All data within the
-            index of this index ID will be queried and returned.</dd><dd><code>query</code> - The description of the query to be performed</dd><dd><code>limit</code> - The maximum number of entries to return</dd>
-<dt><span class="strong">Returns:</span></dt><dd>An iterator on all results that match the query. The iterator
-         implements Closeable and it is best practice to close the
-         iterator after it is no longer needed.</dd></dl>
+<dd><code><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html#delete(mil.nga.giat.geowave.core.store.query.QueryOptions,%20mil.nga.giat.geowave.core.store.query.Query)">delete</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>queryOptions</code> - additional options for the processing the query</dd>
+<dt><span class="strong">Returns:</span></dt><dd>true on success</dd></dl>
 </li>
 </ul>
-<a name="query(mil.nga.giat.geowave.core.store.adapter.DataAdapter, mil.nga.giat.geowave.core.store.index.Index, mil.nga.giat.geowave.core.store.query.Query)">
+<a name="getSplits(mil.nga.giat.geowave.core.store.query.DistributableQuery, mil.nga.giat.geowave.core.store.query.QueryOptions, mil.nga.giat.geowave.core.store.adapter.AdapterStore, mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore, mil.nga.giat.geowave.core.store.index.IndexStore, java.lang.Integer, java.lang.Integer)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>query</h4>
-<pre>public&nbsp;&lt;T&gt;&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;T&gt;&nbsp;query(<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;T&gt;&nbsp;adapter,
-                             <a href="../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index,
-                             <a href="../../../../../../mil/nga/giat/geowave/core/store/query/Query.html" title="interface in mil.nga.giat.geowave.core.store.query">Query</a>&nbsp;query)</pre>
-<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html#query(mil.nga.giat.geowave.core.store.adapter.DataAdapter,%20mil.nga.giat.geowave.core.store.index.Index,%20mil.nga.giat.geowave.core.store.query.Query)">DataStore</a></code></strong></div>
-<div class="block">Returns all data in this data store that matches the query parameter
- within the index described by the index passed in and matches the adapter
- (the same adapter ID as the ID ingested). All data that matches the
- query, adapter ID, and is in the index ID will be returned as an instance
- of the native data type that this adapter supports.</div>
+<h4>getSplits</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;org.apache.hadoop.mapreduce.InputSplit&gt;&nbsp;getSplits(<a href="../../../../../../mil/nga/giat/geowave/core/store/query/DistributableQuery.html" title="interface in mil.nga.giat.geowave.core.store.query">DistributableQuery</a>&nbsp;query,
+                                                     <a href="../../../../../../mil/nga/giat/geowave/core/store/query/QueryOptions.html" title="class in mil.nga.giat.geowave.core.store.query">QueryOptions</a>&nbsp;queryOptions,
+                                                     <a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;adapterStore,
+                                                     <a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatisticsStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatisticsStore</a>&nbsp;statsStore,
+                                                     <a href="../../../../../../mil/nga/giat/geowave/core/store/index/IndexStore.html" title="interface in mil.nga.giat.geowave.core.store.index">IndexStore</a>&nbsp;indexStore,
+                                                     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;minSplits,
+                                                     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;maxSplits)
+                                                       throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a>,
+                                                              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
 <dl>
 <dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html#query(mil.nga.giat.geowave.core.store.adapter.DataAdapter,%20mil.nga.giat.geowave.core.store.index.Index,%20mil.nga.giat.geowave.core.store.query.Query)">query</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a></code></dd>
-<dt><span class="strong">Parameters:</span></dt><dd><code>adapter</code> - the data adapter to use for the query</dd><dd><code>index</code> - The index information to query against. All data within the
-            index of this index ID will be queried and returned.</dd><dd><code>query</code> - The description of the query to be performed</dd>
-<dt><span class="strong">Returns:</span></dt><dd>An iterator on all results that match the query. The iterator
-         implements Closeable and it is best practice to close the
-         iterator after it is no longer needed.</dd></dl>
+<dd><code><a href="../../../../../../mil/nga/giat/geowave/mapreduce/MapReduceDataStore.html#getSplits(mil.nga.giat.geowave.core.store.query.DistributableQuery,%20mil.nga.giat.geowave.core.store.query.QueryOptions,%20mil.nga.giat.geowave.core.store.adapter.AdapterStore,%20mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore,%20mil.nga.giat.geowave.core.store.index.IndexStore,%20java.lang.Integer,%20java.lang.Integer)">getSplits</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/mapreduce/MapReduceDataStore.html" title="interface in mil.nga.giat.geowave.mapreduce">MapReduceDataStore</a></code></dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></code></dd></dl>
 </li>
 </ul>
-<a name="query(mil.nga.giat.geowave.core.store.adapter.DataAdapter, mil.nga.giat.geowave.core.store.index.Index, mil.nga.giat.geowave.core.store.query.Query, java.lang.Integer, mil.nga.giat.geowave.core.store.ScanCallback, java.lang.String...)">
+<a name="createRecordReader(mil.nga.giat.geowave.core.store.query.DistributableQuery, mil.nga.giat.geowave.core.store.query.QueryOptions, mil.nga.giat.geowave.core.store.adapter.AdapterStore, mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore, mil.nga.giat.geowave.core.store.index.IndexStore, boolean, org.apache.hadoop.mapreduce.InputSplit)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>query</h4>
-<pre>public&nbsp;&lt;T&gt;&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;T&gt;&nbsp;query(<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;T&gt;&nbsp;adapter,
-                             <a href="../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index,
-                             <a href="../../../../../../mil/nga/giat/geowave/core/store/query/Query.html" title="interface in mil.nga.giat.geowave.core.store.query">Query</a>&nbsp;query,
-                             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;limit,
-                             <a href="../../../../../../mil/nga/giat/geowave/core/store/ScanCallback.html" title="interface in mil.nga.giat.geowave.core.store">ScanCallback</a>&lt;?&gt;&nbsp;scanCallback,
-                             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</pre>
-<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html#query(mil.nga.giat.geowave.core.store.adapter.DataAdapter,%20mil.nga.giat.geowave.core.store.index.Index,%20mil.nga.giat.geowave.core.store.query.Query,%20java.lang.Integer,%20mil.nga.giat.geowave.core.store.ScanCallback,%20java.lang.String...)">DataStore</a></code></strong></div>
-<div class="block">Returns all data in this data store that matches the query parameter and
- matches one of the adapter IDs. All data types that match the query and
- one of the adapter IDs will be returned as an instance of the native data
- type that was originally ingested. The iterator will only return as many
- results as the limit passed in.</div>
+<h4>createRecordReader</h4>
+<pre>public&nbsp;org.apache.hadoop.mapreduce.RecordReader&lt;<a href="../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a>,?&gt;&nbsp;createRecordReader(<a href="../../../../../../mil/nga/giat/geowave/core/store/query/DistributableQuery.html" title="interface in mil.nga.giat.geowave.core.store.query">DistributableQuery</a>&nbsp;query,
+                                                                             <a href="../../../../../../mil/nga/giat/geowave/core/store/query/QueryOptions.html" title="class in mil.nga.giat.geowave.core.store.query">QueryOptions</a>&nbsp;queryOptions,
+                                                                             <a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;adapterStore,
+                                                                             <a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatisticsStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatisticsStore</a>&nbsp;statsStore,
+                                                                             <a href="../../../../../../mil/nga/giat/geowave/core/store/index/IndexStore.html" title="interface in mil.nga.giat.geowave.core.store.index">IndexStore</a>&nbsp;indexStore,
+                                                                             boolean&nbsp;isOutputWritable,
+                                                                             org.apache.hadoop.mapreduce.InputSplit&nbsp;inputSplit)
+                                                                               throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a>,
+                                                                                      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
 <dl>
 <dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html#query(mil.nga.giat.geowave.core.store.adapter.DataAdapter,%20mil.nga.giat.geowave.core.store.index.Index,%20mil.nga.giat.geowave.core.store.query.Query,%20java.lang.Integer,%20mil.nga.giat.geowave.core.store.ScanCallback,%20java.lang.String...)">query</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a></code></dd>
-<dd><code>query</code> - The description of the query to be performed</dd><dd><code>limit</code> - The maximum number of entries to return</dd><dd><code>scanCallback</code> - A callback invoked for each row with full row information.</dd><dd><code>authorizations</code> - The authorization used to override the default authorization
-            for cell visibility.</dd>
-<dt><span class="strong">Returns:</span></dt><dd>An iterator on all results that match the query. The iterator
-         implements Closeable and it is best practice to close the
-         iterator after it is no longer needed.</dd></dl>
+<dd><code><a href="../../../../../../mil/nga/giat/geowave/mapreduce/MapReduceDataStore.html#createRecordReader(mil.nga.giat.geowave.core.store.query.DistributableQuery,%20mil.nga.giat.geowave.core.store.query.QueryOptions,%20mil.nga.giat.geowave.core.store.adapter.AdapterStore,%20mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore,%20mil.nga.giat.geowave.core.store.index.IndexStore,%20boolean,%20org.apache.hadoop.mapreduce.InputSplit)">createRecordReader</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/mapreduce/MapReduceDataStore.html" title="interface in mil.nga.giat.geowave.mapreduce">MapReduceDataStore</a></code></dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></code></dd></dl>
 </li>
 </ul>
-<a name="deleteEntries(mil.nga.giat.geowave.core.store.adapter.DataAdapter, mil.nga.giat.geowave.core.store.index.Index, java.lang.String...)">
+<a name="getIndexStore()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getIndexStore</h4>
+<pre>public&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/index/IndexStore.html" title="interface in mil.nga.giat.geowave.core.store.index">IndexStore</a>&nbsp;getIndexStore()</pre>
+</li>
+</ul>
+<a name="getAdapterStore()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getAdapterStore</h4>
+<pre>public&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;getAdapterStore()</pre>
+</li>
+</ul>
+<a name="getStatisticsStore()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getStatisticsStore</h4>
+<pre>public&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatisticsStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatisticsStore</a>&nbsp;getStatisticsStore()</pre>
+</li>
+</ul>
+<a name="getSecondaryIndexDataStore()">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>deleteEntries</h4>
-<pre>public&nbsp;&lt;T&gt;&nbsp;void&nbsp;deleteEntries(<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;T&gt;&nbsp;adapter,
-                     <a href="../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index,
-                     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;additionalAuthorizations)
-                   throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
-<dl><dt><span class="strong">Throws:</span></dt>
-<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd></dl>
+<h4>getSecondaryIndexDataStore</h4>
+<pre>public&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a>&nbsp;getSecondaryIndexDataStore()</pre>
 </li>
 </ul>
 </li>
@@ -1210,8 +649,8 @@ public&nbsp;&lt;T&gt;&nbsp;T&nbsp;getEntry(<a href="../../../../../../mil/nga/gi
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloCommandLineOptions.html" title="class in mil.nga.giat.geowave.datastore.accumulo"><span class="strong">Prev Class</span></a></li>
-<li><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloIndexWriter.html" title="class in mil.nga.giat.geowave.datastore.accumulo"><span class="strong">Next Class</span></a></li>
+<li><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AbstractAccumuloStoreFactory.html" title="class in mil.nga.giat.geowave.datastore.accumulo"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloDataStore.CastIterator.html" title="class in mil.nga.giat.geowave.datastore.accumulo"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../index.html?mil/nga/giat/geowave/datastore/accumulo/AccumuloDataStore.html" target="_top">Frames</a></li>
@@ -1235,7 +674,7 @@ public&nbsp;&lt;T&gt;&nbsp;T&nbsp;getEntry(<a href="../../../../../../mil/nga/gi
 <div>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
-<li>Nested&nbsp;|&nbsp;</li>
+<li><a href="#nested_class_summary">Nested</a>&nbsp;|&nbsp;</li>
 <li><a href="#field_summary">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method_summary">Method</a></li>

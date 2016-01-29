@@ -119,8 +119,8 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/DataAd
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/GeoWaveData.html" title="class in mil.nga.giat.geowave.core.ingest">GeoWaveData</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/IngestWithReducer.html" title="type parameter in IngestWithReducer">O</a>&gt;&gt;</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/IngestWithReducer.html#toGeoWaveData(K,%20mil.nga.giat.geowave.core.index.ByteArrayId,%20java.lang.String,%20java.lang.Iterable)">toGeoWaveData</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/IngestWithReducer.html" title="type parameter in IngestWithReducer">K</a>&nbsp;key,
-             <a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;primaryIndexId,
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/IngestWithReducer.html#toGeoWaveData(K,%20java.util.Collection,%20java.lang.String,%20java.lang.Iterable)">toGeoWaveData</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/IngestWithReducer.html" title="type parameter in IngestWithReducer">K</a>&nbsp;key,
+             <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;primaryIndexIds,
              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;globalVisibility,
              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/IngestWithReducer.html" title="type parameter in IngestWithReducer">V</a>&gt;&nbsp;values)</code>&nbsp;</td>
 </tr>
@@ -134,7 +134,7 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/DataAd
 <!--   -->
 </a>
 <h3>Methods inherited from interface&nbsp;mil.nga.giat.geowave.core.ingest.<a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/DataAdapterProvider.html" title="interface in mil.nga.giat.geowave.core.ingest">DataAdapterProvider</a></h3>
-<code><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/DataAdapterProvider.html#getDataAdapters(java.lang.String)">getDataAdapters</a></code></li>
+<code><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/DataAdapterProvider.html#getDataAdapters(java.lang.String)">getDataAdapters</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/DataAdapterProvider.html#getSupportedIndexableTypes()">getSupportedIndexableTypes</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods_inherited_from_class_mil.nga.giat.geowave.core.index.Persistable">
@@ -168,16 +168,16 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/DataAd
 <pre><a href="../../../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/KeyValueData.html" title="class in mil.nga.giat.geowave.core.ingest.hdfs.mapreduce">KeyValueData</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/IngestWithReducer.html" title="type parameter in IngestWithReducer">K</a>,<a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/IngestWithReducer.html" title="type parameter in IngestWithReducer">V</a>&gt;&gt;&nbsp;toIntermediateMapReduceData(<a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/IngestWithReducer.html" title="type parameter in IngestWithReducer">I</a>&nbsp;input)</pre>
 </li>
 </ul>
-<a name="toGeoWaveData(org.apache.hadoop.io.WritableComparable,mil.nga.giat.geowave.core.index.ByteArrayId,java.lang.String,java.lang.Iterable)">
+<a name="toGeoWaveData(org.apache.hadoop.io.WritableComparable,java.util.Collection,java.lang.String,java.lang.Iterable)">
 <!--   -->
-</a><a name="toGeoWaveData(K, mil.nga.giat.geowave.core.index.ByteArrayId, java.lang.String, java.lang.Iterable)">
+</a><a name="toGeoWaveData(K, java.util.Collection, java.lang.String, java.lang.Iterable)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>toGeoWaveData</h4>
 <pre><a href="../../../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/GeoWaveData.html" title="class in mil.nga.giat.geowave.core.ingest">GeoWaveData</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/IngestWithReducer.html" title="type parameter in IngestWithReducer">O</a>&gt;&gt;&nbsp;toGeoWaveData(<a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/IngestWithReducer.html" title="type parameter in IngestWithReducer">K</a>&nbsp;key,
-                                              <a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;primaryIndexId,
+                                              <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;primaryIndexIds,
                                               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;globalVisibility,
                                               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/IngestWithReducer.html" title="type parameter in IngestWithReducer">V</a>&gt;&nbsp;values)</pre>
 </li>

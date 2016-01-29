@@ -100,7 +100,7 @@
 </dl>
 <dl>
 <dt>Direct Known Subclasses:</dt>
-<dd><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureCollectionDataAdapter.html" title="class in mil.nga.giat.geowave.adapter.vector">FeatureCollectionDataAdapter</a>, <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureDataAdapter.html" title="class in mil.nga.giat.geowave.adapter.vector">FeatureDataAdapter</a></dd>
+<dd><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureDataAdapter.html" title="class in mil.nga.giat.geowave.adapter.vector">FeatureDataAdapter</a>, <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/KryoFeatureDataAdapter.html" title="class in mil.nga.giat.geowave.adapter.vector">KryoFeatureDataAdapter</a></dd>
 </dl>
 <hr>
 <br>
@@ -197,8 +197,8 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/AbstractDataAdapter.html" title="type parameter in AbstractDataAdapter">T</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/AbstractDataAdapter.html#decode(mil.nga.giat.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding,%20mil.nga.giat.geowave.core.store.index.Index)">decode</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/IndexedAdapterPersistenceEncoding.html" title="class in mil.nga.giat.geowave.core.store.adapter">IndexedAdapterPersistenceEncoding</a>&nbsp;data,
-      <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index)</code>&nbsp;</td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/AbstractDataAdapter.html#decode(mil.nga.giat.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding,%20mil.nga.giat.geowave.core.store.index.PrimaryIndex)">decode</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/IndexedAdapterPersistenceEncoding.html" title="class in mil.nga.giat.geowave.core.store.adapter">IndexedAdapterPersistenceEncoding</a>&nbsp;data,
+      <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></td>
@@ -223,7 +223,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/IndexFieldHandler.html" title="interface in mil.nga.giat.geowave.core.store.adapter">IndexFieldHandler</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/AbstractDataAdapter.html" title="type parameter in AbstractDataAdapter">T</a>,? extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexValue.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexValue</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/AbstractDataAdapter.html#getFieldHandler(mil.nga.giat.geowave.core.store.dimension.DimensionField)">getFieldHandler</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/DimensionField.html" title="interface in mil.nga.giat.geowave.core.store.dimension">DimensionField</a>&lt;? extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexValue.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexValue</a>&gt;&nbsp;dimension)</code>&nbsp;</td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/AbstractDataAdapter.html#getFieldHandler(mil.nga.giat.geowave.core.store.dimension.NumericDimensionField)">getFieldHandler</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/NumericDimensionField.html" title="interface in mil.nga.giat.geowave.core.store.dimension">NumericDimensionField</a>&lt;? extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexValue.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexValue</a>&gt;&nbsp;dimension)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/field/FieldVisibilityHandler.html" title="interface in mil.nga.giat.geowave.core.store.data.field">FieldVisibilityHandler</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/AbstractDataAdapter.html" title="type parameter in AbstractDataAdapter">T</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></td>
@@ -402,17 +402,17 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter
 </dl>
 </li>
 </ul>
-<a name="decode(mil.nga.giat.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding, mil.nga.giat.geowave.core.store.index.Index)">
+<a name="decode(mil.nga.giat.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding, mil.nga.giat.geowave.core.store.index.PrimaryIndex)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>decode</h4>
 <pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/AbstractDataAdapter.html" title="type parameter in AbstractDataAdapter">T</a>&nbsp;decode(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/IndexedAdapterPersistenceEncoding.html" title="class in mil.nga.giat.geowave.core.store.adapter">IndexedAdapterPersistenceEncoding</a>&nbsp;data,
-       <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index)</pre>
+       <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index)</pre>
 <dl>
 <dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html#decode(mil.nga.giat.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding,%20mil.nga.giat.geowave.core.store.index.Index)">decode</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/AbstractDataAdapter.html" title="type parameter in AbstractDataAdapter">T</a>&gt;</code></dd>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html#decode(mil.nga.giat.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding,%20mil.nga.giat.geowave.core.store.index.PrimaryIndex)">decode</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/AbstractDataAdapter.html" title="type parameter in AbstractDataAdapter">T</a>&gt;</code></dd>
 </dl>
 </li>
 </ul>
@@ -425,13 +425,13 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter
 <pre>protected abstract&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/NativeFieldHandler.RowBuilder.html" title="interface in mil.nga.giat.geowave.core.store.adapter">NativeFieldHandler.RowBuilder</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/AbstractDataAdapter.html" title="type parameter in AbstractDataAdapter">T</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;newBuilder()</pre>
 </li>
 </ul>
-<a name="getFieldHandler(mil.nga.giat.geowave.core.store.dimension.DimensionField)">
+<a name="getFieldHandler(mil.nga.giat.geowave.core.store.dimension.NumericDimensionField)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>getFieldHandler</h4>
-<pre>protected&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/IndexFieldHandler.html" title="interface in mil.nga.giat.geowave.core.store.adapter">IndexFieldHandler</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/AbstractDataAdapter.html" title="type parameter in AbstractDataAdapter">T</a>,? extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexValue.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexValue</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;getFieldHandler(<a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/DimensionField.html" title="interface in mil.nga.giat.geowave.core.store.dimension">DimensionField</a>&lt;? extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexValue.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexValue</a>&gt;&nbsp;dimension)</pre>
+<pre>protected&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/IndexFieldHandler.html" title="interface in mil.nga.giat.geowave.core.store.adapter">IndexFieldHandler</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/AbstractDataAdapter.html" title="type parameter in AbstractDataAdapter">T</a>,? extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexValue.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexValue</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;getFieldHandler(<a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/NumericDimensionField.html" title="interface in mil.nga.giat.geowave.core.store.dimension">NumericDimensionField</a>&lt;? extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexValue.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexValue</a>&gt;&nbsp;dimension)</pre>
 </li>
 </ul>
 <a name="toBinary()">

@@ -170,8 +170,8 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/geotime/store/qu
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/DistributableQueryFilter.html" title="interface in mil.nga.giat.geowave.core.store.filter">DistributableQueryFilter</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/query/IndexOnlySpatialQuery.html#createQueryFilter(mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData,%20mil.nga.giat.geowave.core.store.dimension.DimensionField[])">createQueryFilter</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;constraints,
-                 <a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/DimensionField.html" title="interface in mil.nga.giat.geowave.core.store.dimension">DimensionField</a>&lt;?&gt;[]&nbsp;dimensionFields)</code>&nbsp;</td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/query/IndexOnlySpatialQuery.html#createQueryFilter(mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData,%20mil.nga.giat.geowave.core.store.dimension.NumericDimensionField[])">createQueryFilter</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;constraints,
+                 <a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/NumericDimensionField.html" title="interface in mil.nga.giat.geowave.core.store.dimension">NumericDimensionField</a>&lt;?&gt;[]&nbsp;dimensionFields)</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -186,7 +186,7 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/geotime/store/qu
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;mil.nga.giat.geowave.core.store.query.<a href="../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.html" title="class in mil.nga.giat.geowave.core.store.query">BasicQuery</a></h3>
-<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.html#createFilters(mil.nga.giat.geowave.core.store.index.CommonIndexModel)">createFilters</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.html#getIndexConstraints(mil.nga.giat.geowave.core.index.NumericIndexStrategy)">getIndexConstraints</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.html#isSupported(mil.nga.giat.geowave.core.store.index.Index)">isSupported</a></code></li>
+<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.html#createFilters(mil.nga.giat.geowave.core.store.index.CommonIndexModel)">createFilters</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.html#getIndexConstraints(mil.nga.giat.geowave.core.index.NumericIndexStrategy)">getIndexConstraints</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.html#getSecondaryIndexConstraints(mil.nga.giat.geowave.core.store.index.SecondaryIndex)">getSecondaryIndexConstraints</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.html#getSecondaryIndexQueryConstraints(mil.nga.giat.geowave.core.store.index.SecondaryIndex)">getSecondaryIndexQueryConstraints</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.html#getSecondaryQueryFilter(mil.nga.giat.geowave.core.store.index.SecondaryIndex)">getSecondaryQueryFilter</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.html#isSupported(mil.nga.giat.geowave.core.store.index.Index)">isSupported</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.html#secondaryIndexSupports(mil.nga.giat.geowave.core.store.index.SecondaryIndex)">secondaryIndexSupports</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods_inherited_from_class_java.lang.Object">
@@ -236,17 +236,17 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/geotime/store/qu
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="createQueryFilter(mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData, mil.nga.giat.geowave.core.store.dimension.DimensionField[])">
+<a name="createQueryFilter(mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData, mil.nga.giat.geowave.core.store.dimension.NumericDimensionField[])">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>createQueryFilter</h4>
 <pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/DistributableQueryFilter.html" title="interface in mil.nga.giat.geowave.core.store.filter">DistributableQueryFilter</a>&nbsp;createQueryFilter(<a href="../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;constraints,
-                                         <a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/DimensionField.html" title="interface in mil.nga.giat.geowave.core.store.dimension">DimensionField</a>&lt;?&gt;[]&nbsp;dimensionFields)</pre>
+                                         <a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/NumericDimensionField.html" title="interface in mil.nga.giat.geowave.core.store.dimension">NumericDimensionField</a>&lt;?&gt;[]&nbsp;dimensionFields)</pre>
 <dl>
 <dt><strong>Overrides:</strong></dt>
-<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/geotime/store/query/SpatialQuery.html#createQueryFilter(mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData,%20mil.nga.giat.geowave.core.store.dimension.DimensionField[])">createQueryFilter</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/geotime/store/query/SpatialQuery.html" title="class in mil.nga.giat.geowave.core.geotime.store.query">SpatialQuery</a></code></dd>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/geotime/store/query/SpatialQuery.html#createQueryFilter(mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData,%20mil.nga.giat.geowave.core.store.dimension.NumericDimensionField[])">createQueryFilter</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/geotime/store/query/SpatialQuery.html" title="class in mil.nga.giat.geowave.core.geotime.store.query">SpatialQuery</a></code></dd>
 </dl>
 </li>
 </ul>

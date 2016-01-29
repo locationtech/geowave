@@ -35,7 +35,7 @@
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/DistributableQuery.html" title="interface in mil.nga.giat.geowave.core.store.query"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/PrefixIdQuery.html" title="class in mil.nga.giat.geowave.core.store.query"><span class="strong">Prev Class</span></a></li>
 <li><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/QueryOptions.html" title="class in mil.nga.giat.geowave.core.store.query"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">
@@ -91,7 +91,7 @@
 </dl>
 <dl>
 <dt>All Known Implementing Classes:</dt>
-<dd><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.html" title="class in mil.nga.giat.geowave.core.store.query">BasicQuery</a>, <a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/query/IndexOnlySpatialQuery.html" title="class in mil.nga.giat.geowave.adapter.raster.query">IndexOnlySpatialQuery</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/geotime/store/query/SpatialQuery.html" title="class in mil.nga.giat.geowave.core.geotime.store.query">SpatialQuery</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/geotime/store/query/SpatialTemporalQuery.html" title="class in mil.nga.giat.geowave.core.geotime.store.query">SpatialTemporalQuery</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/geotime/store/query/TemporalQuery.html" title="class in mil.nga.giat.geowave.core.geotime.store.query">TemporalQuery</a></dd>
+<dd><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/AdapterIdQuery.html" title="class in mil.nga.giat.geowave.core.store.query">AdapterIdQuery</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.html" title="class in mil.nga.giat.geowave.core.store.query">BasicQuery</a>, <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/query/cql/CQLQuery.html" title="class in mil.nga.giat.geowave.adapter.vector.query.cql">CQLQuery</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/query/DataIdQuery.html" title="class in mil.nga.giat.geowave.core.store.query">DataIdQuery</a>, <a href="../../../../../../../mil/nga/giat/geowave/analytic/clustering/DistortionGroupManagement.BatchIdQuery.html" title="class in mil.nga.giat.geowave.analytic.clustering">DistortionGroupManagement.BatchIdQuery</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/query/EverythingQuery.html" title="class in mil.nga.giat.geowave.core.store.query">EverythingQuery</a>, <a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/query/IndexOnlySpatialQuery.html" title="class in mil.nga.giat.geowave.adapter.raster.query">IndexOnlySpatialQuery</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/query/PrefixIdQuery.html" title="class in mil.nga.giat.geowave.core.store.query">PrefixIdQuery</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/query/RowIdQuery.html" title="class in mil.nga.giat.geowave.core.store.query">RowIdQuery</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/geotime/store/query/SpatialQuery.html" title="class in mil.nga.giat.geowave.core.geotime.store.query">SpatialQuery</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/geotime/store/query/SpatialTemporalQuery.html" title="class in mil.nga.giat.geowave.core.geotime.store.query">SpatialTemporalQuery</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/geotime/store/query/TemporalQuery.html" title="class in mil.nga.giat.geowave.core.geotime.store.query">TemporalQuery</a></dd>
 </dl>
 <hr>
 <br>
@@ -131,7 +131,7 @@
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/Query.html#isSupported(mil.nga.giat.geowave.core.store.index.Index)">isSupported</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index)</code>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/Query.html#isSupported(mil.nga.giat.geowave.core.store.index.Index)">isSupported</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="interface in mil.nga.giat.geowave.core.store.index">Index</a>&lt;?,?&gt;&nbsp;index)</code>
 <div class="block">This is useful to determine what indices this query supports.</div>
 </td>
 </tr>
@@ -174,7 +174,7 @@
 <ul class="blockList">
 <li class="blockList">
 <h4>isSupported</h4>
-<pre>boolean&nbsp;isSupported(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index)</pre>
+<pre>boolean&nbsp;isSupported(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="interface in mil.nga.giat.geowave.core.store.index">Index</a>&lt;?,?&gt;&nbsp;index)</pre>
 <div class="block">This is useful to determine what indices this query supports. If an index
  is not supported the query will not be run on it and no data will be
  returned from that index.</div>
@@ -225,7 +225,7 @@
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/DistributableQuery.html" title="interface in mil.nga.giat.geowave.core.store.query"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/PrefixIdQuery.html" title="class in mil.nga.giat.geowave.core.store.query"><span class="strong">Prev Class</span></a></li>
 <li><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/QueryOptions.html" title="class in mil.nga.giat.geowave.core.store.query"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">

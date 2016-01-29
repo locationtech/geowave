@@ -79,6 +79,10 @@
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><a href="#mil.nga.giat.geowave.core.geotime.ingest">mil.nga.giat.geowave.core.geotime.ingest</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.core.geotime.store.dimension">mil.nga.giat.geowave.core.geotime.store.dimension</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -100,15 +104,19 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../../../../../mil/nga/giat/geowave/core/geotime/index/dimension/TemporalBinningStrategy.Unit.html" title="enum in mil.nga.giat.geowave.core.geotime.index.dimension">TemporalBinningStrategy.Unit</a></code></td>
-<td class="colLast"><span class="strong">TemporalBinningStrategy.Unit.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/core/geotime/index/dimension/TemporalBinningStrategy.Unit.html#getUnit(int)">getUnit</a></strong>(int&nbsp;calendarEnum)</code>&nbsp;</td>
+<td class="colLast"><span class="strong">TemporalBinningStrategy.Unit.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/core/geotime/index/dimension/TemporalBinningStrategy.Unit.html#fromString(java.lang.String)">fromString</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;code)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../../../../../mil/nga/giat/geowave/core/geotime/index/dimension/TemporalBinningStrategy.Unit.html" title="enum in mil.nga.giat.geowave.core.geotime.index.dimension">TemporalBinningStrategy.Unit</a></code></td>
+<td class="colLast"><span class="strong">TemporalBinningStrategy.Unit.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/core/geotime/index/dimension/TemporalBinningStrategy.Unit.html#getUnit(int)">getUnit</a></strong>(int&nbsp;calendarEnum)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../../../../../mil/nga/giat/geowave/core/geotime/index/dimension/TemporalBinningStrategy.Unit.html" title="enum in mil.nga.giat.geowave.core.geotime.index.dimension">TemporalBinningStrategy.Unit</a></code></td>
 <td class="colLast"><span class="strong">TemporalBinningStrategy.Unit.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/core/geotime/index/dimension/TemporalBinningStrategy.Unit.html#valueOf(java.lang.String)">valueOf</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name)</code>
 <div class="block">Returns the enum constant of this type with the specified name.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../../../../../mil/nga/giat/geowave/core/geotime/index/dimension/TemporalBinningStrategy.Unit.html" title="enum in mil.nga.giat.geowave.core.geotime.index.dimension">TemporalBinningStrategy.Unit</a>[]</code></td>
 <td class="colLast"><span class="strong">TemporalBinningStrategy.Unit.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/core/geotime/index/dimension/TemporalBinningStrategy.Unit.html#values()">values</a></strong>()</code>
 <div class="block">Returns an array containing the constants of this enum type, in
@@ -135,6 +143,37 @@ the order they are declared.</div>
 <div class="block">Constructor used to create a new Unbounded Binning Strategy based upon a
  temporal binning strategy of the unit parameter.</div>
 </td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="mil.nga.giat.geowave.core.geotime.ingest">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../../../../mil/nga/giat/geowave/core/geotime/index/dimension/TemporalBinningStrategy.Unit.html" title="enum in mil.nga.giat.geowave.core.geotime.index.dimension">TemporalBinningStrategy.Unit</a> in <a href="../../../../../../../../../mil/nga/giat/geowave/core/geotime/ingest/package-summary.html">mil.nga.giat.geowave.core.geotime.ingest</a></h3>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../../../mil/nga/giat/geowave/core/geotime/ingest/package-summary.html">mil.nga.giat.geowave.core.geotime.ingest</a> that return <a href="../../../../../../../../../mil/nga/giat/geowave/core/geotime/index/dimension/TemporalBinningStrategy.Unit.html" title="enum in mil.nga.giat.geowave.core.geotime.index.dimension">TemporalBinningStrategy.Unit</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../../../mil/nga/giat/geowave/core/geotime/index/dimension/TemporalBinningStrategy.Unit.html" title="enum in mil.nga.giat.geowave.core.geotime.index.dimension">TemporalBinningStrategy.Unit</a></code></td>
+<td class="colLast"><span class="strong">SpatialTemporalDimensionalityTypeProvider.UnitConverter.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/core/geotime/ingest/SpatialTemporalDimensionalityTypeProvider.UnitConverter.html#convert(java.lang.String)">convert</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;value)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../../../mil/nga/giat/geowave/core/geotime/ingest/package-summary.html">mil.nga.giat.geowave.core.geotime.ingest</a> with parameters of type <a href="../../../../../../../../../mil/nga/giat/geowave/core/geotime/index/dimension/TemporalBinningStrategy.Unit.html" title="enum in mil.nga.giat.geowave.core.geotime.index.dimension">TemporalBinningStrategy.Unit</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../../../mil/nga/giat/geowave/core/geotime/ingest/SpatialTemporalDimensionalityTypeProvider.SpatialTemporalIndexBuilder.html" title="class in mil.nga.giat.geowave.core.geotime.ingest">SpatialTemporalDimensionalityTypeProvider.SpatialTemporalIndexBuilder</a></code></td>
+<td class="colLast"><span class="strong">SpatialTemporalDimensionalityTypeProvider.SpatialTemporalIndexBuilder.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/core/geotime/ingest/SpatialTemporalDimensionalityTypeProvider.SpatialTemporalIndexBuilder.html#setPeriodicity(mil.nga.giat.geowave.core.geotime.index.dimension.TemporalBinningStrategy.Unit)">setPeriodicity</a></strong>(<a href="../../../../../../../../../mil/nga/giat/geowave/core/geotime/index/dimension/TemporalBinningStrategy.Unit.html" title="enum in mil.nga.giat.geowave.core.geotime.index.dimension">TemporalBinningStrategy.Unit</a>&nbsp;periodicity)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>

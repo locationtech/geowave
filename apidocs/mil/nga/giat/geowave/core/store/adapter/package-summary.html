@@ -82,52 +82,64 @@
 </td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStoreFactorySpi.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStoreFactorySpi</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;T&gt;</td>
 <td class="colLast">
 <div class="block">This interface should be implemented by any custom data type that must be
  stored in the Accumulo index.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DimensionMatchingIndexFieldHandler.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DimensionMatchingIndexFieldHandler</a>&lt;RowType,IndexFieldType extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexValue.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexValue</a>,NativeFieldType&gt;</td>
 <td class="colLast">
 <div class="block">This is internally useful for the AbstractDataAdapter to match field handlers
  with dimensions by field ID.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/IndexDependentDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">IndexDependentDataAdapter</a>&lt;T&gt;</td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/IndexFieldHandler.html" title="interface in mil.nga.giat.geowave.core.store.adapter">IndexFieldHandler</a>&lt;RowType,IndexFieldType extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexValue.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexValue</a>,NativeFieldType&gt;</td>
 <td class="colLast">
 <div class="block">This is used by the AbstractDataAdapter to translate between native values
  and persistence encoded values.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/NativeFieldHandler.html" title="interface in mil.nga.giat.geowave.core.store.adapter">NativeFieldHandler</a>&lt;RowType,FieldType&gt;</td>
 <td class="colLast">
 <div class="block">This is used by the AbstractDataAdapter to get individual field values from
  the row</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/NativeFieldHandler.RowBuilder.html" title="interface in mil.nga.giat.geowave.core.store.adapter">NativeFieldHandler.RowBuilder</a>&lt;RowType,FieldType&gt;</td>
 <td class="colLast">
 <div class="block">This is used internally by the AbstractDataAdapter to build a row from a
  set of field values</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/PersistentIndexFieldHandler.html" title="interface in mil.nga.giat.geowave.core.store.adapter">PersistentIndexFieldHandler</a>&lt;RowType,IndexFieldType extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexValue.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexValue</a>,NativeFieldType&gt;</td>
 <td class="colLast">
 <div class="block">This is a persistable version of the IndexFieldHandler so that customized
  filed handlers can be automatically persisted with the data adapter.</div>
 </td>
 </tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/RowMergingDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">RowMergingDataAdapter</a>&lt;T,M extends <a href="../../../../../../../mil/nga/giat/geowave/core/index/Mergeable.html" title="interface in mil.nga.giat.geowave.core.index">Mergeable</a>&gt;</td>
+<td class="colLast">&nbsp;</td>
+</tr>
 <tr class="altColor">
+<td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/RowMergingDataAdapter.RowTransform.html" title="interface in mil.nga.giat.geowave.core.store.adapter">RowMergingDataAdapter.RowTransform</a>&lt;M extends <a href="../../../../../../../mil/nga/giat/geowave/core/index/Mergeable.html" title="interface in mil.nga.giat.geowave.core.index">Mergeable</a>&gt;</td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">WritableDataAdapter</a>&lt;T&gt;</td>
 <td class="colLast">
 <div class="block">This extends the basic DataAdapter interface to be able to ingest data in
@@ -169,14 +181,6 @@
 <td class="colLast">
 <div class="block">This is an implements of persistence encoding that also contains all of the
  extended data values used to form the native type supported by this adapter.</div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/MemoryAdapterStore.html" title="class in mil.nga.giat.geowave.core.store.adapter">MemoryAdapterStore</a></td>
-<td class="colLast">
-<div class="block">This is a simple HashMap based in-memory implementation of the AdapterStore
- and can be useful if it is undesirable to persist and query objects within
- another storage mechanism such as an Accumulo table.</div>
 </td>
 </tr>
 </tbody>

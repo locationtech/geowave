@@ -100,7 +100,7 @@
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroFormatPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">AvroFormatPlugin</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">AvroPluginBase</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroSchemaProvider.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">AvroSchemaProvider</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/DataAdapterProvider.html" title="interface in mil.nga.giat.geowave.core.ingest">DataAdapterProvider</a>&lt;T&gt;, <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/IngestFromHdfsPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.hdfs.mapreduce">IngestFromHdfsPlugin</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/avro/WholeFile.html" title="class in mil.nga.giat.geowave.core.ingest.avro">WholeFile</a>,T&gt;, <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/IndexProvider.html" title="interface in mil.nga.giat.geowave.core.ingest">IndexProvider</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/IngestPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest">IngestPluginBase</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>,T&gt;, <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalFileIngestPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.local">LocalFileIngestPlugin</a>&lt;T&gt;, <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest.local">LocalPluginBase</a></dd>
+<dd><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroFormatPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">AvroFormatPlugin</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">AvroPluginBase</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroSchemaProvider.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">AvroSchemaProvider</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/DataAdapterProvider.html" title="interface in mil.nga.giat.geowave.core.ingest">DataAdapterProvider</a>&lt;T&gt;, <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/IngestFromHdfsPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.hdfs.mapreduce">IngestFromHdfsPlugin</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/avro/WholeFile.html" title="class in mil.nga.giat.geowave.core.ingest.avro">WholeFile</a>,T&gt;, <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/index/IndexProvider.html" title="interface in mil.nga.giat.geowave.core.ingest.index">IndexProvider</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/IngestPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest">IngestPluginBase</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>,T&gt;, <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalFileIngestPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.local">LocalFileIngestPlugin</a>&lt;T&gt;, <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest.local">LocalPluginBase</a></dd>
 </dl>
 <hr>
 <br>
@@ -173,8 +173,8 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/loc
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/GeoWaveData.html" title="class in mil.nga.giat.geowave.core.ingest">GeoWaveData</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/AbstractLocalIngestWithMapper.html" title="type parameter in AbstractLocalIngestWithMapper">T</a>&gt;&gt;</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/AbstractLocalIngestWithMapper.html#toGeoWaveData(java.io.File,%20mil.nga.giat.geowave.core.index.ByteArrayId,%20java.lang.String)">toGeoWaveData</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;input,
-             <a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;primaryIndexId,
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/AbstractLocalIngestWithMapper.html#toGeoWaveData(java.io.File,%20java.util.Collection,%20java.lang.String)">toGeoWaveData</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;input,
+             <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;primaryIndexIds,
              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;globalVisibility)</code>
 <div class="block">Convert from an expected input format to a data format that can be
  directly ingested into GeoWave</div>
@@ -182,8 +182,8 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/loc
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>protected abstract <a href="../../../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/GeoWaveData.html" title="class in mil.nga.giat.geowave.core.ingest">GeoWaveData</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/AbstractLocalIngestWithMapper.html" title="type parameter in AbstractLocalIngestWithMapper">T</a>&gt;&gt;</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/AbstractLocalIngestWithMapper.html#toGeoWaveDataInternal(java.io.InputStream,%20mil.nga.giat.geowave.core.index.ByteArrayId,%20java.lang.String)">toGeoWaveDataInternal</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/InputStream.html?is-external=true" title="class or interface in java.io">InputStream</a>&nbsp;file,
-                     <a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;primaryIndexId,
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/AbstractLocalIngestWithMapper.html#toGeoWaveDataInternal(java.io.InputStream,%20java.util.Collection,%20java.lang.String)">toGeoWaveDataInternal</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/InputStream.html?is-external=true" title="class or interface in java.io">InputStream</a>&nbsp;file,
+                     <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;primaryIndexIds,
                      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;globalVisibility)</code>&nbsp;</td>
 </tr>
 </table>
@@ -213,14 +213,14 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/loc
 <!--   -->
 </a>
 <h3>Methods inherited from interface&nbsp;mil.nga.giat.geowave.core.ingest.<a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/DataAdapterProvider.html" title="interface in mil.nga.giat.geowave.core.ingest">DataAdapterProvider</a></h3>
-<code><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/DataAdapterProvider.html#getDataAdapters(java.lang.String)">getDataAdapters</a></code></li>
+<code><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/DataAdapterProvider.html#getDataAdapters(java.lang.String)">getDataAdapters</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/DataAdapterProvider.html#getSupportedIndexableTypes()">getSupportedIndexableTypes</a></code></li>
 </ul>
 <ul class="blockList">
-<li class="blockList"><a name="methods_inherited_from_class_mil.nga.giat.geowave.core.ingest.IndexProvider">
+<li class="blockList"><a name="methods_inherited_from_class_mil.nga.giat.geowave.core.ingest.index.IndexProvider">
 <!--   -->
 </a>
-<h3>Methods inherited from interface&nbsp;mil.nga.giat.geowave.core.ingest.<a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/IndexProvider.html" title="interface in mil.nga.giat.geowave.core.ingest">IndexProvider</a></h3>
-<code><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/IndexProvider.html#getRequiredIndices()">getRequiredIndices</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/IndexProvider.html#getSupportedIndices()">getSupportedIndices</a></code></li>
+<h3>Methods inherited from interface&nbsp;mil.nga.giat.geowave.core.ingest.index.<a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/index/IndexProvider.html" title="interface in mil.nga.giat.geowave.core.ingest.index">IndexProvider</a></h3>
+<code><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/index/IndexProvider.html#getRequiredIndices()">getRequiredIndices</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods_inherited_from_class_mil.nga.giat.geowave.core.ingest.avro.AvroSchemaProvider">
@@ -304,23 +304,23 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/loc
 <dt><span class="strong">Returns:</span></dt><dd>The implementation for ingestion with only a mapper</dd></dl>
 </li>
 </ul>
-<a name="toGeoWaveData(java.io.File, mil.nga.giat.geowave.core.index.ByteArrayId, java.lang.String)">
+<a name="toGeoWaveData(java.io.File, java.util.Collection, java.lang.String)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>toGeoWaveData</h4>
 <pre>public&nbsp;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/GeoWaveData.html" title="class in mil.nga.giat.geowave.core.ingest">GeoWaveData</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/AbstractLocalIngestWithMapper.html" title="type parameter in AbstractLocalIngestWithMapper">T</a>&gt;&gt;&nbsp;toGeoWaveData(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;input,
-                                              <a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;primaryIndexId,
+                                              <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;primaryIndexIds,
                                               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;globalVisibility)</pre>
-<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/IngestPluginBase.html#toGeoWaveData(I,%20mil.nga.giat.geowave.core.index.ByteArrayId,%20java.lang.String)">IngestPluginBase</a></code></strong></div>
+<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/IngestPluginBase.html#toGeoWaveData(I,%20java.util.Collection,%20java.lang.String)">IngestPluginBase</a></code></strong></div>
 <div class="block">Convert from an expected input format to a data format that can be
  directly ingested into GeoWave</div>
 <dl>
 <dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/IngestPluginBase.html#toGeoWaveData(I,%20mil.nga.giat.geowave.core.index.ByteArrayId,%20java.lang.String)">toGeoWaveData</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/IngestPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest">IngestPluginBase</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>,<a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/AbstractLocalIngestWithMapper.html" title="type parameter in AbstractLocalIngestWithMapper">T</a>&gt;</code></dd>
-<dt><span class="strong">Parameters:</span></dt><dd><code>input</code> - The expected input.</dd><dd><code>primaryIndexId</code> - The index ID specified via a commandline argument (this is
-            typically either the default spatial index or default
+<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/IngestPluginBase.html#toGeoWaveData(I,%20java.util.Collection,%20java.lang.String)">toGeoWaveData</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/IngestPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest">IngestPluginBase</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>,<a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/AbstractLocalIngestWithMapper.html" title="type parameter in AbstractLocalIngestWithMapper">T</a>&gt;</code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>input</code> - The expected input.</dd><dd><code>primaryIndexIds</code> - The set of index IDs specified via a commandline argument
+            (this is typically either the default spatial index or default
             spatial-temporal index)</dd><dd><code>globalVisibility</code> - If on the command-line the user specifies a global visibility
             to write to the visibility column in GeoWave, it is passed
             along here. It is assumed that this is the same visibility
@@ -329,14 +329,14 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/loc
 <dt><span class="strong">Returns:</span></dt><dd>The objects that can be directly ingested into GeoWave</dd></dl>
 </li>
 </ul>
-<a name="toGeoWaveDataInternal(java.io.InputStream, mil.nga.giat.geowave.core.index.ByteArrayId, java.lang.String)">
+<a name="toGeoWaveDataInternal(java.io.InputStream, java.util.Collection, java.lang.String)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>toGeoWaveDataInternal</h4>
 <pre>protected abstract&nbsp;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/GeoWaveData.html" title="class in mil.nga.giat.geowave.core.ingest">GeoWaveData</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/AbstractLocalIngestWithMapper.html" title="type parameter in AbstractLocalIngestWithMapper">T</a>&gt;&gt;&nbsp;toGeoWaveDataInternal(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/InputStream.html?is-external=true" title="class or interface in java.io">InputStream</a>&nbsp;file,
-                                                      <a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;primaryIndexId,
+                                                      <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;primaryIndexIds,
                                                       <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;globalVisibility)</pre>
 </li>
 </ul>

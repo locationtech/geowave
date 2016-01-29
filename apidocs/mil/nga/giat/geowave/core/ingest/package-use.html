@@ -99,11 +99,19 @@
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><a href="#mil.nga.giat.geowave.core.ingest.kafka">mil.nga.giat.geowave.core.ingest.kafka</a></td>
+<td class="colFirst"><a href="#mil.nga.giat.geowave.core.ingest.index">mil.nga.giat.geowave.core.ingest.index</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><a href="#mil.nga.giat.geowave.core.ingest.kafka">mil.nga.giat.geowave.core.ingest.kafka</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.core.ingest.local">mil.nga.giat.geowave.core.ingest.local</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="#mil.nga.giat.geowave.format.gdelt">mil.nga.giat.geowave.format.gdelt</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
@@ -159,18 +167,15 @@
 </td>
 </tr>
 <tr class="altColor">
-<td class="colOne"><a href="../../../../../../mil/nga/giat/geowave/core/ingest/class-use/IndexProvider.html#mil.nga.giat.geowave.adapter.vector.ingest">IndexProvider</a>&nbsp;</td>
-</tr>
-<tr class="rowColor">
 <td class="colOne"><a href="../../../../../../mil/nga/giat/geowave/core/ingest/class-use/IngestFormatOptionProvider.html#mil.nga.giat.geowave.adapter.vector.ingest">IngestFormatOptionProvider</a>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colOne"><a href="../../../../../../mil/nga/giat/geowave/core/ingest/class-use/IngestFormatPluginProviderSpi.html#mil.nga.giat.geowave.adapter.vector.ingest">IngestFormatPluginProviderSpi</a>
 <div class="block">This interface can be injected and automatically discovered using SPI to
  provide a new ingest format to the GeoWave ingestion framework.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colOne"><a href="../../../../../../mil/nga/giat/geowave/core/ingest/class-use/IngestPluginBase.html#mil.nga.giat.geowave.adapter.vector.ingest">IngestPluginBase</a>
 <div class="block">An interface required for ingest plugins to implement a conversion from an
  expected input format to GeoWave data which can in turn be ingested into the
@@ -190,15 +195,7 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colOne"><a href="../../../../../../mil/nga/giat/geowave/core/ingest/class-use/IndexCompatibilityVisitor.html#mil.nga.giat.geowave.core.geotime.ingest">IndexCompatibilityVisitor</a>
-<div class="block">This is a visitor that can interpret the compatibility of an index</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colOne"><a href="../../../../../../mil/nga/giat/geowave/core/ingest/class-use/IngestDimensionalityTypeProviderSpi.html#mil.nga.giat.geowave.core.geotime.ingest">IngestDimensionalityTypeProviderSpi</a>
-<div class="block">This interface can be injected using SPI to determine which supported index
- for an ingest type will be used.</div>
-</td>
+<td class="colOne"><a href="../../../../../../mil/nga/giat/geowave/core/ingest/class-use/GeoWaveCLIOptionsProvider.html#mil.nga.giat.geowave.core.geotime.ingest">GeoWaveCLIOptionsProvider</a>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -234,14 +231,6 @@
 </td>
 </tr>
 <tr class="altColor">
-<td class="colOne"><a href="../../../../../../mil/nga/giat/geowave/core/ingest/class-use/IndexCompatibilityVisitor.html#mil.nga.giat.geowave.core.ingest">IndexCompatibilityVisitor</a>
-<div class="block">This is a visitor that can interpret the compatibility of an index</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colOne"><a href="../../../../../../mil/nga/giat/geowave/core/ingest/class-use/IndexProvider.html#mil.nga.giat.geowave.core.ingest">IndexProvider</a>&nbsp;</td>
-</tr>
-<tr class="altColor">
 <td class="colOne"><a href="../../../../../../mil/nga/giat/geowave/core/ingest/class-use/IngestCommandLineOptions.html#mil.nga.giat.geowave.core.ingest">IngestCommandLineOptions</a>&nbsp;</td>
 </tr>
 <tr class="rowColor">
@@ -273,9 +262,6 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colOne"><a href="../../../../../../mil/nga/giat/geowave/core/ingest/class-use/IndexProvider.html#mil.nga.giat.geowave.core.ingest.avro">IndexProvider</a>&nbsp;</td>
-</tr>
-<tr class="rowColor">
 <td class="colOne"><a href="../../../../../../mil/nga/giat/geowave/core/ingest/class-use/IngestPluginBase.html#mil.nga.giat.geowave.core.ingest.avro">IngestPluginBase</a>
 <div class="block">An interface required for ingest plugins to implement a conversion from an
  expected input format to GeoWave data which can in turn be ingested into the
@@ -337,23 +323,35 @@
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><a href="../../../../../../mil/nga/giat/geowave/core/ingest/class-use/IndexProvider.html#mil.nga.giat.geowave.core.ingest.hdfs.mapreduce">IndexProvider</a>&nbsp;</td>
-</tr>
-<tr class="altColor">
 <td class="colOne"><a href="../../../../../../mil/nga/giat/geowave/core/ingest/class-use/IngestCommandLineOptions.html#mil.nga.giat.geowave.core.ingest.hdfs.mapreduce">IngestCommandLineOptions</a>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colOne"><a href="../../../../../../mil/nga/giat/geowave/core/ingest/class-use/IngestFormatPluginProviderSpi.html#mil.nga.giat.geowave.core.ingest.hdfs.mapreduce">IngestFormatPluginProviderSpi</a>
 <div class="block">This interface can be injected and automatically discovered using SPI to
  provide a new ingest format to the GeoWave ingestion framework.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colOne"><a href="../../../../../../mil/nga/giat/geowave/core/ingest/class-use/IngestPluginBase.html#mil.nga.giat.geowave.core.ingest.hdfs.mapreduce">IngestPluginBase</a>
 <div class="block">An interface required for ingest plugins to implement a conversion from an
  expected input format to GeoWave data which can in turn be ingested into the
  system.</div>
 </td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="mil.nga.giat.geowave.core.ingest.index">
+<!--   -->
+</a>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
+<caption><span>Classes in <a href="../../../../../../mil/nga/giat/geowave/core/ingest/package-summary.html">mil.nga.giat.geowave.core.ingest</a> used by <a href="../../../../../../mil/nga/giat/geowave/core/ingest/index/package-summary.html">mil.nga.giat.geowave.core.ingest.index</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Class and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colOne"><a href="../../../../../../mil/nga/giat/geowave/core/ingest/class-use/GeoWaveCLIOptionsProvider.html#mil.nga.giat.geowave.core.ingest.index">GeoWaveCLIOptionsProvider</a>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -410,19 +408,56 @@
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><a href="../../../../../../mil/nga/giat/geowave/core/ingest/class-use/IndexProvider.html#mil.nga.giat.geowave.core.ingest.local">IndexProvider</a>&nbsp;</td>
-</tr>
-<tr class="altColor">
 <td class="colOne"><a href="../../../../../../mil/nga/giat/geowave/core/ingest/class-use/IngestCommandLineOptions.html#mil.nga.giat.geowave.core.ingest.local">IngestCommandLineOptions</a>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colOne"><a href="../../../../../../mil/nga/giat/geowave/core/ingest/class-use/IngestFormatPluginProviderSpi.html#mil.nga.giat.geowave.core.ingest.local">IngestFormatPluginProviderSpi</a>
 <div class="block">This interface can be injected and automatically discovered using SPI to
  provide a new ingest format to the GeoWave ingestion framework.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colOne"><a href="../../../../../../mil/nga/giat/geowave/core/ingest/class-use/IngestPluginBase.html#mil.nga.giat.geowave.core.ingest.local">IngestPluginBase</a>
+<div class="block">An interface required for ingest plugins to implement a conversion from an
+ expected input format to GeoWave data which can in turn be ingested into the
+ system.</div>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="mil.nga.giat.geowave.format.gdelt">
+<!--   -->
+</a>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
+<caption><span>Classes in <a href="../../../../../../mil/nga/giat/geowave/core/ingest/package-summary.html">mil.nga.giat.geowave.core.ingest</a> used by <a href="../../../../../../mil/nga/giat/geowave/format/gdelt/package-summary.html">mil.nga.giat.geowave.format.gdelt</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Class and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colOne"><a href="../../../../../../mil/nga/giat/geowave/core/ingest/class-use/DataAdapterProvider.html#mil.nga.giat.geowave.format.gdelt">DataAdapterProvider</a>
+<div class="block">This interface is applicable for plugins that need to provide writable data
+ adapters for ingest.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><a href="../../../../../../mil/nga/giat/geowave/core/ingest/class-use/GeoWaveData.html#mil.nga.giat.geowave.format.gdelt">GeoWaveData</a>
+<div class="block">This models any information that is necessary to ingest an entry into
+ GeoWave: the adapter and index you wish to use as well as the actual data</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colOne"><a href="../../../../../../mil/nga/giat/geowave/core/ingest/class-use/IngestFormatOptionProvider.html#mil.nga.giat.geowave.format.gdelt">IngestFormatOptionProvider</a>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><a href="../../../../../../mil/nga/giat/geowave/core/ingest/class-use/IngestFormatPluginProviderSpi.html#mil.nga.giat.geowave.format.gdelt">IngestFormatPluginProviderSpi</a>
+<div class="block">This interface can be injected and automatically discovered using SPI to
+ provide a new ingest format to the GeoWave ingestion framework.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colOne"><a href="../../../../../../mil/nga/giat/geowave/core/ingest/class-use/IngestPluginBase.html#mil.nga.giat.geowave.format.gdelt">IngestPluginBase</a>
 <div class="block">An interface required for ingest plugins to implement a conversion from an
  expected input format to GeoWave data which can in turn be ingested into the
  system.</div>
@@ -453,15 +488,12 @@
 </td>
 </tr>
 <tr class="altColor">
-<td class="colOne"><a href="../../../../../../mil/nga/giat/geowave/core/ingest/class-use/IndexProvider.html#mil.nga.giat.geowave.format.geolife">IndexProvider</a>&nbsp;</td>
-</tr>
-<tr class="rowColor">
 <td class="colOne"><a href="../../../../../../mil/nga/giat/geowave/core/ingest/class-use/IngestFormatPluginProviderSpi.html#mil.nga.giat.geowave.format.geolife">IngestFormatPluginProviderSpi</a>
 <div class="block">This interface can be injected and automatically discovered using SPI to
  provide a new ingest format to the GeoWave ingestion framework.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colOne"><a href="../../../../../../mil/nga/giat/geowave/core/ingest/class-use/IngestPluginBase.html#mil.nga.giat.geowave.format.geolife">IngestPluginBase</a>
 <div class="block">An interface required for ingest plugins to implement a conversion from an
  expected input format to GeoWave data which can in turn be ingested into the
@@ -493,18 +525,15 @@
 </td>
 </tr>
 <tr class="altColor">
-<td class="colOne"><a href="../../../../../../mil/nga/giat/geowave/core/ingest/class-use/IndexProvider.html#mil.nga.giat.geowave.format.geotools.raster">IndexProvider</a>&nbsp;</td>
-</tr>
-<tr class="rowColor">
 <td class="colOne"><a href="../../../../../../mil/nga/giat/geowave/core/ingest/class-use/IngestFormatOptionProvider.html#mil.nga.giat.geowave.format.geotools.raster">IngestFormatOptionProvider</a>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colOne"><a href="../../../../../../mil/nga/giat/geowave/core/ingest/class-use/IngestFormatPluginProviderSpi.html#mil.nga.giat.geowave.format.geotools.raster">IngestFormatPluginProviderSpi</a>
 <div class="block">This interface can be injected and automatically discovered using SPI to
  provide a new ingest format to the GeoWave ingestion framework.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colOne"><a href="../../../../../../mil/nga/giat/geowave/core/ingest/class-use/IngestPluginBase.html#mil.nga.giat.geowave.format.geotools.raster">IngestPluginBase</a>
 <div class="block">An interface required for ingest plugins to implement a conversion from an
  expected input format to GeoWave data which can in turn be ingested into the
@@ -536,18 +565,15 @@
 </td>
 </tr>
 <tr class="altColor">
-<td class="colOne"><a href="../../../../../../mil/nga/giat/geowave/core/ingest/class-use/IndexProvider.html#mil.nga.giat.geowave.format.geotools.vector">IndexProvider</a>&nbsp;</td>
-</tr>
-<tr class="rowColor">
 <td class="colOne"><a href="../../../../../../mil/nga/giat/geowave/core/ingest/class-use/IngestFormatOptionProvider.html#mil.nga.giat.geowave.format.geotools.vector">IngestFormatOptionProvider</a>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colOne"><a href="../../../../../../mil/nga/giat/geowave/core/ingest/class-use/IngestFormatPluginProviderSpi.html#mil.nga.giat.geowave.format.geotools.vector">IngestFormatPluginProviderSpi</a>
 <div class="block">This interface can be injected and automatically discovered using SPI to
  provide a new ingest format to the GeoWave ingestion framework.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colOne"><a href="../../../../../../mil/nga/giat/geowave/core/ingest/class-use/IngestPluginBase.html#mil.nga.giat.geowave.format.geotools.vector">IngestPluginBase</a>
 <div class="block">An interface required for ingest plugins to implement a conversion from an
  expected input format to GeoWave data which can in turn be ingested into the
@@ -594,15 +620,12 @@
 </td>
 </tr>
 <tr class="altColor">
-<td class="colOne"><a href="../../../../../../mil/nga/giat/geowave/core/ingest/class-use/IndexProvider.html#mil.nga.giat.geowave.format.gpx">IndexProvider</a>&nbsp;</td>
-</tr>
-<tr class="rowColor">
 <td class="colOne"><a href="../../../../../../mil/nga/giat/geowave/core/ingest/class-use/IngestFormatPluginProviderSpi.html#mil.nga.giat.geowave.format.gpx">IngestFormatPluginProviderSpi</a>
 <div class="block">This interface can be injected and automatically discovered using SPI to
  provide a new ingest format to the GeoWave ingestion framework.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colOne"><a href="../../../../../../mil/nga/giat/geowave/core/ingest/class-use/IngestPluginBase.html#mil.nga.giat.geowave.format.gpx">IngestPluginBase</a>
 <div class="block">An interface required for ingest plugins to implement a conversion from an
  expected input format to GeoWave data which can in turn be ingested into the
@@ -634,18 +657,15 @@
 </td>
 </tr>
 <tr class="altColor">
-<td class="colOne"><a href="../../../../../../mil/nga/giat/geowave/core/ingest/class-use/IndexProvider.html#mil.nga.giat.geowave.format.stanag4676">IndexProvider</a>&nbsp;</td>
-</tr>
-<tr class="rowColor">
 <td class="colOne"><a href="../../../../../../mil/nga/giat/geowave/core/ingest/class-use/IngestFormatOptionProvider.html#mil.nga.giat.geowave.format.stanag4676">IngestFormatOptionProvider</a>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colOne"><a href="../../../../../../mil/nga/giat/geowave/core/ingest/class-use/IngestFormatPluginProviderSpi.html#mil.nga.giat.geowave.format.stanag4676">IngestFormatPluginProviderSpi</a>
 <div class="block">This interface can be injected and automatically discovered using SPI to
  provide a new ingest format to the GeoWave ingestion framework.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colOne"><a href="../../../../../../mil/nga/giat/geowave/core/ingest/class-use/IngestPluginBase.html#mil.nga.giat.geowave.format.stanag4676">IngestPluginBase</a>
 <div class="block">An interface required for ingest plugins to implement a conversion from an
  expected input format to GeoWave data which can in turn be ingested into the
@@ -677,15 +697,12 @@
 </td>
 </tr>
 <tr class="altColor">
-<td class="colOne"><a href="../../../../../../mil/nga/giat/geowave/core/ingest/class-use/IndexProvider.html#mil.nga.giat.geowave.format.tdrive">IndexProvider</a>&nbsp;</td>
-</tr>
-<tr class="rowColor">
 <td class="colOne"><a href="../../../../../../mil/nga/giat/geowave/core/ingest/class-use/IngestFormatPluginProviderSpi.html#mil.nga.giat.geowave.format.tdrive">IngestFormatPluginProviderSpi</a>
 <div class="block">This interface can be injected and automatically discovered using SPI to
  provide a new ingest format to the GeoWave ingestion framework.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colOne"><a href="../../../../../../mil/nga/giat/geowave/core/ingest/class-use/IngestPluginBase.html#mil.nga.giat.geowave.format.tdrive">IngestPluginBase</a>
 <div class="block">An interface required for ingest plugins to implement a conversion from an
  expected input format to GeoWave data which can in turn be ingested into the

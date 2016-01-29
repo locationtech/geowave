@@ -95,7 +95,7 @@
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><a href="../../../../../../../mil/nga/giat/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in mil.nga.giat.geowave.core.index.dimension">NumericDimensionDefinition</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/index/Persistable.html" title="interface in mil.nga.giat.geowave.core.index">Persistable</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/DimensionField.html" title="interface in mil.nga.giat.geowave.core.store.dimension">DimensionField</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/ArrayWrapper.html" title="class in mil.nga.giat.geowave.core.store.dimension">ArrayWrapper</a>&lt;T&gt;&gt;</dd>
+<dd><a href="../../../../../../../mil/nga/giat/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in mil.nga.giat.geowave.core.index.dimension">NumericDimensionDefinition</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/index/Persistable.html" title="interface in mil.nga.giat.geowave.core.index">Persistable</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/NumericDimensionField.html" title="interface in mil.nga.giat.geowave.core.store.dimension">NumericDimensionField</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/ArrayWrapper.html" title="class in mil.nga.giat.geowave.core.store.dimension">ArrayWrapper</a>&lt;T&gt;&gt;</dd>
 </dl>
 <dl>
 <dt>Direct Known Subclasses:</dt>
@@ -105,7 +105,7 @@
 <br>
 <pre>public abstract class <span class="strong">ArrayField&lt;T extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexValue.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexValue</a>&gt;</span>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
-implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/DimensionField.html" title="interface in mil.nga.giat.geowave.core.store.dimension">DimensionField</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/ArrayWrapper.html" title="class in mil.nga.giat.geowave.core.store.dimension">ArrayWrapper</a>&lt;T&gt;&gt;</pre>
+implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/NumericDimensionField.html" title="interface in mil.nga.giat.geowave.core.store.dimension">NumericDimensionField</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/ArrayWrapper.html" title="class in mil.nga.giat.geowave.core.store.dimension">ArrayWrapper</a>&lt;T&gt;&gt;</pre>
 </li>
 </ul>
 </div>
@@ -125,7 +125,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/dimensi
 <th class="colLast" scope="col">Field and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/DimensionField.html" title="interface in mil.nga.giat.geowave.core.store.dimension">DimensionField</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/ArrayField.html" title="type parameter in ArrayField">T</a>&gt;</code></td>
+<td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/NumericDimensionField.html" title="interface in mil.nga.giat.geowave.core.store.dimension">NumericDimensionField</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/ArrayField.html" title="type parameter in ArrayField">T</a>&gt;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/ArrayField.html#elementField">elementField</a></strong></code>&nbsp;</td>
 </tr>
 </table>
@@ -146,7 +146,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/dimensi
 <td class="colOne"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/ArrayField.html#ArrayField()">ArrayField</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/ArrayField.html#ArrayField(mil.nga.giat.geowave.core.store.dimension.DimensionField)">ArrayField</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/DimensionField.html" title="interface in mil.nga.giat.geowave.core.store.dimension">DimensionField</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/ArrayField.html" title="type parameter in ArrayField">T</a>&gt;&nbsp;elementField)</code>&nbsp;</td>
+<td class="colOne"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/ArrayField.html#ArrayField(mil.nga.giat.geowave.core.store.dimension.NumericDimensionField)">ArrayField</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/NumericDimensionField.html" title="interface in mil.nga.giat.geowave.core.store.dimension">NumericDimensionField</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/ArrayField.html" title="type parameter in ArrayField">T</a>&gt;&nbsp;elementField)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -261,13 +261,6 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/dimensi
 <h3>Methods inherited from class&nbsp;java.lang.<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></h3>
 <code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#clone()" title="class or interface in java.lang">clone</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.lang">equals</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#finalize()" title="class or interface in java.lang">finalize</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang">getClass</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#hashCode()" title="class or interface in java.lang">hashCode</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang">notify</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang">notifyAll</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#toString()" title="class or interface in java.lang">toString</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait(long,%20int)" title="class or interface in java.lang">wait</a></code></li>
 </ul>
-<ul class="blockList">
-<li class="blockList"><a name="methods_inherited_from_class_mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition">
-<!--   -->
-</a>
-<h3>Methods inherited from interface&nbsp;mil.nga.giat.geowave.core.index.dimension.<a href="../../../../../../../mil/nga/giat/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in mil.nga.giat.geowave.core.index.dimension">NumericDimensionDefinition</a></h3>
-<code><a href="../../../../../../../mil/nga/giat/geowave/core/index/dimension/NumericDimensionDefinition.html#isCompatibleDefinition(mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition)">isCompatibleDefinition</a></code></li>
-</ul>
 </li>
 </ul>
 </li>
@@ -288,7 +281,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/dimensi
 <ul class="blockListLast">
 <li class="blockList">
 <h4>elementField</h4>
-<pre>protected&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/DimensionField.html" title="interface in mil.nga.giat.geowave.core.store.dimension">DimensionField</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/ArrayField.html" title="type parameter in ArrayField">T</a> extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexValue.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexValue</a>&gt; elementField</pre>
+<pre>protected&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/NumericDimensionField.html" title="interface in mil.nga.giat.geowave.core.store.dimension">NumericDimensionField</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/ArrayField.html" title="type parameter in ArrayField">T</a> extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexValue.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexValue</a>&gt; elementField</pre>
 </li>
 </ul>
 </li>
@@ -299,13 +292,13 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/dimensi
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="ArrayField(mil.nga.giat.geowave.core.store.dimension.DimensionField)">
+<a name="ArrayField(mil.nga.giat.geowave.core.store.dimension.NumericDimensionField)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>ArrayField</h4>
-<pre>public&nbsp;ArrayField(<a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/DimensionField.html" title="interface in mil.nga.giat.geowave.core.store.dimension">DimensionField</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/ArrayField.html" title="type parameter in ArrayField">T</a>&gt;&nbsp;elementField)</pre>
+<pre>public&nbsp;ArrayField(<a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/NumericDimensionField.html" title="interface in mil.nga.giat.geowave.core.store.dimension">NumericDimensionField</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/ArrayField.html" title="type parameter in ArrayField">T</a>&gt;&nbsp;elementField)</pre>
 </li>
 </ul>
 <a name="ArrayField()">
@@ -403,12 +396,12 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/dimensi
 <li class="blockList">
 <h4>getFieldId</h4>
 <pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;getFieldId()</pre>
-<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/DimensionField.html#getFieldId()">DimensionField</a></code></strong></div>
+<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/NumericDimensionField.html#getFieldId()">NumericDimensionField</a></code></strong></div>
 <div class="block">Returns an identifier that is unique for a given data type (field IDs
  should be distinct per row)</div>
 <dl>
 <dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/DimensionField.html#getFieldId()">getFieldId</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/DimensionField.html" title="interface in mil.nga.giat.geowave.core.store.dimension">DimensionField</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/ArrayWrapper.html" title="class in mil.nga.giat.geowave.core.store.dimension">ArrayWrapper</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/ArrayField.html" title="type parameter in ArrayField">T</a> extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexValue.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexValue</a>&gt;&gt;</code></dd>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/NumericDimensionField.html#getFieldId()">getFieldId</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/NumericDimensionField.html" title="interface in mil.nga.giat.geowave.core.store.dimension">NumericDimensionField</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/ArrayWrapper.html" title="class in mil.nga.giat.geowave.core.store.dimension">ArrayWrapper</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/ArrayField.html" title="type parameter in ArrayField">T</a> extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexValue.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexValue</a>&gt;&gt;</code></dd>
 <dt><span class="strong">Returns:</span></dt><dd>the field ID</dd></dl>
 </li>
 </ul>
@@ -452,11 +445,11 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/dimensi
 <li class="blockList">
 <h4>getNumericData</h4>
 <pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/NumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">NumericData</a>&nbsp;getNumericData(<a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/ArrayWrapper.html" title="class in mil.nga.giat.geowave.core.store.dimension">ArrayWrapper</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/ArrayField.html" title="type parameter in ArrayField">T</a>&gt;&nbsp;dataElement)</pre>
-<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/DimensionField.html#getNumericData(T)">DimensionField</a></code></strong></div>
+<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/NumericDimensionField.html#getNumericData(T)">NumericDimensionField</a></code></strong></div>
 <div class="block">Decode a numeric value or range from the raw field value</div>
 <dl>
 <dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/DimensionField.html#getNumericData(T)">getNumericData</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/DimensionField.html" title="interface in mil.nga.giat.geowave.core.store.dimension">DimensionField</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/ArrayWrapper.html" title="class in mil.nga.giat.geowave.core.store.dimension">ArrayWrapper</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/ArrayField.html" title="type parameter in ArrayField">T</a> extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexValue.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexValue</a>&gt;&gt;</code></dd>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/NumericDimensionField.html#getNumericData(T)">getNumericData</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/NumericDimensionField.html" title="interface in mil.nga.giat.geowave.core.store.dimension">NumericDimensionField</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/ArrayWrapper.html" title="class in mil.nga.giat.geowave.core.store.dimension">ArrayWrapper</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/ArrayField.html" title="type parameter in ArrayField">T</a> extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexValue.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexValue</a>&gt;&gt;</code></dd>
 <dt><span class="strong">Parameters:</span></dt><dd><code>dataElement</code> - the raw field value</dd>
 <dt><span class="strong">Returns:</span></dt><dd>a numeric value or range</dd></dl>
 </li>
@@ -468,11 +461,11 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/dimensi
 <li class="blockList">
 <h4>getWriter</h4>
 <pre>public abstract&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/data/field/FieldWriter.html" title="interface in mil.nga.giat.geowave.core.store.data.field">FieldWriter</a>&lt;?,<a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/ArrayWrapper.html" title="class in mil.nga.giat.geowave.core.store.dimension">ArrayWrapper</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/ArrayField.html" title="type parameter in ArrayField">T</a>&gt;&gt;&nbsp;getWriter()</pre>
-<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/DimensionField.html#getWriter()">DimensionField</a></code></strong></div>
+<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/NumericDimensionField.html#getWriter()">NumericDimensionField</a></code></strong></div>
 <div class="block">Get a writer that can handle serializing values for this field</div>
 <dl>
 <dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/DimensionField.html#getWriter()">getWriter</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/DimensionField.html" title="interface in mil.nga.giat.geowave.core.store.dimension">DimensionField</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/ArrayWrapper.html" title="class in mil.nga.giat.geowave.core.store.dimension">ArrayWrapper</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/ArrayField.html" title="type parameter in ArrayField">T</a> extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexValue.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexValue</a>&gt;&gt;</code></dd>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/NumericDimensionField.html#getWriter()">getWriter</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/NumericDimensionField.html" title="interface in mil.nga.giat.geowave.core.store.dimension">NumericDimensionField</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/ArrayWrapper.html" title="class in mil.nga.giat.geowave.core.store.dimension">ArrayWrapper</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/ArrayField.html" title="type parameter in ArrayField">T</a> extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexValue.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexValue</a>&gt;&gt;</code></dd>
 <dt><span class="strong">Returns:</span></dt><dd>the field writer for this field</dd></dl>
 </li>
 </ul>
@@ -483,12 +476,12 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/dimensi
 <li class="blockList">
 <h4>getReader</h4>
 <pre>public abstract&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/data/field/FieldReader.html" title="interface in mil.nga.giat.geowave.core.store.data.field">FieldReader</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/ArrayWrapper.html" title="class in mil.nga.giat.geowave.core.store.dimension">ArrayWrapper</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/ArrayField.html" title="type parameter in ArrayField">T</a>&gt;&gt;&nbsp;getReader()</pre>
-<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/DimensionField.html#getReader()">DimensionField</a></code></strong></div>
+<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/NumericDimensionField.html#getReader()">NumericDimensionField</a></code></strong></div>
 <div class="block">Get a reader that can handle deserializing binary data into values for
  this field</div>
 <dl>
 <dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/DimensionField.html#getReader()">getReader</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/DimensionField.html" title="interface in mil.nga.giat.geowave.core.store.dimension">DimensionField</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/ArrayWrapper.html" title="class in mil.nga.giat.geowave.core.store.dimension">ArrayWrapper</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/ArrayField.html" title="type parameter in ArrayField">T</a> extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexValue.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexValue</a>&gt;&gt;</code></dd>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/NumericDimensionField.html#getReader()">getReader</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/NumericDimensionField.html" title="interface in mil.nga.giat.geowave.core.store.dimension">NumericDimensionField</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/ArrayWrapper.html" title="class in mil.nga.giat.geowave.core.store.dimension">ArrayWrapper</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/ArrayField.html" title="type parameter in ArrayField">T</a> extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexValue.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexValue</a>&gt;&gt;</code></dd>
 <dt><span class="strong">Returns:</span></dt><dd>the field reader for this field</dd></dl>
 </li>
 </ul>
@@ -499,11 +492,11 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/dimensi
 <li class="blockList">
 <h4>getBaseDefinition</h4>
 <pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in mil.nga.giat.geowave.core.index.dimension">NumericDimensionDefinition</a>&nbsp;getBaseDefinition()</pre>
-<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/DimensionField.html#getBaseDefinition()">DimensionField</a></code></strong></div>
+<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/NumericDimensionField.html#getBaseDefinition()">NumericDimensionField</a></code></strong></div>
 <div class="block">Get the basic index definition for this field</div>
 <dl>
 <dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/DimensionField.html#getBaseDefinition()">getBaseDefinition</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/DimensionField.html" title="interface in mil.nga.giat.geowave.core.store.dimension">DimensionField</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/ArrayWrapper.html" title="class in mil.nga.giat.geowave.core.store.dimension">ArrayWrapper</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/ArrayField.html" title="type parameter in ArrayField">T</a> extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexValue.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexValue</a>&gt;&gt;</code></dd>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/NumericDimensionField.html#getBaseDefinition()">getBaseDefinition</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/NumericDimensionField.html" title="interface in mil.nga.giat.geowave.core.store.dimension">NumericDimensionField</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/ArrayWrapper.html" title="class in mil.nga.giat.geowave.core.store.dimension">ArrayWrapper</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/ArrayField.html" title="type parameter in ArrayField">T</a> extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexValue.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexValue</a>&gt;&gt;</code></dd>
 <dt><span class="strong">Returns:</span></dt><dd>the base index definition for this dimension</dd></dl>
 </li>
 </ul>

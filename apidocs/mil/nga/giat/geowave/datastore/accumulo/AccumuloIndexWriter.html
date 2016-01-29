@@ -35,7 +35,7 @@
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloDataStore.html" title="class in mil.nga.giat.geowave.datastore.accumulo"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloDataStoreFactory.html" title="class in mil.nga.giat.geowave.datastore.accumulo"><span class="strong">Prev Class</span></a></li>
 <li><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOperations.html" title="interface in mil.nga.giat.geowave.datastore.accumulo"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">
@@ -140,42 +140,30 @@ implements <a href="../../../../../../mil/nga/giat/geowave/core/store/IndexWrite
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloIndexWriter.html#altIdxWriter">altIdxWriter</a></strong></code>&nbsp;</td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>protected <a href="../../../../../../mil/nga/giat/geowave/core/store/DataStoreCallbackManager.html" title="class in mil.nga.giat.geowave.core.store">DataStoreCallbackManager</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloIndexWriter.html#callbackCache">callbackCache</a></strong></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected <a href="../../../../../../mil/nga/giat/geowave/core/store/data/VisibilityWriter.html" title="interface in mil.nga.giat.geowave.core.store.data">VisibilityWriter</a>&lt;?&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloIndexWriter.html#customFieldVisibilityWriter">customFieldVisibilityWriter</a></strong></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>protected <a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloDataStore.html" title="class in mil.nga.giat.geowave.datastore.accumulo">AccumuloDataStore</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloIndexWriter.html#dataStore">dataStore</a></strong></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>static int</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloIndexWriter.html#FLUSH_STATS_THRESHOLD">FLUSH_STATS_THRESHOLD</a></strong></code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>protected <a href="../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a></code></td>
+<td class="colFirst"><code>protected <a href="../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloIndexWriter.html#index">index</a></strong></code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloIndexWriter.html#indexName">indexName</a></strong></code>&nbsp;</td>
 </tr>
-<tr class="altColor">
-<td class="colFirst"><code>protected boolean</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloIndexWriter.html#persistStats">persistStats</a></strong></code>&nbsp;</td>
-</tr>
 <tr class="rowColor">
-<td class="colFirst"><code>protected boolean</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloIndexWriter.html#skipFlush">skipFlush</a></strong></code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>protected int</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloIndexWriter.html#statsFlushCount">statsFlushCount</a></strong></code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>,<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/StatsCompositionTool.html" title="class in mil.nga.giat.geowave.core.store.adapter.statistics">StatsCompositionTool</a>&lt;?&gt;&gt;</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloIndexWriter.html#statsMap">statsMap</a></strong></code>&nbsp;</td>
-</tr>
-<tr class="altColor">
 <td class="colFirst"><code>protected boolean</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloIndexWriter.html#useAltIndex">useAltIndex</a></strong></code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>protected <a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/Writer.html" title="interface in mil.nga.giat.geowave.datastore.accumulo">Writer</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloIndexWriter.html#writer">writer</a></strong></code>&nbsp;</td>
 </tr>
@@ -194,15 +182,21 @@ implements <a href="../../../../../../mil/nga/giat/geowave/core/store/IndexWrite
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloIndexWriter.html#AccumuloIndexWriter(mil.nga.giat.geowave.core.store.index.Index,%20mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations,%20mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStore)">AccumuloIndexWriter</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index,
+<td class="colOne"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloIndexWriter.html#AccumuloIndexWriter(mil.nga.giat.geowave.core.store.index.PrimaryIndex,%20mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations,%20mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStore,%20mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore,%20mil.nga.giat.geowave.core.store.index.SecondaryIndexDataStore,%20mil.nga.giat.geowave.core.store.data.VisibilityWriter)">AccumuloIndexWriter</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
                    <a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOperations.html" title="interface in mil.nga.giat.geowave.datastore.accumulo">AccumuloOperations</a>&nbsp;accumuloOperations,
-                   <a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloDataStore.html" title="class in mil.nga.giat.geowave.datastore.accumulo">AccumuloDataStore</a>&nbsp;dataStore)</code>&nbsp;</td>
+                   <a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloDataStore.html" title="class in mil.nga.giat.geowave.datastore.accumulo">AccumuloDataStore</a>&nbsp;dataStore,
+                   <a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatisticsStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatisticsStore</a>&nbsp;statsStore,
+                   <a href="../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a>&nbsp;secondaryIndexDataStore,
+                   <a href="../../../../../../mil/nga/giat/geowave/core/store/data/VisibilityWriter.html" title="interface in mil.nga.giat.geowave.core.store.data">VisibilityWriter</a>&lt;?&gt;&nbsp;customFieldVisibilityWriter)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloIndexWriter.html#AccumuloIndexWriter(mil.nga.giat.geowave.core.store.index.Index,%20mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations,%20mil.nga.giat.geowave.datastore.accumulo.AccumuloOptions,%20mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStore)">AccumuloIndexWriter</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index,
+<td class="colOne"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloIndexWriter.html#AccumuloIndexWriter(mil.nga.giat.geowave.core.store.index.PrimaryIndex,%20mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations,%20mil.nga.giat.geowave.datastore.accumulo.AccumuloOptions,%20mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStore,%20mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore,%20mil.nga.giat.geowave.core.store.index.SecondaryIndexDataStore,%20mil.nga.giat.geowave.core.store.data.VisibilityWriter)">AccumuloIndexWriter</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
                    <a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOperations.html" title="interface in mil.nga.giat.geowave.datastore.accumulo">AccumuloOperations</a>&nbsp;accumuloOperations,
                    <a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOptions.html" title="class in mil.nga.giat.geowave.datastore.accumulo">AccumuloOptions</a>&nbsp;accumuloOptions,
-                   <a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloDataStore.html" title="class in mil.nga.giat.geowave.datastore.accumulo">AccumuloDataStore</a>&nbsp;dataStore)</code>&nbsp;</td>
+                   <a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloDataStore.html" title="class in mil.nga.giat.geowave.datastore.accumulo">AccumuloDataStore</a>&nbsp;dataStore,
+                   <a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatisticsStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatisticsStore</a>&nbsp;statsStore,
+                   <a href="../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a>&nbsp;secondaryIndexDataStore,
+                   <a href="../../../../../../mil/nga/giat/geowave/core/store/data/VisibilityWriter.html" title="interface in mil.nga.giat.geowave.core.store.data">VisibilityWriter</a>&lt;?&gt;&nbsp;customFieldVisibilityWriter)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -228,7 +222,7 @@ implements <a href="../../../../../../mil/nga/giat/geowave/core/store/IndexWrite
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloIndexWriter.html#flush()">flush</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a></code></td>
+<td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloIndexWriter.html#getIndex()">getIndex</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
@@ -238,12 +232,22 @@ implements <a href="../../../../../../mil/nga/giat/geowave/core/store/IndexWrite
 <tr class="altColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloIndexWriter.html#write(mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter,%20T)">write</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">WritableDataAdapter</a>&lt;T&gt;&nbsp;writableAdapter,
-     T&nbsp;entry)</code>&nbsp;</td>
+     T&nbsp;entry)</code>
+<div class="block">Write the entry using the index writer's configure field visibility
+ writer.</div>
+</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloIndexWriter.html#writeInternal(mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter,%20T)">writeInternal</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">WritableDataAdapter</a>&lt;T&gt;&nbsp;writableAdapter,
-             T&nbsp;entry)</code>&nbsp;</td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloIndexWriter.html#write(mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter,%20T,%20mil.nga.giat.geowave.core.store.data.VisibilityWriter)">write</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">WritableDataAdapter</a>&lt;T&gt;&nbsp;writableAdapter,
+     T&nbsp;entry,
+     <a href="../../../../../../mil/nga/giat/geowave/core/store/data/VisibilityWriter.html" title="interface in mil.nga.giat.geowave.core.store.data">VisibilityWriter</a>&lt;T&gt;&nbsp;feldVisibilityWriter)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>&lt;T&gt;&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloIndexWriter.html#writeInternal(mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter,%20T,%20mil.nga.giat.geowave.core.store.data.VisibilityWriter)">writeInternal</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">WritableDataAdapter</a>&lt;T&gt;&nbsp;writableAdapter,
+             T&nbsp;entry,
+             <a href="../../../../../../mil/nga/giat/geowave/core/store/data/VisibilityWriter.html" title="interface in mil.nga.giat.geowave.core.store.data">VisibilityWriter</a>&lt;T&gt;&nbsp;visibilityWriter)</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -273,7 +277,7 @@ implements <a href="../../../../../../mil/nga/giat/geowave/core/store/IndexWrite
 <ul class="blockList">
 <li class="blockList">
 <h4>index</h4>
-<pre>protected final&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a> index</pre>
+<pre>protected final&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a> index</pre>
 </li>
 </ul>
 <a name="accumuloOperations">
@@ -301,6 +305,15 @@ implements <a href="../../../../../../mil/nga/giat/geowave/core/store/IndexWrite
 <li class="blockList">
 <h4>dataStore</h4>
 <pre>protected final&nbsp;<a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloDataStore.html" title="class in mil.nga.giat.geowave.datastore.accumulo">AccumuloDataStore</a> dataStore</pre>
+</li>
+</ul>
+<a name="callbackCache">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>callbackCache</h4>
+<pre>protected final&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/DataStoreCallbackManager.html" title="class in mil.nga.giat.geowave.core.store">DataStoreCallbackManager</a> callbackCache</pre>
 </li>
 </ul>
 <a name="writer">
@@ -348,50 +361,13 @@ implements <a href="../../../../../../mil/nga/giat/geowave/core/store/IndexWrite
 <pre>protected&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> altIdxTableName</pre>
 </li>
 </ul>
-<a name="persistStats">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>persistStats</h4>
-<pre>protected&nbsp;boolean persistStats</pre>
-</li>
-</ul>
-<a name="statsFlushCount">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>statsFlushCount</h4>
-<pre>protected&nbsp;int statsFlushCount</pre>
-</li>
-</ul>
-<a name="skipFlush">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>skipFlush</h4>
-<pre>protected&nbsp;boolean skipFlush</pre>
-</li>
-</ul>
-<a name="FLUSH_STATS_THRESHOLD">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>FLUSH_STATS_THRESHOLD</h4>
-<pre>public static final&nbsp;int FLUSH_STATS_THRESHOLD</pre>
-<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../../constant-values.html#mil.nga.giat.geowave.datastore.accumulo.AccumuloIndexWriter.FLUSH_STATS_THRESHOLD">Constant Field Values</a></dd></dl>
-</li>
-</ul>
-<a name="statsMap">
+<a name="customFieldVisibilityWriter">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>statsMap</h4>
-<pre>protected final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>,<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/StatsCompositionTool.html" title="class in mil.nga.giat.geowave.core.store.adapter.statistics">StatsCompositionTool</a>&lt;?&gt;&gt; statsMap</pre>
+<h4>customFieldVisibilityWriter</h4>
+<pre>protected final&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/data/VisibilityWriter.html" title="interface in mil.nga.giat.geowave.core.store.data">VisibilityWriter</a>&lt;?&gt; customFieldVisibilityWriter</pre>
 </li>
 </ul>
 </li>
@@ -402,27 +378,33 @@ implements <a href="../../../../../../mil/nga/giat/geowave/core/store/IndexWrite
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="AccumuloIndexWriter(mil.nga.giat.geowave.core.store.index.Index, mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations, mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStore)">
+<a name="AccumuloIndexWriter(mil.nga.giat.geowave.core.store.index.PrimaryIndex, mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations, mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStore, mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore, mil.nga.giat.geowave.core.store.index.SecondaryIndexDataStore, mil.nga.giat.geowave.core.store.data.VisibilityWriter)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>AccumuloIndexWriter</h4>
-<pre>public&nbsp;AccumuloIndexWriter(<a href="../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index,
+<pre>public&nbsp;AccumuloIndexWriter(<a href="../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
                    <a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOperations.html" title="interface in mil.nga.giat.geowave.datastore.accumulo">AccumuloOperations</a>&nbsp;accumuloOperations,
-                   <a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloDataStore.html" title="class in mil.nga.giat.geowave.datastore.accumulo">AccumuloDataStore</a>&nbsp;dataStore)</pre>
+                   <a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloDataStore.html" title="class in mil.nga.giat.geowave.datastore.accumulo">AccumuloDataStore</a>&nbsp;dataStore,
+                   <a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatisticsStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatisticsStore</a>&nbsp;statsStore,
+                   <a href="../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a>&nbsp;secondaryIndexDataStore,
+                   <a href="../../../../../../mil/nga/giat/geowave/core/store/data/VisibilityWriter.html" title="interface in mil.nga.giat.geowave.core.store.data">VisibilityWriter</a>&lt;?&gt;&nbsp;customFieldVisibilityWriter)</pre>
 </li>
 </ul>
-<a name="AccumuloIndexWriter(mil.nga.giat.geowave.core.store.index.Index, mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations, mil.nga.giat.geowave.datastore.accumulo.AccumuloOptions, mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStore)">
+<a name="AccumuloIndexWriter(mil.nga.giat.geowave.core.store.index.PrimaryIndex, mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations, mil.nga.giat.geowave.datastore.accumulo.AccumuloOptions, mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStore, mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore, mil.nga.giat.geowave.core.store.index.SecondaryIndexDataStore, mil.nga.giat.geowave.core.store.data.VisibilityWriter)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>AccumuloIndexWriter</h4>
-<pre>public&nbsp;AccumuloIndexWriter(<a href="../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index,
+<pre>public&nbsp;AccumuloIndexWriter(<a href="../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
                    <a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOperations.html" title="interface in mil.nga.giat.geowave.datastore.accumulo">AccumuloOperations</a>&nbsp;accumuloOperations,
                    <a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOptions.html" title="class in mil.nga.giat.geowave.datastore.accumulo">AccumuloOptions</a>&nbsp;accumuloOptions,
-                   <a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloDataStore.html" title="class in mil.nga.giat.geowave.datastore.accumulo">AccumuloDataStore</a>&nbsp;dataStore)</pre>
+                   <a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloDataStore.html" title="class in mil.nga.giat.geowave.datastore.accumulo">AccumuloDataStore</a>&nbsp;dataStore,
+                   <a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatisticsStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatisticsStore</a>&nbsp;statsStore,
+                   <a href="../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a>&nbsp;secondaryIndexDataStore,
+                   <a href="../../../../../../mil/nga/giat/geowave/core/store/data/VisibilityWriter.html" title="interface in mil.nga.giat.geowave.core.store.data">VisibilityWriter</a>&lt;?&gt;&nbsp;customFieldVisibilityWriter)</pre>
 </li>
 </ul>
 </li>
@@ -439,7 +421,7 @@ implements <a href="../../../../../../mil/nga/giat/geowave/core/store/IndexWrite
 <ul class="blockList">
 <li class="blockList">
 <h4>getIndex</h4>
-<pre>public&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;getIndex()</pre>
+<pre>public&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;getIndex()</pre>
 <dl>
 <dt><strong>Specified by:</strong></dt>
 <dd><code><a href="../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html#getIndex()">getIndex</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a></code></dd>
@@ -456,22 +438,43 @@ implements <a href="../../../../../../mil/nga/giat/geowave/core/store/IndexWrite
 <h4>write</h4>
 <pre>public&nbsp;&lt;T&gt;&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;write(<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">WritableDataAdapter</a>&lt;T&gt;&nbsp;writableAdapter,
                           T&nbsp;entry)</pre>
+<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html#write(mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter,%20T)">IndexWriter</a></code></strong></div>
+<div class="block">Write the entry using the index writer's configure field visibility
+ writer.</div>
 <dl>
 <dt><strong>Specified by:</strong></dt>
 <dd><code><a href="../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html#write(mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter,%20T)">write</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a></code></dd>
+<dt><span class="strong">Returns:</span></dt><dd></dd></dl>
+</li>
+</ul>
+<a name="write(mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter,java.lang.Object,mil.nga.giat.geowave.core.store.data.VisibilityWriter)">
+<!--   -->
+</a><a name="write(mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter, T, mil.nga.giat.geowave.core.store.data.VisibilityWriter)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>write</h4>
+<pre>public&nbsp;&lt;T&gt;&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;write(<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">WritableDataAdapter</a>&lt;T&gt;&nbsp;writableAdapter,
+                          T&nbsp;entry,
+                          <a href="../../../../../../mil/nga/giat/geowave/core/store/data/VisibilityWriter.html" title="interface in mil.nga.giat.geowave.core.store.data">VisibilityWriter</a>&lt;T&gt;&nbsp;feldVisibilityWriter)</pre>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html#write(mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter,%20T,%20mil.nga.giat.geowave.core.store.data.VisibilityWriter)">write</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a></code></dd>
 </dl>
 </li>
 </ul>
-<a name="writeInternal(mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter,java.lang.Object)">
+<a name="writeInternal(mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter,java.lang.Object,mil.nga.giat.geowave.core.store.data.VisibilityWriter)">
 <!--   -->
-</a><a name="writeInternal(mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter, T)">
+</a><a name="writeInternal(mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter, T, mil.nga.giat.geowave.core.store.data.VisibilityWriter)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>writeInternal</h4>
 <pre>public&nbsp;&lt;T&gt;&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;writeInternal(<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">WritableDataAdapter</a>&lt;T&gt;&nbsp;writableAdapter,
-                                  T&nbsp;entry)</pre>
+                                  T&nbsp;entry,
+                                  <a href="../../../../../../mil/nga/giat/geowave/core/store/data/VisibilityWriter.html" title="interface in mil.nga.giat.geowave.core.store.data">VisibilityWriter</a>&lt;T&gt;&nbsp;visibilityWriter)</pre>
 </li>
 </ul>
 <a name="close()">
@@ -541,7 +544,7 @@ implements <a href="../../../../../../mil/nga/giat/geowave/core/store/IndexWrite
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloDataStore.html" title="class in mil.nga.giat.geowave.datastore.accumulo"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloDataStoreFactory.html" title="class in mil.nga.giat.geowave.datastore.accumulo"><span class="strong">Prev Class</span></a></li>
 <li><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOperations.html" title="interface in mil.nga.giat.geowave.datastore.accumulo"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">

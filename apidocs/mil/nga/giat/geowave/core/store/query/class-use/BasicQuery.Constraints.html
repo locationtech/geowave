@@ -142,7 +142,8 @@
 <td class="colLast"><span class="strong">QueryIndexHelper.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/util/QueryIndexHelper.html#composeGeometricConstraints(org.opengis.feature.simple.SimpleFeatureType,%20java.util.Map,%20com.vividsolutions.jts.geom.Geometry)">composeGeometricConstraints</a></strong>(org.opengis.feature.simple.SimpleFeatureType&nbsp;featureType,
                            <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>,<a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&gt;&nbsp;statsMap,
                            com.vividsolutions.jts.geom.Geometry&nbsp;jtsBounds)</code>
-<div class="block">* Compose a time constraints.</div>
+<div class="block">If composed constraints matched statistics constraints, are empty or
+ null, then return empty constraint set</div>
 </td>
 </tr>
 <tr class="altColor">
@@ -151,8 +152,8 @@
                              <a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/utils/TimeDescriptors.html" title="class in mil.nga.giat.geowave.adapter.vector.utils">TimeDescriptors</a>&nbsp;timeDescriptors,
                              <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>,<a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&gt;&nbsp;statsMap,
                              <a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/query/TemporalConstraintsSet.html" title="class in mil.nga.giat.geowave.core.geotime.store.query">TemporalConstraintsSet</a>&nbsp;timeBoundsSet)</code>
-<div class="block">If composed constraints matched statistics constraints or are null, then
- return empty constraint set to indicate a full table scan.</div>
+<div class="block">If composed constraints matched statistics constraints, are empty or
+ null, then return empty constraint set.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -161,7 +162,7 @@
                       <a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/utils/TimeDescriptors.html" title="class in mil.nga.giat.geowave.adapter.vector.utils">TimeDescriptors</a>&nbsp;timeDescriptors,
                       <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>,<a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&gt;&nbsp;statsMap,
                       <a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/query/TemporalConstraintsSet.html" title="class in mil.nga.giat.geowave.core.geotime.store.query">TemporalConstraintsSet</a>&nbsp;timeBoundsSet)</code>
-<div class="block">* Compose a time constraints.</div>
+<div class="block">Compose a time constraints.</div>
 </td>
 </tr>
 </tbody>
@@ -280,6 +281,10 @@
 <tbody>
 <tr class="altColor">
 <td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.html#BasicQuery(mil.nga.giat.geowave.core.store.query.BasicQuery.Constraints)">BasicQuery</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.Constraints.html" title="class in mil.nga.giat.geowave.core.store.query">BasicQuery.Constraints</a>&nbsp;constraints)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.html#BasicQuery(mil.nga.giat.geowave.core.store.query.BasicQuery.Constraints,%20java.util.Map)">BasicQuery</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.Constraints.html" title="class in mil.nga.giat.geowave.core.store.query">BasicQuery.Constraints</a>&nbsp;constraints,
+          <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>,<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/FilterableConstraints.html" title="interface in mil.nga.giat.geowave.core.store.index">FilterableConstraints</a>&gt;&nbsp;additionalConstraints)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>

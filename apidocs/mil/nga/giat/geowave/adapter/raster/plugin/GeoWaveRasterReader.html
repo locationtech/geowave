@@ -35,7 +35,7 @@
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/plugin/GeoWaveRasterFormatFactory.html" title="class in mil.nga.giat.geowave.adapter.raster.plugin"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/plugin/GeoWaveRasterConfig.ConfigParameter.html" title="enum in mil.nga.giat.geowave.adapter.raster.plugin"><span class="strong">Prev Class</span></a></li>
 <li><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/plugin/GeoWaveRasterReaderState.html" title="class in mil.nga.giat.geowave.adapter.raster.plugin"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">
@@ -137,7 +137,7 @@ implements org.geotools.coverage.grid.io.GridCoverage2DReader</pre>
 <!--   -->
 </a>
 <h3>Fields inherited from class&nbsp;org.geotools.coverage.grid.io.AbstractGridCoverage2DReader</h3>
-<code>closeMe, coverageFactory, coverageName, crs, EPS, gzipped, highestRes, hints, inStream, inStreamSPI, numOverviews, originalEnvelope, originalGridRange, overViewResolutions, raster2Model, source</code></li>
+<code>closeMe, coverageFactory, coverageName, crs, dtLayout, EPS, gzipped, highestRes, hints, inStream, inStreamSPI, numOverviews, originalEnvelope, originalGridRange, overViewResolutions, raster2Model, source</code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="fields_inherited_from_class_org.geotools.coverage.grid.io.GridCoverage2DReader">
@@ -318,7 +318,7 @@ implements org.geotools.coverage.grid.io.GridCoverage2DReader</pre>
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;org.geotools.coverage.grid.io.AbstractGridCoverage2DReader</h3>
-<code>createImageCoverage, createImageCoverage, createImageCoverage, createImageCoverage, decimationOnReadingControl, decimationOnReadingControl, dispose, finalize, getCrs, getCurrentSubname, getGroundControlPoints, getGroundControlPoints, getHighestRes, getInfo, getOverviewGridEnvelope, getOverviewGridEnvelope, getRescaledRasterToModel, getResolution, getSource, hasMoreGridCoverages, listSubNames, setlayout, setLayout, setReadParams, setReadParams, skip</code></li>
+<code>createImageCoverage, createImageCoverage, createImageCoverage, createImageCoverage, decimationOnReadingControl, decimationOnReadingControl, dispose, finalize, getCrs, getCurrentSubname, getDatasetLayout, getDatasetLayout, getGroundControlPoints, getGroundControlPoints, getHighestRes, getInfo, getOverviewGridEnvelope, getOverviewGridEnvelope, getRescaledRasterToModel, getResolution, getSource, hasMoreGridCoverages, listSubNames, setlayout, setLayout, setReadParams, setReadParams, skip</code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods_inherited_from_class_java.lang.Object">
@@ -326,6 +326,13 @@ implements org.geotools.coverage.grid.io.GridCoverage2DReader</pre>
 </a>
 <h3>Methods inherited from class&nbsp;java.lang.<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></h3>
 <code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#clone()" title="class or interface in java.lang">clone</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.lang">equals</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang">getClass</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#hashCode()" title="class or interface in java.lang">hashCode</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang">notify</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang">notifyAll</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#toString()" title="class or interface in java.lang">toString</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait(long,%20int)" title="class or interface in java.lang">wait</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_org.geotools.coverage.grid.io.GridCoverage2DReader">
+<!--   -->
+</a>
+<h3>Methods inherited from interface&nbsp;org.geotools.coverage.grid.io.GridCoverage2DReader</h3>
+<code>getDatasetLayout, getDatasetLayout</code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods_inherited_from_class_org.opengis.coverage.grid.GridCoverageReader">
@@ -373,16 +380,13 @@ implements org.geotools.coverage.grid.io.GridCoverage2DReader</pre>
 <h4>GeoWaveRasterReader</h4>
 <pre>public&nbsp;GeoWaveRasterReader(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;source,
                    org.geotools.factory.Hints&nbsp;uHints)
-                    throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a>,
-                           <a href="http://docs.oracle.com/javase/7/docs/api/java/net/MalformedURLException.html?is-external=true" title="class or interface in java.net">MalformedURLException</a>,
-                           org.apache.accumulo.core.client.AccumuloException,
-                           org.apache.accumulo.core.client.AccumuloSecurityException</pre>
+                    throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
 <dl><dt><span class="strong">Parameters:</span></dt><dd><code>source</code> - The source object.</dd><dd><code>uHints</code> - </dd>
 <dt><span class="strong">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/net/MalformedURLException.html?is-external=true" title="class or interface in java.net">MalformedURLException</a></code></dd>
-<dd><code>org.apache.accumulo.core.client.AccumuloSecurityException</code></dd>
-<dd><code>org.apache.accumulo.core.client.AccumuloException</code></dd></dl>
+<dd><code>AccumuloSecurityException</code></dd>
+<dd><code>AccumuloException</code></dd></dl>
 </li>
 </ul>
 <a name="GeoWaveRasterReader(mil.nga.giat.geowave.adapter.raster.plugin.GeoWaveRasterConfig)">
@@ -392,13 +396,9 @@ implements org.geotools.coverage.grid.io.GridCoverage2DReader</pre>
 <li class="blockList">
 <h4>GeoWaveRasterReader</h4>
 <pre>public&nbsp;GeoWaveRasterReader(<a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/plugin/GeoWaveRasterConfig.html" title="class in mil.nga.giat.geowave.adapter.raster.plugin">GeoWaveRasterConfig</a>&nbsp;config)
-                    throws org.geotools.data.DataSourceException,
-                           org.apache.accumulo.core.client.AccumuloException,
-                           org.apache.accumulo.core.client.AccumuloSecurityException</pre>
+                    throws org.geotools.data.DataSourceException</pre>
 <dl><dt><span class="strong">Throws:</span></dt>
-<dd><code>org.geotools.data.DataSourceException</code></dd>
-<dd><code>org.apache.accumulo.core.client.AccumuloException</code></dd>
-<dd><code>org.apache.accumulo.core.client.AccumuloSecurityException</code></dd></dl>
+<dd><code>org.geotools.data.DataSourceException</code></dd></dl>
 </li>
 </ul>
 <a name="GeoWaveRasterReader(java.lang.Object)">
@@ -408,15 +408,13 @@ implements org.geotools.coverage.grid.io.GridCoverage2DReader</pre>
 <li class="blockList">
 <h4>GeoWaveRasterReader</h4>
 <pre>public&nbsp;GeoWaveRasterReader(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;source)
-                    throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a>,
-                           org.apache.accumulo.core.client.AccumuloException,
-                           org.apache.accumulo.core.client.AccumuloSecurityException</pre>
+                    throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
 <div class="block">Constructor.</div>
 <dl><dt><span class="strong">Parameters:</span></dt><dd><code>source</code> - The source object.</dd>
 <dt><span class="strong">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd>
-<dd><code>org.apache.accumulo.core.client.AccumuloSecurityException</code></dd>
-<dd><code>org.apache.accumulo.core.client.AccumuloException</code></dd>
+<dd><code>AccumuloSecurityException</code></dd>
+<dd><code>AccumuloException</code></dd>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/UnsupportedEncodingException.html?is-external=true" title="class or interface in java.io">UnsupportedEncodingException</a></code></dd></dl>
 </li>
 </ul>
@@ -918,7 +916,7 @@ implements org.geotools.coverage.grid.io.GridCoverage2DReader</pre>
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/plugin/GeoWaveRasterFormatFactory.html" title="class in mil.nga.giat.geowave.adapter.raster.plugin"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/plugin/GeoWaveRasterConfig.ConfigParameter.html" title="enum in mil.nga.giat.geowave.adapter.raster.plugin"><span class="strong">Prev Class</span></a></li>
 <li><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/plugin/GeoWaveRasterReaderState.html" title="class in mil.nga.giat.geowave.adapter.raster.plugin"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">

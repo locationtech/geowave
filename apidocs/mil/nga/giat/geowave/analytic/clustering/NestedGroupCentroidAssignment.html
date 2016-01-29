@@ -136,7 +136,9 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
                              <a href="../../../../../../mil/nga/giat/geowave/analytic/distance/DistanceFn.html" title="interface in mil.nga.giat.geowave.analytic.distance">DistanceFn</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/analytic/clustering/NestedGroupCentroidAssignment.html" title="type parameter in NestedGroupCentroidAssignment">T</a>&gt;&nbsp;distanceFunction)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/clustering/NestedGroupCentroidAssignment.html#NestedGroupCentroidAssignment(mil.nga.giat.geowave.analytic.ConfigurationWrapper)">NestedGroupCentroidAssignment</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/analytic/ConfigurationWrapper.html" title="interface in mil.nga.giat.geowave.analytic">ConfigurationWrapper</a>&nbsp;wrapper)</code>&nbsp;</td>
+<td class="colOne"><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/clustering/NestedGroupCentroidAssignment.html#NestedGroupCentroidAssignment(org.apache.hadoop.mapreduce.JobContext,%20java.lang.Class,%20org.slf4j.Logger)">NestedGroupCentroidAssignment</a></strong>(org.apache.hadoop.mapreduce.JobContext&nbsp;context,
+                             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;scope,
+                             org.slf4j.Logger&nbsp;logger)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -154,39 +156,42 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>static void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/clustering/NestedGroupCentroidAssignment.html#fillOptions(java.util.Set)">fillOptions</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;org.apache.commons.cli.Option&gt;&nbsp;options)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
 <td class="colFirst"><code>double</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/clustering/NestedGroupCentroidAssignment.html#findCentroidForLevel(mil.nga.giat.geowave.analytic.AnalyticItemWrapper,%20mil.nga.giat.geowave.analytic.kmeans.AssociationNotification)">findCentroidForLevel</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/analytic/AnalyticItemWrapper.html" title="interface in mil.nga.giat.geowave.analytic">AnalyticItemWrapper</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/analytic/clustering/NestedGroupCentroidAssignment.html" title="type parameter in NestedGroupCentroidAssignment">T</a>&gt;&nbsp;item,
                     <a href="../../../../../../mil/nga/giat/geowave/analytic/kmeans/AssociationNotification.html" title="interface in mil.nga.giat.geowave.analytic.kmeans">AssociationNotification</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/analytic/clustering/NestedGroupCentroidAssignment.html" title="type parameter in NestedGroupCentroidAssignment">T</a>&gt;&nbsp;associationNotification)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/analytic/AnalyticItemWrapper.html" title="interface in mil.nga.giat.geowave.analytic">AnalyticItemWrapper</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/analytic/clustering/NestedGroupCentroidAssignment.html" title="type parameter in NestedGroupCentroidAssignment">T</a>&gt;&gt;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/clustering/NestedGroupCentroidAssignment.html#getCentroidsForGroup(java.lang.String)">getCentroidsForGroup</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;groupID)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/clustering/NestedGroupCentroidAssignment.html#getGroupForLevel(mil.nga.giat.geowave.analytic.AnalyticItemWrapper)">getGroupForLevel</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/analytic/AnalyticItemWrapper.html" title="interface in mil.nga.giat.geowave.analytic">AnalyticItemWrapper</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/analytic/clustering/NestedGroupCentroidAssignment.html" title="type parameter in NestedGroupCentroidAssignment">T</a>&gt;&nbsp;item)</code>
 <div class="block">Get the associated group id from the current zoom level</div>
 </td>
 </tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/analytic/param/ParameterEnum.html" title="interface in mil.nga.giat.geowave.analytic.param">ParameterEnum</a>&lt;?&gt;&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/clustering/NestedGroupCentroidAssignment.html#getParameters()">getParameters</a></strong>()</code>&nbsp;</td>
+</tr>
 <tr class="altColor">
 <td class="colFirst"><code>static void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/clustering/NestedGroupCentroidAssignment.html#setParameters(org.apache.hadoop.conf.Configuration,%20mil.nga.giat.geowave.analytic.PropertyManagement)">setParameters</a></strong>(org.apache.hadoop.conf.Configuration&nbsp;config,
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/clustering/NestedGroupCentroidAssignment.html#setParameters(org.apache.hadoop.conf.Configuration,%20java.lang.Class,%20mil.nga.giat.geowave.analytic.PropertyManagement)">setParameters</a></strong>(org.apache.hadoop.conf.Configuration&nbsp;config,
+             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;scope,
              <a href="../../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>static void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/clustering/NestedGroupCentroidAssignment.html#setParentBatchID(org.apache.hadoop.conf.Configuration,%20java.lang.String)">setParentBatchID</a></strong>(org.apache.hadoop.conf.Configuration&nbsp;config,
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/clustering/NestedGroupCentroidAssignment.html#setParentBatchID(org.apache.hadoop.conf.Configuration,%20java.lang.Class,%20java.lang.String)">setParentBatchID</a></strong>(org.apache.hadoop.conf.Configuration&nbsp;config,
+                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;scope,
                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;parentID)</code>
 <div class="block">Override zoomLevel from parameters</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>static void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/clustering/NestedGroupCentroidAssignment.html#setZoomLevel(org.apache.hadoop.conf.Configuration,%20int)">setZoomLevel</a></strong>(org.apache.hadoop.conf.Configuration&nbsp;config,
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/clustering/NestedGroupCentroidAssignment.html#setZoomLevel(org.apache.hadoop.conf.Configuration,%20java.lang.Class,%20int)">setZoomLevel</a></strong>(org.apache.hadoop.conf.Configuration&nbsp;config,
+            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;scope,
             int&nbsp;zoomLevel)</code>
 <div class="block">Override zoomLevel from parameters</div>
 </td>
@@ -225,24 +230,22 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
                              <a href="../../../../../../mil/nga/giat/geowave/analytic/distance/DistanceFn.html" title="interface in mil.nga.giat.geowave.analytic.distance">DistanceFn</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/analytic/clustering/NestedGroupCentroidAssignment.html" title="type parameter in NestedGroupCentroidAssignment">T</a>&gt;&nbsp;distanceFunction)</pre>
 </li>
 </ul>
-<a name="NestedGroupCentroidAssignment(mil.nga.giat.geowave.analytic.ConfigurationWrapper)">
+<a name="NestedGroupCentroidAssignment(org.apache.hadoop.mapreduce.JobContext, java.lang.Class, org.slf4j.Logger)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>NestedGroupCentroidAssignment</h4>
-<pre>public&nbsp;NestedGroupCentroidAssignment(<a href="../../../../../../mil/nga/giat/geowave/analytic/ConfigurationWrapper.html" title="interface in mil.nga.giat.geowave.analytic">ConfigurationWrapper</a>&nbsp;wrapper)
+<pre>public&nbsp;NestedGroupCentroidAssignment(org.apache.hadoop.mapreduce.JobContext&nbsp;context,
+                             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;scope,
+                             org.slf4j.Logger&nbsp;logger)
                               throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/InstantiationException.html?is-external=true" title="class or interface in java.lang">InstantiationException</a>,
                                      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/IllegalAccessException.html?is-external=true" title="class or interface in java.lang">IllegalAccessException</a>,
-                                     org.apache.accumulo.core.client.AccumuloException,
-                                     <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a>,
-                                     org.apache.accumulo.core.client.AccumuloSecurityException</pre>
+                                     <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
 <dl><dt><span class="strong">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/InstantiationException.html?is-external=true" title="class or interface in java.lang">InstantiationException</a></code></dd>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/IllegalAccessException.html?is-external=true" title="class or interface in java.lang">IllegalAccessException</a></code></dd>
-<dd><code>org.apache.accumulo.core.client.AccumuloException</code></dd>
-<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd>
-<dd><code>org.apache.accumulo.core.client.AccumuloSecurityException</code></dd></dl>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd></dl>
 </li>
 </ul>
 </li>
@@ -253,37 +256,39 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="setZoomLevel(org.apache.hadoop.conf.Configuration, int)">
+<a name="setZoomLevel(org.apache.hadoop.conf.Configuration, java.lang.Class, int)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>setZoomLevel</h4>
 <pre>public static&nbsp;void&nbsp;setZoomLevel(org.apache.hadoop.conf.Configuration&nbsp;config,
+                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;scope,
                 int&nbsp;zoomLevel)</pre>
 <div class="block">Override zoomLevel from parameters</div>
 <dl><dt><span class="strong">Parameters:</span></dt><dd><code>config</code> - </dd><dd><code>runTimeProperties</code> - </dd><dd><code>zoomLevel</code> - </dd></dl>
 </li>
 </ul>
-<a name="setParentBatchID(org.apache.hadoop.conf.Configuration, java.lang.String)">
+<a name="setParentBatchID(org.apache.hadoop.conf.Configuration, java.lang.Class, java.lang.String)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>setParentBatchID</h4>
 <pre>public static&nbsp;void&nbsp;setParentBatchID(org.apache.hadoop.conf.Configuration&nbsp;config,
+                    <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;scope,
                     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;parentID)</pre>
 <div class="block">Override zoomLevel from parameters</div>
 <dl><dt><span class="strong">Parameters:</span></dt><dd><code>config</code> - </dd><dd><code>runTimeProperties</code> - </dd><dd><code>zoomLevel</code> - </dd></dl>
 </li>
 </ul>
-<a name="fillOptions(java.util.Set)">
+<a name="getParameters()">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>fillOptions</h4>
-<pre>public static&nbsp;void&nbsp;fillOptions(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;org.apache.commons.cli.Option&gt;&nbsp;options)</pre>
+<h4>getParameters</h4>
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/analytic/param/ParameterEnum.html" title="interface in mil.nga.giat.geowave.analytic.param">ParameterEnum</a>&lt;?&gt;&gt;&nbsp;getParameters()</pre>
 </li>
 </ul>
 <a name="getCentroidsForGroup(java.lang.String)">
@@ -324,13 +329,14 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd></dl>
 </li>
 </ul>
-<a name="setParameters(org.apache.hadoop.conf.Configuration, mil.nga.giat.geowave.analytic.PropertyManagement)">
+<a name="setParameters(org.apache.hadoop.conf.Configuration, java.lang.Class, mil.nga.giat.geowave.analytic.PropertyManagement)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>setParameters</h4>
 <pre>public static&nbsp;void&nbsp;setParameters(org.apache.hadoop.conf.Configuration&nbsp;config,
+                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;scope,
                  <a href="../../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties)</pre>
 </li>
 </ul>

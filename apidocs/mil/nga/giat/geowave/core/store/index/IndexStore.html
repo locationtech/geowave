@@ -35,8 +35,8 @@
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index"><span class="strong">Prev Class</span></a></li>
-<li><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/MemoryIndexStore.html" title="class in mil.nga.giat.geowave.core.store.index"><span class="strong">Next Class</span></a></li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="interface in mil.nga.giat.geowave.core.store.index"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/IndexStoreFactorySpi.html" title="interface in mil.nga.giat.geowave.core.store.index"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../../index.html?mil/nga/giat/geowave/core/store/index/IndexStore.html" target="_top">Frames</a></li>
@@ -87,13 +87,11 @@
 <li class="blockList">
 <dl>
 <dt>All Known Implementing Classes:</dt>
-<dd><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AccumuloIndexStore.html" title="class in mil.nga.giat.geowave.datastore.accumulo.metadata">AccumuloIndexStore</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/JobContextIndexStore.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce">JobContextIndexStore</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/MemoryIndexStore.html" title="class in mil.nga.giat.geowave.core.store.index">MemoryIndexStore</a></dd>
+<dd><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AccumuloIndexStore.html" title="class in mil.nga.giat.geowave.datastore.accumulo.metadata">AccumuloIndexStore</a>, <a href="../../../../../../../mil/nga/giat/geowave/mapreduce/JobContextIndexStore.html" title="class in mil.nga.giat.geowave.mapreduce">JobContextIndexStore</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/MemoryIndexStore.html" title="class in mil.nga.giat.geowave.core.store.memory">MemoryIndexStore</a></dd>
 </dl>
 <hr>
 <br>
 <pre>public interface <span class="strong">IndexStore</span></pre>
-<div class="block">This is responsible for persisting index configuration (either in memory or
- to disk depending on the implementation).</div>
 </li>
 </ul>
 </div>
@@ -114,14 +112,14 @@
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/IndexStore.html#addIndex(mil.nga.giat.geowave.core.store.index.Index)">addIndex</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index)</code>&nbsp;</td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/IndexStore.html#addIndex(mil.nga.giat.geowave.core.store.index.Index)">addIndex</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="interface in mil.nga.giat.geowave.core.store.index">Index</a>&lt;?,?&gt;&nbsp;index)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a></code></td>
+<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="interface in mil.nga.giat.geowave.core.store.index">Index</a>&lt;?,?&gt;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/IndexStore.html#getIndex(mil.nga.giat.geowave.core.index.ByteArrayId)">getIndex</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;indexId)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&gt;</code></td>
+<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="interface in mil.nga.giat.geowave.core.store.index">Index</a>&lt;?,?&gt;&gt;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/IndexStore.html#getIndices()">getIndices</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
@@ -149,7 +147,7 @@
 <ul class="blockList">
 <li class="blockList">
 <h4>addIndex</h4>
-<pre>void&nbsp;addIndex(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index)</pre>
+<pre>void&nbsp;addIndex(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="interface in mil.nga.giat.geowave.core.store.index">Index</a>&lt;?,?&gt;&nbsp;index)</pre>
 </li>
 </ul>
 <a name="getIndex(mil.nga.giat.geowave.core.index.ByteArrayId)">
@@ -158,7 +156,7 @@
 <ul class="blockList">
 <li class="blockList">
 <h4>getIndex</h4>
-<pre><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;getIndex(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;indexId)</pre>
+<pre><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="interface in mil.nga.giat.geowave.core.store.index">Index</a>&lt;?,?&gt;&nbsp;getIndex(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;indexId)</pre>
 </li>
 </ul>
 <a name="indexExists(mil.nga.giat.geowave.core.index.ByteArrayId)">
@@ -176,7 +174,7 @@
 <ul class="blockListLast">
 <li class="blockList">
 <h4>getIndices</h4>
-<pre><a href="../../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&gt;&nbsp;getIndices()</pre>
+<pre><a href="../../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="interface in mil.nga.giat.geowave.core.store.index">Index</a>&lt;?,?&gt;&gt;&nbsp;getIndices()</pre>
 </li>
 </ul>
 </li>
@@ -205,8 +203,8 @@
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index"><span class="strong">Prev Class</span></a></li>
-<li><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/MemoryIndexStore.html" title="class in mil.nga.giat.geowave.core.store.index"><span class="strong">Next Class</span></a></li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="interface in mil.nga.giat.geowave.core.store.index"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/IndexStoreFactorySpi.html" title="interface in mil.nga.giat.geowave.core.store.index"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../../index.html?mil/nga/giat/geowave/core/store/index/IndexStore.html" target="_top">Frames</a></li>

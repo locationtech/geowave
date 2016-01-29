@@ -153,16 +153,17 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializable.h
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/Partitioner.html#fillOptions(java.util.Set)">fillOptions</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;org.apache.commons.cli.Option&gt;&nbsp;options)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/Partitioner.PartitionData.html" title="class in mil.nga.giat.geowave.analytic.partitioner">Partitioner.PartitionData</a>&gt;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/Partitioner.html#getCubeIdentifiers(T)">getCubeIdentifiers</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/Partitioner.html" title="type parameter in Partitioner">T</a>&nbsp;entry)</code>&nbsp;</td>
 </tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/analytic/param/ParameterEnum.html" title="interface in mil.nga.giat.geowave.analytic.param">ParameterEnum</a>&lt;?&gt;&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/Partitioner.html#getParameters()">getParameters</a></strong>()</code>&nbsp;</td>
+</tr>
 <tr class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/Partitioner.html#initialize(mil.nga.giat.geowave.analytic.ConfigurationWrapper)">initialize</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/analytic/ConfigurationWrapper.html" title="interface in mil.nga.giat.geowave.analytic">ConfigurationWrapper</a>&nbsp;context)</code>&nbsp;</td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/Partitioner.html#initialize(org.apache.hadoop.mapreduce.JobContext,%20java.lang.Class)">initialize</a></strong>(org.apache.hadoop.mapreduce.JobContext&nbsp;context,
+          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;scope)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
@@ -171,7 +172,8 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializable.h
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/Partitioner.html#setup(mil.nga.giat.geowave.analytic.PropertyManagement,%20org.apache.hadoop.conf.Configuration)">setup</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties,
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/Partitioner.html#setup(mil.nga.giat.geowave.analytic.PropertyManagement,%20java.lang.Class,%20org.apache.hadoop.conf.Configuration)">setup</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties,
+     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;scope,
      org.apache.hadoop.conf.Configuration&nbsp;configuration)</code>&nbsp;</td>
 </tr>
 </table>
@@ -189,13 +191,14 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializable.h
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="initialize(mil.nga.giat.geowave.analytic.ConfigurationWrapper)">
+<a name="initialize(org.apache.hadoop.mapreduce.JobContext, java.lang.Class)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>initialize</h4>
-<pre>void&nbsp;initialize(<a href="../../../../../../mil/nga/giat/geowave/analytic/ConfigurationWrapper.html" title="interface in mil.nga.giat.geowave.analytic">ConfigurationWrapper</a>&nbsp;context)
+<pre>void&nbsp;initialize(org.apache.hadoop.mapreduce.JobContext&nbsp;context,
+              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;scope)
                 throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
 <dl><dt><span class="strong">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd></dl>
@@ -227,22 +230,23 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializable.h
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></code></dd></dl>
 </li>
 </ul>
-<a name="fillOptions(java.util.Set)">
+<a name="getParameters()">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>fillOptions</h4>
-<pre>void&nbsp;fillOptions(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;org.apache.commons.cli.Option&gt;&nbsp;options)</pre>
+<h4>getParameters</h4>
+<pre><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/analytic/param/ParameterEnum.html" title="interface in mil.nga.giat.geowave.analytic.param">ParameterEnum</a>&lt;?&gt;&gt;&nbsp;getParameters()</pre>
 </li>
 </ul>
-<a name="setup(mil.nga.giat.geowave.analytic.PropertyManagement, org.apache.hadoop.conf.Configuration)">
+<a name="setup(mil.nga.giat.geowave.analytic.PropertyManagement, java.lang.Class, org.apache.hadoop.conf.Configuration)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>setup</h4>
 <pre>void&nbsp;setup(<a href="../../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties,
+         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;scope,
          org.apache.hadoop.conf.Configuration&nbsp;configuration)</pre>
 </li>
 </ul>

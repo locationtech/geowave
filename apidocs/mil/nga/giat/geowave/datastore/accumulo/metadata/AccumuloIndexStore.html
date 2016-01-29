@@ -35,8 +35,8 @@
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AccumuloDataStatisticsStore.html" title="class in mil.nga.giat.geowave.datastore.accumulo.metadata"><span class="strong">Prev Class</span></a></li>
-<li>Next Class</li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AccumuloDataStatisticsStoreFactory.html" title="class in mil.nga.giat.geowave.datastore.accumulo.metadata"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AccumuloIndexStoreFactory.html" title="class in mil.nga.giat.geowave.datastore.accumulo.metadata"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../../index.html?mil/nga/giat/geowave/datastore/accumulo/metadata/AccumuloIndexStore.html" target="_top">Frames</a></li>
@@ -86,7 +86,7 @@
 <li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
 <li>
 <ul class="inheritance">
-<li><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html" title="class in mil.nga.giat.geowave.datastore.accumulo.metadata">mil.nga.giat.geowave.datastore.accumulo.metadata.AbstractAccumuloPersistence</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&gt;</li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html" title="class in mil.nga.giat.geowave.datastore.accumulo.metadata">mil.nga.giat.geowave.datastore.accumulo.metadata.AbstractAccumuloPersistence</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="interface in mil.nga.giat.geowave.core.store.index">Index</a>&lt;?,?&gt;&gt;</li>
 <li>
 <ul class="inheritance">
 <li>mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloIndexStore</li>
@@ -105,7 +105,7 @@
 <hr>
 <br>
 <pre>public class <span class="strong">AccumuloIndexStore</span>
-extends <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html" title="class in mil.nga.giat.geowave.datastore.accumulo.metadata">AbstractAccumuloPersistence</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&gt;
+extends <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html" title="class in mil.nga.giat.geowave.datastore.accumulo.metadata">AbstractAccumuloPersistence</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="interface in mil.nga.giat.geowave.core.store.index">Index</a>&lt;?,?&gt;&gt;
 implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/IndexStore.html" title="interface in mil.nga.giat.geowave.core.store.index">IndexStore</a></pre>
 <div class="block">This class will persist Index objects within an Accumulo table for GeoWave
  metadata. The indices will be persisted in an "INDEX" column family.
@@ -130,7 +130,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/I
 <!--   -->
 </a>
 <h3>Fields inherited from class&nbsp;mil.nga.giat.geowave.datastore.accumulo.metadata.<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html" title="class in mil.nga.giat.geowave.datastore.accumulo.metadata">AbstractAccumuloPersistence</a></h3>
-<code><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html#cache">cache</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html#METADATA_TABLE">METADATA_TABLE</a></code></li>
+<code><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html#accumuloOperations">accumuloOperations</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html#cache">cache</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html#METADATA_TABLE">METADATA_TABLE</a></code></li>
 </ul>
 </li>
 </ul>
@@ -165,14 +165,14 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/I
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AccumuloIndexStore.html#addIndex(mil.nga.giat.geowave.core.store.index.Index)">addIndex</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index)</code>&nbsp;</td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AccumuloIndexStore.html#addIndex(mil.nga.giat.geowave.core.store.index.Index)">addIndex</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="interface in mil.nga.giat.geowave.core.store.index">Index</a>&lt;?,?&gt;&nbsp;index)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a></code></td>
+<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="interface in mil.nga.giat.geowave.core.store.index">Index</a>&lt;?,?&gt;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AccumuloIndexStore.html#getIndex(mil.nga.giat.geowave.core.index.ByteArrayId)">getIndex</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;indexId)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&gt;</code></td>
+<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="interface in mil.nga.giat.geowave.core.store.index">Index</a>&lt;?,?&gt;&gt;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AccumuloIndexStore.html#getIndices()">getIndices</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
@@ -181,7 +181,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/I
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AccumuloIndexStore.html#getPrimaryId(mil.nga.giat.geowave.core.store.index.Index)">getPrimaryId</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;persistedObject)</code>&nbsp;</td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AccumuloIndexStore.html#getPrimaryId(mil.nga.giat.geowave.core.store.index.Index)">getPrimaryId</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="interface in mil.nga.giat.geowave.core.store.index">Index</a>&lt;?,?&gt;&nbsp;persistedObject)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
@@ -239,7 +239,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/I
 <ul class="blockList">
 <li class="blockList">
 <h4>addIndex</h4>
-<pre>public&nbsp;void&nbsp;addIndex(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index)</pre>
+<pre>public&nbsp;void&nbsp;addIndex(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="interface in mil.nga.giat.geowave.core.store.index">Index</a>&lt;?,?&gt;&nbsp;index)</pre>
 <dl>
 <dt><strong>Specified by:</strong></dt>
 <dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/IndexStore.html#addIndex(mil.nga.giat.geowave.core.store.index.Index)">addIndex</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/IndexStore.html" title="interface in mil.nga.giat.geowave.core.store.index">IndexStore</a></code></dd>
@@ -252,7 +252,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/I
 <ul class="blockList">
 <li class="blockList">
 <h4>getIndex</h4>
-<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;getIndex(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;indexId)</pre>
+<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="interface in mil.nga.giat.geowave.core.store.index">Index</a>&lt;?,?&gt;&nbsp;getIndex(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;indexId)</pre>
 <dl>
 <dt><strong>Specified by:</strong></dt>
 <dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/IndexStore.html#getIndex(mil.nga.giat.geowave.core.index.ByteArrayId)">getIndex</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/IndexStore.html" title="interface in mil.nga.giat.geowave.core.store.index">IndexStore</a></code></dd>
@@ -268,7 +268,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/I
 <pre>protected&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getPersistenceTypeName()</pre>
 <dl>
 <dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html#getPersistenceTypeName()">getPersistenceTypeName</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html" title="class in mil.nga.giat.geowave.datastore.accumulo.metadata">AbstractAccumuloPersistence</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&gt;</code></dd>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html#getPersistenceTypeName()">getPersistenceTypeName</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html" title="class in mil.nga.giat.geowave.datastore.accumulo.metadata">AbstractAccumuloPersistence</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="interface in mil.nga.giat.geowave.core.store.index">Index</a>&lt;?,?&gt;&gt;</code></dd>
 </dl>
 </li>
 </ul>
@@ -278,10 +278,10 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/I
 <ul class="blockList">
 <li class="blockList">
 <h4>getPrimaryId</h4>
-<pre>protected&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;getPrimaryId(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;persistedObject)</pre>
+<pre>protected&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;getPrimaryId(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="interface in mil.nga.giat.geowave.core.store.index">Index</a>&lt;?,?&gt;&nbsp;persistedObject)</pre>
 <dl>
 <dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html#getPrimaryId(T)">getPrimaryId</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html" title="class in mil.nga.giat.geowave.datastore.accumulo.metadata">AbstractAccumuloPersistence</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&gt;</code></dd>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html#getPrimaryId(T)">getPrimaryId</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html" title="class in mil.nga.giat.geowave.datastore.accumulo.metadata">AbstractAccumuloPersistence</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="interface in mil.nga.giat.geowave.core.store.index">Index</a>&lt;?,?&gt;&gt;</code></dd>
 </dl>
 </li>
 </ul>
@@ -304,7 +304,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/I
 <ul class="blockListLast">
 <li class="blockList">
 <h4>getIndices</h4>
-<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&gt;&nbsp;getIndices()</pre>
+<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="interface in mil.nga.giat.geowave.core.store.index">Index</a>&lt;?,?&gt;&gt;&nbsp;getIndices()</pre>
 <dl>
 <dt><strong>Specified by:</strong></dt>
 <dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/IndexStore.html#getIndices()">getIndices</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/IndexStore.html" title="interface in mil.nga.giat.geowave.core.store.index">IndexStore</a></code></dd>
@@ -337,8 +337,8 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/I
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AccumuloDataStatisticsStore.html" title="class in mil.nga.giat.geowave.datastore.accumulo.metadata"><span class="strong">Prev Class</span></a></li>
-<li>Next Class</li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AccumuloDataStatisticsStoreFactory.html" title="class in mil.nga.giat.geowave.datastore.accumulo.metadata"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AccumuloIndexStoreFactory.html" title="class in mil.nga.giat.geowave.datastore.accumulo.metadata"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../../index.html?mil/nga/giat/geowave/datastore/accumulo/metadata/AccumuloIndexStore.html" target="_top">Frames</a></li>

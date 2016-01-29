@@ -35,7 +35,7 @@
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../mil/nga/giat/geowave/core/store/DeleteCallback.html" title="interface in mil.nga.giat.geowave.core.store"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../../mil/nga/giat/geowave/core/store/GeoWaveStoreFinder.html" title="class in mil.nga.giat.geowave.core.store"><span class="strong">Prev Class</span></a></li>
 <li><a href="../../../../../../mil/nga/giat/geowave/core/store/IngestCallback.html" title="interface in mil.nga.giat.geowave.core.store"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">
@@ -120,7 +120,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.html
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html#flush()">flush</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a></code></td>
+<td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html#getIndex()">getIndex</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
@@ -130,7 +130,16 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.html
 <tr class="rowColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html#write(mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter,%20T)">write</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">WritableDataAdapter</a>&lt;T&gt;&nbsp;writableAdapter,
-     T&nbsp;entry)</code>&nbsp;</td>
+     T&nbsp;entry)</code>
+<div class="block">Write the entry using the index writer's configure field visibility
+ writer.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>&lt;T&gt;&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html#write(mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter,%20T,%20mil.nga.giat.geowave.core.store.data.VisibilityWriter)">write</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">WritableDataAdapter</a>&lt;T&gt;&nbsp;writableAdapter,
+     T&nbsp;entry,
+     <a href="../../../../../../mil/nga/giat/geowave/core/store/data/VisibilityWriter.html" title="interface in mil.nga.giat.geowave.core.store.data">VisibilityWriter</a>&lt;T&gt;&nbsp;fieldVisibilityWriter)</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -164,6 +173,23 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.html
 <h4>write</h4>
 <pre>&lt;T&gt;&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;write(<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">WritableDataAdapter</a>&lt;T&gt;&nbsp;writableAdapter,
                           T&nbsp;entry)</pre>
+<div class="block">Write the entry using the index writer's configure field visibility
+ writer.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>writableAdapter</code> - </dd><dd><code>entry</code> - </dd>
+<dt><span class="strong">Returns:</span></dt><dd></dd></dl>
+</li>
+</ul>
+<a name="write(mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter,java.lang.Object,mil.nga.giat.geowave.core.store.data.VisibilityWriter)">
+<!--   -->
+</a><a name="write(mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter, T, mil.nga.giat.geowave.core.store.data.VisibilityWriter)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>write</h4>
+<pre>&lt;T&gt;&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;write(<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">WritableDataAdapter</a>&lt;T&gt;&nbsp;writableAdapter,
+                          T&nbsp;entry,
+                          <a href="../../../../../../mil/nga/giat/geowave/core/store/data/VisibilityWriter.html" title="interface in mil.nga.giat.geowave.core.store.data">VisibilityWriter</a>&lt;T&gt;&nbsp;fieldVisibilityWriter)</pre>
 </li>
 </ul>
 <a name="setupAdapter(mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter)">
@@ -181,7 +207,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.html
 <ul class="blockList">
 <li class="blockList">
 <h4>getIndex</h4>
-<pre><a href="../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="class in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;getIndex()</pre>
+<pre><a href="../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;getIndex()</pre>
 </li>
 </ul>
 <a name="flush()">
@@ -219,7 +245,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.html
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../mil/nga/giat/geowave/core/store/DeleteCallback.html" title="interface in mil.nga.giat.geowave.core.store"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../../mil/nga/giat/geowave/core/store/GeoWaveStoreFinder.html" title="class in mil.nga.giat.geowave.core.store"><span class="strong">Prev Class</span></a></li>
 <li><a href="../../../../../../mil/nga/giat/geowave/core/store/IngestCallback.html" title="interface in mil.nga.giat.geowave.core.store"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">

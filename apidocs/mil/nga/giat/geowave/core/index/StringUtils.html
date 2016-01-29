@@ -35,7 +35,7 @@
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../mil/nga/giat/geowave/core/index/PersistenceUtils.html" title="class in mil.nga.giat.geowave.core.index"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../../mil/nga/giat/geowave/core/index/QueryConstraints.html" title="interface in mil.nga.giat.geowave.core.index"><span class="strong">Prev Class</span></a></li>
 <li>Next Class</li>
 </ul>
 <ul class="navList">
@@ -122,6 +122,10 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/nio/charset/Charset.html?is-external=true" title="class or interface in java.nio.charset">Charset</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/index/StringUtils.html#GEOWAVE_CHAR_SET">GEOWAVE_CHAR_SET</a></strong></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/nio/charset/Charset.html?is-external=true" title="class or interface in java.nio.charset">Charset</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/index/StringUtils.html#UTF8_CHAR_SET">UTF8_CHAR_SET</a></strong></code>&nbsp;</td>
 </tr>
 </table>
@@ -163,12 +167,28 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/index/StringUtils.html#parseParams(java.lang.String)">parseParams</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;params)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/index/StringUtils.html#stringFromBinary(byte[])">stringFromBinary</a></strong>(byte[]&nbsp;binary)</code>
 <div class="block">Utility to convert bytes to a String</div>
 </td>
 </tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/index/StringUtils.html#stringsFromBinary(byte[])">stringsFromBinary</a></strong>(byte[]&nbsp;binary)</code>
+<div class="block">Utility to convert bytes to a String</div>
+</td>
+</tr>
 <tr class="altColor">
+<td class="colFirst"><code>static byte[]</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/index/StringUtils.html#stringsToBinary(java.lang.String[])">stringsToBinary</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;strings)</code>
+<div class="block">Utility to convert a String to bytes</div>
+</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>static byte[]</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/index/StringUtils.html#stringToBinary(java.lang.String)">stringToBinary</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;string)</code>
 <div class="block">Utility to convert a String to bytes</div>
@@ -196,6 +216,15 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <!--   -->
 </a>
 <h3>Field Detail</h3>
+<a name="GEOWAVE_CHAR_SET">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>GEOWAVE_CHAR_SET</h4>
+<pre>public static final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/nio/charset/Charset.html?is-external=true" title="class or interface in java.nio.charset">Charset</a> GEOWAVE_CHAR_SET</pre>
+</li>
+</ul>
 <a name="UTF8_CHAR_SET">
 <!--   -->
 </a>
@@ -242,6 +271,18 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <dt><span class="strong">Returns:</span></dt><dd>a byte array</dd></dl>
 </li>
 </ul>
+<a name="stringsToBinary(java.lang.String[])">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>stringsToBinary</h4>
+<pre>public static&nbsp;byte[]&nbsp;stringsToBinary(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;strings)</pre>
+<div class="block">Utility to convert a String to bytes</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>string</code> - incoming String to convert</dd>
+<dt><span class="strong">Returns:</span></dt><dd>a byte array</dd></dl>
+</li>
+</ul>
 <a name="stringFromBinary(byte[])">
 <!--   -->
 </a>
@@ -254,10 +295,22 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <dt><span class="strong">Returns:</span></dt><dd>a String representation of the byte array</dd></dl>
 </li>
 </ul>
+<a name="stringsFromBinary(byte[])">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>stringsFromBinary</h4>
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;stringsFromBinary(byte[]&nbsp;binary)</pre>
+<div class="block">Utility to convert bytes to a String</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>binary</code> - a byte array to convert to a String</dd>
+<dt><span class="strong">Returns:</span></dt><dd>a String representation of the byte array</dd></dl>
+</li>
+</ul>
 <a name="intToString(int)">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>intToString</h4>
 <pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;intToString(int&nbsp;number)</pre>
@@ -265,6 +318,18 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
  Accumulo table names by replacing '-' with '_'</div>
 <dl><dt><span class="strong">Parameters:</span></dt><dd><code>number</code> - the number to convert</dd>
 <dt><span class="strong">Returns:</span></dt><dd>the safe string representing that number</dd></dl>
+</li>
+</ul>
+<a name="parseParams(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>parseParams</h4>
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;parseParams(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;params)
+                                      throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></pre>
+<dl><dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></code></dd></dl>
 </li>
 </ul>
 </li>
@@ -293,7 +358,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../mil/nga/giat/geowave/core/index/PersistenceUtils.html" title="class in mil.nga.giat.geowave.core.index"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../../mil/nga/giat/geowave/core/index/QueryConstraints.html" title="interface in mil.nga.giat.geowave.core.index"><span class="strong">Prev Class</span></a></li>
 <li>Next Class</li>
 </ul>
 <ul class="navList">

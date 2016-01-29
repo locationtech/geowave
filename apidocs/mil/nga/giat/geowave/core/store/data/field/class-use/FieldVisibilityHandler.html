@@ -83,11 +83,19 @@
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><a href="#mil.nga.giat.geowave.adapter.vector.field">mil.nga.giat.geowave.adapter.vector.field</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="#mil.nga.giat.geowave.adapter.vector.ingest">mil.nga.giat.geowave.adapter.vector.ingest</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.adapter.vector.plugin.visibility">mil.nga.giat.geowave.adapter.vector.plugin.visibility</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><a href="#mil.nga.giat.geowave.adapter.vector.util">mil.nga.giat.geowave.adapter.vector.util</a></td>
+<td class="colFirst"><a href="#mil.nga.giat.geowave.analytic.clustering">mil.nga.giat.geowave.analytic.clustering</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
@@ -166,6 +174,19 @@
 </tr>
 </tbody>
 </table>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/package-summary.html">mil.nga.giat.geowave.adapter.vector</a> that return <a href="../../../../../../../../../mil/nga/giat/geowave/core/store/data/field/FieldVisibilityHandler.html" title="interface in mil.nga.giat.geowave.core.store.data.field">FieldVisibilityHandler</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/data/field/FieldVisibilityHandler.html" title="interface in mil.nga.giat.geowave.core.store.data.field">FieldVisibilityHandler</a>&lt;org.opengis.feature.simple.SimpleFeature,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></td>
+<td class="colLast"><span class="strong">GeotoolsFeatureDataAdapter.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/GeotoolsFeatureDataAdapter.html#getFieldVisiblityHandler()">getFieldVisiblityHandler</a></strong>()</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
 <table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing constructors, and an explanation">
 <caption><span>Constructors in <a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/package-summary.html">mil.nga.giat.geowave.adapter.vector</a> with parameters of type <a href="../../../../../../../../../mil/nga/giat/geowave/core/store/data/field/FieldVisibilityHandler.html" title="interface in mil.nga.giat.geowave.core.store.data.field">FieldVisibilityHandler</a></span><span class="tabEnd">&nbsp;</span></caption>
 <tr>
@@ -175,34 +196,6 @@
 <tr class="altColor">
 <td class="colLast"><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/AvroFeatureDataAdapter.html#AvroFeatureDataAdapter(org.opengis.feature.simple.SimpleFeatureType,%20mil.nga.giat.geowave.core.store.data.field.FieldVisibilityHandler)">AvroFeatureDataAdapter</a></strong>(org.opengis.feature.simple.SimpleFeatureType&nbsp;type,
                       <a href="../../../../../../../../../mil/nga/giat/geowave/core/store/data/field/FieldVisibilityHandler.html" title="interface in mil.nga.giat.geowave.core.store.data.field">FieldVisibilityHandler</a>&lt;org.opengis.feature.simple.SimpleFeature,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;fieldVisiblityHandler)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colLast"><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureCollectionDataAdapter.html#FeatureCollectionDataAdapter(org.opengis.feature.simple.SimpleFeatureType,%20mil.nga.giat.geowave.core.store.data.field.FieldVisibilityHandler)">FeatureCollectionDataAdapter</a></strong>(org.opengis.feature.simple.SimpleFeatureType&nbsp;type,
-                            <a href="../../../../../../../../../mil/nga/giat/geowave/core/store/data/field/FieldVisibilityHandler.html" title="interface in mil.nga.giat.geowave.core.store.data.field">FieldVisibilityHandler</a>&lt;org.geotools.feature.DefaultFeatureCollection,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;fieldVisiblityHandler)</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colLast"><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureCollectionDataAdapter.html#FeatureCollectionDataAdapter(org.opengis.feature.simple.SimpleFeatureType,%20int,%20mil.nga.giat.geowave.core.store.data.field.FieldVisibilityHandler)">FeatureCollectionDataAdapter</a></strong>(org.opengis.feature.simple.SimpleFeatureType&nbsp;type,
-                            int&nbsp;featuresPerEntry,
-                            <a href="../../../../../../../../../mil/nga/giat/geowave/core/store/data/field/FieldVisibilityHandler.html" title="interface in mil.nga.giat.geowave.core.store.data.field">FieldVisibilityHandler</a>&lt;org.geotools.feature.DefaultFeatureCollection,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;fieldVisiblityHandler)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colLast"><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureCollectionDataAdapter.html#FeatureCollectionDataAdapter(org.opengis.feature.simple.SimpleFeatureType,%20int,%20java.util.List,%20mil.nga.giat.geowave.core.store.data.field.FieldVisibilityHandler)">FeatureCollectionDataAdapter</a></strong>(org.opengis.feature.simple.SimpleFeatureType&nbsp;type,
-                            int&nbsp;featuresPerEntry,
-                            <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/PersistentIndexFieldHandler.html" title="interface in mil.nga.giat.geowave.core.store.adapter">PersistentIndexFieldHandler</a>&lt;org.geotools.feature.DefaultFeatureCollection,? extends <a href="../../../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexValue.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexValue</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&gt;&nbsp;customIndexHandlers,
-                            <a href="../../../../../../../../../mil/nga/giat/geowave/core/store/data/field/FieldVisibilityHandler.html" title="interface in mil.nga.giat.geowave.core.store.data.field">FieldVisibilityHandler</a>&lt;org.geotools.feature.DefaultFeatureCollection,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;fieldVisiblityHandler)</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colLast"><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureCollectionGeometryHandler.html#FeatureCollectionGeometryHandler(org.opengis.feature.type.AttributeDescriptor,%20mil.nga.giat.geowave.core.store.data.field.FieldVisibilityHandler)">FeatureCollectionGeometryHandler</a></strong>(org.opengis.feature.type.AttributeDescriptor&nbsp;geometryAttrDesc,
-                                <a href="../../../../../../../../../mil/nga/giat/geowave/core/store/data/field/FieldVisibilityHandler.html" title="interface in mil.nga.giat.geowave.core.store.data.field">FieldVisibilityHandler</a>&lt;org.geotools.feature.DefaultFeatureCollection,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;visibilityHandler)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colLast"><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureCollectionTimeRangeHandler.html#FeatureCollectionTimeRangeHandler(mil.nga.giat.geowave.adapter.vector.FeatureCollectionAttributeHandler,%20mil.nga.giat.geowave.adapter.vector.FeatureCollectionAttributeHandler,%20mil.nga.giat.geowave.core.store.data.field.FieldVisibilityHandler)">FeatureCollectionTimeRangeHandler</a></strong>(<a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureCollectionAttributeHandler.html" title="class in mil.nga.giat.geowave.adapter.vector">FeatureCollectionAttributeHandler</a>&nbsp;nativeStartTimeHandler,
-                                 <a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureCollectionAttributeHandler.html" title="class in mil.nga.giat.geowave.adapter.vector">FeatureCollectionAttributeHandler</a>&nbsp;nativeEndTimeHandler,
-                                 <a href="../../../../../../../../../mil/nga/giat/geowave/core/store/data/field/FieldVisibilityHandler.html" title="interface in mil.nga.giat.geowave.core.store.data.field">FieldVisibilityHandler</a>&lt;org.geotools.feature.DefaultFeatureCollection,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;visibilityHandler)</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colLast"><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureCollectionTimestampHandler.html#FeatureCollectionTimestampHandler(org.opengis.feature.type.AttributeDescriptor,%20mil.nga.giat.geowave.core.store.data.field.FieldVisibilityHandler)">FeatureCollectionTimestampHandler</a></strong>(org.opengis.feature.type.AttributeDescriptor&nbsp;timestampAttrDesc,
-                                 <a href="../../../../../../../../../mil/nga/giat/geowave/core/store/data/field/FieldVisibilityHandler.html" title="interface in mil.nga.giat.geowave.core.store.data.field">FieldVisibilityHandler</a>&lt;org.geotools.feature.DefaultFeatureCollection,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;visibilityHandler)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colLast"><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureDataAdapter.html#FeatureDataAdapter(org.opengis.feature.simple.SimpleFeatureType,%20mil.nga.giat.geowave.core.store.data.field.FieldVisibilityHandler)">FeatureDataAdapter</a></strong>(org.opengis.feature.simple.SimpleFeatureType&nbsp;type,
@@ -230,6 +223,43 @@
 </tbody>
 </table>
 </li>
+<li class="blockList"><a name="mil.nga.giat.geowave.adapter.vector.field">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../../../../mil/nga/giat/geowave/core/store/data/field/FieldVisibilityHandler.html" title="interface in mil.nga.giat.geowave.core.store.data.field">FieldVisibilityHandler</a> in <a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/field/package-summary.html">mil.nga.giat.geowave.adapter.vector.field</a></h3>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
+<caption><span>Classes in <a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/field/package-summary.html">mil.nga.giat.geowave.adapter.vector.field</a> that implement <a href="../../../../../../../../../mil/nga/giat/geowave/core/store/data/field/FieldVisibilityHandler.html" title="interface in mil.nga.giat.geowave.core.store.data.field">FieldVisibilityHandler</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Class and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>static class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/field/SimpleFeatureSerializationProvider.WholeFeatureWriter.html" title="class in mil.nga.giat.geowave.adapter.vector.field">SimpleFeatureSerializationProvider.WholeFeatureWriter</a></strong></code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="mil.nga.giat.geowave.adapter.vector.ingest">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../../../../mil/nga/giat/geowave/core/store/data/field/FieldVisibilityHandler.html" title="interface in mil.nga.giat.geowave.core.store.data.field">FieldVisibilityHandler</a> in <a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/package-summary.html">mil.nga.giat.geowave.adapter.vector.ingest</a></h3>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/package-summary.html">mil.nga.giat.geowave.adapter.vector.ingest</a> with parameters of type <a href="../../../../../../../../../mil/nga/giat/geowave/core/store/data/field/FieldVisibilityHandler.html" title="interface in mil.nga.giat.geowave.core.store.data.field">FieldVisibilityHandler</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>protected <a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">WritableDataAdapter</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></td>
+<td class="colLast"><span class="strong">AbstractSimpleFeatureIngestPlugin.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html#newAdapter(org.opengis.feature.simple.SimpleFeatureType,%20mil.nga.giat.geowave.core.store.data.field.FieldVisibilityHandler)">newAdapter</a></strong>(org.opengis.feature.simple.SimpleFeatureType&nbsp;type,
+          <a href="../../../../../../../../../mil/nga/giat/geowave/core/store/data/field/FieldVisibilityHandler.html" title="interface in mil.nga.giat.geowave.core.store.data.field">FieldVisibilityHandler</a>&lt;org.opengis.feature.simple.SimpleFeature,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;fieldVisiblityHandler)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
 <li class="blockList"><a name="mil.nga.giat.geowave.adapter.vector.plugin.visibility">
 <!--   -->
 </a>
@@ -244,7 +274,7 @@
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/visibility/AdaptorProxyFieldLevelVisibilityHandler.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin.visibility">AdaptorProxyFieldLevelVisibilityHandler</a></strong></code>
-<div class="block">Works with <code>VisibilityManagement</code> instance to define the visibility for
+<div class="block">Works with <a href="../../../../../../../../../mil/nga/giat/geowave/core/store/data/visibility/VisibilityManagement.html" title="interface in mil.nga.giat.geowave.core.store.data.visibility"><code>VisibilityManagement</code></a> instance to define the visibility for
  a specific field of a data row object.</div>
 </td>
 </tr>
@@ -311,33 +341,18 @@
 </tbody>
 </table>
 </li>
-<li class="blockList"><a name="mil.nga.giat.geowave.adapter.vector.util">
+<li class="blockList"><a name="mil.nga.giat.geowave.analytic.clustering">
 <!--   -->
 </a>
-<h3>Uses of <a href="../../../../../../../../../mil/nga/giat/geowave/core/store/data/field/FieldVisibilityHandler.html" title="interface in mil.nga.giat.geowave.core.store.data.field">FieldVisibilityHandler</a> in <a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/util/package-summary.html">mil.nga.giat.geowave.adapter.vector.util</a></h3>
-<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
-<caption><span>Methods in <a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/util/package-summary.html">mil.nga.giat.geowave.adapter.vector.util</a> that return <a href="../../../../../../../../../mil/nga/giat/geowave/core/store/data/field/FieldVisibilityHandler.html" title="interface in mil.nga.giat.geowave.core.store.data.field">FieldVisibilityHandler</a></span><span class="tabEnd">&nbsp;</span></caption>
+<h3>Uses of <a href="../../../../../../../../../mil/nga/giat/geowave/core/store/data/field/FieldVisibilityHandler.html" title="interface in mil.nga.giat.geowave.core.store.data.field">FieldVisibilityHandler</a> in <a href="../../../../../../../../../mil/nga/giat/geowave/analytic/clustering/package-summary.html">mil.nga.giat.geowave.analytic.clustering</a></h3>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing constructors, and an explanation">
+<caption><span>Constructors in <a href="../../../../../../../../../mil/nga/giat/geowave/analytic/clustering/package-summary.html">mil.nga.giat.geowave.analytic.clustering</a> with parameters of type <a href="../../../../../../../../../mil/nga/giat/geowave/core/store/data/field/FieldVisibilityHandler.html" title="interface in mil.nga.giat.geowave.core.store.data.field">FieldVisibilityHandler</a></span><span class="tabEnd">&nbsp;</span></caption>
 <tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Method and Description</th>
+<th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><code><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/data/field/FieldVisibilityHandler.html" title="interface in mil.nga.giat.geowave.core.store.data.field">FieldVisibilityHandler</a>&lt;org.geotools.feature.DefaultFeatureCollection,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></td>
-<td class="colLast"><span class="strong">RedistributeConfig.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/util/RedistributeConfig.html#getFieldVisiblityHandler()">getFieldVisiblityHandler</a></strong>()</code>&nbsp;</td>
-</tr>
-</tbody>
-</table>
-<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
-<caption><span>Methods in <a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/util/package-summary.html">mil.nga.giat.geowave.adapter.vector.util</a> with parameters of type <a href="../../../../../../../../../mil/nga/giat/geowave/core/store/data/field/FieldVisibilityHandler.html" title="interface in mil.nga.giat.geowave.core.store.data.field">FieldVisibilityHandler</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Method and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colFirst"><code><a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/util/RedistributeConfig.html" title="class in mil.nga.giat.geowave.adapter.vector.util">RedistributeConfig</a></code></td>
-<td class="colLast"><span class="strong">RedistributeConfig.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/util/RedistributeConfig.html#setFieldVisiblityHandler(mil.nga.giat.geowave.core.store.data.field.FieldVisibilityHandler)">setFieldVisiblityHandler</a></strong>(<a href="../../../../../../../../../mil/nga/giat/geowave/core/store/data/field/FieldVisibilityHandler.html" title="interface in mil.nga.giat.geowave.core.store.data.field">FieldVisibilityHandler</a>&lt;org.geotools.feature.DefaultFeatureCollection,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;fieldVisiblityHandler)</code>&nbsp;</td>
+<td class="colLast"><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/analytic/clustering/DistortionGroupManagement.DistortionDataAdapter.html#DistortionGroupManagement.DistortionDataAdapter(mil.nga.giat.geowave.core.store.data.field.FieldVisibilityHandler)">DistortionGroupManagement.DistortionDataAdapter</a></strong>(<a href="../../../../../../../../../mil/nga/giat/geowave/core/store/data/field/FieldVisibilityHandler.html" title="interface in mil.nga.giat.geowave.core.store.data.field">FieldVisibilityHandler</a>&lt;<a href="../../../../../../../../../mil/nga/giat/geowave/analytic/clustering/DistortionGroupManagement.DistortionEntry.html" title="class in mil.nga.giat.geowave.analytic.clustering">DistortionGroupManagement.DistortionEntry</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;distortionVisibilityHandler)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>

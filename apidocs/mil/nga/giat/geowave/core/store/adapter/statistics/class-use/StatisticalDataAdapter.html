@@ -86,10 +86,6 @@
 <td class="colFirst"><a href="#mil.nga.giat.geowave.core.store.adapter.statistics">mil.nga.giat.geowave.core.store.adapter.statistics</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
-<td class="colFirst"><a href="#mil.nga.giat.geowave.datastore.accumulo">mil.nga.giat.geowave.datastore.accumulo</a></td>
-<td class="colLast">&nbsp;</td>
-</tr>
 </tbody>
 </table>
 </li>
@@ -117,6 +113,19 @@
 <!--   -->
 </a>
 <h3>Uses of <a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/StatisticalDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">StatisticalDataAdapter</a> in <a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/package-summary.html">mil.nga.giat.geowave.adapter.vector</a></h3>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing subinterfaces, and an explanation">
+<caption><span>Subinterfaces of <a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/StatisticalDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">StatisticalDataAdapter</a> in <a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/package-summary.html">mil.nga.giat.geowave.adapter.vector</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Interface and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>interface&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/GeotoolsFeatureDataAdapter.html" title="interface in mil.nga.giat.geowave.adapter.vector">GeotoolsFeatureDataAdapter</a></strong></code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
 <table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
 <caption><span>Classes in <a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/package-summary.html">mil.nga.giat.geowave.adapter.vector</a> that implement <a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/StatisticalDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">StatisticalDataAdapter</a></span><span class="tabEnd">&nbsp;</span></caption>
 <tr>
@@ -136,6 +145,14 @@
  store in Accumulo.</div>
 </td>
 </tr>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/KryoFeatureDataAdapter.html" title="class in mil.nga.giat.geowave.adapter.vector">KryoFeatureDataAdapter</a></strong></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/WholeFeatureDataAdapter.html" title="class in mil.nga.giat.geowave.adapter.vector">WholeFeatureDataAdapter</a></strong></code>&nbsp;</td>
+</tr>
 </tbody>
 </table>
 </li>
@@ -143,6 +160,19 @@
 <!--   -->
 </a>
 <h3>Uses of <a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/StatisticalDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">StatisticalDataAdapter</a> in <a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/package-summary.html">mil.nga.giat.geowave.core.store.adapter.statistics</a></h3>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
+<caption><span>Classes in <a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/package-summary.html">mil.nga.giat.geowave.core.store.adapter.statistics</a> that implement <a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/StatisticalDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">StatisticalDataAdapter</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Class and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStoreStatsAdapterWrapper.html" title="class in mil.nga.giat.geowave.core.store.adapter.statistics">DataStoreStatsAdapterWrapper</a>&lt;T&gt;</strong></code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
 <table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing constructors, and an explanation">
 <caption><span>Constructors in <a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/package-summary.html">mil.nga.giat.geowave.core.store.adapter.statistics</a> with parameters of type <a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/StatisticalDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">StatisticalDataAdapter</a></span><span class="tabEnd">&nbsp;</span></caption>
 <tr>
@@ -152,24 +182,6 @@
 <tr class="altColor">
 <td class="colLast"><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatisticsBuilder.html#DataStatisticsBuilder(mil.nga.giat.geowave.core.store.adapter.statistics.StatisticalDataAdapter,%20mil.nga.giat.geowave.core.index.ByteArrayId)">DataStatisticsBuilder</a></strong>(<a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/StatisticalDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">StatisticalDataAdapter</a>&lt;<a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatisticsBuilder.html" title="type parameter in DataStatisticsBuilder">T</a>&gt;&nbsp;adapter,
                      <a href="../../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;statisticsId)</code>&nbsp;</td>
-</tr>
-</tbody>
-</table>
-</li>
-<li class="blockList"><a name="mil.nga.giat.geowave.datastore.accumulo">
-<!--   -->
-</a>
-<h3>Uses of <a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/StatisticalDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">StatisticalDataAdapter</a> in <a href="../../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/package-summary.html">mil.nga.giat.geowave.datastore.accumulo</a></h3>
-<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
-<caption><span>Classes in <a href="../../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/package-summary.html">mil.nga.giat.geowave.datastore.accumulo</a> that implement <a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/StatisticalDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">StatisticalDataAdapter</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Class and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colFirst"><code>class&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/DataAdapterStatsWrapper.html" title="class in mil.nga.giat.geowave.datastore.accumulo">DataAdapterStatsWrapper</a>&lt;T&gt;</strong></code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
