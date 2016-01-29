@@ -1,8 +1,8 @@
 package mil.nga.giat.geowave.datastore.accumulo.metadata;
 
-import java.util.ArrayList;
 import java.util.EnumSet;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
@@ -10,17 +10,23 @@ import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations;
+import mil.nga.giat.geowave.datastore.accumulo.BasicOptionProvider;
 import mil.nga.giat.geowave.datastore.accumulo.IteratorConfig;
 import mil.nga.giat.geowave.datastore.accumulo.MergingCombiner;
 import mil.nga.giat.geowave.datastore.accumulo.MergingVisibilityCombiner;
+import mil.nga.giat.geowave.datastore.accumulo.util.TransformerWriter;
+import mil.nga.giat.geowave.datastore.accumulo.util.VisibilityTransformer;
 
 import org.apache.accumulo.core.client.IteratorSetting;
 import org.apache.accumulo.core.client.IteratorSetting.Column;
+import org.apache.accumulo.core.client.Scanner;
+import org.apache.accumulo.core.client.TableNotFoundException;
 import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.Value;
-import org.apache.accumulo.core.iterators.Combiner;
 import org.apache.accumulo.core.iterators.IteratorUtil.IteratorScope;
+import org.apache.accumulo.core.iterators.conf.ColumnSet;
 import org.apache.hadoop.io.Text;
+import org.apache.log4j.Logger;
 
 /**
  * This class will persist Index objects within an Accumulo table for GeoWave
@@ -35,10 +41,12 @@ public class AccumuloDataStatisticsStore extends
 		AbstractAccumuloPersistence<DataStatistics<?>> implements
 		DataStatisticsStore
 {
+	private final static Logger LOGGER = Logger.getLogger(AccumuloDataStatisticsStore.class);
 	// this is fairly arbitrary at the moment because it is the only custom
 	// iterator added
 	private static final int STATS_COMBINER_PRIORITY = 10;
 	private static final int STATS_MULTI_VISIBILITY_COMBINER_PRIORITY = 15;
+	private static final String STATISTICS_COMBINER_NAME = "STATS_COMBINER";
 	private static final String STATISTICS_CF = "STATS";
 
 	public AccumuloDataStatisticsStore(
@@ -99,17 +107,21 @@ public class AccumuloDataStatisticsStore extends
 
 	@Override
 	protected IteratorConfig[] getIteratorConfig() {
+		final Column adapterColumn = new Column(
+				STATISTICS_CF);
+		final Map<String, String> options = new HashMap<String, String>();
+		options.put(
+				MergingCombiner.COLUMNS_OPTION,
+				ColumnSet.encodeColumns(
+						adapterColumn.getFirst(),
+						adapterColumn.getSecond()));
 		final IteratorConfig statsCombiner = new IteratorConfig(
-				new IteratorSetting(
-						STATS_COMBINER_PRIORITY,
-						MergingCombiner.class),
-				EnumSet.allOf(IteratorScope.class));
-		final List<Column> columns = new ArrayList<Column>();
-		columns.add(new Column(
-				STATISTICS_CF));
-		Combiner.setColumns(
-				statsCombiner.getIteratorSettings(),
-				columns);
+				EnumSet.allOf(IteratorScope.class),
+				STATS_COMBINER_PRIORITY,
+				STATISTICS_COMBINER_NAME,
+				MergingCombiner.class.getName(),
+				new BasicOptionProvider(
+						options));
 		return new IteratorConfig[] {
 			statsCombiner
 		};
@@ -129,7 +141,7 @@ public class AccumuloDataStatisticsStore extends
 	public DataStatistics<?> getDataStatistics(
 			final ByteArrayId adapterId,
 			final ByteArrayId statisticsId,
-			String... authorizations ) {
+			final String... authorizations ) {
 		return getObject(
 				statisticsId,
 				adapterId,
@@ -173,7 +185,7 @@ public class AccumuloDataStatisticsStore extends
 
 	@Override
 	public CloseableIterator<DataStatistics<?>> getAllDataStatistics(
-			String... authorizations ) {
+			final String... authorizations ) {
 		return getObjects(authorizations);
 	}
 
@@ -181,7 +193,7 @@ public class AccumuloDataStatisticsStore extends
 	public boolean removeStatistics(
 			final ByteArrayId adapterId,
 			final ByteArrayId statisticsId,
-			String... authorizations ) {
+			final String... authorizations ) {
 		return deleteObject(
 				statisticsId,
 				adapterId,
@@ -191,7 +203,7 @@ public class AccumuloDataStatisticsStore extends
 	@Override
 	public CloseableIterator<DataStatistics<?>> getDataStatistics(
 			final ByteArrayId adapterId,
-			String... authorizations ) {
+			final String... authorizations ) {
 		return getAllObjectsWithSecondaryId(
 				adapterId,
 				authorizations);
@@ -206,5 +218,72 @@ public class AccumuloDataStatisticsStore extends
 	protected byte[] getAccumuloVisibility(
 			final DataStatistics<?> entry ) {
 		return entry.getVisibility();
+	}
+
+	@Override
+	public void removeAllStatistics(
+			final ByteArrayId adapterId,
+			final String... authorizations ) {
+		deleteObjects(
+				adapterId,
+				authorizations);
+	}
+
+	@Override
+	public void transformVisibility(
+			final ByteArrayId adapterId,
+			final String transformingRegex,
+			final String replacement,
+			final String... authorizations ) {
+		Scanner scanner;
+
+		try {
+			scanner = createSortScanner(
+					adapterId,
+					authorizations);
+
+			final TransformerWriter writer = new TransformerWriter(
+					scanner,
+					getAccumuloTablename(),
+					accumuloOperations,
+					new VisibilityTransformer(
+							transformingRegex,
+							replacement));
+			writer.transform();
+			scanner.close();
+		}
+		catch (final TableNotFoundException e) {
+			LOGGER.error(
+					"Table not found during transaction commit: " + getAccumuloTablename(),
+					e);
+		}
+	}
+
+	private Scanner createSortScanner(
+			final ByteArrayId adapterId,
+			final String... authorizations )
+			throws TableNotFoundException {
+		Scanner scanner = null;
+
+		scanner = accumuloOperations.createScanner(
+				getAccumuloTablename(),
+				authorizations);
+
+		final IteratorSetting[] settings = getScanSettings();
+		if ((settings != null) && (settings.length > 0)) {
+			for (final IteratorSetting setting : settings) {
+				scanner.addScanIterator(setting);
+			}
+		}
+		final String columnFamily = getAccumuloColumnFamily();
+		final String columnQualifier = getAccumuloColumnQualifier(adapterId);
+		scanner.fetchColumn(
+				new Text(
+						columnFamily),
+				new Text(
+						columnQualifier));
+
+		// scanner.setRange(Range.);
+		return scanner;
 	}
 }

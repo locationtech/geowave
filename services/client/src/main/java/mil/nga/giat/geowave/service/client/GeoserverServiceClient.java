@@ -3,6 +3,8 @@ package mil.nga.giat.geowave.service.client;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.core.Response;
@@ -114,17 +116,14 @@ public class GeoserverServiceClient
 	}
 
 	public boolean publishDatastore(
-			final String zookeeperUrl,
-			final String username,
-			final String password,
-			final String instance,
-			final String namespace ) {
+			final String geowaveStoreType,
+			final Map<String, String> dataStoreConfig,
+			final String name ) {
 		return publishDatastore(
-				zookeeperUrl,
-				username,
-				password,
-				instance,
-				namespace,
+				geowaveStoreType,
+				dataStoreConfig,
+				name,
+				null,
 				null,
 				null,
 				null,
@@ -132,41 +131,33 @@ public class GeoserverServiceClient
 	}
 
 	public boolean publishDatastore(
-			final String zookeeperUrl,
-			final String username,
-			final String password,
-			final String instance,
-			final String namespace,
+			final String geowaveStoreType,
+			final Map<String, String> dataStoreConfig,
+			final String name,
 			final String lockMgmt,
 			final String authMgmtProvider,
 			final String authDataUrl,
+			final String queryIndexStrategy,
 			final String workspace ) {
 		final FormDataMultiPart multiPart = new FormDataMultiPart();
 
 		multiPart.field(
-				"zookeeperUrl",
-				zookeeperUrl);
-
+				"geowaveStoreType",
+				geowaveStoreType);
 		multiPart.field(
-				"username",
-				username);
-
-		multiPart.field(
-				"password",
-				password);
-
-		multiPart.field(
-				"instance",
-				instance);
-
-		multiPart.field(
-				"namespace",
-				namespace);
+				"name",
+				name);
 
 		if (lockMgmt != null) {
 			multiPart.field(
 					"lockMgmt",
 					lockMgmt);
+		}
+
+		if (queryIndexStrategy != null) {
+			multiPart.field(
+					"queryIndexStrategy",
+					queryIndexStrategy);
 		}
 
 		if (authMgmtProvider != null) {
@@ -185,6 +176,11 @@ public class GeoserverServiceClient
 			multiPart.field(
 					"workspace",
 					workspace);
+		}
+		for (final Entry<String, String> e : dataStoreConfig.entrySet()) {
+			multiPart.field(
+					e.getKey(),
+					e.getValue());
 		}
 
 		final Response resp = geoserverService.publishDatastore(multiPart);

@@ -35,21 +35,28 @@ public class DataStoreEntryInfo
 		}
 	}
 
+	private final byte[] dataId;
 	private final List<ByteArrayId> rowIds;
-	private final List<FieldInfo> fieldInfo;
+	private final List<FieldInfo<?>> fieldInfo;
 
 	public DataStoreEntryInfo(
+			final byte[] dataId,
 			final List<ByteArrayId> rowIds,
-			final List<FieldInfo> fieldInfo ) {
+			final List<FieldInfo<?>> fieldInfo ) {
+		this.dataId = dataId;
 		this.rowIds = rowIds;
 		this.fieldInfo = fieldInfo;
+	}
+
+	public byte[] getDataId() {
+		return dataId;
 	}
 
 	public List<ByteArrayId> getRowIds() {
 		return rowIds;
 	}
 
-	public List<FieldInfo> getFieldInfo() {
+	public List<FieldInfo<?>> getFieldInfo() {
 		return fieldInfo;
 	}
 }

@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
@@ -15,29 +16,36 @@ import mil.nga.giat.geowave.analytic.PropertyManagement;
 import mil.nga.giat.geowave.analytic.SimpleFeatureItemWrapperFactory;
 import mil.nga.giat.geowave.analytic.clustering.CentroidManagerGeoWave;
 import mil.nga.giat.geowave.analytic.clustering.ClusteringUtils;
+import mil.nga.giat.geowave.analytic.clustering.DistortionGroupManagement.DistortionEntry;
 import mil.nga.giat.geowave.analytic.clustering.NestedGroupCentroidAssignment;
 import mil.nga.giat.geowave.analytic.distance.DistanceFn;
 import mil.nga.giat.geowave.analytic.distance.FeatureCentroidDistanceFn;
 import mil.nga.giat.geowave.analytic.extract.SimpleFeatureCentroidExtractor;
 import mil.nga.giat.geowave.analytic.mapreduce.CountofDoubleWritable;
-import mil.nga.giat.geowave.analytic.mapreduce.kmeans.KMeansDistortionMapReduce;
 import mil.nga.giat.geowave.analytic.param.CentroidParameters;
 import mil.nga.giat.geowave.analytic.param.CommonParameters;
 import mil.nga.giat.geowave.analytic.param.GlobalParameters;
-import mil.nga.giat.geowave.core.geotime.IndexType;
+import mil.nga.giat.geowave.analytic.param.StoreParameters.StoreParam;
+import mil.nga.giat.geowave.analytic.store.PersistableAdapterStore;
+import mil.nga.giat.geowave.analytic.store.PersistableDataStore;
+import mil.nga.giat.geowave.analytic.store.PersistableIndexStore;
+import mil.nga.giat.geowave.core.cli.AdapterStoreCommandLineOptions;
+import mil.nga.giat.geowave.core.cli.DataStoreCommandLineOptions;
+import mil.nga.giat.geowave.core.cli.IndexStoreCommandLineOptions;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.store.index.Index;
-import mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStore;
-import mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations;
-import mil.nga.giat.geowave.datastore.accumulo.mapreduce.GeoWaveConfiguratorBase;
-import mil.nga.giat.geowave.datastore.accumulo.mapreduce.JobContextAdapterStore;
-import mil.nga.giat.geowave.datastore.accumulo.mapreduce.input.GeoWaveInputKey;
+import mil.nga.giat.geowave.core.store.DataStore;
+import mil.nga.giat.geowave.core.store.IndexWriter;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.core.store.memory.DataStoreUtils;
+import mil.nga.giat.geowave.core.store.memory.MemoryAdapterStoreFactory;
+import mil.nga.giat.geowave.core.store.memory.MemoryDataStoreFactory;
+import mil.nga.giat.geowave.core.store.memory.MemoryIndexStoreFactory;
+import mil.nga.giat.geowave.mapreduce.GeoWaveConfiguratorBase;
+import mil.nga.giat.geowave.mapreduce.JobContextAdapterStore;
+import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
+import mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputKey;
 
-import org.apache.accumulo.core.client.AccumuloException;
-import org.apache.accumulo.core.client.AccumuloSecurityException;
-import org.apache.accumulo.core.data.Key;
-import org.apache.accumulo.core.data.Mutation;
-import org.apache.accumulo.core.data.Value;
 import org.apache.hadoop.io.ObjectWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mrunit.mapreduce.MapDriver;
@@ -53,8 +61,9 @@ import com.vividsolutions.jts.geom.GeometryFactory;
 
 public class KMeansDistortionMapReduceTest
 {
+	private static final String TEST_NAMESPACE = "test";
 	MapDriver<GeoWaveInputKey, ObjectWritable, Text, CountofDoubleWritable> mapDriver;
-	ReduceDriver<Text, CountofDoubleWritable, Text, Mutation> reduceDriver;
+	ReduceDriver<Text, CountofDoubleWritable, GeoWaveOutputKey, DistortionEntry> reduceDriver;
 
 	final String batchId = "b1";
 
@@ -65,24 +74,19 @@ public class KMeansDistortionMapReduceTest
 			},
 			"http://geowave.test.net",
 			ClusteringUtils.CLUSTERING_CRS).getType();
-	final FeatureDataAdapter testObjectAapter = new FeatureDataAdapter(
+	final FeatureDataAdapter testObjectAdapter = new FeatureDataAdapter(
 			ftype);
 
 	private static final List<Object> capturedObjects = new ArrayList<Object>();
 
-	final Index index = IndexType.SPATIAL_VECTOR.createDefaultIndex();
+	final PrimaryIndex index = new SpatialDimensionalityTypeProvider().createPrimaryIndex();
 
 	final GeometryFactory factory = new GeometryFactory();
 	final String grp1 = "g1";
-	Key accumuloKey = null; // new Key(new Text("row"), new Text("cf"), new
-
-	// Text("c"));
 
 	@Before
 	public void setUp()
-			throws IOException,
-			AccumuloException,
-			AccumuloSecurityException {
+			throws IOException {
 		final KMeansDistortionMapReduce.KMeansDistortionMapper mapper = new KMeansDistortionMapReduce.KMeansDistortionMapper();
 		final KMeansDistortionMapReduce.KMeansDistortionReduce reducer = new KMeansDistortionMapReduce.KMeansDistortionReduce();
 		mapDriver = MapDriver.newMapDriver(mapper);
@@ -97,19 +101,16 @@ public class KMeansDistortionMapReduceTest
 
 		JobContextAdapterStore.addDataAdapter(
 				mapDriver.getConfiguration(),
-				testObjectAapter);
+				testObjectAdapter);
 
 		JobContextAdapterStore.addDataAdapter(
 				reduceDriver.getConfiguration(),
-				testObjectAapter);
+				testObjectAdapter);
 
-		PropertyManagement propManagement = new PropertyManagement();
-		propManagement.store(
-				CommonParameters.Common.ACCUMULO_CONNECT_FACTORY,
-				MockAccumuloOperationsFactory.class);
+		final PropertyManagement propManagement = new PropertyManagement();
 		propManagement.store(
 				CentroidParameters.Centroid.INDEX_ID,
-				IndexType.SPATIAL_VECTOR.getDefaultId());
+				new SpatialDimensionalityTypeProvider().createPrimaryIndex().getId().getString());
 		propManagement.store(
 				CentroidParameters.Centroid.DATA_TYPE_ID,
 				ftype.getTypeName());
@@ -126,22 +127,33 @@ public class KMeansDistortionMapReduceTest
 		propManagement.store(
 				CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS,
 				SimpleFeatureItemWrapperFactory.class);
-
-		NestedGroupCentroidAssignment.setParameters(
-				reduceDriver.getConfiguration(),
-				propManagement);
+		propManagement.store(
+				StoreParam.DATA_STORE,
+				new PersistableDataStore(
+						new DataStoreCommandLineOptions(
+								new MemoryDataStoreFactory(),
+								new HashMap<String, Object>(),
+								TEST_NAMESPACE)));
+		propManagement.store(
+				StoreParam.INDEX_STORE,
+				new PersistableIndexStore(
+						new IndexStoreCommandLineOptions(
+								new MemoryIndexStoreFactory(),
+								new HashMap<String, Object>(),
+								TEST_NAMESPACE)));
+		propManagement.store(
+				StoreParam.ADAPTER_STORE,
+				new PersistableAdapterStore(
+						new AdapterStoreCommandLineOptions(
+								new MemoryAdapterStoreFactory(),
+								new HashMap<String, Object>(),
+								TEST_NAMESPACE)));
 		NestedGroupCentroidAssignment.setParameters(
 				mapDriver.getConfiguration(),
+				KMeansDistortionMapReduce.class,
 				propManagement);
 
 		serializations();
-
-		final BasicAccumuloOperations dataOps = new MockAccumuloOperationsFactory().build(
-				null,
-				null,
-				null,
-				null,
-				null);
 
 		capturedObjects.clear();
 
@@ -165,25 +177,45 @@ public class KMeansDistortionMapReduceTest
 				1,
 				0);
 
-		final AccumuloDataStore dataStore = new AccumuloDataStore(
-				dataOps);
-		dataStore.ingest(
-				testObjectAapter,
+		propManagement.store(
+				CentroidParameters.Centroid.ZOOM_LEVEL,
+				1);
+		final MemoryDataStoreFactory dataStoreFactory = new MemoryDataStoreFactory();
+		propManagement.store(
+				StoreParam.DATA_STORE,
+				new PersistableDataStore(
+						new DataStoreCommandLineOptions(
+								dataStoreFactory,
+								new HashMap<String, Object>(),
+								TEST_NAMESPACE)));
+		ingest(
+				dataStoreFactory.createStore(
+						new HashMap<String, Object>(),
+						TEST_NAMESPACE),
+				testObjectAdapter,
 				index,
 				feature);
 
 		CentroidManagerGeoWave.setParameters(
 				reduceDriver.getConfiguration(),
-				dataOps.getConnector().getInstance().getZooKeepers(),
-				dataOps.getConnector().getInstance().getInstanceName(),
-				"root",
-				"",
-				"",
-				SimpleFeatureItemWrapperFactory.class,
-				ftype.getTypeName(),
-				IndexType.SPATIAL_VECTOR.getDefaultId(),
-				batchId,
-				1);
+				KMeansDistortionMapReduce.class,
+				propManagement);
+	}
+
+	private void ingest(
+			final DataStore dataStore,
+			final FeatureDataAdapter adapter,
+			final PrimaryIndex index,
+			final SimpleFeature feature )
+			throws IOException {
+		try (IndexWriter writer = dataStore.createIndexWriter(
+				index,
+				DataStoreUtils.DEFAULT_VISIBILITY)) {
+			writer.write(
+					adapter,
+					feature);
+			writer.close();
+		}
 	}
 
 	private void serializations() {
@@ -208,13 +240,11 @@ public class KMeansDistortionMapReduceTest
 
 	@Test
 	public void testMapper()
-			throws IOException,
-			AccumuloException,
-			AccumuloSecurityException {
+			throws IOException {
 
 		final GeoWaveInputKey inputKey = new GeoWaveInputKey();
-		inputKey.setAccumuloKey(accumuloKey);
-		inputKey.setAdapterId(testObjectAapter.getAdapterId());
+		inputKey.setInsertionId(null);
+		inputKey.setAdapterId(testObjectAdapter.getAdapterId());
 		inputKey.setDataId(new ByteArrayId(
 				"abc".getBytes()));
 
@@ -262,9 +292,7 @@ public class KMeansDistortionMapReduceTest
 
 	@Test
 	public void testReducer()
-			throws IOException,
-			AccumuloException,
-			AccumuloSecurityException {
+			throws IOException {
 
 		reduceDriver.addInput(
 				new Text(
@@ -287,23 +315,20 @@ public class KMeansDistortionMapReduceTest
 								0.25,
 								1)));
 
-		final List<Pair<Text, Mutation>> results = reduceDriver.run();
+		final List<Pair<GeoWaveOutputKey, DistortionEntry>> results = reduceDriver.run();
 		assertEquals(
 				1,
 				results.size());
 
-		final Mutation m2 = new Mutation(
-				"g1");
-		// TODO: floating point error?
-		m2.put(
-				new Text(
-						"dt"),
-				new Text(
-						"1"),
-				new Value(
-						"3.6697247706422016".toString().getBytes()));
 		assertTrue(results.get(
-				0).getSecond().equals(
-				m2));
+				0).getSecond().getGroupId().equals(
+				"g1"));
+		assertTrue(results.get(
+				0).getSecond().getClusterCount().equals(
+				1));
+		// TODO: floating point error?
+		assertTrue(results.get(
+				0).getSecond().getDistortionValue().equals(
+				3.6697247706422016));
 	}
 }

@@ -1,6 +1,14 @@
 package mil.nga.giat.geowave.core.index;
 
+import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Convenience methods for converting to and from strings. The encoding and
@@ -12,6 +20,9 @@ import java.nio.charset.Charset;
  */
 public class StringUtils
 {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(StringUtils.class);
+	public static final Charset GEOWAVE_CHAR_SET = Charset.forName("ISO-8859-1");
 	public static final Charset UTF8_CHAR_SET = Charset.forName("UTF-8");
 
 	/**
@@ -23,7 +34,33 @@ public class StringUtils
 	 */
 	public static byte[] stringToBinary(
 			final String string ) {
-		return string.getBytes(UTF8_CHAR_SET);
+		return string.getBytes(GEOWAVE_CHAR_SET);
+	}
+
+	/**
+	 * Utility to convert a String to bytes
+	 * 
+	 * @param string
+	 *            incoming String to convert
+	 * @return a byte array
+	 */
+	public static byte[] stringsToBinary(
+			final String strings[] ) {
+		int len = 4;
+		final List<byte[]> strsBytes = new ArrayList<byte[]>();
+		for (final String str : strings) {
+			final byte[] strByte = str.getBytes(GEOWAVE_CHAR_SET);
+			strsBytes.add(strByte);
+			len += (strByte.length + 4);
+
+		}
+		final ByteBuffer buf = ByteBuffer.allocate(len);
+		buf.putInt(strings.length);
+		for (final byte[] str : strsBytes) {
+			buf.putInt(str.length);
+			buf.put(str);
+		}
+		return buf.array();
 	}
 
 	/**
@@ -37,7 +74,30 @@ public class StringUtils
 			final byte[] binary ) {
 		return new String(
 				binary,
-				UTF8_CHAR_SET);
+				GEOWAVE_CHAR_SET);
+	}
+
+	/**
+	 * Utility to convert bytes to a String
+	 * 
+	 * @param binary
+	 *            a byte array to convert to a String
+	 * @return a String representation of the byte array
+	 */
+	public static String[] stringsFromBinary(
+			final byte[] binary ) {
+		final ByteBuffer buf = ByteBuffer.wrap(binary);
+		final int count = buf.getInt();
+		final String[] result = new String[count];
+		for (int i = 0; i < count; i++) {
+			final int size = buf.getInt();
+			final byte[] strBytes = new byte[size];
+			buf.get(strBytes);
+			result[i] = new String(
+					strBytes,
+					GEOWAVE_CHAR_SET);
+		}
+		return result;
 	}
 
 	/**
@@ -56,4 +116,21 @@ public class StringUtils
 				"_");
 	}
 
+	public static Map<String, String> parseParams(
+			final String params )
+			throws Exception {
+		final Map<String, String> paramsMap = new HashMap<String, String>();
+		final String[] paramsSplit = params.split(";");
+		for (final String param : paramsSplit) {
+			final String[] keyValue = param.split("=");
+			if (keyValue.length != 2) {
+				LOGGER.warn("Unable to parse param '" + param + "'");
+				continue;
+			}
+			paramsMap.put(
+					keyValue[0].trim(),
+					keyValue[1].trim());
+		}
+		return paramsMap;
+	}
 }

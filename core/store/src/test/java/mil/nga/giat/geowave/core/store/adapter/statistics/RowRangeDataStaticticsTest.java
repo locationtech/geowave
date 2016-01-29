@@ -34,6 +34,7 @@ public class RowRangeDataStaticticsTest
 
 		stats.entryIngested(
 				new DataStoreEntryInfo(
+						"23".getBytes(),
 						Arrays.asList(
 								new ByteArrayId(
 										"20030"),
@@ -47,7 +48,7 @@ public class RowRangeDataStaticticsTest
 										"5064"),
 								new ByteArrayId(
 										"50632")),
-						Collections.<FieldInfo> emptyList()),
+						Collections.<FieldInfo<?>> emptyList()),
 				1);
 
 		assertTrue(Arrays.equals(
@@ -70,6 +71,7 @@ public class RowRangeDataStaticticsTest
 
 		stats2.entryIngested(
 				new DataStoreEntryInfo(
+						"32".getBytes(),
 						Arrays.asList(
 								new ByteArrayId(
 										"20030"),
@@ -77,7 +79,7 @@ public class RowRangeDataStaticticsTest
 										"014"),
 								new ByteArrayId(
 										"8062")),
-						Collections.<FieldInfo> emptyList()),
+						Collections.<FieldInfo<?>> emptyList()),
 				1);
 
 		stats.merge(stats2);

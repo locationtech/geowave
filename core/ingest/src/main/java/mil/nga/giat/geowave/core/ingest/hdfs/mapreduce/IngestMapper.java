@@ -1,13 +1,15 @@
 package mil.nga.giat.geowave.core.ingest.hdfs.mapreduce;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayUtils;
 import mil.nga.giat.geowave.core.index.PersistenceUtils;
 import mil.nga.giat.geowave.core.ingest.GeoWaveData;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
-import mil.nga.giat.geowave.datastore.accumulo.mapreduce.output.GeoWaveOutputKey;
+import mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputKey;
 
 import org.apache.avro.mapred.AvroKey;
 import org.apache.hadoop.io.NullWritable;
@@ -21,7 +23,7 @@ public class IngestMapper extends
 {
 	private IngestWithMapper ingestWithMapper;
 	private String globalVisibility;
-	private ByteArrayId primaryIndexId;
+	private List<ByteArrayId> primaryIndexIds;
 
 	@Override
 	protected void map(
@@ -32,7 +34,7 @@ public class IngestMapper extends
 			InterruptedException {
 		try (CloseableIterator<GeoWaveData> data = ingestWithMapper.toGeoWaveData(
 				key.datum(),
-				primaryIndexId,
+				primaryIndexIds,
 				globalVisibility)) {
 			while (data.hasNext()) {
 				final GeoWaveData d = data.next();
@@ -58,12 +60,7 @@ public class IngestMapper extends
 					IngestWithMapper.class);
 			globalVisibility = context.getConfiguration().get(
 					AbstractMapReduceIngest.GLOBAL_VISIBILITY_KEY);
-			final String primaryIndexIdStr = context.getConfiguration().get(
-					AbstractMapReduceIngest.PRIMARY_INDEX_ID_KEY);
-			if (primaryIndexIdStr != null) {
-				primaryIndexId = new ByteArrayId(
-						primaryIndexIdStr);
-			}
+			primaryIndexIds = AbstractMapReduceIngest.getPrimaryIndexIds(context.getConfiguration());
 		}
 		catch (final Exception e) {
 			throw new IllegalArgumentException(

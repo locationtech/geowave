@@ -3,7 +3,7 @@ package mil.nga.giat.geowave.core.store.index;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.NullNumericIndexStrategy;
 import mil.nga.giat.geowave.core.index.StringUtils;
-import mil.nga.giat.geowave.core.store.dimension.DimensionField;
+import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;
 
 /**
  * This can be used as a pass-through for an index. In other words, it
@@ -15,7 +15,7 @@ import mil.nga.giat.geowave.core.store.dimension.DimensionField;
  * 
  */
 public class NullIndex extends
-		Index
+		PrimaryIndex
 {
 
 	protected NullIndex() {
@@ -28,7 +28,7 @@ public class NullIndex extends
 				new NullNumericIndexStrategy(
 						id),
 				new BasicIndexModel(
-						new DimensionField[] {}));
+						new NumericDimensionField[] {}));
 	}
 
 	@Override
@@ -46,7 +46,7 @@ public class NullIndex extends
 	public void fromBinary(
 			final byte[] bytes ) {
 		indexModel = new BasicIndexModel(
-				new DimensionField[] {});
+				new NumericDimensionField[] {});
 		indexStrategy = new NullNumericIndexStrategy(
 				StringUtils.stringFromBinary(bytes));
 	}

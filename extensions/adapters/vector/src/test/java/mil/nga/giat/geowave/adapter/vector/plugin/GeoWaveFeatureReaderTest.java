@@ -5,16 +5,20 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
+import mil.nga.giat.geowave.adapter.vector.BaseDataStoreTest;
 import mil.nga.giat.geowave.adapter.vector.utils.DateUtilities;
+import mil.nga.giat.geowave.core.store.memory.MemoryStoreFactoryFamily;
 
-import org.apache.accumulo.core.client.AccumuloException;
-import org.apache.accumulo.core.client.AccumuloSecurityException;
+import org.geotools.data.DataStore;
 import org.geotools.data.DataUtilities;
 import org.geotools.data.DefaultTransaction;
 import org.geotools.data.DelegatingFeatureReader;
@@ -37,9 +41,10 @@ import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.PrecisionModel;
 
-public class GeoWaveFeatureReaderTest
+public class GeoWaveFeatureReaderTest extends
+		BaseDataStoreTest
 {
-	GeoWaveGTMemDataStore dataStore;
+	DataStore dataStore;
 	SimpleFeatureType schema;
 	SimpleFeatureType type;
 	final GeometryFactory factory = new GeometryFactory(
@@ -52,13 +57,10 @@ public class GeoWaveFeatureReaderTest
 
 	@Before
 	public void setup()
-			throws AccumuloException,
-			AccumuloSecurityException,
-			SchemaException,
+			throws SchemaException,
 			CQLException,
 			Exception {
-
-		dataStore = new GeoWaveGTMemDataStore();
+		dataStore = createDataStore();
 		type = DataUtilities.createType(
 				"GeoWaveFeatureReaderTest",
 				"geometry:Geometry:srid=4326,start:Date,end:Date,pop:java.lang.Long,pid:String");
@@ -140,7 +142,7 @@ public class GeoWaveFeatureReaderTest
 				Transaction.AUTO_COMMIT);
 		int count = 0;
 		while (reader.hasNext()) {
-			final SimpleFeature feature = (SimpleFeature) reader.next();
+			final SimpleFeature feature = reader.next();
 			assertTrue(fids.contains(feature.getID()));
 			count++;
 		}
@@ -172,7 +174,7 @@ public class GeoWaveFeatureReaderTest
 				Transaction.AUTO_COMMIT);
 		int count = 0;
 		while (reader.hasNext()) {
-			final SimpleFeature feature = (SimpleFeature) reader.next();
+			final SimpleFeature feature = reader.next();
 			assertTrue(fids.contains(feature.getID()));
 			count++;
 		}
@@ -190,7 +192,7 @@ public class GeoWaveFeatureReaderTest
 				Transaction.AUTO_COMMIT);
 		int count = 0;
 		while (reader.hasNext()) {
-			final SimpleFeature feature = (SimpleFeature) reader.next();
+			final SimpleFeature feature = reader.next();
 			assertTrue(fids.contains(feature.getID()));
 			count++;
 		}
@@ -222,7 +224,7 @@ public class GeoWaveFeatureReaderTest
 				Transaction.AUTO_COMMIT);
 		int count = 0;
 		while (reader.hasNext()) {
-			final SimpleFeature feature = (SimpleFeature) reader.next();
+			final SimpleFeature feature = reader.next();
 			assertTrue(fids.contains(feature.getID()));
 			count++;
 		}

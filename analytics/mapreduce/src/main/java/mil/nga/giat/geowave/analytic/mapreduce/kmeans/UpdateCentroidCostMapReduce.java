@@ -1,10 +1,12 @@
 package mil.nga.giat.geowave.analytic.mapreduce.kmeans;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import mil.nga.giat.geowave.analytic.AnalyticItemWrapper;
 import mil.nga.giat.geowave.analytic.AnalyticItemWrapperFactory;
-import mil.nga.giat.geowave.analytic.ConfigurationWrapper;
+import mil.nga.giat.geowave.analytic.ScopedJobConfiguration;
 import mil.nga.giat.geowave.analytic.SimpleFeatureItemWrapperFactory;
 import mil.nga.giat.geowave.analytic.clustering.CentroidManager;
 import mil.nga.giat.geowave.analytic.clustering.CentroidManagerGeoWave;
@@ -14,11 +16,11 @@ import mil.nga.giat.geowave.analytic.clustering.exception.MatchingCentroidNotFou
 import mil.nga.giat.geowave.analytic.kmeans.AssociationNotification;
 import mil.nga.giat.geowave.analytic.mapreduce.CountofDoubleWritable;
 import mil.nga.giat.geowave.analytic.mapreduce.GroupIDText;
-import mil.nga.giat.geowave.analytic.mapreduce.JobContextConfigurationWrapper;
 import mil.nga.giat.geowave.analytic.param.CentroidParameters;
-import mil.nga.giat.geowave.datastore.accumulo.mapreduce.GeoWaveWritableInputMapper;
-import mil.nga.giat.geowave.datastore.accumulo.mapreduce.input.GeoWaveInputKey;
-import mil.nga.giat.geowave.datastore.accumulo.mapreduce.output.GeoWaveOutputKey;
+import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.mapreduce.GeoWaveWritableInputMapper;
+import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
+import mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputKey;
 
 import org.apache.hadoop.io.ObjectWritable;
 import org.apache.hadoop.mapreduce.Mapper;
@@ -99,13 +101,16 @@ public class UpdateCentroidCostMapReduce
 				InterruptedException {
 			super.setup(context);
 
-			final ConfigurationWrapper config = new JobContextConfigurationWrapper(
-					context,
+			final ScopedJobConfiguration config = new ScopedJobConfiguration(
+					context.getConfiguration(),
+					UpdateCentroidCostMapReduce.class,
 					UpdateCentroidCostMapReduce.LOGGER);
 
 			try {
 				nestedGroupCentroidAssigner = new NestedGroupCentroidAssignment<Object>(
-						config);
+						context,
+						UpdateCentroidCostMapReduce.class,
+						UpdateCentroidCostMapReduce.LOGGER);
 
 			}
 			catch (final Exception e1) {
@@ -116,11 +121,13 @@ public class UpdateCentroidCostMapReduce
 			try {
 				itemWrapperFactory = config.getInstance(
 						CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS,
-						KMeansMapReduce.class,
 						AnalyticItemWrapperFactory.class,
 						SimpleFeatureItemWrapperFactory.class);
 
-				itemWrapperFactory.initialize(config);
+				itemWrapperFactory.initialize(
+						context,
+						UpdateCentroidCostMapReduce.class,
+						UpdateCentroidCostMapReduce.LOGGER);
 			}
 			catch (final Exception e1) {
 				throw new IOException(
@@ -162,6 +169,7 @@ public class UpdateCentroidCostMapReduce
 	{
 
 		private CentroidManager<Object> centroidManager;
+		private List<ByteArrayId> indexIds;
 
 		@Override
 		protected void reduce(
@@ -187,7 +195,7 @@ public class UpdateCentroidCostMapReduce
 						id,
 						groupID);
 			}
-			catch (MatchingCentroidNotFoundException e) {
+			catch (final MatchingCentroidNotFoundException e) {
 				LOGGER.error("Unable to get centroid " + id + " for group " + groupID);
 				return;
 			}
@@ -200,7 +208,7 @@ public class UpdateCentroidCostMapReduce
 			context.write(
 					new GeoWaveOutputKey(
 							centroidManager.getDataTypeId(),
-							centroidManager.getIndexId()),
+							indexIds),
 					centroid.getWrappedItem());
 		}
 
@@ -221,13 +229,14 @@ public class UpdateCentroidCostMapReduce
 				InterruptedException {
 			super.setup(context);
 
-			final ConfigurationWrapper config = new JobContextConfigurationWrapper(
-					context,
-					UpdateCentroidCostMapReduce.LOGGER);
-
 			try {
 				centroidManager = new CentroidManagerGeoWave<Object>(
-						config);
+
+						context,
+						UpdateCentroidCostMapReduce.class,
+						UpdateCentroidCostMapReduce.LOGGER);
+				indexIds = new ArrayList<ByteArrayId>();
+				indexIds.add(centroidManager.getIndexId());
 			}
 			catch (final Exception e) {
 				UpdateCentroidCostMapReduce.LOGGER.warn(

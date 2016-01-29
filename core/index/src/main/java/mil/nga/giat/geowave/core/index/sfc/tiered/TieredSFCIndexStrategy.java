@@ -5,9 +5,11 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
@@ -109,8 +111,9 @@ public class TieredSFCIndexStrategy implements
 			maxRangeDecompositionPerBin = (int) Math.ceil((double) maxRanges / (double) binnedQueries.length);
 		}
 		for (final BinnedNumericDataset binnedQuery : binnedQueries) {
-			final RangeDecomposition rangeDecomp = sfc.decomposeQuery(
+			final RangeDecomposition rangeDecomp = sfc.decomposeRange(
 					binnedQuery,
+					true,
 					maxRangeDecompositionPerBin);
 			final byte[] tierAndBinId = ByteArrayUtils.combineArrays(
 					new byte[] {
@@ -265,6 +268,63 @@ public class TieredSFCIndexStrategy implements
 	}
 
 	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = (prime * result) + Arrays.hashCode(baseDefinitions);
+		result = (prime * result) + (int) (maxEstimatedDuplicateIds ^ (maxEstimatedDuplicateIds >>> 32));
+		result = (prime * result) + ((maxEstimatedDuplicateIdsBigInteger == null) ? 0 : maxEstimatedDuplicateIdsBigInteger.hashCode());
+		result = (prime * result) + ((orderedSfcIndexToTierId == null) ? 0 : orderedSfcIndexToTierId.hashCode());
+		result = (prime * result) + Arrays.hashCode(orderedSfcs);
+		return result;
+	}
+
+	@Override
+	public boolean equals(
+			final Object obj ) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		final TieredSFCIndexStrategy other = (TieredSFCIndexStrategy) obj;
+		if (!Arrays.equals(
+				baseDefinitions,
+				other.baseDefinitions)) {
+			return false;
+		}
+		if (maxEstimatedDuplicateIds != other.maxEstimatedDuplicateIds) {
+			return false;
+		}
+		if (maxEstimatedDuplicateIdsBigInteger == null) {
+			if (other.maxEstimatedDuplicateIdsBigInteger != null) {
+				return false;
+			}
+		}
+		else if (!maxEstimatedDuplicateIdsBigInteger.equals(other.maxEstimatedDuplicateIdsBigInteger)) {
+			return false;
+		}
+		if (orderedSfcIndexToTierId == null) {
+			if (other.orderedSfcIndexToTierId != null) {
+				return false;
+			}
+		}
+		else if (!orderedSfcIndexToTierId.equals(other.orderedSfcIndexToTierId)) {
+			return false;
+		}
+		if (!Arrays.equals(
+				orderedSfcs,
+				other.orderedSfcs)) {
+			return false;
+		}
+		return true;
+	}
+
+	@Override
 	public String getId() {
 		return StringUtils.intToString(hashCode());
 	}
@@ -342,8 +402,9 @@ public class TieredSFCIndexStrategy implements
 					tierId
 				},
 				index.getBinId());
-		final RangeDecomposition rangeDecomp = sfc.decomposeQuery(
+		final RangeDecomposition rangeDecomp = sfc.decomposeRange(
 				index,
+				false,
 				DEFAULT_MAX_RANGES);
 		// this range does not fit into a single row ID at the lowest
 		// tier, decompose it
@@ -522,8 +583,33 @@ public class TieredSFCIndexStrategy implements
 	}
 
 	public void setMaxEstimatedDuplicateIds(
-			int maxEstimatedDuplicateIds ) {
+			final int maxEstimatedDuplicateIds ) {
 		this.maxEstimatedDuplicateIds = maxEstimatedDuplicateIds;
 		maxEstimatedDuplicateIdsBigInteger = BigInteger.valueOf(maxEstimatedDuplicateIds);
+	}
+
+	@Override
+	public Set<ByteArrayId> getNaturalSplits() {
+		final Set<ByteArrayId> retVal = new HashSet<ByteArrayId>(
+				orderedSfcIndexToTierId.size());
+		for (final Byte tier : orderedSfcIndexToTierId.values()) {
+			retVal.add(new ByteArrayId(
+					new byte[] {
+						tier
+					}));
+		}
+		return retVal;
+	}
+
+	@Override
+	public int getByteOffsetFromDimensionalIndex() {
+		int rowIdOffset = 1;
+		for (int dimensionIdx = 0; dimensionIdx < baseDefinitions.length; dimensionIdx++) {
+			final int binSize = baseDefinitions[dimensionIdx].getFixedBinIdSize();
+			if (binSize > 0) {
+				rowIdOffset += binSize;
+			}
+		}
+		return rowIdOffset;
 	}
 }

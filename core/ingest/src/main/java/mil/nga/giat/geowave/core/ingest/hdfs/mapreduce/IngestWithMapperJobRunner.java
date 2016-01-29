@@ -1,8 +1,8 @@
 package mil.nga.giat.geowave.core.ingest.hdfs.mapreduce;
 
+import mil.nga.giat.geowave.core.cli.DataStoreCommandLineOptions;
 import mil.nga.giat.geowave.core.ingest.IngestCommandLineOptions;
-import mil.nga.giat.geowave.datastore.accumulo.AccumuloCommandLineOptions;
-import mil.nga.giat.geowave.datastore.accumulo.mapreduce.output.GeoWaveOutputKey;
+import mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputKey;
 
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.mapreduce.Job;
@@ -15,14 +15,14 @@ public class IngestWithMapperJobRunner extends
 {
 
 	public IngestWithMapperJobRunner(
-			final AccumuloCommandLineOptions accumuloOptions,
+			final DataStoreCommandLineOptions dataStoreOptions,
 			final IngestCommandLineOptions ingestOptions,
 			final Path inputFile,
 			final String typeName,
 			final IngestFromHdfsPlugin<?, ?> plugin,
 			final IngestWithMapper<?, ?> mapperIngest ) {
 		super(
-				accumuloOptions,
+				dataStoreOptions,
 				ingestOptions,
 				inputFile,
 				typeName,

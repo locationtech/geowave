@@ -14,5 +14,4 @@ public interface WritableDataAdapter<T> extends
 		DataAdapter<T>,
 		DataWriter<T, Object>
 {
-
 }

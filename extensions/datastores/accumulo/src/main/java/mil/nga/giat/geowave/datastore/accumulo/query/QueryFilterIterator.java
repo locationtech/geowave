@@ -1,13 +1,16 @@
 package mil.nga.giat.geowave.datastore.accumulo.query;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
+import java.net.URL;
 import java.util.List;
 import java.util.Map;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayUtils;
 import mil.nga.giat.geowave.core.index.PersistenceUtils;
-import mil.nga.giat.geowave.core.store.data.IndexedPersistenceEncoding;
+import mil.nga.giat.geowave.core.store.DataStoreEntryInfo.FieldInfo;
+import mil.nga.giat.geowave.core.store.data.CommonIndexedPersistenceEncoding;
 import mil.nga.giat.geowave.core.store.data.PersistentDataset;
 import mil.nga.giat.geowave.core.store.data.PersistentValue;
 import mil.nga.giat.geowave.core.store.data.field.FieldReader;
@@ -15,13 +18,16 @@ import mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter;
 import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloRowId;
+import mil.nga.giat.geowave.datastore.accumulo.util.AccumuloUtils;
 
 import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.Value;
 import org.apache.accumulo.core.iterators.IteratorEnvironment;
 import org.apache.accumulo.core.iterators.SortedKeyValueIterator;
 import org.apache.accumulo.core.iterators.user.WholeRowIterator;
+import org.apache.hadoop.fs.FsUrlStreamHandlerFactory;
 import org.apache.hadoop.io.Text;
+import org.apache.log4j.Logger;
 
 /**
  * This iterator wraps a DistributableQueryFilter which is deserialized from a
@@ -34,6 +40,7 @@ import org.apache.hadoop.io.Text;
 public class QueryFilterIterator extends
 		WholeRowIterator
 {
+	private final static Logger LOGGER = Logger.getLogger(QueryFilterIterator.class);
 	protected static final String QUERY_ITERATOR_NAME = "GEOWAVE_QUERY_FILTER";
 	public static final String WHOLE_ROW_ITERATOR_NAME = "GEOWAVE_WHOLE_ROW_ITERATOR";
 	protected static final int QUERY_ITERATOR_PRIORITY = 10;
@@ -42,6 +49,49 @@ public class QueryFilterIterator extends
 	protected static final String MODEL = "model";
 	private DistributableQueryFilter filter;
 	private CommonIndexModel model;
+
+	static {
+		initialize();
+	}
+
+	private static void initialize() {
+		try {
+			URL.setURLStreamHandlerFactory(new FsUrlStreamHandlerFactory());
+		}
+		catch (final Error factoryError) {
+			String type = "";
+			Field f = null;
+			try {
+				f = URL.class.getDeclaredField("factory");
+			}
+			catch (final NoSuchFieldException e) {
+				LOGGER.error(
+						"URL.setURLStreamHandlerFactory() can only be called once per JVM instance, and currently something has set it to;  additionally unable to discover type of Factory",
+						e);
+				throw (factoryError);
+			}
+			f.setAccessible(true);
+			Object o;
+			try {
+				o = f.get(null);
+			}
+			catch (final IllegalAccessException e) {
+				LOGGER.error(
+						"URL.setURLStreamHandlerFactory() can only be called once per JVM instance, and currently something has set it to;  additionally unable to discover type of Factory",
+						e);
+				throw (factoryError);
+			}
+			if (o instanceof FsUrlStreamHandlerFactory) {
+				LOGGER.info("setURLStreamHandlerFactory already set on this JVM to FsUrlStreamHandlerFactory.  Nothing to do");
+				return;
+			}
+			else {
+				type = o.getClass().getCanonicalName();
+			}
+			LOGGER.error("URL.setURLStreamHandlerFactory() can only be called once per JVM instance, and currently something has set it to: " + type);
+			throw (factoryError);
+		}
+	}
 
 	@Override
 	protected boolean filter(
@@ -52,22 +102,54 @@ public class QueryFilterIterator extends
 			final AccumuloRowId rowId = new AccumuloRowId(
 					currentRow.getBytes());
 			final PersistentDataset<CommonIndexValue> commonData = new PersistentDataset<CommonIndexValue>();
+			final PersistentDataset<byte[]> unknownData = new PersistentDataset<byte[]>();
 			for (int i = 0; (i < keys.size()) && (i < values.size()); i++) {
 				final Key key = keys.get(i);
-				final ByteArrayId fieldId = new ByteArrayId(
+				final ByteArrayId colQual = new ByteArrayId(
 						key.getColumnQualifierData().getBackingArray());
-				final FieldReader<? extends CommonIndexValue> reader = model.getReader(fieldId);
-				if (reader == null) {
-					continue;
+				if (colQual.equals(AccumuloUtils.COMPOSITE_CQ)) {
+					final byte[] valueBytes = values.get(
+							i).get();
+					final List<FieldInfo<Object>> fieldInfos = AccumuloUtils.decomposeFlattenedFields(
+							model,
+							valueBytes,
+							key.getColumnVisibilityData().getBackingArray());
+					for (final FieldInfo<Object> fieldInfo : fieldInfos) {
+						final ByteArrayId fieldId = fieldInfo.getDataValue().getId();
+						final FieldReader<? extends CommonIndexValue> reader = model.getReader(fieldId);
+						if (reader != null) {
+							final CommonIndexValue fieldValue = reader.readField(fieldInfo.getWrittenValue());
+							fieldValue.setVisibility(fieldInfo.getVisibility());
+							commonData.addValue(new PersistentValue<CommonIndexValue>(
+									fieldId,
+									fieldValue));
+						}
+						else {
+							unknownData.addValue(new PersistentValue<byte[]>(
+									fieldId,
+									fieldInfo.getWrittenValue()));
+						}
+					}
 				}
-				final CommonIndexValue fieldValue = reader.readField(values.get(
-						i).get());
-				fieldValue.setVisibility(key.getColumnVisibilityData().getBackingArray());
-				commonData.addValue(new PersistentValue<CommonIndexValue>(
-						fieldId,
-						fieldValue));
+				else {
+					final FieldReader<? extends CommonIndexValue> reader = model.getReader(colQual);
+					if (reader != null) {
+						final CommonIndexValue fieldValue = reader.readField(values.get(
+								i).get());
+						fieldValue.setVisibility(key.getColumnVisibilityData().getBackingArray());
+						commonData.addValue(new PersistentValue<CommonIndexValue>(
+								colQual,
+								fieldValue));
+					}
+					else {
+						unknownData.addValue(new PersistentValue<byte[]>(
+								colQual,
+								values.get(
+										i).get()));
+					}
+				}
 			}
-			final IndexedPersistenceEncoding encoding = new IndexedPersistenceEncoding(
+			final CommonIndexedPersistenceEncoding encoding = new CommonIndexedPersistenceEncoding(
 					new ByteArrayId(
 							rowId.getAdapterId()),
 					new ByteArrayId(
@@ -75,12 +157,29 @@ public class QueryFilterIterator extends
 					new ByteArrayId(
 							rowId.getInsertionId()),
 					rowId.getNumberOfDuplicates(),
-					commonData);
-			return filter.accept(encoding);
+					commonData,
+					unknownData);
+			return accept(
+					currentRow,
+					keys,
+					values,
+					model,
+					encoding);
 		}
 		// if the query filter or index model did not get sent to this iterator,
 		// it'll just have to accept everything
 		return true;
+	}
+
+	protected boolean accept(
+			final Text currentRow,
+			final List<Key> keys,
+			final List<Value> values,
+			final CommonIndexModel model,
+			final CommonIndexedPersistenceEncoding encoding ) {
+		return filter.accept(
+				model,
+				encoding);
 	}
 
 	@Override

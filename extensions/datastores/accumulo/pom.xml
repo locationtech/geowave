@@ -18,6 +18,11 @@
         </dependency>
         <dependency>
             <groupId>mil.nga.giat</groupId>
+            <artifactId>geowave-core-mapreduce</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>mil.nga.giat</groupId>
             <artifactId>geowave-core-cli</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -90,7 +95,7 @@
                             <goal>munge</goal>
                         </goals>
                         <configuration>
-                            <symbols>ACCUMULO_${accumulo.version}</symbols>
+                            <symbols>accumulo.api=${accumulo.api}</symbols>
                         </configuration>
                     </execution>
                 </executions>

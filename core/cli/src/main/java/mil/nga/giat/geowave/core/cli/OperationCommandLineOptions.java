@@ -127,7 +127,7 @@ public class OperationCommandLineOptions
 		final PrintWriter pw = new PrintWriter(
 				new OutputStreamWriter(
 						System.out,
-						StringUtils.UTF8_CHAR_SET));
+						StringUtils.GEOWAVE_CHAR_SET));
 		final int width = HelpFormatter.DEFAULT_WIDTH;
 		helpFormatter.printUsage(
 				pw,

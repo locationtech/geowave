@@ -8,15 +8,16 @@ import mil.nga.giat.geowave.core.store.DataStoreEntryInfo;
 import mil.nga.giat.geowave.core.store.DataStoreEntryInfo.FieldInfo;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.core.store.data.VisibilityWriter;
-import mil.nga.giat.geowave.core.store.index.Index;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.core.store.memory.DataStoreUtils;
 
 import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.Value;
 
 /**
  * 
- * Given a {@link WritableDataAdapter} and an {@link Index}, this class handles
- * the creation of Geowave-formatted [Key,Value] pairs.
+ * Given a {@link WritableDataAdapter} and an {@link PrimaryIndex}, this class
+ * handles the creation of Geowave-formatted [Key,Value] pairs.
  * 
  * The intent is that this class will be used within the Mapper of a MapReduce
  * job to generate Keys and Values to be sorted during the shuffle-and-sort
@@ -30,12 +31,12 @@ public class AccumuloKeyValuePairGenerator<T>
 {
 
 	private WritableDataAdapter<T> adapter;
-	private Index index;
+	private PrimaryIndex index;
 	private VisibilityWriter<T> visibilityWriter;
 
 	public AccumuloKeyValuePairGenerator(
 			WritableDataAdapter<T> adapter,
-			Index index,
+			PrimaryIndex index,
 			VisibilityWriter<T> visibilityWriter ) {
 		super();
 		this.adapter = adapter;
@@ -51,14 +52,13 @@ public class AccumuloKeyValuePairGenerator<T>
 		Key key;
 		Value value;
 		AccumuloKeyValuePair keyValuePair;
-		DataStoreEntryInfo ingestInfo = AccumuloUtils.getIngestInfo(
+		DataStoreEntryInfo ingestInfo = DataStoreUtils.getIngestInfo(
 				adapter,
 				index,
 				entry,
 				visibilityWriter);
 		List<ByteArrayId> rowIds = ingestInfo.getRowIds();
-		@SuppressWarnings("rawtypes")
-		List<FieldInfo> fieldInfoList = ingestInfo.getFieldInfo();
+		List<FieldInfo<?>> fieldInfoList = ingestInfo.getFieldInfo();
 
 		for (ByteArrayId rowId : rowIds) {
 			for (@SuppressWarnings("rawtypes")

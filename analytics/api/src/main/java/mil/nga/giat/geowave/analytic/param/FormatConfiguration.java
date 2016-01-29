@@ -1,14 +1,14 @@
 package mil.nga.giat.geowave.analytic.param;
 
-import java.util.Set;
+import java.util.Collection;
 
 import mil.nga.giat.geowave.analytic.PropertyManagement;
 
-import org.apache.commons.cli.Option;
 import org.apache.hadoop.conf.Configuration;
 
 public interface FormatConfiguration
 {
+
 	public void setup(
 			PropertyManagement runTimeProperties,
 			Configuration configuration )
@@ -29,6 +29,5 @@ public interface FormatConfiguration
 	public void setDataIsWritable(
 			boolean isWritable );
 
-	public void fillOptions(
-			Set<Option> options );
+	public Collection<ParameterEnum<?>> getParameters();
 }

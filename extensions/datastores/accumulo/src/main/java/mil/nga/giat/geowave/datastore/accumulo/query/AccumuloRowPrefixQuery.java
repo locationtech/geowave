@@ -6,57 +6,44 @@ import java.util.List;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.store.ScanCallback;
-import mil.nga.giat.geowave.core.store.index.Index;
-import mil.nga.giat.geowave.datastore.accumulo.util.CloseableIteratorWrapper;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 
 /**
  * Represents a query operation using an Accumulo row prefix.
  * 
  */
-public class AccumuloRowPrefixQuery extends
-		AbstractAccumuloRowQuery<CloseableIteratorWrapper<?>>
+public class AccumuloRowPrefixQuery<T> extends
+		AbstractAccumuloRowQuery<T>
 {
 
+	final Integer limit;
+	final ByteArrayId rowPrefix;
+
 	public AccumuloRowPrefixQuery(
-			final Index index,
+			final PrimaryIndex index,
 			final ByteArrayId rowPrefix,
-			final ScanCallback<CloseableIteratorWrapper<?>> scanCallback,
-			final String... authorizations ) {
+			final ScanCallback<T> scanCallback,
+			final Integer limit,
+			final String[] authorizations ) {
 		super(
 				index,
-				rowPrefix,
 				authorizations,
 				scanCallback);
-	}
-
-	public AccumuloRowPrefixQuery(
-			final Index index,
-			final ByteArrayId rowPrefix,
-			final String... authorizations ) {
-		super(
-				index,
-				rowPrefix,
-				authorizations,
-				null);
-	}
-
-	@Override
-	protected CloseableIteratorWrapper<?> queryResultFromIterator(
-			final CloseableIteratorWrapper<?> it ) {
-		return it;
+		this.limit = limit;
+		this.rowPrefix = rowPrefix;
 	}
 
 	@Override
 	protected Integer getScannerLimit() {
-		return null;
+		return limit;
 	}
 
 	@Override
 	protected List<ByteArrayRange> getRanges() {
 		final List<ByteArrayRange> ranges = new ArrayList<ByteArrayRange>();
 		ranges.add(new ByteArrayRange(
-				row,
-				row,
+				rowPrefix,
+				rowPrefix,
 				false));
 		return ranges;
 	}

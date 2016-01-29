@@ -20,4 +20,5 @@ public interface DataReader<FieldType>
 	 */
 	public FieldReader<FieldType> getReader(
 			ByteArrayId fieldId );
+
 }

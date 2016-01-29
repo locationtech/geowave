@@ -1,9 +1,12 @@
 package mil.nga.giat.geowave.test.mapreduce;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
+import mil.nga.giat.geowave.core.cli.GenericStoreCommandLineOptions;
 import mil.nga.giat.geowave.core.cli.GeoWaveMain;
-import mil.nga.giat.geowave.core.geotime.IndexType;
+import mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations;
 import mil.nga.giat.geowave.test.GeoWaveTestEnvironment;
 
 import org.apache.commons.lang.StringUtils;
@@ -31,7 +34,7 @@ abstract public class MapReduceTestEnvironment extends
 	protected static String hdfsBaseDirectory;
 
 	protected void testMapReduceIngest(
-			final IndexType indexType,
+			final DimensionalityType dimensionalityType,
 			final String ingestFilePath ) {
 		// ingest gpx data directly into GeoWave using the
 		// ingest framework's main method and pre-defined commandline arguments
@@ -39,10 +42,10 @@ abstract public class MapReduceTestEnvironment extends
 		String[] args = null;
 		synchronized (MUTEX) {
 			args = StringUtils.split(
-					"-hdfsingest -f gpx -hdfs " + hdfs + " -hdfsbase " + hdfsBaseDirectory + " -jobtracker " + jobtracker + " -b " + ingestFilePath + " -z " + zookeeper + " -i " + accumuloInstance + " -u " + accumuloUser + " -p " + accumuloPassword + " -n " + TEST_NAMESPACE + " -dim " + (indexType.equals(IndexType.SPATIAL_VECTOR) ? "spatial" : "spatial-temporal"),
+					"-hdfsingest -f gpx -hdfs " + hdfs + " -hdfsbase " + hdfsBaseDirectory + " -jobtracker " + jobtracker + " -b " + ingestFilePath + " -" + GenericStoreCommandLineOptions.NAMESPACE_OPTION_KEY + " " + TEST_NAMESPACE + " -dim " + dimensionalityType.getDimensionalityArg() + " -datastore accumulo -" + BasicAccumuloOperations.ZOOKEEPER_CONFIG_NAME + " " + zookeeper + " -" + BasicAccumuloOperations.INSTANCE_CONFIG_NAME + " " + accumuloInstance + " -" + BasicAccumuloOperations.USER_CONFIG_NAME + " " + accumuloUser + " -" + BasicAccumuloOperations.PASSWORD_CONFIG_NAME + " " + accumuloPassword,
 					' ');
 		}
-		GeoWaveMain.main(args);
+		GeoWaveMain.run(args);
 	}
 
 	@BeforeClass
@@ -140,4 +143,20 @@ abstract public class MapReduceTestEnvironment extends
 
 	}
 
+	protected static Map<String, String> getAccumuloConfigOptions() {
+		final Map<String, String> configOptions = new HashMap<String, String>();
+		configOptions.put(
+				BasicAccumuloOperations.ZOOKEEPER_CONFIG_NAME,
+				zookeeper);
+		configOptions.put(
+				BasicAccumuloOperations.INSTANCE_CONFIG_NAME,
+				accumuloInstance);
+		configOptions.put(
+				BasicAccumuloOperations.USER_CONFIG_NAME,
+				accumuloUser);
+		configOptions.put(
+				BasicAccumuloOperations.PASSWORD_CONFIG_NAME,
+				accumuloPassword);
+		return configOptions;
+	}
 }

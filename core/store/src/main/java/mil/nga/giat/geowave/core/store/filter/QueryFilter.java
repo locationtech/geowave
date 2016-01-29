@@ -1,6 +1,7 @@
 package mil.nga.giat.geowave.core.store.filter;
 
 import mil.nga.giat.geowave.core.store.data.IndexedPersistenceEncoding;
+import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 
 /**
  * A simple filter interface to determine inclusion/exclusion based on a generic
@@ -12,5 +13,6 @@ import mil.nga.giat.geowave.core.store.data.IndexedPersistenceEncoding;
 public interface QueryFilter
 {
 	public boolean accept(
-			IndexedPersistenceEncoding persistenceEncoding );
+			CommonIndexModel indexModel,
+			IndexedPersistenceEncoding<?> persistenceEncoding );
 }

@@ -13,35 +13,36 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeMap;
 
 import javax.imageio.ImageReadParam;
 import javax.media.jai.Histogram;
 import javax.media.jai.ImageLayout;
 import javax.media.jai.Interpolation;
 
-import mil.nga.giat.geowave.adapter.raster.RasterDataStore;
 import mil.nga.giat.geowave.adapter.raster.RasterUtils;
 import mil.nga.giat.geowave.adapter.raster.Resolution;
 import mil.nga.giat.geowave.adapter.raster.adapter.RasterDataAdapter;
 import mil.nga.giat.geowave.adapter.raster.query.IndexOnlySpatialQuery;
 import mil.nga.giat.geowave.adapter.raster.stats.HistogramStatistics;
 import mil.nga.giat.geowave.adapter.raster.stats.OverviewStatistics;
-import mil.nga.giat.geowave.core.geotime.IndexType;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider.SpatialIndexBuilder;
 import mil.nga.giat.geowave.core.geotime.store.statistics.BoundingBoxDataStatistics;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.index.HierarchicalNumericIndexStrategy;
+import mil.nga.giat.geowave.core.index.HierarchicalNumericIndexStrategy.SubStrategy;
+import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
+import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
-import mil.nga.giat.geowave.core.store.index.Index;
-import mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations;
-import mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations;
-import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloAdapterStore;
-import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloDataStatisticsStore;
+import mil.nga.giat.geowave.core.store.index.CustomIdIndex;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.core.store.query.Query;
+import mil.nga.giat.geowave.core.store.query.QueryOptions;
 
-import org.apache.accumulo.core.client.AccumuloException;
-import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.apache.log4j.Logger;
 import org.geotools.coverage.grid.GridCoverage2D;
 import org.geotools.coverage.grid.GridEnvelope2D;
@@ -91,9 +92,9 @@ public class GeoWaveRasterReader extends
 
 	private DataStatisticsStore geowaveStatisticsStore;
 
-	private RasterDataStore geowaveDataStore;
+	private DataStore geowaveDataStore;
 
-	private Index rasterIndex;
+	private PrimaryIndex rasterIndex;
 
 	protected final static CoordinateOperationFactory OPERATION_FACTORY = new BufferedCoordinateOperationFactory(
 			new Hints(
@@ -130,41 +131,45 @@ public class GeoWaveRasterReader extends
 	public GeoWaveRasterReader(
 			final Object source,
 			final Hints uHints )
-			throws IOException,
-			MalformedURLException,
-			AccumuloException,
-			AccumuloSecurityException {
+			throws IOException {
 		super(
 				source,
 				uHints);
 		this.source = source;
-
-		final URL url = GeoWaveGTRasterFormat.getURLFromSource(source);
-
-		if (url == null) {
-			throw new MalformedURLException(
-					source.toString());
+		if (GeoWaveGTRasterFormat.isParamList(source)) {
+			try {
+				config = GeoWaveRasterConfig.readFromConfigParams(source.toString());
+			}
+			catch (final Exception e) {
+				throw new MalformedURLException(
+						source.toString());
+			}
 		}
+		else {
+			final URL url = GeoWaveGTRasterFormat.getURLFromSource(source);
 
-		try {
-			config = GeoWaveRasterConfig.readFrom(url);
-			init(config);
-		}
-		catch (final Exception e) {
-			LOGGER.error(
-					"Cannot read config",
-					e);
-			throw new IOException(
-					e);
-		}
+			if (url == null) {
+				throw new MalformedURLException(
+						source.toString());
+			}
 
+			try {
+				config = GeoWaveRasterConfig.readFromURL(url);
+			}
+			catch (final Exception e) {
+				LOGGER.error(
+						"Cannot read config",
+						e);
+				throw new IOException(
+						e);
+			}
+		}
+		init(config);
 	}
 
 	public GeoWaveRasterReader(
 			final GeoWaveRasterConfig config )
-			throws DataSourceException,
-			AccumuloException,
-			AccumuloSecurityException {
+			throws DataSourceException {
 		super(
 				new Object(),
 				new Hints());
@@ -173,25 +178,14 @@ public class GeoWaveRasterReader extends
 	}
 
 	private void init(
-			final GeoWaveRasterConfig config )
-			throws AccumuloException,
-			AccumuloSecurityException {
-		final AccumuloOperations accumuloOperations = new BasicAccumuloOperations(
-				config.getZookeeperUrls(),
-				config.getAccumuloInstanceId(),
-				config.getAccumuloUsername(),
-				config.getAccumuloPassword(),
-				config.getGeowaveNamespace());
-		geowaveAdapterStore = new AccumuloAdapterStore(
-				accumuloOperations);
+			final GeoWaveRasterConfig config ) {
 
-		geowaveStatisticsStore = new AccumuloDataStatisticsStore(
-				accumuloOperations);
+		geowaveDataStore = config.getDataStore();
+		geowaveAdapterStore = config.getAdapterStore();
+		geowaveStatisticsStore = config.getDataStatisticsStore();
 
-		geowaveDataStore = new RasterDataStore(
-				accumuloOperations);
-
-		rasterIndex = IndexType.SPATIAL_RASTER.createDefaultIndex();
+		rasterIndex = new SpatialIndexBuilder().setAllTiers(
+				true).createIndex();
 		crs = GeoWaveGTRasterFormat.DEFAULT_CRS;
 	}
 
@@ -208,9 +202,7 @@ public class GeoWaveRasterReader extends
 	 */
 	public GeoWaveRasterReader(
 			final Object source )
-			throws IOException,
-			AccumuloException,
-			AccumuloSecurityException {
+			throws IOException {
 		this(
 				source,
 				null);
@@ -696,9 +688,8 @@ public class GeoWaveRasterReader extends
 			final double levelResY,
 			final RasterDataAdapter adapter )
 			throws IOException {
-		return geowaveDataStore.query(
+		return queryForTiles(
 				adapter,
-				rasterIndex,
 				new IndexOnlySpatialQuery(
 						new GeometryFactory().toGeometry(new Envelope(
 								requestEnvelope.getMinimum(0),
@@ -709,6 +700,73 @@ public class GeoWaveRasterReader extends
 					levelResX * adapter.getTileSize(),
 					levelResY * adapter.getTileSize()
 				});
+	}
+
+	private CloseableIterator<GridCoverage> queryForTiles(
+			final RasterDataAdapter adapter,
+			final Query query,
+			final double[] targetResolutionPerDimension ) {
+		// determine the correct tier to query for the given resolution
+		final NumericIndexStrategy strategy = rasterIndex.getIndexStrategy();
+		if (strategy instanceof HierarchicalNumericIndexStrategy) {
+			final TreeMap<Double, SubStrategy> sortedStrategies = new TreeMap<Double, SubStrategy>();
+			SubStrategy targetIndexStrategy = null;
+			for (final SubStrategy subStrategy : ((HierarchicalNumericIndexStrategy) strategy).getSubStrategies()) {
+				final double[] idRangePerDimension = subStrategy.getIndexStrategy().getHighestPrecisionIdRangePerDimension();
+				double rangeSum = 0;
+				for (final double range : idRangePerDimension) {
+					rangeSum += range;
+				}
+				// sort by the sum of the range in each dimension
+				sortedStrategies.put(
+						rangeSum,
+						subStrategy);
+			}
+			for (final SubStrategy subStrategy : sortedStrategies.descendingMap().values()) {
+				final double[] highestPrecisionIdRangePerDimension = subStrategy.getIndexStrategy().getHighestPrecisionIdRangePerDimension();
+				// if the id range is less than or equal to the target
+				// resolution in each dimension, use this substrategy
+				boolean withinTargetResolution = true;
+				for (int d = 0; d < highestPrecisionIdRangePerDimension.length; d++) {
+					if (highestPrecisionIdRangePerDimension[d] > targetResolutionPerDimension[d]) {
+						withinTargetResolution = false;
+						break;
+					}
+				}
+				if (withinTargetResolution) {
+					targetIndexStrategy = subStrategy;
+					break;
+				}
+			}
+			if (targetIndexStrategy == null) {
+				// if there is not a substrategy that is within the target
+				// resolution, use the first substrategy (the lowest range per
+				// dimension, which is the highest precision)
+				targetIndexStrategy = sortedStrategies.firstEntry().getValue();
+			}
+			return geowaveDataStore.query(
+					new QueryOptions(
+							adapter,
+							new CustomIdIndex(
+									// replace the index strategy with a single
+									// substrategy that fits the target
+									// resolution
+									targetIndexStrategy.getIndexStrategy(),
+									rasterIndex.getIndexModel(),
+									rasterIndex.getId())), // make sure the
+															// index ID is
+															// the
+					// same as the orginal so that we
+					// are querying the correct table
+					query);
+		}
+		else {
+			return geowaveDataStore.query(
+					new QueryOptions(
+							adapter,
+							rasterIndex),
+					query);
+		}
 	}
 
 	private GridCoverage2D transformResult(

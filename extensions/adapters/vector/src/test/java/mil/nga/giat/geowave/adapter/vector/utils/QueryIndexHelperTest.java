@@ -15,11 +15,13 @@ import mil.nga.giat.geowave.adapter.vector.stats.FeatureTimeRangeStatistics;
 import mil.nga.giat.geowave.adapter.vector.util.FeatureDataUtils;
 import mil.nga.giat.geowave.adapter.vector.util.QueryIndexHelper;
 import mil.nga.giat.geowave.adapter.vector.utils.TimeDescriptors.TimeDescriptorConfiguration;
-import mil.nga.giat.geowave.core.geotime.IndexType;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialTemporalDimensionalityTypeProvider;
 import mil.nga.giat.geowave.core.geotime.store.query.TemporalConstraints;
 import mil.nga.giat.geowave.core.geotime.store.query.TemporalConstraintsSet;
 import mil.nga.giat.geowave.core.geotime.store.query.TemporalRange;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.query.BasicQuery;
@@ -46,6 +48,8 @@ import com.vividsolutions.jts.geom.PrecisionModel;
 
 public class QueryIndexHelperTest
 {
+	private static final NumericIndexStrategy SPATIAL_INDEX_STRATEGY = new SpatialDimensionalityTypeProvider().createPrimaryIndex().getIndexStrategy();
+	private static final NumericIndexStrategy SPATIAL_TEMPORAL_INDEX_STRATEGY = new SpatialTemporalDimensionalityTypeProvider().createPrimaryIndex().getIndexStrategy();
 	final ByteArrayId dataAdapterId = new ByteArrayId(
 			"123");
 
@@ -362,7 +366,7 @@ public class QueryIndexHelperTest
 										41.25)).getEnvelopeInternal()),
 						constraintsSet));
 
-		final List<MultiDimensionalNumericData> nd = query.getIndexConstraints(IndexType.SPATIAL_TEMPORAL_VECTOR.createDefaultIndexStrategy());
+		final List<MultiDimensionalNumericData> nd = query.getIndexConstraints(SPATIAL_TEMPORAL_INDEX_STRATEGY);
 		assertEquals(
 				stime.getTime(),
 				(long) nd.get(
@@ -383,7 +387,7 @@ public class QueryIndexHelperTest
 										41.25)).getEnvelopeInternal()),
 						null));
 
-		final List<MultiDimensionalNumericData> nd1 = query1.getIndexConstraints(IndexType.SPATIAL_TEMPORAL_VECTOR.createDefaultIndexStrategy());
+		final List<MultiDimensionalNumericData> nd1 = query1.getIndexConstraints(SPATIAL_TEMPORAL_INDEX_STRATEGY);
 		assertEquals(
 				statsStart1.getTime(),
 				(long) nd1.get(
@@ -434,7 +438,7 @@ public class QueryIndexHelperTest
 						new GeometryFactory().toGeometry(bounds),
 						null));
 
-		final List<MultiDimensionalNumericData> nd = query.getIndexConstraints(IndexType.SPATIAL_VECTOR.createDefaultIndexStrategy());
+		final List<MultiDimensionalNumericData> nd = query.getIndexConstraints(SPATIAL_INDEX_STRATEGY);
 		assertEquals(
 				21.23,
 				nd.get(
@@ -453,36 +457,6 @@ public class QueryIndexHelperTest
 		assertEquals(
 				43.1,
 				nd.get(
-						0).getDataPerDimension()[1].getMax(),
-				0.0001);
-
-		final BasicQuery query1 = new BasicQuery(
-				QueryIndexHelper.composeConstraints(
-						geoType,
-						geoTimeDescriptors,
-						statsMap,
-						null,
-						null));
-
-		final List<MultiDimensionalNumericData> nd1 = query1.getIndexConstraints(IndexType.SPATIAL_VECTOR.createDefaultIndexStrategy());
-		assertEquals(
-				22.25,
-				nd1.get(
-						0).getDataPerDimension()[0].getMin(),
-				0.0001);
-		assertEquals(
-				27.25,
-				nd1.get(
-						0).getDataPerDimension()[0].getMax(),
-				0.0001);
-		assertEquals(
-				41.25,
-				nd1.get(
-						0).getDataPerDimension()[1].getMin(),
-				0.0001);
-		assertEquals(
-				42.25,
-				nd1.get(
 						0).getDataPerDimension()[1].getMax(),
 				0.0001);
 
@@ -573,7 +547,7 @@ public class QueryIndexHelperTest
 				null,
 				mercFeat);
 
-		Coordinate coord = ((Point) defaultCRSFeat.getDefaultGeometry()).getCoordinate();
+		final Coordinate coord = ((Point) defaultCRSFeat.getDefaultGeometry()).getCoordinate();
 
 		// coordinate should match reprojected feature
 		assertEquals(
@@ -717,15 +691,44 @@ public class QueryIndexHelperTest
 				rangeTimeDescriptors,
 				statsMap,
 				constraintsSet);
-		final List<MultiDimensionalNumericData> nd = constraints.getIndexConstraints(IndexType.SPATIAL_TEMPORAL_VECTOR.createDefaultIndexStrategy());
-		assertEquals(
-				stime.getTime(),
-				(long) nd.get(
-						0).getDataPerDimension()[2].getMin());
-		assertEquals(
-				etime.getTime(),
-				(long) nd.get(
-						0).getDataPerDimension()[2].getMax());
+		final List<MultiDimensionalNumericData> nd = constraints.getIndexConstraints(SPATIAL_TEMPORAL_INDEX_STRATEGY);
+		assertTrue(nd.isEmpty());
+
+		final FeatureBoundingBoxStatistics geoStats = new FeatureBoundingBoxStatistics(
+				dataAdapterId,
+				"geometry");
+		statsMap.put(
+				FeatureBoundingBoxStatistics.composeId("geometry"),
+				geoStats);
+
+		final SimpleFeature firstFeature = createGeoFeature(factory.createPoint(new Coordinate(
+				22.25,
+				42.25)));
+
+		geoStats.entryIngested(
+				null,
+				firstFeature);
+
+		final SimpleFeature secondFeature = createGeoFeature(factory.createPoint(new Coordinate(
+				27.25,
+				41.25)));
+		geoStats.entryIngested(
+				null,
+				secondFeature);
+
+		final Constraints constraints1 = QueryIndexHelper.composeConstraints(
+				rangeType,
+				rangeTimeDescriptors,
+				statsMap,
+				null,
+				constraintsSet);
+		final List<MultiDimensionalNumericData> nd1 = constraints1.getIndexConstraints(SPATIAL_TEMPORAL_INDEX_STRATEGY);
+		assertTrue(nd1.isEmpty());
+		/*
+		 * assertEquals( stime.getTime(), (long) nd1.get(
+		 * 0).getDataPerDimension()[2].getMin()); assertEquals( etime.getTime(),
+		 * (long) nd1.get( 0).getDataPerDimension()[2].getMax());
+		 */
 
 		final TemporalConstraintsSet constraintsSet2 = new TemporalConstraintsSet();
 		constraintsSet2.getConstraintsFor(
@@ -738,7 +741,7 @@ public class QueryIndexHelperTest
 				rangeTimeDescriptors,
 				statsMap,
 				constraintsSet2);
-		final List<MultiDimensionalNumericData> nd2 = constraints2.getIndexConstraints(IndexType.SPATIAL_TEMPORAL_VECTOR.createDefaultIndexStrategy());
+		final List<MultiDimensionalNumericData> nd2 = constraints2.getIndexConstraints(SPATIAL_TEMPORAL_INDEX_STRATEGY);
 		assertTrue(nd2.isEmpty());
 	}
 

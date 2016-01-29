@@ -2,10 +2,13 @@ package mil.nga.giat.geowave.datastore.accumulo.query;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
-import mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStore;
+import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.index.ByteArrayUtils;
 
 import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.Value;
@@ -20,15 +23,15 @@ import com.google.common.io.BaseEncoding;
 public class SingleEntryFilterIterator extends
 		Filter
 {
-	private final static Logger LOGGER = Logger.getLogger(AccumuloDataStore.class);
+	private final static Logger LOGGER = Logger.getLogger(SingleEntryFilterIterator.class);
 	public static final String ENTRY_FILTER_ITERATOR_NAME = "GEOWAVE_ENTRY_FILTER_ITERATOR";
 	public static final int ENTRY_FILTER_ITERATOR_PRIORITY = 15;
 	public static final String WHOLE_ROW_ITERATOR_NAME = "GEOWAVE_WHOLE_ROW_ITERATOR";
 	public static final int WHOLE_ROW_ITERATOR_PRIORITY = ENTRY_FILTER_ITERATOR_PRIORITY - 1;
 	public static final String ADAPTER_ID = "adapterid";
-	public static final String DATA_ID = "dataid";
+	public static final String DATA_IDS = "dataids";
 	private byte[] adapterId;
-	private byte[] dataId;
+	private List<byte[]> dataIds;
 
 	@Override
 	public boolean accept(
@@ -86,12 +89,15 @@ public class SingleEntryFilterIterator extends
 					buf.get(rawAdapterId);
 					buf.get(rawDataId);
 
-					if (!Arrays.equals(
-							rawDataId,
-							dataId) && Arrays.equals(
-							rawAdapterId,
-							adapterId)) {
-						accept = false;
+					accept = false;
+					for (final byte[] dataId : dataIds) {
+						if (Arrays.equals(
+								rawDataId,
+								dataId) && Arrays.equals(
+								rawAdapterId,
+								adapterId)) {
+							accept |= true;
+						}
 					}
 				}
 				else {
@@ -103,6 +109,37 @@ public class SingleEntryFilterIterator extends
 		return accept;
 	}
 
+	public static final String encodeIDs(
+			final List<ByteArrayId> dataIds ) {
+		int size = 4;
+		for (final ByteArrayId id : dataIds) {
+			size += id.getBytes().length + 4;
+		}
+		final ByteBuffer buffer = ByteBuffer.allocate(size);
+		buffer.putInt(dataIds.size());
+		for (final ByteArrayId id : dataIds) {
+			final byte[] sId = id.getBytes();
+			buffer.putInt(sId.length);
+			buffer.put(sId);
+		}
+
+		return ByteArrayUtils.byteArrayToString(buffer.array());
+	}
+
+	private static final List<byte[]> decodeIDs(
+			final String dataIdsString ) {
+		final ByteBuffer buf = ByteBuffer.wrap(ByteArrayUtils.byteArrayFromString(dataIdsString));
+		final List<byte[]> list = new ArrayList<byte[]>();
+		int count = buf.getInt();
+		while (count > 0) {
+			final byte[] tempByte = new byte[buf.getInt()];
+			buf.get(tempByte);
+			list.add(tempByte);
+			count--;
+		}
+		return list;
+	}
+
 	@Override
 	public void init(
 			final SortedKeyValueIterator<Key, Value> source,
@@ -111,20 +148,19 @@ public class SingleEntryFilterIterator extends
 			throws IOException {
 
 		final String adapterIdStr = options.get(ADAPTER_ID);
-		final String dataIdStr = options.get(DATA_ID);
+		final String dataIdsStr = options.get(DATA_IDS);
 		if (adapterIdStr == null) {
 			throw new IllegalArgumentException(
 					"'adapterid' must be set for " + SingleEntryFilterIterator.class.getName());
 		}
-		if (dataIdStr == null) {
+		if (dataIdsStr == null) {
 			throw new IllegalArgumentException(
 					"'dataid' must be set for " + SingleEntryFilterIterator.class.getName());
 		}
 
 		adapterId = BaseEncoding.base64Url().decode(
 				adapterIdStr);
-		dataId = BaseEncoding.base64Url().decode(
-				dataIdStr);
+		dataIds = decodeIDs(dataIdsStr);
 
 		super.init(
 				source,

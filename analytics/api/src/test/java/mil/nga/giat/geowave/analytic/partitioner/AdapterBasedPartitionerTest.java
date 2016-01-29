@@ -4,8 +4,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import mil.nga.giat.geowave.analytic.AnalyticFeature;
@@ -14,11 +15,21 @@ import mil.nga.giat.geowave.analytic.clustering.ClusteringUtils;
 import mil.nga.giat.geowave.analytic.model.SpatialIndexModelBuilder;
 import mil.nga.giat.geowave.analytic.param.ClusteringParameters;
 import mil.nga.giat.geowave.analytic.param.CommonParameters;
+import mil.nga.giat.geowave.analytic.param.ParameterEnum;
+import mil.nga.giat.geowave.analytic.param.StoreParameters.StoreParam;
 import mil.nga.giat.geowave.analytic.partitioner.AdapterBasedPartitioner.AdapterDataEntry;
 import mil.nga.giat.geowave.analytic.partitioner.Partitioner.PartitionData;
+import mil.nga.giat.geowave.analytic.store.PersistableAdapterStore;
+import mil.nga.giat.geowave.core.cli.AdapterStoreCommandLineOptions;
+import mil.nga.giat.geowave.core.cli.CommandLineOptions.OptionMapWrapper;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
+import mil.nga.giat.geowave.core.store.memory.MemoryAdapterStoreFactory;
 
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.mapreduce.Job;
 import org.geotools.feature.type.BasicFeatureTypes;
 import org.geotools.referencing.CRS;
 import org.junit.Test;
@@ -45,26 +56,9 @@ public class AdapterBasedPartitionerTest
 	}
 
 	@Test
-	public void testTools() {
-		final PropertyManagement pMt = new PropertyManagement();
-		final double[] distances = new double[] {
-			0.02,
-			0.35
-		};
-		AbstractPartitioner.putDistances(
-				pMt,
-				distances);
-		final double[] copyOfDistances = AbstractPartitioner.getDistances(
-				pMt,
-				getClass());
-		assertTrue(Arrays.equals(
-				distances,
-				copyOfDistances));
-	}
-
-	@Test
-	public void testPartion()
-			throws IOException {
+	public void testPartition()
+			throws IOException,
+			ParseException {
 
 		final SimpleFeatureType ftype = AnalyticFeature.createGeometryFeatureAdapter(
 				"centroid",
@@ -103,16 +97,32 @@ public class AdapterBasedPartitionerTest
 		propertyManagement.store(
 				CommonParameters.Common.INDEX_MODEL_BUILDER_CLASS,
 				SpatialIndexModelBuilder.class);
-		propertyManagement.store(
-				CommonParameters.Common.ADAPTER_STORE_FACTORY,
-				FeatureDataAdapterStoreFactory.class);
-
-		FeatureDataAdapterStoreFactory.saveState(
+		final Configuration configuration = new Configuration();
+		final Class<?> scope = OrthodromicDistancePartitionerTest.class;
+		propertyManagement.setJobConfiguration(
+				configuration,
+				scope);
+		final Map<String, String> memoryAdapterStoreOptions = new HashMap<String, String>();
+		memoryAdapterStoreOptions.put(
+				AdapterStoreCommandLineOptions.ADAPTER_STORE_NAME_KEY,
+				new MemoryAdapterStoreFactory().getName());
+		final Options options = new Options();
+		AdapterStoreCommandLineOptions.applyOptions(options);
+		final PersistableAdapterStore adapterStore = new PersistableAdapterStore(
+				AdapterStoreCommandLineOptions.parseOptions(
+						options,
+						new OptionMapWrapper(
+								memoryAdapterStoreOptions)).getResult());
+		adapterStore.getCliOptions().createStore().addAdapter(
 				new FeatureDataAdapter(
-						ftype),
-				propertyManagement);
-
-		partitioner.initialize(propertyManagement);
+						ftype));
+		((ParameterEnum<PersistableAdapterStore>) StoreParam.ADAPTER_STORE).getHelper().setValue(
+				configuration,
+				scope,
+				adapterStore);
+		partitioner.initialize(
+				Job.getInstance(configuration),
+				scope);
 
 		List<PartitionData> partitions = partitioner.getCubeIdentifiers(new AdapterDataEntry(
 				new ByteArrayId(

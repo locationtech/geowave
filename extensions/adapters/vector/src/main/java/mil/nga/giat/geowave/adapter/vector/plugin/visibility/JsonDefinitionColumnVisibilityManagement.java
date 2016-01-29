@@ -3,14 +3,13 @@ package mil.nga.giat.geowave.adapter.vector.plugin.visibility;
 import java.io.IOException;
 import java.util.Iterator;
 
+import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.data.field.FieldVisibilityHandler;
 import mil.nga.giat.geowave.core.store.data.field.FieldWriter;
 import mil.nga.giat.geowave.core.store.data.visibility.FieldLevelVisibilityWriter;
 
-import org.apache.accumulo.core.security.ColumnVisibility;
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.JsonProcessingException;
 import org.codehaus.jackson.map.ObjectMapper;
 
 /**
@@ -37,22 +36,26 @@ public class JsonDefinitionColumnVisibilityManagement<T> extends
 
 	private final static Logger LOGGER = Logger.getLogger(JsonDefinitionColumnVisibilityManagement.class);
 
-	private ObjectMapper mapper = new ObjectMapper();
+	private final ObjectMapper mapper = new ObjectMapper();
 
 	@Override
 	public byte[] translateVisibility(
-			Object visibilityObject,
-			String fieldName ) {
-		if (visibilityObject == null) return new byte[0];
+			final Object visibilityObject,
+			final String fieldName ) {
+		if (visibilityObject == null) {
+			return new byte[0];
+		}
 		try {
-			JsonNode attributeMap = mapper.readTree(visibilityObject.toString());
-			JsonNode field = attributeMap.get(fieldName);
-			if (field != null && field.isValueNode()) return validate(field.getTextValue());
-			Iterator<String> attNameIt = attributeMap.getFieldNames();
+			final JsonNode attributeMap = mapper.readTree(visibilityObject.toString());
+			final JsonNode field = attributeMap.get(fieldName);
+			if ((field != null) && field.isValueNode()) {
+				return validate(field.getTextValue());
+			}
+			final Iterator<String> attNameIt = attributeMap.getFieldNames();
 			while (attNameIt.hasNext()) {
-				String attName = attNameIt.next();
+				final String attName = attNameIt.next();
 				if (fieldName.matches(attName)) {
-					JsonNode attNode = attributeMap.get(attName);
+					final JsonNode attNode = attributeMap.get(attName);
 					if (attNode == null) {
 						LOGGER.error("Cannot parse visibility expression, JsonNode for attribute " + attName + " was null");
 						return null;
@@ -71,9 +74,9 @@ public class JsonDefinitionColumnVisibilityManagement<T> extends
 
 	@Override
 	public FieldVisibilityHandler<T, Object> createVisibilityHandler(
-			String fieldName,
-			FieldVisibilityHandler<T, Object> defaultHandler,
-			String visibilityAttributeName ) {
+			final String fieldName,
+			final FieldVisibilityHandler<T, Object> defaultHandler,
+			final String visibilityAttributeName ) {
 		return new FieldLevelVisibilityHandler<T, Object>(
 				fieldName,
 				defaultHandler,
@@ -82,28 +85,35 @@ public class JsonDefinitionColumnVisibilityManagement<T> extends
 	}
 
 	protected byte[] validate(
-			String vis ) {
-		try {
-			ColumnVisibility cVis = new ColumnVisibility(
-					vis);
-			return cVis.getExpression();
-		}
-		catch (Exception ex) {
-			LOGGER.error(
-					"Failed to parse visibility " + vis,
-					ex);
-			return null;
-		}
+			final String vis ) {
+		return StringUtils.stringToBinary(vis);
+
+		// TODO come up with another way to validate, below is the accumulo
+		// dependent validation
+
+		// try {
+		// ColumnVisibility cVis = new ColumnVisibility(
+		// vis);
+		// return cVis.getExpression();
+		// }
+		// catch (Exception ex) {
+		// LOGGER.error(
+		// "Failed to parse visibility " + vis,
+		// ex);
+		// return null;
+		// }
 	}
 
 	@Override
 	public FieldLevelVisibilityWriter<T, Object> createVisibilityWriter(
-			String fieldName,
-			FieldWriter<T, Object> writer,
-			FieldVisibilityHandler<T, Object> defaultFieldVisiblityHandler,
-			String visibilityAttribute ) {
+			final String fieldName,
+			final FieldWriter<T, Object> writer,
+			final FieldVisibilityHandler<T, Object> defaultFieldVisiblityHandler,
+			final String visibilityAttribute ) {
 		// ignore the visibility attribute field
-		if (fieldName.equals(visibilityAttribute)) return null;
+		if (fieldName.equals(visibilityAttribute)) {
+			return null;
+		}
 
 		return new FieldLevelVisibilityWriter<T, Object>(
 				fieldName,

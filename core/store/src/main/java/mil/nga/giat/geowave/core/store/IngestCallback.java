@@ -22,4 +22,5 @@ public interface IngestCallback<T>
 	public void entryIngested(
 			final DataStoreEntryInfo entryInfo,
 			T entry );
+
 }

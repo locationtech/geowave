@@ -4,7 +4,9 @@ import java.io.IOException;
 
 import mil.nga.giat.geowave.analytic.AnalyticItemWrapper;
 import mil.nga.giat.geowave.analytic.AnalyticItemWrapperFactory;
-import mil.nga.giat.geowave.analytic.ConfigurationWrapper;
+
+import org.apache.hadoop.mapreduce.JobContext;
+import org.slf4j.Logger;
 
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
@@ -22,7 +24,9 @@ public class TestObjectItemWrapperFactory implements
 
 	@Override
 	public void initialize(
-			final ConfigurationWrapper context )
+			final JobContext context,
+			final Class<?> scope,
+			final Logger logger )
 			throws IOException {}
 
 	@Override
@@ -158,4 +162,5 @@ public class TestObjectItemWrapperFactory implements
 		}
 
 	}
+
 }

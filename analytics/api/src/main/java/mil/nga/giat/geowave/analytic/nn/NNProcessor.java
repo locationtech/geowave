@@ -66,7 +66,9 @@ public class NNProcessor<PARTITION_VALUE, STORE_VALUE>
 	protected final DistanceProfileGenerateFn<?, STORE_VALUE> distanceProfileFn;
 	protected final double maxDistance;
 	protected final PartitionData parentPartition;
-	private int upperBoundPerPartition = 75000;
+	private int upperBoundPerPartition = DEFAULT_UPPER_BOUND_PARTIION_SIZE;
+
+	public static final int DEFAULT_UPPER_BOUND_PARTIION_SIZE = 75000;
 
 	/**
 	 * Run State

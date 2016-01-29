@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collection;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.PersistenceUtils;
@@ -14,6 +15,7 @@ import mil.nga.giat.geowave.core.ingest.avro.WholeFile;
 import mil.nga.giat.geowave.core.ingest.local.LocalFileIngestPlugin;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
+import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 
 import org.apache.log4j.Logger;
 
@@ -45,13 +47,13 @@ abstract public class AbstractLocalIngestWithMapper<T> extends
 	@Override
 	public CloseableIterator<GeoWaveData<T>> toGeoWaveData(
 			final File input,
-			final ByteArrayId primaryIndexId,
+			final Collection<ByteArrayId> primaryIndexIds,
 			final String globalVisibility ) {
 		try (final InputStream inputStream = new FileInputStream(
 				input)) {
 			return toGeoWaveDataInternal(
 					inputStream,
-					primaryIndexId,
+					primaryIndexIds,
 					globalVisibility);
 		}
 		catch (final IOException e) {
@@ -65,7 +67,7 @@ abstract public class AbstractLocalIngestWithMapper<T> extends
 
 	abstract protected CloseableIterator<GeoWaveData<T>> toGeoWaveDataInternal(
 			final InputStream file,
-			final ByteArrayId primaryIndexId,
+			final Collection<ByteArrayId> primaryIndexIds,
 			final String globalVisibility );
 
 	@Override
@@ -94,13 +96,13 @@ abstract public class AbstractLocalIngestWithMapper<T> extends
 		@Override
 		public CloseableIterator<GeoWaveData<T>> toGeoWaveData(
 				final WholeFile input,
-				final ByteArrayId primaryIndexId,
+				final Collection<ByteArrayId> primaryIndexIds,
 				final String globalVisibility ) {
 			final InputStream inputStream = new ByteBufferBackedInputStream(
 					input.getOriginalFile());
 			return parentPlugin.toGeoWaveDataInternal(
 					inputStream,
-					primaryIndexId,
+					primaryIndexIds,
 					globalVisibility);
 		}
 
@@ -115,6 +117,11 @@ abstract public class AbstractLocalIngestWithMapper<T> extends
 			parentPlugin = PersistenceUtils.classFactory(
 					StringUtils.stringFromBinary(bytes),
 					AbstractLocalIngestWithMapper.class);
+		}
+
+		@Override
+		public Class<? extends CommonIndexValue>[] getSupportedIndexableTypes() {
+			return parentPlugin.getSupportedIndexableTypes();
 		}
 	}
 

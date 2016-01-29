@@ -4,12 +4,14 @@ import java.util.List;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
+import mil.nga.giat.geowave.core.index.IndexUtils;
 import mil.nga.giat.geowave.core.index.StringUtils;
-import mil.nga.giat.geowave.core.store.index.Index;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations;
 import mil.nga.giat.geowave.datastore.accumulo.util.AccumuloUtils;
 
 import org.apache.accumulo.core.client.BatchScanner;
+import org.apache.accumulo.core.client.IteratorSetting;
 import org.apache.accumulo.core.client.Scanner;
 import org.apache.accumulo.core.client.ScannerBase;
 import org.apache.accumulo.core.client.TableNotFoundException;
@@ -26,12 +28,12 @@ abstract public class AccumuloQuery
 {
 	private final static Logger LOGGER = Logger.getLogger(AccumuloQuery.class);
 	protected final List<ByteArrayId> adapterIds;
-	protected final Index index;
+	protected final PrimaryIndex index;
 
 	private final String[] authorizations;
 
 	public AccumuloQuery(
-			final Index index,
+			final PrimaryIndex index,
 			final String... authorizations ) {
 		this(
 				null,
@@ -41,7 +43,7 @@ abstract public class AccumuloQuery
 
 	public AccumuloQuery(
 			final List<ByteArrayId> adapterIds,
-			final Index index,
+			final PrimaryIndex index,
 			final String... authorizations ) {
 		this.adapterIds = adapterIds;
 		this.index = index;
@@ -52,6 +54,7 @@ abstract public class AccumuloQuery
 
 	protected ScannerBase getScanner(
 			final AccumuloOperations accumuloOperations,
+			final double[] maxResolutionSubsamplingPerDimension,
 			final Integer limit ) {
 		final List<ByteArrayRange> ranges = getRanges();
 		final String tableName = StringUtils.stringFromBinary(index.getId().getBytes());
@@ -71,6 +74,26 @@ abstract public class AccumuloQuery
 				}
 				if ((limit != null) && (limit > 0) && (limit < ((Scanner) scanner).getBatchSize())) {
 					((Scanner) scanner).setBatchSize(limit);
+				}
+				if (maxResolutionSubsamplingPerDimension != null) {
+					if (maxResolutionSubsamplingPerDimension.length != index.getIndexStrategy().getOrderedDimensionDefinitions().length) {
+						LOGGER.warn("Unable to subsample for table '" + tableName + "'. Subsample dimensions = " + maxResolutionSubsamplingPerDimension.length + " when indexed dimensions = " + index.getIndexStrategy().getOrderedDimensionDefinitions().length);
+					}
+					else {
+
+						final int cardinalityToSubsample = (int) Math.round(IndexUtils.getDimensionalBitsUsed(
+								index.getIndexStrategy(),
+								maxResolutionSubsamplingPerDimension) + (8 * index.getIndexStrategy().getByteOffsetFromDimensionalIndex()));
+
+						final IteratorSetting iteratorSettings = new IteratorSetting(
+								FixedCardinalitySkippingIterator.CARDINALITY_SKIPPING_ITERATOR_PRIORITY,
+								FixedCardinalitySkippingIterator.CARDINALITY_SKIPPING_ITERATOR_NAME,
+								FixedCardinalitySkippingIterator.class);
+						iteratorSettings.addOption(
+								FixedCardinalitySkippingIterator.CARDINALITY_SKIP_INTERVAL,
+								Integer.toString(cardinalityToSubsample));
+						scanner.addScanIterator(iteratorSettings);
+					}
 				}
 			}
 			else {

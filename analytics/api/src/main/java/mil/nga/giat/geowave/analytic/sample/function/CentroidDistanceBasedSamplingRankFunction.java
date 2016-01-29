@@ -8,9 +8,8 @@ import java.util.Map;
 
 import mil.nga.giat.geowave.analytic.AnalyticItemWrapper;
 import mil.nga.giat.geowave.analytic.AnalyticItemWrapperFactory;
-import mil.nga.giat.geowave.analytic.ConfigurationWrapper;
 import mil.nga.giat.geowave.analytic.PropertyManagement;
-import mil.nga.giat.geowave.analytic.RunnerUtils;
+import mil.nga.giat.geowave.analytic.ScopedJobConfiguration;
 import mil.nga.giat.geowave.analytic.SimpleFeatureItemWrapperFactory;
 import mil.nga.giat.geowave.analytic.clustering.CentroidPairing;
 import mil.nga.giat.geowave.analytic.clustering.NestedGroupCentroidAssignment;
@@ -21,9 +20,10 @@ import mil.nga.giat.geowave.analytic.param.ParameterEnum;
 import mil.nga.giat.geowave.analytic.param.SampleParameters;
 import mil.nga.giat.geowave.analytic.sample.RandomProbabilitySampleFn;
 import mil.nga.giat.geowave.analytic.sample.SampleProbabilityFn;
-import mil.nga.giat.geowave.datastore.accumulo.mapreduce.GeoWaveConfiguratorBase;
+import mil.nga.giat.geowave.mapreduce.GeoWaveConfiguratorBase;
 
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.mapreduce.JobContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -80,29 +80,34 @@ public class CentroidDistanceBasedSamplingRankFunction<T> implements
 
 	public static void setParameters(
 			final Configuration config,
+			final Class<?> scope,
 			final PropertyManagement runTimeProperties ) {
 		NestedGroupCentroidAssignment.setParameters(
 				config,
+				scope,
 				runTimeProperties);
-		RunnerUtils.setParameter(
-				config,
-				CentroidDistanceBasedSamplingRankFunction.class,
-				runTimeProperties,
+		runTimeProperties.setConfig(
 				new ParameterEnum[] {
 					SampleParameters.Sample.PROBABILITY_FUNCTION,
 					CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS,
-				});
+				},
+				config,
+				scope);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public void initialize(
-			final ConfigurationWrapper context )
+			final JobContext context,
+			final Class<?> scope,
+			final Logger logger )
 			throws IOException {
+		final ScopedJobConfiguration config = new ScopedJobConfiguration(
+				context.getConfiguration(),
+				scope);
 		try {
-			sampleProbabilityFn = context.getInstance(
+			sampleProbabilityFn = config.getInstance(
 					SampleParameters.Sample.PROBABILITY_FUNCTION,
-					CentroidDistanceBasedSamplingRankFunction.class,
 					SampleProbabilityFn.class,
 					RandomProbabilitySampleFn.class);
 		}
@@ -112,13 +117,15 @@ public class CentroidDistanceBasedSamplingRankFunction<T> implements
 		}
 
 		try {
-			itemWrapperFactory = context.getInstance(
+			itemWrapperFactory = config.getInstance(
 					CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS,
-					CentroidDistanceBasedSamplingRankFunction.class,
 					AnalyticItemWrapperFactory.class,
 					SimpleFeatureItemWrapperFactory.class);
 
-			itemWrapperFactory.initialize(context);
+			itemWrapperFactory.initialize(
+					context,
+					scope,
+					logger);
 		}
 		catch (final Exception e1) {
 
@@ -128,7 +135,9 @@ public class CentroidDistanceBasedSamplingRankFunction<T> implements
 
 		try {
 			nestedGroupCentroidAssigner = new NestedGroupCentroidAssignment<T>(
-					context);
+					context,
+					scope,
+					logger);
 		}
 		catch (final Exception e1) {
 			throw new IOException(
@@ -138,7 +147,7 @@ public class CentroidDistanceBasedSamplingRankFunction<T> implements
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	@Override
 	public double rank(
@@ -164,7 +173,7 @@ public class CentroidDistanceBasedSamplingRankFunction<T> implements
 						}
 					});
 		}
-		catch (IOException e) {
+		catch (final IOException e) {
 			throw new RuntimeException(
 					e);
 		}

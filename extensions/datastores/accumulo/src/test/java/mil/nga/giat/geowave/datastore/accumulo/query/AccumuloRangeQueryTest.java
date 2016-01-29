@@ -1,28 +1,32 @@
 package mil.nga.giat.geowave.datastore.accumulo.query;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 import mil.nga.giat.geowave.core.geotime.GeometryUtils;
-import mil.nga.giat.geowave.core.geotime.IndexType;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import mil.nga.giat.geowave.core.geotime.store.dimension.GeometryWrapper;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.DataStore;
+import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.adapter.AbstractDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.NativeFieldHandler;
+import mil.nga.giat.geowave.core.store.adapter.NativeFieldHandler.RowBuilder;
 import mil.nga.giat.geowave.core.store.adapter.PersistentIndexFieldHandler;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
-import mil.nga.giat.geowave.core.store.adapter.NativeFieldHandler.RowBuilder;
 import mil.nga.giat.geowave.core.store.data.PersistentValue;
 import mil.nga.giat.geowave.core.store.data.field.FieldReader;
 import mil.nga.giat.geowave.core.store.data.field.FieldUtils;
 import mil.nga.giat.geowave.core.store.data.field.FieldWriter;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
-import mil.nga.giat.geowave.core.store.index.Index;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.core.store.memory.DataStoreUtils;
 import mil.nga.giat.geowave.core.store.query.Query;
+import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStore;
 import mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations;
 
@@ -46,7 +50,7 @@ import com.vividsolutions.jts.io.WKBWriter;
 public class AccumuloRangeQueryTest
 {
 	private DataStore mockDataStore;
-	private Index index;
+	private PrimaryIndex index;
 	private WritableDataAdapter<TestGeometry> adapter;
 	private final GeometryFactory factory = new GeometryFactory();
 	private final TestGeometry testdata = new TestGeometry(
@@ -69,7 +73,8 @@ public class AccumuloRangeQueryTest
 	@Before
 	public void ingestGeometries()
 			throws AccumuloException,
-			AccumuloSecurityException {
+			AccumuloSecurityException,
+			IOException {
 		final MockInstance mockInstance = new MockInstance();
 		final Connector mockConnector = mockInstance.getConnector(
 				"root",
@@ -79,14 +84,17 @@ public class AccumuloRangeQueryTest
 				new BasicAccumuloOperations(
 						mockConnector));
 
-		index = IndexType.SPATIAL_VECTOR.createDefaultIndex();
+		index = new SpatialDimensionalityTypeProvider().createPrimaryIndex();
 		adapter = new TestGeometryAdapter();
 
-		mockDataStore.ingest(
-				adapter,
+		try (IndexWriter writer = mockDataStore.createIndexWriter(
 				index,
-				testdata).get(
-				0);
+				DataStoreUtils.DEFAULT_VISIBILITY)) {
+			writer.write(
+					adapter,
+					testdata);
+		}
+
 	}
 
 	@Test
@@ -109,7 +117,9 @@ public class AccumuloRangeQueryTest
 				testGeo);
 		Assert.assertTrue(testdata.geom.intersects(testGeo));
 		final CloseableIterator<TestGeometry> resultOfIntersect = mockDataStore.query(
-				index,
+				new QueryOptions(
+						adapter,
+						index),
 				intersectQuery);
 		Assert.assertTrue(resultOfIntersect.hasNext());
 	}
@@ -120,7 +130,9 @@ public class AccumuloRangeQueryTest
 		final Query largeQuery = new SpatialQuery(
 				largeGeo);
 		final CloseableIterator itr = mockDataStore.query(
-				index,
+				new QueryOptions(
+						adapter,
+						index),
 				largeQuery);
 		int numfeats = 0;
 		while (itr.hasNext()) {
@@ -220,7 +232,9 @@ public class AccumuloRangeQueryTest
 							1.0319)
 				}));
 		final CloseableIterator<TestGeometry> resultOfIntersect = mockDataStore.query(
-				index,
+				new QueryOptions(
+						adapter,
+						index),
 				intersectQuery);
 		Assert.assertFalse(resultOfIntersect.hasNext());
 	}
@@ -243,7 +257,9 @@ public class AccumuloRangeQueryTest
 							1.0319)
 				}));
 		final CloseableIterator<TestGeometry> resultOfIntersect = mockDataStore.query(
-				index,
+				new QueryOptions(
+						adapter,
+						index),
 				encompassQuery);
 		Assert.assertTrue(resultOfIntersect.hasNext());
 		final TestGeometry geom1 = resultOfIntersect.next();

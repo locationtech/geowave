@@ -5,6 +5,7 @@ import mil.nga.giat.geowave.analytic.AnalyticOperationCategory;
 import mil.nga.giat.geowave.analytic.mapreduce.clustering.runner.MultiLevelJumpKMeansClusteringJobRunner;
 import mil.nga.giat.geowave.analytic.mapreduce.clustering.runner.MultiLevelKMeansClusteringJobRunner;
 import mil.nga.giat.geowave.analytic.mapreduce.dbscan.DBScanIterationsJobRunner;
+import mil.nga.giat.geowave.analytic.mapreduce.kde.KDEJobRunner;
 import mil.nga.giat.geowave.analytic.mapreduce.nn.GeoWaveExtractNNJobRunner;
 import mil.nga.giat.geowave.core.cli.CLIOperation;
 import mil.nga.giat.geowave.core.cli.CLIOperationCategory;
@@ -37,7 +38,11 @@ public class MapReduceAnalyticOperationCLIProvider implements
 				"kmeansjump",
 				"KMeans Clustering using Jump Method",
 				new AnalyticCLIOperationDriver(
-						new MultiLevelJumpKMeansClusteringJobRunner()))
+						new MultiLevelJumpKMeansClusteringJobRunner())),
+		new CLIOperation(
+				"kde",
+				"Kernel Density Estimate",
+				new KDEJobRunner())
 	};
 
 	private static final CLIOperationCategory CATEGORY = new AnalyticOperationCategory();

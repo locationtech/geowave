@@ -13,12 +13,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.ws.rs.core.Response.Status;
-
-import mil.nga.giat.geowave.service.client.GeoserverServiceClient;
 
 import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
@@ -48,6 +47,9 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import mil.nga.giat.geowave.datastore.accumulo.AccumuloStoreFactoryFamily;
+import mil.nga.giat.geowave.service.client.GeoserverServiceClient;
+
 public class GeoServerIT extends
 		ServicesTestEnvironment
 {
@@ -69,10 +71,9 @@ public class GeoServerIT extends
 	private static String update;
 
 	@BeforeClass
-	public static void setUp()
+	public static void initialize()
 			throws ClientProtocolException,
 			IOException {
-		ServicesTestEnvironment.startServices();
 		try {
 			accumuloOperations.deleteAll();
 		}
@@ -112,18 +113,15 @@ public class GeoServerIT extends
 		// enable wfs & wms
 		success &= enableWfs();
 		success &= enableWms();
-
+		final Map<String, String> configOptions = getAccumuloConfigOptions();
+		configOptions.put(
+				"gwNamespace",
+				TEST_NAMESPACE);
 		// create the datastore
 		success &= geoserverServiceClient.publishDatastore(
-				zookeeper,
-				accumuloUser,
-				accumuloPassword,
-				accumuloInstance,
-				TEST_NAMESPACE,
-				null,
-				null,
-				null,
-				TEST_WORKSPACE);
+				new AccumuloStoreFactoryFamily().getName(),
+				configOptions,
+				TEST_NAMESPACE);
 
 		// make sure the datastore exists
 		success &= (null != geoserverServiceClient.getDatastore(
@@ -138,7 +136,7 @@ public class GeoServerIT extends
 	}
 
 	@AfterClass
-	public static void cleanup() {
+	public static void cleanupWorkspace() {
 		assertTrue(geoserverServiceClient.deleteWorkspace(TEST_WORKSPACE));
 	}
 
@@ -372,10 +370,10 @@ public class GeoServerIT extends
 		final boolean result = r.getStatusLine().getStatusCode() == Status.OK.getStatusCode();
 		if (result) {
 			final String content = getContent(r);
-			final String pattern = "34.68158180311274 35.1828408241272";
-
+			final String patternX = "34.6815818";
+			final String patternY = "35.1828408";
 			// name space check as well
-			return content.contains(pattern) && content.contains(TEST_WORKSPACE + ":geometry");
+			return content.contains(patternX) && content.contains(patternY) && content.contains(TEST_WORKSPACE + ":geometry");
 		}
 		return false;
 	}

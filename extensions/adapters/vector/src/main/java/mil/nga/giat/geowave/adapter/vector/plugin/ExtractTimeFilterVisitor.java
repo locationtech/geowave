@@ -94,9 +94,15 @@ public class ExtractTimeFilterVisitor extends
 
 	public TemporalConstraintsSet getConstraints(
 			final Query query ) {
-		final Object output = query.getFilter().accept(
+		return getConstraints(query.getFilter());
+	}
+
+	public TemporalConstraintsSet getConstraints(
+			final Filter filter ) {
+		final Object output = filter.accept(
 				this,
 				null);
+
 		if (output instanceof TemporalConstraintsSet) {
 			return (TemporalConstraintsSet) output;
 		}

@@ -5,24 +5,25 @@ import java.util.List;
 
 import mil.nga.giat.geowave.analytic.AnalyticItemWrapper;
 import mil.nga.giat.geowave.analytic.AnalyticItemWrapperFactory;
-import mil.nga.giat.geowave.analytic.ConfigurationWrapper;
+import mil.nga.giat.geowave.analytic.ScopedJobConfiguration;
 import mil.nga.giat.geowave.analytic.SimpleFeatureItemWrapperFactory;
 import mil.nga.giat.geowave.analytic.clustering.CentroidManagerGeoWave;
 import mil.nga.giat.geowave.analytic.clustering.CentroidPairing;
+import mil.nga.giat.geowave.analytic.clustering.DistortionGroupManagement;
+import mil.nga.giat.geowave.analytic.clustering.DistortionGroupManagement.DistortionDataAdapter;
+import mil.nga.giat.geowave.analytic.clustering.DistortionGroupManagement.DistortionEntry;
 import mil.nga.giat.geowave.analytic.clustering.NestedGroupCentroidAssignment;
 import mil.nga.giat.geowave.analytic.extract.CentroidExtractor;
 import mil.nga.giat.geowave.analytic.extract.SimpleFeatureCentroidExtractor;
 import mil.nga.giat.geowave.analytic.kmeans.AssociationNotification;
 import mil.nga.giat.geowave.analytic.mapreduce.CountofDoubleWritable;
-import mil.nga.giat.geowave.analytic.mapreduce.JobContextConfigurationWrapper;
 import mil.nga.giat.geowave.analytic.param.CentroidParameters;
+import mil.nga.giat.geowave.analytic.param.GlobalParameters;
 import mil.nga.giat.geowave.analytic.param.JumpParameters;
-import mil.nga.giat.geowave.core.index.StringUtils;
-import mil.nga.giat.geowave.datastore.accumulo.mapreduce.GeoWaveWritableInputMapper;
-import mil.nga.giat.geowave.datastore.accumulo.mapreduce.input.GeoWaveInputKey;
+import mil.nga.giat.geowave.mapreduce.GeoWaveWritableInputMapper;
+import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
+import mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputKey;
 
-import org.apache.accumulo.core.data.Mutation;
-import org.apache.accumulo.core.data.Value;
 import org.apache.hadoop.io.ObjectWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
@@ -129,13 +130,17 @@ public class KMeansDistortionMapReduce
 				throws IOException,
 				InterruptedException {
 			super.setup(context);
-			final ConfigurationWrapper config = new JobContextConfigurationWrapper(
-					context,
+			final ScopedJobConfiguration config = new ScopedJobConfiguration(
+					context.getConfiguration(),
+					KMeansDistortionMapReduce.class,
 					KMeansDistortionMapReduce.LOGGER);
 
 			try {
 				nestedGroupCentroidAssigner = new NestedGroupCentroidAssignment<Object>(
-						config);
+
+						context,
+						KMeansDistortionMapReduce.class,
+						KMeansDistortionMapReduce.LOGGER);
 			}
 			catch (final Exception e1) {
 				throw new IOException(
@@ -145,7 +150,6 @@ public class KMeansDistortionMapReduce
 			try {
 				centroidExtractor = config.getInstance(
 						CentroidParameters.Centroid.EXTRACTOR_CLASS,
-						KMeansDistortionMapReduce.class,
 						CentroidExtractor.class,
 						SimpleFeatureCentroidExtractor.class);
 			}
@@ -157,7 +161,6 @@ public class KMeansDistortionMapReduce
 			try {
 				itemWrapperFactory = config.getInstance(
 						CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS,
-						KMeansDistortionMapReduce.class,
 						AnalyticItemWrapperFactory.class,
 						SimpleFeatureItemWrapperFactory.class);
 			}
@@ -197,25 +200,32 @@ public class KMeansDistortionMapReduce
 	}
 
 	public static class KMeansDistortionReduce extends
-			Reducer<Text, CountofDoubleWritable, Text, Mutation>
+			Reducer<Text, CountofDoubleWritable, GeoWaveOutputKey, DistortionEntry>
 	{
-		private String expectedK = null;
+		private Integer expectedK = null;
 		final protected Text output = new Text(
 				"");
 		private CentroidManagerGeoWave<Object> centroidManager;
+		private String batchId;
 
 		@Override
 		public void reduce(
 				final Text key,
 				final Iterable<CountofDoubleWritable> values,
-				final Reducer<Text, CountofDoubleWritable, Text, Mutation>.Context context )
+				final Reducer<Text, CountofDoubleWritable, GeoWaveOutputKey, DistortionEntry>.Context context )
 				throws IOException,
 				InterruptedException {
 			double expectation = 0.0;
 			final List<AnalyticItemWrapper<Object>> centroids = centroidManager.getCentroidsForGroup(key.toString());
 			// it is possible that the number of items in a group are smaller
 			// than the cluster
-			final String kCount = expectedK == null ? Integer.toString(centroids.size()) : expectedK;
+			final Integer kCount;
+			if (expectedK == null) {
+				kCount = centroids.size();
+			}
+			else {
+				kCount = expectedK;
+			}
 			if (centroids.size() == 0) {
 				return;
 			}
@@ -235,57 +245,56 @@ public class KMeansDistortionMapReduce
 						expectation / numDimesions,
 						-(numDimesions / 2));
 
-				// key: group ID | "DISTORTION" | K
-				// value: distortion value
-				final Mutation m = new Mutation(
-						key.toString());
-				m.put(
-						new Text(
-								"dt"),
-						new Text(
-								kCount),
-						new Value(
-								distortion.toString().getBytes(
-										StringUtils.UTF8_CHAR_SET)));
+				final DistortionEntry entry = new DistortionEntry(
+						key.toString(),
+						batchId,
+						kCount,
+						distortion);
 
-				// write distortion to accumulo, defaults to table given to
-				// AccumuloOutputFormat, in driver
 				context.write(
-						output, // default table
-						m);
+						new GeoWaveOutputKey(
+								DistortionDataAdapter.ADAPTER_ID,
+								DistortionGroupManagement.DISTORTIONS_INDEX_LIST),
+						entry);
 			}
 		}
 
 		@Override
 		protected void setup(
-				final Reducer<Text, CountofDoubleWritable, Text, Mutation>.Context context )
+				final Reducer<Text, CountofDoubleWritable, GeoWaveOutputKey, DistortionEntry>.Context context )
 				throws IOException,
 				InterruptedException {
 			super.setup(context);
-			final ConfigurationWrapper config = new JobContextConfigurationWrapper(
-					context,
+			final ScopedJobConfiguration config = new ScopedJobConfiguration(
+					context.getConfiguration(),
+					KMeansDistortionMapReduce.class,
 					KMeansDistortionMapReduce.LOGGER);
 
 			final int k = config.getInt(
 					JumpParameters.Jump.COUNT_OF_CENTROIDS,
-					KMeansDistortionMapReduce.class,
 					-1);
 			if (k > 0) {
-				expectedK = Integer.toString(k);
+				expectedK = k;
 			}
 
 			try {
 				centroidManager = new CentroidManagerGeoWave<Object>(
-						config);
+						context,
+						KMeansDistortionMapReduce.class,
+						KMeansDistortionMapReduce.LOGGER);
 			}
 			catch (final Exception e) {
 				KMeansDistortionMapReduce.LOGGER.warn(
 						"Unable to initialize centroid manager",
 						e);
 				throw new IOException(
-						"Unable to initialize centroid manager");
+						"Unable to initialize centroid manager",
+						e);
 			}
 
+			batchId = config.getString(
+					GlobalParameters.Global.PARENT_BATCH_ID,
+					centroidManager.getBatchId());
 		}
 	}
 

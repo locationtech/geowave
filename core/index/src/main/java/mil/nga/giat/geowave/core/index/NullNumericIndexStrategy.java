@@ -2,6 +2,7 @@ package mil.nga.giat.geowave.core.index;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
@@ -104,6 +105,16 @@ public class NullNumericIndexStrategy implements
 		retVal.add(new ByteArrayId(
 				new byte[] {}));
 		return retVal;
+	}
+
+	@Override
+	public Set<ByteArrayId> getNaturalSplits() {
+		return null;
+	}
+
+	@Override
+	public int getByteOffsetFromDimensionalIndex() {
+		return 0;
 	}
 
 }

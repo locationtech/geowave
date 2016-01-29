@@ -9,10 +9,11 @@ import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.List;
 
-import mil.nga.giat.geowave.adapter.vector.plugin.GeoWavePluginConfig;
-import mil.nga.giat.geowave.adapter.vector.plugin.GeoWavePluginException;
+import mil.nga.giat.geowave.core.store.memory.MemoryStoreFactoryFamily;
 
 import org.geotools.data.DataAccessFactory.Param;
+import org.geotools.data.Parameter;
+import org.junit.Assert;
 import org.junit.Test;
 
 public class GeoWavePluginConfigTest
@@ -22,12 +23,12 @@ public class GeoWavePluginConfigTest
 	public void test()
 			throws GeoWavePluginException,
 			URISyntaxException {
-		List<Param> params = GeoWavePluginConfig.getPluginParams();
-		HashMap<String, Serializable> paramValues = new HashMap<String, Serializable>();
-		for (Param param : params) {
+		final List<Param> params = GeoWavePluginConfig.getPluginParams(new MemoryStoreFactoryFamily());
+		final HashMap<String, Serializable> paramValues = new HashMap<String, Serializable>();
+		for (final Param param : params) {
 			if (param.getName().equals(
 					GeoWavePluginConfig.LOCK_MGT_KEY)) {
-				List<String> options = (List<String>) param.metadata.get(Param.OPTIONS);
+				final List<String> options = (List<String>) param.metadata.get(Parameter.OPTIONS);
 				assertNotNull(options);
 				assertTrue(options.size() > 0);
 				paramValues.put(
@@ -41,13 +42,25 @@ public class GeoWavePluginConfigTest
 						new URI(
 								"http://test/test"));
 			}
+			else if (param.getName().equals(
+					GeoWavePluginConfig.TRANSACTION_BUFFER_SIZE)) {
+				paramValues.put(
+						param.getName(),
+						1000);
+			}
 			else if (!param.getName().equals(
-					GeoWavePluginConfig.AUTH_URL_KEY)) paramValues.put(
-					param.getName(),
-					(Serializable) (param.getDefaultValue() == null ? "" : param.getDefaultValue()));
+					GeoWavePluginConfig.AUTH_URL_KEY)) {
+				paramValues.put(
+						param.getName(),
+						(Serializable) (param.getDefaultValue() == null ? "" : param.getDefaultValue()));
+			}
 		}
-		GeoWavePluginConfig config = new GeoWavePluginConfig(
+		final GeoWavePluginConfig config = new GeoWavePluginConfig(
+				new MemoryStoreFactoryFamily(),
 				paramValues);
+		Assert.assertEquals(
+				1000,
+				(int) config.getTransactionBufferSize());
 		assertNotNull(config.getLockingManagementFactory());
 		assertNotNull(config.getLockingManagementFactory().createLockingManager(
 				config));

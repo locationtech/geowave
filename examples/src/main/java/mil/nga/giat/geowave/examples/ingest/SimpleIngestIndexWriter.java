@@ -1,21 +1,18 @@
 package mil.nga.giat.geowave.examples.ingest;
 
 import java.io.IOException;
-import java.util.Date;
 
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
-import mil.nga.giat.geowave.core.geotime.GeometryUtils;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.IndexWriter;
-import mil.nga.giat.geowave.core.store.index.Index;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.core.store.memory.DataStoreUtils;
 import mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations;
 
 import org.apache.log4j.Logger;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
-
-import com.vividsolutions.jts.geom.Coordinate;
 
 public class SimpleIngestIndexWriter extends
 		SimpleIngest
@@ -56,7 +53,6 @@ public class SimpleIngestIndexWriter extends
 	 * Here we will change the ingest mechanism to use a producer/consumer
 	 * pattern
 	 */
-	@Override
 	protected void generateGrid(
 			final DataStore geowaveDataStore ) {
 
@@ -73,7 +69,7 @@ public class SimpleIngestIndexWriter extends
 		final FeatureDataAdapter adapter = createDataAdapter(point);
 
 		// This describes how to index the data
-		final Index index = createSpatialIndex();
+		final PrimaryIndex index = createSpatialIndex();
 
 		// features require a featureID - this should be unqiue as it's a
 		// foreign key on the feature
@@ -84,7 +80,9 @@ public class SimpleIngestIndexWriter extends
 		// get a handle on a GeoWave index writer which wraps the Accumulo
 		// BatchWriter, make sure to close it (here we use a try with resources
 		// block to close it automatically)
-		try (IndexWriter indexWriter = geowaveDataStore.createIndexWriter(index)) {
+		try (IndexWriter indexWriter = geowaveDataStore.createIndexWriter(
+				index,
+				DataStoreUtils.DEFAULT_VISIBILITY)) {
 			// build a grid of points across the globe at each whole
 			// lattitude/longitude intersection
 

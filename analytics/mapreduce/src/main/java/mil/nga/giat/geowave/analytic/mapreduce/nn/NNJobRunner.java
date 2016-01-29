@@ -1,22 +1,21 @@
 package mil.nga.giat.geowave.analytic.mapreduce.nn;
 
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 
 import mil.nga.giat.geowave.analytic.AdapterWithObjectWritable;
 import mil.nga.giat.geowave.analytic.PropertyManagement;
-import mil.nga.giat.geowave.analytic.RunnerUtils;
 import mil.nga.giat.geowave.analytic.mapreduce.GeoWaveAnalyticJobRunner;
 import mil.nga.giat.geowave.analytic.mapreduce.nn.NNMapReduce.PartitionDataWritable;
 import mil.nga.giat.geowave.analytic.mapreduce.nn.NNMapReduce.PassthruPartitioner;
 import mil.nga.giat.geowave.analytic.param.CommonParameters;
 import mil.nga.giat.geowave.analytic.param.ParameterEnum;
-import mil.nga.giat.geowave.analytic.param.PartitionParameters;
 import mil.nga.giat.geowave.analytic.param.PartitionParameters.Partition;
 import mil.nga.giat.geowave.analytic.partitioner.OrthodromicDistancePartitioner;
 import mil.nga.giat.geowave.analytic.partitioner.Partitioner;
-import mil.nga.giat.geowave.datastore.accumulo.mapreduce.input.GeoWaveInputFormat;
 
-import org.apache.commons.cli.Option;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
@@ -36,15 +35,6 @@ public class NNJobRunner extends
 		job.setOutputKeyClass(Text.class);
 		job.setOutputValueClass(Text.class);
 		job.setSpeculativeExecution(false);
-
-		GeoWaveInputFormat.setAccumuloOperationsInfo(
-				job,
-				zookeeper,
-				instanceName,
-				userName,
-				password,
-				namespace);
-
 	}
 
 	@Override
@@ -58,35 +48,38 @@ public class NNJobRunner extends
 			final PropertyManagement runTimeProperties )
 			throws Exception {
 
-		Partitioner<?> partitioner = runTimeProperties.getClassInstance(
+		final Partitioner<?> partitioner = runTimeProperties.getClassInstance(
 				Partition.PARTITIONER_CLASS,
 				Partitioner.class,
 				OrthodromicDistancePartitioner.class);
 
-		Partitioner<?> secondaryPartitioner = runTimeProperties.getClassInstance(
+		final Partitioner<?> secondaryPartitioner = runTimeProperties.getClassInstance(
 				Partition.SECONDARY_PARTITIONER_CLASS,
 				Partitioner.class,
 				PassthruPartitioner.class);
 
 		partitioner.setup(
 				runTimeProperties,
-				config);
-
-		if (secondaryPartitioner.getClass() != partitioner.getClass()) secondaryPartitioner.setup(
-				runTimeProperties,
-				config);
-
-		RunnerUtils.setParameter(
-				config,
 				getScope(),
-				runTimeProperties,
+				config);
+
+		if (secondaryPartitioner.getClass() != partitioner.getClass()) {
+			secondaryPartitioner.setup(
+					runTimeProperties,
+					getScope(),
+					config);
+		}
+
+		runTimeProperties.setConfig(
 				new ParameterEnum[] {
 					Partition.PARTITIONER_CLASS,
 					Partition.SECONDARY_PARTITIONER_CLASS,
 					Partition.PARTITION_DISTANCE,
 					Partition.MAX_MEMBER_SELECTION,
 					CommonParameters.Common.DISTANCE_FUNCTION_CLASS
-				});
+				},
+				config,
+				getScope());
 
 		return super.run(
 				config,
@@ -95,23 +88,21 @@ public class NNJobRunner extends
 	}
 
 	@Override
-	public void fillOptions(
-			final Set<Option> options ) {
-		super.fillOptions(options);
-		PartitionParameters.fillOptions(
-				options,
-				new PartitionParameters.Partition[] {
-					Partition.PARTITIONER_CLASS,
-					Partition.SECONDARY_PARTITIONER_CLASS,
-					Partition.PARTITION_DISTANCE,
-					Partition.MAX_MEMBER_SELECTION
-				});
-
-		CommonParameters.fillOptions(
-				options,
-				new CommonParameters.Common[] {
-					CommonParameters.Common.DISTANCE_FUNCTION_CLASS
-				});
+	public Collection<ParameterEnum<?>> getParameters() {
+		final Set<ParameterEnum<?>> params = new HashSet<ParameterEnum<?>>();
+		params.addAll(super.getParameters());
+		params.addAll(Arrays.asList(new ParameterEnum<?>[] {
+			Partition.PARTITIONER_CLASS,
+			Partition.PARTITION_DISTANCE,
+			Partition.SECONDARY_PARTITIONER_CLASS,
+			Partition.MAX_MEMBER_SELECTION,
+			CommonParameters.Common.DISTANCE_FUNCTION_CLASS
+		}));
+		return params;
 	}
 
+	@Override
+	protected String getJobName() {
+		return "Nearest Neighbors";
+	}
 }

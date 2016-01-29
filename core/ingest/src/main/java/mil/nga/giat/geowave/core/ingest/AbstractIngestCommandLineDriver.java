@@ -12,6 +12,9 @@ import java.util.ServiceLoader;
 
 import mil.nga.giat.geowave.core.cli.CLIOperationDriver;
 import mil.nga.giat.geowave.core.index.StringUtils;
+import mil.nga.giat.geowave.core.store.DataStoreFactorySpi;
+import mil.nga.giat.geowave.core.store.GeoWaveStoreFinder;
+import mil.nga.giat.geowave.core.store.config.ConfigUtils;
 
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
@@ -52,30 +55,20 @@ abstract public class AbstractIngestCommandLineDriver implements
 		while (pluginProviders.hasNext()) {
 			final IngestFormatPluginProviderSpi pluginProvider = pluginProviders.next();
 			pluginProviderRegistry.put(
-					cleanIngestFormatName(pluginProvider.getIngestFormatName()),
+					ConfigUtils.cleanOptionName(pluginProvider.getIngestFormatName()),
 					pluginProvider);
 		}
 	}
 
-	private static String cleanIngestFormatName(
-			String ingestFormatName ) {
-		ingestFormatName = ingestFormatName.trim().toLowerCase().replaceAll(
-				" ",
-				"_");
-		ingestFormatName = ingestFormatName.replaceAll(
-				",",
-				"");
-		return ingestFormatName;
-	}
-
 	@Override
-	public void run(
+	public boolean runOperation(
 			final String[] args )
 			throws ParseException {
 		final List<IngestFormatPluginProviderSpi<?, ?>> pluginProviders = applyArguments(args);
-		runInternal(
+		final boolean retVal = runInternal(
 				args,
 				pluginProviders);
+		return retVal;
 	}
 
 	@SuppressFBWarnings(value = "DM_EXIT", justification = "Exiting JVM with System.exit(0) is intentional")
@@ -94,7 +87,7 @@ abstract public class AbstractIngestCommandLineDriver implements
 				"l",
 				"list",
 				false,
-				"List the available ingest formats"));
+				"List the available ingest formats and available data stores"));
 		baseOptionGroup.addOption(new Option(
 				"f",
 				"formats",
@@ -120,12 +113,26 @@ abstract public class AbstractIngestCommandLineDriver implements
 				final PrintWriter pw = new PrintWriter(
 						new OutputStreamWriter(
 								System.out,
-								StringUtils.UTF8_CHAR_SET));
+								StringUtils.GEOWAVE_CHAR_SET));
 				pw.println("Available ingest formats currently registered as plugins:\n");
 				for (final Entry<String, IngestFormatPluginProviderSpi<?, ?>> pluginProviderEntry : pluginProviderRegistry.entrySet()) {
 					final IngestFormatPluginProviderSpi<?, ?> pluginProvider = pluginProviderEntry.getValue();
 					final String desc = pluginProvider.getIngestFormatDescription() == null ? "no description" : pluginProvider.getIngestFormatDescription();
 					final String text = pluginProviderEntry.getKey() + ":\n" + desc;
+
+					formatter.printWrapped(
+							pw,
+							formatter.getWidth(),
+							5,
+							text);
+					pw.println();
+				}
+				pw.println("Available datastores currently registered:\n");
+				final Map<String, DataStoreFactorySpi> dataStoreFactories = GeoWaveStoreFinder.getRegisteredDataStoreFactories();
+				for (final Entry<String, DataStoreFactorySpi> dataStoreFactoryEntry : dataStoreFactories.entrySet()) {
+					final DataStoreFactorySpi dataStoreFactory = dataStoreFactoryEntry.getValue();
+					final String desc = dataStoreFactory.getDescription() == null ? "no description" : dataStoreFactory.getDescription();
+					final String text = dataStoreFactory.getName() + ":\n" + desc;
 
 					formatter.printWrapped(
 							pw,
@@ -155,18 +162,17 @@ abstract public class AbstractIngestCommandLineDriver implements
 					System.exit(-3);
 				}
 			}
-			for (final IngestFormatPluginProviderSpi<?, ?> plugin : selectedPluginProviders) {
-				final IngestFormatOptionProvider optionProvider = plugin.getIngestFormatOptionProvider();
-				if (optionProvider != null) {
-					optionProvider.applyOptions(options);
-				}
-			}
+			applyAdditionalOptions(
+					selectedPluginProviders,
+					commandLine,
+					options);
 			if (options.getOptions().size() > optionCount) {
 				// custom options have been added, reparse the commandline
 				// arguments with the new set of options
 				commandLine = parser.parse(
 						options,
-						args);
+						args,
+						true);
 				for (final IngestFormatPluginProviderSpi<?, ?> plugin : selectedPluginProviders) {
 					final IngestFormatOptionProvider optionProvider = plugin.getIngestFormatOptionProvider();
 					if (optionProvider != null) {
@@ -174,16 +180,33 @@ abstract public class AbstractIngestCommandLineDriver implements
 					}
 				}
 			}
-			parseOptionsInternal(commandLine);
+			parseOptionsInternal(
+					options,
+					commandLine);
 		}
 		catch (final ParseException e) {
-			LOGGER.fatal(e.getMessage());
+			LOGGER.fatal(
+					"Error parsing commandline",
+					e);
 			printHelp(
 					options,
 					operation);
 			System.exit(-1);
 		}
 		return selectedPluginProviders;
+	}
+
+	private void applyAdditionalOptions(
+			final List<IngestFormatPluginProviderSpi<?, ?>> selectedPluginProviders,
+			final CommandLine commandLine,
+			final Options options )
+			throws ParseException {
+		for (final IngestFormatPluginProviderSpi<?, ?> plugin : selectedPluginProviders) {
+			final IngestFormatOptionProvider optionProvider = plugin.getIngestFormatOptionProvider();
+			if (optionProvider != null) {
+				optionProvider.applyOptions(options);
+			}
+		}
 	}
 
 	private List<IngestFormatPluginProviderSpi<?, ?>> getPluginProviders(
@@ -219,13 +242,14 @@ abstract public class AbstractIngestCommandLineDriver implements
 	}
 
 	abstract protected void parseOptionsInternal(
+			Options options,
 			final CommandLine commandLine )
 			throws ParseException;
 
 	abstract protected void applyOptionsInternal(
 			final Options allOptions );
 
-	abstract protected void runInternal(
+	abstract protected boolean runInternal(
 			String[] args,
 			List<IngestFormatPluginProviderSpi<?, ?>> pluginProviders );
 }

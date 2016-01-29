@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.UUID;
 
+import mil.nga.giat.geowave.adapter.vector.BaseDataStoreTest;
 import mil.nga.giat.geowave.adapter.vector.stats.FeatureNumericRangeStatistics;
 import mil.nga.giat.geowave.adapter.vector.stats.FeatureTimeRangeStatistics;
 import mil.nga.giat.geowave.adapter.vector.utils.DateUtilities;
@@ -18,6 +19,7 @@ import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.adapter.statistics.CountDataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 
+import org.geotools.data.DataStore;
 import org.geotools.data.DataUtilities;
 import org.geotools.data.DefaultTransaction;
 import org.geotools.data.FeatureWriter;
@@ -25,7 +27,6 @@ import org.geotools.data.Query;
 import org.geotools.data.Transaction;
 import org.geotools.data.simple.SimpleFeatureSource;
 import org.geotools.data.simple.SimpleFeatureStore;
-import org.geotools.data.store.ContentFeatureSource;
 import org.geotools.filter.text.cql2.CQL;
 import org.geotools.filter.text.cql2.CQLException;
 import org.geotools.geometry.jts.ReferencedEnvelope;
@@ -38,7 +39,8 @@ import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.PrecisionModel;
 
-public class GeoWaveFeatureSourceTest
+public class GeoWaveFeatureSourceTest extends
+		BaseDataStoreTest
 {
 	static final GeometryFactory factory = new GeometryFactory(
 			new PrecisionModel(
@@ -47,8 +49,6 @@ public class GeoWaveFeatureSourceTest
 	@Test
 	public void test()
 			throws Exception {
-		// Mock instance is not thread safe. Even with the separate instance ids
-		// per each test.
 		testEmpty();
 		testFull(
 				new FWPopulater(),
@@ -70,7 +70,7 @@ public class GeoWaveFeatureSourceTest
 		final SimpleFeatureType type = DataUtilities.createType(
 				"GeoWaveFeatureSourceTest_e",
 				"geometry:Geometry:srid=4326,pop:java.lang.Long,pid:String,when:Date");
-		final GeoWaveGTMemDataStore dataStore = new GeoWaveGTMemDataStore();
+		final DataStore dataStore = createDataStore();
 		dataStore.createSchema(type);
 		final SimpleFeatureSource source = dataStore.getFeatureSource("GeoWaveFeatureSourceTest_e");
 		final ReferencedEnvelope env = source.getBounds();
@@ -98,7 +98,7 @@ public class GeoWaveFeatureSourceTest
 		final SimpleFeatureType type = DataUtilities.createType(
 				typeName,
 				"geometry:Geometry:srid=4326,pop:java.lang.Long,pid:String,when:Date");
-		final GeoWaveGTMemDataStore dataStore = new GeoWaveGTMemDataStore();
+		final DataStore dataStore = createDataStore();
 		populater.populate(
 				type,
 				dataStore);
@@ -121,62 +121,63 @@ public class GeoWaveFeatureSourceTest
 				Filter.INCLUDE);
 		assertTrue(source.getCount(query) > 2);
 
-		final CloseableIterator<DataStatistics<?>> stats = dataStore.dataStore.getStatsStore().getDataStatistics(
+		try (final CloseableIterator<DataStatistics<?>> stats = ((GeoWaveGTDataStore) dataStore).getDataStatisticsStore().getDataStatistics(
 				new ByteArrayId(
-						(typeName).getBytes(StringUtils.UTF8_CHAR_SET)));
-		assertTrue(stats.hasNext());
-		int count = 0;
-		BoundingBoxDataStatistics<SimpleFeature> bboxStats = null;
-		CountDataStatistics<SimpleFeature> cStats = null;
-		FeatureTimeRangeStatistics timeRangeStats = null;
-		FeatureNumericRangeStatistics popStats = null;
-		while (stats.hasNext()) {
-			final DataStatistics<?> statsData = stats.next();
-			System.out.println(statsData.toString());
-			if (statsData instanceof BoundingBoxDataStatistics) {
-				bboxStats = (BoundingBoxDataStatistics<SimpleFeature>) statsData;
+						(typeName).getBytes(StringUtils.GEOWAVE_CHAR_SET)))) {
+			assertTrue(stats.hasNext());
+			int count = 0;
+			BoundingBoxDataStatistics<SimpleFeature> bboxStats = null;
+			CountDataStatistics<SimpleFeature> cStats = null;
+			FeatureTimeRangeStatistics timeRangeStats = null;
+			FeatureNumericRangeStatistics popStats = null;
+			while (stats.hasNext()) {
+				final DataStatistics<?> statsData = stats.next();
+				System.out.println(statsData.toString());
+				if (statsData instanceof BoundingBoxDataStatistics) {
+					bboxStats = (BoundingBoxDataStatistics<SimpleFeature>) statsData;
+				}
+				else if (statsData instanceof CountDataStatistics) {
+					cStats = (CountDataStatistics<SimpleFeature>) statsData;
+				}
+				else if (statsData instanceof FeatureTimeRangeStatistics) {
+					timeRangeStats = (FeatureTimeRangeStatistics) statsData;
+				}
+				else if (statsData instanceof FeatureNumericRangeStatistics) {
+					popStats = (FeatureNumericRangeStatistics) statsData;
+				}
+				count++;
 			}
-			else if (statsData instanceof CountDataStatistics) {
-				cStats = (CountDataStatistics<SimpleFeature>) statsData;
-			}
-			else if (statsData instanceof FeatureTimeRangeStatistics) {
-				timeRangeStats = (FeatureTimeRangeStatistics) statsData;
-			}
-			else if (statsData instanceof FeatureNumericRangeStatistics) {
-				popStats = (FeatureNumericRangeStatistics) statsData;
-			}
-			count++;
+
+			assertEquals(
+					7,
+					count);
+
+			assertEquals(
+					66,
+					popStats.getMin(),
+					0.001);
+			assertEquals(
+					100,
+					popStats.getMax(),
+					0.001);
+			assertEquals(
+					DateUtilities.parseISO("2005-05-17T20:32:56Z"),
+					timeRangeStats.asTemporalRange().getStartTime());
+			assertEquals(
+					DateUtilities.parseISO("2005-05-19T20:32:56Z"),
+					timeRangeStats.asTemporalRange().getEndTime());
+			assertEquals(
+					43.454,
+					bboxStats.getMaxX(),
+					0.0001);
+			assertEquals(
+					27.232,
+					bboxStats.getMinY(),
+					0.0001);
+			assertEquals(
+					3,
+					cStats.getCount());
 		}
-
-		assertEquals(
-				7,
-				count);
-
-		assertEquals(
-				66,
-				popStats.getMin(),
-				0.001);
-		assertEquals(
-				100,
-				popStats.getMax(),
-				0.001);
-		assertEquals(
-				DateUtilities.parseISO("2005-05-17T20:32:56Z"),
-				timeRangeStats.asTemporalRange().getStartTime());
-		assertEquals(
-				DateUtilities.parseISO("2005-05-19T20:32:56Z"),
-				timeRangeStats.asTemporalRange().getEndTime());
-		assertEquals(
-				43.454,
-				bboxStats.getMaxX(),
-				0.0001);
-		assertEquals(
-				27.232,
-				bboxStats.getMinY(),
-				0.0001);
-		assertEquals(
-				3,
-				cStats.getCount());
 
 	}
 
@@ -189,7 +190,7 @@ public class GeoWaveFeatureSourceTest
 		final SimpleFeatureType type = DataUtilities.createType(
 				typeName,
 				"geometry:Geometry:srid=4326,pop:java.lang.Long,pid:String,when:Date");
-		final GeoWaveGTMemDataStore dataStore = new GeoWaveGTMemDataStore();
+		final DataStore dataStore = createDataStore();
 		populater.populate(
 				type,
 				dataStore);
@@ -225,7 +226,7 @@ public class GeoWaveFeatureSourceTest
 	{
 		void populate(
 				final SimpleFeatureType type,
-				final GeoWaveGTMemDataStore dataStore )
+				final DataStore dataStore )
 				throws IOException,
 				CQLException,
 				ParseException;
@@ -236,7 +237,7 @@ public class GeoWaveFeatureSourceTest
 	{
 		public void populate(
 				final SimpleFeatureType type,
-				final GeoWaveGTMemDataStore dataStore )
+				final DataStore dataStore )
 				throws IOException,
 				CQLException,
 				ParseException {
@@ -310,7 +311,7 @@ public class GeoWaveFeatureSourceTest
 	{
 		public void populate(
 				final SimpleFeatureType type,
-				final GeoWaveGTMemDataStore dataStore )
+				final DataStore dataStore )
 				throws IOException,
 				CQLException,
 				ParseException {

@@ -1,15 +1,14 @@
 package mil.nga.giat.geowave.analytic;
 
-import java.util.Set;
+import java.util.Collection;
 
-import org.apache.commons.cli.Option;
+import mil.nga.giat.geowave.analytic.param.ParameterEnum;
 
 public interface IndependentJobRunner
 {
-	public void fillOptions(
-			Set<Option> options );
-
 	public int run(
-			final PropertyManagement runTimeProperties )
+			PropertyManagement properties )
 			throws Exception;
+
+	public Collection<ParameterEnum<?>> getParameters();
 }

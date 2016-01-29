@@ -27,9 +27,19 @@
 			<artifactId>geowave-analytic-mapreduce</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+				<dependency>
+			<groupId>mil.nga.giat</groupId>
+			<artifactId>geowave-datastore-accumulo</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>mil.nga.giat</groupId>
 			<artifactId>geowave-example</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>mil.nga.giat</groupId>
+			<artifactId>geowave-cli-stats</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
@@ -72,11 +82,6 @@
 			</exclusions>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.kafka</groupId>
-			<artifactId>${kafka.artifact}</artifactId>
-			<version>${kafka.version}</version>	
-		</dependency>		
-		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
 			<version>4.3.6</version>
@@ -113,7 +118,7 @@
 									<type>war</type>
 									<overWrite>true</overWrite>
 									<outputDirectory>${project.build.directory}/geoserver</outputDirectory>
-									<excludes>**/commons-dbcp-1.4.jar,**/*1.7-SNAPSHOT.jar,**/*2.7-SNAPSHOT.jar,**/*20140915*.jar,**/*13-SNAPSHOT.jar,**/slf4j*.jar</excludes>
+									<excludes>**/commons-dbcp-1.4.jar,**/*-SNAPSHOT.jar,**/*20140915*.jar,**/slf4j*.jar</excludes>
 								</artifactItem>
 							</artifactItems>
 						</configuration>

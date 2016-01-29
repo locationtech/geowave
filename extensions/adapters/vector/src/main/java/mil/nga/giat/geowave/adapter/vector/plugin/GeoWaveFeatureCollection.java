@@ -5,11 +5,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import mil.nga.giat.geowave.adapter.vector.render.DistributableRenderer;
+import mil.nga.giat.geowave.adapter.vector.render.RenderedMaster;
 import mil.nga.giat.geowave.adapter.vector.stats.FeatureBoundingBoxStatistics;
 import mil.nga.giat.geowave.adapter.vector.stats.FeatureNumericRangeStatistics;
 import mil.nga.giat.geowave.adapter.vector.stats.FeatureTimeRangeStatistics;
-import mil.nga.giat.geowave.adapter.vector.wms.DistributableRenderer;
-import mil.nga.giat.geowave.adapter.vector.wms.accumulo.RenderedMaster;
 import mil.nga.giat.geowave.core.geotime.store.query.TemporalConstraintsSet;
 import mil.nga.giat.geowave.core.geotime.store.statistics.BoundingBoxDataStatistics;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
@@ -222,12 +222,12 @@ public class GeoWaveFeatureCollection extends
 	}
 
 	private Filter getFilter(
-			Query query ) {
-		Filter filter = query.getFilter();
+			final Query query ) {
+		final Filter filter = query.getFilter();
 		if (filter instanceof BBOXImpl) {
-			BBOXImpl bbox = ((BBOXImpl) filter);
-			String propName = bbox.getPropertyName();
-			if (propName == null || propName.isEmpty()) {
+			final BBOXImpl bbox = ((BBOXImpl) filter);
+			final String propName = bbox.getPropertyName();
+			if ((propName == null) || propName.isEmpty()) {
 				bbox.setPropertyName(getSchema(
 						reader,
 						query).getGeometryDescriptor().getLocalName());
@@ -330,18 +330,9 @@ public class GeoWaveFeatureCollection extends
 			return new GeometryFactory().toGeometry(envelope);
 		}
 
-		final Geometry bbox = (Geometry) query.getFilter().accept(
-				ExtractGeometryFilterVisitor.GEOMETRY_VISITOR,
-				null);
-		if ((bbox == null) || bbox.isEmpty()) {
-			return null;
-		}
-		final double area = bbox.getArea();
-		if (Double.isInfinite(area) || Double.isNaN(area)) {
-			return null;
-		}
-
-		return reader.clipIndexedBBOXConstraints(bbox);
+		return reader.clipIndexedBBOXConstraints(ExtractGeometryFilterVisitor.getConstraints(
+				query.getFilter(),
+				GeoWaveGTDataStore.DEFAULT_CRS));
 	}
 
 	private Query validateQuery(
@@ -375,7 +366,7 @@ public class GeoWaveFeatureCollection extends
 					null);
 			int acceptedCount = 0;
 			for (final String attr : attrs) {
-				for (DataStatistics<SimpleFeature> stat : reader.getStatsFor(attr)) {
+				for (final DataStatistics<SimpleFeature> stat : reader.getStatsFor(attr)) {
 					if (stat instanceof FeatureTimeRangeStatistics) {
 						minVisitor.setValue(reader.convertToType(
 								attr,
@@ -407,7 +398,7 @@ public class GeoWaveFeatureCollection extends
 					null);
 			int acceptedCount = 0;
 			for (final String attr : attrs) {
-				for (DataStatistics<SimpleFeature> stat : reader.getStatsFor(attr)) {
+				for (final DataStatistics<SimpleFeature> stat : reader.getStatsFor(attr)) {
 					if (stat instanceof FeatureTimeRangeStatistics) {
 						maxVisitor.setValue(reader.convertToType(
 								attr,

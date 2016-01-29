@@ -14,7 +14,7 @@ import mil.nga.giat.geowave.core.store.data.field.FieldVisibilityHandler;
 import mil.nga.giat.geowave.core.store.data.field.FieldWriter;
 import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
-import mil.nga.giat.geowave.core.store.index.Index;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 
 public class ImageChipDataAdapter implements
 		WritableDataAdapter<ImageChip>
@@ -55,7 +55,7 @@ public class ImageChipDataAdapter implements
 	@Override
 	public ImageChip decode(
 			final IndexedAdapterPersistenceEncoding data,
-			final Index index ) {
+			final PrimaryIndex index ) {
 		return ImageChipUtils.fromDataIdAndValue(
 				data.getDataId(),
 				(byte[]) data.getAdapterExtendedData().getValue(

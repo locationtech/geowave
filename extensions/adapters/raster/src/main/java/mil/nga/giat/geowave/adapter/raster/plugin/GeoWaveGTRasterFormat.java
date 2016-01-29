@@ -1,12 +1,15 @@
 package mil.nga.giat.geowave.adapter.raster.plugin;
 
 import java.awt.Color;
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.util.HashMap;
 
-import mil.nga.giat.geowave.adapter.raster.RasterUtils;
 import mil.nga.giat.geowave.adapter.raster.plugin.GeoWaveRasterConfig.ConfigParameter;
 import mil.nga.giat.geowave.core.index.StringUtils;
 
@@ -37,6 +40,7 @@ public class GeoWaveGTRasterFormat extends
 			null,
 			null);
 	public static final CoordinateReferenceSystem DEFAULT_CRS;
+
 	static {
 		try {
 			DEFAULT_CRS = CRS.decode("EPSG:4326");
@@ -75,7 +79,7 @@ public class GeoWaveGTRasterFormat extends
 				"https://github.com/ngageoint/geowave");
 		info.put(
 				"version",
-				"0.8.0");
+				"0.9.0");
 		mInfo = info;
 
 		// reading parameters
@@ -132,51 +136,10 @@ public class GeoWaveGTRasterFormat extends
 		if (source == null) {
 			return false;
 		}
-
-		final URL sourceUrl = getURLFromSource(source);
-
-		if (sourceUrl == null) {
-			return false;
+		if (isParamList(source)) {
+			return true;
 		}
-
-		if (!sourceUrl.getPath().toLowerCase().endsWith(
-				".xml")) {
-			return false;
-		}
-
-		final ByteArrayOutputStream out = new ByteArrayOutputStream();
-
-		try {
-			final InputStream in = (InputStream) sourceUrl.getContent();
-			int c;
-
-			while ((c = in.read()) != -1) {
-				out.write(c);
-			}
-
-			in.close();
-			out.close();
-		}
-		catch (final IOException e) {
-			return false;
-		}
-		final String xmlStr;
-		try {
-			xmlStr = out.toString(StringUtils.UTF8_CHAR_SET.toString());
-		}
-		catch (UnsupportedEncodingException e) {
-			LOGGER.error(
-					"Unable to write ByteArray to UTF-8",
-					e);
-			return false;
-		}
-
-		for (final ConfigParameter parameter : GeoWaveRasterConfig.ConfigParameter.values()) {
-			if (!xmlStr.contains(parameter.getConfigName())) {
-				return false;
-			}
-		}
-		return true;
+		return validateURL(source);
 	}
 
 	@Override
@@ -191,6 +154,13 @@ public class GeoWaveGTRasterFormat extends
 			final Hints hints ) {
 		throw new UnsupportedOperationException(
 				"This plugin does not support writing.");
+	}
+
+	public static boolean isParamList(
+			final Object source ) {
+		return ((source instanceof String) && source.toString().contains(
+				"=") && source.toString().contains(
+				ConfigParameter.NAMESPACE.getConfigName()));
 	}
 
 	public static URL getURLFromSource(
@@ -232,5 +202,52 @@ public class GeoWaveGTRasterFormat extends
 		}
 
 		return sourceURL;
+	}
+
+	public static boolean validateURL(
+			final Object source ) {
+		final URL sourceUrl = getURLFromSource(source);
+
+		if (sourceUrl == null) {
+			return false;
+		}
+
+		if (!sourceUrl.getPath().toLowerCase().endsWith(
+				".xml")) {
+			return false;
+		}
+
+		final ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+		try {
+			final InputStream in = (InputStream) sourceUrl.getContent();
+			int c;
+
+			while ((c = in.read()) != -1) {
+				out.write(c);
+			}
+
+			in.close();
+			out.close();
+		}
+		catch (final IOException e) {
+			return false;
+		}
+		final String xmlStr;
+		try {
+			xmlStr = out.toString(StringUtils.UTF8_CHAR_SET.toString());
+		}
+		catch (final UnsupportedEncodingException e) {
+			LOGGER.error(
+					"Unable to write ByteArray to UTF-8",
+					e);
+			return false;
+		}
+
+		// Namespace is the only required parameter
+		if (!xmlStr.contains(ConfigParameter.NAMESPACE.getConfigName())) {
+			return false;
+		}
+		return true;
 	}
 }

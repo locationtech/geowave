@@ -3,17 +3,20 @@ package mil.nga.giat.geowave.format.geotools.vector;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import mil.nga.giat.geowave.core.geotime.IndexType;
+import mil.nga.giat.geowave.core.geotime.store.dimension.GeometryWrapper;
+import mil.nga.giat.geowave.core.geotime.store.dimension.Time;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.ingest.GeoWaveData;
 import mil.nga.giat.geowave.core.ingest.local.LocalFileIngestPlugin;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
-import mil.nga.giat.geowave.core.store.index.Index;
+import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 
 import org.apache.log4j.Logger;
 import org.geotools.data.DataStore;
@@ -36,7 +39,6 @@ public class GeoToolsVectorDataStoreIngestPlugin implements
 {
 	private final static Logger LOGGER = Logger.getLogger(GeoToolsVectorDataStoreIngestPlugin.class);
 
-	private final Index[] supportedIndices;
 	private final RetypingVectorDataPlugin retypingPlugin;
 	private final Filter filter;
 
@@ -54,10 +56,6 @@ public class GeoToolsVectorDataStoreIngestPlugin implements
 		// this constructor can be used directly as an extension point for
 		// retyping the original feature data, if the retyping plugin is null,
 		// the data will be ingested as the original type
-		supportedIndices = new Index[] {
-			IndexType.SPATIAL_VECTOR.createDefaultIndex(),
-			IndexType.SPATIAL_TEMPORAL_VECTOR.createDefaultIndex()
-		};
 		this.retypingPlugin = retypingPlugin;
 		this.filter = filter;
 	}
@@ -100,7 +98,7 @@ public class GeoToolsVectorDataStoreIngestPlugin implements
 	@Override
 	public CloseableIterator<GeoWaveData<SimpleFeature>> toGeoWaveData(
 			final File input,
-			final ByteArrayId primaryIndexId,
+			final Collection<ByteArrayId> primaryIndexIds,
 			final String visibility ) {
 		DataStore dataStore = null;
 		List<Name> names = null;
@@ -141,7 +139,7 @@ public class GeoToolsVectorDataStoreIngestPlugin implements
 		}
 		return new SimpleFeatureGeoWaveWrapper(
 				featureCollections,
-				primaryIndexId,
+				primaryIndexIds,
 				visibility,
 				dataStore,
 				retypingPlugin,
@@ -149,12 +147,15 @@ public class GeoToolsVectorDataStoreIngestPlugin implements
 	}
 
 	@Override
-	public Index[] getSupportedIndices() {
-		return supportedIndices;
+	public PrimaryIndex[] getRequiredIndices() {
+		return new PrimaryIndex[] {};
 	}
 
 	@Override
-	public Index[] getRequiredIndices() {
-		return new Index[] {};
+	public Class<? extends CommonIndexValue>[] getSupportedIndexableTypes() {
+		return new Class[] {
+			GeometryWrapper.class,
+			Time.class
+		};
 	}
 }

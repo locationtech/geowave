@@ -20,7 +20,10 @@
 		<module>formats/geotools-vector</module>
 		<module>formats/gpx</module>
 		<module>formats/tdrive</module>
+		<module>formats/gdelt</module>
 		<module>formats/stanag4676/format</module>
 		<module>formats/stanag4676/service</module>
+		<module>cli/debug</module>
+		<module>cli/stats</module>
 	</modules>
 </project>

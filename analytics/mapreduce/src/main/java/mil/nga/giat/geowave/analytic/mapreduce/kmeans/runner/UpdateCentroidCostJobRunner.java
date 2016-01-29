@@ -1,7 +1,6 @@
 package mil.nga.giat.geowave.analytic.mapreduce.kmeans.runner;
 
 import mil.nga.giat.geowave.analytic.PropertyManagement;
-import mil.nga.giat.geowave.analytic.RunnerUtils;
 import mil.nga.giat.geowave.analytic.clustering.CentroidManagerGeoWave;
 import mil.nga.giat.geowave.analytic.clustering.NestedGroupCentroidAssignment;
 import mil.nga.giat.geowave.analytic.mapreduce.CountofDoubleWritable;
@@ -12,7 +11,7 @@ import mil.nga.giat.geowave.analytic.mapreduce.MapReduceJobRunner;
 import mil.nga.giat.geowave.analytic.mapreduce.kmeans.UpdateCentroidCostMapReduce;
 import mil.nga.giat.geowave.analytic.param.CentroidParameters;
 import mil.nga.giat.geowave.analytic.param.ParameterEnum;
-import mil.nga.giat.geowave.datastore.accumulo.mapreduce.output.GeoWaveOutputKey;
+import mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputKey;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.mapreduce.Job;
@@ -46,19 +45,19 @@ public class UpdateCentroidCostJobRunner extends
 
 		CentroidManagerGeoWave.setParameters(
 				config,
+				getScope(),
 				runTimeProperties);
 
 		NestedGroupCentroidAssignment.setParameters(
 				config,
+				getScope(),
 				runTimeProperties);
-
-		RunnerUtils.setParameter(
-				config,
-				UpdateCentroidCostMapReduce.class,
-				runTimeProperties,
+		runTimeProperties.setConfig(
 				new ParameterEnum[] {
 					CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS
-				});
+				},
+				config,
+				getScope());
 
 		return super.run(
 				config,
@@ -78,5 +77,10 @@ public class UpdateCentroidCostJobRunner extends
 		job.setReduceSpeculativeExecution(false);
 		job.setOutputKeyClass(GeoWaveOutputKey.class);
 		job.setOutputValueClass(SimpleFeature.class);
+	}
+
+	@Override
+	protected String getJobName() {
+		return "Update Centroid Cost";
 	}
 }

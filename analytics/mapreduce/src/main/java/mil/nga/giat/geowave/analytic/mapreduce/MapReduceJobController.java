@@ -1,13 +1,15 @@
 package mil.nga.giat.geowave.analytic.mapreduce;
 
 import java.io.IOException;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 
 import mil.nga.giat.geowave.analytic.IndependentJobRunner;
 import mil.nga.giat.geowave.analytic.PropertyManagement;
 import mil.nga.giat.geowave.analytic.param.MapReduceParameters;
+import mil.nga.giat.geowave.analytic.param.ParameterEnum;
 
-import org.apache.commons.cli.Option;
 import org.apache.hadoop.conf.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -80,16 +82,17 @@ public class MapReduceJobController implements
 	}
 
 	@Override
-	public void fillOptions(
-			final Set<Option> options ) {
-		MapReduceParameters.fillOptions(options);
+	public Collection<ParameterEnum<?>> getParameters() {
+		final Set<ParameterEnum<?>> params = new HashSet<ParameterEnum<?>>();
+		params.addAll(MapReduceParameters.getParameters());
 
 		for (int i = 0; i < runners.length; i++) {
 			final MapReduceJobRunner runner = runners[i];
 			if (runner instanceof IndependentJobRunner) {
-				((IndependentJobRunner) runner).fillOptions(options);
+				params.addAll(((IndependentJobRunner) runner).getParameters());
 			}
 		}
+		return params;
 	}
 
 	@Override

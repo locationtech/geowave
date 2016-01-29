@@ -2,17 +2,25 @@ package mil.nga.giat.geowave.format.stanag4676;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.TimeZone;
+import java.util.UUID;
 
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import mil.nga.giat.geowave.core.geotime.GeometryUtils;
-import mil.nga.giat.geowave.core.geotime.IndexType;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialTemporalDimensionalityTypeProvider;
+import mil.nga.giat.geowave.core.geotime.store.dimension.GeometryWrapper;
+import mil.nga.giat.geowave.core.geotime.store.dimension.Time;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.ingest.GeoWaveData;
@@ -28,8 +36,10 @@ import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.core.store.data.field.FieldVisibilityHandler;
 import mil.nga.giat.geowave.core.store.data.visibility.GlobalVisibilityHandler;
-import mil.nga.giat.geowave.core.store.index.Index;
+import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
+import mil.nga.giat.geowave.core.store.index.CustomIdIndex;
 import mil.nga.giat.geowave.core.store.index.NullIndex;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.format.stanag4676.image.ImageChip;
 import mil.nga.giat.geowave.format.stanag4676.image.ImageChipDataAdapter;
 import mil.nga.giat.geowave.format.stanag4676.parser.NATO4676Decoder;
@@ -48,11 +58,6 @@ import org.slf4j.LoggerFactory;
 import com.google.common.collect.Iterators;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.LineString;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.TimeZone;
-import java.util.UUID;
-import mil.nga.giat.geowave.core.store.index.CustomIdIndex;
 
 public class Stanag4676IngestPlugin extends
 		AbstractStageWholeFileToAvro<Object> implements
@@ -60,15 +65,18 @@ public class Stanag4676IngestPlugin extends
 		LocalFileIngestPlugin<Object>
 {
 	private static Logger LOGGER = LoggerFactory.getLogger(Stanag4676IngestPlugin.class);
-	private final Index[] supportedIndices;
-	public final static Index IMAGE_CHIP_INDEX = new NullIndex(
+	public final static PrimaryIndex IMAGE_CHIP_INDEX = new NullIndex(
 			"IMAGERY_CHIPS");
 	public final static ByteArrayId MISSION_SUMMARY_ID = new ByteArrayId(
 			"MISSION_SUMMARY");
-	public final static Index MISSION_SUMMARY = new CustomIdIndex(
-			IndexType.SPATIAL_TEMPORAL_VECTOR.createDefaultIndexStrategy(),
-			IndexType.SPATIAL_TEMPORAL_VECTOR.getDefaultIndexModel(),
+	private final static PrimaryIndex DEFAULT_SPATIAL_TEMPORAL = new SpatialTemporalDimensionalityTypeProvider.SpatialTemporalIndexBuilder().createIndex();
+	public final static PrimaryIndex MISSION_SUMMARY = new CustomIdIndex(
+			DEFAULT_SPATIAL_TEMPORAL.getIndexStrategy(),
+			DEFAULT_SPATIAL_TEMPORAL.getIndexModel(),
 			MISSION_SUMMARY_ID);
+	private static final List<ByteArrayId> MISSION_SUMMARY_AS_ID_LIST = Arrays.asList(MISSION_SUMMARY_ID);
+
+	private static final List<ByteArrayId> IMAGE_CHIP_AS_ID_LIST = Arrays.asList(IMAGE_CHIP_INDEX.getId());
 
 	@Override
 	public String[] getFileExtensionFilters() {
@@ -80,12 +88,6 @@ public class Stanag4676IngestPlugin extends
 
 	public Stanag4676IngestPlugin() {
 		super();
-		supportedIndices = new Index[] {
-			IndexType.SPATIAL_VECTOR.createDefaultIndex(),
-			IndexType.SPATIAL_TEMPORAL_VECTOR.createDefaultIndex(),
-			MISSION_SUMMARY,
-			IMAGE_CHIP_INDEX
-		};
 	}
 
 	@Override
@@ -110,11 +112,6 @@ public class Stanag4676IngestPlugin extends
 	}
 
 	@Override
-	public Index[] getSupportedIndices() {
-		return supportedIndices;
-	}
-
-	@Override
 	public IngestWithReducer<WholeFile, ?, ?, Object> ingestWithReducer() {
 		return new IngestWithReducerImpl();
 	}
@@ -122,11 +119,11 @@ public class Stanag4676IngestPlugin extends
 	@Override
 	public CloseableIterator<GeoWaveData<Object>> toGeoWaveData(
 			final File file,
-			final ByteArrayId primaryIndexId,
+			final Collection<ByteArrayId> primaryIndexIds,
 			final String globalVisibility ) {
 		return ingestWithMapper().toGeoWaveData(
 				toAvroObjects(file)[0],
-				primaryIndexId,
+				primaryIndexIds,
 				globalVisibility);
 	}
 
@@ -188,6 +185,14 @@ public class Stanag4676IngestPlugin extends
 		}
 
 		@Override
+		public Class<? extends CommonIndexValue>[] getSupportedIndexableTypes() {
+			return new Class[] {
+				GeometryWrapper.class,
+				Time.class
+			};
+		}
+
+		@Override
 		public WritableDataAdapter<Object>[] getDataAdapters(
 				final String globalVisibility ) {
 			final FieldVisibilityHandler fieldVisiblityHandler = ((globalVisibility != null) && !globalVisibility.isEmpty()) ? new GlobalVisibilityHandler(
@@ -239,7 +244,7 @@ public class Stanag4676IngestPlugin extends
 		@Override
 		public CloseableIterator<GeoWaveData<Object>> toGeoWaveData(
 				final Text key,
-				final ByteArrayId primaryIndexId,
+				final Collection<ByteArrayId> primaryIndexIds,
 				final String globalVisibility,
 				final Iterable<Stanag4676EventWritable> values ) {
 			final List<GeoWaveData<Object>> geowaveData = new ArrayList<GeoWaveData<Object>>();
@@ -355,7 +360,7 @@ public class Stanag4676IngestPlugin extends
 					geowaveData.add(new GeoWaveData<Object>(
 							new ByteArrayId(
 									StringUtils.stringToBinary(Stanag4676Utils.TRACK_POINT)),
-							primaryIndexId,
+							primaryIndexIds,
 							ptBuilder.buildFeature(event.TrackItemUUID.toString())));
 				}
 				// build collection of motion events
@@ -414,21 +419,29 @@ public class Stanag4676IngestPlugin extends
 					geowaveData.add(new GeoWaveData<Object>(
 							new ByteArrayId(
 									StringUtils.stringToBinary(Stanag4676Utils.MOTION_POINT)),
-							primaryIndexId,
+							primaryIndexIds,
 							motionBuilder.buildFeature(event.TrackItemUUID.toString())));
 				}
 				else if (event.EventType.get() == 2) {
-					Date date = new Date(
+					final Date date = new Date(
 							event.TimeStamp.get());
-					DateFormat format = new SimpleDateFormat(
+					final DateFormat format = new SimpleDateFormat(
 							"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 					format.setTimeZone(TimeZone.getTimeZone("UTC"));
-					String dateStr = format.format(date);
+					final String dateStr = format.format(date);
 
-					if (objectClass.length() != 0) objectClass += ",";
-					if (objectClassConf.length() != 0) objectClassConf += ",";
-					if (objectClassRel.length() != 0) objectClassRel += ",";
-					if (objectClassTimes.length() != 0) objectClassTimes += ",";
+					if (objectClass.length() != 0) {
+						objectClass += ",";
+					}
+					if (objectClassConf.length() != 0) {
+						objectClassConf += ",";
+					}
+					if (objectClassRel.length() != 0) {
+						objectClassRel += ",";
+					}
+					if (objectClassTimes.length() != 0) {
+						objectClassTimes += ",";
+					}
 
 					objectClass += event.ObjectClass.toString();
 					objectClassConf += event.ObjectClassConf.toString();
@@ -445,7 +458,7 @@ public class Stanag4676IngestPlugin extends
 					geowaveData.add(new GeoWaveData<Object>(
 							new ByteArrayId(
 									StringUtils.stringToBinary(Stanag4676Utils.MISSION_FRAME)),
-							MISSION_SUMMARY_ID,
+							MISSION_SUMMARY_AS_ID_LIST,
 							missionFrameBuilder.buildFeature(UUID.randomUUID().toString())));
 				}
 				else if (event.EventType.get() == 4) {
@@ -464,7 +477,7 @@ public class Stanag4676IngestPlugin extends
 					geowaveData.add(new GeoWaveData<Object>(
 							new ByteArrayId(
 									StringUtils.stringToBinary(Stanag4676Utils.MISSION_SUMMARY)),
-							MISSION_SUMMARY_ID,
+							MISSION_SUMMARY_AS_ID_LIST,
 							missionSummaryBuilder.buildFeature(UUID.randomUUID().toString())));
 				}
 				if (event.Image != null) {
@@ -472,7 +485,7 @@ public class Stanag4676IngestPlugin extends
 					if ((imageBytes != null) && (imageBytes.length > 0)) {
 						geowaveData.add(new GeoWaveData(
 								ImageChipDataAdapter.ADAPTER_ID,
-								IMAGE_CHIP_INDEX.getId(),
+								IMAGE_CHIP_AS_ID_LIST,
 								new ImageChip(
 										mission,
 										trackUuid,
@@ -534,7 +547,7 @@ public class Stanag4676IngestPlugin extends
 				geowaveData.add(new GeoWaveData<Object>(
 						new ByteArrayId(
 								StringUtils.stringToBinary(Stanag4676Utils.TRACK)),
-						primaryIndexId,
+						primaryIndexIds,
 						trackBuilder.buildFeature(trackUuid)));
 			}
 			return new CloseableIterator.Wrapper<GeoWaveData<Object>>(
@@ -544,7 +557,7 @@ public class Stanag4676IngestPlugin extends
 		@Override
 		public CloseableIterator<GeoWaveData<Object>> toGeoWaveData(
 				final WholeFile input,
-				final ByteArrayId primaryIndexId,
+				final Collection<ByteArrayId> primaryIndexIds,
 				final String globalVisibility ) {
 			try (CloseableIterator<KeyValueData<Text, Stanag4676EventWritable>> intermediateData = toIntermediateMapReduceData(input)) {
 				// this is much better done in the reducer of a map reduce job,
@@ -559,13 +572,13 @@ public class Stanag4676IngestPlugin extends
 								next.getKey(),
 								trackEvents);
 					}
-					trackEvents.add((Stanag4676EventWritable) next.getValue());
+					trackEvents.add(next.getValue());
 				}
 				final List<CloseableIterator<GeoWaveData<Object>>> iterators = new ArrayList<CloseableIterator<GeoWaveData<Object>>>();
 				for (final Entry<Text, List<Stanag4676EventWritable>> entry : trackUuidMap.entrySet()) {
 					iterators.add(toGeoWaveData(
 							entry.getKey(),
-							primaryIndexId,
+							primaryIndexIds,
 							globalVisibility,
 							entry.getValue()));
 				}
@@ -584,8 +597,8 @@ public class Stanag4676IngestPlugin extends
 	}
 
 	@Override
-	public Index[] getRequiredIndices() {
-		return new Index[] {
+	public PrimaryIndex[] getRequiredIndices() {
+		return new PrimaryIndex[] {
 			IMAGE_CHIP_INDEX,
 			MISSION_SUMMARY
 		};
@@ -594,6 +607,14 @@ public class Stanag4676IngestPlugin extends
 	@Override
 	public IngestPluginBase<WholeFile, Object> getIngestWithAvroPlugin() {
 		return ingestWithMapper();
+	}
+
+	@Override
+	public Class<? extends CommonIndexValue>[] getSupportedIndexableTypes() {
+		return new Class[] {
+			GeometryWrapper.class,
+			Time.class
+		};
 	}
 
 }

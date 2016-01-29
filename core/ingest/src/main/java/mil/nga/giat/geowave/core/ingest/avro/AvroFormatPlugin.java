@@ -1,7 +1,7 @@
 package mil.nga.giat.geowave.core.ingest.avro;
 
-import mil.nga.giat.geowave.core.ingest.IndexProvider;
 import mil.nga.giat.geowave.core.ingest.IngestPluginBase;
+import mil.nga.giat.geowave.core.ingest.index.IndexProvider;
 import mil.nga.giat.geowave.core.ingest.local.LocalPluginBase;
 
 /**

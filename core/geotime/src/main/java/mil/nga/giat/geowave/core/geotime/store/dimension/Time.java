@@ -6,7 +6,7 @@ import mil.nga.giat.geowave.core.index.Persistable;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericData;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericRange;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericValue;
-import mil.nga.giat.geowave.core.store.dimension.DimensionField;
+import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 
 /**
@@ -77,7 +77,7 @@ public interface Time extends
 
 		@Override
 		public boolean overlaps(
-				final DimensionField[] field,
+				final NumericDimensionField[] field,
 				final NumericData[] rangeData ) {
 			assert (field[0] instanceof TimeField);
 			long t0 = (long) Math.ceil(rangeData[0].getMax()) - this.startTime;
@@ -141,7 +141,7 @@ public interface Time extends
 
 		@Override
 		public boolean overlaps(
-				final DimensionField[] field,
+				final NumericDimensionField[] field,
 				final NumericData[] rangeData ) {
 			assert (field[0] instanceof TimeField);
 			return (long) Math.floor(rangeData[0].getMin()) <= this.time && (long) Math.ceil(rangeData[0].getMax()) >= this.time;

@@ -4,28 +4,26 @@ import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import mil.nga.giat.geowave.analytic.AnalyticFeature;
 import mil.nga.giat.geowave.analytic.SimpleFeatureItemWrapperFactory;
-import mil.nga.giat.geowave.analytic.clustering.CentroidManagerGeoWave;
-import mil.nga.giat.geowave.analytic.clustering.CentroidPairing;
-import mil.nga.giat.geowave.analytic.clustering.ClusteringUtils;
-import mil.nga.giat.geowave.analytic.clustering.NestedGroupCentroidAssignment;
 import mil.nga.giat.geowave.analytic.distance.FeatureCentroidDistanceFn;
 import mil.nga.giat.geowave.analytic.kmeans.AssociationNotification;
-import mil.nga.giat.geowave.core.geotime.IndexType;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import mil.nga.giat.geowave.core.index.StringUtils;
-import mil.nga.giat.geowave.core.store.index.Index;
-import mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStore;
-import mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations;
+import mil.nga.giat.geowave.core.store.DataStore;
+import mil.nga.giat.geowave.core.store.IndexWriter;
+import mil.nga.giat.geowave.core.store.StoreFactoryFamilySpi;
+import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
+import mil.nga.giat.geowave.core.store.index.IndexStore;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.core.store.memory.DataStoreUtils;
+import mil.nga.giat.geowave.core.store.memory.MemoryStoreFactoryFamily;
 
-import org.apache.accumulo.core.client.AccumuloException;
-import org.apache.accumulo.core.client.AccumuloSecurityException;
-import org.apache.accumulo.core.client.Connector;
-import org.apache.accumulo.core.client.mock.MockInstance;
-import org.apache.accumulo.core.client.security.tokens.PasswordToken;
 import org.geotools.feature.type.BasicFeatureTypes;
 import org.junit.Test;
 import org.opengis.feature.simple.SimpleFeature;
@@ -37,20 +35,25 @@ import com.vividsolutions.jts.geom.GeometryFactory;
 public class NestedGroupCentroidAssignmentTest
 {
 
+	private <T> void ingest(
+			final DataStore dataStore,
+			final WritableDataAdapter<T> adapter,
+			final PrimaryIndex index,
+			final T entry )
+			throws IOException {
+		try (IndexWriter writer = dataStore.createIndexWriter(
+				index,
+				DataStoreUtils.DEFAULT_VISIBILITY)) {
+			writer.write(
+					adapter,
+					entry);
+			writer.close();
+		}
+	}
+
 	@Test
 	public void test()
-			throws AccumuloException,
-			AccumuloSecurityException,
-			IOException {
-		final MockInstance mockDataInstance = new MockInstance();
-		final Connector mockDataConnector = mockDataInstance.getConnector(
-				"root",
-				new PasswordToken(
-						new byte[0]));
-
-		final BasicAccumuloOperations dataOps = new BasicAccumuloOperations(
-				mockDataConnector);
-
+			throws IOException {
 		final SimpleFeatureType ftype = AnalyticFeature.createGeometryFeatureAdapter(
 				"centroid",
 				new String[] {
@@ -82,13 +85,22 @@ public class NestedGroupCentroidAssignmentTest
 				1,
 				0);
 
-		final Index index = IndexType.SPATIAL_VECTOR.createDefaultIndex();
+		final PrimaryIndex index = new SpatialDimensionalityTypeProvider().createPrimaryIndex();
 		final FeatureDataAdapter adapter = new FeatureDataAdapter(
 				ftype);
-
-		final AccumuloDataStore dataStore = new AccumuloDataStore(
-				dataOps);
-		dataStore.ingest(
+		final String namespace = "test_" + getClass().getName();
+		final StoreFactoryFamilySpi storeFamily = new MemoryStoreFactoryFamily();
+		final DataStore dataStore = storeFamily.getDataStoreFactory().createStore(
+				new HashMap<String, Object>(),
+				namespace);
+		final IndexStore indexStore = storeFamily.getIndexStoreFactory().createStore(
+				new HashMap<String, Object>(),
+				namespace);
+		final AdapterStore adapterStore = storeFamily.getAdapterStoreFactory().createStore(
+				new HashMap<String, Object>(),
+				namespace);
+		ingest(
+				dataStore,
 				adapter,
 				index,
 				level1b1G1Feature);
@@ -112,7 +124,8 @@ public class NestedGroupCentroidAssignmentTest
 				1,
 				1,
 				0);
-		dataStore.ingest(
+		ingest(
+				dataStore,
 				adapter,
 				index,
 				level1b1G2Feature);
@@ -136,7 +149,8 @@ public class NestedGroupCentroidAssignmentTest
 				2,
 				1,
 				0);
-		dataStore.ingest(
+		ingest(
+				dataStore,
 				adapter,
 				index,
 				level2b1G1Feature);
@@ -160,7 +174,8 @@ public class NestedGroupCentroidAssignmentTest
 				2,
 				1,
 				0);
-		dataStore.ingest(
+		ingest(
+				dataStore,
 				adapter,
 				index,
 				level2b1G2Feature);
@@ -185,14 +200,17 @@ public class NestedGroupCentroidAssignmentTest
 				2,
 				1,
 				0);
-		dataStore.ingest(
+		ingest(
+				dataStore,
 				adapter,
 				index,
 				level2B2G1Feature);
 
 		final SimpleFeatureItemWrapperFactory wrapperFactory = new SimpleFeatureItemWrapperFactory();
 		final CentroidManagerGeoWave<SimpleFeature> mananger = new CentroidManagerGeoWave<SimpleFeature>(
-				dataOps,
+				dataStore,
+				indexStore,
+				adapterStore,
 				new SimpleFeatureItemWrapperFactory(),
 				StringUtils.stringFromBinary(adapter.getAdapterId().getBytes()),
 				StringUtils.stringFromBinary(index.getId().getBytes()),
@@ -264,7 +282,9 @@ public class NestedGroupCentroidAssignmentTest
 		// level two with different batch than parent
 
 		final CentroidManagerGeoWave<SimpleFeature> mananger2 = new CentroidManagerGeoWave<SimpleFeature>(
-				dataOps,
+				dataStore,
+				indexStore,
+				adapterStore,
 				new SimpleFeatureItemWrapperFactory(),
 				StringUtils.stringFromBinary(adapter.getAdapterId().getBytes()),
 				StringUtils.stringFromBinary(index.getId().getBytes()),

@@ -33,4 +33,9 @@ public class SimpleLongIndexStrategy extends
 		return (long) value;
 	}
 
+	@Override
+	public int getByteOffsetFromDimensionalIndex() {
+		return 0;
+	}
+
 }

@@ -13,8 +13,6 @@ import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.data.visibility.GlobalVisibilityHandler;
 
-import org.apache.accumulo.core.client.AccumuloException;
-import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.geotools.data.DataUtilities;
 import org.geotools.feature.SchemaException;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
@@ -53,9 +51,7 @@ public class FeatureHyperLogLogStaticticsTest
 
 	@Before
 	public void setup()
-			throws AccumuloException,
-			AccumuloSecurityException,
-			SchemaException,
+			throws SchemaException,
 			CQLException,
 			ParseException {
 		schema = DataUtilities.createType(
@@ -81,7 +77,7 @@ public class FeatureHyperLogLogStaticticsTest
 
 	private SimpleFeature create(
 			final String pid,
-			Set<String> set ) {
+			final Set<String> set ) {
 		final List<AttributeDescriptor> descriptors = schema.getAttributeDescriptors();
 		final Object[] defaults = new Object[descriptors.size()];
 		int p = 0;
@@ -106,8 +102,8 @@ public class FeatureHyperLogLogStaticticsTest
 	@Test
 	public void test() {
 
-		Set<String> firstSet = new HashSet<String>();
-		Set<String> secondSet = new HashSet<String>();
+		final Set<String> firstSet = new HashSet<String>();
+		final Set<String> secondSet = new HashSet<String>();
 		final FeatureHyperLogLogStatistics stat = new FeatureHyperLogLogStatistics(
 				new ByteArrayId(
 						"sp.geostuff"),

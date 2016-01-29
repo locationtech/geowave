@@ -14,11 +14,11 @@ import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.Persistable;
 import mil.nga.giat.geowave.core.index.PersistenceUtils;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
+import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations;
 import mil.nga.giat.geowave.datastore.accumulo.IteratorConfig;
 import mil.nga.giat.geowave.datastore.accumulo.Writer;
-import mil.nga.giat.geowave.datastore.accumulo.util.CloseableIteratorWrapper;
-import mil.nga.giat.geowave.datastore.accumulo.util.CloseableIteratorWrapper.ScannerClosableWrapper;
+import mil.nga.giat.geowave.datastore.accumulo.util.ScannerClosableWrapper;
 
 import org.apache.accumulo.core.client.BatchScanner;
 import org.apache.accumulo.core.client.IteratorSetting;
@@ -47,7 +47,7 @@ abstract public class AbstractAccumuloPersistence<T extends Persistable>
 {
 	public final static String METADATA_TABLE = "GEOWAVE_METADATA";
 	private final static Logger LOGGER = Logger.getLogger(AbstractAccumuloPersistence.class);
-	private final AccumuloOperations accumuloOperations;
+	protected final AccumuloOperations accumuloOperations;
 
 	// TODO: should we concern ourselves with multiple distributed processes
 	// updating and looking up objects simultaneously that would require some
@@ -437,7 +437,7 @@ abstract public class AbstractAccumuloPersistence<T extends Persistable>
 							secondaryId);
 				}
 			}
-			catch (IOException e) {
+			catch (final IOException e) {
 				LOGGER.error(
 						"Unable to delete objects",
 						e);
@@ -500,7 +500,7 @@ abstract public class AbstractAccumuloPersistence<T extends Persistable>
 
 		private DeleteIteratorWrapper(
 				final Iterator<Entry<Key, Value>> it,
-				String[] authorizations ) {
+				final String[] authorizations ) {
 			this.it = it;
 			this.authorizations = authorizations;
 		}
@@ -512,7 +512,7 @@ abstract public class AbstractAccumuloPersistence<T extends Persistable>
 
 		@Override
 		public T next() {
-			Map.Entry<Key, Value> entry = it.next();
+			final Map.Entry<Key, Value> entry = it.next();
 			accumuloOperations.delete(
 					getAccumuloTablename(),
 					Arrays.asList(new ByteArrayId(

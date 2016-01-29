@@ -1,5 +1,7 @@
 package mil.nga.giat.geowave.analytic.mapreduce.kmeans.runner;
 
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -16,9 +18,9 @@ import mil.nga.giat.geowave.analytic.param.CentroidParameters;
 import mil.nga.giat.geowave.analytic.param.CommonParameters;
 import mil.nga.giat.geowave.analytic.param.FormatConfiguration;
 import mil.nga.giat.geowave.analytic.param.GlobalParameters;
+import mil.nga.giat.geowave.analytic.param.ParameterEnum;
 import mil.nga.giat.geowave.analytic.param.SampleParameters;
 
-import org.apache.commons.cli.Option;
 import org.apache.hadoop.conf.Configuration;
 import org.opengis.feature.simple.SimpleFeature;
 
@@ -144,14 +146,13 @@ public class KMeansParallelJobRunner extends
 	}
 
 	@Override
-	public void fillOptions(
-			Set<Option> options ) {
-		kmeansJobRunner.fillOptions(options);
-		sampleSetsRunner.fillOptions(options);
+	public Collection<ParameterEnum<?>> getParameters() {
+		final Set<ParameterEnum<?>> params = new HashSet<ParameterEnum<?>>();
+		params.addAll(kmeansJobRunner.getParameters());
+		params.addAll(sampleSetsRunner.getParameters());
 		// while override
-		PropertyManagement.removeOption(
-				options,
-				CentroidParameters.Centroid.ZOOM_LEVEL);
+		params.remove(CentroidParameters.Centroid.ZOOM_LEVEL);
+		return params;
 	}
 
 }

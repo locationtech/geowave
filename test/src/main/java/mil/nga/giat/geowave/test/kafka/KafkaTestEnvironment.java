@@ -6,8 +6,9 @@ import java.util.Properties;
 
 import kafka.server.KafkaConfig;
 import kafka.server.KafkaServerStartable;
+import mil.nga.giat.geowave.core.cli.GenericStoreCommandLineOptions;
 import mil.nga.giat.geowave.core.cli.GeoWaveMain;
-import mil.nga.giat.geowave.core.geotime.IndexType;
+import mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStoreFactory;
 import mil.nga.giat.geowave.test.GeoWaveTestEnvironment;
 
 import org.apache.commons.lang.StringUtils;
@@ -41,20 +42,22 @@ abstract public class KafkaTestEnvironment<I> extends
 					e);
 		}
 		synchronized (MUTEX) {
+			// FIXME
 			args = StringUtils.split("-kafkastage -f gpx -b " + ingestFilePath + " -metadataBrokerList " + localhost + ":9092 -requestRequiredAcks 1 -producerType sync -retryBackoffMs 1000 -serializerClass mil.nga.giat.geowave.core.ingest.kafka.AvroKafkaEncoder" + ' ');
 		}
 
-		GeoWaveMain.main(args);
+		GeoWaveMain.run(args);
 	}
 
 	protected void testKafkaIngest(
-			final IndexType indexType,
+			final boolean spatialTemporal,
 			final String ingestFilePath ) {
 		LOGGER.warn("Ingesting '" + ingestFilePath + "' - this may take several minutes...");
+		// FIXME
 		final String[] args = StringUtils.split(
-				"-kafkaingest -f gpx -consumerTimeoutMs 5000 -reconnectOnTimeout -groupId testGroup -autoOffsetReset smallest -fetchMessageMaxBytes " + MAX_MESSAGE_BYTES + " -zookeeperConnect " + zookeeper + " -z " + zookeeper + " -i " + accumuloInstance + " -u " + accumuloUser + " -p " + accumuloPassword + " -n " + TEST_NAMESPACE + " -dim " + (indexType.equals(IndexType.SPATIAL_VECTOR) ? "spatial" : "spatial-temporal"),
-				' ');
-		GeoWaveMain.main(args);
+				"-kafkaingest" + " -f gpx -consumerTimeoutMs 5000 -reconnectOnTimeout -groupId testGroup -autoOffsetReset smallest -fetchMessageMaxBytes " + MAX_MESSAGE_BYTES + " -zookeeperConnect " + zookeeper + " -" + GenericStoreCommandLineOptions.NAMESPACE_OPTION_KEY + " " + TEST_NAMESPACE + " -dim " + (spatialTemporal ? "spatial-temporal" : "spatial"),
+				" -datastore " + new AccumuloDataStoreFactory().getName() + " -z " + zookeeper + " -i " + accumuloInstance + " -u " + accumuloUser + " -p " + accumuloPassword + ' ');
+		GeoWaveMain.run(args);
 	}
 
 	@BeforeClass

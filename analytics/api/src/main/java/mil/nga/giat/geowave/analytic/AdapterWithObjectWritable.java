@@ -5,7 +5,7 @@ import java.io.DataOutput;
 import java.io.IOException;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.datastore.accumulo.mapreduce.HadoopWritableSerializationTool;
+import mil.nga.giat.geowave.mapreduce.HadoopWritableSerializationTool;
 
 import org.apache.hadoop.io.ObjectWritable;
 import org.apache.hadoop.io.Writable;

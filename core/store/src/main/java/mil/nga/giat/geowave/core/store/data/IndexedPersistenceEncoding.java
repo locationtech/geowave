@@ -1,34 +1,35 @@
 package mil.nga.giat.geowave.core.store.data;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 
 /**
- * This class models all of the necessary information for persisting data in
- * Accumulo (following the common index model) and is used internally within
+ * This class models all of the necessary information for persisting data in the
+ * data store (following the common index model) and is used internally within
  * GeoWave as an intermediary object between the direct storage format and the
  * native data format. It also contains information about the persisted object
  * within a particular index such as the insertion ID in the index and the
  * number of duplicates for this entry in the index, and is used when reading
  * data from the index.
  */
-public class IndexedPersistenceEncoding extends
-		PersistenceEncoding
+public class IndexedPersistenceEncoding<T> extends
+		PersistenceEncoding<T>
 {
-	private final ByteArrayId indexId;
+	private final ByteArrayId indexInsertionId;
 	private final int duplicateCount;
 
 	public IndexedPersistenceEncoding(
 			final ByteArrayId adapterId,
 			final ByteArrayId dataId,
-			final ByteArrayId indexId,
+			final ByteArrayId indexInsertionId,
 			final int duplicateCount,
-			final PersistentDataset<? extends CommonIndexValue> commonData ) {
+			final PersistentDataset<T> commonData,
+			final PersistentDataset<byte[]> unknownData ) {
 		super(
 				adapterId,
 				dataId,
-				commonData);
-		this.indexId = indexId;
+				commonData,
+				unknownData);
+		this.indexInsertionId = indexInsertionId;
 		this.duplicateCount = duplicateCount;
 	}
 
@@ -39,7 +40,7 @@ public class IndexedPersistenceEncoding extends
 	 * @return the index ID
 	 */
 	public ByteArrayId getIndexInsertionId() {
-		return indexId;
+		return indexInsertionId;
 	}
 
 	@Override

@@ -1,19 +1,22 @@
 package mil.nga.giat.geowave.test.service;
 
-import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import mil.nga.giat.geowave.core.cli.GenericStoreCommandLineOptions;
 import mil.nga.giat.geowave.core.index.StringUtils;
+import mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations;
 import mil.nga.giat.geowave.test.mapreduce.MapReduceTestEnvironment;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.mortbay.jetty.Connector;
@@ -24,7 +27,8 @@ import org.mortbay.jetty.webapp.WebAppContext;
 import org.mortbay.xml.XmlConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.xml.sax.SAXException;
+
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 abstract public class ServicesTestEnvironment extends
 		MapReduceTestEnvironment
@@ -54,11 +58,12 @@ abstract public class ServicesTestEnvironment extends
 		try {
 			final PrintWriter writer = new PrintWriter(
 					configFile,
-					StringUtils.UTF8_CHAR_SET.toString());
-			writer.println("zookeeper.url=" + zookeeper);
-			writer.println("zookeeper.instance=" + accumuloInstance);
-			writer.println("zookeeper.username=" + accumuloUser);
-			writer.println("zookeeper.password=" + accumuloPassword);
+					StringUtils.GEOWAVE_CHAR_SET.toString());
+			writer.println("datastore=accumulo");
+			writer.println("zookeeper=" + zookeeper);
+			writer.println("instance=" + accumuloInstance);
+			writer.println("user=" + accumuloUser);
+			writer.println("password=" + accumuloPassword);
 			writer.println("geoserver.url=" + JETTY_BASE_URL);
 			writer.println("geoserver.username=" + GEOSERVER_USER);
 			writer.println("geoserver.password=" + GEOSERVER_PASS);
@@ -73,7 +78,7 @@ abstract public class ServicesTestEnvironment extends
 					"Unable to find config file",
 					e);
 		}
-		catch (UnsupportedEncodingException e) {
+		catch (final UnsupportedEncodingException e) {
 			LOGGER.error(
 					"Unable to write config file in UTF-8",
 					e);
@@ -111,7 +116,7 @@ abstract public class ServicesTestEnvironment extends
 								return new WebAppClassLoader(
 										gsWebapp);
 							}
-							catch (IOException e) {
+							catch (final IOException e) {
 								LOGGER.error(
 										"Unable to create new classloader",
 										e);
@@ -178,7 +183,7 @@ abstract public class ServicesTestEnvironment extends
 				catch (final RuntimeException e) {
 					throw e;
 				}
-				catch (Exception e) {
+				catch (final Exception e) {
 					LOGGER.error(
 							"Could not start the Jetty server: " + e.getMessage(),
 							e);
@@ -196,6 +201,26 @@ abstract public class ServicesTestEnvironment extends
 				}
 			}
 		}
+	}
+
+	protected Map<String, String> getAccumuloConfig() {
+		final Map<String, String> accumuloConfig = new HashMap<String, String>();
+		accumuloConfig.put(
+				BasicAccumuloOperations.ZOOKEEPER_CONFIG_NAME,
+				zookeeper);
+		accumuloConfig.put(
+				BasicAccumuloOperations.PASSWORD_CONFIG_NAME,
+				accumuloPassword);
+		accumuloConfig.put(
+				BasicAccumuloOperations.USER_CONFIG_NAME,
+				accumuloUser);
+		accumuloConfig.put(
+				BasicAccumuloOperations.INSTANCE_CONFIG_NAME,
+				accumuloInstance);
+		accumuloConfig.put(
+				GenericStoreCommandLineOptions.NAMESPACE_OPTION_KEY,
+				TEST_NAMESPACE);
+		return accumuloConfig;
 	}
 
 	@AfterClass
