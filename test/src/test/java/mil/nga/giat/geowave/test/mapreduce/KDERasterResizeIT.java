@@ -10,6 +10,14 @@ import java.util.Map.Entry;
 
 import javax.media.jai.Interpolation;
 
+import org.apache.accumulo.core.client.Connector;
+import org.apache.hadoop.util.ToolRunner;
+import org.geotools.geometry.GeneralEnvelope;
+import org.junit.Assert;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.opengis.coverage.grid.GridCoverage;
+
 import mil.nga.giat.geowave.adapter.raster.plugin.GeoWaveGTRasterFormat;
 import mil.nga.giat.geowave.adapter.raster.plugin.GeoWaveRasterConfig;
 import mil.nga.giat.geowave.adapter.raster.plugin.GeoWaveRasterReader;
@@ -21,14 +29,6 @@ import mil.nga.giat.geowave.core.cli.GenericStoreCommandLineOptions;
 import mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations;
 import mil.nga.giat.geowave.datastore.accumulo.util.ConnectorPool;
 import mil.nga.giat.geowave.test.GeoWaveTestEnvironment;
-
-import org.apache.accumulo.core.client.Connector;
-import org.apache.hadoop.util.ToolRunner;
-import org.geotools.geometry.GeneralEnvelope;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.opengis.coverage.grid.GridCoverage;
 
 public class KDERasterResizeIT extends
 		MapReduceTestEnvironment
@@ -262,7 +262,8 @@ public class KDERasterResizeIT extends
 			throws Exception {
 		final Map<String, String> options = getAccumuloConfigOptions();
 		final StringBuilder str = new StringBuilder(
-				"namespace=").append(
+				GenericStoreCommandLineOptions.NAMESPACE_OPTION_KEY).append(
+				"=").append(
 				TEST_COVERAGE_NAMESPACE).append(
 				";equalizeHistogramOverride=false;interpolationOverride=").append(
 				Interpolation.INTERP_NEAREST);
