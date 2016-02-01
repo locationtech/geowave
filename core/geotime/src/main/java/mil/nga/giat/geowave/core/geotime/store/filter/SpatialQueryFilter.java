@@ -22,12 +22,8 @@ import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import com.google.common.collect.Interner;
 import com.google.common.collect.Interners;
 import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.Point;
-import com.vividsolutions.jts.geom.Polygon;
 import com.vividsolutions.jts.geom.prep.PreparedGeometry;
 import com.vividsolutions.jts.geom.prep.PreparedGeometryFactory;
-import com.vividsolutions.jts.geom.prep.PreparedPoint;
-import com.vividsolutions.jts.geom.prep.PreparedPolygon;
 
 /**
  * This filter can perform fine-grained acceptance testing (intersection test
@@ -54,37 +50,11 @@ public class SpatialQueryFilter extends
 	public enum CompareOperation
 			implements
 			SpatialQueryCompareOp {
-		OVERLAPS {
-
-			@Override
-			public boolean compare(
-					Geometry dataGeometry,
-					PreparedGeometry constraintGeometry ) {
-				// GEOWAVE-564 - Temporary fix to prevent intersects method
-				// from returning false when used with linestrings in a
-				// multi-threaded environment.
-				boolean doesIntersect = false;
-				if ((dataGeometry instanceof Point || dataGeometry instanceof Polygon) && (constraintGeometry instanceof PreparedPoint || constraintGeometry instanceof PreparedPolygon)) {
-					doesIntersect = constraintGeometry.intersects(dataGeometry);
-				}
-				else {
-					synchronized (constraintGeometry) {
-						doesIntersect = constraintGeometry.intersects(dataGeometry);
-					}
-				}
-				return doesIntersect;
-			}
-
-			@Override
-			public BasicQueryCompareOperation getBaseCompareOp() {
-				return BasicQueryCompareOperation.OVERLAPS;
-			}
-		},
 		CONTAINS {
 			@Override
 			public boolean compare(
-					Geometry dataGeometry,
-					PreparedGeometry constraintGeometry ) {
+					final Geometry dataGeometry,
+					final PreparedGeometry constraintGeometry ) {
 				return constraintGeometry.contains(dataGeometry);
 			}
 
@@ -92,10 +62,24 @@ public class SpatialQueryFilter extends
 			public BasicQueryCompareOperation getBaseCompareOp() {
 				return BasicQueryCompareOperation.CONTAINS;
 			}
+		},
+		OVERLAPS {
+
+			@Override
+			public boolean compare(
+					final Geometry dataGeometry,
+					final PreparedGeometry constraintGeometry ) {
+				return constraintGeometry.intersects(dataGeometry);
+			}
+
+			@Override
+			public BasicQueryCompareOperation getBaseCompareOp() {
+				return BasicQueryCompareOperation.OVERLAPS;
+			}
 		}
 	};
 
-	private CompareOperation compareOp = CompareOperation.OVERLAPS;
+	private CompareOperation compareOperation = CompareOperation.OVERLAPS;
 
 	private Set<ByteArrayId> geometryFieldIds;
 
@@ -119,7 +103,7 @@ public class SpatialQueryFilter extends
 	private SpatialQueryFilter(
 			final StrippedGeometry strippedGeometry,
 			final Geometry queryGeometry,
-			CompareOperation compareOp ) {
+			final CompareOperation compareOp ) {
 		super(
 				strippedGeometry.strippedQuery,
 				strippedGeometry.strippedDimensionDefinitions,
@@ -127,7 +111,7 @@ public class SpatialQueryFilter extends
 		preparedGeometryImage = new GeometryImage(
 				FACTORY.create(queryGeometry));
 		geometryFieldIds = strippedGeometry.geometryFieldIds;
-		this.compareOp = compareOp;
+		this.compareOperation = compareOp;
 	}
 
 	private static class StrippedGeometry
@@ -220,7 +204,7 @@ public class SpatialQueryFilter extends
 			return false;
 		}
 		if (preparedGeometryImage != null) {
-			return compareOp.compare(
+			return compareOperation.compare(
 					dataGeometry,
 					preparedGeometryImage.preparedGeometry);
 		}
@@ -246,7 +230,7 @@ public class SpatialQueryFilter extends
 		}
 		final byte[] theRest = super.toBinary();
 		final ByteBuffer buf = ByteBuffer.allocate(12 + geometryBinary.length + geometryFieldIdByteSize + theRest.length);
-		buf.putInt(compareOp.ordinal());
+		buf.putInt(compareOperation.ordinal());
 		buf.putInt(geometryBinary.length);
 		buf.putInt(geometryFieldIdByteSize);
 		buf.put(geometryBinary);
@@ -259,7 +243,7 @@ public class SpatialQueryFilter extends
 	public void fromBinary(
 			final byte[] bytes ) {
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
-		compareOp = CompareOperation.values()[buf.getInt()];
+		compareOperation = CompareOperation.values()[buf.getInt()];
 		final byte[] geometryBinary = new byte[buf.getInt()];
 		final byte[] theRest = new byte[bytes.length - geometryBinary.length - buf.getInt() - 12];
 		buf.get(geometryBinary);
