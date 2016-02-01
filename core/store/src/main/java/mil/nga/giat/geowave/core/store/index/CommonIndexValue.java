@@ -1,7 +1,7 @@
 package mil.nga.giat.geowave.core.store.index;
 
 import mil.nga.giat.geowave.core.index.sfc.data.NumericData;
-import mil.nga.giat.geowave.core.store.dimension.DimensionField;
+import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;
 
 /**
  * A common index value can be very generic but must have a way to identify its
@@ -16,6 +16,6 @@ public interface CommonIndexValue
 			byte[] visibility );
 
 	public boolean overlaps(
-			DimensionField[] field,
+			NumericDimensionField[] field,
 			NumericData[] rangeData );
 }

@@ -8,14 +8,15 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
-import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import mil.nga.giat.geowave.adapter.vector.ingest.AbstractSimpleFeatureIngestPlugin;
 import mil.nga.giat.geowave.adapter.vector.utils.SimpleFeatureUserDataConfigurationSet;
 import mil.nga.giat.geowave.core.geotime.GeometryUtils;
-import mil.nga.giat.geowave.core.geotime.IndexType;
+import mil.nga.giat.geowave.core.geotime.store.dimension.GeometryWrapper;
+import mil.nga.giat.geowave.core.geotime.store.dimension.Time;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.ingest.GeoWaveData;
@@ -23,10 +24,8 @@ import mil.nga.giat.geowave.core.ingest.IngestPluginBase;
 import mil.nga.giat.geowave.core.ingest.hdfs.mapreduce.IngestWithMapper;
 import mil.nga.giat.geowave.core.ingest.hdfs.mapreduce.IngestWithReducer;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
-import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
-import mil.nga.giat.geowave.core.store.data.field.FieldVisibilityHandler;
-import mil.nga.giat.geowave.core.store.data.visibility.GlobalVisibilityHandler;
-import mil.nga.giat.geowave.core.store.index.Index;
+import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 
 import org.apache.avro.Schema;
 import org.apache.commons.io.IOUtils;
@@ -51,8 +50,6 @@ public class TdriveIngestPlugin extends
 
 	private final ByteArrayId pointKey;
 
-	private final Index[] supportedIndices;
-
 	public TdriveIngestPlugin() {
 
 		tdrivepointType = TdriveUtils.createTdrivePointDataType();
@@ -61,17 +58,13 @@ public class TdriveIngestPlugin extends
 				StringUtils.stringToBinary(TdriveUtils.TDRIVE_POINT_FEATURE));
 		tdrivepointBuilder = new SimpleFeatureBuilder(
 				tdrivepointType);
-		supportedIndices = new Index[] {
-			IndexType.SPATIAL_VECTOR.createDefaultIndex(),
-			IndexType.SPATIAL_TEMPORAL_VECTOR.createDefaultIndex()
-		};
-
 	}
 
 	@Override
 	public String[] getFileExtensionFilters() {
 		return new String[] {
-			"csv"
+			"csv",
+			"txt"
 		};
 	}
 
@@ -88,19 +81,9 @@ public class TdriveIngestPlugin extends
 	}
 
 	@Override
-	public Index[] getSupportedIndices() {
-		return supportedIndices;
-	}
-
-	@Override
-	public WritableDataAdapter<SimpleFeature>[] getDataAdapters(
-			final String globalVisibility ) {
-		final FieldVisibilityHandler<SimpleFeature, Object> fieldVisiblityHandler = ((globalVisibility != null) && !globalVisibility.isEmpty()) ? new GlobalVisibilityHandler<SimpleFeature, Object>(
-				globalVisibility) : null;
-		return new WritableDataAdapter[] {
-			new FeatureDataAdapter(
-					SimpleFeatureUserDataConfigurationSet.configureType(tdrivepointType),
-					fieldVisiblityHandler)
+	protected SimpleFeatureType[] getTypes() {
+		return new SimpleFeatureType[] {
+			SimpleFeatureUserDataConfigurationSet.configureType(tdrivepointType)
 		};
 	}
 
@@ -121,7 +104,7 @@ public class TdriveIngestPlugin extends
 					new InputStreamReader(
 							new FileInputStream(
 									input),
-							StringUtils.UTF8_CHAR_SET));
+							StringUtils.GEOWAVE_CHAR_SET));
 			br = new BufferedReader(
 					fr);
 			String line;
@@ -187,7 +170,7 @@ public class TdriveIngestPlugin extends
 	@Override
 	protected CloseableIterator<GeoWaveData<SimpleFeature>> toGeoWaveDataInternal(
 			final TdrivePoint tdrivePoint,
-			final ByteArrayId primaryIndexId,
+			final Collection<ByteArrayId> primaryIndexIds,
 			final String globalVisibility ) {
 
 		final List<GeoWaveData<SimpleFeature>> featureData = new ArrayList<GeoWaveData<SimpleFeature>>();
@@ -216,7 +199,7 @@ public class TdriveIngestPlugin extends
 				tdrivePoint.getLongitude());
 		featureData.add(new GeoWaveData<SimpleFeature>(
 				pointKey,
-				primaryIndexId,
+				primaryIndexIds,
 				tdrivepointBuilder.buildFeature(tdrivePoint.getTaxiid() + "_" + tdrivePoint.getPointinstance())));
 
 		return new CloseableIterator.Wrapper<GeoWaveData<SimpleFeature>>(
@@ -224,8 +207,8 @@ public class TdriveIngestPlugin extends
 	}
 
 	@Override
-	public Index[] getRequiredIndices() {
-		return new Index[] {};
+	public PrimaryIndex[] getRequiredIndices() {
+		return new PrimaryIndex[] {};
 	}
 
 	public static class IngestTdrivePointFromHdfs extends
@@ -248,5 +231,13 @@ public class TdriveIngestPlugin extends
 	public IngestPluginBase<TdrivePoint, SimpleFeature> getIngestWithAvroPlugin() {
 		return new IngestTdrivePointFromHdfs(
 				this);
+	}
+
+	@Override
+	public Class<? extends CommonIndexValue>[] getSupportedIndexableTypes() {
+		return new Class[] {
+			GeometryWrapper.class,
+			Time.class
+		};
 	}
 }

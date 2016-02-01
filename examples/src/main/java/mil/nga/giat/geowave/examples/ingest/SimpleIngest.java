@@ -4,15 +4,15 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.vividsolutions.jts.geom.Point;
-
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import mil.nga.giat.geowave.core.geotime.GeometryUtils;
-import mil.nga.giat.geowave.core.geotime.IndexType;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import mil.nga.giat.geowave.core.store.DataStore;
-import mil.nga.giat.geowave.core.store.index.Index;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStore;
+import mil.nga.giat.geowave.datastore.accumulo.AccumuloOptions;
 import mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations;
+import mil.nga.giat.geowave.datastore.accumulo.index.secondary.AccumuloSecondaryIndexDataStore;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloAdapterStore;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloDataStatisticsStore;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloIndexStore;
@@ -35,43 +35,12 @@ public class SimpleIngest
 	static Logger log = Logger.getLogger(SimpleIngest.class);
 	public static final String FEATURE_NAME = "GridPoint";
 
-	public static void main(
-			final String[] args ) {
-		if (args.length != 5) {
-			log.error("Invalid arguments, expected: zookeepers, accumuloInstance, accumuloUser, accumuloPass, geowaveNamespace");
-			System.exit(1);
-		}
-
-		final SimpleIngest si = new SimpleIngest();
-
-		try {
-			final BasicAccumuloOperations bao = si.getAccumuloOperationsInstance(
-					args[0],
-					args[1],
-					args[2],
-					args[3],
-					args[4]);
-
-			final DataStore geowaveDataStore = si.getGeowaveDataStore(bao);
-			si.generateGrid(geowaveDataStore);
-		}
-		catch (final Exception e) {
-			log.error(
-					"Error creating BasicAccumuloOperations",
-					e);
-			System.exit(1);
-		}
-
-		System.out.println("Finished ingesting data to namespace: " + args[4] + " at accumulo instance: " + args[1]);
-
-	}
-
 	public static List<SimpleFeature> getGriddedFeatures(
-			SimpleFeatureBuilder pointBuilder,
-			int firstFeatureId ) {
+			final SimpleFeatureBuilder pointBuilder,
+			final int firstFeatureId ) {
 
 		int featureId = firstFeatureId;
-		List<SimpleFeature> feats = new ArrayList<>();
+		final List<SimpleFeature> feats = new ArrayList<>();
 		for (int longitude = -180; longitude <= 180; longitude += 5) {
 			for (int latitude = -90; latitude <= 90; latitude += 5) {
 				pointBuilder.set(
@@ -99,53 +68,6 @@ public class SimpleIngest
 		return feats;
 	}
 
-	protected void generateGrid(
-			final DataStore geowaveDataStore ) {
-
-		// In order to store data we need to determine the type of data store
-		final SimpleFeatureType point = createPointFeatureType();
-
-		// This a factory class that builds simple feature objects based on the
-		// type passed
-		final SimpleFeatureBuilder pointBuilder = new SimpleFeatureBuilder(
-				point);
-
-		// This is an adapter, that is needed to describe how to persist the
-		// data type passed
-		final FeatureDataAdapter adapter = createDataAdapter(point);
-
-		// This describes how to index the data
-		final Index index = createSpatialIndex();
-
-		// features require a featureID - this should be unqiue as it's a
-		// foreign key on the feature
-		// (i.e. sending in a new feature with the same feature id will
-		// overwrite the existing feature)
-		int featureId = 0;
-
-		// build a grid of points across the globe at each whole
-		// lattitude/longitude intersection
-
-		// this loads the data to geowave
-		// in practice you probably wouldn't do this in a tight loop -
-		// but use a the SimpleIngestIndexWriter, producer/consumer, mapreduce,
-		// or some other pattern. But if it matters depends also on the amount
-		// of data
-		// you are ingesting.
-
-		// Note that the ingest method can take a feature, or an
-		// interator on a collection of SimpleFeatures. The latter
-		// is the preferred mechanism for non-trivial data sets.
-		for (SimpleFeature sft : getGriddedFeatures(
-				pointBuilder,
-				0)) {
-			geowaveDataStore.ingest(
-					adapter,
-					index,
-					sft);
-		}
-	}
-
 	/***
 	 * DataStore is essentially the controller that take the accumulo
 	 * information, geowave configuration, and data type, and inserts/queries
@@ -168,6 +90,8 @@ public class SimpleIngest
 				new AccumuloAdapterStore(
 						instance),
 				new AccumuloDataStatisticsStore(
+						instance),
+				new AccumuloSecondaryIndexDataStore(
 						instance),
 				instance);
 	}
@@ -234,7 +158,7 @@ public class SimpleIngest
 	 * 
 	 * @return GeoWave index for a default SPATIAL index
 	 */
-	public static Index createSpatialIndex() {
+	public static PrimaryIndex createSpatialIndex() {
 
 		// Reasonable values for spatial and spatio-temporal are provided
 		// through static factory methods.
@@ -242,7 +166,7 @@ public class SimpleIngest
 		// a custom index may provide better
 		// performance is the distribution/characterization of the data is well
 		// known.
-		return IndexType.SPATIAL_VECTOR.createDefaultIndex();
+		return new SpatialDimensionalityTypeProvider().createPrimaryIndex();
 	}
 
 	/***

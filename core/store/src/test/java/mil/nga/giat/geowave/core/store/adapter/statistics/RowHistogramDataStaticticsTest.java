@@ -61,13 +61,19 @@ public class RowHistogramDataStaticticsTest
 					100000));
 			stats1.entryIngested(
 					new DataStoreEntryInfo(
+							new byte[] {
+								1
+							},
 							ids,
-							Collections.<FieldInfo> emptyList()),
+							Collections.<FieldInfo<?>> emptyList()),
 					1);
 			stats2.entryIngested(
 					new DataStoreEntryInfo(
+							new byte[] {
+								1
+							},
 							ids,
-							Collections.<FieldInfo> emptyList()),
+							Collections.<FieldInfo<?>> emptyList()),
 					1);
 		}
 
@@ -89,13 +95,19 @@ public class RowHistogramDataStaticticsTest
 					200000));
 			stats1.entryIngested(
 					new DataStoreEntryInfo(
+							new byte[] {
+								1
+							},
 							ids,
-							Collections.<FieldInfo> emptyList()),
+							Collections.<FieldInfo<?>> emptyList()),
 					1);
 			stats2.entryIngested(
 					new DataStoreEntryInfo(
+							new byte[] {
+								1
+							},
 							ids,
-							Collections.<FieldInfo> emptyList()),
+							Collections.<FieldInfo<?>> emptyList()),
 					1);
 		}
 

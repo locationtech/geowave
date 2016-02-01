@@ -1,7 +1,6 @@
 package mil.nga.giat.geowave.analytic.mapreduce.kmeans.runner;
 
 import mil.nga.giat.geowave.analytic.PropertyManagement;
-import mil.nga.giat.geowave.analytic.RunnerUtils;
 import mil.nga.giat.geowave.analytic.clustering.NestedGroupCentroidAssignment;
 import mil.nga.giat.geowave.analytic.mapreduce.GeoWaveAnalyticJobRunner;
 import mil.nga.giat.geowave.analytic.mapreduce.GeoWaveOutputFormatConfiguration;
@@ -11,7 +10,7 @@ import mil.nga.giat.geowave.analytic.mapreduce.kmeans.KMeansMapReduce;
 import mil.nga.giat.geowave.analytic.param.CentroidParameters;
 import mil.nga.giat.geowave.analytic.param.ClusteringParameters;
 import mil.nga.giat.geowave.analytic.param.ParameterEnum;
-import mil.nga.giat.geowave.datastore.accumulo.mapreduce.output.GeoWaveOutputKey;
+import mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputKey;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.io.BytesWritable;
@@ -67,24 +66,28 @@ public class KMeansJobRunner extends
 			throws Exception {
 		NestedGroupCentroidAssignment.setParameters(
 				configuration,
+				getScope(),
 				runTimeProperties);
 		super.setReducerCount(runTimeProperties.getPropertyAsInt(
 				ClusteringParameters.Clustering.MAX_REDUCER_COUNT,
 				Math.max(
 						2,
 						super.getReducerCount())));
-
-		RunnerUtils.setParameter(
-				configuration,
-				KMeansMapReduce.class,
-				runTimeProperties,
+		runTimeProperties.setConfig(
 				new ParameterEnum[] {
 					CentroidParameters.Centroid.EXTRACTOR_CLASS,
 					CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS
-				});
+				},
+				configuration,
+				getScope());
 
 		return super.run(
 				configuration,
 				runTimeProperties);
+	}
+
+	@Override
+	protected String getJobName() {
+		return "K-Means";
 	}
 }

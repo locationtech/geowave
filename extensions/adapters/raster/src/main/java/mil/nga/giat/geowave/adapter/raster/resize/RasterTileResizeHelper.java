@@ -1,17 +1,19 @@
 package mil.nga.giat.geowave.adapter.raster.resize;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import mil.nga.giat.geowave.adapter.raster.adapter.MergeableRasterTile;
 import mil.nga.giat.geowave.adapter.raster.adapter.RasterDataAdapter;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
-import mil.nga.giat.geowave.core.store.index.Index;
-import mil.nga.giat.geowave.datastore.accumulo.mapreduce.JobContextAdapterStore;
-import mil.nga.giat.geowave.datastore.accumulo.mapreduce.JobContextIndexStore;
-import mil.nga.giat.geowave.datastore.accumulo.mapreduce.input.GeoWaveInputKey;
-import mil.nga.giat.geowave.datastore.accumulo.mapreduce.output.GeoWaveOutputKey;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.mapreduce.JobContextAdapterStore;
+import mil.nga.giat.geowave.mapreduce.JobContextIndexStore;
+import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
+import mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputKey;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.mapreduce.JobContext;
@@ -21,11 +23,14 @@ public class RasterTileResizeHelper
 {
 	private RasterDataAdapter oldAdapter;
 	private RasterDataAdapter newAdapter;
-	private final Index index;
+	private final PrimaryIndex index;
+	private final List<ByteArrayId> indexIds;
 
 	public RasterTileResizeHelper(
 			final JobContext context ) {
 		index = JobContextIndexStore.getIndices(context)[0];
+		indexIds = new ArrayList<ByteArrayId>();
+		indexIds.add(index.getId());
 		final DataAdapter[] adapters = JobContextAdapterStore.getDataAdapters(context);
 		final Configuration conf = context.getConfiguration();
 		final String oldAdapterId = conf.get(RasterTileResizeJobRunner.OLD_ADAPTER_ID_KEY);
@@ -45,7 +50,7 @@ public class RasterTileResizeHelper
 	public GeoWaveOutputKey getGeoWaveOutputKey() {
 		return new GeoWaveOutputKey(
 				newAdapter.getAdapterId(),
-				index.getId());
+				indexIds);
 	}
 
 	public Iterator<GridCoverage> getCoveragesForIndex(

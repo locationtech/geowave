@@ -4,6 +4,7 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
 import mil.nga.giat.geowave.core.index.sfc.data.BasicNumericDataset;
@@ -14,6 +15,9 @@ import mil.nga.giat.geowave.core.index.sfc.data.NumericData;
  * Class that implements a compound index strategy. It's a wrapper around two
  * NumericIndexStrategy objects that can externally be treated as a
  * multi-dimensional NumericIndexStrategy.
+ * 
+ * Each of the 'wrapped' strategies cannot share the same dimension definition.
+ * 
  */
 public class CompoundIndexStrategy implements
 		NumericIndexStrategy
@@ -22,6 +26,9 @@ public class CompoundIndexStrategy implements
 	private NumericIndexStrategy subStrategy1;
 	private NumericIndexStrategy subStrategy2;
 	private NumericDimensionDefinition[] baseDefinitions;
+	private double[] highestPrecision;
+	private int[] strategy1Mappings;
+	private int[] strategy2Mappings;
 	private int defaultNumberOfRanges;
 
 	public CompoundIndexStrategy(
@@ -29,7 +36,7 @@ public class CompoundIndexStrategy implements
 			final NumericIndexStrategy subStrategy2 ) {
 		this.subStrategy1 = subStrategy1;
 		this.subStrategy2 = subStrategy2;
-		baseDefinitions = createNumericDimensionDefinitions();
+		init();
 		defaultNumberOfRanges = (int) Math.ceil(Math.pow(
 				2,
 				getNumberOfDimensions()));
@@ -70,7 +77,7 @@ public class CompoundIndexStrategy implements
 		subStrategy2 = PersistenceUtils.fromBinary(
 				delegateBinary2,
 				NumericIndexStrategy.class);
-		baseDefinitions = createNumericDimensionDefinitions();
+		this.init();
 		defaultNumberOfRanges = (int) Math.ceil(Math.pow(
 				2,
 				getNumberOfDimensions()));
@@ -260,16 +267,20 @@ public class CompoundIndexStrategy implements
 
 	private MultiDimensionalNumericData[] getRangesForIndexedRange(
 			final MultiDimensionalNumericData indexedRange ) {
-		final int[] numDimensionsPerStrategy = getNumberOfDimensionsPerIndexStrategy();
 		final NumericData[] datasets = indexedRange.getDataPerDimension();
-		final NumericData[] datasetForStrategy1 = Arrays.copyOfRange(
-				datasets,
-				0,
-				numDimensionsPerStrategy[0]);
-		final NumericData[] datasetForStrategy2 = Arrays.copyOfRange(
-				datasets,
-				numDimensionsPerStrategy[0],
-				datasets.length);
+
+		final int[] numDimensionsPerStrategy = getNumberOfDimensionsPerIndexStrategy();
+
+		final NumericData[] datasetForStrategy1 = new NumericData[numDimensionsPerStrategy[0]];
+		final NumericData[] datasetForStrategy2 = new NumericData[numDimensionsPerStrategy[1]];
+		for (int i = 0; i < datasets.length; i++) {
+			if (strategy1Mappings[i] >= 0) {
+				datasetForStrategy1[strategy1Mappings[i]] = datasets[i];
+			}
+			if (strategy2Mappings[i] >= 0) {
+				datasetForStrategy2[strategy2Mappings[i]] = datasets[i];
+			}
+		}
 		return new MultiDimensionalNumericData[] {
 			new BasicNumericDataset(
 					datasetForStrategy1),
@@ -284,19 +295,15 @@ public class CompoundIndexStrategy implements
 		final MultiDimensionalNumericData[] rangesForId = getRangesForId(insertionId);
 		final NumericData[] data1 = rangesForId[0].getDataPerDimension();
 		final NumericData[] data2 = rangesForId[1].getDataPerDimension();
-		final NumericData[] dataPerDimension = new NumericData[data1.length + data2.length];
-		System.arraycopy(
-				data1,
-				0,
-				dataPerDimension,
-				0,
-				data1.length);
-		System.arraycopy(
-				data2,
-				0,
-				dataPerDimension,
-				data1.length,
-				data2.length);
+		final NumericData[] dataPerDimension = new NumericData[baseDefinitions.length];
+		for (int i = 0; i < dataPerDimension.length; i++) {
+			if (strategy1Mappings[i] >= 0) {
+				dataPerDimension[i] = data1[strategy1Mappings[i]];
+			}
+			if (strategy2Mappings[i] >= 0) {
+				dataPerDimension[i] = data2[strategy2Mappings[i]];
+			}
+		}
 		return new BasicNumericDataset(
 				dataPerDimension);
 	}
@@ -307,44 +314,118 @@ public class CompoundIndexStrategy implements
 		final ByteArrayId[] insertionIds = decomposeByteArrayId(insertionId);
 		final long[] coordinates1 = subStrategy1.getCoordinatesPerDimension(insertionIds[0]);
 		final long[] coordinates2 = subStrategy2.getCoordinatesPerDimension(insertionIds[1]);
-		final long[] coordinates = new long[coordinates1.length + coordinates2.length];
-		System.arraycopy(
-				coordinates1,
-				0,
-				coordinates,
-				0,
-				coordinates1.length);
-		System.arraycopy(
-				coordinates2,
-				0,
-				coordinates,
-				coordinates1.length,
-				coordinates2.length);
+		final long[] coordinates = new long[baseDefinitions.length];
+		for (int i = 0; i < baseDefinitions.length; i++) {
+			if (strategy1Mappings[i] >= 0) {
+				coordinates[i] = coordinates1[strategy1Mappings[i]];
+			}
+			if (strategy2Mappings[i] >= 0) {
+				coordinates[i] = coordinates2[strategy2Mappings[i]];
+			}
+		}
 		return coordinates;
 	}
 
-	private NumericDimensionDefinition[] createNumericDimensionDefinitions() {
+	private void init() {
 		final NumericDimensionDefinition[] strategy1Definitions = subStrategy1.getOrderedDimensionDefinitions();
 		final NumericDimensionDefinition[] strategy2Definitions = subStrategy2.getOrderedDimensionDefinitions();
-		final NumericDimensionDefinition[] definitions = new NumericDimensionDefinition[strategy1Definitions.length + strategy2Definitions.length];
-		System.arraycopy(
-				strategy1Definitions,
+		final double[] strategy1HighestPrecision = subStrategy1.getHighestPrecisionIdRangePerDimension();
+		final double[] strategy2HighestPrecision = subStrategy2.getHighestPrecisionIdRangePerDimension();
+
+		final List<NumericDimensionDefinition> definitions = new ArrayList<NumericDimensionDefinition>(
+				strategy1Definitions.length + strategy2Definitions.length);
+		final double precision[] = new double[strategy1Definitions.length + strategy2Definitions.length];
+		strategy1Mappings = new int[precision.length];
+		strategy2Mappings = new int[precision.length];
+
+		int dimsPosition = 0;
+		for (NumericDimensionDefinition definition : strategy1Definitions) {
+			definitions.add(definition);
+			strategy1Mappings[dimsPosition] = dimsPosition;
+			strategy2Mappings[dimsPosition] = -1;
+			precision[dimsPosition] = strategy1HighestPrecision[dimsPosition];
+			dimsPosition++;
+		}
+		int twosDefsPosition = 0;
+		for (NumericDimensionDefinition definition : strategy2Definitions) {
+			int pos = definitions.indexOf(definition);
+			if (pos >= 0) {
+				strategy2Mappings[pos] = twosDefsPosition;
+				precision[pos] = Math.max(
+						precision[pos],
+						strategy2HighestPrecision[twosDefsPosition]);
+			}
+			else {
+				strategy2Mappings[dimsPosition] = twosDefsPosition;
+				strategy1Mappings[dimsPosition] = -1;
+				definitions.add(definition);
+				precision[dimsPosition] = strategy2HighestPrecision[twosDefsPosition];
+				dimsPosition++;
+			}
+			twosDefsPosition++;
+		}
+
+		this.baseDefinitions = definitions.toArray(new NumericDimensionDefinition[definitions.size()]);
+		this.highestPrecision = Arrays.copyOfRange(
+				precision,
 				0,
-				definitions,
-				0,
-				strategy1Definitions.length);
-		System.arraycopy(
-				strategy2Definitions,
-				0,
-				definitions,
-				strategy1Definitions.length,
-				strategy2Definitions.length);
-		return definitions;
+				baseDefinitions.length);
 	}
 
 	@Override
 	public NumericDimensionDefinition[] getOrderedDimensionDefinitions() {
 		return baseDefinitions;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = (prime * result) + Arrays.hashCode(baseDefinitions);
+		result = (prime * result) + defaultNumberOfRanges;
+		result = (prime * result) + ((subStrategy1 == null) ? 0 : subStrategy1.hashCode());
+		result = (prime * result) + ((subStrategy2 == null) ? 0 : subStrategy2.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(
+			final Object obj ) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		final CompoundIndexStrategy other = (CompoundIndexStrategy) obj;
+		if (!Arrays.equals(
+				baseDefinitions,
+				other.baseDefinitions)) {
+			return false;
+		}
+		if (defaultNumberOfRanges != other.defaultNumberOfRanges) {
+			return false;
+		}
+		if (subStrategy1 == null) {
+			if (other.subStrategy1 != null) {
+				return false;
+			}
+		}
+		else if (!subStrategy1.equals(other.subStrategy1)) {
+			return false;
+		}
+		if (subStrategy2 == null) {
+			if (other.subStrategy2 != null) {
+				return false;
+			}
+		}
+		else if (!subStrategy2.equals(other.subStrategy2)) {
+			return false;
+		}
+		return true;
 	}
 
 	@Override
@@ -354,22 +435,21 @@ public class CompoundIndexStrategy implements
 
 	@Override
 	public double[] getHighestPrecisionIdRangePerDimension() {
-		final double[] strategy1HighestPrecision = subStrategy1.getHighestPrecisionIdRangePerDimension();
-		final double[] strategy2HighestPrecision = subStrategy2.getHighestPrecisionIdRangePerDimension();
-		final double[] highestPrecision = new double[strategy1HighestPrecision.length + strategy2HighestPrecision.length];
-		System.arraycopy(
-				strategy1HighestPrecision,
-				0,
-				highestPrecision,
-				0,
-				strategy1HighestPrecision.length);
-		System.arraycopy(
-				strategy2HighestPrecision,
-				0,
-				highestPrecision,
-				strategy1HighestPrecision.length,
-				strategy2HighestPrecision.length);
 		return highestPrecision;
+	}
+
+	@Override
+	public Set<ByteArrayId> getNaturalSplits() {
+		// because substrategy one is prefixing substrategy2, just use the
+		// splits associated with substrategy1
+		return subStrategy1.getNaturalSplits();
+	}
+
+	@Override
+	public int getByteOffsetFromDimensionalIndex() {
+		// TODO: this only makes sense if substrategy 1 contributes no
+		// dimensional index component
+		return subStrategy1.getByteOffsetFromDimensionalIndex() + subStrategy2.getByteOffsetFromDimensionalIndex();
 	}
 
 }

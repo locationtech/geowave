@@ -25,4 +25,8 @@ public interface MapReduceIntegration
 	public Job getJob(
 			Tool tool )
 			throws IOException;
+
+	public Configuration getConfiguration(
+			final PropertyManagement runTimeProperties )
+			throws IOException;
 }

@@ -2,12 +2,12 @@ package mil.nga.giat.geowave.core.store.adapter;
 
 import java.util.Iterator;
 
-import mil.nga.giat.geowave.core.store.index.Index;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 
 public interface IndexDependentDataAdapter<T> extends
 		WritableDataAdapter<T>
 {
 	public Iterator<T> convertToIndex(
-			Index index,
+			PrimaryIndex index,
 			T originalEntry );
 }

@@ -1,5 +1,8 @@
 package mil.nga.giat.geowave.analytic.mapreduce.clustering.runner;
 
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 
 import mil.nga.giat.geowave.analytic.PropertyManagement;
@@ -10,17 +13,15 @@ import mil.nga.giat.geowave.analytic.mapreduce.MapReduceJobRunner;
 import mil.nga.giat.geowave.analytic.mapreduce.SequenceFileInputFormatConfiguration;
 import mil.nga.giat.geowave.analytic.mapreduce.SequenceFileOutputFormatConfiguration;
 import mil.nga.giat.geowave.analytic.param.CentroidParameters;
-import mil.nga.giat.geowave.analytic.param.ClusteringParameters;
 import mil.nga.giat.geowave.analytic.param.ClusteringParameters.Clustering;
 import mil.nga.giat.geowave.analytic.param.CommonParameters;
 import mil.nga.giat.geowave.analytic.param.ExtractParameters;
-import mil.nga.giat.geowave.analytic.param.GlobalParameters;
 import mil.nga.giat.geowave.analytic.param.GlobalParameters.Global;
 import mil.nga.giat.geowave.analytic.param.HullParameters;
 import mil.nga.giat.geowave.analytic.param.MapReduceParameters;
-import mil.nga.giat.geowave.core.geotime.IndexType;
+import mil.nga.giat.geowave.analytic.param.ParameterEnum;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 
-import org.apache.commons.cli.Option;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
@@ -64,33 +65,21 @@ public abstract class MultiLevelClusteringJobRunner extends
 	protected abstract ClusteringRunner getClusteringRunner();
 
 	@Override
-	public void fillOptions(
-			final Set<Option> options ) {
-
-		jobExtractRunner.fillOptions(options);
-		hullRunner.fillOptions(options);
-		getClusteringRunner().fillOptions(
-				options);
-		ClusteringParameters.fillOptions(
-				options,
-				new Clustering[] {
-					Clustering.ZOOM_LEVELS
-				});
-		GlobalParameters.fillOptions(
-				options,
-				new Global[] {
-					Global.BATCH_ID,
-					Global.ACCUMULO_NAMESPACE
-				});
-		MapReduceParameters.fillOptions(options);
+	public Collection<ParameterEnum<?>> getParameters() {
+		final Set<ParameterEnum<?>> params = new HashSet<ParameterEnum<?>>();
+		params.addAll(jobExtractRunner.getParameters());
+		params.addAll(hullRunner.getParameters());
+		params.addAll(getClusteringRunner().getParameters());
+		params.addAll(Arrays.asList(new ParameterEnum<?>[] {
+			Clustering.ZOOM_LEVELS,
+			Global.BATCH_ID
+		}));
+		params.addAll(MapReduceParameters.getParameters());
 		// the output data type is used for centroid management
-		PropertyManagement.removeOption(
-				options,
-				CentroidParameters.Centroid.DATA_TYPE_ID);
+		params.remove(CentroidParameters.Centroid.DATA_TYPE_ID);
 
-		PropertyManagement.removeOption(
-				options,
-				CentroidParameters.Centroid.DATA_NAMESPACE_URI);
+		params.remove(CentroidParameters.Centroid.DATA_NAMESPACE_URI);
+		return params;
 	}
 
 	@Override
@@ -150,26 +139,18 @@ public abstract class MultiLevelClusteringJobRunner extends
 		// TODO: set out index type for extracts?
 		propertyManagement.storeIfEmpty(
 				CentroidParameters.Centroid.INDEX_ID,
-				IndexType.SPATIAL_VECTOR.getDefaultId());
+				new SpatialDimensionalityTypeProvider().createPrimaryIndex().getId().getString());
 
 		propertyManagement.storeIfEmpty(
 				HullParameters.Hull.INDEX_ID,
-				IndexType.SPATIAL_VECTOR.getDefaultId());
-
-		final FileSystem fs = FileSystem.get(config);
-
-		final Path extractPath = GeoWaveAnalyticExtractJobRunner.getHdfsOutputPath(propertyManagement);
-
-		if (fs.exists(extractPath)) {
-			fs.delete(
-					extractPath,
-					true);
-		}
+				new SpatialDimensionalityTypeProvider().createPrimaryIndex().getId().getString());
 
 		// first. extract data
 		int status = jobExtractRunner.run(
 				config,
 				propertyManagement);
+
+		final Path extractPath = jobExtractRunner.getHdfsOutputPath();
 
 		groupAssignmentRunner.setInputFormatConfiguration(new SequenceFileInputFormatConfiguration(
 				extractPath));
@@ -181,6 +162,8 @@ public abstract class MultiLevelClusteringJobRunner extends
 		final boolean retainGroupAssigments = propertyManagement.getPropertyAsBoolean(
 				Clustering.RETAIN_GROUP_ASSIGNMENTS,
 				false);
+
+		final FileSystem fs = FileSystem.get(config);
 
 		// run clustering for each level
 		final String outputBaseDir = propertyManagement.getPropertyAsString(
@@ -199,7 +182,7 @@ public abstract class MultiLevelClusteringJobRunner extends
 					propertyManagement);
 			if (status == 0) {
 				final Path nextPath = new Path(
-						outputBaseDir + "/" + propertyManagement.getPropertyAsString(GlobalParameters.Global.ACCUMULO_NAMESPACE) + "_level_" + zoomLevel);
+						outputBaseDir + "/" + "level_" + zoomLevel);
 				if (fs.exists(nextPath)) {
 					fs.delete(
 							nextPath,

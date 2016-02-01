@@ -3,9 +3,10 @@ package mil.nga.giat.geowave.adapter.vector.plugin;
 import java.io.IOException;
 import java.util.Map;
 
-import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
+import mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
 import mil.nga.giat.geowave.adapter.vector.plugin.transaction.GeoWaveEmptyTransaction;
 import mil.nga.giat.geowave.adapter.vector.plugin.transaction.GeoWaveTransactionState;
+import mil.nga.giat.geowave.adapter.vector.plugin.transaction.TransactionsAllocator;
 import mil.nga.giat.geowave.adapter.vector.stats.FeatureBoundingBoxStatistics;
 import mil.nga.giat.geowave.core.geotime.store.statistics.BoundingBoxDataStatistics;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
@@ -32,15 +33,18 @@ public class GeoWaveFeatureSource extends
 	public GeoWaveFeatureSource(
 			final ContentEntry entry,
 			final Query query,
-			final FeatureDataAdapter adapter ) {
+			final GeotoolsFeatureDataAdapter adapter,
+			final TransactionsAllocator transactionAllocator ) {
 		super(
 				entry,
 				query);
 		components = new GeoWaveDataStoreComponents(
-				this.getDataStore().getDataStore(),
-				this.getDataStore(),
+				getDataStore().getDataStore(),
+				getDataStore().getDataStatisticsStore(),
+				getDataStore().getIndexStore(),
 				adapter,
-				this.getDataStore().getTransactionsAllocater());
+				getDataStore(),
+				transactionAllocator);
 	}
 
 	public GeoWaveDataStoreComponents getComponents() {
@@ -59,7 +63,7 @@ public class GeoWaveFeatureSource extends
 				Filter.INCLUDE)) {
 			final Map<ByteArrayId, DataStatistics<SimpleFeature>> stats = new GeoWaveEmptyTransaction(
 					components).getDataStatistics();
-			bboxStats = stats.get(FeatureBoundingBoxStatistics.composeId(this.getFeatureType().getGeometryDescriptor().getLocalName()));
+			bboxStats = stats.get(FeatureBoundingBoxStatistics.composeId(getFeatureType().getGeometryDescriptor().getLocalName()));
 		}
 		if (bboxStats != null) {
 			minx = ((BoundingBoxDataStatistics) bboxStats).getMinX();
@@ -143,7 +147,7 @@ public class GeoWaveFeatureSource extends
 	protected FeatureReader<SimpleFeatureType, SimpleFeature> getReaderInternal(
 			final Query query )
 			throws IOException {
-		final GeoWaveTransactionState state = this.getDataStore().getMyTransactionState(
+		final GeoWaveTransactionState state = getDataStore().getMyTransactionState(
 				transaction,
 				this);
 		return new GeoWaveFeatureReader(
@@ -154,10 +158,10 @@ public class GeoWaveFeatureSource extends
 
 	@Override
 	protected FeatureWriter<SimpleFeatureType, SimpleFeature> getWriterInternal(
-			Query query,
-			int flags )
+			final Query query,
+			final int flags )
 			throws IOException {
-		final GeoWaveTransactionState state = this.getDataStore().getMyTransactionState(
+		final GeoWaveTransactionState state = getDataStore().getMyTransactionState(
 				transaction,
 				this);
 		return new GeoWaveFeatureWriter(
@@ -193,8 +197,8 @@ public class GeoWaveFeatureSource extends
 
 	@Override
 	protected void doLockInternal(
-			String typeName,
-			SimpleFeature feature )
+			final String typeName,
+			final SimpleFeature feature )
 			throws IOException {
 		getDataStore().getLockingManager().lockFeatureID(
 				typeName,
@@ -205,8 +209,8 @@ public class GeoWaveFeatureSource extends
 
 	@Override
 	protected void doUnlockInternal(
-			String typeName,
-			SimpleFeature feature )
+			final String typeName,
+			final SimpleFeature feature )
 			throws IOException {
 		getDataStore().getLockingManager().unLockFeatureID(
 				typeName,

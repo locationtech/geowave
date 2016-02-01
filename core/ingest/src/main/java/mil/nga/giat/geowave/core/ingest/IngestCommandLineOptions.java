@@ -1,25 +1,12 @@
 package mil.nga.giat.geowave.core.ingest;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.ServiceLoader;
-
-import mil.nga.giat.geowave.core.store.index.Index;
-
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class IngestCommandLineOptions
 {
-	private final static Logger LOGGER = LoggerFactory.getLogger(IngestCommandLineOptions.class);
-
-	private static Map<String, IndexCompatibilityVisitor> registeredDimensionalityTypes = null;
-	private static String defaultDimensionalityType;
 	private final String visibility;
 	private final boolean clearNamespace;
 	private final String dimensionalityType;
@@ -37,106 +24,21 @@ public class IngestCommandLineOptions
 		return visibility;
 	}
 
-	public String getDimensionalityType() {
+	public String[] getDimensionalityTypes() {
+		if ((dimensionalityType != null) && dimensionalityType.contains(",")) {
+			return dimensionalityType.split(",");
+		}
+		return new String[] {
+			dimensionalityType
+		};
+	}
+
+	public String getDimensionalityTypeArgument() {
 		return dimensionalityType;
 	}
 
 	public boolean isClearNamespace() {
 		return clearNamespace;
-	}
-
-	public Index getIndex(
-			final Index[] supportedIndices ) {
-		final IndexCompatibilityVisitor compatibilityVisitor = getSelectedIndexCompatibility(getDimensionalityType());
-		for (final Index i : supportedIndices) {
-			if (compatibilityVisitor.isCompatible(i)) {
-				return i;
-			}
-		}
-		return null;
-	}
-
-	public boolean isSupported(
-			final Index[] supportedIndices ) {
-		return (getIndex(supportedIndices) != null);
-	}
-
-	private static synchronized String getDimensionalityTypeOptionDescription() {
-		if (registeredDimensionalityTypes == null) {
-			initDimensionalityTypeRegistry();
-		}
-		if (registeredDimensionalityTypes.isEmpty()) {
-			return "There are no registered dimensionality types.  The supported index listed first for any given data type will be used.";
-		}
-		final StringBuilder builder = new StringBuilder();
-		for (final String dimType : registeredDimensionalityTypes.keySet()) {
-			if (builder.length() > 0) {
-				builder.append(",");
-			}
-			else {
-				builder.append("Options include: ");
-			}
-			builder.append(
-					"'").append(
-					dimType).append(
-					"'");
-		}
-		builder.append(
-				"(optional; default is '").append(
-				defaultDimensionalityType).append(
-				"')");
-		return builder.toString();
-	}
-
-	private static String getDefaultDimensionalityType() {
-		if (registeredDimensionalityTypes == null) {
-			initDimensionalityTypeRegistry();
-		}
-		if (defaultDimensionalityType == null) {
-			return "";
-		}
-		return defaultDimensionalityType;
-	}
-
-	private static IndexCompatibilityVisitor getSelectedIndexCompatibility(
-			final String dimensionalityType ) {
-		if (registeredDimensionalityTypes == null) {
-			initDimensionalityTypeRegistry();
-		}
-		final IndexCompatibilityVisitor compatibilityVisitor = registeredDimensionalityTypes.get(dimensionalityType);
-		if (compatibilityVisitor == null) {
-			return new IndexCompatibilityVisitor() {
-
-				@Override
-				public boolean isCompatible(
-						final Index index ) {
-					return true;
-				}
-			};
-		}
-		return compatibilityVisitor;
-	}
-
-	private static synchronized void initDimensionalityTypeRegistry() {
-		registeredDimensionalityTypes = new HashMap<String, IndexCompatibilityVisitor>();
-		final Iterator<IngestDimensionalityTypeProviderSpi> dimensionalityTypesProviders = ServiceLoader.load(
-				IngestDimensionalityTypeProviderSpi.class).iterator();
-		int currentDefaultPriority = Integer.MIN_VALUE;
-		while (dimensionalityTypesProviders.hasNext()) {
-			final IngestDimensionalityTypeProviderSpi dimensionalityTypeProvider = dimensionalityTypesProviders.next();
-			if (registeredDimensionalityTypes.containsKey(dimensionalityTypeProvider.getDimensionalityTypeName())) {
-				LOGGER.warn("Dimensionality type '" + dimensionalityTypeProvider.getDimensionalityTypeName() + "' already registered.  Unable to register type provided by " + dimensionalityTypeProvider.getClass().getName());
-			}
-			else {
-				registeredDimensionalityTypes.put(
-						dimensionalityTypeProvider.getDimensionalityTypeName(),
-						dimensionalityTypeProvider.getCompatibilityVisitor());
-				if (dimensionalityTypeProvider.getPriority() > currentDefaultPriority) {
-					currentDefaultPriority = dimensionalityTypeProvider.getPriority();
-					defaultDimensionalityType = dimensionalityTypeProvider.getDimensionalityTypeName();
-				}
-			}
-		}
 	}
 
 	public static IngestCommandLineOptions parseOptions(
@@ -153,7 +55,7 @@ public class IngestCommandLineOptions
 		}
 		final String dimensionalityType = commandLine.getOptionValue(
 				"dim",
-				getDefaultDimensionalityType());
+				IngestUtils.getDefaultDimensionalityType());
 		if (!success) {
 			throw new ParseException(
 					"Required option is missing");
@@ -177,7 +79,7 @@ public class IngestCommandLineOptions
 				"dim",
 				"dimensionality",
 				true,
-				"The preferred dimensionality type to index the data for this ingest operation. " + getDimensionalityTypeOptionDescription());
+				"The preferred dimensionality type to index the data for this ingest operation. Can be a comma-delimited set to ingest into multiple dimensionalities within the same ingest operation.  " + IngestUtils.getDimensionalityTypeOptionDescription());
 		allOptions.addOption(dimensionalityType);
 		allOptions.addOption(new Option(
 				"c",

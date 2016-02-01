@@ -36,8 +36,8 @@ public class GeoWaveFeatureWriter implements
 			final GeoWaveTransaction transaction,
 			final GeoWaveFeatureReader reader ) {
 		this.transaction = transaction;
-		this.myReader = reader;
-		this.featureType = components.getAdapter().getType();
+		myReader = reader;
+		featureType = components.getAdapter().getType();
 	}
 
 	@Override
@@ -54,7 +54,7 @@ public class GeoWaveFeatureWriter implements
 	@Override
 	public boolean hasNext()
 			throws IOException {
-		return (myReader != null && myReader.hasNext());
+		return ((myReader != null) && myReader.hasNext());
 	}
 
 	@Override
@@ -64,10 +64,10 @@ public class GeoWaveFeatureWriter implements
 			NoSuchElementException {
 		if (hasNext()) {
 			original = myReader.next();
-			List<AttributeDescriptor> descriptors = featureType.getAttributeDescriptors();
-			Object[] defaults = new Object[descriptors.size()];
+			final List<AttributeDescriptor> descriptors = featureType.getAttributeDescriptors();
+			final Object[] defaults = new Object[descriptors.size()];
 			int p = 0;
-			for (AttributeDescriptor descriptor : descriptors) {
+			for (final AttributeDescriptor descriptor : descriptors) {
 				defaults[p++] = original.getAttribute(descriptor.getName());
 			}
 			live = SimpleFeatureBuilder.build(
@@ -77,10 +77,10 @@ public class GeoWaveFeatureWriter implements
 		}
 		else {
 			original = null;
-			List<AttributeDescriptor> descriptors = featureType.getAttributeDescriptors();
-			Object[] defaults = new Object[descriptors.size()];
+			final List<AttributeDescriptor> descriptors = featureType.getAttributeDescriptors();
+			final Object[] defaults = new Object[descriptors.size()];
 			int p = 0;
-			for (AttributeDescriptor descriptor : descriptors) {
+			for (final AttributeDescriptor descriptor : descriptors) {
 				defaults[p++] = descriptor.getDefaultValue();
 			}
 
@@ -95,29 +95,31 @@ public class GeoWaveFeatureWriter implements
 	@Override
 	public void remove()
 			throws IOException {
-		this.transaction.remove(
+		transaction.remove(
 				live.getID(),
 				live);
 	}
 
 	private final static Logger LOGGER = Logger.getLogger(GeoWaveFeatureWriter.class);
 
+	@Override
 	public void write()
 			throws IOException {
 		if (live == null) {
-			LOGGER.error("Unable to process transaction " + this.transaction.toString());
+			LOGGER.error("Unable to process transaction " + transaction.toString());
 			throw new IOException(
 					"No current feature to write");
 		}
 
-		if (original == null)
-			this.transaction.add(
+		if (original == null) {
+			transaction.add(
 					live.getID(),
 					live);
+		}
 		else if (!Utilities.deepEquals(
 				live,
 				original)) {
-			this.transaction.modify(
+			transaction.modify(
 					live.getID(),
 					original,
 					live);

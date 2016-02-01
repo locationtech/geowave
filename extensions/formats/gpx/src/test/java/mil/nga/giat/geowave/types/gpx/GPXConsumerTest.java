@@ -7,6 +7,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -36,10 +38,10 @@ public class GPXConsumerTest
 				new ValidateObject<SimpleFeature>() {
 					@Override
 					public boolean validate(
-							SimpleFeature feature ) {
+							final SimpleFeature feature ) {
 						return feature.getAttribute(
 								"Elevation").toString().equals(
-								"4.46") && feature.getAttribute("Timestamp") != null && feature.getAttribute("Latitude") != null && feature.getAttribute("Longitude") != null;
+								"4.46") && (feature.getAttribute("Timestamp") != null) && (feature.getAttribute("Latitude") != null) && (feature.getAttribute("Longitude") != null);
 					}
 				});
 		expectedResults.put(
@@ -47,10 +49,10 @@ public class GPXConsumerTest
 				new ValidateObject<SimpleFeature>() {
 					@Override
 					public boolean validate(
-							SimpleFeature feature ) {
+							final SimpleFeature feature ) {
 						return feature.getAttribute(
 								"Elevation").toString().equals(
-								"4.634") && feature.getAttribute("Timestamp") != null && feature.getAttribute("Latitude") != null && feature.getAttribute("Longitude") != null;
+								"4.634") && (feature.getAttribute("Timestamp") != null) && (feature.getAttribute("Latitude") != null) && (feature.getAttribute("Longitude") != null);
 					}
 				});
 		expectedResults.put(
@@ -58,10 +60,10 @@ public class GPXConsumerTest
 				new ValidateObject<SimpleFeature>() {
 					@Override
 					public boolean validate(
-							SimpleFeature feature ) {
+							final SimpleFeature feature ) {
 						return feature.getAttribute(
 								"Elevation").toString().equals(
-								"10.46") && feature.getAttribute("Timestamp") != null && feature.getAttribute("Latitude") != null && feature.getAttribute("Longitude") != null;
+								"10.46") && (feature.getAttribute("Timestamp") != null) && (feature.getAttribute("Latitude") != null) && (feature.getAttribute("Longitude") != null);
 					}
 				});
 		expectedResults.put(
@@ -69,7 +71,7 @@ public class GPXConsumerTest
 				new ValidateObject<SimpleFeature>() {
 					@Override
 					public boolean validate(
-							SimpleFeature feature ) {
+							final SimpleFeature feature ) {
 						return feature.getAttribute(
 								"Elevation").toString().equals(
 								"11.634") && feature.getAttribute(
@@ -82,7 +84,7 @@ public class GPXConsumerTest
 								"VDOP").toString().equals(
 								"2.1") && feature.getAttribute(
 								"PDOP").toString().equals(
-								"2.2") && feature.getAttribute("Timestamp") != null && feature.getAttribute("Latitude") != null && feature.getAttribute("Longitude") != null;
+								"2.2") && (feature.getAttribute("Timestamp") != null) && (feature.getAttribute("Latitude") != null) && (feature.getAttribute("Longitude") != null);
 					}
 				});
 		expectedResults.put(
@@ -90,14 +92,14 @@ public class GPXConsumerTest
 				new ValidateObject<SimpleFeature>() {
 					@Override
 					public boolean validate(
-							SimpleFeature feature ) {
+							final SimpleFeature feature ) {
 						return feature.getAttribute(
 								"Name").toString().equals(
 								"A track") && feature.getAttribute(
 								"Duration").toString().equals(
-								"60000") && feature.getAttribute("StartTimeStamp") != null && feature.getAttribute(
+								"60000") && (feature.getAttribute("StartTimeStamp") != null) && feature.getAttribute(
 								"NumberPoints").toString().equals(
-								"2") && feature.getAttribute("EndTimeStamp") != null;
+								"2") && (feature.getAttribute("EndTimeStamp") != null);
 					}
 				});
 		expectedResults.put(
@@ -105,12 +107,12 @@ public class GPXConsumerTest
 				new ValidateObject<SimpleFeature>() {
 					@Override
 					public boolean validate(
-							SimpleFeature feature ) {
+							final SimpleFeature feature ) {
 						return feature.getAttribute(
 								"Duration").toString().equals(
-								"60000") && feature.getAttribute("StartTimeStamp") != null && feature.getAttribute(
+								"60000") && (feature.getAttribute("StartTimeStamp") != null) && feature.getAttribute(
 								"NumberPoints").toString().equals(
-								"2") && feature.getAttribute("EndTimeStamp") != null;
+								"2") && (feature.getAttribute("EndTimeStamp") != null);
 					}
 				});
 		expectedResults.put(
@@ -118,12 +120,12 @@ public class GPXConsumerTest
 				new ValidateObject<SimpleFeature>() {
 					@Override
 					public boolean validate(
-							SimpleFeature feature ) {
+							final SimpleFeature feature ) {
 						return feature.getAttribute(
 								"Description").toString().equals(
-								"Aquaduct") && feature.getAttribute("Longitude") != null && feature.getAttribute(
+								"Aquaduct") && (feature.getAttribute("Longitude") != null) && feature.getAttribute(
 								"Symbol").toString().equals(
-								"Dam") && feature.getAttribute("Latitude") != null;
+								"Dam") && (feature.getAttribute("Latitude") != null);
 					}
 				});
 		expectedResults.put(
@@ -131,7 +133,7 @@ public class GPXConsumerTest
 				new ValidateObject<SimpleFeature>() {
 					@Override
 					public boolean validate(
-							SimpleFeature feature ) {
+							final SimpleFeature feature ) {
 						return feature.getAttribute(
 								"Name").toString().equals(
 								"TRANSITION") && feature.getAttribute(
@@ -144,7 +146,7 @@ public class GPXConsumerTest
 				new ValidateObject<SimpleFeature>() {
 					@Override
 					public boolean validate(
-							SimpleFeature feature ) {
+							final SimpleFeature feature ) {
 						return feature.getAttribute(
 								"Name").toString().equals(
 								"ROUT135ASP") && feature.getAttribute(
@@ -160,8 +162,8 @@ public class GPXConsumerTest
 				new ValidateObject<SimpleFeature>() {
 					@Override
 					public boolean validate(
-							SimpleFeature feature ) {
-						return feature.getAttribute("Longitude") != null && feature.getAttribute("Latitude") != null;
+							final SimpleFeature feature ) {
+						return (feature.getAttribute("Longitude") != null) && (feature.getAttribute("Latitude") != null);
 					}
 				});
 
@@ -170,14 +172,18 @@ public class GPXConsumerTest
 	@Test
 	public void test()
 			throws IOException {
-		Set<String> expectedSet = HelperClass.buildSet(expectedResults);
+		final Set<String> expectedSet = HelperClass.buildSet(expectedResults);
 
-		InputStream is = this.getClass().getClassLoader().getResourceAsStream(
+		final InputStream is = this.getClass().getClassLoader().getResourceAsStream(
 				"sample_gpx.xml");
-		GPXConsumer consumer = new GPXConsumer(
+
+		final ByteArrayId indexId = new ByteArrayId(
+				"123".getBytes(StringUtils.GEOWAVE_CHAR_SET));
+		final Collection<ByteArrayId> indexIds = new ArrayList<ByteArrayId>();
+		indexIds.add(indexId);
+		final GPXConsumer consumer = new GPXConsumer(
 				is,
-				new ByteArrayId(
-						"123".getBytes(StringUtils.UTF8_CHAR_SET)),
+				indexIds,
 				"123",
 				new HashMap<String, Map<String, String>>(),
 				true,
@@ -185,11 +191,11 @@ public class GPXConsumerTest
 		int totalCount = 0;
 
 		while (consumer.hasNext()) {
-			GeoWaveData<SimpleFeature> data = consumer.next();
+			final GeoWaveData<SimpleFeature> data = consumer.next();
 			if (!expectedSet.remove(data.getValue().getID())) {
 				System.out.println("Missing match:" + data.getValue().getID());
 			}
-			ValidateObject<SimpleFeature> tester = expectedResults.get(data.getValue().getID());
+			final ValidateObject<SimpleFeature> tester = expectedResults.get(data.getValue().getID());
 			if (tester != null) {
 				assertTrue(
 						data.getValue().toString(),
@@ -237,42 +243,48 @@ public class GPXConsumerTest
 	}
 
 	private void descent(
-			File dir )
+			final File dir )
 			throws IOException {
 		if (dir.isDirectory()) {
-			for (File file : dir.listFiles())
+			for (final File file : dir.listFiles()) {
 				descent(file);
+			}
 
 		}
 		else if (dir.getName().endsWith(
 				"gpx")) {
-			InputStream is = new FileInputStream(
+			final InputStream is = new FileInputStream(
 					dir);
 			try {
-				GPXConsumer consumer = new GPXConsumer(
+				final ByteArrayId indexId = new ByteArrayId(
+						"123".getBytes(StringUtils.GEOWAVE_CHAR_SET));
+				final Collection<ByteArrayId> indexIds = new ArrayList<ByteArrayId>();
+				indexIds.add(indexId);
+				try (final GPXConsumer consumer = new GPXConsumer(
 						is,
-						new ByteArrayId(
-								"123".getBytes(StringUtils.UTF8_CHAR_SET)),
+						indexIds,
 						"",
 						new HashMap<String, Map<String, String>>(),
 						false,
-						"");
-				Set<String> ids = new HashSet<String>();
-				while (consumer.hasNext()) {
-					String id = consumer.next().getValue().getID();
-					// insure uniqueness...even for duplicate points
-					assertTrue(!ids.contains(id));
-					ids.add(id);
-				}
-				Long amount = fileCount.get(dir.getName());
-				if (amount != null) {
-					assertEquals(
-							dir.getName(),
-							amount.intValue(),
-							ids.size());
+						"")) {
+					final Set<String> ids = new HashSet<String>();
+					while (consumer.hasNext()) {
+						final String id = consumer.next().getValue().getID();
+						// insure uniqueness...even for duplicate points
+						assertTrue(!ids.contains(id));
+						ids.add(id);
+					}
+
+					final Long amount = fileCount.get(dir.getName());
+					if (amount != null) {
+						assertEquals(
+								dir.getName(),
+								amount.intValue(),
+								ids.size());
+					}
 				}
 			}
-			catch (Exception ex) {
+			catch (final Exception ex) {
 				System.out.println("Failed " + dir);
 				throw ex;
 			}

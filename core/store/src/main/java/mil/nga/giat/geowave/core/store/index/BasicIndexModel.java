@@ -12,7 +12,7 @@ import mil.nga.giat.geowave.core.index.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.data.field.FieldReader;
 import mil.nga.giat.geowave.core.store.data.field.FieldWriter;
-import mil.nga.giat.geowave.core.store.dimension.DimensionField;
+import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;
 
 /**
  * This class is a concrete implementation of a common index model. Data
@@ -25,23 +25,23 @@ import mil.nga.giat.geowave.core.store.dimension.DimensionField;
 public class BasicIndexModel implements
 		CommonIndexModel
 {
-	private DimensionField<?>[] dimensions;
+	private NumericDimensionField<?>[] dimensions;
 	// the first dimension of a particular field ID will be the persistence
 	// model used
-	private Map<ByteArrayId, DimensionField<?>> fieldIdToPeristenceMap;
+	private Map<ByteArrayId, NumericDimensionField<?>> fieldIdToPeristenceMap;
 
 	protected BasicIndexModel() {}
 
 	public BasicIndexModel(
-			final DimensionField<?>[] dimensions ) {
+			final NumericDimensionField<?>[] dimensions ) {
 		init(dimensions);
 	}
 
 	private void init(
-			final DimensionField<?>[] dimensions ) {
+			final NumericDimensionField<?>[] dimensions ) {
 		this.dimensions = dimensions;
-		fieldIdToPeristenceMap = new HashMap<ByteArrayId, DimensionField<?>>();
-		for (final DimensionField<?> d : dimensions) {
+		fieldIdToPeristenceMap = new HashMap<ByteArrayId, NumericDimensionField<?>>();
+		for (final NumericDimensionField<?> d : dimensions) {
 			if (!fieldIdToPeristenceMap.containsKey(d.getFieldId())) {
 				fieldIdToPeristenceMap.put(
 						d.getFieldId(),
@@ -54,7 +54,7 @@ public class BasicIndexModel implements
 	@Override
 	public FieldWriter<Object, CommonIndexValue> getWriter(
 			final ByteArrayId fieldId ) {
-		final DimensionField<?> dimension = fieldIdToPeristenceMap.get(fieldId);
+		final NumericDimensionField<?> dimension = fieldIdToPeristenceMap.get(fieldId);
 		if (dimension != null) {
 			return (FieldWriter<Object, CommonIndexValue>) dimension.getWriter();
 		}
@@ -65,7 +65,7 @@ public class BasicIndexModel implements
 	@Override
 	public FieldReader<CommonIndexValue> getReader(
 			final ByteArrayId fieldId ) {
-		final DimensionField<?> dimension = fieldIdToPeristenceMap.get(fieldId);
+		final NumericDimensionField<?> dimension = fieldIdToPeristenceMap.get(fieldId);
 		if (dimension != null) {
 			return (FieldReader<CommonIndexValue>) dimension.getReader();
 		}
@@ -73,7 +73,7 @@ public class BasicIndexModel implements
 	}
 
 	@Override
-	public DimensionField<?>[] getDimensions() {
+	public NumericDimensionField<?>[] getDimensions() {
 		return dimensions;
 	}
 
@@ -110,7 +110,7 @@ public class BasicIndexModel implements
 		int byteBufferLength = 4;
 		final List<byte[]> dimensionBinaries = new ArrayList<byte[]>(
 				dimensions.length);
-		for (final DimensionField<?> dimension : dimensions) {
+		for (final NumericDimensionField<?> dimension : dimensions) {
 			final byte[] dimensionBinary = PersistenceUtils.toBinary(dimension);
 			byteBufferLength += (4 + dimensionBinary.length);
 			dimensionBinaries.add(dimensionBinary);
@@ -129,13 +129,13 @@ public class BasicIndexModel implements
 			final byte[] bytes ) {
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
 		final int numDimensions = buf.getInt();
-		dimensions = new DimensionField[numDimensions];
+		dimensions = new NumericDimensionField[numDimensions];
 		for (int i = 0; i < numDimensions; i++) {
 			final byte[] dim = new byte[buf.getInt()];
 			buf.get(dim);
 			dimensions[i] = PersistenceUtils.fromBinary(
 					dim,
-					DimensionField.class);
+					NumericDimensionField.class);
 		}
 		init(dimensions);
 	}

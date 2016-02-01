@@ -2,14 +2,18 @@ package mil.nga.giat.geowave.analytic.mapreduce.kde.compare;
 
 import java.awt.image.WritableRaster;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.vecmath.Point2d;
 
 import mil.nga.giat.geowave.adapter.raster.RasterUtils;
 import mil.nga.giat.geowave.analytic.mapreduce.kde.KDEJobRunner;
-import mil.nga.giat.geowave.core.geotime.IndexType;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.datastore.accumulo.mapreduce.output.GeoWaveOutputKey;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.mapreduce.JobContextIndexStore;
+import mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputKey;
 
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.mapreduce.Reducer;
@@ -48,6 +52,7 @@ public class ComparisonAccumuloStatsReducer extends
 	private int numYPosts;
 	private String coverageName;
 	private int tileSize;
+	protected List<ByteArrayId> indexList;
 
 	@Override
 	protected void reduce(
@@ -91,8 +96,7 @@ public class ComparisonAccumuloStatsReducer extends
 					new GeoWaveOutputKey(
 							new ByteArrayId(
 									coverageName),
-							new ByteArrayId(
-									IndexType.SPATIAL_VECTOR.getDefaultId())),
+							indexList),
 					RasterUtils.createCoverageTypeDouble(
 							coverageName,
 							bbox[0].x,
@@ -155,5 +159,17 @@ public class ComparisonAccumuloStatsReducer extends
 		totalKeys = context.getConfiguration().getLong(
 				"Entries per level.level" + level,
 				10);
+		final PrimaryIndex[] indices = JobContextIndexStore.getIndices(context);
+		indexList = new ArrayList<ByteArrayId>();
+		if ((indices != null) && (indices.length > 0)) {
+			for (final PrimaryIndex index : indices) {
+				indexList.add(index.getId());
+			}
+
+		}
+		else {
+			indexList.add(new SpatialDimensionalityTypeProvider.SpatialIndexBuilder().setAllTiers(
+					true).createIndex().getId());
+		}
 	}
 }

@@ -3,6 +3,7 @@ package mil.nga.giat.geowave.core.store.filter;
 import java.util.List;
 
 import mil.nga.giat.geowave.core.store.data.IndexedPersistenceEncoding;
+import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 
 /**
  * This class wraps a list of filters into a single filter such that if any one
@@ -37,9 +38,12 @@ public class FilterList<T extends QueryFilter> implements
 
 	@Override
 	public boolean accept(
-			final IndexedPersistenceEncoding entry ) {
+			final CommonIndexModel indexModel,
+			final IndexedPersistenceEncoding<?> entry ) {
 		for (final QueryFilter filter : filters) {
-			final boolean ok = filter.accept(entry);
+			final boolean ok = filter.accept(
+					indexModel,
+					entry);
 			if (!ok && logicalAnd) return false;
 			if (ok && !logicalAnd) return true;
 

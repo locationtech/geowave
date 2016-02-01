@@ -11,7 +11,8 @@ public class AccumuloOptions
 	protected boolean persistDataStatistics = true;
 	protected boolean createTable = true;
 	protected boolean useLocalityGroups = true;
-	protected boolean useAltIndex = true;
+	protected boolean useAltIndex = false;
+	protected boolean enableBlockCache = true;
 
 	public boolean isPersistDataStatistics() {
 		return persistDataStatistics;
@@ -65,5 +66,14 @@ public class AccumuloOptions
 	public void setUseAltIndex(
 			final boolean useAltIndex ) {
 		this.useAltIndex = useAltIndex;
+	}
+
+	public boolean isEnableBlockCache() {
+		return enableBlockCache;
+	}
+
+	public void setEnableBlockCache(
+			boolean enableBlockCache ) {
+		this.enableBlockCache = enableBlockCache;
 	}
 }

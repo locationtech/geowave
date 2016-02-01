@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.file.Files;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -14,25 +15,24 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import javax.xml.stream.XMLStreamException;
 
-import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import mil.nga.giat.geowave.adapter.vector.ingest.AbstractSimpleFeatureIngestPlugin;
 import mil.nga.giat.geowave.adapter.vector.utils.SimpleFeatureUserDataConfigurationSet;
-import mil.nga.giat.geowave.core.geotime.IndexType;
+import mil.nga.giat.geowave.core.geotime.store.dimension.GeometryWrapper;
+import mil.nga.giat.geowave.core.geotime.store.dimension.Time;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.ingest.GeoWaveData;
 import mil.nga.giat.geowave.core.ingest.IngestPluginBase;
 import mil.nga.giat.geowave.core.ingest.hdfs.mapreduce.IngestWithMapper;
 import mil.nga.giat.geowave.core.ingest.hdfs.mapreduce.IngestWithReducer;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
-import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
-import mil.nga.giat.geowave.core.store.data.field.FieldVisibilityHandler;
-import mil.nga.giat.geowave.core.store.data.visibility.GlobalVisibilityHandler;
-import mil.nga.giat.geowave.core.store.index.Index;
+import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 
 import org.apache.avro.Schema;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 import org.opengis.feature.simple.SimpleFeature;
+import org.opengis.feature.simple.SimpleFeatureType;
 import org.xml.sax.SAXException;
 
 /**
@@ -57,15 +57,7 @@ public class GpxIngestPlugin extends
 	private static final AtomicLong currentFreeTrackId = new AtomicLong(
 			0);
 
-	private final Index[] supportedIndices;
-
-	public GpxIngestPlugin() {
-		supportedIndices = new Index[] {
-			IndexType.SPATIAL_VECTOR.createDefaultIndex(),
-			IndexType.SPATIAL_TEMPORAL_VECTOR.createDefaultIndex()
-		};
-
-	}
+	public GpxIngestPlugin() {}
 
 	@Override
 	public String[] getFileExtensionFilters() {
@@ -130,28 +122,12 @@ public class GpxIngestPlugin extends
 	}
 
 	@Override
-	public Index[] getSupportedIndices() {
-		return supportedIndices;
-	}
-
-	@Override
-	public WritableDataAdapter<SimpleFeature>[] getDataAdapters(
-			final String globalVisibility ) {
-		final FieldVisibilityHandler<SimpleFeature, Object> fieldVisiblityHandler = ((globalVisibility != null) && !globalVisibility.isEmpty()) ? new GlobalVisibilityHandler<SimpleFeature, Object>(
-				globalVisibility) : null;
-		return new WritableDataAdapter[] {
-			new FeatureDataAdapter(
-					SimpleFeatureUserDataConfigurationSet.configureType(GPXConsumer.pointType),
-					fieldVisiblityHandler),
-			new FeatureDataAdapter(
-					SimpleFeatureUserDataConfigurationSet.configureType(GPXConsumer.waypointType),
-					fieldVisiblityHandler),
-			new FeatureDataAdapter(
-					SimpleFeatureUserDataConfigurationSet.configureType(GPXConsumer.trackType),
-					fieldVisiblityHandler),
-			new FeatureDataAdapter(
-					SimpleFeatureUserDataConfigurationSet.configureType(GPXConsumer.routeType),
-					fieldVisiblityHandler)
+	protected SimpleFeatureType[] getTypes() {
+		return new SimpleFeatureType[] {
+			SimpleFeatureUserDataConfigurationSet.configureType(GPXConsumer.pointType),
+			SimpleFeatureUserDataConfigurationSet.configureType(GPXConsumer.waypointType),
+			SimpleFeatureUserDataConfigurationSet.configureType(GPXConsumer.trackType),
+			SimpleFeatureUserDataConfigurationSet.configureType(GPXConsumer.routeType)
 		};
 	}
 
@@ -213,7 +189,7 @@ public class GpxIngestPlugin extends
 	@Override
 	protected CloseableIterator<GeoWaveData<SimpleFeature>> toGeoWaveDataInternal(
 			final GpxTrack gpxTrack,
-			final ByteArrayId primaryIndexId,
+			final Collection<ByteArrayId> primaryIndexIds,
 			final String globalVisibility ) {
 		final InputStream in = new ByteArrayInputStream(
 				gpxTrack.getGpxfile().array());
@@ -221,7 +197,7 @@ public class GpxIngestPlugin extends
 		try {
 			return new GPXConsumer(
 					in,
-					primaryIndexId,
+					primaryIndexIds,
 					gpxTrack.getTrackid() == null ? "" : gpxTrack.getTrackid().toString(),
 					getAdditionalData(gpxTrack),
 					false, // waypoints, even dups, are unique, due to QGis
@@ -237,8 +213,8 @@ public class GpxIngestPlugin extends
 	}
 
 	@Override
-	public Index[] getRequiredIndices() {
-		return new Index[] {};
+	public PrimaryIndex[] getRequiredIndices() {
+		return new PrimaryIndex[] {};
 	}
 
 	private Map<String, Map<String, String>> getAdditionalData(
@@ -306,6 +282,14 @@ public class GpxIngestPlugin extends
 	public IngestPluginBase<GpxTrack, SimpleFeature> getIngestWithAvroPlugin() {
 		return new IngestGpxTrackFromHdfs(
 				this);
+	}
+
+	@Override
+	public Class<? extends CommonIndexValue>[] getSupportedIndexableTypes() {
+		return new Class[] {
+			GeometryWrapper.class,
+			Time.class
+		};
 	}
 
 }

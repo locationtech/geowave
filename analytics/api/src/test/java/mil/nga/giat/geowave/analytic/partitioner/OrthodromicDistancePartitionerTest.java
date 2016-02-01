@@ -3,7 +3,11 @@ package mil.nga.giat.geowave.analytic.partitioner;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.List;
 
 import mil.nga.giat.geowave.analytic.AnalyticFeature;
@@ -12,13 +16,15 @@ import mil.nga.giat.geowave.analytic.clustering.ClusteringUtils;
 import mil.nga.giat.geowave.analytic.extract.SimpleFeatureGeometryExtractor;
 import mil.nga.giat.geowave.analytic.model.SpatialIndexModelBuilder;
 import mil.nga.giat.geowave.analytic.param.ClusteringParameters;
+import mil.nga.giat.geowave.analytic.param.ClusteringParameters.Clustering;
 import mil.nga.giat.geowave.analytic.param.CommonParameters;
 import mil.nga.giat.geowave.analytic.param.ExtractParameters;
 import mil.nga.giat.geowave.analytic.param.GlobalParameters;
-import mil.nga.giat.geowave.analytic.param.PartitionParameters.Partition;
 import mil.nga.giat.geowave.analytic.partitioner.Partitioner.PartitionData;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.mapreduce.Job;
 import org.geotools.feature.type.BasicFeatureTypes;
 import org.geotools.referencing.CRS;
 import org.junit.Test;
@@ -33,6 +39,7 @@ import com.vividsolutions.jts.geom.GeometryFactory;
 public class OrthodromicDistancePartitionerTest
 {
 	public static CoordinateReferenceSystem DEFAULT_CRS;
+
 	static {
 		try {
 			DEFAULT_CRS = CRS.decode(
@@ -46,7 +53,8 @@ public class OrthodromicDistancePartitionerTest
 
 	@Test
 	public void test()
-			throws IOException {
+			throws IOException,
+			ClassNotFoundException {
 
 		final SimpleFeatureType ftype = AnalyticFeature.createGeometryFeatureAdapter(
 				"centroid",
@@ -78,20 +86,13 @@ public class OrthodromicDistancePartitionerTest
 
 		final PropertyManagement propertyManagement = new PropertyManagement();
 
-		AbstractPartitioner.putDistances(
-				propertyManagement,
-				new double[] {
-					propertyManagement.getPropertyAsDouble(
-							Partition.PARTITION_DISTANCE,
-							10000)
-				});
+		propertyManagement.store(
+				Clustering.DISTANCE_THRESHOLDS,
+				"10000");
 
 		propertyManagement.store(
 				CommonParameters.Common.INDEX_MODEL_BUILDER_CLASS,
 				SpatialIndexModelBuilder.class);
-		propertyManagement.store(
-				CommonParameters.Common.ADAPTER_STORE_FACTORY,
-				FeatureDataAdapterStoreFactory.class);
 
 		propertyManagement.store(
 				ExtractParameters.Extract.DIMENSION_EXTRACT_CLASS,
@@ -104,8 +105,14 @@ public class OrthodromicDistancePartitionerTest
 				"m");
 
 		final OrthodromicDistancePartitioner<SimpleFeature> partitioner = new OrthodromicDistancePartitioner<SimpleFeature>();
-
-		partitioner.initialize(propertyManagement);
+		final Configuration configuration = new Configuration();
+		final Class<?> scope = OrthodromicDistancePartitionerTest.class;
+		propertyManagement.setJobConfiguration(
+				configuration,
+				scope);
+		partitioner.initialize(
+				Job.getInstance(configuration),
+				scope);
 
 		List<PartitionData> partitions = partitioner.getCubeIdentifiers(feature);
 		assertEquals(
@@ -197,6 +204,24 @@ public class OrthodromicDistancePartitionerTest
 		assertTrue(minY < 88.0);
 		assertTrue(maxX > 0);
 		assertTrue(minX < 0);
+
+		try (final ByteArrayOutputStream bs = new ByteArrayOutputStream()) {
+			final ObjectOutputStream os = new ObjectOutputStream(
+					bs);
+			os.writeObject(partitioner);
+			os.flush();
+			try (final ObjectInputStream is = new ObjectInputStream(
+					new ByteArrayInputStream(
+							bs.toByteArray()))) {
+
+				@SuppressWarnings("unchecked")
+				final OrthodromicDistancePartitioner<SimpleFeature> partitioner2 = (OrthodromicDistancePartitioner<SimpleFeature>) is.readObject();
+				assertEquals(
+						partitioner2,
+						partitioner);
+
+			}
+		}
 
 	}
 

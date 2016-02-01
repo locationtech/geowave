@@ -14,7 +14,7 @@ import org.opengis.feature.simple.SimpleFeature
 import org.opengis.feature.`type`.AttributeType
 import mil.nga.giat.geowave.core.index.ByteArrayId
 import mil.nga.giat.geowave.analytic.distance.FeatureCentroidDistanceFn
-import mil.nga.giat.geowave.datastore.accumulo.mapreduce.input.GeoWaveInputKey
+import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey
 import mil.nga.giat.geowave.analytic.distance.CoordinateCircleDistanceFn
 
 class TestSuiteDataTools(val name: String, val definition: String) {

@@ -33,12 +33,14 @@ public class RankSamplerJobRunner extends
 			throws Exception {
 		CentroidManagerGeoWave.setParameters(
 				config,
+				getScope(),
 				runTimeProperties);
 		runTimeProperties.storeIfEmpty(
 				SampleParameters.Sample.PROBABILITY_FUNCTION,
 				BahmanEtAlSampleProbabilityFn.class);
 		CentroidDistanceBasedSamplingRankFunction.setParameters(
 				config,
+				getScope(),
 				runTimeProperties);
 
 		return super.run(

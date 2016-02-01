@@ -164,8 +164,10 @@ public class Stanag4676EventWritable implements
 				0);
 		Geometry = new BytesWritable(
 				geometry);
-		Image = new BytesWritable(
-				image);
+		if (image != null) {
+			Image = new BytesWritable(
+					image);
+		}
 		MissionUUID = new Text(
 				missionUUID);
 		TrackNumber = new Text(
@@ -230,8 +232,11 @@ public class Stanag4676EventWritable implements
 				1);
 		Geometry = new BytesWritable(
 				geometry);
-		Image = new BytesWritable(
-				image);
+		if (image != null) {
+			Image = new BytesWritable(
+					image);
+		}
+
 		MissionUUID = new Text(
 				missionUUID);
 		TrackNumber = new Text(

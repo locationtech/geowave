@@ -1,6 +1,9 @@
 package mil.nga.giat.geowave.analytic.partitioner;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -8,10 +11,21 @@ import javax.measure.quantity.Length;
 import javax.measure.unit.SI;
 import javax.measure.unit.Unit;
 
-import mil.nga.giat.geowave.analytic.ConfigurationWrapper;
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.mapreduce.JobContext;
+import org.geotools.referencing.CRS;
+import org.opengis.referencing.FactoryException;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.Envelope;
+import com.vividsolutions.jts.geom.Geometry;
+
 import mil.nga.giat.geowave.analytic.GeometryCalculations;
 import mil.nga.giat.geowave.analytic.PropertyManagement;
-import mil.nga.giat.geowave.analytic.RunnerUtils;
+import mil.nga.giat.geowave.analytic.ScopedJobConfiguration;
 import mil.nga.giat.geowave.analytic.extract.DimensionExtractor;
 import mil.nga.giat.geowave.analytic.extract.SimpleFeatureGeometryExtractor;
 import mil.nga.giat.geowave.analytic.param.ClusteringParameters;
@@ -25,29 +39,17 @@ import mil.nga.giat.geowave.core.index.sfc.data.BasicNumericDataset;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericData;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericRange;
-import mil.nga.giat.geowave.core.store.dimension.DimensionField;
+import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;
 import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
-
-import org.apache.commons.cli.Option;
-import org.apache.hadoop.conf.Configuration;
-import org.geotools.referencing.CRS;
-import org.opengis.referencing.FactoryException;
-import org.opengis.referencing.crs.CoordinateReferenceSystem;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.Envelope;
-import com.vividsolutions.jts.geom.Geometry;
 
 /*
  * Calculates distance use orthodromic distance to calculate the bounding box around each
  * point.
- * 
+ *
  * The approach is slow and more accurate, resulting in more partitions of smaller size.
  * The class requires {@link CoordinateReferenceSystem} for the distance calculation
  * and {@link DimensionExtractor} to extract geometries and other dimensions.
- * 
+ *
  * The order of distances provided must match the order or dimensions extracted from the dimension
  * extractor.
  */
@@ -118,7 +120,7 @@ public class OrthodromicDistancePartitioner<T> extends
 	private MultiDimensionalNumericData getNumericData(
 			final Geometry geometry,
 			final double[] otherDimensionData ) {
-		final DimensionField<?>[] dimensionFields = getIndex().getIndexModel().getDimensions();
+		final NumericDimensionField<?>[] dimensionFields = getIndex().getIndexModel().getDimensions();
 		final NumericData[] numericData = new NumericData[dimensionFields.length];
 		final double[] distancePerDimension = getDistancePerDimension();
 		int otherIndex = 0;
@@ -152,7 +154,7 @@ public class OrthodromicDistancePartitioner<T> extends
 	}
 
 	private static int indexOf(
-			final DimensionField<?> fields[],
+			final NumericDimensionField<?> fields[],
 			final Class<? extends NumericDimensionDefinition> clazz ) {
 
 		for (int i = 0; i < fields.length; i++) {
@@ -234,12 +236,30 @@ public class OrthodromicDistancePartitioner<T> extends
 	@SuppressWarnings("unchecked")
 	@Override
 	public void initialize(
-			final ConfigurationWrapper context )
+			final JobContext context,
+			final Class<?> scope )
+			throws IOException {
+		this.initialize(
+				context.getConfiguration(),
+				scope);
+	}
+
+	public void initialize(
+			final Configuration configuration,
+			final Class<?> scope )
+			throws IOException {
+		initialize(new ScopedJobConfiguration(
+				configuration,
+				scope));
+	}
+
+	@Override
+	public void initialize(
+			ScopedJobConfiguration config )
 			throws IOException {
 
-		crsName = context.getString(
+		crsName = config.getString(
 				GlobalParameters.Global.CRS_ID,
-				this.getClass(),
 				"EPSG:4326");
 		try {
 			crs = CRS.decode(
@@ -253,9 +273,8 @@ public class OrthodromicDistancePartitioner<T> extends
 		}
 
 		try {
-			dimensionExtractor = context.getInstance(
+			dimensionExtractor = config.getInstance(
 					ExtractParameters.Extract.DIMENSION_EXTRACT_CLASS,
-					this.getClass(),
 					DimensionExtractor.class,
 					SimpleFeatureGeometryExtractor.class);
 		}
@@ -265,48 +284,43 @@ public class OrthodromicDistancePartitioner<T> extends
 					ex);
 		}
 
-		final String distanceUnit = context.getString(
+		final String distanceUnit = config.getString(
 				ClusteringParameters.Clustering.GEOMETRIC_DISTANCE_UNIT,
-				this.getClass(),
 				"m");
 
 		this.geometricDistanceUnit = (Unit<Length>) Unit.valueOf(distanceUnit);
 
-		super.initialize(context);
+		super.initialize(config);
 	}
 
 	@Override
-	public void fillOptions(
-			final Set<Option> options ) {
-		super.fillOptions(options);
-		ClusteringParameters.fillOptions(
-				options,
-				new ClusteringParameters.Clustering[] {
-					ClusteringParameters.Clustering.GEOMETRIC_DISTANCE_UNIT
-				});
-		ExtractParameters.fillOptions(
-				options,
-				new ExtractParameters.Extract[] {
-					ExtractParameters.Extract.DIMENSION_EXTRACT_CLASS
-				});
-
+	public Collection<ParameterEnum<?>> getParameters() {
+		final Set<ParameterEnum<?>> params = new HashSet<ParameterEnum<?>>();
+		params.addAll(super.getParameters());
+		params.addAll(Arrays.asList(new ParameterEnum<?>[] {
+			ClusteringParameters.Clustering.GEOMETRIC_DISTANCE_UNIT,
+			ExtractParameters.Extract.DIMENSION_EXTRACT_CLASS
+		}));
+		return params;
 	}
 
 	@Override
 	public void setup(
 			final PropertyManagement runTimeProperties,
+			final Class<?> scope,
 			final Configuration configuration ) {
 		super.setup(
 				runTimeProperties,
+				scope,
 				configuration);
-		RunnerUtils.setParameter(
+		final ParameterEnum[] params = new ParameterEnum[] {
+			GlobalParameters.Global.CRS_ID,
+			ExtractParameters.Extract.DIMENSION_EXTRACT_CLASS,
+			ClusteringParameters.Clustering.GEOMETRIC_DISTANCE_UNIT
+		};
+		runTimeProperties.setConfig(
+				params,
 				configuration,
-				getClass(),
-				runTimeProperties,
-				new ParameterEnum[] {
-					GlobalParameters.Global.CRS_ID,
-					ExtractParameters.Extract.DIMENSION_EXTRACT_CLASS,
-					ClusteringParameters.Clustering.GEOMETRIC_DISTANCE_UNIT
-				});
+				scope);
 	}
 }

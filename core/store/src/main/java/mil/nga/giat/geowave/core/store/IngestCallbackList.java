@@ -1,9 +1,12 @@
 package mil.nga.giat.geowave.core.store;
 
+import java.io.Closeable;
+import java.io.IOException;
 import java.util.List;
 
 public class IngestCallbackList<T> implements
-		IngestCallback<T>
+		IngestCallback<T>,
+		Closeable
 {
 	private final List<IngestCallback<T>> callbacks;
 
@@ -20,6 +23,14 @@ public class IngestCallbackList<T> implements
 			callback.entryIngested(
 					entryInfo,
 					entry);
+		}
+	}
+
+	@Override
+	public void close()
+			throws IOException {
+		for (final IngestCallback<T> callback : callbacks) {
+			if (callback instanceof Closeable) ((Closeable) callback).close();
 		}
 	}
 

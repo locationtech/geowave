@@ -1,11 +1,11 @@
 package mil.nga.giat.geowave.analytic.mapreduce.clustering.runner;
 
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 
-import mil.nga.giat.geowave.analytic.Projection;
 import mil.nga.giat.geowave.analytic.PropertyManagement;
-import mil.nga.giat.geowave.analytic.RunnerUtils;
-import mil.nga.giat.geowave.analytic.SimpleFeatureItemWrapperFactory;
 import mil.nga.giat.geowave.analytic.SimpleFeatureProjection;
 import mil.nga.giat.geowave.analytic.clustering.CentroidManagerGeoWave;
 import mil.nga.giat.geowave.analytic.clustering.NestedGroupCentroidAssignment;
@@ -17,16 +17,16 @@ import mil.nga.giat.geowave.analytic.param.GlobalParameters;
 import mil.nga.giat.geowave.analytic.param.HullParameters;
 import mil.nga.giat.geowave.analytic.param.MapReduceParameters;
 import mil.nga.giat.geowave.analytic.param.ParameterEnum;
-import mil.nga.giat.geowave.datastore.accumulo.mapreduce.input.GeoWaveInputKey;
-import mil.nga.giat.geowave.datastore.accumulo.mapreduce.output.GeoWaveOutputKey;
+import mil.nga.giat.geowave.analytic.param.StoreParameters;
+import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
+import mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputKey;
 
-import org.apache.commons.cli.Option;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.io.ObjectWritable;
 import org.apache.hadoop.mapreduce.Job;
 
 /**
- * 
+ *
 
  */
 public class ConvexHullJobRunner extends
@@ -71,52 +71,24 @@ public class ConvexHullJobRunner extends
 		runTimeProperties.storeIfEmpty(
 				HullParameters.Hull.PROJECTION_CLASS,
 				SimpleFeatureProjection.class);
-
-		final Projection<?> projectionFunction = runTimeProperties.getClassInstance(
-				HullParameters.Hull.PROJECTION_CLASS,
-				Projection.class,
-				SimpleFeatureProjection.class);
-
-		projectionFunction.setup(
-				runTimeProperties,
-				config);
-
-		runTimeProperties.storeIfEmpty(
-				HullParameters.Hull.WRAPPER_FACTORY_CLASS,
-				SimpleFeatureItemWrapperFactory.class);
-
-		RunnerUtils.setParameter(
-				config,
-				getScope(),
-				new Object[] {
-					checkIndex(
-							runTimeProperties,
-							HullParameters.Hull.INDEX_ID,
-							runTimeProperties.getPropertyAsString(
-									CentroidParameters.Centroid.INDEX_ID,
-									"hull_idx"))
-				},
-				new ParameterEnum[] {
-					HullParameters.Hull.INDEX_ID
-				});
-
-		RunnerUtils.setParameter(
-				config,
-				getScope(),
-				runTimeProperties,
-				new ParameterEnum[] {
+		runTimeProperties.setConfig(
+				new ParameterEnum<?>[] {
 					HullParameters.Hull.WRAPPER_FACTORY_CLASS,
 					HullParameters.Hull.PROJECTION_CLASS,
 					HullParameters.Hull.DATA_TYPE_ID
-				});
+				},
+				config,
+				getScope());
 		setReducerCount(runTimeProperties.getPropertyAsInt(
 				HullParameters.Hull.REDUCER_COUNT,
 				4));
 		CentroidManagerGeoWave.setParameters(
 				config,
+				getScope(),
 				runTimeProperties);
 		NestedGroupCentroidAssignment.setParameters(
 				config,
+				getScope(),
 				runTimeProperties);
 
 		final int localZoomLevel = runTimeProperties.getPropertyAsInt(
@@ -125,6 +97,7 @@ public class ConvexHullJobRunner extends
 		// getting group from next level, now that the prior level is complete
 		NestedGroupCentroidAssignment.setZoomLevel(
 				config,
+				getScope(),
 				localZoomLevel + 1);
 
 		addDataAdapter(
@@ -133,41 +106,42 @@ public class ConvexHullJobRunner extends
 						runTimeProperties,
 						HullParameters.Hull.DATA_TYPE_ID,
 						HullParameters.Hull.DATA_NAMESPACE_URI));
-
+		checkIndex(
+				runTimeProperties,
+				HullParameters.Hull.INDEX_ID,
+				"hull_idx");
 		return super.run(
 				config,
 				runTimeProperties);
 	}
 
 	@Override
-	public void fillOptions(
-			final Set<Option> options ) {
-		super.fillOptions(options);
+	public Collection<ParameterEnum<?>> getParameters() {
+		final Set<ParameterEnum<?>> params = new HashSet<ParameterEnum<?>>();
+		params.addAll(super.getParameters());
 
-		GlobalParameters.fillOptions(
-				options,
-				new GlobalParameters.Global[] {
-					GlobalParameters.Global.ZOOKEEKER,
-					GlobalParameters.Global.ACCUMULO_INSTANCE,
-					GlobalParameters.Global.ACCUMULO_PASSWORD,
-					GlobalParameters.Global.ACCUMULO_USER,
-					GlobalParameters.Global.ACCUMULO_NAMESPACE,
-					GlobalParameters.Global.BATCH_ID
-				});
+		params.addAll(Arrays.asList(new ParameterEnum<?>[] {
+			StoreParameters.StoreParam.DATA_STORE,
+			GlobalParameters.Global.BATCH_ID
+		}));
 
-		MapReduceParameters.fillOptions(options);
-		NestedGroupCentroidAssignment.fillOptions(options);
+		params.addAll(MapReduceParameters.getParameters());
+		params.addAll(NestedGroupCentroidAssignment.getParameters());
 
-		HullParameters.fillOptions(
-				options,
-				new HullParameters.Hull[] {
-					HullParameters.Hull.WRAPPER_FACTORY_CLASS,
-					HullParameters.Hull.PROJECTION_CLASS,
-					HullParameters.Hull.REDUCER_COUNT,
-					HullParameters.Hull.DATA_TYPE_ID,
-					HullParameters.Hull.DATA_NAMESPACE_URI,
-					HullParameters.Hull.INDEX_ID
-				});
+		params.addAll(Arrays.asList(new ParameterEnum<?>[] {
+			HullParameters.Hull.WRAPPER_FACTORY_CLASS,
+			HullParameters.Hull.PROJECTION_CLASS,
+			HullParameters.Hull.REDUCER_COUNT,
+			HullParameters.Hull.DATA_TYPE_ID,
+			HullParameters.Hull.DATA_NAMESPACE_URI,
+			HullParameters.Hull.INDEX_ID
+		}));
+		return params;
+	}
+
+	@Override
+	protected String getJobName() {
+		return "Convex Hull";
 	}
 
 }

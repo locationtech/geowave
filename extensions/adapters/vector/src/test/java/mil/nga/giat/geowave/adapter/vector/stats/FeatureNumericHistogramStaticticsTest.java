@@ -13,8 +13,6 @@ import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.data.visibility.GlobalVisibilityHandler;
 
-import org.apache.accumulo.core.client.AccumuloException;
-import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.apache.commons.math.util.MathUtils;
 import org.geotools.data.DataUtilities;
 import org.geotools.feature.SchemaException;
@@ -41,9 +39,7 @@ public class FeatureNumericHistogramStaticticsTest
 
 	@Before
 	public void setup()
-			throws AccumuloException,
-			AccumuloSecurityException,
-			SchemaException,
+			throws SchemaException,
 			CQLException,
 			ParseException {
 		schema = DataUtilities.createType(
@@ -127,7 +123,7 @@ public class FeatureNumericHistogramStaticticsTest
 
 		double max = 0;
 		for (long i = 0; i < 10000; i++) {
-			final double val = next + (double) (1000 * rand.nextDouble());
+			final double val = next + 1000 * rand.nextDouble();
 			stat2.entryIngested(
 					null,
 					create(val));
@@ -135,8 +131,8 @@ public class FeatureNumericHistogramStaticticsTest
 					val,
 					max);
 		}
-		final double skewvalue = next + (double) (1000 * rand.nextDouble());
-		SimpleFeature skewedFeature = create(skewvalue);
+		final double skewvalue = next + 1000 * rand.nextDouble();
+		final SimpleFeature skewedFeature = create(skewvalue);
 		for (int i = 0; i < 10000; i++) {
 			stat2.entryIngested(
 					null,
@@ -145,7 +141,7 @@ public class FeatureNumericHistogramStaticticsTest
 			// (1000 * rand.nextDouble())));
 		}
 
-		byte[] b = stat2.toBinary();
+		final byte[] b = stat2.toBinary();
 		stat2.fromBinary(b);
 		assertEquals(
 				1.0,
@@ -189,14 +185,14 @@ public class FeatureNumericHistogramStaticticsTest
 				7777);
 		double next = 1;
 		for (int i = 0; i < 100; i++) {
-			next = next + rand.nextDouble() * 100.0;
+			next = next + (rand.nextDouble() * 100.0);
 			stat1.entryIngested(
 					null,
 					create(next));
 		}
 
 		for (long i = 0; i < 100; i++) {
-			FeatureNumericHistogramStatistics stat2 = new FeatureNumericHistogramStatistics(
+			final FeatureNumericHistogramStatistics stat2 = new FeatureNumericHistogramStatistics(
 					new ByteArrayId(
 							"sp.geostuff"),
 					"pop");
@@ -261,8 +257,8 @@ public class FeatureNumericHistogramStaticticsTest
 					val,
 					min);
 		}
-		final double skewvalue = next - (double) (1000 * rand.nextDouble());
-		SimpleFeature skewedFeature = create(skewvalue);
+		final double skewvalue = next - 1000 * rand.nextDouble();
+		final SimpleFeature skewedFeature = create(skewvalue);
 		for (int i = 0; i < 10000; i++) {
 			stat2.entryIngested(
 					null,
@@ -273,7 +269,7 @@ public class FeatureNumericHistogramStaticticsTest
 				1.0,
 				stat2.cdf(0),
 				0.00001);
-		byte[] b = stat2.toBinary();
+		final byte[] b = stat2.toBinary();
 		stat2.fromBinary(b);
 
 		assertEquals(
@@ -326,7 +322,7 @@ public class FeatureNumericHistogramStaticticsTest
 					new ByteArrayId(
 							"sp.geostuff"),
 					"pop");
-			double m = 10000.0 * Math.pow(
+			final double m = 10000.0 * Math.pow(
 					10.0,
 					((i / 100) + 1));
 			if (i == 50) {

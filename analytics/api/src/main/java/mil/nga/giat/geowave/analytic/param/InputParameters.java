@@ -1,71 +1,46 @@
 package mil.nga.giat.geowave.analytic.param;
 
-import java.util.Arrays;
-import java.util.Set;
-
-import mil.nga.giat.geowave.analytic.PropertyManagement;
-
-import org.apache.commons.cli.Option;
 import org.apache.hadoop.fs.Path;
 
 public class InputParameters
 {
 	public enum Input
 			implements
-			ParameterEnum {
+			ParameterEnum<Object> {
 		INPUT_FORMAT(
-				FormatConfiguration.class),
+				FormatConfiguration.class,
+				"ifc",
+				"Input Format Class",
+				true),
 		HDFS_INPUT_PATH(
-				Path.class);
-		private final Class<?> baseClass;
+				Path.class,
+				"iip",
+				"Input HDFS File Path",
+				true);
 
-		Input(
-				final Class<?> baseClass ) {
-			this.baseClass = baseClass;
-		}
+		private final ParameterHelper<Object> helper;
 
-		@Override
-		public Class<?> getBaseClass() {
-			return baseClass;
+		private Input(
+				final Class baseClass,
+				final String name,
+				final String description,
+				final boolean hasArg ) {
+			helper = new BasicParameterHelper(
+					this,
+					baseClass,
+					name,
+					description,
+					hasArg);
 		}
 
 		@Override
 		public Enum<?> self() {
 			return this;
 		}
-	}
 
-	public static final void fillOptions(
-			final Set<Option> options,
-			final Input[] params ) {
-
-		if (contains(
-				params,
-				Input.HDFS_INPUT_PATH)) {
-			options.add(PropertyManagement.newOption(
-					Input.HDFS_INPUT_PATH,
-					"iip",
-					"Input HDFS File Path",
-					true));
+		@Override
+		public ParameterHelper<Object> getHelper() {
+			return helper;
 		}
-
-		if (contains(
-				params,
-				Input.INPUT_FORMAT)) {
-			options.add(PropertyManagement.newOption(
-					Input.INPUT_FORMAT,
-					"ifc",
-					"Input Format Class",
-					true));
-		}
-
-	}
-
-	private static boolean contains(
-			final Input[] params,
-			final Input option ) {
-		return Arrays.asList(
-				params).contains(
-				option);
 	}
 }

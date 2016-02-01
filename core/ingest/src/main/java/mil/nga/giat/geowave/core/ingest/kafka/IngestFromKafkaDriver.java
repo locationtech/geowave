@@ -15,6 +15,8 @@ import kafka.consumer.ConsumerIterator;
 import kafka.consumer.ConsumerTimeoutException;
 import kafka.consumer.KafkaStream;
 import kafka.javaapi.consumer.ConsumerConnector;
+import mil.nga.giat.geowave.core.cli.CommandLineResult;
+import mil.nga.giat.geowave.core.cli.DataStoreCommandLineOptions;
 import mil.nga.giat.geowave.core.ingest.AbstractIngestCommandLineDriver;
 import mil.nga.giat.geowave.core.ingest.IngestCommandLineOptions;
 import mil.nga.giat.geowave.core.ingest.IngestFormatPluginProviderSpi;
@@ -25,12 +27,7 @@ import mil.nga.giat.geowave.core.ingest.avro.GenericAvroSerializer;
 import mil.nga.giat.geowave.core.ingest.local.IngestRunData;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
-import mil.nga.giat.geowave.datastore.accumulo.AccumuloCommandLineOptions;
-import mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStore;
-import mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations;
 
-import org.apache.accumulo.core.client.AccumuloException;
-import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
@@ -47,7 +44,7 @@ public class IngestFromKafkaDriver extends
 	private final static Logger LOGGER = Logger.getLogger(IngestFromKafkaDriver.class);
 
 	private KafkaConsumerCommandLineOptions kafkaOptions;
-	private AccumuloCommandLineOptions accumuloOptions;
+	private DataStoreCommandLineOptions dataStoreOptions;
 	private IngestCommandLineOptions ingestOptions;
 
 	public IngestFromKafkaDriver(
@@ -57,24 +54,10 @@ public class IngestFromKafkaDriver extends
 	}
 
 	@Override
-	protected void runInternal(
+	protected boolean runInternal(
 			final String[] args,
 			final List<IngestFormatPluginProviderSpi<?, ?>> pluginProviders ) {
-
-		AccumuloOperations operations;
-		try {
-			operations = accumuloOptions.getAccumuloOperations();
-
-		}
-		catch (AccumuloException | AccumuloSecurityException e) {
-			LOGGER.fatal(
-					"Unable to connect to Accumulo with the specified options",
-					e);
-			return;
-		}
-
-		final DataStore dataStore = new AccumuloDataStore(
-				operations);
+		final DataStore dataStore = dataStoreOptions.createStore();
 
 		final List<String> queue = new ArrayList<String>();
 		addPluginsToQueue(
@@ -84,7 +67,8 @@ public class IngestFromKafkaDriver extends
 		configureAndLaunchPlugins(
 				dataStore,
 				pluginProviders,
-				queue);
+				queue,
+				args);
 
 		int counter = 0;
 		while (queue.size() > 0) {
@@ -113,7 +97,9 @@ public class IngestFromKafkaDriver extends
 			for (final String formatPluginName : queue) {
 				LOGGER.warn("\t[" + formatPluginName + "]");
 			}
+			return false;
 		}
+		return true;
 	}
 
 	private void addPluginsToQueue(
@@ -127,7 +113,8 @@ public class IngestFromKafkaDriver extends
 	private void configureAndLaunchPlugins(
 			final DataStore dataStore,
 			final List<IngestFormatPluginProviderSpi<?, ?>> pluginProviders,
-			final List<String> queue ) {
+			final List<String> queue,
+			final String[] args ) {
 		try {
 			for (final IngestFormatPluginProviderSpi<?, ?> pluginProvider : pluginProviders) {
 				final List<WritableDataAdapter<?>> adapters = new ArrayList<WritableDataAdapter<?>>();
@@ -145,7 +132,8 @@ public class IngestFromKafkaDriver extends
 					adapters.addAll(Arrays.asList(dataAdapters));
 					final IngestRunData runData = new IngestRunData(
 							adapters,
-							dataStore);
+							dataStore,
+							args);
 
 					launchTopicConsumer(
 							pluginProvider.getIngestFormatName(),
@@ -315,9 +303,16 @@ public class IngestFromKafkaDriver extends
 
 	@Override
 	protected void parseOptionsInternal(
-			final CommandLine commandLine )
+			final Options options,
+			CommandLine commandLine )
 			throws ParseException {
-		accumuloOptions = AccumuloCommandLineOptions.parseOptions(commandLine);
+		final CommandLineResult<DataStoreCommandLineOptions> dataStoreOptionsResult = DataStoreCommandLineOptions.parseOptions(
+				options,
+				commandLine);
+		dataStoreOptions = dataStoreOptionsResult.getResult();
+		if (dataStoreOptionsResult.isCommandLineChange()) {
+			commandLine = dataStoreOptionsResult.getCommandLine();
+		}
 		ingestOptions = IngestCommandLineOptions.parseOptions(commandLine);
 		kafkaOptions = KafkaConsumerCommandLineOptions.parseOptions(commandLine);
 	}
@@ -325,7 +320,7 @@ public class IngestFromKafkaDriver extends
 	@Override
 	protected void applyOptionsInternal(
 			final Options allOptions ) {
-		AccumuloCommandLineOptions.applyOptions(allOptions);
+		DataStoreCommandLineOptions.applyOptions(allOptions);
 		IngestCommandLineOptions.applyOptions(allOptions);
 		KafkaConsumerCommandLineOptions.applyOptions(allOptions);
 	}

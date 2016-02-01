@@ -62,7 +62,7 @@ public interface SpaceFillingCurve extends
 	 *         parameters supplied in the query object
 	 * 
 	 */
-	public RangeDecomposition decomposeQueryFully(
+	public RangeDecomposition decomposeRangeFully(
 			MultiDimensionalNumericData query );
 
 	/***
@@ -80,8 +80,9 @@ public interface SpaceFillingCurve extends
 	 *         parameters supplied in the query object
 	 * 
 	 */
-	public RangeDecomposition decomposeQuery(
+	public RangeDecomposition decomposeRange(
 			MultiDimensionalNumericData query,
+			boolean overInclusiveOnEdge,
 			int maxRanges );
 
 	/***

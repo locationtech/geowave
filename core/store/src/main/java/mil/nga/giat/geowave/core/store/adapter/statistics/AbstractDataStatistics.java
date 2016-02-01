@@ -49,10 +49,14 @@ abstract public class AbstractDataStatistics<T> implements
 
 	protected ByteBuffer binaryBuffer(
 			final int size ) {
-		final byte idBytes[] = statisticsId.getBytes();
-		final ByteBuffer buffer = ByteBuffer.allocate(size + 4 + idBytes.length);
-		buffer.putInt(idBytes.length);
-		buffer.put(idBytes);
+		final byte aidBytes[] = dataAdapterId.getBytes();
+		final byte sidBytes[] = statisticsId.getBytes();
+		final ByteBuffer buffer = ByteBuffer.allocate(size + 8 + sidBytes.length + aidBytes.length);
+		buffer.putInt(aidBytes.length);
+		buffer.putInt(sidBytes.length);
+		buffer.put(aidBytes);
+		buffer.put(sidBytes);
+
 		return buffer;
 	}
 
@@ -60,11 +64,17 @@ abstract public class AbstractDataStatistics<T> implements
 			final byte[] bytes ) {
 
 		final ByteBuffer buffer = ByteBuffer.wrap(bytes);
-		final int len = buffer.getInt();
-		final byte idBytes[] = new byte[len];
-		buffer.get(idBytes);
+		final int alen = buffer.getInt();
+		final byte aidBytes[] = new byte[alen];
+		final int slen = buffer.getInt();
+		final byte sidBytes[] = new byte[slen];
+
+		buffer.get(aidBytes);
+		dataAdapterId = new ByteArrayId(
+				aidBytes);
+		buffer.get(sidBytes);
 		statisticsId = new ByteArrayId(
-				idBytes);
+				sidBytes);
 		return buffer;
 	}
 

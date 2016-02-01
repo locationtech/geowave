@@ -1,7 +1,7 @@
 package mil.nga.giat.geowave.core.ingest.hdfs.mapreduce;
 
-import mil.nga.giat.geowave.core.ingest.IndexProvider;
 import mil.nga.giat.geowave.core.ingest.avro.AvroSchemaProvider;
+import mil.nga.giat.geowave.core.ingest.index.IndexProvider;
 
 /**
  * This is the main plugin interface for ingesting intermediate data into
@@ -20,6 +20,7 @@ import mil.nga.giat.geowave.core.ingest.avro.AvroSchemaProvider;
  */
 public interface IngestFromHdfsPlugin<I, O> extends
 		IndexProvider,
+
 		AvroSchemaProvider
 {
 	/**

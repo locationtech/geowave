@@ -1,8 +1,8 @@
 package mil.nga.giat.geowave.core.store;
 
 /**
- * This interface provides a callback mechanism when ingesting a collection of
- * entries to receive the row IDs where each entry is ingested
+ * This interface provides a callback mechanism when deleting a collection of
+ * entries.
  * 
  * @param <T>
  *            A generic type for ingested entries

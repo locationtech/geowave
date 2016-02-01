@@ -33,4 +33,8 @@ public class SimpleIntegerIndexStrategy extends
 		return (int) value;
 	}
 
+	@Override
+	public int getByteOffsetFromDimensionalIndex() {
+		return 0;
+	}
 }

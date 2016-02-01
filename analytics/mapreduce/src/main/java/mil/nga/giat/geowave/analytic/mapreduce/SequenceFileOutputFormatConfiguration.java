@@ -1,12 +1,13 @@
 package mil.nga.giat.geowave.analytic.mapreduce;
 
-import java.util.Set;
+import java.util.Arrays;
+import java.util.Collection;
 
 import mil.nga.giat.geowave.analytic.PropertyManagement;
 import mil.nga.giat.geowave.analytic.param.FormatConfiguration;
 import mil.nga.giat.geowave.analytic.param.OutputParameters;
+import mil.nga.giat.geowave.analytic.param.ParameterEnum;
 
-import org.apache.commons.cli.Option;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.mapreduce.lib.output.SequenceFileOutputFormat;
@@ -58,13 +59,10 @@ public class SequenceFileOutputFormatConfiguration implements
 	}
 
 	@Override
-	public void fillOptions(
-			final Set<Option> options ) {
-		OutputParameters.fillOptions(
-				options,
-				new OutputParameters.Output[] {
-					OutputParameters.Output.HDFS_OUTPUT_PATH
-				});
+	public Collection<ParameterEnum<?>> getParameters() {
+		return Arrays.asList(new ParameterEnum<?>[] {
+			OutputParameters.Output.HDFS_OUTPUT_PATH
+		});
 	}
 
 }

@@ -4,11 +4,9 @@ import java.io.IOException;
 
 import mil.nga.giat.geowave.analytic.AnalyticItemWrapper;
 import mil.nga.giat.geowave.analytic.AnalyticItemWrapperFactory;
-import mil.nga.giat.geowave.analytic.ConfigurationWrapper;
 import mil.nga.giat.geowave.analytic.kmeans.AssociationNotification;
 
-import org.apache.accumulo.core.client.AccumuloException;
-import org.apache.accumulo.core.client.AccumuloSecurityException;
+import org.apache.hadoop.mapreduce.JobContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,16 +37,15 @@ public class CentroidItemWrapperFactory<T> implements
 
 	@Override
 	public void initialize(
-			final ConfigurationWrapper context )
+			final JobContext context,
+			final Class<?> scope,
+			final Logger logger )
 			throws IOException {
 		try {
 			nestedGroupCentroidAssignment = new NestedGroupCentroidAssignment<T>(
-					context);
-		}
-		catch (AccumuloException | AccumuloSecurityException e) {
-			throw new IOException(
-					"Failed to connect to Accumulo",
-					e);
+					context,
+					scope,
+					logger);
 		}
 		catch (InstantiationException | IllegalAccessException e) {
 			throw new IOException(
@@ -56,7 +53,10 @@ public class CentroidItemWrapperFactory<T> implements
 					e);
 		}
 
-		itemFactory.initialize(context);
+		itemFactory.initialize(
+				context,
+				scope,
+				logger);
 	}
 
 	public AnalyticItemWrapperFactory<T> getItemFactory() {

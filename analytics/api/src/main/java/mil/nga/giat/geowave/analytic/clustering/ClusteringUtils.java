@@ -7,29 +7,23 @@ import java.util.List;
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import mil.nga.giat.geowave.analytic.AnalyticFeature;
 import mil.nga.giat.geowave.analytic.PropertyManagement;
-import mil.nga.giat.geowave.analytic.db.AccumuloAdapterStoreFactory;
-import mil.nga.giat.geowave.analytic.db.AdapterStoreFactory;
-import mil.nga.giat.geowave.analytic.db.BasicAccumuloOperationsFactory;
-import mil.nga.giat.geowave.analytic.db.DirectBasicAccumuloOperationsFactory;
 import mil.nga.giat.geowave.analytic.extract.DimensionExtractor;
 import mil.nga.giat.geowave.analytic.param.CentroidParameters;
 import mil.nga.giat.geowave.analytic.param.CommonParameters;
-import mil.nga.giat.geowave.analytic.param.GlobalParameters;
-import mil.nga.giat.geowave.core.geotime.IndexType;
+import mil.nga.giat.geowave.analytic.param.StoreParameters;
+import mil.nga.giat.geowave.analytic.store.PersistableAdapterStore;
+import mil.nga.giat.geowave.analytic.store.PersistableIndexStore;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
-import mil.nga.giat.geowave.core.store.index.CustomIdIndex;
 import mil.nga.giat.geowave.core.store.index.Index;
-import mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations;
-import mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations;
-import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloIndexStore;
-import mil.nga.giat.geowave.datastore.accumulo.util.AccumuloUtils;
+import mil.nga.giat.geowave.core.store.index.IndexStore;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.core.store.memory.DataStoreUtils;
 
-import org.apache.accumulo.core.client.AccumuloException;
-import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.geotools.feature.type.BasicFeatureTypes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,54 +36,6 @@ public class ClusteringUtils
 	public static final String CLUSTERING_CRS = "EPSG:4326";
 
 	final static Logger LOGGER = LoggerFactory.getLogger(ClusteringUtils.class);
-
-	private static Index createIndex(
-			final String indexId,
-			final String zookeeper,
-			final String accumuloInstance,
-			final String accumuloUser,
-			final String accumuloPassword,
-			final String namespace )
-			throws Exception {
-
-		final AccumuloOperations operations = new BasicAccumuloOperations(
-				zookeeper,
-				accumuloInstance,
-				accumuloUser,
-				accumuloPassword,
-				namespace);
-
-		final AccumuloIndexStore indexStore = new AccumuloIndexStore(
-				operations);
-
-		final ByteArrayId dbId = new ByteArrayId(
-				indexId);
-		if (!indexStore.indexExists(dbId)) {
-			if (indexId.equals(IndexType.SPATIAL_VECTOR.getDefaultId())) {
-				final Index index = IndexType.SPATIAL_VECTOR.createDefaultIndex();
-				indexStore.addIndex(index);
-				return index;
-			}
-			else if (indexId.equals(IndexType.SPATIAL_TEMPORAL_VECTOR.getDefaultId())) {
-				final Index index = IndexType.SPATIAL_TEMPORAL_VECTOR.createDefaultIndex();
-				indexStore.addIndex(index);
-				return index;
-			}
-			else {
-				final Index index = new CustomIdIndex(
-						IndexType.SPATIAL_VECTOR.createDefaultIndexStrategy(),
-						IndexType.SPATIAL_VECTOR.getDefaultIndexModel(),
-						new ByteArrayId(
-								indexId));
-				indexStore.addIndex(index);
-				return index;
-			}
-		}
-		else {
-			return indexStore.getIndex(dbId);
-		}
-
-	}
 
 	private static DataAdapter<?> createAdapter(
 			final String sampleDataTypeId,
@@ -119,82 +65,40 @@ public class ClusteringUtils
 	public static DataAdapter[] getAdapters(
 			final PropertyManagement propertyManagement )
 			throws IOException {
-		final BasicAccumuloOperations ops;
-		try {
+		final AdapterStore adapterStore = ((PersistableAdapterStore) StoreParameters.StoreParam.ADAPTER_STORE.getHelper().getValue(
+				propertyManagement)).getCliOptions().createStore();
 
-			final AdapterStore adapterStore = propertyManagement.getClassInstance(
-					CommonParameters.Common.ADAPTER_STORE_FACTORY,
-					AdapterStoreFactory.class,
-					AccumuloAdapterStoreFactory.class).getAdapterStore(
-					propertyManagement);
-
-			final mil.nga.giat.geowave.core.store.CloseableIterator<DataAdapter<?>> it = adapterStore.getAdapters();
-			final List<DataAdapter> adapters = new LinkedList<DataAdapter>();
-			while (it.hasNext()) {
-				adapters.add(it.next());
-			}
-
-			final DataAdapter[] result = new DataAdapter[adapters.size()];
-			adapters.toArray(result);
-			return result;
+		final mil.nga.giat.geowave.core.store.CloseableIterator<DataAdapter<?>> it = adapterStore.getAdapters();
+		final List<DataAdapter> adapters = new LinkedList<DataAdapter>();
+		while (it.hasNext()) {
+			adapters.add(it.next());
 		}
-		catch (final InstantiationException e) {
-			throw new IOException(
-					e);
-		}
+		it.close();
+		final DataAdapter[] result = new DataAdapter[adapters.size()];
+		adapters.toArray(result);
+		return result;
 	}
 
-	public static Index[] getIndices(
+	public static PrimaryIndex[] getIndices(
 			final PropertyManagement propertyManagement ) {
-		BasicAccumuloOperations ops;
-		final String zookeeper = propertyManagement.getPropertyAsString(
-				GlobalParameters.Global.ZOOKEEKER,
-				"localhost:2181");
-		final String accumuloInstance = propertyManagement.getPropertyAsString(
-				GlobalParameters.Global.ACCUMULO_INSTANCE,
-				"miniInstance");
 
+		final IndexStore indexStore = ((PersistableIndexStore) StoreParameters.StoreParam.INDEX_STORE.getHelper().getValue(
+				propertyManagement)).getCliOptions().createStore();
+
+		final mil.nga.giat.geowave.core.store.CloseableIterator<Index<?, ?>> it = indexStore.getIndices();
+		final List<PrimaryIndex> indices = new LinkedList<PrimaryIndex>();
+		while (it.hasNext()) {
+			indices.add((PrimaryIndex) it.next());
+		}
 		try {
-			ops = propertyManagement.getClassInstance(
-					CommonParameters.Common.ACCUMULO_CONNECT_FACTORY,
-					BasicAccumuloOperationsFactory.class,
-					DirectBasicAccumuloOperationsFactory.class).build(
-					zookeeper,
-					accumuloInstance,
-					propertyManagement.getPropertyAsString(GlobalParameters.Global.ACCUMULO_USER),
-					propertyManagement.getPropertyAsString(GlobalParameters.Global.ACCUMULO_PASSWORD),
-					propertyManagement.getPropertyAsString(GlobalParameters.Global.ACCUMULO_NAMESPACE));
-
-			final AccumuloIndexStore indexStore = new AccumuloIndexStore(
-					ops);
-			final mil.nga.giat.geowave.core.store.CloseableIterator<Index> it = indexStore.getIndices();
-			final List<Index> indices = new LinkedList<Index>();
-			while (it.hasNext()) {
-				indices.add(it.next());
-			}
-
-			final Index[] result = new Index[indices.size()];
-			indices.toArray(result);
-			return result;
+			it.close();
 		}
-		catch (final AccumuloException e) {
-			LOGGER.error(
-					"Cannot connect to GeoWave for Index Inquiry (" + accumuloInstance + "@ " + zookeeper + ")",
-					e);
+		catch (final IOException e) {
+			LOGGER.warn("Unable to close iterator" + e);
 		}
-		catch (final AccumuloSecurityException e) {
-			LOGGER.error(
-					"Cannot connect to GeoWave for Index Inquiry (" + accumuloInstance + "@ " + zookeeper + ")",
-					e);
-		}
-		catch (final InstantiationException e) {
-			LOGGER.error(
-					"cannot connect to GeoWave ",
-					e);
-		}
-		return new Index[] {
-			IndexType.SPATIAL_VECTOR.createDefaultIndex()
-		};
+		final PrimaryIndex[] result = new PrimaryIndex[indices.size()];
+		indices.toArray(result);
+		return result;
 	}
 
 	/*
@@ -204,41 +108,24 @@ public class ClusteringUtils
 	protected static List<ByteArrayRange> getGeoWaveRangesForQuery(
 			final Polygon polygon ) {
 
-		final Index index = IndexType.SPATIAL_VECTOR.createDefaultIndex();
-		final List<ByteArrayRange> ranges = AccumuloUtils.constraintsToByteArrayRanges(
+		final PrimaryIndex index = new SpatialDimensionalityTypeProvider().createPrimaryIndex();
+		final List<ByteArrayRange> ranges = DataStoreUtils.constraintsToByteArrayRanges(
 				new SpatialQuery(
 						polygon).getIndexConstraints(index.getIndexStrategy()),
-				index.getIndexStrategy());
+				index.getIndexStrategy(),
+				-1);
 
 		return ranges;
 	}
 
-	public static Index createIndex(
+	public static PrimaryIndex createIndex(
 			final PropertyManagement propertyManagement )
 			throws Exception {
-		return ClusteringUtils.createIndex(
-				propertyManagement.getPropertyAsString(CentroidParameters.Centroid.INDEX_ID),
-				propertyManagement.getPropertyAsString(GlobalParameters.Global.ZOOKEEKER),
-				propertyManagement.getPropertyAsString(GlobalParameters.Global.ACCUMULO_INSTANCE),
-				propertyManagement.getPropertyAsString(GlobalParameters.Global.ACCUMULO_USER),
-				propertyManagement.getPropertyAsString(GlobalParameters.Global.ACCUMULO_PASSWORD),
-				propertyManagement.getPropertyAsString(GlobalParameters.Global.ACCUMULO_NAMESPACE));
 
-	}
-
-	public static BasicAccumuloOperations createOperations(
-			final PropertyManagement propertyManagement )
-			throws Exception {
-		return propertyManagement.getClassInstance(
-				CommonParameters.Common.ACCUMULO_CONNECT_FACTORY,
-				BasicAccumuloOperationsFactory.class,
-				DirectBasicAccumuloOperationsFactory.class).build(
-				propertyManagement.getPropertyAsString(GlobalParameters.Global.ZOOKEEKER),
-				propertyManagement.getPropertyAsString(GlobalParameters.Global.ACCUMULO_INSTANCE),
-				propertyManagement.getPropertyAsString(GlobalParameters.Global.ACCUMULO_USER),
-				propertyManagement.getPropertyAsString(GlobalParameters.Global.ACCUMULO_PASSWORD),
-				propertyManagement.getPropertyAsString(GlobalParameters.Global.ACCUMULO_NAMESPACE));
-
+		final IndexStore indexStore = ((PersistableIndexStore) StoreParameters.StoreParam.INDEX_STORE.getHelper().getValue(
+				propertyManagement)).getCliOptions().createStore();
+		return (PrimaryIndex) indexStore.getIndex(new ByteArrayId(
+				propertyManagement.getPropertyAsString(CentroidParameters.Centroid.INDEX_ID)));
 	}
 
 	public static DataAdapter<?> createAdapter(
@@ -254,11 +141,8 @@ public class ClusteringUtils
 				propertyManagement.getPropertyAsString(
 						CentroidParameters.Centroid.DATA_NAMESPACE_URI,
 						BasicFeatureTypes.DEFAULT_NAMESPACE),
-				propertyManagement.getClassInstance(
-						CommonParameters.Common.ADAPTER_STORE_FACTORY,
-						AdapterStoreFactory.class,
-						AccumuloAdapterStoreFactory.class).getAdapterStore(
-						propertyManagement),
+				((PersistableAdapterStore) StoreParameters.StoreParam.ADAPTER_STORE.getHelper().getValue(
+						propertyManagement)).getCliOptions().createStore(),
 				dimensionExtractorClass.newInstance().getDimensionNames());
 	}
 }

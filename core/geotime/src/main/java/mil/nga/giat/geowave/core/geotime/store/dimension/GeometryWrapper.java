@@ -2,7 +2,7 @@ package mil.nga.giat.geowave.core.geotime.store.dimension;
 
 import mil.nga.giat.geowave.core.index.sfc.data.NumericData;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericRange;
-import mil.nga.giat.geowave.core.store.dimension.DimensionField;
+import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 
 import com.google.common.math.DoubleMath;
@@ -53,7 +53,7 @@ public class GeometryWrapper implements
 	 */
 	@Override
 	public boolean overlaps(
-			final DimensionField[] fields,
+			final NumericDimensionField[] fields,
 			final NumericData[] rangeData ) {
 
 		final int latPosition = fields[0] instanceof LatitudeField ? 0 : 1;

@@ -8,7 +8,6 @@ import java.util.Map;
 
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import mil.nga.giat.geowave.adapter.vector.stats.FeatureBoundingBoxStatistics;
-import mil.nga.giat.geowave.core.geotime.IndexType;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
 import mil.nga.giat.geowave.core.geotime.store.statistics.BoundingBoxDataStatistics;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
@@ -17,9 +16,10 @@ import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.statistics.CountDataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
-import mil.nga.giat.geowave.core.store.index.Index;
 import mil.nga.giat.geowave.core.store.query.Query;
+import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStore;
+import mil.nga.giat.geowave.datastore.accumulo.index.secondary.AccumuloSecondaryIndexDataStore;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloAdapterStore;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloDataStatisticsStore;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloIndexStore;
@@ -35,7 +35,6 @@ import com.vividsolutions.jts.geom.GeometryFactory;
 public class BasicKafkaIT extends
 		KafkaTestBase<GpxTrack>
 {
-	private static final Index INDEX = IndexType.SPATIAL_VECTOR.createDefaultIndex();
 	private static final Map<ByteArrayId, Integer> EXPECTED_COUNT_PER_ADAPTER_ID = new HashMap<ByteArrayId, Integer>();
 	static {
 		EXPECTED_COUNT_PER_ADAPTER_ID.put(
@@ -54,7 +53,7 @@ public class BasicKafkaIT extends
 			throws Exception {
 		testKafkaStage(OSM_GPX_INPUT_DIR);
 		testKafkaIngest(
-				IndexType.SPATIAL_VECTOR,
+				false,
 				OSM_GPX_INPUT_DIR);
 		// wait a sufficient time for consumers to ingest all of the data
 		Thread.sleep(60000);
@@ -119,11 +118,14 @@ public class BasicKafkaIT extends
 						accumuloOperations),
 				new AccumuloDataStatisticsStore(
 						accumuloOperations),
+				new AccumuloSecondaryIndexDataStore(
+						accumuloOperations),
 				accumuloOperations);
 
 		final CloseableIterator<?> accumuloResults = geowaveStore.query(
-				adapter,
-				INDEX,
+				new QueryOptions(
+						adapter,
+						DEFAULT_SPATIAL_INDEX),
 				query);
 
 		int resultCount = 0;

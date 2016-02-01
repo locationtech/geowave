@@ -44,7 +44,7 @@ public class MemoryLockManager extends
 	public MemoryLockManager(
 			GeoWavePluginConfig pluginConfig ) {
 		this(
-				pluginConfig.getInstanceName());
+				pluginConfig.getName());
 	}
 
 	@Override

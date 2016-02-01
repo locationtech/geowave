@@ -7,11 +7,11 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.UUID;
 
+import mil.nga.giat.geowave.adapter.vector.BaseDataStoreTest;
 import mil.nga.giat.geowave.adapter.vector.utils.DateUtilities;
-import mil.nga.giat.geowave.core.geotime.IndexType;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialTemporalDimensionalityTypeProvider;
 
-import org.apache.accumulo.core.client.AccumuloException;
-import org.apache.accumulo.core.client.AccumuloSecurityException;
+import org.geotools.data.DataStore;
 import org.geotools.data.DataUtilities;
 import org.geotools.data.DefaultTransaction;
 import org.geotools.data.FeatureReader;
@@ -30,9 +30,10 @@ import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.PrecisionModel;
 
-public class WFSTemporalQueryTest
+public class WFSTemporalQueryTest extends
+		BaseDataStoreTest
 {
-	GeoWaveGTMemDataStore dataStore;
+	DataStore dataStore;
 	SimpleFeatureType schema;
 	SimpleFeatureType type;
 	final GeometryFactory factory = new GeometryFactory(
@@ -41,14 +42,12 @@ public class WFSTemporalQueryTest
 
 	@Before
 	public void setup()
-			throws AccumuloException,
-			AccumuloSecurityException,
-			SchemaException,
+			throws SchemaException,
 			CQLException,
-			IOException {
-		dataStore = new GeoWaveGTMemDataStore();
-		dataStore.dataStore.getIndexStore().addIndex(
-				IndexType.SPATIAL_TEMPORAL_VECTOR.createDefaultIndex());
+			IOException,
+			GeoWavePluginException {
+		dataStore = createDataStore();
+		((GeoWaveGTDataStore) dataStore).indexStore.addIndex(new SpatialTemporalDimensionalityTypeProvider().createPrimaryIndex());
 		type = DataUtilities.createType(
 				"geostuff",
 				"geometry:Geometry:srid=4326,pop:java.lang.Long,pid:String,start:Date,end:Date");
@@ -138,15 +137,15 @@ public class WFSTemporalQueryTest
 			ParseException {
 
 		populate();
-		Transaction transaction2 = new DefaultTransaction();
-		Query query = new Query(
+		final Transaction transaction2 = new DefaultTransaction();
+		final Query query = new Query(
 				"geostuff",
 				CQL.toFilter("BBOX(geometry,44,27,42,30) and start during 2005-05-16T20:32:56Z/2005-05-20T21:32:56Z and end during 2005-05-18T20:32:56Z/2005-05-22T21:32:56Z"),
 				new String[] {
 					"geometry",
 					"pid"
 				});
-		FeatureReader<SimpleFeatureType, SimpleFeature> reader = dataStore.getFeatureReader(
+		final FeatureReader<SimpleFeatureType, SimpleFeature> reader = dataStore.getFeatureReader(
 				query,
 				transaction2);
 		int c = 0;

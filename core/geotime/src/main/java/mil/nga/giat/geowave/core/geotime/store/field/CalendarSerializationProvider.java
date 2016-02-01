@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.TimeZone;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.store.TimeUtils;
+import mil.nga.giat.geowave.core.geotime.TimeUtils;
 import mil.nga.giat.geowave.core.store.data.field.FieldReader;
 import mil.nga.giat.geowave.core.store.data.field.FieldSerializationProviderSpi;
 import mil.nga.giat.geowave.core.store.data.field.FieldWriter;

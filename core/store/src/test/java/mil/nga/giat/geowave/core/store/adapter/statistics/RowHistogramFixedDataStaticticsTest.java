@@ -35,8 +35,10 @@ public class RowHistogramFixedDataStaticticsTest
 		for (long i = 0; i < 10000; i++) {
 			stats.entryIngested(
 					new DataStoreEntryInfo(
+							Long.toString(
+									i).getBytes(),
 							Arrays.asList(genId(i)),
-							Collections.<FieldInfo> emptyList()),
+							Collections.<FieldInfo<?>> emptyList()),
 					1);
 		}
 
@@ -70,8 +72,10 @@ public class RowHistogramFixedDataStaticticsTest
 		for (long j = 10000; j < 20000; j++) {
 			stats2.entryIngested(
 					new DataStoreEntryInfo(
+							Long.toString(
+									j).getBytes(),
 							Arrays.asList(genId(j)),
-							Collections.<FieldInfo> emptyList()),
+							Collections.<FieldInfo<?>> emptyList()),
 					1);
 		}
 

@@ -2,12 +2,11 @@ package mil.nga.giat.geowave.core.ingest;
 
 import java.util.List;
 
-import mil.nga.giat.geowave.core.store.IndexWriter;
-import mil.nga.giat.geowave.datastore.accumulo.AccumuloCommandLineOptions;
+import mil.nga.giat.geowave.core.cli.CommandLineResult;
+import mil.nga.giat.geowave.core.cli.DataStoreCommandLineOptions;
+import mil.nga.giat.geowave.core.store.query.EverythingQuery;
+import mil.nga.giat.geowave.core.store.query.QueryOptions;
 
-import org.apache.accumulo.core.client.AccumuloException;
-import org.apache.accumulo.core.client.AccumuloSecurityException;
-import org.apache.accumulo.core.client.TableNotFoundException;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
@@ -21,9 +20,8 @@ public class ClearNamespaceDriver extends
 		AbstractIngestCommandLineDriver
 {
 	private final static Logger LOGGER = Logger.getLogger(ClearNamespaceDriver.class);
-	protected AccumuloCommandLineOptions accumulo;
+	protected DataStoreCommandLineOptions dataStoreOptions;
 	protected IngestCommandLineOptions ingest;
-	protected IndexWriter indexWriter;
 
 	public ClearNamespaceDriver(
 			final String operation ) {
@@ -33,50 +31,45 @@ public class ClearNamespaceDriver extends
 
 	@Override
 	public void parseOptionsInternal(
-			final CommandLine commandLine )
+			final Options options,
+			CommandLine commandLine )
 			throws ParseException {
-		accumulo = AccumuloCommandLineOptions.parseOptions(commandLine);
+		final CommandLineResult<DataStoreCommandLineOptions> dataStoreOptionsResult = DataStoreCommandLineOptions.parseOptions(
+				options,
+				commandLine);
+		dataStoreOptions = dataStoreOptionsResult.getResult();
+		if (dataStoreOptionsResult.isCommandLineChange()) {
+			commandLine = dataStoreOptionsResult.getCommandLine();
+		}
 		ingest = IngestCommandLineOptions.parseOptions(commandLine);
 	}
 
 	@Override
 	public void applyOptionsInternal(
 			final Options allOptions ) {
-		AccumuloCommandLineOptions.applyOptions(allOptions);
+		DataStoreCommandLineOptions.applyOptions(allOptions);
 		IngestCommandLineOptions.applyOptions(allOptions);
 	}
 
 	@Override
-	protected void runInternal(
+	protected boolean runInternal(
 			final String[] args,
 			final List<IngestFormatPluginProviderSpi<?, ?>> pluginProviders ) {
 		// just check if the flag to clear namespaces is set, and even if it is
 		// not, clear it, but only if a namespace is provided
 		if (!ingest.isClearNamespace()) {
-			try {
-				clearNamespace();
-			}
-			catch (AccumuloException | AccumuloSecurityException e) {
-				LOGGER.fatal(
-						"Unable to connect to Accumulo with the specified options",
-						e);
-			}
+			clearNamespace();
 		}
+		return true;
 	}
 
-	protected void clearNamespace()
-			throws AccumuloException,
-			AccumuloSecurityException {
+	protected void clearNamespace() {
 		// don't delete all tables in the case that no namespace is given
-		if ((accumulo.getNamespace() != null) && !accumulo.getNamespace().isEmpty()) {
-			LOGGER.info("deleting all tables prefixed by '" + accumulo.getNamespace() + "'");
-			try {
-				accumulo.getAccumuloOperations().deleteAll();
-			}
-			catch (TableNotFoundException | AccumuloSecurityException | AccumuloException e) {
-				LOGGER.error("Unable to clear accumulo namespace");
-			}
-
+		if ((dataStoreOptions.getNamespace() != null) && !dataStoreOptions.getNamespace().isEmpty()) {
+			LOGGER.info("deleting everything in namespace '" + dataStoreOptions.getNamespace() + "'");
+			dataStoreOptions.createStore().delete(
+					new QueryOptions(),
+					new EverythingQuery());
 		}
 		else {
 			LOGGER.error("cannot clear a namespace if no namespace is provided");

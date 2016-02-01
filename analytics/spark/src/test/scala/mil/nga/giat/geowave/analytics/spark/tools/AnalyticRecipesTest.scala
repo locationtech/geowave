@@ -12,11 +12,12 @@ import mil.nga.giat.geowave.analytic.param.GlobalParameters
 import mil.nga.giat.geowave.analytic.param.ExtractParameters
 import mil.nga.giat.geowave.analytic.param.CommonParameters
 import mil.nga.giat.geowave.analytic.model.SpatialIndexModelBuilder
-import mil.nga.giat.geowave.analytic.partitioner.FeatureDataAdapterStoreFactory
 import mil.nga.giat.geowave.analytic.extract.SimpleFeatureGeometryExtractor
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter
 import mil.nga.giat.geowave.analytic.partitioner.OrthodromicDistancePartitioner
 import org.opengis.feature.simple.SimpleFeature
+import mil.nga.giat.geowave.analytic.ScopedJobConfiguration
+import mil.nga.giat.geowave.analytic.param.ParameterEnum;
 import org.apache.spark.SparkContext._
 
 class AnalyticRecipesTest extends FlatSpec {
@@ -81,8 +82,10 @@ class AnalyticRecipesTest extends FlatSpec {
     val rawRDD = sc.parallelize(dataSet, 5)
     val distanceFn = dataTool.distanceFn
 
-    val distancePartitioner = new OrthodromicDistancePartitioner[SimpleFeature]();
-    distancePartitioner.initialize(config);
+    val distancePartitioner = new OrthodromicDistancePartitioner[SimpleFeature]()    
+    val jobConfig = new org.apache.hadoop.conf.Configuration(sc.hadoopConfiguration)
+    distancePartitioner.setup(config,classOf[OrthodromicDistancePartitioner[SimpleFeature]], jobConfig)
+    distancePartitioner.initialize(new ScopedJobConfiguration(jobConfig,classOf[OrthodromicDistancePartitioner[SimpleFeature]]))
 
     val partitionedRDD = GeoWaveRDD.mapByPartition(rawRDD, distancePartitioner)
 
@@ -96,12 +99,7 @@ class AnalyticRecipesTest extends FlatSpec {
     val rawRDD = sc.parallelize(dataSet, 5)
     val distanceFn = dataTool.distanceFn
 
-    FeatureDataAdapterStoreFactory.saveState(
-      new FeatureDataAdapter(
-        dataTool.featureType),
-      config);
-
-    val partitionedRDD = GeoWaveRDD.sparkPartition(rawRDD, config)
+    val partitionedRDD = GeoWaveRDD.sparkPartition(rawRDD, config, sc)
 
     val result = toMap(partitionedRDD.mapPartitions(AnalyticRecipes.compareByPartition(distanceFn, 10000)).distinct.collect)
     
@@ -112,22 +110,19 @@ class AnalyticRecipesTest extends FlatSpec {
     val propertyManagement = new PropertyManagement();
 
     propertyManagement.store(
-      ClusteringParameters.Clustering.DISTANCE_THRESHOLDS,
+      ClusteringParameters.Clustering.DISTANCE_THRESHOLDS.asInstanceOf[ParameterEnum[_]],
       "10,10");
     propertyManagement.store(
-      CommonParameters.Common.INDEX_MODEL_BUILDER_CLASS,
+      CommonParameters.Common.INDEX_MODEL_BUILDER_CLASS.asInstanceOf[ParameterEnum[_]],
       classOf[SpatialIndexModelBuilder]);
     propertyManagement.store(
-      CommonParameters.Common.ADAPTER_STORE_FACTORY,
-      classOf[FeatureDataAdapterStoreFactory]);
-    propertyManagement.store(
-      ExtractParameters.Extract.DIMENSION_EXTRACT_CLASS,
+      ExtractParameters.Extract.DIMENSION_EXTRACT_CLASS.asInstanceOf[ParameterEnum[_]],
       classOf[SimpleFeatureGeometryExtractor]);
     propertyManagement.store(
       GlobalParameters.Global.CRS_ID,
       "EPSG:4326");
     propertyManagement.store(
-      ClusteringParameters.Clustering.GEOMETRIC_DISTANCE_UNIT,
+      ClusteringParameters.Clustering.GEOMETRIC_DISTANCE_UNIT.asInstanceOf[ParameterEnum[_]],
       "km");
 
     propertyManagement

@@ -3,6 +3,7 @@ package mil.nga.giat.geowave.analytic;
 import java.io.IOException;
 
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.mapreduce.JobContext;
 
 import com.vividsolutions.jts.geom.Geometry;
 
@@ -18,10 +19,12 @@ public interface Projection<T>
 			T anItem );
 
 	public void initialize(
-			ConfigurationWrapper context )
+			JobContext context,
+			Class<?> scope )
 			throws IOException;
 
 	public void setup(
 			PropertyManagement runTimeProperties,
+			Class<?> scope,
 			Configuration configuration );
 }

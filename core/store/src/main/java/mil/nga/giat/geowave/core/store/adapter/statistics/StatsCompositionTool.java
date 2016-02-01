@@ -1,5 +1,6 @@
 package mil.nga.giat.geowave.core.store.adapter.statistics;
 
+import java.io.Closeable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -10,6 +11,8 @@ import mil.nga.giat.geowave.core.store.DeleteCallback;
 import mil.nga.giat.geowave.core.store.IngestCallback;
 import mil.nga.giat.geowave.core.store.ScanCallback;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+
+import org.apache.log4j.Logger;
 
 /**
  * 
@@ -24,12 +27,18 @@ public class StatsCompositionTool<T> implements
 		IngestCallback<T>,
 		ScanCallback<T>,
 		DeleteCallback<T>,
-		AutoCloseable
+		AutoCloseable,
+		Closeable
 {
+	private final static Logger LOGGER = Logger.getLogger(StatsCompositionTool.class);
+	public static final int FLUSH_STATS_THRESHOLD = 16384;
+
+	int updateCount = 0;
 	DataStatisticsStore statisticsStore;
 	List<DataStatisticsBuilder<T>> statisticsBuilders = null;
 	final boolean persistStats;
 	final Object MUTEX = new Object();
+	protected boolean skipFlush = false;
 
 	public StatsCompositionTool() {
 		statisticsStore = null;
@@ -47,7 +56,7 @@ public class StatsCompositionTool<T> implements
 			final DataAdapter<T> dataAdapter,
 			final DataStatisticsStore statisticsStore ) {
 		this.statisticsStore = statisticsStore;
-		persistStats = (dataAdapter instanceof StatisticalDataAdapter) && (statisticsStore != null);
+		persistStats = (dataAdapter != null && dataAdapter instanceof StatisticalDataAdapter) && (statisticsStore != null);
 		this.init(dataAdapter);
 	}
 
@@ -62,6 +71,16 @@ public class StatsCompositionTool<T> implements
 						(StatisticalDataAdapter<T>) dataAdapter,
 						id));
 			}
+		}
+		try {
+			final Object v = System.getProperty("StatsCompositionTool.skipFlush");
+			skipFlush = ((v != null) && v.toString().equalsIgnoreCase(
+					"true"));
+		}
+		catch (final Exception ex) {
+			LOGGER.error(
+					"Unable to determine property AccumuloIndexWriter.skipFlush",
+					ex);
 		}
 	}
 
@@ -82,6 +101,8 @@ public class StatsCompositionTool<T> implements
 						entryInfo,
 						entry);
 			}
+			updateCount++;
+			checkStats();
 		}
 
 	}
@@ -100,6 +121,8 @@ public class StatsCompositionTool<T> implements
 						entryInfo,
 						entry);
 			}
+			updateCount++;
+			checkStats();
 		}
 
 	}
@@ -153,18 +176,25 @@ public class StatsCompositionTool<T> implements
 						entryInfo,
 						entry);
 			}
+			updateCount++;
+			checkStats();
 		}
 	}
 
 	@Override
-	public void close()
-			throws Exception {
+	public void close() {
 		flush();
 	}
 
 	public void setStatisticsStore(
 			DataStatisticsStore statisticsStore ) {
 		this.statisticsStore = statisticsStore;
+	}
+
+	private void checkStats() {
+		if (!skipFlush && (updateCount > FLUSH_STATS_THRESHOLD)) {
+			updateCount = 0;
+		}
 	}
 
 }

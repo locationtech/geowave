@@ -9,12 +9,12 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.UUID;
 
+import mil.nga.giat.geowave.adapter.vector.BaseDataStoreTest;
 import mil.nga.giat.geowave.adapter.vector.stats.FeatureHyperLogLogStatistics;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 
-import org.apache.accumulo.core.client.AccumuloException;
-import org.apache.accumulo.core.client.AccumuloSecurityException;
+import org.geotools.data.DataStore;
 import org.geotools.data.DataUtilities;
 import org.geotools.data.DefaultTransaction;
 import org.geotools.data.FeatureReader;
@@ -33,9 +33,10 @@ import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.PrecisionModel;
 
-public class WFSTransactionTest
+public class WFSTransactionTest extends
+		BaseDataStoreTest
 {
-	GeoWaveGTMemDataStore dataStore;
+	DataStore dataStore;
 	SimpleFeatureType schema;
 	SimpleFeatureType type;
 	final GeometryFactory factory = new GeometryFactory(
@@ -45,12 +46,11 @@ public class WFSTransactionTest
 
 	@Before
 	public void setup()
-			throws AccumuloException,
-			AccumuloSecurityException,
-			SchemaException,
+			throws SchemaException,
 			CQLException,
-			IOException {
-		dataStore = new GeoWaveGTMemDataStore();
+			IOException,
+			GeoWavePluginException {
+		dataStore = createDataStore();
 		type = DataUtilities.createType(
 				"geostuff",
 				"geometry:Geometry:srid=4326,pop:java.lang.Long,pid:String");
@@ -136,7 +136,7 @@ public class WFSTransactionTest
 
 		// stats check
 		final Transaction transaction3 = new DefaultTransaction();
-		reader = ((GeoWaveFeatureSource) dataStore.getFeatureSource(
+		reader = ((GeoWaveFeatureSource) ((GeoWaveGTDataStore) dataStore).getFeatureSource(
 				"geostuff",
 				transaction3)).getReaderInternal(query);
 		Map<ByteArrayId, DataStatistics<SimpleFeature>> transStats = ((GeoWaveFeatureReader) reader).getTransaction().getDataStatistics();

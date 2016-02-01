@@ -7,81 +7,62 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 import mil.nga.giat.geowave.analytic.AnalyticFeature;
 import mil.nga.giat.geowave.analytic.AnalyticItemWrapperFactory;
-import mil.nga.giat.geowave.analytic.ConfigurationWrapper;
 import mil.nga.giat.geowave.analytic.PropertyManagement;
 import mil.nga.giat.geowave.analytic.clustering.CentroidManagerGeoWave;
 import mil.nga.giat.geowave.analytic.clustering.ClusteringUtils;
 import mil.nga.giat.geowave.analytic.extract.CentroidExtractor;
-import mil.nga.giat.geowave.analytic.mapreduce.kmeans.KSamplerMapReduce;
 import mil.nga.giat.geowave.analytic.param.CentroidParameters;
-import mil.nga.giat.geowave.analytic.param.CommonParameters;
 import mil.nga.giat.geowave.analytic.param.GlobalParameters;
 import mil.nga.giat.geowave.analytic.param.SampleParameters;
+import mil.nga.giat.geowave.analytic.param.StoreParameters.StoreParam;
 import mil.nga.giat.geowave.analytic.sample.function.SamplingRankFunction;
-import mil.nga.giat.geowave.core.geotime.IndexType;
+import mil.nga.giat.geowave.analytic.store.PersistableAdapterStore;
+import mil.nga.giat.geowave.analytic.store.PersistableDataStore;
+import mil.nga.giat.geowave.analytic.store.PersistableIndexStore;
+import mil.nga.giat.geowave.core.cli.AdapterStoreCommandLineOptions;
+import mil.nga.giat.geowave.core.cli.DataStoreCommandLineOptions;
+import mil.nga.giat.geowave.core.cli.IndexStoreCommandLineOptions;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
-import mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations;
-import mil.nga.giat.geowave.datastore.accumulo.mapreduce.GeoWaveConfiguratorBase;
-import mil.nga.giat.geowave.datastore.accumulo.mapreduce.JobContextAdapterStore;
-import mil.nga.giat.geowave.datastore.accumulo.mapreduce.input.GeoWaveInputKey;
-import mil.nga.giat.geowave.datastore.accumulo.mapreduce.output.GeoWaveOutputKey;
+import mil.nga.giat.geowave.core.store.memory.MemoryAdapterStoreFactory;
+import mil.nga.giat.geowave.core.store.memory.MemoryDataStoreFactory;
+import mil.nga.giat.geowave.core.store.memory.MemoryIndexStoreFactory;
+import mil.nga.giat.geowave.mapreduce.GeoWaveConfiguratorBase;
+import mil.nga.giat.geowave.mapreduce.JobContextAdapterStore;
+import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
+import mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputKey;
 
-import org.apache.accumulo.core.client.AccumuloException;
-import org.apache.accumulo.core.client.AccumuloSecurityException;
-import org.apache.accumulo.core.data.Key;
 import org.apache.hadoop.io.ObjectWritable;
+import org.apache.hadoop.mapreduce.JobContext;
 import org.apache.hadoop.mrunit.mapreduce.MapDriver;
 import org.apache.hadoop.mrunit.mapreduce.ReduceDriver;
 import org.apache.hadoop.mrunit.types.Pair;
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.Logger;
 
 import com.vividsolutions.jts.geom.Coordinate;
 
 public class KSamplerMapReduceTest
 {
+	private static final String TEST_NAMESPACE = "test";
 	MapDriver<GeoWaveInputKey, ObjectWritable, GeoWaveInputKey, ObjectWritable> mapDriver;
 	ReduceDriver<GeoWaveInputKey, ObjectWritable, GeoWaveOutputKey, TestObject> reduceDriver;
 	final TestObjectDataAdapter testObjectAapter = new TestObjectDataAdapter();
-	BasicAccumuloOperations dataOps;
 
 	private static final List<Object> capturedObjects = new ArrayList<Object>();
 
-	Key accumuloKey = null;
-
-	public KSamplerMapReduceTest() {
-
-		try {
-			dataOps = new MockAccumuloOperationsFactory().build(
-					null,
-					null,
-					null,
-					null,
-					null);
-		}
-		catch (AccumuloException e) {
-			dataOps = null;
-			e.printStackTrace();
-		}
-		catch (AccumuloSecurityException e) {
-			dataOps = null;
-			e.printStackTrace();
-		}
-
-	}
+	public KSamplerMapReduceTest() {}
 
 	public static class TestSamplingMidRankFunction implements
 			SamplingRankFunction
 	{
-		@Override
-		public void initialize(
-				final ConfigurationWrapper context )
-				throws IOException {}
 
 		@Override
 		public double rank(
@@ -90,6 +71,13 @@ public class KSamplerMapReduceTest
 			capturedObjects.add(value);
 			return 0.5;
 		}
+
+		@Override
+		public void initialize(
+				final JobContext context,
+				final Class scope,
+				final Logger logger )
+				throws IOException {}
 	}
 
 	public static class TestSamplingNoRankFunction implements
@@ -97,7 +85,9 @@ public class KSamplerMapReduceTest
 	{
 		@Override
 		public void initialize(
-				final ConfigurationWrapper context )
+				final JobContext context,
+				final Class scope,
+				final Logger logger )
 				throws IOException {}
 
 		@Override
@@ -111,26 +101,42 @@ public class KSamplerMapReduceTest
 
 	@Before
 	public void setUp()
-			throws IOException,
-			AccumuloException,
-			AccumuloSecurityException {
+			throws IOException {
 		final KSamplerMapReduce.SampleMap<TestObject> mapper = new KSamplerMapReduce.SampleMap<TestObject>();
 		final KSamplerMapReduce.SampleReducer<TestObject> reducer = new KSamplerMapReduce.SampleReducer<TestObject>();
 		mapDriver = MapDriver.newMapDriver(mapper);
 		reduceDriver = ReduceDriver.newReduceDriver(reducer);
-		DataAdapter adapter = AnalyticFeature.createGeometryFeatureAdapter(
+		final DataAdapter adapter = AnalyticFeature.createGeometryFeatureAdapter(
 				"altoids",
 				new String[] {},
 				"http://geowave.test.net",
 				ClusteringUtils.CLUSTERING_CRS);
 
-		PropertyManagement propManagement = new PropertyManagement();
+		final PropertyManagement propManagement = new PropertyManagement();
 		propManagement.store(
-				CommonParameters.Common.ACCUMULO_CONNECT_FACTORY,
-				MockAccumuloOperationsFactory.class);
+				StoreParam.DATA_STORE,
+				new PersistableDataStore(
+						new DataStoreCommandLineOptions(
+								new MemoryDataStoreFactory(),
+								new HashMap<String, Object>(),
+								TEST_NAMESPACE)));
+		propManagement.store(
+				StoreParam.ADAPTER_STORE,
+				new PersistableAdapterStore(
+						new AdapterStoreCommandLineOptions(
+								new MemoryAdapterStoreFactory(),
+								new HashMap<String, Object>(),
+								TEST_NAMESPACE)));
+		propManagement.store(
+				StoreParam.INDEX_STORE,
+				new PersistableIndexStore(
+						new IndexStoreCommandLineOptions(
+								new MemoryIndexStoreFactory(),
+								new HashMap<String, Object>(),
+								TEST_NAMESPACE)));
 		propManagement.store(
 				CentroidParameters.Centroid.INDEX_ID,
-				IndexType.SPATIAL_VECTOR.getDefaultId());
+				new SpatialDimensionalityTypeProvider().createPrimaryIndex().getId().getString());
 		propManagement.store(
 				CentroidParameters.Centroid.DATA_TYPE_ID,
 				"altoids");
@@ -149,9 +155,11 @@ public class KSamplerMapReduceTest
 
 		CentroidManagerGeoWave.setParameters(
 				reduceDriver.getConfiguration(),
+				KSamplerMapReduce.class,
 				propManagement);
 		CentroidManagerGeoWave.setParameters(
 				mapDriver.getConfiguration(),
+				KSamplerMapReduce.class,
 				propManagement);
 
 		mapDriver.getConfiguration().setClass(
@@ -244,7 +252,6 @@ public class KSamplerMapReduceTest
 				SamplingRankFunction.class);
 
 		final GeoWaveInputKey inputKey = new GeoWaveInputKey();
-		inputKey.setAccumuloKey(accumuloKey);
 		inputKey.setAdapterId(testObjectAapter.getAdapterId());
 		inputKey.setDataId(new ByteArrayId(
 				"abc".getBytes()));
@@ -258,7 +265,6 @@ public class KSamplerMapReduceTest
 						"abc")));
 
 		final GeoWaveInputKey outputKey = new GeoWaveInputKey();
-		outputKey.setAccumuloKey(accumuloKey);
 		outputKey.setAdapterId(testObjectAapter.getAdapterId());
 
 		final ByteBuffer keyBuf = ByteBuffer.allocate(64);
@@ -308,7 +314,6 @@ public class KSamplerMapReduceTest
 				SamplingRankFunction.class);
 
 		final GeoWaveInputKey inputKey = new GeoWaveInputKey();
-		inputKey.setAccumuloKey(accumuloKey);
 		inputKey.setAdapterId(testObjectAapter.getAdapterId());
 		inputKey.setDataId(new ByteArrayId(
 				"abc".getBytes()));
@@ -322,7 +327,6 @@ public class KSamplerMapReduceTest
 						"abc")));
 
 		final GeoWaveInputKey outputKey = new GeoWaveInputKey();
-		outputKey.setAccumuloKey(accumuloKey);
 		outputKey.setAdapterId(testObjectAapter.getAdapterId());
 
 		final ByteBuffer keyBuf = ByteBuffer.allocate(64);
@@ -381,7 +385,6 @@ public class KSamplerMapReduceTest
 						"ghi")));
 
 		final GeoWaveInputKey inputKey1 = new GeoWaveInputKey();
-		inputKey1.setAccumuloKey(accumuloKey);
 		inputKey1.setAdapterId(testObjectAapter.getAdapterId());
 
 		ByteBuffer keyBuf = ByteBuffer.allocate(64);
@@ -393,7 +396,6 @@ public class KSamplerMapReduceTest
 
 		keyBuf = ByteBuffer.allocate(64);
 		final GeoWaveInputKey inputKey2 = new GeoWaveInputKey();
-		inputKey2.setAccumuloKey(accumuloKey);
 		inputKey2.setAdapterId(testObjectAapter.getAdapterId());
 		keyBuf.putDouble(0.6);
 		keyBuf.putInt(3);
@@ -403,7 +405,6 @@ public class KSamplerMapReduceTest
 
 		keyBuf = ByteBuffer.allocate(64);
 		final GeoWaveInputKey inputKey3 = new GeoWaveInputKey();
-		inputKey3.setAccumuloKey(accumuloKey);
 		inputKey3.setAdapterId(testObjectAapter.getAdapterId());
 		keyBuf.putDouble(0.7);
 		keyBuf.putInt(3);

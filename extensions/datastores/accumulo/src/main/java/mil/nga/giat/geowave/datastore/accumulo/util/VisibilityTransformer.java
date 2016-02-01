@@ -38,7 +38,7 @@ public class VisibilityTransformer implements
 		byte[] cf = originalKey.getColumnFamilyData().toArray();
 		byte[] cq = originalKey.getColumnQualifierData().toArray();
 		long timestamp = originalKey.getTimestamp();
-		byte[] cv = newVisibility.getBytes(StringUtils.UTF8_CHAR_SET);
+		byte[] cv = newVisibility.getBytes(StringUtils.GEOWAVE_CHAR_SET);
 		Key newKey = new Key(
 				row,
 				0,

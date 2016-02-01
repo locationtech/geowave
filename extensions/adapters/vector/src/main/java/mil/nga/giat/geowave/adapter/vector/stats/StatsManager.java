@@ -5,17 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import mil.nga.giat.geowave.core.geotime.store.dimension.GeometryWrapper;
-import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.store.TimeUtils;
-import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
-import mil.nga.giat.geowave.core.store.adapter.statistics.AbstractDataStatistics;
-import mil.nga.giat.geowave.core.store.adapter.statistics.CountDataStatistics;
-import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
-import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsVisibilityHandler;
-import mil.nga.giat.geowave.core.store.adapter.statistics.FieldIdStatisticVisibility;
-import mil.nga.giat.geowave.core.store.adapter.statistics.FieldTypeStatisticVisibility;
-
 import org.apache.log4j.Logger;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
@@ -24,15 +13,26 @@ import org.opengis.referencing.operation.MathTransform;
 
 import com.vividsolutions.jts.geom.Geometry;
 
+import mil.nga.giat.geowave.core.geotime.TimeUtils;
+import mil.nga.giat.geowave.core.geotime.store.dimension.GeometryWrapper;
+import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.store.EntryVisibilityHandler;
+import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.statistics.AbstractDataStatistics;
+import mil.nga.giat.geowave.core.store.adapter.statistics.CountDataStatistics;
+import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
+import mil.nga.giat.geowave.core.store.adapter.statistics.FieldIdStatisticVisibility;
+import mil.nga.giat.geowave.core.store.adapter.statistics.FieldTypeStatisticVisibility;
+
 public class StatsManager
 {
 
 	private final static Logger LOGGER = Logger.getLogger(StatsManager.class);
-	private final static DataStatisticsVisibilityHandler<SimpleFeature> GEOMETRY_VISIBILITY_HANDLER = new FieldTypeStatisticVisibility<SimpleFeature>(
+	private final static EntryVisibilityHandler<SimpleFeature> GEOMETRY_VISIBILITY_HANDLER = new FieldTypeStatisticVisibility<SimpleFeature>(
 			GeometryWrapper.class);
 
 	private final List<DataStatistics<SimpleFeature>> statsList = new ArrayList<DataStatistics<SimpleFeature>>();
-	private final Map<ByteArrayId, DataStatisticsVisibilityHandler<SimpleFeature>> visibilityHandlers = new HashMap<ByteArrayId, DataStatisticsVisibilityHandler<SimpleFeature>>();
+	private final Map<ByteArrayId, EntryVisibilityHandler<SimpleFeature>> visibilityHandlers = new HashMap<ByteArrayId, EntryVisibilityHandler<SimpleFeature>>();
 
 	public DataStatistics<SimpleFeature> createDataStatistics(
 			final DataAdapter<SimpleFeature> dataAdapter,
@@ -53,7 +53,7 @@ public class StatsManager
 				statisticsId);
 	}
 
-	public DataStatisticsVisibilityHandler<SimpleFeature> getVisibilityHandler(
+	public EntryVisibilityHandler<SimpleFeature> getVisibilityHandler(
 			final ByteArrayId statisticsId ) {
 		if (statisticsId.equals(CountDataStatistics.STATS_ID) || !visibilityHandlers.containsKey(statisticsId)) {
 			return GEOMETRY_VISIBILITY_HANDLER;
@@ -157,7 +157,7 @@ public class StatsManager
 	 */
 	public void addStats(
 			DataStatistics<SimpleFeature> stats,
-			DataStatisticsVisibilityHandler<SimpleFeature> visibilityHandler ) {
+			EntryVisibilityHandler<SimpleFeature> visibilityHandler ) {
 		int replaceStat = 0;
 		for (DataStatistics<SimpleFeature> currentStat : statsList) {
 			if (currentStat.getStatisticsId().equals(

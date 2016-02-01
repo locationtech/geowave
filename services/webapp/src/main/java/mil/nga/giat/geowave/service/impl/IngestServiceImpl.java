@@ -5,7 +5,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Properties;
 
 import javax.servlet.ServletConfig;
 import javax.ws.rs.Consumes;
@@ -18,8 +23,10 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import mil.nga.giat.geowave.core.cli.GenericStoreCommandLineOptions;
 import mil.nga.giat.geowave.core.cli.GeoWaveMain;
 import mil.nga.giat.geowave.service.IngestService;
+import mil.nga.giat.geowave.service.ServiceUtils;
 
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
@@ -31,10 +38,7 @@ import com.google.common.io.Files;
 public class IngestServiceImpl implements
 		IngestService
 {
-	private final String zookeeperUrl;
-	private final String instance;
-	private final String username;
-	private final String password;
+	private final Map<String, String> additionalParams;
 	private final String hdfs;
 	private final String hdfsBase;
 	private final String jobTracker;
@@ -44,22 +48,6 @@ public class IngestServiceImpl implements
 			final ServletConfig servletConfig ) {
 		final Properties props = ServiceUtils.loadProperties(servletConfig.getServletContext().getResourceAsStream(
 				servletConfig.getInitParameter("config.properties")));
-
-		zookeeperUrl = ServiceUtils.getProperty(
-				props,
-				"zookeeper.url");
-
-		instance = ServiceUtils.getProperty(
-				props,
-				"zookeeper.instance");
-
-		username = ServiceUtils.getProperty(
-				props,
-				"zookeeper.username");
-
-		password = ServiceUtils.getProperty(
-				props,
-				"zookeeper.password");
 
 		hdfs = ServiceUtils.getProperty(
 				props,
@@ -72,6 +60,20 @@ public class IngestServiceImpl implements
 		jobTracker = ServiceUtils.getProperty(
 				props,
 				"jobTracker");
+		additionalParams = new HashMap<String, String>();
+		// TODO what about getting values from system properties?
+		for (final Entry<Object, Object> e : props.entrySet()) {
+			if (!(e.getKey().equals(
+					"hdfs") || e.getKey().equals(
+					"hdfsBase") || e.getKey().equals(
+					"jobTracker") || e.getKey().toString().startsWith(
+					"geoserver."))) {
+				additionalParams.put(
+						e.getKey().toString(),
+						e.getValue().toString());
+
+			}
+		}
 	}
 
 	@Override
@@ -104,7 +106,7 @@ public class IngestServiceImpl implements
 			final String ingestMethod,
 			final FormDataMultiPart multiPart ) {
 
-		List<FormDataBodyPart> fileFields = multiPart.getFields("file");
+		final List<FormDataBodyPart> fileFields = multiPart.getFields("file");
 		if (fileFields == null) {
 			return Response.noContent().build();
 		}
@@ -192,16 +194,8 @@ public class IngestServiceImpl implements
 		args.add(ingestType);
 		args.add("-b");
 		args.add(baseDir.getAbsolutePath());
-		args.add("-z");
-		args.add(zookeeperUrl);
-		args.add("-n");
+		args.add("-" + GenericStoreCommandLineOptions.NAMESPACE_OPTION_KEY);
 		args.add(namespace);
-		args.add("-u");
-		args.add(username);
-		args.add("-p");
-		args.add(password);
-		args.add("-i");
-		args.add(instance);
 		args.add("-dim");
 		args.add(dimType);
 
@@ -222,8 +216,15 @@ public class IngestServiceImpl implements
 			args.add("-jobtracker");
 			args.add(jobTracker);
 		}
+		for (final Entry<String, String> e : additionalParams.entrySet()) {
+			args.add("-" + e.getKey());
+			args.add(e.getValue());
+		}
 
-		GeoWaveMain.main(args.toArray(new String[] {}));
-		return Response.ok().build();
+		final int retVal = GeoWaveMain.run(args.toArray(new String[] {}));
+		if (retVal == 0) {
+			return Response.ok().build();
+		}
+		return Response.serverError().build();
 	}
 }

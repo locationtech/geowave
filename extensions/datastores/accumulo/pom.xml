@@ -1,11 +1,10 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <artifactId>geowave-extension-parent</artifactId>
         <groupId>mil.nga.giat</groupId>
         <relativePath>../../</relativePath>
-        <version>0.9.0-SNAPSHOT</version>
+        <version>0.9.1-SNAPSHOT</version>
     </parent>
     <artifactId>geowave-datastore-accumulo</artifactId>
 	<name>GeoWave Accumulo</name>
@@ -14,6 +13,11 @@
         <dependency>
             <groupId>mil.nga.giat</groupId>
             <artifactId>geowave-core-geotime</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>mil.nga.giat</groupId>
+            <artifactId>geowave-core-mapreduce</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
@@ -90,7 +94,7 @@
                             <goal>munge</goal>
                         </goals>
                         <configuration>
-                            <symbols>ACCUMULO_${accumulo.version}</symbols>
+                            <symbols>accumulo.api=${accumulo.api}</symbols>
                         </configuration>
                     </execution>
                 </executions>
@@ -123,7 +127,7 @@
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>
-                                        <ignore/>
+                                        <ignore />
                                     </action>
                                 </pluginExecution>
                             </pluginExecutions>

@@ -3,6 +3,20 @@ package mil.nga.giat.geowave.test.mapreduce;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.cli.Options;
+import org.geotools.feature.simple.SimpleFeatureBuilder;
+import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
+import org.geotools.referencing.CRS;
+import org.junit.Assert;
+import org.junit.Test;
+import org.opengis.feature.simple.SimpleFeature;
+import org.opengis.referencing.FactoryException;
+
+import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.Geometry;
+import com.vividsolutions.jts.geom.Point;
 
 import mil.nga.giat.geowave.analytic.AnalyticItemWrapper;
 import mil.nga.giat.geowave.analytic.GeometryDataSetGenerator;
@@ -23,23 +37,23 @@ import mil.nga.giat.geowave.analytic.param.MapReduceParameters;
 import mil.nga.giat.geowave.analytic.param.OutputParameters;
 import mil.nga.giat.geowave.analytic.param.ParameterEnum;
 import mil.nga.giat.geowave.analytic.param.PartitionParameters;
-import mil.nga.giat.geowave.analytic.param.PartitionParameters.Partition;
+import mil.nga.giat.geowave.analytic.param.StoreParameters.StoreParam;
 import mil.nga.giat.geowave.analytic.partitioner.OrthodromicDistancePartitioner;
+import mil.nga.giat.geowave.analytic.store.PersistableAdapterStore;
+import mil.nga.giat.geowave.analytic.store.PersistableDataStore;
+import mil.nga.giat.geowave.analytic.store.PersistableIndexStore;
+import mil.nga.giat.geowave.core.cli.AdapterStoreCommandLineOptions;
+import mil.nga.giat.geowave.core.cli.CommandLineOptions.OptionMapWrapper;
+import mil.nga.giat.geowave.core.cli.CommandLineResult;
+import mil.nga.giat.geowave.core.cli.DataStoreCommandLineOptions;
+import mil.nga.giat.geowave.core.cli.GenericStoreCommandLineOptions;
+import mil.nga.giat.geowave.core.cli.IndexStoreCommandLineOptions;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
+import mil.nga.giat.geowave.core.store.DataStore;
+import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
+import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
-
-import org.geotools.feature.simple.SimpleFeatureBuilder;
-import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
-import org.geotools.referencing.CRS;
-import org.junit.Assert;
-import org.junit.Test;
-import org.opengis.feature.simple.SimpleFeature;
-import org.opengis.referencing.FactoryException;
-
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.Point;
 
 public class DBScanIT extends
 		MapReduceTestEnvironment
@@ -54,7 +68,7 @@ public class DBScanIT extends
 					ClusteringUtils.CLUSTERING_CRS,
 					true));
 		}
-		catch (FactoryException e) {
+		catch (final FactoryException e) {
 			e.printStackTrace();
 			return null;
 		}
@@ -81,17 +95,43 @@ public class DBScanIT extends
 	@Test
 	public void testDBScan()
 			throws Exception {
+		final Map<String, String> options = getAccumuloConfigOptions();
+		options.put(
+				GenericStoreCommandLineOptions.NAMESPACE_OPTION_KEY,
+				TEST_NAMESPACE);
+		final Options nsOptions = new Options();
+		DataStoreCommandLineOptions.applyOptions(nsOptions);
+		final CommandLineResult<DataStoreCommandLineOptions> dataStoreOptions = DataStoreCommandLineOptions.parseOptions(
+				nsOptions,
+				new OptionMapWrapper(
+						options));
+		final CommandLineResult<IndexStoreCommandLineOptions> indexStoreOptions = IndexStoreCommandLineOptions.parseOptions(
+				nsOptions,
+				new OptionMapWrapper(
+						options));
+		final CommandLineResult<AdapterStoreCommandLineOptions> adapterStoreOptions = AdapterStoreCommandLineOptions.parseOptions(
+				nsOptions,
+				new OptionMapWrapper(
+						options));
 		dataGenerator.setIncludePolygons(false);
-		ingest();
-		runScan(new SpatialQuery(
-				dataGenerator.getBoundingRegion()));
+		ingest(dataStoreOptions.getResult().createStore());
+		runScan(
+				new SpatialQuery(
+						dataGenerator.getBoundingRegion()),
+				dataStoreOptions.getResult(),
+				indexStoreOptions.getResult(),
+				adapterStoreOptions.getResult());
 	}
 
 	private void runScan(
-			final DistributableQuery query )
+			final DistributableQuery query,
+			final DataStoreCommandLineOptions dataStoreOptions,
+			final IndexStoreCommandLineOptions indexStoreOptions,
+			final AdapterStoreCommandLineOptions adapterStoreOptions )
 			throws Exception {
 
 		final DBScanIterationsJobRunner jobRunner = new DBScanIterationsJobRunner();
+
 		final int res = jobRunner.run(
 				getConfiguration(),
 				new PropertyManagement(
@@ -103,32 +143,30 @@ public class DBScanIT extends
 							PartitionParameters.Partition.PARTITION_DISTANCE,
 							PartitionParameters.Partition.PARTITIONER_CLASS,
 							ClusteringParameters.Clustering.MINIMUM_SIZE,
-							GlobalParameters.Global.ZOOKEEKER,
-							GlobalParameters.Global.ACCUMULO_INSTANCE,
-							GlobalParameters.Global.ACCUMULO_USER,
-							GlobalParameters.Global.ACCUMULO_PASSWORD,
-							GlobalParameters.Global.ACCUMULO_NAMESPACE,
+							StoreParam.DATA_STORE,
+							StoreParam.INDEX_STORE,
+							StoreParam.ADAPTER_STORE,
 							MapReduceParameters.MRConfig.HDFS_BASE_DIR,
 							OutputParameters.Output.REDUCER_COUNT,
 							InputParameters.Input.INPUT_FORMAT,
 							GlobalParameters.Global.BATCH_ID,
-							Partition.PARTITION_DECREASE_RATE,
-							Partition.PARTITION_PRECISION
+							PartitionParameters.Partition.PARTITION_DECREASE_RATE,
+							PartitionParameters.Partition.PARTITION_PRECISION
 						},
 						new Object[] {
 							query,
-							new QueryOptions(
-									"geom"),
+							new QueryOptions(),
 							Integer.toString(MIN_INPUT_SPLITS),
 							Integer.toString(MAX_INPUT_SPLITS),
-							10000,
+							10000.0,
 							OrthodromicDistancePartitioner.class,
 							10,
-							zookeeper,
-							accumuloInstance,
-							accumuloUser,
-							accumuloPassword,
-							TEST_NAMESPACE,
+							new PersistableDataStore(
+									dataStoreOptions),
+							new PersistableIndexStore(
+									indexStoreOptions),
+							new PersistableAdapterStore(
+									adapterStoreOptions),
 							hdfsBaseDirectory + "/t1",
 							2,
 							GeoWaveInputFormatConfiguration.class,
@@ -141,19 +179,23 @@ public class DBScanIT extends
 				0,
 				res);
 
-		Assert.assertTrue(readHulls() > 2);
+		Assert.assertTrue(readHulls(
+				dataStoreOptions.createStore(),
+				indexStoreOptions.createStore(),
+				adapterStoreOptions.createStore()) > 2);
 		// for travis-ci to run, we want to limit the memory consumption
 		System.gc();
 	}
 
-	private int readHulls()
+	private int readHulls(
+			final DataStore dataStore,
+			final IndexStore indexStore,
+			final AdapterStore adapterStore )
 			throws Exception {
 		final CentroidManager<SimpleFeature> centroidManager = new CentroidManagerGeoWave<SimpleFeature>(
-				zookeeper,
-				accumuloInstance,
-				accumuloUser,
-				accumuloPassword,
-				TEST_NAMESPACE,
+				dataStore,
+				indexStore,
+				adapterStore,
 				new SimpleFeatureItemWrapperFactory(),
 				"concave_hull",
 				"hull_idx",
@@ -161,8 +203,8 @@ public class DBScanIT extends
 				0);
 
 		int count = 0;
-		for (String grp : centroidManager.getAllCentroidGroups()) {
-			for (AnalyticItemWrapper<SimpleFeature> feature : centroidManager.getCentroidsForGroup(grp)) {
+		for (final String grp : centroidManager.getAllCentroidGroups()) {
+			for (final AnalyticItemWrapper<SimpleFeature> feature : centroidManager.getCentroidsForGroup(grp)) {
 				ShapefileTool.writeShape(
 						feature.getName(),
 						new File(
@@ -177,7 +219,8 @@ public class DBScanIT extends
 		return count;
 	}
 
-	private void ingest()
+	private void ingest(
+			final DataStore dataStore )
 			throws IOException {
 		final List<SimpleFeature> features = dataGenerator.generatePointSet(
 				0.05,
@@ -214,11 +257,7 @@ public class DBScanIT extends
 						"./target/test_in"),
 				features);
 		dataGenerator.writeToGeoWave(
-				zookeeper,
-				accumuloInstance,
-				accumuloUser,
-				accumuloPassword,
-				TEST_NAMESPACE,
+				dataStore,
 				features);
 	}
 }

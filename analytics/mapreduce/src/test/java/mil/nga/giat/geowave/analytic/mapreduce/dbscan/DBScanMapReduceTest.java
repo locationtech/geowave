@@ -26,25 +26,19 @@ import mil.nga.giat.geowave.analytic.param.PartitionParameters;
 import mil.nga.giat.geowave.analytic.partitioner.OrthodromicDistancePartitioner;
 import mil.nga.giat.geowave.analytic.partitioner.Partitioner.PartitionData;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.datastore.accumulo.mapreduce.GeoWaveConfiguratorBase;
-import mil.nga.giat.geowave.datastore.accumulo.mapreduce.JobContextAdapterStore;
-import mil.nga.giat.geowave.datastore.accumulo.mapreduce.input.GeoWaveInputKey;
+import mil.nga.giat.geowave.mapreduce.GeoWaveConfiguratorBase;
+import mil.nga.giat.geowave.mapreduce.JobContextAdapterStore;
+import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
 
-import org.apache.accumulo.core.client.AccumuloException;
-import org.apache.accumulo.core.client.AccumuloSecurityException;
-import org.apache.accumulo.core.data.Key;
 import org.apache.hadoop.io.ObjectWritable;
 import org.apache.hadoop.mrunit.mapreduce.MapDriver;
 import org.apache.hadoop.mrunit.mapreduce.ReduceDriver;
 import org.apache.hadoop.mrunit.types.Pair;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
 import org.geotools.feature.type.BasicFeatureTypes;
 import org.junit.Before;
 import org.junit.Test;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
-import org.slf4j.impl.Log4jLoggerAdapter;
 
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.GeometryFactory;
@@ -60,22 +54,19 @@ public class DBScanMapReduceTest
 			new PrecisionModel(
 					0.000001),
 			4326);
-	final Key accumuloKey = null;
 	final NNMapReduce.NNMapper<ClusterItem> nnMapper = new NNMapReduce.NNMapper<ClusterItem>();
 	final NNMapReduce.NNReducer<ClusterItem, GeoWaveInputKey, ObjectWritable, Map<ByteArrayId, Cluster>> nnReducer = new DBScanMapReduce.DBScanMapHullReducer();
 
 	@Before
 	public void setUp()
-			throws IOException,
-			AccumuloException,
-			AccumuloSecurityException {
+			throws IOException {
 
 		mapDriver = MapDriver.newMapDriver(nnMapper);
 		reduceDriver = ReduceDriver.newReduceDriver(nnReducer);
 
 		mapDriver.getConfiguration().set(
 				GeoWaveConfiguratorBase.enumToConfKey(
-						OrthodromicDistancePartitioner.class,
+						NNMapReduce.class,
 						ClusteringParameters.Clustering.DISTANCE_THRESHOLDS),
 				"10,10");
 
@@ -158,9 +149,7 @@ public class DBScanMapReduceTest
 
 	@Test
 	public void testReducer()
-			throws IOException,
-			AccumuloException,
-			AccumuloSecurityException {
+			throws IOException {
 
 		final ByteArrayId adapterId = new ByteArrayId(
 				ftype.getTypeName());
@@ -387,19 +376,17 @@ public class DBScanMapReduceTest
 	}
 
 	private double round(
-			double value ) {
+			final double value ) {
 		return (double) Math.round(value * 1000000) / 1000000;
 	}
 
 	@Test
 	public void test8With4()
-			throws IOException,
-			AccumuloException,
-			AccumuloSecurityException {
+			throws IOException {
 
 		final ByteArrayId adapterId = new ByteArrayId(
 				ftype.getTypeName());
-		Random r = new Random(
+		final Random r = new Random(
 				3434);
 		for (int i = 0; i < 8; i++) {
 			final SimpleFeature feature = createTestFeature(
@@ -435,13 +422,11 @@ public class DBScanMapReduceTest
 
 	@Test
 	public void testScale()
-			throws IOException,
-			AccumuloException,
-			AccumuloSecurityException {
+			throws IOException {
 
 		final ByteArrayId adapterId = new ByteArrayId(
 				ftype.getTypeName());
-		Random r = new Random(
+		final Random r = new Random(
 				3434);
 		for (int i = 0; i < 10000; i++) {
 			final SimpleFeature feature = createTestFeature(

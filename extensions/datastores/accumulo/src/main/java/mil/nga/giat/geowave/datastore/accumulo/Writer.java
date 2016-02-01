@@ -8,15 +8,14 @@ import org.apache.accumulo.core.data.Mutation;
  * will wrap this interface with a BatchWriter but can be overridden for other
  * mechanisms to write the data.
  */
-public interface Writer
+public interface Writer extends
+		Closable
 {
 	public void write(
 			Iterable<Mutation> mutations );
 
 	public void write(
 			Mutation mutation );
-
-	public void close();
 
 	public void flush();
 }

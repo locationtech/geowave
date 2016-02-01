@@ -7,7 +7,7 @@ import java.util.NoSuchElementException;
 import mil.nga.giat.geowave.core.store.ScanCallback;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
-import mil.nga.giat.geowave.core.store.index.Index;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 
 import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.Value;
@@ -25,7 +25,7 @@ public class EntryIteratorWrapper<T> implements
 		Iterator<T>
 {
 	private final AdapterStore adapterStore;
-	private final Index index;
+	private final PrimaryIndex index;
 	private final Iterator<Entry<Key, Value>> scannerIt;
 	private final QueryFilter clientFilter;
 	private final ScanCallback<T> scanCallback;
@@ -34,7 +34,7 @@ public class EntryIteratorWrapper<T> implements
 
 	public EntryIteratorWrapper(
 			final AdapterStore adapterStore,
-			final Index index,
+			final PrimaryIndex index,
 			final Iterator<Entry<Key, Value>> scannerIt,
 			final QueryFilter clientFilter ) {
 		this.adapterStore = adapterStore;
@@ -46,7 +46,7 @@ public class EntryIteratorWrapper<T> implements
 
 	public EntryIteratorWrapper(
 			final AdapterStore adapterStore,
-			final Index index,
+			final PrimaryIndex index,
 			final Iterator<Entry<Key, Value>> scannerIt,
 			final QueryFilter clientFilter,
 			final ScanCallback<T> scanCallback ) {
@@ -74,7 +74,7 @@ public class EntryIteratorWrapper<T> implements
 	private T decodeRow(
 			final Entry<Key, Value> row,
 			final QueryFilter clientFilter,
-			final Index index ) {
+			final PrimaryIndex index ) {
 		return AccumuloUtils.decodeRow(
 				row.getKey(),
 				row.getValue(),
@@ -93,6 +93,7 @@ public class EntryIteratorWrapper<T> implements
 	@Override
 	public T next()
 			throws NoSuchElementException {
+		if (nextValue == null) findNext();
 		final T previousNext = nextValue;
 		if (nextValue == null) {
 			throw new NoSuchElementException();

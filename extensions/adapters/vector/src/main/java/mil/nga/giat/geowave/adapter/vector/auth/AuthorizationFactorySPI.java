@@ -5,7 +5,6 @@ import java.net.URL;
 /**
  * Creates an authorization provider with the given URL.
  * 
- * @author rwgdrummer
  * 
  */
 public interface AuthorizationFactorySPI

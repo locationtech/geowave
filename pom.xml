@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>mil.nga.giat</groupId>
 	<artifactId>geowave-parent</artifactId>
-	<version>0.9.0-SNAPSHOT</version>
+	<version>0.9.1-SNAPSHOT</version>
 	<name>GeoWave Parent POM</name>
 	<packaging>pom</packaging>
 	<description>Geowave adds spatio-temporal indexing to accumulo through geotools and geoserver</description>
@@ -32,10 +31,10 @@
 		<connection>scm:git:git@github.com:ngageoint/geowave.git</connection>
 	</scm>
 	<properties>
-		<geotools.version>13.2</geotools.version>
+		<geotools.version>14.2</geotools.version>
 		<hadoop.env.classifier>hadoop2</hadoop.env.classifier>
-		<geoserver.version>2.7.2</geoserver.version>
-		<accumulo.version>1.6.2</accumulo.version>
+		<geoserver.version>2.8.2</geoserver.version>
+		<accumulo.version>1.7.0</accumulo.version>
 		<hadoop.version>2.6.0</hadoop.version>
 		<avro.version>1.7.6</avro.version>
 		<commons.cli.version>1.2</commons.cli.version>
@@ -45,10 +44,13 @@
 		<zookeeper.version>3.4.6</zookeeper.version>
 		<jersey.version>2.14</jersey.version>
 		<kafka.artifact>kafka_2.10</kafka.artifact>
-		<kafka.version>0.8.2.1</kafka.version>				
+		<kafka.version>0.8.2.1</kafka.version>
+		<snappy.version>1.0.5</snappy.version>
+		<jcommander.version>1.48</jcommander.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<sonar.language>java</sonar.language>
+		<container.extension />
 		<!-- Feed Sonar with the JaCoCo integration tests coverage report (that 
 			you have previously generated) -->
 		<jacoco.it.reportPath>${project.build.directory}/coverage-reports/jacoco-it.exec</jacoco.it.reportPath>
@@ -132,6 +134,11 @@
 				<version>2.1</version>
 			</dependency>
 			<dependency>
+				<groupId>org.xerial.snappy</groupId>
+				<artifactId>snappy-java</artifactId>
+				<version>1.0.5</version>
+			</dependency>
+			<dependency>
 				<groupId>org.apache.accumulo</groupId>
 				<artifactId>accumulo-core</artifactId>
 				<version>${accumulo.version}</version>
@@ -161,9 +168,9 @@
 				<scope>${hadoop.scope}</scope>
 			</dependency>
 			<dependency>
-				<groupId>commons-cli</groupId>
-				<artifactId>commons-cli</artifactId>
-				<version>${commons.cli.version}</version>
+				<groupId>com.beust</groupId>
+				<artifactId>jcommander</artifactId>
+				<version>${jcommander.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.geotools</groupId>
@@ -333,7 +340,7 @@
 										</goals>
 									</pluginExecutionFilter>
 									<action>
-										<ignore></ignore>
+										<ignore />
 									</action>
 								</pluginExecution>
 								<pluginExecution>
@@ -352,7 +359,7 @@
 										</goals>
 									</pluginExecutionFilter>
 									<action>
-										<ignore></ignore>
+										<ignore />
 									</action>
 								</pluginExecution>
 								<pluginExecution>
@@ -414,20 +421,17 @@
 					<scripts>
 						<script><![CDATA[
 			                import org.apache.maven.plugin.MojoExecutionException
-			                if (System.properties["accumulo.version"]){
-			                    String accumVer = System.properties["accumulo.version"]
-			                    if (accumVer.substring(0,3) == "1.5"){
-			                       if (!System.properties["accumulo.legacy"])
-			                          throw new MojoExecutionException("Error: When defining -Daccumulo.version=" + accumVer + ", you must also define -Daccumulo.legacy")
-			                    }
-			                    else {
-			                       if (System.properties["accumulo.legacy"])
-			                          throw new MojoExecutionException("Error: When defining -Daccumulo.version=" + accumVer + ", you should not define -Daccumulo.legacy")
-			                    }
-			                }
-			                else {
-			                    if (System.properties["accumulo.legacy"])
-			                        throw new MojoExecutionException("Error: For default builds, you should not define -Daccumulo.legacy")
+			                String accumuloVersion = System.getProperties().getProperty("accumulo.version")
+							String accumuloAPI = System.getProperties().getProperty("accumulo.api")
+							if (accumuloVersion != null){
+			                	String apiVersion = accumuloVersion.substring(0,3)
+			                	if (accumuloAPI == null) {
+			                		throw new MojoExecutionException("Error: When defining -Daccumulo.version=" + accumuloVersion + ", you must also define -Daccumulo.api=" + apiVersion)
+			                	} else if (!accumuloAPI.equals(apiVersion)) {
+			                		throw new MojoExecutionException("Error: Setting -Daccumulo.version=" + accumuloVersion + ", is not the same API version as set in -Daccumulo.api=" + accumuloAPI + "; value should be: " + apiVersion)
+			                	}
+			                } else if (accumuloAPI != null) {
+			                		throw new MojoExecutionException("Error: When defining -Daccumulo.api=" + accumuloAPI + ", you must also define -Daccumulo.version equal to a version compatible with that api")
 			                }
                     ]]></script>
 					</scripts>
@@ -760,14 +764,12 @@
 										</filter>
 									</filters>
 									<transformers>
-										<transformer
-											implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+										<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
 											<manifestEntries>
 												<Main-Class>mil.nga.giat.geowave.core.cli.GeoWaveMain</Main-Class>
 											</manifestEntries>
 										</transformer>
-										<transformer
-											implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
+										<transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
 									</transformers>
 									<createDependencyReducedPom>false</createDependencyReducedPom>
 									<minimizeJar>false</minimizeJar>
@@ -789,12 +791,12 @@
 		<profile>
 			<id>cloudera</id>
 			<properties>
-				<hadoop.version>2.5.0-cdh5.2.0</hadoop.version>
+				<hadoop.version>2.6.0-cdh5.5.0</hadoop.version>
 			</properties>
 			<repositories>
 				<repository>
 					<id>cloudera</id>
-					<url>https://repository.cloudera.com/cloudera/cloudera-repos/</url>
+					<url>http://repository.cloudera.com/cloudera/cloudera-repos/</url>
 					<releases>
 						<enabled>true</enabled>
 					</releases>

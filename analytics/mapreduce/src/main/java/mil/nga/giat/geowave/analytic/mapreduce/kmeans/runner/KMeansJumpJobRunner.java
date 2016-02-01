@@ -1,5 +1,8 @@
 package mil.nga.giat.geowave.analytic.mapreduce.kmeans.runner;
 
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -21,11 +24,19 @@ import mil.nga.giat.geowave.analytic.param.FormatConfiguration;
 import mil.nga.giat.geowave.analytic.param.GlobalParameters;
 import mil.nga.giat.geowave.analytic.param.JumpParameters;
 import mil.nga.giat.geowave.analytic.param.MapReduceParameters;
+import mil.nga.giat.geowave.analytic.param.ParameterEnum;
 import mil.nga.giat.geowave.analytic.param.SampleParameters;
+import mil.nga.giat.geowave.analytic.param.StoreParameters;
+import mil.nga.giat.geowave.analytic.param.StoreParameters.StoreParam;
+import mil.nga.giat.geowave.analytic.store.PersistableAdapterStore;
+import mil.nga.giat.geowave.analytic.store.PersistableDataStore;
+import mil.nga.giat.geowave.analytic.store.PersistableIndexStore;
+import mil.nga.giat.geowave.core.cli.GenericStoreCommandLineOptions;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericRange;
-import mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations;
+import mil.nga.giat.geowave.core.store.DataStore;
+import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
+import mil.nga.giat.geowave.core.store.index.IndexStore;
 
-import org.apache.commons.cli.Option;
 import org.apache.hadoop.conf.Configuration;
 import org.opengis.feature.simple.SimpleFeature;
 import org.slf4j.Logger;
@@ -123,24 +134,11 @@ public class KMeansJumpJobRunner extends
 		ClusteringUtils.createAdapter(propertyManagement);
 		ClusteringUtils.createIndex(propertyManagement);
 
-		final boolean destroyDistorationTable = propertyManagement.getPropertyAsString(CentroidParameters.Centroid.DISTORTION_TABLE_NAME) == null;
-
 		final String currentBatchId = propertyManagement.getPropertyAsString(
 				GlobalParameters.Global.BATCH_ID,
 				UUID.randomUUID().toString());
 
-		final String tableName = propertyManagement.storeIfEmpty(
-				CentroidParameters.Centroid.DISTORTION_TABLE_NAME,
-				"DIS_" + currentBatchId.replace(
-						'-',
-						'_')).toString();
-
 		try {
-			final BasicAccumuloOperations ops = ClusteringUtils.createOperations(propertyManagement);
-
-			if (!ops.tableExists(tableName)) {
-				ops.createTable(tableName);
-			}
 
 			final NumericRange rangeOfIterations = propertyManagement.getPropertyAsRange(
 					JumpParameters.Jump.RANGE_OF_CENTROIDS,
@@ -150,6 +148,15 @@ public class KMeansJumpJobRunner extends
 			propertyManagement.store(
 					GlobalParameters.Global.PARENT_BATCH_ID,
 					currentBatchId);
+
+			final GenericStoreCommandLineOptions<DataStore> dataStoreOptions = ((PersistableDataStore) propertyManagement.getProperty(StoreParam.DATA_STORE)).getCliOptions();
+			final GenericStoreCommandLineOptions<IndexStore> indexStoreOptions = ((PersistableIndexStore) propertyManagement.getProperty(StoreParam.INDEX_STORE)).getCliOptions();
+			final GenericStoreCommandLineOptions<AdapterStore> adapterStoreOptions = ((PersistableAdapterStore) propertyManagement.getProperty(StoreParam.ADAPTER_STORE)).getCliOptions();
+
+			final DistortionGroupManagement distortionGroupManagement = new DistortionGroupManagement(
+					dataStoreOptions.createStore(),
+					indexStoreOptions.createStore(),
+					adapterStoreOptions.createStore());
 
 			for (int k = (int) Math.max(
 					2,
@@ -165,8 +172,9 @@ public class KMeansJumpJobRunner extends
 				propertyManagement.store(
 						SampleParameters.Sample.SAMPLE_SIZE,
 						k);
-				jumpRunner.setCentroidsCount(k);
 
+				jumpRunner.setCentroidsCount(k);
+				jumpRunner.setDataStoreOptions(dataStoreOptions);
 				final String iterationBatchId = currentBatchId + "_" + k;
 				propertyManagement.store(
 						GlobalParameters.Global.BATCH_ID,
@@ -193,24 +201,20 @@ public class KMeansJumpJobRunner extends
 			 * Associate the batch id with the best set of groups so the caller
 			 * can find the clusters for the given batch
 			 */
-			final int result = DistortionGroupManagement.retainBestGroups(
-					ClusteringUtils.createOperations(propertyManagement),
+			final int result = distortionGroupManagement.retainBestGroups(
 					(AnalyticItemWrapperFactory<SimpleFeature>) analyticItemWrapperFC.newInstance(),
 					propertyManagement.getPropertyAsString(CentroidParameters.Centroid.DATA_TYPE_ID),
 					propertyManagement.getPropertyAsString(CentroidParameters.Centroid.INDEX_ID),
-					tableName,
 					currentBatchId,
 					currentZoomLevel);
 
-			if (destroyDistorationTable) {
-				ops.deleteTable(tableName);
-			}
+			// distortionGroupManagement.cleanUp();
 
 			return result;
 		}
 		catch (final Exception ex) {
 			LOGGER.error(
-					"Cannot create table for distortions",
+					"Cannot create distortions",
 					ex);
 			return 1;
 		}
@@ -218,57 +222,32 @@ public class KMeansJumpJobRunner extends
 	}
 
 	@Override
-	public void fillOptions(
-			final Set<Option> options ) {
-		kmeansRunner.singleSamplekmeansJobRunner.fillOptions(options);
-		kmeansRunner.parallelJobRunner.fillOptions(options);
-		JumpParameters.fillOptions(
-				options,
-				new JumpParameters.Jump[] {
-					JumpParameters.Jump.RANGE_OF_CENTROIDS,
-					JumpParameters.Jump.KPLUSPLUS_MIN
-				});
-		ClusteringParameters.fillOptions(
-				options,
-				new ClusteringParameters.Clustering[] {
-					ClusteringParameters.Clustering.MAX_REDUCER_COUNT
-				});
-		CentroidParameters.fillOptions(
-				options,
-				new CentroidParameters.Centroid[] {
-					CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS,
-					CentroidParameters.Centroid.INDEX_ID,
-					CentroidParameters.Centroid.DATA_TYPE_ID,
-					CentroidParameters.Centroid.DATA_NAMESPACE_URI,
-					CentroidParameters.Centroid.EXTRACTOR_CLASS,
-				});
-		CommonParameters.fillOptions(
-				options,
-				new CommonParameters.Common[] {
-					CommonParameters.Common.DISTANCE_FUNCTION_CLASS,
-					CommonParameters.Common.DIMENSION_EXTRACT_CLASS
-				});
-		GlobalParameters.fillOptions(
-				options,
-				new GlobalParameters.Global[] {
-					GlobalParameters.Global.ZOOKEEKER,
-					GlobalParameters.Global.ACCUMULO_INSTANCE,
-					GlobalParameters.Global.ACCUMULO_PASSWORD,
-					GlobalParameters.Global.ACCUMULO_USER,
-					GlobalParameters.Global.ACCUMULO_NAMESPACE,
-					GlobalParameters.Global.BATCH_ID
-				});
-		MapReduceParameters.fillOptions(options);
+	public Collection<ParameterEnum<?>> getParameters() {
+		final Set<ParameterEnum<?>> params = new HashSet<ParameterEnum<?>>();
+		params.addAll(kmeansRunner.singleSamplekmeansJobRunner.getParameters());
+		params.addAll(kmeansRunner.parallelJobRunner.getParameters());
+		params.addAll(Arrays.asList(new ParameterEnum<?>[] {
+			JumpParameters.Jump.RANGE_OF_CENTROIDS,
+			JumpParameters.Jump.KPLUSPLUS_MIN,
+			ClusteringParameters.Clustering.MAX_REDUCER_COUNT,
+			CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS,
+			CentroidParameters.Centroid.INDEX_ID,
+			CentroidParameters.Centroid.DATA_TYPE_ID,
+			CentroidParameters.Centroid.DATA_NAMESPACE_URI,
+			CentroidParameters.Centroid.EXTRACTOR_CLASS,
+			CommonParameters.Common.DISTANCE_FUNCTION_CLASS,
+			CommonParameters.Common.DIMENSION_EXTRACT_CLASS,
+			StoreParameters.StoreParam.DATA_STORE,
+			StoreParameters.StoreParam.ADAPTER_STORE,
+			StoreParameters.StoreParam.INDEX_STORE,
+			GlobalParameters.Global.BATCH_ID
+		}));
+		params.addAll(MapReduceParameters.getParameters());
 
-		PropertyManagement.removeOption(
-				options,
-				CentroidParameters.Centroid.ZOOM_LEVEL);
-		PropertyManagement.removeOption(
-				options,
-				SampleParameters.Sample.DATA_TYPE_ID);
-		PropertyManagement.removeOption(
-				options,
-				SampleParameters.Sample.INDEX_ID);
+		params.remove(CentroidParameters.Centroid.ZOOM_LEVEL);
+		params.remove(SampleParameters.Sample.DATA_TYPE_ID);
+		params.remove(SampleParameters.Sample.INDEX_ID);
+		return params;
 	}
 
 	private static class KMeansParallelJobRunnerDelegate implements

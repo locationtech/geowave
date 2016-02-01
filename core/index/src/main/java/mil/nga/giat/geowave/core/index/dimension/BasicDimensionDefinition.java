@@ -172,11 +172,4 @@ public class BasicDimensionDefinition implements
 				min,
 				max);
 	}
-
-	@Override
-	public boolean isCompatibleDefinition(
-			NumericDimensionDefinition otherDimensionDefinition ) {
-		return equals(otherDimensionDefinition);
-	}
-
 }

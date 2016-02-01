@@ -3,44 +3,42 @@ package mil.nga.giat.geowave.adapter.vector.plugin;
 import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import mil.nga.giat.geowave.adapter.vector.AccumuloDataStatisticsStoreExt;
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
-import mil.nga.giat.geowave.adapter.vector.VectorDataStore;
+import mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
 import mil.nga.giat.geowave.adapter.vector.auth.AuthorizationSPI;
-import mil.nga.giat.geowave.adapter.vector.auth.EmptyAuthorizationProvider;
+import mil.nga.giat.geowave.adapter.vector.index.IndexQueryStrategySPI;
+import mil.nga.giat.geowave.adapter.vector.index.SimpleFeaturePrimaryIndexConfiguration;
 import mil.nga.giat.geowave.adapter.vector.plugin.lock.LockingManagement;
-import mil.nga.giat.geowave.adapter.vector.plugin.lock.MemoryLockManager;
 import mil.nga.giat.geowave.adapter.vector.plugin.transaction.GeoWaveAutoCommitTransactionState;
 import mil.nga.giat.geowave.adapter.vector.plugin.transaction.GeoWaveTransactionManagementState;
 import mil.nga.giat.geowave.adapter.vector.plugin.transaction.GeoWaveTransactionState;
+import mil.nga.giat.geowave.adapter.vector.plugin.transaction.MemoryTransactionsAllocator;
+import mil.nga.giat.geowave.adapter.vector.plugin.transaction.TransactionsAllocator;
 import mil.nga.giat.geowave.adapter.vector.plugin.visibility.ColumnVisibilityManagement;
 import mil.nga.giat.geowave.adapter.vector.plugin.visibility.VisibilityManagementHelper;
-import mil.nga.giat.geowave.adapter.vector.transaction.TransactionNotification;
-import mil.nga.giat.geowave.adapter.vector.transaction.TransactionsAllocater;
-import mil.nga.giat.geowave.adapter.vector.transaction.ZooKeeperTransactionsAllocater;
-import mil.nga.giat.geowave.core.geotime.IndexType;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import mil.nga.giat.geowave.core.geotime.store.dimension.LatitudeField;
 import mil.nga.giat.geowave.core.geotime.store.dimension.LongitudeField;
 import mil.nga.giat.geowave.core.geotime.store.dimension.TimeField;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
+import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
-import mil.nga.giat.geowave.core.store.dimension.DimensionField;
+import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;
 import mil.nga.giat.geowave.core.store.index.Index;
-import mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations;
-import mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations;
-import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloAdapterStore;
-import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloIndexStore;
+import mil.nga.giat.geowave.core.store.index.IndexStore;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.core.store.query.AdapterIdQuery;
+import mil.nga.giat.geowave.core.store.query.QueryOptions;
 
-import org.apache.accumulo.core.client.AccumuloException;
-import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.apache.log4j.Logger;
 import org.geotools.data.FeatureListenerManager;
 import org.geotools.data.Query;
@@ -57,8 +55,7 @@ import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 public class GeoWaveGTDataStore extends
-		ContentDataStore implements
-		TransactionNotification
+		ContentDataStore
 {
 	/** Package logger */
 	private final static Logger LOGGER = Logger.getLogger(GeoWaveGTDataStore.class);
@@ -82,52 +79,40 @@ public class GeoWaveGTDataStore extends
 
 	private FeatureListenerManager listenerManager = null;
 	protected AdapterStore adapterStore;
-	protected VectorDataStore dataStore;
-	protected AccumuloOperations storeOperations;
-	private final Map<String, Index> preferredIndexes = new ConcurrentHashMap<String, Index>();
+	protected IndexStore indexStore;
+	protected DataStatisticsStore dataStatisticsStore;
+	protected DataStore dataStore;
+	private final Map<String, List<PrimaryIndex>> preferredIndexes = new ConcurrentHashMap<String, List<PrimaryIndex>>();
+
 	private final ColumnVisibilityManagement<SimpleFeature> visibilityManagement = VisibilityManagementHelper.loadVisibilityManagement();
 	private final AuthorizationSPI authorizationSPI;
-	private final TransactionsAllocater transactionsAllocater;
-	private URI featureNameSpaceURI;
+	private final IndexQueryStrategySPI indexQueryStrategy;
+	private final URI featureNameSpaceURI;
 	private int transactionBufferSize = 10000;
-
-	public GeoWaveGTDataStore(
-			final TransactionsAllocater transactionsAllocater ) {
-		listenerManager = new FeatureListenerManager();
-		this.transactionsAllocater = transactionsAllocater;
-		lockingManager = new MemoryLockManager(
-				"default");
-		authorizationSPI = new EmptyAuthorizationProvider();
-	}
-
-	public GeoWaveGTDataStore(
-			final TransactionsAllocater transactionsAllocater,
-			final AuthorizationSPI authSPI ) {
-		listenerManager = new FeatureListenerManager();
-		authorizationSPI = authSPI;
-		lockingManager = new MemoryLockManager(
-				"default");
-		this.transactionsAllocater = transactionsAllocater;
-	}
+	private final TransactionsAllocator transactionsAllocator;
 
 	public GeoWaveGTDataStore(
 			final GeoWavePluginConfig config )
-			throws IOException,
-			AccumuloException,
-			AccumuloSecurityException {
+			throws IOException {
 		listenerManager = new FeatureListenerManager();
 		lockingManager = config.getLockingManagementFactory().createLockingManager(
 				config);
 		authorizationSPI = config.getAuthorizationFactory().create(
 				config.getAuthorizationURL());
 		init(config);
-		transactionsAllocater = new ZooKeeperTransactionsAllocater(
-				config.getZookeeperServers(),
-				config.getUserName(),
-				this);
 		featureNameSpaceURI = config.getFeatureNamespace();
+		indexQueryStrategy = config.getIndexQueryStrategy();
 		transactionBufferSize = config.getTransactionBufferSize();
+		transactionsAllocator = new MemoryTransactionsAllocator();
 
+	}
+
+	public void init(
+			final GeoWavePluginConfig config ) {
+		dataStore = config.getDataStore();
+		dataStatisticsStore = config.getDataStatisticsStore();
+		indexStore = config.getIndexStore();
+		adapterStore = config.getAdapterStore();
 	}
 
 	public AuthorizationSPI getAuthorizationSPI() {
@@ -138,36 +123,32 @@ public class GeoWaveGTDataStore extends
 		return listenerManager;
 	}
 
-	public VectorDataStore getDataStore() {
+	public IndexQueryStrategySPI getIndexQueryStrategy() {
+		return indexQueryStrategy;
+	}
+
+	public DataStore getDataStore() {
 		return dataStore;
 	}
 
-	public void init(
-			final GeoWavePluginConfig config )
-			throws AccumuloException,
-			AccumuloSecurityException {
-		storeOperations = new BasicAccumuloOperations(
-				config.getZookeeperServers(),
-				config.getInstanceName(),
-				config.getUserName(),
-				config.getPassword(),
-				config.getAccumuloNamespace());
-		final AccumuloIndexStore indexStore = new AccumuloIndexStore(
-				storeOperations);
-		final DataStatisticsStore statisticsStore = new AccumuloDataStatisticsStoreExt(
-				storeOperations);
-		adapterStore = new AccumuloAdapterStore(
-				storeOperations);
-		dataStore = new VectorDataStore(
-				indexStore,
-				adapterStore,
-				statisticsStore,
-				storeOperations);
+	public AdapterStore getAdapterStore() {
+		return adapterStore;
 	}
 
-	protected Index getIndex(
-			final FeatureDataAdapter adapter ) {
-		return getPreferredIndex(adapter);
+	public IndexStore getIndexStore() {
+		return indexStore;
+	}
+
+	public DataStatisticsStore getDataStatisticsStore() {
+		return dataStatisticsStore;
+	}
+
+	protected List<PrimaryIndex> getWriteIndices(
+			final GeotoolsFeatureDataAdapter adapter ) {
+		if (adapter instanceof FeatureDataAdapter) {
+			return getPreferredIndex((FeatureDataAdapter) adapter);
+		}
+		return Arrays.asList(new SpatialDimensionalityTypeProvider().createPrimaryIndex());
 	}
 
 	@Override
@@ -188,21 +169,19 @@ public class GeoWaveGTDataStore extends
 		getPreferredIndex(adapter);
 	}
 
-	public TransactionsAllocater getTransactionsAllocater() {
-		return transactionsAllocater;
-	}
-
-	private FeatureDataAdapter getAdapter(
+	private GeotoolsFeatureDataAdapter getAdapter(
 			final String typeName ) {
-		final FeatureDataAdapter featureAdapter;
+		final GeotoolsFeatureDataAdapter featureAdapter;
 		final DataAdapter<?> adapter = adapterStore.getAdapter(new ByteArrayId(
 				StringUtils.stringToBinary(typeName)));
-		if ((adapter == null) || !(adapter instanceof FeatureDataAdapter)) {
+		if ((adapter == null) || !(adapter instanceof GeotoolsFeatureDataAdapter)) {
 			return null;
 		}
-		featureAdapter = (FeatureDataAdapter) adapter;
+		featureAdapter = (GeotoolsFeatureDataAdapter) adapter;
 		if (featureNameSpaceURI != null) {
-			featureAdapter.setNamespace(featureNameSpaceURI.toString());
+			if (adapter instanceof FeatureDataAdapter) {
+				((FeatureDataAdapter) featureAdapter).setNamespace(featureNameSpaceURI.toString());
+			}
 		}
 		return featureAdapter;
 	}
@@ -210,13 +189,13 @@ public class GeoWaveGTDataStore extends
 	@Override
 	protected List<Name> createTypeNames()
 			throws IOException {
-		List<Name> names = new ArrayList<>();
+		final List<Name> names = new ArrayList<>();
 		final CloseableIterator<DataAdapter<?>> adapters = adapterStore.getAdapters();
 		while (adapters.hasNext()) {
 			final DataAdapter<?> adapter = adapters.next();
-			if (adapter instanceof FeatureDataAdapter) {
+			if (adapter instanceof GeotoolsFeatureDataAdapter) {
 				names.add(new NameImpl(
-						((FeatureDataAdapter) adapter).getType().getTypeName()));
+						((GeotoolsFeatureDataAdapter) adapter).getType().getTypeName()));
 			}
 		}
 		adapters.close();
@@ -225,7 +204,7 @@ public class GeoWaveGTDataStore extends
 
 	@Override
 	public ContentFeatureSource getFeatureSource(
-			String typeName )
+			final String typeName )
 			throws IOException {
 		return getFeatureSource(
 				typeName,
@@ -234,8 +213,8 @@ public class GeoWaveGTDataStore extends
 
 	@Override
 	public ContentFeatureSource getFeatureSource(
-			String typeName,
-			Transaction tx )
+			final String typeName,
+			final Transaction tx )
 			throws IOException {
 		return super.getFeatureSource(
 				new NameImpl(
@@ -246,8 +225,8 @@ public class GeoWaveGTDataStore extends
 
 	@Override
 	public ContentFeatureSource getFeatureSource(
-			Name typeName,
-			Transaction tx )
+			final Name typeName,
+			final Transaction tx )
 			throws IOException {
 		return getFeatureSource(
 				typeName.getLocalPart(),
@@ -257,7 +236,7 @@ public class GeoWaveGTDataStore extends
 
 	@Override
 	public ContentFeatureSource getFeatureSource(
-			Name typeName )
+			final Name typeName )
 			throws IOException {
 		return getFeatureSource(
 				typeName.getLocalPart(),
@@ -271,7 +250,8 @@ public class GeoWaveGTDataStore extends
 		return new GeoWaveFeatureSource(
 				entry,
 				Query.ALL,
-				getAdapter(entry.getTypeName()));
+				getAdapter(entry.getTypeName()),
+				transactionsAllocator);
 	}
 
 	@Override
@@ -289,19 +269,14 @@ public class GeoWaveGTDataStore extends
 				StringUtils.stringToBinary(typeName)));
 		if (adapter != null) {
 			final String[] authorizations = getAuthorizationSPI().getAuthorizations();
-			try (CloseableIterator<Index> indicesIt = dataStore.getIndices()) {
-				while (indicesIt.hasNext()) {
-					dataStore.deleteEntries(
+			dataStore.delete(
+					new QueryOptions(
 							adapter,
-							indicesIt.next(),
-							authorizations);
-				}
-			}
-			catch (final IOException ex) {
-				LOGGER.error(
-						"Unable to remove schema",
-						ex);
-			}
+							(PrimaryIndex) null,
+							authorizations),
+					new AdapterIdQuery(
+							adapter.getAdapterId()));
+			// TODO do we want to delete the adapter from the adapter store?
 		}
 	}
 
@@ -341,26 +316,34 @@ public class GeoWaveGTDataStore extends
 		}
 	}
 
-	private Index getPreferredIndex(
+	private List<PrimaryIndex> getPreferredIndex(
 			final FeatureDataAdapter adapter ) {
 
-		Index currentSelection = preferredIndexes.get(adapter.getType().getName().toString());
-		if (currentSelection != null) {
-			return currentSelection;
+		List<PrimaryIndex> currentSelections = preferredIndexes.get(adapter.getType().getName().toString());
+		if (currentSelections != null) {
+			return currentSelections;
 		}
 
+		currentSelections = new ArrayList<PrimaryIndex>(
+				2);
+		final List<String> indexNames = SimpleFeaturePrimaryIndexConfiguration.getIndexNames(adapter.getType());
+		PrimaryIndex bestSelection = null;
 		final boolean needTime = adapter.hasTemporalConstraints();
 
-		try (CloseableIterator<Index> indices = dataStore.getIndices()) {
+		try (CloseableIterator<Index<?, ?>> indices = indexStore.getIndices()) {
 			boolean currentSelectionHasTime = false;
 			while (indices.hasNext()) {
-				final Index index = indices.next();
+				final PrimaryIndex index = (PrimaryIndex) indices.next();
+
+				if (!indexNames.isEmpty() && indexNames.contains(index.getId().getString())) {
+					currentSelections.add(index);
+				}
 				@SuppressWarnings("rawtypes")
-				final DimensionField[] dims = index.getIndexModel().getDimensions();
+				final NumericDimensionField[] dims = index.getIndexModel().getDimensions();
 				boolean hasLat = false;
 				boolean hasLong = false;
 				boolean hasTime = false;
-				for (final DimensionField<?> dim : dims) {
+				for (final NumericDimensionField<?> dim : dims) {
 					hasLat |= dim instanceof LatitudeField;
 					hasLong |= dim instanceof LongitudeField;
 					hasTime |= dim instanceof TimeField;
@@ -369,8 +352,8 @@ public class GeoWaveGTDataStore extends
 				// pick the first matching one or
 				// pick the one does not match the required time constraints
 				if (hasLat && hasLong) {
-					if ((currentSelection == null) || (currentSelectionHasTime != needTime)) {
-						currentSelection = index;
+					if ((bestSelection == null) || (currentSelectionHasTime != needTime)) {
+						bestSelection = index;
 						currentSelectionHasTime = hasTime;
 					}
 				}
@@ -379,8 +362,8 @@ public class GeoWaveGTDataStore extends
 			// only select the index if one has not been found or
 			// the current selection. Not using temporal at this point.
 			// temporal index should only be used if explicitly requested.
-			if (currentSelection == null) {
-				currentSelection = IndexType.SPATIAL_VECTOR.createDefaultIndex();
+			if (bestSelection == null) {
+				bestSelection = new SpatialDimensionalityTypeProvider().createPrimaryIndex();
 			}
 		}
 		catch (final IOException ex) {
@@ -389,28 +372,11 @@ public class GeoWaveGTDataStore extends
 					ex);
 		}
 
+		if (currentSelections.isEmpty() && bestSelection != null) currentSelections.add(bestSelection);
+
 		preferredIndexes.put(
 				adapter.getType().getName().toString(),
-				currentSelection);
-		return currentSelection;
+				currentSelections);
+		return currentSelections;
 	}
-
-	@Override
-	public boolean transactionCreated(
-			final String clientID,
-			final String txID ) {
-		try {
-			((BasicAccumuloOperations) storeOperations).insureAuthorization(
-					clientID,
-					txID);
-			return true;
-		}
-		catch (final Exception ex) {
-			LOGGER.error(
-					"Cannot add transaction id as an authorization.",
-					ex);
-			return false;
-		}
-	}
-
 }

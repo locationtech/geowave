@@ -1,19 +1,15 @@
 package mil.nga.giat.geowave.adapter.vector.plugin.visibility;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-import mil.nga.giat.geowave.adapter.vector.plugin.visibility.FieldLevelVisibilityHandler;
-import mil.nga.giat.geowave.adapter.vector.plugin.visibility.JsonDefinitionColumnVisibilityManagement;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.data.visibility.GlobalVisibilityHandler;
 
-import org.apache.accumulo.core.client.AccumuloException;
-import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.geotools.data.DataUtilities;
 import org.geotools.feature.SchemaException;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
@@ -62,9 +58,7 @@ public class JsonDefinitionColumnVisibilityManagementTest
 
 	@Before
 	public void setup()
-			throws AccumuloException,
-			AccumuloSecurityException,
-			SchemaException,
+			throws SchemaException,
 			CQLException {
 		type = DataUtilities.createType(
 				"geostuff",
@@ -72,7 +66,7 @@ public class JsonDefinitionColumnVisibilityManagementTest
 		descriptors = type.getAttributeDescriptors();
 		defaults = new Object[descriptors.size()];
 		int p = 0;
-		for (AttributeDescriptor descriptor : descriptors) {
+		for (final AttributeDescriptor descriptor : descriptors) {
 			defaults[p++] = descriptor.getDefaultValue();
 		}
 
@@ -100,22 +94,22 @@ public class JsonDefinitionColumnVisibilityManagementTest
 	public void testPIDNonDefault() {
 
 		assertTrue(Arrays.equals(
-				"TS".getBytes(StringUtils.UTF8_CHAR_SET),
+				"TS".getBytes(StringUtils.GEOWAVE_CHAR_SET),
 				simplePIDHandler.getVisibility(
 						newFeature,
 						new ByteArrayId(
-								"pid".getBytes(StringUtils.UTF8_CHAR_SET)),
+								"pid".getBytes(StringUtils.GEOWAVE_CHAR_SET)),
 						"pid")));
 	}
 
 	@Test
 	public void testPOPNonDefault() {
 		assertTrue(Arrays.equals(
-				"default".getBytes(StringUtils.UTF8_CHAR_SET),
+				"default".getBytes(StringUtils.GEOWAVE_CHAR_SET),
 				simplePOPHandler.getVisibility(
 						newFeature,
 						new ByteArrayId(
-								"pop".getBytes(StringUtils.UTF8_CHAR_SET)),
+								"pop".getBytes(StringUtils.GEOWAVE_CHAR_SET)),
 						"pop")));
 
 	}
@@ -123,11 +117,11 @@ public class JsonDefinitionColumnVisibilityManagementTest
 	@Test
 	public void testGEORegexDefault() {
 		assertTrue(Arrays.equals(
-				"S".getBytes(StringUtils.UTF8_CHAR_SET),
+				"S".getBytes(StringUtils.GEOWAVE_CHAR_SET),
 				simpleGEOHandler.getVisibility(
 						newFeature,
 						new ByteArrayId(
-								"geometry".getBytes(StringUtils.UTF8_CHAR_SET)),
+								"geometry".getBytes(StringUtils.GEOWAVE_CHAR_SET)),
 						"geometry")));
 
 	}
@@ -138,11 +132,11 @@ public class JsonDefinitionColumnVisibilityManagementTest
 				"vis",
 				"{\"pid\":\"TS\", \".*\":\"U\"}");
 		assertTrue(Arrays.equals(
-				"U".getBytes(StringUtils.UTF8_CHAR_SET),
+				"U".getBytes(StringUtils.GEOWAVE_CHAR_SET),
 				simplePOPHandler.getVisibility(
 						newFeature,
 						new ByteArrayId(
-								"pop".getBytes(StringUtils.UTF8_CHAR_SET)),
+								"pop".getBytes(StringUtils.GEOWAVE_CHAR_SET)),
 						"pop")));
 
 	}

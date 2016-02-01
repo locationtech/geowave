@@ -3,27 +3,25 @@ package mil.nga.giat.geowave.analytic.mapreduce.kmeans.runner;
 import java.util.UUID;
 
 import mil.nga.giat.geowave.analytic.PropertyManagement;
-import mil.nga.giat.geowave.analytic.RunnerUtils;
 import mil.nga.giat.geowave.analytic.clustering.NestedGroupCentroidAssignment;
 import mil.nga.giat.geowave.analytic.mapreduce.GeoWaveAnalyticJobRunner;
 import mil.nga.giat.geowave.analytic.mapreduce.GeoWaveOutputFormatConfiguration;
 import mil.nga.giat.geowave.analytic.mapreduce.MapReduceJobRunner;
 import mil.nga.giat.geowave.analytic.mapreduce.kmeans.KSamplerMapReduce;
 import mil.nga.giat.geowave.analytic.param.CentroidParameters;
-import mil.nga.giat.geowave.analytic.param.FormatConfiguration;
 import mil.nga.giat.geowave.analytic.param.GlobalParameters;
 import mil.nga.giat.geowave.analytic.param.ParameterEnum;
 import mil.nga.giat.geowave.analytic.param.SampleParameters;
 import mil.nga.giat.geowave.analytic.sample.function.RandomSamplingRankFunction;
 import mil.nga.giat.geowave.analytic.sample.function.SamplingRankFunction;
-import mil.nga.giat.geowave.core.geotime.IndexType;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialTemporalDimensionalityTypeProvider;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
-import mil.nga.giat.geowave.core.store.index.Index;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
-import mil.nga.giat.geowave.datastore.accumulo.mapreduce.input.GeoWaveInputKey;
-import mil.nga.giat.geowave.datastore.accumulo.mapreduce.output.GeoWaveOutputKey;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
+import mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputKey;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.io.ObjectWritable;
@@ -91,12 +89,12 @@ public class KSamplerJobRunner extends
 						"sample")));
 	}
 
-	private Index getIndex(
+	private PrimaryIndex getIndex(
 			final PropertyManagement runTimeProperties )
 			throws Exception {
 		final IndexStore indexStore = super.getIndexStore(runTimeProperties);
 
-		return indexStore.getIndex(new ByteArrayId(
+		return (PrimaryIndex) indexStore.getIndex(new ByteArrayId(
 				runTimeProperties.getPropertyAsString(
 						SampleParameters.Sample.INDEX_ID,
 						"index")));
@@ -122,11 +120,8 @@ public class KSamplerJobRunner extends
 
 		runTimeProperties.storeIfEmpty(
 				SampleParameters.Sample.INDEX_ID,
-				IndexType.SPATIAL_TEMPORAL_VECTOR.getDefaultId());
-		RunnerUtils.setParameter(
-				config,
-				KSamplerMapReduce.class,
-				runTimeProperties,
+				new SpatialTemporalDimensionalityTypeProvider().createPrimaryIndex().getId());
+		runTimeProperties.setConfig(
 				new ParameterEnum[] {
 					GlobalParameters.Global.BATCH_ID,
 					SampleParameters.Sample.INDEX_ID,
@@ -135,20 +130,18 @@ public class KSamplerJobRunner extends
 					CentroidParameters.Centroid.EXTRACTOR_CLASS,
 					CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS,
 					CentroidParameters.Centroid.ZOOM_LEVEL
-				});
-
-		RunnerUtils.setParameter(
-				config,
-				KSamplerMapReduce.class,
-				new Object[] {
-					samplingRankFunctionClass
 				},
-				new ParameterEnum[] {
-					SampleParameters.Sample.SAMPLE_RANK_FUNCTION,
-				});
+				config,
+				getScope());
+
+		((ParameterEnum<Class<?>>) SampleParameters.Sample.SAMPLE_RANK_FUNCTION).getHelper().setValue(
+				config,
+				getScope(),
+				samplingRankFunctionClass);
 
 		NestedGroupCentroidAssignment.setParameters(
 				config,
+				getScope(),
 				runTimeProperties);
 
 		addDataAdapter(
@@ -165,4 +158,8 @@ public class KSamplerJobRunner extends
 
 	}
 
+	@Override
+	protected String getJobName() {
+		return "K-Sampler";
+	}
 }

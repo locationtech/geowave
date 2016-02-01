@@ -1,10 +1,11 @@
 package mil.nga.giat.geowave.test.mapreduce;
 
-import mil.nga.giat.geowave.test.GeoWaveTestEnvironment;
-import org.junit.BeforeClass;
-
 import java.io.File;
 import java.net.URISyntaxException;
+
+import mil.nga.giat.geowave.test.GeoWaveTestEnvironment;
+
+import org.junit.BeforeClass;
 
 public class MapReduceTestBase extends
 		MapReduceTestEnvironment
@@ -26,5 +27,4 @@ public class MapReduceTestBase extends
 								TEST_DATA_ZIP_RESOURCE_PATH).toURI()),
 				TEST_CASE_BASE);
 	}
-
 }

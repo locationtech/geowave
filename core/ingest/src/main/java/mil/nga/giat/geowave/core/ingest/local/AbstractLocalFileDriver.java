@@ -75,6 +75,7 @@ abstract public class AbstractLocalFileDriver<P extends LocalPluginBase, R> exte
 
 	@Override
 	protected void parseOptionsInternal(
+			final Options options,
 			final CommandLine commandLine )
 			throws ParseException {
 		localInput = LocalInputCommandLineOptions.parseOptions(commandLine);

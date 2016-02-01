@@ -1,17 +1,9 @@
 package mil.nga.giat.geowave.datastore.accumulo.query;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-
-import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
-import mil.nga.giat.geowave.core.store.filter.FilterList;
-import mil.nga.giat.geowave.core.store.filter.QueryFilter;
-import mil.nga.giat.geowave.core.store.index.Index;
-import mil.nga.giat.geowave.core.store.query.QueryOptions;
-import mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations;
-import mil.nga.giat.geowave.datastore.accumulo.util.InputFormatIteratorWrapper;
 
 import org.apache.accumulo.core.client.Scanner;
 import org.apache.accumulo.core.client.ScannerBase;
@@ -19,6 +11,16 @@ import org.apache.accumulo.core.client.TableNotFoundException;
 import org.apache.accumulo.core.data.Range;
 import org.apache.hadoop.io.Text;
 import org.apache.log4j.Logger;
+
+import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
+import mil.nga.giat.geowave.core.store.filter.DedupeFilter;
+import mil.nga.giat.geowave.core.store.filter.FilterList;
+import mil.nga.giat.geowave.core.store.filter.QueryFilter;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.core.store.query.QueryOptions;
+import mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations;
+import mil.nga.giat.geowave.datastore.accumulo.util.InputFormatIteratorWrapper;
 
 /**
  * * Represents a query operation for a range of Accumulo row IDs. This class is
@@ -34,30 +36,49 @@ public class InputFormatAccumuloRangeQuery extends
 	private final Range accumuloRange;
 	private final boolean isOutputWritable;
 
+	private static List<ByteArrayId> getAdapterIds(
+			final PrimaryIndex index,
+			final AdapterStore adapterStore,
+			final QueryOptions queryOptions ) {
+		try {
+			return queryOptions.getAdapterIds(adapterStore);
+		}
+		catch (final IOException e) {
+			LOGGER.error(
+					"Adapter IDs not set and unattainable from the AdapterStore",
+					e);
+		}
+		return Collections.emptyList();
+	}
+
 	public InputFormatAccumuloRangeQuery(
-			final List<ByteArrayId> adapterIds,
-			final Index index,
+			final AdapterStore adapterStore,
+			final PrimaryIndex index,
 			final Range accumuloRange,
 			final List<QueryFilter> queryFilters,
 			final boolean isOutputWritable,
-			final QueryOptions queryOptions,
-			final String[] authorizations ) {
+			final QueryOptions queryOptions ) {
 		super(
-				adapterIds,
+				getAdapterIds(
+						index,
+						adapterStore,
+						queryOptions),
 				index,
 				null,
 				queryFilters,
-				authorizations);
+				(DedupeFilter) null,
+				queryOptions.getScanCallback(),
+				null,
+				queryOptions.getAuthorizations());
 
 		this.accumuloRange = accumuloRange;
 		this.isOutputWritable = isOutputWritable;
-
-		setFieldIds(queryOptions != null ? queryOptions.getFieldIds() : Collections.<String> emptyList());
 	}
 
 	@Override
 	protected ScannerBase getScanner(
 			final AccumuloOperations accumuloOperations,
+			final double[] maxResolutionSubsamplingPerDimension,
 			final Integer limit ) {
 		final String tableName = index.getId().getString();
 		Scanner scanner;

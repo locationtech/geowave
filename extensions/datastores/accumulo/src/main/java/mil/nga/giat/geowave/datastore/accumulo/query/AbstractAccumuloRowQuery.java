@@ -1,13 +1,13 @@
 package mil.nga.giat.geowave.datastore.accumulo.query;
 
-import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.store.CloseableIterator;
+import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
 import mil.nga.giat.geowave.core.store.ScanCallback;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
-import mil.nga.giat.geowave.core.store.index.Index;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations;
-import mil.nga.giat.geowave.datastore.accumulo.util.CloseableIteratorWrapper;
 import mil.nga.giat.geowave.datastore.accumulo.util.EntryIteratorWrapper;
-import mil.nga.giat.geowave.datastore.accumulo.util.CloseableIteratorWrapper.ScannerClosableWrapper;
+import mil.nga.giat.geowave.datastore.accumulo.util.ScannerClosableWrapper;
 
 import org.apache.accumulo.core.client.IteratorSetting;
 import org.apache.accumulo.core.client.ScannerBase;
@@ -23,40 +23,40 @@ abstract public class AbstractAccumuloRowQuery<T> extends
 		AccumuloQuery
 {
 	private static final Logger LOGGER = Logger.getLogger(AbstractAccumuloRowQuery.class);
-	protected final ByteArrayId row;
 	protected final ScanCallback<T> scanCallback;
 
 	public AbstractAccumuloRowQuery(
-			final Index index,
-			final ByteArrayId row,
+			final PrimaryIndex index,
 			final String[] authorizations,
 			final ScanCallback<T> scanCallback ) {
 		super(
-				index);
-		this.row = row;
+				index,
+				authorizations);
 		this.scanCallback = scanCallback;
 	}
 
-	public T query(
+	public CloseableIterator<T> query(
 			final AccumuloOperations accumuloOperations,
+			final double[] maxResolutionSubsamplingPerDimension,
 			final AdapterStore adapterStore ) {
 		final ScannerBase scanner = getScanner(
 				accumuloOperations,
+				maxResolutionSubsamplingPerDimension,
 				getScannerLimit());
 		if (scanner == null) {
 			LOGGER.error("Unable to get a new scanner instance, getScanner returned null");
 			return null;
 		}
 		addScanIteratorSettings(scanner);
-		final CloseableIteratorWrapper<Object> it = new CloseableIteratorWrapper<Object>(
+		return new CloseableIteratorWrapper<T>(
 				new ScannerClosableWrapper(
 						scanner),
 				new EntryIteratorWrapper(
 						adapterStore,
 						index,
 						scanner.iterator(),
-						null));
-		return queryResultFromIterator(it);
+						null,
+						this.scanCallback));
 	}
 
 	protected void addScanIteratorSettings(
@@ -68,9 +68,6 @@ abstract public class AbstractAccumuloRowQuery<T> extends
 				WholeRowIterator.class);
 		scanner.addScanIterator(iteratorSettings);
 	}
-
-	abstract protected T queryResultFromIterator(
-			final CloseableIteratorWrapper<?> it );
 
 	abstract protected Integer getScannerLimit();
 }
