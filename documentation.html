@@ -2737,23 +2737,23 @@ mvn package -P analytics-singlejar -Dfindbugs.skip=true -DskipFormat=true -Dskip
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">-n</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-gwNamespace</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Namespace</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">-u</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-user</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Accumulo User</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">-p</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-password</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Accumulo User Password</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">-z</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-zookeeper</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Zookeeper host and port</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">-i</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-instance</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Accumulo instance name</p></td>
 </tr>
 <tr>
@@ -2910,27 +2910,27 @@ data store type called 'GeoWave Datastore'.</p>
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">ZookeeperServers</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">zookeeper</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Comma-separated list of Zookeeper host and port.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Host and port are separated by a colon (host:port).</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">InstanceName</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">instance</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">The Accumulo tablet server&#8217;s instance name.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">The name matches the one configured in Zookeeper.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">UserName</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">user</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">The Accumulo user name.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">The user should have administrative privileges to add and remove authorized visibility constraints.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Password</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">password</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Accumulo user&#8217;s password.</p></td>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Namespace</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">gwNamespace</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">The table namespace associated with this Accumlo data store</p></td>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
@@ -2950,9 +2950,9 @@ data store type called 'GeoWave Datastore'.</p>
 <td class="tableblock halign-left valign-top"><p class="tableblock">The interpretation of the URL depends on the selected provider.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Transaction Buffer Size</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The maximum number of newly inserted features per transaction buffered in memory prior to transaction completion.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Considerations include system memory, size of typical transactions, the expected number of simultaneous transactions and the average size of a new feature.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Query Index Strategy</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The pluggable query strategy to use for querying geowave tables - a reasonable default will be used if not supplied.</p></td>
+<td class="tableblock halign-left valign-top"></td>
 </tr>
 </tbody>
 </table>
@@ -4292,7 +4292,7 @@ yum --enablerepo=geowave install geowave-puppet</code></pre>
 <div class="sect2">
 <h3 id="version"><a class="anchor" href="#version"></a>Version</h3>
 <div class="paragraph">
-<p>This documentation was generated for GeoWave version 0.9.1-SNAPSHOT from commit ac22542bcaeef9695742ca828158c3b8af790390.</p>
+<p>This documentation was generated for GeoWave version 0.9.1-SNAPSHOT from commit 8707a6749543f79f1390f596c462767d37b31257.</p>
 </div>
 <div style="page-break-after: always;"></div>
 </div>
@@ -4344,7 +4344,7 @@ yum --enablerepo=geowave install geowave-puppet</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-02-02 20:13:00 UTC
+Last updated 2016-02-02 20:56:28 UTC
 </div>
 </div>
 </body>
