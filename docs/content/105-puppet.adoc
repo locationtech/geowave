@@ -15,7 +15,7 @@ Puppet runs to do the initial install.
 === Options
 
 geowave_version::
-The desired version of GeoWave to install, ex: '0.8.7' we support concurrent installs but only one will be active at a time
+The desired version of GeoWave to install, ex: '0.9.0' we support concurrent installs but only one will be active at a time
 
 hadoop_vendor_version::
 The Hadoop framework vendor and version against which GeoWave was built. Examples would be cdh5 or hdp2, check the
@@ -60,7 +60,7 @@ class { 'geowave::repo':
   repo_refresh_md => 0,
 } ->
 class { 'geowave':
-  geowave_version       => '0.8.7',
+  geowave_version       => '0.9.0',
   hadoop_vendor_version => 'cdh5',
   install_accumulo      => true,
   install_app           => true,
@@ -80,7 +80,7 @@ node 'c1-master' {
     repo_enabled    => 1,
   } ->
   class { 'geowave':
-    geowave_version       => '0.8.7',
+    geowave_version       => '0.9.0',
     hadoop_vendor_version => 'cdh5',
     install_accumulo      => true,
     install_app           => true,
@@ -94,7 +94,7 @@ node 'c1-app-01' {
     repo_enabled    => 1,
   } ->
   class { 'geowave':
-    geowave_version       => '0.8.7',
+    geowave_version       => '0.9.0',
     hadoop_vendor_version => 'cdh5',
     install_app_server    => true,
     http_port             => '8888',
