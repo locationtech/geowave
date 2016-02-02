@@ -69,11 +69,11 @@ This set of parameters is not complete. There are many parameters that permit cu
 [width="80%",cols="2,10",options="header"]
 |===
 |Argument|Description
-|-n|Namespace
-|-u|Accumulo User
-|-p|Accumulo User Password
-|-z|Zookeeper host and port
-|-i|Accumulo instance name
+|-gwNamespace|Namespace
+|-user|Accumulo User
+|-password|Accumulo User Password
+|-zookeeper|Zookeeper host and port
+|-instance|Accumulo instance name
 |-emn|Minimum input splits
 |-emx|Maximum input splits (controls the number of Hadoop Mappers).
 |-eit|The type name of the input features to analyze.
