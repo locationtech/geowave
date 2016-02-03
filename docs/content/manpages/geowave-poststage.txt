@@ -39,7 +39,7 @@ HDFS hostname and port in the format hostname:port
 -hdfsbase <arg>::
 Fully qualified path to the base directory in HDFS
 
--i, --instance-id <arg>::
+-instance <arg>::
 The Accumulo instance ID
 
 -jobtracker <arg>::
@@ -48,20 +48,20 @@ Hadoop job tracker hostname and port in the format hostname:port
 -l, --list::
 List the available ingest types
 
--n, --namespace <arg>::
+-gwNamespace <arg>::
 The table namespace (optional; default is no namespace)
 
--p, --password <arg>::
+-password <arg>::
 The password for the user
 
 -resourceman <arg>::
 YARN resource manager hostname and port in the format hostname:port
 
--u, --user <arg>::
+-user <arg>::
 A valid Accumulo user ID
 
 -v, --visibility <arg>::
 The visibility of the data ingested (optional; default is 'public')
 
--z,--zookeepers <arg>::
+-zookeeper <arg>::
 A comma-separated list of zookeeper servers that an Accumulo instance is using

@@ -66,10 +66,10 @@ After an update of the components you must restart Accumulo to get vfs to downlo
 [source, bash]
 ----
 [spohnae@c1-master ~]$ rpm -qa | grep geowave
-geowave-0.8.7-hdp2-core-0.8.7-201505131644.noarch
-geowave-0.8.7-hdp2-jetty-0.8.7-201505131644.noarch
-geowave-0.8.7-hdp2-accumulo-0.8.7-201505131644.noarch
-geowave-0.8.7-hdp2-tools-0.8.7-201505131644.noarch
+geowave-0.9.0-hdp2-core-0.9.0-201602012009.noarch
+geowave-0.9.0-hdp2-jetty-0.9.0-201602012009.noarch
+geowave-0.9.0-hdp2-accumulo-0.9.0-201602012009.noarch
+geowave-0.9.0-hdp2-tools-0.9.0-201602012009.noarch
 ----
 
 ==== Advanced
