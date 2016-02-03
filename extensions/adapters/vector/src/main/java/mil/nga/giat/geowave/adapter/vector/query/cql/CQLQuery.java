@@ -130,8 +130,6 @@ public class CQLQuery implements
 		if (baseQuery != null) {
 			return baseQuery.isSupported(index);
 		}
-		// TODO: this should interrogate strategy to see if constraint are
-		// processed by strategy
 		return true;
 	}
 

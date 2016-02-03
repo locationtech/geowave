@@ -62,17 +62,6 @@ public class AccumuloConstraintsQuery extends
 				scanCallback,
 				aggregation,
 				authorizations);
-		// TODO determine what to do with isSupported() - this at one
-		// point acted as rudimentary query planning but it seems like a
-		// responsibility of higher level query planning logic for example,
-		// sometimes a spatial index is better at handling a spatial-temporal
-		// query than a spatial-temporal index, if the constraints are much more
-		// restrictive spatially
-
-		// if ((query != null) && !query.isSupported(index)) {
-		// throw new IllegalArgumentException(
-		// "Index does not support the query");
-		// }
 	}
 
 	public AccumuloConstraintsQuery(
