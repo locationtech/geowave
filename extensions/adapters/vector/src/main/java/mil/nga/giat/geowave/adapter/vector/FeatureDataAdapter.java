@@ -7,21 +7,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
-import org.geotools.data.DataUtilities;
-import org.geotools.feature.SchemaException;
-import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
-import org.geotools.referencing.CRS;
-import org.opengis.feature.simple.SimpleFeature;
-import org.opengis.feature.simple.SimpleFeatureType;
-import org.opengis.feature.type.AttributeDescriptor;
-import org.opengis.referencing.FactoryException;
-import org.opengis.referencing.operation.MathTransform;
-
 import mil.nga.giat.geowave.adapter.vector.index.SecondaryIndexManager;
 import mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveGTDataStore;
-import mil.nga.giat.geowave.adapter.vector.plugin.visibility.AdaptorProxyFieldLevelVisibilityHandler;
-import mil.nga.giat.geowave.adapter.vector.plugin.visibility.JsonDefinitionColumnVisibilityManagement;
+import mil.nga.giat.geowave.adapter.vector.plugin.visibility.VisibilityConfiguration;
 import mil.nga.giat.geowave.adapter.vector.stats.StatsConfigurationCollection.SimpleFeatureStatsConfigurationCollection;
 import mil.nga.giat.geowave.adapter.vector.stats.StatsManager;
 import mil.nga.giat.geowave.adapter.vector.util.FeatureDataUtils;
@@ -52,6 +40,17 @@ import mil.nga.giat.geowave.core.store.index.SecondaryIndex;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndexDataAdapter;
 import mil.nga.giat.geowave.mapreduce.HadoopDataAdapter;
 import mil.nga.giat.geowave.mapreduce.HadoopWritableSerializer;
+
+import org.apache.log4j.Logger;
+import org.geotools.data.DataUtilities;
+import org.geotools.feature.SchemaException;
+import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
+import org.geotools.referencing.CRS;
+import org.opengis.feature.simple.SimpleFeature;
+import org.opengis.feature.simple.SimpleFeatureType;
+import org.opengis.feature.type.AttributeDescriptor;
+import org.opengis.referencing.FactoryException;
+import org.opengis.referencing.operation.MathTransform;
 
 /**
  * This data adapter will handle all reading/writing concerns for storing and
@@ -116,14 +115,11 @@ public class FeatureDataAdapter extends
 	private MathTransform transform;
 	private StatsManager statsManager;
 	private SecondaryIndexManager secondaryIndexManager;
-
-	private String visibilityAttributeName = "GEOWAVE_VISIBILITY";
-	private VisibilityManagement<SimpleFeature> fieldVisibilityManagement;
 	private TimeDescriptors timeDescriptors = null;
 
 	// should change this anytime the serialized image changes. Stay negative.
 	// so 0xa0, 0xa1, 0xa2 etc.
-	final static byte VERSION = (byte) 0xa1;
+	final static byte VERSION = (byte) 0xa2;
 
 	protected FeatureDataAdapter() {}
 
@@ -151,7 +147,7 @@ public class FeatureDataAdapter extends
 				type,
 				customIndexHandlers,
 				null,
-				new JsonDefinitionColumnVisibilityManagement<SimpleFeature>());
+				null);
 	}
 
 	public FeatureDataAdapter(
@@ -161,27 +157,38 @@ public class FeatureDataAdapter extends
 				type,
 				new ArrayList<PersistentIndexFieldHandler<SimpleFeature, ? extends CommonIndexValue, Object>>(),
 				fieldVisiblityHandler,
-				new JsonDefinitionColumnVisibilityManagement<SimpleFeature>());
+				null);
 	}
 
 	public FeatureDataAdapter(
 			final SimpleFeatureType type,
 			final List<PersistentIndexFieldHandler<SimpleFeature, ? extends CommonIndexValue, Object>> customIndexHandlers,
 			final FieldVisibilityHandler<SimpleFeature, Object> fieldVisiblityHandler,
-			final VisibilityManagement<SimpleFeature> visibilityManagement ) {
+			final VisibilityManagement<SimpleFeature> defaultVisibilityManagement ) {
 		super(
 				customIndexHandlers,
 				new ArrayList<NativeFieldHandler<SimpleFeature, Object>>(),
-				type);
+				fieldVisiblityHandler,
+				updateVisibility(
+						type,
+						defaultVisibilityManagement));
 		setFeatureType(type);
-		this.fieldVisiblityHandler = fieldVisiblityHandler;
-		fieldVisibilityManagement = visibilityManagement;
+	}
+
+	private static SimpleFeatureType updateVisibility(
+			final SimpleFeatureType type,
+			final VisibilityManagement<SimpleFeature> defaultVisibilityManagement ) {
+		final VisibilityConfiguration config = new VisibilityConfiguration(
+				type);
+		config.updateWithDefaultIfNeeded(
+				type,
+				defaultVisibilityManagement);
+		return type;
 	}
 
 	protected void setFeatureType(
 			final SimpleFeatureType type ) {
 		persistedType = type;
-		determineVisibilityAttribute();
 		if (!GeoWaveGTDataStore.DEFAULT_CRS.equals(type.getCoordinateReferenceSystem())) {
 			reprojectedType = SimpleFeatureTypeBuilder.retype(
 					type,
@@ -226,18 +233,10 @@ public class FeatureDataAdapter extends
 		return nativeHandlers;
 	}
 
-	@Override
-	public String getVisibilityAttributeName() {
-		return visibilityAttributeName;
-	}
-
-	@Override
-	public VisibilityManagement<SimpleFeature> getFieldVisibilityManagement() {
-		return fieldVisibilityManagement;
-	}
-
 	protected IndexFieldHandler<SimpleFeature, Time, Object> getTimeRangeHandler(
 			final SimpleFeatureType featureType ) {
+		final VisibilityConfiguration config = new VisibilityConfiguration(
+				featureType);
 		final TimeDescriptors timeDescriptors = inferTimeAttributeDescriptor(featureType);
 		if ((timeDescriptors.getStartRange() != null) && (timeDescriptors.getEndRange() != null)) {
 			return (new FeatureTimeRangeHandler(
@@ -245,18 +244,20 @@ public class FeatureDataAdapter extends
 							timeDescriptors.getStartRange()),
 					new FeatureAttributeHandler(
 							timeDescriptors.getEndRange()),
-					new AdaptorProxyFieldLevelVisibilityHandler(
+					config.getManager().createVisibilityHandler(
 							timeDescriptors.getStartRange().getLocalName(),
-							this)));
+							fieldVisiblityHandler,
+							config.getAttributeName())));
 		}
 		else if (timeDescriptors.getTime() != null) {
 			// if we didn't succeed in identifying a start and end time,
 			// just grab the first attribute and use it as a timestamp
 			return new FeatureTimestampHandler(
 					timeDescriptors.getTime(),
-					new AdaptorProxyFieldLevelVisibilityHandler(
+					config.getManager().createVisibilityHandler(
 							timeDescriptors.getTime().getLocalName(),
-							this));
+							fieldVisiblityHandler,
+							config.getAttributeName()));
 		}
 		return null;
 	}
@@ -265,7 +266,10 @@ public class FeatureDataAdapter extends
 	protected List<IndexFieldHandler<SimpleFeature, ? extends CommonIndexValue, Object>> getDefaultTypeMatchingHandlers(
 			final Object typeObj ) {
 		if ((typeObj != null) && (typeObj instanceof SimpleFeatureType)) {
+
 			final SimpleFeatureType internalType = (SimpleFeatureType) typeObj;
+			final VisibilityConfiguration config = new VisibilityConfiguration(
+					internalType);
 
 			nativeFieldHandlers = typeToFieldHandlers((SimpleFeatureType) typeObj);
 			final List<IndexFieldHandler<SimpleFeature, ? extends CommonIndexValue, Object>> defaultHandlers = new ArrayList<IndexFieldHandler<SimpleFeature, ? extends CommonIndexValue, Object>>();
@@ -274,11 +278,13 @@ public class FeatureDataAdapter extends
 				defaultHandlers.add(timeHandler);
 			}
 
+			final AttributeDescriptor descriptor = internalType.getGeometryDescriptor();
 			defaultHandlers.add(new FeatureGeometryHandler(
-					internalType.getGeometryDescriptor(),
-					new AdaptorProxyFieldLevelVisibilityHandler(
-							internalType.getGeometryDescriptor().getLocalName(),
-							this)));
+					descriptor,
+					config.getManager().createVisibilityHandler(
+							descriptor.getLocalName(),
+							fieldVisiblityHandler,
+							config.getAttributeName())));
 			return defaultHandlers;
 		}
 		LOGGER.warn("Simple Feature Type could not be used for handling the indexed data");
@@ -313,32 +319,40 @@ public class FeatureDataAdapter extends
 
 	private Map<ByteArrayId, FieldWriter<SimpleFeature, Object>> idToWriterMap = new HashMap<ByteArrayId, FieldWriter<SimpleFeature, Object>>();
 
+	private FieldVisibilityHandler<SimpleFeature, Object> getVisbilityHandler(
+			final ByteArrayId fieldId ) {
+		final VisibilityConfiguration config = new VisibilityConfiguration(
+				reprojectedType);
+		if (reprojectedType.getDescriptor(config.getAttributeName()) == null) return fieldVisiblityHandler;
+		final AttributeDescriptor descriptor = reprojectedType.getDescriptor(fieldId.getString());
+
+		return config.getManager().createVisibilityHandler(
+				descriptor.getLocalName(),
+				fieldVisiblityHandler,
+				config.getAttributeName());
+	}
+
 	@Override
 	public FieldWriter<SimpleFeature, Object> getWriter(
 			final ByteArrayId fieldId ) {
 		FieldWriter<SimpleFeature, Object> writer = idToWriterMap.get(fieldId);
 		if (writer == null) {
+			FieldVisibilityHandler<SimpleFeature, Object> handler = getVisbilityHandler(fieldId);
 			final AttributeDescriptor descriptor = reprojectedType.getDescriptor(fieldId.getString());
 
 			final Class<?> bindingClass = descriptor.getType().getBinding();
-			FieldWriter<SimpleFeature, Object> basicWriter;
-			if (fieldVisiblityHandler != null) {
-				basicWriter = (FieldWriter<SimpleFeature, Object>) FieldUtils.getDefaultWriterForClass(
+			if (handler != null) {
+				writer = (FieldWriter<SimpleFeature, Object>) FieldUtils.getDefaultWriterForClass(
 						bindingClass,
-						fieldVisiblityHandler);
+						handler);
 			}
 			else {
-				basicWriter = (FieldWriter<SimpleFeature, Object>) FieldUtils.getDefaultWriterForClass(bindingClass);
+				writer = (FieldWriter<SimpleFeature, Object>) FieldUtils.getDefaultWriterForClass(bindingClass);
 			}
-			if (basicWriter == null) {
+			if (writer == null) {
 				LOGGER.error("BasicWriter not found for binding type:" + bindingClass.getName().toString());
 			}
 
-			writer = fieldVisibilityManagement.createVisibilityWriter(
-					descriptor.getLocalName(),
-					basicWriter,
-					fieldVisiblityHandler,
-					visibilityAttributeName);
 			idToWriterMap.put(
 					fieldId,
 					writer);
@@ -353,8 +367,6 @@ public class FeatureDataAdapter extends
 		final String axis = FeatureDataUtils.getAxis(persistedType.getCoordinateReferenceSystem());
 		final String typeName = reprojectedType.getTypeName();
 		final byte[] typeNameBytes = StringUtils.stringToBinary(typeName);
-		final byte[] fieldVisibilityAtributeNameBytes = StringUtils.stringToBinary(visibilityAttributeName);
-		final byte[] visibilityManagementClassNameBytes = StringUtils.stringToBinary(fieldVisibilityManagement.getClass().getCanonicalName());
 		final byte[] axisBytes = StringUtils.stringToBinary(axis);
 		byte[] attrBytes = new byte[0];
 
@@ -362,6 +374,8 @@ public class FeatureDataAdapter extends
 		userDataConfiguration.addConfigurations(new TimeDescriptorConfiguration(
 				persistedType));
 		userDataConfiguration.addConfigurations(new SimpleFeatureStatsConfigurationCollection(
+				persistedType));
+		userDataConfiguration.addConfigurations(new VisibilityConfiguration(
 				persistedType));
 		try {
 			attrBytes = StringUtils.stringToBinary(userDataConfiguration.asJsonString());
@@ -383,21 +397,17 @@ public class FeatureDataAdapter extends
 		}
 		final byte[] encodedTypeBytes = StringUtils.stringToBinary(encodedType);
 		final byte[] secondaryIndexBytes = PersistenceUtils.toBinary(secondaryIndexManager);
-		// 29 bytes is the 7 four byte length fields and one byte for the
+		// 21 bytes is the 7 four byte length fields and one byte for the
 		// version
-		final ByteBuffer buf = ByteBuffer.allocate(encodedTypeBytes.length + typeNameBytes.length + namespaceBytes.length + fieldVisibilityAtributeNameBytes.length + visibilityManagementClassNameBytes.length + attrBytes.length + axisBytes.length + secondaryIndexBytes.length + 29);
+		final ByteBuffer buf = ByteBuffer.allocate(encodedTypeBytes.length + typeNameBytes.length + namespaceBytes.length + attrBytes.length + axisBytes.length + secondaryIndexBytes.length + 21);
 		buf.put(VERSION);
 		buf.putInt(typeNameBytes.length);
 		buf.putInt(namespaceBytes.length);
-		buf.putInt(fieldVisibilityAtributeNameBytes.length);
-		buf.putInt(visibilityManagementClassNameBytes.length);
 		buf.putInt(attrBytes.length);
 		buf.putInt(axisBytes.length);
 		buf.putInt(encodedTypeBytes.length);
 		buf.put(typeNameBytes);
 		buf.put(namespaceBytes);
-		buf.put(fieldVisibilityAtributeNameBytes);
-		buf.put(visibilityManagementClassNameBytes);
 		buf.put(attrBytes);
 		buf.put(axisBytes);
 		buf.put(encodedTypeBytes);
@@ -419,15 +429,12 @@ public class FeatureDataAdapter extends
 		}
 		final byte[] typeNameBytes = new byte[buf.getInt()];
 		final byte[] namespaceBytes = new byte[buf.getInt()];
-		final byte[] fieldVisibilityAtributeNameBytes = new byte[buf.getInt()];
-		final byte[] visibilityManagementClassNameBytes = new byte[buf.getInt()];
+
 		final byte[] attrBytes = new byte[buf.getInt()];
 		final byte[] axisBytes = new byte[buf.getInt()];
 		final byte[] encodedTypeBytes = new byte[buf.getInt()];
 		buf.get(typeNameBytes);
 		buf.get(namespaceBytes);
-		buf.get(fieldVisibilityAtributeNameBytes);
-		buf.get(visibilityManagementClassNameBytes);
 		buf.get(attrBytes);
 		buf.get(axisBytes);
 		buf.get(encodedTypeBytes);
@@ -437,20 +444,10 @@ public class FeatureDataAdapter extends
 		if (namespace.length() == 0) {
 			namespace = null;
 		}
-		visibilityAttributeName = StringUtils.stringFromBinary(fieldVisibilityAtributeNameBytes);
-		final String visibilityManagementClassName = StringUtils.stringFromBinary(visibilityManagementClassNameBytes);
-		try {
-			fieldVisibilityManagement = (VisibilityManagement<SimpleFeature>) Class.forName(
-					visibilityManagementClassName).newInstance();
-		}
-		catch (final Exception ex) {
-			LOGGER.error(
-					"Cannot instantiate " + visibilityManagementClassName,
-					ex);
-		}
-		// 29 bytes is the 7 four byte length fields and one byte for the
+
+		// 24 bytes is the 6 four byte length fields and one byte for the
 		// version
-		final byte[] secondaryIndexBytes = new byte[bytes.length - axisBytes.length - typeNameBytes.length - namespaceBytes.length - fieldVisibilityAtributeNameBytes.length - visibilityManagementClassNameBytes.length - attrBytes.length - encodedTypeBytes.length - 29];
+		final byte[] secondaryIndexBytes = new byte[bytes.length - axisBytes.length - typeNameBytes.length - namespaceBytes.length - attrBytes.length - encodedTypeBytes.length - 29];
 		buf.get(secondaryIndexBytes);
 
 		final String encodedType = StringUtils.stringFromBinary(encodedTypeBytes);
@@ -466,6 +463,8 @@ public class FeatureDataAdapter extends
 					myType));
 			userDataConfiguration.addConfigurations(new SimpleFeatureStatsConfigurationCollection(
 					myType));
+			userDataConfiguration.addConfigurations(new VisibilityConfiguration(
+					myType));
 			try {
 				userDataConfiguration.fromJsonString(
 						StringUtils.stringFromBinary(attrBytes),
@@ -478,12 +477,6 @@ public class FeatureDataAdapter extends
 						e);
 			}
 			setFeatureType(myType);
-			if (persistedType.getDescriptor(visibilityAttributeName) != null) {
-				persistedType.getDescriptor(
-						visibilityAttributeName).getUserData().put(
-						"visibility",
-						Boolean.TRUE);
-			}
 
 			// advertise the reprojected type externally
 			return reprojectedType;
@@ -605,16 +598,6 @@ public class FeatureDataAdapter extends
 		// serialization/deserialization
 		config.updateType(persistType);
 		return timeDescriptors;
-	}
-
-	private void determineVisibilityAttribute() {
-		for (final AttributeDescriptor attrDesc : persistedType.getAttributeDescriptors()) {
-			final Boolean isVisibility = (Boolean) attrDesc.getUserData().get(
-					"visibility");
-			if ((isVisibility != null) && isVisibility.booleanValue()) {
-				visibilityAttributeName = attrDesc.getLocalName();
-			}
-		}
 	}
 
 	@Override

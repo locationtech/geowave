@@ -10,8 +10,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
-
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.Persistable;
 import mil.nga.giat.geowave.core.index.PersistenceUtils;
@@ -26,6 +24,8 @@ import mil.nga.giat.geowave.core.store.filter.GenericTypeResolver;
 import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+
+import org.apache.log4j.Logger;
 
 /**
  * This class generically supports most of the operations necessary to implement
@@ -54,18 +54,32 @@ abstract public class AbstractDataAdapter<T> implements
 
 	public AbstractDataAdapter(
 			final List<PersistentIndexFieldHandler<T, ? extends CommonIndexValue, Object>> indexFieldHandlers,
+			final List<NativeFieldHandler<T, Object>> nativeFieldHandlers,
+			final FieldVisibilityHandler<T, Object> fieldVisiblityHandler ) {
+		this(
+				indexFieldHandlers,
+				nativeFieldHandlers,
+				fieldVisiblityHandler,
+				null);
+	}
+
+	public AbstractDataAdapter(
+			final List<PersistentIndexFieldHandler<T, ? extends CommonIndexValue, Object>> indexFieldHandlers,
 			final List<NativeFieldHandler<T, Object>> nativeFieldHandlers ) {
 		this(
 				indexFieldHandlers,
 				nativeFieldHandlers,
+				null,
 				null);
 	}
 
 	protected AbstractDataAdapter(
 			final List<PersistentIndexFieldHandler<T, ? extends CommonIndexValue, Object>> indexFieldHandlers,
 			final List<NativeFieldHandler<T, Object>> nativeFieldHandlers,
+			final FieldVisibilityHandler<T, Object> fieldVisiblityHandler,
 			final Object defaultTypeData ) {
 		this.nativeFieldHandlers = nativeFieldHandlers;
+		this.fieldVisiblityHandler = fieldVisiblityHandler;
 		init(
 				indexFieldHandlers,
 				defaultTypeData);
@@ -240,6 +254,7 @@ abstract public class AbstractDataAdapter<T> implements
 		if (fieldVisiblityHandler instanceof Persistable) {
 			persistables.add((Persistable) fieldVisiblityHandler);
 		}
+
 		final byte[] defaultTypeDataBinary = defaultTypeDataToBinary();
 		final byte[] persistablesBytes = PersistenceUtils.toBinary(persistables);
 		final ByteBuffer buf = ByteBuffer.allocate(defaultTypeDataBinary.length + persistablesBytes.length + 4);
@@ -286,6 +301,7 @@ abstract public class AbstractDataAdapter<T> implements
 				}
 			}
 		}
+
 		this.nativeFieldHandlers = nativeFieldHandlers;
 		init(
 				indexFieldHandlers,
