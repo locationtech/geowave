@@ -189,6 +189,12 @@
 				<artifactId>gt-main</artifactId>
 				<version>${geotools.version}</version>
 				<scope>${geotools.scope}</scope>
+				<exclusions>
+					<exclusion>
+						<groupId>com.vividsolutions</groupId>
+						<artifactId>jts</artifactId>
+					</exclusion>
+				</exclusions>
 			</dependency>
 			<dependency>
 				<groupId>org.geotools</groupId>
@@ -207,12 +213,24 @@
 				<artifactId>gs-wms</artifactId>
 				<version>${geoserver.version}</version>
 				<scope>${geotools.scope}</scope>
+				<exclusions>
+					<exclusion>
+						<groupId>com.vividsolutions</groupId>
+						<artifactId>jts</artifactId>
+					</exclusion>
+				</exclusions>
 			</dependency>
 			<dependency>
 				<groupId>org.geoserver</groupId>
 				<artifactId>gs-main</artifactId>
 				<version>${geoserver.version}</version>
 				<scope>${geotools.scope}</scope>
+				<exclusions>
+					<exclusion>
+						<groupId>com.vividsolutions</groupId>
+						<artifactId>jts</artifactId>
+					</exclusion>
+				</exclusions>
 			</dependency>
 			<dependency>
 				<groupId>org.geoserver</groupId>
@@ -237,6 +255,12 @@
 				<artifactId>gt-render</artifactId>
 				<version>${geotools.version}</version>
 				<scope>${geotools.scope}</scope>
+				<exclusions>
+					<exclusion>
+						<groupId>com.vividsolutions</groupId>
+						<artifactId>jts</artifactId>
+					</exclusion>
+				</exclusions>
 			</dependency>
 			<dependency>
 				<groupId>org.geotools</groupId>
