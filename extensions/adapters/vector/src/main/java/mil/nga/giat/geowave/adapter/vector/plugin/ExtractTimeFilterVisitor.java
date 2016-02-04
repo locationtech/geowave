@@ -12,6 +12,7 @@ import mil.nga.giat.geowave.core.geotime.store.query.TemporalRange;
 
 import org.geotools.data.Query;
 import org.geotools.filter.visitor.NullFilterVisitor;
+import org.geotools.util.Converters;
 import org.opengis.filter.And;
 import org.opengis.filter.ExcludeFilter;
 import org.opengis.filter.Filter;
@@ -69,23 +70,23 @@ import org.opengis.temporal.Position;
 /**
  * This class can be used to get Time range from an OpenGIS filter object.
  * GeoWave then uses this time range to perform a spatial intersection query.
- * 
+ *
  * Only those time elements associated with an index are extracted. At the
  * moment, the adapter only supports temporal indexing on a single attribute or
  * a pair of attributes representing a time range.
- * 
+ *
  */
 public class ExtractTimeFilterVisitor extends
 		NullFilterVisitor
 {
 	static public NullFilterVisitor TIME_VISITOR = new ExtractTimeFilterVisitor();
-	private List<String[]> validParamRanges = new LinkedList<String[]>();
+	private final List<String[]> validParamRanges = new LinkedList<String[]>();
 
 	public ExtractTimeFilterVisitor() {}
 
 	public void addRangeVariables(
-			String start,
-			String end ) {
+			final String start,
+			final String end ) {
 		validParamRanges.add(new String[] {
 			start,
 			end
@@ -119,7 +120,7 @@ public class ExtractTimeFilterVisitor extends
 
 	/**
 	 * Produce an ReferencedEnvelope from the provided data parameter.
-	 * 
+	 *
 	 * @param data
 	 * @return ReferencedEnvelope
 	 */
@@ -189,6 +190,12 @@ public class ExtractTimeFilterVisitor extends
 					s));
 		}
 
+		final Date convertedDate = Converters.convert(
+				data,
+				Date.class);
+		if (convertedDate != null) {
+			return btime(convertedDate);
+		}
 		return new TemporalConstraints();
 	}
 
@@ -215,12 +222,12 @@ public class ExtractTimeFilterVisitor extends
 
 	/**
 	 * Please note we are only visiting literals involved in spatial operations.
-	 * 
+	 *
 	 * @param literal
 	 *            , hopefully a Geometry or Envelope
 	 * @param data
 	 *            Incoming BoundingBox (or Envelope or CRS)
-	 * 
+	 *
 	 * @return ReferencedEnvelope updated to reflect literal
 	 */
 	@Override
@@ -275,7 +282,7 @@ public class ExtractTimeFilterVisitor extends
 			for (final Map.Entry<String, TemporalConstraints> entry : rangeSet.getSet()) {
 				newRangeSet.getConstraintsFor(
 						entry.getKey()).replaceWithMerged(
-						not((TemporalConstraints) entry.getValue()));
+						not(entry.getValue()));
 			}
 			return newRangeSet;
 		}
@@ -838,18 +845,20 @@ public class ExtractTimeFilterVisitor extends
 		if (leftResult.isEmpty() || rightResult.isEmpty()) {
 			return new TemporalConstraints();
 		}
-		if (leftResult instanceof ParameterTimeConstraint)
+		if (leftResult instanceof ParameterTimeConstraint) {
 			return new ParameterTimeConstraint(
 					new TemporalRange(
 							rightResult.getStartRange().getStartTime(),
 							rightResult.getEndRange().getEndTime()),
 					leftResult.getName());
-		else
+		}
+		else {
 			return new ParameterTimeConstraint(
 					new TemporalRange(
 							leftResult.getStartRange().getStartTime(),
 							leftResult.getEndRange().getEndTime()),
 					rightResult.getName());
+		}
 	}
 
 	@Override
@@ -903,18 +912,20 @@ public class ExtractTimeFilterVisitor extends
 		if (leftResult.isEmpty() || rightResult.isEmpty()) {
 			return new TemporalConstraints();
 		}
-		if (leftResult instanceof ParameterTimeConstraint)
+		if (leftResult instanceof ParameterTimeConstraint) {
 			return new ParameterTimeConstraint(
 					new TemporalRange(
 							rightResult.getStartRange().getStartTime(),
 							TemporalRange.END_TIME),
 					leftResult.getName());
-		else
+		}
+		else {
 			return new ParameterTimeConstraint(
 					new TemporalRange(
 							TemporalRange.START_TIME,
 							leftResult.getStartRange().getStartTime()),
 					rightResult.getName());
+		}
 	}
 
 	@Override
@@ -931,18 +942,20 @@ public class ExtractTimeFilterVisitor extends
 			return new TemporalConstraints();
 		}
 
-		if (leftResult instanceof ParameterTimeConstraint)
+		if (leftResult instanceof ParameterTimeConstraint) {
 			return new ParameterTimeConstraint(
 					new TemporalRange(
 							rightResult.getStartRange().getStartTime(),
 							TemporalRange.END_TIME),
 					leftResult.getName());
-		else
+		}
+		else {
 			return new ParameterTimeConstraint(
 					new TemporalRange(
 							TemporalRange.START_TIME,
 							leftResult.getStartRange().getStartTime()),
 					rightResult.getName());
+		}
 	}
 
 	@Override
@@ -959,18 +972,20 @@ public class ExtractTimeFilterVisitor extends
 			return new TemporalConstraints();
 		}
 
-		if (leftResult instanceof ParameterTimeConstraint)
+		if (leftResult instanceof ParameterTimeConstraint) {
 			return new ParameterTimeConstraint(
 					new TemporalRange(
 							TemporalRange.START_TIME,
 							rightResult.getStartRange().getStartTime()),
 					leftResult.getName());
-		else
+		}
+		else {
 			return new ParameterTimeConstraint(
 					new TemporalRange(
 							leftResult.getStartRange().getStartTime(),
 							TemporalRange.END_TIME),
 					rightResult.getName());
+		}
 	}
 
 	@Override
@@ -987,18 +1002,20 @@ public class ExtractTimeFilterVisitor extends
 			return new TemporalConstraints();
 		}
 
-		if (leftResult instanceof ParameterTimeConstraint)
+		if (leftResult instanceof ParameterTimeConstraint) {
 			return new ParameterTimeConstraint(
 					new TemporalRange(
 							TemporalRange.START_TIME,
 							rightResult.getStartRange().getStartTime()),
 					leftResult.getName());
-		else
+		}
+		else {
 			return new ParameterTimeConstraint(
 					new TemporalRange(
 							leftResult.getStartRange().getStartTime(),
 							TemporalRange.END_TIME),
 					rightResult.getName());
+		}
 	}
 
 	@Override
@@ -1150,7 +1167,7 @@ public class ExtractTimeFilterVisitor extends
 			final Object data ) {
 		final String name = expression.getPropertyName();
 		if (validateName(expression.getPropertyName())) {
-			for (String[] range : validParamRanges) {
+			for (final String[] range : validParamRanges) {
 				if (range[0].equals(name) || range[1].equals(name)) {
 					return new ParameterTimeConstraint(
 							range[0] + "_" + range[1]);
