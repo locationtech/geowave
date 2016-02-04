@@ -11,7 +11,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.vividsolutions</groupId>
-			<artifactId>jts</artifactId>
+			<artifactId>jts-core</artifactId>
 		</dependency>
 		<!--we can switch the dependency from store to ingest when accumulo becomes 
 			a pluggable data store and is no longer a dependency on ingest -->
