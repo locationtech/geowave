@@ -18,13 +18,12 @@ import org.opengis.feature.simple.SimpleFeature;
  * @param <T>
  * @param <CommonIndexValue>
  */
-public class FieldLevelVisibilityHandler<T, CommonIndexValue> implements
+public abstract class FieldLevelVisibilityHandler<T, CommonIndexValue> implements
 		FieldVisibilityHandler<T, CommonIndexValue>
 {
 
 	private final String visibilityAttribute;
 	private final String fieldName;
-	private final VisibilityManagement<T> visibilityManagement;
 	private FieldVisibilityHandler<T, Object> defaultFieldVisiblityHandler;
 
 	/**
@@ -46,14 +45,26 @@ public class FieldLevelVisibilityHandler<T, CommonIndexValue> implements
 	public FieldLevelVisibilityHandler(
 			final String fieldName,
 			final FieldVisibilityHandler<T, Object> fieldVisiblityHandler,
-			final String visibilityAttribute,
-			final VisibilityManagement<T> visibilityManagement ) {
+			final String visibilityAttribute ) {
 		super();
 		this.fieldName = fieldName;
 		this.visibilityAttribute = visibilityAttribute;
-		this.visibilityManagement = visibilityManagement;
 		this.defaultFieldVisiblityHandler = fieldVisiblityHandler;
 	}
+
+	/**
+	 * 
+	 * @param visibilityObject
+	 *            an object that defines visibility for each field
+	 * @param fieldName
+	 *            the field to which visibility is being requested
+	 * @return null if the default should be used, otherwise return the
+	 *         visibility for the provide field given the instructions found in
+	 *         the visibilityObject
+	 */
+	public abstract byte[] translateVisibility(
+			final Object visibilityObject,
+			final String fieldName );
 
 	@Override
 	public byte[] getVisibility(
@@ -63,10 +74,10 @@ public class FieldLevelVisibilityHandler<T, CommonIndexValue> implements
 
 		SimpleFeature feature = (SimpleFeature) rowValue;
 		Object visibilityAttributeValue = feature.getAttribute(this.visibilityAttribute);
-		byte[] result = visibilityAttributeValue != null ? visibilityManagement.translateVisibility(
+		final byte[] result = visibilityAttributeValue != null ? translateVisibility(
 				visibilityAttributeValue,
 				fieldName) : null;
-		return result != null ? result : (defaultFieldVisiblityHandler == null ? new byte[] {} : defaultFieldVisiblityHandler.getVisibility(
+		return result != null ? result : (defaultFieldVisiblityHandler == null ? new byte[0] : defaultFieldVisiblityHandler.getVisibility(
 				rowValue,
 				fieldId,
 				fieldValue));

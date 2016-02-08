@@ -103,7 +103,7 @@ public class DataStoreUtils
 		}
 		catch (final IOException e) {
 			LOGGER.error(
-					"inavalid visibility " + Arrays.toString(visibility),
+					"invalid visibility " + Arrays.toString(visibility),
 					e);
 			return false;
 		}

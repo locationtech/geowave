@@ -19,7 +19,6 @@ import mil.nga.giat.geowave.adapter.vector.plugin.transaction.GeoWaveTransaction
 import mil.nga.giat.geowave.adapter.vector.plugin.transaction.GeoWaveTransactionState;
 import mil.nga.giat.geowave.adapter.vector.plugin.transaction.MemoryTransactionsAllocator;
 import mil.nga.giat.geowave.adapter.vector.plugin.transaction.TransactionsAllocator;
-import mil.nga.giat.geowave.adapter.vector.plugin.visibility.ColumnVisibilityManagement;
 import mil.nga.giat.geowave.adapter.vector.plugin.visibility.VisibilityManagementHelper;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import mil.nga.giat.geowave.core.geotime.store.dimension.LatitudeField;
@@ -32,6 +31,7 @@ import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
+import mil.nga.giat.geowave.core.store.data.visibility.VisibilityManagement;
 import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;
 import mil.nga.giat.geowave.core.store.index.Index;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
@@ -84,7 +84,7 @@ public class GeoWaveGTDataStore extends
 	protected DataStore dataStore;
 	private final Map<String, List<PrimaryIndex>> preferredIndexes = new ConcurrentHashMap<String, List<PrimaryIndex>>();
 
-	private final ColumnVisibilityManagement<SimpleFeature> visibilityManagement = VisibilityManagementHelper.loadVisibilityManagement();
+	private final VisibilityManagement<SimpleFeature> visibilityManagement = VisibilityManagementHelper.loadVisibilityManagement();
 	private final AuthorizationSPI authorizationSPI;
 	private final IndexQueryStrategySPI indexQueryStrategy;
 	private final URI featureNameSpaceURI;
