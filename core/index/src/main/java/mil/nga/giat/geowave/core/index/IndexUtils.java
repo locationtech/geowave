@@ -35,6 +35,9 @@ public class IndexUtils
 				cellRangePerDimension);
 		for (int d = 0; d < dataRangePerDimension.length; d++) {
 			final double bitsUsed = bitsPerDimension[d] - log2(Math.ceil(dataRangePerDimension[d] / cellRangePerDimension[d]));
+			if (bitsUsed <= 0) {
+				return 0;
+			}
 			result = Math.min(
 					bitsUsed,
 					result);
