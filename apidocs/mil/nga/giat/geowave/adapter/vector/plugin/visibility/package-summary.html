@@ -67,6 +67,23 @@
 <div class="contentContainer">
 <ul class="blockList">
 <li class="blockList">
+<table class="packageSummary" border="0" cellpadding="3" cellspacing="0" summary="Interface Summary table, listing interfaces, and an explanation">
+<caption><span>Interface Summary</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Interface</th>
+<th class="colLast" scope="col">Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/visibility/ColumnVisibilityManagementSpi.html" title="interface in mil.nga.giat.geowave.adapter.vector.plugin.visibility">ColumnVisibilityManagementSpi</a>&lt;T&gt;</td>
+<td class="colLast">
+<div class="block">Provides a strategy to create visibility handlers for each attribute.</div>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList">
 <table class="packageSummary" border="0" cellpadding="3" cellspacing="0" summary="Class Summary table, listing classes, and an explanation">
 <caption><span>Class Summary</span><span class="tabEnd">&nbsp;</span></caption>
 <tr>
@@ -74,19 +91,6 @@
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tbody>
-<tr class="altColor">
-<td class="colFirst"><a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/visibility/AdaptorProxyFieldLevelVisibilityHandler.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin.visibility">AdaptorProxyFieldLevelVisibilityHandler</a></td>
-<td class="colLast">
-<div class="block">Works with <a href="../../../../../../../../mil/nga/giat/geowave/core/store/data/visibility/VisibilityManagement.html" title="interface in mil.nga.giat.geowave.core.store.data.visibility"><code>VisibilityManagement</code></a> instance to define the visibility for
- a specific field of a data row object.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/visibility/ColumnVisibilityManagement.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin.visibility">ColumnVisibilityManagement</a>&lt;T&gt;</td>
-<td class="colLast">
-<div class="block">Treats the visibility column as a String expression, as defined by Accumulo.</div>
-</td>
-</tr>
 <tr class="altColor">
 <td class="colFirst"><a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/visibility/FieldLevelVisibilityHandler.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin.visibility">FieldLevelVisibilityHandler</a>&lt;T,CommonIndexValue&gt;</td>
 <td class="colLast">
@@ -102,6 +106,13 @@
 </td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/visibility/VisibilityConfiguration.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin.visibility">VisibilityConfiguration</a></td>
+<td class="colLast">
+<div class="block">Describes which attribute in a feature contains the visibility constraints,
+ interpreted by a <a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/visibility/ColumnVisibilityManagementSpi.html" title="interface in mil.nga.giat.geowave.adapter.vector.plugin.visibility"><code>ColumnVisibilityManagementSpi</code></a></div>
+</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/visibility/VisibilityManagementHelper.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin.visibility">VisibilityManagementHelper</a></td>
 <td class="colLast">
 <div class="block">At the moment, the expectation is that a single GeoServer instance supports

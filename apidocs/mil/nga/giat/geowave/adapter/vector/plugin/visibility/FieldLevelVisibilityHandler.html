@@ -35,7 +35,7 @@
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/visibility/ColumnVisibilityManagement.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin.visibility"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/visibility/ColumnVisibilityManagementSpi.html" title="interface in mil.nga.giat.geowave.adapter.vector.plugin.visibility"><span class="strong">Prev Class</span></a></li>
 <li><a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/visibility/JsonDefinitionColumnVisibilityManagement.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin.visibility"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">
@@ -100,7 +100,7 @@
 </dl>
 <hr>
 <br>
-<pre>public class <span class="strong">FieldLevelVisibilityHandler&lt;T,CommonIndexValue&gt;</span>
+<pre>public abstract class <span class="strong">FieldLevelVisibilityHandler&lt;T,CommonIndexValue&gt;</span>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements <a href="../../../../../../../../mil/nga/giat/geowave/core/store/data/field/FieldVisibilityHandler.html" title="interface in mil.nga.giat.geowave.core.store.data.field">FieldVisibilityHandler</a>&lt;T,CommonIndexValue&gt;</pre>
 <div class="block">Define visibility for a specific attribute using the
@@ -125,10 +125,9 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/store/data
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/visibility/FieldLevelVisibilityHandler.html#FieldLevelVisibilityHandler(java.lang.String,%20mil.nga.giat.geowave.core.store.data.field.FieldVisibilityHandler,%20java.lang.String,%20mil.nga.giat.geowave.core.store.data.visibility.VisibilityManagement)">FieldLevelVisibilityHandler</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName,
+<td class="colOne"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/visibility/FieldLevelVisibilityHandler.html#FieldLevelVisibilityHandler(java.lang.String,%20mil.nga.giat.geowave.core.store.data.field.FieldVisibilityHandler,%20java.lang.String)">FieldLevelVisibilityHandler</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName,
                            <a href="../../../../../../../../mil/nga/giat/geowave/core/store/data/field/FieldVisibilityHandler.html" title="interface in mil.nga.giat.geowave.core.store.data.field">FieldVisibilityHandler</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/visibility/FieldLevelVisibilityHandler.html" title="type parameter in FieldLevelVisibilityHandler">T</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;fieldVisiblityHandler,
-                           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;visibilityAttribute,
-                           <a href="../../../../../../../../mil/nga/giat/geowave/core/store/data/visibility/VisibilityManagement.html" title="interface in mil.nga.giat.geowave.core.store.data.visibility">VisibilityManagement</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/visibility/FieldLevelVisibilityHandler.html" title="type parameter in FieldLevelVisibilityHandler">T</a>&gt;&nbsp;visibilityManagement)</code>
+                           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;visibilityAttribute)</code>
 <div class="block">Used when acting with an Index adaptor as a visibility handler.</div>
 </td>
 </tr>
@@ -155,6 +154,11 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/store/data
 <div class="block">Determine visibility on a per field basis.</div>
 </td>
 </tr>
+<tr class="rowColor">
+<td class="colFirst"><code>abstract byte[]</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/visibility/FieldLevelVisibilityHandler.html#translateVisibility(java.lang.Object,%20java.lang.String)">translateVisibility</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;visibilityObject,
+                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName)</code>&nbsp;</td>
+</tr>
 </table>
 <ul class="blockList">
 <li class="blockList"><a name="methods_inherited_from_class_java.lang.Object">
@@ -177,7 +181,7 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/store/data
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="FieldLevelVisibilityHandler(java.lang.String, mil.nga.giat.geowave.core.store.data.field.FieldVisibilityHandler, java.lang.String, mil.nga.giat.geowave.core.store.data.visibility.VisibilityManagement)">
+<a name="FieldLevelVisibilityHandler(java.lang.String, mil.nga.giat.geowave.core.store.data.field.FieldVisibilityHandler, java.lang.String)">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -185,8 +189,7 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/store/data
 <h4>FieldLevelVisibilityHandler</h4>
 <pre>public&nbsp;FieldLevelVisibilityHandler(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName,
                            <a href="../../../../../../../../mil/nga/giat/geowave/core/store/data/field/FieldVisibilityHandler.html" title="interface in mil.nga.giat.geowave.core.store.data.field">FieldVisibilityHandler</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/visibility/FieldLevelVisibilityHandler.html" title="type parameter in FieldLevelVisibilityHandler">T</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;fieldVisiblityHandler,
-                           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;visibilityAttribute,
-                           <a href="../../../../../../../../mil/nga/giat/geowave/core/store/data/visibility/VisibilityManagement.html" title="interface in mil.nga.giat.geowave.core.store.data.visibility">VisibilityManagement</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/visibility/FieldLevelVisibilityHandler.html" title="type parameter in FieldLevelVisibilityHandler">T</a>&gt;&nbsp;visibilityManagement)</pre>
+                           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;visibilityAttribute)</pre>
 <div class="block">Used when acting with an Index adaptor as a visibility handler. This</div>
 <dl><dt><span class="strong">Parameters:</span></dt><dd><code>fieldName</code> - - the name of the field for which to set determine the
             visibility.</dd><dd><code>fieldVisiblityHandler</code> - default visibility handler if a specific visibility cannot be
@@ -204,6 +207,20 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/store/data
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a name="translateVisibility(java.lang.Object, java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>translateVisibility</h4>
+<pre>public abstract&nbsp;byte[]&nbsp;translateVisibility(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;visibilityObject,
+                         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName)</pre>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>visibilityObject</code> - an object that defines visibility for each field</dd><dd><code>fieldName</code> - the field to which visibility is being requested</dd>
+<dt><span class="strong">Returns:</span></dt><dd>null if the default should be used, otherwise return the
+         visibility for the provide field given the instructions found in
+         the visibilityObject</dd></dl>
+</li>
+</ul>
 <a name="getVisibility(java.lang.Object,mil.nga.giat.geowave.core.index.ByteArrayId,java.lang.Object)">
 <!--   -->
 </a><a name="getVisibility(T, mil.nga.giat.geowave.core.index.ByteArrayId, CommonIndexValue)">
@@ -250,7 +267,7 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/store/data
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/visibility/ColumnVisibilityManagement.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin.visibility"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/visibility/ColumnVisibilityManagementSpi.html" title="interface in mil.nga.giat.geowave.adapter.vector.plugin.visibility"><span class="strong">Prev Class</span></a></li>
 <li><a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/visibility/JsonDefinitionColumnVisibilityManagement.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin.visibility"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">

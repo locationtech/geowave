@@ -36,7 +36,7 @@
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/visibility/FieldLevelVisibilityHandler.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin.visibility"><span class="strong">Prev Class</span></a></li>
-<li><a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/visibility/VisibilityManagementHelper.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin.visibility"><span class="strong">Next Class</span></a></li>
+<li><a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/visibility/VisibilityConfiguration.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin.visibility"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../../../index.html?mil/nga/giat/geowave/adapter/vector/plugin/visibility/JsonDefinitionColumnVisibilityManagement.html" target="_top">Frames</a></li>
@@ -86,12 +86,7 @@
 <li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
 <li>
 <ul class="inheritance">
-<li><a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/visibility/ColumnVisibilityManagement.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin.visibility">mil.nga.giat.geowave.adapter.vector.plugin.visibility.ColumnVisibilityManagement</a>&lt;T&gt;</li>
-<li>
-<ul class="inheritance">
 <li>mil.nga.giat.geowave.adapter.vector.plugin.visibility.JsonDefinitionColumnVisibilityManagement&lt;T&gt;</li>
-</ul>
-</li>
 </ul>
 </li>
 </ul>
@@ -100,12 +95,13 @@
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><a href="../../../../../../../../mil/nga/giat/geowave/core/store/data/visibility/VisibilityManagement.html" title="interface in mil.nga.giat.geowave.core.store.data.visibility">VisibilityManagement</a>&lt;T&gt;</dd>
+<dd><a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/visibility/ColumnVisibilityManagementSpi.html" title="interface in mil.nga.giat.geowave.adapter.vector.plugin.visibility">ColumnVisibilityManagementSpi</a>&lt;T&gt;, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/data/visibility/VisibilityManagement.html" title="interface in mil.nga.giat.geowave.core.store.data.visibility">VisibilityManagement</a>&lt;T&gt;</dd>
 </dl>
 <hr>
 <br>
 <pre>public class <span class="strong">JsonDefinitionColumnVisibilityManagement&lt;T&gt;</span>
-extends <a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/visibility/ColumnVisibilityManagement.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin.visibility">ColumnVisibilityManagement</a>&lt;T&gt;</pre>
+extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
+implements <a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/visibility/ColumnVisibilityManagementSpi.html" title="interface in mil.nga.giat.geowave.adapter.vector.plugin.visibility">ColumnVisibilityManagementSpi</a>&lt;T&gt;</pre>
 <div class="block">Object defining visibility is a json structure where each attribute defines
  the visibility for a field with the same name (as the attribute).
  
@@ -162,24 +158,6 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/plu
 <div class="block">Create a visibility handler</div>
 </td>
 </tr>
-<tr class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/data/visibility/FieldLevelVisibilityWriter.html" title="class in mil.nga.giat.geowave.core.store.data.visibility">FieldLevelVisibilityWriter</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/visibility/JsonDefinitionColumnVisibilityManagement.html" title="type parameter in JsonDefinitionColumnVisibilityManagement">T</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/visibility/JsonDefinitionColumnVisibilityManagement.html#createVisibilityWriter(java.lang.String,%20mil.nga.giat.geowave.core.store.data.field.FieldWriter,%20mil.nga.giat.geowave.core.store.data.field.FieldVisibilityHandler,%20java.lang.String)">createVisibilityWriter</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName,
-                      <a href="../../../../../../../../mil/nga/giat/geowave/core/store/data/field/FieldWriter.html" title="interface in mil.nga.giat.geowave.core.store.data.field">FieldWriter</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/visibility/JsonDefinitionColumnVisibilityManagement.html" title="type parameter in JsonDefinitionColumnVisibilityManagement">T</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;writer,
-                      <a href="../../../../../../../../mil/nga/giat/geowave/core/store/data/field/FieldVisibilityHandler.html" title="interface in mil.nga.giat.geowave.core.store.data.field">FieldVisibilityHandler</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/visibility/JsonDefinitionColumnVisibilityManagement.html" title="type parameter in JsonDefinitionColumnVisibilityManagement">T</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;defaultFieldVisiblityHandler,
-                      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;visibilityAttribute)</code>
-<div class="block">Create a wrapper visibility writer.</div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>byte[]</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/visibility/JsonDefinitionColumnVisibilityManagement.html#translateVisibility(java.lang.Object,%20java.lang.String)">translateVisibility</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;visibilityObject,
-                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>protected byte[]</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/visibility/JsonDefinitionColumnVisibilityManagement.html#validate(java.lang.String)">validate</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;vis)</code>&nbsp;</td>
-</tr>
 </table>
 <ul class="blockList">
 <li class="blockList"><a name="methods_inherited_from_class_java.lang.Object">
@@ -219,24 +197,10 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/plu
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="translateVisibility(java.lang.Object, java.lang.String)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>translateVisibility</h4>
-<pre>public&nbsp;byte[]&nbsp;translateVisibility(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;visibilityObject,
-                         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName)</pre>
-<dl><dt><span class="strong">Parameters:</span></dt><dd><code>visibilityObject</code> - an object that defines visibility for each field</dd><dd><code>fieldName</code> - the field to which visibility is being requested</dd>
-<dt><span class="strong">Returns:</span></dt><dd>null if the default should be used, otherwise return the
-         visibility for the provide field given the instructions found in
-         the visibilityObject</dd></dl>
-</li>
-</ul>
 <a name="createVisibilityHandler(java.lang.String, mil.nga.giat.geowave.core.store.data.field.FieldVisibilityHandler, java.lang.String)">
 <!--   -->
 </a>
-<ul class="blockList">
+<ul class="blockListLast">
 <li class="blockList">
 <h4>createVisibilityHandler</h4>
 <pre>public&nbsp;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/data/field/FieldVisibilityHandler.html" title="interface in mil.nga.giat.geowave.core.store.data.field">FieldVisibilityHandler</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/visibility/JsonDefinitionColumnVisibilityManagement.html" title="type parameter in JsonDefinitionColumnVisibilityManagement">T</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;createVisibilityHandler(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName,
@@ -244,42 +208,12 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/plu
                                                        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;visibilityAttributeName)</pre>
 <div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/data/visibility/VisibilityManagement.html#createVisibilityHandler(java.lang.String,%20mil.nga.giat.geowave.core.store.data.field.FieldVisibilityHandler,%20java.lang.String)">VisibilityManagement</a></code></strong></div>
 <div class="block">Create a visibility handler</div>
-<dl><dt><span class="strong">Parameters:</span></dt><dd><code>fieldName</code> - -- the name of the field for object of type T requiring
-            visibility treatment</dd><dd><code>defaultHandler</code> - -- default handler if the visibilityAttributeName is not
-            provided or the field does not exist in a provided object of
-            type T.</dd><dd><code>visibilityAttributeName</code> - -- optional name of a field that determines visibility of each
-            field in an object of type T</dd>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/data/visibility/VisibilityManagement.html#createVisibilityHandler(java.lang.String,%20mil.nga.giat.geowave.core.store.data.field.FieldVisibilityHandler,%20java.lang.String)">createVisibilityHandler</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/data/visibility/VisibilityManagement.html" title="interface in mil.nga.giat.geowave.core.store.data.visibility">VisibilityManagement</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/visibility/JsonDefinitionColumnVisibilityManagement.html" title="type parameter in JsonDefinitionColumnVisibilityManagement">T</a>&gt;</code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>fieldName</code> - -- the name of the field for object of type T requiring
+            visibility treatment</dd>
 <dt><span class="strong">Returns:</span></dt><dd></dd></dl>
-</li>
-</ul>
-<a name="validate(java.lang.String)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>validate</h4>
-<pre>protected&nbsp;byte[]&nbsp;validate(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;vis)</pre>
-</li>
-</ul>
-<a name="createVisibilityWriter(java.lang.String, mil.nga.giat.geowave.core.store.data.field.FieldWriter, mil.nga.giat.geowave.core.store.data.field.FieldVisibilityHandler, java.lang.String)">
-<!--   -->
-</a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>createVisibilityWriter</h4>
-<pre>public&nbsp;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/data/visibility/FieldLevelVisibilityWriter.html" title="class in mil.nga.giat.geowave.core.store.data.visibility">FieldLevelVisibilityWriter</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/visibility/JsonDefinitionColumnVisibilityManagement.html" title="type parameter in JsonDefinitionColumnVisibilityManagement">T</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;createVisibilityWriter(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName,
-                                                          <a href="../../../../../../../../mil/nga/giat/geowave/core/store/data/field/FieldWriter.html" title="interface in mil.nga.giat.geowave.core.store.data.field">FieldWriter</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/visibility/JsonDefinitionColumnVisibilityManagement.html" title="type parameter in JsonDefinitionColumnVisibilityManagement">T</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;writer,
-                                                          <a href="../../../../../../../../mil/nga/giat/geowave/core/store/data/field/FieldVisibilityHandler.html" title="interface in mil.nga.giat.geowave.core.store.data.field">FieldVisibilityHandler</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/visibility/JsonDefinitionColumnVisibilityManagement.html" title="type parameter in JsonDefinitionColumnVisibilityManagement">T</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;defaultFieldVisiblityHandler,
-                                                          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;visibilityAttribute)</pre>
-<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/data/visibility/VisibilityManagement.html#createVisibilityWriter(java.lang.String,%20mil.nga.giat.geowave.core.store.data.field.FieldWriter,%20mil.nga.giat.geowave.core.store.data.field.FieldVisibilityHandler,%20java.lang.String)">VisibilityManagement</a></code></strong></div>
-<div class="block">Create a wrapper visibility writer.
- In most cases, the return value should be <a href="../../../../../../../../mil/nga/giat/geowave/core/store/data/visibility/FieldLevelVisibilityWriter.html" title="class in mil.nga.giat.geowave.core.store.data.visibility"><code>FieldLevelVisibilityWriter</code></a> 
- using the <a href="../../../../../../../../mil/nga/giat/geowave/core/store/data/field/FieldVisibilityHandler.html" title="interface in mil.nga.giat.geowave.core.store.data.field"><code>FieldVisibilityHandler</code></a> created by <a href="../../../../../../../../mil/nga/giat/geowave/core/store/data/visibility/VisibilityManagement.html#createVisibilityHandler(java.lang.String,%20mil.nga.giat.geowave.core.store.data.field.FieldVisibilityHandler,%20java.lang.String)"><code>VisibilityManagement.createVisibilityHandler(String, FieldVisibilityHandler, String)</code></a>
- 
- The motivation to provide an alternate implementation is to support a strategy where
- each field carries its own marking.  In such a case, the method {@link VisibilityManagement#translateVisibility(Object, String)
- would not be used since</div>
-<dl><dt><span class="strong">Returns:</span></dt><dd></dd></dl>
 </li>
 </ul>
 </li>
@@ -309,7 +243,7 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/plu
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/visibility/FieldLevelVisibilityHandler.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin.visibility"><span class="strong">Prev Class</span></a></li>
-<li><a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/visibility/VisibilityManagementHelper.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin.visibility"><span class="strong">Next Class</span></a></li>
+<li><a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/visibility/VisibilityConfiguration.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin.visibility"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../../../index.html?mil/nga/giat/geowave/adapter/vector/plugin/visibility/JsonDefinitionColumnVisibilityManagement.html" target="_top">Frames</a></li>
