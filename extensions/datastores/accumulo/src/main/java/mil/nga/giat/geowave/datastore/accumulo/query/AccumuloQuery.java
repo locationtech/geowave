@@ -73,7 +73,8 @@ abstract public class AccumuloQuery
 					((Scanner) scanner).setRange(AccumuloUtils.byteArrayRangeToAccumuloRange(r));
 				}
 				if ((limit != null) && (limit > 0) && (limit < ((Scanner) scanner).getBatchSize())) {
-					((Scanner) scanner).setBatchSize(limit);
+					// do allow the limit to be set to some enormous size.
+					((Scanner) scanner).setBatchSize(Math.min(1024,limit));
 				}
 				if (maxResolutionSubsamplingPerDimension != null) {
 					if (maxResolutionSubsamplingPerDimension.length != index.getIndexStrategy().getOrderedDimensionDefinitions().length) {
