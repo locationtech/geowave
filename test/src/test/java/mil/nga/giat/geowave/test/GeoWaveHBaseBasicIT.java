@@ -6,46 +6,14 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
-import mil.nga.giat.geowave.adapter.vector.stats.FeatureBoundingBoxStatistics;
-import mil.nga.giat.geowave.core.cli.GeoWaveMain;
-import mil.nga.giat.geowave.core.geotime.GeometryUtils;
-import mil.nga.giat.geowave.core.geotime.IndexType;
-import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
-import mil.nga.giat.geowave.core.geotime.store.statistics.BoundingBoxDataStatistics;
-import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.ingest.GeoWaveData;
-import mil.nga.giat.geowave.core.ingest.local.LocalFileIngestPlugin;
-import mil.nga.giat.geowave.core.store.CloseableIterator;
-import mil.nga.giat.geowave.core.store.DataStore;
-import mil.nga.giat.geowave.core.store.DataStoreEntryInfo;
-import mil.nga.giat.geowave.core.store.IngestCallback;
-import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
-import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
-import mil.nga.giat.geowave.core.store.adapter.MemoryAdapterStore;
-import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
-import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
-import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
-import mil.nga.giat.geowave.core.store.adapter.statistics.StatisticalDataAdapter;
-import mil.nga.giat.geowave.core.store.data.visibility.GlobalVisibilityHandler;
-import mil.nga.giat.geowave.core.store.data.visibility.UniformVisibilityWriter;
-import mil.nga.giat.geowave.core.store.index.Index;
-import mil.nga.giat.geowave.core.store.query.DistributableQuery;
-import mil.nga.giat.geowave.datastore.hbase.HBaseAdapterStore;
-import mil.nga.giat.geowave.datastore.hbase.HBaseDataStatisticsStore;
-import mil.nga.giat.geowave.datastore.hbase.HBaseDataStore;
-import mil.nga.giat.geowave.datastore.hbase.HBaseIndexStore;
-import mil.nga.giat.geowave.datastore.hbase.util.HBaseUtils;
-import mil.nga.giat.geowave.format.geotools.vector.GeoToolsVectorDataStoreIngestPlugin;
-
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.math.util.MathUtils;
 import org.apache.log4j.Logger;
 import org.geotools.feature.AttributeTypeBuilder;
@@ -62,10 +30,44 @@ import org.opengis.filter.Filter;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 
+import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
+import mil.nga.giat.geowave.adapter.vector.stats.FeatureBoundingBoxStatistics;
+import mil.nga.giat.geowave.core.geotime.GeometryUtils;
+import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
+import mil.nga.giat.geowave.core.geotime.store.statistics.BoundingBoxDataStatistics;
+import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.ingest.GeoWaveData;
+import mil.nga.giat.geowave.core.ingest.local.LocalFileIngestPlugin;
+import mil.nga.giat.geowave.core.store.CloseableIterator;
+import mil.nga.giat.geowave.core.store.DataStore;
+import mil.nga.giat.geowave.core.store.DataStoreEntryInfo;
+import mil.nga.giat.geowave.core.store.IndexWriter;
+import mil.nga.giat.geowave.core.store.IngestCallback;
+import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.MemoryAdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
+import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
+import mil.nga.giat.geowave.core.store.adapter.statistics.StatisticalDataAdapter;
+import mil.nga.giat.geowave.core.store.data.visibility.GlobalVisibilityHandler;
+import mil.nga.giat.geowave.core.store.data.visibility.UniformVisibilityWriter;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.core.store.memory.DataStoreUtils;
+import mil.nga.giat.geowave.core.store.query.DataIdQuery;
+import mil.nga.giat.geowave.core.store.query.DistributableQuery;
+import mil.nga.giat.geowave.core.store.query.QueryOptions;
+import mil.nga.giat.geowave.datastore.hbase.HBaseDataStore;
+import mil.nga.giat.geowave.datastore.hbase.metadata.HBaseAdapterStore;
+import mil.nga.giat.geowave.datastore.hbase.metadata.HBaseDataStatisticsStore;
+import mil.nga.giat.geowave.datastore.hbase.metadata.HBaseIndexStore;
+import mil.nga.giat.geowave.format.geotools.vector.GeoToolsVectorDataStoreIngestPlugin;
+
 public class GeoWaveHBaseBasicIT extends
 		GeoWaveHBaseTestEnvironment
 {
-	private final static Logger LOGGER = Logger.getLogger(GeoWaveHBaseBasicIT.class);
+	private final static Logger LOGGER = Logger.getLogger(
+			GeoWaveHBaseBasicIT.class);
 	private static final String TEST_DATA_ZIP_RESOURCE_PATH = TEST_RESOURCE_PACKAGE + "basic-testdata.zip";
 	private static final String TEST_FILTER_PACKAGE = TEST_CASE_BASE + "filter/";
 	private static final String HAIL_TEST_CASE_PACKAGE = TEST_CASE_BASE + "hail_test_case/";
@@ -89,7 +91,7 @@ public class GeoWaveHBaseBasicIT extends
 	@BeforeClass
 	public static void extractTestFiles()
 			throws URISyntaxException {
-		GeoWaveHBaseTestEnvironment.unZipFile(
+		GeoWaveTestEnvironment.unZipFile(
 				new File(
 						GeoWaveHBaseBasicIT.class.getClassLoader().getResource(
 								TEST_DATA_ZIP_RESOURCE_PATH).toURI()),
@@ -98,13 +100,12 @@ public class GeoWaveHBaseBasicIT extends
 
 	@Test
 	public void testIngestAndQuerySpatialPointsAndLines() {
-		final Index spatialIndex = IndexType.SPATIAL_VECTOR.createDefaultIndex();
 		// ingest both lines and points
 		testLocalIngest(
-				IndexType.SPATIAL_VECTOR,
+				DimensionalityType.SPATIAL,
 				HAIL_SHAPEFILE_FILE);
 		testLocalIngest(
-				IndexType.SPATIAL_VECTOR,
+				DimensionalityType.SPATIAL,
 				TORNADO_TRACKS_SHAPEFILE_FILE);
 
 		try {
@@ -116,8 +117,8 @@ public class GeoWaveHBaseBasicIT extends
 								HAIL_EXPECTED_BOX_FILTER_RESULTS_FILE).toURI().toURL(),
 						new File(
 								TORNADO_TRACKS_EXPECTED_BOX_FILTER_RESULTS_FILE).toURI().toURL()
-					},
-					spatialIndex,
+			},
+					DEFAULT_SPATIAL_INDEX,
 					"bounding box constraint only");
 		}
 		catch (final Exception e) {
@@ -125,12 +126,13 @@ public class GeoWaveHBaseBasicIT extends
 			try {
 				getOperations().deleteAll();
 			}
-			catch (IOException ex) {
+			catch (final IOException ex) {
 				LOGGER.error(
 						"Unable to clear hbase namespace",
 						ex);
 			}
-			Assert.fail("Error occurred while testing a bounding box query of spatial index: '" + e.getLocalizedMessage() + "'");
+			Assert.fail(
+					"Error occurred while testing a bounding box query of spatial index: '" + e.getLocalizedMessage() + "'");
 		}
 		try {
 			testQuery(
@@ -141,8 +143,8 @@ public class GeoWaveHBaseBasicIT extends
 								HAIL_EXPECTED_POLYGON_FILTER_RESULTS_FILE).toURI().toURL(),
 						new File(
 								TORNADO_TRACKS_EXPECTED_POLYGON_FILTER_RESULTS_FILE).toURI().toURL()
-					},
-					spatialIndex,
+			},
+					DEFAULT_SPATIAL_INDEX,
 					"polygon constraint only");
 		}
 		catch (final Exception e) {
@@ -150,12 +152,13 @@ public class GeoWaveHBaseBasicIT extends
 			try {
 				getOperations().deleteAll();
 			}
-			catch (IOException ex) {
+			catch (final IOException ex) {
 				LOGGER.error(
 						"Unable to clear hbase namespace",
 						ex);
 			}
-			Assert.fail("Error occurred while testing a polygon query of spatial index: '" + e.getLocalizedMessage() + "'");
+			Assert.fail(
+					"Error occurred while testing a polygon query of spatial index: '" + e.getLocalizedMessage() + "'");
 		}
 		try {
 			testStats(
@@ -164,43 +167,45 @@ public class GeoWaveHBaseBasicIT extends
 								HAIL_SHAPEFILE_FILE),
 						new File(
 								TORNADO_TRACKS_SHAPEFILE_FILE)
-					},
-					spatialIndex);
+			},
+					DEFAULT_SPATIAL_INDEX);
 		}
 		catch (final Exception e) {
 			e.printStackTrace();
 			try {
 				getOperations().deleteAll();
 			}
-			catch (IOException ex) {
+			catch (final IOException ex) {
 				LOGGER.error(
 						"Unable to clear hbase namespace",
 						ex);
 			}
-			Assert.fail("Error occurred while testing a bounding box stats on spatial index: '" + e.getLocalizedMessage() + "'");
+			Assert.fail(
+					"Error occurred while testing a bounding box stats on spatial index: '" + e.getLocalizedMessage() + "'");
 		}
 		try {
 			testDelete(
 					new File(
 							TEST_POLYGON_FILTER_FILE).toURI().toURL(),
-					IndexType.SPATIAL_VECTOR);
+					DEFAULT_SPATIAL_INDEX);
 		}
 		catch (final Exception e) {
 			e.printStackTrace();
 			try {
 				getOperations().deleteAll();
 			}
-			catch (IOException ex) {
+			catch (final IOException ex) {
 				LOGGER.error(
 						"Unable to clear hbase namespace",
 						ex);
 			}
-			Assert.fail("Error occurred while testing deletion of an entry using spatial index: '" + e.getLocalizedMessage() + "'");
+			Assert.fail(
+					"Error occurred while testing deletion of an entry using spatial index: '" + e.getLocalizedMessage() + "'");
 		}
 		try {
 			getOperations().deleteAll();
 		}
-		catch (IOException ex) {
+		catch (final IOException ex) {
 			LOGGER.error(
 					"Unable to clear hbase namespace",
 					ex);
@@ -213,9 +218,9 @@ public class GeoWaveHBaseBasicIT extends
 		// assume a bounding box statistic exists and calculate the value
 		// separately to ensure calculation works
 		private double minX = Double.MAX_VALUE;
-		private double minY = Double.MAX_VALUE;;
-		private double maxX = -Double.MAX_VALUE;;
-		private double maxY = -Double.MAX_VALUE;;
+		private double minY = Double.MAX_VALUE;
+		private double maxX = -Double.MAX_VALUE;
+		private double maxY = -Double.MAX_VALUE;
 		protected final Map<ByteArrayId, DataStatistics<SimpleFeature>> statsCache = new HashMap<ByteArrayId, DataStatistics<SimpleFeature>>();
 
 		// otherwise use the statistics interface to calculate every statistic
@@ -224,7 +229,8 @@ public class GeoWaveHBaseBasicIT extends
 				final StatisticalDataAdapter<SimpleFeature> dataAdapter ) {
 			final ByteArrayId[] statsIds = dataAdapter.getSupportedStatisticsIds();
 			for (final ByteArrayId statsId : statsIds) {
-				final DataStatistics<SimpleFeature> stats = dataAdapter.createDataStatistics(statsId);
+				final DataStatistics<SimpleFeature> stats = dataAdapter.createDataStatistics(
+						statsId);
 				statsCache.put(
 						statsId,
 						stats);
@@ -260,24 +266,31 @@ public class GeoWaveHBaseBasicIT extends
 
 	public void testStats(
 			final File[] inputFiles,
-			final Index index ) {
+			final PrimaryIndex index ) {
 		final LocalFileIngestPlugin<SimpleFeature> localFileIngest = new GeoToolsVectorDataStoreIngestPlugin(
 				Filter.INCLUDE);
 		final Map<ByteArrayId, StatisticsCache> statsCache = new HashMap<ByteArrayId, StatisticsCache>();
+		final Collection<ByteArrayId> indexIds = new ArrayList<ByteArrayId>();
+		indexIds.add(
+				index.getId());
 		for (final File inputFile : inputFiles) {
-			LOGGER.warn("Calculating stats from file '" + inputFile.getName() + "' - this may take several minutes...");
+			LOGGER.warn(
+					"Calculating stats from file '" + inputFile.getName() + "' - this may take several minutes...");
 			try (final CloseableIterator<GeoWaveData<SimpleFeature>> dataIterator = localFileIngest.toGeoWaveData(
 					inputFile,
-					index.getId(),
+					indexIds,
 					null)) {
 				final AdapterStore adapterCache = new MemoryAdapterStore(
-						localFileIngest.getDataAdapters(null));
+						localFileIngest.getDataAdapters(
+								null));
 				while (dataIterator.hasNext()) {
 					final GeoWaveData<SimpleFeature> data = dataIterator.next();
-					final WritableDataAdapter<SimpleFeature> adapter = data.getAdapter(adapterCache);
+					final WritableDataAdapter<SimpleFeature> adapter = data.getAdapter(
+							adapterCache);
 					// it should be a statistical data adapter
 					if (adapter instanceof StatisticalDataAdapter) {
-						StatisticsCache cachedValues = statsCache.get(adapter.getAdapterId());
+						StatisticsCache cachedValues = statsCache.get(
+								adapter.getAdapterId());
 						if (cachedValues == null) {
 							cachedValues = new StatisticsCache(
 									(StatisticalDataAdapter<SimpleFeature>) adapter);
@@ -285,7 +298,7 @@ public class GeoWaveHBaseBasicIT extends
 									adapter.getAdapterId(),
 									cachedValues);
 						}
-						final DataStoreEntryInfo entryInfo = HBaseUtils.getIngestInfo(
+						final DataStoreEntryInfo entryInfo = DataStoreUtils.getIngestInfo(
 								adapter,
 								index,
 								data.getValue(),
@@ -303,12 +316,13 @@ public class GeoWaveHBaseBasicIT extends
 				try {
 					getOperations().deleteAll();
 				}
-				catch (IOException ex) {
+				catch (final IOException ex) {
 					LOGGER.error(
 							"Unable to clear hbase namespace",
 							ex);
 				}
-				Assert.fail("Error occurred while reading data from file '" + inputFile.getAbsolutePath() + "': '" + e.getLocalizedMessage() + "'");
+				Assert.fail(
+						"Error occurred while reading data from file '" + inputFile.getAbsolutePath() + "': '" + e.getLocalizedMessage() + "'");
 			}
 		}
 		final DataStatisticsStore statsStore = new HBaseDataStatisticsStore(
@@ -318,12 +332,15 @@ public class GeoWaveHBaseBasicIT extends
 		try (CloseableIterator<DataAdapter<?>> adapterIterator = adapterStore.getAdapters()) {
 			while (adapterIterator.hasNext()) {
 				final FeatureDataAdapter adapter = (FeatureDataAdapter) adapterIterator.next();
-				final StatisticsCache cachedValue = statsCache.get(adapter.getAdapterId());
-				Assert.assertNotNull(cachedValue);
+				final StatisticsCache cachedValue = statsCache.get(
+						adapter.getAdapterId());
+				Assert.assertNotNull(
+						cachedValue);
 				final Collection<DataStatistics<SimpleFeature>> expectedStats = cachedValue.statsCache.values();
-				try (CloseableIterator<DataStatistics<?>> statsIterator = statsStore.getDataStatistics(adapter.getAdapterId())) {
+				try (CloseableIterator<DataStatistics<?>> statsIterator = statsStore.getDataStatistics(
+						adapter.getAdapterId())) {
 					int statsCount = 0;
-					while (statsIterator != null && statsIterator.hasNext()) {
+					while ((statsIterator != null) && statsIterator.hasNext()) {
 						statsIterator.next();
 						statsCount++;
 					}
@@ -337,7 +354,8 @@ public class GeoWaveHBaseBasicIT extends
 					final DataStatistics<?> actualStats = statsStore.getDataStatistics(
 							expectedStat.getDataAdapterId(),
 							expectedStat.getStatisticsId());
-					Assert.assertNotNull(actualStats);
+					Assert.assertNotNull(
+							actualStats);
 					// if the stats are the same, their binary serialization
 					// should be the same
 					Assert.assertArrayEquals(
@@ -348,9 +366,11 @@ public class GeoWaveHBaseBasicIT extends
 				// the bounding box
 				final BoundingBoxDataStatistics<?> bboxStat = (BoundingBoxDataStatistics<SimpleFeature>) statsStore.getDataStatistics(
 						adapter.getAdapterId(),
-						FeatureBoundingBoxStatistics.composeId(adapter.getType().getGeometryDescriptor().getLocalName()));
+						FeatureBoundingBoxStatistics.composeId(
+								adapter.getType().getGeometryDescriptor().getLocalName()));
 
-				Assert.assertNotNull(bboxStat);
+				Assert.assertNotNull(
+						bboxStat);
 				Assert.assertEquals(
 						"The min X of the bounding box stat does not match the expected value",
 						cachedValue.minX,
@@ -378,24 +398,24 @@ public class GeoWaveHBaseBasicIT extends
 			try {
 				getOperations().deleteAll();
 			}
-			catch (IOException ex) {
+			catch (final IOException ex) {
 				LOGGER.error(
 						"Unable to clear hbase namespace",
 						ex);
 			}
-			Assert.fail("Error occurred while retrieving adapters or statistics from metadata table: '" + e.getLocalizedMessage() + "'");
+			Assert.fail(
+					"Error occurred while retrieving adapters or statistics from metadata table: '" + e.getLocalizedMessage() + "'");
 		}
 	}
 
 	@Test
 	public void testIngestAndQuerySpatialTemporalPointsAndLines() {
-		final Index spatialTemporalIndex = IndexType.SPATIAL_VECTOR.createDefaultIndex();
 		// ingest both lines and points
 		testLocalIngest(
-				IndexType.SPATIAL_TEMPORAL_VECTOR,
+				DimensionalityType.SPATIAL_TEMPORAL,
 				HAIL_SHAPEFILE_FILE);
 		testLocalIngest(
-				IndexType.SPATIAL_TEMPORAL_VECTOR,
+				DimensionalityType.SPATIAL_TEMPORAL,
 				TORNADO_TRACKS_SHAPEFILE_FILE);
 		try {
 			testQuery(
@@ -406,7 +426,7 @@ public class GeoWaveHBaseBasicIT extends
 								HAIL_EXPECTED_BOX_TEMPORAL_FILTER_RESULTS_FILE).toURI().toURL(),
 						new File(
 								TORNADO_TRACKS_EXPECTED_BOX_TEMPORAL_FILTER_RESULTS_FILE).toURI().toURL()
-					},
+			},
 					"bounding box and time range");
 		}
 		catch (final Exception e) {
@@ -414,12 +434,13 @@ public class GeoWaveHBaseBasicIT extends
 			try {
 				getOperations().deleteAll();
 			}
-			catch (IOException ex) {
+			catch (final IOException ex) {
 				LOGGER.error(
 						"Unable to clear hbase namespace",
 						ex);
 			}
-			Assert.fail("Error occurred while testing a bounding box and time range query of spatial temporal index: '" + e.getLocalizedMessage() + "'");
+			Assert.fail(
+					"Error occurred while testing a bounding box and time range query of spatial temporal index: '" + e.getLocalizedMessage() + "'");
 		}
 		try {
 			testQuery(
@@ -430,19 +451,20 @@ public class GeoWaveHBaseBasicIT extends
 								HAIL_EXPECTED_POLYGON_TEMPORAL_FILTER_RESULTS_FILE).toURI().toURL(),
 						new File(
 								TORNADO_TRACKS_EXPECTED_POLYGON_TEMPORAL_FILTER_RESULTS_FILE).toURI().toURL()
-					},
+			},
 					"polygon constraint and time range");
 		}
 		catch (final Exception e) {
 			try {
 				getOperations().deleteAll();
 			}
-			catch (IOException ex) {
+			catch (final IOException ex) {
 				LOGGER.error(
 						"Unable to clear hbase namespace",
 						ex);
 			}
-			Assert.fail("Error occurred while testing a polygon and time range query of spatial temporal index: '" + e.getLocalizedMessage() + "'");
+			Assert.fail(
+					"Error occurred while testing a polygon and time range query of spatial temporal index: '" + e.getLocalizedMessage() + "'");
 		}
 
 		try {
@@ -452,43 +474,45 @@ public class GeoWaveHBaseBasicIT extends
 								HAIL_SHAPEFILE_FILE),
 						new File(
 								TORNADO_TRACKS_SHAPEFILE_FILE)
-					},
-					spatialTemporalIndex);
+			},
+					DEFAULT_SPATIAL_TEMPORAL_INDEX);
 		}
 		catch (final Exception e) {
 			e.printStackTrace();
 			try {
 				getOperations().deleteAll();
 			}
-			catch (IOException ex) {
+			catch (final IOException ex) {
 				LOGGER.error(
 						"Unable to clear hbase namespace",
 						ex);
 			}
-			Assert.fail("Error occurred while testing a bounding box stats on spatial temporal index: '" + e.getLocalizedMessage() + "'");
+			Assert.fail(
+					"Error occurred while testing a bounding box stats on spatial temporal index: '" + e.getLocalizedMessage() + "'");
 		}
 		try {
 			testDelete(
 					new File(
 							TEST_POLYGON_TEMPORAL_FILTER_FILE).toURI().toURL(),
-					IndexType.SPATIAL_TEMPORAL_VECTOR);
+					DEFAULT_SPATIAL_TEMPORAL_INDEX);
 		}
 		catch (final Exception e) {
 			e.printStackTrace();
 			try {
 				getOperations().deleteAll();
 			}
-			catch (IOException ex) {
+			catch (final IOException ex) {
 				LOGGER.error(
 						"Unable to clear hbase namespace",
 						ex);
 			}
-			Assert.fail("Error occurred while testing deletion of an entry using spatial temporal index: '" + e.getLocalizedMessage() + "'");
+			Assert.fail(
+					"Error occurred while testing deletion of an entry using spatial temporal index: '" + e.getLocalizedMessage() + "'");
 		}
 		try {
 			getOperations().deleteAll();
 		}
-		catch (IOException ex) {
+		catch (final IOException ex) {
 			LOGGER.error(
 					"Unable to clear hbase namespace",
 					ex);
@@ -496,7 +520,8 @@ public class GeoWaveHBaseBasicIT extends
 	}
 
 	@Test
-	public void testFeatureSerialization() {
+	public void testFeatureSerialization()
+			throws IOException {
 
 		final Map<Class, Object> args = new HashMap<>();
 		args.put(
@@ -504,8 +529,9 @@ public class GeoWaveHBaseBasicIT extends
 				GeometryUtils.GEOMETRY_FACTORY.createPoint(
 						new Coordinate(
 								123.4,
-								567.8)).buffer(
-						1));
+								567.8))
+						.buffer(
+								1));
 		args.put(
 				Integer.class,
 				23);
@@ -520,7 +546,8 @@ public class GeoWaveHBaseBasicIT extends
 				(byte) 0xa);
 		args.put(
 				Short.class,
-				Short.valueOf("2"));
+				Short.valueOf(
+						"2"));
 		args.put(
 				Float.class,
 				34.23434f);
@@ -533,21 +560,22 @@ public class GeoWaveHBaseBasicIT extends
 					(byte) 1,
 					(byte) 2,
 					(byte) 3
-				});
+		});
 		args.put(
 				Byte[].class,
 				new Byte[] {
 					(byte) 4,
 					(byte) 5,
 					(byte) 6
-				});
+		});
 		args.put(
 				Date.class,
 				new Date(
 						8675309l));
 		args.put(
 				BigInteger.class,
-				BigInteger.valueOf(893489348343423l));
+				BigInteger.valueOf(
+						893489348343423l));
 		args.put(
 				BigDecimal.class,
 				new BigDecimal(
@@ -565,7 +593,7 @@ public class GeoWaveHBaseBasicIT extends
 					6789l,
 					1011l,
 					1213111111111111l
-				});
+		});
 		args.put(
 				int[].class,
 				new int[] {
@@ -574,36 +602,41 @@ public class GeoWaveHBaseBasicIT extends
 					-33,
 					-934839,
 					55
-				});
+		});
 		args.put(
 				double[].class,
 				new double[] {
 					1.125d,
 					2.25d
-				});
+		});
 		args.put(
 				float[].class,
 				new float[] {
 					1.5f,
 					1.75f
-				});
+		});
 		args.put(
 				short[].class,
 				new short[] {
 					(short) 8,
 					(short) 9,
 					(short) 10
-				});
+		});
 
 		final SimpleFeatureTypeBuilder builder = new SimpleFeatureTypeBuilder();
 		final AttributeTypeBuilder ab = new AttributeTypeBuilder();
-		builder.setName("featureserializationtest");
+		builder.setName(
+				"featureserializationtest");
 
 		for (final Map.Entry<Class, Object> arg : args.entrySet()) {
-			builder.add(ab.binding(
-					arg.getKey()).nillable(
-					false).buildDescriptor(
-					arg.getKey().getName().toString()));
+			builder.add(
+					ab
+							.binding(
+									arg.getKey())
+							.nillable(
+									false)
+							.buildDescriptor(
+									arg.getKey().getName().toString()));
 		}
 
 		final SimpleFeatureType serTestType = builder.buildFeatureType();
@@ -611,7 +644,6 @@ public class GeoWaveHBaseBasicIT extends
 				serTestType);
 		final FeatureDataAdapter serAdapter = new FeatureDataAdapter(
 				serTestType);
-		final Index index = IndexType.SPATIAL_VECTOR.createDefaultIndex();
 
 		for (final Map.Entry<Class, Object> arg : args.entrySet()) {
 			serBuilder.set(
@@ -628,93 +660,109 @@ public class GeoWaveHBaseBasicIT extends
 						getOperations()),
 				getOperations());
 
-		final SimpleFeature sf = serBuilder.buildFeature("343");
-		geowaveStore.ingest(
-				serAdapter,
-				index,
-				sf);
+		final SimpleFeature sf = serBuilder.buildFeature(
+				"343");
+		try (IndexWriter writer = geowaveStore.createIndexWriter(
+				DEFAULT_SPATIAL_INDEX,
+				DataStoreUtils.DEFAULT_VISIBILITY)) {
+			writer.write(
+					serAdapter,
+					sf);
+		}
 		final DistributableQuery q = new SpatialQuery(
-				((Geometry) args.get(Geometry.class)).buffer(0.5d));
-		final CloseableIterator<?> iter = geowaveStore.query(q);
-		boolean foundFeat = false;
-		while (iter.hasNext()) {
-			final Object maybeFeat = iter.next();
-			Assert.assertTrue(
-					"Iterator should return simple feature in this test",
-					maybeFeat instanceof SimpleFeature);
-			foundFeat = true;
-			final SimpleFeature isFeat = (SimpleFeature) maybeFeat;
-			for (final Property p : isFeat.getProperties()) {
-				final Object before = args.get(p.getType().getBinding());
-				final Object after = isFeat.getAttribute(p.getType().getName().toString());
+				((Geometry) args.get(
+						Geometry.class)).buffer(
+								0.5d));
+		try (final CloseableIterator<?> iter = geowaveStore.query(
+				new QueryOptions(/* TODO do I need to pass 'index'? */),
+				q)) {
+			boolean foundFeat = false;
+			while (iter.hasNext()) {
+				final Object maybeFeat = iter.next();
+				Assert.assertTrue(
+						"Iterator should return simple feature in this test",
+						maybeFeat instanceof SimpleFeature);
+				foundFeat = true;
+				final SimpleFeature isFeat = (SimpleFeature) maybeFeat;
+				for (final Property p : isFeat.getProperties()) {
+					final Object before = args.get(
+							p.getType().getBinding());
+					final Object after = isFeat.getAttribute(
+							p.getType().getName().toString());
 
-				if (before instanceof double[]) {
-					Assert.assertArrayEquals(
-							(double[]) before,
-							(double[]) after,
-							1e-12d);
-				}
-				else if (before instanceof boolean[]) {
-					final boolean[] b = (boolean[]) before;
-					final boolean[] a = (boolean[]) after;
-					Assert.assertTrue(a.length == b.length);
-					for (int i = 0; i < b.length; i++) {
-						Assert.assertTrue(b[i] == a[i]);
+					if (before instanceof double[]) {
+						Assert.assertArrayEquals(
+								(double[]) before,
+								(double[]) after,
+								1e-12d);
+					}
+					else if (before instanceof boolean[]) {
+						final boolean[] b = (boolean[]) before;
+						final boolean[] a = (boolean[]) after;
+						Assert.assertTrue(
+								a.length == b.length);
+						for (int i = 0; i < b.length; i++) {
+							Assert.assertTrue(
+									b[i] == a[i]);
+						}
+					}
+					else if (before instanceof byte[]) {
+						Assert.assertArrayEquals(
+								(byte[]) before,
+								(byte[]) after);
+					}
+					else if (before instanceof char[]) {
+						Assert.assertArrayEquals(
+								(char[]) before,
+								(char[]) after);
+					}
+					else if (before instanceof float[]) {
+						Assert.assertArrayEquals(
+								(float[]) before,
+								(float[]) after,
+								1e-12f);
+					}
+					else if (before instanceof int[]) {
+						Assert.assertArrayEquals(
+								(int[]) before,
+								(int[]) after);
+					}
+					else if (before instanceof long[]) {
+						Assert.assertArrayEquals(
+								(long[]) before,
+								(long[]) after);
+					}
+					else if (before instanceof short[]) {
+						Assert.assertArrayEquals(
+								(short[]) before,
+								(short[]) after);
+					}
+					else if (before.getClass().isArray()) {
+						Assert.assertArrayEquals(
+								returnArray(
+										p.getType().getBinding(),
+										before),
+								returnArray(
+										p.getType().getBinding(),
+										after));
+					}
+					else {
+						Assert.assertTrue(
+								before.equals(
+										after));
 					}
 				}
-				else if (before instanceof byte[]) {
-					Assert.assertArrayEquals(
-							(byte[]) before,
-							(byte[]) after);
-				}
-				else if (before instanceof char[]) {
-					Assert.assertArrayEquals(
-							(char[]) before,
-							(char[]) after);
-				}
-				else if (before instanceof float[]) {
-					Assert.assertArrayEquals(
-							(float[]) before,
-							(float[]) after,
-							1e-12f);
-				}
-				else if (before instanceof int[]) {
-					Assert.assertArrayEquals(
-							(int[]) before,
-							(int[]) after);
-				}
-				else if (before instanceof long[]) {
-					Assert.assertArrayEquals(
-							(long[]) before,
-							(long[]) after);
-				}
-				else if (before instanceof short[]) {
-					Assert.assertArrayEquals(
-							(short[]) before,
-							(short[]) after);
-				}
-				else if (before.getClass().isArray()) {
-					Assert.assertArrayEquals(
-							returnArray(
-									p.getType().getBinding(),
-									before),
-							returnArray(
-									p.getType().getBinding(),
-									after));
-				}
-				else {
-					Assert.assertTrue(before.equals(after));
-				}
 			}
+			IOUtils.closeQuietly(
+					iter);
+			Assert.assertTrue(
+					"One feature should be found",
+					foundFeat);
 		}
-		IOUtils.closeQuietly(iter);
-		Assert.assertTrue(
-				"One feature should be found",
-				foundFeat);
 		try {
 			getOperations().deleteAll();
 		}
-		catch (IOException ex) {
+		catch (final IOException ex) {
 			LOGGER.error(
 					"Unable to clear hbase namespace",
 					ex);
@@ -727,23 +775,11 @@ public class GeoWaveHBaseBasicIT extends
 		return (T[]) o;
 	}
 
-	private void testIngest(
-			final IndexType indexType,
-			final String ingestFilePath ) {
-		// ingest a shapefile (geotools type) directly into GeoWave using the
-		// ingest framework's main method and pre-defined commandline arguments
-		LOGGER.warn("Ingesting '" + ingestFilePath + "' - this may take several minutes...");
-		final String[] args = StringUtils.split(
-				"-localingest -f geotools-vector -b " + ingestFilePath + " -z " + zookeeper + " -n " + TEST_NAMESPACE + " -dim " + (indexType.equals(IndexType.SPATIAL_VECTOR) ? "spatial" : "spatial-temporal"),
-				' ');
-		GeoWaveMain.main(args);
-	}
-
 	private void testQuery(
 			final URL savedFilterResource,
 			final URL[] expectedResultsResources,
 			final String queryDescription )
-			throws Exception {
+					throws Exception {
 		// test the query with an unspecified index
 		testQuery(
 				savedFilterResource,
@@ -755,11 +791,13 @@ public class GeoWaveHBaseBasicIT extends
 	private void testQuery(
 			final URL savedFilterResource,
 			final URL[] expectedResultsResources,
-			final Index index,
+			final PrimaryIndex index,
 			final String queryDescription )
-			throws Exception {
-		LOGGER.info("querying " + queryDescription);
-		System.out.println("querying " + queryDescription);
+					throws Exception {
+		LOGGER.info(
+				"querying " + queryDescription);
+		System.out.println(
+				"querying " + queryDescription);
 		final DataStore geowaveStore = new HBaseDataStore(
 				new HBaseIndexStore(
 						getOperations()),
@@ -770,63 +808,78 @@ public class GeoWaveHBaseBasicIT extends
 				getOperations());
 		// this file is the filtered dataset (using the previous file as a
 		// filter) so use it to ensure the query worked
-		final DistributableQuery query = resourceToQuery(savedFilterResource);
-		final CloseableIterator<?> actualResults;
-		if (index == null) {
-			actualResults = geowaveStore.query(query);
-		}
-		else {
-			actualResults = geowaveStore.query(
-					index,
-					query);
-		}
-		final ExpectedResults expectedResults = getExpectedResults(expectedResultsResources);
-		int totalResults = 0;
-		while (actualResults.hasNext()) {
-			final Object obj = actualResults.next();
-			if (obj instanceof SimpleFeature) {
-				final SimpleFeature result = (SimpleFeature) obj;
-				long actualhashCentroid = hashCentroid((Geometry) result.getDefaultGeometry());
-				Assert.assertTrue(
-						"Actual result '" + result.toString() + "' not found in expected result set",
-						expectedResults.hashedCentroids.contains(actualhashCentroid));
-				totalResults++;
+		final DistributableQuery query = resourceToQuery(
+				savedFilterResource);
+		try (final CloseableIterator<?> actualResults = (index == null) ? geowaveStore.query(
+				new QueryOptions(),
+				query)
+				: geowaveStore.query(
+						new QueryOptions(
+								index),
+						query)) {
+			final ExpectedResults expectedResults = getExpectedResults(
+					expectedResultsResources);
+			int totalResults = 0;
+			while (actualResults.hasNext()) {
+				final Object obj = actualResults.next();
+				if (obj instanceof SimpleFeature) {
+					final SimpleFeature result = (SimpleFeature) obj;
+					final long actualhashCentroid = hashCentroid(
+							(Geometry) result.getDefaultGeometry());
+					Assert.assertTrue(
+							"Actual result '" + result.toString() + "' not found in expected result set",
+							expectedResults.hashedCentroids.contains(
+									actualhashCentroid));
+
+					final SimpleFeature found = expectedFeatures.remove(actualhashCentroid);
+					totalResults++;
+				}
+				else {
+					try {
+						getOperations().deleteAll();
+					}
+					catch (final IOException ex) {
+						LOGGER.error(
+								"Unable to clear hbase namespace",
+								ex);
+					}
+					Assert.fail(
+							"Actual result '" + obj.toString() + "' is not of type Simple Feature.");
+				}
 			}
-			else {
+			for(final SimpleFeature notRead : expectedFeatures.values()){
+				LOGGER.error("Failed to read feature " + notRead.getID() + " | " + notRead + " from query results.");
+				LOGGER.error("Hashed centroid: " + hashCentroid(
+						(Geometry) notRead.getDefaultGeometry()));
+			}
+			if (expectedResults.count != totalResults) {
 				try {
 					getOperations().deleteAll();
 				}
-				catch (IOException ex) {
+				catch (final IOException ex) {
 					LOGGER.error(
 							"Unable to clear hbase namespace",
 							ex);
+					Assert.fail(
+							"Unable to clear hbase namespace");
 				}
-				Assert.fail("Actual result '" + obj.toString() + "' is not of type Simple Feature.");
 			}
+
+			Assert.assertEquals(
+					expectedResults.count,
+					totalResults);
+			actualResults.close();
 		}
-		if (expectedResults.count != totalResults) {
-			try {
-				getOperations().deleteAll();
-			}
-			catch (IOException ex) {
-				LOGGER.error(
-						"Unable to clear hbase namespace",
-						ex);
-				Assert.fail("Unable to clear hbase namespace");
-			}
-		}
-		Assert.assertEquals(
-				expectedResults.count,
-				totalResults);
-		actualResults.close();
 	}
 
 	private void testDelete(
 			final URL savedFilterResource,
-			final IndexType indexType )
-			throws Exception {
-		LOGGER.info("deleting from " + indexType.toString() + " index");
-		System.out.println("deleting from " + indexType.toString() + " index");
+			final PrimaryIndex index )
+					throws Exception {
+		LOGGER.info(
+				"deleting from " + index.getId() + " index");
+		System.out.println(
+				"deleting from " + index.getId() + " index");
 		boolean success = false;
 		final mil.nga.giat.geowave.core.store.DataStore geowaveStore = new HBaseDataStore(
 				new HBaseIndexStore(
@@ -836,12 +889,13 @@ public class GeoWaveHBaseBasicIT extends
 				new HBaseDataStatisticsStore(
 						getOperations()),
 				getOperations());
-		final DistributableQuery query = resourceToQuery(savedFilterResource);
-		final Index index = indexType.createDefaultIndex();
+		final DistributableQuery query = resourceToQuery(
+				savedFilterResource);
 		final CloseableIterator<?> actualResults;
 
 		actualResults = geowaveStore.query(
-				index,
+				new QueryOptions(
+						index),
 				query);
 
 		SimpleFeature testFeature = null;
@@ -859,22 +913,42 @@ public class GeoWaveHBaseBasicIT extends
 			final ByteArrayId adapterId = new ByteArrayId(
 					testFeature.getFeatureType().getTypeName());
 
-			if (geowaveStore.deleteEntry(
-					index,
-					dataId,
-					adapterId)) {
+			if (geowaveStore.delete(
+					new QueryOptions(
+							adapterId,
+							index.getId()),
+					new DataIdQuery(
+							adapterId,
+							dataId))) {
 
-				if (geowaveStore.getEntry(
-						index,
-						dataId,
-						adapterId) == null) {
-					success = true;
-				}
+				success = !hasAtLeastOne(
+						geowaveStore.query(
+								new QueryOptions(
+										adapterId,
+										index.getId()),
+								new DataIdQuery(
+										adapterId,
+										dataId)));
 			}
 		}
 		Assert.assertTrue(
 				"Unable to delete entry by data ID and adapter ID",
 				success);
+	}
+
+	private boolean hasAtLeastOne(
+			final CloseableIterator<?> it ) {
+		try {
+			return it.hasNext();
+		}
+		finally {
+			try {
+				it.close();
+			}
+			catch (final IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 }

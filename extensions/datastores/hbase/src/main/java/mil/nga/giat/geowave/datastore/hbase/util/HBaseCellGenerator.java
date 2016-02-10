@@ -3,16 +3,17 @@ package mil.nga.giat.geowave.datastore.hbase.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.hadoop.hbase.Cell;
+import org.apache.hadoop.hbase.CellUtil;
+import org.apache.hadoop.hbase.KeyValue;
+
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.DataStoreEntryInfo;
 import mil.nga.giat.geowave.core.store.DataStoreEntryInfo.FieldInfo;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.core.store.data.VisibilityWriter;
-import mil.nga.giat.geowave.core.store.index.Index;
-
-import org.apache.hadoop.hbase.Cell;
-import org.apache.hadoop.hbase.CellUtil;
-import org.apache.hadoop.hbase.KeyValue;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.core.store.memory.DataStoreUtils;
 
 /**
  * @author viggy Functionality similar to
@@ -23,14 +24,14 @@ import org.apache.hadoop.hbase.KeyValue;
 public class HBaseCellGenerator<T>
 {
 
-	private WritableDataAdapter<T> adapter;
-	private Index index;
-	private VisibilityWriter<T> visibilityWriter;
+	private final WritableDataAdapter<T> adapter;
+	private final PrimaryIndex index;
+	private final VisibilityWriter<T> visibilityWriter;
 
 	public HBaseCellGenerator(
-			WritableDataAdapter<T> adapter,
-			Index index,
-			VisibilityWriter<T> visibilityWriter ) {
+			final WritableDataAdapter<T> adapter,
+			final PrimaryIndex index,
+			final VisibilityWriter<T> visibilityWriter ) {
 		super();
 		this.adapter = adapter;
 		this.index = index;
@@ -38,22 +39,23 @@ public class HBaseCellGenerator<T>
 	}
 
 	public List<Cell> constructKeyValuePairs(
-			byte[] adapterId,
-			T entry ) {
+			final byte[] adapterId,
+			final T entry ) {
 
-		List<Cell> keyValuePairs = new ArrayList<>();
+		final List<Cell> keyValuePairs = new ArrayList<>();
 		Cell cell;
-		DataStoreEntryInfo ingestInfo = HBaseUtils.getIngestInfo(
+		final DataStoreEntryInfo ingestInfo = DataStoreUtils.getIngestInfo(
 				adapter,
 				index,
 				entry,
 				visibilityWriter);
-		List<ByteArrayId> rowIds = ingestInfo.getRowIds();
+		final List<ByteArrayId> rowIds = ingestInfo.getRowIds();
 		@SuppressWarnings("rawtypes")
-		List<FieldInfo> fieldInfoList = ingestInfo.getFieldInfo();
+		final
+		List<FieldInfo<?>> fieldInfoList = ingestInfo.getFieldInfo();
 
-		for (ByteArrayId rowId : rowIds) {
-			for (@SuppressWarnings("rawtypes")
+		for (final ByteArrayId rowId : rowIds) {
+			for (@SuppressWarnings("rawtypes") final
 			FieldInfo fieldInfo : fieldInfoList) {
 				cell = CellUtil.createCell(
 						rowId.getBytes(),
@@ -62,7 +64,8 @@ public class HBaseCellGenerator<T>
 						System.currentTimeMillis(),
 						KeyValue.Type.Put.getCode(),
 						fieldInfo.getWrittenValue());
-				keyValuePairs.add(cell);
+				keyValuePairs.add(
+						cell);
 			}
 		}
 

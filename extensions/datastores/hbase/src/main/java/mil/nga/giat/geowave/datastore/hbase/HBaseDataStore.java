@@ -10,6 +10,20 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.hadoop.hbase.Cell;
+import org.apache.hadoop.hbase.CellUtil;
+import org.apache.hadoop.hbase.KeyValue;
+import org.apache.hadoop.hbase.client.Delete;
+import org.apache.hadoop.hbase.client.Result;
+import org.apache.hadoop.hbase.client.ResultScanner;
+import org.apache.hadoop.hbase.client.RowMutations;
+import org.apache.hadoop.hbase.client.Scan;
+import org.apache.hadoop.mapreduce.InputSplit;
+import org.apache.hadoop.mapreduce.RecordReader;
+import org.apache.log4j.Logger;
+
+import com.google.common.collect.Iterators;
+
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
@@ -29,13 +43,16 @@ import mil.nga.giat.geowave.core.store.adapter.statistics.StatsCompositionTool;
 import mil.nga.giat.geowave.core.store.data.VisibilityWriter;
 import mil.nga.giat.geowave.core.store.data.visibility.UnconstrainedVisibilityHandler;
 import mil.nga.giat.geowave.core.store.data.visibility.UniformVisibilityWriter;
-import mil.nga.giat.geowave.core.store.filter.MultiIndexDedupeFilter;
+import mil.nga.giat.geowave.core.store.filter.DedupeFilter;
 import mil.nga.giat.geowave.core.store.index.Index;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.query.Query;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.datastore.hbase.entities.HBaseRowId;
 import mil.nga.giat.geowave.datastore.hbase.io.HBaseWriter;
+import mil.nga.giat.geowave.datastore.hbase.metadata.HBaseAdapterStore;
+import mil.nga.giat.geowave.datastore.hbase.metadata.HBaseDataStatisticsStore;
+import mil.nga.giat.geowave.datastore.hbase.metadata.HBaseIndexStore;
 import mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations;
 import mil.nga.giat.geowave.datastore.hbase.query.HBaseConstraintsQuery;
 import mil.nga.giat.geowave.datastore.hbase.query.HBaseFilteredIndexQuery;
@@ -128,7 +145,7 @@ public class HBaseDataStore implements
 
 	@Override
 	public <T> IndexWriter createIndexWriter(
-			Index index ) {
+			PrimaryIndex index ) {
 		return new HBaseIndexWriter(
 				index,
 				operations,
@@ -139,7 +156,7 @@ public class HBaseDataStore implements
 	@Override
 	public <T> List<ByteArrayId> ingest(
 			WritableDataAdapter<T> writableAdapter,
-			Index index,
+			PrimaryIndex index,
 			T entry ) {
 		return this.ingest(
 				writableAdapter,
@@ -152,7 +169,7 @@ public class HBaseDataStore implements
 	@Override
 	public <T> void ingest(
 			WritableDataAdapter<T> writableAdapter,
-			Index index,
+			PrimaryIndex index,
 			Iterator<T> entryIterator ) {
 		ingest(
 				writableAdapter,
@@ -165,7 +182,7 @@ public class HBaseDataStore implements
 
 	public <T> void ingest(
 			final WritableDataAdapter<T> writableAdapter,
-			final Index index,
+			final PrimaryIndex index,
 			Iterator<T> entryIterator,
 			IngestCallback<T> ingestCallback,
 			VisibilityWriter<T> customFieldVisibilityWriter ) {
@@ -209,7 +226,7 @@ public class HBaseDataStore implements
 
 	@Override
 	public <T> T getEntry(
-			Index index,
+			PrimaryIndex index,
 			ByteArrayId rowId ) {
 		// TODO #406 Need to fix
 		LOGGER.error("This method getEntry2 is not yet coded. Need to fix it");
@@ -218,7 +235,7 @@ public class HBaseDataStore implements
 
 	@Override
 	public <T> T getEntry(
-			Index index,
+			PrimaryIndex index,
 			ByteArrayId dataId,
 			ByteArrayId adapterId,
 			String... additionalAuthorizations ) {
@@ -269,7 +286,7 @@ public class HBaseDataStore implements
 
 	@Override
 	public boolean deleteEntry(
-			Index index,
+			PrimaryIndex index,
 			ByteArrayId dataId,
 			ByteArrayId adapterId,
 			String... authorizations ) {
@@ -374,7 +391,7 @@ public class HBaseDataStore implements
 	private DeleteRowObserver createDecodingDeleteObserver(
 			final StatsCompositionTool<Object> stats,
 			final DataAdapter<Object> adapter,
-			final Index index ) {
+			final PrimaryIndex index ) {
 
 		return stats.isPersisting() ? new DeleteRowObserver() {
 			// many rows can be associated with one entry.
@@ -587,7 +604,7 @@ public class HBaseDataStore implements
 
 	@Override
 	public <T> CloseableIterator<T> getEntriesByPrefix(
-			Index index,
+			PrimaryIndex index,
 			ByteArrayId rowPrefix,
 			String... authorizations ) {
 		// TODO #406 Need to fix
@@ -676,7 +693,7 @@ public class HBaseDataStore implements
 			final Integer limit,
 			final ScanCallback<?> scanCallback,
 			final String... authorizations ) {
-		try (final CloseableIterator<Index> indices = indexStore.getIndices()) {
+		try (final CloseableIterator<Index<?, ?>> indices = indexStore.getIndices()) {
 			return query(
 					adapterIds,
 					query,
@@ -766,7 +783,7 @@ public class HBaseDataStore implements
 	@Override
 	public <T> CloseableIterator<T> query(
 			DataAdapter<T> adapter,
-			Index index,
+			PrimaryIndex index,
 			Query query,
 			Integer limit,
 			ScanCallback<?> scanCallback,
@@ -778,7 +795,7 @@ public class HBaseDataStore implements
 
 	@SuppressWarnings("unchecked")
 	private <T> CloseableIterator<T> query(
-			final Index index,
+			final PrimaryIndex index,
 			final Query query,
 			final Integer limit,
 			final QueryOptions queryOptions, 
@@ -792,7 +809,7 @@ public class HBaseDataStore implements
 				query,
 				new CloseableIterator.Wrapper(
 						Arrays.asList(
-								new Index[] {
+								new PrimaryIndex[] {
 									index
 								}).iterator()),
 				adapterStore,
@@ -805,7 +822,7 @@ public class HBaseDataStore implements
 	private CloseableIterator<?> query(
 			final List<ByteArrayId> adapterIds,
 			final Query query,
-			final CloseableIterator<Index> indices,
+			final CloseableIterator<PrimaryIndex> indices,
 			final AdapterStore adapterStore,
 			final Integer limit,
 			final ScanCallback<?> scanCallback,
@@ -818,9 +835,9 @@ public class HBaseDataStore implements
 		// all queries will use the same instance of the dedupe filter for
 		// client side filtering because the filter needs to be applied across
 		// indices
-		final MultiIndexDedupeFilter clientDedupeFilter = new MultiIndexDedupeFilter();
+		final DedupeFilter clientDedupeFilter = new DedupeFilter();
 		while (indices.hasNext()) {
-			final Index index = indices.next();
+			final PrimaryIndex index = indices.next();
 			final HBaseConstraintsQuery hbaseQuery;
 			if (query == null) {
 				hbaseQuery = new HBaseConstraintsQuery(
@@ -875,7 +892,7 @@ public class HBaseDataStore implements
 
 	private <T> void ingestInternal(
 			final WritableDataAdapter<T> dataWriter,
-			final Index index,
+			final PrimaryIndex index,
 			final Iterator<T> entryIterator,
 			final IngestCallback<T> ingestCallback,
 			final VisibilityWriter<T> customFieldVisibilityWriter ) {
@@ -1020,7 +1037,7 @@ public class HBaseDataStore implements
 	@Override
 	public <T> List<ByteArrayId> ingest(
 			WritableDataAdapter<T> writableAdapter,
-			Index index,
+			PrimaryIndex index,
 			T entry,
 			VisibilityWriter<T> customFieldVisibilityWriter ) {
 		if (writableAdapter instanceof IndexDependentDataAdapter) {
@@ -1049,7 +1066,7 @@ public class HBaseDataStore implements
 
 	public <T> List<ByteArrayId> ingestInternal(
 			final WritableDataAdapter<T> writableAdapter,
-			final Index index,
+			final PrimaryIndex index,
 			final T entry,
 			final VisibilityWriter<T> customFieldVisibilityWriter ) {
 		store(writableAdapter);
@@ -1137,7 +1154,7 @@ public class HBaseDataStore implements
 	@Override
 	public <T> void ingest(
 			WritableDataAdapter<T> writableAdapter,
-			Index index,
+			PrimaryIndex index,
 			Iterator<T> entryIterator,
 			IngestCallback<T> ingestCallback ) {
 		// TODO #406 Need to fix
@@ -1145,7 +1162,7 @@ public class HBaseDataStore implements
 	}
 
 	public void store(
-			Index index ) {
+			PrimaryIndex index ) {
 		if (options.isPersistIndex() && !indexStore.indexExists(index.getId())) {
 			indexStore.addIndex(index);
 		}
@@ -1180,7 +1197,7 @@ public class HBaseDataStore implements
 
 	@Override
 	public <T> CloseableIterator<T> query(
-			Index index,
+			PrimaryIndex index,
 			Query query,
 			String... additionalAuthorizations ) {
 		return query(
@@ -1192,7 +1209,7 @@ public class HBaseDataStore implements
 
 	@Override
 	public <T> CloseableIterator<T> query(
-			Index index,
+			PrimaryIndex index,
 			Query query,
 			QueryOptions queryOptions,
 			String... additionalAuthorizations ) {
@@ -1207,7 +1224,7 @@ public class HBaseDataStore implements
 	@Override
 	public <T> CloseableIterator<T> query(
 			DataAdapter<T> adapter,
-			Index index,
+			PrimaryIndex index,
 			Query query,
 			String... additionalAuthorizations ) {
 		// TODO #406 Need to fix
@@ -1252,7 +1269,7 @@ public class HBaseDataStore implements
 
 	@Override
 	public <T> CloseableIterator<T> query(
-			Index index,
+			PrimaryIndex index,
 			Query query,
 			int limit,
 			String... additionalAuthorizations ) {
@@ -1283,7 +1300,7 @@ public class HBaseDataStore implements
 
 	@Override
 	public RecordReader<GeoWaveInputKey, ?> createRecordReader(
-			Index[] indices,
+			PrimaryIndex[] indices,
 			List<ByteArrayId> adapterIds,
 			DistributableQuery query,
 			QueryOptions queryOptions,
@@ -1299,7 +1316,7 @@ public class HBaseDataStore implements
 
 	@Override
 	public List<InputSplit> getSplits(
-			Index[] indices,
+			PrimaryIndex[] indices,
 			List<ByteArrayId> adapterIds,
 			DistributableQuery query,
 			QueryOptions queryOptions,

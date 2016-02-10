@@ -3,16 +3,6 @@ package mil.nga.giat.geowave.examples.ingest.bulk;
 import java.io.IOException;
 import java.util.List;
 
-import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
-import mil.nga.giat.geowave.core.geotime.GeometryUtils;
-import mil.nga.giat.geowave.core.geotime.IndexType;
-import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
-import mil.nga.giat.geowave.core.store.data.VisibilityWriter;
-import mil.nga.giat.geowave.core.store.data.visibility.UnconstrainedVisibilityHandler;
-import mil.nga.giat.geowave.core.store.data.visibility.UniformVisibilityWriter;
-import mil.nga.giat.geowave.core.store.index.Index;
-import mil.nga.giat.geowave.datastore.hbase.util.HBaseCellGenerator;
-
 import org.apache.hadoop.hbase.Cell;
 import org.apache.hadoop.hbase.CellUtil;
 import org.apache.hadoop.hbase.io.ImmutableBytesWritable;
@@ -24,16 +14,26 @@ import org.opengis.feature.simple.SimpleFeature;
 
 import com.vividsolutions.jts.geom.Coordinate;
 
+import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
+import mil.nga.giat.geowave.core.geotime.GeometryUtils;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
+import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
+import mil.nga.giat.geowave.core.store.data.VisibilityWriter;
+import mil.nga.giat.geowave.core.store.data.visibility.UnconstrainedVisibilityHandler;
+import mil.nga.giat.geowave.core.store.data.visibility.UniformVisibilityWriter;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.datastore.hbase.util.HBaseCellGenerator;
+
 public class SimpleFeatureToHBaseKeyValueMapper extends
 		Mapper<LongWritable, Text, ImmutableBytesWritable, ImmutableBytesWritable>
 {
 
-	private WritableDataAdapter<SimpleFeature> adapter = new FeatureDataAdapter(
+	private final WritableDataAdapter<SimpleFeature> adapter = new FeatureDataAdapter(
 			GeonamesSimpleFeatureType.getInstance());
-	private final Index index = IndexType.SPATIAL_VECTOR.createDefaultIndex();
+	private final PrimaryIndex index = new SpatialDimensionalityTypeProvider().createPrimaryIndex();
 	private final VisibilityWriter<SimpleFeature> visibilityWriter = new UniformVisibilityWriter<SimpleFeature>(
 			new UnconstrainedVisibilityHandler<SimpleFeature, Object>());
-	private HBaseCellGenerator<SimpleFeature> generator = new HBaseCellGenerator<SimpleFeature>(
+	private final HBaseCellGenerator<SimpleFeature> generator = new HBaseCellGenerator<SimpleFeature>(
 			adapter,
 			index,
 			visibilityWriter);
@@ -49,13 +49,14 @@ public class SimpleFeatureToHBaseKeyValueMapper extends
 
 	@Override
 	protected void map(
-			LongWritable key,
-			Text value,
-			Context context )
-			throws IOException,
-			InterruptedException {
+			final LongWritable key,
+			final Text value,
+			final Context context )
+					throws IOException,
+					InterruptedException {
 
-		simpleFeature = parseGeonamesValue(value);
+		simpleFeature = parseGeonamesValue(
+				value);
 
 		// build Geowave-formatted Accumulo [Key,Value] pairs
 		keyValuePairs = generator.constructKeyValuePairs(
@@ -64,25 +65,29 @@ public class SimpleFeatureToHBaseKeyValueMapper extends
 
 		// output each [Key,Value] pair to shuffle-and-sort phase where we rely
 		// on MapReduce to sort by Key
-		for (Cell keyValue : keyValuePairs) {
+		for (final Cell keyValue : keyValuePairs) {
 			context.write(
 					new ImmutableBytesWritable(
-							CellUtil.cloneRow(keyValue)),
+							CellUtil.cloneRow(
+									keyValue)),
 					new ImmutableBytesWritable(
-							CellUtil.cloneValue(keyValue)));
+							CellUtil.cloneValue(
+									keyValue)));
 		}
 	}
 
 	private SimpleFeature parseGeonamesValue(
-			Text value ) {
+			final Text value ) {
 
 		geonamesEntryTokens = value.toString().split(
 				"\\t"); // Exported Geonames entries are tab-delimited
 
 		geonameId = geonamesEntryTokens[0];
 		location = geonamesEntryTokens[1];
-		latitude = Double.parseDouble(geonamesEntryTokens[4]);
-		longitude = Double.parseDouble(geonamesEntryTokens[5]);
+		latitude = Double.parseDouble(
+				geonamesEntryTokens[4]);
+		longitude = Double.parseDouble(
+				geonamesEntryTokens[5]);
 
 		return buildSimpleFeature(
 				geonameId,
@@ -92,16 +97,17 @@ public class SimpleFeatureToHBaseKeyValueMapper extends
 	}
 
 	private SimpleFeature buildSimpleFeature(
-			String featureId,
-			double longitude,
-			double latitude,
-			String location ) {
+			final String featureId,
+			final double longitude,
+			final double latitude,
+			final String location ) {
 
 		builder.set(
 				"geometry",
-				GeometryUtils.GEOMETRY_FACTORY.createPoint(new Coordinate(
-						longitude,
-						latitude)));
+				GeometryUtils.GEOMETRY_FACTORY.createPoint(
+						new Coordinate(
+								longitude,
+								latitude)));
 		builder.set(
 				"Latitude",
 				latitude);
@@ -112,7 +118,8 @@ public class SimpleFeatureToHBaseKeyValueMapper extends
 				"Location",
 				location);
 
-		return builder.buildFeature(featureId);
+		return builder.buildFeature(
+				featureId);
 	}
 
 }

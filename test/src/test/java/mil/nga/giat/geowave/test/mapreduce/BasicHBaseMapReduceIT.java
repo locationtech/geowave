@@ -13,25 +13,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import mil.nga.giat.geowave.core.geotime.IndexType;
-import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.ByteArrayUtils;
-import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
-import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
-import mil.nga.giat.geowave.core.store.index.Index;
-import mil.nga.giat.geowave.core.store.query.DistributableQuery;
-import mil.nga.giat.geowave.datastore.hbase.HBaseAdapterStore;
-import mil.nga.giat.geowave.datastore.hbase.HBaseDataStatisticsStore;
-import mil.nga.giat.geowave.datastore.hbase.HBaseDataStore;
-import mil.nga.giat.geowave.datastore.hbase.HBaseIndexStore;
-import mil.nga.giat.geowave.datastore.hbase.mapreduce.GeoWaveHBaseConfiguratorBase;
-import mil.nga.giat.geowave.datastore.hbase.mapreduce.dedupe.GeoWaveHBaseDedupeJobRunner;
-import mil.nga.giat.geowave.datastore.hbase.mapreduce.input.GeoWaveHBaseInputFormat;
-import mil.nga.giat.geowave.format.gpx.GpxIngestPlugin;
-import mil.nga.giat.geowave.mapreduce.GeoWaveWritableInputMapper;
-import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
-import mil.nga.giat.geowave.test.GeoWaveTestEnvironment;
-
 import org.apache.commons.io.FilenameUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.io.NullWritable;
@@ -53,11 +34,32 @@ import org.opengis.feature.simple.SimpleFeature;
 import com.vividsolutions.jts.geom.Geometry;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.index.ByteArrayUtils;
+import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
+import mil.nga.giat.geowave.core.store.index.Index;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.core.store.query.DistributableQuery;
+import mil.nga.giat.geowave.core.store.query.EverythingQuery;
+import mil.nga.giat.geowave.core.store.query.QueryOptions;
+import mil.nga.giat.geowave.datastore.hbase.HBaseDataStore;
+import mil.nga.giat.geowave.datastore.hbase.mapreduce.GeoWaveHBaseConfiguratorBase;
+import mil.nga.giat.geowave.datastore.hbase.mapreduce.dedupe.GeoWaveHBaseDedupeJobRunner;
+import mil.nga.giat.geowave.datastore.hbase.mapreduce.input.GeoWaveHBaseInputFormat;
+import mil.nga.giat.geowave.datastore.hbase.metadata.HBaseAdapterStore;
+import mil.nga.giat.geowave.datastore.hbase.metadata.HBaseDataStatisticsStore;
+import mil.nga.giat.geowave.datastore.hbase.metadata.HBaseIndexStore;
+import mil.nga.giat.geowave.format.gpx.GpxIngestPlugin;
+import mil.nga.giat.geowave.mapreduce.GeoWaveWritableInputMapper;
+import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
+import mil.nga.giat.geowave.test.GeoWaveTestEnvironment;
 
 public class BasicHBaseMapReduceIT extends
 		MapReduceHBaseTestBase
 {
-	private final static Logger LOGGER = Logger.getLogger(BasicHBaseMapReduceIT.class);
+	private final static Logger LOGGER = Logger.getLogger(
+			BasicHBaseMapReduceIT.class);
 
 	public static enum ResultCounterType {
 		EXPECTED,
@@ -71,14 +73,15 @@ public class BasicHBaseMapReduceIT extends
 		try {
 			getOperations().deleteAll();
 		}
-		catch (IOException ex) {
+		catch (final IOException ex) {
 			LOGGER.error(
 					"Unable to clear hbase namespace",
 					ex);
-			Assert.fail("Index not deleted successfully");
+			Assert.fail(
+					"Index not deleted successfully");
 		}
 		testMapReduceIngest(
-				IndexType.SPATIAL_VECTOR,
+				DimensionalityType.SPATIAL,
 				GENERAL_GPX_INPUT_GPX_DIR);
 		final File gpxInputDir = new File(
 				GENERAL_GPX_INPUT_GPX_DIR);
@@ -87,53 +90,63 @@ public class BasicHBaseMapReduceIT extends
 		final List<URL> expectedResultsResources = new ArrayList<URL>();
 		final Map<String, URL> baseNameToExpectedResultURL = new HashMap<String, URL>();
 
-		for (final File file : expectedResultsDir.listFiles(new FileFilter() {
+		for (final File file : expectedResultsDir.listFiles(
+				new FileFilter() {
 
-			@Override
-			public boolean accept(
-					final File pathname ) {
-				final Map<String, Object> map = new HashMap<String, Object>();
-				try {
-					map.put(
-							"url",
-							pathname.toURI().toURL());
-					return DataStoreFinder.getDataStore(map) != null;
-				}
-				catch (final IOException e) {
-					LOGGER.warn(
-							"Cannot read file as GeoTools data store",
-							e);
-				}
-				return false;
-			}
+					@Override
+					public boolean accept(
+							final File pathname ) {
+						final Map<String, Object> map = new HashMap<String, Object>();
+						try {
+							map.put(
+									"url",
+									pathname.toURI().toURL());
+							return DataStoreFinder.getDataStore(
+									map) != null;
+						}
+						catch (final IOException e) {
+							LOGGER.warn(
+									"Cannot read file as GeoTools data store",
+									e);
+						}
+						return false;
+					}
 
-		})) {
+				})) {
 			baseNameToExpectedResultURL.put(
 					FilenameUtils.getBaseName(
 							file.getName()).replaceAll(
-							"_filtered",
-							""),
+									"_filtered",
+									""),
 					file.toURI().toURL());
 		}
-		for (final String filename : gpxInputDir.list(new FilenameFilter() {
-			@Override
-			public boolean accept(
-					final File dir,
-					final String name ) {
-				return FilenameUtils.isExtension(
-						name,
-						new GpxIngestPlugin().getFileExtensionFilters());
-			}
-		})) {
-			final URL url = baseNameToExpectedResultURL.get(FilenameUtils.getBaseName(filename));
-			Assert.assertNotNull(url);
-			expectedResultsResources.add(url);
+		for (final String filename : gpxInputDir.list(
+				new FilenameFilter() {
+					@Override
+					public boolean accept(
+							final File dir,
+							final String name ) {
+						return FilenameUtils.isExtension(
+								name,
+								new GpxIngestPlugin().getFileExtensionFilters());
+					}
+				})) {
+			final URL url = baseNameToExpectedResultURL.get(
+					FilenameUtils.getBaseName(
+							filename));
+			Assert.assertNotNull(
+					url);
+			expectedResultsResources.add(
+					url);
 		}
-		final ExpectedResults expectedResults = getExpectedResults(expectedResultsResources.toArray(new URL[expectedResultsResources.size()]));
+		final ExpectedResults expectedResults = getExpectedResults(
+				expectedResultsResources.toArray(
+						new URL[expectedResultsResources.size()]));
 		runTestJob(
 				expectedResults,
-				resourceToQuery(new File(
-						GENERAL_GPX_FILTER_FILE).toURI().toURL()),
+				resourceToQuery(
+						new File(
+								GENERAL_GPX_FILTER_FILE).toURI().toURL()),
 				null,
 				null);
 	}
@@ -144,21 +157,20 @@ public class BasicHBaseMapReduceIT extends
 		try {
 			getOperations().deleteAll();
 		}
-		catch (IOException ex) {
+		catch (final IOException ex) {
 			LOGGER.error(
 					"Unable to clear hbase namespace",
 					ex);
-			Assert.fail("Index not deleted successfully");
+			Assert.fail(
+					"Index not deleted successfully");
 		}
 		// ingest the data set into multiple indices and then try several query
 		// methods, by adapter and by index
 		testMapReduceIngest(
-				IndexType.SPATIAL_VECTOR,
+				DimensionalityType.ALL,
 				OSM_GPX_INPUT_DIR);
-		testMapReduceIngest(
-				IndexType.SPATIAL_TEMPORAL_VECTOR,
-				OSM_GPX_INPUT_DIR);
-		final WritableDataAdapter<SimpleFeature>[] adapters = new GpxIngestPlugin().getDataAdapters(null);
+		final WritableDataAdapter<SimpleFeature>[] adapters = new GpxIngestPlugin().getDataAdapters(
+				null);
 
 		final mil.nga.giat.geowave.core.store.DataStore geowaveStore = new HBaseDataStore(
 				new HBaseIndexStore(
@@ -172,18 +184,30 @@ public class BasicHBaseMapReduceIT extends
 		for (final WritableDataAdapter<SimpleFeature> adapter : adapters) {
 			adapterIdToResultsMap.put(
 					adapter.getAdapterId(),
-					getExpectedResults(geowaveStore.query(
-							adapter,
-							null)));
+					getExpectedResults(
+							geowaveStore.query(
+									new QueryOptions(
+											adapter,
+											null),
+									new EverythingQuery())));
 		}
 
 		final List<ByteArrayId> firstTwoAdapters = new ArrayList<ByteArrayId>();
-		firstTwoAdapters.add(adapters[0].getAdapterId());
-		firstTwoAdapters.add(adapters[1].getAdapterId());
-		final ExpectedResults firstTwoAdaptersResults = getExpectedResults(geowaveStore.query(
-				firstTwoAdapters,
-				null));
-		final ExpectedResults fullDataSetResults = getExpectedResults(geowaveStore.query(null));
+		firstTwoAdapters.add(
+				adapters[0].getAdapterId());
+		firstTwoAdapters.add(
+				adapters[1].getAdapterId());
+		final ExpectedResults firstTwoAdaptersResults = getExpectedResults(
+				geowaveStore.query(
+						new QueryOptions(
+								firstTwoAdapters,
+								null),
+						new EverythingQuery()));
+		final ExpectedResults fullDataSetResults = getExpectedResults(
+				geowaveStore.query(
+						new QueryOptions(),
+						new EverythingQuery()));
+
 		// just for sanity verify its greater than 0 (ie. that data was actually
 		// ingested in the first place)
 		Assert.assertTrue(
@@ -192,11 +216,12 @@ public class BasicHBaseMapReduceIT extends
 		// first try each adapter individually
 		for (final WritableDataAdapter<SimpleFeature> adapter : adapters) {
 			runTestJob(
-					adapterIdToResultsMap.get(adapter.getAdapterId()),
+					adapterIdToResultsMap.get(
+							adapter.getAdapterId()),
 					null,
 					new DataAdapter[] {
 						adapter
-					},
+			},
 					null);
 		}
 		// then try the first 2 adapters, and may as well try with both indices
@@ -207,11 +232,11 @@ public class BasicHBaseMapReduceIT extends
 				new DataAdapter[] {
 					adapters[0],
 					adapters[1]
-				},
-				new Index[] {
-					IndexType.SPATIAL_VECTOR.createDefaultIndex(),
-					IndexType.SPATIAL_TEMPORAL_VECTOR.createDefaultIndex()
-				});
+		},
+				new PrimaryIndex[] {
+					DEFAULT_SPATIAL_INDEX,
+					DEFAULT_SPATIAL_TEMPORAL_INDEX
+		});
 
 		// now try all adapters and the spatial temporal index, the result
 		// should be the full data set
@@ -219,9 +244,9 @@ public class BasicHBaseMapReduceIT extends
 				fullDataSetResults,
 				null,
 				adapters,
-				new Index[] {
-					IndexType.SPATIAL_TEMPORAL_VECTOR.createDefaultIndex()
-				});
+				new PrimaryIndex[] {
+					DEFAULT_SPATIAL_TEMPORAL_INDEX
+		});
 
 		// and finally run with nothing set, should be the full data set
 		runTestJob(
@@ -237,33 +262,39 @@ public class BasicHBaseMapReduceIT extends
 			final DistributableQuery query,
 			final DataAdapter<?>[] adapters,
 			final Index[] indices )
-			throws Exception {
+					throws Exception {
 		final TestJobRunner jobRunner = new TestJobRunner(
 				expectedResults);
-		jobRunner.setMinInputSplits(MIN_INPUT_SPLITS);
-		jobRunner.setMaxInputSplits(MAX_INPUT_SPLITS);
+		jobRunner.setMinInputSplits(
+				MIN_INPUT_SPLITS);
+		jobRunner.setMaxInputSplits(
+				MAX_INPUT_SPLITS);
 		if (query != null) {
-			jobRunner.setQuery(query);
+			jobRunner.setQuery(
+					query);
 		}
 		if ((adapters != null) && (adapters.length > 0)) {
 			for (final DataAdapter<?> adapter : adapters) {
-				jobRunner.addDataAdapter(adapter);
+				jobRunner.addDataAdapter(
+						adapter);
 			}
 		}
 		if ((indices != null) && (indices.length > 0)) {
 			for (final Index index : indices) {
-				jobRunner.addIndex(index);
+				jobRunner.addIndex(
+						index);
 			}
 		}
 		final Configuration conf = getConfiguration();
-		MapReduceHBaseTestEnvironment.filterConfiguration(conf);
+		MapReduceHBaseTestEnvironment.filterConfiguration(
+				conf);
 		final int res = ToolRunner.run(
 				conf,
 				jobRunner,
 				new String[] {
 					zookeeper,
 					TEST_NAMESPACE
-				});
+		});
 		Assert.assertEquals(
 				0,
 				res);
@@ -290,31 +321,47 @@ public class BasicHBaseMapReduceIT extends
 		public int runJob()
 				throws Exception {
 			final boolean job1Success = (super.runJob() == 0);
-			Assert.assertTrue(job1Success);
+			Assert.assertTrue(
+					job1Success);
 			// after the first job there should be a sequence file with the
 			// filtered results which should match the expected results
 			// resources
 			final Configuration conf = super.getConf();
-			MapReduceHBaseTestEnvironment.filterConfiguration(conf);
-			final ByteBuffer buf = ByteBuffer.allocate((8 * expectedResults.hashedCentroids.size()) + 4);
-			buf.putInt(expectedResults.hashedCentroids.size());
+			MapReduceHBaseTestEnvironment.filterConfiguration(
+					conf);
+			final ByteBuffer buf = ByteBuffer.allocate(
+					(8 * expectedResults.hashedCentroids.size()) + 4);
+			buf.putInt(
+					expectedResults.hashedCentroids.size());
 			for (final Long hashedCentroid : expectedResults.hashedCentroids) {
-				buf.putLong(hashedCentroid);
+				buf.putLong(
+						hashedCentroid);
 			}
 			conf.set(
 					EXPECTED_RESULTS_KEY,
-					ByteArrayUtils.byteArrayToString(buf.array()));
-			final Job job = Job.getInstance(conf);
-			job.setJarByClass(this.getClass());
+					ByteArrayUtils.byteArrayToString(
+							buf.array()));
+			final Job job = Job.getInstance(
+					conf);
+			job.setJarByClass(
+					this.getClass());
 
-			job.setJobName("GeoWave Test (" + namespace + ")");
-			job.setInputFormatClass(SequenceFileInputFormat.class);
-			job.setMapperClass(VerifyExpectedResultsMapper.class);
-			job.setMapOutputKeyClass(NullWritable.class);
-			job.setMapOutputValueClass(NullWritable.class);
-			job.setOutputFormatClass(NullOutputFormat.class);
-			job.setNumReduceTasks(0);
-			job.setSpeculativeExecution(false);
+			job.setJobName(
+					"GeoWave Test (" + namespace + ")");
+			job.setInputFormatClass(
+					SequenceFileInputFormat.class);
+			job.setMapperClass(
+					VerifyExpectedResultsMapper.class);
+			job.setMapOutputKeyClass(
+					NullWritable.class);
+			job.setMapOutputValueClass(
+					NullWritable.class);
+			job.setOutputFormatClass(
+					NullOutputFormat.class);
+			job.setNumReduceTasks(
+					0);
+			job.setSpeculativeExecution(
+					false);
 
 			GeoWaveHBaseInputFormat.setOperationsInfo(
 					job.getConfiguration(),
@@ -324,20 +371,25 @@ public class BasicHBaseMapReduceIT extends
 					job,
 					getHdfsOutputPath());
 
-			final boolean job2success = job.waitForCompletion(true);
+			final boolean job2success = job.waitForCompletion(
+					true);
 			final Counters jobCounters = job.getCounters();
-			final Counter expectedCnt = jobCounters.findCounter(ResultCounterType.EXPECTED);
-			Assert.assertNotNull(expectedCnt);
+			final Counter expectedCnt = jobCounters.findCounter(
+					ResultCounterType.EXPECTED);
+			Assert.assertNotNull(
+					expectedCnt);
 			Assert.assertEquals(
 					expectedResults.count,
 					expectedCnt.getValue());
-			final Counter errorCnt = jobCounters.findCounter(ResultCounterType.ERROR);
+			final Counter errorCnt = jobCounters.findCounter(
+					ResultCounterType.ERROR);
 			if (errorCnt != null) {
 				Assert.assertEquals(
 						0L,
 						errorCnt.getValue());
 			}
-			final Counter unexpectedCnt = jobCounters.findCounter(ResultCounterType.UNEXPECTED);
+			final Counter unexpectedCnt = jobCounters.findCounter(
+					ResultCounterType.UNEXPECTED);
 			if (unexpectedCnt != null) {
 				Assert.assertEquals(
 						0L,
@@ -357,36 +409,44 @@ public class BasicHBaseMapReduceIT extends
 				final GeoWaveInputKey key,
 				final Object value,
 				final Mapper<GeoWaveInputKey, ObjectWritable, NullWritable, NullWritable>.Context context )
-				throws IOException,
-				InterruptedException {
+						throws IOException,
+						InterruptedException {
 			ResultCounterType resultType = ResultCounterType.ERROR;
 			if (value instanceof SimpleFeature) {
 				final SimpleFeature result = (SimpleFeature) value;
 				final Geometry geometry = (Geometry) result.getDefaultGeometry();
 				if (!geometry.isEmpty()) {
-					resultType = expectedHashedCentroids.contains(hashCentroid(geometry)) ? ResultCounterType.EXPECTED : ResultCounterType.UNEXPECTED;
+					resultType = expectedHashedCentroids.contains(
+							hashCentroid(
+									geometry)) ? ResultCounterType.EXPECTED : ResultCounterType.UNEXPECTED;
 				}
 			}
 			context.getCounter(
 					resultType).increment(
-					1);
+							1);
 		}
 
 		@Override
 		protected void setup(
 				final Mapper<GeoWaveInputKey, ObjectWritable, NullWritable, NullWritable>.Context context )
-				throws IOException,
-				InterruptedException {
-			super.setup(context);
-			final Configuration config = GeoWaveHBaseConfiguratorBase.getConfiguration(context);
-			final String expectedResults = config.get(EXPECTED_RESULTS_KEY);
+						throws IOException,
+						InterruptedException {
+			super.setup(
+					context);
+			final Configuration config = GeoWaveHBaseConfiguratorBase.getConfiguration(
+					context);
+			final String expectedResults = config.get(
+					EXPECTED_RESULTS_KEY);
 			if (expectedResults != null) {
 				expectedHashedCentroids = new HashSet<Long>();
-				final byte[] expectedResultsBinary = ByteArrayUtils.byteArrayFromString(expectedResults);
-				final ByteBuffer buf = ByteBuffer.wrap(expectedResultsBinary);
+				final byte[] expectedResultsBinary = ByteArrayUtils.byteArrayFromString(
+						expectedResults);
+				final ByteBuffer buf = ByteBuffer.wrap(
+						expectedResultsBinary);
 				final int count = buf.getInt();
 				for (int i = 0; i < count; i++) {
-					expectedHashedCentroids.add(buf.getLong());
+					expectedHashedCentroids.add(
+							buf.getLong());
 				}
 			}
 		}

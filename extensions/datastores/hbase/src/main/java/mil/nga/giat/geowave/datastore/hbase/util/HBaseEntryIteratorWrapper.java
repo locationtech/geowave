@@ -3,13 +3,13 @@ package mil.nga.giat.geowave.datastore.hbase.util;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+import org.apache.hadoop.hbase.client.Result;
+import org.apache.log4j.Logger;
+
 import mil.nga.giat.geowave.core.store.ScanCallback;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
-import mil.nga.giat.geowave.core.store.index.Index;
-
-import org.apache.hadoop.hbase.client.Result;
-import org.apache.log4j.Logger;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 
 /**
  * @author viggy Functionality similar to <code> EntryIteratorWrapper </code>
@@ -17,18 +17,19 @@ import org.apache.log4j.Logger;
 public class HBaseEntryIteratorWrapper<T> implements
 		Iterator<T>
 {
-	private final static Logger LOGGER = Logger.getLogger(HBaseEntryIteratorWrapper.class);
+	private final static Logger LOGGER = Logger.getLogger(
+			HBaseEntryIteratorWrapper.class);
 	private final AdapterStore adapterStore;
-	private final Index index;
+	protected final PrimaryIndex index;
 	private final Iterator<Result> scannerIt;
-	private final QueryFilter clientFilter;
+	protected final QueryFilter clientFilter;
 	private final ScanCallback<T> scanCallback;
 
-	private T nextValue;
+	protected T nextValue;
 
 	public HBaseEntryIteratorWrapper(
 			final AdapterStore adapterStore,
-			final Index index,
+			final PrimaryIndex index,
 			final Iterator<Result> scannerIt,
 			final QueryFilter clientFilter ) {
 		this.adapterStore = adapterStore;
@@ -40,7 +41,7 @@ public class HBaseEntryIteratorWrapper<T> implements
 
 	public HBaseEntryIteratorWrapper(
 			final AdapterStore adapterStore,
-			final Index index,
+			final PrimaryIndex index,
 			final Iterator<Result> scannerIt,
 			final QueryFilter clientFilter,
 			final ScanCallback<T> scanCallback ) {
@@ -68,7 +69,7 @@ public class HBaseEntryIteratorWrapper<T> implements
 		return nextValue != null;
 	}
 
-	private void findNext() {
+	protected void findNext() {
 		while ((nextValue == null) && scannerIt.hasNext()) {
 			final Result row = scannerIt.next();
 			final T decodedValue = decodeRow(
@@ -82,10 +83,10 @@ public class HBaseEntryIteratorWrapper<T> implements
 		}
 	}
 
-	private T decodeRow(
+	protected T decodeRow(
 			final Result row,
 			final QueryFilter clientFilter,
-			final Index index ) {
+			final PrimaryIndex index ) {
 		return HBaseUtils.decodeRow(
 				row,
 				adapterStore,
@@ -97,7 +98,8 @@ public class HBaseEntryIteratorWrapper<T> implements
 	@Override
 	public void remove() {
 		// TODO #406 Need to fix
-		LOGGER.error("This method is not yet coded. Need to fix it");
+		LOGGER.error(
+				"This method is not yet coded. Need to fix it");
 	}
 
 }

@@ -1,4 +1,4 @@
-package mil.nga.giat.geowave.datastore.accumulo;
+package mil.nga.giat.geowave.core.store;
 
 public interface Closable
 {

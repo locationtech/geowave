@@ -1,6 +1,7 @@
 package mil.nga.giat.geowave.mapreduce.input;
 
 import java.io.IOException;
+import java.util.Map;
 
 import mil.nga.giat.geowave.core.index.ByteArrayUtils;
 import mil.nga.giat.geowave.core.index.PersistenceUtils;
@@ -29,8 +30,9 @@ public class GeoWaveInputConfigurator extends
 		QUERY_OPTIONS,
 		MIN_SPLITS,
 		MAX_SPLITS,
-		OUTPUT_WRITABLE // used to inform the input format to output a Writable
-						// from the HadoopDataAdapter
+		OUTPUT_WRITABLE, // used to inform the input format to output a Writable
+							// from the HadoopDataAdapter
+		AUTHORIZATION
 	}
 
 	private static DistributableQuery getQueryInternal(

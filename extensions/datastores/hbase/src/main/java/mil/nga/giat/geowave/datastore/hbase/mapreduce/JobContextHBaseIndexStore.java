@@ -1,21 +1,21 @@
 /**
- * 
+ *
  */
 package mil.nga.giat.geowave.datastore.hbase.mapreduce;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.mapreduce.JobContext;
+import org.apache.log4j.Logger;
+
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.index.Index;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
-import mil.nga.giat.geowave.datastore.hbase.HBaseIndexStore;
+import mil.nga.giat.geowave.datastore.hbase.metadata.HBaseIndexStore;
 import mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations;
-
-import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.mapreduce.JobContext;
-import org.apache.log4j.Logger;
 
 /**
  * @author viggy Functionality similar to <code> JobContextIndexStore </code>
@@ -28,7 +28,8 @@ public class JobContextHBaseIndexStore implements
 	private final JobContext context;
 	private final BasicHBaseOperations operations;
 	private final Map<ByteArrayId, Index> indexCache = new HashMap<ByteArrayId, Index>();
-	protected static final Logger LOGGER = Logger.getLogger(CLASS);
+	protected static final Logger LOGGER = Logger.getLogger(
+			CLASS);
 
 	public JobContextHBaseIndexStore(
 			final JobContext context,
@@ -49,9 +50,11 @@ public class JobContextHBaseIndexStore implements
 	@Override
 	public Index getIndex(
 			final ByteArrayId indexId ) {
-		Index index = indexCache.get(indexId);
+		Index index = indexCache.get(
+				indexId);
 		if (index == null) {
-			index = getIndexInternal(indexId);
+			index = getIndexInternal(
+					indexId);
 		}
 		return index;
 	}
@@ -59,22 +62,25 @@ public class JobContextHBaseIndexStore implements
 	@Override
 	public boolean indexExists(
 			final ByteArrayId indexId ) {
-		if (indexCache.containsKey(indexId)) {
+		if (indexCache.containsKey(
+				indexId)) {
 			return true;
 		}
-		final Index index = getIndexInternal(indexId);
+		final Index index = getIndexInternal(
+				indexId);
 		return index != null;
 	}
 
 	@Override
-	public CloseableIterator<Index> getIndices() {
+	public CloseableIterator<Index<?, ?>> getIndices() {
 		// TODO #406 Need to fix
-		LOGGER.warn("Need to code this method getIndices");
+		LOGGER.warn(
+				"Need to code this method getIndices");
 		return null;
 	}
 
 	public static Index[] getIndices(
-			JobContext context ) {
+			final JobContext context ) {
 		return GeoWaveHBaseConfiguratorBase.getIndices(
 				CLASS,
 				context);
@@ -90,7 +96,8 @@ public class JobContextHBaseIndexStore implements
 			// then try to get it from the accumulo persistent store
 			final HBaseIndexStore indexStore = new HBaseIndexStore(
 					operations);
-			index = indexStore.getIndex(indexId);
+			index = indexStore.getIndex(
+					indexId);
 		}
 
 		if (index != null) {

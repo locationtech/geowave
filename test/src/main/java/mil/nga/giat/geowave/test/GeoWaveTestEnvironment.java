@@ -86,6 +86,7 @@ abstract public class GeoWaveTestEnvironment
 	protected static final String TEST_CASE_BASE = "data/";
 	protected static final String DEFAULT_MINI_ACCUMULO_PASSWORD = "Ge0wave";
 	protected static final String HADOOP_WINDOWS_UTIL = "winutils.exe";
+	protected static final String HADOOP_DLL = "hadoop.dll";
 	protected static final Object MUTEX = new Object();
 	protected static AccumuloOperations accumuloOperations;
 	protected static String zookeeper = "z";
@@ -105,6 +106,8 @@ abstract public class GeoWaveTestEnvironment
 
 	protected static final AtomicBoolean DEFER_CLEANUP = new AtomicBoolean(
 			false);
+	
+	protected static HashMap<Long, SimpleFeature> expectedFeatures = new HashMap<Long, SimpleFeature>();
 
 	protected static boolean isYarn() {
 		return VersionUtil.compareVersions(
@@ -165,6 +168,7 @@ abstract public class GeoWaveTestEnvironment
 			throws IOException {
 		synchronized (MUTEX) {
 			TimeZone.setDefault(TimeZone.getTimeZone("GMT"));
+			
 			if (accumuloOperations == null) {
 				zookeeper = System.getProperty("zookeeperUrl");
 				accumuloInstance = System.getProperty("instance");
@@ -375,7 +379,10 @@ abstract public class GeoWaveTestEnvironment
 				// easy to check against
 				featureIterator = expectedResults.features();
 				while (featureIterator.hasNext()) {
-					hashedCentroids.add(hashCentroid((Geometry) featureIterator.next().getDefaultGeometry()));
+					SimpleFeature feature = featureIterator.next();
+					long centroid = hashCentroid((Geometry) feature.getDefaultGeometry());
+					hashedCentroids.add(centroid);
+					expectedFeatures.put(centroid, feature);
 				}
 			}
 			finally {

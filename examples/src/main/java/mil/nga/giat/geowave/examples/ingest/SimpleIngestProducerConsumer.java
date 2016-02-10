@@ -1,56 +1,110 @@
 package mil.nga.giat.geowave.examples.ingest;
 
-import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
-import mil.nga.giat.geowave.core.store.DataStore;
-import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.core.store.IndexWriter;
-import mil.nga.giat.geowave.core.store.memory.DataStoreUtils;
-import mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations;
+import java.io.IOException;
+import java.util.Iterator;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import org.apache.log4j.Logger;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 
-import java.io.IOException;
-import java.util.Iterator;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
+import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
+import mil.nga.giat.geowave.core.store.DataStore;
+import mil.nga.giat.geowave.core.store.IndexWriter;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.core.store.memory.DataStoreUtils;
+import mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations;
+import mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations;
 
 public class SimpleIngestProducerConsumer extends
 		SimpleIngest
 {
 
-	private static Logger log = Logger.getLogger(SimpleIngestProducerConsumer.class);
+	private static Logger log = Logger.getLogger(
+			SimpleIngestProducerConsumer.class);
 	private final FeatureCollection features = new FeatureCollection();
 
 	public static void main(
 			final String[] args ) {
-		if (args.length != 5) {
-			log.error("Invalid arguments, expected: zookeepers, accumuloInstance, accumuloUser, accumuloPass, geowaveNamespace");
-			System.exit(1);
+
+		if ((args == null) || (args.length == 0) || !(args[0].equals(
+				"-a")
+				|| args[0].equals(
+						"-h"))) {
+			log.error(
+					"Invalid arguments, expected: dataStoreType, dataStoreOptions");
+			System.exit(
+					1);
 		}
 
 		final SimpleIngestProducerConsumer si = new SimpleIngestProducerConsumer();
+		DataStore geowaveDataStore = null;
+		String namespace = null;
+		String instance = null;
 
-		try {
-			final BasicAccumuloOperations bao = si.getAccumuloOperationsInstance(
-					args[0],
-					args[1],
-					args[2],
-					args[3],
-					args[4]);
-			final DataStore geowaveDataStore = si.getGeowaveDataStore(bao);
-			si.generateGrid(geowaveDataStore);
+		if (args[0].equals(
+				"-a")) {
+			if (args.length != 6) {
+				log.error(
+						"Invalid arguments, expected: dataStoreType, zookeepers, accumuloInstance, accumuloUser, accumuloPass, geowaveNamespace");
+				System.exit(
+						1);
+			}
+			namespace = args[5];
+			instance = args[2];
+			try {
+				final BasicAccumuloOperations bao = si.getAccumuloOperationsInstance(
+						args[1],
+						args[2],
+						args[3],
+						args[4],
+						args[5]);
+				geowaveDataStore = si.getAccumuloGeowaveDataStore(
+						bao);
+			}
+			catch (final Exception e) {
+				log.error(
+						"Error creating BasicAccumuloOperations",
+						e);
+				System.exit(
+						1);
+			}
 		}
-		catch (final Exception e) {
-			log.error(
-					"Error creating BasicAccumuloOperations",
-					e);
-			System.exit(1);
+		else if (args[0].equals(
+				"-h")) {
+			if (args.length != 3) {
+				log.error(
+						"Invalid arguments, expected: dataStoreType, zookeepers, geowaveNamespace");
+				System.exit(
+						1);
+			}
+			namespace = args[2];
+			instance = "hbase";
+
+			try {
+				final BasicHBaseOperations bao = si.getHbaseOperationsInstance(
+						args[1],
+						args[2]);
+
+				geowaveDataStore = si.getHbaseGeowaveDataStore(
+						bao);
+			}
+			catch (final Exception e) {
+				log.error(
+						"Error creating BasicHbaseOperations",
+						e);
+				System.exit(
+						1);
+			}
 		}
 
-		System.out.println("Finished ingesting data to namespace: " + args[4] + " at accumulo instance: " + args[1]);
+		si.generateGrid(
+				geowaveDataStore);
+
+		System.out.println(
+				"Finished ingesting data to namespace: " + namespace + " at datastore instance: " + instance);
 
 	}
 
@@ -71,7 +125,8 @@ public class SimpleIngestProducerConsumer extends
 
 		// This is an adapter, that is needed to describe how to persist the
 		// data type passed
-		final FeatureDataAdapter adapter = createDataAdapter(point);
+		final FeatureDataAdapter adapter = createDataAdapter(
+				point);
 
 		// This describes how to index the data
 		final PrimaryIndex index = createSpatialIndex();
@@ -88,7 +143,7 @@ public class SimpleIngestProducerConsumer extends
 								writer.write(sft);
 							}
 						}
-						catch (IOException e) {
+						catch (final IOException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
@@ -100,10 +155,11 @@ public class SimpleIngestProducerConsumer extends
 
 		// build a grid of points across the globe at each whole
 		// latitude/longitude intersection
-		for (SimpleFeature sft : getGriddedFeatures(
+		for (final SimpleFeature sft : getGriddedFeatures(
 				pointBuilder,
 				-10000)) {
-			features.add(sft);
+			features.add(
+					sft);
 		}
 		features.ingestCompleted = true;
 		try {
@@ -126,7 +182,8 @@ public class SimpleIngestProducerConsumer extends
 		public void add(
 				final SimpleFeature sft ) {
 			try {
-				queue.put(sft);
+				queue.put(
+						sft);
 			}
 			catch (final InterruptedException e) {
 				log.error(
@@ -155,7 +212,8 @@ public class SimpleIngestProducerConsumer extends
 
 		@Override
 		public void remove() {
-			log.error("Remove called, method not implemented");
+			log.error(
+					"Remove called, method not implemented");
 		}
 	}
 }

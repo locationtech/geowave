@@ -1,18 +1,17 @@
 /**
- * 
+ *
  */
-package mil.nga.giat.geowave.datastore.hbase;
+package mil.nga.giat.geowave.datastore.hbase.metadata;
+
+import org.apache.hadoop.hbase.Cell;
+import org.apache.hadoop.hbase.CellUtil;
+import org.apache.log4j.Logger;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
-import mil.nga.giat.geowave.datastore.hbase.metadata.AbstractHBasePersistence;
 import mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations;
-
-import org.apache.hadoop.hbase.Cell;
-import org.apache.hadoop.hbase.CellUtil;
-import org.apache.log4j.Logger;
 
 /**
  * @author viggy Functionality similar to
@@ -27,14 +26,14 @@ public class HBaseDataStatisticsStore extends
 	private final static Logger LOGGER = Logger.getLogger(HBaseDataStatisticsStore.class);
 
 	public HBaseDataStatisticsStore(
-			BasicHBaseOperations operations ) {
+			final BasicHBaseOperations operations ) {
 		super(
 				operations);
 	}
 
 	@Override
 	public void setStatistics(
-			DataStatistics<?> statistics ) {
+			final DataStatistics<?> statistics ) {
 		removeStatistics(
 				statistics.getDataAdapterId(),
 				statistics.getStatisticsId());
@@ -44,15 +43,15 @@ public class HBaseDataStatisticsStore extends
 
 	@Override
 	public void incorporateStatistics(
-			DataStatistics<?> statistics ) {
+			final DataStatistics<?> statistics ) {
 		addObject(statistics);
 
 	}
 
 	@Override
 	public CloseableIterator<DataStatistics<?>> getDataStatistics(
-			ByteArrayId adapterId,
-			String... authorizations ) {
+			final ByteArrayId adapterId,
+			final String... authorizations ) {
 		return getAllObjectsWithSecondaryId(
 				adapterId,
 				authorizations);
@@ -60,15 +59,15 @@ public class HBaseDataStatisticsStore extends
 
 	@Override
 	public CloseableIterator<DataStatistics<?>> getAllDataStatistics(
-			String... authorizations ) {
+			final String... authorizations ) {
 		return getObjects(authorizations);
 	}
 
 	@Override
 	public DataStatistics<?> getDataStatistics(
-			ByteArrayId adapterId,
-			ByteArrayId statisticsId,
-			String... authorizations ) {
+			final ByteArrayId adapterId,
+			final ByteArrayId statisticsId,
+			final String... authorizations ) {
 		return getObject(
 				statisticsId,
 				adapterId,
@@ -77,9 +76,9 @@ public class HBaseDataStatisticsStore extends
 
 	@Override
 	public boolean removeStatistics(
-			ByteArrayId adapterId,
-			ByteArrayId statisticsId,
-			String... authorizations ) {
+			final ByteArrayId adapterId,
+			final ByteArrayId statisticsId,
+			final String... authorizations ) {
 		return deleteObject(
 				statisticsId,
 				adapterId,
@@ -88,7 +87,7 @@ public class HBaseDataStatisticsStore extends
 
 	@Override
 	protected ByteArrayId getPrimaryId(
-			DataStatistics<?> persistedObject ) {
+			final DataStatistics<?> persistedObject ) {
 		return persistedObject.getStatisticsId();
 	}
 
@@ -108,15 +107,15 @@ public class HBaseDataStatisticsStore extends
 			final Cell entry ) {
 		final DataStatistics<?> stats = super.entryToValue(entry);
 		if (stats != null) {
-			stats.setDataAdapterId(getSecondaryId(CellUtil.cloneRow(entry)));
+			stats.setDataAdapterId(new ByteArrayId(CellUtil.cloneQualifier(entry)));
 		}
 		return stats;
 	}
 
 	@Override
 	public void removeAllStatistics(
-			ByteArrayId adapterId,
-			String... authorizations ) {
+			final ByteArrayId adapterId,
+			final String... authorizations ) {
 		// TODO #406 Need to fix
 		LOGGER.error("This method removeAllStatistics is not yet coded. Need to fix it");
 
@@ -124,10 +123,10 @@ public class HBaseDataStatisticsStore extends
 
 	@Override
 	public void transformVisibility(
-			ByteArrayId adapterId,
-			String transformingRegex,
-			String replacement,
-			String... authorizations ) {
+			final ByteArrayId adapterId,
+			final String transformingRegex,
+			final String replacement,
+			final String... authorizations ) {
 		// TODO #406 Need to fix
 		LOGGER.error("This method transformVisibility is not yet coded. Need to fix it");
 

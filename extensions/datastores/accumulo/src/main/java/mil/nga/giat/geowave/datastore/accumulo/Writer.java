@@ -2,6 +2,8 @@ package mil.nga.giat.geowave.datastore.accumulo;
 
 import org.apache.accumulo.core.data.Mutation;
 
+import mil.nga.giat.geowave.core.store.Closable;
+
 /**
  * This interface is returned by AccumuloOperations and useful for general
  * purpose writing of entries. The default implementation of AccumuloOperations

@@ -1,44 +1,45 @@
 /**
- * 
+ *
  */
-package mil.nga.giat.geowave.datastore.hbase;
+package mil.nga.giat.geowave.datastore.hbase.metadata;
+
+import org.apache.log4j.Logger;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.index.Index;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
-import mil.nga.giat.geowave.datastore.hbase.metadata.AbstractHBasePersistence;
 import mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations;
-
-import org.apache.log4j.Logger;
 
 /**
  * @author viggy Functionality similar to <code> AccumuloIndexStore </code>
  */
 public class HBaseIndexStore extends
-		AbstractHBasePersistence<Index> implements
+		AbstractHBasePersistence<Index<?, ?>> implements
 		IndexStore
 {
 
-	private final static Logger LOGGER = Logger.getLogger(HBaseIndexStore.class);
+	private final static Logger LOGGER = Logger.getLogger(
+			HBaseIndexStore.class);
 	private static final String INDEX_CF = "INDEX";
 
 	public HBaseIndexStore(
-			BasicHBaseOperations operations ) {
+			final BasicHBaseOperations operations ) {
 		super(
 				operations);
 	}
 
 	@Override
 	public void addIndex(
-			Index index ) {
-		addObject(index);
+			final Index index ) {
+		addObject(
+				index);
 
 	}
 
 	@Override
 	public Index getIndex(
-			ByteArrayId indexId ) {
+			final ByteArrayId indexId ) {
 		return getObject(
 				indexId,
 				null);
@@ -46,20 +47,20 @@ public class HBaseIndexStore extends
 
 	@Override
 	public boolean indexExists(
-			ByteArrayId id ) {
+			final ByteArrayId id ) {
 		return objectExists(
 				id,
 				null);
 	}
 
 	@Override
-	public CloseableIterator<Index> getIndices() {
+	public CloseableIterator<Index<?, ?>> getIndices() {
 		return getObjects();
 	}
 
 	@Override
 	protected ByteArrayId getPrimaryId(
-			Index persistedObject ) {
+			final Index persistedObject ) {
 		return persistedObject.getId();
 	}
 

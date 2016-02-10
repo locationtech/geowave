@@ -1,15 +1,13 @@
 /**
- * 
+ *
  */
 package mil.nga.giat.geowave.datastore.hbase.operations;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
-
-import mil.nga.giat.geowave.datastore.hbase.io.HBaseWriter;
-import mil.nga.giat.geowave.datastore.hbase.util.HBaseUtils;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
@@ -22,6 +20,11 @@ import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.client.Table;
 import org.apache.log4j.Logger;
+
+import mil.nga.giat.geowave.core.store.config.AbstractConfigOption;
+import mil.nga.giat.geowave.core.store.config.StringConfigOption;
+import mil.nga.giat.geowave.datastore.hbase.io.HBaseWriter;
+import mil.nga.giat.geowave.datastore.hbase.util.HBaseUtils;
 
 /**
  * @author viggy Functionality similar to <code> BasicAccumuloOperations </code>
@@ -36,26 +39,33 @@ public class BasicHBaseOperations
 	private static final String HBASE_CONFIGURATION_ZOOKEEPER_QUORUM = "hbase.zookeeper.quorum";
 	private static final String DEFAULT_TABLE_NAMESPACE = "";
 
-	protected Connection conn;
-	private String tableNamespace;
+	public static final String ZOOKEEPER_INSTANCES_NAME = "zookeeper";
+	private static final AbstractConfigOption<?>[] CONFIG_OPTIONS = new AbstractConfigOption[] {
+		new StringConfigOption(
+				ZOOKEEPER_INSTANCES_NAME,
+				"A comma-separated list of zookeeper servers that an HBase instance is using")
+	};
+
+	private final Connection conn;
+	private final String tableNamespace;
 
 	public BasicHBaseOperations(
-			String zookeeperInstances,
-			String geowaveNamespace )
+			final String zookeeperInstances,
+			final String geowaveNamespace )
 			throws IOException {
-		Configuration hConf = HBaseConfiguration.create();
+		final Configuration hConf = HBaseConfiguration.create();
 		hConf.set(
 				HBASE_CONFIGURATION_ZOOKEEPER_QUORUM,
 				zookeeperInstances);
 		hConf.setInt(
 				HBASE_CONFIGURATION_TIMEOUT,
 				120000);
-		this.conn = ConnectionFactory.createConnection(hConf);
-		this.tableNamespace = geowaveNamespace;
+		conn = ConnectionFactory.createConnection(hConf);
+		tableNamespace = geowaveNamespace;
 	}
 
 	public BasicHBaseOperations(
-			String zookeeperInstances )
+			final String zookeeperInstances )
 			throws IOException {
 		this(
 				zookeeperInstances,
@@ -73,12 +83,22 @@ public class BasicHBaseOperations
 			final String tableNamespace,
 			final Connection connector ) {
 		this.tableNamespace = tableNamespace;
-		this.conn = connector;
+		conn = connector;
+	}
+
+	public static BasicHBaseOperations createOperations(
+			final Map<String, Object> configOptions,
+			final String namespace ) 
+			throws IOException {
+		return new BasicHBaseOperations(
+				configOptions.get(
+						ZOOKEEPER_INSTANCES_NAME).toString(),
+				namespace);
 	}
 
 	public HBaseWriter createWriter(
-			String tableName,
-			String columnFamily )
+			final String tableName,
+			final String columnFamily )
 			throws IOException {
 		return createWriter(
 				tableName,
@@ -87,7 +107,7 @@ public class BasicHBaseOperations
 	}
 
 	private TableName getTableName(
-			String tableName ) {
+			final String tableName ) {
 		return TableName.valueOf(tableName);
 	}
 
@@ -96,7 +116,7 @@ public class BasicHBaseOperations
 			final String columnFamily,
 			final boolean createTable )
 			throws IOException {
-		TableName tName = getTableName(getQualifiedTableName(sTableName));
+		final TableName tName = getTableName(getQualifiedTableName(sTableName));
 		Table table = null;
 		table = getTable(
 				createTable,
@@ -115,12 +135,12 @@ public class BasicHBaseOperations
 	private Table getTable(
 			final boolean create,
 			final String columnFamily,
-			TableName name )
+			final TableName name )
 			throws IOException {
 		Table table;
 		if (create && !conn.getAdmin().isTableAvailable(
 				name)) {
-			HTableDescriptor desc = new HTableDescriptor(
+			final HTableDescriptor desc = new HTableDescriptor(
 					name);
 			desc.addFamily(new HColumnDescriptor(
 					columnFamily));
@@ -140,8 +160,8 @@ public class BasicHBaseOperations
 
 	public void deleteAll()
 			throws IOException {
-		TableName[] tableNamesArr = conn.getAdmin().listTableNames();
-		SortedSet<TableName> tableNames = new TreeSet<TableName>();
+		final TableName[] tableNamesArr = conn.getAdmin().listTableNames();
+		final SortedSet<TableName> tableNames = new TreeSet<TableName>();
 		Collections.addAll(
 				tableNames,
 				tableNamesArr);
@@ -166,8 +186,8 @@ public class BasicHBaseOperations
 	}
 
 	public ResultScanner getScannedResults(
-			Scan scanner,
-			String tableName )
+			final Scan scanner,
+			final String tableName )
 			throws IOException {
 		return conn.getTable(
 				getTableName(getQualifiedTableName(tableName))).getScanner(
@@ -175,20 +195,24 @@ public class BasicHBaseOperations
 	}
 
 	public boolean deleteTable(
-			String tableName ) {
+			final String tableName ) {
 		final String qName = getQualifiedTableName(tableName);
 		try {
 			conn.getAdmin().deleteTable(
 					getTableName(qName));
 			return true;
 		}
-		catch (IOException ex) {
+		catch (final IOException ex) {
 			LOGGER.warn(
 					"Unable to delete table '" + qName + "'",
 					ex);
 		}
 		return false;
 
+	}
+
+	public static AbstractConfigOption<?>[] getOptions() {
+		return CONFIG_OPTIONS;
 	}
 
 }

@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package mil.nga.giat.geowave.datastore.hbase;
 
@@ -11,6 +11,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.DataStoreEntryInfo;
@@ -21,12 +23,12 @@ import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsBuilder;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.core.store.adapter.statistics.StatisticalDataAdapter;
-import mil.nga.giat.geowave.core.store.index.Index;
+import mil.nga.giat.geowave.core.store.data.VisibilityWriter;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.datastore.hbase.io.HBaseWriter;
+import mil.nga.giat.geowave.datastore.hbase.metadata.HBaseDataStatisticsStore;
 import mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations;
 import mil.nga.giat.geowave.datastore.hbase.util.HBaseUtils;
-
-import org.apache.log4j.Logger;
 
 /**
  * @author viggy Functionality similar to <code> AccumuloIndexWriter </code>
@@ -35,10 +37,11 @@ public class HBaseIndexWriter implements
 		IndexWriter
 {
 
-	private final static Logger LOGGER = Logger.getLogger(HBaseIndexWriter.class);
-	private Index index;
-	private HBaseDataStore dataStore;
-	private BasicHBaseOperations operations;
+	private final static Logger LOGGER = Logger.getLogger(
+			HBaseIndexWriter.class);
+	private final PrimaryIndex index;
+	private final HBaseDataStore dataStore;
+	private final BasicHBaseOperations operations;
 	private String indexName;
 	protected boolean persistStats;
 	protected HBaseWriter writer;
@@ -49,52 +52,66 @@ public class HBaseIndexWriter implements
 	protected boolean useAltIndex;
 	protected String altIdxTableName;
 
+	protected final VisibilityWriter<?> customFieldVisibilityWriter;
+
 	public HBaseIndexWriter(
-			final Index index,
+			final PrimaryIndex index,
 			final BasicHBaseOperations operations,
-			final HBaseDataStore dataStore ) {
+			final HBaseDataStore dataStore,
+			final VisibilityWriter<?> customFieldVisibilityWriter ) {
 		this(
 				index,
 				operations,
 				new HBaseOptions(),
-				dataStore);
+				dataStore,
+				customFieldVisibilityWriter);
 	}
 
 	public HBaseIndexWriter(
-			final Index index,
+			final PrimaryIndex index,
 			final BasicHBaseOperations operations,
 			final HBaseOptions options,
-			final HBaseDataStore dataStore ) {
+			final HBaseDataStore dataStore,
+			final VisibilityWriter<?> customFieldVisibilityWriter ) {
 		this.index = index;
 		this.operations = operations;
 		this.dataStore = dataStore;
 		this.options = options;
+		this.customFieldVisibilityWriter = customFieldVisibilityWriter;
 		initialize();
 	}
 
 	private void initialize() {
-		indexName = StringUtils.stringFromBinary(index.getId().getBytes());
+		indexName = StringUtils.stringFromBinary(
+				index.getId().getBytes());
 		altIdxTableName = indexName + HBaseUtils.ALT_INDEX_TABLE;
 
 		useAltIndex = options.isUseAltIndex();
 		persistStats = options.isPersistDataStatistics();
 		if (useAltIndex) {
 			try {
-				if (operations.tableExists(indexName)) {
-					if (!operations.tableExists(altIdxTableName)) {
+				if (operations.tableExists(
+						indexName)) {
+					if (!operations.tableExists(
+							altIdxTableName)) {
 						useAltIndex = false;
-						LOGGER.info("Requested alternate index table [" + altIdxTableName + "] does not exist.");
+						LOGGER.info(
+								"Requested alternate index table [" + altIdxTableName + "] does not exist.");
 					}
 				}
 				else {
-					if (operations.tableExists(altIdxTableName)) {
-						operations.deleteTable(altIdxTableName);
-						LOGGER.warn("Deleting current alternate index table [" + altIdxTableName + "] as main table does not yet exist.");
+					if (operations.tableExists(
+							altIdxTableName)) {
+						operations.deleteTable(
+								altIdxTableName);
+						LOGGER.warn(
+								"Deleting current alternate index table [" + altIdxTableName + "] as main table does not yet exist.");
 					}
 				}
 			}
-			catch (IOException e) {
-				LOGGER.warn("Unable to check if Table " + indexName + " exists");
+			catch (final IOException e) {
+				LOGGER.warn(
+						"Unable to check if Table " + indexName + " exists");
 			}
 		}
 	}
@@ -114,7 +131,8 @@ public class HBaseIndexWriter implements
 						for (final DataStatisticsBuilder builder : builders) {
 							final Collection<DataStatistics> s = builder.getStatistics();
 							if ((s != null) && !s.isEmpty()) {
-								accumulatedStats.addAll(s);
+								accumulatedStats.addAll(
+										s);
 							}
 						}
 					}
@@ -124,7 +142,8 @@ public class HBaseIndexWriter implements
 				final DataStatisticsStore statsStore = new HBaseDataStatisticsStore(
 						operations);
 				for (final DataStatistics s : accumulatedStats) {
-					statsStore.incorporateStatistics(s);
+					statsStore.incorporateStatistics(
+							s);
 				}
 			}
 		}
@@ -139,50 +158,43 @@ public class HBaseIndexWriter implements
 
 	@Override
 	public <T> List<ByteArrayId> write(
-			WritableDataAdapter<T> writableAdapter,
-			T entry ) {
-		if (writableAdapter instanceof IndexDependentDataAdapter) {
-			final IndexDependentDataAdapter adapter = ((IndexDependentDataAdapter) writableAdapter);
-			final Iterator<T> indexedEntries = adapter.convertToIndex(
-					index,
-					entry);
-			final List<ByteArrayId> rowIds = new ArrayList<ByteArrayId>();
-			while (indexedEntries.hasNext()) {
-				rowIds.addAll(writeInternal(
-						adapter,
-						indexedEntries.next()));
-			}
-			return rowIds;
-		}
-		else {
-			return writeInternal(
-					writableAdapter,
-					entry);
-		}
+			final WritableDataAdapter<T> writableAdapter,
+			final T entry ) {
+		return write(
+				writableAdapter,
+				entry,
+				(VisibilityWriter<T>) customFieldVisibilityWriter);
 	}
 
 	public <T> List<ByteArrayId> writeInternal(
 			final WritableDataAdapter<T> writableAdapter,
-			final T entry ) {
+			final T entry,
+			final VisibilityWriter<T> visibilityWriter ) {
 		final ByteArrayId adapterIdObj = writableAdapter.getAdapterId();
 
 		// final byte[] adapterId = writableAdapter.getAdapterId().getBytes();
 
 		DataStoreEntryInfo entryInfo;
 		synchronized (this) {
-			dataStore.store(writableAdapter);
-			dataStore.store(index);
+			dataStore.store(
+					writableAdapter);
+			dataStore.store(
+					index);
 
-			ensureOpen(writableAdapter);
+			ensureOpen(
+					writableAdapter);
 			entryInfo = HBaseUtils.write(
 					writableAdapter,
 					index,
 					entry,
-					writer);
+					writer,
+					visibilityWriter);
 			if (persistStats) {
 				List<DataStatisticsBuilder> stats;
-				if (statsMap.containsKey(adapterIdObj)) {
-					stats = statsMap.get(adapterIdObj);
+				if (statsMap.containsKey(
+						adapterIdObj)) {
+					stats = statsMap.get(
+							adapterIdObj);
 				}
 				else {
 					if (writableAdapter instanceof StatisticalDataAdapter) {
@@ -190,9 +202,10 @@ public class HBaseIndexWriter implements
 						stats = new ArrayList<DataStatisticsBuilder>(
 								statisticsIds.length);
 						for (final ByteArrayId id : statisticsIds) {
-							stats.add(new DataStatisticsBuilder<T>(
-									(StatisticalDataAdapter) writableAdapter,
-									id));
+							stats.add(
+									new DataStatisticsBuilder<T>(
+											(StatisticalDataAdapter) writableAdapter,
+											id));
 						}
 						if ((stats != null) && stats.isEmpty()) {
 							// if its an empty list, for simplicity just set it
@@ -224,7 +237,8 @@ public class HBaseIndexWriter implements
 		if (writer == null) {
 			try {
 				writer = operations.createWriter(
-						StringUtils.stringFromBinary(index.getId().getBytes()),
+						StringUtils.stringFromBinary(
+								index.getId().getBytes()),
 						writableAdapter.getAdapterId().getString());
 			}
 			catch (final IOException e) {
@@ -236,22 +250,49 @@ public class HBaseIndexWriter implements
 	}
 
 	@Override
-	public Index getIndex() {
+	public PrimaryIndex getIndex() {
 		return index;
 	}
 
 	@Override
 	public <T> void setupAdapter(
-			WritableDataAdapter<T> writableAdapter ) {
-		LOGGER.error("This method is not yet coded. Need to fix it");
+			final WritableDataAdapter<T> writableAdapter ) {
+		LOGGER.error(
+				"This method is not yet coded. Need to fix it");
 
 	}
 
 	@Override
-	public void flush() {
-		// TODO #406 Need to fix
-		LOGGER.error("This method flush is not yet coded. Need to fix it");
+	public synchronized void flush() {
+		// HBase writer does not require/support flush
+	}
 
+	@Override
+	public <T> List<ByteArrayId> write(
+			final WritableDataAdapter<T> writableAdapter,
+			final T entry,
+			final VisibilityWriter<T> fieldVisibilityWriter ) {
+		if (writableAdapter instanceof IndexDependentDataAdapter) {
+			final IndexDependentDataAdapter adapter = ((IndexDependentDataAdapter) writableAdapter);
+			final Iterator<T> indexedEntries = adapter.convertToIndex(
+					index,
+					entry);
+			final List<ByteArrayId> rowIds = new ArrayList<ByteArrayId>();
+			while (indexedEntries.hasNext()) {
+				rowIds.addAll(
+						writeInternal(
+								adapter,
+								indexedEntries.next(),
+								fieldVisibilityWriter));
+			}
+			return rowIds;
+		}
+		else {
+			return writeInternal(
+					writableAdapter,
+					entry,
+					fieldVisibilityWriter);
+		}
 	}
 
 }

@@ -5,7 +5,6 @@ import org.junit.Test;
 public class SimpleHBaseIngestProducerConsumerTest extends
 		SimpleHBaseIngestTest
 {
-	@Override
 	@Test
 	public void TestIngest() {
 		final SimpleIngestProducerConsumer si = new SimpleIngestProducerConsumer();

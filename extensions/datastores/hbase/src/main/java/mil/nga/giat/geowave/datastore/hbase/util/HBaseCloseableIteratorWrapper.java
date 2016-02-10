@@ -6,6 +6,7 @@ package mil.nga.giat.geowave.datastore.hbase.util;
 import java.io.Closeable;
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.List;
 
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 
@@ -33,7 +34,28 @@ public class HBaseCloseableIteratorWrapper<E> implements
 		}
 
 		@Override
-		public void close() {}
+		public void close() {
+			results.close();
+		}
+
+	}
+
+	public static class MultiScannerClosableWrapper implements
+			Closeable
+	{
+		private final List<ResultScanner> results;
+
+		public MultiScannerClosableWrapper(
+				final List<ResultScanner> results ) {
+			this.results = results;
+		}
+
+		@Override
+		public void close() {
+			for(ResultScanner scanner : results){
+				scanner.close();
+			}
+		}
 
 	}
 

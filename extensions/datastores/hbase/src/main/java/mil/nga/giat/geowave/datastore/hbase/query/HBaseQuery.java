@@ -1,15 +1,15 @@
 /**
- * 
+ *
  */
 package mil.nga.giat.geowave.datastore.hbase.query;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
-import mil.nga.giat.geowave.core.store.index.Index;
-
-import org.apache.log4j.Logger;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 
 /**
  * @author viggy Functionality similar to <code> AccumuloQuery </code>
@@ -17,14 +17,15 @@ import org.apache.log4j.Logger;
 abstract public class HBaseQuery
 {
 
-	private final static Logger LOGGER = Logger.getLogger(HBaseQuery.class);
+	private final static Logger LOGGER = Logger.getLogger(
+			HBaseQuery.class);
 	protected final List<ByteArrayId> adapterIds;
-	protected final Index index;
+	protected final PrimaryIndex index;
 
 	private final String[] authorizations;
 
 	public HBaseQuery(
-			final Index index,
+			final PrimaryIndex index,
 			final String... authorizations ) {
 		this(
 				null,
@@ -34,7 +35,7 @@ abstract public class HBaseQuery
 
 	public HBaseQuery(
 			final List<ByteArrayId> adapterIds,
-			final Index index,
+			final PrimaryIndex index,
 			final String... authorizations ) {
 		this.adapterIds = adapterIds;
 		this.index = index;

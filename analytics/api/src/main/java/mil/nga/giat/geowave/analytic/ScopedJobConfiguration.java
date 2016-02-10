@@ -1,11 +1,11 @@
 package mil.nga.giat.geowave.analytic;
 
-import mil.nga.giat.geowave.core.index.ByteArrayUtils;
-import mil.nga.giat.geowave.mapreduce.GeoWaveConfiguratorBase;
-
 import org.apache.hadoop.conf.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import mil.nga.giat.geowave.core.index.ByteArrayUtils;
+import mil.nga.giat.geowave.mapreduce.GeoWaveConfiguratorBase;
 
 public class ScopedJobConfiguration
 {
