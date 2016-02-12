@@ -254,7 +254,7 @@ public class GeoWaveFeatureCollection extends
 			final Long max =  (limit != null) ? 
 					  limit.longValue() + (startIndex == null ? 0 : startIndex.longValue()) : null;
 			// limit only used if less than an integer max value.
-			limit  = (max != null && max.longValue() > Integer.MAX_VALUE) ? max.intValue() : null;
+			limit  = (max != null && max.longValue() < Integer.MAX_VALUE) ? max.intValue() : null;
 			
 
 			if (query.getFilter() == Filter.EXCLUDE) {
