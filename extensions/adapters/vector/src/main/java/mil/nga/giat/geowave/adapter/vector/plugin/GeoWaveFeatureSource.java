@@ -196,6 +196,11 @@ public class GeoWaveFeatureSource extends
 	}
 
 	@Override
+	 protected boolean canFilter() {
+        return true;
+    }
+	
+	@Override
 	protected void doLockInternal(
 			final String typeName,
 			final SimpleFeature feature )
