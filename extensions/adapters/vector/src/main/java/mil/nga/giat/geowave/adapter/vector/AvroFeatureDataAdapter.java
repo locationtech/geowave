@@ -47,9 +47,7 @@ public class AvroFeatureDataAdapter extends
 			final List<PersistentIndexFieldHandler<SimpleFeature, ? extends CommonIndexValue, Object>> customIndexHandlers ) {
 		super(
 				type,
-				customIndexHandlers,
-				null,
-				new JsonDefinitionColumnVisibilityManagement<SimpleFeature>());
+				customIndexHandlers);
 	}
 
 	public AvroFeatureDataAdapter(
@@ -57,9 +55,7 @@ public class AvroFeatureDataAdapter extends
 			final FieldVisibilityHandler<SimpleFeature, Object> fieldVisiblityHandler ) {
 		super(
 				type,
-				new ArrayList<PersistentIndexFieldHandler<SimpleFeature, ? extends CommonIndexValue, Object>>(),
-				fieldVisiblityHandler,
-				new JsonDefinitionColumnVisibilityManagement<SimpleFeature>());
+				fieldVisiblityHandler);
 	}
 
 	@Override

@@ -350,9 +350,6 @@ public class AvroFeatureDataAdapterTest
 				dataAdapterCopy.getType().getDescriptor(
 						"pid").getUserData().get(
 						"visibility"));
-		assertEquals(
-				"pid",
-				dataAdapterCopy.getVisibilityAttributeName());
 
 	}
 

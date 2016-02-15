@@ -8,6 +8,7 @@ import java.util.UUID;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.StringUtils;
+import mil.nga.giat.geowave.core.store.data.field.FieldVisibilityHandler;
 import mil.nga.giat.geowave.core.store.data.visibility.GlobalVisibilityHandler;
 
 import org.geotools.data.DataUtilities;
@@ -35,26 +36,23 @@ public class JsonDefinitionColumnVisibilityManagementTest
 	final GeometryFactory factory = new GeometryFactory(
 			new PrecisionModel(
 					PrecisionModel.FIXED));
-	final FieldLevelVisibilityHandler<SimpleFeature, Object> simplePIDHandler = new FieldLevelVisibilityHandler<SimpleFeature, Object>(
+	final FieldVisibilityHandler<SimpleFeature, Object> simplePIDHandler = manager.createVisibilityHandler(
 			"pid",
 			new GlobalVisibilityHandler<SimpleFeature, Object>(
 					"default"),
-			"vis",
-			manager);
+			"vis");
 
-	final FieldLevelVisibilityHandler<SimpleFeature, Object> simplePOPHandler = new FieldLevelVisibilityHandler<SimpleFeature, Object>(
+	final FieldVisibilityHandler<SimpleFeature, Object> simplePOPHandler = manager.createVisibilityHandler(
 			"pop",
 			new GlobalVisibilityHandler<SimpleFeature, Object>(
 					"default"),
-			"vis",
-			manager);
+			"vis");
 
-	final FieldLevelVisibilityHandler<SimpleFeature, Object> simpleGEOHandler = new FieldLevelVisibilityHandler<SimpleFeature, Object>(
+	final FieldVisibilityHandler<SimpleFeature, Object> simpleGEOHandler = manager.createVisibilityHandler(
 			"geometry",
 			new GlobalVisibilityHandler<SimpleFeature, Object>(
 					"default"),
-			"vis",
-			manager);
+			"vis");
 
 	@Before
 	public void setup()

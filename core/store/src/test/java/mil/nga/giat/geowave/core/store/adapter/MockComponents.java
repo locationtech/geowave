@@ -72,7 +72,6 @@ public class MockComponents
 					null);
 		}
 
-		@SuppressWarnings("unused")
 		public MockAbstractDataAdapter(
 				final List<PersistentIndexFieldHandler<Integer, ? extends CommonIndexValue, Object>> indexFieldHandlers,
 				final List<NativeFieldHandler<Integer, Object>> nativeFieldHandlers,
@@ -80,6 +79,7 @@ public class MockComponents
 			super(
 					indexFieldHandlers,
 					nativeFieldHandlers,
+					null,
 					defaultTypeData);
 		}
 

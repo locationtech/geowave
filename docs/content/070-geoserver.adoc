@@ -16,15 +16,15 @@ On the Geowave data store creation tab, the system prompts for the following pro
 [frame="topbot",options="header"]
 |======================
 | Name | Description | Constraints
-| ZookeeperServers | Comma-separated list of Zookeeper host and port.| Host and port are separated by a colon (host:port).
-| InstanceName | The Accumulo tablet server's instance name. | The name matches the one configured in Zookeeper.
-| UserName | The Accumulo user name. | The user should have administrative privileges to add and remove authorized visibility constraints.
-| Password | Accumulo user's password. |
-| Namespace | The table namespace associated with this Accumlo data store |
+| zookeeper | Comma-separated list of Zookeeper host and port.| Host and port are separated by a colon (host:port).
+| instance | The Accumulo tablet server's instance name. | The name matches the one configured in Zookeeper.
+| user | The Accumulo user name. | The user should have administrative privileges to add and remove authorized visibility constraints.
+| password | Accumulo user's password. |
+| gwNamespace | The table namespace associated with this Accumlo data store |
 | Lock Management | Select one from a list of lock managers. | Zookeeper is required with a multiple Geoserver architecture.
 | Authorization Management Provider | Select from a list of providers. |
 | Authorization Data URL | The URL for an external supporting service or configuration file. | The interpretation of the URL depends on the selected provider.
-| Transaction Buffer Size | The maximum number of newly inserted features per transaction buffered in memory prior to transaction completion.  | Considerations include system memory, size of typical transactions, the expected number of simultaneous transactions and the average size of a new feature.  
+| Query Index Strategy | The pluggable query strategy to use for querying geowave tables - a reasonable default will be used if not supplied. | 
 |======================
 
 ===== Transactions

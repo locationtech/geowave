@@ -4,9 +4,6 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
-import mil.nga.giat.geowave.adapter.vector.field.SimpleFeatureSerializationProvider;
-import mil.nga.giat.geowave.adapter.vector.plugin.visibility.AdaptorProxyFieldLevelVisibilityHandler;
-import mil.nga.giat.geowave.adapter.vector.plugin.visibility.JsonDefinitionColumnVisibilityManagement;
 import mil.nga.giat.geowave.adapter.vector.utils.TimeDescriptors;
 import mil.nga.giat.geowave.adapter.vector.utils.TimeDescriptors.TimeDescriptorConfiguration;
 import mil.nga.giat.geowave.core.geotime.store.dimension.Time;
@@ -25,7 +22,6 @@ import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.data.field.FieldReader;
 import mil.nga.giat.geowave.core.store.data.field.FieldUtils;
 import mil.nga.giat.geowave.core.store.data.field.FieldWriter;
-import mil.nga.giat.geowave.core.store.data.visibility.VisibilityManagement;
 import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
@@ -40,6 +36,7 @@ import org.opengis.feature.simple.SimpleFeatureType;
 // FIXME currently does not support stats
 // FIXME currently does not support secondary indexing
 // FIXME currently does nto support MapReduce
+// FIXME currentlly does not supported custom visibilities per column
 public class KryoFeatureDataAdapter extends
 		AbstractDataAdapter<SimpleFeature> implements
 		GeotoolsFeatureDataAdapter
@@ -47,7 +44,6 @@ public class KryoFeatureDataAdapter extends
 	private final static Logger LOGGER = Logger.getLogger(KryoFeatureDataAdapter.class);
 	protected SimpleFeatureType featureType;
 	private ByteArrayId adapterId;
-	private VisibilityManagement<SimpleFeature> fieldVisibilityManagement = new JsonDefinitionColumnVisibilityManagement<SimpleFeature>();
 
 	protected KryoFeatureDataAdapter() {}
 
@@ -56,13 +52,13 @@ public class KryoFeatureDataAdapter extends
 		super(
 				new ArrayList<PersistentIndexFieldHandler<SimpleFeature, ? extends CommonIndexValue, Object>>(),
 				new ArrayList<NativeFieldHandler<SimpleFeature, Object>>(),
+				null,
 				featureType);
 		this.featureType = featureType;
 		adapterId = new ByteArrayId(
 				StringUtils.stringToBinary(featureType.getTypeName()));
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public FieldReader<Object> getReader(
 			final ByteArrayId fieldId ) {
@@ -126,15 +122,12 @@ public class KryoFeatureDataAdapter extends
 		final String encodedType = DataUtilities.encodeType(featureType);
 		final String typeName = featureType.getTypeName();
 		final byte[] typeNameBytes = StringUtils.stringToBinary(typeName);
-		final byte[] visibilityManagementClassNameBytes = StringUtils.stringToBinary(fieldVisibilityManagement.getClass().getCanonicalName());
 		final byte[] encodedTypeBytes = StringUtils.stringToBinary(encodedType);
-		final ByteBuffer buf = ByteBuffer.allocate(encodedTypeBytes.length + typeNameBytes.length + visibilityManagementClassNameBytes.length + adapterId.getBytes().length + 16);
+		final ByteBuffer buf = ByteBuffer.allocate(encodedTypeBytes.length + typeNameBytes.length + adapterId.getBytes().length + 12);
 		buf.putInt(typeNameBytes.length);
-		buf.putInt(visibilityManagementClassNameBytes.length);
 		buf.putInt(encodedTypeBytes.length);
 		buf.putInt(adapterId.getBytes().length);
 		buf.put(typeNameBytes);
-		buf.put(visibilityManagementClassNameBytes);
 		buf.put(encodedTypeBytes);
 		buf.put(adapterId.getBytes());
 		return buf.array();
@@ -146,27 +139,15 @@ public class KryoFeatureDataAdapter extends
 			final byte[] bytes ) {
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
 		final byte[] typeNameBytes = new byte[buf.getInt()];
-		final byte[] visibilityManagementClassNameBytes = new byte[buf.getInt()];
 		final byte[] encodedTypeBytes = new byte[buf.getInt()];
 		final byte[] adapterIdBytes = new byte[buf.getInt()];
 		buf.get(typeNameBytes);
-		buf.get(visibilityManagementClassNameBytes);
 		buf.get(encodedTypeBytes);
 		buf.get(adapterIdBytes);
 		adapterId = new ByteArrayId(
 				adapterIdBytes);
 
 		final String typeName = StringUtils.stringFromBinary(typeNameBytes);
-		final String visibilityManagementClassName = StringUtils.stringFromBinary(visibilityManagementClassNameBytes);
-		try {
-			fieldVisibilityManagement = (VisibilityManagement<SimpleFeature>) Class.forName(
-					visibilityManagementClassName).newInstance();
-		}
-		catch (final Exception ex) {
-			LOGGER.error(
-					"Cannot instantiate " + visibilityManagementClassName,
-					ex);
-		}
 
 		final String encodedType = StringUtils.stringFromBinary(encodedTypeBytes);
 		try {
@@ -202,9 +183,7 @@ public class KryoFeatureDataAdapter extends
 
 			defaultHandlers.add(new FeatureGeometryHandler(
 					internalType.getGeometryDescriptor(),
-					new AdaptorProxyFieldLevelVisibilityHandler(
-							internalType.getGeometryDescriptor().getLocalName(),
-							this)));
+					fieldVisiblityHandler));
 			return defaultHandlers;
 		}
 		// LOGGER.warn("Simple Feature Type could not be used for handling the indexed data");
@@ -229,18 +208,14 @@ public class KryoFeatureDataAdapter extends
 							timeDescriptors.getStartRange()),
 					new FeatureAttributeHandler(
 							timeDescriptors.getEndRange()),
-					new AdaptorProxyFieldLevelVisibilityHandler(
-							timeDescriptors.getStartRange().getLocalName(),
-							this)));
+					fieldVisiblityHandler));
 		}
 		else if (timeDescriptors.getTime() != null) {
 			// if we didn't succeed in identifying a start and end time,
 			// just grab the first attribute and use it as a timestamp
 			return new FeatureTimestampHandler(
 					timeDescriptors.getTime(),
-					new AdaptorProxyFieldLevelVisibilityHandler(
-							timeDescriptors.getTime().getLocalName(),
-							this));
+					fieldVisiblityHandler);
 		}
 		return null;
 	}
@@ -264,11 +239,6 @@ public class KryoFeatureDataAdapter extends
 	// FIXME copy/paste from FeatureDataAdater ... abstract!
 	public String getVisibilityAttributeName() {
 		return "GEOWAVE_VISIBILITY";
-	}
-
-	// FIXME copy/paste from FeatureDataAdater ... abstract!
-	public VisibilityManagement<SimpleFeature> getFieldVisibilityManagement() {
-		return fieldVisibilityManagement;
 	}
 
 	@Override

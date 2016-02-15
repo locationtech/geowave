@@ -11,7 +11,7 @@ First build the main project after specifynig the dependency versions you'd like
 
 [source, bash]
 ----
-export BUILD_ARGS="-Daccumulo.version=1.6.0-cdh5.1.4 -Dhadoop.version=2.6.0-cdh5.4.0 -Dgeotools.version=13.0 -Dgeoserver.version=2.7.0 -Dvendor.version=cdh5 -P cloudera" <1>
+export BUILD_ARGS="-Daccumulo.version=1.6.0-cdh5.1.4 -Dhadoop.version=2.6.0-cdh5.4.0 -Dgeotools.version=14.2 -Dgeoserver.version=2.8.2 -Dvendor.version=cdh5 -P cloudera" <1>
 git clone https://github.com/ngageoint/geowave.git <2>
 cd geowave
 mvn install $BUILD_ARGS <3>
@@ -86,12 +86,13 @@ $ rm ne_50m_admin_0_countries.zip
 $ cd ..
 $ geowave -localingest \
       -b ./ingest \
-      -i ACCUMULO_INSTANCE_NAME \
-      -n geowave.50m_admin_0_countries \ <1>
+      -gwNamespace geowave.50m_admin_0_countries \ <1>
       -f geotools-vector \ <2>
-      -u USERNAME \
-      -p PASSWORD \
-      -z ZOOKEEPER_HOST_NAME:2181
+	  -datastore accumulo \
+      -user USERNAME \
+      -password PASSWORD \
+	  -instance ACCUMULO_INSTANCE_NAME \
+      -zookeeper ZOOKEEPER_HOST_NAME:2181
 ----
 <1> We preface the table name with the Accumulo namespace we configured earlier in the Accumulo configuration section followed by a dot (NAMESPACE.TABLE_NAME)
 <2> Explicitly set the ingest formats by name (or multiple comma-delimited formats), if not set all available ingest formats will be used

@@ -31,6 +31,8 @@ import mil.nga.giat.geowave.core.store.filter.QueryFilter;
 import mil.nga.giat.geowave.core.store.index.BasicIndexModel;
 import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
+import mil.nga.giat.geowave.core.store.index.CustomIdIndex;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.query.BasicQuery.ConstraintData;
 import mil.nga.giat.geowave.core.store.query.BasicQuery.ConstraintSet;
 import mil.nga.giat.geowave.core.store.query.BasicQuery.Constraints;
@@ -42,6 +44,53 @@ public class BasicQueryTest
 
 	final SimpleDateFormat df = new SimpleDateFormat(
 			"yyyy-MM-dd'T'HH:mm:ssz");
+
+	@Test
+	public void testIsSupported() {
+		final ConstraintSet cs1 = new ConstraintSet();
+		PrimaryIndex index = new CustomIdIndex(
+				new ExampleNumericIndexStrategy(),
+				new BasicIndexModel(
+						new NumericDimensionField[] {
+							new ExampleDimensionOne(),
+							new ExampleDimensionTwo()
+						}),
+				new ByteArrayId(
+						"22"));
+		assertTrue(cs1.isSupported(index));
+		cs1.addConstraint(
+				ExampleDimensionOne.class,
+				new ConstraintData(
+						new ConstrainedIndexValue(
+								0.3,
+								0.5),
+						true));
+		cs1.addConstraint(
+				ExampleDimensionTwo.class,
+				new ConstraintData(
+						new ConstrainedIndexValue(
+								0.3,
+								0.5),
+						true));
+		assertTrue(cs1.isSupported(index));
+		cs1.addConstraint(
+				ExampleDimensionThree.class,
+				new ConstraintData(
+						new ConstrainedIndexValue(
+								0.3,
+								0.5),
+						true));
+		assertTrue(cs1.isSupported(index));
+		final ConstraintSet cs2 = new ConstraintSet();
+		cs2.addConstraint(
+				ExampleDimensionThree.class,
+				new ConstraintData(
+						new ConstrainedIndexValue(
+								0.3,
+								0.5),
+						false));
+		assertFalse(cs2.isSupported(index));
+	}
 
 	@Test
 	public void testIntersectCasesWithPersistence() {
@@ -529,6 +578,22 @@ public class BasicQueryTest
 		public ByteArrayId getFieldId() {
 			return new ByteArrayId(
 					"two");
+		}
+
+	}
+
+	public static class ExampleDimensionThree extends
+			ExampleDimensionOne
+	{
+
+		public ExampleDimensionThree() {
+			super();
+		}
+
+		@Override
+		public ByteArrayId getFieldId() {
+			return new ByteArrayId(
+					"three");
 		}
 
 	}

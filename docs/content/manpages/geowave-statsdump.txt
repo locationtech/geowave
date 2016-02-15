@@ -20,22 +20,22 @@ The geowave -statsdump(1) operator will remove all statistics for an adapter, sc
 OPTIONS
 //:-------
 
--i, --instance-id <arg>::
+-instance <arg>::
 The Accumulo instance ID
 
--n, --namespace <arg>::
+-gwNamespace <arg>::
 The table namespace (optional; default is no namespace)
 
--p, --password <arg>::
+-password <arg>::
 The password for the user
 
--u, --user <arg>::
+-user <arg>::
 A valid Accumulo user ID
 
 -v, --visibility <arg>::
 The visibility of the data ingested (optional; default is 'public')
 
--z, --zookeepers <arg>::
+-zookeeper <arg>::
 A comma-separated list of zookeeper servers that an Accumulo instance is using
 
 -type <arg>::
@@ -49,9 +49,10 @@ Given the data we loaded in the geowave -localingest example we could look at th
 dump statistics using a command such as the one shown below.
 
 geowave -statsdump \
-    -i accumulo \
-    -n geowave.50m_admin_0_countries \
+    -gwNamespace geowave.50m_admin_0_countries \
     -type ne_50m_admin_0_countries \
-    -u USERNAME \
-    -p PASSWORD \
-    -z ZOOKEEPER_HOST_NAME:2181
+	-datastore accumulo \
+    -user USERNAME \
+    -password PASSWORD \
+	-instance ACCUMULO_INSTANCE_NAME \
+    -zookeeper ZOOKEEPER_HOST_NAME:2181
