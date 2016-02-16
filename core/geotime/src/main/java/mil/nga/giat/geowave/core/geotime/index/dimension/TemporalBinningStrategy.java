@@ -250,6 +250,9 @@ public class TemporalBinningStrategy implements
 	@Override
 	public BinRange[] getNormalizedRanges(
 			final NumericData range ) {
+		if (range.getMax() < range.getMin()) {
+			return new BinRange[] {};
+		}
 		final Calendar startEpoch = Calendar.getInstance(TimeZone.getTimeZone(timezone));
 		final long binSizeMillis = getBinSizeMillis();
 		// initialize the epoch to the range min and then reset appropriate
