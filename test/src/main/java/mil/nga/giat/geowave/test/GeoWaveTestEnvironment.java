@@ -230,6 +230,8 @@ abstract public class GeoWaveTestEnvironment
 						Assert.fail("Unable to start mini accumulo instance: '" + e.getLocalizedMessage() + "'");
 					}
 				}
+				// System.out.println(accumuloInstance);
+				// System.out.println(zookeeper);
 				try {
 					accumuloOperations = new BasicAccumuloOperations(
 							zookeeper,
