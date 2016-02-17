@@ -60,7 +60,14 @@ We work to maintain a N and N-1 tested and supported version pace for the follow
 | 2.6.x, 2.7.x | 12.x, 13.x | 1.5.x, 1.6.x | 2.x | 0.9.9 |  master (pull request pending) | Java7, Java8 |
 
 * [Apache Maven](http://maven.apache.org/) 3.x or greater is required for building
-* [Java Advanced Imaging](http://download.java.net/media/jai/builds/release/1_1_3/) and [Java Image I/O](http://download.java.net/media/jai-imageio/builds/release/1.1/) should both be installed on geoserver (license prohibits us redistributing)
+* [Java Advanced Imaging](http://download.java.net/media/jai/builds/release/1_1_3/INSTALL.html) and [Java Image I/O](http://download.java.net/media/jai-imageio/builds/release/1.1/INSTALL-jai_imageio.html) should both be installed on Geoserver (licensing prohibits us redistributing)
+   * At the time of writing, Oracle is migrating Java projects around and these links are subject to change.  Read the INSTALL files to determine the download file name for different operating systems and architectures.  They are stored in the same directory as the INSTALL file.  Here are some common download locations.
+   * Java Advanced Imaging
+      * Linux ([32-bit](http://download.java.net/media/jai/builds/release/1_1_3/jai-1_1_3-lib-linux-i586.tar.gz) and [64-bit](http://download.java.net/media/jai/builds/release/1_1_3/jai-1_1_3-lib-linux-amd64.tar.gz))
+      * Windows ([32-bit](http://download.java.net/media/jai/builds/release/1_1_3/jai-1_1_3-lib-windows-i586.exe))
+   * Java Image I/O
+      * Linux ([32-bit](http://download.java.net/media/jai-imageio/builds/release/1.1/jai_imageio-1_1-lib-linux-i586.tar.gz) and [64-bit](http://download.java.net/media/jai-imageio/builds/release/1.1/jai_imageio-1_1-lib-linux-amd64.tar.gz))
+      * Windows ([32-bit](http://download.java.net/media/jai-imageio/builds/release/1.1/jai_imageio-1_1-lib-windows-i586.exe))
 * See our [.travis.yml](https://github.com/ngageoint/geowave/blob/master/.travis.yml) file for the currently tested build matrix. 
 
 
