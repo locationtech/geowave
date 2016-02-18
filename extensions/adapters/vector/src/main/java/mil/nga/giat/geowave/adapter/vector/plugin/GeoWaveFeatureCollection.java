@@ -247,7 +247,14 @@ public class GeoWaveFeatureCollection extends
 					query,
 					referencedEnvelope);
 			timeBounds = getBoundedTime(query);
-			final Integer limit = getLimit(query);
+			Integer limit = getLimit(query);
+			final Integer startIndex = getStartIndex(query);
+
+			// limit becomes a 'soft' constraint since GeoServer will inforce
+			// the limit
+			final Long max = (limit != null) ? limit.longValue() + (startIndex == null ? 0 : startIndex.longValue()) : null;
+			// limit only used if less than an integer max value.
+			limit = (max != null && max.longValue() < Integer.MAX_VALUE) ? max.intValue() : null;
 
 			if (query.getFilter() == Filter.EXCLUDE) {
 				featureCursor = reader.getNoData();
@@ -341,6 +348,11 @@ public class GeoWaveFeatureCollection extends
 		return query == null ? new Query(
 				typeName,
 				Filter.EXCLUDE) : query;
+	}
+
+	private Integer getStartIndex(
+			final Query query ) {
+		return query.getStartIndex();
 	}
 
 	private Integer getLimit(
