@@ -1,6 +1,5 @@
 package mil.nga.giat.geowave.adapter.vector.util;
 
-import java.util.Date;
 import java.util.Map;
 
 import mil.nga.giat.geowave.adapter.vector.stats.FeatureBoundingBoxStatistics;
@@ -55,40 +54,33 @@ public class QueryIndexHelper
 			final TemporalConstraintsSet constraintsSet ) {
 
 		if ((timeDescriptors.getEndRange() != null) && (timeDescriptors.getStartRange() != null)) {
-			final TemporalRange statsStartRange = getStatsRange(
-					statsMap,
-					timeDescriptors.getStartRange());
-			final TemporalRange statsEndRange = getStatsRange(
-					statsMap,
-					timeDescriptors.getEndRange());
-			final TemporalRange fullRange = new TemporalRange(
-					statsStartRange.getStartTime(),
-					statsEndRange.getEndTime());
-
 			final String ename = timeDescriptors.getEndRange().getLocalName();
 			final String sname = timeDescriptors.getStartRange().getLocalName();
-			final String rangeName = sname + "_" + ename;
+			if (constraintsSet.hasConstraintsForRange(
+					sname,
+					ename)) {
+				final TemporalRange statsStartRange = getStatsRange(
+						statsMap,
+						timeDescriptors.getStartRange());
+				final TemporalRange statsEndRange = getStatsRange(
+						statsMap,
+						timeDescriptors.getEndRange());
+				final TemporalRange fullRange = new TemporalRange(
+						statsStartRange.getStartTime(),
+						statsEndRange.getEndTime());
 
-			final TemporalConstraints sconstraints = constraintsSet.getConstraintsFor(sname);
-			final TemporalConstraints econstraints = constraintsSet.getConstraintsFor(ename);
+				final TemporalConstraints constraints = constraintsSet.getConstraintsForRange(
+						sname,
+						ename);
+				constraints.replaceWithIntersections(new TemporalConstraints(
+						fullRange,
+						constraints.getName()));
 
-			fullRange.setStartTime(!sconstraints.isEmpty() ? max(
-					sconstraints.getMinOr(fullRange.getStartTime()),
-					fullRange.getStartTime()) : fullRange.getStartTime());
-
-			fullRange.setEndTime(!econstraints.isEmpty() ? min(
-					sconstraints.getMaxOr(fullRange.getEndTime()),
-					fullRange.getEndTime()) : fullRange.getEndTime());
-
-			final TemporalConstraints constraints = constraintsSet.getConstraintsFor(rangeName);
-			constraints.replaceWithIntersections(new TemporalConstraints(
-					fullRange,
-					rangeName));
-
-			constraintsSet.removeAllConstraintsExcept(rangeName);
-			// this should be fixed to handle interwoven range.
-			// specifically look for non-overlapping regions of time
-			return constraintsSet;
+				constraintsSet.removeAllConstraintsExcept(constraints.getName());
+				// this should be fixed to handle interwoven range.
+				// specifically look for non-overlapping regions of time
+				return constraintsSet;
+			}
 		}
 		else if ((timeDescriptors.getTime() != null) && constraintsSet.hasConstraintsFor(timeDescriptors.getTime().getLocalName())) {
 			final String name = timeDescriptors.getTime().getLocalName();
@@ -122,22 +114,15 @@ public class QueryIndexHelper
 		if ((timeDescriptors.getEndRange() != null) && (timeDescriptors.getStartRange() != null)) {
 			final String ename = timeDescriptors.getEndRange().getLocalName();
 			final String sname = timeDescriptors.getStartRange().getLocalName();
-			final String rangeName = sname + "_" + ename;
 
-			if (constraintsSet.hasConstraintsFor(rangeName)) {
-				return constraintsSet.getConstraintsFor(rangeName);
+			if (constraintsSet.hasConstraintsForRange(
+					sname,
+					ename)) {
+				return constraintsSet.getConstraintsForRange(
+						sname,
+						ename);
 			}
 
-			final TemporalConstraints sconstraints = constraintsSet.getConstraintsFor(sname);
-			final TemporalConstraints econstraints = constraintsSet.getConstraintsFor(ename);
-
-			final TemporalRange fullRange = new TemporalRange(
-					sconstraints.getStartRange().getStartTime(),
-					econstraints.getEndRange().getEndTime());
-
-			return new TemporalConstraints(
-					fullRange,
-					rangeName);
 		}
 		else if ((timeDescriptors.getTime() != null) && constraintsSet.hasConstraintsFor(timeDescriptors.getTime().getLocalName())) {
 			return constraintsSet.getConstraintsFor(timeDescriptors.getTime().getLocalName());
@@ -208,9 +193,7 @@ public class QueryIndexHelper
 	public static ConstraintSet getBBOXIndexConstraintsFromIndex(
 			final SimpleFeatureType featureType,
 			final Map<ByteArrayId, DataStatistics<SimpleFeature>> statsMap ) {
-
 		final String geoAttrName = featureType.getGeometryDescriptor().getLocalName();
-
 		final ByteArrayId statId = FeatureBoundingBoxStatistics.composeId(geoAttrName);
 		final BoundingBoxDataStatistics<SimpleFeature> bboxStats = (BoundingBoxDataStatistics<SimpleFeature>) statsMap.get(statId);
 		return (bboxStats != null) ? bboxStats.getConstraints() : new ConstraintSet();
@@ -352,17 +335,5 @@ public class QueryIndexHelper
 				statsMap,
 				jtsBounds);
 		return timeConstraints.merge(geoConstraints);
-	}
-
-	private static Date min(
-			final Date d1,
-			final Date d2 ) {
-		return (d1.before(d2)) ? d1 : d2;
-	}
-
-	private static Date max(
-			final Date d1,
-			final Date d2 ) {
-		return (d1.before(d2)) ? d2 : d1;
 	}
 }

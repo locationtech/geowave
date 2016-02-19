@@ -249,13 +249,12 @@ public class GeoWaveFeatureCollection extends
 			timeBounds = getBoundedTime(query);
 			Integer limit = getLimit(query);
 			final Integer startIndex = getStartIndex(query);
-			
-			// limit becomes a 'soft' constraint since GeoServer will inforce the limit
-			final Long max =  (limit != null) ? 
-					  limit.longValue() + (startIndex == null ? 0 : startIndex.longValue()) : null;
+
+			// limit becomes a 'soft' constraint since GeoServer will inforce
+			// the limit
+			final Long max = (limit != null) ? limit.longValue() + (startIndex == null ? 0 : startIndex.longValue()) : null;
 			// limit only used if less than an integer max value.
-			limit  = (max != null && max.longValue() < Integer.MAX_VALUE) ? max.intValue() : null;
-			
+			limit = (max != null && max.longValue() < Integer.MAX_VALUE) ? max.intValue() : null;
 
 			if (query.getFilter() == Filter.EXCLUDE) {
 				featureCursor = reader.getNoData();
@@ -451,7 +450,8 @@ public class GeoWaveFeatureCollection extends
 		if (query == null) {
 			return null;
 		}
-		final TemporalConstraintsSet constraints = new ExtractTimeFilterVisitor().getConstraints(query);
+		final TemporalConstraintsSet constraints = new ExtractTimeFilterVisitor(
+				reader.getComponents().getAdapter().getTimeDescriptors()).getConstraints(query);
 
 		return constraints.isEmpty() ? constraints : reader.clipIndexedTemporalConstraints(constraints);
 	}

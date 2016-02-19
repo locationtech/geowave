@@ -156,7 +156,7 @@ public class TemporalConstraints
 			return sideL;
 		}
 
-		final TemporalConstraints newSet = new TemporalConstraints();
+		final TemporalConstraints newSet = new TemporalConstraints(sideL.name);
 
 		for (final TemporalRange lRange : sideL.constraints) {
 			for (final TemporalRange rRange : sideR.constraints) {
@@ -187,7 +187,7 @@ public class TemporalConstraints
 			return left;
 		}
 
-		final TemporalConstraints newSetOfRanges = new TemporalConstraints();
+		final TemporalConstraints newSetOfRanges = new TemporalConstraints(left.name);
 		newSetOfRanges.constraints.addAll(left.constraints);
 		for (final TemporalRange range : right.constraints) {
 			newSetOfRanges.add(range);

@@ -266,25 +266,22 @@ public class QueryIndexHelperTest
 		final Date etime = DateUtilities.parseISO("2005-05-19T20:32:56Z");
 
 		final TemporalConstraintsSet constraintsSet = new TemporalConstraintsSet();
-		constraintsSet.getConstraintsFor(
-				"start").add(
+		constraintsSet.getConstraintsForRange(
+				"start",
+				"end").add(
 				new TemporalRange(
 						new Date(
 								0),
 						etime));
-		constraintsSet.getConstraintsFor(
-				"end").add(
-				new TemporalRange(
-						etime,
-						new Date(
-								Long.MAX_VALUE)));
 
 		final TemporalConstraintsSet resultConstraintsSet = QueryIndexHelper.clipIndexedTemporalConstraints(
 				statsMap,
 				rangeTimeDescriptors,
 				constraintsSet);
 
-		final TemporalConstraints constraints = resultConstraintsSet.getConstraintsFor("start_end");
+		final TemporalConstraints constraints = resultConstraintsSet.getConstraintsForRange(
+				"start",
+				"end");
 
 		assertEquals(
 				1,
@@ -349,8 +346,9 @@ public class QueryIndexHelperTest
 		final Date etime = DateUtilities.parseISO("2005-05-19T20:32:56Z");
 
 		final TemporalConstraintsSet constraintsSet = new TemporalConstraintsSet();
-		constraintsSet.getConstraintsFor(
-				"start_end").add(
+		constraintsSet.getConstraintsForRange(
+				"start",
+				"end").add(
 				new TemporalRange(
 						stime,
 						etime));
@@ -680,8 +678,9 @@ public class QueryIndexHelperTest
 		final Date etime = DateUtilities.parseISO("2005-05-19T20:32:56Z");
 
 		final TemporalConstraintsSet constraintsSet = new TemporalConstraintsSet();
-		constraintsSet.getConstraintsFor(
-				"start_end").add(
+		constraintsSet.getConstraintsForRange(
+				"start",
+				"end").add(
 				new TemporalRange(
 						stime,
 						etime));
@@ -731,8 +730,9 @@ public class QueryIndexHelperTest
 		 */
 
 		final TemporalConstraintsSet constraintsSet2 = new TemporalConstraintsSet();
-		constraintsSet2.getConstraintsFor(
-				"start_end").add(
+		constraintsSet2.getConstraintsForRange(
+				"start",
+				"end").add(
 				new TemporalRange(
 						statsStart1,
 						statsEnd2));
