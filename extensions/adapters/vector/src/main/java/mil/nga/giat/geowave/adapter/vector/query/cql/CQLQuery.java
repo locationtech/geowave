@@ -68,7 +68,7 @@ public class CQLQuery implements
 		final Geometry geometry = ExtractGeometryFilterVisitor.getConstraints(
 				cqlFilter,
 				adapter.getType().getCoordinateReferenceSystem());
-		final TemporalConstraintsSet timeConstraintSet = new ExtractTimeFilterVisitor().getConstraints(cqlFilter);
+		final TemporalConstraintsSet timeConstraintSet = new ExtractTimeFilterVisitor(adapter.getTimeDescriptors()).getConstraints(cqlFilter);
 
 		// determine which time constraints are associated with an indexable
 		// field
