@@ -16,9 +16,10 @@ USER=accumulo
 # EMR at any point after creation so the password set during the initial spin-up would have
 # to be persisted somewhere and provided to the newly created nodes at some later date.
 USERPW=secret # TODO: Can't change until trace.password in accumulo-site.xml is updated
-ACCUMULO_VERSION=1.6.4
+ACCUMULO_VERSION=1.7.0
 ACCUMULO_TSERVER_OPTS=3GB
 INSTALL_DIR=/opt
+ACCUMULO_DOWNLOAD_BASE_URL=https://archive.apache.org/dist/accumulo
 
 # GeoWave
 GEOWAVE_REPO_RPM=geowave-repo-dev-1.0-3.noarch.rpm # TODO: Should have a prod->latest rpm
