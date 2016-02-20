@@ -59,9 +59,8 @@ with_backoff() {
 # Using zookeeper packaged by Apache BigTop for ease of installation
 configure_zookeeper() {
 	if is_master ; then
-		sudo sh -c "curl http://www.apache.org/dist/bigtop/bigtop-1.0.0/repos/centos6/bigtop.repo > /etc/yum.repos.d/bigtop.repo"
-		sudo yum -y install zookeeper-server
-		sudo service zookeeper-server start # EMR uses Amazon Linux which uses Upstart
+		sudo yum -y install zookeeper-server # EMR 4.3.0 includes Apache Bigtop.repo config
+		sudo initctl start zookeeper-server  # EMR uses Amazon Linux which uses Upstart
 		# Zookeeper installed on this node, record internal ip from instance metadata
 		ZK_IPADDR=$(curl http://169.254.169.254/latest/meta-data/local-ipv4)
 	else
@@ -115,7 +114,7 @@ install_accumulo() {
 	wait_until_hdfs_is_available
 	ARCHIVE_FILE="accumulo-${ACCUMULO_VERSION}-bin.tar.gz"
 	LOCAL_ARCHIVE="${INSTALL_DIR}/${ARCHIVE_FILE}"
-	sudo sh -c "curl 'http://apache.mirrors.tds.net/accumulo/${ACCUMULO_VERSION}/${ARCHIVE_FILE}' > $LOCAL_ARCHIVE"
+	sudo sh -c "curl '${ACCUMULO_DOWNLOAD_BASE_URL}/${ACCUMULO_VERSION}/${ARCHIVE_FILE}' > $LOCAL_ARCHIVE"
 	sudo sh -c "tar xzf $LOCAL_ARCHIVE -C $INSTALL_DIR"
 	sudo rm -f $LOCAL_ARCHIVE
 	sudo ln -s "${INSTALL_DIR}/accumulo-${ACCUMULO_VERSION}" "${INSTALL_DIR}/accumulo"
