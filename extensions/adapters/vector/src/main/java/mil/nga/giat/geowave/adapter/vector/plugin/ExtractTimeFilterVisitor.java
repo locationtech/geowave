@@ -70,11 +70,11 @@ import org.opengis.temporal.Position;
 /**
  * This class can be used to get Time range from an OpenGIS filter object.
  * GeoWave then uses this time range to perform a spatial intersection query.
- *
+ * 
  * Only those time elements associated with an index are extracted. At the
  * moment, the adapter only supports temporal indexing on a single attribute or
  * a pair of attributes representing a time range.
- *
+ * 
  */
 public class ExtractTimeFilterVisitor extends
 		NullFilterVisitor
@@ -120,7 +120,7 @@ public class ExtractTimeFilterVisitor extends
 
 	/**
 	 * Produce an ReferencedEnvelope from the provided data parameter.
-	 *
+	 * 
 	 * @param data
 	 * @return ReferencedEnvelope
 	 */
@@ -222,12 +222,12 @@ public class ExtractTimeFilterVisitor extends
 
 	/**
 	 * Please note we are only visiting literals involved in spatial operations.
-	 *
+	 * 
 	 * @param literal
 	 *            , hopefully a Geometry or Envelope
 	 * @param data
 	 *            Incoming BoundingBox (or Envelope or CRS)
-	 *
+	 * 
 	 * @return ReferencedEnvelope updated to reflect literal
 	 */
 	@Override
