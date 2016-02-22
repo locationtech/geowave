@@ -1,5 +1,6 @@
 package mil.nga.giat.geowave.core.index;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -92,7 +93,14 @@ public class ByteArrayRange implements
 		return ((getStart().compareTo(other.getEnd())) <= 0 && (getEnd().compareTo(other.getStart())) >= 0);
 	}
 
-	public ByteArrayRange merge(
+	public ByteArrayRange intersection(
+			ByteArrayRange other ) {
+		return new ByteArrayRange(
+				this.start.compareTo(other.start) <= 0 ? other.start : this.start,
+				this.end.compareTo(other.end) >= 0 ? other.end : this.end);
+	}
+
+	public ByteArrayRange union(
 			ByteArrayRange other ) {
 		return new ByteArrayRange(
 				this.start.compareTo(other.start) <= 0 ? this.start : other.start,
@@ -108,26 +116,38 @@ public class ByteArrayRange implements
 				other.getEnd());
 	}
 
-	public static final void mergeIntersections(
+	public static enum MergeOperation {
+		UNION,
+		INTERSECTION
+	}
+
+	public static final List<ByteArrayRange> mergeIntersections(
 			List<ByteArrayRange> ranges,
-			int maxRanges ) {
+			MergeOperation op ) {
 		// sort order so the first range can consume following ranges
 		Collections.<ByteArrayRange> sort(ranges);
-		// merge in place
-		for (int i = 0; i < ranges.size(); i++) {
+		final List<ByteArrayRange> result = new ArrayList<ByteArrayRange>();
+		for (int i = 0; i < ranges.size();) {
 			ByteArrayRange r1 = ranges.get(i);
-			for (int j = i + 1; j < ranges.size(); j++) {
+			int j = i + 1;
+			for (; j < ranges.size(); j++) {
 				final ByteArrayRange r2 = ranges.get(j);
 				if (r1.intersects(r2)) {
-					r1 = r1.merge(r2);
-					ranges.remove(j);
-					j--;
-					ranges.set(
-							i,
-							r1);
+					if (op.equals(MergeOperation.UNION)) {
+						r1 = r1.union(r2);
+					}
+					else {
+						r1 = r1.intersection(r2);
+					}
+				}
+				else {
+					break;
 				}
 			}
+			i = j;
+			result.add(r1);
 		}
+		return result;
 	}
 
 }
