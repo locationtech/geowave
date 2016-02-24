@@ -41,6 +41,9 @@ public class PersistenceUtils
 
 	public static byte[] toBinary(
 			final Persistable persistable ) {
+		if (persistable == null) {
+			return new byte[0];
+		}
 		// preface the payload with the class name and a length of the class
 		// name
 		final byte[] className = StringUtils.stringToBinary(persistable.getClass().getName());
