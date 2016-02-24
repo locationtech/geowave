@@ -12,6 +12,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import mil.nga.giat.geowave.analytic.param.ParameterEnum;
+import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
+import mil.nga.giat.geowave.core.index.ByteArrayUtils;
+import mil.nga.giat.geowave.core.index.Persistable;
+import mil.nga.giat.geowave.core.index.PersistenceUtils;
+import mil.nga.giat.geowave.core.index.sfc.data.NumericRange;
+import mil.nga.giat.geowave.core.store.query.DistributableQuery;
+import mil.nga.giat.geowave.core.store.query.QueryOptions;
+
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.ParseException;
 import org.apache.hadoop.conf.Configuration;
@@ -22,15 +31,6 @@ import org.slf4j.LoggerFactory;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.PrecisionModel;
 import com.vividsolutions.jts.io.WKTReader;
-
-import mil.nga.giat.geowave.analytic.param.ParameterEnum;
-import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
-import mil.nga.giat.geowave.core.index.ByteArrayUtils;
-import mil.nga.giat.geowave.core.index.Persistable;
-import mil.nga.giat.geowave.core.index.PersistenceUtils;
-import mil.nga.giat.geowave.core.index.sfc.data.NumericRange;
-import mil.nga.giat.geowave.core.store.query.DistributableQuery;
-import mil.nga.giat.geowave.core.store.query.QueryOptions;
 
 /**
  * Manage properties used by the Map Reduce environment that are provided
@@ -151,23 +151,25 @@ public class PropertyManagement implements
 	public synchronized void store(
 			final ParameterEnum<?> property,
 			final Object value ) {
-		Serializable convertedValue;
-		try {
-			convertedValue = convertIfNecessary(
+		if (value != null) {
+			Serializable convertedValue;
+			try {
+				convertedValue = convertIfNecessary(
+						property,
+						value);
+			}
+			catch (final Exception e) {
+				throw new IllegalArgumentException(
+						String.format(
+								"Cannot store %s with value %s:%s",
+								property.self().toString(),
+								value.toString(),
+								e.getLocalizedMessage()));
+			}
+			localProperties.put(
 					property,
-					value);
+					convertedValue);
 		}
-		catch (final Exception e) {
-			throw new IllegalArgumentException(
-					String.format(
-							"Cannot store %s with value %s:%s",
-							property.self().toString(),
-							value.toString(),
-							e.getLocalizedMessage()));
-		}
-		localProperties.put(
-				property,
-				convertedValue);
 	}
 
 	/**
