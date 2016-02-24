@@ -466,6 +466,7 @@ public class AccumuloDataStore implements
 					dataIds,
 					adapter.getAdapterId(),
 					callback,
+					dedupeFilter,
 					authorizations,
 					limit ? 1 : -1);
 		}
@@ -479,6 +480,7 @@ public class AccumuloDataStore implements
 			final List<ByteArrayId> dataIds,
 			final ByteArrayId adapterId,
 			final ScanCallback<Object> scanCallback,
+			final DedupeFilter dedupeFilter,
 			final String[] authorizations,
 			final int limit ) {
 
@@ -522,7 +524,7 @@ public class AccumuloDataStore implements
 							adapterStore,
 							index,
 							scanner.iterator(),
-							null,
+							dedupeFilter,
 							scanCallback));
 
 		}
