@@ -146,7 +146,7 @@ public class SpatialTemporalDimensionalityTypeProvider implements
 		protected boolean pointOnly = false;
 	}
 
-	protected static enum Bias {
+	public static enum Bias {
 		TEMPORAL,
 		BALANCED,
 		SPATIAL;

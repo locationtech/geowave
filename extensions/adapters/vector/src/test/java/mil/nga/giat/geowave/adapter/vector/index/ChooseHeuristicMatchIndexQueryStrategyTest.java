@@ -10,15 +10,17 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import mil.nga.giat.geowave.core.geotime.index.dimension.LatitudeDefinition;
 import mil.nga.giat.geowave.core.geotime.index.dimension.LongitudeDefinition;
+import mil.nga.giat.geowave.core.geotime.index.dimension.TemporalBinningStrategy.Unit;
 import mil.nga.giat.geowave.core.geotime.index.dimension.TimeDefinition;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider.SpatialIndexBuilder;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialTemporalDimensionalityTypeProvider;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialTemporalDimensionalityTypeProvider.SpatialTemporalIndexBuilder;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericData;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericRange;
 import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
@@ -26,6 +28,7 @@ import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 import mil.nga.giat.geowave.core.store.index.Index;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.query.BasicQuery;
 import mil.nga.giat.geowave.core.store.query.BasicQuery.ConstraintData;
 import mil.nga.giat.geowave.core.store.query.BasicQuery.ConstraintSet;
@@ -43,6 +46,17 @@ public class ChooseHeuristicMatchIndexQueryStrategyTest
 	private static final double BLOCK = 0.07;
 	private static final double CITY = 1.25;
 
+	protected final List<PrimaryIndex> indices = Arrays.asList(
+			new SpatialTemporalIndexBuilder().setBias(
+					SpatialTemporalDimensionalityTypeProvider.Bias.BALANCED).setPeriodicity(
+					Unit.YEAR).setPointOnly(
+					false).createIndex(),
+			new SpatialTemporalIndexBuilder().setBias(
+					SpatialTemporalDimensionalityTypeProvider.Bias.BALANCED).setPeriodicity(
+					Unit.DAY).setPointOnly(
+					false).createIndex(),
+			new SpatialIndexBuilder().createIndex());
+
 	@Test
 	public void testChooseTemporalWithoutStatsHouseHour() {
 		final ChooseHeuristicMatchIndexQueryStrategy strategy = new ChooseHeuristicMatchIndexQueryStrategy();
@@ -57,8 +71,9 @@ public class ChooseHeuristicMatchIndexQueryStrategyTest
 				strategy);
 		assertTrue(it.hasNext());
 		assertEquals(
-				StringUtils.stringFromBinary(new SpatialTemporalIndexBuilder().createIndex().getId().getBytes()),
-				it.next().getId().getString());
+				indices.get(
+						0).getId(),
+				it.next().getId());
 		assertFalse(it.hasNext());
 
 	}
@@ -77,8 +92,9 @@ public class ChooseHeuristicMatchIndexQueryStrategyTest
 				strategy);
 		assertTrue(it.hasNext());
 		assertEquals(
-				StringUtils.stringFromBinary(new SpatialIndexBuilder().createIndex().getId().getBytes()),
-				it.next().getId().getString());
+				indices.get(
+						2).getId(),
+				it.next().getId());
 		assertFalse(it.hasNext());
 
 	}
@@ -97,8 +113,9 @@ public class ChooseHeuristicMatchIndexQueryStrategyTest
 				strategy);
 		assertTrue(it.hasNext());
 		assertEquals(
-				StringUtils.stringFromBinary(new SpatialIndexBuilder().createIndex().getId().getBytes()),
-				it.next().getId().getString());
+				indices.get(
+						2).getId(),
+				it.next().getId());
 		assertFalse(it.hasNext());
 
 	}
@@ -117,8 +134,9 @@ public class ChooseHeuristicMatchIndexQueryStrategyTest
 				strategy);
 		assertTrue(it.hasNext());
 		assertEquals(
-				StringUtils.stringFromBinary(new SpatialTemporalIndexBuilder().createIndex().getId().getBytes()),
-				it.next().getId().getString());
+				indices.get(
+						0).getId(),
+				it.next().getId());
 		assertFalse(it.hasNext());
 
 	}
@@ -137,8 +155,9 @@ public class ChooseHeuristicMatchIndexQueryStrategyTest
 				strategy);
 		assertTrue(it.hasNext());
 		assertEquals(
-				StringUtils.stringFromBinary(new SpatialIndexBuilder().createIndex().getId().getBytes()),
-				it.next().getId().getString());
+				indices.get(
+						2).getId(),
+				it.next().getId());
 		assertFalse(it.hasNext());
 
 	}
@@ -157,8 +176,9 @@ public class ChooseHeuristicMatchIndexQueryStrategyTest
 				strategy);
 		assertTrue(it.hasNext());
 		assertEquals(
-				StringUtils.stringFromBinary(new SpatialIndexBuilder().createIndex().getId().getBytes()),
-				it.next().getId().getString());
+				indices.get(
+						2).getId(),
+				it.next().getId());
 		assertFalse(it.hasNext());
 
 	}
@@ -177,8 +197,9 @@ public class ChooseHeuristicMatchIndexQueryStrategyTest
 				strategy);
 		assertTrue(it.hasNext());
 		assertEquals(
-				StringUtils.stringFromBinary(new SpatialTemporalIndexBuilder().createIndex().getId().getBytes()),
-				it.next().getId().getString());
+				indices.get(
+						0).getId(),
+				it.next().getId());
 		assertFalse(it.hasNext());
 
 	}
@@ -197,8 +218,9 @@ public class ChooseHeuristicMatchIndexQueryStrategyTest
 				strategy);
 		assertTrue(it.hasNext());
 		assertEquals(
-				StringUtils.stringFromBinary(new SpatialTemporalIndexBuilder().createIndex().getId().getBytes()),
-				it.next().getId().getString());
+				indices.get(
+						0).getId(),
+				it.next().getId());
 		assertFalse(it.hasNext());
 
 	}
@@ -217,8 +239,9 @@ public class ChooseHeuristicMatchIndexQueryStrategyTest
 				strategy);
 		assertTrue(it.hasNext());
 		assertEquals(
-				StringUtils.stringFromBinary(new SpatialIndexBuilder().createIndex().getId().getBytes()),
-				it.next().getId().getString());
+				indices.get(
+						2).getId(),
+				it.next().getId());
 		assertFalse(it.hasNext());
 
 	}
@@ -238,9 +261,7 @@ public class ChooseHeuristicMatchIndexQueryStrategyTest
 
 							}
 						},
-						Arrays.asList(
-								new SpatialTemporalIndexBuilder().createIndex(),
-								new SpatialIndexBuilder().createIndex()).iterator()));
+						indices.iterator()));
 	}
 
 	public static class ConstrainedIndexValue extends
