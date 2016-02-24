@@ -33,6 +33,7 @@ import mil.nga.giat.geowave.core.store.adapter.statistics.histogram.FixedBinNume
 import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 import mil.nga.giat.geowave.core.store.index.Index;
+import mil.nga.giat.geowave.core.store.index.NullIndex;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.memory.DataStoreUtils;
 import mil.nga.giat.geowave.core.store.query.BasicQuery;
@@ -45,10 +46,13 @@ import org.opengis.feature.simple.SimpleFeature;
 
 public class ChooseBestMatchIndexQueryStrategyTest
 {
+	final PrimaryIndex IMAGE_CHIP_INDEX1 = new NullIndex(
+			"IMAGERY_CHIPS1");
+	final PrimaryIndex IMAGE_CHIP_INDEX2 = new NullIndex(
+			"IMAGERY_CHIPS2");
 
 	@Test
 	public void testChooseSpatialWithStats() {
-
 		final PrimaryIndex temporalindex = new SpatialTemporalIndexBuilder().createIndex();
 		final PrimaryIndex spatialIndex = new SpatialIndexBuilder().createIndex();
 
@@ -269,8 +273,10 @@ public class ChooseBestMatchIndexQueryStrategyTest
 							}
 						},
 						Arrays.asList(
+								IMAGE_CHIP_INDEX1,
 								new SpatialTemporalIndexBuilder().createIndex(),
-								new SpatialIndexBuilder().createIndex()).iterator()));
+								new SpatialIndexBuilder().createIndex(),
+								IMAGE_CHIP_INDEX2).iterator()));
 	}
 
 	public static class ConstrainedIndexValue extends

@@ -146,7 +146,7 @@ public class GeoWaveGTDataStore extends
 	protected List<PrimaryIndex> getWriteIndices(
 			final GeotoolsFeatureDataAdapter adapter ) {
 		if (adapter instanceof FeatureDataAdapter) {
-			return getPreferredIndex((FeatureDataAdapter) adapter);
+			return getPreferredIndices((FeatureDataAdapter) adapter);
 		}
 		return Arrays.asList(new SpatialDimensionalityTypeProvider().createPrimaryIndex());
 	}
@@ -166,7 +166,7 @@ public class GeoWaveGTDataStore extends
 		}
 
 		adapterStore.addAdapter(adapter);
-		getPreferredIndex(adapter);
+		getPreferredIndices(adapter);
 	}
 
 	private GeotoolsFeatureDataAdapter getAdapter(
@@ -316,7 +316,7 @@ public class GeoWaveGTDataStore extends
 		}
 	}
 
-	private List<PrimaryIndex> getPreferredIndex(
+	private List<PrimaryIndex> getPreferredIndices(
 			final FeatureDataAdapter adapter ) {
 
 		List<PrimaryIndex> currentSelections = preferredIndexes.get(adapter.getType().getName().toString());
@@ -327,16 +327,23 @@ public class GeoWaveGTDataStore extends
 		currentSelections = new ArrayList<PrimaryIndex>(
 				2);
 		final List<String> indexNames = SimpleFeaturePrimaryIndexConfiguration.getIndexNames(adapter.getType());
-		PrimaryIndex bestSelection = null;
-		final boolean needTime = adapter.hasTemporalConstraints();
+		final boolean canUseTime = adapter.hasTemporalConstraints();
 
+		/**
+		 * Requires the indices to EXIST prior to set up of the adapter.
+		 * Otherwise, only Geospatial is chosen and the index Names are ignored.
+		 */
 		try (CloseableIterator<Index<?, ?>> indices = indexStore.getIndices()) {
-			boolean currentSelectionHasTime = false;
 			while (indices.hasNext()) {
-				final PrimaryIndex index = (PrimaryIndex) indices.next();
-
-				if (!indexNames.isEmpty() && indexNames.contains(index.getId().getString())) {
-					currentSelections.add(index);
+				Index<?, ?> nextIndex = indices.next();
+				if (!(nextIndex instanceof PrimaryIndex)) continue;
+				final PrimaryIndex index = (PrimaryIndex) nextIndex;
+			
+				if (!indexNames.isEmpty()) {
+					// Only used selected preferred indices
+					if (indexNames.contains(index.getId().getString())) {
+						currentSelections.add(index);
+					}
 				}
 				@SuppressWarnings("rawtypes")
 				final NumericDimensionField[] dims = index.getIndexModel().getDimensions();
@@ -349,21 +356,13 @@ public class GeoWaveGTDataStore extends
 					hasTime |= dim instanceof TimeField;
 				}
 
-				// pick the first matching one or
-				// pick the one does not match the required time constraints
 				if (hasLat && hasLong) {
-					if ((bestSelection == null) || (currentSelectionHasTime != needTime)) {
-						bestSelection = index;
-						currentSelectionHasTime = hasTime;
+					// If not requiring time OR (requires time AND has time
+					// constraints)
+					if (!hasTime || canUseTime) {
+						currentSelections.add(index);
 					}
 				}
-			}
-			// at this point, preferredID is not found
-			// only select the index if one has not been found or
-			// the current selection. Not using temporal at this point.
-			// temporal index should only be used if explicitly requested.
-			if (bestSelection == null) {
-				bestSelection = new SpatialDimensionalityTypeProvider().createPrimaryIndex();
 			}
 		}
 		catch (final IOException ex) {
@@ -372,7 +371,7 @@ public class GeoWaveGTDataStore extends
 					ex);
 		}
 
-		if (currentSelections.isEmpty() && bestSelection != null) currentSelections.add(bestSelection);
+		if (currentSelections.isEmpty()) currentSelections.add(new SpatialDimensionalityTypeProvider().createPrimaryIndex());
 
 		preferredIndexes.put(
 				adapter.getType().getName().toString(),

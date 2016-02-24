@@ -570,10 +570,7 @@ public class FeatureDataAdapter extends
 	}
 
 	public boolean hasTemporalConstraints() {
-		return typeMatchingFieldHandlers.keySet().contains(
-				Time.class) || typeMatchingFieldHandlers.keySet().contains(
-				FeatureTimestampHandler.class) || typeMatchingFieldHandlers.keySet().contains(
-				FeatureTimeRangeHandler.class);
+		return getTimeDescriptors().hasTime();
 	}
 
 	public synchronized void resetTimeDescriptors() {
