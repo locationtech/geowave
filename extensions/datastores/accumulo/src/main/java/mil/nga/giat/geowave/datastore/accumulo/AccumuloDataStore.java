@@ -522,7 +522,7 @@ public class AccumuloDataStore implements
 							adapterStore,
 							index,
 							scanner.iterator(),
-							null,
+							new DedupeFilter(),
 							scanCallback));
 
 		}
