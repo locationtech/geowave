@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import mil.nga.giat.geowave.adapter.vector.utils.TimeDescriptors;
 import mil.nga.giat.geowave.core.geotime.store.query.TemporalConstraints;
 import mil.nga.giat.geowave.core.geotime.store.query.TemporalConstraintsSet;
 import mil.nga.giat.geowave.core.geotime.store.query.TemporalRange;
@@ -79,10 +80,18 @@ import org.opengis.temporal.Position;
 public class ExtractTimeFilterVisitor extends
 		NullFilterVisitor
 {
-	static public NullFilterVisitor TIME_VISITOR = new ExtractTimeFilterVisitor();
 	private final List<String[]> validParamRanges = new LinkedList<String[]>();
 
 	public ExtractTimeFilterVisitor() {}
+
+	public ExtractTimeFilterVisitor(
+			final TimeDescriptors timeDescriptors ) {
+		if (timeDescriptors.hasTime() && timeDescriptors.getStartRange() != null && timeDescriptors.getEndRange() != null) {
+			addRangeVariables(
+					timeDescriptors.getStartRange().getLocalName(),
+					timeDescriptors.getEndRange().getLocalName());
+		}
+	}
 
 	public void addRangeVariables(
 			final String start,
@@ -94,11 +103,41 @@ public class ExtractTimeFilterVisitor extends
 	}
 
 	public TemporalConstraintsSet getConstraints(
-			final Query query ) {
-		return getConstraints(query.getFilter());
+			final Filter filter ) {
+		final TemporalConstraintsSet constrainsSet = getRawConstraints(filter);
+		for (final String[] range : validParamRanges) {
+			if (constrainsSet.hasConstraintsFor(range[0]) || constrainsSet.hasConstraintsFor(range[1])) {
+				final TemporalConstraints start = (constrainsSet.hasConstraintsFor(range[0])) ? constrainsSet.getConstraintsFor(range[0]) : constrainsSet.getConstraintsFor(range[1]);
+				// Note: getConstraints has a side effect that is returns a
+				// constraint--full range, if necessary
+				// so if start and end are both not specific, the prior line
+				// would create the end
+				// thus sconstraints and econstraints will be identical
+				final TemporalConstraints end = (constrainsSet.hasConstraintsFor(range[1])) ? constrainsSet.getConstraintsFor(range[1]) : start;
+
+				constrainsSet.removeConstraints(
+						range[0],
+						range[1]);
+				final TemporalConstraints constraintsForRange = constrainsSet.getConstraintsForRange(
+						range[0],
+						range[1]);
+				constraintsForRange.replaceWithIntersections(new TemporalConstraints(
+						new TemporalRange(
+								start.getStartRange().getStartTime(),
+								end.getEndRange().getEndTime()),
+						constraintsForRange.getName()));
+			}
+		}
+		return constrainsSet;
 	}
 
 	public TemporalConstraintsSet getConstraints(
+			final Query query ) {
+		return getConstraints(query.getFilter());
+
+	}
+
+	private TemporalConstraintsSet getRawConstraints(
 			final Filter filter ) {
 		final Object output = filter.accept(
 				this,
@@ -260,8 +299,24 @@ public class ExtractTimeFilterVisitor extends
 							entry.getKey()).replaceWithIntersections(
 							entry.getValue());
 				}
-			}
 
+			}
+		}
+		for (final String[] range : validParamRanges) {
+			if (constraints.hasConstraintsFor(range[0]) && constraints.hasConstraintsFor(range[1])) {
+				TemporalConstraints start = constraints.getConstraintsFor(range[0]);
+				TemporalConstraints end = constraints.getConstraintsFor(range[1]);
+				constraints.removeConstraints(
+						range[0],
+						range[1]);
+				constraints.getConstraintsForRange(
+						range[0],
+						range[1]).add(
+						new TemporalRange(
+								start.getStartRange().getStartTime(),
+								end.getEndRange().getEndTime()));
+
+			}
 		}
 		return constraints;
 	}
@@ -339,6 +394,7 @@ public class ExtractTimeFilterVisitor extends
 			}
 
 		}
+
 		return constraints;
 	}
 
@@ -1167,12 +1223,12 @@ public class ExtractTimeFilterVisitor extends
 			final Object data ) {
 		final String name = expression.getPropertyName();
 		if (validateName(expression.getPropertyName())) {
-			for (final String[] range : validParamRanges) {
-				if (range[0].equals(name) || range[1].equals(name)) {
-					return new ParameterTimeConstraint(
-							range[0] + "_" + range[1]);
-				}
-			}
+			// for (final String[] range : validParamRanges) {
+			// if (range[0].equals(name) || range[1].equals(name)) {
+			// return new ParameterTimeConstraint(
+			// range[0] + "_" + range[1]);
+			// }
+			// }
 			return new ParameterTimeConstraint(
 					name);
 		}

@@ -450,7 +450,8 @@ public class GeoWaveFeatureCollection extends
 		if (query == null) {
 			return null;
 		}
-		final TemporalConstraintsSet constraints = new ExtractTimeFilterVisitor().getConstraints(query);
+		final TemporalConstraintsSet constraints = new ExtractTimeFilterVisitor(
+				reader.getComponents().getAdapter().getTimeDescriptors()).getConstraints(query);
 
 		return constraints.isEmpty() ? constraints : reader.clipIndexedTemporalConstraints(constraints);
 	}
