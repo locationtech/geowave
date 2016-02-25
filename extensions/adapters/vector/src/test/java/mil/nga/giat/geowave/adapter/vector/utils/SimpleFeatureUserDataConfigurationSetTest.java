@@ -17,7 +17,7 @@ public class SimpleFeatureUserDataConfigurationSetTest
 		SimpleFeatureType type = FeatureDataUtils.decodeType(
 				"http://somens.org",
 				"type1",
-				"geometry:Geometry:srid=4326,pop:java.lang.Long,when:Date,whennot:Date,pid:String",
+				"geometry:Geometry:srid=4326,pop:java.lang.Long,when:Date,whennot:Date,pid:String,vis:String",
 				"east");
 		SimpleFeatureUserDataConfigurationSet.configureType(type);
 		assertFalse(type.getDescriptor(
@@ -34,11 +34,17 @@ public class SimpleFeatureUserDataConfigurationSetTest
 		SimpleFeatureType type = FeatureDataUtils.decodeType(
 				"http://somens.org",
 				"type1",
-				"geometry:Geometry:srid=4326,pop:java.lang.Long,when:Date,whennot:Date,pid:String",
+				"geometry:Geometry:srid=4326,pop:java.lang.Long,when:Date,whennot:Date,pid:String,vis:String",
 				"east");
 		SimpleFeatureUserDataConfigurationSet.configureType(type);
 		assertTrue(type.getDescriptor(
 				"pop").getUserData().containsKey(
 				"stats"));
+		assertTrue(type.getDescriptor(
+				"vis").getUserData().containsKey(
+				"visibility"));
+		assertTrue(type.getUserData().containsKey(
+				"visibilityManagerClass"));
+		assertTrue(type.getUserData().get("PrimaryIndexName").equals("SPATIAL_IDX"));
 	}
 }
