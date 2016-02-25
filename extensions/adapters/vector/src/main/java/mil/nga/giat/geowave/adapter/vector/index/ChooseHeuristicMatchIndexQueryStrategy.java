@@ -43,6 +43,7 @@ public class ChooseHeuristicMatchIndexQueryStrategy implements
 					final Index<?, ?> nextChoosenIdx = indices.next();
 					if (nextChoosenIdx instanceof PrimaryIndex) {
 						nextIdx = (PrimaryIndex) nextChoosenIdx;
+						if (nextIdx.getIndexStrategy().getOrderedDimensionDefinitions().length == 0) continue;
 						final List<MultiDimensionalNumericData> queryRanges = query.getIndexConstraints(nextIdx.getIndexStrategy());
 						if (ChooseBestMatchIndexQueryStrategy.isFullTableScan(queryRanges)) {
 							// keep this is as a default in case all indices

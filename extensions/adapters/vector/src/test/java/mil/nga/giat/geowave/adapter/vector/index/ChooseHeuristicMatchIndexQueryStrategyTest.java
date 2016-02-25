@@ -28,6 +28,7 @@ import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 import mil.nga.giat.geowave.core.store.index.Index;
+import mil.nga.giat.geowave.core.store.index.NullIndex;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.query.BasicQuery;
 import mil.nga.giat.geowave.core.store.query.BasicQuery.ConstraintData;
@@ -45,8 +46,13 @@ public class ChooseHeuristicMatchIndexQueryStrategyTest
 	private static final double HOUSE = 0.005;
 	private static final double BLOCK = 0.07;
 	private static final double CITY = 1.25;
+	final PrimaryIndex IMAGE_CHIP_INDEX1 = new NullIndex(
+			"IMAGERY_CHIPS1");
+	final PrimaryIndex IMAGE_CHIP_INDEX2 = new NullIndex(
+			"IMAGERY_CHIPS2");
 
 	protected final List<PrimaryIndex> indices = Arrays.asList(
+			IMAGE_CHIP_INDEX1,
 			new SpatialTemporalIndexBuilder().setBias(
 					SpatialTemporalDimensionalityTypeProvider.Bias.BALANCED).setPeriodicity(
 					Unit.YEAR).setPointOnly(
@@ -55,7 +61,8 @@ public class ChooseHeuristicMatchIndexQueryStrategyTest
 					SpatialTemporalDimensionalityTypeProvider.Bias.BALANCED).setPeriodicity(
 					Unit.DAY).setPointOnly(
 					false).createIndex(),
-			new SpatialIndexBuilder().createIndex());
+			new SpatialIndexBuilder().createIndex(),
+			IMAGE_CHIP_INDEX2);
 
 	@Test
 	public void testChooseTemporalWithoutStatsHouseHour() {
@@ -72,7 +79,7 @@ public class ChooseHeuristicMatchIndexQueryStrategyTest
 		assertTrue(it.hasNext());
 		assertEquals(
 				indices.get(
-						0).getId(),
+						1).getId(),
 				it.next().getId());
 		assertFalse(it.hasNext());
 
@@ -93,7 +100,7 @@ public class ChooseHeuristicMatchIndexQueryStrategyTest
 		assertTrue(it.hasNext());
 		assertEquals(
 				indices.get(
-						2).getId(),
+						3).getId(),
 				it.next().getId());
 		assertFalse(it.hasNext());
 
@@ -114,7 +121,7 @@ public class ChooseHeuristicMatchIndexQueryStrategyTest
 		assertTrue(it.hasNext());
 		assertEquals(
 				indices.get(
-						2).getId(),
+						3).getId(),
 				it.next().getId());
 		assertFalse(it.hasNext());
 
@@ -135,7 +142,7 @@ public class ChooseHeuristicMatchIndexQueryStrategyTest
 		assertTrue(it.hasNext());
 		assertEquals(
 				indices.get(
-						0).getId(),
+						1).getId(),
 				it.next().getId());
 		assertFalse(it.hasNext());
 
@@ -156,7 +163,7 @@ public class ChooseHeuristicMatchIndexQueryStrategyTest
 		assertTrue(it.hasNext());
 		assertEquals(
 				indices.get(
-						2).getId(),
+						3).getId(),
 				it.next().getId());
 		assertFalse(it.hasNext());
 
@@ -177,7 +184,7 @@ public class ChooseHeuristicMatchIndexQueryStrategyTest
 		assertTrue(it.hasNext());
 		assertEquals(
 				indices.get(
-						2).getId(),
+						3).getId(),
 				it.next().getId());
 		assertFalse(it.hasNext());
 
@@ -198,7 +205,7 @@ public class ChooseHeuristicMatchIndexQueryStrategyTest
 		assertTrue(it.hasNext());
 		assertEquals(
 				indices.get(
-						0).getId(),
+						1).getId(),
 				it.next().getId());
 		assertFalse(it.hasNext());
 
@@ -219,7 +226,7 @@ public class ChooseHeuristicMatchIndexQueryStrategyTest
 		assertTrue(it.hasNext());
 		assertEquals(
 				indices.get(
-						0).getId(),
+						1).getId(),
 				it.next().getId());
 		assertFalse(it.hasNext());
 
@@ -240,7 +247,7 @@ public class ChooseHeuristicMatchIndexQueryStrategyTest
 		assertTrue(it.hasNext());
 		assertEquals(
 				indices.get(
-						2).getId(),
+						3).getId(),
 				it.next().getId());
 		assertFalse(it.hasNext());
 
