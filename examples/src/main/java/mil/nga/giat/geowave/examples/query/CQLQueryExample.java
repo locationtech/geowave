@@ -8,6 +8,22 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.accumulo.core.client.AccumuloException;
+import org.apache.accumulo.core.client.AccumuloSecurityException;
+import org.apache.accumulo.minicluster.impl.MiniAccumuloClusterImpl;
+import org.apache.accumulo.minicluster.impl.MiniAccumuloConfigImpl;
+import org.apache.commons.io.FileUtils;
+import org.geotools.feature.AttributeTypeBuilder;
+import org.geotools.feature.simple.SimpleFeatureBuilder;
+import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
+import org.geotools.filter.text.cql2.CQLException;
+import org.opengis.feature.simple.SimpleFeature;
+import org.opengis.feature.simple.SimpleFeatureType;
+
+import com.google.common.io.Files;
+import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.Geometry;
+
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import mil.nga.giat.geowave.adapter.vector.index.TextSecondaryIndexConfiguration;
 import mil.nga.giat.geowave.adapter.vector.query.cql.CQLQuery;
@@ -21,22 +37,7 @@ import mil.nga.giat.geowave.core.store.memory.DataStoreUtils;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStore;
 import mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations;
-
-import org.apache.accumulo.core.client.AccumuloException;
-import org.apache.accumulo.core.client.AccumuloSecurityException;
-import org.apache.accumulo.minicluster.MiniAccumuloCluster;
-import org.apache.accumulo.minicluster.MiniAccumuloConfig;
-import org.apache.commons.io.FileUtils;
-import org.geotools.feature.AttributeTypeBuilder;
-import org.geotools.feature.simple.SimpleFeatureBuilder;
-import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
-import org.geotools.filter.text.cql2.CQLException;
-import org.opengis.feature.simple.SimpleFeature;
-import org.opengis.feature.simple.SimpleFeatureType;
-
-import com.google.common.io.Files;
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.Geometry;
+import mil.nga.giat.geowave.datastore.accumulo.minicluster.MiniAccumuloClusterFactory;
 
 /**
  * This class is intended to provide a self-contained, easy-to-follow example of
@@ -48,7 +49,7 @@ import com.vividsolutions.jts.geom.Geometry;
 public class CQLQueryExample
 {
 	private static File tempAccumuloDir;
-	private static MiniAccumuloCluster accumulo;
+	private static MiniAccumuloClusterImpl accumulo;
 	private static DataStore dataStore;
 
 	private static final PrimaryIndex index = new SpatialDimensionalityTypeProvider().createPrimaryIndex();
@@ -148,10 +149,11 @@ public class CQLQueryExample
 
 		tempAccumuloDir = Files.createTempDir();
 
-		accumulo = new MiniAccumuloCluster(
-				new MiniAccumuloConfig(
+		accumulo = MiniAccumuloClusterFactory.newAccumuloCluster(
+				new MiniAccumuloConfigImpl(
 						tempAccumuloDir,
-						ACCUMULO_PASSWORD));
+						ACCUMULO_PASSWORD),
+				CQLQueryExample.class);
 
 		accumulo.start();
 
