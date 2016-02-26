@@ -1,7 +1,6 @@
 {
   "configurations": 
-   {
-     "type1": [
+   [
        { "@class":"mil.nga.giat.geowave.adapter.vector.stats.StatsConfigurationCollection$SimpleFeatureStatsConfigurationCollection",
          "attConfig" : {
            "pop" : { 
@@ -13,15 +12,11 @@
        },
        { "@class": "mil.nga.giat.geowave.adapter.vector.index.NumericSecondaryIndexConfiguration",
          "attributes" : ["pop"]
-       },
-       { "@class": "mil.nga.giat.geowave.adapter.vector.plugin.visibility.VisibilityConfiguration",
-         "attributeName" : "vis"
-       },
+	   },
        { "@class": "mil.nga.giat.geowave.adapter.vector.index.SimpleFeaturePrimaryIndexConfiguration",
          "indexNames": ["SPATIAL_IDX"]
        }
-     ]
-   }
+   ]
 }
 
 

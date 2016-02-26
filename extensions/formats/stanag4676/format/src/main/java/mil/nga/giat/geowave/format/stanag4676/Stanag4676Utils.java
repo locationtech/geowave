@@ -2,6 +2,8 @@ package mil.nga.giat.geowave.format.stanag4676;
 
 import java.util.Date;
 
+import mil.nga.giat.geowave.adapter.vector.utils.TimeDescriptors.TimeDescriptorConfiguration;
+
 import org.geotools.feature.AttributeTypeBuilder;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.opengis.feature.simple.SimpleFeatureType;
@@ -74,7 +76,11 @@ public class Stanag4676Utils
 				Integer.class).buildDescriptor(
 				"PixelColumn"));
 
-		return simpleFeatureTypeBuilder.buildFeatureType();
+		TimeDescriptorConfiguration timeConfig = new TimeDescriptorConfiguration();
+		timeConfig.setTimeName("TimeStamp");
+		final SimpleFeatureType type = simpleFeatureTypeBuilder.buildFeatureType();
+		timeConfig.updateType(type);
+		return type;
 
 	}
 
@@ -131,7 +137,12 @@ public class Stanag4676Utils
 				Integer.class).buildDescriptor(
 				"PixelColumn"));
 
-		return simpleFeatureTypeBuilder.buildFeatureType();
+		TimeDescriptorConfiguration timeConfig = new TimeDescriptorConfiguration();
+		timeConfig.setStartRangeName("StartTime");
+		timeConfig.setStartRangeName("TimeStamp");
+		final SimpleFeatureType type = simpleFeatureTypeBuilder.buildFeatureType();
+		timeConfig.updateType(type);
+		return type;
 
 	}
 

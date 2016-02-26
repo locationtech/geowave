@@ -350,6 +350,11 @@ public class GeoWaveFeatureCollection extends
 				Filter.EXCLUDE) : query;
 	}
 
+	private Integer getStartIndex(
+			final Query query ) {
+		return query.getStartIndex();
+	}
+
 	private Integer getLimit(
 			final Query query ) {
 		if (!query.isMaxFeaturesUnlimited() && (query.getMaxFeatures() >= 0)) {

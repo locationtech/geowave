@@ -159,6 +159,7 @@ public class Stanag4676IngestPlugin extends
 
 		public IngestWithReducerImpl() {
 			pointType = Stanag4676Utils.createPointDataType();
+			TimeConfiguration = new TimeConfiguration()
 
 			motionPointType = Stanag4676Utils.createMotionDataType();
 

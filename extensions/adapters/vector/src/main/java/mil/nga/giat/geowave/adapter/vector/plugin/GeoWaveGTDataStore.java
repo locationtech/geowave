@@ -338,7 +338,7 @@ public class GeoWaveGTDataStore extends
 				Index<?, ?> nextIndex = indices.next();
 				if (!(nextIndex instanceof PrimaryIndex)) continue;
 				final PrimaryIndex index = (PrimaryIndex) nextIndex;
-			
+
 				if (!indexNames.isEmpty()) {
 					// Only used selected preferred indices
 					if (indexNames.contains(index.getId().getString())) {
