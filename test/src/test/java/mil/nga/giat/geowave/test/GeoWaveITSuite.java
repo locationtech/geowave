@@ -11,6 +11,7 @@ import mil.nga.giat.geowave.test.query.AttributesSubsetQueryIT;
 import mil.nga.giat.geowave.test.query.PolygonDataIdQueryIT;
 import mil.nga.giat.geowave.test.query.SecondaryIndexingDriverIT;
 import mil.nga.giat.geowave.test.query.SecondaryIndexingQueryIT;
+import mil.nga.giat.geowave.test.query.SpatialTemporalQueryIT;
 import mil.nga.giat.geowave.test.service.GeoServerIT;
 import mil.nga.giat.geowave.test.service.GeoWaveIngestGeoserverIT;
 import mil.nga.giat.geowave.test.service.GeoWaveServicesIT;

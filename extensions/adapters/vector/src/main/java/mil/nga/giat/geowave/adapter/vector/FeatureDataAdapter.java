@@ -359,9 +359,9 @@ public class FeatureDataAdapter extends
 		byte[] attrBytes = new byte[0];
 
 		final SimpleFeatureUserDataConfigurationSet userDataConfiguration = new SimpleFeatureUserDataConfigurationSet();
-		userDataConfiguration.addConfigurations(new TimeDescriptorConfiguration(
+		userDataConfiguration.addConfigurations(typeName,new TimeDescriptorConfiguration(
 				persistedType));
-		userDataConfiguration.addConfigurations(new SimpleFeatureStatsConfigurationCollection(
+		userDataConfiguration.addConfigurations(typeName,new SimpleFeatureStatsConfigurationCollection(
 				persistedType));
 		try {
 			attrBytes = StringUtils.stringToBinary(userDataConfiguration.asJsonString());
@@ -462,9 +462,9 @@ public class FeatureDataAdapter extends
 					StringUtils.stringFromBinary(axisBytes));
 
 			final SimpleFeatureUserDataConfigurationSet userDataConfiguration = new SimpleFeatureUserDataConfigurationSet();
-			userDataConfiguration.addConfigurations(new TimeDescriptorConfiguration(
+			userDataConfiguration.addConfigurations(typeName,new TimeDescriptorConfiguration(
 					myType));
-			userDataConfiguration.addConfigurations(new SimpleFeatureStatsConfigurationCollection(
+			userDataConfiguration.addConfigurations(typeName,new SimpleFeatureStatsConfigurationCollection(
 					myType));
 			try {
 				userDataConfiguration.fromJsonString(

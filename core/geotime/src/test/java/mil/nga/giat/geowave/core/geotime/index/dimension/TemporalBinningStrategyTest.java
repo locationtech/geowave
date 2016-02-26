@@ -219,6 +219,20 @@ public class TemporalBinningStrategyTest
 	}
 
 	@Test
+	public void testEndLessThanStart() {
+		final long time = 123987564019283L;
+		final TemporalBinningStrategy binStrategy = new TemporalBinningStrategy(
+				Unit.YEAR);
+		final BinRange[] ranges = binStrategy.getNormalizedRanges(new NumericRange(
+				time,
+				time - 1));
+
+		Assert.assertEquals(
+				0,
+				ranges.length);
+	}
+
+	@Test
 	public void testFeb28ToMarch1NonLeapYear() {
 		final long time = 47920164930285667L;
 		final Calendar startCal = Calendar.getInstance();
