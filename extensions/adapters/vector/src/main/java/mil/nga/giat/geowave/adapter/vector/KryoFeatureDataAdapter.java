@@ -131,7 +131,6 @@ public class KryoFeatureDataAdapter extends
 		final byte[] typeNameBytes = StringUtils.stringToBinary(typeName);
 		final byte[] visibilityManagementClassNameBytes = StringUtils.stringToBinary(fieldVisibilityManagement.getClass().getCanonicalName());
 		final byte[] encodedTypeBytes = StringUtils.stringToBinary(encodedType);
-		
 		byte[] attrBytes = new byte[0];
 
 		final SimpleFeatureUserDataConfigurationSet userDataConfiguration = new SimpleFeatureUserDataConfigurationSet();
@@ -149,7 +148,7 @@ public class KryoFeatureDataAdapter extends
 		}
 		
 		final ByteBuffer buf = ByteBuffer.allocate(encodedTypeBytes.length + typeNameBytes.length + visibilityManagementClassNameBytes.length + adapterId.getBytes().length + attrBytes.length + 24);
-		
+
 		buf.putInt(0); // a signal for the new version
 		buf.putInt(typeNameBytes.length);
 		buf.putInt(visibilityManagementClassNameBytes.length);
