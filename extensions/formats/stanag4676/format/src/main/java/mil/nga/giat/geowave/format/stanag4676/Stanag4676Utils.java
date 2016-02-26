@@ -2,6 +2,8 @@ package mil.nga.giat.geowave.format.stanag4676;
 
 import java.util.Date;
 
+import mil.nga.giat.geowave.adapter.vector.utils.TimeDescriptors.TimeDescriptorConfiguration;
+
 import org.geotools.feature.AttributeTypeBuilder;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.opengis.feature.simple.SimpleFeatureType;
@@ -74,7 +76,11 @@ public class Stanag4676Utils
 				Integer.class).buildDescriptor(
 				"PixelColumn"));
 
-		return simpleFeatureTypeBuilder.buildFeatureType();
+		final TimeDescriptorConfiguration timeConfig = new TimeDescriptorConfiguration();
+		timeConfig.setTimeName("TimeStamp");
+		final SimpleFeatureType type = simpleFeatureTypeBuilder.buildFeatureType();
+		timeConfig.updateType(type);
+		return type;
 
 	}
 
@@ -131,7 +137,12 @@ public class Stanag4676Utils
 				Integer.class).buildDescriptor(
 				"PixelColumn"));
 
-		return simpleFeatureTypeBuilder.buildFeatureType();
+		final TimeDescriptorConfiguration timeConfig = new TimeDescriptorConfiguration();
+		timeConfig.setStartRangeName("StartTime");
+		timeConfig.setEndRangeName("EndTime");
+		final SimpleFeatureType type = simpleFeatureTypeBuilder.buildFeatureType();
+		timeConfig.updateType(type);
+		return type;
 
 	}
 
@@ -227,7 +238,12 @@ public class Stanag4676Utils
 				String.class).buildDescriptor(
 				"ObjectClassTime"));
 
-		return simpleFeatureTypeBuilder.buildFeatureType();
+		final TimeDescriptorConfiguration timeConfig = new TimeDescriptorConfiguration();
+		timeConfig.setStartRangeName("StartTime");
+		timeConfig.setEndRangeName("EndTime");
+		final SimpleFeatureType type = simpleFeatureTypeBuilder.buildFeatureType();
+		timeConfig.updateType(type);
+		return type;
 	}
 
 	public static SimpleFeatureType createMissionSummaryDataType() {
@@ -262,7 +278,12 @@ public class Stanag4676Utils
 				String.class).buildDescriptor(
 				"ActiveObjectClass"));
 
-		return simpleFeatureTypeBuilder.buildFeatureType();
+		final TimeDescriptorConfiguration timeConfig = new TimeDescriptorConfiguration();
+		timeConfig.setStartRangeName("StartTime");
+		timeConfig.setEndRangeName("EndTime");
+		final SimpleFeatureType type = simpleFeatureTypeBuilder.buildFeatureType();
+		timeConfig.updateType(type);
+		return type;
 
 	}
 
@@ -286,6 +307,10 @@ public class Stanag4676Utils
 				Integer.class).buildDescriptor(
 				"FrameNumber"));
 
-		return simpleFeatureTypeBuilder.buildFeatureType();
+		final TimeDescriptorConfiguration timeConfig = new TimeDescriptorConfiguration();
+		timeConfig.setTimeName("TimeStamp");
+		final SimpleFeatureType type = simpleFeatureTypeBuilder.buildFeatureType();
+		timeConfig.updateType(type);
+		return type;
 	}
 }
