@@ -69,6 +69,7 @@ public class IndexUtils
 		for (double[] binnedBitsPerFromTheRightDimension : bitsFromTheRightPerDimension) {
 			for (int d = 0; d < binnedBitsPerFromTheRightDimension.length; d++) {
 				final double totalBitsUsed = (bitsPerDimension[d] - binnedBitsPerFromTheRightDimension[d]);
+				if (totalBitsUsed < 0) return 0;
 				result = Math.min(
 						totalBitsUsed,
 						result);
