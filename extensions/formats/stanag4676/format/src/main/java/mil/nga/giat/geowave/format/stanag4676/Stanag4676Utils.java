@@ -137,9 +137,9 @@ public class Stanag4676Utils
 				Integer.class).buildDescriptor(
 				"PixelColumn"));
 
-		TimeDescriptorConfiguration timeConfig = new TimeDescriptorConfiguration();
+		final TimeDescriptorConfiguration timeConfig = new TimeDescriptorConfiguration();
 		timeConfig.setStartRangeName("StartTime");
-		timeConfig.setStartRangeName("TimeStamp");
+		timeConfig.setEndRangeName("EndTime");
 		final SimpleFeatureType type = simpleFeatureTypeBuilder.buildFeatureType();
 		timeConfig.updateType(type);
 		return type;
@@ -238,7 +238,12 @@ public class Stanag4676Utils
 				String.class).buildDescriptor(
 				"ObjectClassTime"));
 
-		return simpleFeatureTypeBuilder.buildFeatureType();
+		final TimeDescriptorConfiguration timeConfig = new TimeDescriptorConfiguration();
+		timeConfig.setStartRangeName("StartTime");
+		timeConfig.setEndRangeName("EndTime");
+		final SimpleFeatureType type = simpleFeatureTypeBuilder.buildFeatureType();
+		timeConfig.updateType(type);
+		return type;
 	}
 
 	public static SimpleFeatureType createMissionSummaryDataType() {
@@ -273,7 +278,12 @@ public class Stanag4676Utils
 				String.class).buildDescriptor(
 				"ActiveObjectClass"));
 
-		return simpleFeatureTypeBuilder.buildFeatureType();
+		final TimeDescriptorConfiguration timeConfig = new TimeDescriptorConfiguration();
+		timeConfig.setStartRangeName("StartTime");
+		timeConfig.setEndRangeName("EndTime");
+		final SimpleFeatureType type = simpleFeatureTypeBuilder.buildFeatureType();
+		timeConfig.updateType(type);
+		return type;
 
 	}
 
@@ -297,6 +307,10 @@ public class Stanag4676Utils
 				Integer.class).buildDescriptor(
 				"FrameNumber"));
 
-		return simpleFeatureTypeBuilder.buildFeatureType();
+		final TimeDescriptorConfiguration timeConfig = new TimeDescriptorConfiguration();
+		timeConfig.setTimeName("TimeStamp");
+		final SimpleFeatureType type = simpleFeatureTypeBuilder.buildFeatureType();
+		timeConfig.updateType(type);
+		return type;
 	}
 }
