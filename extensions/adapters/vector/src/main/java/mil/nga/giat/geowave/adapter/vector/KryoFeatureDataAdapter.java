@@ -1,9 +1,15 @@
 package mil.nga.giat.geowave.adapter.vector;
 
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
+import mil.nga.giat.geowave.adapter.vector.field.SimpleFeatureSerializationProvider;
+import mil.nga.giat.geowave.adapter.vector.plugin.visibility.AdaptorProxyFieldLevelVisibilityHandler;
+import mil.nga.giat.geowave.adapter.vector.plugin.visibility.JsonDefinitionColumnVisibilityManagement;
+import mil.nga.giat.geowave.adapter.vector.stats.StatsConfigurationCollection.SimpleFeatureStatsConfigurationCollection;
+import mil.nga.giat.geowave.adapter.vector.utils.SimpleFeatureUserDataConfigurationSet;
 import mil.nga.giat.geowave.adapter.vector.utils.TimeDescriptors;
 import mil.nga.giat.geowave.adapter.vector.utils.TimeDescriptors.TimeDescriptorConfiguration;
 import mil.nga.giat.geowave.core.geotime.store.dimension.Time;
@@ -123,11 +129,34 @@ public class KryoFeatureDataAdapter extends
 		final String typeName = featureType.getTypeName();
 		final byte[] typeNameBytes = StringUtils.stringToBinary(typeName);
 		final byte[] encodedTypeBytes = StringUtils.stringToBinary(encodedType);
-		final ByteBuffer buf = ByteBuffer.allocate(encodedTypeBytes.length + typeNameBytes.length + adapterId.getBytes().length + 12);
+		
+		byte[] attrBytes = new byte[0];
+
+		final SimpleFeatureUserDataConfigurationSet userDataConfiguration = new SimpleFeatureUserDataConfigurationSet();
+		userDataConfiguration.addConfigurations(typeName,new TimeDescriptorConfiguration(
+				featureType));
+		userDataConfiguration.addConfigurations(typeName,new SimpleFeatureStatsConfigurationCollection(
+				featureType));
+		try {
+			attrBytes = StringUtils.stringToBinary(userDataConfiguration.asJsonString());
+		}
+		catch (final IOException e) {
+			LOGGER.error(
+					"Failure to encode simple feature user data configuration",
+					e);
+		}
+		
+		final ByteBuffer buf = ByteBuffer.allocate(encodedTypeBytes.length + typeNameBytes.length + visibilityManagementClassNameBytes.length + adapterId.getBytes().length + attrBytes.length + 24);
+		
+		buf.putInt(0); // a signal for the new version
 		buf.putInt(typeNameBytes.length);
+		buf.putInt(visibilityManagementClassNameBytes.length);
+		buf.putInt(attrBytes.length);
 		buf.putInt(encodedTypeBytes.length);
 		buf.putInt(adapterId.getBytes().length);
 		buf.put(typeNameBytes);
+		buf.put(visibilityManagementClassNameBytes);
+		buf.put(attrBytes);
 		buf.put(encodedTypeBytes);
 		buf.put(adapterId.getBytes());
 		return buf.array();
@@ -142,6 +171,17 @@ public class KryoFeatureDataAdapter extends
 		final byte[] encodedTypeBytes = new byte[buf.getInt()];
 		final byte[] adapterIdBytes = new byte[buf.getInt()];
 		buf.get(typeNameBytes);
+		final int initialBytes = buf.getInt();
+		// temporary hack for backward compatibility
+		boolean skipConfig =   (initialBytes > 0);
+		final byte[] typeNameBytes = skipConfig ? new byte[initialBytes] : new byte[buf.getInt()];
+		final byte[] visibilityManagementClassNameBytes = new byte[buf.getInt()];
+		final byte[] attrBytes = skipConfig ? new byte[0] : new byte[buf.getInt()];
+		final byte[] encodedTypeBytes = new byte[buf.getInt()];
+		final byte[] adapterIdBytes = new byte[buf.getInt()];
+		buf.get(typeNameBytes);
+		buf.get(visibilityManagementClassNameBytes);
+		buf.get(attrBytes);
 		buf.get(encodedTypeBytes);
 		buf.get(adapterIdBytes);
 		adapterId = new ByteArrayId(
@@ -161,6 +201,19 @@ public class KryoFeatureDataAdapter extends
 		catch (final SchemaException e) {
 			LOGGER.error(
 					"Unable to deserialized feature type",
+					e);
+		}
+
+		final SimpleFeatureUserDataConfigurationSet userDataConfiguration = new SimpleFeatureUserDataConfigurationSet();
+		try {
+			userDataConfiguration.fromJsonString(
+					StringUtils.stringFromBinary(attrBytes),
+					featureType);
+
+		}
+		catch (final IOException e) {
+			LOGGER.error(
+					"Failure to decode simple feature user data configuration",
 					e);
 		}
 
