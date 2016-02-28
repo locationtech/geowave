@@ -14,6 +14,7 @@ import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
+import mil.nga.giat.geowave.core.store.adapter.statistics.RowRangeHistogramStatistics;
 import mil.nga.giat.geowave.core.store.index.Index;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.memory.DataStoreUtils;
@@ -68,6 +69,10 @@ public class ChooseBestMatchIndexQueryStrategy implements
 						nextIdx = (PrimaryIndex) nextChoosenIdx;
 						if (nextIdx.getIndexStrategy().getOrderedDimensionDefinitions().length == 0) continue;
 						final List<MultiDimensionalNumericData> constraints = query.getIndexConstraints(nextIdx.getIndexStrategy());
+						
+						// no stats, no data
+						if (! stats.containsKey(RowRangeHistogramStatistics.composeId(nextIdx.getId()))) continue;
+						
 						if (isFullTableScan(constraints)) {
 							// keep this is as a default in case all indices
 							// result in a full table scan

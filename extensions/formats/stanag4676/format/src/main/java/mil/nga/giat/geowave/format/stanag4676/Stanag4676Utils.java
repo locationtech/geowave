@@ -311,6 +311,7 @@ public class Stanag4676Utils
 		timeConfig.setTimeName("TimeStamp");
 		final SimpleFeatureType type = simpleFeatureTypeBuilder.buildFeatureType();
 		timeConfig.updateType(type);
+
 		return type;
 	}
 }

@@ -168,7 +168,7 @@ public class ChooseBestMatchIndexQueryStrategyTest
 
 	}
 
-	@Test
+/*	@Test
 	public void testChooseTemporalWithoutStats() {
 		final PrimaryIndex temporalindex = new SpatialTemporalIndexBuilder().createIndex();
 		final ChooseBestMatchIndexQueryStrategy strategy = new ChooseBestMatchIndexQueryStrategy();
@@ -255,7 +255,7 @@ public class ChooseBestMatchIndexQueryStrategyTest
 				it.next().getId());
 		assertFalse(it.hasNext());
 
-	}
+	}*/
 
 	public Iterator<Index<?, ?>> getIndices(
 			final Map<ByteArrayId, DataStatistics<SimpleFeature>> stats,
@@ -317,4 +317,5 @@ public class ChooseBestMatchIndexQueryStrategyTest
 		}
 
 	}
+
 }

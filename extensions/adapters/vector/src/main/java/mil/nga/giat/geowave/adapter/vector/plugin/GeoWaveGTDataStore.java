@@ -58,7 +58,8 @@ public class GeoWaveGTDataStore extends
 		ContentDataStore
 {
 	/** Package logger */
-	private final static Logger LOGGER = Logger.getLogger(GeoWaveGTDataStore.class);
+	private final static Logger LOGGER = Logger.getLogger(
+			GeoWaveGTDataStore.class);
 	public static final CoordinateReferenceSystem DEFAULT_CRS;
 
 	static {
@@ -93,13 +94,14 @@ public class GeoWaveGTDataStore extends
 
 	public GeoWaveGTDataStore(
 			final GeoWavePluginConfig config )
-			throws IOException {
+					throws IOException {
 		listenerManager = new FeatureListenerManager();
 		lockingManager = config.getLockingManagementFactory().createLockingManager(
 				config);
 		authorizationSPI = config.getAuthorizationFactory().create(
 				config.getAuthorizationURL());
-		init(config);
+		init(
+				config);
 		featureNameSpaceURI = config.getFeatureNamespace();
 		indexQueryStrategy = config.getIndexQueryStrategy();
 		transactionBufferSize = config.getTransactionBufferSize();
@@ -143,14 +145,6 @@ public class GeoWaveGTDataStore extends
 		return dataStatisticsStore;
 	}
 
-	protected List<PrimaryIndex> getWriteIndices(
-			final GeotoolsFeatureDataAdapter adapter ) {
-		if (adapter instanceof FeatureDataAdapter) {
-			return getPreferredIndices((FeatureDataAdapter) adapter);
-		}
-		return Arrays.asList(new SpatialDimensionalityTypeProvider().createPrimaryIndex());
-	}
-
 	@Override
 	public void createSchema(
 			final SimpleFeatureType featureType ) {
@@ -162,25 +156,31 @@ public class GeoWaveGTDataStore extends
 				featureType,
 				visibilityManagement);
 		if (featureNameSpaceURI != null) {
-			adapter.setNamespace(featureNameSpaceURI.toString());
+			adapter.setNamespace(
+					featureNameSpaceURI.toString());
 		}
 
-		adapterStore.addAdapter(adapter);
-		getPreferredIndices(adapter);
+		adapterStore.addAdapter(
+				adapter);
+		getPreferredIndices(
+				adapter);
 	}
 
 	private GeotoolsFeatureDataAdapter getAdapter(
 			final String typeName ) {
 		final GeotoolsFeatureDataAdapter featureAdapter;
-		final DataAdapter<?> adapter = adapterStore.getAdapter(new ByteArrayId(
-				StringUtils.stringToBinary(typeName)));
+		final DataAdapter<?> adapter = adapterStore.getAdapter(
+				new ByteArrayId(
+						StringUtils.stringToBinary(
+								typeName)));
 		if ((adapter == null) || !(adapter instanceof GeotoolsFeatureDataAdapter)) {
 			return null;
 		}
 		featureAdapter = (GeotoolsFeatureDataAdapter) adapter;
 		if (featureNameSpaceURI != null) {
 			if (adapter instanceof FeatureDataAdapter) {
-				((FeatureDataAdapter) featureAdapter).setNamespace(featureNameSpaceURI.toString());
+				((FeatureDataAdapter) featureAdapter).setNamespace(
+						featureNameSpaceURI.toString());
 			}
 		}
 		return featureAdapter;
@@ -194,8 +194,9 @@ public class GeoWaveGTDataStore extends
 		while (adapters.hasNext()) {
 			final DataAdapter<?> adapter = adapters.next();
 			if (adapter instanceof GeotoolsFeatureDataAdapter) {
-				names.add(new NameImpl(
-						((GeotoolsFeatureDataAdapter) adapter).getType().getTypeName()));
+				names.add(
+						new NameImpl(
+								((GeotoolsFeatureDataAdapter) adapter).getType().getTypeName()));
 			}
 		}
 		adapters.close();
@@ -205,7 +206,7 @@ public class GeoWaveGTDataStore extends
 	@Override
 	public ContentFeatureSource getFeatureSource(
 			final String typeName )
-			throws IOException {
+					throws IOException {
 		return getFeatureSource(
 				typeName,
 				Transaction.AUTO_COMMIT);
@@ -215,7 +216,7 @@ public class GeoWaveGTDataStore extends
 	public ContentFeatureSource getFeatureSource(
 			final String typeName,
 			final Transaction tx )
-			throws IOException {
+					throws IOException {
 		return super.getFeatureSource(
 				new NameImpl(
 						null,
@@ -227,7 +228,7 @@ public class GeoWaveGTDataStore extends
 	public ContentFeatureSource getFeatureSource(
 			final Name typeName,
 			final Transaction tx )
-			throws IOException {
+					throws IOException {
 		return getFeatureSource(
 				typeName.getLocalPart(),
 				tx);
@@ -237,7 +238,7 @@ public class GeoWaveGTDataStore extends
 	@Override
 	public ContentFeatureSource getFeatureSource(
 			final Name typeName )
-			throws IOException {
+					throws IOException {
 		return getFeatureSource(
 				typeName.getLocalPart(),
 				Transaction.AUTO_COMMIT);
@@ -246,27 +247,31 @@ public class GeoWaveGTDataStore extends
 	@Override
 	protected ContentFeatureSource createFeatureSource(
 			final ContentEntry entry )
-			throws IOException {
+					throws IOException {
 		return new GeoWaveFeatureSource(
 				entry,
 				Query.ALL,
-				getAdapter(entry.getTypeName()),
+				getAdapter(
+						entry.getTypeName()),
 				transactionsAllocator);
 	}
 
 	@Override
 	public void removeSchema(
 			final Name typeName )
-			throws IOException {
-		this.removeSchema(typeName.getLocalPart());
+					throws IOException {
+		this.removeSchema(
+				typeName.getLocalPart());
 	}
 
 	@Override
 	public void removeSchema(
 			final String typeName )
-			throws IOException {
-		final DataAdapter<?> adapter = adapterStore.getAdapter(new ByteArrayId(
-				StringUtils.stringToBinary(typeName)));
+					throws IOException {
+		final DataAdapter<?> adapter = adapterStore.getAdapter(
+				new ByteArrayId(
+						StringUtils.stringToBinary(
+								typeName)));
 		if (adapter != null) {
 			final String[] authorizations = getAuthorizationSPI().getAuthorizations();
 			dataStore.delete(
@@ -292,7 +297,7 @@ public class GeoWaveGTDataStore extends
 	protected GeoWaveTransactionState getMyTransactionState(
 			final Transaction transaction,
 			final GeoWaveFeatureSource source )
-			throws IOException {
+					throws IOException {
 		synchronized (transaction) {
 			GeoWaveTransactionState state = null;
 			if (transaction == Transaction.AUTO_COMMIT) {
@@ -300,7 +305,8 @@ public class GeoWaveGTDataStore extends
 						source);
 			}
 			else {
-				state = (GeoWaveTransactionState) transaction.getState(this);
+				state = (GeoWaveTransactionState) transaction.getState(
+						this);
 				if (state == null) {
 					state = new GeoWaveTransactionManagementState(
 							transactionBufferSize,
@@ -316,18 +322,20 @@ public class GeoWaveGTDataStore extends
 		}
 	}
 
-	private List<PrimaryIndex> getPreferredIndices(
-			final FeatureDataAdapter adapter ) {
+	public List<PrimaryIndex> getPreferredIndices(
+			final GeotoolsFeatureDataAdapter adapter ) {
 
-		List<PrimaryIndex> currentSelections = preferredIndexes.get(adapter.getType().getName().toString());
+		List<PrimaryIndex> currentSelections = preferredIndexes.get(
+				adapter.getType().getName().toString());
 		if (currentSelections != null) {
 			return currentSelections;
 		}
 
 		currentSelections = new ArrayList<PrimaryIndex>(
 				2);
-		final List<String> indexNames = SimpleFeaturePrimaryIndexConfiguration.getIndexNames(adapter.getType());
-		final boolean canUseTime = adapter.hasTemporalConstraints();
+		final List<String> indexNames = SimpleFeaturePrimaryIndexConfiguration.getIndexNames(
+				adapter.getType());
+		final boolean canUseTime = adapter.getTimeDescriptors().hasTime();
 
 		/**
 		 * Requires the indices to EXIST prior to set up of the adapter.
@@ -341,8 +349,10 @@ public class GeoWaveGTDataStore extends
 
 				if (!indexNames.isEmpty()) {
 					// Only used selected preferred indices
-					if (indexNames.contains(index.getId().getString())) {
-						currentSelections.add(index);
+					if (indexNames.contains(
+							index.getId().getString())) {
+						currentSelections.add(
+								index);
 					}
 				}
 				@SuppressWarnings("rawtypes")
@@ -360,7 +370,8 @@ public class GeoWaveGTDataStore extends
 					// If not requiring time OR (requires time AND has time
 					// constraints)
 					if (!hasTime || canUseTime) {
-						currentSelections.add(index);
+						currentSelections.add(
+								index);
 					}
 				}
 			}
@@ -371,7 +382,8 @@ public class GeoWaveGTDataStore extends
 					ex);
 		}
 
-		if (currentSelections.isEmpty()) currentSelections.add(new SpatialDimensionalityTypeProvider().createPrimaryIndex());
+		if (currentSelections.isEmpty()) currentSelections.add(
+				new SpatialDimensionalityTypeProvider().createPrimaryIndex());
 
 		preferredIndexes.put(
 				adapter.getType().getName().toString(),
