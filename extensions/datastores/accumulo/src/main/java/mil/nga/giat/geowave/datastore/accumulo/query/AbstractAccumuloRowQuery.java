@@ -61,6 +61,12 @@ abstract public class AbstractAccumuloRowQuery<T> extends
 
 	protected void addScanIteratorSettings(
 			final ScannerBase scanner ) {
+
+		scanner.addScanIterator(new IteratorSetting(
+				SharedVisibilitySplittingIterator.ITERATOR_PRIORITY,
+				SharedVisibilitySplittingIterator.ITERATOR_NAME,
+				SharedVisibilitySplittingIterator.class));
+
 		// we have to at least use a whole row iterator
 		final IteratorSetting iteratorSettings = new IteratorSetting(
 				QueryFilterIterator.WHOLE_ROW_ITERATOR_PRIORITY,

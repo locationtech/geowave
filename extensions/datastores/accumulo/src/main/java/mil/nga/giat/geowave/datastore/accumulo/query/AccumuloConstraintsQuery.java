@@ -155,6 +155,12 @@ public class AccumuloConstraintsQuery extends
 	@Override
 	protected void addScanIteratorSettings(
 			final ScannerBase scanner ) {
+
+		scanner.addScanIterator(new IteratorSetting(
+				SharedVisibilitySplittingIterator.ITERATOR_PRIORITY,
+				SharedVisibilitySplittingIterator.ITERATOR_NAME,
+				SharedVisibilitySplittingIterator.class));
+
 		if ((distributableFilters != null) && !distributableFilters.isEmpty() && queryFiltersEnabled) {
 
 			final IteratorSetting iteratorSettings;
