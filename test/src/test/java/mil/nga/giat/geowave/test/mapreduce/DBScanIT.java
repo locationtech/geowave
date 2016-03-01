@@ -48,6 +48,7 @@ import mil.nga.giat.geowave.core.cli.CommandLineResult;
 import mil.nga.giat.geowave.core.cli.DataStoreCommandLineOptions;
 import mil.nga.giat.geowave.core.cli.GenericStoreCommandLineOptions;
 import mil.nga.giat.geowave.core.cli.IndexStoreCommandLineOptions;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
@@ -198,7 +199,7 @@ public class DBScanIT extends
 				adapterStore,
 				new SimpleFeatureItemWrapperFactory(),
 				"concave_hull",
-				"hull_idx",
+				new SpatialDimensionalityTypeProvider().createPrimaryIndex().getId().getString(),
 				"bx5",
 				0);
 

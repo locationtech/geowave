@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import mil.nga.giat.geowave.adapter.vector.field.SimpleFeatureSerializationProvider;
+import mil.nga.giat.geowave.adapter.vector.index.SimpleFeaturePrimaryIndexConfiguration;
 import mil.nga.giat.geowave.adapter.vector.plugin.visibility.AdaptorProxyFieldLevelVisibilityHandler;
 import mil.nga.giat.geowave.adapter.vector.plugin.visibility.JsonDefinitionColumnVisibilityManagement;
 import mil.nga.giat.geowave.adapter.vector.stats.StatsConfigurationCollection.SimpleFeatureStatsConfigurationCollection;
@@ -81,6 +82,10 @@ public class KryoFeatureDataAdapter extends
 		return (FieldWriter<SimpleFeature, Object>) FieldUtils.getDefaultWriterForClass(clazz);
 	}
 
+	public boolean hasTemporalConstraints() {
+		return getTimeDescriptors().hasTime();
+	}
+
 	@Override
 	public ByteArrayId getAdapterId() {
 		return adapterId;
@@ -107,7 +112,8 @@ public class KryoFeatureDataAdapter extends
 		final RowBuilder<SimpleFeature, Object> builder = newBuilder();
 		builder.setField(data.getAdapterExtendedData().getValues().get(
 				0));
-		return builder.buildRow(data.getDataId());
+		return builder.buildRow(
+				data.getDataId());
 	}
 
 	@Override
@@ -134,10 +140,10 @@ public class KryoFeatureDataAdapter extends
 		byte[] attrBytes = new byte[0];
 
 		final SimpleFeatureUserDataConfigurationSet userDataConfiguration = new SimpleFeatureUserDataConfigurationSet();
-		userDataConfiguration.addConfigurations(new TimeDescriptorConfiguration(
-				featureType));
-		userDataConfiguration.addConfigurations(new SimpleFeatureStatsConfigurationCollection(
-				featureType));
+		userDataConfiguration.addConfigurations(new TimeDescriptorConfiguration());
+		userDataConfiguration.addConfigurations(new SimpleFeatureStatsConfigurationCollection());
+		userDataConfiguration.addConfigurations(new SimpleFeaturePrimaryIndexConfiguration());
+		userDataConfiguration.configureFromType(this.featureType);
 		try {
 			attrBytes = StringUtils.stringToBinary(userDataConfiguration.asJsonString());
 		}
@@ -146,7 +152,7 @@ public class KryoFeatureDataAdapter extends
 					"Failure to encode simple feature user data configuration",
 					e);
 		}
-		
+
 		final ByteBuffer buf = ByteBuffer.allocate(encodedTypeBytes.length + typeNameBytes.length + visibilityManagementClassNameBytes.length + adapterId.getBytes().length + attrBytes.length + 24);
 
 		buf.putInt(0); // a signal for the new version
@@ -170,7 +176,7 @@ public class KryoFeatureDataAdapter extends
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
 		final int initialBytes = buf.getInt();
 		// temporary hack for backward compatibility
-		boolean skipConfig =   (initialBytes > 0);
+		boolean skipConfig = (initialBytes > 0);
 		final byte[] typeNameBytes = skipConfig ? new byte[initialBytes] : new byte[buf.getInt()];
 		final byte[] visibilityManagementClassNameBytes = new byte[buf.getInt()];
 		final byte[] attrBytes = skipConfig ? new byte[0] : new byte[buf.getInt()];
@@ -216,6 +222,8 @@ public class KryoFeatureDataAdapter extends
 				featureType));
 		userDataConfiguration.addConfigurations(new SimpleFeatureStatsConfigurationCollection(
 				featureType));
+		userDataConfiguration.addConfigurations(new SimpleFeaturePrimaryIndexConfiguration(
+				featureType));
 		try {
 			userDataConfiguration.fromJsonString(
 					StringUtils.stringFromBinary(attrBytes),
@@ -252,7 +260,8 @@ public class KryoFeatureDataAdapter extends
 							this)));
 			return defaultHandlers;
 		}
-		// LOGGER.warn("Simple Feature Type could not be used for handling the indexed data");
+		// LOGGER.warn("Simple Feature Type could not be used for handling the
+		// indexed data");
 		return super.getDefaultTypeMatchingHandlers(featureType);
 	}
 

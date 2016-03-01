@@ -19,6 +19,7 @@ import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.operation.MathTransform;
 
 import mil.nga.giat.geowave.adapter.vector.index.SecondaryIndexManager;
+import mil.nga.giat.geowave.adapter.vector.index.SimpleFeaturePrimaryIndexConfiguration;
 import mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveGTDataStore;
 import mil.nga.giat.geowave.adapter.vector.plugin.visibility.AdaptorProxyFieldLevelVisibilityHandler;
 import mil.nga.giat.geowave.adapter.vector.plugin.visibility.JsonDefinitionColumnVisibilityManagement;
@@ -359,10 +360,10 @@ public class FeatureDataAdapter extends
 		byte[] attrBytes = new byte[0];
 
 		final SimpleFeatureUserDataConfigurationSet userDataConfiguration = new SimpleFeatureUserDataConfigurationSet();
-		userDataConfiguration.addConfigurations(new TimeDescriptorConfiguration(
-				persistedType));
-		userDataConfiguration.addConfigurations(new SimpleFeatureStatsConfigurationCollection(
-				persistedType));
+		userDataConfiguration.addConfigurations(new TimeDescriptorConfiguration());
+		userDataConfiguration.addConfigurations(new SimpleFeatureStatsConfigurationCollection());
+		userDataConfiguration.addConfigurations(new SimpleFeaturePrimaryIndexConfiguration());
+		userDataConfiguration.configureFromType(persistedType);
 		try {
 			attrBytes = StringUtils.stringToBinary(userDataConfiguration.asJsonString());
 		}
@@ -465,6 +466,8 @@ public class FeatureDataAdapter extends
 			userDataConfiguration.addConfigurations(new TimeDescriptorConfiguration(
 					myType));
 			userDataConfiguration.addConfigurations(new SimpleFeatureStatsConfigurationCollection(
+					myType));
+			userDataConfiguration.addConfigurations(new SimpleFeaturePrimaryIndexConfiguration(
 					myType));
 			try {
 				userDataConfiguration.fromJsonString(

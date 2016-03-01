@@ -1,18 +1,21 @@
 package mil.nga.giat.geowave.adapter.vector.plugin;
 
+import java.io.Closeable;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
+import org.opengis.feature.simple.SimpleFeature;
+
 import mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
 import mil.nga.giat.geowave.adapter.vector.plugin.transaction.GeoWaveTransaction;
 import mil.nga.giat.geowave.adapter.vector.plugin.transaction.TransactionsAllocator;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
+import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
@@ -22,12 +25,9 @@ import mil.nga.giat.geowave.core.store.data.visibility.UniformVisibilityWriter;
 import mil.nga.giat.geowave.core.store.index.Index;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.core.store.query.BasicQuery.Constraints;
 import mil.nga.giat.geowave.core.store.query.BasicQuery;
 import mil.nga.giat.geowave.core.store.query.DataIdQuery;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
-
-import org.opengis.feature.simple.SimpleFeature;
 
 public class GeoWaveDataStoreComponents
 {
@@ -38,7 +38,7 @@ public class GeoWaveDataStoreComponents
 	private final GeoWaveGTDataStore gtStore;
 	private final TransactionsAllocator transactionAllocator;
 
-	private final List<PrimaryIndex> writeIndices;
+	private final List<PrimaryIndex> preferredIndices;
 
 	public GeoWaveDataStoreComponents(
 			final DataStore dataStore,
@@ -52,7 +52,7 @@ public class GeoWaveDataStoreComponents
 		this.indexStore = indexStore;
 		this.dataStatisticsStore = dataStatisticsStore;
 		this.gtStore = gtStore;
-		writeIndices = gtStore.getWriteIndices(adapter);
+		preferredIndices = gtStore.getPreferredIndices(adapter);
 		this.transactionAllocator = transactionAllocator;
 	}
 
@@ -72,8 +72,8 @@ public class GeoWaveDataStoreComponents
 		return gtStore;
 	}
 
-	public List<PrimaryIndex> getWriteIndices() {
-		return writeIndices;
+	public List<PrimaryIndex> getPreferredIndices() {
+		return preferredIndices;
 	}
 
 	public DataStatisticsStore getStatsStore() {
@@ -86,7 +86,14 @@ public class GeoWaveDataStoreComponents
 		return getGTstore().getIndexQueryStrategy().getIndices(
 				stats,
 				query,
-				getIndexStore().getIndices());
+				new CloseableIteratorWrapper(
+						new Closeable() {
+
+							@Override
+							public void close()
+									throws IOException {}
+						},
+						this.preferredIndices.iterator()));
 	}
 
 	public void remove(
@@ -97,7 +104,7 @@ public class GeoWaveDataStoreComponents
 		final QueryOptions options = new QueryOptions(
 				adapter);
 		options.setAuthorizations(transaction.composeAuthorizations());
-		options.setIndices(writeIndices.toArray(new Index[writeIndices.size()]));
+		options.setIndices(preferredIndices.toArray(new Index[preferredIndices.size()]));
 
 		dataStore.delete(
 				options,
@@ -114,7 +121,7 @@ public class GeoWaveDataStoreComponents
 		final QueryOptions options = new QueryOptions(
 				adapter);
 		options.setAuthorizations(transaction.composeAuthorizations());
-		options.setIndices(writeIndices.toArray(new Index[writeIndices.size()]));
+		options.setIndices(preferredIndices.toArray(new Index[preferredIndices.size()]));
 
 		dataStore.delete(
 				options,
@@ -131,7 +138,7 @@ public class GeoWaveDataStoreComponents
 			final Set<String> fidList,
 			final GeoWaveTransaction transaction )
 			throws IOException {
-		for (PrimaryIndex currentIndex : this.writeIndices) {
+		for (PrimaryIndex currentIndex : this.preferredIndices) {
 			try (IndexWriter indexWriter = dataStore.createIndexWriter(
 					currentIndex,
 					new UniformVisibilityWriter<SimpleFeature>(
@@ -152,7 +159,7 @@ public class GeoWaveDataStoreComponents
 			final SimpleFeature feature,
 			final GeoWaveTransaction transaction )
 			throws IOException {
-		for (PrimaryIndex currentIndex : this.writeIndices) {
+		for (PrimaryIndex currentIndex : this.preferredIndices) {
 			try (IndexWriter indexWriter = dataStore.createIndexWriter(
 					currentIndex,
 					new UniformVisibilityWriter<SimpleFeature>(
