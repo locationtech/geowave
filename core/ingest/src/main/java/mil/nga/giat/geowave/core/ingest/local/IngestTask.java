@@ -26,17 +26,21 @@ public class IngestTask implements
 {
 
 	private final static Logger LOGGER = LoggerFactory.getLogger(IngestTask.class);
+	private final String id;
 	private final BlockingQueue<GeoWaveData<?>> readQueue;
 	private final LocalIngestRunData runData;
 	private final Map<ByteArrayId, PrimaryIndex> specifiedPrimaryIndexes;
 	private final Map<ByteArrayId, PrimaryIndex> requiredIndexMap;
-	private boolean isTerminated = false;
+	private volatile boolean isTerminated = false;
+	private volatile boolean isFinished = false;
 
 	public IngestTask(
+			String id,
 			LocalIngestRunData runData,
 			Map<ByteArrayId, PrimaryIndex> specifiedPrimaryIndexes,
 			Map<ByteArrayId, PrimaryIndex> requiredIndexMap,
 			BlockingQueue<GeoWaveData<?>> queue ) {
+		this.id = id;
 		this.runData = runData;
 		this.specifiedPrimaryIndexes = specifiedPrimaryIndexes;
 		this.requiredIndexMap = requiredIndexMap;
@@ -52,6 +56,24 @@ public class IngestTask implements
 	}
 
 	/**
+	 * An identifier, usually (filename)-(counter)
+	 * 
+	 * @return
+	 */
+	public String getId() {
+		return this.id;
+	}
+
+	/**
+	 * Whether this worker has terminated.
+	 * 
+	 * @return
+	 */
+	public boolean isFinished() {
+		return isFinished;
+	}
+
+	/**
 	 * This function will continue to read from the BlockingQueue until
 	 * isTerminated is true and the queue is empty.
 	 */
@@ -62,9 +84,13 @@ public class IngestTask implements
 	@Override
 	public void run() {
 		Map<PrimaryIndex, IndexWriter> indexWriters = new HashMap<PrimaryIndex, IndexWriter>();
+		int count = 0;
 		try {
-			LOGGER.debug("Worker executing for plugin");
-
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug(String.format(
+						"Worker executing for plugin [%s]",
+						this.getId()));
+			}
 			while (true) {
 				GeoWaveData<?> geowaveData = readQueue.poll(
 						100,
@@ -76,13 +102,21 @@ public class IngestTask implements
 					}
 					// Didn't receive an item. Make sure we haven't been
 					// terminated.
+					if (LOGGER.isDebugEnabled()) {
+						LOGGER.debug(String.format(
+								"Worker waiting for item [%s]",
+								this.getId()));
+					}
 					continue;
 				}
 
 				// Ingest the data!
 				final WritableDataAdapter adapter = runData.getDataAdapter(geowaveData);
 				if (adapter == null) {
-					LOGGER.warn("Adapter not found for " + geowaveData.getValue());
+					LOGGER.warn(String.format(
+							"Adapter not found for [%s] worker [%s]",
+							geowaveData.getValue(),
+							this.getId()));
 					continue;
 				}
 				for (final ByteArrayId indexId : geowaveData.getIndexIds()) {
@@ -90,7 +124,11 @@ public class IngestTask implements
 					if (index == null) {
 						index = requiredIndexMap.get(indexId);
 						if (index == null) {
-							LOGGER.warn("Index '" + indexId.getString() + "' not found for " + geowaveData.getValue());
+							LOGGER.warn(String.format(
+									"Index '%s' not found for %s; worker [%s]",
+									indexId.getString(),
+									geowaveData.getValue(),
+									this.getId()));
 							continue;
 						}
 					}
@@ -107,6 +145,8 @@ public class IngestTask implements
 					writer.write(
 							adapter,
 							geowaveData.getValue());
+
+					count++;
 				}
 			}
 		}
@@ -138,7 +178,13 @@ public class IngestTask implements
 				}
 			}
 
-			LOGGER.debug("Worker exited for plugin");
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug(String.format(
+						"Worker exited for plugin [%s]; Ingested %d items",
+						this.getId(),
+						count));
+			}
+			isFinished = true;
 		}
 	}
 

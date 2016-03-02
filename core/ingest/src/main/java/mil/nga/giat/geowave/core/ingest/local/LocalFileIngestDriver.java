@@ -240,7 +240,12 @@ public class LocalFileIngestDriver extends
 		List<IngestTask> ingestTasks = new ArrayList<IngestTask>();
 		try {
 			for (int i = 0; i < localInput.getThreads(); i++) {
+				String id = String.format(
+						"%s-%d",
+						file.getName(),
+						i);
 				IngestTask task = new IngestTask(
+						id,
 						ingestRunData,
 						specifiedPrimaryIndexes,
 						requiredIndexMap,
@@ -258,7 +263,37 @@ public class LocalFileIngestDriver extends
 				while (geowaveDataIt.hasNext()) {
 					final GeoWaveData<?> geowaveData = (GeoWaveData<?>) geowaveDataIt.next();
 					try {
-						queue.put(geowaveData);
+						while (!queue.offer(
+								geowaveData,
+								1,
+								TimeUnit.SECONDS)) {
+							// Determine if we have any workers left. The point
+							// of this code is so we
+							// aren't hanging after our workers exit (before the
+							// file is done) due to
+							// some un-handled exception.
+							boolean workerAlive = false;
+							for (IngestTask task : ingestTasks) {
+								if (!task.isFinished()) {
+									workerAlive = true;
+									break;
+								}
+							}
+
+							// If the workers are still there, then just try to
+							// offer again.
+							// This will loop forever until there are no workers
+							// left.
+							if (workerAlive) {
+								LOGGER.debug("Worker threads are overwhelmed, waiting 1 second");
+							}
+							else {
+								String message = "Datastore error, all workers have terminated! Aborting...";
+								LOGGER.error(message);
+								throw new RuntimeException(
+										message);
+							}
+						}
 					}
 					catch (InterruptedException e) {
 						// I can't see how this will ever happen, except maybe
