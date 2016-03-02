@@ -16,6 +16,17 @@ public class SimpleFeaturePrimaryIndexConfiguration implements
 	public static final String INDEX_NAME = "PrimaryIndexName";
 	private List<String> indexNames = null;
 
+	
+	public SimpleFeaturePrimaryIndexConfiguration() {
+		super();
+	}
+
+	public SimpleFeaturePrimaryIndexConfiguration(
+			final SimpleFeatureType type  ) {
+		super();
+		this.configureFromType(type);
+	}
+
 	public static final List<String> getIndexNames(
 			final SimpleFeatureType type ) {
 		Object obj = type.getUserData().get(

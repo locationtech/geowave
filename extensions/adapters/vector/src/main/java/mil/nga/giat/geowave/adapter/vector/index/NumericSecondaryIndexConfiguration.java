@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.Set;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.opengis.feature.simple.SimpleFeatureType;
 
 public class NumericSecondaryIndexConfiguration extends
 		AbstractSecondaryIndexConfiguration<Number>
@@ -22,6 +23,7 @@ public class NumericSecondaryIndexConfiguration extends
 				Number.class,
 				attribute);
 	}
+	
 
 	public NumericSecondaryIndexConfiguration(
 			final Set<String> attributes ) {
