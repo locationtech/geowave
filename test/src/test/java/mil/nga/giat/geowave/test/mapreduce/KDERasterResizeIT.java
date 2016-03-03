@@ -65,7 +65,8 @@ public class KDERasterResizeIT extends
 		accumuloOperations.deleteAll();
 		testLocalIngest(
 				DimensionalityType.SPATIAL,
-				KDE_SHAPEFILE_FILE);
+				KDE_SHAPEFILE_FILE,
+				1);
 		// use the min level to define the request boundary because it is the
 		// most coarse grain
 		final double decimalDegreesPerCellMinLevel = 180.0 / Math.pow(

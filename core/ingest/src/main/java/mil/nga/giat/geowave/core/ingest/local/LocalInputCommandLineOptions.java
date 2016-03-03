@@ -18,16 +18,23 @@ public class LocalInputCommandLineOptions
 	private final static Logger LOGGER = Logger.getLogger(LocalInputCommandLineOptions.class);
 	private final String input;
 	private final String[] extensions;
+	private final int threads;
 
 	public LocalInputCommandLineOptions(
 			final String input,
-			final String[] extensions ) {
+			final String[] extensions,
+			final int threads ) {
 		this.input = input;
 		this.extensions = extensions;
+		this.threads = threads;
 	}
 
 	public String getInput() {
 		return input;
+	}
+
+	public int getThreads() {
+		return threads;
 	}
 
 	public String[] getExtensions() {
@@ -37,6 +44,21 @@ public class LocalInputCommandLineOptions
 	public static LocalInputCommandLineOptions parseOptions(
 			final CommandLine commandLine )
 			throws ParseException {
+		int threads = 1;
+		if (commandLine.hasOption("t")) {
+			try {
+				threads = Integer.parseInt(commandLine.getOptionValue("t"));
+				if (threads < 1) {
+					throw new ParseException(
+							"Invalid threads input");
+				}
+			}
+			catch (final Exception ex) {
+				LOGGER.warn(
+						"Error parsing threads argument, ignoring threads option",
+						ex);
+			}
+		}
 		String value = null;
 		if (commandLine.hasOption("b")) {
 			value = commandLine.getOptionValue("b");
@@ -62,7 +84,8 @@ public class LocalInputCommandLineOptions
 		}
 		return new LocalInputCommandLineOptions(
 				value,
-				extensions);
+				extensions,
+				threads);
 	}
 
 	public static void applyOptions(
@@ -78,5 +101,12 @@ public class LocalInputCommandLineOptions
 				"extension",
 				true,
 				"individual or comma-delimited set of file extensions to accept (optional)");
+
+		allOptions.addOption(
+				"t",
+				"threads",
+				true,
+				"number of threads to use for ingest, default to 1 (optional)");
+
 	}
 }
