@@ -3,6 +3,7 @@ package mil.nga.giat.geowave.core.cli.config;
 import mil.nga.giat.geowave.core.cli.CLIOperation;
 import mil.nga.giat.geowave.core.cli.CLIOperationProviderSpi;
 import mil.nga.giat.geowave.core.cli.CommandObject;
+import mil.nga.giat.geowave.core.cli.config.index.AddIndexOperation;
 
 public class ConfigOperationProvider implements
 		CLIOperationProviderSpi
@@ -10,7 +11,9 @@ public class ConfigOperationProvider implements
 
 	@Override
 	public CLIOperation[] createOperations() {
-		return null;
+		return new CLIOperation[] {
+			new AddIndexOperation()
+		};
 	}
 
 	@Override
