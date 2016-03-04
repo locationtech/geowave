@@ -20,7 +20,7 @@ public class SharedVisibilitySplittingIterator extends
 		TransformingIterator
 {
 	// must execute prior to WholeRowIterator/QueryFilterIterator
-	public static final int ITERATOR_PRIORITY = QueryFilterIterator.WHOLE_ROW_ITERATOR_PRIORITY - 1;
+	public static final int ITERATOR_PRIORITY = QueryFilterIterator.WHOLE_ROW_ITERATOR_PRIORITY - 2;
 	public static final String ITERATOR_NAME = "SHRD_VIZ_SPLT_ITERATOR";
 
 	@Override

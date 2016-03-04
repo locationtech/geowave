@@ -36,6 +36,7 @@ public class AccumuloRowIdsQuery<T> extends
 				dedupFilter,
 				scanCallback,
 				null,
+				Collections.<String> emptyList(),
 				authorizations);
 		this.rows = rows;
 	}
@@ -54,6 +55,7 @@ public class AccumuloRowIdsQuery<T> extends
 				dedupFilter,
 				scanCallback,
 				null,
+				Collections.<String> emptyList(),
 				authorizations);
 		this.rows = rows;
 	}

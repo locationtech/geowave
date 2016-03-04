@@ -67,6 +67,15 @@ abstract public class AbstractAccumuloRowQuery<T> extends
 				SharedVisibilitySplittingIterator.ITERATOR_NAME,
 				SharedVisibilitySplittingIterator.class));
 
+		if ((fieldIds != null) && (fieldIds.size() > 0)) {
+			final IteratorSetting iteratorSetting = FieldFilter.getIteratorSetting();
+			FieldFilter.setFieldIds(
+					iteratorSetting,
+					fieldIds,
+					index.getIndexModel().getDimensions());
+			scanner.addScanIterator(iteratorSetting);
+		}
+
 		// we have to at least use a whole row iterator
 		final IteratorSetting iteratorSettings = new IteratorSetting(
 				QueryFilterIterator.WHOLE_ROW_ITERATOR_PRIORITY,

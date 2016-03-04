@@ -55,7 +55,7 @@ public class QueryOptions implements
 	/**
 	 *
 	 */
-	private static final long serialVersionUID = 544085046847603372L;
+	private static final long serialVersionUID = 544085046847603371L;
 
 	private static ScanCallback<Object> DEFAULT_CALLBACK = new ScanCallback<Object>() {
 		@Override
@@ -82,6 +82,7 @@ public class QueryOptions implements
 	private transient ScanCallback<?> scanCallback = DEFAULT_CALLBACK;
 	private String[] authorizations = new String[0];
 	private Boolean dedupAcrossIndices = null;
+	private List<String> fieldIds = Collections.emptyList();
 
 	public QueryOptions(
 			final ByteArrayId adapterId,
@@ -159,6 +160,17 @@ public class QueryOptions implements
 		setLimit(limit);
 		this.scanCallback = scanCallback;
 		this.authorizations = authorizations;
+	}
+
+	/**
+	 * 
+	 * @param fieldIds
+	 *            the subset of fieldIds to be included with each query result
+	 */
+	public QueryOptions(
+			final List<String> fieldIds ) {
+		super();
+		this.fieldIds = fieldIds;
 	}
 
 	public QueryOptions() {}
@@ -357,8 +369,24 @@ public class QueryOptions implements
 		return ids;
 	}
 
-	public static long getSerialversionuid() {
-		return serialVersionUID;
+	/**
+	 * 
+	 * @return the fieldIds
+	 */
+	public List<String> getFieldIds() {
+		return fieldIds;
+	}
+
+	/**
+	 * 
+	 * @param fieldIds
+	 *            the desired subset of fieldIds to be included in query results
+	 */
+	public void setFieldIds(
+			final List<String> fieldIds ) {
+		if (fieldIds != null) {
+			this.fieldIds = fieldIds;
+		}
 	}
 
 	@Override
@@ -379,7 +407,27 @@ public class QueryOptions implements
 			}
 		}
 
-		final ByteBuffer buf = ByteBuffer.allocate(16 + authBytes.length + aSize + iSize);
+		int fieldIdsBytesNeeded = 0;
+		byte[] fieldIdsBytes = null;
+		if (fieldIds != null && fieldIds.size() > 0) {
+			final StringBuffer sBuf = new StringBuffer();
+			final String comma = ",";
+			for (String fieldId : fieldIds) {
+				if (sBuf.length() > 0) {
+					sBuf.append(comma);
+				}
+				sBuf.append(fieldId);
+			}
+			fieldIdsBytes = StringUtils.stringToBinary(sBuf.toString());
+			fieldIdsBytesNeeded = 4 + fieldIdsBytes.length;
+		}
+
+		final ByteBuffer buf = ByteBuffer.allocate(20 + authBytes.length + aSize + iSize + fieldIdsBytesNeeded);
+		buf.putInt((fieldIdsBytesNeeded > 0) ? 1 : 0);
+		if (fieldIdsBytesNeeded > 0) {
+			buf.putInt(fieldIdsBytes.length);
+			buf.put(fieldIdsBytes);
+		}
 
 		buf.putInt(dedupAcrossIndices == null ? -1 : (dedupAcrossIndices ? 1 : 0));
 		buf.putInt(authBytes.length);
@@ -411,6 +459,14 @@ public class QueryOptions implements
 			final byte[] bytes ) {
 
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
+		if (buf.getInt() == 1) {
+			final int fieldIdsLength = buf.getInt();
+			final byte[] fieldIdsBytes = new byte[fieldIdsLength];
+			buf.get(fieldIdsBytes);
+			fieldIds = Arrays.asList(StringUtils.stringFromBinary(
+					fieldIdsBytes).split(
+					","));
+		}
 		final int dedupCode = buf.getInt();
 
 		dedupAcrossIndices = null;

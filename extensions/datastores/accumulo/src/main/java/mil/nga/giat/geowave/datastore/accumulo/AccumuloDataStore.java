@@ -275,6 +275,7 @@ public class AccumuloDataStore implements
 								filter,
 								sanitizedQueryOptions.getScanCallback(),
 								queryOptions.getAggregation(),
+								queryOptions.getFieldIds(),
 								sanitizedQueryOptions.getAuthorizations());
 						results.add(accumuloQuery.query(
 								accumuloOperations,
@@ -308,6 +309,7 @@ public class AccumuloDataStore implements
 									filter,
 									sanitizedQueryOptions.getScanCallback(),
 									queryOptions.getAggregation(),
+									queryOptions.getFieldIds(),
 									sanitizedQueryOptions.getAuthorizations());
 
 							results.add(accumuloQuery.query(
@@ -493,7 +495,7 @@ public class AccumuloDataStore implements
 
 			scanner.fetchColumnFamily(new Text(
 					adapterId.getBytes()));
-			
+
 			scanner.addScanIterator(new IteratorSetting(
 					SharedVisibilitySplittingIterator.ITERATOR_PRIORITY,
 					SharedVisibilitySplittingIterator.ITERATOR_NAME,
@@ -758,6 +760,7 @@ public class AccumuloDataStore implements
 											null,
 											callback,
 											null,
+											queryOptions.getFieldIds(),
 											queryOptions.getAuthorizations()).query(
 											accumuloOperations,
 											adapterStore,

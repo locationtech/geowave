@@ -33,7 +33,7 @@ import com.google.common.collect.Iterators;
 
 /**
  * This class represents basic numeric contraints applied to an Accumulo Query
- * 
+ *
  */
 public class AccumuloConstraintsQuery extends
 		AccumuloFilteredIndexQuery
@@ -52,6 +52,7 @@ public class AccumuloConstraintsQuery extends
 			final DedupeFilter clientDedupeFilter,
 			final ScanCallback<?> scanCallback,
 			final Pair<DataAdapter<?>, Aggregation<?>> aggregation,
+			final List<String> fieldIds,
 			final String[] authorizations ) {
 		this(
 				adapterIds,
@@ -61,54 +62,8 @@ public class AccumuloConstraintsQuery extends
 				clientDedupeFilter,
 				scanCallback,
 				aggregation,
+				fieldIds,
 				authorizations);
-	}
-
-	public AccumuloConstraintsQuery(
-			final PrimaryIndex index,
-			final List<MultiDimensionalNumericData> constraints,
-			final List<QueryFilter> queryFilters ) {
-		this(
-				null,
-				index,
-				constraints,
-				queryFilters,
-				new String[0]);
-	}
-
-	public AccumuloConstraintsQuery(
-			final List<ByteArrayId> adapterIds,
-			final PrimaryIndex index,
-			final List<MultiDimensionalNumericData> constraints,
-			final List<QueryFilter> queryFilters ) {
-		this(
-				adapterIds,
-				index,
-				constraints,
-				queryFilters,
-				(DedupeFilter) null,
-				(ScanCallback<?>) null,
-				null,
-				new String[0]);
-
-	}
-
-	public AccumuloConstraintsQuery(
-			final List<ByteArrayId> adapterIds,
-			final PrimaryIndex index,
-			final List<MultiDimensionalNumericData> constraints,
-			final List<QueryFilter> queryFilters,
-			final String[] authorizations ) {
-		this(
-				adapterIds,
-				index,
-				constraints,
-				queryFilters,
-				(DedupeFilter) null,
-				(ScanCallback<?>) null,
-				null,
-				authorizations);
-
 	}
 
 	public AccumuloConstraintsQuery(
@@ -119,11 +74,13 @@ public class AccumuloConstraintsQuery extends
 			final DedupeFilter clientDedupeFilter,
 			final ScanCallback<?> scanCallback,
 			final Pair<DataAdapter<?>, Aggregation<?>> aggregation,
+			final List<String> fieldIds,
 			final String[] authorizations ) {
 		super(
 				adapterIds,
 				index,
 				scanCallback,
+				fieldIds,
 				authorizations);
 		this.constraints = constraints;
 		this.aggregation = aggregation;
@@ -160,6 +117,15 @@ public class AccumuloConstraintsQuery extends
 				SharedVisibilitySplittingIterator.ITERATOR_PRIORITY,
 				SharedVisibilitySplittingIterator.ITERATOR_NAME,
 				SharedVisibilitySplittingIterator.class));
+
+		if ((fieldIds != null) && (fieldIds.size() > 0)) {
+			final IteratorSetting iteratorSetting = FieldFilter.getIteratorSetting();
+			FieldFilter.setFieldIds(
+					iteratorSetting,
+					fieldIds,
+					index.getIndexModel().getDimensions());
+			scanner.addScanIterator(iteratorSetting);
+		}
 
 		if ((distributableFilters != null) && !distributableFilters.isEmpty() && queryFiltersEnabled) {
 

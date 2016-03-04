@@ -6,14 +6,16 @@ import static org.junit.Assert.assertTrue;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
-
-import org.junit.Test;
+import java.util.List;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.MockComponents;
+
+import org.junit.Assert;
+import org.junit.Test;
 
 public class QueryOptionsTest
 {
@@ -122,5 +124,20 @@ public class QueryOptionsTest
 				ops2.getAdapterIds(
 						adapterStore).size());
 
+	}
+
+	@Test
+	public void testFieldIdSerialization() {
+		final List<String> fieldIds = Arrays.asList(new String[] {
+			"one",
+			"two",
+			"three"
+		});
+		final QueryOptions ops = new QueryOptions(
+				fieldIds);
+		final QueryOptions deserialized = new QueryOptions();
+		deserialized.fromBinary(ops.toBinary());
+		Assert.assertTrue(fieldIds.size() == deserialized.getFieldIds().size());
+		Assert.assertTrue(fieldIds.equals(deserialized.getFieldIds()));
 	}
 }
