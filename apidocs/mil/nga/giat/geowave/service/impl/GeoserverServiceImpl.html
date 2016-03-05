@@ -99,9 +99,7 @@
 </dl>
 <hr>
 <br>
-<pre>@Produces(value="application/json")
-@Path(value="/geoserver")
-public class <span class="strong">GeoserverServiceImpl</span>
+<pre>public class <span class="strong">GeoserverServiceImpl</span>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements <a href="../../../../../../mil/nga/giat/geowave/service/GeoserverService.html" title="interface in mil.nga.giat.geowave.service">GeoserverService</a></pre>
 </li>
@@ -247,10 +245,7 @@ implements <a href="../../../../../../mil/nga/giat/geowave/service/GeoserverServ
 <ul class="blockList">
 <li class="blockList">
 <h4>getWorkspaces</h4>
-<pre>@GET
-@Path(value="/workspaces")
-@Produces(value="application/json")
-public&nbsp;javax.ws.rs.core.Response&nbsp;getWorkspaces()</pre>
+<pre>public&nbsp;javax.ws.rs.core.Response&nbsp;getWorkspaces()</pre>
 <dl>
 <dt><strong>Specified by:</strong></dt>
 <dd><code><a href="../../../../../../mil/nga/giat/geowave/service/GeoserverService.html#getWorkspaces()">getWorkspaces</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/service/GeoserverService.html" title="interface in mil.nga.giat.geowave.service">GeoserverService</a></code></dd>
@@ -263,10 +258,7 @@ public&nbsp;javax.ws.rs.core.Response&nbsp;getWorkspaces()</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>createWorkspace</h4>
-<pre>@POST
-@Path(value="/workspaces")
-@Produces(value="application/json")
-public&nbsp;javax.ws.rs.core.Response&nbsp;createWorkspace(org.glassfish.jersey.media.multipart.FormDataMultiPart&nbsp;multiPart)</pre>
+<pre>public&nbsp;javax.ws.rs.core.Response&nbsp;createWorkspace(org.glassfish.jersey.media.multipart.FormDataMultiPart&nbsp;multiPart)</pre>
 <dl>
 <dt><strong>Specified by:</strong></dt>
 <dd><code><a href="../../../../../../mil/nga/giat/geowave/service/GeoserverService.html#createWorkspace(org.glassfish.jersey.media.multipart.FormDataMultiPart)">createWorkspace</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/service/GeoserverService.html" title="interface in mil.nga.giat.geowave.service">GeoserverService</a></code></dd>
@@ -279,10 +271,7 @@ public&nbsp;javax.ws.rs.core.Response&nbsp;createWorkspace(org.glassfish.jersey.
 <ul class="blockList">
 <li class="blockList">
 <h4>deleteWorkspace</h4>
-<pre>@DELETE
-@Path(value="/workspaces/{workspace}")
-public&nbsp;javax.ws.rs.core.Response&nbsp;deleteWorkspace(@PathParam(value="workspace")
-                                                    <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;workspace)</pre>
+<pre>public&nbsp;javax.ws.rs.core.Response&nbsp;deleteWorkspace(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;workspace)</pre>
 <dl>
 <dt><strong>Specified by:</strong></dt>
 <dd><code><a href="../../../../../../mil/nga/giat/geowave/service/GeoserverService.html#deleteWorkspace(java.lang.String)">deleteWorkspace</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/service/GeoserverService.html" title="interface in mil.nga.giat.geowave.service">GeoserverService</a></code></dd>
@@ -295,10 +284,7 @@ public&nbsp;javax.ws.rs.core.Response&nbsp;deleteWorkspace(@PathParam(value="wor
 <ul class="blockList">
 <li class="blockList">
 <h4>getStyles</h4>
-<pre>@GET
-@Path(value="/styles")
-@Produces(value="application/json")
-public&nbsp;javax.ws.rs.core.Response&nbsp;getStyles()</pre>
+<pre>public&nbsp;javax.ws.rs.core.Response&nbsp;getStyles()</pre>
 <dl>
 <dt><strong>Specified by:</strong></dt>
 <dd><code><a href="../../../../../../mil/nga/giat/geowave/service/GeoserverService.html#getStyles()">getStyles</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/service/GeoserverService.html" title="interface in mil.nga.giat.geowave.service">GeoserverService</a></code></dd>
@@ -311,11 +297,7 @@ public&nbsp;javax.ws.rs.core.Response&nbsp;getStyles()</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>getStyle</h4>
-<pre>@GET
-@Path(value="/styles/{styleName}")
-@Produces(value="application/octet-stream")
-public&nbsp;javax.ws.rs.core.Response&nbsp;getStyle(@PathParam(value="styleName")
-                                                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;styleName)</pre>
+<pre>public&nbsp;javax.ws.rs.core.Response&nbsp;getStyle(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;styleName)</pre>
 <dl>
 <dt><strong>Specified by:</strong></dt>
 <dd><code><a href="../../../../../../mil/nga/giat/geowave/service/GeoserverService.html#getStyle(java.lang.String)">getStyle</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/service/GeoserverService.html" title="interface in mil.nga.giat.geowave.service">GeoserverService</a></code></dd>
@@ -328,11 +310,7 @@ public&nbsp;javax.ws.rs.core.Response&nbsp;getStyle(@PathParam(value="styleName"
 <ul class="blockList">
 <li class="blockList">
 <h4>publishStyle</h4>
-<pre>@POST
-@Path(value="/styles")
-@Produces(value="application/json")
-@Consumes(value="multipart/form-data")
-public&nbsp;javax.ws.rs.core.Response&nbsp;publishStyle(org.glassfish.jersey.media.multipart.FormDataMultiPart&nbsp;multiPart)</pre>
+<pre>public&nbsp;javax.ws.rs.core.Response&nbsp;publishStyle(org.glassfish.jersey.media.multipart.FormDataMultiPart&nbsp;multiPart)</pre>
 <dl>
 <dt><strong>Specified by:</strong></dt>
 <dd><code><a href="../../../../../../mil/nga/giat/geowave/service/GeoserverService.html#publishStyle(org.glassfish.jersey.media.multipart.FormDataMultiPart)">publishStyle</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/service/GeoserverService.html" title="interface in mil.nga.giat.geowave.service">GeoserverService</a></code></dd>
@@ -345,10 +323,7 @@ public&nbsp;javax.ws.rs.core.Response&nbsp;publishStyle(org.glassfish.jersey.med
 <ul class="blockList">
 <li class="blockList">
 <h4>deleteStyle</h4>
-<pre>@DELETE
-@Path(value="/styles/{styleName}")
-public&nbsp;javax.ws.rs.core.Response&nbsp;deleteStyle(@PathParam(value="styleName")
-                                                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;styleName)</pre>
+<pre>public&nbsp;javax.ws.rs.core.Response&nbsp;deleteStyle(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;styleName)</pre>
 <dl>
 <dt><strong>Specified by:</strong></dt>
 <dd><code><a href="../../../../../../mil/nga/giat/geowave/service/GeoserverService.html#deleteStyle(java.lang.String)">deleteStyle</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/service/GeoserverService.html" title="interface in mil.nga.giat.geowave.service">GeoserverService</a></code></dd>
@@ -361,11 +336,7 @@ public&nbsp;javax.ws.rs.core.Response&nbsp;deleteStyle(@PathParam(value="styleNa
 <ul class="blockList">
 <li class="blockList">
 <h4>getDatastores</h4>
-<pre>@GET
-@Path(value="/datastores")
-@Produces(value="application/json")
-public&nbsp;javax.ws.rs.core.Response&nbsp;getDatastores(@DefaultValue(value="")@QueryParam(value="workspace")
-                                                        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;customWorkspace)</pre>
+<pre>public&nbsp;javax.ws.rs.core.Response&nbsp;getDatastores(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;customWorkspace)</pre>
 <dl>
 <dt><strong>Specified by:</strong></dt>
 <dd><code><a href="../../../../../../mil/nga/giat/geowave/service/GeoserverService.html#getDatastores(java.lang.String)">getDatastores</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/service/GeoserverService.html" title="interface in mil.nga.giat.geowave.service">GeoserverService</a></code></dd>
@@ -378,13 +349,8 @@ public&nbsp;javax.ws.rs.core.Response&nbsp;getDatastores(@DefaultValue(value="")
 <ul class="blockList">
 <li class="blockList">
 <h4>getDatastore</h4>
-<pre>@GET
-@Path(value="/datastores/{datastoreName}")
-@Produces(value="application/json")
-public&nbsp;javax.ws.rs.core.Response&nbsp;getDatastore(@PathParam(value="datastoreName")
-                                                       <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;datastoreName,
-                                                       @DefaultValue(value="")@QueryParam(value="workspace")
-                                                       <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;customWorkspace)</pre>
+<pre>public&nbsp;javax.ws.rs.core.Response&nbsp;getDatastore(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;datastoreName,
+                                     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;customWorkspace)</pre>
 <dl>
 <dt><strong>Specified by:</strong></dt>
 <dd><code><a href="../../../../../../mil/nga/giat/geowave/service/GeoserverService.html#getDatastore(java.lang.String,%20java.lang.String)">getDatastore</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/service/GeoserverService.html" title="interface in mil.nga.giat.geowave.service">GeoserverService</a></code></dd>
@@ -397,11 +363,7 @@ public&nbsp;javax.ws.rs.core.Response&nbsp;getDatastore(@PathParam(value="datast
 <ul class="blockList">
 <li class="blockList">
 <h4>publishDatastore</h4>
-<pre>@POST
-@Path(value="/datastores")
-@Produces(value="application/json")
-@Consumes(value="multipart/form-data")
-public&nbsp;javax.ws.rs.core.Response&nbsp;publishDatastore(org.glassfish.jersey.media.multipart.FormDataMultiPart&nbsp;multiPart)</pre>
+<pre>public&nbsp;javax.ws.rs.core.Response&nbsp;publishDatastore(org.glassfish.jersey.media.multipart.FormDataMultiPart&nbsp;multiPart)</pre>
 <dl>
 <dt><strong>Specified by:</strong></dt>
 <dd><code><a href="../../../../../../mil/nga/giat/geowave/service/GeoserverService.html#publishDatastore(org.glassfish.jersey.media.multipart.FormDataMultiPart)">publishDatastore</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/service/GeoserverService.html" title="interface in mil.nga.giat.geowave.service">GeoserverService</a></code></dd>
@@ -414,12 +376,8 @@ public&nbsp;javax.ws.rs.core.Response&nbsp;publishDatastore(org.glassfish.jersey
 <ul class="blockList">
 <li class="blockList">
 <h4>deleteDatastore</h4>
-<pre>@DELETE
-@Path(value="/datastores/{datastoreName}")
-public&nbsp;javax.ws.rs.core.Response&nbsp;deleteDatastore(@PathParam(value="datastoreName")
-                                                    <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;datastoreName,
-                                                    @DefaultValue(value="")@QueryParam(value="workspace")
-                                                    <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;customWorkspace)</pre>
+<pre>public&nbsp;javax.ws.rs.core.Response&nbsp;deleteDatastore(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;datastoreName,
+                                        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;customWorkspace)</pre>
 <dl>
 <dt><strong>Specified by:</strong></dt>
 <dd><code><a href="../../../../../../mil/nga/giat/geowave/service/GeoserverService.html#deleteDatastore(java.lang.String,%20java.lang.String)">deleteDatastore</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/service/GeoserverService.html" title="interface in mil.nga.giat.geowave.service">GeoserverService</a></code></dd>
@@ -432,10 +390,7 @@ public&nbsp;javax.ws.rs.core.Response&nbsp;deleteDatastore(@PathParam(value="dat
 <ul class="blockList">
 <li class="blockList">
 <h4>getLayers</h4>
-<pre>@GET
-@Path(value="/layers")
-@Produces(value="application/json")
-public&nbsp;javax.ws.rs.core.Response&nbsp;getLayers()</pre>
+<pre>public&nbsp;javax.ws.rs.core.Response&nbsp;getLayers()</pre>
 <dl>
 <dt><strong>Specified by:</strong></dt>
 <dd><code><a href="../../../../../../mil/nga/giat/geowave/service/GeoserverService.html#getLayers()">getLayers</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/service/GeoserverService.html" title="interface in mil.nga.giat.geowave.service">GeoserverService</a></code></dd>
@@ -448,11 +403,7 @@ public&nbsp;javax.ws.rs.core.Response&nbsp;getLayers()</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>getLayer</h4>
-<pre>@GET
-@Path(value="/layers/{layerName}")
-@Produces(value="application/json")
-public&nbsp;javax.ws.rs.core.Response&nbsp;getLayer(@PathParam(value="layerName")
-                                                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;layerName)</pre>
+<pre>public&nbsp;javax.ws.rs.core.Response&nbsp;getLayer(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;layerName)</pre>
 <dl>
 <dt><strong>Specified by:</strong></dt>
 <dd><code><a href="../../../../../../mil/nga/giat/geowave/service/GeoserverService.html#getLayer(java.lang.String)">getLayer</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/service/GeoserverService.html" title="interface in mil.nga.giat.geowave.service">GeoserverService</a></code></dd>
@@ -465,11 +416,7 @@ public&nbsp;javax.ws.rs.core.Response&nbsp;getLayer(@PathParam(value="layerName"
 <ul class="blockList">
 <li class="blockList">
 <h4>publishLayer</h4>
-<pre>@POST
-@Path(value="/layers")
-@Produces(value="application/json")
-@Consumes(value="multipart/form-data")
-public&nbsp;javax.ws.rs.core.Response&nbsp;publishLayer(org.glassfish.jersey.media.multipart.FormDataMultiPart&nbsp;multiPart)</pre>
+<pre>public&nbsp;javax.ws.rs.core.Response&nbsp;publishLayer(org.glassfish.jersey.media.multipart.FormDataMultiPart&nbsp;multiPart)</pre>
 <dl>
 <dt><strong>Specified by:</strong></dt>
 <dd><code><a href="../../../../../../mil/nga/giat/geowave/service/GeoserverService.html#publishLayer(org.glassfish.jersey.media.multipart.FormDataMultiPart)">publishLayer</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/service/GeoserverService.html" title="interface in mil.nga.giat.geowave.service">GeoserverService</a></code></dd>
@@ -482,10 +429,7 @@ public&nbsp;javax.ws.rs.core.Response&nbsp;publishLayer(org.glassfish.jersey.med
 <ul class="blockListLast">
 <li class="blockList">
 <h4>deleteLayer</h4>
-<pre>@DELETE
-@Path(value="/layers/{layer}")
-public&nbsp;javax.ws.rs.core.Response&nbsp;deleteLayer(@PathParam(value="layer")
-                                                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;layerName)</pre>
+<pre>public&nbsp;javax.ws.rs.core.Response&nbsp;deleteLayer(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;layerName)</pre>
 <dl>
 <dt><strong>Specified by:</strong></dt>
 <dd><code><a href="../../../../../../mil/nga/giat/geowave/service/GeoserverService.html#deleteLayer(java.lang.String)">deleteLayer</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/service/GeoserverService.html" title="interface in mil.nga.giat.geowave.service">GeoserverService</a></code></dd>
