@@ -10,21 +10,40 @@
 <body>
 <h1 id="change-log">Change Log</h1>
 <h2 id="unreleased"><a href="https://github.com/ngageoint/geowave/tree/HEAD">Unreleased</a></h2>
-<p><a href="https://github.com/ngageoint/geowave/compare/v0.9.0...HEAD">Full Changelog</a></p>
+<p><a href="https://github.com/ngageoint/geowave/compare/v0.9.0.1...HEAD">Full Changelog</a></p>
+<p><strong>Closed issues:</strong></p>
+<ul>
+<li>Fix MiniAccumuloCluster exec on windows due to classpath too long <a href="https://github.com/ngageoint/geowave/issues/624">#624</a></li>
+</ul>
+<p><strong>Merged pull requests:</strong></p>
+<ul>
+<li>Pathingjar <a href="https://github.com/ngageoint/geowave/pull/656">#656</a> (<a href="https://github.com/andrewdmanning">andrewdmanning</a>)</li>
+<li>GEOWAVE-614 - Added multi-threading to Geowave Ingest <a href="https://github.com/ngageoint/geowave/pull/654">#654</a> (<a href="https://github.com/datasedai">datasedai</a>)</li>
+</ul>
+<h2 id="v0.9.0.1-2016-03-01"><a href="https://github.com/ngageoint/geowave/tree/v0.9.0.1">v0.9.0.1</a> (2016-03-01)</h2>
+<p><a href="https://github.com/ngageoint/geowave/compare/v0.9.0...v0.9.0.1">Full Changelog</a></p>
 <p><strong>Implemented enhancements:</strong></p>
 <ul>
 <li>Upgrade to GeoServer 2.8.2 and GeoTools 14.2 <a href="https://github.com/ngageoint/geowave/issues/594">#594</a></li>
 <li>Upgrade JTS version to 1.14 <a href="https://github.com/ngageoint/geowave/issues/583">#583</a></li>
+<li>geotools data store option for index preference <a href="https://github.com/ngageoint/geowave/issues/554">#554</a></li>
 <li>Accumulo 1.7 support <a href="https://github.com/ngageoint/geowave/issues/422">#422</a></li>
 <li>Support a pluggable DataStore <a href="https://github.com/ngageoint/geowave/issues/238">#238</a></li>
 </ul>
 <p><strong>Fixed bugs:</strong></p>
 <ul>
+<li>GeoWave on EMR Fails During Bootstrap <a href="https://github.com/ngageoint/geowave/issues/633">#633</a></li>
 <li>Issue with queries across multiple bins <a href="https://github.com/ngageoint/geowave/issues/616">#616</a></li>
 <li>Partition strategy bug on commandline <a href="https://github.com/ngageoint/geowave/issues/610">#610</a></li>
 </ul>
 <p><strong>Closed issues:</strong></p>
 <ul>
+<li>Injest configuration for FeatureDataAdapters should be able to target more than one adapter <a href="https://github.com/ngageoint/geowave/issues/644">#644</a></li>
+<li>DataIdQuery is not properly de-duplicating <a href="https://github.com/ngageoint/geowave/issues/640">#640</a></li>
+<li>Index heuristics picking null indices <a href="https://github.com/ngageoint/geowave/issues/638">#638</a></li>
+<li>Look into ByteArrayRanges.mergeIntersections() <a href="https://github.com/ngageoint/geowave/issues/626">#626</a></li>
+<li>WFS: startindex ignored on WFS query <a href="https://github.com/ngageoint/geowave/issues/620">#620</a></li>
+<li>Update Index choosing heuristic to incorporate index bins <a href="https://github.com/ngageoint/geowave/issues/618">#618</a></li>
 <li>Refactor the Column Visibility API <a href="https://github.com/ngageoint/geowave/issues/612">#612</a></li>
 <li>temporarily disable JACE build in RPM packaging <a href="https://github.com/ngageoint/geowave/issues/602">#602</a></li>
 <li>Inspect isSupported in AccumuloCOnstaintsQuery <a href="https://github.com/ngageoint/geowave/issues/600">#600</a></li>
@@ -38,7 +57,19 @@
 </ul>
 <p><strong>Merged pull requests:</strong></p>
 <ul>
+<li>Issue #650. Multiple bugs with storing adapter preferences. Adapter … <a href="https://github.com/ngageoint/geowave/pull/651">#651</a> (<a href="https://github.com/rwgdrummer">rwgdrummer</a>)</li>
+<li>fixed a npe if common data is null <a href="https://github.com/ngageoint/geowave/pull/649">#649</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
+<li>Issue #647 WholeFeatureDataAdapter persists time configuration <a href="https://github.com/ngageoint/geowave/pull/648">#648</a> (<a href="https://github.com/rwgdrummer">rwgdrummer</a>)</li>
+<li>Stanag-4676 time index configuration added to type definitions <a href="https://github.com/ngageoint/geowave/pull/646">#646</a> (<a href="https://github.com/rwgdrummer">rwgdrummer</a>)</li>
+<li>GEOWAVE-644 <a href="https://github.com/ngageoint/geowave/pull/645">#645</a> (<a href="https://github.com/rwgdrummer">rwgdrummer</a>)</li>
+<li>Geowave 632 <a href="https://github.com/ngageoint/geowave/pull/643">#643</a> (<a href="https://github.com/rwgdrummer">rwgdrummer</a>)</li>
+<li>GEOWAVE-638 Index heuristics picking Null (non-spatial) indices <a href="https://github.com/ngageoint/geowave/pull/642">#642</a> (<a href="https://github.com/rwgdrummer">rwgdrummer</a>)</li>
+<li>Fix to properly deduplicate results from DataIdQuery <a href="https://github.com/ngageoint/geowave/pull/641">#641</a> (<a href="https://github.com/dcy2003">dcy2003</a>)</li>
+<li>Protect against NPE <a href="https://github.com/ngageoint/geowave/pull/639">#639</a> (<a href="https://github.com/dcy2003">dcy2003</a>)</li>
+<li>Updated supported version #s of core libraries <a href="https://github.com/ngageoint/geowave/pull/636">#636</a> (<a href="https://github.com/dcy2003">dcy2003</a>)</li>
 <li>Doc and deployment script fixes for EMR bootstrap failures <a href="https://github.com/ngageoint/geowave/pull/634">#634</a> (<a href="https://github.com/spohnan">spohnan</a>)</li>
+<li>GEOWAVE-626: Address performance issue when querying multiple range c… <a href="https://github.com/ngageoint/geowave/pull/631">#631</a> (<a href="https://github.com/rwgdrummer">rwgdrummer</a>)</li>
+<li>GEOWAVE-618: Adjust the index choosing heuristic to incorporate binning <a href="https://github.com/ngageoint/geowave/pull/630">#630</a> (<a href="https://github.com/rwgdrummer">rwgdrummer</a>)</li>
 <li>GEOWAVE-581 - Updated README dead links <a href="https://github.com/ngageoint/geowave/pull/628">#628</a> (<a href="https://github.com/binderparty">binderparty</a>)</li>
 <li>added extra check for end less than start before calculating bins <a href="https://github.com/ngageoint/geowave/pull/627">#627</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>simple fix to limits <a href="https://github.com/ngageoint/geowave/pull/623">#623</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
