@@ -7,11 +7,12 @@ import org.apache.accumulo.core.conf.Property;
 import org.apache.accumulo.minicluster.impl.MiniAccumuloClusterImpl;
 import org.apache.accumulo.minicluster.impl.MiniAccumuloConfigImpl;
 import org.apache.accumulo.monitor.Monitor;
-
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import com.google.common.io.Files;
+
+import mil.nga.giat.geowave.datastore.accumulo.minicluster.MiniAccumuloClusterFactory;
 
 public class GeoWaveDemoApp
 {
@@ -39,8 +40,9 @@ public class GeoWaveDemoApp
 				Property.MONITOR_PORT,
 				"50095");
 
-		final MiniAccumuloClusterImpl accumulo = new MiniAccumuloClusterImpl(
-				miniAccumuloConfig);
+		final MiniAccumuloClusterImpl accumulo = MiniAccumuloClusterFactory.newAccumuloCluster(
+				miniAccumuloConfig,
+				GeoWaveDemoApp.class);
 		accumulo.start();
 
 		accumulo.exec(Monitor.class);
