@@ -70,7 +70,7 @@ public class OrthodromicDistancePartitioner<T> extends
 	private String crsName;
 	private transient CoordinateReferenceSystem crs = null;
 	private transient GeometryCalculations calculator;
-	private DimensionExtractor<T> dimensionExtractor;
+	protected DimensionExtractor<T> dimensionExtractor;
 	private int latDimensionPosition;
 	private int longDimensionPosition;
 
