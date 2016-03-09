@@ -8,6 +8,22 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.accumulo.core.client.AccumuloException;
+import org.apache.accumulo.core.client.AccumuloSecurityException;
+import org.apache.accumulo.minicluster.impl.MiniAccumuloClusterImpl;
+import org.apache.accumulo.minicluster.impl.MiniAccumuloConfigImpl;
+import org.apache.commons.io.FileUtils;
+import org.geotools.feature.AttributeTypeBuilder;
+import org.geotools.feature.simple.SimpleFeatureBuilder;
+import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
+import org.opengis.feature.simple.SimpleFeature;
+import org.opengis.feature.simple.SimpleFeatureType;
+import org.opengis.referencing.operation.TransformException;
+
+import com.google.common.io.Files;
+import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.Geometry;
+
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveGTDataStore;
 import mil.nga.giat.geowave.adapter.vector.utils.DateUtilities;
@@ -24,22 +40,7 @@ import mil.nga.giat.geowave.core.store.memory.DataStoreUtils;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStore;
 import mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations;
-
-import org.apache.accumulo.core.client.AccumuloException;
-import org.apache.accumulo.core.client.AccumuloSecurityException;
-import org.apache.accumulo.minicluster.MiniAccumuloCluster;
-import org.apache.accumulo.minicluster.MiniAccumuloConfig;
-import org.apache.commons.io.FileUtils;
-import org.geotools.feature.AttributeTypeBuilder;
-import org.geotools.feature.simple.SimpleFeatureBuilder;
-import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
-import org.opengis.feature.simple.SimpleFeature;
-import org.opengis.feature.simple.SimpleFeatureType;
-import org.opengis.referencing.operation.TransformException;
-
-import com.google.common.io.Files;
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.Geometry;
+import mil.nga.giat.geowave.datastore.accumulo.minicluster.MiniAccumuloClusterFactory;
 
 /**
  * This class is intended to provide a self-contained, easy-to-follow example of
@@ -52,7 +53,7 @@ import com.vividsolutions.jts.geom.Geometry;
 public class GeoTemporalQueryExample
 {
 	private static File tempAccumuloDir;
-	private static MiniAccumuloCluster accumulo;
+	private static MiniAccumuloClusterImpl accumulo;
 	private static AccumuloDataStore dataStore;
 
 	private static final PrimaryIndex index = new SpatialTemporalDimensionalityTypeProvider().createPrimaryIndex();
@@ -116,10 +117,11 @@ public class GeoTemporalQueryExample
 
 		tempAccumuloDir = Files.createTempDir();
 
-		accumulo = new MiniAccumuloCluster(
-				new MiniAccumuloConfig(
+		accumulo = MiniAccumuloClusterFactory.newAccumuloCluster(
+				new MiniAccumuloConfigImpl(
 						tempAccumuloDir,
-						ACCUMULO_PASSWORD));
+						ACCUMULO_PASSWORD),
+				GeoTemporalQueryExample.class);
 
 		accumulo.start();
 
@@ -256,7 +258,7 @@ public class GeoTemporalQueryExample
 
 		iterator.close();
 
-		TemporalConstraints tempotalIndexConstraints = new TemporalConstraints(
+		final TemporalConstraints tempotalIndexConstraints = new TemporalConstraints(
 				Arrays.asList(
 						new TemporalRange(
 								DateUtilities.parseISO("2005-05-17T19:32:56Z"),
@@ -266,7 +268,7 @@ public class GeoTemporalQueryExample
 								DateUtilities.parseISO("2005-05-19T22:32:56Z"))),
 				"ignored"); // the name is not used in this case
 
-		SpatialTemporalQuery query2 = new SpatialTemporalQuery(
+		final SpatialTemporalQuery query2 = new SpatialTemporalQuery(
 				tempotalIndexConstraints,
 				mil.nga.giat.geowave.adapter.vector.utils.GeometryUtils.buffer(
 						GeoWaveGTDataStore.DEFAULT_CRS,

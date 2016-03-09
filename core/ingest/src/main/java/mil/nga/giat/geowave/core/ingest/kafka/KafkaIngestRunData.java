@@ -1,4 +1,4 @@
-package mil.nga.giat.geowave.core.ingest.local;
+package mil.nga.giat.geowave.core.ingest.kafka;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -20,7 +20,7 @@ import mil.nga.giat.geowave.core.store.memory.MemoryAdapterStore;
  * A class to hold intermediate run data that must be used throughout the life
  * of an ingest process.
  */
-public class IngestRunData implements
+public class KafkaIngestRunData implements
 		Closeable
 {
 	private final Map<ByteArrayId, IndexWriter> indexIdToWriterCache = new HashMap<ByteArrayId, IndexWriter>();
@@ -28,7 +28,7 @@ public class IngestRunData implements
 	private final DataStore dataStore;
 	private final String[] args;
 
-	public IngestRunData(
+	public KafkaIngestRunData(
 			final List<WritableDataAdapter<?>> adapters,
 			final DataStore dataStore,
 			final String[] args ) {
