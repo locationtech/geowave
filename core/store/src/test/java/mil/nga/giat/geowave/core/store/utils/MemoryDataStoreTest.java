@@ -25,6 +25,7 @@ import mil.nga.giat.geowave.core.store.adapter.MockComponents;
 import mil.nga.giat.geowave.core.store.adapter.MockComponents.IntegerRangeDataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.MockComponents.TestIndexModel;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
 import mil.nga.giat.geowave.core.store.adapter.statistics.CountDataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
@@ -51,7 +52,8 @@ public class MemoryDataStoreTest
 
 	@Test
 	public void test()
-			throws IOException {
+			throws IOException,
+			MismatchedIndexToAdapterMapping {
 		final PrimaryIndex index = new PrimaryIndex(
 				new MockComponents.MockIndexStrategy(),
 				new MockComponents.TestIndexModel());
@@ -65,27 +67,29 @@ public class MemoryDataStoreTest
 				namespace);
 		final WritableDataAdapter<Integer> adapter = new MockComponents.MockAbstractDataAdapter();
 
-		try (final IndexWriter indexWriter = dataStore.createIndexWriter(
-				index,
-				new VisibilityWriter<Integer>() {
-					@Override
-					public FieldVisibilityHandler<Integer, Object> getFieldVisibilityHandler(
-							ByteArrayId fieldId ) {
-						return new GlobalVisibilityHandler(
-								"aaa&bbb");
-					}
-				})) {
+		final VisibilityWriter<Integer> visWriter = new VisibilityWriter<Integer>() {
+			@Override
+			public FieldVisibilityHandler<Integer, Object> getFieldVisibilityHandler(
+					ByteArrayId fieldId ) {
+				return new GlobalVisibilityHandler(
+						"aaa&bbb");
+			}
+		};
+
+		try (final IndexWriter indexWriter = dataStore.createWriter(
+				adapter,
+				index)) {
 
 			indexWriter.write(
-					adapter,
 					new Integer(
-							25));
+							25),
+					visWriter);
 			indexWriter.flush();
 
 			indexWriter.write(
-					adapter,
 					new Integer(
-							35));
+							35),
+					visWriter);
 			indexWriter.flush();
 		}
 
@@ -205,6 +209,236 @@ public class MemoryDataStoreTest
 				new QueryOptions(
 						adapter,
 						index,
+						new String[] {
+							"aaa",
+							"bbb"
+						}),
+				new DataIdQuery(
+						adapter.getAdapterId(),
+						adapter.getDataId(new Integer(
+								35))))) {
+			assertTrue(itemIt.hasNext());
+			assertEquals(
+					new Integer(
+							35),
+					itemIt.next());
+		}
+
+	}
+
+	@Test
+	public void testMultipleIndices()
+			throws IOException,
+			MismatchedIndexToAdapterMapping {
+		final PrimaryIndex index1 = new PrimaryIndex(
+				new MockComponents.MockIndexStrategy(),
+				new MockComponents.TestIndexModel(
+						"tm1"));
+		final PrimaryIndex index2 = new PrimaryIndex(
+				new MockComponents.MockIndexStrategy(),
+				new MockComponents.TestIndexModel(
+						"tm2"));
+		final String namespace = "test2_" + getClass().getName();
+		final StoreFactoryFamilySpi storeFamily = new MemoryStoreFactoryFamily();
+		final DataStore dataStore = storeFamily.getDataStoreFactory().createStore(
+				new HashMap<String, Object>(),
+				namespace);
+		final DataStatisticsStore statsStore = storeFamily.getDataStatisticsStoreFactory().createStore(
+				new HashMap<String, Object>(),
+				namespace);
+		final WritableDataAdapter<Integer> adapter = new MockComponents.MockAbstractDataAdapter();
+
+		final VisibilityWriter<Integer> visWriter = new VisibilityWriter<Integer>() {
+			@Override
+			public FieldVisibilityHandler<Integer, Object> getFieldVisibilityHandler(
+					ByteArrayId fieldId ) {
+				return new GlobalVisibilityHandler(
+						"aaa&bbb");
+			}
+		};
+
+		try (final IndexWriter indexWriter = dataStore.createWriter(
+				adapter,
+				index1,
+				index2)) {
+
+			indexWriter.write(
+					new Integer(
+							25),
+					visWriter);
+			indexWriter.flush();
+
+			indexWriter.write(
+					new Integer(
+							35),
+					visWriter);
+			indexWriter.flush();
+		}
+
+		// authorization check
+		try (CloseableIterator<?> itemIt = dataStore.query(
+				new QueryOptions(
+						adapter,
+						index2,
+						new String[] {
+							"aaa"
+						}),
+				new TestQuery(
+						23,
+						26))) {
+			assertFalse(itemIt.hasNext());
+		}
+
+		try (CloseableIterator<?> itemIt = dataStore.query(
+				new QueryOptions(
+						adapter,
+						index1,
+						new String[] {
+							"aaa",
+							"bbb"
+						}),
+				new TestQuery(
+						23,
+						26))) {
+			assertTrue(itemIt.hasNext());
+			assertEquals(
+					new Integer(
+							25),
+					itemIt.next());
+			assertFalse(itemIt.hasNext());
+		}
+		// pick an index
+		try (CloseableIterator<?> itemIt = dataStore.query(
+				new QueryOptions(
+						adapter,
+						new String[] {
+							"aaa",
+							"bbb"
+						}),
+				new TestQuery(
+						23,
+						36))) {
+			assertTrue(itemIt.hasNext());
+			assertEquals(
+					new Integer(
+							25),
+					itemIt.next());
+			assertTrue(itemIt.hasNext());
+			assertEquals(
+					new Integer(
+							35),
+					itemIt.next());
+			assertFalse(itemIt.hasNext());
+		}
+
+		final Iterator<DataStatistics<?>> statsIt = statsStore.getAllDataStatistics();
+		assertTrue(checkStats(
+				(DataStatistics<Integer>) statsIt.next(),
+				2,
+				new NumericRange(
+						25,
+						35)));
+		assertTrue(checkStats(
+				(DataStatistics<Integer>) statsIt.next(),
+				2,
+				new NumericRange(
+						25,
+						35)));
+
+		dataStore.delete(
+				new QueryOptions(
+						adapter,
+						new String[] {
+							"aaa",
+							"bbb"
+						}),
+				new TestQuery(
+						23,
+						26));
+		try (CloseableIterator<?> itemIt = dataStore.query(
+				new QueryOptions(
+						adapter,
+						index1,
+						new String[] {
+							"aaa",
+							"bbb"
+						}),
+				new TestQuery(
+						23,
+						36))) {
+			assertTrue(itemIt.hasNext());
+			assertEquals(
+					new Integer(
+							35),
+					itemIt.next());
+			assertFalse(itemIt.hasNext());
+		}
+		try (CloseableIterator<?> itemIt = dataStore.query(
+				new QueryOptions(
+						adapter,
+						index2,
+						new String[] {
+							"aaa",
+							"bbb"
+						}),
+				new TestQuery(
+						23,
+						36))) {
+			assertTrue(itemIt.hasNext());
+			assertEquals(
+					new Integer(
+							35),
+					itemIt.next());
+			assertFalse(itemIt.hasNext());
+		}
+		try (CloseableIterator<?> itemIt = dataStore.query(
+				new QueryOptions(
+						adapter,
+						index1,
+						new String[] {
+							"aaa",
+							"bbb"
+						}),
+				new TestQuery(
+						23,
+						26))) {
+			assertFalse(itemIt.hasNext());
+		}
+		try (CloseableIterator<?> itemIt = dataStore.query(
+				new QueryOptions(
+						adapter,
+						index2,
+						new String[] {
+							"aaa",
+							"bbb"
+						}),
+				new TestQuery(
+						23,
+						26))) {
+			assertFalse(itemIt.hasNext());
+		}
+		try (CloseableIterator<?> itemIt = dataStore.query(
+				new QueryOptions(
+						adapter,
+						index1,
+						new String[] {
+							"aaa",
+							"bbb"
+						}),
+				new DataIdQuery(
+						adapter.getAdapterId(),
+						adapter.getDataId(new Integer(
+								35))))) {
+			assertTrue(itemIt.hasNext());
+			assertEquals(
+					new Integer(
+							35),
+					itemIt.next());
+		}
+		try (CloseableIterator<?> itemIt = dataStore.query(
+				new QueryOptions(
+						adapter,
+						index2,
 						new String[] {
 							"aaa",
 							"bbb"

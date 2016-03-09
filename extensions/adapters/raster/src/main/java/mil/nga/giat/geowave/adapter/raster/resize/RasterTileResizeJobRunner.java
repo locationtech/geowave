@@ -167,10 +167,9 @@ public class RasterTileResizeJobRunner extends
 				job.getConfiguration(),
 				index);
 		final DataStore store = outputDataStoreOptions.createStore();
-		final IndexWriter writer = store.createIndexWriter(
-				index,
-				DataStoreUtils.DEFAULT_VISIBILITY);
-		writer.setupAdapter(newAdapter);
+		final IndexWriter writer = store.createWriter(
+				newAdapter,
+				index);
 		boolean retVal = false;
 		try {
 			retVal = job.waitForCompletion(true);

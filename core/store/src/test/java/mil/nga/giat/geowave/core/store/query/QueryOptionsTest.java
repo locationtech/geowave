@@ -9,10 +9,12 @@ import java.util.Collections;
 import java.util.List;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.store.AdapterToIndexMapping;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.MockComponents;
+import mil.nga.giat.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -47,9 +49,7 @@ public class QueryOptionsTest
 
 					@Override
 					public void addAdapter(
-							final DataAdapter<?> adapter ) {
-
-					}
+							final DataAdapter<?> adapter ) {}
 
 					@Override
 					public DataAdapter<?> getAdapter(
@@ -70,6 +70,7 @@ public class QueryOptionsTest
 						return new CloseableIterator.Wrapper(
 								Collections.emptyListIterator());
 					}
+
 				}).next().getAdapterId() != null);
 	}
 
@@ -111,8 +112,7 @@ public class QueryOptionsTest
 							"123"),
 					new ByteArrayId(
 							"567")
-				}),
-				null);
+				}));
 		assertEquals(
 				2,
 				ops.getAdapterIds(
@@ -133,8 +133,8 @@ public class QueryOptionsTest
 			"two",
 			"three"
 		});
-		final QueryOptions ops = new QueryOptions(
-				fieldIds);
+		final QueryOptions ops = new QueryOptions();
+		ops.setFieldIds(fieldIds);
 		final QueryOptions deserialized = new QueryOptions();
 		deserialized.fromBinary(ops.toBinary());
 		Assert.assertTrue(fieldIds.size() == deserialized.getFieldIds().size());

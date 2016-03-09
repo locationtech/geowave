@@ -4,6 +4,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.DataStoreEntryInfo;
 import mil.nga.giat.geowave.core.store.DeleteCallback;
@@ -11,25 +13,23 @@ import mil.nga.giat.geowave.core.store.EntryVisibilityHandler;
 import mil.nga.giat.geowave.core.store.IngestCallback;
 import mil.nga.giat.geowave.core.store.ScanCallback;
 
-import org.apache.log4j.Logger;
-
 public class DataStatisticsBuilder<T> implements
 		IngestCallback<T>,
 		DeleteCallback<T>,
 		ScanCallback<T>
 {
-	private final StatisticalDataAdapter<T> adapter;
+	private final StatisticsProvider<T> statisticsProvider;
 	private final Map<ByteArrayId, DataStatistics<T>> statisticsMap = new HashMap<ByteArrayId, DataStatistics<T>>();
 	private final ByteArrayId statisticsId;
 	private final EntryVisibilityHandler<T> visibilityHandler;
 	private static final Logger LOGGER = Logger.getLogger(DataStatistics.class);
 
 	public DataStatisticsBuilder(
-			final StatisticalDataAdapter<T> adapter,
+			final StatisticsProvider<T> statisticsProvider,
 			final ByteArrayId statisticsId ) {
-		this.adapter = adapter;
+		this.statisticsProvider = statisticsProvider;
 		this.statisticsId = statisticsId;
-		this.visibilityHandler = adapter.getVisibilityHandler(statisticsId);
+		this.visibilityHandler = statisticsProvider.getVisibilityHandler(statisticsId);
 	}
 
 	@Override
@@ -42,7 +42,7 @@ public class DataStatisticsBuilder<T> implements
 						entry));
 		DataStatistics<T> statistics = statisticsMap.get(visibility);
 		if (statistics == null) {
-			statistics = adapter.createDataStatistics(statisticsId);
+			statistics = statisticsProvider.createDataStatistics(statisticsId);
 			if (statistics == null) {
 				return;
 			}
@@ -71,7 +71,7 @@ public class DataStatisticsBuilder<T> implements
 						entry));
 		DataStatistics<T> statistics = statisticsMap.get(visibilityByteArray);
 		if (statistics == null) {
-			statistics = adapter.createDataStatistics(statisticsId);
+			statistics = statisticsProvider.createDataStatistics(statisticsId);
 			statistics.setVisibility(visibilityByteArray.getBytes());
 			statisticsMap.put(
 					visibilityByteArray,
@@ -94,7 +94,7 @@ public class DataStatisticsBuilder<T> implements
 						entry));
 		DataStatistics<T> statistics = statisticsMap.get(visibility);
 		if (statistics == null) {
-			statistics = adapter.createDataStatistics(statisticsId);
+			statistics = statisticsProvider.createDataStatistics(statisticsId);
 			if (statistics == null) {
 				return;
 			}

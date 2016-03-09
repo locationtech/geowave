@@ -96,5 +96,4 @@ public class MemoryAdapterStore implements
 							DataAdapter.class));
 		}
 	}
-
 }

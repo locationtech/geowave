@@ -19,7 +19,7 @@ import mil.nga.giat.geowave.core.store.adapter.statistics.CountDataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.FieldIdStatisticVisibility;
 import mil.nga.giat.geowave.core.store.adapter.statistics.NumericRangeDataStatistics;
-import mil.nga.giat.geowave.core.store.adapter.statistics.StatisticalDataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.statistics.StatisticsProvider;
 import mil.nga.giat.geowave.core.store.data.PersistentValue;
 import mil.nga.giat.geowave.core.store.data.field.FieldReader;
 import mil.nga.giat.geowave.core.store.data.field.FieldUtils;
@@ -34,7 +34,7 @@ public class MockComponents
 	// contained in abstract class.
 	public static class MockAbstractDataAdapter extends
 			AbstractDataAdapter<Integer> implements
-			StatisticalDataAdapter<Integer>
+			StatisticsProvider<Integer>
 	{
 
 		public MockAbstractDataAdapter() {
@@ -214,6 +214,11 @@ public class MockComponents
 				final ByteArrayId statisticsId ) {
 			return new FieldIdStatisticVisibility<Integer>(
 					new TestDimensionField().fieldId);
+		}
+
+		@Override
+		public DataAdapter<Integer> getDataAdapter() {
+			return this;
 		}
 
 	} // class MockAbstractDataAdapter
@@ -641,10 +646,18 @@ public class MockComponents
 	{
 
 		private final TestDimensionField[] dimensionFields;
+		private String id = "testmodel";
 
 		public TestIndexModel() {
 			dimensionFields = new TestDimensionField[1];
 			dimensionFields[0] = new TestDimensionField();
+		}
+
+		public TestIndexModel(
+				String id ) {
+			dimensionFields = new TestDimensionField[1];
+			dimensionFields[0] = new TestDimensionField();
+			this.id = id;
 		}
 
 		@Override
@@ -677,7 +690,7 @@ public class MockComponents
 
 		@Override
 		public String getId() {
-			return "testmodel";
+			return id;
 		}
 
 	}

@@ -25,13 +25,13 @@ import com.google.common.collect.Lists;
 
 import mil.nga.giat.geowave.adapter.vector.auth.AuthorizationFactorySPI;
 import mil.nga.giat.geowave.adapter.vector.auth.EmptyAuthorizationFactory;
-import mil.nga.giat.geowave.adapter.vector.index.ChooseBestMatchIndexQueryStrategy;
 import mil.nga.giat.geowave.adapter.vector.index.ChooseHeuristicMatchIndexQueryStrategy;
 import mil.nga.giat.geowave.adapter.vector.index.IndexQueryStrategySPI;
 import mil.nga.giat.geowave.adapter.vector.plugin.lock.LockingManagementFactory;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.GeoWaveStoreFinder;
 import mil.nga.giat.geowave.core.store.StoreFactoryFamilySpi;
+import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.core.store.config.AbstractConfigOption;
@@ -118,6 +118,7 @@ public class GeoWavePluginConfig
 	private final URL authorizationURL;
 	private final Integer transactionBufferSize;
 	private final IndexQueryStrategySPI indexQueryStrategy;
+	private final AdapterIndexMappingStore adapterIndexMappingStore;
 
 	private static Map<String, List<Param>> paramMap = new HashMap<String, List<Param>>();
 
@@ -232,6 +233,12 @@ public class GeoWavePluginConfig
 						paramStrs,
 						storeFactoryFamily.getIndexStoreFactory().getOptions()),
 				namespace);
+
+		adapterIndexMappingStore = storeFactoryFamily.getAdapterIndexMappingStoreFactory().createStore(
+				ConfigUtils.valuesFromStrings(
+						paramStrs,
+						storeFactoryFamily.getAdapterIndexMappingStoreFactory().getOptions()),
+				namespace);
 		lockingManagementFactory = factory;
 
 		authorizationFactory = getAuthorizationFactory(params);
@@ -270,6 +277,10 @@ public class GeoWavePluginConfig
 
 	public DataStore getDataStore() {
 		return dataStore;
+	}
+
+	public AdapterIndexMappingStore getAdapterIndexMappingStore() {
+		return adapterIndexMappingStore;
 	}
 
 	public IndexStore getIndexStore() {

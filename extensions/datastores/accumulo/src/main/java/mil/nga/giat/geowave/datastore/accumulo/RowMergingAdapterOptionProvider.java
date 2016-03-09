@@ -4,14 +4,14 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.accumulo.core.client.IteratorSetting.Column;
+import org.apache.accumulo.core.iterators.conf.ColumnSet;
+import org.apache.hadoop.io.Text;
+
 import mil.nga.giat.geowave.core.index.ByteArrayUtils;
 import mil.nga.giat.geowave.core.index.PersistenceUtils;
 import mil.nga.giat.geowave.core.store.adapter.RowMergingDataAdapter;
 import mil.nga.giat.geowave.datastore.accumulo.IteratorConfig.OptionProvider;
-
-import org.apache.accumulo.core.client.IteratorSetting.Column;
-import org.apache.accumulo.core.iterators.conf.ColumnSet;
-import org.apache.hadoop.io.Text;
 
 public class RowMergingAdapterOptionProvider implements
 		OptionProvider

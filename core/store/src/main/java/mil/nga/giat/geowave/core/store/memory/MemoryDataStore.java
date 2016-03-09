@@ -5,39 +5,45 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeSet;
 
+import org.apache.commons.lang3.tuple.Pair;
+import org.apache.log4j.Logger;
+
+import com.google.common.collect.Iterators;
+
 import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.store.AdapterToIndexMapping;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.DataStoreCallbackManager;
+import mil.nga.giat.geowave.core.store.IndexCompositeWriter;
 import mil.nga.giat.geowave.core.store.DataStoreEntryInfo.FieldInfo;
 import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.IngestCallback;
 import mil.nga.giat.geowave.core.store.ScanCallback;
+import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.core.store.data.IndexedPersistenceEncoding;
 import mil.nga.giat.geowave.core.store.data.VisibilityWriter;
 import mil.nga.giat.geowave.core.store.filter.DedupeFilter;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
 import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
-import mil.nga.giat.geowave.core.store.index.Index;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndexDataStore;
 import mil.nga.giat.geowave.core.store.query.Query;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
-
-import org.apache.log4j.Logger;
-
-import com.google.common.collect.Iterators;
 
 public class MemoryDataStore implements
 		DataStore
@@ -48,6 +54,7 @@ public class MemoryDataStore implements
 	private final IndexStore indexStore;
 	private final DataStatisticsStore statsStore;
 	private final SecondaryIndexDataStore secondaryIndexDataStore;
+	private final AdapterIndexMappingStore adapterIndexMappingStore;
 
 	public MemoryDataStore() {
 		super();
@@ -55,55 +62,69 @@ public class MemoryDataStore implements
 		indexStore = new MemoryIndexStore();
 		statsStore = new MemoryDataStatisticsStore();
 		secondaryIndexDataStore = new MemorySecondaryIndexDataStore();
+		adapterIndexMappingStore = new MemoryAdapterIndexMappingStore();
 	}
 
 	public MemoryDataStore(
 			final AdapterStore adapterStore,
 			final IndexStore indexStore,
 			final DataStatisticsStore statsStore,
-			final SecondaryIndexDataStore secondaryIndexDataStore ) {
+			final SecondaryIndexDataStore secondaryIndexDataStore,
+			final AdapterIndexMappingStore adapterIndexMappingStore ) {
 		super();
 		this.adapterStore = adapterStore;
 		this.indexStore = indexStore;
 		this.statsStore = statsStore;
 		this.secondaryIndexDataStore = secondaryIndexDataStore;
+		this.adapterIndexMappingStore = adapterIndexMappingStore;
 	}
 
 	@Override
-	public <T> IndexWriter createIndexWriter(
-			final PrimaryIndex index,
-			final VisibilityWriter<T> visibilityWriter ) {
-		indexStore.addIndex(index);
+	public <T> IndexWriter createWriter(
+			final DataAdapter<T> adapter,
+			final PrimaryIndex... indices )
+			throws MismatchedIndexToAdapterMapping {
+		adapterStore.addAdapter(adapter);
 
-		return createWriter(
-				index,
-				visibilityWriter);
+		adapterIndexMappingStore.addAdapterIndexMapping(new AdapterToIndexMapping(
+				adapter.getAdapterId(),
+				indices));
+		final IndexWriter<T>[] writers = new IndexWriter[indices.length];
+		int i = 0;
+		for (PrimaryIndex index : indices) {
+			indexStore.addIndex(index);
+			writers[i] = new MyIndexWriter<T>(
+					DataStoreUtils.UNCONSTRAINED_VISIBILITY,
+					adapter,
+					index,
+					i == 0);
+			i++;
+		}
+		return new IndexCompositeWriter(
+				writers);
 	}
 
-	private <T> IndexWriter createWriter(
-			final PrimaryIndex index,
-			final VisibilityWriter<T> customFieldVisibilityWriter ) {
-
-		return new MyIndexWriter<T>(
-				index,
-				customFieldVisibilityWriter);
-	}
-
-	private class MyIndexWriter<S> implements
-			IndexWriter
+	private class MyIndexWriter<T> implements
+			IndexWriter<T>
 	{
 		final PrimaryIndex index;
-		final VisibilityWriter<S> customFieldVisibilityWriter;
-		final DataStoreCallbackManager callbackCache = new DataStoreCallbackManager(
-				statsStore,
-				secondaryIndexDataStore);
+		final DataAdapter<T> adapter;
+		final VisibilityWriter<T> customFieldVisibilityWriter;
+		final DataStoreCallbackManager callbackCache;
 
 		public MyIndexWriter(
+				final VisibilityWriter<T> customFieldVisibilityWriter,
+				final DataAdapter<T> adapter,
 				final PrimaryIndex index,
-				final VisibilityWriter<S> customFieldVisibilityWriter ) {
+				final boolean captureAdapterStats ) {
 			super();
 			this.index = index;
+			this.adapter = adapter;
 			this.customFieldVisibilityWriter = customFieldVisibilityWriter;
+			callbackCache = new DataStoreCallbackManager(
+					statsStore,
+					secondaryIndexDataStore,
+					captureAdapterStats);
 		}
 
 		@Override
@@ -113,28 +134,25 @@ public class MemoryDataStore implements
 		}
 
 		@Override
-		public <T> List<ByteArrayId> write(
-				final WritableDataAdapter<T> writableAdapter,
+		public List<ByteArrayId> write(
 				final T entry ) {
 			return write(
-					writableAdapter,
 					entry,
 					(VisibilityWriter<T>) customFieldVisibilityWriter);
 		}
 
 		@Override
-		public <T> List<ByteArrayId> write(
-				final WritableDataAdapter<T> writableAdapter,
+		public List<ByteArrayId> write(
 				final T entry,
 				final VisibilityWriter<T> fieldVisibilityWriter ) {
-
-			adapterStore.addAdapter(writableAdapter);
-			final IngestCallback<T> callback = callbackCache.getIngestCallback(
-					writableAdapter,
-					index);
 			final List<ByteArrayId> ids = new ArrayList<ByteArrayId>();
+
+			final IngestCallback<T> callback = callbackCache.getIngestCallback(
+					(WritableDataAdapter) this.adapter,
+					index);
+
 			final List<EntryRow> rows = DataStoreUtils.entryToRows(
-					writableAdapter,
+					(WritableDataAdapter) this.adapter,
 					index,
 					entry,
 					callback,
@@ -149,16 +167,15 @@ public class MemoryDataStore implements
 					LOGGER.warn("Unable to add new entry");
 				}
 			}
+
 			return ids;
 		}
 
 		@Override
-		public <T> void setupAdapter(
-				final WritableDataAdapter<T> writableAdapter ) {}
-
-		@Override
-		public PrimaryIndex getIndex() {
-			return index;
+		public PrimaryIndex[] getIndices() {
+			return new PrimaryIndex[] {
+				index
+			};
 		}
 
 		@Override
@@ -191,20 +208,15 @@ public class MemoryDataStore implements
 	public boolean delete(
 			final QueryOptions queryOptions,
 			final Query query ) {
-		final DataStoreCallbackManager callbackCache = new DataStoreCallbackManager(
-				statsStore,
-				secondaryIndexDataStore);
 
 		try (CloseableIterator<?> it = query(
 				queryOptions,
 				query,
-				true,
-				callbackCache)) {
+				true)) {
 			while (it.hasNext()) {
 				it.next();
 				it.remove();
 			}
-			callbackCache.close();
 		}
 		catch (final IOException e) {
 			LOGGER.error(
@@ -239,130 +251,48 @@ public class MemoryDataStore implements
 		return query(
 				queryOptions,
 				query,
-				false,
-				null);
+				false);
 	}
 
 	private <T> CloseableIterator<T> query(
 			final QueryOptions queryOptions,
 			final Query query,
-			final boolean isDelete,
-			final DataStoreCallbackManager callbackCache ) {
-
+			final boolean isDelete ) {
 		final DedupeFilter filter = new DedupeFilter();
-		int indexCount = 0;
-		try (CloseableIterator<Index<?, ?>> indexIt = queryOptions.getIndices(getIndexStore())) {
+		filter.setDedupAcrossIndices(false);
+		try {
+			// keep a list of adapters that have been queried, to only low an
+			// adapter to be queried
+			// once
+			Set<ByteArrayId> queriedAdapters = new HashSet<ByteArrayId>();
+
 			final List<CloseableIterator<T>> results = new ArrayList<CloseableIterator<T>>();
-			while (indexIt.hasNext()) {
-				final PrimaryIndex index = (PrimaryIndex) indexIt.next();
-				indexCount++;
 
-				final TreeSet<EntryRow> set = getRowsForIndex(index.getId());
-				final Iterator<EntryRow> rowIt = ((query == null) || query.isSupported(index)) ? ((TreeSet<EntryRow>) set.clone()).iterator() : Collections.<EntryRow> emptyIterator();
-				final List<QueryFilter> filters = (query == null) ? new ArrayList<QueryFilter>() : new ArrayList<QueryFilter>(
-						query.createFilters(index.getIndexModel()));
-				filters.add(new QueryFilter() {
-					@Override
-					public boolean accept(
-							final CommonIndexModel indexModel,
-							final IndexedPersistenceEncoding persistenceEncoding ) {
-						try (CloseableIterator<DataAdapter<?>> adapters = queryOptions.getAdapters(getAdapterStore())) {
-							for (final ByteArrayId id : DataStoreUtils.trimAdapterIdsByIndex(
-									statsStore,
-									index.getId(),
-									adapters,
-									queryOptions.getAuthorizations())) {
-								if (id.equals(persistenceEncoding.getAdapterId())) {
-									return true;
-								}
-							}
-						}
-						catch (final IOException e) {
-							LOGGER.error(
-									"Cannot resolve adapter IDs",
-									e);
-						}
-						return false;
-					}
-				});
-				filters.add(filter);
-				results.add(new CloseableIterator<T>() {
-					EntryRow nextRow = null;
-					EntryRow currentRow = null;
-					IndexedPersistenceEncoding encoding = null;
+			for (Pair<PrimaryIndex, List<DataAdapter<Object>>> indexAdapterPair : queryOptions.getIndicesForAdapters(
+					adapterStore,
+					adapterIndexMappingStore,
+					indexStore)) {
+				for (DataAdapter<Object> adapter : indexAdapterPair.getRight()) {
 
-					private boolean getNext() {
-						while ((nextRow == null) && rowIt.hasNext()) {
-							final EntryRow row = rowIt.next();
-							final DataAdapter<?> adapter = adapterStore.getAdapter(new ByteArrayId(
-									row.getTableRowId().getAdapterId()));
-							encoding = DataStoreUtils.getEncoding(
-									index.getIndexModel(),
-									adapter,
-									row);
-							boolean ok = true;
-							for (final QueryFilter filter : filters) {
-								if (!filter.accept(
-										index.getIndexModel(),
-										encoding)) {
-									ok = false;
-									break;
-								}
-							}
-							ok &= isAuthorized(
-									row,
-									queryOptions.getAuthorizations());
-							if (ok) {
-								nextRow = row;
-								break;
-							}
-						}
-						return (nextRow != null);
-					}
+					final boolean firstTimeForAdapter = queriedAdapters.add(adapter.getAdapterId());
+					if (!(firstTimeForAdapter || isDelete)) continue;
 
-					@Override
-					public boolean hasNext() {
-						return getNext();
-					}
+					DataStoreCallbackManager callbackManager = new DataStoreCallbackManager(
+							this.statsStore,
+							this.secondaryIndexDataStore,
+							firstTimeForAdapter);
 
-					@Override
-					public T next() {
-						currentRow = nextRow;
-						if (isDelete) {
-							final DataAdapter<T> adapter = (DataAdapter<T>) adapterStore.getAdapter(encoding.getAdapterId());
-							if (adapter instanceof WritableDataAdapter) {
-								callbackCache.getDeleteCallback(
-										(WritableDataAdapter<T>) adapter,
-										index).entryDeleted(
-										currentRow.getInfo(),
-										(T) currentRow.entry);
-							}
-						}
-						((ScanCallback<T>) queryOptions.getScanCallback()).entryScanned(
-								currentRow.getInfo(),
-								(T) currentRow.entry);
-						nextRow = null;
-						return (T) currentRow.entry;
-					}
-
-					@Override
-					public void remove() {
-						if (currentRow != null) {
-							set.remove(currentRow);
-						}
-					}
-
-					@Override
-					public void close()
-							throws IOException {
-						final ScanCallback<?> callback = queryOptions.getScanCallback();
-						if ((callback != null) && (callback instanceof Closeable)) {
-							((Closeable) callback).close();
-						}
-					}
-				});
+					populateResults(
+							results,
+							adapter,
+							indexAdapterPair.getLeft(),
+							query,
+							isDelete ? null : filter,
+							queryOptions,
+							isDelete,
+							callbackManager);
+				}
 			}
-			filter.setDedupAcrossIndices(queryOptions.isDedupAcrossIndices() && (indexCount > 0));
 			return new CloseableIteratorWrapper<T>(
 					new Closeable() {
 						@Override
@@ -375,13 +305,121 @@ public class MemoryDataStore implements
 					},
 					Iterators.concat(results.iterator()),
 					queryOptions.getLimit());
+
 		}
-		catch (final IOException e) {
+		catch (final IOException e)
+
+		{
 			LOGGER.error(
 					"Cannot process query [" + (query == null ? "all" : query.toString()) + "]",
 					e);
 			return new CloseableIterator.Empty<T>();
 		}
+
+	}
+
+	private <T> void populateResults(
+			final List<CloseableIterator<T>> results,
+			final DataAdapter<Object> adapter,
+			final PrimaryIndex index,
+			final Query query,
+			final DedupeFilter filter,
+			final QueryOptions queryOptions,
+			final boolean isDelete,
+			final DataStoreCallbackManager callbackCache ) {
+		final TreeSet<EntryRow> set = getRowsForIndex(index.getId());
+		final Iterator<EntryRow> rowIt = ((query == null) || query.isSupported(index)) ? ((TreeSet<EntryRow>) set.clone()).iterator() : Collections.<EntryRow> emptyIterator();
+		final List<QueryFilter> filters = (query == null) ? new ArrayList<QueryFilter>() : new ArrayList<QueryFilter>(
+				query.createFilters(index.getIndexModel()));
+		filters.add(new QueryFilter() {
+			@Override
+			public boolean accept(
+					final CommonIndexModel indexModel,
+					final IndexedPersistenceEncoding persistenceEncoding ) {
+				if (adapter.getAdapterId().equals(
+						persistenceEncoding.getAdapterId())) {
+					return true;
+				}
+				return false;
+			}
+		});
+		if (filter != null) filters.add(filter);
+		results.add(new CloseableIterator<T>() {
+			EntryRow nextRow = null;
+			EntryRow currentRow = null;
+			IndexedPersistenceEncoding encoding = null;
+
+			private boolean getNext() {
+				while ((nextRow == null) && rowIt.hasNext()) {
+					final EntryRow row = rowIt.next();
+					final DataAdapter<?> adapter = adapterStore.getAdapter(new ByteArrayId(
+							row.getTableRowId().getAdapterId()));
+					encoding = DataStoreUtils.getEncoding(
+							index.getIndexModel(),
+							adapter,
+							row);
+					boolean ok = true;
+					for (final QueryFilter filter : filters) {
+						if (!filter.accept(
+								index.getIndexModel(),
+								encoding)) {
+							ok = false;
+							break;
+						}
+					}
+					ok &= isAuthorized(
+							row,
+							queryOptions.getAuthorizations());
+					if (ok) {
+						nextRow = row;
+						break;
+					}
+				}
+				return (nextRow != null);
+			}
+
+			@Override
+			public boolean hasNext() {
+				return getNext();
+			}
+
+			@Override
+			public T next() {
+				currentRow = nextRow;
+				if (isDelete) {
+					final DataAdapter<T> adapter = (DataAdapter<T>) adapterStore.getAdapter(encoding.getAdapterId());
+					if (adapter instanceof WritableDataAdapter) {
+						callbackCache.getDeleteCallback(
+								(WritableDataAdapter<T>) adapter,
+								index).entryDeleted(
+								currentRow.getInfo(),
+								(T) currentRow.entry);
+					}
+				}
+				((ScanCallback<T>) queryOptions.getScanCallback()).entryScanned(
+						currentRow.getInfo(),
+						(T) currentRow.entry);
+				nextRow = null;
+				return (T) currentRow.entry;
+			}
+
+			@Override
+			public void remove() {
+				if (currentRow != null) {
+					set.remove(currentRow);
+				}
+			}
+
+			@Override
+			public void close()
+					throws IOException {
+				final ScanCallback<?> callback = queryOptions.getScanCallback();
+				if ((callback != null) && (callback instanceof Closeable)) {
+					((Closeable) callback).close();
+				}
+			}
+		});
+
 	}
 
 	private boolean isAuthorized(

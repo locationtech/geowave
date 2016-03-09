@@ -73,27 +73,25 @@ public class PolygonDataIdQueryIT extends
 	private static void ingestSampleData()
 			throws IOException {
 		try (@SuppressWarnings("unchecked")
-		IndexWriter writer = dataStore.createIndexWriter(
-				DEFAULT_SPATIAL_INDEX,
-				DataStoreUtils.DEFAULT_VISIBILITY)) {
-			writer.write(
-					dataAdapter,
-					buildSimpleFeature(
-							DATA_ID,
-							GeometryUtils.GEOMETRY_FACTORY.createPolygon(new Coordinate[] {
-								new Coordinate(
-										1.0249,
-										1.0319),
-								new Coordinate(
-										1.0261,
-										1.0319),
-								new Coordinate(
-										1.0261,
-										1.0323),
-								new Coordinate(
-										1.0249,
-										1.0319)
-							})));
+		IndexWriter writer = dataStore.createWriter(
+				dataAdapter,
+				DEFAULT_SPATIAL_INDEX)) {
+			writer.write(buildSimpleFeature(
+					DATA_ID,
+					GeometryUtils.GEOMETRY_FACTORY.createPolygon(new Coordinate[] {
+						new Coordinate(
+								1.0249,
+								1.0319),
+						new Coordinate(
+								1.0261,
+								1.0319),
+						new Coordinate(
+								1.0261,
+								1.0323),
+						new Coordinate(
+								1.0249,
+								1.0319)
+					})));
 		}
 	}
 

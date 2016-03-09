@@ -117,14 +117,13 @@ public class AvroFeatureDataAdapterTest
 
 		final PrimaryIndex index = new SpatialIndexBuilder().createIndex();
 
-		try (IndexWriter indexWriter = dataStore.createIndexWriter(
-				index,
-				DataStoreUtils.DEFAULT_VISIBILITY)) {
+		try (IndexWriter indexWriter = dataStore.createWriter(
+				adapter,
+				index)) {
 			for (final SimpleFeature sf : data) {
-				//
 				indexWriter.write(
-						adapter,
-						sf);
+						sf,
+						DataStoreUtils.UNCONSTRAINED_VISIBILITY);
 
 			}
 		}

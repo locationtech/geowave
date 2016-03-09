@@ -9,20 +9,33 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Map;
 import java.util.jar.Attributes;
 import java.util.jar.JarOutputStream;
 import java.util.jar.Manifest;
 
 import org.apache.accumulo.minicluster.impl.MiniAccumuloClusterImpl;
 import org.apache.accumulo.minicluster.impl.MiniAccumuloConfigImpl;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.SystemUtils;
 import org.apache.commons.vfs2.FileObject;
 import org.apache.commons.vfs2.impl.VFSClassLoader;
+import org.apache.hadoop.util.VersionInfo;
+import org.apache.hadoop.util.VersionUtil;
 import org.apache.log4j.Logger;
 
 public class MiniAccumuloClusterFactory
 {
 
-	private static final Logger logger = Logger.getLogger(MiniAccumuloClusterFactory.class);
+	private static final Logger LOGGER = Logger.getLogger(MiniAccumuloClusterFactory.class);
+
+	protected static final String HADOOP_WINDOWS_UTIL = "winutils.exe";
+
+	protected static boolean isYarn() {
+		return VersionUtil.compareVersions(
+				VersionInfo.getVersion(),
+				"2.2.0") >= 0;
+	}
 
 	public static MiniAccumuloClusterImpl newAccumuloCluster(
 			final MiniAccumuloConfigImpl config,
@@ -40,8 +53,53 @@ public class MiniAccumuloClusterFactory
 
 		config.setClasspathItems(jarPath);
 
-		return new MiniAccumuloClusterImpl(
+		MiniAccumuloClusterImpl retVal = new MiniAccumuloClusterImpl(
 				config);
+		if (SystemUtils.IS_OS_WINDOWS && isYarn()) {
+			// this must happen after instantiating Mini
+			// Accumulo Cluster because it ensures the accumulo
+			// directory is empty or it will fail, but must
+			// happen before the cluster is started because yarn
+			// expects winutils.exe to exist within a bin
+			// directory in the mini accumulo cluster directory
+			// (mini accumulo cluster will always set this
+			// directory as hadoop_home)
+			LOGGER.info("Running YARN on windows requires a local installation of Hadoop");
+			LOGGER.info("'HADOOP_HOME' must be set and 'PATH' must contain %HADOOP_HOME%/bin");
+
+			final Map<String, String> env = System.getenv();
+			String hadoopHome = System.getProperty("hadoop.home.dir");
+			if (hadoopHome == null) {
+				hadoopHome = env.get("HADOOP_HOME");
+			}
+			boolean success = false;
+			if (hadoopHome != null) {
+				final File hadoopDir = new File(
+						hadoopHome);
+				if (hadoopDir.exists()) {
+					final File binDir = new File(
+							config.getDir(),
+							"bin");
+					if (binDir.mkdir()) {
+						FileUtils.copyFile(
+								new File(
+										hadoopDir + File.separator + "bin",
+										HADOOP_WINDOWS_UTIL),
+								new File(
+										binDir,
+										HADOOP_WINDOWS_UTIL));
+						success = true;
+					}
+				}
+			}
+			if (!success) {
+				LOGGER.error("'HADOOP_HOME' environment variable is not set or <HADOOP_HOME>/bin/winutils.exe does not exist");
+
+				// return mini accumulo cluster anyways
+				return retVal;
+			}
+		}
+		return retVal;
 	}
 
 	private static String setupPathingJarClassPath(
@@ -58,7 +116,7 @@ public class MiniAccumuloClusterFactory
 				jarDir.mkdirs();
 			}
 			catch (final Exception e) {
-				logger.error("Failed to create pathing jar directory: " + e);
+				LOGGER.error("Failed to create pathing jar directory: " + e);
 				return null;
 			}
 		}
@@ -72,7 +130,7 @@ public class MiniAccumuloClusterFactory
 				jarFile.delete();
 			}
 			catch (final Exception e) {
-				logger.error("Failed to delete old pathing jar: " + e);
+				LOGGER.error("Failed to delete old pathing jar: " + e);
 				return null;
 			}
 		}
@@ -155,7 +213,7 @@ public class MiniAccumuloClusterFactory
 	private static boolean containsSiteFile(
 			final File f ) {
 		if (f.isDirectory()) {
-			File[] sitefile = f.listFiles(new FileFilter() {
+			final File[] sitefile = f.listFiles(new FileFilter() {
 				@Override
 				public boolean accept(
 						final File pathname ) {
@@ -164,7 +222,7 @@ public class MiniAccumuloClusterFactory
 				}
 			});
 
-			return sitefile != null && sitefile.length > 0;
+			return (sitefile != null) && (sitefile.length > 0);
 		}
 		return false;
 	}

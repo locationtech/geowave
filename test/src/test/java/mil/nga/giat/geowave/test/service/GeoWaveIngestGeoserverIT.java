@@ -97,13 +97,11 @@ public class GeoWaveIngestGeoserverIT extends
 				features.size()));
 		int ingestedFeatures = 0;
 		final int featuresPer5Percent = features.size() / 20;
-		try (IndexWriter writer = ds.createIndexWriter(
-				idx,
-				DataStoreUtils.DEFAULT_VISIBILITY)) {
+		try (IndexWriter writer = ds.createWriter(
+				fda,
+				idx)) {
 			for (final SimpleFeature feat : features) {
-				writer.write(
-						fda,
-						feat);
+				writer.write(feat);
 				ingestedFeatures++;
 				if ((ingestedFeatures % featuresPer5Percent) == 0) {
 					LOGGER.info(String.format(

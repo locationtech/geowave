@@ -1,6 +1,7 @@
 package mil.nga.giat.geowave.core.store;
 
-import mil.nga.giat.geowave.core.store.data.VisibilityWriter;
+import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.query.Query;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
@@ -15,14 +16,18 @@ public interface DataStore
 	/**
 	 * Returns an index writer to perform batched write operations
 	 * 
+	 * @param adapter
+	 *            The adapter that describes the data written to the set of
+	 *            indices.
 	 * @param index
 	 *            The configuration information for the primary index to use.
 	 * @return Returns the index writer which can be used for batch write
 	 *         operations
 	 */
-	public <T> IndexWriter createIndexWriter(
-			PrimaryIndex index,
-			VisibilityWriter<T> customFieldVisibilityWriter );
+	public <T> IndexWriter createWriter(
+			DataAdapter<T> adapter,
+			PrimaryIndex... index )
+			throws MismatchedIndexToAdapterMapping;
 
 	/**
 	 * Returns all data in this data store that matches the query parameter
@@ -51,10 +56,11 @@ public interface DataStore
 	 * (the same adapter ID as the ID ingested). All data that matches the
 	 * query, adapter ID, and is in the index ID will be deleted.
 	 * 
-	 * For ({@link  mil.nga.giat.geowave.core.store.query.AdapterIdQuery), all supporting statistics
-	 * and secondary indices are also deleted.
+	 * For ({@link mil.nga.giat.geowave.core.store.query.AdapterIdQuery), all
+	 * supporting statistics and secondary indices are also deleted.
 	 * 
-	 * Statistics and secondary indices are updated as required for all other types of queries.
+	 * Statistics and secondary indices are updated as required for all other
+	 * types of queries.
 	 * 
 	 * 
 	 * @param queryOptions

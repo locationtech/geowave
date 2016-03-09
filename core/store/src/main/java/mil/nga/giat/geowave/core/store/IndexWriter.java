@@ -4,11 +4,10 @@ import java.io.Closeable;
 import java.util.List;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
-import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.data.VisibilityWriter;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 
-public interface IndexWriter extends
+public interface IndexWriter<T> extends
 		Closeable
 {
 	/**
@@ -19,19 +18,14 @@ public interface IndexWriter extends
 	 * @param entry
 	 * @return
 	 */
-	public <T> List<ByteArrayId> write(
-			final WritableDataAdapter<T> writableAdapter,
+	public List<ByteArrayId> write(
 			final T entry );
 
-	public <T> List<ByteArrayId> write(
-			final WritableDataAdapter<T> writableAdapter,
+	public List<ByteArrayId> write(
 			final T entry,
 			final VisibilityWriter<T> fieldVisibilityWriter );
 
-	public <T> void setupAdapter(
-			final WritableDataAdapter<T> writableAdapter );
-
-	public PrimaryIndex getIndex();
+	public PrimaryIndex[] getIndices();
 
 	public void flush();
 }

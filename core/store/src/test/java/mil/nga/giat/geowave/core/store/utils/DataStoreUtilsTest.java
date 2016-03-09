@@ -11,10 +11,11 @@ import mil.nga.giat.geowave.core.store.DataStoreEntryInfo;
 import mil.nga.giat.geowave.core.store.EntryVisibilityHandler;
 import mil.nga.giat.geowave.core.store.IngestCallback;
 import mil.nga.giat.geowave.core.store.adapter.AbstractDataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.MockComponents;
 import mil.nga.giat.geowave.core.store.adapter.NativeFieldHandler.RowBuilder;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
-import mil.nga.giat.geowave.core.store.adapter.statistics.StatisticalDataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.statistics.StatisticsProvider;
 import mil.nga.giat.geowave.core.store.data.VisibilityWriter;
 import mil.nga.giat.geowave.core.store.data.field.FieldReader;
 import mil.nga.giat.geowave.core.store.data.field.FieldVisibilityHandler;
@@ -129,7 +130,7 @@ public class DataStoreUtilsTest
 
 	protected static class TestStringAdapter extends
 			AbstractDataAdapter<String> implements
-			StatisticalDataAdapter<String>
+			StatisticsProvider<String>
 	{
 
 		public TestStringAdapter() {}
@@ -185,6 +186,11 @@ public class DataStoreUtilsTest
 		@Override
 		protected RowBuilder<String, Object> newBuilder() {
 			return null;
+		}
+
+		@Override
+		public DataAdapter<String> getDataAdapter() {
+			return this;
 		}
 	}
 }

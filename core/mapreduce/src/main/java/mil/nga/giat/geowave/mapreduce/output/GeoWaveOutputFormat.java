@@ -1,25 +1,11 @@
 package mil.nga.giat.geowave.mapreduce.output;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-
-import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.StringUtils;
-import mil.nga.giat.geowave.core.store.DataStore;
-import mil.nga.giat.geowave.core.store.GeoWaveStoreFinder;
-import mil.nga.giat.geowave.core.store.IndexWriter;
-import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
-import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
-import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
-import mil.nga.giat.geowave.core.store.config.ConfigUtils;
-import mil.nga.giat.geowave.core.store.index.Index;
-import mil.nga.giat.geowave.core.store.index.IndexStore;
-import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.core.store.memory.DataStoreUtils;
-import mil.nga.giat.geowave.mapreduce.GeoWaveConfiguratorBase;
-import mil.nga.giat.geowave.mapreduce.JobContextAdapterStore;
-import mil.nga.giat.geowave.mapreduce.JobContextIndexStore;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.mapreduce.JobContext;
@@ -29,6 +15,23 @@ import org.apache.hadoop.mapreduce.RecordWriter;
 import org.apache.hadoop.mapreduce.TaskAttemptContext;
 import org.apache.hadoop.mapreduce.lib.output.NullOutputFormat;
 import org.apache.log4j.Logger;
+
+import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.index.StringUtils;
+import mil.nga.giat.geowave.core.store.DataStore;
+import mil.nga.giat.geowave.core.store.GeoWaveStoreFinder;
+import mil.nga.giat.geowave.core.store.IndexWriter;
+import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
+import mil.nga.giat.geowave.core.store.config.ConfigUtils;
+import mil.nga.giat.geowave.core.store.index.Index;
+import mil.nga.giat.geowave.core.store.index.IndexStore;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.mapreduce.GeoWaveConfiguratorBase;
+import mil.nga.giat.geowave.mapreduce.JobContextAdapterStore;
+import mil.nga.giat.geowave.mapreduce.JobContextIndexStore;
 
 /**
  * This output format is the preferred mechanism for writing data to GeoWave
@@ -281,7 +284,7 @@ public class GeoWaveOutputFormat extends
 	protected static class GeoWaveRecordWriter extends
 			RecordWriter<GeoWaveOutputKey, Object>
 	{
-		private final Map<ByteArrayId, IndexWriter> indexWriterCache = new HashMap<ByteArrayId, IndexWriter>();
+		private final Map<ByteArrayId, IndexWriter> adapterWriterCache = new HashMap<ByteArrayId, IndexWriter>();
 		private final AdapterStore adapterStore;
 		private final IndexStore indexStore;
 		private final DataStore dataStore;
@@ -313,16 +316,14 @@ public class GeoWaveOutputFormat extends
 				throws IOException {
 			final DataAdapter<?> adapter = adapterStore.getAdapter(ingestKey.getAdapterId());
 			if (adapter instanceof WritableDataAdapter) {
-				for (final ByteArrayId indexId : ingestKey.getIndexIds()) {
-					final IndexWriter indexWriter = getIndexWriter(indexId);
-					if (indexWriter != null) {
-						indexWriter.write(
-								(WritableDataAdapter) adapter,
-								object);
-					}
-					else {
-						LOGGER.warn("Cannot write to index '" + StringUtils.stringFromBinary(ingestKey.getAdapterId().getBytes()) + "'");
-					}
+				final IndexWriter indexWriter = getIndexWriter(
+						adapter,
+						ingestKey.getIndexIds());
+				if (indexWriter != null) {
+					indexWriter.write(object);
+				}
+				else {
+					LOGGER.warn("Cannot write to index '" + StringUtils.stringFromBinary(ingestKey.getAdapterId().getBytes()) + "'");
 				}
 			}
 			else {
@@ -331,24 +332,33 @@ public class GeoWaveOutputFormat extends
 		}
 
 		private synchronized IndexWriter getIndexWriter(
-				final ByteArrayId indexId ) {
-			if (!indexWriterCache.containsKey(indexId)) {
-				final PrimaryIndex index = (PrimaryIndex) indexStore.getIndex(indexId);
-				IndexWriter writer = null;
-				if (index != null) {
-					writer = dataStore.createIndexWriter(
-							index,
-							DataStoreUtils.DEFAULT_VISIBILITY);
+				final DataAdapter<?> adapter,
+				final Collection<ByteArrayId> indexIds )
+				throws MismatchedIndexToAdapterMapping {
+			IndexWriter writer = adapterWriterCache.get(adapter.getAdapterId());
+			if (writer == null) {
+				List<PrimaryIndex> indices = new ArrayList<PrimaryIndex>();
+				for (ByteArrayId indexId : indexIds) {
+					final PrimaryIndex index = (PrimaryIndex) indexStore.getIndex(indexId);
+					if (index != null) {
+						indices.add(index);
+					}
+					else {
+						LOGGER.warn("Index '" + StringUtils.stringFromBinary(indexId.getBytes()) + "' does not exist");
+					}
+
 				}
-				else {
-					LOGGER.warn("Index '" + StringUtils.stringFromBinary(indexId.getBytes()) + "' does not exist");
-				}
-				indexWriterCache.put(
-						indexId,
+
+				writer = dataStore.createWriter(
+						adapter,
+						indices.toArray(new PrimaryIndex[indices.size()]));
+
+				adapterWriterCache.put(
+						adapter.getAdapterId(),
 						writer);
-				return writer;
+
 			}
-			return indexWriterCache.get(indexId);
+			return writer;
 		}
 
 		@Override
@@ -356,7 +366,7 @@ public class GeoWaveOutputFormat extends
 				final TaskAttemptContext attempt )
 				throws IOException,
 				InterruptedException {
-			for (final IndexWriter indexWriter : indexWriterCache.values()) {
+			for (final IndexWriter indexWriter : adapterWriterCache.values()) {
 				indexWriter.close();
 			}
 		}

@@ -1,18 +1,18 @@
 package mil.nga.giat.geowave.core.store.adapter.statistics;
 
 import java.io.Closeable;
+import java.io.Flushable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
+import org.apache.log4j.Logger;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.DataStoreEntryInfo;
 import mil.nga.giat.geowave.core.store.DeleteCallback;
 import mil.nga.giat.geowave.core.store.IngestCallback;
 import mil.nga.giat.geowave.core.store.ScanCallback;
-import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
-
-import org.apache.log4j.Logger;
 
 /**
  * 
@@ -28,7 +28,8 @@ public class StatsCompositionTool<T> implements
 		ScanCallback<T>,
 		DeleteCallback<T>,
 		AutoCloseable,
-		Closeable
+		Closeable,
+		Flushable
 {
 	private final static Logger LOGGER = Logger.getLogger(StatsCompositionTool.class);
 	public static final int FLUSH_STATS_THRESHOLD = 16384;
@@ -36,41 +37,35 @@ public class StatsCompositionTool<T> implements
 	int updateCount = 0;
 	DataStatisticsStore statisticsStore;
 	List<DataStatisticsBuilder<T>> statisticsBuilders = null;
-	final boolean persistStats;
 	final Object MUTEX = new Object();
 	protected boolean skipFlush = false;
 
 	public StatsCompositionTool() {
 		statisticsStore = null;
-		persistStats = false;
 	}
 
 	public StatsCompositionTool(
-			final DataAdapter<T> dataAdapter ) {
-		this.persistStats = true;
+			final StatisticsProvider<T> statisticsProvider ) {
 		this.statisticsStore = null;
-		this.init(dataAdapter);
+		this.init(statisticsProvider);
 	}
 
 	public StatsCompositionTool(
-			final DataAdapter<T> dataAdapter,
+			final StatisticsProvider<T> statisticsProvider,
 			final DataStatisticsStore statisticsStore ) {
 		this.statisticsStore = statisticsStore;
-		persistStats = (dataAdapter != null && dataAdapter instanceof StatisticalDataAdapter) && (statisticsStore != null);
-		this.init(dataAdapter);
+		this.init(statisticsProvider);
 	}
 
 	private void init(
-			final DataAdapter<T> dataAdapter ) {
-		if (persistStats) {
-			final ByteArrayId[] statisticsIds = ((StatisticalDataAdapter<T>) dataAdapter).getSupportedStatisticsIds();
-			statisticsBuilders = new ArrayList<DataStatisticsBuilder<T>>(
-					statisticsIds.length);
-			for (final ByteArrayId id : statisticsIds) {
-				statisticsBuilders.add(new DataStatisticsBuilder<T>(
-						(StatisticalDataAdapter<T>) dataAdapter,
-						id));
-			}
+			final StatisticsProvider<T> statisticsProvider ) {
+		final ByteArrayId[] statisticsIds = statisticsProvider.getSupportedStatisticsIds();
+		statisticsBuilders = new ArrayList<DataStatisticsBuilder<T>>(
+				statisticsIds.length);
+		for (final ByteArrayId id : statisticsIds) {
+			statisticsBuilders.add(new DataStatisticsBuilder<T>(
+					statisticsProvider,
+					id));
 		}
 		try {
 			final Object v = System.getProperty("StatsCompositionTool.skipFlush");
@@ -82,10 +77,6 @@ public class StatsCompositionTool<T> implements
 					"Unable to determine property AccumuloIndexWriter.skipFlush",
 					ex);
 		}
-	}
-
-	public boolean isPersisting() {
-		return persistStats;
 	}
 
 	@Override
@@ -130,6 +121,7 @@ public class StatsCompositionTool<T> implements
 	/**
 	 * Update statistics store
 	 */
+	@Override
 	public void flush() {
 		if (statisticsBuilders == null) {
 			return;
