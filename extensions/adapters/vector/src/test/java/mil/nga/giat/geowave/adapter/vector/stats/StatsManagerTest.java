@@ -60,53 +60,36 @@ public class StatsManagerTest
 		assertEquals(
 				8,
 				ids.length);
-		assertTrue(
-				ArrayUtils.contains(
-						ids,
-						FeatureNumericRangeStatistics.composeId(
-								"pop")));
-		assertTrue(
-				ArrayUtils.contains(
-						ids,
-						FeatureBoundingBoxStatistics.composeId(
-								"somewhere")));
-		assertTrue(
-				ArrayUtils.contains(
-						ids,
-						FeatureBoundingBoxStatistics.composeId(
-								"geometry")));
-		assertTrue(
-				ArrayUtils.contains(
-						ids,
-						FeatureTimeRangeStatistics.composeId(
-								"when")));
-		assertTrue(
-				ArrayUtils.contains(
-						ids,
-						FeatureTimeRangeStatistics.composeId(
-								"whennot")));
-		assertTrue(
-				ArrayUtils.contains(
-						ids,
-						FeatureHyperLogLogStatistics.composeId(
-								"pid")));
+		assertTrue(ArrayUtils.contains(
+				ids,
+				FeatureNumericRangeStatistics.composeId("pop")));
+		assertTrue(ArrayUtils.contains(
+				ids,
+				FeatureBoundingBoxStatistics.composeId("somewhere")));
+		assertTrue(ArrayUtils.contains(
+				ids,
+				FeatureBoundingBoxStatistics.composeId("geometry")));
+		assertTrue(ArrayUtils.contains(
+				ids,
+				FeatureTimeRangeStatistics.composeId("when")));
+		assertTrue(ArrayUtils.contains(
+				ids,
+				FeatureTimeRangeStatistics.composeId("whennot")));
+		assertTrue(ArrayUtils.contains(
+				ids,
+				FeatureHyperLogLogStatistics.composeId("pid")));
 
 		// can each type be created uniquely
 		DataStatistics<SimpleFeature> stat = statsManager.createDataStatistics(
 				dataAdapter,
-				FeatureBoundingBoxStatistics.composeId(
-						"somewhere"));
-		assertNotNull(
-				stat);
-		assertFalse(
-				stat == statsManager.createDataStatistics(
-						dataAdapter,
-						FeatureBoundingBoxStatistics.composeId(
-								"somewhere")));
+				FeatureBoundingBoxStatistics.composeId("somewhere"));
+		assertNotNull(stat);
+		assertFalse(stat == statsManager.createDataStatistics(
+				dataAdapter,
+				FeatureBoundingBoxStatistics.composeId("somewhere")));
 
 		final FeatureBoundingBoxStatistics newStat = new FeatureBoundingBoxStatistics();
-		newStat.fromBinary(
-				stat.toBinary());
+		newStat.fromBinary(stat.toBinary());
 		assertEquals(
 				newStat.getMaxY(),
 				((FeatureBoundingBoxStatistics) stat).getMaxY(),
@@ -117,27 +100,19 @@ public class StatsManagerTest
 
 		stat = statsManager.createDataStatistics(
 				dataAdapter,
-				FeatureTimeRangeStatistics.composeId(
-						"when"));
-		assertNotNull(
-				stat);
-		assertFalse(
-				stat == statsManager.createDataStatistics(
-						dataAdapter,
-						FeatureTimeRangeStatistics.composeId(
-								"when")));
+				FeatureTimeRangeStatistics.composeId("when"));
+		assertNotNull(stat);
+		assertFalse(stat == statsManager.createDataStatistics(
+				dataAdapter,
+				FeatureTimeRangeStatistics.composeId("when")));
 
 		stat = statsManager.createDataStatistics(
 				dataAdapter,
-				FeatureNumericRangeStatistics.composeId(
-						"pop"));
-		assertNotNull(
-				stat);
-		assertFalse(
-				stat == statsManager.createDataStatistics(
-						dataAdapter,
-						FeatureNumericRangeStatistics.composeId(
-								"pop")));
+				FeatureNumericRangeStatistics.composeId("pop"));
+		assertNotNull(stat);
+		assertFalse(stat == statsManager.createDataStatistics(
+				dataAdapter,
+				FeatureNumericRangeStatistics.composeId("pop")));
 
 	}
 
@@ -154,24 +129,24 @@ public class StatsManagerTest
 
 		schema.getDescriptor(
 				1).getUserData().put(
-						"stats",
-						new StatsConfigurationCollection(
-								Arrays.asList(
-										new FeatureFixedBinConfig(
-												0.0,
-												1.0,
-												24),
-										new FeatureNumericHistogramConfig())));
+				"stats",
+				new StatsConfigurationCollection(
+						Arrays.asList(
+								new FeatureFixedBinConfig(
+										0.0,
+										1.0,
+										24),
+								new FeatureNumericHistogramConfig())));
 		schema.getDescriptor(
 				5).getUserData().put(
-						"stats",
-						new StatsConfigurationCollection(
-								Arrays.asList(
-										new FeatureCountMinSketchConfig(
-												0.01,
-												0.97),
-										new FeatureHyperLogLogConfig(
-												24))));
+				"stats",
+				new StatsConfigurationCollection(
+						Arrays.asList(
+								new FeatureCountMinSketchConfig(
+										0.01,
+										0.97),
+								new FeatureHyperLogLogConfig(
+										24))));
 		final FeatureDataAdapter dataAdapter = new FeatureDataAdapter(
 				schema,
 				new GlobalVisibilityHandler<SimpleFeature, Object>(
@@ -187,35 +162,26 @@ public class StatsManagerTest
 				ids.length);
 		DataStatistics<SimpleFeature> stat = statsManager.createDataStatistics(
 				dataAdapter,
-				FeatureFixedBinNumericStatistics.composeId(
-						"pop"));
-		assertNotNull(
-				stat);
+				FeatureFixedBinNumericStatistics.composeId("pop"));
+		assertNotNull(stat);
 		stat = statsManager.createDataStatistics(
 				dataAdapter,
-				FeatureNumericHistogramStatistics.composeId(
-						"pop"));
-		assertNotNull(
-				stat);
+				FeatureNumericHistogramStatistics.composeId("pop"));
+		assertNotNull(stat);
 		stat = statsManager.createDataStatistics(
 				dataAdapter,
-				FeatureHyperLogLogStatistics.composeId(
-						"pid"));
-		assertNotNull(
-				stat);
+				FeatureHyperLogLogStatistics.composeId("pid"));
+		assertNotNull(stat);
 		stat = statsManager.createDataStatistics(
 				dataAdapter,
-				FeatureCountMinSketchStatistics.composeId(
-						"pid"));
-		assertNotNull(
-				stat);
+				FeatureCountMinSketchStatistics.composeId("pid"));
+		assertNotNull(stat);
 
 		final SimpleFeatureUserDataConfigurationSet config = new SimpleFeatureUserDataConfigurationSet();
 		config.addConfigurations(
 				schema.getTypeName(),
 				new SimpleFeatureStatsConfigurationCollection());
-		config.configureFromType(
-				schema);
+		config.configureFromType(schema);
 		config.fromJsonString(
 				config.asJsonString(),
 				schema);
@@ -223,8 +189,7 @@ public class StatsManagerTest
 
 	private String dump(
 			final String value ) {
-		System.out.println(
-				value);
+		System.out.println(value);
 		return value;
 	}
 }

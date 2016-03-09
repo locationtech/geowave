@@ -14,6 +14,7 @@ import mil.nga.giat.geowave.analytic.param.CentroidParameters;
 import mil.nga.giat.geowave.analytic.param.MapReduceParameters;
 import mil.nga.giat.geowave.analytic.param.OutputParameters;
 import mil.nga.giat.geowave.analytic.param.ParameterEnum;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
 import mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputKey;
 
@@ -73,7 +74,7 @@ public class GeoWaveInputLoadJobRunner extends
 				OutputParameters.Output.INDEX_ID,
 				runTimeProperties.getPropertyAsString(
 						CentroidParameters.Centroid.INDEX_ID,
-						"hull_idx"));
+						new SpatialDimensionalityTypeProvider().createPrimaryIndex().getId().getString()));
 		OutputParameters.Output.INDEX_ID.getHelper().setValue(
 				config,
 				getScope(),

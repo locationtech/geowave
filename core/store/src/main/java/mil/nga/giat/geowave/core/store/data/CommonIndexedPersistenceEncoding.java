@@ -57,8 +57,7 @@ public class CommonIndexedPersistenceEncoding extends
 	 */
 	public List<ByteArrayId> getInsertionIds(
 			final PrimaryIndex index ) {
-		final MultiDimensionalNumericData boxRangeData = getNumericData(
-				index.getIndexModel().getDimensions());
+		final MultiDimensionalNumericData boxRangeData = getNumericData(index.getIndexModel().getDimensions());
 		final List<ByteArrayId> untrimmedResult = index.getIndexStrategy().getInsertionIds(
 				boxRangeData);
 		final int size = untrimmedResult.size();
@@ -75,8 +74,7 @@ public class CommonIndexedPersistenceEncoding extends
 						boxRangeData,
 						index.getIndexStrategy().getRangeForId(
 								insertionId))) {
-					LOGGER.error(
-							"Index strategy produced an unmatching tile during encoding and storing an entry");
+					LOGGER.error("Index strategy produced an unmatching tile during encoding and storing an entry");
 				}
 				if (!overlaps(
 						index.getIndexStrategy().getRangeForId(
@@ -108,11 +106,10 @@ public class CommonIndexedPersistenceEncoding extends
 			final boolean overlaps = ((i1 < j2) || DoubleMath.fuzzyEquals(
 					i1,
 					j2,
-					DOUBLE_TOLERANCE))
-					&& ((i2 > j1) || DoubleMath.fuzzyEquals(
-							i2,
-							j1,
-							DOUBLE_TOLERANCE));
+					DOUBLE_TOLERANCE)) && ((i2 > j1) || DoubleMath.fuzzyEquals(
+					i2,
+					j1,
+					DOUBLE_TOLERANCE));
 			if (!overlaps) {
 				return false;
 			}
@@ -136,9 +133,8 @@ public class CommonIndexedPersistenceEncoding extends
 			final NumericDimensionField[] dimensions ) {
 		final NumericData[] dataPerDimension = new NumericData[dimensions.length];
 		for (int d = 0; d < dimensions.length; d++) {
-			dataPerDimension[d] = dimensions[d].getNumericData(
-					getCommonData().getValue(
-							dimensions[d].getFieldId()));
+			dataPerDimension[d] = dimensions[d].getNumericData(getCommonData().getValue(
+					dimensions[d].getFieldId()));
 		}
 		return new BasicNumericDataset(
 				dataPerDimension);
@@ -196,8 +192,7 @@ public class CommonIndexedPersistenceEncoding extends
 
 		for (int d = 0; d < dimensions.length; d++) {
 			final ByteArrayId fieldId = dimensions[d].getFieldId();
-			final DimensionRangePair fieldData = fieldsRangeData.get(
-					fieldId);
+			final DimensionRangePair fieldData = fieldsRangeData.get(fieldId);
 			if (fieldData == null) {
 				fieldsRangeData.put(
 						fieldId,
@@ -216,8 +211,7 @@ public class CommonIndexedPersistenceEncoding extends
 		for (final Entry<ByteArrayId, DimensionRangePair> entry : fieldsRangeData.entrySet()) {
 			PersistentDataset<CommonIndexValue> commonData = getCommonData();
 			if (commonData != null) {
-				CommonIndexValue value = commonData.getValue(
-						entry.getKey());
+				CommonIndexValue value = commonData.getValue(entry.getKey());
 				if (value != null) {
 					ok = ok && value.overlaps(
 							entry.getValue().dimensions,

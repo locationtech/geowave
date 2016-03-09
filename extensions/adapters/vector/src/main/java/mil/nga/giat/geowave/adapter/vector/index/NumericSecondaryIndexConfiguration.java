@@ -13,17 +13,18 @@ public class NumericSecondaryIndexConfiguration extends
 	private static final long serialVersionUID = 7098885526353176048L;
 	public static final String INDEX_KEY = "2ND_IDX_NUMERIC";
 
-	public NumericSecondaryIndexConfiguration() {	
-		super (Number.class, Collections.<String>emptySet());
+	public NumericSecondaryIndexConfiguration() {
+		super(
+				Number.class,
+				Collections.<String> emptySet());
 	}
-	
+
 	public NumericSecondaryIndexConfiguration(
 			final String attribute ) {
 		super(
 				Number.class,
 				attribute);
 	}
-	
 
 	public NumericSecondaryIndexConfiguration(
 			final Set<String> attributes ) {

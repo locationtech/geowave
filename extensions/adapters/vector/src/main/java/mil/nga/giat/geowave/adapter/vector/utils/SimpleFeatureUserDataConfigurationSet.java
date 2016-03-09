@@ -24,8 +24,7 @@ import org.opengis.feature.simple.SimpleFeatureType;
 public class SimpleFeatureUserDataConfigurationSet
 {
 
-	private static Logger LOGGER = Logger.getLogger(
-			SimpleFeatureUserDataConfigurationSet.class);
+	private static Logger LOGGER = Logger.getLogger(SimpleFeatureUserDataConfigurationSet.class);
 	public static final String SIMPLE_FEATURE_CONFIG_FILE_PROP = "SIMPLE_FEATURE_CONFIG_FILE";
 
 	private Map<String, List<SimpleFeatureUserDataConfiguration>> configurations = new HashMap<String, List<SimpleFeatureUserDataConfiguration>>();
@@ -38,9 +37,8 @@ public class SimpleFeatureUserDataConfigurationSet
 		super();
 		this.getConfigurationsForType(
 				type.getTypeName()).addAll(
-						configurations);
-		configureFromType(
-				type);
+				configurations);
+		configureFromType(type);
 	}
 
 	public Map<String, List<SimpleFeatureUserDataConfiguration>> getConfigurations() {
@@ -49,8 +47,7 @@ public class SimpleFeatureUserDataConfigurationSet
 
 	public synchronized List<SimpleFeatureUserDataConfiguration> getConfigurationsForType(
 			String typeName ) {
-		List<SimpleFeatureUserDataConfiguration> configList = configurations.get(
-				typeName);
+		List<SimpleFeatureUserDataConfiguration> configList = configurations.get(typeName);
 		if (configList == null) {
 			configList = new ArrayList<SimpleFeatureUserDataConfiguration>();
 			configurations.put(
@@ -65,33 +62,27 @@ public class SimpleFeatureUserDataConfigurationSet
 			final SimpleFeatureUserDataConfiguration config ) {
 		getConfigurationsForType(
 				typeName).add(
-						config);
+				config);
 	}
 
 	public SimpleFeatureUserDataConfigurationSet(
 			final SimpleFeatureType type ) {
-		for (final SimpleFeatureUserDataConfiguration configuration : this.getConfigurationsForType(
-				type.getTypeName())) {
-			configuration.configureFromType(
-					type);
+		for (final SimpleFeatureUserDataConfiguration configuration : this.getConfigurationsForType(type.getTypeName())) {
+			configuration.configureFromType(type);
 		}
 	}
 
 	public void configureFromType(
 			final SimpleFeatureType type ) {
-		for (final SimpleFeatureUserDataConfiguration configuration : this.getConfigurationsForType(
-				type.getTypeName())) {
-			configuration.configureFromType(
-					type);
+		for (final SimpleFeatureUserDataConfiguration configuration : this.getConfigurationsForType(type.getTypeName())) {
+			configuration.configureFromType(type);
 		}
 	}
 
 	public void updateType(
 			final SimpleFeatureType type ) {
-		for (final SimpleFeatureUserDataConfiguration configuration : this.getConfigurationsForType(
-				type.getTypeName())) {
-			configuration.updateType(
-					type);
+		for (final SimpleFeatureUserDataConfiguration configuration : this.getConfigurationsForType(type.getTypeName())) {
+			configuration.updateType(type);
 		}
 	}
 
@@ -100,34 +91,29 @@ public class SimpleFeatureUserDataConfigurationSet
 			throws IOException {
 		final ObjectMapper mapper = new ObjectMapper();
 		final SerializationConfig serializationConfig = mapper.getSerializationConfig();
-		serializationConfig.disable(
-				SerializationConfig.Feature.FAIL_ON_EMPTY_BEANS);
-		return mapper.writeValueAsString(
-				this);
+		serializationConfig.disable(SerializationConfig.Feature.FAIL_ON_EMPTY_BEANS);
+		return mapper.writeValueAsString(this);
 	}
 
 	@SuppressWarnings("deprecation")
 	public void fromJsonString(
 			final String jsonConfigString,
 			final SimpleFeatureType type )
-					throws IOException {
+			throws IOException {
 		final ObjectMapper mapper = new ObjectMapper();
 		final SerializationConfig serializationConfig = mapper.getSerializationConfig();
-		serializationConfig.disable(
-				SerializationConfig.Feature.FAIL_ON_EMPTY_BEANS);
+		serializationConfig.disable(SerializationConfig.Feature.FAIL_ON_EMPTY_BEANS);
 		final SimpleFeatureUserDataConfigurationSet instance = mapper.readValue(
 				jsonConfigString,
 				SimpleFeatureUserDataConfigurationSet.class);
 		configurations = instance.configurations;
-		updateType(
-				type);
+		updateType(type);
 	}
 
 	@SuppressWarnings("deprecation")
 	public static SimpleFeatureType configureType(
 			final SimpleFeatureType type ) {
-		final String configFileName = System.getProperty(
-				SIMPLE_FEATURE_CONFIG_FILE_PROP);
+		final String configFileName = System.getProperty(SIMPLE_FEATURE_CONFIG_FILE_PROP);
 		if (configFileName != null) {
 			final File configFile = new File(
 					configFileName);
@@ -138,13 +124,11 @@ public class SimpleFeatureUserDataConfigurationSet
 						"UTF-8")) {
 					final ObjectMapper mapper = new ObjectMapper();
 					final SerializationConfig serializationConfig = mapper.getSerializationConfig();
-					serializationConfig.disable(
-							SerializationConfig.Feature.FAIL_ON_EMPTY_BEANS);
+					serializationConfig.disable(SerializationConfig.Feature.FAIL_ON_EMPTY_BEANS);
 					final SimpleFeatureUserDataConfigurationSet instance = mapper.readValue(
 							reader,
 							SimpleFeatureUserDataConfigurationSet.class);
-					instance.updateType(
-							type);
+					instance.updateType(type);
 				}
 				catch (final IOException e) {
 					LOGGER.error(

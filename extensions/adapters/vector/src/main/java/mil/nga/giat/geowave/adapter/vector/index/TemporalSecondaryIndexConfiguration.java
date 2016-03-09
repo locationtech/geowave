@@ -14,8 +14,11 @@ public class TemporalSecondaryIndexConfiguration extends
 	public static final String INDEX_KEY = "2ND_IDX_TEMPORAL";
 
 	public TemporalSecondaryIndexConfiguration() {
-		super (Date.class, Collections.<String>emptySet());
+		super(
+				Date.class,
+				Collections.<String> emptySet());
 	}
+
 	public TemporalSecondaryIndexConfiguration(
 			final String attribute ) {
 		super(

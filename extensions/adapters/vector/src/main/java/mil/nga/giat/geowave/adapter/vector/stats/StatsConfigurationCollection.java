@@ -56,7 +56,7 @@ public class StatsConfigurationCollection implements
 		public SimpleFeatureStatsConfigurationCollection(
 				final SimpleFeatureType type ) {
 			super();
-			updateType(type);
+			configureFromType(type);
 		}
 
 		public Map<String, StatsConfigurationCollection> getAttConfig() {

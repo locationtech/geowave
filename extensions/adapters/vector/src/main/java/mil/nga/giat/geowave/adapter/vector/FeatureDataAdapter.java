@@ -371,12 +371,18 @@ public class FeatureDataAdapter extends
 		byte[] attrBytes = new byte[0];
 
 		final SimpleFeatureUserDataConfigurationSet userDataConfiguration = new SimpleFeatureUserDataConfigurationSet();
-		userDataConfiguration.addConfigurations(typeName,new TimeDescriptorConfiguration(
-				persistedType));
-		userDataConfiguration.addConfigurations(typeName,new SimpleFeatureStatsConfigurationCollection(
-				persistedType));
-		userDataConfiguration.addConfigurations(typeName,new VisibilityConfiguration(
-				persistedType));
+		userDataConfiguration.addConfigurations(
+				typeName,
+				new TimeDescriptorConfiguration(
+						persistedType));
+		userDataConfiguration.addConfigurations(
+				typeName,
+				new SimpleFeatureStatsConfigurationCollection(
+						persistedType));
+		userDataConfiguration.addConfigurations(
+				typeName,
+				new VisibilityConfiguration(
+						persistedType));
 		try {
 			attrBytes = StringUtils.stringToBinary(userDataConfiguration.asJsonString());
 		}
@@ -459,12 +465,18 @@ public class FeatureDataAdapter extends
 					StringUtils.stringFromBinary(axisBytes));
 
 			final SimpleFeatureUserDataConfigurationSet userDataConfiguration = new SimpleFeatureUserDataConfigurationSet();
-			userDataConfiguration.addConfigurations(typeName,new TimeDescriptorConfiguration(
-					myType));
-			userDataConfiguration.addConfigurations(typeName,new SimpleFeatureStatsConfigurationCollection(
-					myType));
-			userDataConfiguration.addConfigurations(typeName,new VisibilityConfiguration(
-					myType));
+			userDataConfiguration.addConfigurations(
+					typeName,
+					new TimeDescriptorConfiguration(
+							myType));
+			userDataConfiguration.addConfigurations(
+					typeName,
+					new SimpleFeatureStatsConfigurationCollection(
+							myType));
+			userDataConfiguration.addConfigurations(
+					typeName,
+					new VisibilityConfiguration(
+							myType));
 			try {
 				userDataConfiguration.fromJsonString(
 						StringUtils.stringFromBinary(attrBytes),

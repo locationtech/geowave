@@ -45,6 +45,8 @@ public class SimpleFeatureUserDataConfigurationSetTest
 				"visibility"));
 		assertTrue(type.getUserData().containsKey(
 				"visibilityManagerClass"));
-		assertTrue(type.getUserData().get("PrimaryIndexName").equals("SPATIAL_IDX"));
+		assertTrue(type.getUserData().get(
+				"PrimaryIndexName").equals(
+				"SPATIAL_IDX"));
 	}
 }
