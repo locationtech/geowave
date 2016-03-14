@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.Set;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.opengis.feature.simple.SimpleFeatureType;
 
 public class NumericSecondaryIndexConfiguration extends
 		AbstractSecondaryIndexConfiguration<Number>
@@ -12,10 +13,12 @@ public class NumericSecondaryIndexConfiguration extends
 	private static final long serialVersionUID = 7098885526353176048L;
 	public static final String INDEX_KEY = "2ND_IDX_NUMERIC";
 
-	public NumericSecondaryIndexConfiguration() {	
-		super (Number.class, Collections.<String>emptySet());
+	public NumericSecondaryIndexConfiguration() {
+		super(
+				Number.class,
+				Collections.<String> emptySet());
 	}
-	
+
 	public NumericSecondaryIndexConfiguration(
 			final String attribute ) {
 		super(

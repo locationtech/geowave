@@ -136,11 +136,11 @@ public class CQLQueryTest
 		assertTrue(query.getIndexConstraints(
 				SPATIAL_TEMPORAL_INDEX_STRATEGY).isEmpty());
 	}
-	
-	
+
 	@Test
 	public void testGeoTemporalRangeWithMatchingIndex()
-			throws CQLException, SchemaException {
+			throws CQLException,
+			SchemaException {
 		SimpleFeatureType type = DataUtilities.createType(
 				"geostuff",
 				"geometry:Geometry:srid=4326,pop:java.lang.Long,start:Date,end:Date,pid:String");
@@ -186,7 +186,7 @@ public class CQLQueryTest
 					41.3,
 					1.116538376E12
 				}));
-		
+
 		final CQLQuery query3 = new CQLQuery(
 				"BBOX(geometry,27.20,41.30,27.30,41.20) and (start after 2005-05-19T20:32:56Z and end before 2005-05-19T21:32:56Z)",
 				adapter);
@@ -207,7 +207,7 @@ public class CQLQueryTest
 					41.3,
 					1.116538376E12
 				}));
-		
+
 		final CQLQuery query4 = new CQLQuery(
 				"BBOX(geometry,27.20,41.30,27.30,41.20) and (start after 2005-05-19T20:32:56Z and end after 2006-05-19T21:32:56Z)",
 				adapter);
@@ -228,8 +228,7 @@ public class CQLQueryTest
 					41.3,
 					9.223372036854776E18
 				}));
-		
-		
+
 	}
 
 }

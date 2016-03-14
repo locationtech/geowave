@@ -143,14 +143,6 @@ public class GeoWaveGTDataStore extends
 		return dataStatisticsStore;
 	}
 
-	protected List<PrimaryIndex> getWriteIndices(
-			final GeotoolsFeatureDataAdapter adapter ) {
-		if (adapter instanceof FeatureDataAdapter) {
-			return getPreferredIndices((FeatureDataAdapter) adapter);
-		}
-		return Arrays.asList(new SpatialDimensionalityTypeProvider().createPrimaryIndex());
-	}
-
 	@Override
 	public void createSchema(
 			final SimpleFeatureType featureType ) {
@@ -316,8 +308,8 @@ public class GeoWaveGTDataStore extends
 		}
 	}
 
-	private List<PrimaryIndex> getPreferredIndices(
-			final FeatureDataAdapter adapter ) {
+	public List<PrimaryIndex> getPreferredIndices(
+			final GeotoolsFeatureDataAdapter adapter ) {
 
 		List<PrimaryIndex> currentSelections = preferredIndexes.get(adapter.getType().getName().toString());
 		if (currentSelections != null) {
@@ -338,7 +330,7 @@ public class GeoWaveGTDataStore extends
 				Index<?, ?> nextIndex = indices.next();
 				if (!(nextIndex instanceof PrimaryIndex)) continue;
 				final PrimaryIndex index = (PrimaryIndex) nextIndex;
-			
+
 				if (!indexNames.isEmpty()) {
 					// Only used selected preferred indices
 					if (indexNames.contains(index.getId().getString())) {

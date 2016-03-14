@@ -52,7 +52,7 @@ public class GeoWaveDataStoreComponents
 		this.indexStore = indexStore;
 		this.dataStatisticsStore = dataStatisticsStore;
 		this.gtStore = gtStore;
-		writeIndices = gtStore.getWriteIndices(adapter);
+		writeIndices = gtStore.getPreferredIndices(adapter);
 		this.transactionAllocator = transactionAllocator;
 	}
 

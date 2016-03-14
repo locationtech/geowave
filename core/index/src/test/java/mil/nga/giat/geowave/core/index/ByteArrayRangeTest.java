@@ -82,7 +82,7 @@ public class ByteArrayRangeTest
 				l1.get(1));
 
 	}
-	
+
 	@Test
 	public void testIntersection() {
 		ByteArrayRange bar1 = new ByteArrayRange(

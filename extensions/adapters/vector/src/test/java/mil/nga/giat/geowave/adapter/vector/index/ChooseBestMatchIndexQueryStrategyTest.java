@@ -168,94 +168,59 @@ public class ChooseBestMatchIndexQueryStrategyTest
 
 	}
 
-	@Test
-	public void testChooseTemporalWithoutStats() {
-		final PrimaryIndex temporalindex = new SpatialTemporalIndexBuilder().createIndex();
-		final ChooseBestMatchIndexQueryStrategy strategy = new ChooseBestMatchIndexQueryStrategy();
-
-		final ConstraintSet cs1 = new ConstraintSet();
-		cs1.addConstraint(
-				LatitudeDefinition.class,
-				new ConstraintData(
-						new ConstrainedIndexValue(
-								0.3,
-								0.5),
-						true));
-
-		cs1.addConstraint(
-				LongitudeDefinition.class,
-				new ConstraintData(
-						new ConstrainedIndexValue(
-								0.4,
-								0.7),
-						true));
-
-		final ConstraintSet cs2a = new ConstraintSet();
-		cs2a.addConstraint(
-				TimeDefinition.class,
-				new ConstraintData(
-						new ConstrainedIndexValue(
-								0.1,
-								0.2),
-						true));
-
-		final Constraints constraints = new Constraints(
-				Arrays.asList(cs2a)).merge(Collections.singletonList(cs1));
-
-		final BasicQuery query = new BasicQuery(
-				constraints);
-
-		final Iterator<Index<?, ?>> it = getIndices(
-				new HashMap<ByteArrayId, DataStatistics<SimpleFeature>>(),
-				query,
-				strategy);
-		assertTrue(it.hasNext());
-		assertEquals(
-				temporalindex.getId(),
-				it.next().getId());
-		assertFalse(it.hasNext());
-
-	}
-
-	@Test
-	public void testChooseSpatialWithoutStats() {
-		final PrimaryIndex spatialIndex = new SpatialIndexBuilder().createIndex();
-		final ChooseBestMatchIndexQueryStrategy strategy = new ChooseBestMatchIndexQueryStrategy();
-
-		final ConstraintSet cs1 = new ConstraintSet();
-		cs1.addConstraint(
-				LatitudeDefinition.class,
-				new ConstraintData(
-						new ConstrainedIndexValue(
-								0.3,
-								0.5),
-						true));
-
-		cs1.addConstraint(
-				LongitudeDefinition.class,
-				new ConstraintData(
-						new ConstrainedIndexValue(
-								0.4,
-								0.7),
-						true));
-
-		final Constraints constraints = new Constraints(
-				Collections.singletonList(cs1));
-
-		final BasicQuery query = new BasicQuery(
-				constraints);
-
-		final Iterator<Index<?, ?>> it = getIndices(
-				new HashMap<ByteArrayId, DataStatistics<SimpleFeature>>(),
-				query,
-				strategy);
-		assertTrue(it.hasNext());
-		assertEquals(
-				spatialIndex.getId(),
-				it.next().getId());
-		assertFalse(it.hasNext());
-
-	}
+	/*
+	 * @Test public void testChooseTemporalWithoutStats() { final PrimaryIndex
+	 * temporalindex = new SpatialTemporalIndexBuilder().createIndex(); final
+	 * ChooseBestMatchIndexQueryStrategy strategy = new
+	 * ChooseBestMatchIndexQueryStrategy();
+	 * 
+	 * final ConstraintSet cs1 = new ConstraintSet(); cs1.addConstraint(
+	 * LatitudeDefinition.class, new ConstraintData( new ConstrainedIndexValue(
+	 * 0.3, 0.5), true));
+	 * 
+	 * cs1.addConstraint( LongitudeDefinition.class, new ConstraintData( new
+	 * ConstrainedIndexValue( 0.4, 0.7), true));
+	 * 
+	 * final ConstraintSet cs2a = new ConstraintSet(); cs2a.addConstraint(
+	 * TimeDefinition.class, new ConstraintData( new ConstrainedIndexValue( 0.1,
+	 * 0.2), true));
+	 * 
+	 * final Constraints constraints = new Constraints(
+	 * Arrays.asList(cs2a)).merge(Collections.singletonList(cs1));
+	 * 
+	 * final BasicQuery query = new BasicQuery( constraints);
+	 * 
+	 * final Iterator<Index<?, ?>> it = getIndices( new HashMap<ByteArrayId,
+	 * DataStatistics<SimpleFeature>>(), query, strategy);
+	 * assertTrue(it.hasNext()); assertEquals( temporalindex.getId(),
+	 * it.next().getId()); assertFalse(it.hasNext());
+	 * 
+	 * }
+	 * 
+	 * @Test public void testChooseSpatialWithoutStats() { final PrimaryIndex
+	 * spatialIndex = new SpatialIndexBuilder().createIndex(); final
+	 * ChooseBestMatchIndexQueryStrategy strategy = new
+	 * ChooseBestMatchIndexQueryStrategy();
+	 * 
+	 * final ConstraintSet cs1 = new ConstraintSet(); cs1.addConstraint(
+	 * LatitudeDefinition.class, new ConstraintData( new ConstrainedIndexValue(
+	 * 0.3, 0.5), true));
+	 * 
+	 * cs1.addConstraint( LongitudeDefinition.class, new ConstraintData( new
+	 * ConstrainedIndexValue( 0.4, 0.7), true));
+	 * 
+	 * final Constraints constraints = new Constraints(
+	 * Collections.singletonList(cs1));
+	 * 
+	 * final BasicQuery query = new BasicQuery( constraints);
+	 * 
+	 * final Iterator<Index<?, ?>> it = getIndices( new HashMap<ByteArrayId,
+	 * DataStatistics<SimpleFeature>>(), query, strategy);
+	 * assertTrue(it.hasNext()); assertEquals( spatialIndex.getId(),
+	 * it.next().getId()); assertFalse(it.hasNext());
+	 * 
+	 * }
+	 */
 
 	public Iterator<Index<?, ?>> getIndices(
 			final Map<ByteArrayId, DataStatistics<SimpleFeature>> stats,
