@@ -50,6 +50,7 @@ import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloIndexStore;
 import mil.nga.giat.geowave.datastore.accumulo.query.AccumuloConstraintsQuery;
 import mil.nga.giat.geowave.datastore.accumulo.query.AccumuloRowIdsQuery;
 import mil.nga.giat.geowave.datastore.accumulo.query.AccumuloRowPrefixQuery;
+import mil.nga.giat.geowave.datastore.accumulo.query.SharedVisibilitySplittingIterator;
 import mil.nga.giat.geowave.datastore.accumulo.query.SingleEntryFilterIterator;
 import mil.nga.giat.geowave.datastore.accumulo.util.AccumuloUtils;
 import mil.nga.giat.geowave.datastore.accumulo.util.EntryIteratorWrapper;
@@ -274,6 +275,7 @@ public class AccumuloDataStore implements
 								filter,
 								sanitizedQueryOptions.getScanCallback(),
 								queryOptions.getAggregation(),
+								queryOptions.getFieldIds(),
 								sanitizedQueryOptions.getAuthorizations());
 						results.add(accumuloQuery.query(
 								accumuloOperations,
@@ -307,6 +309,7 @@ public class AccumuloDataStore implements
 									filter,
 									sanitizedQueryOptions.getScanCallback(),
 									queryOptions.getAggregation(),
+									queryOptions.getFieldIds(),
 									sanitizedQueryOptions.getAuthorizations());
 
 							results.add(accumuloQuery.query(
@@ -492,6 +495,11 @@ public class AccumuloDataStore implements
 
 			scanner.fetchColumnFamily(new Text(
 					adapterId.getBytes()));
+
+			scanner.addScanIterator(new IteratorSetting(
+					SharedVisibilitySplittingIterator.ITERATOR_PRIORITY,
+					SharedVisibilitySplittingIterator.ITERATOR_NAME,
+					SharedVisibilitySplittingIterator.class));
 
 			final IteratorSetting rowIteratorSettings = new IteratorSetting(
 					SingleEntryFilterIterator.WHOLE_ROW_ITERATOR_PRIORITY,
@@ -752,6 +760,7 @@ public class AccumuloDataStore implements
 											null,
 											callback,
 											null,
+											queryOptions.getFieldIds(),
 											queryOptions.getAuthorizations()).query(
 											accumuloOperations,
 											adapterStore,

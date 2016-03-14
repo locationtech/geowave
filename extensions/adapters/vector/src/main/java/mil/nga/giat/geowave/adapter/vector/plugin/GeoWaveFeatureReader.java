@@ -10,6 +10,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -77,6 +78,7 @@ public class GeoWaveFeatureReader implements
 	private final GeoWaveDataStoreComponents components;
 	private final GeoWaveFeatureCollection featureCollection;
 	private final GeoWaveTransaction transaction;
+	private final Query query;
 
 	public GeoWaveFeatureReader(
 			final Query query,
@@ -88,6 +90,7 @@ public class GeoWaveFeatureReader implements
 		featureCollection = new GeoWaveFeatureCollection(
 				this,
 				query);
+		this.query = query;
 	}
 
 	public GeoWaveTransaction getTransaction() {
@@ -260,13 +263,17 @@ public class GeoWaveFeatureReader implements
 		public CloseableIterator<SimpleFeature> query(
 				final PrimaryIndex index,
 				final mil.nga.giat.geowave.core.store.query.Query query ) {
+			final QueryOptions queryOptions = new QueryOptions(
+					components.getAdapter(),
+					index,
+					limit,
+					null,
+					transaction.composeAuthorizations());
+			if (subsetRequested()) {
+				queryOptions.setFieldIds(getSubset());
+			}
 			return components.getDataStore().query(
-					new QueryOptions(
-							components.getAdapter(),
-							index,
-							limit,
-							null,
-							transaction.composeAuthorizations()),
+					queryOptions,
 					new CQLQuery(
 							query,
 							filter,
@@ -320,6 +327,9 @@ public class GeoWaveFeatureReader implements
 					index,
 					transaction.composeAuthorizations());
 			options.setLimit(limit);
+			if (subsetRequested()) {
+				options.setFieldIds(getSubset());
+			}
 			final double east = envelope.getMaxX();
 			final double west = envelope.getMinX();
 			final double north = envelope.getMaxY();
@@ -388,11 +398,15 @@ public class GeoWaveFeatureReader implements
 		public CloseableIterator<SimpleFeature> query(
 				final PrimaryIndex index,
 				final mil.nga.giat.geowave.core.store.query.Query query ) {
+			final QueryOptions queryOptions = new QueryOptions(
+					components.getAdapter(),
+					index,
+					transaction.composeAuthorizations());
+			if (subsetRequested()) {
+				queryOptions.setFieldIds(getSubset());
+			}
 			return components.getDataStore().query(
-					new QueryOptions(
-							components.getAdapter(),
-							index,
-							transaction.composeAuthorizations()),
+					queryOptions,
 					new CQLQuery(
 							query,
 							filter,
@@ -422,13 +436,17 @@ public class GeoWaveFeatureReader implements
 		public CloseableIterator<SimpleFeature> query(
 				final PrimaryIndex index,
 				final mil.nga.giat.geowave.core.store.query.Query query ) {
+			final QueryOptions queryOptions = new QueryOptions(
+					components.getAdapter(),
+					index,
+					limit,
+					null,
+					transaction.composeAuthorizations());
+			if (subsetRequested()) {
+				queryOptions.setFieldIds(getSubset());
+			}
 			return components.getDataStore().query(
-					new QueryOptions(
-							components.getAdapter(),
-							index,
-							limit,
-							null,
-							transaction.composeAuthorizations()),
+					queryOptions,
 					new DataIdQuery(
 							components.getAdapter().getAdapterId(),
 							ids));
@@ -500,13 +518,18 @@ public class GeoWaveFeatureReader implements
 			final List<PrimaryIndex> writeIndices = components.getWriteIndices();
 			final PrimaryIndex queryIndex = ((writeIndices != null) && (writeIndices.size() > 0)) ? writeIndices.get(0) : null;
 
+			final QueryOptions queryOptions = new QueryOptions(
+					components.getAdapter(),
+					queryIndex,
+					limit,
+					null,
+					transaction.composeAuthorizations());
+			if (subsetRequested()) {
+				queryOptions.setFieldIds(getSubset());
+			}
+
 			return components.getDataStore().query(
-					new QueryOptions(
-							components.getAdapter(),
-							queryIndex,
-							limit,
-							null,
-							transaction.composeAuthorizations()),
+					queryOptions,
 					new DataIdQuery(
 							components.getAdapter().getAdapterId(),
 							ids));
@@ -648,5 +671,15 @@ public class GeoWaveFeatureReader implements
 			}
 		}
 		return value;
+	}
+
+	private boolean subsetRequested() {
+		if (query == null) return false;
+		return !(query.getPropertyNames() == Query.ALL_NAMES);
+	}
+
+	private List<String> getSubset() {
+		if (query == null) return Collections.emptyList();
+		return Arrays.asList(query.getPropertyNames());
 	}
 }

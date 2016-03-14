@@ -16,24 +16,6 @@ import java.util.SortedMap;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import org.apache.accumulo.core.client.AccumuloException;
-import org.apache.accumulo.core.client.AccumuloSecurityException;
-import org.apache.accumulo.core.client.BatchScanner;
-import org.apache.accumulo.core.client.Connector;
-import org.apache.accumulo.core.client.IteratorSetting;
-import org.apache.accumulo.core.client.ScannerBase;
-import org.apache.accumulo.core.client.TableNotFoundException;
-import org.apache.accumulo.core.data.Key;
-import org.apache.accumulo.core.data.Mutation;
-import org.apache.accumulo.core.data.Range;
-import org.apache.accumulo.core.data.Value;
-import org.apache.accumulo.core.iterators.IteratorUtil.IteratorScope;
-import org.apache.accumulo.core.iterators.user.WholeRowIterator;
-import org.apache.accumulo.core.security.ColumnVisibility;
-import org.apache.commons.lang3.tuple.Pair;
-import org.apache.hadoop.io.Text;
-import org.apache.log4j.Logger;
-
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.index.StringUtils;
@@ -77,6 +59,24 @@ import mil.nga.giat.geowave.datastore.accumulo.metadata.AbstractAccumuloPersiste
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloAdapterStore;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloIndexStore;
 import mil.nga.giat.geowave.datastore.accumulo.query.AccumuloConstraintsQuery;
+
+import org.apache.accumulo.core.client.AccumuloException;
+import org.apache.accumulo.core.client.AccumuloSecurityException;
+import org.apache.accumulo.core.client.BatchScanner;
+import org.apache.accumulo.core.client.Connector;
+import org.apache.accumulo.core.client.IteratorSetting;
+import org.apache.accumulo.core.client.ScannerBase;
+import org.apache.accumulo.core.client.TableNotFoundException;
+import org.apache.accumulo.core.data.Key;
+import org.apache.accumulo.core.data.Mutation;
+import org.apache.accumulo.core.data.Range;
+import org.apache.accumulo.core.data.Value;
+import org.apache.accumulo.core.iterators.IteratorUtil.IteratorScope;
+import org.apache.accumulo.core.iterators.user.WholeRowIterator;
+import org.apache.accumulo.core.security.ColumnVisibility;
+import org.apache.commons.lang3.tuple.Pair;
+import org.apache.hadoop.io.Text;
+import org.apache.log4j.Logger;
 
 /**
  * A set of convenience methods for common operations on Accumulo within
@@ -305,84 +305,42 @@ public class AccumuloUtils
 			final byte byteValue[] = entry.getValue().get();
 			final ByteArrayId fieldId = new ByteArrayId(
 					entry.getKey().getColumnQualifierData().getBackingArray());
-			if ((adapter instanceof AbstractDataAdapter<?>) && (fieldId.equals(COMPOSITE_CQ))) {
-				final List<FieldInfo<Object>> fieldInfos = decomposeFlattenedFields(
-						indexModel,
+
+			final FieldReader<? extends CommonIndexValue> indexFieldReader = indexModel.getReader(fieldId);
+			if (indexFieldReader != null) {
+				final CommonIndexValue indexValue = indexFieldReader.readField(byteValue);
+				indexValue.setVisibility(entry.getKey().getColumnVisibilityData().getBackingArray());
+				final PersistentValue<CommonIndexValue> val = new PersistentValue<CommonIndexValue>(
+						fieldId,
+						indexValue);
+				indexData.addValue(val);
+				fieldInfoList.add(DataStoreUtils.getFieldInfo(
+						val,
 						byteValue,
-						entry.getKey().getColumnVisibilityData().getBackingArray());
-				for (final FieldInfo<Object> fieldInfo : fieldInfos) {
-					final FieldReader<? extends CommonIndexValue> indexFieldReader = indexModel.getReader(fieldInfo.getDataValue().getId());
-					if (indexFieldReader != null) {
-						final CommonIndexValue indexValue = indexFieldReader.readField(fieldInfo.getWrittenValue());
-						indexValue.setVisibility(entry.getKey().getColumnVisibilityData().getBackingArray());
-						final PersistentValue<CommonIndexValue> val = new PersistentValue<CommonIndexValue>(
-								fieldInfo.getDataValue().getId(),
-								indexValue);
-						indexData.addValue(val);
-						fieldInfoList.add(DataStoreUtils.getFieldInfo(
-								val,
-								fieldInfo.getWrittenValue(),
-								entry.getKey().getColumnVisibilityData().getBackingArray()));
-					}
-					else {
-						final FieldReader<?> extFieldReader = adapter.getReader(fieldInfo.getDataValue().getId());
-						if (extFieldReader != null) {
-							final Object value = extFieldReader.readField(fieldInfo.getWrittenValue());
-							final PersistentValue<Object> val = new PersistentValue<Object>(
-									fieldInfo.getDataValue().getId(),
-									value);
-							extendedData.addValue(val);
-							fieldInfoList.add(DataStoreUtils.getFieldInfo(
-									val,
-									fieldInfo.getWrittenValue(),
-									entry.getKey().getColumnVisibilityData().getBackingArray()));
-						}
-						else {
-							LOGGER.error("field reader not found for data entry, the value may be ignored");
-							unknownData.addValue(new PersistentValue<byte[]>(
-									fieldInfo.getDataValue().getId(),
-									fieldInfo.getWrittenValue()));
-						}
-					}
-				}
+						indexValue.getVisibility()));
 			}
 			else {
-				final FieldReader<? extends CommonIndexValue> indexFieldReader = indexModel.getReader(fieldId);
-				if (indexFieldReader != null) {
-					final CommonIndexValue indexValue = indexFieldReader.readField(byteValue);
-					indexValue.setVisibility(entry.getKey().getColumnVisibilityData().getBackingArray());
-					final PersistentValue<CommonIndexValue> val = new PersistentValue<CommonIndexValue>(
+				// next check if this field is part of the adapter's
+				// extended data model
+				final FieldReader<?> extFieldReader = adapter.getReader(fieldId);
+				if (extFieldReader == null) {
+					// if it still isn't resolved, log an error, and
+					// continue
+					LOGGER.error("field reader not found for data entry, the value may be ignored");
+					unknownData.addValue(new PersistentValue<byte[]>(
 							fieldId,
-							indexValue);
-					indexData.addValue(val);
-					fieldInfoList.add(DataStoreUtils.getFieldInfo(
-							val,
-							byteValue,
-							indexValue.getVisibility()));
+							byteValue));
+					continue;
 				}
-				else {
-					// next check if this field is part of the adapter's
-					// extended data model
-					final FieldReader<?> extFieldReader = adapter.getReader(fieldId);
-					if (extFieldReader == null) {
-						// if it still isn't resolved, log an error, and
-						// continue
-						LOGGER.error("field reader not found for data entry, the value may be ignored");
-						unknownData.addValue(new PersistentValue<byte[]>(
-								fieldId,
-								byteValue));
-						continue;
-					}
-					final Object value = extFieldReader.readField(byteValue);
-					final PersistentValue<Object> val = new PersistentValue<Object>(
-							fieldId,
-							value);
-					extendedData.addValue(val);
-					fieldInfoList.add(DataStoreUtils.getFieldInfo(
-							val,
-							byteValue,
-							entry.getKey().getColumnVisibility().getBytes()));
-				}
+				final Object value = extFieldReader.readField(byteValue);
+				final PersistentValue<Object> val = new PersistentValue<Object>(
+						fieldId,
+						value);
+				extendedData.addValue(val);
+				fieldInfoList.add(DataStoreUtils.getFieldInfo(
+						val,
+						byteValue,
+						entry.getKey().getColumnVisibility().getBytes()));
 			}
 		}
 		final IndexedAdapterPersistenceEncoding encodedRow = new IndexedAdapterPersistenceEncoding(
@@ -627,51 +585,6 @@ public class AccumuloUtils
 			retVal.add(composite);
 		}
 		return retVal;
-	}
-
-	/**
-	 * Takes a byte array representing a serialized composite group of
-	 * FieldInfos sharing a common visibility and returns a List of the
-	 * individual FieldInfos
-	 * 
-	 * @param model
-	 * @param flattenedValue
-	 *            the serialized composite FieldInfo
-	 * @param commonVisibility
-	 *            the shared visibility
-	 * @return
-	 */
-	public static <T> List<FieldInfo<Object>> decomposeFlattenedFields(
-			final CommonIndexModel model,
-			final byte[] flattenedValue,
-			final byte[] commonVisibility ) {
-		final List<FieldInfo<Object>> fieldInfoList = new ArrayList<>();
-		final ByteBuffer input = ByteBuffer.wrap(flattenedValue);
-		final int numFields = input.getInt();
-		for (int x = 0; x < numFields; x++) {
-			final int fieldIdLength = input.getInt();
-			final byte[] fieldIdBytes = new byte[fieldIdLength];
-			input.get(fieldIdBytes);
-			final int fieldLength = input.getInt();
-			final byte[] fieldValueBytes = new byte[fieldLength];
-			input.get(fieldValueBytes);
-			final ByteArrayId fieldId = new ByteArrayId(
-					fieldIdBytes);
-			final FieldReader<? extends CommonIndexValue> fieldReader = model.getReader(fieldId);
-			Object fieldValue = null;
-			if (fieldReader != null) {
-				fieldValue = fieldReader.readField(fieldValueBytes);
-			}
-			final PersistentValue<Object> persistentValue = new PersistentValue<Object>(
-					fieldId,
-					fieldValue);
-			final FieldInfo<Object> fieldInfo = DataStoreUtils.getFieldInfo(
-					persistentValue,
-					fieldValueBytes,
-					commonVisibility);
-			fieldInfoList.add(fieldInfo);
-		}
-		return fieldInfoList;
 	}
 
 	/**
@@ -1129,6 +1042,7 @@ public class AccumuloUtils
 					null,
 					null,
 					null,
+					null,
 					new String[0]);
 			final CloseableIterator<?> iterator = accumuloQuery.query(
 					operations,
@@ -1172,6 +1086,7 @@ public class AccumuloUtils
 			final AccumuloConstraintsQuery accumuloQuery = new AccumuloConstraintsQuery(
 					null,
 					index,
+					null,
 					null,
 					null,
 					null,

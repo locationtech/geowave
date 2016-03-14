@@ -32,10 +32,12 @@ public abstract class AccumuloFilteredIndexQuery extends
 			final List<ByteArrayId> adapterIds,
 			final PrimaryIndex index,
 			final ScanCallback<?> scanCallback,
+			final List<String> fieldIds,
 			final String... authorizations ) {
 		super(
 				adapterIds,
 				index,
+				fieldIds,
 				authorizations);
 		this.scanCallback = scanCallback;
 	}

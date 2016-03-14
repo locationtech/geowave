@@ -1,5 +1,6 @@
 package mil.nga.giat.geowave.datastore.accumulo.query;
 
+import java.util.Collections;
 import java.util.List;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
@@ -29,6 +30,7 @@ abstract public class AccumuloQuery
 	private final static Logger LOGGER = Logger.getLogger(AccumuloQuery.class);
 	protected final List<ByteArrayId> adapterIds;
 	protected final PrimaryIndex index;
+	protected final List<String> fieldIds;
 
 	private final String[] authorizations;
 
@@ -38,15 +40,18 @@ abstract public class AccumuloQuery
 		this(
 				null,
 				index,
+				Collections.<String> emptyList(),
 				authorizations);
 	}
 
 	public AccumuloQuery(
 			final List<ByteArrayId> adapterIds,
 			final PrimaryIndex index,
+			final List<String> fieldIds,
 			final String... authorizations ) {
 		this.adapterIds = adapterIds;
 		this.index = index;
+		this.fieldIds = fieldIds;
 		this.authorizations = authorizations;
 	}
 

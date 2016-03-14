@@ -13,11 +13,9 @@ import mil.nga.giat.geowave.core.geotime.GeometryUtils;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.DataStore;
-import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.IndexWriter;
-import mil.nga.giat.geowave.core.store.ScanCallback;
-import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.memory.DataStoreUtils;
+import mil.nga.giat.geowave.core.store.query.Query;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStore;
 import mil.nga.giat.geowave.test.GeoWaveTestEnvironment;
@@ -66,6 +64,11 @@ public class AttributesSubsetQueryIT extends
 			-84.3900,
 			33.7550);
 
+	private final Query spatialQuery = new SpatialQuery(
+			GeometryUtils.GEOMETRY_FACTORY.toGeometry(new Envelope(
+					GUADALAJARA,
+					ATLANTA)));
+
 	@BeforeClass
 	public static void setupData()
 			throws IOException {
@@ -84,55 +87,50 @@ public class AttributesSubsetQueryIT extends
 	}
 
 	@Test
-	public void testResultsContainAllAttributes()
+	public void testNoFiltering()
 			throws IOException {
 
-		final CloseableIterator<SimpleFeature> matches = dataStore.query(
+		final CloseableIterator<SimpleFeature> results = dataStore.query(
 				new QueryOptions(
 						dataAdapter,
 						DEFAULT_SPATIAL_INDEX),
-				new SpatialQuery(
-						GeometryUtils.GEOMETRY_FACTORY.toGeometry(new Envelope(
-								GUADALAJARA,
-								ATLANTA))));
+				spatialQuery);
 
 		// query expects to match 3 cities from Texas, which should each contain
 		// non-null values for each SimpleFeature attribute
 		verifyResults(
-				matches,
+				results,
 				3,
 				ALL_ATTRIBUTES);
 	}
 
 	@Test
-	public void testResultsContainCityOnly()
+	public void testServerSideFiltering()
 			throws IOException {
 
-		final List<String> attributesSubset = Arrays.asList(CITY_ATTRIBUTE);
+		final QueryOptions queryOptions = new QueryOptions(
+				dataAdapter,
+				DEFAULT_SPATIAL_INDEX);
+		queryOptions.setFieldIds(Arrays.asList(CITY_ATTRIBUTE));
 
 		final CloseableIterator<SimpleFeature> results = dataStore.query(
-				new QueryOptions(
-						dataAdapter,
-						DEFAULT_SPATIAL_INDEX,
-						-1,
-						null,
-						new String[0]),
-				new SpatialQuery(
-						GeometryUtils.GEOMETRY_FACTORY.toGeometry(new Envelope(
-								GUADALAJARA,
-								ATLANTA))));
+				queryOptions,
+				spatialQuery);
 
 		// query expects to match 3 cities from Texas, which should each contain
 		// non-null values for a subset of attributes (city) and nulls for the
 		// rest
+		final List<String> expectedAttributes = Arrays.asList(
+				CITY_ATTRIBUTE,
+				GEOMETRY_ATTRIBUTE); // always included
 		verifyResults(
 				results,
 				3,
-				attributesSubset);
+				expectedAttributes);
 	}
 
 	@Test
-	public void testResultsContainCityAndPopulation()
+	public void testClientSideFiltering()
 			throws IOException {
 
 		final List<String> attributesSubset = Arrays.asList(
@@ -142,20 +140,18 @@ public class AttributesSubsetQueryIT extends
 		final CloseableIterator<SimpleFeature> results = dataStore.query(
 				new QueryOptions(
 						dataAdapter,
-						DEFAULT_SPATIAL_INDEX,
-						-1,
-						null,
-						new String[0]),
-				new SpatialQuery(
-						GeometryUtils.GEOMETRY_FACTORY.toGeometry(new Envelope(
-								GUADALAJARA,
-								ATLANTA))));
+						DEFAULT_SPATIAL_INDEX),
+				spatialQuery);
 
 		// query expects to match 3 cities from Texas, which should each contain
 		// non-null values for a subset of attributes (city, population) and
 		// nulls for the rest
 		verifyResults(
-				results,
+				// performs filtering client side
+				new FeatureTranslatingIterator(
+						simpleFeatureType,
+						attributesSubset,
+						results),
 				3,
 				attributesSubset);
 	}
@@ -169,14 +165,10 @@ public class AttributesSubsetQueryIT extends
 		int numResults = 0;
 		SimpleFeature currentFeature;
 		Object currentAttributeValue;
-		final CloseableIterator<SimpleFeature> translatedResults = new FeatureTranslatingIterator(
-				simpleFeatureType,
-				attributesExpected,
-				results);
 
-		while (translatedResults.hasNext()) {
+		while (results.hasNext()) {
 
-			currentFeature = translatedResults.next();
+			currentFeature = results.next();
 			numResults++;
 
 			for (final String currentAttribute : ALL_ATTRIBUTES) {
@@ -196,7 +188,7 @@ public class AttributesSubsetQueryIT extends
 			}
 		}
 
-		translatedResults.close();
+		results.close();
 
 		Assert.assertEquals(
 				"Unexpected number of query results",
