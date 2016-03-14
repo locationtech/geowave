@@ -407,25 +407,17 @@ public class QueryOptions implements
 			}
 		}
 
-		int fieldIdsBytesNeeded = 0;
-		byte[] fieldIdsBytes = null;
+		byte[] fieldIdsBytes = new byte[0];
 		if (fieldIds != null && fieldIds.size() > 0) {
-			final StringBuffer sBuf = new StringBuffer();
-			final String comma = ",";
-			for (String fieldId : fieldIds) {
-				if (sBuf.length() > 0) {
-					sBuf.append(comma);
-				}
-				sBuf.append(fieldId);
-			}
-			fieldIdsBytes = StringUtils.stringToBinary(sBuf.toString());
-			fieldIdsBytesNeeded = 4 + fieldIdsBytes.length;
+			final String fieldIdsString = org.apache.commons.lang3.StringUtils.join(
+					fieldIds,
+					',');
+			fieldIdsBytes = StringUtils.stringToBinary(fieldIdsString.toString());
 		}
 
-		final ByteBuffer buf = ByteBuffer.allocate(20 + authBytes.length + aSize + iSize + fieldIdsBytesNeeded);
-		buf.putInt((fieldIdsBytesNeeded > 0) ? 1 : 0);
-		if (fieldIdsBytesNeeded > 0) {
-			buf.putInt(fieldIdsBytes.length);
+		final ByteBuffer buf = ByteBuffer.allocate(20 + authBytes.length + aSize + iSize + fieldIdsBytes.length);
+		buf.putInt(fieldIdsBytes.length);
+		if (fieldIdsBytes.length > 0) {
 			buf.put(fieldIdsBytes);
 		}
 
@@ -459,8 +451,8 @@ public class QueryOptions implements
 			final byte[] bytes ) {
 
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
-		if (buf.getInt() == 1) {
-			final int fieldIdsLength = buf.getInt();
+		final int fieldIdsLength = buf.getInt();
+		if (fieldIdsLength > 0) {
 			final byte[] fieldIdsBytes = new byte[fieldIdsLength];
 			buf.get(fieldIdsBytes);
 			fieldIds = Arrays.asList(StringUtils.stringFromBinary(
