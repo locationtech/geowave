@@ -507,19 +507,14 @@ public class GeometryDataSetGenerator
 		CommandLine commandLine = new BasicParser().parse(
 				allOptions,
 				args);
+		final String typeName = commandLine.getOptionValue("typename");
 
 		final CommandLineResult<DataStoreCommandLineOptions> dataStoreOption = DataStoreCommandLineOptions.parseOptions(
 				allOptions,
 				commandLine);
-		if (dataStoreOption.isCommandLineChange()) {
-			commandLine = dataStoreOption.getCommandLine();
-		}
-		else {
-			throw new ParseException(
-					"Unable to parse data store from command line");
-		}
+
 		final DataStore dataStore = dataStoreOption.getResult().createStore();
-		final String typeName = commandLine.getOptionValue("typename");
+
 		final GeometryDataSetGenerator dataGenerator = new GeometryDataSetGenerator(
 				new FeatureCentroidDistanceFn(),
 				getBuilder(typeName));
@@ -599,6 +594,7 @@ public class GeometryDataSetGenerator
 		typeBuilder.add(
 				"count",
 				Long.class);
+		typeBuilder.setNamespaceURI("http://www.nga.net/gg");
 
 		// build the type
 		return new SimpleFeatureBuilder(
