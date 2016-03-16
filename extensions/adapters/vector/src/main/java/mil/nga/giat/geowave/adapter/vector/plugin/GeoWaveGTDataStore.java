@@ -87,7 +87,6 @@ public class GeoWaveGTDataStore extends
 	private final VisibilityManagement<SimpleFeature> visibilityManagement = VisibilityManagementHelper.loadVisibilityManagement();
 	private final AuthorizationSPI authorizationSPI;
 	private final IndexQueryStrategySPI indexQueryStrategy;
-	private final URI featureNameSpaceURI;
 	private int transactionBufferSize = 10000;
 	private final TransactionsAllocator transactionsAllocator;
 
@@ -100,7 +99,6 @@ public class GeoWaveGTDataStore extends
 		authorizationSPI = config.getAuthorizationFactory().create(
 				config.getAuthorizationURL());
 		init(config);
-		featureNameSpaceURI = config.getFeatureNamespace();
 		indexQueryStrategy = config.getIndexQueryStrategy();
 		transactionBufferSize = config.getTransactionBufferSize();
 		transactionsAllocator = new MemoryTransactionsAllocator();
@@ -153,9 +151,9 @@ public class GeoWaveGTDataStore extends
 		final FeatureDataAdapter adapter = new FeatureDataAdapter(
 				featureType,
 				visibilityManagement);
-		if (featureNameSpaceURI != null) {
-			adapter.setNamespace(featureNameSpaceURI.toString());
-		}
+		// if (featureNameSpaceURI != null) {
+		// adapter.setNamespace(featureNameSpaceURI.toString());
+		// }
 
 		adapterStore.addAdapter(adapter);
 		getPreferredIndices(adapter);
@@ -170,11 +168,12 @@ public class GeoWaveGTDataStore extends
 			return null;
 		}
 		featureAdapter = (GeotoolsFeatureDataAdapter) adapter;
-		if (featureNameSpaceURI != null) {
-			if (adapter instanceof FeatureDataAdapter) {
-				((FeatureDataAdapter) featureAdapter).setNamespace(featureNameSpaceURI.toString());
-			}
-		}
+		// if (featureNameSpaceURI != null) {
+		// if (adapter instanceof FeatureDataAdapter) {
+		// ((FeatureDataAdapter)
+		// featureAdapter).setNamespace(featureNameSpaceURI.toString());
+		// }
+		// }
 		return featureAdapter;
 	}
 

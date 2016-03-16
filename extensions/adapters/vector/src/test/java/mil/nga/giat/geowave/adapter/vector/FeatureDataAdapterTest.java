@@ -140,6 +140,43 @@ public class FeatureDataAdapterTest
 	}
 
 	@Test
+	public void testNameSpace()
+			throws SchemaException {
+		final SimpleFeatureType schema3005 = DataUtilities.createType(
+				"www.something.net/ggg",
+				"sp.geostuff",
+				"geometry:Geometry:srid=3005,pop:java.lang.Long");
+		final FeatureDataAdapter dataAdapter3005 = new FeatureDataAdapter(
+				schema3005,
+				new GlobalVisibilityHandler<SimpleFeature, Object>(
+						"default"));
+		final CoordinateReferenceSystem crs = dataAdapter3005.getType().getCoordinateReferenceSystem();
+		assertTrue(crs.getIdentifiers().toString().contains(
+				"EPSG:4326"));
+
+		final FeatureDataAdapter dataAdapter3005_copy = new FeatureDataAdapter();
+		dataAdapter3005_copy.fromBinary(dataAdapter3005.toBinary());
+		assertEquals(
+				"www.something.net/ggg",
+				dataAdapter3005_copy.getType().getName().getNamespaceURI());
+
+		final SimpleFeatureType schema4326 = DataUtilities.createType(
+				"www.something.net/ggg",
+				"sp.geostuff",
+				"geometry:Geometry,pop:java.lang.Long");
+		final FeatureDataAdapter dataAdapter4326 = new FeatureDataAdapter(
+				schema4326,
+				new GlobalVisibilityHandler<SimpleFeature, Object>(
+						"default"));
+
+		final FeatureDataAdapter dataAdapter4326_copy = new FeatureDataAdapter();
+		dataAdapter4326_copy.fromBinary(dataAdapter4326.toBinary());
+		assertEquals(
+				"www.something.net/ggg",
+				dataAdapter4326_copy.getType().getName().getNamespaceURI());
+	}
+
+	@Test
 	public void testSingleTime() {
 		schema.getDescriptor(
 				"when").getUserData().clear();

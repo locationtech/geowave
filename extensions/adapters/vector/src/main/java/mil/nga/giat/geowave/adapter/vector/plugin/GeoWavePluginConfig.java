@@ -112,7 +112,6 @@ public class GeoWavePluginConfig
 	private final IndexStore indexStore;
 	private final DataStatisticsStore dataStatisticsStore;
 	private final String name;
-	private final URI featureNameSpaceURI;
 	private final LockingManagementFactory lockingManagementFactory;
 	private final AuthorizationFactorySPI authorizationFactory;
 	private final URL authorizationURL;
@@ -172,19 +171,17 @@ public class GeoWavePluginConfig
 					e.getValue() == null ? null : e.getValue().toString());
 		}
 
-		param = params.get(FEATURE_NAMESPACE_KEY);
-		URI namespaceURI = null;
-		if (param != null) {
-			try {
-				namespaceURI = param instanceof String ? new URI(
-						param.toString()) : (URI) param;
-			}
-			catch (final URISyntaxException e) {
-				LOGGER.error("Malformed Feature Namespace URI : " + param);
-			}
-		}
-		featureNameSpaceURI = namespaceURI;
-
+		// param = params.get(FEATURE_NAMESPACE_KEY);
+		// URI namespaceURI = null;
+		// if (param != null) {
+		// try {
+		// namespaceURI = param instanceof String ? new URI(
+		// param.toString()) : (URI) param;
+		// }
+		// catch (final URISyntaxException e) {
+		// LOGGER.error("Malformed Feature Namespace URI : " + param);
+		// }
+		// }
 		param = params.get(TRANSACTION_BUFFER_SIZE);
 		Integer bufferSizeFromParam = 10000;
 		if (param != null) {
@@ -328,10 +325,6 @@ public class GeoWavePluginConfig
 
 	public LockingManagementFactory getLockingManagementFactory() {
 		return lockingManagementFactory;
-	}
-
-	public URI getFeatureNamespace() {
-		return featureNameSpaceURI;
 	}
 
 	public Integer getTransactionBufferSize() {
