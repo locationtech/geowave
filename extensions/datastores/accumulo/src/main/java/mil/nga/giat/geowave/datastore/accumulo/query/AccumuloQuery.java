@@ -83,32 +83,32 @@ abstract public class AccumuloQuery
 							1024,
 							limit));
 				}
-				if (maxResolutionSubsamplingPerDimension != null) {
-					if (maxResolutionSubsamplingPerDimension.length != index.getIndexStrategy().getOrderedDimensionDefinitions().length) {
-						LOGGER.warn("Unable to subsample for table '" + tableName + "'. Subsample dimensions = " + maxResolutionSubsamplingPerDimension.length + " when indexed dimensions = " + index.getIndexStrategy().getOrderedDimensionDefinitions().length);
-					}
-					else {
-
-						final int cardinalityToSubsample = (int) Math.round(IndexUtils.getDimensionalBitsUsed(
-								index.getIndexStrategy(),
-								maxResolutionSubsamplingPerDimension) + (8 * index.getIndexStrategy().getByteOffsetFromDimensionalIndex()));
-
-						final IteratorSetting iteratorSettings = new IteratorSetting(
-								FixedCardinalitySkippingIterator.CARDINALITY_SKIPPING_ITERATOR_PRIORITY,
-								FixedCardinalitySkippingIterator.CARDINALITY_SKIPPING_ITERATOR_NAME,
-								FixedCardinalitySkippingIterator.class);
-						iteratorSettings.addOption(
-								FixedCardinalitySkippingIterator.CARDINALITY_SKIP_INTERVAL,
-								Integer.toString(cardinalityToSubsample));
-						scanner.addScanIterator(iteratorSettings);
-					}
-				}
 			}
 			else {
 				scanner = accumuloOperations.createBatchScanner(
 						tableName,
 						getAdditionalAuthorizations());
 				((BatchScanner) scanner).setRanges(AccumuloUtils.byteArrayRangesToAccumuloRanges(ranges));
+			}
+			if (maxResolutionSubsamplingPerDimension != null) {
+				if (maxResolutionSubsamplingPerDimension.length != index.getIndexStrategy().getOrderedDimensionDefinitions().length) {
+					LOGGER.warn("Unable to subsample for table '" + tableName + "'. Subsample dimensions = " + maxResolutionSubsamplingPerDimension.length + " when indexed dimensions = " + index.getIndexStrategy().getOrderedDimensionDefinitions().length);
+				}
+				else {
+
+					final int cardinalityToSubsample = (int) Math.round(IndexUtils.getDimensionalBitsUsed(
+							index.getIndexStrategy(),
+							maxResolutionSubsamplingPerDimension) + (8 * index.getIndexStrategy().getByteOffsetFromDimensionalIndex()));
+
+					final IteratorSetting iteratorSettings = new IteratorSetting(
+							FixedCardinalitySkippingIterator.CARDINALITY_SKIPPING_ITERATOR_PRIORITY,
+							FixedCardinalitySkippingIterator.CARDINALITY_SKIPPING_ITERATOR_NAME,
+							FixedCardinalitySkippingIterator.class);
+					iteratorSettings.addOption(
+							FixedCardinalitySkippingIterator.CARDINALITY_SKIP_INTERVAL,
+							Integer.toString(cardinalityToSubsample));
+					scanner.addScanIterator(iteratorSettings);
+				}
 			}
 		}
 		catch (final TableNotFoundException e) {
