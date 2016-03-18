@@ -98,7 +98,6 @@ mil.nga.giat.geowave.datastore.accumulo.index.secondary
 mil.nga.giat.geowave.datastore.accumulo.mapreduce
 mil.nga.giat.geowave.datastore.accumulo.mapreduce.input
 mil.nga.giat.geowave.datastore.accumulo.metadata
-mil.nga.giat.geowave.datastore.accumulo.minicluster
 mil.nga.giat.geowave.datastore.accumulo.query
 mil.nga.giat.geowave.datastore.accumulo.split
 mil.nga.giat.geowave.datastore.accumulo.util
