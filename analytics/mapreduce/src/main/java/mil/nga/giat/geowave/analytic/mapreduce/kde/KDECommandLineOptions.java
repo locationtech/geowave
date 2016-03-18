@@ -8,6 +8,7 @@ import org.apache.commons.cli.ParseException;
 public class KDECommandLineOptions
 {
 	public static final String FEATURE_TYPE_KEY = "featureType";
+	public static final String INDEX_ID_KEY = "indexId";
 	public static final String MIN_LEVEL_KEY = "minLevel";
 	public static final String MAX_LEVEL_KEY = "maxLevel";
 	public static final String MIN_SPLITS_KEY = "minSplits";
@@ -19,6 +20,7 @@ public class KDECommandLineOptions
 	public static final String CQL_FILTER_KEY = "cqlFilter";
 
 	private final String featureType;
+	private final String indexId;
 	private final Integer minLevel;
 	private final Integer maxLevel;
 	private final Integer minSplits;
@@ -31,6 +33,7 @@ public class KDECommandLineOptions
 
 	public KDECommandLineOptions(
 			final String featureType,
+			final String indexId,
 			final Integer minLevel,
 			final Integer maxLevel,
 			final Integer minSplits,
@@ -41,6 +44,7 @@ public class KDECommandLineOptions
 			final Integer tileSize,
 			final String cqlFilter ) {
 		this.featureType = featureType;
+		this.indexId = indexId;
 		this.minLevel = minLevel;
 		this.maxLevel = maxLevel;
 		this.minSplits = minSplits;
@@ -50,6 +54,10 @@ public class KDECommandLineOptions
 		this.jobTrackerOrResourceManHostPort = jobTrackerOrResourceManHostPort;
 		this.tileSize = tileSize;
 		this.cqlFilter = cqlFilter;
+	}
+
+	public String getIndexId() {
+		return indexId;
 	}
 
 	public String getFeatureType() {
@@ -95,25 +103,49 @@ public class KDECommandLineOptions
 	public static KDECommandLineOptions parseOptions(
 			final CommandLine commandLine )
 			throws ParseException {
-		final String featureType = commandLine.getOptionValue(FEATURE_TYPE_KEY);
-		final int minLevel = Integer.parseInt(commandLine.getOptionValue(MIN_LEVEL_KEY));
-		final int maxLevel = Integer.parseInt(commandLine.getOptionValue(MAX_LEVEL_KEY));
-		final int minSplits = Integer.parseInt(commandLine.getOptionValue(MIN_SPLITS_KEY));
-		final int maxSplits = Integer.parseInt(commandLine.getOptionValue(MAX_SPLITS_KEY));
-		final String coverageName = commandLine.getOptionValue(COVERAGE_NAME_KEY);
-		String hdfsHostPort = commandLine.getOptionValue(HDFS_HOST_PORT_KEY);
+		final String featureType = commandLine.getOptionValue(
+				FEATURE_TYPE_KEY);
+		final int minLevel = Integer.parseInt(
+				commandLine.getOptionValue(
+						MIN_LEVEL_KEY));
+		final int maxLevel = Integer.parseInt(
+				commandLine.getOptionValue(
+						MAX_LEVEL_KEY));
+		final int minSplits = Integer.parseInt(
+				commandLine.getOptionValue(
+						MIN_SPLITS_KEY));
+		final int maxSplits = Integer.parseInt(
+				commandLine.getOptionValue(
+						MAX_SPLITS_KEY));
+		final String coverageName = commandLine.getOptionValue(
+				COVERAGE_NAME_KEY);
+		String hdfsHostPort = commandLine.getOptionValue(
+				HDFS_HOST_PORT_KEY);
 
-		if (!hdfsHostPort.contains("://")) {
+		if (!hdfsHostPort.contains(
+				"://")) {
 			hdfsHostPort = "hdfs://" + hdfsHostPort;
 		}
-		final String jobTrackerOrResourceManHostPort = commandLine.getOptionValue(JOB_TRACKER_HOST_PORT_KEY);
-		final int tileSize = Integer.parseInt(commandLine.getOptionValue(TILE_SIZE_KEY));
+		final String jobTrackerOrResourceManHostPort = commandLine.getOptionValue(
+				JOB_TRACKER_HOST_PORT_KEY);
+		final int tileSize = Integer.parseInt(
+				commandLine.getOptionValue(
+						TILE_SIZE_KEY));
 		String cqlFilter = null;
-		if (commandLine.hasOption(CQL_FILTER_KEY)) {
-			cqlFilter = commandLine.getOptionValue(CQL_FILTER_KEY);
+		if (commandLine.hasOption(
+				CQL_FILTER_KEY)) {
+			cqlFilter = commandLine.getOptionValue(
+					CQL_FILTER_KEY);
+		}
+		String indexId = null;
+		if (commandLine.hasOption(
+				INDEX_ID_KEY)) {
+			indexId = commandLine.getOptionValue(
+					INDEX_ID_KEY);
 		}
 		return new KDECommandLineOptions(
 				featureType,
+				indexId,
 				minLevel,
 				maxLevel,
 				minSplits,
@@ -131,62 +163,90 @@ public class KDECommandLineOptions
 				FEATURE_TYPE_KEY,
 				true,
 				"The name of the feature type to run a KDE on");
-		featureTypeOption.setRequired(true);
-		allOptions.addOption(featureTypeOption);
+		featureTypeOption.setRequired(
+				true);
+		allOptions.addOption(
+				featureTypeOption);
 
 		final Option minLevelOption = new Option(
 				MIN_LEVEL_KEY,
 				true,
 				"The min level to run a KDE at");
-		minLevelOption.setRequired(true);
-		allOptions.addOption(minLevelOption);
+		minLevelOption.setRequired(
+				true);
+		allOptions.addOption(
+				minLevelOption);
 		final Option maxLevelOption = new Option(
 				MAX_LEVEL_KEY,
 				true,
 				"The max level to run a KDE at");
-		maxLevelOption.setRequired(true);
-		allOptions.addOption(maxLevelOption);
+		maxLevelOption.setRequired(
+				true);
+		allOptions.addOption(
+				maxLevelOption);
 		final Option minSplitsOption = new Option(
 				MIN_SPLITS_KEY,
 				true,
 				"The min partitions for the input data");
-		minSplitsOption.setRequired(true);
-		allOptions.addOption(minSplitsOption);
+		minSplitsOption.setRequired(
+				true);
+		allOptions.addOption(
+				minSplitsOption);
 		final Option maxSplitsOption = new Option(
 				MAX_SPLITS_KEY,
 				true,
 				"The max partitions for the input data");
-		maxSplitsOption.setRequired(true);
-		allOptions.addOption(maxSplitsOption);
+		maxSplitsOption.setRequired(
+				true);
+		allOptions.addOption(
+				maxSplitsOption);
 		final Option coverageNameOption = new Option(
 				COVERAGE_NAME_KEY,
 				true,
 				"The max partitions for the input data");
-		coverageNameOption.setRequired(true);
-		allOptions.addOption(coverageNameOption);
+		coverageNameOption.setRequired(
+				true);
+		allOptions.addOption(
+				coverageNameOption);
 		final Option hdfsHostPortOption = new Option(
 				HDFS_HOST_PORT_KEY,
 				true,
 				"The max partitions for the input data");
-		hdfsHostPortOption.setRequired(true);
-		allOptions.addOption(hdfsHostPortOption);
+		hdfsHostPortOption.setRequired(
+				true);
+		allOptions.addOption(
+				hdfsHostPortOption);
 		final Option jobTrackerOption = new Option(
 				JOB_TRACKER_HOST_PORT_KEY,
 				true,
 				"The max partitions for the input data");
-		jobTrackerOption.setRequired(true);
-		allOptions.addOption(jobTrackerOption);
+		jobTrackerOption.setRequired(
+				true);
+		allOptions.addOption(
+				jobTrackerOption);
 		final Option tileSizeOption = new Option(
 				TILE_SIZE_KEY,
 				true,
 				"The max partitions for the input data");
-		tileSizeOption.setRequired(true);
-		allOptions.addOption(tileSizeOption);
+		tileSizeOption.setRequired(
+				true);
+		allOptions.addOption(
+				tileSizeOption);
 		final Option cqlFilterOption = new Option(
 				CQL_FILTER_KEY,
 				true,
 				"An optional CQL filter applied to the input data");
-		cqlFilterOption.setRequired(false);
-		allOptions.addOption(cqlFilterOption);
+		cqlFilterOption.setRequired(
+				false);
+		allOptions.addOption(
+				cqlFilterOption);
+		final Option indexIdOption = new Option(
+				INDEX_ID_KEY,
+				true,
+				"An optional index ID to filter the input data");
+		indexIdOption.setRequired(
+				false);
+		allOptions.addOption(
+				indexIdOption);
 	}
 }
