@@ -33,7 +33,7 @@ import com.google.common.collect.Iterators;
 
 /**
  * This class represents basic numeric contraints applied to an Accumulo Query
- *
+ * 
  */
 public class AccumuloConstraintsQuery extends
 		AccumuloFilteredIndexQuery
