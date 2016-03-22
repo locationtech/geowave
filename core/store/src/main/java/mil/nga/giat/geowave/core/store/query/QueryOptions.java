@@ -7,7 +7,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.Persistable;
@@ -22,9 +27,6 @@ import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.query.aggregate.Aggregation;
-
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
 
 /**
  * Directs a query to restrict searches to specific adapters, indices, etc.. For
@@ -82,7 +84,6 @@ public class QueryOptions implements
 	private double[] maxResolutionSubsamplingPerDimension = null;
 	private transient ScanCallback<?> scanCallback = DEFAULT_CALLBACK;
 	private String[] authorizations = new String[0];
-	private Boolean dedupAcrossIndices = null;
 	private List<String> fieldIds = Collections.emptyList();
 
 	public QueryOptions(
@@ -139,7 +140,6 @@ public class QueryOptions implements
 		limit = options.limit;
 		scanCallback = options.scanCallback;
 		authorizations = options.authorizations;
-		dedupAcrossIndices = options.dedupAcrossIndices;
 	}
 
 	/**
@@ -232,7 +232,7 @@ public class QueryOptions implements
 		this.limit = limit;
 	}
 
-	public boolean isAllAdaptersAndIndices() {
+	public boolean isAllAdapters() {
 		return ((adapterIds == null) || adapterIds.isEmpty());
 	}
 
@@ -273,14 +273,53 @@ public class QueryOptions implements
 	 * query. For deletions, the Data Stores are interested in all the
 	 * associations.
 	 * 
-	 * @param adapterId
 	 * @param adapterStore
+	 * @param
 	 * @param indexStore
 	 * @return
 	 * @throws IOException
 	 */
 
 	public List<Pair<PrimaryIndex, List<DataAdapter<Object>>>> getIndicesForAdapters(
+			final AdapterStore adapterStore,
+			final AdapterIndexMappingStore adapterIndexMappingStore,
+			final IndexStore indexStore )
+			throws IOException {
+		return combineByIndex(compileIndicesForAdapters(
+				adapterStore,
+				adapterIndexMappingStore,
+				indexStore));
+	}
+
+	/**
+	 * Return a set list adapter/index associations. If the adapters are not
+	 * provided, then look up all of them. If the index is not provided, then
+	 * look up all of them. The full set of adapter/index associations is
+	 * reduced so that a single index is queried per adapter and the number
+	 * indices queried is minimized.
+	 * 
+	 * DataStores are responsible for selecting a single adapter/index per
+	 * query. For deletions, the Data Stores are interested in all the
+	 * associations.
+	 * 
+	 * @param adapterStore
+	 * @param adapterIndexMappingStore
+	 * @param indexStore
+	 * @return
+	 * @throws IOException
+	 */
+	public List<Pair<PrimaryIndex, List<DataAdapter<Object>>>> getAdaptersWithMinimalSetOfIndices(
+			final AdapterStore adapterStore,
+			final AdapterIndexMappingStore adapterIndexMappingStore,
+			final IndexStore indexStore )
+			throws IOException {
+		return reduceIndicesAndGroupByIndex(compileIndicesForAdapters(
+				adapterStore,
+				adapterIndexMappingStore,
+				indexStore));
+	}
+
+	private List<Pair<PrimaryIndex, DataAdapter<Object>>> compileIndicesForAdapters(
 			final AdapterStore adapterStore,
 			final AdapterIndexMappingStore adapterIndexMappingStore,
 			final IndexStore indexStore )
@@ -328,9 +367,7 @@ public class QueryOptions implements
 				}
 			}
 		}
-		return
-
-		combine(result);
+		return result;
 	}
 
 	public CloseableIterator<DataAdapter<?>> getAdapters(
@@ -443,7 +480,6 @@ public class QueryOptions implements
 			buf.put(fieldIdsBytes);
 		}
 
-		buf.putInt(dedupAcrossIndices == null ? -1 : (dedupAcrossIndices ? 1 : 0));
 		buf.putInt(authBytes.length);
 		buf.put(authBytes);
 
@@ -478,12 +514,6 @@ public class QueryOptions implements
 			fieldIds = Arrays.asList(StringUtils.stringFromBinary(
 					fieldIdsBytes).split(
 					","));
-		}
-		final int dedupCode = buf.getInt();
-
-		dedupAcrossIndices = null;
-		if (dedupCode >= 0) {
-			dedupAcrossIndices = dedupCode > 0 ? Boolean.TRUE : Boolean.FALSE;
 		}
 		final byte[] authBytes = new byte[buf.getInt()];
 		buf.get(authBytes);
@@ -530,9 +560,8 @@ public class QueryOptions implements
 		return "QueryOptions [adapterId=" + adapterIds + ", limit=" + limit + ", authorizations=" + Arrays.toString(authorizations) + "]";
 	}
 
-	private List<Pair<PrimaryIndex, List<DataAdapter<Object>>>> combine(
+	private void sortInPlace(
 			List<Pair<PrimaryIndex, DataAdapter<Object>>> input ) {
-		List<Pair<PrimaryIndex, List<DataAdapter<Object>>>> result = new ArrayList<Pair<PrimaryIndex, List<DataAdapter<Object>>>>();
 		Collections.sort(
 				input,
 				new Comparator<Pair<PrimaryIndex, DataAdapter<Object>>>() {
@@ -546,6 +575,12 @@ public class QueryOptions implements
 								o1.getKey().getId());
 					}
 				});
+	}
+
+	private List<Pair<PrimaryIndex, List<DataAdapter<Object>>>> combineByIndex(
+			List<Pair<PrimaryIndex, DataAdapter<Object>>> input ) {
+		List<Pair<PrimaryIndex, List<DataAdapter<Object>>>> result = new ArrayList<Pair<PrimaryIndex, List<DataAdapter<Object>>>>();
+		sortInPlace(input);
 		List<DataAdapter<Object>> adapterSet = new ArrayList<DataAdapter<Object>>();
 		Pair<PrimaryIndex, DataAdapter<Object>> last = null;
 		for (Pair<PrimaryIndex, DataAdapter<Object>> item : input) {
@@ -564,5 +599,19 @@ public class QueryOptions implements
 				last.getLeft(),
 				adapterSet));
 		return result;
+	}
+
+	private List<Pair<PrimaryIndex, List<DataAdapter<Object>>>> reduceIndicesAndGroupByIndex(
+			List<Pair<PrimaryIndex, DataAdapter<Object>>> input ) {
+		final List<Pair<PrimaryIndex, DataAdapter<Object>>> result = new ArrayList<Pair<PrimaryIndex, DataAdapter<Object>>>();
+		// sort by index to eliminate the amount of indices returned
+		sortInPlace(input);
+		final Set<DataAdapter<Object>> adapterSet = new HashSet<DataAdapter<Object>>();
+		for (Pair<PrimaryIndex, DataAdapter<Object>> item : input) {
+			if (adapterSet.add(item.getRight())) {
+				result.add(item);
+			}
+		}
+		return combineByIndex(result);
 	}
 }

@@ -58,7 +58,7 @@ public class SpatialTemporalQueryIT extends
 		GeoWaveTestEnvironment
 {
 	private static final SimpleDateFormat CQL_DATE_FORMAT = new SimpleDateFormat(
-			"yyyy-MM-dd HH:mm:ssa");
+			"yyyy-MM-dd'T'hh:mm:ss'Z'");
 	private static int MULTI_DAY_YEAR = 2016;
 	private static int MULTI_DAY_MONTH = 1;
 	private static int MULTI_MONTH_YEAR = 2000;
@@ -308,19 +308,11 @@ public class SpatialTemporalQueryIT extends
 	private static Calendar getInitialDayCalendar() {
 		final Calendar cal = Calendar.getInstance();
 		cal.set(
-				Calendar.YEAR,
-				MULTI_DAY_YEAR);
-		cal.set(
-				Calendar.MONTH,
-				MULTI_DAY_MONTH);
-		cal.set(
-				Calendar.HOUR_OF_DAY,
-				1);
-		cal.set(
-				Calendar.MINUTE,
-				1);
-		cal.set(
-				Calendar.SECOND,
+				MULTI_DAY_YEAR,
+				MULTI_DAY_MONTH,
+				1,
+				1,
+				1,
 				1);
 		cal.set(
 				Calendar.MILLISECOND,
@@ -331,26 +323,19 @@ public class SpatialTemporalQueryIT extends
 	private static Calendar getInitialMonthCalendar() {
 		final Calendar cal = Calendar.getInstance();
 		cal.set(
-				Calendar.YEAR,
-				MULTI_MONTH_YEAR);
-		cal.set(
-				Calendar.DAY_OF_MONTH,
-				1);
-		cal.set(
-				Calendar.HOUR_OF_DAY,
-				1);
-		cal.set(
-				Calendar.MINUTE,
-				1);
-		cal.set(
-				Calendar.SECOND,
+				MULTI_MONTH_YEAR,
+				1,
+				1,
+				1,
+				1,
 				1);
 		cal.set(
 				Calendar.MILLISECOND,
 				0);
+
 		return cal;
 	}
-
+	
 	private static Calendar getInitialYearCalendar() {
 		final Calendar cal = Calendar.getInstance();
 		cal.set(

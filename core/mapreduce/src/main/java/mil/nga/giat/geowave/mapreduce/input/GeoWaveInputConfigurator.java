@@ -11,6 +11,7 @@ import mil.nga.giat.geowave.core.store.query.DistributableQuery;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.mapreduce.GeoWaveConfiguratorBase;
 import mil.nga.giat.geowave.mapreduce.JobContextIndexStore;
+import mil.nga.giat.geowave.mapreduce.GeoWaveConfiguratorBase.GeoWaveMetaStore;
 
 import org.apache.commons.collections.IteratorUtils;
 import org.apache.hadoop.conf.Configuration;
@@ -96,6 +97,39 @@ public class GeoWaveInputConfigurator extends
 		if ((str != null) && !str.isEmpty()) {
 			final Integer retVal = Integer.parseInt(str);
 			return retVal;
+		}
+		return null;
+	}
+
+	public static void setIndex(
+			final Class<?> implementingClass,
+			final Configuration config,
+			final PrimaryIndex index ) {
+		if (index != null) {
+			config.set(
+					enumToConfKey(
+							implementingClass,
+							GeoWaveMetaStore.INDEX),
+					ByteArrayUtils.byteArrayToString(PersistenceUtils.toBinary(index)));
+		}
+		else {
+			config.unset(enumToConfKey(
+					implementingClass,
+					GeoWaveMetaStore.INDEX));
+		}
+	}
+
+	public static PrimaryIndex getIndex(
+			final Class<?> implementingClass,
+			final Configuration config ) {
+		final String input = config.get(enumToConfKey(
+				implementingClass,
+				GeoWaveMetaStore.INDEX));
+		if (input != null) {
+			final byte[] indexBytes = ByteArrayUtils.byteArrayFromString(input);
+			return PersistenceUtils.fromBinary(
+					indexBytes,
+					PrimaryIndex.class);
 		}
 		return null;
 	}
@@ -202,28 +236,5 @@ public class GeoWaveInputConfigurator extends
 					implementingClass,
 					InputConfig.MAX_SPLITS));
 		}
-	}
-
-	public static PrimaryIndex[] searchForIndices(
-			final Class<?> implementingClass,
-			final JobContext context ) {
-		PrimaryIndex[] userIndices = JobContextIndexStore.getIndices(context);
-		if ((userIndices == null) || (userIndices.length <= 0)) {
-			// if there are no indices, assume we are searching all indices
-			// in the metadata store
-			try (CloseableIterator<Index<?, ?>> indicesIterator = getIndexStore(
-					implementingClass,
-					context).getIndices()) {
-				userIndices = (PrimaryIndex[]) IteratorUtils.toArray(
-						indicesIterator,
-						PrimaryIndex.class);
-			}
-			catch (final IOException e) {
-				LOGGER.warn(
-						"Unable to close CloseableIterator",
-						e);
-			}
-		}
-		return userIndices;
 	}
 }

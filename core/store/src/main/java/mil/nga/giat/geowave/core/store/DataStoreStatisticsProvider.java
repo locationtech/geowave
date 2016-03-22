@@ -60,11 +60,4 @@ public class DataStoreStatisticsProvider<T> implements
 			final ByteArrayId statisticsId ) {
 		return (adapter instanceof StatisticsProvider) ? ((StatisticsProvider) adapter).getVisibilityHandler(statisticsId) : new EmptyStatisticVisibility<T>();
 	}
-
-	@Override
-	public DataAdapter<T> getDataAdapter() {
-		// TODO Auto-generated method stub
-		return adapter;
-	}
-
 }

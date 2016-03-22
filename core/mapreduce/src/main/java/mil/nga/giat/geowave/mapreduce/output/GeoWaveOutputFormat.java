@@ -284,7 +284,7 @@ public class GeoWaveOutputFormat extends
 	protected static class GeoWaveRecordWriter extends
 			RecordWriter<GeoWaveOutputKey, Object>
 	{
-		private final Map<ByteArrayId, IndexWriter> adapterWriterCache = new HashMap<ByteArrayId, IndexWriter>();
+		private final Map<ByteArrayId, IndexWriter> adapterIdToIndexWriterCache = new HashMap<ByteArrayId, IndexWriter>();
 		private final AdapterStore adapterStore;
 		private final IndexStore indexStore;
 		private final DataStore dataStore;
@@ -335,7 +335,7 @@ public class GeoWaveOutputFormat extends
 				final DataAdapter<?> adapter,
 				final Collection<ByteArrayId> indexIds )
 				throws MismatchedIndexToAdapterMapping {
-			IndexWriter writer = adapterWriterCache.get(adapter.getAdapterId());
+			IndexWriter writer = adapterIdToIndexWriterCache.get(adapter.getAdapterId());
 			if (writer == null) {
 				List<PrimaryIndex> indices = new ArrayList<PrimaryIndex>();
 				for (ByteArrayId indexId : indexIds) {
@@ -353,7 +353,7 @@ public class GeoWaveOutputFormat extends
 						adapter,
 						indices.toArray(new PrimaryIndex[indices.size()]));
 
-				adapterWriterCache.put(
+				adapterIdToIndexWriterCache.put(
 						adapter.getAdapterId(),
 						writer);
 
@@ -366,7 +366,7 @@ public class GeoWaveOutputFormat extends
 				final TaskAttemptContext attempt )
 				throws IOException,
 				InterruptedException {
-			for (final IndexWriter indexWriter : adapterWriterCache.values()) {
+			for (final IndexWriter indexWriter : adapterIdToIndexWriterCache.values()) {
 				indexWriter.close();
 			}
 		}

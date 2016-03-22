@@ -2,7 +2,6 @@ package mil.nga.giat.geowave.core.store.adapter.statistics;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.EntryVisibilityHandler;
-import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 
 /**
  * This interface defines the set of statistics to capture for a specific
@@ -22,6 +21,4 @@ public interface StatisticsProvider<T>
 
 	public EntryVisibilityHandler<T> getVisibilityHandler(
 			ByteArrayId statisticsId );
-
-	public DataAdapter<T> getDataAdapter();
 }

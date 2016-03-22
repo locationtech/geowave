@@ -209,20 +209,20 @@ public class AccumuloDataStore implements
 
 			store(index);
 
-			final String indexName = StringUtils.stringFromBinary(index.getId().getBytes());
+			final String indexName = index.getId().getString();
 
-			// only apply stats, alt-index and secondary indexing to one of the
-			// writers
-			if ((i == 0) && (adapter instanceof WritableDataAdapter)) {
+			if (adapter instanceof WritableDataAdapter) {
 				if (accumuloOptions.isUseAltIndex()) {
 					try {
 						callbacks.add(new AltIndexCallback<T>(
+								indexName,
 								(WritableDataAdapter<T>) adapter,
 								accumuloOptions));
+
 					}
 					catch (final TableNotFoundException e) {
 						LOGGER.error(
-								"Unable to determine existence of locality group [" + adapter.getAdapterId().getString() + "]",
+								"Unable to create table table for alt index to  [" + index.getId().getString() + "]",
 								e);
 					}
 				}
@@ -291,14 +291,33 @@ public class AccumuloDataStore implements
 
 		private final WritableDataAdapter<T> adapter;
 		private Writer altIdxWriter;
+		private final String altIdxTableName;
 
 		public AltIndexCallback(
+				final String indexName,
 				final WritableDataAdapter<T> adapter,
 				final AccumuloOptions accumuloOptions )
 				throws TableNotFoundException {
 			this.adapter = adapter;
+			altIdxTableName = indexName + AccumuloUtils.ALT_INDEX_TABLE;
+			if (accumuloOperations.tableExists(indexName)) {
+				if (!accumuloOperations.tableExists(altIdxTableName)) {
+					throw new TableNotFoundException(
+							altIdxTableName,
+							altIdxTableName,
+							"Requested alternate index table does not exist.");
+				}
+			}
+			else {
+				// index table does not exist yet
+				if (accumuloOperations.tableExists(altIdxTableName)) {
+					accumuloOperations.deleteTable(altIdxTableName);
+					LOGGER.warn("Deleting current alternate index table [" + altIdxTableName + "] as main table does not yet exist.");
+				}
+			}
+
 			altIdxWriter = accumuloOperations.createWriter(
-					adapter.getAdapterId().getString() + AccumuloUtils.ALT_INDEX_TABLE,
+					altIdxTableName,
 					accumuloOptions.isCreateTable(),
 					true,
 					accumuloOptions.isEnableBlockCache(),
@@ -367,27 +386,19 @@ public class AccumuloDataStore implements
 		final QueryOptions sanitizedQueryOptions = (queryOptions == null) ? new QueryOptions() : queryOptions;
 		final Query sanitizedQuery = (query == null) ? new EverythingQuery() : query;
 
-		// keep a list of adapters that have been queried, to only allow an
-		// adapter to be queried once
-		final Set<ByteArrayId> queriedAdapters = new HashSet<ByteArrayId>();
-
 		final DedupeFilter filter = new DedupeFilter();
 		MemoryAdapterStore tempAdapterStore;
 		try {
 			tempAdapterStore = new MemoryAdapterStore(
 					sanitizedQueryOptions.getAdaptersArray(adapterStore));
 
-			for (final Pair<PrimaryIndex, List<DataAdapter<Object>>> indexAdapterPair : sanitizedQueryOptions.getIndicesForAdapters(
+			for (final Pair<PrimaryIndex, List<DataAdapter<Object>>> indexAdapterPair : sanitizedQueryOptions.getAdaptersWithMinimalSetOfIndices(
 					tempAdapterStore,
 					indexMappingStore,
 					indexStore)) {
 				final List<ByteArrayId> adapterIdsToQuery = new ArrayList<ByteArrayId>();
 
 				for (final DataAdapter<Object> adapter : indexAdapterPair.getRight()) {
-					// only query an adapter once
-					if (!queriedAdapters.add(adapter.getAdapterId())) {
-						continue;
-					}
 					if (sanitizedQuery instanceof RowIdQuery) {
 						final AccumuloRowIdsQuery<Object> q = new AccumuloRowIdsQuery<Object>(
 								adapter,
@@ -561,7 +572,7 @@ public class AccumuloDataStore implements
 			final double[] maxResolutionSubsamplingPerDimension,
 			final boolean limit )
 			throws IOException {
-		final String altIdxTableName = adapter.getAdapterId().getString() + AccumuloUtils.ALT_INDEX_TABLE;
+		final String altIdxTableName = index.getId().getString() + AccumuloUtils.ALT_INDEX_TABLE;
 
 		MemoryAdapterStore tempAdapterStore;
 
@@ -723,7 +734,7 @@ public class AccumuloDataStore implements
 	public boolean delete(
 			final QueryOptions queryOptions,
 			final Query query ) {
-		if (((query == null) || (query instanceof EverythingQuery)) && queryOptions.isAllAdaptersAndIndices()) {
+		if (((query == null) || (query instanceof EverythingQuery)) && queryOptions.isAllAdapters()) {
 			try {
 				accumuloOperations.deleteAll();
 				return true;
@@ -754,21 +765,24 @@ public class AccumuloDataStore implements
 				if (index == null) {
 					continue;
 				}
-				final String tableName = StringUtils.stringFromBinary(index.getId().getBytes());
+				final String indexTableName = index.getId().getString();
+				final String altIdxTableName = indexTableName + AccumuloUtils.ALT_INDEX_TABLE;
+
 				final BatchDeleter idxDeleter = accumuloOperations.createBatchDeleter(
-						tableName,
+						indexTableName,
 						queryOptions.getAuthorizations());
 
+				final BatchDeleter altIdxDelete = accumuloOptions.isUseAltIndex() && accumuloOperations.tableExists(altIdxTableName) ? accumuloOperations.createBatchDeleter(
+						altIdxTableName,
+						queryOptions.getAuthorizations()) : null;
+
 				for (final DataAdapter<Object> adapter : indexAdapterPair.getRight()) {
-					final String altIdxTableName = adapter.getAdapterId().getString() + AccumuloUtils.ALT_INDEX_TABLE;
+
 					final DataStoreCallbackManager callbackCache = new DataStoreCallbackManager(
 							statisticsStore,
 							secondaryIndexDataStore,
 							queriedAdapters.add(adapter.getAdapterId()));
 
-					final BatchDeleter altIdxDelete = accumuloOptions.isUseAltIndex() && accumuloOperations.tableExists(altIdxTableName) ? accumuloOperations.createBatchDeleter(
-							altIdxTableName,
-							queryOptions.getAuthorizations()) : null;
 					if (query instanceof EverythingQuery) {
 						deleteEntries(
 								adapter,
@@ -881,11 +895,11 @@ public class AccumuloDataStore implements
 								ex);
 					}
 					callbackCache.close();
-					if (altIdxDelete != null) {
-						altIdxDelete.close();
-					}
-					idxDeleter.close();
 				}
+				if (altIdxDelete != null) {
+					altIdxDelete.close();
+				}
+				idxDeleter.close();
 			}
 
 			return aOk.get();
@@ -911,7 +925,7 @@ public class AccumuloDataStore implements
 			final String... additionalAuthorizations )
 			throws IOException {
 		final String tableName = index.getId().getString();
-		final String altIdxTableName = adapter.getAdapterId().getString() + AccumuloUtils.ALT_INDEX_TABLE;
+		final String altIdxTableName = tableName + AccumuloUtils.ALT_INDEX_TABLE;
 		final String adapterId = StringUtils.stringFromBinary(adapter.getAdapterId().getBytes());
 
 		try (final CloseableIterator<DataStatistics<?>> it = statisticsStore.getDataStatistics(adapter.getAdapterId())) {

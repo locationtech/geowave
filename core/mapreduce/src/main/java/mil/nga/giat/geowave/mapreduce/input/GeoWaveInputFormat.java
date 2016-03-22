@@ -139,9 +139,16 @@ public class GeoWaveInputFormat<T> extends
 	public static void setIndex(
 			final Configuration config,
 			final PrimaryIndex index ) {
-		JobContextIndexStore.addIndex(
+		GeoWaveInputConfigurator.setIndex(
+				CLASS,
 				config,
 				index);
+		// make available to the context index store
+		if (index != null) {
+			JobContextIndexStore.addIndex(
+					config,
+					index);
+		}
 	}
 
 	public static void setMinimumSplitCount(
@@ -205,11 +212,11 @@ public class GeoWaveInputFormat<T> extends
 		return options == null ? new QueryOptions() : options;
 	}
 
-	protected static PrimaryIndex[] getIndices(
+	protected static PrimaryIndex getIndex(
 			final JobContext context ) {
-		return GeoWaveInputConfigurator.searchForIndices(
+		return GeoWaveInputConfigurator.getIndex(
 				CLASS,
-				context);
+				GeoWaveConfiguratorBase.getConfiguration(context));
 	}
 
 	public static String getGeoWaveNamespace(
@@ -260,8 +267,8 @@ public class GeoWaveInputFormat<T> extends
 			final QueryOptions rangeQueryOptions = new QueryOptions(
 					queryOptions);
 			// split may override these
-			PrimaryIndex[] indices = getIndices(context);
-			if (indices != null && indices.length > 0) rangeQueryOptions.setIndex(indices[0]);
+			PrimaryIndex index = getIndex(context);
+			if (index != null) rangeQueryOptions.setIndex(index);
 			rangeQueryOptions.setAdapterIds(getAdapterIds(
 					context,
 					adapterStore));
@@ -438,7 +445,7 @@ public class GeoWaveInputFormat<T> extends
 			final QueryOptions queryOptions = getQueryOptions(context);
 			final QueryOptions rangeQueryOptions = new QueryOptions(
 					queryOptions);
-			rangeQueryOptions.setIndex((PrimaryIndex) getIndices(context)[0]);
+			rangeQueryOptions.setIndex(getIndex(context));
 			rangeQueryOptions.setAdapterIds(getAdapterIds(
 					context,
 					adapterStore));

@@ -369,9 +369,4 @@ public class WholeFeatureDataAdapter extends
 
 		return null;
 	}
-
-	@Override
-	public DataAdapter<SimpleFeature> getDataAdapter() {
-		return this;
-	}
 }

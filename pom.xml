@@ -638,6 +638,7 @@
 				<version>0.4</version>
 				<configuration>
 					<configFile>eclipse/eclipse-formatter.xml</configFile>
+					<lineEnding>KEEP</lineEnding>
 				</configuration>
 				<executions>
 					<execution>

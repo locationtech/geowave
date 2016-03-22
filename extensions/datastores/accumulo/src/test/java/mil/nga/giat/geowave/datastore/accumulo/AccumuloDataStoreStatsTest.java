@@ -697,11 +697,6 @@ public class AccumuloDataStoreStatsTest
 		public ByteArrayId[] getSupportedStatisticsIds() {
 			return SUPPORTED_STATS_IDS;
 		}
-
-		@Override
-		public DataAdapter<TestGeometry> getDataAdapter() {
-			return this;
-		}
 	}
 
 	private final static ByteArrayId[] SUPPORTED_STATS_IDS = new ByteArrayId[] {

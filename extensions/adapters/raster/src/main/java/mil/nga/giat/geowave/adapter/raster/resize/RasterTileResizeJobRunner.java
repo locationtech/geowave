@@ -163,7 +163,7 @@ public class RasterTileResizeJobRunner extends
 		GeoWaveOutputFormat.setGeoWaveNamespace(
 				job.getConfiguration(),
 				outputDataStoreOptions.getNamespace());
-		JobContextIndexStore.addIndex(
+		GeoWaveOutputFormat.addIndex(
 				job.getConfiguration(),
 				index);
 		final DataStore store = outputDataStoreOptions.createStore();

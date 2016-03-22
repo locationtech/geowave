@@ -187,10 +187,5 @@ public class DataStoreUtilsTest
 		protected RowBuilder<String, Object> newBuilder() {
 			return null;
 		}
-
-		@Override
-		public DataAdapter<String> getDataAdapter() {
-			return this;
-		}
 	}
 }

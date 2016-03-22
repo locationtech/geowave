@@ -216,11 +216,6 @@ public class MockComponents
 					new TestDimensionField().fieldId);
 		}
 
-		@Override
-		public DataAdapter<Integer> getDataAdapter() {
-			return this;
-		}
-
 	} // class MockAbstractDataAdapter
 
 	public static class IntegerRangeDataStatistics extends

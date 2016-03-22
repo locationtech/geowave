@@ -52,6 +52,7 @@ public class DeleteWriterTest
 	private List<ByteArrayId> rowId2s;
 	private WritableDataAdapter<AccumuloDataStoreStatsTest.TestGeometry> adapter;
 	private DataStatisticsStore statsStore;
+	protected AccumuloOptions options = new AccumuloOptions();
 
 	private static final CommonIndexModel model = new SpatialDimensionalityTypeProvider().createPrimaryIndex().getIndexModel();
 
@@ -94,7 +95,8 @@ public class DeleteWriterTest
 
 		operations.createTable("test_table");
 		mockDataStore = new AccumuloDataStore(
-				operations);
+				operations,
+				options);
 
 		statsStore = new AccumuloDataStatisticsStore(
 				operations);

@@ -1863,9 +1863,4 @@ public class RasterDataAdapter implements
 	public RowTransform<RasterTile<?>> getTransform() {
 		return new RasterTileRowTransform();
 	}
-
-	@Override
-	public DataAdapter<GridCoverage> getDataAdapter() {
-		return this;
-	}
 }

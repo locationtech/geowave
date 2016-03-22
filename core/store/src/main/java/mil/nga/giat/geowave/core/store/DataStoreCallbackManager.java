@@ -1,7 +1,6 @@
 package mil.nga.giat.geowave.core.store;
 
 import java.io.Closeable;
-import java.io.Flushable;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -115,19 +114,4 @@ public class DataStoreCallbackManager
 			}
 		}
 	}
-
-	public void flush()
-			throws IOException {
-		for (final IngestCallback<?> callback : icache.values()) {
-			if (callback instanceof Flushable) {
-				((Flushable) callback).flush();
-			}
-		}
-		for (final DeleteCallback<?> callback : dcache.values()) {
-			if (callback instanceof Flushable) {
-				((Flushable) callback).flush();
-			}
-		}
-	}
-
 }

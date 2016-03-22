@@ -94,8 +94,7 @@ public class AccumuloMRUtils
 		final List<InputSplit> retVal = new ArrayList<InputSplit>();
 		final TreeSet<IntermediateSplitInfo> splits = new TreeSet<IntermediateSplitInfo>();
 
-		for (Pair<PrimaryIndex, List<DataAdapter<Object>>> indexAdapterPair :
-			queryOptions.getIndicesForAdapters(
+		for (Pair<PrimaryIndex, List<DataAdapter<Object>>> indexAdapterPair : queryOptions.getAdaptersWithMinimalSetOfIndices(
 				adapterStore,
 				adapterIndexMappingStore,
 				indexStore)) {

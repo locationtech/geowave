@@ -647,9 +647,4 @@ public class FeatureDataAdapter extends
 		return secondaryIndexManager.getSupportedSecondaryIndices();
 	}
 
-	@Override
-	public DataAdapter<SimpleFeature> getDataAdapter() {
-		return this;
-	}
-
 }
