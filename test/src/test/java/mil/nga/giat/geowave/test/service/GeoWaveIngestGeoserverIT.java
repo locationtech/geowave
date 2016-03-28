@@ -1,5 +1,7 @@
 package mil.nga.giat.geowave.test.service;
 
+import static org.junit.Assert.assertTrue;
+
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -8,16 +10,6 @@ import java.net.URISyntaxException;
 import java.util.List;
 
 import javax.imageio.ImageIO;
-
-import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
-import mil.nga.giat.geowave.core.store.IndexWriter;
-import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.core.store.memory.DataStoreUtils;
-import mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStore;
-import mil.nga.giat.geowave.datastore.accumulo.AccumuloStoreFactoryFamily;
-import mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations;
-import mil.nga.giat.geowave.examples.ingest.SimpleIngest;
-import mil.nga.giat.geowave.service.client.GeoserverServiceClient;
 
 import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
@@ -38,6 +30,16 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
+
+import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
+import mil.nga.giat.geowave.core.store.IndexWriter;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.core.store.memory.DataStoreUtils;
+import mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStore;
+import mil.nga.giat.geowave.datastore.accumulo.AccumuloStoreFactoryFamily;
+import mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations;
+import mil.nga.giat.geowave.examples.ingest.SimpleIngest;
+import mil.nga.giat.geowave.service.client.GeoserverServiceClient;
 
 public class GeoWaveIngestGeoserverIT extends
 		ServicesTestEnvironment
@@ -113,28 +115,52 @@ public class GeoWaveIngestGeoserverIT extends
 			}
 		}
 
-		Assert.assertTrue(geoserverServiceClient.createWorkspace(WORKSPACE));
-		Assert.assertTrue(geoserverServiceClient.publishDatastore(
-				new AccumuloStoreFactoryFamily().getName(),
-				getAccumuloConfig(),
-				TEST_NAMESPACE,
-				null,
-				null,
-				null,
-				null,
-				WORKSPACE));
-		Assert.assertTrue(geoserverServiceClient.publishLayer(
-				TEST_NAMESPACE,
-				"point",
-				SimpleIngest.FEATURE_NAME,
-				WORKSPACE));
+		Assert.assertTrue(
+				"Unable to create 'testomatic' workspace",
+				geoserverServiceClient.createWorkspace(WORKSPACE));
+		Assert.assertTrue(
+				"Unable to publish Accumulo data store",
+				geoserverServiceClient.publishDatastore(
+						new AccumuloStoreFactoryFamily().getName(),
+						getAccumuloConfig(),
+						TEST_NAMESPACE,
+						null,
+						null,
+						null,
+						null,
+						WORKSPACE));
+		assertTrue(
+				"Unable to publish '" + TEST_STYLE_NAME_NO_DIFFERENCE + "' style",
+				geoserverServiceClient.publishStyle(new File[] {
+					new File(
+							TEST_SLD_NO_DIFFERENCE_FILE)
+				}));
+		assertTrue(
+				"Unable to publish '" + TEST_SLD_MINOR_SUBSAMPLE_FILE + "' style",
+				geoserverServiceClient.publishStyle(new File[] {
+					new File(
+							TEST_SLD_MINOR_SUBSAMPLE_FILE)
+				}));
+		assertTrue(
+				"Unable to publish '" + TEST_SLD_MAJOR_SUBSAMPLE_FILE + "' style",
+				geoserverServiceClient.publishStyle(new File[] {
+					new File(
+							TEST_SLD_MAJOR_SUBSAMPLE_FILE)
+				}));
+		Assert.assertTrue(
+				"Unable to publish '" + SimpleIngest.FEATURE_NAME + "' layer",
+				geoserverServiceClient.publishLayer(
+						TEST_NAMESPACE,
+						"point",
+						SimpleIngest.FEATURE_NAME,
+						WORKSPACE));
 
-		final BufferedImage bi = getWMSSingleTile(
+		final BufferedImage biDirectRender = getWMSSingleTile(
 				-180,
 				180,
 				-90,
 				90,
-				"GridPoint",
+				SimpleIngest.FEATURE_NAME,
 				"point",
 				920,
 				360,
@@ -155,14 +181,111 @@ public class GeoWaveIngestGeoserverIT extends
 					REFERENCE_26_WMS_IMAGE_PATH));
 		}
 
+		testTileAgainstReference(
+				biDirectRender,
+				ref,
+				0,
+				0);
+
+		final BufferedImage biSubsamplingWithoutError = getWMSSingleTile(
+				-180,
+				180,
+				-90,
+				90,
+				SimpleIngest.FEATURE_NAME,
+				TEST_STYLE_NAME_NO_DIFFERENCE,
+				920,
+				360,
+				null);
 		Assert.assertNotNull(ref);
+		testTileAgainstReference(
+				biSubsamplingWithoutError,
+				ref,
+				0,
+				0);
+
+		final BufferedImage biSubsamplingWithExpectedError = getWMSSingleTile(
+				-180,
+				180,
+				-90,
+				90,
+				SimpleIngest.FEATURE_NAME,
+				TEST_STYLE_NAME_MINOR_SUBSAMPLE,
+				920,
+				360,
+				null);
+		testTileAgainstReference(
+				biSubsamplingWithExpectedError,
+				ref,
+				0.05,
+				0.1);
+
+		final BufferedImage biSubsamplingWithLotsOfError = getWMSSingleTile(
+				-180,
+				180,
+				-90,
+				90,
+				SimpleIngest.FEATURE_NAME,
+				TEST_STYLE_NAME_MAJOR_SUBSAMPLE,
+				920,
+				360,
+				null);
+		testTileAgainstReference(
+				biSubsamplingWithLotsOfError,
+				ref,
+				0.3,
+				0.35);
+
+		assertTrue(
+				"Unable to delete layer '" + SimpleIngest.FEATURE_NAME + "'",
+				geoserverServiceClient.deleteLayer(SimpleIngest.FEATURE_NAME));
+		assertTrue(
+				"Unable to delete datastore '" + TEST_NAMESPACE + "'",
+				geoserverServiceClient.deleteDatastore(
+						TEST_NAMESPACE,
+						WORKSPACE));
+		assertTrue(
+				"Unable to delete style '" + TEST_STYLE_NAME_NO_DIFFERENCE + "'",
+				geoserverServiceClient.deleteStyle(TEST_STYLE_NAME_NO_DIFFERENCE));
+
+		assertTrue(
+				"Unable to delete style '" + TEST_STYLE_NAME_MINOR_SUBSAMPLE + "'",
+				geoserverServiceClient.deleteStyle(TEST_STYLE_NAME_MINOR_SUBSAMPLE));
+		assertTrue(
+				"Unable to delete style '" + TEST_STYLE_NAME_MAJOR_SUBSAMPLE + "'",
+				geoserverServiceClient.deleteStyle(TEST_STYLE_NAME_MAJOR_SUBSAMPLE));
+	}
+
+	/**
+	 * 
+	 * @param bi
+	 *            sample
+	 * @param ref
+	 *            reference
+	 * @param minPctError
+	 *            used for testing subsampling - to ensure we are properly
+	 *            subsampling we want there to be some error if subsampling is
+	 *            aggressive (10 pixels)
+	 * @param maxPctError
+	 *            used for testing subsampling - we want to ensure at most we
+	 *            are off by this percentile
+	 */
+	private static void testTileAgainstReference(
+			final BufferedImage bi,
+			final BufferedImage ref,
+			final double minPctError,
+			final double maxPctError ) {
 		Assert.assertEquals(
 				ref.getWidth(),
 				bi.getWidth());
 		Assert.assertEquals(
 				ref.getHeight(),
 				bi.getHeight());
-
+		final int totalPixels = ref.getWidth() * ref.getHeight();
+		final int minErrorPixels = (int) Math.round(minPctError * totalPixels);
+		final int maxErrorPixels = (int) Math.round(maxPctError * totalPixels);
+		int errorPixels = 0;
+		// test under default style
 		for (int x = 0; x < ref.getWidth(); x++) {
 			for (int y = 0; y < ref.getHeight(); y++) {
 				if (!(bi.getRGB(
@@ -170,20 +293,28 @@ public class GeoWaveIngestGeoserverIT extends
 						y) == ref.getRGB(
 						x,
 						y))) {
-					Assert.fail(String.format(
-							"[%d,%d] failed to match ref=%d gen=%d",
-							x,
-							y,
-							ref.getRGB(
-									x,
-									y),
-							bi.getRGB(
-									x,
-									y)));
+					errorPixels++;
+					if (errorPixels > maxErrorPixels) {
+						Assert.fail(String.format(
+								"[%d,%d] failed to match ref=%d gen=%d",
+								x,
+								y,
+								ref.getRGB(
+										x,
+										y),
+								bi.getRGB(
+										x,
+										y)));
+					}
 				}
 			}
 		}
-
+		if (errorPixels < minErrorPixels) {
+			Assert.fail(String.format(
+					"Subsampling did not work as expected; error pixels (%d) did not exceed the minimum threshold (%d)",
+					errorPixels,
+					minErrorPixels));
+		}
 	}
 
 	private static BufferedImage getWMSSingleTile(
