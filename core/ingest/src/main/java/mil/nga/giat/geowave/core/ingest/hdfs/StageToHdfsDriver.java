@@ -70,7 +70,7 @@ public class StageToHdfsDriver extends
 				}
 				catch (final IOException e) {
 					LOGGER.error(
-							"Cannot append data to seequence file",
+							"Cannot append data to sequence file",
 							e);
 				}
 			}

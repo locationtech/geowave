@@ -4,9 +4,9 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.List;
 
+import mil.nga.giat.geowave.adapter.vector.avro.AttributeValues;
+import mil.nga.giat.geowave.adapter.vector.avro.AvroSimpleFeature;
 import mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveGTDataStore;
-import mil.nga.giat.geowave.adapter.vector.simpleFeature.avro.AttributeValue;
-import mil.nga.giat.geowave.adapter.vector.simpleFeature.avro.AvroSimpleFeature;
 import mil.nga.giat.geowave.core.store.data.field.FieldReader;
 import mil.nga.giat.geowave.core.store.data.field.FieldUtils;
 
@@ -120,7 +120,7 @@ public class AvroFeatureReader implements
 		SimpleFeatureBuilder sfb = new SimpleFeatureBuilder(
 				sft);
 
-		AttributeValue attributeValue = sfc.getValue();
+		AttributeValues attributeValue = sfc.getValue();
 
 		// null values should still take a place in the array - check
 		Preconditions.checkArgument(featureNames.size() == attributeValue.getValues().size());
