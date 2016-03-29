@@ -5,13 +5,6 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
-import org.geotools.data.DataUtilities;
-import org.geotools.feature.SchemaException;
-import org.geotools.feature.simple.SimpleFeatureBuilder;
-import org.opengis.feature.simple.SimpleFeature;
-import org.opengis.feature.simple.SimpleFeatureType;
-
 import mil.nga.giat.geowave.adapter.vector.field.SimpleFeatureSerializationProvider;
 import mil.nga.giat.geowave.adapter.vector.index.SimpleFeaturePrimaryIndexConfiguration;
 import mil.nga.giat.geowave.adapter.vector.stats.StatsConfigurationCollection.SimpleFeatureStatsConfigurationCollection;
@@ -25,12 +18,11 @@ import mil.nga.giat.geowave.core.store.DataStoreEntryInfo;
 import mil.nga.giat.geowave.core.store.EntryVisibilityHandler;
 import mil.nga.giat.geowave.core.store.adapter.AbstractDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.AdapterPersistenceEncoding;
-import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.IndexFieldHandler;
 import mil.nga.giat.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding;
 import mil.nga.giat.geowave.core.store.adapter.NativeFieldHandler;
-import mil.nga.giat.geowave.core.store.adapter.PersistentIndexFieldHandler;
 import mil.nga.giat.geowave.core.store.adapter.NativeFieldHandler.RowBuilder;
+import mil.nga.giat.geowave.core.store.adapter.PersistentIndexFieldHandler;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.data.PersistentDataset;
 import mil.nga.giat.geowave.core.store.data.PersistentValue;
@@ -40,6 +32,13 @@ import mil.nga.giat.geowave.core.store.data.field.FieldWriter;
 import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+
+import org.apache.log4j.Logger;
+import org.geotools.data.DataUtilities;
+import org.geotools.feature.SchemaException;
+import org.geotools.feature.simple.SimpleFeatureBuilder;
+import org.opengis.feature.simple.SimpleFeature;
+import org.opengis.feature.simple.SimpleFeatureType;
 
 public class WholeFeatureDataAdapter extends
 		AbstractDataAdapter<SimpleFeature> implements
@@ -55,7 +54,7 @@ public class WholeFeatureDataAdapter extends
 	}
 
 	public WholeFeatureDataAdapter(
-			SimpleFeatureType featureType ) {
+			final SimpleFeatureType featureType ) {
 		super(
 				new ArrayList<PersistentIndexFieldHandler<SimpleFeature, ? extends CommonIndexValue, Object>>(),
 				new ArrayList<NativeFieldHandler<SimpleFeature, Object>>(),
@@ -103,6 +102,7 @@ public class WholeFeatureDataAdapter extends
 		return new WholeFeatureRowBuilder();
 	}
 
+	@Override
 	public boolean hasTemporalConstraints() {
 		return getTimeDescriptors().hasTime();
 	}
@@ -191,19 +191,19 @@ public class WholeFeatureDataAdapter extends
 
 	@Override
 	public DataStatistics<SimpleFeature> createDataStatistics(
-			ByteArrayId statisticsId ) {
+			final ByteArrayId statisticsId ) {
 		return null;
 	}
 
 	@Override
 	public EntryVisibilityHandler<SimpleFeature> getVisibilityHandler(
-			ByteArrayId statisticsId ) {
+			final ByteArrayId statisticsId ) {
 		return new EntryVisibilityHandler<SimpleFeature>() {
 
 			@Override
 			public byte[] getVisibility(
-					DataStoreEntryInfo entryInfo,
-					SimpleFeature entry ) {
+					final DataStoreEntryInfo entryInfo,
+					final SimpleFeature entry ) {
 				return new byte[] {};
 			}
 		};
@@ -250,7 +250,7 @@ public class WholeFeatureDataAdapter extends
 						""),
 				entry.getAttributes().toArray(
 						new Object[] {})));
-		AdapterPersistenceEncoding encoding = super.encode(
+		final AdapterPersistenceEncoding encoding = super.encode(
 				entry,
 				indexModel);
 		return new WholeFeatureAdapterEncoding(
@@ -279,7 +279,7 @@ public class WholeFeatureDataAdapter extends
 		userDataConfiguration.addConfigurations(
 				typeName,
 				new SimpleFeaturePrimaryIndexConfiguration());
-		userDataConfiguration.configureFromType(this.featureType);
+		userDataConfiguration.configureFromType(featureType);
 
 		try {
 			attrBytes = StringUtils.stringToBinary(userDataConfiguration.asJsonString());
@@ -311,7 +311,7 @@ public class WholeFeatureDataAdapter extends
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
 		final int initialBytes = buf.getInt();
 		// temporary hack for backward compatibility
-		boolean skipConfig = (initialBytes > 0);
+		final boolean skipConfig = (initialBytes > 0);
 		final byte[] typeNameBytes = skipConfig ? new byte[initialBytes] : new byte[buf.getInt()];
 		final byte[] visibilityManagementClassNameBytes = new byte[buf.getInt()];
 		final byte[] attrBytes = skipConfig ? new byte[0] : new byte[buf.getInt()];
@@ -367,6 +367,20 @@ public class WholeFeatureDataAdapter extends
 					e);
 		}
 
+		return null;
+	}
+
+	@Override
+	public int getPositionOfOrderedField(
+			final CommonIndexModel model,
+			final ByteArrayId fieldId ) {
+		return -1;
+	}
+
+	@Override
+	public ByteArrayId getFieldIdForPosition(
+			final CommonIndexModel model,
+			final int position ) {
 		return null;
 	}
 }

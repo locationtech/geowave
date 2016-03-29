@@ -1,29 +1,22 @@
 package mil.nga.giat.geowave.adapter.vector.query.cql;
 
 import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.nio.ByteBuffer;
-import java.util.List;
 
 import mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
 import mil.nga.giat.geowave.adapter.vector.util.FeatureDataUtils;
 import mil.nga.giat.geowave.core.index.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.StringUtils;
+import mil.nga.giat.geowave.core.store.adapter.AbstractAdapterPersistenceEncoding;
 import mil.nga.giat.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding;
 import mil.nga.giat.geowave.core.store.data.IndexedPersistenceEncoding;
 import mil.nga.giat.geowave.core.store.data.PersistentDataset;
 import mil.nga.giat.geowave.core.store.data.PersistentValue;
-import mil.nga.giat.geowave.core.store.data.field.FieldReader;
 import mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter;
 import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.core.store.spi.SPIServiceRegistry;
 
-import org.apache.commons.vfs2.FileObject;
-import org.apache.commons.vfs2.impl.VFSClassLoader;
 import org.apache.log4j.Logger;
-import org.geotools.factory.GeoTools;
 import org.geotools.filter.text.cql2.CQLException;
 import org.geotools.filter.text.ecql.ECQL;
 import org.opengis.feature.simple.SimpleFeature;
@@ -65,26 +58,15 @@ public class CQLQueryFilter implements
 			if (adapter.getAdapterId().equals(
 					persistenceEncoding.getAdapterId())) {
 				final PersistentDataset<Object> adapterExtendedValues = new PersistentDataset<Object>();
-				if (persistenceEncoding instanceof IndexedAdapterPersistenceEncoding) {
-					final PersistentDataset<Object> existingExtValues = ((IndexedAdapterPersistenceEncoding) persistenceEncoding).getAdapterExtendedData();
+				if (persistenceEncoding instanceof AbstractAdapterPersistenceEncoding) {
+					((AbstractAdapterPersistenceEncoding) persistenceEncoding).convertUnknownValues(
+							adapter,
+							indexModel);
+					final PersistentDataset<Object> existingExtValues = ((AbstractAdapterPersistenceEncoding) persistenceEncoding).getAdapterExtendedData();
 					if (existingExtValues != null) {
 						for (final PersistentValue<Object> val : existingExtValues.getValues()) {
 							adapterExtendedValues.addValue(val);
 						}
-					}
-				}
-				final PersistentDataset<byte[]> stillUnknownValues = new PersistentDataset<byte[]>();
-				final List<PersistentValue<byte[]>> unknownDataValues = persistenceEncoding.getUnknownData().getValues();
-				for (final PersistentValue<byte[]> v : unknownDataValues) {
-					final FieldReader<Object> reader = adapter.getReader(v.getId());
-					final Object value = reader.readField(v.getValue());
-					adapterExtendedValues.addValue(new PersistentValue<Object>(
-							v.getId(),
-							value));
-				}
-				if (persistenceEncoding instanceof IndexedAdapterPersistenceEncoding) {
-					for (final PersistentValue<Object> v : ((IndexedAdapterPersistenceEncoding) persistenceEncoding).getAdapterExtendedData().getValues()) {
-						adapterExtendedValues.addValue(v);
 					}
 				}
 				final IndexedAdapterPersistenceEncoding encoding = new IndexedAdapterPersistenceEncoding(
@@ -93,7 +75,7 @@ public class CQLQueryFilter implements
 						persistenceEncoding.getIndexInsertionId(),
 						persistenceEncoding.getDuplicateCount(),
 						persistenceEncoding.getCommonData(),
-						stillUnknownValues,
+						new PersistentDataset<byte[]>(),
 						adapterExtendedValues);
 
 				final SimpleFeature feature = adapter.decode(

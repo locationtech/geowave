@@ -28,6 +28,7 @@ import mil.nga.giat.geowave.core.store.data.field.FieldReader;
 import mil.nga.giat.geowave.core.store.data.field.FieldUtils;
 import mil.nga.giat.geowave.core.store.data.field.FieldVisibilityHandler;
 import mil.nga.giat.geowave.core.store.data.field.FieldWriter;
+import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;
 import mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
 import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
@@ -47,15 +48,15 @@ import org.slf4j.LoggerFactory;
 /**
  * Find the max change in distortion between some k and k-1, picking the value k
  * associated with that change.
- * 
+ *
  * In a multi-group setting, each group may have a different optimal k. Thus,
  * the optimal batch may be different for each group. Each batch is associated
  * with a different value k.
- * 
+ *
  * Choose the appropriate batch for each group. Then change the batch identifier
  * for group centroids to a final provided single batch identifier ( parent
  * batch ).
- * 
+ *
  */
 public class DistortionGroupManagement
 {
@@ -151,7 +152,7 @@ public class DistortionGroupManagement
 	}
 
 	/**
-	 * 
+	 *
 	 * @param ops
 	 * @param distortationTableName
 	 *            the name of the table holding the distortions
@@ -439,6 +440,45 @@ public class DistortionGroupManagement
 				}
 				else {
 					return (FieldWriter) FieldUtils.getDefaultWriterForClass(Double.class);
+				}
+			}
+			return null;
+		}
+
+		@Override
+		public int getPositionOfOrderedField(
+				final CommonIndexModel model,
+				final ByteArrayId fieldId ) {
+			int i = 0;
+			for (final NumericDimensionField<? extends CommonIndexValue> dimensionField : model.getDimensions()) {
+				if (fieldId.equals(dimensionField.getFieldId())) {
+					return i;
+				}
+				i++;
+			}
+			if (fieldId.equals(DISTORTION_FIELD_ID)) {
+				return i;
+			}
+			return -1;
+		}
+
+		@Override
+		public ByteArrayId getFieldIdForPosition(
+				final CommonIndexModel model,
+				final int position ) {
+			if (position < model.getDimensions().length) {
+				int i = 0;
+				for (final NumericDimensionField<? extends CommonIndexValue> dimensionField : model.getDimensions()) {
+					if (i == position) {
+						return dimensionField.getFieldId();
+					}
+					i++;
+				}
+			}
+			else {
+				final int numDimensions = model.getDimensions().length;
+				if (position == numDimensions) {
+					return DISTORTION_FIELD_ID;
 				}
 			}
 			return null;

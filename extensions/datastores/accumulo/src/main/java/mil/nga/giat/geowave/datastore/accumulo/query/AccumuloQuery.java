@@ -1,6 +1,5 @@
 package mil.nga.giat.geowave.datastore.accumulo.query;
 
-import java.util.Collections;
 import java.util.List;
 
 import org.apache.accumulo.core.client.BatchScanner;
@@ -9,6 +8,7 @@ import org.apache.accumulo.core.client.Scanner;
 import org.apache.accumulo.core.client.ScannerBase;
 import org.apache.accumulo.core.client.TableNotFoundException;
 import org.apache.accumulo.core.data.Range;
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.hadoop.io.Text;
 import org.apache.log4j.Logger;
 
@@ -16,6 +16,7 @@ import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.index.IndexUtils;
 import mil.nga.giat.geowave.core.index.StringUtils;
+import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations;
 import mil.nga.giat.geowave.datastore.accumulo.util.AccumuloUtils;
@@ -28,9 +29,9 @@ import mil.nga.giat.geowave.datastore.accumulo.util.AccumuloUtils;
 abstract public class AccumuloQuery
 {
 	private final static Logger LOGGER = Logger.getLogger(AccumuloQuery.class);
-	protected final List<ByteArrayId> adapterIds;
+	protected final List<DataAdapter> adapters;
 	protected final PrimaryIndex index;
-	protected final List<String> fieldIds;
+	protected final Pair<List<String>, DataAdapter<?>> fieldIdsAdapterPair;
 
 	private final String[] authorizations;
 
@@ -40,18 +41,18 @@ abstract public class AccumuloQuery
 		this(
 				null,
 				index,
-				Collections.<String> emptyList(),
+				null,
 				authorizations);
 	}
 
 	public AccumuloQuery(
-			final List<ByteArrayId> adapterIds,
+			final List<DataAdapter> adapters,
 			final PrimaryIndex index,
-			final List<String> fieldIds,
+			final Pair<List<String>, DataAdapter<?>> fieldIdsAdapterPair,
 			final String... authorizations ) {
-		this.adapterIds = adapterIds;
+		this.adapters = adapters;
 		this.index = index;
-		this.fieldIds = fieldIds;
+		this.fieldIdsAdapterPair = fieldIdsAdapterPair;
 		this.authorizations = authorizations;
 	}
 
@@ -121,10 +122,10 @@ abstract public class AccumuloQuery
 					e);
 			return null;
 		}
-		if ((adapterIds != null) && !adapterIds.isEmpty()) {
-			for (final ByteArrayId adapterId : adapterIds) {
+		if ((adapters != null) && !adapters.isEmpty()) {
+			for (final DataAdapter adapter : adapters) {
 				scanner.fetchColumnFamily(new Text(
-						adapterId.getBytes()));
+						adapter.getAdapterId().getBytes()));
 			}
 		}
 		return scanner;

@@ -111,7 +111,9 @@ public class AttributesSubsetQueryIT extends
 		final QueryOptions queryOptions = new QueryOptions(
 				dataAdapter,
 				DEFAULT_SPATIAL_INDEX);
-		queryOptions.setFieldIds(Arrays.asList(CITY_ATTRIBUTE));
+		queryOptions.setFieldIds(
+				Arrays.asList(CITY_ATTRIBUTE),
+				dataAdapter);
 
 		final CloseableIterator<SimpleFeature> results = dataStore.query(
 				queryOptions,

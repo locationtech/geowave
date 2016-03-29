@@ -1,12 +1,14 @@
 package mil.nga.giat.geowave.datastore.accumulo.query;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.filter.DedupeFilter;
 import mil.nga.giat.geowave.core.store.filter.FilterList;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
@@ -36,12 +38,12 @@ public class InputFormatAccumuloRangeQuery extends
 	private final Range accumuloRange;
 	private final boolean isOutputWritable;
 
-	private static List<ByteArrayId> getAdapterIds(
+	private static List<DataAdapter> getAdapterIds(
 			final PrimaryIndex index,
 			final AdapterStore adapterStore,
 			final QueryOptions queryOptions ) {
 		try {
-			return queryOptions.getAdapterIds(adapterStore);
+			return Arrays.asList(queryOptions.getAdaptersArray(adapterStore));
 		}
 		catch (final IOException e) {
 			LOGGER.error(
@@ -69,7 +71,7 @@ public class InputFormatAccumuloRangeQuery extends
 				(DedupeFilter) null,
 				queryOptions.getScanCallback(),
 				null,
-				Collections.<String> emptyList(),
+				null,
 				queryOptions.getAuthorizations());
 
 		this.accumuloRange = accumuloRange;
@@ -88,10 +90,10 @@ public class InputFormatAccumuloRangeQuery extends
 					tableName,
 					getAdditionalAuthorizations());
 			scanner.setRange(accumuloRange);
-			if ((adapterIds != null) && !adapterIds.isEmpty()) {
-				for (final ByteArrayId adapterId : adapterIds) {
+			if ((adapters != null) && !adapters.isEmpty()) {
+				for (final DataAdapter adapter : adapters) {
 					scanner.fetchColumnFamily(new Text(
-							adapterId.getBytes()));
+							adapter.getAdapterId().getBytes()));
 				}
 			}
 			return scanner;

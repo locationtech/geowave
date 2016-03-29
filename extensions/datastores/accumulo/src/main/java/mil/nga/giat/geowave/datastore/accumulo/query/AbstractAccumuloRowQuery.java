@@ -1,18 +1,21 @@
 package mil.nga.giat.geowave.datastore.accumulo.query;
 
-import org.apache.accumulo.core.client.IteratorSetting;
-import org.apache.accumulo.core.client.ScannerBase;
-import org.apache.accumulo.core.iterators.user.WholeRowIterator;
-import org.apache.log4j.Logger;
+import java.util.List;
 
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
 import mil.nga.giat.geowave.core.store.ScanCallback;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations;
 import mil.nga.giat.geowave.datastore.accumulo.util.EntryIteratorWrapper;
 import mil.nga.giat.geowave.datastore.accumulo.util.ScannerClosableWrapper;
+
+import org.apache.accumulo.core.client.IteratorSetting;
+import org.apache.accumulo.core.client.ScannerBase;
+import org.apache.accumulo.core.iterators.user.WholeRowIterator;
+import org.apache.log4j.Logger;
 
 /**
  * Represents a query operation by an Accumulo row. This abstraction is
@@ -62,18 +65,24 @@ abstract public class AbstractAccumuloRowQuery<T> extends
 	protected void addScanIteratorSettings(
 			final ScannerBase scanner ) {
 
-		scanner.addScanIterator(new IteratorSetting(
-				SharedVisibilitySplittingIterator.ITERATOR_PRIORITY,
-				SharedVisibilitySplittingIterator.ITERATOR_NAME,
-				SharedVisibilitySplittingIterator.class));
-
-		if ((fieldIds != null) && (fieldIds.size() > 0)) {
-			final IteratorSetting iteratorSetting = FieldFilter.getIteratorSetting();
-			FieldFilter.setFieldIds(
-					iteratorSetting,
-					fieldIds,
-					index.getIndexModel().getDimensions());
-			scanner.addScanIterator(iteratorSetting);
+		if (fieldIdsAdapterPair != null) {
+			final List<String> fieldIds = fieldIdsAdapterPair.getLeft();
+			final DataAdapter<?> associatedAdapter = fieldIdsAdapterPair.getRight();
+			if ((fieldIds != null) && (!fieldIds.isEmpty()) && (associatedAdapter != null)) {
+				final IteratorSetting iteratorSetting = AttributeSubsettingIterator.getIteratorSetting();
+				AttributeSubsettingIterator.setFieldIds(
+						iteratorSetting,
+						associatedAdapter,
+						fieldIds,
+						index.getIndexModel().getDimensions());
+				AttributeSubsettingIterator.setAdapters(
+						iteratorSetting,
+						adapters);
+				AttributeSubsettingIterator.setModel(
+						iteratorSetting,
+						index.getIndexModel());
+				scanner.addScanIterator(iteratorSetting);
+			}
 		}
 
 		// we have to at least use a whole row iterator

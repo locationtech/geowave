@@ -1,32 +1,34 @@
-package mil.nga.giat.geowave.core.store.adapter;
+package mil.nga.giat.geowave.datastore.accumulo.encoding;
 
 import java.util.List;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.store.adapter.AbstractAdapterPersistenceEncoding;
+import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.data.PersistentDataset;
 import mil.nga.giat.geowave.core.store.data.PersistentValue;
 import mil.nga.giat.geowave.core.store.data.field.FieldReader;
 import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
+import mil.nga.giat.geowave.datastore.accumulo.util.BitmaskUtils;
 
 /**
- * This is an implements of persistence encoding that also contains all of the
- * extended data values used to form the native type supported by this adapter.
- * It also contains information about the persisted object within a particular
- * index such as the insertion ID in the index and the number of duplicates for
- * this entry in the index, and is used when reading data from the index.
+ * Consults adapter to lookup field readers based on bitmasked fieldIds when
+ * converting unknown data to adapter extended values
+ * 
+ * @since 0.9.1
  */
-public class IndexedAdapterPersistenceEncoding extends
+public class AccumuloCommonIndexedPersistenceEncoding extends
 		AbstractAdapterPersistenceEncoding
 {
-	public IndexedAdapterPersistenceEncoding(
+
+	public AccumuloCommonIndexedPersistenceEncoding(
 			final ByteArrayId adapterId,
 			final ByteArrayId dataId,
 			final ByteArrayId indexInsertionId,
 			final int duplicateCount,
 			final PersistentDataset<CommonIndexValue> commonData,
-			final PersistentDataset<byte[]> unknownData,
-			final PersistentDataset<Object> adapterExtendedData ) {
+			final PersistentDataset<byte[]> unknownData ) {
 		super(
 				adapterId,
 				dataId,
@@ -34,7 +36,7 @@ public class IndexedAdapterPersistenceEncoding extends
 				duplicateCount,
 				commonData,
 				unknownData,
-				adapterExtendedData);
+				new PersistentDataset<Object>());
 	}
 
 	@Override
@@ -43,11 +45,17 @@ public class IndexedAdapterPersistenceEncoding extends
 			final CommonIndexModel model ) {
 		final List<PersistentValue<byte[]>> unknownDataValues = getUnknownData().getValues();
 		for (final PersistentValue<byte[]> v : unknownDataValues) {
-			final FieldReader<Object> reader = adapter.getReader(v.getId());
+			final byte[] bitmask = v.getId().getBytes();
+			final int ordinal = BitmaskUtils.getOrdinal(bitmask);
+			final ByteArrayId fieldId = adapter.getFieldIdForPosition(
+					model,
+					ordinal);
+			final FieldReader<Object> reader = adapter.getReader(fieldId);
 			final Object value = reader.readField(v.getValue());
 			adapterExtendedData.addValue(new PersistentValue<Object>(
-					v.getId(),
+					fieldId,
 					value));
 		}
 	}
+
 }

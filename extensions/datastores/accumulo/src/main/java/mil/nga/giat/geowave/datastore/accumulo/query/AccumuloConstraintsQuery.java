@@ -5,15 +5,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 
-import org.apache.accumulo.core.client.IteratorSetting;
-import org.apache.accumulo.core.client.ScannerBase;
-import org.apache.accumulo.core.data.Key;
-import org.apache.accumulo.core.data.Value;
-import org.apache.accumulo.core.iterators.user.WholeRowIterator;
-import org.apache.commons.lang3.tuple.Pair;
-
-import com.google.common.collect.Iterators;
-
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.index.ByteArrayUtils;
@@ -32,6 +23,15 @@ import mil.nga.giat.geowave.core.store.memory.DataStoreUtils;
 import mil.nga.giat.geowave.core.store.query.Query;
 import mil.nga.giat.geowave.core.store.query.aggregate.Aggregation;
 
+import org.apache.accumulo.core.client.IteratorSetting;
+import org.apache.accumulo.core.client.ScannerBase;
+import org.apache.accumulo.core.data.Key;
+import org.apache.accumulo.core.data.Value;
+import org.apache.accumulo.core.iterators.user.WholeRowIterator;
+import org.apache.commons.lang3.tuple.Pair;
+
+import com.google.common.collect.Iterators;
+
 /**
  * This class represents basic numeric contraints applied to an Accumulo Query
  * 
@@ -47,41 +47,41 @@ public class AccumuloConstraintsQuery extends
 	protected final Pair<DataAdapter<?>, Aggregation<?, ?, ?>> aggregation;
 
 	public AccumuloConstraintsQuery(
-			final List<ByteArrayId> adapterIds,
+			final List<DataAdapter> adapters,
 			final PrimaryIndex index,
 			final Query query,
 			final DedupeFilter clientDedupeFilter,
 			final ScanCallback<?> scanCallback,
 			final Pair<DataAdapter<?>, Aggregation<?, ?, ?>> aggregation,
-			final List<String> fieldIds,
+			final Pair<List<String>, DataAdapter<?>> fieldIdsAdapterPair,
 			final String[] authorizations ) {
 		this(
-				adapterIds,
+				adapters,
 				index,
 				query != null ? query.getIndexConstraints(index.getIndexStrategy()) : null,
 				query != null ? query.createFilters(index.getIndexModel()) : null,
 				clientDedupeFilter,
 				scanCallback,
 				aggregation,
-				fieldIds,
+				fieldIdsAdapterPair,
 				authorizations);
 	}
 
 	public AccumuloConstraintsQuery(
-			final List<ByteArrayId> adapterIds,
+			final List<DataAdapter> adapters,
 			final PrimaryIndex index,
 			final List<MultiDimensionalNumericData> constraints,
 			final List<QueryFilter> queryFilters,
 			final DedupeFilter clientDedupeFilter,
 			final ScanCallback<?> scanCallback,
 			final Pair<DataAdapter<?>, Aggregation<?, ?, ?>> aggregation,
-			final List<String> fieldIds,
+			final Pair<List<String>, DataAdapter<?>> fieldIdsAdapterPair,
 			final String[] authorizations ) {
 		super(
-				adapterIds,
+				adapters,
 				index,
 				scanCallback,
-				fieldIds,
+				fieldIdsAdapterPair,
 				authorizations);
 		this.constraints = constraints;
 		this.aggregation = aggregation;
@@ -114,18 +114,24 @@ public class AccumuloConstraintsQuery extends
 	protected void addScanIteratorSettings(
 			final ScannerBase scanner ) {
 
-		scanner.addScanIterator(new IteratorSetting(
-				SharedVisibilitySplittingIterator.ITERATOR_PRIORITY,
-				SharedVisibilitySplittingIterator.ITERATOR_NAME,
-				SharedVisibilitySplittingIterator.class));
-
-		if ((fieldIds != null) && (fieldIds.size() > 0)) {
-			final IteratorSetting iteratorSetting = FieldFilter.getIteratorSetting();
-			FieldFilter.setFieldIds(
-					iteratorSetting,
-					fieldIds,
-					index.getIndexModel().getDimensions());
-			scanner.addScanIterator(iteratorSetting);
+		if (fieldIdsAdapterPair != null) {
+			final List<String> fieldIds = fieldIdsAdapterPair.getLeft();
+			final DataAdapter<?> associatedAdapter = fieldIdsAdapterPair.getRight();
+			if ((fieldIds != null) && (!fieldIds.isEmpty()) && (associatedAdapter != null)) {
+				final IteratorSetting iteratorSetting = AttributeSubsettingIterator.getIteratorSetting();
+				AttributeSubsettingIterator.setFieldIds(
+						iteratorSetting,
+						associatedAdapter,
+						fieldIds,
+						index.getIndexModel().getDimensions());
+				AttributeSubsettingIterator.setAdapters(
+						iteratorSetting,
+						adapters);
+				AttributeSubsettingIterator.setModel(
+						iteratorSetting,
+						index.getIndexModel());
+				scanner.addScanIterator(iteratorSetting);
+			}
 		}
 
 		if ((distributableFilters != null) && !distributableFilters.isEmpty() && queryFiltersEnabled) {

@@ -3,8 +3,26 @@ package mil.nga.giat.geowave.datastore.accumulo.query;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.index.ByteArrayUtils;
+import mil.nga.giat.geowave.core.index.PersistenceUtils;
+import mil.nga.giat.geowave.core.store.DataStoreEntryInfo.FieldInfo;
+import mil.nga.giat.geowave.core.store.data.CommonIndexedPersistenceEncoding;
+import mil.nga.giat.geowave.core.store.data.PersistentDataset;
+import mil.nga.giat.geowave.core.store.data.PersistentValue;
+import mil.nga.giat.geowave.core.store.data.field.FieldReader;
+import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;
+import mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter;
+import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
+import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
+import mil.nga.giat.geowave.datastore.accumulo.AccumuloRowId;
+import mil.nga.giat.geowave.datastore.accumulo.encoding.AccumuloCommonIndexedPersistenceEncoding;
+import mil.nga.giat.geowave.datastore.accumulo.util.AccumuloUtils;
+import mil.nga.giat.geowave.datastore.accumulo.util.BitmaskUtils;
 
 import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.Value;
@@ -14,18 +32,6 @@ import org.apache.accumulo.core.iterators.user.WholeRowIterator;
 import org.apache.hadoop.fs.FsUrlStreamHandlerFactory;
 import org.apache.hadoop.io.Text;
 import org.apache.log4j.Logger;
-
-import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.ByteArrayUtils;
-import mil.nga.giat.geowave.core.index.PersistenceUtils;
-import mil.nga.giat.geowave.core.store.data.CommonIndexedPersistenceEncoding;
-import mil.nga.giat.geowave.core.store.data.PersistentDataset;
-import mil.nga.giat.geowave.core.store.data.PersistentValue;
-import mil.nga.giat.geowave.core.store.data.field.FieldReader;
-import mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter;
-import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
-import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
-import mil.nga.giat.geowave.datastore.accumulo.AccumuloRowId;
 
 /**
  * This iterator wraps a DistributableQueryFilter which is deserialized from a
@@ -47,6 +53,7 @@ public class QueryFilterIterator extends
 	protected static final String MODEL = "model";
 	private DistributableQueryFilter filter;
 	private CommonIndexModel model;
+	private final List<ByteArrayId> commonIndexFieldIds = new ArrayList<>();
 
 	static {
 		initialize();
@@ -105,23 +112,38 @@ public class QueryFilterIterator extends
 				final Key key = keys.get(i);
 				final ByteArrayId colQual = new ByteArrayId(
 						key.getColumnQualifierData().getBackingArray());
-				final FieldReader<? extends CommonIndexValue> reader = model.getReader(colQual);
-				if (reader != null) {
-					final CommonIndexValue fieldValue = reader.readField(values.get(
-							i).get());
-					fieldValue.setVisibility(key.getColumnVisibilityData().getBackingArray());
-					commonData.addValue(new PersistentValue<CommonIndexValue>(
-							colQual,
-							fieldValue));
-				}
-				else {
-					unknownData.addValue(new PersistentValue<byte[]>(
-							colQual,
-							values.get(
-									i).get()));
+				final byte[] valueBytes = values.get(
+						i).get();
+				final List<FieldInfo<Object>> fieldInfos = AccumuloUtils.decomposeFlattenedFields(
+						colQual.getBytes(),
+						valueBytes,
+						key.getColumnVisibilityData().getBackingArray());
+				for (final FieldInfo<Object> fieldInfo : fieldInfos) {
+					final ByteArrayId fieldId = fieldInfo.getDataValue().getId();
+					final byte[] bitmask = fieldId.getBytes();
+					final int ordinal = BitmaskUtils.getOrdinal(bitmask);
+					if (ordinal < model.getDimensions().length) {
+						final ByteArrayId commonIndexFieldId = commonIndexFieldIds.get(ordinal);
+						final FieldReader<? extends CommonIndexValue> reader = model.getReader(commonIndexFieldId);
+						if (reader != null) {
+							final CommonIndexValue fieldValue = reader.readField(fieldInfo.getWrittenValue());
+							fieldValue.setVisibility(fieldInfo.getVisibility());
+							commonData.addValue(new PersistentValue<CommonIndexValue>(
+									commonIndexFieldId,
+									fieldValue));
+						}
+						else {
+							LOGGER.error("Could not find reader for common index field: " + commonIndexFieldId.getString());
+						}
+					}
+					else {
+						unknownData.addValue(new PersistentValue<byte[]>(
+								fieldId,
+								fieldInfo.getWrittenValue()));
+					}
 				}
 			}
-			final CommonIndexedPersistenceEncoding encoding = new CommonIndexedPersistenceEncoding(
+			final CommonIndexedPersistenceEncoding encoding = new AccumuloCommonIndexedPersistenceEncoding(
 					new ByteArrayId(
 							rowId.getAdapterId()),
 					new ByteArrayId(
@@ -164,24 +186,24 @@ public class QueryFilterIterator extends
 				source,
 				options,
 				env);
-
 		if (options == null) {
 			throw new IllegalArgumentException(
 					"Arguments must be set for " + QueryFilterIterator.class.getName());
 		}
 		try {
-
 			final String filterStr = options.get(FILTER);
 			final byte[] filterBytes = ByteArrayUtils.byteArrayFromString(filterStr);
 			filter = PersistenceUtils.fromBinary(
 					filterBytes,
 					DistributableQueryFilter.class);
-
 			final String modelStr = options.get(MODEL);
 			final byte[] modelBytes = ByteArrayUtils.byteArrayFromString(modelStr);
 			model = PersistenceUtils.fromBinary(
 					modelBytes,
 					CommonIndexModel.class);
+			for (final NumericDimensionField<? extends CommonIndexValue> numericDimension : model.getDimensions()) {
+				commonIndexFieldIds.add(numericDimension.getFieldId());
+			}
 		}
 		catch (final Exception e) {
 			throw new IllegalArgumentException(

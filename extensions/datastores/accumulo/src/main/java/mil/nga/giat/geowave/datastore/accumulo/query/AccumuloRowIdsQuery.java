@@ -23,20 +23,20 @@ public class AccumuloRowIdsQuery<T> extends
 	final Collection<ByteArrayId> rows;
 
 	public AccumuloRowIdsQuery(
-			final DataAdapter<T> adapterId,
+			final DataAdapter<T> adapter,
 			final PrimaryIndex index,
 			final Collection<ByteArrayId> rows,
 			final ScanCallback<T> scanCallback,
 			final DedupeFilter dedupFilter,
 			final String[] authorizations ) {
 		super(
-				Collections.<ByteArrayId> emptyList(),
+				Collections.<DataAdapter> singletonList(adapter),
 				index,
 				(Query) null,
 				dedupFilter,
 				scanCallback,
 				null,
-				Collections.<String> emptyList(),
+				null,
 				authorizations);
 		this.rows = rows;
 	}

@@ -40,4 +40,12 @@ public interface DataAdapter<T> extends
 	public AdapterPersistenceEncoding encode(
 			T entry,
 			CommonIndexModel indexModel );
+
+	public int getPositionOfOrderedField(
+			CommonIndexModel model,
+			ByteArrayId fieldId );
+
+	public ByteArrayId getFieldIdForPosition(
+			CommonIndexModel model,
+			int position );
 }

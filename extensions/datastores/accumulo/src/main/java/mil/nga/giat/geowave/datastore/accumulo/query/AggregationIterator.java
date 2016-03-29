@@ -22,6 +22,7 @@ import mil.nga.giat.geowave.core.index.Mergeable;
 import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
 import mil.nga.giat.geowave.core.index.Persistable;
 import mil.nga.giat.geowave.core.index.PersistenceUtils;
+import mil.nga.giat.geowave.core.store.adapter.AbstractAdapterPersistenceEncoding;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding;
 import mil.nga.giat.geowave.core.store.data.CommonIndexedPersistenceEncoding;
@@ -104,26 +105,15 @@ public class AggregationIterator extends
 			if (persistenceEncoding.getAdapterId().getString().equals(
 					adapter.getAdapterId().getString())) {
 				final PersistentDataset<Object> adapterExtendedValues = new PersistentDataset<Object>();
-				if (persistenceEncoding instanceof IndexedAdapterPersistenceEncoding) {
-					final PersistentDataset<Object> existingExtValues = ((IndexedAdapterPersistenceEncoding) persistenceEncoding).getAdapterExtendedData();
+				if (persistenceEncoding instanceof AbstractAdapterPersistenceEncoding) {
+					((AbstractAdapterPersistenceEncoding) persistenceEncoding).convertUnknownValues(
+							adapter,
+							model);
+					final PersistentDataset<Object> existingExtValues = ((AbstractAdapterPersistenceEncoding) persistenceEncoding).getAdapterExtendedData();
 					if (existingExtValues != null) {
 						for (final PersistentValue<Object> val : existingExtValues.getValues()) {
 							adapterExtendedValues.addValue(val);
 						}
-					}
-				}
-				final PersistentDataset<byte[]> stillUnknownValues = new PersistentDataset<byte[]>();
-				final List<PersistentValue<byte[]>> unknownDataValues = persistenceEncoding.getUnknownData().getValues();
-				for (final PersistentValue<byte[]> v : unknownDataValues) {
-					final FieldReader<Object> reader = adapter.getReader(v.getId());
-					final Object value = reader.readField(v.getValue());
-					adapterExtendedValues.addValue(new PersistentValue<Object>(
-							v.getId(),
-							value));
-				}
-				if (persistenceEncoding instanceof IndexedAdapterPersistenceEncoding) {
-					for (final PersistentValue<Object> v : ((IndexedAdapterPersistenceEncoding) persistenceEncoding).getAdapterExtendedData().getValues()) {
-						adapterExtendedValues.addValue(v);
 					}
 				}
 				final IndexedAdapterPersistenceEncoding encoding = new IndexedAdapterPersistenceEncoding(
@@ -132,7 +122,7 @@ public class AggregationIterator extends
 						persistenceEncoding.getIndexInsertionId(),
 						persistenceEncoding.getDuplicateCount(),
 						persistenceEncoding.getCommonData(),
-						stillUnknownValues,
+						new PersistentDataset<byte[]>(),
 						adapterExtendedValues);
 				final Object row = adapter.decode(
 						encoding,

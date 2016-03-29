@@ -14,27 +14,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import org.apache.accumulo.core.client.AccumuloException;
-import org.apache.accumulo.core.client.AccumuloSecurityException;
-import org.apache.accumulo.core.client.BatchDeleter;
-import org.apache.accumulo.core.client.IteratorSetting;
-import org.apache.accumulo.core.client.MutationsRejectedException;
-import org.apache.accumulo.core.client.Scanner;
-import org.apache.accumulo.core.client.ScannerBase;
-import org.apache.accumulo.core.client.TableNotFoundException;
-import org.apache.accumulo.core.data.Key;
-import org.apache.accumulo.core.data.Range;
-import org.apache.accumulo.core.data.Value;
-import org.apache.accumulo.core.iterators.user.WholeRowIterator;
-import org.apache.commons.lang3.tuple.Pair;
-import org.apache.hadoop.io.Text;
-import org.apache.hadoop.mapreduce.InputSplit;
-import org.apache.hadoop.mapreduce.RecordReader;
-import org.apache.log4j.Logger;
-
-import com.google.common.collect.Iterators;
-
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayUtils;
 import mil.nga.giat.geowave.core.index.StringUtils;
@@ -82,7 +61,7 @@ import mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloOptions
 import mil.nga.giat.geowave.datastore.accumulo.query.AccumuloConstraintsQuery;
 import mil.nga.giat.geowave.datastore.accumulo.query.AccumuloRowIdsQuery;
 import mil.nga.giat.geowave.datastore.accumulo.query.AccumuloRowPrefixQuery;
-import mil.nga.giat.geowave.datastore.accumulo.query.SharedVisibilitySplittingIterator;
+import mil.nga.giat.geowave.datastore.accumulo.query.AttributeSubsettingIterator;
 import mil.nga.giat.geowave.datastore.accumulo.query.SingleEntryFilterIterator;
 import mil.nga.giat.geowave.datastore.accumulo.util.AccumuloUtils;
 import mil.nga.giat.geowave.datastore.accumulo.util.DataAdapterAndIndexCache;
@@ -90,6 +69,28 @@ import mil.nga.giat.geowave.datastore.accumulo.util.EntryIteratorWrapper;
 import mil.nga.giat.geowave.datastore.accumulo.util.ScannerClosableWrapper;
 import mil.nga.giat.geowave.mapreduce.MapReduceDataStore;
 import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
+
+import org.apache.accumulo.core.client.AccumuloException;
+import org.apache.accumulo.core.client.AccumuloSecurityException;
+import org.apache.accumulo.core.client.BatchDeleter;
+import org.apache.accumulo.core.client.IteratorSetting;
+import org.apache.accumulo.core.client.MutationsRejectedException;
+import org.apache.accumulo.core.client.Scanner;
+import org.apache.accumulo.core.client.ScannerBase;
+import org.apache.accumulo.core.client.TableNotFoundException;
+import org.apache.accumulo.core.data.Key;
+import org.apache.accumulo.core.data.Range;
+import org.apache.accumulo.core.data.Value;
+import org.apache.accumulo.core.iterators.user.WholeRowIterator;
+import org.apache.commons.lang3.tuple.Pair;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.InputSplit;
+import org.apache.hadoop.mapreduce.RecordReader;
+import org.apache.log4j.Logger;
+
+import com.google.common.collect.Iterators;
+
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 /**
  * This is the Accumulo implementation of the data store. It requires an
@@ -396,8 +397,7 @@ public class AccumuloDataStore implements
 					tempAdapterStore,
 					indexMappingStore,
 					indexStore)) {
-				final List<ByteArrayId> adapterIdsToQuery = new ArrayList<ByteArrayId>();
-
+				final List<DataAdapter> adaptersToQuery = new ArrayList<>();
 				for (final DataAdapter<Object> adapter : indexAdapterPair.getRight()) {
 					if (sanitizedQuery instanceof RowIdQuery) {
 						final AccumuloRowIdsQuery<Object> q = new AccumuloRowIdsQuery<Object>(
@@ -445,22 +445,21 @@ public class AccumuloDataStore implements
 								tempAdapterStore));
 						continue;
 					}
-					adapterIdsToQuery.add(adapter.getAdapterId());
+					adaptersToQuery.add(adapter);
 				}
-
 				// supports querying multiple adapters in a single index
 				// in one query instance (one scanner) for efficiency
-				if (adapterIdsToQuery.size() > 0) {
+				if (adaptersToQuery.size() > 0) {
 					AccumuloConstraintsQuery accumuloQuery;
 
 					accumuloQuery = new AccumuloConstraintsQuery(
-							adapterIdsToQuery,
+							adaptersToQuery,
 							indexAdapterPair.getLeft(),
 							sanitizedQuery,
 							filter,
 							sanitizedQueryOptions.getScanCallback(),
-							queryOptions.getAggregation(),
-							queryOptions.getFieldIds(),
+							sanitizedQueryOptions.getAggregation(),
+							sanitizedQueryOptions.getFieldIdsAdapterPair(),
 							sanitizedQueryOptions.getAuthorizations());
 
 					results.add(accumuloQuery.query(
@@ -469,7 +468,6 @@ public class AccumuloDataStore implements
 							sanitizedQueryOptions.getMaxResolutionSubsamplingPerDimension(),
 							sanitizedQueryOptions.getLimit(),
 							true));
-
 				}
 			}
 
@@ -610,7 +608,7 @@ public class AccumuloDataStore implements
 					index,
 					tempAdapterStore,
 					dataIds,
-					adapter.getAdapterId(),
+					adapter,
 					callback,
 					dedupeFilter,
 					authorizations,
@@ -624,7 +622,7 @@ public class AccumuloDataStore implements
 			final PrimaryIndex index,
 			final AdapterStore adapterStore,
 			final List<ByteArrayId> dataIds,
-			final ByteArrayId adapterId,
+			final DataAdapter<?> adapter,
 			final ScanCallback<Object> scanCallback,
 			final DedupeFilter dedupeFilter,
 			final String[] authorizations,
@@ -637,12 +635,7 @@ public class AccumuloDataStore implements
 					authorizations);
 
 			scanner.fetchColumnFamily(new Text(
-					adapterId.getBytes()));
-
-			scanner.addScanIterator(new IteratorSetting(
-					SharedVisibilitySplittingIterator.ITERATOR_PRIORITY,
-					SharedVisibilitySplittingIterator.ITERATOR_NAME,
-					SharedVisibilitySplittingIterator.class));
+					adapter.getAdapterId().getBytes()));
 
 			final IteratorSetting rowIteratorSettings = new IteratorSetting(
 					SingleEntryFilterIterator.WHOLE_ROW_ITERATOR_PRIORITY,
@@ -657,7 +650,7 @@ public class AccumuloDataStore implements
 
 			filterIteratorSettings.addOption(
 					SingleEntryFilterIterator.ADAPTER_ID,
-					ByteArrayUtils.byteArrayToString(adapterId.getBytes()));
+					ByteArrayUtils.byteArrayToString(adapter.getAdapterId().getBytes()));
 
 			filterIteratorSettings.addOption(
 					SingleEntryFilterIterator.DATA_IDS,
@@ -869,14 +862,16 @@ public class AccumuloDataStore implements
 
 					}
 					else {
+						final List<DataAdapter> adapterList = new ArrayList<>();
+						adapterList.add(adapter);
 						dataIt = new AccumuloConstraintsQuery(
-								Collections.singletonList(adapter.getAdapterId()),
+								adapterList,
 								index,
 								query,
 								null,
 								callback,
 								null,
-								queryOptions.getFieldIds(),
+								queryOptions.getFieldIdsAdapterPair(),
 								queryOptions.getAuthorizations()).query(
 								accumuloOperations,
 								adapterStore,

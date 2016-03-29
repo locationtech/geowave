@@ -71,7 +71,6 @@ import mil.nga.giat.geowave.core.store.EntryVisibilityHandler;
 import mil.nga.giat.geowave.core.store.IteratorWrapper;
 import mil.nga.giat.geowave.core.store.IteratorWrapper.Converter;
 import mil.nga.giat.geowave.core.store.adapter.AdapterPersistenceEncoding;
-import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.FitToIndexPersistenceEncoding;
 import mil.nga.giat.geowave.core.store.adapter.IndexDependentDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding;
@@ -84,6 +83,7 @@ import mil.nga.giat.geowave.core.store.data.PersistentDataset;
 import mil.nga.giat.geowave.core.store.data.PersistentValue;
 import mil.nga.giat.geowave.core.store.data.field.FieldReader;
 import mil.nga.giat.geowave.core.store.data.field.FieldWriter;
+import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;
 import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
@@ -121,7 +121,6 @@ import org.opengis.geometry.Envelope;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.datum.PixelInCell;
-import org.opengis.referencing.operation.MathTransform1D;
 import org.opengis.referencing.operation.TransformException;
 import org.opengis.util.InternationalString;
 
@@ -871,7 +870,7 @@ public class RasterDataAdapter implements
 	/**
 	 * This method is responsible for creating a coverage from the supplied
 	 * {@link RenderedImage}.
-	 * 
+	 *
 	 * @param image
 	 * @return
 	 * @throws IOException
@@ -1862,5 +1861,44 @@ public class RasterDataAdapter implements
 	@Override
 	public RowTransform<RasterTile<?>> getTransform() {
 		return new RasterTileRowTransform();
+	}
+
+	@Override
+	public int getPositionOfOrderedField(
+			final CommonIndexModel model,
+			final ByteArrayId fieldId ) {
+		int i = 0;
+		for (final NumericDimensionField<? extends CommonIndexValue> dimensionField : model.getDimensions()) {
+			if (fieldId.equals(dimensionField.getFieldId())) {
+				return i;
+			}
+			i++;
+		}
+		if (fieldId.equals(DATA_FIELD_ID)) {
+			return i;
+		}
+		return -1;
+	}
+
+	@Override
+	public ByteArrayId getFieldIdForPosition(
+			final CommonIndexModel model,
+			final int position ) {
+		if (position < model.getDimensions().length) {
+			int i = 0;
+			for (final NumericDimensionField<? extends CommonIndexValue> dimensionField : model.getDimensions()) {
+				if (i == position) {
+					return dimensionField.getFieldId();
+				}
+				i++;
+			}
+		}
+		else {
+			final int numDimensions = model.getDimensions().length;
+			if (position == numDimensions) {
+				return DATA_FIELD_ID;
+			}
+		}
+		return null;
 	}
 }
