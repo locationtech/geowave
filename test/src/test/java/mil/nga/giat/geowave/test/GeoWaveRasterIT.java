@@ -499,27 +499,23 @@ public class GeoWaveRasterIT extends
 			}
 		}
 
-		try (IndexWriter writer = dataStore.createIndexWriter(
-				DEFAULT_ALLTIER_SPATIAL_INDEX,
-				DataStoreUtils.DEFAULT_VISIBILITY)) {
-			writer.write(
-					adapter,
-					RasterUtils.createCoverageTypeDouble(
-							coverageName,
-							westLon,
-							eastLon,
-							southLat,
-							northLat,
-							raster1));
-			writer.write(
-					adapter,
-					RasterUtils.createCoverageTypeDouble(
-							coverageName,
-							westLon,
-							eastLon,
-							southLat,
-							northLat,
-							raster2));
+		try (IndexWriter writer = dataStore.createWriter(
+				adapter,
+				DEFAULT_ALLTIER_SPATIAL_INDEX)) {
+			writer.write(RasterUtils.createCoverageTypeDouble(
+					coverageName,
+					westLon,
+					eastLon,
+					southLat,
+					northLat,
+					raster1));
+			writer.write(RasterUtils.createCoverageTypeDouble(
+					coverageName,
+					westLon,
+					eastLon,
+					southLat,
+					northLat,
+					raster2));
 		}
 	}
 
@@ -546,9 +542,9 @@ public class GeoWaveRasterIT extends
 				basicAdapter,
 				coverageName,
 				mergeStrategy);
-		try (IndexWriter writer = dataStore.createIndexWriter(
-				DEFAULT_ALLTIER_SPATIAL_INDEX,
-				DataStoreUtils.DEFAULT_VISIBILITY)) {
+		try (IndexWriter writer = dataStore.createWriter(
+				mergeStrategyOverriddenAdapter,
+				DEFAULT_ALLTIER_SPATIAL_INDEX)) {
 			for (int r = 0; r < numRasters; r++) {
 				final WritableRaster raster = RasterUtils.createRasterTypeDouble(
 						numBands,
@@ -569,15 +565,13 @@ public class GeoWaveRasterIT extends
 						}
 					}
 				}
-				writer.write(
-						mergeStrategyOverriddenAdapter,
-						RasterUtils.createCoverageTypeDouble(
-								coverageName,
-								westLon,
-								eastLon,
-								southLat,
-								northLat,
-								raster));
+				writer.write(RasterUtils.createCoverageTypeDouble(
+						coverageName,
+						westLon,
+						eastLon,
+						southLat,
+						northLat,
+						raster));
 			}
 		}
 	}

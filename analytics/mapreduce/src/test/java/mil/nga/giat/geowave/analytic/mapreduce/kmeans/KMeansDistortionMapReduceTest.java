@@ -208,12 +208,10 @@ public class KMeansDistortionMapReduceTest
 			final PrimaryIndex index,
 			final SimpleFeature feature )
 			throws IOException {
-		try (IndexWriter writer = dataStore.createIndexWriter(
-				index,
-				DataStoreUtils.DEFAULT_VISIBILITY)) {
-			writer.write(
-					adapter,
-					feature);
+		try (IndexWriter writer = dataStore.createWriter(
+				adapter,
+				index)) {
+			writer.write(feature);
 			writer.close();
 		}
 	}

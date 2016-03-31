@@ -162,14 +162,12 @@ public class GeotoolsQueryExample
 
 		System.out.println("Ingesting canned data...");
 
-		try (IndexWriter indexWriter = dataStore.createIndexWriter(
-				index,
-				DataStoreUtils.DEFAULT_VISIBILITY)) {
+		try (IndexWriter indexWriter = dataStore.createWriter(
+				ADAPTER,
+				index)) {
 			for (final SimpleFeature sf : points) {
 				//
-				indexWriter.write(
-						ADAPTER,
-						sf);
+				indexWriter.write(sf);
 
 			}
 		}
@@ -190,6 +188,7 @@ public class GeotoolsQueryExample
 
 		try (final CloseableIterator<SimpleFeature> iterator = dataStore.query(
 				new QueryOptions(
+						ADAPTER,
 						index),
 				new SpatialQuery(
 						boundingBox))) {

@@ -229,19 +229,12 @@ public class ChooseBestMatchIndexQueryStrategyTest
 		return strategy.getIndices(
 				stats,
 				query,
-				new CloseableIteratorWrapper(
-						new Closeable() {
-							@Override
-							public void close()
-									throws IOException {
-
-							}
-						},
-						Arrays.asList(
-								IMAGE_CHIP_INDEX1,
-								new SpatialTemporalIndexBuilder().createIndex(),
-								new SpatialIndexBuilder().createIndex(),
-								IMAGE_CHIP_INDEX2).iterator()));
+				new PrimaryIndex[] {
+					IMAGE_CHIP_INDEX1,
+					new SpatialTemporalIndexBuilder().createIndex(),
+					new SpatialIndexBuilder().createIndex(),
+					IMAGE_CHIP_INDEX2
+				});
 	}
 
 	public static class ConstrainedIndexValue extends
@@ -250,8 +243,8 @@ public class ChooseBestMatchIndexQueryStrategyTest
 	{
 
 		/**
- *
- */
+		*
+		*/
 		private static final long serialVersionUID = 1L;
 
 		public ConstrainedIndexValue(

@@ -2,18 +2,17 @@ package mil.nga.giat.geowave.core.store.adapter.statistics;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.EntryVisibilityHandler;
-import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
 
 /**
- * This interface allows for a data adapter to define a set of statistics that
- * it would like to track
+ * This interface defines the set of statistics to capture for a specific
+ * adapter.
  * 
  * @param <T>
- *            The type for the data elements that are being adapted
+ *            The type for the data elements that are being adapted by the
+ *            adapter
  * 
  */
-public interface StatisticalDataAdapter<T> extends
-		WritableDataAdapter<T>
+public interface StatisticsProvider<T>
 {
 	public ByteArrayId[] getSupportedStatisticsIds();
 

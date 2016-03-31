@@ -3,6 +3,11 @@ package mil.nga.giat.geowave.datastore.accumulo.query;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.accumulo.core.client.ScannerBase;
+import org.apache.log4j.Logger;
+
+import com.google.common.collect.Iterators;
+
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
@@ -15,11 +20,6 @@ import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations;
 import mil.nga.giat.geowave.datastore.accumulo.util.EntryIteratorWrapper;
 import mil.nga.giat.geowave.datastore.accumulo.util.ScannerClosableWrapper;
-
-import org.apache.accumulo.core.client.ScannerBase;
-import org.apache.log4j.Logger;
-
-import com.google.common.collect.Iterators;
 
 public abstract class AccumuloFilteredIndexQuery extends
 		AccumuloQuery

@@ -199,6 +199,7 @@ public class KDECommandLineOptions
 				CQL_FILTER_KEY,
 				true,
 				"An optional CQL filter applied to the input data");
+
 		cqlFilterOption.setRequired(false);
 		allOptions.addOption(cqlFilterOption);
 		final Option indexIdOption = new Option(

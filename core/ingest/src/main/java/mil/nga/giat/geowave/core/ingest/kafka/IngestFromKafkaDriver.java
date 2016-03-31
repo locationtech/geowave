@@ -303,7 +303,9 @@ public class IngestFromKafkaDriver extends
 		IndexProvider indexProvider = plugin;
 
 		final String[] dimensionTypes = ingestOptions.getDimensionalityTypes();
-		final Map<ByteArrayId, IndexWriter> dimensionalityIndexMap = new HashMap<ByteArrayId, IndexWriter>();
+		final Map<ByteArrayId, IndexWriter> writerMap = new HashMap<ByteArrayId, IndexWriter>();
+		final Map<ByteArrayId, PrimaryIndex> indexMap = new HashMap<ByteArrayId, PrimaryIndex>();
+
 		for (final String dimensionType : dimensionTypes) {
 			final PrimaryIndex primaryIndex = IngestUtils.getIndex(
 					ingestPlugin,
@@ -314,30 +316,23 @@ public class IngestFromKafkaDriver extends
 				throw new IOException(
 						"Could not get index instance, getIndex() returned null");
 			}
-			final IndexWriter primaryIndexWriter = ingestRunData.getIndexWriter(primaryIndex);
-			final PrimaryIndex idx = primaryIndexWriter.getIndex();
-			if (idx == null) {
-				LOGGER.error("Could not get index instance, getIndex() returned null;");
-				throw new IOException(
-						"Could not get index instance, getIndex() returned null");
-			}
-			dimensionalityIndexMap.put(
-					idx.getId(),
-					primaryIndexWriter);
+			indexMap.put(
+					primaryIndex.getId(),
+					primaryIndex);
 		}
 
-		final Map<ByteArrayId, PrimaryIndex> requiredIndexMap = new HashMap<ByteArrayId, PrimaryIndex>();
 		final PrimaryIndex[] requiredIndices = indexProvider.getRequiredIndices();
 		if ((requiredIndices != null) && (requiredIndices.length > 0)) {
 			for (final PrimaryIndex requiredIndex : requiredIndices) {
-				requiredIndexMap.put(
+				indexMap.put(
 						requiredIndex.getId(),
 						requiredIndex);
 			}
 		}
+
 		try (CloseableIterator<?> geowaveDataIt = ingestPlugin.toGeoWaveData(
 				dataRecord,
-				dimensionalityIndexMap.keySet(),
+				writerMap.keySet(),
 				ingestOptions.getVisibility())) {
 			while (geowaveDataIt.hasNext()) {
 				final GeoWaveData<?> geowaveData = (GeoWaveData<?>) geowaveDataIt.next();
@@ -346,21 +341,26 @@ public class IngestFromKafkaDriver extends
 					LOGGER.warn("Adapter not found for " + geowaveData.getValue());
 					continue;
 				}
-				IndexWriter indexWriter;
-				for (final ByteArrayId indexId : geowaveData.getIndexIds()) {
-					indexWriter = dimensionalityIndexMap.get(indexId);
-					if (indexWriter == null) {
-						final PrimaryIndex index = requiredIndexMap.get(indexId);
+				IndexWriter indexWriter = writerMap.get(adapter.getAdapterId());
+				if (indexWriter == null) {
+					List<PrimaryIndex> indexList = new ArrayList<PrimaryIndex>();
+					for (final ByteArrayId indexId : geowaveData.getIndexIds()) {
+						final PrimaryIndex index = indexMap.get(indexId);
 						if (index == null) {
 							LOGGER.warn("Index '" + indexId.getString() + "' not found for " + geowaveData.getValue());
 							continue;
 						}
-						indexWriter = ingestRunData.getIndexWriter(index);
+						indexList.add(index);
 					}
-					indexWriter.write(
+					indexWriter = ingestRunData.getIndexWriter(
 							adapter,
-							geowaveData.getValue());
+							indexList.toArray(new PrimaryIndex[indexList.size()]));
+					writerMap.put(
+							adapter.getAdapterId(),
+							indexWriter);
 				}
+				indexWriter.write(geowaveData.getValue());
+
 			}
 		}
 	}

@@ -151,7 +151,7 @@ public class KDEJobRunner extends
 			final Index index = indexStore.getIndex(new ByteArrayId(
 					kdeCommandLineOptions.getIndexId()));
 			if ((index != null) && (index instanceof PrimaryIndex)) {
-				GeoWaveInputFormat.addIndex(
+				GeoWaveInputFormat.setIndex(
 						job.getConfiguration(),
 						(PrimaryIndex) index);
 			}
@@ -360,10 +360,9 @@ public class KDEJobRunner extends
 		GeoWaveOutputFormat.addIndex(
 				job.getConfiguration(),
 				index);
-		final IndexWriter writer = outputDataStoreOptions.createStore().createIndexWriter(
-				index,
-				DataStoreUtils.DEFAULT_VISIBILITY);
-		writer.setupAdapter(adapter);
+		final IndexWriter writer = outputDataStoreOptions.createStore().createWriter(
+				adapter,
+				index);
 		writer.close();
 	}
 

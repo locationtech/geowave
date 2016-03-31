@@ -6,10 +6,9 @@ import org.apache.log4j.Logger;
 
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.DataStore;
+import mil.nga.giat.geowave.core.store.DataStoreStatisticsProvider;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
-import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
-import mil.nga.giat.geowave.core.store.adapter.statistics.DataStoreStatsAdapterWrapper;
 import mil.nga.giat.geowave.core.store.adapter.statistics.StatsCompositionTool;
 import mil.nga.giat.geowave.core.store.index.Index;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
@@ -39,14 +38,15 @@ public class StatsOperation extends
 				adapter.getAdapterId(),
 				authorizations);
 
+		boolean isFirstTime = true;
 		try (CloseableIterator<Index<?, ?>> indexit = indexStore.getIndices()) {
 			while (indexit.hasNext()) {
 				final PrimaryIndex index = (PrimaryIndex) indexit.next();
 				try (StatsCompositionTool<?> statsTool = new StatsCompositionTool(
-						new DataStoreStatsAdapterWrapper(
+						new DataStoreStatisticsProvider(
+								adapter,
 								index,
-								(WritableDataAdapter) adapter),
-						statsStore)) {
+								isFirstTime))) {
 					try (CloseableIterator<?> entryIt = dataStore.query(
 							new QueryOptions(
 									adapter,
@@ -60,6 +60,7 @@ public class StatsOperation extends
 						}
 					}
 				}
+				isFirstTime = false;
 			}
 		}
 		catch (final Exception ex) {

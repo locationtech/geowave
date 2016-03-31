@@ -34,7 +34,7 @@ import mil.nga.giat.geowave.core.store.adapter.statistics.CountDataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.core.store.adapter.statistics.RowRangeHistogramStatistics;
-import mil.nga.giat.geowave.core.store.adapter.statistics.StatisticalDataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.statistics.StatisticsProvider;
 import mil.nga.giat.geowave.core.store.data.visibility.GlobalVisibilityHandler;
 import mil.nga.giat.geowave.core.store.data.visibility.UniformVisibilityWriter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
@@ -46,6 +46,7 @@ import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.core.store.query.aggregate.CountAggregation;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStore;
 import mil.nga.giat.geowave.datastore.accumulo.index.secondary.AccumuloSecondaryIndexDataStore;
+import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloAdapterIndexMappingStore;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloAdapterStore;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloDataStatisticsStore;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloIndexStore;
@@ -246,7 +247,7 @@ public class GeoWaveBasicIT extends
 		// otherwise use the statistics interface to calculate every statistic
 		// and compare results to what is available in the statistics data store
 		private StatisticsCache(
-				final StatisticalDataAdapter<SimpleFeature> dataAdapter ) {
+				final StatisticsProvider<SimpleFeature> dataAdapter ) {
 			final ByteArrayId[] statsIds = dataAdapter.getSupportedStatisticsIds();
 			for (final ByteArrayId statsId : statsIds) {
 				final DataStatistics<SimpleFeature> stats = dataAdapter.createDataStatistics(statsId);
@@ -307,11 +308,11 @@ public class GeoWaveBasicIT extends
 					final GeoWaveData<SimpleFeature> data = dataIterator.next();
 					final WritableDataAdapter<SimpleFeature> adapter = data.getAdapter(adapterCache);
 					// it should be a statistical data adapter
-					if (adapter instanceof StatisticalDataAdapter) {
+					if (adapter instanceof StatisticsProvider) {
 						StatisticsCache cachedValues = statsCache.get(adapter.getAdapterId());
 						if (cachedValues == null) {
 							cachedValues = new StatisticsCache(
-									(StatisticalDataAdapter<SimpleFeature>) adapter);
+									(StatisticsProvider<SimpleFeature>) adapter);
 							statsCache.put(
 									adapter.getAdapterId(),
 									cachedValues);
@@ -680,15 +681,15 @@ public class GeoWaveBasicIT extends
 						accumuloOperations),
 				new AccumuloSecondaryIndexDataStore(
 						accumuloOperations),
+				new AccumuloAdapterIndexMappingStore(
+						accumuloOperations),
 				accumuloOperations);
 
 		final SimpleFeature sf = serBuilder.buildFeature("343");
-		try (IndexWriter writer = geowaveStore.createIndexWriter(
-				DEFAULT_SPATIAL_INDEX,
-				DataStoreUtils.DEFAULT_VISIBILITY)) {
-			writer.write(
-					serAdapter,
-					sf);
+		try (IndexWriter writer = geowaveStore.createWriter(
+				serAdapter,
+				DEFAULT_SPATIAL_INDEX)) {
+			writer.write(sf);
 		}
 		final DistributableQuery q = new SpatialQuery(
 				((Geometry) args.get(Geometry.class)).buffer(0.5d));
@@ -814,6 +815,8 @@ public class GeoWaveBasicIT extends
 						accumuloOperations),
 				new AccumuloSecondaryIndexDataStore(
 						accumuloOperations),
+				new AccumuloAdapterIndexMappingStore(
+						accumuloOperations),
 				accumuloOperations);
 		// this file is the filtered dataset (using the previous file as a
 		// filter) so use it to ensure the query worked
@@ -909,6 +912,8 @@ public class GeoWaveBasicIT extends
 				new AccumuloDataStatisticsStore(
 						accumuloOperations),
 				new AccumuloSecondaryIndexDataStore(
+						accumuloOperations),
+				new AccumuloAdapterIndexMappingStore(
 						accumuloOperations),
 				accumuloOperations);
 		final DistributableQuery query = resourceToQuery(savedFilterResource);

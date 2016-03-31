@@ -1,6 +1,7 @@
 package mil.nga.giat.geowave.test;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Calendar;
@@ -213,6 +214,17 @@ abstract public class GeoWaveTestEnvironment
 														binDir,
 														HADOOP_WINDOWS_UTIL));
 										success = true;
+									}
+									else {
+										final String[] r = binDir.list(new FilenameFilter() {
+											@Override
+											public boolean accept(
+													File arg0,
+													String arg1 ) {
+												return arg1.equals(HADOOP_WINDOWS_UTIL);
+											}
+										});
+										success = r != null && r.length > 0;
 									}
 								}
 							}
