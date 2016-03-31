@@ -20,12 +20,12 @@ public class AvroIngestFormat extends
 
 	@Override
 	public String getIngestFormatName() {
-		return "gpx";
+		return "avro";
 	}
 
 	@Override
 	public String getIngestFormatDescription() {
-		return "xml files adhering to the schema of gps exchange format";
+		return "This can read an Avro file encoded with the SimpleFeatureCollection schema.  This schema is also used by the export tool, so this format handles re-ingesting exported datasets.";
 	}
 
 }
