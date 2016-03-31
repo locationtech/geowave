@@ -53,48 +53,46 @@ public class ChooseBestMatchIndexQueryStrategy implements
 	public CloseableIterator<Index<?, ?>> getIndices(
 			final Map<ByteArrayId, DataStatistics<SimpleFeature>> stats,
 			final BasicQuery query,
-			final CloseableIterator<Index<?, ?>> indices ) {
+			final PrimaryIndex[] indices ) {
 		return new CloseableIterator<Index<?, ?>>() {
 			PrimaryIndex nextIdx = null;
 			boolean done = false;
+			int i = 0;
 
 			@Override
 			public boolean hasNext() {
 				long min = Long.MAX_VALUE;
 				PrimaryIndex bestIdx = null;
 
-				while (!done && indices.hasNext()) {
-					final Index<?, ?> nextChoosenIdx = indices.next();
-					if (nextChoosenIdx instanceof PrimaryIndex) {
-						nextIdx = (PrimaryIndex) nextChoosenIdx;
-						if (nextIdx.getIndexStrategy().getOrderedDimensionDefinitions().length == 0) continue;
-						final List<MultiDimensionalNumericData> constraints = query.getIndexConstraints(nextIdx.getIndexStrategy());
+				while (!done && i < indices.length) {
+					nextIdx = (PrimaryIndex) indices[i++];
+					if (nextIdx.getIndexStrategy().getOrderedDimensionDefinitions().length == 0) continue;
+					final List<MultiDimensionalNumericData> constraints = query.getIndexConstraints(nextIdx.getIndexStrategy());
+					// no stats, no data
+					if (!stats.containsKey(RowRangeHistogramStatistics.composeId(nextIdx.getId()))) continue;
 
-						// no stats, no data
-						if (!stats.containsKey(RowRangeHistogramStatistics.composeId(nextIdx.getId()))) continue;
-
-						if (isFullTableScan(constraints)) {
-							// keep this is as a default in case all indices
-							// result in a full table scan
-							if (bestIdx == null) {
-								bestIdx = nextIdx;
-							}
-						}
-						else {
-							final List<ByteArrayRange> ranges = DataStoreUtils.constraintsToByteArrayRanges(
-									constraints,
-									nextIdx.getIndexStrategy(),
-									5000);
-							final long temp = DataStoreUtils.cardinality(
-									nextIdx,
-									stats,
-									ranges);
-							if (temp < min) {
-								bestIdx = nextIdx;
-								min = temp;
-							}
+					if (isFullTableScan(constraints)) {
+						// keep this is as a default in case all indices
+						// result in a full table scan
+						if (bestIdx == null) {
+							bestIdx = nextIdx;
 						}
 					}
+					else {
+						final List<ByteArrayRange> ranges = DataStoreUtils.constraintsToByteArrayRanges(
+								constraints,
+								nextIdx.getIndexStrategy(),
+								5000);
+						final long temp = DataStoreUtils.cardinality(
+								nextIdx,
+								stats,
+								ranges);
+						if (temp < min) {
+							bestIdx = nextIdx;
+							min = temp;
+						}
+					}
+
 				}
 				nextIdx = bestIdx;
 				done = true;
@@ -117,9 +115,7 @@ public class ChooseBestMatchIndexQueryStrategy implements
 
 			@Override
 			public void close()
-					throws IOException {
-				indices.close();
-			}
+					throws IOException {}
 		};
 	}
 

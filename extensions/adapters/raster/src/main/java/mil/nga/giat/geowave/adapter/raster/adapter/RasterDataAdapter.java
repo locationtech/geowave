@@ -71,6 +71,7 @@ import mil.nga.giat.geowave.core.store.EntryVisibilityHandler;
 import mil.nga.giat.geowave.core.store.IteratorWrapper;
 import mil.nga.giat.geowave.core.store.IteratorWrapper.Converter;
 import mil.nga.giat.geowave.core.store.adapter.AdapterPersistenceEncoding;
+import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.FitToIndexPersistenceEncoding;
 import mil.nga.giat.geowave.core.store.adapter.IndexDependentDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding;
@@ -78,7 +79,7 @@ import mil.nga.giat.geowave.core.store.adapter.RowMergingDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.statistics.CountDataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.FieldIdStatisticVisibility;
-import mil.nga.giat.geowave.core.store.adapter.statistics.StatisticalDataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.statistics.StatisticsProvider;
 import mil.nga.giat.geowave.core.store.data.PersistentDataset;
 import mil.nga.giat.geowave.core.store.data.PersistentValue;
 import mil.nga.giat.geowave.core.store.data.field.FieldReader;
@@ -128,7 +129,7 @@ import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
 
 public class RasterDataAdapter implements
-		StatisticalDataAdapter<GridCoverage>,
+		StatisticsProvider<GridCoverage>,
 		IndexDependentDataAdapter<GridCoverage>,
 		HadoopDataAdapter<GridCoverage, GridCoverageWritable>,
 		RowMergingDataAdapter<GridCoverage, RasterTile<?>>

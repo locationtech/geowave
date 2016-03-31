@@ -11,6 +11,11 @@ import java.util.Map.Entry;
 import java.util.ServiceLoader;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
+import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStoreFactorySpi;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStoreFactorySpi;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
@@ -22,9 +27,6 @@ import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.index.IndexStoreFactorySpi;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndexDataStore;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndexDataStoreFactorySpi;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class GeoWaveStoreFinder
 {
@@ -38,6 +40,7 @@ public class GeoWaveStoreFinder
 	private static Map<String, StoreFactoryFamilySpi> registeredStoreFactoryFamilies = null;
 	private static Map<String, DataStoreFactorySpi> registeredDataStoreFactories = null;
 	private static Map<String, AdapterStoreFactorySpi> registeredAdapterStoreFactories = null;
+	private static Map<String, AdapterIndexMappingStoreFactorySpi> registeredAdapterIndexMappingStoreFactories = null;
 	private static Map<String, DataStatisticsStoreFactorySpi> registeredDataStatisticsStoreFactories = null;
 	private static Map<String, IndexStoreFactorySpi> registeredIndexStoreFactories = null;
 	private static Map<String, SecondaryIndexDataStoreFactorySpi> registeredSecondaryIndexDataStoreFactories = null;
@@ -70,6 +73,18 @@ public class GeoWaveStoreFinder
 			final Map<String, Object> configOptions,
 			final String namespace ) {
 		final AdapterStoreFactorySpi factory = findAdapterStoreFactory(configOptions);
+		if (factory == null) {
+			return null;
+		}
+		return factory.createStore(
+				configOptions,
+				namespace);
+	}
+
+	public static AdapterIndexMappingStore createAdapterIndexMappingStore(
+			final Map<String, Object> configOptions,
+			final String namespace ) {
+		final AdapterIndexMappingStoreFactorySpi factory = findAdapterIndexMappingStoreFactory(configOptions);
 		if (factory == null) {
 			return null;
 		}
@@ -151,6 +166,15 @@ public class GeoWaveStoreFinder
 				"adapter");
 	}
 
+	public static AdapterIndexMappingStoreFactorySpi findAdapterIndexMappingStoreFactory(
+			final Map<String, Object> configOptions ) {
+		final Map<String, AdapterIndexMappingStoreFactorySpi> factories = getRegisteredAdapterIndexMappingStoreFactories();
+		return findStore(
+				factories,
+				configOptions,
+				"adapter index");
+	}
+
 	public static DataStatisticsStoreFactorySpi findDataStatisticsStoreFactory(
 			final Map<String, Object> configOptions ) {
 		final Map<String, DataStatisticsStoreFactorySpi> factories = getRegisteredDataStatisticsStoreFactories();
@@ -218,7 +242,8 @@ public class GeoWaveStoreFinder
 		uniqueNames.addAll(getRegisteredDataStoreFactories().keySet());
 		uniqueNames.addAll(getRegisteredAdapterStoreFactories().keySet());
 		uniqueNames.addAll(getRegisteredIndexStoreFactories().keySet());
-		uniqueNames.addAll(getRegisteredDataStatisticsStoreFactories().keySet());
+		uniqueNames.addAll(getRegisteredAdapterStoreFactories().keySet());
+		uniqueNames.addAll(getRegisteredAdapterIndexMappingStoreFactories().keySet());
 		return ConfigUtils.getOptions(
 				uniqueNames).toString();
 	}
@@ -251,6 +276,13 @@ public class GeoWaveStoreFinder
 		return registeredAdapterStoreFactories;
 	}
 
+	public static synchronized Map<String, AdapterIndexMappingStoreFactorySpi> getRegisteredAdapterIndexMappingStoreFactories() {
+		registeredAdapterIndexMappingStoreFactories = getRegisteredFactories(
+				AdapterIndexMappingStoreFactorySpi.class,
+				registeredAdapterIndexMappingStoreFactories);
+		return registeredAdapterIndexMappingStoreFactories;
+	}
+
 	public static synchronized Map<String, SecondaryIndexDataStoreFactorySpi> getRegisteredSecondaryIndexDataStoreFactories() {
 		registeredSecondaryIndexDataStoreFactories = getRegisteredFactories(
 				SecondaryIndexDataStoreFactorySpi.class,
@@ -272,6 +304,7 @@ public class GeoWaveStoreFinder
 		allOptions.addAll(Arrays.asList(storeFactoryFamily.getIndexStoreFactory().getOptions()));
 		allOptions.addAll(Arrays.asList(storeFactoryFamily.getDataStatisticsStoreFactory().getOptions()));
 		allOptions.addAll(Arrays.asList(storeFactoryFamily.getAdapterStoreFactory().getOptions()));
+		allOptions.addAll(Arrays.asList(storeFactoryFamily.getAdapterIndexMappingStoreFactory().getOptions()));
 		return allOptions.toArray(new AbstractConfigOption[] {});
 	}
 
@@ -287,6 +320,9 @@ public class GeoWaveStoreFinder
 			allOptions.addAll(Arrays.asList(f.getOptions()));
 		}
 		for (final AdapterStoreFactorySpi f : getRegisteredAdapterStoreFactories().values()) {
+			allOptions.addAll(Arrays.asList(f.getOptions()));
+		}
+		for (final AdapterIndexMappingStoreFactorySpi f : getRegisteredAdapterIndexMappingStoreFactories().values()) {
 			allOptions.addAll(Arrays.asList(f.getOptions()));
 		}
 		return allOptions.toArray(new AbstractConfigOption[] {});

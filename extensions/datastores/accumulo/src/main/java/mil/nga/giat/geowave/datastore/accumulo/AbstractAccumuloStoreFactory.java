@@ -2,13 +2,13 @@ package mil.nga.giat.geowave.datastore.accumulo;
 
 import java.util.Map;
 
-import mil.nga.giat.geowave.core.store.GenericStoreFactory;
-import mil.nga.giat.geowave.core.store.config.AbstractConfigOption;
-
 import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import mil.nga.giat.geowave.core.store.GenericStoreFactory;
+import mil.nga.giat.geowave.core.store.config.AbstractConfigOption;
 
 abstract public class AbstractAccumuloStoreFactory<T> extends
 		AbstractAccumuloFactory implements

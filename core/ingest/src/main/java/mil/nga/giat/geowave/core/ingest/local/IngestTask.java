@@ -1,6 +1,8 @@
 package mil.nga.giat.geowave.core.ingest.local;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.BlockingQueue;
@@ -11,6 +13,7 @@ import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.ingest.GeoWaveData;
+import mil.nga.giat.geowave.core.store.AdapterToIndexMapping;
 import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
@@ -83,7 +86,8 @@ public class IngestTask implements
 	})
 	@Override
 	public void run() {
-		Map<PrimaryIndex, IndexWriter> indexWriters = new HashMap<PrimaryIndex, IndexWriter>();
+		Map<AdapterToIndexMapping, IndexWriter> indexWriters = new HashMap<AdapterToIndexMapping, IndexWriter>();
+		Map<ByteArrayId, AdapterToIndexMapping> adapterMappings = new HashMap<ByteArrayId, AdapterToIndexMapping>();
 		int count = 0;
 		try {
 			if (LOGGER.isDebugEnabled()) {
@@ -119,35 +123,51 @@ public class IngestTask implements
 							this.getId()));
 					continue;
 				}
-				for (final ByteArrayId indexId : geowaveData.getIndexIds()) {
-					PrimaryIndex index = specifiedPrimaryIndexes.get(indexId);
-					if (index == null) {
-						index = requiredIndexMap.get(indexId);
+
+				AdapterToIndexMapping mapping = adapterMappings.get(adapter.getAdapterId());
+
+				if (mapping == null) {
+
+					List<PrimaryIndex> indices = new ArrayList<PrimaryIndex>();
+					for (final ByteArrayId indexId : geowaveData.getIndexIds()) {
+						PrimaryIndex index = specifiedPrimaryIndexes.get(indexId);
 						if (index == null) {
-							LOGGER.warn(String.format(
-									"Index '%s' not found for %s; worker [%s]",
-									indexId.getString(),
-									geowaveData.getValue(),
-									this.getId()));
-							continue;
+							index = requiredIndexMap.get(indexId);
+							if (index == null) {
+								LOGGER.warn(String.format(
+										"Index '%s' not found for %s; worker [%s]",
+										indexId.getString(),
+										geowaveData.getValue(),
+										this.getId()));
+								continue;
+							}
 						}
+						indices.add(index);
 					}
+					runData.addIndices(indices);
+					runData.addAdapter(adapter);
+
+					mapping = new AdapterToIndexMapping(
+							adapter.getAdapterId(),
+							indices.toArray(new PrimaryIndex[indices.size()]));
+					adapterMappings.put(
+							mapping.getAdapterId(),
+							mapping);
 
 					// If we have the index checked out already, use that.
-					if (!indexWriters.containsKey(index)) {
+					if (!indexWriters.containsKey(mapping)) {
 						indexWriters.put(
-								index,
-								runData.getIndexWriter(index));
+								mapping,
+								runData.getIndexWriter(mapping));
 					}
-
-					// Write the data to the data store.
-					IndexWriter writer = indexWriters.get(index);
-					writer.write(
-							adapter,
-							geowaveData.getValue());
-
-					count++;
 				}
+
+				// Write the data to the data store.
+				IndexWriter writer = indexWriters.get(mapping);
+
+				writer.write(geowaveData.getValue());
+
+				count++;
 			}
 		}
 		catch (Exception e) {
@@ -163,7 +183,7 @@ public class IngestTask implements
 		}
 		finally {
 			// Clean up index writers
-			for (Entry<PrimaryIndex, IndexWriter> writerEntry : indexWriters.entrySet()) {
+			for (Entry<AdapterToIndexMapping, IndexWriter> writerEntry : indexWriters.entrySet()) {
 				try {
 					runData.releaseIndexWriter(
 							writerEntry.getKey(),

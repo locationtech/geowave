@@ -5,8 +5,6 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import mil.nga.giat.geowave.core.index.ByteArrayUtils;
-
 import org.apache.accumulo.core.data.ByteSequence;
 import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.Range;
@@ -16,6 +14,8 @@ import org.apache.accumulo.core.iterators.SkippingIterator;
 import org.apache.accumulo.core.iterators.SortedKeyValueIterator;
 import org.apache.accumulo.core.iterators.system.InterruptibleIterator;
 import org.apache.hadoop.io.Text;
+
+import mil.nga.giat.geowave.core.index.ByteArrayUtils;
 
 /**
  * This class is an Accumulo Iterator that can support skipping by a fixed

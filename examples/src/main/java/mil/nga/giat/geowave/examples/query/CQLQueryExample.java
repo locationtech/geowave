@@ -182,14 +182,12 @@ public class CQLQueryExample
 
 		System.out.println("Ingesting canned data...");
 
-		try (IndexWriter indexWriter = dataStore.createIndexWriter(
-				index,
-				DataStoreUtils.DEFAULT_VISIBILITY)) {
+		try (IndexWriter indexWriter = dataStore.createWriter(
+				ADAPTER,
+				index)) {
 			for (final SimpleFeature sf : points) {
 				//
-				indexWriter.write(
-						ADAPTER,
-						sf);
+				indexWriter.write(sf);
 
 			}
 		}

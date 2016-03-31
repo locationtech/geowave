@@ -12,11 +12,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import mil.nga.giat.geowave.core.cli.GenericStoreCommandLineOptions;
-import mil.nga.giat.geowave.core.index.StringUtils;
-import mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations;
-import mil.nga.giat.geowave.test.mapreduce.MapReduceTestEnvironment;
-
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.mortbay.jetty.Connector;
@@ -29,6 +24,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import mil.nga.giat.geowave.core.cli.GenericStoreCommandLineOptions;
+import mil.nga.giat.geowave.core.index.StringUtils;
+import mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations;
+import mil.nga.giat.geowave.test.mapreduce.MapReduceTestEnvironment;
 
 abstract public class ServicesTestEnvironment extends
 		MapReduceTestEnvironment
@@ -51,6 +50,13 @@ abstract public class ServicesTestEnvironment extends
 	protected static final String GEOWAVE_CONTEXT_PATH = "/geowave-services";
 	protected static final String GEOWAVE_BASE_URL = JETTY_BASE_URL + GEOWAVE_CONTEXT_PATH;
 	protected static final String GEOWAVE_WORKSPACE_PATH = GEOSERVER_WAR_DIR + "/data/workspaces/" + TEST_WORKSPACE;
+	protected static final String TEST_STYLE_NAME_NO_DIFFERENCE = "DecimatePoints-2px";
+	protected static final String TEST_STYLE_NAME_MINOR_SUBSAMPLE = "DecimatePoints-10px";
+	protected static final String TEST_STYLE_NAME_MAJOR_SUBSAMPLE = "DecimatePoints-100px";
+	protected static final String TEST_STYLE_PATH = "src/test/resources/sld/";
+	protected static final String TEST_SLD_NO_DIFFERENCE_FILE = TEST_STYLE_PATH + TEST_STYLE_NAME_NO_DIFFERENCE + ".sld";
+	protected static final String TEST_SLD_MINOR_SUBSAMPLE_FILE = TEST_STYLE_PATH + TEST_STYLE_NAME_MINOR_SUBSAMPLE + ".sld";
+	protected static final String TEST_SLD_MAJOR_SUBSAMPLE_FILE = TEST_STYLE_PATH + TEST_STYLE_NAME_MAJOR_SUBSAMPLE + ".sld";
 	protected static Server jettyServer;
 
 	protected static void writeConfigFile(

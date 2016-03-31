@@ -21,6 +21,7 @@ import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.memory.DataStoreUtils;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStore;
 import mil.nga.giat.geowave.datastore.accumulo.index.secondary.AccumuloSecondaryIndexDataStore;
+import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloAdapterIndexMappingStore;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloAdapterStore;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloDataStatisticsStore;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloIndexStore;
@@ -95,6 +96,8 @@ public class SecondaryIndexingDriverIT extends
 						accumuloOperations),
 				new AccumuloSecondaryIndexDataStore(
 						accumuloOperations),
+				new AccumuloAdapterIndexMappingStore(
+						accumuloOperations),
 				accumuloOperations);
 
 		final PrimaryIndex index = DEFAULT_SPATIAL_INDEX;
@@ -104,13 +107,11 @@ public class SecondaryIndexingDriverIT extends
 			features.add(buildSimpleFeature());
 		}
 
-		try (IndexWriter writer = dataStore.createIndexWriter(
-				index,
-				DataStoreUtils.DEFAULT_VISIBILITY)) {
+		try (IndexWriter writer = dataStore.createWriter(
+				dataAdapter,
+				index)) {
 			for (final SimpleFeature aFeature : features) {
-				writer.write(
-						dataAdapter,
-						aFeature);
+				writer.write(aFeature);
 			}
 		}
 

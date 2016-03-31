@@ -57,6 +57,8 @@ public class GeoTemporalQueryExample
 	private static AccumuloDataStore dataStore;
 
 	private static final PrimaryIndex index = new SpatialTemporalDimensionalityTypeProvider().createPrimaryIndex();
+	private static final FeatureDataAdapter adapter = new FeatureDataAdapter(
+			getPointSimpleFeatureType());
 
 	// Points (to be ingested into GeoWave Data Store)
 	private static final Coordinate washingtonMonument = new Coordinate(
@@ -192,17 +194,12 @@ public class GeoTemporalQueryExample
 
 		System.out.println("Ingesting canned data...");
 
-		final FeatureDataAdapter adapter = new FeatureDataAdapter(
-				getPointSimpleFeatureType());
-
-		try (IndexWriter indexWriter = dataStore.createIndexWriter(
-				index,
-				DataStoreUtils.DEFAULT_VISIBILITY)) {
+		try (IndexWriter indexWriter = dataStore.createWriter(
+				adapter,
+				index)) {
 			for (final SimpleFeature sf : points) {
 				//
-				indexWriter.write(
-						adapter,
-						sf);
+				indexWriter.write(sf);
 
 			}
 		}
@@ -248,8 +245,7 @@ public class GeoTemporalQueryExample
 		System.out.println("Executing query, expecting to match three points...");
 
 		final CloseableIterator<SimpleFeature> iterator = dataStore.query(
-				new QueryOptions(
-						index),
+				new QueryOptions(),
 				query);
 
 		while (iterator.hasNext()) {
@@ -283,6 +279,7 @@ public class GeoTemporalQueryExample
 
 		final CloseableIterator<SimpleFeature> iterator2 = dataStore.query(
 				new QueryOptions(
+						adapter,
 						index),
 				query2);
 

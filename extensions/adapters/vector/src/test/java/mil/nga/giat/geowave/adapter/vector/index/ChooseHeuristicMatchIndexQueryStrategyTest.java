@@ -260,15 +260,7 @@ public class ChooseHeuristicMatchIndexQueryStrategyTest
 		return strategy.getIndices(
 				stats,
 				query,
-				new CloseableIteratorWrapper(
-						new Closeable() {
-							@Override
-							public void close()
-									throws IOException {
-
-							}
-						},
-						indices.iterator()));
+				indices.toArray(new PrimaryIndex[indices.size()]));
 	}
 
 	public static class ConstrainedIndexValue extends
@@ -277,8 +269,8 @@ public class ChooseHeuristicMatchIndexQueryStrategyTest
 	{
 
 		/**
- *
- */
+		*
+		*/
 		private static final long serialVersionUID = 1L;
 
 		public ConstrainedIndexValue(

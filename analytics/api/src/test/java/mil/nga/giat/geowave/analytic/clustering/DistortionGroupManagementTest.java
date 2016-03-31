@@ -51,12 +51,10 @@ public class DistortionGroupManagementTest
 			final PrimaryIndex index,
 			final T entry )
 			throws IOException {
-		try (IndexWriter writer = dataStore.createIndexWriter(
-				index,
-				DataStoreUtils.DEFAULT_VISIBILITY)) {
-			writer.write(
-					adapter,
-					entry);
+		try (IndexWriter writer = dataStore.createWriter(
+				adapter,
+				index)) {
+			writer.write(entry);
 			writer.close();
 		}
 	}

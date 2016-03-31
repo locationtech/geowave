@@ -3,8 +3,9 @@ package mil.nga.giat.geowave.datastore.accumulo;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.accumulo.core.data.Key;
+
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 /**
  * This class encapsulates the elements that compose the row ID in Accumulo, and

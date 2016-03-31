@@ -2,10 +2,6 @@ package mil.nga.giat.geowave.datastore.accumulo;
 
 import java.io.IOException;
 
-import mil.nga.giat.geowave.core.index.Mergeable;
-import mil.nga.giat.geowave.core.index.PersistenceUtils;
-import mil.nga.giat.geowave.core.index.StringUtils;
-
 import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.PartialKey;
 import org.apache.accumulo.core.data.Value;
@@ -14,6 +10,10 @@ import org.apache.accumulo.core.iterators.user.TransformingIterator;
 import org.apache.accumulo.core.security.ColumnVisibility;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.hadoop.io.Text;
+
+import mil.nga.giat.geowave.core.index.Mergeable;
+import mil.nga.giat.geowave.core.index.PersistenceUtils;
+import mil.nga.giat.geowave.core.index.StringUtils;
 
 public class MergingVisibilityCombiner extends
 		TransformingIterator

@@ -219,13 +219,11 @@ public class AttributesSubsetQueryIT extends
 
 		LOGGER.info("Ingesting canned data...");
 
-		try (IndexWriter writer = dataStore.createIndexWriter(
-				DEFAULT_SPATIAL_INDEX,
-				DataStoreUtils.DEFAULT_VISIBILITY)) {
+		try (IndexWriter writer = dataStore.createWriter(
+				dataAdapter,
+				DEFAULT_SPATIAL_INDEX)) {
 			for (final SimpleFeature sf : buildCityDataSet()) {
-				writer.write(
-						dataAdapter,
-						sf);
+				writer.write(sf);
 			}
 
 		}

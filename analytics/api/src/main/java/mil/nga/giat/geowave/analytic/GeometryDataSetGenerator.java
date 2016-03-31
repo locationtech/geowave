@@ -182,14 +182,11 @@ public class GeometryDataSetGenerator
 
 		LOGGER.info("Writing " + featureData.size() + " records to " + adapter.getType().getTypeName());
 		Integer idCounter = 0;
-		try (IndexWriter writer = dataStore.createIndexWriter(
-				index,
-				DataStoreUtils.DEFAULT_VISIBILITY)) {
-			writer.setupAdapter(adapter);
+		try (IndexWriter writer = dataStore.createWriter(
+				adapter,
+				index)) {
 			for (final SimpleFeature feature : featureData) {
-				writer.write(
-						adapter,
-						feature);
+				writer.write(feature);
 				featureBuilder.reset();
 
 				idCounter++;

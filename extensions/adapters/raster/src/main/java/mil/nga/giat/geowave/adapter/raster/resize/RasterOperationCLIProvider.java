@@ -13,7 +13,7 @@ public class RasterOperationCLIProvider implements
 	 */
 	private static final CLIOperation[] RASTER_OPERATIONS = new CLIOperation[] {
 		new CLIOperation(
-				"raster-resize",
+				"rasterresize",
 				"Resize Raster Tiles",
 				new RasterTileResizeJobRunner())
 	};
