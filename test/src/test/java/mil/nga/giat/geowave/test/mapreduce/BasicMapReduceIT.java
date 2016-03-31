@@ -25,6 +25,7 @@ import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStore;
 import mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations;
 import mil.nga.giat.geowave.datastore.accumulo.index.secondary.AccumuloSecondaryIndexDataStore;
+import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloAdapterIndexMappingStore;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloAdapterStore;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloDataStatisticsStore;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloIndexStore;
@@ -173,6 +174,8 @@ public class BasicMapReduceIT extends
 						accumuloOperations),
 				new AccumuloSecondaryIndexDataStore(
 						accumuloOperations),
+				new AccumuloAdapterIndexMappingStore(
+						accumuloOperations),
 				accumuloOperations);
 		final Map<ByteArrayId, ExpectedResults> adapterIdToResultsMap = new HashMap<ByteArrayId, GeoWaveTestEnvironment.ExpectedResults>();
 		for (final WritableDataAdapter<SimpleFeature> adapter : adapters) {
@@ -180,8 +183,7 @@ public class BasicMapReduceIT extends
 					adapter.getAdapterId(),
 					getExpectedResults(geowaveStore.query(
 							new QueryOptions(
-									adapter,
-									null),
+									adapter),
 							new EverythingQuery())));
 		}
 
@@ -190,8 +192,7 @@ public class BasicMapReduceIT extends
 		firstTwoAdapters.add(adapters[1].getAdapterId());
 		final ExpectedResults firstTwoAdaptersResults = getExpectedResults(geowaveStore.query(
 				new QueryOptions(
-						firstTwoAdapters,
-						null),
+						firstTwoAdapters),
 				new EverythingQuery()));
 		final ExpectedResults fullDataSetResults = getExpectedResults(geowaveStore.query(
 				new QueryOptions(),

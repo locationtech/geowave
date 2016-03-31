@@ -98,7 +98,7 @@ public abstract class AbstractGeoWaveJobRunner extends
 		}
 		if ((indices != null) && (indices.size() > 0)) {
 			for (final PrimaryIndex index : indices) {
-				GeoWaveInputFormat.addIndex(
+				GeoWaveInputFormat.setIndex(
 						conf,
 						index);
 			}

@@ -30,43 +30,41 @@ public class ChooseHeuristicMatchIndexQueryStrategy implements
 	public CloseableIterator<Index<?, ?>> getIndices(
 			final Map<ByteArrayId, DataStatistics<SimpleFeature>> stats,
 			final BasicQuery query,
-			final CloseableIterator<Index<?, ?>> indices ) {
+			final PrimaryIndex[] indices ) {
 		return new CloseableIterator<Index<?, ?>>() {
 			PrimaryIndex nextIdx = null;
 			boolean done = false;
+			int i = 0;
 
 			@Override
 			public boolean hasNext() {
 				double indexMax = -1;
 				PrimaryIndex bestIdx = null;
-				while (!done && indices.hasNext()) {
-					final Index<?, ?> nextChoosenIdx = indices.next();
-					if (nextChoosenIdx instanceof PrimaryIndex) {
-						nextIdx = (PrimaryIndex) nextChoosenIdx;
-						if (nextIdx.getIndexStrategy().getOrderedDimensionDefinitions().length == 0) continue;
-						final List<MultiDimensionalNumericData> queryRanges = query.getIndexConstraints(nextIdx.getIndexStrategy());
-						if (ChooseBestMatchIndexQueryStrategy.isFullTableScan(queryRanges)) {
-							// keep this is as a default in case all indices
-							// result in a full table scan
-							if (bestIdx == null) {
-								bestIdx = nextIdx;
-							}
+				while (!done && i < indices.length) {
+					nextIdx = indices[i++];
+					if (nextIdx.getIndexStrategy().getOrderedDimensionDefinitions().length == 0) continue;
+					final List<MultiDimensionalNumericData> queryRanges = query.getIndexConstraints(nextIdx.getIndexStrategy());
+					if (ChooseBestMatchIndexQueryStrategy.isFullTableScan(queryRanges)) {
+						// keep this is as a default in case all indices
+						// result in a full table scan
+						if (bestIdx == null) {
+							bestIdx = nextIdx;
 						}
-						else {
-							double totalMax = 0;
-							for (final MultiDimensionalNumericData qr : queryRanges) {
-								final double[] dataRangePerDimension = new double[qr.getDimensionCount()];
-								for (int d = 0; d < dataRangePerDimension.length; d++) {
-									dataRangePerDimension[d] = qr.getMaxValuesPerDimension()[d] - qr.getMinValuesPerDimension()[d];
-								}
-								totalMax += IndexUtils.getDimensionalBitsUsed(
-										nextIdx.getIndexStrategy(),
-										dataRangePerDimension);
+					}
+					else {
+						double totalMax = 0;
+						for (final MultiDimensionalNumericData qr : queryRanges) {
+							final double[] dataRangePerDimension = new double[qr.getDimensionCount()];
+							for (int d = 0; d < dataRangePerDimension.length; d++) {
+								dataRangePerDimension[d] = qr.getMaxValuesPerDimension()[d] - qr.getMinValuesPerDimension()[d];
 							}
-							if (totalMax > indexMax) {
-								indexMax = totalMax;
-								bestIdx = nextIdx;
-							}
+							totalMax += IndexUtils.getDimensionalBitsUsed(
+									nextIdx.getIndexStrategy(),
+									dataRangePerDimension);
+						}
+						if (totalMax > indexMax) {
+							indexMax = totalMax;
+							bestIdx = nextIdx;
 						}
 					}
 				}
@@ -91,9 +89,7 @@ public class ChooseHeuristicMatchIndexQueryStrategy implements
 
 			@Override
 			public void close()
-					throws IOException {
-				indices.close();
-			}
+					throws IOException {}
 		};
 	}
 }

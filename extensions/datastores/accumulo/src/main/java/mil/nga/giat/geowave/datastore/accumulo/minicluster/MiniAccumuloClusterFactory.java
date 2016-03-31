@@ -27,8 +27,7 @@ import org.apache.log4j.Logger;
 public class MiniAccumuloClusterFactory
 {
 
-	private static final Logger LOGGER = Logger.getLogger(
-			MiniAccumuloClusterFactory.class);
+	private static final Logger LOGGER = Logger.getLogger(MiniAccumuloClusterFactory.class);
 
 	protected static final String HADOOP_WINDOWS_UTIL = "winutils.exe";
 
@@ -52,8 +51,7 @@ public class MiniAccumuloClusterFactory
 			return null;
 		}
 
-		config.setClasspathItems(
-				jarPath);
+		config.setClasspathItems(jarPath);
 
 		MiniAccumuloClusterImpl retVal = new MiniAccumuloClusterImpl(
 				config);
@@ -66,17 +64,13 @@ public class MiniAccumuloClusterFactory
 			// directory in the mini accumulo cluster directory
 			// (mini accumulo cluster will always set this
 			// directory as hadoop_home)
-			LOGGER.info(
-					"Running YARN on windows requires a local installation of Hadoop");
-			LOGGER.info(
-					"'HADOOP_HOME' must be set and 'PATH' must contain %HADOOP_HOME%/bin");
+			LOGGER.info("Running YARN on windows requires a local installation of Hadoop");
+			LOGGER.info("'HADOOP_HOME' must be set and 'PATH' must contain %HADOOP_HOME%/bin");
 
 			final Map<String, String> env = System.getenv();
-			String hadoopHome = System.getProperty(
-					"hadoop.home.dir");
+			String hadoopHome = System.getProperty("hadoop.home.dir");
 			if (hadoopHome == null) {
-				hadoopHome = env.get(
-						"HADOOP_HOME");
+				hadoopHome = env.get("HADOOP_HOME");
 			}
 			boolean success = false;
 			if (hadoopHome != null) {
@@ -99,10 +93,9 @@ public class MiniAccumuloClusterFactory
 				}
 			}
 			if (!success) {
-				LOGGER.error(
-						"'HADOOP_HOME' environment variable is not set or <HADOOP_HOME>/bin/winutils.exe does not exist");
-				
-				//return mini accumulo cluster anyways
+				LOGGER.error("'HADOOP_HOME' environment variable is not set or <HADOOP_HOME>/bin/winutils.exe does not exist");
+
+				// return mini accumulo cluster anyways
 				return retVal;
 			}
 		}
@@ -114,8 +107,7 @@ public class MiniAccumuloClusterFactory
 			final Class context )
 			throws IOException {
 
-		final String classpath = getClasspath(
-				context);
+		final String classpath = getClasspath(context);
 
 		final File jarDir = new File(
 				dir.getParentFile().getAbsolutePath() + File.separator + "pathing");
@@ -124,8 +116,7 @@ public class MiniAccumuloClusterFactory
 				jarDir.mkdirs();
 			}
 			catch (final Exception e) {
-				LOGGER.error(
-						"Failed to create pathing jar directory: " + e);
+				LOGGER.error("Failed to create pathing jar directory: " + e);
 				return null;
 			}
 		}
@@ -139,8 +130,7 @@ public class MiniAccumuloClusterFactory
 				jarFile.delete();
 			}
 			catch (final Exception e) {
-				LOGGER.error(
-						"Failed to delete old pathing jar: " + e);
+				LOGGER.error("Failed to delete old pathing jar: " + e);
 				return null;
 			}
 		}
@@ -174,20 +164,17 @@ public class MiniAccumuloClusterFactory
 			ClassLoader cl = context.getClassLoader();
 
 			while (cl != null) {
-				classloaders.add(
-						cl);
+				classloaders.add(cl);
 				cl = cl.getParent();
 			}
 
-			Collections.reverse(
-					classloaders);
+			Collections.reverse(classloaders);
 
 			final StringBuilder classpathBuilder = new StringBuilder();
 
 			// assume 0 is the system classloader and skip it
 			for (int i = 0; i < classloaders.size(); i++) {
-				final ClassLoader classLoader = classloaders.get(
-						i);
+				final ClassLoader classLoader = classloaders.get(i);
 
 				if (classLoader instanceof URLClassLoader) {
 
@@ -213,8 +200,7 @@ public class MiniAccumuloClusterFactory
 				}
 			}
 
-			classpathBuilder.deleteCharAt(
-					0);
+			classpathBuilder.deleteCharAt(0);
 			return classpathBuilder.toString();
 
 		}
@@ -227,15 +213,14 @@ public class MiniAccumuloClusterFactory
 	private static boolean containsSiteFile(
 			final File f ) {
 		if (f.isDirectory()) {
-			final File[] sitefile = f.listFiles(
-					new FileFilter() {
-						@Override
-						public boolean accept(
-								final File pathname ) {
-							return pathname.getName().endsWith(
-									"site.xml");
-						}
-					});
+			final File[] sitefile = f.listFiles(new FileFilter() {
+				@Override
+				public boolean accept(
+						final File pathname ) {
+					return pathname.getName().endsWith(
+							"site.xml");
+				}
+			});
 
 			return (sitefile != null) && (sitefile.length > 0);
 		}
@@ -251,18 +236,16 @@ public class MiniAccumuloClusterFactory
 				url.toURI());
 
 		// do not include dirs containing hadoop or accumulo site files
-		if (!containsSiteFile(
-				file)) {
+		if (!containsSiteFile(file)) {
 			classpathBuilder.append(
 					" ").append(
-							file.getAbsolutePath().replace(
-									"C:\\",
-									"file:/C:/").replace(
-											"\\",
-											"/"));
+					file.getAbsolutePath().replace(
+							"C:\\",
+							"file:/C:/").replace(
+							"\\",
+							"/"));
 			if (file.isDirectory()) {
-				classpathBuilder.append(
-						"/");
+				classpathBuilder.append("/");
 			}
 		}
 	}

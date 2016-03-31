@@ -19,9 +19,9 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 
-/** 
+/**
  * Partition on the boundary of polygons (the hull); not on the interior space.
- *
+ * 
  */
 public class BoundaryPartitioner extends
 		OrthodromicDistancePartitioner<Object>

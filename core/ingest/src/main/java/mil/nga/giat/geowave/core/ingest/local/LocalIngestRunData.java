@@ -13,28 +13,30 @@ import org.apache.commons.pool2.impl.DefaultPooledObject;
 import org.apache.commons.pool2.impl.GenericKeyedObjectPool;
 
 import mil.nga.giat.geowave.core.ingest.GeoWaveData;
+import mil.nga.giat.geowave.core.store.AdapterToIndexMapping;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
+import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.core.store.memory.DataStoreUtils;
 import mil.nga.giat.geowave.core.store.memory.MemoryAdapterStore;
+import mil.nga.giat.geowave.core.store.memory.MemoryIndexStore;
 
 /**
  * This class maintains a pool of index writers keyed by the primary index. In
  * addition, it contains a static method to help create the blocking queue
  * needed by threads to execute ingest of individual GeoWaveData items.
  * 
- * @author mcnuttsl
- * 
  */
 public class LocalIngestRunData implements
 		Closeable
 {
 
-	private final KeyedObjectPool<PrimaryIndex, IndexWriter> indexWriterPool;
+	private final KeyedObjectPool<AdapterToIndexMapping, IndexWriter> indexWriterPool;
 	private final AdapterStore adapterCache;
+	private final IndexStore indexCache;
 	private final DataStore dataStore;
 	private final String[] args;
 
@@ -50,11 +52,24 @@ public class LocalIngestRunData implements
 		indexWriterPool = new GenericKeyedObjectPool<>(
 				new IndexWriterFactory());
 		this.args = args;
+		this.indexCache = new MemoryIndexStore();
 	}
 
 	public WritableDataAdapter<?> getDataAdapter(
 			final GeoWaveData<?> data ) {
 		return data.getAdapter(adapterCache);
+	}
+
+	public void addAdapter(
+			DataAdapter<?> adapter ) {
+		adapterCache.addAdapter(adapter);
+	}
+
+	public void addIndices(
+			final List<PrimaryIndex> indices ) {
+		for (PrimaryIndex index : indices) {
+			if (!indexCache.indexExists(index.getId())) indexCache.addIndex(index);
+		}
 	}
 
 	/**
@@ -67,9 +82,9 @@ public class LocalIngestRunData implements
 	 * @throws Exception
 	 */
 	public IndexWriter getIndexWriter(
-			final PrimaryIndex index )
+			final AdapterToIndexMapping mapping )
 			throws Exception {
-		return indexWriterPool.borrowObject(index);
+		return indexWriterPool.borrowObject(mapping);
 	}
 
 	/**
@@ -81,11 +96,11 @@ public class LocalIngestRunData implements
 	 * @throws Exception
 	 */
 	public void releaseIndexWriter(
-			final PrimaryIndex index,
-			IndexWriter writer )
+			final AdapterToIndexMapping mapping,
+			final IndexWriter writer )
 			throws Exception {
 		indexWriterPool.returnObject(
-				index,
+				mapping,
 				writer);
 	}
 
@@ -110,22 +125,21 @@ public class LocalIngestRunData implements
 	 * return new instances of an index writer for a given primary index.
 	 */
 	public class IndexWriterFactory extends
-			BaseKeyedPooledObjectFactory<PrimaryIndex, IndexWriter>
+			BaseKeyedPooledObjectFactory<AdapterToIndexMapping, IndexWriter>
 	{
 
-		@SuppressWarnings("unchecked")
 		@Override
-		public IndexWriter create(
-				PrimaryIndex index )
+		public IndexWriter<?> create(
+				AdapterToIndexMapping mapping )
 				throws Exception {
-			return dataStore.createIndexWriter(
-					index,
-					DataStoreUtils.DEFAULT_VISIBILITY);
+			return dataStore.createWriter(
+					adapterCache.getAdapter(mapping.getAdapterId()),
+					mapping.getIndices(indexCache));
 		}
 
 		@Override
 		public void destroyObject(
-				PrimaryIndex key,
+				AdapterToIndexMapping key,
 				PooledObject<IndexWriter> p )
 				throws Exception {
 			super.destroyObject(

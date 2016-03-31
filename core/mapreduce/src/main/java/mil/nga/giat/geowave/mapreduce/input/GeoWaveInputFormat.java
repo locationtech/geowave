@@ -136,12 +136,19 @@ public class GeoWaveInputFormat<T> extends
 				context);
 	}
 
-	public static void addIndex(
+	public static void setIndex(
 			final Configuration config,
 			final PrimaryIndex index ) {
-		JobContextIndexStore.addIndex(
+		GeoWaveInputConfigurator.setIndex(
+				CLASS,
 				config,
 				index);
+		// make available to the context index store
+		if (index != null) {
+			JobContextIndexStore.addIndex(
+					config,
+					index);
+		}
 	}
 
 	public static void setMinimumSplitCount(
@@ -205,11 +212,11 @@ public class GeoWaveInputFormat<T> extends
 		return options == null ? new QueryOptions() : options;
 	}
 
-	protected static Index[] getIndices(
+	protected static PrimaryIndex getIndex(
 			final JobContext context ) {
-		return GeoWaveInputConfigurator.searchForIndices(
+		return GeoWaveInputConfigurator.getIndex(
 				CLASS,
-				context);
+				GeoWaveConfiguratorBase.getConfiguration(context));
 	}
 
 	public static String getGeoWaveNamespace(
@@ -260,7 +267,8 @@ public class GeoWaveInputFormat<T> extends
 			final QueryOptions rangeQueryOptions = new QueryOptions(
 					queryOptions);
 			// split may override these
-			rangeQueryOptions.setIndices(getIndices(context));
+			PrimaryIndex index = getIndex(context);
+			if (index != null) rangeQueryOptions.setIndex(index);
 			rangeQueryOptions.setAdapterIds(getAdapterIds(
 					context,
 					adapterStore));
@@ -291,7 +299,8 @@ public class GeoWaveInputFormat<T> extends
 	 */
 	protected static void validateOptions(
 			final JobContext context )
-			throws IOException {// attempt to get each of the GeoWave stores
+			throws IOException {// attempt to get each of the GeoWave
+								// stores
 								// from the job context
 		try {
 			final String namespace = getGeoWaveNamespace(context);
@@ -436,7 +445,7 @@ public class GeoWaveInputFormat<T> extends
 			final QueryOptions queryOptions = getQueryOptions(context);
 			final QueryOptions rangeQueryOptions = new QueryOptions(
 					queryOptions);
-			rangeQueryOptions.setIndices(getIndices(context));
+			rangeQueryOptions.setIndex(getIndex(context));
 			rangeQueryOptions.setAdapterIds(getAdapterIds(
 					context,
 					adapterStore));

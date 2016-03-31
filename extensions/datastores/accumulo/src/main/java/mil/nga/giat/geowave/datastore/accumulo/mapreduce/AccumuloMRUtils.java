@@ -18,7 +18,6 @@ import java.util.TreeSet;
 
 import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
-
 import org.apache.accumulo.core.client.impl.Tables;
 import org.apache.accumulo.core.client.impl.TabletLocator;
 import org.apache.accumulo.core.client.mock.MockInstance;
@@ -27,7 +26,6 @@ import org.apache.accumulo.core.data.ArrayByteSequence;
 import org.apache.accumulo.core.data.ByteSequence;
 import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.Range;
-
 import org.apache.accumulo.core.client.ClientConfiguration;
 import org.apache.accumulo.core.client.Instance;
 import org.apache.accumulo.core.client.TableDeletedException;
@@ -43,7 +41,9 @@ import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
+import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.core.store.adapter.statistics.RowRangeDataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.RowRangeHistogramStatistics;
@@ -56,6 +56,8 @@ import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations;
 import mil.nga.giat.geowave.datastore.accumulo.mapreduce.input.RangeLocationPair;
 import mil.nga.giat.geowave.datastore.accumulo.util.AccumuloUtils;
+import org.apache.commons.lang3.tuple.Pair;
+
 //@formatter:off
 /*if[accumulo.api=1.6]
 import org.apache.accumulo.core.security.Credentials;
@@ -81,6 +83,7 @@ public class AccumuloMRUtils
 			final AdapterStore adapterStore,
 			final DataStatisticsStore statsStore,
 			final IndexStore indexStore,
+			final AdapterIndexMappingStore adapterIndexMappingStore,
 			final Integer minSplits,
 			final Integer maxSplits )
 			throws IOException,
@@ -88,65 +91,73 @@ public class AccumuloMRUtils
 
 		final Map<PrimaryIndex, RowRangeHistogramStatistics<?>> statsCache = new HashMap<PrimaryIndex, RowRangeHistogramStatistics<?>>();
 
-		try (CloseableIterator<Index<?, ?>> indices = queryOptions.getIndices(indexStore)) {
-			final TreeSet<IntermediateSplitInfo> splits = getIntermediateSplits(
+		final List<InputSplit> retVal = new ArrayList<InputSplit>();
+		final TreeSet<IntermediateSplitInfo> splits = new TreeSet<IntermediateSplitInfo>();
+
+		for (Pair<PrimaryIndex, List<DataAdapter<Object>>> indexAdapterPair : queryOptions.getAdaptersWithMinimalSetOfIndices(
+				adapterStore,
+				adapterIndexMappingStore,
+				indexStore)) {
+
+			populateIntermediateSplits(
+					splits,
 					operations,
-					indices,
-					queryOptions.getAdapterIds(adapterStore),
+					indexAdapterPair.getLeft(),
+					indexAdapterPair.getValue(),
 					statsCache,
 					adapterStore,
 					statsStore,
 					maxSplits,
 					query,
 					queryOptions.getAuthorizations());
-
-			// this is an incremental algorithm, it may be better use the target
-			// split count to drive it (ie. to get 3 splits this will split 1
-			// large
-			// range into two down the middle and then split one of those ranges
-			// down the middle to get 3, rather than splitting one range into
-			// thirds)
-			if (!statsCache.isEmpty() && !splits.isEmpty() && (minSplits != null) && (splits.size() < minSplits)) {
-				// set the ranges to at least min splits
-				do {
-					// remove the highest range, split it into 2 and add both
-					// back,
-					// increasing the size by 1
-					final IntermediateSplitInfo highestSplit = splits.pollLast();
-					final IntermediateSplitInfo otherSplit = highestSplit.split(statsCache);
-					splits.add(highestSplit);
-					if (otherSplit == null) {
-						LOGGER.warn("Cannot meet minimum splits");
-						break;
-					}
-					splits.add(otherSplit);
-				}
-				while (splits.size() < minSplits);
-			}
-			else if (((maxSplits != null) && (maxSplits > 0)) && (splits.size() > maxSplits)) {
-				// merge splits to fit within max splits
-				do {
-					// this is the naive approach, remove the lowest two ranges
-					// and
-					// merge them, decreasing the size by 1
-
-					// TODO Ideally merge takes into account locations (as well
-					// as
-					// possibly the index as a secondary criteria) to limit the
-					// number of locations/indices
-					final IntermediateSplitInfo lowestSplit = splits.pollFirst();
-					final IntermediateSplitInfo nextLowestSplit = splits.pollFirst();
-					lowestSplit.merge(nextLowestSplit);
-					splits.add(lowestSplit);
-				}
-				while (splits.size() > maxSplits);
-			}
-			final List<InputSplit> retVal = new ArrayList<InputSplit>();
-			for (final IntermediateSplitInfo split : splits) {
-				retVal.add(split.toFinalSplit());
-			}
-			return retVal;
 		}
+
+		// this is an incremental algorithm, it may be better use the target
+		// split count to drive it (ie. to get 3 splits this will split 1
+		// large
+		// range into two down the middle and then split one of those ranges
+		// down the middle to get 3, rather than splitting one range into
+		// thirds)
+		if (!statsCache.isEmpty() && !splits.isEmpty() && (minSplits != null) && (splits.size() < minSplits)) {
+			// set the ranges to at least min splits
+			do {
+				// remove the highest range, split it into 2 and add both
+				// back,
+				// increasing the size by 1
+				final IntermediateSplitInfo highestSplit = splits.pollLast();
+				final IntermediateSplitInfo otherSplit = highestSplit.split(statsCache);
+				splits.add(highestSplit);
+				if (otherSplit == null) {
+					LOGGER.warn("Cannot meet minimum splits");
+					break;
+				}
+				splits.add(otherSplit);
+			}
+			while (splits.size() < minSplits);
+		}
+		else if (((maxSplits != null) && (maxSplits > 0)) && (splits.size() > maxSplits)) {
+			// merge splits to fit within max splits
+			do {
+				// this is the naive approach, remove the lowest two ranges
+				// and
+				// merge them, decreasing the size by 1
+
+				// TODO Ideally merge takes into account locations (as well
+				// as
+				// possibly the index as a secondary criteria) to limit the
+				// number of locations/indices
+				final IntermediateSplitInfo lowestSplit = splits.pollFirst();
+				final IntermediateSplitInfo nextLowestSplit = splits.pollFirst();
+				lowestSplit.merge(nextLowestSplit);
+				splits.add(lowestSplit);
+			}
+			while (splits.size() > maxSplits);
+		}
+
+		for (final IntermediateSplitInfo split : splits) {
+			retVal.add(split.toFinalSplit());
+		}
+		return retVal;
 	}
 
 	private static final BigInteger ONE = new BigInteger(
@@ -154,7 +165,7 @@ public class AccumuloMRUtils
 
 	private static RowRangeHistogramStatistics<?> getRangeStats(
 			final PrimaryIndex index,
-			final List<ByteArrayId> adapterIds,
+			final List<DataAdapter<Object>> adapters,
 			final AdapterStore adapterStore,
 			final DataStatisticsStore store,
 			final String[] authorizations )
@@ -162,9 +173,9 @@ public class AccumuloMRUtils
 			AccumuloSecurityException,
 			IOException {
 		RowRangeHistogramStatistics<?> singleStats = null;
-		for (final ByteArrayId adapterId : adapterIds) {
+		for (final DataAdapter<?> adapter : adapters) {
 			final RowRangeHistogramStatistics<?> rowStat = (RowRangeHistogramStatistics<?>) store.getDataStatistics(
-					adapterId,
+					adapter.getAdapterId(),
 					RowRangeHistogramStatistics.composeId(index.getId()),
 					authorizations);
 			if (singleStats == null) {
@@ -215,10 +226,11 @@ public class AccumuloMRUtils
 				true);
 	}
 
-	private static TreeSet<IntermediateSplitInfo> getIntermediateSplits(
+	private static TreeSet<IntermediateSplitInfo> populateIntermediateSplits(
+			final TreeSet<IntermediateSplitInfo> splits,
 			final AccumuloOperations operations,
-			final CloseableIterator<Index<?, ?>> indices,
-			final List<ByteArrayId> adapterIds,
+			final PrimaryIndex index,
+			final List<DataAdapter<Object>> adapters,
 			final Map<PrimaryIndex, RowRangeHistogramStatistics<?>> statsCache,
 			final AdapterStore adapterStore,
 			final DataStatisticsStore statsStore,
@@ -227,84 +239,79 @@ public class AccumuloMRUtils
 			final String[] authorizations )
 			throws IOException {
 
-		final TreeSet<IntermediateSplitInfo> splits = new TreeSet<IntermediateSplitInfo>();
+		if ((query != null) && !query.isSupported(index)) {
+			return splits;
+		}
+		Range fullrange;
+		try {
+			fullrange = getRangeMax(
+					index,
+					adapterStore,
+					statsStore,
+					authorizations);
+		}
+		catch (final AccumuloException e) {
+			fullrange = new Range();
+			LOGGER.warn(
+					"Cannot ascertain the full range of the data",
+					e);
+		}
+		catch (final AccumuloSecurityException e) {
+			fullrange = new Range();
+			LOGGER.warn(
+					"Cannot ascertain the full range of the data",
+					e);
+		}
 
-		while (indices.hasNext()) {
-			final PrimaryIndex index = (PrimaryIndex) indices.next();
-			if ((query != null) && !query.isSupported(index)) {
-				continue;
-			}
-			Range fullrange;
-			try {
-				fullrange = getRangeMax(
-						index,
-						adapterStore,
-						statsStore,
-						authorizations);
-			}
-			catch (final AccumuloException e) {
-				fullrange = new Range();
-				LOGGER.warn(
-						"Cannot ascertain the full range of the data",
-						e);
-			}
-			catch (final AccumuloSecurityException e) {
-				fullrange = new Range();
-				LOGGER.warn(
-						"Cannot ascertain the full range of the data",
-						e);
-			}
-
-			final String tableName = AccumuloUtils.getQualifiedTableName(
-					operations.getGeoWaveNamespace(),
-					index.getId().getString());
-			final NumericIndexStrategy indexStrategy = index.getIndexStrategy();
-			final TreeSet<Range> ranges;
-			if (query != null) {
-				final List<MultiDimensionalNumericData> indexConstraints = query.getIndexConstraints(indexStrategy);
-				if ((maxSplits != null) && (maxSplits > 0)) {
-					ranges = AccumuloUtils.byteArrayRangesToAccumuloRanges(DataStoreUtils.constraintsToByteArrayRanges(
-							indexConstraints,
-							indexStrategy,
-							maxSplits));
-				}
-				else {
-					ranges = AccumuloUtils.byteArrayRangesToAccumuloRanges(DataStoreUtils.constraintsToByteArrayRanges(
-							indexConstraints,
-							indexStrategy,
-							-1));
-				}
-				if (ranges.size() == 1) {
-					final Range range = ranges.first();
-					if (range.isInfiniteStartKey() || range.isInfiniteStopKey()) {
-						ranges.remove(range);
-						ranges.add(fullrange.clip(range));
-					}
-				}
+		final String tableName = AccumuloUtils.getQualifiedTableName(
+				operations.getGeoWaveNamespace(),
+				index.getId().getString());
+		final NumericIndexStrategy indexStrategy = index.getIndexStrategy();
+		final TreeSet<Range> ranges;
+		if (query != null) {
+			final List<MultiDimensionalNumericData> indexConstraints = query.getIndexConstraints(indexStrategy);
+			if ((maxSplits != null) && (maxSplits > 0)) {
+				ranges = AccumuloUtils.byteArrayRangesToAccumuloRanges(DataStoreUtils.constraintsToByteArrayRanges(
+						indexConstraints,
+						indexStrategy,
+						maxSplits));
 			}
 			else {
-
-				ranges = new TreeSet<Range>();
-				ranges.add(fullrange);
-				if (LOGGER.isTraceEnabled()) {
-					LOGGER.trace("Protected range: " + fullrange);
+				ranges = AccumuloUtils.byteArrayRangesToAccumuloRanges(DataStoreUtils.constraintsToByteArrayRanges(
+						indexConstraints,
+						indexStrategy,
+						-1));
+			}
+			if (ranges.size() == 1) {
+				final Range range = ranges.first();
+				if (range.isInfiniteStartKey() || range.isInfiniteStopKey()) {
+					ranges.remove(range);
+					ranges.add(fullrange.clip(range));
 				}
 			}
-			// get the metadata information for these ranges
-			final Map<String, Map<KeyExtent, List<Range>>> tserverBinnedRanges = new HashMap<String, Map<KeyExtent, List<Range>>>();
-			TabletLocator tl;
-			try {
-				final Instance instance = operations.getInstance();
-				final String tableId = Tables.getTableId(
-						instance,
-						tableName);
+		}
+		else {
+			ranges = new TreeSet<Range>();
+			ranges.add(fullrange);
+			if (LOGGER.isTraceEnabled()) {
+				LOGGER.trace("Protected range: " + fullrange);
+			}
+		}
+		// get the metadata information for these ranges
+		final Map<String, Map<KeyExtent, List<Range>>> tserverBinnedRanges = new HashMap<String, Map<KeyExtent, List<Range>>>();
+		TabletLocator tl;
+		try {
+			final Instance instance = operations.getInstance();
+			final String tableId = Tables.getTableId(
+					instance,
+					tableName);
 
-				Credentials credentials = new Credentials(
-						operations.getUsername(),
-						new PasswordToken(
-								operations.getPassword()));
+			Credentials credentials = new Credentials(
+					operations.getUsername(),
+					new PasswordToken(
+							operations.getPassword()));
 
-				// @formatter:off
+			// @formatter:off
 				/*if[accumulo.api=1.6]
 				tl = getTabletLocator(
 						instance,
@@ -321,99 +328,99 @@ public class AccumuloMRUtils
 				Object clientContextOrCredentials = clientContext;
 				/*end[accumulo.api=1.6]*/
 				// @formatter:on
-				// its possible that the cache could contain complete, but
-				// old information about a tables tablets... so clear it
+			// its possible that the cache could contain complete, but
+			// old information about a tables tablets... so clear it
+			tl.invalidateCache();
+			final List<Range> rangeList = new ArrayList<Range>(
+					ranges);
+			final Random r = new Random();
+			while (!binRanges(
+					rangeList,
+					clientContextOrCredentials,
+					tserverBinnedRanges,
+					tl)) {
+				if (!(instance instanceof MockInstance)) {
+					if (!Tables.exists(
+							instance,
+							tableId)) {
+						throw new TableDeletedException(
+								tableId);
+					}
+					if (Tables.getTableState(
+							instance,
+							tableId) == TableState.OFFLINE) {
+						throw new TableOfflineException(
+								instance,
+								tableId);
+					}
+				}
+				tserverBinnedRanges.clear();
+				LOGGER.warn("Unable to locate bins for specified ranges. Retrying.");
+				UtilWaitThread.sleep(100 + r.nextInt(101));
+				// sleep randomly between 100 and 200 ms
 				tl.invalidateCache();
-				final List<Range> rangeList = new ArrayList<Range>(
-						ranges);
-				final Random r = new Random();
-				while (!binRanges(
-						rangeList,
-						clientContextOrCredentials,
-						tserverBinnedRanges,
-						tl)) {
-					if (!(instance instanceof MockInstance)) {
-						if (!Tables.exists(
-								instance,
-								tableId)) {
-							throw new TableDeletedException(
-									tableId);
-						}
-						if (Tables.getTableState(
-								instance,
-								tableId) == TableState.OFFLINE) {
-							throw new TableOfflineException(
-									instance,
-									tableId);
-						}
-					}
-					tserverBinnedRanges.clear();
-					LOGGER.warn("Unable to locate bins for specified ranges. Retrying.");
-					UtilWaitThread.sleep(100 + r.nextInt(101));
-					// sleep randomly between 100 and 200 ms
-					tl.invalidateCache();
-				}
 			}
-			catch (final Exception e) {
-				throw new IOException(
-						e);
+		}
+		catch (final Exception e) {
+			throw new IOException(
+					e);
+		}
+
+		final HashMap<String, String> hostNameCache = new HashMap<String, String>();
+		for (final Entry<String, Map<KeyExtent, List<Range>>> tserverBin : tserverBinnedRanges.entrySet()) {
+			final String tabletServer = tserverBin.getKey();
+			final String ipAddress = tabletServer.split(
+					":",
+					2)[0];
+
+			String location = hostNameCache.get(ipAddress);
+			if (location == null) {
+				final InetAddress inetAddress = InetAddress.getByName(ipAddress);
+				location = inetAddress.getHostName();
+				hostNameCache.put(
+						ipAddress,
+						location);
 			}
+			for (final Entry<KeyExtent, List<Range>> extentRanges : tserverBin.getValue().entrySet()) {
+				final Range keyExtent = extentRanges.getKey().toDataRange();
+				final Map<PrimaryIndex, List<RangeLocationPair>> splitInfo = new HashMap<PrimaryIndex, List<RangeLocationPair>>();
+				final List<RangeLocationPair> rangeList = new ArrayList<RangeLocationPair>();
+				for (final Range range : extentRanges.getValue()) {
 
-			final HashMap<String, String> hostNameCache = new HashMap<String, String>();
-			for (final Entry<String, Map<KeyExtent, List<Range>>> tserverBin : tserverBinnedRanges.entrySet()) {
-				final String tabletServer = tserverBin.getKey();
-				final String ipAddress = tabletServer.split(
-						":",
-						2)[0];
-
-				String location = hostNameCache.get(ipAddress);
-				if (location == null) {
-					final InetAddress inetAddress = InetAddress.getByName(ipAddress);
-					location = inetAddress.getHostName();
-					hostNameCache.put(
-							ipAddress,
-							location);
+					final Range clippedRange = keyExtent.clip(range);
+					final double cardinality = getCardinality(
+							getHistStats(
+									index,
+									adapters,
+									adapterStore,
+									statsStore,
+									statsCache,
+									authorizations),
+							clippedRange);
+					if (!(fullrange.beforeStartKey(clippedRange.getEndKey()) || fullrange.afterEndKey(clippedRange.getStartKey()))) {
+						rangeList.add(new RangeLocationPair(
+								clippedRange,
+								location,
+								cardinality < 1 ? 1.0 : cardinality));
+					}
+					else {
+						LOGGER.info("Query split outside of range");
+					}
+					if (LOGGER.isTraceEnabled()) {
+						LOGGER.warn("Clipped range: " + rangeList.get(
+								rangeList.size() - 1).getRange());
+					}
 				}
-				for (final Entry<KeyExtent, List<Range>> extentRanges : tserverBin.getValue().entrySet()) {
-					final Range keyExtent = extentRanges.getKey().toDataRange();
-					final Map<PrimaryIndex, List<RangeLocationPair>> splitInfo = new HashMap<PrimaryIndex, List<RangeLocationPair>>();
-					final List<RangeLocationPair> rangeList = new ArrayList<RangeLocationPair>();
-					for (final Range range : extentRanges.getValue()) {
-
-						final Range clippedRange = keyExtent.clip(range);
-						final double cardinality = getCardinality(
-								getHistStats(
-										index,
-										adapterIds,
-										adapterStore,
-										statsStore,
-										statsCache,
-										authorizations),
-								clippedRange);
-						if (!(fullrange.beforeStartKey(clippedRange.getEndKey()) || fullrange.afterEndKey(clippedRange.getStartKey()))) {
-							rangeList.add(new RangeLocationPair(
-									clippedRange,
-									location,
-									cardinality < 1 ? 1.0 : cardinality));
-						}
-						else {
-							LOGGER.info("Query split outside of range");
-						}
-						if (LOGGER.isTraceEnabled()) {
-							LOGGER.warn("Clipped range: " + rangeList.get(
-									rangeList.size() - 1).getRange());
-						}
-					}
-					if (!rangeList.isEmpty()) {
-						splitInfo.put(
-								index,
-								rangeList);
-						splits.add(new IntermediateSplitInfo(
-								splitInfo));
-					}
+				if (!rangeList.isEmpty()) {
+					splitInfo.put(
+							index,
+							rangeList);
+					splits.add(new IntermediateSplitInfo(
+							splitInfo));
 				}
 			}
 		}
+
 		return splits;
 	}
 
@@ -427,7 +434,7 @@ public class AccumuloMRUtils
 
 	private static RowRangeHistogramStatistics<?> getHistStats(
 			final PrimaryIndex index,
-			final List<ByteArrayId> adapterIds,
+			final List<DataAdapter<Object>> adapters,
 			final AdapterStore adapterStore,
 			final DataStatisticsStore statsStore,
 			final Map<PrimaryIndex, RowRangeHistogramStatistics<?>> statsCache,
@@ -440,7 +447,7 @@ public class AccumuloMRUtils
 
 				rangeStats = getRangeStats(
 						index,
-						adapterIds,
+						adapters,
 						adapterStore,
 						statsStore,
 						authorizations);

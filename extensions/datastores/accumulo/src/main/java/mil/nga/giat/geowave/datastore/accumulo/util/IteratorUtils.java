@@ -1,9 +1,9 @@
 package mil.nga.giat.geowave.datastore.accumulo.util;
 
-import mil.nga.giat.geowave.datastore.accumulo.AccumuloRowId;
-
 import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.PartialKey;
+
+import mil.nga.giat.geowave.datastore.accumulo.AccumuloRowId;
 
 public class IteratorUtils
 {

@@ -2,11 +2,13 @@ package mil.nga.giat.geowave.datastore.accumulo;
 
 import mil.nga.giat.geowave.core.store.DataStoreFactorySpi;
 import mil.nga.giat.geowave.core.store.StoreFactoryFamilySpi;
+import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStoreFactorySpi;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStoreFactorySpi;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStoreFactorySpi;
 import mil.nga.giat.geowave.core.store.index.IndexStoreFactorySpi;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndexDataStoreFactorySpi;
 import mil.nga.giat.geowave.datastore.accumulo.index.secondary.AccumuloSecondaryIndexDataStoreFactory;
+import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloAdapterIndexMappingStoreFactory;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloAdapterStoreFactory;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloDataStatisticsStoreFactory;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloIndexStoreFactory;
@@ -38,6 +40,11 @@ public class AccumuloStoreFactoryFamily extends
 	@Override
 	public SecondaryIndexDataStoreFactorySpi getSecondaryIndexDataStore() {
 		return new AccumuloSecondaryIndexDataStoreFactory();
+	}
+
+	@Override
+	public AdapterIndexMappingStoreFactorySpi getAdapterIndexMappingStoreFactory() {
+		return new AccumuloAdapterIndexMappingStoreFactory();
 	}
 
 }

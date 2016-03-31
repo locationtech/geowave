@@ -7,9 +7,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.ByteArrayUtils;
-
 import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.Value;
 import org.apache.accumulo.core.iterators.Filter;
@@ -19,6 +16,9 @@ import org.apache.accumulo.core.iterators.user.WholeRowIterator;
 import org.apache.log4j.Logger;
 
 import com.google.common.io.BaseEncoding;
+
+import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.index.ByteArrayUtils;
 
 public class SingleEntryFilterIterator extends
 		Filter

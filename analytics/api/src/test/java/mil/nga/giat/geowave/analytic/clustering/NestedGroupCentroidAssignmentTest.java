@@ -21,7 +21,6 @@ import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.core.store.memory.DataStoreUtils;
 import mil.nga.giat.geowave.core.store.memory.MemoryStoreFactoryFamily;
 
 import org.geotools.feature.type.BasicFeatureTypes;
@@ -41,12 +40,10 @@ public class NestedGroupCentroidAssignmentTest
 			final PrimaryIndex index,
 			final T entry )
 			throws IOException {
-		try (IndexWriter writer = dataStore.createIndexWriter(
-				index,
-				DataStoreUtils.DEFAULT_VISIBILITY)) {
-			writer.write(
-					adapter,
-					entry);
+		try (IndexWriter writer = dataStore.createWriter(
+				adapter,
+				index)) {
+			writer.write(entry);
 			writer.close();
 		}
 	}
