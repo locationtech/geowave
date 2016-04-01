@@ -1,7 +1,6 @@
 package mil.nga.giat.geowave.test;
 
 import java.io.File;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Calendar;
@@ -26,7 +25,6 @@ import org.apache.commons.lang3.SystemUtils;
 import org.apache.hadoop.fs.FileUtil;
 import org.apache.hadoop.util.VersionInfo;
 import org.apache.hadoop.util.VersionUtil;
-import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.geotools.data.DataStore;
 import org.geotools.data.DataStoreFinder;
@@ -180,60 +178,6 @@ abstract public class GeoWaveTestEnvironment
 								config,
 								GeoWaveTestEnvironment.class);
 
-						if (SystemUtils.IS_OS_WINDOWS && isYarn()) {
-							// this must happen after instantiating Mini
-							// Accumulo Cluster because it ensures the accumulo
-							// directory is empty or it will fail, but must
-							// happen before the cluster is started because yarn
-							// expects winutils.exe to exist within a bin
-							// directory in the mini accumulo cluster directory
-							// (mini accumulo cluster will always set this
-							// directory as hadoop_home)
-							LOGGER.info("Running YARN on windows requires a local installation of Hadoop");
-							LOGGER.info("'HADOOP_HOME' must be set and 'PATH' must contain %HADOOP_HOME%/bin");
-
-							final Map<String, String> env = System.getenv();
-							String hadoopHome = System.getProperty("hadoop.home.dir");
-							if (hadoopHome == null) {
-								hadoopHome = env.get("HADOOP_HOME");
-							}
-							boolean success = false;
-							if (hadoopHome != null) {
-								final File hadoopDir = new File(
-										hadoopHome);
-								if (hadoopDir.exists()) {
-									final File binDir = new File(
-											TEMP_DIR,
-											"bin");
-									if (binDir.mkdir()) {
-										FileUtils.copyFile(
-												new File(
-														hadoopDir + File.separator + "bin",
-														HADOOP_WINDOWS_UTIL),
-												new File(
-														binDir,
-														HADOOP_WINDOWS_UTIL));
-										success = true;
-									}
-									else {
-										final String[] r = binDir.list(new FilenameFilter() {
-											@Override
-											public boolean accept(
-													File arg0,
-													String arg1 ) {
-												return arg1.equals(HADOOP_WINDOWS_UTIL);
-											}
-										});
-										success = r != null && r.length > 0;
-									}
-								}
-							}
-							if (!success) {
-								LOGGER.error("'HADOOP_HOME' environment variable is not set or <HADOOP_HOME>/bin/winutils.exe does not exist");
-								return;
-							}
-						}
-
 						miniAccumulo.start();
 						zookeeper = miniAccumulo.getZooKeepers();
 						accumuloInstance = miniAccumulo.getInstanceName();
@@ -251,8 +195,6 @@ abstract public class GeoWaveTestEnvironment
 						Assert.fail("Unable to start mini accumulo instance: '" + e.getLocalizedMessage() + "'");
 					}
 				}
-				// System.out.println(accumuloInstance);
-				// System.out.println(zookeeper);
 				try {
 					accumuloOperations = new BasicAccumuloOperations(
 							zookeeper,
