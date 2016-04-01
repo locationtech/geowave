@@ -3,6 +3,7 @@ package mil.nga.giat.geowave.adapter.vector.query.cql;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertNotNull;
 import mil.nga.giat.geowave.adapter.vector.util.FeatureDataUtils;
 
 import org.apache.commons.lang3.tuple.Pair;
@@ -12,7 +13,6 @@ import org.geotools.filter.FilterFactoryImpl;
 import org.geotools.filter.identity.FeatureIdImpl;
 import org.geotools.filter.text.cql2.CQL;
 import org.geotools.filter.text.cql2.CQLException;
-import org.geotools.filter.text.ecql.ECQL;
 import org.junit.Before;
 import org.junit.Test;
 import org.opengis.feature.simple.SimpleFeature;
@@ -40,11 +40,18 @@ public class FilterToCQLToolTest
 	}
 
 	@Test
+	public void testDate()
+			throws CQLException {
+		assertNotNull(FilterToCQLTool.toFilter("when = 2005-05-19T21:32:56Z"));
+	}
+
+	@Test
 	public void tesFid() {
 		final FilterFactoryImpl factory = new FilterFactoryImpl();
 		final Id f = factory.id(new FeatureIdImpl(
 				"123-abc"));
 		final String ss = FilterToCQLTool.toCQL(f);
+		System.out.println(ss);
 		assertTrue(ss.contains("'123-abc'"));
 
 	}
@@ -63,15 +70,24 @@ public class FilterToCQLToolTest
 	}
 
 	@Test
-	public void testDWithin()
+	public void testDWithinFromCQLFilter()
 			throws CQLException {
 		final Filter filter = CQL.toFilter("DWITHIN(geom, POINT(-122.7668 0.4979), 233.7, meters)");
 		final String gtFilterStr = FilterToCQLTool.toCQL(filter);
-		// TODO: geotools 13.x and geotools 14.x produce different results for
-		// the below assertion
-		// assertEquals(
-		// "INTERSECTS(geom, POLYGON ((-122.76470055844142 0.4979, -122.76474089862228 0.4974904192702817, -122.76486036891433 0.4970965784983109, -122.76505437814123 0.4967336127640861, -122.76531547063722 0.4964154706372199, -122.76563361276409 0.4961543781412318, -122.76599657849832 0.49596036891432, -122.76639041927028 0.4958408986222733, -122.7668 0.4958005584414154, -122.76720958072973 0.4958408986222733, -122.76760342150169 0.49596036891432, -122.76796638723592 0.4961543781412318, -122.76828452936279 0.4964154706372199, -122.76854562185878 0.4967336127640861, -122.76873963108568 0.4970965784983109, -122.76885910137773 0.4974904192702817, -122.76889944155859 0.4979, -122.76885910137773 0.4983095807297183, -122.76873963108568 0.4987034215016891, -122.76854562185878 0.499066387235914, -122.76828452936279 0.4993845293627801, -122.76796638723592 0.4996456218587683, -122.76760342150169 0.49983963108568, -122.76720958072973 0.4999591013777267, -122.7668 0.4999994415585847, -122.76639041927028 0.4999591013777267, -122.76599657849832 0.49983963108568, -122.76563361276409 0.4996456218587683, -122.76531547063722 0.4993845293627801, -122.76505437814123 0.499066387235914, -122.76486036891433 0.4987034215016891, -122.76474089862228 0.4983095807297183, -122.76470055844142 0.4979)))",
-		// gtFilterStr);
+		assertTrue(gtFilterStr.contains("INTERSECTS(geom, POLYGON (("));
+		System.out.println(gtFilterStr);
+
+		testFilter(FilterToCQLTool.toFilter(gtFilterStr));
+	}
+
+	@Test
+	public void testDWithinFromTool()
+			throws CQLException {
+		testFilter(FilterToCQLTool.toFilter("DWITHIN(geom, POINT(-122.7668 0.4979), 233.7, meters)"));
+	}
+
+	public void testFilter(
+			Filter gtFilter ) {
 
 		final SimpleFeature newFeature = FeatureDataUtils.buildFeature(
 				type,
@@ -87,7 +103,6 @@ public class FilterToCQLToolTest
 
 				});
 
-		final Filter gtFilter = ECQL.toFilter(gtFilterStr);
 		assertTrue(gtFilter.evaluate(newFeature));
 
 		final SimpleFeature newFeatureToFail = FeatureDataUtils.buildFeature(
