@@ -25,6 +25,7 @@ import mil.nga.giat.geowave.core.store.query.DistributableQuery
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter
 import org.geotools.feature.simple.SimpleFeatureBuilder
 import mil.nga.giat.geowave.analytic.PropertyManagement
+import mil.nga.giat.geowave.core.ingest.GeoWaveData
 
 
 /**
@@ -121,7 +122,7 @@ object GeoWaveRDD {
 
     //create the job
     val job = new org.apache.hadoop.mapreduce.Job(conf)
-    job.setOutputKeyClass(classOf[GeoWaveOutputKey])
+    job.setOutputKeyClass(classOf[GeoWaveOutputKey[SimpleFeature]])
     job.setOutputValueClass(classOf[SimpleFeature])
     job.setOutputFormatClass(classOf[GeoWaveOutputFormat])
 
@@ -130,8 +131,8 @@ object GeoWaveRDD {
     val indexId = sc.broadcast(index.getId())
 
     //map to a pair containing the output key and the output value
-    inputRDD.mapToPair(new PairFunction[V, GeoWaveOutputKey, OutputType] {
-      override def call(inputValue: V): (GeoWaveOutputKey, OutputType) = {
+    inputRDD.mapToPair(new PairFunction[V, GeoWaveOutputKey[SimpleFeature], OutputType] {
+      override def call(inputValue: V): (GeoWaveOutputKey[SimpleFeature], OutputType) = {
         (new GeoWaveOutputKey(adapterId.value, indexId.value), toOutput(inputValue))
       }
     }) saveAsNewAPIHadoopDataset (job.getConfiguration)

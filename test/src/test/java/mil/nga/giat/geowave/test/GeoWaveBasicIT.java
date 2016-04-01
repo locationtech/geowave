@@ -6,17 +6,44 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import org.apache.accumulo.core.client.AccumuloException;
+import org.apache.accumulo.core.client.AccumuloSecurityException;
+import org.apache.accumulo.core.client.TableNotFoundException;
+import org.apache.commons.math.util.MathUtils;
+import org.apache.log4j.Logger;
+import org.geotools.feature.AttributeTypeBuilder;
+import org.geotools.feature.simple.SimpleFeatureBuilder;
+import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
+import org.geotools.filter.text.cql2.CQLException;
+import org.junit.Assert;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.opengis.feature.Property;
+import org.opengis.feature.simple.SimpleFeature;
+import org.opengis.feature.simple.SimpleFeatureType;
+import org.opengis.filter.Filter;
+
+import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.Envelope;
+import com.vividsolutions.jts.geom.Geometry;
+
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
+import mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
+import mil.nga.giat.geowave.adapter.vector.export.VectorLocalExportCommand;
+import mil.nga.giat.geowave.adapter.vector.export.VectorLocalExportOptions;
 import mil.nga.giat.geowave.adapter.vector.stats.FeatureBoundingBoxStatistics;
 import mil.nga.giat.geowave.adapter.vector.stats.FeatureNumericRangeStatistics;
+import mil.nga.giat.geowave.adapter.vector.utils.TimeDescriptors;
 import mil.nga.giat.geowave.core.geotime.GeometryUtils;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
 import mil.nga.giat.geowave.core.geotime.store.statistics.BoundingBoxDataStatistics;
@@ -24,6 +51,7 @@ import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.ingest.GeoWaveData;
 import mil.nga.giat.geowave.core.ingest.local.LocalFileIngestPlugin;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
+import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.DataStoreEntryInfo;
 import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.IngestCallback;
@@ -52,29 +80,11 @@ import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloDataStatisticsSt
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloIndexStore;
 import mil.nga.giat.geowave.format.geotools.vector.GeoToolsVectorDataStoreIngestPlugin;
 
-import org.apache.accumulo.core.client.AccumuloException;
-import org.apache.accumulo.core.client.AccumuloSecurityException;
-import org.apache.accumulo.core.client.TableNotFoundException;
-import org.apache.commons.math.util.MathUtils;
-import org.apache.log4j.Logger;
-import org.geotools.feature.AttributeTypeBuilder;
-import org.geotools.feature.simple.SimpleFeatureBuilder;
-import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.opengis.feature.Property;
-import org.opengis.feature.simple.SimpleFeature;
-import org.opengis.feature.simple.SimpleFeatureType;
-import org.opengis.filter.Filter;
-import org.slf4j.LoggerFactory;
-
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.Geometry;
-
 public class GeoWaveBasicIT extends
 		GeoWaveTestEnvironment
 {
+	private static final SimpleDateFormat CQL_DATE_FORMAT = new SimpleDateFormat(
+			"yyyy-MM-dd'T'hh:mm:ss'Z'");
 	private final static Logger LOGGER = Logger.getLogger(GeoWaveBasicIT.class);
 	private static final String TEST_DATA_ZIP_RESOURCE_PATH = TEST_RESOURCE_PACKAGE + "basic-testdata.zip";
 	private static final String TEST_FILTER_PACKAGE = TEST_CASE_BASE + "filter/";
@@ -95,6 +105,8 @@ public class GeoWaveBasicIT extends
 	private static final String TEST_POLYGON_FILTER_FILE = TEST_FILTER_PACKAGE + "Polygon-Filter.shp";
 	private static final String TEST_BOX_TEMPORAL_FILTER_FILE = TEST_FILTER_PACKAGE + "Box-Temporal-Filter.shp";
 	private static final String TEST_POLYGON_TEMPORAL_FILTER_FILE = TEST_FILTER_PACKAGE + "Polygon-Temporal-Filter.shp";
+	private static final String TEST_EXPORT_DIRECTORY = "export";
+	private static final String TEST_BASE_EXPORT_FILE_NAME = "basicIT-export.avro";
 
 	@BeforeClass
 	public static void extractTestFiles()
@@ -117,7 +129,7 @@ public class GeoWaveBasicIT extends
 	}
 
 	public void testIngestAndQuerySpatialPointsAndLines(
-			int nthreads ) {
+			final int nthreads ) {
 		System.getProperties().put(
 				"AccumuloIndexWriter.skipFlush",
 				"true");
@@ -205,6 +217,7 @@ public class GeoWaveBasicIT extends
 			}
 			Assert.fail("Error occurred while testing a bounding box stats on spatial index: '" + e.getLocalizedMessage() + "'");
 		}
+
 		try {
 			testDelete(
 					new File(
@@ -284,7 +297,7 @@ public class GeoWaveBasicIT extends
 		}
 	}
 
-	public void testStats(
+	private void testStats(
 			final File[] inputFiles,
 			final PrimaryIndex index,
 			final boolean multithreaded ) {
@@ -435,6 +448,139 @@ public class GeoWaveBasicIT extends
 		}
 	}
 
+	private void testSpatialTemporalLocalExportAndReingestWithCQL(
+			final URL filterURL )
+			throws CQLException,
+			IOException {
+
+		final SimpleFeature savedFilter = resourceToFeature(filterURL);
+
+		final Geometry filterGeometry = (Geometry) savedFilter.getDefaultGeometry();
+		final Object startObj = savedFilter.getAttribute(TEST_FILTER_START_TIME_ATTRIBUTE_NAME);
+		final Object endObj = savedFilter.getAttribute(TEST_FILTER_END_TIME_ATTRIBUTE_NAME);
+		Date startDate = null, endDate = null;
+		if ((startObj != null) && (endObj != null)) {
+			// if we can resolve start and end times, make it a spatial temporal
+			// query
+			if (startObj instanceof Calendar) {
+				startDate = ((Calendar) startObj).getTime();
+			}
+			else if (startObj instanceof Date) {
+				startDate = (Date) startObj;
+			}
+			if (endObj instanceof Calendar) {
+				endDate = ((Calendar) endObj).getTime();
+			}
+			else if (endObj instanceof Date) {
+				endDate = (Date) endObj;
+			}
+		}
+		final AccumuloIndexStore indexStore = new AccumuloIndexStore(
+				accumuloOperations);
+		final AccumuloAdapterStore adapterStore = new AccumuloAdapterStore(
+				accumuloOperations);
+		final DataStore dataStore = new AccumuloDataStore(
+				accumuloOperations);
+		final VectorLocalExportCommand exportCommand = new VectorLocalExportCommand();
+		final VectorLocalExportOptions options = exportCommand.getOptions();
+		final File exportDir = new File(
+				TEMP_DIR,
+				TEST_EXPORT_DIRECTORY);
+		exportDir.mkdir();
+
+		options.setDataStore(dataStore);
+		options.setIndexStore(indexStore);
+		options.setAdapterStore(adapterStore);
+		options.setBatchSize(10000);
+		final Envelope env = filterGeometry.getEnvelopeInternal();
+		final double east = env.getMaxX();
+		final double west = env.getMinX();
+		final double south = env.getMinY();
+		final double north = env.getMaxY();
+		try (CloseableIterator<DataAdapter<?>> adapterIt = adapterStore.getAdapters()) {
+			while (adapterIt.hasNext()) {
+				final DataAdapter<?> adapter = adapterIt.next();
+				List<String> adapterIds = new ArrayList<String>();
+				adapterIds.add(adapter.getAdapterId().getString());
+				options.setAdapterIds(adapterIds);
+				if (adapter instanceof GeotoolsFeatureDataAdapter) {
+					final GeotoolsFeatureDataAdapter gtAdapter = (GeotoolsFeatureDataAdapter) adapter;
+					final TimeDescriptors timeDesc = gtAdapter.getTimeDescriptors();
+
+					String startTimeAttribute;
+					if (timeDesc.getStartRange() != null) {
+						startTimeAttribute = timeDesc.getStartRange().getLocalName();
+					}
+					else {
+						startTimeAttribute = timeDesc.getTime().getLocalName();
+					}
+					final String endTimeAttribute;
+					if (timeDesc.getEndRange() != null) {
+						endTimeAttribute = timeDesc.getEndRange().getLocalName();
+					}
+					else {
+						endTimeAttribute = timeDesc.getTime().getLocalName();
+					}
+					final String geometryAttribute = gtAdapter.getType().getGeometryDescriptor().getLocalName();
+
+					final String cqlPredicate = String.format(
+							"BBOX(\"%s\",%f,%f,%f,%f) AND \"%s\" <= '%s' AND \"%s\" >= '%s'",
+							geometryAttribute,
+							west,
+							south,
+							east,
+							north,
+							startTimeAttribute,
+							CQL_DATE_FORMAT.format(endDate),
+							endTimeAttribute,
+							CQL_DATE_FORMAT.format(startDate));
+					options.setOutputFile(new File(
+							exportDir,
+							adapter.getAdapterId().getString() + TEST_BASE_EXPORT_FILE_NAME));
+					options.setCqlFilter(cqlPredicate);
+					exportCommand.run();
+				}
+			}
+		}
+		try {
+			accumuloOperations.deleteAll();
+		}
+		catch (TableNotFoundException | AccumuloSecurityException | AccumuloException ex) {
+			LOGGER.error(
+					"Unable to clear accumulo namespace",
+					ex);
+		}
+		testLocalIngest(
+				DimensionalityType.SPATIAL_TEMPORAL,
+				exportDir.getAbsolutePath(),
+				"avro",
+				4);
+		try {
+			testQuery(
+					new File(
+							TEST_BOX_TEMPORAL_FILTER_FILE).toURI().toURL(),
+					new URL[] {
+						new File(
+								HAIL_EXPECTED_BOX_TEMPORAL_FILTER_RESULTS_FILE).toURI().toURL(),
+						new File(
+								TORNADO_TRACKS_EXPECTED_BOX_TEMPORAL_FILTER_RESULTS_FILE).toURI().toURL()
+					},
+					"reingested bounding box and time range");
+		}
+		catch (final Exception e) {
+			e.printStackTrace();
+			try {
+				accumuloOperations.deleteAll();
+			}
+			catch (TableNotFoundException | AccumuloSecurityException | AccumuloException ex) {
+				LOGGER.error(
+						"Unable to clear accumulo namespace",
+						ex);
+			}
+			Assert.fail("Error occurred on reingested dataset while testing a bounding box and time range query of spatial temporal index: '" + e.getLocalizedMessage() + "'");
+		}
+	}
+
 	@Test
 	public void testIngestAndQuerySpatialTemporalPointsAndLines() {
 		System.getProperties().put(
@@ -521,9 +667,26 @@ public class GeoWaveBasicIT extends
 			Assert.fail("Error occurred while testing a bounding box stats on spatial temporal index: '" + e.getLocalizedMessage() + "'");
 		}
 		try {
+			testSpatialTemporalLocalExportAndReingestWithCQL(new File(
+					TEST_BOX_TEMPORAL_FILTER_FILE).toURI().toURL());
+		}
+		catch (final Exception e) {
+			e.printStackTrace();
+			try {
+				accumuloOperations.deleteAll();
+			}
+			catch (TableNotFoundException | AccumuloSecurityException | AccumuloException ex) {
+				LOGGER.error(
+						"Unable to export accumulo namespace",
+						ex);
+			}
+			Assert.fail("Error occurred while testing deletion of an entry using spatial index: '" + e.getLocalizedMessage() + "'");
+		}
+
+		try {
 			testDelete(
 					new File(
-							TEST_POLYGON_TEMPORAL_FILTER_FILE).toURI().toURL(),
+							TEST_BOX_TEMPORAL_FILTER_FILE).toURI().toURL(),
 					DEFAULT_SPATIAL_TEMPORAL_INDEX);
 		}
 		catch (final Exception e) {

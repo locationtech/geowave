@@ -8,16 +8,14 @@ import mil.nga.giat.geowave.core.store.data.field.FieldReader;
 public class AvroFeatureReader implements
 		FieldReader<Object>
 {
-	private final static Logger LOGGER = Logger.getLogger(
-			AvroFeatureReader.class);
+	private final static Logger LOGGER = Logger.getLogger(AvroFeatureReader.class);
 
 	@Override
 	public Object readField(
 			final byte[] fieldData ) {
 		SimpleFeature deserializedSimpleFeature = null;
 		try {
-			deserializedSimpleFeature = AvroFeatureUtils.deserializeAvroSimpleFeature(
-					fieldData);
+			deserializedSimpleFeature = AvroFeatureUtils.deserializeAvroSimpleFeature(fieldData);
 		}
 		catch (final Exception e) {
 			LOGGER.error(

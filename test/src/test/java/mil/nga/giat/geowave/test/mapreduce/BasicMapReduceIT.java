@@ -13,30 +13,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import mil.nga.giat.geowave.core.cli.GenericStoreCommandLineOptions;
-import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.ByteArrayUtils;
-import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
-import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
-import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.core.store.query.DistributableQuery;
-import mil.nga.giat.geowave.core.store.query.EverythingQuery;
-import mil.nga.giat.geowave.core.store.query.QueryOptions;
-import mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStore;
-import mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations;
-import mil.nga.giat.geowave.datastore.accumulo.index.secondary.AccumuloSecondaryIndexDataStore;
-import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloAdapterIndexMappingStore;
-import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloAdapterStore;
-import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloDataStatisticsStore;
-import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloIndexStore;
-import mil.nga.giat.geowave.format.gpx.GpxIngestPlugin;
-import mil.nga.giat.geowave.mapreduce.GeoWaveConfiguratorBase;
-import mil.nga.giat.geowave.mapreduce.GeoWaveWritableInputMapper;
-import mil.nga.giat.geowave.mapreduce.dedupe.GeoWaveDedupeJobRunner;
-import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputFormat;
-import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
-import mil.nga.giat.geowave.test.GeoWaveTestEnvironment;
-
 import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.apache.accumulo.core.client.TableNotFoundException;
@@ -61,11 +37,38 @@ import org.opengis.feature.simple.SimpleFeature;
 import com.vividsolutions.jts.geom.Geometry;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import mil.nga.giat.geowave.adapter.vector.export.VectorMRExportCommand;
+import mil.nga.giat.geowave.adapter.vector.export.VectorMRExportOptions;
+import mil.nga.giat.geowave.core.cli.GenericStoreCommandLineOptions;
+import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.index.ByteArrayUtils;
+import mil.nga.giat.geowave.core.store.DataStore;
+import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.core.store.query.DistributableQuery;
+import mil.nga.giat.geowave.core.store.query.EverythingQuery;
+import mil.nga.giat.geowave.core.store.query.QueryOptions;
+import mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStore;
+import mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations;
+import mil.nga.giat.geowave.datastore.accumulo.index.secondary.AccumuloSecondaryIndexDataStore;
+import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloAdapterIndexMappingStore;
+import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloAdapterStore;
+import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloDataStatisticsStore;
+import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloIndexStore;
+import mil.nga.giat.geowave.format.gpx.GpxIngestPlugin;
+import mil.nga.giat.geowave.mapreduce.GeoWaveConfiguratorBase;
+import mil.nga.giat.geowave.mapreduce.GeoWaveWritableInputMapper;
+import mil.nga.giat.geowave.mapreduce.dedupe.GeoWaveDedupeJobRunner;
+import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputFormat;
+import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
+import mil.nga.giat.geowave.test.GeoWaveTestEnvironment;
 
 public class BasicMapReduceIT extends
 		MapReduceTestBase
 {
 	private final static Logger LOGGER = Logger.getLogger(BasicMapReduceIT.class);
+	private static final String TEST_EXPORT_DIRECTORY = "basicMapReduceIT-export";
 
 	public static enum ResultCounterType {
 		EXPECTED,
@@ -202,6 +205,10 @@ public class BasicMapReduceIT extends
 		Assert.assertTrue(
 				"There is no data ingested from OSM GPX test files",
 				fullDataSetResults.count > 0);
+
+		// now that we have expected results, run map-reduce export and
+		// re-ingest it
+		testMapReduceExportAndReingest(DimensionalityType.ALL);
 		// first try each adapter individually
 		for (final WritableDataAdapter<SimpleFeature> adapter : adapters) {
 			runTestJob(
@@ -242,6 +249,74 @@ public class BasicMapReduceIT extends
 				null,
 				null,
 				null);
+	}
+
+	private void testMapReduceExportAndReingest(
+			final DimensionalityType dimensionalityType )
+			throws Exception {
+		final AccumuloIndexStore indexStore = new AccumuloIndexStore(
+				accumuloOperations);
+		final AccumuloAdapterStore adapterStore = new AccumuloAdapterStore(
+				accumuloOperations);
+		final DataStore dataStore = new AccumuloDataStore(
+				accumuloOperations);
+		final VectorMRExportCommand exportCommand = new VectorMRExportCommand();
+		final VectorMRExportOptions options = exportCommand.getOptions();
+		final File exportDir = new File(
+				TEMP_DIR,
+				TEST_EXPORT_DIRECTORY);
+		exportDir.mkdir();
+
+		options.setDataStore(dataStore);
+		options.setIndexStore(indexStore);
+		options.setAdapterStore(adapterStore);
+		options.setBatchSize(10000);
+		options.setMinSplits(MIN_INPUT_SPLITS);
+		options.setMaxSplits(MAX_INPUT_SPLITS);
+		options.setHdfsHostPort(hdfs);
+		options.setResourceManagerHostPort(jobtracker);
+		options.setHdfsOutputDirectory(hdfsBaseDirectory + "/" + TEST_EXPORT_DIRECTORY);
+		// TODO this snippet is temporary until the merge with the new
+		// commandline tool
+		options.dataStoreName = "accumulo";
+		options.configOptions = new HashMap<String, String>();
+		options.configOptions.put(
+				BasicAccumuloOperations.ZOOKEEPER_CONFIG_NAME,
+				zookeeper);
+		options.configOptions.put(
+				BasicAccumuloOperations.PASSWORD_CONFIG_NAME,
+				accumuloPassword);
+		options.configOptions.put(
+				BasicAccumuloOperations.USER_CONFIG_NAME,
+				accumuloUser);
+		options.configOptions.put(
+				BasicAccumuloOperations.INSTANCE_CONFIG_NAME,
+				accumuloInstance);
+		options.gwNamespace = TEST_NAMESPACE;
+		// the snippet above this line is temporary until the new commandline
+		// tool is merged
+
+		final Configuration conf = getConfiguration();
+		MapReduceTestEnvironment.filterConfiguration(conf);
+		final int res = ToolRunner.run(
+				conf,
+				exportCommand,
+				new String[] {});
+		Assert.assertTrue(
+				"Export Vector Data map reduce job failed",
+				res == 0);
+		try {
+			accumuloOperations.deleteAll();
+		}
+		catch (TableNotFoundException | AccumuloSecurityException | AccumuloException ex) {
+			LOGGER.error(
+					"Unable to clear accumulo namespace",
+					ex);
+		}
+		testMapReduceIngest(
+				DimensionalityType.ALL,
+				"avro",
+				TEMP_DIR + File.separator + HDFS_BASE_DIRECTORY + File.separator + TEST_EXPORT_DIRECTORY);
 	}
 
 	@SuppressFBWarnings(value = "DM_GC", justification = "Memory usage kept low for travis-ci")

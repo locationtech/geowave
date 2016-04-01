@@ -45,8 +45,7 @@ public class AvroIngestPlugin extends
 		AbstractSimpleFeatureIngestPlugin<AvroSimpleFeatureCollection>
 {
 
-	private final static Logger LOGGER = Logger.getLogger(
-			AvroIngestPlugin.class);
+	private final static Logger LOGGER = Logger.getLogger(AvroIngestPlugin.class);
 
 	public AvroIngestPlugin() {}
 
@@ -105,8 +104,7 @@ public class AvroIngestPlugin extends
 				new SpecificDatumReader<AvroSimpleFeatureCollection>())) {
 			while (reader.hasNext()) {
 				final AvroSimpleFeatureCollection simpleFeatureCollection = reader.next();
-				retVal.add(
-						simpleFeatureCollection);
+				retVal.add(simpleFeatureCollection);
 			}
 		}
 		catch (final IOException e) {
@@ -114,8 +112,7 @@ public class AvroIngestPlugin extends
 					"Unable to read file '" + input.getAbsolutePath() + "' as AVRO SimpleFeatureCollection",
 					e);
 		}
-		return retVal.toArray(
-				new AvroSimpleFeatureCollection[] {});
+		return retVal.toArray(new AvroSimpleFeatureCollection[] {});
 	}
 
 	@Override
@@ -145,8 +142,7 @@ public class AvroIngestPlugin extends
 		final List<GeoWaveData<SimpleFeature>> retVal = new ArrayList<GeoWaveData<SimpleFeature>>();
 		SimpleFeatureType featureType;
 		try {
-			featureType = AvroFeatureUtils.avroFeatureDefinitionToGTSimpleFeatureType(
-					featureDefinition);
+			featureType = AvroFeatureUtils.avroFeatureDefinitionToGTSimpleFeatureType(featureDefinition);
 
 			final FeatureDataAdapter adapter = new FeatureDataAdapter(
 					featureType);
@@ -157,11 +153,10 @@ public class AvroIngestPlugin extends
 							featureType,
 							attributeTypes,
 							attributeValues);
-					retVal.add(
-							new GeoWaveData<SimpleFeature>(
-									adapter,
-									primaryIndexIds,
-									simpleFeature));
+					retVal.add(new GeoWaveData<SimpleFeature>(
+							adapter,
+							primaryIndexIds,
+							simpleFeature));
 				}
 				catch (final Exception e) {
 					LOGGER.warn(

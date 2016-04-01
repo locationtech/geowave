@@ -38,13 +38,13 @@ import mil.nga.giat.geowave.mapreduce.JobContextIndexStore;
  * within a map-reduce job.
  */
 public class GeoWaveOutputFormat extends
-		OutputFormat<GeoWaveOutputKey, Object>
+		OutputFormat<GeoWaveOutputKey<Object>, Object>
 {
 	private static final Class<?> CLASS = GeoWaveOutputFormat.class;
 	protected static final Logger LOGGER = Logger.getLogger(CLASS);
 
 	@Override
-	public RecordWriter<GeoWaveOutputKey, Object> getRecordWriter(
+	public RecordWriter<GeoWaveOutputKey<Object>, Object> getRecordWriter(
 			final TaskAttemptContext context )
 			throws IOException,
 			InterruptedException {
@@ -282,7 +282,7 @@ public class GeoWaveOutputFormat extends
 	 * write to Accumulo.
 	 */
 	protected static class GeoWaveRecordWriter extends
-			RecordWriter<GeoWaveOutputKey, Object>
+			RecordWriter<GeoWaveOutputKey<Object>, Object>
 	{
 		private final Map<ByteArrayId, IndexWriter> adapterIdToIndexWriterCache = new HashMap<ByteArrayId, IndexWriter>();
 		private final AdapterStore adapterStore;
@@ -312,22 +312,22 @@ public class GeoWaveOutputFormat extends
 		@Override
 		public void write(
 				final GeoWaveOutputKey ingestKey,
-				final Object object )
+				final Object data )
 				throws IOException {
-			final DataAdapter<?> adapter = adapterStore.getAdapter(ingestKey.getAdapterId());
-			if (adapter instanceof WritableDataAdapter) {
+			final WritableDataAdapter<?> adapter = ingestKey.getAdapter(adapterStore);
+			if (adapter != null) {
 				final IndexWriter indexWriter = getIndexWriter(
 						adapter,
 						ingestKey.getIndexIds());
 				if (indexWriter != null) {
-					indexWriter.write(object);
+					indexWriter.write(data);
 				}
 				else {
 					LOGGER.warn("Cannot write to index '" + StringUtils.stringFromBinary(ingestKey.getAdapterId().getBytes()) + "'");
 				}
 			}
 			else {
-				LOGGER.warn("Adapter '" + StringUtils.stringFromBinary(ingestKey.getAdapterId().getBytes()) + "' is not writable");
+				LOGGER.warn("Adapter '" + StringUtils.stringFromBinary(ingestKey.getAdapterId().getBytes()) + "' does not exist");
 			}
 		}
 
@@ -337,8 +337,8 @@ public class GeoWaveOutputFormat extends
 				throws MismatchedIndexToAdapterMapping {
 			IndexWriter writer = adapterIdToIndexWriterCache.get(adapter.getAdapterId());
 			if (writer == null) {
-				List<PrimaryIndex> indices = new ArrayList<PrimaryIndex>();
-				for (ByteArrayId indexId : indexIds) {
+				final List<PrimaryIndex> indices = new ArrayList<PrimaryIndex>();
+				for (final ByteArrayId indexId : indexIds) {
 					final PrimaryIndex index = (PrimaryIndex) indexStore.getIndex(indexId);
 					if (index != null) {
 						indices.add(index);

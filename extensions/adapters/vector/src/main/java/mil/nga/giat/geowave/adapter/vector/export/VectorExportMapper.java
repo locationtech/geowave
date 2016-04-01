@@ -8,7 +8,6 @@ import java.util.Map;
 
 import org.apache.avro.mapred.AvroKey;
 import org.apache.hadoop.io.NullWritable;
-import org.apache.hadoop.io.ObjectWritable;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
@@ -19,11 +18,10 @@ import mil.nga.giat.geowave.adapter.vector.AvroFeatureUtils;
 import mil.nga.giat.geowave.adapter.vector.avro.AttributeValues;
 import mil.nga.giat.geowave.adapter.vector.avro.AvroSimpleFeatureCollection;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.mapreduce.GeoWaveWritableInputMapper;
 import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
 
 public class VectorExportMapper extends
-		GeoWaveWritableInputMapper<AvroKey<AvroSimpleFeatureCollection>, NullWritable>
+		Mapper<GeoWaveInputKey, SimpleFeature, AvroKey<AvroSimpleFeatureCollection>, NullWritable>
 {
 	private static final Logger LOGGER = LoggerFactory.getLogger(Logger.class);
 	private int batchSize;
@@ -32,32 +30,33 @@ public class VectorExportMapper extends
 	private final AvroKey<AvroSimpleFeatureCollection> outKey = new AvroKey<AvroSimpleFeatureCollection>();
 
 	@Override
-	protected void mapNativeValue(
+	protected void map(
 			final GeoWaveInputKey key,
-			final Object value,
-			final Mapper<GeoWaveInputKey, ObjectWritable, AvroKey<AvroSimpleFeatureCollection>, NullWritable>.Context context )
+			final SimpleFeature value,
+			final Mapper<GeoWaveInputKey, SimpleFeature, AvroKey<AvroSimpleFeatureCollection>, NullWritable>.Context context )
 			throws IOException,
 			InterruptedException {
-		if (value instanceof SimpleFeature) {
-			AvroSFCWriter avroWriter = adapterIdToAvroWriterMap.get(key.getAdapterId());
-			if (avroWriter == null) {
-				avroWriter = new AvroSFCWriter(
-						((SimpleFeature) value).getFeatureType(),
-						batchSize);
-			}
-			final AvroSimpleFeatureCollection retVal = avroWriter.write((SimpleFeature) value);
-			if (retVal != null) {
-				outKey.datum(retVal);
-				context.write(
-						outKey,
-						outVal);
-			}
+		AvroSFCWriter avroWriter = adapterIdToAvroWriterMap.get(key.getAdapterId());
+		if (avroWriter == null) {
+			avroWriter = new AvroSFCWriter(
+					value.getFeatureType(),
+					batchSize);
+			adapterIdToAvroWriterMap.put(
+					key.getAdapterId(),
+					avroWriter);
+		}
+		final AvroSimpleFeatureCollection retVal = avroWriter.write(value);
+		if (retVal != null) {
+			outKey.datum(retVal);
+			context.write(
+					outKey,
+					outVal);
 		}
 	}
 
 	@Override
 	protected void setup(
-			final Mapper<GeoWaveInputKey, ObjectWritable, AvroKey<AvroSimpleFeatureCollection>, NullWritable>.Context context )
+			final Mapper<GeoWaveInputKey, SimpleFeature, AvroKey<AvroSimpleFeatureCollection>, NullWritable>.Context context )
 			throws IOException,
 			InterruptedException {
 		super.setup(context);
@@ -68,7 +67,7 @@ public class VectorExportMapper extends
 
 	@Override
 	protected void cleanup(
-			final Mapper<GeoWaveInputKey, ObjectWritable, AvroKey<AvroSimpleFeatureCollection>, NullWritable>.Context context )
+			final Mapper<GeoWaveInputKey, SimpleFeature, AvroKey<AvroSimpleFeatureCollection>, NullWritable>.Context context )
 			throws IOException,
 			InterruptedException {
 		super.cleanup(context);
@@ -76,7 +75,7 @@ public class VectorExportMapper extends
 	}
 
 	private void writeRemainingAvroBatches(
-			final Mapper<GeoWaveInputKey, ObjectWritable, AvroKey<AvroSimpleFeatureCollection>, NullWritable>.Context context )
+			final Mapper<GeoWaveInputKey, SimpleFeature, AvroKey<AvroSimpleFeatureCollection>, NullWritable>.Context context )
 			throws IOException,
 			InterruptedException {
 		for (final AvroSFCWriter writer : adapterIdToAvroWriterMap.values()) {

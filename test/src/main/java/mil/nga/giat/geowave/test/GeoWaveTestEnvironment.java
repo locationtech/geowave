@@ -116,6 +116,18 @@ abstract public class GeoWaveTestEnvironment
 			final DimensionalityType dimensionalityType,
 			final String ingestFilePath,
 			final int nthreads ) {
+		testLocalIngest(
+				dimensionalityType,
+				ingestFilePath,
+				"geotools-vector",
+				nthreads);
+	}
+
+	protected void testLocalIngest(
+			final DimensionalityType dimensionalityType,
+			final String ingestFilePath,
+			final String format,
+			final int nthreads ) {
 		// ingest a shapefile (geotools type) directly into GeoWave using the
 		// ingest framework's main method and pre-defined commandline arguments
 		String threadExtra = "";
@@ -124,7 +136,7 @@ abstract public class GeoWaveTestEnvironment
 		}
 		LOGGER.warn("Ingesting '" + ingestFilePath + "' - this may take several minutes...");
 		final String[] args = StringUtils.split(
-				"-localingest -datastore " + new AccumuloDataStoreFactory().getName() + " -f geotools-vector " + threadExtra + "-b " + ingestFilePath + " -" + GenericStoreCommandLineOptions.NAMESPACE_OPTION_KEY + " " + TEST_NAMESPACE + " -dim " + dimensionalityType.getDimensionalityArg() + " -" + BasicAccumuloOperations.ZOOKEEPER_CONFIG_NAME + " " + zookeeper + " -" + BasicAccumuloOperations.INSTANCE_CONFIG_NAME + " " + accumuloInstance + " -" + BasicAccumuloOperations.USER_CONFIG_NAME + " " + accumuloUser + " -" + BasicAccumuloOperations.PASSWORD_CONFIG_NAME + " " + accumuloPassword,
+				"-localingest -datastore " + new AccumuloDataStoreFactory().getName() + " -f " + format + " " + threadExtra + "-b " + ingestFilePath + " -" + GenericStoreCommandLineOptions.NAMESPACE_OPTION_KEY + " " + TEST_NAMESPACE + " -dim " + dimensionalityType.getDimensionalityArg() + " -" + BasicAccumuloOperations.ZOOKEEPER_CONFIG_NAME + " " + zookeeper + " -" + BasicAccumuloOperations.INSTANCE_CONFIG_NAME + " " + accumuloInstance + " -" + BasicAccumuloOperations.USER_CONFIG_NAME + " " + accumuloUser + " -" + BasicAccumuloOperations.PASSWORD_CONFIG_NAME + " " + accumuloPassword,
 				' ');
 		GeoWaveMain.run(args);
 		verifyStats();

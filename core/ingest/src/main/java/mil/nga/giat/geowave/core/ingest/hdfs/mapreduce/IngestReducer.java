@@ -3,16 +3,16 @@ package mil.nga.giat.geowave.core.ingest.hdfs.mapreduce;
 import java.io.IOException;
 import java.util.List;
 
+import org.apache.hadoop.io.Writable;
+import org.apache.hadoop.io.WritableComparable;
+import org.apache.hadoop.mapreduce.Reducer;
+
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayUtils;
 import mil.nga.giat.geowave.core.index.PersistenceUtils;
 import mil.nga.giat.geowave.core.ingest.GeoWaveData;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputKey;
-
-import org.apache.hadoop.io.Writable;
-import org.apache.hadoop.io.WritableComparable;
-import org.apache.hadoop.mapreduce.Reducer;
 
 /**
  * This is the map-reduce reducer for ingestion with both the mapper and
@@ -40,7 +40,7 @@ public class IngestReducer extends
 			while (data.hasNext()) {
 				final GeoWaveData d = data.next();
 				context.write(
-						d.getKey(),
+						d.getOutputKey(),
 						d.getValue());
 			}
 		}
