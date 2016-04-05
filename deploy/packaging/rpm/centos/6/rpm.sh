@@ -19,16 +19,14 @@ done
 # Artifact settings
 ARTIFACT_01_URL=$LOCAL_JENKINS/job/${ARGS[job]}/lastSuccessfulBuild/artifact/deploy/target/geowave-accumulo.jar
 ARTIFACT_02_URL=$LOCAL_JENKINS/job/${ARGS[job]}/lastSuccessfulBuild/artifact/deploy/target/geowave-geoserver.jar
-ARTIFACT_03_URL=$LOCAL_JENKINS/job/${ARGS[job]}/lastSuccessfulBuild/artifact/deploy/target/jace-linux-amd64-debug.tar.gz
-ARTIFACT_04_URL=$LOCAL_JENKINS/job/${ARGS[job]}/lastSuccessfulBuild/artifact/deploy/target/jace-linux-amd64-release.tar.gz
-ARTIFACT_05_URL=$LOCAL_JENKINS/job/${ARGS[job]}/lastSuccessfulBuild/artifact/deploy/target/jace-source.tar.gz
-ARTIFACT_06_URL=$LOCAL_JENKINS/job/${ARGS[job]}/lastSuccessfulBuild/artifact/deploy/target/geowave-tools.jar
-ARTIFACT_07_URL=$LOCAL_JENKINS/job/${ARGS[job]}/lastSuccessfulBuild/artifact/deploy/target/plugins.tar.gz
-ARTIFACT_08_URL=$LOCAL_JENKINS/job/${ARGS[job]}/lastSuccessfulBuild/artifact/target/site.tar.gz
-ARTIFACT_09_URL=$LOCAL_JENKINS/job/${ARGS[job]}/lastSuccessfulBuild/artifact/deploy/target/puppet-scripts.tar.gz
-ARTIFACT_10_URL=$LOCAL_JENKINS/job/${ARGS[job]}/lastSuccessfulBuild/artifact/docs/target/manpages.tar.gz
-ARTIFACT_11_URL=$LOCAL_JENKINS/job/${ARGS[job]}/lastSuccessfulBuild/artifact/deploy/target/geowave-analytic-mapreduce.jar
-ARTIFACT_12_URL=$LOCAL_JENKINS/userContent/geoserver/${ARGS[geoserver]}
+ARTIFACT_03_URL=$LOCAL_JENKINS/job/${ARGS[job]}/lastSuccessfulBuild/artifact/deploy/target/geowave-jace.tar.gz
+ARTIFACT_04_URL=$LOCAL_JENKINS/job/${ARGS[job]}/lastSuccessfulBuild/artifact/deploy/target/geowave-tools.jar
+ARTIFACT_05_URL=$LOCAL_JENKINS/job/${ARGS[job]}/lastSuccessfulBuild/artifact/deploy/target/plugins.tar.gz
+ARTIFACT_06_URL=$LOCAL_JENKINS/job/${ARGS[job]}/lastSuccessfulBuild/artifact/target/site.tar.gz
+ARTIFACT_07_URL=$LOCAL_JENKINS/job/${ARGS[job]}/lastSuccessfulBuild/artifact/deploy/target/puppet-scripts.tar.gz
+ARTIFACT_08_URL=$LOCAL_JENKINS/job/${ARGS[job]}/lastSuccessfulBuild/artifact/docs/target/manpages.tar.gz
+ARTIFACT_09_URL=$LOCAL_JENKINS/job/${ARGS[job]}/lastSuccessfulBuild/artifact/deploy/target/geowave-analytic-mapreduce.jar
+ARTIFACT_10_URL=$LOCAL_JENKINS/userContent/geoserver/${ARGS[geoserver]}
 RPM_ARCH=noarch
 
 GEOWAVE_VERSION=$(parseVersion)
@@ -51,8 +49,6 @@ case ${ARGS[command]} in
         update_artifact $ARTIFACT_07_URL;
         update_artifact $ARTIFACT_08_URL;
         update_artifact $ARTIFACT_09_URL;
-        update_artifact $ARTIFACT_10_URL;
-        update_artifact $ARTIFACT_11_URL;
-        update_artifact $ARTIFACT_12_URL geoserver.zip; ;;
+        update_artifact $ARTIFACT_10_URL geoserver.zip; ;;
         *) about ;;
 esac

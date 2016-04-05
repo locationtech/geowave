@@ -18,6 +18,11 @@ find $WORKSPACE/extensions/formats -name "*.jar" -not -path "*/service/target/*"
 tar cvzf ../plugins.tar.gz *.jar
 popd
 
+# Throughout the build, capture jace artifacts to support testing
+mkdir -p $WORKSPACE/deploy/target/geowave-jace/bin
+cp $WORKSPACE/extensions/formats/geotools-vector/target/*.jar $WORKSPACE/deploy/target/geowave-jace/bin/geowave-format-vector.jar
+cp $WORKSPACE/examples/target/*.jar $WORKSPACE/deploy/target/geowave-jace/bin/geowave-example.jar
+
 # Build each of the "fat jar" artifacts and rename to remove any version strings in the file name
 
 mvn package -P geotools-container-singlejar $BUILD_ARGS "$@"
@@ -34,47 +39,24 @@ mvn package -P analytics-singlejar $BUILD_ARGS "$@"
 mv $WORKSPACE/analytics/mapreduce/target/munged/geowave-analytic-mapreduce-*-analytics-singlejar.jar $WORKSPACE/deploy/target/geowave-analytic-mapreduce.jar
 popd
 
-# Build the jace artifacts (release, debug, source) and include geotools-vector ingest tool to support testing
-mkdir -p $WORKSPACE/deploy/target/jace
-
-# Build the test ingest jar
-cd $WORKSPACE/extensions/formats/geotools-vector
-mvn package -P geowave-tools-singlejar $BUILD_ARGS "$@"
-mv $WORKSPACE/extensions/formats/geotools-vector/target/*-tools.jar $WORKSPACE/deploy/target/jace/geowave-ingest.jar
+# Copy the tools fat jar
+cp $WORKSPACE/deploy/target/geowave-tools.jar $WORKSPACE/deploy/target/geowave-jace/bin/geowave-tools.jar
 
 # Run the Jace hack
 cd $WORKSPACE
 chmod +x $WORKSPACE/.utility/maven-jace-hack.sh
 $WORKSPACE/.utility/maven-jace-hack.sh
 
-# Build the debug bindings
 cd $WORKSPACE/deploy
-#if [ ! -f $WORKSPACE/deploy/target/jace-linux-amd64-debug.tar.gz ]; then
-#    mvn package -P generate-jace-proxies,linux-amd64-gcc-debug $BUILD_ARGS "$@"
-#    mv $WORKSPACE/deploy/target/*-jace.jar $WORKSPACE/deploy/target/jace/geowave-jace.jar
-#    tar -czf $WORKSPACE/deploy/target/jace-linux-amd64-debug.tar.gz \
-#        -C $WORKSPACE/deploy/target/jace geowave-ingest.jar \
-#        -C $WORKSPACE/deploy/target/jace geowave-jace.jar \
-#        -C $WORKSPACE/deploy/target/dependency/jace libjace.so \
-#        -C $WORKSPACE/deploy/target/dependency/jace include
-#fi
-
-# Build the release bindings
-#if [ ! -f $WORKSPACE/deploy/target/jace-linux-amd64-release.tar.gz ] || [ ! -f $WORKSPACE/deploy/target/jace-source.tar.gz ]; then
-#    mvn package -P generate-jace-proxies,linux-amd64-gcc-release $BUILD_ARGS "$@"
-#    tar -czf $WORKSPACE/deploy/target/jace-linux-amd64-release.tar.gz \
-#        -C $WORKSPACE/deploy/target/jace geowave-ingest.jar \
-#        -C $WORKSPACE/deploy/target/jace geowave-jace.jar \
-#        -C $WORKSPACE/deploy/target/dependency/jace libjace.so \
-#        -C $WORKSPACE/deploy/target/dependency/jace include
-
-#    tar -czf $WORKSPACE/deploy/target/jace-source.tar.gz \
-#        -C $WORKSPACE/deploy/target/jace geowave-ingest.jar \
-#        -C $WORKSPACE/deploy/target/jace geowave-jace.jar \
-#        -C $WORKSPACE/deploy/target/dependency/jace CMakeLists.txt \
-#        -C $WORKSPACE/deploy/target/dependency/jace source \
-#        -C $WORKSPACE/deploy/target/dependency/jace include
-#fi
+# Build the jace bindings
+if [ ! -f $WORKSPACE/deploy/target/jace-source.tar.gz ]; then
+    mvn package -P generate-geowave-jace $BUILD_ARGS "$@"
+    mv $WORKSPACE/deploy/target/geowave-deploy*-jace.jar $WORKSPACE/deploy/target/geowave-jace/bin/geowave-runtime.jar
+    cp $WORKSPACE/deploy/jace/CMakeLists.txt $WORKSPACE/deploy/target/geowave-jace
+    cp -R $WORKSPACE/deploy/target/dependency/jace/source $WORKSPACE/deploy/target/geowave-jace
+    cp -R $WORKSPACE/deploy/target/dependency/jace/include $WORKSPACE/deploy/target/geowave-jace
+    tar -czf $WORKSPACE/deploy/target/geowave-jace.tar.gz -C $WORKSPACE/deploy/target/ geowave-jace
+fi
 
 # Build and archive HTML/PDF docs
 cd $WORKSPACE/

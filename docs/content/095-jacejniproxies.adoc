@@ -39,47 +39,19 @@ $ git checkout tags/v1.3.0
 $ mvn clean install -Dsources
 ----
 
-==== Step 3 - Build GeoWave
+==== Step 3 - Generate GeoWave Jace Proxies
 
-Here, we will specify two Maven profiles; one which specifies that we are building jace proxies, and another to specify our target platform.
+Here, we will specify a Maven profile which specifies that we are building jace proxies.
 
 [source, bash]
 ----
 $ cd geowave
-$ mvn clean package -pl deploy -am -P generate-jace-proxies,linux-amd64-gcc-debug -DBUILD_SHARED_LIBS=ON -DskipTests
+$ mvn clean package -pl deploy -am -P generate-geowave-jace -DskipTests
 ----
 
-Note: To build static libraries use -DBUILD_SHARED_LIBS=OFF
+This generates the source and header files required to build GeoWave.  To build the library, simply run cmake, followed by make.
 
-Refer to the table below to select the platform most applicable to your needs.
-
-[cols="4*", options="header"]
-|===
-|Profile
-|Generator
-|Config
-|Architecture
-
-|windows-amd64-vc11-debug
-|Visual Studio 11 Win64
-|Debug-x64
-|amd64
-
-|windows-amd64-vc11-release
-|Visual Studio 11 Win64
-|Release-x64
-|amd64
-
-|linux-amd64-gcc-debug
-|Unix Makefiles
-|Debug
-|amd64
-
-|linux-amd64-gcc-release
-|Unix Makefiles
-|Release
-|amd64
-|===
+Note: To build static libraries use -DBUILD_SHARED_LIBS=OFF, otherwise use -DBUILD_SHARED_LIBS=ON
 
 === Mapnik Plugin Configuration
 
@@ -87,57 +59,6 @@ Refer to the table below to select the platform most applicable to your needs.
 
 http://mapnik.org/[Mapnik] is an open source toolkit for developing mapping applications.
 GeoWave is supported as a plugin for Mapnik for reading vector data from Accumulo.
-
-Note: These instructions assume that you are using prepackaged binaries.
-
-==== Configure Scons for Mapnik
-
-To configure Mapnik to run with GeoWave, there are a few SCons options which need to be configured.
-Refer to the table below to get an idea for how these options would be configured on Ubuntu 14.04 LTS.
-
-[cols="2*", options="header"]
-|===
-|Option
-|Value
-
-|GEOWAVE_RUNTIME_JAR
-|/path/to/geowave/geowave-jace.jar
-
-|GEOWAVE_INCLUDES
-|/path/to/geowave/include
-
-|GEOWAVE_LIBS
-|/path/to/geowave
-
-|JAVA_INCLUDE_PATH
-|/usr/lib/jvm/java-7-oracle/include
-
-|JAVA_INCLUDE_PATH2
-|/usr/lib/jvm/java-7-oracle/include/linux
-
-|JAVA_JVM_LIB
-|/usr/lib/jvm/java-7-oracle/jre/lib/amd64/server
-|===
-
-Note: As Boost is a Mapnik dependency, it should already be included.
-
-==== Build Mapnik
-
-Once SCons is configured, you can proceed with your normal Mapnik build process.
-
-Last, but not least, you should ensure that the libraries specified above are available either via PATH or LD_LIBRARY_PATH.
-
-==== Mapnik Python Tests
-
-In order to run the GeoWave integration test located in python-mapnik, you need to set environment variables defining the locations of the GeoWave runtime and ingest jars.
-
-[source, bash]
-----
-$ export GEOWAVE_RUNTIME_JAR=/path/to/geowave/geowave-jace.jar
-$ export GEOWAVE_INGEST_JAR=/path/to/geowave/geowave-ingest.jar
-----
-
-Note: The geowave-ingest jar included in the tarball only works for the geotools-vector format.
 
 === PDAL Plugin Configuration
 
@@ -165,36 +86,40 @@ Refer to the table below to get an idea for how these options would be configure
 |ON
 |
 
-|GEOWAVE_RUNTIME_JAR
-|/path/to/geowave/geowave-jace.jar
+|BUILD_GEOWAVE_TESTS
+|ON
 |
 
-|JACE_INCLUDE_DIR
+|GEOWAVE_RUNTIME_JAR
+|/path/to/geowave/geowave-runtime.jar
+|
+
+|GEOWAVE_INCLUDE_DIR
 |/path/to/geowave/include
 |
 
-|JACE_LIBRARY
-|/path/to/geowave/libjace.so
+|GEOWAVE_LIBRARY
+|/path/to/geowave/libgeowave.so
 |
 
 |JAVA_AWT_INCLUDE_PATH
-|/usr/lib/jvm/java-7-oracle/include
+|/usr/lib/jvm/java-8-oracle/include
 |X
 
 |JAVA_INCLUDE_PATH
-|/usr/lib/jvm/java-7-oracle/include
+|/usr/lib/jvm/java-8-oracle/include
 |X
 
 |JAVA_INCLUDE_PATH2
-|/usr/lib/jvm/java-7-oracle/include/linux
+|/usr/lib/jvm/java-8-oracle/include/linux
 |X
 
 |JAVA_AWT_LIBRARY
-|/usr/lib/jvm/java-7-oracle/jre/lib/amd64/libjawt.so
+|/usr/lib/jvm/java-8-oracle/jre/lib/amd64/libjawt.so
 |X
 
 |JAVA_JVM_LIBRARY
-|/usr/lib/jvm/java-7-oracle/jre/lib/amd64/server/libjvm.so
+|/usr/lib/jvm/java-8-oracle/jre/lib/amd64/server/libjvm.so
 |X
 |===
 
