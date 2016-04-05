@@ -1,13 +1,13 @@
 [[tools-framework]]
 == Tools Framework
 
-A plugin framework (using SPI based injection) is provided with several input formats and utilities supported out of the box.
+A plugin framework (using Service Provider Interface (SPI) based injection) is provided with several input formats and utilities supported out of the box.
 
 First we'll show how to build and use the built in formats, and after that describe how to create a new plugin.
 
 === Building
 
-First build the main project after specifynig the dependency versions you'd like to build against.
+First build the main project after specifying the dependency versions you'd like to build against.
 
 [source, bash]
 ----
