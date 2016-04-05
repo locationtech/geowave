@@ -29,6 +29,9 @@ public class AccumuloDataStoreFactory extends
 				GeoWaveStoreFinder.createSecondaryIndexDataStore(
 						configOptions,
 						namespace),
+				GeoWaveStoreFinder.createAdapterIndexMappingStore(
+						configOptions,
+						namespace),
 				createOperations(
 						configOptions,
 						namespace));

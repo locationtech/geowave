@@ -7,6 +7,17 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
+import org.apache.accumulo.core.client.AccumuloException;
+import org.apache.accumulo.core.client.AccumuloSecurityException;
+import org.apache.accumulo.core.client.Connector;
+import org.apache.accumulo.core.client.mock.MockInstance;
+import org.apache.accumulo.core.client.security.tokens.PasswordToken;
+import org.junit.Before;
+import org.junit.Test;
+
+import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.GeometryFactory;
+
 import mil.nga.giat.geowave.core.geotime.index.dimension.LatitudeDefinition;
 import mil.nga.giat.geowave.core.geotime.index.dimension.LongitudeDefinition;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
@@ -31,17 +42,6 @@ import mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStoreStatsTest.TestGe
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStoreStatsTest.TestGeometryAdapter;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloDataStatisticsStore;
 
-import org.apache.accumulo.core.client.AccumuloException;
-import org.apache.accumulo.core.client.AccumuloSecurityException;
-import org.apache.accumulo.core.client.Connector;
-import org.apache.accumulo.core.client.mock.MockInstance;
-import org.apache.accumulo.core.client.security.tokens.PasswordToken;
-import org.junit.Before;
-import org.junit.Test;
-
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.GeometryFactory;
-
 public class DeleteWriterTest
 {
 	private final MockInstance mockInstance = new MockInstance();
@@ -52,6 +52,7 @@ public class DeleteWriterTest
 	private List<ByteArrayId> rowId2s;
 	private WritableDataAdapter<AccumuloDataStoreStatsTest.TestGeometry> adapter;
 	private DataStatisticsStore statsStore;
+	protected AccumuloOptions options = new AccumuloOptions();
 
 	private static final CommonIndexModel model = new SpatialDimensionalityTypeProvider().createPrimaryIndex().getIndexModel();
 
@@ -94,7 +95,8 @@ public class DeleteWriterTest
 
 		operations.createTable("test_table");
 		mockDataStore = new AccumuloDataStore(
-				operations);
+				operations,
+				options);
 
 		statsStore = new AccumuloDataStatisticsStore(
 				operations);
@@ -102,46 +104,42 @@ public class DeleteWriterTest
 		adapter = new TestGeometryAdapter();
 		final GeometryFactory factory = new GeometryFactory();
 
-		try (IndexWriter indexWriter = mockDataStore.createIndexWriter(
-				index,
-				DataStoreUtils.DEFAULT_VISIBILITY)) {
-			rowId1s = indexWriter.write(
-					adapter,
-					new AccumuloDataStoreStatsTest.TestGeometry(
-							factory.createLineString(new Coordinate[] {
-								new Coordinate(
-										43.444,
-										28.232),
-								new Coordinate(
-										43.454,
-										28.242),
-								new Coordinate(
-										43.444,
-										28.252),
-								new Coordinate(
-										43.444,
-										28.232),
-							}),
-							"test_pt_1"));
+		try (IndexWriter indexWriter = mockDataStore.createWriter(
+				adapter,
+				index)) {
+			rowId1s = indexWriter.write(new AccumuloDataStoreStatsTest.TestGeometry(
+					factory.createLineString(new Coordinate[] {
+						new Coordinate(
+								43.444,
+								28.232),
+						new Coordinate(
+								43.454,
+								28.242),
+						new Coordinate(
+								43.444,
+								28.252),
+						new Coordinate(
+								43.444,
+								28.232),
+					}),
+					"test_pt_1"));
 
-			rowId2s = indexWriter.write(
-					adapter,
-					new AccumuloDataStoreStatsTest.TestGeometry(
-							factory.createLineString(new Coordinate[] {
-								new Coordinate(
-										43.444,
-										28.232),
-								new Coordinate(
-										43.454,
-										28.242),
-								new Coordinate(
-										43.444,
-										28.252),
-								new Coordinate(
-										43.444,
-										28.232),
-							}),
-							"test_pt_2"));
+			rowId2s = indexWriter.write(new AccumuloDataStoreStatsTest.TestGeometry(
+					factory.createLineString(new Coordinate[] {
+						new Coordinate(
+								43.444,
+								28.232),
+						new Coordinate(
+								43.454,
+								28.242),
+						new Coordinate(
+								43.444,
+								28.252),
+						new Coordinate(
+								43.444,
+								28.232),
+					}),
+					"test_pt_2"));
 		}
 
 	}

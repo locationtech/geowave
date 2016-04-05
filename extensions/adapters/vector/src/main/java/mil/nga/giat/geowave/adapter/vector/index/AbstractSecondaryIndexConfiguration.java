@@ -33,6 +33,15 @@ public abstract class AbstractSecondaryIndexConfiguration<T> implements
 		this.attributes = attributes;
 	}
 
+	public Set<String> getAttributes() {
+		return attributes;
+	}
+
+	public void setAttributes(
+			Set<String> attributes ) {
+		this.attributes = attributes;
+	}
+
 	@Override
 	public void updateType(
 			final SimpleFeatureType type ) {

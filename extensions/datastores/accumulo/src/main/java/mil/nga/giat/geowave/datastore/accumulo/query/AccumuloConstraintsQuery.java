@@ -5,6 +5,15 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 
+import org.apache.accumulo.core.client.IteratorSetting;
+import org.apache.accumulo.core.client.ScannerBase;
+import org.apache.accumulo.core.data.Key;
+import org.apache.accumulo.core.data.Value;
+import org.apache.accumulo.core.iterators.user.WholeRowIterator;
+import org.apache.commons.lang3.tuple.Pair;
+
+import com.google.common.collect.Iterators;
+
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.index.ByteArrayUtils;
@@ -21,15 +30,6 @@ import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.memory.DataStoreUtils;
 import mil.nga.giat.geowave.core.store.query.Query;
 import mil.nga.giat.geowave.core.store.query.aggregate.Aggregation;
-
-import org.apache.accumulo.core.client.IteratorSetting;
-import org.apache.accumulo.core.client.ScannerBase;
-import org.apache.accumulo.core.data.Key;
-import org.apache.accumulo.core.data.Value;
-import org.apache.accumulo.core.iterators.user.WholeRowIterator;
-import org.apache.commons.lang3.tuple.Pair;
-
-import com.google.common.collect.Iterators;
 
 /**
  * This class represents basic numeric contraints applied to an Accumulo Query
@@ -52,6 +52,7 @@ public class AccumuloConstraintsQuery extends
 			final DedupeFilter clientDedupeFilter,
 			final ScanCallback<?> scanCallback,
 			final Pair<DataAdapter<?>, Aggregation<?>> aggregation,
+			final List<String> fieldIds,
 			final String[] authorizations ) {
 		this(
 				adapterIds,
@@ -61,54 +62,8 @@ public class AccumuloConstraintsQuery extends
 				clientDedupeFilter,
 				scanCallback,
 				aggregation,
+				fieldIds,
 				authorizations);
-	}
-
-	public AccumuloConstraintsQuery(
-			final PrimaryIndex index,
-			final List<MultiDimensionalNumericData> constraints,
-			final List<QueryFilter> queryFilters ) {
-		this(
-				null,
-				index,
-				constraints,
-				queryFilters,
-				new String[0]);
-	}
-
-	public AccumuloConstraintsQuery(
-			final List<ByteArrayId> adapterIds,
-			final PrimaryIndex index,
-			final List<MultiDimensionalNumericData> constraints,
-			final List<QueryFilter> queryFilters ) {
-		this(
-				adapterIds,
-				index,
-				constraints,
-				queryFilters,
-				(DedupeFilter) null,
-				(ScanCallback<?>) null,
-				null,
-				new String[0]);
-
-	}
-
-	public AccumuloConstraintsQuery(
-			final List<ByteArrayId> adapterIds,
-			final PrimaryIndex index,
-			final List<MultiDimensionalNumericData> constraints,
-			final List<QueryFilter> queryFilters,
-			final String[] authorizations ) {
-		this(
-				adapterIds,
-				index,
-				constraints,
-				queryFilters,
-				(DedupeFilter) null,
-				(ScanCallback<?>) null,
-				null,
-				authorizations);
-
 	}
 
 	public AccumuloConstraintsQuery(
@@ -119,11 +74,13 @@ public class AccumuloConstraintsQuery extends
 			final DedupeFilter clientDedupeFilter,
 			final ScanCallback<?> scanCallback,
 			final Pair<DataAdapter<?>, Aggregation<?>> aggregation,
+			final List<String> fieldIds,
 			final String[] authorizations ) {
 		super(
 				adapterIds,
 				index,
 				scanCallback,
+				fieldIds,
 				authorizations);
 		this.constraints = constraints;
 		this.aggregation = aggregation;
@@ -155,6 +112,21 @@ public class AccumuloConstraintsQuery extends
 	@Override
 	protected void addScanIteratorSettings(
 			final ScannerBase scanner ) {
+
+		scanner.addScanIterator(new IteratorSetting(
+				SharedVisibilitySplittingIterator.ITERATOR_PRIORITY,
+				SharedVisibilitySplittingIterator.ITERATOR_NAME,
+				SharedVisibilitySplittingIterator.class));
+
+		if ((fieldIds != null) && (fieldIds.size() > 0)) {
+			final IteratorSetting iteratorSetting = FieldFilter.getIteratorSetting();
+			FieldFilter.setFieldIds(
+					iteratorSetting,
+					fieldIds,
+					index.getIndexModel().getDimensions());
+			scanner.addScanIterator(iteratorSetting);
+		}
+
 		if ((distributableFilters != null) && !distributableFilters.isEmpty() && queryFiltersEnabled) {
 
 			final IteratorSetting iteratorSettings;

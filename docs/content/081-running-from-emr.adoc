@@ -28,7 +28,7 @@ aws emr create-cluster \
   --instance-groups InstanceGroupType=MASTER,InstanceCount=1,InstanceType=m3.xlarge InstanceGroupType=CORE,InstanceCount=${NUM_WORKERS},InstanceType=m3.xlarge \
   --ec2-attributes "KeyName=YOUR_KEYNAME,SubnetId=YOUR_SUBNET_ID" \
   --region YOUR_REGION \
-  --release-label emr-4.2.0 \
+  --release-label emr-4.3.0 \
   --applications Name=Ganglia Name=Hadoop Name=Hue Name=Spark \
   --use-default-roles \
   --no-auto-terminate \

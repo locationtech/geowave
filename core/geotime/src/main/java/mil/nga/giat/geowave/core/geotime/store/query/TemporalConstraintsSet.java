@@ -15,18 +15,48 @@ public class TemporalConstraintsSet
 
 	public TemporalConstraintsSet() {}
 
+	public boolean hasConstraintsForRange(
+			final String startName,
+			final String endName ) {
+		return constraintsSet.containsKey(startName + "_" + endName);
+	}
+
+	public TemporalConstraints getConstraintsForRange(
+			final String startName,
+			final String endName ) {
+		final String rangeName = startName + "_" + endName;
+		if (constraintsSet.containsKey(rangeName)) {
+			return constraintsSet.get(rangeName);
+		}
+		else {
+			final TemporalConstraints constraints = new TemporalConstraints(
+					rangeName);
+			constraintsSet.put(
+					rangeName,
+					constraints);
+			return constraints;
+		}
+	}
+
 	public TemporalConstraints getConstraintsFor(
 			final String fieldName ) {
 		if (constraintsSet.containsKey(fieldName)) {
 			return constraintsSet.get(fieldName);
 		}
 		else {
-			final TemporalConstraints constraints = new TemporalConstraints();
+			final TemporalConstraints constraints = new TemporalConstraints(
+					fieldName);
 			constraintsSet.put(
 					fieldName,
 					constraints);
 			return constraints;
 		}
+	}
+
+	public void removeConstraints(
+			final String... names ) {
+		for (String name : names)
+			constraintsSet.remove(name);
 	}
 
 	public void removeAllConstraintsExcept(

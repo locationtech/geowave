@@ -9,6 +9,11 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
+import org.apache.log4j.Logger;
+
 import kafka.consumer.Consumer;
 import kafka.consumer.ConsumerConfig;
 import kafka.consumer.ConsumerIterator;
@@ -17,21 +22,21 @@ import kafka.consumer.KafkaStream;
 import kafka.javaapi.consumer.ConsumerConnector;
 import mil.nga.giat.geowave.core.cli.CommandLineResult;
 import mil.nga.giat.geowave.core.cli.DataStoreCommandLineOptions;
+import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.ingest.AbstractIngestCommandLineDriver;
+import mil.nga.giat.geowave.core.ingest.GeoWaveData;
 import mil.nga.giat.geowave.core.ingest.IngestCommandLineOptions;
 import mil.nga.giat.geowave.core.ingest.IngestFormatPluginProviderSpi;
 import mil.nga.giat.geowave.core.ingest.IngestPluginBase;
 import mil.nga.giat.geowave.core.ingest.IngestUtils;
 import mil.nga.giat.geowave.core.ingest.avro.AvroFormatPlugin;
 import mil.nga.giat.geowave.core.ingest.avro.GenericAvroSerializer;
-import mil.nga.giat.geowave.core.ingest.local.IngestRunData;
+import mil.nga.giat.geowave.core.ingest.index.IndexProvider;
+import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.DataStore;
+import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
-
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.Options;
-import org.apache.commons.cli.ParseException;
-import org.apache.log4j.Logger;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 
 /**
  * This class executes the ingestion of intermediate data from a Kafka topic
@@ -130,7 +135,7 @@ public class IngestFromKafkaDriver extends
 					final IngestPluginBase<?, ?> ingestWithAvroPlugin = avroFormatPlugin.getIngestWithAvroPlugin();
 					final WritableDataAdapter<?>[] dataAdapters = ingestWithAvroPlugin.getDataAdapters(ingestOptions.getVisibility());
 					adapters.addAll(Arrays.asList(dataAdapters));
-					final IngestRunData runData = new IngestRunData(
+					final KafkaIngestRunData runData = new KafkaIngestRunData(
 							adapters,
 							dataStore,
 							args);
@@ -167,7 +172,7 @@ public class IngestFromKafkaDriver extends
 	private void launchTopicConsumer(
 			final String formatPluginName,
 			final AvroFormatPlugin<?, ?> avroFormatPlugin,
-			final IngestRunData ingestRunData,
+			final KafkaIngestRunData ingestRunData,
 			final List<String> queue )
 			throws Exception {
 		final ExecutorService executorService = Executors.newFixedThreadPool(queue.size());
@@ -194,7 +199,7 @@ public class IngestFromKafkaDriver extends
 	public <T> void consumeFromTopic(
 			final String formatPluginName,
 			final AvroFormatPlugin<T, ?> avroFormatPlugin,
-			final IngestRunData ingestRunData,
+			final KafkaIngestRunData ingestRunData,
 			final List<String> queue )
 			throws Exception {
 
@@ -228,7 +233,7 @@ public class IngestFromKafkaDriver extends
 	protected <T> void consumeMessages(
 			final String formatPluginName,
 			final AvroFormatPlugin<T, ?> avroFormatPlugin,
-			final IngestRunData ingestRunData,
+			final KafkaIngestRunData ingestRunData,
 			final KafkaStream<byte[], byte[]> stream ) {
 		int currentBatchId = 0;
 		final int batchSize = kafkaOptions.getBatchSize();
@@ -290,15 +295,74 @@ public class IngestFromKafkaDriver extends
 
 	synchronized protected <T> void processMessage(
 			final T dataRecord,
-			final IngestRunData ingestRunData,
+			final KafkaIngestRunData ingestRunData,
 			final AvroFormatPlugin<T, ?> plugin )
 			throws IOException {
-		IngestUtils.ingest(
+
+		IngestPluginBase<T, ?> ingestPlugin = plugin.getIngestWithAvroPlugin();
+		IndexProvider indexProvider = plugin;
+
+		final String[] dimensionTypes = ingestOptions.getDimensionalityTypes();
+		final Map<ByteArrayId, IndexWriter> writerMap = new HashMap<ByteArrayId, IndexWriter>();
+		final Map<ByteArrayId, PrimaryIndex> indexMap = new HashMap<ByteArrayId, PrimaryIndex>();
+
+		for (final String dimensionType : dimensionTypes) {
+			final PrimaryIndex primaryIndex = IngestUtils.getIndex(
+					ingestPlugin,
+					ingestRunData.getArgs(),
+					dimensionType);
+			if (primaryIndex == null) {
+				LOGGER.error("Could not get index instance, getIndex() returned null;");
+				throw new IOException(
+						"Could not get index instance, getIndex() returned null");
+			}
+			indexMap.put(
+					primaryIndex.getId(),
+					primaryIndex);
+		}
+
+		final PrimaryIndex[] requiredIndices = indexProvider.getRequiredIndices();
+		if ((requiredIndices != null) && (requiredIndices.length > 0)) {
+			for (final PrimaryIndex requiredIndex : requiredIndices) {
+				indexMap.put(
+						requiredIndex.getId(),
+						requiredIndex);
+			}
+		}
+
+		try (CloseableIterator<?> geowaveDataIt = ingestPlugin.toGeoWaveData(
 				dataRecord,
-				ingestOptions,
-				plugin.getIngestWithAvroPlugin(),
-				plugin,
-				ingestRunData);
+				writerMap.keySet(),
+				ingestOptions.getVisibility())) {
+			while (geowaveDataIt.hasNext()) {
+				final GeoWaveData<?> geowaveData = (GeoWaveData<?>) geowaveDataIt.next();
+				final WritableDataAdapter adapter = ingestRunData.getDataAdapter(geowaveData);
+				if (adapter == null) {
+					LOGGER.warn("Adapter not found for " + geowaveData.getValue());
+					continue;
+				}
+				IndexWriter indexWriter = writerMap.get(adapter.getAdapterId());
+				if (indexWriter == null) {
+					List<PrimaryIndex> indexList = new ArrayList<PrimaryIndex>();
+					for (final ByteArrayId indexId : geowaveData.getIndexIds()) {
+						final PrimaryIndex index = indexMap.get(indexId);
+						if (index == null) {
+							LOGGER.warn("Index '" + indexId.getString() + "' not found for " + geowaveData.getValue());
+							continue;
+						}
+						indexList.add(index);
+					}
+					indexWriter = ingestRunData.getIndexWriter(
+							adapter,
+							indexList.toArray(new PrimaryIndex[indexList.size()]));
+					writerMap.put(
+							adapter.getAdapterId(),
+							indexWriter);
+				}
+				indexWriter.write(geowaveData.getValue());
+
+			}
+		}
 	}
 
 	@Override
@@ -324,5 +388,4 @@ public class IngestFromKafkaDriver extends
 		IngestCommandLineOptions.applyOptions(allOptions);
 		KafkaConsumerCommandLineOptions.applyOptions(allOptions);
 	}
-
 }

@@ -16,6 +16,7 @@ import java.util.Map;
 
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import mil.nga.giat.geowave.adapter.vector.stats.FeatureBoundingBoxStatistics;
+import mil.nga.giat.geowave.adapter.vector.stats.FeatureNumericRangeStatistics;
 import mil.nga.giat.geowave.core.geotime.GeometryUtils;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
 import mil.nga.giat.geowave.core.geotime.store.statistics.BoundingBoxDataStatistics;
@@ -29,10 +30,11 @@ import mil.nga.giat.geowave.core.store.IngestCallback;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.statistics.CountDataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.core.store.adapter.statistics.RowRangeHistogramStatistics;
-import mil.nga.giat.geowave.core.store.adapter.statistics.StatisticalDataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.statistics.StatisticsProvider;
 import mil.nga.giat.geowave.core.store.data.visibility.GlobalVisibilityHandler;
 import mil.nga.giat.geowave.core.store.data.visibility.UniformVisibilityWriter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
@@ -44,6 +46,7 @@ import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.core.store.query.aggregate.CountAggregation;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStore;
 import mil.nga.giat.geowave.datastore.accumulo.index.secondary.AccumuloSecondaryIndexDataStore;
+import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloAdapterIndexMappingStore;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloAdapterStore;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloDataStatisticsStore;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloIndexStore;
@@ -64,6 +67,7 @@ import org.opengis.feature.Property;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.filter.Filter;
+import org.slf4j.LoggerFactory;
 
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
@@ -103,17 +107,29 @@ public class GeoWaveBasicIT extends
 	}
 
 	@Test
-	public void testIngestAndQuerySpatialPointsAndLines() {
+	public void testMultiThreadedIngestAndQuerySpatialPointsAndLines() {
+		testIngestAndQuerySpatialPointsAndLines(4);
+	}
+
+	@Test
+	public void testSingleThreadedIngestAndQuerySpatialPointsAndLines() {
+		testIngestAndQuerySpatialPointsAndLines(1);
+	}
+
+	public void testIngestAndQuerySpatialPointsAndLines(
+			int nthreads ) {
 		System.getProperties().put(
 				"AccumuloIndexWriter.skipFlush",
 				"true");
 		// ingest both lines and points
 		testLocalIngest(
 				DimensionalityType.SPATIAL,
-				HAIL_SHAPEFILE_FILE);
+				HAIL_SHAPEFILE_FILE,
+				nthreads);
 		testLocalIngest(
 				DimensionalityType.SPATIAL,
-				TORNADO_TRACKS_SHAPEFILE_FILE);
+				TORNADO_TRACKS_SHAPEFILE_FILE,
+				nthreads);
 
 		try {
 			testQuery(
@@ -174,7 +190,8 @@ public class GeoWaveBasicIT extends
 						new File(
 								TORNADO_TRACKS_SHAPEFILE_FILE)
 					},
-					DEFAULT_SPATIAL_INDEX);
+					DEFAULT_SPATIAL_INDEX,
+					true);
 		}
 		catch (final Exception e) {
 			e.printStackTrace();
@@ -230,7 +247,7 @@ public class GeoWaveBasicIT extends
 		// otherwise use the statistics interface to calculate every statistic
 		// and compare results to what is available in the statistics data store
 		private StatisticsCache(
-				final StatisticalDataAdapter<SimpleFeature> dataAdapter ) {
+				final StatisticsProvider<SimpleFeature> dataAdapter ) {
 			final ByteArrayId[] statsIds = dataAdapter.getSupportedStatisticsIds();
 			for (final ByteArrayId statsId : statsIds) {
 				final DataStatistics<SimpleFeature> stats = dataAdapter.createDataStatistics(statsId);
@@ -269,7 +286,11 @@ public class GeoWaveBasicIT extends
 
 	public void testStats(
 			final File[] inputFiles,
-			final PrimaryIndex index ) {
+			final PrimaryIndex index,
+			final boolean multithreaded ) {
+		// In the multithreaded case, only test min/max and count. Stats will be
+		// ingested
+		// in a different order and will not match.
 		final LocalFileIngestPlugin<SimpleFeature> localFileIngest = new GeoToolsVectorDataStoreIngestPlugin(
 				Filter.INCLUDE);
 		final Map<ByteArrayId, StatisticsCache> statsCache = new HashMap<ByteArrayId, StatisticsCache>();
@@ -287,11 +308,11 @@ public class GeoWaveBasicIT extends
 					final GeoWaveData<SimpleFeature> data = dataIterator.next();
 					final WritableDataAdapter<SimpleFeature> adapter = data.getAdapter(adapterCache);
 					// it should be a statistical data adapter
-					if (adapter instanceof StatisticalDataAdapter) {
+					if (adapter instanceof StatisticsProvider) {
 						StatisticsCache cachedValues = statsCache.get(adapter.getAdapterId());
 						if (cachedValues == null) {
 							cachedValues = new StatisticsCache(
-									(StatisticalDataAdapter<SimpleFeature>) adapter);
+									(StatisticsProvider<SimpleFeature>) adapter);
 							statsCache.put(
 									adapter.getAdapterId(),
 									cachedValues);
@@ -351,6 +372,18 @@ public class GeoWaveBasicIT extends
 					final DataStatistics<?> actualStats = statsStore.getDataStatistics(
 							expectedStat.getDataAdapterId(),
 							expectedStat.getStatisticsId());
+
+					// Only test RANGE and COUNT in the multithreaded case. None
+					// of the other
+					// statistics will match!
+					if (multithreaded) {
+						if (!(expectedStat.getStatisticsId().getString().startsWith(
+								FeatureNumericRangeStatistics.STATS_TYPE + "#") || expectedStat.getStatisticsId().equals(
+								CountDataStatistics.STATS_ID))) {
+							continue;
+						}
+					}
+
 					Assert.assertNotNull(actualStats);
 					// if the stats are the same, their binary serialization
 					// should be the same
@@ -410,10 +443,12 @@ public class GeoWaveBasicIT extends
 		// ingest both lines and points
 		testLocalIngest(
 				DimensionalityType.SPATIAL_TEMPORAL,
-				HAIL_SHAPEFILE_FILE);
+				HAIL_SHAPEFILE_FILE,
+				1);
 		testLocalIngest(
 				DimensionalityType.SPATIAL_TEMPORAL,
-				TORNADO_TRACKS_SHAPEFILE_FILE);
+				TORNADO_TRACKS_SHAPEFILE_FILE,
+				1);
 		try {
 			testQuery(
 					new File(
@@ -470,7 +505,8 @@ public class GeoWaveBasicIT extends
 						new File(
 								TORNADO_TRACKS_SHAPEFILE_FILE)
 					},
-					DEFAULT_SPATIAL_TEMPORAL_INDEX);
+					DEFAULT_SPATIAL_TEMPORAL_INDEX,
+					false);
 		}
 		catch (final Exception e) {
 			e.printStackTrace();
@@ -645,15 +681,15 @@ public class GeoWaveBasicIT extends
 						accumuloOperations),
 				new AccumuloSecondaryIndexDataStore(
 						accumuloOperations),
+				new AccumuloAdapterIndexMappingStore(
+						accumuloOperations),
 				accumuloOperations);
 
 		final SimpleFeature sf = serBuilder.buildFeature("343");
-		try (IndexWriter writer = geowaveStore.createIndexWriter(
-				DEFAULT_SPATIAL_INDEX,
-				DataStoreUtils.DEFAULT_VISIBILITY)) {
-			writer.write(
-					serAdapter,
-					sf);
+		try (IndexWriter writer = geowaveStore.createWriter(
+				serAdapter,
+				DEFAULT_SPATIAL_INDEX)) {
+			writer.write(sf);
 		}
 		final DistributableQuery q = new SpatialQuery(
 				((Geometry) args.get(Geometry.class)).buffer(0.5d));
@@ -779,6 +815,8 @@ public class GeoWaveBasicIT extends
 						accumuloOperations),
 				new AccumuloSecondaryIndexDataStore(
 						accumuloOperations),
+				new AccumuloAdapterIndexMappingStore(
+						accumuloOperations),
 				accumuloOperations);
 		// this file is the filtered dataset (using the previous file as a
 		// filter) so use it to ensure the query worked
@@ -874,6 +912,8 @@ public class GeoWaveBasicIT extends
 				new AccumuloDataStatisticsStore(
 						accumuloOperations),
 				new AccumuloSecondaryIndexDataStore(
+						accumuloOperations),
+				new AccumuloAdapterIndexMappingStore(
 						accumuloOperations),
 				accumuloOperations);
 		final DistributableQuery query = resourceToQuery(savedFilterResource);

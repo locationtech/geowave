@@ -70,7 +70,7 @@ object GeoWaveRDD {
 
     // index and adapters are not mandatory.
     // they are used here as an example
-    GeoWaveInputFormat.addIndex(conf, index)
+    GeoWaveInputFormat.setIndex(conf, index)
     GeoWaveInputFormat.addDataAdapter(conf, adapter)
 
     // query is not mandatory.

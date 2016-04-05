@@ -67,14 +67,6 @@ public class Stanag4676IngestPlugin extends
 	private static Logger LOGGER = LoggerFactory.getLogger(Stanag4676IngestPlugin.class);
 	public final static PrimaryIndex IMAGE_CHIP_INDEX = new NullIndex(
 			"IMAGERY_CHIPS");
-	public final static ByteArrayId MISSION_SUMMARY_ID = new ByteArrayId(
-			"MISSION_SUMMARY");
-	private final static PrimaryIndex DEFAULT_SPATIAL_TEMPORAL = new SpatialTemporalDimensionalityTypeProvider.SpatialTemporalIndexBuilder().createIndex();
-	public final static PrimaryIndex MISSION_SUMMARY = new CustomIdIndex(
-			DEFAULT_SPATIAL_TEMPORAL.getIndexStrategy(),
-			DEFAULT_SPATIAL_TEMPORAL.getIndexModel(),
-			MISSION_SUMMARY_ID);
-	private static final List<ByteArrayId> MISSION_SUMMARY_AS_ID_LIST = Arrays.asList(MISSION_SUMMARY_ID);
 
 	private static final List<ByteArrayId> IMAGE_CHIP_AS_ID_LIST = Arrays.asList(IMAGE_CHIP_INDEX.getId());
 
@@ -458,7 +450,7 @@ public class Stanag4676IngestPlugin extends
 					geowaveData.add(new GeoWaveData<Object>(
 							new ByteArrayId(
 									StringUtils.stringToBinary(Stanag4676Utils.MISSION_FRAME)),
-							MISSION_SUMMARY_AS_ID_LIST,
+							primaryIndexIds,
 							missionFrameBuilder.buildFeature(UUID.randomUUID().toString())));
 				}
 				else if (event.EventType.get() == 4) {
@@ -477,7 +469,7 @@ public class Stanag4676IngestPlugin extends
 					geowaveData.add(new GeoWaveData<Object>(
 							new ByteArrayId(
 									StringUtils.stringToBinary(Stanag4676Utils.MISSION_SUMMARY)),
-							MISSION_SUMMARY_AS_ID_LIST,
+							primaryIndexIds,
 							missionSummaryBuilder.buildFeature(UUID.randomUUID().toString())));
 				}
 				if (event.Image != null) {
@@ -599,8 +591,7 @@ public class Stanag4676IngestPlugin extends
 	@Override
 	public PrimaryIndex[] getRequiredIndices() {
 		return new PrimaryIndex[] {
-			IMAGE_CHIP_INDEX,
-			MISSION_SUMMARY
+			IMAGE_CHIP_INDEX
 		};
 	}
 

@@ -1,5 +1,7 @@
 package mil.nga.giat.geowave.datastore.accumulo.app;
 
+import java.io.IOException;
+
 // @formatter:off
 /*if[accumulo.api=1.6]
 import org.apache.accumulo.core.util.shell.Shell;
@@ -10,13 +12,11 @@ import org.apache.accumulo.shell.Shell;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
-import java.io.IOException;
-
 public class GeoWaveDemoAppShell
 {
 
 	public static void main(
-			String[] args )
+			final String[] args )
 			throws IOException {
 		Logger.getRootLogger().setLevel(
 				Level.WARN);
@@ -24,7 +24,7 @@ public class GeoWaveDemoAppShell
 		final String instanceName = (System.getProperty("instanceName") != null) ? System.getProperty("instanceName") : "geowave";
 		final String password = (System.getProperty("password") != null) ? System.getProperty("password") : "password";
 
-		String[] shellArgs = new String[] {
+		final String[] shellArgs = new String[] {
 			"-u",
 			"root",
 			"-p",
@@ -33,6 +33,7 @@ public class GeoWaveDemoAppShell
 			instanceName,
 			"localhost:2181"
 		};
+
 		Shell.main(shellArgs);
 	}
 }

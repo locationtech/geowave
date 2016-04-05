@@ -209,10 +209,15 @@ public class CommonIndexedPersistenceEncoding extends
 
 		boolean ok = true;
 		for (final Entry<ByteArrayId, DimensionRangePair> entry : fieldsRangeData.entrySet()) {
-			ok = ok && getCommonData().getValue(
-					entry.getKey()).overlaps(
-					entry.getValue().dimensions,
-					entry.getValue().dataPerDimension);
+			PersistentDataset<CommonIndexValue> commonData = getCommonData();
+			if (commonData != null) {
+				CommonIndexValue value = commonData.getValue(entry.getKey());
+				if (value != null) {
+					ok = ok && value.overlaps(
+							entry.getValue().dimensions,
+							entry.getValue().dataPerDimension);
+				}
+			}
 		}
 		return ok;
 	}

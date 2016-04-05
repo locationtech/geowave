@@ -63,14 +63,14 @@ public class GeoWaveInputFormatConfiguration implements
 					StringUtils.stringToBinary(indexId));
 			for (final PrimaryIndex index : indices) {
 				if (byteId.equals(index.getId())) {
-					GeoWaveInputFormat.addIndex(
+					GeoWaveInputFormat.setIndex(
 							configuration,
 							index);
 				}
 			}
 		}
 		for (final PrimaryIndex index : indices) {
-			GeoWaveInputFormat.addIndex(
+			GeoWaveInputFormat.setIndex(
 					configuration,
 					index);
 		}

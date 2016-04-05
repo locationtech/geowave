@@ -80,18 +80,16 @@ public class SimpleIngestIndexWriter extends
 		// get a handle on a GeoWave index writer which wraps the Accumulo
 		// BatchWriter, make sure to close it (here we use a try with resources
 		// block to close it automatically)
-		try (IndexWriter indexWriter = geowaveDataStore.createIndexWriter(
-				index,
-				DataStoreUtils.DEFAULT_VISIBILITY)) {
+		try (IndexWriter indexWriter = geowaveDataStore.createWriter(
+				adapter,
+				index)) {
 			// build a grid of points across the globe at each whole
 			// lattitude/longitude intersection
 
 			for (SimpleFeature sft : getGriddedFeatures(
 					pointBuilder,
 					1000)) {
-				indexWriter.write(
-						adapter,
-						sft);
+				indexWriter.write(sft);
 			}
 		}
 		catch (final IOException e) {

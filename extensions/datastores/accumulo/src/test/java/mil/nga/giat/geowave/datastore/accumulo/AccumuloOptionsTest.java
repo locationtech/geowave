@@ -10,6 +10,20 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.accumulo.core.client.AccumuloException;
+import org.apache.accumulo.core.client.AccumuloSecurityException;
+import org.apache.accumulo.core.client.Connector;
+import org.apache.accumulo.core.client.TableNotFoundException;
+import org.apache.accumulo.core.client.mock.MockInstance;
+import org.apache.accumulo.core.client.security.tokens.PasswordToken;
+import org.apache.log4j.Logger;
+import org.junit.Before;
+import org.junit.Test;
+
+import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.Geometry;
+import com.vividsolutions.jts.geom.GeometryFactory;
+
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import mil.nga.giat.geowave.core.geotime.store.dimension.GeometryWrapper;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
@@ -27,28 +41,15 @@ import mil.nga.giat.geowave.core.store.data.field.FieldUtils;
 import mil.nga.giat.geowave.core.store.data.field.FieldWriter;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.core.store.memory.DataStoreUtils;
+import mil.nga.giat.geowave.core.store.query.DataIdQuery;
 import mil.nga.giat.geowave.core.store.query.EverythingQuery;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.core.store.query.RowIdQuery;
 import mil.nga.giat.geowave.datastore.accumulo.index.secondary.AccumuloSecondaryIndexDataStore;
+import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloAdapterIndexMappingStore;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloAdapterStore;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloDataStatisticsStore;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloIndexStore;
-
-import org.apache.accumulo.core.client.AccumuloException;
-import org.apache.accumulo.core.client.AccumuloSecurityException;
-import org.apache.accumulo.core.client.Connector;
-import org.apache.accumulo.core.client.TableNotFoundException;
-import org.apache.accumulo.core.client.mock.MockInstance;
-import org.apache.accumulo.core.client.security.tokens.PasswordToken;
-import org.apache.log4j.Logger;
-import org.junit.Before;
-import org.junit.Test;
-
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.GeometryFactory;
 
 public class AccumuloOptionsTest
 {
@@ -106,6 +107,8 @@ public class AccumuloOptionsTest
 				adapterStore,
 				statsStore,
 				secondaryIndexDataStore,
+				new AccumuloAdapterIndexMappingStore(
+						accumuloOperations),
 				accumuloOperations,
 				accumuloOptions);
 	}
@@ -120,16 +123,14 @@ public class AccumuloOptionsTest
 		accumuloOptions.setCreateTable(false);
 		accumuloOptions.setPersistIndex(false);
 
-		try (IndexWriter indexWriter = mockDataStore.createIndexWriter(
-				index,
-				DataStoreUtils.DEFAULT_VISIBILITY)) {
-			final List<ByteArrayId> rowIds = indexWriter.write(
-					adapter,
-					new TestGeometry(
-							factory.createPoint(new Coordinate(
-									25,
-									32)),
-							"test_pt"));
+		try (IndexWriter<TestGeometry> indexWriter = mockDataStore.createWriter(
+				adapter,
+				index)) {
+			final List<ByteArrayId> rowIds = indexWriter.write(new TestGeometry(
+					factory.createPoint(new Coordinate(
+							25,
+							32)),
+					"test_pt"));
 
 			// as the table didn't already exist, the flag indicates not to
 			// create
@@ -146,11 +147,10 @@ public class AccumuloOptionsTest
 
 		accumuloOptions.setCreateTable(true);
 
-		try (IndexWriter indexWriter = mockDataStore.createIndexWriter(
-				index,
-				DataStoreUtils.DEFAULT_VISIBILITY)) {
+		try (IndexWriter<TestGeometry> indexWriter = mockDataStore.createWriter(
+				adapter,
+				index)) {
 			final ByteArrayId rowId1 = indexWriter.write(
-					adapter,
 					new TestGeometry(
 							factory.createPoint(new Coordinate(
 									25,
@@ -188,11 +188,10 @@ public class AccumuloOptionsTest
 
 		accumuloOptions.setPersistIndex(true);
 
-		try (IndexWriter indexWriter = mockDataStore.createIndexWriter(
-				index,
-				DataStoreUtils.DEFAULT_VISIBILITY)) {
+		try (IndexWriter<TestGeometry> indexWriter = mockDataStore.createWriter(
+				adapter,
+				index)) {
 			final ByteArrayId rowId2 = indexWriter.write(
-					adapter,
 					new TestGeometry(
 							factory.createPoint(new Coordinate(
 									25,
@@ -232,11 +231,10 @@ public class AccumuloOptionsTest
 
 		accumuloOptions.setUseLocalityGroups(false);
 
-		try (IndexWriter indexWriter = mockDataStore.createIndexWriter(
-				index,
-				DataStoreUtils.DEFAULT_VISIBILITY)) {
+		try (IndexWriter<TestGeometry> indexWriter = mockDataStore.createWriter(
+				adapter,
+				index)) {
 			final ByteArrayId rowId1 = indexWriter.write(
-					adapter,
 					new TestGeometry(
 							factory.createPoint(new Coordinate(
 									25,
@@ -273,11 +271,10 @@ public class AccumuloOptionsTest
 
 		accumuloOptions.setUseLocalityGroups(true);
 
-		try (IndexWriter indexWriter = mockDataStore.createIndexWriter(
-				index,
-				DataStoreUtils.DEFAULT_VISIBILITY)) {
+		try (IndexWriter<TestGeometry> indexWriter = mockDataStore.createWriter(
+				adapter,
+				index)) {
 			final ByteArrayId rowId2 = indexWriter.write(
-					adapter,
 					new TestGeometry(
 							factory.createPoint(new Coordinate(
 									25,
@@ -322,11 +319,10 @@ public class AccumuloOptionsTest
 		final WritableDataAdapter<TestGeometry> adapter = new TestGeometryAdapter();
 		accumuloOptions.setPersistAdapter(false);
 
-		try (IndexWriter indexWriter = mockDataStore.createIndexWriter(
-				index,
-				DataStoreUtils.DEFAULT_VISIBILITY)) {
+		try (IndexWriter<TestGeometry> indexWriter = mockDataStore.createWriter(
+				adapter,
+				index)) {
 			final ByteArrayId rowId1 = indexWriter.write(
-					adapter,
 					new TestGeometry(
 							factory.createPoint(new Coordinate(
 									25,
@@ -341,11 +337,10 @@ public class AccumuloOptionsTest
 
 		}
 
-		try (IndexWriter indexWriter = mockDataStore.createIndexWriter(
-				index,
-				DataStoreUtils.DEFAULT_VISIBILITY)) {
+		try (IndexWriter<TestGeometry> indexWriter = mockDataStore.createWriter(
+				adapter,
+				index)) {
 			final ByteArrayId rowId1 = indexWriter.write(
-					adapter,
 					new TestGeometry(
 							factory.createPoint(new Coordinate(
 									25,
@@ -382,11 +377,11 @@ public class AccumuloOptionsTest
 
 		accumuloOptions.setPersistAdapter(true);
 
-		try (IndexWriter indexWriter = mockDataStore.createIndexWriter(
-				index,
-				DataStoreUtils.DEFAULT_VISIBILITY)) {
+		try (IndexWriter<TestGeometry> indexWriter = mockDataStore.createWriter(
+				adapter,
+				index)) {
 			final ByteArrayId rowId2 = indexWriter.write(
-					adapter,
+
 					new TestGeometry(
 							factory.createPoint(new Coordinate(
 									25,
@@ -447,11 +442,21 @@ public class AccumuloOptionsTest
 
 		accumuloOptions.setUseAltIndex(true);
 
-		try (IndexWriter indexWriter = mockDataStore.createIndexWriter(
-				index,
-				DataStoreUtils.DEFAULT_VISIBILITY)) {
+		try (IndexWriter<TestGeometry> indexWriter = mockDataStore.createWriter(
+				adapter0,
+				index)) {
 			final ByteArrayId rowId0 = indexWriter.write(
-					adapter0,
+					new TestGeometry(
+							factory.createPoint(new Coordinate(
+									25,
+									32)),
+							"test_pt_0")).get(
+					0);
+		}
+		try (IndexWriter<TestGeometry> indexWriter = mockDataStore.createWriter(
+				adapter1,
+				index)) {
+			final ByteArrayId rowId0 = indexWriter.write(
 					new TestGeometry(
 							factory.createPoint(new Coordinate(
 									25,
@@ -460,7 +465,6 @@ public class AccumuloOptionsTest
 					0);
 
 			final ByteArrayId rowId1 = indexWriter.write(
-					adapter1,
 					new TestGeometry(
 							factory.createPoint(new Coordinate(
 									25,
@@ -495,7 +499,7 @@ public class AccumuloOptionsTest
 		}
 
 		assertEquals(
-				1,
+				2,
 				count);
 
 		it = mockDataStore.query(
@@ -508,7 +512,7 @@ public class AccumuloOptionsTest
 			count++;
 		}
 		assertEquals(
-				2,
+				3,
 				count);
 
 		// delete entry by data id & adapter id
@@ -529,7 +533,7 @@ public class AccumuloOptionsTest
 			count++;
 		}
 		assertEquals(
-				1,
+				2,
 				count);
 
 		it = mockDataStore.query(
@@ -546,11 +550,10 @@ public class AccumuloOptionsTest
 				0,
 				count);
 
-		try (IndexWriter indexWriter = mockDataStore.createIndexWriter(
-				index,
-				DataStoreUtils.DEFAULT_VISIBILITY)) {
+		try (IndexWriter<TestGeometry> indexWriter = mockDataStore.createWriter(
+				adapter0,
+				index)) {
 			final ByteArrayId rowId0 = indexWriter.write(
-					adapter0,
 					new TestGeometry(
 							factory.createPoint(new Coordinate(
 									25,
@@ -560,8 +563,42 @@ public class AccumuloOptionsTest
 
 		}
 		it = mockDataStore.query(
+				new QueryOptions(),
+				new EverythingQuery());
+		count = 0;
+		while (it.hasNext()) {
+			it.next();
+			count++;
+		}
+		assertEquals(
+				3,
+				count);
+
+		assertTrue(mockDataStore.delete(
 				new QueryOptions(
+						adapter1,
 						index),
+				new DataIdQuery(
+						adapter1.getAdapterId(),
+						new ByteArrayId(
+								"test_pt_1"))));
+
+		it = mockDataStore.query(
+				new QueryOptions(
+						adapter1,
+						index),
+				new EverythingQuery());
+		count = 0;
+		while (it.hasNext()) {
+			it.next();
+			count++;
+		}
+		assertEquals(
+				1,
+				count);
+
+		it = mockDataStore.query(
+				new QueryOptions(),
 				new EverythingQuery());
 		count = 0;
 		while (it.hasNext()) {
@@ -573,7 +610,8 @@ public class AccumuloOptionsTest
 				count);
 
 		assertTrue(mockDataStore.delete(
-				new QueryOptions(),
+				new QueryOptions(
+						index),
 				new EverythingQuery()));
 
 		it = mockDataStore.query(
@@ -666,6 +704,7 @@ public class AccumuloOptionsTest
 
 		private static final List<NativeFieldHandler<TestGeometry, Object>> NATIVE_FIELD_HANDLER_LIST = new ArrayList<NativeFieldHandler<TestGeometry, Object>>();
 		private static final List<PersistentIndexFieldHandler<TestGeometry, ? extends CommonIndexValue, Object>> COMMON_FIELD_HANDLER_LIST = new ArrayList<PersistentIndexFieldHandler<TestGeometry, ? extends CommonIndexValue, Object>>();
+
 		static {
 			COMMON_FIELD_HANDLER_LIST.add(GEOM_FIELD_HANDLER);
 			NATIVE_FIELD_HANDLER_LIST.add(ID_FIELD_HANDLER);

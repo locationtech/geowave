@@ -6,6 +6,17 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
+import org.apache.accumulo.core.client.AccumuloException;
+import org.apache.accumulo.core.client.AccumuloSecurityException;
+import org.apache.accumulo.core.client.TableNotFoundException;
+import org.apache.commons.io.IOUtils;
+import org.geotools.feature.SchemaException;
+import org.junit.Assert;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import mil.nga.giat.geowave.core.cli.GenericStoreCommandLineOptions;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloStoreFactoryFamily;
 import mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations;
@@ -18,17 +29,6 @@ import mil.nga.giat.geowave.test.mapreduce.MapReduceTestEnvironment;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
-import org.apache.accumulo.core.client.AccumuloException;
-import org.apache.accumulo.core.client.AccumuloSecurityException;
-import org.apache.accumulo.core.client.TableNotFoundException;
-import org.apache.commons.io.IOUtils;
-import org.geotools.feature.SchemaException;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 public class GeoWaveServicesIT extends
 		ServicesTestEnvironment
 {
@@ -39,9 +39,6 @@ public class GeoWaveServicesIT extends
 	protected static final String GENERAL_GPX_INPUT_GPX_DIR = TEST_CASE_GENERAL_GPX_BASE + "input_gpx/";
 	private static final String ASHLAND_GPX_FILE = GENERAL_GPX_INPUT_GPX_DIR + "ashland.gpx";
 	private static final String ASHLAND_INGEST_TYPE = "gpx";
-	private static final String TEST_STYLE_NAME = "DecimatePoints";
-	private static final String TEST_STYLE_PATH = "src/test/resources/sld/";
-	private static final String TEST_SLD_FILE = TEST_STYLE_PATH + TEST_STYLE_NAME + ".sld";
 
 	private static InfoServiceClient infoServiceClient;
 	private static GeoserverServiceClient geoserverServiceClient;
@@ -87,25 +84,10 @@ public class GeoWaveServicesIT extends
 				ASHLAND_INGEST_TYPE,
 				null,
 				false);
-		assertTrue(success);
+		assertTrue(
+				"Unable to ingest '" + ASHLAND_GPX_FILE + "'",
+				success);
 		success = false;
-
-		// verify that the namespace was created
-		// LOGGER.info("Verify that the namespace was created via localIngest.");
-		// JSONArray namespaces =
-		// infoServiceClient.getNamespaces().getJSONArray(
-		// "namespaces");
-		// for (int i = 0; i < namespaces.size(); i++) {
-		// if (namespaces.getJSONObject(
-		// i).getString(
-		// "name").equals(
-		// TEST_NAMESPACE)) {
-		// success = true;
-		// break;
-		// }
-		// }
-		// assertTrue(success);
-		// success = false;
 
 		try {
 			accumuloOperations.deleteAll();
@@ -129,24 +111,10 @@ public class GeoWaveServicesIT extends
 				ASHLAND_INGEST_TYPE,
 				null,
 				false);
-		assertTrue(success);
+		assertTrue(
+				"Unable to ingest '" + ASHLAND_GPX_FILE + "'",
+				success);
 		success = false;
-
-		// verify that the namespace was created
-		// LOGGER.info("Verify that the namespace was created via localIngest.");
-		// namespaces = infoServiceClient.getNamespaces().getJSONArray(
-		// "namespaces");
-		// for (int i = 0; i < namespaces.size(); i++) {
-		// if (namespaces.getJSONObject(
-		// i).getString(
-		// "name").equals(
-		// TEST_NAMESPACE)) {
-		// success = true;
-		// break;
-		// }
-		// }
-		// assertTrue(success);
-		// success = false;
 
 		// verify the adapter type
 		LOGGER.info("Verify the adapter type.");
@@ -162,7 +130,9 @@ public class GeoWaveServicesIT extends
 				break;
 			}
 		}
-		assertTrue(success);
+		assertTrue(
+				"Unable to find adapter '" + GpxUtils.GPX_WAYPOINT_FEATURE + "'",
+				success);
 		success = false;
 
 		// verify the index type
@@ -179,7 +149,9 @@ public class GeoWaveServicesIT extends
 				break;
 			}
 		}
-		assertTrue(success);
+		assertTrue(
+				"Unable to find index '" + DEFAULT_SPATIAL_INDEX.getId().getString() + "'",
+				success);
 		success = false;
 
 		// *****************************************************
@@ -188,7 +160,9 @@ public class GeoWaveServicesIT extends
 
 		// create the workspace
 		LOGGER.info("Create the test workspace.");
-		assertTrue(geoserverServiceClient.createWorkspace(TEST_WORKSPACE));
+		assertTrue(
+				"Unable to create workspace '" + TEST_WORKSPACE + "'",
+				geoserverServiceClient.createWorkspace(TEST_WORKSPACE));
 
 		// verify that the workspace was created
 		LOGGER.info("Verify that the workspace was created.");
@@ -203,15 +177,25 @@ public class GeoWaveServicesIT extends
 				break;
 			}
 		}
-		assertTrue(success);
+		assertTrue(
+				"Unable to find workspace '" + TEST_WORKSPACE + "'",
+				success);
 		success = false;
 
 		// upload the default style
 		LOGGER.info("Upload the default style.");
-		assertTrue(geoserverServiceClient.publishStyle(new File[] {
-			new File(
-					TEST_SLD_FILE)
-		}));
+		assertTrue(
+				"Unable to publish style '" + TEST_STYLE_NAME_NO_DIFFERENCE + "'",
+				geoserverServiceClient.publishStyle(new File[] {
+					new File(
+							TEST_SLD_NO_DIFFERENCE_FILE)
+				}));
+		assertTrue(
+				"Unable to publish style '" + TEST_STYLE_NAME_MINOR_SUBSAMPLE + "'",
+				geoserverServiceClient.publishStyle(new File[] {
+					new File(
+							TEST_SLD_MINOR_SUBSAMPLE_FILE)
+				}));
 
 		// verify that the style was uploaded
 		LOGGER.info("Verify that the style was uploaded.");
@@ -221,30 +205,48 @@ public class GeoWaveServicesIT extends
 			if (styles.getJSONObject(
 					i).getString(
 					"name").equals(
-					TEST_STYLE_NAME)) {
+					TEST_STYLE_NAME_NO_DIFFERENCE)) {
 				success = true;
 				break;
 			}
 		}
-		assertTrue(success);
+		assertTrue(
+				"Unable to find style '" + TEST_STYLE_NAME_NO_DIFFERENCE + "'",
+				success);
 		success = false;
-
+		for (int i = 0; i < styles.size(); i++) {
+			if (styles.getJSONObject(
+					i).getString(
+					"name").equals(
+					TEST_STYLE_NAME_MINOR_SUBSAMPLE)) {
+				success = true;
+				break;
+			}
+		}
+		assertTrue(
+				"Unable to find style '" + TEST_STYLE_NAME_MINOR_SUBSAMPLE + "'",
+				success);
+		success = false;
 		// verify that we can recall the stored style
 		LOGGER.info("Verify that we can recall the stored style.");
-		final String style = IOUtils.toString(geoserverServiceClient.getStyle(TEST_STYLE_NAME));
-		assertTrue((style != null) && !style.isEmpty());
+		final String style = IOUtils.toString(geoserverServiceClient.getStyle(TEST_SLD_NO_DIFFERENCE_FILE));
+		assertTrue(
+				"Unable to get style '" + TEST_STYLE_NAME_NO_DIFFERENCE + "'",
+				(style != null) && !style.isEmpty());
 
 		// verify that we can publish a datastore
 		LOGGER.info("Verify that we can publish a datastore.");
-		assertTrue(geoserverServiceClient.publishDatastore(
-				new AccumuloStoreFactoryFamily().getName(),
-				getAccumuloConfig(),
-				TEST_NAMESPACE,
-				null,
-				null,
-				null,
-				null,
-				TEST_WORKSPACE));
+		assertTrue(
+				"Unable to publish accumulo datastore",
+				geoserverServiceClient.publishDatastore(
+						new AccumuloStoreFactoryFamily().getName(),
+						getAccumuloConfig(),
+						TEST_NAMESPACE,
+						null,
+						null,
+						null,
+						null,
+						TEST_WORKSPACE));
 
 		// verify that the datastore was published
 		LOGGER.info("Verify that the datastore was published.");
@@ -263,22 +265,30 @@ public class GeoWaveServicesIT extends
 				break;
 			}
 		}
-		assertTrue(success);
+		assertTrue(
+				"Unable to get accumulo datastore",
+				success);
 		success = false;
 
 		if (dsInfo != null) {
 
-			assertTrue(dsInfo.getString(
-					GenericStoreCommandLineOptions.NAMESPACE_OPTION_KEY).equals(
-					TEST_NAMESPACE));
+			assertTrue(
+					"Unable to get accumulo datastore namespace",
+					dsInfo.getString(
+							GenericStoreCommandLineOptions.NAMESPACE_OPTION_KEY).equals(
+							TEST_NAMESPACE));
 
-			assertTrue(dsInfo.getString(
-					BasicAccumuloOperations.ZOOKEEPER_CONFIG_NAME).equals(
-					zookeeper));
+			assertTrue(
+					"Unable to publish accumulo datastore zookeeper",
+					dsInfo.getString(
+							BasicAccumuloOperations.ZOOKEEPER_CONFIG_NAME).equals(
+							zookeeper));
 
-			assertTrue(dsInfo.getString(
-					BasicAccumuloOperations.INSTANCE_CONFIG_NAME).equals(
-					accumuloInstance));
+			assertTrue(
+					"Unable to publish accumulo datastore instance",
+					dsInfo.getString(
+							BasicAccumuloOperations.INSTANCE_CONFIG_NAME).equals(
+							accumuloInstance));
 		}
 
 		// verify that we can recall the datastore
@@ -286,18 +296,22 @@ public class GeoWaveServicesIT extends
 		final JSONObject datastore = geoserverServiceClient.getDatastore(
 				TEST_NAMESPACE,
 				TEST_WORKSPACE);
-		assertTrue(datastore.getJSONObject(
-				"dataStore").getString(
-				"name").equals(
-				TEST_NAMESPACE));
+		assertTrue(
+				"Unable to publish accumulo datastore",
+				datastore.getJSONObject(
+						"dataStore").getString(
+						"name").equals(
+						TEST_NAMESPACE));
 
 		// verify that we can publish a layer
 		LOGGER.info("Verify that we can publish a layer.");
-		assertTrue(geoserverServiceClient.publishLayer(
-				TEST_NAMESPACE,
-				TEST_STYLE_NAME,
-				GpxUtils.GPX_WAYPOINT_FEATURE,
-				TEST_WORKSPACE));
+		assertTrue(
+				"Unable to publish layer '" + GpxUtils.GPX_WAYPOINT_FEATURE + "'",
+				geoserverServiceClient.publishLayer(
+						TEST_NAMESPACE,
+						TEST_STYLE_NAME_NO_DIFFERENCE,
+						GpxUtils.GPX_WAYPOINT_FEATURE,
+						TEST_WORKSPACE));
 
 		// verify that the layer was published
 		LOGGER.info("Verify that the layer was published.");
@@ -314,24 +328,40 @@ public class GeoWaveServicesIT extends
 				break;
 			}
 		}
-		assertTrue(success);
+		assertTrue(
+				"Unable to get layer '" + GpxUtils.GPX_WAYPOINT_FEATURE + "'",
+				success);
 		success = false;
 
 		// verify that we can recall the layer
 		LOGGER.info("Verify that we can recall the layer.");
 		final JSONObject layer = geoserverServiceClient.getLayer(GpxUtils.GPX_WAYPOINT_FEATURE);
-		assertTrue(layer.getJSONObject(
-				"layer").getString(
-				"name").equals(
-				GpxUtils.GPX_WAYPOINT_FEATURE));
+		assertTrue(
+				"Unable to publish accumulo datastore",
+				layer.getJSONObject(
+						"layer").getString(
+						"name").equals(
+						GpxUtils.GPX_WAYPOINT_FEATURE));
 
 		// verify that we are able to delete
 		LOGGER.info("Verify that we are able to clean up.");
-		assertTrue(geoserverServiceClient.deleteLayer(GpxUtils.GPX_WAYPOINT_FEATURE));
-		assertTrue(geoserverServiceClient.deleteDatastore(
-				TEST_NAMESPACE,
-				TEST_WORKSPACE));
-		assertTrue(geoserverServiceClient.deleteStyle(TEST_STYLE_NAME));
-		assertTrue(geoserverServiceClient.deleteWorkspace(TEST_WORKSPACE));
+		assertTrue(
+				"Unable to delete layer '" + GpxUtils.GPX_WAYPOINT_FEATURE + "'",
+				geoserverServiceClient.deleteLayer(GpxUtils.GPX_WAYPOINT_FEATURE));
+		assertTrue(
+				"Unable to delete datastore",
+				geoserverServiceClient.deleteDatastore(
+						TEST_NAMESPACE,
+						TEST_WORKSPACE));
+		assertTrue(
+				"Unable to delete style '" + TEST_STYLE_NAME_NO_DIFFERENCE + "'",
+				geoserverServiceClient.deleteStyle(TEST_STYLE_NAME_NO_DIFFERENCE));
+
+		assertTrue(
+				"Unable to delete style '" + TEST_STYLE_NAME_MINOR_SUBSAMPLE + "'",
+				geoserverServiceClient.deleteStyle(TEST_STYLE_NAME_MINOR_SUBSAMPLE));
+		assertTrue(
+				"Unable to delete workspace",
+				geoserverServiceClient.deleteWorkspace(TEST_WORKSPACE));
 	}
 }

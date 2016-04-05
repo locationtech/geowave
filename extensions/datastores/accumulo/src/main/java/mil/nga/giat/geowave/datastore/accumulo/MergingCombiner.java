@@ -2,12 +2,12 @@ package mil.nga.giat.geowave.datastore.accumulo;
 
 import java.util.Iterator;
 
-import mil.nga.giat.geowave.core.index.Mergeable;
-import mil.nga.giat.geowave.core.index.PersistenceUtils;
-
 import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.Value;
 import org.apache.accumulo.core.iterators.Combiner;
+
+import mil.nga.giat.geowave.core.index.Mergeable;
+import mil.nga.giat.geowave.core.index.PersistenceUtils;
 
 public class MergingCombiner extends
 		Combiner

@@ -80,14 +80,12 @@ public class SimpleIngestProducerConsumer extends
 				new Runnable() {
 					@Override
 					public void run() {
-						try (IndexWriter writer = geowaveDataStore.createIndexWriter(
-								index,
-								DataStoreUtils.DEFAULT_VISIBILITY)) {
+						try (IndexWriter writer = geowaveDataStore.createWriter(
+								adapter,
+								index)) {
 							while (features.hasNext()) {
 								final SimpleFeature sft = features.next();
-								writer.write(
-										adapter,
-										sft);
+								writer.write(sft);
 							}
 						}
 						catch (IOException e) {

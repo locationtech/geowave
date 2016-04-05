@@ -23,12 +23,13 @@ import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.EntryVisibilityHandler;
 import mil.nga.giat.geowave.core.store.adapter.AbstractDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.AdapterPersistenceEncoding;
+import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.IndexFieldHandler;
 import mil.nga.giat.geowave.core.store.adapter.NativeFieldHandler;
 import mil.nga.giat.geowave.core.store.adapter.NativeFieldHandler.RowBuilder;
 import mil.nga.giat.geowave.core.store.adapter.PersistentIndexFieldHandler;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
-import mil.nga.giat.geowave.core.store.adapter.statistics.StatisticalDataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.statistics.StatisticsProvider;
 import mil.nga.giat.geowave.core.store.data.field.FieldReader;
 import mil.nga.giat.geowave.core.store.data.field.FieldUtils;
 import mil.nga.giat.geowave.core.store.data.field.FieldVisibilityHandler;
@@ -98,7 +99,7 @@ import org.opengis.referencing.operation.MathTransform;
 public class FeatureDataAdapter extends
 		AbstractDataAdapter<SimpleFeature> implements
 		GeotoolsFeatureDataAdapter,
-		StatisticalDataAdapter<SimpleFeature>,
+		StatisticsProvider<SimpleFeature>,
 		HadoopDataAdapter<SimpleFeature, FeatureWritable>,
 		SecondaryIndexDataAdapter<SimpleFeature>
 {
@@ -371,12 +372,18 @@ public class FeatureDataAdapter extends
 		byte[] attrBytes = new byte[0];
 
 		final SimpleFeatureUserDataConfigurationSet userDataConfiguration = new SimpleFeatureUserDataConfigurationSet();
-		userDataConfiguration.addConfigurations(new TimeDescriptorConfiguration(
-				persistedType));
-		userDataConfiguration.addConfigurations(new SimpleFeatureStatsConfigurationCollection(
-				persistedType));
-		userDataConfiguration.addConfigurations(new VisibilityConfiguration(
-				persistedType));
+		userDataConfiguration.addConfigurations(
+				typeName,
+				new TimeDescriptorConfiguration(
+						persistedType));
+		userDataConfiguration.addConfigurations(
+				typeName,
+				new SimpleFeatureStatsConfigurationCollection(
+						persistedType));
+		userDataConfiguration.addConfigurations(
+				typeName,
+				new VisibilityConfiguration(
+						persistedType));
 		try {
 			attrBytes = StringUtils.stringToBinary(userDataConfiguration.asJsonString());
 		}
@@ -459,12 +466,18 @@ public class FeatureDataAdapter extends
 					StringUtils.stringFromBinary(axisBytes));
 
 			final SimpleFeatureUserDataConfigurationSet userDataConfiguration = new SimpleFeatureUserDataConfigurationSet();
-			userDataConfiguration.addConfigurations(new TimeDescriptorConfiguration(
-					myType));
-			userDataConfiguration.addConfigurations(new SimpleFeatureStatsConfigurationCollection(
-					myType));
-			userDataConfiguration.addConfigurations(new VisibilityConfiguration(
-					myType));
+			userDataConfiguration.addConfigurations(
+					typeName,
+					new TimeDescriptorConfiguration(
+							myType));
+			userDataConfiguration.addConfigurations(
+					typeName,
+					new SimpleFeatureStatsConfigurationCollection(
+							myType));
+			userDataConfiguration.addConfigurations(
+					typeName,
+					new VisibilityConfiguration(
+							myType));
 			try {
 				userDataConfiguration.fromJsonString(
 						StringUtils.stringFromBinary(attrBytes),
@@ -563,10 +576,7 @@ public class FeatureDataAdapter extends
 	}
 
 	public boolean hasTemporalConstraints() {
-		return typeMatchingFieldHandlers.keySet().contains(
-				Time.class) || typeMatchingFieldHandlers.keySet().contains(
-				FeatureTimestampHandler.class) || typeMatchingFieldHandlers.keySet().contains(
-				FeatureTimeRangeHandler.class);
+		return getTimeDescriptors().hasTime();
 	}
 
 	public synchronized void resetTimeDescriptors() {

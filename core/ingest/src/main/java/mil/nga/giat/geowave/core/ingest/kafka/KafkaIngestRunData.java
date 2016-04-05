@@ -1,4 +1,4 @@
-package mil.nga.giat.geowave.core.ingest.local;
+package mil.nga.giat.geowave.core.ingest.kafka;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -11,24 +11,25 @@ import mil.nga.giat.geowave.core.ingest.GeoWaveData;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.core.store.memory.DataStoreUtils;
 import mil.nga.giat.geowave.core.store.memory.MemoryAdapterStore;
 
 /**
  * A class to hold intermediate run data that must be used throughout the life
  * of an ingest process.
  */
-public class IngestRunData implements
+public class KafkaIngestRunData implements
 		Closeable
 {
-	private final Map<ByteArrayId, IndexWriter> indexIdToWriterCache = new HashMap<ByteArrayId, IndexWriter>();
+	private final Map<ByteArrayId, IndexWriter> adapterIdToWriterCache = new HashMap<ByteArrayId, IndexWriter>();
 	private final AdapterStore adapterCache;
 	private final DataStore dataStore;
 	private final String[] args;
 
-	public IngestRunData(
+	public KafkaIngestRunData(
 			final List<WritableDataAdapter<?>> adapters,
 			final DataStore dataStore,
 			final String[] args ) {
@@ -44,14 +45,16 @@ public class IngestRunData implements
 	}
 
 	public synchronized IndexWriter getIndexWriter(
-			final PrimaryIndex index ) {
-		IndexWriter indexWriter = indexIdToWriterCache.get(index.getId());
+			final DataAdapter<?> adapter,
+			final PrimaryIndex... requiredIndices )
+			throws MismatchedIndexToAdapterMapping {
+		IndexWriter indexWriter = adapterIdToWriterCache.get(adapter.getAdapterId());
 		if (indexWriter == null) {
-			indexWriter = dataStore.createIndexWriter(
-					index,
-					DataStoreUtils.DEFAULT_VISIBILITY);
-			indexIdToWriterCache.put(
-					index.getId(),
+			indexWriter = dataStore.createWriter(
+					adapter,
+					requiredIndices);
+			adapterIdToWriterCache.put(
+					adapter.getAdapterId(),
 					indexWriter);
 		}
 		return indexWriter;
@@ -65,16 +68,16 @@ public class IngestRunData implements
 	public void close()
 			throws IOException {
 		synchronized (this) {
-			for (final IndexWriter indexWriter : indexIdToWriterCache.values()) {
+			for (final IndexWriter indexWriter : adapterIdToWriterCache.values()) {
 				indexWriter.close();
 			}
-			indexIdToWriterCache.clear();
+			adapterIdToWriterCache.clear();
 		}
 	}
 
 	public void flush() {
 		synchronized (this) {
-			for (final IndexWriter indexWriter : indexIdToWriterCache.values()) {
+			for (final IndexWriter indexWriter : adapterIdToWriterCache.values()) {
 				indexWriter.flush();
 			}
 		}

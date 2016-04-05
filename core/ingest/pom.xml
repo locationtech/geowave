@@ -11,8 +11,8 @@
 	<name>GeoWave Ingest Framework</name>
 	<dependencies>
 		<dependency>
-			<groupId>org.geotools</groupId>
-			<artifactId>gt-shapefile</artifactId>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-pool2</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.avro</groupId>
