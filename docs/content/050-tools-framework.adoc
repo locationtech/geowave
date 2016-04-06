@@ -65,8 +65,9 @@ include::manpages/geowave-statsdump.txt[]
 
 === Ingest Example
 
-We can ingest any data type that has been listed as an ingest plugin. Let's start out with the GeoTools datastore; this
-wraps a bunch of GeoTools supported formats. We will use the shapefile capability for our example here.
+GeoWave can ingest any data type that has been listed as an ingest plugin. Let's start out with the GeoTools datastore; this
+wraps a bunch of GeoTools supported formats. This includes all file-based datastores supported within GeoTools. 
+We will use the shapefile capability for our example here.
 
 ==== Something recognizable
 

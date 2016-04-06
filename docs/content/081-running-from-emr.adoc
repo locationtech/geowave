@@ -5,7 +5,7 @@
 === Provisioning
 
 The configuration files needed to use GeoWave from EMR are stored under the deploy/emr/4 directory. EMR expects that all
-config files are available from S3 so the first step would be to create a bucket if needed and then copy the two scripts
+config files are available from S3 so the first step would be to create an S3 bucket and then copy the two scripts
 into the S3 bucket adjusting the path used in the command as needed.
 
 The command below is an example of using the API to launch an EMR cluster, you could also provide this same information

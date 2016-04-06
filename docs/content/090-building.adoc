@@ -31,7 +31,7 @@ Required repositories not in Maven Central have been added to the parent POM. Sp
 
 === Build Process
 
-Checkout geowave, set your preferred dependencies as build arguments and then run maven install.
+Checkout GeoWave, set your preferred dependencies as build arguments and then run maven install.
 
 [source, bash]
 ----
@@ -49,7 +49,7 @@ mvn install $BUILD_ARGS <3>
 Integration Tests: Windows
 
 Integration tests are currently not working on Windows out of the box. If you install cygwin and set the environmental variable CYGPATH to the
-location of the cygpath binary provided by cygwin then is should work. Eclipse and Avro generated files
+location of the cygpath binary provided by cygwin then this should work.
 ====
 
 === Docker Build Process
