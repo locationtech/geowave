@@ -9,6 +9,7 @@ import org.apache.avro.mapreduce.AvroKeyOutputFormat;
 import org.apache.commons.cli.ParseException;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
+import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
@@ -43,7 +44,11 @@ public class VectorMRExportCommand extends
 	private static final Logger LOGGER = Logger.getLogger(VectorMRExportCommand.class);
 
 	public static final String BATCH_SIZE_KEY = "BATCH_SIZE";
-	private VectorMRExportOptions mrOptions;
+	private final VectorMRExportOptions mrOptions = new VectorMRExportOptions();
+
+	public VectorMRExportOptions getOptions() {
+		return mrOptions;
+	}
 
 	/**
 	 * Main method to execute the MapReduce analytic.
@@ -126,12 +131,23 @@ public class VectorMRExportCommand extends
 			}
 			GeoWaveInputFormat.setQuery(
 					conf,
-
 					new CQLQuery(
 							mrOptions.getCqlFilter(),
 							(GeotoolsFeatureDataAdapter) adapter));
 		}
 		// TODO set data store appropriately for input format
+
+		GeoWaveInputFormat.setDataStoreName(
+				conf,
+				mrOptions.dataStoreName);
+		GeoWaveInputFormat.setStoreConfigOptions(
+				conf,
+				mrOptions.configOptions);
+		GeoWaveInputFormat.setGeoWaveNamespace(
+				conf,
+				mrOptions.gwNamespace);
+		// the above code is a temporary placeholder until this gets merged with
+		// the new commandline options
 		GeoWaveInputFormat.setQueryOptions(
 				conf,
 				options);
@@ -140,13 +156,14 @@ public class VectorMRExportCommand extends
 
 		job.setJarByClass(this.getClass());
 
-		job.setJobName("Exporting to " + mrOptions.getHdfsOutputFile());
+		job.setJobName("Exporting to " + mrOptions.getHdfsOutputDirectory());
 		FileOutputFormat.setCompressOutput(
 				job,
 				true);
-		AvroJob.setOutputKeySchema(
+		FileOutputFormat.setOutputPath(
 				job,
-				AvroSimpleFeatureCollection.SCHEMA$);
+				new Path(
+						mrOptions.getHdfsOutputDirectory()));
 		job.setMapperClass(VectorExportMapper.class);
 		job.setInputFormatClass(GeoWaveInputFormat.class);
 		job.setOutputFormatClass(AvroKeyOutputFormat.class);
@@ -154,6 +171,13 @@ public class VectorMRExportCommand extends
 		job.setMapOutputValueClass(NullWritable.class);
 		job.setOutputKeyClass(AvroKey.class);
 		job.setOutputValueClass(NullWritable.class);
+		job.setNumReduceTasks(0);
+		AvroJob.setOutputKeySchema(
+				job,
+				AvroSimpleFeatureCollection.SCHEMA$);
+		AvroJob.setMapOutputKeySchema(
+				job,
+				AvroSimpleFeatureCollection.SCHEMA$);
 
 		GeoWaveInputFormat.setMinimumSplitCount(
 				job.getConfiguration(),

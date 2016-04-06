@@ -41,7 +41,7 @@ public class AvroFeatureUtils
 	/**
 	 * Add the attributes, types and classifications for the SimpleFeatureType
 	 * to the provided FeatureDefinition
-	 *
+	 * 
 	 * @param fd
 	 *            - existing Feature Definition (or new one if null)
 	 * @param sft
@@ -62,8 +62,7 @@ public class AvroFeatureUtils
 		if (fd == null) {
 			fd = new FeatureDefinition();
 		}
-		fd.setFeatureTypeName(
-				sft.getTypeName());
+		fd.setFeatureTypeName(sft.getTypeName());
 
 		final List<String> attributes = new ArrayList<String>(
 				sft.getAttributeCount());
@@ -75,23 +74,17 @@ public class AvroFeatureUtils
 		for (final AttributeDescriptor attr : sft.getAttributeDescriptors()) {
 			final String localName = attr.getLocalName();
 
-			attributes.add(
-					localName);
-			types.add(
-					attr.getType().getBinding().getCanonicalName());
-			classifications.add(
-					getClassification(
-							localName,
-							defaultClassifications,
-							defaultClassification));
+			attributes.add(localName);
+			types.add(attr.getType().getBinding().getCanonicalName());
+			classifications.add(getClassification(
+					localName,
+					defaultClassifications,
+					defaultClassification));
 		}
 
-		fd.setAttributeNames(
-				attributes);
-		fd.setAttributeTypes(
-				types);
-		fd.setAttributeDefaultClassifications(
-				classifications);
+		fd.setAttributeNames(attributes);
+		fd.setAttributeTypes(types);
+		fd.setAttributeDefaultClassifications(classifications);
 
 		return fd;
 	}
@@ -99,7 +92,7 @@ public class AvroFeatureUtils
 	/**
 	 * If a classification exists for this attribute name then use it If not
 	 * then use the provided default classification
-	 *
+	 * 
 	 * @param localName
 	 *            - attribute name
 	 * @param defaultClassifications
@@ -117,10 +110,8 @@ public class AvroFeatureUtils
 			throws IOException {
 		String classification = null;
 
-		if ((defaultClassifications != null) && defaultClassifications.containsKey(
-				localName)) {
-			classification = defaultClassifications.get(
-					localName);
+		if ((defaultClassifications != null) && defaultClassifications.containsKey(localName)) {
+			classification = defaultClassifications.get(localName);
 		}
 		else {
 			classification = defaultClassification;
@@ -136,7 +127,7 @@ public class AvroFeatureUtils
 
 	/**
 	 * Create an AttributeValue from the SimpleFeature's attributes
-	 *
+	 * 
 	 * @param sf
 	 * @param sft
 	 * @return
@@ -149,29 +140,21 @@ public class AvroFeatureUtils
 		final List<ByteBuffer> values = new ArrayList<ByteBuffer>(
 				sft.getAttributeCount());
 
-		attributeValue.setFid(
-				sf.getID());
+		attributeValue.setFid(sf.getID());
 
 		for (final AttributeDescriptor attr : sft.getAttributeDescriptors()) {
-			final Object o = sf.getAttribute(
-					attr.getLocalName());
+			final Object o = sf.getAttribute(attr.getLocalName());
 			byte[] bytes = null;
 			if (o instanceof Geometry) {
-				bytes = WKB_WRITER.write(
-						(Geometry) o);
+				bytes = WKB_WRITER.write((Geometry) o);
 			}
 			else {
-				final FieldWriter fw = FieldUtils.getDefaultWriterForClass(
-						attr.getType().getBinding());
-				bytes = fw.writeField(
-						o);
+				final FieldWriter fw = FieldUtils.getDefaultWriterForClass(attr.getType().getBinding());
+				bytes = fw.writeField(o);
 			}
-			values.add(
-					ByteBuffer.wrap(
-							bytes));
+			values.add(ByteBuffer.wrap(bytes));
 		}
-		attributeValue.setValues(
-				values);
+		attributeValue.setValues(values);
 
 		return attributeValue;
 	}
@@ -179,7 +162,7 @@ public class AvroFeatureUtils
 	/***
 	 * Deserialize byte array into an AvroSimpleFeature then convert to a
 	 * SimpleFeature
-	 *
+	 * 
 	 * @param avroData
 	 *            serialized bytes of a AvroSimpleFeature
 	 * @return Collection of GeoTools SimpleFeature instances.
@@ -198,8 +181,7 @@ public class AvroFeatureUtils
 				null);
 		final FeatureDefinition featureDefinition = sfc.getFeatureType();
 		return avroSimpleFeatureToGTSimpleFeature(
-				avroFeatureDefinitionToGTSimpleFeatureType(
-						featureDefinition),
+				avroFeatureDefinitionToGTSimpleFeatureType(featureDefinition),
 				featureDefinition.getAttributeTypes(),
 				sfc.getValue());
 	}
@@ -208,19 +190,14 @@ public class AvroFeatureUtils
 			final FeatureDefinition featureDefinition )
 			throws ClassNotFoundException {
 		final SimpleFeatureTypeBuilder sftb = new SimpleFeatureTypeBuilder();
-		sftb.setCRS(
-				GeoWaveGTDataStore.DEFAULT_CRS);
-		sftb.setName(
-				featureDefinition.getFeatureTypeName());
+		sftb.setCRS(GeoWaveGTDataStore.DEFAULT_CRS);
+		sftb.setName(featureDefinition.getFeatureTypeName());
 		final List<String> featureTypes = featureDefinition.getAttributeTypes();
 		final List<String> featureNames = featureDefinition.getAttributeNames();
 		for (int i = 0; i < featureDefinition.getAttributeNames().size(); i++) {
-			final String type = featureTypes.get(
-					i);
-			final String name = featureNames.get(
-					i);
-			final Class<?> c = Class.forName(
-					type);
+			final String type = featureTypes.get(i);
+			final String name = featureNames.get(i);
+			final Class<?> c = Class.forName(type);
 			sftb.add(
 					name,
 					c);
@@ -242,38 +219,29 @@ public class AvroFeatureUtils
 				type);
 
 		// null values should still take a place in the array - check
-		Preconditions.checkArgument(
-				attributeTypes.size() == attributeValues.getValues().size());
+		Preconditions.checkArgument(attributeTypes.size() == attributeValues.getValues().size());
 		for (int i = 0; i < attributeValues.getValues().size(); i++) {
 			final ByteBuffer val = attributeValues.getValues().get(
 					i);
 
 			if (attributeTypes.get(
 					i).equals(
-							"com.vividsolutions.jts.geom.Geometry")) {
-				sfb.add(
-						WKB_READER.read(
-								val.array()));
+					"com.vividsolutions.jts.geom.Geometry")) {
+				sfb.add(WKB_READER.read(val.array()));
 			}
 			else {
-				final FieldReader<?> fr = FieldUtils.getDefaultReaderForClass(
-						Class.forName(
-								attributeTypes.get(
-										i)));
-				sfb.add(
-						fr.readField(
-								val.array()));
+				final FieldReader<?> fr = FieldUtils.getDefaultReaderForClass(Class.forName(attributeTypes.get(i)));
+				sfb.add(fr.readField(val.array()));
 			}
 		}
 
-		simpleFeature = sfb.buildFeature(
-				attributeValues.getFid());
+		simpleFeature = sfb.buildFeature(attributeValues.getFid());
 		return simpleFeature;
 	}
 
 	/***
 	 * Deserialize byte stream into an AvroSimpleFeature
-	 *
+	 * 
 	 * @param avroData
 	 *            serialized bytes of AvroSimpleFeature
 	 * @param avroObjectToReuse
@@ -293,8 +261,7 @@ public class AvroFeatureUtils
 			avroObjectToReuse = new AvroSimpleFeature();
 		}
 
-		DATUM_READER.setSchema(
-				avroObjectToReuse.getSchema());
+		DATUM_READER.setSchema(avroObjectToReuse.getSchema());
 		return DATUM_READER.read(
 				avroObjectToReuse,
 				decoder);

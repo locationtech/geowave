@@ -8,25 +8,31 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 
-import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.mapreduce.GeoWaveKey;
-
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.hadoop.io.WritableComparator;
+import org.apache.log4j.Logger;
+
+import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
+import mil.nga.giat.geowave.mapreduce.GeoWaveKey;
 
 /**
  * This class encapsulates the unique identifier for GeoWave to ingest data
  * using a map-reduce GeoWave output format. The record writer must have bother
  * the adapter and the index for the data element to ingest.
  */
-public class GeoWaveOutputKey extends
+public class GeoWaveOutputKey<T> extends
 		GeoWaveKey
 {
+	private final static Logger LOGGER = Logger.getLogger(GeoWaveOutputKey.class);
 	/**
 	 *
 	 */
 	private static final long serialVersionUID = 1L;
 	private Collection<ByteArrayId> indexIds;
+	transient private WritableDataAdapter<T> adapter;
 
 	protected GeoWaveOutputKey() {
 		super();
@@ -37,7 +43,7 @@ public class GeoWaveOutputKey extends
 			final ByteArrayId indexId ) {
 		super(
 				adapterId);
-		this.indexIds = Arrays.asList(indexId);
+		indexIds = Arrays.asList(indexId);
 	}
 
 	public GeoWaveOutputKey(
@@ -48,8 +54,32 @@ public class GeoWaveOutputKey extends
 		this.indexIds = indexIds;
 	}
 
+	public GeoWaveOutputKey(
+			final WritableDataAdapter<T> adapter,
+			final Collection<ByteArrayId> indexIds ) {
+		super(
+				adapter.getAdapterId());
+		this.adapter = adapter;
+		this.indexIds = indexIds;
+
+		adapterId = adapter.getAdapterId();
+	}
+
 	public Collection<ByteArrayId> getIndexIds() {
 		return indexIds;
+	}
+
+	public WritableDataAdapter<T> getAdapter(
+			final AdapterStore adapterCache ) {
+		if (adapter != null) {
+			return adapter;
+		}
+		final DataAdapter<?> adapter = adapterCache.getAdapter(adapterId);
+		if (adapter instanceof WritableDataAdapter) {
+			return (WritableDataAdapter<T>) adapter;
+		}
+		LOGGER.warn("Adapter is not writable");
+		return null;
 	}
 
 	@Override

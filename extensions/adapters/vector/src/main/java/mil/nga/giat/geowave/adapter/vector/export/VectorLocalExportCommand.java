@@ -31,16 +31,20 @@ public class VectorLocalExportCommand
 	// TODO annotate appropriately when new commandline tools is merged
 	private VectorLocalExportOptions options = new VectorLocalExportOptions();
 
+	public VectorLocalExportOptions getOptions() {
+		return options;
+	}
+
 	public void run()
 			throws IOException,
 			CQLException {
 		try (final DataFileWriter<AvroSimpleFeatureCollection> dfw = new DataFileWriter<AvroSimpleFeatureCollection>(
 				new GenericDatumWriter<AvroSimpleFeatureCollection>(
 						AvroSimpleFeatureCollection.SCHEMA$))) {
+			dfw.setCodec(CodecFactory.snappyCodec());
 			dfw.create(
 					AvroSimpleFeatureCollection.SCHEMA$,
 					options.getOutputFile());
-			dfw.setCodec(CodecFactory.snappyCodec());
 			// get appropriate feature adapters
 			final List<GeotoolsFeatureDataAdapter> featureAdapters = new ArrayList<GeotoolsFeatureDataAdapter>();
 			if ((options.getAdapterIds() != null) && !options.getAdapterIds().isEmpty()) {

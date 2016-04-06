@@ -7,6 +7,13 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.commons.lang.ArrayUtils;
+import org.opengis.feature.simple.SimpleFeature;
+import org.opengis.feature.simple.SimpleFeatureType;
+
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterators;
+
 import mil.nga.giat.geowave.adapter.vector.AvroFeatureDataAdapter;
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import mil.nga.giat.geowave.adapter.vector.WholeFeatureDataAdapter;
@@ -23,13 +30,6 @@ import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.core.store.data.field.FieldVisibilityHandler;
 import mil.nga.giat.geowave.core.store.data.visibility.GlobalVisibilityHandler;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
-
-import org.apache.commons.lang.ArrayUtils;
-import org.opengis.feature.simple.SimpleFeature;
-import org.opengis.feature.simple.SimpleFeatureType;
-
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterators;
 
 abstract public class AbstractSimpleFeatureIngestPlugin<I> implements
 		LocalFileIngestPlugin<SimpleFeature>,
@@ -175,7 +175,7 @@ abstract public class AbstractSimpleFeatureIngestPlugin<I> implements
 						@Override
 						public boolean apply(
 								final GeoWaveData<SimpleFeature> input ) {
-							if ((internalTypeNameProvider != null) && internalTypeNameProvider.typeNameMatches(input.getKey().getAdapterId().getString())) {
+							if ((internalTypeNameProvider != null) && internalTypeNameProvider.typeNameMatches(input.getAdapterId().getString())) {
 								return false;
 							}
 							if ((internalFilterProvider != null) && !internalFilterProvider.evaluate(input.getValue())) {

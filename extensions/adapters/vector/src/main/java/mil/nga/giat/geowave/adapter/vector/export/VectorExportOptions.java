@@ -45,4 +45,39 @@ public class VectorExportOptions
 	public int getBatchSize() {
 		return batchSize;
 	}
+
+	public void setCqlFilter(
+			String cqlFilter ) {
+		this.cqlFilter = cqlFilter;
+	}
+
+	public void setAdapterIds(
+			List<String> adapterIds ) {
+		this.adapterIds = adapterIds;
+	}
+
+	public void setIndexId(
+			String indexId ) {
+		this.indexId = indexId;
+	}
+
+	public void setDataStore(
+			DataStore dataStore ) {
+		this.dataStore = dataStore;
+	}
+
+	public void setAdapterStore(
+			AdapterStore adapterStore ) {
+		this.adapterStore = adapterStore;
+	}
+
+	public void setIndexStore(
+			IndexStore indexStore ) {
+		this.indexStore = indexStore;
+	}
+
+	public void setBatchSize(
+			int batchSize ) {
+		this.batchSize = batchSize;
+	}
 }

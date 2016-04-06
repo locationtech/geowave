@@ -46,4 +46,44 @@ public class VectorLocalExportOptions
 		return outputFile;
 	}
 
+	public void setCqlFilter(
+			String cqlFilter ) {
+		generalExportOptions.setCqlFilter(cqlFilter);
+	}
+
+	public void setAdapterIds(
+			List<String> adapterIds ) {
+		generalExportOptions.setAdapterIds(adapterIds);
+	}
+
+	public void setIndexId(
+			String indexId ) {
+		generalExportOptions.setIndexId(indexId);
+	}
+
+	public void setDataStore(
+			DataStore dataStore ) {
+		generalExportOptions.setDataStore(dataStore);
+	}
+
+	public void setAdapterStore(
+			AdapterStore adapterStore ) {
+		generalExportOptions.setAdapterStore(adapterStore);
+	}
+
+	public void setIndexStore(
+			IndexStore indexStore ) {
+		generalExportOptions.setIndexStore(indexStore);
+	}
+
+	public void setBatchSize(
+			int batchSize ) {
+		generalExportOptions.setBatchSize(batchSize);
+	}
+
+	public void setOutputFile(
+			File outputFile ) {
+		this.outputFile = outputFile;
+	}
+
 }
