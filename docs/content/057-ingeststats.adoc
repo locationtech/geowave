@@ -40,7 +40,6 @@ Each simple feature type attribute may have several assigned statistics.  Boundi
 
 [frame="topbot",options="header"]
 |===
-
 |Attribute Type |Statistic Name|Statistic Configuration Attributes (with default values)|Statistic Class
 .3+|Numeric
 |Fixed Bin Histogram|minValue=-&#8734;,maxValue=&#8734;,bins=32|mil.nga.giat.geowave.adapter.vector.stats.FeatureFixedBinNumericStatistics$FeatureFixedBinConfig
@@ -49,8 +48,7 @@ Each simple feature type attribute may have several assigned statistics.  Boundi
 .2+|String
 |Count Min Sketch|errorFactor=0.001,probabilityOfCorrectness=0.98|mil.nga.giat.geowave.adapter.vector.stats.FeatureCountMinSketchStatistics$FeatureCountMinSketchConfig
 |Hyper Log Log|precision=16|mil.nga.giat.geowave.adapter.vector.stats.FeatureHyperLogLogStatistics$FeatureHyperLogLogConfig
-
-===|
+|===
 
 ==== Visibility Configuration
 
@@ -73,8 +71,6 @@ Each of this configurations maintains a set of simple feature attribute names to
 
 The class mil.nga.giat.geowave.adapter.vector.index.SimpleFeaturePrimaryIndexConfiguration is used to maintain the configuration of
 primary indices used for adding or updating simple features via the GeoServer plug-in (FeatureWriter).
-
-|===
 
 ==== Example
 [source]
