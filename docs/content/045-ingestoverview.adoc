@@ -1,14 +1,15 @@
 [[ingest-overview]]
+<<<
 == Ingest
 
 === Overview
-
-image::ingestoverview1.png[scaledwidth="100%",alt="Ingest Architecture"]
 
 In addition to the raw data to ingest, the ingest process requires an adapter to translate the native data into a format
 that can be persisted into the data store. Also, the ingest process requires an Index which is a definition of all the
 configured parameters that define how data is translated to row IDs (how it is indexed) and what common fields need to
 be maintained within the table to be used by fine-grained and secondary filters.
+
+image::ingestoverview1.png[scaledwidth="100%",alt="Ingest Architecture"]
 
 The logic within the ingest process immediately ensures that the index and data adapter are persisted within the Index
 Store and the Adapter Store to support self-described data discovery. In-memory implementations of both of these

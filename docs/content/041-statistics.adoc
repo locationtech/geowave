@@ -1,4 +1,5 @@
 [[statistics]]
+<<<
 == Statistics
 
 Adapters provide a set of statistics stored within a statistic store.  The set of available statistics is specific to each adapter and
@@ -31,3 +32,7 @@ Re-computation of statistics is required in three circumstances:
 contains an attribute that represents the minimum or maximum value for the population.
 . New statistics added to the statistics store after data items are ingested.  These new statistics do not reflect the entire population.
 . Software changes invalidate prior stored images of statistics.
+
+\\\\
+TODO: figure out why the list above causes formatting issues with the next section
+\\\\

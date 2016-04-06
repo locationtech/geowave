@@ -38,7 +38,7 @@ names of the simple feature type attributes that define start and end time value
 
 Each simple feature type attribute may have several assigned statistics.  Bounding box and range statistics are automatically captured for geometry and temporal attributes.
 
-[frame="topbot",options="header"]  
+[frame="topbot",options="header"]
 |===
 
 |Attribute Type |Statistic Name|Statistic Configuration Attributes (with default values)|Statistic Class
@@ -49,6 +49,8 @@ Each simple feature type attribute may have several assigned statistics.  Boundi
 .2+|String
 |Count Min Sketch|errorFactor=0.001,probabilityOfCorrectness=0.98|mil.nga.giat.geowave.adapter.vector.stats.FeatureCountMinSketchStatistics$FeatureCountMinSketchConfig
 |Hyper Log Log|precision=16|mil.nga.giat.geowave.adapter.vector.stats.FeatureHyperLogLogStatistics$FeatureHyperLogLogConfig
+
+===|
 
 ==== Visibility Configuration
 

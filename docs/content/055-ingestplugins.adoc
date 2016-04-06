@@ -1,5 +1,5 @@
 [[ingest-plugins]]
-=== Ingest plugins
+=== Ingest Plugins
 
 The geowave command line utility comes with several plugins out of the box
 

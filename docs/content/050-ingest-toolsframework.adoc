@@ -1,5 +1,5 @@
-[[tools-framework]]
-== Tools Framework
+[[ingest-toolsframework]]
+=== Tools Framework
 
 A plugin framework (using Service Provider Interface (SPI) based injection) is provided with several input formats and utilities supported out of the box.
 
@@ -31,42 +31,44 @@ The geowave tools jar is now packaged in deploy/target. When packaged for instal
 that will be installed in $PATH. In a development environment where this script has not been installed you could create a directory
 containing the tools jar and any needed plugin jars and use with something like the following command ```java -cp "$DIR/* <operation> <options>```
 
-=== geowave -clear
+=== Commands
+
+==== geowave -clear
 
 include::manpages/geowave-clear.txt[]
 
-=== geowave -hdfsingest
+==== geowave -hdfsingest
 
 include::manpages/geowave-hdfsingest.txt[]
 
-=== geowave -hdfsstage
+==== geowave -hdfsstage
 
 include::manpages/geowave-hdfsstage.txt[]
 
-=== geowave -kafkastage
+==== geowave -kafkastage
 
 include::manpages/geowave-kafkastage.txt[]
 
-=== geowave -localingest
+==== geowave -localingest
 
 include::manpages/geowave-localingest.txt[]
 
-=== geowave -poststage
+==== geowave -poststage
 
 include::manpages/geowave-poststage.txt[]
 
-=== geowave -stats
+==== geowave -stats
 
 include::manpages/geowave-stats.txt[]
 
-=== geowave -statsdump
+==== geowave -statsdump
 
 include::manpages/geowave-statsdump.txt[]
 
 === Ingest Example
 
 GeoWave can ingest any data type that has been listed as an ingest plugin. Let's start out with the GeoTools datastore; this
-wraps a bunch of GeoTools supported formats. This includes all file-based datastores supported within GeoTools. 
+wraps a bunch of GeoTools supported formats. This includes all file-based datastores supported within GeoTools.
 We will use the shapefile capability for our example here.
 
 ==== Something recognizable
