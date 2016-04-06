@@ -335,7 +335,7 @@ public class SpatialTemporalQueryIT extends
 
 		return cal;
 	}
-	
+
 	private static Calendar getInitialYearCalendar() {
 		final Calendar cal = Calendar.getInstance();
 		cal.set(

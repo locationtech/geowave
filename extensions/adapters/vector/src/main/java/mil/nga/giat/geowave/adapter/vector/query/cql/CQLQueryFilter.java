@@ -23,6 +23,7 @@ import org.apache.commons.vfs2.FileObject;
 import org.apache.commons.vfs2.impl.VFSClassLoader;
 import org.apache.log4j.Logger;
 import org.geotools.factory.GeoTools;
+import org.geotools.filter.text.cql2.CQLException;
 import org.geotools.filter.text.ecql.ECQL;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.filter.Filter;
@@ -43,7 +44,17 @@ public class CQLQueryFilter implements
 	public CQLQueryFilter(
 			final Filter filter,
 			final GeotoolsFeatureDataAdapter adapter ) {
-		this.filter = filter;
+		try {
+			// We do not have a way to transform a filter directly from one to
+			// another.
+			this.filter = FilterToCQLTool.toFilter(FilterToCQLTool.toCQL(filter));
+		}
+		catch (CQLException e) {
+			LOGGER.trace(
+					"Filter is not a CQL Expression",
+					e);
+			this.filter = filter;
+		}
 		this.adapter = adapter;
 	}
 
@@ -150,7 +161,7 @@ public class CQLQueryFilter implements
 			filterBytes = new byte[] {};
 		}
 		else {
-			filterBytes = StringUtils.stringToBinary(ECQL.toCQL(filter));
+			filterBytes = StringUtils.stringToBinary(FilterToCQLTool.toCQL(filter));
 		}
 		byte[] adapterBytes;
 		if (adapter != null) {
