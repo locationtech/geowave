@@ -20,6 +20,7 @@ import mil.nga.giat.geowave.core.store.query.Query;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStore;
 import mil.nga.giat.geowave.datastore.accumulo.index.secondary.AccumuloSecondaryIndexDataStore;
+import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloAdapterIndexMappingStore;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloAdapterStore;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloDataStatisticsStore;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloIndexStore;
@@ -36,6 +37,7 @@ public class BasicKafkaIT extends
 		KafkaTestBase<GpxTrack>
 {
 	private static final Map<ByteArrayId, Integer> EXPECTED_COUNT_PER_ADAPTER_ID = new HashMap<ByteArrayId, Integer>();
+
 	static {
 		EXPECTED_COUNT_PER_ADAPTER_ID.put(
 				new ByteArrayId(
@@ -119,6 +121,8 @@ public class BasicKafkaIT extends
 				new AccumuloDataStatisticsStore(
 						accumuloOperations),
 				new AccumuloSecondaryIndexDataStore(
+						accumuloOperations),
+				new AccumuloAdapterIndexMappingStore(
 						accumuloOperations),
 				accumuloOperations);
 

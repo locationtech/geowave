@@ -8,6 +8,7 @@ import org.apache.commons.cli.ParseException;
 public class KDECommandLineOptions
 {
 	public static final String FEATURE_TYPE_KEY = "featureType";
+	public static final String INDEX_ID_KEY = "indexId";
 	public static final String MIN_LEVEL_KEY = "minLevel";
 	public static final String MAX_LEVEL_KEY = "maxLevel";
 	public static final String MIN_SPLITS_KEY = "minSplits";
@@ -19,6 +20,7 @@ public class KDECommandLineOptions
 	public static final String CQL_FILTER_KEY = "cqlFilter";
 
 	private final String featureType;
+	private final String indexId;
 	private final Integer minLevel;
 	private final Integer maxLevel;
 	private final Integer minSplits;
@@ -31,6 +33,7 @@ public class KDECommandLineOptions
 
 	public KDECommandLineOptions(
 			final String featureType,
+			final String indexId,
 			final Integer minLevel,
 			final Integer maxLevel,
 			final Integer minSplits,
@@ -41,6 +44,7 @@ public class KDECommandLineOptions
 			final Integer tileSize,
 			final String cqlFilter ) {
 		this.featureType = featureType;
+		this.indexId = indexId;
 		this.minLevel = minLevel;
 		this.maxLevel = maxLevel;
 		this.minSplits = minSplits;
@@ -50,6 +54,10 @@ public class KDECommandLineOptions
 		this.jobTrackerOrResourceManHostPort = jobTrackerOrResourceManHostPort;
 		this.tileSize = tileSize;
 		this.cqlFilter = cqlFilter;
+	}
+
+	public String getIndexId() {
+		return indexId;
 	}
 
 	public String getFeatureType() {
@@ -112,8 +120,13 @@ public class KDECommandLineOptions
 		if (commandLine.hasOption(CQL_FILTER_KEY)) {
 			cqlFilter = commandLine.getOptionValue(CQL_FILTER_KEY);
 		}
+		String indexId = null;
+		if (commandLine.hasOption(INDEX_ID_KEY)) {
+			indexId = commandLine.getOptionValue(INDEX_ID_KEY);
+		}
 		return new KDECommandLineOptions(
 				featureType,
+				indexId,
 				minLevel,
 				maxLevel,
 				minSplits,
@@ -186,7 +199,14 @@ public class KDECommandLineOptions
 				CQL_FILTER_KEY,
 				true,
 				"An optional CQL filter applied to the input data");
+
 		cqlFilterOption.setRequired(false);
 		allOptions.addOption(cqlFilterOption);
+		final Option indexIdOption = new Option(
+				INDEX_ID_KEY,
+				true,
+				"An optional index ID to filter the input data");
+		indexIdOption.setRequired(false);
+		allOptions.addOption(indexIdOption);
 	}
 }

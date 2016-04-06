@@ -1,14 +1,7 @@
 package mil.nga.giat.geowave.datastore.accumulo.query;
 
+import java.util.Collections;
 import java.util.List;
-
-import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.ByteArrayRange;
-import mil.nga.giat.geowave.core.index.IndexUtils;
-import mil.nga.giat.geowave.core.index.StringUtils;
-import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations;
-import mil.nga.giat.geowave.datastore.accumulo.util.AccumuloUtils;
 
 import org.apache.accumulo.core.client.BatchScanner;
 import org.apache.accumulo.core.client.IteratorSetting;
@@ -18,6 +11,14 @@ import org.apache.accumulo.core.client.TableNotFoundException;
 import org.apache.accumulo.core.data.Range;
 import org.apache.hadoop.io.Text;
 import org.apache.log4j.Logger;
+
+import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.index.ByteArrayRange;
+import mil.nga.giat.geowave.core.index.IndexUtils;
+import mil.nga.giat.geowave.core.index.StringUtils;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations;
+import mil.nga.giat.geowave.datastore.accumulo.util.AccumuloUtils;
 
 /**
  * This class is used internally to perform query operations against an Accumulo
@@ -29,6 +30,7 @@ abstract public class AccumuloQuery
 	private final static Logger LOGGER = Logger.getLogger(AccumuloQuery.class);
 	protected final List<ByteArrayId> adapterIds;
 	protected final PrimaryIndex index;
+	protected final List<String> fieldIds;
 
 	private final String[] authorizations;
 
@@ -38,15 +40,18 @@ abstract public class AccumuloQuery
 		this(
 				null,
 				index,
+				Collections.<String> emptyList(),
 				authorizations);
 	}
 
 	public AccumuloQuery(
 			final List<ByteArrayId> adapterIds,
 			final PrimaryIndex index,
+			final List<String> fieldIds,
 			final String... authorizations ) {
 		this.adapterIds = adapterIds;
 		this.index = index;
+		this.fieldIds = fieldIds;
 		this.authorizations = authorizations;
 	}
 
@@ -73,27 +78,10 @@ abstract public class AccumuloQuery
 					((Scanner) scanner).setRange(AccumuloUtils.byteArrayRangeToAccumuloRange(r));
 				}
 				if ((limit != null) && (limit > 0) && (limit < ((Scanner) scanner).getBatchSize())) {
-					((Scanner) scanner).setBatchSize(limit);
-				}
-				if (maxResolutionSubsamplingPerDimension != null) {
-					if (maxResolutionSubsamplingPerDimension.length != index.getIndexStrategy().getOrderedDimensionDefinitions().length) {
-						LOGGER.warn("Unable to subsample for table '" + tableName + "'. Subsample dimensions = " + maxResolutionSubsamplingPerDimension.length + " when indexed dimensions = " + index.getIndexStrategy().getOrderedDimensionDefinitions().length);
-					}
-					else {
-
-						final int cardinalityToSubsample = (int) Math.round(IndexUtils.getDimensionalBitsUsed(
-								index.getIndexStrategy(),
-								maxResolutionSubsamplingPerDimension) + (8 * index.getIndexStrategy().getByteOffsetFromDimensionalIndex()));
-
-						final IteratorSetting iteratorSettings = new IteratorSetting(
-								FixedCardinalitySkippingIterator.CARDINALITY_SKIPPING_ITERATOR_PRIORITY,
-								FixedCardinalitySkippingIterator.CARDINALITY_SKIPPING_ITERATOR_NAME,
-								FixedCardinalitySkippingIterator.class);
-						iteratorSettings.addOption(
-								FixedCardinalitySkippingIterator.CARDINALITY_SKIP_INTERVAL,
-								Integer.toString(cardinalityToSubsample));
-						scanner.addScanIterator(iteratorSettings);
-					}
+					// do allow the limit to be set to some enormous size.
+					((Scanner) scanner).setBatchSize(Math.min(
+							1024,
+							limit));
 				}
 			}
 			else {
@@ -101,6 +89,26 @@ abstract public class AccumuloQuery
 						tableName,
 						getAdditionalAuthorizations());
 				((BatchScanner) scanner).setRanges(AccumuloUtils.byteArrayRangesToAccumuloRanges(ranges));
+			}
+			if (maxResolutionSubsamplingPerDimension != null) {
+				if (maxResolutionSubsamplingPerDimension.length != index.getIndexStrategy().getOrderedDimensionDefinitions().length) {
+					LOGGER.warn("Unable to subsample for table '" + tableName + "'. Subsample dimensions = " + maxResolutionSubsamplingPerDimension.length + " when indexed dimensions = " + index.getIndexStrategy().getOrderedDimensionDefinitions().length);
+				}
+				else {
+
+					final int cardinalityToSubsample = (int) Math.round(IndexUtils.getDimensionalBitsUsed(
+							index.getIndexStrategy(),
+							maxResolutionSubsamplingPerDimension) + (8 * index.getIndexStrategy().getByteOffsetFromDimensionalIndex()));
+
+					final IteratorSetting iteratorSettings = new IteratorSetting(
+							FixedCardinalitySkippingIterator.CARDINALITY_SKIPPING_ITERATOR_PRIORITY,
+							FixedCardinalitySkippingIterator.CARDINALITY_SKIPPING_ITERATOR_NAME,
+							FixedCardinalitySkippingIterator.class);
+					iteratorSettings.addOption(
+							FixedCardinalitySkippingIterator.CARDINALITY_SKIP_INTERVAL,
+							Integer.toString(cardinalityToSubsample));
+					scanner.addScanIterator(iteratorSettings);
+				}
 			}
 		}
 		catch (final TableNotFoundException e) {

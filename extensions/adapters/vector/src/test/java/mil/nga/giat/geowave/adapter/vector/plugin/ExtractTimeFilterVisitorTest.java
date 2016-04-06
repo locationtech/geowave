@@ -187,6 +187,7 @@ public class ExtractTimeFilterVisitorTest
 				rangeSet.getConstraintsFor(
 						"start_end").getEndRange().getEndTime());
 
+		// Open ended query
 		filter = ECQL.toFilter("start < 2005-05-20T20:32:56Z and end > 2005-05-19T20:32:56Z");
 		filter = factory.and(
 				Filter.INCLUDE,
@@ -200,11 +201,11 @@ public class ExtractTimeFilterVisitorTest
 		assertNotNull(rangeSet);
 		assertTrue(!rangeSet.isEmpty());
 		assertEquals(
-				stime,
+				TemporalRange.START_TIME,
 				rangeSet.getConstraintsFor(
 						"start_end").getStartRange().getStartTime());
 		assertEquals(
-				etime,
+				TemporalRange.END_TIME,
 				rangeSet.getConstraintsFor(
 						"start_end").getEndRange().getEndTime());
 

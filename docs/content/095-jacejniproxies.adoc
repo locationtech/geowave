@@ -2,17 +2,19 @@
 <<<
 == Jace JNI Proxies
 
-Using Jace, we are able to create JNI proxy classes for GeoWave which can be used in C/C++ applications.  
+Using Jace, we are able to create JNI proxy classes for GeoWave which can be used in C/C++ applications.
 
-Boost is required when using the Jace bindings.  
+Boost is required when using the Jace bindings.
 
 === Prepackaged Source and Binaries
 
-There is a public http://ngageoint.github.io/geowave/packages.html[GeoWave RPM Repo] where you can download a tarball for the GeoWave Jace bindings for your desired platform.  If your platform is not available, there is a source tarball which can be used in conjunction with CMake to build the GeoWave Jace bindings for your desired platform.  
+There is a public http://ngageoint.github.io/geowave/packages.html[GeoWave RPM Repo] where you can download a tarball
+for the GeoWave Jace bindings for your desired platform.  If your platform is not available, there is a source tarball
+which can be used in conjunction with CMake to build the GeoWave Jace bindings for your desired platform.
 
 === Generate Proxies and Build from Source
 
-If you want, you can generate and build the Jace proxies yourself.  
+If you want, you can generate and build the Jace proxies yourself.
 
 ==== Step 1 - Checkout Jace and GeoWave
 
@@ -86,11 +88,12 @@ Refer to the table below to select the platform most applicable to your needs.
 http://mapnik.org/[Mapnik] is an open source toolkit for developing mapping applications.
 GeoWave is supported as a plugin for Mapnik for reading vector data from Accumulo.
 
-Note: These instructions assume that you are using prepackaged binaries.  
+Note: These instructions assume that you are using prepackaged binaries.
 
 ==== Configure Scons for Mapnik
 
-To configure Mapnik to run with GeoWave, there are a few SCons options which need to be configured.  Refer to the table below to get an idea for how these options would be configured on Ubuntu 14.04 LTS.
+To configure Mapnik to run with GeoWave, there are a few SCons options which need to be configured.
+Refer to the table below to get an idea for how these options would be configured on Ubuntu 14.04 LTS.
 
 [cols="2*", options="header"]
 |===
@@ -138,17 +141,19 @@ Note: The geowave-ingest jar included in the tarball only works for the geotools
 
 === PDAL Plugin Configuration
 
-==== PDAL  
+==== PDAL
 
 The Point Data Abstraction Library http://www.pdal.io/index.html[PDAL] is a BSD licensed library for translating
 and manipulating point cloud data of various formats.  GeoWave is supported as a plugin for PDAL for both reading
-and writing data to Accumulo.  
+and writing data to Accumulo.
 
-Note: These instructions assume that you are using prepackaged binaries.  
+Note: These instructions assume that you are using prepackaged binaries.
 
 ==== Configure CMake for PDAL
 
-To configure PDAL to run with GeoWave, there are a few CMake options which need to be configured.  While some of the options (namely the JAVA options) may configure automatically, some will need to be set manually.  Refer to the table below to get an idea for how these options would be configured on Ubuntu 14.04 LTS.
+To configure PDAL to run with GeoWave, there are a few CMake options which need to be configured.
+While some of the options (namely the JAVA options) may configure automatically, some will need to be set manually.  
+Refer to the table below to get an idea for how these options would be configured on Ubuntu 14.04 LTS.
 
 [cols="3*", options="header"]
 |===

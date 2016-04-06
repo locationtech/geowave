@@ -85,7 +85,7 @@ Current `best' version is /usr/local/geowave-0.9.0-hdp2.
 geowave-*-accumulo: This RPM will install the GeoWave Accumulo iterator into the local file system and then upload
 it into HDFS using the `hadoop fs -put` command. This means of deployment requires that the RPM is installed on a node that
 has the correct binaries and configuration in place to push files to HDFS, like your namenode. We also need to set the ownership
-and permissions correctly within HDFS and as such need to execute the script as a user that has superuser permisisons in HDFS.
+and permissions correctly within HDFS and as such need to execute the script as a user that has superuser permissions in HDFS.
 This user varies by Hadoop distribution vendor. If the Accumulo RPM installation fails, check the install log located at
 `/usr/local/geowave/accumulo/geowave-to-hdfs.log` for errors. The script can be re-run manually if there was a problem that
 can be corrected like the HDFS service was not started. If a non-default user was used to install Hadoop you can specify a user

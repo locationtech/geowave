@@ -2,6 +2,7 @@ package mil.nga.giat.geowave.core.store.memory;
 
 import mil.nga.giat.geowave.core.store.DataStoreFactorySpi;
 import mil.nga.giat.geowave.core.store.StoreFactoryFamilySpi;
+import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStoreFactorySpi;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStoreFactorySpi;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStoreFactorySpi;
 import mil.nga.giat.geowave.core.store.index.IndexStoreFactorySpi;
@@ -35,6 +36,11 @@ public class MemoryStoreFactoryFamily extends
 	@Override
 	public SecondaryIndexDataStoreFactorySpi getSecondaryIndexDataStore() {
 		return new MemorySecondaryIndexStoreFactory();
+	}
+
+	@Override
+	public AdapterIndexMappingStoreFactorySpi getAdapterIndexMappingStoreFactory() {
+		return new MemoryAdapterIndexMappingStoreFactory();
 	}
 
 }

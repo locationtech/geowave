@@ -6,9 +6,9 @@
        xmlns:xlink="http://www.w3.org/1999/xlink"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
      <NamedLayer>
-       <Name>Decimate</Name>
+       <Name>DecimatePoints-10px</Name>
        <UserStyle>
-         <Title>Decimate</Title>
+         <Title>DecimatePoints-10px</Title>
          <Abstract>An example of how to handle large datasets in a WMS request by decimating to pixel resolution.</Abstract>
          <FeatureTypeStyle>
            <Transformation>
@@ -18,7 +18,7 @@
                </ogc:Function>
                <ogc:Function name="parameter">
                  <ogc:Literal>pixelSize</ogc:Literal>
-                 <ogc:Literal>1.5</ogc:Literal>
+                 <ogc:Literal>10</ogc:Literal>
                </ogc:Function>
                <ogc:Function name="parameter">
                  <ogc:Literal>outputBBOX</ogc:Literal>
@@ -52,7 +52,7 @@
                     <CssParameter name="fill">#FF0000</CssParameter>
                   </Fill>
                 </Mark>
-                <Size>3</Size>
+                <Size>6</Size>
               </Graphic>
             </PointSymbolizer>
           </Rule>

@@ -34,7 +34,7 @@ exit
 <1> You'll be prompted for a password
 <2> Ensure the user has ownership of all tables created within the namespace
 <3> The Accumulo root path in HDFS varies between hadoop vendors. Cloudera is /accumulo and Hortonworks is /apps/accumulo
-<4> Link the namespace with the application classpath, adjust the labels as needed if you've used different user or appilcation names
+<4> Link the namespace with the application classpath, adjust the labels as needed if you've used different user or application names
 
 These manual configuration steps have to be performed before attempting to create GeoWave index tables. After the initial configuration
 you may elect to do further user and namespace creation and configuring to provide isolation between groups and data sets.

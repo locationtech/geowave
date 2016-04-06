@@ -178,7 +178,9 @@ public class StatsManagerTest
 		assertNotNull(stat);
 
 		final SimpleFeatureUserDataConfigurationSet config = new SimpleFeatureUserDataConfigurationSet();
-		config.addConfigurations(new SimpleFeatureStatsConfigurationCollection());
+		config.addConfigurations(
+				schema.getTypeName(),
+				new SimpleFeatureStatsConfigurationCollection());
 		config.configureFromType(schema);
 		config.fromJsonString(
 				config.asJsonString(),

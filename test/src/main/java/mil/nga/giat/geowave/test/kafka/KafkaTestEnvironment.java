@@ -9,6 +9,7 @@ import kafka.server.KafkaServerStartable;
 import mil.nga.giat.geowave.core.cli.GenericStoreCommandLineOptions;
 import mil.nga.giat.geowave.core.cli.GeoWaveMain;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStoreFactory;
+import mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations;
 import mil.nga.giat.geowave.test.GeoWaveTestEnvironment;
 
 import org.apache.commons.lang.StringUtils;
@@ -54,10 +55,10 @@ abstract public class KafkaTestEnvironment<I> extends
 			final String ingestFilePath ) {
 		LOGGER.warn("Ingesting '" + ingestFilePath + "' - this may take several minutes...");
 		// FIXME
-		final String[] args = StringUtils.split(
-				"-kafkaingest" + " -f gpx -consumerTimeoutMs 5000 -reconnectOnTimeout -groupId testGroup -autoOffsetReset smallest -fetchMessageMaxBytes " + MAX_MESSAGE_BYTES + " -zookeeperConnect " + zookeeper + " -" + GenericStoreCommandLineOptions.NAMESPACE_OPTION_KEY + " " + TEST_NAMESPACE + " -dim " + (spatialTemporal ? "spatial-temporal" : "spatial"),
-				" -datastore " + new AccumuloDataStoreFactory().getName() + " -z " + zookeeper + " -i " + accumuloInstance + " -u " + accumuloUser + " -p " + accumuloPassword + ' ');
+		final String[] args = StringUtils.split("-kafkaingest" + " -f gpx -batchSize 1 -consumerTimeoutMs 5000 -reconnectOnTimeout -groupId testGroup -autoOffsetReset smallest -fetchMessageMaxBytes " + MAX_MESSAGE_BYTES + " -zookeeperConnect " + zookeeper + " -" + GenericStoreCommandLineOptions.NAMESPACE_OPTION_KEY + " " + TEST_NAMESPACE + " -dim " + (spatialTemporal ? "spatial-temporal" : "spatial") + " -datastore " + new AccumuloDataStoreFactory().getName() + " -" + BasicAccumuloOperations.ZOOKEEPER_CONFIG_NAME + " " + zookeeper + " -" + BasicAccumuloOperations.INSTANCE_CONFIG_NAME + " " + accumuloInstance + " -" + BasicAccumuloOperations.USER_CONFIG_NAME + " " + accumuloUser + " -" + BasicAccumuloOperations.PASSWORD_CONFIG_NAME + " " + accumuloPassword + ' ');
+
 		GeoWaveMain.run(args);
+
 	}
 
 	@BeforeClass

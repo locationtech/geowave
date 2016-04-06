@@ -120,14 +120,12 @@ public class SpatialQueryExample
 			FeatureDataAdapter adapter,
 			PrimaryIndex index,
 			List<SimpleFeature> features ) {
-		try (IndexWriter indexWriter = dataStore.createIndexWriter(
-				index,
-				DataStoreUtils.DEFAULT_VISIBILITY)) {
+		try (IndexWriter indexWriter = dataStore.createWriter(
+				adapter,
+				index)) {
 			for (SimpleFeature sf : features) {
 				//
-				indexWriter.write(
-						adapter,
-						sf);
+				indexWriter.write(sf);
 
 			}
 		}

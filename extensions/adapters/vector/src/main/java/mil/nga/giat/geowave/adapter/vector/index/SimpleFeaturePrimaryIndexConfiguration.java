@@ -16,6 +16,16 @@ public class SimpleFeaturePrimaryIndexConfiguration implements
 	public static final String INDEX_NAME = "PrimaryIndexName";
 	private List<String> indexNames = null;
 
+	public SimpleFeaturePrimaryIndexConfiguration() {
+		super();
+	}
+
+	public SimpleFeaturePrimaryIndexConfiguration(
+			final SimpleFeatureType type ) {
+		super();
+		this.configureFromType(type);
+	}
+
 	public static final List<String> getIndexNames(
 			final SimpleFeatureType type ) {
 		Object obj = type.getUserData().get(
@@ -31,6 +41,7 @@ public class SimpleFeaturePrimaryIndexConfiguration implements
 	public void updateType(
 			final SimpleFeatureType type ) {
 		final StringBuffer names = new StringBuffer();
+		if (indexNames == null) return;
 		for (String name : indexNames) {
 			if (names.length() > 0) names.append(",");
 			names.append(name);

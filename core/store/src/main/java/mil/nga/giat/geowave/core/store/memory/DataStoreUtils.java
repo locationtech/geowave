@@ -15,6 +15,7 @@ import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
 import mil.nga.giat.geowave.core.index.StringUtils;
+import mil.nga.giat.geowave.core.index.ByteArrayRange.MergeOperation;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.DataStoreEntryInfo;
@@ -27,7 +28,7 @@ import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.core.store.adapter.statistics.RowRangeHistogramStatistics;
-import mil.nga.giat.geowave.core.store.adapter.statistics.StatisticalDataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.statistics.StatisticsProvider;
 import mil.nga.giat.geowave.core.store.data.DataWriter;
 import mil.nga.giat.geowave.core.store.data.PersistentDataset;
 import mil.nga.giat.geowave.core.store.data.PersistentValue;
@@ -51,7 +52,7 @@ public class DataStoreUtils
 		"rawtypes",
 		"unchecked"
 	})
-	public static final UniformVisibilityWriter DEFAULT_VISIBILITY = new UniformVisibilityWriter(
+	public static final UniformVisibilityWriter UNCONSTRAINED_VISIBILITY = new UniformVisibilityWriter(
 			new UnconstrainedVisibilityHandler());
 
 	public static <T> long cardinality(
@@ -84,9 +85,11 @@ public class DataStoreUtils
 						nd,
 						maxRanges));
 			}
-			ByteArrayRange.mergeIntersections(
-					ranges,
-					0);
+			if (constraints.size() > 1) {
+				return ByteArrayRange.mergeIntersections(
+						ranges,
+						MergeOperation.UNION);
+			}
 			return ranges;
 		}
 	}
@@ -253,7 +256,7 @@ public class DataStoreUtils
 		final List<ByteArrayId> results = new ArrayList<ByteArrayId>();
 		while (adapters.hasNext()) {
 			final DataAdapter<?> adapter = adapters.next();
-			if (!(adapter instanceof StatisticalDataAdapter) || (statisticsStore.getDataStatistics(
+			if (!(adapter instanceof StatisticsProvider) || (statisticsStore.getDataStatistics(
 					adapter.getAdapterId(),
 					RowRangeHistogramStatistics.composeId(indexId),
 					authorizations) != null)) {

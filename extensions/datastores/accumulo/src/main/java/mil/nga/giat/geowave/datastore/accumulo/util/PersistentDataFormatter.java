@@ -7,14 +7,14 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
-import mil.nga.giat.geowave.core.index.Persistable;
-import mil.nga.giat.geowave.core.index.PersistenceUtils;
-
 import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.Value;
 import org.apache.accumulo.core.security.ColumnVisibility;
 import org.apache.accumulo.core.util.format.Formatter;
 import org.apache.hadoop.io.Text;
+
+import mil.nga.giat.geowave.core.index.Persistable;
+import mil.nga.giat.geowave.core.index.PersistenceUtils;
 
 public class PersistentDataFormatter implements
 		Formatter

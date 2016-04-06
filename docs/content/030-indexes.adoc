@@ -10,8 +10,12 @@ configured with several different parameters:
 * dimension type (bounded / unbounded)
 * value range of each dimension
 
-More on each of these properties will be described later; this list here is just to give the reader a notion of what
+More on each of these properties will be described later; the intent of this list is to provide a notion of what
 type of configuration information is persisted.
+
+////
+TODO: Provide a link in the text above to the section where we describe more on these properties.
+////
 
 In order to insert data in a datastore the configuration of the index has to be known. The index is persisted in a
 special table and is referenced back via table name to a table with data in it. Therefore queries can retrieve data

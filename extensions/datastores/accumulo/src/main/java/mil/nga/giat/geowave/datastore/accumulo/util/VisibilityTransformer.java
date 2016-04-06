@@ -1,11 +1,11 @@
 package mil.nga.giat.geowave.datastore.accumulo.util;
 
-import mil.nga.giat.geowave.core.index.StringUtils;
-
 import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.Value;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.hadoop.io.Text;
+
+import mil.nga.giat.geowave.core.index.StringUtils;
 
 public class VisibilityTransformer implements
 		Transformer

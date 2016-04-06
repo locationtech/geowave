@@ -3,7 +3,6 @@ package mil.nga.giat.geowave.core.geotime.index.dimension;
 import java.util.Calendar;
 import java.util.TimeZone;
 
-import mil.nga.giat.geowave.core.geotime.index.dimension.TemporalBinningStrategy;
 import mil.nga.giat.geowave.core.geotime.index.dimension.TemporalBinningStrategy.Unit;
 import mil.nga.giat.geowave.core.index.dimension.bin.BinRange;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericRange;
@@ -216,6 +215,20 @@ public class TemporalBinningStrategyTest
 				ranges.length);
 		// both the min and max of the range should be equal
 		Assert.assertTrue(ranges[0].getNormalizedMin() == ranges[0].getNormalizedMax());
+	}
+
+	@Test
+	public void testEndLessThanStart() {
+		final long time = 123987564019283L;
+		final TemporalBinningStrategy binStrategy = new TemporalBinningStrategy(
+				Unit.YEAR);
+		final BinRange[] ranges = binStrategy.getNormalizedRanges(new NumericRange(
+				time,
+				time - 1));
+
+		Assert.assertEquals(
+				0,
+				ranges.length);
 	}
 
 	@Test

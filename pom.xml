@@ -104,9 +104,9 @@
 				<version>1.1</version>
 			</dependency>
 			<dependency>
-				<groupId>com.vividsolutions</groupId>
-				<artifactId>jts</artifactId>
-				<version>1.13</version>
+    			<groupId>com.vividsolutions</groupId>
+    			<artifactId>jts-core</artifactId>
+    			<version>1.14.0</version>
 			</dependency>
 			<dependency>
 				<groupId>org.slf4j</groupId>
@@ -117,6 +117,11 @@
 				<groupId>org.slf4j</groupId>
 				<artifactId>slf4j-log4j12</artifactId>
 				<version>1.6.1</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-pool2</artifactId>
+				<version>2.4.2</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.commons</groupId>
@@ -189,6 +194,12 @@
 				<artifactId>gt-main</artifactId>
 				<version>${geotools.version}</version>
 				<scope>${geotools.scope}</scope>
+				<exclusions>
+					<exclusion>
+						<groupId>com.vividsolutions</groupId>
+						<artifactId>jts</artifactId>
+					</exclusion>
+				</exclusions>
 			</dependency>
 			<dependency>
 				<groupId>org.geotools</groupId>
@@ -207,12 +218,24 @@
 				<artifactId>gs-wms</artifactId>
 				<version>${geoserver.version}</version>
 				<scope>${geotools.scope}</scope>
+				<exclusions>
+					<exclusion>
+						<groupId>com.vividsolutions</groupId>
+						<artifactId>jts</artifactId>
+					</exclusion>
+				</exclusions>
 			</dependency>
 			<dependency>
 				<groupId>org.geoserver</groupId>
 				<artifactId>gs-main</artifactId>
 				<version>${geoserver.version}</version>
 				<scope>${geotools.scope}</scope>
+				<exclusions>
+					<exclusion>
+						<groupId>com.vividsolutions</groupId>
+						<artifactId>jts</artifactId>
+					</exclusion>
+				</exclusions>
 			</dependency>
 			<dependency>
 				<groupId>org.geoserver</groupId>
@@ -237,6 +260,12 @@
 				<artifactId>gt-render</artifactId>
 				<version>${geotools.version}</version>
 				<scope>${geotools.scope}</scope>
+				<exclusions>
+					<exclusion>
+						<groupId>com.vividsolutions</groupId>
+						<artifactId>jts</artifactId>
+					</exclusion>
+				</exclusions>
 			</dependency>
 			<dependency>
 				<groupId>org.geotools</groupId>
@@ -609,6 +638,7 @@
 				<version>0.4</version>
 				<configuration>
 					<configFile>eclipse/eclipse-formatter.xml</configFile>
+					<lineEnding>KEEP</lineEnding>
 				</configuration>
 				<executions>
 					<execution>

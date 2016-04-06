@@ -509,18 +509,15 @@ public class CentroidManagerGeoWave<T> implements
 				fromBatchId,
 				groupID);
 		int count = 0;
-		try (final IndexWriter indexWriter = dataStore.createIndexWriter(
-				index,
-				DataStoreUtils.DEFAULT_VISIBILITY)) {
-			indexWriter.setupAdapter((WritableDataAdapter<T>) adapter);
+		try (final IndexWriter indexWriter = dataStore.createWriter(
+				adapter,
+				index)) {
 			while (it.hasNext()) {
 				final AnalyticItemWrapper<T> item = centroidFactory.create(it.next());
 				item.setBatchID(this.batchId);
 				count++;
 
-				indexWriter.write(
-						(WritableDataAdapter<T>) adapter,
-						item.getWrappedItem());
+				indexWriter.write(item.getWrappedItem());
 			}
 			it.close();
 			// indexWriter.close();

@@ -18,6 +18,7 @@ import mil.nga.giat.geowave.analytic.param.HullParameters;
 import mil.nga.giat.geowave.analytic.param.MapReduceParameters;
 import mil.nga.giat.geowave.analytic.param.ParameterEnum;
 import mil.nga.giat.geowave.analytic.param.StoreParameters;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
 import mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputKey;
 
@@ -75,7 +76,8 @@ public class ConvexHullJobRunner extends
 				new ParameterEnum<?>[] {
 					HullParameters.Hull.WRAPPER_FACTORY_CLASS,
 					HullParameters.Hull.PROJECTION_CLASS,
-					HullParameters.Hull.DATA_TYPE_ID
+					HullParameters.Hull.DATA_TYPE_ID,
+					HullParameters.Hull.INDEX_ID
 				},
 				config,
 				getScope());
@@ -109,7 +111,7 @@ public class ConvexHullJobRunner extends
 		checkIndex(
 				runTimeProperties,
 				HullParameters.Hull.INDEX_ID,
-				"hull_idx");
+				new SpatialDimensionalityTypeProvider().createPrimaryIndex().getId().getString());
 		return super.run(
 				config,
 				runTimeProperties);

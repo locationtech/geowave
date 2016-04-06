@@ -16,7 +16,6 @@ import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.ingest.index.IndexOptionProviderSpi;
 import mil.nga.giat.geowave.core.ingest.index.IndexProvider;
 import mil.nga.giat.geowave.core.ingest.index.IngestDimensionalityTypeProviderSpi;
-import mil.nga.giat.geowave.core.ingest.local.IngestRunData;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
@@ -35,76 +34,6 @@ public class IngestUtils
 	private static Map<String, IngestDimensionalityTypeProviderSpi> registeredDimensionalityTypes = null;
 	private static SortedSet<IndexOptionProviderSpi> registeredIndexOptions = null;
 	private static String defaultDimensionalityType;
-
-	public static <T> void ingest(
-			final T input,
-			final IngestCommandLineOptions ingestOptions,
-			final IngestPluginBase<T, ?> ingestPlugin,
-			final IndexProvider indexProvider,
-			final IngestRunData ingestRunData )
-			throws IOException {
-		final String[] dimensionTypes = ingestOptions.getDimensionalityTypes();
-		final Map<ByteArrayId, IndexWriter> dimensionalityIndexMap = new HashMap<ByteArrayId, IndexWriter>();
-		for (final String dimensionType : dimensionTypes) {
-			final PrimaryIndex primaryIndex = getIndex(
-					ingestPlugin,
-					ingestRunData.getArgs(),
-					dimensionType);
-			if (primaryIndex == null) {
-				LOGGER.error("Could not get index instance, getIndex() returned null;");
-				throw new IOException(
-						"Could not get index instance, getIndex() returned null");
-			}
-			final IndexWriter primaryIndexWriter = ingestRunData.getIndexWriter(primaryIndex);
-			final PrimaryIndex idx = primaryIndexWriter.getIndex();
-			if (idx == null) {
-				LOGGER.error("Could not get index instance, getIndex() returned null;");
-				throw new IOException(
-						"Could not get index instance, getIndex() returned null");
-			}
-			dimensionalityIndexMap.put(
-					idx.getId(),
-					primaryIndexWriter);
-		}
-
-		final Map<ByteArrayId, PrimaryIndex> requiredIndexMap = new HashMap<ByteArrayId, PrimaryIndex>();
-		final PrimaryIndex[] requiredIndices = indexProvider.getRequiredIndices();
-		if ((requiredIndices != null) && (requiredIndices.length > 0)) {
-			for (final PrimaryIndex requiredIndex : requiredIndices) {
-				requiredIndexMap.put(
-						requiredIndex.getId(),
-						requiredIndex);
-			}
-		}
-		try (CloseableIterator<?> geowaveDataIt = ingestPlugin.toGeoWaveData(
-				input,
-				dimensionalityIndexMap.keySet(),
-				ingestOptions.getVisibility())) {
-			while (geowaveDataIt.hasNext()) {
-				final GeoWaveData<?> geowaveData = (GeoWaveData<?>) geowaveDataIt.next();
-				final WritableDataAdapter adapter = ingestRunData.getDataAdapter(geowaveData);
-				if (adapter == null) {
-					LOGGER.warn("Adapter not found for " + geowaveData.getValue());
-					continue;
-				}
-				IndexWriter indexWriter;
-				for (final ByteArrayId indexId : geowaveData.getIndexIds()) {
-					indexWriter = dimensionalityIndexMap.get(indexId);
-					if (indexWriter == null) {
-						final PrimaryIndex index = requiredIndexMap.get(indexId);
-						if (index == null) {
-							LOGGER.warn("Index '" + indexId.getString() + "' not found for " + geowaveData.getValue());
-							continue;
-						}
-						indexWriter = ingestRunData.getIndexWriter(index);
-					}
-					indexWriter.write(
-							adapter,
-							geowaveData.getValue());
-				}
-			}
-		}
-	}
 
 	public static PrimaryIndex getIndex(
 			final DataAdapterProvider<?> adapterProvider,

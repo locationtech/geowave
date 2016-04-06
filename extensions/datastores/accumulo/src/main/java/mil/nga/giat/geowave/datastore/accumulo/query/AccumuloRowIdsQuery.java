@@ -23,7 +23,7 @@ public class AccumuloRowIdsQuery<T> extends
 	final Collection<ByteArrayId> rows;
 
 	public AccumuloRowIdsQuery(
-			final DataAdapter<T> adapter,
+			final DataAdapter<T> adapterId,
 			final PrimaryIndex index,
 			final Collection<ByteArrayId> rows,
 			final ScanCallback<T> scanCallback,
@@ -36,24 +36,7 @@ public class AccumuloRowIdsQuery<T> extends
 				dedupFilter,
 				scanCallback,
 				null,
-				authorizations);
-		this.rows = rows;
-	}
-
-	public AccumuloRowIdsQuery(
-			final List<ByteArrayId> adapterIds,
-			final PrimaryIndex index,
-			final Collection<ByteArrayId> rows,
-			final ScanCallback<T> scanCallback,
-			final DedupeFilter dedupFilter,
-			final String[] authorizations ) {
-		super(
-				adapterIds,
-				index,
-				(Query) null,
-				dedupFilter,
-				scanCallback,
-				null,
+				Collections.<String> emptyList(),
 				authorizations);
 		this.rows = rows;
 	}

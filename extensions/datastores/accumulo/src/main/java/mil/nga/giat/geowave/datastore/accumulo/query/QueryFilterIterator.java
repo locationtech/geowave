@@ -6,20 +6,6 @@ import java.net.URL;
 import java.util.List;
 import java.util.Map;
 
-import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.ByteArrayUtils;
-import mil.nga.giat.geowave.core.index.PersistenceUtils;
-import mil.nga.giat.geowave.core.store.DataStoreEntryInfo.FieldInfo;
-import mil.nga.giat.geowave.core.store.data.CommonIndexedPersistenceEncoding;
-import mil.nga.giat.geowave.core.store.data.PersistentDataset;
-import mil.nga.giat.geowave.core.store.data.PersistentValue;
-import mil.nga.giat.geowave.core.store.data.field.FieldReader;
-import mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter;
-import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
-import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
-import mil.nga.giat.geowave.datastore.accumulo.AccumuloRowId;
-import mil.nga.giat.geowave.datastore.accumulo.util.AccumuloUtils;
-
 import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.Value;
 import org.apache.accumulo.core.iterators.IteratorEnvironment;
@@ -28,6 +14,18 @@ import org.apache.accumulo.core.iterators.user.WholeRowIterator;
 import org.apache.hadoop.fs.FsUrlStreamHandlerFactory;
 import org.apache.hadoop.io.Text;
 import org.apache.log4j.Logger;
+
+import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.index.ByteArrayUtils;
+import mil.nga.giat.geowave.core.index.PersistenceUtils;
+import mil.nga.giat.geowave.core.store.data.CommonIndexedPersistenceEncoding;
+import mil.nga.giat.geowave.core.store.data.PersistentDataset;
+import mil.nga.giat.geowave.core.store.data.PersistentValue;
+import mil.nga.giat.geowave.core.store.data.field.FieldReader;
+import mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter;
+import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
+import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
+import mil.nga.giat.geowave.datastore.accumulo.AccumuloRowId;
 
 /**
  * This iterator wraps a DistributableQueryFilter which is deserialized from a
@@ -107,46 +105,20 @@ public class QueryFilterIterator extends
 				final Key key = keys.get(i);
 				final ByteArrayId colQual = new ByteArrayId(
 						key.getColumnQualifierData().getBackingArray());
-				if (colQual.equals(AccumuloUtils.COMPOSITE_CQ)) {
-					final byte[] valueBytes = values.get(
-							i).get();
-					final List<FieldInfo<Object>> fieldInfos = AccumuloUtils.decomposeFlattenedFields(
-							model,
-							valueBytes,
-							key.getColumnVisibilityData().getBackingArray());
-					for (final FieldInfo<Object> fieldInfo : fieldInfos) {
-						final ByteArrayId fieldId = fieldInfo.getDataValue().getId();
-						final FieldReader<? extends CommonIndexValue> reader = model.getReader(fieldId);
-						if (reader != null) {
-							final CommonIndexValue fieldValue = reader.readField(fieldInfo.getWrittenValue());
-							fieldValue.setVisibility(fieldInfo.getVisibility());
-							commonData.addValue(new PersistentValue<CommonIndexValue>(
-									fieldId,
-									fieldValue));
-						}
-						else {
-							unknownData.addValue(new PersistentValue<byte[]>(
-									fieldId,
-									fieldInfo.getWrittenValue()));
-						}
-					}
+				final FieldReader<? extends CommonIndexValue> reader = model.getReader(colQual);
+				if (reader != null) {
+					final CommonIndexValue fieldValue = reader.readField(values.get(
+							i).get());
+					fieldValue.setVisibility(key.getColumnVisibilityData().getBackingArray());
+					commonData.addValue(new PersistentValue<CommonIndexValue>(
+							colQual,
+							fieldValue));
 				}
 				else {
-					final FieldReader<? extends CommonIndexValue> reader = model.getReader(colQual);
-					if (reader != null) {
-						final CommonIndexValue fieldValue = reader.readField(values.get(
-								i).get());
-						fieldValue.setVisibility(key.getColumnVisibilityData().getBackingArray());
-						commonData.addValue(new PersistentValue<CommonIndexValue>(
-								colQual,
-								fieldValue));
-					}
-					else {
-						unknownData.addValue(new PersistentValue<byte[]>(
-								colQual,
-								values.get(
-										i).get()));
-					}
+					unknownData.addValue(new PersistentValue<byte[]>(
+							colQual,
+							values.get(
+									i).get()));
 				}
 			}
 			final CommonIndexedPersistenceEncoding encoding = new CommonIndexedPersistenceEncoding(
