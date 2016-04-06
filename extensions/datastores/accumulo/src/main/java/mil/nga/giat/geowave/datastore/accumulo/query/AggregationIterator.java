@@ -1,9 +1,12 @@
 package mil.nga.giat.geowave.datastore.accumulo.query;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeSet;
 
 import org.apache.accumulo.core.data.ByteSequence;
 import org.apache.accumulo.core.data.Key;
@@ -12,8 +15,12 @@ import org.apache.accumulo.core.data.Value;
 import org.apache.accumulo.core.iterators.IteratorEnvironment;
 import org.apache.accumulo.core.iterators.SortedKeyValueIterator;
 import org.apache.hadoop.io.Text;
+import org.apache.log4j.Logger;
 
 import mil.nga.giat.geowave.core.index.ByteArrayUtils;
+import mil.nga.giat.geowave.core.index.Mergeable;
+import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
+import mil.nga.giat.geowave.core.index.Persistable;
 import mil.nga.giat.geowave.core.index.PersistenceUtils;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding;
@@ -23,20 +30,28 @@ import mil.nga.giat.geowave.core.store.data.PersistentValue;
 import mil.nga.giat.geowave.core.store.data.field.FieldReader;
 import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.core.store.memory.DataStoreUtils;
 import mil.nga.giat.geowave.core.store.query.aggregate.Aggregation;
+import mil.nga.giat.geowave.datastore.accumulo.util.AccumuloUtils;
 
 public class AggregationIterator extends
 		QueryFilterIterator
 {
+	private static final Logger LOGGER = Logger.getLogger(
+			AggregationIterator.class);
 	public static final String AGGREGATION_QUERY_ITERATOR_NAME = "GEOWAVE_AGGREGATION_ITERATOR";
 	public static final String AGGREGATION_OPTION_NAME = "AGGREGATION";
+	public static final String PARAMETER_OPTION_NAME = "PARAMETER";
 	public static final String ADAPTER_OPTION_NAME = "ADAPTER";
+	public static final String INDEX_STRATEGY_OPTION_NAME = "INDEX_STRATEGY";
+	public static final String CONSTRAINTS_OPTION_NAME = "CONSTRAINTS";
+	public static final String MAX_DECOMPOSITION_OPTION_NAME = "MAX_DECOMP";
 	public static final int STATISTICS_QUERY_ITERATOR_PRIORITY = 10;
-	private Aggregation aggregation;
+	private Aggregation aggregationFunction;
 	private DataAdapter adapter;
-	private boolean agregationReturned = false;
+	private boolean aggregationReturned = false;
 	private Text startRowOfAggregation = null;
-	private byte[] aggregationBytes;
+	private TreeSet<Range> ranges;
 
 	public AggregationIterator() {
 		super();
@@ -94,22 +109,27 @@ public class AggregationIterator extends
 					final PersistentDataset<Object> existingExtValues = ((IndexedAdapterPersistenceEncoding) persistenceEncoding).getAdapterExtendedData();
 					if (existingExtValues != null) {
 						for (final PersistentValue<Object> val : existingExtValues.getValues()) {
-							adapterExtendedValues.addValue(val);
+							adapterExtendedValues.addValue(
+									val);
 						}
 					}
 				}
 				final PersistentDataset<byte[]> stillUnknownValues = new PersistentDataset<byte[]>();
 				final List<PersistentValue<byte[]>> unknownDataValues = persistenceEncoding.getUnknownData().getValues();
 				for (final PersistentValue<byte[]> v : unknownDataValues) {
-					final FieldReader<Object> reader = adapter.getReader(v.getId());
-					final Object value = reader.readField(v.getValue());
-					adapterExtendedValues.addValue(new PersistentValue<Object>(
-							v.getId(),
-							value));
+					final FieldReader<Object> reader = adapter.getReader(
+							v.getId());
+					final Object value = reader.readField(
+							v.getValue());
+					adapterExtendedValues.addValue(
+							new PersistentValue<Object>(
+									v.getId(),
+									value));
 				}
 				if (persistenceEncoding instanceof IndexedAdapterPersistenceEncoding) {
 					for (final PersistentValue<Object> v : ((IndexedAdapterPersistenceEncoding) persistenceEncoding).getAdapterExtendedData().getValues()) {
-						adapterExtendedValues.addValue(v);
+						adapterExtendedValues.addValue(
+								v);
 					}
 				}
 				final IndexedAdapterPersistenceEncoding encoding = new IndexedAdapterPersistenceEncoding(
@@ -135,7 +155,8 @@ public class AggregationIterator extends
 								model));
 				if (row != null) {
 					// for now ignore field info
-					aggregation.aggregate(row);
+					aggregationFunction.aggregate(
+							row);
 					if (startRowOfAggregation == null) {
 						startRowOfAggregation = currentRow;
 					}
@@ -154,7 +175,7 @@ public class AggregationIterator extends
 		else {
 			// there's only one instance of stat that we want to return
 			// return it and finish
-			agregationReturned = true;
+			aggregationReturned = true;
 		}
 	}
 
@@ -165,14 +186,67 @@ public class AggregationIterator extends
 			final IteratorEnvironment env )
 			throws IOException {
 		try {
-			final String aggregationStr = options.get(AGGREGATION_OPTION_NAME);
-			aggregationBytes = ByteArrayUtils.byteArrayFromString(aggregationStr);
 
-			final String adapterStr = options.get(ADAPTER_OPTION_NAME);
-			final byte[] adapterBytes = ByteArrayUtils.byteArrayFromString(adapterStr);
+			final String className = options.get(
+					AGGREGATION_OPTION_NAME);
+			aggregationFunction = PersistenceUtils.classFactory(
+					className,
+					Aggregation.class);
+			final String parameterStr = options.get(
+					PARAMETER_OPTION_NAME);
+			if ((parameterStr != null) && parameterStr.isEmpty()) {
+				final byte[] parameterBytes = ByteArrayUtils.byteArrayFromString(
+						parameterStr);
+				final Persistable aggregationParams = PersistenceUtils.fromBinary(
+						parameterBytes,
+						Persistable.class);
+				aggregationFunction.setParameters(
+						aggregationParams);
+			}
+			final String adapterStr = options.get(
+					ADAPTER_OPTION_NAME);
+			final byte[] adapterBytes = ByteArrayUtils.byteArrayFromString(
+					adapterStr);
 			adapter = PersistenceUtils.fromBinary(
 					adapterBytes,
 					DataAdapter.class);
+
+			// now go from index strategy, constraints, and max decomp to a set
+			// of accumulo ranges
+
+			final String indexStrategyStr = options.get(
+					INDEX_STRATEGY_OPTION_NAME);
+			final byte[] indexStrategyBytes = ByteArrayUtils.byteArrayFromString(
+					indexStrategyStr);
+			final NumericIndexStrategy strategy = PersistenceUtils.fromBinary(
+					indexStrategyBytes,
+					NumericIndexStrategy.class);
+
+			final String contraintsStr = options.get(
+					CONSTRAINTS_OPTION_NAME);
+			final byte[] constraintsBytes = ByteArrayUtils.byteArrayFromString(
+					contraintsStr);
+			final List constraints = PersistenceUtils.fromBinary(
+					constraintsBytes);
+			final String maxDecomp = options.get(
+					MAX_DECOMPOSITION_OPTION_NAME);
+			Integer maxDecompInt = AccumuloConstraintsQuery.MAX_RANGE_DECOMPOSITION;
+			if (maxDecomp != null) {
+				try {
+					maxDecompInt = Integer.parseInt(
+							maxDecomp);
+				}
+				catch (final Exception e) {
+					LOGGER.warn(
+							"Unable to parse '" + MAX_DECOMPOSITION_OPTION_NAME + "' as integer",
+							e);
+				}
+			}
+			ranges = AccumuloUtils.byteArrayRangesToAccumuloRanges(
+					DataStoreUtils.constraintsToByteArrayRanges(
+							constraints,
+							strategy,
+							maxDecompInt));
 			super.init(
 					source,
 					options,
@@ -206,46 +280,143 @@ public class AggregationIterator extends
 
 	private Value getTopStatValue() {
 		if (hasTopStat()) {
+
+			final Mergeable result = aggregationFunction.getResult();
+			if (result == null) {
+				return null;
+			}
 			return new Value(
-					PersistenceUtils.toBinary(aggregation));
+					PersistenceUtils.toBinary(
+							result));
 		}
 		return null;
 	}
 
 	private boolean hasTopStat() {
-		return !agregationReturned && (startRowOfAggregation != null);
+		return !aggregationReturned && (startRowOfAggregation != null);
 	}
 
 	@Override
 	public SortedKeyValueIterator<Key, Value> deepCopy(
 			final IteratorEnvironment env ) {
-		final SortedKeyValueIterator<Key, Value> iterator = super.deepCopy(env);
+		final SortedKeyValueIterator<Key, Value> iterator = super.deepCopy(
+				env);
 		if (iterator instanceof AggregationIterator) {
 			((AggregationIterator) iterator).startRowOfAggregation = startRowOfAggregation;
 			((AggregationIterator) iterator).adapter = adapter;
-			((AggregationIterator) iterator).aggregation = aggregation;
-			((AggregationIterator) iterator).agregationReturned = agregationReturned;
+			((AggregationIterator) iterator).aggregationFunction = aggregationFunction;
+			((AggregationIterator) iterator).aggregationReturned = aggregationReturned;
 		}
 		return iterator;
 	}
 
+	private void findEnd(
+			final Iterator<Range> rangeIt,
+			final Collection<Range> internalRanges,
+			final Range seekRange ) {
+		// find the first range in the set whose end key is after this
+		// range's end key, clip its end to this range end if its start
+		// is not also greater than this end, and stop
+		// after that
+		while (rangeIt.hasNext()) {
+			final Range internalRange = rangeIt.next();
+			if (internalRange.getEndKey().compareTo(
+					seekRange.getEndKey()) > 0) {
+				if (internalRange.getStartKey().compareTo(
+						seekRange.getEndKey()) > 0) {
+					return;
+				}
+				else {
+					internalRanges.add(
+							new Range(
+									internalRange.getStartKey(),
+									seekRange.getEndKey()));
+					return;
+				}
+			}
+			else {
+				internalRanges.add(
+						internalRange);
+			}
+		}
+	}
+
+	private void findStart(
+			final Iterator<Range> rangeIt,
+			final Collection<Range> internalRanges,
+			final Range seekRange ) {
+		// find the first range whose end key is after this range's start key
+		// and clip its start to this range start key, and start on that
+		while (rangeIt.hasNext()) {
+			final Range internalRange = rangeIt.next();
+			if (internalRange.getEndKey().compareTo(
+					seekRange.getStartKey()) > 0) {
+				if (internalRange.getStartKey().compareTo(
+						seekRange.getStartKey()) > 0) {
+					internalRanges.add(
+							internalRange);
+					return;
+				}
+				else {
+					internalRanges.add(
+							new Range(
+									seekRange.getStartKey(),
+									internalRange.getEndKey()));
+					return;
+				}
+			}
+		}
+	}
+
 	@Override
 	public void seek(
-			final Range range,
+			final Range seekRange,
 			final Collection<ByteSequence> columnFamilies,
 			final boolean inclusive )
 			throws IOException {
-		agregationReturned = false;
-		aggregation = PersistenceUtils.fromBinary(
-				aggregationBytes,
-				Aggregation.class);
+		aggregationReturned = false;
+		aggregationFunction.clearResult();
 		startRowOfAggregation = null;
-		// TODO consider using a single range for the scanner and decomposing
-		// the range within the iterator.
-		// for now every seek we have to reset aggregation of the statistic
-		super.seek(
-				range,
-				columnFamilies,
-				inclusive);
+		Collection<Range> internalRanges = new ArrayList<Range>();
+		if (seekRange.isInfiniteStartKey()) {
+			if (seekRange.isInfiniteStopKey()) {
+				internalRanges = ranges;
+			}
+			else {
+				findEnd(
+						ranges.iterator(),
+						internalRanges,
+						seekRange);
+			}
+		}
+		else if (seekRange.isInfiniteStopKey()) {
+			final Iterator<Range> rangeIt = ranges.iterator();
+			findStart(
+					rangeIt,
+					internalRanges,
+					seekRange);
+			while (rangeIt.hasNext()) {
+				internalRanges.add(
+						rangeIt.next());
+			}
+		}
+		else {
+			final Iterator<Range> rangeIt = ranges.iterator();
+			findStart(
+					rangeIt,
+					internalRanges,
+					seekRange);
+			findEnd(
+					rangeIt,
+					internalRanges,
+					seekRange);
+		}
+		final Iterator<Range> rangeIt = internalRanges.iterator();
+		while (rangeIt.hasNext()) {
+			super.seek(
+					rangeIt.next(),
+					columnFamilies,
+					inclusive);
+		}
 	}
 }

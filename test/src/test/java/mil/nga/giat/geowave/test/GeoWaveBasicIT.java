@@ -44,6 +44,7 @@ import mil.nga.giat.geowave.core.store.query.DataIdQuery;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.core.store.query.aggregate.CountAggregation;
+import mil.nga.giat.geowave.core.store.query.aggregate.CountResult;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStore;
 import mil.nga.giat.geowave.datastore.accumulo.index.secondary.AccumuloSecondaryIndexDataStore;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloAdapterIndexMappingStore;
@@ -884,8 +885,8 @@ public class GeoWaveBasicIT extends
 						// exactly one value in this iterator
 						Assert.assertTrue(countResult.hasNext());
 						final Object result = countResult.next();
-						Assert.assertTrue(result instanceof CountAggregation);
-						statisticsResult += ((CountAggregation) result).getCount();
+						Assert.assertTrue(result instanceof CountResult);
+						statisticsResult += ((CountResult) result).getCount();
 						Assert.assertFalse(countResult.hasNext());
 					}
 				}

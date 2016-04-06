@@ -1,19 +1,27 @@
 package mil.nga.giat.geowave.core.index.sfc.data;
 
+import java.nio.ByteBuffer;
+
 /**
  * Concrete implementation defining a numeric range associated with a space
  * filling curve.
- * 
+ *
  */
 public class NumericRange implements
 		NumericData
 {
-	private final double min;
-	private final double max;
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = 1L;
+	private double min;
+	private double max;
+
+	protected NumericRange() {}
 
 	/**
 	 * Constructor used to create a IndexRange object
-	 * 
+	 *
 	 * @param min
 	 *            the minimum bounds of a unique index range
 	 * @param max
@@ -27,7 +35,7 @@ public class NumericRange implements
 	}
 
 	/**
-	 * 
+	 *
 	 * @return min the minimum bounds of a index range object
 	 */
 	@Override
@@ -36,7 +44,7 @@ public class NumericRange implements
 	}
 
 	/**
-	 * 
+	 *
 	 * @return max the maximum bounds of a index range object
 	 */
 	@Override
@@ -45,7 +53,7 @@ public class NumericRange implements
 	}
 
 	/**
-	 * 
+	 *
 	 * @return centroid the center of a unique index range object
 	 */
 	@Override
@@ -71,21 +79,53 @@ public class NumericRange implements
 		final int prime = 31;
 		int result = 1;
 		long temp;
-		temp = Double.doubleToLongBits(max);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
-		temp = Double.doubleToLongBits(min);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
+		temp = Double.doubleToLongBits(
+				max);
+		result = (prime * result) + (int) (temp ^ (temp >>> 32));
+		temp = Double.doubleToLongBits(
+				min);
+		result = (prime * result) + (int) (temp ^ (temp >>> 32));
 		return result;
 	}
 
 	@Override
 	public boolean equals(
-			Object obj ) {
-		if (this == obj) return true;
-		if (obj == null) return false;
+			final Object obj ) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
 		// changing this check will fail some unit tests.
-		if (!NumericRange.class.isAssignableFrom(obj.getClass())) return false;
-		NumericRange other = (NumericRange) obj;
-		return (Math.abs(max - other.max) < NumericValue.EPSILON) && (Math.abs(min - other.min) < NumericValue.EPSILON);
+		if (!NumericRange.class.isAssignableFrom(
+				obj.getClass())) {
+			return false;
+		}
+		final NumericRange other = (NumericRange) obj;
+		return (Math.abs(
+				max - other.max) < NumericValue.EPSILON)
+				&& (Math.abs(
+						min - other.min) < NumericValue.EPSILON);
+	}
+
+	@Override
+	public byte[] toBinary() {
+		final ByteBuffer buf = ByteBuffer.allocate(
+				16);
+		buf.putDouble(
+				min);
+		buf.putDouble(
+				max);
+		return buf.array();
+	}
+
+	@Override
+	public void fromBinary(
+			final byte[] bytes ) {
+		final ByteBuffer buf = ByteBuffer.wrap(
+				bytes);
+		min = buf.getDouble();
+		max = buf.getDouble();
 	}
 }
