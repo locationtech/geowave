@@ -1,22 +1,27 @@
 package mil.nga.giat.geowave.core.index.sfc.data;
 
+import java.nio.ByteBuffer;
+
 import mil.nga.giat.geowave.core.index.ByteArrayUtils;
+import mil.nga.giat.geowave.core.index.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
 import mil.nga.giat.geowave.core.index.dimension.bin.BinRange;
 
 /**
  * The Binned Numeric Dataset class creates an object that associates a
  * multi-dimensional index range to a particular bin ID.
- * 
+ *
  */
 public class BinnedNumericDataset implements
 		MultiDimensionalNumericData
 {
-	private final byte[] binId;
-	private final MultiDimensionalNumericData indexRanges;
+	private byte[] binId;
+	private MultiDimensionalNumericData indexRanges;
+
+	protected BinnedNumericDataset() {}
 
 	/**
-	 * 
+	 *
 	 * @param binId
 	 *            a unique ID associated with the BinnedQuery object
 	 * @param indexRanges
@@ -84,7 +89,7 @@ public class BinnedNumericDataset implements
 	 * translated into 2 binned queries representing the 2012 portion of the
 	 * query and the 2013 portion, each normalized to millis from the beginning
 	 * of the year.
-	 * 
+	 *
 	 * @param numericData
 	 *            the incoming query into the index implementation, to be
 	 *            translated into normalized, binned queries
@@ -93,20 +98,21 @@ public class BinnedNumericDataset implements
 	 * @return normalized indexes
 	 */
 	public static BinnedNumericDataset[] applyBins(
-			MultiDimensionalNumericData numericData,
-			NumericDimensionDefinition[] dimensionDefinitions ) {
+			final MultiDimensionalNumericData numericData,
+			final NumericDimensionDefinition[] dimensionDefinitions ) {
 		if (dimensionDefinitions.length == 0) {
 			return new BinnedNumericDataset[0];
 		}
-		BinRange[][] binRangesPerDimension = new BinRange[dimensionDefinitions.length][];
+		final BinRange[][] binRangesPerDimension = new BinRange[dimensionDefinitions.length][];
 		int numBinnedQueries = 1;
 		for (int d = 0; d < dimensionDefinitions.length; d++) {
-			binRangesPerDimension[d] = dimensionDefinitions[d].getNormalizedRanges(numericData.getDataPerDimension()[d]);
+			binRangesPerDimension[d] = dimensionDefinitions[d].getNormalizedRanges(
+					numericData.getDataPerDimension()[d]);
 			numBinnedQueries *= binRangesPerDimension[d].length;
 		}
 		// now we need to combine all permutations of bin ranges into
 		// BinnedQuery objects
-		BinnedNumericDataset[] binnedQueries = new BinnedNumericDataset[numBinnedQueries];
+		final BinnedNumericDataset[] binnedQueries = new BinnedNumericDataset[numBinnedQueries];
 		for (int d = 0; d < dimensionDefinitions.length; d++) {
 			for (int b = 0; b < binRangesPerDimension[d].length; b++) {
 				for (int i = b; i < numBinnedQueries; i += binRangesPerDimension[d].length) {
@@ -123,7 +129,7 @@ public class BinnedNumericDataset implements
 						// re-instantiate the object
 						rangePerDimension = binnedQueries[i].getDataPerDimension();
 
-						byte[] combinedBinId = ByteArrayUtils.combineArrays(
+						final byte[] combinedBinId = ByteArrayUtils.combineArrays(
 								binnedQueries[i].getBinId(),
 								binRangesPerDimension[d][b].getBinId());
 						binnedQueries[i] = new BinnedNumericDataset(
@@ -144,5 +150,37 @@ public class BinnedNumericDataset implements
 	@Override
 	public boolean isEmpty() {
 		return indexRanges.isEmpty();
+	}
+
+	@Override
+	public byte[] toBinary() {
+		final byte[] indexRangesBinary = PersistenceUtils.toBinary(
+				indexRanges);
+		final ByteBuffer buf = ByteBuffer.allocate(
+				4 + indexRangesBinary.length + binId.length);
+		buf.putInt(
+				binId.length);
+		buf.put(
+				binId);
+		buf.put(
+				indexRangesBinary);
+		return null;
+	}
+
+	@Override
+	public void fromBinary(
+			final byte[] bytes ) {
+		final ByteBuffer buf = ByteBuffer.wrap(
+				bytes);
+		binId = new byte[buf.getInt()];
+		buf.get(
+				binId);
+
+		final byte[] indexRangesBinary = new byte[bytes.length - 4 - binId.length];
+		buf.get(
+				indexRangesBinary);
+		indexRanges = PersistenceUtils.fromBinary(
+				indexRangesBinary,
+				MultiDimensionalNumericData.class);
 	}
 }

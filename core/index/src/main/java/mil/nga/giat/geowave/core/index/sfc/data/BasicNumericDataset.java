@@ -1,28 +1,33 @@
 package mil.nga.giat.geowave.core.index.sfc.data;
 
+import java.nio.ByteBuffer;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+
+import mil.nga.giat.geowave.core.index.PersistenceUtils;
 
 /**
  * The Basic Index Result class creates an object associated with a generic
  * query. This class can be used when the dimensions and/or axis are generic.
- * 
+ *
  */
 public class BasicNumericDataset implements
 		MultiDimensionalNumericData
 {
 
-	private final NumericData[] dataPerDimension;
+	private NumericData[] dataPerDimension;
 
 	/**
 	 * Open ended/unconstrained
 	 */
 	public BasicNumericDataset() {
-		this.dataPerDimension = new NumericData[0];
+		dataPerDimension = new NumericData[0];
 	}
 
 	/**
 	 * Constructor used to create a new Basic Numeric Dataset object.
-	 * 
+	 *
 	 * @param dataPerDimension
 	 *            an array of numeric data objects
 	 */
@@ -36,8 +41,8 @@ public class BasicNumericDataset implements
 	 */
 	@Override
 	public double[] getMaxValuesPerDimension() {
-		NumericData[] ranges = getDataPerDimension();
-		double[] maxPerDimension = new double[ranges.length];
+		final NumericData[] ranges = getDataPerDimension();
+		final double[] maxPerDimension = new double[ranges.length];
 		for (int d = 0; d < ranges.length; d++) {
 			maxPerDimension[d] = ranges[d].getMax();
 		}
@@ -49,8 +54,8 @@ public class BasicNumericDataset implements
 	 */
 	@Override
 	public double[] getMinValuesPerDimension() {
-		NumericData[] ranges = getDataPerDimension();
-		double[] minPerDimension = new double[ranges.length];
+		final NumericData[] ranges = getDataPerDimension();
+		final double[] minPerDimension = new double[ranges.length];
 		for (int d = 0; d < ranges.length; d++) {
 			minPerDimension[d] = ranges[d].getMin();
 		}
@@ -62,8 +67,8 @@ public class BasicNumericDataset implements
 	 */
 	@Override
 	public double[] getCentroidPerDimension() {
-		NumericData[] ranges = getDataPerDimension();
-		double[] centroid = new double[ranges.length];
+		final NumericData[] ranges = getDataPerDimension();
+		final double[] centroid = new double[ranges.length];
 		for (int d = 0; d < ranges.length; d++) {
 			centroid[d] = ranges[d].getCentroid();
 		}
@@ -71,7 +76,7 @@ public class BasicNumericDataset implements
 	}
 
 	/**
-	 * 
+	 *
 	 * @return an array of NumericData objects
 	 */
 	@Override
@@ -89,28 +94,78 @@ public class BasicNumericDataset implements
 
 	@Override
 	public boolean isEmpty() {
-		return this.dataPerDimension == null || this.dataPerDimension.length == 0;
+		return (dataPerDimension == null) || (dataPerDimension.length == 0);
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + Arrays.hashCode(dataPerDimension);
+		result = (prime * result) + Arrays.hashCode(
+				dataPerDimension);
 		return result;
 	}
 
 	@Override
 	public boolean equals(
-			Object obj ) {
-		if (this == obj) return true;
-		if (obj == null) return false;
-		if (getClass() != obj.getClass()) return false;
-		BasicNumericDataset other = (BasicNumericDataset) obj;
+			final Object obj ) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		final BasicNumericDataset other = (BasicNumericDataset) obj;
 		if (!Arrays.equals(
 				dataPerDimension,
-				other.dataPerDimension)) return false;
+				other.dataPerDimension)) {
+			return false;
+		}
 		return true;
+	}
+
+	@Override
+	public byte[] toBinary() {
+		int totalBytes = 4;
+		final List<byte[]> serializedData = new ArrayList<byte[]>();
+		for (final NumericData data : dataPerDimension) {
+			final byte[] binary = PersistenceUtils.toBinary(
+					data);
+			totalBytes += (binary.length + 4);
+			serializedData.add(
+					binary);
+		}
+		final ByteBuffer buf = ByteBuffer.allocate(
+				totalBytes);
+		buf.putInt(
+				dataPerDimension.length);
+		for (final byte[] binary : serializedData) {
+			buf.putInt(
+					binary.length);
+			buf.put(
+					binary);
+		}
+		return buf.array();
+	}
+
+	@Override
+	public void fromBinary(
+			final byte[] bytes ) {
+		final ByteBuffer buf = ByteBuffer.wrap(
+				bytes);
+		final int numDimensions = buf.getInt();
+		dataPerDimension = new NumericData[numDimensions];
+		for (int d = 0; d < numDimensions; d++) {
+			final byte[] binary = new byte[buf.getInt()];
+			buf.get(
+					binary);
+			dataPerDimension[d] = PersistenceUtils.fromBinary(
+					binary,
+					NumericData.class);
+		}
 	}
 
 }

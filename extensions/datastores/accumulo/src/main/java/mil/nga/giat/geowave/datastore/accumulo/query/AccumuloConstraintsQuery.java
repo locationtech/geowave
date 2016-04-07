@@ -17,6 +17,7 @@ import com.google.common.collect.Iterators;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.index.ByteArrayUtils;
+import mil.nga.giat.geowave.core.index.Mergeable;
 import mil.nga.giat.geowave.core.index.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.core.store.ScanCallback;
@@ -33,17 +34,17 @@ import mil.nga.giat.geowave.core.store.query.aggregate.Aggregation;
 
 /**
  * This class represents basic numeric contraints applied to an Accumulo Query
- * 
+ *
  */
 public class AccumuloConstraintsQuery extends
 		AccumuloFilteredIndexQuery
 {
-	private static final int MAX_RANGE_DECOMPOSITION = 5000;
+	protected static final int MAX_RANGE_DECOMPOSITION = 5000;
 	protected final List<MultiDimensionalNumericData> constraints;
 	protected final List<DistributableQueryFilter> distributableFilters;
 	protected boolean queryFiltersEnabled;
 
-	protected final Pair<DataAdapter<?>, Aggregation<?>> aggregation;
+	protected final Pair<DataAdapter<?>, Aggregation<?, ?, ?>> aggregation;
 
 	public AccumuloConstraintsQuery(
 			final List<ByteArrayId> adapterIds,
@@ -51,14 +52,16 @@ public class AccumuloConstraintsQuery extends
 			final Query query,
 			final DedupeFilter clientDedupeFilter,
 			final ScanCallback<?> scanCallback,
-			final Pair<DataAdapter<?>, Aggregation<?>> aggregation,
+			final Pair<DataAdapter<?>, Aggregation<?, ?, ?>> aggregation,
 			final List<String> fieldIds,
 			final String[] authorizations ) {
 		this(
 				adapterIds,
 				index,
-				query != null ? query.getIndexConstraints(index.getIndexStrategy()) : null,
-				query != null ? query.createFilters(index.getIndexModel()) : null,
+				query != null ? query.getIndexConstraints(
+						index.getIndexStrategy()) : null,
+				query != null ? query.createFilters(
+						index.getIndexModel()) : null,
 				clientDedupeFilter,
 				scanCallback,
 				aggregation,
@@ -73,7 +76,7 @@ public class AccumuloConstraintsQuery extends
 			final List<QueryFilter> queryFilters,
 			final DedupeFilter clientDedupeFilter,
 			final ScanCallback<?> scanCallback,
-			final Pair<DataAdapter<?>, Aggregation<?>> aggregation,
+			final Pair<DataAdapter<?>, Aggregation<?, ?, ?>> aggregation,
 			final List<String> fieldIds,
 			final String[] authorizations ) {
 		super(
@@ -84,7 +87,8 @@ public class AccumuloConstraintsQuery extends
 				authorizations);
 		this.constraints = constraints;
 		this.aggregation = aggregation;
-		final SplitFilterLists lists = splitList(queryFilters);
+		final SplitFilterLists lists = splitList(
+				queryFilters);
 		final List<QueryFilter> clientFilters = lists.clientFilters;
 		// add dedupe filters to the front of both lists so that the
 		// de-duplication is performed before any more complex filtering
@@ -94,7 +98,8 @@ public class AccumuloConstraintsQuery extends
 					0,
 					clientDedupeFilter);
 		}
-		super.setClientFilters(clientFilters);
+		super.setClientFilters(
+				clientFilters);
 		distributableFilters = lists.distributableFilters;
 		if (!distributableFilters.isEmpty() && (clientDedupeFilter != null)) {
 			distributableFilters.add(
@@ -113,10 +118,11 @@ public class AccumuloConstraintsQuery extends
 	protected void addScanIteratorSettings(
 			final ScannerBase scanner ) {
 
-		scanner.addScanIterator(new IteratorSetting(
-				SharedVisibilitySplittingIterator.ITERATOR_PRIORITY,
-				SharedVisibilitySplittingIterator.ITERATOR_NAME,
-				SharedVisibilitySplittingIterator.class));
+		scanner.addScanIterator(
+				new IteratorSetting(
+						SharedVisibilitySplittingIterator.ITERATOR_PRIORITY,
+						SharedVisibilitySplittingIterator.ITERATOR_NAME,
+						SharedVisibilitySplittingIterator.class));
 
 		if ((fieldIds != null) && (fieldIds.size() > 0)) {
 			final IteratorSetting iteratorSetting = FieldFilter.getIteratorSetting();
@@ -124,7 +130,8 @@ public class AccumuloConstraintsQuery extends
 					iteratorSetting,
 					fieldIds,
 					index.getIndexModel().getDimensions());
-			scanner.addScanIterator(iteratorSetting);
+			scanner.addScanIterator(
+					iteratorSetting);
 		}
 
 		if ((distributableFilters != null) && !distributableFilters.isEmpty() && queryFiltersEnabled) {
@@ -137,10 +144,25 @@ public class AccumuloConstraintsQuery extends
 						AggregationIterator.class);
 				iteratorSettings.addOption(
 						AggregationIterator.ADAPTER_OPTION_NAME,
-						ByteArrayUtils.byteArrayToString(PersistenceUtils.toBinary(aggregation.getLeft())));
+						ByteArrayUtils.byteArrayToString(
+								PersistenceUtils.toBinary(
+										aggregation.getLeft())));
+				final Aggregation aggr = aggregation.getRight();
 				iteratorSettings.addOption(
 						AggregationIterator.AGGREGATION_OPTION_NAME,
-						ByteArrayUtils.byteArrayToString(PersistenceUtils.toBinary(aggregation.getRight())));
+						aggr.getClass().getName());
+				iteratorSettings.addOption(
+						AggregationIterator.CONSTRAINTS_OPTION_NAME,
+						ByteArrayUtils.byteArrayToString(
+								(PersistenceUtils.toBinary(
+										(List) constraints))));
+				iteratorSettings.addOption(
+						AggregationIterator.INDEX_STRATEGY_OPTION_NAME,
+						ByteArrayUtils.byteArrayToString(
+								PersistenceUtils.toBinary(
+										index.getIndexStrategy())));
+				// don't bother setting max decomposition because it is just the
+				// default anyways
 			}
 			else {
 				iteratorSettings = new IteratorSetting(
@@ -152,11 +174,16 @@ public class AccumuloConstraintsQuery extends
 					distributableFilters);
 			iteratorSettings.addOption(
 					QueryFilterIterator.FILTER,
-					ByteArrayUtils.byteArrayToString(PersistenceUtils.toBinary(filterList)));
+					ByteArrayUtils.byteArrayToString(
+							PersistenceUtils.toBinary(
+									filterList)));
 			iteratorSettings.addOption(
 					QueryFilterIterator.MODEL,
-					ByteArrayUtils.byteArrayToString(PersistenceUtils.toBinary(index.getIndexModel())));
-			scanner.addScanIterator(iteratorSettings);
+					ByteArrayUtils.byteArrayToString(
+							PersistenceUtils.toBinary(
+									index.getIndexModel())));
+			scanner.addScanIterator(
+					iteratorSettings);
 		}
 		else
 
@@ -166,17 +193,48 @@ public class AccumuloConstraintsQuery extends
 					QueryFilterIterator.WHOLE_ROW_ITERATOR_PRIORITY,
 					QueryFilterIterator.WHOLE_ROW_ITERATOR_NAME,
 					WholeRowIterator.class);
-			scanner.addScanIterator(iteratorSettings);
+			scanner.addScanIterator(
+					iteratorSettings);
 		}
 
 	}
 
 	@Override
 	protected List<ByteArrayRange> getRanges() {
-		return DataStoreUtils.constraintsToByteArrayRanges(
-				constraints,
-				index.getIndexStrategy(),
-				MAX_RANGE_DECOMPOSITION);
+		if (isAggregation()) {
+			final List<ByteArrayRange> ranges = DataStoreUtils.constraintsToByteArrayRanges(
+					constraints,
+					index.getIndexStrategy(),
+					MAX_RANGE_DECOMPOSITION);
+			if ((ranges == null) || (ranges.size() < 2)) {
+				return ranges;
+			}
+			ByteArrayId start = null;
+			ByteArrayId end = null;
+
+			for (final ByteArrayRange range : ranges) {
+				if ((start == null) || (range.getStart().compareTo(
+						start) < 0)) {
+					start = range.getStart();
+				}
+				if ((end == null) || (range.getEnd().compareTo(
+						end) > 0)) {
+					end = range.getEnd();
+				}
+			}
+			final List<ByteArrayRange> retVal = new ArrayList<ByteArrayRange>();
+			retVal.add(
+					new ByteArrayRange(
+							start,
+							end));
+			return retVal;
+		}
+		else {
+			return DataStoreUtils.constraintsToByteArrayRanges(
+					constraints,
+					index.getIndexStrategy(),
+					MAX_RANGE_DECOMPOSITION);
+		}
 	}
 
 	public boolean isQueryFiltersEnabled() {
@@ -197,28 +255,30 @@ public class AccumuloConstraintsQuery extends
 
 			final Iterator<Entry<Key, Value>> it = scanner.iterator();
 
-			Aggregation mergedAggregation = null;
+			Mergeable mergedAggregationResult = null;
 			if (!it.hasNext()) {
-				mergedAggregation = aggregation.getRight();
+				return Iterators.emptyIterator();
 			}
 			else {
 				while (it.hasNext()) {
 					final Entry<Key, Value> input = it.next();
 					if (input.getValue() != null) {
-						if (mergedAggregation == null) {
-							mergedAggregation = PersistenceUtils.fromBinary(
+						if (mergedAggregationResult == null) {
+							mergedAggregationResult = PersistenceUtils.fromBinary(
 									input.getValue().get(),
-									Aggregation.class);
+									Mergeable.class);
 						}
 						else {
-							mergedAggregation.merge(PersistenceUtils.fromBinary(
-									input.getValue().get(),
-									Aggregation.class));
+							mergedAggregationResult.merge(
+									PersistenceUtils.fromBinary(
+											input.getValue().get(),
+											Mergeable.class));
 						}
 					}
 				}
 			}
-			return Iterators.singletonIterator(mergedAggregation);
+			return Iterators.singletonIterator(
+					mergedAggregationResult);
 		}
 		else {
 			return super.initIterator(
@@ -238,10 +298,12 @@ public class AccumuloConstraintsQuery extends
 		}
 		for (final QueryFilter filter : allFilters) {
 			if (filter instanceof DistributableQueryFilter) {
-				distributableFilters.add((DistributableQueryFilter) filter);
+				distributableFilters.add(
+						(DistributableQueryFilter) filter);
 			}
 			else {
-				clientFilters.add(filter);
+				clientFilters.add(
+						filter);
 			}
 		}
 		return new SplitFilterLists(
