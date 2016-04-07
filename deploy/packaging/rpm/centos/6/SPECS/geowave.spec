@@ -121,9 +121,6 @@ tar xzf %{SOURCE14} -C %{buildroot}%{geowave_plugins_home}
 
 cp %{SOURCE15} %{buildroot}%{geowave_tools_home}
 
-mkdir -p %{buildroot}/etc/bash_completion.d
-unzip -p %{SOURCE10} geowave-tools-cmd-completion.sh > %{buildroot}/etc/bash_completion.d/geowave-tools-cmd-completion.sh
-
 # Copy documentation into place
 mkdir -p %{buildroot}%{geowave_docs_home}
 tar -xzf %{SOURCE11} -C %{buildroot}%{geowave_docs_home} --strip=1
@@ -291,7 +288,6 @@ fi
 %{geowave_tools_home}
 
 %attr(755, geowave, geowave) %{geowave_tools_home}/geowave-tools.sh
-%attr(644, root, root) /etc/bash_completion.d/geowave-tools-cmd-completion.sh
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
