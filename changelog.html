@@ -11,20 +11,86 @@
 <h1 id="change-log">Change Log</h1>
 <h2 id="unreleased"><a href="https://github.com/ngageoint/geowave/tree/HEAD">Unreleased</a></h2>
 <p><a href="https://github.com/ngageoint/geowave/compare/v0.9.0.1...HEAD">Full Changelog</a></p>
+<p><strong>Implemented enhancements:</strong></p>
+<ul>
+<li>implement integration test for spatial sub-sampling <a href="https://github.com/ngageoint/geowave/issues/666">#666</a></li>
+<li>Store required data statistics for discovering what adapters are in each index <a href="https://github.com/ngageoint/geowave/issues/660">#660</a></li>
+<li>Eliminate VisibilityWriter from DataStore.createIndexWriter <a href="https://github.com/ngageoint/geowave/issues/659">#659</a></li>
+<li>DataStore createWriter to write to multiple indices <a href="https://github.com/ngageoint/geowave/issues/658">#658</a></li>
+<li>Raster config options can use connectionParams option format or URL <a href="https://github.com/ngageoint/geowave/issues/578">#578</a></li>
+<li>Single jar dependency download site <a href="https://github.com/ngageoint/geowave/issues/477">#477</a></li>
+<li>Look at using curator for zookeeper connection management <a href="https://github.com/ngageoint/geowave/issues/467">#467</a></li>
+<li>Implement a WholeFeatureDataAdapter <a href="https://github.com/ngageoint/geowave/issues/380">#380</a></li>
+<li>Import/Export capability <a href="https://github.com/ngageoint/geowave/issues/353">#353</a></li>
+<li>add maven profile for findbugs <a href="https://github.com/ngageoint/geowave/issues/321">#321</a></li>
+<li>Ingest framework support for Kafka streaming ingest as input <a href="https://github.com/ngageoint/geowave/issues/299">#299</a></li>
+<li>Handle Statistics for data duplicated in multiple indices <a href="https://github.com/ngageoint/geowave/issues/292">#292</a></li>
+<li>Add ability to add, remove, and re-compute statistics separate from ingest <a href="https://github.com/ngageoint/geowave/issues/239">#239</a></li>
+<li>Investigate storing FeatureCollection data as a binary blob <a href="https://github.com/ngageoint/geowave/issues/224">#224</a></li>
+<li>Add support for per-field visibility for FeatureCollectionDataAdapter <a href="https://github.com/ngageoint/geowave/issues/223">#223</a></li>
+<li>Add support for polygons for FeatureCollectionDataAdapter <a href="https://github.com/ngageoint/geowave/issues/222">#222</a></li>
+<li>Add support for alternate indexing for FeatureCollectionDataAdapter <a href="https://github.com/ngageoint/geowave/issues/221">#221</a></li>
+<li>Provide consistent way to uniquely identify raster tiles for GeoWaveInputFormat <a href="https://github.com/ngageoint/geowave/issues/163">#163</a></li>
+<li>Provide a mechanism to vary column family for the same adapter ID <a href="https://github.com/ngageoint/geowave/issues/145">#145</a></li>
+<li>Validate geowave &lt;-&gt; geotools naming restrictions <a href="https://github.com/ngageoint/geowave/issues/83">#83</a></li>
+<li>Determine meaningful visibility for row ID lookup entries in &quot;Alt&quot; index <a href="https://github.com/ngageoint/geowave/issues/71">#71</a></li>
+<li>GEOWAVE-684: export vector data commandline tools; also seems to have… <a href="https://github.com/ngageoint/geowave/pull/685">#685</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
+</ul>
+<p><strong>Fixed bugs:</strong></p>
+<ul>
+<li>raster resize commandline operation SPI missing <a href="https://github.com/ngageoint/geowave/issues/679">#679</a></li>
+<li>get geowavedemoapp running in windows <a href="https://github.com/ngageoint/geowave/issues/669">#669</a></li>
+<li>No assumptions should be made as to what Statistics a Statistical DataAdapter provides <a href="https://github.com/ngageoint/geowave/issues/655">#655</a></li>
+<li>Random SpatialTemporalQueryIT.testTimeRangeAcrossBinsYear() failure in 0.9.1 branch <a href="https://github.com/ngageoint/geowave/issues/625">#625</a></li>
+<li>WMS test failing for geoserver 2.6.0 and 2.6.1 <a href="https://github.com/ngageoint/geowave/issues/392">#392</a></li>
+<li>KMeansIT test has a seemingly random failure <a href="https://github.com/ngageoint/geowave/issues/361">#361</a></li>
+<li>Handle Statistics for data duplicated in multiple indices <a href="https://github.com/ngageoint/geowave/issues/292">#292</a></li>
+<li>Integration test not loading decimation process <a href="https://github.com/ngageoint/geowave/issues/204">#204</a></li>
+<li>Exception on resolving namespace when using Open Layers with 12.1 geotools and 2.6.1 geoserver. <a href="https://github.com/ngageoint/geowave/issues/132">#132</a></li>
+<li>Kernel Density process dies when encountering empty points <a href="https://github.com/ngageoint/geowave/issues/30">#30</a></li>
+</ul>
 <p><strong>Closed issues:</strong></p>
 <ul>
+<li>Docs: Add accumulo.api flag <a href="https://github.com/ngageoint/geowave/issues/713">#713</a></li>
+<li>CORS does not work in Jetty due to jetty-servlets.jar missing <a href="https://github.com/ngageoint/geowave/issues/678">#678</a></li>
+<li>add index ID as commandline option to KDE process <a href="https://github.com/ngageoint/geowave/issues/673">#673</a></li>
 <li>Create a boundary partitioner for nearest neighbor <a href="https://github.com/ngageoint/geowave/issues/662">#662</a></li>
 <li>FeatureDataAdapter not persisting preferred index selection <a href="https://github.com/ngageoint/geowave/issues/650">#650</a></li>
 <li>WholeFeatureRowAdapter should persist its Time Configuration <a href="https://github.com/ngageoint/geowave/issues/647">#647</a></li>
 <li>Query can be null and thrown an NPE in the CLI <a href="https://github.com/ngageoint/geowave/issues/637">#637</a></li>
+<li>A query constraining lower bound time and missing the upper bound submitted through the GeoTools pluggin is inefficient <a href="https://github.com/ngageoint/geowave/issues/632">#632</a></li>
 <li>Fix MiniAccumuloCluster exec on windows due to classpath too long <a href="https://github.com/ngageoint/geowave/issues/624">#624</a></li>
 <li>Server-Side (Iterator) Attribute Subsetting for Queries <a href="https://github.com/ngageoint/geowave/issues/615">#615</a></li>
 <li>Add multithreading to local ingest <a href="https://github.com/ngageoint/geowave/issues/614">#614</a></li>
+<li>query planner <a href="https://github.com/ngageoint/geowave/issues/599">#599</a></li>
+<li>Error scanning line featuretypes in 4676 data. <a href="https://github.com/ngageoint/geowave/issues/556">#556</a></li>
+<li>A query should support multiple ranges per dimension. <a href="https://github.com/ngageoint/geowave/issues/543">#543</a></li>
+<li>Add set splits as CLI operations <a href="https://github.com/ngageoint/geowave/issues/542">#542</a></li>
+<li>Allow ingest to set the default geometry if more than one is present for indexing. <a href="https://github.com/ngageoint/geowave/issues/494">#494</a></li>
+<li>GeoServer-produced WFS data needs to ensure data field titles are GML-safe <a href="https://github.com/ngageoint/geowave/issues/488">#488</a></li>
+<li>Move analytics deploy into deploy/pom.xml. <a href="https://github.com/ngageoint/geowave/issues/456">#456</a></li>
+<li>GeowaveInputFormat query causes Out of Memory Error <a href="https://github.com/ngageoint/geowave/issues/417">#417</a></li>
+<li>Initial tests against GeoServer-2.8.0-M0 using GeoTools 14.M0 fail <a href="https://github.com/ngageoint/geowave/issues/415">#415</a></li>
+<li>Meta-Data to ascertain which indices are used for each data adapter. <a href="https://github.com/ngageoint/geowave/issues/193">#193</a></li>
+<li>Documentation: Finish Quickstart + Graphics/Description of underlying theory <a href="https://github.com/ngageoint/geowave/issues/23">#23</a></li>
 </ul>
 <p><strong>Merged pull requests:</strong></p>
 <ul>
+<li>GEOWAVE-713: Add accumulo.api argument to doc examples <a href="https://github.com/ngageoint/geowave/pull/714">#714</a> (<a href="https://github.com/spohnan">spohnan</a>)</li>
+<li>GEOWAVE-681: Aggregation improvements <a href="https://github.com/ngageoint/geowave/pull/712">#712</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
+<li>Geowave 653 <a href="https://github.com/ngageoint/geowave/pull/708">#708</a> (<a href="https://github.com/rwgdrummer">rwgdrummer</a>)</li>
+<li>ignoring files generated by eclipse's scala plugin <a href="https://github.com/ngageoint/geowave/pull/705">#705</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
+<li>GEOWAVE-697: removed commandline completion <a href="https://github.com/ngageoint/geowave/pull/703">#703</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
+<li>GEOWAVE-687: tested and fixed issues with export and ingest from avro <a href="https://github.com/ngageoint/geowave/pull/702">#702</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
+<li>Added Contribution Section to Docs <a href="https://github.com/ngageoint/geowave/pull/700">#700</a> (<a href="https://github.com/ScottEvil">ScottEvil</a>)</li>
+<li>fixed an issue with winutils.exe being copied twice for ITs on windows <a href="https://github.com/ngageoint/geowave/pull/698">#698</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
+<li>GEOWAVE-686: added an ingest format for avro encoded using the geowav… <a href="https://github.com/ngageoint/geowave/pull/695">#695</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
+<li>GEOWAVE-682: gdelt automated example tied into emr bootstrap scripts <a href="https://github.com/ngageoint/geowave/pull/683">#683</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
+<li>GEOWAVE-679: raster resize CLI fix <a href="https://github.com/ngageoint/geowave/pull/680">#680</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
+<li>Issue #659, #658, #660. Allow the index writer to to multiple indice… <a href="https://github.com/ngageoint/geowave/pull/676">#676</a> (<a href="https://github.com/rwgdrummer">rwgdrummer</a>)</li>
 <li>GEOWAVE-673: added index as optional parameter to KDE <a href="https://github.com/ngageoint/geowave/pull/674">#674</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>GEOWAVE-669: moved geowavedemoapp to exmaples so that it could use ad… <a href="https://github.com/ngageoint/geowave/pull/671">#671</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
+<li>GEOWAVE-666: fixed an issue with subsampling and added integration te… <a href="https://github.com/ngageoint/geowave/pull/670">#670</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>Issue #662. Partition based on boundary of polygon <a href="https://github.com/ngageoint/geowave/pull/665">#665</a> (<a href="https://github.com/rwgdrummer">rwgdrummer</a>)</li>
 <li>Geowave 615 <a href="https://github.com/ngageoint/geowave/pull/663">#663</a> (<a href="https://github.com/dcy2003">dcy2003</a>)</li>
 <li>Geowave 647 9.1 <a href="https://github.com/ngageoint/geowave/pull/661">#661</a> (<a href="https://github.com/rwgdrummer">rwgdrummer</a>)</li>
@@ -563,7 +629,6 @@
 <li>deploy-geowave-to-hdfs.sh script issues <a href="https://github.com/ngageoint/geowave/issues/154">#154</a></li>
 <li>Fix heatmap stats render transform <a href="https://github.com/ngageoint/geowave/issues/141">#141</a></li>
 <li>Fix bugs in the persistence model for raster merge metadata <a href="https://github.com/ngageoint/geowave/issues/137">#137</a></li>
-<li>Output streams sometimes closed twice in geowave iterators <a href="https://github.com/ngageoint/geowave/issues/22">#22</a></li>
 </ul>
 <p><strong>Closed issues:</strong></p>
 <ul>
