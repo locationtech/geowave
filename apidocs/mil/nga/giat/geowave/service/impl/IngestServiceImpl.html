@@ -99,7 +99,9 @@
 </dl>
 <hr>
 <br>
-<pre>public class <span class="strong">IngestServiceImpl</span>
+<pre>@Produces(value="application/json")
+@Path(value="/ingest")
+public class <span class="strong">IngestServiceImpl</span>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements <a href="../../../../../../mil/nga/giat/geowave/service/IngestService.html" title="interface in mil.nga.giat.geowave.service">IngestService</a></pre>
 </li>
@@ -191,7 +193,11 @@ implements <a href="../../../../../../mil/nga/giat/geowave/service/IngestService
 <ul class="blockList">
 <li class="blockList">
 <h4>localIngest</h4>
-<pre>public&nbsp;javax.ws.rs.core.Response&nbsp;localIngest(org.glassfish.jersey.media.multipart.FormDataMultiPart&nbsp;multiPart)</pre>
+<pre>@POST
+@Path(value="/local")
+@Consumes(value="multipart/form-data")
+@Produces(value="application/json")
+public&nbsp;javax.ws.rs.core.Response&nbsp;localIngest(org.glassfish.jersey.media.multipart.FormDataMultiPart&nbsp;multiPart)</pre>
 <dl>
 <dt><strong>Specified by:</strong></dt>
 <dd><code><a href="../../../../../../mil/nga/giat/geowave/service/IngestService.html#localIngest(org.glassfish.jersey.media.multipart.FormDataMultiPart)">localIngest</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/service/IngestService.html" title="interface in mil.nga.giat.geowave.service">IngestService</a></code></dd>
@@ -204,7 +210,11 @@ implements <a href="../../../../../../mil/nga/giat/geowave/service/IngestService
 <ul class="blockListLast">
 <li class="blockList">
 <h4>hdfsIngest</h4>
-<pre>public&nbsp;javax.ws.rs.core.Response&nbsp;hdfsIngest(org.glassfish.jersey.media.multipart.FormDataMultiPart&nbsp;multiPart)</pre>
+<pre>@POST
+@Path(value="/hdfs")
+@Consumes(value="multipart/form-data")
+@Produces(value="application/json")
+public&nbsp;javax.ws.rs.core.Response&nbsp;hdfsIngest(org.glassfish.jersey.media.multipart.FormDataMultiPart&nbsp;multiPart)</pre>
 <dl>
 <dt><strong>Specified by:</strong></dt>
 <dd><code><a href="../../../../../../mil/nga/giat/geowave/service/IngestService.html#hdfsIngest(org.glassfish.jersey.media.multipart.FormDataMultiPart)">hdfsIngest</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/service/IngestService.html" title="interface in mil.nga.giat.geowave.service">IngestService</a></code></dd>
