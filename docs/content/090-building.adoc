@@ -35,7 +35,7 @@ Checkout geowave, set your preferred dependencies as build arguments and then ru
 
 [source, bash]
 ----
-export BUILD_ARGS="-Daccumulo.version=1.6.0-cdh5.1.4 -Dhadoop.version=2.6.0-cdh5.4.0 -Dgeotools.version=13.0 -Dgeoserver.version=2.7.0 -Dvendor.version=cdh5 -P cloudera" <1>
+export BUILD_ARGS="-Daccumulo.version=1.6.0-cdh5.1.4 -Dhadoop.version=2.6.0-cdh5.4.0 -Dgeotools.version=13.0 -Dgeoserver.version=2.7.0 -Dvendor.version=cdh5 -Daccumulo.api=1.6 -P cloudera" <1>
 git clone https://github.com/ngageoint/geowave.git <2>
 cd geowave
 mvn install $BUILD_ARGS <3>

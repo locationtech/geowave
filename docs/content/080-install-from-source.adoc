@@ -14,7 +14,7 @@ Example build args:
 
 [source, bash]
 ----
-export BUILD_ARGS="-Daccumulo.version=1.6.0 -Dhadoop.version=2.5.0-cdh5.3.0 -Dgeotools.version=13.0 -Dgeoserver.version=2.7.0 -Dvender.version=cdh5 -P cloudera"
+export BUILD_ARGS="-Daccumulo.version=1.6.0 -Dhadoop.version=2.5.0-cdh5.3.0 -Dgeotools.version=13.0 -Dgeoserver.version=2.7.0 -Dvender.version=cdh5 -Daccumulo.api=1.6 -P cloudera"
 ----
 
 ==== GeoServer Install
