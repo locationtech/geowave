@@ -2,7 +2,7 @@
 
 === Decomposition
 
-Core to the concept of SFC based indexing is range decomposition. This is when we take a range described in multiple
+Range decomposition is core to the concept of SFC based indexing. This is when we take a range described in multiple
 dimensions and turn it into a series of 1d ranges.
 
 image::hilbertdecomp1.png[scaledwidth="100%",alt="Hilbert Decomposition 1"]
@@ -10,15 +10,15 @@ image::hilbertdecomp1.png[scaledwidth="100%",alt="Hilbert Decomposition 1"]
 _Figure: Hilbert Ranges_
 
 In the figure above we show that we mean by this. The bounding box described by the blue selection window – or
-(2,9) -> (5,13) will “fully” decompose to 3 ranges – 70-75, 92->99, and 116->121.
+(2,9) -> (5,13) will “fully” decompose to 3 ranges – 70->75, 92->99, and 116->121.
 
 It should be noted that sometimes more simplistic algorithms will not fully decompose – but would instead represent
-this as 70-121, or even 64->127 (the smallest “unit cell” this box fits in). As you can see this would result in
+this as 70->121, or even 64->127 (the smallest “unit cell” this box fits in). As you can see, this would result in
 scanning many extraneous cells.
 
-At some point – with high precision high dimensionality curves – the number of possible unit cells can become to large
-too deal with – in this case GeoWaves optimizes this by treating the curve as a “lower cardinality” curve than it
-actually is – so the unit cell size might not be 1, but instead 64, 128, 1024, etc. This allows the user to still
+At some point, with high precision high dimensionality curves, the number of possible unit cells can become too large
+to deal with. In such a case, GeoWave optimizes this by treating the curve as a “lower cardinality” curve than it
+actually is. So the unit cell size might not be 1, but instead 64, 128, 1024, etc. This allows the user to still
 achieve high precision when selection windows are small, but not spend an inordinate amount of time fully decomposing
 for large selection windows.
 

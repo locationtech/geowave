@@ -1,9 +1,9 @@
 [[screenshots]]
 <<<
-== Screenshots
+== Example screenshots
 
-The screenshots below are of data loaded from the various attributed data sets into a Geowave instance, processed
-(in some cases) by a Geowave analytic process, and rendered by Geoserver.
+The screenshots below are of data loaded from various attributed data sets into a GeoWave instance, processed
+(in some cases) by a GeoWave analytic process, and rendered by Geoserver.
 
 === GeoLife
 
@@ -14,7 +14,7 @@ More information on this data set is available at http://research.microsoft.com/
 
 ==== GeoLife at city scale
 
-Below are renderings of GeoLife data. They display both the raw points, as well as the results of a GeoWave kernel
+Below are renderings of GeoLife data. They display the raw points as well as the results of a GeoWave kernel
 density analytic. The data corresponds to Mapbox zoom level 13.
 
 image::geolife-density-13-thumb.jpg[scaledwidth="100%",alt="Geolife density at city scale",link=images/geolife-density-13.jpg]
@@ -68,7 +68,7 @@ More information on this data set is available at: http://research.microsoft.com
 
 ==== T-drive at city scale
 
-Below are renderings of the t-drive data. They display both the raw points, as well as the results of a Geowave kernel
+Below are renderings of the t-drive data. They display the raw points along with the results of a GeoWave kernel
 density analytic. The data corresponds to Mapbox zoom level 12.
 
 image::t-drive-points-12-thumb.jpg[scaledwidth="100%",alt="T-drive points at city scale",link=images/t-drive-points-12.jpg]

@@ -1,7 +1,7 @@
 [[ingest-statistics]]
 === Ingest Statistics and Time Dimension Configuration
 
-The available plugins for vector support adjustments to their configuration via the command line. 
+The available plugins for vector support adjustments to their configuration via the command line.
 The system property 'SIMPLE_FEATURE_CONFIG_FILE' may be assigned to the name of a locally accessible JSON file defining
 the configuration.
 
@@ -10,15 +10,15 @@ the configuration.
 ----
 geowave -DSIMPLE_FEATURE_CONFIG_FILE=myconfigfile.json -localingest
 ----
- 
+
 Configuration consists of several parts:
-[arabic] 
+[arabic]
 . Selecting temporal attributes for a temporal index.
 . Assigning to each attribute the type of statistics to be captured within the Statistics Store
 . Determining which attributes should be indexed in a secondary index.
 . Determining which attribute contains visibility information for other attributes
 . Setting the names of the indices to update in WFS-T transactions via the GeoServer plug-in.
- 
+
 The JSON file is made up of configurations.   Each configuration is defined by a class name and a set of attributes.
 Configurations are grouped by the Simple Feature Type name.
 
@@ -30,17 +30,16 @@ There are three attributes for the temporal configuration:
 . startRangeName
 . endRangeName
 
-These attributes are associated with the name of a simple feature type attribute that references a time value.  To index by a single time attribute, 
+These attributes are associated with the name of a simple feature type attribute that references a time value.  To index by a single time attribute,
 set `_timeName_` to the name of the single attribute.  To index by a range, set both `_startRangeName_` and `_endRangeName_` to the
 names of the simple feature type attributes that define start and end time values.
 
 ==== Statistics Configuration
 
-Each simple feature type attribute may have several assigned statistics.  Bounding box and range statistics are automatically captured for Geometry and temporal attributes.
-  
-[frame="topbot",options="header"]  
-|===
+Each simple feature type attribute may have several assigned statistics.  Bounding box and range statistics are automatically captured for geometry and temporal attributes.
 
+[frame="topbot",options="header"]
+|===
 |Attribute Type |Statistic Name|Statistic Configuration Attributes (with default values)|Statistic Class
 .3+|Numeric
 |Fixed Bin Histogram|minValue=-&#8734;,maxValue=&#8734;,bins=32|mil.nga.giat.geowave.adapter.vector.stats.FeatureFixedBinNumericStatistics$FeatureFixedBinConfig
@@ -49,13 +48,14 @@ Each simple feature type attribute may have several assigned statistics.  Boundi
 .2+|String
 |Count Min Sketch|errorFactor=0.001,probabilityOfCorrectness=0.98|mil.nga.giat.geowave.adapter.vector.stats.FeatureCountMinSketchStatistics$FeatureCountMinSketchConfig
 |Hyper Log Log|precision=16|mil.nga.giat.geowave.adapter.vector.stats.FeatureHyperLogLogStatistics$FeatureHyperLogLogConfig
+|===
 
 ==== Visibility Configuration
 
-Visibility configuration has two attributes: the visibility manager class and the visibility attribute name. 
- 
+Visibility configuration has two attributes: the visibility manager class and the visibility attribute name.
+
 A Visibility manager extends mil.nga.giat.geowave.core.store.data.visibility.VisibilityManagement.  An instance of this class
-interprets the contents of a visibility attribute, within a simple feature, to determine the visibility constraints of 
+interprets the contents of a visibility attribute, within a simple feature, to determine the visibility constraints of
 the other attributes in that simple feature.  The default visibility management class is mil.nga.giat.geowave.adapter.vector.plugin.visibility.JsonDefinitionColumnVisibilityManagement.
 
 ==== Secondary Index Configuration
@@ -71,8 +71,6 @@ Each of this configurations maintains a set of simple feature attribute names to
 
 The class mil.nga.giat.geowave.adapter.vector.index.SimpleFeaturePrimaryIndexConfiguration is used to maintain the configuration of
 primary indices used for adding or updating simple features via the GeoServer plug-in (FeatureWriter).
-
-|===
 
 ==== Example
 [source]
@@ -96,16 +94,16 @@ primary indices used for adding or updating simple features via the GeoServer pl
        }
        {"@class":"mil.nga.giat.geowave.adapter.vector.stats.StatsConfigurationCollection$SimpleFeatureStatsConfigurationCollection",
         "attConfig" : {
-          "population" : { 
-            "configurationsForAttribute" :  [ 
-              {"@class" : "mil.nga.giat.geowave.adapter.vector.stats.FeatureFixedBinNumericStatistics$FeatureFixedBinConfig","bins" : 24} 
+          "population" : {
+            "configurationsForAttribute" :  [
+              {"@class" : "mil.nga.giat.geowave.adapter.vector.stats.FeatureFixedBinNumericStatistics$FeatureFixedBinConfig","bins" : 24}
              ]
             },
-          "country" : { 
-            "configurationsForAttribute" :  [ 
+          "country" : {
+            "configurationsForAttribute" :  [
              {"@class" : "mil.nga.giat.geowave.adapter.vector.stats.FeatureCountMinSketchStatistics$FeatureCountMinSketchConfig",
               "probabilityOfCorrectness" : 0.98,
-              "errorFactor" :0.001 
+              "errorFactor" :0.001
              },
              {"@class" : "mil.nga.giat.geowave.adapter.vector.stats.FeatureHyperLogLogStatistics$FeatureHyperLogLogConfig"}
             ]

@@ -2,7 +2,7 @@
 === New Formats
 
 There are multiple ways to get data into GeoWave. In other sections we will discuss higher order frameworks, mapreduce
-interfaces, etc. The intent here is "just the basics" - what's the least framework intensive way that one can load
+interfaces, etc. The intent here is "just the basics" - the least framework intensive way that one can load
 geospatial data.
 
 Information here will reference the SimpleIngest and SimpleIngestProducerConsumer examples in the geowave-examples project.
@@ -57,7 +57,7 @@ Here we will programmatically generate a grid of points at each location where a
  * @throws AccumuloException
  * @throws AccumuloSecurityException
  */
-protected BasicAccumuloOperations getAccumuloInstance(String zookeepers, String accumuloInstance, String accumuloUser, String accumuloPass, String geowaveNamespace) 
+protected BasicAccumuloOperations getAccumuloInstance(String zookeepers, String accumuloInstance, String accumuloUser, String accumuloPass, String geowaveNamespace)
   throws AccumuloException, AccumuloSecurityException {
     return new BasicAccumuloOperations(zookeepers, accumuloInstance, accumuloUser, accumuloPass, geowaveNamespace);
 }
@@ -65,7 +65,7 @@ protected BasicAccumuloOperations getAccumuloInstance(String zookeepers, String 
 
 ==== Simple Feature Type
 
-We know fore sure we need a geometry field. Everything else is really optional. It's often convenient to add a text
+A geometry field is required. Everything else is really optional. It's often convenient to add a text
 latitude and longitude field for ease of display values (getFeatureInfo, etc.).
 
 [source, java]
@@ -80,16 +80,16 @@ protected SimpleFeatureType createPointFeatureType(){
 
     final SimpleFeatureTypeBuilder builder = new SimpleFeatureTypeBuilder();
     final AttributeTypeBuilder ab = new AttributeTypeBuilder();
-    
-    
+
+
     //Names should be unique (at least for a given GeoWave namespace) - think about names in the same sense as a full classname
     //The value you set here will also persist through discovery - so when people are looking at a dataset they will see the
     //type names associated with the data.
     builder.setName("Point");
-            
+
     //The data is persisted in a sparse format, so if data is nullable it will not take up any space if no values are persisted.
-    //Data which is included in the primary index (in this example lattitude/longtiude) can not be null
-    //Calling out latitude an longitude separately is not strictly needed, as the geometry contains that information.  But it's 
+    //Data which is included in the primary index (in this example lattitude/longtiude) cannot be null
+    //Calling out latitude an longitude separately is not strictly needed, as the geometry contains that information.  But it's
     //convienent in many use cases to get a text representation without having to handle geometries.
     builder.add(ab.binding(Geometry.class).nillable(false).buildDescriptor("geometry"));
     builder.add(ab.binding(Date.class).nillable(true).buildDescriptor("TimeStamp"));
@@ -97,7 +97,7 @@ protected SimpleFeatureType createPointFeatureType(){
     builder.add(ab.binding(Double.class).nillable(false).buildDescriptor("Longitude"));
     builder.add(ab.binding(String.class).nillable(true).buildDescriptor("TrajectoryID"));
     builder.add(ab.binding(String.class).nillable(true).buildDescriptor("Comment"));
-    
+
     return builder.buildFeatureType();
 }
 ----
@@ -116,8 +116,8 @@ protected SimpleFeatureType createPointFeatureType(){
  * @return GeoWave index for a default SPATIAL index
  */
 protected Index createSpatialIndex(){
-    
-    //Reasonable values for spatial and spatio-temporal are provided through static factory methods.  
+
+    //Reasonable values for spatial and spatio-temporal are provided through static factory methods.
     //They are intended to be a reasonable starting place - though creating a custom index may provide better
     //performance is the distribution/characterization of the data is well known.
     return IndexType.SPATIAL.createDefaultIndex();
@@ -131,7 +131,7 @@ protected Index createSpatialIndex(){
 /***
  * The dataadapter interface describes how to serialize a data type.
  * Here we are using an implementation that understands how to serialize
- * OGC SimpleFeature types.  
+ * OGC SimpleFeature types.
  * @param sft  simple feature type you want to generate an adapter from
  * @return data adapter that handles serialization of the sft simple feature type
  */
@@ -215,7 +215,7 @@ protected void generateGrid(
 
 ==== Other methods
 
-There are other patterns that can be used - see the various classes in the geowave-examples project. The method displayed
+There are other patterns that can be used. See the various classes in the geowave-examples project. The method displayed
 above is the suggested pattern - it's demonstrated in SimpleIngestIndexWriter.java
 
 The other methods displayed work, but are either more complicated than necessary (SimpleIngestProducerConsumer.java) or
