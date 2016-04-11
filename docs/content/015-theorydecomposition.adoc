@@ -16,8 +16,8 @@ It should be noted that sometimes more simplistic algorithms will not fully deco
 this as 70->121, or even 64->127 (the smallest “unit cell” this box fits in). As you can see, this would result in
 scanning many extraneous cells.
 
-At some point, with high precision high dimensionality curves, the number of possible unit cells can become to large
-too deal with. In such a case, GeoWaves optimizes this by treating the curve as a “lower cardinality” curve than it
+At some point, with high precision high dimensionality curves, the number of possible unit cells can become too large
+to deal with. In such a case, GeoWave optimizes this by treating the curve as a “lower cardinality” curve than it
 actually is. So the unit cell size might not be 1, but instead 64, 128, 1024, etc. This allows the user to still
 achieve high precision when selection windows are small, but not spend an inordinate amount of time fully decomposing
 for large selection windows.
