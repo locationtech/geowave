@@ -14,8 +14,7 @@ public class DataStatisticsAggregation<T> implements
 	public DataStatisticsAggregation(
 			final DataStatistics<T> statistics ) {
 		this.statisticsResult = statistics;
-		this.defaultResultBinary = PersistenceUtils.toBinary(
-				statisticsResult);
+		this.defaultResultBinary = PersistenceUtils.toBinary(statisticsResult);
 		this.statisticsParam = statistics;
 	}
 

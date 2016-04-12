@@ -10,7 +10,7 @@ import mil.nga.giat.geowave.core.index.PersistenceUtils;
 /**
  * The Basic Index Result class creates an object associated with a generic
  * query. This class can be used when the dimensions and/or axis are generic.
- *
+ * 
  */
 public class BasicNumericDataset implements
 		MultiDimensionalNumericData
@@ -27,7 +27,7 @@ public class BasicNumericDataset implements
 
 	/**
 	 * Constructor used to create a new Basic Numeric Dataset object.
-	 *
+	 * 
 	 * @param dataPerDimension
 	 *            an array of numeric data objects
 	 */
@@ -76,7 +76,7 @@ public class BasicNumericDataset implements
 	}
 
 	/**
-	 *
+	 * 
 	 * @return an array of NumericData objects
 	 */
 	@Override
@@ -101,8 +101,7 @@ public class BasicNumericDataset implements
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = (prime * result) + Arrays.hashCode(
-				dataPerDimension);
+		result = (prime * result) + Arrays.hashCode(dataPerDimension);
 		return result;
 	}
 
@@ -132,21 +131,15 @@ public class BasicNumericDataset implements
 		int totalBytes = 4;
 		final List<byte[]> serializedData = new ArrayList<byte[]>();
 		for (final NumericData data : dataPerDimension) {
-			final byte[] binary = PersistenceUtils.toBinary(
-					data);
+			final byte[] binary = PersistenceUtils.toBinary(data);
 			totalBytes += (binary.length + 4);
-			serializedData.add(
-					binary);
+			serializedData.add(binary);
 		}
-		final ByteBuffer buf = ByteBuffer.allocate(
-				totalBytes);
-		buf.putInt(
-				dataPerDimension.length);
+		final ByteBuffer buf = ByteBuffer.allocate(totalBytes);
+		buf.putInt(dataPerDimension.length);
 		for (final byte[] binary : serializedData) {
-			buf.putInt(
-					binary.length);
-			buf.put(
-					binary);
+			buf.putInt(binary.length);
+			buf.put(binary);
 		}
 		return buf.array();
 	}
@@ -154,14 +147,12 @@ public class BasicNumericDataset implements
 	@Override
 	public void fromBinary(
 			final byte[] bytes ) {
-		final ByteBuffer buf = ByteBuffer.wrap(
-				bytes);
+		final ByteBuffer buf = ByteBuffer.wrap(bytes);
 		final int numDimensions = buf.getInt();
 		dataPerDimension = new NumericData[numDimensions];
 		for (int d = 0; d < numDimensions; d++) {
 			final byte[] binary = new byte[buf.getInt()];
-			buf.get(
-					binary);
+			buf.get(binary);
 			dataPerDimension[d] = PersistenceUtils.fromBinary(
 					binary,
 					NumericData.class);

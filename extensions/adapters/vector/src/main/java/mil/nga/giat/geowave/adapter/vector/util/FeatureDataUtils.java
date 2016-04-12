@@ -1,13 +1,20 @@
 package mil.nga.giat.geowave.adapter.vector.util;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.List;
 import java.util.UUID;
 
 import mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveGTDataStore;
+import mil.nga.giat.geowave.core.store.spi.SPIServiceRegistry;
 
 import org.apache.commons.lang3.tuple.Pair;
+import org.apache.commons.vfs2.FileObject;
+import org.apache.commons.vfs2.impl.VFSClassLoader;
 import org.apache.log4j.Logger;
 import org.geotools.data.DataUtilities;
+import org.geotools.factory.GeoTools;
 import org.geotools.feature.SchemaException;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
@@ -28,6 +35,42 @@ import com.vividsolutions.jts.geom.Geometry;
 public class FeatureDataUtils
 {
 	private final static Logger LOGGER = Logger.getLogger(FeatureDataUtils.class);
+	private static final Object MUTEX = new Object();
+	private static boolean classLoaderInitialized = false;
+
+	public static void initClassLoader()
+			throws MalformedURLException {
+		synchronized (MUTEX) {
+			if (classLoaderInitialized) {
+				return;
+			}
+			ClassLoader classLoader = FeatureDataUtils.class.getClassLoader();
+			LOGGER.info("Generating patched classloader");
+			if (classLoader instanceof VFSClassLoader) {
+				final VFSClassLoader cl = (VFSClassLoader) classLoader;
+				final FileObject[] fileObjs = cl.getFileObjects();
+				final URL[] fileUrls = new URL[fileObjs.length];
+				for (int i = 0; i < fileObjs.length; i++) {
+					fileUrls[i] = new URL(
+							fileObjs[i].toString());
+				}
+				final ClassLoader urlCL = java.security.AccessController.doPrivileged(new java.security.PrivilegedAction<URLClassLoader>() {
+					@Override
+					public URLClassLoader run() {
+						final URLClassLoader ucl = new URLClassLoader(
+								fileUrls,
+								cl);
+						return ucl;
+					}
+				});
+				GeoTools.addClassLoader(urlCL);
+				SPIServiceRegistry.registerClassLoader(urlCL);
+
+			}
+			classLoaderInitialized = true;
+		}
+
+	}
 
 	public static SimpleFeature defaultCRSTransform(
 			final SimpleFeature entry,

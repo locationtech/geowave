@@ -7,7 +7,8 @@ import mil.nga.giat.geowave.core.index.Persistable;
  * 
  */
 public interface NumericData extends
-		java.io.Serializable, Persistable
+		java.io.Serializable,
+		Persistable
 {
 	public double getMin();
 

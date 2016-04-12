@@ -6,7 +6,7 @@ import mil.nga.giat.geowave.core.index.QueryConstraints;
 /**
  * Interface which defines the methods associated with a multi-dimensional
  * numeric data range.
- *
+ * 
  */
 public interface MultiDimensionalNumericData extends
 		QueryConstraints,
