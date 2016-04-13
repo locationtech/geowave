@@ -1,11 +1,23 @@
 package mil.nga.giat.geowave.adapter.vector;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.log4j.Logger;
+import org.geotools.data.DataUtilities;
+import org.geotools.feature.SchemaException;
+import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
+import org.geotools.referencing.CRS;
+import org.opengis.feature.simple.SimpleFeature;
+import org.opengis.feature.simple.SimpleFeatureType;
+import org.opengis.feature.type.AttributeDescriptor;
+import org.opengis.referencing.FactoryException;
+import org.opengis.referencing.operation.MathTransform;
 
 import mil.nga.giat.geowave.adapter.vector.index.SecondaryIndexManager;
 import mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveGTDataStore;
@@ -23,7 +35,6 @@ import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.EntryVisibilityHandler;
 import mil.nga.giat.geowave.core.store.adapter.AbstractDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.AdapterPersistenceEncoding;
-import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.IndexFieldHandler;
 import mil.nga.giat.geowave.core.store.adapter.NativeFieldHandler;
 import mil.nga.giat.geowave.core.store.adapter.NativeFieldHandler.RowBuilder;
@@ -41,17 +52,6 @@ import mil.nga.giat.geowave.core.store.index.SecondaryIndex;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndexDataAdapter;
 import mil.nga.giat.geowave.mapreduce.HadoopDataAdapter;
 import mil.nga.giat.geowave.mapreduce.HadoopWritableSerializer;
-
-import org.apache.log4j.Logger;
-import org.geotools.data.DataUtilities;
-import org.geotools.feature.SchemaException;
-import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
-import org.geotools.referencing.CRS;
-import org.opengis.feature.simple.SimpleFeature;
-import org.opengis.feature.simple.SimpleFeatureType;
-import org.opengis.feature.type.AttributeDescriptor;
-import org.opengis.referencing.FactoryException;
-import org.opengis.referencing.operation.MathTransform;
 
 /**
  * This data adapter will handle all reading/writing concerns for storing and
@@ -300,7 +300,7 @@ public class FeatureDataAdapter extends
 		reprojectedType = builder.buildFeatureType();
 	}
 
-	private Map<ByteArrayId, FieldReader<Object>> idToReaderMap = new HashMap<ByteArrayId, FieldReader<Object>>();
+	private final Map<ByteArrayId, FieldReader<Object>> idToReaderMap = new HashMap<ByteArrayId, FieldReader<Object>>();
 
 	@Override
 	public FieldReader<Object> getReader(
@@ -318,13 +318,15 @@ public class FeatureDataAdapter extends
 		return reader;
 	}
 
-	private Map<ByteArrayId, FieldWriter<SimpleFeature, Object>> idToWriterMap = new HashMap<ByteArrayId, FieldWriter<SimpleFeature, Object>>();
+	private final Map<ByteArrayId, FieldWriter<SimpleFeature, Object>> idToWriterMap = new HashMap<ByteArrayId, FieldWriter<SimpleFeature, Object>>();
 
 	private FieldVisibilityHandler<SimpleFeature, Object> getVisbilityHandler(
 			final ByteArrayId fieldId ) {
 		final VisibilityConfiguration config = new VisibilityConfiguration(
 				reprojectedType);
-		if (reprojectedType.getDescriptor(config.getAttributeName()) == null) return fieldVisiblityHandler;
+		if (reprojectedType.getDescriptor(config.getAttributeName()) == null) {
+			return fieldVisiblityHandler;
+		}
 		final AttributeDescriptor descriptor = reprojectedType.getDescriptor(fieldId.getString());
 
 		return config.getManager().createVisibilityHandler(
@@ -338,7 +340,7 @@ public class FeatureDataAdapter extends
 			final ByteArrayId fieldId ) {
 		FieldWriter<SimpleFeature, Object> writer = idToWriterMap.get(fieldId);
 		if (writer == null) {
-			FieldVisibilityHandler<SimpleFeature, Object> handler = getVisbilityHandler(fieldId);
+			final FieldVisibilityHandler<SimpleFeature, Object> handler = getVisbilityHandler(fieldId);
 			final AttributeDescriptor descriptor = reprojectedType.getDescriptor(fieldId.getString());
 
 			final Class<?> bindingClass = descriptor.getType().getBinding();
@@ -427,6 +429,14 @@ public class FeatureDataAdapter extends
 	@Override
 	protected Object defaultTypeDataFromBinary(
 			final byte[] bytes ) {
+		try {
+			FeatureDataUtils.initClassLoader();
+		}
+		catch (final MalformedURLException e) {
+			LOGGER.warn(
+					"Unable to initialize GeoTools classloader",
+					e);
+		}
 		// deserialize the feature type
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
 		// for now...do a gentle migration
@@ -575,6 +585,7 @@ public class FeatureDataAdapter extends
 		return statsManager.getVisibilityHandler(statisticsId);
 	}
 
+	@Override
 	public boolean hasTemporalConstraints() {
 		return getTimeDescriptors().hasTime();
 	}

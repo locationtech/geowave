@@ -19,18 +19,15 @@ public class CountResult implements
 
 	@Override
 	public byte[] toBinary() {
-		final ByteBuffer buffer = ByteBuffer.allocate(
-				8);
-		buffer.putLong(
-				count);
+		final ByteBuffer buffer = ByteBuffer.allocate(8);
+		buffer.putLong(count);
 		return buffer.array();
 	}
 
 	@Override
 	public void fromBinary(
 			final byte[] bytes ) {
-		final ByteBuffer buffer = ByteBuffer.wrap(
-				bytes);
+		final ByteBuffer buffer = ByteBuffer.wrap(bytes);
 		count = buffer.getLong();
 	}
 
@@ -39,12 +36,11 @@ public class CountResult implements
 		final StringBuffer buffer = new StringBuffer();
 		buffer.append(
 				"count[count=").append(
-						count);
-		buffer.append(
-				"]");
+				count);
+		buffer.append("]");
 		return buffer.toString();
 	}
-	
+
 	@Override
 	public void merge(
 			final Mergeable result ) {

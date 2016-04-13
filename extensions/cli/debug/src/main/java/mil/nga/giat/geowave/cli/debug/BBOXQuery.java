@@ -33,69 +33,49 @@ public class BBOXQuery extends
 				"east",
 				true,
 				"East in degrees longitude");
-		east.setRequired(
-				true);
+		east.setRequired(true);
 		final Option west = new Option(
 				"west",
 				true,
 				"West in degrees longitude");
-		west.setRequired(
-				true);
+		west.setRequired(true);
 		final Option north = new Option(
 				"north",
 				true,
 				"North in degrees latitude");
-		north.setRequired(
-				true);
+		north.setRequired(true);
 		final Option south = new Option(
 				"south",
 				true,
 				"South in degrees latitude");
-		south.setRequired(
-				true);
+		south.setRequired(true);
 
-		options.addOption(
-				west);
-		options.addOption(
-				east);
-		options.addOption(
-				north);
-		options.addOption(
-				south);
+		options.addOption(west);
+		options.addOption(east);
+		options.addOption(north);
+		options.addOption(south);
 
 		final Option stats = new Option(
 				"useAggregation",
 				false,
 				"Compute count on the server side");
-		stats.setRequired(
-				false);
-		options.addOption(
-				stats);
+		stats.setRequired(false);
+		options.addOption(stats);
 	}
 
 	@Override
 	protected void parseOptions(
 			final CommandLine commandLine ) {
-		final double east = Double.parseDouble(
-				commandLine.getOptionValue(
-						"east"));
-		final double west = Double.parseDouble(
-				commandLine.getOptionValue(
-						"west"));
-		final double north = Double.parseDouble(
-				commandLine.getOptionValue(
-						"north"));
-		final double south = Double.parseDouble(
-				commandLine.getOptionValue(
-						"south"));
-		geom = new GeometryFactory().toGeometry(
-				new Envelope(
-						west,
-						east,
-						south,
-						north));
-		useAggregation = commandLine.hasOption(
-				"useAggregation");
+		final double east = Double.parseDouble(commandLine.getOptionValue("east"));
+		final double west = Double.parseDouble(commandLine.getOptionValue("west"));
+		final double north = Double.parseDouble(commandLine.getOptionValue("north"));
+		final double south = Double.parseDouble(commandLine.getOptionValue("south"));
+		geom = new GeometryFactory().toGeometry(new Envelope(
+				west,
+				east,
+				south,
+				north));
+		useAggregation = commandLine.hasOption("useAggregation");
 	}
 
 	@Override
@@ -117,7 +97,7 @@ public class BBOXQuery extends
 					options,
 					new SpatialQuery(
 							geom))) {
-				final CountResult result = ((CountAggregation) (it.next())).getResult();
+				final CountResult result = ((CountResult) (it.next()));
 				if (result != null) {
 					count += result.getCount();
 				}
@@ -135,8 +115,7 @@ public class BBOXQuery extends
 							geom))) {
 				while (it.hasNext()) {
 					if (debug) {
-						System.out.println(
-								it.next());
+						System.out.println(it.next());
 					}
 					else {
 						it.next();

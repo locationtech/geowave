@@ -10,7 +10,7 @@ import mil.nga.giat.geowave.core.index.dimension.bin.BinRange;
 /**
  * The Binned Numeric Dataset class creates an object that associates a
  * multi-dimensional index range to a particular bin ID.
- *
+ * 
  */
 public class BinnedNumericDataset implements
 		MultiDimensionalNumericData
@@ -21,7 +21,7 @@ public class BinnedNumericDataset implements
 	protected BinnedNumericDataset() {}
 
 	/**
-	 *
+	 * 
 	 * @param binId
 	 *            a unique ID associated with the BinnedQuery object
 	 * @param indexRanges
@@ -89,7 +89,7 @@ public class BinnedNumericDataset implements
 	 * translated into 2 binned queries representing the 2012 portion of the
 	 * query and the 2013 portion, each normalized to millis from the beginning
 	 * of the year.
-	 *
+	 * 
 	 * @param numericData
 	 *            the incoming query into the index implementation, to be
 	 *            translated into normalized, binned queries
@@ -106,8 +106,7 @@ public class BinnedNumericDataset implements
 		final BinRange[][] binRangesPerDimension = new BinRange[dimensionDefinitions.length][];
 		int numBinnedQueries = 1;
 		for (int d = 0; d < dimensionDefinitions.length; d++) {
-			binRangesPerDimension[d] = dimensionDefinitions[d].getNormalizedRanges(
-					numericData.getDataPerDimension()[d]);
+			binRangesPerDimension[d] = dimensionDefinitions[d].getNormalizedRanges(numericData.getDataPerDimension()[d]);
 			numBinnedQueries *= binRangesPerDimension[d].length;
 		}
 		// now we need to combine all permutations of bin ranges into
@@ -154,31 +153,23 @@ public class BinnedNumericDataset implements
 
 	@Override
 	public byte[] toBinary() {
-		final byte[] indexRangesBinary = PersistenceUtils.toBinary(
-				indexRanges);
-		final ByteBuffer buf = ByteBuffer.allocate(
-				4 + indexRangesBinary.length + binId.length);
-		buf.putInt(
-				binId.length);
-		buf.put(
-				binId);
-		buf.put(
-				indexRangesBinary);
+		final byte[] indexRangesBinary = PersistenceUtils.toBinary(indexRanges);
+		final ByteBuffer buf = ByteBuffer.allocate(4 + indexRangesBinary.length + binId.length);
+		buf.putInt(binId.length);
+		buf.put(binId);
+		buf.put(indexRangesBinary);
 		return null;
 	}
 
 	@Override
 	public void fromBinary(
 			final byte[] bytes ) {
-		final ByteBuffer buf = ByteBuffer.wrap(
-				bytes);
+		final ByteBuffer buf = ByteBuffer.wrap(bytes);
 		binId = new byte[buf.getInt()];
-		buf.get(
-				binId);
+		buf.get(binId);
 
 		final byte[] indexRangesBinary = new byte[bytes.length - 4 - binId.length];
-		buf.get(
-				indexRangesBinary);
+		buf.get(indexRangesBinary);
 		indexRanges = PersistenceUtils.fromBinary(
 				indexRangesBinary,
 				MultiDimensionalNumericData.class);

@@ -5,7 +5,7 @@ import java.nio.ByteBuffer;
 /**
  * Concrete implementation defining a numeric range associated with a space
  * filling curve.
- *
+ * 
  */
 public class NumericRange implements
 		NumericData
@@ -21,7 +21,7 @@ public class NumericRange implements
 
 	/**
 	 * Constructor used to create a IndexRange object
-	 *
+	 * 
 	 * @param min
 	 *            the minimum bounds of a unique index range
 	 * @param max
@@ -35,7 +35,7 @@ public class NumericRange implements
 	}
 
 	/**
-	 *
+	 * 
 	 * @return min the minimum bounds of a index range object
 	 */
 	@Override
@@ -44,7 +44,7 @@ public class NumericRange implements
 	}
 
 	/**
-	 *
+	 * 
 	 * @return max the maximum bounds of a index range object
 	 */
 	@Override
@@ -53,7 +53,7 @@ public class NumericRange implements
 	}
 
 	/**
-	 *
+	 * 
 	 * @return centroid the center of a unique index range object
 	 */
 	@Override
@@ -79,11 +79,9 @@ public class NumericRange implements
 		final int prime = 31;
 		int result = 1;
 		long temp;
-		temp = Double.doubleToLongBits(
-				max);
+		temp = Double.doubleToLongBits(max);
 		result = (prime * result) + (int) (temp ^ (temp >>> 32));
-		temp = Double.doubleToLongBits(
-				min);
+		temp = Double.doubleToLongBits(min);
 		result = (prime * result) + (int) (temp ^ (temp >>> 32));
 		return result;
 	}
@@ -98,33 +96,25 @@ public class NumericRange implements
 			return false;
 		}
 		// changing this check will fail some unit tests.
-		if (!NumericRange.class.isAssignableFrom(
-				obj.getClass())) {
+		if (!NumericRange.class.isAssignableFrom(obj.getClass())) {
 			return false;
 		}
 		final NumericRange other = (NumericRange) obj;
-		return (Math.abs(
-				max - other.max) < NumericValue.EPSILON)
-				&& (Math.abs(
-						min - other.min) < NumericValue.EPSILON);
+		return (Math.abs(max - other.max) < NumericValue.EPSILON) && (Math.abs(min - other.min) < NumericValue.EPSILON);
 	}
 
 	@Override
 	public byte[] toBinary() {
-		final ByteBuffer buf = ByteBuffer.allocate(
-				16);
-		buf.putDouble(
-				min);
-		buf.putDouble(
-				max);
+		final ByteBuffer buf = ByteBuffer.allocate(16);
+		buf.putDouble(min);
+		buf.putDouble(max);
 		return buf.array();
 	}
 
 	@Override
 	public void fromBinary(
 			final byte[] bytes ) {
-		final ByteBuffer buf = ByteBuffer.wrap(
-				bytes);
+		final ByteBuffer buf = ByteBuffer.wrap(bytes);
 		min = buf.getDouble();
 		max = buf.getDouble();
 	}

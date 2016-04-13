@@ -28,19 +28,15 @@ public class CQLQuery extends
 				"cql",
 				true,
 				"CQL Filter executed client side");
-		cql.setRequired(
-				true);
-		options.addOption(
-				cql);
+		cql.setRequired(true);
+		options.addOption(cql);
 
 		final Option aggregation = new Option(
 				"useAggregation",
 				false,
 				"Compute count on the server side");
-		aggregation.setRequired(
-				false);
-		options.addOption(
-				aggregation);
+		aggregation.setRequired(false);
+		options.addOption(aggregation);
 	}
 
 	@Override
@@ -48,8 +44,7 @@ public class CQLQuery extends
 			final CommandLine commandLine ) {
 		cqlStr = commandLine.getOptionValue(
 				"cql").toString();
-		useAggregation = commandLine.hasOption(
-				"useAggregation");
+		useAggregation = commandLine.hasOption("useAggregation");
 	}
 
 	@Override
@@ -72,7 +67,7 @@ public class CQLQuery extends
 					new mil.nga.giat.geowave.adapter.vector.query.cql.CQLQuery(
 							cqlStr,
 							adapter))) {
-				final CountResult result = ((CountAggregation) (it.next())).getResult();
+				final CountResult result = ((CountResult) (it.next()));
 				if (result != null) {
 					count += result.getCount();
 				}
@@ -96,8 +91,7 @@ public class CQLQuery extends
 							adapter))) {
 				while (it.hasNext()) {
 					if (debug) {
-						System.out.println(
-								it.next());
+						System.out.println(it.next());
 					}
 					else {
 						it.next();

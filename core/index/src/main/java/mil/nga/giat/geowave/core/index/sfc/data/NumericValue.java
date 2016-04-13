@@ -5,7 +5,7 @@ import java.nio.ByteBuffer;
 /**
  * Concrete implementation defining a single numeric value associated with a
  * space filling curve.
- *
+ * 
  */
 public class NumericValue implements
 		NumericData
@@ -20,7 +20,7 @@ public class NumericValue implements
 
 	/**
 	 * Constructor used to create a new NumericValue object
-	 *
+	 * 
 	 * @param value
 	 *            the particular numeric value
 	 */
@@ -30,7 +30,7 @@ public class NumericValue implements
 	}
 
 	/**
-	 *
+	 * 
 	 * @return value the value of a numeric value object
 	 */
 	@Override
@@ -39,7 +39,7 @@ public class NumericValue implements
 	}
 
 	/**
-	 *
+	 * 
 	 * @return value the value of a numeric value object
 	 */
 	@Override
@@ -48,7 +48,7 @@ public class NumericValue implements
 	}
 
 	/**
-	 *
+	 * 
 	 * @return value the value of a numeric value object
 	 */
 	@Override
@@ -74,8 +74,7 @@ public class NumericValue implements
 		final int prime = 31;
 		int result = 1;
 		long temp;
-		temp = Double.doubleToLongBits(
-				value);
+		temp = Double.doubleToLongBits(value);
 		result = (prime * result) + (int) (temp ^ (temp >>> 32));
 		return result;
 	}
@@ -95,24 +94,20 @@ public class NumericValue implements
 			return false;
 		}
 		final NumericValue other = (NumericValue) obj;
-		return (Math.abs(
-				value - other.value) < EPSILON);
+		return (Math.abs(value - other.value) < EPSILON);
 	}
 
 	@Override
 	public byte[] toBinary() {
-		final ByteBuffer buf = ByteBuffer.allocate(
-				8);
-		buf.putDouble(
-				value);
+		final ByteBuffer buf = ByteBuffer.allocate(8);
+		buf.putDouble(value);
 		return buf.array();
 	}
 
 	@Override
 	public void fromBinary(
 			final byte[] bytes ) {
-		final ByteBuffer buf = ByteBuffer.wrap(
-				bytes);
+		final ByteBuffer buf = ByteBuffer.wrap(bytes);
 		value = buf.getDouble();
 	}
 }

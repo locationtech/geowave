@@ -7,6 +7,7 @@ import java.nio.ByteBuffer;
 import java.util.List;
 
 import mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
+import mil.nga.giat.geowave.adapter.vector.util.FeatureDataUtils;
 import mil.nga.giat.geowave.core.index.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding;
@@ -32,8 +33,6 @@ public class CQLQueryFilter implements
 		DistributableQueryFilter
 {
 	private final static Logger LOGGER = Logger.getLogger(CQLQueryFilter.class);
-	private static final Object MUTEX = new Object();
-	private static boolean classLoaderInitialized = false;
 	private GeotoolsFeatureDataAdapter adapter;
 	private Filter filter;
 
@@ -118,41 +117,6 @@ public class CQLQueryFilter implements
 		return true;
 	}
 
-	public static void initClassLoader(
-			@SuppressWarnings("rawtypes")
-			final Class cls )
-			throws MalformedURLException {
-		synchronized (MUTEX) {
-			if (classLoaderInitialized) {
-				return;
-			}
-			LOGGER.info("Generating patched classloader");
-			if (cls.getClassLoader() instanceof VFSClassLoader) {
-				final VFSClassLoader cl = (VFSClassLoader) cls.getClassLoader();
-				final FileObject[] fileObjs = cl.getFileObjects();
-				final URL[] fileUrls = new URL[fileObjs.length];
-				for (int i = 0; i < fileObjs.length; i++) {
-					fileUrls[i] = new URL(
-							fileObjs[i].toString());
-				}
-				final ClassLoader urlCL = java.security.AccessController.doPrivileged(new java.security.PrivilegedAction<URLClassLoader>() {
-					@Override
-					public URLClassLoader run() {
-						final URLClassLoader ucl = new URLClassLoader(
-								fileUrls,
-								cl);
-						return ucl;
-					}
-				});
-				GeoTools.addClassLoader(urlCL);
-				SPIServiceRegistry.registerClassLoader(urlCL);
-
-			}
-			classLoaderInitialized = true;
-		}
-
-	}
-
 	@Override
 	public byte[] toBinary() {
 		byte[] filterBytes;
@@ -182,7 +146,7 @@ public class CQLQueryFilter implements
 	public void fromBinary(
 			final byte[] bytes ) {
 		try {
-			initClassLoader(CQLQueryFilter.class);
+			FeatureDataUtils.initClassLoader();
 		}
 		catch (final MalformedURLException e) {
 			LOGGER.error(

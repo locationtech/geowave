@@ -57,6 +57,10 @@ abstract public class AccumuloQuery
 
 	abstract protected List<ByteArrayRange> getRanges();
 
+	protected boolean isAggregation() {
+		return false;
+	}
+
 	protected ScannerBase getScanner(
 			final AccumuloOperations accumuloOperations,
 			final double[] maxResolutionSubsamplingPerDimension,
@@ -65,7 +69,7 @@ abstract public class AccumuloQuery
 		final String tableName = StringUtils.stringFromBinary(index.getId().getBytes());
 		ScannerBase scanner;
 		try {
-			if ((ranges != null) && (ranges.size() == 1)) {
+			if (!isAggregation() && (ranges != null) && (ranges.size() == 1)) {
 				scanner = accumuloOperations.createScanner(
 						tableName,
 						getAdditionalAuthorizations());
