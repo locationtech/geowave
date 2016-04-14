@@ -140,7 +140,8 @@ public class GeoWaveMain
 		}
 		else {
 			throw new RuntimeException(
-					"Exception while processing help: " + params.getSuccessMessage());
+					"Exception while processing help: " + params.getSuccessMessage(),
+					params.getSuccessException());
 		}
 	}
 }

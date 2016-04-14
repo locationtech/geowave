@@ -182,7 +182,7 @@ public class KMeansCommonOptions
 
 	@SampleParameter(SampleParameters.Sample.INDEX_ID)
 	@Parameter(names = {
-		"-sdt",
+		"-sid",
 		"--sampleIndexId"
 	}, description = "Sample Index Type Id")
 	private String sampleIndexId;

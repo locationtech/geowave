@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
@@ -22,6 +25,8 @@ import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePlugin
 public class AddStoreCommand implements
 		Command
 {
+
+	private final static Logger LOGGER = LoggerFactory.getLogger(AddStoreCommand.class);
 
 	public static final String PROPERTIES_CONTEXT = "properties";
 
@@ -63,11 +68,20 @@ public class AddStoreCommand implements
 			String defaultStore = existingProps.getProperty(DataStorePluginOptions.DEFAULT_PROPERTY_NAMESPACE);
 
 			// Load the default index.
-			if (pluginOptions.load(
-					existingProps,
-					DataStorePluginOptions.getStoreNamespace(defaultStore))) {
-				// Set the required type option.
-				this.storeType = pluginOptions.getType();
+			if (defaultStore != null) {
+				try {
+					if (pluginOptions.load(
+							existingProps,
+							DataStorePluginOptions.getStoreNamespace(defaultStore))) {
+						// Set the required type option.
+						this.storeType = pluginOptions.getType();
+					}
+				}
+				catch (ParameterException pe) {
+					LOGGER.warn(
+							"Couldn't load default store: " + defaultStore,
+							pe);
+				}
 			}
 		}
 

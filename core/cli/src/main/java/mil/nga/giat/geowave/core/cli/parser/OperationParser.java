@@ -143,7 +143,7 @@ public class OperationParser
 			throw new ParameterException(
 					String.format(
 							"Exception while processing arguments: %s",
-							p.getMessage()));
+							p.getMessage()), p);
 		}
 
 		// Re-enable param validation and don't allow unknown params
@@ -164,7 +164,7 @@ public class OperationParser
 				throw new ParameterException(
 						String.format(
 								"Unable to prepare operation: %s",
-								p.getMessage()));
+								p.getMessage()), p);
 			}
 		}
 
@@ -176,7 +176,7 @@ public class OperationParser
 			throw new ParameterException(
 					String.format(
 							"Exception while processing arguments: %s",
-							p.getMessage()));
+							p.getMessage()), p);
 		}
 
 		return true;

@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
@@ -22,6 +25,7 @@ import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOpti
 public class AddIndexCommand implements
 		Command
 {
+	private final static Logger LOGGER = LoggerFactory.getLogger(AddIndexCommand.class);
 
 	@Parameter(description = "<name>", required = true)
 	private List<String> parameters = new ArrayList<String>();
@@ -61,11 +65,20 @@ public class AddIndexCommand implements
 			String defaultIndex = existingProps.getProperty(IndexPluginOptions.DEFAULT_PROPERTY_NAMESPACE);
 
 			// Load the default index.
-			if (pluginOptions.load(
-					existingProps,
-					IndexPluginOptions.getIndexNamespace(defaultIndex))) {
-				// Set the required type option.
-				this.type = pluginOptions.getType();
+			if (defaultIndex != null) {
+				try {
+					if (pluginOptions.load(
+							existingProps,
+							IndexPluginOptions.getIndexNamespace(defaultIndex))) {
+						// Set the required type option.
+						this.type = pluginOptions.getType();
+					}
+				}
+				catch (ParameterException pe) {
+					LOGGER.warn(
+							"Couldn't load default index: " + defaultIndex,
+							pe);
+				}
 			}
 		}
 

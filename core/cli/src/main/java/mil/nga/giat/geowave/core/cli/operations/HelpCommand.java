@@ -124,8 +124,10 @@ public class HelpCommand implements
 			}
 		}
 
-		JCommander.getConsole().println(
-				builder.toString());
+		// Trim excess newlines.
+		String output = builder.toString().trim();
+
+		System.out.println(output);
 	}
 
 	/**

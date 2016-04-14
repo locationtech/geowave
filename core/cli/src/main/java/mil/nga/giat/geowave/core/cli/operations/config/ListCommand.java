@@ -1,8 +1,13 @@
 package mil.nga.giat.geowave.core.cli.operations.config;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Properties;
+import java.util.Set;
+import java.util.TreeSet;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
@@ -46,12 +51,15 @@ public class ListCommand extends
 					f,
 					null);
 		}
-
+		
 		JCommander.getConsole().println(
 				"PROPERTIES (" + f.getName() + ")");
-		Enumeration<Object> keys = p.keys();
-		while (keys.hasMoreElements()) {
-			String key = (String) keys.nextElement();
+		
+		List<String> keys = new ArrayList<String>();
+		keys.addAll(p.stringPropertyNames());
+		Collections.sort(keys);
+
+		for (String key : keys) {
 			String value = (String) p.get(key);
 			JCommander.getConsole().println(
 					key + ": " + value);
