@@ -7,9 +7,10 @@ import static org.junit.Assert.assertTrue;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+
+import org.junit.Test;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
@@ -40,12 +41,11 @@ import mil.nga.giat.geowave.core.store.filter.QueryFilter;
 import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.core.store.index.Index;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.core.store.memory.MemoryRequiredOptions;
 import mil.nga.giat.geowave.core.store.memory.MemoryStoreFactoryFamily;
 import mil.nga.giat.geowave.core.store.query.DataIdQuery;
 import mil.nga.giat.geowave.core.store.query.Query;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
-
-import org.junit.Test;
 
 public class MemoryDataStoreTest
 {
@@ -59,12 +59,12 @@ public class MemoryDataStoreTest
 				new MockComponents.TestIndexModel());
 		final String namespace = "test_" + getClass().getName();
 		final StoreFactoryFamilySpi storeFamily = new MemoryStoreFactoryFamily();
+		MemoryRequiredOptions reqOptions = new MemoryRequiredOptions();
+		reqOptions.setGeowaveNamespace(namespace);
 		final DataStore dataStore = storeFamily.getDataStoreFactory().createStore(
-				new HashMap<String, Object>(),
-				namespace);
+				reqOptions);
 		final DataStatisticsStore statsStore = storeFamily.getDataStatisticsStoreFactory().createStore(
-				new HashMap<String, Object>(),
-				namespace);
+				reqOptions);
 		final WritableDataAdapter<Integer> adapter = new MockComponents.MockAbstractDataAdapter();
 
 		final VisibilityWriter<Integer> visWriter = new VisibilityWriter<Integer>() {
@@ -240,12 +240,12 @@ public class MemoryDataStoreTest
 						"tm2"));
 		final String namespace = "test2_" + getClass().getName();
 		final StoreFactoryFamilySpi storeFamily = new MemoryStoreFactoryFamily();
+		MemoryRequiredOptions opts = new MemoryRequiredOptions();
+		opts.setGeowaveNamespace(namespace);
 		final DataStore dataStore = storeFamily.getDataStoreFactory().createStore(
-				new HashMap<String, Object>(),
-				namespace);
+				opts);
 		final DataStatisticsStore statsStore = storeFamily.getDataStatisticsStoreFactory().createStore(
-				new HashMap<String, Object>(),
-				namespace);
+				opts);
 		final WritableDataAdapter<Integer> adapter = new MockComponents.MockAbstractDataAdapter();
 
 		final VisibilityWriter<Integer> visWriter = new VisibilityWriter<Integer>() {

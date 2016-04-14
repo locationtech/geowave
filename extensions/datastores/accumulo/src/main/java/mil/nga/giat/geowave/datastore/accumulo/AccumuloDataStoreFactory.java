@@ -1,10 +1,15 @@
 package mil.nga.giat.geowave.datastore.accumulo;
 
-import java.util.Map;
-
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.DataStoreFactorySpi;
-import mil.nga.giat.geowave.core.store.GeoWaveStoreFinder;
+import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
+import mil.nga.giat.geowave.datastore.accumulo.index.secondary.AccumuloSecondaryIndexDataStore;
+import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloAdapterIndexMappingStore;
+import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloAdapterStore;
+import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloDataStatisticsStore;
+import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloIndexStore;
+import mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloOptions;
+import mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloRequiredOptions;
 
 public class AccumuloDataStoreFactory extends
 		AbstractAccumuloStoreFactory<DataStore> implements
@@ -13,27 +18,31 @@ public class AccumuloDataStoreFactory extends
 
 	@Override
 	public DataStore createStore(
-			final Map<String, Object> configOptions,
-			final String namespace ) {
-		// TODO also need to add config options for AccumuloOptions
+			final StoreFactoryOptions options ) {
+		if (!(options instanceof AccumuloRequiredOptions)) {
+			throw new AssertionError(
+					"Expected " + AccumuloRequiredOptions.class.getSimpleName());
+		}
+		AccumuloRequiredOptions opts = (AccumuloRequiredOptions) options;
+		if (opts.getAdditionalOptions() == null) {
+			opts.setAdditionalOptions(new AccumuloOptions());
+		}
+
+		BasicAccumuloOperations accumuloOperations = createOperations(opts);
 		return new AccumuloDataStore(
-				GeoWaveStoreFinder.createIndexStore(
-						configOptions,
-						namespace),
-				GeoWaveStoreFinder.createAdapterStore(
-						configOptions,
-						namespace),
-				GeoWaveStoreFinder.createDataStatisticsStore(
-						configOptions,
-						namespace),
-				GeoWaveStoreFinder.createSecondaryIndexDataStore(
-						configOptions,
-						namespace),
-				GeoWaveStoreFinder.createAdapterIndexMappingStore(
-						configOptions,
-						namespace),
-				createOperations(
-						configOptions,
-						namespace));
+				new AccumuloIndexStore(
+						accumuloOperations),
+				new AccumuloAdapterStore(
+						accumuloOperations),
+				new AccumuloDataStatisticsStore(
+						accumuloOperations),
+				new AccumuloSecondaryIndexDataStore(
+						accumuloOperations,
+						opts.getAdditionalOptions()),
+				new AccumuloAdapterIndexMappingStore(
+						accumuloOperations),
+				accumuloOperations,
+				opts.getAdditionalOptions());
+
 	}
 }

@@ -31,12 +31,12 @@ import mil.nga.giat.geowave.adapter.vector.plugin.lock.LockingManagementFactory;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.GeoWaveStoreFinder;
 import mil.nga.giat.geowave.core.store.StoreFactoryFamilySpi;
+import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
 import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
-import mil.nga.giat.geowave.core.store.config.AbstractConfigOption;
+import mil.nga.giat.geowave.core.store.config.ConfigOption;
 import mil.nga.giat.geowave.core.store.config.ConfigUtils;
-import mil.nga.giat.geowave.core.store.config.PasswordConfigOption;
 import mil.nga.giat.geowave.core.store.filter.GenericTypeResolver;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
 
@@ -50,7 +50,7 @@ public class GeoWavePluginConfig
 {
 	private final static Logger LOGGER = Logger.getLogger(GeoWavePluginConfig.class);
 
-	public static final String GEOWAVE_NAMESPACE_KEY = "gwNamespace";
+	public static final String GEOWAVE_NAMESPACE_KEY = StoreFactoryOptions.GEOWAVE_NAMESPACE_OPTION;
 	// name matches the workspace parameter provided to the factory
 	protected static final String FEATURE_NAMESPACE_KEY = "namespace";
 	protected static final String LOCK_MGT_KEY = "Lock Management";
@@ -133,7 +133,7 @@ public class GeoWavePluginConfig
 			final StoreFactoryFamilySpi storeFactoryFamily ) {
 		List<Param> params = paramMap.get(storeFactoryFamily.getName());
 		if (params == null) {
-			final AbstractConfigOption<?>[] configOptions = GeoWaveStoreFinder.getAllOptions(storeFactoryFamily);
+			final ConfigOption[] configOptions = GeoWaveStoreFinder.getAllOptions(storeFactoryFamily);
 			params = new ArrayList<Param>(
 					Lists.transform(
 							Lists.newArrayList(configOptions),
@@ -211,34 +211,28 @@ public class GeoWavePluginConfig
 		}
 
 		adapterStore = storeFactoryFamily.getAdapterStoreFactory().createStore(
-				ConfigUtils.valuesFromStrings(
-						paramStrs,
-						storeFactoryFamily.getAdapterStoreFactory().getOptions()),
-				namespace);
+				ConfigUtils.populateOptionsFromList(
+						storeFactoryFamily.getAdapterStoreFactory().createOptionsInstance(),
+						paramStrs));
 
 		dataStore = storeFactoryFamily.getDataStoreFactory().createStore(
-				ConfigUtils.valuesFromStrings(
-						paramStrs,
-						storeFactoryFamily.getDataStoreFactory().getOptions()),
-				namespace);
+				ConfigUtils.populateOptionsFromList(
+						storeFactoryFamily.getDataStoreFactory().createOptionsInstance(),
+						paramStrs));
 
 		dataStatisticsStore = storeFactoryFamily.getDataStatisticsStoreFactory().createStore(
-				ConfigUtils.valuesFromStrings(
-						paramStrs,
-						storeFactoryFamily.getDataStatisticsStoreFactory().getOptions()),
-				namespace);
+				ConfigUtils.populateOptionsFromList(
+						storeFactoryFamily.getDataStatisticsStoreFactory().createOptionsInstance(),
+						paramStrs));
 
 		indexStore = storeFactoryFamily.getIndexStoreFactory().createStore(
-				ConfigUtils.valuesFromStrings(
-						paramStrs,
-						storeFactoryFamily.getIndexStoreFactory().getOptions()),
-				namespace);
-
+				ConfigUtils.populateOptionsFromList(
+						storeFactoryFamily.getIndexStoreFactory().createOptionsInstance(),
+						paramStrs));
 		adapterIndexMappingStore = storeFactoryFamily.getAdapterIndexMappingStoreFactory().createStore(
-				ConfigUtils.valuesFromStrings(
-						paramStrs,
-						storeFactoryFamily.getAdapterIndexMappingStoreFactory().getOptions()),
-				namespace);
+				ConfigUtils.populateOptionsFromList(
+						storeFactoryFamily.getAdapterIndexMappingStoreFactory().createOptionsInstance(),
+						paramStrs));
 		lockingManagementFactory = factory;
 
 		authorizationFactory = getAuthorizationFactory(params);
@@ -440,13 +434,13 @@ public class GeoWavePluginConfig
 	}
 
 	private static class GeoWaveConfigOptionToGeoToolsConfigOption implements
-			Function<AbstractConfigOption<?>, Param>
+			Function<ConfigOption, Param>
 	{
 
 		@Override
 		public Param apply(
-				final AbstractConfigOption<?> input ) {
-			if (input instanceof PasswordConfigOption) {
+				final ConfigOption input ) {
+			if (input.isPassword()) {
 				return new Param(
 						input.getName(),
 						String.class,
@@ -461,7 +455,7 @@ public class GeoWavePluginConfig
 					input.getName(),
 					GenericTypeResolver.resolveTypeArgument(
 							input.getClass(),
-							AbstractConfigOption.class),
+							ConfigOption.class),
 					input.getDescription(),
 					!input.isOptional());
 		}

@@ -11,9 +11,14 @@
 	<dependencies>
 		<dependency>
 			<groupId>mil.nga.giat</groupId>
-			<artifactId>geowave-analytic-api</artifactId>
+			<artifactId>geowave-core-cli</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>mil.nga.giat</groupId>
+			<artifactId>geowave-analytic-api</artifactId>
+			<version>${project.version}</version>
+		</dependency>	
 		<dependency>
 			<groupId>java3d</groupId>
 			<artifactId>vecmath</artifactId>

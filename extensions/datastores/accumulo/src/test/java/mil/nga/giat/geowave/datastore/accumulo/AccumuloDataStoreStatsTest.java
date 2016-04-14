@@ -62,6 +62,7 @@ import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloAdapterIndexMapp
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloAdapterStore;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloDataStatisticsStore;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloIndexStore;
+import mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloOptions;
 
 public class AccumuloDataStoreStatsTest
 {

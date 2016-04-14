@@ -1,10 +1,7 @@
 package mil.nga.giat.geowave.core.ingest.local;
 
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.Option;
-import org.apache.commons.cli.Options;
-import org.apache.commons.cli.ParseException;
-import org.apache.log4j.Logger;
+import com.beust.jcommander.IStringConverter;
+import com.beust.jcommander.Parameter;
 
 /**
  * This class encapsulates all of the options and parsed values specific to
@@ -15,98 +12,44 @@ import org.apache.log4j.Logger;
  */
 public class LocalInputCommandLineOptions
 {
-	private final static Logger LOGGER = Logger.getLogger(LocalInputCommandLineOptions.class);
-	private final String input;
-	private final String[] extensions;
-	private final int threads;
+	@Parameter(names = {
+		"-x",
+		"--extension"
+	}, description = "individual or comma-delimited set of file extensions to accept (optional)", converter = SplitConverter.class)
+	private String[] extensions;
 
-	public LocalInputCommandLineOptions(
-			final String input,
-			final String[] extensions,
-			final int threads ) {
-		this.input = input;
-		this.extensions = extensions;
-		this.threads = threads;
-	}
-
-	public String getInput() {
-		return input;
-	}
-
-	public int getThreads() {
-		return threads;
-	}
+	@Parameter(names = {
+		"-f",
+		"--formats"
+	}, description = "Explicitly set the ingest formats by name (or multiple comma-delimited formats), if not set all available ingest formats will be used")
+	private String formats;
 
 	public String[] getExtensions() {
 		return extensions;
 	}
 
-	public static LocalInputCommandLineOptions parseOptions(
-			final CommandLine commandLine )
-			throws ParseException {
-		int threads = 1;
-		if (commandLine.hasOption("t")) {
-			try {
-				threads = Integer.parseInt(commandLine.getOptionValue("t"));
-				if (threads < 1) {
-					throw new ParseException(
-							"Invalid threads input");
-				}
-			}
-			catch (final Exception ex) {
-				LOGGER.warn(
-						"Error parsing threads argument, ignoring threads option",
-						ex);
-			}
-		}
-		String value = null;
-		if (commandLine.hasOption("b")) {
-			value = commandLine.getOptionValue("b");
-		}
-		else {
-			throw new ParseException(
-					"Unable to ingest data, input file or base directory not specified");
-		}
-		String[] extensions = null;
-
-		if (commandLine.hasOption("x")) {
-			try {
-				extensions = commandLine.getOptionValue(
-						"x").split(
-						",");
-
-			}
-			catch (final Exception ex) {
-				LOGGER.warn(
-						"Error parsing extensions argument, ignoring file extension option",
-						ex);
-			}
-		}
-		return new LocalInputCommandLineOptions(
-				value,
-				extensions,
-				threads);
+	public String getFormats() {
+		return formats;
 	}
 
-	public static void applyOptions(
-			final Options allOptions ) {
-		allOptions.addOption(new Option(
-				"b",
-				"base",
-				true,
-				"Base input file or directory to crawl with one of the supported ingest types"));
+	public static class SplitConverter implements
+			IStringConverter<String[]>
+	{
+		@Override
+		public String[] convert(
+				String value ) {
+			return value.trim().split(
+					",");
+		}
+	}
 
-		allOptions.addOption(
-				"x",
-				"extension",
-				true,
-				"individual or comma-delimited set of file extensions to accept (optional)");
+	public void setExtensions(
+			String[] extensions ) {
+		this.extensions = extensions;
+	}
 
-		allOptions.addOption(
-				"t",
-				"threads",
-				true,
-				"number of threads to use for ingest, default to 1 (optional)");
-
+	public void setFormats(
+			String formats ) {
+		this.formats = formats;
 	}
 }

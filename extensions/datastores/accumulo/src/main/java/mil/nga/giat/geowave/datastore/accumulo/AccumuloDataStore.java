@@ -59,7 +59,6 @@ import mil.nga.giat.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapt
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.core.store.filter.DedupeFilter;
-import mil.nga.giat.geowave.core.store.index.Index;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndexDataStore;
@@ -79,6 +78,7 @@ import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloAdapterIndexMapp
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloAdapterStore;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloDataStatisticsStore;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloIndexStore;
+import mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloOptions;
 import mil.nga.giat.geowave.datastore.accumulo.query.AccumuloConstraintsQuery;
 import mil.nga.giat.geowave.datastore.accumulo.query.AccumuloRowIdsQuery;
 import mil.nga.giat.geowave.datastore.accumulo.query.AccumuloRowPrefixQuery;
@@ -452,6 +452,7 @@ public class AccumuloDataStore implements
 				// in one query instance (one scanner) for efficiency
 				if (adapterIdsToQuery.size() > 0) {
 					AccumuloConstraintsQuery accumuloQuery;
+
 					accumuloQuery = new AccumuloConstraintsQuery(
 							adapterIdsToQuery,
 							indexAdapterPair.getLeft(),

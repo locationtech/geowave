@@ -1,12 +1,11 @@
 package mil.nga.giat.geowave.cli.debug;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map.Entry;
-
-import mil.nga.giat.geowave.core.cli.CLIOperationDriver;
-import mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations;
-import mil.nga.giat.geowave.datastore.accumulo.split.AccumuloCommandLineOptions;
 
 import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
@@ -15,40 +14,71 @@ import org.apache.accumulo.core.client.TableNotFoundException;
 import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.Range;
 import org.apache.accumulo.core.data.Value;
-import org.apache.commons.cli.BasicParser;
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.Option;
-import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParameterException;
+import com.beust.jcommander.Parameters;
 import com.google.common.base.Stopwatch;
 
-public class MinimalFullTable implements
-		CLIOperationDriver
+import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
+import mil.nga.giat.geowave.core.cli.api.Command;
+import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
+import mil.nga.giat.geowave.core.cli.api.OperationParams;
+import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
+import mil.nga.giat.geowave.core.store.operations.remote.options.StoreLoader;
+import mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations;
+import mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations;
+import mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloRequiredOptions;
+
+@GeowaveOperation(name = "fullscanMinimal", parentOperation = DebugSection.class)
+@Parameters(commandDescription = "full table scan without any iterators or deserialization")
+public class MinimalFullTable extends
+		DefaultOperation implements
+		Command
 {
+	@Parameter(description = "<storename>")
+	private List<String> parameters = new ArrayList<String>();
+
+	@Parameter(names = "--indexId", required = true, description = "The name of the index (optional)")
+	private String indexId;
 
 	@Override
-	public boolean runOperation(
-			final String[] args )
+	public void execute(
+			OperationParams params )
 			throws ParseException {
 		final Stopwatch stopWatch = new Stopwatch();
-		final Options allOptions = new Options();
-		AccumuloCommandLineOptions.applyOptions(allOptions);
-		final Option indexIdOpt = new Option(
-				"indexId",
-				true,
-				"The name of the index");
-		indexIdOpt.setRequired(true);
-		allOptions.addOption(indexIdOpt);
-		final BasicParser parser = new BasicParser();
-		final CommandLine commandLine = parser.parse(
-				allOptions,
-				args);
-		final String indexId = commandLine.getOptionValue("indexId");
-		final AccumuloCommandLineOptions cli = AccumuloCommandLineOptions.parseOptions(commandLine);
+
+		// Ensure we have all the required arguments
+		if (parameters.size() != 1) {
+			throw new ParameterException(
+					"Requires arguments: <storename>");
+		}
+
+		String storeName = parameters.get(0);
+
+		// Config file
+		File configFile = (File) params.getContext().get(
+				ConfigOptions.PROPERTIES_FILE_CONTEXT);
+
+		// Attempt to load store.
+		StoreLoader storeOptions = new StoreLoader(
+				storeName);
+		if (!storeOptions.loadFromConfig(configFile)) {
+			throw new ParameterException(
+					"Cannot find store name: " + storeOptions.getStoreName());
+		}
 
 		try {
-			final AccumuloOperations ops = cli.getAccumuloOperations();
+			AccumuloRequiredOptions opts = (AccumuloRequiredOptions) storeOptions.getFactoryOptions();
+
+			final AccumuloOperations ops = new BasicAccumuloOperations(
+					opts.getZookeeper(),
+					opts.getInstance(),
+					opts.getUser(),
+					opts.getPassword(),
+					opts.getGeowaveNamespace());
+
 			long results = 0;
 			final BatchScanner scanner = ops.createBatchScanner(indexId);
 			scanner.setRanges(Collections.singleton(new Range()));
@@ -61,13 +91,10 @@ public class MinimalFullTable implements
 			stopWatch.stop();
 			scanner.close();
 			System.out.println("Got " + results + " results in " + stopWatch.toString());
-
-			return true;
 		}
 		catch (AccumuloException | AccumuloSecurityException | TableNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return false;
 	}
 }

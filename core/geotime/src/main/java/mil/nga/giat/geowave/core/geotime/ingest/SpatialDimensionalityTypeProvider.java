@@ -11,15 +11,15 @@ import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
 import mil.nga.giat.geowave.core.index.sfc.SFCFactory.SFCType;
 import mil.nga.giat.geowave.core.index.sfc.tiered.TieredSFCIndexFactory;
-import mil.nga.giat.geowave.core.ingest.index.IngestDimensionalityTypeProviderSpi;
 import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;
 import mil.nga.giat.geowave.core.store.index.BasicIndexModel;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 import mil.nga.giat.geowave.core.store.index.CustomIdIndex;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.core.store.spi.DimensionalityTypeProviderSpi;
 
 public class SpatialDimensionalityTypeProvider implements
-		IngestDimensionalityTypeProviderSpi
+		DimensionalityTypeProviderSpi
 {
 	private final SpatialOptions options = new SpatialOptions();
 	private static final String DEFAULT_SPATIAL_ID = "SPATIAL_IDX";
@@ -135,11 +135,11 @@ public class SpatialDimensionalityTypeProvider implements
 	private static class SpatialOptions
 	{
 		@Parameter(names = {
-			"-pointOnly"
+			"--pointOnly"
 		}, required = false, description = "The index will only be good at handling pointsand will not be optimized for handling lines/polys.  The default behavior is to handle any geometry.")
 		protected boolean pointOnly = false;
 		@Parameter(names = {
-			"-allTiers"
+			"--allTiers"
 		}, required = false, description = "The index will represent all tiers.  Typically for vector data we only need a subset of the tiers to minimize query decomposition, but for raster data typically all tiers is better.")
 		protected boolean allTiers = false;
 	}

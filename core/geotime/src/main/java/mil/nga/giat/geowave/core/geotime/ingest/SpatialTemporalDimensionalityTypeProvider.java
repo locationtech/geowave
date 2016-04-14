@@ -19,15 +19,15 @@ import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
 import mil.nga.giat.geowave.core.index.sfc.SFCFactory.SFCType;
 import mil.nga.giat.geowave.core.index.sfc.tiered.TieredSFCIndexFactory;
-import mil.nga.giat.geowave.core.ingest.index.IngestDimensionalityTypeProviderSpi;
 import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;
 import mil.nga.giat.geowave.core.store.index.BasicIndexModel;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 import mil.nga.giat.geowave.core.store.index.CustomIdIndex;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.core.store.spi.DimensionalityTypeProviderSpi;
 
 public class SpatialTemporalDimensionalityTypeProvider implements
-		IngestDimensionalityTypeProviderSpi
+		DimensionalityTypeProviderSpi
 {
 	private final SpatialTemporalOptions options = new SpatialTemporalOptions();
 	private static final String DEFAULT_SPATIAL_TEMPORAL_ID_STR = "SPATIAL_TEMPORAL_IDX";
@@ -132,16 +132,16 @@ public class SpatialTemporalDimensionalityTypeProvider implements
 	private static class SpatialTemporalOptions
 	{
 		@Parameter(names = {
-			"-period"
+			"--period"
 		}, required = false, description = "The periodicity of the temporal dimension.  Because time is continuous, it is binned at this interval.", converter = UnitConverter.class)
 		protected Unit periodicity = Unit.YEAR;
 
 		@Parameter(names = {
-			"-bias"
+			"--bias"
 		}, required = false, description = "The bias of the spatial-temporal index. There can be more precision given to time or space if necessary.", converter = BiasConverter.class)
 		protected Bias bias = Bias.BALANCED;
 		@Parameter(names = {
-			"-pointTimestampOnly"
+			"--pointTimestampOnly"
 		}, required = false, description = "The index will only be good at handling points and timestamps and will not be optimized for handling lines/polys or time ranges.  The default behavior is to handle any geometry and time ranges well.")
 		protected boolean pointOnly = false;
 	}

@@ -2,22 +2,17 @@ package mil.nga.giat.geowave.core.ingest.hdfs;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import mil.nga.giat.geowave.core.ingest.IngestFormatPluginProviderSpi;
-import mil.nga.giat.geowave.core.ingest.avro.AvroFormatPlugin;
-import mil.nga.giat.geowave.core.ingest.local.AbstractLocalFileDriver;
-
 import org.apache.avro.file.DataFileWriter;
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.Options;
-import org.apache.commons.cli.ParseException;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.log4j.Logger;
+
+import mil.nga.giat.geowave.core.ingest.avro.AvroFormatPlugin;
+import mil.nga.giat.geowave.core.ingest.local.AbstractLocalFileDriver;
+import mil.nga.giat.geowave.core.ingest.local.LocalInputCommandLineOptions;
 
 /**
  * This class actually executes the staging of data to HDFS based on the
@@ -27,30 +22,20 @@ public class StageToHdfsDriver extends
 		AbstractLocalFileDriver<AvroFormatPlugin<?, ?>, StageRunData>
 {
 	private final static Logger LOGGER = Logger.getLogger(StageToHdfsDriver.class);
-	private HdfsCommandLineOptions hdfsOptions;
+	private final Map<String, AvroFormatPlugin<?, ?>> ingestPlugins;
+	private final String hdfsHostPort;
+	private final String basePath;
 
 	public StageToHdfsDriver(
-			final String operation ) {
+			Map<String, AvroFormatPlugin<?, ?>> ingestPlugins,
+			String hdfsHostPort,
+			String basePath,
+			LocalInputCommandLineOptions inputOptions ) {
 		super(
-				operation);
-	}
-
-	@Override
-	protected void parseOptionsInternal(
-			final Options options,
-			final CommandLine commandLine )
-			throws ParseException {
-		hdfsOptions = HdfsCommandLineOptions.parseOptions(commandLine);
-		super.parseOptionsInternal(
-				options,
-				commandLine);
-	}
-
-	@Override
-	protected void applyOptionsInternal(
-			final Options allOptions ) {
-		HdfsCommandLineOptions.applyOptions(allOptions);
-		super.applyOptionsInternal(allOptions);
+				inputOptions);
+		this.ingestPlugins = ingestPlugins;
+		this.hdfsHostPort = hdfsHostPort;
+		this.basePath = basePath;
 	}
 
 	@Override
@@ -77,42 +62,20 @@ public class StageToHdfsDriver extends
 		}
 	}
 
-	@Override
-	protected boolean runInternal(
-			final String[] args,
-			final List<IngestFormatPluginProviderSpi<?, ?>> pluginProviders ) {
+	public boolean runOperation(
+			String inputPath ) {
 
 		// first collect the stage to hdfs plugins
-		final Map<String, AvroFormatPlugin<?, ?>> stageToHdfsPlugins = new HashMap<String, AvroFormatPlugin<?, ?>>();
-		for (final IngestFormatPluginProviderSpi<?, ?> pluginProvider : pluginProviders) {
-			AvroFormatPlugin<?, ?> stageToHdfsPlugin = null;
-			try {
-				stageToHdfsPlugin = pluginProvider.getAvroFormatPlugin();
-
-				if (stageToHdfsPlugin == null) {
-					LOGGER.warn("Plugin provider for ingest type '" + pluginProvider.getIngestFormatName() + "' does not support staging to HDFS");
-					continue;
-				}
-			}
-			catch (final UnsupportedOperationException e) {
-				LOGGER.warn(
-						"Plugin provider '" + pluginProvider.getIngestFormatName() + "' does not support staging to HDFS",
-						e);
-				continue;
-			}
-			stageToHdfsPlugins.put(
-					pluginProvider.getIngestFormatName(),
-					stageToHdfsPlugin);
-		}
+		final Map<String, AvroFormatPlugin<?, ?>> stageToHdfsPlugins = ingestPlugins;
 		final Configuration conf = new Configuration();
 		conf.set(
 				"fs.defaultFS",
-				hdfsOptions.getHdfsHostPort());
+				hdfsHostPort);
 		conf.set(
 				"fs.hdfs.impl",
 				org.apache.hadoop.hdfs.DistributedFileSystem.class.getName());
 		final Path hdfsBaseDirectory = new Path(
-				hdfsOptions.getBasePath());
+				basePath);
 
 		try {
 			final FileSystem fs = FileSystem.get(conf);
@@ -124,6 +87,7 @@ public class StageToHdfsDriver extends
 						hdfsBaseDirectory,
 						fs);
 				processInput(
+						inputPath,
 						stageToHdfsPlugins,
 						runData);
 				runData.close();

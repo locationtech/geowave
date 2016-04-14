@@ -4,14 +4,14 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Map;
 
-import mil.nga.giat.geowave.core.ingest.AbstractIngestCommandLineDriver;
-
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.Options;
-import org.apache.commons.cli.ParseException;
 import org.apache.log4j.Logger;
+
+import mil.nga.giat.geowave.core.ingest.DataAdapterProvider;
+import mil.nga.giat.geowave.core.ingest.IngestUtils;
+import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOptions;
 
 /**
  * This class can be sub-classed to handle recursing over a local directory
@@ -25,32 +25,47 @@ import org.apache.log4j.Logger;
  *            life of the process and is passed along for each call to process a
  *            file.
  */
-abstract public class AbstractLocalFileDriver<P extends LocalPluginBase, R> extends
-		AbstractIngestCommandLineDriver
+abstract public class AbstractLocalFileDriver<P extends LocalPluginBase, R>
 {
 	private final static Logger LOGGER = Logger.getLogger(AbstractLocalFileDriver.class);
 	protected LocalInputCommandLineOptions localInput;
 
 	public AbstractLocalFileDriver(
-			final String operation ) {
-		super(
-				operation);
+			LocalInputCommandLineOptions input ) {
+		localInput = input;
+	}
+
+	protected boolean checkIndexesAgainstProvider(
+			String providerName,
+			DataAdapterProvider<?> adapterProvider,
+			List<IndexPluginOptions> indexOptions ) {
+		boolean valid = true;
+		for (IndexPluginOptions option : indexOptions) {
+			if (!IngestUtils.isCompatible(
+					adapterProvider,
+					option)) {
+				LOGGER.warn("Local file ingest plugin for ingest type '" + providerName + "' does not support dimensionality '" + option.getType() + "'");
+				valid = false;
+			}
+		}
+		return valid;
 	}
 
 	protected void processInput(
+			final String inputPath,
 			final Map<String, P> localPlugins,
 			final R runData )
 			throws IOException {
-		if (localInput.getInput() == null) {
+		if (inputPath == null) {
 			LOGGER.fatal("Unable to ingest data, base directory or file input not specified");
 			return;
 		}
 		final File f = new File(
-				localInput.getInput());
+				inputPath);
 		if (!f.exists()) {
 			LOGGER.fatal("Input file '" + f.getAbsolutePath() + "' does not exist");
 			throw new IllegalArgumentException(
-					localInput.getInput() + " does not exist");
+					inputPath + " does not exist");
 		}
 		final File base = f.isDirectory() ? f : f.getParentFile();
 
@@ -58,7 +73,7 @@ abstract public class AbstractLocalFileDriver<P extends LocalPluginBase, R> exte
 			localPlugin.init(base);
 		}
 		Files.walkFileTree(
-				Paths.get(localInput.getInput()),
+				Paths.get(inputPath),
 				new LocalPluginFileVisitor<P, R>(
 						localPlugins,
 						this,
@@ -72,19 +87,4 @@ abstract public class AbstractLocalFileDriver<P extends LocalPluginBase, R> exte
 			P plugin,
 			R runData )
 			throws IOException;
-
-	@Override
-	protected void parseOptionsInternal(
-			final Options options,
-			final CommandLine commandLine )
-			throws ParseException {
-		localInput = LocalInputCommandLineOptions.parseOptions(commandLine);
-	}
-
-	@Override
-	protected void applyOptionsInternal(
-			final Options allOptions ) {
-		LocalInputCommandLineOptions.applyOptions(allOptions);
-	}
-
 }

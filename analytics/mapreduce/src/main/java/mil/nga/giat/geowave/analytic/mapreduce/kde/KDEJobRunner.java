@@ -4,10 +4,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import org.apache.commons.cli.BasicParser;
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.Options;
-import org.apache.commons.cli.ParseException;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.fs.FileSystem;
@@ -35,11 +31,10 @@ import com.vividsolutions.jts.geom.Geometry;
 
 import mil.nga.giat.geowave.adapter.raster.RasterUtils;
 import mil.nga.giat.geowave.adapter.vector.plugin.ExtractGeometryFilterVisitor;
-import mil.nga.giat.geowave.core.cli.AdapterStoreCommandLineOptions;
-import mil.nga.giat.geowave.core.cli.CLIOperationDriver;
-import mil.nga.giat.geowave.core.cli.CommandLineResult;
-import mil.nga.giat.geowave.core.cli.DataStoreCommandLineOptions;
-import mil.nga.giat.geowave.core.cli.IndexStoreCommandLineOptions;
+import mil.nga.giat.geowave.analytic.mapreduce.operations.KdeCommand;
+import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
+import mil.nga.giat.geowave.core.cli.parser.CommandLineOperationParams;
+import mil.nga.giat.geowave.core.cli.parser.OperationParser;
 import mil.nga.giat.geowave.core.geotime.GeometryUtils;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider.SpatialIndexBuilder;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
@@ -47,11 +42,10 @@ import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
-import mil.nga.giat.geowave.core.store.config.ConfigUtils;
 import mil.nga.giat.geowave.core.store.index.Index;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.core.store.memory.DataStoreUtils;
+import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.mapreduce.GeoWaveConfiguratorBase;
 import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputFormat;
 import mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputFormat;
@@ -59,8 +53,7 @@ import mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputKey;
 
 public class KDEJobRunner extends
 		Configured implements
-		Tool,
-		CLIOperationDriver
+		Tool
 {
 	private static final Logger LOGGER = LoggerFactory.getLogger(KDEJobRunner.class);
 	public static final String GEOWAVE_CLASSPATH_JARS = "geowave.classpath.jars";
@@ -69,17 +62,13 @@ public class KDEJobRunner extends
 	public static final String COVERAGE_NAME_KEY = "COVERAGE_NAME";
 	public static final String TILE_SIZE_KEY = "TILE_SIZE";
 	protected KDECommandLineOptions kdeCommandLineOptions;
-	protected DataStoreCommandLineOptions inputDataStoreOptions;
-	protected DataStoreCommandLineOptions outputDataStoreOptions;
-	protected AdapterStoreCommandLineOptions inputAdapterStoreOptions;
-	protected IndexStoreCommandLineOptions inputIndexStoreOptions;
-
-	public KDEJobRunner() {}
+	protected DataStorePluginOptions inputDataStoreOptions;
+	protected DataStorePluginOptions outputDataStoreOptions;
 
 	public KDEJobRunner(
 			final KDECommandLineOptions kdeCommandLineOptions,
-			final DataStoreCommandLineOptions inputDataStoreOptions,
-			final DataStoreCommandLineOptions outputDataStoreOptions ) {
+			final DataStorePluginOptions inputDataStoreOptions,
+			final DataStorePluginOptions outputDataStoreOptions ) {
 		this.kdeCommandLineOptions = kdeCommandLineOptions;
 		this.inputDataStoreOptions = inputDataStoreOptions;
 		this.outputDataStoreOptions = outputDataStoreOptions;
@@ -140,8 +129,8 @@ public class KDEJobRunner extends
 		job.setOutputFormatClass(SequenceFileOutputFormat.class);
 		job.setNumReduceTasks(8);
 		job.setSpeculativeExecution(false);
-		final AdapterStore adapterStore = inputAdapterStoreOptions.createStore();
-		final IndexStore indexStore = inputIndexStoreOptions.createStore();
+		final AdapterStore adapterStore = inputDataStoreOptions.createAdapterStore();
+		final IndexStore indexStore = inputDataStoreOptions.createIndexStore();
 		GeoWaveInputFormat.addDataAdapter(
 				job.getConfiguration(),
 				adapterStore.getAdapter(new ByteArrayId(
@@ -165,15 +154,11 @@ public class KDEJobRunner extends
 
 		GeoWaveInputFormat.setDataStoreName(
 				job.getConfiguration(),
-				inputDataStoreOptions.getFactory().getName());
+				inputDataStoreOptions.getType());
 		GeoWaveInputFormat.setStoreConfigOptions(
 				job.getConfiguration(),
-				ConfigUtils.valuesToStrings(
-						inputDataStoreOptions.getConfigOptions(),
-						inputDataStoreOptions.getFactory().getOptions()));
-		GeoWaveInputFormat.setGeoWaveNamespace(
-				job.getConfiguration(),
-				inputDataStoreOptions.getNamespace());
+				inputDataStoreOptions.getFactoryOptionsAsMap());
+
 		if (kdeCommandLineOptions.getCqlFilter() != null) {
 			final Filter filter = ECQL.toFilter(kdeCommandLineOptions.getCqlFilter());
 			final Geometry bbox = (Geometry) filter.accept(
@@ -190,12 +175,12 @@ public class KDEJobRunner extends
 		final FileSystem fs = FileSystem.get(conf);
 		fs.delete(
 				new Path(
-						"/tmp/" + inputDataStoreOptions.getNamespace() + "_stats_" + kdeCommandLineOptions.getMinLevel() + "_" + kdeCommandLineOptions.getMaxLevel() + "_" + kdeCommandLineOptions.getCoverageName()),
+						"/tmp/" + inputDataStoreOptions.getGeowaveNamespace() + "_stats_" + kdeCommandLineOptions.getMinLevel() + "_" + kdeCommandLineOptions.getMaxLevel() + "_" + kdeCommandLineOptions.getCoverageName()),
 				true);
 		FileOutputFormat.setOutputPath(
 				job,
 				new Path(
-						"/tmp/" + inputDataStoreOptions.getNamespace() + "_stats_" + kdeCommandLineOptions.getMinLevel() + "_" + kdeCommandLineOptions.getMaxLevel() + "_" + kdeCommandLineOptions.getCoverageName() + "/basic"));
+						"/tmp/" + inputDataStoreOptions.getGeowaveNamespace() + "_stats_" + kdeCommandLineOptions.getMinLevel() + "_" + kdeCommandLineOptions.getMaxLevel() + "_" + kdeCommandLineOptions.getCoverageName() + "/basic"));
 
 		final boolean job1Success = job.waitForCompletion(true);
 		boolean job2Success = false;
@@ -227,16 +212,16 @@ public class KDEJobRunner extends
 			FileInputFormat.setInputPaths(
 					statsReducer,
 					new Path(
-							"/tmp/" + inputDataStoreOptions.getNamespace() + "_stats_" + kdeCommandLineOptions.getMinLevel() + "_" + kdeCommandLineOptions.getMaxLevel() + "_" + kdeCommandLineOptions.getCoverageName() + "/basic"));
+							"/tmp/" + inputDataStoreOptions.getGeowaveNamespace() + "_stats_" + kdeCommandLineOptions.getMinLevel() + "_" + kdeCommandLineOptions.getMaxLevel() + "_" + kdeCommandLineOptions.getCoverageName() + "/basic"));
 			setupJob2Output(
 					conf,
 					statsReducer,
-					outputDataStoreOptions.getNamespace());
+					outputDataStoreOptions.getGeowaveNamespace());
 			job2Success = statsReducer.waitForCompletion(true);
 			if (job2Success) {
 				postJob2Success = postJob2Actions(
 						conf,
-						outputDataStoreOptions.getNamespace());
+						outputDataStoreOptions.getGeowaveNamespace());
 			}
 		}
 		else {
@@ -245,7 +230,7 @@ public class KDEJobRunner extends
 
 		fs.delete(
 				new Path(
-						"/tmp/" + inputDataStoreOptions.getNamespace() + "_stats_" + kdeCommandLineOptions.getMinLevel() + "_" + kdeCommandLineOptions.getMaxLevel() + "_" + kdeCommandLineOptions.getCoverageName()),
+						"/tmp/" + inputDataStoreOptions.getGeowaveNamespace() + "_stats_" + kdeCommandLineOptions.getMinLevel() + "_" + kdeCommandLineOptions.getMaxLevel() + "_" + kdeCommandLineOptions.getCoverageName()),
 				true);
 		return (job1Success && job2Success && postJob2Success) ? 0 : 1;
 	}
@@ -309,11 +294,11 @@ public class KDEJobRunner extends
 	}
 
 	protected String getJob2Name() {
-		return inputDataStoreOptions.getNamespace() + "(" + kdeCommandLineOptions.getCoverageName() + ")" + " levels " + kdeCommandLineOptions.getMinLevel() + "-" + kdeCommandLineOptions.getMaxLevel() + " Ingest";
+		return inputDataStoreOptions.getGeowaveNamespace() + "(" + kdeCommandLineOptions.getCoverageName() + ")" + " levels " + kdeCommandLineOptions.getMinLevel() + "-" + kdeCommandLineOptions.getMaxLevel() + " Ingest";
 	}
 
 	protected String getJob1Name() {
-		return inputDataStoreOptions.getNamespace() + "(" + kdeCommandLineOptions.getCoverageName() + ")" + " levels " + kdeCommandLineOptions.getMinLevel() + "-" + kdeCommandLineOptions.getMaxLevel() + " Calculation";
+		return inputDataStoreOptions.getGeowaveNamespace() + "(" + kdeCommandLineOptions.getCoverageName() + ")" + " levels " + kdeCommandLineOptions.getMinLevel() + "-" + kdeCommandLineOptions.getMaxLevel() + " Calculation";
 	}
 
 	protected void setupJob2Output(
@@ -345,22 +330,18 @@ public class KDEJobRunner extends
 			throws Exception {
 		GeoWaveOutputFormat.setDataStoreName(
 				job.getConfiguration(),
-				outputDataStoreOptions.getFactory().getName());
+				outputDataStoreOptions.getType());
 		GeoWaveOutputFormat.setStoreConfigOptions(
 				job.getConfiguration(),
-				ConfigUtils.valuesToStrings(
-						outputDataStoreOptions.getConfigOptions(),
-						outputDataStoreOptions.getFactory().getOptions()));
-		GeoWaveOutputFormat.setGeoWaveNamespace(
-				job.getConfiguration(),
-				outputDataStoreOptions.getNamespace());
+				outputDataStoreOptions.getFactoryOptionsAsMap());
+
 		GeoWaveOutputFormat.addDataAdapter(
 				job.getConfiguration(),
 				adapter);
 		GeoWaveOutputFormat.addIndex(
 				job.getConfiguration(),
 				index);
-		final IndexWriter writer = outputDataStoreOptions.createStore().createWriter(
+		final IndexWriter writer = outputDataStoreOptions.createDataStore().createWriter(
 				adapter,
 				index);
 		writer.close();
@@ -369,133 +350,25 @@ public class KDEJobRunner extends
 	public static void main(
 			final String[] args )
 			throws Exception {
+		ConfigOptions opts = new ConfigOptions();
+		OperationParser parser = new OperationParser();
+		parser.addAdditionalObject(opts);
+		KdeCommand command = new KdeCommand();
+		CommandLineOperationParams params = parser.parse(
+				command,
+				args);
+		opts.prepare(params);
 		final int res = ToolRunner.run(
 				new Configuration(),
-				new KDEJobRunner(),
+				command.createRunner(params),
 				args);
 		System.exit(res);
-	}
-
-	protected void applyOptions(
-			final Options allOptions ) {
-		DataStoreCommandLineOptions.applyOptions(
-				"input_",
-				allOptions);
-		DataStoreCommandLineOptions.applyOptions(
-				"output_",
-				allOptions);
-
-		AdapterStoreCommandLineOptions.applyOptions(
-				"input_",
-				allOptions);
-		KDECommandLineOptions.applyOptions(allOptions);
-	}
-
-	protected CommandLine parseOptions(
-			final String[] args,
-			final Options allOptions )
-			throws Exception {
-		final BasicParser parser = new BasicParser();
-		CommandLine commandLine = parser.parse(
-				allOptions,
-				args,
-				true);
-		boolean newCommandLine = false;
-		CommandLineResult<DataStoreCommandLineOptions> inputDataStoreOptionsResult = null;
-		CommandLineResult<DataStoreCommandLineOptions> outputDataStoreOptionsResult = null;
-		CommandLineResult<AdapterStoreCommandLineOptions> inputAdapterStoreOptionsResult = null;
-		CommandLineResult<IndexStoreCommandLineOptions> inputIndexStoreOptionsResult = null;
-		Exception parseException = null;
-		do {
-			inputDataStoreOptionsResult = null;
-			outputDataStoreOptionsResult = null;
-			inputAdapterStoreOptionsResult = null;
-			parseException = null;
-			newCommandLine = false;
-			try {
-				kdeCommandLineOptions = KDECommandLineOptions.parseOptions(commandLine);
-			}
-			catch (final Exception e) {
-				parseException = e;
-			}
-
-			try {
-				inputDataStoreOptionsResult = DataStoreCommandLineOptions.parseOptions(
-						"input_",
-						allOptions,
-						commandLine);
-			}
-			catch (final Exception e) {
-				parseException = e;
-			}
-			try {
-				inputAdapterStoreOptionsResult = AdapterStoreCommandLineOptions.parseOptions(
-						"input_",
-						allOptions,
-						commandLine);
-			}
-			catch (final Exception e) {
-				parseException = e;
-			}
-			if ((inputAdapterStoreOptionsResult != null) && inputAdapterStoreOptionsResult.isCommandLineChange()) {
-				commandLine = inputAdapterStoreOptionsResult.getCommandLine();
-				// newCommandLine = true;
-				// continue;
-			}
-			try {
-				inputIndexStoreOptionsResult = IndexStoreCommandLineOptions.parseOptions(
-						"input_",
-						allOptions,
-						commandLine);
-			}
-			catch (final Exception e) {
-				parseException = e;
-			}
-			if ((inputIndexStoreOptionsResult != null) && inputIndexStoreOptionsResult.isCommandLineChange()) {
-				commandLine = inputIndexStoreOptionsResult.getCommandLine();
-				// newCommandLine = true;
-				// continue;
-			}
-
-			if ((inputDataStoreOptionsResult != null) && inputDataStoreOptionsResult.isCommandLineChange()) {
-				commandLine = inputDataStoreOptionsResult.getCommandLine();
-			}
-			try {
-				outputDataStoreOptionsResult = DataStoreCommandLineOptions.parseOptions(
-						"output_",
-						allOptions,
-						commandLine);
-			}
-			catch (final Exception e) {
-				parseException = e;
-			}
-			if ((outputDataStoreOptionsResult != null) && outputDataStoreOptionsResult.isCommandLineChange()) {
-				commandLine = outputDataStoreOptionsResult.getCommandLine();
-				// newCommandLine = true;
-				// continue;
-			}
-
-		}
-		while (newCommandLine);
-		if (parseException != null) {
-			throw parseException;
-		}
-		inputDataStoreOptions = inputDataStoreOptionsResult.getResult();
-		outputDataStoreOptions = outputDataStoreOptionsResult.getResult();
-		inputAdapterStoreOptions = inputAdapterStoreOptionsResult.getResult();
-		inputIndexStoreOptions = inputIndexStoreOptionsResult.getResult();
-		return commandLine;
 	}
 
 	@Override
 	public int run(
 			final String[] args )
 			throws Exception {
-		final Options allOptions = new Options();
-		applyOptions(allOptions);
-		parseOptions(
-				args,
-				allOptions);
 		return runJob();
 	}
 
@@ -512,21 +385,6 @@ public class KDEJobRunner extends
 						new URI(
 								jarPath)));
 			}
-		}
-	}
-
-	@Override
-	public boolean runOperation(
-			final String[] args )
-			throws ParseException {
-		try {
-			return run(args) == 0;
-		}
-		catch (final Exception e) {
-			LOGGER.warn(
-					"Unable to run operation",
-					e);
-			return false;
 		}
 	}
 }

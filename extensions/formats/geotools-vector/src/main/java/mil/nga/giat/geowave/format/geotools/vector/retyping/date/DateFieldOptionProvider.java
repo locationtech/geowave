@@ -3,36 +3,32 @@ package mil.nga.giat.geowave.format.geotools.vector.retyping.date;
 import java.util.HashMap;
 import java.util.Map;
 
-import mil.nga.giat.geowave.core.ingest.IngestFormatOptionProvider;
-
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.Option;
-import org.apache.commons.cli.Options;
 import org.apache.log4j.Logger;
 
-public class DateFieldOptionProvider implements
-		IngestFormatOptionProvider
+import com.beust.jcommander.IStringConverter;
+import com.beust.jcommander.Parameter;
+
+public class DateFieldOptionProvider
 {
 	private final static Logger LOGGER = Logger.getLogger(DateFieldOptionProvider.class);
 
+	@Parameter(names = "--data", description = "A map of date field names to the date format of the file. Use commas to separate each entry, then the first ':' character will separate the field name from the format. Use '\\,' to include a comma in the format. For example: \"time:MM:dd:YYYY,time2:YYYY/MM/dd hh:mm:ss\" configures fields 'time' and 'time2' as dates with different formats", converter = StringToDateFieldConverter.class)
 	private Map<String, String> fieldToFormatMap = null;
 
-	@Override
-	public void applyOptions(
-			Options allOptions ) {
-		final Option dateOption = new Option(
-				"date",
-				true,
-				"A map of date field names to the date format of the file. Use commas to separate each entry, then the first ':' character will separate the field name from the format. Use '\\,' to include a comma in the format. For example: \"time:MM:dd:YYYY,time2:YYYY/MM/dd hh:mm:ss\" configures fields 'time' and 'time2' as dates with different formats");
-		allOptions.addOption(dateOption);
+	public Map<String, String> getFieldToFormatMap() {
+		return fieldToFormatMap;
 	}
 
-	@Override
-	public void parseOptions(
-			CommandLine commandLine ) {
-		if (commandLine.hasOption("date")) {
-			fieldToFormatMap = new HashMap<>();
-			final String arg = commandLine.getOptionValue("date");
+	/**
+	 * Class to convert from a String to Map
+	 */
+	public static class StringToDateFieldConverter implements
+			IStringConverter<Map<String, String>>
+	{
+		@Override
+		public Map<String, String> convert(
+				final String arg ) {
+			Map<String, String> fieldToFormatMap = new HashMap<>();
 			if (arg != null) {
 				String[] values = arg.split(",");
 				StringBuilder escapedStrs = new StringBuilder();
@@ -64,10 +60,8 @@ public class DateFieldOptionProvider implements
 					}
 				}
 			}
+			return fieldToFormatMap;
 		}
 	}
 
-	public Map<String, String> getFieldToFormatMap() {
-		return fieldToFormatMap;
-	}
 }

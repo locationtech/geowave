@@ -5,6 +5,11 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.io.ObjectWritable;
+import org.apache.hadoop.mapreduce.Job;
+import org.apache.hadoop.mapreduce.Reducer;
+
 import mil.nga.giat.geowave.analytic.PropertyManagement;
 import mil.nga.giat.geowave.analytic.clustering.CentroidManagerGeoWave;
 import mil.nga.giat.geowave.analytic.clustering.NestedGroupCentroidAssignment;
@@ -16,17 +21,10 @@ import mil.nga.giat.geowave.analytic.param.MapReduceParameters;
 import mil.nga.giat.geowave.analytic.param.ParameterEnum;
 import mil.nga.giat.geowave.analytic.param.StoreParameters;
 import mil.nga.giat.geowave.analytic.param.StoreParameters.StoreParam;
-import mil.nga.giat.geowave.analytic.store.PersistableDataStore;
-import mil.nga.giat.geowave.core.cli.GenericStoreCommandLineOptions;
-import mil.nga.giat.geowave.core.store.DataStore;
-import mil.nga.giat.geowave.core.store.config.ConfigUtils;
+import mil.nga.giat.geowave.analytic.store.PersistableStore;
+import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputFormat;
 import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
-
-import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.io.ObjectWritable;
-import org.apache.hadoop.mapreduce.Job;
-import org.apache.hadoop.mapreduce.Reducer;
 
 /**
  * 
@@ -73,18 +71,13 @@ public class GroupAssigmentJobRunner extends
 
 		// Required since the Mapper uses the input format parameters to lookup
 		// the adapter
-		final GenericStoreCommandLineOptions<DataStore> dataStoreOptions = ((PersistableDataStore) runTimeProperties.getProperty(StoreParam.DATA_STORE)).getCliOptions();
+		final DataStorePluginOptions dataStoreOptions = ((PersistableStore) runTimeProperties.getProperty(StoreParam.STORE)).getDataStoreOptions();
 		GeoWaveInputFormat.setDataStoreName(
 				config,
-				dataStoreOptions.getFactory().getName());
+				dataStoreOptions.getType());
 		GeoWaveInputFormat.setStoreConfigOptions(
 				config,
-				ConfigUtils.valuesToStrings(
-						dataStoreOptions.getConfigOptions(),
-						dataStoreOptions.getFactory().getOptions()));
-		GeoWaveInputFormat.setGeoWaveNamespace(
-				config,
-				dataStoreOptions.getNamespace());
+				dataStoreOptions.getFactoryOptionsAsMap());
 		runTimeProperties.setConfig(
 				new ParameterEnum[] {
 					CentroidParameters.Centroid.EXTRACTOR_CLASS,
@@ -117,7 +110,7 @@ public class GroupAssigmentJobRunner extends
 		params.addAll(super.getParameters());
 
 		params.addAll(Arrays.asList(new ParameterEnum<?>[] {
-			StoreParameters.StoreParam.DATA_STORE,
+			StoreParameters.StoreParam.STORE,
 			GlobalParameters.Global.BATCH_ID
 		}));
 

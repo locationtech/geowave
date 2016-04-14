@@ -2,20 +2,21 @@ package mil.nga.giat.geowave.test.kafka;
 
 import java.io.File;
 import java.net.UnknownHostException;
+import java.util.Arrays;
 import java.util.Properties;
 
-import kafka.server.KafkaConfig;
-import kafka.server.KafkaServerStartable;
-import mil.nga.giat.geowave.core.cli.GenericStoreCommandLineOptions;
-import mil.nga.giat.geowave.core.cli.GeoWaveMain;
-import mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStoreFactory;
-import mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations;
-import mil.nga.giat.geowave.test.GeoWaveTestEnvironment;
-
-import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+
+import kafka.server.KafkaConfig;
+import kafka.server.KafkaServerStartable;
+import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
+import mil.nga.giat.geowave.core.ingest.operations.KafkaToGeowaveCommand;
+import mil.nga.giat.geowave.core.ingest.operations.LocalToKafkaCommand;
+import mil.nga.giat.geowave.core.ingest.operations.options.IngestFormatPluginOptions;
+import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOptions;
+import mil.nga.giat.geowave.test.GeoWaveTestEnvironment;
 
 abstract public class KafkaTestEnvironment<I> extends
 		GeoWaveTestEnvironment
@@ -42,23 +43,71 @@ abstract public class KafkaTestEnvironment<I> extends
 					"unable to get canonical hostname for localhost",
 					e);
 		}
-		synchronized (MUTEX) {
-			// FIXME
-			args = StringUtils.split("-kafkastage -f gpx -b " + ingestFilePath + " -metadataBrokerList " + localhost + ":9092 -requestRequiredAcks 1 -producerType sync -retryBackoffMs 1000 -serializerClass mil.nga.giat.geowave.core.ingest.kafka.AvroKafkaEncoder" + ' ');
-		}
 
-		GeoWaveMain.run(args);
+		// Ingest Formats
+		IngestFormatPluginOptions ingestFormatOptions = new IngestFormatPluginOptions();
+		ingestFormatOptions.selectPlugin("gpx");
+
+		LocalToKafkaCommand localToKafka = new LocalToKafkaCommand();
+		localToKafka.setParameters(ingestFilePath);
+		localToKafka.setPluginFormats(ingestFormatOptions);
+		localToKafka.getKafkaOptions().setMetadataBrokerList(
+				localhost + ":9092");
+		localToKafka.getKafkaOptions().setRequestRequiredAcks(
+				"1");
+		localToKafka.getKafkaOptions().setProducerType(
+				"sync");
+		localToKafka.getKafkaOptions().setRetryBackoffMs(
+				"1000");
+		localToKafka.getKafkaOptions().setSerializerClass(
+				"mil.nga.giat.geowave.core.ingest.kafka.AvroKafkaEncoder");
+		localToKafka.execute(new ManualOperationParams());
 	}
 
 	protected void testKafkaIngest(
 			final boolean spatialTemporal,
 			final String ingestFilePath ) {
 		LOGGER.warn("Ingesting '" + ingestFilePath + "' - this may take several minutes...");
-		// FIXME
-		final String[] args = StringUtils.split("-kafkaingest" + " -f gpx -batchSize 1 -consumerTimeoutMs 5000 -reconnectOnTimeout -groupId testGroup -autoOffsetReset smallest -fetchMessageMaxBytes " + MAX_MESSAGE_BYTES + " -zookeeperConnect " + zookeeper + " -" + GenericStoreCommandLineOptions.NAMESPACE_OPTION_KEY + " " + TEST_NAMESPACE + " -dim " + (spatialTemporal ? "spatial-temporal" : "spatial") + " -datastore " + new AccumuloDataStoreFactory().getName() + " -" + BasicAccumuloOperations.ZOOKEEPER_CONFIG_NAME + " " + zookeeper + " -" + BasicAccumuloOperations.INSTANCE_CONFIG_NAME + " " + accumuloInstance + " -" + BasicAccumuloOperations.USER_CONFIG_NAME + " " + accumuloUser + " -" + BasicAccumuloOperations.PASSWORD_CONFIG_NAME + " " + accumuloPassword + ' ');
 
-		GeoWaveMain.run(args);
+		// // FIXME
+		// final String[] args = StringUtils.split("-kafkaingest" +
+		// " -f gpx -batchSize 1 -consumerTimeoutMs 5000 -reconnectOnTimeout -groupId testGroup"
+		// + " -autoOffsetReset smallest -fetchMessageMaxBytes " +
+		// MAX_MESSAGE_BYTES +
+		// " -zookeeperConnect " + zookeeper + " -" +
 
+		// Ingest Formats
+		IngestFormatPluginOptions ingestFormatOptions = new IngestFormatPluginOptions();
+		ingestFormatOptions.selectPlugin("gpx");
+
+		// Indexes
+		IndexPluginOptions indexOption = new IndexPluginOptions();
+		indexOption.selectPlugin((spatialTemporal ? "spatial-temporal" : "spatial"));
+
+		// Execute Command
+		KafkaToGeowaveCommand kafkaToGeowave = new KafkaToGeowaveCommand();
+		kafkaToGeowave.setPluginFormats(ingestFormatOptions);
+		kafkaToGeowave.setInputIndexOptions(Arrays.asList(indexOption));
+		kafkaToGeowave.setInputStoreOptions(getAccumuloStorePluginOptions());
+		kafkaToGeowave.getKafkaOptions().setBatchSize(
+				1);
+		kafkaToGeowave.getKafkaOptions().setConsumerTimeoutMs(
+				"5000");
+		kafkaToGeowave.getKafkaOptions().setReconnectOnTimeout(
+				true);
+		kafkaToGeowave.getKafkaOptions().setGroupId(
+				"testGroup");
+		kafkaToGeowave.getKafkaOptions().setAutoOffsetReset(
+				"smallest");
+		kafkaToGeowave.getKafkaOptions().setFetchMessageMaxBytes(
+				MAX_MESSAGE_BYTES);
+		kafkaToGeowave.getKafkaOptions().setZookeeperConnect(
+				zookeeper);
+		kafkaToGeowave.setParameters(
+				null,
+				null);
+
+		kafkaToGeowave.execute(new ManualOperationParams());
 	}
 
 	@BeforeClass

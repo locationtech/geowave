@@ -4,25 +4,23 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.hadoop.conf.Configuration;
+
 import mil.nga.giat.geowave.analytic.PropertyManagement;
 import mil.nga.giat.geowave.analytic.clustering.ClusteringUtils;
 import mil.nga.giat.geowave.analytic.param.ExtractParameters;
 import mil.nga.giat.geowave.analytic.param.FormatConfiguration;
 import mil.nga.giat.geowave.analytic.param.ParameterEnum;
 import mil.nga.giat.geowave.analytic.param.StoreParameters.StoreParam;
-import mil.nga.giat.geowave.analytic.store.PersistableDataStore;
-import mil.nga.giat.geowave.core.cli.GenericStoreCommandLineOptions;
+import mil.nga.giat.geowave.analytic.store.PersistableStore;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.StringUtils;
-import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
-import mil.nga.giat.geowave.core.store.config.ConfigUtils;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputFormat;
-
-import org.apache.hadoop.conf.Configuration;
 
 public class GeoWaveInputFormatConfiguration implements
 		FormatConfiguration
@@ -41,18 +39,13 @@ public class GeoWaveInputFormatConfiguration implements
 			final PropertyManagement runTimeProperties,
 			final Configuration configuration )
 			throws Exception {
-		final GenericStoreCommandLineOptions<DataStore> dataStoreOptions = ((PersistableDataStore) runTimeProperties.getProperty(StoreParam.DATA_STORE)).getCliOptions();
+		final DataStorePluginOptions dataStoreOptions = ((PersistableStore) runTimeProperties.getProperty(StoreParam.STORE)).getDataStoreOptions();
 		GeoWaveInputFormat.setDataStoreName(
 				configuration,
-				dataStoreOptions.getFactory().getName());
+				dataStoreOptions.getType());
 		GeoWaveInputFormat.setStoreConfigOptions(
 				configuration,
-				ConfigUtils.valuesToStrings(
-						dataStoreOptions.getConfigOptions(),
-						dataStoreOptions.getFactory().getOptions()));
-		GeoWaveInputFormat.setGeoWaveNamespace(
-				configuration,
-				dataStoreOptions.getNamespace());
+				dataStoreOptions.getFactoryOptionsAsMap());
 
 		final String indexId = runTimeProperties.getPropertyAsString(ExtractParameters.Extract.INDEX_ID);
 		final String adapterId = runTimeProperties.getPropertyAsString(ExtractParameters.Extract.ADAPTER_ID);
@@ -166,7 +159,7 @@ public class GeoWaveInputFormatConfiguration implements
 			ExtractParameters.Extract.QUERY,
 			ExtractParameters.Extract.MAX_INPUT_SPLIT,
 			ExtractParameters.Extract.MIN_INPUT_SPLIT,
-			StoreParam.DATA_STORE
+			StoreParam.STORE
 		});
 	}
 }

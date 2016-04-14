@@ -4,8 +4,15 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
+
+import org.geotools.feature.type.BasicFeatureTypes;
+import org.junit.Test;
+import org.opengis.feature.simple.SimpleFeature;
+import org.opengis.feature.simple.SimpleFeatureType;
+
+import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.GeometryFactory;
 
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import mil.nga.giat.geowave.analytic.AnalyticFeature;
@@ -17,19 +24,11 @@ import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.StoreFactoryFamilySpi;
+import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.core.store.memory.DataStoreUtils;
 import mil.nga.giat.geowave.core.store.memory.MemoryStoreFactoryFamily;
-
-import org.geotools.feature.type.BasicFeatureTypes;
-import org.junit.Test;
-import org.opengis.feature.simple.SimpleFeature;
-import org.opengis.feature.simple.SimpleFeatureType;
-
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.GeometryFactory;
 
 public class CentroidManagerTest
 {
@@ -86,15 +85,14 @@ public class CentroidManagerTest
 				ftype);
 		final String namespace = "test_" + getClass().getName();
 		final StoreFactoryFamilySpi storeFamily = new MemoryStoreFactoryFamily();
+		StoreFactoryOptions opts = storeFamily.getDataStoreFactory().createOptionsInstance();
+		opts.setGeowaveNamespace(namespace);
 		final DataStore dataStore = storeFamily.getDataStoreFactory().createStore(
-				new HashMap<String, Object>(),
-				namespace);
+				opts);
 		final IndexStore indexStore = storeFamily.getIndexStoreFactory().createStore(
-				new HashMap<String, Object>(),
-				namespace);
+				opts);
 		final AdapterStore adapterStore = storeFamily.getAdapterStoreFactory().createStore(
-				new HashMap<String, Object>(),
-				namespace);
+				opts);
 
 		ingest(
 				dataStore,

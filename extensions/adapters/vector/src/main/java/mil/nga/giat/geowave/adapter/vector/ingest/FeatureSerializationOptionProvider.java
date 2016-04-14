@@ -1,42 +1,17 @@
 package mil.nga.giat.geowave.adapter.vector.ingest;
 
-import mil.nga.giat.geowave.core.index.Persistable;
-import mil.nga.giat.geowave.core.ingest.IngestFormatOptionProvider;
+import com.beust.jcommander.Parameter;
 
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.Options;
+import mil.nga.giat.geowave.core.index.Persistable;
 
 public class FeatureSerializationOptionProvider implements
-		IngestFormatOptionProvider,
 		Persistable
 {
+	@Parameter(names = "--whole", description = "A flag to indicate whether whole feature serialization should be used")
 	private boolean whole = false;
 
+	@Parameter(names = "--avro", description = "A flag to indicate whether avro feature serialization should be used")
 	private boolean avro = false;
-
-	@Override
-	public void applyOptions(
-			final Options allOptions ) {
-		allOptions.addOption(
-				"whole",
-				false,
-				"A flag to indicate whether whole feature serialization should be used");
-		allOptions.addOption(
-				"avro",
-				false,
-				"A flag to indicate whether avro feature serialization should be used");
-	}
-
-	@Override
-	public void parseOptions(
-			final CommandLine commandLine ) {
-		if (commandLine.hasOption("whole")) {
-			whole = true;
-		}
-		if (commandLine.hasOption("avro")) {
-			avro = true;
-		}
-	}
 
 	public boolean isWhole() {
 		return whole;

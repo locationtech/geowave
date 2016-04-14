@@ -6,8 +6,20 @@ import static org.junit.Assert.assertTrue;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
+
+import org.apache.hadoop.io.ObjectWritable;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mrunit.mapreduce.MapDriver;
+import org.apache.hadoop.mrunit.mapreduce.ReduceDriver;
+import org.apache.hadoop.mrunit.types.Pair;
+import org.junit.Before;
+import org.junit.Test;
+import org.opengis.feature.simple.SimpleFeature;
+import org.opengis.feature.simple.SimpleFeatureType;
+
+import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.GeometryFactory;
 
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import mil.nga.giat.geowave.adapter.vector.FeatureWritable;
@@ -26,38 +38,18 @@ import mil.nga.giat.geowave.analytic.param.CentroidParameters;
 import mil.nga.giat.geowave.analytic.param.CommonParameters;
 import mil.nga.giat.geowave.analytic.param.GlobalParameters;
 import mil.nga.giat.geowave.analytic.param.StoreParameters.StoreParam;
-import mil.nga.giat.geowave.analytic.store.PersistableAdapterStore;
-import mil.nga.giat.geowave.analytic.store.PersistableDataStore;
-import mil.nga.giat.geowave.analytic.store.PersistableIndexStore;
-import mil.nga.giat.geowave.core.cli.AdapterStoreCommandLineOptions;
-import mil.nga.giat.geowave.core.cli.DataStoreCommandLineOptions;
-import mil.nga.giat.geowave.core.cli.IndexStoreCommandLineOptions;
+import mil.nga.giat.geowave.analytic.store.PersistableStore;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.core.store.memory.DataStoreUtils;
-import mil.nga.giat.geowave.core.store.memory.MemoryAdapterStoreFactory;
-import mil.nga.giat.geowave.core.store.memory.MemoryDataStoreFactory;
-import mil.nga.giat.geowave.core.store.memory.MemoryIndexStoreFactory;
+import mil.nga.giat.geowave.core.store.memory.MemoryRequiredOptions;
+import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.mapreduce.GeoWaveConfiguratorBase;
 import mil.nga.giat.geowave.mapreduce.JobContextAdapterStore;
 import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
 import mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputKey;
-
-import org.apache.hadoop.io.ObjectWritable;
-import org.apache.hadoop.io.Text;
-import org.apache.hadoop.mrunit.mapreduce.MapDriver;
-import org.apache.hadoop.mrunit.mapreduce.ReduceDriver;
-import org.apache.hadoop.mrunit.types.Pair;
-import org.junit.Before;
-import org.junit.Test;
-import org.opengis.feature.simple.SimpleFeature;
-import org.opengis.feature.simple.SimpleFeatureType;
-
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.GeometryFactory;
 
 public class KMeansDistortionMapReduceTest
 {
@@ -127,27 +119,18 @@ public class KMeansDistortionMapReduceTest
 		propManagement.store(
 				CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS,
 				SimpleFeatureItemWrapperFactory.class);
+
+		DataStorePluginOptions pluginOptions = new DataStorePluginOptions();
+		pluginOptions.selectPlugin("memory");
+		MemoryRequiredOptions opts = (MemoryRequiredOptions) pluginOptions.getFactoryOptions();
+		opts.setGeowaveNamespace(TEST_NAMESPACE);
+		PersistableStore store = new PersistableStore(
+				pluginOptions);
+
 		propManagement.store(
-				StoreParam.DATA_STORE,
-				new PersistableDataStore(
-						new DataStoreCommandLineOptions(
-								new MemoryDataStoreFactory(),
-								new HashMap<String, Object>(),
-								TEST_NAMESPACE)));
-		propManagement.store(
-				StoreParam.INDEX_STORE,
-				new PersistableIndexStore(
-						new IndexStoreCommandLineOptions(
-								new MemoryIndexStoreFactory(),
-								new HashMap<String, Object>(),
-								TEST_NAMESPACE)));
-		propManagement.store(
-				StoreParam.ADAPTER_STORE,
-				new PersistableAdapterStore(
-						new AdapterStoreCommandLineOptions(
-								new MemoryAdapterStoreFactory(),
-								new HashMap<String, Object>(),
-								TEST_NAMESPACE)));
+				StoreParam.STORE,
+				store);
+
 		NestedGroupCentroidAssignment.setParameters(
 				mapDriver.getConfiguration(),
 				KMeansDistortionMapReduce.class,
@@ -180,18 +163,8 @@ public class KMeansDistortionMapReduceTest
 		propManagement.store(
 				CentroidParameters.Centroid.ZOOM_LEVEL,
 				1);
-		final MemoryDataStoreFactory dataStoreFactory = new MemoryDataStoreFactory();
-		propManagement.store(
-				StoreParam.DATA_STORE,
-				new PersistableDataStore(
-						new DataStoreCommandLineOptions(
-								dataStoreFactory,
-								new HashMap<String, Object>(),
-								TEST_NAMESPACE)));
 		ingest(
-				dataStoreFactory.createStore(
-						new HashMap<String, Object>(),
-						TEST_NAMESPACE),
+				pluginOptions.createDataStore(),
 				testObjectAdapter,
 				index,
 				feature);

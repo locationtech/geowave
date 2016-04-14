@@ -13,9 +13,6 @@ public class VectorExportOptions
 	private String cqlFilter;
 	private List<String> adapterIds;
 	private String indexId;
-	private DataStore dataStore;
-	private AdapterStore adapterStore;
-	private IndexStore indexStore;
 	private int batchSize;
 
 	public String getCqlFilter() {
@@ -28,18 +25,6 @@ public class VectorExportOptions
 
 	public String getIndexId() {
 		return indexId;
-	}
-
-	public DataStore getDataStore() {
-		return dataStore;
-	}
-
-	public AdapterStore getAdapterStore() {
-		return adapterStore;
-	}
-
-	public IndexStore getIndexStore() {
-		return indexStore;
 	}
 
 	public int getBatchSize() {
@@ -59,21 +44,6 @@ public class VectorExportOptions
 	public void setIndexId(
 			String indexId ) {
 		this.indexId = indexId;
-	}
-
-	public void setDataStore(
-			DataStore dataStore ) {
-		this.dataStore = dataStore;
-	}
-
-	public void setAdapterStore(
-			AdapterStore adapterStore ) {
-		this.adapterStore = adapterStore;
-	}
-
-	public void setIndexStore(
-			IndexStore indexStore ) {
-		this.indexStore = indexStore;
 	}
 
 	public void setBatchSize(
