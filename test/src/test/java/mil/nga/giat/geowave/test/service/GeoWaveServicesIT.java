@@ -17,9 +17,9 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mil.nga.giat.geowave.core.cli.GenericStoreCommandLineOptions;
+import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloStoreFactoryFamily;
-import mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations;
+import mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloRequiredOptions;
 import mil.nga.giat.geowave.format.gpx.GpxUtils;
 import mil.nga.giat.geowave.service.client.GeoserverServiceClient;
 import mil.nga.giat.geowave.service.client.InfoServiceClient;
@@ -275,19 +275,19 @@ public class GeoWaveServicesIT extends
 			assertTrue(
 					"Unable to get accumulo datastore namespace",
 					dsInfo.getString(
-							GenericStoreCommandLineOptions.NAMESPACE_OPTION_KEY).equals(
+							StoreFactoryOptions.GEOWAVE_NAMESPACE_OPTION).equals(
 							TEST_NAMESPACE));
 
 			assertTrue(
 					"Unable to publish accumulo datastore zookeeper",
 					dsInfo.getString(
-							BasicAccumuloOperations.ZOOKEEPER_CONFIG_NAME).equals(
+							AccumuloRequiredOptions.ZOOKEEPER_CONFIG_KEY).equals(
 							zookeeper));
 
 			assertTrue(
 					"Unable to publish accumulo datastore instance",
 					dsInfo.getString(
-							BasicAccumuloOperations.INSTANCE_CONFIG_NAME).equals(
+							AccumuloRequiredOptions.INSTANCE_CONFIG_KEY).equals(
 							accumuloInstance));
 		}
 

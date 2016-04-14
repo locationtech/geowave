@@ -66,9 +66,6 @@ object GeoWaveRDD {
     GeoWaveInputFormat.setStoreConfigOptions(conf,
       geoWaveContext.storeParameters)
 
-    GeoWaveInputFormat.setGeoWaveNamespace(conf,
-      geoWaveContext.tableNameSpace)
-
     // index and adapters are not mandatory.
     // they are used here as an example
     GeoWaveInputFormat.setIndex(conf, index)
@@ -113,9 +110,6 @@ object GeoWaveRDD {
 
     GeoWaveOutputFormat.setStoreConfigOptions(conf,
       geoWaveContext.storeParameters)
-
-    GeoWaveOutputFormat.setGeoWaveNamespace(conf,
-      geoWaveContext.tableNameSpace)
 
     GeoWaveOutputFormat.addIndex(conf, index)
     GeoWaveOutputFormat.addDataAdapter(conf, adapter)

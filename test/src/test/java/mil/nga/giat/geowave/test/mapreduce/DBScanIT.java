@@ -5,6 +5,18 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+import org.geotools.feature.simple.SimpleFeatureBuilder;
+import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
+import org.geotools.referencing.CRS;
+import org.junit.Assert;
+import org.junit.Test;
+import org.opengis.feature.simple.SimpleFeature;
+import org.opengis.referencing.FactoryException;
+
+import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.Geometry;
+import com.vividsolutions.jts.geom.Point;
+
 import mil.nga.giat.geowave.analytic.AnalyticItemWrapper;
 import mil.nga.giat.geowave.analytic.GeometryDataSetGenerator;
 import mil.nga.giat.geowave.analytic.PropertyManagement;
@@ -26,35 +38,12 @@ import mil.nga.giat.geowave.analytic.param.ParameterEnum;
 import mil.nga.giat.geowave.analytic.param.PartitionParameters;
 import mil.nga.giat.geowave.analytic.param.StoreParameters.StoreParam;
 import mil.nga.giat.geowave.analytic.partitioner.OrthodromicDistancePartitioner;
-import mil.nga.giat.geowave.analytic.store.PersistableAdapterStore;
-import mil.nga.giat.geowave.analytic.store.PersistableDataStore;
-import mil.nga.giat.geowave.analytic.store.PersistableIndexStore;
-import mil.nga.giat.geowave.core.cli.AdapterStoreCommandLineOptions;
-import mil.nga.giat.geowave.core.cli.CommandLineOptions.OptionMapWrapper;
-import mil.nga.giat.geowave.core.cli.CommandLineResult;
-import mil.nga.giat.geowave.core.cli.DataStoreCommandLineOptions;
-import mil.nga.giat.geowave.core.cli.GenericStoreCommandLineOptions;
-import mil.nga.giat.geowave.core.cli.IndexStoreCommandLineOptions;
+import mil.nga.giat.geowave.analytic.store.PersistableStore;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
 import mil.nga.giat.geowave.core.store.DataStore;
-import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
-import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
-
-import org.apache.commons.cli.Options;
-import org.geotools.feature.simple.SimpleFeatureBuilder;
-import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
-import org.geotools.referencing.CRS;
-import org.junit.Assert;
-import org.junit.Test;
-import org.opengis.feature.simple.SimpleFeature;
-import org.opengis.referencing.FactoryException;
-
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.Point;
 
 public class DBScanIT extends
 		MapReduceTestEnvironment
@@ -97,38 +86,14 @@ public class DBScanIT extends
 	public void testDBScan()
 			throws Exception {
 		final Map<String, String> options = getAccumuloConfigOptions();
-		options.put(
-				GenericStoreCommandLineOptions.NAMESPACE_OPTION_KEY,
-				TEST_NAMESPACE);
-		final Options nsOptions = new Options();
-		DataStoreCommandLineOptions.applyOptions(nsOptions);
-		final CommandLineResult<DataStoreCommandLineOptions> dataStoreOptions = DataStoreCommandLineOptions.parseOptions(
-				nsOptions,
-				new OptionMapWrapper(
-						options));
-		final CommandLineResult<IndexStoreCommandLineOptions> indexStoreOptions = IndexStoreCommandLineOptions.parseOptions(
-				nsOptions,
-				new OptionMapWrapper(
-						options));
-		final CommandLineResult<AdapterStoreCommandLineOptions> adapterStoreOptions = AdapterStoreCommandLineOptions.parseOptions(
-				nsOptions,
-				new OptionMapWrapper(
-						options));
 		dataGenerator.setIncludePolygons(false);
-		ingest(dataStoreOptions.getResult().createStore());
-		runScan(
-				new SpatialQuery(
-						dataGenerator.getBoundingRegion()),
-				dataStoreOptions.getResult(),
-				indexStoreOptions.getResult(),
-				adapterStoreOptions.getResult());
+		ingest(getAccumuloStorePluginOptions().createDataStore());
+		runScan(new SpatialQuery(
+				dataGenerator.getBoundingRegion()));
 	}
 
 	private void runScan(
-			final DistributableQuery query,
-			final DataStoreCommandLineOptions dataStoreOptions,
-			final IndexStoreCommandLineOptions indexStoreOptions,
-			final AdapterStoreCommandLineOptions adapterStoreOptions )
+			final DistributableQuery query )
 			throws Exception {
 
 		final DBScanIterationsJobRunner jobRunner = new DBScanIterationsJobRunner();
@@ -144,9 +109,7 @@ public class DBScanIT extends
 							PartitionParameters.Partition.PARTITION_DISTANCE,
 							PartitionParameters.Partition.PARTITIONER_CLASS,
 							ClusteringParameters.Clustering.MINIMUM_SIZE,
-							StoreParam.DATA_STORE,
-							StoreParam.INDEX_STORE,
-							StoreParam.ADAPTER_STORE,
+							StoreParam.STORE,
 							MapReduceParameters.MRConfig.HDFS_BASE_DIR,
 							OutputParameters.Output.REDUCER_COUNT,
 							InputParameters.Input.INPUT_FORMAT,
@@ -162,12 +125,8 @@ public class DBScanIT extends
 							10000.0,
 							OrthodromicDistancePartitioner.class,
 							10,
-							new PersistableDataStore(
-									dataStoreOptions),
-							new PersistableIndexStore(
-									indexStoreOptions),
-							new PersistableAdapterStore(
-									adapterStoreOptions),
+							new PersistableStore(
+									getAccumuloStorePluginOptions()),
 							hdfsBaseDirectory + "/t1",
 							2,
 							GeoWaveInputFormatConfiguration.class,
@@ -180,23 +139,17 @@ public class DBScanIT extends
 				0,
 				res);
 
-		Assert.assertTrue(readHulls(
-				dataStoreOptions.createStore(),
-				indexStoreOptions.createStore(),
-				adapterStoreOptions.createStore()) > 2);
+		Assert.assertTrue(readHulls() > 2);
 		// for travis-ci to run, we want to limit the memory consumption
 		System.gc();
 	}
 
-	private int readHulls(
-			final DataStore dataStore,
-			final IndexStore indexStore,
-			final AdapterStore adapterStore )
+	private int readHulls()
 			throws Exception {
 		final CentroidManager<SimpleFeature> centroidManager = new CentroidManagerGeoWave<SimpleFeature>(
-				dataStore,
-				indexStore,
-				adapterStore,
+				getAccumuloStorePluginOptions().createDataStore(),
+				getAccumuloStorePluginOptions().createIndexStore(),
+				getAccumuloStorePluginOptions().createAdapterStore(),
 				new SimpleFeatureItemWrapperFactory(),
 				"concave_hull",
 				new SpatialDimensionalityTypeProvider().createPrimaryIndex().getId().getString(),

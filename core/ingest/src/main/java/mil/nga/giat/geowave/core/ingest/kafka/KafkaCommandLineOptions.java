@@ -7,99 +7,75 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Properties;
 
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.Option;
-import org.apache.commons.cli.Options;
-import org.apache.commons.cli.ParseException;
 import org.apache.log4j.Logger;
+
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParameterException;
+
+import mil.nga.giat.geowave.core.cli.prefix.JCommanderPrefixTranslator;
+import mil.nga.giat.geowave.core.cli.prefix.JCommanderTranslationMap;
+import mil.nga.giat.geowave.core.cli.prefix.TranslationEntry;
 
 public class KafkaCommandLineOptions
 {
-
 	private final static Logger LOGGER = Logger.getLogger(KafkaCommandLineOptions.class);
-	private final static String KAFKA_PROPS_KEY = "kafkaprops";
-	private final Properties properties;
 
-	public KafkaCommandLineOptions(
-			final Properties properties ) {
-		this.properties = properties;
-	}
+	@Parameter(names = "--kafkaprops", required = true, description = "Properties file containing Kafka properties")
+	private String kafkaPropertyFile;
 
-	public static void applyOptions(
-			final Options allOptions ) {
-		final Option propertiesOption = new Option(
-				KAFKA_PROPS_KEY,
-				true,
-				"Properties file containing Kafka properties");
-		propertiesOption.setRequired(false);
+	// After initProperties()
+	private Properties kafkaProperties = null;
 
-		allOptions.addOption(propertiesOption);
-	}
-
-	protected static void applyAdditionalOptions(
-			final Options allOptions,
-			final KafkaCommandLineArgument[] arguments ) {
-		for (final KafkaCommandLineArgument arg : arguments) {
-			final Option additionalOption = new Option(
-					arg.getArgName(),
-					true,
-					arg.getArgDescription());
-			allOptions.addOption(additionalOption);
-		}
-	}
+	public KafkaCommandLineOptions() {}
 
 	public Properties getProperties() {
-		return properties;
+		initProperties();
+		return kafkaProperties;
 	}
 
-	public static KafkaCommandLineOptions parseOptions(
-			final CommandLine commandLine )
-			throws ParseException {
-		return new KafkaCommandLineOptions(
-				getBaseProperties(commandLine));
-	}
-
-	public static Properties getBaseProperties(
-			final CommandLine commandLine )
-			throws ParseException {
-		final String kafkaPropertiesPath = commandLine.getOptionValue(KAFKA_PROPS_KEY);
-		final Properties properties = new Properties();
-		if (kafkaPropertiesPath != null) {
-			readAndVerifyProperties(
-					kafkaPropertiesPath,
-					properties);
+	public synchronized void initProperties() {
+		if (kafkaProperties == null) {
+			final Properties properties = new Properties();
+			if (kafkaPropertyFile != null) {
+				if (!readAndVerifyProperties(
+						kafkaPropertyFile,
+						properties)) {
+					throw new ParameterException(
+							"Unable to read properties file");
+				}
+				applyOverrides(properties);
+			}
+			kafkaProperties = properties;
 		}
-		return properties;
 	}
 
-	protected static KafkaCommandLineOptions parseOptionsWithAdditionalArguments(
-			final CommandLine commandLine,
-			final KafkaCommandLineArgument[] additionalArguments )
-			throws ParseException {
-		final Properties properties = getBaseProperties(commandLine);
-		for (final KafkaCommandLineArgument arg : additionalArguments) {
-			if (commandLine.hasOption(arg.getArgName())) {
-				final String value = commandLine.getOptionValue(arg.getArgName());
-				if ((value != null) && !value.trim().isEmpty()) {
-					properties.put(
-							arg.getKafkaParamName(),
-							value);
+	/**
+	 * This function looks as 'this' and checks for @PropertyReference
+	 * annotations, and overrides the string values into the props list based on
+	 * the propety name in the annotation value.
+	 */
+	private void applyOverrides(
+			Properties properties ) {
+		// Get the parameters specified in this object.
+		JCommanderPrefixTranslator translator = new JCommanderPrefixTranslator();
+		translator.addObject(this);
+		JCommanderTranslationMap map = translator.translate();
+
+		// Find objects with the PropertyReference annotation
+		for (TranslationEntry entry : map.getEntries().values()) {
+			if (entry.hasValue()) {
+				PropertyReference ref = entry.getMember().getAnnotation(
+						PropertyReference.class);
+				if (ref != null) {
+					String propKey = ref.value();
+					String propStringValue = entry.getParam().get(
+							entry.getObject()).toString();
+					properties.setProperty(
+							propKey,
+							propStringValue);
 				}
 			}
 		}
-		boolean success = true;
-		for (final KafkaCommandLineArgument arg : additionalArguments) {
-			if (arg.isRequired() && !properties.containsKey(arg.getKafkaParamName())) {
-				LOGGER.fatal("Option '" + arg.getArgName() + "' must be provided or kafka properties file must contain '" + arg.getKafkaParamName() + "' property");
-				success = false;
-			}
-		}
-		if (!success) {
-			throw new ParseException(
-					"Required option is missing");
-		}
-		return new KafkaCommandLineOptions(
-				properties);
 	}
 
 	private static boolean readAndVerifyProperties(
@@ -134,5 +110,15 @@ public class KafkaCommandLineOptions
 		}
 
 		return true;
+	}
+
+	/**
+	 * Find bugs complained, so I added synchronized.
+	 * 
+	 * @param kafkaPropertyFile
+	 */
+	public synchronized void setKafkaPropertyFile(
+			String kafkaPropertyFile ) {
+		this.kafkaPropertyFile = kafkaPropertyFile;
 	}
 }

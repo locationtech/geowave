@@ -3,6 +3,7 @@ package mil.nga.giat.geowave.test;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -20,7 +21,6 @@ import org.apache.accumulo.minicluster.impl.MiniAccumuloClusterImpl;
 import org.apache.accumulo.minicluster.impl.MiniAccumuloConfigImpl;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.SystemUtils;
 import org.apache.hadoop.fs.FileUtil;
 import org.apache.hadoop.util.VersionInfo;
@@ -39,20 +39,25 @@ import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.Point;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import mil.nga.giat.geowave.core.cli.GenericStoreCommandLineOptions;
-import mil.nga.giat.geowave.core.cli.GeoWaveMain;
+import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider.SpatialIndexBuilder;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialTemporalDimensionalityTypeProvider;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialTemporalQuery;
+import mil.nga.giat.geowave.core.ingest.operations.LocalToGeowaveCommand;
+import mil.nga.giat.geowave.core.ingest.operations.options.IngestFormatPluginOptions;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.core.store.operations.remote.ListStatsCommand;
+import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOptions;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStoreFactory;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations;
 import mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations;
 import mil.nga.giat.geowave.datastore.accumulo.minicluster.MiniAccumuloClusterFactory;
+import mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloRequiredOptions;
 import net.lingala.zip4j.core.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
 
@@ -130,34 +135,56 @@ abstract public class GeoWaveTestEnvironment
 			final int nthreads ) {
 		// ingest a shapefile (geotools type) directly into GeoWave using the
 		// ingest framework's main method and pre-defined commandline arguments
-		String threadExtra = "";
-		if (nthreads > 1) {
-			threadExtra = "-t " + nthreads + " ";
-		}
-		LOGGER.warn("Ingesting '" + ingestFilePath + "' - this may take several minutes...");
-		final String[] args = StringUtils.split(
-				"-localingest -datastore " + new AccumuloDataStoreFactory().getName() + " -f " + format + " " + threadExtra + "-b " + ingestFilePath + " -" + GenericStoreCommandLineOptions.NAMESPACE_OPTION_KEY + " " + TEST_NAMESPACE + " -dim " + dimensionalityType.getDimensionalityArg() + " -" + BasicAccumuloOperations.ZOOKEEPER_CONFIG_NAME + " " + zookeeper + " -" + BasicAccumuloOperations.INSTANCE_CONFIG_NAME + " " + accumuloInstance + " -" + BasicAccumuloOperations.USER_CONFIG_NAME + " " + accumuloUser + " -" + BasicAccumuloOperations.PASSWORD_CONFIG_NAME + " " + accumuloPassword,
-				' ');
-		GeoWaveMain.run(args);
+
+		// Ingest Formats
+		IngestFormatPluginOptions ingestFormatOptions = new IngestFormatPluginOptions();
+		ingestFormatOptions.selectPlugin(format);
+
+		// Indexes
+		IndexPluginOptions indexOption = new IndexPluginOptions();
+		indexOption.selectPlugin(dimensionalityType.getDimensionalityArg());
+
+		// Create the command and execute.
+		LocalToGeowaveCommand localIngester = new LocalToGeowaveCommand();
+		localIngester.setPluginFormats(ingestFormatOptions);
+		localIngester.setInputIndexOptions(Arrays.asList(indexOption));
+		localIngester.setInputStoreOptions(getAccumuloStorePluginOptions());
+		localIngester.setParameters(
+				ingestFilePath,
+				null,
+				null);
+		localIngester.setThreads(nthreads);
+		localIngester.execute(new ManualOperationParams());
+
 		verifyStats();
 	}
 
+	protected DataStorePluginOptions getAccumuloStorePluginOptions() {
+		DataStorePluginOptions pluginOptions = new DataStorePluginOptions();
+		AccumuloRequiredOptions opts = new AccumuloRequiredOptions();
+		opts.setGeowaveNamespace(TEST_NAMESPACE);
+		opts.setUser(accumuloUser);
+		opts.setPassword(accumuloPassword);
+		opts.setInstance(accumuloInstance);
+		opts.setZookeeper(zookeeper);
+		pluginOptions.selectPlugin(new AccumuloDataStoreFactory().getName());
+		pluginOptions.setFactoryOptions(opts);
+		return pluginOptions;
+	}
+
 	private void verifyStats() {
-		GeoWaveMain.run(new String[] {
-			"-statsdump",
-			"-" + GenericStoreCommandLineOptions.NAMESPACE_OPTION_KEY,
-			TEST_NAMESPACE,
-			"-datastore",
-			new AccumuloDataStoreFactory().getName(),
-			"-" + BasicAccumuloOperations.ZOOKEEPER_CONFIG_NAME,
-			zookeeper,
-			"-" + BasicAccumuloOperations.USER_CONFIG_NAME,
-			accumuloUser,
-			"-" + BasicAccumuloOperations.PASSWORD_CONFIG_NAME,
-			accumuloPassword,
-			"-" + BasicAccumuloOperations.INSTANCE_CONFIG_NAME,
-			accumuloInstance
-		});
+		ListStatsCommand listStats = new ListStatsCommand();
+		listStats.setInputStoreOptions(getAccumuloStorePluginOptions());
+		listStats.setParameters(
+				null,
+				null);
+		try {
+			listStats.execute(new ManualOperationParams());
+		}
+		catch (Exception e) {
+			throw new RuntimeException(
+					e);
+		}
 	}
 
 	@BeforeClass

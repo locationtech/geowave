@@ -2,48 +2,59 @@ package mil.nga.giat.geowave.core.ingest.hdfs.mapreduce;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import mil.nga.giat.geowave.core.cli.CommandLineResult;
-import mil.nga.giat.geowave.core.cli.DataStoreCommandLineOptions;
-import mil.nga.giat.geowave.core.ingest.AbstractIngestCommandLineDriver;
-import mil.nga.giat.geowave.core.ingest.IngestCommandLineOptions;
-import mil.nga.giat.geowave.core.ingest.IngestFormatPluginProviderSpi;
-import mil.nga.giat.geowave.core.ingest.IngestUtils;
-import mil.nga.giat.geowave.core.ingest.hdfs.HdfsCommandLineOptions;
-import mil.nga.giat.geowave.mapreduce.GeoWaveConfiguratorBase;
-
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.Options;
-import org.apache.commons.cli.ParseException;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.util.ToolRunner;
 import org.apache.log4j.Logger;
 
+import mil.nga.giat.geowave.core.ingest.DataAdapterProvider;
+import mil.nga.giat.geowave.core.ingest.IngestUtils;
+import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOptions;
+import mil.nga.giat.geowave.core.store.operations.remote.options.VisibilityOptions;
+import mil.nga.giat.geowave.mapreduce.GeoWaveConfiguratorBase;
+
 /**
  * This class actually executes the ingestion of intermediate data into GeoWave
  * that had been staged in HDFS.
  */
-public class IngestFromHdfsDriver extends
-		AbstractIngestCommandLineDriver
+public class IngestFromHdfsDriver
 {
 	private final static Logger LOGGER = Logger.getLogger(IngestFromHdfsDriver.class);
 	private final static int NUM_CONCURRENT_JOBS = 5;
 	private final static int DAYS_TO_AWAIT_COMPLETION = 999;
-	private HdfsCommandLineOptions hdfsOptions;
-	private DataStoreCommandLineOptions dataStoreOptions;
-	private IngestCommandLineOptions ingestOptions;
-	private MapReduceCommandLineOptions mapReduceOptions;
+	protected final DataStorePluginOptions storeOptions;
+	protected final List<IndexPluginOptions> indexOptions;
+	protected final VisibilityOptions ingestOptions;
+	private final MapReduceCommandLineOptions mapReduceOptions;
+	private final Map<String, IngestFromHdfsPlugin<?, ?>> ingestPlugins;
+	private final String hdfsHostPort;
+	private final String basePath;
+
 	private static ExecutorService singletonExecutor;
 
 	public IngestFromHdfsDriver(
-			final String operation ) {
-		super(
-				operation);
+			DataStorePluginOptions storeOptions,
+			List<IndexPluginOptions> indexOptions,
+			VisibilityOptions ingestOptions,
+			MapReduceCommandLineOptions mapReduceOptions,
+			Map<String, IngestFromHdfsPlugin<?, ?>> ingestPlugins,
+			String hdfsHostPort,
+			String basePath ) {
+		this.storeOptions = storeOptions;
+		this.indexOptions = indexOptions;
+		this.ingestOptions = ingestOptions;
+		this.mapReduceOptions = mapReduceOptions;
+		this.ingestPlugins = ingestPlugins;
+		this.hdfsHostPort = hdfsHostPort;
+		this.basePath = basePath;
 	}
 
 	private static synchronized ExecutorService getSingletonExecutorService() {
@@ -53,17 +64,29 @@ public class IngestFromHdfsDriver extends
 		return singletonExecutor;
 	}
 
-	@Override
-	protected boolean runInternal(
-			final String[] args,
-			final List<IngestFormatPluginProviderSpi<?, ?>> pluginProviders ) {
+	private boolean checkIndexesAgainstProvider(
+			String providerName,
+			DataAdapterProvider<?> adapterProvider ) {
+		boolean valid = true;
+		for (IndexPluginOptions option : indexOptions) {
+			if (!IngestUtils.isCompatible(
+					adapterProvider,
+					option)) {
+				LOGGER.warn("HDFS file ingest plugin for ingest type '" + providerName + "' does not support dimensionality '" + option.getType() + "'");
+				valid = false;
+			}
+		}
+		return valid;
+	}
+
+	public boolean runOperation() {
 
 		final Path hdfsBaseDirectory = new Path(
-				hdfsOptions.getBasePath());
+				basePath);
 		try {
 			final Configuration conf = new Configuration();
 			GeoWaveConfiguratorBase.setRemoteInvocationParams(
-					hdfsOptions.getHdfsHostPort(),
+					hdfsHostPort,
 					mapReduceOptions.getJobTrackerOrResourceManagerHostPort(),
 					conf);
 			final FileSystem fs = FileSystem.get(conf);
@@ -71,35 +94,20 @@ public class IngestFromHdfsDriver extends
 				LOGGER.fatal("HDFS base directory " + hdfsBaseDirectory + " does not exist");
 				return false;
 			}
-			for (final IngestFormatPluginProviderSpi<?, ?> pluginProvider : pluginProviders) {
+			for (Entry<String, IngestFromHdfsPlugin<?, ?>> pluginProvider : ingestPlugins.entrySet()) {
 				// if an appropriate sequence file does not exist, continue
 
 				// TODO: we should probably clean up the type name to make it
 				// HDFS path safe in case there are invalid characters
 				final Path inputFile = new Path(
 						hdfsBaseDirectory,
-						pluginProvider.getIngestFormatName());
+						pluginProvider.getKey());
 				if (!fs.exists(inputFile)) {
-					LOGGER.warn("HDFS file '" + inputFile + "' does not exist for ingest type '" + pluginProvider.getIngestFormatName() + "'");
-					continue;
-				}
-				IngestFromHdfsPlugin ingestFromHdfsPlugin = null;
-				try {
-					ingestFromHdfsPlugin = pluginProvider.getIngestFromHdfsPlugin();
-
-					if (ingestFromHdfsPlugin == null) {
-						LOGGER.warn("Plugin provider for ingest type '" + pluginProvider.getIngestFormatName() + "' does not support ingest from HDFS");
-						continue;
-					}
-
-				}
-				catch (final UnsupportedOperationException e) {
-					LOGGER.warn(
-							"Plugin provider '" + pluginProvider.getIngestFormatName() + "' does not support ingest from HDFS",
-							e);
+					LOGGER.warn("HDFS file '" + inputFile + "' does not exist for ingest type '" + pluginProvider.getKey() + "'");
 					continue;
 				}
 
+				IngestFromHdfsPlugin<?, ?> ingestFromHdfsPlugin = pluginProvider.getValue();
 				IngestWithReducer ingestWithReducer = null;
 				IngestWithMapper ingestWithMapper = null;
 
@@ -108,7 +116,7 @@ public class IngestFromHdfsDriver extends
 				if (ingestFromHdfsPlugin.isUseReducerPreferred()) {
 					ingestWithReducer = ingestFromHdfsPlugin.ingestWithReducer();
 					if (ingestWithReducer == null) {
-						LOGGER.warn("Plugin provider '" + pluginProvider.getIngestFormatName() + "' prefers ingest with reducer but it is unimplemented");
+						LOGGER.warn("Plugin provider '" + pluginProvider.getKey() + "' prefers ingest with reducer but it is unimplemented");
 					}
 				}
 				if (ingestWithReducer == null) {
@@ -118,46 +126,44 @@ public class IngestFromHdfsDriver extends
 
 						ingestWithReducer = ingestFromHdfsPlugin.ingestWithReducer();
 						if (ingestWithReducer == null) {
-							LOGGER.warn("Plugin provider '" + pluginProvider.getIngestFormatName() + "' does not does not support ingest from HDFS");
+							LOGGER.warn("Plugin provider '" + pluginProvider.getKey() + "' does not does not support ingest from HDFS");
 							continue;
 						}
 						else {
-							LOGGER.warn("Plugin provider '" + pluginProvider.getIngestFormatName() + "' prefers ingest with mapper but it is unimplemented");
+							LOGGER.warn("Plugin provider '" + pluginProvider.getKey() + "' prefers ingest with mapper but it is unimplemented");
 						}
 					}
 				}
 
 				AbstractMapReduceIngest jobRunner = null;
 				if (ingestWithReducer != null) {
-					if (!IngestUtils.isSupported(
-							ingestWithReducer,
-							args,
-							ingestOptions.getDimensionalityTypes())) {
-						LOGGER.warn("HDFS file ingest plugin for ingest type '" + pluginProvider.getIngestFormatName() + "' does not support dimensionality '" + ingestOptions.getDimensionalityTypeArgument() + "'");
+					if (!checkIndexesAgainstProvider(
+							pluginProvider.getKey(),
+							ingestWithReducer)) {
 						continue;
 					}
 					jobRunner = new IngestWithReducerJobRunner(
-							dataStoreOptions,
+							storeOptions,
+							indexOptions,
 							ingestOptions,
 							inputFile,
-							pluginProvider.getIngestFormatName(),
+							pluginProvider.getKey(),
 							ingestFromHdfsPlugin,
 							ingestWithReducer);
 
 				}
 				else if (ingestWithMapper != null) {
-					if (!IngestUtils.isSupported(
-							ingestWithMapper,
-							args,
-							ingestOptions.getDimensionalityTypes())) {
-						LOGGER.warn("HDFS file ingest plugin for ingest type '" + pluginProvider.getIngestFormatName() + "' does not support dimensionality '" + ingestOptions.getDimensionalityTypeArgument() + "'");
+					if (!checkIndexesAgainstProvider(
+							pluginProvider.getKey(),
+							ingestWithMapper)) {
 						continue;
 					}
 					jobRunner = new IngestWithMapperJobRunner(
-							dataStoreOptions,
+							storeOptions,
+							indexOptions,
 							ingestOptions,
 							inputFile,
-							pluginProvider.getIngestFormatName(),
+							pluginProvider.getKey(),
 							ingestFromHdfsPlugin,
 							ingestWithMapper);
 
@@ -166,8 +172,7 @@ public class IngestFromHdfsDriver extends
 					try {
 						runJob(
 								conf,
-								jobRunner,
-								args);
+								jobRunner);
 					}
 					catch (final Exception e) {
 						LOGGER.warn(
@@ -208,8 +213,7 @@ public class IngestFromHdfsDriver extends
 
 	private void runJob(
 			final Configuration conf,
-			final AbstractMapReduceIngest jobRunner,
-			final String[] args )
+			final AbstractMapReduceIngest jobRunner )
 			throws Exception {
 		final ExecutorService executorService = getSingletonExecutorService();
 		executorService.execute(new Runnable() {
@@ -220,7 +224,7 @@ public class IngestFromHdfsDriver extends
 					final int res = ToolRunner.run(
 							conf,
 							jobRunner,
-							args);
+							new String[0]);
 					if (res != 0) {
 						LOGGER.error("Mapper ingest job '" + jobRunner.getJobName() + "' exited with error code: " + res);
 					}
@@ -234,29 +238,4 @@ public class IngestFromHdfsDriver extends
 		});
 	}
 
-	@Override
-	protected void parseOptionsInternal(
-			final Options options,
-			CommandLine commandLine )
-			throws ParseException {
-		final CommandLineResult<DataStoreCommandLineOptions> dataStoreOptionsResult = DataStoreCommandLineOptions.parseOptions(
-				options,
-				commandLine);
-		dataStoreOptions = dataStoreOptionsResult.getResult();
-		if (dataStoreOptionsResult.isCommandLineChange()) {
-			commandLine = dataStoreOptionsResult.getCommandLine();
-		}
-		ingestOptions = IngestCommandLineOptions.parseOptions(commandLine);
-		hdfsOptions = HdfsCommandLineOptions.parseOptions(commandLine);
-		mapReduceOptions = MapReduceCommandLineOptions.parseOptions(commandLine);
-	}
-
-	@Override
-	protected void applyOptionsInternal(
-			final Options allOptions ) {
-		DataStoreCommandLineOptions.applyOptions(allOptions);
-		IngestCommandLineOptions.applyOptions(allOptions);
-		HdfsCommandLineOptions.applyOptions(allOptions);
-		MapReduceCommandLineOptions.applyOptions(allOptions);
-	}
 }

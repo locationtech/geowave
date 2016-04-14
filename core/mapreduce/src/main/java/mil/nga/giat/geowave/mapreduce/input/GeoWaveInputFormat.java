@@ -6,25 +6,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.store.CloseableIterator;
-import mil.nga.giat.geowave.core.store.DataStore;
-import mil.nga.giat.geowave.core.store.GeoWaveStoreFinder;
-import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
-import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
-import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
-import mil.nga.giat.geowave.core.store.config.ConfigUtils;
-import mil.nga.giat.geowave.core.store.index.Index;
-import mil.nga.giat.geowave.core.store.index.IndexStore;
-import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.core.store.query.DistributableQuery;
-import mil.nga.giat.geowave.core.store.query.QueryOptions;
-import mil.nga.giat.geowave.mapreduce.GeoWaveConfiguratorBase;
-import mil.nga.giat.geowave.mapreduce.JobContextAdapterStore;
-import mil.nga.giat.geowave.mapreduce.JobContextIndexStore;
-import mil.nga.giat.geowave.mapreduce.MapReduceDataStore;
-import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputConfigurator.InputConfig;
-
 import org.apache.commons.collections.IteratorUtils;
 import org.apache.commons.collections.Transformer;
 import org.apache.hadoop.conf.Configuration;
@@ -34,6 +15,23 @@ import org.apache.hadoop.mapreduce.JobContext;
 import org.apache.hadoop.mapreduce.RecordReader;
 import org.apache.hadoop.mapreduce.TaskAttemptContext;
 import org.apache.log4j.Logger;
+
+import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.store.CloseableIterator;
+import mil.nga.giat.geowave.core.store.DataStore;
+import mil.nga.giat.geowave.core.store.GeoWaveStoreFinder;
+import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
+import mil.nga.giat.geowave.core.store.index.IndexStore;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.core.store.query.DistributableQuery;
+import mil.nga.giat.geowave.core.store.query.QueryOptions;
+import mil.nga.giat.geowave.mapreduce.GeoWaveConfiguratorBase;
+import mil.nga.giat.geowave.mapreduce.JobContextAdapterStore;
+import mil.nga.giat.geowave.mapreduce.JobContextIndexStore;
+import mil.nga.giat.geowave.mapreduce.MapReduceDataStore;
+import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputConfigurator.InputConfig;
 
 public class GeoWaveInputFormat<T> extends
 		InputFormat<GeoWaveInputKey, T>
@@ -95,15 +93,6 @@ public class GeoWaveInputFormat<T> extends
 				CLASS,
 				config,
 				indexStoreName);
-	}
-
-	public static void setGeoWaveNamespace(
-			final Configuration config,
-			final String namespace ) {
-		GeoWaveConfiguratorBase.setGeoWaveNamespace(
-				CLASS,
-				config,
-				namespace);
 	}
 
 	public static void setStoreConfigOptions(
@@ -219,13 +208,6 @@ public class GeoWaveInputFormat<T> extends
 				GeoWaveConfiguratorBase.getConfiguration(context));
 	}
 
-	public static String getGeoWaveNamespace(
-			final JobContext context ) {
-		return GeoWaveConfiguratorBase.getGeoWaveNamespace(
-				CLASS,
-				context);
-	}
-
 	protected static Boolean isOutputWritable(
 			final JobContext context ) {
 		return GeoWaveConfiguratorBase.getConfiguration(
@@ -256,11 +238,8 @@ public class GeoWaveInputFormat<T> extends
 			final TaskAttemptContext context )
 			throws IOException,
 			InterruptedException {
-		final Map<String, Object> configOptions = ConfigUtils.valuesFromStrings(getStoreConfigOptions(context));
-		final String namespace = getGeoWaveNamespace(context);
-		final DataStore dataStore = GeoWaveStoreFinder.createDataStore(
-				configOptions,
-				namespace);
+		final Map<String, String> configOptions = getStoreConfigOptions(context);
+		final DataStore dataStore = GeoWaveStoreFinder.createDataStore(configOptions);
 		final AdapterStore adapterStore = getJobContextAdapterStore(context);
 		if ((dataStore != null) && (dataStore instanceof MapReduceDataStore)) {
 			final QueryOptions queryOptions = getQueryOptions(context);
@@ -303,36 +282,26 @@ public class GeoWaveInputFormat<T> extends
 								// stores
 								// from the job context
 		try {
-			final String namespace = getGeoWaveNamespace(context);
-
-			final Map<String, Object> configOptions = ConfigUtils.valuesFromStrings(getStoreConfigOptions(context));
-			if (GeoWaveStoreFinder.createDataStore(
-					configOptions,
-					namespace) == null) {
+			final Map<String, String> configOptions = getStoreConfigOptions(context);
+			if (GeoWaveStoreFinder.createDataStore(configOptions) == null) {
 				final String msg = "Unable to find GeoWave data store";
 				LOGGER.warn(msg);
 				throw new IOException(
 						msg);
 			}
-			if (GeoWaveStoreFinder.createIndexStore(
-					configOptions,
-					namespace) == null) {
+			if (GeoWaveStoreFinder.createIndexStore(configOptions) == null) {
 				final String msg = "Unable to find GeoWave index store";
 				LOGGER.warn(msg);
 				throw new IOException(
 						msg);
 			}
-			if (GeoWaveStoreFinder.createAdapterStore(
-					configOptions,
-					namespace) == null) {
+			if (GeoWaveStoreFinder.createAdapterStore(configOptions) == null) {
 				final String msg = "Unable to find GeoWave adapter store";
 				LOGGER.warn(msg);
 				throw new IOException(
 						msg);
 			}
-			if (GeoWaveStoreFinder.createDataStatisticsStore(
-					configOptions,
-					namespace) == null) {
+			if (GeoWaveStoreFinder.createDataStatisticsStore(configOptions) == null) {
 				final String msg = "Unable to find GeoWave data statistics store";
 				LOGGER.warn(msg);
 				throw new IOException(
@@ -435,11 +404,8 @@ public class GeoWaveInputFormat<T> extends
 			final JobContext context )
 			throws IOException,
 			InterruptedException {
-		final Map<String, Object> configOptions = ConfigUtils.valuesFromStrings(getStoreConfigOptions(context));
-		final String namespace = getGeoWaveNamespace(context);
-		final DataStore dataStore = GeoWaveStoreFinder.createDataStore(
-				configOptions,
-				namespace);
+		final Map<String, String> configOptions = getStoreConfigOptions(context);
+		final DataStore dataStore = GeoWaveStoreFinder.createDataStore(configOptions);
 		final AdapterStore adapterStore = getJobContextAdapterStore(context);
 		if ((dataStore != null) && (dataStore instanceof MapReduceDataStore)) {
 			final QueryOptions queryOptions = getQueryOptions(context);

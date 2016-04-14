@@ -1,11 +1,11 @@
 package mil.nga.giat.geowave.format.stanag4676;
 
-import mil.nga.giat.geowave.core.ingest.IngestFormatOptionProvider;
-import mil.nga.giat.geowave.core.ingest.IngestFormatPluginProviderSpi;
 import mil.nga.giat.geowave.core.ingest.avro.AvroFormatPlugin;
 import mil.nga.giat.geowave.core.ingest.avro.WholeFile;
 import mil.nga.giat.geowave.core.ingest.hdfs.mapreduce.IngestFromHdfsPlugin;
 import mil.nga.giat.geowave.core.ingest.local.LocalFileIngestPlugin;
+import mil.nga.giat.geowave.core.ingest.spi.IngestFormatOptionProvider;
+import mil.nga.giat.geowave.core.ingest.spi.IngestFormatPluginProviderSpi;
 
 public class Stanag4676IngestFormat implements
 		IngestFormatPluginProviderSpi<WholeFile, Object>
@@ -20,19 +20,22 @@ public class Stanag4676IngestFormat implements
 	}
 
 	@Override
-	public AvroFormatPlugin<WholeFile, Object> getAvroFormatPlugin()
+	public AvroFormatPlugin<WholeFile, Object> createAvroFormatPlugin(
+			IngestFormatOptionProvider options )
 			throws UnsupportedOperationException {
 		return getSingletonInstance();
 	}
 
 	@Override
-	public IngestFromHdfsPlugin<WholeFile, Object> getIngestFromHdfsPlugin()
+	public IngestFromHdfsPlugin<WholeFile, Object> createIngestFromHdfsPlugin(
+			IngestFormatOptionProvider options )
 			throws UnsupportedOperationException {
 		return getSingletonInstance();
 	}
 
 	@Override
-	public LocalFileIngestPlugin<Object> getLocalFileIngestPlugin()
+	public LocalFileIngestPlugin<Object> createLocalFileIngestPlugin(
+			IngestFormatOptionProvider options )
 			throws UnsupportedOperationException {
 		return getSingletonInstance();
 	}
@@ -48,7 +51,7 @@ public class Stanag4676IngestFormat implements
 	}
 
 	@Override
-	public IngestFormatOptionProvider getIngestFormatOptionProvider() {
+	public IngestFormatOptionProvider createOptionsInstances() {
 		// for now don't support filtering
 		return null;
 	}

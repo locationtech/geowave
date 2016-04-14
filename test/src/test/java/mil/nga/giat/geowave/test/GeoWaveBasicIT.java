@@ -44,6 +44,7 @@ import mil.nga.giat.geowave.adapter.vector.export.VectorLocalExportOptions;
 import mil.nga.giat.geowave.adapter.vector.stats.FeatureBoundingBoxStatistics;
 import mil.nga.giat.geowave.adapter.vector.stats.FeatureNumericRangeStatistics;
 import mil.nga.giat.geowave.adapter.vector.utils.TimeDescriptors;
+import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
 import mil.nga.giat.geowave.core.geotime.GeometryUtils;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
 import mil.nga.giat.geowave.core.geotime.store.statistics.BoundingBoxDataStatistics;
@@ -51,7 +52,6 @@ import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.ingest.GeoWaveData;
 import mil.nga.giat.geowave.core.ingest.local.LocalFileIngestPlugin;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
-import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.DataStoreEntryInfo;
 import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.IngestCallback;
@@ -476,11 +476,7 @@ public class GeoWaveBasicIT extends
 				endDate = (Date) endObj;
 			}
 		}
-		final AccumuloIndexStore indexStore = new AccumuloIndexStore(
-				accumuloOperations);
 		final AccumuloAdapterStore adapterStore = new AccumuloAdapterStore(
-				accumuloOperations);
-		final DataStore dataStore = new AccumuloDataStore(
 				accumuloOperations);
 		final VectorLocalExportCommand exportCommand = new VectorLocalExportCommand();
 		final VectorLocalExportOptions options = exportCommand.getOptions();
@@ -489,9 +485,7 @@ public class GeoWaveBasicIT extends
 				TEST_EXPORT_DIRECTORY);
 		exportDir.mkdir();
 
-		options.setDataStore(dataStore);
-		options.setIndexStore(indexStore);
-		options.setAdapterStore(adapterStore);
+		exportCommand.setInputStoreOptions(getAccumuloStorePluginOptions());
 		options.setBatchSize(10000);
 		final Envelope env = filterGeometry.getEnvelopeInternal();
 		final double east = env.getMaxX();
@@ -539,7 +533,7 @@ public class GeoWaveBasicIT extends
 							exportDir,
 							adapter.getAdapterId().getString() + TEST_BASE_EXPORT_FILE_NAME));
 					options.setCqlFilter(cqlPredicate);
-					exportCommand.run();
+					exportCommand.execute(new ManualOperationParams());
 				}
 			}
 		}

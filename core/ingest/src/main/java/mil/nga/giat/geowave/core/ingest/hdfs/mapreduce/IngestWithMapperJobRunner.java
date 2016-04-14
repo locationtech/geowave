@@ -1,11 +1,14 @@
 package mil.nga.giat.geowave.core.ingest.hdfs.mapreduce;
 
-import mil.nga.giat.geowave.core.cli.DataStoreCommandLineOptions;
-import mil.nga.giat.geowave.core.ingest.IngestCommandLineOptions;
-import mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputKey;
+import java.util.List;
 
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.mapreduce.Job;
+
+import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOptions;
+import mil.nga.giat.geowave.core.store.operations.remote.options.VisibilityOptions;
+import mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputKey;
 
 /**
  * This will run the mapper only ingest process.
@@ -15,14 +18,16 @@ public class IngestWithMapperJobRunner extends
 {
 
 	public IngestWithMapperJobRunner(
-			final DataStoreCommandLineOptions dataStoreOptions,
-			final IngestCommandLineOptions ingestOptions,
+			final DataStorePluginOptions storeOptions,
+			final List<IndexPluginOptions> indexOptions,
+			final VisibilityOptions ingestOptions,
 			final Path inputFile,
 			final String typeName,
 			final IngestFromHdfsPlugin<?, ?> plugin,
 			final IngestWithMapper<?, ?> mapperIngest ) {
 		super(
-				dataStoreOptions,
+				storeOptions,
+				indexOptions,
 				ingestOptions,
 				inputFile,
 				typeName,

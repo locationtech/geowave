@@ -2,31 +2,20 @@ package mil.nga.giat.geowave.mapreduce;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-import mil.nga.giat.geowave.core.cli.CLIOperationDriver;
-import mil.nga.giat.geowave.core.cli.CommandLineResult;
-import mil.nga.giat.geowave.core.cli.DataStoreCommandLineOptions;
-import mil.nga.giat.geowave.core.store.DataStoreFactorySpi;
-import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
-import mil.nga.giat.geowave.core.store.config.ConfigUtils;
-import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.core.store.query.DistributableQuery;
-import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputFormat;
-import mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputFormat;
-
-import org.apache.commons.cli.BasicParser;
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.HelpFormatter;
-import org.apache.commons.cli.Option;
-import org.apache.commons.cli.OptionGroup;
-import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.util.Tool;
 import org.apache.log4j.Logger;
+
+import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.query.DistributableQuery;
+import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputFormat;
+import mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputFormat;
 
 /**
  * This class can run a basic job to query GeoWave. It manages Accumulo user,
@@ -35,20 +24,22 @@ import org.apache.log4j.Logger;
  */
 public abstract class AbstractGeoWaveJobRunner extends
 		Configured implements
-		Tool,
-		CLIOperationDriver
+		Tool
 {
 
 	protected static final Logger LOGGER = Logger.getLogger(AbstractGeoWaveJobRunner.class);
 
-	protected Map<String, Object> configOptions;
-	protected String namespace;
-	protected DataStoreFactorySpi dataStoreFactory;
+	protected DataStorePluginOptions dataStoreOptions;
 	protected List<DataAdapter<?>> adapters = new ArrayList<DataAdapter<?>>();
 	protected List<PrimaryIndex> indices = new ArrayList<PrimaryIndex>();
 	protected DistributableQuery query = null;
 	protected Integer minInputSplits = null;
 	protected Integer maxInputSplits = null;
+
+	public AbstractGeoWaveJobRunner(
+			DataStorePluginOptions dataStoreOptions ) {
+		this.dataStoreOptions = dataStoreOptions;
+	}
 
 	/**
 	 * Main method to execute the MapReduce analytic.
@@ -63,27 +54,17 @@ public abstract class AbstractGeoWaveJobRunner extends
 
 		GeoWaveInputFormat.setDataStoreName(
 				conf,
-				dataStoreFactory.getName());
+				dataStoreOptions.getType());
 		GeoWaveInputFormat.setStoreConfigOptions(
 				conf,
-				ConfigUtils.valuesToStrings(
-						configOptions,
-						dataStoreFactory.getOptions()));
-		GeoWaveInputFormat.setGeoWaveNamespace(
-				conf,
-				namespace);
+				dataStoreOptions.getFactoryOptionsAsMap());
 
 		GeoWaveOutputFormat.setDataStoreName(
 				conf,
-				dataStoreFactory.getName());
+				dataStoreOptions.getType());
 		GeoWaveOutputFormat.setStoreConfigOptions(
 				conf,
-				ConfigUtils.valuesToStrings(
-						configOptions,
-						dataStoreFactory.getOptions()));
-		GeoWaveOutputFormat.setGeoWaveNamespace(
-				conf,
-				namespace);
+				dataStoreOptions.getFactoryOptionsAsMap());
 
 		job.setJarByClass(this.getClass());
 
@@ -160,58 +141,19 @@ public abstract class AbstractGeoWaveJobRunner extends
 		return runOperation(args) ? 0 : -1;
 	}
 
-	@Override
 	public boolean runOperation(
 			final String[] args )
 			throws ParseException {
-		final Options allOptions = new Options();
-		DataStoreCommandLineOptions.applyOptions(allOptions);
-		final OptionGroup baseOptionGroup = new OptionGroup();
-		baseOptionGroup.setRequired(false);
-		baseOptionGroup.addOption(new Option(
-				"h",
-				"help",
-				false,
-				"Display help"));
-		allOptions.addOptionGroup(baseOptionGroup);
-		final BasicParser parser = new BasicParser();
-		final CommandLine commandLine = parser.parse(
-				allOptions,
-				args,
-				true);
-		final CommandLineResult<DataStoreCommandLineOptions> dataStoreOptionsResult = DataStoreCommandLineOptions.parseOptions(
-				allOptions,
-				commandLine);
-		final DataStoreCommandLineOptions dataStoreOptions = dataStoreOptionsResult.getResult();
-		dataStoreFactory = (DataStoreFactorySpi) dataStoreOptions.getFactory();
-		configOptions = dataStoreOptions.getConfigOptions();
-		namespace = dataStoreOptions.getNamespace();
-		if (commandLine.hasOption("h")) {
-			printHelp(allOptions);
-			return true;
+		try {
+			return runJob() == 0 ? true : false;
 		}
-		else {
-
-			try {
-				return runJob() == 0 ? true : false;
-			}
-			catch (final Exception e) {
-				LOGGER.error(
-						"Unable to run job",
-						e);
-				throw new ParseException(
-						e.getMessage());
-			}
+		catch (final Exception e) {
+			LOGGER.error(
+					"Unable to run job",
+					e);
+			throw new ParseException(
+					e.getMessage());
 		}
 	}
 
-	private static void printHelp(
-			final Options options ) {
-		final HelpFormatter formatter = new HelpFormatter();
-		formatter.printHelp(
-				"GeoWave MapReduce",
-				"\nOptions:",
-				options,
-				"");
-	}
 }

@@ -8,6 +8,7 @@ import org.apache.commons.cli.Options;
 import org.geotools.filter.text.cql2.CQLException;
 
 import mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
+import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.DataStore;
@@ -15,6 +16,10 @@ import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.core.store.query.aggregate.CountAggregation;
 import mil.nga.giat.geowave.core.store.query.aggregate.CountResult;
 
+import com.beust.jcommander.Parameters;
+
+@GeowaveOperation(name = "serverCql", parentOperation = DebugSection.class)
+@Parameters(commandDescription = "cql server-side")
 public class CQLQuery extends
 		AbstractGeoWaveQuery
 {

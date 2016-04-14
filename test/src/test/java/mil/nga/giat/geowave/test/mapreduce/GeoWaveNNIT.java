@@ -3,6 +3,20 @@ package mil.nga.giat.geowave.test.mapreduce;
 import java.io.IOException;
 import java.util.Map;
 
+import org.apache.hadoop.fs.FileStatus;
+import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.io.SequenceFile;
+import org.apache.hadoop.io.SequenceFile.Reader;
+import org.apache.hadoop.io.Text;
+import org.geotools.feature.simple.SimpleFeatureBuilder;
+import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
+import org.geotools.referencing.crs.DefaultGeographicCRS;
+import org.junit.Assert;
+import org.junit.Test;
+
+import com.vividsolutions.jts.geom.Geometry;
+
 import mil.nga.giat.geowave.analytic.GeometryDataSetGenerator;
 import mil.nga.giat.geowave.analytic.PropertyManagement;
 import mil.nga.giat.geowave.analytic.distance.FeatureCentroidOrthodromicDistanceFn;
@@ -18,33 +32,10 @@ import mil.nga.giat.geowave.analytic.param.ParameterEnum;
 import mil.nga.giat.geowave.analytic.param.PartitionParameters;
 import mil.nga.giat.geowave.analytic.param.StoreParameters.StoreParam;
 import mil.nga.giat.geowave.analytic.partitioner.OrthodromicDistancePartitioner;
-import mil.nga.giat.geowave.analytic.store.PersistableAdapterStore;
-import mil.nga.giat.geowave.analytic.store.PersistableDataStore;
-import mil.nga.giat.geowave.analytic.store.PersistableIndexStore;
-import mil.nga.giat.geowave.core.cli.AdapterStoreCommandLineOptions;
-import mil.nga.giat.geowave.core.cli.CommandLineOptions.OptionMapWrapper;
-import mil.nga.giat.geowave.core.cli.CommandLineResult;
-import mil.nga.giat.geowave.core.cli.DataStoreCommandLineOptions;
-import mil.nga.giat.geowave.core.cli.GenericStoreCommandLineOptions;
-import mil.nga.giat.geowave.core.cli.IndexStoreCommandLineOptions;
+import mil.nga.giat.geowave.analytic.store.PersistableStore;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
-
-import org.apache.commons.cli.Options;
-import org.apache.hadoop.fs.FileStatus;
-import org.apache.hadoop.fs.FileSystem;
-import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.io.SequenceFile;
-import org.apache.hadoop.io.SequenceFile.Reader;
-import org.apache.hadoop.io.Text;
-import org.geotools.feature.simple.SimpleFeatureBuilder;
-import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
-import org.geotools.referencing.crs.DefaultGeographicCRS;
-import org.junit.Assert;
-import org.junit.Test;
-
-import com.vividsolutions.jts.geom.Geometry;
 
 public class GeoWaveNNIT extends
 		MapReduceTestEnvironment
@@ -79,38 +70,14 @@ public class GeoWaveNNIT extends
 	public void testNN()
 			throws Exception {
 		final Map<String, String> options = getAccumuloConfigOptions();
-		options.put(
-				GenericStoreCommandLineOptions.NAMESPACE_OPTION_KEY,
-				TEST_NAMESPACE + "_nn");
-		final Options nsOptions = new Options();
-		DataStoreCommandLineOptions.applyOptions(nsOptions);
-		final CommandLineResult<DataStoreCommandLineOptions> dataStoreOptions = DataStoreCommandLineOptions.parseOptions(
-				nsOptions,
-				new OptionMapWrapper(
-						options));
-		final CommandLineResult<IndexStoreCommandLineOptions> indexStoreOptions = IndexStoreCommandLineOptions.parseOptions(
-				nsOptions,
-				new OptionMapWrapper(
-						options));
-		final CommandLineResult<AdapterStoreCommandLineOptions> adapterStoreOptions = AdapterStoreCommandLineOptions.parseOptions(
-				nsOptions,
-				new OptionMapWrapper(
-						options));
 		dataGenerator.setIncludePolygons(false);
-		ingest(dataStoreOptions.getResult().createStore());
-		runNN(
-				new SpatialQuery(
-						dataGenerator.getBoundingRegion()),
-				dataStoreOptions.getResult(),
-				indexStoreOptions.getResult(),
-				adapterStoreOptions.getResult());
+		ingest(getAccumuloStorePluginOptions().createDataStore());
+		runNN(new SpatialQuery(
+				dataGenerator.getBoundingRegion()));
 	}
 
 	private void runNN(
-			final DistributableQuery query,
-			final DataStoreCommandLineOptions dataStoreOptions,
-			final IndexStoreCommandLineOptions indexStoreOptions,
-			final AdapterStoreCommandLineOptions adapterStoreOptions )
+			final DistributableQuery query )
 			throws Exception {
 
 		final NNJobRunner jobRunner = new NNJobRunner();
@@ -124,9 +91,7 @@ public class GeoWaveNNIT extends
 							PartitionParameters.Partition.PARTITION_DISTANCE,
 							ClusteringParameters.Clustering.DISTANCE_THRESHOLDS,
 							PartitionParameters.Partition.PARTITIONER_CLASS,
-							StoreParam.DATA_STORE,
-							StoreParam.INDEX_STORE,
-							StoreParam.ADAPTER_STORE,
+							StoreParam.STORE,
 							OutputParameters.Output.HDFS_OUTPUT_PATH,
 							MapReduceParameters.MRConfig.HDFS_BASE_DIR,
 							OutputParameters.Output.REDUCER_COUNT,
@@ -140,12 +105,8 @@ public class GeoWaveNNIT extends
 							0.2,
 							"0.2,0.2",
 							OrthodromicDistancePartitioner.class,
-							new PersistableDataStore(
-									dataStoreOptions),
-							new PersistableIndexStore(
-									indexStoreOptions),
-							new PersistableAdapterStore(
-									adapterStoreOptions),
+							new PersistableStore(
+									getAccumuloStorePluginOptions()),
 							hdfsBaseDirectory + "/t1/pairs",
 							hdfsBaseDirectory + "/t1",
 							3,

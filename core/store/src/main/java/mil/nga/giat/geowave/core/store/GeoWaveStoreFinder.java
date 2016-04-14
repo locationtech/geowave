@@ -20,9 +20,8 @@ import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStoreFactorySpi;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStoreFactorySpi;
-import mil.nga.giat.geowave.core.store.config.AbstractConfigOption;
+import mil.nga.giat.geowave.core.store.config.ConfigOption;
 import mil.nga.giat.geowave.core.store.config.ConfigUtils;
-import mil.nga.giat.geowave.core.store.config.StringConfigOption;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.index.IndexStoreFactorySpi;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndexDataStore;
@@ -33,7 +32,7 @@ public class GeoWaveStoreFinder
 	private static final Logger LOGGER = LoggerFactory.getLogger(GeoWaveStoreFinder.class);
 	private static String STORE_HINT_KEY = "store_name";
 
-	public static final StringConfigOption STORE_HINT_OPTION = new StringConfigOption(
+	public static final ConfigOption STORE_HINT_OPTION = new ConfigOption(
 			STORE_HINT_KEY,
 			"Set the GeoWave store, by default it will try to discover based on matching config options. " + getStoreNames(),
 			true);
@@ -46,83 +45,77 @@ public class GeoWaveStoreFinder
 	private static Map<String, SecondaryIndexDataStoreFactorySpi> registeredSecondaryIndexDataStoreFactories = null;
 
 	public static DataStatisticsStore createDataStatisticsStore(
-			final Map<String, Object> configOptions,
-			final String namespace ) {
+			final Map<String, String> configOptions ) {
 		final DataStatisticsStoreFactorySpi factory = findDataStatisticsStoreFactory(configOptions);
 		if (factory == null) {
 			return null;
 		}
-		return factory.createStore(
-				configOptions,
-				namespace);
+		return factory.createStore(ConfigUtils.populateOptionsFromList(
+				factory.createOptionsInstance(),
+				configOptions));
 	}
 
 	public static DataStore createDataStore(
-			final Map<String, Object> configOptions,
-			final String namespace ) {
+			final Map<String, String> configOptions ) {
 		final DataStoreFactorySpi factory = findDataStoreFactory(configOptions);
 		if (factory == null) {
 			return null;
 		}
-		return factory.createStore(
-				configOptions,
-				namespace);
+		return factory.createStore(ConfigUtils.populateOptionsFromList(
+				factory.createOptionsInstance(),
+				configOptions));
 	}
 
 	public static AdapterStore createAdapterStore(
-			final Map<String, Object> configOptions,
-			final String namespace ) {
+			final Map<String, String> configOptions ) {
 		final AdapterStoreFactorySpi factory = findAdapterStoreFactory(configOptions);
 		if (factory == null) {
 			return null;
 		}
-		return factory.createStore(
-				configOptions,
-				namespace);
+		return factory.createStore(ConfigUtils.populateOptionsFromList(
+				factory.createOptionsInstance(),
+				configOptions));
 	}
 
 	public static AdapterIndexMappingStore createAdapterIndexMappingStore(
-			final Map<String, Object> configOptions,
-			final String namespace ) {
+			final Map<String, String> configOptions ) {
 		final AdapterIndexMappingStoreFactorySpi factory = findAdapterIndexMappingStoreFactory(configOptions);
 		if (factory == null) {
 			return null;
 		}
-		return factory.createStore(
-				configOptions,
-				namespace);
+		return factory.createStore(ConfigUtils.populateOptionsFromList(
+				factory.createOptionsInstance(),
+				configOptions));
 	}
 
 	public static IndexStore createIndexStore(
-			final Map<String, Object> configOptions,
-			final String namespace ) {
+			final Map<String, String> configOptions ) {
 		final IndexStoreFactorySpi factory = findIndexStoreFactory(configOptions);
 		if (factory == null) {
 			return null;
 		}
-		return factory.createStore(
-				configOptions,
-				namespace);
+		return factory.createStore(ConfigUtils.populateOptionsFromList(
+				factory.createOptionsInstance(),
+				configOptions));
 	}
 
 	public static SecondaryIndexDataStore createSecondaryIndexDataStore(
-			final Map<String, Object> configOptions,
-			final String namespace ) {
+			final Map<String, String> configOptions ) {
 		final SecondaryIndexDataStoreFactorySpi factory = findSecondaryIndexDataStoreFactory(configOptions);
 		if (factory == null) {
 			return null;
 		}
-		return factory.createStore(
-				configOptions,
-				namespace);
+		return factory.createStore(ConfigUtils.populateOptionsFromList(
+				factory.createOptionsInstance(),
+				configOptions));
 	}
 
 	private static List<String> getMissingRequiredOptions(
 			final GenericStoreFactory<?> factory,
-			final Map<String, Object> configOptions ) {
-		final AbstractConfigOption<?>[] options = factory.getOptions();
+			final Map<String, String> configOptions ) {
+		final ConfigOption[] options = ConfigUtils.createConfigOptionsFromJCommander(factory.createOptionsInstance());
 		final List<String> missing = new ArrayList<String>();
-		for (final AbstractConfigOption<?> option : options) {
+		for (final ConfigOption option : options) {
 			if (!option.isOptional() && !configOptions.containsKey(option.getName())) {
 				missing.add(option.getName());
 			}
@@ -131,7 +124,7 @@ public class GeoWaveStoreFinder
 	}
 
 	public static DataStoreFactorySpi findDataStoreFactory(
-			final Map<String, Object> configOptions ) {
+			final Map<String, String> configOptions ) {
 		final Map<String, DataStoreFactorySpi> factories = getRegisteredDataStoreFactories();
 		return findStore(
 				factories,
@@ -140,7 +133,7 @@ public class GeoWaveStoreFinder
 	}
 
 	public static IndexStoreFactorySpi findIndexStoreFactory(
-			final Map<String, Object> configOptions ) {
+			final Map<String, String> configOptions ) {
 		final Map<String, IndexStoreFactorySpi> factories = getRegisteredIndexStoreFactories();
 		return findStore(
 				factories,
@@ -149,7 +142,7 @@ public class GeoWaveStoreFinder
 	}
 
 	public static SecondaryIndexDataStoreFactorySpi findSecondaryIndexDataStoreFactory(
-			final Map<String, Object> configOptions ) {
+			final Map<String, String> configOptions ) {
 		final Map<String, SecondaryIndexDataStoreFactorySpi> factories = getRegisteredSecondaryIndexDataStoreFactories();
 		return findStore(
 				factories,
@@ -158,7 +151,7 @@ public class GeoWaveStoreFinder
 	}
 
 	public static AdapterStoreFactorySpi findAdapterStoreFactory(
-			final Map<String, Object> configOptions ) {
+			final Map<String, String> configOptions ) {
 		final Map<String, AdapterStoreFactorySpi> factories = getRegisteredAdapterStoreFactories();
 		return findStore(
 				factories,
@@ -167,7 +160,7 @@ public class GeoWaveStoreFinder
 	}
 
 	public static AdapterIndexMappingStoreFactorySpi findAdapterIndexMappingStoreFactory(
-			final Map<String, Object> configOptions ) {
+			final Map<String, String> configOptions ) {
 		final Map<String, AdapterIndexMappingStoreFactorySpi> factories = getRegisteredAdapterIndexMappingStoreFactories();
 		return findStore(
 				factories,
@@ -176,7 +169,7 @@ public class GeoWaveStoreFinder
 	}
 
 	public static DataStatisticsStoreFactorySpi findDataStatisticsStoreFactory(
-			final Map<String, Object> configOptions ) {
+			final Map<String, String> configOptions ) {
 		final Map<String, DataStatisticsStoreFactorySpi> factories = getRegisteredDataStatisticsStoreFactories();
 		return findStore(
 				factories,
@@ -186,7 +179,7 @@ public class GeoWaveStoreFinder
 
 	private static <T extends GenericStoreFactory<?>> T findStore(
 			final Map<String, T> factories,
-			final Map<String, Object> configOptions,
+			final Map<String, String> configOptions,
 			final String storeType ) {
 		final Object storeHint = configOptions.get(STORE_HINT_KEY);
 		if (storeHint != null) {
@@ -221,10 +214,11 @@ public class GeoWaveStoreFinder
 			final List<String> missingOptions = getMissingRequiredOptions(
 					factory,
 					configOptions);
-			if (missingOptions.isEmpty() && ((matchingFactory == null) || (factory.getOptions().length >= matchingFactoryOptionCount))) {
+			ConfigOption[] factoryOptions = ConfigUtils.createConfigOptionsFromJCommander(factory.createOptionsInstance());
+			if (missingOptions.isEmpty() && ((matchingFactory == null) || (factoryOptions.length >= matchingFactoryOptionCount))) {
 				matchingFactory = factory;
-				matchingFactoriesHaveSameOptionCount = (factory.getOptions().length == matchingFactoryOptionCount);
-				matchingFactoryOptionCount = factory.getOptions().length;
+				matchingFactoriesHaveSameOptionCount = (factoryOptions.length == matchingFactoryOptionCount);
+				matchingFactoryOptionCount = factoryOptions.length;
 			}
 		}
 		if (matchingFactory == null) {
@@ -297,35 +291,40 @@ public class GeoWaveStoreFinder
 		return registeredIndexStoreFactories;
 	}
 
-	public static synchronized AbstractConfigOption<?>[] getAllOptions(
+	public static synchronized ConfigOption[] getAllOptions(
 			final StoreFactoryFamilySpi storeFactoryFamily ) {
-		final List<AbstractConfigOption<?>> allOptions = new ArrayList<AbstractConfigOption<?>>();
-		allOptions.addAll(Arrays.asList(storeFactoryFamily.getDataStoreFactory().getOptions()));
-		allOptions.addAll(Arrays.asList(storeFactoryFamily.getIndexStoreFactory().getOptions()));
-		allOptions.addAll(Arrays.asList(storeFactoryFamily.getDataStatisticsStoreFactory().getOptions()));
-		allOptions.addAll(Arrays.asList(storeFactoryFamily.getAdapterStoreFactory().getOptions()));
-		allOptions.addAll(Arrays.asList(storeFactoryFamily.getAdapterIndexMappingStoreFactory().getOptions()));
-		return allOptions.toArray(new AbstractConfigOption[] {});
+		final List<ConfigOption> allOptions = new ArrayList<ConfigOption>();
+		allOptions.addAll(Arrays.asList(ConfigUtils.createConfigOptionsFromJCommander(storeFactoryFamily.getDataStoreFactory().createOptionsInstance())));
+		allOptions.addAll(Arrays.asList(ConfigUtils.createConfigOptionsFromJCommander(storeFactoryFamily.getIndexStoreFactory().createOptionsInstance())));
+		allOptions.addAll(Arrays.asList(ConfigUtils.createConfigOptionsFromJCommander(storeFactoryFamily.getDataStatisticsStoreFactory().createOptionsInstance())));
+		allOptions.addAll(Arrays.asList(ConfigUtils.createConfigOptionsFromJCommander(storeFactoryFamily.getAdapterStoreFactory().createOptionsInstance())));
+		allOptions.addAll(Arrays.asList(ConfigUtils.createConfigOptionsFromJCommander(storeFactoryFamily.getAdapterIndexMappingStoreFactory().createOptionsInstance())));
+		return allOptions.toArray(new ConfigOption[] {});
 	}
 
-	public static synchronized AbstractConfigOption<?>[] getAllOptions() {
-		final List<AbstractConfigOption<?>> allOptions = new ArrayList<AbstractConfigOption<?>>();
+	public static synchronized ConfigOption[] getAllOptions() {
+		final List<ConfigOption> allOptions = new ArrayList<ConfigOption>();
 		for (final DataStoreFactorySpi f : getRegisteredDataStoreFactories().values()) {
-			allOptions.addAll(Arrays.asList(f.getOptions()));
+			ConfigOption[] factoryOptions = ConfigUtils.createConfigOptionsFromJCommander(f.createOptionsInstance());
+			allOptions.addAll(Arrays.asList(factoryOptions));
 		}
 		for (final IndexStoreFactorySpi f : getRegisteredIndexStoreFactories().values()) {
-			allOptions.addAll(Arrays.asList(f.getOptions()));
+			ConfigOption[] factoryOptions = ConfigUtils.createConfigOptionsFromJCommander(f.createOptionsInstance());
+			allOptions.addAll(Arrays.asList(factoryOptions));
 		}
 		for (final DataStatisticsStoreFactorySpi f : getRegisteredDataStatisticsStoreFactories().values()) {
-			allOptions.addAll(Arrays.asList(f.getOptions()));
+			ConfigOption[] factoryOptions = ConfigUtils.createConfigOptionsFromJCommander(f.createOptionsInstance());
+			allOptions.addAll(Arrays.asList(factoryOptions));
 		}
 		for (final AdapterStoreFactorySpi f : getRegisteredAdapterStoreFactories().values()) {
-			allOptions.addAll(Arrays.asList(f.getOptions()));
+			ConfigOption[] factoryOptions = ConfigUtils.createConfigOptionsFromJCommander(f.createOptionsInstance());
+			allOptions.addAll(Arrays.asList(factoryOptions));
 		}
 		for (final AdapterIndexMappingStoreFactorySpi f : getRegisteredAdapterIndexMappingStoreFactories().values()) {
-			allOptions.addAll(Arrays.asList(f.getOptions()));
+			ConfigOption[] factoryOptions = ConfigUtils.createConfigOptionsFromJCommander(f.createOptionsInstance());
+			allOptions.addAll(Arrays.asList(factoryOptions));
 		}
-		return allOptions.toArray(new AbstractConfigOption[] {});
+		return allOptions.toArray(new ConfigOption[] {});
 	}
 
 	private static <T extends GenericFactory> Map<String, T> getRegisteredFactories(

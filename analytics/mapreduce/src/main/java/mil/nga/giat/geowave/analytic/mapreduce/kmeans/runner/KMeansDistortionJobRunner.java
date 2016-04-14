@@ -1,5 +1,9 @@
 package mil.nga.giat.geowave.analytic.mapreduce.kmeans.runner;
 
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.Job;
+
 import mil.nga.giat.geowave.analytic.PropertyManagement;
 import mil.nga.giat.geowave.analytic.clustering.DistortionGroupManagement.DistortionDataAdapter;
 import mil.nga.giat.geowave.analytic.clustering.DistortionGroupManagement.DistortionEntry;
@@ -12,16 +16,10 @@ import mil.nga.giat.geowave.analytic.param.ClusteringParameters;
 import mil.nga.giat.geowave.analytic.param.GlobalParameters;
 import mil.nga.giat.geowave.analytic.param.JumpParameters;
 import mil.nga.giat.geowave.analytic.param.ParameterEnum;
-import mil.nga.giat.geowave.core.cli.GenericStoreCommandLineOptions;
-import mil.nga.giat.geowave.core.store.DataStore;
-import mil.nga.giat.geowave.core.store.config.ConfigUtils;
+import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputFormat;
 import mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputFormat;
 import mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputKey;
-
-import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.io.Text;
-import org.apache.hadoop.mapreduce.Job;
 
 /**
  * 
@@ -37,14 +35,14 @@ public class KMeansDistortionJobRunner extends
 		GeoWaveAnalyticJobRunner
 {
 	private int k = 1;
-	private GenericStoreCommandLineOptions<DataStore> dataStoreOptions;
+	private DataStorePluginOptions dataStoreOptions;
 
 	public KMeansDistortionJobRunner() {
 		setReducerCount(8);
 	}
 
 	public void setDataStoreOptions(
-			final GenericStoreCommandLineOptions<DataStore> dataStoreOptions ) {
+			final DataStorePluginOptions dataStoreOptions ) {
 		this.dataStoreOptions = dataStoreOptions;
 	}
 
@@ -82,15 +80,11 @@ public class KMeansDistortionJobRunner extends
 
 		GeoWaveInputFormat.setDataStoreName(
 				conf,
-				dataStoreOptions.getFactory().getName());
+				dataStoreOptions.getType());
 		GeoWaveInputFormat.setStoreConfigOptions(
 				conf,
-				ConfigUtils.valuesToStrings(
-						dataStoreOptions.getConfigOptions(),
-						dataStoreOptions.getFactory().getOptions()));
-		GeoWaveInputFormat.setGeoWaveNamespace(
-				conf,
-				dataStoreOptions.getNamespace());
+				dataStoreOptions.getFactoryOptionsAsMap());
+
 		GeoWaveOutputFormat.addDataAdapter(
 				conf,
 				new DistortionDataAdapter());

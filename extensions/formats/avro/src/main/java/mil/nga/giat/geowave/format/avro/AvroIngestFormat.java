@@ -3,6 +3,7 @@ package mil.nga.giat.geowave.format.avro;
 import mil.nga.giat.geowave.adapter.vector.avro.AvroSimpleFeatureCollection;
 import mil.nga.giat.geowave.adapter.vector.ingest.AbstractSimpleFeatureIngestFormat;
 import mil.nga.giat.geowave.adapter.vector.ingest.AbstractSimpleFeatureIngestPlugin;
+import mil.nga.giat.geowave.core.ingest.spi.IngestFormatOptionProvider;
 
 /**
  * This represents an ingest format plugin provider for Avro data that matches
@@ -14,7 +15,8 @@ public class AvroIngestFormat extends
 		AbstractSimpleFeatureIngestFormat<AvroSimpleFeatureCollection>
 {
 	@Override
-	protected AbstractSimpleFeatureIngestPlugin<AvroSimpleFeatureCollection> newPluginInstance() {
+	protected AbstractSimpleFeatureIngestPlugin<AvroSimpleFeatureCollection> newPluginInstance(
+			IngestFormatOptionProvider options ) {
 		return new AvroIngestPlugin();
 	}
 

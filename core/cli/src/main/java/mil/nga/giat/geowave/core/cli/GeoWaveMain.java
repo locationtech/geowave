@@ -1,12 +1,23 @@
 package mil.nga.giat.geowave.core.cli;
 
-import org.apache.commons.cli.BasicParser;
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.Options;
-import org.apache.commons.cli.ParseException;
-import org.apache.commons.cli.Parser;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.beust.jcommander.JCommander;
+
+import mil.nga.giat.geowave.core.cli.api.Command;
+import mil.nga.giat.geowave.core.cli.api.Operation;
+import mil.nga.giat.geowave.core.cli.operations.ExplainCommand;
+import mil.nga.giat.geowave.core.cli.operations.GeowaveTopLevelSection;
+import mil.nga.giat.geowave.core.cli.operations.HelpCommand;
+import mil.nga.giat.geowave.core.cli.parser.CommandLineOperationParams;
+import mil.nga.giat.geowave.core.cli.parser.OperationParser;
+import mil.nga.giat.geowave.core.cli.spi.OperationEntry;
+import mil.nga.giat.geowave.core.cli.spi.OperationRegistry;
 
 /**
  * This is the primary entry point for command line tools. When run it will
@@ -20,47 +31,116 @@ public class GeoWaveMain
 
 	public static void main(
 			final String[] args ) {
-		System.exit(run(args));
+
+		// Take an initial stab at running geowave with the given arguments.
+		OperationParser parser = new OperationParser(
+				prepRegistry());
+		CommandLineOperationParams params = parser.parse(
+				GeowaveTopLevelSection.class,
+				args);
+
+		// No problems so far.
+		if (params.getSuccessCode() == 0) {
+			run(params);			
+		}
+
+		// Log error to console if any.
+		if (params.getSuccessCode() != 0) {
+			doHelp(
+					parser,
+					args);
+			LOGGER.error(
+					params.getSuccessMessage(),
+					params.getSuccessException());
+			JCommander.getConsole().println(
+					params.getSuccessMessage());
+		}
+		else if (!params.isCommandPresent()) {
+			doHelp(
+					parser,
+					args);
+		}
+
+		System.exit(params.getSuccessCode());
 	}
 
-	public static int run(
-			final String[] args ) {
-		if (args.length < 1 || args[0].trim().equals(
-				"--help")) {
-			OperationCommandLineOptions.printHelp();
+	/**
+	 * Run the operations contained in CommandLineOperationParams.
+	 * 
+	 * @param params
+	 */
+	private static void run(
+			CommandLineOperationParams params ) {
+		// Execute the command
+		for (Operation operation : params.getOperationMap().values()) {
+			if (operation instanceof Command) {
+
+				try {
+					((Command) operation).execute(params);
+				}
+				catch (Exception p) {
+					params.setSuccessCode(-1);
+					params.setSuccessMessage(String.format(
+							"Unable to execute operation: %s",
+							p.getMessage()));
+					params.setSuccessException(p);
+				}
+
+				// Only execute the first command.
+				break;
+			}
+		}
+	}
+
+	/**
+	 * This adds the help and explain commands to have all operations as
+	 * children, so the user can do 'help command' or 'explain command'
+	 * 
+	 * @return
+	 */
+	private static OperationRegistry prepRegistry() {
+		OperationRegistry registry = new OperationRegistry();
+
+		OperationEntry explainCommand = registry.getOperation(ExplainCommand.class);
+		OperationEntry helpCommand = registry.getOperation(HelpCommand.class);
+		OperationEntry topLevel = registry.getOperation(GeowaveTopLevelSection.class);
+
+		// Special processing for "HelpSection". This special section will be
+		// added as a child to
+		// top level, and will have all the same children as top level.
+		for (OperationEntry entry : topLevel.getChildren()) {
+			if (entry != helpCommand && entry != explainCommand) {
+				helpCommand.addChild(entry);
+				explainCommand.addChild(entry);
+			}
 		}
 
-		final Options operations = new Options();
+		return registry;
+	}
 
-		OperationCommandLineOptions.applyOptions(operations);
-
-		final String[] optionsArgs = new String[args.length - 1];
-		System.arraycopy(
-				args,
-				1,
-				optionsArgs,
+	/**
+	 * This function will show options for the given operation/section.
+	 */
+	private static void doHelp(
+			OperationParser parser,
+			String[] args ) {
+		// Re-run with the 'help' command inserted.
+		OperationEntry helpCommand = parser.getRegistry().getOperation(
+				HelpCommand.class);
+		List<String> newArgs = new ArrayList<String>(
+				Arrays.asList(args));
+		newArgs.add(
 				0,
-				optionsArgs.length);
-		final String[] operationsArgs = new String[] {
-			args[0]
-		};
-		final Parser parser = new BasicParser();
-		CommandLine operationCommandLine;
-		try {
-			operationCommandLine = parser.parse(
-					operations,
-					operationsArgs,
-					true);
-			final OperationCommandLineOptions operationOption = OperationCommandLineOptions.parseOptions(operationCommandLine);
-
-			return (operationOption.getOperation().getDriver().runOperation(
-					optionsArgs) ? 0 : -1);
+				helpCommand.getOperationName());
+		CommandLineOperationParams params = parser.parse(
+				GeowaveTopLevelSection.class,
+				newArgs.toArray(new String[0]));
+		if (params.getSuccessCode() == 0) {
+			run(params);
 		}
-		catch (final ParseException e) {
-			LOGGER.error(
-					"Unable to parse operation",
-					e);
-			return -1;
+		else {
+			throw new RuntimeException(
+					"Exception while processing help: " + params.getSuccessMessage());
 		}
 	}
 }

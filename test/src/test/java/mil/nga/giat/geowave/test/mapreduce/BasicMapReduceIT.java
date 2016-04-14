@@ -39,18 +39,18 @@ import com.vividsolutions.jts.geom.Geometry;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import mil.nga.giat.geowave.adapter.vector.export.VectorMRExportCommand;
 import mil.nga.giat.geowave.adapter.vector.export.VectorMRExportOptions;
-import mil.nga.giat.geowave.core.cli.GenericStoreCommandLineOptions;
+import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayUtils;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
 import mil.nga.giat.geowave.core.store.query.EverythingQuery;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStore;
-import mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations;
 import mil.nga.giat.geowave.datastore.accumulo.index.secondary.AccumuloSecondaryIndexDataStore;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloAdapterIndexMappingStore;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloAdapterStore;
@@ -261,46 +261,25 @@ public class BasicMapReduceIT extends
 		final DataStore dataStore = new AccumuloDataStore(
 				accumuloOperations);
 		final VectorMRExportCommand exportCommand = new VectorMRExportCommand();
-		final VectorMRExportOptions options = exportCommand.getOptions();
+		final VectorMRExportOptions options = exportCommand.getMrOptions();
 		final File exportDir = new File(
 				TEMP_DIR,
 				TEST_EXPORT_DIRECTORY);
 		exportDir.mkdir();
 
-		options.setDataStore(dataStore);
-		options.setIndexStore(indexStore);
-		options.setAdapterStore(adapterStore);
+		exportCommand.setStoreOptions(getAccumuloStorePluginOptions());
 		options.setBatchSize(10000);
 		options.setMinSplits(MIN_INPUT_SPLITS);
 		options.setMaxSplits(MAX_INPUT_SPLITS);
 		options.setHdfsHostPort(hdfs);
 		options.setResourceManagerHostPort(jobtracker);
 		options.setHdfsOutputDirectory(hdfsBaseDirectory + "/" + TEST_EXPORT_DIRECTORY);
-		// TODO this snippet is temporary until the merge with the new
-		// commandline tool
-		options.dataStoreName = "accumulo";
-		options.configOptions = new HashMap<String, String>();
-		options.configOptions.put(
-				BasicAccumuloOperations.ZOOKEEPER_CONFIG_NAME,
-				zookeeper);
-		options.configOptions.put(
-				BasicAccumuloOperations.PASSWORD_CONFIG_NAME,
-				accumuloPassword);
-		options.configOptions.put(
-				BasicAccumuloOperations.USER_CONFIG_NAME,
-				accumuloUser);
-		options.configOptions.put(
-				BasicAccumuloOperations.INSTANCE_CONFIG_NAME,
-				accumuloInstance);
-		options.gwNamespace = TEST_NAMESPACE;
-		// the snippet above this line is temporary until the new commandline
-		// tool is merged
 
 		final Configuration conf = getConfiguration();
 		MapReduceTestEnvironment.filterConfiguration(conf);
 		final int res = ToolRunner.run(
 				conf,
-				exportCommand,
+				exportCommand.createRunner(new ManualOperationParams()),
 				new String[] {});
 		Assert.assertTrue(
 				"Export Vector Data map reduce job failed",
@@ -327,6 +306,7 @@ public class BasicMapReduceIT extends
 			final PrimaryIndex[] indices )
 			throws Exception {
 		final TestJobRunner jobRunner = new TestJobRunner(
+				getAccumuloStorePluginOptions(),
 				expectedResults);
 		jobRunner.setMinInputSplits(MIN_INPUT_SPLITS);
 		jobRunner.setMaxInputSplits(MAX_INPUT_SPLITS);
@@ -348,20 +328,7 @@ public class BasicMapReduceIT extends
 		final int res = ToolRunner.run(
 				conf,
 				jobRunner,
-				new String[] {
-					"-" + GenericStoreCommandLineOptions.NAMESPACE_OPTION_KEY,
-					TEST_NAMESPACE,
-					"-datastore",
-					"accumulo",
-					"-" + BasicAccumuloOperations.ZOOKEEPER_CONFIG_NAME,
-					zookeeper,
-					"-" + BasicAccumuloOperations.INSTANCE_CONFIG_NAME,
-					accumuloInstance,
-					"-" + BasicAccumuloOperations.USER_CONFIG_NAME,
-					accumuloUser,
-					"-" + BasicAccumuloOperations.PASSWORD_CONFIG_NAME,
-					accumuloPassword
-				});
+				new String[] {});
 		Assert.assertEquals(
 				0,
 				res);
@@ -375,7 +342,10 @@ public class BasicMapReduceIT extends
 		private final ExpectedResults expectedResults;
 
 		public TestJobRunner(
+				final DataStorePluginOptions pluginOptions,
 				final ExpectedResults expectedResults ) {
+			super(
+					pluginOptions);
 			this.expectedResults = expectedResults;
 		}
 
@@ -405,7 +375,7 @@ public class BasicMapReduceIT extends
 			final Job job = Job.getInstance(conf);
 			job.setJarByClass(this.getClass());
 
-			job.setJobName("GeoWave Test (" + namespace + ")");
+			job.setJobName("GeoWave Test (" + dataStoreOptions.getGeowaveNamespace() + ")");
 			job.setInputFormatClass(SequenceFileInputFormat.class);
 			job.setMapperClass(VerifyExpectedResultsMapper.class);
 			job.setMapOutputKeyClass(NullWritable.class);
@@ -416,9 +386,6 @@ public class BasicMapReduceIT extends
 			GeoWaveInputFormat.setStoreConfigOptions(
 					job.getConfiguration(),
 					getAccumuloConfigOptions());
-			GeoWaveInputFormat.setGeoWaveNamespace(
-					job.getConfiguration(),
-					namespace);
 			FileInputFormat.setInputPaths(
 					job,
 					getHdfsOutputPath());

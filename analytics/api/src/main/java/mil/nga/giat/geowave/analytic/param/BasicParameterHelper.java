@@ -1,18 +1,14 @@
 package mil.nga.giat.geowave.analytic.param;
 
-import mil.nga.giat.geowave.analytic.PropertyManagement;
-import mil.nga.giat.geowave.analytic.ScopedJobConfiguration;
-import mil.nga.giat.geowave.core.cli.CommandLineResult;
-import mil.nga.giat.geowave.core.index.ByteArrayUtils;
-import mil.nga.giat.geowave.mapreduce.GeoWaveConfiguratorBase;
-
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.Option;
-import org.apache.commons.cli.Options;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.mapreduce.JobContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import mil.nga.giat.geowave.analytic.PropertyManagement;
+import mil.nga.giat.geowave.analytic.ScopedJobConfiguration;
+import mil.nga.giat.geowave.core.index.ByteArrayUtils;
+import mil.nga.giat.geowave.mapreduce.GeoWaveConfiguratorBase;
 
 public class BasicParameterHelper implements
 		ParameterHelper<Object>
@@ -20,7 +16,6 @@ public class BasicParameterHelper implements
 	final static Logger LOGGER = LoggerFactory.getLogger(BasicParameterHelper.class);
 	private final ParameterEnum<?> parent;
 	private final Class<Object> baseClass;
-	private final Option[] options;
 
 	public BasicParameterHelper(
 			final ParameterEnum<?> parent,
@@ -30,23 +25,11 @@ public class BasicParameterHelper implements
 			final boolean hasArg ) {
 		this.baseClass = baseClass;
 		this.parent = parent;
-		options = new Option[] {
-			newOption(
-					parent,
-					name,
-					description,
-					hasArg)
-		};
 	}
 
 	@Override
 	public Class<Object> getBaseClass() {
 		return baseClass;
-	}
-
-	@Override
-	public Option[] getOptions() {
-		return options;
 	}
 
 	@Override
@@ -121,25 +104,6 @@ public class BasicParameterHelper implements
 		}
 	}
 
-	private static final Option newOption(
-			final ParameterEnum e,
-			final String name,
-			final String description,
-			final boolean hasArg ) {
-		return new Option(
-				name,
-				toPropertyName(e),
-				hasArg,
-				description);
-	}
-
-	private static final String toPropertyName(
-			final ParameterEnum param ) {
-		return param.getClass().getSimpleName().toLowerCase() + "-" + param.self().name().replace(
-				'_',
-				'-').toLowerCase();
-	}
-
 	@Override
 	public Object getValue(
 			final JobContext context,
@@ -178,41 +142,6 @@ public class BasicParameterHelper implements
 						"Unable to get instance from job context",
 						e);
 			}
-		}
-		return null;
-	}
-
-	@Override
-	public CommandLineResult<Object> getValue(
-			final Options allOptions,
-			final CommandLine commandline ) {
-		return new CommandLineResult<Object>(
-				getValueInternal(
-						allOptions,
-						commandline));
-	}
-
-	private Object getValueInternal(
-			final Options allOptions,
-			final CommandLine commandline ) {
-		if (baseClass.isAssignableFrom(Boolean.class)) {
-			return commandline.hasOption(options[0].getOpt());
-		}
-		final String optionValueStr = commandline.getOptionValue(options[0].getOpt());
-		if (optionValueStr == null) {
-			return null;
-		}
-		if (baseClass.isAssignableFrom(Integer.class)) {
-			return Integer.parseInt(optionValueStr);
-		}
-		else if (baseClass.isAssignableFrom(String.class)) {
-			return optionValueStr;
-		}
-		else if (baseClass.isAssignableFrom(Double.class)) {
-			return Double.parseDouble(optionValueStr);
-		}
-		else if (baseClass.isAssignableFrom(byte[].class)) {
-			return ByteArrayUtils.byteArrayFromString(optionValueStr);
 		}
 		return null;
 	}

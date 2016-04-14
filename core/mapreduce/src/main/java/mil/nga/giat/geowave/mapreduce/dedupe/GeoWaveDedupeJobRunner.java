@@ -1,8 +1,6 @@
 package mil.nga.giat.geowave.mapreduce.dedupe;
 
-import mil.nga.giat.geowave.mapreduce.AbstractGeoWaveJobRunner;
-import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputFormat;
-import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
+import java.io.File;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
@@ -15,6 +13,18 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.SequenceFileOutputFormat;
 import org.apache.hadoop.util.ToolRunner;
 
+import com.beust.jcommander.ParameterException;
+
+import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
+import mil.nga.giat.geowave.core.cli.parser.OperationParser;
+import mil.nga.giat.geowave.core.cli.parser.OperationParser.MainParameterHolder;
+import mil.nga.giat.geowave.core.cli.parser.ParseOnlyOperationParams;
+import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.operations.remote.options.StoreLoader;
+import mil.nga.giat.geowave.mapreduce.AbstractGeoWaveJobRunner;
+import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputFormat;
+import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
+
 /**
  * This class can run a basic job to query GeoWave, deduplicating results, and
  * writing the final set of key value pairs to a sequence file. It can be
@@ -24,12 +34,18 @@ public class GeoWaveDedupeJobRunner extends
 		AbstractGeoWaveJobRunner
 {
 
+	public GeoWaveDedupeJobRunner(
+			DataStorePluginOptions dataStoreOptions ) {
+		super(
+				dataStoreOptions);
+	}
+
 	@Override
 	protected void configure(
 			final Job job )
 			throws Exception {
 
-		job.setJobName("GeoWave Dedupe (" + namespace + ")");
+		job.setJobName("GeoWave Dedupe (" + dataStoreOptions.getGeowaveNamespace() + ")");
 
 		job.setMapperClass(GeoWaveDedupeMapper.class);
 		job.setCombinerClass(GeoWaveDedupeCombiner.class);
@@ -67,7 +83,7 @@ public class GeoWaveDedupeJobRunner extends
 
 	public Path getHdfsOutputPath() {
 		return new Path(
-				getHdfsOutputBase() + "/" + namespace + "_dedupe");
+				getHdfsOutputBase() + "/" + dataStoreOptions.getGeowaveNamespace() + "_dedupe");
 	}
 
 	protected Class<? extends OutputFormat> getOutputFormatClass() {
@@ -81,9 +97,36 @@ public class GeoWaveDedupeJobRunner extends
 	public static void main(
 			final String[] args )
 			throws Exception {
+
+		ConfigOptions opts = new ConfigOptions();
+		MainParameterHolder holder = new MainParameterHolder();
+
+		OperationParser parser = new OperationParser();
+		parser.addAdditionalObject(opts);
+		parser.addAdditionalObject(holder);
+
+		// Second round to get everything else.
+		ParseOnlyOperationParams params = parser.parse(args);
+
+		// Set the datastore plugin
+		if (holder.getMainParameter().size() == 0) {
+			throw new ParameterException(
+					"Must specify datastore name as first argument.");
+		}
+
+		// Load the params for config file.
+		opts.prepare(params);
+
+		StoreLoader loader = new StoreLoader(
+				holder.getMainParameter().get(
+						0));
+		loader.loadFromConfig((File) params.getContext().get(
+				ConfigOptions.PROPERTIES_FILE_CONTEXT));
+
 		final int res = ToolRunner.run(
 				new Configuration(),
-				new GeoWaveDedupeJobRunner(),
+				new GeoWaveDedupeJobRunner(
+						loader.getDataStorePlugin()),
 				args);
 		System.exit(res);
 	}

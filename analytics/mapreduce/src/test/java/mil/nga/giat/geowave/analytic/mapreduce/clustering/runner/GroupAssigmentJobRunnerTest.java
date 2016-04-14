@@ -1,11 +1,18 @@
 package mil.nga.giat.geowave.analytic.mapreduce.clustering.runner;
 
 import java.io.IOException;
-import java.security.AccessControlContext;
-import java.security.AccessController;
-import java.util.HashMap;
 
-import javax.security.auth.Subject;
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.mapreduce.Counters;
+import org.apache.hadoop.mapreduce.Job;
+import org.apache.hadoop.mapreduce.lib.input.SequenceFileInputFormat;
+import org.apache.hadoop.util.Tool;
+import org.geotools.feature.type.BasicFeatureTypes;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.opengis.feature.simple.SimpleFeatureType;
 
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import mil.nga.giat.geowave.analytic.AnalyticFeature;
@@ -27,27 +34,9 @@ import mil.nga.giat.geowave.analytic.param.GlobalParameters;
 import mil.nga.giat.geowave.analytic.param.MapReduceParameters.MRConfig;
 import mil.nga.giat.geowave.analytic.param.ParameterHelper;
 import mil.nga.giat.geowave.analytic.param.StoreParameters.StoreParam;
-import mil.nga.giat.geowave.analytic.store.PersistableAdapterStore;
-import mil.nga.giat.geowave.analytic.store.PersistableDataStore;
-import mil.nga.giat.geowave.analytic.store.PersistableIndexStore;
-import mil.nga.giat.geowave.core.cli.AdapterStoreCommandLineOptions;
-import mil.nga.giat.geowave.core.cli.DataStoreCommandLineOptions;
-import mil.nga.giat.geowave.core.cli.IndexStoreCommandLineOptions;
-import mil.nga.giat.geowave.core.store.memory.MemoryAdapterStoreFactory;
-import mil.nga.giat.geowave.core.store.memory.MemoryDataStoreFactory;
-import mil.nga.giat.geowave.core.store.memory.MemoryIndexStoreFactory;
-
-import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.mapreduce.Counters;
-import org.apache.hadoop.mapreduce.Job;
-import org.apache.hadoop.mapreduce.lib.input.SequenceFileInputFormat;
-import org.apache.hadoop.util.Tool;
-import org.geotools.feature.type.BasicFeatureTypes;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.opengis.feature.simple.SimpleFeatureType;
+import mil.nga.giat.geowave.analytic.store.PersistableStore;
+import mil.nga.giat.geowave.core.store.memory.MemoryRequiredOptions;
+import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 
 public class GroupAssigmentJobRunnerTest
 {
@@ -74,10 +63,10 @@ public class GroupAssigmentJobRunnerTest
 					final GeoWaveAnalyticJobRunner tool )
 					throws Exception {
 				tool.setConf(configuration);
-				((ParameterHelper<Object>) StoreParam.ADAPTER_STORE.getHelper()).setValue(
+				((ParameterHelper<Object>) StoreParam.STORE.getHelper()).setValue(
 						configuration,
 						GroupAssignmentMapReduce.class,
-						StoreParam.ADAPTER_STORE.getHelper().getValue(
+						StoreParam.STORE.getHelper().getValue(
 								runTimeProperties));
 				return tool.run(new String[] {});
 			}
@@ -189,32 +178,18 @@ public class GroupAssigmentJobRunnerTest
 				CommonParameters.Common.DISTANCE_FUNCTION_CLASS,
 				FeatureCentroidDistanceFn.class);
 
-		runTimeProperties.store(
-				StoreParam.DATA_STORE,
-				new PersistableDataStore(
-						new DataStoreCommandLineOptions(
-								new MemoryDataStoreFactory(),
-								new HashMap<String, Object>(),
-								TEST_NAMESPACE)));
-		final MemoryAdapterStoreFactory adapterStoreFactory = new MemoryAdapterStoreFactory();
-		runTimeProperties.store(
-				StoreParam.ADAPTER_STORE,
-				new PersistableAdapterStore(
-						new AdapterStoreCommandLineOptions(
-								adapterStoreFactory,
-								new HashMap<String, Object>(),
-								TEST_NAMESPACE)));
+		DataStorePluginOptions pluginOptions = new DataStorePluginOptions();
+		pluginOptions.selectPlugin("memory");
+		MemoryRequiredOptions opts = (MemoryRequiredOptions) pluginOptions.getFactoryOptions();
+		opts.setGeowaveNamespace(TEST_NAMESPACE);
+		PersistableStore store = new PersistableStore(
+				pluginOptions);
 
 		runTimeProperties.store(
-				StoreParam.INDEX_STORE,
-				new PersistableIndexStore(
-						new IndexStoreCommandLineOptions(
-								new MemoryIndexStoreFactory(),
-								new HashMap<String, Object>(),
-								TEST_NAMESPACE)));
-		adapterStoreFactory.createStore(
-				new HashMap<String, Object>(),
-				TEST_NAMESPACE).addAdapter(
+				StoreParam.STORE,
+				store);
+
+		pluginOptions.createAdapterStore().addAdapter(
 				new FeatureDataAdapter(
 						ftype));
 	}

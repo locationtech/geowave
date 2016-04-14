@@ -1,16 +1,13 @@
 package mil.nga.giat.geowave.format.geotools.vector;
 
-import mil.nga.giat.geowave.adapter.vector.ingest.CQLFilterOptionProvider;
-import mil.nga.giat.geowave.core.ingest.CompoundIngestFormatOptionProvider;
-import mil.nga.giat.geowave.core.ingest.IngestFormatOptionProvider;
-import mil.nga.giat.geowave.core.ingest.IngestFormatPluginProviderSpi;
+import org.opengis.feature.simple.SimpleFeature;
+
 import mil.nga.giat.geowave.core.ingest.avro.AvroFormatPlugin;
 import mil.nga.giat.geowave.core.ingest.hdfs.mapreduce.IngestFromHdfsPlugin;
 import mil.nga.giat.geowave.core.ingest.local.LocalFileIngestPlugin;
-import mil.nga.giat.geowave.format.geotools.vector.retyping.date.DateFieldOptionProvider;
+import mil.nga.giat.geowave.core.ingest.spi.IngestFormatOptionProvider;
+import mil.nga.giat.geowave.core.ingest.spi.IngestFormatPluginProviderSpi;
 import mil.nga.giat.geowave.format.geotools.vector.retyping.date.DateFieldRetypingPlugin;
-
-import org.opengis.feature.simple.SimpleFeature;
 
 /**
  * This represents an ingest format plugin provider for GeoTools vector data
@@ -20,29 +17,30 @@ import org.opengis.feature.simple.SimpleFeature;
 public class GeoToolsVectorDataStoreIngestFormat implements
 		IngestFormatPluginProviderSpi<Object, SimpleFeature>
 {
-	protected final CQLFilterOptionProvider cqlFilterOptionProvider = new CQLFilterOptionProvider();
-	protected final DateFieldOptionProvider dateFieldOptionProvider = new DateFieldOptionProvider();
-
 	@Override
-	public AvroFormatPlugin<Object, SimpleFeature> getAvroFormatPlugin() {
+	public AvroFormatPlugin<Object, SimpleFeature> createAvroFormatPlugin(
+			IngestFormatOptionProvider options ) {
 		// unsupported right now
 		throw new UnsupportedOperationException(
 				"GeoTools vector files cannot be ingested using intermediate avro files");
 	}
 
 	@Override
-	public IngestFromHdfsPlugin<Object, SimpleFeature> getIngestFromHdfsPlugin() {
+	public IngestFromHdfsPlugin<Object, SimpleFeature> createIngestFromHdfsPlugin(
+			IngestFormatOptionProvider options ) {
 		// unsupported right now
 		throw new UnsupportedOperationException(
 				"GeoTools vector files cannot be ingested from HDFS");
 	}
 
 	@Override
-	public LocalFileIngestPlugin<SimpleFeature> getLocalFileIngestPlugin() {
+	public LocalFileIngestPlugin<SimpleFeature> createLocalFileIngestPlugin(
+			IngestFormatOptionProvider options ) {
+		GeoToolsVectorDataOptions vectorDataOptions = (GeoToolsVectorDataOptions) options;
 		return new GeoToolsVectorDataStoreIngestPlugin(
 				new DateFieldRetypingPlugin(
-						dateFieldOptionProvider),
-				cqlFilterOptionProvider);
+						vectorDataOptions.getDateFieldOptionProvider()),
+				vectorDataOptions.getCqlFilterOptionProvider());
 	}
 
 	@Override
@@ -56,10 +54,8 @@ public class GeoToolsVectorDataStoreIngestFormat implements
 	}
 
 	@Override
-	public IngestFormatOptionProvider getIngestFormatOptionProvider() {
-		return new CompoundIngestFormatOptionProvider().add(
-				cqlFilterOptionProvider).add(
-				dateFieldOptionProvider);
+	public IngestFormatOptionProvider createOptionsInstances() {
+		return new GeoToolsVectorDataOptions();
 	}
 
 }

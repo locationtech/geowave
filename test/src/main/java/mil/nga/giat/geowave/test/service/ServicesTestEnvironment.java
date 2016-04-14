@@ -8,7 +8,6 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -24,9 +23,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import mil.nga.giat.geowave.core.cli.GenericStoreCommandLineOptions;
 import mil.nga.giat.geowave.core.index.StringUtils;
-import mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations;
+import mil.nga.giat.geowave.core.store.config.ConfigUtils;
+import mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloRequiredOptions;
 import mil.nga.giat.geowave.test.mapreduce.MapReduceTestEnvironment;
 
 abstract public class ServicesTestEnvironment extends
@@ -210,23 +209,14 @@ abstract public class ServicesTestEnvironment extends
 	}
 
 	protected Map<String, String> getAccumuloConfig() {
-		final Map<String, String> accumuloConfig = new HashMap<String, String>();
-		accumuloConfig.put(
-				BasicAccumuloOperations.ZOOKEEPER_CONFIG_NAME,
-				zookeeper);
-		accumuloConfig.put(
-				BasicAccumuloOperations.PASSWORD_CONFIG_NAME,
-				accumuloPassword);
-		accumuloConfig.put(
-				BasicAccumuloOperations.USER_CONFIG_NAME,
-				accumuloUser);
-		accumuloConfig.put(
-				BasicAccumuloOperations.INSTANCE_CONFIG_NAME,
-				accumuloInstance);
-		accumuloConfig.put(
-				GenericStoreCommandLineOptions.NAMESPACE_OPTION_KEY,
-				TEST_NAMESPACE);
-		return accumuloConfig;
+		AccumuloRequiredOptions opts = new AccumuloRequiredOptions();
+		opts.setUser(accumuloUser);
+		opts.setPassword(accumuloPassword);
+		opts.setInstance(accumuloInstance);
+		opts.setZookeeper(zookeeper);
+		opts.setGeowaveNamespace(TEST_NAMESPACE);
+		Map<String, String> mapOpts = ConfigUtils.populateListFromOptions(opts);
+		return mapOpts;
 	}
 
 	@AfterClass

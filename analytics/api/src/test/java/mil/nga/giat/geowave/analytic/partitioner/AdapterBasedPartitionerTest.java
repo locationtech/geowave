@@ -4,29 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
-import mil.nga.giat.geowave.analytic.AnalyticFeature;
-import mil.nga.giat.geowave.analytic.PropertyManagement;
-import mil.nga.giat.geowave.analytic.clustering.ClusteringUtils;
-import mil.nga.giat.geowave.analytic.model.SpatialIndexModelBuilder;
-import mil.nga.giat.geowave.analytic.param.ClusteringParameters;
-import mil.nga.giat.geowave.analytic.param.CommonParameters;
-import mil.nga.giat.geowave.analytic.param.ParameterEnum;
-import mil.nga.giat.geowave.analytic.param.StoreParameters.StoreParam;
-import mil.nga.giat.geowave.analytic.partitioner.AdapterBasedPartitioner.AdapterDataEntry;
-import mil.nga.giat.geowave.analytic.partitioner.Partitioner.PartitionData;
-import mil.nga.giat.geowave.analytic.store.PersistableAdapterStore;
-import mil.nga.giat.geowave.core.cli.AdapterStoreCommandLineOptions;
-import mil.nga.giat.geowave.core.cli.CommandLineOptions.OptionMapWrapper;
-import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
-import mil.nga.giat.geowave.core.store.memory.MemoryAdapterStoreFactory;
-
-import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.mapreduce.Job;
@@ -40,6 +19,22 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.GeometryFactory;
+
+import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
+import mil.nga.giat.geowave.analytic.AnalyticFeature;
+import mil.nga.giat.geowave.analytic.PropertyManagement;
+import mil.nga.giat.geowave.analytic.clustering.ClusteringUtils;
+import mil.nga.giat.geowave.analytic.model.SpatialIndexModelBuilder;
+import mil.nga.giat.geowave.analytic.param.ClusteringParameters;
+import mil.nga.giat.geowave.analytic.param.CommonParameters;
+import mil.nga.giat.geowave.analytic.param.ParameterEnum;
+import mil.nga.giat.geowave.analytic.param.StoreParameters.StoreParam;
+import mil.nga.giat.geowave.analytic.partitioner.AdapterBasedPartitioner.AdapterDataEntry;
+import mil.nga.giat.geowave.analytic.partitioner.Partitioner.PartitionData;
+import mil.nga.giat.geowave.analytic.store.PersistableStore;
+import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
+import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 
 public class AdapterBasedPartitionerTest
 {
@@ -102,24 +97,19 @@ public class AdapterBasedPartitionerTest
 		propertyManagement.setJobConfiguration(
 				configuration,
 				scope);
-		final Map<String, String> memoryAdapterStoreOptions = new HashMap<String, String>();
-		memoryAdapterStoreOptions.put(
-				AdapterStoreCommandLineOptions.ADAPTER_STORE_NAME_KEY,
-				new MemoryAdapterStoreFactory().getName());
-		final Options options = new Options();
-		AdapterStoreCommandLineOptions.applyOptions(options);
-		final PersistableAdapterStore adapterStore = new PersistableAdapterStore(
-				AdapterStoreCommandLineOptions.parseOptions(
-						options,
-						new OptionMapWrapper(
-								memoryAdapterStoreOptions)).getResult());
-		adapterStore.getCliOptions().createStore().addAdapter(
+
+		DataStorePluginOptions pluginOptions = new DataStorePluginOptions();
+		pluginOptions.selectPlugin("memory");
+		PersistableStore store = new PersistableStore(
+				pluginOptions);
+
+		store.getDataStoreOptions().createAdapterStore().addAdapter(
 				new FeatureDataAdapter(
 						ftype));
-		((ParameterEnum<PersistableAdapterStore>) StoreParam.ADAPTER_STORE).getHelper().setValue(
+		((ParameterEnum<PersistableStore>) StoreParam.STORE).getHelper().setValue(
 				configuration,
 				scope,
-				adapterStore);
+				store);
 		partitioner.initialize(
 				Job.getInstance(configuration),
 				scope);

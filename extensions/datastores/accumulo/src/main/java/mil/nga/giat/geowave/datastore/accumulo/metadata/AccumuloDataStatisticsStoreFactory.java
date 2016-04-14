@@ -1,10 +1,10 @@
 package mil.nga.giat.geowave.datastore.accumulo.metadata;
 
-import java.util.Map;
-
+import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStoreFactorySpi;
 import mil.nga.giat.geowave.datastore.accumulo.AbstractAccumuloStoreFactory;
+import mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloRequiredOptions;
 
 public class AccumuloDataStatisticsStoreFactory extends
 		AbstractAccumuloStoreFactory<DataStatisticsStore> implements
@@ -13,12 +13,14 @@ public class AccumuloDataStatisticsStoreFactory extends
 
 	@Override
 	public DataStatisticsStore createStore(
-			final Map<String, Object> configOptions,
-			final String namespace ) {
+			StoreFactoryOptions options ) {
+		if (!(options instanceof AccumuloRequiredOptions)) {
+			throw new AssertionError(
+					"Expected " + AccumuloRequiredOptions.class.getSimpleName());
+		}
+		AccumuloRequiredOptions opts = (AccumuloRequiredOptions) options;
 		return new AccumuloDataStatisticsStore(
-				createOperations(
-						configOptions,
-						namespace));
+				createOperations(opts));
 	}
 
 }

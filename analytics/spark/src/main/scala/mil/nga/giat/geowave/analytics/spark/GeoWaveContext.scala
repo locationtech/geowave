@@ -1,7 +1,7 @@
 package mil.nga.giat.geowave.analytics.spark
 
 import mil.nga.giat.geowave.core.store.config.ConfigUtils
-import mil.nga.giat.geowave.core.cli.DataStoreCommandLineOptions
+import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions
 
 class GeoWaveContext(
 											val storeParameters: java.util.Map[String, String],
@@ -10,12 +10,10 @@ class GeoWaveContext(
 }
 
 object GeoWaveContext {
-	def apply(dataStoreOptions: DataStoreCommandLineOptions,
+	def apply(dataStoreOptions: DataStorePluginOptions,
 						dataStoreName: String,
 						tableNameSpace: String) = new GeoWaveContext(
-		ConfigUtils.valuesToStrings(
-			dataStoreOptions.getConfigOptions(),
-			dataStoreOptions.getFactory().getOptions()),
+		ConfigUtils.populateListFromOptions(dataStoreOptions.getFactoryOptions),
 		dataStoreName,
 		tableNameSpace);
 
