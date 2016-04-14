@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.beust.jcommander.ParametersDelegate;
 
 import mil.nga.giat.geowave.core.cli.api.DefaultPluginOptions;
@@ -59,9 +61,9 @@ public class IndexGroupPluginOptions extends
 					entry.getKey(),
 					entry.getValue().getType()));
 		}
-		return String.join(
-				",",
-				typeString);
+		return StringUtils.join(
+				typeString, 
+				",");
 	}
 
 	public void addIndex(
