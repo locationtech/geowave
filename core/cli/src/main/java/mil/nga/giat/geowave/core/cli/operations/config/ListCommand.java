@@ -51,10 +51,10 @@ public class ListCommand extends
 					f,
 					null);
 		}
-		
+
 		JCommander.getConsole().println(
 				"PROPERTIES (" + f.getName() + ")");
-		
+
 		List<String> keys = new ArrayList<String>();
 		keys.addAll(p.stringPropertyNames());
 		Collections.sort(keys);

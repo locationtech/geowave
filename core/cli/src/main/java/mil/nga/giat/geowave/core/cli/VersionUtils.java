@@ -17,7 +17,7 @@ public class VersionUtils
 	private static final String VERSION_PROPERTY_KEY = "project.version";
 
 	public static File getBuildPropertiesFile() {
-		final URL buildProperties = VersionUtils.class.getClass().getClassLoader().getResource(
+		final URL buildProperties = VersionUtils.class.getClassLoader().getResource(
 				BUILD_PROPERTIES_FILE_NAME);
 		if (buildProperties != null) {
 			final File buildPropertiesFile = new File(
