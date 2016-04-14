@@ -225,7 +225,7 @@ public class OperationParser
 		// Copy over the parsed items from the facade objects back to the real
 		// objects
 		map.transformToOriginal();
-		
+
 		params.setCommander(jc);
 		params.setTranslationMap(map);
 	}

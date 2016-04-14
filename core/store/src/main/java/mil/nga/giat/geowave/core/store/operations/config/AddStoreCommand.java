@@ -53,20 +53,19 @@ public class AddStoreCommand implements
 		}
 		else {
 			// Try to load the 'default' options.
-			
+
 			File configFile = (File) params.getContext().get(
 					ConfigOptions.PROPERTIES_FILE_CONTEXT);
 			Properties existingProps = ConfigOptions.loadProperties(
 					configFile,
 					null);
 
-			String defaultStore = existingProps.getProperty(
-					DataStorePluginOptions.DEFAULT_PROPERTY_NAMESPACE);
-			
+			String defaultStore = existingProps.getProperty(DataStorePluginOptions.DEFAULT_PROPERTY_NAMESPACE);
+
 			// Load the default index.
 			if (pluginOptions.load(
-				existingProps,
-				DataStorePluginOptions.getStoreNamespace(defaultStore))) {
+					existingProps,
+					DataStorePluginOptions.getStoreNamespace(defaultStore))) {
 				// Set the required type option.
 				this.storeType = pluginOptions.getType();
 			}
@@ -91,7 +90,7 @@ public class AddStoreCommand implements
 			throw new ParameterException(
 					"Must specify store name");
 		}
-		
+
 		// Make sure we're not already in the index.
 		DataStorePluginOptions existingOptions = new DataStorePluginOptions();
 		if (existingOptions.load(

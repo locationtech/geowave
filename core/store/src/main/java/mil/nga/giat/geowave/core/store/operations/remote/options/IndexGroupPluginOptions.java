@@ -62,7 +62,7 @@ public class IndexGroupPluginOptions extends
 					entry.getValue().getType()));
 		}
 		return StringUtils.join(
-				typeString, 
+				typeString,
 				",");
 	}
 

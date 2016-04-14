@@ -51,20 +51,19 @@ public class AddIndexCommand implements
 		}
 		else {
 			// Try to load the 'default' options.
-			
+
 			File configFile = (File) params.getContext().get(
 					ConfigOptions.PROPERTIES_FILE_CONTEXT);
 			Properties existingProps = ConfigOptions.loadProperties(
 					configFile,
 					null);
 
-			String defaultIndex = existingProps.getProperty(
-					IndexPluginOptions.DEFAULT_PROPERTY_NAMESPACE);
-			
+			String defaultIndex = existingProps.getProperty(IndexPluginOptions.DEFAULT_PROPERTY_NAMESPACE);
+
 			// Load the default index.
 			if (pluginOptions.load(
-				existingProps,
-				IndexPluginOptions.getIndexNamespace(defaultIndex))) {
+					existingProps,
+					IndexPluginOptions.getIndexNamespace(defaultIndex))) {
 				// Set the required type option.
 				this.type = pluginOptions.getType();
 			}

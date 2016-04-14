@@ -41,7 +41,7 @@ public class GeoWaveMain
 
 		// No problems so far.
 		if (params.getSuccessCode() == 0) {
-			run(params);			
+			run(params);
 		}
 
 		// Log error to console if any.

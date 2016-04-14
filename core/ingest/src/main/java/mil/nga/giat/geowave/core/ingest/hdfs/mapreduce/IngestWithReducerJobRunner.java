@@ -15,7 +15,7 @@ import mil.nga.giat.geowave.core.store.operations.remote.options.VisibilityOptio
  * value pairs and a reducer to ingest data into GeoWave.
  */
 public class IngestWithReducerJobRunner extends
-		AbstractMapReduceIngest<IngestWithReducer>
+		AbstractMapReduceIngest<IngestWithReducer<?, ?, ?, ?>>
 {
 	public IngestWithReducerJobRunner(
 			final DataStorePluginOptions storeOptions,
