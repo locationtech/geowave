@@ -11,7 +11,7 @@ First build the main project after specifying the dependency versions you'd like
 
 [source, bash]
 ----
-export BUILD_ARGS="-Daccumulo.version=1.6.0-cdh5.1.4 -Dhadoop.version=2.6.0-cdh5.4.0 -Dgeotools.version=14.2 -Dgeoserver.version=2.8.2 -Dvendor.version=cdh5 -P cloudera" <1>
+export BUILD_ARGS="-Daccumulo.version=1.6.0-cdh5.1.4 -Dhadoop.version=2.6.0-cdh5.4.0 -Dgeotools.version=14.2 -Dgeoserver.version=2.8.2 -Dvendor.version=cdh5 -Daccumulo.api=1.6 -P cloudera" <1>
 git clone https://github.com/ngageoint/geowave.git <2>
 cd geowave
 mvn install $BUILD_ARGS <3>
