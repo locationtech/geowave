@@ -797,9 +797,27 @@
 										<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
 											<manifestEntries>
 												<Main-Class>mil.nga.giat.geowave.core.cli.GeoWaveMain</Main-Class>
+												<Specification-Title>GeoWave</Specification-Title>
+                                                <Specification-Vendor>LocationTech</Specification-Vendor>
+                                                <Specification-Version>${project.version}</Specification-Version>
+                                                <Implementation-Title>mil.nga.giat.geowave</Implementation-Title>
+                                                <Implementation-Vendor>LocationTech</Implementation-Vendor>
+                                                <Implementation-Version>${project.version}</Implementation-Version>
 											</manifestEntries>
 										</transformer>
 										<transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
+										<!-- merges META-INF/javax.media.jai.registryFile.jai entries instead of overwriting -->
+                                        <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                                                <resource>META-INF/javax.media.jai.registryFile.jai</resource>
+                                        </transformer>
+                                        <!-- merges META-INF/registryFile.jai entries instead of overwriting -->
+                                        <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                                                <resource>META-INF/registryFile.jai</resource>
+                                        </transformer>
+                                        <!-- merges META-INF/registryFile.jaiext entries instead of overwriting -->
+                                        <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                                                <resource>META-INF/registryFile.jaiext</resource>  
+                                        </transformer>
 									</transformers>
 									<createDependencyReducedPom>false</createDependencyReducedPom>
 									<minimizeJar>false</minimizeJar>
