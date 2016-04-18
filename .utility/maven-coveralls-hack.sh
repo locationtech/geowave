@@ -8,6 +8,6 @@ then
     cd coveralls-maven-plugin;
     git submodule init;
     git submodule update;
-    mvn -q clean install;
+    mvn -q clean install -DskipTests;
     cd ../..;
 fi
