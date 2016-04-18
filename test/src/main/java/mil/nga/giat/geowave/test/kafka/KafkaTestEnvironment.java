@@ -82,7 +82,7 @@ abstract public class KafkaTestEnvironment<I> extends
 
 		// Indexes
 		IndexPluginOptions indexOption = new IndexPluginOptions();
-		indexOption.selectPlugin((spatialTemporal ? "spatial-temporal" : "spatial"));
+		indexOption.selectPlugin((spatialTemporal ? "spatial_temporal" : "spatial"));
 
 		// Execute Command
 		KafkaToGeowaveCommand kafkaToGeowave = new KafkaToGeowaveCommand();

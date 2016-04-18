@@ -36,7 +36,7 @@ public class SpatialTemporalDimensionalityTypeProvider implements
 
 	@Override
 	public String getDimensionalityTypeName() {
-		return "spatial-temporal";
+		return "spatial_temporal";
 	}
 
 	@Override

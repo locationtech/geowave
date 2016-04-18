@@ -112,6 +112,7 @@ public class IngestServiceImpl implements
 
 		final String storeName = multiPart.getField(
 				"store").getValue();
+
 		final String visibility = (multiPart.getField("visibility") != null) ? multiPart.getField(
 				"visibility").getValue() : null;
 		final String ingestType = (multiPart.getField("ingestFormat") != null) ? multiPart.getField(

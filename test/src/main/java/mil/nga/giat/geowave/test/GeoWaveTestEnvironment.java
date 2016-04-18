@@ -69,9 +69,9 @@ abstract public class GeoWaveTestEnvironment
 		SPATIAL(
 				"spatial"),
 		SPATIAL_TEMPORAL(
-				"spatial-temporal"),
+				"spatial_temporal"),
 		ALL(
-				"spatial,spatial-temporal");
+				"spatial,spatial_temporal");
 		private final String dimensionalityArg;
 
 		private DimensionalityType(
@@ -126,6 +126,7 @@ abstract public class GeoWaveTestEnvironment
 				ingestFilePath,
 				"geotools-vector",
 				nthreads);
+
 	}
 
 	protected void testLocalIngest(
@@ -133,6 +134,7 @@ abstract public class GeoWaveTestEnvironment
 			final String ingestFilePath,
 			final String format,
 			final int nthreads ) {
+
 		// ingest a shapefile (geotools type) directly into GeoWave using the
 		// ingest framework's main method and pre-defined commandline arguments
 
@@ -157,6 +159,7 @@ abstract public class GeoWaveTestEnvironment
 		localIngester.execute(new ManualOperationParams());
 
 		verifyStats();
+
 	}
 
 	protected DataStorePluginOptions getAccumuloStorePluginOptions() {
