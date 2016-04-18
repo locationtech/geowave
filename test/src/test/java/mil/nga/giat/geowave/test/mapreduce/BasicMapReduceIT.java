@@ -268,6 +268,7 @@ public class BasicMapReduceIT extends
 		exportDir.mkdir();
 
 		exportCommand.setStoreOptions(getAccumuloStorePluginOptions());
+		exportCommand.setParameters(null);
 		options.setBatchSize(10000);
 		options.setMinSplits(MIN_INPUT_SPLITS);
 		options.setMaxSplits(MAX_INPUT_SPLITS);

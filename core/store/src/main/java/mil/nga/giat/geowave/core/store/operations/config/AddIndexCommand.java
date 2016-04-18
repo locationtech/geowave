@@ -39,7 +39,7 @@ public class AddIndexCommand implements
 	@Parameter(names = {
 		"-t",
 		"--type"
-	}, required = true, description = "The type of index, such as spatial, or spatial-temporal")
+	}, required = true, description = "The type of index, such as spatial, or spatial_temporal")
 	private String type;
 
 	@ParametersDelegate

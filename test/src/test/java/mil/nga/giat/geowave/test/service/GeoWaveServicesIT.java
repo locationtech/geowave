@@ -17,6 +17,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloStoreFactoryFamily;
 import mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloRequiredOptions;
@@ -58,6 +59,7 @@ public class GeoWaveServicesIT extends
 	public void testServices()
 			throws IOException,
 			SchemaException {
+
 		// initialize the service clients
 		geoserverServiceClient = new GeoserverServiceClient(
 				GEOWAVE_BASE_URL);
@@ -74,16 +76,19 @@ public class GeoWaveServicesIT extends
 
 		// ingest data using the local ingest service
 		LOGGER.info("Ingesting data using the local ingest service.");
+
 		success = ingestServiceClient.localIngest(
 				new File[] {
 					new File(
 							ASHLAND_GPX_FILE)
 				},
+				ACCUMULO_STORE_NAME,
 				TEST_NAMESPACE,
 				null,
 				ASHLAND_INGEST_TYPE,
 				null,
 				false);
+
 		assertTrue(
 				"Unable to ingest '" + ASHLAND_GPX_FILE + "'",
 				success);
@@ -106,6 +111,7 @@ public class GeoWaveServicesIT extends
 					new File(
 							ASHLAND_GPX_FILE)
 				},
+				ACCUMULO_STORE_NAME,
 				TEST_NAMESPACE,
 				null,
 				ASHLAND_INGEST_TYPE,
@@ -140,17 +146,18 @@ public class GeoWaveServicesIT extends
 		final JSONArray indices = infoServiceClient.getIndices(
 				TEST_NAMESPACE).getJSONArray(
 				"indices");
+		final String expectedIndex = new SpatialDimensionalityTypeProvider().getDimensionalityTypeName();
 		for (int i = 0; i < indices.size(); i++) {
 			if (indices.getJSONObject(
 					i).getString(
 					"name").equals(
-					DEFAULT_SPATIAL_INDEX.getId().getString())) {
+					expectedIndex)) {
 				success = true;
 				break;
 			}
 		}
 		assertTrue(
-				"Unable to find index '" + DEFAULT_SPATIAL_INDEX.getId().getString() + "'",
+				"Unable to find index '" + expectedIndex + "'",
 				success);
 		success = false;
 

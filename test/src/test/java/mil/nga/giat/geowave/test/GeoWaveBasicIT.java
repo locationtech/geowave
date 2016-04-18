@@ -533,6 +533,7 @@ public class GeoWaveBasicIT extends
 							exportDir,
 							adapter.getAdapterId().getString() + TEST_BASE_EXPORT_FILE_NAME));
 					options.setCqlFilter(cqlPredicate);
+					exportCommand.setParameters(null);
 					exportCommand.execute(new ManualOperationParams());
 				}
 			}
@@ -581,15 +582,18 @@ public class GeoWaveBasicIT extends
 		System.getProperties().put(
 				"AccumuloIndexWriter.skipFlush",
 				"true");
+
 		// ingest both lines and points
 		testLocalIngest(
 				DimensionalityType.SPATIAL_TEMPORAL,
 				HAIL_SHAPEFILE_FILE,
 				1);
+
 		testLocalIngest(
 				DimensionalityType.SPATIAL_TEMPORAL,
 				TORNADO_TRACKS_SHAPEFILE_FILE,
 				1);
+
 		try {
 			testQuery(
 					new File(
@@ -614,6 +618,7 @@ public class GeoWaveBasicIT extends
 			}
 			Assert.fail("Error occurred while testing a bounding box and time range query of spatial temporal index: '" + e.getLocalizedMessage() + "'");
 		}
+
 		try {
 			testQuery(
 					new File(
@@ -661,6 +666,7 @@ public class GeoWaveBasicIT extends
 			}
 			Assert.fail("Error occurred while testing a bounding box stats on spatial temporal index: '" + e.getLocalizedMessage() + "'");
 		}
+
 		try {
 			testSpatialTemporalLocalExportAndReingestWithCQL(new File(
 					TEST_BOX_TEMPORAL_FILTER_FILE).toURI().toURL());
@@ -696,6 +702,7 @@ public class GeoWaveBasicIT extends
 			}
 			Assert.fail("Error occurred while testing deletion of an entry using spatial temporal index: '" + e.getLocalizedMessage() + "'");
 		}
+
 		try {
 			accumuloOperations.deleteAll();
 		}

@@ -1,7 +1,9 @@
 package mil.nga.giat.geowave.test.mapreduce;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.hadoop.conf.Configuration;
@@ -13,6 +15,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
 import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
+import mil.nga.giat.geowave.core.ingest.operations.LocalToMapReduceToGeowaveCommand;
 import mil.nga.giat.geowave.core.ingest.operations.MapReduceToGeowaveCommand;
 import mil.nga.giat.geowave.core.ingest.operations.options.IngestFormatPluginOptions;
 import mil.nga.giat.geowave.core.store.config.ConfigUtils;
@@ -54,20 +57,27 @@ abstract public class MapReduceTestEnvironment extends
 		String[] args = null;
 
 		// Indexes
-		IndexPluginOptions indexOption = new IndexPluginOptions();
-		indexOption.selectPlugin(dimensionalityType.getDimensionalityArg());
-
+		String[] indexTypes = dimensionalityType.getDimensionalityArg().split(
+				",");
+		List<IndexPluginOptions> indexOptions = new ArrayList<IndexPluginOptions>(
+				indexTypes.length);
+		for (String indexType : indexTypes) {
+			IndexPluginOptions indexOption = new IndexPluginOptions();
+			indexOption.selectPlugin(indexType);
+			indexOptions.add(indexOption);
+		}
 		// Ingest Formats
 		IngestFormatPluginOptions ingestFormatOptions = new IngestFormatPluginOptions();
 		ingestFormatOptions.selectPlugin(format);
 
-		MapReduceToGeowaveCommand mrGw = new MapReduceToGeowaveCommand();
+		LocalToMapReduceToGeowaveCommand mrGw = new LocalToMapReduceToGeowaveCommand();
 
-		mrGw.setInputIndexOptions(Arrays.asList(indexOption));
+		mrGw.setInputIndexOptions(indexOptions);
 		mrGw.setInputStoreOptions(getAccumuloStorePluginOptions());
 
 		mrGw.setPluginFormats(ingestFormatOptions);
 		mrGw.setParameters(
+				ingestFilePath,
 				hdfs,
 				hdfsBaseDirectory,
 				null,

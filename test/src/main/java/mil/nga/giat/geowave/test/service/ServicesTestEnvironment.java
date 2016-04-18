@@ -57,6 +57,7 @@ abstract public class ServicesTestEnvironment extends
 	protected static final String TEST_SLD_MINOR_SUBSAMPLE_FILE = TEST_STYLE_PATH + TEST_STYLE_NAME_MINOR_SUBSAMPLE + ".sld";
 	protected static final String TEST_SLD_MAJOR_SUBSAMPLE_FILE = TEST_STYLE_PATH + TEST_STYLE_NAME_MAJOR_SUBSAMPLE + ".sld";
 	protected static Server jettyServer;
+	protected static final String ACCUMULO_STORE_NAME = "accumulotest";
 
 	protected static void writeConfigFile(
 			final File configFile ) {
@@ -69,6 +70,13 @@ abstract public class ServicesTestEnvironment extends
 			writer.println("instance=" + accumuloInstance);
 			writer.println("user=" + accumuloUser);
 			writer.println("password=" + accumuloPassword);
+			writer.println("gwNamespace=" + TEST_NAMESPACE);
+			writer.println("store." + ACCUMULO_STORE_NAME + ".type=accumulo");
+			writer.println("store." + ACCUMULO_STORE_NAME + ".opts.zookeeper=" + zookeeper);
+			writer.println("store." + ACCUMULO_STORE_NAME + ".opts.instance=" + accumuloInstance);
+			writer.println("store." + ACCUMULO_STORE_NAME + ".opts.user=" + accumuloUser);
+			writer.println("store." + ACCUMULO_STORE_NAME + ".opts.password=" + accumuloPassword);
+			writer.println("store." + ACCUMULO_STORE_NAME + ".opts.gwNamespace=" + TEST_NAMESPACE);
 			writer.println("geoserver.url=" + JETTY_BASE_URL);
 			writer.println("geoserver.username=" + GEOSERVER_USER);
 			writer.println("geoserver.password=" + GEOSERVER_PASS);

@@ -54,6 +54,7 @@ public class DimensionalityTypeRegistry
 			final String dimensionalityType ) {
 		if (registeredDimensionalityTypes == null) {
 			initDimensionalityTypeRegistry();
+
 		}
 
 		return registeredDimensionalityTypes.get(dimensionalityType);
