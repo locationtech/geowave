@@ -9,6 +9,8 @@ import java.util.Map.Entry;
 
 import mil.nga.giat.geowave.core.index.Persistable;
 import mil.nga.giat.geowave.core.index.PersistenceUtils;
+import mil.nga.giat.geowave.core.index.StringUtils;
+import mil.nga.giat.geowave.core.store.memory.EntryRowID;
 
 import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.Value;
@@ -132,15 +134,48 @@ public class PersistentDataFormatter implements
 			Entry<Key, Value> entry,
 			DateFormat timestampFormat ) {
 		StringBuilder sb = new StringBuilder();
+		StringBuilder sbInsertion = new StringBuilder();
 
 		Key key = entry.getKey();
+		
+		EntryRowID rowId = new EntryRowID(key.getRow().getBytes());
+		
+		byte[] insertionIdBytes;
+		insertionIdBytes = rowId.getInsertionId();
+		
+		for(byte b:insertionIdBytes) {
+			sbInsertion.append(String.format("%02x", b));
+		}
+		
+		Text insertionIdText = new Text(sbInsertion.toString());
+		Text adapterIdText = new Text(StringUtils.stringFromBinary(rowId.getAdapterId()));
+		Text dataIdText = new Text(StringUtils.stringFromBinary(rowId.getDataId()));
+		Text duplicatesText = new Text(Integer.toString(rowId.getNumberOfDuplicates()));
 
-		// append row
+		// append insertion Id
 		appendText(
 				sb,
-				key.getRow()).append(
-				" ");
-
+				insertionIdText).append(
+						" ");
+		
+		// append adapterId
+		appendText(
+				sb,
+				adapterIdText).append(
+						" ");
+		
+		// append dataId
+		appendText(
+				sb,
+				dataIdText).append(
+						" ");
+		
+		// append numberOfDuplicates
+		appendText(
+				sb,
+				duplicatesText).append(
+						" ");
+		
 		// append column family
 		appendText(
 				sb,
