@@ -66,7 +66,10 @@ public class TranslationEntry
 	}
 
 	public boolean isPassword() {
-		if (getParam().getWrappedParameter() != null) {
+		if (getParam().getParameter() != null) {
+			return getParam().getParameter().password();
+		}
+		else if (getParam().getWrappedParameter() != null) {
 			return getParam().getWrappedParameter().password();
 		}
 		return false;

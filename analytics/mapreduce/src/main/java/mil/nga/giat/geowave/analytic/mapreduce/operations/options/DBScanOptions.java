@@ -3,17 +3,15 @@ package mil.nga.giat.geowave.analytic.mapreduce.operations.options;
 import com.beust.jcommander.Parameter;
 
 import mil.nga.giat.geowave.analytic.param.ClusteringParameters;
-import mil.nga.giat.geowave.analytic.param.ExtractParameters;
 import mil.nga.giat.geowave.analytic.param.GlobalParameters;
 import mil.nga.giat.geowave.analytic.param.HullParameters;
-import mil.nga.giat.geowave.analytic.param.InputParameters;
+import mil.nga.giat.geowave.analytic.param.MapReduceParameters;
 import mil.nga.giat.geowave.analytic.param.OutputParameters;
 import mil.nga.giat.geowave.analytic.param.PartitionParameters;
 import mil.nga.giat.geowave.analytic.param.annotations.ClusteringParameter;
-import mil.nga.giat.geowave.analytic.param.annotations.ExtractParameter;
 import mil.nga.giat.geowave.analytic.param.annotations.GlobalParameter;
 import mil.nga.giat.geowave.analytic.param.annotations.HullParameter;
-import mil.nga.giat.geowave.analytic.param.annotations.InputParameter;
+import mil.nga.giat.geowave.analytic.param.annotations.MapReduceParameter;
 import mil.nga.giat.geowave.analytic.param.annotations.OutputParameter;
 import mil.nga.giat.geowave.analytic.param.annotations.PartitionParameter;
 
@@ -26,6 +24,13 @@ public class DBScanOptions
 		"--clusteringDistanceThresholds"
 	}, description = "Comma separated list of distance thresholds, per dimension")
 	private String clusteringDistanceThresholds;
+
+	@ClusteringParameter(ClusteringParameters.Clustering.GEOMETRIC_DISTANCE_UNIT)
+	@Parameter(names = {
+		"-du",
+		"--clusteringGeometricDistanceUnit"
+	}, description = "Geometric distance unit (m=meters,km=kilometers, see symbols for javax.units.BaseUnit)")
+	private String clusteringGeometricDistanceUnit;
 
 	@ClusteringParameter(ClusteringParameters.Clustering.MAX_ITERATIONS)
 	@Parameter(names = {
@@ -41,26 +46,12 @@ public class DBScanOptions
 	}, description = "Minimum Cluster Size")
 	private String clusteringMinimumSize;
 
-	@ExtractParameter(ExtractParameters.Extract.QUERY_OPTIONS)
-	@Parameter(names = {
-		"-eqf",
-		"--extractQueryOptions"
-	}, description = "Restricted extracted field list (comma-separated list of field ids)")
-	private String extractQueryOptions;
-
 	@GlobalParameter(GlobalParameters.Global.BATCH_ID)
 	@Parameter(names = {
 		"-b",
 		"--globalBatchId"
 	}, description = "Batch ID")
 	private String globalBatchId;
-
-	@HullParameter(HullParameters.Hull.DATA_NAMESPACE_URI)
-	@Parameter(names = {
-		"-hns",
-		"--hullDataNamespaceUri"
-	}, description = "Data Type Namespace for a centroid item")
-	private String hullDataNamespaceUri;
 
 	@HullParameter(HullParameters.Hull.DATA_TYPE_ID)
 	@Parameter(names = {
@@ -69,19 +60,12 @@ public class DBScanOptions
 	}, description = "Data Type ID for a centroid item")
 	private String hullDataTypeId;
 
-	@HullParameter(HullParameters.Hull.INDEX_ID)
+	@HullParameter(HullParameters.Hull.HULL_BUILDER)
 	@Parameter(names = {
-		"-hid",
-		"--hullIndexId"
-	}, description = "Index Identifier for Centroids")
-	private String hullIndexId;
-
-	@HullParameter(HullParameters.Hull.ITERATION)
-	@Parameter(names = {
-		"-hi",
-		"--hullIteration"
-	}, description = "The iteration of the hull calculation")
-	private String hullIteration;
+		"-hhb",
+		"--hullHullBuilder"
+	}, description = "Hull Builder")
+	private String hullHullBuilder;
 
 	@HullParameter(HullParameters.Hull.PROJECTION_CLASS)
 	@Parameter(names = {
@@ -90,19 +74,47 @@ public class DBScanOptions
 	}, description = "Class to project on to 2D space. Implements mil.nga.giat.geowave.analytics.tools.Projection")
 	private String hullProjectionClass;
 
-	@HullParameter(HullParameters.Hull.ZOOM_LEVEL)
+	@MapReduceParameter(MapReduceParameters.MRConfig.CONFIG_FILE)
 	@Parameter(names = {
-		"-hzl",
-		"--hullZoomLevel"
-	}, description = "Zoom Level Number")
-	private String hullZoomLevel;
+		"-conf",
+		"--mapReduceConfigFile"
+	}, description = "MapReduce Configuration")
+	private String mapReduceConfigFile;
 
-	@InputParameter(InputParameters.Input.HDFS_INPUT_PATH)
+	@MapReduceParameter(MapReduceParameters.MRConfig.HDFS_BASE_DIR)
 	@Parameter(names = {
-		"-iip",
-		"--inputHdfsInputPath"
-	}, description = "Input HDFS File Path")
-	private String inputHdfsInputPath;
+		"-hdfsbase",
+		"--mapReduceHdfsBaseDir"
+	}, description = "Fully qualified path to the base directory in hdfs")
+	private String mapReduceHdfsBaseDir;
+
+	@MapReduceParameter(MapReduceParameters.MRConfig.HDFS_HOST_PORT)
+	@Parameter(names = {
+		"-hdfs",
+		"--mapReduceHdfsHostPort"
+	}, description = "HDFS hostname and port in the format hostname:port")
+	private String mapReduceHdfsHostPort;
+
+	@MapReduceParameter(MapReduceParameters.MRConfig.JOBTRACKER_HOST_PORT)
+	@Parameter(names = {
+		"-jobtracker",
+		"--mapReduceJobtrackerHostPort"
+	}, description = "Hadoop job tracker hostname and port in the format hostname:port")
+	private String mapReduceJobtrackerHostPort;
+
+	@MapReduceParameter(MapReduceParameters.MRConfig.YARN_RESOURCE_MANAGER)
+	@Parameter(names = {
+		"-resourceman",
+		"--mapReduceYarnResourceManager"
+	}, description = "Yarn resource manager hostname and port in the format hostname:port")
+	private String mapReduceYarnResourceManager;
+
+	@OutputParameter(OutputParameters.Output.DATA_NAMESPACE_URI)
+	@Parameter(names = {
+		"-ons",
+		"--outputDataNamespaceUri"
+	}, description = "Output namespace for objects that will be written to GeoWave")
+	private String outputDataNamespaceUri;
 
 	@OutputParameter(OutputParameters.Output.DATA_TYPE_ID)
 	@Parameter(names = {
@@ -169,6 +181,15 @@ public class DBScanOptions
 		this.clusteringDistanceThresholds = clusteringDistanceThresholds;
 	}
 
+	public String getClusteringGeometricDistanceUnit() {
+		return clusteringGeometricDistanceUnit;
+	}
+
+	public void setClusteringGeometricDistanceUnit(
+			String clusteringGeometricDistanceUnit ) {
+		this.clusteringGeometricDistanceUnit = clusteringGeometricDistanceUnit;
+	}
+
 	public String getClusteringMaxIterations() {
 		return clusteringMaxIterations;
 	}
@@ -187,15 +208,6 @@ public class DBScanOptions
 		this.clusteringMinimumSize = clusteringMinimumSize;
 	}
 
-	public String getExtractQueryOptions() {
-		return extractQueryOptions;
-	}
-
-	public void setExtractQueryOptions(
-			String extractQueryOptions ) {
-		this.extractQueryOptions = extractQueryOptions;
-	}
-
 	public String getGlobalBatchId() {
 		return globalBatchId;
 	}
@@ -203,15 +215,6 @@ public class DBScanOptions
 	public void setGlobalBatchId(
 			String globalBatchId ) {
 		this.globalBatchId = globalBatchId;
-	}
-
-	public String getHullDataNamespaceUri() {
-		return hullDataNamespaceUri;
-	}
-
-	public void setHullDataNamespaceUri(
-			String hullDataNamespaceUri ) {
-		this.hullDataNamespaceUri = hullDataNamespaceUri;
 	}
 
 	public String getHullDataTypeId() {
@@ -223,22 +226,13 @@ public class DBScanOptions
 		this.hullDataTypeId = hullDataTypeId;
 	}
 
-	public String getHullIndexId() {
-		return hullIndexId;
+	public String getHullHullBuilder() {
+		return hullHullBuilder;
 	}
 
-	public void setHullIndexId(
-			String hullIndexId ) {
-		this.hullIndexId = hullIndexId;
-	}
-
-	public String getHullIteration() {
-		return hullIteration;
-	}
-
-	public void setHullIteration(
-			String hullIteration ) {
-		this.hullIteration = hullIteration;
+	public void setHullHullBuilder(
+			String hullHullBuilder ) {
+		this.hullHullBuilder = hullHullBuilder;
 	}
 
 	public String getHullProjectionClass() {
@@ -250,22 +244,58 @@ public class DBScanOptions
 		this.hullProjectionClass = hullProjectionClass;
 	}
 
-	public String getHullZoomLevel() {
-		return hullZoomLevel;
+	public String getMapReduceConfigFile() {
+		return mapReduceConfigFile;
 	}
 
-	public void setHullZoomLevel(
-			String hullZoomLevel ) {
-		this.hullZoomLevel = hullZoomLevel;
+	public void setMapReduceConfigFile(
+			String mapReduceConfigFile ) {
+		this.mapReduceConfigFile = mapReduceConfigFile;
 	}
 
-	public String getInputHdfsInputPath() {
-		return inputHdfsInputPath;
+	public String getMapReduceHdfsBaseDir() {
+		return mapReduceHdfsBaseDir;
 	}
 
-	public void setInputHdfsInputPath(
-			String inputHdfsInputPath ) {
-		this.inputHdfsInputPath = inputHdfsInputPath;
+	public void setMapReduceHdfsBaseDir(
+			String mapReduceHdfsBaseDir ) {
+		this.mapReduceHdfsBaseDir = mapReduceHdfsBaseDir;
+	}
+
+	public String getMapReduceHdfsHostPort() {
+		return mapReduceHdfsHostPort;
+	}
+
+	public void setMapReduceHdfsHostPort(
+			String mapReduceHdfsHostPort ) {
+		this.mapReduceHdfsHostPort = mapReduceHdfsHostPort;
+	}
+
+	public String getMapReduceJobtrackerHostPort() {
+		return mapReduceJobtrackerHostPort;
+	}
+
+	public void setMapReduceJobtrackerHostPort(
+			String mapReduceJobtrackerHostPort ) {
+		this.mapReduceJobtrackerHostPort = mapReduceJobtrackerHostPort;
+	}
+
+	public String getMapReduceYarnResourceManager() {
+		return mapReduceYarnResourceManager;
+	}
+
+	public void setMapReduceYarnResourceManager(
+			String mapReduceYarnResourceManager ) {
+		this.mapReduceYarnResourceManager = mapReduceYarnResourceManager;
+	}
+
+	public String getOutputDataNamespaceUri() {
+		return outputDataNamespaceUri;
+	}
+
+	public void setOutputDataNamespaceUri(
+			String outputDataNamespaceUri ) {
+		this.outputDataNamespaceUri = outputDataNamespaceUri;
 	}
 
 	public String getOutputDataTypeId() {

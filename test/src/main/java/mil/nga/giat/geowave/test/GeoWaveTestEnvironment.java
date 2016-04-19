@@ -150,7 +150,7 @@ abstract public class GeoWaveTestEnvironment
 		LocalToGeowaveCommand localIngester = new LocalToGeowaveCommand();
 		localIngester.setPluginFormats(ingestFormatOptions);
 		localIngester.setInputIndexOptions(Arrays.asList(indexOption));
-		localIngester.setInputStoreOptions(getAccumuloStorePluginOptions());
+		localIngester.setInputStoreOptions(getAccumuloStorePluginOptions(TEST_NAMESPACE));
 		localIngester.setParameters(
 				ingestFilePath,
 				null,
@@ -162,10 +162,11 @@ abstract public class GeoWaveTestEnvironment
 
 	}
 
-	protected DataStorePluginOptions getAccumuloStorePluginOptions() {
+	protected static DataStorePluginOptions getAccumuloStorePluginOptions(
+			String namespace ) {
 		DataStorePluginOptions pluginOptions = new DataStorePluginOptions();
 		AccumuloRequiredOptions opts = new AccumuloRequiredOptions();
-		opts.setGeowaveNamespace(TEST_NAMESPACE);
+		opts.setGeowaveNamespace(namespace);
 		opts.setUser(accumuloUser);
 		opts.setPassword(accumuloPassword);
 		opts.setInstance(accumuloInstance);
@@ -177,7 +178,7 @@ abstract public class GeoWaveTestEnvironment
 
 	private void verifyStats() {
 		ListStatsCommand listStats = new ListStatsCommand();
-		listStats.setInputStoreOptions(getAccumuloStorePluginOptions());
+		listStats.setInputStoreOptions(getAccumuloStorePluginOptions(TEST_NAMESPACE));
 		listStats.setParameters(
 				null,
 				null);

@@ -1,9 +1,5 @@
 package mil.nga.giat.geowave.core.cli;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,19 +42,15 @@ public class GeoWaveMain
 
 		// Log error to console if any.
 		if (params.getSuccessCode() != 0) {
-			doHelp(
-					parser,
-					args);
-			LOGGER.error(
+			doHelp(params);
+			LOGGER.debug(
 					params.getSuccessMessage(),
 					params.getSuccessException());
 			JCommander.getConsole().println(
-					params.getSuccessMessage());
+					"\n" + params.getSuccessMessage());
 		}
 		else if (!params.isCommandPresent()) {
-			doHelp(
-					parser,
-					args);
+			doHelp(params);
 		}
 
 		System.exit(params.getSuccessCode());
@@ -122,26 +114,8 @@ public class GeoWaveMain
 	 * This function will show options for the given operation/section.
 	 */
 	private static void doHelp(
-			OperationParser parser,
-			String[] args ) {
-		// Re-run with the 'help' command inserted.
-		OperationEntry helpCommand = parser.getRegistry().getOperation(
-				HelpCommand.class);
-		List<String> newArgs = new ArrayList<String>(
-				Arrays.asList(args));
-		newArgs.add(
-				0,
-				helpCommand.getOperationName());
-		CommandLineOperationParams params = parser.parse(
-				GeowaveTopLevelSection.class,
-				newArgs.toArray(new String[0]));
-		if (params.getSuccessCode() == 0) {
-			run(params);
-		}
-		else {
-			throw new RuntimeException(
-					"Exception while processing help: " + params.getSuccessMessage(),
-					params.getSuccessException());
-		}
+			CommandLineOperationParams params ) {
+		HelpCommand command = new HelpCommand();
+		command.execute(params);
 	}
 }

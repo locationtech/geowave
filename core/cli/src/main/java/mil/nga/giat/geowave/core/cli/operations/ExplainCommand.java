@@ -1,6 +1,8 @@
 package mil.nga.giat.geowave.core.cli.operations;
 
 import java.util.List;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -50,8 +52,17 @@ public class ExplainCommand implements
 		builder.append("\n");
 		builder.append("----------------------------------------------\n");
 
+		// Sort first
+		SortedMap<String, ParameterDescription> parameterDescs = new TreeMap<String, ParameterDescription>();
 		List<ParameterDescription> parameters = params.getCommander().getParameters();
 		for (ParameterDescription pd : parameters) {
+			parameterDescs.put(
+					pd.getLongestName(),
+					pd);
+		}
+
+		// Then output
+		for (ParameterDescription pd : parameterDescs.values()) {
 
 			Object value = null;
 			try {

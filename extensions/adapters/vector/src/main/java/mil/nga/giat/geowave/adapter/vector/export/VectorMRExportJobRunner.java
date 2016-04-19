@@ -41,18 +41,23 @@ public class VectorMRExportJobRunner extends
 		Configured implements
 		Tool
 {
-	// TODO annotate appropriately when new commandline tools is merged
 	private static final Logger LOGGER = Logger.getLogger(VectorMRExportCommand.class);
 
 	public static final String BATCH_SIZE_KEY = "BATCH_SIZE";
 	private final DataStorePluginOptions storeOptions;
 	private final VectorMRExportOptions mrOptions;
+	private final String hdfsHostPort;
+	private final String hdfsPath;
 
 	public VectorMRExportJobRunner(
 			DataStorePluginOptions storeOptions,
-			VectorMRExportOptions mrOptions ) {
+			VectorMRExportOptions mrOptions,
+			String hdfsHostPort,
+			String hdfsPath ) {
 		this.storeOptions = storeOptions;
 		this.mrOptions = mrOptions;
+		this.hdfsHostPort = hdfsHostPort;
+		this.hdfsPath = hdfsPath;
 	}
 
 	/**
@@ -66,7 +71,7 @@ public class VectorMRExportJobRunner extends
 			setConf(conf);
 		}
 		GeoWaveConfiguratorBase.setRemoteInvocationParams(
-				mrOptions.getHdfsHostPort(),
+				hdfsHostPort,
 				mrOptions.getResourceManagerHostPort(),
 				conf);
 		final QueryOptions options = new QueryOptions();
@@ -140,8 +145,6 @@ public class VectorMRExportJobRunner extends
 							mrOptions.getCqlFilter(),
 							(GeotoolsFeatureDataAdapter) adapter));
 		}
-		// TODO set data store appropriately for input format
-
 		GeoWaveInputFormat.setDataStoreName(
 				conf,
 				storeOptions.getType());
@@ -158,14 +161,14 @@ public class VectorMRExportJobRunner extends
 
 		job.setJarByClass(this.getClass());
 
-		job.setJobName("Exporting to " + mrOptions.getHdfsOutputDirectory());
+		job.setJobName("Exporting to " + hdfsPath);
 		FileOutputFormat.setCompressOutput(
 				job,
 				true);
 		FileOutputFormat.setOutputPath(
 				job,
 				new Path(
-						mrOptions.getHdfsOutputDirectory()));
+						hdfsPath));
 		job.setMapperClass(VectorExportMapper.class);
 		job.setInputFormatClass(GeoWaveInputFormat.class);
 		job.setOutputFormatClass(AvroKeyOutputFormat.class);

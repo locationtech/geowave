@@ -88,7 +88,7 @@ abstract public class KafkaTestEnvironment<I> extends
 		KafkaToGeowaveCommand kafkaToGeowave = new KafkaToGeowaveCommand();
 		kafkaToGeowave.setPluginFormats(ingestFormatOptions);
 		kafkaToGeowave.setInputIndexOptions(Arrays.asList(indexOption));
-		kafkaToGeowave.setInputStoreOptions(getAccumuloStorePluginOptions());
+		kafkaToGeowave.setInputStoreOptions(getAccumuloStorePluginOptions(TEST_NAMESPACE));
 		kafkaToGeowave.getKafkaOptions().setBatchSize(
 				1);
 		kafkaToGeowave.getKafkaOptions().setConsumerTimeoutMs(

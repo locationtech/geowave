@@ -4,17 +4,19 @@ import com.beust.jcommander.Parameter;
 
 import mil.nga.giat.geowave.analytic.param.CentroidParameters;
 import mil.nga.giat.geowave.analytic.param.ClusteringParameters;
+import mil.nga.giat.geowave.analytic.param.CommonParameters;
 import mil.nga.giat.geowave.analytic.param.ExtractParameters;
 import mil.nga.giat.geowave.analytic.param.GlobalParameters;
 import mil.nga.giat.geowave.analytic.param.HullParameters;
-import mil.nga.giat.geowave.analytic.param.InputParameters;
+import mil.nga.giat.geowave.analytic.param.MapReduceParameters;
 import mil.nga.giat.geowave.analytic.param.SampleParameters;
 import mil.nga.giat.geowave.analytic.param.annotations.CentroidParameter;
 import mil.nga.giat.geowave.analytic.param.annotations.ClusteringParameter;
+import mil.nga.giat.geowave.analytic.param.annotations.CommonParameter;
 import mil.nga.giat.geowave.analytic.param.annotations.ExtractParameter;
 import mil.nga.giat.geowave.analytic.param.annotations.GlobalParameter;
 import mil.nga.giat.geowave.analytic.param.annotations.HullParameter;
-import mil.nga.giat.geowave.analytic.param.annotations.InputParameter;
+import mil.nga.giat.geowave.analytic.param.annotations.MapReduceParameter;
 import mil.nga.giat.geowave.analytic.param.annotations.SampleParameter;
 
 public class KMeansCommonOptions
@@ -25,6 +27,13 @@ public class KMeansCommonOptions
 		"--centroidExtractorClass"
 	}, description = "Centroid Exractor Class implements mil.nga.giat.geowave.analytics.extract.CentroidExtractor")
 	private String centroidExtractorClass;
+
+	@CentroidParameter(CentroidParameters.Centroid.INDEX_ID)
+	@Parameter(names = {
+		"-cid",
+		"--centroidIndexId"
+	}, description = "Index Identifier for Centroids")
+	private String centroidIndexId;
 
 	@CentroidParameter(CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS)
 	@Parameter(names = {
@@ -61,19 +70,19 @@ public class KMeansCommonOptions
 	}, description = "Maximum Clustering Reducer Count")
 	private String clusteringMaxReducerCount;
 
-	@ClusteringParameter(ClusteringParameters.Clustering.RETAIN_GROUP_ASSIGNMENTS)
-	@Parameter(names = {
-		"-ga",
-		"--clusteringRetainGroupAssignments"
-	}, description = "Retain Group assignments during execution")
-	private String clusteringRetainGroupAssignments;
-
 	@ClusteringParameter(ClusteringParameters.Clustering.ZOOM_LEVELS)
 	@Parameter(names = {
 		"-zl",
 		"--clusteringZoomLevels"
 	}, description = "Number of Zoom Levels to Process")
 	private String clusteringZoomLevels;
+
+	@CommonParameter(CommonParameters.Common.DIMENSION_EXTRACT_CLASS)
+	@Parameter(names = {
+		"-dde",
+		"--commonDimensionExtractClass"
+	}, description = "Dimension Extractor Class implements mil.nga.giat.geowave.analytics.extract.DimensionExtractor")
+	private String commonDimensionExtractClass;
 
 	@ExtractParameter(ExtractParameters.Extract.DATA_NAMESPACE_URI)
 	@Parameter(names = {
@@ -88,13 +97,6 @@ public class KMeansCommonOptions
 		"--extractDimensionExtractClass"
 	}, description = "Class to extract dimensions into a simple feature output")
 	private String extractDimensionExtractClass;
-
-	@ExtractParameter(ExtractParameters.Extract.GROUP_ID)
-	@Parameter(names = {
-		"-eg",
-		"--extractGroupId"
-	}, description = "Group ID assigned to extracted data")
-	private String extractGroupId;
 
 	@ExtractParameter(ExtractParameters.Extract.OUTPUT_DATA_TYPE_ID)
 	@Parameter(names = {
@@ -166,26 +168,40 @@ public class KMeansCommonOptions
 	}, description = "Class to create analytic item to capture hulls. Implements mil.nga.giat.geowave.analytics.tools.AnalyticItemWrapperFactory")
 	private String hullWrapperFactoryClass;
 
-	@InputParameter(InputParameters.Input.HDFS_INPUT_PATH)
+	@MapReduceParameter(MapReduceParameters.MRConfig.CONFIG_FILE)
 	@Parameter(names = {
-		"-iip",
-		"--inputHdfsInputPath"
-	}, description = "Input HDFS File Path")
-	private String inputHdfsInputPath;
+		"-conf",
+		"--mapReduceConfigFile"
+	}, description = "MapReduce Configuration")
+	private String mapReduceConfigFile;
 
-	@SampleParameter(SampleParameters.Sample.DATA_TYPE_ID)
+	@MapReduceParameter(MapReduceParameters.MRConfig.HDFS_BASE_DIR)
 	@Parameter(names = {
-		"-sdt",
-		"--sampleDataTypeId"
-	}, description = "Sample Data Type Id")
-	private String sampleDataTypeId;
+		"-hdfsbase",
+		"--mapReduceHdfsBaseDir"
+	}, description = "Fully qualified path to the base directory in hdfs")
+	private String mapReduceHdfsBaseDir;
 
-	@SampleParameter(SampleParameters.Sample.INDEX_ID)
+	@MapReduceParameter(MapReduceParameters.MRConfig.HDFS_HOST_PORT)
 	@Parameter(names = {
-		"-sid",
-		"--sampleIndexId"
-	}, description = "Sample Index Type Id")
-	private String sampleIndexId;
+		"-hdfs",
+		"--mapReduceHdfsHostPort"
+	}, description = "HDFS hostname and port in the format hostname:port")
+	private String mapReduceHdfsHostPort;
+
+	@MapReduceParameter(MapReduceParameters.MRConfig.JOBTRACKER_HOST_PORT)
+	@Parameter(names = {
+		"-jobtracker",
+		"--mapReduceJobtrackerHostPort"
+	}, description = "Hadoop job tracker hostname and port in the format hostname:port")
+	private String mapReduceJobtrackerHostPort;
+
+	@MapReduceParameter(MapReduceParameters.MRConfig.YARN_RESOURCE_MANAGER)
+	@Parameter(names = {
+		"-resourceman",
+		"--mapReduceYarnResourceManager"
+	}, description = "Yarn resource manager hostname and port in the format hostname:port")
+	private String mapReduceYarnResourceManager;
 
 	@SampleParameter(SampleParameters.Sample.MAX_SAMPLE_SIZE)
 	@Parameter(names = {
@@ -201,33 +217,12 @@ public class KMeansCommonOptions
 	}, description = "Minimum Sample Size")
 	private String sampleMinSampleSize;
 
-	@SampleParameter(SampleParameters.Sample.PROBABILITY_FUNCTION)
-	@Parameter(names = {
-		"-spf",
-		"--sampleProbabilityFunction"
-	}, description = "The PDF determines the probability for samping an item. Used by specific sample rank functions, such as CentroidDistanceBasedSamplingRankFunction.")
-	private String sampleProbabilityFunction;
-
 	@SampleParameter(SampleParameters.Sample.SAMPLE_ITERATIONS)
 	@Parameter(names = {
 		"-ssi",
 		"--sampleSampleIterations"
 	}, description = "Minimum number of sample iterations")
 	private String sampleSampleIterations;
-
-	@SampleParameter(SampleParameters.Sample.SAMPLE_RANK_FUNCTION)
-	@Parameter(names = {
-		"-srf",
-		"--sampleSampleRankFunction"
-	}, description = "The rank function used when sampling the first N highest rank items.")
-	private String sampleSampleRankFunction;
-
-	@SampleParameter(SampleParameters.Sample.SAMPLE_SIZE)
-	@Parameter(names = {
-		"-sss",
-		"--sampleSampleSize"
-	}, description = "Sample Size")
-	private String sampleSampleSize;
 
 	public String getCentroidExtractorClass() {
 		return centroidExtractorClass;
@@ -236,6 +231,15 @@ public class KMeansCommonOptions
 	public void setCentroidExtractorClass(
 			String centroidExtractorClass ) {
 		this.centroidExtractorClass = centroidExtractorClass;
+	}
+
+	public String getCentroidIndexId() {
+		return centroidIndexId;
+	}
+
+	public void setCentroidIndexId(
+			String centroidIndexId ) {
+		this.centroidIndexId = centroidIndexId;
 	}
 
 	public String getCentroidWrapperFactoryClass() {
@@ -283,15 +287,6 @@ public class KMeansCommonOptions
 		this.clusteringMaxReducerCount = clusteringMaxReducerCount;
 	}
 
-	public String getClusteringRetainGroupAssignments() {
-		return clusteringRetainGroupAssignments;
-	}
-
-	public void setClusteringRetainGroupAssignments(
-			String clusteringRetainGroupAssignments ) {
-		this.clusteringRetainGroupAssignments = clusteringRetainGroupAssignments;
-	}
-
 	public String getClusteringZoomLevels() {
 		return clusteringZoomLevels;
 	}
@@ -299,6 +294,15 @@ public class KMeansCommonOptions
 	public void setClusteringZoomLevels(
 			String clusteringZoomLevels ) {
 		this.clusteringZoomLevels = clusteringZoomLevels;
+	}
+
+	public String getCommonDimensionExtractClass() {
+		return commonDimensionExtractClass;
+	}
+
+	public void setCommonDimensionExtractClass(
+			String commonDimensionExtractClass ) {
+		this.commonDimensionExtractClass = commonDimensionExtractClass;
 	}
 
 	public String getExtractDataNamespaceUri() {
@@ -317,15 +321,6 @@ public class KMeansCommonOptions
 	public void setExtractDimensionExtractClass(
 			String extractDimensionExtractClass ) {
 		this.extractDimensionExtractClass = extractDimensionExtractClass;
-	}
-
-	public String getExtractGroupId() {
-		return extractGroupId;
-	}
-
-	public void setExtractGroupId(
-			String extractGroupId ) {
-		this.extractGroupId = extractGroupId;
 	}
 
 	public String getExtractOutputDataTypeId() {
@@ -418,31 +413,49 @@ public class KMeansCommonOptions
 		this.hullWrapperFactoryClass = hullWrapperFactoryClass;
 	}
 
-	public String getInputHdfsInputPath() {
-		return inputHdfsInputPath;
+	public String getMapReduceConfigFile() {
+		return mapReduceConfigFile;
 	}
 
-	public void setInputHdfsInputPath(
-			String inputHdfsInputPath ) {
-		this.inputHdfsInputPath = inputHdfsInputPath;
+	public void setMapReduceConfigFile(
+			String mapReduceConfigFile ) {
+		this.mapReduceConfigFile = mapReduceConfigFile;
 	}
 
-	public String getSampleDataTypeId() {
-		return sampleDataTypeId;
+	public String getMapReduceHdfsBaseDir() {
+		return mapReduceHdfsBaseDir;
 	}
 
-	public void setSampleDataTypeId(
-			String sampleDataTypeId ) {
-		this.sampleDataTypeId = sampleDataTypeId;
+	public void setMapReduceHdfsBaseDir(
+			String mapReduceHdfsBaseDir ) {
+		this.mapReduceHdfsBaseDir = mapReduceHdfsBaseDir;
 	}
 
-	public String getSampleIndexId() {
-		return sampleIndexId;
+	public String getMapReduceHdfsHostPort() {
+		return mapReduceHdfsHostPort;
 	}
 
-	public void setSampleIndexId(
-			String sampleIndexId ) {
-		this.sampleIndexId = sampleIndexId;
+	public void setMapReduceHdfsHostPort(
+			String mapReduceHdfsHostPort ) {
+		this.mapReduceHdfsHostPort = mapReduceHdfsHostPort;
+	}
+
+	public String getMapReduceJobtrackerHostPort() {
+		return mapReduceJobtrackerHostPort;
+	}
+
+	public void setMapReduceJobtrackerHostPort(
+			String mapReduceJobtrackerHostPort ) {
+		this.mapReduceJobtrackerHostPort = mapReduceJobtrackerHostPort;
+	}
+
+	public String getMapReduceYarnResourceManager() {
+		return mapReduceYarnResourceManager;
+	}
+
+	public void setMapReduceYarnResourceManager(
+			String mapReduceYarnResourceManager ) {
+		this.mapReduceYarnResourceManager = mapReduceYarnResourceManager;
 	}
 
 	public String getSampleMaxSampleSize() {
@@ -463,15 +476,6 @@ public class KMeansCommonOptions
 		this.sampleMinSampleSize = sampleMinSampleSize;
 	}
 
-	public String getSampleProbabilityFunction() {
-		return sampleProbabilityFunction;
-	}
-
-	public void setSampleProbabilityFunction(
-			String sampleProbabilityFunction ) {
-		this.sampleProbabilityFunction = sampleProbabilityFunction;
-	}
-
 	public String getSampleSampleIterations() {
 		return sampleSampleIterations;
 	}
@@ -479,23 +483,5 @@ public class KMeansCommonOptions
 	public void setSampleSampleIterations(
 			String sampleSampleIterations ) {
 		this.sampleSampleIterations = sampleSampleIterations;
-	}
-
-	public String getSampleSampleRankFunction() {
-		return sampleSampleRankFunction;
-	}
-
-	public void setSampleSampleRankFunction(
-			String sampleSampleRankFunction ) {
-		this.sampleSampleRankFunction = sampleSampleRankFunction;
-	}
-
-	public String getSampleSampleSize() {
-		return sampleSampleSize;
-	}
-
-	public void setSampleSampleSize(
-			String sampleSampleSize ) {
-		this.sampleSampleSize = sampleSampleSize;
 	}
 }

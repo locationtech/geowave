@@ -7,7 +7,7 @@ import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.operations.GeowaveTopLevelSection;
 
 @GeowaveOperation(name = "vector", parentOperation = GeowaveTopLevelSection.class)
-@Parameters(commandDescription = "TBD")
+@Parameters(commandDescription = "Export data from GeoWave to Avro files")
 public class VectorSection extends
 		DefaultOperation
 {

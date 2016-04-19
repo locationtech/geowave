@@ -73,12 +73,6 @@ public class JCommanderPrefixTranslator
 				ParseContext pc = queue.remove();
 				Object item = pc.getObject();
 
-				// Add to the translation map, so we can look up the prefix for
-				// specific object instances later
-				transMap.addObjectPrefix(
-						item,
-						pc.getPrefix());
-
 				// This is the JCommander class used to parse the object
 				// hierarchy for
 				// Parameter annotations. They kept it public ... so I used it.

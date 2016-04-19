@@ -15,6 +15,7 @@ import mil.nga.giat.geowave.core.index.simple.HashKeyIndexStrategy;
 import mil.nga.giat.geowave.core.index.simple.RoundRobinKeyIndexStrategy;
 import mil.nga.giat.geowave.core.store.index.CustomIdIndex;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.core.store.spi.DimensionalityTypeOptions;
 import mil.nga.giat.geowave.core.store.spi.DimensionalityTypeProviderSpi;
 import mil.nga.giat.geowave.core.store.spi.DimensionalityTypeRegistry;
 
@@ -51,7 +52,7 @@ public class IndexPluginOptions extends
 
 	// These are the options loaded from indexPlugin based on "type"
 	@ParametersDelegate
-	private Object indexOptions = null;
+	private DimensionalityTypeOptions indexOptions = null;
 
 	/**
 	 * Constructor

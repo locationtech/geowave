@@ -485,7 +485,7 @@ public class GeoWaveBasicIT extends
 				TEST_EXPORT_DIRECTORY);
 		exportDir.mkdir();
 
-		exportCommand.setInputStoreOptions(getAccumuloStorePluginOptions());
+		exportCommand.setInputStoreOptions(getAccumuloStorePluginOptions(TEST_NAMESPACE));
 		options.setBatchSize(10000);
 		final Envelope env = filterGeometry.getEnvelopeInternal();
 		final double east = env.getMaxX();

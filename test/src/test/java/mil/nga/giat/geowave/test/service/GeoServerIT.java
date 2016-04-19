@@ -47,6 +47,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import mil.nga.giat.geowave.core.store.config.ConfigUtils;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloStoreFactoryFamily;
 import mil.nga.giat.geowave.service.client.GeoserverServiceClient;
 
@@ -113,7 +114,7 @@ public class GeoServerIT extends
 		// enable wfs & wms
 		success &= enableWfs();
 		success &= enableWms();
-		final Map<String, String> configOptions = getAccumuloConfigOptions();
+		final Map<String, String> configOptions = ConfigUtils.populateListFromOptions(getAccumuloStorePluginOptions(null));
 		configOptions.put(
 				"gwNamespace",
 				TEST_NAMESPACE);

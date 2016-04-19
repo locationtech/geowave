@@ -3,11 +3,8 @@ package mil.nga.giat.geowave.core.cli.operations.config;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Enumeration;
 import java.util.List;
 import java.util.Properties;
-import java.util.Set;
-import java.util.TreeSet;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;

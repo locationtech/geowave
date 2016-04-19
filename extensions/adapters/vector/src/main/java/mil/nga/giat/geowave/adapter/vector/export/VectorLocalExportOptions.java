@@ -2,12 +2,13 @@ package mil.nga.giat.geowave.adapter.vector.export;
 
 import java.io.File;
 
+import com.beust.jcommander.Parameter;
+
 public class VectorLocalExportOptions extends
 		VectorExportOptions
 {
-	// TODO annotate appropriately when new commandline tools is merged
-	private File outputFile = new File(
-			"");
+	@Parameter(names = "--outputFile", required = true)
+	private File outputFile;
 
 	public File getOutputFile() {
 		return outputFile;

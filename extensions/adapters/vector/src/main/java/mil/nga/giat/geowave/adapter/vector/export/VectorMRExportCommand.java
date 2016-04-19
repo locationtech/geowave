@@ -18,13 +18,13 @@ import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePlugin
 import mil.nga.giat.geowave.core.store.operations.remote.options.StoreLoader;
 
 @GeowaveOperation(name = "mrexport", parentOperation = VectorSection.class)
-@Parameters(commandDescription = "")
+@Parameters(commandDescription = "Export data using map-reduce")
 public class VectorMRExportCommand extends
 		DefaultOperation implements
 		Command
 {
 
-	@Parameter(description = "<store name>")
+	@Parameter(description = "<hdfs host:port> <path to base directory to write to> <store name>")
 	private List<String> parameters = new ArrayList<String>();
 
 	@ParametersDelegate
@@ -43,12 +43,18 @@ public class VectorMRExportCommand extends
 	public VectorMRExportJobRunner createRunner(
 			OperationParams params ) {
 		// Ensure we have all the required arguments
-		if (parameters.size() != 1) {
+		if (parameters.size() != 3) {
 			throw new ParameterException(
-					"Requires arguments: <store name>");
+					"Requires arguments: <hdfs host:port> <path to base directory to write to> <store name>");
 		}
 
-		String storeName = parameters.get(0);
+		String hdfsHostPort = parameters.get(0);
+		String hdfsPath = parameters.get(1);
+		String storeName = parameters.get(2);
+
+		if (!hdfsHostPort.contains("://")) {
+			hdfsHostPort = "hdfs://" + hdfsHostPort;
+		}
 
 		// Config file
 		File configFile = (File) params.getContext().get(
@@ -67,7 +73,9 @@ public class VectorMRExportCommand extends
 
 		VectorMRExportJobRunner vectorRunner = new VectorMRExportJobRunner(
 				storeOptions,
-				mrOptions);
+				mrOptions,
+				hdfsHostPort,
+				hdfsPath);
 		return vectorRunner;
 	}
 
@@ -76,8 +84,12 @@ public class VectorMRExportCommand extends
 	}
 
 	public void setParameters(
+			String hdfsHostPort,
+			String hdfsPath,
 			String storeName ) {
 		this.parameters = new ArrayList<String>();
+		this.parameters.add(hdfsHostPort);
+		this.parameters.add(hdfsPath);
 		this.parameters.add(storeName);
 	}
 

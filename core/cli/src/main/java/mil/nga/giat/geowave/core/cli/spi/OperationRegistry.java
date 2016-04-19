@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.ServiceLoader;
 
@@ -18,10 +19,20 @@ import mil.nga.giat.geowave.core.cli.api.Operation;
 public class OperationRegistry
 {
 
-	private static Map<Class<?>, OperationEntry> operationMapByClass = null;
+	private Map<Class<?>, OperationEntry> operationMapByClass = null;
 
 	public OperationRegistry() {
 		init();
+	}
+
+	public OperationRegistry(
+			List<OperationEntry> entries ) {
+		operationMapByClass = new HashMap<Class<?>, OperationEntry>();
+		for (OperationEntry entry : entries) {
+			operationMapByClass.put(
+					entry.getOperationClass(),
+					entry);
+		}
 	}
 
 	private synchronized void init() {

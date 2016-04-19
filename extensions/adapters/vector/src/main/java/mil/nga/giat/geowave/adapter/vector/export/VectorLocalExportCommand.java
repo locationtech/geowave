@@ -42,7 +42,7 @@ import mil.nga.giat.geowave.core.store.query.Query;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 
 @GeowaveOperation(name = "localexport", parentOperation = VectorSection.class)
-@Parameters(commandDescription = "")
+@Parameters(commandDescription = "Export data directly")
 public class VectorLocalExportCommand extends
 		DefaultOperation implements
 		Command

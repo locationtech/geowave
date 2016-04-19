@@ -62,6 +62,10 @@ public class HelpCommand implements
 		// parameters as the Default parameters. It's also done so that we can
 		// parse prefix annotations and special delegate processing.
 		JCommanderPrefixTranslator translator = new JCommanderPrefixTranslator();
+		if (lastOperation == null) {
+			lastOperation = registry.getOperation(
+					GeowaveTopLevelSection.class).createInstance();
+		}
 		translator.addObject(lastOperation);
 		JCommanderTranslationMap map = translator.translate();
 		map.createFacadeObjects();

@@ -2,20 +2,20 @@ package mil.nga.giat.geowave.analytic.mapreduce.operations.options;
 
 import com.beust.jcommander.Parameter;
 
-import mil.nga.giat.geowave.analytic.param.ExtractParameters;
+import mil.nga.giat.geowave.analytic.param.OutputParameters;
 import mil.nga.giat.geowave.analytic.param.PartitionParameters;
-import mil.nga.giat.geowave.analytic.param.annotations.ExtractParameter;
+import mil.nga.giat.geowave.analytic.param.annotations.OutputParameter;
 import mil.nga.giat.geowave.analytic.param.annotations.PartitionParameter;
 
 public class NearestNeighborOptions
 {
 
-	@ExtractParameter(ExtractParameters.Extract.QUERY_OPTIONS)
+	@OutputParameter(OutputParameters.Output.HDFS_OUTPUT_PATH)
 	@Parameter(names = {
-		"-eqf",
-		"--extractQueryOptions"
-	}, description = "Restricted extracted field list (comma-separated list of field ids)")
-	private String extractQueryOptions;
+		"-oop",
+		"--outputHdfsOutputPath"
+	}, description = "Output HDFS File Path")
+	private String outputHdfsOutputPath;
 
 	@PartitionParameter(PartitionParameters.Partition.MAX_MEMBER_SELECTION)
 	@Parameter(names = {
@@ -38,13 +38,6 @@ public class NearestNeighborOptions
 	}, description = "Partition Distance")
 	private String partitionPartitionDistance;
 
-	@PartitionParameter(PartitionParameters.Partition.PARTITION_PRECISION)
-	@Parameter(names = {
-		"-pp",
-		"--partitionPartitionPrecision"
-	}, description = "Partition Precision")
-	private String partitionPartitionPrecision;
-
 	@PartitionParameter(PartitionParameters.Partition.SECONDARY_PARTITIONER_CLASS)
 	@Parameter(names = {
 		"-psp",
@@ -52,13 +45,13 @@ public class NearestNeighborOptions
 	}, description = "Perform secondary partitioning with the provided class")
 	private String partitionSecondaryPartitionerClass;
 
-	public String getExtractQueryOptions() {
-		return extractQueryOptions;
+	public String getOutputHdfsOutputPath() {
+		return outputHdfsOutputPath;
 	}
 
-	public void setExtractQueryOptions(
-			String extractQueryOptions ) {
-		this.extractQueryOptions = extractQueryOptions;
+	public void setOutputHdfsOutputPath(
+			String outputHdfsOutputPath ) {
+		this.outputHdfsOutputPath = outputHdfsOutputPath;
 	}
 
 	public String getPartitionMaxMemberSelection() {
@@ -86,15 +79,6 @@ public class NearestNeighborOptions
 	public void setPartitionPartitionDistance(
 			String partitionPartitionDistance ) {
 		this.partitionPartitionDistance = partitionPartitionDistance;
-	}
-
-	public String getPartitionPartitionPrecision() {
-		return partitionPartitionPrecision;
-	}
-
-	public void setPartitionPartitionPrecision(
-			String partitionPartitionPrecision ) {
-		this.partitionPartitionPrecision = partitionPartitionPrecision;
 	}
 
 	public String getPartitionSecondaryPartitionerClass() {

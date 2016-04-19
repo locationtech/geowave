@@ -1,13 +1,18 @@
 package mil.nga.giat.geowave.adapter.vector.export;
 
+import com.beust.jcommander.Parameter;
+
 public class VectorMRExportOptions extends
 		VectorExportOptions
 {
-	private String hdfsHostPort;
+	@Parameter(names = "--resourceManagerHostPort")
 	private String resourceManagerHostPort;
+
+	@Parameter(names = "--minSplits")
 	private int minSplits;
+
+	@Parameter(names = "--maxSplits")
 	private int maxSplits;
-	private String hdfsOutputDirectory;
 
 	public int getMinSplits() {
 		return minSplits;
@@ -17,21 +22,8 @@ public class VectorMRExportOptions extends
 		return maxSplits;
 	}
 
-	public String getHdfsOutputDirectory() {
-		return hdfsOutputDirectory;
-	}
-
-	public String getHdfsHostPort() {
-		return hdfsHostPort;
-	}
-
 	public String getResourceManagerHostPort() {
 		return resourceManagerHostPort;
-	}
-
-	public void setHdfsHostPort(
-			String hdfsHostPort ) {
-		this.hdfsHostPort = hdfsHostPort;
 	}
 
 	public void setResourceManagerHostPort(
@@ -47,10 +39,5 @@ public class VectorMRExportOptions extends
 	public void setMaxSplits(
 			int maxSplits ) {
 		this.maxSplits = maxSplits;
-	}
-
-	public void setHdfsOutputDirectory(
-			String hdfsOutputDirectory ) {
-		this.hdfsOutputDirectory = hdfsOutputDirectory;
 	}
 }

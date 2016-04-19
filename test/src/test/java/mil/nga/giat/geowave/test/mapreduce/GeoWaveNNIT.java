@@ -1,7 +1,6 @@
 package mil.nga.giat.geowave.test.mapreduce;
 
 import java.io.IOException;
-import java.util.Map;
 
 import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
@@ -69,9 +68,9 @@ public class GeoWaveNNIT extends
 	@Test
 	public void testNN()
 			throws Exception {
-		final Map<String, String> options = getAccumuloConfigOptions();
 		dataGenerator.setIncludePolygons(false);
-		ingest(getAccumuloStorePluginOptions().createDataStore());
+		ingest(getAccumuloStorePluginOptions(
+				TEST_NAMESPACE + "_nn").createDataStore());
 		runNN(new SpatialQuery(
 				dataGenerator.getBoundingRegion()));
 	}
@@ -106,7 +105,7 @@ public class GeoWaveNNIT extends
 							"0.2,0.2",
 							OrthodromicDistancePartitioner.class,
 							new PersistableStore(
-									getAccumuloStorePluginOptions()),
+									getAccumuloStorePluginOptions(TEST_NAMESPACE + "_nn")),
 							hdfsBaseDirectory + "/t1/pairs",
 							hdfsBaseDirectory + "/t1",
 							3,

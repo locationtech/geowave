@@ -1,6 +1,5 @@
 package mil.nga.giat.geowave.core.store.spi;
 
-import mil.nga.giat.geowave.core.cli.GeoWaveCLIOptionsProvider;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 
@@ -9,8 +8,7 @@ import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
  * for an ingest type will be used.
  * 
  */
-public interface DimensionalityTypeProviderSpi extends
-		GeoWaveCLIOptionsProvider
+public interface DimensionalityTypeProviderSpi
 {
 	/**
 	 * return a set of classes that can be indexed by this index provider, used
@@ -54,4 +52,12 @@ public interface DimensionalityTypeProviderSpi extends
 	 * @return the primary index
 	 */
 	public PrimaryIndex createPrimaryIndex();
+
+	/**
+	 * These are options specific to the type of index being exposed by this SPI
+	 * plugin.
+	 * 
+	 * @return
+	 */
+	public DimensionalityTypeOptions getOptions();
 }

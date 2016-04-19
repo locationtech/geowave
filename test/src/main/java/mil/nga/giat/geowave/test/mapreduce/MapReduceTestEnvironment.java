@@ -2,7 +2,6 @@ package mil.nga.giat.geowave.test.mapreduce;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -16,7 +15,6 @@ import org.junit.BeforeClass;
 
 import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
 import mil.nga.giat.geowave.core.ingest.operations.LocalToMapReduceToGeowaveCommand;
-import mil.nga.giat.geowave.core.ingest.operations.MapReduceToGeowaveCommand;
 import mil.nga.giat.geowave.core.ingest.operations.options.IngestFormatPluginOptions;
 import mil.nga.giat.geowave.core.store.config.ConfigUtils;
 import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOptions;
@@ -73,7 +71,7 @@ abstract public class MapReduceTestEnvironment extends
 		LocalToMapReduceToGeowaveCommand mrGw = new LocalToMapReduceToGeowaveCommand();
 
 		mrGw.setInputIndexOptions(indexOptions);
-		mrGw.setInputStoreOptions(getAccumuloStorePluginOptions());
+		mrGw.setInputStoreOptions(getAccumuloStorePluginOptions(TEST_NAMESPACE));
 
 		mrGw.setPluginFormats(ingestFormatOptions);
 		mrGw.setParameters(
@@ -183,14 +181,4 @@ abstract public class MapReduceTestEnvironment extends
 
 	}
 
-	protected static Map<String, String> getAccumuloConfigOptions() {
-		AccumuloRequiredOptions opts = new AccumuloRequiredOptions();
-		opts.setUser(accumuloUser);
-		opts.setPassword(accumuloPassword);
-		opts.setInstance(accumuloInstance);
-		opts.setZookeeper(zookeeper);
-		opts.setGeowaveNamespace(TEST_NAMESPACE);
-		Map<String, String> mapOpts = ConfigUtils.populateListFromOptions(opts);
-		return mapOpts;
-	}
 }

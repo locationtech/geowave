@@ -1,44 +1,34 @@
 package mil.nga.giat.geowave.core.cli.parser;
 
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 import mil.nga.giat.geowave.core.cli.api.Operation;
-import mil.nga.giat.geowave.core.cli.spi.OperationEntry;
+import mil.nga.giat.geowave.core.cli.api.OperationParams;
+import mil.nga.giat.geowave.core.cli.prefix.PrefixedJCommander;
 
-public class CommandLineOperationParams extends
-		ParseOnlyOperationParams
+public class CommandLineOperationParams implements
+		OperationParams
 {
-
-	private final List<OperationEntry> operationEntries;
-	private final Map<String, Operation> operationMap;
-	private final boolean commandPressent;
+	private final Map<String, Object> context = new HashMap<String, Object>();
+	private final Map<String, Operation> operationMap = new LinkedHashMap<String, Operation>();
+	private final String[] args;
+	private PrefixedJCommander commander;
+	private boolean validate = true;
+	private boolean allowUnknown = false;
+	private boolean commandPresent;
 	private int successCode = 0;
 	private String successMessage;
 	private Throwable successException;
 
 	public CommandLineOperationParams(
-			List<OperationEntry> operationEntries,
 			String[] args ) {
-		super(
-				args);
-		this.operationEntries = Collections.unmodifiableList(operationEntries);
-		operationMap = new LinkedHashMap<String, Operation>();
-		boolean commandPresent = false;
-		for (OperationEntry entry : operationEntries) {
-			if (operationMap.containsKey(entry.getOperationName())) {
-				// Code programmer error
-				throw new RuntimeException(
-						"Duplicate operation name: " + entry.getOperationName());
-			}
-			commandPresent |= entry.isCommand();
-			operationMap.put(
-					entry.getOperationName(),
-					entry.createInstance());
-		}
-		this.commandPressent = commandPresent;
+		this.args = args;
+	}
+
+	public String[] getArgs() {
+		return this.args;
 	}
 
 	/**
@@ -49,8 +39,50 @@ public class CommandLineOperationParams extends
 		return operationMap;
 	}
 
+	@Override
+	public Map<String, Object> getContext() {
+		return this.context;
+	}
+
+	public PrefixedJCommander getCommander() {
+		return this.commander;
+	}
+
+	public void setValidate(
+			boolean validate ) {
+		this.validate = validate;
+	}
+
+	public void setAllowUnknown(
+			boolean allowUnknown ) {
+		this.allowUnknown = allowUnknown;
+	}
+
+	public boolean isValidate() {
+		return validate;
+	}
+
+	public boolean isAllowUnknown() {
+		return this.allowUnknown;
+	}
+
+	public void setCommander(
+			PrefixedJCommander commander ) {
+		this.commander = commander;
+	}
+
+	public void addOperation(
+			String name,
+			Operation operation,
+			boolean isCommand ) {
+		commandPresent |= isCommand;
+		this.operationMap.put(
+				name,
+				operation);
+	}
+
 	public boolean isCommandPresent() {
-		return commandPressent;
+		return commandPresent;
 	}
 
 	public int getSuccessCode() {
@@ -78,9 +110,5 @@ public class CommandLineOperationParams extends
 	public void setSuccessException(
 			Throwable successException ) {
 		this.successException = successException;
-	}
-
-	public List<OperationEntry> getOperationEntries() {
-		return operationEntries;
 	}
 }

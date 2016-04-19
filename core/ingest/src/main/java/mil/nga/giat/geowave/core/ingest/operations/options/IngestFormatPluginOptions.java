@@ -64,9 +64,16 @@ public class IngestFormatPluginOptions extends
 		plugins.put(
 				formatName,
 				formatPlugin);
+
+		IngestFormatOptionProvider optionObject = formatPlugin.createOptionsInstances();
+
+		if (optionObject == null) {
+			optionObject = new IngestFormatOptionProvider() {};
+		}
+
 		options.put(
 				formatName,
-				formatPlugin.createOptionsInstances());
+				optionObject);
 	}
 
 	@Override

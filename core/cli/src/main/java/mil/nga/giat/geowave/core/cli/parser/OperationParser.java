@@ -1,30 +1,20 @@
 package mil.nga.giat.geowave.core.cli.parser;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.MutablePair;
-import org.apache.commons.lang3.tuple.Pair;
-
 import com.beust.jcommander.JCommander;
-import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
-import com.beust.jcommander.Parameters;
 
 import mil.nga.giat.geowave.core.cli.api.Operation;
-import mil.nga.giat.geowave.core.cli.prefix.JCommanderPrefixTranslator;
-import mil.nga.giat.geowave.core.cli.prefix.JCommanderTranslationMap;
+import mil.nga.giat.geowave.core.cli.prefix.PrefixedJCommander;
+import mil.nga.giat.geowave.core.cli.prefix.PrefixedJCommander.PrefixedJCommanderInitializer;
 import mil.nga.giat.geowave.core.cli.spi.OperationEntry;
 import mil.nga.giat.geowave.core.cli.spi.OperationRegistry;
 
 public class OperationParser
 {
-
 	private final OperationRegistry registry;
 	private final Set<Object> additionalObjects = new HashSet<Object>();
 
@@ -50,29 +40,17 @@ public class OperationParser
 	public CommandLineOperationParams parse(
 			Operation operation,
 			String[] args ) {
-		OperationEntry topLevelEntry = registry.getOperation(operation.getClass());
 		CommandLineOperationParams params = new CommandLineOperationParams(
-				Arrays.asList(new OperationEntry[] {
-					topLevelEntry
-				}),
 				args);
-		// Override the default created instance with the passed instance.
+		OperationEntry topLevelEntry = registry.getOperation(operation.getClass());
+		// Populate the operation map.
 		params.getOperationMap().put(
 				topLevelEntry.getOperationName(),
 				operation);
-		try {
-			if (!doParseParameters(params)) {
-				// Do not execute any commands.
-				params.getOperationMap().clear();
-			}
-		}
-		catch (ParameterException p) {
-			params.setSuccessCode(-1);
-			params.setSuccessMessage(p.getMessage());
-			params.setSuccessException(p);
-		}
+		parseInternal(
+				params,
+				topLevelEntry);
 		return params;
-
 	}
 
 	/**
@@ -86,22 +64,71 @@ public class OperationParser
 	public CommandLineOperationParams parse(
 			Class<? extends Operation> topLevel,
 			String[] args ) {
-		OperationEntry topLevelEntry = registry.getOperation(topLevel);
-		CommandLineOperationParams params = parseOperation(
-				topLevelEntry,
+		CommandLineOperationParams params = new CommandLineOperationParams(
 				args);
+		OperationEntry topLevelEntry = registry.getOperation(topLevel);
+		parseInternal(
+				params,
+				topLevelEntry);
+		return params;
+	}
+
+	/**
+	 * Parse, starting from the given entry.
+	 * 
+	 * @param params
+	 */
+	private void parseInternal(
+			CommandLineOperationParams params,
+			OperationEntry topLevelEntry ) {
+
 		try {
-			if (!doParseParameters(params)) {
-				// Do not execute any commands.
-				params.getOperationMap().clear();
+			PrefixedJCommander pluginCommander = new PrefixedJCommander();
+			pluginCommander.setInitializer(new OperationContext(
+					topLevelEntry,
+					params));
+			params.setCommander(pluginCommander);
+			for (Object obj : additionalObjects) {
+				params.getCommander().addPrefixedObject(
+						obj);
 			}
+
+			// Parse without validation so we can prepare.
+			params.getCommander().setAcceptUnknownOptions(
+					true);
+			params.getCommander().setValidate(
+					false);
+			params.getCommander().parse(
+					params.getArgs());
+
+			if (!prepare(params)) {
+				return;
+			}
+
+			// Parse with validation
+			PrefixedJCommander finalCommander = new PrefixedJCommander();
+			finalCommander.setInitializer(new OperationContext(
+					topLevelEntry,
+					params));
+			params.setCommander(finalCommander);
+			for (Object obj : additionalObjects) {
+				params.getCommander().addPrefixedObject(
+						obj);
+			}
+			params.getCommander().setAcceptUnknownOptions(
+					params.isAllowUnknown());
+			params.getCommander().setValidate(
+					params.isValidate());
+			params.getCommander().parse(
+					params.getArgs());
 		}
 		catch (ParameterException p) {
 			params.setSuccessCode(-1);
 			params.setSuccessMessage(p.getMessage());
 			params.setSuccessException(p);
 		}
-		return params;
+
+		return;
 	}
 
 	/**
@@ -111,244 +138,49 @@ public class OperationParser
 	 * 
 	 * @param args
 	 */
-	public ParseOnlyOperationParams parse(
+	public CommandLineOperationParams parse(
 			String[] args ) {
-		ParseOnlyOperationParams params = new ParseOnlyOperationParams(
+
+		CommandLineOperationParams params = new CommandLineOperationParams(
 				args);
-		params.setAllowUnknown(true);
-		doParseParameters(params);
+
+		try {
+			PrefixedJCommander pluginCommander = new PrefixedJCommander();
+			params.setCommander(pluginCommander);
+			for (Object obj : additionalObjects) {
+				params.getCommander().addPrefixedObject(
+						obj);
+			}
+			params.getCommander().parse(
+					params.getArgs());
+
+		}
+		catch (ParameterException p) {
+			params.setSuccessCode(-1);
+			params.setSuccessMessage(p.getMessage());
+			params.setSuccessException(p);
+		}
+
 		return params;
 	}
 
 	/**
-	 * Convenience method which attempts to parse the parameters, and outputs
-	 * the exception if failure.
+	 * Build an operation map and prepare each operation.
 	 * 
-	 * @param parser
 	 * @param params
-	 * @return
+	 * @return whether we prepared successfully.
 	 */
-	private boolean doParseParameters(
-			ParseOnlyOperationParams params )
-			throws ParameterException {
-
-		// Don't validate, and allow unknown params for the prepare stage.
-		params.setAllowUnknown(true);
-		params.setValidate(false);
-
-		try {
-			parseParameters(params);
-		}
-		catch (ParameterException p) {
-			throw new ParameterException(
-					String.format(
-							"Exception while processing arguments: %s",
-							p.getMessage()),
-					p);
-		}
-
-		// Re-enable param validation and don't allow unknown params
-		// for the execution stage. This allows users to disable this
-		// in prepare stage for whatever reason.
-		params.setAllowUnknown(false);
-		params.setValidate(true);
-
+	private boolean prepare(
+			CommandLineOperationParams params ) {
 		// Prepare stage:
 		for (Operation operation : params.getOperationMap().values()) {
 			// Do not continue
-			try {
-				if (!operation.prepare(params)) {
-					return false;
-				}
+			if (!operation.prepare(params)) {
+				return false;
 			}
-			catch (Exception p) {
-				throw new ParameterException(
-						String.format(
-								"Unable to prepare operation: %s",
-								p.getMessage()),
-						p);
-			}
-		}
-
-		// Final parameter parsing, for real with validation now.
-		try {
-			parseParameters(params);
-		}
-		catch (ParameterException p) {
-			throw new ParameterException(
-					String.format(
-							"Exception while processing arguments: %s",
-							p.getMessage()),
-					p);
 		}
 
 		return true;
-	}
-
-	/**
-	 * This function will parse the given parameters into the given operation
-	 * objects. It must be a complete list. If there are any un-identified
-	 * parameters, or if there are extra items specified, then it will throw an
-	 * exception.
-	 * 
-	 * @param operations
-	 * @param args
-	 */
-	public void parseParameters(
-			ParseOnlyOperationParams params ) {
-
-		Collection<Operation> opList = params.getOperationMap().values();
-
-		Pair<JCommander, JCommanderTranslationMap> commander = createCommander(opList);
-		JCommanderTranslationMap map = commander.getRight();
-		JCommander jc = commander.getLeft();
-
-		// Parse!
-		jc.setAcceptUnknownOptions(params.isAllowUnknown());
-		if (params.isValidate()) {
-			jc.parse(params.getArgs());
-		}
-		else {
-			jc.parseWithoutValidation(params.getArgs());
-		}
-
-		// This function will remove 'operation' string entries from the main
-		// parameter.
-		List<String> mainParameters = getAndCleanMainParameter(
-				jc,
-				opList.size() - 1);
-
-		if (!params.isAllowUnknown() && !map.hasMainParameter() && mainParameters.size() > 0) {
-			throw new ParameterException(
-					"Unrecognized additional parameters specified: " + StringUtils.join(
-							mainParameters,
-							" "));
-		}
-
-		// Copy over the parsed items from the facade objects back to the real
-		// objects
-		map.transformToOriginal();
-
-		params.setCommander(jc);
-		params.setTranslationMap(map);
-	}
-
-	/**
-	 * The point of this method is to find the list of operations that are being
-	 * used on the command line.
-	 * 
-	 * @param args
-	 */
-	public CommandLineOperationParams parseOperation(
-			OperationEntry topLevel,
-			String[] args ) {
-
-		// Start from the baseEntry, parsing for main parameters, until
-		// we get to a point where we can't find the given operation.
-		List<OperationEntry> operationEntryList = new ArrayList<OperationEntry>();
-		List<Operation> opList = new ArrayList<Operation>();
-		OperationEntry currentEntry = topLevel;
-		while (currentEntry != null) {
-
-			operationEntryList.add(currentEntry);
-			opList.add(currentEntry.createInstance());
-
-			Pair<JCommander, JCommanderTranslationMap> commander = createCommander(opList);
-			JCommander jc = commander.getLeft();
-
-			// Parse!
-			jc.setAcceptUnknownOptions(true);
-			jc.parseWithoutValidation(args);
-
-			// Tidy up the main parameter, removing operation entries.
-			List<String> mainParameters = getAndCleanMainParameter(
-					jc,
-					opList.size() - 1);
-
-			// Do we have another operation?
-			if (mainParameters.size() == 0) {
-				break;
-			}
-
-			// See if the first item is a command...
-			OperationEntry nextEntry = currentEntry.getChild(mainParameters.get(
-					0).toLowerCase());
-			if (nextEntry == null) {
-				break;
-			}
-
-			currentEntry = nextEntry;
-		}
-
-		return new CommandLineOperationParams(
-				operationEntryList,
-				args);
-	}
-
-	/**
-	 * This function is simply to help reduce code duplication. It creates a
-	 * translator and a JCommander instance, and copies over all the parameters
-	 * from the given operations to the facade objects, returning the commander
-	 * + map combo as a tuple.
-	 * 
-	 * @param operationList
-	 * @return
-	 */
-	private Pair<JCommander, JCommanderTranslationMap> createCommander(
-			Collection<Operation> operationList ) {
-		JCommanderPrefixTranslator translator = new JCommanderPrefixTranslator();
-		for (Operation op : operationList) {
-			translator.addObject(op);
-		}
-		// Allow the user to extend the capabilities.
-		for (Object obj : additionalObjects) {
-			translator.addObject(obj);
-		}
-		JCommanderTranslationMap map = translator.translate();
-		map.createFacadeObjects();
-
-		// Copy default parameters over for parsing.
-		map.transformToFacade();
-
-		JCommander jc = new JCommander();
-		for (Object obj : map.getObjects()) {
-			jc.addObject(obj);
-		}
-
-		// If we don't have a main parameter, then that means there could be
-		// an additional operation specified. Add a pseudo one to capture them.
-		if (!map.hasMainParameter()) {
-			MainParameterHolder holder = new MainParameterHolder();
-			jc.addObject(holder);
-		}
-		return new MutablePair<JCommander, JCommanderTranslationMap>(
-				jc,
-				map);
-	}
-
-	/**
-	 * This function will take the main parameter from the JCommander, and
-	 * remove any 'prepended' categories and commands, which were used to parse
-	 * the operations.
-	 * 
-	 * @param jc
-	 * @param depth
-	 * @return
-	 */
-	private List<String> getAndCleanMainParameter(
-			JCommander jc,
-			int depth ) {
-		// Get the main parameter. We know there's at least one because we added
-		// it above.
-		@SuppressWarnings("unchecked")
-		List<String> mainParameters = (List<String>) jc.getMainParameter().getParameterized().get(
-				jc.getMainParameter().getObject());
-
-		// Remove already executed operations
-		for (int i = depth; i > 0; i--) {
-			mainParameters.remove(0);
-		}
-		return mainParameters;
 	}
 
 	public Set<Object> getAdditionalObjects() {
@@ -365,22 +197,68 @@ public class OperationParser
 	}
 
 	/**
-	 * This helper class is used when there is no main parameter specified. This
-	 * occurs so that we can find the next operation to execute. If there is a
-	 * main parameter specified in one of the operations, then we don't add
-	 * this, as it will throw a JCommander exception. That also means we can't
-	 * find any further sections or commands.
+	 * This class is used to lazily init child commands only when they are
+	 * actually referenced/used by command line options. It will set itself on
+	 * the commander, and then add its children as commands.
 	 */
-	@Parameters(hidden = true)
-	public static class MainParameterHolder
+	public class OperationContext implements
+			PrefixedJCommanderInitializer
 	{
-		@Parameter
-		private List<String> mainParameter = new ArrayList<String>();
 
-		public List<String> getMainParameter() {
-			return mainParameter;
+		private final OperationEntry operationEntry;
+		private final CommandLineOperationParams params;
+		private Operation operation;
+
+		public OperationContext(
+				OperationEntry entry,
+				CommandLineOperationParams params ) {
+			this.operationEntry = entry;
+			this.params = params;
 		}
 
-	}
+		@Override
+		public void initialize(
+				PrefixedJCommander commander ) {
+			commander.setCaseSensitiveOptions(false);
 
+			// Add myself.
+			if (params.getOperationMap().containsKey(
+					operationEntry.getOperationName())) {
+				operation = params.getOperationMap().get(
+						operationEntry.getOperationName());
+			}
+			else {
+				operation = operationEntry.createInstance();
+				params.addOperation(
+						operationEntry.getOperationName(),
+						operation,
+						operationEntry.isCommand());
+			}
+			commander.addPrefixedObject(operation);
+
+			// initialize the commander by adding child operations.
+			for (OperationEntry child : operationEntry.getChildren()) {
+				commander.addCommand(
+						child.getOperationName(),
+						null);
+			}
+
+			// Update each command to add an initializer.
+			Map<String, JCommander> childCommanders = commander.getCommands();
+			for (OperationEntry child : operationEntry.getChildren()) {
+				PrefixedJCommander pCommander = (PrefixedJCommander) childCommanders.get(child.getOperationName());
+				pCommander.setInitializer(new OperationContext(
+						child,
+						params));
+			}
+		}
+
+		public Operation getOperation() {
+			return operation;
+		}
+
+		public OperationEntry getOperationEntry() {
+			return operationEntry;
+		}
+	}
 }

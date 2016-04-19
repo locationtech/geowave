@@ -24,7 +24,7 @@ public class SetCommand extends
 {
 
 	@Parameter
-	private List<String> opts = new ArrayList<String>();
+	private List<String> parameters = new ArrayList<String>();
 
 	@Override
 	public void execute(
@@ -38,16 +38,16 @@ public class SetCommand extends
 
 		String key = null;
 		String value = null;
-		if (opts.size() == 1) {
+		if (parameters.size() == 1) {
 			String[] parts = StringUtils.split(
-					opts.get(0),
+					parameters.get(0),
 					"=");
 			key = parts[0];
 			value = parts[1];
 		}
 		else {
-			key = opts.get(0);
-			value = opts.get(1);
+			key = parameters.get(0);
+			value = parameters.get(1);
 		}
 
 		p.setProperty(
@@ -58,4 +58,15 @@ public class SetCommand extends
 				p);
 	}
 
+	public List<String> getParameters() {
+		return parameters;
+	}
+
+	public void setParameters(
+			String key,
+			String value ) {
+		this.parameters = new ArrayList<String>();
+		this.parameters.add(key);
+		this.parameters.add(value);
+	}
 }

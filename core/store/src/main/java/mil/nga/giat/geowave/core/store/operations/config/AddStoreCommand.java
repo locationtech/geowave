@@ -132,7 +132,7 @@ public class AddStoreCommand implements
 				existingProps);
 	}
 
-	public Object getPluginOptions() {
+	public DataStorePluginOptions getPluginOptions() {
 		return pluginOptions;
 	}
 

@@ -16,6 +16,7 @@ import mil.nga.giat.geowave.core.store.index.BasicIndexModel;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 import mil.nga.giat.geowave.core.store.index.CustomIdIndex;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.core.store.spi.DimensionalityTypeOptions;
 import mil.nga.giat.geowave.core.store.spi.DimensionalityTypeProviderSpi;
 
 public class SpatialDimensionalityTypeProvider implements
@@ -81,7 +82,7 @@ public class SpatialDimensionalityTypeProvider implements
 	}
 
 	@Override
-	public Object getOptions() {
+	public DimensionalityTypeOptions getOptions() {
 		return options;
 	}
 
@@ -132,7 +133,8 @@ public class SpatialDimensionalityTypeProvider implements
 						options.pointOnly ? DEFAULT_SPATIAL_ID + "_POINTONLY" : DEFAULT_SPATIAL_ID));
 	}
 
-	private static class SpatialOptions
+	private static class SpatialOptions implements
+			DimensionalityTypeOptions
 	{
 		@Parameter(names = {
 			"--pointOnly"

@@ -1,6 +1,8 @@
 package mil.nga.giat.geowave.mapreduce.dedupe;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
@@ -13,12 +15,12 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.SequenceFileOutputFormat;
 import org.apache.hadoop.util.ToolRunner;
 
+import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
+import mil.nga.giat.geowave.core.cli.parser.CommandLineOperationParams;
 import mil.nga.giat.geowave.core.cli.parser.OperationParser;
-import mil.nga.giat.geowave.core.cli.parser.OperationParser.MainParameterHolder;
-import mil.nga.giat.geowave.core.cli.parser.ParseOnlyOperationParams;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.operations.remote.options.StoreLoader;
 import mil.nga.giat.geowave.mapreduce.AbstractGeoWaveJobRunner;
@@ -106,7 +108,7 @@ public class GeoWaveDedupeJobRunner extends
 		parser.addAdditionalObject(holder);
 
 		// Second round to get everything else.
-		ParseOnlyOperationParams params = parser.parse(args);
+		CommandLineOperationParams params = parser.parse(args);
 
 		// Set the datastore plugin
 		if (holder.getMainParameter().size() == 0) {
@@ -129,6 +131,16 @@ public class GeoWaveDedupeJobRunner extends
 						loader.getDataStorePlugin()),
 				args);
 		System.exit(res);
+	}
+
+	public static class MainParameterHolder
+	{
+		@Parameter
+		private List<String> mainParameter = new ArrayList<String>();
+
+		public List<String> getMainParameter() {
+			return mainParameter;
+		}
 	}
 
 }

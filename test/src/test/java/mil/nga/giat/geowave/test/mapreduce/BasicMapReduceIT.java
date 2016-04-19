@@ -45,6 +45,7 @@ import mil.nga.giat.geowave.core.index.ByteArrayUtils;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
+import mil.nga.giat.geowave.core.store.config.ConfigUtils;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
@@ -254,12 +255,6 @@ public class BasicMapReduceIT extends
 	private void testMapReduceExportAndReingest(
 			final DimensionalityType dimensionalityType )
 			throws Exception {
-		final AccumuloIndexStore indexStore = new AccumuloIndexStore(
-				accumuloOperations);
-		final AccumuloAdapterStore adapterStore = new AccumuloAdapterStore(
-				accumuloOperations);
-		final DataStore dataStore = new AccumuloDataStore(
-				accumuloOperations);
 		final VectorMRExportCommand exportCommand = new VectorMRExportCommand();
 		final VectorMRExportOptions options = exportCommand.getMrOptions();
 		final File exportDir = new File(
@@ -267,14 +262,15 @@ public class BasicMapReduceIT extends
 				TEST_EXPORT_DIRECTORY);
 		exportDir.mkdir();
 
-		exportCommand.setStoreOptions(getAccumuloStorePluginOptions());
-		exportCommand.setParameters(null);
+		exportCommand.setStoreOptions(getAccumuloStorePluginOptions(TEST_NAMESPACE));
+		exportCommand.setParameters(
+				hdfs,
+				hdfsBaseDirectory + "/" + TEST_EXPORT_DIRECTORY,
+				null);
 		options.setBatchSize(10000);
 		options.setMinSplits(MIN_INPUT_SPLITS);
 		options.setMaxSplits(MAX_INPUT_SPLITS);
-		options.setHdfsHostPort(hdfs);
 		options.setResourceManagerHostPort(jobtracker);
-		options.setHdfsOutputDirectory(hdfsBaseDirectory + "/" + TEST_EXPORT_DIRECTORY);
 
 		final Configuration conf = getConfiguration();
 		MapReduceTestEnvironment.filterConfiguration(conf);
@@ -307,7 +303,7 @@ public class BasicMapReduceIT extends
 			final PrimaryIndex[] indices )
 			throws Exception {
 		final TestJobRunner jobRunner = new TestJobRunner(
-				getAccumuloStorePluginOptions(),
+				getAccumuloStorePluginOptions(TEST_NAMESPACE),
 				expectedResults);
 		jobRunner.setMinInputSplits(MIN_INPUT_SPLITS);
 		jobRunner.setMaxInputSplits(MAX_INPUT_SPLITS);
@@ -386,7 +382,7 @@ public class BasicMapReduceIT extends
 			job.setSpeculativeExecution(false);
 			GeoWaveInputFormat.setStoreConfigOptions(
 					job.getConfiguration(),
-					getAccumuloConfigOptions());
+					ConfigUtils.populateListFromOptions(dataStoreOptions));
 			FileInputFormat.setInputPaths(
 					job,
 					getHdfsOutputPath());

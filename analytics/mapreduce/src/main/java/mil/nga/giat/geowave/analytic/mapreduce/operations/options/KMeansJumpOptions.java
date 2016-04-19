@@ -3,17 +3,12 @@ package mil.nga.giat.geowave.analytic.mapreduce.operations.options;
 import com.beust.jcommander.Parameter;
 
 import mil.nga.giat.geowave.analytic.param.JumpParameters;
+import mil.nga.giat.geowave.analytic.param.SampleParameters;
 import mil.nga.giat.geowave.analytic.param.annotations.JumpParameter;
+import mil.nga.giat.geowave.analytic.param.annotations.SampleParameter;
 
 public class KMeansJumpOptions
 {
-
-	@JumpParameter(JumpParameters.Jump.COUNT_OF_CENTROIDS)
-	@Parameter(names = {
-		"-jcc",
-		"--jumpCountOfCentroids"
-	}, description = "Set the count of centroids for one run of kmeans.")
-	private String jumpCountOfCentroids;
 
 	@JumpParameter(JumpParameters.Jump.KPLUSPLUS_MIN)
 	@Parameter(names = {
@@ -29,14 +24,19 @@ public class KMeansJumpOptions
 	}, description = "Comma-separated range of centroids (e.g. 2,100)")
 	private String jumpRangeOfCentroids;
 
-	public String getJumpCountOfCentroids() {
-		return jumpCountOfCentroids;
-	}
+	@SampleParameter(SampleParameters.Sample.SAMPLE_RANK_FUNCTION)
+	@Parameter(names = {
+		"-srf",
+		"--sampleSampleRankFunction"
+	}, description = "The rank function used when sampling the first N highest rank items.")
+	private String sampleSampleRankFunction;
 
-	public void setJumpCountOfCentroids(
-			String jumpCountOfCentroids ) {
-		this.jumpCountOfCentroids = jumpCountOfCentroids;
-	}
+	@SampleParameter(SampleParameters.Sample.SAMPLE_SIZE)
+	@Parameter(names = {
+		"-sss",
+		"--sampleSampleSize"
+	}, description = "Sample Size")
+	private String sampleSampleSize;
 
 	public String getJumpKplusplusMin() {
 		return jumpKplusplusMin;
@@ -54,5 +54,23 @@ public class KMeansJumpOptions
 	public void setJumpRangeOfCentroids(
 			String jumpRangeOfCentroids ) {
 		this.jumpRangeOfCentroids = jumpRangeOfCentroids;
+	}
+
+	public String getSampleSampleRankFunction() {
+		return sampleSampleRankFunction;
+	}
+
+	public void setSampleSampleRankFunction(
+			String sampleSampleRankFunction ) {
+		this.sampleSampleRankFunction = sampleSampleRankFunction;
+	}
+
+	public String getSampleSampleSize() {
+		return sampleSampleSize;
+	}
+
+	public void setSampleSampleSize(
+			String sampleSampleSize ) {
+		this.sampleSampleSize = sampleSampleSize;
 	}
 }
