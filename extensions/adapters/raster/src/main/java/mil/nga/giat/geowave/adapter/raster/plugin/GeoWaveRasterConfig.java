@@ -36,8 +36,6 @@ public class GeoWaveRasterConfig
 	static private final Map<String, GeoWaveRasterConfig> CONFIG_CACHE = new Hashtable<String, GeoWaveRasterConfig>();
 
 	protected static enum ConfigParameter {
-		NAMESPACE(
-				"gwNamespace"),
 		// the following two are optional parameters that will override the
 		// behavior of tile mosaicing that is already set within each adapter
 		INTERPOLATION(

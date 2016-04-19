@@ -85,7 +85,6 @@ public class DBScanIT extends
 	@Test
 	public void testDBScan()
 			throws Exception {
-		final Map<String, String> options = getAccumuloConfigOptions();
 		dataGenerator.setIncludePolygons(false);
 		ingest(getAccumuloStorePluginOptions().createDataStore());
 		runScan(new SpatialQuery(

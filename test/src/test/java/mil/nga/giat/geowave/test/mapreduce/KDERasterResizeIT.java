@@ -91,7 +91,7 @@ public class KDERasterResizeIT extends
 		for (int i = MIN_TILE_SIZE_POWER_OF_2; i <= MAX_TILE_SIZE_POWER_OF_2; i += INCREMENT) {
 			final String tileSizeCoverageName = TEST_COVERAGE_NAME_PREFIX + i;
 
-			KdeCommand command = new KdeCommand();
+			final KdeCommand command = new KdeCommand();
 
 			// We're going to override these anyway.
 			command.setParameters(
@@ -100,7 +100,7 @@ public class KDERasterResizeIT extends
 
 			command.setInputStoreOptions(getAccumuloStorePluginOptions());
 
-			DataStorePluginOptions outputStore = getAccumuloStorePluginOptions();
+			final DataStorePluginOptions outputStore = getAccumuloStorePluginOptions();
 			outputStore.getFactoryOptions().setGeowaveNamespace(
 					TEST_COVERAGE_NAMESPACE);
 			command.setOutputStoreOptions(outputStore);
@@ -176,19 +176,19 @@ public class KDERasterResizeIT extends
 			final String originalTileSizeCoverageName = TEST_COVERAGE_NAME_PREFIX + i;
 			final String resizeTileSizeCoverageName = TEST_RESIZE_COVERAGE_NAME_PREFIX + i;
 
-			ResizeCommand command = new ResizeCommand();
+			final ResizeCommand command = new ResizeCommand();
 
 			// We're going to override these anyway.
 			command.setParameters(
 					null,
 					null);
 
-			DataStorePluginOptions inputStore = getAccumuloStorePluginOptions();
+			final DataStorePluginOptions inputStore = getAccumuloStorePluginOptions();
 			inputStore.getFactoryOptions().setGeowaveNamespace(
 					TEST_COVERAGE_NAMESPACE);
 			command.setInputStoreOptions(inputStore);
 
-			DataStorePluginOptions outputStore = getAccumuloStorePluginOptions();
+			final DataStorePluginOptions outputStore = getAccumuloStorePluginOptions();
 			outputStore.getFactoryOptions().setGeowaveNamespace(
 					TEST_COVERAGE_NAMESPACE);
 			command.setOutputStoreOptions(outputStore);
@@ -270,11 +270,14 @@ public class KDERasterResizeIT extends
 				Interpolation.INTERP_NEAREST);
 
 		for (final Entry<String, String> entry : options.entrySet()) {
-			str.append(
-					";").append(
-					entry.getKey()).append(
-					"=").append(
-					entry.getValue());
+			if (!entry.getKey().equals(
+					StoreFactoryOptions.GEOWAVE_NAMESPACE_OPTION)) {
+				str.append(
+						";").append(
+						entry.getKey()).append(
+						"=").append(
+						entry.getValue());
+			}
 		}
 
 		final GeoWaveRasterReader reader = new GeoWaveRasterReader(

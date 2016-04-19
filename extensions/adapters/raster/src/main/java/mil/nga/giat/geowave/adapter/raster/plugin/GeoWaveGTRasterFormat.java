@@ -160,7 +160,7 @@ public class GeoWaveGTRasterFormat extends
 			final Object source ) {
 		return ((source instanceof String) && source.toString().contains(
 				"=") && source.toString().contains(
-				ConfigParameter.NAMESPACE.getConfigName()));
+				";"));
 	}
 
 	public static URL getURLFromSource(
@@ -217,37 +217,41 @@ public class GeoWaveGTRasterFormat extends
 			return false;
 		}
 
-		final ByteArrayOutputStream out = new ByteArrayOutputStream();
-
-		try {
-			final InputStream in = (InputStream) sourceUrl.getContent();
-			int c;
-
-			while ((c = in.read()) != -1) {
-				out.write(c);
-			}
-
-			in.close();
-			out.close();
-		}
-		catch (final IOException e) {
-			return false;
-		}
-		final String xmlStr;
-		try {
-			xmlStr = out.toString(StringUtils.UTF8_CHAR_SET.toString());
-		}
-		catch (final UnsupportedEncodingException e) {
-			LOGGER.error(
-					"Unable to write ByteArray to UTF-8",
-					e);
-			return false;
-		}
-
 		// Namespace is the only required parameter
-		if (!xmlStr.contains(ConfigParameter.NAMESPACE.getConfigName())) {
-			return false;
-		}
+		// TODO figure out the equivalent of namespace in the current CLI work
+		// final ByteArrayOutputStream out = new ByteArrayOutputStream();
+		//
+		// try {
+		// final InputStream in = (InputStream) sourceUrl.getContent();
+		// int c;
+		//
+		// while ((c = in.read()) != -1) {
+		// out.write(c);
+		// }
+		//
+		// in.close();
+		// out.close();
+		// }
+		// catch (final IOException e) {
+		// return false;
+		// }
+
+		// or figure out a different way to validate
+
+		// final String xmlStr;
+		// try {
+		// out.toString(StringUtils.UTF8_CHAR_SET.toString());
+		// }
+		// catch (final UnsupportedEncodingException e) {
+		// LOGGER.error(
+		// "Unable to write ByteArray to UTF-8",
+		// e);
+		// return false;
+		// }
+
+		// if (!xmlStr.contains(ConfigParameter.NAMESPACE.getConfigName())) {
+		// return false;
+		// }
 		return true;
 	}
 }
