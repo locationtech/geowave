@@ -554,8 +554,8 @@ public class HBaseDataStore implements
 				// supports querying multiple adapters in a single index
 				// in one query instance (one scanner) for efficiency
 				if (adapterIdsToQuery.size() > 0) {
-					HBaseConstraintsQuery accumuloQuery;
-					accumuloQuery = new HBaseConstraintsQuery(
+					HBaseConstraintsQuery hbaseQuery;
+					hbaseQuery = new HBaseConstraintsQuery(
 							adapterIdsToQuery,
 							indexAdapterPair.getLeft(),
 							sanitizedQuery,
@@ -566,7 +566,7 @@ public class HBaseDataStore implements
 							// queryOptions.getFieldIds(),
 							sanitizedQueryOptions.getAuthorizations());
 
-					results.add(accumuloQuery.query(
+					results.add(hbaseQuery.query(
 							operations,
 							tempAdapterStore,
 							// TODO support subsampling
@@ -744,16 +744,18 @@ public class HBaseDataStore implements
 								null);
 					}
 
-					while (dataIt.hasNext()) {
-						dataIt.next();
-					}
-					try {
-						dataIt.close();
-					}
-					catch (final Exception ex) {
-						LOGGER.warn(
-								"Cannot close iterator",
-								ex);
+					if (dataIt != null) {
+						while (dataIt.hasNext()) {
+							dataIt.next();
+						}
+						try {
+							dataIt.close();
+						}
+						catch (final Exception ex) {
+							LOGGER.warn(
+									"Cannot close iterator",
+									ex);
+						}
 					}
 					callbackCache.close();
 				}
@@ -899,7 +901,7 @@ public class HBaseDataStore implements
 		public AltIndexCallback(
 				final String indexName,
 				final WritableDataAdapter<T> adapter,
-				final HBaseOptions accumuloOptions )
+				final HBaseOptions hbaseOptions )
 				throws IOException {
 			this.adapter = adapter;
 			altIdxTableName = indexName + HBaseUtils.ALT_INDEX_TABLE;
@@ -920,7 +922,7 @@ public class HBaseDataStore implements
 			altIdxWriter = operations.createWriter(
 					altIdxTableName,
 					adapter.getAdapterId().getString(),
-					accumuloOptions.isCreateTable());
+					hbaseOptions.isCreateTable());
 		}
 
 		@Override

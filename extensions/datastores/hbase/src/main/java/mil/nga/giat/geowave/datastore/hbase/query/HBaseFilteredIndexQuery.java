@@ -107,10 +107,13 @@ public abstract class HBaseFilteredIndexQuery extends
 				final ResultScanner rs = operations.getScannedResults(
 						scanner,
 						tableName);
-				final Iterator<Result> it = rs.iterator();
-				if ((rs != null) && it.hasNext()) {
-					resultsIterators.add(it);
-					results.add(rs);
+
+				if (rs != null) {
+					final Iterator<Result> it = rs.iterator();
+					if (it.hasNext()) {
+						resultsIterators.add(it);
+						results.add(rs);
+					}
 				}
 			}
 
