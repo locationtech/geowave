@@ -1,4 +1,4 @@
-package mil.nga.giat.geowave.datastore.accumulo.util;
+package mil.nga.giat.geowave.core.store;
 
 import java.util.HashMap;
 import java.util.HashSet;

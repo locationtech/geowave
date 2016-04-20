@@ -52,11 +52,10 @@ public class SimpleFeatureToHBaseKeyValueMapper extends
 			final LongWritable key,
 			final Text value,
 			final Context context )
-					throws IOException,
-					InterruptedException {
+			throws IOException,
+			InterruptedException {
 
-		simpleFeature = parseGeonamesValue(
-				value);
+		simpleFeature = parseGeonamesValue(value);
 
 		// build Geowave-formatted Accumulo [Key,Value] pairs
 		keyValuePairs = generator.constructKeyValuePairs(
@@ -68,11 +67,9 @@ public class SimpleFeatureToHBaseKeyValueMapper extends
 		for (final Cell keyValue : keyValuePairs) {
 			context.write(
 					new ImmutableBytesWritable(
-							CellUtil.cloneRow(
-									keyValue)),
+							CellUtil.cloneRow(keyValue)),
 					new ImmutableBytesWritable(
-							CellUtil.cloneValue(
-									keyValue)));
+							CellUtil.cloneValue(keyValue)));
 		}
 	}
 
@@ -84,10 +81,8 @@ public class SimpleFeatureToHBaseKeyValueMapper extends
 
 		geonameId = geonamesEntryTokens[0];
 		location = geonamesEntryTokens[1];
-		latitude = Double.parseDouble(
-				geonamesEntryTokens[4]);
-		longitude = Double.parseDouble(
-				geonamesEntryTokens[5]);
+		latitude = Double.parseDouble(geonamesEntryTokens[4]);
+		longitude = Double.parseDouble(geonamesEntryTokens[5]);
 
 		return buildSimpleFeature(
 				geonameId,
@@ -104,10 +99,9 @@ public class SimpleFeatureToHBaseKeyValueMapper extends
 
 		builder.set(
 				"geometry",
-				GeometryUtils.GEOMETRY_FACTORY.createPoint(
-						new Coordinate(
-								longitude,
-								latitude)));
+				GeometryUtils.GEOMETRY_FACTORY.createPoint(new Coordinate(
+						longitude,
+						latitude)));
 		builder.set(
 				"Latitude",
 				latitude);
@@ -118,8 +112,7 @@ public class SimpleFeatureToHBaseKeyValueMapper extends
 				"Location",
 				location);
 
-		return builder.buildFeature(
-				featureId);
+		return builder.buildFeature(featureId);
 	}
 
 }

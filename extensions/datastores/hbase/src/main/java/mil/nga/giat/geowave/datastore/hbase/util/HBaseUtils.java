@@ -1,6 +1,3 @@
-/**
- *
- */
 package mil.nga.giat.geowave.datastore.hbase.util;
 
 import java.io.DataInputStream;
@@ -48,24 +45,17 @@ import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.memory.DataStoreUtils;
-import mil.nga.giat.geowave.core.store.memory.EntryRowID;
 import mil.nga.giat.geowave.datastore.hbase.entities.HBaseRowId;
 import mil.nga.giat.geowave.datastore.hbase.io.HBaseWriter;
 
-/**
- * @author viggy Functionality similar to <code> AccumuloUtils </code>
- */
 public class HBaseUtils
 {
 
-	private final static Logger LOGGER = Logger.getLogger(
-			HBaseUtils.class);
+	private final static Logger LOGGER = Logger.getLogger(HBaseUtils.class);
 	public static final String ALT_INDEX_TABLE = "_GEOWAVE_ALT_INDEX";
 
-	private static final byte[] BEG_AND_BYTE = "&".getBytes(
-			StringUtils.UTF8_CHAR_SET);
-	private static final byte[] END_AND_BYTE = ")".getBytes(
-			StringUtils.UTF8_CHAR_SET);
+	private static final byte[] BEG_AND_BYTE = "&".getBytes(StringUtils.UTF8_CHAR_SET);
+	private static final byte[] END_AND_BYTE = ")".getBytes(StringUtils.UTF8_CHAR_SET);
 
 	private static final UniformVisibilityWriter DEFAULT_VISIBILITY = new UniformVisibilityWriter(
 			new UnconstrainedVisibilityHandler());
@@ -80,37 +70,29 @@ public class HBaseUtils
 			return vis1;
 		}
 
-		final ByteBuffer buffer = ByteBuffer.allocate(
-				vis1.length + 3 + vis2.length);
-		buffer.putChar(
-				'(');
-		buffer.put(
-				vis1);
-		buffer.putChar(
-				')');
-		buffer.put(
-				BEG_AND_BYTE);
-		buffer.put(
-				vis2);
-		buffer.put(
-				END_AND_BYTE);
+		final ByteBuffer buffer = ByteBuffer.allocate(vis1.length + 3 + vis2.length);
+		buffer.putChar('(');
+		buffer.put(vis1);
+		buffer.putChar(')');
+		buffer.put(BEG_AND_BYTE);
+		buffer.put(vis2);
+		buffer.put(END_AND_BYTE);
 		return buffer.array();
 	}
-	
+
 	private static HashSet goodDataIds;
-	static{
+	static {
 		goodDataIds = new HashSet();
 		goodDataIds.add("tornado_tracks.21986");
 		goodDataIds.add("tornado_tracks.28685");
 	}
-	
+
 	private static HashSet badDataIds;
-	static{
+	static {
 		badDataIds = new HashSet();
 		badDataIds.add("tornado_tracks.7583");
-		
-		
-		badDataIds.add("tornado_tracks.1528");		
+
+		badDataIds.add("tornado_tracks.1528");
 		badDataIds.add("tornado_tracks.1678");
 		badDataIds.add("tornado_tracks.6562");
 		badDataIds.add("tornado_tracks.8099");
@@ -138,14 +120,16 @@ public class HBaseUtils
 		for (final ByteArrayId rowId : ingestInfo.getRowIds()) {
 			final RowMutations mutation = new RowMutations(
 					rowId.getBytes());
-//			EntryRowID entry = new EntryRowID(rowId.getBytes());
-//			String dataId = new String(entry.getDataId());
-//			if(goodDataIds.contains(dataId)){
-//				LOGGER.error("GOOD mutations: " + dataId + " | " + rowId.getReadableString());
-//			}
-//			else if(badDataIds.contains(dataId)){
-//				LOGGER.error("BAD mutations: " + dataId + " | " + rowId.getReadableString());
-//			}
+			// EntryRowID entry = new EntryRowID(rowId.getBytes());
+			// String dataId = new String(entry.getDataId());
+			// if(goodDataIds.contains(dataId)){
+			// LOGGER.error("GOOD mutations: " + dataId + " | " +
+			// rowId.getReadableString());
+			// }
+			// else if(badDataIds.contains(dataId)){
+			// LOGGER.error("BAD mutations: " + dataId + " | " +
+			// rowId.getReadableString());
+			// }
 			try {
 				final Put row = new Put(
 						rowId.getBytes());
@@ -155,15 +139,12 @@ public class HBaseUtils
 							fieldInfo.getDataValue().getId().getBytes(),
 							fieldInfo.getWrittenValue());
 				}
-				mutation.add(
-						row);
+				mutation.add(row);
 			}
 			catch (final IOException e) {
-				LOGGER.warn(
-						"Could not add row to mutation.");
+				LOGGER.warn("Could not add row to mutation.");
 			}
-			mutations.add(
-					mutation);
+			mutations.add(mutation);
 		}
 		return mutations;
 	}
@@ -186,13 +167,12 @@ public class HBaseUtils
 			// lastly add a number of duplicates which can be useful as
 			// metadata in our de-duplication
 			// step
-			rowIds.add(
-					new ByteArrayId(
-							new HBaseRowId(
-									indexId,
-									dataId,
-									adapterId,
-									enableDeduplication ? numberOfDuplicates : -1).getRowId()));
+			rowIds.add(new ByteArrayId(
+					new HBaseRowId(
+							indexId,
+							dataId,
+							adapterId,
+							enableDeduplication ? numberOfDuplicates : -1).getRowId()));
 		}
 	}
 
@@ -205,16 +185,13 @@ public class HBaseUtils
 			final PersistentValue<T> fieldValue,
 			final T entry,
 			final VisibilityWriter<T> customFieldVisibilityWriter ) {
-		final FieldWriter fieldWriter = dataWriter.getWriter(
-				fieldValue.getId());
-		final FieldVisibilityHandler<T, Object> customVisibilityHandler = customFieldVisibilityWriter.getFieldVisibilityHandler(
-				fieldValue.getId());
+		final FieldWriter fieldWriter = dataWriter.getWriter(fieldValue.getId());
+		final FieldVisibilityHandler<T, Object> customVisibilityHandler = customFieldVisibilityWriter.getFieldVisibilityHandler(fieldValue.getId());
 		if (fieldWriter != null) {
 			final Object value = fieldValue.getValue();
 			return new FieldInfo<T>(
 					fieldValue,
-					fieldWriter.writeField(
-							value),
+					fieldWriter.writeField(value),
 					merge(
 							customVisibilityHandler.getVisibility(
 									entry,
@@ -226,8 +203,7 @@ public class HBaseUtils
 									value)));
 		}
 		else if (fieldValue.getValue() != null) {
-			LOGGER.warn(
-					"Data writer of class " + dataWriter.getClass() + " does not support field for " + fieldValue.getValue());
+			LOGGER.warn("Data writer of class " + dataWriter.getClass() + " does not support field for " + fieldValue.getValue());
 		}
 		return null;
 	}
@@ -253,8 +229,7 @@ public class HBaseUtils
 					writableAdapter.getAdapterId().getString());
 		}
 		catch (final IOException e) {
-			LOGGER.warn(
-					"Writing to table failed." + e);
+			LOGGER.warn("Writing to table failed." + e);
 		}
 		return ingestInfo;
 	}
@@ -356,19 +331,16 @@ public class HBaseUtils
 			final PrimaryIndex index,
 			final ScanCallback<T> scanCallback ) {
 		if ((dataAdapter == null) && (adapterStore == null)) {
-			LOGGER.error(
-					"Could not decode row from iterator. Either adapter or adapter store must be non-null.");
+			LOGGER.error("Could not decode row from iterator. Either adapter or adapter store must be non-null.");
 			return null;
 		}
 		DataAdapter<T> adapter = dataAdapter;
 		List<KeyValue> rowMapping;
 		try {
-			rowMapping = getSortedRowMapping(
-					row);
+			rowMapping = getSortedRowMapping(row);
 		}
 		catch (final IOException e) {
-			LOGGER.error(
-					"Could not decode row from iterator. Ensure whole row iterators are being used.");
+			LOGGER.error("Could not decode row from iterator. Ensure whole row iterators are being used.");
 			return null;
 		}
 		// build a persistence encoding object first, pass it through the
@@ -406,17 +378,14 @@ public class HBaseUtils
 			}
 
 			if (adapter == null) {
-				adapter = (DataAdapter<T>) adapterStore.getAdapter(
-						adapterId);
+				adapter = (DataAdapter<T>) adapterStore.getAdapter(adapterId);
 				if (adapter == null) {
-					LOGGER.error(
-							"DataAdapter does not exist");
+					LOGGER.error("DataAdapter does not exist");
 					return null;
 				}
 			}
 			if (!adapterMatchVerified) {
-				if (!adapterId.equals(
-						adapter.getAdapterId())) {
+				if (!adapterId.equals(adapter.getAdapterId())) {
 					return null;
 				}
 				adapterMatchVerified = true;
@@ -428,48 +397,39 @@ public class HBaseUtils
 			indexModel = index.getIndexModel();
 
 			// first check if this field is part of the index model
-			final FieldReader<? extends CommonIndexValue> indexFieldReader = indexModel.getReader(
-					fieldId);
+			final FieldReader<? extends CommonIndexValue> indexFieldReader = indexModel.getReader(fieldId);
 			final byte byteValue[] = entry.getValue();
 			if (indexFieldReader != null) {
-				final CommonIndexValue indexValue = indexFieldReader.readField(
-						byteValue);
+				final CommonIndexValue indexValue = indexFieldReader.readField(byteValue);
 				// indexValue.setVisibility(entry.getKey().getColumnVisibilityData().getBackingArray());
 				final PersistentValue<CommonIndexValue> val = new PersistentValue<CommonIndexValue>(
 						fieldId,
 						indexValue);
-				indexData.addValue(
-						val);
-				fieldInfoList.add(
-						getFieldInfo(
-								val,
-								byteValue,
-								indexValue.getVisibility()));
+				indexData.addValue(val);
+				fieldInfoList.add(getFieldInfo(
+						val,
+						byteValue,
+						indexValue.getVisibility()));
 			}
 			else {
 				// next check if this field is part of the adapter's
 				// extended data model
-				final FieldReader<?> extFieldReader = adapter.getReader(
-						fieldId);
+				final FieldReader<?> extFieldReader = adapter.getReader(fieldId);
 				if (extFieldReader == null) {
 					// if it still isn't resolved, log an error, and
 					// continue
-					LOGGER.error(
-							"field reader not found for data entry, the value will be ignored");
+					LOGGER.error("field reader not found for data entry, the value will be ignored");
 					continue;
 				}
-				final Object value = extFieldReader.readField(
-						byteValue);
+				final Object value = extFieldReader.readField(byteValue);
 				final PersistentValue<Object> val = new PersistentValue<Object>(
 						fieldId,
 						value);
-				extendedData.addValue(
-						val);
-				fieldInfoList.add(
-						getFieldInfo(
-								val,
-								byteValue,
-								null));
+				extendedData.addValue(val);
+				fieldInfoList.add(getFieldInfo(
+						val,
+						byteValue,
+						null));
 				// entry.getKey().getColumnVisibility().getBytes()));
 			}
 		}
@@ -482,6 +442,7 @@ public class HBaseUtils
 						rowId.getInsertionId()),
 				rowId.getNumberOfDuplicates(),
 				indexData,
+				unknownData,
 				extendedData);
 
 		if ((clientFilter == null) || clientFilter.accept(
@@ -489,8 +450,7 @@ public class HBaseUtils
 				encodedRow)) {
 			// cannot get here unless adapter is found (not null)
 			if (adapter == null) {
-				LOGGER.error(
-						"Error, adapter was null when it should not be");
+				LOGGER.error("Error, adapter was null when it should not be");
 			}
 			else {
 				final Pair<T, DataStoreEntryInfo> pair = Pair.of(
@@ -499,9 +459,8 @@ public class HBaseUtils
 								index),
 						new DataStoreEntryInfo(
 								rowId.getDataId(),
-								Arrays.asList(
-										new ByteArrayId(
-												row.getRow())),
+								Arrays.asList(new ByteArrayId(
+										row.getRow())),
 								fieldInfoList));
 				if (scanCallback != null) {
 					scanCallback.entryScanned(
@@ -516,7 +475,7 @@ public class HBaseUtils
 
 	private static List<KeyValue> getSortedRowMapping(
 			final Result row )
-					throws IOException {
+			throws IOException {
 		final List<KeyValue> map = new ArrayList<KeyValue>();
 		/*
 		 * ByteArrayInputStream in = new
@@ -541,10 +500,9 @@ public class HBaseUtils
 						KeyValue.Type.Put.getCode(),
 						noVersionMap.get(
 								family).get(
-										qualifier));
-				map.add(
-						new KeyValue(
-								cell));
+								qualifier));
+				map.add(new KeyValue(
+						cell));
 			}
 		}
 		return map;
@@ -552,11 +510,10 @@ public class HBaseUtils
 
 	private static byte[] readField(
 			final DataInputStream din )
-					throws IOException {
+			throws IOException {
 		final int len = din.readInt();
 		final byte[] b = new byte[len];
-		final int readLen = din.read(
-				b);
+		final int readLen = din.read(b);
 		if ((len > 0) && (len != readLen)) {
 			throw new IOException(
 					String.format(
@@ -589,17 +546,13 @@ public class HBaseUtils
 					row.addColumn(
 							adapterId,
 							rowId.getBytes(),
-							"".getBytes(
-									StringUtils.UTF8_CHAR_SET));
-					mutation.add(
-							row);
+							"".getBytes(StringUtils.UTF8_CHAR_SET));
+					mutation.add(row);
 				}
 				catch (final IOException e) {
-					LOGGER.warn(
-							"Could not add row to mutation.");
+					LOGGER.warn("Could not add row to mutation.");
 				}
-				mutations.add(
-						mutation);
+				mutations.add(mutation);
 			}
 			try {
 				writer.write(
@@ -607,8 +560,7 @@ public class HBaseUtils
 						writableAdapter.getAdapterId().getString());
 			}
 			catch (final IOException e) {
-				LOGGER.warn(
-						"Writing to table failed." + e);
+				LOGGER.warn("Writing to table failed." + e);
 			}
 
 		}
@@ -619,7 +571,7 @@ public class HBaseUtils
 			final byte[] columnFamily,
 			final byte[] columnQualifier,
 			final String[] authorizations )
-					throws IOException {
+			throws IOException {
 		final RowMutations m = new RowMutations(
 				rowId);
 		final Delete d = new Delete(
@@ -627,8 +579,7 @@ public class HBaseUtils
 		d.addColumn(
 				columnFamily,
 				columnQualifier);
-		m.add(
-				d);
+		m.add(d);
 		return m;
 	}
 

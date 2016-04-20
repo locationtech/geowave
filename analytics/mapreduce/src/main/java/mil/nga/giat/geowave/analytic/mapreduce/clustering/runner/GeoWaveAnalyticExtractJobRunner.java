@@ -156,7 +156,6 @@ public class GeoWaveAnalyticExtractJobRunner extends
 		runTimeProperties.storeIfEmpty(
 				ExtractParameters.Extract.OUTPUT_DATA_TYPE_ID,
 				"centroid");
-
 		runTimeProperties.setConfig(
 				new ParameterEnum[] {
 					MapReduceParameters.MRConfig.HDFS_BASE_DIR,

@@ -1,6 +1,3 @@
-/**
- *
- */
 package mil.nga.giat.geowave.datastore.hbase.query;
 
 import java.io.IOException;
@@ -19,16 +16,11 @@ import mil.nga.giat.geowave.datastore.hbase.util.HBaseCloseableIteratorWrapper;
 import mil.nga.giat.geowave.datastore.hbase.util.HBaseCloseableIteratorWrapper.ScannerClosableWrapper;
 import mil.nga.giat.geowave.datastore.hbase.util.HBaseEntryIteratorWrapper;
 
-/**
- * @author viggy Functionality similar to
- *         <code> AbstractAccumuloRowQuery </code>
- */
 abstract public class AbstractHBaseRowQuery<T> extends
 		HBaseQuery
 {
 
-	private static final Logger LOGGER = Logger.getLogger(
-			AbstractHBaseRowQuery.class);
+	private static final Logger LOGGER = Logger.getLogger(AbstractHBaseRowQuery.class);
 	protected final ScanCallback<T> scanCallback;
 
 	public AbstractHBaseRowQuery(
@@ -44,18 +36,15 @@ abstract public class AbstractHBaseRowQuery<T> extends
 			final BasicHBaseOperations operations,
 			final AdapterStore adapterStore ) {
 		final Scan scanner = new Scan();
-		scanner.setMaxResultSize(
-				getScannerLimit());
+		scanner.setMaxResultSize(getScannerLimit());
 		ResultScanner results = null;
 		try {
 			results = operations.getScannedResults(
 					scanner,
-					StringUtils.stringFromBinary(
-							index.getId().getBytes()));
+					StringUtils.stringFromBinary(index.getId().getBytes()));
 		}
 		catch (final IOException e) {
-			LOGGER.error(
-					"Unable to get the scanned results " + e);
+			LOGGER.error("Unable to get the scanned results " + e);
 		}
 		/*
 		 * getScanner( accumuloOperations, getScannerLimit());
@@ -69,8 +58,7 @@ abstract public class AbstractHBaseRowQuery<T> extends
 						index,
 						results.iterator(),
 						null));
-		return queryResultFromIterator(
-				it);
+		return queryResultFromIterator(it);
 	}
 
 	abstract protected Integer getScannerLimit();

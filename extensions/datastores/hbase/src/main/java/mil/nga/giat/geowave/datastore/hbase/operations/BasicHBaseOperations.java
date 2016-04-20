@@ -1,21 +1,12 @@
-/**
- *
- */
 package mil.nga.giat.geowave.datastore.hbase.operations;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.Map;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
-import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.HColumnDescriptor;
 import org.apache.hadoop.hbase.HTableDescriptor;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.Connection;
-import org.apache.hadoop.hbase.client.ConnectionFactory;
 import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.client.Table;
@@ -24,19 +15,13 @@ import org.apache.log4j.Logger;
 import mil.nga.giat.geowave.core.store.config.AbstractConfigOption;
 import mil.nga.giat.geowave.core.store.config.StringConfigOption;
 import mil.nga.giat.geowave.datastore.hbase.io.HBaseWriter;
+import mil.nga.giat.geowave.datastore.hbase.util.ConnectionPool;
 import mil.nga.giat.geowave.datastore.hbase.util.HBaseUtils;
 
-/**
- * @author viggy Functionality similar to <code> BasicAccumuloOperations </code>
- *         . It is currently not extending any interface like AccumuloOperations
- *         to avoid replication.
- */
 public class BasicHBaseOperations
 {
 
 	private final static Logger LOGGER = Logger.getLogger(BasicHBaseOperations.class);
-	private static final String HBASE_CONFIGURATION_TIMEOUT = "timeout";
-	private static final String HBASE_CONFIGURATION_ZOOKEEPER_QUORUM = "hbase.zookeeper.quorum";
 	private static final String DEFAULT_TABLE_NAMESPACE = "";
 
 	public static final String ZOOKEEPER_INSTANCES_NAME = "zookeeper";
@@ -53,14 +38,8 @@ public class BasicHBaseOperations
 			final String zookeeperInstances,
 			final String geowaveNamespace )
 			throws IOException {
-		final Configuration hConf = HBaseConfiguration.create();
-		hConf.set(
-				HBASE_CONFIGURATION_ZOOKEEPER_QUORUM,
+		conn = ConnectionPool.getInstance().getConnection(
 				zookeeperInstances);
-		hConf.setInt(
-				HBASE_CONFIGURATION_TIMEOUT,
-				120000);
-		conn = ConnectionFactory.createConnection(hConf);
 		tableNamespace = geowaveNamespace;
 	}
 
@@ -88,7 +67,7 @@ public class BasicHBaseOperations
 
 	public static BasicHBaseOperations createOperations(
 			final Map<String, Object> configOptions,
-			final String namespace ) 
+			final String namespace )
 			throws IOException {
 		return new BasicHBaseOperations(
 				configOptions.get(
@@ -161,17 +140,16 @@ public class BasicHBaseOperations
 	public void deleteAll()
 			throws IOException {
 		final TableName[] tableNamesArr = conn.getAdmin().listTableNames();
-		final SortedSet<TableName> tableNames = new TreeSet<TableName>();
-		Collections.addAll(
-				tableNames,
-				tableNamesArr);
-		for (final TableName tableName : tableNames) {
-			if (conn.getAdmin().isTableAvailable(
-					tableName)) {
-				conn.getAdmin().disableTable(
-						tableName);
-				conn.getAdmin().deleteTable(
-						tableName);
+		for (final TableName tableName : tableNamesArr) {
+			if ((tableNamespace == null) || tableName.getNameAsString().startsWith(
+					tableNamespace)) {
+				if (conn.getAdmin().isTableAvailable(
+						tableName)) {
+					conn.getAdmin().disableTable(
+							tableName);
+					conn.getAdmin().deleteTable(
+							tableName);
+				}
 			}
 		}
 	}

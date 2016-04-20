@@ -39,8 +39,10 @@ import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayUtils;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.AdapterToIndexMapping;
+import mil.nga.giat.geowave.core.store.CastIterator;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
+import mil.nga.giat.geowave.core.store.DataAdapterAndIndexCache;
 import mil.nga.giat.geowave.core.store.DataStoreCallbackManager;
 import mil.nga.giat.geowave.core.store.DataStoreEntryInfo;
 import mil.nga.giat.geowave.core.store.IndependentAdapterIndexWriter;
@@ -85,7 +87,6 @@ import mil.nga.giat.geowave.datastore.accumulo.query.AccumuloRowPrefixQuery;
 import mil.nga.giat.geowave.datastore.accumulo.query.SharedVisibilitySplittingIterator;
 import mil.nga.giat.geowave.datastore.accumulo.query.SingleEntryFilterIterator;
 import mil.nga.giat.geowave.datastore.accumulo.util.AccumuloUtils;
-import mil.nga.giat.geowave.datastore.accumulo.util.DataAdapterAndIndexCache;
 import mil.nga.giat.geowave.datastore.accumulo.util.EntryIteratorWrapper;
 import mil.nga.giat.geowave.datastore.accumulo.util.ScannerClosableWrapper;
 import mil.nga.giat.geowave.mapreduce.MapReduceDataStore;
@@ -265,7 +266,6 @@ public class AccumuloDataStore implements
 					index,
 					accumuloOperations,
 					accumuloOptions,
-					this,
 					callbacksList,
 					callbacksList,
 					DataStoreUtils.UNCONSTRAINED_VISIBILITY);
@@ -466,8 +466,7 @@ public class AccumuloDataStore implements
 							accumuloOperations,
 							tempAdapterStore,
 							sanitizedQueryOptions.getMaxResolutionSubsamplingPerDimension(),
-							sanitizedQueryOptions.getLimit(),
-							true));
+							sanitizedQueryOptions.getLimit()));
 
 				}
 			}
@@ -492,33 +491,6 @@ public class AccumuloDataStore implements
 				},
 				Iterators.concat(new CastIterator<T>(
 						results.iterator())));
-	}
-
-	protected static class CastIterator<T> implements
-			Iterator<CloseableIterator<T>>
-	{
-
-		final Iterator<CloseableIterator<Object>> it;
-
-		public CastIterator(
-				final Iterator<CloseableIterator<Object>> it ) {
-			this.it = it;
-		}
-
-		@Override
-		public boolean hasNext() {
-			return it.hasNext();
-		}
-
-		@Override
-		public CloseableIterator<T> next() {
-			return (CloseableIterator<T>) it.next();
-		}
-
-		@Override
-		public void remove() {
-			it.remove();
-		}
 	}
 
 	protected static byte[] getRowIdBytes(

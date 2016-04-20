@@ -1,6 +1,3 @@
-/**
- *
- */
 package mil.nga.giat.geowave.datastore.hbase.query;
 
 import java.util.ArrayList;
@@ -18,15 +15,11 @@ import mil.nga.giat.geowave.core.store.filter.DedupeFilter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.query.Query;
 
-/**
- * @author viggy Functionality similar to <code> AccumuloRowIdQuery </code>
- */
 public class HBaseRowIdsQuery<T> extends
 		HBaseConstraintsQuery
 {
 
-	private final static Logger LOGGER = Logger.getLogger(
-			HBaseRowIdsQuery.class);
+	private final static Logger LOGGER = Logger.getLogger(HBaseRowIdsQuery.class);
 
 	final Collection<ByteArrayId> rows;
 
@@ -66,28 +59,28 @@ public class HBaseRowIdsQuery<T> extends
 		this.rows = rows;
 	}
 
-//	@Override
-//	protected Integer getScannerLimit() {
-//		return 1;
-//	}
-//
-//	@Override
-//	protected Object queryResultFromIterator(
-//			final HBaseCloseableIteratorWrapper<?> it ) {
-//		Object retVal = null;
-//		if (it.hasNext()) {
-//			retVal = it.next();
-//		}
-//		try {
-//			it.close();
-//		}
-//		catch (final IOException e) {
-//			LOGGER.warn(
-//					"Unable to close single row ID query iterator",
-//					e);
-//		}
-//		return retVal;
-//	}
+	// @Override
+	// protected Integer getScannerLimit() {
+	// return 1;
+	// }
+	//
+	// @Override
+	// protected Object queryResultFromIterator(
+	// final HBaseCloseableIteratorWrapper<?> it ) {
+	// Object retVal = null;
+	// if (it.hasNext()) {
+	// retVal = it.next();
+	// }
+	// try {
+	// it.close();
+	// }
+	// catch (final IOException e) {
+	// LOGGER.warn(
+	// "Unable to close single row ID query iterator",
+	// e);
+	// }
+	// return retVal;
+	// }
 
 	@Override
 	protected List<ByteArrayRange> getRanges() {

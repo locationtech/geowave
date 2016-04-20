@@ -2,11 +2,13 @@ package mil.nga.giat.geowave.datastore.hbase;
 
 import mil.nga.giat.geowave.core.store.DataStoreFactorySpi;
 import mil.nga.giat.geowave.core.store.StoreFactoryFamilySpi;
+import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStoreFactorySpi;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStoreFactorySpi;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStoreFactorySpi;
 import mil.nga.giat.geowave.core.store.index.IndexStoreFactorySpi;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndexDataStoreFactorySpi;
 import mil.nga.giat.geowave.datastore.hbase.index.secondary.HBaseSecondaryIndexDataStoreFactory;
+import mil.nga.giat.geowave.datastore.hbase.metadata.HBaseAdapterIndexMappingStoreFactory;
 import mil.nga.giat.geowave.datastore.hbase.metadata.HBaseAdapterStoreFactory;
 import mil.nga.giat.geowave.datastore.hbase.metadata.HBaseDataStatisticsStoreFactory;
 import mil.nga.giat.geowave.datastore.hbase.metadata.HBaseIndexStoreFactory;
@@ -38,6 +40,11 @@ public class HBaseStoreFactoryFamily extends
 	@Override
 	public SecondaryIndexDataStoreFactorySpi getSecondaryIndexDataStore() {
 		return new HBaseSecondaryIndexDataStoreFactory();
+	}
+
+	@Override
+	public AdapterIndexMappingStoreFactorySpi getAdapterIndexMappingStoreFactory() {
+		return new HBaseAdapterIndexMappingStoreFactory();
 	}
 
 }

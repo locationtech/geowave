@@ -125,7 +125,6 @@ public class BasicAccumuloOperations implements
 				null,
 				tableNamespace);
 		this.password = password;
-
 		connector = ConnectorPool.getInstance().getConnector(
 				zookeeperUrl,
 				instanceName,

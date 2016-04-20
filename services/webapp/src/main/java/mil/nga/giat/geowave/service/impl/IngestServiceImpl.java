@@ -198,6 +198,10 @@ public class IngestServiceImpl implements
 		args.add(namespace);
 		args.add("-dim");
 		args.add(dimType);
+		for (final Entry<String, String> e : additionalParams.entrySet()) {
+			args.add("-" + e.getKey());
+			args.add(e.getValue());
+		}
 
 		if ((visibility != null) && !visibility.isEmpty()) {
 			args.add("-v");

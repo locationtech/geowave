@@ -1,5 +1,6 @@
 package mil.nga.giat.geowave.core.ingest;
 
+import mil.nga.giat.geowave.core.store.config.ConfigUtils;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;

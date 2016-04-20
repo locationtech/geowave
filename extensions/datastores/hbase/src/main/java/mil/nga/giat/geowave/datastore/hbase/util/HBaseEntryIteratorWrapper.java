@@ -11,14 +11,10 @@ import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 
-/**
- * @author viggy Functionality similar to <code> EntryIteratorWrapper </code>
- */
 public class HBaseEntryIteratorWrapper<T> implements
 		Iterator<T>
 {
-	private final static Logger LOGGER = Logger.getLogger(
-			HBaseEntryIteratorWrapper.class);
+	private final static Logger LOGGER = Logger.getLogger(HBaseEntryIteratorWrapper.class);
 	private final AdapterStore adapterStore;
 	protected final PrimaryIndex index;
 	private final Iterator<Result> scannerIt;
@@ -98,8 +94,7 @@ public class HBaseEntryIteratorWrapper<T> implements
 	@Override
 	public void remove() {
 		// TODO #406 Need to fix
-		LOGGER.error(
-				"This method is not yet coded. Need to fix it");
+		LOGGER.error("This method is not yet coded. Need to fix it");
 	}
 
 }

@@ -56,11 +56,9 @@ public class GeoWaveKMeansIT extends
 
 	private SimpleFeatureBuilder getBuilder() {
 		final SimpleFeatureTypeBuilder typeBuilder = new SimpleFeatureTypeBuilder();
-		typeBuilder.setName(
-				"test");
-		typeBuilder.setCRS(
-				DefaultGeographicCRS.WGS84); // <- Coordinate
-												// reference
+		typeBuilder.setName("test");
+		typeBuilder.setCRS(DefaultGeographicCRS.WGS84); // <- Coordinate
+														// reference
 		// add attributes in order
 		typeBuilder.add(
 				"geom",
@@ -83,7 +81,7 @@ public class GeoWaveKMeansIT extends
 
 	private void testIngest(
 			final DataStore dataStore )
-					throws IOException {
+			throws IOException {
 
 		dataGenerator.writeToGeoWave(
 				dataStore,
@@ -95,11 +93,11 @@ public class GeoWaveKMeansIT extends
 						new double[] {
 							-100,
 							-45
-		},
+						},
 						new double[] {
 							-90,
 							-35
-		}));
+						}));
 		dataGenerator.writeToGeoWave(
 				dataStore,
 				dataGenerator.generatePointSet(
@@ -110,11 +108,11 @@ public class GeoWaveKMeansIT extends
 						new double[] {
 							0,
 							0
-		},
+						},
 						new double[] {
 							10,
 							10
-		}));
+						}));
 		dataGenerator.writeToGeoWave(
 				dataStore,
 				dataGenerator.generatePointSet(
@@ -125,11 +123,11 @@ public class GeoWaveKMeansIT extends
 						new double[] {
 							65,
 							35
-		},
+						},
 						new double[] {
 							75,
 							45
-		}));
+						}));
 
 	}
 
@@ -141,8 +139,7 @@ public class GeoWaveKMeansIT extends
 				GenericStoreCommandLineOptions.NAMESPACE_OPTION_KEY,
 				TEST_NAMESPACE);
 		final Options nsOptions = new Options();
-		DataStoreCommandLineOptions.applyOptions(
-				nsOptions);
+		DataStoreCommandLineOptions.applyOptions(nsOptions);
 		final CommandLineResult<DataStoreCommandLineOptions> dataStoreOptions = DataStoreCommandLineOptions.parseOptions(
 				nsOptions,
 				new OptionMapWrapper(
@@ -155,8 +152,7 @@ public class GeoWaveKMeansIT extends
 				nsOptions,
 				new OptionMapWrapper(
 						options));
-		testIngest(
-				dataStoreOptions.getResult().createStore());
+		testIngest(dataStoreOptions.getResult().createStore());
 
 		runKPlusPlus(
 				new SpatialQuery(
@@ -164,7 +160,6 @@ public class GeoWaveKMeansIT extends
 				dataStoreOptions.getResult(),
 				indexStoreOptions.getResult(),
 				adapterStoreOptions.getResult());
-
 	}
 
 	private void runKPlusPlus(
@@ -172,7 +167,7 @@ public class GeoWaveKMeansIT extends
 			final DataStoreCommandLineOptions dataStoreOptions,
 			final IndexStoreCommandLineOptions indexStoreOptions,
 			final AdapterStoreCommandLineOptions adapterStoreOptions )
-					throws Exception {
+			throws Exception {
 
 		final MultiLevelKMeansClusteringJobRunner jobRunner = new MultiLevelKMeansClusteringJobRunner();
 		final int res = jobRunner.run(
@@ -193,7 +188,7 @@ public class GeoWaveKMeansIT extends
 							MapReduceParameters.MRConfig.HDFS_BASE_DIR,
 							SampleParameters.Sample.MAX_SAMPLE_SIZE,
 							SampleParameters.Sample.MIN_SAMPLE_SIZE
-		},
+						},
 						new Object[] {
 							query,
 							MIN_INPUT_SPLITS,
@@ -212,7 +207,7 @@ public class GeoWaveKMeansIT extends
 							hdfsBaseDirectory + "/t1",
 							3,
 							2
-		}));
+						}));
 
 		Assert.assertEquals(
 				0,
@@ -235,8 +230,7 @@ public class GeoWaveKMeansIT extends
 				"bx1",
 				2, // level
 				resultCounLevel1);
-		Assert.assertTrue(
-				resultCounLevel2 >= 2);
+		Assert.assertTrue(resultCounLevel2 >= 2);
 		// for travis-ci to run, we want to limit the memory consumption
 		System.gc();
 	}
@@ -246,7 +240,7 @@ public class GeoWaveKMeansIT extends
 			final DataStoreCommandLineOptions dataStoreOptions,
 			final IndexStoreCommandLineOptions indexStoreOptions,
 			final AdapterStoreCommandLineOptions adapterStoreOptions )
-					throws Exception {
+			throws Exception {
 
 		final MultiLevelJumpKMeansClusteringJobRunner jobRunner2 = new MultiLevelJumpKMeansClusteringJobRunner();
 		final int res2 = jobRunner2.run(
@@ -266,7 +260,7 @@ public class GeoWaveKMeansIT extends
 							JumpParameters.Jump.RANGE_OF_CENTROIDS,
 							JumpParameters.Jump.KPLUSPLUS_MIN,
 							ClusteringParameters.Clustering.MAX_ITERATIONS
-		},
+						},
 						new Object[] {
 							query,
 							MIN_INPUT_SPLITS,
@@ -286,7 +280,7 @@ public class GeoWaveKMeansIT extends
 									7),
 							5,
 							2
-		}));
+						}));
 
 		Assert.assertEquals(
 				0,
@@ -309,10 +303,8 @@ public class GeoWaveKMeansIT extends
 				"bx2",
 				2,
 				jumpRresultCounLevel1);
-		Assert.assertTrue(
-				jumpRresultCounLevel1 >= 2);
-		Assert.assertTrue(
-				jumpRresultCounLevel2 >= 2);
+		Assert.assertTrue(jumpRresultCounLevel1 >= 2);
+		Assert.assertTrue(jumpRresultCounLevel2 >= 2);
 		// for travis-ci to run, we want to limit the memory consumption
 		System.gc();
 	}
@@ -324,9 +316,9 @@ public class GeoWaveKMeansIT extends
 			final String batchID,
 			final int level,
 			final int expectedParentCount )
-					throws AccumuloException,
-					AccumuloSecurityException,
-					IOException {
+			throws AccumuloException,
+			AccumuloSecurityException,
+			IOException {
 
 		final CentroidManager<SimpleFeature> centroidManager = new CentroidManagerGeoWave<SimpleFeature>(
 				dataStore,
@@ -351,33 +343,24 @@ public class GeoWaveKMeansIT extends
 		int childCount = 0;
 		int parentCount = 0;
 		for (final String grp : centroidManager.getAllCentroidGroups()) {
-			final List<AnalyticItemWrapper<SimpleFeature>> centroids = centroidManager.getCentroidsForGroup(
-					grp);
-			final List<AnalyticItemWrapper<SimpleFeature>> hulls = hullManager.getCentroidsForGroup(
-					grp);
+			final List<AnalyticItemWrapper<SimpleFeature>> centroids = centroidManager.getCentroidsForGroup(grp);
+			final List<AnalyticItemWrapper<SimpleFeature>> hulls = hullManager.getCentroidsForGroup(grp);
 
 			for (final AnalyticItemWrapper<SimpleFeature> centroid : centroids) {
 				if (centroid.getAssociationCount() == 0) {
 					continue;
 				}
-				Assert.assertTrue(
-						centroid.getGeometry() != null);
-				Assert.assertTrue(
-						centroid.getBatchID() != null);
+				Assert.assertTrue(centroid.getGeometry() != null);
+				Assert.assertTrue(centroid.getBatchID() != null);
 				boolean found = false;
 				final List<SimpleFeature> features = new ArrayList<SimpleFeature>();
 				for (final AnalyticItemWrapper<SimpleFeature> hull : hulls) {
-					found |= (hull.getName().equals(
-							centroid.getName()));
-					Assert.assertTrue(
-							hull.getGeometry() != null);
-					Assert.assertTrue(
-							hull.getBatchID() != null);
-					features.add(
-							hull.getWrappedItem());
+					found |= (hull.getName().equals(centroid.getName()));
+					Assert.assertTrue(hull.getGeometry() != null);
+					Assert.assertTrue(hull.getBatchID() != null);
+					features.add(hull.getWrappedItem());
 				}
-				System.out.println(
-						features);
+				System.out.println(features);
 				Assert.assertTrue(
 						grp,
 						found);

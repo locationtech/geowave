@@ -33,7 +33,6 @@ public class AccumuloIndexWriter<T> implements
 	protected final PrimaryIndex index;
 	protected final AccumuloOperations accumuloOperations;
 	protected final AccumuloOptions accumuloOptions;
-	protected final AccumuloDataStore dataStore;
 	protected final IngestCallback<T> callback;
 	protected Writer writer;
 
@@ -50,14 +49,12 @@ public class AccumuloIndexWriter<T> implements
 			final PrimaryIndex index,
 			final AccumuloOperations accumuloOperations,
 			final AccumuloOptions accumuloOptions,
-			final AccumuloDataStore dataStore,
 			final IngestCallback<T> callback,
 			final Closeable closable,
 			final VisibilityWriter<T> customFieldVisibilityWriter ) {
 		this.index = index;
 		this.accumuloOperations = accumuloOperations;
 		this.accumuloOptions = accumuloOptions;
-		this.dataStore = dataStore;
 		this.customFieldVisibilityWriter = customFieldVisibilityWriter;
 		this.callback = callback;
 		this.adapter = adapter;

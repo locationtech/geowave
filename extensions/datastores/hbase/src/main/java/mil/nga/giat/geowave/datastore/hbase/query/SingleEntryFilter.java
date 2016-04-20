@@ -1,13 +1,8 @@
-/**
- * 
- */
 package mil.nga.giat.geowave.datastore.hbase.query;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
-
-import mil.nga.giat.geowave.datastore.hbase.query.generated.FilterProtos;
 
 import org.apache.hadoop.hbase.Cell;
 import org.apache.hadoop.hbase.CellUtil;
@@ -18,12 +13,13 @@ import org.apache.hadoop.hbase.util.ByteStringer;
 
 import com.google.protobuf.InvalidProtocolBufferException;
 
+import mil.nga.giat.geowave.datastore.hbase.query.generated.FilterProtos;
+
 /**
- * @author viggy This is a Filter which will run on Tablet Server during Scan.
- *         HBase uses these filters instead of Iterators. It makes use of
- *         Protocol Buffer library See {@link https
- *         ://developers.google.com/protocol-buffers/docs/javatutorial} for more
- *         info.
+ * This is a Filter which will run on Tablet Server during Scan. HBase uses
+ * these filters instead of Iterators. It makes use of Protocol Buffer library
+ * See {@link https ://developers.google.com/protocol-buffers/docs/javatutorial}
+ * for more info.
  */
 public class SingleEntryFilter extends
 		FilterBase
@@ -31,12 +27,12 @@ public class SingleEntryFilter extends
 
 	public static final String ADAPTER_ID = "adapterid";
 	public static final String DATA_ID = "dataid";
-	private byte[] adapterId;
-	private byte[] dataId;
+	private final byte[] adapterId;
+	private final byte[] dataId;
 
 	public SingleEntryFilter(
-			byte[] dataId,
-			byte[] adapterId ) {
+			final byte[] dataId,
+			final byte[] adapterId ) {
 
 		if (adapterId == null) {
 			throw new IllegalArgumentException(
@@ -53,7 +49,7 @@ public class SingleEntryFilter extends
 
 	@Override
 	public ReturnCode filterKeyValue(
-			Cell v )
+			final Cell v )
 			throws IOException {
 
 		boolean accept = true;
@@ -101,7 +97,7 @@ public class SingleEntryFilter extends
 	}
 
 	public static Filter parseFrom(
-			byte[] pbBytes )
+			final byte[] pbBytes )
 			throws DeserializationException {
 		mil.nga.giat.geowave.datastore.hbase.query.generated.FilterProtos.SingleEntryFilter proto;
 		try {
@@ -121,7 +117,7 @@ public class SingleEntryFilter extends
 																		// correct
 																		// values.
 		}
-		catch (InvalidProtocolBufferException e) {
+		catch (final InvalidProtocolBufferException e) {
 			throw new DeserializationException(
 					e);
 		}
@@ -130,10 +126,15 @@ public class SingleEntryFilter extends
 				proto.getAdapterId().toByteArray());
 	}
 
+	@Override
 	public byte[] toByteArray() {
-		FilterProtos.SingleEntryFilter.Builder builder = FilterProtos.SingleEntryFilter.newBuilder();
-		if (adapterId != null) builder.setAdapterId(ByteStringer.wrap(adapterId));
-		if (dataId != null) builder.setDataId(ByteStringer.wrap(dataId));
+		final FilterProtos.SingleEntryFilter.Builder builder = FilterProtos.SingleEntryFilter.newBuilder();
+		if (adapterId != null) {
+			builder.setAdapterId(ByteStringer.wrap(adapterId));
+		}
+		if (dataId != null) {
+			builder.setDataId(ByteStringer.wrap(dataId));
+		}
 
 		return builder.build().toByteArray();
 	}

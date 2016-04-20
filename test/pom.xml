@@ -65,19 +65,16 @@
 			<groupId>com.github.sakserv</groupId>
 		    <artifactId>hadoop-mini-clusters-hbase</artifactId>
 		    <version>0.1.3</version>
-            <scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.github.sakserv</groupId>
 		    <artifactId>hadoop-mini-clusters-zookeeper</artifactId>
 		    <version>0.1.3</version>
-            <scope>test</scope>
 		</dependency>
 		<dependency>
             <groupId>com.github.sakserv</groupId>
             <artifactId>property-parser</artifactId>
             <version>0.0.2</version>
-            <scope>test</scope>
         </dependency>
 		<dependency>
 			<groupId>org.apache.hadoop</groupId>

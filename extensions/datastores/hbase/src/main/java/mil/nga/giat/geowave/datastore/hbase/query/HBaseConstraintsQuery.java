@@ -1,6 +1,3 @@
-/**
- *
- */
 package mil.nga.giat.geowave.datastore.hbase.query;
 
 import java.util.ArrayList;
@@ -23,31 +20,26 @@ import mil.nga.giat.geowave.core.store.memory.DataStoreUtils;
 import mil.nga.giat.geowave.core.store.query.Query;
 import mil.nga.giat.geowave.core.store.query.aggregate.Aggregation;
 
-/**
- * @author viggy Functionality similar to
- *         <code> AccumuloConstraintsQuery </code>
- */
 public class HBaseConstraintsQuery extends
 		HBaseFilteredIndexQuery
 {
 
-	private final static Logger LOGGER = Logger.getLogger(
-			HBaseConstraintsQuery.class);
+	private final static Logger LOGGER = Logger.getLogger(HBaseConstraintsQuery.class);
 	private static final int MAX_RANGE_DECOMPOSITION = 5000;
 	private final List<MultiDimensionalNumericData> constraints;
 	protected final List<DistributableQueryFilter> distributableFilters;
 	protected boolean queryFiltersEnabled;
 
 	// TODO How to use?
-	protected final Pair<DataAdapter<?>, Aggregation<?>> aggregation;
-	
+	protected final Pair<DataAdapter<?>, Aggregation<?, ?, ?>> aggregation;
+
 	public HBaseConstraintsQuery(
 			final List<ByteArrayId> adapterIds,
 			final PrimaryIndex index,
 			final Query query,
 			final DedupeFilter clientDedupeFilter,
 			final ScanCallback<?> scanCallback,
-			final Pair<DataAdapter<?>, Aggregation<?>> aggregation,
+			final Pair<DataAdapter<?>, Aggregation<?, ?, ?>> aggregation,
 			final String[] authorizations ) {
 		this(
 				adapterIds,
@@ -125,7 +117,7 @@ public class HBaseConstraintsQuery extends
 			final List<QueryFilter> queryFilters,
 			final DedupeFilter clientDedupeFilter,
 			final ScanCallback<?> scanCallback,
-			final Pair<DataAdapter<?>, Aggregation<?>> aggregation,
+			final Pair<DataAdapter<?>, Aggregation<?, ?, ?>> aggregation,
 			final String[] authorizations ) {
 		super(
 				adapterIds,
@@ -170,12 +162,10 @@ public class HBaseConstraintsQuery extends
 		}
 		for (final QueryFilter filter : allFilters) {
 			if (filter instanceof DistributableQueryFilter) {
-				distributableFilters.add(
-						(DistributableQueryFilter) filter);
+				distributableFilters.add((DistributableQueryFilter) filter);
 			}
 			else {
-				clientFilters.add(
-						filter);
+				clientFilters.add(filter);
 			}
 		}
 		return new SplitFilterLists(
@@ -207,8 +197,8 @@ public class HBaseConstraintsQuery extends
 	@Override
 	protected List<QueryFilter> getAllFiltersList() {
 		final List<QueryFilter> filters = super.getAllFiltersList();
-		for(QueryFilter distributable : distributableFilters){
-			if(!filters.contains(distributable)){
+		for (QueryFilter distributable : distributableFilters) {
+			if (!filters.contains(distributable)) {
 				filters.add(distributable);
 			}
 		}

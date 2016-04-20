@@ -26,14 +26,13 @@ import mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations;
 
 /**
  * @author viggy
- *
+ * 
  */
 public class GeoWaveHBaseTestEnvironment extends
 		GeoWaveTestEnvironment
 {
 
-	private final static Logger LOGGER = Logger.getLogger(
-			GeoWaveHBaseTestEnvironment.class);
+	private final static Logger LOGGER = Logger.getLogger(GeoWaveHBaseTestEnvironment.class);
 	private static final String HBASE_PROPS_FILE = "hbase.properties";
 	protected static BasicHBaseOperations operations;
 	protected static String zookeeper;
@@ -46,14 +45,10 @@ public class GeoWaveHBaseTestEnvironment extends
 			throws IOException {
 
 		synchronized (MUTEX) {
-			TimeZone.setDefault(
-					TimeZone.getTimeZone(
-							"GMT"));
+			TimeZone.setDefault(TimeZone.getTimeZone("GMT"));
 			if (operations == null) {
-				zookeeper = System.getProperty(
-						"zookeeperUrl");
-				if (!isSet(
-						zookeeper)) {
+				zookeeper = System.getProperty("zookeeperUrl");
+				if (!isSet(zookeeper)) {
 
 					PropertyParser propertyParser = null;
 
@@ -63,25 +58,19 @@ public class GeoWaveHBaseTestEnvironment extends
 						propertyParser.parsePropsFile();
 					}
 					catch (final IOException e) {
-						LOGGER.error(
-								"Unable to load property file: {}" + HBASE_PROPS_FILE);
+						LOGGER.error("Unable to load property file: {}" + HBASE_PROPS_FILE);
 					}
 
-					System.setProperty("HADOOP_HOME", System.getenv().get("HADOOP_HOME"));
+					System.setProperty(
+							"HADOOP_HOME",
+							System.getenv().get(
+									"HADOOP_HOME"));
 
 					try {
-						zookeeperLocalCluster = new ZookeeperLocalCluster.Builder()
-								.setPort(
-										Integer.parseInt(
-												propertyParser.getProperty(
-														ConfigVars.ZOOKEEPER_PORT_KEY)))
-								.setTempDir(
-										propertyParser.getProperty(
-												ConfigVars.ZOOKEEPER_TEMP_DIR_KEY))
-								.setZookeeperConnectionString(
-										propertyParser.getProperty(
-												ConfigVars.ZOOKEEPER_CONNECTION_STRING_KEY))
-								.build();
+						zookeeperLocalCluster = new ZookeeperLocalCluster.Builder().setPort(
+								Integer.parseInt(propertyParser.getProperty(ConfigVars.ZOOKEEPER_PORT_KEY))).setTempDir(
+								propertyParser.getProperty(ConfigVars.ZOOKEEPER_TEMP_DIR_KEY)).setZookeeperConnectionString(
+								propertyParser.getProperty(ConfigVars.ZOOKEEPER_CONNECTION_STRING_KEY)).build();
 						zookeeperLocalCluster.start();
 					}
 					catch (final Exception e) {
@@ -93,39 +82,16 @@ public class GeoWaveHBaseTestEnvironment extends
 					zookeeper = zookeeperLocalCluster.getZookeeperConnectionString();
 
 					try {
-						hbaseLocalCluster = new HbaseLocalCluster.Builder()
-								.setHbaseMasterPort(
-										Integer.parseInt(
-												propertyParser.getProperty(
-														ConfigVars.HBASE_MASTER_PORT_KEY)))
-								.setHbaseMasterInfoPort(
-										Integer.parseInt(
-												propertyParser.getProperty(
-														ConfigVars.HBASE_MASTER_INFO_PORT_KEY)))
-								.setNumRegionServers(
-										Integer.parseInt(
-												propertyParser.getProperty(
-														ConfigVars.HBASE_NUM_REGION_SERVERS_KEY)))
-								.setHbaseRootDir(
-										propertyParser.getProperty(
-												ConfigVars.HBASE_ROOT_DIR_KEY))
-								.setZookeeperPort(
-										Integer.parseInt(
-												propertyParser.getProperty(
-														ConfigVars.ZOOKEEPER_PORT_KEY)))
-								.setZookeeperConnectionString(
-										propertyParser.getProperty(
-												ConfigVars.ZOOKEEPER_CONNECTION_STRING_KEY))
-								.setZookeeperZnodeParent(
-										propertyParser.getProperty(
-												ConfigVars.HBASE_ZNODE_PARENT_KEY))
-								.setHbaseWalReplicationEnabled(
-										Boolean.parseBoolean(
-												propertyParser.getProperty(
-														ConfigVars.HBASE_WAL_REPLICATION_ENABLED_KEY)))
-								.setHbaseConfiguration(
-										new Configuration())
-								.build();
+						hbaseLocalCluster = new HbaseLocalCluster.Builder().setHbaseMasterPort(
+								Integer.parseInt(propertyParser.getProperty(ConfigVars.HBASE_MASTER_PORT_KEY))).setHbaseMasterInfoPort(
+								Integer.parseInt(propertyParser.getProperty(ConfigVars.HBASE_MASTER_INFO_PORT_KEY))).setNumRegionServers(
+								Integer.parseInt(propertyParser.getProperty(ConfigVars.HBASE_NUM_REGION_SERVERS_KEY))).setHbaseRootDir(
+								propertyParser.getProperty(ConfigVars.HBASE_ROOT_DIR_KEY)).setZookeeperPort(
+								Integer.parseInt(propertyParser.getProperty(ConfigVars.ZOOKEEPER_PORT_KEY))).setZookeeperConnectionString(
+								propertyParser.getProperty(ConfigVars.ZOOKEEPER_CONNECTION_STRING_KEY)).setZookeeperZnodeParent(
+								propertyParser.getProperty(ConfigVars.HBASE_ZNODE_PARENT_KEY)).setHbaseWalReplicationEnabled(
+								Boolean.parseBoolean(propertyParser.getProperty(ConfigVars.HBASE_WAL_REPLICATION_ENABLED_KEY))).setHbaseConfiguration(
+								new Configuration()).build();
 						hbaseLocalCluster.start();
 					}
 					catch (final Exception e) {
@@ -149,8 +115,7 @@ public class GeoWaveHBaseTestEnvironment extends
 						LOGGER.warn(
 								"Unable to connect to HBase",
 								e);
-						Assert.fail(
-								"Could not connect to HBase instance: '" + e.getLocalizedMessage() + "'");
+						Assert.fail("Could not connect to HBase instance: '" + e.getLocalizedMessage() + "'");
 					}
 				}
 			}
@@ -166,8 +131,7 @@ public class GeoWaveHBaseTestEnvironment extends
 			if (!DEFER_CLEANUP.get()) {
 
 				if (operations == null) {
-					Assert.fail(
-							"Invalid state <null> for hbase operations during CLEANUP phase");
+					Assert.fail("Invalid state <null> for hbase operations during CLEANUP phase");
 				}
 				try {
 					operations.deleteAll();
@@ -176,8 +140,7 @@ public class GeoWaveHBaseTestEnvironment extends
 					LOGGER.error(
 							"Unable to clear hbase namespace",
 							ex);
-					Assert.fail(
-							"Index not deleted successfully");
+					Assert.fail("Index not deleted successfully");
 				}
 
 				try {
@@ -211,16 +174,20 @@ public class GeoWaveHBaseTestEnvironment extends
 	@Override
 	protected void testLocalIngest(
 			final DimensionalityType dimensionalityType,
-			final String ingestFilePath ) {
+			final String ingestFilePath,
+			final String format,
+			final int nthreads ) {
 		// ingest a shapefile (geotools type) directly into GeoWave using the
 		// ingest framework's main method and pre-defined commandline arguments
-		LOGGER.warn(
-				"Ingesting '" + ingestFilePath + "' - this may take several minutes...");
+		String threadExtra = "";
+		if (nthreads > 1) {
+			threadExtra = "-t " + nthreads + " ";
+		}
+		LOGGER.warn("Ingesting '" + ingestFilePath + "' - this may take several minutes...");
 		final String[] args = StringUtils.split(
-				"-localingest -datastore " + new HBaseDataStoreFactory().getName() + " -f geotools-vector -b " + ingestFilePath + " -" + GenericStoreCommandLineOptions.NAMESPACE_OPTION_KEY + " " + TEST_NAMESPACE + " -dim " + dimensionalityType.getDimensionalityArg() + " -" + BasicHBaseOperations.ZOOKEEPER_INSTANCES_NAME + " " + zookeeper,
+				"-localingest -datastore " + new HBaseDataStoreFactory().getName() + " -f " + format + " " + threadExtra + "-b " + ingestFilePath + " -" + GenericStoreCommandLineOptions.NAMESPACE_OPTION_KEY + " " + TEST_NAMESPACE + " -dim " + dimensionalityType.getDimensionalityArg() + " -" + BasicHBaseOperations.ZOOKEEPER_INSTANCES_NAME + " " + zookeeper,
 				' ');
-		GeoWaveMain.run(
-				args);
+		GeoWaveMain.run(args);
 		verifyStats();
 	}
 

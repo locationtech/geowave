@@ -3,9 +3,6 @@ package mil.nga.giat.geowave.datastore.hbase.util;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-/**
- * @author viggy Functionality similar to <code> IteratorWrapper </code>
- */
 public class HBaseIteratorWrapper<InputType, ConvertedType> implements
 		Iterator<ConvertedType>
 {

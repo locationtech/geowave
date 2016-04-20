@@ -25,6 +25,9 @@ public class HBaseDataStoreFactory extends
 				GeoWaveStoreFinder.createDataStatisticsStore(
 						configOptions,
 						namespace),
+				GeoWaveStoreFinder.createAdapterIndexMappingStore(
+						configOptions,
+						namespace),
 				GeoWaveStoreFinder.createSecondaryIndexDataStore(
 						configOptions,
 						namespace),

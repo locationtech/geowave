@@ -7,9 +7,6 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.UUID;
 
-import mil.nga.giat.geowave.adapter.vector.BaseDataStoreTest;
-import mil.nga.giat.geowave.adapter.vector.utils.DateUtilities;
-
 import org.geotools.data.DataStore;
 import org.geotools.data.DataUtilities;
 import org.geotools.data.DefaultTransaction;
@@ -28,6 +25,9 @@ import org.opengis.feature.simple.SimpleFeatureType;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.PrecisionModel;
+
+import mil.nga.giat.geowave.adapter.vector.BaseDataStoreTest;
+import mil.nga.giat.geowave.adapter.vector.utils.DateUtilities;
 
 public class WFSBoundedQueryTest extends
 		BaseDataStoreTest

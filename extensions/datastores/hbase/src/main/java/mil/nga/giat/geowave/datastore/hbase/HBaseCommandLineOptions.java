@@ -11,10 +11,6 @@ import org.apache.commons.cli.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * @author viggy Functionality similar to
- *         <code> AccumuloCommandLineOptions </code>
- */
 public class HBaseCommandLineOptions
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(HBaseCommandLineOptions.class);

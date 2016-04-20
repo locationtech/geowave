@@ -23,10 +23,6 @@ import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputFormat;
 import mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputFormat;
 import mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputKey;
 
-import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.io.Text;
-import org.apache.hadoop.mapreduce.Job;
-
 /**
  * 
  * Calculate the distortation.
@@ -83,7 +79,6 @@ public class KMeansDistortionJobRunner extends
 
 		// Required since the Mapper uses the input format parameters to lookup
 		// the adapter
-
 		GeoWaveInputFormat.setDataStoreName(
 				conf,
 				dataStoreOptions.getFactory().getName());

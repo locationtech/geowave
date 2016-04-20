@@ -208,8 +208,6 @@ public class KMeansJumpJobRunner extends
 					currentBatchId,
 					currentZoomLevel);
 
-			// distortionGroupManagement.cleanUp();
-
 			return result;
 		}
 		catch (final Exception ex) {

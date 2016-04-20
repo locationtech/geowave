@@ -39,14 +39,16 @@ public class ByteArrayId implements
 		}
 		return stringId;
 	}
-	
-	public String getReadableString(){
-		
+
+	public String getReadableString() {
+
 		StringBuffer str = new StringBuffer();
-		for(byte b : id){
-			str.append(String.format("%02X ", b));
+		for (byte b : id) {
+			str.append(String.format(
+					"%02X ",
+					b));
 		}
-		return str.toString();		
+		return str.toString();
 	}
 
 	@Override

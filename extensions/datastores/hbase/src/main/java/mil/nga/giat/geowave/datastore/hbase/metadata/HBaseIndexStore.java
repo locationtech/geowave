@@ -1,6 +1,3 @@
-/**
- *
- */
 package mil.nga.giat.geowave.datastore.hbase.metadata;
 
 import org.apache.log4j.Logger;
@@ -11,16 +8,12 @@ import mil.nga.giat.geowave.core.store.index.Index;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations;
 
-/**
- * @author viggy Functionality similar to <code> AccumuloIndexStore </code>
- */
 public class HBaseIndexStore extends
 		AbstractHBasePersistence<Index<?, ?>> implements
 		IndexStore
 {
 
-	private final static Logger LOGGER = Logger.getLogger(
-			HBaseIndexStore.class);
+	private final static Logger LOGGER = Logger.getLogger(HBaseIndexStore.class);
 	private static final String INDEX_CF = "INDEX";
 
 	public HBaseIndexStore(
@@ -32,8 +25,7 @@ public class HBaseIndexStore extends
 	@Override
 	public void addIndex(
 			final Index index ) {
-		addObject(
-				index);
+		addObject(index);
 
 	}
 

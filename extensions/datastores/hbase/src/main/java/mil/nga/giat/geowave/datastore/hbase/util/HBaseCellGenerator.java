@@ -16,10 +16,9 @@ import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.memory.DataStoreUtils;
 
 /**
- * @author viggy Functionality similar to
- *         <code> AccumuloKeyValuePairGenerator </code> Since HBase already has
- *         a concept of Cell, we are using it rather than custom implementation
- *         of KeyValue Pair
+ * Functionality similar to <code> AccumuloKeyValuePairGenerator </code> Since
+ * HBase already has a concept of Cell, we are using it rather than custom
+ * implementation of KeyValue Pair
  */
 public class HBaseCellGenerator<T>
 {
@@ -51,12 +50,11 @@ public class HBaseCellGenerator<T>
 				visibilityWriter);
 		final List<ByteArrayId> rowIds = ingestInfo.getRowIds();
 		@SuppressWarnings("rawtypes")
-		final
-		List<FieldInfo<?>> fieldInfoList = ingestInfo.getFieldInfo();
+		final List<FieldInfo<?>> fieldInfoList = ingestInfo.getFieldInfo();
 
 		for (final ByteArrayId rowId : rowIds) {
-			for (@SuppressWarnings("rawtypes") final
-			FieldInfo fieldInfo : fieldInfoList) {
+			for (@SuppressWarnings("rawtypes")
+			final FieldInfo fieldInfo : fieldInfoList) {
 				cell = CellUtil.createCell(
 						rowId.getBytes(),
 						adapterId,
@@ -64,8 +62,7 @@ public class HBaseCellGenerator<T>
 						System.currentTimeMillis(),
 						KeyValue.Type.Put.getCode(),
 						fieldInfo.getWrittenValue());
-				keyValuePairs.add(
-						cell);
+				keyValuePairs.add(cell);
 			}
 		}
 

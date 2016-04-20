@@ -106,7 +106,7 @@ abstract public class GeoWaveTestEnvironment
 
 	protected static final AtomicBoolean DEFER_CLEANUP = new AtomicBoolean(
 			false);
-	
+
 	protected static HashMap<Long, SimpleFeature> expectedFeatures = new HashMap<Long, SimpleFeature>();
 
 	protected static boolean isYarn() {
@@ -124,6 +124,16 @@ abstract public class GeoWaveTestEnvironment
 				ingestFilePath,
 				"geotools-vector",
 				nthreads);
+	}
+
+	protected void testLocalIngest(
+			final DimensionalityType dimensionalityType,
+			final String ingestFilePath ) {
+		testLocalIngest(
+				dimensionalityType,
+				ingestFilePath,
+				"geotools-vector",
+				1);
 	}
 
 	protected void testLocalIngest(
@@ -168,7 +178,7 @@ abstract public class GeoWaveTestEnvironment
 			throws IOException {
 		synchronized (MUTEX) {
 			TimeZone.setDefault(TimeZone.getTimeZone("GMT"));
-			
+
 			if (accumuloOperations == null) {
 				zookeeper = System.getProperty("zookeeperUrl");
 				accumuloInstance = System.getProperty("instance");
@@ -382,7 +392,9 @@ abstract public class GeoWaveTestEnvironment
 					SimpleFeature feature = featureIterator.next();
 					long centroid = hashCentroid((Geometry) feature.getDefaultGeometry());
 					hashedCentroids.add(centroid);
-					expectedFeatures.put(centroid, feature);
+					expectedFeatures.put(
+							centroid,
+							feature);
 				}
 			}
 			finally {

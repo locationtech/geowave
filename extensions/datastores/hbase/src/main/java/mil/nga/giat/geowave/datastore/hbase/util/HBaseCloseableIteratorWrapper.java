@@ -1,6 +1,3 @@
-/**
- * 
- */
 package mil.nga.giat.geowave.datastore.hbase.util;
 
 import java.io.Closeable;
@@ -13,10 +10,6 @@ import mil.nga.giat.geowave.core.store.CloseableIterator;
 import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.log4j.Logger;
 
-/**
- * @author viggy Functionality similar to
- *         <code> CloseableIteratorWrapper </code>
- */
 public class HBaseCloseableIteratorWrapper<E> implements
 		CloseableIterator<E>
 {
@@ -52,7 +45,7 @@ public class HBaseCloseableIteratorWrapper<E> implements
 
 		@Override
 		public void close() {
-			for(ResultScanner scanner : results){
+			for (ResultScanner scanner : results) {
 				scanner.close();
 			}
 		}

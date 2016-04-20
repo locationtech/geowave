@@ -26,6 +26,7 @@ import org.junit.runners.Suite.SuiteClasses;
 @RunWith(Suite.class)
 @SuiteClasses({
 	GeoWaveBasicIT.class,
+	GeoWaveHBaseBasicIT.class,
 	GeoWaveRasterIT.class,
 	BasicMapReduceIT.class,
 	BulkIngestInputGenerationIT.class,

@@ -1,6 +1,3 @@
-/**
- *
- */
 package mil.nga.giat.geowave.datastore.hbase.query;
 
 import java.io.IOException;
@@ -40,18 +37,13 @@ import mil.nga.giat.geowave.datastore.hbase.util.HBaseCloseableIteratorWrapper;
 import mil.nga.giat.geowave.datastore.hbase.util.HBaseCloseableIteratorWrapper.MultiScannerClosableWrapper;
 import mil.nga.giat.geowave.datastore.hbase.util.HBaseEntryIteratorWrapper;
 
-/**
- * @author viggy Functionality similar to
- *         <code> AccumuloFilteredIndexQuery </code>
- */
 public abstract class HBaseFilteredIndexQuery extends
 		HBaseQuery
 {
 
 	protected final ScanCallback<?> scanCallback;
 	protected List<QueryFilter> clientFilters;
-	private final static Logger LOGGER = Logger.getLogger(
-			HBaseFilteredIndexQuery.class);
+	private final static Logger LOGGER = Logger.getLogger(HBaseFilteredIndexQuery.class);
 	private Collection<String> fieldIds = null;
 
 	public HBaseFilteredIndexQuery(
@@ -82,23 +74,16 @@ public abstract class HBaseFilteredIndexQuery extends
 			final AdapterStore adapterStore,
 			final Integer limit ) {
 		try {
-			if (!operations.tableExists(
-					StringUtils.stringFromBinary(
-							index.getId().getBytes()))) {
-				LOGGER.warn(
-						"Table does not exist " + StringUtils.stringFromBinary(
-								index.getId().getBytes()));
+			if (!operations.tableExists(StringUtils.stringFromBinary(index.getId().getBytes()))) {
+				LOGGER.warn("Table does not exist " + StringUtils.stringFromBinary(index.getId().getBytes()));
 				return new CloseableIterator.Empty();
 			}
 		}
 		catch (final IOException ex) {
-			LOGGER.warn(
-					"Unabe to check if " + StringUtils.stringFromBinary(
-							index.getId().getBytes()) + " table exists");
+			LOGGER.warn("Unabe to check if " + StringUtils.stringFromBinary(index.getId().getBytes()) + " table exists");
 			return new CloseableIterator.Empty();
 		}
-		final String tableName = StringUtils.stringFromBinary(
-				index.getId().getBytes());
+		final String tableName = StringUtils.stringFromBinary(index.getId().getBytes());
 
 		final List<Filter> distributableFilters = getDistributableFilter();
 
@@ -124,18 +109,15 @@ public abstract class HBaseFilteredIndexQuery extends
 						tableName);
 				final Iterator<Result> it = rs.iterator();
 				if ((rs != null) && it.hasNext()) {
-					resultsIterators.add(
-							it);
-					results.add(
-							rs);
+					resultsIterators.add(it);
+					results.add(rs);
 				}
 			}
 
 			if (results.iterator().hasNext()) {
 				Iterator it = initIterator(
 						adapterStore,
-						Iterators.concat(
-								resultsIterators.iterator()));
+						Iterators.concat(resultsIterators.iterator()));
 
 				if ((limit != null) && (limit > 0)) {
 					it = Iterators.limit(
@@ -148,14 +130,12 @@ public abstract class HBaseFilteredIndexQuery extends
 						it);
 			}
 			else {
-				LOGGER.error(
-						"Results were empty");
+				LOGGER.error("Results were empty");
 				return null;
 			}
 		}
 		catch (final IOException e) {
-			LOGGER.error(
-					"Could not get the results from scanner");
+			LOGGER.error("Could not get the results from scanner");
 			return null;
 		}
 
@@ -237,8 +217,7 @@ public abstract class HBaseFilteredIndexQuery extends
 		if ((distributableFilters != null) && (distributableFilters.size() > 0)) {
 			filterList = new FilterList();
 			for (final Filter filter : distributableFilters) {
-				filterList.addFilter(
-						filter);
+				filterList.addFilter(filter);
 			}
 		}
 		final List<ByteArrayRange> ranges = getRanges();
@@ -251,21 +230,16 @@ public abstract class HBaseFilteredIndexQuery extends
 
 				if ((adapterIds != null) && !adapterIds.isEmpty()) {
 					for (final ByteArrayId adapterId : adapterIds) {
-						scanner.addFamily(
-								adapterId.getBytes());
+						scanner.addFamily(adapterId.getBytes());
 					}
 				}
 
-				scanner.setStartRow(
-						range.getStart().getBytes());
+				scanner.setStartRow(range.getStart().getBytes());
 				if (!range.isSingleValue()) {
-					scanner.setStopRow(
-							calculateTheClosestNextRowKeyForPrefix(
-									range.getEnd().getBytes()));
+					scanner.setStopRow(calculateTheClosestNextRowKeyForPrefix(range.getEnd().getBytes()));
 				}
 
-				scanner.setFilter(
-						filterList);
+				scanner.setFilter(filterList);
 
 				// a subset of fieldIds is being requested
 				if ((fieldIds != null) && !fieldIds.isEmpty()) {
@@ -276,12 +250,10 @@ public abstract class HBaseFilteredIndexQuery extends
 				}
 
 				if ((limit != null) && (limit > 0) && (limit < scanner.getBatch())) {
-					scanner.setBatch(
-							limit);
+					scanner.setBatch(limit);
 				}
 
-				scanners.add(
-						scanner);
+				scanners.add(scanner);
 			}
 		}
 
@@ -298,15 +270,11 @@ public abstract class HBaseFilteredIndexQuery extends
 
 		if ((ranges != null) && (ranges.size() == 0)) {
 
-			final ByteArrayRange range = ranges.get(
-					0);
+			final ByteArrayRange range = ranges.get(0);
 
-			scanner.setStartRow(
-					range.getStart().getBytes());
+			scanner.setStartRow(range.getStart().getBytes());
 			if (!range.isSingleValue()) {
-				scanner.setStopRow(
-						calculateTheClosestNextRowKeyForPrefix(
-								range.getEnd().getBytes()));
+				scanner.setStopRow(calculateTheClosestNextRowKeyForPrefix(range.getEnd().getBytes()));
 			}
 		}
 		else if (ranges != null) {
@@ -322,37 +290,29 @@ public abstract class HBaseFilteredIndexQuery extends
 						maxEnd) > 0)) {
 					maxEnd = range.getEnd();
 				}
-				rowRanges.add(
-						new RowRange(
-								range.getStart().getBytes(),
-								true,
-								calculateTheClosestNextRowKeyForPrefix(
-										range.getEnd().getBytes()),
-								false));
+				rowRanges.add(new RowRange(
+						range.getStart().getBytes(),
+						true,
+						calculateTheClosestNextRowKeyForPrefix(range.getEnd().getBytes()),
+						false));
 			}
-			scanner.setStartRow(
-					minStart.getBytes());
-			scanner.setStopRow(
-					calculateTheClosestNextRowKeyForPrefix(
-							maxEnd.getBytes()));
+			scanner.setStartRow(minStart.getBytes());
+			scanner.setStopRow(calculateTheClosestNextRowKeyForPrefix(maxEnd.getBytes()));
 			try {
 				final MultiRowRangeFilter filter = new MultiRowRangeFilter(
 						rowRanges.subList(
 								0,
 								15));
-				scanner.setFilter(
-						filter);
+				scanner.setFilter(filter);
 			}
 			catch (final IOException e) {
-				LOGGER.error(
-						"Failed to instantiate row range filter. " + e);
+				LOGGER.error("Failed to instantiate row range filter. " + e);
 				e.printStackTrace();
 			}
 		}
 
 		if ((limit != null) && (limit > 0) && (limit < scanner.getBatch())) {
-			scanner.setBatch(
-					limit);
+			scanner.setBatch(limit);
 		}
 
 		// a subset of fieldIds is being requested
@@ -365,8 +325,7 @@ public abstract class HBaseFilteredIndexQuery extends
 
 		if ((adapterIds != null) && !adapterIds.isEmpty()) {
 			for (final ByteArrayId adapterId : adapterIds) {
-				scanner.addFamily(
-						adapterId.getBytes());
+				scanner.addFamily(adapterId.getBytes());
 			}
 		}
 
@@ -379,8 +338,7 @@ public abstract class HBaseFilteredIndexQuery extends
 
 		final Set<ByteArrayId> uniqueDimensions = new HashSet<>();
 		for (final NumericDimensionField<? extends CommonIndexValue> dimension : index.getIndexModel().getDimensions()) {
-			uniqueDimensions.add(
-					dimension.getFieldId());
+			uniqueDimensions.add(dimension.getFieldId());
 		}
 
 		while (dataAdapters.hasNext()) {
@@ -397,8 +355,7 @@ public abstract class HBaseFilteredIndexQuery extends
 			for (final String fieldId : fieldIds) {
 				scanner.addColumn(
 						next.getAdapterId().getBytes(),
-						StringUtils.stringToBinary(
-								fieldId));
+						StringUtils.stringToBinary(fieldId));
 			}
 		}
 
@@ -433,8 +390,7 @@ public abstract class HBaseFilteredIndexQuery extends
 		// This method is so that it can be overridden to also add distributed
 		// filter list
 		final List<QueryFilter> filters = new ArrayList<QueryFilter>();
-		filters.addAll(
-				clientFilters);
+		filters.addAll(clientFilters);
 		return filters;
 	}
 }

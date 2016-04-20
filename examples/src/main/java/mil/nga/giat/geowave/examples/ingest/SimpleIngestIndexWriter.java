@@ -18,20 +18,14 @@ import mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations;
 public class SimpleIngestIndexWriter extends
 		SimpleIngest
 {
-	private static Logger log = Logger.getLogger(
-			SimpleIngestIndexWriter.class);
+	private static Logger log = Logger.getLogger(SimpleIngestIndexWriter.class);
 
 	public static void main(
 			final String[] args ) {
 
-		if ((args == null) || (args.length == 0) || !(args[0].equals(
-				"-a")
-				|| args[0].equals(
-						"-h"))) {
-			log.error(
-					"Invalid arguments, expected: dataStoreType, dataStoreOptions");
-			System.exit(
-					1);
+		if ((args == null) || (args.length == 0) || !(args[0].equals("-a") || args[0].equals("-h"))) {
+			log.error("Invalid arguments, expected: dataStoreType, dataStoreOptions");
+			System.exit(1);
 		}
 
 		final SimpleIngestIndexWriter si = new SimpleIngestIndexWriter();
@@ -39,13 +33,10 @@ public class SimpleIngestIndexWriter extends
 		String namespace = null;
 		String instance = null;
 
-		if (args[0].equals(
-				"-a")) {
+		if (args[0].equals("-a")) {
 			if (args.length != 6) {
-				log.error(
-						"Invalid arguments, expected: dataStoreType, zookeepers, accumuloInstance, accumuloUser, accumuloPass, geowaveNamespace");
-				System.exit(
-						1);
+				log.error("Invalid arguments, expected: dataStoreType, zookeepers, accumuloInstance, accumuloUser, accumuloPass, geowaveNamespace");
+				System.exit(1);
 			}
 			namespace = args[5];
 			instance = args[2];
@@ -56,24 +47,19 @@ public class SimpleIngestIndexWriter extends
 						args[3],
 						args[4],
 						args[5]);
-				geowaveDataStore = si.getAccumuloGeowaveDataStore(
-						bao);
+				geowaveDataStore = si.getAccumuloGeowaveDataStore(bao);
 			}
 			catch (final Exception e) {
 				log.error(
 						"Error creating BasicAccumuloOperations",
 						e);
-				System.exit(
-						1);
+				System.exit(1);
 			}
 		}
-		else if (args[0].equals(
-				"-h")) {
+		else if (args[0].equals("-h")) {
 			if (args.length != 3) {
-				log.error(
-						"Invalid arguments, expected: dataStoreType, zookeepers, geowaveNamespace");
-				System.exit(
-						1);
+				log.error("Invalid arguments, expected: dataStoreType, zookeepers, geowaveNamespace");
+				System.exit(1);
 			}
 			namespace = args[2];
 			instance = "hbase";
@@ -83,23 +69,19 @@ public class SimpleIngestIndexWriter extends
 						args[1],
 						args[2]);
 
-				geowaveDataStore = si.getHbaseGeowaveDataStore(
-						bao);
+				geowaveDataStore = si.getHbaseGeowaveDataStore(bao);
 			}
 			catch (final Exception e) {
 				log.error(
 						"Error creating BasicHbaseOperations",
 						e);
-				System.exit(
-						1);
+				System.exit(1);
 			}
 		}
 
-		si.generateGrid(
-				geowaveDataStore);
+		si.generateGrid(geowaveDataStore);
 
-		System.out.println(
-				"Finished ingesting data to namespace: " + namespace + " at datastore instance: " + instance);
+		System.out.println("Finished ingesting data to namespace: " + namespace + " at datastore instance: " + instance);
 
 	}
 
@@ -120,8 +102,7 @@ public class SimpleIngestIndexWriter extends
 
 		// This is an adapter, that is needed to describe how to persist the
 		// data type passed
-		final FeatureDataAdapter adapter = createDataAdapter(
-				point);
+		final FeatureDataAdapter adapter = createDataAdapter(point);
 
 		// This describes how to index the data
 		final PrimaryIndex index = createSpatialIndex();

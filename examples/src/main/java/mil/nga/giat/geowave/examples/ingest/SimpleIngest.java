@@ -19,6 +19,7 @@ import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloAdapterStore;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloDataStatisticsStore;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloIndexStore;
 import mil.nga.giat.geowave.datastore.hbase.HBaseDataStore;
+import mil.nga.giat.geowave.datastore.hbase.metadata.HBaseAdapterIndexMappingStore;
 import mil.nga.giat.geowave.datastore.hbase.metadata.HBaseAdapterStore;
 import mil.nga.giat.geowave.datastore.hbase.metadata.HBaseDataStatisticsStore;
 import mil.nga.giat.geowave.datastore.hbase.metadata.HBaseIndexStore;
@@ -73,7 +74,7 @@ public class SimpleIngest
 			}
 		}
 		return feats;
-	}	
+	}
 
 	/***
 	 * DataStore is essentially the controller that take the accumulo
@@ -140,12 +141,11 @@ public class SimpleIngest
 				accumuloUser,
 				accumuloPass,
 				geowaveNamespace);
-	}	
+	}
 
 	/***
-	 * DataStore is essentially the controller that take the HBase
-	 * information, geowave configuration, and data type, and inserts/queries
-	 * from HBase
+	 * DataStore is essentially the controller that take the HBase information,
+	 * geowave configuration, and data type, and inserts/queries from HBase
 	 * 
 	 * @param instance
 	 *            HBase instance configuration
@@ -164,6 +164,8 @@ public class SimpleIngest
 				new HBaseAdapterStore(
 						instance),
 				new HBaseDataStatisticsStore(
+						instance),
+				new HBaseAdapterIndexMappingStore(
 						instance),
 				instance);
 	}

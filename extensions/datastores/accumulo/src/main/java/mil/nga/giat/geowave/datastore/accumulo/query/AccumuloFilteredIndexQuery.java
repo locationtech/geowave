@@ -54,26 +54,12 @@ public abstract class AccumuloFilteredIndexQuery extends
 	protected abstract void addScanIteratorSettings(
 			final ScannerBase scanner );
 
-	public CloseableIterator<Object> query(
-			final AccumuloOperations accumuloOperations,
-			final AdapterStore adapterStore,
-			final double[] maxResolutionSubsamplingPerDimension,
-			final Integer limit ) {
-		return query(
-				accumuloOperations,
-				adapterStore,
-				maxResolutionSubsamplingPerDimension,
-				limit,
-				false);
-	}
-
 	@SuppressWarnings("rawtypes")
 	public CloseableIterator<Object> query(
 			final AccumuloOperations accumuloOperations,
 			final AdapterStore adapterStore,
 			final double[] maxResolutionSubsamplingPerDimension,
-			final Integer limit,
-			final boolean withKeys ) {
+			final Integer limit ) {
 		if (!accumuloOperations.tableExists(StringUtils.stringFromBinary(index.getId().getBytes()))) {
 			LOGGER.warn("Table does not exist " + StringUtils.stringFromBinary(index.getId().getBytes()));
 			return new CloseableIterator.Empty();

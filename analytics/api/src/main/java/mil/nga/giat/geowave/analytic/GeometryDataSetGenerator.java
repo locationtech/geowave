@@ -7,18 +7,6 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
-import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
-import mil.nga.giat.geowave.analytic.distance.CoordinateCircleDistanceFn;
-import mil.nga.giat.geowave.analytic.distance.DistanceFn;
-import mil.nga.giat.geowave.analytic.distance.FeatureCentroidDistanceFn;
-import mil.nga.giat.geowave.core.cli.CommandLineResult;
-import mil.nga.giat.geowave.core.cli.DataStoreCommandLineOptions;
-import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
-import mil.nga.giat.geowave.core.store.DataStore;
-import mil.nga.giat.geowave.core.store.IndexWriter;
-import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.core.store.memory.DataStoreUtils;
-
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
@@ -47,6 +35,18 @@ import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.LineString;
 import com.vividsolutions.jts.geom.Point;
+
+import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
+import mil.nga.giat.geowave.analytic.distance.CoordinateCircleDistanceFn;
+import mil.nga.giat.geowave.analytic.distance.DistanceFn;
+import mil.nga.giat.geowave.analytic.distance.FeatureCentroidDistanceFn;
+import mil.nga.giat.geowave.core.cli.CommandLineResult;
+import mil.nga.giat.geowave.core.cli.DataStoreCommandLineOptions;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
+import mil.nga.giat.geowave.core.store.DataStore;
+import mil.nga.giat.geowave.core.store.IndexWriter;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.core.store.memory.DataStoreUtils;
 
 /**
  * Generate clusters of geometries.

@@ -101,7 +101,7 @@ public class SecondaryIndexDataManager<T> implements
 	@Override
 	public void close()
 			throws IOException {
-		if(secondaryIndexStore != null){
+		if (secondaryIndexStore != null) {
 			secondaryIndexStore.flush();
 		}
 	}

@@ -1,6 +1,3 @@
-/**
- * 
- */
 package mil.nga.giat.geowave.datastore.hbase.io;
 
 import java.io.IOException;
@@ -16,10 +13,10 @@ import org.apache.hadoop.hbase.client.Table;
 import org.apache.log4j.Logger;
 
 /**
- * @author viggy Functionality similar to <code> BatchWriterWrapper </code>
+ * Functionality similar to <code> BatchWriterWrapper </code>
  * 
- *         TODO #406 This class directly writes to the HBase table instead of
- *         using any existing Writer API provided by HBase.
+ * TODO #406 This class directly writes to the HBase table instead of using any
+ * existing Writer API provided by HBase.
  * 
  */
 public class HBaseWriter
@@ -133,35 +130,37 @@ public class HBaseWriter
 			throws IOException {
 		table.delete(deletes);
 	}
-	
-	public String getLongest(String input){	
+
+	public String getLongest(
+			String input ) {
 		Character curr = null;
 		Character prev = null;
 		int streak = 0;
 		int longStreak = 0;
 		StringBuilder currentString = new StringBuilder();
 		String longString = null;
-		for(int i = 0; i < input.length(); i++){
+		for (int i = 0; i < input.length(); i++) {
 			curr = input.charAt(i);
-			if(curr == prev){
+			if (curr == prev) {
 				streak++;
 				currentString.append(curr);
-			} else {
-				if(streak > longStreak){
+			}
+			else {
+				if (streak > longStreak) {
 					longStreak = streak;
 					currentString.append(curr);
 					longString = currentString.toString();
 					currentString = new StringBuilder();
-				}				
+				}
 				streak = 0;
 			}
 			prev = curr;
 		}
-		if(streak > longStreak){
+		if (streak > longStreak) {
 			currentString.append(curr);
 			longString = currentString.toString();
 		}
-		
+
 		return longString;
 	}
 

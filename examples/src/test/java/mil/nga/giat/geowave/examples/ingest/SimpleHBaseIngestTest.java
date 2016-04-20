@@ -21,6 +21,7 @@ import mil.nga.giat.geowave.core.store.query.BasicQuery;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.datastore.hbase.HBaseDataStore;
 import mil.nga.giat.geowave.datastore.hbase.HBaseOptions;
+import mil.nga.giat.geowave.datastore.hbase.metadata.HBaseAdapterIndexMappingStore;
 import mil.nga.giat.geowave.datastore.hbase.metadata.HBaseAdapterStore;
 import mil.nga.giat.geowave.datastore.hbase.metadata.HBaseDataStatisticsStore;
 import mil.nga.giat.geowave.datastore.hbase.metadata.HBaseIndexStore;
@@ -28,8 +29,7 @@ import mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations;
 
 public class SimpleHBaseIngestTest
 {
-	private final static Logger LOGGER = Logger.getLogger(
-			SimpleHBaseIngestTest.class);
+	private final static Logger LOGGER = Logger.getLogger(SimpleHBaseIngestTest.class);
 
 	final HBaseOptions hbaseOptions = new HBaseOptions();
 	final GeometryFactory factory = new GeometryFactory();
@@ -37,6 +37,7 @@ public class SimpleHBaseIngestTest
 	HBaseIndexStore indexStore;
 	HBaseAdapterStore adapterStore;
 	HBaseDataStatisticsStore statsStore;
+	HBaseAdapterIndexMappingStore mockIndexMappingStore;
 	HBaseDataStore mockDataStore;
 	private final HBaseTestingUtility testUtil = new HBaseTestingUtility();
 
@@ -48,8 +49,7 @@ public class SimpleHBaseIngestTest
 		testUtil.getConfiguration().reloadConfiguration();
 		// start mini hbase cluster
 		try {
-			testUtil.startMiniCluster(
-					1);
+			testUtil.startMiniCluster(1);
 			connection = testUtil.getConnection();
 		}
 		catch (final Exception e) {
@@ -69,32 +69,29 @@ public class SimpleHBaseIngestTest
 
 		statsStore = new HBaseDataStatisticsStore(
 				hbaseOperations);
-
+		mockIndexMappingStore = new HBaseAdapterIndexMappingStore(
+				hbaseOperations);
 		mockDataStore = new HBaseDataStore(
 				indexStore,
 				adapterStore,
 				statsStore,
+				mockIndexMappingStore,
 				hbaseOperations,
 				hbaseOptions);
 
-		hbaseOptions.setCreateTable(
-				true);
-		hbaseOptions.setUseAltIndex(
-				true);
-		hbaseOptions.setPersistDataStatistics(
-				true);
+		hbaseOptions.setCreateTable(true);
+		hbaseOptions.setUseAltIndex(true);
+		hbaseOptions.setPersistDataStatistics(true);
 	}
 
 	protected static Set<Point> getCalcedPointSet() {
 		final Set<Point> calcPoints = new TreeSet<Point>();
 		for (int longitude = -180; longitude <= 180; longitude += 5) {
 			for (int latitude = -90; latitude <= 90; latitude += 5) {
-				final Point p = GeometryUtils.GEOMETRY_FACTORY.createPoint(
-						new Coordinate(
-								longitude,
-								latitude));
-				calcPoints.add(
-						p);
+				final Point p = GeometryUtils.GEOMETRY_FACTORY.createPoint(new Coordinate(
+						longitude,
+						latitude));
+				calcPoints.add(p);
 			}
 		}
 		return calcPoints;
@@ -112,8 +109,7 @@ public class SimpleHBaseIngestTest
 			if (n instanceof SimpleFeature) {
 				final SimpleFeature gridCell = (SimpleFeature) n;
 				final Point p = (Point) gridCell.getDefaultGeometry();
-				readPoints.add(
-						p);
+				readPoints.add(p);
 			}
 		}
 		return readPoints;
@@ -121,13 +117,10 @@ public class SimpleHBaseIngestTest
 
 	protected static void validate(
 			final DataStore ds ) {
-		final Set<Point> readPoints = getStoredPointSet(
-				ds);
+		final Set<Point> readPoints = getStoredPointSet(ds);
 		final Set<Point> calcPoints = getCalcedPointSet();
 
-		Assert.assertTrue(
-				readPoints.equals(
-						calcPoints));
+		Assert.assertTrue(readPoints.equals(calcPoints));
 	}
 
 }

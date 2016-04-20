@@ -1,6 +1,7 @@
 package mil.nga.giat.geowave.adapter.vector;
 
 import mil.nga.giat.geowave.core.geotime.TimeUtils;
+import mil.nga.giat.geowave.core.geotime.TimeUtils;
 import mil.nga.giat.geowave.core.geotime.store.dimension.Time;
 import mil.nga.giat.geowave.core.geotime.store.dimension.Time.Timestamp;
 import mil.nga.giat.geowave.core.index.ByteArrayId;

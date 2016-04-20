@@ -1,6 +1,3 @@
-/**
- *
- */
 package mil.nga.giat.geowave.datastore.hbase.metadata;
 
 import org.apache.hadoop.hbase.Cell;
@@ -13,10 +10,6 @@ import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations;
 
-/**
- * @author viggy Functionality similar to
- *         <code> AccumuloDataStatisticsStore </code>
- */
 public class HBaseDataStatisticsStore extends
 		AbstractHBasePersistence<DataStatistics<?>> implements
 		DataStatisticsStore
@@ -107,7 +100,8 @@ public class HBaseDataStatisticsStore extends
 			final Cell entry ) {
 		final DataStatistics<?> stats = super.entryToValue(entry);
 		if (stats != null) {
-			stats.setDataAdapterId(new ByteArrayId(CellUtil.cloneQualifier(entry)));
+			stats.setDataAdapterId(new ByteArrayId(
+					CellUtil.cloneQualifier(entry)));
 		}
 		return stats;
 	}

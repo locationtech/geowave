@@ -1,6 +1,3 @@
-/**
- *
- */
 package mil.nga.giat.geowave.datastore.hbase.query;
 
 import java.util.List;
@@ -11,14 +8,10 @@ import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 
-/**
- * @author viggy Functionality similar to <code> AccumuloQuery </code>
- */
 abstract public class HBaseQuery
 {
 
-	private final static Logger LOGGER = Logger.getLogger(
-			HBaseQuery.class);
+	private final static Logger LOGGER = Logger.getLogger(HBaseQuery.class);
 	protected final List<ByteArrayId> adapterIds;
 	protected final PrimaryIndex index;
 

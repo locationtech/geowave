@@ -1,11 +1,5 @@
-/**
- * 
- */
 package mil.nga.giat.geowave.datastore.hbase;
 
-/**
- * @author viggy Functionality similar to <code> AccumuloOptions </code>
- */
 public class HBaseOptions
 {
 
@@ -14,7 +8,7 @@ public class HBaseOptions
 	protected boolean persistDataStatistics = true;
 	protected boolean createTable = true;
 	protected boolean useLocalityGroups = true;
-	protected boolean useAltIndex = true;
+	protected boolean useAltIndex = false;
 
 	public boolean isPersistDataStatistics() {
 		return persistDataStatistics;

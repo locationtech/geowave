@@ -17,8 +17,7 @@ import mil.nga.giat.geowave.test.GeoWaveHBaseTestEnvironment;
 abstract public class MapReduceHBaseTestEnvironment extends
 		GeoWaveHBaseTestEnvironment
 {
-	private final static Logger LOGGER = Logger.getLogger(
-			MapReduceHBaseTestEnvironment.class);
+	private final static Logger LOGGER = Logger.getLogger(MapReduceHBaseTestEnvironment.class);
 
 	protected static final String HDFS_BASE_DIRECTORY = "test_tmp";
 	protected static final String DEFAULT_JOB_TRACKER = "local";
@@ -35,29 +34,23 @@ abstract public class MapReduceHBaseTestEnvironment extends
 			final String ingestFilePath ) {
 		// ingest gpx data directly into GeoWave using the
 		// ingest framework's main method and pre-defined commandline arguments
-		LOGGER.warn(
-				"Ingesting '" + ingestFilePath + "' - this may take several minutes...");
+		LOGGER.warn("Ingesting '" + ingestFilePath + "' - this may take several minutes...");
 		String[] args = null;
 		synchronized (MUTEX) {
 			args = StringUtils.split(
-					"-hdfshbaseingest -f gpx -hdfs " + hdfs + " -hdfsbase " + hdfsBaseDirectory + " -jobtracker " + jobtracker + " -b " + ingestFilePath + " -z " + zookeeper + " -n " + TEST_NAMESPACE + " -dim " + (indexType.equals(
-							DimensionalityType.SPATIAL) ? "spatial" : "spatial-temporal"),
+					"-hdfshbaseingest -f gpx -hdfs " + hdfs + " -hdfsbase " + hdfsBaseDirectory + " -jobtracker " + jobtracker + " -b " + ingestFilePath + " -z " + zookeeper + " -n " + TEST_NAMESPACE + " -dim " + (indexType.equals(DimensionalityType.SPATIAL) ? "spatial" : "spatial-temporal"),
 					' ');
 		}
-		GeoWaveMain.main(
-				args);
+		GeoWaveMain.main(args);
 	}
 
 	@BeforeClass
 	public static void setVariables()
 			throws IOException {
 		GeoWaveHBaseTestEnvironment.setup();
-		hdfs = System.getProperty(
-				"hdfs");
-		jobtracker = System.getProperty(
-				"jobtracker");
-		if (!isSet(
-				hdfs)) {
+		hdfs = System.getProperty("hdfs");
+		jobtracker = System.getProperty("jobtracker");
+		if (!isSet(hdfs)) {
 			hdfs = "file:///";
 
 			hdfsBaseDirectory = TEMP_DIR.toURI().toURL().toString() + "/" + HDFS_BASE_DIRECTORY;
@@ -65,8 +58,7 @@ abstract public class MapReduceHBaseTestEnvironment extends
 		}
 		else {
 			hdfsBaseDirectory = HDFS_BASE_DIRECTORY;
-			if (!hdfs.contains(
-					"://")) {
+			if (!hdfs.contains("://")) {
 				hdfs = "hdfs://" + hdfs;
 				hdfsProtocol = true;
 			}
@@ -75,8 +67,7 @@ abstract public class MapReduceHBaseTestEnvironment extends
 						"hdfs://");
 			}
 		}
-		if (!isSet(
-				jobtracker)) {
+		if (!isSet(jobtracker)) {
 			jobtracker = DEFAULT_JOB_TRACKER;
 		}
 	}
@@ -87,8 +78,7 @@ abstract public class MapReduceHBaseTestEnvironment extends
 			final Path tmpDir = new Path(
 					hdfsBaseDirectory);
 			try {
-				final FileSystem fs = FileSystem.get(
-						getConfiguration());
+				final FileSystem fs = FileSystem.get(getConfiguration());
 				fs.delete(
 						tmpDir,
 						true);
@@ -104,45 +94,27 @@ abstract public class MapReduceHBaseTestEnvironment extends
 	public static void filterConfiguration(
 			final Configuration conf ) {
 		// final parameters, can't be overriden
-		conf.unset(
-				"mapreduce.job.end-notification.max.retry.interval");
-		conf.unset(
-				"mapreduce.job.end-notification.max.attempts");
+		conf.unset("mapreduce.job.end-notification.max.retry.interval");
+		conf.unset("mapreduce.job.end-notification.max.attempts");
 
 		// deprecated parameters (added in by default since we used the
 		// Configuration() constructor (everything is set))
-		conf.unset(
-				"session.id");
-		conf.unset(
-				"mapred.jar");
-		conf.unset(
-				"fs.default.name");
-		conf.unset(
-				"mapred.map.tasks.speculative.execution");
-		conf.unset(
-				"mapred.reduce.tasks");
-		conf.unset(
-				"mapred.reduce.tasks.speculative.execution");
-		conf.unset(
-				"mapred.mapoutput.value.class");
-		conf.unset(
-				"mapred.used.genericoptionsparser");
-		conf.unset(
-				"mapreduce.map.class");
-		conf.unset(
-				"mapred.job.name");
-		conf.unset(
-				"mapreduce.inputformat.class");
-		conf.unset(
-				"mapred.input.dir");
-		conf.unset(
-				"mapreduce.outputformat.class");
-		conf.unset(
-				"mapred.map.tasks");
-		conf.unset(
-				"mapred.mapoutput.key.class");
-		conf.unset(
-				"mapred.working.dir");
+		conf.unset("session.id");
+		conf.unset("mapred.jar");
+		conf.unset("fs.default.name");
+		conf.unset("mapred.map.tasks.speculative.execution");
+		conf.unset("mapred.reduce.tasks");
+		conf.unset("mapred.reduce.tasks.speculative.execution");
+		conf.unset("mapred.mapoutput.value.class");
+		conf.unset("mapred.used.genericoptionsparser");
+		conf.unset("mapreduce.map.class");
+		conf.unset("mapred.job.name");
+		conf.unset("mapreduce.inputformat.class");
+		conf.unset("mapred.input.dir");
+		conf.unset("mapreduce.outputformat.class");
+		conf.unset("mapred.map.tasks");
+		conf.unset("mapred.mapoutput.key.class");
+		conf.unset("mapred.working.dir");
 	}
 
 	protected static Configuration getConfiguration() {
@@ -161,8 +133,7 @@ abstract public class MapReduceHBaseTestEnvironment extends
 				MRJobConfig.IO_SORT_MB,
 				10);
 
-		filterConfiguration(
-				conf);
+		filterConfiguration(conf);
 
 		return conf;
 

@@ -142,8 +142,7 @@ public class GeoWaveAccumuloRecordReader<T> extends
 								accumuloOperations,
 								adapterStore,
 								queryOptions.getMaxResolutionSubsamplingPerDimension(),
-								queryOptions.getLimit(),
-								true));
+								queryOptions.getLimit()));
 				incrementalRangeSums.put(
 						r,
 						sum);

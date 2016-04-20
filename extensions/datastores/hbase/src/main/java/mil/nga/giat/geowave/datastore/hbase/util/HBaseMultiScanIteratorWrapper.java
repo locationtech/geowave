@@ -14,8 +14,7 @@ public class HBaseMultiScanIteratorWrapper<T> extends
 		HBaseEntryIteratorWrapper<T>
 {
 
-	private final static Logger LOGGER = Logger.getLogger(
-			HBaseMultiScanIteratorWrapper.class);
+	private final static Logger LOGGER = Logger.getLogger(HBaseMultiScanIteratorWrapper.class);
 	private final Iterator<Iterator<Result>> scanIterators;
 	private Iterator<Result> currentScanIt;
 

@@ -165,6 +165,7 @@ public class CentroidManagerGeoWave<T> implements
 				StringUtils.stringToBinary(centroidDataTypeId)));
 	}
 
+	@SuppressWarnings("unchecked")
 	public CentroidManagerGeoWave(
 			final PropertyManagement properties )
 			throws IOException {
@@ -243,7 +244,6 @@ public class CentroidManagerGeoWave<T> implements
 		final String indexId = scopedJob.getString(
 				CentroidParameters.Centroid.INDEX_ID,
 				new SpatialDimensionalityTypeProvider().createPrimaryIndex().getId().getString());
-
 		dataStore = ((PersistableDataStore) StoreParameters.StoreParam.DATA_STORE.getHelper().getValue(
 				context,
 				scope,

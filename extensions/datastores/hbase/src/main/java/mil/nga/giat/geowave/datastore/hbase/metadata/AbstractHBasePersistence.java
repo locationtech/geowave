@@ -1,6 +1,3 @@
-/**
- * 
- */
 package mil.nga.giat.geowave.datastore.hbase.metadata;
 
 import java.io.IOException;
@@ -32,10 +29,6 @@ import org.apache.hadoop.hbase.client.RowMutations;
 import org.apache.hadoop.hbase.client.Scan;
 import org.apache.log4j.Logger;
 
-/**
- * @author viggy Functionality similar to
- *         <code> AbstractAccumuloPersistence </code>
- */
 public abstract class AbstractHBasePersistence<T extends Persistable>
 {
 
