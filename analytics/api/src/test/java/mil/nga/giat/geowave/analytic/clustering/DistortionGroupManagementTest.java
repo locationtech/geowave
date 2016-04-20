@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 
 import org.geotools.feature.type.BasicFeatureTypes;
@@ -27,11 +26,11 @@ import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.StoreFactoryFamilySpi;
+import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.core.store.memory.DataStoreUtils;
 import mil.nga.giat.geowave.core.store.memory.MemoryStoreFactoryFamily;
 
 public class DistortionGroupManagementTest
@@ -72,16 +71,16 @@ public class DistortionGroupManagementTest
 
 		final String namespace = "test_" + getClass().getName();
 		final StoreFactoryFamilySpi storeFamily = new MemoryStoreFactoryFamily();
+
+		StoreFactoryOptions opts = storeFamily.getDataStoreFactory().createOptionsInstance();
+		opts.setGeowaveNamespace(namespace);
 		dataStore = storeFamily.getDataStoreFactory().createStore(
-				new HashMap<String, Object>(),
-				namespace);
-		adapterStore = storeFamily.getAdapterStoreFactory().createStore(
-				new HashMap<String, Object>(),
-				namespace);
-		adapterStore.addAdapter(adapter);
+				opts);
 		indexStore = storeFamily.getIndexStoreFactory().createStore(
-				new HashMap<String, Object>(),
-				namespace);
+				opts);
+		adapterStore = storeFamily.getAdapterStoreFactory().createStore(
+				opts);
+		adapterStore.addAdapter(adapter);
 		indexStore.addIndex(index);
 	}
 

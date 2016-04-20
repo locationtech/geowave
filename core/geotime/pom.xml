@@ -17,9 +17,14 @@
 			a pluggable data store and is no longer a dependency on ingest -->
 		<dependency>
 			<groupId>mil.nga.giat</groupId>
-			<artifactId>geowave-core-ingest</artifactId>
+			<artifactId>geowave-core-index</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>mil.nga.giat</groupId>
+			<artifactId>geowave-core-store</artifactId>
+			<version>${project.version}</version>
+		</dependency>		
 		<!-- <dependency> <groupId>mil.nga.giat</groupId> <artifactId>geowave-core-ingest</artifactId> 
 			<version>${project.version}</version> </dependency> -->
 		<dependency>

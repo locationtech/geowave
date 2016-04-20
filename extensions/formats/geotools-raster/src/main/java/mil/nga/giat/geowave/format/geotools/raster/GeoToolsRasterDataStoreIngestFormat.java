@@ -1,10 +1,10 @@
 package mil.nga.giat.geowave.format.geotools.raster;
 
-import mil.nga.giat.geowave.core.ingest.IngestFormatOptionProvider;
-import mil.nga.giat.geowave.core.ingest.IngestFormatPluginProviderSpi;
 import mil.nga.giat.geowave.core.ingest.avro.AvroFormatPlugin;
 import mil.nga.giat.geowave.core.ingest.hdfs.mapreduce.IngestFromHdfsPlugin;
 import mil.nga.giat.geowave.core.ingest.local.LocalFileIngestPlugin;
+import mil.nga.giat.geowave.core.ingest.spi.IngestFormatOptionProvider;
+import mil.nga.giat.geowave.core.ingest.spi.IngestFormatPluginProviderSpi;
 
 import org.opengis.coverage.grid.GridCoverage;
 
@@ -19,7 +19,8 @@ public class GeoToolsRasterDataStoreIngestFormat implements
 	private final RasterOptionProvider optionProvider = new RasterOptionProvider();
 
 	@Override
-	public AvroFormatPlugin<Object, GridCoverage> getAvroFormatPlugin()
+	public AvroFormatPlugin<Object, GridCoverage> createAvroFormatPlugin(
+			IngestFormatOptionProvider options )
 			throws UnsupportedOperationException {
 		// unsupported right now
 		throw new UnsupportedOperationException(
@@ -27,7 +28,8 @@ public class GeoToolsRasterDataStoreIngestFormat implements
 	}
 
 	@Override
-	public IngestFromHdfsPlugin<Object, GridCoverage> getIngestFromHdfsPlugin()
+	public IngestFromHdfsPlugin<Object, GridCoverage> createIngestFromHdfsPlugin(
+			IngestFormatOptionProvider options )
 			throws UnsupportedOperationException {
 		// unsupported right now
 		throw new UnsupportedOperationException(
@@ -35,7 +37,8 @@ public class GeoToolsRasterDataStoreIngestFormat implements
 	}
 
 	@Override
-	public LocalFileIngestPlugin<GridCoverage> getLocalFileIngestPlugin()
+	public LocalFileIngestPlugin<GridCoverage> createLocalFileIngestPlugin(
+			IngestFormatOptionProvider options )
 			throws UnsupportedOperationException {
 		return new GeoToolsRasterDataStoreIngestPlugin(
 				optionProvider);
@@ -52,7 +55,7 @@ public class GeoToolsRasterDataStoreIngestFormat implements
 	}
 
 	@Override
-	public IngestFormatOptionProvider getIngestFormatOptionProvider() {
+	public IngestFormatOptionProvider createOptionsInstances() {
 		return optionProvider;
 	}
 

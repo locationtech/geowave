@@ -6,12 +6,10 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.Options;
-import org.apache.commons.cli.ParseException;
 import org.apache.log4j.Logger;
 
 import kafka.consumer.Consumer;
@@ -20,15 +18,9 @@ import kafka.consumer.ConsumerIterator;
 import kafka.consumer.ConsumerTimeoutException;
 import kafka.consumer.KafkaStream;
 import kafka.javaapi.consumer.ConsumerConnector;
-import mil.nga.giat.geowave.core.cli.CommandLineResult;
-import mil.nga.giat.geowave.core.cli.DataStoreCommandLineOptions;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.ingest.AbstractIngestCommandLineDriver;
 import mil.nga.giat.geowave.core.ingest.GeoWaveData;
-import mil.nga.giat.geowave.core.ingest.IngestCommandLineOptions;
-import mil.nga.giat.geowave.core.ingest.IngestFormatPluginProviderSpi;
 import mil.nga.giat.geowave.core.ingest.IngestPluginBase;
-import mil.nga.giat.geowave.core.ingest.IngestUtils;
 import mil.nga.giat.geowave.core.ingest.avro.AvroFormatPlugin;
 import mil.nga.giat.geowave.core.ingest.avro.GenericAvroSerializer;
 import mil.nga.giat.geowave.core.ingest.index.IndexProvider;
@@ -37,43 +29,51 @@ import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOptions;
+import mil.nga.giat.geowave.core.store.operations.remote.options.VisibilityOptions;
 
 /**
  * This class executes the ingestion of intermediate data from a Kafka topic
  * into GeoWave.
  * 
  */
-public class IngestFromKafkaDriver extends
-		AbstractIngestCommandLineDriver
+public class IngestFromKafkaDriver
 {
 	private final static Logger LOGGER = Logger.getLogger(IngestFromKafkaDriver.class);
 
-	private KafkaConsumerCommandLineOptions kafkaOptions;
-	private DataStoreCommandLineOptions dataStoreOptions;
-	private IngestCommandLineOptions ingestOptions;
+	private final DataStorePluginOptions storeOptions;
+	private final List<IndexPluginOptions> indexOptions;
+	private final Map<String, AvroFormatPlugin<?, ?>> ingestPlugins;
+	private final KafkaConsumerCommandLineOptions kafkaOptions;
+	private final VisibilityOptions ingestOptions;
 
 	public IngestFromKafkaDriver(
-			final String operation ) {
-		super(
-				operation);
+			DataStorePluginOptions storeOptions,
+			List<IndexPluginOptions> indexOptions,
+			Map<String, AvroFormatPlugin<?, ?>> ingestPlugins,
+			KafkaConsumerCommandLineOptions kafkaOptions,
+			VisibilityOptions ingestOptions ) {
+		this.storeOptions = storeOptions;
+		this.indexOptions = indexOptions;
+		this.ingestPlugins = ingestPlugins;
+		this.kafkaOptions = kafkaOptions;
+		this.ingestOptions = ingestOptions;
 	}
 
-	@Override
-	protected boolean runInternal(
-			final String[] args,
-			final List<IngestFormatPluginProviderSpi<?, ?>> pluginProviders ) {
-		final DataStore dataStore = dataStoreOptions.createStore();
+	public boolean runOperation() {
+
+		final DataStore dataStore = storeOptions.createDataStore();
 
 		final List<String> queue = new ArrayList<String>();
 		addPluginsToQueue(
-				pluginProviders,
+				ingestPlugins,
 				queue);
 
 		configureAndLaunchPlugins(
 				dataStore,
-				pluginProviders,
-				queue,
-				args);
+				ingestPlugins,
+				queue);
 
 		int counter = 0;
 		while (queue.size() > 0) {
@@ -108,47 +108,39 @@ public class IngestFromKafkaDriver extends
 	}
 
 	private void addPluginsToQueue(
-			final List<IngestFormatPluginProviderSpi<?, ?>> pluginProviders,
+			final Map<String, AvroFormatPlugin<?, ?>> pluginProviders,
 			final List<String> queue ) {
-		for (final IngestFormatPluginProviderSpi<?, ?> pluginProvider : pluginProviders) {
-			queue.add(pluginProvider.getIngestFormatName());
-		}
+		queue.addAll(pluginProviders.keySet());
 	}
 
 	private void configureAndLaunchPlugins(
 			final DataStore dataStore,
-			final List<IngestFormatPluginProviderSpi<?, ?>> pluginProviders,
-			final List<String> queue,
-			final String[] args ) {
+			final Map<String, AvroFormatPlugin<?, ?>> pluginProviders,
+			final List<String> queue ) {
 		try {
-			for (final IngestFormatPluginProviderSpi<?, ?> pluginProvider : pluginProviders) {
+			for (Entry<String, AvroFormatPlugin<?, ?>> pluginProvider : pluginProviders.entrySet()) {
 				final List<WritableDataAdapter<?>> adapters = new ArrayList<WritableDataAdapter<?>>();
 
 				AvroFormatPlugin<?, ?> avroFormatPlugin = null;
 				try {
-					avroFormatPlugin = pluginProvider.getAvroFormatPlugin();
-					if (avroFormatPlugin == null) {
-						LOGGER.warn("Plugin provider for ingest type '" + pluginProvider.getIngestFormatName() + "' does not support ingest from Kafka");
-						continue;
-					}
+					avroFormatPlugin = pluginProvider.getValue();
 
 					final IngestPluginBase<?, ?> ingestWithAvroPlugin = avroFormatPlugin.getIngestWithAvroPlugin();
 					final WritableDataAdapter<?>[] dataAdapters = ingestWithAvroPlugin.getDataAdapters(ingestOptions.getVisibility());
 					adapters.addAll(Arrays.asList(dataAdapters));
 					final KafkaIngestRunData runData = new KafkaIngestRunData(
 							adapters,
-							dataStore,
-							args);
+							dataStore);
 
 					launchTopicConsumer(
-							pluginProvider.getIngestFormatName(),
+							pluginProvider.getKey(),
 							avroFormatPlugin,
 							runData,
 							queue);
 				}
 				catch (final UnsupportedOperationException e) {
 					LOGGER.warn(
-							"Plugin provider '" + pluginProvider.getIngestFormatName() + "' does not support ingest from Kafka",
+							"Plugin provider '" + pluginProvider.getKey() + "' does not support ingest from Kafka",
 							e);
 					continue;
 				}
@@ -302,15 +294,11 @@ public class IngestFromKafkaDriver extends
 		IngestPluginBase<T, ?> ingestPlugin = plugin.getIngestWithAvroPlugin();
 		IndexProvider indexProvider = plugin;
 
-		final String[] dimensionTypes = ingestOptions.getDimensionalityTypes();
 		final Map<ByteArrayId, IndexWriter> writerMap = new HashMap<ByteArrayId, IndexWriter>();
 		final Map<ByteArrayId, PrimaryIndex> indexMap = new HashMap<ByteArrayId, PrimaryIndex>();
 
-		for (final String dimensionType : dimensionTypes) {
-			final PrimaryIndex primaryIndex = IngestUtils.getIndex(
-					ingestPlugin,
-					ingestRunData.getArgs(),
-					dimensionType);
+		for (IndexPluginOptions indexOption : indexOptions) {
+			final PrimaryIndex primaryIndex = indexOption.createPrimaryIndex();
 			if (primaryIndex == null) {
 				LOGGER.error("Could not get index instance, getIndex() returned null;");
 				throw new IOException(
@@ -363,29 +351,5 @@ public class IngestFromKafkaDriver extends
 
 			}
 		}
-	}
-
-	@Override
-	protected void parseOptionsInternal(
-			final Options options,
-			CommandLine commandLine )
-			throws ParseException {
-		final CommandLineResult<DataStoreCommandLineOptions> dataStoreOptionsResult = DataStoreCommandLineOptions.parseOptions(
-				options,
-				commandLine);
-		dataStoreOptions = dataStoreOptionsResult.getResult();
-		if (dataStoreOptionsResult.isCommandLineChange()) {
-			commandLine = dataStoreOptionsResult.getCommandLine();
-		}
-		ingestOptions = IngestCommandLineOptions.parseOptions(commandLine);
-		kafkaOptions = KafkaConsumerCommandLineOptions.parseOptions(commandLine);
-	}
-
-	@Override
-	protected void applyOptionsInternal(
-			final Options allOptions ) {
-		DataStoreCommandLineOptions.applyOptions(allOptions);
-		IngestCommandLineOptions.applyOptions(allOptions);
-		KafkaConsumerCommandLineOptions.applyOptions(allOptions);
 	}
 }

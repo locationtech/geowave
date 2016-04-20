@@ -1,28 +1,33 @@
 package mil.nga.giat.geowave.core.ingest.hdfs.mapreduce;
 
-import mil.nga.giat.geowave.core.cli.DataStoreCommandLineOptions;
-import mil.nga.giat.geowave.core.ingest.IngestCommandLineOptions;
-import mil.nga.giat.geowave.core.store.filter.GenericTypeResolver;
+import java.util.List;
 
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.mapreduce.Job;
+
+import mil.nga.giat.geowave.core.store.filter.GenericTypeResolver;
+import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOptions;
+import mil.nga.giat.geowave.core.store.operations.remote.options.VisibilityOptions;
 
 /**
  * This class will run the ingestion process by using a mapper to aggregate key
  * value pairs and a reducer to ingest data into GeoWave.
  */
 public class IngestWithReducerJobRunner extends
-		AbstractMapReduceIngest<IngestWithReducer>
+		AbstractMapReduceIngest<IngestWithReducer<?, ?, ?, ?>>
 {
 	public IngestWithReducerJobRunner(
-			final DataStoreCommandLineOptions dataStoreOptions,
-			final IngestCommandLineOptions ingestOptions,
+			final DataStorePluginOptions storeOptions,
+			final List<IndexPluginOptions> indexOptions,
+			final VisibilityOptions ingestOptions,
 			final Path inputFile,
 			final String typeName,
 			final IngestFromHdfsPlugin parentPlugin,
 			final IngestWithReducer ingestPlugin ) {
 		super(
-				dataStoreOptions,
+				storeOptions,
+				indexOptions,
 				ingestOptions,
 				inputFile,
 				typeName,

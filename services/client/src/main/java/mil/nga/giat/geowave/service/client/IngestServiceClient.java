@@ -29,10 +29,12 @@ public class IngestServiceClient
 
 	public boolean localIngest(
 			final File[] inputFiles,
+			final String storeName,
 			final String namespace )
 			throws FileNotFoundException {
 		return localIngest(
 				inputFiles,
+				storeName,
 				namespace,
 				null,
 				null,
@@ -42,11 +44,13 @@ public class IngestServiceClient
 
 	public boolean localIngest(
 			final File[] inputFiles,
+			final String storeName,
 			final String namespace,
 			final String visibility )
 			throws FileNotFoundException {
 		return localIngest(
 				inputFiles,
+				storeName,
 				namespace,
 				visibility,
 				null,
@@ -56,6 +60,7 @@ public class IngestServiceClient
 
 	public boolean localIngest(
 			final File[] inputFiles,
+			final String storeName,
 			final String namespace,
 			final String visibility,
 			final String ingestFormat,
@@ -69,6 +74,10 @@ public class IngestServiceClient
 					"file",
 					file));
 		}
+
+		multiPart.field(
+				"store",
+				storeName);
 
 		multiPart.field(
 				"namespace",
@@ -104,10 +113,12 @@ public class IngestServiceClient
 
 	public boolean hdfsIngest(
 			final File[] inputFiles,
+			final String storeName,
 			final String namespace )
 			throws FileNotFoundException {
 		return hdfsIngest(
 				inputFiles,
+				storeName,
 				namespace,
 				null,
 				null,
@@ -117,11 +128,13 @@ public class IngestServiceClient
 
 	public boolean hdfsIngest(
 			final File[] inputFiles,
+			final String storeName,
 			final String namespace,
 			final String visibility )
 			throws FileNotFoundException {
 		return hdfsIngest(
 				inputFiles,
+				storeName,
 				namespace,
 				visibility,
 				null,
@@ -131,6 +144,7 @@ public class IngestServiceClient
 
 	public boolean hdfsIngest(
 			final File[] inputFiles,
+			final String storeName,
 			final String namespace,
 			final String visibility,
 			final String ingestFormat,
@@ -148,6 +162,10 @@ public class IngestServiceClient
 		multiPart.field(
 				"namespace",
 				namespace);
+
+		multiPart.field(
+				"store",
+				storeName);
 
 		if (visibility != null) {
 			multiPart.field(

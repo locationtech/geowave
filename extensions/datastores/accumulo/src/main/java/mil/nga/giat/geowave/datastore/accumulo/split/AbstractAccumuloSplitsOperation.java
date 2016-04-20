@@ -5,44 +5,45 @@ import java.io.IOException;
 import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.apache.accumulo.core.client.Connector;
-import org.apache.commons.cli.BasicParser;
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mil.nga.giat.geowave.core.cli.CLIOperationDriver;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.index.Index;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.index.NullIndex;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloIndexStore;
+import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations;
+import mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloRequiredOptions;
 
-abstract public class AbstractAccumuloSplitsOperation implements
-		CLIOperationDriver
+abstract public class AbstractAccumuloSplitsOperation
 {
 	private static Logger LOGGER = LoggerFactory.getLogger(AbstractAccumuloSplitsOperation.class);
 
-	@Override
-	public boolean runOperation(
-			final String[] args )
+	private final DataStorePluginOptions storeOptions;
+	private final SplitCommandLineOptions splitOptions;
+
+	public AbstractAccumuloSplitsOperation(
+			DataStorePluginOptions storeOptions,
+			SplitCommandLineOptions splitOptions ) {
+		this.storeOptions = storeOptions;
+		this.splitOptions = splitOptions;
+	}
+
+	public boolean runOperation()
 			throws ParseException {
-		final Options allOptions = new Options();
-		AccumuloCommandLineOptions.applyOptions(allOptions);
-		SplitCommandLineOptions.applyOptions(allOptions);
-		final CommandLine commandLine = new BasicParser().parse(
-				allOptions,
-				args);
-		final SplitCommandLineOptions splitOptions = SplitCommandLineOptions.parseOptions(commandLine);
-		final AccumuloCommandLineOptions accumuloOptions = AccumuloCommandLineOptions.parseOptions(commandLine);
+
 		try {
-			final IndexStore indexStore = new AccumuloIndexStore(
-					accumuloOptions.getAccumuloOperations());
-			final Connector connector = accumuloOptions.getAccumuloOperations().getConnector();
-			final String namespace = accumuloOptions.getNamespace();
+			final IndexStore indexStore = storeOptions.createIndexStore();
+
+			AccumuloRequiredOptions options = (AccumuloRequiredOptions) storeOptions.getFactoryOptions();
+			BasicAccumuloOperations operations = BasicAccumuloOperations.createOperations(options);
+
+			final Connector connector = operations.getConnector();
+			final String namespace = options.getGeowaveNamespace();
 			final long number = splitOptions.getNumber();
 			if (splitOptions.getIndexId() == null) {
 				boolean retVal = false;

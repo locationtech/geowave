@@ -40,9 +40,7 @@ import org.apache.log4j.Logger;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.StringUtils;
-import mil.nga.giat.geowave.core.store.config.AbstractConfigOption;
-import mil.nga.giat.geowave.core.store.config.PasswordConfigOption;
-import mil.nga.giat.geowave.core.store.config.StringConfigOption;
+import mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloRequiredOptions;
 import mil.nga.giat.geowave.datastore.accumulo.util.AccumuloUtils;
 import mil.nga.giat.geowave.datastore.accumulo.util.ConnectorPool;
 
@@ -55,25 +53,6 @@ public class BasicAccumuloOperations implements
 		AccumuloOperations
 {
 	private final static Logger LOGGER = Logger.getLogger(BasicAccumuloOperations.class);
-	public static final String ZOOKEEPER_CONFIG_NAME = "zookeeper";
-	public static final String INSTANCE_CONFIG_NAME = "instance";
-	public static final String USER_CONFIG_NAME = "user";
-	public static final String PASSWORD_CONFIG_NAME = "password";
-	private static final AbstractConfigOption<?>[] CONFIG_OPTIONS = new AbstractConfigOption[] {
-		new StringConfigOption(
-				ZOOKEEPER_CONFIG_NAME,
-				"A comma-separated list of zookeeper servers that an Accumulo instance is using"),
-		new StringConfigOption(
-				INSTANCE_CONFIG_NAME,
-				"The Accumulo instance ID"),
-		new StringConfigOption(
-				USER_CONFIG_NAME,
-				"A valid Accumulo user ID"),
-		new PasswordConfigOption(
-				PASSWORD_CONFIG_NAME,
-				"The password for the user")
-	};
-
 	private static final int DEFAULT_NUM_THREADS = 16;
 	private static final long DEFAULT_TIMEOUT_MILLIS = 1000L; // 1 second
 	private static final long DEFAULT_BYTE_BUFFER_SIZE = 1048576L; // 1 MB
@@ -775,50 +754,37 @@ public class BasicAccumuloOperations implements
 		return false;
 	}
 
-	public static AbstractConfigOption<?>[] getOptions() {
-		return CONFIG_OPTIONS;
-	}
-
 	public static BasicAccumuloOperations createOperations(
-			final Map<String, Object> configOptions,
-			final String namespace )
+			AccumuloRequiredOptions options )
 			throws AccumuloException,
 			AccumuloSecurityException {
 		return new BasicAccumuloOperations(
-				configOptions.get(
-						ZOOKEEPER_CONFIG_NAME).toString(),
-				configOptions.get(
-						INSTANCE_CONFIG_NAME).toString(),
-				configOptions.get(
-						USER_CONFIG_NAME).toString(),
-				configOptions.get(
-						PASSWORD_CONFIG_NAME).toString(),
-				namespace);
+				options.getZookeeper(),
+				options.getInstance(),
+				options.getUser(),
+				options.getPassword(),
+				options.getGeowaveNamespace());
 	}
 
 	public static Connector getConnector(
-			final Map<String, Object> configOptions )
+			final AccumuloRequiredOptions options )
 			throws AccumuloException,
 			AccumuloSecurityException {
-		return createOperations(
-				configOptions,
-				null).connector;
+		return createOperations(options).connector;
 	}
 
 	public static String getUsername(
-			final Map<String, Object> configOptions )
+			final AccumuloRequiredOptions options )
 			throws AccumuloException,
 			AccumuloSecurityException {
-		return configOptions.get(
-				USER_CONFIG_NAME).toString();
+		return options.getUser();
 	}
 
 	public static String getPassword(
-			final Map<String, Object> configOptions )
+			final AccumuloRequiredOptions options )
 			throws AccumuloException,
 			AccumuloSecurityException {
-		return configOptions.get(
-				PASSWORD_CONFIG_NAME).toString();
+		return options.getPassword();
 	}
 
 	@Override

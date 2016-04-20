@@ -7,27 +7,24 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.Options;
-import org.apache.commons.cli.ParseException;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import mil.nga.giat.geowave.core.cli.CommandLineResult;
-import mil.nga.giat.geowave.core.cli.DataStoreCommandLineOptions;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.ingest.GeoWaveData;
-import mil.nga.giat.geowave.core.ingest.IngestCommandLineOptions;
-import mil.nga.giat.geowave.core.ingest.IngestFormatPluginProviderSpi;
-import mil.nga.giat.geowave.core.ingest.IngestUtils;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOptions;
+import mil.nga.giat.geowave.core.store.operations.remote.options.VisibilityOptions;
 
 /**
  * This extends the local file driver to directly ingest data into GeoWave
@@ -37,89 +34,61 @@ public class LocalFileIngestDriver extends
 		AbstractLocalFileDriver<LocalFileIngestPlugin<?>, LocalIngestRunData>
 {
 	public final static int INGEST_BATCH_SIZE = 500;
-	private final static Logger LOGGER = Logger.getLogger(LocalFileIngestDriver.class);
-	protected DataStoreCommandLineOptions dataStoreOptions;
-	protected IngestCommandLineOptions ingestOptions;
+	private final static Logger LOGGER = LoggerFactory.getLogger(LocalFileIngestDriver.class);
+	protected DataStorePluginOptions storeOptions;
+	protected List<IndexPluginOptions> indexOptions;
+	protected VisibilityOptions ingestOptions;
+	protected Map<String, LocalFileIngestPlugin<?>> ingestPlugins;
+	protected int threads;
 	protected ExecutorService ingestExecutor;
 
 	public LocalFileIngestDriver(
-			final String operation ) {
+			DataStorePluginOptions storeOptions,
+			List<IndexPluginOptions> indexOptions,
+			Map<String, LocalFileIngestPlugin<?>> ingestPlugins,
+			VisibilityOptions ingestOptions,
+			LocalInputCommandLineOptions inputOptions,
+			int threads ) {
 		super(
-				operation);
+				inputOptions);
+		this.storeOptions = storeOptions;
+		this.indexOptions = indexOptions;
+		this.ingestOptions = ingestOptions;
+		this.ingestPlugins = ingestPlugins;
+		this.threads = threads;
 	}
 
-	@Override
-	protected void parseOptionsInternal(
-			final Options options,
-			CommandLine commandLine )
-			throws ParseException {
-		final CommandLineResult<DataStoreCommandLineOptions> dataStoreOptionsResult = DataStoreCommandLineOptions.parseOptions(
-				options,
-				commandLine);
-		dataStoreOptions = dataStoreOptionsResult.getResult();
-		if (dataStoreOptionsResult.isCommandLineChange()) {
-			commandLine = dataStoreOptionsResult.getCommandLine();
-		}
-		ingestOptions = IngestCommandLineOptions.parseOptions(commandLine);
-		super.parseOptionsInternal(
-				options,
-				commandLine);
-	}
-
-	@Override
-	protected void applyOptionsInternal(
-			final Options allOptions ) {
-		DataStoreCommandLineOptions.applyOptions(allOptions);
-		IngestCommandLineOptions.applyOptions(allOptions);
-		super.applyOptionsInternal(allOptions);
-	}
-
-	@Override
-	protected boolean runInternal(
-			final String[] args,
-			final List<IngestFormatPluginProviderSpi<?, ?>> pluginProviders ) {
+	public boolean runOperation(
+			String inputPath ) {
 		// first collect the local file ingest plugins
 		final Map<String, LocalFileIngestPlugin<?>> localFileIngestPlugins = new HashMap<String, LocalFileIngestPlugin<?>>();
 		final List<WritableDataAdapter<?>> adapters = new ArrayList<WritableDataAdapter<?>>();
-		for (final IngestFormatPluginProviderSpi<?, ?> pluginProvider : pluginProviders) {
-			LocalFileIngestPlugin<?> localFileIngestPlugin = null;
-			try {
-				localFileIngestPlugin = pluginProvider.getLocalFileIngestPlugin();
+		for (Entry<String, LocalFileIngestPlugin<?>> pluginEntry : ingestPlugins.entrySet()) {
 
-				if (localFileIngestPlugin == null) {
-					LOGGER.warn("Plugin provider for ingest type '" + pluginProvider.getIngestFormatName() + "' does not support local file ingest");
-					continue;
-				}
-			}
-			catch (final UnsupportedOperationException e) {
-				LOGGER.warn(
-						"Plugin provider '" + pluginProvider.getIngestFormatName() + "' does not support local file ingest",
-						e);
+			if (!checkIndexesAgainstProvider(
+					pluginEntry.getKey(),
+					pluginEntry.getValue(),
+					indexOptions)) {
 				continue;
 			}
-			final boolean indexSupported = (IngestUtils.isSupported(
-					localFileIngestPlugin,
-					args,
-					ingestOptions.getDimensionalityTypes()));
-			if (!indexSupported) {
-				LOGGER.warn("Local file ingest plugin for ingest type '" + pluginProvider.getIngestFormatName() + "' does not support dimensionality type '" + ingestOptions.getDimensionalityTypeArgument() + "'");
-				continue;
-			}
+
 			localFileIngestPlugins.put(
-					pluginProvider.getIngestFormatName(),
-					localFileIngestPlugin);
-			adapters.addAll(Arrays.asList(localFileIngestPlugin.getDataAdapters(ingestOptions.getVisibility())));
+					pluginEntry.getKey(),
+					pluginEntry.getValue());
+
+			adapters.addAll(Arrays.asList(pluginEntry.getValue().getDataAdapters(
+					ingestOptions.getVisibility())));
 		}
 
-		final DataStore dataStore = dataStoreOptions.createStore();
+		DataStore dataStore = storeOptions.createDataStore();
 		try (LocalIngestRunData runData = new LocalIngestRunData(
 				adapters,
-				dataStore,
-				args)) {
+				dataStore)) {
 
 			startExecutor();
 
 			processInput(
+					inputPath,
 					localFileIngestPlugins,
 					runData);
 
@@ -133,7 +102,7 @@ public class LocalFileIngestDriver extends
 			shutdownExecutor();
 		}
 		catch (final IOException e) {
-			LOGGER.fatal(
+			LOGGER.error(
 					"Unexpected I/O exception when reading input files",
 					e);
 			return false;
@@ -149,7 +118,7 @@ public class LocalFileIngestDriver extends
 	 * of threads specified on the command line.
 	 */
 	private void startExecutor() {
-		ingestExecutor = Executors.newFixedThreadPool(localInput.getThreads());
+		ingestExecutor = Executors.newFixedThreadPool(threads);
 	}
 
 	/**
@@ -190,13 +159,9 @@ public class LocalFileIngestDriver extends
 		// This loads up the primary indexes that are specified on the command
 		// line.
 		// Usually spatial or spatial-temporal
-		final String[] dimensionTypes = ingestOptions.getDimensionalityTypes();
 		final Map<ByteArrayId, PrimaryIndex> specifiedPrimaryIndexes = new HashMap<ByteArrayId, PrimaryIndex>();
-		for (final String dimensionType : dimensionTypes) {
-			final PrimaryIndex primaryIndex = IngestUtils.getIndex(
-					plugin,
-					ingestRunData.getArgs(),
-					dimensionType);
+		for (final IndexPluginOptions dimensionType : indexOptions) {
+			final PrimaryIndex primaryIndex = dimensionType.createPrimaryIndex();
 			if (primaryIndex == null) {
 				LOGGER.error("Could not get index instance, getIndex() returned null;");
 				throw new IOException(
@@ -235,11 +200,11 @@ public class LocalFileIngestDriver extends
 		// These folks will read our blocking queue
 		LOGGER.debug(String.format(
 				"Creating [%d] threads to ingest file: [%s]",
-				localInput.getThreads(),
+				threads,
 				file.getName()));
 		List<IngestTask> ingestTasks = new ArrayList<IngestTask>();
 		try {
-			for (int i = 0; i < localInput.getThreads(); i++) {
+			for (int i = 0; i < threads; i++) {
 				String id = String.format(
 						"%s-%d",
 						file.getName(),

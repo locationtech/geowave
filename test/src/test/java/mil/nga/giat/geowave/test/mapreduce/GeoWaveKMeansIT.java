@@ -3,11 +3,9 @@ package mil.nga.giat.geowave.test.mapreduce;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
-import org.apache.commons.cli.Options;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.geotools.referencing.crs.DefaultGeographicCRS;
@@ -34,15 +32,7 @@ import mil.nga.giat.geowave.analytic.param.MapReduceParameters;
 import mil.nga.giat.geowave.analytic.param.ParameterEnum;
 import mil.nga.giat.geowave.analytic.param.SampleParameters;
 import mil.nga.giat.geowave.analytic.param.StoreParameters.StoreParam;
-import mil.nga.giat.geowave.analytic.store.PersistableAdapterStore;
-import mil.nga.giat.geowave.analytic.store.PersistableDataStore;
-import mil.nga.giat.geowave.analytic.store.PersistableIndexStore;
-import mil.nga.giat.geowave.core.cli.AdapterStoreCommandLineOptions;
-import mil.nga.giat.geowave.core.cli.CommandLineOptions.OptionMapWrapper;
-import mil.nga.giat.geowave.core.cli.CommandLineResult;
-import mil.nga.giat.geowave.core.cli.DataStoreCommandLineOptions;
-import mil.nga.giat.geowave.core.cli.GenericStoreCommandLineOptions;
-import mil.nga.giat.geowave.core.cli.IndexStoreCommandLineOptions;
+import mil.nga.giat.geowave.analytic.store.PersistableStore;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericRange;
 import mil.nga.giat.geowave.core.store.DataStore;
@@ -134,39 +124,15 @@ public class GeoWaveKMeansIT extends
 	@Test
 	public void testIngestAndQueryGeneralGpx()
 			throws Exception {
-		final Map<String, String> options = getAccumuloConfigOptions();
-		options.put(
-				GenericStoreCommandLineOptions.NAMESPACE_OPTION_KEY,
-				TEST_NAMESPACE);
-		final Options nsOptions = new Options();
-		DataStoreCommandLineOptions.applyOptions(nsOptions);
-		final CommandLineResult<DataStoreCommandLineOptions> dataStoreOptions = DataStoreCommandLineOptions.parseOptions(
-				nsOptions,
-				new OptionMapWrapper(
-						options));
-		final CommandLineResult<IndexStoreCommandLineOptions> indexStoreOptions = IndexStoreCommandLineOptions.parseOptions(
-				nsOptions,
-				new OptionMapWrapper(
-						options));
-		final CommandLineResult<AdapterStoreCommandLineOptions> adapterStoreOptions = AdapterStoreCommandLineOptions.parseOptions(
-				nsOptions,
-				new OptionMapWrapper(
-						options));
-		testIngest(dataStoreOptions.getResult().createStore());
+		testIngest(getAccumuloStorePluginOptions(
+				TEST_NAMESPACE).createDataStore());
 
-		runKPlusPlus(
-				new SpatialQuery(
-						dataGenerator.getBoundingRegion()),
-				dataStoreOptions.getResult(),
-				indexStoreOptions.getResult(),
-				adapterStoreOptions.getResult());
+		runKPlusPlus(new SpatialQuery(
+				dataGenerator.getBoundingRegion()));
 	}
 
 	private void runKPlusPlus(
-			final DistributableQuery query,
-			final DataStoreCommandLineOptions dataStoreOptions,
-			final IndexStoreCommandLineOptions indexStoreOptions,
-			final AdapterStoreCommandLineOptions adapterStoreOptions )
+			final DistributableQuery query )
 			throws Exception {
 
 		final MultiLevelKMeansClusteringJobRunner jobRunner = new MultiLevelKMeansClusteringJobRunner();
@@ -181,9 +147,7 @@ public class GeoWaveKMeansIT extends
 							ClusteringParameters.Clustering.MAX_ITERATIONS,
 							ClusteringParameters.Clustering.RETAIN_GROUP_ASSIGNMENTS,
 							ExtractParameters.Extract.OUTPUT_DATA_TYPE_ID,
-							StoreParam.DATA_STORE,
-							StoreParam.INDEX_STORE,
-							StoreParam.ADAPTER_STORE,
+							StoreParam.STORE,
 							GlobalParameters.Global.BATCH_ID,
 							MapReduceParameters.MRConfig.HDFS_BASE_DIR,
 							SampleParameters.Sample.MAX_SAMPLE_SIZE,
@@ -197,12 +161,8 @@ public class GeoWaveKMeansIT extends
 							2,
 							false,
 							"centroid",
-							new PersistableDataStore(
-									dataStoreOptions),
-							new PersistableIndexStore(
-									indexStoreOptions),
-							new PersistableAdapterStore(
-									adapterStoreOptions),
+							new PersistableStore(
+									getAccumuloStorePluginOptions(TEST_NAMESPACE)),
 							"bx1",
 							hdfsBaseDirectory + "/t1",
 							3,
@@ -213,9 +173,12 @@ public class GeoWaveKMeansIT extends
 				0,
 				res);
 
-		final DataStore dataStore = dataStoreOptions.createStore();
-		final IndexStore indexStore = indexStoreOptions.createStore();
-		final AdapterStore adapterStore = adapterStoreOptions.createStore();
+		final DataStore dataStore = getAccumuloStorePluginOptions(
+				TEST_NAMESPACE).createDataStore();
+		final IndexStore indexStore = getAccumuloStorePluginOptions(
+				TEST_NAMESPACE).createIndexStore();
+		final AdapterStore adapterStore = getAccumuloStorePluginOptions(
+				TEST_NAMESPACE).createAdapterStore();
 		final int resultCounLevel1 = countResults(
 				dataStore,
 				indexStore,
@@ -236,10 +199,7 @@ public class GeoWaveKMeansIT extends
 	}
 
 	private void runKJumpPlusPlus(
-			final DistributableQuery query,
-			final DataStoreCommandLineOptions dataStoreOptions,
-			final IndexStoreCommandLineOptions indexStoreOptions,
-			final AdapterStoreCommandLineOptions adapterStoreOptions )
+			final DistributableQuery query )
 			throws Exception {
 
 		final MultiLevelJumpKMeansClusteringJobRunner jobRunner2 = new MultiLevelJumpKMeansClusteringJobRunner();
@@ -252,9 +212,7 @@ public class GeoWaveKMeansIT extends
 							ExtractParameters.Extract.MAX_INPUT_SPLIT,
 							ClusteringParameters.Clustering.ZOOM_LEVELS,
 							ExtractParameters.Extract.OUTPUT_DATA_TYPE_ID,
-							StoreParam.DATA_STORE,
-							StoreParam.INDEX_STORE,
-							StoreParam.ADAPTER_STORE,
+							StoreParam.STORE,
 							GlobalParameters.Global.BATCH_ID,
 							MapReduceParameters.MRConfig.HDFS_BASE_DIR,
 							JumpParameters.Jump.RANGE_OF_CENTROIDS,
@@ -267,12 +225,8 @@ public class GeoWaveKMeansIT extends
 							MAX_INPUT_SPLITS,
 							2,
 							"centroid",
-							new PersistableDataStore(
-									dataStoreOptions),
-							new PersistableIndexStore(
-									indexStoreOptions),
-							new PersistableAdapterStore(
-									adapterStoreOptions),
+							new PersistableStore(
+									getAccumuloStorePluginOptions(TEST_NAMESPACE)),
 							"bx2",
 							hdfsBaseDirectory + "/t2",
 							new NumericRange(
@@ -286,9 +240,12 @@ public class GeoWaveKMeansIT extends
 				0,
 				res2);
 
-		final DataStore dataStore = dataStoreOptions.createStore();
-		final IndexStore indexStore = indexStoreOptions.createStore();
-		final AdapterStore adapterStore = adapterStoreOptions.createStore();
+		final DataStore dataStore = getAccumuloStorePluginOptions(
+				TEST_NAMESPACE).createDataStore();
+		final IndexStore indexStore = getAccumuloStorePluginOptions(
+				TEST_NAMESPACE).createIndexStore();
+		final AdapterStore adapterStore = getAccumuloStorePluginOptions(
+				TEST_NAMESPACE).createAdapterStore();
 		final int jumpRresultCounLevel1 = countResults(
 				dataStore,
 				indexStore,

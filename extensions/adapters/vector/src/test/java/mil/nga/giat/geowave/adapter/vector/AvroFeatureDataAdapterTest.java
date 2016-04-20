@@ -41,6 +41,7 @@ import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.StoreFactoryFamilySpi;
+import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
 import mil.nga.giat.geowave.core.store.adapter.AdapterPersistenceEncoding;
 import mil.nga.giat.geowave.core.store.adapter.IndexFieldHandler;
 import mil.nga.giat.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding;
@@ -73,9 +74,10 @@ public class AvroFeatureDataAdapterTest
 			ParseException {
 
 		final StoreFactoryFamilySpi storeFactoryFamily = new MemoryStoreFactoryFamily();
+		StoreFactoryOptions opts = storeFactoryFamily.getDataStoreFactory().createOptionsInstance();
+		opts.setGeowaveNamespace("test_avro");
 		dataStore = storeFactoryFamily.getDataStoreFactory().createStore(
-				new HashMap(),
-				"test_avro");
+				opts);
 
 		try {
 			time1 = DateUtilities.parseISO("2005-05-19T18:33:55Z");

@@ -42,7 +42,7 @@ public class InfoServiceImpl implements
 	private final static int defaultIndentation = 2;
 	private final IndexStoreFactorySpi indexStoreFactory;
 	private final AdapterStoreFactorySpi adapterStoreFactory;
-	private final Map<String, Object> configOptions;
+	private final Map<String, String> configOptions;
 
 	public InfoServiceImpl(
 			@Context
@@ -59,7 +59,7 @@ public class InfoServiceImpl implements
 					key,
 					props.getProperty(key));
 		}
-		configOptions = ConfigUtils.valuesFromStrings(strMap);
+		configOptions = strMap;
 		indexStoreFactory = GeoWaveStoreFinder.findIndexStoreFactory(configOptions);
 		adapterStoreFactory = GeoWaveStoreFinder.findAdapterStoreFactory(configOptions);
 	}
@@ -98,8 +98,9 @@ public class InfoServiceImpl implements
 			@PathParam("namespace")
 			final String namespace ) {
 		try (CloseableIterator<Index<?, ?>> indices = indexStoreFactory.createStore(
-				configOptions,
-				namespace).getIndices()) {
+				ConfigUtils.populateOptionsFromList(
+						indexStoreFactory.createOptionsInstance(),
+						configOptions)).getIndices()) {
 
 			final JSONArray indexNames = new JSONArray();
 			while (indices.hasNext()) {
@@ -136,8 +137,9 @@ public class InfoServiceImpl implements
 			@PathParam("namespace")
 			final String namespace ) {
 		try (CloseableIterator<DataAdapter<?>> dataAdapters = adapterStoreFactory.createStore(
-				configOptions,
-				namespace).getAdapters()) {
+				ConfigUtils.populateOptionsFromList(
+						indexStoreFactory.createOptionsInstance(),
+						configOptions)).getAdapters()) {
 			final JSONArray dataAdapterNames = new JSONArray();
 			while (dataAdapters.hasNext()) {
 				final DataAdapter<?> dataAdapter = dataAdapters.next();

@@ -6,12 +6,17 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.mapreduce.JobContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import mil.nga.giat.geowave.analytic.PropertyManagement;
 import mil.nga.giat.geowave.analytic.SerializableAdapterStore;
 import mil.nga.giat.geowave.analytic.param.ParameterEnum;
 import mil.nga.giat.geowave.analytic.param.StoreParameters;
 import mil.nga.giat.geowave.analytic.partitioner.AdapterBasedPartitioner.AdapterDataEntry;
-import mil.nga.giat.geowave.analytic.store.PersistableAdapterStore;
+import mil.nga.giat.geowave.analytic.store.PersistableStore;
 import mil.nga.giat.geowave.core.geotime.index.dimension.LongitudeDefinition;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
@@ -23,11 +28,6 @@ import mil.nga.giat.geowave.core.store.adapter.AdapterPersistenceEncoding;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
-
-import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.mapreduce.JobContext;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * This class uses the {@link DataAdapter} to decode the dimension fields to be
@@ -43,8 +43,7 @@ import org.slf4j.LoggerFactory;
  * This class depends on an AdapterStore. Since an AdapterStore is not
  * Serializable, the dependency is transient requiring initialization after
  * serialization
- * {@link AdapterBasedPartitioner#initialize(ConfigurationWrapper)
-
+ * {@link AdapterBasedPartitioner#initialize(ConfigurationWrapper)
  * 
  * 
  */
@@ -137,10 +136,10 @@ public class AdapterBasedPartitioner extends
 				context,
 				scope);
 		adapterStore = new SerializableAdapterStore(
-				((PersistableAdapterStore) StoreParameters.StoreParam.ADAPTER_STORE.getHelper().getValue(
+				((PersistableStore) StoreParameters.StoreParam.STORE.getHelper().getValue(
 						context,
 						scope,
-						null)).getCliOptions().createStore());
+						null)).getDataStoreOptions().createAdapterStore());
 
 		init();
 	}
@@ -155,7 +154,7 @@ public class AdapterBasedPartitioner extends
 				scope,
 				configuration);
 		final ParameterEnum[] params = new ParameterEnum[] {
-			StoreParameters.StoreParam.ADAPTER_STORE
+			StoreParameters.StoreParam.STORE
 		};
 		runTimeProperties.setConfig(
 				params,

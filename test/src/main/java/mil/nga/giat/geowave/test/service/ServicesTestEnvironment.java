@@ -8,7 +8,6 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -24,9 +23,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import mil.nga.giat.geowave.core.cli.GenericStoreCommandLineOptions;
 import mil.nga.giat.geowave.core.index.StringUtils;
-import mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations;
+import mil.nga.giat.geowave.core.store.config.ConfigUtils;
+import mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloRequiredOptions;
 import mil.nga.giat.geowave.test.mapreduce.MapReduceTestEnvironment;
 
 abstract public class ServicesTestEnvironment extends
@@ -58,6 +57,7 @@ abstract public class ServicesTestEnvironment extends
 	protected static final String TEST_SLD_MINOR_SUBSAMPLE_FILE = TEST_STYLE_PATH + TEST_STYLE_NAME_MINOR_SUBSAMPLE + ".sld";
 	protected static final String TEST_SLD_MAJOR_SUBSAMPLE_FILE = TEST_STYLE_PATH + TEST_STYLE_NAME_MAJOR_SUBSAMPLE + ".sld";
 	protected static Server jettyServer;
+	protected static final String ACCUMULO_STORE_NAME = "accumulotest";
 
 	protected static void writeConfigFile(
 			final File configFile ) {
@@ -70,6 +70,13 @@ abstract public class ServicesTestEnvironment extends
 			writer.println("instance=" + accumuloInstance);
 			writer.println("user=" + accumuloUser);
 			writer.println("password=" + accumuloPassword);
+			writer.println("gwNamespace=" + TEST_NAMESPACE);
+			writer.println("store." + ACCUMULO_STORE_NAME + ".type=accumulo");
+			writer.println("store." + ACCUMULO_STORE_NAME + ".opts.zookeeper=" + zookeeper);
+			writer.println("store." + ACCUMULO_STORE_NAME + ".opts.instance=" + accumuloInstance);
+			writer.println("store." + ACCUMULO_STORE_NAME + ".opts.user=" + accumuloUser);
+			writer.println("store." + ACCUMULO_STORE_NAME + ".opts.password=" + accumuloPassword);
+			writer.println("store." + ACCUMULO_STORE_NAME + ".opts.gwNamespace=" + TEST_NAMESPACE);
 			writer.println("geoserver.url=" + JETTY_BASE_URL);
 			writer.println("geoserver.username=" + GEOSERVER_USER);
 			writer.println("geoserver.password=" + GEOSERVER_PASS);
@@ -210,23 +217,14 @@ abstract public class ServicesTestEnvironment extends
 	}
 
 	protected Map<String, String> getAccumuloConfig() {
-		final Map<String, String> accumuloConfig = new HashMap<String, String>();
-		accumuloConfig.put(
-				BasicAccumuloOperations.ZOOKEEPER_CONFIG_NAME,
-				zookeeper);
-		accumuloConfig.put(
-				BasicAccumuloOperations.PASSWORD_CONFIG_NAME,
-				accumuloPassword);
-		accumuloConfig.put(
-				BasicAccumuloOperations.USER_CONFIG_NAME,
-				accumuloUser);
-		accumuloConfig.put(
-				BasicAccumuloOperations.INSTANCE_CONFIG_NAME,
-				accumuloInstance);
-		accumuloConfig.put(
-				GenericStoreCommandLineOptions.NAMESPACE_OPTION_KEY,
-				TEST_NAMESPACE);
-		return accumuloConfig;
+		AccumuloRequiredOptions opts = new AccumuloRequiredOptions();
+		opts.setUser(accumuloUser);
+		opts.setPassword(accumuloPassword);
+		opts.setInstance(accumuloInstance);
+		opts.setZookeeper(zookeeper);
+		opts.setGeowaveNamespace(TEST_NAMESPACE);
+		Map<String, String> mapOpts = ConfigUtils.populateListFromOptions(opts);
+		return mapOpts;
 	}
 
 	@AfterClass

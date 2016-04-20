@@ -2,21 +2,16 @@ package mil.nga.giat.geowave.core.ingest.kafka;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+
+import org.apache.avro.specific.SpecificRecordBase;
+import org.apache.log4j.Logger;
 
 import kafka.javaapi.producer.Producer;
 import kafka.producer.KeyedMessage;
-import mil.nga.giat.geowave.core.ingest.IngestFormatPluginProviderSpi;
 import mil.nga.giat.geowave.core.ingest.avro.AvroFormatPlugin;
 import mil.nga.giat.geowave.core.ingest.local.AbstractLocalFileDriver;
-
-import org.apache.avro.specific.SpecificRecordBase;
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.Options;
-import org.apache.commons.cli.ParseException;
-import org.apache.log4j.Logger;
+import mil.nga.giat.geowave.core.ingest.local.LocalInputCommandLineOptions;
 
 /**
  * This class actually executes the staging of data to a Kafka topic based on
@@ -26,31 +21,18 @@ public class StageToKafkaDriver<T extends SpecificRecordBase> extends
 		AbstractLocalFileDriver<AvroFormatPlugin<?, ?>, StageKafkaData<?>>
 {
 	private final static Logger LOGGER = Logger.getLogger(StageToKafkaDriver.class);
-	private KafkaProducerCommandLineOptions kafkaOptions;
+
+	private final Map<String, AvroFormatPlugin<?, ?>> ingestPlugins;
+	private final KafkaProducerCommandLineOptions kafkaOptions;
 
 	public StageToKafkaDriver(
-			final String operation ) {
+			KafkaProducerCommandLineOptions kafkaOptions,
+			Map<String, AvroFormatPlugin<?, ?>> ingestPlugins,
+			LocalInputCommandLineOptions localOptions ) {
 		super(
-				operation);
-	}
-
-	@Override
-	protected void parseOptionsInternal(
-			final Options options,
-			final CommandLine commandLine )
-			throws ParseException {
-		kafkaOptions = KafkaProducerCommandLineOptions.parseOptions(commandLine);
-		super.parseOptionsInternal(
-				options,
-				commandLine);
-	}
-
-	@Override
-	protected void applyOptionsInternal(
-			final Options allOptions ) {
-		KafkaProducerCommandLineOptions.applyOptions(allOptions);
-		super.applyOptionsInternal(allOptions);
-
+				localOptions);
+		this.kafkaOptions = kafkaOptions;
+		this.ingestPlugins = ingestPlugins;
 	}
 
 	@Override
@@ -77,37 +59,16 @@ public class StageToKafkaDriver<T extends SpecificRecordBase> extends
 		}
 	}
 
-	@Override
-	protected boolean runInternal(
-			final String[] args,
-			final List<IngestFormatPluginProviderSpi<?, ?>> pluginProviders ) {
+	public boolean runOperation(
+			String inputPath ) {
 
-		final Map<String, AvroFormatPlugin<?, ?>> stageToKafkaPlugins = new HashMap<String, AvroFormatPlugin<?, ?>>();
-		for (final IngestFormatPluginProviderSpi<?, ?> pluginProvider : pluginProviders) {
-			AvroFormatPlugin<?, ?> stageToKafkaPlugin = null;
-			try {
-				stageToKafkaPlugin = pluginProvider.getAvroFormatPlugin();
-
-				if (stageToKafkaPlugin == null) {
-					LOGGER.warn("Plugin provider for ingest type '" + pluginProvider.getIngestFormatName() + "' does not support staging to HDFS");
-					continue;
-				}
-			}
-			catch (final UnsupportedOperationException e) {
-				LOGGER.warn(
-						"Plugin provider '" + pluginProvider.getIngestFormatName() + "' does not support staging to HDFS",
-						e);
-				continue;
-			}
-			stageToKafkaPlugins.put(
-					pluginProvider.getIngestFormatName(),
-					stageToKafkaPlugin);
-		}
+		final Map<String, AvroFormatPlugin<?, ?>> stageToKafkaPlugins = ingestPlugins;
 
 		try {
 			final StageKafkaData<T> runData = new StageKafkaData<T>(
 					kafkaOptions.getProperties());
 			processInput(
+					inputPath,
 					stageToKafkaPlugins,
 					runData);
 			runData.close();

@@ -27,13 +27,18 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 
-import mil.nga.giat.geowave.core.cli.GenericStoreCommandLineOptions;
+import org.apache.log4j.Logger;
+
+import com.google.common.io.Files;
+import com.xuggle.mediatool.IMediaWriter;
+import com.xuggle.mediatool.ToolFactory;
+import com.xuggle.xuggler.ICodec;
+
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayUtils;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.GeoWaveStoreFinder;
-import mil.nga.giat.geowave.core.store.config.ConfigUtils;
 import mil.nga.giat.geowave.core.store.query.DataIdQuery;
 import mil.nga.giat.geowave.core.store.query.PrefixIdQuery;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
@@ -42,13 +47,6 @@ import mil.nga.giat.geowave.format.stanag4676.image.ImageChip;
 import mil.nga.giat.geowave.format.stanag4676.image.ImageChipDataAdapter;
 import mil.nga.giat.geowave.format.stanag4676.image.ImageChipUtils;
 import mil.nga.giat.geowave.service.ServiceUtils;
-
-import org.apache.log4j.Logger;
-
-import com.google.common.io.Files;
-import com.xuggle.mediatool.IMediaWriter;
-import com.xuggle.mediatool.ToolFactory;
-import com.xuggle.xuggler.ICodec;
 
 @Path("stanag4676")
 public class Stanag4676ImageryChipService
@@ -303,13 +301,9 @@ public class Stanag4676ImageryChipService
 							props,
 							key));
 		}
-		configOptions = ConfigUtils.valuesFromStrings(strMap);
 
-		final String namespace = (String) configOptions.get(GenericStoreCommandLineOptions.NAMESPACE_OPTION_KEY);
-		dataStore = GeoWaveStoreFinder.findDataStoreFactory(
-				configOptions).createStore(
-				configOptions,
-				namespace);
+		dataStore = GeoWaveStoreFinder.createDataStore(strMap);
+
 		return dataStore;
 	}
 }

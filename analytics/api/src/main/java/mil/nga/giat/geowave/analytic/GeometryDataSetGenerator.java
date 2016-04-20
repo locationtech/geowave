@@ -7,11 +7,6 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
-import org.apache.commons.cli.BasicParser;
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.Option;
-import org.apache.commons.cli.Options;
-import org.apache.commons.cli.ParseException;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
@@ -39,14 +34,10 @@ import com.vividsolutions.jts.geom.Point;
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import mil.nga.giat.geowave.analytic.distance.CoordinateCircleDistanceFn;
 import mil.nga.giat.geowave.analytic.distance.DistanceFn;
-import mil.nga.giat.geowave.analytic.distance.FeatureCentroidDistanceFn;
-import mil.nga.giat.geowave.core.cli.CommandLineResult;
-import mil.nga.giat.geowave.core.cli.DataStoreCommandLineOptions;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.core.store.memory.DataStoreUtils;
 
 /**
  * Generate clusters of geometries.
@@ -490,92 +481,94 @@ public class GeometryDataSetGenerator
 
 	}
 
-	public static void main(
-			final String args[] )
-			throws Exception {
-		final Options allOptions = new Options();
-		DataStoreCommandLineOptions.applyOptions(allOptions);
-		final Option typeNameOption = new Option(
-				"typename",
-				true,
-				"a name for the feature type (required)");
-		typeNameOption.setRequired(true);
-		allOptions.addOption(typeNameOption);
-		CommandLine commandLine = new BasicParser().parse(
-				allOptions,
-				args);
-
-		final CommandLineResult<DataStoreCommandLineOptions> dataStoreOption = DataStoreCommandLineOptions.parseOptions(
-				allOptions,
-				commandLine);
-		if (dataStoreOption.isCommandLineChange()) {
-			commandLine = dataStoreOption.getCommandLine();
-		}
-		else {
-			throw new ParseException(
-					"Unable to parse data store from command line");
-		}
-		final DataStore dataStore = dataStoreOption.getResult().createStore();
-		final String typeName = commandLine.getOptionValue("typename");
-		final GeometryDataSetGenerator dataGenerator = new GeometryDataSetGenerator(
-				new FeatureCentroidDistanceFn(),
-				getBuilder(typeName));
-		dataGenerator.writeToGeoWave(
-				dataStore,
-				dataGenerator.generatePointSet(
-						0.2,
-						0.2,
-						5,
-						5000,
-						new double[] {
-							-100,
-							-45
-						},
-						new double[] {
-							-90,
-							-35
-						}));
-		dataGenerator.writeToGeoWave(
-				dataStore,
-				dataGenerator.generatePointSet(
-						0.2,
-						0.2,
-						7,
-						5000,
-						new double[] {
-							0,
-							0
-						},
-						new double[] {
-							10,
-							10
-						}));
-		dataGenerator.writeToGeoWave(
-				dataStore,
-				dataGenerator.addRandomNoisePoints(
-						dataGenerator.generatePointSet(
-								0.2,
-								0.2,
-								6,
-								5000,
-								new double[] {
-									65,
-									35
-								},
-								new double[] {
-									75,
-									45
-								}),
-						6000,
-						new double[] {
-							-90,
-							-90
-						},
-						new double[] {
-							90,
-							90
-						}));
-	}
+	// public static void main(
+	// final String args[] )
+	// throws Exception {
+	// final Options allOptions = new Options();
+	// DataStoreCommandLineOptions.applyOptions(allOptions);
+	// final Option typeNameOption = new Option(
+	// "typename",
+	// true,
+	// "a name for the feature type (required)");
+	// typeNameOption.setRequired(true);
+	// allOptions.addOption(typeNameOption);
+	// CommandLine commandLine = new BasicParser().parse(
+	// allOptions,
+	// args);
+	//
+	// final CommandLineResult<DataStoreCommandLineOptions> dataStoreOption =
+	// DataStoreCommandLineOptions.parseOptions(
+	// allOptions,
+	// commandLine);
+	// if (dataStoreOption.isCommandLineChange()) {
+	// commandLine = dataStoreOption.getCommandLine();
+	// }
+	// else {
+	// throw new ParseException(
+	// "Unable to parse data store from command line");
+	// }
+	// final DataStore dataStore = dataStoreOption.getResult().createStore();
+	// final String typeName = commandLine.getOptionValue("typename");
+	// final GeometryDataSetGenerator dataGenerator = new
+	// GeometryDataSetGenerator(
+	// new FeatureCentroidDistanceFn(),
+	// getBuilder(typeName));
+	// dataGenerator.writeToGeoWave(
+	// dataStore,
+	// dataGenerator.generatePointSet(
+	// 0.2,
+	// 0.2,
+	// 5,
+	// 5000,
+	// new double[] {
+	// -100,
+	// -45
+	// },
+	// new double[] {
+	// -90,
+	// -35
+	// }));
+	// dataGenerator.writeToGeoWave(
+	// dataStore,
+	// dataGenerator.generatePointSet(
+	// 0.2,
+	// 0.2,
+	// 7,
+	// 5000,
+	// new double[] {
+	// 0,
+	// 0
+	// },
+	// new double[] {
+	// 10,
+	// 10
+	// }));
+	// dataGenerator.writeToGeoWave(
+	// dataStore,
+	// dataGenerator.addRandomNoisePoints(
+	// dataGenerator.generatePointSet(
+	// 0.2,
+	// 0.2,
+	// 6,
+	// 5000,
+	// new double[] {
+	// 65,
+	// 35
+	// },
+	// new double[] {
+	// 75,
+	// 45
+	// }),
+	// 6000,
+	// new double[] {
+	// -90,
+	// -90
+	// },
+	// new double[] {
+	// 90,
+	// 90
+	// }));
+	// }
 
 	private static SimpleFeatureBuilder getBuilder(
 			final String name )

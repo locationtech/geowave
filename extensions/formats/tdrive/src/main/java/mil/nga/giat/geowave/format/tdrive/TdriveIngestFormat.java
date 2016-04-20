@@ -1,6 +1,7 @@
 package mil.nga.giat.geowave.format.tdrive;
 
 import mil.nga.giat.geowave.adapter.vector.ingest.AbstractSimpleFeatureIngestPlugin;
+import mil.nga.giat.geowave.core.ingest.spi.IngestFormatOptionProvider;
 import mil.nga.giat.geowave.adapter.vector.ingest.AbstractSimpleFeatureIngestFormat;
 
 /**
@@ -12,7 +13,8 @@ public class TdriveIngestFormat extends
 		AbstractSimpleFeatureIngestFormat<TdrivePoint>
 {
 	@Override
-	protected AbstractSimpleFeatureIngestPlugin<TdrivePoint> newPluginInstance() {
+	protected AbstractSimpleFeatureIngestPlugin<TdrivePoint> newPluginInstance(
+			IngestFormatOptionProvider options ) {
 		return new TdriveIngestPlugin();
 	}
 

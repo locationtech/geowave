@@ -1,232 +1,113 @@
 package mil.nga.giat.geowave.adapter.vector.export;
 
-import java.io.IOException;
+import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.avro.mapred.AvroKey;
-import org.apache.avro.mapreduce.AvroJob;
-import org.apache.avro.mapreduce.AvroKeyOutputFormat;
-import org.apache.commons.cli.ParseException;
-import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.conf.Configured;
-import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.io.NullWritable;
-import org.apache.hadoop.mapreduce.Job;
-import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
-import org.apache.hadoop.util.Tool;
-import org.apache.hadoop.util.ToolRunner;
-import org.apache.log4j.Logger;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParameterException;
+import com.beust.jcommander.Parameters;
+import com.beust.jcommander.ParametersDelegate;
 
-import com.beust.jcommander.JCommander;
-import com.google.common.base.Function;
-import com.google.common.collect.Lists;
+import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
+import mil.nga.giat.geowave.core.cli.api.Command;
+import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
+import mil.nga.giat.geowave.core.cli.api.OperationParams;
+import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
+import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.operations.remote.options.StoreLoader;
 
-import mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
-import mil.nga.giat.geowave.adapter.vector.avro.AvroSimpleFeatureCollection;
-import mil.nga.giat.geowave.adapter.vector.query.cql.CQLQuery;
-import mil.nga.giat.geowave.core.cli.CLIOperationDriver;
-import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.store.CloseableIterator;
-import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
-import mil.nga.giat.geowave.core.store.index.Index;
-import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.core.store.query.QueryOptions;
-import mil.nga.giat.geowave.mapreduce.GeoWaveConfiguratorBase;
-import mil.nga.giat.geowave.mapreduce.JobContextAdapterStore;
-import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputFormat;
-
+@GeowaveOperation(name = "mrexport", parentOperation = VectorSection.class)
+@Parameters(commandDescription = "Export data using map-reduce")
 public class VectorMRExportCommand extends
-		Configured implements
-		Tool,
-		CLIOperationDriver
+		DefaultOperation implements
+		Command
 {
-	// TODO annotate appropriately when new commandline tools is merged
-	private static final Logger LOGGER = Logger.getLogger(VectorMRExportCommand.class);
 
-	public static final String BATCH_SIZE_KEY = "BATCH_SIZE";
-	private final VectorMRExportOptions mrOptions = new VectorMRExportOptions();
+	@Parameter(description = "<hdfs host:port> <path to base directory to write to> <store name>")
+	private List<String> parameters = new ArrayList<String>();
 
-	public VectorMRExportOptions getOptions() {
+	@ParametersDelegate
+	private VectorMRExportOptions mrOptions = new VectorMRExportOptions();
+
+	private DataStorePluginOptions storeOptions = null;
+
+	@Override
+	public void execute(
+			OperationParams params )
+			throws Exception {
+		createRunner(
+				params).runJob();
+	}
+
+	public VectorMRExportJobRunner createRunner(
+			OperationParams params ) {
+		// Ensure we have all the required arguments
+		if (parameters.size() != 3) {
+			throw new ParameterException(
+					"Requires arguments: <hdfs host:port> <path to base directory to write to> <store name>");
+		}
+
+		String hdfsHostPort = parameters.get(0);
+		String hdfsPath = parameters.get(1);
+		String storeName = parameters.get(2);
+
+		if (!hdfsHostPort.contains("://")) {
+			hdfsHostPort = "hdfs://" + hdfsHostPort;
+		}
+
+		// Config file
+		File configFile = (File) params.getContext().get(
+				ConfigOptions.PROPERTIES_FILE_CONTEXT);
+
+		// Attempt to load store.
+		if (storeOptions == null) {
+			StoreLoader storeLoader = new StoreLoader(
+					storeName);
+			if (!storeLoader.loadFromConfig(configFile)) {
+				throw new ParameterException(
+						"Cannot find store name: " + storeLoader.getStoreName());
+			}
+			storeOptions = storeLoader.getDataStorePlugin();
+		}
+
+		VectorMRExportJobRunner vectorRunner = new VectorMRExportJobRunner(
+				storeOptions,
+				mrOptions,
+				hdfsHostPort,
+				hdfsPath);
+		return vectorRunner;
+	}
+
+	public List<String> getParameters() {
+		return parameters;
+	}
+
+	public void setParameters(
+			String hdfsHostPort,
+			String hdfsPath,
+			String storeName ) {
+		this.parameters = new ArrayList<String>();
+		this.parameters.add(hdfsHostPort);
+		this.parameters.add(hdfsPath);
+		this.parameters.add(storeName);
+	}
+
+	public VectorMRExportOptions getMrOptions() {
 		return mrOptions;
 	}
 
-	/**
-	 * Main method to execute the MapReduce analytic.
-	 */
-	public int runJob()
-			throws Exception {
-		Configuration conf = super.getConf();
-		if (conf == null) {
-			conf = new Configuration();
-			setConf(conf);
-		}
-		GeoWaveConfiguratorBase.setRemoteInvocationParams(
-				mrOptions.getHdfsHostPort(),
-				mrOptions.getResourceManagerHostPort(),
-				conf);
-		final QueryOptions options = new QueryOptions();
-		final List<String> adapterIds = mrOptions.getAdapterIds();
-		if ((adapterIds != null) && !adapterIds.isEmpty()) {
-			options.setAdapterIds(Lists.transform(
-					adapterIds,
-					new Function<String, ByteArrayId>() {
-
-						@Override
-						public ByteArrayId apply(
-								final String input ) {
-							return new ByteArrayId(
-									input);
-						}
-					}));
-			try (CloseableIterator<DataAdapter<?>> it = options.getAdapters(mrOptions.getAdapterStore())) {
-				while (it.hasNext()) {
-					final DataAdapter<?> adapter = it.next();
-					JobContextAdapterStore.addDataAdapter(
-							conf,
-							adapter);
-				}
-			}
-		}
-		conf.setInt(
-				BATCH_SIZE_KEY,
-				mrOptions.getBatchSize());
-		if (mrOptions.getIndexId() != null) {
-			final Index index = mrOptions.getIndexStore().getIndex(
-					new ByteArrayId(
-							mrOptions.getIndexId()));
-			if (index == null) {
-				JCommander.getConsole().println(
-						"Unable to find index '" + mrOptions.getIndexId() + "' in store");
-				return -1;
-			}
-			if (index instanceof PrimaryIndex) {
-				options.setIndex((PrimaryIndex) index);
-			}
-			else {
-				JCommander.getConsole().println(
-						"Index '" + mrOptions.getIndexId() + "' is not a primary index");
-				return -1;
-			}
-		}
-		if (mrOptions.getCqlFilter() != null) {
-			if ((adapterIds == null) || (adapterIds.size() != 1)) {
-				JCommander.getConsole().println(
-						"Exactly one type is expected when using CQL filter");
-				return -1;
-			}
-			final String adapterId = adapterIds.get(0);
-			final DataAdapter<?> adapter = mrOptions.getAdapterStore().getAdapter(
-					new ByteArrayId(
-							adapterId));
-			if (adapter == null) {
-				JCommander.getConsole().println(
-						"Type '" + adapterId + "' not found");
-				return -1;
-			}
-			if (!(adapter instanceof GeotoolsFeatureDataAdapter)) {
-				JCommander.getConsole().println(
-						"Type '" + adapterId + "' does not support vector export");
-
-				return -1;
-			}
-			GeoWaveInputFormat.setQuery(
-					conf,
-					new CQLQuery(
-							mrOptions.getCqlFilter(),
-							(GeotoolsFeatureDataAdapter) adapter));
-		}
-		// TODO set data store appropriately for input format
-
-		GeoWaveInputFormat.setDataStoreName(
-				conf,
-				mrOptions.dataStoreName);
-		GeoWaveInputFormat.setStoreConfigOptions(
-				conf,
-				mrOptions.configOptions);
-		GeoWaveInputFormat.setGeoWaveNamespace(
-				conf,
-				mrOptions.gwNamespace);
-		// the above code is a temporary placeholder until this gets merged with
-		// the new commandline options
-		GeoWaveInputFormat.setQueryOptions(
-				conf,
-				options);
-		final Job job = new Job(
-				conf);
-
-		job.setJarByClass(this.getClass());
-
-		job.setJobName("Exporting to " + mrOptions.getHdfsOutputDirectory());
-		FileOutputFormat.setCompressOutput(
-				job,
-				true);
-		FileOutputFormat.setOutputPath(
-				job,
-				new Path(
-						mrOptions.getHdfsOutputDirectory()));
-		job.setMapperClass(VectorExportMapper.class);
-		job.setInputFormatClass(GeoWaveInputFormat.class);
-		job.setOutputFormatClass(AvroKeyOutputFormat.class);
-		job.setMapOutputKeyClass(AvroKey.class);
-		job.setMapOutputValueClass(NullWritable.class);
-		job.setOutputKeyClass(AvroKey.class);
-		job.setOutputValueClass(NullWritable.class);
-		job.setNumReduceTasks(0);
-		AvroJob.setOutputKeySchema(
-				job,
-				AvroSimpleFeatureCollection.SCHEMA$);
-		AvroJob.setMapOutputKeySchema(
-				job,
-				AvroSimpleFeatureCollection.SCHEMA$);
-
-		GeoWaveInputFormat.setMinimumSplitCount(
-				job.getConfiguration(),
-				mrOptions.getMinSplits());
-		GeoWaveInputFormat.setMaximumSplitCount(
-				job.getConfiguration(),
-				mrOptions.getMaxSplits());
-
-		boolean retVal = false;
-		try {
-			retVal = job.waitForCompletion(true);
-		}
-		catch (final IOException ex) {
-			LOGGER.error(
-					"Error waiting for map reduce tile resize job: ",
-					ex);
-		}
-		return retVal ? 0 : 1;
+	public void setMrOptions(
+			VectorMRExportOptions mrOptions ) {
+		this.mrOptions = mrOptions;
 	}
 
-	public static void main(
-			final String[] args )
-			throws Exception {
-		final int res = ToolRunner.run(
-				new Configuration(),
-				new VectorMRExportCommand(),
-				args);
-		System.exit(res);
+	public DataStorePluginOptions getStoreOptions() {
+		return storeOptions;
 	}
 
-	@Override
-	public int run(
-			final String[] args )
-			throws Exception {
-		return runJob();
-	}
-
-	@Override
-	public boolean runOperation(
-			final String[] args )
-			throws ParseException {
-		try {
-			return run(args) == 0;
-		}
-		catch (final Exception e) {
-			LOGGER.warn(
-					"Unable to run operation",
-					e);
-			return false;
-		}
+	public void setStoreOptions(
+			DataStorePluginOptions storeOptions ) {
+		this.storeOptions = storeOptions;
 	}
 }

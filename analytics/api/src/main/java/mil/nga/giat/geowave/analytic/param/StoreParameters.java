@@ -5,14 +5,8 @@ public class StoreParameters
 	public enum StoreParam
 			implements
 			ParameterEnum {
-		DATA_STORE(
-				new DataStoreParameterHelper()),
-		ADAPTER_STORE(
-				new AdapterStoreParameterHelper()),
-		INDEX_STORE(
-				new IndexStoreParameterHelper()),
-		DATA_STATISTICS_STORE(
-				new DataStatisticsStoreParameterHelper());
+		STORE(
+				new StoreParameterHelper());
 
 		private final ParameterHelper<?> helper;
 

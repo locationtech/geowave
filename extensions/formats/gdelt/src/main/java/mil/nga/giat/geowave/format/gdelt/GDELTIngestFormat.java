@@ -1,13 +1,10 @@
 package mil.nga.giat.geowave.format.gdelt;
 
-import java.util.Collection;
-import java.util.Collections;
-
 import mil.nga.giat.geowave.adapter.vector.ingest.AbstractSimpleFeatureIngestFormat;
 import mil.nga.giat.geowave.adapter.vector.ingest.AbstractSimpleFeatureIngestPlugin;
 import mil.nga.giat.geowave.adapter.vector.ingest.DataSchemaOptionProvider;
-import mil.nga.giat.geowave.core.ingest.IngestFormatOptionProvider;
 import mil.nga.giat.geowave.core.ingest.avro.WholeFile;
+import mil.nga.giat.geowave.core.ingest.spi.IngestFormatOptionProvider;
 
 /**
  * This represents an ingest format plugin provider for GDELT data. It will
@@ -21,7 +18,8 @@ public class GDELTIngestFormat extends
 	protected final DataSchemaOptionProvider dataSchemaOptionProvider = new DataSchemaOptionProvider();
 
 	@Override
-	protected AbstractSimpleFeatureIngestPlugin<WholeFile> newPluginInstance() {
+	protected AbstractSimpleFeatureIngestPlugin<WholeFile> newPluginInstance(
+			IngestFormatOptionProvider options ) {
 		return new GDELTIngestPlugin();
 	}
 
@@ -41,7 +39,7 @@ public class GDELTIngestFormat extends
 	}
 
 	@Override
-	public Collection<? extends IngestFormatOptionProvider> internalGetIngestFormatOptionProviders() {
-		return Collections.singleton(dataSchemaOptionProvider);
+	public Object internalGetIngestFormatOptionProviders() {
+		return dataSchemaOptionProvider;
 	}
 }

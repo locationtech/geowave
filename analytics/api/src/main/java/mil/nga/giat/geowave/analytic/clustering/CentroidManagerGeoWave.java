@@ -53,9 +53,7 @@ import mil.nga.giat.geowave.analytic.param.CentroidParameters;
 import mil.nga.giat.geowave.analytic.param.GlobalParameters;
 import mil.nga.giat.geowave.analytic.param.ParameterEnum;
 import mil.nga.giat.geowave.analytic.param.StoreParameters;
-import mil.nga.giat.geowave.analytic.store.PersistableAdapterStore;
-import mil.nga.giat.geowave.analytic.store.PersistableDataStore;
-import mil.nga.giat.geowave.analytic.store.PersistableIndexStore;
+import mil.nga.giat.geowave.analytic.store.PersistableStore;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.StringUtils;
@@ -64,10 +62,8 @@ import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
-import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.core.store.memory.DataStoreUtils;
 import mil.nga.giat.geowave.core.store.query.DataIdQuery;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.mapreduce.GeoWaveConfiguratorBase;
@@ -120,9 +116,7 @@ public class CentroidManagerGeoWave<T> implements
 {
 	final static Logger LOGGER = LoggerFactory.getLogger(CentroidManagerGeoWave.class);
 	private static final ParameterEnum<?>[] MY_PARAMS = new ParameterEnum[] {
-		StoreParameters.StoreParam.DATA_STORE,
-		StoreParameters.StoreParam.INDEX_STORE,
-		StoreParameters.StoreParam.ADAPTER_STORE,
+		StoreParameters.StoreParam.STORE,
 		GlobalParameters.Global.BATCH_ID,
 		CentroidParameters.Centroid.DATA_TYPE_ID,
 		CentroidParameters.Centroid.DATA_NAMESPACE_URI,
@@ -244,20 +238,16 @@ public class CentroidManagerGeoWave<T> implements
 		final String indexId = scopedJob.getString(
 				CentroidParameters.Centroid.INDEX_ID,
 				new SpatialDimensionalityTypeProvider().createPrimaryIndex().getId().getString());
-		dataStore = ((PersistableDataStore) StoreParameters.StoreParam.DATA_STORE.getHelper().getValue(
+		PersistableStore store = (PersistableStore) StoreParameters.StoreParam.STORE.getHelper().getValue(
 				context,
 				scope,
-				null)).getCliOptions().createStore();
-		indexStore = ((PersistableIndexStore) StoreParameters.StoreParam.INDEX_STORE.getHelper().getValue(
-				context,
-				scope,
-				null)).getCliOptions().createStore();
+				null);
+
+		dataStore = store.getDataStoreOptions().createDataStore();
+		indexStore = store.getDataStoreOptions().createIndexStore();
 		index = (PrimaryIndex) indexStore.getIndex(new ByteArrayId(
 				StringUtils.stringToBinary(indexId)));
-		adapterStore = ((PersistableAdapterStore) StoreParameters.StoreParam.ADAPTER_STORE.getHelper().getValue(
-				context,
-				scope,
-				null)).getCliOptions().createStore();
+		adapterStore = store.getDataStoreOptions().createAdapterStore();
 		adapter = (GeotoolsFeatureDataAdapter) adapterStore.getAdapter(new ByteArrayId(
 				StringUtils.stringToBinary(centroidDataTypeId)));
 	}

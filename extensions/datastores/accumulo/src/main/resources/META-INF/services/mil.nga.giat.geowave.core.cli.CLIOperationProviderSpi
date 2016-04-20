@@ -1,1 +1,1 @@
-mil.nga.giat.geowave.datastore.accumulo.split.AccumuloSplitsOperationCLIProvider
+mil.nga.giat.geowave.datastore.accumulo.operations.AccumuloSplitsOperationCLIProvider

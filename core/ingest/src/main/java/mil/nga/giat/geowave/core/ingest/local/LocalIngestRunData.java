@@ -38,12 +38,10 @@ public class LocalIngestRunData implements
 	private final AdapterStore adapterCache;
 	private final IndexStore indexCache;
 	private final DataStore dataStore;
-	private final String[] args;
 
 	public LocalIngestRunData(
 			final List<WritableDataAdapter<?>> adapters,
-			final DataStore dataStore,
-			final String[] args ) {
+			final DataStore dataStore ) {
 		this.dataStore = dataStore;
 		// NOTE: This should be thread-safe because the adapterCache is never
 		// added to after this point. It's a static list.
@@ -51,7 +49,6 @@ public class LocalIngestRunData implements
 				adapters.toArray(new WritableDataAdapter[adapters.size()]));
 		indexWriterPool = new GenericKeyedObjectPool<>(
 				new IndexWriterFactory());
-		this.args = args;
 		this.indexCache = new MemoryIndexStore();
 	}
 
@@ -102,10 +99,6 @@ public class LocalIngestRunData implements
 		indexWriterPool.returnObject(
 				mapping,
 				writer);
-	}
-
-	public String[] getArgs() {
-		return args;
 	}
 
 	@Override

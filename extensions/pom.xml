@@ -25,6 +25,5 @@
 		<module>formats/stanag4676/format</module>
 		<module>formats/stanag4676/service</module>
 		<module>cli/debug</module>
-		<module>cli/stats</module>
 	</modules>
 </project>

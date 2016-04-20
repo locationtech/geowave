@@ -3,6 +3,7 @@ package mil.nga.giat.geowave.core.store.memory;
 import java.util.HashMap;
 import java.util.Map;
 
+import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
 import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
 import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStoreFactorySpi;
 
@@ -14,9 +15,8 @@ public class MemoryAdapterIndexMappingStoreFactory extends
 
 	@Override
 	public AdapterIndexMappingStore createStore(
-			final Map<String, Object> configOptions,
-			final String namespace ) {
-		return createStore(namespace);
+			final StoreFactoryOptions configOptions ) {
+		return createStore(configOptions.getGeowaveNamespace());
 	}
 
 	protected static AdapterIndexMappingStore createStore(

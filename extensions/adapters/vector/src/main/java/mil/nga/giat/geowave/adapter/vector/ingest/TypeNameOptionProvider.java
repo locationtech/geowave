@@ -1,27 +1,17 @@
 package mil.nga.giat.geowave.adapter.vector.ingest;
 
+import com.beust.jcommander.Parameter;
+
 import mil.nga.giat.geowave.core.index.Persistable;
 import mil.nga.giat.geowave.core.index.StringUtils;
-import mil.nga.giat.geowave.core.ingest.IngestFormatOptionProvider;
-
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.Options;
 
 public class TypeNameOptionProvider implements
-		IngestFormatOptionProvider,
 		Persistable
 {
+	@Parameter(names = "--typename", description = "A comma-delimitted set of typenames to ingest, feature types matching the specified typenames will be ingested (optional, by default all types will be ingested)")
 	private String typename = null;
-	private String[] typenames = null;
 
-	@Override
-	public void applyOptions(
-			final Options allOptions ) {
-		allOptions.addOption(
-				"typename",
-				true,
-				"A comma-delimitted set of typenames to ingest, feature types matching the specified typenames will be ingested (optional, by default all types will be ingested)");
-	}
+	private String[] typenames = null;
 
 	public String getTypeName() {
 		return typename;
@@ -42,14 +32,6 @@ public class TypeNameOptionProvider implements
 			}
 		}
 		return false;
-	}
-
-	@Override
-	public void parseOptions(
-			final CommandLine commandLine ) {
-		if (commandLine.hasOption("typename")) {
-			typename = commandLine.getOptionValue("typename");
-		}
 	}
 
 	@Override

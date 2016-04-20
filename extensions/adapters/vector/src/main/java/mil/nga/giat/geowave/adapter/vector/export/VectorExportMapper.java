@@ -61,7 +61,7 @@ public class VectorExportMapper extends
 			InterruptedException {
 		super.setup(context);
 		batchSize = context.getConfiguration().getInt(
-				VectorMRExportCommand.BATCH_SIZE_KEY,
+				VectorMRExportJobRunner.BATCH_SIZE_KEY,
 				VectorExportOptions.DEFAULT_BATCH_SIZE);
 	}
 

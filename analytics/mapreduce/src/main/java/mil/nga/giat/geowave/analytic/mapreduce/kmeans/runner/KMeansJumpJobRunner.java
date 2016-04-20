@@ -33,14 +33,9 @@ import mil.nga.giat.geowave.analytic.param.ParameterEnum;
 import mil.nga.giat.geowave.analytic.param.SampleParameters;
 import mil.nga.giat.geowave.analytic.param.StoreParameters;
 import mil.nga.giat.geowave.analytic.param.StoreParameters.StoreParam;
-import mil.nga.giat.geowave.analytic.store.PersistableAdapterStore;
-import mil.nga.giat.geowave.analytic.store.PersistableDataStore;
-import mil.nga.giat.geowave.analytic.store.PersistableIndexStore;
-import mil.nga.giat.geowave.core.cli.GenericStoreCommandLineOptions;
+import mil.nga.giat.geowave.analytic.store.PersistableStore;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericRange;
-import mil.nga.giat.geowave.core.store.DataStore;
-import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
-import mil.nga.giat.geowave.core.store.index.IndexStore;
+import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 
 /**
  * The KMeans Jump algorithm
@@ -149,14 +144,12 @@ public class KMeansJumpJobRunner extends
 					GlobalParameters.Global.PARENT_BATCH_ID,
 					currentBatchId);
 
-			final GenericStoreCommandLineOptions<DataStore> dataStoreOptions = ((PersistableDataStore) propertyManagement.getProperty(StoreParam.DATA_STORE)).getCliOptions();
-			final GenericStoreCommandLineOptions<IndexStore> indexStoreOptions = ((PersistableIndexStore) propertyManagement.getProperty(StoreParam.INDEX_STORE)).getCliOptions();
-			final GenericStoreCommandLineOptions<AdapterStore> adapterStoreOptions = ((PersistableAdapterStore) propertyManagement.getProperty(StoreParam.ADAPTER_STORE)).getCliOptions();
+			final DataStorePluginOptions dataStoreOptions = ((PersistableStore) propertyManagement.getProperty(StoreParam.STORE)).getDataStoreOptions();
 
 			final DistortionGroupManagement distortionGroupManagement = new DistortionGroupManagement(
-					dataStoreOptions.createStore(),
-					indexStoreOptions.createStore(),
-					adapterStoreOptions.createStore());
+					dataStoreOptions.createDataStore(),
+					dataStoreOptions.createIndexStore(),
+					dataStoreOptions.createAdapterStore());
 
 			for (int k = (int) Math.max(
 					2,
@@ -235,9 +228,7 @@ public class KMeansJumpJobRunner extends
 			CentroidParameters.Centroid.EXTRACTOR_CLASS,
 			CommonParameters.Common.DISTANCE_FUNCTION_CLASS,
 			CommonParameters.Common.DIMENSION_EXTRACT_CLASS,
-			StoreParameters.StoreParam.DATA_STORE,
-			StoreParameters.StoreParam.ADAPTER_STORE,
-			StoreParameters.StoreParam.INDEX_STORE,
+			StoreParameters.StoreParam.STORE,
 			GlobalParameters.Global.BATCH_ID
 		}));
 		params.addAll(MapReduceParameters.getParameters());

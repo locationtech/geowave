@@ -2,21 +2,23 @@ package mil.nga.giat.geowave.adapter.vector.export;
 
 import java.util.List;
 
-import mil.nga.giat.geowave.core.store.DataStore;
-import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
-import mil.nga.giat.geowave.core.store.index.IndexStore;
+import com.beust.jcommander.Parameter;
 
 public class VectorExportOptions
 {
-	// TODO annotate appropriately when new commandline tools is merged
 	protected static final int DEFAULT_BATCH_SIZE = 10000;
+
+	@Parameter(names = "--cqlFilter", description = "Filter exported data based on CQL filter")
 	private String cqlFilter;
+
+	@Parameter(names = "--adapterIds", description = "Comma separated list of adapter Ids")
 	private List<String> adapterIds;
+
+	@Parameter(names = "--indexId", description = "The index to export from")
 	private String indexId;
-	private DataStore dataStore;
-	private AdapterStore adapterStore;
-	private IndexStore indexStore;
-	private int batchSize;
+
+	@Parameter(names = "--batchSize", description = "Records to process at a time")
+	private int batchSize = DEFAULT_BATCH_SIZE;
 
 	public String getCqlFilter() {
 		return cqlFilter;
@@ -28,18 +30,6 @@ public class VectorExportOptions
 
 	public String getIndexId() {
 		return indexId;
-	}
-
-	public DataStore getDataStore() {
-		return dataStore;
-	}
-
-	public AdapterStore getAdapterStore() {
-		return adapterStore;
-	}
-
-	public IndexStore getIndexStore() {
-		return indexStore;
 	}
 
 	public int getBatchSize() {
@@ -59,21 +49,6 @@ public class VectorExportOptions
 	public void setIndexId(
 			String indexId ) {
 		this.indexId = indexId;
-	}
-
-	public void setDataStore(
-			DataStore dataStore ) {
-		this.dataStore = dataStore;
-	}
-
-	public void setAdapterStore(
-			AdapterStore adapterStore ) {
-		this.adapterStore = adapterStore;
-	}
-
-	public void setIndexStore(
-			IndexStore indexStore ) {
-		this.indexStore = indexStore;
 	}
 
 	public void setBatchSize(
