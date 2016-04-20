@@ -1,7 +1,6 @@
 package mil.nga.giat.geowave.datastore.hbase.operations;
 
 import java.io.IOException;
-import java.util.Map;
 
 import org.apache.hadoop.hbase.HColumnDescriptor;
 import org.apache.hadoop.hbase.HTableDescriptor;
@@ -12,9 +11,8 @@ import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.client.Table;
 import org.apache.log4j.Logger;
 
-import mil.nga.giat.geowave.core.store.config.AbstractConfigOption;
-import mil.nga.giat.geowave.core.store.config.StringConfigOption;
 import mil.nga.giat.geowave.datastore.hbase.io.HBaseWriter;
+import mil.nga.giat.geowave.datastore.hbase.operations.config.HBaseRequiredOptions;
 import mil.nga.giat.geowave.datastore.hbase.util.ConnectionPool;
 import mil.nga.giat.geowave.datastore.hbase.util.HBaseUtils;
 
@@ -23,13 +21,6 @@ public class BasicHBaseOperations
 
 	private final static Logger LOGGER = Logger.getLogger(BasicHBaseOperations.class);
 	private static final String DEFAULT_TABLE_NAMESPACE = "";
-
-	public static final String ZOOKEEPER_INSTANCES_NAME = "zookeeper";
-	private static final AbstractConfigOption<?>[] CONFIG_OPTIONS = new AbstractConfigOption[] {
-		new StringConfigOption(
-				ZOOKEEPER_INSTANCES_NAME,
-				"A comma-separated list of zookeeper servers that an HBase instance is using")
-	};
 
 	private final Connection conn;
 	private final String tableNamespace;
@@ -66,13 +57,11 @@ public class BasicHBaseOperations
 	}
 
 	public static BasicHBaseOperations createOperations(
-			final Map<String, Object> configOptions,
-			final String namespace )
+			final HBaseRequiredOptions options )
 			throws IOException {
 		return new BasicHBaseOperations(
-				configOptions.get(
-						ZOOKEEPER_INSTANCES_NAME).toString(),
-				namespace);
+				options.getZookeeper(),
+				options.getGeowaveNamespace());
 	}
 
 	public HBaseWriter createWriter(
@@ -188,9 +177,4 @@ public class BasicHBaseOperations
 		return false;
 
 	}
-
-	public static AbstractConfigOption<?>[] getOptions() {
-		return CONFIG_OPTIONS;
-	}
-
 }

@@ -14,9 +14,9 @@ import mil.nga.giat.geowave.core.store.DataStoreEntryInfo.FieldInfo;
 import mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndex;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndexDataStore;
-import mil.nga.giat.geowave.datastore.hbase.HBaseOptions;
 import mil.nga.giat.geowave.datastore.hbase.io.HBaseWriter;
 import mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations;
+import mil.nga.giat.geowave.datastore.hbase.operations.config.HBaseOptions;
 
 public class HBaseSecondaryIndexDataStore implements
 		SecondaryIndexDataStore,

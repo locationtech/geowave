@@ -1,14 +1,29 @@
-package mil.nga.giat.geowave.datastore.hbase;
+package mil.nga.giat.geowave.datastore.hbase.operations.config;
+
+import com.beust.jcommander.Parameter;
 
 public class HBaseOptions
 {
-
+	@Parameter(names = "--persistAdapter", hidden = true, arity = 1)
 	protected boolean persistAdapter = true;
+
+	@Parameter(names = "--persistIndex", hidden = true, arity = 1)
 	protected boolean persistIndex = true;
+
+	@Parameter(names = "--persistDataStatistics", hidden = true, arity = 1)
 	protected boolean persistDataStatistics = true;
+
+	@Parameter(names = "--createTable", hidden = true, arity = 1)
 	protected boolean createTable = true;
+
+	@Parameter(names = "--useLocalityGroups", hidden = true, arity = 1)
 	protected boolean useLocalityGroups = true;
+
+	@Parameter(names = "--useAltIndex", hidden = true, arity = 1)
 	protected boolean useAltIndex = false;
+
+	@Parameter(names = "--enableBlockCache", hidden = true, arity = 1)
+	protected boolean enableBlockCache = true;
 
 	public boolean isPersistDataStatistics() {
 		return persistDataStatistics;

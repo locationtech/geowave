@@ -1,11 +1,11 @@
 package mil.nga.giat.geowave.datastore.hbase.index.secondary;
 
-import java.util.Map;
-
+import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndexDataStore;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndexDataStoreFactorySpi;
 import mil.nga.giat.geowave.datastore.hbase.AbstractHBaseStoreFactory;
-import mil.nga.giat.geowave.datastore.hbase.HBaseOptions;
+import mil.nga.giat.geowave.datastore.hbase.operations.config.HBaseOptions;
+import mil.nga.giat.geowave.datastore.hbase.operations.config.HBaseRequiredOptions;
 
 public class HBaseSecondaryIndexDataStoreFactory extends
 		AbstractHBaseStoreFactory<SecondaryIndexDataStore> implements
@@ -14,12 +14,17 @@ public class HBaseSecondaryIndexDataStoreFactory extends
 
 	@Override
 	public SecondaryIndexDataStore createStore(
-			final Map<String, Object> configOptions,
-			final String namespace ) {
+			final StoreFactoryOptions options ) {
+		if (!(options instanceof HBaseRequiredOptions)) {
+			throw new AssertionError(
+					"Expected " + HBaseRequiredOptions.class.getSimpleName());
+		}
+		final HBaseRequiredOptions opts = (HBaseRequiredOptions) options;
+		if (opts.getAdditionalOptions() == null) {
+			opts.setAdditionalOptions(new HBaseOptions());
+		}
 		return new HBaseSecondaryIndexDataStore(
-				createOperations(
-						configOptions,
-						namespace),
-				new HBaseOptions());
+				createOperations(opts),
+				opts.getAdditionalOptions());
 	}
 }

@@ -1,10 +1,11 @@
 package mil.nga.giat.geowave.datastore.hbase.metadata;
 
-import java.util.Map;
-
+import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
 import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
 import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStoreFactorySpi;
 import mil.nga.giat.geowave.datastore.hbase.AbstractHBaseStoreFactory;
+import mil.nga.giat.geowave.datastore.hbase.operations.config.HBaseOptions;
+import mil.nga.giat.geowave.datastore.hbase.operations.config.HBaseRequiredOptions;
 
 public class HBaseAdapterIndexMappingStoreFactory extends
 		AbstractHBaseStoreFactory<AdapterIndexMappingStore> implements
@@ -13,12 +14,17 @@ public class HBaseAdapterIndexMappingStoreFactory extends
 
 	@Override
 	public AdapterIndexMappingStore createStore(
-			final Map<String, Object> configOptions,
-			final String namespace ) {
+			final StoreFactoryOptions options ) {
+		if (!(options instanceof HBaseRequiredOptions)) {
+			throw new AssertionError(
+					"Expected " + HBaseRequiredOptions.class.getSimpleName());
+		}
+		final HBaseRequiredOptions opts = (HBaseRequiredOptions) options;
+		if (opts.getAdditionalOptions() == null) {
+			opts.setAdditionalOptions(new HBaseOptions());
+		}
 		return new HBaseAdapterIndexMappingStore(
-				createOperations(
-						configOptions,
-						namespace));
+				createOperations(opts));
 	}
 
 }

@@ -1,38 +1,48 @@
 package mil.nga.giat.geowave.datastore.hbase;
 
-import java.util.Map;
-
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.DataStoreFactorySpi;
-import mil.nga.giat.geowave.core.store.GeoWaveStoreFinder;
+import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
+import mil.nga.giat.geowave.datastore.hbase.index.secondary.HBaseSecondaryIndexDataStore;
+import mil.nga.giat.geowave.datastore.hbase.metadata.HBaseAdapterIndexMappingStore;
+import mil.nga.giat.geowave.datastore.hbase.metadata.HBaseAdapterStore;
+import mil.nga.giat.geowave.datastore.hbase.metadata.HBaseDataStatisticsStore;
+import mil.nga.giat.geowave.datastore.hbase.metadata.HBaseIndexStore;
+import mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations;
+import mil.nga.giat.geowave.datastore.hbase.operations.config.HBaseOptions;
+import mil.nga.giat.geowave.datastore.hbase.operations.config.HBaseRequiredOptions;
 
 public class HBaseDataStoreFactory extends
 		AbstractHBaseStoreFactory<DataStore> implements
 		DataStoreFactorySpi
 {
-
 	@Override
 	public DataStore createStore(
-			final Map<String, Object> configOptions,
-			final String namespace ) {
+			final StoreFactoryOptions options ) {
+		if (!(options instanceof HBaseRequiredOptions)) {
+			throw new AssertionError(
+					"Expected " + HBaseRequiredOptions.class.getSimpleName());
+		}
+		final HBaseRequiredOptions opts = (HBaseRequiredOptions) options;
+		if (opts.getAdditionalOptions() == null) {
+			opts.setAdditionalOptions(new HBaseOptions());
+		}
+
+		final BasicHBaseOperations hbaseOperations = createOperations(opts);
 		return new HBaseDataStore(
-				GeoWaveStoreFinder.createIndexStore(
-						configOptions,
-						namespace),
-				GeoWaveStoreFinder.createAdapterStore(
-						configOptions,
-						namespace),
-				GeoWaveStoreFinder.createDataStatisticsStore(
-						configOptions,
-						namespace),
-				GeoWaveStoreFinder.createAdapterIndexMappingStore(
-						configOptions,
-						namespace),
-				GeoWaveStoreFinder.createSecondaryIndexDataStore(
-						configOptions,
-						namespace),
-				createOperations(
-						configOptions,
-						namespace));
+				new HBaseIndexStore(
+						hbaseOperations),
+				new HBaseAdapterStore(
+						hbaseOperations),
+				new HBaseDataStatisticsStore(
+						hbaseOperations),
+				new HBaseAdapterIndexMappingStore(
+						hbaseOperations),
+				new HBaseSecondaryIndexDataStore(
+						hbaseOperations,
+						opts.getAdditionalOptions()),
+				hbaseOperations,
+				opts.getAdditionalOptions());
+
 	}
 }

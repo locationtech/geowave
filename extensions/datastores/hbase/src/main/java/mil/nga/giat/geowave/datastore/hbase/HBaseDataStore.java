@@ -69,6 +69,7 @@ import mil.nga.giat.geowave.datastore.hbase.metadata.HBaseAdapterStore;
 import mil.nga.giat.geowave.datastore.hbase.metadata.HBaseDataStatisticsStore;
 import mil.nga.giat.geowave.datastore.hbase.metadata.HBaseIndexStore;
 import mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations;
+import mil.nga.giat.geowave.datastore.hbase.operations.config.HBaseOptions;
 import mil.nga.giat.geowave.datastore.hbase.query.HBaseConstraintsQuery;
 import mil.nga.giat.geowave.datastore.hbase.query.HBaseRowIdsQuery;
 import mil.nga.giat.geowave.datastore.hbase.query.SingleEntryFilter;
@@ -649,7 +650,7 @@ public class HBaseDataStore implements
 							secondaryIndexDataStore,
 							queriedAdapters.add(adapter.getAdapterId()));
 
-					callbackCache.setPersistStats(options.persistDataStatistics);
+					callbackCache.setPersistStats(options.isPersistDataStatistics());
 					if (query instanceof EverythingQuery) {
 						deleteEntries(
 								adapter,

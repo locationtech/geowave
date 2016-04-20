@@ -22,6 +22,7 @@ import mil.nga.giat.geowave.core.store.data.VisibilityWriter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.datastore.hbase.io.HBaseWriter;
 import mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations;
+import mil.nga.giat.geowave.datastore.hbase.operations.config.HBaseOptions;
 import mil.nga.giat.geowave.datastore.hbase.util.HBaseUtils;
 
 public class HBaseIndexWriter<T> implements
@@ -130,7 +131,7 @@ public class HBaseIndexWriter<T> implements
 				writer = operations.createWriter(
 						StringUtils.stringFromBinary(index.getId().getBytes()),
 						adapter.getAdapterId().getString(),
-						options.createTable);
+						options.isCreateTable());
 			}
 			catch (final IOException e) {
 				LOGGER.error(

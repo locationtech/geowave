@@ -1,13 +1,11 @@
 package mil.nga.giat.geowave.datastore.hbase;
 
-import java.util.Map;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.store.GenericStoreFactory;
-import mil.nga.giat.geowave.core.store.config.AbstractConfigOption;
 import mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations;
+import mil.nga.giat.geowave.datastore.hbase.operations.config.HBaseRequiredOptions;
 
 abstract public class AbstractHBaseStoreFactory<T> extends
 		AbstractHBaseFactory implements
@@ -15,18 +13,10 @@ abstract public class AbstractHBaseStoreFactory<T> extends
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(AbstractHBaseStoreFactory.class);
 
-	@Override
-	public AbstractConfigOption<?>[] getOptions() {
-		return BasicHBaseOperations.getOptions();
-	}
-
 	protected BasicHBaseOperations createOperations(
-			final Map<String, Object> configOptions,
-			final String namespace ) {
+			final HBaseRequiredOptions options ) {
 		try {
-			return BasicHBaseOperations.createOperations(
-					configOptions,
-					namespace);
+			return BasicHBaseOperations.createOperations(options);
 		}
 		catch (final Exception e) {
 			LOGGER.error(
@@ -35,5 +25,4 @@ abstract public class AbstractHBaseStoreFactory<T> extends
 			return null;
 		}
 	}
-
 }
