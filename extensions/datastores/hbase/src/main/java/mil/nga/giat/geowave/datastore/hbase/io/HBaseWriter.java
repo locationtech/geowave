@@ -23,18 +23,18 @@ public class HBaseWriter
 {
 
 	private final static Logger LOGGER = Logger.getLogger(HBaseWriter.class);
-	private Table table;
-	private Admin admin;
+	private final Table table;
+	private final Admin admin;
 
 	public HBaseWriter(
-			Admin admin,
-			Table table ) {
+			final Admin admin,
+			final Table table ) {
 		this.admin = admin;
 		this.table = table;
 	}
 
 	private void write(
-			RowMutations rowMutation )
+			final RowMutations rowMutation )
 			throws IOException {
 		table.mutateRow(rowMutation);
 	}
@@ -42,13 +42,13 @@ public class HBaseWriter
 	public void close() {}
 
 	public void write(
-			Iterable<RowMutations> iterable,
-			String columnFamily )
+			final Iterable<RowMutations> iterable,
+			final String columnFamily )
 			throws IOException {
 		addColumnFamilyToTable(
 				table.getName(),
 				columnFamily);
-		for (RowMutations rowMutation : iterable) {
+		for (final RowMutations rowMutation : iterable) {
 			write(rowMutation);
 		}
 	}
@@ -62,15 +62,15 @@ public class HBaseWriter
 	 */
 
 	public void write(
-			RowMutations mutation,
-			String columnFamily ) {
+			final RowMutations mutation,
+			final String columnFamily ) {
 		try {
 			addColumnFamilyToTable(
 					table.getName(),
 					columnFamily);
 			write(mutation);
 		}
-		catch (IOException e) {
+		catch (final IOException e) {
 			LOGGER.warn(
 					"Unable to add column family " + columnFamily,
 					e);
@@ -78,10 +78,10 @@ public class HBaseWriter
 	}
 
 	private void addColumnFamilyToTable(
-			TableName name,
-			String columnFamilyName )
+			final TableName name,
+			final String columnFamilyName )
 			throws IOException {
-		HColumnDescriptor cfDesciptor = new HColumnDescriptor(
+		final HColumnDescriptor cfDesciptor = new HColumnDescriptor(
 				columnFamilyName);
 		if (admin.tableExists(name)) {
 			// Before any modification to table schema, it's necessary to
@@ -89,11 +89,13 @@ public class HBaseWriter
 			if (!admin.isTableEnabled(name)) {
 				admin.enableTable(name);
 			}
-			HTableDescriptor descriptor = admin.getTableDescriptor(name);
+			final HTableDescriptor descriptor = admin.getTableDescriptor(name);
 			boolean found = false;
-			for (HColumnDescriptor hColumnDescriptor : descriptor.getColumnFamilies()) {
+			for (final HColumnDescriptor hColumnDescriptor : descriptor.getColumnFamilies()) {
 				if (hColumnDescriptor.getNameAsString().equalsIgnoreCase(
-						columnFamilyName)) found = true;
+						columnFamilyName)) {
+					found = true;
+				}
 			}
 			if (!found) {
 				if (admin.isTableEnabled(name)) {
@@ -112,56 +114,23 @@ public class HBaseWriter
 	}
 
 	public void delete(
-			Iterable<RowMutations> iterable )
+			final Iterable<RowMutations> iterable )
 			throws IOException {
-		for (RowMutations rowMutation : iterable) {
+		for (final RowMutations rowMutation : iterable) {
 			write(rowMutation);
 		}
 	}
 
 	public void delete(
-			Delete delete )
+			final Delete delete )
 			throws IOException {
 		table.delete(delete);
 	}
 
 	public void delete(
-			List<Delete> deletes )
+			final List<Delete> deletes )
 			throws IOException {
 		table.delete(deletes);
-	}
-
-	public String getLongest(
-			String input ) {
-		Character curr = null;
-		Character prev = null;
-		int streak = 0;
-		int longStreak = 0;
-		StringBuilder currentString = new StringBuilder();
-		String longString = null;
-		for (int i = 0; i < input.length(); i++) {
-			curr = input.charAt(i);
-			if (curr == prev) {
-				streak++;
-				currentString.append(curr);
-			}
-			else {
-				if (streak > longStreak) {
-					longStreak = streak;
-					currentString.append(curr);
-					longString = currentString.toString();
-					currentString = new StringBuilder();
-				}
-				streak = 0;
-			}
-			prev = curr;
-		}
-		if (streak > longStreak) {
-			currentString.append(curr);
-			longString = currentString.toString();
-		}
-
-		return longString;
 	}
 
 }
