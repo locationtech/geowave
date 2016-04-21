@@ -8,6 +8,7 @@ import org.opengis.filter.FilterVisitor;
 
 import com.beust.jcommander.IStringConverter;
 import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParameterException;
 
 import mil.nga.giat.geowave.core.index.Persistable;
 import mil.nga.giat.geowave.core.index.StringUtils;
@@ -102,8 +103,9 @@ public class CQLFilterOptionProvider implements
 					LOGGER.error(
 							"Cannot parse CQL expression '" + value + "'",
 							e);
-					value = null;
-					convertedFilter = null;
+					// value = null;
+					// convertedFilter = null;
+					throw new ParameterException("Cannot parse CQL expression '" + value + "'", e);
 				}
 			}
 			else {

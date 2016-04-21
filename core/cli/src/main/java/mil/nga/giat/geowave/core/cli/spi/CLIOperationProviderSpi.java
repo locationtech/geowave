@@ -1,4 +1,4 @@
-package mil.nga.giat.geowave.core.cli;
+package mil.nga.giat.geowave.core.cli.spi;
 
 public interface CLIOperationProviderSpi
 {

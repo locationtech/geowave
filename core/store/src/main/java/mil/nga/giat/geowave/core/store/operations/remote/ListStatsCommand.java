@@ -58,6 +58,8 @@ public class ListStatsCommand extends
 
 		DataStatisticsStore statsStore = storeOptions.createDataStatisticsStore();
 
+		StringBuilder builder = new StringBuilder();
+		
 		try (CloseableIterator<DataStatistics<?>> statsIt = statsStore.getAllDataStatistics(authorizations)) {
 			while (statsIt.hasNext()) {
 				final DataStatistics<?> stats = statsIt.next();
@@ -66,8 +68,13 @@ public class ListStatsCommand extends
 					continue;
 				}
 				try {
-					JCommander.getConsole().println(
-							stats.toString());
+					builder.append("[");
+					builder.append(String.format(
+							"%1$-20s",
+							stats.getStatisticsId().getString()));
+					builder.append("] ");
+					builder.append(stats.toString());
+					builder.append("\n");
 				}
 				catch (final Exception ex) {
 					LOGGER.error(
@@ -75,6 +82,9 @@ public class ListStatsCommand extends
 							ex);
 				}
 			}
+			JCommander.getConsole().println(
+					builder.toString().trim());
+
 		}
 		catch (final Exception ex) {
 			LOGGER.error(

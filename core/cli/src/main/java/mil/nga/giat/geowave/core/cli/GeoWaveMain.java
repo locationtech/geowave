@@ -35,13 +35,19 @@ public class GeoWaveMain
 				GeowaveTopLevelSection.class,
 				args);
 
-		// No problems so far.
+		// Run the command if no issue.
+		// successCode == 1 means that prepare returned false
+		// successCode == 0 means that everything went find
+		// successCode == -1 means that something errored.
 		if (params.getSuccessCode() == 0) {
 			run(params);
 		}
 
+		// Now that successCode has been updated by run(),
+		// assess it.
+
 		// Log error to console if any.
-		if (params.getSuccessCode() != 0) {
+		if (params.getSuccessCode() < 0) {
 			doHelp(params);
 			LOGGER.debug(
 					params.getSuccessMessage(),
@@ -49,7 +55,7 @@ public class GeoWaveMain
 			JCommander.getConsole().println(
 					"\n" + params.getSuccessMessage());
 		}
-		else if (!params.isCommandPresent()) {
+		else if (params.getSuccessCode() == 0 && !params.isCommandPresent()) {
 			doHelp(params);
 		}
 
@@ -91,7 +97,7 @@ public class GeoWaveMain
 	 * @return
 	 */
 	private static OperationRegistry prepRegistry() {
-		OperationRegistry registry = new OperationRegistry();
+		OperationRegistry registry = OperationRegistry.getInstance();
 
 		OperationEntry explainCommand = registry.getOperation(ExplainCommand.class);
 		OperationEntry helpCommand = registry.getOperation(HelpCommand.class);
