@@ -7,14 +7,16 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
+import mil.nga.giat.geowave.core.index.Persistable;
+import mil.nga.giat.geowave.core.index.PersistenceUtils;
+import mil.nga.giat.geowave.core.index.StringUtils;
+import mil.nga.giat.geowave.core.store.memory.EntryRowID;
+
 import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.Value;
 import org.apache.accumulo.core.security.ColumnVisibility;
 import org.apache.accumulo.core.util.format.Formatter;
 import org.apache.hadoop.io.Text;
-
-import mil.nga.giat.geowave.core.index.Persistable;
-import mil.nga.giat.geowave.core.index.PersistenceUtils;
 
 public class PersistentDataFormatter implements
 		Formatter
@@ -132,13 +134,53 @@ public class PersistentDataFormatter implements
 			Entry<Key, Value> entry,
 			DateFormat timestampFormat ) {
 		StringBuilder sb = new StringBuilder();
+		StringBuilder sbInsertion = new StringBuilder();
 
 		Key key = entry.getKey();
 
-		// append row
+		EntryRowID rowId = new EntryRowID(
+				key.getRow().getBytes());
+
+		byte[] insertionIdBytes;
+		insertionIdBytes = rowId.getInsertionId();
+
+		for (byte b : insertionIdBytes) {
+			sbInsertion.append(String.format(
+					"%02x",
+					b));
+		}
+
+		Text insertionIdText = new Text(
+				sbInsertion.toString());
+		Text adapterIdText = new Text(
+				StringUtils.stringFromBinary(rowId.getAdapterId()));
+		Text dataIdText = new Text(
+				StringUtils.stringFromBinary(rowId.getDataId()));
+		Text duplicatesText = new Text(
+				Integer.toString(rowId.getNumberOfDuplicates()));
+
+		// append insertion Id
 		appendText(
 				sb,
-				key.getRow()).append(
+				insertionIdText).append(
+				" ");
+
+		// append adapterId
+		appendText(
+				sb,
+				adapterIdText).append(
+				" ");
+
+		// append dataId
+		appendText(
+				sb,
+				dataIdText).append(
+				" ");
+
+		// append numberOfDuplicates
+		appendText(
+				sb,
+				duplicatesText).append(
 				" ");
 
 		// append column family
