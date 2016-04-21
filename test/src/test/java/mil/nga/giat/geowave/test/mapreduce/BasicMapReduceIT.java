@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -13,9 +14,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.accumulo.core.client.AccumuloException;
-import org.apache.accumulo.core.client.AccumuloSecurityException;
-import org.apache.accumulo.core.client.TableNotFoundException;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.io.NullWritable;
@@ -31,7 +29,9 @@ import org.apache.hadoop.util.ToolRunner;
 import org.apache.log4j.Logger;
 import org.geotools.data.DataStoreFinder;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.opengis.feature.simple.SimpleFeature;
 
 import com.vividsolutions.jts.geom.Geometry;
@@ -42,7 +42,6 @@ import mil.nga.giat.geowave.adapter.vector.export.VectorMRExportOptions;
 import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayUtils;
-import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.core.store.config.ConfigUtils;
@@ -51,23 +50,45 @@ import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePlugin
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
 import mil.nga.giat.geowave.core.store.query.EverythingQuery;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
-import mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStore;
-import mil.nga.giat.geowave.datastore.accumulo.index.secondary.AccumuloSecondaryIndexDataStore;
-import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloAdapterIndexMappingStore;
-import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloAdapterStore;
-import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloDataStatisticsStore;
-import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloIndexStore;
 import mil.nga.giat.geowave.format.gpx.GpxIngestPlugin;
 import mil.nga.giat.geowave.mapreduce.GeoWaveConfiguratorBase;
 import mil.nga.giat.geowave.mapreduce.GeoWaveWritableInputMapper;
 import mil.nga.giat.geowave.mapreduce.dedupe.GeoWaveDedupeJobRunner;
 import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputFormat;
 import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
-import mil.nga.giat.geowave.test.GeoWaveTestEnvironment;
+import mil.nga.giat.geowave.test.GeoWaveIT;
+import mil.nga.giat.geowave.test.TestUtils;
+import mil.nga.giat.geowave.test.TestUtils.DimensionalityType;
+import mil.nga.giat.geowave.test.TestUtils.ExpectedResults;
+import mil.nga.giat.geowave.test.annotation.Environments;
+import mil.nga.giat.geowave.test.annotation.Environments.Environment;
+import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore;
+import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 
-public class BasicMapReduceIT extends
-		MapReduceTestBase
+@RunWith(GeoWaveIT.class)
+@Environments({
+	Environment.MAP_REDUCE
+})
+public class BasicMapReduceIT
 {
+	protected static final String TEST_DATA_ZIP_RESOURCE_PATH = TestUtils.TEST_RESOURCE_PACKAGE + "mapreduce-testdata.zip";
+	protected static final String TEST_CASE_GENERAL_GPX_BASE = TestUtils.TEST_CASE_BASE + "general_gpx_test_case/";
+	protected static final String GENERAL_GPX_FILTER_PACKAGE = TEST_CASE_GENERAL_GPX_BASE + "filter/";
+	protected static final String GENERAL_GPX_FILTER_FILE = GENERAL_GPX_FILTER_PACKAGE + "filter.shp";
+	protected static final String GENERAL_GPX_INPUT_GPX_DIR = TEST_CASE_GENERAL_GPX_BASE + "input_gpx/";
+	protected static final String GENERAL_GPX_EXPECTED_RESULTS_DIR = TEST_CASE_GENERAL_GPX_BASE + "filter_results/";
+	protected static final String OSM_GPX_INPUT_DIR = TestUtils.TEST_CASE_BASE + "osm_gpx_test_case/";
+
+	@BeforeClass
+	public static void extractTestFiles()
+			throws URISyntaxException {
+		TestUtils.unZipFile(
+				new File(
+						MapReduceTestEnvironment.class.getClassLoader().getResource(
+								TEST_DATA_ZIP_RESOURCE_PATH).toURI()),
+				TestUtils.TEST_CASE_BASE);
+	}
+
 	private final static Logger LOGGER = Logger.getLogger(BasicMapReduceIT.class);
 	private static final String TEST_EXPORT_DIRECTORY = "basicMapReduceIT-export";
 
@@ -77,19 +98,17 @@ public class BasicMapReduceIT extends
 		ERROR
 	}
 
+	@GeoWaveTestStore({
+		GeoWaveStoreType.ACCUMULO
+	})
+	protected DataStorePluginOptions dataStorePluginOptions;
+
 	@Test
 	public void testIngestAndQueryGeneralGpx()
 			throws Exception {
-		try {
-			accumuloOperations.deleteAll();
-		}
-		catch (TableNotFoundException | AccumuloSecurityException | AccumuloException ex) {
-			LOGGER.error(
-					"Unable to clear accumulo namespace",
-					ex);
-			Assert.fail("Index not deleted successfully");
-		}
-		testMapReduceIngest(
+		TestUtils.deleteAll(dataStorePluginOptions);
+		MapReduceTestUtils.testMapReduceIngest(
+				dataStorePluginOptions,
 				DimensionalityType.SPATIAL,
 				GENERAL_GPX_INPUT_GPX_DIR);
 		final File gpxInputDir = new File(
@@ -141,10 +160,10 @@ public class BasicMapReduceIT extends
 			Assert.assertNotNull(url);
 			expectedResultsResources.add(url);
 		}
-		final ExpectedResults expectedResults = getExpectedResults(expectedResultsResources.toArray(new URL[expectedResultsResources.size()]));
+		final ExpectedResults expectedResults = TestUtils.getExpectedResults(expectedResultsResources.toArray(new URL[expectedResultsResources.size()]));
 		runTestJob(
 				expectedResults,
-				resourceToQuery(new File(
+				TestUtils.resourceToQuery(new File(
 						GENERAL_GPX_FILTER_FILE).toURI().toURL()),
 				null,
 				null);
@@ -153,39 +172,21 @@ public class BasicMapReduceIT extends
 	@Test
 	public void testIngestOsmGpxMultipleIndices()
 			throws Exception {
-		try {
-			accumuloOperations.deleteAll();
-		}
-		catch (TableNotFoundException | AccumuloSecurityException | AccumuloException ex) {
-			LOGGER.error(
-					"Unable to clear accumulo namespace",
-					ex);
-			Assert.fail("Index not deleted successfully");
-		}
+		TestUtils.deleteAll(dataStorePluginOptions);
 		// ingest the data set into multiple indices and then try several query
 		// methods, by adapter and by index
-		testMapReduceIngest(
+		MapReduceTestUtils.testMapReduceIngest(
+				dataStorePluginOptions,
 				DimensionalityType.ALL,
 				OSM_GPX_INPUT_DIR);
 		final WritableDataAdapter<SimpleFeature>[] adapters = new GpxIngestPlugin().getDataAdapters(null);
 
-		final mil.nga.giat.geowave.core.store.DataStore geowaveStore = new AccumuloDataStore(
-				new AccumuloIndexStore(
-						accumuloOperations),
-				new AccumuloAdapterStore(
-						accumuloOperations),
-				new AccumuloDataStatisticsStore(
-						accumuloOperations),
-				new AccumuloSecondaryIndexDataStore(
-						accumuloOperations),
-				new AccumuloAdapterIndexMappingStore(
-						accumuloOperations),
-				accumuloOperations);
-		final Map<ByteArrayId, ExpectedResults> adapterIdToResultsMap = new HashMap<ByteArrayId, GeoWaveTestEnvironment.ExpectedResults>();
+		final mil.nga.giat.geowave.core.store.DataStore geowaveStore = dataStorePluginOptions.createDataStore();
+		final Map<ByteArrayId, ExpectedResults> adapterIdToResultsMap = new HashMap<ByteArrayId, ExpectedResults>();
 		for (final WritableDataAdapter<SimpleFeature> adapter : adapters) {
 			adapterIdToResultsMap.put(
 					adapter.getAdapterId(),
-					getExpectedResults(geowaveStore.query(
+					TestUtils.getExpectedResults(geowaveStore.query(
 							new QueryOptions(
 									adapter),
 							new EverythingQuery())));
@@ -194,11 +195,11 @@ public class BasicMapReduceIT extends
 		final List<ByteArrayId> firstTwoAdapters = new ArrayList<ByteArrayId>();
 		firstTwoAdapters.add(adapters[0].getAdapterId());
 		firstTwoAdapters.add(adapters[1].getAdapterId());
-		final ExpectedResults firstTwoAdaptersResults = getExpectedResults(geowaveStore.query(
+		final ExpectedResults firstTwoAdaptersResults = TestUtils.getExpectedResults(geowaveStore.query(
 				new QueryOptions(
 						firstTwoAdapters),
 				new EverythingQuery()));
-		final ExpectedResults fullDataSetResults = getExpectedResults(geowaveStore.query(
+		final ExpectedResults fullDataSetResults = TestUtils.getExpectedResults(geowaveStore.query(
 				new QueryOptions(),
 				new EverythingQuery()));
 		// just for sanity verify its greater than 0 (ie. that data was actually
@@ -230,8 +231,8 @@ public class BasicMapReduceIT extends
 					adapters[1]
 				},
 				new PrimaryIndex[] {
-					DEFAULT_SPATIAL_INDEX,
-					DEFAULT_SPATIAL_TEMPORAL_INDEX
+					TestUtils.DEFAULT_SPATIAL_INDEX,
+					TestUtils.DEFAULT_SPATIAL_TEMPORAL_INDEX
 				});
 
 		// now try all adapters and the spatial temporal index, the result
@@ -241,7 +242,7 @@ public class BasicMapReduceIT extends
 				null,
 				adapters,
 				new PrimaryIndex[] {
-					DEFAULT_SPATIAL_TEMPORAL_INDEX
+					TestUtils.DEFAULT_SPATIAL_TEMPORAL_INDEX
 				});
 
 		// and finally run with nothing set, should be the full data set
@@ -258,22 +259,24 @@ public class BasicMapReduceIT extends
 		final VectorMRExportCommand exportCommand = new VectorMRExportCommand();
 		final VectorMRExportOptions options = exportCommand.getMrOptions();
 		final File exportDir = new File(
-				TEMP_DIR,
+				TestUtils.TEMP_DIR,
 				TEST_EXPORT_DIRECTORY);
 		exportDir.mkdir();
 
-		exportCommand.setStoreOptions(getAccumuloStorePluginOptions(TEST_NAMESPACE));
+		exportCommand.setStoreOptions(dataStorePluginOptions);
+
+		final MapReduceTestEnvironment env = MapReduceTestEnvironment.getInstance();
 		exportCommand.setParameters(
-				hdfs,
-				hdfsBaseDirectory + "/" + TEST_EXPORT_DIRECTORY,
+				env.getHdfs(),
+				env.getHdfsBaseDirectory() + "/" + TEST_EXPORT_DIRECTORY,
 				null);
 		options.setBatchSize(10000);
-		options.setMinSplits(MIN_INPUT_SPLITS);
-		options.setMaxSplits(MAX_INPUT_SPLITS);
-		options.setResourceManagerHostPort(jobtracker);
+		options.setMinSplits(MapReduceTestUtils.MIN_INPUT_SPLITS);
+		options.setMaxSplits(MapReduceTestUtils.MAX_INPUT_SPLITS);
+		options.setResourceManagerHostPort(env.getJobtracker());
 
-		final Configuration conf = getConfiguration();
-		MapReduceTestEnvironment.filterConfiguration(conf);
+		final Configuration conf = MapReduceTestUtils.getConfiguration();
+		MapReduceTestUtils.filterConfiguration(conf);
 		final int res = ToolRunner.run(
 				conf,
 				exportCommand.createRunner(new ManualOperationParams()),
@@ -281,18 +284,12 @@ public class BasicMapReduceIT extends
 		Assert.assertTrue(
 				"Export Vector Data map reduce job failed",
 				res == 0);
-		try {
-			accumuloOperations.deleteAll();
-		}
-		catch (TableNotFoundException | AccumuloSecurityException | AccumuloException ex) {
-			LOGGER.error(
-					"Unable to clear accumulo namespace",
-					ex);
-		}
-		testMapReduceIngest(
+		TestUtils.deleteAll(dataStorePluginOptions);
+		MapReduceTestUtils.testMapReduceIngest(
+				dataStorePluginOptions,
 				DimensionalityType.ALL,
 				"avro",
-				TEMP_DIR + File.separator + HDFS_BASE_DIRECTORY + File.separator + TEST_EXPORT_DIRECTORY);
+				TestUtils.TEMP_DIR + File.separator + MapReduceTestEnvironment.HDFS_BASE_DIRECTORY + File.separator + TEST_EXPORT_DIRECTORY);
 	}
 
 	@SuppressFBWarnings(value = "DM_GC", justification = "Memory usage kept low for travis-ci")
@@ -303,10 +300,10 @@ public class BasicMapReduceIT extends
 			final PrimaryIndex[] indices )
 			throws Exception {
 		final TestJobRunner jobRunner = new TestJobRunner(
-				getAccumuloStorePluginOptions(TEST_NAMESPACE),
+				dataStorePluginOptions,
 				expectedResults);
-		jobRunner.setMinInputSplits(MIN_INPUT_SPLITS);
-		jobRunner.setMaxInputSplits(MAX_INPUT_SPLITS);
+		jobRunner.setMinInputSplits(MapReduceTestUtils.MIN_INPUT_SPLITS);
+		jobRunner.setMaxInputSplits(MapReduceTestUtils.MAX_INPUT_SPLITS);
 		if (query != null) {
 			jobRunner.setQuery(query);
 		}
@@ -320,8 +317,8 @@ public class BasicMapReduceIT extends
 				jobRunner.addIndex(index);
 			}
 		}
-		final Configuration conf = getConfiguration();
-		MapReduceTestEnvironment.filterConfiguration(conf);
+		final Configuration conf = MapReduceTestUtils.getConfiguration();
+		MapReduceTestUtils.filterConfiguration(conf);
 		final int res = ToolRunner.run(
 				conf,
 				jobRunner,
@@ -348,7 +345,7 @@ public class BasicMapReduceIT extends
 
 		@Override
 		protected String getHdfsOutputBase() {
-			return hdfsBaseDirectory;
+			return MapReduceTestEnvironment.getInstance().getHdfsBaseDirectory();
 		}
 
 		@Override
@@ -360,14 +357,14 @@ public class BasicMapReduceIT extends
 			// filtered results which should match the expected results
 			// resources
 			final Configuration conf = super.getConf();
-			MapReduceTestEnvironment.filterConfiguration(conf);
+			MapReduceTestUtils.filterConfiguration(conf);
 			final ByteBuffer buf = ByteBuffer.allocate((8 * expectedResults.hashedCentroids.size()) + 4);
 			buf.putInt(expectedResults.hashedCentroids.size());
 			for (final Long hashedCentroid : expectedResults.hashedCentroids) {
 				buf.putLong(hashedCentroid);
 			}
 			conf.set(
-					EXPECTED_RESULTS_KEY,
+					MapReduceTestUtils.EXPECTED_RESULTS_KEY,
 					ByteArrayUtils.byteArrayToString(buf.array()));
 			final Job job = Job.getInstance(conf);
 			job.setJarByClass(this.getClass());
@@ -382,7 +379,7 @@ public class BasicMapReduceIT extends
 			job.setSpeculativeExecution(false);
 			GeoWaveInputFormat.setStoreConfigOptions(
 					job.getConfiguration(),
-					ConfigUtils.populateListFromOptions(dataStoreOptions));
+					dataStoreOptions.getFactoryOptionsAsMap());
 			FileInputFormat.setInputPaths(
 					job,
 					getHdfsOutputPath());
@@ -427,7 +424,7 @@ public class BasicMapReduceIT extends
 				final SimpleFeature result = (SimpleFeature) value;
 				final Geometry geometry = (Geometry) result.getDefaultGeometry();
 				if (!geometry.isEmpty()) {
-					resultType = expectedHashedCentroids.contains(hashCentroid(geometry)) ? ResultCounterType.EXPECTED : ResultCounterType.UNEXPECTED;
+					resultType = expectedHashedCentroids.contains(TestUtils.hashCentroid(geometry)) ? ResultCounterType.EXPECTED : ResultCounterType.UNEXPECTED;
 				}
 			}
 			context.getCounter(
@@ -442,7 +439,7 @@ public class BasicMapReduceIT extends
 				InterruptedException {
 			super.setup(context);
 			final Configuration config = GeoWaveConfiguratorBase.getConfiguration(context);
-			final String expectedResults = config.get(EXPECTED_RESULTS_KEY);
+			final String expectedResults = config.get(MapReduceTestUtils.EXPECTED_RESULTS_KEY);
 			if (expectedResults != null) {
 				expectedHashedCentroids = new HashSet<Long>();
 				final byte[] expectedResultsBinary = ByteArrayUtils.byteArrayFromString(expectedResults);

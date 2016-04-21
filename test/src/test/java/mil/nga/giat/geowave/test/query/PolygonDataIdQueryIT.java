@@ -2,48 +2,55 @@ package mil.nga.giat.geowave.test.query;
 
 import java.io.IOException;
 
-import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
-import mil.nga.giat.geowave.core.geotime.GeometryUtils;
-import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.StringUtils;
-import mil.nga.giat.geowave.core.store.CloseableIterator;
-import mil.nga.giat.geowave.core.store.DataStore;
-import mil.nga.giat.geowave.core.store.IndexWriter;
-import mil.nga.giat.geowave.core.store.memory.DataStoreUtils;
-import mil.nga.giat.geowave.core.store.query.DataIdQuery;
-import mil.nga.giat.geowave.core.store.query.QueryOptions;
-import mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStore;
-import mil.nga.giat.geowave.test.GeoWaveTestEnvironment;
-
 import org.apache.log4j.Logger;
 import org.geotools.data.DataUtilities;
 import org.geotools.feature.SchemaException;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
+import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 
-public class PolygonDataIdQueryIT extends
-		GeoWaveTestEnvironment
+import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
+import mil.nga.giat.geowave.core.geotime.GeometryUtils;
+import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.index.StringUtils;
+import mil.nga.giat.geowave.core.store.CloseableIterator;
+import mil.nga.giat.geowave.core.store.IndexWriter;
+import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.query.DataIdQuery;
+import mil.nga.giat.geowave.core.store.query.QueryOptions;
+import mil.nga.giat.geowave.test.GeoWaveIT;
+import mil.nga.giat.geowave.test.TestUtils;
+import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore;
+import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
+
+@RunWith(GeoWaveIT.class)
+public class PolygonDataIdQueryIT
 {
 	private static final Logger LOGGER = Logger.getLogger(PolygonDataIdQueryIT.class);
 	private static SimpleFeatureType simpleFeatureType;
 	private static FeatureDataAdapter dataAdapter;
-	private static DataStore dataStore;
 	private static final String GEOMETRY_ATTRIBUTE = "geometry";
 	private static final String DATA_ID = "dataId";
+	@GeoWaveTestStore({
+		GeoWaveStoreType.ACCUMULO
+	})
+	protected DataStorePluginOptions dataStore;
 
 	@Test
 	public void testPolygonDataIdQueryResults() {
-		final CloseableIterator<SimpleFeature> matches = dataStore.query(
+		final CloseableIterator<SimpleFeature> matches = dataStore.createDataStore().query(
 				new QueryOptions(
 						dataAdapter,
-						DEFAULT_SPATIAL_INDEX),
+						TestUtils.DEFAULT_SPATIAL_INDEX),
 				new DataIdQuery(
 						dataAdapter.getAdapterId(),
 						new ByteArrayId(
@@ -61,21 +68,18 @@ public class PolygonDataIdQueryIT extends
 	@BeforeClass
 	public static void setupData()
 			throws IOException {
-		GeoWaveTestEnvironment.setup();
 		simpleFeatureType = getSimpleFeatureType();
 		dataAdapter = new FeatureDataAdapter(
 				simpleFeatureType);
-		dataStore = new AccumuloDataStore(
-				accumuloOperations);
-		ingestSampleData();
 	}
 
-	private static void ingestSampleData()
+	@Before
+	public void ingestSampleData()
 			throws IOException {
 		try (@SuppressWarnings("unchecked")
-		IndexWriter writer = dataStore.createWriter(
+		IndexWriter writer = dataStore.createDataStore().createWriter(
 				dataAdapter,
-				DEFAULT_SPATIAL_INDEX)) {
+				TestUtils.DEFAULT_SPATIAL_INDEX)) {
 			writer.write(buildSimpleFeature(
 					DATA_ID,
 					GeometryUtils.GEOMETRY_FACTORY.createPolygon(new Coordinate[] {
@@ -93,6 +97,15 @@ public class PolygonDataIdQueryIT extends
 								1.0319)
 					})));
 		}
+	}
+
+	@After
+	public void deleteSampleData()
+			throws IOException {
+
+		LOGGER.info("Deleting canned data...");
+		TestUtils.deleteAll(dataStore);
+		LOGGER.info("Delete complete.");
 	}
 
 	private static SimpleFeatureType getSimpleFeatureType() {

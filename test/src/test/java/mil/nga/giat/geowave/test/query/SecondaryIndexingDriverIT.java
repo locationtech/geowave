@@ -4,9 +4,24 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map.Entry;
 import java.util.Random;
 import java.util.UUID;
+
+import org.apache.accumulo.core.client.AccumuloException;
+import org.apache.accumulo.core.client.AccumuloSecurityException;
+import org.apache.accumulo.core.client.TableNotFoundException;
+import org.geotools.data.DataUtilities;
+import org.geotools.feature.SchemaException;
+import org.geotools.feature.simple.SimpleFeatureBuilder;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.opengis.feature.simple.SimpleFeature;
+import org.opengis.feature.simple.SimpleFeatureType;
+
+import com.vividsolutions.jts.geom.Coordinate;
 
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import mil.nga.giat.geowave.adapter.vector.index.NumericSecondaryIndexConfiguration;
@@ -18,31 +33,11 @@ import mil.nga.giat.geowave.core.geotime.GeometryUtils;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.core.store.memory.DataStoreUtils;
-import mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStore;
-import mil.nga.giat.geowave.datastore.accumulo.index.secondary.AccumuloSecondaryIndexDataStore;
-import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloAdapterIndexMappingStore;
-import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloAdapterStore;
-import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloDataStatisticsStore;
-import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloIndexStore;
-import mil.nga.giat.geowave.test.GeoWaveTestEnvironment;
-
-import org.apache.accumulo.core.client.AccumuloException;
-import org.apache.accumulo.core.client.AccumuloSecurityException;
-import org.apache.accumulo.core.client.Scanner;
-import org.apache.accumulo.core.client.TableNotFoundException;
-import org.apache.accumulo.core.data.Key;
-import org.apache.accumulo.core.data.Value;
-import org.geotools.data.DataUtilities;
-import org.geotools.feature.SchemaException;
-import org.geotools.feature.simple.SimpleFeatureBuilder;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.opengis.feature.simple.SimpleFeature;
-import org.opengis.feature.simple.SimpleFeatureType;
-
-import com.vividsolutions.jts.geom.Coordinate;
+import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.test.GeoWaveIT;
+import mil.nga.giat.geowave.test.TestUtils;
+import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore;
+import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 
 /**
  * This class is currently a dirty test harness used to sanity check changes as
@@ -50,16 +45,21 @@ import com.vividsolutions.jts.geom.Coordinate;
  * integration test for secondary indexing once the capability matures
  * 
  */
-public class SecondaryIndexingDriverIT extends
-		GeoWaveTestEnvironment
+@RunWith(GeoWaveIT.class)
+public class SecondaryIndexingDriverIT
 
 {
 	private static SimpleFeatureType schema;
 	private static Random random = new Random();
 	private static int NUM_FEATURES = 10;
 
-	@BeforeClass
-	public static void initializeTest()
+	@GeoWaveTestStore({
+		GeoWaveStoreType.ACCUMULO
+	})
+	protected DataStorePluginOptions dataStoreOptions;
+
+	@Before
+	public void initializeTest()
 			throws IOException,
 			SchemaException,
 			AccumuloException,
@@ -87,20 +87,9 @@ public class SecondaryIndexingDriverIT extends
 		final FeatureDataAdapter dataAdapter = new FeatureDataAdapter(
 				schema);
 
-		final DataStore dataStore = new AccumuloDataStore(
-				new AccumuloIndexStore(
-						accumuloOperations),
-				new AccumuloAdapterStore(
-						accumuloOperations),
-				new AccumuloDataStatisticsStore(
-						accumuloOperations),
-				new AccumuloSecondaryIndexDataStore(
-						accumuloOperations),
-				new AccumuloAdapterIndexMappingStore(
-						accumuloOperations),
-				accumuloOperations);
+		final DataStore dataStore = dataStoreOptions.createDataStore();
 
-		final PrimaryIndex index = DEFAULT_SPATIAL_INDEX;
+		final PrimaryIndex index = TestUtils.DEFAULT_SPATIAL_INDEX;
 
 		final List<SimpleFeature> features = new ArrayList<>();
 		for (int x = 0; x < NUM_FEATURES; x++) {
@@ -119,6 +108,12 @@ public class SecondaryIndexingDriverIT extends
 
 		// TODO query
 
+	}
+
+	@After
+	public void deleteTestData()
+			throws IOException {
+		TestUtils.deleteAll(dataStoreOptions);
 	}
 
 	@Test
@@ -142,14 +137,19 @@ public class SecondaryIndexingDriverIT extends
 	private int countNumberOfEntriesInIndexTable(
 			final String tableName )
 			throws TableNotFoundException {
-		final Scanner scanner = accumuloOperations.createScanner(tableName);
-		int numEntries = 0;
-		for (@SuppressWarnings("unused")
-		final Entry<Key, Value> kv : scanner) {
-			numEntries++;
-		}
-		scanner.close();
-		return numEntries;
+		// TODO can't use accumulo scanner directly, this test must be
+		// refactored
+
+		// final Scanner scanner = accumuloOperations.createScanner(
+		// tableName);
+		// int numEntries = 0;
+		// for (@SuppressWarnings("unused")
+		// final Entry<Key, Value> kv : scanner) {
+		// numEntries++;
+		// }
+		// scanner.close();
+		// return numEntries;
+		return -1;
 	}
 
 	private static SimpleFeature buildSimpleFeature() {

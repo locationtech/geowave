@@ -13,6 +13,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.geotools.data.DataUtilities;
+import org.geotools.feature.SchemaException;
+import org.geotools.feature.simple.SimpleFeatureBuilder;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.opengis.feature.simple.SimpleFeature;
+import org.opengis.feature.simple.SimpleFeatureType;
+
+import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.Envelope;
+
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import mil.nga.giat.geowave.adapter.vector.index.NumericSecondaryIndexConfiguration;
 import mil.nga.giat.geowave.adapter.vector.index.TemporalSecondaryIndexConfiguration;
@@ -34,49 +48,38 @@ import mil.nga.giat.geowave.core.store.index.numeric.NumericGreaterThanOrEqualTo
 import mil.nga.giat.geowave.core.store.index.numeric.NumericIndexStrategy;
 import mil.nga.giat.geowave.core.store.index.temporal.TemporalIndexStrategy;
 import mil.nga.giat.geowave.core.store.index.text.TextIndexStrategy;
-import mil.nga.giat.geowave.core.store.memory.DataStoreUtils;
+import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.query.BasicQuery;
 import mil.nga.giat.geowave.core.store.query.Query;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
-import mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStore;
-import mil.nga.giat.geowave.datastore.accumulo.index.secondary.AccumuloSecondaryIndexDataStore;
-import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloAdapterIndexMappingStore;
-import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloAdapterStore;
-import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloDataStatisticsStore;
-import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloIndexStore;
-import mil.nga.giat.geowave.test.GeoWaveTestEnvironment;
+import mil.nga.giat.geowave.test.GeoWaveIT;
+import mil.nga.giat.geowave.test.TestUtils;
+import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore;
+import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 
-import org.geotools.data.DataUtilities;
-import org.geotools.feature.SchemaException;
-import org.geotools.feature.simple.SimpleFeatureBuilder;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.opengis.feature.simple.SimpleFeature;
-import org.opengis.feature.simple.SimpleFeatureType;
-
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.Envelope;
-
-public class SecondaryIndexingQueryIT extends
-		GeoWaveTestEnvironment
+@RunWith(GeoWaveIT.class)
+public class SecondaryIndexingQueryIT
 {
-	private static String BASE_DIR = "/src/test/resources/mil/nga/giat/geowave/test/query/";
-	private static String FILE = "stateCapitals.csv";
-	private static String TYPE_NAME = "stateCapitalData";
-	private static SimpleFeatureType schema;
-	private static FeatureDataAdapter dataAdapter;
-	private static DataStore dataStore;
-	private static PrimaryIndex index;
-	private static Coordinate CHARLESTON = new Coordinate(
+	private static final String BASE_DIR = "/src/test/resources/mil/nga/giat/geowave/test/query/";
+	private static final String FILE = "stateCapitals.csv";
+	private static final String TYPE_NAME = "stateCapitalData";
+	private static final Coordinate CHARLESTON = new Coordinate(
 			-79.9704779,
 			32.8210454);
-	private static Coordinate MILWAUKEE = new Coordinate(
+	private static final Coordinate MILWAUKEE = new Coordinate(
 			-87.96743,
 			43.0578914);
+	private SimpleFeatureType schema;
+	private FeatureDataAdapter dataAdapter;
+	private DataStore dataStore;
+	private PrimaryIndex index;
+	@GeoWaveTestStore({
+		GeoWaveStoreType.ACCUMULO
+	})
+	protected DataStorePluginOptions dataStoreOptions;
 
-	@BeforeClass
-	public static void initTest()
+	@Before
+	public void initTest()
 			throws SchemaException,
 			IOException {
 
@@ -107,19 +110,8 @@ public class SecondaryIndexingQueryIT extends
 
 		dataAdapter = new FeatureDataAdapter(
 				schema);
-		dataStore = new AccumuloDataStore(
-				new AccumuloIndexStore(
-						accumuloOperations),
-				new AccumuloAdapterStore(
-						accumuloOperations),
-				new AccumuloDataStatisticsStore(
-						accumuloOperations),
-				new AccumuloSecondaryIndexDataStore(
-						accumuloOperations),
-				new AccumuloAdapterIndexMappingStore(
-						accumuloOperations),
-				accumuloOperations);
-		index = DEFAULT_SPATIAL_INDEX;
+		dataStore = dataStoreOptions.createDataStore();
+		index = TestUtils.DEFAULT_SPATIAL_INDEX;
 
 		final List<SimpleFeature> features = loadStateCapitalData();
 
@@ -132,6 +124,12 @@ public class SecondaryIndexingQueryIT extends
 		}
 
 		System.out.println("Data ingest complete.");
+	}
+
+	@After
+	public void deleteSampleData()
+			throws IOException {
+		TestUtils.deleteAll(dataStoreOptions);
 	}
 
 	@Test
@@ -174,8 +172,7 @@ public class SecondaryIndexingQueryIT extends
 						MILWAUKEE)),
 				additionalConstraints);
 		final SecondaryIndexQueryManager secondaryIndexQueryManager = new SecondaryIndexQueryManager(
-				new AccumuloSecondaryIndexDataStore(
-						accumuloOperations));
+				dataStoreOptions.createSecondaryIndexStore());
 		for (final SecondaryIndex<?> secondaryIndex : dataAdapter.getSupportedSecondaryIndices()) {
 			final CloseableIterator<ByteArrayId> matches = secondaryIndexQueryManager.query(
 					(BasicQuery) query,
@@ -203,7 +200,7 @@ public class SecondaryIndexingQueryIT extends
 		}
 	}
 
-	public static List<SimpleFeature> loadStateCapitalData()
+	public List<SimpleFeature> loadStateCapitalData()
 			throws FileNotFoundException,
 			IOException {
 		final List<SimpleFeature> features = new ArrayList<>();
@@ -246,7 +243,7 @@ public class SecondaryIndexingQueryIT extends
 		return features;
 	}
 
-	private static SimpleFeature buildSimpleFeature(
+	private SimpleFeature buildSimpleFeature(
 			final String state,
 			final String city,
 			final double lng,

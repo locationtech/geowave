@@ -12,7 +12,7 @@ abstract public class HBaseQuery
 {
 
 	private final static Logger LOGGER = Logger.getLogger(HBaseQuery.class);
-	protected final List<ByteArrayId> adapterIds;
+	protected List<ByteArrayId> adapterIds;
 	protected final PrimaryIndex index;
 
 	private final String[] authorizations;

@@ -13,6 +13,7 @@ import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.geotools.referencing.crs.DefaultGeographicCRS;
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import com.vividsolutions.jts.geom.Geometry;
 
@@ -34,11 +35,25 @@ import mil.nga.giat.geowave.analytic.partitioner.OrthodromicDistancePartitioner;
 import mil.nga.giat.geowave.analytic.store.PersistableStore;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
 import mil.nga.giat.geowave.core.store.DataStore;
+import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
+import mil.nga.giat.geowave.test.GeoWaveIT;
+import mil.nga.giat.geowave.test.annotation.Environments;
+import mil.nga.giat.geowave.test.annotation.Environments.Environment;
+import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore;
+import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 
-public class GeoWaveNNIT extends
-		MapReduceTestEnvironment
+@RunWith(GeoWaveIT.class)
+@Environments({
+	Environment.MAP_REDUCE
+})
+public class GeoWaveNNIT
 {
+
+	@GeoWaveTestStore({
+		GeoWaveStoreType.ACCUMULO
+	})
+	protected DataStorePluginOptions dataStorePluginOptions;
 
 	private SimpleFeatureBuilder getBuilder() {
 		final SimpleFeatureTypeBuilder typeBuilder = new SimpleFeatureTypeBuilder();
@@ -69,8 +84,7 @@ public class GeoWaveNNIT extends
 	public void testNN()
 			throws Exception {
 		dataGenerator.setIncludePolygons(false);
-		ingest(getAccumuloStorePluginOptions(
-				TEST_NAMESPACE + "_nn").createDataStore());
+		ingest(dataStorePluginOptions.createDataStore());
 		runNN(new SpatialQuery(
 				dataGenerator.getBoundingRegion()));
 	}
@@ -81,7 +95,7 @@ public class GeoWaveNNIT extends
 
 		final NNJobRunner jobRunner = new NNJobRunner();
 		final int res = jobRunner.run(
-				getConfiguration(),
+				MapReduceTestUtils.getConfiguration(),
 				new PropertyManagement(
 						new ParameterEnum[] {
 							ExtractParameters.Extract.QUERY,
@@ -99,15 +113,15 @@ public class GeoWaveNNIT extends
 						},
 						new Object[] {
 							query,
-							Integer.toString(MIN_INPUT_SPLITS),
-							Integer.toString(MAX_INPUT_SPLITS),
+							Integer.toString(MapReduceTestUtils.MIN_INPUT_SPLITS),
+							Integer.toString(MapReduceTestUtils.MAX_INPUT_SPLITS),
 							0.2,
 							"0.2,0.2",
 							OrthodromicDistancePartitioner.class,
 							new PersistableStore(
-									getAccumuloStorePluginOptions(TEST_NAMESPACE + "_nn")),
-							hdfsBaseDirectory + "/t1/pairs",
-							hdfsBaseDirectory + "/t1",
+									dataStorePluginOptions),
+							MapReduceTestEnvironment.HDFS_BASE_DIRECTORY + "/t1/pairs",
+							MapReduceTestEnvironment.HDFS_BASE_DIRECTORY + "/t1",
 							3,
 							SequenceFileOutputFormatConfiguration.class,
 							GeoWaveInputFormatConfiguration.class
@@ -126,14 +140,14 @@ public class GeoWaveNNIT extends
 			throws IllegalArgumentException,
 			IOException {
 		int count = 0;
-		final FileSystem fs = FileSystem.get(getConfiguration());
+		final FileSystem fs = FileSystem.get(MapReduceTestUtils.getConfiguration());
 		final FileStatus[] fss = fs.listStatus(new Path(
-				hdfsBaseDirectory + "/t1/pairs"));
+				MapReduceTestEnvironment.HDFS_BASE_DIRECTORY + "/t1/pairs"));
 		for (final FileStatus ifs : fss) {
 			if (ifs.isFile() && ifs.getPath().toString().matches(
 					".*part-r-0000[0-9]")) {
 				try (SequenceFile.Reader reader = new SequenceFile.Reader(
-						getConfiguration(),
+						MapReduceTestUtils.getConfiguration(),
 						Reader.file(ifs.getPath()))) {
 
 					final Text key = new Text();

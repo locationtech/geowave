@@ -208,7 +208,6 @@ public class HBaseDataStore implements
 				adapter.getAdapterId(),
 				indices));
 
-		final byte[] adapterId = adapter.getAdapterId().getBytes();
 		final IndexWriter<T>[] writers = new IndexWriter[indices.length];
 
 		int i = 0;

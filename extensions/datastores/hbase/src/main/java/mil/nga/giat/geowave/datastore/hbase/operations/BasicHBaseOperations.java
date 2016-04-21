@@ -21,6 +21,7 @@ public class BasicHBaseOperations
 
 	private final static Logger LOGGER = Logger.getLogger(BasicHBaseOperations.class);
 	private static final String DEFAULT_TABLE_NAMESPACE = "";
+	public static final Object ADMIN_MUTEX = new Object();
 
 	private final Connection conn;
 	private final String tableNamespace;
@@ -106,14 +107,16 @@ public class BasicHBaseOperations
 			final TableName name )
 			throws IOException {
 		Table table;
-		if (create && !conn.getAdmin().isTableAvailable(
-				name)) {
-			final HTableDescriptor desc = new HTableDescriptor(
-					name);
-			desc.addFamily(new HColumnDescriptor(
-					columnFamily));
-			conn.getAdmin().createTable(
-					desc);
+		synchronized (ADMIN_MUTEX) {
+			if (create && !conn.getAdmin().isTableAvailable(
+					name)) {
+				final HTableDescriptor desc = new HTableDescriptor(
+						name);
+				desc.addFamily(new HColumnDescriptor(
+						columnFamily));
+				conn.getAdmin().createTable(
+						desc);
+			}
 		}
 		table = conn.getTable(name);
 		return table;
@@ -132,12 +135,14 @@ public class BasicHBaseOperations
 		for (final TableName tableName : tableNamesArr) {
 			if ((tableNamespace == null) || tableName.getNameAsString().startsWith(
 					tableNamespace)) {
-				if (conn.getAdmin().isTableAvailable(
-						tableName)) {
-					conn.getAdmin().disableTable(
-							tableName);
-					conn.getAdmin().deleteTable(
-							tableName);
+				synchronized (ADMIN_MUTEX) {
+					if (conn.getAdmin().isTableAvailable(
+							tableName)) {
+						conn.getAdmin().disableTable(
+								tableName);
+						conn.getAdmin().deleteTable(
+								tableName);
+					}
 				}
 			}
 		}
@@ -147,8 +152,10 @@ public class BasicHBaseOperations
 			final String tableName )
 			throws IOException {
 		final String qName = getQualifiedTableName(tableName);
-		return conn.getAdmin().isTableAvailable(
-				getTableName(qName));
+		synchronized (ADMIN_MUTEX) {
+			return conn.getAdmin().isTableAvailable(
+					getTableName(qName));
+		}
 
 	}
 

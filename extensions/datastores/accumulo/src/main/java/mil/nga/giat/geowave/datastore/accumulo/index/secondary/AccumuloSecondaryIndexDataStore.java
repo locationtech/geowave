@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -231,6 +232,9 @@ public class AccumuloSecondaryIndexDataStore implements
 
 	private Collection<Range> getScanRanges(
 			final List<ByteArrayRange> ranges ) {
+		if (ranges == null || ranges.isEmpty()) {
+			return Collections.singleton(new Range());
+		}
 		final Collection<Range> scanRanges = new ArrayList<>();
 		for (final ByteArrayRange range : ranges) {
 			scanRanges.add(new Range(

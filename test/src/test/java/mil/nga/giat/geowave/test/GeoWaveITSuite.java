@@ -13,7 +13,6 @@ import mil.nga.giat.geowave.test.mapreduce.DBScanIT;
 import mil.nga.giat.geowave.test.mapreduce.GeoWaveKMeansIT;
 import mil.nga.giat.geowave.test.mapreduce.GeoWaveNNIT;
 import mil.nga.giat.geowave.test.mapreduce.KDERasterResizeIT;
-import mil.nga.giat.geowave.test.mapreduce.MapReduceTestEnvironment;
 import mil.nga.giat.geowave.test.query.AttributesSubsetQueryIT;
 import mil.nga.giat.geowave.test.query.PolygonDataIdQueryIT;
 import mil.nga.giat.geowave.test.query.SecondaryIndexingDriverIT;
@@ -22,45 +21,39 @@ import mil.nga.giat.geowave.test.query.SpatialTemporalQueryIT;
 import mil.nga.giat.geowave.test.service.GeoServerIT;
 import mil.nga.giat.geowave.test.service.GeoWaveIngestGeoserverIT;
 import mil.nga.giat.geowave.test.service.GeoWaveServicesIT;
-import mil.nga.giat.geowave.test.service.ServicesTestEnvironment;
 
 @RunWith(Suite.class)
 @SuiteClasses({
 	GeoWaveBasicIT.class,
-	GeoWaveHBaseBasicIT.class,
-	GeoWaveRasterIT.class,
-	BasicMapReduceIT.class,
-	BulkIngestInputGenerationIT.class,
-	KDERasterResizeIT.class,
-	GeoWaveKMeansIT.class,
-	GeoWaveNNIT.class,
-	GeoServerIT.class,
-	GeoWaveServicesIT.class,
-	GeoWaveIngestGeoserverIT.class,
-	AttributesSubsetQueryIT.class,
-	SecondaryIndexingDriverIT.class,
-	SecondaryIndexingQueryIT.class,
-	DBScanIT.class,
-	SpatialTemporalQueryIT.class,
-	PolygonDataIdQueryIT.class,
-	ConfigCacheIT.class,
+// GeoWaveRasterIT.class,
+// BasicMapReduceIT.class,
+// BulkIngestInputGenerationIT.class,
+// KDERasterResizeIT.class,
+// GeoWaveKMeansIT.class,
+// GeoWaveNNIT.class,
+// GeoServerIT.class,
+// GeoWaveServicesIT.class,
+// GeoWaveIngestGeoserverIT.class,
+// AttributesSubsetQueryIT.class,
+// SecondaryIndexingQueryIT.class,
+// DBScanIT.class,
+// SpatialTemporalQueryIT.class,
+// PolygonDataIdQueryIT.class,
+// ConfigCacheIT.class,
 })
 public class GeoWaveITSuite
 {
 	@BeforeClass
 	public static void setupSuite() {
-		synchronized (GeoWaveTestEnvironment.MUTEX) {
-			GeoWaveTestEnvironment.DEFER_CLEANUP.set(true);
+		synchronized (GeoWaveIT.MUTEX) {
+			GeoWaveIT.DEFER_CLEANUP.set(true);
 		}
 	}
 
 	@AfterClass
-	public static void cleanupSuite() {
-		synchronized (GeoWaveTestEnvironment.MUTEX) {
-			GeoWaveTestEnvironment.DEFER_CLEANUP.set(false);
-			ServicesTestEnvironment.stopServices();
-			MapReduceTestEnvironment.cleanupHdfsFiles();
-			GeoWaveTestEnvironment.cleanup();
+	public static void tearDownSuite() {
+		synchronized (GeoWaveIT.MUTEX) {
+			GeoWaveIT.DEFER_CLEANUP.set(false);
 		}
 	}
 }

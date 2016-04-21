@@ -9,6 +9,7 @@ import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.geotools.referencing.CRS;
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.referencing.FactoryException;
 
@@ -41,14 +42,29 @@ import mil.nga.giat.geowave.analytic.store.PersistableStore;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
 import mil.nga.giat.geowave.core.store.DataStore;
+import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
+import mil.nga.giat.geowave.test.GeoWaveIT;
+import mil.nga.giat.geowave.test.TestUtils;
+import mil.nga.giat.geowave.test.annotation.Environments;
+import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore;
+import mil.nga.giat.geowave.test.annotation.Environments.Environment;
+import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 
-public class DBScanIT extends
-		MapReduceTestEnvironment
+@RunWith(GeoWaveIT.class)
+@Environments({
+	Environment.MAP_REDUCE
+})
+public class DBScanIT
 {
 
-	public static final String DBSCAN_TEST_NAMESPACE = TEST_NAMESPACE + "_dbscanit";
+	public static final String DBSCAN_TEST_NAMESPACE = TestUtils.TEST_NAMESPACE + "_dbscanit";
+
+	@GeoWaveTestStore({
+		GeoWaveStoreType.ACCUMULO
+	})
+	protected DataStorePluginOptions dataStorePluginOptions;
 
 	private SimpleFeatureBuilder getBuilder() {
 		final SimpleFeatureTypeBuilder typeBuilder = new SimpleFeatureTypeBuilder();
@@ -86,9 +102,9 @@ public class DBScanIT extends
 	@Test
 	public void testDBScan()
 			throws Exception {
+		TestUtils.deleteAll(dataStorePluginOptions);
 		dataGenerator.setIncludePolygons(false);
-		ingest(getAccumuloStorePluginOptions(
-				DBSCAN_TEST_NAMESPACE).createDataStore());
+		ingest(dataStorePluginOptions.createDataStore());
 		runScan(new SpatialQuery(
 				dataGenerator.getBoundingRegion()));
 	}
@@ -100,7 +116,7 @@ public class DBScanIT extends
 		final DBScanIterationsJobRunner jobRunner = new DBScanIterationsJobRunner();
 
 		final int res = jobRunner.run(
-				getConfiguration(),
+				MapReduceTestUtils.getConfiguration(),
 				new PropertyManagement(
 						new ParameterEnum[] {
 							ExtractParameters.Extract.QUERY,
@@ -121,14 +137,14 @@ public class DBScanIT extends
 						new Object[] {
 							query,
 							new QueryOptions(),
-							Integer.toString(MIN_INPUT_SPLITS),
-							Integer.toString(MAX_INPUT_SPLITS),
+							Integer.toString(MapReduceTestUtils.MIN_INPUT_SPLITS),
+							Integer.toString(MapReduceTestUtils.MAX_INPUT_SPLITS),
 							10000.0,
 							OrthodromicDistancePartitioner.class,
 							10,
 							new PersistableStore(
-									getAccumuloStorePluginOptions(DBSCAN_TEST_NAMESPACE)),
-							hdfsBaseDirectory + "/t1",
+									dataStorePluginOptions),
+							MapReduceTestEnvironment.HDFS_BASE_DIRECTORY + "/t1",
 							2,
 							GeoWaveInputFormatConfiguration.class,
 							"bx5",
@@ -148,12 +164,9 @@ public class DBScanIT extends
 	private int readHulls()
 			throws Exception {
 		final CentroidManager<SimpleFeature> centroidManager = new CentroidManagerGeoWave<SimpleFeature>(
-				getAccumuloStorePluginOptions(
-						DBSCAN_TEST_NAMESPACE).createDataStore(),
-				getAccumuloStorePluginOptions(
-						DBSCAN_TEST_NAMESPACE).createIndexStore(),
-				getAccumuloStorePluginOptions(
-						DBSCAN_TEST_NAMESPACE).createAdapterStore(),
+				dataStorePluginOptions.createDataStore(),
+				dataStorePluginOptions.createIndexStore(),
+				dataStorePluginOptions.createAdapterStore(),
 				new SimpleFeatureItemWrapperFactory(),
 				"concave_hull",
 				new SpatialDimensionalityTypeProvider().createPrimaryIndex().getId().getString(),

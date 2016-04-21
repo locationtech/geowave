@@ -44,14 +44,14 @@ public class RasterTileResizeJobRunner extends
 	public static final String NEW_ADAPTER_ID_KEY = "NEW_ADAPTER_ID";
 	public static final String OLD_ADAPTER_ID_KEY = "OLD_ADAPTER_ID";
 
-	private DataStorePluginOptions inputStoreOptions;
-	private DataStorePluginOptions outputStoreOptions;
+	private final DataStorePluginOptions inputStoreOptions;
+	private final DataStorePluginOptions outputStoreOptions;
 	protected RasterTileResizeCommandLineOptions rasterResizeOptions;
 
 	public RasterTileResizeJobRunner(
-			DataStorePluginOptions inputStoreOptions,
-			DataStorePluginOptions outputStoreOptions,
-			RasterTileResizeCommandLineOptions rasterResizeOptions ) {
+			final DataStorePluginOptions inputStoreOptions,
+			final DataStorePluginOptions outputStoreOptions,
+			final RasterTileResizeCommandLineOptions rasterResizeOptions ) {
 		this.inputStoreOptions = inputStoreOptions;
 		this.outputStoreOptions = outputStoreOptions;
 		this.rasterResizeOptions = rasterResizeOptions;
@@ -107,7 +107,7 @@ public class RasterTileResizeJobRunner extends
 				inputStoreOptions.getFactoryFamily().getDataStoreFactory().getName());
 		GeoWaveInputFormat.setStoreConfigOptions(
 				job.getConfiguration(),
-				ConfigUtils.populateListFromOptions(inputStoreOptions.getFactoryOptions()));
+				inputStoreOptions.getFactoryOptionsAsMap());
 
 		final DataAdapter adapter = inputStoreOptions.createAdapterStore().getAdapter(
 				new ByteArrayId(
@@ -174,11 +174,11 @@ public class RasterTileResizeJobRunner extends
 	public static void main(
 			final String[] args )
 			throws Exception {
-		ConfigOptions opts = new ConfigOptions();
-		OperationParser parser = new OperationParser();
+		final ConfigOptions opts = new ConfigOptions();
+		final OperationParser parser = new OperationParser();
 		parser.addAdditionalObject(opts);
-		ResizeCommand command = new ResizeCommand();
-		CommandLineOperationParams params = parser.parse(
+		final ResizeCommand command = new ResizeCommand();
+		final CommandLineOperationParams params = parser.parse(
 				command,
 				args);
 		opts.prepare(params);

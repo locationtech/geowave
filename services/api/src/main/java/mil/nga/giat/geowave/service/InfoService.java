@@ -23,16 +23,16 @@ public interface InfoService
 	// lists the indices associated with the given namespace
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/namespaces/{namespace}/indices")
+	@Path("/{storeName}/indices")
 	public Response getIndices(
-			@PathParam("namespace")
-			String namespace );
+			@PathParam("storeName")
+			final String storeName );
 
 	// lists the adapters associated with the given namespace
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/namespaces/{namespace}/adapters")
+	@Path("/{storeName}/adapters")
 	public Response getAdapters(
-			@PathParam("namespace")
-			String namespace );
+			@PathParam("storeName")
+			final String storeName );
 }

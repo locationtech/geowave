@@ -5,38 +5,38 @@ import static org.junit.Assert.assertTrue;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.Map;
+import java.util.Map.Entry;
 
-import org.apache.accumulo.core.client.AccumuloException;
-import org.apache.accumulo.core.client.AccumuloSecurityException;
-import org.apache.accumulo.core.client.TableNotFoundException;
 import org.apache.commons.io.IOUtils;
 import org.geotools.feature.SchemaException;
-import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
-import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
-import mil.nga.giat.geowave.datastore.accumulo.AccumuloStoreFactoryFamily;
-import mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloRequiredOptions;
+import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.format.gpx.GpxUtils;
 import mil.nga.giat.geowave.service.client.GeoserverServiceClient;
 import mil.nga.giat.geowave.service.client.InfoServiceClient;
 import mil.nga.giat.geowave.service.client.IngestServiceClient;
-import mil.nga.giat.geowave.test.GeoWaveTestEnvironment;
-import mil.nga.giat.geowave.test.mapreduce.MapReduceTestEnvironment;
+import mil.nga.giat.geowave.test.GeoWaveIT;
+import mil.nga.giat.geowave.test.TestUtils;
+import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore;
+import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
+@RunWith(GeoWaveIT.class)
 public class GeoWaveServicesIT extends
 		ServicesTestEnvironment
 {
 	private static final Logger LOGGER = LoggerFactory.getLogger(GeoWaveServicesIT.class);
 
-	protected static final String TEST_DATA_ZIP_RESOURCE_PATH = TEST_RESOURCE_PACKAGE + "mapreduce-testdata.zip";
-	protected static final String TEST_CASE_GENERAL_GPX_BASE = TEST_CASE_BASE + "general_gpx_test_case/";
+	protected static final String TEST_DATA_ZIP_RESOURCE_PATH = TestUtils.TEST_RESOURCE_PACKAGE + "mapreduce-testdata.zip";
+	protected static final String TEST_CASE_GENERAL_GPX_BASE = TestUtils.TEST_CASE_BASE + "general_gpx_test_case/";
 	protected static final String GENERAL_GPX_INPUT_GPX_DIR = TEST_CASE_GENERAL_GPX_BASE + "input_gpx/";
 	private static final String ASHLAND_GPX_FILE = GENERAL_GPX_INPUT_GPX_DIR + "ashland.gpx";
 	private static final String ASHLAND_INGEST_TYPE = "gpx";
@@ -45,14 +45,19 @@ public class GeoWaveServicesIT extends
 	private static GeoserverServiceClient geoserverServiceClient;
 	private static IngestServiceClient ingestServiceClient;
 
+	@GeoWaveTestStore({
+		GeoWaveStoreType.ACCUMULO
+	})
+	protected DataStorePluginOptions dataStoreOptions;
+
 	@BeforeClass
 	public static void extractTestFiles()
 			throws URISyntaxException {
-		GeoWaveTestEnvironment.unZipFile(
+		TestUtils.unZipFile(
 				new File(
-						MapReduceTestEnvironment.class.getClassLoader().getResource(
+						GeoWaveServicesIT.class.getClassLoader().getResource(
 								TEST_DATA_ZIP_RESOURCE_PATH).toURI()),
-				TEST_CASE_BASE);
+				TestUtils.TEST_CASE_BASE);
 	}
 
 	@Test
@@ -82,8 +87,8 @@ public class GeoWaveServicesIT extends
 					new File(
 							ASHLAND_GPX_FILE)
 				},
-				ACCUMULO_STORE_NAME,
-				TEST_NAMESPACE,
+				dataStoreOptions.getType(),
+				TestUtils.TEST_NAMESPACE,
 				null,
 				ASHLAND_INGEST_TYPE,
 				null,
@@ -94,15 +99,7 @@ public class GeoWaveServicesIT extends
 				success);
 		success = false;
 
-		try {
-			accumuloOperations.deleteAll();
-		}
-		catch (TableNotFoundException | AccumuloSecurityException | AccumuloException ex) {
-			LOGGER.error(
-					"Unable to clear accumulo namespace",
-					ex);
-			Assert.fail("Index not deleted successfully");
-		}
+		TestUtils.deleteAll(dataStoreOptions);
 
 		// ingest data using the local ingest service
 		LOGGER.info("Ingesting data using the hdfs ingest service.");
@@ -111,8 +108,8 @@ public class GeoWaveServicesIT extends
 					new File(
 							ASHLAND_GPX_FILE)
 				},
-				ACCUMULO_STORE_NAME,
-				TEST_NAMESPACE,
+				dataStoreOptions.getType(),
+				TestUtils.TEST_NAMESPACE,
 				null,
 				ASHLAND_INGEST_TYPE,
 				null,
@@ -125,7 +122,7 @@ public class GeoWaveServicesIT extends
 		// verify the adapter type
 		LOGGER.info("Verify the adapter type.");
 		final JSONArray adapters = infoServiceClient.getAdapters(
-				TEST_NAMESPACE).getJSONArray(
+				dataStoreOptions.getType()).getJSONArray(
 				"adapters");
 		for (int i = 0; i < adapters.size(); i++) {
 			if (adapters.getJSONObject(
@@ -144,7 +141,7 @@ public class GeoWaveServicesIT extends
 		// verify the index type
 		LOGGER.info("Verify the index type.");
 		final JSONArray indices = infoServiceClient.getIndices(
-				TEST_NAMESPACE).getJSONArray(
+				dataStoreOptions.getType()).getJSONArray(
 				"indices");
 		final String expectedIndex = new SpatialDimensionalityTypeProvider().getDimensionalityTypeName();
 		for (int i = 0; i < indices.size(); i++) {
@@ -246,9 +243,9 @@ public class GeoWaveServicesIT extends
 		assertTrue(
 				"Unable to publish accumulo datastore",
 				geoserverServiceClient.publishDatastore(
-						new AccumuloStoreFactoryFamily().getName(),
-						getAccumuloConfig(),
-						TEST_NAMESPACE,
+						dataStoreOptions.getType(),
+						dataStoreOptions.getFactoryOptionsAsMap(),
+						TestUtils.TEST_NAMESPACE,
 						null,
 						null,
 						null,
@@ -266,7 +263,7 @@ public class GeoWaveServicesIT extends
 			if (datastores.getJSONObject(
 					i).getString(
 					"name").equals(
-					TEST_NAMESPACE)) {
+					TestUtils.TEST_NAMESPACE)) {
 				dsInfo = datastores.getJSONObject(i);
 				success = true;
 				break;
@@ -278,44 +275,34 @@ public class GeoWaveServicesIT extends
 		success = false;
 
 		if (dsInfo != null) {
-
-			assertTrue(
-					"Unable to get accumulo datastore namespace",
-					dsInfo.getString(
-							StoreFactoryOptions.GEOWAVE_NAMESPACE_OPTION).equals(
-							TEST_NAMESPACE));
-
-			assertTrue(
-					"Unable to publish accumulo datastore zookeeper",
-					dsInfo.getString(
-							AccumuloRequiredOptions.ZOOKEEPER_CONFIG_KEY).equals(
-							zookeeper));
-
-			assertTrue(
-					"Unable to publish accumulo datastore instance",
-					dsInfo.getString(
-							AccumuloRequiredOptions.INSTANCE_CONFIG_KEY).equals(
-							accumuloInstance));
+			final Map<String, String> options = dataStoreOptions.getFactoryOptionsAsMap();
+			for (final Entry<String, String> entry : options.entrySet()) {
+				assertTrue(
+						"Unable to get datastore option '" + entry.getKey() + "'",
+						dsInfo.getString(
+								entry.getKey()).equals(
+								entry.getValue()));
+			}
 		}
 
 		// verify that we can recall the datastore
 		LOGGER.info("Verify that we can recall the datastore.");
 		final JSONObject datastore = geoserverServiceClient.getDatastore(
-				TEST_NAMESPACE,
+				TestUtils.TEST_NAMESPACE,
 				TEST_WORKSPACE);
 		assertTrue(
-				"Unable to publish accumulo datastore",
+				"Unable to publish datastore",
 				datastore.getJSONObject(
 						"dataStore").getString(
 						"name").equals(
-						TEST_NAMESPACE));
+						TestUtils.TEST_NAMESPACE));
 
 		// verify that we can publish a layer
 		LOGGER.info("Verify that we can publish a layer.");
 		assertTrue(
 				"Unable to publish layer '" + GpxUtils.GPX_WAYPOINT_FEATURE + "'",
 				geoserverServiceClient.publishLayer(
-						TEST_NAMESPACE,
+						TestUtils.TEST_NAMESPACE,
 						TEST_STYLE_NAME_NO_DIFFERENCE,
 						GpxUtils.GPX_WAYPOINT_FEATURE,
 						TEST_WORKSPACE));
@@ -358,7 +345,7 @@ public class GeoWaveServicesIT extends
 		assertTrue(
 				"Unable to delete datastore",
 				geoserverServiceClient.deleteDatastore(
-						TEST_NAMESPACE,
+						TestUtils.TEST_NAMESPACE,
 						TEST_WORKSPACE));
 		assertTrue(
 				"Unable to delete style '" + TEST_STYLE_NAME_NO_DIFFERENCE + "'",

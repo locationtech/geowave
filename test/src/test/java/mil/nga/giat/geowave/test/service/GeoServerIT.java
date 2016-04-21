@@ -19,9 +19,6 @@ import java.util.regex.Pattern;
 
 import javax.ws.rs.core.Response.Status;
 
-import org.apache.accumulo.core.client.AccumuloException;
-import org.apache.accumulo.core.client.AccumuloSecurityException;
-import org.apache.accumulo.core.client.TableNotFoundException;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
@@ -40,22 +37,31 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.BeforeClass;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mil.nga.giat.geowave.core.store.config.ConfigUtils;
+import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloStoreFactoryFamily;
 import mil.nga.giat.geowave.service.client.GeoserverServiceClient;
+import mil.nga.giat.geowave.test.GeoWaveIT;
+import mil.nga.giat.geowave.test.TestUtils;
+import mil.nga.giat.geowave.test.annotation.Environments;
+import mil.nga.giat.geowave.test.annotation.Environments.Environment;
+import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore;
+import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 
-public class GeoServerIT extends
-		ServicesTestEnvironment
+@RunWith(GeoWaveIT.class)
+@Environments({
+	Environment.SERVICES
+})
+public class GeoServerIT
 {
 	private static final Logger LOGGER = LoggerFactory.getLogger(GeoServerIT.class);
-	private static final String WFS_URL_PREFIX = JETTY_BASE_URL + "/geoserver/wfs";
+	private static final String WFS_URL_PREFIX = ServicesTestEnvironment.JETTY_BASE_URL + "/geoserver/wfs";
 
 	private static final String GEOSTUFF_LAYER_FILE = "src/test/resources/wfs-requests/geostuff_layer.xml";
 	private static final String INSERT_FILE = "src/test/resources/wfs-requests/insert.xml";
@@ -63,71 +69,67 @@ public class GeoServerIT extends
 	private static final String QUERY_FILE = "src/test/resources/wfs-requests/query.xml";
 	private static final String UPDATE_FILE = "src/test/resources/wfs-requests/update.xml";
 
-	private static GeoserverServiceClient geoserverServiceClient;
+	private GeoserverServiceClient geoserverServiceClient;
 
-	private static String geostuff_layer;
-	private static String insert;
-	private static String lock;
-	private static String query;
-	private static String update;
+	private String geostuff_layer;
+	private String insert;
+	private String lock;
+	private String query;
+	private String update;
 
-	@BeforeClass
-	public static void initialize()
+	@GeoWaveTestStore({
+		GeoWaveStoreType.ACCUMULO
+	})
+	protected DataStorePluginOptions dataStoreOptions;
+
+	@Before
+	public void initialize()
 			throws ClientProtocolException,
 			IOException {
-		try {
-			accumuloOperations.deleteAll();
-		}
-		catch (TableNotFoundException | AccumuloSecurityException | AccumuloException ex) {
-			LOGGER.error(
-					"Unable to clear accumulo namespace",
-					ex);
-			Assert.fail("Index not deleted successfully");
-		}
 		// setup the wfs-requests
 		geostuff_layer = MessageFormat.format(
 				IOUtils.toString(new FileInputStream(
 						GEOSTUFF_LAYER_FILE)),
-				TEST_WORKSPACE);
+				ServicesTestEnvironment.TEST_WORKSPACE);
 
 		insert = MessageFormat.format(
 				IOUtils.toString(new FileInputStream(
 						INSERT_FILE)),
-				TEST_WORKSPACE);
+				ServicesTestEnvironment.TEST_WORKSPACE);
 
 		lock = MessageFormat.format(
 				IOUtils.toString(new FileInputStream(
 						LOCK_FILE)),
-				TEST_WORKSPACE);
+				ServicesTestEnvironment.TEST_WORKSPACE);
 
 		query = MessageFormat.format(
 				IOUtils.toString(new FileInputStream(
 						QUERY_FILE)),
-				TEST_WORKSPACE);
+				ServicesTestEnvironment.TEST_WORKSPACE);
 
 		geoserverServiceClient = new GeoserverServiceClient(
-				GEOWAVE_BASE_URL);
+				ServicesTestEnvironment.GEOWAVE_BASE_URL);
 
 		// create the workspace
-		boolean success = geoserverServiceClient.createWorkspace(TEST_WORKSPACE);
+		boolean success = geoserverServiceClient.createWorkspace(ServicesTestEnvironment.TEST_WORKSPACE);
 
 		// enable wfs & wms
 		success &= enableWfs();
 		success &= enableWms();
-		final Map<String, String> configOptions = ConfigUtils.populateListFromOptions(getAccumuloStorePluginOptions(null));
+		final Map<String, String> configOptions = dataStoreOptions.getFactoryOptionsAsMap();
 		configOptions.put(
 				"gwNamespace",
-				TEST_NAMESPACE);
+				TestUtils.TEST_NAMESPACE);
 		// create the datastore
 		success &= geoserverServiceClient.publishDatastore(
-				new AccumuloStoreFactoryFamily().getName(),
+				dataStoreOptions.getType(),
 				configOptions,
-				TEST_NAMESPACE);
+				TestUtils.TEST_NAMESPACE);
 
 		// make sure the datastore exists
 		success &= (null != geoserverServiceClient.getDatastore(
-				TEST_NAMESPACE,
-				TEST_WORKSPACE));
+				TestUtils.TEST_NAMESPACE,
+				ServicesTestEnvironment.TEST_WORKSPACE));
 
 		success &= createLayers();
 
@@ -136,9 +138,10 @@ public class GeoServerIT extends
 		}
 	}
 
-	@AfterClass
-	public static void cleanupWorkspace() {
-		assertTrue(geoserverServiceClient.deleteWorkspace(TEST_WORKSPACE));
+	@After
+	public void cleanupWorkspace() {
+		assertTrue(geoserverServiceClient.deleteWorkspace(ServicesTestEnvironment.TEST_WORKSPACE));
+		TestUtils.deleteAll(dataStoreOptions);
 	}
 
 	@Test
@@ -151,7 +154,7 @@ public class GeoServerIT extends
 		update = MessageFormat.format(
 				IOUtils.toString(new FileInputStream(
 						UPDATE_FILE)),
-				TEST_WORKSPACE,
+				ServicesTestEnvironment.TEST_WORKSPACE,
 				lockID);
 
 		assertNotNull(lockID);
@@ -166,7 +169,7 @@ public class GeoServerIT extends
 			IOException {
 		final HttpClient httpclient = createClient();
 		final HttpPut command = new HttpPut(
-				GEOSERVER_REST_PATH + "/services/wfs/workspaces/" + TEST_WORKSPACE + "/settings");
+				ServicesTestEnvironment.GEOSERVER_REST_PATH + "/services/wfs/workspaces/" + ServicesTestEnvironment.TEST_WORKSPACE + "/settings");
 		command.setHeader(
 				"Content-type",
 				"text/xml");
@@ -183,7 +186,7 @@ public class GeoServerIT extends
 			IOException {
 		final HttpClient httpclient = createClient();
 		final HttpPut command = new HttpPut(
-				GEOSERVER_REST_PATH + "/services/wms/workspaces/" + TEST_WORKSPACE + "/settings");
+				ServicesTestEnvironment.GEOSERVER_REST_PATH + "/services/wms/workspaces/" + ServicesTestEnvironment.TEST_WORKSPACE + "/settings");
 		command.setHeader(
 				"Content-type",
 				"text/xml");
@@ -195,12 +198,12 @@ public class GeoServerIT extends
 		return r.getStatusLine().getStatusCode() == Status.OK.getStatusCode();
 	}
 
-	static public boolean createLayers()
+	public boolean createLayers()
 			throws ClientProtocolException,
 			IOException {
 		final HttpClient httpclient = createClient();
 		final HttpPost command = new HttpPost(
-				GEOSERVER_REST_PATH + "/workspaces/" + TEST_WORKSPACE + "/datastores/" + TEST_NAMESPACE + "/featuretypes");
+				ServicesTestEnvironment.GEOSERVER_REST_PATH + "/workspaces/" + ServicesTestEnvironment.TEST_WORKSPACE + "/datastores/" + TestUtils.TEST_NAMESPACE + "/featuretypes");
 		command.setHeader(
 				"Content-type",
 				"text/xml");
@@ -216,8 +219,8 @@ public class GeoServerIT extends
 		provider.setCredentials(
 				AuthScope.ANY,
 				new UsernamePasswordCredentials(
-						GEOSERVER_USER,
-						GEOSERVER_PASS));
+						ServicesTestEnvironment.GEOSERVER_USER,
+						ServicesTestEnvironment.GEOSERVER_PASS));
 
 		return HttpClientBuilder.create().setDefaultCredentialsProvider(
 				provider).build();
@@ -237,7 +240,7 @@ public class GeoServerIT extends
 				version));
 		postParameters.add(new BasicNameValuePair(
 				"typename",
-				TEST_WORKSPACE + ":geostuff"));
+				ServicesTestEnvironment.TEST_WORKSPACE + ":geostuff"));
 		Collections.addAll(
 				postParameters,
 				paramTuples);
@@ -270,7 +273,7 @@ public class GeoServerIT extends
 				"GetFeature"));
 		localParams.add(new BasicNameValuePair(
 				"typeNames",
-				TEST_WORKSPACE + ":geostuff"));
+				ServicesTestEnvironment.TEST_WORKSPACE + ":geostuff"));
 		localParams.add(new BasicNameValuePair(
 				"service",
 				"WFS"));
@@ -374,7 +377,7 @@ public class GeoServerIT extends
 			final String patternX = "34.6815818";
 			final String patternY = "35.1828408";
 			// name space check as well
-			return content.contains(patternX) && content.contains(patternY) && content.contains(TEST_WORKSPACE + ":geometry");
+			return content.contains(patternX) && content.contains(patternY) && content.contains(ServicesTestEnvironment.TEST_WORKSPACE + ":geometry");
 		}
 		return false;
 	}

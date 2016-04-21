@@ -12,6 +12,8 @@ import org.apache.hadoop.hbase.client.RowMutations;
 import org.apache.hadoop.hbase.client.Table;
 import org.apache.log4j.Logger;
 
+import mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations;
+
 /**
  * Functionality similar to <code> BatchWriterWrapper </code>
  * 
@@ -83,33 +85,37 @@ public class HBaseWriter
 			throws IOException {
 		final HColumnDescriptor cfDesciptor = new HColumnDescriptor(
 				columnFamilyName);
-		if (admin.tableExists(name)) {
-			// Before any modification to table schema, it's necessary to
-			// disable it
-			if (!admin.isTableEnabled(name)) {
-				admin.enableTable(name);
-			}
-			final HTableDescriptor descriptor = admin.getTableDescriptor(name);
-			boolean found = false;
-			for (final HColumnDescriptor hColumnDescriptor : descriptor.getColumnFamilies()) {
-				if (hColumnDescriptor.getNameAsString().equalsIgnoreCase(
-						columnFamilyName)) {
-					found = true;
+		synchronized (BasicHBaseOperations.ADMIN_MUTEX) {
+			if (admin.tableExists(name)) {
+				// TODO: tableenabling/diabling is not very friendly with
+				// concurrency
+				// Before any modification to table schema, it's necessary to
+				// disable it
+				if (!admin.isTableEnabled(name)) {
+					admin.enableTable(name);
+				}
+				final HTableDescriptor descriptor = admin.getTableDescriptor(name);
+				boolean found = false;
+				for (final HColumnDescriptor hColumnDescriptor : descriptor.getColumnFamilies()) {
+					if (hColumnDescriptor.getNameAsString().equalsIgnoreCase(
+							columnFamilyName)) {
+						found = true;
+					}
+				}
+				if (!found) {
+					if (admin.isTableEnabled(name)) {
+						admin.disableTable(name);
+					}
+					admin.addColumn(
+							name,
+							cfDesciptor);
+					// Enable table once done
+					admin.enableTable(name);
 				}
 			}
-			if (!found) {
-				if (admin.isTableEnabled(name)) {
-					admin.disableTable(name);
-				}
-				admin.addColumn(
-						name,
-						cfDesciptor);
-				// Enable table once done
-				admin.enableTable(name);
+			else {
+				LOGGER.warn("Table " + name.getNameAsString() + " doesn't exist, so no question of adding column family " + columnFamilyName + " to it!");
 			}
-		}
-		else {
-			LOGGER.warn("Table " + name.getNameAsString() + " doesn't exist, so no question of adding column family " + columnFamilyName + " to it!");
 		}
 	}
 

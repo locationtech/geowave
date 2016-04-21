@@ -1,16 +1,23 @@
 package mil.nga.giat.geowave.datastore.hbase.query;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.hadoop.hbase.filter.Filter;
 import org.apache.log4j.Logger;
 
+import com.google.common.collect.Iterators;
+
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
+import mil.nga.giat.geowave.core.store.CloseableIterator;
+import mil.nga.giat.geowave.core.store.CloseableIterator.Wrapper;
 import mil.nga.giat.geowave.core.store.ScanCallback;
+import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.filter.DedupeFilter;
 import mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter;
@@ -19,6 +26,7 @@ import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.memory.DataStoreUtils;
 import mil.nga.giat.geowave.core.store.query.Query;
 import mil.nga.giat.geowave.core.store.query.aggregate.Aggregation;
+import mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations;
 
 public class HBaseConstraintsQuery extends
 		HBaseFilteredIndexQuery
@@ -50,17 +58,6 @@ public class HBaseConstraintsQuery extends
 				scanCallback,
 				aggregation,
 				authorizations);
-		// TODO determine what to do with isSupported() - this at one
-		// point acted as rudimentary query planning but it seems like a
-		// responsibility of higher level query planning logic for example,
-		// sometimes a spatial index is better at handling a spatial-temporal
-		// query than a spatial-temporal index, if the constraints are much more
-		// restrictive spatially
-
-		// if ((query != null) && !query.isSupported(index)) {
-		// throw new IllegalArgumentException(
-		// "Index does not support the query");
-		// }
 	}
 
 	public HBaseConstraintsQuery(
@@ -144,6 +141,12 @@ public class HBaseConstraintsQuery extends
 					clientDedupeFilter);
 		}
 		queryFiltersEnabled = true;
+		if (isAggregation()) {
+			// TODO because aggregations are done client-side make sure to set
+			// the adapter ID here
+
+			this.adapterIds = Collections.singletonList(aggregation.getLeft().getAdapterId());
+		}
 	}
 
 	protected boolean isAggregation() {
@@ -197,7 +200,7 @@ public class HBaseConstraintsQuery extends
 	@Override
 	protected List<QueryFilter> getAllFiltersList() {
 		final List<QueryFilter> filters = super.getAllFiltersList();
-		for (QueryFilter distributable : distributableFilters) {
+		for (final QueryFilter distributable : distributableFilters) {
 			if (!filters.contains(distributable)) {
 				filters.add(distributable);
 			}
@@ -208,5 +211,48 @@ public class HBaseConstraintsQuery extends
 	@Override
 	protected List<Filter> getDistributableFilter() {
 		return new ArrayList<Filter>();
+	}
+
+	@Override
+	public CloseableIterator<Object> query(
+			final BasicHBaseOperations operations,
+			final AdapterStore adapterStore,
+			final Integer limit ) {
+		final CloseableIterator<Object> it = super.query(
+				operations,
+				adapterStore,
+				limit);
+		if (isAggregation() && (it != null) && it.hasNext()) {
+			// TODO implement aggregation as a co-processor on the server side,
+			// but for now simply aggregate client-side here
+
+			final Aggregation aggregationFunction = aggregation.getRight();
+			synchronized (aggregationFunction) {
+
+				aggregationFunction.clearResult();
+				while (it.hasNext()) {
+					final Object input = it.next();
+					if (input != null) {
+						aggregationFunction.aggregate(input);
+					}
+				}
+				try {
+					it.close();
+				}
+				catch (final IOException e) {
+					LOGGER.warn(
+							"Unable to close hbase scanner",
+							e);
+				}
+				return new Wrapper(
+						Iterators.singletonIterator(aggregationFunction.getResult()));
+			}
+		}
+		else {
+			return super.query(
+					operations,
+					adapterStore,
+					limit);
+		}
 	}
 }

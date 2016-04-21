@@ -11,17 +11,9 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.TimeZone;
-import java.util.concurrent.atomic.AtomicBoolean;
 
-import org.apache.accumulo.core.client.AccumuloException;
-import org.apache.accumulo.core.client.AccumuloSecurityException;
-import org.apache.accumulo.core.client.TableNotFoundException;
-import org.apache.accumulo.minicluster.impl.MiniAccumuloClusterImpl;
-import org.apache.accumulo.minicluster.impl.MiniAccumuloConfigImpl;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.SystemUtils;
 import org.apache.hadoop.fs.FileUtil;
 import org.apache.hadoop.util.VersionInfo;
 import org.apache.hadoop.util.VersionUtil;
@@ -30,9 +22,7 @@ import org.geotools.data.DataStore;
 import org.geotools.data.DataStoreFinder;
 import org.geotools.data.simple.SimpleFeatureCollection;
 import org.geotools.data.simple.SimpleFeatureIterator;
-import org.junit.AfterClass;
 import org.junit.Assert;
-import org.junit.BeforeClass;
 import org.opengis.feature.simple.SimpleFeature;
 
 import com.vividsolutions.jts.geom.Geometry;
@@ -53,19 +43,15 @@ import mil.nga.giat.geowave.core.store.operations.remote.ListStatsCommand;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOptions;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
-import mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStoreFactory;
-import mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations;
-import mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations;
-import mil.nga.giat.geowave.datastore.accumulo.minicluster.MiniAccumuloClusterFactory;
-import mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloRequiredOptions;
+import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import net.lingala.zip4j.core.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
 
-abstract public class GeoWaveTestEnvironment
+public class TestUtils
 {
-	private final static Logger LOGGER = Logger.getLogger(GeoWaveTestEnvironment.class);
+	private final static Logger LOGGER = Logger.getLogger(TestUtils.class);
 
-	protected static enum DimensionalityType {
+	public static enum DimensionalityType {
 		SPATIAL(
 				"spatial"),
 		SPATIAL_TEMPORAL(
@@ -84,47 +70,33 @@ abstract public class GeoWaveTestEnvironment
 		}
 	}
 
+	public static final File TEMP_DIR = new File(
+			"./target/temp");
 	protected static final String TEST_FILTER_START_TIME_ATTRIBUTE_NAME = "StartTime";
 	protected static final String TEST_FILTER_END_TIME_ATTRIBUTE_NAME = "EndTime";
-	protected static final String TEST_NAMESPACE = "mil_nga_giat_geowave_test";
-	protected static final String TEST_RESOURCE_PACKAGE = "mil/nga/giat/geowave/test/";
-	protected static final String TEST_CASE_BASE = "data/";
-	protected static final String DEFAULT_MINI_ACCUMULO_PASSWORD = "Ge0wave";
-	protected static final String HADOOP_WINDOWS_UTIL = "winutils.exe";
-	protected static final String HADOOP_DLL = "hadoop.dll";
-	protected static final Object MUTEX = new Object();
-	protected static AccumuloOperations accumuloOperations;
-	protected static String zookeeper = "z";
-	protected static String accumuloInstance = "i";
-	protected static String accumuloUser = "u";
-	protected static String accumuloPassword = "p";
-	protected static MiniAccumuloClusterImpl miniAccumulo;
-	protected static File TEMP_DIR = new File(
-			"./target/accumulo_temp"); // breaks on windows if temp directory
-										// isn't on same drive as project
+	public static final String TEST_NAMESPACE = "mil_nga_giat_geowave_test";
+	public static final String TEST_RESOURCE_PACKAGE = "mil/nga/giat/geowave/test/";
+	public static final String TEST_CASE_BASE = "data/";
 
-	protected static final PrimaryIndex DEFAULT_SPATIAL_INDEX = new SpatialDimensionalityTypeProvider().createPrimaryIndex();
-	protected static final PrimaryIndex DEFAULT_ALLTIER_SPATIAL_INDEX = new SpatialIndexBuilder().setAllTiers(
+	public static final PrimaryIndex DEFAULT_SPATIAL_INDEX = new SpatialDimensionalityTypeProvider().createPrimaryIndex();
+	public static final PrimaryIndex DEFAULT_ALLTIER_SPATIAL_INDEX = new SpatialIndexBuilder().setAllTiers(
 			true).createIndex();
 
-	protected static final PrimaryIndex DEFAULT_SPATIAL_TEMPORAL_INDEX = new SpatialTemporalDimensionalityTypeProvider().createPrimaryIndex();
+	public static final PrimaryIndex DEFAULT_SPATIAL_TEMPORAL_INDEX = new SpatialTemporalDimensionalityTypeProvider().createPrimaryIndex();
 
-	protected static final AtomicBoolean DEFER_CLEANUP = new AtomicBoolean(
-			false);
-
-	protected static HashMap<Long, SimpleFeature> expectedFeatures = new HashMap<Long, SimpleFeature>();
-
-	protected static boolean isYarn() {
+	public static boolean isYarn() {
 		return VersionUtil.compareVersions(
 				VersionInfo.getVersion(),
 				"2.2.0") >= 0;
 	}
 
-	protected void testLocalIngest(
+	public static void testLocalIngest(
+			final DataStorePluginOptions dataStore,
 			final DimensionalityType dimensionalityType,
 			final String ingestFilePath,
 			final int nthreads ) {
 		testLocalIngest(
+				dataStore,
 				dimensionalityType,
 				ingestFilePath,
 				"geotools-vector",
@@ -132,17 +104,32 @@ abstract public class GeoWaveTestEnvironment
 
 	}
 
-	protected void testLocalIngest(
+	public static void testLocalIngest(
+			final DataStorePluginOptions dataStore,
 			final DimensionalityType dimensionalityType,
 			final String ingestFilePath ) {
 		testLocalIngest(
+				dataStore,
 				dimensionalityType,
 				ingestFilePath,
 				"geotools-vector",
 				1);
 	}
 
-	protected void testLocalIngest(
+	public static boolean isSet(
+			final String str ) {
+		return (str != null) && !str.isEmpty();
+	}
+
+	public static void deleteAll(
+			DataStorePluginOptions dataStore ) {
+		dataStore.createDataStore().delete(
+				new QueryOptions(),
+				null);
+	}
+
+	public static void testLocalIngest(
+			final DataStorePluginOptions dataStore,
 			final DimensionalityType dimensionalityType,
 			final String ingestFilePath,
 			final String format,
@@ -152,18 +139,18 @@ abstract public class GeoWaveTestEnvironment
 		// ingest framework's main method and pre-defined commandline arguments
 
 		// Ingest Formats
-		IngestFormatPluginOptions ingestFormatOptions = new IngestFormatPluginOptions();
+		final IngestFormatPluginOptions ingestFormatOptions = new IngestFormatPluginOptions();
 		ingestFormatOptions.selectPlugin(format);
 
 		// Indexes
-		IndexPluginOptions indexOption = new IndexPluginOptions();
+		final IndexPluginOptions indexOption = new IndexPluginOptions();
 		indexOption.selectPlugin(dimensionalityType.getDimensionalityArg());
 
 		// Create the command and execute.
-		LocalToGeowaveCommand localIngester = new LocalToGeowaveCommand();
+		final LocalToGeowaveCommand localIngester = new LocalToGeowaveCommand();
 		localIngester.setPluginFormats(ingestFormatOptions);
 		localIngester.setInputIndexOptions(Arrays.asList(indexOption));
-		localIngester.setInputStoreOptions(getAccumuloStorePluginOptions(TEST_NAMESPACE));
+		localIngester.setInputStoreOptions(dataStore);
 		localIngester.setParameters(
 				ingestFilePath,
 				null,
@@ -171,189 +158,33 @@ abstract public class GeoWaveTestEnvironment
 		localIngester.setThreads(nthreads);
 		localIngester.execute(new ManualOperationParams());
 
-		verifyStats();
+		verifyStats(dataStore);
 
 	}
 
-	protected static DataStorePluginOptions getAccumuloStorePluginOptions(
-			String namespace ) {
-		DataStorePluginOptions pluginOptions = new DataStorePluginOptions();
-		AccumuloRequiredOptions opts = new AccumuloRequiredOptions();
-		opts.setGeowaveNamespace(namespace);
-		opts.setUser(accumuloUser);
-		opts.setPassword(accumuloPassword);
-		opts.setInstance(accumuloInstance);
-		opts.setZookeeper(zookeeper);
-		pluginOptions.selectPlugin(new AccumuloDataStoreFactory().getName());
-		pluginOptions.setFactoryOptions(opts);
-		return pluginOptions;
-	}
-
-	private void verifyStats() {
-		ListStatsCommand listStats = new ListStatsCommand();
-		listStats.setInputStoreOptions(getAccumuloStorePluginOptions(TEST_NAMESPACE));
+	private static void verifyStats(
+			final DataStorePluginOptions dataStore ) {
+		final ListStatsCommand listStats = new ListStatsCommand();
+		listStats.setInputStoreOptions(dataStore);
 		listStats.setParameters(
 				null,
 				null);
 		try {
 			listStats.execute(new ManualOperationParams());
 		}
-		catch (Exception e) {
+		catch (final Exception e) {
 			throw new RuntimeException(
 					e);
 		}
 	}
 
-	@BeforeClass
-	public static void setup()
-			throws IOException {
-		synchronized (MUTEX) {
-			TimeZone.setDefault(TimeZone.getTimeZone("GMT"));
-
-			if (accumuloOperations == null) {
-				zookeeper = System.getProperty("zookeeperUrl");
-				accumuloInstance = System.getProperty("instance");
-				accumuloUser = System.getProperty("username");
-				accumuloPassword = System.getProperty("password");
-				if (!isSet(zookeeper) || !isSet(accumuloInstance) || !isSet(accumuloUser) || !isSet(accumuloPassword)) {
-					try {
-
-						// TEMP_DIR = Files.createTempDir();
-						if (!TEMP_DIR.exists()) {
-							if (!TEMP_DIR.mkdirs()) {
-								throw new IOException(
-										"Could not create temporary directory");
-							}
-						}
-						TEMP_DIR.deleteOnExit();
-						final MiniAccumuloConfigImpl config = new MiniAccumuloConfigImpl(
-								TEMP_DIR,
-								DEFAULT_MINI_ACCUMULO_PASSWORD);
-						config.setNumTservers(2);
-
-						miniAccumulo = MiniAccumuloClusterFactory.newAccumuloCluster(
-								config,
-								GeoWaveTestEnvironment.class);
-
-						miniAccumulo.start();
-						zookeeper = miniAccumulo.getZooKeepers();
-						accumuloInstance = miniAccumulo.getInstanceName();
-						accumuloUser = "root";
-						accumuloPassword = DEFAULT_MINI_ACCUMULO_PASSWORD;
-					}
-					catch (IOException | InterruptedException e) {
-						LOGGER.warn(
-								"Unable to start mini accumulo instance",
-								e);
-						LOGGER.info("Check '" + TEMP_DIR.getAbsolutePath() + File.separator + "logs' for more info");
-						if (SystemUtils.IS_OS_WINDOWS) {
-							LOGGER.warn("For windows, make sure that Cygwin is installed and set a CYGPATH environment variable to %CYGWIN_HOME%/bin/cygpath to successfully run a mini accumulo cluster");
-						}
-						Assert.fail("Unable to start mini accumulo instance: '" + e.getLocalizedMessage() + "'");
-					}
-				}
-				try {
-					accumuloOperations = new BasicAccumuloOperations(
-							zookeeper,
-							accumuloInstance,
-							accumuloUser,
-							accumuloPassword,
-							TEST_NAMESPACE);
-				}
-				catch (AccumuloException | AccumuloSecurityException e) {
-					LOGGER.warn(
-							"Unable to connect to Accumulo",
-							e);
-					Assert.fail("Could not connect to Accumulo instance: '" + e.getLocalizedMessage() + "'");
-				}
-			}
-		}
-	}
-
-	protected static boolean isSet(
-			final String str ) {
-		return (str != null) && !str.isEmpty();
-	}
-
-	@SuppressFBWarnings(value = {
-		"SWL_SLEEP_WITH_LOCK_HELD"
-	}, justification = "Sleep in lock while waiting for external resources")
-	@AfterClass
-	public static void cleanup() {
-		synchronized (MUTEX) {
-			if (!DEFER_CLEANUP.get()) {
-
-				if (accumuloOperations == null) {
-					Assert.fail("Invalid state <null> for accumulo operations during CLEANUP phase");
-				}
-				try {
-					accumuloOperations.deleteAll();
-				}
-				catch (TableNotFoundException | AccumuloSecurityException | AccumuloException ex) {
-					LOGGER.error(
-							"Unable to clear accumulo namespace",
-							ex);
-					Assert.fail("Index not deleted successfully");
-				}
-
-				accumuloOperations = null;
-				zookeeper = null;
-				accumuloInstance = null;
-				accumuloUser = null;
-				accumuloPassword = null;
-				if (miniAccumulo != null) {
-					try {
-						miniAccumulo.stop();
-						miniAccumulo = null;
-					}
-					catch (IOException | InterruptedException e) {
-						LOGGER.warn(
-								"Unable to stop mini accumulo instance",
-								e);
-					}
-				}
-				if (TEMP_DIR != null) {
-					try {
-						// sleep because mini accumulo processes still have a
-						// hold on the log files and there is no hook to get
-						// notified when it is completely stopped
-
-						Thread.sleep(2000);
-						FileUtils.deleteDirectory(TEMP_DIR);
-
-						TEMP_DIR = null;
-					}
-					catch (final IOException | InterruptedException e) {
-						LOGGER.warn(
-								"Unable to delete mini Accumulo temporary directory",
-								e);
-					}
-				}
-			}
-		}
-	}
-
-	public static void addAuthorization(
-			final String auth,
-			final BasicAccumuloOperations accumuloOperations ) {
-		try {
-			accumuloOperations.insureAuthorization(auth);
-		}
-		catch (AccumuloException | AccumuloSecurityException e) {
-			LOGGER.warn(
-					"Unable to alter authorization for Accumulo user",
-					e);
-			Assert.fail("Unable to alter authorization for Accumulo user: '" + e.getLocalizedMessage() + "'");
-		}
-	}
-
-	protected static long hashCentroid(
+	public static long hashCentroid(
 			final Geometry geometry ) {
 		final Point centroid = geometry.getCentroid();
 		return Double.doubleToLongBits(centroid.getX()) + Double.doubleToLongBits(centroid.getY() * 31);
 	}
 
-	protected static class ExpectedResults
+	public static class ExpectedResults
 	{
 		public Set<Long> hashedCentroids;
 		public int count;
@@ -369,7 +200,7 @@ abstract public class GeoWaveTestEnvironment
 		}
 	}
 
-	protected static ExpectedResults getExpectedResults(
+	public static ExpectedResults getExpectedResults(
 			final CloseableIterator<?> results )
 			throws IOException {
 		final Set<Long> hashedCentroids = new HashSet<Long>();
@@ -392,7 +223,7 @@ abstract public class GeoWaveTestEnvironment
 				expectedResultCount);
 	}
 
-	protected static ExpectedResults getExpectedResults(
+	public static ExpectedResults getExpectedResults(
 			final URL[] expectedResultsResources )
 			throws IOException {
 		final Map<String, Object> map = new HashMap<String, Object>();
@@ -420,12 +251,9 @@ abstract public class GeoWaveTestEnvironment
 				// easy to check against
 				featureIterator = expectedResults.features();
 				while (featureIterator.hasNext()) {
-					SimpleFeature feature = featureIterator.next();
-					long centroid = hashCentroid((Geometry) feature.getDefaultGeometry());
+					final SimpleFeature feature = featureIterator.next();
+					final long centroid = hashCentroid((Geometry) feature.getDefaultGeometry());
 					hashedCentroids.add(centroid);
-					expectedFeatures.put(
-							centroid,
-							feature);
 				}
 			}
 			finally {
@@ -440,7 +268,7 @@ abstract public class GeoWaveTestEnvironment
 				expectedResultCount);
 	}
 
-	protected static DistributableQuery resourceToQuery(
+	public static DistributableQuery resourceToQuery(
 			final URL filterResource )
 			throws IOException {
 		return featureToQuery(resourceToFeature(filterResource));
@@ -515,21 +343,6 @@ abstract public class GeoWaveTestEnvironment
 				filterGeometry);
 	}
 
-	public static void addAuthorization(
-			final String auth ) {
-		try {
-			synchronized (MUTEX) {
-				accumuloOperations.insureAuthorization(auth);
-			}
-		}
-		catch (AccumuloException | AccumuloSecurityException e) {
-			LOGGER.warn(
-					"Unable to alter authorization for Accumulo user",
-					e);
-			Assert.fail("Unable to alter authorization for Accumulo user: '" + e.getLocalizedMessage() + "'");
-		}
-	}
-
 	/**
 	 * Unzips the contents of a zip file to a target output directory, deleting
 	 * anything that existed beforehand
@@ -539,7 +352,7 @@ abstract public class GeoWaveTestEnvironment
 	 * @param outputFolder
 	 *            zip file output folder
 	 */
-	protected static void unZipFile(
+	public static void unZipFile(
 			final File zipInput,
 			final String outputFolder ) {
 

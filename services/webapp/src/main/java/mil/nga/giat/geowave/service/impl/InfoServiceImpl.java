@@ -1,12 +1,7 @@
 package mil.nga.giat.geowave.service.impl;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Map;
 import java.util.Properties;
-import java.util.Set;
 
 import javax.servlet.ServletConfig;
 import javax.ws.rs.Consumes;
@@ -14,23 +9,22 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+
+import org.apache.log4j.Logger;
 
 import mil.nga.giat.geowave.core.store.CloseableIterator;
-import mil.nga.giat.geowave.core.store.GeoWaveStoreFinder;
-import mil.nga.giat.geowave.core.store.adapter.AdapterStoreFactorySpi;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
-import mil.nga.giat.geowave.core.store.config.ConfigUtils;
 import mil.nga.giat.geowave.core.store.index.Index;
-import mil.nga.giat.geowave.core.store.index.IndexStoreFactorySpi;
+import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.service.InfoService;
 import mil.nga.giat.geowave.service.ServiceUtils;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
-
-import org.apache.log4j.Logger;
 
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
@@ -40,28 +34,15 @@ public class InfoServiceImpl implements
 {
 	private final static Logger LOGGER = Logger.getLogger(InfoServiceImpl.class);
 	private final static int defaultIndentation = 2;
-	private final IndexStoreFactorySpi indexStoreFactory;
-	private final AdapterStoreFactorySpi adapterStoreFactory;
-	private final Map<String, String> configOptions;
+	private final Properties serviceProperties;
 
 	public InfoServiceImpl(
 			@Context
 			final ServletConfig servletConfig ) {
 		final Properties props = ServiceUtils.loadProperties(servletConfig.getServletContext().getResourceAsStream(
 				servletConfig.getInitParameter("config.properties")));
-		final Map<String, String> strMap = new HashMap<String, String>();
 
-		final Set<Object> keySet = props.keySet();
-		final Iterator<Object> it = keySet.iterator();
-		while (it.hasNext()) {
-			final String key = it.next().toString();
-			strMap.put(
-					key,
-					props.getProperty(key));
-		}
-		configOptions = strMap;
-		indexStoreFactory = GeoWaveStoreFinder.findIndexStoreFactory(configOptions);
-		adapterStoreFactory = GeoWaveStoreFinder.findAdapterStoreFactory(configOptions);
+		serviceProperties = props;
 	}
 
 	// lists the namespaces in geowave
@@ -93,15 +74,28 @@ public class InfoServiceImpl implements
 	@Override
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/namespaces/{namespace}/indices")
+	@Path("/{storeName}/indices")
 	public Response getIndices(
-			@PathParam("namespace")
-			final String namespace ) {
-		try (CloseableIterator<Index<?, ?>> indices = indexStoreFactory.createStore(
-				ConfigUtils.populateOptionsFromList(
-						indexStoreFactory.createOptionsInstance(),
-						configOptions)).getIndices()) {
-
+			@PathParam("storeName")
+			final String storeName ) {
+		if ((storeName == null) || storeName.isEmpty()) {
+			throw new WebApplicationException(
+					Response.status(
+							Status.BAD_REQUEST).entity(
+							"Get Indices Failed - Missing Store Name").build());
+		}
+		// Store
+		final String namespace = DataStorePluginOptions.getStoreNamespace(storeName);
+		final DataStorePluginOptions dataStorePlugin = new DataStorePluginOptions();
+		if (!dataStorePlugin.load(
+				serviceProperties,
+				namespace)) {
+			throw new WebApplicationException(
+					Response.status(
+							Status.BAD_REQUEST).entity(
+							"Get Indices Failed - Invalid Store").build());
+		}
+		try (CloseableIterator<Index<?, ?>> indices = dataStorePlugin.createIndexStore().getIndices()) {
 			final JSONArray indexNames = new JSONArray();
 			while (indices.hasNext()) {
 				final Index<?, ?> index = indices.next();
@@ -122,7 +116,7 @@ public class InfoServiceImpl implements
 		}
 		catch (final IOException e) {
 			LOGGER.error(
-					"Unable to read from index store for namespace '" + namespace + "'",
+					"Unable to read from index store for store '" + storeName + "'",
 					e);
 			return Response.serverError().build();
 		}
@@ -132,14 +126,28 @@ public class InfoServiceImpl implements
 	@Override
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/namespaces/{namespace}/adapters")
+	@Path("/{storeName}/adapters")
 	public Response getAdapters(
-			@PathParam("namespace")
-			final String namespace ) {
-		try (CloseableIterator<DataAdapter<?>> dataAdapters = adapterStoreFactory.createStore(
-				ConfigUtils.populateOptionsFromList(
-						indexStoreFactory.createOptionsInstance(),
-						configOptions)).getAdapters()) {
+			@PathParam("storeName")
+			final String storeName ) {
+		if ((storeName == null) || storeName.isEmpty()) {
+			throw new WebApplicationException(
+					Response.status(
+							Status.BAD_REQUEST).entity(
+							"Get Adapters Failed - Missing Store Name").build());
+		}
+		// Store
+		final String namespace = DataStorePluginOptions.getStoreNamespace(storeName);
+		final DataStorePluginOptions dataStorePlugin = new DataStorePluginOptions();
+		if (!dataStorePlugin.load(
+				serviceProperties,
+				namespace)) {
+			throw new WebApplicationException(
+					Response.status(
+							Status.BAD_REQUEST).entity(
+							"Get Adapters Failed - Invalid Store").build());
+		}
+		try (CloseableIterator<DataAdapter<?>> dataAdapters = dataStorePlugin.createAdapterStore().getAdapters()) {
 			final JSONArray dataAdapterNames = new JSONArray();
 			while (dataAdapters.hasNext()) {
 				final DataAdapter<?> dataAdapter = dataAdapters.next();
@@ -160,7 +168,7 @@ public class InfoServiceImpl implements
 		}
 		catch (final IOException e) {
 			LOGGER.error(
-					"Unable to read from adapter store for namespace '" + namespace + "'",
+					"Unable to read from adapter store for store '" + storeName + "'",
 					e);
 			return Response.serverError().build();
 		}
