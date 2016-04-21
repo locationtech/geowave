@@ -5,6 +5,7 @@ import java.util.Map;
 
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.DataStoreFactorySpi;
+import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
 
 public class MemoryDataStoreFactory extends
 		AbstractMemoryStoreFactory<DataStore> implements
@@ -14,9 +15,8 @@ public class MemoryDataStoreFactory extends
 
 	@Override
 	public DataStore createStore(
-			final Map<String, Object> configOptions,
-			final String namespace ) {
-		return createStore(namespace);
+			StoreFactoryOptions configOptions ) {
+		return createStore(configOptions.getGeowaveNamespace());
 	}
 
 	protected static synchronized DataStore createStore(

@@ -1,7 +1,17 @@
 package mil.nga.giat.geowave.analytic.mapreduce.nn;
 
 import java.io.IOException;
-import java.util.HashMap;
+
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.mapreduce.Counters;
+import org.apache.hadoop.mapreduce.Job;
+import org.apache.hadoop.mapreduce.lib.input.SequenceFileInputFormat;
+import org.apache.hadoop.util.Tool;
+import org.apache.hadoop.util.ToolRunner;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
 import mil.nga.giat.geowave.analytic.PropertyManagement;
 import mil.nga.giat.geowave.analytic.ScopedJobConfiguration;
@@ -17,26 +27,9 @@ import mil.nga.giat.geowave.analytic.param.PartitionParameters.Partition;
 import mil.nga.giat.geowave.analytic.param.StoreParameters.StoreParam;
 import mil.nga.giat.geowave.analytic.partitioner.OrthodromicDistancePartitioner;
 import mil.nga.giat.geowave.analytic.partitioner.Partitioner;
-import mil.nga.giat.geowave.analytic.store.PersistableAdapterStore;
-import mil.nga.giat.geowave.analytic.store.PersistableDataStore;
-import mil.nga.giat.geowave.analytic.store.PersistableIndexStore;
-import mil.nga.giat.geowave.core.cli.AdapterStoreCommandLineOptions;
-import mil.nga.giat.geowave.core.cli.DataStoreCommandLineOptions;
-import mil.nga.giat.geowave.core.cli.IndexStoreCommandLineOptions;
-import mil.nga.giat.geowave.core.store.memory.MemoryAdapterStoreFactory;
-import mil.nga.giat.geowave.core.store.memory.MemoryDataStoreFactory;
-import mil.nga.giat.geowave.core.store.memory.MemoryIndexStoreFactory;
-
-import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.mapreduce.Counters;
-import org.apache.hadoop.mapreduce.Job;
-import org.apache.hadoop.mapreduce.lib.input.SequenceFileInputFormat;
-import org.apache.hadoop.util.Tool;
-import org.apache.hadoop.util.ToolRunner;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import mil.nga.giat.geowave.analytic.store.PersistableStore;
+import mil.nga.giat.geowave.core.store.memory.MemoryRequiredOptions;
+import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 
 public class NNJobRunnerTest
 {
@@ -167,29 +160,16 @@ public class NNJobRunnerTest
 				MRConfig.HDFS_BASE_DIR,
 				"/");
 
-		runTimeProperties.store(
-				StoreParam.DATA_STORE,
-				new PersistableDataStore(
-						new DataStoreCommandLineOptions(
-								new MemoryDataStoreFactory(),
-								new HashMap<String, Object>(),
-								TEST_NAMESPACE)));
+		DataStorePluginOptions pluginOptions = new DataStorePluginOptions();
+		pluginOptions.selectPlugin("memory");
+		MemoryRequiredOptions opts = (MemoryRequiredOptions) pluginOptions.getFactoryOptions();
+		opts.setGeowaveNamespace(TEST_NAMESPACE);
+		PersistableStore store = new PersistableStore(
+				pluginOptions);
 
 		runTimeProperties.store(
-				StoreParam.ADAPTER_STORE,
-				new PersistableAdapterStore(
-						new AdapterStoreCommandLineOptions(
-								new MemoryAdapterStoreFactory(),
-								new HashMap<String, Object>(),
-								TEST_NAMESPACE)));
-
-		runTimeProperties.store(
-				StoreParam.INDEX_STORE,
-				new PersistableIndexStore(
-						new IndexStoreCommandLineOptions(
-								new MemoryIndexStoreFactory(),
-								new HashMap<String, Object>(),
-								TEST_NAMESPACE)));
+				StoreParam.STORE,
+				store);
 
 		runTimeProperties.store(
 				CommonParameters.Common.DISTANCE_FUNCTION_CLASS,

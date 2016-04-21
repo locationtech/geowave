@@ -1,14 +1,12 @@
 package mil.nga.giat.geowave.datastore.accumulo;
 
-import java.util.Map;
-
 import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.store.GenericStoreFactory;
-import mil.nga.giat.geowave.core.store.config.AbstractConfigOption;
+import mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloRequiredOptions;
 
 abstract public class AbstractAccumuloStoreFactory<T> extends
 		AbstractAccumuloFactory implements
@@ -16,18 +14,10 @@ abstract public class AbstractAccumuloStoreFactory<T> extends
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(AbstractAccumuloStoreFactory.class);
 
-	@Override
-	public AbstractConfigOption<?>[] getOptions() {
-		return BasicAccumuloOperations.getOptions();
-	}
-
 	protected BasicAccumuloOperations createOperations(
-			final Map<String, Object> configOptions,
-			final String namespace ) {
+			AccumuloRequiredOptions options ) {
 		try {
-			return BasicAccumuloOperations.createOperations(
-					configOptions,
-					namespace);
+			return BasicAccumuloOperations.createOperations(options);
 		}
 		catch (AccumuloException | AccumuloSecurityException e) {
 			LOGGER.error(

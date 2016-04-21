@@ -1,76 +1,65 @@
 package mil.nga.giat.geowave.adapter.vector.ingest;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
 import org.opengis.feature.simple.SimpleFeature;
 
-import mil.nga.giat.geowave.core.ingest.IngestFormatOptionProvider;
-import mil.nga.giat.geowave.core.ingest.IngestFormatPluginProviderSpi;
 import mil.nga.giat.geowave.core.ingest.avro.AvroFormatPlugin;
 import mil.nga.giat.geowave.core.ingest.hdfs.mapreduce.IngestFromHdfsPlugin;
 import mil.nga.giat.geowave.core.ingest.local.LocalFileIngestPlugin;
+import mil.nga.giat.geowave.core.ingest.spi.IngestFormatOptionProvider;
+import mil.nga.giat.geowave.core.ingest.spi.IngestFormatPluginProviderSpi;
 
 abstract public class AbstractSimpleFeatureIngestFormat<I> implements
 		IngestFormatPluginProviderSpi<I, SimpleFeature>
 {
-	protected final CQLFilterOptionProvider cqlFilterOptionProvider = new CQLFilterOptionProvider();
-	protected final TypeNameOptionProvider typeNameOptionProvider = new TypeNameOptionProvider();
-	protected final FeatureSerializationOptionProvider serializationFormatOptionProvider = new FeatureSerializationOptionProvider();
+	protected final SimpleFeatureIngestOptions myOptions = new SimpleFeatureIngestOptions();
 	protected AbstractSimpleFeatureIngestPlugin<I> myInstance;
 
-	private synchronized AbstractSimpleFeatureIngestPlugin<I> getInstance() {
+	private synchronized AbstractSimpleFeatureIngestPlugin<I> getInstance(
+			IngestFormatOptionProvider options ) {
 		if (myInstance == null) {
-			myInstance = newPluginInstance();
-			myInstance.setFilterProvider(cqlFilterOptionProvider);
-			myInstance.setTypeNameProvider(typeNameOptionProvider);
-			myInstance.setSerializationFormatProvider(serializationFormatOptionProvider);
-			setPluginInstanceOptionProviders();
+			myInstance = newPluginInstance(options);
+			myInstance.setFilterProvider(myOptions.getCqlFilterOptionProvider());
+			myInstance.setTypeNameProvider(myOptions.getTypeNameOptionProvider());
+			myInstance.setSerializationFormatProvider(myOptions.getSerializationFormatOptionProvider());
 		}
 		return myInstance;
 	}
 
-	abstract protected AbstractSimpleFeatureIngestPlugin<I> newPluginInstance();
+	abstract protected AbstractSimpleFeatureIngestPlugin<I> newPluginInstance(
+			IngestFormatOptionProvider options );
 
 	protected void setPluginInstanceOptionProviders() {}
 
 	@Override
-	public AvroFormatPlugin<I, SimpleFeature> getAvroFormatPlugin() {
-		return getInstance();
+	public AvroFormatPlugin<I, SimpleFeature> createAvroFormatPlugin(
+			IngestFormatOptionProvider options ) {
+		return getInstance(options);
 	}
 
 	@Override
-	public IngestFromHdfsPlugin<I, SimpleFeature> getIngestFromHdfsPlugin() {
-		return getInstance();
+	public IngestFromHdfsPlugin<I, SimpleFeature> createIngestFromHdfsPlugin(
+			IngestFormatOptionProvider options ) {
+		return getInstance(options);
 	}
 
 	@Override
-	public LocalFileIngestPlugin<SimpleFeature> getLocalFileIngestPlugin() {
-		return getInstance();
+	public LocalFileIngestPlugin<SimpleFeature> createLocalFileIngestPlugin(
+			IngestFormatOptionProvider options ) {
+		return getInstance(options);
 	}
 
+	/**
+	 * Create an options instance. We may want to change this code from a
+	 * singleton instance to actually allow multiple instances per format.
+	 */
 	@Override
-	public IngestFormatOptionProvider getIngestFormatOptionProvider() {
-		return new MultiOptionProvider(
-				getIngestFormatOptionProviders().toArray(
-						new IngestFormatOptionProvider[] {}));
+	public IngestFormatOptionProvider createOptionsInstances() {
+		myOptions.setPluginOptions(internalGetIngestFormatOptionProviders());
+		return myOptions;
 	}
 
-	private List<IngestFormatOptionProvider> getIngestFormatOptionProviders() {
-		// TODO: because other formats are not yet implemented,
-		// don't expose the options to the user
-		final List<IngestFormatOptionProvider> providers = new ArrayList<IngestFormatOptionProvider>();
-		providers.add(serializationFormatOptionProvider);
-		providers.add(cqlFilterOptionProvider);
-		providers.add(typeNameOptionProvider);
-		providers.addAll(internalGetIngestFormatOptionProviders());
-
-		return providers;
-	}
-
-	protected Collection<? extends IngestFormatOptionProvider> internalGetIngestFormatOptionProviders() {
-		return new ArrayList<IngestFormatOptionProvider>();
+	protected Object internalGetIngestFormatOptionProviders() {
+		return null;
 	}
 
 }

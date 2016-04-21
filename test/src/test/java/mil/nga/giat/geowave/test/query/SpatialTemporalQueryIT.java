@@ -45,13 +45,14 @@ import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
+import mil.nga.giat.geowave.core.store.config.ConfigUtils;
 import mil.nga.giat.geowave.core.store.index.Index;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.query.BasicQuery;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStore;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloStoreFactoryFamily;
-import mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations;
+import mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloRequiredOptions;
 import mil.nga.giat.geowave.test.GeoWaveTestEnvironment;
 
 public class SpatialTemporalQueryIT extends
@@ -243,21 +244,21 @@ public class SpatialTemporalQueryIT extends
 			rangeWriters.close();
 		}
 		final Map<String, Serializable> config = new HashMap<String, Serializable>();
-		config.put(
-				GeoWavePluginConfig.GEOWAVE_NAMESPACE_KEY,
-				TEST_NAMESPACE);
-		config.put(
-				BasicAccumuloOperations.INSTANCE_CONFIG_NAME,
-				accumuloInstance);
-		config.put(
-				BasicAccumuloOperations.PASSWORD_CONFIG_NAME,
-				accumuloPassword);
-		config.put(
-				BasicAccumuloOperations.USER_CONFIG_NAME,
-				accumuloUser);
-		config.put(
-				BasicAccumuloOperations.ZOOKEEPER_CONFIG_NAME,
-				zookeeper);
+
+		AccumuloRequiredOptions opts = new AccumuloRequiredOptions();
+		opts.setGeowaveNamespace(TEST_NAMESPACE);
+		opts.setUser(accumuloUser);
+		opts.setPassword(accumuloPassword);
+		opts.setInstance(accumuloInstance);
+		opts.setZookeeper(zookeeper);
+		Map<String, String> mapOpts = ConfigUtils.populateListFromOptions(opts);
+
+		for (String key : mapOpts.keySet()) {
+			config.put(
+					key,
+					mapOpts.get(key));
+		}
+
 		geowaveGtDataStore = new GeoWaveGTDataStore(
 				new GeoWavePluginConfig(
 						new AccumuloStoreFactoryFamily(),

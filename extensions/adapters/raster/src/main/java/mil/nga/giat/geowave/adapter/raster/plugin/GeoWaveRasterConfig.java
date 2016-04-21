@@ -12,7 +12,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import mil.nga.giat.geowave.core.cli.GenericStoreCommandLineOptions;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.DataStoreFactorySpi;
@@ -37,8 +36,6 @@ public class GeoWaveRasterConfig
 	static private final Map<String, GeoWaveRasterConfig> CONFIG_CACHE = new Hashtable<String, GeoWaveRasterConfig>();
 
 	protected static enum ConfigParameter {
-		NAMESPACE(
-				GenericStoreCommandLineOptions.NAMESPACE_OPTION_KEY),
 		// the following two are optional parameters that will override the
 		// behavior of tile mosaicing that is already set within each adapter
 		INTERPOLATION(
@@ -57,8 +54,7 @@ public class GeoWaveRasterConfig
 		}
 	}
 
-	private String geowaveNamespace;
-	private Map<String, Object> storeConfigObj;
+	private Map<String, String> storeConfigObj;
 	private DataStoreFactorySpi dataStoreFactory;
 	private IndexStoreFactorySpi indexStoreFactory;
 	private AdapterStoreFactorySpi adapterStoreFactory;
@@ -93,8 +89,7 @@ public class GeoWaveRasterConfig
 		result.equalizeHistogramOverride = equalizeHistogramOverride;
 		result.interpolationOverride = interpolationOverride;
 		synchronized (result) {
-			result.geowaveNamespace = geowaveNamespace;
-			result.storeConfigObj = ConfigUtils.valuesFromStrings(dataStoreConfig);
+			result.storeConfigObj = dataStoreConfig;
 			result.dataStoreFactory = GeoWaveStoreFinder.findDataStoreFactory(result.storeConfigObj);
 			result.indexStoreFactory = GeoWaveStoreFinder.findIndexStoreFactory(result.storeConfigObj);
 			result.adapterStoreFactory = GeoWaveStoreFinder.findAdapterStoreFactory(result.storeConfigObj);
@@ -212,8 +207,7 @@ public class GeoWaveRasterConfig
 		}
 		// findbugs complaint requires this synchronization
 		synchronized (result) {
-			result.geowaveNamespace = params.get(ConfigParameter.NAMESPACE.getConfigName());
-			result.storeConfigObj = ConfigUtils.valuesFromStrings(storeParams);
+			result.storeConfigObj = storeParams;
 			result.dataStoreFactory = GeoWaveStoreFinder.findDataStoreFactory(result.storeConfigObj);
 			result.indexStoreFactory = GeoWaveStoreFinder.findIndexStoreFactory(result.storeConfigObj);
 			result.adapterStoreFactory = GeoWaveStoreFinder.findAdapterStoreFactory(result.storeConfigObj);
@@ -236,36 +230,36 @@ public class GeoWaveRasterConfig
 
 	public synchronized DataStore getDataStore() {
 		if (dataStore == null) {
-			dataStore = dataStoreFactory.createStore(
-					storeConfigObj,
-					geowaveNamespace);
+			dataStore = dataStoreFactory.createStore(ConfigUtils.populateOptionsFromList(
+					dataStoreFactory.createOptionsInstance(),
+					storeConfigObj));
 		}
 		return dataStore;
 	}
 
 	public synchronized AdapterStore getAdapterStore() {
 		if (adapterStore == null) {
-			adapterStore = adapterStoreFactory.createStore(
-					storeConfigObj,
-					geowaveNamespace);
+			adapterStore = adapterStoreFactory.createStore(ConfigUtils.populateOptionsFromList(
+					adapterStoreFactory.createOptionsInstance(),
+					storeConfigObj));
 		}
 		return adapterStore;
 	}
 
 	public synchronized IndexStore getIndexStore() {
 		if (indexStore == null) {
-			indexStore = indexStoreFactory.createStore(
-					storeConfigObj,
-					geowaveNamespace);
+			indexStore = indexStoreFactory.createStore(ConfigUtils.populateOptionsFromList(
+					indexStoreFactory.createOptionsInstance(),
+					storeConfigObj));
 		}
 		return indexStore;
 	}
 
 	public synchronized DataStatisticsStore getDataStatisticsStore() {
 		if (dataStatisticsStore == null) {
-			dataStatisticsStore = dataStatisticsStoreFactory.createStore(
-					storeConfigObj,
-					geowaveNamespace);
+			dataStatisticsStore = dataStatisticsStoreFactory.createStore(ConfigUtils.populateOptionsFromList(
+					dataStatisticsStoreFactory.createOptionsInstance(),
+					storeConfigObj));
 		}
 		return dataStatisticsStore;
 	}

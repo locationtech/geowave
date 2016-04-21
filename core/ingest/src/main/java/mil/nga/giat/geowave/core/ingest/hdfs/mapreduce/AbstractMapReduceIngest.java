@@ -3,19 +3,6 @@ package mil.nga.giat.geowave.core.ingest.hdfs.mapreduce;
 import java.util.ArrayList;
 import java.util.List;
 
-import mil.nga.giat.geowave.core.cli.DataStoreCommandLineOptions;
-import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.ByteArrayUtils;
-import mil.nga.giat.geowave.core.index.Persistable;
-import mil.nga.giat.geowave.core.index.PersistenceUtils;
-import mil.nga.giat.geowave.core.ingest.DataAdapterProvider;
-import mil.nga.giat.geowave.core.ingest.IngestCommandLineOptions;
-import mil.nga.giat.geowave.core.ingest.IngestUtils;
-import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
-import mil.nga.giat.geowave.core.store.config.ConfigUtils;
-import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputFormat;
-
 import org.apache.avro.mapreduce.AvroJob;
 import org.apache.avro.mapreduce.AvroKeyInputFormat;
 import org.apache.hadoop.conf.Configuration;
@@ -24,6 +11,19 @@ import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.util.Tool;
+
+import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.index.ByteArrayUtils;
+import mil.nga.giat.geowave.core.index.Persistable;
+import mil.nga.giat.geowave.core.index.PersistenceUtils;
+import mil.nga.giat.geowave.core.ingest.DataAdapterProvider;
+import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
+import mil.nga.giat.geowave.core.store.config.ConfigUtils;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOptions;
+import mil.nga.giat.geowave.core.store.operations.remote.options.VisibilityOptions;
+import mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputFormat;
 
 /**
  * This class can be sub-classed to run map-reduce jobs within the ingest
@@ -34,7 +34,7 @@ import org.apache.hadoop.util.Tool;
  *            map-reduce job configuration and used by the mapper and/or reducer
  *            to ingest data
  */
-abstract public class AbstractMapReduceIngest<T extends Persistable & DataAdapterProvider> extends
+abstract public class AbstractMapReduceIngest<T extends Persistable & DataAdapterProvider<?>> extends
 		Configured implements
 		Tool
 {
@@ -42,21 +42,25 @@ abstract public class AbstractMapReduceIngest<T extends Persistable & DataAdapte
 	public static final String GLOBAL_VISIBILITY_KEY = "GLOBAL_VISIBILITY";
 	public static final String PRIMARY_INDEX_IDS_KEY = "PRIMARY_INDEX_IDS";
 	private static String JOB_NAME = "%s ingest from %s to namespace %s (%s)";
-	protected final DataStoreCommandLineOptions dataStoreOptions;
-	protected final IngestCommandLineOptions ingestOptions;
+	protected final DataStorePluginOptions dataStoreOptions;
+	protected final List<IndexPluginOptions> indexOptions;
+	protected final VisibilityOptions ingestOptions;
 	protected final Path inputFile;
 	protected final String typeName;
-	protected final IngestFromHdfsPlugin parentPlugin;
+	protected final IngestFromHdfsPlugin<?, ?> parentPlugin;
 	protected final T ingestPlugin;
 
 	public AbstractMapReduceIngest(
-			final DataStoreCommandLineOptions dataStoreOptions,
-			final IngestCommandLineOptions ingestOptions,
+			final DataStorePluginOptions dataStoreOptions,
+			final List<IndexPluginOptions> indexOptions,
+			final VisibilityOptions ingestOptions,
 			final Path inputFile,
 			final String typeName,
-			final IngestFromHdfsPlugin parentPlugin,
+			final IngestFromHdfsPlugin<?, ?> parentPlugin,
 			final T ingestPlugin ) {
 		this.dataStoreOptions = dataStoreOptions;
+		this.indexOptions = indexOptions;
+		;
 		this.ingestOptions = ingestOptions;
 		this.inputFile = inputFile;
 		this.typeName = typeName;
@@ -69,7 +73,7 @@ abstract public class AbstractMapReduceIngest<T extends Persistable & DataAdapte
 				JOB_NAME,
 				typeName,
 				inputFile.toString(),
-				dataStoreOptions.getNamespace(),
+				dataStoreOptions.getGeowaveNamespace(),
 				getIngestDescription());
 	}
 
@@ -106,11 +110,8 @@ abstract public class AbstractMapReduceIngest<T extends Persistable & DataAdapte
 				conf,
 				getJobName());
 		final StringBuilder indexIds = new StringBuilder();
-		for (final String dim : ingestOptions.getDimensionalityTypes()) {
-			final PrimaryIndex primaryIndex = IngestUtils.getIndex(
-					ingestPlugin,
-					args,
-					dim);
+		for (IndexPluginOptions indexOption : indexOptions) {
+			final PrimaryIndex primaryIndex = indexOption.createPrimaryIndex();
 			if (primaryIndex != null) {
 				// add index
 				GeoWaveOutputFormat.addIndex(
@@ -145,15 +146,10 @@ abstract public class AbstractMapReduceIngest<T extends Persistable & DataAdapte
 		// set data store info
 		GeoWaveOutputFormat.setDataStoreName(
 				job.getConfiguration(),
-				dataStoreOptions.getFactory().getName());
+				dataStoreOptions.getFactoryFamily().getDataStoreFactory().getName());
 		GeoWaveOutputFormat.setStoreConfigOptions(
 				job.getConfiguration(),
-				ConfigUtils.valuesToStrings(
-						dataStoreOptions.getConfigOptions(),
-						dataStoreOptions.getFactory().getOptions()));
-		GeoWaveOutputFormat.setGeoWaveNamespace(
-				job.getConfiguration(),
-				dataStoreOptions.getNamespace());
+				ConfigUtils.populateListFromOptions(dataStoreOptions.getFactoryOptions()));
 		final WritableDataAdapter<?>[] dataAdapters = ingestPlugin.getDataAdapters(ingestOptions.getVisibility());
 		for (final WritableDataAdapter<?> dataAdapter : dataAdapters) {
 			GeoWaveOutputFormat.addDataAdapter(

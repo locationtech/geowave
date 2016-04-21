@@ -3,6 +3,7 @@ package mil.nga.giat.geowave.format.geolife;
 import mil.nga.giat.geowave.adapter.vector.ingest.AbstractSimpleFeatureIngestFormat;
 import mil.nga.giat.geowave.adapter.vector.ingest.AbstractSimpleFeatureIngestPlugin;
 import mil.nga.giat.geowave.core.ingest.avro.WholeFile;
+import mil.nga.giat.geowave.core.ingest.spi.IngestFormatOptionProvider;
 
 /**
  * This represents an ingest format plugin provider for GeoLife data. It will
@@ -14,7 +15,8 @@ public class GeoLifeIngestFormat extends
 {
 
 	@Override
-	protected AbstractSimpleFeatureIngestPlugin<WholeFile> newPluginInstance() {
+	protected AbstractSimpleFeatureIngestPlugin<WholeFile> newPluginInstance(
+			IngestFormatOptionProvider options ) {
 		return new GeoLifeIngestPlugin();
 	}
 

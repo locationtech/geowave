@@ -25,7 +25,6 @@ import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
-import mil.nga.giat.geowave.core.store.config.ConfigUtils;
 import mil.nga.giat.geowave.core.store.index.Index;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
@@ -49,20 +48,15 @@ public class GeoWaveOutputFormat extends
 			throws IOException,
 			InterruptedException {
 		try {
-			final Map<String, Object> configOptions = ConfigUtils.valuesFromStrings(getStoreConfigOptions(context));
-			final String namespace = getGeoWaveNamespace(context);
-			final AdapterStore persistentAdapterStore = GeoWaveStoreFinder.createAdapterStore(
-					configOptions,
-					namespace);
+			final Map<String, String> configOptions = getStoreConfigOptions(context);
+			final AdapterStore persistentAdapterStore = GeoWaveStoreFinder.createAdapterStore(configOptions);
 			final DataAdapter<?>[] adapters = JobContextAdapterStore.getDataAdapters(context);
 			for (final DataAdapter<?> a : adapters) {
 				if (!persistentAdapterStore.adapterExists(a.getAdapterId())) {
 					persistentAdapterStore.addAdapter(a);
 				}
 			}
-			final IndexStore persistentIndexStore = GeoWaveStoreFinder.createIndexStore(
-					configOptions,
-					namespace);
+			final IndexStore persistentIndexStore = GeoWaveStoreFinder.createIndexStore(configOptions);
 			final Index[] indices = JobContextIndexStore.getIndices(context);
 			for (final Index i : indices) {
 				if (!persistentIndexStore.indexExists(i.getId())) {
@@ -75,9 +69,7 @@ public class GeoWaveOutputFormat extends
 			final IndexStore jobContextIndexStore = new JobContextIndexStore(
 					context,
 					persistentIndexStore);
-			final DataStore dataStore = GeoWaveStoreFinder.createDataStore(
-					configOptions,
-					namespace);
+			final DataStore dataStore = GeoWaveStoreFinder.createDataStore(configOptions);
 			return new GeoWaveRecordWriter(
 					context,
 					dataStore,
@@ -126,15 +118,6 @@ public class GeoWaveOutputFormat extends
 				dataStoreName);
 	}
 
-	public static void setGeoWaveNamespace(
-			final Configuration config,
-			final String namespace ) {
-		GeoWaveConfiguratorBase.setGeoWaveNamespace(
-				CLASS,
-				config,
-				namespace);
-	}
-
 	public static void setStoreConfigOptions(
 			final Configuration config,
 			final Map<String, String> storeConfigOptions ) {
@@ -170,13 +153,6 @@ public class GeoWaveOutputFormat extends
 	protected static AdapterStore getJobContextAdapterStore(
 			final JobContext context ) {
 		return GeoWaveConfiguratorBase.getJobContextAdapterStore(
-				CLASS,
-				context);
-	}
-
-	public static String getGeoWaveNamespace(
-			final JobContext context ) {
-		return GeoWaveConfiguratorBase.getGeoWaveNamespace(
 				CLASS,
 				context);
 	}
@@ -223,36 +199,26 @@ public class GeoWaveOutputFormat extends
 			InterruptedException {
 		// attempt to get each of the GeoWave stores from the job context
 		try {
-			final String namespace = getGeoWaveNamespace(context);
-
-			final Map<String, Object> configOptions = ConfigUtils.valuesFromStrings(getStoreConfigOptions(context));
-			if (GeoWaveStoreFinder.createDataStore(
-					configOptions,
-					namespace) == null) {
+			final Map<String, String> configOptions = getStoreConfigOptions(context);
+			if (GeoWaveStoreFinder.createDataStore(configOptions) == null) {
 				final String msg = "Unable to find GeoWave data store";
 				LOGGER.warn(msg);
 				throw new IOException(
 						msg);
 			}
-			if (GeoWaveStoreFinder.createIndexStore(
-					configOptions,
-					namespace) == null) {
+			if (GeoWaveStoreFinder.createIndexStore(configOptions) == null) {
 				final String msg = "Unable to find GeoWave index store";
 				LOGGER.warn(msg);
 				throw new IOException(
 						msg);
 			}
-			if (GeoWaveStoreFinder.createAdapterStore(
-					configOptions,
-					namespace) == null) {
+			if (GeoWaveStoreFinder.createAdapterStore(configOptions) == null) {
 				final String msg = "Unable to find GeoWave adapter store";
 				LOGGER.warn(msg);
 				throw new IOException(
 						msg);
 			}
-			if (GeoWaveStoreFinder.createDataStatisticsStore(
-					configOptions,
-					namespace) == null) {
+			if (GeoWaveStoreFinder.createDataStatisticsStore(configOptions) == null) {
 				final String msg = "Unable to find GeoWave data statistics store";
 				LOGGER.warn(msg);
 				throw new IOException(

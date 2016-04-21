@@ -1,6 +1,7 @@
 package mil.nga.giat.geowave.format.gpx;
 
 import mil.nga.giat.geowave.adapter.vector.ingest.AbstractSimpleFeatureIngestPlugin;
+import mil.nga.giat.geowave.core.ingest.spi.IngestFormatOptionProvider;
 import mil.nga.giat.geowave.adapter.vector.ingest.AbstractSimpleFeatureIngestFormat;
 
 /**
@@ -12,7 +13,8 @@ public class GpxIngestFormat extends
 		AbstractSimpleFeatureIngestFormat<GpxTrack>
 {
 	@Override
-	protected AbstractSimpleFeatureIngestPlugin<GpxTrack> newPluginInstance() {
+	protected AbstractSimpleFeatureIngestPlugin<GpxTrack> newPluginInstance(
+			IngestFormatOptionProvider options ) {
 		return new GpxIngestPlugin();
 	}
 

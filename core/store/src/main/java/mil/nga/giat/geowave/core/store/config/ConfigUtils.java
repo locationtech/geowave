@@ -3,9 +3,11 @@ package mil.nga.giat.geowave.core.store.config;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 
-import mil.nga.giat.geowave.core.store.GeoWaveStoreFinder;
+import mil.nga.giat.geowave.core.cli.prefix.JCommanderPrefixTranslator;
+import mil.nga.giat.geowave.core.cli.prefix.JCommanderPropertiesTransformer;
+import mil.nga.giat.geowave.core.cli.prefix.JCommanderTranslationMap;
+import mil.nga.giat.geowave.core.cli.prefix.TranslationEntry;
 
 public class ConfigUtils
 {
@@ -47,56 +49,62 @@ public class ConfigUtils
 				"Options include: ");
 	}
 
-	@SuppressWarnings("unchecked")
-	public static Map<String, String> valuesToStrings(
-			final Map<String, Object> objectValues,
-			final AbstractConfigOption<?>[] configOptions ) {
-		final Map<String, String> stringValues = new HashMap<String, String>(
-				objectValues.size());
-		final Map<String, AbstractConfigOption<Object>> configOptionMap = new HashMap<String, AbstractConfigOption<Object>>();
-		// first get a map of optionname to option
-		for (final AbstractConfigOption<?> option : configOptions) {
-			configOptionMap.put(
-					option.getName(),
-					(AbstractConfigOption<Object>) option);
-		}
-		for (final Entry<String, Object> objectValue : objectValues.entrySet()) {
-			final AbstractConfigOption<Object> option = configOptionMap.get(objectValue.getKey());
-			stringValues.put(
-					objectValue.getKey(),
-					option.valueToString(objectValue.getValue()));
-		}
-		return stringValues;
-	}
-
-	public static Map<String, Object> valuesFromStrings(
-			final Map<String, String> stringValues ) {
-		return valuesFromStrings(
-				stringValues,
-				GeoWaveStoreFinder.getAllOptions());
-	}
-
-	public static Map<String, Object> valuesFromStrings(
-			final Map<String, String> stringValues,
-			final AbstractConfigOption<?>[] configOptions ) {
-		final Map<String, Object> objectValues = new HashMap<String, Object>(
-				stringValues.size());
-		final Map<String, AbstractConfigOption<?>> configOptionMap = new HashMap<String, AbstractConfigOption<?>>();
-		// first get a map of optionname to option
-		for (final AbstractConfigOption<?> option : configOptions) {
-			configOptionMap.put(
-					option.getName(),
-					option);
-		}
-		for (final Entry<String, String> stringValue : stringValues.entrySet()) {
-			final AbstractConfigOption<?> option = configOptionMap.get(stringValue.getKey());
-			if (option != null) {
-				objectValues.put(
-						stringValue.getKey(),
-						option.valueFromString(stringValue.getValue()));
+	/**
+	 * This method will use the parameter descriptions from JCommander to
+	 * create/populate an AbstractConfigOptions map.
+	 */
+	public static ConfigOption[] createConfigOptionsFromJCommander(
+			Object createOptionsInstance ) {
+		ConfigOption[] opts = null;
+		if (createOptionsInstance != null) {
+			JCommanderPrefixTranslator translator = new JCommanderPrefixTranslator();
+			translator.addObject(createOptionsInstance);
+			JCommanderTranslationMap map = translator.translate();
+			Collection<TranslationEntry> entries = map.getEntries().values();
+			opts = new ConfigOption[entries.size()];
+			int optCounter = 0;
+			for (TranslationEntry entry : entries) {
+				ConfigOption opt = new ConfigOption(
+						entry.getAsPropertyName(),
+						entry.getDescription(),
+						!entry.isRequired());
+				opt.setPassword(entry.isPassword());
+				opts[optCounter++] = opt;
 			}
 		}
-		return objectValues;
+		else {
+			opts = new ConfigOption[0];
+		}
+		return opts;
+	}
 
+	/**
+	 * Take the given options and populate the given options list. This is
+	 * JCommander specific.
+	 */
+	public static <T> T populateOptionsFromList(
+			T optionsObject,
+			Map<String, String> optionList ) {
+		if (optionsObject != null) {
+			JCommanderPropertiesTransformer translator = new JCommanderPropertiesTransformer();
+			translator.addObject(optionsObject);
+			translator.transformFromMap(optionList);
+		}
+		return optionsObject;
+	}
+
+	/**
+	 * Take the given options and populate the given options list. This is
+	 * JCommander specific.
+	 */
+	public static Map<String, String> populateListFromOptions(
+			Object optionsObject ) {
+		Map<String, String> mapOptions = new HashMap<String, String>();
+		if (optionsObject != null) {
+			JCommanderPropertiesTransformer translator = new JCommanderPropertiesTransformer();
+			translator.addObject(optionsObject);
+			translator.transformToMap(mapOptions);
+		}
+		return mapOptions;
 	}
 }

@@ -1,7 +1,6 @@
 package mil.nga.giat.geowave.analytic;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -10,21 +9,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
-import mil.nga.giat.geowave.analytic.extract.EmptyDimensionExtractor;
-import mil.nga.giat.geowave.analytic.param.BasicParameterHelper;
-import mil.nga.giat.geowave.analytic.param.ExtractParameters;
-import mil.nga.giat.geowave.analytic.param.InputParameters.Input;
-import mil.nga.giat.geowave.analytic.param.ParameterEnum;
-import mil.nga.giat.geowave.analytic.param.ParameterHelper;
-import mil.nga.giat.geowave.core.cli.CommandLineResult;
-import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
-import mil.nga.giat.geowave.core.store.query.DistributableQuery;
-
-import org.apache.commons.cli.BasicParser;
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.Option;
-import org.apache.commons.cli.Options;
-import org.apache.commons.cli.ParseException;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
@@ -34,6 +18,15 @@ import org.junit.Test;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
+
+import mil.nga.giat.geowave.analytic.extract.EmptyDimensionExtractor;
+import mil.nga.giat.geowave.analytic.param.BasicParameterHelper;
+import mil.nga.giat.geowave.analytic.param.ExtractParameters;
+import mil.nga.giat.geowave.analytic.param.InputParameters.Input;
+import mil.nga.giat.geowave.analytic.param.ParameterEnum;
+import mil.nga.giat.geowave.analytic.param.ParameterHelper;
+import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
+import mil.nga.giat.geowave.core.store.query.DistributableQuery;
 
 public class PropertyManagementTest
 {
@@ -175,20 +168,6 @@ public class PropertyManagementTest
 				@Override
 				public Class<NonSerializableExample> getBaseClass() {
 					return NonSerializableExample.class;
-				}
-
-				@Override
-				public Option[] getOptions() {
-					return null;
-				}
-
-				@Override
-				public CommandLineResult<NonSerializableExample> getValue(
-						final Options allOptions,
-						final CommandLine commandline )
-						throws ParseException {
-					return new CommandLineResult<NonSerializableExample>(
-							null);
 				}
 
 				@Override
@@ -341,53 +320,6 @@ public class PropertyManagementTest
 		public ParameterHelper getHelper() {
 			return helper;
 		}
-	}
-
-	@Test
-	public void testCommandLine()
-			throws ParseException {
-		final PropertyManagement pm = new PropertyManagement();
-		// PropertyManagement.fillOptions(
-		// optionSet,
-		final ParameterEnum<?>[] params = new ParameterEnum<?>[] {
-			ExtractParameters.Extract.ADAPTER_ID,
-			MyLocalBoolEnum.BOOLEAN_ARG1,
-			MyLocalBoolEnum.BOOLEAN_ARG2
-		};
-
-		final Options options = new Options();
-		for (final ParameterEnum<?> param : params) {
-			final Option[] opts = param.getHelper().getOptions();
-			for (final Option opt : opts) {
-				options.addOption(opt);
-			}
-		}
-		final BasicParser parser = new BasicParser();
-		final CommandLine commandLine = parser.parse(
-				options,
-				new String[] {
-					"-eit",
-					"y",
-					"-rd"
-				});
-
-		for (final ParameterEnum<?> param : params) {
-			((ParameterEnum<Object>) param).getHelper().setValue(
-					pm,
-					param.getHelper().getValue(
-							options,
-							commandLine).getResult());
-		}
-
-		assertTrue(pm.getPropertyAsBoolean(
-				MyLocalBoolEnum.BOOLEAN_ARG2,
-				false));
-		assertFalse(pm.getPropertyAsBoolean(
-				MyLocalBoolEnum.BOOLEAN_ARG1,
-				false));
-		assertEquals(
-				"y",
-				pm.getPropertyAsString(ExtractParameters.Extract.ADAPTER_ID));
 	}
 
 	@Test

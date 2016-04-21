@@ -5,11 +5,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Properties;
 
 import javax.servlet.ServletConfig;
@@ -23,22 +22,26 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import mil.nga.giat.geowave.core.cli.GenericStoreCommandLineOptions;
-import mil.nga.giat.geowave.core.cli.GeoWaveMain;
-import mil.nga.giat.geowave.service.IngestService;
-import mil.nga.giat.geowave.service.ServiceUtils;
-
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 
 import com.google.common.io.Files;
+
+import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
+import mil.nga.giat.geowave.core.ingest.operations.LocalToGeowaveCommand;
+import mil.nga.giat.geowave.core.ingest.operations.LocalToMapReduceToGeowaveCommand;
+import mil.nga.giat.geowave.core.ingest.operations.options.IngestFormatPluginOptions;
+import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOptions;
+import mil.nga.giat.geowave.service.IngestService;
+import mil.nga.giat.geowave.service.ServiceUtils;
 
 @Produces(MediaType.APPLICATION_JSON)
 @Path("/ingest")
 public class IngestServiceImpl implements
 		IngestService
 {
-	private final Map<String, String> additionalParams;
+	private final Properties serviceProperties;
 	private final String hdfs;
 	private final String hdfsBase;
 	private final String jobTracker;
@@ -60,20 +63,7 @@ public class IngestServiceImpl implements
 		jobTracker = ServiceUtils.getProperty(
 				props,
 				"jobTracker");
-		additionalParams = new HashMap<String, String>();
-		// TODO what about getting values from system properties?
-		for (final Entry<Object, Object> e : props.entrySet()) {
-			if (!(e.getKey().equals(
-					"hdfs") || e.getKey().equals(
-					"hdfsBase") || e.getKey().equals(
-					"jobTracker") || e.getKey().toString().startsWith(
-					"geoserver."))) {
-				additionalParams.put(
-						e.getKey().toString(),
-						e.getValue().toString());
-
-			}
-		}
+		serviceProperties = props;
 	}
 
 	@Override
@@ -120,8 +110,9 @@ public class IngestServiceImpl implements
 					field.getValueAs(InputStream.class));
 		}
 
-		final String namespace = multiPart.getField(
-				"namespace").getValue();
+		final String storeName = multiPart.getField(
+				"store").getValue();
+
 		final String visibility = (multiPart.getField("visibility") != null) ? multiPart.getField(
 				"visibility").getValue() : null;
 		final String ingestType = (multiPart.getField("ingestFormat") != null) ? multiPart.getField(
@@ -131,11 +122,11 @@ public class IngestServiceImpl implements
 		final boolean clear = (multiPart.getField("clear") != null) ? Boolean.parseBoolean(multiPart.getField(
 				"clear").getValue()) : false;
 
-		if ((namespace == null) || namespace.isEmpty()) {
+		if ((storeName == null) || storeName.isEmpty()) {
 			throw new WebApplicationException(
 					Response.status(
 							Status.BAD_REQUEST).entity(
-							"Ingest Failed - Missing Namespace").build());
+							"Ingest Failed - Missing Store Name").build());
 		}
 
 		final File baseDir = Files.createTempDir();
@@ -174,7 +165,7 @@ public class IngestServiceImpl implements
 				ingestMethod,
 				ingestType,
 				dimType,
-				namespace,
+				storeName,
 				visibility,
 				clear);
 	}
@@ -184,47 +175,63 @@ public class IngestServiceImpl implements
 			final String ingestMethod,
 			final String ingestType,
 			final String dimType,
-			final String namespace,
+			final String storeName,
 			final String visibility,
 			final boolean clear ) {
 
-		final ArrayList<String> args = new ArrayList<String>();
-		args.add("-" + ingestMethod);
-		args.add("-f");
-		args.add(ingestType);
-		args.add("-b");
-		args.add(baseDir.getAbsolutePath());
-		args.add("-" + GenericStoreCommandLineOptions.NAMESPACE_OPTION_KEY);
-		args.add(namespace);
-		args.add("-dim");
-		args.add(dimType);
+		// Ingest Formats
+		IngestFormatPluginOptions ingestFormatOptions = new IngestFormatPluginOptions();
+		ingestFormatOptions.selectPlugin(ingestType);
 
-		if ((visibility != null) && !visibility.isEmpty()) {
-			args.add("-v");
-			args.add(visibility);
-		}
+		// Indexes
+		IndexPluginOptions indexOption = new IndexPluginOptions();
+		indexOption.selectPlugin(dimType);
 
-		if (clear) {
-			args.add("-c");
-		}
-
-		if (ingestMethod.equals("hdfsingest")) {
-			args.add("-hdfs");
-			args.add(hdfs);
-			args.add("-hdfsbase");
-			args.add(hdfsBase);
-			args.add("-jobtracker");
-			args.add(jobTracker);
-		}
-		for (final Entry<String, String> e : additionalParams.entrySet()) {
-			args.add("-" + e.getKey());
-			args.add(e.getValue());
+		// Store
+		String namespace = DataStorePluginOptions.getStoreNamespace(storeName);
+		DataStorePluginOptions dataStorePlugin = new DataStorePluginOptions();
+		if (!dataStorePlugin.load(
+				serviceProperties,
+				namespace)) {
+			throw new WebApplicationException(
+					Response.status(
+							Status.BAD_REQUEST).entity(
+							"Ingest Failed - Invalid Store").build());
 		}
 
-		final int retVal = GeoWaveMain.run(args.toArray(new String[] {}));
-		if (retVal == 0) {
-			return Response.ok().build();
+		switch (ingestMethod) {
+			default:
+			case "localingest":
+				LocalToGeowaveCommand localIngester = new LocalToGeowaveCommand();
+				localIngester.setPluginFormats(ingestFormatOptions);
+				localIngester.setInputIndexOptions(Arrays.asList(indexOption));
+				localIngester.setInputStoreOptions(dataStorePlugin);
+				localIngester.getIngestOptions().setVisibility(
+						visibility);
+				localIngester.setParameters(
+						baseDir.getAbsolutePath(),
+						null,
+						null);
+				localIngester.execute(new ManualOperationParams());
+				return Response.ok().build();
+
+			case "hdfsingest":
+				LocalToMapReduceToGeowaveCommand hdfsIngester = new LocalToMapReduceToGeowaveCommand();
+				hdfsIngester.setPluginFormats(ingestFormatOptions);
+				hdfsIngester.setInputIndexOptions(Arrays.asList(indexOption));
+				hdfsIngester.setInputStoreOptions(dataStorePlugin);
+				hdfsIngester.getIngestOptions().setVisibility(
+						visibility);
+				hdfsIngester.setParameters(
+						baseDir.getAbsolutePath(),
+						hdfs,
+						hdfsBase,
+						null,
+						null);
+				hdfsIngester.getMapReduceOptions().setJobTrackerHostPort(
+						jobTracker);
+				hdfsIngester.execute(new ManualOperationParams());
+				return Response.ok().build();
 		}
-		return Response.serverError().build();
 	}
 }

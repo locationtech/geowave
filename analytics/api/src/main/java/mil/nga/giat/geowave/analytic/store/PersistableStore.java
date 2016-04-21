@@ -2,49 +2,44 @@ package mil.nga.giat.geowave.analytic.store;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
+import java.util.Properties;
 
-import mil.nga.giat.geowave.core.cli.GenericStoreCommandLineOptions;
 import mil.nga.giat.geowave.core.index.Persistable;
 import mil.nga.giat.geowave.core.index.StringUtils;
-import mil.nga.giat.geowave.core.store.GenericStoreFactory;
-import mil.nga.giat.geowave.core.store.config.ConfigUtils;
+import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-abstract public class PersistableStore<T> implements
+public class PersistableStore implements
 		Persistable
 {
-	final static Logger LOGGER = LoggerFactory.getLogger(PersistableStore.class);
-	protected GenericStoreCommandLineOptions<T> cliOptions;
+	// Using this here instead of raw DataStorePluginOptions, so we can
+	// use the convenient methods
+	private DataStorePluginOptions pluginOptions;
 
 	protected PersistableStore() {}
 
 	public PersistableStore(
-			final GenericStoreCommandLineOptions<T> cliOptions ) {
-		this.cliOptions = cliOptions;
+			final DataStorePluginOptions options ) {
+		pluginOptions = options;
 	}
 
-	public GenericStoreCommandLineOptions<T> getCliOptions() {
-		return cliOptions;
+	public DataStorePluginOptions getDataStoreOptions() {
+		return pluginOptions;
 	}
 
 	@Override
 	public byte[] toBinary() {
-		final GenericStoreFactory<T> factory = cliOptions.getFactory();
-		final Map<String, String> strOptions = ConfigUtils.valuesToStrings(
-				cliOptions.getConfigOptions(),
-				factory.getOptions());
+		// Persist
+		Properties strOptions = new Properties();
+		pluginOptions.save(
+				strOptions,
+				null);
 		final List<byte[]> strOptionsBinary = new ArrayList<byte[]>(
 				strOptions.size());
 		int optionsLength = 4;// for the size of the config options
-		for (final Entry<String, String> e : strOptions.entrySet()) {
-			final byte[] keyBinary = StringUtils.stringToBinary(e.getKey());
-			final byte[] valueBinary = StringUtils.stringToBinary(e.getValue());
+		for (final String key : strOptions.stringPropertyNames()) {
+			final byte[] keyBinary = StringUtils.stringToBinary(key);
+			final byte[] valueBinary = StringUtils.stringToBinary(strOptions.getProperty(key));
 			final int entryLength = keyBinary.length + valueBinary.length + 8;
 			final ByteBuffer buf = ByteBuffer.allocate(entryLength);
 			buf.putInt(keyBinary.length);
@@ -54,19 +49,12 @@ abstract public class PersistableStore<T> implements
 			strOptionsBinary.add(buf.array());
 			optionsLength += entryLength;
 		}
-		final byte[] namespace = StringUtils.stringToBinary(cliOptions.getNamespace());
-		final byte[] factoryName = StringUtils.stringToBinary(factory.getName());
-		optionsLength += (8 + namespace.length + factoryName.length);
+		optionsLength += (8);
 		final ByteBuffer buf = ByteBuffer.allocate(optionsLength);
-		buf.putInt(namespace.length);
-		buf.put(namespace);
-		buf.putInt(factoryName.length);
-		buf.put(factoryName);
 		buf.putInt(strOptionsBinary.size());
 		for (final byte[] strOption : strOptionsBinary) {
 			buf.put(strOption);
 		}
-
 		return buf.array();
 	}
 
@@ -74,13 +62,8 @@ abstract public class PersistableStore<T> implements
 	public void fromBinary(
 			final byte[] bytes ) {
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
-		final byte[] namespaceBinary = new byte[buf.getInt()];
-		buf.get(namespaceBinary);
-		final byte[] factoryNameBinary = new byte[buf.getInt()];
-		buf.get(factoryNameBinary);
 		final int configOptionLength = buf.getInt();
-		final Map<String, String> configOptions = new HashMap<String, String>(
-				configOptionLength);
+		final Properties configOptions = new Properties();
 		for (int i = 0; i < configOptionLength; i++) {
 			final int keyLength = buf.getInt();
 			final byte[] keyBinary = new byte[keyLength];
@@ -92,16 +75,9 @@ abstract public class PersistableStore<T> implements
 					StringUtils.stringFromBinary(keyBinary),
 					StringUtils.stringFromBinary(valueBinary));
 		}
-		final String factoryName = StringUtils.stringFromBinary(factoryNameBinary);
-		final String namespace = StringUtils.stringFromBinary(namespaceBinary);
-		cliOptions = getCLIOptions(
+		pluginOptions = new DataStorePluginOptions();
+		pluginOptions.load(
 				configOptions,
-				namespace,
-				factoryName);
+				null);
 	}
-
-	abstract protected GenericStoreCommandLineOptions<T> getCLIOptions(
-			Map<String, String> configOptions,
-			String namespace,
-			String factoryName );
 }

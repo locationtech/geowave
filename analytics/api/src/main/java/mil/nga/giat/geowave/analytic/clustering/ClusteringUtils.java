@@ -4,6 +4,12 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.geotools.feature.type.BasicFeatureTypes;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.vividsolutions.jts.geom.Polygon;
+
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import mil.nga.giat.geowave.analytic.AnalyticFeature;
 import mil.nga.giat.geowave.analytic.PropertyManagement;
@@ -11,8 +17,7 @@ import mil.nga.giat.geowave.analytic.extract.DimensionExtractor;
 import mil.nga.giat.geowave.analytic.param.CentroidParameters;
 import mil.nga.giat.geowave.analytic.param.CommonParameters;
 import mil.nga.giat.geowave.analytic.param.StoreParameters;
-import mil.nga.giat.geowave.analytic.store.PersistableAdapterStore;
-import mil.nga.giat.geowave.analytic.store.PersistableIndexStore;
+import mil.nga.giat.geowave.analytic.store.PersistableStore;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
@@ -23,12 +28,6 @@ import mil.nga.giat.geowave.core.store.index.Index;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.memory.DataStoreUtils;
-
-import org.geotools.feature.type.BasicFeatureTypes;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.vividsolutions.jts.geom.Polygon;
 
 public class ClusteringUtils
 {
@@ -65,8 +64,11 @@ public class ClusteringUtils
 	public static DataAdapter[] getAdapters(
 			final PropertyManagement propertyManagement )
 			throws IOException {
-		final AdapterStore adapterStore = ((PersistableAdapterStore) StoreParameters.StoreParam.ADAPTER_STORE.getHelper().getValue(
-				propertyManagement)).getCliOptions().createStore();
+
+		PersistableStore store = (PersistableStore) StoreParameters.StoreParam.STORE.getHelper().getValue(
+				propertyManagement);
+
+		final AdapterStore adapterStore = store.getDataStoreOptions().createAdapterStore();
 
 		final mil.nga.giat.geowave.core.store.CloseableIterator<DataAdapter<?>> it = adapterStore.getAdapters();
 		final List<DataAdapter> adapters = new LinkedList<DataAdapter>();
@@ -82,8 +84,10 @@ public class ClusteringUtils
 	public static PrimaryIndex[] getIndices(
 			final PropertyManagement propertyManagement ) {
 
-		final IndexStore indexStore = ((PersistableIndexStore) StoreParameters.StoreParam.INDEX_STORE.getHelper().getValue(
-				propertyManagement)).getCliOptions().createStore();
+		PersistableStore store = (PersistableStore) StoreParameters.StoreParam.STORE.getHelper().getValue(
+				propertyManagement);
+
+		final IndexStore indexStore = store.getDataStoreOptions().createIndexStore();
 
 		final mil.nga.giat.geowave.core.store.CloseableIterator<Index<?, ?>> it = indexStore.getIndices();
 		final List<PrimaryIndex> indices = new LinkedList<PrimaryIndex>();
@@ -122,8 +126,10 @@ public class ClusteringUtils
 			final PropertyManagement propertyManagement )
 			throws Exception {
 
-		final IndexStore indexStore = ((PersistableIndexStore) StoreParameters.StoreParam.INDEX_STORE.getHelper().getValue(
-				propertyManagement)).getCliOptions().createStore();
+		PersistableStore store = (PersistableStore) StoreParameters.StoreParam.STORE.getHelper().getValue(
+				propertyManagement);
+
+		final IndexStore indexStore = store.getDataStoreOptions().createIndexStore();
 		return (PrimaryIndex) indexStore.getIndex(new ByteArrayId(
 				propertyManagement.getPropertyAsString(CentroidParameters.Centroid.INDEX_ID)));
 	}
@@ -141,8 +147,8 @@ public class ClusteringUtils
 				propertyManagement.getPropertyAsString(
 						CentroidParameters.Centroid.DATA_NAMESPACE_URI,
 						BasicFeatureTypes.DEFAULT_NAMESPACE),
-				((PersistableAdapterStore) StoreParameters.StoreParam.ADAPTER_STORE.getHelper().getValue(
-						propertyManagement)).getCliOptions().createStore(),
+				((PersistableStore) StoreParameters.StoreParam.STORE.getHelper().getValue(
+						propertyManagement)).getDataStoreOptions().createAdapterStore(),
 				dimensionExtractorClass.newInstance().getDimensionNames());
 	}
 }

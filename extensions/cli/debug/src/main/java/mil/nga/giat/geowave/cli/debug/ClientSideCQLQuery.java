@@ -3,6 +3,7 @@ package mil.nga.giat.geowave.cli.debug;
 import java.io.IOException;
 
 import mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
+import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.DataStore;
@@ -16,6 +17,10 @@ import org.geotools.filter.text.ecql.ECQL;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.filter.Filter;
 
+import com.beust.jcommander.Parameters;
+
+@GeowaveOperation(name = "clientCql", parentOperation = DebugSection.class)
+@Parameters(commandDescription = "cql client-side, primarily useful for consistency checking")
 public class ClientSideCQLQuery extends
 		AbstractGeoWaveQuery
 {

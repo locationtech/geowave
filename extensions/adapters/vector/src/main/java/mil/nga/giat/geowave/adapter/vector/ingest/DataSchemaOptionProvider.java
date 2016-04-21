@@ -1,35 +1,14 @@
 package mil.nga.giat.geowave.adapter.vector.ingest;
 
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.Options;
+import com.beust.jcommander.Parameter;
 
 import mil.nga.giat.geowave.core.index.Persistable;
-import mil.nga.giat.geowave.core.ingest.IngestFormatOptionProvider;
 
 public class DataSchemaOptionProvider implements
-		IngestFormatOptionProvider,
 		Persistable
 {
-
+	@Parameter(names = "--extended", description = "A flag to indicate whether extended data format should be used")
 	private boolean includeSupplementalFields = false;
-	private final static String SUPPLEMENTAL_OPTION = "extended";
-
-	@Override
-	public void applyOptions(
-			final Options allOptions ) {
-		allOptions.addOption(
-				SUPPLEMENTAL_OPTION,
-				false,
-				"A flag to indicate whether extended data format should be used");
-	}
-
-	@Override
-	public void parseOptions(
-			final CommandLine commandLine ) {
-		if (commandLine.hasOption(SUPPLEMENTAL_OPTION)) {
-			includeSupplementalFields = true;
-		}
-	}
 
 	public boolean includeSupplementalFields() {
 		return includeSupplementalFields;

@@ -2,15 +2,6 @@ package mil.nga.giat.geowave.analytic.mapreduce.kde.compare;
 
 import java.io.IOException;
 
-import mil.nga.giat.geowave.adapter.raster.RasterUtils;
-import mil.nga.giat.geowave.analytic.mapreduce.kde.KDEJobRunner;
-import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
-import mil.nga.giat.geowave.core.store.config.ConfigUtils;
-import mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputFormat;
-import mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputKey;
-
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.Options;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
@@ -24,18 +15,67 @@ import org.apache.hadoop.mapreduce.lib.output.SequenceFileOutputFormat;
 import org.apache.hadoop.util.ToolRunner;
 import org.opengis.feature.simple.SimpleFeature;
 
+import mil.nga.giat.geowave.adapter.raster.RasterUtils;
+import mil.nga.giat.geowave.analytic.mapreduce.kde.KDECommandLineOptions;
+import mil.nga.giat.geowave.analytic.mapreduce.kde.KDEJobRunner;
+import mil.nga.giat.geowave.analytic.mapreduce.operations.KdeCommand;
+import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
+import mil.nga.giat.geowave.core.cli.parser.CommandLineOperationParams;
+import mil.nga.giat.geowave.core.cli.parser.OperationParser;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
+import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputFormat;
+import mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputKey;
+
 public class ComparisonStatsJobRunner extends
 		KDEJobRunner
 {
-	private String timeAttribute;
+	private final String timeAttribute;
+
+	public ComparisonStatsJobRunner(
+			ComparisonCommandLineOptions inputOptions,
+			KDECommandLineOptions kdeCommandLineOptions,
+			DataStorePluginOptions inputDataStoreOptions,
+			DataStorePluginOptions outputDataStoreOptions ) {
+		super(
+				kdeCommandLineOptions,
+				inputDataStoreOptions,
+				outputDataStoreOptions);
+		timeAttribute = inputOptions.getTimeAttribute();
+	}
 
 	public static void main(
 			final String[] args )
 			throws Exception {
+		ConfigOptions opts = new ConfigOptions();
+		ComparisonCommandLineOptions comparisonOptions = new ComparisonCommandLineOptions();
+
+		OperationParser parser = new OperationParser();
+		parser.addAdditionalObject(opts);
+		parser.addAdditionalObject(comparisonOptions);
+
+		KdeCommand kdeCommand = new KdeCommand();
+		CommandLineOperationParams params = parser.parse(
+				kdeCommand,
+				args);
+
+		// Load the params for config file.
+		opts.prepare(params);
+
+		// Don't care about output, but this will set the datastore options.
+		kdeCommand.createRunner(params);
+
+		ComparisonStatsJobRunner runner = new ComparisonStatsJobRunner(
+				comparisonOptions,
+				kdeCommand.getKdeOptions(),
+				kdeCommand.getInputStoreOptions(),
+				kdeCommand.getOutputStoreOptions());
+
 		final int res = ToolRunner.run(
 				new Configuration(),
-				new ComparisonStatsJobRunner(),
+				runner,
 				args);
+
 		System.exit(res);
 	}
 
@@ -56,12 +96,12 @@ public class ComparisonStatsJobRunner extends
 		final FileSystem fs = FileSystem.get(conf);
 		fs.delete(
 				new Path(
-						"/tmp/" + inputDataStoreOptions.getNamespace() + "_stats_" + kdeCommandLineOptions.getMinLevel() + "_" + kdeCommandLineOptions.getMaxLevel() + "_" + kdeCommandLineOptions.getCoverageName() + "/basic"),
+						"/tmp/" + inputDataStoreOptions.getGeowaveNamespace() + "_stats_" + kdeCommandLineOptions.getMinLevel() + "_" + kdeCommandLineOptions.getMaxLevel() + "_" + kdeCommandLineOptions.getCoverageName() + "/basic"),
 				true);
 		final Job combiner = new Job(
 				conf);
 		combiner.setJarByClass(this.getClass());
-		combiner.setJobName(inputDataStoreOptions.getNamespace() + "(" + kdeCommandLineOptions.getCoverageName() + ")" + " levels " + kdeCommandLineOptions.getMinLevel() + "-" + kdeCommandLineOptions.getMaxLevel() + " combining seasons");
+		combiner.setJobName(inputDataStoreOptions.getGeowaveNamespace() + "(" + kdeCommandLineOptions.getCoverageName() + ")" + " levels " + kdeCommandLineOptions.getMinLevel() + "-" + kdeCommandLineOptions.getMaxLevel() + " combining seasons");
 		combiner.setMapperClass(ComparisonCombiningStatsMapper.class);
 		combiner.setReducerClass(ComparisonCombiningStatsReducer.class);
 		combiner.setMapOutputKeyClass(LongWritable.class);
@@ -73,17 +113,17 @@ public class ComparisonStatsJobRunner extends
 		FileOutputFormat.setOutputPath(
 				combiner,
 				new Path(
-						"/tmp/" + inputDataStoreOptions.getNamespace() + "_stats_" + kdeCommandLineOptions.getMinLevel() + "_" + kdeCommandLineOptions.getMaxLevel() + "_" + kdeCommandLineOptions.getCoverageName() + "/combined_pct"));
+						"/tmp/" + inputDataStoreOptions.getGeowaveNamespace() + "_stats_" + kdeCommandLineOptions.getMinLevel() + "_" + kdeCommandLineOptions.getMaxLevel() + "_" + kdeCommandLineOptions.getCoverageName() + "/combined_pct"));
 
 		FileInputFormat.setInputPaths(
 				combiner,
 				new Path(
-						"/tmp/" + inputDataStoreOptions.getNamespace() + "_stats_" + kdeCommandLineOptions.getMinLevel() + "_" + kdeCommandLineOptions.getMaxLevel() + "_" + kdeCommandLineOptions.getCoverageName() + "/percentiles"));
+						"/tmp/" + inputDataStoreOptions.getGeowaveNamespace() + "_stats_" + kdeCommandLineOptions.getMinLevel() + "_" + kdeCommandLineOptions.getMaxLevel() + "_" + kdeCommandLineOptions.getCoverageName() + "/percentiles"));
 		if (combiner.waitForCompletion(true)) {
 
 			fs.delete(
 					new Path(
-							"/tmp/" + inputDataStoreOptions.getNamespace() + "_stats_" + kdeCommandLineOptions.getMinLevel() + "_" + kdeCommandLineOptions.getMaxLevel() + "_" + kdeCommandLineOptions.getCoverageName() + "/percentiles"),
+							"/tmp/" + inputDataStoreOptions.getGeowaveNamespace() + "_stats_" + kdeCommandLineOptions.getMinLevel() + "_" + kdeCommandLineOptions.getMaxLevel() + "_" + kdeCommandLineOptions.getCoverageName() + "/percentiles"),
 					true);
 			for (int l = kdeCommandLineOptions.getMinLevel(); l <= kdeCommandLineOptions.getMaxLevel(); l++) {
 				conf.setLong(
@@ -96,7 +136,7 @@ public class ComparisonStatsJobRunner extends
 			final Job ingester = new Job(
 					conf);
 			ingester.setJarByClass(this.getClass());
-			ingester.setJobName(inputDataStoreOptions.getNamespace() + "(" + kdeCommandLineOptions.getCoverageName() + ")" + " levels " + kdeCommandLineOptions.getMinLevel() + "-" + kdeCommandLineOptions + " Ingest");
+			ingester.setJobName(inputDataStoreOptions.getGeowaveNamespace() + "(" + kdeCommandLineOptions.getCoverageName() + ")" + " levels " + kdeCommandLineOptions.getMinLevel() + "-" + kdeCommandLineOptions + " Ingest");
 			ingester.setMapperClass(ComparisonIdentityMapper.class);
 			ingester.setPartitionerClass(ComparisonCellLevelPartitioner.class);
 			ingester.setReducerClass(ComparisonAccumuloStatsReducer.class);
@@ -111,18 +151,14 @@ public class ComparisonStatsJobRunner extends
 			FileInputFormat.setInputPaths(
 					ingester,
 					new Path(
-							"/tmp/" + inputDataStoreOptions.getNamespace() + "_stats_" + kdeCommandLineOptions.getMinLevel() + "_" + kdeCommandLineOptions.getMaxLevel() + "_" + kdeCommandLineOptions.getCoverageName() + "/combined_pct"));
+							"/tmp/" + inputDataStoreOptions.getGeowaveNamespace() + "_stats_" + kdeCommandLineOptions.getMinLevel() + "_" + kdeCommandLineOptions.getMaxLevel() + "_" + kdeCommandLineOptions.getCoverageName() + "/combined_pct"));
 			GeoWaveOutputFormat.setDataStoreName(
 					conf,
-					outputDataStoreOptions.getFactory().getName());
+					outputDataStoreOptions.getType());
 			GeoWaveOutputFormat.setStoreConfigOptions(
 					conf,
-					ConfigUtils.valuesToStrings(
-							outputDataStoreOptions.getConfigOptions(),
-							outputDataStoreOptions.getFactory().getOptions()));
-			GeoWaveOutputFormat.setGeoWaveNamespace(
-					conf,
-					outputDataStoreOptions.getNamespace());
+					outputDataStoreOptions.getFactoryOptionsAsMap());
+
 			setup(
 					ingester,
 					statsNamespace,
@@ -180,7 +216,7 @@ public class ComparisonStatsJobRunner extends
 
 	@Override
 	protected String getJob2Name() {
-		return inputDataStoreOptions.getNamespace() + "(" + kdeCommandLineOptions.getCoverageName() + ")" + " levels " + kdeCommandLineOptions.getMinLevel() + "-" + kdeCommandLineOptions.getMaxLevel() + " Percentile Calculation by season";
+		return inputDataStoreOptions.getGeowaveNamespace() + "(" + kdeCommandLineOptions.getCoverageName() + ")" + " levels " + kdeCommandLineOptions.getMinLevel() + "-" + kdeCommandLineOptions.getMaxLevel() + " Percentile Calculation by season";
 	}
 
 	@Override
@@ -216,26 +252,7 @@ public class ComparisonStatsJobRunner extends
 		FileOutputFormat.setOutputPath(
 				statsReducer,
 				new Path(
-						"/tmp/" + inputDataStoreOptions.getNamespace() + "_stats_" + kdeCommandLineOptions.getMinLevel() + "_" + kdeCommandLineOptions.getMaxLevel() + "_" + kdeCommandLineOptions.getCoverageName() + "/percentiles"));
+						"/tmp/" + inputDataStoreOptions.getGeowaveNamespace() + "_stats_" + kdeCommandLineOptions.getMinLevel() + "_" + kdeCommandLineOptions.getMaxLevel() + "_" + kdeCommandLineOptions.getCoverageName() + "/percentiles"));
 	}
 
-	@Override
-	protected void applyOptions(
-			final Options allOptions ) {
-		super.applyOptions(allOptions);
-		ComparisonCommandLineOptions.applyOptions(allOptions);
-	}
-
-	@Override
-	protected CommandLine parseOptions(
-			final String[] args,
-			final Options allOptions )
-			throws Exception {
-		final CommandLine commandLine = super.parseOptions(
-				args,
-				allOptions);
-		final ComparisonCommandLineOptions comparisonOptions = ComparisonCommandLineOptions.parseOptions(commandLine);
-		timeAttribute = comparisonOptions.getTimeAttribute();
-		return commandLine;
-	}
 }

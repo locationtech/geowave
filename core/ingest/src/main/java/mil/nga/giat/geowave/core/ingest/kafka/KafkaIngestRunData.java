@@ -27,16 +27,13 @@ public class KafkaIngestRunData implements
 	private final Map<ByteArrayId, IndexWriter> adapterIdToWriterCache = new HashMap<ByteArrayId, IndexWriter>();
 	private final AdapterStore adapterCache;
 	private final DataStore dataStore;
-	private final String[] args;
 
 	public KafkaIngestRunData(
 			final List<WritableDataAdapter<?>> adapters,
-			final DataStore dataStore,
-			final String[] args ) {
+			final DataStore dataStore ) {
 		this.dataStore = dataStore;
 		adapterCache = new MemoryAdapterStore(
 				adapters.toArray(new WritableDataAdapter[adapters.size()]));
-		this.args = args;
 	}
 
 	public WritableDataAdapter<?> getDataAdapter(
@@ -58,10 +55,6 @@ public class KafkaIngestRunData implements
 					indexWriter);
 		}
 		return indexWriter;
-	}
-
-	public String[] getArgs() {
-		return args;
 	}
 
 	@Override

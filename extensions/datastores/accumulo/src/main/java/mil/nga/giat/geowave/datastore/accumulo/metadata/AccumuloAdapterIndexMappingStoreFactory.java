@@ -1,10 +1,11 @@
 package mil.nga.giat.geowave.datastore.accumulo.metadata;
 
-import java.util.Map;
-
+import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
 import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
 import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStoreFactorySpi;
 import mil.nga.giat.geowave.datastore.accumulo.AbstractAccumuloStoreFactory;
+import mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloOptions;
+import mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloRequiredOptions;
 
 public class AccumuloAdapterIndexMappingStoreFactory extends
 		AbstractAccumuloStoreFactory<AdapterIndexMappingStore> implements
@@ -13,12 +14,17 @@ public class AccumuloAdapterIndexMappingStoreFactory extends
 
 	@Override
 	public AdapterIndexMappingStore createStore(
-			final Map<String, Object> configOptions,
-			final String namespace ) {
+			final StoreFactoryOptions options ) {
+		if (!(options instanceof AccumuloRequiredOptions)) {
+			throw new AssertionError(
+					"Expected " + AccumuloRequiredOptions.class.getSimpleName());
+		}
+		AccumuloRequiredOptions opts = (AccumuloRequiredOptions) options;
+		if (opts.getAdditionalOptions() == null) {
+			opts.setAdditionalOptions(new AccumuloOptions());
+		}
 		return new AccumuloAdapterIndexMappingStore(
-				createOperations(
-						configOptions,
-						namespace));
+				createOperations(opts));
 	}
 
 }

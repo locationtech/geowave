@@ -3,18 +3,16 @@ package mil.nga.giat.geowave.analytic.mapreduce;
 import java.util.Arrays;
 import java.util.Collection;
 
+import org.apache.hadoop.conf.Configuration;
+
 import mil.nga.giat.geowave.analytic.PropertyManagement;
 import mil.nga.giat.geowave.analytic.param.FormatConfiguration;
 import mil.nga.giat.geowave.analytic.param.ParameterEnum;
 import mil.nga.giat.geowave.analytic.param.StoreParameters.StoreParam;
-import mil.nga.giat.geowave.analytic.store.PersistableDataStore;
-import mil.nga.giat.geowave.core.cli.GenericStoreCommandLineOptions;
-import mil.nga.giat.geowave.core.store.DataStore;
-import mil.nga.giat.geowave.core.store.config.ConfigUtils;
+import mil.nga.giat.geowave.analytic.store.PersistableStore;
+import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputFormat;
 import mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputFormat;
-
-import org.apache.hadoop.conf.Configuration;
 
 public class GeoWaveOutputFormatConfiguration implements
 		FormatConfiguration
@@ -31,19 +29,13 @@ public class GeoWaveOutputFormatConfiguration implements
 			final PropertyManagement runTimeProperties,
 			final Configuration configuration )
 			throws Exception {
-		final GenericStoreCommandLineOptions<DataStore> dataStoreOptions = ((PersistableDataStore) runTimeProperties.getProperty(StoreParam.DATA_STORE)).getCliOptions();
-		GeoWaveOutputFormat.setDataStoreName(
+		final DataStorePluginOptions dataStoreOptions = ((PersistableStore) runTimeProperties.getProperty(StoreParam.STORE)).getDataStoreOptions();
+		GeoWaveInputFormat.setDataStoreName(
 				configuration,
-				dataStoreOptions.getFactory().getName());
-		GeoWaveOutputFormat.setStoreConfigOptions(
+				dataStoreOptions.getType());
+		GeoWaveInputFormat.setStoreConfigOptions(
 				configuration,
-				ConfigUtils.valuesToStrings(
-						dataStoreOptions.getConfigOptions(),
-						dataStoreOptions.getFactory().getOptions()));
-		GeoWaveOutputFormat.setGeoWaveNamespace(
-				configuration,
-				dataStoreOptions.getNamespace());
-
+				dataStoreOptions.getFactoryOptionsAsMap());
 	}
 
 	@Override
@@ -65,7 +57,7 @@ public class GeoWaveOutputFormatConfiguration implements
 	@Override
 	public Collection<ParameterEnum<?>> getParameters() {
 		return Arrays.asList(new ParameterEnum<?>[] {
-			StoreParam.DATA_STORE
+			StoreParam.STORE
 		});
 	}
 }
