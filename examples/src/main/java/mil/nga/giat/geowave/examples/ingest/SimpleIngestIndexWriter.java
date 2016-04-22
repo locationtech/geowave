@@ -11,7 +11,6 @@ import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.core.store.memory.DataStoreUtils;
 import mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations;
 import mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations;
 
@@ -79,7 +78,12 @@ public class SimpleIngestIndexWriter extends
 			}
 		}
 
-		si.generateGrid(geowaveDataStore);
+		if (geowaveDataStore != null) {
+			si.generateGrid(geowaveDataStore);
+		}
+		else {
+			log.error("Could not instantiate DataStore from given arguments.");
+		}
 
 		System.out.println("Finished ingesting data to namespace: " + namespace + " at datastore instance: " + instance);
 

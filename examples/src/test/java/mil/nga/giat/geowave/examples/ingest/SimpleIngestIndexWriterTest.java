@@ -3,7 +3,7 @@ package mil.nga.giat.geowave.examples.ingest;
 import org.junit.Test;
 
 public class SimpleIngestIndexWriterTest extends
-		SimpleHBaseIngestTest
+		SimpleIngestTest
 {
 	@Test
 	public void TestIngest() {

@@ -1,19 +1,25 @@
 package mil.nga.giat.geowave.examples.ingest;
 
+import java.io.IOException;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.apache.hadoop.hbase.HBaseTestingUtility;
-import org.apache.hadoop.hbase.client.Connection;
+import org.apache.hadoop.conf.Configuration;
 import org.apache.log4j.Logger;
+import org.junit.AfterClass;
 import org.junit.Assert;
-import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 import org.opengis.feature.simple.SimpleFeature;
 
+import com.github.sakserv.minicluster.config.ConfigVars;
+import com.github.sakserv.minicluster.impl.HbaseLocalCluster;
+import com.github.sakserv.minicluster.impl.ZookeeperLocalCluster;
+import com.github.sakserv.propertyparser.PropertyParser;
 import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.Point;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import mil.nga.giat.geowave.core.geotime.GeometryUtils;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.DataStore;
@@ -31,35 +37,86 @@ public class SimpleHBaseIngestTest
 {
 	private final static Logger LOGGER = Logger.getLogger(SimpleHBaseIngestTest.class);
 
-	final HBaseOptions hbaseOptions = new HBaseOptions();
-	final GeometryFactory factory = new GeometryFactory();
-	BasicHBaseOperations hbaseOperations;
-	HBaseIndexStore indexStore;
-	HBaseAdapterStore adapterStore;
-	HBaseDataStatisticsStore statsStore;
-	HBaseAdapterIndexMappingStore mockIndexMappingStore;
-	HBaseDataStore mockDataStore;
-	private final HBaseTestingUtility testUtil = new HBaseTestingUtility();
+	private final static HBaseOptions hbaseOptions = new HBaseOptions();
+	private static HBaseIndexStore indexStore;
+	private static HBaseAdapterStore adapterStore;
+	private static HBaseDataStatisticsStore statsStore;
+	private static HBaseAdapterIndexMappingStore mockIndexMappingStore;
+	private static HBaseDataStore mockDataStore;
 
-	@Before
-	public void setUp() {
-		Connection connection = null;
-		testUtil.getConfiguration().addResource(
-				"hbase-site-local.xml");
-		testUtil.getConfiguration().reloadConfiguration();
-		// start mini hbase cluster
+	private static String zookeeper;
+	private static HbaseLocalCluster hbaseLocalCluster;
+	private static ZookeeperLocalCluster zookeeperLocalCluster;
+	private static final String HBASE_PROPS_FILE = "hbase.properties";
+	private static final String TEST_NAMESPACE = "mil_nga_giat_geowave_test";
+	private static BasicHBaseOperations hbaseOperations;
+
+	@BeforeClass
+	public static void setUp() {
+
+		PropertyParser propertyParser = null;
+
 		try {
-			testUtil.startMiniCluster(1);
-			connection = testUtil.getConnection();
+			propertyParser = new PropertyParser(
+					HBASE_PROPS_FILE);
+			propertyParser.parsePropsFile();
+		}
+		catch (final IOException e) {
+			LOGGER.error("Unable to load property file: {}" + HBASE_PROPS_FILE);
+		}
+
+		if (System.getProperty(
+				"os.name").startsWith(
+				"Windows")) {
+			System.setProperty(
+					"HADOOP_HOME",
+					System.getenv().get(
+							"HADOOP_HOME"));
+		}
+
+		try {
+			zookeeperLocalCluster = new ZookeeperLocalCluster.Builder().setPort(
+					Integer.parseInt(propertyParser.getProperty(ConfigVars.ZOOKEEPER_PORT_KEY))).setTempDir(
+					propertyParser.getProperty(ConfigVars.ZOOKEEPER_TEMP_DIR_KEY)).setZookeeperConnectionString(
+					propertyParser.getProperty(ConfigVars.ZOOKEEPER_CONNECTION_STRING_KEY)).build();
+			zookeeperLocalCluster.start();
 		}
 		catch (final Exception e) {
-			LOGGER.error(
-					"Failed to create HBase MiniCluster",
-					e);
+			LOGGER.error("Exception starting zookeeperLocalCluster: " + e);
+			e.printStackTrace();
+			Assert.fail();
 		}
 
-		hbaseOperations = new BasicHBaseOperations(
-				connection);
+		zookeeper = zookeeperLocalCluster.getZookeeperConnectionString();
+
+		try {
+			hbaseLocalCluster = new HbaseLocalCluster.Builder().setHbaseMasterPort(
+					Integer.parseInt(propertyParser.getProperty(ConfigVars.HBASE_MASTER_PORT_KEY))).setHbaseMasterInfoPort(
+					Integer.parseInt(propertyParser.getProperty(ConfigVars.HBASE_MASTER_INFO_PORT_KEY))).setNumRegionServers(
+					Integer.parseInt(propertyParser.getProperty(ConfigVars.HBASE_NUM_REGION_SERVERS_KEY))).setHbaseRootDir(
+					propertyParser.getProperty(ConfigVars.HBASE_ROOT_DIR_KEY)).setZookeeperPort(
+					Integer.parseInt(propertyParser.getProperty(ConfigVars.ZOOKEEPER_PORT_KEY))).setZookeeperConnectionString(
+					propertyParser.getProperty(ConfigVars.ZOOKEEPER_CONNECTION_STRING_KEY)).setZookeeperZnodeParent(
+					propertyParser.getProperty(ConfigVars.HBASE_ZNODE_PARENT_KEY)).setHbaseWalReplicationEnabled(
+					Boolean.parseBoolean(propertyParser.getProperty(ConfigVars.HBASE_WAL_REPLICATION_ENABLED_KEY))).setHbaseConfiguration(
+					new Configuration()).build();
+			hbaseLocalCluster.start();
+		}
+		catch (final Exception e) {
+			LOGGER.error("Exception starting hbaseLocalCluster: " + e);
+			e.printStackTrace();
+			Assert.fail();
+		}
+
+		try {
+			hbaseOperations = new BasicHBaseOperations(
+					zookeeperLocalCluster.getZookeeperConnectionString(),
+					TEST_NAMESPACE);
+		}
+		catch (final IOException e) {
+			LOGGER.error("Exception connecting to hbaseLocalCluster: " + e);
+			Assert.fail();
+		}
 
 		indexStore = new HBaseIndexStore(
 				hbaseOperations);
@@ -82,6 +139,67 @@ public class SimpleHBaseIngestTest
 		hbaseOptions.setCreateTable(true);
 		hbaseOptions.setUseAltIndex(true);
 		hbaseOptions.setPersistDataStatistics(true);
+	}
+
+	@SuppressFBWarnings(value = {
+		"SWL_SLEEP_WITH_LOCK_HELD"
+	}, justification = "Sleep in lock while waiting for external resources")
+	@AfterClass
+	public static void cleanup() {
+
+		try {
+			hbaseOperations.deleteAll();
+		}
+		catch (final IOException ex) {
+			LOGGER.error(
+					"Unable to clear hbase namespace",
+					ex);
+			Assert.fail("Index not deleted successfully");
+		}
+		catch (final NullPointerException npe) {
+			Assert.fail("Invalid state <null> for hbase operations during CLEANUP phase");
+		}
+
+		try {
+			hbaseLocalCluster.stop(true);
+		}
+		catch (final Exception e) {
+			LOGGER.warn(
+					"Unable to delete mini hbase temporary directory",
+					e);
+		}
+
+		try {
+			zookeeperLocalCluster.stop(true);
+		}
+		catch (final Exception e) {
+			LOGGER.warn(
+					"Unable to delete mini zookeeper temporary directory",
+					e);
+		}
+
+		hbaseOperations = null;
+		zookeeper = null;
+	}
+
+	@Test
+	public void TestIngestIndexWriter() {
+		final SimpleIngestIndexWriter si = new SimpleIngestIndexWriter();
+		si.generateGrid(mockDataStore);
+		validate(mockDataStore);
+		mockDataStore.delete(
+				new QueryOptions(),
+				null);
+	}
+
+	@Test
+	public void TestIngestProducerConsumer() {
+		final SimpleIngestProducerConsumer si = new SimpleIngestProducerConsumer();
+		si.generateGrid(mockDataStore);
+		validate(mockDataStore);
+		mockDataStore.delete(
+				new QueryOptions(),
+				null);
 	}
 
 	protected static Set<Point> getCalcedPointSet() {

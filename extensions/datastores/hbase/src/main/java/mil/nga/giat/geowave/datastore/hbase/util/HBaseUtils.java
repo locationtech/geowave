@@ -30,13 +30,10 @@ import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
-import mil.nga.giat.geowave.core.store.data.DataWriter;
 import mil.nga.giat.geowave.core.store.data.PersistentDataset;
 import mil.nga.giat.geowave.core.store.data.PersistentValue;
 import mil.nga.giat.geowave.core.store.data.VisibilityWriter;
 import mil.nga.giat.geowave.core.store.data.field.FieldReader;
-import mil.nga.giat.geowave.core.store.data.field.FieldVisibilityHandler;
-import mil.nga.giat.geowave.core.store.data.field.FieldWriter;
 import mil.nga.giat.geowave.core.store.data.visibility.UnconstrainedVisibilityHandler;
 import mil.nga.giat.geowave.core.store.data.visibility.UniformVisibilityWriter;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
@@ -131,38 +128,6 @@ public class HBaseUtils
 							adapterId,
 							enableDeduplication ? numberOfDuplicates : -1).getRowId()));
 		}
-	}
-
-	@SuppressWarnings({
-		"rawtypes",
-		"unchecked"
-	})
-	private static <T> FieldInfo<T> getFieldInfo(
-			final DataWriter dataWriter,
-			final PersistentValue<T> fieldValue,
-			final T entry,
-			final VisibilityWriter<T> customFieldVisibilityWriter ) {
-		final FieldWriter fieldWriter = dataWriter.getWriter(fieldValue.getId());
-		final FieldVisibilityHandler<T, Object> customVisibilityHandler = customFieldVisibilityWriter.getFieldVisibilityHandler(fieldValue.getId());
-		if (fieldWriter != null) {
-			final Object value = fieldValue.getValue();
-			return new FieldInfo<T>(
-					fieldValue,
-					fieldWriter.writeField(value),
-					merge(
-							customVisibilityHandler.getVisibility(
-									entry,
-									fieldValue.getId(),
-									value),
-							fieldWriter.getVisibility(
-									entry,
-									fieldValue.getId(),
-									value)));
-		}
-		else if (fieldValue.getValue() != null) {
-			LOGGER.warn("Data writer of class " + dataWriter.getClass() + " does not support field for " + fieldValue.getValue());
-		}
-		return null;
 	}
 
 	public static <T> DataStoreEntryInfo write(

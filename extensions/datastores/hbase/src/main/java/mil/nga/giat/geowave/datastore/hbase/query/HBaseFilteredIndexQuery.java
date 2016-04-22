@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -134,12 +135,12 @@ public abstract class HBaseFilteredIndexQuery extends
 			}
 			else {
 				LOGGER.error("Results were empty");
-				return null;
+				return new CloseableIterator.Empty();
 			}
 		}
 		catch (final IOException e) {
 			LOGGER.error("Could not get the results from scanner");
-			return null;
+			return new CloseableIterator.Empty();
 		}
 
 		// final Scan scanner = getScanner(
@@ -223,7 +224,12 @@ public abstract class HBaseFilteredIndexQuery extends
 				filterList.addFilter(filter);
 			}
 		}
-		final List<ByteArrayRange> ranges = getRanges();
+		List<ByteArrayRange> ranges = getRanges();
+		if ((ranges == null) || ranges.isEmpty()) {
+			ranges = Collections.singletonList(new ByteArrayRange(
+					null,
+					null));
+		}
 		final List<Scan> scanners = new ArrayList<Scan>();
 		if ((ranges != null) && (ranges.size() > 0)) {
 
@@ -237,9 +243,11 @@ public abstract class HBaseFilteredIndexQuery extends
 					}
 				}
 
-				scanner.setStartRow(range.getStart().getBytes());
-				if (!range.isSingleValue()) {
-					scanner.setStopRow(calculateTheClosestNextRowKeyForPrefix(range.getEnd().getBytes()));
+				if (range.getStart() != null) {
+					scanner.setStartRow(range.getStart().getBytes());
+					if (!range.isSingleValue()) {
+						scanner.setStopRow(calculateTheClosestNextRowKeyForPrefix(range.getEnd().getBytes()));
+					}
 				}
 
 				scanner.setFilter(filterList);

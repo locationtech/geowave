@@ -64,6 +64,7 @@ import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.core.store.query.RowIdQuery;
 import mil.nga.giat.geowave.datastore.hbase.index.secondary.HBaseSecondaryIndexDataStore;
 import mil.nga.giat.geowave.datastore.hbase.io.HBaseWriter;
+import mil.nga.giat.geowave.datastore.hbase.metadata.AbstractHBasePersistence;
 import mil.nga.giat.geowave.datastore.hbase.metadata.HBaseAdapterIndexMappingStore;
 import mil.nga.giat.geowave.datastore.hbase.metadata.HBaseAdapterStore;
 import mil.nga.giat.geowave.datastore.hbase.metadata.HBaseDataStatisticsStore;
@@ -208,7 +209,6 @@ public class HBaseDataStore implements
 				adapter.getAdapterId(),
 				indices));
 
-		final byte[] adapterId = adapter.getAdapterId().getBytes();
 		final IndexWriter<T>[] writers = new IndexWriter[indices.length];
 
 		int i = 0;
@@ -605,6 +605,15 @@ public class HBaseDataStore implements
 			final Query query ) {
 		if (((query == null) || (query instanceof EverythingQuery)) && queryOptions.isAllAdapters()) {
 			try {
+				// TODO These interfaces should all provide remove and removeAll
+				// capabilities instead of having to clear the
+				// AbstractPersistence's cache manually
+				((AbstractHBasePersistence) indexStore).clearCache();
+				((AbstractHBasePersistence) adapterStore).clearCache();
+				((AbstractHBasePersistence) statisticsStore).clearCache();
+				// secondaryIndexDataStore.removeAll();
+				((AbstractHBasePersistence) indexMappingStore).clearCache();
+
 				operations.deleteAll();
 				return true;
 			}

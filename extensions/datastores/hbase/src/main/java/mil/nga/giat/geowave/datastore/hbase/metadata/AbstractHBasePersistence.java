@@ -235,7 +235,7 @@ public abstract class AbstractHBasePersistence<T extends Persistable>
 		}
 		catch (final IOException e) {
 			LOGGER.warn(
-					"Unable to find objects, table '" + getTablename() + "' does not exist",
+					"Unable to find objects in HBase table.",
 					e);
 		}
 		return new CloseableIterator.Empty<T>();
@@ -248,6 +248,10 @@ public abstract class AbstractHBasePersistence<T extends Persistable>
 				null,
 				null,
 				authorizations);
+	}
+
+	public void clearCache() {
+		cache.clear();
 	}
 
 	protected void addObject(
