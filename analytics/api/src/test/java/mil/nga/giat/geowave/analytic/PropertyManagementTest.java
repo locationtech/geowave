@@ -26,7 +26,9 @@ import mil.nga.giat.geowave.analytic.param.InputParameters.Input;
 import mil.nga.giat.geowave.analytic.param.ParameterEnum;
 import mil.nga.giat.geowave.analytic.param.ParameterHelper;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
+import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
+import mil.nga.giat.geowave.core.store.query.QueryOptions;
 
 public class PropertyManagementTest
 {
@@ -251,11 +253,19 @@ public class PropertyManagementTest
 			throws Exception {
 		final PropertyManagement pm = new PropertyManagement();
 		pm.store(
-				ExtractParameters.Extract.ADAPTER_ID,
-				"bar");
+				ExtractParameters.Extract.QUERY_OPTIONS,
+				new QueryOptions(
+						new ByteArrayId(
+								"adapterId"),
+						new ByteArrayId(
+								"indexId")));
 		assertEquals(
-				"bar",
-				pm.getPropertyAsString(ExtractParameters.Extract.ADAPTER_ID));
+				new QueryOptions(
+						new ByteArrayId(
+								"adapterId"),
+						new ByteArrayId(
+								"indexId")),
+				pm.getPropertyAsQueryOptions(ExtractParameters.Extract.QUERY_OPTIONS));
 
 		final Path path1 = new Path(
 				"http://java.sun.com/j2se/1.3/foo");
@@ -274,8 +284,12 @@ public class PropertyManagementTest
 				bis)) {
 			final PropertyManagement pm2 = (PropertyManagement) is.readObject();
 			assertEquals(
-					"bar",
-					pm2.getPropertyAsString(ExtractParameters.Extract.ADAPTER_ID));
+					new QueryOptions(
+							new ByteArrayId(
+									"adapterId"),
+							new ByteArrayId(
+									"indexId")),
+					pm2.getPropertyAsQueryOptions(ExtractParameters.Extract.QUERY_OPTIONS));
 			assertEquals(
 					path1,
 					pm2.getPropertyAsPath(Input.HDFS_INPUT_PATH));
@@ -365,17 +379,23 @@ public class PropertyManagementTest
 			throws Exception {
 		final PropertyManagement pm1 = new PropertyManagement();
 		pm1.store(
-				ExtractParameters.Extract.ADAPTER_ID,
-				"bar");
-		assertEquals(
-				"bar",
-				pm1.getPropertyAsString(ExtractParameters.Extract.ADAPTER_ID));
+				ExtractParameters.Extract.QUERY_OPTIONS,
+				new QueryOptions(
+						new ByteArrayId(
+								"adapterId"),
+						new ByteArrayId(
+								"indexId")));
 
 		final PropertyManagement pm2 = new PropertyManagement(
 				pm1);
 
-		assertTrue(pm2.hasProperty(ExtractParameters.Extract.ADAPTER_ID));
-
+		assertEquals(
+				new QueryOptions(
+						new ByteArrayId(
+								"adapterId"),
+						new ByteArrayId(
+								"indexId")),
+				pm2.getPropertyAsQueryOptions(ExtractParameters.Extract.QUERY_OPTIONS));
 		final Path path1 = new Path(
 				"http://java.sun.com/j2se/1.3/foo");
 		pm2.store(
@@ -393,8 +413,12 @@ public class PropertyManagementTest
 				bis)) {
 			final PropertyManagement pm3 = (PropertyManagement) is.readObject();
 			assertEquals(
-					"bar",
-					pm3.getPropertyAsString(ExtractParameters.Extract.ADAPTER_ID));
+					new QueryOptions(
+							new ByteArrayId(
+									"adapterId"),
+							new ByteArrayId(
+									"indexId")),
+					pm2.getPropertyAsQueryOptions(ExtractParameters.Extract.QUERY_OPTIONS));
 			assertEquals(
 					path1,
 					pm3.getPropertyAsPath(Input.HDFS_INPUT_PATH));

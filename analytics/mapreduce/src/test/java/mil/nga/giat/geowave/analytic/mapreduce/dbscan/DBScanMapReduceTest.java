@@ -67,13 +67,13 @@ public class DBScanMapReduceTest
 		mapDriver.getConfiguration().set(
 				GeoWaveConfiguratorBase.enumToConfKey(
 						NNMapReduce.class,
-						ClusteringParameters.Clustering.DISTANCE_THRESHOLDS),
+						PartitionParameters.Partition.DISTANCE_THRESHOLDS),
 				"10,10");
 
 		reduceDriver.getConfiguration().setDouble(
 				GeoWaveConfiguratorBase.enumToConfKey(
 						NNMapReduce.class,
-						PartitionParameters.Partition.PARTITION_DISTANCE),
+						PartitionParameters.Partition.MAX_DISTANCE),
 				10);
 
 		ftype = AnalyticFeature.createGeometryFeatureAdapter(

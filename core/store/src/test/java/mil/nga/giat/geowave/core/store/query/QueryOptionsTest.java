@@ -6,7 +6,6 @@ import static org.junit.Assert.assertTrue;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang3.tuple.Pair;
@@ -242,7 +241,7 @@ public class QueryOptionsTest
 	}
 
 	@Test
-	public void testAdapterIds()
+	public void testAdapters()
 			throws IOException {
 		final AdapterStore adapterStore = new AdapterStore() {
 
@@ -255,9 +254,8 @@ public class QueryOptionsTest
 			@Override
 			public DataAdapter<?> getAdapter(
 					final ByteArrayId adapterId ) {
-				final MockComponents.MockAbstractDataAdapter adapter = new MockComponents.MockAbstractDataAdapter();
-				return adapter.getAdapterId().equals(
-						adapterId) ? adapter : null;
+				return new MockComponents.MockAbstractDataAdapter(
+						adapterId);
 			}
 
 			@Override
@@ -274,12 +272,11 @@ public class QueryOptionsTest
 		};
 
 		final QueryOptions ops = new QueryOptions(
-				Arrays.asList(new ByteArrayId[] {
-					new ByteArrayId(
-							"123"),
-					new ByteArrayId(
-							"567")
-				}));
+				Arrays.asList(
+						(DataAdapter<?>) adapterStore.getAdapter(new ByteArrayId(
+								"123")),
+						(DataAdapter<?>) adapterStore.getAdapter(new ByteArrayId(
+								"567"))));
 		assertEquals(
 				2,
 				ops.getAdapterIds(

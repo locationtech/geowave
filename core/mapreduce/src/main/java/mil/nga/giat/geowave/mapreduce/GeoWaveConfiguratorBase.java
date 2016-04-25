@@ -138,54 +138,6 @@ public class GeoWaveConfiguratorBase
 		}
 	}
 
-	public static AdapterStore getAdapterStore(
-			final Class<?> implementingClass,
-			final JobContext context ) {
-		// use adapter store name and if thats not set, use the data store name
-		String adapterStoreName = getAdapterStoreName(
-				implementingClass,
-				context);
-		if ((adapterStoreName == null) || (adapterStoreName.isEmpty())) {
-			adapterStoreName = getDataStoreName(
-					implementingClass,
-					context);
-			if ((adapterStoreName == null) || adapterStoreName.isEmpty()) {
-				return null;
-			}
-		}
-		final Map<String, String> configOptions = getStoreConfigOptions(
-				implementingClass,
-				context);
-		configOptions.put(
-				GeoWaveStoreFinder.STORE_HINT_OPTION.getName(),
-				adapterStoreName);
-		return GeoWaveStoreFinder.createAdapterStore(configOptions);
-	}
-
-	public static IndexStore getIndexStore(
-			final Class<?> implementingClass,
-			final JobContext context ) {
-		// use index store name and if thats not set, use the data store name
-		String indexStoreName = getIndexStoreName(
-				implementingClass,
-				context);
-		if ((indexStoreName == null) || (indexStoreName.isEmpty())) {
-			indexStoreName = getDataStoreName(
-					implementingClass,
-					context);
-			if ((indexStoreName == null) || indexStoreName.isEmpty()) {
-				return null;
-			}
-		}
-		final Map<String, String> configOptions = getStoreConfigOptions(
-				implementingClass,
-				context);
-		configOptions.put(
-				GeoWaveStoreFinder.STORE_HINT_OPTION.getName(),
-				indexStoreName);
-		return GeoWaveStoreFinder.createIndexStore(configOptions);
-	}
-
 	public static DataStatisticsStore getDataStatisticsStore(
 			final Class<?> implementingClass,
 			final JobContext context ) {

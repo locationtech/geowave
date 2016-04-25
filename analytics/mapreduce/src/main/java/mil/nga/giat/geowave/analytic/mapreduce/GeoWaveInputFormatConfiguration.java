@@ -47,45 +47,6 @@ public class GeoWaveInputFormatConfiguration implements
 				configuration,
 				dataStoreOptions.getFactoryOptionsAsMap());
 
-		final String indexId = runTimeProperties.getPropertyAsString(ExtractParameters.Extract.INDEX_ID);
-		final String adapterId = runTimeProperties.getPropertyAsString(ExtractParameters.Extract.ADAPTER_ID);
-
-		if (indexId != null) {
-			final PrimaryIndex[] indices = ClusteringUtils.getIndices(runTimeProperties);
-			final ByteArrayId byteId = new ByteArrayId(
-					StringUtils.stringToBinary(indexId));
-			for (final PrimaryIndex index : indices) {
-				if (byteId.equals(index.getId())) {
-					GeoWaveInputFormat.setIndex(
-							configuration,
-							index);
-				}
-			}
-		}
-		for (final PrimaryIndex index : indices) {
-			GeoWaveInputFormat.setIndex(
-					configuration,
-					index);
-		}
-
-		if (adapterId != null) {
-			final DataAdapter<?>[] adapters = ClusteringUtils.getAdapters(runTimeProperties);
-			final ByteArrayId byteId = new ByteArrayId(
-					StringUtils.stringToBinary(adapterId));
-			for (final DataAdapter<?> adapter : adapters) {
-				if (byteId.equals(adapter.getAdapterId())) {
-					GeoWaveInputFormat.addDataAdapter(
-							configuration,
-							adapter);
-				}
-			}
-		}
-		for (final DataAdapter<?> adapter : adapters) {
-			GeoWaveInputFormat.addDataAdapter(
-					configuration,
-					adapter);
-		}
-
 		final DistributableQuery query = runTimeProperties.getPropertyAsQuery(ExtractParameters.Extract.QUERY);
 
 		if (query != null) {
@@ -154,8 +115,7 @@ public class GeoWaveInputFormatConfiguration implements
 	@Override
 	public List<ParameterEnum<?>> getParameters() {
 		return Arrays.asList(new ParameterEnum<?>[] {
-			ExtractParameters.Extract.INDEX_ID,
-			ExtractParameters.Extract.ADAPTER_ID,
+			ExtractParameters.Extract.QUERY_OPTIONS,
 			ExtractParameters.Extract.QUERY,
 			ExtractParameters.Extract.MAX_INPUT_SPLIT,
 			ExtractParameters.Extract.MIN_INPUT_SPLIT,

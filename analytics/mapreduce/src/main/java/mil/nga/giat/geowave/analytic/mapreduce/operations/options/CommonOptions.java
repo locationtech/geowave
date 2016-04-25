@@ -1,13 +1,21 @@
 package mil.nga.giat.geowave.analytic.mapreduce.operations.options;
 
 import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParametersDelegate;
+import com.google.common.base.Function;
+import com.google.common.collect.Lists;
 
 import mil.nga.giat.geowave.analytic.param.CommonParameters;
 import mil.nga.giat.geowave.analytic.param.ExtractParameters;
 import mil.nga.giat.geowave.analytic.param.OutputParameters;
+import mil.nga.giat.geowave.analytic.param.InputParameters;
 import mil.nga.giat.geowave.analytic.param.annotations.CommonParameter;
 import mil.nga.giat.geowave.analytic.param.annotations.ExtractParameter;
+import mil.nga.giat.geowave.analytic.param.annotations.InputParameter;
 import mil.nga.giat.geowave.analytic.param.annotations.OutputParameter;
+import mil.nga.giat.geowave.core.cli.annotations.PrefixParameter;
+import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.store.query.QueryOptions;
 
 public class CommonOptions
 {
@@ -19,19 +27,9 @@ public class CommonOptions
 	}, description = "Distance Function Class implements mil.nga.giat.geowave.analytics.distance.DistanceFn")
 	private String commonDistanceFunctionClass;
 
-	@ExtractParameter(ExtractParameters.Extract.ADAPTER_ID)
-	@Parameter(names = {
-		"-eit",
-		"--extractAdapterId"
-	}, description = "Input Data Type ID")
-	private String extractAdapterId;
-
-	@ExtractParameter(ExtractParameters.Extract.INDEX_ID)
-	@Parameter(names = {
-		"-ei",
-		"--extractIndexId"
-	}, description = "Extract from a specific index")
-	private String extractIndexId;
+	@ParametersDelegate
+	@PrefixParameter(prefix = "ex")
+	private QueryOptionsCommand extractQueryOptions = new QueryOptionsCommand();
 
 	@ExtractParameter(ExtractParameters.Extract.MAX_INPUT_SPLIT)
 	@Parameter(names = {
@@ -61,6 +59,20 @@ public class CommonOptions
 	}, description = "Output Format Class")
 	private String outputOutputFormat;
 
+	@InputParameter(InputParameters.Input.INPUT_FORMAT)
+	@Parameter(names = {
+		"-ifc",
+		"--inputFormatClass"
+	}, description = "Input Format Class")
+	private String inputFormatClass;
+
+	@InputParameter(InputParameters.Input.HDFS_INPUT_PATH)
+	@Parameter(names = {
+		"-iip",
+		"--inputHdfsPath"
+	}, description = "Input Path")
+	private String inputHdfsPath;
+
 	@OutputParameter(OutputParameters.Output.REDUCER_COUNT)
 	@Parameter(names = {
 		"-orc",
@@ -77,22 +89,13 @@ public class CommonOptions
 		this.commonDistanceFunctionClass = commonDistanceFunctionClass;
 	}
 
-	public String getExtractAdapterId() {
-		return extractAdapterId;
+	public QueryOptionsCommand getExtractQueryOptions() {
+		return extractQueryOptions;
 	}
 
-	public void setExtractAdapterId(
-			String extractAdapterId ) {
-		this.extractAdapterId = extractAdapterId;
-	}
-
-	public String getExtractIndexId() {
-		return extractIndexId;
-	}
-
-	public void setExtractIndexId(
-			String extractIndexId ) {
-		this.extractIndexId = extractIndexId;
+	public void setExtractQueryOptions(
+			QueryOptionsCommand extractQueryOptions ) {
+		this.extractQueryOptions = extractQueryOptions;
 	}
 
 	public String getExtractMaxInputSplit() {
@@ -138,6 +141,50 @@ public class CommonOptions
 	public void setOutputReducerCount(
 			String outputReducerCount ) {
 		this.outputReducerCount = outputReducerCount;
+	}
+
+	public String getInputFormatClass() {
+		return inputFormatClass;
+	}
+
+	public void setInputFormatClass(
+			String inputFormatClass ) {
+		this.inputFormatClass = inputFormatClass;
+	}
+
+	public String getInputHdfsPath() {
+		return inputHdfsPath;
+	}
+
+	public void setInputHdfsPath(
+			String inputHdfsPath ) {
+		this.inputHdfsPath = inputHdfsPath;
+	}
+
+	public QueryOptions createQueryOptions() {
+		final QueryOptions options = new QueryOptions();
+		if (extractQueryOptions.getAdapterIds() != null && extractQueryOptions.getAdapterIds().size() > 0) options.setAdapter(Lists.transform(
+				extractQueryOptions.getAdapterIds(),
+				new Function<String, ByteArrayId>() {
+					@Override
+					public ByteArrayId apply(
+							String input ) {
+						return new ByteArrayId(
+								input);
+					}
+				}));
+		if (extractQueryOptions.getAuthorizations() != null) {
+			options.setAuthorizations(this.extractQueryOptions.getAuthorizations().toArray(
+					new String[this.extractQueryOptions.getAuthorizations().size()]));
+		}
+		if (extractQueryOptions.getIndexId() != null) {
+			options.setIndexId(new ByteArrayId(
+					extractQueryOptions.getIndexId()));
+		}
+		if (extractQueryOptions.getFieldIds() != null) {
+			options.setFieldIds(extractQueryOptions.getFieldIds());
+		}
+		return options;
 	}
 
 }

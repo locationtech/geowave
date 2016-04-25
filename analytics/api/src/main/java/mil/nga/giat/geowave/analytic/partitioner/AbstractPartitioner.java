@@ -17,6 +17,7 @@ import mil.nga.giat.geowave.analytic.model.SpatialIndexModelBuilder;
 import mil.nga.giat.geowave.analytic.param.ClusteringParameters;
 import mil.nga.giat.geowave.analytic.param.CommonParameters;
 import mil.nga.giat.geowave.analytic.param.ParameterEnum;
+import mil.nga.giat.geowave.analytic.param.PartitionParameters;
 import mil.nga.giat.geowave.analytic.param.PartitionParameters.Partition;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.PersistenceUtils;
@@ -155,7 +156,7 @@ public abstract class AbstractPartitioner<T> implements
 	private static double[] getDistances(
 			final ScopedJobConfiguration config ) {
 		final String distances = config.getString(
-				ClusteringParameters.Clustering.DISTANCE_THRESHOLDS,
+				PartitionParameters.Partition.DISTANCE_THRESHOLDS,
 				"0.000001");
 
 		final String distancesArray[] = distances.split(",");
@@ -229,7 +230,7 @@ public abstract class AbstractPartitioner<T> implements
 			final Configuration configuration ) {
 		final ParameterEnum[] params = new ParameterEnum[] {
 			CommonParameters.Common.INDEX_MODEL_BUILDER_CLASS,
-			ClusteringParameters.Clustering.DISTANCE_THRESHOLDS,
+			PartitionParameters.Partition.DISTANCE_THRESHOLDS,
 			Partition.PARTITION_PRECISION
 		};
 		runTimeProperties.setConfig(
@@ -283,7 +284,7 @@ public abstract class AbstractPartitioner<T> implements
 	public Collection<ParameterEnum<?>> getParameters() {
 		return Arrays.asList(new ParameterEnum<?>[] {
 			CommonParameters.Common.INDEX_MODEL_BUILDER_CLASS,
-			ClusteringParameters.Clustering.DISTANCE_THRESHOLDS,
+			PartitionParameters.Partition.DISTANCE_THRESHOLDS,
 			Partition.PARTITION_PRECISION
 		});
 

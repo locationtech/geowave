@@ -16,6 +16,7 @@ import mil.nga.giat.geowave.analytic.mapreduce.operations.options.KMeansCommonOp
 import mil.nga.giat.geowave.analytic.mapreduce.operations.options.KMeansJumpOptions;
 import mil.nga.giat.geowave.analytic.mapreduce.operations.options.PropertyManagementConverter;
 import mil.nga.giat.geowave.analytic.param.StoreParameters;
+import mil.nga.giat.geowave.analytic.param.ExtractParameters.Extract;
 import mil.nga.giat.geowave.analytic.store.PersistableStore;
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.Command;
@@ -88,6 +89,9 @@ public class KmeansJumpCommand extends
 		converter.readProperties(commonOptions);
 		converter.readProperties(kmeansCommonOptions);
 		converter.readProperties(kmeansJumpOptions);
+		properties.store(
+				Extract.QUERY_OPTIONS,
+				commonOptions.createQueryOptions());
 
 		MultiLevelJumpKMeansClusteringJobRunner runner = new MultiLevelJumpKMeansClusteringJobRunner();
 		int status = runner.run(properties);

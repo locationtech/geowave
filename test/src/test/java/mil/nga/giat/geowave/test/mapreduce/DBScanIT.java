@@ -47,7 +47,7 @@ import mil.nga.giat.geowave.core.store.query.QueryOptions;
 public class DBScanIT extends
 		MapReduceTestEnvironment
 {
-	
+
 	public static final String DBSCAN_TEST_NAMESPACE = TEST_NAMESPACE + "_dbscanit";
 
 	private SimpleFeatureBuilder getBuilder() {
@@ -107,7 +107,7 @@ public class DBScanIT extends
 							ExtractParameters.Extract.QUERY_OPTIONS,
 							ExtractParameters.Extract.MIN_INPUT_SPLIT,
 							ExtractParameters.Extract.MAX_INPUT_SPLIT,
-							PartitionParameters.Partition.PARTITION_DISTANCE,
+							PartitionParameters.Partition.MAX_DISTANCE,
 							PartitionParameters.Partition.PARTITIONER_CLASS,
 							ClusteringParameters.Clustering.MINIMUM_SIZE,
 							StoreParam.STORE,

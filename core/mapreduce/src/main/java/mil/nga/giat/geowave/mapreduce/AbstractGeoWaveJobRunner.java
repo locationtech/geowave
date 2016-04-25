@@ -1,7 +1,10 @@
 package mil.nga.giat.geowave.mapreduce;
 
-import java.util.ArrayList;
-import java.util.List;
+import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.query.DistributableQuery;
+import mil.nga.giat.geowave.core.store.query.QueryOptions;
+import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputFormat;
+import mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputFormat;
 
 import org.apache.commons.cli.ParseException;
 import org.apache.hadoop.conf.Configuration;
@@ -9,13 +12,6 @@ import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.util.Tool;
 import org.apache.log4j.Logger;
-
-import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
-import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
-import mil.nga.giat.geowave.core.store.query.DistributableQuery;
-import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputFormat;
-import mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputFormat;
 
 /**
  * This class can run a basic job to query GeoWave. It manages Accumulo user,
@@ -30,9 +26,8 @@ public abstract class AbstractGeoWaveJobRunner extends
 	protected static final Logger LOGGER = Logger.getLogger(AbstractGeoWaveJobRunner.class);
 
 	protected DataStorePluginOptions dataStoreOptions;
-	protected List<DataAdapter<?>> adapters = new ArrayList<DataAdapter<?>>();
-	protected List<PrimaryIndex> indices = new ArrayList<PrimaryIndex>();
 	protected DistributableQuery query = null;
+	protected QueryOptions queryOptions;
 	protected Integer minInputSplits = null;
 	protected Integer maxInputSplits = null;
 
@@ -70,19 +65,11 @@ public abstract class AbstractGeoWaveJobRunner extends
 
 		configure(job);
 
-		if ((adapters != null) && (adapters.size() > 0)) {
-			for (final DataAdapter<?> adapter : adapters) {
-				GeoWaveInputFormat.addDataAdapter(
-						conf,
-						adapter);
-			}
-		}
-		if ((indices != null) && (indices.size() > 0)) {
-			for (final PrimaryIndex index : indices) {
-				GeoWaveInputFormat.setIndex(
-						conf,
-						index);
-			}
+		if (queryOptions != null) {
+			GeoWaveInputFormat.setQueryOptions(
+					conf,
+					queryOptions);
+
 		}
 		if (query != null) {
 			GeoWaveInputFormat.setQuery(
@@ -119,14 +106,9 @@ public abstract class AbstractGeoWaveJobRunner extends
 		this.minInputSplits = minInputSplits;
 	}
 
-	public void addDataAdapter(
-			final DataAdapter<?> adapter ) {
-		adapters.add(adapter);
-	}
-
-	public void addIndex(
-			final PrimaryIndex index ) {
-		indices.add(index);
+	public void setQueryOptions(
+			final QueryOptions options ) {
+		this.queryOptions = options;
 	}
 
 	public void setQuery(

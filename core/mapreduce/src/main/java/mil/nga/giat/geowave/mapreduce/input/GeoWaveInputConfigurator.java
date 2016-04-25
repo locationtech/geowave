@@ -101,24 +101,6 @@ public class GeoWaveInputConfigurator extends
 		return null;
 	}
 
-	public static void setIndex(
-			final Class<?> implementingClass,
-			final Configuration config,
-			final PrimaryIndex index ) {
-		if (index != null) {
-			config.set(
-					enumToConfKey(
-							implementingClass,
-							GeoWaveMetaStore.INDEX),
-					ByteArrayUtils.byteArrayToString(PersistenceUtils.toBinary(index)));
-		}
-		else {
-			config.unset(enumToConfKey(
-					implementingClass,
-					GeoWaveMetaStore.INDEX));
-		}
-	}
-
 	public static PrimaryIndex getIndex(
 			final Class<?> implementingClass,
 			final Configuration config ) {

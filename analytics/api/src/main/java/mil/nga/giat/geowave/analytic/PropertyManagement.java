@@ -835,6 +835,9 @@ public class PropertyManagement implements
 		public QueryOptions convert(
 				final Serializable ob )
 				throws Exception {
+			if (ob instanceof String) {
+
+			}
 			if (ob instanceof byte[]) {
 				return (QueryOptions) PropertyManagement.fromBytes(
 						(byte[]) ob,

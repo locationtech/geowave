@@ -49,20 +49,10 @@ public class ExtractParameters
 				"emn",
 				"Minimum input split size",
 				true),
-		INDEX_ID(
-				String.class,
-				"ei",
-				"Extract from a specific index",
-				true),
 		GROUP_ID(
 				String.class,
 				"eg",
 				"Group ID assigned to extracted data",
-				true),
-		ADAPTER_ID(
-				String.class,
-				"eit",
-				"Input Data Type ID",
 				true);
 
 		private transient final ParameterHelper<?> helper;
