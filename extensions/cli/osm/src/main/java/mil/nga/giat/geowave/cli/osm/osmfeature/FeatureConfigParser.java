@@ -81,7 +81,10 @@ public class FeatureConfigParser
 						}
 						case "validated_geometry": {
 							fd.type = FeatureType.Geometry;
+							break;
 						}
+						default:
+							break;
 					}
 					break;
 				}
@@ -103,6 +106,8 @@ public class FeatureConfigParser
 							fd);
 					break;
 				}
+				default:
+					break;
 			}
 		}
 		return fd;

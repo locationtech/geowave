@@ -150,6 +150,8 @@ public class OSMRunner extends
 				job.setMapperClass(OSMRelationMapper.class);
 				break;
 			}
+			default:
+				break;
 		}
 		if (avroSchema == null || inputAvroFile == null) {
 			throw new MissingArgumentException(
