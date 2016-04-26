@@ -3,7 +3,6 @@ package mil.nga.giat.geowave.test;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 import mil.nga.giat.geowave.test.config.ConfigCacheIT;
@@ -15,31 +14,30 @@ import mil.nga.giat.geowave.test.mapreduce.GeoWaveNNIT;
 import mil.nga.giat.geowave.test.mapreduce.KDERasterResizeIT;
 import mil.nga.giat.geowave.test.query.AttributesSubsetQueryIT;
 import mil.nga.giat.geowave.test.query.PolygonDataIdQueryIT;
-import mil.nga.giat.geowave.test.query.SecondaryIndexingDriverIT;
 import mil.nga.giat.geowave.test.query.SecondaryIndexingQueryIT;
 import mil.nga.giat.geowave.test.query.SpatialTemporalQueryIT;
 import mil.nga.giat.geowave.test.service.GeoServerIT;
 import mil.nga.giat.geowave.test.service.GeoWaveIngestGeoserverIT;
 import mil.nga.giat.geowave.test.service.GeoWaveServicesIT;
 
-@RunWith(Suite.class)
+@RunWith(GeoWaveITSuiteRunner.class)
 @SuiteClasses({
 	GeoWaveBasicIT.class,
-// GeoWaveRasterIT.class,
-// BasicMapReduceIT.class,
-// BulkIngestInputGenerationIT.class,
-// KDERasterResizeIT.class,
-// GeoWaveKMeansIT.class,
-// GeoWaveNNIT.class,
-// GeoServerIT.class,
-// GeoWaveServicesIT.class,
-// GeoWaveIngestGeoserverIT.class,
-// AttributesSubsetQueryIT.class,
-// SecondaryIndexingQueryIT.class,
-// DBScanIT.class,
-// SpatialTemporalQueryIT.class,
-// PolygonDataIdQueryIT.class,
-// ConfigCacheIT.class,
+	GeoWaveRasterIT.class,
+	BasicMapReduceIT.class,
+	BulkIngestInputGenerationIT.class,
+	KDERasterResizeIT.class,
+	GeoWaveKMeansIT.class,
+	GeoWaveNNIT.class,
+	GeoServerIT.class,
+	GeoWaveServicesIT.class,
+	GeoWaveIngestGeoserverIT.class,
+	AttributesSubsetQueryIT.class,
+	SecondaryIndexingQueryIT.class,
+	DBScanIT.class,
+	SpatialTemporalQueryIT.class,
+	PolygonDataIdQueryIT.class,
+	ConfigCacheIT.class,
 })
 public class GeoWaveITSuite
 {
