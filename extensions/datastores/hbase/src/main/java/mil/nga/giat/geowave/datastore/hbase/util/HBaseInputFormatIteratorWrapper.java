@@ -1,47 +1,45 @@
-package mil.nga.giat.geowave.datastore.accumulo.util;
+package mil.nga.giat.geowave.datastore.hbase.util;
 
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.NoSuchElementException;
 
-import org.apache.accumulo.core.data.Key;
-import org.apache.accumulo.core.data.Value;
 import org.apache.commons.lang.ArrayUtils;
+import org.apache.hadoop.hbase.client.Result;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.datastore.accumulo.AccumuloRowId;
+import mil.nga.giat.geowave.datastore.hbase.entities.HBaseRowId;
 import mil.nga.giat.geowave.mapreduce.HadoopWritableSerializationTool;
 import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
 
 /**
- * This is used internally to translate Accumulo rows into native objects (using
+ * This is used internally to translate HBase rows into native objects (using
  * the appropriate data adapter). It also performs any client-side filtering. It
- * will peek at the next entry in the accumulo iterator to always maintain a
+ * will peek at the next entry in the HBase iterator to always maintain a
  * reference to the next value. It maintains the adapter ID, data ID, and
- * original accumulo key in the GeoWaveInputKey for use by the
- * GeoWaveInputFormat.
+ * original HBase key in the GeoWaveInputKey for use by the GeoWaveInputFormat.
  * 
  * @param <T>
  *            The type for the entry
  */
-public class InputFormatIteratorWrapper<T> implements
+public class HBaseInputFormatIteratorWrapper<T> implements
 		Iterator<Entry<GeoWaveInputKey, T>>
 {
 	private final PrimaryIndex index;
-	private final Iterator<Entry<Key, Value>> scannerIt;
+	private final Iterator<Result> scannerIt;
 	private final QueryFilter clientFilter;
 	private final HadoopWritableSerializationTool serializationTool;
 	private final boolean isOutputWritable;
 	private Entry<GeoWaveInputKey, T> nextValue;
 
-	public InputFormatIteratorWrapper(
+	public HBaseInputFormatIteratorWrapper(
 			final AdapterStore adapterStore,
 			final PrimaryIndex index,
-			final Iterator<Entry<Key, Value>> scannerIt,
+			final Iterator<Result> scannerIt,
 			final boolean isOutputWritable,
 			final QueryFilter clientFilter ) {
 		this.serializationTool = new HadoopWritableSerializationTool(
@@ -54,7 +52,7 @@ public class InputFormatIteratorWrapper<T> implements
 
 	private void findNext() {
 		while ((nextValue == null) && scannerIt.hasNext()) {
-			final Entry<Key, Value> row = scannerIt.next();
+			final Result row = scannerIt.next();
 			final Entry<GeoWaveInputKey, T> decodedValue = decodeRow(
 					row,
 					clientFilter,
@@ -68,18 +66,20 @@ public class InputFormatIteratorWrapper<T> implements
 
 	@SuppressWarnings("unchecked")
 	private Entry<GeoWaveInputKey, T> decodeRow(
-			final Entry<Key, Value> row,
+			final Result row,
 			final QueryFilter clientFilter,
 			final PrimaryIndex index ) {
-		final AccumuloRowId rowId = new AccumuloRowId(
-				row.getKey());
-		final Object value = AccumuloUtils.decodeRow(
-				row.getKey(),
-				row.getValue(),
+		final HBaseRowId rowId = new HBaseRowId(
+				row.getRow());
+		final Object value = HBaseUtils.decodeRow(
+				row,
 				rowId,
+				null,
 				serializationTool.getAdapterStore(),
 				clientFilter,
-				index);
+				index,
+				null);
+
 		if (value == null) {
 			return null;
 		}

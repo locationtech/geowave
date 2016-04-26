@@ -64,6 +64,8 @@ import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.core.store.query.RowIdQuery;
 import mil.nga.giat.geowave.datastore.hbase.index.secondary.HBaseSecondaryIndexDataStore;
 import mil.nga.giat.geowave.datastore.hbase.io.HBaseWriter;
+import mil.nga.giat.geowave.datastore.hbase.mapreduce.GeoWaveHBaseRecordReader;
+import mil.nga.giat.geowave.datastore.hbase.mapreduce.HBaseMRUtils;
 import mil.nga.giat.geowave.datastore.hbase.metadata.AbstractHBasePersistence;
 import mil.nga.giat.geowave.datastore.hbase.metadata.HBaseAdapterIndexMappingStore;
 import mil.nga.giat.geowave.datastore.hbase.metadata.HBaseAdapterStore;
@@ -867,22 +869,6 @@ public class HBaseDataStore implements
 	}
 
 	@Override
-	public RecordReader<GeoWaveInputKey, ?> createRecordReader(
-			final DistributableQuery query,
-			final QueryOptions queryOptions,
-			final AdapterStore adapterStore,
-			final DataStatisticsStore statsStore,
-			final IndexStore indexStore,
-			final boolean isOutputWritable,
-			final InputSplit inputSplit )
-			throws IOException,
-			InterruptedException {
-		// TODO Implement HBase record reader
-		LOGGER.error("This method createRecordReader9 is not yet coded. Need to fix it");
-		return null;
-	}
-
-	@Override
 	public List<InputSplit> getSplits(
 			final DistributableQuery query,
 			final QueryOptions queryOptions,
@@ -893,9 +879,35 @@ public class HBaseDataStore implements
 			final Integer maxSplits )
 			throws IOException,
 			InterruptedException {
-		// TODO Implement
-		LOGGER.error("This method getSplits9 is not yet coded. Need to fix it");
-		return null;
+		return HBaseMRUtils.getSplits(
+				operations,
+				query,
+				queryOptions,
+				adapterStore,
+				statsStore,
+				indexStore,
+				indexMappingStore,
+				minSplits,
+				maxSplits);
+	}
+
+	@Override
+	public RecordReader<GeoWaveInputKey, ?> createRecordReader(
+			final DistributableQuery query,
+			final QueryOptions queryOptions,
+			final AdapterStore adapterStore,
+			final DataStatisticsStore statsStore,
+			final IndexStore indexStore,
+			final boolean isOutputWritable,
+			final InputSplit inputSplit )
+			throws IOException,
+			InterruptedException {
+		return new GeoWaveHBaseRecordReader(
+				query,
+				queryOptions,
+				isOutputWritable,
+				adapterStore,
+				operations);
 	}
 
 	private class AltIndexCallback<T> implements
