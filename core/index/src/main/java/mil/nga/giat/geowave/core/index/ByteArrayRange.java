@@ -11,9 +11,9 @@ import java.util.List;
 public class ByteArrayRange implements
 		Comparable<ByteArrayRange>
 {
-	private final ByteArrayId start;
-	private final ByteArrayId end;
-	private boolean singleValue;
+	protected ByteArrayId start;
+	protected ByteArrayId end;
+	protected boolean singleValue;
 
 	/***
 	 * 

@@ -136,6 +136,11 @@ public class AccumuloSecondaryIndexDataStore implements
 		}
 	}
 
+	public void clearCache() {
+		close();
+		writerCache.clear();
+	}
+
 	private Mutation buildMutation(
 			final byte[] secondaryIndexRowId,
 			final byte[] secondaryIndexId,

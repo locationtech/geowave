@@ -3,6 +3,9 @@
 
 package mil.nga.giat.geowave.datastore.hbase.query.generated;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
+@SuppressFBWarnings
 public final class FilterProtos
 {
 	private FilterProtos() {}

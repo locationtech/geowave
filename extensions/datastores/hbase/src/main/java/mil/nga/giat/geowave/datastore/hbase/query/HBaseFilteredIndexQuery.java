@@ -2,14 +2,13 @@ package mil.nga.giat.geowave.datastore.hbase.query;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.hadoop.hbase.HConstants;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.Scan;
@@ -36,6 +35,7 @@ import mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations;
 import mil.nga.giat.geowave.datastore.hbase.util.HBaseCloseableIteratorWrapper;
 import mil.nga.giat.geowave.datastore.hbase.util.HBaseCloseableIteratorWrapper.MultiScannerClosableWrapper;
 import mil.nga.giat.geowave.datastore.hbase.util.HBaseEntryIteratorWrapper;
+import mil.nga.giat.geowave.datastore.hbase.util.HBaseUtils;
 
 public abstract class HBaseFilteredIndexQuery extends
 		HBaseQuery
@@ -134,12 +134,12 @@ public abstract class HBaseFilteredIndexQuery extends
 			}
 			else {
 				LOGGER.error("Results were empty");
-				return null;
+				return new CloseableIterator.Empty();
 			}
 		}
 		catch (final IOException e) {
 			LOGGER.error("Could not get the results from scanner");
-			return null;
+			return new CloseableIterator.Empty();
 		}
 
 		// final Scan scanner = getScanner(
@@ -182,36 +182,6 @@ public abstract class HBaseFilteredIndexQuery extends
 
 	protected abstract List<Filter> getDistributableFilter();
 
-	private byte[] calculateTheClosestNextRowKeyForPrefix(
-			final byte[] rowKeyPrefix ) {
-		// Essentially we are treating it like an 'unsigned very very long' and
-		// doing +1 manually.
-		// Search for the place where the trailing 0xFFs start
-		int offset = rowKeyPrefix.length;
-		while (offset > 0) {
-			if (rowKeyPrefix[offset - 1] != (byte) 0xFF) {
-				break;
-			}
-			offset--;
-		}
-
-		if (offset == 0) {
-			// We got an 0xFFFF... (only FFs) stopRow value which is
-			// the last possible prefix before the end of the table.
-			// So set it to stop at the 'end of the table'
-			return HConstants.EMPTY_END_ROW;
-		}
-
-		// Copy the right length of the original
-		final byte[] newStopRow = Arrays.copyOfRange(
-				rowKeyPrefix,
-				0,
-				offset);
-		// And increment the last one
-		newStopRow[newStopRow.length - 1]++;
-		return newStopRow;
-	}
-
 	private List<Scan> getScanners(
 			final Integer limit,
 			final List<Filter> distributableFilters,
@@ -223,7 +193,12 @@ public abstract class HBaseFilteredIndexQuery extends
 				filterList.addFilter(filter);
 			}
 		}
-		final List<ByteArrayRange> ranges = getRanges();
+		List<ByteArrayRange> ranges = getRanges();
+		if ((ranges == null) || ranges.isEmpty()) {
+			ranges = Collections.singletonList(new ByteArrayRange(
+					null,
+					null));
+		}
 		final List<Scan> scanners = new ArrayList<Scan>();
 		if ((ranges != null) && (ranges.size() > 0)) {
 
@@ -237,9 +212,11 @@ public abstract class HBaseFilteredIndexQuery extends
 					}
 				}
 
-				scanner.setStartRow(range.getStart().getBytes());
-				if (!range.isSingleValue()) {
-					scanner.setStopRow(calculateTheClosestNextRowKeyForPrefix(range.getEnd().getBytes()));
+				if (range.getStart() != null) {
+					scanner.setStartRow(range.getStart().getBytes());
+					if (!range.isSingleValue()) {
+						scanner.setStopRow(HBaseUtils.calculateTheClosestNextRowKeyForPrefix(range.getEnd().getBytes()));
+					}
 				}
 
 				scanner.setFilter(filterList);
@@ -263,7 +240,7 @@ public abstract class HBaseFilteredIndexQuery extends
 		return scanners;
 	}
 
-	private Scan getScanner(
+	protected Scan getScanner(
 			final Integer limit,
 			final List<Filter> distributableFilters,
 			final CloseableIterator<DataAdapter<?>> adapters ) {
@@ -277,7 +254,7 @@ public abstract class HBaseFilteredIndexQuery extends
 
 			scanner.setStartRow(range.getStart().getBytes());
 			if (!range.isSingleValue()) {
-				scanner.setStopRow(calculateTheClosestNextRowKeyForPrefix(range.getEnd().getBytes()));
+				scanner.setStopRow(HBaseUtils.calculateTheClosestNextRowKeyForPrefix(range.getEnd().getBytes()));
 			}
 		}
 		else if (ranges != null) {
@@ -296,11 +273,11 @@ public abstract class HBaseFilteredIndexQuery extends
 				rowRanges.add(new RowRange(
 						range.getStart().getBytes(),
 						true,
-						calculateTheClosestNextRowKeyForPrefix(range.getEnd().getBytes()),
+						HBaseUtils.calculateTheClosestNextRowKeyForPrefix(range.getEnd().getBytes()),
 						false));
 			}
 			scanner.setStartRow(minStart.getBytes());
-			scanner.setStopRow(calculateTheClosestNextRowKeyForPrefix(maxEnd.getBytes()));
+			scanner.setStopRow(HBaseUtils.calculateTheClosestNextRowKeyForPrefix(maxEnd.getBytes()));
 			try {
 				final MultiRowRangeFilter filter = new MultiRowRangeFilter(
 						rowRanges.subList(

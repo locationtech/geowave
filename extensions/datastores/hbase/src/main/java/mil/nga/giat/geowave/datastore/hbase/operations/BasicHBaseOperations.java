@@ -6,6 +6,7 @@ import org.apache.hadoop.hbase.HColumnDescriptor;
 import org.apache.hadoop.hbase.HTableDescriptor;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.Connection;
+import org.apache.hadoop.hbase.client.RegionLocator;
 import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.client.Table;
@@ -122,7 +123,7 @@ public class BasicHBaseOperations
 		return table;
 	}
 
-	private String getQualifiedTableName(
+	public String getQualifiedTableName(
 			final String unqualifiedTableName ) {
 		return HBaseUtils.getQualifiedTableName(
 				tableNamespace,
@@ -183,5 +184,11 @@ public class BasicHBaseOperations
 		}
 		return false;
 
+	}
+
+	public RegionLocator getRegionLocator(
+			final String tableName )
+			throws IOException {
+		return conn.getRegionLocator(getTableName(getQualifiedTableName(tableName)));
 	}
 }

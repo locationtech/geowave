@@ -76,6 +76,7 @@ import mil.nga.giat.geowave.core.store.query.RowIdQuery;
 import mil.nga.giat.geowave.datastore.accumulo.index.secondary.AccumuloSecondaryIndexDataStore;
 import mil.nga.giat.geowave.datastore.accumulo.mapreduce.AccumuloMRUtils;
 import mil.nga.giat.geowave.datastore.accumulo.mapreduce.GeoWaveAccumuloRecordReader;
+import mil.nga.giat.geowave.datastore.accumulo.metadata.AbstractAccumuloPersistence;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloAdapterIndexMappingStore;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloAdapterStore;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloDataStatisticsStore;
@@ -709,6 +710,16 @@ public class AccumuloDataStore implements
 			final Query query ) {
 		if (((query == null) || (query instanceof EverythingQuery)) && queryOptions.isAllAdapters()) {
 			try {
+
+				// TODO These interfaces should all provide remove and removeAll
+				// capabilities instead of having to clear the
+				// AbstractPersistence's cache manually
+				((AbstractAccumuloPersistence) indexStore).clearCache();
+				((AbstractAccumuloPersistence) adapterStore).clearCache();
+				((AbstractAccumuloPersistence) statisticsStore).clearCache();
+				((AccumuloSecondaryIndexDataStore) secondaryIndexDataStore).clearCache();
+				((AbstractAccumuloPersistence) indexMappingStore).clearCache();
+
 				accumuloOperations.deleteAll();
 				return true;
 			}
@@ -919,10 +930,12 @@ public class AccumuloDataStore implements
 				tableName,
 				adapterId,
 				additionalAuthorizations);
-		deleteAll(
-				altIdxTableName,
-				adapterId,
-				additionalAuthorizations);
+		if (accumuloOptions.isUseAltIndex() && accumuloOperations.tableExists(altIdxTableName)) {
+			deleteAll(
+					altIdxTableName,
+					adapterId,
+					additionalAuthorizations);
+		}
 	}
 
 	private boolean deleteAll(

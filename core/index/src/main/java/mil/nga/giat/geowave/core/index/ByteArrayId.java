@@ -40,7 +40,7 @@ public class ByteArrayId implements
 		return stringId;
 	}
 
-	public String getReadableString() {
+	public String getHexString() {
 
 		StringBuffer str = new StringBuffer();
 		for (byte b : id) {
