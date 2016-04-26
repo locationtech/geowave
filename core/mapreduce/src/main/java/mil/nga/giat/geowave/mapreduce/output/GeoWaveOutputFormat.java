@@ -91,33 +91,6 @@ public class GeoWaveOutputFormat extends
 				dataStoreName);
 	}
 
-	public static void setDataStatisticsStoreName(
-			final Configuration config,
-			final String dataStatisticsStoreName ) {
-		GeoWaveConfiguratorBase.setDataStatisticsStoreName(
-				CLASS,
-				config,
-				dataStatisticsStoreName);
-	}
-
-	public static void setIndexStoreName(
-			final Configuration config,
-			final String indexStoreName ) {
-		GeoWaveConfiguratorBase.setIndexStoreName(
-				CLASS,
-				config,
-				indexStoreName);
-	}
-
-	public static void setAdapterStoreName(
-			final Configuration config,
-			final String dataStoreName ) {
-		GeoWaveConfiguratorBase.setAdapterStoreName(
-				CLASS,
-				config,
-				dataStoreName);
-	}
-
 	public static void setStoreConfigOptions(
 			final Configuration config,
 			final Map<String, String> storeConfigOptions ) {
@@ -167,27 +140,6 @@ public class GeoWaveOutputFormat extends
 	public static String getDataStoreName(
 			final JobContext context ) {
 		return GeoWaveConfiguratorBase.getDataStoreName(
-				CLASS,
-				context);
-	}
-
-	public static String getIndexStoreName(
-			final JobContext context ) {
-		return GeoWaveConfiguratorBase.getIndexStoreName(
-				CLASS,
-				context);
-	}
-
-	public static String getDataStatisticsStoreName(
-			final JobContext context ) {
-		return GeoWaveConfiguratorBase.getDataStatisticsStoreName(
-				CLASS,
-				context);
-	}
-
-	public static String getAdapterStoreName(
-			final JobContext context ) {
-		return GeoWaveConfiguratorBase.getAdapterStoreName(
 				CLASS,
 				context);
 	}

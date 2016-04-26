@@ -20,6 +20,7 @@ import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.GeoWaveStoreFinder;
+import mil.nga.giat.geowave.core.store.StoreFactoryFamilySpi;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
@@ -68,33 +69,6 @@ public class GeoWaveInputFormat<T> extends
 				dataStoreName);
 	}
 
-	public static void setAdapterStoreName(
-			final Configuration config,
-			final String adapterStoreName ) {
-		GeoWaveConfiguratorBase.setAdapterStoreName(
-				CLASS,
-				config,
-				adapterStoreName);
-	}
-
-	public static void setDataStatisticsStoreName(
-			final Configuration config,
-			final String dataStatisticsStoreName ) {
-		GeoWaveConfiguratorBase.setDataStatisticsStoreName(
-				CLASS,
-				config,
-				dataStatisticsStoreName);
-	}
-
-	public static void setIndexStoreName(
-			final Configuration config,
-			final String indexStoreName ) {
-		GeoWaveConfiguratorBase.setIndexStoreName(
-				CLASS,
-				config,
-				indexStoreName);
-	}
-
 	public static void setStoreConfigOptions(
 			final Configuration config,
 			final Map<String, String> storeConfigOptions ) {
@@ -124,7 +98,7 @@ public class GeoWaveInputFormat<T> extends
 				CLASS,
 				context);
 	}
-
+	
 	public static void setIndex(
 			final Configuration config,
 			final PrimaryIndex index ) {
@@ -283,26 +257,9 @@ public class GeoWaveInputFormat<T> extends
 								// from the job context
 		try {
 			final Map<String, String> configOptions = getStoreConfigOptions(context);
-			if (GeoWaveStoreFinder.createDataStore(configOptions) == null) {
+			StoreFactoryFamilySpi factoryFamily = GeoWaveStoreFinder.findStoreFamily(configOptions);
+			if (factoryFamily == null) {
 				final String msg = "Unable to find GeoWave data store";
-				LOGGER.warn(msg);
-				throw new IOException(
-						msg);
-			}
-			if (GeoWaveStoreFinder.createIndexStore(configOptions) == null) {
-				final String msg = "Unable to find GeoWave index store";
-				LOGGER.warn(msg);
-				throw new IOException(
-						msg);
-			}
-			if (GeoWaveStoreFinder.createAdapterStore(configOptions) == null) {
-				final String msg = "Unable to find GeoWave adapter store";
-				LOGGER.warn(msg);
-				throw new IOException(
-						msg);
-			}
-			if (GeoWaveStoreFinder.createDataStatisticsStore(configOptions) == null) {
-				final String msg = "Unable to find GeoWave data statistics store";
 				LOGGER.warn(msg);
 				throw new IOException(
 						msg);
@@ -328,27 +285,6 @@ public class GeoWaveInputFormat<T> extends
 	public static String getDataStoreName(
 			final JobContext context ) {
 		return GeoWaveConfiguratorBase.getDataStoreName(
-				CLASS,
-				context);
-	}
-
-	public static String getIndexStoreName(
-			final JobContext context ) {
-		return GeoWaveConfiguratorBase.getIndexStoreName(
-				CLASS,
-				context);
-	}
-
-	public static String getDataStatisticsStoreName(
-			final JobContext context ) {
-		return GeoWaveConfiguratorBase.getDataStatisticsStoreName(
-				CLASS,
-				context);
-	}
-
-	public static String getAdapterStoreName(
-			final JobContext context ) {
-		return GeoWaveConfiguratorBase.getAdapterStoreName(
 				CLASS,
 				context);
 	}

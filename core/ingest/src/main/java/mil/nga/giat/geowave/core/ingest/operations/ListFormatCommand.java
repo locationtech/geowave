@@ -14,8 +14,8 @@ import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.ingest.spi.IngestFormatPluginProviderSpi;
 import mil.nga.giat.geowave.core.ingest.spi.IngestFormatPluginRegistry;
-import mil.nga.giat.geowave.core.store.DataStoreFactorySpi;
 import mil.nga.giat.geowave.core.store.GeoWaveStoreFinder;
+import mil.nga.giat.geowave.core.store.StoreFactoryFamilySpi;
 import mil.nga.giat.geowave.core.store.spi.DimensionalityTypeProviderSpi;
 import mil.nga.giat.geowave.core.store.spi.DimensionalityTypeRegistry;
 
@@ -51,9 +51,9 @@ public class ListFormatCommand extends
 			pw.println();
 		}
 		pw.println("Available datastores currently registered:\n");
-		final Map<String, DataStoreFactorySpi> dataStoreFactories = GeoWaveStoreFinder.getRegisteredDataStoreFactories();
-		for (final Entry<String, DataStoreFactorySpi> dataStoreFactoryEntry : dataStoreFactories.entrySet()) {
-			final DataStoreFactorySpi dataStoreFactory = dataStoreFactoryEntry.getValue();
+		final Map<String, StoreFactoryFamilySpi> dataStoreFactories = GeoWaveStoreFinder.getRegisteredStoreFactoryFamilies();
+		for (final Entry<String, StoreFactoryFamilySpi> dataStoreFactoryEntry : dataStoreFactories.entrySet()) {
+			final StoreFactoryFamilySpi dataStoreFactory = dataStoreFactoryEntry.getValue();
 			final String desc = dataStoreFactory.getDescription() == null ? "no description" : dataStoreFactory.getDescription();
 			final String text = "  " + dataStoreFactory.getName() + ":\n    " + desc;
 			pw.println(text);

@@ -1,12 +1,13 @@
 package mil.nga.giat.geowave.datastore.accumulo;
 
-import mil.nga.giat.geowave.core.store.DataStoreFactorySpi;
+import mil.nga.giat.geowave.core.store.DataStore;
+import mil.nga.giat.geowave.core.store.GenericStoreFactory;
 import mil.nga.giat.geowave.core.store.StoreFactoryFamilySpi;
-import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStoreFactorySpi;
-import mil.nga.giat.geowave.core.store.adapter.AdapterStoreFactorySpi;
-import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStoreFactorySpi;
-import mil.nga.giat.geowave.core.store.index.IndexStoreFactorySpi;
-import mil.nga.giat.geowave.core.store.index.SecondaryIndexDataStoreFactorySpi;
+import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
+import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
+import mil.nga.giat.geowave.core.store.index.IndexStore;
+import mil.nga.giat.geowave.core.store.index.SecondaryIndexDataStore;
 import mil.nga.giat.geowave.datastore.accumulo.index.secondary.AccumuloSecondaryIndexDataStoreFactory;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloAdapterIndexMappingStoreFactory;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloAdapterStoreFactory;
@@ -18,32 +19,32 @@ public class AccumuloStoreFactoryFamily extends
 		StoreFactoryFamilySpi
 {
 	@Override
-	public DataStoreFactorySpi getDataStoreFactory() {
+	public GenericStoreFactory<DataStore> getDataStoreFactory() {
 		return new AccumuloDataStoreFactory();
 	}
 
 	@Override
-	public DataStatisticsStoreFactorySpi getDataStatisticsStoreFactory() {
+	public GenericStoreFactory<DataStatisticsStore> getDataStatisticsStoreFactory() {
 		return new AccumuloDataStatisticsStoreFactory();
 	}
 
 	@Override
-	public IndexStoreFactorySpi getIndexStoreFactory() {
+	public GenericStoreFactory<IndexStore> getIndexStoreFactory() {
 		return new AccumuloIndexStoreFactory();
 	}
 
 	@Override
-	public AdapterStoreFactorySpi getAdapterStoreFactory() {
+	public GenericStoreFactory<AdapterStore> getAdapterStoreFactory() {
 		return new AccumuloAdapterStoreFactory();
 	}
 
 	@Override
-	public SecondaryIndexDataStoreFactorySpi getSecondaryIndexDataStore() {
+	public GenericStoreFactory<SecondaryIndexDataStore> getSecondaryIndexDataStore() {
 		return new AccumuloSecondaryIndexDataStoreFactory();
 	}
 
 	@Override
-	public AdapterIndexMappingStoreFactorySpi getAdapterIndexMappingStoreFactory() {
+	public GenericStoreFactory<AdapterIndexMappingStore> getAdapterIndexMappingStoreFactory() {
 		return new AccumuloAdapterIndexMappingStoreFactory();
 	}
 
