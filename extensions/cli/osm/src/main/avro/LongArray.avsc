@@ -1,0 +1,14 @@
+{
+        "name": "LongArray",
+        "namespace": "mil.nga.giat.geowave.cli.osm.types.generated",
+        "type": "record",
+        "fields": [{
+            "name": "ids",
+            "type": {
+                "type": "array",
+                "items": "long"
+            }
+            }
+        ]
+}
+
