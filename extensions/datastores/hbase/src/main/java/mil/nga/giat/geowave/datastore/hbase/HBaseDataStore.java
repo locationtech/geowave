@@ -64,6 +64,9 @@ import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.core.store.query.RowIdQuery;
 import mil.nga.giat.geowave.datastore.hbase.index.secondary.HBaseSecondaryIndexDataStore;
 import mil.nga.giat.geowave.datastore.hbase.io.HBaseWriter;
+import mil.nga.giat.geowave.datastore.hbase.mapreduce.GeoWaveHBaseRecordReader;
+import mil.nga.giat.geowave.datastore.hbase.mapreduce.HBaseMRUtils;
+import mil.nga.giat.geowave.datastore.hbase.metadata.AbstractHBasePersistence;
 import mil.nga.giat.geowave.datastore.hbase.metadata.HBaseAdapterIndexMappingStore;
 import mil.nga.giat.geowave.datastore.hbase.metadata.HBaseAdapterStore;
 import mil.nga.giat.geowave.datastore.hbase.metadata.HBaseDataStatisticsStore;
@@ -208,7 +211,6 @@ public class HBaseDataStore implements
 				adapter.getAdapterId(),
 				indices));
 
-		final byte[] adapterId = adapter.getAdapterId().getBytes();
 		final IndexWriter<T>[] writers = new IndexWriter[indices.length];
 
 		int i = 0;
@@ -605,6 +607,15 @@ public class HBaseDataStore implements
 			final Query query ) {
 		if (((query == null) || (query instanceof EverythingQuery)) && queryOptions.isAllAdapters()) {
 			try {
+				// TODO These interfaces should all provide remove and removeAll
+				// capabilities instead of having to clear the
+				// AbstractPersistence's cache manually
+				((AbstractHBasePersistence) indexStore).clearCache();
+				((AbstractHBasePersistence) adapterStore).clearCache();
+				((AbstractHBasePersistence) statisticsStore).clearCache();
+				// secondaryIndexDataStore.removeAll();
+				((AbstractHBasePersistence) indexMappingStore).clearCache();
+
 				operations.deleteAll();
 				return true;
 			}
@@ -858,22 +869,6 @@ public class HBaseDataStore implements
 	}
 
 	@Override
-	public RecordReader<GeoWaveInputKey, ?> createRecordReader(
-			final DistributableQuery query,
-			final QueryOptions queryOptions,
-			final AdapterStore adapterStore,
-			final DataStatisticsStore statsStore,
-			final IndexStore indexStore,
-			final boolean isOutputWritable,
-			final InputSplit inputSplit )
-			throws IOException,
-			InterruptedException {
-		// TODO Implement HBase record reader
-		LOGGER.error("This method createRecordReader9 is not yet coded. Need to fix it");
-		return null;
-	}
-
-	@Override
 	public List<InputSplit> getSplits(
 			final DistributableQuery query,
 			final QueryOptions queryOptions,
@@ -884,9 +879,35 @@ public class HBaseDataStore implements
 			final Integer maxSplits )
 			throws IOException,
 			InterruptedException {
-		// TODO Implement
-		LOGGER.error("This method getSplits9 is not yet coded. Need to fix it");
-		return null;
+		return HBaseMRUtils.getSplits(
+				operations,
+				query,
+				queryOptions,
+				adapterStore,
+				statsStore,
+				indexStore,
+				indexMappingStore,
+				minSplits,
+				maxSplits);
+	}
+
+	@Override
+	public RecordReader<GeoWaveInputKey, ?> createRecordReader(
+			final DistributableQuery query,
+			final QueryOptions queryOptions,
+			final AdapterStore adapterStore,
+			final DataStatisticsStore statsStore,
+			final IndexStore indexStore,
+			final boolean isOutputWritable,
+			final InputSplit inputSplit )
+			throws IOException,
+			InterruptedException {
+		return new GeoWaveHBaseRecordReader(
+				query,
+				queryOptions,
+				isOutputWritable,
+				adapterStore,
+				operations);
 	}
 
 	private class AltIndexCallback<T> implements

@@ -166,6 +166,10 @@ abstract public class AbstractAccumuloPersistence<T extends Persistable>
 		return primaryId;
 	}
 
+	public void clearCache() {
+		cache.clear();
+	}
+
 	protected void addObject(
 			final T object ) {
 		final ByteArrayId id = getPrimaryId(object);

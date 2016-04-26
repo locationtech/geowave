@@ -78,4 +78,13 @@ public class HBaseOptions
 			final boolean useAltIndex ) {
 		this.useAltIndex = useAltIndex;
 	}
+
+	public boolean isEnableBlockCache() {
+		return enableBlockCache;
+	}
+
+	public void setEnableBlockCache(
+			boolean enableBlockCache ) {
+		this.enableBlockCache = enableBlockCache;
+	}
 }

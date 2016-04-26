@@ -11,6 +11,7 @@ import java.util.NavigableMap;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.hadoop.hbase.Cell;
 import org.apache.hadoop.hbase.CellUtil;
+import org.apache.hadoop.hbase.HConstants;
 import org.apache.hadoop.hbase.KeyValue;
 import org.apache.hadoop.hbase.client.Delete;
 import org.apache.hadoop.hbase.client.Put;
@@ -30,13 +31,10 @@ import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
-import mil.nga.giat.geowave.core.store.data.DataWriter;
 import mil.nga.giat.geowave.core.store.data.PersistentDataset;
 import mil.nga.giat.geowave.core.store.data.PersistentValue;
 import mil.nga.giat.geowave.core.store.data.VisibilityWriter;
 import mil.nga.giat.geowave.core.store.data.field.FieldReader;
-import mil.nga.giat.geowave.core.store.data.field.FieldVisibilityHandler;
-import mil.nga.giat.geowave.core.store.data.field.FieldWriter;
 import mil.nga.giat.geowave.core.store.data.visibility.UnconstrainedVisibilityHandler;
 import mil.nga.giat.geowave.core.store.data.visibility.UniformVisibilityWriter;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
@@ -133,36 +131,34 @@ public class HBaseUtils
 		}
 	}
 
-	@SuppressWarnings({
-		"rawtypes",
-		"unchecked"
-	})
-	private static <T> FieldInfo<T> getFieldInfo(
-			final DataWriter dataWriter,
-			final PersistentValue<T> fieldValue,
-			final T entry,
-			final VisibilityWriter<T> customFieldVisibilityWriter ) {
-		final FieldWriter fieldWriter = dataWriter.getWriter(fieldValue.getId());
-		final FieldVisibilityHandler<T, Object> customVisibilityHandler = customFieldVisibilityWriter.getFieldVisibilityHandler(fieldValue.getId());
-		if (fieldWriter != null) {
-			final Object value = fieldValue.getValue();
-			return new FieldInfo<T>(
-					fieldValue,
-					fieldWriter.writeField(value),
-					merge(
-							customVisibilityHandler.getVisibility(
-									entry,
-									fieldValue.getId(),
-									value),
-							fieldWriter.getVisibility(
-									entry,
-									fieldValue.getId(),
-									value)));
+	public static byte[] calculateTheClosestNextRowKeyForPrefix(
+			final byte[] rowKeyPrefix ) {
+		// Essentially we are treating it like an 'unsigned very very long' and
+		// doing +1 manually.
+		// Search for the place where the trailing 0xFFs start
+		int offset = rowKeyPrefix.length;
+		while (offset > 0) {
+			if (rowKeyPrefix[offset - 1] != (byte) 0xFF) {
+				break;
+			}
+			offset--;
 		}
-		else if (fieldValue.getValue() != null) {
-			LOGGER.warn("Data writer of class " + dataWriter.getClass() + " does not support field for " + fieldValue.getValue());
+
+		if (offset == 0) {
+			// We got an 0xFFFF... (only FFs) stopRow value which is
+			// the last possible prefix before the end of the table.
+			// So set it to stop at the 'end of the table'
+			return HConstants.EMPTY_END_ROW;
 		}
-		return null;
+
+		// Copy the right length of the original
+		final byte[] newStopRow = Arrays.copyOfRange(
+				rowKeyPrefix,
+				0,
+				offset);
+		// And increment the last one
+		newStopRow[newStopRow.length - 1]++;
+		return newStopRow;
 	}
 
 	public static <T> DataStoreEntryInfo write(
