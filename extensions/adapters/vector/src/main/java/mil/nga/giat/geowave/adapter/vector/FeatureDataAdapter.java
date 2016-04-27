@@ -679,38 +679,27 @@ public class FeatureDataAdapter extends
 			initializePositionMaps();
 		}
 		// next check other fields
-		if (fieldToPositionMap.containsKey(fieldId)) {
 			// dimension fields must be first, add padding
-			return fieldToPositionMap.get(
+			final Integer retVal = fieldToPositionMap.get(
 					fieldId).intValue() + model.getDimensions().length;
-		}
-		else {
-			// field not found
-			return -1;
-		}
+			return (retVal != null) ? retVal.intValue() : -1;
 	}
 
 	@Override
 	public ByteArrayId getFieldIdForPosition(
 			final CommonIndexModel model,
 			final int position ) {
-		final List<ByteArrayId> dimensionFieldIds = getDimensionFieldIds(model);
-		// first check CommonIndexModel dimensions
-		if (position < dimensionFieldIds.size()) {
-			return dimensionFieldIds.get(position);
-		}
-		if (fieldToPositionMap.isEmpty()) {
-			initializePositionMaps();
-		}
-		final int adjustedPosition = position - model.getDimensions().length;
-		// next check other fields
-		if (positionToFieldMap.containsKey(adjustedPosition)) {
+		if(position >= model.getDimensions().length) {
+			if (fieldToPositionMap.isEmpty()) {
+				initializePositionMaps();
+			}
+			final int adjustedPosition = position - model.getDimensions().length;
+			// check other fields
 			return positionToFieldMap.get(adjustedPosition);
 		}
-		else {
-			// fieldId not found
-			return null;
-		}
+		final List<ByteArrayId> dimensionFieldIds = getDimensionFieldIds(model);
+		// otherwise check CommonIndexModel dimensions
+		return dimensionFieldIds.get(position);
 	}
 
 	private void initializePositionMaps() {
@@ -727,8 +716,9 @@ public class FeatureDataAdapter extends
 
 	private List<ByteArrayId> getDimensionFieldIds(
 			final CommonIndexModel model ) {
-		if (modelToDimensionsMap.containsKey(model.getId())) {
-			return modelToDimensionsMap.get(model.getId());
+		final List<ByteArrayId> retVal = modelToDimensionsMap.get(model.getId());
+		if(retVal != null) {
+			return retVal;
 		}
 		final List<ByteArrayId> dimensionFieldIds = new ArrayList<>();
 		for (final NumericDimensionField<? extends CommonIndexValue> dimension : model.getDimensions()) {
