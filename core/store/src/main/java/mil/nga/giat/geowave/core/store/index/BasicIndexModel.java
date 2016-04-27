@@ -143,7 +143,7 @@ public class BasicIndexModel implements
 
 	@Override
 	public String getId() {
-		if(id == null) { 
+		if (id == null) {
 			id = StringUtils.intToString(hashCode());
 		}
 		return id;
