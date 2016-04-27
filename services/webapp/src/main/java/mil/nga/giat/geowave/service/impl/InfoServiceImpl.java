@@ -17,19 +17,18 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.log4j.Logger;
+
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.GeoWaveStoreFinder;
-import mil.nga.giat.geowave.core.store.adapter.AdapterStoreFactorySpi;
+import mil.nga.giat.geowave.core.store.StoreFactoryFamilySpi;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.config.ConfigUtils;
 import mil.nga.giat.geowave.core.store.index.Index;
-import mil.nga.giat.geowave.core.store.index.IndexStoreFactorySpi;
 import mil.nga.giat.geowave.service.InfoService;
 import mil.nga.giat.geowave.service.ServiceUtils;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
-
-import org.apache.log4j.Logger;
 
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
@@ -39,8 +38,7 @@ public class InfoServiceImpl implements
 {
 	private final static Logger LOGGER = Logger.getLogger(InfoServiceImpl.class);
 	private final static int defaultIndentation = 2;
-	private final IndexStoreFactorySpi indexStoreFactory;
-	private final AdapterStoreFactorySpi adapterStoreFactory;
+	private final StoreFactoryFamilySpi factoryFamily;
 	private final Map<String, String> configOptions;
 
 	public InfoServiceImpl(
@@ -59,8 +57,8 @@ public class InfoServiceImpl implements
 					props.getProperty(key));
 		}
 		configOptions = strMap;
-		indexStoreFactory = GeoWaveStoreFinder.findIndexStoreFactory(configOptions);
-		adapterStoreFactory = GeoWaveStoreFinder.findAdapterStoreFactory(configOptions);
+		factoryFamily = GeoWaveStoreFinder.findStoreFamily(configOptions);
+		
 	}
 
 	// lists the namespaces in geowave
@@ -96,9 +94,9 @@ public class InfoServiceImpl implements
 	public Response getIndices(
 			@PathParam("namespace")
 			final String namespace ) {
-		try (CloseableIterator<Index<?, ?>> indices = indexStoreFactory.createStore(
+		try (CloseableIterator<Index<?, ?>> indices = factoryFamily.getIndexStoreFactory().createStore(
 				ConfigUtils.populateOptionsFromList(
-						indexStoreFactory.createOptionsInstance(),
+						factoryFamily.getIndexStoreFactory().createOptionsInstance(),
 						configOptions)).getIndices()) {
 
 			final JSONArray indexNames = new JSONArray();
@@ -135,9 +133,9 @@ public class InfoServiceImpl implements
 	public Response getAdapters(
 			@PathParam("namespace")
 			final String namespace ) {
-		try (CloseableIterator<DataAdapter<?>> dataAdapters = adapterStoreFactory.createStore(
+		try (CloseableIterator<DataAdapter<?>> dataAdapters = factoryFamily.getAdapterStoreFactory().createStore(
 				ConfigUtils.populateOptionsFromList(
-						indexStoreFactory.createOptionsInstance(),
+						factoryFamily.getAdapterStoreFactory().createOptionsInstance(),
 						configOptions)).getAdapters()) {
 			final JSONArray dataAdapterNames = new JSONArray();
 			while (dataAdapters.hasNext()) {

@@ -12,23 +12,20 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import mil.nga.giat.geowave.core.index.StringUtils;
-import mil.nga.giat.geowave.core.store.DataStore;
-import mil.nga.giat.geowave.core.store.DataStoreFactorySpi;
-import mil.nga.giat.geowave.core.store.GeoWaveStoreFinder;
-import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
-import mil.nga.giat.geowave.core.store.adapter.AdapterStoreFactorySpi;
-import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
-import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStoreFactorySpi;
-import mil.nga.giat.geowave.core.store.config.ConfigUtils;
-import mil.nga.giat.geowave.core.store.index.IndexStore;
-import mil.nga.giat.geowave.core.store.index.IndexStoreFactorySpi;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+
+import mil.nga.giat.geowave.core.index.StringUtils;
+import mil.nga.giat.geowave.core.store.DataStore;
+import mil.nga.giat.geowave.core.store.GeoWaveStoreFinder;
+import mil.nga.giat.geowave.core.store.StoreFactoryFamilySpi;
+import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
+import mil.nga.giat.geowave.core.store.config.ConfigUtils;
+import mil.nga.giat.geowave.core.store.index.IndexStore;
 
 public class GeoWaveRasterConfig
 {
@@ -55,10 +52,7 @@ public class GeoWaveRasterConfig
 	}
 
 	private Map<String, String> storeConfigObj;
-	private DataStoreFactorySpi dataStoreFactory;
-	private IndexStoreFactorySpi indexStoreFactory;
-	private AdapterStoreFactorySpi adapterStoreFactory;
-	private DataStatisticsStoreFactorySpi dataStatisticsStoreFactory;
+	private StoreFactoryFamilySpi factoryFamily;
 	private DataStore dataStore;
 	private IndexStore indexStore;
 	private AdapterStore adapterStore;
@@ -90,10 +84,7 @@ public class GeoWaveRasterConfig
 		result.interpolationOverride = interpolationOverride;
 		synchronized (result) {
 			result.storeConfigObj = dataStoreConfig;
-			result.dataStoreFactory = GeoWaveStoreFinder.findDataStoreFactory(result.storeConfigObj);
-			result.indexStoreFactory = GeoWaveStoreFinder.findIndexStoreFactory(result.storeConfigObj);
-			result.adapterStoreFactory = GeoWaveStoreFinder.findAdapterStoreFactory(result.storeConfigObj);
-			result.dataStatisticsStoreFactory = GeoWaveStoreFinder.findDataStatisticsStoreFactory(result.storeConfigObj);
+			result.factoryFamily = GeoWaveStoreFinder.findStoreFamily(result.storeConfigObj);
 		}
 		return result;
 	}
@@ -173,29 +164,6 @@ public class GeoWaveRasterConfig
 		return configParams;
 	}
 
-	static private String readValueString(
-			final Document dom,
-			final String elemName ) {
-		final Node n = getNodeByName(
-				dom,
-				elemName);
-
-		if (n == null) {
-			return null;
-		}
-
-		return n.getTextContent();
-	}
-
-	static private Node getNodeByName(
-			final Document dom,
-			final String elemName ) {
-		final NodeList list = dom.getElementsByTagName(elemName);
-		final Node n = list.item(0);
-
-		return n;
-	}
-
 	private static void parseParamsIntoRasterConfig(
 			final GeoWaveRasterConfig result,
 			final Map<String, String> params ) {
@@ -208,10 +176,7 @@ public class GeoWaveRasterConfig
 		// findbugs complaint requires this synchronization
 		synchronized (result) {
 			result.storeConfigObj = storeParams;
-			result.dataStoreFactory = GeoWaveStoreFinder.findDataStoreFactory(result.storeConfigObj);
-			result.indexStoreFactory = GeoWaveStoreFinder.findIndexStoreFactory(result.storeConfigObj);
-			result.adapterStoreFactory = GeoWaveStoreFinder.findAdapterStoreFactory(result.storeConfigObj);
-			result.dataStatisticsStoreFactory = GeoWaveStoreFinder.findDataStatisticsStoreFactory(result.storeConfigObj);
+			result.factoryFamily = GeoWaveStoreFinder.findStoreFamily(result.storeConfigObj);
 		}
 		final String equalizeHistogram = params.get(ConfigParameter.EQUALIZE_HISTOGRAM.getConfigName());
 		if (equalizeHistogram != null) {
@@ -230,8 +195,8 @@ public class GeoWaveRasterConfig
 
 	public synchronized DataStore getDataStore() {
 		if (dataStore == null) {
-			dataStore = dataStoreFactory.createStore(ConfigUtils.populateOptionsFromList(
-					dataStoreFactory.createOptionsInstance(),
+			dataStore = factoryFamily.getDataStoreFactory().createStore(ConfigUtils.populateOptionsFromList(
+					factoryFamily.getDataStoreFactory().createOptionsInstance(),
 					storeConfigObj));
 		}
 		return dataStore;
@@ -239,8 +204,8 @@ public class GeoWaveRasterConfig
 
 	public synchronized AdapterStore getAdapterStore() {
 		if (adapterStore == null) {
-			adapterStore = adapterStoreFactory.createStore(ConfigUtils.populateOptionsFromList(
-					adapterStoreFactory.createOptionsInstance(),
+			adapterStore = factoryFamily.getAdapterStoreFactory().createStore(ConfigUtils.populateOptionsFromList(
+					factoryFamily.getAdapterStoreFactory().createOptionsInstance(),
 					storeConfigObj));
 		}
 		return adapterStore;
@@ -248,8 +213,8 @@ public class GeoWaveRasterConfig
 
 	public synchronized IndexStore getIndexStore() {
 		if (indexStore == null) {
-			indexStore = indexStoreFactory.createStore(ConfigUtils.populateOptionsFromList(
-					indexStoreFactory.createOptionsInstance(),
+			indexStore = factoryFamily.getIndexStoreFactory().createStore(ConfigUtils.populateOptionsFromList(
+					factoryFamily.getIndexStoreFactory().createOptionsInstance(),
 					storeConfigObj));
 		}
 		return indexStore;
@@ -257,8 +222,8 @@ public class GeoWaveRasterConfig
 
 	public synchronized DataStatisticsStore getDataStatisticsStore() {
 		if (dataStatisticsStore == null) {
-			dataStatisticsStore = dataStatisticsStoreFactory.createStore(ConfigUtils.populateOptionsFromList(
-					dataStatisticsStoreFactory.createOptionsInstance(),
+			dataStatisticsStore = factoryFamily.getDataStatisticsStoreFactory().createStore(ConfigUtils.populateOptionsFromList(
+					factoryFamily.getDataStatisticsStoreFactory().createOptionsInstance(),
 					storeConfigObj));
 		}
 		return dataStatisticsStore;

@@ -37,9 +37,6 @@ public class GeoWaveConfiguratorBase
 
 	public static enum GeneralConfig {
 		DATA_STORE_NAME,
-		ADAPTER_STORE_NAME,
-		INDEX_STORE_NAME,
-		DATA_STATISTICS_STORE_NAME,
 		STORE_CONFIG_OPTION
 	}
 
@@ -137,69 +134,16 @@ public class GeoWaveConfiguratorBase
 			return null;
 		}
 	}
-
-	public static AdapterStore getAdapterStore(
-			final Class<?> implementingClass,
-			final JobContext context ) {
-		// use adapter store name and if thats not set, use the data store name
-		String adapterStoreName = getAdapterStoreName(
-				implementingClass,
-				context);
-		if ((adapterStoreName == null) || (adapterStoreName.isEmpty())) {
-			adapterStoreName = getDataStoreName(
-					implementingClass,
-					context);
-			if ((adapterStoreName == null) || adapterStoreName.isEmpty()) {
-				return null;
-			}
-		}
-		final Map<String, String> configOptions = getStoreConfigOptions(
-				implementingClass,
-				context);
-		configOptions.put(
-				GeoWaveStoreFinder.STORE_HINT_OPTION.getName(),
-				adapterStoreName);
-		return GeoWaveStoreFinder.createAdapterStore(configOptions);
-	}
-
-	public static IndexStore getIndexStore(
-			final Class<?> implementingClass,
-			final JobContext context ) {
-		// use index store name and if thats not set, use the data store name
-		String indexStoreName = getIndexStoreName(
-				implementingClass,
-				context);
-		if ((indexStoreName == null) || (indexStoreName.isEmpty())) {
-			indexStoreName = getDataStoreName(
-					implementingClass,
-					context);
-			if ((indexStoreName == null) || indexStoreName.isEmpty()) {
-				return null;
-			}
-		}
-		final Map<String, String> configOptions = getStoreConfigOptions(
-				implementingClass,
-				context);
-		configOptions.put(
-				GeoWaveStoreFinder.STORE_HINT_OPTION.getName(),
-				indexStoreName);
-		return GeoWaveStoreFinder.createIndexStore(configOptions);
-	}
-
+	
 	public static DataStatisticsStore getDataStatisticsStore(
 			final Class<?> implementingClass,
 			final JobContext context ) {
 		// use adapter store name and if thats not set, use the data store name
-		String dataStatisticsStoreName = getDataStatisticsStoreName(
+		String dataStatisticsStoreName = getDataStoreName(
 				implementingClass,
 				context);
 		if ((dataStatisticsStoreName == null) || (dataStatisticsStoreName.isEmpty())) {
-			dataStatisticsStoreName = getDataStoreName(
-					implementingClass,
-					context);
-			if ((dataStatisticsStoreName == null) || dataStatisticsStoreName.isEmpty()) {
 				return null;
-			}
 		}
 		final Map<String, String> configOptions = getStoreConfigOptions(
 				implementingClass,
@@ -209,7 +153,7 @@ public class GeoWaveConfiguratorBase
 				dataStatisticsStoreName);
 		return GeoWaveStoreFinder.createDataStatisticsStore(configOptions);
 	}
-
+	
 	public static void setDataStoreName(
 			final Class<?> implementingClass,
 			final Configuration config,
@@ -219,45 +163,6 @@ public class GeoWaveConfiguratorBase
 					enumToConfKey(
 							implementingClass,
 							GeneralConfig.DATA_STORE_NAME),
-					dataStoreName);
-		}
-	}
-
-	public static void setAdapterStoreName(
-			final Class<?> implementingClass,
-			final Configuration config,
-			final String dataStoreName ) {
-		if (dataStoreName != null) {
-			config.set(
-					enumToConfKey(
-							implementingClass,
-							GeneralConfig.ADAPTER_STORE_NAME),
-					dataStoreName);
-		}
-	}
-
-	public static void setDataStatisticsStoreName(
-			final Class<?> implementingClass,
-			final Configuration config,
-			final String dataStoreName ) {
-		if (dataStoreName != null) {
-			config.set(
-					enumToConfKey(
-							implementingClass,
-							GeneralConfig.DATA_STATISTICS_STORE_NAME),
-					dataStoreName);
-		}
-	}
-
-	public static void setIndexStoreName(
-			final Class<?> implementingClass,
-			final Configuration config,
-			final String dataStoreName ) {
-		if (dataStoreName != null) {
-			config.set(
-					enumToConfKey(
-							implementingClass,
-							GeneralConfig.INDEX_STORE_NAME),
 					dataStoreName);
 		}
 	}
@@ -290,30 +195,6 @@ public class GeoWaveConfiguratorBase
 			final Class<?> implementingClass,
 			final JobContext context ) {
 		return getDataStoreNameInternal(
-				implementingClass,
-				getConfiguration(context));
-	}
-
-	public static String getAdapterStoreName(
-			final Class<?> implementingClass,
-			final JobContext context ) {
-		return getAdapterStoreNameInternal(
-				implementingClass,
-				getConfiguration(context));
-	}
-
-	public static String getIndexStoreName(
-			final Class<?> implementingClass,
-			final JobContext context ) {
-		return getIndexStoreNameInternal(
-				implementingClass,
-				getConfiguration(context));
-	}
-
-	public static String getDataStatisticsStoreName(
-			final Class<?> implementingClass,
-			final JobContext context ) {
-		return getDataStatisticsStoreNameInternal(
 				implementingClass,
 				getConfiguration(context));
 	}
@@ -502,36 +383,6 @@ public class GeoWaveConfiguratorBase
 				enumToConfKey(
 						implementingClass,
 						GeneralConfig.DATA_STORE_NAME),
-				"");
-	}
-
-	private static String getAdapterStoreNameInternal(
-			final Class<?> implementingClass,
-			final Configuration configuration ) {
-		return configuration.get(
-				enumToConfKey(
-						implementingClass,
-						GeneralConfig.ADAPTER_STORE_NAME),
-				"");
-	}
-
-	private static String getDataStatisticsStoreNameInternal(
-			final Class<?> implementingClass,
-			final Configuration configuration ) {
-		return configuration.get(
-				enumToConfKey(
-						implementingClass,
-						GeneralConfig.DATA_STATISTICS_STORE_NAME),
-				"");
-	}
-
-	private static String getIndexStoreNameInternal(
-			final Class<?> implementingClass,
-			final Configuration configuration ) {
-		return configuration.get(
-				enumToConfKey(
-						implementingClass,
-						GeneralConfig.INDEX_STORE_NAME),
 				"");
 	}
 

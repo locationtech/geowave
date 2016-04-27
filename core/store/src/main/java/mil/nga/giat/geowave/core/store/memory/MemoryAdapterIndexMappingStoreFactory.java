@@ -5,11 +5,9 @@ import java.util.Map;
 
 import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
 import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
-import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStoreFactorySpi;
 
 public class MemoryAdapterIndexMappingStoreFactory extends
-		AbstractMemoryStoreFactory<AdapterIndexMappingStore> implements
-		AdapterIndexMappingStoreFactorySpi
+		AbstractMemoryStoreFactory<AdapterIndexMappingStore>
 {
 	private static final Map<String, AdapterIndexMappingStore> ADAPTER_STORE_CACHE = new HashMap<String, AdapterIndexMappingStore>();
 
