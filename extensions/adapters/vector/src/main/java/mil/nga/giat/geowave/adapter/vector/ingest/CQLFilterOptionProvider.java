@@ -105,7 +105,9 @@ public class CQLFilterOptionProvider implements
 							e);
 					// value = null;
 					// convertedFilter = null;
-					throw new ParameterException("Cannot parse CQL expression '" + value + "'", e);
+					throw new ParameterException(
+							"Cannot parse CQL expression '" + value + "'",
+							e);
 				}
 			}
 			else {

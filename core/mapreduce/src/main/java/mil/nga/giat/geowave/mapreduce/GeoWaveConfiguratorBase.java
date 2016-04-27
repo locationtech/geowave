@@ -134,7 +134,7 @@ public class GeoWaveConfiguratorBase
 			return null;
 		}
 	}
-	
+
 	public static DataStatisticsStore getDataStatisticsStore(
 			final Class<?> implementingClass,
 			final JobContext context ) {
@@ -143,7 +143,7 @@ public class GeoWaveConfiguratorBase
 				implementingClass,
 				context);
 		if ((dataStatisticsStoreName == null) || (dataStatisticsStoreName.isEmpty())) {
-				return null;
+			return null;
 		}
 		final Map<String, String> configOptions = getStoreConfigOptions(
 				implementingClass,
@@ -153,7 +153,7 @@ public class GeoWaveConfiguratorBase
 				dataStatisticsStoreName);
 		return GeoWaveStoreFinder.createDataStatisticsStore(configOptions);
 	}
-	
+
 	public static void setDataStoreName(
 			final Class<?> implementingClass,
 			final Configuration config,

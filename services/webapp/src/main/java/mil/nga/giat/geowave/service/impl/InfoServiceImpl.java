@@ -58,7 +58,7 @@ public class InfoServiceImpl implements
 		}
 		configOptions = strMap;
 		factoryFamily = GeoWaveStoreFinder.findStoreFamily(configOptions);
-		
+
 	}
 
 	// lists the namespaces in geowave

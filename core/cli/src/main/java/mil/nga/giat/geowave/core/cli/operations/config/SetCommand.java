@@ -8,6 +8,7 @@ import java.util.Properties;
 import org.apache.commons.lang3.StringUtils;
 
 import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
 
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
@@ -23,7 +24,7 @@ public class SetCommand extends
 		Command
 {
 
-	@Parameter
+	@Parameter(description = "<name> <value>")
 	private List<String> parameters = new ArrayList<String>();
 
 	@Override
@@ -38,16 +39,22 @@ public class SetCommand extends
 
 		String key = null;
 		String value = null;
-		if (parameters.size() == 1) {
+		if (parameters.size() == 1 && parameters.get(
+				0).indexOf(
+				"=") != -1) {
 			String[] parts = StringUtils.split(
 					parameters.get(0),
 					"=");
 			key = parts[0];
 			value = parts[1];
 		}
-		else {
+		else if (parameters.size() == 2) {
 			key = parameters.get(0);
 			value = parameters.get(1);
+		}
+		else {
+			throw new ParameterException(
+					"Requires: <name> <value>");
 		}
 
 		p.setProperty(

@@ -31,7 +31,7 @@ public class GeoWaveStoreFinder
 			STORE_HINT_KEY,
 			"Set the GeoWave store, by default it will try to discover based on matching config options. " + getStoreNames(),
 			true);
-	
+
 	private static Map<String, StoreFactoryFamilySpi> registeredStoreFactoryFamilies = null;
 
 	public static DataStatisticsStore createDataStatisticsStore(
@@ -40,9 +40,10 @@ public class GeoWaveStoreFinder
 		if (factory == null) {
 			return null;
 		}
-		return factory.getDataStatisticsStoreFactory().createStore(ConfigUtils.populateOptionsFromList(
-				factory.getDataStatisticsStoreFactory().createOptionsInstance(),
-				configOptions));
+		return factory.getDataStatisticsStoreFactory().createStore(
+				ConfigUtils.populateOptionsFromList(
+						factory.getDataStatisticsStoreFactory().createOptionsInstance(),
+						configOptions));
 	}
 
 	public static DataStore createDataStore(
@@ -51,9 +52,10 @@ public class GeoWaveStoreFinder
 		if (factory == null) {
 			return null;
 		}
-		return factory.getDataStoreFactory().createStore(ConfigUtils.populateOptionsFromList(
-				factory.getDataStoreFactory().createOptionsInstance(),
-				configOptions));
+		return factory.getDataStoreFactory().createStore(
+				ConfigUtils.populateOptionsFromList(
+						factory.getDataStoreFactory().createOptionsInstance(),
+						configOptions));
 	}
 
 	public static AdapterStore createAdapterStore(
@@ -62,9 +64,10 @@ public class GeoWaveStoreFinder
 		if (factory == null) {
 			return null;
 		}
-		return factory.getAdapterStoreFactory().createStore(ConfigUtils.populateOptionsFromList(
-				factory.getAdapterStoreFactory().createOptionsInstance(),
-				configOptions));
+		return factory.getAdapterStoreFactory().createStore(
+				ConfigUtils.populateOptionsFromList(
+						factory.getAdapterStoreFactory().createOptionsInstance(),
+						configOptions));
 	}
 
 	public static AdapterIndexMappingStore createAdapterIndexMappingStore(
@@ -73,9 +76,10 @@ public class GeoWaveStoreFinder
 		if (factory == null) {
 			return null;
 		}
-		return factory.getAdapterIndexMappingStoreFactory().createStore(ConfigUtils.populateOptionsFromList(
-				factory.getAdapterIndexMappingStoreFactory().createOptionsInstance(),
-				configOptions));
+		return factory.getAdapterIndexMappingStoreFactory().createStore(
+				ConfigUtils.populateOptionsFromList(
+						factory.getAdapterIndexMappingStoreFactory().createOptionsInstance(),
+						configOptions));
 	}
 
 	public static IndexStore createIndexStore(
@@ -84,9 +88,10 @@ public class GeoWaveStoreFinder
 		if (factory == null) {
 			return null;
 		}
-		return factory.getIndexStoreFactory().createStore(ConfigUtils.populateOptionsFromList(
-				factory.getIndexStoreFactory().createOptionsInstance(),
-				configOptions));
+		return factory.getIndexStoreFactory().createStore(
+				ConfigUtils.populateOptionsFromList(
+						factory.getIndexStoreFactory().createOptionsInstance(),
+						configOptions));
 	}
 
 	public static SecondaryIndexDataStore createSecondaryIndexDataStore(
@@ -95,9 +100,10 @@ public class GeoWaveStoreFinder
 		if (factory == null) {
 			return null;
 		}
-		return factory.getSecondaryIndexDataStore().createStore(ConfigUtils.populateOptionsFromList(
-				factory.getSecondaryIndexDataStore().createOptionsInstance(),
-				configOptions));
+		return factory.getSecondaryIndexDataStore().createStore(
+				ConfigUtils.populateOptionsFromList(
+						factory.getSecondaryIndexDataStore().createOptionsInstance(),
+						configOptions));
 	}
 
 	private static List<String> getMissingRequiredOptions(
@@ -114,11 +120,10 @@ public class GeoWaveStoreFinder
 	}
 
 	public static StoreFactoryFamilySpi findStoreFamily(
-			final Map<String, String> configOptions) {
+			final Map<String, String> configOptions ) {
 		final Object storeHint = configOptions.get(STORE_HINT_KEY);
 		if (storeHint != null) {
-			final StoreFactoryFamilySpi factory = 
-					registeredStoreFactoryFamilies.get(storeHint.toString());
+			final StoreFactoryFamilySpi factory = registeredStoreFactoryFamilies.get(storeHint.toString());
 			if (factory != null) {
 				final List<String> missingOptions = getMissingRequiredOptions(
 						factory,

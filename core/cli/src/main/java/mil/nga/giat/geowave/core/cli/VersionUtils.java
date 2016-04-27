@@ -44,18 +44,12 @@ public class VersionUtils
 		final List<String> buildAndPropertyList = Arrays.asList(getBuildProperties().toString().split(
 				","));
 
-		if (buildAndPropertyList != null) {
-			Collections.sort(buildAndPropertyList.subList(
-					1,
-					buildAndPropertyList.size()));
-			for (String str : buildAndPropertyList) {
-				JCommander.getConsole().println(
-						str);
-			}
-		}
-		else {
+		Collections.sort(buildAndPropertyList.subList(
+				1,
+				buildAndPropertyList.size()));
+		for (String str : buildAndPropertyList) {
 			JCommander.getConsole().println(
-					"Unable to convert Build Properties into List.");
+					str);
 		}
 	}
 }

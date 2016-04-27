@@ -80,7 +80,8 @@ public class RecalculateStatsCommand extends
 						isFirstTime);
 
 				try (StatsCompositionTool<?> statsTool = new StatsCompositionTool(
-						provider, storeOptions.createDataStatisticsStore())) {
+						provider,
+						storeOptions.createDataStatisticsStore())) {
 					try (CloseableIterator<?> entryIt = dataStore.query(
 							new QueryOptions(
 									adapter,

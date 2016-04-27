@@ -95,7 +95,7 @@ public class CalculateStatCommand extends
 				};
 
 				try (StatsCompositionTool<?> statsTool = new StatsCompositionTool(
-						provider, 
+						provider,
 						storeOptions.createDataStatisticsStore())) {
 					try (CloseableIterator<?> entryIt = dataStore.query(
 							new QueryOptions(

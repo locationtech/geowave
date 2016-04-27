@@ -195,36 +195,40 @@ public class GeoWaveRasterConfig
 
 	public synchronized DataStore getDataStore() {
 		if (dataStore == null) {
-			dataStore = factoryFamily.getDataStoreFactory().createStore(ConfigUtils.populateOptionsFromList(
-					factoryFamily.getDataStoreFactory().createOptionsInstance(),
-					storeConfigObj));
+			dataStore = factoryFamily.getDataStoreFactory().createStore(
+					ConfigUtils.populateOptionsFromList(
+							factoryFamily.getDataStoreFactory().createOptionsInstance(),
+							storeConfigObj));
 		}
 		return dataStore;
 	}
 
 	public synchronized AdapterStore getAdapterStore() {
 		if (adapterStore == null) {
-			adapterStore = factoryFamily.getAdapterStoreFactory().createStore(ConfigUtils.populateOptionsFromList(
-					factoryFamily.getAdapterStoreFactory().createOptionsInstance(),
-					storeConfigObj));
+			adapterStore = factoryFamily.getAdapterStoreFactory().createStore(
+					ConfigUtils.populateOptionsFromList(
+							factoryFamily.getAdapterStoreFactory().createOptionsInstance(),
+							storeConfigObj));
 		}
 		return adapterStore;
 	}
 
 	public synchronized IndexStore getIndexStore() {
 		if (indexStore == null) {
-			indexStore = factoryFamily.getIndexStoreFactory().createStore(ConfigUtils.populateOptionsFromList(
-					factoryFamily.getIndexStoreFactory().createOptionsInstance(),
-					storeConfigObj));
+			indexStore = factoryFamily.getIndexStoreFactory().createStore(
+					ConfigUtils.populateOptionsFromList(
+							factoryFamily.getIndexStoreFactory().createOptionsInstance(),
+							storeConfigObj));
 		}
 		return indexStore;
 	}
 
 	public synchronized DataStatisticsStore getDataStatisticsStore() {
 		if (dataStatisticsStore == null) {
-			dataStatisticsStore = factoryFamily.getDataStatisticsStoreFactory().createStore(ConfigUtils.populateOptionsFromList(
-					factoryFamily.getDataStatisticsStoreFactory().createOptionsInstance(),
-					storeConfigObj));
+			dataStatisticsStore = factoryFamily.getDataStatisticsStoreFactory().createStore(
+					ConfigUtils.populateOptionsFromList(
+							factoryFamily.getDataStatisticsStoreFactory().createOptionsInstance(),
+							storeConfigObj));
 		}
 		return dataStatisticsStore;
 	}

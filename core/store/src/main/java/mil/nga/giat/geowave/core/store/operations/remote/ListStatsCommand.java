@@ -59,7 +59,7 @@ public class ListStatsCommand extends
 		DataStatisticsStore statsStore = storeOptions.createDataStatisticsStore();
 
 		StringBuilder builder = new StringBuilder();
-		
+
 		try (CloseableIterator<DataStatistics<?>> statsIt = statsStore.getAllDataStatistics(authorizations)) {
 			while (statsIt.hasNext()) {
 				final DataStatistics<?> stats = statsIt.next();
