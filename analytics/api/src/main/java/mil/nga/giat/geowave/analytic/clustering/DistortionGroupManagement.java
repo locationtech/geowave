@@ -48,15 +48,15 @@ import org.slf4j.LoggerFactory;
 /**
  * Find the max change in distortion between some k and k-1, picking the value k
  * associated with that change.
- *
+ * 
  * In a multi-group setting, each group may have a different optimal k. Thus,
  * the optimal batch may be different for each group. Each batch is associated
  * with a different value k.
- *
+ * 
  * Choose the appropriate batch for each group. Then change the batch identifier
  * for group centroids to a final provided single batch identifier ( parent
  * batch ).
- *
+ * 
  */
 public class DistortionGroupManagement
 {
@@ -152,7 +152,7 @@ public class DistortionGroupManagement
 	}
 
 	/**
-	 *
+	 * 
 	 * @param ops
 	 * @param distortationTableName
 	 *            the name of the table holding the distortions

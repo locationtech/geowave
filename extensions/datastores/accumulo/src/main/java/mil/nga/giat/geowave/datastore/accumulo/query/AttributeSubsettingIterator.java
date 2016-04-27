@@ -8,7 +8,19 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.SortedSet;
 import java.util.TreeSet;
+
+import org.apache.accumulo.core.client.IteratorSetting;
+import org.apache.accumulo.core.data.Key;
+import org.apache.accumulo.core.data.PartialKey;
+import org.apache.accumulo.core.data.Value;
+import org.apache.accumulo.core.iterators.IteratorEnvironment;
+import org.apache.accumulo.core.iterators.SortedKeyValueIterator;
+import org.apache.accumulo.core.iterators.user.TransformingIterator;
+import org.apache.hadoop.io.Text;
+
+import com.google.common.base.Splitter;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayUtils;
@@ -21,17 +33,6 @@ import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;
 import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 import mil.nga.giat.geowave.datastore.accumulo.util.BitmaskUtils;
-
-import org.apache.accumulo.core.client.IteratorSetting;
-import org.apache.accumulo.core.data.Key;
-import org.apache.accumulo.core.data.PartialKey;
-import org.apache.accumulo.core.data.Value;
-import org.apache.accumulo.core.iterators.IteratorEnvironment;
-import org.apache.accumulo.core.iterators.SortedKeyValueIterator;
-import org.apache.accumulo.core.iterators.user.TransformingIterator;
-import org.apache.hadoop.io.Text;
-
-import com.google.common.base.Splitter;
 
 public class AttributeSubsettingIterator extends
 		TransformingIterator
@@ -69,24 +70,23 @@ public class AttributeSubsettingIterator extends
 						adapterAssociatedWithFieldIds.getAdapterId());
 				if (currAdapterIsAssociatedWithFieldIds) {
 					final byte[] compositeBitmask = currKey.getColumnQualifierData().getBackingArray();
-					final List<byte[]> bitmasks = BitmaskUtils.getBitmasks(compositeBitmask);
+					final List<Integer> fieldPositions = BitmaskUtils.getFieldPositions(compositeBitmask);
 					final List<ByteArrayId> currentFieldIds = new ArrayList<>();
 					final List<ByteArrayId> fieldsToKeep = new ArrayList<>();
-					final List<byte[]> bitmasksOfKeepers = new ArrayList<>();
-					for (final byte[] currBitmask : bitmasks) {
-						final int ordinal = BitmaskUtils.getOrdinal(currBitmask);
+					final SortedSet<Integer> ordinalsOfKeepers = new TreeSet<>();
+					for (final Integer ordinal : fieldPositions) {
 						final ByteArrayId fieldId = adapterAssociatedWithFieldIds.getFieldIdForPosition(
 								model,
 								ordinal);
 						currentFieldIds.add(fieldId);
 						if (fieldIds.contains(fieldId)) {
 							fieldsToKeep.add(fieldId);
-							bitmasksOfKeepers.add(currBitmask);
+							ordinalsOfKeepers.add(ordinal);
 						}
 					}
 					if (!fieldsToKeep.isEmpty()) {
 						if (fieldsToKeep.size() != currentFieldIds.size()) {
-							final byte[] newBitmask = BitmaskUtils.generateCompositeBitmask(bitmasksOfKeepers);
+							final byte[] newBitmask = BitmaskUtils.generateCompositeBitmask(ordinalsOfKeepers);
 							final Key newKey = replaceColumnQualifier(
 									currKey,
 									new Text(

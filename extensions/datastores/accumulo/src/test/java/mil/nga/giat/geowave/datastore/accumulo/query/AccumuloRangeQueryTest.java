@@ -146,7 +146,7 @@ public class AccumuloRangeQueryTest
 	/**
 	 * Verifies equality for interning is still working as expected
 	 * (topologically), as the the largeQuery() test has a dependency on this;
-	 *
+	 * 
 	 * @throws ParseException
 	 */
 	@Test

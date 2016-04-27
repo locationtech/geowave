@@ -107,9 +107,9 @@ public class MockComponents
 		}
 
 		/**
-		 *
+		 * 
 		 * Return the adapter ID
-		 *
+		 * 
 		 * @return a unique identifier for this adapter
 		 */
 		@Override

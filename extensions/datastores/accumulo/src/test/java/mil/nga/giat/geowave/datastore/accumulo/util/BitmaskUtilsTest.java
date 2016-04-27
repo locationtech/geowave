@@ -4,14 +4,15 @@ import java.util.Arrays;
 import java.util.BitSet;
 import java.util.Collections;
 import java.util.List;
+import java.util.TreeSet;
+
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
+import org.junit.Assert;
+import org.junit.Test;
 
 import mil.nga.giat.geowave.core.store.DataStoreEntryInfo.FieldInfo;
 import mil.nga.giat.geowave.core.store.data.PersistentValue;
-import mil.nga.giat.geowave.datastore.accumulo.util.BitmaskUtils;
-import mil.nga.giat.geowave.datastore.accumulo.util.BitmaskedFieldInfoComparator;
-
-import org.junit.Assert;
-import org.junit.Test;
 
 public class BitmaskUtilsTest
 {
@@ -46,10 +47,10 @@ public class BitmaskUtilsTest
 	public void testGenerateBitSet() {
 		Assert.assertTrue(Arrays.equals(
 				zeroth.toByteArray(),
-				BitmaskUtils.generateBitmask(0)));
+				BitmaskUtils.generateCompositeBitmask(0)));
 		Assert.assertTrue(Arrays.equals(
 				eighth.toByteArray(),
-				BitmaskUtils.generateBitmask(8)));
+				BitmaskUtils.generateCompositeBitmask(8)));
 	}
 
 	@Test
@@ -62,19 +63,26 @@ public class BitmaskUtilsTest
 
 	@Test
 	public void testGetOrdinal() {
-		Assert.assertTrue(0 == BitmaskUtils.getOrdinal(zeroth.toByteArray()));
-		Assert.assertTrue(1 == BitmaskUtils.getOrdinal(first.toByteArray()));
-		Assert.assertTrue(8 == BitmaskUtils.getOrdinal(eighth.toByteArray()));
+		List<Integer> positions = BitmaskUtils.getFieldPositions(zeroth.toByteArray());
+		Assert.assertTrue(0 == positions.get(0));
+		Assert.assertTrue(1 == positions.size());
+		positions = BitmaskUtils.getFieldPositions(first.toByteArray());
+		Assert.assertTrue(1 == positions.get(0));
+		Assert.assertTrue(1 == positions.size());
+		positions = BitmaskUtils.getFieldPositions(eighth.toByteArray());
+		Assert.assertTrue(8 == positions.get(0));
+		Assert.assertTrue(1 == positions.size());
 	}
 
 	@Test
 	public void testCompositeBitmask() {
 
 		// generate composite bitmask for 3 bitmasks and ensure correctness
-		final byte[] bitmask = BitmaskUtils.generateCompositeBitmask(Arrays.asList(
-				zeroth.toByteArray(),
-				first.toByteArray(),
-				second.toByteArray()));
+		final byte[] bitmask = BitmaskUtils.generateCompositeBitmask(new TreeSet<Integer>(
+				Arrays.asList(
+						0,
+						1,
+						2)));
 		Assert.assertTrue(BitSet.valueOf(
 				bitmask).equals(
 				composite_0_1_2));
@@ -84,24 +92,18 @@ public class BitmaskUtilsTest
 	public void testDecompositionOfComposite() {
 
 		// decompose composite bitmask and ensure correctness
-		final List<byte[]> bitmasks = BitmaskUtils.getBitmasks(composite_0_1_2.toByteArray());
-		Assert.assertTrue(bitmasks.size() == 3);
-		Assert.assertTrue(Arrays.equals(
-				zeroth.toByteArray(),
-				bitmasks.get(0)));
-		Assert.assertTrue(Arrays.equals(
-				first.toByteArray(),
-				bitmasks.get(1)));
-		Assert.assertTrue(Arrays.equals(
-				second.toByteArray(),
-				bitmasks.get(2)));
+		final List<Integer> positions = BitmaskUtils.getFieldPositions(composite_0_1_2.toByteArray());
+		Assert.assertTrue(positions.size() == 3);
+		Assert.assertTrue(0 == positions.get(0));
+		Assert.assertTrue(1 == positions.get(1));
+		Assert.assertTrue(2 == positions.get(2));
 	}
 
 	@Test
 	public void testCompositeSortOrder() {
 
 		// generate meaningless fieldInfo to transform
-		final FieldInfo<Object> original = new FieldInfo<Object>(
+		final FieldInfo<?> original = new FieldInfo<Object>(
 				new PersistentValue<Object>(
 						null, // will be overwritten by
 								// BitmaskUtils.transformField() below
@@ -110,36 +112,36 @@ public class BitmaskUtilsTest
 				null); // unused in this instance
 
 		// clone original fieldInfo overwriting dataValue.id with bitmask
-		final FieldInfo<Object> field0 = BitmaskUtils.transformField(
-				original,
-				zeroth.toByteArray());
-		final FieldInfo<Object> field1 = BitmaskUtils.transformField(
-				original,
-				first.toByteArray());
-		final FieldInfo<Object> field2 = BitmaskUtils.transformField(
-				original,
-				second.toByteArray());
-		final FieldInfo<Object> field3 = BitmaskUtils.transformField(
-				original,
-				third.toByteArray());
-		final FieldInfo<Object> field4 = BitmaskUtils.transformField(
-				original,
-				fourth.toByteArray());
-		final FieldInfo<Object> field5 = BitmaskUtils.transformField(
-				original,
-				fifth.toByteArray());
-		final FieldInfo<Object> field6 = BitmaskUtils.transformField(
-				original,
-				sixth.toByteArray());
-		final FieldInfo<Object> field7 = BitmaskUtils.transformField(
-				original,
-				seventh.toByteArray());
-		final FieldInfo<Object> field8 = BitmaskUtils.transformField(
-				original,
-				eighth.toByteArray());
+		final Pair<Integer, FieldInfo<?>> field0 = new ImmutablePair(
+				0,
+				original);
+		final Pair<Integer, FieldInfo<?>> field1 = new ImmutablePair(
+				1,
+				original);
+		final Pair<Integer, FieldInfo<?>> field2 = new ImmutablePair(
+				2,
+				original);
+		final Pair<Integer, FieldInfo<?>> field3 = new ImmutablePair(
+				3,
+				original);
+		final Pair<Integer, FieldInfo<?>> field4 = new ImmutablePair(
+				4,
+				original);
+		final Pair<Integer, FieldInfo<?>> field5 = new ImmutablePair(
+				5,
+				original);
+		final Pair<Integer, FieldInfo<?>> field6 = new ImmutablePair(
+				6,
+				original);
+		final Pair<Integer, FieldInfo<?>> field7 = new ImmutablePair(
+				7,
+				original);
+		final Pair<Integer, FieldInfo<?>> field8 = new ImmutablePair(
+				8,
+				original);
 
 		// construct list in wrong order
-		final List<FieldInfo<Object>> fieldInfoList = Arrays.asList(
+		final List<Pair<Integer, FieldInfo<?>>> fieldInfoList = Arrays.asList(
 				field8,
 				field7,
 				field6,

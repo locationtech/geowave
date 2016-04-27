@@ -1,8 +1,10 @@
 package mil.nga.giat.geowave.datastore.accumulo.util;
 
 import java.util.ArrayList;
-import java.util.BitSet;
+import java.util.Collections;
 import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.DataStoreEntryInfo.FieldInfo;
@@ -15,97 +17,65 @@ import mil.nga.giat.geowave.core.store.data.PersistentValue;
  */
 public class BitmaskUtils
 {
-
 	/**
-	 * Generates a bitmask with the bit at the given index set to true
+	 * Generates a composite bitmask given a list of field positions. The
+	 * composite bitmask represents a true bit for every positive field position
 	 * 
-	 * @param index
-	 *            0-based index of bit to set to true
-	 * @return the bitmask
-	 */
-	public static byte[] generateBitmask(
-			final int index ) {
-		final BitSet bitSet = new BitSet();
-		bitSet.set(index);
-		return bitSet.toByteArray();
-	}
-
-	/**
-	 * Returns the ordinal (integer) this bitmask represents
+	 * For example, given field 0, field 1, and field 2 this method will return
+	 * 00000111
 	 * 
-	 * It is assumed this method is given a non-composite 
-	 * bitmask, that is a bitmask with only a single bit set to true
-	 * 
-	 * @param bitmask
-	 *            the bitmask
-	 * @return the ordinal
-	 */
-	public static int getOrdinal(
-			final byte[] bitmask ) {
-		final BitSet bitSet = BitSet.valueOf(bitmask);
-		return bitSet.nextSetBit(0);
-	}
-
-	/**
-	 * Generates a composite bitmask given a list of bitmasks. The composite
-	 * bitmask represents the logical OR of all the given bitmasks
-	 * 
-	 * For example, given 00000001, 00000010, and 00000100 this method will
-	 * return 00000111
-	 * 
-	 * @param bitmasks
-	 *            a list of bitmasks
+	 * @param fieldPositions
+	 *            a list of field positions
 	 * @return a composite bitmask
 	 */
 	public static byte[] generateCompositeBitmask(
-			final List<byte[]> bitmasks ) {
-		final BitSet composite = new BitSet();
-		for (final byte[] bitmaskBytes : bitmasks) {
-			final BitSet bitmask = BitSet.valueOf(bitmaskBytes);
-			composite.or(bitmask);
+			final SortedSet<Integer> fieldPositions ) {
+		final byte[] retVal = new byte[(fieldPositions.last() / 8) + 1];
+		for (final Integer fieldPosition : fieldPositions) {
+			final int bytePosition = fieldPosition / 8;
+			final int bitPosition = fieldPosition % 8;
+			retVal[bytePosition] |= (1 << bitPosition);
 		}
-		return composite.toByteArray();
+		return retVal;
+	}
+
+	/**
+	 * Generates a composite bitmask given a single field position. The
+	 * composite bitmask represents a true bit for this field position
+	 * 
+	 * For example, given field 2 this method will return 00000100
+	 * 
+	 * @param fieldPosition
+	 *            a field position
+	 * @return a composite bitmask
+	 */
+	public static byte[] generateCompositeBitmask(
+			final Integer fieldPosition ) {
+		return generateCompositeBitmask(new TreeSet<Integer>(
+				Collections.singleton(fieldPosition)));
 	}
 
 	/**
 	 * Iterates the set (true) bits within the given composite bitmask and
-	 * generates a list of individual bitmasks. The XOR of each bitmask in the
-	 * resultant list equals the original composite bitmask.
+	 * generates a list of field positions.
 	 * 
 	 * @param compositeBitmask
 	 *            the composite bitmask
-	 * @return a list of bitmasks
+	 * @return a list of field positions
 	 */
-	public static List<byte[]> getBitmasks(
-			final byte[] compositeBitmask ) {
-		final List<byte[]> bitmasks = new ArrayList<>();
-		final BitSet bitSet = BitSet.valueOf(compositeBitmask);
-		for (int i = bitSet.nextSetBit(0); i >= 0; i = bitSet.nextSetBit(i + 1)) {
-			bitmasks.add(generateBitmask(i));
-		}
-		return bitmasks;
-	}
-
-	/**
-	 * Creates a clone of the given FieldInfo using the given bitmask to
-	 * overwrite the original dataValue id
-	 * 
-	 * @param fieldInfo
-	 *            fieldInfo to clone
-	 * @param bitmask
-	 *            bitmask to use to overwrite dataValue id value
-	 * @return new FieldInfo with bitmask as dataValue id
-	 */
-	public static FieldInfo<Object> transformField(
-			final FieldInfo<?> fieldInfo,
+	public static List<Integer> getFieldPositions(
 			final byte[] bitmask ) {
-		return new FieldInfo<Object>(
-				new PersistentValue<Object>(
-						new ByteArrayId(
-								bitmask),
-						fieldInfo.getDataValue().getValue()),
-				fieldInfo.getWrittenValue(),
-				fieldInfo.getVisibility());
+		final List<Integer> fieldPositions = new ArrayList<>();
+		int currentByte = 0;
+		for (final byte singleByteBitMask : bitmask) {
+			for (int bit = 0; bit < 8; ++bit) {
+				if (((singleByteBitMask >>> bit) & 0x1) == 1) {
+					fieldPositions.add((currentByte * 8) + bit);
+				}
+			}
+			currentByte++;
+		}
+		return fieldPositions;
 	}
 
 }

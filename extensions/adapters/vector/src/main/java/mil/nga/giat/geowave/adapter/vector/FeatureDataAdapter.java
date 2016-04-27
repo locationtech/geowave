@@ -679,17 +679,17 @@ public class FeatureDataAdapter extends
 			initializePositionMaps();
 		}
 		// next check other fields
-			// dimension fields must be first, add padding
-			final Integer retVal = fieldToPositionMap.get(
-					fieldId).intValue() + model.getDimensions().length;
-			return (retVal != null) ? retVal.intValue() : -1;
+		// dimension fields must be first, add padding
+		final Integer retVal = fieldToPositionMap.get(
+				fieldId).intValue() + model.getDimensions().length;
+		return (retVal != null) ? retVal.intValue() : -1;
 	}
 
 	@Override
 	public ByteArrayId getFieldIdForPosition(
 			final CommonIndexModel model,
 			final int position ) {
-		if(position >= model.getDimensions().length) {
+		if (position >= model.getDimensions().length) {
 			if (fieldToPositionMap.isEmpty()) {
 				initializePositionMaps();
 			}
@@ -717,7 +717,7 @@ public class FeatureDataAdapter extends
 	private List<ByteArrayId> getDimensionFieldIds(
 			final CommonIndexModel model ) {
 		final List<ByteArrayId> retVal = modelToDimensionsMap.get(model.getId());
-		if(retVal != null) {
+		if (retVal != null) {
 			return retVal;
 		}
 		final List<ByteArrayId> dimensionFieldIds = new ArrayList<>();

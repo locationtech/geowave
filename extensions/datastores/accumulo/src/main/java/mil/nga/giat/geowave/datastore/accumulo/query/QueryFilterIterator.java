@@ -7,10 +7,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.accumulo.core.data.Key;
+import org.apache.accumulo.core.data.Value;
+import org.apache.accumulo.core.iterators.IteratorEnvironment;
+import org.apache.accumulo.core.iterators.SortedKeyValueIterator;
+import org.apache.accumulo.core.iterators.user.WholeRowIterator;
+import org.apache.hadoop.fs.FsUrlStreamHandlerFactory;
+import org.apache.hadoop.io.Text;
+import org.apache.log4j.Logger;
+
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayUtils;
 import mil.nga.giat.geowave.core.index.PersistenceUtils;
-import mil.nga.giat.geowave.core.store.DataStoreEntryInfo.FieldInfo;
 import mil.nga.giat.geowave.core.store.data.CommonIndexedPersistenceEncoding;
 import mil.nga.giat.geowave.core.store.data.PersistentDataset;
 import mil.nga.giat.geowave.core.store.data.PersistentValue;
@@ -21,17 +29,8 @@ import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloRowId;
 import mil.nga.giat.geowave.datastore.accumulo.encoding.AccumuloCommonIndexedPersistenceEncoding;
+import mil.nga.giat.geowave.datastore.accumulo.encoding.AccumuloFieldInfo;
 import mil.nga.giat.geowave.datastore.accumulo.util.AccumuloUtils;
-import mil.nga.giat.geowave.datastore.accumulo.util.BitmaskUtils;
-
-import org.apache.accumulo.core.data.Key;
-import org.apache.accumulo.core.data.Value;
-import org.apache.accumulo.core.iterators.IteratorEnvironment;
-import org.apache.accumulo.core.iterators.SortedKeyValueIterator;
-import org.apache.accumulo.core.iterators.user.WholeRowIterator;
-import org.apache.hadoop.fs.FsUrlStreamHandlerFactory;
-import org.apache.hadoop.io.Text;
-import org.apache.log4j.Logger;
 
 /**
  * This iterator wraps a DistributableQueryFilter which is deserialized from a
@@ -107,27 +106,25 @@ public class QueryFilterIterator extends
 			final AccumuloRowId rowId = new AccumuloRowId(
 					currentRow.getBytes());
 			final PersistentDataset<CommonIndexValue> commonData = new PersistentDataset<CommonIndexValue>();
-			final PersistentDataset<byte[]> unknownData = new PersistentDataset<byte[]>();
+			final List<AccumuloFieldInfo> unknownData = new ArrayList<AccumuloFieldInfo>();
 			for (int i = 0; (i < keys.size()) && (i < values.size()); i++) {
 				final Key key = keys.get(i);
 				final ByteArrayId colQual = new ByteArrayId(
 						key.getColumnQualifierData().getBackingArray());
 				final byte[] valueBytes = values.get(
 						i).get();
-				final List<FieldInfo<Object>> fieldInfos = AccumuloUtils.decomposeFlattenedFields(
+				final List<AccumuloFieldInfo> fieldInfos = AccumuloUtils.decomposeFlattenedFields(
 						colQual.getBytes(),
 						valueBytes,
 						key.getColumnVisibilityData().getBackingArray());
-				for (final FieldInfo<Object> fieldInfo : fieldInfos) {
-					final ByteArrayId fieldId = fieldInfo.getDataValue().getId();
-					final byte[] bitmask = fieldId.getBytes();
-					final int ordinal = BitmaskUtils.getOrdinal(bitmask);
+				for (final AccumuloFieldInfo fieldInfo : fieldInfos) {
+					final int ordinal = fieldInfo.getFieldPosition();
 					if (ordinal < model.getDimensions().length) {
 						final ByteArrayId commonIndexFieldId = commonIndexFieldIds.get(ordinal);
 						final FieldReader<? extends CommonIndexValue> reader = model.getReader(commonIndexFieldId);
 						if (reader != null) {
-							final CommonIndexValue fieldValue = reader.readField(fieldInfo.getWrittenValue());
-							fieldValue.setVisibility(fieldInfo.getVisibility());
+							final CommonIndexValue fieldValue = reader.readField(fieldInfo.getValue());
+							fieldValue.setVisibility(key.getColumnVisibility().getBytes());
 							commonData.addValue(new PersistentValue<CommonIndexValue>(
 									commonIndexFieldId,
 									fieldValue));
@@ -137,9 +134,7 @@ public class QueryFilterIterator extends
 						}
 					}
 					else {
-						unknownData.addValue(new PersistentValue<byte[]>(
-								fieldId,
-								fieldInfo.getWrittenValue()));
+						unknownData.add(fieldInfo);
 					}
 				}
 			}
