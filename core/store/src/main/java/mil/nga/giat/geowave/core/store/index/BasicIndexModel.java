@@ -29,6 +29,7 @@ public class BasicIndexModel implements
 	// the first dimension of a particular field ID will be the persistence
 	// model used
 	private Map<ByteArrayId, NumericDimensionField<?>> fieldIdToPeristenceMap;
+	private transient String id;
 
 	protected BasicIndexModel() {}
 
@@ -142,6 +143,9 @@ public class BasicIndexModel implements
 
 	@Override
 	public String getId() {
-		return StringUtils.intToString(hashCode());
+		if(id == null) { 
+			id = StringUtils.intToString(hashCode());
+		}
+		return id;
 	}
 }

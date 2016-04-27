@@ -93,11 +93,6 @@ public class AccumuloUtils
 	private static final String ROW_MERGING_SUFFIX = "_COMBINER";
 	private static final String ROW_MERGING_VISIBILITY_SUFFIX = "_VISIBILITY_COMBINER";
 
-	// used to combine attributes with a common visibility attribute into a
-	// single CQ for performance purposes
-	public static final ByteArrayId COMPOSITE_CQ = new ByteArrayId(
-			StringUtils.stringToBinary("composite"));
-
 	public static Range byteArrayRangeToAccumuloRange(
 			final ByteArrayRange byteArrayRange ) {
 		final Text start = new Text(
@@ -382,7 +377,6 @@ public class AccumuloUtils
 		final boolean sharedVisibility = fieldPositions.size() > 1;
 		if (sharedVisibility) {
 			for (final Integer fieldPosition : fieldPositions) {
-
 				final int fieldLength = input.getInt();
 				final byte[] fieldValueBytes = new byte[fieldLength];
 				input.get(fieldValueBytes);
@@ -1062,10 +1056,10 @@ public class AccumuloUtils
 		final AccumuloAdapterStore adapterStore = new AccumuloAdapterStore(
 				operations);
 		if (indexStore.indexExists(index.getId()) && adapterStore.adapterExists(adapter.getAdapterId())) {
-			final List<DataAdapter> adapters = new ArrayList<>();
-			adapters.add(adapter);
+			final List<ByteArrayId> adapterIds = new ArrayList<>();
+			adapterIds.add(adapter.getAdapterId());
 			final AccumuloConstraintsQuery accumuloQuery = new AccumuloConstraintsQuery(
-					adapters,
+					adapterIds,
 					index,
 					null,
 					null,
