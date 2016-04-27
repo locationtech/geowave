@@ -38,12 +38,12 @@ public class InputFormatAccumuloRangeQuery extends
 	private final Range accumuloRange;
 	private final boolean isOutputWritable;
 
-	private static List<DataAdapter> getAdapterIds(
+	private static List<ByteArrayId> getAdapterIds(
 			final PrimaryIndex index,
 			final AdapterStore adapterStore,
 			final QueryOptions queryOptions ) {
 		try {
-			return Arrays.asList(queryOptions.getAdaptersArray(adapterStore));
+			return queryOptions.getAdapterIds(adapterStore);
 		}
 		catch (final IOException e) {
 			LOGGER.error(
@@ -90,10 +90,10 @@ public class InputFormatAccumuloRangeQuery extends
 					tableName,
 					getAdditionalAuthorizations());
 			scanner.setRange(accumuloRange);
-			if ((adapters != null) && !adapters.isEmpty()) {
-				for (final DataAdapter adapter : adapters) {
+			if ((adapterIds != null) && !adapterIds.isEmpty()) {
+				for (final ByteArrayId adapterId : adapterIds) {
 					scanner.fetchColumnFamily(new Text(
-							adapter.getAdapterId().getBytes()));
+							adapterId.getBytes()));
 				}
 			}
 			return scanner;

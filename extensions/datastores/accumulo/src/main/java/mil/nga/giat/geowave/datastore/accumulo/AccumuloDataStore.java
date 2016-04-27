@@ -397,7 +397,7 @@ public class AccumuloDataStore implements
 					tempAdapterStore,
 					indexMappingStore,
 					indexStore)) {
-				final List<DataAdapter> adaptersToQuery = new ArrayList<>();
+				final List<ByteArrayId> adapterIdsToQuery = new ArrayList<>();
 				for (final DataAdapter<Object> adapter : indexAdapterPair.getRight()) {
 					if (sanitizedQuery instanceof RowIdQuery) {
 						final AccumuloRowIdsQuery<Object> q = new AccumuloRowIdsQuery<Object>(
@@ -445,15 +445,15 @@ public class AccumuloDataStore implements
 								tempAdapterStore));
 						continue;
 					}
-					adaptersToQuery.add(adapter);
+					adapterIdsToQuery.add(adapter.getAdapterId());
 				}
 				// supports querying multiple adapters in a single index
 				// in one query instance (one scanner) for efficiency
-				if (adaptersToQuery.size() > 0) {
+				if (adapterIdsToQuery.size() > 0) {
 					AccumuloConstraintsQuery accumuloQuery;
 
 					accumuloQuery = new AccumuloConstraintsQuery(
-							adaptersToQuery,
+							adapterIdsToQuery,
 							indexAdapterPair.getLeft(),
 							sanitizedQuery,
 							filter,
@@ -862,10 +862,8 @@ public class AccumuloDataStore implements
 
 					}
 					else {
-						final List<DataAdapter> adapterList = new ArrayList<>();
-						adapterList.add(adapter);
 						dataIt = new AccumuloConstraintsQuery(
-								adapterList,
+								Collections.singletonList(adapter.getAdapterId()),
 								index,
 								query,
 								null,

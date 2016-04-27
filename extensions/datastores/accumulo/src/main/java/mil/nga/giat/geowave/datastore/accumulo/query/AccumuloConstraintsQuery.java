@@ -47,7 +47,7 @@ public class AccumuloConstraintsQuery extends
 	protected final Pair<DataAdapter<?>, Aggregation<?, ?, ?>> aggregation;
 
 	public AccumuloConstraintsQuery(
-			final List<DataAdapter> adapters,
+			final List<ByteArrayId> adapterIds,
 			final PrimaryIndex index,
 			final Query query,
 			final DedupeFilter clientDedupeFilter,
@@ -56,7 +56,7 @@ public class AccumuloConstraintsQuery extends
 			final Pair<List<String>, DataAdapter<?>> fieldIdsAdapterPair,
 			final String[] authorizations ) {
 		this(
-				adapters,
+				adapterIds,
 				index,
 				query != null ? query.getIndexConstraints(index.getIndexStrategy()) : null,
 				query != null ? query.createFilters(index.getIndexModel()) : null,
@@ -68,7 +68,7 @@ public class AccumuloConstraintsQuery extends
 	}
 
 	public AccumuloConstraintsQuery(
-			final List<DataAdapter> adapters,
+			final List<ByteArrayId> adapterIds,
 			final PrimaryIndex index,
 			final List<MultiDimensionalNumericData> constraints,
 			final List<QueryFilter> queryFilters,
@@ -78,7 +78,7 @@ public class AccumuloConstraintsQuery extends
 			final Pair<List<String>, DataAdapter<?>> fieldIdsAdapterPair,
 			final String[] authorizations ) {
 		super(
-				adapters,
+				adapterIds,
 				index,
 				scanCallback,
 				fieldIdsAdapterPair,
@@ -124,9 +124,6 @@ public class AccumuloConstraintsQuery extends
 						associatedAdapter,
 						fieldIds,
 						index.getIndexModel().getDimensions());
-				AttributeSubsettingIterator.setAdapters(
-						iteratorSetting,
-						adapters);
 				AttributeSubsettingIterator.setModel(
 						iteratorSetting,
 						index.getIndexModel());

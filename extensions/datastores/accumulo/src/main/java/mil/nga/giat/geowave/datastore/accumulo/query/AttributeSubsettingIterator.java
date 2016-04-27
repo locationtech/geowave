@@ -3,7 +3,6 @@ package mil.nga.giat.geowave.datastore.accumulo.query;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -24,7 +23,6 @@ import com.google.common.base.Splitter;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayUtils;
-import mil.nga.giat.geowave.core.index.Persistable;
 import mil.nga.giat.geowave.core.index.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.adapter.AbstractDataAdapter;
@@ -45,9 +43,6 @@ public class AttributeSubsettingIterator extends
 	private static final String FIELD_IDS_ADAPTER = "fieldIdsAdapter";
 	private DataAdapter<?> adapterAssociatedWithFieldIds;
 
-	private static final String ADAPTERS = "adapters";
-	private final List<DataAdapter> adapters = new ArrayList<>();
-
 	private static final String MODEL = "model";
 	private CommonIndexModel model;
 
@@ -64,68 +59,54 @@ public class AttributeSubsettingIterator extends
 		while (input.hasTop()) {
 			final Key currKey = input.getTopKey();
 			final Value currVal = input.getTopValue();
-			final DataAdapter currAdapter = lookupAdapter(currKey.getColumnFamilyData().getBackingArray());
-			if (currAdapter != null) {
-				final boolean currAdapterIsAssociatedWithFieldIds = currAdapter.getAdapterId().equals(
-						adapterAssociatedWithFieldIds.getAdapterId());
-				if (currAdapterIsAssociatedWithFieldIds) {
-					final byte[] compositeBitmask = currKey.getColumnQualifierData().getBackingArray();
-					final List<Integer> fieldPositions = BitmaskUtils.getFieldPositions(compositeBitmask);
-					final List<ByteArrayId> currentFieldIds = new ArrayList<>();
-					final List<ByteArrayId> fieldsToKeep = new ArrayList<>();
-					final SortedSet<Integer> ordinalsOfKeepers = new TreeSet<>();
-					for (final Integer ordinal : fieldPositions) {
-						final ByteArrayId fieldId = adapterAssociatedWithFieldIds.getFieldIdForPosition(
-								model,
-								ordinal);
-						currentFieldIds.add(fieldId);
-						if (fieldIds.contains(fieldId)) {
-							fieldsToKeep.add(fieldId);
-							ordinalsOfKeepers.add(ordinal);
-						}
-					}
-					if (!fieldsToKeep.isEmpty()) {
-						if (fieldsToKeep.size() != currentFieldIds.size()) {
-							final byte[] newBitmask = BitmaskUtils.generateCompositeBitmask(ordinalsOfKeepers);
-							final Key newKey = replaceColumnQualifier(
-									currKey,
-									new Text(
-											newBitmask));
-							final Value newVal = constructNewValue(
-									currVal,
-									currentFieldIds,
-									fieldsToKeep);
-							output.append(
-									newKey,
-									newVal);
-						}
-						else {
-							output.append(
-									currKey,
-									currVal);
-						}
+			final ByteArrayId currAdapterId = new ByteArrayId(currKey.getColumnFamilyData().getBackingArray());
+			final boolean currAdapterIsAssociatedWithFieldIds = currAdapterId.equals(
+					adapterAssociatedWithFieldIds.getAdapterId());
+			if (currAdapterIsAssociatedWithFieldIds) {
+				final byte[] compositeBitmask = currKey.getColumnQualifierData().getBackingArray();
+				final List<Integer> fieldPositions = BitmaskUtils.getFieldPositions(compositeBitmask);
+				final List<ByteArrayId> currentFieldIds = new ArrayList<>();
+				final List<ByteArrayId> fieldsToKeep = new ArrayList<>();
+				final SortedSet<Integer> ordinalsOfKeepers = new TreeSet<>();
+				for (final Integer ordinal : fieldPositions) {
+					final ByteArrayId fieldId = adapterAssociatedWithFieldIds.getFieldIdForPosition(
+							model,
+							ordinal);
+					currentFieldIds.add(fieldId);
+					if (fieldIds.contains(fieldId)) {
+						fieldsToKeep.add(fieldId);
+						ordinalsOfKeepers.add(ordinal);
 					}
 				}
-				else {
-					output.append(
-							currKey,
-							currVal);
+				if (!fieldsToKeep.isEmpty()) {
+					if (fieldsToKeep.size() != currentFieldIds.size()) {
+						final byte[] newBitmask = BitmaskUtils.generateCompositeBitmask(ordinalsOfKeepers);
+						final Key newKey = replaceColumnQualifier(
+								currKey,
+								new Text(
+										newBitmask));
+						final Value newVal = constructNewValue(
+								currVal,
+								currentFieldIds,
+								fieldsToKeep);
+						output.append(
+								newKey,
+								newVal);
+					}
+					else {
+						output.append(
+								currKey,
+								currVal);
+					}
 				}
+			}
+			else {
+				output.append(
+						currKey,
+						currVal);
 			}
 			input.next();
 		}
-	}
-
-	private DataAdapter lookupAdapter(
-			final byte[] adapterId ) {
-		for (final DataAdapter adapter : adapters) {
-			if (Arrays.equals(
-					adapterId,
-					adapter.getAdapterId().getBytes())) {
-				return adapter;
-			}
-		}
-		return null;
 	}
 
 	private Value constructNewValue(
@@ -164,13 +145,6 @@ public class AttributeSubsettingIterator extends
 				source,
 				options,
 				env);
-		// get adapter
-		final String adapterStr = options.get(ADAPTERS);
-		final byte[] adapterBytes = ByteArrayUtils.byteArrayFromString(adapterStr);
-		final List<Persistable> persistables = PersistenceUtils.fromBinary(adapterBytes);
-		for (final Persistable persistable : persistables) {
-			adapters.add((DataAdapter) persistable);
-		}
 		// get model
 		final String modelStr = options.get(MODEL);
 		final byte[] modelBytes = ByteArrayUtils.byteArrayFromString(modelStr);
@@ -198,11 +172,10 @@ public class AttributeSubsettingIterator extends
 		if ((!super.validateOptions(options)) || (options == null)) {
 			return false;
 		}
-		final boolean hasAdapters = options.containsKey(ADAPTERS);
 		final boolean hasModel = options.containsKey(MODEL);
 		final boolean hasFieldIds = options.containsKey(FIELD_IDS);
 		final boolean hasAdapterForFieldIds = options.containsKey(FIELD_IDS_ADAPTER);
-		if (!hasAdapters || !hasModel || !hasFieldIds || !hasAdapterForFieldIds) {
+		if (!hasModel || !hasFieldIds || !hasAdapterForFieldIds) {
 			// all are required
 			return false;
 		}
@@ -253,27 +226,6 @@ public class AttributeSubsettingIterator extends
 		final String adapterString = ByteArrayUtils.byteArrayToString(PersistenceUtils.toBinary(adapterAssociatedWithFieldIds));
 		setting.addOption(
 				FIELD_IDS_ADAPTER,
-				adapterString);
-	}
-
-	/**
-	 * Sets the Data Adapters for use by this iterator
-	 * 
-	 * @param setting
-	 *            the {@link IteratorSetting}
-	 * @param adapter
-	 *            the {@link DataAdapter}
-	 */
-	public static void setAdapters(
-			final IteratorSetting setting,
-			final List<DataAdapter> adapters ) {
-		final List<Persistable> persistables = new ArrayList<>();
-		for (final DataAdapter adapter : adapters) {
-			persistables.add(adapter);
-		}
-		final String adapterString = ByteArrayUtils.byteArrayToString(PersistenceUtils.toBinary(persistables));
-		setting.addOption(
-				ADAPTERS,
 				adapterString);
 	}
 

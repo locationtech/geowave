@@ -29,7 +29,7 @@ import mil.nga.giat.geowave.datastore.accumulo.util.AccumuloUtils;
 abstract public class AccumuloQuery
 {
 	private final static Logger LOGGER = Logger.getLogger(AccumuloQuery.class);
-	protected final List<DataAdapter> adapters;
+	protected final List<ByteArrayId> adapterIds;
 	protected final PrimaryIndex index;
 	protected final Pair<List<String>, DataAdapter<?>> fieldIdsAdapterPair;
 
@@ -46,11 +46,11 @@ abstract public class AccumuloQuery
 	}
 
 	public AccumuloQuery(
-			final List<DataAdapter> adapters,
+			final List<ByteArrayId> adapterIds,
 			final PrimaryIndex index,
 			final Pair<List<String>, DataAdapter<?>> fieldIdsAdapterPair,
 			final String... authorizations ) {
-		this.adapters = adapters;
+		this.adapterIds = adapterIds;
 		this.index = index;
 		this.fieldIdsAdapterPair = fieldIdsAdapterPair;
 		this.authorizations = authorizations;
@@ -122,10 +122,10 @@ abstract public class AccumuloQuery
 					e);
 			return null;
 		}
-		if ((adapters != null) && !adapters.isEmpty()) {
-			for (final DataAdapter adapter : adapters) {
+		if ((adapterIds != null) && !adapterIds.isEmpty()) {
+			for (final ByteArrayId adapterId : adapterIds) {
 				scanner.fetchColumnFamily(new Text(
-						adapter.getAdapterId().getBytes()));
+						adapterId.getBytes()));
 			}
 		}
 		return scanner;

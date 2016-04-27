@@ -31,13 +31,13 @@ public abstract class AccumuloFilteredIndexQuery extends
 	protected final ScanCallback<?> scanCallback;
 
 	public AccumuloFilteredIndexQuery(
-			final List<DataAdapter> adapters,
+			final List<ByteArrayId> adapterIds,
 			final PrimaryIndex index,
 			final ScanCallback<?> scanCallback,
 			final Pair<List<String>, DataAdapter<?>> fieldIdsAdapterPair,
 			final String... authorizations ) {
 		super(
-				adapters,
+				adapterIds,
 				index,
 				fieldIdsAdapterPair,
 				authorizations);

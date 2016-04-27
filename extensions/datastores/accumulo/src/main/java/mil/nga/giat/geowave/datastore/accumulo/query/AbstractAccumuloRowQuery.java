@@ -75,9 +75,6 @@ abstract public class AbstractAccumuloRowQuery<T> extends
 						associatedAdapter,
 						fieldIds,
 						index.getIndexModel().getDimensions());
-				AttributeSubsettingIterator.setAdapters(
-						iteratorSetting,
-						adapters);
 				AttributeSubsettingIterator.setModel(
 						iteratorSetting,
 						index.getIndexModel());

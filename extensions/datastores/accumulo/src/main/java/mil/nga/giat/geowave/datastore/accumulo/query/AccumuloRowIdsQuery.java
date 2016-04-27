@@ -30,7 +30,7 @@ public class AccumuloRowIdsQuery<T> extends
 			final DedupeFilter dedupFilter,
 			final String[] authorizations ) {
 		super(
-				Collections.<DataAdapter> singletonList(adapter),
+				Collections.<ByteArrayId> singletonList(adapter.getAdapterId()),
 				index,
 				(Query) null,
 				dedupFilter,
