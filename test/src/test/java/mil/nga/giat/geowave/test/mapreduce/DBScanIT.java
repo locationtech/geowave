@@ -47,7 +47,7 @@ import mil.nga.giat.geowave.core.store.query.QueryOptions;
 public class DBScanIT extends
 		MapReduceTestEnvironment
 {
-	
+
 	public static final String DBSCAN_TEST_NAMESPACE = TEST_NAMESPACE + "_dbscanit";
 
 	private SimpleFeatureBuilder getBuilder() {

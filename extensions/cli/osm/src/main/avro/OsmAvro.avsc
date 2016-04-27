@@ -1,0 +1,92 @@
+/**
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * Copyright 2010 Lars Francke
+ * Modifications 2015, Public Domain
+ *
+ */
+
+[
+    {
+        "name": "Changeset",
+        "namespace": "mil.nga.giat.geowave.cli.osm.types.generated",
+        "type": "record",
+        "fields": [
+            {"name": "id", "type": "long"},
+            {"name": "user_id", "type": ["null", "long"]},
+            {"name": "user_name", "type": ["null", "string"]},
+            {"name": "created_at", "type": ["null", "long"]},
+            {"name": "closed_at", "type": ["null", "long"]},
+            {"name": "open", "type": "boolean", "default": "false"},
+            {"name": "num_changes", "type": ["null", "int"]},
+            {"name": "min_lon", "type": ["null", "int"]},
+            {"name": "min_lat", "type": ["null", "int"]},
+            {"name": "max_lon", "type": ["null", "int"]},
+            {"name": "max_lat", "type": ["null", "int"]},
+            {"name": "tags", "type": ["null", {"type": "map", "values": "string"}]}
+        ]
+    },
+    {
+        "name": "Primitive",
+        "namespace": "mil.nga.giat.geowave.cli.osm.types.generated",
+        "type": "record",
+        "fields": [
+            {"name": "id", "type": "long"},
+            {"name": "version", "type": "long"},
+            {"name": "timestamp", "type": "long"},
+            {"name": "user_id", "type": ["null", "long"]},
+            {"name": "user_name", "type": ["null", "string"]},
+            {"name": "changeset_id", "type": "long"},
+            {"name": "visible", "type": "boolean", "default": "true"},
+            {"name": "tags", "type": ["null", {"type": "map", "values": "string"}]}
+        ]
+    },
+    {
+        "name": "Node",
+        "namespace": "mil.nga.giat.geowave.cli.osm.types.generated",
+        "type": "record",
+        "fields": [
+            {"name": "common", "type": "Primitive"},
+            {"name": "latitude", "type": "double"},
+            {"name": "longitude", "type": "double"}
+        ]
+    },
+    {
+        "name": "Way",
+        "namespace": "mil.nga.giat.geowave.cli.osm.types.generated",
+        "type": "record",
+        "fields": [
+            {"name": "common", "type": "Primitive"},
+            {"name": "nodes", "type": ["null", {"type": "array", "items": "long"}]}
+        ]
+    },
+    {
+        "name": "Relation",
+        "namespace": "mil.nga.giat.geowave.cli.osm.types.generated",
+        "type": "record",
+        "fields": [
+            {"name": "common", "type": "Primitive"},
+            {"name": "members", "type": ["null", {"type": "array", "items":
+                { "name": "RelationMember", "type": "record", "fields": [
+                        {"name": "role", "type": ["null", "string"]},
+                        {"name": "member", "type": "long"},
+                        {"name": "member_type", "type": {"name": "MemberType", "type": "enum", "symbols": ["NODE", "WAY", "RELATION"]}}
+                    ]
+                }
+              }
+             ]
+            }
+        ]
+    }
+]
