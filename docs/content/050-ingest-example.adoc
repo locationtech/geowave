@@ -1,0 +1,37 @@
+[[ingest-example]]
+=== Ingest Example
+
+GeoWave can ingest any data type that has been listed as an ingest plugin. Let's start out with the GeoTools datastore; this
+wraps a bunch of GeoTools supported formats. This includes all file-based datastores supported within GeoTools.
+We will use the shapefile capability for our example here.
+
+==== Something recognizable
+
+The naturalearthdata side has a few shapefile we can use use. On the page
+http://www.naturalearthdata.com/downloads/50m-cultural-vectors/[50m Cultural Vectors]
+
+Let's download the Admin 0 - Countries shapefile:
+http://naciscdn.org/naturalearth/50m/cultural/ne_50m_admin_0_countries.zip[ne_50m_admin_0_countries.zip]
+
+[source, bash]
+----
+$ mkdir ingest
+$ mv ne_50m_admin_0_countries.zip ingest/
+$ cd ingest
+$ unzip ne_50m_admin_0_countries.zip
+$ rm ne_50m_admin_0_countries.zip
+$ cd ..
+$ geowave -localingest \
+      -b ./ingest \
+      -gwNamespace geowave.50m_admin_0_countries \ <1>
+      -f geotools-vector \ <2>
+	  -datastore accumulo \
+      -user USERNAME \
+      -password PASSWORD \
+	  -instance ACCUMULO_INSTANCE_NAME \
+      -zookeeper ZOOKEEPER_HOST_NAME:2181
+----
+<1> We preface the table name with the Accumulo namespace we configured earlier in the Accumulo configuration section followed by a dot (NAMESPACE.TABLE_NAME)
+<2> Explicitly set the ingest formats by name (or multiple comma-delimited formats), if not set all available ingest formats will be used
+
+After running the ingest command you should see the various index tables in Accumulo
