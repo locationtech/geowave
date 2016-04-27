@@ -40,6 +40,10 @@ import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 
+/**
+ * Deprecated as of 0.9.1
+ */
+@Deprecated
 public class WholeFeatureDataAdapter extends
 		AbstractDataAdapter<SimpleFeature> implements
 		GeotoolsFeatureDataAdapter
