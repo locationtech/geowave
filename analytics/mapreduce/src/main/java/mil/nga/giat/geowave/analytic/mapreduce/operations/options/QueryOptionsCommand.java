@@ -7,16 +7,16 @@ import com.beust.jcommander.Parameter;
 public class QueryOptionsCommand
 {
 
-	@Parameter(names = "--auth", description = "The authorizations used during extract; by default all authorizations are used.")
+	@Parameter(names = "--auth", description = "The comma-separated list of authorizations used during extract; by default all authorizations are used.")
 	private List<String> authorizations;
 
-	@Parameter(names = "--adapters", description = "The data adapters to query; by default all authorizations are used.")
+	@Parameter(names = "--adapters", description = "The comma-separated list of data adapters to query; by default all adapters are used.")
 	private List<String> adapterIds = null;
 
 	@Parameter(names = "--index", description = "The specific index to query; by default one is chosen for each adapter.")
 	private String indexId = null;
 
-	@Parameter(names = "--fields", description = "The set of field names to extract; by default all are extracted.")
+	@Parameter(names = "--fields", description = "The comma-separated set of field names to extract; by default all are extracted.")
 	private List<String> fieldIds = null;
 
 	public QueryOptionsCommand() {}

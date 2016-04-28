@@ -28,8 +28,8 @@ public class CommonOptions
 	private String commonDistanceFunctionClass;
 
 	@ParametersDelegate
-	@PrefixParameter(prefix = "ex")
-	private QueryOptionsCommand extractQueryOptions = new QueryOptionsCommand();
+	@PrefixParameter(prefix = "query")
+	private QueryOptionsCommand queryOptions = new QueryOptionsCommand();
 
 	@ExtractParameter(ExtractParameters.Extract.MAX_INPUT_SPLIT)
 	@Parameter(names = {
@@ -89,13 +89,13 @@ public class CommonOptions
 		this.commonDistanceFunctionClass = commonDistanceFunctionClass;
 	}
 
-	public QueryOptionsCommand getExtractQueryOptions() {
-		return extractQueryOptions;
+	public QueryOptionsCommand getQueryOptions() {
+		return queryOptions;
 	}
 
-	public void setExtractQueryOptions(
+	public void setQueryOptions(
 			QueryOptionsCommand extractQueryOptions ) {
-		this.extractQueryOptions = extractQueryOptions;
+		this.queryOptions = extractQueryOptions;
 	}
 
 	public String getExtractMaxInputSplit() {
@@ -161,10 +161,15 @@ public class CommonOptions
 		this.inputHdfsPath = inputHdfsPath;
 	}
 
-	public QueryOptions createQueryOptions() {
+	/**
+	 * Build the query options from the command line arguments.
+	 * 
+	 * @return
+	 */
+	public QueryOptions buildQueryOptions() {
 		final QueryOptions options = new QueryOptions();
-		if (extractQueryOptions.getAdapterIds() != null && extractQueryOptions.getAdapterIds().size() > 0) options.setAdapter(Lists.transform(
-				extractQueryOptions.getAdapterIds(),
+		if (queryOptions.getAdapterIds() != null && queryOptions.getAdapterIds().size() > 0) options.setAdapter(Lists.transform(
+				queryOptions.getAdapterIds(),
 				new Function<String, ByteArrayId>() {
 					@Override
 					public ByteArrayId apply(
@@ -173,16 +178,16 @@ public class CommonOptions
 								input);
 					}
 				}));
-		if (extractQueryOptions.getAuthorizations() != null) {
-			options.setAuthorizations(this.extractQueryOptions.getAuthorizations().toArray(
-					new String[this.extractQueryOptions.getAuthorizations().size()]));
+		if (queryOptions.getAuthorizations() != null) {
+			options.setAuthorizations(this.queryOptions.getAuthorizations().toArray(
+					new String[this.queryOptions.getAuthorizations().size()]));
 		}
-		if (extractQueryOptions.getIndexId() != null) {
+		if (queryOptions.getIndexId() != null) {
 			options.setIndexId(new ByteArrayId(
-					extractQueryOptions.getIndexId()));
+					queryOptions.getIndexId()));
 		}
-		if (extractQueryOptions.getFieldIds() != null) {
-			options.setFieldIds(extractQueryOptions.getFieldIds());
+		if (queryOptions.getFieldIds() != null) {
+			options.setFieldIds(queryOptions.getFieldIds());
 		}
 		return options;
 	}

@@ -91,7 +91,7 @@ public class KmeansJumpCommand extends
 		converter.readProperties(kmeansJumpOptions);
 		properties.store(
 				Extract.QUERY_OPTIONS,
-				commonOptions.createQueryOptions());
+				commonOptions.buildQueryOptions());
 
 		MultiLevelJumpKMeansClusteringJobRunner runner = new MultiLevelJumpKMeansClusteringJobRunner();
 		int status = runner.run(properties);

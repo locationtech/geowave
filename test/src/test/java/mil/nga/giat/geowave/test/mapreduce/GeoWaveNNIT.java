@@ -88,9 +88,9 @@ public class GeoWaveNNIT extends
 		// GeoWaveMain.main(new String[] {
 		// "analytic",
 		// "nn",
-		// "--ex.adapters",
+		// "--query.adapters",
 		// "testnn",
-		// "--ex.index",
+		// "--query.index",
 		// new
 		// SpatialDimensionalityTypeProvider().createPrimaryIndex().getId().getString(),
 		// "-emn",

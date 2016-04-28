@@ -87,6 +87,13 @@ public class DBScanOptions
 		"--mapReduceHdfsBaseDir"
 	}, description = "Fully qualified path to the base directory in hdfs")
 	private String mapReduceHdfsBaseDir;
+	
+	@OutputParameter(OutputParameters.Output.HDFS_OUTPUT_PATH)
+	@Parameter(names = {
+		"-oop",
+		"--outputHdfsOutputPath"
+	}, description = "Output HDFS File Path when used with a sequence file")
+	private String outputHdfsOutputPath;
 
 	@MapReduceParameter(MapReduceParameters.MRConfig.HDFS_HOST_PORT)
 	@Parameter(names = {
@@ -171,6 +178,7 @@ public class DBScanOptions
 		"--partitionSecondaryPartitionerClass"
 	}, description = "Perform secondary partitioning with the provided class")
 	private String partitionSecondaryPartitionerClass;
+	
 
 	public String getPartitioningDistanceThresholds() {
 		return partitioningDistanceThresholds;
@@ -368,5 +376,14 @@ public class DBScanOptions
 	public void setPartitionSecondaryPartitionerClass(
 			String partitionSecondaryPartitionerClass ) {
 		this.partitionSecondaryPartitionerClass = partitionSecondaryPartitionerClass;
+	}
+
+	public String getOutputHdfsOutputPath() {
+		return outputHdfsOutputPath;
+	}
+
+	public void setOutputHdfsOutputPath(
+			String outputHdfsOutputPath ) {
+		this.outputHdfsOutputPath = outputHdfsOutputPath;
 	}
 }

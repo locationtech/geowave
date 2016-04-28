@@ -85,7 +85,7 @@ public class NearestNeighborCommand extends
 		converter.readProperties(nnOptions);
 		properties.store(
 				Extract.QUERY_OPTIONS,
-				commonOptions.createQueryOptions());
+				commonOptions.buildQueryOptions());
 
 		GeoWaveExtractNNJobRunner runner = new GeoWaveExtractNNJobRunner();
 		int status = runner.run(properties);
