@@ -36,7 +36,7 @@ public class ConfigSection implements
 				ConfigOptions.PROPERTIES_FILE_CONTEXT);
 
 		File propertyPath = propertyFile.getParentFile();
-		if (!propertyPath.exists()) {
+		if (propertyPath != null && !propertyPath.exists()) {
 			if (!propertyPath.mkdir()) {
 				LOGGER.error("Could not create property cache path: " + propertyPath);
 				return false;

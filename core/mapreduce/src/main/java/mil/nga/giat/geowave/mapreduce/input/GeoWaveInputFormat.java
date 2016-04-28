@@ -98,7 +98,7 @@ public class GeoWaveInputFormat<T> extends
 				CLASS,
 				context);
 	}
-	
+
 	public static void setIndex(
 			final Configuration config,
 			final PrimaryIndex index ) {

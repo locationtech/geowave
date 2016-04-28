@@ -1,6 +1,6 @@
 package mil.nga.giat.geowave.core.ingest.operations;
 
-import mil.nga.giat.geowave.core.cli.CLIOperationProviderSpi;
+import mil.nga.giat.geowave.core.cli.spi.CLIOperationProviderSpi;
 
 public class IngestOperationProvider implements
 		CLIOperationProviderSpi

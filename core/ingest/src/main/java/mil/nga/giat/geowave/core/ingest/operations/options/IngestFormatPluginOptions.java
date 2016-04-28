@@ -48,6 +48,12 @@ public class IngestFormatPluginOptions extends
 				addFormat(name.trim());
 			}
 		}
+		else {
+			// Add all
+			for (String formatName : IngestFormatPluginRegistry.getPluginProviderRegistry().keySet()) {
+				addFormat(formatName);
+			}
+		}
 	}
 
 	private void addFormat(

@@ -1,6 +1,6 @@
 package mil.nga.giat.geowave.cli.debug;
 
-import mil.nga.giat.geowave.core.cli.CLIOperationProviderSpi;
+import mil.nga.giat.geowave.core.cli.spi.CLIOperationProviderSpi;
 
 public class DebugOperationsProvider implements
 		CLIOperationProviderSpi
