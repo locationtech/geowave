@@ -37,10 +37,10 @@ import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 import mil.nga.giat.geowave.test.annotation.NamespaceOverride;
 
-public class GeoWaveIT extends
+public class GeoWaveITRunner extends
 		Suite
 {
-	private static final Logger LOGGER = LoggerFactory.getLogger(GeoWaveIT.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(GeoWaveITRunner.class);
 	public static final AtomicBoolean DEFER_CLEANUP = new AtomicBoolean(
 			false);
 	public static final Object MUTEX = new Object();
@@ -50,7 +50,7 @@ public class GeoWaveIT extends
 			final Statement statement ) {
 		// add test environment setup
 		try {
-			final Method setupMethod = GeoWaveIT.class.getDeclaredMethod("setup");
+			final Method setupMethod = GeoWaveITRunner.class.getDeclaredMethod("setup");
 			setupMethod.setAccessible(true);
 			return super.withBeforeClasses(new RunBefores(
 					statement,
@@ -72,8 +72,8 @@ public class GeoWaveIT extends
 			final Statement statement ) {
 		// add test environment tear down
 		try {
-			Statement newStatement = super.withAfterClasses(statement);
-			final Method tearDownMethod = GeoWaveIT.class.getDeclaredMethod("tearDown");
+			final Statement newStatement = super.withAfterClasses(statement);
+			final Method tearDownMethod = GeoWaveITRunner.class.getDeclaredMethod("tearDown");
 			tearDownMethod.setAccessible(true);
 			return new RunAfters(
 					newStatement,
@@ -132,10 +132,13 @@ public class GeoWaveIT extends
 						GeoWaveTestStore.class);
 
 				typeNamespace = store.namespace();
+
+				Annotation[] annotations = getTestClass().getJavaClass().getDeclaredAnnotations();
 				for (final String fieldName : fieldNameStoreTypePair.keySet()) {
 
-					final Field field = getTestClass().getJavaClass().getField(
+					final Field field = getTestClass().getJavaClass().getDeclaredField(
 							fieldName);
+					Annotation[] a = field.getDeclaredAnnotations();
 					String fieldNamespace = typeNamespace;
 					if (field.isAnnotationPresent(NamespaceOverride.class)) {
 						fieldNamespace = field.getAnnotation(
@@ -231,7 +234,7 @@ public class GeoWaveIT extends
 	/**
 	 * Only called reflectively. Do not use programmatically.
 	 */
-	public GeoWaveIT(
+	public GeoWaveITRunner(
 			final Class<?> klass )
 			throws Throwable {
 		super(
@@ -284,7 +287,7 @@ public class GeoWaveIT extends
 
 	private Set<String> getDataStoreOptionFieldsForTypeAnnotation()
 			throws Exception {
-		final Field[] fields = getTestClass().getJavaClass().getFields();
+		final Field[] fields = getTestClass().getJavaClass().getDeclaredFields();
 		final Set<String> dataStoreOptionFields = new HashSet<String>();
 		for (final Field field : fields) {
 			if (field.getType().isAssignableFrom(

@@ -26,7 +26,7 @@ import mil.nga.giat.geowave.analytic.mapreduce.operations.KdeCommand;
 import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
 import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
-import mil.nga.giat.geowave.test.GeoWaveIT;
+import mil.nga.giat.geowave.test.GeoWaveITRunner;
 import mil.nga.giat.geowave.test.TestUtils;
 import mil.nga.giat.geowave.test.TestUtils.DimensionalityType;
 import mil.nga.giat.geowave.test.annotation.Environments;
@@ -35,7 +35,7 @@ import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 import mil.nga.giat.geowave.test.annotation.NamespaceOverride;
 
-@RunWith(GeoWaveIT.class)
+@RunWith(GeoWaveITRunner.class)
 @Environments({
 	Environment.MAP_REDUCE
 })
@@ -60,10 +60,10 @@ public class KDERasterResizeIT
 	private static final int BASE_MIN_LEVEL = 15;
 	private static final int BASE_MAX_LEVEL = 17;
 
-	protected DataStorePluginOptions inputDataStorePluginOptions;
-
 	@NamespaceOverride(TEST_COVERAGE_NAMESPACE)
 	protected DataStorePluginOptions outputDataStorePluginOptions;
+
+	protected DataStorePluginOptions inputDataStorePluginOptions;
 
 	@BeforeClass
 	public static void extractTestFiles()

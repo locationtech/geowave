@@ -22,14 +22,14 @@ import mil.nga.giat.geowave.format.gpx.GpxUtils;
 import mil.nga.giat.geowave.service.client.GeoserverServiceClient;
 import mil.nga.giat.geowave.service.client.InfoServiceClient;
 import mil.nga.giat.geowave.service.client.IngestServiceClient;
-import mil.nga.giat.geowave.test.GeoWaveIT;
+import mil.nga.giat.geowave.test.GeoWaveITRunner;
 import mil.nga.giat.geowave.test.TestUtils;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
-@RunWith(GeoWaveIT.class)
+@RunWith(GeoWaveITRunner.class)
 public class GeoWaveServicesIT extends
 		ServicesTestEnvironment
 {

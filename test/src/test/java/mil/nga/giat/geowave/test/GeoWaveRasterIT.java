@@ -42,7 +42,7 @@ import org.opengis.coverage.grid.GridCoverage;
 import com.vividsolutions.jts.geom.Envelope;
 import com.vividsolutions.jts.geom.GeometryFactory;
 
-@RunWith(GeoWaveIT.class)
+@RunWith(GeoWaveITRunner.class)
 public class GeoWaveRasterIT
 {
 	private static final double DOUBLE_TOLERANCE = 1E-10d;

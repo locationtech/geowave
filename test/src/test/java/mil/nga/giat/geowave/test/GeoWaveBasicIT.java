@@ -78,13 +78,12 @@ import mil.nga.giat.geowave.test.TestUtils.ExpectedResults;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 
-@RunWith(GeoWaveIT.class)
+@RunWith(GeoWaveITRunner.class)
 public class GeoWaveBasicIT
 {
 	private static final SimpleDateFormat CQL_DATE_FORMAT = new SimpleDateFormat(
 			"yyyy-MM-dd'T'hh:mm:ss'Z'");
-	private final static Logger LOGGER = Logger.getLogger(
-			GeoWaveBasicIT.class);
+	private final static Logger LOGGER = Logger.getLogger(GeoWaveBasicIT.class);
 	private static final String TEST_DATA_ZIP_RESOURCE_PATH = TestUtils.TEST_RESOURCE_PACKAGE + "basic-testdata.zip";
 	private static final String TEST_FILTER_PACKAGE = TestUtils.TEST_CASE_BASE + "filter/";
 	private static final String HAIL_TEST_CASE_PACKAGE = TestUtils.TEST_CASE_BASE + "hail_test_case/";
@@ -125,14 +124,12 @@ public class GeoWaveBasicIT
 
 	@Test
 	public void testMultiThreadedIngestAndQuerySpatialPointsAndLines() {
-		testIngestAndQuerySpatialPointsAndLines(
-				4);
+		testIngestAndQuerySpatialPointsAndLines(4);
 	}
 
 	@Test
 	public void testSingleThreadedIngestAndQuerySpatialPointsAndLines() {
-		testIngestAndQuerySpatialPointsAndLines(
-				1);
+		testIngestAndQuerySpatialPointsAndLines(1);
 	}
 
 	public void testIngestAndQuerySpatialPointsAndLines(
@@ -167,10 +164,8 @@ public class GeoWaveBasicIT
 		}
 		catch (final Exception e) {
 			e.printStackTrace();
-			TestUtils.deleteAll(
-					dataStore);
-			Assert.fail(
-					"Error occurred while testing a bounding box query of spatial index: '" + e.getLocalizedMessage() + "'");
+			TestUtils.deleteAll(dataStore);
+			Assert.fail("Error occurred while testing a bounding box query of spatial index: '" + e.getLocalizedMessage() + "'");
 		}
 		try {
 			testQuery(
@@ -187,10 +182,8 @@ public class GeoWaveBasicIT
 		}
 		catch (final Exception e) {
 			e.printStackTrace();
-			TestUtils.deleteAll(
-					dataStore);
-			Assert.fail(
-					"Error occurred while testing a polygon query of spatial index: '" + e.getLocalizedMessage() + "'");
+			TestUtils.deleteAll(dataStore);
+			Assert.fail("Error occurred while testing a polygon query of spatial index: '" + e.getLocalizedMessage() + "'");
 		}
 		// TODO HBase implementation needs to merge statistics
 		if ((nthreads > 0) && (dataStore.getType() != "hbase")) {
@@ -207,10 +200,8 @@ public class GeoWaveBasicIT
 			}
 			catch (final Exception e) {
 				e.printStackTrace();
-				TestUtils.deleteAll(
-						dataStore);
-				Assert.fail(
-						"Error occurred while testing a bounding box stats on spatial index: '" + e.getLocalizedMessage() + "'");
+				TestUtils.deleteAll(dataStore);
+				Assert.fail("Error occurred while testing a bounding box stats on spatial index: '" + e.getLocalizedMessage() + "'");
 			}
 		}
 		try {
@@ -221,14 +212,11 @@ public class GeoWaveBasicIT
 		}
 		catch (final Exception e) {
 			e.printStackTrace();
-			TestUtils.deleteAll(
-					dataStore);
-			Assert.fail(
-					"Error occurred while testing deletion of an entry using spatial index: '" + e.getLocalizedMessage() + "'");
+			TestUtils.deleteAll(dataStore);
+			Assert.fail("Error occurred while testing deletion of an entry using spatial index: '" + e.getLocalizedMessage() + "'");
 		}
 
-		TestUtils.deleteAll(
-				dataStore);
+		TestUtils.deleteAll(dataStore);
 	}
 
 	protected static class StatisticsCache implements
@@ -248,8 +236,7 @@ public class GeoWaveBasicIT
 				final StatisticsProvider<SimpleFeature> dataAdapter ) {
 			final ByteArrayId[] statsIds = dataAdapter.getSupportedStatisticsIds();
 			for (final ByteArrayId statsId : statsIds) {
-				final DataStatistics<SimpleFeature> stats = dataAdapter.createDataStatistics(
-						statsId);
+				final DataStatistics<SimpleFeature> stats = dataAdapter.createDataStatistics(statsId);
 				statsCache.put(
 						statsId,
 						stats);
@@ -294,26 +281,21 @@ public class GeoWaveBasicIT
 				Filter.INCLUDE);
 		final Map<ByteArrayId, StatisticsCache> statsCache = new HashMap<ByteArrayId, StatisticsCache>();
 		final Collection<ByteArrayId> indexIds = new ArrayList<ByteArrayId>();
-		indexIds.add(
-				index.getId());
+		indexIds.add(index.getId());
 		for (final File inputFile : inputFiles) {
-			LOGGER.warn(
-					"Calculating stats from file '" + inputFile.getName() + "' - this may take several minutes...");
+			LOGGER.warn("Calculating stats from file '" + inputFile.getName() + "' - this may take several minutes...");
 			try (final CloseableIterator<GeoWaveData<SimpleFeature>> dataIterator = localFileIngest.toGeoWaveData(
 					inputFile,
 					indexIds,
 					null)) {
 				final AdapterStore adapterCache = new MemoryAdapterStore(
-						localFileIngest.getDataAdapters(
-								null));
+						localFileIngest.getDataAdapters(null));
 				while (dataIterator.hasNext()) {
 					final GeoWaveData<SimpleFeature> data = dataIterator.next();
-					final WritableDataAdapter<SimpleFeature> adapter = data.getAdapter(
-							adapterCache);
+					final WritableDataAdapter<SimpleFeature> adapter = data.getAdapter(adapterCache);
 					// it should be a statistical data adapter
 					if (adapter instanceof StatisticsProvider) {
-						StatisticsCache cachedValues = statsCache.get(
-								adapter.getAdapterId());
+						StatisticsCache cachedValues = statsCache.get(adapter.getAdapterId());
 						if (cachedValues == null) {
 							cachedValues = new StatisticsCache(
 									(StatisticsProvider<SimpleFeature>) adapter);
@@ -336,10 +318,8 @@ public class GeoWaveBasicIT
 			}
 			catch (final IOException e) {
 				e.printStackTrace();
-				TestUtils.deleteAll(
-						dataStore);
-				Assert.fail(
-						"Error occurred while reading data from file '" + inputFile.getAbsolutePath() + "': '" + e.getLocalizedMessage() + "'");
+				TestUtils.deleteAll(dataStore);
+				Assert.fail("Error occurred while reading data from file '" + inputFile.getAbsolutePath() + "': '" + e.getLocalizedMessage() + "'");
 			}
 		}
 		final DataStatisticsStore statsStore = dataStore.createDataStatisticsStore();
@@ -347,13 +327,10 @@ public class GeoWaveBasicIT
 		try (CloseableIterator<DataAdapter<?>> adapterIterator = adapterStore.getAdapters()) {
 			while (adapterIterator.hasNext()) {
 				final FeatureDataAdapter adapter = (FeatureDataAdapter) adapterIterator.next();
-				final StatisticsCache cachedValue = statsCache.get(
-						adapter.getAdapterId());
-				Assert.assertNotNull(
-						cachedValue);
+				final StatisticsCache cachedValue = statsCache.get(adapter.getAdapterId());
+				Assert.assertNotNull(cachedValue);
 				final Collection<DataStatistics<SimpleFeature>> expectedStats = cachedValue.statsCache.values();
-				try (CloseableIterator<DataStatistics<?>> statsIterator = statsStore.getDataStatistics(
-						adapter.getAdapterId())) {
+				try (CloseableIterator<DataStatistics<?>> statsIterator = statsStore.getDataStatistics(adapter.getAdapterId())) {
 					int statsCount = 0;
 					while (statsIterator.hasNext()) {
 						final DataStatistics<?> nextStats = statsIterator.next();
@@ -378,15 +355,13 @@ public class GeoWaveBasicIT
 					// statistics will match!
 					if (multithreaded) {
 						if (!(expectedStat.getStatisticsId().getString().startsWith(
-								FeatureNumericRangeStatistics.STATS_TYPE + "#")
-								|| expectedStat.getStatisticsId().equals(
-										CountDataStatistics.STATS_ID))) {
+								FeatureNumericRangeStatistics.STATS_TYPE + "#") || expectedStat.getStatisticsId().equals(
+								CountDataStatistics.STATS_ID))) {
 							continue;
 						}
 					}
 
-					Assert.assertNotNull(
-							actualStats);
+					Assert.assertNotNull(actualStats);
 					// if the stats are the same, their binary serialization
 					// should be the same
 					Assert.assertArrayEquals(
@@ -398,11 +373,9 @@ public class GeoWaveBasicIT
 				// the bounding box
 				final BoundingBoxDataStatistics<?> bboxStat = (BoundingBoxDataStatistics<SimpleFeature>) statsStore.getDataStatistics(
 						adapter.getAdapterId(),
-						FeatureBoundingBoxStatistics.composeId(
-								adapter.getType().getGeometryDescriptor().getLocalName()));
+						FeatureBoundingBoxStatistics.composeId(adapter.getType().getGeometryDescriptor().getLocalName()));
 
-				Assert.assertNotNull(
-						bboxStat);
+				Assert.assertNotNull(bboxStat);
 				Assert.assertEquals(
 						"The min X of the bounding box stat does not match the expected value",
 						cachedValue.minX,
@@ -428,10 +401,8 @@ public class GeoWaveBasicIT
 		catch (final IOException e) {
 			e.printStackTrace();
 
-			TestUtils.deleteAll(
-					dataStore);
-			Assert.fail(
-					"Error occurred while retrieving adapters or statistics from metadata table: '" + e.getLocalizedMessage() + "'");
+			TestUtils.deleteAll(dataStore);
+			Assert.fail("Error occurred while retrieving adapters or statistics from metadata table: '" + e.getLocalizedMessage() + "'");
 		}
 	}
 
@@ -440,14 +411,11 @@ public class GeoWaveBasicIT
 			throws CQLException,
 			IOException {
 
-		final SimpleFeature savedFilter = TestUtils.resourceToFeature(
-				filterURL);
+		final SimpleFeature savedFilter = TestUtils.resourceToFeature(filterURL);
 
 		final Geometry filterGeometry = (Geometry) savedFilter.getDefaultGeometry();
-		final Object startObj = savedFilter.getAttribute(
-				TestUtils.TEST_FILTER_START_TIME_ATTRIBUTE_NAME);
-		final Object endObj = savedFilter.getAttribute(
-				TestUtils.TEST_FILTER_END_TIME_ATTRIBUTE_NAME);
+		final Object startObj = savedFilter.getAttribute(TestUtils.TEST_FILTER_START_TIME_ATTRIBUTE_NAME);
+		final Object endObj = savedFilter.getAttribute(TestUtils.TEST_FILTER_END_TIME_ATTRIBUTE_NAME);
 		Date startDate = null, endDate = null;
 		if ((startObj != null) && (endObj != null)) {
 			// if we can resolve start and end times, make it a spatial temporal
@@ -474,10 +442,8 @@ public class GeoWaveBasicIT
 		exportDir.delete();
 		exportDir.mkdirs();
 
-		exportCommand.setInputStoreOptions(
-				dataStore);
-		options.setBatchSize(
-				10000);
+		exportCommand.setInputStoreOptions(dataStore);
+		options.setBatchSize(10000);
 		final Envelope env = filterGeometry.getEnvelopeInternal();
 		final double east = env.getMaxX();
 		final double west = env.getMinX();
@@ -487,10 +453,8 @@ public class GeoWaveBasicIT
 			while (adapterIt.hasNext()) {
 				final DataAdapter<?> adapter = adapterIt.next();
 				final List<String> adapterIds = new ArrayList<String>();
-				adapterIds.add(
-						adapter.getAdapterId().getString());
-				options.setAdapterIds(
-						adapterIds);
+				adapterIds.add(adapter.getAdapterId().getString());
+				options.setAdapterIds(adapterIds);
 				if (adapter instanceof GeotoolsFeatureDataAdapter) {
 					final GeotoolsFeatureDataAdapter gtAdapter = (GeotoolsFeatureDataAdapter) adapter;
 					final TimeDescriptors timeDesc = gtAdapter.getTimeDescriptors();
@@ -519,26 +483,19 @@ public class GeoWaveBasicIT
 							east,
 							north,
 							startTimeAttribute,
-							CQL_DATE_FORMAT.format(
-									endDate),
+							CQL_DATE_FORMAT.format(endDate),
 							endTimeAttribute,
-							CQL_DATE_FORMAT.format(
-									startDate));
-					options.setOutputFile(
-							new File(
-									exportDir,
-									adapter.getAdapterId().getString() + TEST_BASE_EXPORT_FILE_NAME));
-					options.setCqlFilter(
-							cqlPredicate);
-					exportCommand.setParameters(
-							null);
-					exportCommand.execute(
-							new ManualOperationParams());
+							CQL_DATE_FORMAT.format(startDate));
+					options.setOutputFile(new File(
+							exportDir,
+							adapter.getAdapterId().getString() + TEST_BASE_EXPORT_FILE_NAME));
+					options.setCqlFilter(cqlPredicate);
+					exportCommand.setParameters(null);
+					exportCommand.execute(new ManualOperationParams());
 				}
 			}
 		}
-		TestUtils.deleteAll(
-				dataStore);
+		TestUtils.deleteAll(dataStore);
 		TestUtils.testLocalIngest(
 				dataStore,
 				DimensionalityType.SPATIAL_TEMPORAL,
@@ -559,10 +516,8 @@ public class GeoWaveBasicIT
 		}
 		catch (final Exception e) {
 			e.printStackTrace();
-			TestUtils.deleteAll(
-					dataStore);
-			Assert.fail(
-					"Error occurred on reingested dataset while testing a bounding box and time range query of spatial temporal index: '" + e.getLocalizedMessage() + "'");
+			TestUtils.deleteAll(dataStore);
+			Assert.fail("Error occurred on reingested dataset while testing a bounding box and time range query of spatial temporal index: '" + e.getLocalizedMessage() + "'");
 		}
 	}
 
@@ -599,10 +554,8 @@ public class GeoWaveBasicIT
 		}
 		catch (final Exception e) {
 			e.printStackTrace();
-			TestUtils.deleteAll(
-					dataStore);
-			Assert.fail(
-					"Error occurred while testing a bounding box and time range query of spatial temporal index: '" + e.getLocalizedMessage() + "'");
+			TestUtils.deleteAll(dataStore);
+			Assert.fail("Error occurred while testing a bounding box and time range query of spatial temporal index: '" + e.getLocalizedMessage() + "'");
 		}
 
 		try {
@@ -619,10 +572,8 @@ public class GeoWaveBasicIT
 		}
 		catch (final Exception e) {
 			e.printStackTrace();
-			TestUtils.deleteAll(
-					dataStore);
-			Assert.fail(
-					"Error occurred while testing a polygon and time range query of spatial temporal index: '" + e.getLocalizedMessage() + "'");
+			TestUtils.deleteAll(dataStore);
+			Assert.fail("Error occurred while testing a polygon and time range query of spatial temporal index: '" + e.getLocalizedMessage() + "'");
 		}
 
 		try {
@@ -638,23 +589,18 @@ public class GeoWaveBasicIT
 		}
 		catch (final Exception e) {
 			e.printStackTrace();
-			TestUtils.deleteAll(
-					dataStore);
-			Assert.fail(
-					"Error occurred while testing a bounding box stats on spatial temporal index: '" + e.getLocalizedMessage() + "'");
+			TestUtils.deleteAll(dataStore);
+			Assert.fail("Error occurred while testing a bounding box stats on spatial temporal index: '" + e.getLocalizedMessage() + "'");
 		}
 
 		try {
-			testSpatialTemporalLocalExportAndReingestWithCQL(
-					new File(
-							TEST_BOX_TEMPORAL_FILTER_FILE).toURI().toURL());
+			testSpatialTemporalLocalExportAndReingestWithCQL(new File(
+					TEST_BOX_TEMPORAL_FILTER_FILE).toURI().toURL());
 		}
 		catch (final Exception e) {
 			e.printStackTrace();
-			TestUtils.deleteAll(
-					dataStore);
-			Assert.fail(
-					"Error occurred while testing deletion of an entry using spatial index: '" + e.getLocalizedMessage() + "'");
+			TestUtils.deleteAll(dataStore);
+			Assert.fail("Error occurred while testing deletion of an entry using spatial index: '" + e.getLocalizedMessage() + "'");
 		}
 
 		try {
@@ -665,14 +611,11 @@ public class GeoWaveBasicIT
 		}
 		catch (final Exception e) {
 			e.printStackTrace();
-			TestUtils.deleteAll(
-					dataStore);
-			Assert.fail(
-					"Error occurred while testing deletion of an entry using spatial temporal index: '" + e.getLocalizedMessage() + "'");
+			TestUtils.deleteAll(dataStore);
+			Assert.fail("Error occurred while testing deletion of an entry using spatial temporal index: '" + e.getLocalizedMessage() + "'");
 		}
 
-		TestUtils.deleteAll(
-				dataStore);
+		TestUtils.deleteAll(dataStore);
 	}
 
 	@Test
@@ -682,13 +625,11 @@ public class GeoWaveBasicIT
 		final Map<Class, Object> args = new HashMap<>();
 		args.put(
 				Geometry.class,
-				GeometryUtils.GEOMETRY_FACTORY
-						.createPoint(
-								new Coordinate(
-										123.4,
-										567.8))
-						.buffer(
-								1));
+				GeometryUtils.GEOMETRY_FACTORY.createPoint(
+						new Coordinate(
+								123.4,
+								567.8)).buffer(
+						1));
 		args.put(
 				Integer.class,
 				23);
@@ -703,8 +644,7 @@ public class GeoWaveBasicIT
 				(byte) 0xa);
 		args.put(
 				Short.class,
-				Short.valueOf(
-						"2"));
+				Short.valueOf("2"));
 		args.put(
 				Float.class,
 				34.23434f);
@@ -731,8 +671,7 @@ public class GeoWaveBasicIT
 						8675309l));
 		args.put(
 				BigInteger.class,
-				BigInteger.valueOf(
-						893489348343423l));
+				BigInteger.valueOf(893489348343423l));
 		args.put(
 				BigDecimal.class,
 				new BigDecimal(
@@ -782,18 +721,13 @@ public class GeoWaveBasicIT
 
 		final SimpleFeatureTypeBuilder builder = new SimpleFeatureTypeBuilder();
 		final AttributeTypeBuilder ab = new AttributeTypeBuilder();
-		builder.setName(
-				"featureserializationtest");
+		builder.setName("featureserializationtest");
 
 		for (final Map.Entry<Class, Object> arg : args.entrySet()) {
-			builder.add(
-					ab
-							.binding(
-									arg.getKey())
-							.nillable(
-									false)
-							.buildDescriptor(
-									arg.getKey().getName().toString()));
+			builder.add(ab.binding(
+					arg.getKey()).nillable(
+					false).buildDescriptor(
+					arg.getKey().getName().toString()));
 		}
 
 		final SimpleFeatureType serTestType = builder.buildFeatureType();
@@ -810,18 +744,14 @@ public class GeoWaveBasicIT
 
 		final mil.nga.giat.geowave.core.store.DataStore geowaveStore = dataStore.createDataStore();
 
-		final SimpleFeature sf = serBuilder.buildFeature(
-				"343");
+		final SimpleFeature sf = serBuilder.buildFeature("343");
 		try (IndexWriter writer = geowaveStore.createWriter(
 				serAdapter,
 				TestUtils.DEFAULT_SPATIAL_INDEX)) {
-			writer.write(
-					sf);
+			writer.write(sf);
 		}
 		final DistributableQuery q = new SpatialQuery(
-				((Geometry) args.get(
-						Geometry.class)).buffer(
-								0.5d));
+				((Geometry) args.get(Geometry.class)).buffer(0.5d));
 		try (final CloseableIterator<?> iter = geowaveStore.query(
 				new QueryOptions(/* TODO do I need to pass 'index'? */),
 				q)) {
@@ -834,25 +764,20 @@ public class GeoWaveBasicIT
 				foundFeat = true;
 				final SimpleFeature isFeat = (SimpleFeature) maybeFeat;
 				for (final Property p : isFeat.getProperties()) {
-					final Object before = args.get(
-							p.getType().getBinding());
-					final Object after = isFeat.getAttribute(
-							p.getType().getName().toString());
+					final Object before = args.get(p.getType().getBinding());
+					final Object after = isFeat.getAttribute(p.getType().getName().toString());
 
 					if (before instanceof double[]) {
-						Assert.assertTrue(
-								Arrays.equals(
-										(double[]) before,
-										(double[]) after));
+						Assert.assertTrue(Arrays.equals(
+								(double[]) before,
+								(double[]) after));
 					}
 					else if (before instanceof boolean[]) {
 						final boolean[] b = (boolean[]) before;
 						final boolean[] a = (boolean[]) after;
-						Assert.assertTrue(
-								a.length == b.length);
+						Assert.assertTrue(a.length == b.length);
 						for (int i = 0; i < b.length; i++) {
-							Assert.assertTrue(
-									b[i] == a[i]);
+							Assert.assertTrue(b[i] == a[i]);
 						}
 					}
 					else if (before instanceof byte[]) {
@@ -866,10 +791,9 @@ public class GeoWaveBasicIT
 								(char[]) after);
 					}
 					else if (before instanceof float[]) {
-						Assert.assertTrue(
-								Arrays.equals(
-										(float[]) before,
-										(float[]) after));
+						Assert.assertTrue(Arrays.equals(
+								(float[]) before,
+								(float[]) after));
 					}
 					else if (before instanceof int[]) {
 						Assert.assertArrayEquals(
@@ -896,9 +820,7 @@ public class GeoWaveBasicIT
 										after));
 					}
 					else {
-						Assert.assertTrue(
-								before.equals(
-										after));
+						Assert.assertTrue(before.equals(after));
 					}
 				}
 			}
@@ -907,8 +829,7 @@ public class GeoWaveBasicIT
 					foundFeat);
 		}
 
-		TestUtils.deleteAll(
-				dataStore);
+		TestUtils.deleteAll(dataStore);
 	}
 
 	public <T> T[] returnArray(
@@ -936,47 +857,37 @@ public class GeoWaveBasicIT
 			final PrimaryIndex index,
 			final String queryDescription )
 			throws Exception {
-		LOGGER.info(
-				"querying " + queryDescription);
-		System.out.println(
-				"querying " + queryDescription);
+		LOGGER.info("querying " + queryDescription);
+		System.out.println("querying " + queryDescription);
 		final mil.nga.giat.geowave.core.store.DataStore geowaveStore = dataStore.createDataStore();
 		// this file is the filtered dataset (using the previous file as a
 		// filter) so use it to ensure the query worked
-		final DistributableQuery query = TestUtils.resourceToQuery(
-				savedFilterResource);
+		final DistributableQuery query = TestUtils.resourceToQuery(savedFilterResource);
 		try (final CloseableIterator<?> actualResults = (index == null) ? geowaveStore.query(
 				new QueryOptions(),
-				query)
-				: geowaveStore.query(
-						new QueryOptions(
-								index),
-						query)) {
-			final ExpectedResults expectedResults = TestUtils.getExpectedResults(
-					expectedResultsResources);
+				query) : geowaveStore.query(
+				new QueryOptions(
+						index),
+				query)) {
+			final ExpectedResults expectedResults = TestUtils.getExpectedResults(expectedResultsResources);
 			int totalResults = 0;
 			while (actualResults.hasNext()) {
 				final Object obj = actualResults.next();
 				if (obj instanceof SimpleFeature) {
 					final SimpleFeature result = (SimpleFeature) obj;
-					final long actualHashCentroid = TestUtils.hashCentroid(
-							(Geometry) result.getDefaultGeometry());
+					final long actualHashCentroid = TestUtils.hashCentroid((Geometry) result.getDefaultGeometry());
 					Assert.assertTrue(
 							"Actual result '" + result.toString() + "' not found in expected result set",
-							expectedResults.hashedCentroids.contains(
-									actualHashCentroid));
+							expectedResults.hashedCentroids.contains(actualHashCentroid));
 					totalResults++;
 				}
 				else {
-					TestUtils.deleteAll(
-							dataStore);
-					Assert.fail(
-							"Actual result '" + obj.toString() + "' is not of type Simple Feature.");
+					TestUtils.deleteAll(dataStore);
+					Assert.fail("Actual result '" + obj.toString() + "' is not of type Simple Feature.");
 				}
 			}
 			if (expectedResults.count != totalResults) {
-				TestUtils.deleteAll(
-						dataStore);
+				TestUtils.deleteAll(dataStore);
 			}
 			Assert.assertEquals(
 					expectedResults.count,
@@ -992,21 +903,17 @@ public class GeoWaveBasicIT
 					queryOptions.setAggregation(
 							new CountAggregation(),
 							adapter);
-					queryOptions.setAdapter(
-							adapter);
+					queryOptions.setAdapter(adapter);
 					try (final CloseableIterator<?> countResult = geowaveStore.query(
 							queryOptions,
 							query)) {
 						// results should already be aggregated, there should be
 						// exactly one value in this iterator
-						Assert.assertTrue(
-								countResult.hasNext());
+						Assert.assertTrue(countResult.hasNext());
 						final Object result = countResult.next();
-						Assert.assertTrue(
-								result instanceof CountResult);
+						Assert.assertTrue(result instanceof CountResult);
 						statisticsResult += ((CountResult) result).getCount();
-						Assert.assertFalse(
-								countResult.hasNext());
+						Assert.assertFalse(countResult.hasNext());
 					}
 				}
 			}
@@ -1021,14 +928,11 @@ public class GeoWaveBasicIT
 			final URL savedFilterResource,
 			final PrimaryIndex index )
 			throws Exception {
-		LOGGER.info(
-				"deleting from " + index.getId() + " index");
-		System.out.println(
-				"deleting from " + index.getId() + " index");
+		LOGGER.info("deleting from " + index.getId() + " index");
+		System.out.println("deleting from " + index.getId() + " index");
 		boolean success = false;
 		final mil.nga.giat.geowave.core.store.DataStore geowaveStore = dataStore.createDataStore();
-		final DistributableQuery query = TestUtils.resourceToQuery(
-				savedFilterResource);
+		final DistributableQuery query = TestUtils.resourceToQuery(savedFilterResource);
 		final CloseableIterator<?> actualResults;
 
 		actualResults = geowaveStore.query(
@@ -1059,14 +963,13 @@ public class GeoWaveBasicIT
 							adapterId,
 							dataId))) {
 
-				success = !hasAtLeastOne(
-						geowaveStore.query(
-								new QueryOptions(
-										adapterId,
-										index.getId()),
-								new DataIdQuery(
-										adapterId,
-										dataId)));
+				success = !hasAtLeastOne(geowaveStore.query(
+						new QueryOptions(
+								adapterId,
+								index.getId()),
+						new DataIdQuery(
+								adapterId,
+								dataId)));
 			}
 		}
 		Assert.assertTrue(

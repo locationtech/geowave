@@ -43,15 +43,15 @@ public class GeoWaveITSuite
 {
 	@BeforeClass
 	public static void setupSuite() {
-		synchronized (GeoWaveIT.MUTEX) {
-			GeoWaveIT.DEFER_CLEANUP.set(true);
+		synchronized (GeoWaveITRunner.MUTEX) {
+			GeoWaveITRunner.DEFER_CLEANUP.set(true);
 		}
 	}
 
 	@AfterClass
 	public static void tearDownSuite() {
-		synchronized (GeoWaveIT.MUTEX) {
-			GeoWaveIT.DEFER_CLEANUP.set(false);
+		synchronized (GeoWaveITRunner.MUTEX) {
+			GeoWaveITRunner.DEFER_CLEANUP.set(false);
 		}
 	}
 }

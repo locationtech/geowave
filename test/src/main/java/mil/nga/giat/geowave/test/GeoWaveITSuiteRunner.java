@@ -40,19 +40,26 @@ public class GeoWaveITSuiteRunner extends
 		}
 		return super.withAfterClasses(statement);
 	}
-	private GeoWaveIT itRunner;
-	protected void tearDown() throws Exception{
-		if (itRunner != null){
+
+	private GeoWaveITRunner itRunner;
+
+	protected void tearDown()
+			throws Exception {
+		if (itRunner != null) {
 			itRunner.tearDown();
-		}		
+		}
 	}
 
 	@Override
 	protected void runChild(
 			Runner runner,
 			RunNotifier notifier ) {
-		if (runner instanceof GeoWaveIT){
-			itRunner = (GeoWaveIT) runner;
+		// this is kinda a hack but the intent is to ensure that each individual
+		// test is able to tear down the environment *after* the
+		// suite.tearDown() method is called, in general the child runner
+		// methods are always called before the parent runner
+		if (runner instanceof GeoWaveITRunner) {
+			itRunner = (GeoWaveITRunner) runner;
 		}
 		super.runChild(
 				runner,
