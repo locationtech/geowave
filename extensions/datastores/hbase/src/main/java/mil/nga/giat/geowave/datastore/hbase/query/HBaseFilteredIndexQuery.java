@@ -203,7 +203,7 @@ public abstract class HBaseFilteredIndexQuery extends
 				if (range.getStart() != null) {
 					scanner.setStartRow(range.getStart().getBytes());
 					if (!range.isSingleValue()) {
-						scanner.setStopRow(HBaseUtils.calculateTheClosestNextRowKeyForPrefix(range.getEnd().getBytes()));
+						scanner.setStopRow(HBaseUtils.getNextPrefix(range.getEnd().getBytes()));
 					}
 				}
 
@@ -242,7 +242,7 @@ public abstract class HBaseFilteredIndexQuery extends
 
 			scanner.setStartRow(range.getStart().getBytes());
 			if (!range.isSingleValue()) {
-				scanner.setStopRow(HBaseUtils.calculateTheClosestNextRowKeyForPrefix(range.getEnd().getBytes()));
+				scanner.setStopRow(HBaseUtils.getNextPrefix(range.getEnd().getBytes()));
 			}
 		}
 		else if (ranges != null) {
@@ -261,11 +261,11 @@ public abstract class HBaseFilteredIndexQuery extends
 				rowRanges.add(new RowRange(
 						range.getStart().getBytes(),
 						true,
-						HBaseUtils.calculateTheClosestNextRowKeyForPrefix(range.getEnd().getBytes()),
+						HBaseUtils.getNextPrefix(range.getEnd().getBytes()),
 						false));
 			}
 			scanner.setStartRow(minStart.getBytes());
-			scanner.setStopRow(HBaseUtils.calculateTheClosestNextRowKeyForPrefix(maxEnd.getBytes()));
+			scanner.setStopRow(HBaseUtils.getNextPrefix(maxEnd.getBytes()));
 			try {
 				final MultiRowRangeFilter filter = new MultiRowRangeFilter(
 						rowRanges.subList(
