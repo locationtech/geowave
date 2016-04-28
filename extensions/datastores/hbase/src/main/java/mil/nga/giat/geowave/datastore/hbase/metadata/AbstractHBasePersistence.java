@@ -191,6 +191,7 @@ public abstract class AbstractHBasePersistence<T extends Persistable>
 		}
 		if (primaryId != null) {
 			scanner.setStartRow(primaryId.getBytes());
+			scanner.setStopRow(primaryId.getBytes());
 		}
 		return scanner;
 	}

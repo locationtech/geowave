@@ -255,6 +255,22 @@ public class HBaseUtils
 				scanCallback);
 	}
 
+	public static Object decodeRow(
+			final Result row,
+			final HBaseRowId rowId,
+			final AdapterStore adapterStore,
+			final QueryFilter clientFilter,
+			final PrimaryIndex index ) {
+		return decodeRowObj(
+				row,
+				rowId,
+				null,
+				adapterStore,
+				clientFilter,
+				index,
+				null);
+	}
+
 	private static <T> Object decodeRowObj(
 			final Result row,
 			final HBaseRowId rowId,

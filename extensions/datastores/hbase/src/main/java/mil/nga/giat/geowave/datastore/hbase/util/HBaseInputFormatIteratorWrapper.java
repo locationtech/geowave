@@ -9,6 +9,7 @@ import org.apache.commons.lang.ArrayUtils;
 import org.apache.hadoop.hbase.client.Result;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.store.ScanCallback;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
@@ -71,14 +72,13 @@ public class HBaseInputFormatIteratorWrapper<T> implements
 			final PrimaryIndex index ) {
 		final HBaseRowId rowId = new HBaseRowId(
 				row.getRow());
+
 		final Object value = HBaseUtils.decodeRow(
 				row,
 				rowId,
-				null,
 				serializationTool.getAdapterStore(),
 				clientFilter,
-				index,
-				null);
+				index);
 
 		if (value == null) {
 			return null;

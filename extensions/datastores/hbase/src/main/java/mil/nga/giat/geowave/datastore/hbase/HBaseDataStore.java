@@ -246,36 +246,6 @@ public class HBaseDataStore implements
 					(WritableDataAdapter<T>) adapter,
 					index));
 
-			// try {
-			// if (adapter instanceof RowMergingDataAdapter) {
-			// if (!DataAdapterAndIndexCache.getInstance(
-			// RowMergingAdapterOptionProvider.ROW_MERGING_ADAPTER_CACHE_ID).add(
-			// adapter.getAdapterId(),
-			// indexName)) {
-			// AccumuloUtils.attachRowMergingIterators(
-			// ((RowMergingDataAdapter<?, ?>) adapter),
-			// accumuloOperations,
-			// indexName,
-			// accumuloOptions.isCreateTable());
-			// }
-			// }
-			// if (options.isUseLocalityGroups() &&
-			// !operations.localityGroupExists(
-			// indexName,
-			// adapterId)) {
-			// accumuloOperations.addLocalityGroup(
-			// indexName,
-			// adapterId);
-			// }
-			// }
-			// catch (AccumuloException | TableNotFoundException |
-			// AccumuloSecurityException e) {
-			// LOGGER.error(
-			// "Unable to determine existence of locality group [" +
-			// adapter.getAdapterId().getString() + "]",
-			// e);
-			// }
-
 			final IngestCallbackList<T> callbacksList = new IngestCallbackList<T>(
 					callbacks);
 			writers[i] = new HBaseIndexWriter(
@@ -297,10 +267,6 @@ public class HBaseDataStore implements
 		}
 		return new IndexCompositeWriter(
 				writers);
-	}
-
-	public AdapterStore getAdapterStore() {
-		return adapterStore;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -393,19 +359,6 @@ public class HBaseDataStore implements
 			}
 
 			iterator = Iterators.concat(resultList.iterator());
-
-			// int i = 0;
-			// while (iterator.hasNext() && (i < limit)) { // FB supression as
-			// FB
-			// // not
-			// // detecting i reference
-			// // here
-			// final Cell cell = iterator.next().listCells().get(
-			// 0);
-			// resultList.add(new KeyValue(
-			// cell));
-			// i++;
-			// }
 		}
 		catch (final IOException e) {
 			LOGGER.warn(

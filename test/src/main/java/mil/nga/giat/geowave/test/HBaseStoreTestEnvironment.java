@@ -64,10 +64,14 @@ public class HBaseStoreTestEnvironment implements
 					LOGGER.error("Unable to load property file: {}" + HBASE_PROPS_FILE);
 				}
 
-				System.setProperty(
-						"HADOOP_HOME",
-						System.getenv().get(
-								"HADOOP_HOME"));
+				if (System.getProperty(
+						"os.name").startsWith(
+						"Windows")) {
+					System.setProperty(
+							"HADOOP_HOME",
+							System.getenv().get(
+									"HADOOP_HOME"));
+				}
 
 				try {
 					zookeeperLocalCluster = new ZookeeperLocalCluster.Builder().setPort(
