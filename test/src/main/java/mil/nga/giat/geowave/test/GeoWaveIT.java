@@ -50,15 +50,13 @@ public class GeoWaveIT extends
 			final Statement statement ) {
 		// add test environment setup
 		try {
-			final Statement newStatement = super.withBeforeClasses(statement);
-
 			final Method setupMethod = GeoWaveIT.class.getDeclaredMethod("setup");
 			setupMethod.setAccessible(true);
-			return new RunBefores(
-					newStatement,
+			return super.withBeforeClasses(new RunBefores(
+					statement,
 					Collections.singletonList(new FrameworkMethod(
 							setupMethod)),
-					this);
+					this));
 		}
 		catch (NoSuchMethodException | SecurityException e) {
 			LOGGER.warn(
@@ -74,7 +72,7 @@ public class GeoWaveIT extends
 			final Statement statement ) {
 		// add test environment tear down
 		try {
-			final Statement newStatement = super.withAfterClasses(statement);
+			Statement newStatement = super.withAfterClasses(statement);
 			final Method tearDownMethod = GeoWaveIT.class.getDeclaredMethod("tearDown");
 			tearDownMethod.setAccessible(true);
 			return new RunAfters(
