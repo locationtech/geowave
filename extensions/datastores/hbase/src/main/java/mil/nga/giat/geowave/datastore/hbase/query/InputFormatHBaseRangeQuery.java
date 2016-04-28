@@ -84,7 +84,7 @@ public class InputFormatHBaseRangeQuery extends
 		final Scan scanner = new Scan();
 
 		scanner.setStartRow(range.getStart().getBytes());
-		scanner.setStopRow(HBaseUtils.calculateTheClosestNextRowKeyForPrefix(range.getEnd().getBytes()));
+		scanner.setStopRow(HBaseUtils.getNextPrefix(range.getEnd().getBytes()));
 
 		if ((adapterIds != null) && !adapterIds.isEmpty()) {
 			for (final ByteArrayId adapterId : adapterIds) {

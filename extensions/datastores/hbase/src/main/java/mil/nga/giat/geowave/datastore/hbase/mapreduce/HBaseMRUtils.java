@@ -349,7 +349,7 @@ public class HBaseMRUtils
 
 				final HBaseMRRowRange uncoveredRange = new HBaseMRRowRange(
 						new ByteArrayId(
-								HBaseUtils.calculateTheClosestNextRowKeyForPrefix(regionInfo.getEndKey())),
+								HBaseUtils.getNextPrefix(regionInfo.getEndKey())),
 						range.getEnd());
 				i.add(uncoveredRange);
 			}

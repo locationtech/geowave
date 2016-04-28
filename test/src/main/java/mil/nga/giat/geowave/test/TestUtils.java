@@ -3,11 +3,13 @@ package mil.nga.giat.geowave.test;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -141,15 +143,22 @@ public class TestUtils
 		// Ingest Formats
 		final IngestFormatPluginOptions ingestFormatOptions = new IngestFormatPluginOptions();
 		ingestFormatOptions.selectPlugin(format);
-
+		
 		// Indexes
-		final IndexPluginOptions indexOption = new IndexPluginOptions();
-		indexOption.selectPlugin(dimensionalityType.getDimensionalityArg());
+		final String[] indexTypes = dimensionalityType.getDimensionalityArg().split(
+				",");
+		final List<IndexPluginOptions> indexOptions = new ArrayList<IndexPluginOptions>(
+				indexTypes.length);
+		for (final String indexType : indexTypes) {
+			final IndexPluginOptions indexOption = new IndexPluginOptions();
+			indexOption.selectPlugin(indexType);
+			indexOptions.add(indexOption);
+		}
 
 		// Create the command and execute.
 		final LocalToGeowaveCommand localIngester = new LocalToGeowaveCommand();
 		localIngester.setPluginFormats(ingestFormatOptions);
-		localIngester.setInputIndexOptions(Arrays.asList(indexOption));
+		localIngester.setInputIndexOptions(indexOptions);
 		localIngester.setInputStoreOptions(dataStore);
 		localIngester.setParameters(
 				ingestFilePath,
