@@ -213,7 +213,7 @@ public class HBaseMRUtils
 				statsStore,
 				authorizations);
 
-		final String tableName = operations.getQualifiedTableName(index.getId().getString());
+		final String tableName = index.getId().getString();
 		final NumericIndexStrategy indexStrategy = index.getIndexStrategy();
 
 		// Build list of row ranges from query

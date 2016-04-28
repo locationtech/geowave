@@ -76,7 +76,7 @@ public class InputFormatHBaseRangeQuery extends
 	}
 
 	@Override
-	protected Scan getScanner(
+	protected List<Scan> getScanners(
 			final Integer limit,
 			final List<Filter> distributableFilters,
 			final CloseableIterator<DataAdapter<?>> adapters ) {
@@ -84,9 +84,7 @@ public class InputFormatHBaseRangeQuery extends
 		final Scan scanner = new Scan();
 
 		scanner.setStartRow(range.getStart().getBytes());
-		if (!range.isSingleValue()) {
-			scanner.setStopRow(HBaseUtils.calculateTheClosestNextRowKeyForPrefix(range.getEnd().getBytes()));
-		}
+		scanner.setStopRow(HBaseUtils.calculateTheClosestNextRowKeyForPrefix(range.getEnd().getBytes()));
 
 		if ((adapterIds != null) && !adapterIds.isEmpty()) {
 			for (final ByteArrayId adapterId : adapterIds) {
@@ -94,7 +92,7 @@ public class InputFormatHBaseRangeQuery extends
 			}
 		}
 
-		return scanner;
+		return Collections.singletonList(scanner);
 	}
 
 	@Override

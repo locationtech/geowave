@@ -160,6 +160,27 @@ public class BasicHBaseOperations
 
 	}
 
+	public boolean columnFamilyExists(
+			final String tableName,
+			final String columnFamily )
+			throws IOException {
+		final String qName = getQualifiedTableName(tableName);
+		synchronized (ADMIN_MUTEX) {
+			final HTableDescriptor descriptor = conn.getAdmin().getTableDescriptor(
+					getTableName(qName));
+
+			if (descriptor != null) {
+				for (final HColumnDescriptor hColumnDescriptor : descriptor.getColumnFamilies()) {
+					if (hColumnDescriptor.getNameAsString().equalsIgnoreCase(
+							columnFamily)) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+
 	public ResultScanner getScannedResults(
 			final Scan scanner,
 			final String tableName )
@@ -191,4 +212,24 @@ public class BasicHBaseOperations
 			throws IOException {
 		return conn.getRegionLocator(getTableName(getQualifiedTableName(tableName)));
 	}
+
+	// public void addColumnFamily(
+	// final String tableName,
+	// final String columnFamily )
+	// throws IOException {
+	//
+	// final TableName tn = getTableName(
+	// getQualifiedTableName(
+	// tableName));
+	// final HBaseWriter writer = new HBaseWriter(
+	// conn.getAdmin(),
+	// getTable(
+	// false,
+	// null,
+	// tn));
+	//
+	// writer.addColumnFamilyToTable(
+	// tn,
+	// columnFamily);
+	// }
 }

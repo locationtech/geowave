@@ -68,12 +68,37 @@ public abstract class HBaseFilteredIndexQuery extends
 		this.fieldIds = fieldIds;
 	}
 
+	private boolean validateAdapters(
+			final BasicHBaseOperations operations )
+			throws IOException {
+		if ((adapterIds == null) || adapterIds.isEmpty()) {
+			return true;
+		}
+		final Iterator<ByteArrayId> i = adapterIds.iterator();
+		while (i.hasNext()) {
+			final ByteArrayId adapterId = i.next();
+			if (!operations.columnFamilyExists(
+					index.getId().getString(),
+					adapterId.getString())) {
+				i.remove();
+			}
+		}
+		if (adapterIds.isEmpty()) {
+			return false;
+		}
+		return true;
+	}
+
 	@SuppressWarnings("rawtypes")
 	public CloseableIterator<Object> query(
 			final BasicHBaseOperations operations,
 			final AdapterStore adapterStore,
 			final Integer limit ) {
 		try {
+			if (!validateAdapters(operations)) {
+				LOGGER.warn("Query contains no valid adapters.");
+				return new CloseableIterator.Empty();
+			}
 			if (!operations.tableExists(StringUtils.stringFromBinary(index.getId().getBytes()))) {
 				LOGGER.warn("Table does not exist " + StringUtils.stringFromBinary(index.getId().getBytes()));
 				return new CloseableIterator.Empty();
@@ -99,90 +124,53 @@ public abstract class HBaseFilteredIndexQuery extends
 
 		final List<Iterator<Result>> resultsIterators = new ArrayList<Iterator<Result>>();
 		final List<ResultScanner> results = new ArrayList<ResultScanner>();
-		try {
 
-			// TODO Consider parallelization as list of scanners can be long and
-			// getScannedResults might be slow?
-			for (final Scan scanner : scanners) {
+		// TODO Consider parallelization as list of scanners can be long and
+		// getScannedResults might be slow?
+		for (final Scan scanner : scanners) {
+			try {
 				final ResultScanner rs = operations.getScannedResults(
 						scanner,
 						tableName);
 
 				if (rs != null) {
+					results.add(rs);
 					final Iterator<Result> it = rs.iterator();
 					if (it.hasNext()) {
 						resultsIterators.add(it);
-						results.add(rs);
 					}
 				}
 			}
+			catch (final IOException e) {
+				LOGGER.warn("Could not get the results from scanner " + e);
+			}
+		}
 
-			if (results.iterator().hasNext()) {
-				Iterator it = initIterator(
-						adapterStore,
-						Iterators.concat(resultsIterators.iterator()));
+		if (results.iterator().hasNext()) {
+			Iterator it = initIterator(
+					adapterStore,
+					Iterators.concat(resultsIterators.iterator()));
 
-				if ((limit != null) && (limit > 0)) {
-					it = Iterators.limit(
-							it,
-							limit);
-				}
+			if ((limit != null) && (limit > 0)) {
+				it = Iterators.limit(
+						it,
+						limit);
+			}
+			if (it.hasNext()) {
 				return new HBaseCloseableIteratorWrapper(
 						new MultiScannerClosableWrapper(
 								results),
 						it);
 			}
-			else {
-				LOGGER.error("Results were empty");
-				return new CloseableIterator.Empty();
-			}
-		}
-		catch (final IOException e) {
-			LOGGER.error("Could not get the results from scanner");
-			return new CloseableIterator.Empty();
 		}
 
-		// final Scan scanner = getScanner(
-		// limit,
-		// distributableFilters,
-		// adapters);
-		// try {
-		// final ResultScanner results = operations.getScannedResults(
-		// scanner,
-		// tableName);
-		// Iterator<Result> it = results.iterator();
-		//
-		// if (it.hasNext()) {
-		// Iterator geoWaveIt = initIterator(
-		// adapterStore,
-		// it);
-		// if ((limit != null) && (limit > 0)) {
-		// geoWaveIt = Iterators.limit(
-		// geoWaveIt,
-		// limit);
-		// }
-		// return new HBaseCloseableIteratorWrapper(
-		// new ScannerClosableWrapper(
-		// results),
-		// geoWaveIt);
-		// }
-		// else {
-		// LOGGER.error(
-		// "Results were empty");
-		// return null;
-		// }
-		// }
-		// catch (final IOException e) {
-		// LOGGER.error(
-		// "Could not get the results from scanner");
-		// return null;
-		// }
-
+		LOGGER.error("Results were empty");
+		return new CloseableIterator.Empty();
 	}
 
 	protected abstract List<Filter> getDistributableFilter();
 
-	private List<Scan> getScanners(
+	protected List<Scan> getScanners(
 			final Integer limit,
 			final List<Filter> distributableFilters,
 			final CloseableIterator<DataAdapter<?>> adapters ) {
