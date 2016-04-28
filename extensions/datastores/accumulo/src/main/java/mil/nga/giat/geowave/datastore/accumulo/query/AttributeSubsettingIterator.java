@@ -3,6 +3,7 @@ package mil.nga.giat.geowave.datastore.accumulo.query;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -19,13 +20,8 @@ import org.apache.accumulo.core.iterators.SortedKeyValueIterator;
 import org.apache.accumulo.core.iterators.user.TransformingIterator;
 import org.apache.hadoop.io.Text;
 
-import com.google.common.base.Splitter;
-
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayUtils;
-import mil.nga.giat.geowave.core.index.PersistenceUtils;
-import mil.nga.giat.geowave.core.index.StringUtils;
-import mil.nga.giat.geowave.core.store.adapter.AbstractDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;
 import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
@@ -38,13 +34,8 @@ public class AttributeSubsettingIterator extends
 	private static final int ITERATOR_PRIORITY = QueryFilterIterator.WHOLE_ROW_ITERATOR_PRIORITY - 1;
 	private static final String ITERATOR_NAME = "ATTRIBUTE_SUBSETTING_ITERATOR";
 
-	private static final String FIELD_IDS = "fieldIds";
-	private final Set<ByteArrayId> fieldIds = new HashSet<>();
-	private static final String FIELD_IDS_ADAPTER = "fieldIdsAdapter";
-	private DataAdapter<?> adapterAssociatedWithFieldIds;
-
-	private static final String MODEL = "model";
-	private CommonIndexModel model;
+	private static final String FIELD_SUBSET_BITMASK = "fieldsBitmask";
+	private byte[] fieldSubsetBitmask;
 
 	@Override
 	protected PartialKey getKeyPrefix() {
@@ -59,51 +50,29 @@ public class AttributeSubsettingIterator extends
 		while (input.hasTop()) {
 			final Key currKey = input.getTopKey();
 			final Value currVal = input.getTopValue();
-			final ByteArrayId currAdapterId = new ByteArrayId(currKey.getColumnFamilyData().getBackingArray());
-			final boolean currAdapterIsAssociatedWithFieldIds = currAdapterId.equals(
-					adapterAssociatedWithFieldIds.getAdapterId());
-			if (currAdapterIsAssociatedWithFieldIds) {
-				final byte[] compositeBitmask = currKey.getColumnQualifierData().getBackingArray();
-				final List<Integer> fieldPositions = BitmaskUtils.getFieldPositions(compositeBitmask);
-				final List<ByteArrayId> currentFieldIds = new ArrayList<>();
-				final List<ByteArrayId> fieldsToKeep = new ArrayList<>();
-				final SortedSet<Integer> ordinalsOfKeepers = new TreeSet<>();
-				for (final Integer ordinal : fieldPositions) {
-					final ByteArrayId fieldId = adapterAssociatedWithFieldIds.getFieldIdForPosition(
-							model,
-							ordinal);
-					currentFieldIds.add(fieldId);
-					if (fieldIds.contains(fieldId)) {
-						fieldsToKeep.add(fieldId);
-						ordinalsOfKeepers.add(ordinal);
-					}
+			final byte[] originalBitmask = currKey.getColumnQualifierData().getBackingArray();
+			final byte[] newBitmask = BitmaskUtils.generateANDBitmask(
+					originalBitmask,
+					fieldSubsetBitmask);
+			if (BitmaskUtils.isAnyBitSet(newBitmask)) {
+				if (!Arrays.equals(
+						newBitmask,
+						originalBitmask)) {
+					output.append(
+							replaceColumnQualifier(
+									currKey,
+									new Text(
+											newBitmask)),
+							constructNewValue(
+									currVal,
+									originalBitmask,
+									newBitmask));
 				}
-				if (!fieldsToKeep.isEmpty()) {
-					if (fieldsToKeep.size() != currentFieldIds.size()) {
-						final byte[] newBitmask = BitmaskUtils.generateCompositeBitmask(ordinalsOfKeepers);
-						final Key newKey = replaceColumnQualifier(
-								currKey,
-								new Text(
-										newBitmask));
-						final Value newVal = constructNewValue(
-								currVal,
-								currentFieldIds,
-								fieldsToKeep);
-						output.append(
-								newKey,
-								newVal);
-					}
-					else {
-						output.append(
-								currKey,
-								currVal);
-					}
+				else {
+					output.append(
+							currKey,
+							currVal);
 				}
-			}
-			else {
-				output.append(
-						currKey,
-						currVal);
 			}
 			input.next();
 		}
@@ -111,22 +80,43 @@ public class AttributeSubsettingIterator extends
 
 	private Value constructNewValue(
 			final Value original,
-			final List<ByteArrayId> allFieldIds,
-			final List<ByteArrayId> fieldIdsToKeep ) {
+			final byte[] originalBitmask,
+			final byte[] newBitmask ) {
 		final ByteBuffer originalBytes = ByteBuffer.wrap(original.get());
 		final List<byte[]> valsToKeep = new ArrayList<>();
 		int totalSize = 0;
-		final int numFields = allFieldIds.size();
-		for (int i = 0; i < numFields; i++) {
-			final int len = originalBytes.getInt();
-			final byte[] val = new byte[len];
-			originalBytes.get(val);
-			if (fieldIdsToKeep.contains(allFieldIds.get(i))) {
-				valsToKeep.add(val);
-				totalSize += len;
+		final List<Integer> originalPositions = BitmaskUtils.getFieldPositions(originalBitmask);
+		// convert list to set for quick contains()
+		final Set<Integer> newPositions = new HashSet<Integer>(
+				BitmaskUtils.getFieldPositions(newBitmask));
+		if (originalPositions.size() > 1) {
+			for (final Integer originalPosition : originalPositions) {
+				final int len = originalBytes.getInt();
+				final byte[] val = new byte[len];
+				originalBytes.get(val);
+				if (newPositions.contains(originalPosition)) {
+					valsToKeep.add(val);
+					totalSize += len;
+				}
 			}
 		}
-		final ByteBuffer retVal = ByteBuffer.allocate((4 * valsToKeep.size()) + totalSize);
+		else if (!newPositions.isEmpty()) {
+			// this shouldn't happen because we should already catch the case
+			// where the bitmask is unchanged
+			return original;
+		}
+		else {
+			// and this shouldn't happen because we should already catch the
+			// case where the resultant bitmask is empty
+			return null;
+		}
+		if (valsToKeep.size() == 1) {
+			final ByteBuffer retVal = ByteBuffer.allocate(totalSize);
+			retVal.put(valsToKeep.get(0));
+			return new Value(
+					retVal.array());
+		}
+		final ByteBuffer retVal = ByteBuffer.allocate((valsToKeep.size() * 4) + totalSize);
 		for (final byte[] val : valsToKeep) {
 			retVal.putInt(val.length);
 			retVal.put(val);
@@ -145,25 +135,9 @@ public class AttributeSubsettingIterator extends
 				source,
 				options,
 				env);
-		// get model
-		final String modelStr = options.get(MODEL);
-		final byte[] modelBytes = ByteArrayUtils.byteArrayFromString(modelStr);
-		model = PersistenceUtils.fromBinary(
-				modelBytes,
-				CommonIndexModel.class);
 		// get fieldIds and associated adapter
-		final Iterable<String> fieldIdsList = Splitter.on(
-				',').split(
-				options.get(FIELD_IDS));
-		for (final String fieldId : fieldIdsList) {
-			fieldIds.add(new ByteArrayId(
-					StringUtils.stringToBinary(fieldId)));
-		}
-		final String fieldIdsAdapterString = options.get(FIELD_IDS_ADAPTER);
-		final byte[] fieldIdsAdapterBytes = ByteArrayUtils.byteArrayFromString(fieldIdsAdapterString);
-		adapterAssociatedWithFieldIds = PersistenceUtils.fromBinary(
-				fieldIdsAdapterBytes,
-				AbstractDataAdapter.class);
+		final String bitmaskStr = options.get(FIELD_SUBSET_BITMASK);
+		fieldSubsetBitmask = ByteArrayUtils.byteArrayFromString(bitmaskStr);
 	}
 
 	@Override
@@ -172,10 +146,8 @@ public class AttributeSubsettingIterator extends
 		if ((!super.validateOptions(options)) || (options == null)) {
 			return false;
 		}
-		final boolean hasModel = options.containsKey(MODEL);
-		final boolean hasFieldIds = options.containsKey(FIELD_IDS);
-		final boolean hasAdapterForFieldIds = options.containsKey(FIELD_IDS_ADAPTER);
-		if (!hasModel || !hasFieldIds || !hasAdapterForFieldIds) {
+		final boolean hasFieldsBitmask = options.containsKey(FIELD_SUBSET_BITMASK);
+		if (!hasFieldsBitmask) {
 			// all are required
 			return false;
 		}
@@ -209,41 +181,26 @@ public class AttributeSubsettingIterator extends
 			final IteratorSetting setting,
 			final DataAdapter<?> adapterAssociatedWithFieldIds,
 			final List<String> fieldIds,
-			final NumericDimensionField<? extends CommonIndexValue>[] numericDimensions ) {
-		final Set<String> desiredSubset = new TreeSet<>();
-		// add fieldIds
-		desiredSubset.addAll(fieldIds);
+			final CommonIndexModel indexModel ) {
+		final SortedSet<Integer> fieldPositions = new TreeSet<Integer>();
+
 		// dimension fields must also be included
-		for (final NumericDimensionField<? extends CommonIndexValue> dimension : numericDimensions) {
-			desiredSubset.add(StringUtils.stringFromBinary(dimension.getFieldId().getBytes()));
+		for (final NumericDimensionField<? extends CommonIndexValue> dimension : indexModel.getDimensions()) {
+			fieldPositions.add(adapterAssociatedWithFieldIds.getPositionOfOrderedField(
+					indexModel,
+					dimension.getFieldId()));
 		}
-		final String fieldIdsString = org.apache.commons.lang3.StringUtils.join(
-				desiredSubset,
-				',');
-		setting.addOption(
-				FIELD_IDS,
-				fieldIdsString);
-		final String adapterString = ByteArrayUtils.byteArrayToString(PersistenceUtils.toBinary(adapterAssociatedWithFieldIds));
-		setting.addOption(
-				FIELD_IDS_ADAPTER,
-				adapterString);
-	}
 
-	/**
-	 * Sets the {@link CommonIndexModel} for use by this iterator
-	 * 
-	 * @param setting
-	 *            the {@link IteratorSetting}
-	 * @param model
-	 *            the {@link CommonIndexModel}
-	 */
-	public static void setModel(
-			final IteratorSetting setting,
-			final CommonIndexModel model ) {
-		final String modelString = ByteArrayUtils.byteArrayToString(PersistenceUtils.toBinary(model));
-		setting.addOption(
-				MODEL,
-				modelString);
-	}
+		for (final String fieldId : fieldIds) {
+			fieldPositions.add(adapterAssociatedWithFieldIds.getPositionOfOrderedField(
+					indexModel,
+					new ByteArrayId(
+							fieldId)));
+		}
+		final byte[] fieldSubsetBitmask = BitmaskUtils.generateCompositeBitmask(fieldPositions);
 
+		setting.addOption(
+				FIELD_SUBSET_BITMASK,
+				ByteArrayUtils.byteArrayToString(fieldSubsetBitmask));
+	}
 }

@@ -32,6 +32,7 @@ import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
+import mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
 import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.memory.DataStoreUtils;
@@ -89,7 +90,7 @@ public class GeoWaveIngestGeoserverIT extends
 				bao);
 		final SimpleFeatureType sft = SimpleIngest.createPointFeatureType();
 		final PrimaryIndex idx = SimpleIngest.createSpatialIndex();
-		final FeatureDataAdapter fda = SimpleIngest.createDataAdapter(sft);
+		final GeotoolsFeatureDataAdapter fda = SimpleIngest.createDataAdapter(sft);
 		final List<SimpleFeature> features = SimpleIngest.getGriddedFeatures(
 				new SimpleFeatureBuilder(
 						sft),

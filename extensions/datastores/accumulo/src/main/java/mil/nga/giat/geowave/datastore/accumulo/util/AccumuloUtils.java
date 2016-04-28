@@ -541,6 +541,11 @@ public class AccumuloUtils
 			final int fieldPosition = writableAdapter.getPositionOfOrderedField(
 					model,
 					fieldInfo.getDataValue().getId());
+			if (fieldPosition == -1) {
+				writableAdapter.getPositionOfOrderedField(
+						model,
+						fieldInfo.getDataValue().getId());
+			}
 			final ByteArrayId currViz = new ByteArrayId(
 					fieldInfo.getVisibility());
 			if (vizToFieldMap.containsKey(currViz)) {

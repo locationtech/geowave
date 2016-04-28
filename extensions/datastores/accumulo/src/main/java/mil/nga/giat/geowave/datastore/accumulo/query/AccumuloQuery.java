@@ -131,6 +131,24 @@ abstract public class AccumuloQuery
 		return scanner;
 	}
 
+	protected void addFieldSubsettingToIterator(
+			final ScannerBase scanner ) {
+		if (fieldIdsAdapterPair != null) {
+			final List<String> fieldIds = fieldIdsAdapterPair.getLeft();
+			final DataAdapter<?> associatedAdapter = fieldIdsAdapterPair.getRight();
+			if ((fieldIds != null) && (!fieldIds.isEmpty()) && (associatedAdapter != null)) {
+				final IteratorSetting iteratorSetting = AttributeSubsettingIterator.getIteratorSetting();
+
+				AttributeSubsettingIterator.setFieldIds(
+						iteratorSetting,
+						associatedAdapter,
+						fieldIds,
+						index.getIndexModel());
+				scanner.addScanIterator(iteratorSetting);
+			}
+		}
+	}
+
 	public String[] getAdditionalAuthorizations() {
 		return authorizations;
 	}

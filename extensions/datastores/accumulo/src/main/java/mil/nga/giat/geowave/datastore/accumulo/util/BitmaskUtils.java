@@ -6,10 +6,6 @@ import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.store.DataStoreEntryInfo.FieldInfo;
-import mil.nga.giat.geowave.core.store.data.PersistentValue;
-
 /**
  * Utility methods when dealing with bitmasks in Accumulo
  * 
@@ -17,6 +13,29 @@ import mil.nga.giat.geowave.core.store.data.PersistentValue;
  */
 public class BitmaskUtils
 {
+	public static byte[] generateANDBitmask(
+			final byte[] bitmask1,
+			final byte[] bitmask2 ) {
+		final byte[] result = new byte[Math.min(
+				bitmask1.length,
+				bitmask2.length)];
+		for (int i = 0; i < result.length; i++) {
+			result[i] = bitmask1[i];
+			result[i] &= bitmask2[i];
+		}
+		return result;
+	}
+
+	public static boolean isAnyBitSet(
+			final byte[] array ) {
+		for (byte b : array) {
+			if (b != 0) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	/**
 	 * Generates a composite bitmask given a list of field positions. The
 	 * composite bitmask represents a true bit for every positive field position
