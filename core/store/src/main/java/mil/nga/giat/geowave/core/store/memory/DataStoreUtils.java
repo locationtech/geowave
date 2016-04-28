@@ -238,33 +238,6 @@ public class DataStoreUtils
 		return rowIds;
 	}
 
-	/**
-	 * Reduce the list of adapter IDs to those which have associated data in the
-	 * given index.
-	 * 
-	 * @param statisticsStore
-	 * @param indexId
-	 * @param adapterIds
-	 * @param authorizations
-	 * @return
-	 */
-	public static List<ByteArrayId> trimAdapterIdsByIndex(
-			final DataStatisticsStore statisticsStore,
-			final ByteArrayId indexId,
-			final CloseableIterator<DataAdapter<?>> adapters,
-			final String... authorizations ) {
-		final List<ByteArrayId> results = new ArrayList<ByteArrayId>();
-		while (adapters.hasNext()) {
-			final DataAdapter<?> adapter = adapters.next();
-			if (!(adapter instanceof StatisticsProvider) || (statisticsStore.getDataStatistics(
-					adapter.getAdapterId(),
-					RowRangeHistogramStatistics.composeId(indexId),
-					authorizations) != null)) {
-				results.add(adapter.getAdapterId());
-			}
-		}
-		return results;
-	}
 
 	public static <T> void addToRowIds(
 			final List<ByteArrayId> rowIds,

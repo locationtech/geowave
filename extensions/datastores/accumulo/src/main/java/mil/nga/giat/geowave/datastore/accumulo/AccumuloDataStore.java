@@ -204,6 +204,8 @@ public class AccumuloDataStore implements
 					statisticsStore,
 					secondaryIndexDataStore,
 					i == 0);
+			
+			callbackManager.setPersistStats(this.accumuloOptions.isPersistDataStatistics());
 
 			final List<IngestCallback<T>> callbacks = new ArrayList<IngestCallback<T>>();
 
@@ -783,6 +785,8 @@ public class AccumuloDataStore implements
 							statisticsStore,
 							secondaryIndexDataStore,
 							queriedAdapters.add(adapter.getAdapterId()));
+					
+					callbackCache.setPersistStats(this.accumuloOptions.isPersistDataStatistics());
 
 					if (query instanceof EverythingQuery) {
 						deleteEntries(
