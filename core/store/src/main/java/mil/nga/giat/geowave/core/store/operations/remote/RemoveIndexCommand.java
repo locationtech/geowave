@@ -13,7 +13,7 @@ import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 
 @GeowaveOperation(name = "rmindex", parentOperation = RemoteSection.class)
-@Parameters(commandDescription = "Remove an index from the remote store and all associated data for the index")
+@Parameters(hidden = true, commandDescription = "Remove an index from the remote store and all associated data for the index")
 public class RemoveIndexCommand extends
 		DefaultOperation implements
 		Command

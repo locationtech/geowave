@@ -1,12 +1,13 @@
 package mil.nga.giat.geowave.core.store.memory;
 
-import mil.nga.giat.geowave.core.store.DataStoreFactorySpi;
+import mil.nga.giat.geowave.core.store.DataStore;
+import mil.nga.giat.geowave.core.store.GenericStoreFactory;
 import mil.nga.giat.geowave.core.store.StoreFactoryFamilySpi;
-import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStoreFactorySpi;
-import mil.nga.giat.geowave.core.store.adapter.AdapterStoreFactorySpi;
-import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStoreFactorySpi;
-import mil.nga.giat.geowave.core.store.index.IndexStoreFactorySpi;
-import mil.nga.giat.geowave.core.store.index.SecondaryIndexDataStoreFactorySpi;
+import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
+import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
+import mil.nga.giat.geowave.core.store.index.IndexStore;
+import mil.nga.giat.geowave.core.store.index.SecondaryIndexDataStore;
 
 public class MemoryStoreFactoryFamily extends
 		AbstractMemoryFactory implements
@@ -14,32 +15,32 @@ public class MemoryStoreFactoryFamily extends
 {
 
 	@Override
-	public DataStoreFactorySpi getDataStoreFactory() {
+	public GenericStoreFactory<DataStore> getDataStoreFactory() {
 		return new MemoryDataStoreFactory();
 	}
 
 	@Override
-	public DataStatisticsStoreFactorySpi getDataStatisticsStoreFactory() {
+	public GenericStoreFactory<DataStatisticsStore> getDataStatisticsStoreFactory() {
 		return new MemoryDataStatisticsStoreFactory();
 	}
 
 	@Override
-	public IndexStoreFactorySpi getIndexStoreFactory() {
+	public GenericStoreFactory<IndexStore> getIndexStoreFactory() {
 		return new MemoryIndexStoreFactory();
 	}
 
 	@Override
-	public AdapterStoreFactorySpi getAdapterStoreFactory() {
+	public GenericStoreFactory<AdapterStore> getAdapterStoreFactory() {
 		return new MemoryAdapterStoreFactory();
 	}
 
 	@Override
-	public SecondaryIndexDataStoreFactorySpi getSecondaryIndexDataStore() {
+	public GenericStoreFactory<SecondaryIndexDataStore> getSecondaryIndexDataStore() {
 		return new MemorySecondaryIndexStoreFactory();
 	}
 
 	@Override
-	public AdapterIndexMappingStoreFactorySpi getAdapterIndexMappingStoreFactory() {
+	public GenericStoreFactory<AdapterIndexMappingStore> getAdapterIndexMappingStoreFactory() {
 		return new MemoryAdapterIndexMappingStoreFactory();
 	}
 

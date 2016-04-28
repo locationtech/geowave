@@ -1,6 +1,6 @@
 package mil.nga.giat.geowave.core.store.operations.config;
 
-import mil.nga.giat.geowave.core.cli.CLIOperationProviderSpi;
+import mil.nga.giat.geowave.core.cli.spi.CLIOperationProviderSpi;
 import mil.nga.giat.geowave.core.store.operations.config.AddIndexCommand;
 import mil.nga.giat.geowave.core.store.operations.config.AddIndexGroupCommand;
 import mil.nga.giat.geowave.core.store.operations.config.AddStoreCommand;

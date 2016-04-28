@@ -43,8 +43,7 @@ public class HelpCommand implements
 		CommandLineOperationParams params = (CommandLineOperationParams) inputParams;
 
 		List<String> nameArray = new ArrayList<String>();
-
-		OperationRegistry registry = new OperationRegistry();
+		OperationRegistry registry = OperationRegistry.getInstance();
 
 		StringBuilder builder = new StringBuilder();
 
@@ -123,8 +122,8 @@ public class HelpCommand implements
 					else {
 						builder.append("      <no description>\n");
 					}
+					builder.append("\n");
 				}
-				builder.append("\n");
 			}
 		}
 

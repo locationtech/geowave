@@ -1,21 +1,14 @@
 package mil.nga.giat.geowave.mapreduce.input;
 
-import java.io.IOException;
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.mapreduce.JobContext;
 
 import mil.nga.giat.geowave.core.index.ByteArrayUtils;
 import mil.nga.giat.geowave.core.index.PersistenceUtils;
-import mil.nga.giat.geowave.core.store.CloseableIterator;
-import mil.nga.giat.geowave.core.store.index.Index;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.mapreduce.GeoWaveConfiguratorBase;
-import mil.nga.giat.geowave.mapreduce.JobContextIndexStore;
-import mil.nga.giat.geowave.mapreduce.GeoWaveConfiguratorBase.GeoWaveMetaStore;
-
-import org.apache.commons.collections.IteratorUtils;
-import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.mapreduce.JobContext;
 
 /**
  * This class provides utility methods for accessing job context configuration
