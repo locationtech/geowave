@@ -9,6 +9,7 @@ import mil.nga.giat.geowave.core.cli.operations.GeowaveTopLevelSection;
 @GeowaveOperation(name = "hbase", parentOperation = GeowaveTopLevelSection.class)
 @Parameters(commandDescription = "Utility operations to combine statistics in hbase")
 public class HBaseSection extends
-		DefaultOperation {
+		DefaultOperation
+{
 
 }

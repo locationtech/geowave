@@ -74,9 +74,9 @@ public abstract class AbstractHBasePersistence<T extends Persistable>
 			final Iterator<Result> it = operations.getScannedResults(
 					scanner,
 					getTablename()).iterator();
-			
+
 			Iterator<T> iter = getNativeIteratorWrapper(it);
-			
+
 			if (!iter.hasNext()) {
 				LOGGER.warn("Object '" + getCombinedId(
 						primaryId,
@@ -173,10 +173,12 @@ public abstract class AbstractHBasePersistence<T extends Persistable>
 		return null;
 	}
 
-	protected Iterator<T> getNativeIteratorWrapper(Iterator<Result> resultIterator) {
-		return new NativeIteratorWrapper(resultIterator);
+	protected Iterator<T> getNativeIteratorWrapper(
+			Iterator<Result> resultIterator ) {
+		return new NativeIteratorWrapper(
+				resultIterator);
 	}
-	
+
 	protected Scan applyScannerSettings(
 			Scan scanner,
 			ByteArrayId primaryId,
@@ -259,10 +261,11 @@ public abstract class AbstractHBasePersistence<T extends Persistable>
 		cache.clear();
 	}
 
-	protected ByteArrayId getRowId(T object) {
+	protected ByteArrayId getRowId(
+			T object ) {
 		return getPrimaryId(object);
 	}
-	
+
 	protected void addObject(
 			final T object ) {
 		final ByteArrayId id = getRowId(object);
@@ -294,25 +297,28 @@ public abstract class AbstractHBasePersistence<T extends Persistable>
 					e);
 		}
 	}
-	
+
 	public boolean deleteObjects(
 			final ByteArrayId primaryId,
 			final ByteArrayId secondaryId,
 			final String... authorizations ) {
 		try {
 			// Only way to do this is with a Scanner.
-			Scan scanner = getScanner(primaryId, secondaryId, authorizations);
+			Scan scanner = getScanner(
+					primaryId,
+					secondaryId,
+					authorizations);
 			ResultScanner rS = operations.getScannedResults(
 					scanner,
 					getTablename());
-			
+
 			byte[] columnFamily = getColumnFamily().getBytes(
 					Charset.forName("UTF-8"));
 			byte[] columnQualifier = getColumnQualifier(secondaryId);
 
 			List<RowMutations> l = new ArrayList<RowMutations>();
 			for (Result rr : rS) {
-				
+
 				RowMutations deleteMutations = HBaseUtils.getDeleteMutations(
 						rr.getRow(),
 						columnFamily,
@@ -326,7 +332,7 @@ public abstract class AbstractHBasePersistence<T extends Persistable>
 					getTablename(),
 					getColumnFamily(),
 					false);
-			
+
 			deleter.delete(l);
 			return true;
 		}
@@ -352,9 +358,9 @@ public abstract class AbstractHBasePersistence<T extends Persistable>
 					scanner,
 					getTablename());
 			final Iterator<Result> it = rS.iterator();
-			
+
 			Iterator<T> iter = getNativeIteratorWrapper(it);
-			
+
 			if (iter.hasNext()) {
 				return iter.next() != null;
 			}
