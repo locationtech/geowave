@@ -147,8 +147,6 @@ public class QueryOptions implements
 		authorizations = options.authorizations;
 		adapters = options.adapters;
 		index = options.index;
-		fieldIds = new ArrayList<String>(
-				options.fieldIds);
 		aggregationAdapterPair = options.aggregationAdapterPair;
 	}
 
@@ -670,7 +668,6 @@ public class QueryOptions implements
 		int result = 1;
 		result = prime * result + ((adapterIds == null) ? 0 : adapterIds.hashCode());
 		result = prime * result + Arrays.hashCode(authorizations);
-		result = prime * result + ((fieldIds == null) ? 0 : fieldIds.hashCode());
 		result = prime * result + ((indexId == null) ? 0 : indexId.hashCode());
 		result = prime * result + ((limit == null) ? 0 : limit.hashCode());
 		result = prime * result + Arrays.hashCode(maxResolutionSubsamplingPerDimension);
@@ -691,10 +688,6 @@ public class QueryOptions implements
 		if (!Arrays.equals(
 				authorizations,
 				other.authorizations)) return false;
-		if (fieldIds == null) {
-			if (other.fieldIds != null) return false;
-		}
-		else if (!fieldIds.equals(other.fieldIds)) return false;
 		if (indexId == null) {
 			if (other.indexId != null) return false;
 		}

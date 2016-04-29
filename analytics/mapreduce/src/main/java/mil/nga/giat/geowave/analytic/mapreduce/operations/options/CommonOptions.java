@@ -186,9 +186,6 @@ public class CommonOptions
 			options.setIndexId(new ByteArrayId(
 					queryOptions.getIndexId()));
 		}
-		if (queryOptions.getFieldIds() != null) {
-			options.setFieldIds(queryOptions.getFieldIds());
-		}
 		return options;
 	}
 
