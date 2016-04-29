@@ -23,14 +23,16 @@ import mil.nga.giat.geowave.core.store.operations.remote.options.StoreLoader;
 
 @GeowaveOperation(name = "combinestats", parentOperation = HBaseSection.class)
 @Parameters(commandDescription = "Combine all statistics in HBase namespace")
-public class CombineStatisticsCommand extends DefaultOperation implements
-		Command {
+public class CombineStatisticsCommand extends
+		DefaultOperation implements
+		Command
+{
 
 	@Parameter(description = "<storename> <adapter id>")
 	private List<String> parameters = new ArrayList<String>();
-	
+
 	private DataStorePluginOptions inputStoreOptions = null;
-	
+
 	/**
 	 * Prep the driver & run the operation.
 	 */
@@ -64,11 +66,13 @@ public class CombineStatisticsCommand extends DefaultOperation implements
 
 		// Get all statistics, remove all statistics, then re-add
 		DataStatisticsStore store = inputStoreOptions.createDataStatisticsStore();
-		CloseableIterator<DataStatistics<?>> stats = store.getDataStatistics(new ByteArrayId(adapterId));
-		
+		CloseableIterator<DataStatistics<?>> stats = store.getDataStatistics(new ByteArrayId(
+				adapterId));
+
 		// Clear all existing stats
-		store.removeAllStatistics(new ByteArrayId(adapterId));
-		
+		store.removeAllStatistics(new ByteArrayId(
+				adapterId));
+
 		// Re-insert
 		while (stats.hasNext()) {
 			store.incorporateStatistics(stats.next());
@@ -79,15 +83,20 @@ public class CombineStatisticsCommand extends DefaultOperation implements
 		return parameters;
 	}
 
-	public void setParameters(String storeName, String adapterId) {
-		parameters = Arrays.asList(storeName, adapterId);
+	public void setParameters(
+			String storeName,
+			String adapterId ) {
+		parameters = Arrays.asList(
+				storeName,
+				adapterId);
 	}
 
 	public DataStorePluginOptions getInputStoreOptions() {
 		return inputStoreOptions;
 	}
 
-	public void setInputStoreOptions(DataStorePluginOptions inputStoreOptions) {
+	public void setInputStoreOptions(
+			DataStorePluginOptions inputStoreOptions ) {
 		this.inputStoreOptions = inputStoreOptions;
 	}
 }

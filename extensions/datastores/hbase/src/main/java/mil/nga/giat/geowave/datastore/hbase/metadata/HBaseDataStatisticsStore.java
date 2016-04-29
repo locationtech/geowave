@@ -82,7 +82,9 @@ public class HBaseDataStatisticsStore extends
 			final ByteArrayId statisticsId,
 			final String... authorizations ) {
 		if (statisticsId == null) {
-			LOGGER.log(Level.ERROR, "No statistics id specified for removeStatistics, ignoring request!");
+			LOGGER.log(
+					Level.ERROR,
+					"No statistics id specified for removeStatistics, ignoring request!");
 			return false;
 		}
 		return deleteObject(
@@ -124,9 +126,9 @@ public class HBaseDataStatisticsStore extends
 			final ByteArrayId adapterId,
 			final String... authorizations ) {
 		deleteObjects(
-			null,
-			adapterId,
-			authorizations);
+				null,
+				adapterId,
+				authorizations);
 
 	}
 
@@ -142,40 +144,54 @@ public class HBaseDataStatisticsStore extends
 	}
 
 	/**
-	 * This function is used to change the scan object created in the superclass to enable 
-	 * prefixing.
+	 * This function is used to change the scan object created in the superclass
+	 * to enable prefixing.
 	 */
 	@Override
-	protected Scan applyScannerSettings(Scan scanner, ByteArrayId primaryId, ByteArrayId secondaryId) {
-		Scan scan = super.applyScannerSettings(scanner, primaryId, secondaryId);
+	protected Scan applyScannerSettings(
+			Scan scanner,
+			ByteArrayId primaryId,
+			ByteArrayId secondaryId ) {
+		Scan scan = super.applyScannerSettings(
+				scanner,
+				primaryId,
+				secondaryId);
 		if (primaryId != null) {
 			ByteBuffer buf = ByteBuffer.allocate(primaryId.getBytes().length + 1);
 			buf.put(primaryId.getBytes());
-			buf.put(new byte[] { 0 });
-			// So this will set the stop row to just after all the possible suffixes to this primaryId.
+			buf.put(new byte[] {
+				0
+			});
+			// So this will set the stop row to just after all the possible
+			// suffixes to this primaryId.
 			scan.setStopRow(HBaseUtils.getNextPrefix(buf.array()));
 		}
 		return scan;
 	}
-	
+
 	/**
-	 * This function converts results and merges data statistic elements together that have
-	 * the same id.
+	 * This function converts results and merges data statistic elements
+	 * together that have the same id.
 	 */
 	@Override
-	protected Iterator<DataStatistics<?>> getNativeIteratorWrapper(Iterator<Result> resultIterator) {
-		return new StatisticsNativeIteratorWrapper(resultIterator);
+	protected Iterator<DataStatistics<?>> getNativeIteratorWrapper(
+			Iterator<Result> resultIterator ) {
+		return new StatisticsNativeIteratorWrapper(
+				resultIterator);
 	}
 
 	/**
-	 * A special version of NativeIteratorWrapper (defined in the parent) which 
-	 * will combine records that have the same dataid & statsId 
+	 * A special version of NativeIteratorWrapper (defined in the parent) which
+	 * will combine records that have the same dataid & statsId
 	 */
-	private class StatisticsNativeIteratorWrapper implements Iterator<DataStatistics<?>> {
+	private class StatisticsNativeIteratorWrapper implements
+			Iterator<DataStatistics<?>>
+	{
 		final private Iterator<Result> it;
 		private DataStatistics<?> nextVal = null;
 
-		public StatisticsNativeIteratorWrapper(Iterator<Result> resultIterator) {
+		public StatisticsNativeIteratorWrapper(
+				Iterator<Result> resultIterator ) {
 			this.it = resultIterator;
 		}
 
@@ -189,19 +205,23 @@ public class HBaseDataStatisticsStore extends
 			DataStatistics<?> currentStatistics = nextVal;
 			nextVal = null;
 			while (it.hasNext()) {
-				Cell cell = it.next().listCells().get(0);
-				
-				// This entryToValue function has the side effect of adding the object to the cache.  
-				// We need to make sure to add the merged version of the stat at the end of this
+				Cell cell = it.next().listCells().get(
+						0);
+
+				// This entryToValue function has the side effect of adding the
+				// object to the cache.
+				// We need to make sure to add the merged version of the stat at
+				// the end of this
 				// function, before it is returned.
 				DataStatistics<?> statEntry = entryToValue(cell);
-				
+
 				if (currentStatistics == null) {
 					currentStatistics = statEntry;
 				}
 				else {
-					if (statEntry.getStatisticsId().equals(currentStatistics.getStatisticsId()) 
-							&& statEntry.getDataAdapterId().equals(currentStatistics.getDataAdapterId())) {
+					if (statEntry.getStatisticsId().equals(
+							currentStatistics.getStatisticsId()) && statEntry.getDataAdapterId().equals(
+							currentStatistics.getDataAdapterId())) {
 						currentStatistics.merge(statEntry);
 					}
 					else {
@@ -210,33 +230,41 @@ public class HBaseDataStatisticsStore extends
 					}
 				}
 			}
-			
+
 			// Add this entry to cache (see comment above)
 			addObjectToCache(currentStatistics);
 			return currentStatistics;
 		}
 
 		@Override
-		public void remove() {			
-			throw new NotImplementedException("Transforming iterator cannot use remove()");
+		public void remove() {
+			throw new NotImplementedException(
+					"Transforming iterator cannot use remove()");
 		}
 
-	}	
-	
+	}
+
 	/**
-	 * This function will append a UUID to the record that's inserted into the database.
+	 * This function will append a UUID to the record that's inserted into the
+	 * database.
+	 * 
 	 * @param object
 	 * @return
 	 */
 	@Override
-	protected ByteArrayId getRowId(DataStatistics<?> object) {
-		byte[] parentRecord = super.getRowId(object).getBytes();
+	protected ByteArrayId getRowId(
+			DataStatistics<?> object ) {
+		byte[] parentRecord = super.getRowId(
+				object).getBytes();
 		ByteBuffer parentBuffer = ByteBuffer.allocate(parentRecord.length + 1 + 16);
 		parentBuffer.put(parentRecord);
 		UUID uuid = UUID.randomUUID();
-		parentBuffer.put(new byte[] { 0 });
+		parentBuffer.put(new byte[] {
+			0
+		});
 		parentBuffer.putLong(uuid.getMostSignificantBits());
 		parentBuffer.putLong(uuid.getLeastSignificantBits());
-		return new ByteArrayId(parentBuffer.array());
+		return new ByteArrayId(
+				parentBuffer.array());
 	}
 }
