@@ -78,7 +78,7 @@ import mil.nga.giat.geowave.test.TestUtils.ExpectedResults;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 
-@RunWith(GeoWaveIT.class)
+@RunWith(GeoWaveITRunner.class)
 public class GeoWaveBasicIT
 {
 	private static final SimpleDateFormat CQL_DATE_FORMAT = new SimpleDateFormat(

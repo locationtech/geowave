@@ -17,7 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.test.AccumuloStoreTestEnvironment;
-import mil.nga.giat.geowave.test.GeoWaveIT;
+import mil.nga.giat.geowave.test.GeoWaveITRunner;
 import mil.nga.giat.geowave.test.TestEnvironment;
 import mil.nga.giat.geowave.test.TestUtils;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
@@ -66,7 +66,7 @@ public class ServicesTestEnvironment implements
 	@Override
 	public void setup()
 			throws Exception {
-		synchronized (GeoWaveIT.MUTEX) {
+		synchronized (GeoWaveITRunner.MUTEX) {
 			if (jettyServer == null) {
 				try {
 					// delete old workspace configuration if it's still there
@@ -181,8 +181,8 @@ public class ServicesTestEnvironment implements
 	@Override
 	public void tearDown()
 			throws Exception {
-		synchronized (GeoWaveIT.MUTEX) {
-			if (!GeoWaveIT.DEFER_CLEANUP.get()) {
+		synchronized (GeoWaveITRunner.MUTEX) {
+			if (!GeoWaveITRunner.DEFER_CLEANUP.get()) {
 				if (jettyServer != null) {
 					try {
 						jettyServer.stop();
