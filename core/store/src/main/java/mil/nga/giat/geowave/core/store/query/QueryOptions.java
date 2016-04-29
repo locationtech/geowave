@@ -14,6 +14,9 @@ import java.util.Set;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Lists;
+
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.Persistable;
 import mil.nga.giat.geowave.core.index.StringUtils;
@@ -112,8 +115,8 @@ public class QueryOptions implements
 	}
 
 	public QueryOptions(
-			final List<ByteArrayId> adapterIds ) {
-		setAdapterIds(adapterIds);
+			final List<DataAdapter<?>> adapters ) {
+		setAdapters(adapters);
 	}
 
 	public QueryOptions(
@@ -140,6 +143,11 @@ public class QueryOptions implements
 		limit = options.limit;
 		scanCallback = options.scanCallback;
 		authorizations = options.authorizations;
+		adapters = options.adapters;
+		index = options.index;
+		fieldIds = new ArrayList<String>(
+				options.fieldIds);
+		aggregationAdapterPair = options.aggregationAdapterPair;
 	}
 
 	/**
@@ -168,10 +176,27 @@ public class QueryOptions implements
 
 	public QueryOptions() {}
 
-	public void setAdapterIds(
-			final List<ByteArrayId> adapterIds ) {
-		adapters = null;
-		this.adapterIds = adapterIds == null ? Collections.<ByteArrayId> emptyList() : adapterIds;
+	public void setAdapters(
+			final List<DataAdapter<?>> adapters ) {
+		this.adapters = Lists.transform(
+				adapters,
+				new Function<DataAdapter<?>, DataAdapter<Object>>() {
+					@Override
+					public DataAdapter<Object> apply(
+							final DataAdapter<?> input ) {
+						return (DataAdapter<Object>) input;
+					}
+				});
+		this.adapterIds = Lists.transform(
+				adapters,
+				new Function<DataAdapter<?>, ByteArrayId>() {
+
+					@Override
+					public ByteArrayId apply(
+							final DataAdapter<?> input ) {
+						return input.getAdapterId();
+					}
+				});
 	}
 
 	public void setAdapter(
@@ -185,6 +210,18 @@ public class QueryOptions implements
 			adapters = null;
 		}
 
+	}
+
+	public void setAdapter(
+			final List<ByteArrayId> adapters ) {
+		if (adapters != null) {
+			this.adapters = null;
+			adapterIds = adapters;
+		}
+		else {
+			adapterIds = Collections.emptyList();
+			this.adapters = null;
+		}
 	}
 
 	public void setMaxResolutionSubsamplingPerDimension(
@@ -209,6 +246,25 @@ public class QueryOptions implements
 			indexId = null;
 			this.index = null;
 		}
+	}
+
+	/**
+	 * @param index
+	 */
+	public void setIndexId(
+			final ByteArrayId indexId ) {
+		if (indexId != null) {
+			this.indexId = indexId;
+			index = null;
+		}
+		else {
+			this.indexId = null;
+			this.index = null;
+		}
+	}
+
+	public PrimaryIndex getIndex() {
+		return this.index;
 	}
 
 	/**
@@ -560,6 +616,51 @@ public class QueryOptions implements
 	@Override
 	public String toString() {
 		return "QueryOptions [adapterId=" + adapterIds + ", limit=" + limit + ", authorizations=" + Arrays.toString(authorizations) + "]";
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((adapterIds == null) ? 0 : adapterIds.hashCode());
+		result = prime * result + Arrays.hashCode(authorizations);
+		result = prime * result + ((fieldIds == null) ? 0 : fieldIds.hashCode());
+		result = prime * result + ((indexId == null) ? 0 : indexId.hashCode());
+		result = prime * result + ((limit == null) ? 0 : limit.hashCode());
+		result = prime * result + Arrays.hashCode(maxResolutionSubsamplingPerDimension);
+		return result;
+	}
+
+	@Override
+	public boolean equals(
+			Object obj ) {
+		if (this == obj) return true;
+		if (obj == null) return false;
+		if (getClass() != obj.getClass()) return false;
+		QueryOptions other = (QueryOptions) obj;
+		if (adapterIds == null) {
+			if (other.adapterIds != null) return false;
+		}
+		else if (!adapterIds.equals(other.adapterIds)) return false;
+		if (!Arrays.equals(
+				authorizations,
+				other.authorizations)) return false;
+		if (fieldIds == null) {
+			if (other.fieldIds != null) return false;
+		}
+		else if (!fieldIds.equals(other.fieldIds)) return false;
+		if (indexId == null) {
+			if (other.indexId != null) return false;
+		}
+		else if (!indexId.equals(other.indexId)) return false;
+		if (limit == null) {
+			if (other.limit != null) return false;
+		}
+		else if (!limit.equals(other.limit)) return false;
+		if (!Arrays.equals(
+				maxResolutionSubsamplingPerDimension,
+				other.maxResolutionSubsamplingPerDimension)) return false;
+		return true;
 	}
 
 	private void sortInPlace(

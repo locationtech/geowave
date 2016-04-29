@@ -40,26 +40,6 @@ public class GeoWaveInputFormat<T> extends
 	private static final Class<?> CLASS = GeoWaveInputFormat.class;
 	protected static final Logger LOGGER = Logger.getLogger(CLASS);
 
-	/**
-	 * Add an adapter specific to the input format
-	 * 
-	 * @param job
-	 * @param adapter
-	 */
-	public static void addDataAdapter(
-			final Configuration config,
-			final DataAdapter<?> adapter ) {
-
-		// Also store for use the mapper and reducers
-		JobContextAdapterStore.addDataAdapter(
-				config,
-				adapter);
-		GeoWaveConfiguratorBase.addDataAdapter(
-				CLASS,
-				config,
-				adapter);
-	}
-
 	public static void setDataStoreName(
 			final Configuration config,
 			final String dataStoreName ) {
@@ -97,21 +77,6 @@ public class GeoWaveInputFormat<T> extends
 		return GeoWaveConfiguratorBase.getDataStatisticsStore(
 				CLASS,
 				context);
-	}
-
-	public static void setIndex(
-			final Configuration config,
-			final PrimaryIndex index ) {
-		GeoWaveInputConfigurator.setIndex(
-				CLASS,
-				config,
-				index);
-		// make available to the context index store
-		if (index != null) {
-			JobContextIndexStore.addIndex(
-					config,
-					index);
-		}
 	}
 
 	public static void setMinimumSplitCount(
@@ -161,6 +126,30 @@ public class GeoWaveInputFormat<T> extends
 	public static void setQueryOptions(
 			final Configuration config,
 			final QueryOptions queryOptions ) {
+		PrimaryIndex index = queryOptions.getIndex();
+		if (index != null) {
+			// make available to the context index store
+			JobContextIndexStore.addIndex(
+					config,
+					index);
+		}
+
+		try {
+			// THIS SHOULD GO AWAY, and assume the adapters in the Persistent
+			// Data Store
+			// instead. It will fail, due to the 'null', if the query options
+			// does not
+			// contain the adapters
+			for (DataAdapter<?> adapter : queryOptions.getAdaptersArray(null)) {
+				// Also store for use the mapper and reducers
+				JobContextAdapterStore.addDataAdapter(
+						config,
+						adapter);
+			}
+		}
+		catch (Exception e) {
+			LOGGER.warn("Adapter Ids witih adapters are included in the query options.This, the adapter must be accessible from the data store for use by the consumer/Mapper.");
+		}
 		GeoWaveInputConfigurator.setQueryOptions(
 				CLASS,
 				config,
@@ -219,12 +208,6 @@ public class GeoWaveInputFormat<T> extends
 			final QueryOptions queryOptions = getQueryOptions(context);
 			final QueryOptions rangeQueryOptions = new QueryOptions(
 					queryOptions);
-			// split may override these
-			PrimaryIndex index = getIndex(context);
-			if (index != null) rangeQueryOptions.setIndex(index);
-			rangeQueryOptions.setAdapterIds(getAdapterIds(
-					context,
-					adapterStore));
 			return (RecordReader<GeoWaveInputKey, T>) ((MapReduceDataStore) dataStore).createRecordReader(
 					getQuery(context),
 					rangeQueryOptions,
@@ -289,52 +272,6 @@ public class GeoWaveInputFormat<T> extends
 				context);
 	}
 
-	/**
-	 * First look for input-specific adapters
-	 * 
-	 * @param context
-	 * @param adapterStore
-	 * @return
-	 */
-	@SuppressWarnings("unchecked")
-	public static List<ByteArrayId> getAdapterIds(
-			final JobContext context,
-			final AdapterStore adapterStore ) {
-		final DataAdapter<?>[] userAdapters = GeoWaveConfiguratorBase.getDataAdapters(
-				CLASS,
-				context);
-		List<ByteArrayId> retVal = null;
-		if ((userAdapters == null) || (userAdapters.length <= 0)) {
-			try (CloseableIterator<DataAdapter<?>> adapters = adapterStore.getAdapters()) {
-				final Iterator<?> transformed = IteratorUtils.transformedIterator(
-						adapters,
-						new Transformer() {
-
-							@Override
-							public Object transform(
-									final Object input ) {
-								if (input instanceof DataAdapter) {
-									return ((DataAdapter<?>) input).getAdapterId();
-								}
-								return input;
-							}
-						});
-				retVal = IteratorUtils.toList(transformed);
-			}
-			catch (final IOException e) {
-				LOGGER.warn("Unable to close iterator" + e);
-			}
-		}
-		else {
-			retVal = new ArrayList<ByteArrayId>(
-					userAdapters.length);
-			for (final DataAdapter<?> adapter : userAdapters) {
-				retVal.add(adapter.getAdapterId());
-			}
-		}
-		return retVal;
-	}
-
 	@Override
 	public List<InputSplit> getSplits(
 			final JobContext context )
@@ -347,10 +284,6 @@ public class GeoWaveInputFormat<T> extends
 			final QueryOptions queryOptions = getQueryOptions(context);
 			final QueryOptions rangeQueryOptions = new QueryOptions(
 					queryOptions);
-			rangeQueryOptions.setIndex(getIndex(context));
-			rangeQueryOptions.setAdapterIds(getAdapterIds(
-					context,
-					adapterStore));
 			return ((MapReduceDataStore) dataStore).getSplits(
 					getQuery(context),
 					rangeQueryOptions,

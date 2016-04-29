@@ -7,15 +7,25 @@ public class PartitionParameters
 	public enum Partition
 			implements
 			ParameterEnum {
-		PARTITION_DISTANCE(
+		MAX_DISTANCE(
 				Double.class,
-				"pd",
-				"Partition Distance",
+				"pmd",
+				"Partition Max Distance",
 				true),
 		PARTITION_PRECISION(
 				Double.class,
 				"pp",
 				"Partition Precision",
+				true),
+		GEOMETRIC_DISTANCE_UNIT(
+				String.class,
+				"du",
+				"Geometric distance unit (m=meters,km=kilometers, see symbols for javax.units.BaseUnit)",
+				true),
+		DISTANCE_THRESHOLDS(
+				String.class,
+				"dt",
+				"Comma separated list of distance thresholds, per dimension",
 				true),
 		PARTITION_DECREASE_RATE(
 				Double.class,

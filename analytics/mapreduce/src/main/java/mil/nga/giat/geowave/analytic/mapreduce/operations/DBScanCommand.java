@@ -14,6 +14,7 @@ import mil.nga.giat.geowave.analytic.mapreduce.dbscan.DBScanIterationsJobRunner;
 import mil.nga.giat.geowave.analytic.mapreduce.operations.options.CommonOptions;
 import mil.nga.giat.geowave.analytic.mapreduce.operations.options.DBScanOptions;
 import mil.nga.giat.geowave.analytic.mapreduce.operations.options.PropertyManagementConverter;
+import mil.nga.giat.geowave.analytic.param.ExtractParameters.Extract;
 import mil.nga.giat.geowave.analytic.param.StoreParameters;
 import mil.nga.giat.geowave.analytic.store.PersistableStore;
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
@@ -83,6 +84,9 @@ public class DBScanCommand extends
 				properties);
 		converter.readProperties(commonOptions);
 		converter.readProperties(dbScanOptions);
+		properties.store(
+				Extract.QUERY_OPTIONS,
+				commonOptions.buildQueryOptions());
 
 		DBScanIterationsJobRunner runner = new DBScanIterationsJobRunner();
 		int status = runner.run(properties);

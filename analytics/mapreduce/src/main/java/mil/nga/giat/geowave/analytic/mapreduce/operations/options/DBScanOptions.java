@@ -18,19 +18,19 @@ import mil.nga.giat.geowave.analytic.param.annotations.PartitionParameter;
 public class DBScanOptions
 {
 
-	@ClusteringParameter(ClusteringParameters.Clustering.DISTANCE_THRESHOLDS)
+	@PartitionParameter(PartitionParameters.Partition.DISTANCE_THRESHOLDS)
 	@Parameter(names = {
-		"-dt",
-		"--clusteringDistanceThresholds"
+		"-pdt",
+		"--partitionDistanceThresholds"
 	}, description = "Comma separated list of distance thresholds, per dimension")
-	private String clusteringDistanceThresholds;
+	private String partitioningDistanceThresholds;
 
-	@ClusteringParameter(ClusteringParameters.Clustering.GEOMETRIC_DISTANCE_UNIT)
+	@PartitionParameter(PartitionParameters.Partition.GEOMETRIC_DISTANCE_UNIT)
 	@Parameter(names = {
-		"-du",
-		"--clusteringGeometricDistanceUnit"
+		"-pdu",
+		"--partitionGeometricDistanceUnit"
 	}, description = "Geometric distance unit (m=meters,km=kilometers, see symbols for javax.units.BaseUnit)")
-	private String clusteringGeometricDistanceUnit;
+	private String partitioningGeometricDistanceUnit;
 
 	@ClusteringParameter(ClusteringParameters.Clustering.MAX_ITERATIONS)
 	@Parameter(names = {
@@ -87,6 +87,13 @@ public class DBScanOptions
 		"--mapReduceHdfsBaseDir"
 	}, description = "Fully qualified path to the base directory in hdfs")
 	private String mapReduceHdfsBaseDir;
+	
+	@OutputParameter(OutputParameters.Output.HDFS_OUTPUT_PATH)
+	@Parameter(names = {
+		"-oop",
+		"--outputHdfsOutputPath"
+	}, description = "Output HDFS File Path when used with a sequence file")
+	private String outputHdfsOutputPath;
 
 	@MapReduceParameter(MapReduceParameters.MRConfig.HDFS_HOST_PORT)
 	@Parameter(names = {
@@ -151,11 +158,11 @@ public class DBScanOptions
 	}, description = "Rate of decrease for precision(within (0,1])")
 	private String partitionPartitionDecreaseRate;
 
-	@PartitionParameter(PartitionParameters.Partition.PARTITION_DISTANCE)
+	@PartitionParameter(PartitionParameters.Partition.MAX_DISTANCE)
 	@Parameter(names = {
-		"-pd",
-		"--partitionPartitionDistance"
-	}, description = "Partition Distance")
+		"-pmd",
+		"--partitionMaxDistance"
+	}, description = "Maximum Partition Distance")
 	private String partitionPartitionDistance;
 
 	@PartitionParameter(PartitionParameters.Partition.PARTITION_PRECISION)
@@ -171,23 +178,24 @@ public class DBScanOptions
 		"--partitionSecondaryPartitionerClass"
 	}, description = "Perform secondary partitioning with the provided class")
 	private String partitionSecondaryPartitionerClass;
+	
 
-	public String getClusteringDistanceThresholds() {
-		return clusteringDistanceThresholds;
+	public String getPartitioningDistanceThresholds() {
+		return partitioningDistanceThresholds;
 	}
 
-	public void setClusteringDistanceThresholds(
+	public void setPartitioningDistanceThresholds(
 			String clusteringDistanceThresholds ) {
-		this.clusteringDistanceThresholds = clusteringDistanceThresholds;
+		this.partitioningDistanceThresholds = clusteringDistanceThresholds;
 	}
 
-	public String getClusteringGeometricDistanceUnit() {
-		return clusteringGeometricDistanceUnit;
+	public String getPartitioningGeometricDistanceUnit() {
+		return partitioningGeometricDistanceUnit;
 	}
 
-	public void setClusteringGeometricDistanceUnit(
+	public void setPartitioningGeometricDistanceUnit(
 			String clusteringGeometricDistanceUnit ) {
-		this.clusteringGeometricDistanceUnit = clusteringGeometricDistanceUnit;
+		this.partitioningGeometricDistanceUnit = clusteringGeometricDistanceUnit;
 	}
 
 	public String getClusteringMaxIterations() {
@@ -368,5 +376,14 @@ public class DBScanOptions
 	public void setPartitionSecondaryPartitionerClass(
 			String partitionSecondaryPartitionerClass ) {
 		this.partitionSecondaryPartitionerClass = partitionSecondaryPartitionerClass;
+	}
+
+	public String getOutputHdfsOutputPath() {
+		return outputHdfsOutputPath;
+	}
+
+	public void setOutputHdfsOutputPath(
+			String outputHdfsOutputPath ) {
+		this.outputHdfsOutputPath = outputHdfsOutputPath;
 	}
 }

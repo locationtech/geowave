@@ -26,6 +26,7 @@ import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter
 import org.geotools.feature.simple.SimpleFeatureBuilder
 import mil.nga.giat.geowave.analytic.PropertyManagement
 import mil.nga.giat.geowave.core.ingest.GeoWaveData
+import mil.nga.giat.geowave.core.store.query.QueryOptions
 
 
 /**
@@ -52,8 +53,7 @@ object GeoWaveRDD {
     * The default splits are necessarily optimal
     */
   def rddForSimpleFeatures(sc: SparkContext,
-                           index: PrimaryIndex,
-                           adapter: DataAdapter[SimpleFeature],
+                           queryOptions: QueryOptions,
                            minSplits: Int,
                            maxSplits: Int,
                            query: DistributableQuery)(implicit geoWaveContext: GeoWaveContext): RDD[(GeoWaveInputKey, SimpleFeature)] = {
@@ -68,8 +68,7 @@ object GeoWaveRDD {
 
     // index and adapters are not mandatory.
     // they are used here as an example
-    GeoWaveInputFormat.setIndex(conf, index)
-    GeoWaveInputFormat.addDataAdapter(conf, adapter)
+    GeoWaveInputFormat.setQueryOptions(conf, queryOptions)
 
     // query is not mandatory.
     GeoWaveInputFormat.setQuery(conf, query)

@@ -8,6 +8,7 @@ import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.SequenceFile;
 import org.apache.hadoop.io.SequenceFile.Reader;
 import org.apache.hadoop.io.Text;
+import org.apache.hadoop.util.ToolRunner;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.geotools.referencing.crs.DefaultGeographicCRS;
@@ -32,6 +33,8 @@ import mil.nga.giat.geowave.analytic.param.PartitionParameters;
 import mil.nga.giat.geowave.analytic.param.StoreParameters.StoreParam;
 import mil.nga.giat.geowave.analytic.partitioner.OrthodromicDistancePartitioner;
 import mil.nga.giat.geowave.analytic.store.PersistableStore;
+import mil.nga.giat.geowave.core.cli.GeoWaveMain;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
@@ -80,6 +83,38 @@ public class GeoWaveNNIT extends
 			throws Exception {
 
 		final NNJobRunner jobRunner = new NNJobRunner();
+
+		// final int res = 1;
+		// GeoWaveMain.main(new String[] {
+		// "analytic",
+		// "nn",
+		// "--query.adapters",
+		// "testnn",
+		// "--query.index",
+		// new
+		// SpatialDimensionalityTypeProvider().createPrimaryIndex().getId().getString(),
+		// "-emn",
+		// Integer.toString(MIN_INPUT_SPLITS),
+		// "-emx",
+		// Integer.toString(MAX_INPUT_SPLITS),
+		// "-pmd",
+		// "0.2",
+		// "-pdt",
+		// "0.2,0.2",
+		// "-pc",
+		// OrthodromicDistancePartitioner.class.toString(),
+		// "-oop",
+		// hdfsBaseDirectory + "/t1/pairs",
+		// "-hdfsbase",
+		// hdfsBaseDirectory + "/t1",
+		// "-orc",
+		// "3",
+		// "-ofc",
+		// SequenceFileOutputFormatConfiguration.class.toString(),
+		// "-ifc",
+		// GeoWaveInputFormatConfiguration.class.toString(),
+		// "foo"
+		// });
 		final int res = jobRunner.run(
 				getConfiguration(),
 				new PropertyManagement(
@@ -87,8 +122,8 @@ public class GeoWaveNNIT extends
 							ExtractParameters.Extract.QUERY,
 							ExtractParameters.Extract.MIN_INPUT_SPLIT,
 							ExtractParameters.Extract.MAX_INPUT_SPLIT,
-							PartitionParameters.Partition.PARTITION_DISTANCE,
-							ClusteringParameters.Clustering.DISTANCE_THRESHOLDS,
+							PartitionParameters.Partition.MAX_DISTANCE,
+							PartitionParameters.Partition.DISTANCE_THRESHOLDS,
 							PartitionParameters.Partition.PARTITIONER_CLASS,
 							StoreParam.STORE,
 							OutputParameters.Output.HDFS_OUTPUT_PATH,

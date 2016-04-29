@@ -32,6 +32,7 @@ import mil.nga.giat.geowave.analytic.param.ClusteringParameters;
 import mil.nga.giat.geowave.analytic.param.ExtractParameters;
 import mil.nga.giat.geowave.analytic.param.GlobalParameters;
 import mil.nga.giat.geowave.analytic.param.ParameterEnum;
+import mil.nga.giat.geowave.analytic.param.PartitionParameters;
 import mil.nga.giat.geowave.core.geotime.index.dimension.LatitudeDefinition;
 import mil.nga.giat.geowave.core.geotime.index.dimension.LongitudeDefinition;
 import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
@@ -285,7 +286,7 @@ public class OrthodromicDistancePartitioner<T> extends
 		}
 
 		final String distanceUnit = config.getString(
-				ClusteringParameters.Clustering.GEOMETRIC_DISTANCE_UNIT,
+				PartitionParameters.Partition.GEOMETRIC_DISTANCE_UNIT,
 				"m");
 
 		this.geometricDistanceUnit = (Unit<Length>) Unit.valueOf(distanceUnit);
@@ -298,7 +299,7 @@ public class OrthodromicDistancePartitioner<T> extends
 		final Set<ParameterEnum<?>> params = new HashSet<ParameterEnum<?>>();
 		params.addAll(super.getParameters());
 		params.addAll(Arrays.asList(new ParameterEnum<?>[] {
-			ClusteringParameters.Clustering.GEOMETRIC_DISTANCE_UNIT,
+			PartitionParameters.Partition.GEOMETRIC_DISTANCE_UNIT,
 			ExtractParameters.Extract.DIMENSION_EXTRACT_CLASS
 		}));
 		return params;
@@ -316,7 +317,7 @@ public class OrthodromicDistancePartitioner<T> extends
 		final ParameterEnum[] params = new ParameterEnum[] {
 			GlobalParameters.Global.CRS_ID,
 			ExtractParameters.Extract.DIMENSION_EXTRACT_CLASS,
-			ClusteringParameters.Clustering.GEOMETRIC_DISTANCE_UNIT
+			PartitionParameters.Partition.GEOMETRIC_DISTANCE_UNIT
 		};
 		runTimeProperties.setConfig(
 				params,

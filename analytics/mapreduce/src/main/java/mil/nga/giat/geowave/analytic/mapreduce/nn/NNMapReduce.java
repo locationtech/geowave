@@ -377,7 +377,7 @@ public class NNMapReduce
 			}
 
 			maxDistance = config.getDouble(
-					PartitionParameters.Partition.PARTITION_DISTANCE,
+					PartitionParameters.Partition.MAX_DISTANCE,
 
 					1.0);
 
