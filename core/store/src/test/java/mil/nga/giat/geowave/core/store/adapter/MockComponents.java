@@ -36,9 +36,17 @@ public class MockComponents
 			AbstractDataAdapter<Integer> implements
 			StatisticsProvider<Integer>
 	{
+		private ByteArrayId id = ID;
 
 		public MockAbstractDataAdapter() {
+			this(
+					ID);
+		}
+
+		public MockAbstractDataAdapter(
+				ByteArrayId id ) {
 			super();
+			this.id = id;
 			final List<IndexFieldHandler<Integer, TestIndexFieldType, Object>> handlers = new ArrayList<IndexFieldHandler<Integer, TestIndexFieldType, Object>>();
 			handlers.add(new IndexFieldHandler<Integer, TestIndexFieldType, Object>() {
 
@@ -103,7 +111,7 @@ public class MockComponents
 
 		@Override
 		public ByteArrayId getAdapterId() {
-			return MockAbstractDataAdapter.ID;
+			return id;
 		}
 
 		/**
@@ -161,7 +169,7 @@ public class MockComponents
 		protected RowBuilder<Integer, Object> newBuilder() {
 			return new RowBuilder<Integer, Object>() {
 				@SuppressWarnings("unused")
-				private String id;
+				private String myid;
 				private Integer intValue;
 
 				@Override
@@ -173,7 +181,7 @@ public class MockComponents
 					}
 					else if (fieldValue.getId().equals(
 							ID)) {
-						id = (String) fieldValue.getValue();
+						myid = (String) fieldValue.getValue();
 					}
 				}
 

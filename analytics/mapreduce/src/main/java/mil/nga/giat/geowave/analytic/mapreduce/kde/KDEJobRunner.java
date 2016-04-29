@@ -46,6 +46,7 @@ import mil.nga.giat.geowave.core.store.index.Index;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.mapreduce.GeoWaveConfiguratorBase;
 import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputFormat;
 import mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputFormat;
@@ -131,8 +132,7 @@ public class KDEJobRunner extends
 		job.setSpeculativeExecution(false);
 		final AdapterStore adapterStore = inputDataStoreOptions.createAdapterStore();
 		final IndexStore indexStore = inputDataStoreOptions.createIndexStore();
-		GeoWaveInputFormat.addDataAdapter(
-				job.getConfiguration(),
+		final QueryOptions queryOptions = new QueryOptions(
 				adapterStore.getAdapter(new ByteArrayId(
 						kdeCommandLineOptions.getFeatureType())));
 
@@ -140,11 +140,14 @@ public class KDEJobRunner extends
 			final Index index = indexStore.getIndex(new ByteArrayId(
 					kdeCommandLineOptions.getIndexId()));
 			if ((index != null) && (index instanceof PrimaryIndex)) {
-				GeoWaveInputFormat.setIndex(
-						job.getConfiguration(),
-						(PrimaryIndex) index);
+				queryOptions.setIndex((PrimaryIndex) index);
+
 			}
 		}
+
+		GeoWaveInputFormat.setQueryOptions(
+				job.getConfiguration(),
+				queryOptions);
 		GeoWaveInputFormat.setMinimumSplitCount(
 				job.getConfiguration(),
 				kdeCommandLineOptions.getMinSplits());

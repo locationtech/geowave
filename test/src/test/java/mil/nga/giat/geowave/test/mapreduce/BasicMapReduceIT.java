@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -191,9 +192,9 @@ public class BasicMapReduceIT extends
 							new EverythingQuery())));
 		}
 
-		final List<ByteArrayId> firstTwoAdapters = new ArrayList<ByteArrayId>();
-		firstTwoAdapters.add(adapters[0].getAdapterId());
-		firstTwoAdapters.add(adapters[1].getAdapterId());
+		final List<DataAdapter<?>> firstTwoAdapters = new ArrayList<DataAdapter<?>>();
+		firstTwoAdapters.add(adapters[0]);
+		firstTwoAdapters.add(adapters[1]);
 		final ExpectedResults firstTwoAdaptersResults = getExpectedResults(geowaveStore.query(
 				new QueryOptions(
 						firstTwoAdapters),
@@ -229,10 +230,7 @@ public class BasicMapReduceIT extends
 					adapters[0],
 					adapters[1]
 				},
-				new PrimaryIndex[] {
-					DEFAULT_SPATIAL_INDEX,
-					DEFAULT_SPATIAL_TEMPORAL_INDEX
-				});
+				null);
 
 		// now try all adapters and the spatial temporal index, the result
 		// should be the full data set
@@ -240,9 +238,7 @@ public class BasicMapReduceIT extends
 				fullDataSetResults,
 				null,
 				adapters,
-				new PrimaryIndex[] {
-					DEFAULT_SPATIAL_TEMPORAL_INDEX
-				});
+				DEFAULT_SPATIAL_TEMPORAL_INDEX);
 
 		// and finally run with nothing set, should be the full data set
 		runTestJob(
@@ -300,7 +296,7 @@ public class BasicMapReduceIT extends
 			final ExpectedResults expectedResults,
 			final DistributableQuery query,
 			final DataAdapter<?>[] adapters,
-			final PrimaryIndex[] indices )
+			final PrimaryIndex index )
 			throws Exception {
 		final TestJobRunner jobRunner = new TestJobRunner(
 				getAccumuloStorePluginOptions(TEST_NAMESPACE),
@@ -310,16 +306,14 @@ public class BasicMapReduceIT extends
 		if (query != null) {
 			jobRunner.setQuery(query);
 		}
+		final QueryOptions options = new QueryOptions();
 		if ((adapters != null) && (adapters.length > 0)) {
-			for (final DataAdapter<?> adapter : adapters) {
-				jobRunner.addDataAdapter(adapter);
-			}
+			options.setAdapters(Arrays.asList(adapters));
 		}
-		if ((indices != null) && (indices.length > 0)) {
-			for (final PrimaryIndex index : indices) {
-				jobRunner.addIndex(index);
-			}
+		if ((index != null)) {
+			options.setIndex(index);
 		}
+		jobRunner.setQueryOptions(options);
 		final Configuration conf = getConfiguration();
 		MapReduceTestEnvironment.filterConfiguration(conf);
 		final int res = ToolRunner.run(

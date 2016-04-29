@@ -19,11 +19,13 @@ public class Stanag4676Utils
 	public static final String TRACK = "track";
 	public static final String MISSION_SUMMARY = "mission_summary";
 	public static final String MISSION_FRAME = "mission_frame";
+	public static final String NAMESPACE = "http://github.com/ngageoint/geowave";
 
 	public static SimpleFeatureType createPointDataType() {
 
 		final SimpleFeatureTypeBuilder simpleFeatureTypeBuilder = new SimpleFeatureTypeBuilder();
 		simpleFeatureTypeBuilder.setName(TRACK_POINT);
+		simpleFeatureTypeBuilder.setNamespaceURI(NAMESPACE);
 
 		final AttributeTypeBuilder attributeTypeBuilder = new AttributeTypeBuilder();
 
@@ -88,6 +90,7 @@ public class Stanag4676Utils
 
 		final SimpleFeatureTypeBuilder simpleFeatureTypeBuilder = new SimpleFeatureTypeBuilder();
 		simpleFeatureTypeBuilder.setName(MOTION_POINT);
+		simpleFeatureTypeBuilder.setNamespaceURI(NAMESPACE);
 
 		final AttributeTypeBuilder attributeTypeBuilder = new AttributeTypeBuilder();
 
@@ -150,6 +153,7 @@ public class Stanag4676Utils
 
 		final SimpleFeatureTypeBuilder simpleFeatureTypeBuilder = new SimpleFeatureTypeBuilder();
 		simpleFeatureTypeBuilder.setName(TRACK);
+		simpleFeatureTypeBuilder.setNamespaceURI(NAMESPACE);
 
 		final AttributeTypeBuilder attributeTypeBuilder = new AttributeTypeBuilder();
 
@@ -250,6 +254,7 @@ public class Stanag4676Utils
 
 		final SimpleFeatureTypeBuilder simpleFeatureTypeBuilder = new SimpleFeatureTypeBuilder();
 		simpleFeatureTypeBuilder.setName(MISSION_SUMMARY);
+		simpleFeatureTypeBuilder.setNamespaceURI(NAMESPACE);
 
 		final AttributeTypeBuilder attributeTypeBuilder = new AttributeTypeBuilder();
 
@@ -291,6 +296,7 @@ public class Stanag4676Utils
 
 		final SimpleFeatureTypeBuilder simpleFeatureTypeBuilder = new SimpleFeatureTypeBuilder();
 		simpleFeatureTypeBuilder.setName(MISSION_FRAME);
+		simpleFeatureTypeBuilder.setNamespaceURI(NAMESPACE);
 
 		final AttributeTypeBuilder attributeTypeBuilder = new AttributeTypeBuilder();
 
