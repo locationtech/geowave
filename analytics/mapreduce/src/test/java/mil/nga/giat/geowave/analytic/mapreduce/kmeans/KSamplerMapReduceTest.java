@@ -34,8 +34,10 @@ import mil.nga.giat.geowave.analytic.sample.function.SamplingRankFunction;
 import mil.nga.giat.geowave.analytic.store.PersistableStore;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.store.GeoWaveStoreFinder;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.memory.MemoryRequiredOptions;
+import mil.nga.giat.geowave.core.store.memory.MemoryStoreFactoryFamily;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.mapreduce.GeoWaveConfiguratorBase;
 import mil.nga.giat.geowave.mapreduce.JobContextAdapterStore;
@@ -108,6 +110,9 @@ public class KSamplerMapReduceTest
 		final PropertyManagement propManagement = new PropertyManagement();
 
 		DataStorePluginOptions pluginOptions = new DataStorePluginOptions();
+		GeoWaveStoreFinder.getRegisteredStoreFactoryFamilies().put(
+				"memory",
+				new MemoryStoreFactoryFamily());
 		pluginOptions.selectPlugin("memory");
 		MemoryRequiredOptions opts = (MemoryRequiredOptions) pluginOptions.getFactoryOptions();
 		opts.setGeowaveNamespace(TEST_NAMESPACE);

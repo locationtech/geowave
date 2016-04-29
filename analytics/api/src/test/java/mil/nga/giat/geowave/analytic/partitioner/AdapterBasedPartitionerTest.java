@@ -34,6 +34,8 @@ import mil.nga.giat.geowave.analytic.partitioner.Partitioner.PartitionData;
 import mil.nga.giat.geowave.analytic.store.PersistableStore;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
+import mil.nga.giat.geowave.core.store.GeoWaveStoreFinder;
+import mil.nga.giat.geowave.core.store.memory.MemoryStoreFactoryFamily;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 
 public class AdapterBasedPartitionerTest
@@ -98,9 +100,12 @@ public class AdapterBasedPartitionerTest
 				configuration,
 				scope);
 
-		DataStorePluginOptions pluginOptions = new DataStorePluginOptions();
+		final DataStorePluginOptions pluginOptions = new DataStorePluginOptions();
+		GeoWaveStoreFinder.getRegisteredStoreFactoryFamilies().put(
+				"memory",
+				new MemoryStoreFactoryFamily());
 		pluginOptions.selectPlugin("memory");
-		PersistableStore store = new PersistableStore(
+		final PersistableStore store = new PersistableStore(
 				pluginOptions);
 
 		store.getDataStoreOptions().createAdapterStore().addAdapter(
