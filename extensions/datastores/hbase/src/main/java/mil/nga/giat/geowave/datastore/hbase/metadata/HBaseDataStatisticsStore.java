@@ -228,9 +228,10 @@ public class HBaseDataStatisticsStore extends
 	@Override
 	protected ByteArrayId getRowId(DataStatistics<?> object) {
 		byte[] parentRecord = super.getRowId(object).getBytes();
-		ByteBuffer parentBuffer = ByteBuffer.allocate(parentRecord.length + 16);
+		ByteBuffer parentBuffer = ByteBuffer.allocate(parentRecord.length + 1 + 16);
 		parentBuffer.put(parentRecord);
 		UUID uuid = UUID.randomUUID();
+		parentBuffer.put(new byte[] { 0 });
 		parentBuffer.putLong(uuid.getMostSignificantBits());
 		parentBuffer.putLong(uuid.getLeastSignificantBits());
 		return new ByteArrayId(parentBuffer.array());
