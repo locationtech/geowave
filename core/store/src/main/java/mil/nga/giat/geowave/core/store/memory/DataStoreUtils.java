@@ -238,7 +238,6 @@ public class DataStoreUtils
 		return rowIds;
 	}
 
-
 	public static <T> void addToRowIds(
 			final List<ByteArrayId> rowIds,
 			final List<ByteArrayId> insertionIds,

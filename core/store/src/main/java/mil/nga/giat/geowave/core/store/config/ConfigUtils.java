@@ -1,7 +1,9 @@
 package mil.nga.giat.geowave.core.store.config;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import mil.nga.giat.geowave.core.cli.prefix.JCommanderPrefixTranslator;
@@ -61,16 +63,19 @@ public class ConfigUtils
 			translator.addObject(createOptionsInstance);
 			JCommanderTranslationMap map = translator.translate();
 			Collection<TranslationEntry> entries = map.getEntries().values();
-			opts = new ConfigOption[entries.size()];
-			int optCounter = 0;
+			final List<ConfigOption> options = new ArrayList<ConfigOption>();
 			for (TranslationEntry entry : entries) {
-				ConfigOption opt = new ConfigOption(
-						entry.getAsPropertyName(),
-						entry.getDescription(),
-						!entry.isRequired());
-				opt.setPassword(entry.isPassword());
-				opts[optCounter++] = opt;
+				if (!entry.isHidden()) {
+					ConfigOption opt = new ConfigOption(
+							entry.getAsPropertyName(),
+							entry.getDescription(),
+							!entry.isRequired(),
+							entry.getParam().getType());
+					opt.setPassword(entry.isPassword());
+					options.add(opt);
+				}
 			}
+			opts = options.toArray(new ConfigOption[options.size()]);
 		}
 		else {
 			opts = new ConfigOption[0];

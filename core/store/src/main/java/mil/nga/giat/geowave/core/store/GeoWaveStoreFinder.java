@@ -30,7 +30,8 @@ public class GeoWaveStoreFinder
 	public static final ConfigOption STORE_HINT_OPTION = new ConfigOption(
 			STORE_HINT_KEY,
 			"Set the GeoWave store, by default it will try to discover based on matching config options. " + getStoreNames(),
-			true);
+			true,
+			String.class);
 
 	private static Map<String, StoreFactoryFamilySpi> registeredStoreFactoryFamilies = null;
 
