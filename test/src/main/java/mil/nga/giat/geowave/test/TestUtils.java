@@ -143,7 +143,7 @@ public class TestUtils
 		// Ingest Formats
 		final IngestFormatPluginOptions ingestFormatOptions = new IngestFormatPluginOptions();
 		ingestFormatOptions.selectPlugin(format);
-		
+
 		// Indexes
 		final String[] indexTypes = dimensionalityType.getDimensionalityArg().split(
 				",");

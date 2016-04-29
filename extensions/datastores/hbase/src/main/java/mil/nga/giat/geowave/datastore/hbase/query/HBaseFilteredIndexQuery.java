@@ -156,12 +156,10 @@ public abstract class HBaseFilteredIndexQuery extends
 						it,
 						limit);
 			}
-			if (it.hasNext()) {
-				return new HBaseCloseableIteratorWrapper(
-						new MultiScannerClosableWrapper(
-								results),
-						it);
-			}
+			return new HBaseCloseableIteratorWrapper(
+					new MultiScannerClosableWrapper(
+							results),
+					it);
 		}
 
 		LOGGER.error("Results were empty");
@@ -204,6 +202,9 @@ public abstract class HBaseFilteredIndexQuery extends
 					scanner.setStartRow(range.getStart().getBytes());
 					if (!range.isSingleValue()) {
 						scanner.setStopRow(HBaseUtils.getNextPrefix(range.getEnd().getBytes()));
+					}
+					else {
+						scanner.setStopRow(HBaseUtils.getNextPrefix(range.getStart().getBytes()));
 					}
 				}
 
