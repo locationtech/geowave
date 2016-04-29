@@ -40,18 +40,21 @@ public class GeoWaveITSuiteRunner extends
 		}
 		return super.withAfterClasses(statement);
 	}
+
 	private GeoWaveIT itRunner;
-	protected void tearDown() throws Exception{
-		if (itRunner != null){
+
+	protected void tearDown()
+			throws Exception {
+		if (itRunner != null) {
 			itRunner.tearDown();
-		}		
+		}
 	}
 
 	@Override
 	protected void runChild(
 			Runner runner,
 			RunNotifier notifier ) {
-		if (runner instanceof GeoWaveIT){
+		if (runner instanceof GeoWaveIT) {
 			itRunner = (GeoWaveIT) runner;
 		}
 		super.runChild(
