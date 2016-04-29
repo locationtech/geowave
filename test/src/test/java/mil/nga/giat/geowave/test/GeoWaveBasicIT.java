@@ -185,8 +185,8 @@ public class GeoWaveBasicIT
 			TestUtils.deleteAll(dataStore);
 			Assert.fail("Error occurred while testing a polygon query of spatial index: '" + e.getLocalizedMessage() + "'");
 		}
-		// TODO HBase implementation needs to merge statistics
-		if ((nthreads > 0) && (dataStore.getType() != "hbase")) {
+
+		if ((nthreads > 0)) {
 			try {
 				testStats(
 						new File[] {

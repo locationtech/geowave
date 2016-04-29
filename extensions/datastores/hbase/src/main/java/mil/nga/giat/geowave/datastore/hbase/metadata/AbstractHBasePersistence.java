@@ -9,16 +9,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.Persistable;
-import mil.nga.giat.geowave.core.index.PersistenceUtils;
-import mil.nga.giat.geowave.core.store.CloseableIterator;
-import mil.nga.giat.geowave.datastore.hbase.io.HBaseWriter;
-import mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations;
-import mil.nga.giat.geowave.datastore.hbase.util.HBaseCloseableIteratorWrapper;
-import mil.nga.giat.geowave.datastore.hbase.util.HBaseCloseableIteratorWrapper.ScannerClosableWrapper;
-import mil.nga.giat.geowave.datastore.hbase.util.HBaseUtils;
-
 import org.apache.hadoop.hbase.Cell;
 import org.apache.hadoop.hbase.CellUtil;
 import org.apache.hadoop.hbase.TableNotFoundException;
@@ -29,12 +19,22 @@ import org.apache.hadoop.hbase.client.RowMutations;
 import org.apache.hadoop.hbase.client.Scan;
 import org.apache.log4j.Logger;
 
+import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.index.Persistable;
+import mil.nga.giat.geowave.core.index.PersistenceUtils;
+import mil.nga.giat.geowave.core.store.CloseableIterator;
+import mil.nga.giat.geowave.datastore.hbase.io.HBaseWriter;
+import mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations;
+import mil.nga.giat.geowave.datastore.hbase.util.HBaseCloseableIteratorWrapper;
+import mil.nga.giat.geowave.datastore.hbase.util.HBaseCloseableIteratorWrapper.ScannerClosableWrapper;
+import mil.nga.giat.geowave.datastore.hbase.util.HBaseUtils;
+
 public abstract class AbstractHBasePersistence<T extends Persistable>
 {
 
 	public final static String METADATA_TABLE = "GEOWAVE_METADATA";
 	private final static Logger LOGGER = Logger.getLogger(AbstractHBasePersistence.class);
-	private final BasicHBaseOperations operations;
+	protected final BasicHBaseOperations operations;
 
 	private static final int MAX_ENTRIES = 100;
 	protected final Map<ByteArrayId, T> cache = Collections.synchronizedMap(new LinkedHashMap<ByteArrayId, T>(
@@ -74,15 +74,16 @@ public abstract class AbstractHBasePersistence<T extends Persistable>
 			final Iterator<Result> it = operations.getScannedResults(
 					scanner,
 					getTablename()).iterator();
-			if (!it.hasNext()) {
+			
+			Iterator<T> iter = getNativeIteratorWrapper(it);
+			
+			if (!iter.hasNext()) {
 				LOGGER.warn("Object '" + getCombinedId(
 						primaryId,
 						secondaryId).getString() + "' not found");
 				return null;
 			}
-			final Result entry = it.next();
-			return entryToValue(entry.listCells().get(
-					0));
+			return iter.next();
 		}
 		catch (final IOException e) {
 			LOGGER.error(
@@ -172,6 +173,10 @@ public abstract class AbstractHBasePersistence<T extends Persistable>
 		return null;
 	}
 
+	protected Iterator<T> getNativeIteratorWrapper(Iterator<Result> resultIterator) {
+		return new NativeIteratorWrapper(resultIterator);
+	}
+	
 	protected Scan applyScannerSettings(
 			Scan scanner,
 			ByteArrayId primaryId,
@@ -231,8 +236,7 @@ public abstract class AbstractHBasePersistence<T extends Persistable>
 			return new HBaseCloseableIteratorWrapper<T>(
 					new ScannerClosableWrapper(
 							rS),
-					new NativeIteratorWrapper(
-							it));
+					getNativeIteratorWrapper(it));
 		}
 		catch (final IOException e) {
 			LOGGER.warn(
@@ -255,9 +259,13 @@ public abstract class AbstractHBasePersistence<T extends Persistable>
 		cache.clear();
 	}
 
+	protected ByteArrayId getRowId(T object) {
+		return getPrimaryId(object);
+	}
+	
 	protected void addObject(
 			final T object ) {
-		final ByteArrayId id = getPrimaryId(object);
+		final ByteArrayId id = getRowId(object);
 		addObjectToCache(object);
 		try {
 
@@ -286,6 +294,47 @@ public abstract class AbstractHBasePersistence<T extends Persistable>
 					e);
 		}
 	}
+	
+	public boolean deleteObjects(
+			final ByteArrayId primaryId,
+			final ByteArrayId secondaryId,
+			final String... authorizations ) {
+		try {
+			// Only way to do this is with a Scanner.
+			Scan scanner = getScanner(primaryId, secondaryId, authorizations);
+			ResultScanner rS = operations.getScannedResults(
+					scanner,
+					getTablename());
+			
+			byte[] columnFamily = getColumnFamily().getBytes(
+					Charset.forName("UTF-8"));
+			byte[] columnQualifier = getColumnQualifier(secondaryId);
+
+			List<RowMutations> l = new ArrayList<RowMutations>();
+			for (Result rr : rS) {
+				
+				RowMutations deleteMutations = HBaseUtils.getDeleteMutations(
+						rr.getRow(),
+						columnFamily,
+						columnQualifier,
+						authorizations);
+
+				l.add(deleteMutations);
+
+			}
+			HBaseWriter deleter = operations.createWriter(
+					getTablename(),
+					getColumnFamily(),
+					false);
+			
+			deleter.delete(l);
+			return true;
+		}
+		catch (IOException e) {
+			LOGGER.warn("Unable to delete row from " + getTablename() + " " + e);
+			return false;
+		}
+	}
 
 	protected boolean objectExists(
 			final ByteArrayId primaryId,
@@ -303,11 +352,11 @@ public abstract class AbstractHBasePersistence<T extends Persistable>
 					scanner,
 					getTablename());
 			final Iterator<Result> it = rS.iterator();
-			if (it.hasNext()) {
-				// may as well cache the result
-				Cell c = it.next().listCells().get(
-						0);
-				return (entryToValue(c) != null);
+			
+			Iterator<T> iter = getNativeIteratorWrapper(it);
+			
+			if (iter.hasNext()) {
+				return iter.next() != null;
 			}
 			else {
 				return false;
@@ -367,8 +416,7 @@ public abstract class AbstractHBasePersistence<T extends Persistable>
 			return new HBaseCloseableIteratorWrapper<T>(
 					new ScannerClosableWrapper(
 							rS),
-					new NativeIteratorWrapper(
-							it));
+					getNativeIteratorWrapper(it));
 		}
 		catch (final IOException e) {
 			LOGGER.warn(
@@ -384,36 +432,10 @@ public abstract class AbstractHBasePersistence<T extends Persistable>
 			final String... authorizations ) {
 		return deleteObjectFromCache(
 				primaryId,
-				secondaryId) && deleteRows(
+				secondaryId) && deleteObjects(
 				primaryId,
 				secondaryId,
 				authorizations);
-	}
-
-	private boolean deleteRows(
-			final ByteArrayId primaryId,
-			final ByteArrayId secondaryId,
-			final String... authorizations ) {
-		try {
-			RowMutations deleteMutations = HBaseUtils.getDeleteMutations(
-					primaryId.getBytes(),
-					getColumnFamily().getBytes(
-							Charset.forName("UTF-8")),
-					getColumnQualifier(secondaryId),
-					authorizations);
-			HBaseWriter deleter = operations.createWriter(
-					getTablename(),
-					getColumnFamily(),
-					false);
-			List<RowMutations> l = new ArrayList<RowMutations>();
-			l.add(deleteMutations);
-			deleter.delete(l);
-			return true;
-		}
-		catch (IOException e) {
-			LOGGER.warn("Unable to delete row from " + getTablename() + " " + e);
-			return false;
-		}
 	}
 
 	protected boolean deleteObjectFromCache(
