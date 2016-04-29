@@ -65,7 +65,7 @@ public class DataStatisticsStoreIT {
 		ResultScanner rs = ops.getScannedResults(scan, "GEOWAVE_METADATA");
 		Iterator<Result> res = rs.iterator();
 		byte[] row = res.next().getRow();
-		Assert.assertEquals(stat.getStatisticsId().getBytes().length + 16, row.length);
+		Assert.assertEquals(stat.getStatisticsId().getBytes().length + 16 + 1, row.length);
 		
 		byte[] bytes = new byte[stat.getStatisticsId().getBytes().length];
 		ByteBuffer bb = ByteBuffer.wrap(row);

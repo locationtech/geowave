@@ -149,8 +149,11 @@ public class HBaseDataStatisticsStore extends
 	protected Scan applyScannerSettings(Scan scanner, ByteArrayId primaryId, ByteArrayId secondaryId) {
 		Scan scan = super.applyScannerSettings(scanner, primaryId, secondaryId);
 		if (primaryId != null) {
+			ByteBuffer buf = ByteBuffer.allocate(primaryId.getBytes().length + 1);
+			buf.put(primaryId.getBytes());
+			buf.put(new byte[] { 0 });
 			// So this will set the stop row to just after all the possible suffixes to this primaryId.
-			scan.setStopRow(HBaseUtils.getNextPrefix(scan.getStopRow()));
+			scan.setStopRow(HBaseUtils.getNextPrefix(buf.array()));
 		}
 		return scan;
 	}
