@@ -87,7 +87,7 @@ public class DBScanOptions
 		"--mapReduceHdfsBaseDir"
 	}, description = "Fully qualified path to the base directory in hdfs")
 	private String mapReduceHdfsBaseDir;
-	
+
 	@OutputParameter(OutputParameters.Output.HDFS_OUTPUT_PATH)
 	@Parameter(names = {
 		"-oop",
@@ -178,7 +178,6 @@ public class DBScanOptions
 		"--partitionSecondaryPartitionerClass"
 	}, description = "Perform secondary partitioning with the provided class")
 	private String partitionSecondaryPartitionerClass;
-	
 
 	public String getPartitioningDistanceThresholds() {
 		return partitioningDistanceThresholds;

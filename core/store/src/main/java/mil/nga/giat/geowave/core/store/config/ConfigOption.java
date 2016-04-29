@@ -6,14 +6,26 @@ public class ConfigOption
 	private final String description;
 	private final boolean optional;
 	private boolean password;
+	private Class type;
 
 	public ConfigOption(
 			final String name,
 			final String description,
-			final boolean optional ) {
+			final boolean optional,
+			final Class type ) {
 		this.name = name;
 		this.description = description;
 		this.optional = optional;
+		this.type = type;
+	}
+
+	public Class getType() {
+		return type;
+	}
+
+	public void setType(
+			Class type ) {
+		this.type = type;
 	}
 
 	public String getName() {

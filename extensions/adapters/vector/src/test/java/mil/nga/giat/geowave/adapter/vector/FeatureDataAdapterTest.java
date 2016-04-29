@@ -338,6 +338,7 @@ public class FeatureDataAdapterTest
 			throws SchemaException {
 
 		final SimpleFeatureType schema = DataUtilities.createType(
+				"http://foo",
 				"sp.geostuff",
 				"geometry:Geometry:srid=4326,pop:java.lang.Long,start:Date,end:Date,pid:String");
 
@@ -379,6 +380,10 @@ public class FeatureDataAdapterTest
 
 		final FeatureDataAdapter dataAdapterCopy = new FeatureDataAdapter();
 		dataAdapterCopy.fromBinary(binary);
+
+		assertEquals(
+				"http://foo",
+				dataAdapterCopy.getType().getName().getNamespaceURI());
 
 		assertEquals(
 				dataAdapterCopy.getAdapterId(),
