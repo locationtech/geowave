@@ -137,7 +137,7 @@ public class HBaseUtils
 	// Using a private HBase method called from the constructor of Scan
 	public static byte[] getNextPrefix(
 			final byte[] prefix ) {
-		return new Scan(
+		return new Scan().setRowPrefixFilter(
 				prefix).getStopRow();
 	}
 
