@@ -16,11 +16,11 @@ import org.mortbay.xml.XmlConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import mil.nga.giat.geowave.test.AccumuloStoreTestEnvironment;
 import mil.nga.giat.geowave.test.GeoWaveITRunner;
 import mil.nga.giat.geowave.test.TestEnvironment;
 import mil.nga.giat.geowave.test.TestUtils;
-import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 import mil.nga.giat.geowave.test.mapreduce.MapReduceTestEnvironment;
 
 public class ServicesTestEnvironment implements
@@ -63,6 +63,9 @@ public class ServicesTestEnvironment implements
 
 	private Server jettyServer;
 
+	@SuppressFBWarnings(value = {
+		"SWL_SLEEP_WITH_LOCK_HELD"
+	}, justification = "Jetty must be started before releasing the lock")
 	@Override
 	public void setup()
 			throws Exception {
