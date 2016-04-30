@@ -2,8 +2,6 @@ package mil.nga.giat.geowave.test.query;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -21,24 +19,24 @@ import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Envelope;
 
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
-import mil.nga.giat.geowave.adapter.vector.util.FeatureTranslatingIterator;
 import mil.nga.giat.geowave.core.geotime.GeometryUtils;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.IndexWriter;
+import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.query.Query;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStore;
 import mil.nga.giat.geowave.test.GeoWaveTestEnvironment;
 
-public class AttributesSubsetQueryIT extends
+public class QueryOptionsIT extends
 		GeoWaveTestEnvironment
 {
-	private static final Logger LOGGER = Logger.getLogger(AttributesSubsetQueryIT.class);
-
-	private static SimpleFeatureType simpleFeatureType;
-	private static FeatureDataAdapter dataAdapter;
+	private static SimpleFeatureType type1;
+	private static SimpleFeatureType type2;
+	private static FeatureDataAdapter dataAdapter1;
+	private static FeatureDataAdapter dataAdapter2;
 	private static DataStore dataStore;
 
 	// constants for attributes of SimpleFeatureType
@@ -47,13 +45,6 @@ public class AttributesSubsetQueryIT extends
 	private static final String POPULATION_ATTRIBUTE = "population";
 	private static final String LAND_AREA_ATTRIBUTE = "landArea";
 	private static final String GEOMETRY_ATTRIBUTE = "geometry";
-
-	private static final Collection<String> ALL_ATTRIBUTES = Arrays.asList(
-			CITY_ATTRIBUTE,
-			STATE_ATTRIBUTE,
-			POPULATION_ATTRIBUTE,
-			LAND_AREA_ATTRIBUTE,
-			GEOMETRY_ATTRIBUTE);
 
 	// points used to construct bounding box for queries
 	private static final Coordinate GUADALAJARA = new Coordinate(
@@ -71,188 +62,129 @@ public class AttributesSubsetQueryIT extends
 	@BeforeClass
 	public static void setupData()
 			throws IOException {
-
 		GeoWaveTestEnvironment.setup();
-
-		simpleFeatureType = getSimpleFeatureType();
-
-		dataAdapter = new FeatureDataAdapter(
-				simpleFeatureType);
-
+		type1 = getSimpleFeatureType("type1");
+		type2 = getSimpleFeatureType("type2");
+		dataAdapter1 = new FeatureDataAdapter(
+				type1);
+		dataAdapter2 = new FeatureDataAdapter(
+				type2);
 		dataStore = new AccumuloDataStore(
 				accumuloOperations);
-
-		ingestSampleData();
+		ingestSampleData(
+				new SimpleFeatureBuilder(
+						type1),
+				dataAdapter1);
+		ingestSampleData(
+				new SimpleFeatureBuilder(
+						type2),
+				dataAdapter2);
 	}
 
 	@Test
-	public void testNoFiltering()
+	public void testQuerySpecificAdapter()
 			throws IOException {
-
-		final CloseableIterator<SimpleFeature> results = dataStore.query(
-				new QueryOptions(
-						dataAdapter,
-						DEFAULT_SPATIAL_INDEX),
-				spatialQuery);
-
-		// query expects to match 3 cities from Texas, which should each contain
-		// non-null values for each SimpleFeature attribute
-		verifyResults(
-				results,
-				3,
-				ALL_ATTRIBUTES);
-	}
-
-	@Test
-	public void testServerSideFiltering()
-			throws IOException {
-
-		final QueryOptions queryOptions = new QueryOptions(
-				dataAdapter,
-				DEFAULT_SPATIAL_INDEX);
-		queryOptions.setFieldIds(
-				Arrays.asList(CITY_ATTRIBUTE),
-				dataAdapter);
-
-		CloseableIterator<SimpleFeature> results = dataStore.query(
-				queryOptions,
-				spatialQuery);
-
-		// query expects to match 3 cities from Texas, which should each contain
-		// non-null values for a subset of attributes (city) and nulls for the
-		// rest
-		List<String> expectedAttributes = Arrays.asList(
-				CITY_ATTRIBUTE,
-				GEOMETRY_ATTRIBUTE); // always included
-		verifyResults(
-				results,
-				3,
-				expectedAttributes);
-		queryOptions.setFieldIds(
-				Arrays.asList(GEOMETRY_ATTRIBUTE),
-				dataAdapter);
-		// now try just geometry
-		results = dataStore.query(
-				queryOptions,
-				spatialQuery);
-
-		// query expects to match 3 cities from Texas, which should each contain
-		// non-null values for geometry and null values for all other attributes
-		expectedAttributes = Arrays.asList(GEOMETRY_ATTRIBUTE); // always
-																// included
-		verifyResults(
-				results,
-				3,
-				expectedAttributes);
-	}
-
-	@Test
-	public void testClientSideFiltering()
-			throws IOException {
-
-		final List<String> attributesSubset = Arrays.asList(
-				CITY_ATTRIBUTE,
-				POPULATION_ATTRIBUTE);
-
-		final CloseableIterator<SimpleFeature> results = dataStore.query(
-				new QueryOptions(
-						dataAdapter,
-						DEFAULT_SPATIAL_INDEX),
-				spatialQuery);
-
-		// query expects to match 3 cities from Texas, which should each contain
-		// non-null values for a subset of attributes (city, population) and
-		// nulls for the rest
-		verifyResults(
-				// performs filtering client side
-				new FeatureTranslatingIterator(
-						simpleFeatureType,
-						attributesSubset,
-						results),
-				3,
-				attributesSubset);
-	}
-
-	private void verifyResults(
-			final CloseableIterator<SimpleFeature> results,
-			final int numExpectedResults,
-			final Collection<String> attributesExpected )
-			throws IOException {
-
 		int numResults = 0;
-		SimpleFeature currentFeature;
-		Object currentAttributeValue;
-
-		while (results.hasNext()) {
-
-			currentFeature = results.next();
-			numResults++;
-
-			for (final String currentAttribute : ALL_ATTRIBUTES) {
-
-				currentAttributeValue = currentFeature.getAttribute(currentAttribute);
-
-				if (attributesExpected.contains(currentAttribute)) {
-					Assert.assertNotNull(
-							"Expected non-null " + currentAttribute + " value!",
-							currentAttributeValue);
-				}
-				else {
-					Assert.assertNull(
-							"Expected null " + currentAttribute + " value!",
-							currentAttributeValue);
-				}
+		try (final CloseableIterator<SimpleFeature> results = dataStore.query(
+				new QueryOptions(
+						dataAdapter1,
+						DEFAULT_SPATIAL_INDEX),
+				spatialQuery)) {
+			while (results.hasNext()) {
+				numResults++;
+				final SimpleFeature currFeat = results.next();
+				Assert.assertTrue(
+						"Expected state to be 'Texas'",
+						currFeat.getAttribute(
+								STATE_ATTRIBUTE).equals(
+								"Texas"));
 			}
 		}
-
-		results.close();
-
-		Assert.assertEquals(
-				"Unexpected number of query results",
-				numExpectedResults,
-				numResults);
+		Assert.assertTrue(
+				"Expected 3 results but returned " + numResults,
+				3 == numResults);
 	}
 
-	private static SimpleFeatureType getSimpleFeatureType() {
+	@Test
+	public void testQueryAcrossAdapters()
+			throws IOException {
+		int numResults = 0;
+		try (final CloseableIterator<SimpleFeature> results = dataStore.query(
+				new QueryOptions(
+						DEFAULT_SPATIAL_INDEX),
+				spatialQuery)) {
+			while (results.hasNext()) {
+				numResults++;
+				final SimpleFeature currFeat = results.next();
+				Assert.assertTrue(
+						"Expected state to be 'Texas'",
+						currFeat.getAttribute(
+								STATE_ATTRIBUTE).equals(
+								"Texas"));
+			}
+		}
+		Assert.assertTrue(
+				"Expected 6 results but returned " + numResults,
+				6 == numResults);
+	}
 
+	@Test
+	public void testQueryEmptyOptions()
+			throws IOException {
+		int numResults = 0;
+		try (final CloseableIterator<SimpleFeature> results = dataStore.query(
+				new QueryOptions(),
+				spatialQuery)) {
+			while (results.hasNext()) {
+				numResults++;
+				final SimpleFeature currFeat = results.next();
+				Assert.assertTrue(
+						"Expected state to be 'Texas'",
+						currFeat.getAttribute(
+								STATE_ATTRIBUTE).equals(
+								"Texas"));
+			}
+		}
+		Assert.assertTrue(
+				"Expected 6 results but returned " + numResults,
+				6 == numResults);
+	}
+
+	private static SimpleFeatureType getSimpleFeatureType(
+			final String typeName ) {
 		SimpleFeatureType type = null;
-
 		try {
 			type = DataUtilities.createType(
-					"testCityData",
+					typeName,
 					CITY_ATTRIBUTE + ":String," + STATE_ATTRIBUTE + ":String," + POPULATION_ATTRIBUTE + ":Double," + LAND_AREA_ATTRIBUTE + ":Double," + GEOMETRY_ATTRIBUTE + ":Geometry");
 		}
 		catch (final SchemaException e) {
-			LOGGER.error(
-					"Unable to create SimpleFeatureType",
-					e);
+			System.out.println("Unable to create SimpleFeatureType");
 		}
-
 		return type;
 	}
 
-	private static void ingestSampleData()
+	@SuppressWarnings("unchecked")
+	private static void ingestSampleData(
+			final SimpleFeatureBuilder builder,
+			final DataAdapter<?> adapter )
 			throws IOException {
-
-		LOGGER.info("Ingesting canned data...");
-
-		try (IndexWriter writer = dataStore.createWriter(
-				dataAdapter,
+		try (@SuppressWarnings("rawtypes")
+		IndexWriter writer = dataStore.createWriter(
+				adapter,
 				DEFAULT_SPATIAL_INDEX)) {
-			for (final SimpleFeature sf : buildCityDataSet()) {
+			for (final SimpleFeature sf : buildCityDataSet(builder)) {
 				writer.write(sf);
 			}
-
 		}
-		LOGGER.info("Ingest complete.");
 	}
 
-	private static List<SimpleFeature> buildCityDataSet() {
-
+	private static List<SimpleFeature> buildCityDataSet(
+			final SimpleFeatureBuilder builder ) {
 		final List<SimpleFeature> points = new ArrayList<>();
-
 		// http://en.wikipedia.org/wiki/List_of_United_States_cities_by_population
 		points.add(buildSimpleFeature(
+				builder,
 				"New York",
 				"New York",
 				8405837,
@@ -261,6 +193,7 @@ public class AttributesSubsetQueryIT extends
 						-73.9385,
 						40.6643)));
 		points.add(buildSimpleFeature(
+				builder,
 				"Los Angeles",
 				"California",
 				3884307,
@@ -269,6 +202,7 @@ public class AttributesSubsetQueryIT extends
 						-118.4108,
 						34.0194)));
 		points.add(buildSimpleFeature(
+				builder,
 				"Chicago",
 				"Illinois",
 				2718782,
@@ -277,6 +211,7 @@ public class AttributesSubsetQueryIT extends
 						-87.6818,
 						41.8376)));
 		points.add(buildSimpleFeature(
+				builder,
 				"Houston",
 				"Texas",
 				2195914,
@@ -285,6 +220,7 @@ public class AttributesSubsetQueryIT extends
 						-95.3863,
 						29.7805)));
 		points.add(buildSimpleFeature(
+				builder,
 				"Philadelphia",
 				"Pennsylvania",
 				1553165,
@@ -293,6 +229,7 @@ public class AttributesSubsetQueryIT extends
 						-75.1333,
 						40.0094)));
 		points.add(buildSimpleFeature(
+				builder,
 				"Phoenix",
 				"Arizona",
 				1513367,
@@ -301,6 +238,7 @@ public class AttributesSubsetQueryIT extends
 						-112.088,
 						33.5722)));
 		points.add(buildSimpleFeature(
+				builder,
 				"San Antonio",
 				"Texas",
 				1409019,
@@ -309,6 +247,7 @@ public class AttributesSubsetQueryIT extends
 						-98.5251,
 						29.4724)));
 		points.add(buildSimpleFeature(
+				builder,
 				"San Diego",
 				"California",
 				1355896,
@@ -317,6 +256,7 @@ public class AttributesSubsetQueryIT extends
 						-117.135,
 						32.8153)));
 		points.add(buildSimpleFeature(
+				builder,
 				"Dallas",
 				"Texas",
 				1257676,
@@ -325,6 +265,7 @@ public class AttributesSubsetQueryIT extends
 						-96.7967,
 						32.7757)));
 		points.add(buildSimpleFeature(
+				builder,
 				"San Jose",
 				"California",
 				998537,
@@ -332,20 +273,16 @@ public class AttributesSubsetQueryIT extends
 				new Coordinate(
 						-121.8193,
 						37.2969)));
-
 		return points;
 	}
 
 	private static SimpleFeature buildSimpleFeature(
+			final SimpleFeatureBuilder builder,
 			final String city,
 			final String state,
 			final double population,
 			final double landArea,
 			final Coordinate coordinate ) {
-
-		final SimpleFeatureBuilder builder = new SimpleFeatureBuilder(
-				simpleFeatureType);
-
 		builder.set(
 				CITY_ATTRIBUTE,
 				city);
@@ -361,8 +298,6 @@ public class AttributesSubsetQueryIT extends
 		builder.set(
 				GEOMETRY_ATTRIBUTE,
 				GeometryUtils.GEOMETRY_FACTORY.createPoint(coordinate));
-
 		return builder.buildFeature(UUID.randomUUID().toString());
 	}
-
 }

@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.accumulo.core.client.ScannerBase;
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.log4j.Logger;
 
 import com.google.common.collect.Iterators;
@@ -14,6 +15,7 @@ import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
 import mil.nga.giat.geowave.core.store.ScanCallback;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.filter.FilterList;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
@@ -32,12 +34,12 @@ public abstract class AccumuloFilteredIndexQuery extends
 			final List<ByteArrayId> adapterIds,
 			final PrimaryIndex index,
 			final ScanCallback<?> scanCallback,
-			final List<String> fieldIds,
+			final Pair<List<String>, DataAdapter<?>> fieldIdsAdapterPair,
 			final String... authorizations ) {
 		super(
 				adapterIds,
 				index,
-				fieldIds,
+				fieldIdsAdapterPair,
 				authorizations);
 		this.scanCallback = scanCallback;
 	}

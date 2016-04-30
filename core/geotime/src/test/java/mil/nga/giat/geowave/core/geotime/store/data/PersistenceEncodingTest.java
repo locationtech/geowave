@@ -32,6 +32,7 @@ import mil.nga.giat.geowave.core.store.data.PersistentValue;
 import mil.nga.giat.geowave.core.store.data.field.FieldReader;
 import mil.nga.giat.geowave.core.store.data.field.FieldUtils;
 import mil.nga.giat.geowave.core.store.data.field.FieldWriter;
+import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;
 import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
@@ -462,6 +463,63 @@ public class PersistenceEncodingTest
 							id);
 				}
 			};
+		}
+
+		@Override
+		public int getPositionOfOrderedField(
+				final CommonIndexModel model,
+				final ByteArrayId fieldId ) {
+			int i = 0;
+			for (final NumericDimensionField<? extends CommonIndexValue> dimensionField : model.getDimensions()) {
+				if (fieldId.equals(dimensionField.getFieldId())) {
+					return i;
+				}
+				i++;
+			}
+			if (fieldId.equals(GEOM)) {
+				return i;
+			}
+			else if (fieldId.equals(ID)) {
+				return i + 1;
+			}
+			else if (fieldId.equals(START_TIME)) {
+				return i + 2;
+			}
+			else if (fieldId.equals(END_TIME)) {
+				return i + 3;
+			}
+			return -1;
+		}
+
+		@Override
+		public ByteArrayId getFieldIdForPosition(
+				final CommonIndexModel model,
+				final int position ) {
+			if (position < model.getDimensions().length) {
+				int i = 0;
+				for (final NumericDimensionField<? extends CommonIndexValue> dimensionField : model.getDimensions()) {
+					if (i == position) {
+						return dimensionField.getFieldId();
+					}
+					i++;
+				}
+			}
+			else {
+				final int numDimensions = model.getDimensions().length;
+				if (position == numDimensions) {
+					return GEOM;
+				}
+				else if (position == (numDimensions + 1)) {
+					return ID;
+				}
+				else if (position == (numDimensions + 2)) {
+					return START_TIME;
+				}
+				else if (position == (numDimensions + 3)) {
+					return END_TIME;
+				}
+			}
+			return null;
 		}
 
 	}

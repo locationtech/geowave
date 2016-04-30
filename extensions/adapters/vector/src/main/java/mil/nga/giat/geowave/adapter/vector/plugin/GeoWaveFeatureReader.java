@@ -270,7 +270,9 @@ public class GeoWaveFeatureReader implements
 					null,
 					transaction.composeAuthorizations());
 			if (subsetRequested()) {
-				queryOptions.setFieldIds(getSubset());
+				queryOptions.setFieldIds(
+						getSubset(),
+						components.getAdapter());
 			}
 			return components.getDataStore().query(
 					queryOptions,
@@ -328,7 +330,9 @@ public class GeoWaveFeatureReader implements
 					transaction.composeAuthorizations());
 			options.setLimit(limit);
 			if (subsetRequested()) {
-				options.setFieldIds(getSubset());
+				options.setFieldIds(
+						getSubset(),
+						components.getAdapter());
 			}
 			final double east = envelope.getMaxX();
 			final double west = envelope.getMinX();
@@ -403,7 +407,9 @@ public class GeoWaveFeatureReader implements
 					index,
 					transaction.composeAuthorizations());
 			if (subsetRequested()) {
-				queryOptions.setFieldIds(getSubset());
+				queryOptions.setFieldIds(
+						getSubset(),
+						components.getAdapter());
 			}
 			return components.getDataStore().query(
 					queryOptions,
@@ -443,7 +449,9 @@ public class GeoWaveFeatureReader implements
 					null,
 					transaction.composeAuthorizations());
 			if (subsetRequested()) {
-				queryOptions.setFieldIds(getSubset());
+				queryOptions.setFieldIds(
+						getSubset(),
+						components.getAdapter());
 			}
 			return components.getDataStore().query(
 					queryOptions,
@@ -525,7 +533,9 @@ public class GeoWaveFeatureReader implements
 					null,
 					transaction.composeAuthorizations());
 			if (subsetRequested()) {
-				queryOptions.setFieldIds(getSubset());
+				queryOptions.setFieldIds(
+						getSubset(),
+						components.getAdapter());
 			}
 
 			return components.getDataStore().query(

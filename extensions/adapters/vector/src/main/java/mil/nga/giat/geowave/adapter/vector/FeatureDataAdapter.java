@@ -8,17 +8,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
-import org.geotools.data.DataUtilities;
-import org.geotools.feature.SchemaException;
-import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
-import org.geotools.referencing.CRS;
-import org.opengis.feature.simple.SimpleFeature;
-import org.opengis.feature.simple.SimpleFeatureType;
-import org.opengis.feature.type.AttributeDescriptor;
-import org.opengis.referencing.FactoryException;
-import org.opengis.referencing.operation.MathTransform;
-
 import mil.nga.giat.geowave.adapter.vector.index.SecondaryIndexManager;
 import mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveGTDataStore;
 import mil.nga.giat.geowave.adapter.vector.plugin.visibility.VisibilityConfiguration;
@@ -46,12 +35,27 @@ import mil.nga.giat.geowave.core.store.data.field.FieldUtils;
 import mil.nga.giat.geowave.core.store.data.field.FieldVisibilityHandler;
 import mil.nga.giat.geowave.core.store.data.field.FieldWriter;
 import mil.nga.giat.geowave.core.store.data.visibility.VisibilityManagement;
+import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;
 import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndex;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndexDataAdapter;
 import mil.nga.giat.geowave.mapreduce.HadoopDataAdapter;
 import mil.nga.giat.geowave.mapreduce.HadoopWritableSerializer;
+
+import org.apache.log4j.Logger;
+import org.geotools.data.DataUtilities;
+import org.geotools.feature.SchemaException;
+import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
+import org.geotools.referencing.CRS;
+import org.opengis.feature.simple.SimpleFeature;
+import org.opengis.feature.simple.SimpleFeatureType;
+import org.opengis.feature.type.AttributeDescriptor;
+import org.opengis.referencing.FactoryException;
+import org.opengis.referencing.operation.MathTransform;
+
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
 
 /**
  * This data adapter will handle all reading/writing concerns for storing and
@@ -658,4 +662,71 @@ public class FeatureDataAdapter extends
 		return secondaryIndexManager.getSupportedSecondaryIndices();
 	}
 
+	private transient final BiMap<ByteArrayId, Integer> fieldToPositionMap = HashBiMap.create();
+	private transient BiMap<Integer, ByteArrayId> positionToFieldMap = null;
+	private transient final Map<String, List<ByteArrayId>> modelToDimensionsMap = new HashMap<>();
+
+	@Override
+	public int getPositionOfOrderedField(
+			final CommonIndexModel model,
+			final ByteArrayId fieldId ) {
+		final List<ByteArrayId> dimensionFieldIds = getDimensionFieldIds(model);
+		// first check CommonIndexModel dimensions
+		if (dimensionFieldIds.contains(fieldId)) {
+			return dimensionFieldIds.indexOf(fieldId);
+		}
+		if (fieldToPositionMap.isEmpty()) {
+			initializePositionMaps();
+		}
+		// next check other fields
+		// dimension fields must be first, add padding
+		final Integer retVal = fieldToPositionMap.get(
+				fieldId).intValue() + model.getDimensions().length;
+		return (retVal != null) ? retVal.intValue() : -1;
+	}
+
+	@Override
+	public ByteArrayId getFieldIdForPosition(
+			final CommonIndexModel model,
+			final int position ) {
+		if (position >= model.getDimensions().length) {
+			if (fieldToPositionMap.isEmpty()) {
+				initializePositionMaps();
+			}
+			final int adjustedPosition = position - model.getDimensions().length;
+			// check other fields
+			return positionToFieldMap.get(adjustedPosition);
+		}
+		final List<ByteArrayId> dimensionFieldIds = getDimensionFieldIds(model);
+		// otherwise check CommonIndexModel dimensions
+		return dimensionFieldIds.get(position);
+	}
+
+	private void initializePositionMaps() {
+		for (int i = 0; i < reprojectedType.getAttributeCount(); i++) {
+			final AttributeDescriptor ad = reprojectedType.getDescriptor(i);
+			final ByteArrayId currFieldId = new ByteArrayId(
+					ad.getLocalName());
+			fieldToPositionMap.put(
+					currFieldId,
+					i);
+		}
+		positionToFieldMap = fieldToPositionMap.inverse();
+	}
+
+	private List<ByteArrayId> getDimensionFieldIds(
+			final CommonIndexModel model ) {
+		final List<ByteArrayId> retVal = modelToDimensionsMap.get(model.getId());
+		if (retVal != null) {
+			return retVal;
+		}
+		final List<ByteArrayId> dimensionFieldIds = new ArrayList<>();
+		for (final NumericDimensionField<? extends CommonIndexValue> dimension : model.getDimensions()) {
+			dimensionFieldIds.add(dimension.getFieldId());
+		}
+		modelToDimensionsMap.put(
+				model.getId(),
+				dimensionFieldIds);
+		return dimensionFieldIds;
+	}
 }

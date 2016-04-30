@@ -10,20 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import org.apache.accumulo.core.client.AccumuloException;
-import org.apache.accumulo.core.client.AccumuloSecurityException;
-import org.apache.accumulo.core.client.Connector;
-import org.apache.accumulo.core.client.mock.MockInstance;
-import org.apache.accumulo.core.client.security.tokens.PasswordToken;
-import org.apache.log4j.Logger;
-import org.junit.Before;
-import org.junit.Test;
-
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.Envelope;
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.GeometryFactory;
-
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import mil.nga.giat.geowave.core.geotime.store.dimension.GeometryWrapper;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
@@ -36,7 +22,6 @@ import mil.nga.giat.geowave.core.store.EntryVisibilityHandler;
 import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.ScanCallback;
 import mil.nga.giat.geowave.core.store.adapter.AbstractDataAdapter;
-import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.NativeFieldHandler;
 import mil.nga.giat.geowave.core.store.adapter.NativeFieldHandler.RowBuilder;
 import mil.nga.giat.geowave.core.store.adapter.PersistentIndexFieldHandler;
@@ -52,6 +37,8 @@ import mil.nga.giat.geowave.core.store.data.field.FieldReader;
 import mil.nga.giat.geowave.core.store.data.field.FieldUtils;
 import mil.nga.giat.geowave.core.store.data.field.FieldVisibilityHandler;
 import mil.nga.giat.geowave.core.store.data.field.FieldWriter;
+import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;
+import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.query.DataIdQuery;
@@ -63,6 +50,20 @@ import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloAdapterStore;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloDataStatisticsStore;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloIndexStore;
 import mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloOptions;
+
+import org.apache.accumulo.core.client.AccumuloException;
+import org.apache.accumulo.core.client.AccumuloSecurityException;
+import org.apache.accumulo.core.client.Connector;
+import org.apache.accumulo.core.client.mock.MockInstance;
+import org.apache.accumulo.core.client.security.tokens.PasswordToken;
+import org.apache.log4j.Logger;
+import org.junit.Before;
+import org.junit.Test;
+
+import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.Envelope;
+import com.vividsolutions.jts.geom.Geometry;
+import com.vividsolutions.jts.geom.GeometryFactory;
 
 public class AccumuloDataStoreStatsTest
 {
@@ -697,6 +698,51 @@ public class AccumuloDataStoreStatsTest
 		@Override
 		public ByteArrayId[] getSupportedStatisticsIds() {
 			return SUPPORTED_STATS_IDS;
+		}
+
+		@Override
+		public int getPositionOfOrderedField(
+				final CommonIndexModel model,
+				final ByteArrayId fieldId ) {
+			int i = 0;
+			for (final NumericDimensionField<? extends CommonIndexValue> dimensionField : model.getDimensions()) {
+				if (fieldId.equals(dimensionField.getFieldId())) {
+					return i;
+				}
+				i++;
+			}
+			if (fieldId.equals(GEOM)) {
+				return i;
+			}
+			else if (fieldId.equals(ID)) {
+				return i + 1;
+			}
+			return -1;
+		}
+
+		@Override
+		public ByteArrayId getFieldIdForPosition(
+				final CommonIndexModel model,
+				final int position ) {
+			if (position < model.getDimensions().length) {
+				int i = 0;
+				for (final NumericDimensionField<? extends CommonIndexValue> dimensionField : model.getDimensions()) {
+					if (i == position) {
+						return dimensionField.getFieldId();
+					}
+					i++;
+				}
+			}
+			else {
+				final int numDimensions = model.getDimensions().length;
+				if (position == numDimensions) {
+					return GEOM;
+				}
+				else if (position == (numDimensions + 1)) {
+					return ID;
+				}
+			}
+			return null;
 		}
 	}
 

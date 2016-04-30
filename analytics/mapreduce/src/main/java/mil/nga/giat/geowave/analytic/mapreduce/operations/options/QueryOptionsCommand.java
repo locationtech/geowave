@@ -16,9 +16,6 @@ public class QueryOptionsCommand
 	@Parameter(names = "--index", description = "The specific index to query; by default one is chosen for each adapter.")
 	private String indexId = null;
 
-	@Parameter(names = "--fields", description = "The comma-separated set of field names to extract; by default all are extracted.")
-	private List<String> fieldIds = null;
-
 	public QueryOptionsCommand() {}
 
 	public List<String> getAuthorizations() {
@@ -46,14 +43,5 @@ public class QueryOptionsCommand
 	public void setIndexId(
 			String indexId ) {
 		this.indexId = indexId;
-	}
-
-	public List<String> getFieldIds() {
-		return fieldIds;
-	}
-
-	public void setFieldIds(
-			List<String> fieldIds ) {
-		this.fieldIds = fieldIds;
 	}
 }

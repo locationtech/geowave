@@ -3,6 +3,7 @@ package mil.nga.giat.geowave.datastore.accumulo.query;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -22,10 +23,14 @@ import mil.nga.giat.geowave.core.store.data.CommonIndexedPersistenceEncoding;
 import mil.nga.giat.geowave.core.store.data.PersistentDataset;
 import mil.nga.giat.geowave.core.store.data.PersistentValue;
 import mil.nga.giat.geowave.core.store.data.field.FieldReader;
+import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;
 import mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter;
 import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloRowId;
+import mil.nga.giat.geowave.datastore.accumulo.encoding.AccumuloCommonIndexedPersistenceEncoding;
+import mil.nga.giat.geowave.datastore.accumulo.encoding.AccumuloFieldInfo;
+import mil.nga.giat.geowave.datastore.accumulo.util.AccumuloUtils;
 
 /**
  * This iterator wraps a DistributableQueryFilter which is deserialized from a
@@ -47,6 +52,7 @@ public class QueryFilterIterator extends
 	protected static final String MODEL = "model";
 	private DistributableQueryFilter filter;
 	private CommonIndexModel model;
+	private final List<ByteArrayId> commonIndexFieldIds = new ArrayList<>();
 
 	static {
 		initialize();
@@ -100,28 +106,39 @@ public class QueryFilterIterator extends
 			final AccumuloRowId rowId = new AccumuloRowId(
 					currentRow.getBytes());
 			final PersistentDataset<CommonIndexValue> commonData = new PersistentDataset<CommonIndexValue>();
-			final PersistentDataset<byte[]> unknownData = new PersistentDataset<byte[]>();
+			final List<AccumuloFieldInfo> unknownData = new ArrayList<AccumuloFieldInfo>();
 			for (int i = 0; (i < keys.size()) && (i < values.size()); i++) {
 				final Key key = keys.get(i);
 				final ByteArrayId colQual = new ByteArrayId(
 						key.getColumnQualifierData().getBackingArray());
-				final FieldReader<? extends CommonIndexValue> reader = model.getReader(colQual);
-				if (reader != null) {
-					final CommonIndexValue fieldValue = reader.readField(values.get(
-							i).get());
-					fieldValue.setVisibility(key.getColumnVisibilityData().getBackingArray());
-					commonData.addValue(new PersistentValue<CommonIndexValue>(
-							colQual,
-							fieldValue));
-				}
-				else {
-					unknownData.addValue(new PersistentValue<byte[]>(
-							colQual,
-							values.get(
-									i).get()));
+				final byte[] valueBytes = values.get(
+						i).get();
+				final List<AccumuloFieldInfo> fieldInfos = AccumuloUtils.decomposeFlattenedFields(
+						colQual.getBytes(),
+						valueBytes,
+						key.getColumnVisibilityData().getBackingArray());
+				for (final AccumuloFieldInfo fieldInfo : fieldInfos) {
+					final int ordinal = fieldInfo.getFieldPosition();
+					if (ordinal < model.getDimensions().length) {
+						final ByteArrayId commonIndexFieldId = commonIndexFieldIds.get(ordinal);
+						final FieldReader<? extends CommonIndexValue> reader = model.getReader(commonIndexFieldId);
+						if (reader != null) {
+							final CommonIndexValue fieldValue = reader.readField(fieldInfo.getValue());
+							fieldValue.setVisibility(key.getColumnVisibility().getBytes());
+							commonData.addValue(new PersistentValue<CommonIndexValue>(
+									commonIndexFieldId,
+									fieldValue));
+						}
+						else {
+							LOGGER.error("Could not find reader for common index field: " + commonIndexFieldId.getString());
+						}
+					}
+					else {
+						unknownData.add(fieldInfo);
+					}
 				}
 			}
-			final CommonIndexedPersistenceEncoding encoding = new CommonIndexedPersistenceEncoding(
+			final CommonIndexedPersistenceEncoding encoding = new AccumuloCommonIndexedPersistenceEncoding(
 					new ByteArrayId(
 							rowId.getAdapterId()),
 					new ByteArrayId(
@@ -164,24 +181,24 @@ public class QueryFilterIterator extends
 				source,
 				options,
 				env);
-
 		if (options == null) {
 			throw new IllegalArgumentException(
 					"Arguments must be set for " + QueryFilterIterator.class.getName());
 		}
 		try {
-
 			final String filterStr = options.get(FILTER);
 			final byte[] filterBytes = ByteArrayUtils.byteArrayFromString(filterStr);
 			filter = PersistenceUtils.fromBinary(
 					filterBytes,
 					DistributableQueryFilter.class);
-
 			final String modelStr = options.get(MODEL);
 			final byte[] modelBytes = ByteArrayUtils.byteArrayFromString(modelStr);
 			model = PersistenceUtils.fromBinary(
 					modelBytes,
 					CommonIndexModel.class);
+			for (final NumericDimensionField<? extends CommonIndexValue> numericDimension : model.getDimensions()) {
+				commonIndexFieldIds.add(numericDimension.getFieldId());
+			}
 		}
 		catch (final Exception e) {
 			throw new IllegalArgumentException(
