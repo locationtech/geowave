@@ -65,10 +65,10 @@ public class GroupAssigmentJobRunnerTest
 					final GeoWaveAnalyticJobRunner tool )
 					throws Exception {
 				tool.setConf(configuration);
-				((ParameterHelper<Object>) StoreParam.STORE.getHelper()).setValue(
+				((ParameterHelper<Object>) StoreParam.INPUT_STORE.getHelper()).setValue(
 						configuration,
 						GroupAssignmentMapReduce.class,
-						StoreParam.STORE.getHelper().getValue(
+						StoreParam.INPUT_STORE.getHelper().getValue(
 								runTimeProperties));
 				return tool.run(new String[] {});
 			}
@@ -191,7 +191,7 @@ public class GroupAssigmentJobRunnerTest
 				pluginOptions);
 
 		runTimeProperties.store(
-				StoreParam.STORE,
+				StoreParam.INPUT_STORE,
 				store);
 
 		pluginOptions.createAdapterStore().addAdapter(

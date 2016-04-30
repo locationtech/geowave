@@ -144,7 +144,7 @@ public class KMeansJumpJobRunner extends
 					GlobalParameters.Global.PARENT_BATCH_ID,
 					currentBatchId);
 
-			final DataStorePluginOptions dataStoreOptions = ((PersistableStore) propertyManagement.getProperty(StoreParam.STORE)).getDataStoreOptions();
+			final DataStorePluginOptions dataStoreOptions = ((PersistableStore) propertyManagement.getProperty(StoreParam.INPUT_STORE)).getDataStoreOptions();
 
 			final DistortionGroupManagement distortionGroupManagement = new DistortionGroupManagement(
 					dataStoreOptions.createDataStore(),
@@ -228,7 +228,7 @@ public class KMeansJumpJobRunner extends
 			CentroidParameters.Centroid.EXTRACTOR_CLASS,
 			CommonParameters.Common.DISTANCE_FUNCTION_CLASS,
 			CommonParameters.Common.DIMENSION_EXTRACT_CLASS,
-			StoreParameters.StoreParam.STORE,
+			StoreParameters.StoreParam.INPUT_STORE,
 			GlobalParameters.Global.BATCH_ID
 		}));
 		params.addAll(MapReduceParameters.getParameters());

@@ -65,10 +65,10 @@ public class ConvexHullJobRunnerTest
 					final GeoWaveAnalyticJobRunner tool )
 					throws Exception {
 				tool.setConf(configuration);
-				((ParameterHelper<Object>) StoreParam.STORE.getHelper()).setValue(
+				((ParameterHelper<Object>) StoreParam.INPUT_STORE.getHelper()).setValue(
 						configuration,
 						ConvexHullMapReduce.class,
-						StoreParam.STORE.getHelper().getValue(
+						StoreParam.INPUT_STORE.getHelper().getValue(
 								runTimeProperties));
 				return tool.run(new String[] {});
 			}
@@ -93,7 +93,7 @@ public class ConvexHullJobRunnerTest
 						"file://foo/bin",
 						job.getConfiguration().get(
 								"mapred.input.dir"));
-				final PersistableStore persistableStore = (PersistableStore) StoreParam.STORE.getHelper().getValue(
+				final PersistableStore persistableStore = (PersistableStore) StoreParam.INPUT_STORE.getHelper().getValue(
 						job,
 						ConvexHullMapReduce.class,
 						null);
@@ -102,7 +102,7 @@ public class ConvexHullJobRunnerTest
 					Assert.assertTrue(indexStore.indexExists(new ByteArrayId(
 							"spatial")));
 
-					final PersistableStore persistableAdapterStore = (PersistableStore) StoreParam.STORE.getHelper().getValue(
+					final PersistableStore persistableAdapterStore = (PersistableStore) StoreParam.INPUT_STORE.getHelper().getValue(
 							job,
 							ConvexHullMapReduce.class,
 							null);
@@ -191,7 +191,7 @@ public class ConvexHullJobRunnerTest
 				pluginOptions);
 
 		runTimeProperties.store(
-				StoreParam.STORE,
+				StoreParam.INPUT_STORE,
 				store);
 
 		pluginOptions.createAdapterStore().addAdapter(

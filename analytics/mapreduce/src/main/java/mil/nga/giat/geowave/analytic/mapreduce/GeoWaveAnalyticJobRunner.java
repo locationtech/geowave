@@ -109,7 +109,7 @@ public abstract class GeoWaveAnalyticJobRunner extends
 	public AdapterStore getAdapterStore(
 			final PropertyManagement runTimeProperties )
 			throws Exception {
-		PersistableStore store = (PersistableStore) StoreParameters.StoreParam.STORE.getHelper().getValue(
+		PersistableStore store = (PersistableStore) StoreParameters.StoreParam.INPUT_STORE.getHelper().getValue(
 				runTimeProperties);
 		return store.getDataStoreOptions().createAdapterStore();
 	}
@@ -117,7 +117,7 @@ public abstract class GeoWaveAnalyticJobRunner extends
 	public IndexStore getIndexStore(
 			final PropertyManagement runTimeProperties )
 			throws Exception {
-		PersistableStore store = (PersistableStore) StoreParameters.StoreParam.STORE.getHelper().getValue(
+		PersistableStore store = (PersistableStore) StoreParameters.StoreParam.INPUT_STORE.getHelper().getValue(
 				runTimeProperties);
 		return store.getDataStoreOptions().createIndexStore();
 	}
@@ -162,7 +162,7 @@ public abstract class GeoWaveAnalyticJobRunner extends
 
 		runTimeProperties.setConfig(
 				new ParameterEnum[] {
-					StoreParam.STORE
+					StoreParam.INPUT_STORE
 				},
 				configuration,
 				getScope());
@@ -259,7 +259,7 @@ public abstract class GeoWaveAnalyticJobRunner extends
 			params.addAll(inputFormat.getParameters());
 		}
 		params.addAll(Arrays.asList(new ParameterEnum<?>[] {
-			StoreParam.STORE,
+			StoreParam.INPUT_STORE,
 			Output.REDUCER_COUNT,
 			Output.OUTPUT_FORMAT
 		}));

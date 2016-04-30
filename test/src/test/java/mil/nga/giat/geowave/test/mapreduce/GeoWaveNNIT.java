@@ -1,5 +1,6 @@
 package mil.nga.giat.geowave.test.mapreduce;
 
+import java.io.File;
 import java.io.IOException;
 
 import org.apache.hadoop.fs.FileStatus;
@@ -38,6 +39,7 @@ import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
 import mil.nga.giat.geowave.test.GeoWaveITRunner;
+import mil.nga.giat.geowave.test.TestUtils;
 import mil.nga.giat.geowave.test.annotation.Environments;
 import mil.nga.giat.geowave.test.annotation.Environments.Environment;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore;
@@ -104,7 +106,7 @@ public class GeoWaveNNIT
 							PartitionParameters.Partition.PARTITION_DISTANCE,
 							ClusteringParameters.Clustering.DISTANCE_THRESHOLDS,
 							PartitionParameters.Partition.PARTITIONER_CLASS,
-							StoreParam.STORE,
+							StoreParam.INPUT_STORE,
 							OutputParameters.Output.HDFS_OUTPUT_PATH,
 							MapReduceParameters.MRConfig.HDFS_BASE_DIR,
 							OutputParameters.Output.REDUCER_COUNT,
@@ -120,8 +122,8 @@ public class GeoWaveNNIT
 							OrthodromicDistancePartitioner.class,
 							new PersistableStore(
 									dataStorePluginOptions),
-							MapReduceTestEnvironment.HDFS_BASE_DIRECTORY + "/t1/pairs",
-							MapReduceTestEnvironment.HDFS_BASE_DIRECTORY + "/t1",
+							TestUtils.TEMP_DIR + File.separator + MapReduceTestEnvironment.HDFS_BASE_DIRECTORY + "/t1/pairs",
+							TestUtils.TEMP_DIR + File.separator + MapReduceTestEnvironment.HDFS_BASE_DIRECTORY + "/t1",
 							3,
 							SequenceFileOutputFormatConfiguration.class,
 							GeoWaveInputFormatConfiguration.class
@@ -142,7 +144,7 @@ public class GeoWaveNNIT
 		int count = 0;
 		final FileSystem fs = FileSystem.get(MapReduceTestUtils.getConfiguration());
 		final FileStatus[] fss = fs.listStatus(new Path(
-				MapReduceTestEnvironment.HDFS_BASE_DIRECTORY + "/t1/pairs"));
+				TestUtils.TEMP_DIR + File.separator + MapReduceTestEnvironment.HDFS_BASE_DIRECTORY + "/t1/pairs"));
 		for (final FileStatus ifs : fss) {
 			if (ifs.isFile() && ifs.getPath().toString().matches(
 					".*part-r-0000[0-9]")) {

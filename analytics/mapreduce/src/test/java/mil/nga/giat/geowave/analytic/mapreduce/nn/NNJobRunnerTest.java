@@ -174,7 +174,7 @@ public class NNJobRunnerTest
 				pluginOptions);
 
 		runTimeProperties.store(
-				StoreParam.STORE,
+				StoreParam.INPUT_STORE,
 				store);
 
 		runTimeProperties.store(

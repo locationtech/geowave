@@ -29,7 +29,7 @@ public class GeoWaveOutputFormatConfiguration implements
 			final PropertyManagement runTimeProperties,
 			final Configuration configuration )
 			throws Exception {
-		final DataStorePluginOptions dataStoreOptions = ((PersistableStore) runTimeProperties.getProperty(StoreParam.STORE)).getDataStoreOptions();
+		final DataStorePluginOptions dataStoreOptions = ((PersistableStore) runTimeProperties.getProperty(StoreParam.INPUT_STORE)).getDataStoreOptions();
 		GeoWaveInputFormat.setDataStoreName(
 				configuration,
 				dataStoreOptions.getType());
@@ -57,7 +57,7 @@ public class GeoWaveOutputFormatConfiguration implements
 	@Override
 	public Collection<ParameterEnum<?>> getParameters() {
 		return Arrays.asList(new ParameterEnum<?>[] {
-			StoreParam.STORE
+			StoreParam.INPUT_STORE
 		});
 	}
 }

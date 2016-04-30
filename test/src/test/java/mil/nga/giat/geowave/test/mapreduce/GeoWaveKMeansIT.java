@@ -1,5 +1,6 @@
 package mil.nga.giat.geowave.test.mapreduce;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -162,7 +163,7 @@ public class GeoWaveKMeansIT
 							ClusteringParameters.Clustering.MAX_ITERATIONS,
 							ClusteringParameters.Clustering.RETAIN_GROUP_ASSIGNMENTS,
 							ExtractParameters.Extract.OUTPUT_DATA_TYPE_ID,
-							StoreParam.STORE,
+							StoreParam.INPUT_STORE,
 							GlobalParameters.Global.BATCH_ID,
 							MapReduceParameters.MRConfig.HDFS_BASE_DIR,
 							SampleParameters.Sample.MAX_SAMPLE_SIZE,
@@ -179,7 +180,7 @@ public class GeoWaveKMeansIT
 							new PersistableStore(
 									dataStorePluginOptions),
 							"bx1",
-							MapReduceTestEnvironment.HDFS_BASE_DIRECTORY + "/t1",
+							TestUtils.TEMP_DIR + File.separator + MapReduceTestEnvironment.HDFS_BASE_DIRECTORY + "/t1",
 							3,
 							2
 						}));
@@ -224,7 +225,7 @@ public class GeoWaveKMeansIT
 							ExtractParameters.Extract.MAX_INPUT_SPLIT,
 							ClusteringParameters.Clustering.ZOOM_LEVELS,
 							ExtractParameters.Extract.OUTPUT_DATA_TYPE_ID,
-							StoreParam.STORE,
+							StoreParam.INPUT_STORE,
 							GlobalParameters.Global.BATCH_ID,
 							MapReduceParameters.MRConfig.HDFS_BASE_DIR,
 							JumpParameters.Jump.RANGE_OF_CENTROIDS,
@@ -240,7 +241,7 @@ public class GeoWaveKMeansIT
 							new PersistableStore(
 									dataStorePluginOptions),
 							"bx2",
-							MapReduceTestEnvironment.HDFS_BASE_DIRECTORY + "/t2",
+							TestUtils.TEMP_DIR + File.separator + MapReduceTestEnvironment.HDFS_BASE_DIRECTORY + "/t2",
 							new NumericRange(
 									4,
 									7),

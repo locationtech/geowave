@@ -133,7 +133,7 @@ public class KMeansDistortionMapReduceTest
 				pluginOptions);
 
 		propManagement.store(
-				StoreParam.STORE,
+				StoreParam.INPUT_STORE,
 				store);
 
 		NestedGroupCentroidAssignment.setParameters(

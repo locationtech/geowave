@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import org.apache.hadoop.conf.Configuration;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.geotools.referencing.CRS;
@@ -34,6 +35,7 @@ import mil.nga.giat.geowave.analytic.param.GlobalParameters;
 import mil.nga.giat.geowave.analytic.param.InputParameters;
 import mil.nga.giat.geowave.analytic.param.MapReduceParameters;
 import mil.nga.giat.geowave.analytic.param.OutputParameters;
+import mil.nga.giat.geowave.analytic.param.OutputStoreParameterHelper;
 import mil.nga.giat.geowave.analytic.param.ParameterEnum;
 import mil.nga.giat.geowave.analytic.param.PartitionParameters;
 import mil.nga.giat.geowave.analytic.param.StoreParameters.StoreParam;
@@ -42,9 +44,11 @@ import mil.nga.giat.geowave.analytic.store.PersistableStore;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
 import mil.nga.giat.geowave.core.store.DataStore;
+import mil.nga.giat.geowave.core.store.config.ConfigUtils;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
+import mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputFormat;
 import mil.nga.giat.geowave.test.GeoWaveITRunner;
 import mil.nga.giat.geowave.test.TestUtils;
 import mil.nga.giat.geowave.test.annotation.Environments;
@@ -58,9 +62,6 @@ import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 })
 public class DBScanIT
 {
-
-	public static final String DBSCAN_TEST_NAMESPACE = TestUtils.TEST_NAMESPACE + "_dbscanit";
-
 	@GeoWaveTestStore({
 		GeoWaveStoreType.ACCUMULO
 	})
@@ -114,9 +115,16 @@ public class DBScanIT
 			throws Exception {
 
 		final DBScanIterationsJobRunner jobRunner = new DBScanIterationsJobRunner();
-
+		// TODO should use
+		Configuration conf = MapReduceTestUtils.getConfiguration();
+		GeoWaveOutputFormat.setDataStoreName(
+				conf,
+				dataStorePluginOptions.getFactoryFamily().getDataStoreFactory().getName());
+		GeoWaveOutputFormat.setStoreConfigOptions(
+				conf,
+				ConfigUtils.populateListFromOptions(dataStorePluginOptions.getFactoryOptions()));
 		final int res = jobRunner.run(
-				MapReduceTestUtils.getConfiguration(),
+				conf,
 				new PropertyManagement(
 						new ParameterEnum[] {
 							ExtractParameters.Extract.QUERY,
@@ -126,7 +134,7 @@ public class DBScanIT
 							PartitionParameters.Partition.PARTITION_DISTANCE,
 							PartitionParameters.Partition.PARTITIONER_CLASS,
 							ClusteringParameters.Clustering.MINIMUM_SIZE,
-							StoreParam.STORE,
+							StoreParam.INPUT_STORE,
 							MapReduceParameters.MRConfig.HDFS_BASE_DIR,
 							OutputParameters.Output.REDUCER_COUNT,
 							InputParameters.Input.INPUT_FORMAT,
@@ -144,7 +152,7 @@ public class DBScanIT
 							10,
 							new PersistableStore(
 									dataStorePluginOptions),
-							MapReduceTestEnvironment.HDFS_BASE_DIRECTORY + "/t1",
+							TestUtils.TEMP_DIR + File.separator + MapReduceTestEnvironment.HDFS_BASE_DIRECTORY + "/t1",
 							2,
 							GeoWaveInputFormatConfiguration.class,
 							"bx5",

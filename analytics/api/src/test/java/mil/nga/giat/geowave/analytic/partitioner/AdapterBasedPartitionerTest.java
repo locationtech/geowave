@@ -111,7 +111,7 @@ public class AdapterBasedPartitionerTest
 		store.getDataStoreOptions().createAdapterStore().addAdapter(
 				new FeatureDataAdapter(
 						ftype));
-		((ParameterEnum<PersistableStore>) StoreParam.STORE).getHelper().setValue(
+		((ParameterEnum<PersistableStore>) StoreParam.INPUT_STORE).getHelper().setValue(
 				configuration,
 				scope,
 				store);

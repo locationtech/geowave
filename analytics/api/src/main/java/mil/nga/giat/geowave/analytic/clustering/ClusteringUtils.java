@@ -65,7 +65,7 @@ public class ClusteringUtils
 			final PropertyManagement propertyManagement )
 			throws IOException {
 
-		PersistableStore store = (PersistableStore) StoreParameters.StoreParam.STORE.getHelper().getValue(
+		PersistableStore store = (PersistableStore) StoreParameters.StoreParam.INPUT_STORE.getHelper().getValue(
 				propertyManagement);
 
 		final AdapterStore adapterStore = store.getDataStoreOptions().createAdapterStore();
@@ -84,7 +84,7 @@ public class ClusteringUtils
 	public static PrimaryIndex[] getIndices(
 			final PropertyManagement propertyManagement ) {
 
-		PersistableStore store = (PersistableStore) StoreParameters.StoreParam.STORE.getHelper().getValue(
+		PersistableStore store = (PersistableStore) StoreParameters.StoreParam.INPUT_STORE.getHelper().getValue(
 				propertyManagement);
 
 		final IndexStore indexStore = store.getDataStoreOptions().createIndexStore();
@@ -126,7 +126,7 @@ public class ClusteringUtils
 			final PropertyManagement propertyManagement )
 			throws Exception {
 
-		PersistableStore store = (PersistableStore) StoreParameters.StoreParam.STORE.getHelper().getValue(
+		PersistableStore store = (PersistableStore) StoreParameters.StoreParam.INPUT_STORE.getHelper().getValue(
 				propertyManagement);
 
 		final IndexStore indexStore = store.getDataStoreOptions().createIndexStore();
@@ -147,7 +147,7 @@ public class ClusteringUtils
 				propertyManagement.getPropertyAsString(
 						CentroidParameters.Centroid.DATA_NAMESPACE_URI,
 						BasicFeatureTypes.DEFAULT_NAMESPACE),
-				((PersistableStore) StoreParameters.StoreParam.STORE.getHelper().getValue(
+				((PersistableStore) StoreParameters.StoreParam.INPUT_STORE.getHelper().getValue(
 						propertyManagement)).getDataStoreOptions().createAdapterStore(),
 				dimensionExtractorClass.newInstance().getDimensionNames());
 	}

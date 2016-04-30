@@ -227,7 +227,7 @@ public class GeoWaveAnalyticExtractJobRunner extends
 
 		@SuppressWarnings("rawtypes")
 		final DataAdapter[] adapters = ClusteringUtils.getAdapters(runTimeProperties);
-		final PersistableStore store = ((PersistableStore) runTimeProperties.getProperty(StoreParam.STORE));
+		final PersistableStore store = ((PersistableStore) runTimeProperties.getProperty(StoreParam.INPUT_STORE));
 		dataStoreOptions = store.getDataStoreOptions();
 		if (adapterId != null) {
 			final ByteArrayId byteId = new ByteArrayId(
@@ -291,7 +291,7 @@ public class GeoWaveAnalyticExtractJobRunner extends
 			ExtractParameters.Extract.MIN_INPUT_SPLIT,
 			ExtractParameters.Extract.MAX_INPUT_SPLIT,
 			ExtractParameters.Extract.QUERY,
-			StoreParam.STORE,
+			StoreParam.INPUT_STORE,
 			GlobalParameters.Global.BATCH_ID
 		}));
 

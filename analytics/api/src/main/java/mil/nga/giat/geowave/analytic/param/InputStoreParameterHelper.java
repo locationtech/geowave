@@ -12,10 +12,10 @@ import mil.nga.giat.geowave.analytic.store.PersistableStore;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputFormat;
 
-public class StoreParameterHelper implements
+public class InputStoreParameterHelper implements
 		ParameterHelper<PersistableStore>
 {
-	final static Logger LOGGER = LoggerFactory.getLogger(StoreParameterHelper.class);
+	final static Logger LOGGER = LoggerFactory.getLogger(InputStoreParameterHelper.class);
 
 	@Override
 	public Class<PersistableStore> getBaseClass() {
@@ -61,7 +61,7 @@ public class StoreParameterHelper implements
 	public PersistableStore getValue(
 			final PropertyManagement propertyManagement ) {
 		try {
-			return (PersistableStore) propertyManagement.getProperty(StoreParameters.StoreParam.STORE);
+			return (PersistableStore) propertyManagement.getProperty(StoreParameters.StoreParam.INPUT_STORE);
 		}
 		catch (final Exception e) {
 			LOGGER.error(
@@ -76,7 +76,7 @@ public class StoreParameterHelper implements
 			final PropertyManagement propertyManagement,
 			final PersistableStore value ) {
 		propertyManagement.store(
-				StoreParameters.StoreParam.STORE,
+				StoreParameters.StoreParam.INPUT_STORE,
 				value);
 	}
 }

@@ -120,7 +120,7 @@ public class KSamplerMapReduceTest
 				pluginOptions);
 
 		propManagement.store(
-				StoreParam.STORE,
+				StoreParam.INPUT_STORE,
 				store);
 
 		propManagement.store(

@@ -71,7 +71,7 @@ public class GroupAssigmentJobRunner extends
 
 		// Required since the Mapper uses the input format parameters to lookup
 		// the adapter
-		final DataStorePluginOptions dataStoreOptions = ((PersistableStore) runTimeProperties.getProperty(StoreParam.STORE)).getDataStoreOptions();
+		final DataStorePluginOptions dataStoreOptions = ((PersistableStore) runTimeProperties.getProperty(StoreParam.INPUT_STORE)).getDataStoreOptions();
 		GeoWaveInputFormat.setDataStoreName(
 				config,
 				dataStoreOptions.getType());
@@ -110,7 +110,7 @@ public class GroupAssigmentJobRunner extends
 		params.addAll(super.getParameters());
 
 		params.addAll(Arrays.asList(new ParameterEnum<?>[] {
-			StoreParameters.StoreParam.STORE,
+			StoreParameters.StoreParam.INPUT_STORE,
 			GlobalParameters.Global.BATCH_ID
 		}));
 
