@@ -5,8 +5,14 @@ import static org.junit.Assert.assertTrue;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.apache.commons.io.IOUtils;
 import org.geotools.feature.SchemaException;
@@ -16,7 +22,14 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Function;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Collections2;
+
+import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
+import mil.nga.giat.geowave.core.store.config.ConfigOption;
+import mil.nga.giat.geowave.core.store.config.ConfigUtils;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.format.gpx.GpxUtils;
 import mil.nga.giat.geowave.service.client.GeoserverServiceClient;
@@ -24,14 +37,18 @@ import mil.nga.giat.geowave.service.client.InfoServiceClient;
 import mil.nga.giat.geowave.service.client.IngestServiceClient;
 import mil.nga.giat.geowave.test.GeoWaveITRunner;
 import mil.nga.giat.geowave.test.TestUtils;
+import mil.nga.giat.geowave.test.annotation.Environments;
+import mil.nga.giat.geowave.test.annotation.Environments.Environment;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 @RunWith(GeoWaveITRunner.class)
-public class GeoWaveServicesIT extends
-		ServicesTestEnvironment
+@Environments({
+	Environment.SERVICES
+})
+public class GeoWaveServicesIT
 {
 	private static final Logger LOGGER = LoggerFactory.getLogger(GeoWaveServicesIT.class);
 
@@ -67,11 +84,11 @@ public class GeoWaveServicesIT extends
 
 		// initialize the service clients
 		geoserverServiceClient = new GeoserverServiceClient(
-				GEOWAVE_BASE_URL);
+				ServicesTestEnvironment.GEOWAVE_BASE_URL);
 		infoServiceClient = new InfoServiceClient(
-				GEOWAVE_BASE_URL);
+				ServicesTestEnvironment.GEOWAVE_BASE_URL);
 		ingestServiceClient = new IngestServiceClient(
-				GEOWAVE_BASE_URL);
+				ServicesTestEnvironment.GEOWAVE_BASE_URL);
 
 		// *****************************************************
 		// Ingest Service Client Test
@@ -165,8 +182,8 @@ public class GeoWaveServicesIT extends
 		// create the workspace
 		LOGGER.info("Create the test workspace.");
 		assertTrue(
-				"Unable to create workspace '" + TEST_WORKSPACE + "'",
-				geoserverServiceClient.createWorkspace(TEST_WORKSPACE));
+				"Unable to create workspace '" + ServicesTestEnvironment.TEST_WORKSPACE + "'",
+				geoserverServiceClient.createWorkspace(ServicesTestEnvironment.TEST_WORKSPACE));
 
 		// verify that the workspace was created
 		LOGGER.info("Verify that the workspace was created.");
@@ -176,29 +193,29 @@ public class GeoWaveServicesIT extends
 			if (workspaces.getJSONObject(
 					i).getString(
 					"name").equals(
-					TEST_WORKSPACE)) {
+					ServicesTestEnvironment.TEST_WORKSPACE)) {
 				success = true;
 				break;
 			}
 		}
 		assertTrue(
-				"Unable to find workspace '" + TEST_WORKSPACE + "'",
+				"Unable to find workspace '" + ServicesTestEnvironment.TEST_WORKSPACE + "'",
 				success);
 		success = false;
 
 		// upload the default style
 		LOGGER.info("Upload the default style.");
 		assertTrue(
-				"Unable to publish style '" + TEST_STYLE_NAME_NO_DIFFERENCE + "'",
+				"Unable to publish style '" + ServicesTestEnvironment.TEST_STYLE_NAME_NO_DIFFERENCE + "'",
 				geoserverServiceClient.publishStyle(new File[] {
 					new File(
-							TEST_SLD_NO_DIFFERENCE_FILE)
+							ServicesTestEnvironment.TEST_SLD_NO_DIFFERENCE_FILE)
 				}));
 		assertTrue(
-				"Unable to publish style '" + TEST_STYLE_NAME_MINOR_SUBSAMPLE + "'",
+				"Unable to publish style '" + ServicesTestEnvironment.TEST_STYLE_NAME_MINOR_SUBSAMPLE + "'",
 				geoserverServiceClient.publishStyle(new File[] {
 					new File(
-							TEST_SLD_MINOR_SUBSAMPLE_FILE)
+							ServicesTestEnvironment.TEST_SLD_MINOR_SUBSAMPLE_FILE)
 				}));
 
 		// verify that the style was uploaded
@@ -209,33 +226,33 @@ public class GeoWaveServicesIT extends
 			if (styles.getJSONObject(
 					i).getString(
 					"name").equals(
-					TEST_STYLE_NAME_NO_DIFFERENCE)) {
+					ServicesTestEnvironment.TEST_STYLE_NAME_NO_DIFFERENCE)) {
 				success = true;
 				break;
 			}
 		}
 		assertTrue(
-				"Unable to find style '" + TEST_STYLE_NAME_NO_DIFFERENCE + "'",
+				"Unable to find style '" + ServicesTestEnvironment.TEST_STYLE_NAME_NO_DIFFERENCE + "'",
 				success);
 		success = false;
 		for (int i = 0; i < styles.size(); i++) {
 			if (styles.getJSONObject(
 					i).getString(
 					"name").equals(
-					TEST_STYLE_NAME_MINOR_SUBSAMPLE)) {
+					ServicesTestEnvironment.TEST_STYLE_NAME_MINOR_SUBSAMPLE)) {
 				success = true;
 				break;
 			}
 		}
 		assertTrue(
-				"Unable to find style '" + TEST_STYLE_NAME_MINOR_SUBSAMPLE + "'",
+				"Unable to find style '" + ServicesTestEnvironment.TEST_STYLE_NAME_MINOR_SUBSAMPLE + "'",
 				success);
 		success = false;
 		// verify that we can recall the stored style
 		LOGGER.info("Verify that we can recall the stored style.");
-		final String style = IOUtils.toString(geoserverServiceClient.getStyle(TEST_SLD_NO_DIFFERENCE_FILE));
+		final String style = IOUtils.toString(geoserverServiceClient.getStyle(ServicesTestEnvironment.TEST_SLD_NO_DIFFERENCE_FILE));
 		assertTrue(
-				"Unable to get style '" + TEST_STYLE_NAME_NO_DIFFERENCE + "'",
+				"Unable to get style '" + ServicesTestEnvironment.TEST_STYLE_NAME_NO_DIFFERENCE + "'",
 				(style != null) && !style.isEmpty());
 
 		// verify that we can publish a datastore
@@ -250,12 +267,12 @@ public class GeoWaveServicesIT extends
 						null,
 						null,
 						null,
-						TEST_WORKSPACE));
+						ServicesTestEnvironment.TEST_WORKSPACE));
 
 		// verify that the datastore was published
 		LOGGER.info("Verify that the datastore was published.");
 		final JSONArray datastores = geoserverServiceClient.getDatastores(
-				TEST_WORKSPACE).getJSONArray(
+				ServicesTestEnvironment.TEST_WORKSPACE).getJSONArray(
 				"dataStores");
 
 		JSONObject dsInfo = null;
@@ -276,12 +293,34 @@ public class GeoWaveServicesIT extends
 
 		if (dsInfo != null) {
 			final Map<String, String> options = dataStoreOptions.getFactoryOptionsAsMap();
+			List<ConfigOption> configOptions = Arrays.asList(ConfigUtils.createConfigOptionsFromJCommander(dataStoreOptions));
+			Collection<String> nonPasswordRequiredFields = Collections2.transform(
+					Collections2.filter(
+							configOptions,
+							new Predicate<ConfigOption>() {
+
+								@Override
+								public boolean apply(
+										ConfigOption input ) {
+									return !input.isPassword() && !input.isOptional();
+								}
+							}),
+					new Function<ConfigOption, String>() {
+
+						@Override
+						public String apply(
+								ConfigOption input ) {
+							return input.getName();
+						}
+					});
 			for (final Entry<String, String> entry : options.entrySet()) {
-				assertTrue(
-						"Unable to get datastore option '" + entry.getKey() + "'",
-						dsInfo.getString(
-								entry.getKey()).equals(
-								entry.getValue()));
+				if (nonPasswordRequiredFields.contains(entry.getKey())) {
+					assertTrue(
+							"Unable to get datastore option '" + entry.getKey() + "'",
+							dsInfo.getString(
+									entry.getKey()).equals(
+									entry.getValue()));
+				}
 			}
 		}
 
@@ -289,7 +328,7 @@ public class GeoWaveServicesIT extends
 		LOGGER.info("Verify that we can recall the datastore.");
 		final JSONObject datastore = geoserverServiceClient.getDatastore(
 				TestUtils.TEST_NAMESPACE,
-				TEST_WORKSPACE);
+				ServicesTestEnvironment.TEST_WORKSPACE);
 		assertTrue(
 				"Unable to publish datastore",
 				datastore.getJSONObject(
@@ -303,9 +342,9 @@ public class GeoWaveServicesIT extends
 				"Unable to publish layer '" + GpxUtils.GPX_WAYPOINT_FEATURE + "'",
 				geoserverServiceClient.publishLayer(
 						TestUtils.TEST_NAMESPACE,
-						TEST_STYLE_NAME_NO_DIFFERENCE,
+						ServicesTestEnvironment.TEST_STYLE_NAME_NO_DIFFERENCE,
 						GpxUtils.GPX_WAYPOINT_FEATURE,
-						TEST_WORKSPACE));
+						ServicesTestEnvironment.TEST_WORKSPACE));
 
 		// verify that the layer was published
 		LOGGER.info("Verify that the layer was published.");
@@ -346,16 +385,16 @@ public class GeoWaveServicesIT extends
 				"Unable to delete datastore",
 				geoserverServiceClient.deleteDatastore(
 						TestUtils.TEST_NAMESPACE,
-						TEST_WORKSPACE));
+						ServicesTestEnvironment.TEST_WORKSPACE));
 		assertTrue(
-				"Unable to delete style '" + TEST_STYLE_NAME_NO_DIFFERENCE + "'",
-				geoserverServiceClient.deleteStyle(TEST_STYLE_NAME_NO_DIFFERENCE));
+				"Unable to delete style '" + ServicesTestEnvironment.TEST_STYLE_NAME_NO_DIFFERENCE + "'",
+				geoserverServiceClient.deleteStyle(ServicesTestEnvironment.TEST_STYLE_NAME_NO_DIFFERENCE));
 
 		assertTrue(
-				"Unable to delete style '" + TEST_STYLE_NAME_MINOR_SUBSAMPLE + "'",
-				geoserverServiceClient.deleteStyle(TEST_STYLE_NAME_MINOR_SUBSAMPLE));
+				"Unable to delete style '" + ServicesTestEnvironment.TEST_STYLE_NAME_MINOR_SUBSAMPLE + "'",
+				geoserverServiceClient.deleteStyle(ServicesTestEnvironment.TEST_STYLE_NAME_MINOR_SUBSAMPLE));
 		assertTrue(
 				"Unable to delete workspace",
-				geoserverServiceClient.deleteWorkspace(TEST_WORKSPACE));
+				geoserverServiceClient.deleteWorkspace(ServicesTestEnvironment.TEST_WORKSPACE));
 	}
 }

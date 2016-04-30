@@ -39,10 +39,15 @@ import mil.nga.giat.geowave.examples.ingest.SimpleIngest;
 import mil.nga.giat.geowave.service.client.GeoserverServiceClient;
 import mil.nga.giat.geowave.test.GeoWaveITRunner;
 import mil.nga.giat.geowave.test.TestUtils;
+import mil.nga.giat.geowave.test.annotation.Environments;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore;
+import mil.nga.giat.geowave.test.annotation.Environments.Environment;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 
 @RunWith(GeoWaveITRunner.class)
+@Environments({
+	Environment.SERVICES
+})
 public class GeoWaveIngestGeoserverIT
 {
 

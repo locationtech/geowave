@@ -74,7 +74,7 @@ public class InfoServiceImpl implements
 	@Override
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/{storeName}/indices")
+	@Path("/indices/{storeName}")
 	public Response getIndices(
 			@PathParam("storeName")
 			final String storeName ) {
@@ -126,7 +126,7 @@ public class InfoServiceImpl implements
 	@Override
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/{storeName}/adapters")
+	@Path("/adapters/{storeName}")
 	public Response getAdapters(
 			@PathParam("storeName")
 			final String storeName ) {
