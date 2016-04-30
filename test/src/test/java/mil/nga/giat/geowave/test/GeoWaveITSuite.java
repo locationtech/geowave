@@ -25,7 +25,6 @@ import mil.nga.giat.geowave.test.store.DataStatisticsStoreIT;
 @SuiteClasses({
 	GeoWaveBasicIT.class,
 	BasicMapReduceIT.class,
-	HBaseTearDownIT.class,
 	GeoWaveRasterIT.class,
 	BulkIngestInputGenerationIT.class,
 	KDERasterResizeIT.class,

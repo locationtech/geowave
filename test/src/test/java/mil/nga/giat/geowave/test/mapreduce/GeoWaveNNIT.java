@@ -85,6 +85,7 @@ public class GeoWaveNNIT
 	@Test
 	public void testNN()
 			throws Exception {
+		TestUtils.deleteAll(dataStorePluginOptions);
 		dataGenerator.setIncludePolygons(false);
 		ingest(dataStorePluginOptions.createDataStore());
 		runNN(new SpatialQuery(
