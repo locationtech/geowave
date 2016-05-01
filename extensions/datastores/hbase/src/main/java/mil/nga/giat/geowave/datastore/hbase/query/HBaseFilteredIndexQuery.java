@@ -14,8 +14,6 @@ import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.filter.Filter;
 import org.apache.hadoop.hbase.filter.FilterList;
-import org.apache.hadoop.hbase.filter.MultiRowRangeFilter;
-import org.apache.hadoop.hbase.filter.MultiRowRangeFilter.RowRange;
 import org.apache.log4j.Logger;
 
 import com.google.common.collect.Iterators;
@@ -227,78 +225,6 @@ public abstract class HBaseFilteredIndexQuery extends
 		}
 
 		return scanners;
-	}
-
-	protected Scan getScanner(
-			final Integer limit,
-			final List<Filter> distributableFilters,
-			final CloseableIterator<DataAdapter<?>> adapters ) {
-
-		final List<ByteArrayRange> ranges = getRanges();
-		final Scan scanner = new Scan();
-
-		if ((ranges != null) && (ranges.size() == 0)) {
-
-			final ByteArrayRange range = ranges.get(0);
-
-			scanner.setStartRow(range.getStart().getBytes());
-			if (!range.isSingleValue()) {
-				scanner.setStopRow(HBaseUtils.getNextPrefix(range.getEnd().getBytes()));
-			}
-		}
-		else if (ranges != null) {
-			ByteArrayId minStart = null;
-			ByteArrayId maxEnd = null;
-			final List<RowRange> rowRanges = new ArrayList<RowRange>();
-			for (final ByteArrayRange range : ranges) {
-				if ((minStart == null) || (range.getStart().compareTo(
-						minStart) < 0)) {
-					minStart = range.getStart();
-				}
-				if ((maxEnd == null) || (range.getEnd().compareTo(
-						maxEnd) > 0)) {
-					maxEnd = range.getEnd();
-				}
-				rowRanges.add(new RowRange(
-						range.getStart().getBytes(),
-						true,
-						HBaseUtils.getNextPrefix(range.getEnd().getBytes()),
-						false));
-			}
-			scanner.setStartRow(minStart.getBytes());
-			scanner.setStopRow(HBaseUtils.getNextPrefix(maxEnd.getBytes()));
-			try {
-				final MultiRowRangeFilter filter = new MultiRowRangeFilter(
-						rowRanges.subList(
-								0,
-								15));
-				scanner.setFilter(filter);
-			}
-			catch (final IOException e) {
-				LOGGER.error("Failed to instantiate row range filter. " + e);
-				e.printStackTrace();
-			}
-		}
-
-		if ((limit != null) && (limit > 0) && (limit < scanner.getBatch())) {
-			scanner.setBatch(limit);
-		}
-
-		// a subset of fieldIds is being requested
-		if ((fieldIds != null) && !fieldIds.isEmpty()) {
-			// configure scanner to fetch only the fieldIds specified
-			handleSubsetOfFieldIds(
-					scanner,
-					adapters);
-		}
-
-		if ((adapterIds != null) && !adapterIds.isEmpty()) {
-			for (final ByteArrayId adapterId : adapterIds) {
-				scanner.addFamily(adapterId.getBytes());
-			}
-		}
-
-		return scanner;
 	}
 
 	private void handleSubsetOfFieldIds(
