@@ -143,6 +143,18 @@ public class AccumuloStoreTestEnvironment implements
 		return zookeeper;
 	}
 
+	public String getAccumuloInstance() {
+		return accumuloInstance;
+	}
+
+	public String getAccumuloUser() {
+		return accumuloUser;
+	}
+
+	public String getAccumuloPassword() {
+		return accumuloPassword;
+	}
+
 	@Override
 	public TestEnvironment[] getDependentEnvironments() {
 		// TODO: create zookeeper test environment as dependency

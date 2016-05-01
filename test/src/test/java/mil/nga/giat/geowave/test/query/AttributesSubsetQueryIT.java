@@ -111,18 +111,36 @@ public class AttributesSubsetQueryIT
 		final QueryOptions queryOptions = new QueryOptions(
 				dataAdapter,
 				TestUtils.DEFAULT_SPATIAL_INDEX);
-		queryOptions.setFieldIds(Arrays.asList(CITY_ATTRIBUTE));
+		queryOptions.setFieldIds(
+				Arrays.asList(CITY_ATTRIBUTE),
+				dataAdapter);
 
-		final CloseableIterator<SimpleFeature> results = dataStore.createDataStore().query(
+		CloseableIterator<SimpleFeature> results = dataStore.createDataStore().query(
 				queryOptions,
 				spatialQuery);
 
 		// query expects to match 3 cities from Texas, which should each contain
 		// non-null values for a subset of attributes (city) and nulls for the
 		// rest
-		final List<String> expectedAttributes = Arrays.asList(
+		List<String> expectedAttributes = Arrays.asList(
 				CITY_ATTRIBUTE,
 				GEOMETRY_ATTRIBUTE); // always included
+		verifyResults(
+				results,
+				3,
+				expectedAttributes);
+		queryOptions.setFieldIds(
+				Arrays.asList(GEOMETRY_ATTRIBUTE),
+				dataAdapter);
+		// now try just geometry
+		results = dataStore.createDataStore().query(
+				queryOptions,
+				spatialQuery);
+
+		// query expects to match 3 cities from Texas, which should each contain
+		// non-null values for geometry and null values for all other attributes
+		expectedAttributes = Arrays.asList(GEOMETRY_ATTRIBUTE); // always
+																// included
 		verifyResults(
 				results,
 				3,

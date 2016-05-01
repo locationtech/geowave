@@ -20,12 +20,14 @@ import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.memory.DataStoreUtils;
 import mil.nga.giat.geowave.core.store.query.BasicQuery;
 
+import org.apache.log4j.Logger;
 import org.opengis.feature.simple.SimpleFeature;
 
 public class ChooseBestMatchIndexQueryStrategy implements
 		IndexQueryStrategySPI
 {
 	public static final String NAME = "Best Match";
+	private final static Logger LOGGER = Logger.getLogger(ChooseBestMatchIndexQueryStrategy.class);
 
 	@Override
 	public String toString() {
@@ -68,8 +70,9 @@ public class ChooseBestMatchIndexQueryStrategy implements
 					nextIdx = (PrimaryIndex) indices[i++];
 					if (nextIdx.getIndexStrategy().getOrderedDimensionDefinitions().length == 0) continue;
 					final List<MultiDimensionalNumericData> constraints = query.getIndexConstraints(nextIdx.getIndexStrategy());
-					// no stats, no data
-					if (!stats.containsKey(RowRangeHistogramStatistics.composeId(nextIdx.getId()))) continue;
+					if (!stats.containsKey(RowRangeHistogramStatistics.composeId(nextIdx.getId()))) {
+						LOGGER.warn("Best Match Heuristic requires statistic RowRangeHistogramStatistics for each index to properly choose an index.");
+					}
 
 					if (isFullTableScan(constraints)) {
 						// keep this is as a default in case all indices

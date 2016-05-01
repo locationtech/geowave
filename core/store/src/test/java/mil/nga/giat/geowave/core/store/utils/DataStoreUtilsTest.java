@@ -11,7 +11,6 @@ import mil.nga.giat.geowave.core.store.DataStoreEntryInfo;
 import mil.nga.giat.geowave.core.store.EntryVisibilityHandler;
 import mil.nga.giat.geowave.core.store.IngestCallback;
 import mil.nga.giat.geowave.core.store.adapter.AbstractDataAdapter;
-import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.MockComponents;
 import mil.nga.giat.geowave.core.store.adapter.NativeFieldHandler.RowBuilder;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
@@ -21,6 +20,7 @@ import mil.nga.giat.geowave.core.store.data.field.FieldReader;
 import mil.nga.giat.geowave.core.store.data.field.FieldVisibilityHandler;
 import mil.nga.giat.geowave.core.store.data.field.FieldWriter;
 import mil.nga.giat.geowave.core.store.data.visibility.GlobalVisibilityHandler;
+import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.memory.DataStoreUtils;
 import mil.nga.giat.geowave.core.store.memory.EntryRow;
@@ -33,7 +33,7 @@ public class DataStoreUtilsTest
 	public void testEntryToRows() {
 		final AtomicInteger count = new AtomicInteger(
 				0);
-		List<EntryRow> entryRows = DataStoreUtils.entryToRows(
+		final List<EntryRow> entryRows = DataStoreUtils.entryToRows(
 				new MockComponents.MockAbstractDataAdapter(),
 				new PrimaryIndex(
 						new MockComponents.MockIndexStrategy(),
@@ -44,15 +44,15 @@ public class DataStoreUtilsTest
 
 					@Override
 					public void entryIngested(
-							DataStoreEntryInfo entryInfo,
-							Integer entry ) {
+							final DataStoreEntryInfo entryInfo,
+							final Integer entry ) {
 						count.incrementAndGet();
 					}
 				},
 				new VisibilityWriter<Integer>() {
 					@Override
 					public FieldVisibilityHandler<Integer, Object> getFieldVisibilityHandler(
-							ByteArrayId fieldId ) {
+							final ByteArrayId fieldId ) {
 						return new GlobalVisibilityHandler(
 								"aaa&bbb");
 					}
@@ -143,26 +143,26 @@ public class DataStoreUtilsTest
 
 		@Override
 		public boolean isSupported(
-				String entry ) {
+				final String entry ) {
 			return true;
 		}
 
 		@Override
 		public ByteArrayId getDataId(
-				String entry ) {
+				final String entry ) {
 			return new ByteArrayId(
 					entry.getBytes());
 		}
 
 		@Override
 		public FieldReader<Object> getReader(
-				ByteArrayId fieldId ) {
+				final ByteArrayId fieldId ) {
 			return null;
 		}
 
 		@Override
 		public FieldWriter<String, Object> getWriter(
-				ByteArrayId fieldId ) {
+				final ByteArrayId fieldId ) {
 			return null;
 		}
 
@@ -173,18 +173,32 @@ public class DataStoreUtilsTest
 
 		@Override
 		public DataStatistics<String> createDataStatistics(
-				ByteArrayId statisticsId ) {
+				final ByteArrayId statisticsId ) {
 			return null;
 		}
 
 		@Override
 		public EntryVisibilityHandler<String> getVisibilityHandler(
-				ByteArrayId statisticsId ) {
+				final ByteArrayId statisticsId ) {
 			return null;
 		}
 
 		@Override
 		protected RowBuilder<String, Object> newBuilder() {
+			return null;
+		}
+
+		@Override
+		public int getPositionOfOrderedField(
+				final CommonIndexModel model,
+				final ByteArrayId fieldId ) {
+			return -1;
+		}
+
+		@Override
+		public ByteArrayId getFieldIdForPosition(
+				final CommonIndexModel model,
+				final int position ) {
 			return null;
 		}
 	}

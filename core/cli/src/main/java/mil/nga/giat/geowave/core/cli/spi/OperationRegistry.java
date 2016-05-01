@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.ServiceLoader;
 
-import mil.nga.giat.geowave.core.cli.CLIOperationProviderSpi;
 import mil.nga.giat.geowave.core.cli.api.Operation;
 
 /**
@@ -21,8 +20,25 @@ public class OperationRegistry
 
 	private Map<Class<?>, OperationEntry> operationMapByClass = null;
 
+	/**
+	 * Singleton pattern allows us to create a version that can be used by the
+	 * whole application.
+	 */
+	private static class OperationRegistryHolder
+	{
+		public static final OperationRegistry instance = new OperationRegistry();
+	}
+
+	/**
+	 * But also allow the user to create their own if they want it to be
+	 * sanitized.
+	 */
 	public OperationRegistry() {
 		init();
+	}
+
+	public static OperationRegistry getInstance() {
+		return OperationRegistryHolder.instance;
 	}
 
 	public OperationRegistry(

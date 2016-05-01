@@ -28,6 +28,7 @@ import mil.nga.giat.geowave.core.cli.parser.CommandLineOperationParams;
 import mil.nga.giat.geowave.core.cli.parser.OperationParser;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
+import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.index.Index;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
@@ -76,26 +77,19 @@ public class VectorMRExportJobRunner extends
 				conf);
 		final QueryOptions options = new QueryOptions();
 		final List<String> adapterIds = mrOptions.getAdapterIds();
+		final AdapterStore adapterStore = storeOptions.createAdapterStore();
 		if ((adapterIds != null) && !adapterIds.isEmpty()) {
-			options.setAdapterIds(Lists.transform(
+			options.setAdapters(Lists.transform(
 					adapterIds,
-					new Function<String, ByteArrayId>() {
+					new Function<String, DataAdapter<?>>() {
 
 						@Override
-						public ByteArrayId apply(
+						public DataAdapter<?> apply(
 								final String input ) {
-							return new ByteArrayId(
-									input);
+							return (DataAdapter<?>) adapterStore.getAdapter(new ByteArrayId(
+									input));
 						}
 					}));
-			try (CloseableIterator<DataAdapter<?>> it = options.getAdapters(storeOptions.createAdapterStore())) {
-				while (it.hasNext()) {
-					final DataAdapter<?> adapter = it.next();
-					JobContextAdapterStore.addDataAdapter(
-							conf,
-							adapter);
-				}
-			}
 		}
 		conf.setInt(
 				BATCH_SIZE_KEY,

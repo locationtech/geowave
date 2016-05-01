@@ -73,8 +73,10 @@ public class NNJobRunner extends
 				new ParameterEnum[] {
 					Partition.PARTITIONER_CLASS,
 					Partition.SECONDARY_PARTITIONER_CLASS,
-					Partition.PARTITION_DISTANCE,
+					Partition.MAX_DISTANCE,
 					Partition.MAX_MEMBER_SELECTION,
+					Partition.GEOMETRIC_DISTANCE_UNIT,
+					Partition.DISTANCE_THRESHOLDS,
 					CommonParameters.Common.DISTANCE_FUNCTION_CLASS
 				},
 				config,
@@ -92,9 +94,11 @@ public class NNJobRunner extends
 		params.addAll(super.getParameters());
 		params.addAll(Arrays.asList(new ParameterEnum<?>[] {
 			Partition.PARTITIONER_CLASS,
-			Partition.PARTITION_DISTANCE,
+			Partition.MAX_DISTANCE,
 			Partition.SECONDARY_PARTITIONER_CLASS,
 			Partition.MAX_MEMBER_SELECTION,
+			Partition.GEOMETRIC_DISTANCE_UNIT,
+			Partition.DISTANCE_THRESHOLDS,
 			CommonParameters.Common.DISTANCE_FUNCTION_CLASS
 		}));
 		return params;

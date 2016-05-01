@@ -1,8 +1,8 @@
 package mil.nga.giat.geowave.core.store.adapter;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.store.data.CommonIndexedPersistenceEncoding;
 import mil.nga.giat.geowave.core.store.data.PersistentDataset;
+import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 
 /**
@@ -12,10 +12,8 @@ import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
  * index and is used when writing an entry, prior to its existence in an index.
  */
 public class AdapterPersistenceEncoding extends
-		CommonIndexedPersistenceEncoding
+		AbstractAdapterPersistenceEncoding
 {
-	private final PersistentDataset<Object> adapterExtendedData;
-
 	public AdapterPersistenceEncoding(
 			final ByteArrayId adapterId,
 			final ByteArrayId dataId,
@@ -27,21 +25,18 @@ public class AdapterPersistenceEncoding extends
 				null,
 				0,
 				commonData,
-				new PersistentDataset<byte[]>()); // all data is identified by
-													// the adapter, there is
-													// inherently no unknown
-													// data elements
-		this.adapterExtendedData = adapterExtendedData;
+				new PersistentDataset<byte[]>(),
+				adapterExtendedData); // all data is identified by
+										// the adapter, there is
+										// inherently no unknown
+										// data elements
 	}
 
-	/**
-	 * This returns a representation of the custom fields for the data adapter
-	 * 
-	 * @return the extended data beyond the common index fields that are
-	 *         provided by the adapter
-	 */
-	public PersistentDataset<Object> getAdapterExtendedData() {
-		return adapterExtendedData;
+	@Override
+	public void convertUnknownValues(
+			final DataAdapter<?> adapter,
+			final CommonIndexModel model ) {
+		// inherently no unknown data, nothing to do
 	}
 
 }

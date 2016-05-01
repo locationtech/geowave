@@ -62,7 +62,7 @@ public class NNMapReduceTest
 		mapDriver.getConfiguration().set(
 				GeoWaveConfiguratorBase.enumToConfKey(
 						NNMapReduce.class,
-						ClusteringParameters.Clustering.DISTANCE_THRESHOLDS),
+						PartitionParameters.Partition.DISTANCE_THRESHOLDS),
 				"0.0002,0.0002");
 
 		reduceDriver.getConfiguration().setClass(
@@ -74,7 +74,7 @@ public class NNMapReduceTest
 		reduceDriver.getConfiguration().setDouble(
 				GeoWaveConfiguratorBase.enumToConfKey(
 						NNMapReduce.class,
-						PartitionParameters.Partition.PARTITION_DISTANCE),
+						PartitionParameters.Partition.MAX_DISTANCE),
 				0.001);
 
 		ftype = AnalyticFeature.createGeometryFeatureAdapter(

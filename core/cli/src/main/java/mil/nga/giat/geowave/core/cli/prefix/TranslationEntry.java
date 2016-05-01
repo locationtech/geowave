@@ -75,6 +75,16 @@ public class TranslationEntry
 		return false;
 	}
 
+	public boolean isHidden() {
+		if (getParam().getParameter() != null) {
+			return getParam().getParameter().hidden();
+		}
+		else if (getParam().getWrappedParameter() != null) {
+			return getParam().getWrappedParameter().hidden();
+		}
+		return false;
+	}
+
 	public boolean isRequired() {
 		if (getParam().getParameter() != null) {
 			return getParam().getParameter().required();

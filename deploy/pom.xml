@@ -83,6 +83,16 @@
 
 	<profiles>
 		<profile>
+			<id>geowave-tools-singlejar</id>
+			<dependencies>
+				<dependency>
+					<groupId>mil.nga.giat</groupId>
+					<artifactId>geowave-cli-osm</artifactId>
+					<version>${project.version}</version>
+				</dependency>
+			</dependencies>
+		</profile>
+		<profile>
 			<id>accumulo-container</id>
 			<dependencyManagement>
 				<dependencies>

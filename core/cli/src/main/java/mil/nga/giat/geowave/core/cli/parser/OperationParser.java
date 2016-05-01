@@ -25,7 +25,7 @@ public class OperationParser
 
 	public OperationParser() {
 		this(
-				new OperationRegistry());
+				OperationRegistry.getInstance());
 	}
 
 	/**
@@ -101,8 +101,13 @@ public class OperationParser
 			params.getCommander().parse(
 					params.getArgs());
 
-			if (!prepare(params)) {
-				return;
+			// Prepare stage:
+			for (Operation operation : params.getOperationMap().values()) {
+				// Do not continue
+				if (!operation.prepare(params)) {
+					params.setSuccessCode(1);
+					return;
+				}
 			}
 
 			// Parse with validation
@@ -124,7 +129,7 @@ public class OperationParser
 		}
 		catch (ParameterException p) {
 			params.setSuccessCode(-1);
-			params.setSuccessMessage(p.getMessage());
+			params.setSuccessMessage("Error: " + p.getMessage());
 			params.setSuccessException(p);
 		}
 
@@ -157,30 +162,11 @@ public class OperationParser
 		}
 		catch (ParameterException p) {
 			params.setSuccessCode(-1);
-			params.setSuccessMessage(p.getMessage());
+			params.setSuccessMessage("Error: " + p.getMessage());
 			params.setSuccessException(p);
 		}
 
 		return params;
-	}
-
-	/**
-	 * Build an operation map and prepare each operation.
-	 * 
-	 * @param params
-	 * @return whether we prepared successfully.
-	 */
-	private boolean prepare(
-			CommandLineOperationParams params ) {
-		// Prepare stage:
-		for (Operation operation : params.getOperationMap().values()) {
-			// Do not continue
-			if (!operation.prepare(params)) {
-				return false;
-			}
-		}
-
-		return true;
 	}
 
 	public Set<Object> getAdditionalObjects() {

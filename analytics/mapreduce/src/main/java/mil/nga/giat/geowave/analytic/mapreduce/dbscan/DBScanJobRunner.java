@@ -174,6 +174,8 @@ public class DBScanJobRunner extends
 					HullParameters.Hull.DATA_TYPE_ID,
 					HullParameters.Hull.DATA_NAMESPACE_URI,
 					ClusteringParameters.Clustering.MINIMUM_SIZE,
+					Partition.GEOMETRIC_DISTANCE_UNIT,
+					Partition.DISTANCE_THRESHOLDS,
 					Partition.MAX_MEMBER_SELECTION
 				},
 				config,
@@ -190,15 +192,15 @@ public class DBScanJobRunner extends
 		final Collection<ParameterEnum<?>> params = super.getParameters();
 		params.addAll(Arrays.asList(new ParameterEnum<?>[] {
 			Partition.PARTITIONER_CLASS,
-			Partition.PARTITION_DISTANCE,
+			Partition.MAX_DISTANCE,
 			Partition.MAX_MEMBER_SELECTION,
 			Global.BATCH_ID,
 			Hull.HULL_BUILDER,
 			Hull.DATA_TYPE_ID,
 			Hull.PROJECTION_CLASS,
 			Clustering.MINIMUM_SIZE,
-			Clustering.GEOMETRIC_DISTANCE_UNIT,
-			Clustering.DISTANCE_THRESHOLDS
+			Partition.GEOMETRIC_DISTANCE_UNIT,
+			Partition.DISTANCE_THRESHOLDS
 		}));
 		return params;
 	}

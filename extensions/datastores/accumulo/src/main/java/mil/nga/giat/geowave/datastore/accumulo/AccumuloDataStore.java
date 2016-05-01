@@ -85,7 +85,6 @@ import mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloOptions
 import mil.nga.giat.geowave.datastore.accumulo.query.AccumuloConstraintsQuery;
 import mil.nga.giat.geowave.datastore.accumulo.query.AccumuloRowIdsQuery;
 import mil.nga.giat.geowave.datastore.accumulo.query.AccumuloRowPrefixQuery;
-import mil.nga.giat.geowave.datastore.accumulo.query.SharedVisibilitySplittingIterator;
 import mil.nga.giat.geowave.datastore.accumulo.query.SingleEntryFilterIterator;
 import mil.nga.giat.geowave.datastore.accumulo.util.AccumuloUtils;
 import mil.nga.giat.geowave.datastore.accumulo.util.EntryIteratorWrapper;
@@ -206,6 +205,8 @@ public class AccumuloDataStore implements
 					statisticsStore,
 					secondaryIndexDataStore,
 					i == 0);
+
+			callbackManager.setPersistStats(accumuloOptions.isPersistDataStatistics());
 
 			final List<IngestCallback<T>> callbacks = new ArrayList<IngestCallback<T>>();
 
@@ -397,8 +398,7 @@ public class AccumuloDataStore implements
 					tempAdapterStore,
 					indexMappingStore,
 					indexStore)) {
-				final List<ByteArrayId> adapterIdsToQuery = new ArrayList<ByteArrayId>();
-
+				final List<ByteArrayId> adapterIdsToQuery = new ArrayList<>();
 				for (final DataAdapter<Object> adapter : indexAdapterPair.getRight()) {
 					if (sanitizedQuery instanceof RowIdQuery) {
 						final AccumuloRowIdsQuery<Object> q = new AccumuloRowIdsQuery<Object>(
@@ -448,7 +448,6 @@ public class AccumuloDataStore implements
 					}
 					adapterIdsToQuery.add(adapter.getAdapterId());
 				}
-
 				// supports querying multiple adapters in a single index
 				// in one query instance (one scanner) for efficiency
 				if (adapterIdsToQuery.size() > 0) {
@@ -460,8 +459,8 @@ public class AccumuloDataStore implements
 							sanitizedQuery,
 							filter,
 							sanitizedQueryOptions.getScanCallback(),
-							queryOptions.getAggregation(),
-							queryOptions.getFieldIds(),
+							sanitizedQueryOptions.getAggregation(),
+							sanitizedQueryOptions.getFieldIdsAdapterPair(),
 							sanitizedQueryOptions.getAuthorizations());
 
 					results.add(accumuloQuery.query(
@@ -469,7 +468,6 @@ public class AccumuloDataStore implements
 							tempAdapterStore,
 							sanitizedQueryOptions.getMaxResolutionSubsamplingPerDimension(),
 							sanitizedQueryOptions.getLimit()));
-
 				}
 			}
 
@@ -583,7 +581,7 @@ public class AccumuloDataStore implements
 					index,
 					tempAdapterStore,
 					dataIds,
-					adapter.getAdapterId(),
+					adapter,
 					callback,
 					dedupeFilter,
 					authorizations,
@@ -597,7 +595,7 @@ public class AccumuloDataStore implements
 			final PrimaryIndex index,
 			final AdapterStore adapterStore,
 			final List<ByteArrayId> dataIds,
-			final ByteArrayId adapterId,
+			final DataAdapter<?> adapter,
 			final ScanCallback<Object> scanCallback,
 			final DedupeFilter dedupeFilter,
 			final String[] authorizations,
@@ -610,12 +608,7 @@ public class AccumuloDataStore implements
 					authorizations);
 
 			scanner.fetchColumnFamily(new Text(
-					adapterId.getBytes()));
-
-			scanner.addScanIterator(new IteratorSetting(
-					SharedVisibilitySplittingIterator.ITERATOR_PRIORITY,
-					SharedVisibilitySplittingIterator.ITERATOR_NAME,
-					SharedVisibilitySplittingIterator.class));
+					adapter.getAdapterId().getBytes()));
 
 			final IteratorSetting rowIteratorSettings = new IteratorSetting(
 					SingleEntryFilterIterator.WHOLE_ROW_ITERATOR_PRIORITY,
@@ -630,7 +623,7 @@ public class AccumuloDataStore implements
 
 			filterIteratorSettings.addOption(
 					SingleEntryFilterIterator.ADAPTER_ID,
-					ByteArrayUtils.byteArrayToString(adapterId.getBytes()));
+					ByteArrayUtils.byteArrayToString(adapter.getAdapterId().getBytes()));
 
 			filterIteratorSettings.addOption(
 					SingleEntryFilterIterator.DATA_IDS,
@@ -767,6 +760,8 @@ public class AccumuloDataStore implements
 							secondaryIndexDataStore,
 							queriedAdapters.add(adapter.getAdapterId()));
 
+					callbackCache.setPersistStats(accumuloOptions.isPersistDataStatistics());
+
 					if (query instanceof EverythingQuery) {
 						deleteEntries(
 								adapter,
@@ -859,7 +854,7 @@ public class AccumuloDataStore implements
 								null,
 								callback,
 								null,
-								queryOptions.getFieldIds(),
+								queryOptions.getFieldIdsAdapterPair(),
 								queryOptions.getAuthorizations()).query(
 								accumuloOperations,
 								adapterStore,

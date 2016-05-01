@@ -2,14 +2,12 @@ package mil.nga.giat.geowave.datastore.hbase.metadata;
 
 import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
 import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
-import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStoreFactorySpi;
 import mil.nga.giat.geowave.datastore.hbase.AbstractHBaseStoreFactory;
 import mil.nga.giat.geowave.datastore.hbase.operations.config.HBaseOptions;
 import mil.nga.giat.geowave.datastore.hbase.operations.config.HBaseRequiredOptions;
 
 public class HBaseAdapterIndexMappingStoreFactory extends
-		AbstractHBaseStoreFactory<AdapterIndexMappingStore> implements
-		AdapterIndexMappingStoreFactorySpi
+		AbstractHBaseStoreFactory<AdapterIndexMappingStore>
 {
 
 	@Override

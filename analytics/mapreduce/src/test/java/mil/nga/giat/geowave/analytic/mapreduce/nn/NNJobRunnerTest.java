@@ -80,7 +80,7 @@ public class NNJobRunnerTest
 				Assert.assertEquals(
 						0.4,
 						configWrapper.getDouble(
-								Partition.PARTITION_DISTANCE,
+								Partition.MAX_DISTANCE,
 								0.0),
 						0.001);
 
@@ -190,7 +190,7 @@ public class NNJobRunnerTest
 				OrthodromicDistancePartitioner.class);
 
 		runTimeProperties.store(
-				Partition.PARTITION_DISTANCE,
+				Partition.MAX_DISTANCE,
 				Double.valueOf(0.4));
 
 		runTimeProperties.store(

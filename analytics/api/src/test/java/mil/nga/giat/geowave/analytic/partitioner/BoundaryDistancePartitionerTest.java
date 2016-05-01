@@ -16,6 +16,7 @@ import mil.nga.giat.geowave.analytic.param.ClusteringParameters.Clustering;
 import mil.nga.giat.geowave.analytic.param.CommonParameters;
 import mil.nga.giat.geowave.analytic.param.ExtractParameters;
 import mil.nga.giat.geowave.analytic.param.GlobalParameters;
+import mil.nga.giat.geowave.analytic.param.PartitionParameters;
 import mil.nga.giat.geowave.analytic.partitioner.Partitioner.PartitionData;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 
@@ -83,7 +84,7 @@ public class BoundaryDistancePartitionerTest
 		final PropertyManagement propertyManagement = new PropertyManagement();
 
 		propertyManagement.store(
-				Clustering.DISTANCE_THRESHOLDS,
+				PartitionParameters.Partition.DISTANCE_THRESHOLDS,
 				"10000");
 
 		propertyManagement.store(
@@ -97,7 +98,7 @@ public class BoundaryDistancePartitionerTest
 				GlobalParameters.Global.CRS_ID,
 				"EPSG:4326");
 		propertyManagement.store(
-				ClusteringParameters.Clustering.GEOMETRIC_DISTANCE_UNIT,
+				PartitionParameters.Partition.GEOMETRIC_DISTANCE_UNIT,
 				"m");
 
 		final BoundaryPartitioner partitioner = new BoundaryPartitioner();

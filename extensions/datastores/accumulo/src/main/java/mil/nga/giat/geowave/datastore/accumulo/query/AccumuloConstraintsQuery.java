@@ -53,7 +53,7 @@ public class AccumuloConstraintsQuery extends
 			final DedupeFilter clientDedupeFilter,
 			final ScanCallback<?> scanCallback,
 			final Pair<DataAdapter<?>, Aggregation<?, ?, ?>> aggregation,
-			final List<String> fieldIds,
+			final Pair<List<String>, DataAdapter<?>> fieldIdsAdapterPair,
 			final String[] authorizations ) {
 		this(
 				adapterIds,
@@ -63,7 +63,7 @@ public class AccumuloConstraintsQuery extends
 				clientDedupeFilter,
 				scanCallback,
 				aggregation,
-				fieldIds,
+				fieldIdsAdapterPair,
 				authorizations);
 	}
 
@@ -75,13 +75,13 @@ public class AccumuloConstraintsQuery extends
 			final DedupeFilter clientDedupeFilter,
 			final ScanCallback<?> scanCallback,
 			final Pair<DataAdapter<?>, Aggregation<?, ?, ?>> aggregation,
-			final List<String> fieldIds,
+			final Pair<List<String>, DataAdapter<?>> fieldIdsAdapterPair,
 			final String[] authorizations ) {
 		super(
 				adapterIds,
 				index,
 				scanCallback,
-				fieldIds,
+				fieldIdsAdapterPair,
 				authorizations);
 		this.constraints = constraints;
 		this.aggregation = aggregation;
@@ -113,20 +113,7 @@ public class AccumuloConstraintsQuery extends
 	@Override
 	protected void addScanIteratorSettings(
 			final ScannerBase scanner ) {
-
-		scanner.addScanIterator(new IteratorSetting(
-				SharedVisibilitySplittingIterator.ITERATOR_PRIORITY,
-				SharedVisibilitySplittingIterator.ITERATOR_NAME,
-				SharedVisibilitySplittingIterator.class));
-
-		if ((fieldIds != null) && (fieldIds.size() > 0)) {
-			final IteratorSetting iteratorSetting = FieldFilter.getIteratorSetting();
-			FieldFilter.setFieldIds(
-					iteratorSetting,
-					fieldIds,
-					index.getIndexModel().getDimensions());
-			scanner.addScanIterator(iteratorSetting);
-		}
+		addFieldSubsettingToIterator(scanner);
 
 		if ((distributableFilters != null) && !distributableFilters.isEmpty() && queryFiltersEnabled) {
 

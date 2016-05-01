@@ -15,23 +15,23 @@ import org.opengis.feature.simple.SimpleFeatureType;
 import mil.nga.giat.geowave.adapter.vector.field.SimpleFeatureSerializationProvider;
 import mil.nga.giat.geowave.adapter.vector.index.SimpleFeaturePrimaryIndexConfiguration;
 import mil.nga.giat.geowave.adapter.vector.stats.StatsConfigurationCollection.SimpleFeatureStatsConfigurationCollection;
+import mil.nga.giat.geowave.adapter.vector.stats.StatsManager;
 import mil.nga.giat.geowave.adapter.vector.utils.SimpleFeatureUserDataConfigurationSet;
 import mil.nga.giat.geowave.adapter.vector.utils.TimeDescriptors;
 import mil.nga.giat.geowave.adapter.vector.utils.TimeDescriptors.TimeDescriptorConfiguration;
 import mil.nga.giat.geowave.core.geotime.store.dimension.Time;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.StringUtils;
-import mil.nga.giat.geowave.core.store.DataStoreEntryInfo;
 import mil.nga.giat.geowave.core.store.EntryVisibilityHandler;
 import mil.nga.giat.geowave.core.store.adapter.AbstractDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.AdapterPersistenceEncoding;
-import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.IndexFieldHandler;
 import mil.nga.giat.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding;
 import mil.nga.giat.geowave.core.store.adapter.NativeFieldHandler;
-import mil.nga.giat.geowave.core.store.adapter.PersistentIndexFieldHandler;
 import mil.nga.giat.geowave.core.store.adapter.NativeFieldHandler.RowBuilder;
+import mil.nga.giat.geowave.core.store.adapter.PersistentIndexFieldHandler;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
+import mil.nga.giat.geowave.core.store.adapter.statistics.StatisticsProvider;
 import mil.nga.giat.geowave.core.store.data.PersistentDataset;
 import mil.nga.giat.geowave.core.store.data.PersistentValue;
 import mil.nga.giat.geowave.core.store.data.field.FieldReader;
@@ -41,21 +41,27 @@ import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 
+/**
+ * Deprecated as of 0.9.1
+ */
+@Deprecated
 public class WholeFeatureDataAdapter extends
 		AbstractDataAdapter<SimpleFeature> implements
-		GeotoolsFeatureDataAdapter
+		GeotoolsFeatureDataAdapter,
+		StatisticsProvider<SimpleFeature>
 {
 	private final static Logger LOGGER = Logger.getLogger(WholeFeatureDataAdapter.class);
 	protected SimpleFeatureType featureType;
 	private ByteArrayId adapterId;
 	private SimpleFeatureBuilder b;
+	private StatsManager statsManager;
 
 	protected WholeFeatureDataAdapter() {
 		super();
 	}
 
 	public WholeFeatureDataAdapter(
-			SimpleFeatureType featureType ) {
+			final SimpleFeatureType featureType ) {
 		super(
 				new ArrayList<PersistentIndexFieldHandler<SimpleFeature, ? extends CommonIndexValue, Object>>(),
 				new ArrayList<NativeFieldHandler<SimpleFeature, Object>>(),
@@ -64,6 +70,11 @@ public class WholeFeatureDataAdapter extends
 		this.featureType = featureType;
 		adapterId = new ByteArrayId(
 				StringUtils.stringToBinary(featureType.getTypeName()));
+		statsManager = new StatsManager(
+				this,
+				featureType,
+				featureType,
+				null);
 	}
 
 	@Override
@@ -103,6 +114,7 @@ public class WholeFeatureDataAdapter extends
 		return new WholeFeatureRowBuilder();
 	}
 
+	@Override
 	public boolean hasTemporalConstraints() {
 		return getTimeDescriptors().hasTime();
 	}
@@ -126,7 +138,8 @@ public class WholeFeatureDataAdapter extends
 					fieldVisiblityHandler));
 			return defaultHandlers;
 		}
-		// LOGGER.warn("Simple Feature Type could not be used for handling the indexed data");
+		// LOGGER.warn("Simple Feature Type could not be used for handling the
+		// indexed data");
 		return super.getDefaultTypeMatchingHandlers(featureType);
 	}
 
@@ -186,27 +199,21 @@ public class WholeFeatureDataAdapter extends
 
 	@Override
 	public ByteArrayId[] getSupportedStatisticsIds() {
-		return new ByteArrayId[] {};
+		return statsManager.getSupportedStatisticsIds();
 	}
 
 	@Override
 	public DataStatistics<SimpleFeature> createDataStatistics(
-			ByteArrayId statisticsId ) {
-		return null;
+			final ByteArrayId statisticsId ) {
+		return statsManager.createDataStatistics(
+				this,
+				statisticsId);
 	}
 
 	@Override
 	public EntryVisibilityHandler<SimpleFeature> getVisibilityHandler(
-			ByteArrayId statisticsId ) {
-		return new EntryVisibilityHandler<SimpleFeature>() {
-
-			@Override
-			public byte[] getVisibility(
-					DataStoreEntryInfo entryInfo,
-					SimpleFeature entry ) {
-				return new byte[] {};
-			}
-		};
+			final ByteArrayId statisticsId ) {
+		return statsManager.getVisibilityHandler(statisticsId);
 	}
 
 	@Override
@@ -250,7 +257,7 @@ public class WholeFeatureDataAdapter extends
 						""),
 				entry.getAttributes().toArray(
 						new Object[] {})));
-		AdapterPersistenceEncoding encoding = super.encode(
+		final AdapterPersistenceEncoding encoding = super.encode(
 				entry,
 				indexModel);
 		return new WholeFeatureAdapterEncoding(
@@ -279,7 +286,7 @@ public class WholeFeatureDataAdapter extends
 		userDataConfiguration.addConfigurations(
 				typeName,
 				new SimpleFeaturePrimaryIndexConfiguration());
-		userDataConfiguration.configureFromType(this.featureType);
+		userDataConfiguration.configureFromType(featureType);
 
 		try {
 			attrBytes = StringUtils.stringToBinary(userDataConfiguration.asJsonString());
@@ -311,7 +318,7 @@ public class WholeFeatureDataAdapter extends
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
 		final int initialBytes = buf.getInt();
 		// temporary hack for backward compatibility
-		boolean skipConfig = (initialBytes > 0);
+		final boolean skipConfig = (initialBytes > 0);
 		final byte[] typeNameBytes = skipConfig ? new byte[initialBytes] : new byte[buf.getInt()];
 		final byte[] visibilityManagementClassNameBytes = new byte[buf.getInt()];
 		final byte[] attrBytes = skipConfig ? new byte[0] : new byte[buf.getInt()];
@@ -368,5 +375,20 @@ public class WholeFeatureDataAdapter extends
 		}
 
 		return null;
+	}
+
+	@Override
+	public int getPositionOfOrderedField(
+			final CommonIndexModel model,
+			final ByteArrayId fieldId ) {
+		return model.getDimensions().length + 1;
+	}
+
+	@Override
+	public ByteArrayId getFieldIdForPosition(
+			final CommonIndexModel model,
+			final int position ) {
+		return new ByteArrayId(
+				"");
 	}
 }

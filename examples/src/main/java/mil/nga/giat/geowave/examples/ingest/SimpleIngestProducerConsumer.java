@@ -10,11 +10,10 @@ import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 
-import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
+import mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.core.store.memory.DataStoreUtils;
 import mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations;
 import mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations;
 
@@ -107,7 +106,7 @@ public class SimpleIngestProducerConsumer extends
 
 		// This is an adapter, that is needed to describe how to persist the
 		// data type passed
-		final FeatureDataAdapter adapter = createDataAdapter(point);
+		final GeotoolsFeatureDataAdapter adapter = createDataAdapter(point);
 
 		// This describes how to index the data
 		final PrimaryIndex index = createSpatialIndex();

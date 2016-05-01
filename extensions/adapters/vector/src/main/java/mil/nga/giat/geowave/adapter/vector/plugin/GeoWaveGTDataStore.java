@@ -156,14 +156,8 @@ public class GeoWaveGTDataStore extends
 		if (adapterIndexMapping != null && adapterIndexMapping.isNotEmpty()) {
 			currentSelections = adapterIndexMapping.getIndices(this.indexStore);
 		}
-		else if (adapter instanceof FeatureDataAdapter) {
-			currentSelections = getPreferredIndices(adapter);
-		}
 		else {
-			currentSelections = new PrimaryIndex[] {
-
-				new SpatialDimensionalityTypeProvider().createPrimaryIndex()
-			};
+			currentSelections = getPreferredIndices(adapter);
 		}
 		preferredIndexes.put(
 				adapter.getType().getName().toString(),

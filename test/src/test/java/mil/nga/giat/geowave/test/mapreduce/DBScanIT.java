@@ -131,7 +131,7 @@ public class DBScanIT
 							ExtractParameters.Extract.QUERY_OPTIONS,
 							ExtractParameters.Extract.MIN_INPUT_SPLIT,
 							ExtractParameters.Extract.MAX_INPUT_SPLIT,
-							PartitionParameters.Partition.PARTITION_DISTANCE,
+							PartitionParameters.Partition.MAX_DISTANCE,
 							PartitionParameters.Partition.PARTITIONER_CLASS,
 							ClusteringParameters.Clustering.MINIMUM_SIZE,
 							StoreParam.INPUT_STORE,

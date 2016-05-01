@@ -112,7 +112,7 @@ public class DBScanIterationsJobRunner implements
 				OrthodromicDistancePartitioner.class);
 
 		final double maxDistance = runTimeProperties.getPropertyAsDouble(
-				Partition.PARTITION_DISTANCE,
+				Partition.MAX_DISTANCE,
 				10);
 
 		final double precisionDecreaseRate = runTimeProperties.getPropertyAsDouble(
@@ -124,13 +124,13 @@ public class DBScanIterationsJobRunner implements
 				1.0);
 
 		runTimeProperties.storeIfEmpty(
-				Clustering.DISTANCE_THRESHOLDS,
+				Partition.DISTANCE_THRESHOLDS,
 				Double.toString(maxDistance));
 
 		final boolean overrideSecondary = runTimeProperties.hasProperty(Partition.SECONDARY_PARTITIONER_CLASS);
 
 		if (!overrideSecondary) {
-			final Serializable distances = runTimeProperties.get(ClusteringParameters.Clustering.DISTANCE_THRESHOLDS);
+			final Serializable distances = runTimeProperties.get(Partition.DISTANCE_THRESHOLDS);
 			String dstStr;
 			if (distances == null) {
 				dstStr = "0.000001";

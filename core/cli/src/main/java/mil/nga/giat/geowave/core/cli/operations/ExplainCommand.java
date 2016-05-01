@@ -31,12 +31,56 @@ public class ExplainCommand implements
 		return true;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void execute(
 			OperationParams inputParams ) {
 
 		CommandLineOperationParams params = (CommandLineOperationParams) inputParams;
+
+		StringBuilder builder = new StringBuilder();
+
+		// Sort first
+		String nextCommand = "geowave";
+		JCommander commander = params.getCommander();
+		while (commander != null) {
+			if (commander.getParameters() != null && commander.getParameters().size() > 0) {
+				builder.append("Command: ");
+				builder.append(nextCommand);
+				builder.append(" [options]");
+				if (commander.getParsedCommand() != null) {
+					builder.append(" <subcommand> ...");
+				}
+				builder.append("\n\n");
+				builder.append(explainCommander(commander));
+				builder.append("\n");
+			}
+			else if (commander.getMainParameter() != null) {
+				builder.append("Command: ");
+				builder.append(nextCommand);
+				if (commander.getParsedCommand() != null) {
+					builder.append(" <subcommand> ...");
+				}
+				builder.append("\n\n");
+				builder.append(explainMainParameter(commander));
+				builder.append("\n");
+			}
+			nextCommand = commander.getParsedCommand();
+			commander = commander.getCommands().get(
+					nextCommand);
+		}
+
+		JCommander.getConsole().println(
+				builder.toString().trim());
+	}
+
+	/**
+	 * This function will explain the currently selected values for a
+	 * JCommander.
+	 * 
+	 * @param commander
+	 */
+	public static StringBuilder explainCommander(
+			JCommander commander ) {
 
 		StringBuilder builder = new StringBuilder();
 
@@ -54,7 +98,7 @@ public class ExplainCommand implements
 
 		// Sort first
 		SortedMap<String, ParameterDescription> parameterDescs = new TreeMap<String, ParameterDescription>();
-		List<ParameterDescription> parameters = params.getCommander().getParameters();
+		List<ParameterDescription> parameters = commander.getParameters();
 		for (ParameterDescription pd : parameters) {
 			parameterDescs.put(
 					pd.getLongestName(),
@@ -88,6 +132,9 @@ public class ExplainCommand implements
 			// Data we have:
 			// required, assigned, value, names.
 			builder.append("{");
+			if (value == null) {
+				value = "";
+			}
 			builder.append(String.format(
 					"%1$20s",
 					value));
@@ -107,14 +154,39 @@ public class ExplainCommand implements
 
 		}
 
-		// Output the main parameter.
-		if (params.getCommander().getMainParameter() != null) {
-			ParameterDescription pd = params.getCommander().getMainParameter();
-			boolean assigned = pd.isAssigned();
+		if (commander.getMainParameter() != null) {
 			builder.append("\n");
-			builder.append("Main Parameter: ");
-			List<String> mP = (List<String>) pd.getParameterized().get(
-					pd.getObject());
+			builder.append(explainMainParameter(commander));
+		}
+
+		return builder;
+	}
+
+	/**
+	 * Output details about the main parameter, if there is one.
+	 * 
+	 * @param commander
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public static StringBuilder explainMainParameter(
+			JCommander commander ) {
+		StringBuilder builder = new StringBuilder();
+
+		ParameterDescription mainParameter = commander.getMainParameter();
+
+		// Output the main parameter.
+		if (mainParameter != null) {
+			if (mainParameter.getDescription() != null && mainParameter.getDescription().length() > 0) {
+				builder.append("Expects: ");
+				builder.append(mainParameter.getDescription());
+				builder.append("\n");
+			}
+
+			boolean assigned = mainParameter.isAssigned();
+			builder.append("Specified: ");
+			List<String> mP = (List<String>) mainParameter.getParameterized().get(
+					mainParameter.getObject());
 			if (!assigned || mP.size() == 0) {
 				builder.append("<none specified>");
 			}
@@ -128,7 +200,7 @@ public class ExplainCommand implements
 			builder.append("\n");
 		}
 
-		JCommander.getConsole().println(
-				builder.toString());
+		return builder;
 	}
+
 }

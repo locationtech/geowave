@@ -11,22 +11,27 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
+import com.google.common.base.Function;
+import com.google.common.collect.Lists;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.Persistable;
+import mil.nga.giat.geowave.core.index.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.AdapterToIndexMapping;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.DataStoreEntryInfo;
 import mil.nga.giat.geowave.core.store.ScanCallback;
+import mil.nga.giat.geowave.core.store.adapter.AbstractDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.query.aggregate.Aggregation;
+
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 
 /**
  * Directs a query to restrict searches to specific adapters, indices, etc.. For
@@ -84,7 +89,7 @@ public class QueryOptions implements
 	private double[] maxResolutionSubsamplingPerDimension = null;
 	private transient ScanCallback<?> scanCallback = DEFAULT_CALLBACK;
 	private String[] authorizations = new String[0];
-	private List<String> fieldIds = Collections.emptyList();
+	private Pair<List<String>, DataAdapter<?>> fieldIdsAdapterPair;
 
 	public QueryOptions(
 			final ByteArrayId adapterId,
@@ -112,8 +117,8 @@ public class QueryOptions implements
 	}
 
 	public QueryOptions(
-			final List<ByteArrayId> adapterIds ) {
-		setAdapterIds(adapterIds);
+			final List<DataAdapter<?>> adapters ) {
+		setAdapters(adapters);
 	}
 
 	public QueryOptions(
@@ -140,6 +145,9 @@ public class QueryOptions implements
 		limit = options.limit;
 		scanCallback = options.scanCallback;
 		authorizations = options.authorizations;
+		adapters = options.adapters;
+		index = options.index;
+		aggregationAdapterPair = options.aggregationAdapterPair;
 	}
 
 	/**
@@ -166,12 +174,44 @@ public class QueryOptions implements
 		this.authorizations = authorizations;
 	}
 
+	/**
+	 * @param fieldIds
+	 *            the subset of fieldIds to be included with each query result
+	 * @param adapter
+	 *            the associated data adapter
+	 */
+	public QueryOptions(
+			final List<String> fieldIds,
+			final DataAdapter<?> adapter ) {
+		super();
+		fieldIdsAdapterPair = new ImmutablePair<List<String>, DataAdapter<?>>(
+				fieldIds,
+				adapter);
+	}
+
 	public QueryOptions() {}
 
-	public void setAdapterIds(
-			final List<ByteArrayId> adapterIds ) {
-		adapters = null;
-		this.adapterIds = adapterIds == null ? Collections.<ByteArrayId> emptyList() : adapterIds;
+	public void setAdapters(
+			final List<DataAdapter<?>> adapters ) {
+		this.adapters = Lists.transform(
+				adapters,
+				new Function<DataAdapter<?>, DataAdapter<Object>>() {
+					@Override
+					public DataAdapter<Object> apply(
+							final DataAdapter<?> input ) {
+						return (DataAdapter<Object>) input;
+					}
+				});
+		this.adapterIds = Lists.transform(
+				adapters,
+				new Function<DataAdapter<?>, ByteArrayId>() {
+
+					@Override
+					public ByteArrayId apply(
+							final DataAdapter<?> input ) {
+						return input.getAdapterId();
+					}
+				});
 	}
 
 	public void setAdapter(
@@ -185,6 +225,18 @@ public class QueryOptions implements
 			adapters = null;
 		}
 
+	}
+
+	public void setAdapter(
+			final List<ByteArrayId> adapters ) {
+		if (adapters != null) {
+			this.adapters = null;
+			adapterIds = adapters;
+		}
+		else {
+			adapterIds = Collections.emptyList();
+			this.adapters = null;
+		}
 	}
 
 	public void setMaxResolutionSubsamplingPerDimension(
@@ -209,6 +261,25 @@ public class QueryOptions implements
 			indexId = null;
 			this.index = null;
 		}
+	}
+
+	/**
+	 * @param index
+	 */
+	public void setIndexId(
+			final ByteArrayId indexId ) {
+		if (indexId != null) {
+			this.indexId = indexId;
+			index = null;
+		}
+		else {
+			this.indexId = null;
+			this.index = null;
+		}
+	}
+
+	public PrimaryIndex getIndex() {
+		return this.index;
 	}
 
 	/**
@@ -433,22 +504,26 @@ public class QueryOptions implements
 
 	/**
 	 * 
-	 * @return the fieldIds
+	 * @return a paring of fieldIds and their associated data adapter >>>>>>>
+	 *         wip: bitmask approach
 	 */
-	public List<String> getFieldIds() {
-		return fieldIds;
+	public Pair<List<String>, DataAdapter<?>> getFieldIdsAdapterPair() {
+		return fieldIdsAdapterPair;
 	}
 
 	/**
 	 * 
 	 * @param fieldIds
-	 *            the desired subset of fieldIds to be included in query results
+	 *            the subset of fieldIds to be included with each query result
+	 * @param adapter
+	 *            the associated data adapter
 	 */
 	public void setFieldIds(
-			final List<String> fieldIds ) {
-		if (fieldIds != null) {
-			this.fieldIds = fieldIds;
-		}
+			final List<String> fieldIds,
+			final DataAdapter<?> adapter ) {
+		fieldIdsAdapterPair = new ImmutablePair<List<String>, DataAdapter<?>>(
+				fieldIds,
+				adapter);
 	}
 
 	@Override
@@ -467,15 +542,24 @@ public class QueryOptions implements
 			}
 		}
 
+		byte[] adapterBytes = new byte[0];
+		if ((fieldIdsAdapterPair != null) && (fieldIdsAdapterPair.getRight() != null)) {
+			adapterBytes = PersistenceUtils.toBinary(fieldIdsAdapterPair.getRight());
+		}
+
 		byte[] fieldIdsBytes = new byte[0];
-		if ((fieldIds != null) && (fieldIds.size() > 0)) {
+		if ((fieldIdsAdapterPair != null) && (fieldIdsAdapterPair.getLeft() != null) && (fieldIdsAdapterPair.getLeft().size() > 0)) {
 			final String fieldIdsString = org.apache.commons.lang3.StringUtils.join(
-					fieldIds,
+					fieldIdsAdapterPair.getLeft(),
 					',');
 			fieldIdsBytes = StringUtils.stringToBinary(fieldIdsString.toString());
 		}
 
-		final ByteBuffer buf = ByteBuffer.allocate(20 + authBytes.length + aSize + iSize + fieldIdsBytes.length);
+		final ByteBuffer buf = ByteBuffer.allocate(24 + authBytes.length + aSize + iSize + adapterBytes.length + fieldIdsBytes.length);
+		buf.putInt(adapterBytes.length);
+		if (adapterBytes.length > 0) {
+			buf.put(adapterBytes);
+		}
 		buf.putInt(fieldIdsBytes.length);
 		if (fieldIdsBytes.length > 0) {
 			buf.put(fieldIdsBytes);
@@ -509,7 +593,17 @@ public class QueryOptions implements
 			final byte[] bytes ) {
 
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
+		final int adapterBytesLength = buf.getInt();
+		AbstractDataAdapter<?> dataAdapter = null;
+		if (adapterBytesLength > 0) {
+			final byte[] adapterBytes = new byte[adapterBytesLength];
+			buf.get(adapterBytes);
+			dataAdapter = PersistenceUtils.fromBinary(
+					adapterBytes,
+					AbstractDataAdapter.class);
+		}
 		final int fieldIdsLength = buf.getInt();
+		List<String> fieldIds = null;
 		if (fieldIdsLength > 0) {
 			final byte[] fieldIdsBytes = new byte[fieldIdsLength];
 			buf.get(fieldIdsBytes);
@@ -517,6 +611,12 @@ public class QueryOptions implements
 					fieldIdsBytes).split(
 					","));
 		}
+		if ((dataAdapter != null) && (fieldIds != null)) {
+			setFieldIds(
+					fieldIds,
+					dataAdapter);
+		}
+
 		final byte[] authBytes = new byte[buf.getInt()];
 		buf.get(authBytes);
 
@@ -560,6 +660,46 @@ public class QueryOptions implements
 	@Override
 	public String toString() {
 		return "QueryOptions [adapterId=" + adapterIds + ", limit=" + limit + ", authorizations=" + Arrays.toString(authorizations) + "]";
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((adapterIds == null) ? 0 : adapterIds.hashCode());
+		result = prime * result + Arrays.hashCode(authorizations);
+		result = prime * result + ((indexId == null) ? 0 : indexId.hashCode());
+		result = prime * result + ((limit == null) ? 0 : limit.hashCode());
+		result = prime * result + Arrays.hashCode(maxResolutionSubsamplingPerDimension);
+		return result;
+	}
+
+	@Override
+	public boolean equals(
+			Object obj ) {
+		if (this == obj) return true;
+		if (obj == null) return false;
+		if (getClass() != obj.getClass()) return false;
+		QueryOptions other = (QueryOptions) obj;
+		if (adapterIds == null) {
+			if (other.adapterIds != null) return false;
+		}
+		else if (!adapterIds.equals(other.adapterIds)) return false;
+		if (!Arrays.equals(
+				authorizations,
+				other.authorizations)) return false;
+		if (indexId == null) {
+			if (other.indexId != null) return false;
+		}
+		else if (!indexId.equals(other.indexId)) return false;
+		if (limit == null) {
+			if (other.limit != null) return false;
+		}
+		else if (!limit.equals(other.limit)) return false;
+		if (!Arrays.equals(
+				maxResolutionSubsamplingPerDimension,
+				other.maxResolutionSubsamplingPerDimension)) return false;
+		return true;
 	}
 
 	private void sortInPlace(

@@ -36,9 +36,17 @@ public class MockComponents
 			AbstractDataAdapter<Integer> implements
 			StatisticsProvider<Integer>
 	{
+		private ByteArrayId id = ID;
 
 		public MockAbstractDataAdapter() {
+			this(
+					ID);
+		}
+
+		public MockAbstractDataAdapter(
+				ByteArrayId id ) {
 			super();
+			this.id = id;
 			final List<IndexFieldHandler<Integer, TestIndexFieldType, Object>> handlers = new ArrayList<IndexFieldHandler<Integer, TestIndexFieldType, Object>>();
 			handlers.add(new IndexFieldHandler<Integer, TestIndexFieldType, Object>() {
 
@@ -103,7 +111,7 @@ public class MockComponents
 
 		@Override
 		public ByteArrayId getAdapterId() {
-			return MockAbstractDataAdapter.ID;
+			return id;
 		}
 
 		/**
@@ -161,7 +169,7 @@ public class MockComponents
 		protected RowBuilder<Integer, Object> newBuilder() {
 			return new RowBuilder<Integer, Object>() {
 				@SuppressWarnings("unused")
-				private String id;
+				private String myid;
 				private Integer intValue;
 
 				@Override
@@ -173,7 +181,7 @@ public class MockComponents
 					}
 					else if (fieldValue.getId().equals(
 							ID)) {
-						id = (String) fieldValue.getValue();
+						myid = (String) fieldValue.getValue();
 					}
 				}
 
@@ -214,6 +222,51 @@ public class MockComponents
 				final ByteArrayId statisticsId ) {
 			return new FieldIdStatisticVisibility<Integer>(
 					new TestDimensionField().fieldId);
+		}
+
+		@Override
+		public int getPositionOfOrderedField(
+				final CommonIndexModel model,
+				final ByteArrayId fieldId ) {
+			int i = 0;
+			for (final NumericDimensionField<? extends CommonIndexValue> dimensionField : model.getDimensions()) {
+				if (fieldId.equals(dimensionField.getFieldId())) {
+					return i;
+				}
+				i++;
+			}
+			if (fieldId.equals(INTEGER)) {
+				return i;
+			}
+			else if (fieldId.equals(ID)) {
+				return i + 1;
+			}
+			return -1;
+		}
+
+		@Override
+		public ByteArrayId getFieldIdForPosition(
+				final CommonIndexModel model,
+				final int position ) {
+			if (position < model.getDimensions().length) {
+				int i = 0;
+				for (final NumericDimensionField<? extends CommonIndexValue> dimensionField : model.getDimensions()) {
+					if (i == position) {
+						return dimensionField.getFieldId();
+					}
+					i++;
+				}
+			}
+			else {
+				final int numDimensions = model.getDimensions().length;
+				if (position == numDimensions) {
+					return INTEGER;
+				}
+				else if (position == (numDimensions + 1)) {
+					return ID;
+				}
+			}
+			return null;
 		}
 
 	} // class MockAbstractDataAdapter
@@ -649,7 +702,7 @@ public class MockComponents
 		}
 
 		public TestIndexModel(
-				String id ) {
+				final String id ) {
 			dimensionFields = new TestDimensionField[1];
 			dimensionFields[0] = new TestDimensionField();
 			this.id = id;

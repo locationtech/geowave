@@ -31,16 +31,6 @@ public class ClusteringParameters
 				"cct",
 				"Convergence Tolerance",
 				true),
-		DISTANCE_THRESHOLDS(
-				String.class,
-				"dt",
-				"Comma separated list of distance thresholds, per dimension",
-				true),
-		GEOMETRIC_DISTANCE_UNIT(
-				String.class,
-				"du",
-				"Geometric distance unit (m=meters,km=kilometers, see symbols for javax.units.BaseUnit)",
-				true),
 		ZOOM_LEVELS(
 				Integer.class,
 				"zl",

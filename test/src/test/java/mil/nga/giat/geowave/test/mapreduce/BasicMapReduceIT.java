@@ -8,6 +8,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -44,7 +45,6 @@ import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayUtils;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
-import mil.nga.giat.geowave.core.store.config.ConfigUtils;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
@@ -193,9 +193,9 @@ public class BasicMapReduceIT
 							new EverythingQuery())));
 		}
 
-		final List<ByteArrayId> firstTwoAdapters = new ArrayList<ByteArrayId>();
-		firstTwoAdapters.add(adapters[0].getAdapterId());
-		firstTwoAdapters.add(adapters[1].getAdapterId());
+		final List<DataAdapter<?>> firstTwoAdapters = new ArrayList<DataAdapter<?>>();
+		firstTwoAdapters.add(adapters[0]);
+		firstTwoAdapters.add(adapters[1]);
 		final ExpectedResults firstTwoAdaptersResults = TestUtils.getExpectedResults(geowaveStore.query(
 				new QueryOptions(
 						firstTwoAdapters),
@@ -231,10 +231,7 @@ public class BasicMapReduceIT
 					adapters[0],
 					adapters[1]
 				},
-				new PrimaryIndex[] {
-					TestUtils.DEFAULT_SPATIAL_INDEX,
-					TestUtils.DEFAULT_SPATIAL_TEMPORAL_INDEX
-				});
+				null);
 
 		// now try all adapters and the spatial temporal index, the result
 		// should be the full data set
@@ -242,9 +239,7 @@ public class BasicMapReduceIT
 				fullDataSetResults,
 				null,
 				adapters,
-				new PrimaryIndex[] {
-					TestUtils.DEFAULT_SPATIAL_TEMPORAL_INDEX
-				});
+				TestUtils.DEFAULT_SPATIAL_TEMPORAL_INDEX);
 
 		// and finally run with nothing set, should be the full data set
 		runTestJob(
@@ -298,7 +293,7 @@ public class BasicMapReduceIT
 			final ExpectedResults expectedResults,
 			final DistributableQuery query,
 			final DataAdapter<?>[] adapters,
-			final PrimaryIndex[] indices )
+			final PrimaryIndex index )
 			throws Exception {
 		final TestJobRunner jobRunner = new TestJobRunner(
 				dataStorePluginOptions,
@@ -308,15 +303,12 @@ public class BasicMapReduceIT
 		if (query != null) {
 			jobRunner.setQuery(query);
 		}
+		final QueryOptions options = new QueryOptions();
 		if ((adapters != null) && (adapters.length > 0)) {
-			for (final DataAdapter<?> adapter : adapters) {
-				jobRunner.addDataAdapter(adapter);
-			}
+			options.setAdapters(Arrays.asList(adapters));
 		}
-		if ((indices != null) && (indices.length > 0)) {
-			for (final PrimaryIndex index : indices) {
-				jobRunner.addIndex(index);
-			}
+		if ((index != null)) {
+			options.setIndex(index);
 		}
 		final Configuration conf = MapReduceTestUtils.getConfiguration();
 		MapReduceTestUtils.filterConfiguration(conf);

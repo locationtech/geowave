@@ -6,6 +6,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -356,6 +357,10 @@ public class GeoWavePluginConfig
 		return map;
 	}
 
+	static final List<String> BooleanOptions = Arrays.asList(
+			"true",
+			"false");
+
 	private static Map<String, List<String>> getIndexQueryStrategyOptions() {
 		final List<String> options = new ArrayList<String>();
 
@@ -451,11 +456,20 @@ public class GeoWavePluginConfig
 								Parameter.IS_PASSWORD,
 								Boolean.TRUE));
 			}
+			if (input.getType().isPrimitive() && input.getType() == boolean.class) {
+				return new Param(
+						input.getName(),
+						input.getType(),
+						input.getDescription(),
+						true,
+						"true",
+						Collections.singletonMap(
+								Parameter.OPTIONS,
+								BooleanOptions));
+			}
 			return new Param(
 					input.getName(),
-					GenericTypeResolver.resolveTypeArgument(
-							input.getClass(),
-							ConfigOption.class),
+					input.getType(),
 					input.getDescription(),
 					!input.isOptional());
 		}

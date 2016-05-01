@@ -1,12 +1,14 @@
 package mil.nga.giat.geowave.datastore.accumulo.query;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.filter.DedupeFilter;
 import mil.nga.giat.geowave.core.store.filter.FilterList;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
@@ -69,7 +71,7 @@ public class InputFormatAccumuloRangeQuery extends
 				(DedupeFilter) null,
 				queryOptions.getScanCallback(),
 				null,
-				Collections.<String> emptyList(),
+				null,
 				queryOptions.getAuthorizations());
 
 		this.accumuloRange = accumuloRange;

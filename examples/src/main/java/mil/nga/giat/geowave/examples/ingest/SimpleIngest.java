@@ -18,6 +18,8 @@ import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
+import mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
+import mil.nga.giat.geowave.adapter.vector.WholeFeatureDataAdapter;
 import mil.nga.giat.geowave.core.geotime.GeometryUtils;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import mil.nga.giat.geowave.core.store.DataStore;
@@ -188,7 +190,7 @@ public class SimpleIngest
 	 * @return data adapter that handles serialization of the sft simple feature
 	 *         type
 	 */
-	public static FeatureDataAdapter createDataAdapter(
+	public static GeotoolsFeatureDataAdapter createDataAdapter(
 			final SimpleFeatureType sft ) {
 		return new FeatureDataAdapter(
 				sft);

@@ -93,9 +93,11 @@ public class JCommanderPropertiesTransformer
 			Map<String, String> properties ) {
 		Properties props = new Properties();
 		for (Entry<String, String> prop : properties.entrySet()) {
-			props.setProperty(
-					prop.getKey(),
-					prop.getValue());
+			if (prop.getValue() != null) {
+				props.setProperty(
+						prop.getKey(),
+						prop.getValue());
+			}
 		}
 		transformFromProperties(props);
 	}

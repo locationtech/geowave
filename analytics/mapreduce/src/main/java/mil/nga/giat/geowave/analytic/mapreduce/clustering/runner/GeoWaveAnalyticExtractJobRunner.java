@@ -29,12 +29,9 @@ import mil.nga.giat.geowave.analytic.param.ExtractParameters;
 import mil.nga.giat.geowave.analytic.param.GlobalParameters;
 import mil.nga.giat.geowave.analytic.param.MapReduceParameters;
 import mil.nga.giat.geowave.analytic.param.ParameterEnum;
+import mil.nga.giat.geowave.analytic.param.StoreParameters;
 import mil.nga.giat.geowave.analytic.param.StoreParameters.StoreParam;
 import mil.nga.giat.geowave.analytic.store.PersistableStore;
-import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.StringUtils;
-import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
-import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
 import mil.nga.giat.geowave.mapreduce.GeoWaveConfiguratorBase;
 import mil.nga.giat.geowave.mapreduce.dedupe.GeoWaveDedupeJobRunner;
@@ -220,35 +217,9 @@ public class GeoWaveAnalyticExtractJobRunner extends
 						SimpleFeatureGeometryExtractor.class),
 				DimensionExtractor.class);
 
-		final String indexId = runTimeProperties.getPropertyAsString(ExtractParameters.Extract.INDEX_ID);
-		final String adapterId = runTimeProperties.getPropertyAsString(ExtractParameters.Extract.ADAPTER_ID);
-
-		final PrimaryIndex[] indices = ClusteringUtils.getIndices(runTimeProperties);
-
-		@SuppressWarnings("rawtypes")
-		final DataAdapter[] adapters = ClusteringUtils.getAdapters(runTimeProperties);
 		final PersistableStore store = ((PersistableStore) runTimeProperties.getProperty(StoreParam.INPUT_STORE));
+		setQueryOptions(runTimeProperties.getPropertyAsQueryOptions(ExtractParameters.Extract.QUERY_OPTIONS));
 		dataStoreOptions = store.getDataStoreOptions();
-		if (adapterId != null) {
-			final ByteArrayId byteId = new ByteArrayId(
-					StringUtils.stringToBinary(adapterId));
-			for (@SuppressWarnings("rawtypes")
-			final DataAdapter adapter : adapters) {
-				if (byteId.equals(adapter.getAdapterId())) {
-					addDataAdapter(adapter);
-				}
-			}
-		}
-
-		if (indexId != null) {
-			final ByteArrayId byteId = new ByteArrayId(
-					StringUtils.stringToBinary(indexId));
-			for (final PrimaryIndex index : indices) {
-				if (byteId.equals(index.getId())) {
-					addIndex(index);
-				}
-			}
-		}
 
 		GeoWaveInputFormat.setDataStoreName(
 				config,
@@ -286,11 +257,10 @@ public class GeoWaveAnalyticExtractJobRunner extends
 			ExtractParameters.Extract.OUTPUT_DATA_TYPE_ID,
 			ExtractParameters.Extract.DATA_NAMESPACE_URI,
 			ExtractParameters.Extract.DIMENSION_EXTRACT_CLASS,
-			ExtractParameters.Extract.INDEX_ID,
-			ExtractParameters.Extract.ADAPTER_ID,
 			ExtractParameters.Extract.MIN_INPUT_SPLIT,
 			ExtractParameters.Extract.MAX_INPUT_SPLIT,
 			ExtractParameters.Extract.QUERY,
+			ExtractParameters.Extract.QUERY_OPTIONS,
 			StoreParam.INPUT_STORE,
 			GlobalParameters.Global.BATCH_ID
 		}));

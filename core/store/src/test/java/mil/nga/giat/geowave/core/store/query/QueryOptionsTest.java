@@ -4,26 +4,30 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
-
-import org.apache.commons.lang3.tuple.Pair;
-import org.junit.Assert;
-import org.junit.Test;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.AdapterToIndexMapping;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
+import mil.nga.giat.geowave.core.store.adapter.AbstractDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.MockComponents;
+import mil.nga.giat.geowave.core.store.adapter.NativeFieldHandler;
+import mil.nga.giat.geowave.core.store.adapter.PersistentIndexFieldHandler;
 import mil.nga.giat.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
+import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 import mil.nga.giat.geowave.core.store.index.Index;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+
+import org.apache.commons.lang3.tuple.Pair;
+import org.junit.Assert;
+import org.junit.Test;
 
 public class QueryOptionsTest
 {
@@ -242,7 +246,7 @@ public class QueryOptionsTest
 	}
 
 	@Test
-	public void testAdapterIds()
+	public void testAdapters()
 			throws IOException {
 		final AdapterStore adapterStore = new AdapterStore() {
 
@@ -255,9 +259,8 @@ public class QueryOptionsTest
 			@Override
 			public DataAdapter<?> getAdapter(
 					final ByteArrayId adapterId ) {
-				final MockComponents.MockAbstractDataAdapter adapter = new MockComponents.MockAbstractDataAdapter();
-				return adapter.getAdapterId().equals(
-						adapterId) ? adapter : null;
+				return new MockComponents.MockAbstractDataAdapter(
+						adapterId);
 			}
 
 			@Override
@@ -274,12 +277,11 @@ public class QueryOptionsTest
 		};
 
 		final QueryOptions ops = new QueryOptions(
-				Arrays.asList(new ByteArrayId[] {
-					new ByteArrayId(
-							"123"),
-					new ByteArrayId(
-							"567")
-				}));
+				Arrays.asList(
+						(DataAdapter<?>) adapterStore.getAdapter(new ByteArrayId(
+								"123")),
+						(DataAdapter<?>) adapterStore.getAdapter(new ByteArrayId(
+								"567"))));
 		assertEquals(
 				2,
 				ops.getAdapterIds(
@@ -300,11 +302,20 @@ public class QueryOptionsTest
 			"two",
 			"three"
 		});
-		final QueryOptions ops = new QueryOptions();
-		ops.setFieldIds(fieldIds);
+		final ArrayList<PersistentIndexFieldHandler<Integer, ? extends CommonIndexValue, Object>> indexFieldHandlers = new ArrayList<PersistentIndexFieldHandler<Integer, ? extends CommonIndexValue, Object>>();
+		indexFieldHandlers.add(new MockComponents.TestPersistentIndexFieldHandler());
+		final ArrayList<NativeFieldHandler<Integer, Object>> nativeFieldHandlers = new ArrayList<NativeFieldHandler<Integer, Object>>();
+		nativeFieldHandlers.add(new MockComponents.TestNativeFieldHandler());
+		final MockComponents.MockAbstractDataAdapter mockAbstractDataAdapter = new MockComponents.MockAbstractDataAdapter(
+				indexFieldHandlers,
+				nativeFieldHandlers);
+		final QueryOptions ops = new QueryOptions(
+				fieldIds,
+				mockAbstractDataAdapter);
 		final QueryOptions deserialized = new QueryOptions();
 		deserialized.fromBinary(ops.toBinary());
-		Assert.assertTrue(fieldIds.size() == deserialized.getFieldIds().size());
-		Assert.assertTrue(fieldIds.equals(deserialized.getFieldIds()));
+		Assert.assertTrue(fieldIds.size() == deserialized.getFieldIdsAdapterPair().getLeft().size());
+		Assert.assertTrue(fieldIds.equals(deserialized.getFieldIdsAdapterPair().getLeft()));
+		Assert.assertTrue(deserialized.getFieldIdsAdapterPair().getRight() instanceof AbstractDataAdapter<?>);
 	}
 }

@@ -25,9 +25,9 @@ import mil.nga.giat.geowave.analytic.AnalyticFeature;
 import mil.nga.giat.geowave.analytic.PropertyManagement;
 import mil.nga.giat.geowave.analytic.clustering.ClusteringUtils;
 import mil.nga.giat.geowave.analytic.model.SpatialIndexModelBuilder;
-import mil.nga.giat.geowave.analytic.param.ClusteringParameters;
 import mil.nga.giat.geowave.analytic.param.CommonParameters;
 import mil.nga.giat.geowave.analytic.param.ParameterEnum;
+import mil.nga.giat.geowave.analytic.param.PartitionParameters;
 import mil.nga.giat.geowave.analytic.param.StoreParameters.StoreParam;
 import mil.nga.giat.geowave.analytic.partitioner.AdapterBasedPartitioner.AdapterDataEntry;
 import mil.nga.giat.geowave.analytic.partitioner.Partitioner.PartitionData;
@@ -89,7 +89,7 @@ public class AdapterBasedPartitionerTest
 		final AdapterBasedPartitioner partitioner = new AdapterBasedPartitioner();
 
 		propertyManagement.store(
-				ClusteringParameters.Clustering.DISTANCE_THRESHOLDS,
+				PartitionParameters.Partition.DISTANCE_THRESHOLDS,
 				"1.00001,1.00001");
 		propertyManagement.store(
 				CommonParameters.Common.INDEX_MODEL_BUILDER_CLASS,

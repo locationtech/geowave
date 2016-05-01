@@ -17,8 +17,9 @@ import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter
 import mil.nga.giat.geowave.analytic.partitioner.OrthodromicDistancePartitioner
 import org.opengis.feature.simple.SimpleFeature
 import mil.nga.giat.geowave.analytic.ScopedJobConfiguration
-import mil.nga.giat.geowave.analytic.param.ParameterEnum;
+import mil.nga.giat.geowave.analytic.param.ParameterEnum
 import org.apache.spark.SparkContext._
+import mil.nga.giat.geowave.analytic.param.PartitionParameters
 
 class AnalyticRecipesTest extends FlatSpec {
 
@@ -110,7 +111,7 @@ class AnalyticRecipesTest extends FlatSpec {
     val propertyManagement = new PropertyManagement();
 
     propertyManagement.store(
-      ClusteringParameters.Clustering.DISTANCE_THRESHOLDS.asInstanceOf[ParameterEnum[_]],
+      PartitionParameters.Partition.DISTANCE_THRESHOLDS.asInstanceOf[ParameterEnum[_]],
       "10,10");
     propertyManagement.store(
       CommonParameters.Common.INDEX_MODEL_BUILDER_CLASS.asInstanceOf[ParameterEnum[_]],
@@ -122,7 +123,7 @@ class AnalyticRecipesTest extends FlatSpec {
       GlobalParameters.Global.CRS_ID,
       "EPSG:4326");
     propertyManagement.store(
-      ClusteringParameters.Clustering.GEOMETRIC_DISTANCE_UNIT.asInstanceOf[ParameterEnum[_]],
+      PartitionParameters.Partition.GEOMETRIC_DISTANCE_UNIT.asInstanceOf[ParameterEnum[_]],
       "km");
 
     propertyManagement

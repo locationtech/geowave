@@ -15,6 +15,7 @@ import mil.nga.giat.geowave.analytic.mapreduce.operations.options.CommonOptions;
 import mil.nga.giat.geowave.analytic.mapreduce.operations.options.NearestNeighborOptions;
 import mil.nga.giat.geowave.analytic.mapreduce.operations.options.PropertyManagementConverter;
 import mil.nga.giat.geowave.analytic.param.StoreParameters;
+import mil.nga.giat.geowave.analytic.param.ExtractParameters.Extract;
 import mil.nga.giat.geowave.analytic.store.PersistableStore;
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.Command;
@@ -48,7 +49,7 @@ public class NearestNeighborCommand extends
 			throws Exception {
 
 		// Ensure we have all the required arguments
-		if (parameters.size() != 1) {
+		if (parameters.size() != 1 && inputStoreOptions == null) {
 			throw new ParameterException(
 					"Requires arguments: <storename>");
 		}
@@ -82,6 +83,9 @@ public class NearestNeighborCommand extends
 				properties);
 		converter.readProperties(commonOptions);
 		converter.readProperties(nnOptions);
+		properties.store(
+				Extract.QUERY_OPTIONS,
+				commonOptions.buildQueryOptions());
 
 		GeoWaveExtractNNJobRunner runner = new GeoWaveExtractNNJobRunner();
 		int status = runner.run(properties);

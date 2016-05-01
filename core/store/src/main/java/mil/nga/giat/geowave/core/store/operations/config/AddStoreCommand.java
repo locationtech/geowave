@@ -100,7 +100,7 @@ public class AddStoreCommand implements
 				null);
 
 		// Ensure that a name is chosen.
-		if (parameters.size() < 1) {
+		if (parameters.size() != 1) {
 			throw new ParameterException(
 					"Must specify store name");
 		}

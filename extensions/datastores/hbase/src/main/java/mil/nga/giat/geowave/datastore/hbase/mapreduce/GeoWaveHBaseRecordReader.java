@@ -121,9 +121,6 @@ public class GeoWaveHBaseRecordReader<T> extends
 				final QueryOptions rangeQueryOptions = new QueryOptions(
 						queryOptions);
 				rangeQueryOptions.setIndex(i);
-				rangeQueryOptions.setAdapterIds(GeoWaveInputFormat.getAdapterIds(
-						attempt,
-						adapterStore));
 				iteratorsPerRange.put(
 						r,
 						new InputFormatHBaseRangeQuery(
