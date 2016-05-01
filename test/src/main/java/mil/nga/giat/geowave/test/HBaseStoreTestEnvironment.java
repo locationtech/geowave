@@ -12,8 +12,6 @@ import com.github.sakserv.minicluster.impl.ZookeeperLocalCluster;
 import com.github.sakserv.propertyparser.PropertyParser;
 
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
-import mil.nga.giat.geowave.datastore.hbase.HBaseDataStoreFactory;
-import mil.nga.giat.geowave.datastore.hbase.operations.config.HBaseRequiredOptions;
 
 public class HBaseStoreTestEnvironment implements
 		StoreTestEnvironment
@@ -39,11 +37,11 @@ public class HBaseStoreTestEnvironment implements
 	public DataStorePluginOptions getDataStoreOptions(
 			final String namespace ) {
 		final DataStorePluginOptions pluginOptions = new DataStorePluginOptions();
-		final HBaseRequiredOptions opts = new HBaseRequiredOptions();
-		opts.setGeowaveNamespace(namespace);
-		opts.setZookeeper(zookeeper);
-		pluginOptions.selectPlugin(new HBaseDataStoreFactory().getName());
-		pluginOptions.setFactoryOptions(opts);
+		// final HBaseRequiredOptions opts = new HBaseRequiredOptions();
+		// opts.setGeowaveNamespace(namespace);
+		// opts.setZookeeper(zookeeper);
+		// pluginOptions.selectPlugin(new HBaseDataStoreFactory().getName());
+		// pluginOptions.setFactoryOptions(opts);
 		return pluginOptions;
 	}
 

@@ -256,6 +256,7 @@ public class BasicMapReduceIT
 		final File exportDir = new File(
 				TestUtils.TEMP_DIR,
 				TEST_EXPORT_DIRECTORY);
+		exportDir.delete();
 		exportDir.mkdir();
 
 		exportCommand.setStoreOptions(dataStorePluginOptions);
@@ -309,6 +310,7 @@ public class BasicMapReduceIT
 		if ((index != null)) {
 			options.setIndex(index);
 		}
+		jobRunner.setQueryOptions(options);
 		final Configuration conf = MapReduceTestUtils.getConfiguration();
 		MapReduceTestUtils.filterConfiguration(conf);
 		final int res = ToolRunner.run(

@@ -42,7 +42,7 @@ public class DataStatisticsStoreIT
 {
 
 	@GeoWaveTestStore({
-		GeoWaveStoreType.HBASE
+		GeoWaveStoreType.ACCUMULO
 	})
 	protected DataStorePluginOptions dataStore;
 
@@ -51,6 +51,7 @@ public class DataStatisticsStoreIT
 			throws IOException {
 		TestUtils.deleteAll(dataStore);
 	}
+
 	@Test
 	public void testInsert()
 			throws IOException {

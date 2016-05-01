@@ -19,7 +19,6 @@ import mil.nga.giat.geowave.test.query.SpatialTemporalQueryIT;
 import mil.nga.giat.geowave.test.service.GeoServerIT;
 import mil.nga.giat.geowave.test.service.GeoWaveIngestGeoserverIT;
 import mil.nga.giat.geowave.test.service.GeoWaveServicesIT;
-import mil.nga.giat.geowave.test.store.DataStatisticsStoreIT;
 
 @RunWith(GeoWaveITSuiteRunner.class)
 @SuiteClasses({
@@ -39,7 +38,7 @@ import mil.nga.giat.geowave.test.store.DataStatisticsStoreIT;
 	SpatialTemporalQueryIT.class,
 	PolygonDataIdQueryIT.class,
 	ConfigCacheIT.class,
-	DataStatisticsStoreIT.class,
+// DataStatisticsStoreIT.class,
 })
 public class GeoWaveITSuite
 {

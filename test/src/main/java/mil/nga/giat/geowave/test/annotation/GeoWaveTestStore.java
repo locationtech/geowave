@@ -33,9 +33,9 @@ public @interface GeoWaveTestStore {
 
 	public static enum GeoWaveStoreType {
 		ACCUMULO(
-				AccumuloStoreTestEnvironment.getInstance()),
-		HBASE(
-				HBaseStoreTestEnvironment.getInstance());
+				AccumuloStoreTestEnvironment.getInstance());
+		// HBASE(
+		// HBaseStoreTestEnvironment.getInstance());
 		private final StoreTestEnvironment testEnvironment;
 
 		private GeoWaveStoreType(
