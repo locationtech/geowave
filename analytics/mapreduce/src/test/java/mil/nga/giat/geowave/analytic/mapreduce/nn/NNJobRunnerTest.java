@@ -23,12 +23,15 @@ import mil.nga.giat.geowave.analytic.mapreduce.MapReduceIntegration;
 import mil.nga.giat.geowave.analytic.mapreduce.SequenceFileInputFormatConfiguration;
 import mil.nga.giat.geowave.analytic.param.CommonParameters;
 import mil.nga.giat.geowave.analytic.param.MapReduceParameters.MRConfig;
+import mil.nga.giat.geowave.analytic.param.ParameterHelper;
 import mil.nga.giat.geowave.analytic.param.PartitionParameters.Partition;
 import mil.nga.giat.geowave.analytic.param.StoreParameters.StoreParam;
 import mil.nga.giat.geowave.analytic.partitioner.OrthodromicDistancePartitioner;
 import mil.nga.giat.geowave.analytic.partitioner.Partitioner;
 import mil.nga.giat.geowave.analytic.store.PersistableStore;
+import mil.nga.giat.geowave.core.store.GeoWaveStoreFinder;
 import mil.nga.giat.geowave.core.store.memory.MemoryRequiredOptions;
+import mil.nga.giat.geowave.core.store.memory.MemoryStoreFactoryFamily;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 
 public class NNJobRunnerTest
@@ -161,6 +164,9 @@ public class NNJobRunnerTest
 				"/");
 
 		DataStorePluginOptions pluginOptions = new DataStorePluginOptions();
+		GeoWaveStoreFinder.getRegisteredStoreFactoryFamilies().put(
+				"memory",
+				new MemoryStoreFactoryFamily());
 		pluginOptions.selectPlugin("memory");
 		MemoryRequiredOptions opts = (MemoryRequiredOptions) pluginOptions.getFactoryOptions();
 		opts.setGeowaveNamespace(TEST_NAMESPACE);
@@ -168,7 +174,7 @@ public class NNJobRunnerTest
 				pluginOptions);
 
 		runTimeProperties.store(
-				StoreParam.STORE,
+				StoreParam.INPUT_STORE,
 				store);
 
 		runTimeProperties.store(

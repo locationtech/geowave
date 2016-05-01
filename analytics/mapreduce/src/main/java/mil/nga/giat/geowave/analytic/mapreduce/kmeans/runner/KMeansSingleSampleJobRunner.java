@@ -130,7 +130,7 @@ public class KMeansSingleSampleJobRunner<T> extends
 			CentroidParameters.Centroid.EXTRACTOR_CLASS,
 			CommonParameters.Common.DISTANCE_FUNCTION_CLASS,
 			CommonParameters.Common.DIMENSION_EXTRACT_CLASS,
-			StoreParameters.StoreParam.STORE,
+			StoreParameters.StoreParam.INPUT_STORE,
 			GlobalParameters.Global.BATCH_ID,
 			ClusteringParameters.Clustering.MAX_REDUCER_COUNT
 		}));

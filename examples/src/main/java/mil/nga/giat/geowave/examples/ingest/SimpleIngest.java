@@ -1,8 +1,21 @@
 package mil.nga.giat.geowave.examples.ingest;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import org.apache.accumulo.core.client.AccumuloException;
+import org.apache.accumulo.core.client.AccumuloSecurityException;
+import org.apache.log4j.Logger;
+import org.geotools.feature.AttributeTypeBuilder;
+import org.geotools.feature.simple.SimpleFeatureBuilder;
+import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
+import org.opengis.feature.simple.SimpleFeature;
+import org.opengis.feature.simple.SimpleFeatureType;
+
+import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.Geometry;
 
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
@@ -18,19 +31,12 @@ import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloAdapterIndexMapp
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloAdapterStore;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloDataStatisticsStore;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloIndexStore;
-import mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloOptions;
-
-import org.apache.accumulo.core.client.AccumuloException;
-import org.apache.accumulo.core.client.AccumuloSecurityException;
-import org.apache.log4j.Logger;
-import org.geotools.feature.AttributeTypeBuilder;
-import org.geotools.feature.simple.SimpleFeatureBuilder;
-import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
-import org.opengis.feature.simple.SimpleFeature;
-import org.opengis.feature.simple.SimpleFeatureType;
-
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.Geometry;
+import mil.nga.giat.geowave.datastore.hbase.HBaseDataStore;
+import mil.nga.giat.geowave.datastore.hbase.metadata.HBaseAdapterIndexMappingStore;
+import mil.nga.giat.geowave.datastore.hbase.metadata.HBaseAdapterStore;
+import mil.nga.giat.geowave.datastore.hbase.metadata.HBaseDataStatisticsStore;
+import mil.nga.giat.geowave.datastore.hbase.metadata.HBaseIndexStore;
+import mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations;
 
 public class SimpleIngest
 {
@@ -80,7 +86,7 @@ public class SimpleIngest
 	 *            Accumulo instance configuration
 	 * @return DataStore object for the particular accumulo instance
 	 */
-	protected DataStore getGeowaveDataStore(
+	protected DataStore getAccumuloGeowaveDataStore(
 			final BasicAccumuloOperations instance ) {
 
 		// GeoWave persists both the index and data adapter to the same accumulo
@@ -135,6 +141,42 @@ public class SimpleIngest
 				accumuloInstance,
 				accumuloUser,
 				accumuloPass,
+				geowaveNamespace);
+	}
+
+	/***
+	 * DataStore is essentially the controller that take the HBase information,
+	 * geowave configuration, and data type, and inserts/queries from HBase
+	 * 
+	 * @param instance
+	 *            HBase instance configuration
+	 * @return DataStore object for the particular HBase instance
+	 */
+	protected DataStore getHbaseGeowaveDataStore(
+			final BasicHBaseOperations instance ) {
+
+		// GeoWave persists both the index and data adapter to the same accumulo
+		// namespace as the data. The intent here
+		// is that all data is discoverable without configuration/classes stored
+		// outside of the accumulo instance.
+		return new HBaseDataStore(
+				new HBaseIndexStore(
+						instance),
+				new HBaseAdapterStore(
+						instance),
+				new HBaseDataStatisticsStore(
+						instance),
+				new HBaseAdapterIndexMappingStore(
+						instance),
+				instance);
+	}
+
+	protected BasicHBaseOperations getHbaseOperationsInstance(
+			final String zookeeperInstances,
+			final String geowaveNamespace )
+			throws IOException {
+		return new BasicHBaseOperations(
+				zookeeperInstances,
 				geowaveNamespace);
 	}
 

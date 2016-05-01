@@ -90,7 +90,6 @@ public class OrthodromicDistancePartitionerTest
 		propertyManagement.store(
 				PartitionParameters.Partition.DISTANCE_THRESHOLDS,
 				"10000");
-
 		propertyManagement.store(
 				CommonParameters.Common.INDEX_MODEL_BUILDER_CLASS,
 				SpatialIndexModelBuilder.class);

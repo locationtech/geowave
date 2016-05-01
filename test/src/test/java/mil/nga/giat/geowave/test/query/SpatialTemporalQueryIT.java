@@ -21,9 +21,11 @@ import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.geotools.filter.text.cql2.CQL;
 import org.geotools.filter.text.cql2.CQLException;
+import org.junit.After;
 import org.junit.Assert;
-import org.junit.BeforeClass;
+import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.opengis.feature.simple.SimpleFeature;
 
 import com.vividsolutions.jts.geom.Coordinate;
@@ -45,45 +47,50 @@ import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
-import mil.nga.giat.geowave.core.store.config.ConfigUtils;
 import mil.nga.giat.geowave.core.store.index.Index;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.query.BasicQuery;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
-import mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStore;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloStoreFactoryFamily;
-import mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloRequiredOptions;
-import mil.nga.giat.geowave.test.GeoWaveTestEnvironment;
+import mil.nga.giat.geowave.test.GeoWaveITRunner;
+import mil.nga.giat.geowave.test.TestUtils;
+import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore;
+import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 
-public class SpatialTemporalQueryIT extends
-		GeoWaveTestEnvironment
+@RunWith(GeoWaveITRunner.class)
+public class SpatialTemporalQueryIT
 {
 	private static final SimpleDateFormat CQL_DATE_FORMAT = new SimpleDateFormat(
 			"yyyy-MM-dd'T'hh:mm:ss'Z'");
-	private static int MULTI_DAY_YEAR = 2016;
-	private static int MULTI_DAY_MONTH = 1;
-	private static int MULTI_MONTH_YEAR = 2000;
-	private static int MULTI_YEAR_MIN = 1980;
-	private static int MULTI_YEAR_MAX = 1995;
-	private static PrimaryIndex DAY_INDEX = new SpatialTemporalIndexBuilder().setPeriodicity(
+	private static final int MULTI_DAY_YEAR = 2016;
+	private static final int MULTI_DAY_MONTH = 1;
+	private static final int MULTI_MONTH_YEAR = 2000;
+	private static final int MULTI_YEAR_MIN = 1980;
+	private static final int MULTI_YEAR_MAX = 1995;
+	private static final PrimaryIndex DAY_INDEX = new SpatialTemporalIndexBuilder().setPeriodicity(
 			Unit.DAY).createIndex();
-	private static PrimaryIndex MONTH_INDEX = new SpatialTemporalIndexBuilder().setPeriodicity(
+	private static final PrimaryIndex MONTH_INDEX = new SpatialTemporalIndexBuilder().setPeriodicity(
 			Unit.MONTH).createIndex();
-	private static PrimaryIndex YEAR_INDEX = new SpatialTemporalIndexBuilder().setPeriodicity(
+	private static final PrimaryIndex YEAR_INDEX = new SpatialTemporalIndexBuilder().setPeriodicity(
 			Unit.YEAR).createIndex();
-	private static FeatureDataAdapter timeStampAdapter;
-	private static FeatureDataAdapter timeRangeAdapter;
-	private static DataStore dataStore;
-	private static GeoWaveGTDataStore geowaveGtDataStore;
-	private static PrimaryIndex currentGeotoolsIndex;
+	private FeatureDataAdapter timeStampAdapter;
+	private FeatureDataAdapter timeRangeAdapter;
+	private DataStore dataStore;
+	private GeoWaveGTDataStore geowaveGtDataStore;
+	private PrimaryIndex currentGeotoolsIndex;
 
-	@BeforeClass
-	public static void initSpatialTemporalTestData()
+	@GeoWaveTestStore({
+		GeoWaveStoreType.ACCUMULO
+	})
+	protected DataStorePluginOptions dataStoreOptions;
+
+	@Before
+	public void initSpatialTemporalTestData()
 			throws IOException,
 			GeoWavePluginException {
 
-		dataStore = new AccumuloDataStore(
-				accumuloOperations);
+		dataStore = dataStoreOptions.createDataStore();
 		SimpleFeatureTypeBuilder builder = new SimpleFeatureTypeBuilder();
 		builder.setName("simpletimestamp");
 		builder.add(
@@ -245,15 +252,9 @@ public class SpatialTemporalQueryIT extends
 		}
 		final Map<String, Serializable> config = new HashMap<String, Serializable>();
 
-		AccumuloRequiredOptions opts = new AccumuloRequiredOptions();
-		opts.setGeowaveNamespace(TEST_NAMESPACE);
-		opts.setUser(accumuloUser);
-		opts.setPassword(accumuloPassword);
-		opts.setInstance(accumuloInstance);
-		opts.setZookeeper(zookeeper);
-		Map<String, String> mapOpts = ConfigUtils.populateListFromOptions(opts);
+		final Map<String, String> mapOpts = dataStoreOptions.getFactoryOptionsAsMap();
 
-		for (String key : mapOpts.keySet()) {
+		for (final String key : mapOpts.keySet()) {
 			config.put(
 					key,
 					mapOpts.get(key));
@@ -261,7 +262,7 @@ public class SpatialTemporalQueryIT extends
 
 		geowaveGtDataStore = new GeoWaveGTDataStore(
 				new GeoWavePluginConfig(
-						new AccumuloStoreFactoryFamily(),
+						dataStoreOptions.getFactoryFamily(),
 						config) {
 					@Override
 					public IndexQueryStrategySPI getIndexQueryStrategy() {
@@ -276,7 +277,7 @@ public class SpatialTemporalQueryIT extends
 								final Iterator<IndexQueryStrategySPI> it = ldr.iterator();
 								final List<Index<?, ?>> indexList = new ArrayList<Index<?, ?>>();
 
-								for (PrimaryIndex index : indices) {
+								for (final PrimaryIndex index : indices) {
 									indexList.add(index);
 								}
 								while (it.hasNext()) {
@@ -304,6 +305,12 @@ public class SpatialTemporalQueryIT extends
 						};
 					}
 				});
+	}
+
+	@After
+	public void deleteTestData()
+			throws IOException {
+		TestUtils.deleteAll(dataStoreOptions);
 	}
 
 	private static Calendar getInitialDayCalendar() {
@@ -362,8 +369,8 @@ public class SpatialTemporalQueryIT extends
 
 	private static void write(
 			final IndexWriter[] writers,
-			SimpleFeature feature ) {
-		for (IndexWriter writer : writers) {
+			final SimpleFeature feature ) {
+		for (final IndexWriter writer : writers) {
 			writer.write(feature);
 		}
 	}

@@ -11,8 +11,6 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
-import org.apache.accumulo.core.client.AccumuloException;
-import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.apache.http.HttpResponse;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
@@ -28,39 +26,50 @@ import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 
-import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
+import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.core.store.memory.DataStoreUtils;
-import mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStore;
-import mil.nga.giat.geowave.datastore.accumulo.AccumuloStoreFactoryFamily;
-import mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations;
+import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.examples.ingest.SimpleIngest;
 import mil.nga.giat.geowave.service.client.GeoserverServiceClient;
+import mil.nga.giat.geowave.test.GeoWaveITRunner;
+import mil.nga.giat.geowave.test.TestUtils;
+import mil.nga.giat.geowave.test.annotation.Environments;
+import mil.nga.giat.geowave.test.annotation.Environments.Environment;
+import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore;
+import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 
-public class GeoWaveIngestGeoserverIT extends
-		ServicesTestEnvironment
+@RunWith(GeoWaveITRunner.class)
+@Environments({
+	Environment.SERVICES
+})
+public class GeoWaveIngestGeoserverIT
 {
 
 	private static final Logger LOGGER = Logger.getLogger(GeoWaveIngestGeoserverIT.class);
 
 	private static final String WORKSPACE = "testomatic";
 	private static final String WMS_VERSION = "1.3";
-
-	private static GeoserverServiceClient geoserverServiceClient = null;
 	private static final String WMS_URL_PREFIX = "/geoserver/wms";
 	private static final String REFERENCE_26_WMS_IMAGE_PATH = "src/test/resources/wms/wms-grid-2.6.gif";
 	private static final String REFERENCE_25_WMS_IMAGE_PATH = "src/test/resources/wms/wms-grid-2.5.gif";
+
+	private static GeoserverServiceClient geoserverServiceClient = null;
+	@GeoWaveTestStore({
+		GeoWaveStoreType.ACCUMULO
+	})
+	protected DataStorePluginOptions dataStoreOptions;
 
 	@BeforeClass
 	public static void setupIngestTest()
 			throws URISyntaxException {
 		geoserverServiceClient = new GeoserverServiceClient(
-				GEOWAVE_BASE_URL);
+				ServicesTestEnvironment.GEOWAVE_BASE_URL);
 
 	}
 
@@ -69,25 +78,7 @@ public class GeoWaveIngestGeoserverIT extends
 			throws IOException,
 			SchemaException,
 			URISyntaxException {
-		BasicAccumuloOperations bao = null;
-		try {
-			bao = new BasicAccumuloOperations(
-					zookeeper,
-					accumuloInstance,
-					accumuloUser,
-					accumuloPassword,
-					TEST_NAMESPACE);
-		}
-		catch (final AccumuloException e) {
-			e.printStackTrace();
-			Assert.fail(e.getMessage());
-		}
-		catch (final AccumuloSecurityException e) {
-			e.printStackTrace();
-			Assert.fail(e.getMessage());
-		}
-		final AccumuloDataStore ds = new AccumuloDataStore(
-				bao);
+		final DataStore ds = dataStoreOptions.createDataStore();
 		final SimpleFeatureType sft = SimpleIngest.createPointFeatureType();
 		final PrimaryIndex idx = SimpleIngest.createSpatialIndex();
 		final GeotoolsFeatureDataAdapter fda = SimpleIngest.createDataAdapter(sft);
@@ -118,38 +109,38 @@ public class GeoWaveIngestGeoserverIT extends
 				"Unable to create 'testomatic' workspace",
 				geoserverServiceClient.createWorkspace(WORKSPACE));
 		Assert.assertTrue(
-				"Unable to publish Accumulo data store",
+				"Unable to publish '" + dataStoreOptions.getType() + "' data store",
 				geoserverServiceClient.publishDatastore(
-						new AccumuloStoreFactoryFamily().getName(),
-						getAccumuloConfig(),
-						TEST_NAMESPACE,
+						dataStoreOptions.getType(),
+						dataStoreOptions.getFactoryOptionsAsMap(),
+						TestUtils.TEST_NAMESPACE,
 						null,
 						null,
 						null,
 						null,
 						WORKSPACE));
 		assertTrue(
-				"Unable to publish '" + TEST_STYLE_NAME_NO_DIFFERENCE + "' style",
+				"Unable to publish '" + ServicesTestEnvironment.TEST_STYLE_NAME_NO_DIFFERENCE + "' style",
 				geoserverServiceClient.publishStyle(new File[] {
 					new File(
-							TEST_SLD_NO_DIFFERENCE_FILE)
+							ServicesTestEnvironment.TEST_SLD_NO_DIFFERENCE_FILE)
 				}));
 		assertTrue(
-				"Unable to publish '" + TEST_SLD_MINOR_SUBSAMPLE_FILE + "' style",
+				"Unable to publish '" + ServicesTestEnvironment.TEST_SLD_MINOR_SUBSAMPLE_FILE + "' style",
 				geoserverServiceClient.publishStyle(new File[] {
 					new File(
-							TEST_SLD_MINOR_SUBSAMPLE_FILE)
+							ServicesTestEnvironment.TEST_SLD_MINOR_SUBSAMPLE_FILE)
 				}));
 		assertTrue(
-				"Unable to publish '" + TEST_SLD_MAJOR_SUBSAMPLE_FILE + "' style",
+				"Unable to publish '" + ServicesTestEnvironment.TEST_SLD_MAJOR_SUBSAMPLE_FILE + "' style",
 				geoserverServiceClient.publishStyle(new File[] {
 					new File(
-							TEST_SLD_MAJOR_SUBSAMPLE_FILE)
+							ServicesTestEnvironment.TEST_SLD_MAJOR_SUBSAMPLE_FILE)
 				}));
 		Assert.assertTrue(
 				"Unable to publish '" + SimpleIngest.FEATURE_NAME + "' layer",
 				geoserverServiceClient.publishLayer(
-						TEST_NAMESPACE,
+						TestUtils.TEST_NAMESPACE,
 						"point",
 						SimpleIngest.FEATURE_NAME,
 						WORKSPACE));
@@ -192,7 +183,7 @@ public class GeoWaveIngestGeoserverIT extends
 				-90,
 				90,
 				SimpleIngest.FEATURE_NAME,
-				TEST_STYLE_NAME_NO_DIFFERENCE,
+				ServicesTestEnvironment.TEST_STYLE_NAME_NO_DIFFERENCE,
 				920,
 				360,
 				null);
@@ -209,7 +200,7 @@ public class GeoWaveIngestGeoserverIT extends
 				-90,
 				90,
 				SimpleIngest.FEATURE_NAME,
-				TEST_STYLE_NAME_MINOR_SUBSAMPLE,
+				ServicesTestEnvironment.TEST_STYLE_NAME_MINOR_SUBSAMPLE,
 				920,
 				360,
 				null);
@@ -225,7 +216,7 @@ public class GeoWaveIngestGeoserverIT extends
 				-90,
 				90,
 				SimpleIngest.FEATURE_NAME,
-				TEST_STYLE_NAME_MAJOR_SUBSAMPLE,
+				ServicesTestEnvironment.TEST_STYLE_NAME_MAJOR_SUBSAMPLE,
 				920,
 				360,
 				null);
@@ -239,20 +230,20 @@ public class GeoWaveIngestGeoserverIT extends
 				"Unable to delete layer '" + SimpleIngest.FEATURE_NAME + "'",
 				geoserverServiceClient.deleteLayer(SimpleIngest.FEATURE_NAME));
 		assertTrue(
-				"Unable to delete datastore '" + TEST_NAMESPACE + "'",
+				"Unable to delete datastore '" + TestUtils.TEST_NAMESPACE + "'",
 				geoserverServiceClient.deleteDatastore(
-						TEST_NAMESPACE,
+						TestUtils.TEST_NAMESPACE,
 						WORKSPACE));
 		assertTrue(
-				"Unable to delete style '" + TEST_STYLE_NAME_NO_DIFFERENCE + "'",
-				geoserverServiceClient.deleteStyle(TEST_STYLE_NAME_NO_DIFFERENCE));
+				"Unable to delete style '" + ServicesTestEnvironment.TEST_STYLE_NAME_NO_DIFFERENCE + "'",
+				geoserverServiceClient.deleteStyle(ServicesTestEnvironment.TEST_STYLE_NAME_NO_DIFFERENCE));
 
 		assertTrue(
-				"Unable to delete style '" + TEST_STYLE_NAME_MINOR_SUBSAMPLE + "'",
-				geoserverServiceClient.deleteStyle(TEST_STYLE_NAME_MINOR_SUBSAMPLE));
+				"Unable to delete style '" + ServicesTestEnvironment.TEST_STYLE_NAME_MINOR_SUBSAMPLE + "'",
+				geoserverServiceClient.deleteStyle(ServicesTestEnvironment.TEST_STYLE_NAME_MINOR_SUBSAMPLE));
 		assertTrue(
-				"Unable to delete style '" + TEST_STYLE_NAME_MAJOR_SUBSAMPLE + "'",
-				geoserverServiceClient.deleteStyle(TEST_STYLE_NAME_MAJOR_SUBSAMPLE));
+				"Unable to delete style '" + ServicesTestEnvironment.TEST_STYLE_NAME_MAJOR_SUBSAMPLE + "'",
+				geoserverServiceClient.deleteStyle(ServicesTestEnvironment.TEST_STYLE_NAME_MAJOR_SUBSAMPLE));
 	}
 
 	/**
@@ -332,7 +323,7 @@ public class GeoWaveIngestGeoserverIT extends
 		builder.setScheme(
 				"http").setHost(
 				"localhost").setPort(
-				JETTY_PORT).setPath(
+				ServicesTestEnvironment.JETTY_PORT).setPath(
 				WMS_URL_PREFIX).setParameter(
 				"service",
 				"WMS").setParameter(
@@ -381,8 +372,8 @@ public class GeoWaveIngestGeoserverIT extends
 		provider.setCredentials(
 				AuthScope.ANY,
 				new UsernamePasswordCredentials(
-						GEOSERVER_USER,
-						GEOSERVER_PASS));
+						ServicesTestEnvironment.GEOSERVER_USER,
+						ServicesTestEnvironment.GEOSERVER_PASS));
 
 		return HttpClientBuilder.create().setDefaultCredentialsProvider(
 				provider).build();

@@ -80,7 +80,7 @@ public class KmeansJumpCommand extends
 				inputStoreOptions);
 		final PropertyManagement properties = new PropertyManagement();
 		properties.store(
-				StoreParameters.StoreParam.STORE,
+				StoreParameters.StoreParam.INPUT_STORE,
 				persistedStore);
 
 		// Convert properties from DBScanOptions and CommonOptions

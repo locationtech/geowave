@@ -136,7 +136,7 @@ public class AdapterBasedPartitioner extends
 				context,
 				scope);
 		adapterStore = new SerializableAdapterStore(
-				((PersistableStore) StoreParameters.StoreParam.STORE.getHelper().getValue(
+				((PersistableStore) StoreParameters.StoreParam.INPUT_STORE.getHelper().getValue(
 						context,
 						scope,
 						null)).getDataStoreOptions().createAdapterStore());
@@ -154,7 +154,7 @@ public class AdapterBasedPartitioner extends
 				scope,
 				configuration);
 		final ParameterEnum[] params = new ParameterEnum[] {
-			StoreParameters.StoreParam.STORE
+			StoreParameters.StoreParam.INPUT_STORE
 		};
 		runTimeProperties.setConfig(
 				params,

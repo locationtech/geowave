@@ -123,7 +123,8 @@ public class ConvexHullJobRunner extends
 		params.addAll(super.getParameters());
 
 		params.addAll(Arrays.asList(new ParameterEnum<?>[] {
-			StoreParameters.StoreParam.STORE,
+			StoreParameters.StoreParam.INPUT_STORE,
+			StoreParameters.StoreParam.OUTPUT_STORE,
 			GlobalParameters.Global.BATCH_ID
 		}));
 

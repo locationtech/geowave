@@ -16,6 +16,25 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.math.util.MathUtils;
+import org.apache.log4j.Logger;
+import org.geotools.feature.AttributeTypeBuilder;
+import org.geotools.feature.simple.SimpleFeatureBuilder;
+import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
+import org.geotools.filter.text.cql2.CQLException;
+import org.junit.Assert;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.opengis.feature.Property;
+import org.opengis.feature.simple.SimpleFeature;
+import org.opengis.feature.simple.SimpleFeatureType;
+import org.opengis.filter.Filter;
+
+import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.Envelope;
+import com.vividsolutions.jts.geom.Geometry;
+
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
 import mil.nga.giat.geowave.adapter.vector.export.VectorLocalExportCommand;
@@ -47,55 +66,33 @@ import mil.nga.giat.geowave.core.store.data.visibility.UniformVisibilityWriter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.memory.DataStoreUtils;
 import mil.nga.giat.geowave.core.store.memory.MemoryAdapterStore;
+import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.query.DataIdQuery;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.core.store.query.aggregate.CountAggregation;
 import mil.nga.giat.geowave.core.store.query.aggregate.CountResult;
-import mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStore;
-import mil.nga.giat.geowave.datastore.accumulo.index.secondary.AccumuloSecondaryIndexDataStore;
-import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloAdapterIndexMappingStore;
-import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloAdapterStore;
-import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloDataStatisticsStore;
-import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloIndexStore;
 import mil.nga.giat.geowave.format.geotools.vector.GeoToolsVectorDataStoreIngestPlugin;
+import mil.nga.giat.geowave.test.TestUtils.DimensionalityType;
+import mil.nga.giat.geowave.test.TestUtils.ExpectedResults;
+import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore;
+import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 
-import org.apache.accumulo.core.client.AccumuloException;
-import org.apache.accumulo.core.client.AccumuloSecurityException;
-import org.apache.accumulo.core.client.TableNotFoundException;
-import org.apache.commons.math.util.MathUtils;
-import org.apache.log4j.Logger;
-import org.geotools.feature.AttributeTypeBuilder;
-import org.geotools.feature.simple.SimpleFeatureBuilder;
-import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
-import org.geotools.filter.text.cql2.CQLException;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.opengis.feature.Property;
-import org.opengis.feature.simple.SimpleFeature;
-import org.opengis.feature.simple.SimpleFeatureType;
-import org.opengis.filter.Filter;
-
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.Envelope;
-import com.vividsolutions.jts.geom.Geometry;
-
-public class GeoWaveBasicIT extends
-		GeoWaveTestEnvironment
+@RunWith(GeoWaveITRunner.class)
+public class GeoWaveBasicIT
 {
 	private static final SimpleDateFormat CQL_DATE_FORMAT = new SimpleDateFormat(
 			"yyyy-MM-dd'T'hh:mm:ss'Z'");
 	private final static Logger LOGGER = Logger.getLogger(GeoWaveBasicIT.class);
-	private static final String TEST_DATA_ZIP_RESOURCE_PATH = TEST_RESOURCE_PACKAGE + "basic-testdata.zip";
-	private static final String TEST_FILTER_PACKAGE = TEST_CASE_BASE + "filter/";
-	private static final String HAIL_TEST_CASE_PACKAGE = TEST_CASE_BASE + "hail_test_case/";
+	private static final String TEST_DATA_ZIP_RESOURCE_PATH = TestUtils.TEST_RESOURCE_PACKAGE + "basic-testdata.zip";
+	private static final String TEST_FILTER_PACKAGE = TestUtils.TEST_CASE_BASE + "filter/";
+	private static final String HAIL_TEST_CASE_PACKAGE = TestUtils.TEST_CASE_BASE + "hail_test_case/";
 	private static final String HAIL_SHAPEFILE_FILE = HAIL_TEST_CASE_PACKAGE + "hail.shp";
 	private static final String HAIL_EXPECTED_BOX_FILTER_RESULTS_FILE = HAIL_TEST_CASE_PACKAGE + "hail-box-filter.shp";
 	private static final String HAIL_EXPECTED_POLYGON_FILTER_RESULTS_FILE = HAIL_TEST_CASE_PACKAGE + "hail-polygon-filter.shp";
 	private static final String HAIL_EXPECTED_BOX_TEMPORAL_FILTER_RESULTS_FILE = HAIL_TEST_CASE_PACKAGE + "hail-box-temporal-filter.shp";
 	private static final String HAIL_EXPECTED_POLYGON_TEMPORAL_FILTER_RESULTS_FILE = HAIL_TEST_CASE_PACKAGE + "hail-polygon-temporal-filter.shp";
-	private static final String TORNADO_TRACKS_TEST_CASE_PACKAGE = TEST_CASE_BASE + "tornado_tracks_test_case/";
+	private static final String TORNADO_TRACKS_TEST_CASE_PACKAGE = TestUtils.TEST_CASE_BASE + "tornado_tracks_test_case/";
 	private static final String TORNADO_TRACKS_SHAPEFILE_FILE = TORNADO_TRACKS_TEST_CASE_PACKAGE + "tornado_tracks.shp";
 	private static final String TORNADO_TRACKS_EXPECTED_BOX_FILTER_RESULTS_FILE = TORNADO_TRACKS_TEST_CASE_PACKAGE + "tornado_tracks-box-filter.shp";
 	private static final String TORNADO_TRACKS_EXPECTED_POLYGON_FILTER_RESULTS_FILE = TORNADO_TRACKS_TEST_CASE_PACKAGE + "tornado_tracks-polygon-filter.shp";
@@ -109,14 +106,19 @@ public class GeoWaveBasicIT extends
 	private static final String TEST_EXPORT_DIRECTORY = "export";
 	private static final String TEST_BASE_EXPORT_FILE_NAME = "basicIT-export.avro";
 
+	@GeoWaveTestStore({
+		GeoWaveStoreType.ACCUMULO
+	})
+	protected DataStorePluginOptions dataStore;
+
 	@BeforeClass
 	public static void extractTestFiles()
 			throws URISyntaxException {
-		GeoWaveTestEnvironment.unZipFile(
+		TestUtils.unZipFile(
 				new File(
 						GeoWaveBasicIT.class.getClassLoader().getResource(
 								TEST_DATA_ZIP_RESOURCE_PATH).toURI()),
-				TEST_CASE_BASE);
+				TestUtils.TEST_CASE_BASE);
 	}
 
 	@Test
@@ -135,11 +137,13 @@ public class GeoWaveBasicIT extends
 				"AccumuloIndexWriter.skipFlush",
 				"true");
 		// ingest both lines and points
-		testLocalIngest(
+		TestUtils.testLocalIngest(
+				dataStore,
 				DimensionalityType.SPATIAL,
 				HAIL_SHAPEFILE_FILE,
 				nthreads);
-		testLocalIngest(
+		TestUtils.testLocalIngest(
+				dataStore,
 				DimensionalityType.SPATIAL,
 				TORNADO_TRACKS_SHAPEFILE_FILE,
 				nthreads);
@@ -154,20 +158,12 @@ public class GeoWaveBasicIT extends
 						new File(
 								TORNADO_TRACKS_EXPECTED_BOX_FILTER_RESULTS_FILE).toURI().toURL()
 					},
-					DEFAULT_SPATIAL_INDEX,
+					TestUtils.DEFAULT_SPATIAL_INDEX,
 					"bounding box constraint only");
 		}
 		catch (final Exception e) {
 			e.printStackTrace();
-			try {
-				accumuloOperations.deleteAll();
-			}
-			catch (TableNotFoundException | AccumuloSecurityException | AccumuloException ex) {
-				LOGGER.error(
-						"Unable to clear accumulo namespace",
-						ex);
-			}
-
+			TestUtils.deleteAll(dataStore);
 			Assert.fail("Error occurred while testing a bounding box query of spatial index: '" + e.getLocalizedMessage() + "'");
 		}
 		try {
@@ -180,71 +176,46 @@ public class GeoWaveBasicIT extends
 						new File(
 								TORNADO_TRACKS_EXPECTED_POLYGON_FILTER_RESULTS_FILE).toURI().toURL()
 					},
-					DEFAULT_SPATIAL_INDEX,
+					TestUtils.DEFAULT_SPATIAL_INDEX,
 					"polygon constraint only");
 		}
 		catch (final Exception e) {
 			e.printStackTrace();
-			try {
-				accumuloOperations.deleteAll();
-			}
-			catch (TableNotFoundException | AccumuloSecurityException | AccumuloException ex) {
-				LOGGER.error(
-						"Unable to clear accumulo namespace",
-						ex);
-			}
+			TestUtils.deleteAll(dataStore);
 			Assert.fail("Error occurred while testing a polygon query of spatial index: '" + e.getLocalizedMessage() + "'");
 		}
-		try {
-			testStats(
-					new File[] {
-						new File(
-								HAIL_SHAPEFILE_FILE),
-						new File(
-								TORNADO_TRACKS_SHAPEFILE_FILE)
-					},
-					DEFAULT_SPATIAL_INDEX,
-					true);
-		}
-		catch (final Exception e) {
-			e.printStackTrace();
-			try {
-				accumuloOperations.deleteAll();
-			}
-			catch (TableNotFoundException | AccumuloSecurityException | AccumuloException ex) {
-				LOGGER.error(
-						"Unable to clear accumulo namespace",
-						ex);
-			}
-			Assert.fail("Error occurred while testing a bounding box stats on spatial index: '" + e.getLocalizedMessage() + "'");
-		}
 
+		if ((nthreads > 0)) {
+			try {
+				testStats(
+						new File[] {
+							new File(
+									HAIL_SHAPEFILE_FILE),
+							new File(
+									TORNADO_TRACKS_SHAPEFILE_FILE)
+						},
+						TestUtils.DEFAULT_SPATIAL_INDEX,
+						true);
+			}
+			catch (final Exception e) {
+				e.printStackTrace();
+				TestUtils.deleteAll(dataStore);
+				Assert.fail("Error occurred while testing a bounding box stats on spatial index: '" + e.getLocalizedMessage() + "'");
+			}
+		}
 		try {
 			testDelete(
 					new File(
 							TEST_POLYGON_FILTER_FILE).toURI().toURL(),
-					DEFAULT_SPATIAL_INDEX);
+					TestUtils.DEFAULT_SPATIAL_INDEX);
 		}
 		catch (final Exception e) {
 			e.printStackTrace();
-			try {
-				accumuloOperations.deleteAll();
-			}
-			catch (TableNotFoundException | AccumuloSecurityException | AccumuloException ex) {
-				LOGGER.error(
-						"Unable to clear accumulo namespace",
-						ex);
-			}
+			TestUtils.deleteAll(dataStore);
 			Assert.fail("Error occurred while testing deletion of an entry using spatial index: '" + e.getLocalizedMessage() + "'");
 		}
-		try {
-			accumuloOperations.deleteAll();
-		}
-		catch (TableNotFoundException | AccumuloSecurityException | AccumuloException ex) {
-			LOGGER.error(
-					"Unable to clear accumulo namespace",
-					ex);
-		}
+
+		TestUtils.deleteAll(dataStore);
 	}
 
 	protected static class StatisticsCache implements
@@ -346,21 +317,12 @@ public class GeoWaveBasicIT extends
 			}
 			catch (final IOException e) {
 				e.printStackTrace();
-				try {
-					accumuloOperations.deleteAll();
-				}
-				catch (TableNotFoundException | AccumuloSecurityException | AccumuloException ex) {
-					LOGGER.error(
-							"Unable to clear accumulo namespace",
-							ex);
-				}
+				TestUtils.deleteAll(dataStore);
 				Assert.fail("Error occurred while reading data from file '" + inputFile.getAbsolutePath() + "': '" + e.getLocalizedMessage() + "'");
 			}
 		}
-		final DataStatisticsStore statsStore = new AccumuloDataStatisticsStore(
-				accumuloOperations);
-		final AdapterStore adapterStore = new AccumuloAdapterStore(
-				accumuloOperations);
+		final DataStatisticsStore statsStore = dataStore.createDataStatisticsStore();
+		final AdapterStore adapterStore = dataStore.createAdapterStore();
 		try (CloseableIterator<DataAdapter<?>> adapterIterator = adapterStore.getAdapters()) {
 			while (adapterIterator.hasNext()) {
 				final FeatureDataAdapter adapter = (FeatureDataAdapter) adapterIterator.next();
@@ -437,14 +399,8 @@ public class GeoWaveBasicIT extends
 		}
 		catch (final IOException e) {
 			e.printStackTrace();
-			try {
-				accumuloOperations.deleteAll();
-			}
-			catch (TableNotFoundException | AccumuloSecurityException | AccumuloException ex) {
-				LOGGER.error(
-						"Unable to clear accumulo namespace",
-						ex);
-			}
+
+			TestUtils.deleteAll(dataStore);
 			Assert.fail("Error occurred while retrieving adapters or statistics from metadata table: '" + e.getLocalizedMessage() + "'");
 		}
 	}
@@ -454,11 +410,11 @@ public class GeoWaveBasicIT extends
 			throws CQLException,
 			IOException {
 
-		final SimpleFeature savedFilter = resourceToFeature(filterURL);
+		final SimpleFeature savedFilter = TestUtils.resourceToFeature(filterURL);
 
 		final Geometry filterGeometry = (Geometry) savedFilter.getDefaultGeometry();
-		final Object startObj = savedFilter.getAttribute(TEST_FILTER_START_TIME_ATTRIBUTE_NAME);
-		final Object endObj = savedFilter.getAttribute(TEST_FILTER_END_TIME_ATTRIBUTE_NAME);
+		final Object startObj = savedFilter.getAttribute(TestUtils.TEST_FILTER_START_TIME_ATTRIBUTE_NAME);
+		final Object endObj = savedFilter.getAttribute(TestUtils.TEST_FILTER_END_TIME_ATTRIBUTE_NAME);
 		Date startDate = null, endDate = null;
 		if ((startObj != null) && (endObj != null)) {
 			// if we can resolve start and end times, make it a spatial temporal
@@ -476,16 +432,16 @@ public class GeoWaveBasicIT extends
 				endDate = (Date) endObj;
 			}
 		}
-		final AccumuloAdapterStore adapterStore = new AccumuloAdapterStore(
-				accumuloOperations);
+		final AdapterStore adapterStore = dataStore.createAdapterStore();
 		final VectorLocalExportCommand exportCommand = new VectorLocalExportCommand();
 		final VectorLocalExportOptions options = exportCommand.getOptions();
 		final File exportDir = new File(
-				TEMP_DIR,
+				TestUtils.TEMP_DIR,
 				TEST_EXPORT_DIRECTORY);
-		exportDir.mkdir();
+		exportDir.delete();
+		exportDir.mkdirs();
 
-		exportCommand.setInputStoreOptions(getAccumuloStorePluginOptions(TEST_NAMESPACE));
+		exportCommand.setInputStoreOptions(dataStore);
 		options.setBatchSize(10000);
 		final Envelope env = filterGeometry.getEnvelopeInternal();
 		final double east = env.getMaxX();
@@ -495,7 +451,7 @@ public class GeoWaveBasicIT extends
 		try (CloseableIterator<DataAdapter<?>> adapterIt = adapterStore.getAdapters()) {
 			while (adapterIt.hasNext()) {
 				final DataAdapter<?> adapter = adapterIt.next();
-				List<String> adapterIds = new ArrayList<String>();
+				final List<String> adapterIds = new ArrayList<String>();
 				adapterIds.add(adapter.getAdapterId().getString());
 				options.setAdapterIds(adapterIds);
 				if (adapter instanceof GeotoolsFeatureDataAdapter) {
@@ -538,15 +494,9 @@ public class GeoWaveBasicIT extends
 				}
 			}
 		}
-		try {
-			accumuloOperations.deleteAll();
-		}
-		catch (TableNotFoundException | AccumuloSecurityException | AccumuloException ex) {
-			LOGGER.error(
-					"Unable to clear accumulo namespace",
-					ex);
-		}
-		testLocalIngest(
+		TestUtils.deleteAll(dataStore);
+		TestUtils.testLocalIngest(
+				dataStore,
 				DimensionalityType.SPATIAL_TEMPORAL,
 				exportDir.getAbsolutePath(),
 				"avro",
@@ -565,14 +515,7 @@ public class GeoWaveBasicIT extends
 		}
 		catch (final Exception e) {
 			e.printStackTrace();
-			try {
-				accumuloOperations.deleteAll();
-			}
-			catch (TableNotFoundException | AccumuloSecurityException | AccumuloException ex) {
-				LOGGER.error(
-						"Unable to clear accumulo namespace",
-						ex);
-			}
+			TestUtils.deleteAll(dataStore);
 			Assert.fail("Error occurred on reingested dataset while testing a bounding box and time range query of spatial temporal index: '" + e.getLocalizedMessage() + "'");
 		}
 	}
@@ -584,12 +527,14 @@ public class GeoWaveBasicIT extends
 				"true");
 
 		// ingest both lines and points
-		testLocalIngest(
+		TestUtils.testLocalIngest(
+				dataStore,
 				DimensionalityType.SPATIAL_TEMPORAL,
 				HAIL_SHAPEFILE_FILE,
 				1);
 
-		testLocalIngest(
+		TestUtils.testLocalIngest(
+				dataStore,
 				DimensionalityType.SPATIAL_TEMPORAL,
 				TORNADO_TRACKS_SHAPEFILE_FILE,
 				1);
@@ -608,14 +553,7 @@ public class GeoWaveBasicIT extends
 		}
 		catch (final Exception e) {
 			e.printStackTrace();
-			try {
-				accumuloOperations.deleteAll();
-			}
-			catch (TableNotFoundException | AccumuloSecurityException | AccumuloException ex) {
-				LOGGER.error(
-						"Unable to clear accumulo namespace",
-						ex);
-			}
+			TestUtils.deleteAll(dataStore);
 			Assert.fail("Error occurred while testing a bounding box and time range query of spatial temporal index: '" + e.getLocalizedMessage() + "'");
 		}
 
@@ -632,14 +570,8 @@ public class GeoWaveBasicIT extends
 					"polygon constraint and time range");
 		}
 		catch (final Exception e) {
-			try {
-				accumuloOperations.deleteAll();
-			}
-			catch (TableNotFoundException | AccumuloSecurityException | AccumuloException ex) {
-				LOGGER.error(
-						"Unable to clear accumulo namespace",
-						ex);
-			}
+			e.printStackTrace();
+			TestUtils.deleteAll(dataStore);
 			Assert.fail("Error occurred while testing a polygon and time range query of spatial temporal index: '" + e.getLocalizedMessage() + "'");
 		}
 
@@ -651,19 +583,12 @@ public class GeoWaveBasicIT extends
 						new File(
 								TORNADO_TRACKS_SHAPEFILE_FILE)
 					},
-					DEFAULT_SPATIAL_TEMPORAL_INDEX,
+					TestUtils.DEFAULT_SPATIAL_TEMPORAL_INDEX,
 					false);
 		}
 		catch (final Exception e) {
 			e.printStackTrace();
-			try {
-				accumuloOperations.deleteAll();
-			}
-			catch (TableNotFoundException | AccumuloSecurityException | AccumuloException ex) {
-				LOGGER.error(
-						"Unable to clear accumulo namespace",
-						ex);
-			}
+			TestUtils.deleteAll(dataStore);
 			Assert.fail("Error occurred while testing a bounding box stats on spatial temporal index: '" + e.getLocalizedMessage() + "'");
 		}
 
@@ -673,14 +598,7 @@ public class GeoWaveBasicIT extends
 		}
 		catch (final Exception e) {
 			e.printStackTrace();
-			try {
-				accumuloOperations.deleteAll();
-			}
-			catch (TableNotFoundException | AccumuloSecurityException | AccumuloException ex) {
-				LOGGER.error(
-						"Unable to export accumulo namespace",
-						ex);
-			}
+			TestUtils.deleteAll(dataStore);
 			Assert.fail("Error occurred while testing deletion of an entry using spatial index: '" + e.getLocalizedMessage() + "'");
 		}
 
@@ -688,29 +606,15 @@ public class GeoWaveBasicIT extends
 			testDelete(
 					new File(
 							TEST_BOX_TEMPORAL_FILTER_FILE).toURI().toURL(),
-					DEFAULT_SPATIAL_TEMPORAL_INDEX);
+					TestUtils.DEFAULT_SPATIAL_TEMPORAL_INDEX);
 		}
 		catch (final Exception e) {
 			e.printStackTrace();
-			try {
-				accumuloOperations.deleteAll();
-			}
-			catch (TableNotFoundException | AccumuloSecurityException | AccumuloException ex) {
-				LOGGER.error(
-						"Unable to clear accumulo namespace",
-						ex);
-			}
+			TestUtils.deleteAll(dataStore);
 			Assert.fail("Error occurred while testing deletion of an entry using spatial temporal index: '" + e.getLocalizedMessage() + "'");
 		}
 
-		try {
-			accumuloOperations.deleteAll();
-		}
-		catch (TableNotFoundException | AccumuloSecurityException | AccumuloException ex) {
-			LOGGER.error(
-					"Unable to clear accumulo namespace",
-					ex);
-		}
+		TestUtils.deleteAll(dataStore);
 	}
 
 	@Test
@@ -837,23 +741,12 @@ public class GeoWaveBasicIT extends
 					arg.getValue());
 		}
 
-		final mil.nga.giat.geowave.core.store.DataStore geowaveStore = new AccumuloDataStore(
-				new AccumuloIndexStore(
-						accumuloOperations),
-				new AccumuloAdapterStore(
-						accumuloOperations),
-				new AccumuloDataStatisticsStore(
-						accumuloOperations),
-				new AccumuloSecondaryIndexDataStore(
-						accumuloOperations),
-				new AccumuloAdapterIndexMappingStore(
-						accumuloOperations),
-				accumuloOperations);
+		final mil.nga.giat.geowave.core.store.DataStore geowaveStore = dataStore.createDataStore();
 
 		final SimpleFeature sf = serBuilder.buildFeature("343");
 		try (IndexWriter writer = geowaveStore.createWriter(
 				serAdapter,
-				DEFAULT_SPATIAL_INDEX)) {
+				TestUtils.DEFAULT_SPATIAL_INDEX)) {
 			writer.write(sf);
 		}
 		final DistributableQuery q = new SpatialQuery(
@@ -934,14 +827,8 @@ public class GeoWaveBasicIT extends
 					"One feature should be found",
 					foundFeat);
 		}
-		try {
-			accumuloOperations.deleteAll();
-		}
-		catch (TableNotFoundException | AccumuloSecurityException | AccumuloException ex) {
-			LOGGER.error(
-					"Unable to clear accumulo namespace",
-					ex);
-		}
+
+		TestUtils.deleteAll(dataStore);
 	}
 
 	public <T> T[] returnArray(
@@ -971,67 +858,41 @@ public class GeoWaveBasicIT extends
 			throws Exception {
 		LOGGER.info("querying " + queryDescription);
 		System.out.println("querying " + queryDescription);
-		final mil.nga.giat.geowave.core.store.DataStore geowaveStore = new AccumuloDataStore(
-				new AccumuloIndexStore(
-						accumuloOperations),
-				new AccumuloAdapterStore(
-						accumuloOperations),
-				new AccumuloDataStatisticsStore(
-						accumuloOperations),
-				new AccumuloSecondaryIndexDataStore(
-						accumuloOperations),
-				new AccumuloAdapterIndexMappingStore(
-						accumuloOperations),
-				accumuloOperations);
+		final mil.nga.giat.geowave.core.store.DataStore geowaveStore = dataStore.createDataStore();
 		// this file is the filtered dataset (using the previous file as a
 		// filter) so use it to ensure the query worked
-		final DistributableQuery query = resourceToQuery(savedFilterResource);
+		final DistributableQuery query = TestUtils.resourceToQuery(savedFilterResource);
 		try (final CloseableIterator<?> actualResults = (index == null) ? geowaveStore.query(
 				new QueryOptions(),
 				query) : geowaveStore.query(
 				new QueryOptions(
 						index),
 				query)) {
-			final ExpectedResults expectedResults = getExpectedResults(expectedResultsResources);
+			final ExpectedResults expectedResults = TestUtils.getExpectedResults(expectedResultsResources);
 			int totalResults = 0;
 			while (actualResults.hasNext()) {
 				final Object obj = actualResults.next();
 				if (obj instanceof SimpleFeature) {
 					final SimpleFeature result = (SimpleFeature) obj;
+					final long actualHashCentroid = TestUtils.hashCentroid((Geometry) result.getDefaultGeometry());
 					Assert.assertTrue(
 							"Actual result '" + result.toString() + "' not found in expected result set",
-							expectedResults.hashedCentroids.contains(hashCentroid((Geometry) result.getDefaultGeometry())));
+							expectedResults.hashedCentroids.contains(actualHashCentroid));
 					totalResults++;
 				}
 				else {
-					try {
-						accumuloOperations.deleteAll();
-					}
-					catch (TableNotFoundException | AccumuloSecurityException | AccumuloException ex) {
-						LOGGER.error(
-								"Unable to clear accumulo namespace",
-								ex);
-					}
+					TestUtils.deleteAll(dataStore);
 					Assert.fail("Actual result '" + obj.toString() + "' is not of type Simple Feature.");
 				}
 			}
 			if (expectedResults.count != totalResults) {
-				try {
-					accumuloOperations.deleteAll();
-				}
-				catch (TableNotFoundException | AccumuloSecurityException | AccumuloException ex) {
-					LOGGER.error(
-							"Unable to clear accumulo namespace",
-							ex);
-					Assert.fail("Unable to clear accumulo namespace");
-				}
+				TestUtils.deleteAll(dataStore);
 			}
 			Assert.assertEquals(
 					expectedResults.count,
 					totalResults);
 
-			final AdapterStore adapterStore = new AccumuloAdapterStore(
-					accumuloOperations);
+			final AdapterStore adapterStore = dataStore.createAdapterStore();
 			long statisticsResult = 0;
 			try (CloseableIterator<DataAdapter<?>> adapterIt = adapterStore.getAdapters()) {
 				while (adapterIt.hasNext()) {
@@ -1069,19 +930,8 @@ public class GeoWaveBasicIT extends
 		LOGGER.info("deleting from " + index.getId() + " index");
 		System.out.println("deleting from " + index.getId() + " index");
 		boolean success = false;
-		final mil.nga.giat.geowave.core.store.DataStore geowaveStore = new AccumuloDataStore(
-				new AccumuloIndexStore(
-						accumuloOperations),
-				new AccumuloAdapterStore(
-						accumuloOperations),
-				new AccumuloDataStatisticsStore(
-						accumuloOperations),
-				new AccumuloSecondaryIndexDataStore(
-						accumuloOperations),
-				new AccumuloAdapterIndexMappingStore(
-						accumuloOperations),
-				accumuloOperations);
-		final DistributableQuery query = resourceToQuery(savedFilterResource);
+		final mil.nga.giat.geowave.core.store.DataStore geowaveStore = dataStore.createDataStore();
+		final DistributableQuery query = TestUtils.resourceToQuery(savedFilterResource);
 		final CloseableIterator<?> actualResults;
 
 		actualResults = geowaveStore.query(

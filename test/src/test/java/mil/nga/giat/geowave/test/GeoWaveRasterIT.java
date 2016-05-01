@@ -23,25 +23,33 @@ import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.memory.DataStoreUtils;
+import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.query.EverythingQuery;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStore;
 import mil.nga.giat.geowave.datastore.accumulo.util.ConnectorPool;
+import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore;
+import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 
 import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.apache.accumulo.core.client.Connector;
 import org.apache.accumulo.core.client.TableNotFoundException;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.opengis.coverage.grid.GridCoverage;
 
 import com.vividsolutions.jts.geom.Envelope;
 import com.vividsolutions.jts.geom.GeometryFactory;
 
-public class GeoWaveRasterIT extends
-		GeoWaveTestEnvironment
+@RunWith(GeoWaveITRunner.class)
+public class GeoWaveRasterIT
 {
 	private static final double DOUBLE_TOLERANCE = 1E-10d;
+	@GeoWaveTestStore({
+		GeoWaveStoreType.ACCUMULO
+	})
+	protected DataStorePluginOptions dataStoreOptions;
 
 	@Test
 	public void testNoDataMergeStrategy()
@@ -136,45 +144,6 @@ public class GeoWaveRasterIT extends
 				sumAndAveragingNumBands,
 				sumAndAveragingNumRasters,
 				new SumAndAveragingExpectedValue());
-
-		// get a connector so we can make sure queries work before and after
-		// compaction
-		final Connector connector = ConnectorPool.getInstance().getConnector(
-				zookeeper,
-				accumuloInstance,
-				accumuloUser,
-				accumuloPassword);
-		connector.tableOperations().compact(
-				TEST_NAMESPACE + "_" + DEFAULT_ALLTIER_SPATIAL_INDEX.getId().getString(),
-				null,
-				null,
-				true,
-				true);
-		// test query again after compaction
-		queryNoDataMergeStrategy(
-				noDataCoverageName,
-				noDataTileSize);
-		queryGeneralPurpose(
-				summingCoverageName,
-				summingTileSize,
-				westLon,
-				eastLon,
-				southLat,
-				northLat,
-				summingNumBands,
-				summingNumRasters,
-				new SummingExpectedValue());
-		queryGeneralPurpose(
-				sumAndAveragingCoverageName,
-				sumAndAveragingTileSize,
-				westLon,
-				eastLon,
-				southLat,
-				northLat,
-				summingNumBands,
-				sumAndAveragingNumRasters,
-				new SumAndAveragingExpectedValue());
-
 	}
 
 	private void ingestAndQueryNoDataMergeStrategy(
@@ -198,23 +167,6 @@ public class GeoWaveRasterIT extends
 		queryNoDataMergeStrategy(
 				coverageName,
 				tileSize);
-		// get a connector so we can make sure queries work before and after
-		// compaction
-		final Connector connector = ConnectorPool.getInstance().getConnector(
-				zookeeper,
-				accumuloInstance,
-				accumuloUser,
-				accumuloPassword);
-		connector.tableOperations().compact(
-				TEST_NAMESPACE + "_" + DEFAULT_ALLTIER_SPATIAL_INDEX.getId().getString(),
-				null,
-				null,
-				true,
-				true);
-		// test query again after compaction
-		queryNoDataMergeStrategy(
-				coverageName,
-				tileSize);
 	}
 
 	private void queryNoDataMergeStrategy(
@@ -223,8 +175,7 @@ public class GeoWaveRasterIT extends
 			throws AccumuloException,
 			AccumuloSecurityException,
 			IOException {
-		final DataStore dataStore = new AccumuloDataStore(
-				accumuloOperations);
+		final DataStore dataStore = dataStoreOptions.createDataStore();
 
 		try (CloseableIterator<?> it = dataStore.query(
 				new QueryOptions(
@@ -325,8 +276,7 @@ public class GeoWaveRasterIT extends
 			final double northLat )
 			throws IOException {
 		final int numBands = 8;
-		final DataStore dataStore = new AccumuloDataStore(
-				accumuloOperations);
+		final DataStore dataStore = dataStoreOptions.createDataStore();
 		final RasterDataAdapter adapter = RasterUtils.createDataAdapterTypeDouble(
 				coverageName,
 				numBands,
@@ -501,7 +451,7 @@ public class GeoWaveRasterIT extends
 
 		try (IndexWriter writer = dataStore.createWriter(
 				adapter,
-				DEFAULT_ALLTIER_SPATIAL_INDEX)) {
+				TestUtils.DEFAULT_ALLTIER_SPATIAL_INDEX)) {
 			writer.write(RasterUtils.createCoverageTypeDouble(
 					coverageName,
 					westLon,
@@ -532,8 +482,7 @@ public class GeoWaveRasterIT extends
 			throws IOException {
 
 		// just ingest a number of rasters
-		final DataStore dataStore = new AccumuloDataStore(
-				accumuloOperations);
+		final DataStore dataStore = dataStoreOptions.createDataStore();
 		final RasterDataAdapter basicAdapter = RasterUtils.createDataAdapterTypeDouble(
 				coverageName,
 				numBands,
@@ -544,7 +493,7 @@ public class GeoWaveRasterIT extends
 				mergeStrategy);
 		try (IndexWriter writer = dataStore.createWriter(
 				mergeStrategyOverriddenAdapter,
-				DEFAULT_ALLTIER_SPATIAL_INDEX)) {
+				TestUtils.DEFAULT_ALLTIER_SPATIAL_INDEX)) {
 			for (int r = 0; r < numRasters; r++) {
 				final WritableRaster raster = RasterUtils.createRasterTypeDouble(
 						numBands,
@@ -636,9 +585,7 @@ public class GeoWaveRasterIT extends
 			throws AccumuloException,
 			AccumuloSecurityException,
 			IOException {
-		final DataStore dataStore = new AccumuloDataStore(
-				accumuloOperations);
-		final List<ByteArrayId> ids = new ArrayList<ByteArrayId>();
+		final DataStore dataStore = dataStoreOptions.createDataStore();
 
 		try (CloseableIterator<?> it = dataStore.query(
 				new QueryOptions(

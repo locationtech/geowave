@@ -1,5 +1,6 @@
 package mil.nga.giat.geowave.test.mapreduce;
 
+import java.io.File;
 import java.io.IOException;
 
 import org.apache.hadoop.fs.FileStatus;
@@ -14,6 +15,7 @@ import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.geotools.referencing.crs.DefaultGeographicCRS;
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import com.vividsolutions.jts.geom.Geometry;
 
@@ -37,11 +39,26 @@ import mil.nga.giat.geowave.core.cli.GeoWaveMain;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
 import mil.nga.giat.geowave.core.store.DataStore;
+import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
+import mil.nga.giat.geowave.test.GeoWaveITRunner;
+import mil.nga.giat.geowave.test.TestUtils;
+import mil.nga.giat.geowave.test.annotation.Environments;
+import mil.nga.giat.geowave.test.annotation.Environments.Environment;
+import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore;
+import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 
-public class GeoWaveNNIT extends
-		MapReduceTestEnvironment
+@RunWith(GeoWaveITRunner.class)
+@Environments({
+	Environment.MAP_REDUCE
+})
+public class GeoWaveNNIT
 {
+
+	@GeoWaveTestStore({
+		GeoWaveStoreType.ACCUMULO
+	})
+	protected DataStorePluginOptions dataStorePluginOptions;
 
 	private SimpleFeatureBuilder getBuilder() {
 		final SimpleFeatureTypeBuilder typeBuilder = new SimpleFeatureTypeBuilder();
@@ -71,9 +88,9 @@ public class GeoWaveNNIT extends
 	@Test
 	public void testNN()
 			throws Exception {
+		TestUtils.deleteAll(dataStorePluginOptions);
 		dataGenerator.setIncludePolygons(false);
-		ingest(getAccumuloStorePluginOptions(
-				TEST_NAMESPACE + "_nn").createDataStore());
+		ingest(dataStorePluginOptions.createDataStore());
 		runNN(new SpatialQuery(
 				dataGenerator.getBoundingRegion()));
 	}
@@ -116,7 +133,7 @@ public class GeoWaveNNIT extends
 		// "foo"
 		// });
 		final int res = jobRunner.run(
-				getConfiguration(),
+				MapReduceTestUtils.getConfiguration(),
 				new PropertyManagement(
 						new ParameterEnum[] {
 							ExtractParameters.Extract.QUERY,
@@ -125,7 +142,7 @@ public class GeoWaveNNIT extends
 							PartitionParameters.Partition.MAX_DISTANCE,
 							PartitionParameters.Partition.DISTANCE_THRESHOLDS,
 							PartitionParameters.Partition.PARTITIONER_CLASS,
-							StoreParam.STORE,
+							StoreParam.INPUT_STORE,
 							OutputParameters.Output.HDFS_OUTPUT_PATH,
 							MapReduceParameters.MRConfig.HDFS_BASE_DIR,
 							OutputParameters.Output.REDUCER_COUNT,
@@ -134,15 +151,15 @@ public class GeoWaveNNIT extends
 						},
 						new Object[] {
 							query,
-							Integer.toString(MIN_INPUT_SPLITS),
-							Integer.toString(MAX_INPUT_SPLITS),
+							Integer.toString(MapReduceTestUtils.MIN_INPUT_SPLITS),
+							Integer.toString(MapReduceTestUtils.MAX_INPUT_SPLITS),
 							0.2,
 							"0.2,0.2",
 							OrthodromicDistancePartitioner.class,
 							new PersistableStore(
-									getAccumuloStorePluginOptions(TEST_NAMESPACE + "_nn")),
-							hdfsBaseDirectory + "/t1/pairs",
-							hdfsBaseDirectory + "/t1",
+									dataStorePluginOptions),
+							TestUtils.TEMP_DIR + File.separator + MapReduceTestEnvironment.HDFS_BASE_DIRECTORY + "/t1/pairs",
+							TestUtils.TEMP_DIR + File.separator + MapReduceTestEnvironment.HDFS_BASE_DIRECTORY + "/t1",
 							3,
 							SequenceFileOutputFormatConfiguration.class,
 							GeoWaveInputFormatConfiguration.class
@@ -161,14 +178,14 @@ public class GeoWaveNNIT extends
 			throws IllegalArgumentException,
 			IOException {
 		int count = 0;
-		final FileSystem fs = FileSystem.get(getConfiguration());
+		final FileSystem fs = FileSystem.get(MapReduceTestUtils.getConfiguration());
 		final FileStatus[] fss = fs.listStatus(new Path(
-				hdfsBaseDirectory + "/t1/pairs"));
+				TestUtils.TEMP_DIR + File.separator + MapReduceTestEnvironment.HDFS_BASE_DIRECTORY + "/t1/pairs"));
 		for (final FileStatus ifs : fss) {
 			if (ifs.isFile() && ifs.getPath().toString().matches(
 					".*part-r-0000[0-9]")) {
 				try (SequenceFile.Reader reader = new SequenceFile.Reader(
-						getConfiguration(),
+						MapReduceTestUtils.getConfiguration(),
 						Reader.file(ifs.getPath()))) {
 
 					final Text key = new Text();

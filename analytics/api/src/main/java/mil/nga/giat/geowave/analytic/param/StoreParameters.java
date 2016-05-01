@@ -5,8 +5,10 @@ public class StoreParameters
 	public enum StoreParam
 			implements
 			ParameterEnum {
-		STORE(
-				new StoreParameterHelper());
+		INPUT_STORE(
+				new InputStoreParameterHelper()),
+		OUTPUT_STORE(
+				new OutputStoreParameterHelper()), ;
 
 		private final ParameterHelper<?> helper;
 

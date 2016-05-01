@@ -92,6 +92,8 @@ public class AccumuloUtils
 	public final static String ALT_INDEX_TABLE = "_GEOWAVE_ALT_INDEX";
 	private static final String ROW_MERGING_SUFFIX = "_COMBINER";
 	private static final String ROW_MERGING_VISIBILITY_SUFFIX = "_VISIBILITY_COMBINER";
+	private static final int ROW_MERGING_COMBINER_PRIORITY = 4;
+	private static final int ROW_MERGING_VISIBILITY_COMBINER_PRIORITY = 6;
 
 	public static Range byteArrayRangeToAccumuloRange(
 			final ByteArrayRange byteArrayRange ) {

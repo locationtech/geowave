@@ -5,13 +5,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import org.apache.log4j.Logger;
 import org.geotools.data.DataUtilities;
 import org.geotools.feature.SchemaException;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 
@@ -22,23 +23,23 @@ import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import mil.nga.giat.geowave.core.geotime.GeometryUtils;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
-import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.query.Query;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
-import mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStore;
-import mil.nga.giat.geowave.test.GeoWaveTestEnvironment;
+import mil.nga.giat.geowave.test.GeoWaveITRunner;
+import mil.nga.giat.geowave.test.TestUtils;
+import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore;
+import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 
-public class QueryOptionsIT extends
-		GeoWaveTestEnvironment
+@RunWith(GeoWaveITRunner.class)
+public class QueryOptionsIT
 {
 	private static SimpleFeatureType type1;
 	private static SimpleFeatureType type2;
 	private static FeatureDataAdapter dataAdapter1;
 	private static FeatureDataAdapter dataAdapter2;
-	private static DataStore dataStore;
-
 	// constants for attributes of SimpleFeatureType
 	private static final String CITY_ATTRIBUTE = "city";
 	private static final String STATE_ATTRIBUTE = "state";
@@ -59,18 +60,26 @@ public class QueryOptionsIT extends
 					GUADALAJARA,
 					ATLANTA)));
 
+	@GeoWaveTestStore({
+		GeoWaveStoreType.ACCUMULO
+	})
+	protected DataStorePluginOptions dataStoreOptions;
+
 	@BeforeClass
 	public static void setupData()
 			throws IOException {
-		GeoWaveTestEnvironment.setup();
 		type1 = getSimpleFeatureType("type1");
 		type2 = getSimpleFeatureType("type2");
 		dataAdapter1 = new FeatureDataAdapter(
 				type1);
 		dataAdapter2 = new FeatureDataAdapter(
 				type2);
-		dataStore = new AccumuloDataStore(
-				accumuloOperations);
+	}
+
+	@Before
+	public void ingestData()
+			throws IOException {
+		TestUtils.deleteAll(dataStoreOptions);
 		ingestSampleData(
 				new SimpleFeatureBuilder(
 						type1),
@@ -85,10 +94,10 @@ public class QueryOptionsIT extends
 	public void testQuerySpecificAdapter()
 			throws IOException {
 		int numResults = 0;
-		try (final CloseableIterator<SimpleFeature> results = dataStore.query(
+		try (final CloseableIterator<SimpleFeature> results = dataStoreOptions.createDataStore().query(
 				new QueryOptions(
 						dataAdapter1,
-						DEFAULT_SPATIAL_INDEX),
+						TestUtils.DEFAULT_SPATIAL_INDEX),
 				spatialQuery)) {
 			while (results.hasNext()) {
 				numResults++;
@@ -109,9 +118,9 @@ public class QueryOptionsIT extends
 	public void testQueryAcrossAdapters()
 			throws IOException {
 		int numResults = 0;
-		try (final CloseableIterator<SimpleFeature> results = dataStore.query(
+		try (final CloseableIterator<SimpleFeature> results = dataStoreOptions.createDataStore().query(
 				new QueryOptions(
-						DEFAULT_SPATIAL_INDEX),
+						TestUtils.DEFAULT_SPATIAL_INDEX),
 				spatialQuery)) {
 			while (results.hasNext()) {
 				numResults++;
@@ -132,7 +141,7 @@ public class QueryOptionsIT extends
 	public void testQueryEmptyOptions()
 			throws IOException {
 		int numResults = 0;
-		try (final CloseableIterator<SimpleFeature> results = dataStore.query(
+		try (final CloseableIterator<SimpleFeature> results = dataStoreOptions.createDataStore().query(
 				new QueryOptions(),
 				spatialQuery)) {
 			while (results.hasNext()) {
@@ -165,14 +174,14 @@ public class QueryOptionsIT extends
 	}
 
 	@SuppressWarnings("unchecked")
-	private static void ingestSampleData(
+	private void ingestSampleData(
 			final SimpleFeatureBuilder builder,
 			final DataAdapter<?> adapter )
 			throws IOException {
 		try (@SuppressWarnings("rawtypes")
-		IndexWriter writer = dataStore.createWriter(
+		IndexWriter writer = dataStoreOptions.createDataStore().createWriter(
 				adapter,
-				DEFAULT_SPATIAL_INDEX)) {
+				TestUtils.DEFAULT_SPATIAL_INDEX)) {
 			for (final SimpleFeature sf : buildCityDataSet(builder)) {
 				writer.write(sf);
 			}

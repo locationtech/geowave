@@ -9,11 +9,6 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.UUID;
 
-import mil.nga.giat.geowave.adapter.vector.BaseDataStoreTest;
-import mil.nga.giat.geowave.adapter.vector.stats.FeatureHyperLogLogStatistics;
-import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
-
 import org.geotools.data.DataStore;
 import org.geotools.data.DataUtilities;
 import org.geotools.data.DefaultTransaction;
@@ -32,6 +27,11 @@ import org.opengis.feature.simple.SimpleFeatureType;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.PrecisionModel;
+
+import mil.nga.giat.geowave.adapter.vector.BaseDataStoreTest;
+import mil.nga.giat.geowave.adapter.vector.stats.FeatureHyperLogLogStatistics;
+import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 
 public class WFSTransactionTest extends
 		BaseDataStoreTest

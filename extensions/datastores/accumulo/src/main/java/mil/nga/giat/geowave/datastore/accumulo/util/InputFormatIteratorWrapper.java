@@ -101,7 +101,7 @@ public class InputFormatIteratorWrapper<T> implements
 										rowId.getInsertionId()),
 								rowId.getDataId())));
 		key.setInsertionId(new ByteArrayId(
-				row.getKey().getRow().getBytes()));
+				rowId.getInsertionId()));
 		return new GeoWaveInputFormatEntry(
 				key,
 				result);

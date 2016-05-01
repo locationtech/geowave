@@ -180,16 +180,16 @@ public class IngestServiceImpl implements
 			final boolean clear ) {
 
 		// Ingest Formats
-		IngestFormatPluginOptions ingestFormatOptions = new IngestFormatPluginOptions();
+		final IngestFormatPluginOptions ingestFormatOptions = new IngestFormatPluginOptions();
 		ingestFormatOptions.selectPlugin(ingestType);
 
 		// Indexes
-		IndexPluginOptions indexOption = new IndexPluginOptions();
+		final IndexPluginOptions indexOption = new IndexPluginOptions();
 		indexOption.selectPlugin(dimType);
 
 		// Store
-		String namespace = DataStorePluginOptions.getStoreNamespace(storeName);
-		DataStorePluginOptions dataStorePlugin = new DataStorePluginOptions();
+		final String namespace = DataStorePluginOptions.getStoreNamespace(storeName);
+		final DataStorePluginOptions dataStorePlugin = new DataStorePluginOptions();
 		if (!dataStorePlugin.load(
 				serviceProperties,
 				namespace)) {
@@ -202,7 +202,7 @@ public class IngestServiceImpl implements
 		switch (ingestMethod) {
 			default:
 			case "localingest":
-				LocalToGeowaveCommand localIngester = new LocalToGeowaveCommand();
+				final LocalToGeowaveCommand localIngester = new LocalToGeowaveCommand();
 				localIngester.setPluginFormats(ingestFormatOptions);
 				localIngester.setInputIndexOptions(Arrays.asList(indexOption));
 				localIngester.setInputStoreOptions(dataStorePlugin);
@@ -216,7 +216,7 @@ public class IngestServiceImpl implements
 				return Response.ok().build();
 
 			case "hdfsingest":
-				LocalToMapReduceToGeowaveCommand hdfsIngester = new LocalToMapReduceToGeowaveCommand();
+				final LocalToMapReduceToGeowaveCommand hdfsIngester = new LocalToMapReduceToGeowaveCommand();
 				hdfsIngester.setPluginFormats(ingestFormatOptions);
 				hdfsIngester.setInputIndexOptions(Arrays.asList(indexOption));
 				hdfsIngester.setInputStoreOptions(dataStorePlugin);

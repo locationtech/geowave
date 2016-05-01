@@ -4,11 +4,13 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import org.apache.hadoop.conf.Configuration;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.geotools.referencing.CRS;
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.referencing.FactoryException;
 
@@ -33,6 +35,7 @@ import mil.nga.giat.geowave.analytic.param.GlobalParameters;
 import mil.nga.giat.geowave.analytic.param.InputParameters;
 import mil.nga.giat.geowave.analytic.param.MapReduceParameters;
 import mil.nga.giat.geowave.analytic.param.OutputParameters;
+import mil.nga.giat.geowave.analytic.param.OutputStoreParameterHelper;
 import mil.nga.giat.geowave.analytic.param.ParameterEnum;
 import mil.nga.giat.geowave.analytic.param.PartitionParameters;
 import mil.nga.giat.geowave.analytic.param.StoreParameters.StoreParam;
@@ -41,14 +44,28 @@ import mil.nga.giat.geowave.analytic.store.PersistableStore;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
 import mil.nga.giat.geowave.core.store.DataStore;
+import mil.nga.giat.geowave.core.store.config.ConfigUtils;
+import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
+import mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputFormat;
+import mil.nga.giat.geowave.test.GeoWaveITRunner;
+import mil.nga.giat.geowave.test.TestUtils;
+import mil.nga.giat.geowave.test.annotation.Environments;
+import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore;
+import mil.nga.giat.geowave.test.annotation.Environments.Environment;
+import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 
-public class DBScanIT extends
-		MapReduceTestEnvironment
+@RunWith(GeoWaveITRunner.class)
+@Environments({
+	Environment.MAP_REDUCE
+})
+public class DBScanIT
 {
-
-	public static final String DBSCAN_TEST_NAMESPACE = TEST_NAMESPACE + "_dbscanit";
+	@GeoWaveTestStore({
+		GeoWaveStoreType.ACCUMULO
+	})
+	protected DataStorePluginOptions dataStorePluginOptions;
 
 	private SimpleFeatureBuilder getBuilder() {
 		final SimpleFeatureTypeBuilder typeBuilder = new SimpleFeatureTypeBuilder();
@@ -86,9 +103,9 @@ public class DBScanIT extends
 	@Test
 	public void testDBScan()
 			throws Exception {
+		TestUtils.deleteAll(dataStorePluginOptions);
 		dataGenerator.setIncludePolygons(false);
-		ingest(getAccumuloStorePluginOptions(
-				DBSCAN_TEST_NAMESPACE).createDataStore());
+		ingest(dataStorePluginOptions.createDataStore());
 		runScan(new SpatialQuery(
 				dataGenerator.getBoundingRegion()));
 	}
@@ -98,9 +115,16 @@ public class DBScanIT extends
 			throws Exception {
 
 		final DBScanIterationsJobRunner jobRunner = new DBScanIterationsJobRunner();
-
+		// TODO should use
+		Configuration conf = MapReduceTestUtils.getConfiguration();
+		GeoWaveOutputFormat.setDataStoreName(
+				conf,
+				dataStorePluginOptions.getFactoryFamily().getDataStoreFactory().getName());
+		GeoWaveOutputFormat.setStoreConfigOptions(
+				conf,
+				ConfigUtils.populateListFromOptions(dataStorePluginOptions.getFactoryOptions()));
 		final int res = jobRunner.run(
-				getConfiguration(),
+				conf,
 				new PropertyManagement(
 						new ParameterEnum[] {
 							ExtractParameters.Extract.QUERY,
@@ -110,7 +134,7 @@ public class DBScanIT extends
 							PartitionParameters.Partition.MAX_DISTANCE,
 							PartitionParameters.Partition.PARTITIONER_CLASS,
 							ClusteringParameters.Clustering.MINIMUM_SIZE,
-							StoreParam.STORE,
+							StoreParam.INPUT_STORE,
 							MapReduceParameters.MRConfig.HDFS_BASE_DIR,
 							OutputParameters.Output.REDUCER_COUNT,
 							InputParameters.Input.INPUT_FORMAT,
@@ -121,14 +145,14 @@ public class DBScanIT extends
 						new Object[] {
 							query,
 							new QueryOptions(),
-							Integer.toString(MIN_INPUT_SPLITS),
-							Integer.toString(MAX_INPUT_SPLITS),
+							Integer.toString(MapReduceTestUtils.MIN_INPUT_SPLITS),
+							Integer.toString(MapReduceTestUtils.MAX_INPUT_SPLITS),
 							10000.0,
 							OrthodromicDistancePartitioner.class,
 							10,
 							new PersistableStore(
-									getAccumuloStorePluginOptions(DBSCAN_TEST_NAMESPACE)),
-							hdfsBaseDirectory + "/t1",
+									dataStorePluginOptions),
+							TestUtils.TEMP_DIR + File.separator + MapReduceTestEnvironment.HDFS_BASE_DIRECTORY + "/t1",
 							2,
 							GeoWaveInputFormatConfiguration.class,
 							"bx5",
@@ -148,12 +172,9 @@ public class DBScanIT extends
 	private int readHulls()
 			throws Exception {
 		final CentroidManager<SimpleFeature> centroidManager = new CentroidManagerGeoWave<SimpleFeature>(
-				getAccumuloStorePluginOptions(
-						DBSCAN_TEST_NAMESPACE).createDataStore(),
-				getAccumuloStorePluginOptions(
-						DBSCAN_TEST_NAMESPACE).createIndexStore(),
-				getAccumuloStorePluginOptions(
-						DBSCAN_TEST_NAMESPACE).createAdapterStore(),
+				dataStorePluginOptions.createDataStore(),
+				dataStorePluginOptions.createIndexStore(),
+				dataStorePluginOptions.createAdapterStore(),
 				new SimpleFeatureItemWrapperFactory(),
 				"concave_hull",
 				new SpatialDimensionalityTypeProvider().createPrimaryIndex().getId().getString(),

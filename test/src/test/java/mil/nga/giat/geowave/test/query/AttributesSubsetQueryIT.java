@@ -11,9 +11,12 @@ import org.apache.log4j.Logger;
 import org.geotools.data.DataUtilities;
 import org.geotools.feature.SchemaException;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
+import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 
@@ -25,21 +28,27 @@ import mil.nga.giat.geowave.adapter.vector.util.FeatureTranslatingIterator;
 import mil.nga.giat.geowave.core.geotime.GeometryUtils;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
-import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.IndexWriter;
+import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.query.Query;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
-import mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStore;
-import mil.nga.giat.geowave.test.GeoWaveTestEnvironment;
+import mil.nga.giat.geowave.test.GeoWaveITRunner;
+import mil.nga.giat.geowave.test.TestUtils;
+import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore;
+import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 
-public class AttributesSubsetQueryIT extends
-		GeoWaveTestEnvironment
+@RunWith(GeoWaveITRunner.class)
+public class AttributesSubsetQueryIT
 {
 	private static final Logger LOGGER = Logger.getLogger(AttributesSubsetQueryIT.class);
 
 	private static SimpleFeatureType simpleFeatureType;
 	private static FeatureDataAdapter dataAdapter;
-	private static DataStore dataStore;
+
+	@GeoWaveTestStore({
+		GeoWaveStoreType.ACCUMULO
+	})
+	protected DataStorePluginOptions dataStore;
 
 	// constants for attributes of SimpleFeatureType
 	private static final String CITY_ATTRIBUTE = "city";
@@ -71,28 +80,20 @@ public class AttributesSubsetQueryIT extends
 	@BeforeClass
 	public static void setupData()
 			throws IOException {
-
-		GeoWaveTestEnvironment.setup();
-
 		simpleFeatureType = getSimpleFeatureType();
 
 		dataAdapter = new FeatureDataAdapter(
 				simpleFeatureType);
-
-		dataStore = new AccumuloDataStore(
-				accumuloOperations);
-
-		ingestSampleData();
 	}
 
 	@Test
 	public void testNoFiltering()
 			throws IOException {
 
-		final CloseableIterator<SimpleFeature> results = dataStore.query(
+		final CloseableIterator<SimpleFeature> results = dataStore.createDataStore().query(
 				new QueryOptions(
 						dataAdapter,
-						DEFAULT_SPATIAL_INDEX),
+						TestUtils.DEFAULT_SPATIAL_INDEX),
 				spatialQuery);
 
 		// query expects to match 3 cities from Texas, which should each contain
@@ -109,12 +110,12 @@ public class AttributesSubsetQueryIT extends
 
 		final QueryOptions queryOptions = new QueryOptions(
 				dataAdapter,
-				DEFAULT_SPATIAL_INDEX);
+				TestUtils.DEFAULT_SPATIAL_INDEX);
 		queryOptions.setFieldIds(
 				Arrays.asList(CITY_ATTRIBUTE),
 				dataAdapter);
 
-		CloseableIterator<SimpleFeature> results = dataStore.query(
+		CloseableIterator<SimpleFeature> results = dataStore.createDataStore().query(
 				queryOptions,
 				spatialQuery);
 
@@ -132,7 +133,7 @@ public class AttributesSubsetQueryIT extends
 				Arrays.asList(GEOMETRY_ATTRIBUTE),
 				dataAdapter);
 		// now try just geometry
-		results = dataStore.query(
+		results = dataStore.createDataStore().query(
 				queryOptions,
 				spatialQuery);
 
@@ -154,10 +155,10 @@ public class AttributesSubsetQueryIT extends
 				CITY_ATTRIBUTE,
 				POPULATION_ATTRIBUTE);
 
-		final CloseableIterator<SimpleFeature> results = dataStore.query(
+		final CloseableIterator<SimpleFeature> results = dataStore.createDataStore().query(
 				new QueryOptions(
 						dataAdapter,
-						DEFAULT_SPATIAL_INDEX),
+						TestUtils.DEFAULT_SPATIAL_INDEX),
 				spatialQuery);
 
 		// query expects to match 3 cities from Texas, which should each contain
@@ -231,20 +232,30 @@ public class AttributesSubsetQueryIT extends
 		return type;
 	}
 
-	private static void ingestSampleData()
+	@Before
+	public void ingestSampleData()
 			throws IOException {
 
 		LOGGER.info("Ingesting canned data...");
 
-		try (IndexWriter writer = dataStore.createWriter(
+		try (IndexWriter writer = dataStore.createDataStore().createWriter(
 				dataAdapter,
-				DEFAULT_SPATIAL_INDEX)) {
+				TestUtils.DEFAULT_SPATIAL_INDEX)) {
 			for (final SimpleFeature sf : buildCityDataSet()) {
 				writer.write(sf);
 			}
 
 		}
 		LOGGER.info("Ingest complete.");
+	}
+
+	@After
+	public void deleteSampleData()
+			throws IOException {
+
+		LOGGER.info("Deleting canned data...");
+		TestUtils.deleteAll(dataStore);
+		LOGGER.info("Delete complete.");
 	}
 
 	private static List<SimpleFeature> buildCityDataSet() {

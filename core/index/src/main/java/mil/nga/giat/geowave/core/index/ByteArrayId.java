@@ -40,6 +40,17 @@ public class ByteArrayId implements
 		return stringId;
 	}
 
+	public String getHexString() {
+
+		StringBuffer str = new StringBuffer();
+		for (byte b : id) {
+			str.append(String.format(
+					"%02X ",
+					b));
+		}
+		return str.toString();
+	}
+
 	@Override
 	public String toString() {
 		return "ByteArrayId [getString()=" + getString() + "]";

@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +26,7 @@ import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.index.ByteArrayUtils;
 import mil.nga.giat.geowave.core.index.PersistenceUtils;
+import mil.nga.giat.geowave.core.store.Closable;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
 import mil.nga.giat.geowave.core.store.DataStoreEntryInfo.FieldInfo;
@@ -33,7 +35,6 @@ import mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndex;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndexDataStore;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations;
-import mil.nga.giat.geowave.datastore.accumulo.Closable;
 import mil.nga.giat.geowave.datastore.accumulo.Writer;
 import mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloOptions;
 import mil.nga.giat.geowave.datastore.accumulo.query.SecondaryIndexQueryFilterIterator;
@@ -135,6 +136,11 @@ public class AccumuloSecondaryIndexDataStore implements
 		}
 	}
 
+	public void clearCache() {
+		close();
+		writerCache.clear();
+	}
+
 	private Mutation buildMutation(
 			final byte[] secondaryIndexRowId,
 			final byte[] secondaryIndexId,
@@ -231,6 +237,9 @@ public class AccumuloSecondaryIndexDataStore implements
 
 	private Collection<Range> getScanRanges(
 			final List<ByteArrayRange> ranges ) {
+		if (ranges == null || ranges.isEmpty()) {
+			return Collections.singleton(new Range());
+		}
 		final Collection<Range> scanRanges = new ArrayList<>();
 		for (final ByteArrayRange range : ranges) {
 			scanRanges.add(new Range(

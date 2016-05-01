@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<artifactId>geowave-parent</artifactId>
@@ -223,7 +224,8 @@
 						<configuration>
 							<tasks xmlns:jacoco="antlib:org.jacoco.ant">
 								<mkdir dir="${project.reporting.outputDirectory}" />
-								<taskdef uri="antlib:org.jacoco.ant" resource="org/jacoco/ant/antlib.xml" classpathref="maven.plugin.classpath" />
+								<taskdef uri="antlib:org.jacoco.ant" resource="org/jacoco/ant/antlib.xml"
+									classpathref="maven.plugin.classpath" />
 								<jacoco:report>
 									<executiondata>
 										<fileset dir="../" includes="**/coverage-reports/*.exec" />
@@ -231,7 +233,9 @@
 
 									<structure name="GeoWave">
 										<classfiles>
-											<fileset dir="../" includes="**/target/classes/**,**/target/munged/classes/**" excludes="**/analytics/api/target/classes/**,**/analytics/mapreduce/target/classes/**,**/accumulo/target/classes/**" />
+											<fileset dir="../"
+												includes="**/target/classes/**,**/target/munged/classes/**"
+												excludes="**/analytics/api/target/classes/**,**/analytics/mapreduce/target/classes/**,**/accumulo/target/classes/**" />
 										</classfiles>
 										<sourcefiles>
 											<fileset dir="../" includes="**/src/main/java/**,**/src/main/scala/**,**/target/munged/main/**" excludes="**/analytics/api/src/main/java/**,**/analytics/mapreduce/src/main/java/**,**/accumulo/target/src/main/java/**" />
@@ -264,6 +268,7 @@
 						<sourceDirectory>../core/geotime/src/main/java</sourceDirectory>
 						<sourceDirectory>../core/mapreduce/src/main/java</sourceDirectory>
 						<sourceDirectory>../extensions/datastores/accumulo/target/munged/main</sourceDirectory>
+						<sourceDirectory>../extensions/datastores/hbase/src/main/java</sourceDirectory>
 						<sourceDirectory>../extensions/adapters/vector/src/main/java</sourceDirectory>
 						<sourceDirectory>../extensions/adapters/raster/src/main/java</sourceDirectory>
 						<sourceDirectory>../extensions/cli/stats/src/main/java</sourceDirectory>

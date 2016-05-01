@@ -35,7 +35,9 @@ import mil.nga.giat.geowave.analytic.param.MapReduceParameters.MRConfig;
 import mil.nga.giat.geowave.analytic.param.ParameterHelper;
 import mil.nga.giat.geowave.analytic.param.StoreParameters.StoreParam;
 import mil.nga.giat.geowave.analytic.store.PersistableStore;
+import mil.nga.giat.geowave.core.store.GeoWaveStoreFinder;
 import mil.nga.giat.geowave.core.store.memory.MemoryRequiredOptions;
+import mil.nga.giat.geowave.core.store.memory.MemoryStoreFactoryFamily;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 
 public class GroupAssigmentJobRunnerTest
@@ -63,10 +65,10 @@ public class GroupAssigmentJobRunnerTest
 					final GeoWaveAnalyticJobRunner tool )
 					throws Exception {
 				tool.setConf(configuration);
-				((ParameterHelper<Object>) StoreParam.STORE.getHelper()).setValue(
+				((ParameterHelper<Object>) StoreParam.INPUT_STORE.getHelper()).setValue(
 						configuration,
 						GroupAssignmentMapReduce.class,
-						StoreParam.STORE.getHelper().getValue(
+						StoreParam.INPUT_STORE.getHelper().getValue(
 								runTimeProperties));
 				return tool.run(new String[] {});
 			}
@@ -179,6 +181,9 @@ public class GroupAssigmentJobRunnerTest
 				FeatureCentroidDistanceFn.class);
 
 		DataStorePluginOptions pluginOptions = new DataStorePluginOptions();
+		GeoWaveStoreFinder.getRegisteredStoreFactoryFamilies().put(
+				"memory",
+				new MemoryStoreFactoryFamily());
 		pluginOptions.selectPlugin("memory");
 		MemoryRequiredOptions opts = (MemoryRequiredOptions) pluginOptions.getFactoryOptions();
 		opts.setGeowaveNamespace(TEST_NAMESPACE);
@@ -186,7 +191,7 @@ public class GroupAssigmentJobRunnerTest
 				pluginOptions);
 
 		runTimeProperties.store(
-				StoreParam.STORE,
+				StoreParam.INPUT_STORE,
 				store);
 
 		pluginOptions.createAdapterStore().addAdapter(

@@ -96,6 +96,7 @@ public class CentroidManagerTest
 
 		ingest(
 				dataStore,
+
 				adapter,
 				index,
 				feature);

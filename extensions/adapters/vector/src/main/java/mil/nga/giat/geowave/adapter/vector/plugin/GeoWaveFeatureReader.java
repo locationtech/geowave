@@ -20,28 +20,6 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.TimeZone;
 
-import mil.nga.giat.geowave.adapter.vector.plugin.transaction.GeoWaveTransaction;
-import mil.nga.giat.geowave.adapter.vector.query.cql.CQLQuery;
-import mil.nga.giat.geowave.adapter.vector.render.DistributableRenderer;
-import mil.nga.giat.geowave.adapter.vector.stats.FeatureStatistic;
-import mil.nga.giat.geowave.adapter.vector.util.QueryIndexHelper;
-import mil.nga.giat.geowave.core.geotime.index.dimension.LatitudeDefinition;
-import mil.nga.giat.geowave.core.geotime.index.dimension.TimeDefinition;
-import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
-import mil.nga.giat.geowave.core.geotime.store.query.TemporalConstraintsSet;
-import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.StringUtils;
-import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
-import mil.nga.giat.geowave.core.store.CloseableIterator;
-import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
-import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
-import mil.nga.giat.geowave.core.store.index.Index;
-import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.core.store.query.BasicQuery;
-import mil.nga.giat.geowave.core.store.query.BasicQuery.Constraints;
-import mil.nga.giat.geowave.core.store.query.DataIdQuery;
-import mil.nga.giat.geowave.core.store.query.QueryOptions;
-
 import org.apache.log4j.Logger;
 import org.geotools.data.FeatureReader;
 import org.geotools.data.Query;
@@ -63,6 +41,28 @@ import org.opengis.referencing.operation.TransformException;
 import com.google.common.collect.Iterators;
 import com.vividsolutions.jts.geom.Envelope;
 import com.vividsolutions.jts.geom.Geometry;
+
+import mil.nga.giat.geowave.adapter.vector.plugin.transaction.GeoWaveTransaction;
+import mil.nga.giat.geowave.adapter.vector.query.cql.CQLQuery;
+import mil.nga.giat.geowave.adapter.vector.render.DistributableRenderer;
+import mil.nga.giat.geowave.adapter.vector.stats.FeatureStatistic;
+import mil.nga.giat.geowave.adapter.vector.util.QueryIndexHelper;
+import mil.nga.giat.geowave.core.geotime.index.dimension.LatitudeDefinition;
+import mil.nga.giat.geowave.core.geotime.index.dimension.TimeDefinition;
+import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
+import mil.nga.giat.geowave.core.geotime.store.query.TemporalConstraintsSet;
+import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.index.StringUtils;
+import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
+import mil.nga.giat.geowave.core.store.CloseableIterator;
+import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
+import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
+import mil.nga.giat.geowave.core.store.index.Index;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.core.store.query.BasicQuery;
+import mil.nga.giat.geowave.core.store.query.BasicQuery.Constraints;
+import mil.nga.giat.geowave.core.store.query.DataIdQuery;
+import mil.nga.giat.geowave.core.store.query.QueryOptions;
 
 /**
  * This class wraps a geotools data store as well as one for statistics (for

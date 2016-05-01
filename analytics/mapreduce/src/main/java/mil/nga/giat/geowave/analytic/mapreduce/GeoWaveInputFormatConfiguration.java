@@ -39,7 +39,7 @@ public class GeoWaveInputFormatConfiguration implements
 			final PropertyManagement runTimeProperties,
 			final Configuration configuration )
 			throws Exception {
-		final DataStorePluginOptions dataStoreOptions = ((PersistableStore) runTimeProperties.getProperty(StoreParam.STORE)).getDataStoreOptions();
+		final DataStorePluginOptions dataStoreOptions = ((PersistableStore) runTimeProperties.getProperty(StoreParam.INPUT_STORE)).getDataStoreOptions();
 		GeoWaveInputFormat.setDataStoreName(
 				configuration,
 				dataStoreOptions.getType());
@@ -119,7 +119,7 @@ public class GeoWaveInputFormatConfiguration implements
 			ExtractParameters.Extract.QUERY,
 			ExtractParameters.Extract.MAX_INPUT_SPLIT,
 			ExtractParameters.Extract.MIN_INPUT_SPLIT,
-			StoreParam.STORE
+			StoreParam.INPUT_STORE
 		});
 	}
 }

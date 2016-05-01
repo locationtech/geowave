@@ -5,18 +5,11 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.UUID;
-
-import mil.nga.giat.geowave.adapter.vector.BaseDataStoreTest;
-import mil.nga.giat.geowave.adapter.vector.utils.DateUtilities;
-import mil.nga.giat.geowave.core.store.memory.MemoryStoreFactoryFamily;
 
 import org.geotools.data.DataStore;
 import org.geotools.data.DataUtilities;
@@ -40,6 +33,9 @@ import org.opengis.feature.simple.SimpleFeatureType;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.PrecisionModel;
+
+import mil.nga.giat.geowave.adapter.vector.BaseDataStoreTest;
+import mil.nga.giat.geowave.adapter.vector.utils.DateUtilities;
 
 public class GeoWaveFeatureReaderTest extends
 		BaseDataStoreTest

@@ -3,8 +3,19 @@ package mil.nga.giat.geowave.test.kafka;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.io.File;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.opengis.feature.simple.SimpleFeature;
+
+import com.vividsolutions.jts.geom.Envelope;
+import com.vividsolutions.jts.geom.Geometry;
+import com.vividsolutions.jts.geom.GeometryFactory;
 
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import mil.nga.giat.geowave.adapter.vector.stats.FeatureBoundingBoxStatistics;
@@ -16,25 +27,21 @@ import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.statistics.CountDataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
+import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.query.Query;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
-import mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStore;
-import mil.nga.giat.geowave.datastore.accumulo.index.secondary.AccumuloSecondaryIndexDataStore;
-import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloAdapterIndexMappingStore;
-import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloAdapterStore;
-import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloDataStatisticsStore;
-import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloIndexStore;
-import mil.nga.giat.geowave.format.gpx.GpxTrack;
+import mil.nga.giat.geowave.test.GeoWaveITRunner;
+import mil.nga.giat.geowave.test.TestUtils;
+import mil.nga.giat.geowave.test.annotation.Environments;
+import mil.nga.giat.geowave.test.annotation.Environments.Environment;
+import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore;
+import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 
-import org.junit.Test;
-import org.opengis.feature.simple.SimpleFeature;
-
-import com.vividsolutions.jts.geom.Envelope;
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.GeometryFactory;
-
-public class BasicKafkaIT extends
-		KafkaTestBase<GpxTrack>
+@RunWith(GeoWaveITRunner.class)
+@Environments({
+	Environment.KAFKA
+})
+public class BasicKafkaIT
 {
 	private static final Map<ByteArrayId, Integer> EXPECTED_COUNT_PER_ADAPTER_ID = new HashMap<ByteArrayId, Integer>();
 
@@ -49,20 +56,37 @@ public class BasicKafkaIT extends
 				257);
 	}
 
+	protected static final String TEST_DATA_ZIP_RESOURCE_PATH = TestUtils.TEST_RESOURCE_PACKAGE + "mapreduce-testdata.zip";
+	protected static final String OSM_GPX_INPUT_DIR = TestUtils.TEST_CASE_BASE + "osm_gpx_test_case/";
+
+	@GeoWaveTestStore({
+		GeoWaveStoreType.ACCUMULO
+	})
+	protected DataStorePluginOptions dataStorePluginOptions;
+
+	@BeforeClass
+	public static void extractTestFiles()
+			throws URISyntaxException {
+		TestUtils.unZipFile(
+				new File(
+						BasicKafkaIT.class.getClassLoader().getResource(
+								TEST_DATA_ZIP_RESOURCE_PATH).toURI()),
+				TestUtils.TEST_CASE_BASE);
+	}
+
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testBasicIngestGpx()
 			throws Exception {
-		testKafkaStage(OSM_GPX_INPUT_DIR);
-		testKafkaIngest(
+		KafkaTestUtils.testKafkaStage(OSM_GPX_INPUT_DIR);
+		KafkaTestUtils.testKafkaIngest(
+				dataStorePluginOptions,
 				false,
 				OSM_GPX_INPUT_DIR);
 		// wait a sufficient time for consumers to ingest all of the data
 		Thread.sleep(60000);
-		final DataStatisticsStore statsStore = new AccumuloDataStatisticsStore(
-				accumuloOperations);
-		final AdapterStore adapterStore = new AccumuloAdapterStore(
-				accumuloOperations);
+		final DataStatisticsStore statsStore = dataStorePluginOptions.createDataStatisticsStore();
+		final AdapterStore adapterStore = dataStorePluginOptions.createAdapterStore();
 		int adapterCount = 0;
 		try (CloseableIterator<DataAdapter<?>> adapterIterator = adapterStore.getAdapters()) {
 			while (adapterIterator.hasNext()) {
@@ -113,23 +137,12 @@ public class BasicKafkaIT extends
 			final DataAdapter<?> adapter,
 			final Query query )
 			throws Exception {
-		final mil.nga.giat.geowave.core.store.DataStore geowaveStore = new AccumuloDataStore(
-				new AccumuloIndexStore(
-						accumuloOperations),
-				new AccumuloAdapterStore(
-						accumuloOperations),
-				new AccumuloDataStatisticsStore(
-						accumuloOperations),
-				new AccumuloSecondaryIndexDataStore(
-						accumuloOperations),
-				new AccumuloAdapterIndexMappingStore(
-						accumuloOperations),
-				accumuloOperations);
+		final mil.nga.giat.geowave.core.store.DataStore geowaveStore = dataStorePluginOptions.createDataStore();
 
 		final CloseableIterator<?> accumuloResults = geowaveStore.query(
 				new QueryOptions(
 						adapter,
-						DEFAULT_SPATIAL_INDEX),
+						TestUtils.DEFAULT_SPATIAL_INDEX),
 				query);
 
 		int resultCount = 0;

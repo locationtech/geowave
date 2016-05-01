@@ -2,17 +2,11 @@ package mil.nga.giat.geowave.test.service;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.mortbay.jetty.Connector;
 import org.mortbay.jetty.Server;
 import org.mortbay.jetty.bio.SocketConnector;
@@ -23,15 +17,25 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import mil.nga.giat.geowave.core.index.StringUtils;
-import mil.nga.giat.geowave.core.store.config.ConfigUtils;
-import mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloRequiredOptions;
+import mil.nga.giat.geowave.test.AccumuloStoreTestEnvironment;
+import mil.nga.giat.geowave.test.GeoWaveITRunner;
+import mil.nga.giat.geowave.test.TestEnvironment;
+import mil.nga.giat.geowave.test.TestUtils;
 import mil.nga.giat.geowave.test.mapreduce.MapReduceTestEnvironment;
 
-abstract public class ServicesTestEnvironment extends
-		MapReduceTestEnvironment
+public class ServicesTestEnvironment implements
+		TestEnvironment
 {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ServicesTestEnvironment.class);
+
+	private static ServicesTestEnvironment singletonInstance = null;
+
+	public static synchronized ServicesTestEnvironment getInstance() {
+		if (singletonInstance == null) {
+			singletonInstance = new ServicesTestEnvironment();
+		}
+		return singletonInstance;
+	}
 
 	protected static final int JETTY_PORT = 9011;
 	protected static final String JETTY_BASE_URL = "http://localhost:" + JETTY_PORT;
@@ -56,58 +60,19 @@ abstract public class ServicesTestEnvironment extends
 	protected static final String TEST_SLD_NO_DIFFERENCE_FILE = TEST_STYLE_PATH + TEST_STYLE_NAME_NO_DIFFERENCE + ".sld";
 	protected static final String TEST_SLD_MINOR_SUBSAMPLE_FILE = TEST_STYLE_PATH + TEST_STYLE_NAME_MINOR_SUBSAMPLE + ".sld";
 	protected static final String TEST_SLD_MAJOR_SUBSAMPLE_FILE = TEST_STYLE_PATH + TEST_STYLE_NAME_MAJOR_SUBSAMPLE + ".sld";
-	protected static Server jettyServer;
-	protected static final String ACCUMULO_STORE_NAME = "accumulotest";
 
-	protected static void writeConfigFile(
-			final File configFile ) {
-		try {
-			final PrintWriter writer = new PrintWriter(
-					configFile,
-					StringUtils.GEOWAVE_CHAR_SET.toString());
-			writer.println("datastore=accumulo");
-			writer.println("zookeeper=" + zookeeper);
-			writer.println("instance=" + accumuloInstance);
-			writer.println("user=" + accumuloUser);
-			writer.println("password=" + accumuloPassword);
-			writer.println("gwNamespace=" + TEST_NAMESPACE);
-			writer.println("store." + ACCUMULO_STORE_NAME + ".type=accumulo");
-			writer.println("store." + ACCUMULO_STORE_NAME + ".opts.zookeeper=" + zookeeper);
-			writer.println("store." + ACCUMULO_STORE_NAME + ".opts.instance=" + accumuloInstance);
-			writer.println("store." + ACCUMULO_STORE_NAME + ".opts.user=" + accumuloUser);
-			writer.println("store." + ACCUMULO_STORE_NAME + ".opts.password=" + accumuloPassword);
-			writer.println("store." + ACCUMULO_STORE_NAME + ".opts.gwNamespace=" + TEST_NAMESPACE);
-			writer.println("geoserver.url=" + JETTY_BASE_URL);
-			writer.println("geoserver.username=" + GEOSERVER_USER);
-			writer.println("geoserver.password=" + GEOSERVER_PASS);
-			writer.println("geoserver.workspace=" + TEST_WORKSPACE);
-			writer.println("hdfs=" + hdfs);
-			writer.println("hdfsBase=" + hdfsBaseDirectory);
-			writer.println("jobTracker=" + jobtracker);
-			writer.close();
-		}
-		catch (final FileNotFoundException e) {
-			LOGGER.error(
-					"Unable to find config file",
-					e);
-		}
-		catch (final UnsupportedEncodingException e) {
-			LOGGER.error(
-					"Unable to write config file in UTF-8",
-					e);
-		}
-	}
+	private Server jettyServer;
 
 	@SuppressFBWarnings(value = {
 		"SWL_SLEEP_WITH_LOCK_HELD"
-	}, justification = "Sleep in lock intentional, waiting on external resource")
-	@BeforeClass
-	public static void startServices() {
-		synchronized (MUTEX) {
+	}, justification = "Jetty must be started before releasing the lock")
+	@Override
+	public void setup()
+			throws Exception {
+		synchronized (GeoWaveITRunner.MUTEX) {
 			if (jettyServer == null) {
 				try {
 					// delete old workspace configuration if it's still there
-					MapReduceTestEnvironment.setVariables();
 					jettyServer = new Server();
 					final SocketConnector conn = new SocketConnector();
 					conn.setPort(JETTY_PORT);
@@ -155,7 +120,7 @@ abstract public class ServicesTestEnvironment extends
 							GEOWAVE_WAR_DIR);
 
 					// update the config file
-					writeConfigFile(new File(
+					ServicesTestUtils.writeConfigFile(new File(
 							warDir,
 							"/WEB-INF/config.properties"));
 
@@ -167,7 +132,7 @@ abstract public class ServicesTestEnvironment extends
 						gsWebapp,
 						gwWebapp
 					});
-					gsWebapp.setTempDirectory(TEMP_DIR);
+					gsWebapp.setTempDirectory(TestUtils.TEMP_DIR);
 					// this allows to send large SLD's from the styles form
 					gsWebapp.getServletContext().getContextHandler().setMaxFormContentSize(
 							MAX_FORM_CONTENT_SIZE);
@@ -216,21 +181,11 @@ abstract public class ServicesTestEnvironment extends
 		}
 	}
 
-	protected Map<String, String> getAccumuloConfig() {
-		AccumuloRequiredOptions opts = new AccumuloRequiredOptions();
-		opts.setUser(accumuloUser);
-		opts.setPassword(accumuloPassword);
-		opts.setInstance(accumuloInstance);
-		opts.setZookeeper(zookeeper);
-		opts.setGeowaveNamespace(TEST_NAMESPACE);
-		Map<String, String> mapOpts = ConfigUtils.populateListFromOptions(opts);
-		return mapOpts;
-	}
-
-	@AfterClass
-	public static void stopServices() {
-		synchronized (MUTEX) {
-			if (!DEFER_CLEANUP.get()) {
+	@Override
+	public void tearDown()
+			throws Exception {
+		synchronized (GeoWaveITRunner.MUTEX) {
+			if (!GeoWaveITRunner.DEFER_CLEANUP.get()) {
 				if (jettyServer != null) {
 					try {
 						jettyServer.stop();
@@ -244,5 +199,13 @@ abstract public class ServicesTestEnvironment extends
 				}
 			}
 		}
+	}
+
+	@Override
+	public TestEnvironment[] getDependentEnvironments() {
+		return new TestEnvironment[] {
+			MapReduceTestEnvironment.getInstance(),
+			AccumuloStoreTestEnvironment.getInstance()
+		};
 	}
 }

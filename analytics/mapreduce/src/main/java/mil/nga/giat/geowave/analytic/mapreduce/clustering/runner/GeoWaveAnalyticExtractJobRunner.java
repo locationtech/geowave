@@ -153,7 +153,6 @@ public class GeoWaveAnalyticExtractJobRunner extends
 		runTimeProperties.storeIfEmpty(
 				ExtractParameters.Extract.OUTPUT_DATA_TYPE_ID,
 				"centroid");
-
 		runTimeProperties.setConfig(
 				new ParameterEnum[] {
 					MapReduceParameters.MRConfig.HDFS_BASE_DIR,
@@ -218,7 +217,7 @@ public class GeoWaveAnalyticExtractJobRunner extends
 						SimpleFeatureGeometryExtractor.class),
 				DimensionExtractor.class);
 
-		final PersistableStore store = ((PersistableStore) runTimeProperties.getProperty(StoreParam.STORE));
+		final PersistableStore store = ((PersistableStore) runTimeProperties.getProperty(StoreParam.INPUT_STORE));
 		setQueryOptions(runTimeProperties.getPropertyAsQueryOptions(ExtractParameters.Extract.QUERY_OPTIONS));
 		dataStoreOptions = store.getDataStoreOptions();
 
@@ -262,7 +261,7 @@ public class GeoWaveAnalyticExtractJobRunner extends
 			ExtractParameters.Extract.MAX_INPUT_SPLIT,
 			ExtractParameters.Extract.QUERY,
 			ExtractParameters.Extract.QUERY_OPTIONS,
-			StoreParam.STORE,
+			StoreParam.INPUT_STORE,
 			GlobalParameters.Global.BATCH_ID
 		}));
 

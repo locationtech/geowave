@@ -13,6 +13,7 @@ import java.util.Map;
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameterized;
 
+import javassist.ClassClassPath;
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.CtField;
@@ -167,6 +168,9 @@ public class JCommanderTranslationMap
 			// new
 			// classes.
 			ClassPool classPool = ClassPool.getDefault();
+			ClassClassPath path = new ClassClassPath(
+					JCommanderPrefixTranslator.class);
+			classPool.insertClassPath(path);
 
 			// Iterate the final translations and create the classes.
 			for (Map.Entry<String, TranslationEntry> mapEntry : translations.entrySet()) {

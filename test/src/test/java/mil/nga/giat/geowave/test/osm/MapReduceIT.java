@@ -8,6 +8,7 @@ import org.apache.accumulo.core.client.security.tokens.PasswordToken;
 import org.apache.accumulo.core.security.Authorizations;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,12 +17,22 @@ import mil.nga.giat.geowave.cli.osm.operations.StageOSMToHDFSCommand;
 import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloRequiredOptions;
-import mil.nga.giat.geowave.test.GeoWaveDFSTestEnvironment;
+import mil.nga.giat.geowave.test.AccumuloStoreTestEnvironment;
+import mil.nga.giat.geowave.test.GeoWaveITRunner;
+import mil.nga.giat.geowave.test.TestUtils;
+import mil.nga.giat.geowave.test.annotation.Environments;
+import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore;
+import mil.nga.giat.geowave.test.annotation.Environments.Environment;
+import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
+import mil.nga.giat.geowave.test.mapreduce.MapReduceTestEnvironment;
 import net.lingala.zip4j.core.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
 
-public class MapReduceIT extends
-		GeoWaveDFSTestEnvironment
+@RunWith(GeoWaveITRunner.class)
+@Environments({
+	Environment.MAP_REDUCE
+})
+public class MapReduceIT
 {
 
 	private final static Logger LOGGER = LoggerFactory.getLogger(MapReduceIT.class);
@@ -30,7 +41,13 @@ public class MapReduceIT extends
 			"./src/test/resources/osm/").getAbsolutePath().toString();
 	protected static final String TEST_DATA_ZIP_RESOURCE_PATH = TEST_RESOURCE_DIR + "/" + "andorra-latest.zip";
 	protected static final String TEST_DATA_BASE_DIR = new File(
-			"./target/data/").getAbsoluteFile().toString();
+			TestUtils.TEST_CASE_BASE,
+			"osm").getAbsoluteFile().toString();
+
+	@GeoWaveTestStore({
+		GeoWaveStoreType.ACCUMULO
+	})
+	protected DataStorePluginOptions dataStoreOptions;
 
 	@BeforeClass
 	public static void setupTestData()
@@ -45,51 +62,46 @@ public class MapReduceIT extends
 	@Test
 	public void testIngestOSMPBF()
 			throws Exception {
-
+		TestUtils.deleteAll(dataStoreOptions);
 		// NOTE: This will probably fail unless you bump up the memory for the
 		// tablet
 		// servers, for whatever reason, using the
 		// miniAccumuloConfig.setMemory() function.
+		MapReduceTestEnvironment mrEnv = MapReduceTestEnvironment.getInstance();
 
-		String hdfsPath = "/user/" + System.getProperty("user.name") + "/osm_stage/";
+		// TODO: for now this only works with accumulo, generalize the data
+		// store usage
+		AccumuloStoreTestEnvironment accumuloEnv = AccumuloStoreTestEnvironment.getInstance();
+
+		String hdfsPath = mrEnv.getHdfsBaseDirectory() + "/osm_stage/";
 
 		StageOSMToHDFSCommand stage = new StageOSMToHDFSCommand();
 		stage.setParameters(
 				TEST_DATA_BASE_DIR,
-				NAME_NODE,
+				mrEnv.getHdfs(),
 				hdfsPath);
 		stage.execute(new ManualOperationParams());
 
 		Connector conn = new ZooKeeperInstance(
-				accumuloInstance,
-				zookeeper).getConnector(
-				accumuloUser,
+				accumuloEnv.getAccumuloInstance(),
+				accumuloEnv.getZookeeper()).getConnector(
+				accumuloEnv.getAccumuloUser(),
 				new PasswordToken(
-						accumuloPassword));
+						accumuloEnv.getAccumuloPassword()));
 		Authorizations auth = new Authorizations(
 				new String[] {
 					"public"
 				});
 		conn.securityOperations().changeUserAuthorizations(
-				accumuloUser,
+				accumuloEnv.getAccumuloUser(),
 				auth);
-
-		DataStorePluginOptions pluginOptions = new DataStorePluginOptions();
-		pluginOptions.selectPlugin("accumulo");
-		AccumuloRequiredOptions opts = new AccumuloRequiredOptions();
-		opts.setZookeeper(zookeeper);
-		opts.setInstance(accumuloInstance);
-		opts.setUser(accumuloUser);
-		opts.setPassword(accumuloPassword);
-		opts.setGeowaveNamespace("osmnamespace");
-		pluginOptions.setFactoryOptions(opts);
 
 		IngestOSMToGeoWaveCommand ingest = new IngestOSMToGeoWaveCommand();
 		ingest.setParameters(
-				NAME_NODE,
+				mrEnv.getHdfs(),
 				hdfsPath,
 				null);
-		ingest.setInputStoreOptions(pluginOptions);
+		ingest.setInputStoreOptions(dataStoreOptions);
 
 		ingest.getIngestOptions().setJobName(
 				"ConversionTest");

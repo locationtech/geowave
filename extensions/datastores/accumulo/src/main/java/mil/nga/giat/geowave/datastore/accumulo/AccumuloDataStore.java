@@ -14,12 +14,35 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import org.apache.accumulo.core.client.AccumuloException;
+import org.apache.accumulo.core.client.AccumuloSecurityException;
+import org.apache.accumulo.core.client.BatchDeleter;
+import org.apache.accumulo.core.client.IteratorSetting;
+import org.apache.accumulo.core.client.MutationsRejectedException;
+import org.apache.accumulo.core.client.Scanner;
+import org.apache.accumulo.core.client.ScannerBase;
+import org.apache.accumulo.core.client.TableNotFoundException;
+import org.apache.accumulo.core.data.Key;
+import org.apache.accumulo.core.data.Range;
+import org.apache.accumulo.core.data.Value;
+import org.apache.accumulo.core.iterators.user.WholeRowIterator;
+import org.apache.commons.lang3.tuple.Pair;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.InputSplit;
+import org.apache.hadoop.mapreduce.RecordReader;
+import org.apache.log4j.Logger;
+
+import com.google.common.collect.Iterators;
+
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayUtils;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.AdapterToIndexMapping;
+import mil.nga.giat.geowave.core.store.CastIterator;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
+import mil.nga.giat.geowave.core.store.DataAdapterAndIndexCache;
 import mil.nga.giat.geowave.core.store.DataStoreCallbackManager;
 import mil.nga.giat.geowave.core.store.DataStoreEntryInfo;
 import mil.nga.giat.geowave.core.store.IndependentAdapterIndexWriter;
@@ -53,6 +76,7 @@ import mil.nga.giat.geowave.core.store.query.RowIdQuery;
 import mil.nga.giat.geowave.datastore.accumulo.index.secondary.AccumuloSecondaryIndexDataStore;
 import mil.nga.giat.geowave.datastore.accumulo.mapreduce.AccumuloMRUtils;
 import mil.nga.giat.geowave.datastore.accumulo.mapreduce.GeoWaveAccumuloRecordReader;
+import mil.nga.giat.geowave.datastore.accumulo.metadata.AbstractAccumuloPersistence;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloAdapterIndexMappingStore;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloAdapterStore;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloDataStatisticsStore;
@@ -61,36 +85,12 @@ import mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloOptions
 import mil.nga.giat.geowave.datastore.accumulo.query.AccumuloConstraintsQuery;
 import mil.nga.giat.geowave.datastore.accumulo.query.AccumuloRowIdsQuery;
 import mil.nga.giat.geowave.datastore.accumulo.query.AccumuloRowPrefixQuery;
-import mil.nga.giat.geowave.datastore.accumulo.query.AttributeSubsettingIterator;
 import mil.nga.giat.geowave.datastore.accumulo.query.SingleEntryFilterIterator;
 import mil.nga.giat.geowave.datastore.accumulo.util.AccumuloUtils;
-import mil.nga.giat.geowave.datastore.accumulo.util.DataAdapterAndIndexCache;
 import mil.nga.giat.geowave.datastore.accumulo.util.EntryIteratorWrapper;
 import mil.nga.giat.geowave.datastore.accumulo.util.ScannerClosableWrapper;
 import mil.nga.giat.geowave.mapreduce.MapReduceDataStore;
 import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
-
-import org.apache.accumulo.core.client.AccumuloException;
-import org.apache.accumulo.core.client.AccumuloSecurityException;
-import org.apache.accumulo.core.client.BatchDeleter;
-import org.apache.accumulo.core.client.IteratorSetting;
-import org.apache.accumulo.core.client.MutationsRejectedException;
-import org.apache.accumulo.core.client.Scanner;
-import org.apache.accumulo.core.client.ScannerBase;
-import org.apache.accumulo.core.client.TableNotFoundException;
-import org.apache.accumulo.core.data.Key;
-import org.apache.accumulo.core.data.Range;
-import org.apache.accumulo.core.data.Value;
-import org.apache.accumulo.core.iterators.user.WholeRowIterator;
-import org.apache.commons.lang3.tuple.Pair;
-import org.apache.hadoop.io.Text;
-import org.apache.hadoop.mapreduce.InputSplit;
-import org.apache.hadoop.mapreduce.RecordReader;
-import org.apache.log4j.Logger;
-
-import com.google.common.collect.Iterators;
-
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 /**
  * This is the Accumulo implementation of the data store. It requires an
@@ -206,7 +206,7 @@ public class AccumuloDataStore implements
 					secondaryIndexDataStore,
 					i == 0);
 
-			callbackManager.setPersistStats(this.accumuloOptions.isPersistDataStatistics());
+			callbackManager.setPersistStats(accumuloOptions.isPersistDataStatistics());
 
 			final List<IngestCallback<T>> callbacks = new ArrayList<IngestCallback<T>>();
 
@@ -268,7 +268,6 @@ public class AccumuloDataStore implements
 					index,
 					accumuloOperations,
 					accumuloOptions,
-					this,
 					callbacksList,
 					callbacksList,
 					DataStoreUtils.UNCONSTRAINED_VISIBILITY);
@@ -468,8 +467,7 @@ public class AccumuloDataStore implements
 							accumuloOperations,
 							tempAdapterStore,
 							sanitizedQueryOptions.getMaxResolutionSubsamplingPerDimension(),
-							sanitizedQueryOptions.getLimit(),
-							true));
+							sanitizedQueryOptions.getLimit()));
 				}
 			}
 
@@ -493,33 +491,6 @@ public class AccumuloDataStore implements
 				},
 				Iterators.concat(new CastIterator<T>(
 						results.iterator())));
-	}
-
-	protected static class CastIterator<T> implements
-			Iterator<CloseableIterator<T>>
-	{
-
-		final Iterator<CloseableIterator<Object>> it;
-
-		public CastIterator(
-				final Iterator<CloseableIterator<Object>> it ) {
-			this.it = it;
-		}
-
-		@Override
-		public boolean hasNext() {
-			return it.hasNext();
-		}
-
-		@Override
-		public CloseableIterator<T> next() {
-			return (CloseableIterator<T>) it.next();
-		}
-
-		@Override
-		public void remove() {
-			it.remove();
-		}
 	}
 
 	protected static byte[] getRowIdBytes(
@@ -732,6 +703,16 @@ public class AccumuloDataStore implements
 			final Query query ) {
 		if (((query == null) || (query instanceof EverythingQuery)) && queryOptions.isAllAdapters()) {
 			try {
+
+				// TODO These interfaces should all provide remove and removeAll
+				// capabilities instead of having to clear the
+				// AbstractPersistence's cache manually
+				((AbstractAccumuloPersistence) indexStore).clearCache();
+				((AbstractAccumuloPersistence) adapterStore).clearCache();
+				((AbstractAccumuloPersistence) statisticsStore).clearCache();
+				((AccumuloSecondaryIndexDataStore) secondaryIndexDataStore).clearCache();
+				((AbstractAccumuloPersistence) indexMappingStore).clearCache();
+
 				accumuloOperations.deleteAll();
 				return true;
 			}
@@ -779,7 +760,7 @@ public class AccumuloDataStore implements
 							secondaryIndexDataStore,
 							queriedAdapters.add(adapter.getAdapterId()));
 
-					callbackCache.setPersistStats(this.accumuloOptions.isPersistDataStatistics());
+					callbackCache.setPersistStats(accumuloOptions.isPersistDataStatistics());
 
 					if (query instanceof EverythingQuery) {
 						deleteEntries(
@@ -944,10 +925,12 @@ public class AccumuloDataStore implements
 				tableName,
 				adapterId,
 				additionalAuthorizations);
-		deleteAll(
-				altIdxTableName,
-				adapterId,
-				additionalAuthorizations);
+		if (accumuloOptions.isUseAltIndex() && accumuloOperations.tableExists(altIdxTableName)) {
+			deleteAll(
+					altIdxTableName,
+					adapterId,
+					additionalAuthorizations);
+		}
 	}
 
 	private boolean deleteAll(

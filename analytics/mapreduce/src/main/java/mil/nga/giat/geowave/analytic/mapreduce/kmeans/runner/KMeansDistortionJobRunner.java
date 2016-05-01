@@ -77,7 +77,6 @@ public class KMeansDistortionJobRunner extends
 
 		// Required since the Mapper uses the input format parameters to lookup
 		// the adapter
-
 		GeoWaveInputFormat.setDataStoreName(
 				conf,
 				dataStoreOptions.getType());

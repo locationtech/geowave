@@ -221,30 +221,34 @@ public class AccumuloConstraintsQuery extends
 		if (isAggregation()) {
 			// aggregate the stats to a single value here
 
-			final Iterator<Entry<Key, Value>> it = scanner.iterator();
-
-			Mergeable mergedAggregationResult = null;
-			if (!it.hasNext()) {
-				return Iterators.emptyIterator();
-			}
-			else {
-				while (it.hasNext()) {
-					final Entry<Key, Value> input = it.next();
-					if (input.getValue() != null) {
-						if (mergedAggregationResult == null) {
-							mergedAggregationResult = PersistenceUtils.fromBinary(
-									input.getValue().get(),
-									Mergeable.class);
-						}
-						else {
-							mergedAggregationResult.merge(PersistenceUtils.fromBinary(
-									input.getValue().get(),
-									Mergeable.class));
+			try {
+				final Iterator<Entry<Key, Value>> it = scanner.iterator();
+				Mergeable mergedAggregationResult = null;
+				if (!it.hasNext()) {
+					return Iterators.emptyIterator();
+				}
+				else {
+					while (it.hasNext()) {
+						final Entry<Key, Value> input = it.next();
+						if (input.getValue() != null) {
+							if (mergedAggregationResult == null) {
+								mergedAggregationResult = PersistenceUtils.fromBinary(
+										input.getValue().get(),
+										Mergeable.class);
+							}
+							else {
+								mergedAggregationResult.merge(PersistenceUtils.fromBinary(
+										input.getValue().get(),
+										Mergeable.class));
+							}
 						}
 					}
 				}
+				return Iterators.singletonIterator(mergedAggregationResult);
 			}
-			return Iterators.singletonIterator(mergedAggregationResult);
+			finally {
+				scanner.close();
+			}
 		}
 		else {
 			return super.initIterator(

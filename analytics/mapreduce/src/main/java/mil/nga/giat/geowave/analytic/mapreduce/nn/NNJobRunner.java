@@ -62,7 +62,6 @@ public class NNJobRunner extends
 				runTimeProperties,
 				getScope(),
 				config);
-
 		if (secondaryPartitioner.getClass() != partitioner.getClass()) {
 			secondaryPartitioner.setup(
 					runTimeProperties,

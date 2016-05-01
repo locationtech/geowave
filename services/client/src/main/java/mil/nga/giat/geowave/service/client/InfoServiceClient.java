@@ -3,10 +3,10 @@ package mil.nga.giat.geowave.service.client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.core.Response;
 
+import org.glassfish.jersey.client.proxy.WebResourceFactory;
+
 import mil.nga.giat.geowave.service.InfoService;
 import net.sf.json.JSONObject;
-
-import org.glassfish.jersey.client.proxy.WebResourceFactory;
 
 public class InfoServiceClient
 {
@@ -28,15 +28,15 @@ public class InfoServiceClient
 	// }
 
 	public JSONObject getIndices(
-			final String namespace ) {
-		final Response resp = infoService.getIndices(namespace);
+			final String storeName ) {
+		final Response resp = infoService.getIndices(storeName);
 		resp.bufferEntity();
 		return JSONObject.fromObject(resp.readEntity(String.class));
 	}
 
 	public JSONObject getAdapters(
-			final String namespace ) {
-		final Response resp = infoService.getAdapters(namespace);
+			final String storeName ) {
+		final Response resp = infoService.getAdapters(storeName);
 		resp.bufferEntity();
 		return JSONObject.fromObject(resp.readEntity(String.class));
 	}

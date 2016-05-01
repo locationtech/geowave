@@ -194,7 +194,7 @@ public class SampleMultipleSetsJobRunner<T> extends
 			CentroidParameters.Centroid.EXTRACTOR_CLASS,
 			CommonParameters.Common.DISTANCE_FUNCTION_CLASS,
 			CommonParameters.Common.DIMENSION_EXTRACT_CLASS,
-			StoreParameters.StoreParam.STORE,
+			StoreParameters.StoreParam.INPUT_STORE,
 			GlobalParameters.Global.BATCH_ID
 		}));
 

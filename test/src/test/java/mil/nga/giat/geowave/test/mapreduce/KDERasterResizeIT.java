@@ -10,12 +10,12 @@ import java.util.Map.Entry;
 
 import javax.media.jai.Interpolation;
 
-import org.apache.accumulo.core.client.Connector;
 import org.apache.hadoop.util.ToolRunner;
 import org.geotools.geometry.GeneralEnvelope;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.opengis.coverage.grid.GridCoverage;
 
 import mil.nga.giat.geowave.adapter.raster.operations.ResizeCommand;
@@ -25,19 +25,30 @@ import mil.nga.giat.geowave.adapter.raster.plugin.GeoWaveRasterReader;
 import mil.nga.giat.geowave.analytic.mapreduce.operations.KdeCommand;
 import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
 import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
-import mil.nga.giat.geowave.core.store.config.ConfigUtils;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
-import mil.nga.giat.geowave.datastore.accumulo.util.ConnectorPool;
-import mil.nga.giat.geowave.test.GeoWaveTestEnvironment;
+import mil.nga.giat.geowave.test.GeoWaveITRunner;
+import mil.nga.giat.geowave.test.TestUtils;
+import mil.nga.giat.geowave.test.TestUtils.DimensionalityType;
+import mil.nga.giat.geowave.test.annotation.Environments;
+import mil.nga.giat.geowave.test.annotation.Environments.Environment;
+import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore;
+import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
+import mil.nga.giat.geowave.test.annotation.NamespaceOverride;
 
-public class KDERasterResizeIT extends
-		MapReduceTestEnvironment
+@RunWith(GeoWaveITRunner.class)
+@Environments({
+	Environment.MAP_REDUCE
+})
+@GeoWaveTestStore({
+	GeoWaveStoreType.ACCUMULO
+})
+public class KDERasterResizeIT
 {
 	private static final String TEST_COVERAGE_NAME_PREFIX = "TEST_COVERAGE";
 	private static final String TEST_RESIZE_COVERAGE_NAME_PREFIX = "TEST_RESIZE";
 	private static final String TEST_COVERAGE_NAMESPACE = "mil_nga_giat_geowave_test_coverage";
-	protected static final String TEST_DATA_ZIP_RESOURCE_PATH = TEST_RESOURCE_PACKAGE + "kde-testdata.zip";
-	protected static final String KDE_INPUT_DIR = TEST_CASE_BASE + "kde_test_case/";
+	protected static final String TEST_DATA_ZIP_RESOURCE_PATH = TestUtils.TEST_RESOURCE_PACKAGE + "kde-testdata.zip";
+	protected static final String KDE_INPUT_DIR = TestUtils.TEST_CASE_BASE + "kde_test_case/";
 	private static final String KDE_SHAPEFILE_FILE = KDE_INPUT_DIR + "kde-test.shp";
 	private static final double TARGET_MIN_LON = 155;
 	private static final double TARGET_MIN_LAT = 16;
@@ -49,21 +60,27 @@ public class KDERasterResizeIT extends
 	private static final int BASE_MIN_LEVEL = 15;
 	private static final int BASE_MAX_LEVEL = 17;
 
+	@NamespaceOverride(TEST_COVERAGE_NAMESPACE)
+	protected DataStorePluginOptions outputDataStorePluginOptions;
+
+	protected DataStorePluginOptions inputDataStorePluginOptions;
+
 	@BeforeClass
 	public static void extractTestFiles()
 			throws URISyntaxException {
-		GeoWaveTestEnvironment.unZipFile(
+		TestUtils.unZipFile(
 				new File(
 						KDERasterResizeIT.class.getClassLoader().getResource(
 								TEST_DATA_ZIP_RESOURCE_PATH).toURI()),
-				TEST_CASE_BASE);
+				TestUtils.TEST_CASE_BASE);
 	}
 
 	@Test
 	public void testKDEAndRasterResize()
 			throws Exception {
-		accumuloOperations.deleteAll();
-		testLocalIngest(
+		TestUtils.deleteAll(inputDataStorePluginOptions);
+		TestUtils.testLocalIngest(
+				inputDataStorePluginOptions,
 				DimensionalityType.SPATIAL,
 				KDE_SHAPEFILE_FILE,
 				1);
@@ -89,6 +106,7 @@ public class KDERasterResizeIT extends
 					decimalDegreesPerCellMinLevel * (cellOriginYMinLevel + numCellsMinLevel)
 				});
 
+		final MapReduceTestEnvironment env = MapReduceTestEnvironment.getInstance();
 		for (int i = MIN_TILE_SIZE_POWER_OF_2; i <= MAX_TILE_SIZE_POWER_OF_2; i += INCREMENT) {
 			final String tileSizeCoverageName = TEST_COVERAGE_NAME_PREFIX + i;
 
@@ -99,8 +117,8 @@ public class KDERasterResizeIT extends
 					null,
 					null);
 
-			command.setInputStoreOptions(getAccumuloStorePluginOptions(TEST_NAMESPACE));
-			command.setOutputStoreOptions(getAccumuloStorePluginOptions(TEST_COVERAGE_NAMESPACE));
+			command.setInputStoreOptions(inputDataStorePluginOptions);
+			command.setOutputStoreOptions(outputDataStorePluginOptions);
 
 			command.getKdeOptions().setFeatureType(
 					KDE_FEATURE_TYPE_NAME);
@@ -109,15 +127,15 @@ public class KDERasterResizeIT extends
 			command.getKdeOptions().setMaxLevel(
 					BASE_MAX_LEVEL - i);
 			command.getKdeOptions().setMinSplits(
-					MIN_INPUT_SPLITS);
+					MapReduceTestUtils.MIN_INPUT_SPLITS);
 			command.getKdeOptions().setMaxSplits(
-					MAX_INPUT_SPLITS);
+					MapReduceTestUtils.MAX_INPUT_SPLITS);
 			command.getKdeOptions().setCoverageName(
 					tileSizeCoverageName);
 			command.getKdeOptions().setHdfsHostPort(
-					hdfs);
+					env.getHdfs());
 			command.getKdeOptions().setJobTrackerOrResourceManHostPort(
-					jobtracker);
+					env.getJobtracker());
 			command.getKdeOptions().setTileSize(
 					(int) Math.pow(
 							2,
@@ -143,32 +161,6 @@ public class KDERasterResizeIT extends
 									l))),
 					null);
 		}
-
-		final Connector conn = ConnectorPool.getInstance().getConnector(
-				zookeeper,
-				accumuloInstance,
-				accumuloUser,
-				accumuloPassword);
-		conn.tableOperations().compact(
-				TEST_COVERAGE_NAMESPACE + "_" + DEFAULT_ALLTIER_SPATIAL_INDEX.getId().getString(),
-				null,
-				null,
-				true,
-				true);
-		for (int l = 0; l < numLevels; l++) {
-			testSamplesMatch(
-					TEST_COVERAGE_NAME_PREFIX,
-					((MAX_TILE_SIZE_POWER_OF_2 - MIN_TILE_SIZE_POWER_OF_2) / INCREMENT) + 1,
-					queryEnvelope,
-					new Rectangle(
-							(int) (numCellsMinLevel * Math.pow(
-									2,
-									l)),
-							(int) (numCellsMinLevel * Math.pow(
-									2,
-									l))),
-					initialSampleValuesPerRequestSize[l]);
-		}
 		for (int i = MIN_TILE_SIZE_POWER_OF_2; i <= MAX_TILE_SIZE_POWER_OF_2; i += INCREMENT) {
 			final String originalTileSizeCoverageName = TEST_COVERAGE_NAME_PREFIX + i;
 			final String resizeTileSizeCoverageName = TEST_RESIZE_COVERAGE_NAME_PREFIX + i;
@@ -180,23 +172,23 @@ public class KDERasterResizeIT extends
 					null,
 					null);
 
-			command.setInputStoreOptions(getAccumuloStorePluginOptions(TEST_COVERAGE_NAMESPACE));
-			command.setOutputStoreOptions(getAccumuloStorePluginOptions(TEST_COVERAGE_NAMESPACE));
+			command.setInputStoreOptions(outputDataStorePluginOptions);
+			command.setOutputStoreOptions(outputDataStorePluginOptions);
 
 			command.getOptions().setInputCoverageName(
 					originalTileSizeCoverageName);
 			command.getOptions().setMinSplits(
-					MIN_INPUT_SPLITS);
+					MapReduceTestUtils.MIN_INPUT_SPLITS);
 			command.getOptions().setMaxSplits(
-					MAX_INPUT_SPLITS);
+					MapReduceTestUtils.MAX_INPUT_SPLITS);
 			command.getOptions().setHdfsHostPort(
-					hdfs);
+					env.getHdfs());
 			command.getOptions().setJobTrackerOrResourceManHostPort(
-					jobtracker);
+					env.getJobtracker());
 			command.getOptions().setOutputCoverageName(
 					resizeTileSizeCoverageName);
 			command.getOptions().setIndexId(
-					DEFAULT_ALLTIER_SPATIAL_INDEX.getId().toString());
+					TestUtils.DEFAULT_ALLTIER_SPATIAL_INDEX.getId().toString());
 			command.getOptions().setOutputTileSize(
 					(int) Math.pow(
 							2,
@@ -221,30 +213,9 @@ public class KDERasterResizeIT extends
 									l))),
 					initialSampleValuesPerRequestSize[l]);
 		}
-
-		conn.tableOperations().compact(
-				TEST_COVERAGE_NAMESPACE + "_" + DEFAULT_ALLTIER_SPATIAL_INDEX.getId().getString(),
-				null,
-				null,
-				true,
-				true);
-		for (int l = 0; l < numLevels; l++) {
-			testSamplesMatch(
-					TEST_RESIZE_COVERAGE_NAME_PREFIX,
-					((MAX_TILE_SIZE_POWER_OF_2 - MIN_TILE_SIZE_POWER_OF_2) / INCREMENT) + 1,
-					queryEnvelope,
-					new Rectangle(
-							(int) (numCellsMinLevel * Math.pow(
-									2,
-									l)),
-							(int) (numCellsMinLevel * Math.pow(
-									2,
-									l))),
-					initialSampleValuesPerRequestSize[l]);
-		}
 	}
 
-	private static double[][][] testSamplesMatch(
+	private double[][][] testSamplesMatch(
 			final String coverageNamePrefix,
 			final int numCoverages,
 			final GeneralEnvelope queryEnvelope,
@@ -258,7 +229,7 @@ public class KDERasterResizeIT extends
 				";equalizeHistogramOverride=false;interpolationOverride=").append(
 				Interpolation.INTERP_NEAREST);
 
-		Map<String, String> options = ConfigUtils.populateListFromOptions(getAccumuloStorePluginOptions(null));
+		final Map<String, String> options = outputDataStorePluginOptions.getFactoryOptionsAsMap();
 
 		for (final Entry<String, String> entry : options.entrySet()) {
 			if (!entry.getKey().equals(

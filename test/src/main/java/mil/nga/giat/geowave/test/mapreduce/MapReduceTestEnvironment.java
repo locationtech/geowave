@@ -1,101 +1,47 @@
 package mil.nga.giat.geowave.test.mapreduce;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
-import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.mapreduce.MRJobConfig;
 import org.apache.log4j.Logger;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 
-import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
-import mil.nga.giat.geowave.core.ingest.operations.LocalToMapReduceToGeowaveCommand;
-import mil.nga.giat.geowave.core.ingest.operations.options.IngestFormatPluginOptions;
-import mil.nga.giat.geowave.core.store.config.ConfigUtils;
-import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOptions;
-import mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloRequiredOptions;
-import mil.nga.giat.geowave.test.GeoWaveTestEnvironment;
+import mil.nga.giat.geowave.test.TestEnvironment;
+import mil.nga.giat.geowave.test.TestUtils;
 
-abstract public class MapReduceTestEnvironment extends
-		GeoWaveTestEnvironment
+public class MapReduceTestEnvironment implements
+		TestEnvironment
 {
 	private final static Logger LOGGER = Logger.getLogger(MapReduceTestEnvironment.class);
 
-	protected static final String HDFS_BASE_DIRECTORY = "test_tmp";
-	protected static final String DEFAULT_JOB_TRACKER = "local";
-	protected static final String EXPECTED_RESULTS_KEY = "EXPECTED_RESULTS";
-	protected static final int MIN_INPUT_SPLITS = 3;
-	protected static final int MAX_INPUT_SPLITS = 5;
-	protected static String jobtracker;
-	protected static String hdfs;
-	protected static boolean hdfsProtocol;
-	protected static String hdfsBaseDirectory;
+	private static MapReduceTestEnvironment singletonInstance = null;
 
-	protected void testMapReduceIngest(
-			final DimensionalityType dimensionalityType,
-			final String ingestFilePath ) {
-		testMapReduceIngest(
-				dimensionalityType,
-				"gpx",
-				ingestFilePath);
-	}
-
-	protected void testMapReduceIngest(
-			final DimensionalityType dimensionalityType,
-			final String format,
-			final String ingestFilePath ) {
-		// ingest gpx data directly into GeoWave using the
-		// ingest framework's main method and pre-defined commandline arguments
-		LOGGER.warn("Ingesting '" + ingestFilePath + "' - this may take several minutes...");
-		String[] args = null;
-
-		// Indexes
-		String[] indexTypes = dimensionalityType.getDimensionalityArg().split(
-				",");
-		List<IndexPluginOptions> indexOptions = new ArrayList<IndexPluginOptions>(
-				indexTypes.length);
-		for (String indexType : indexTypes) {
-			IndexPluginOptions indexOption = new IndexPluginOptions();
-			indexOption.selectPlugin(indexType);
-			indexOptions.add(indexOption);
+	public static synchronized MapReduceTestEnvironment getInstance() {
+		if (singletonInstance == null) {
+			singletonInstance = new MapReduceTestEnvironment();
 		}
-		// Ingest Formats
-		IngestFormatPluginOptions ingestFormatOptions = new IngestFormatPluginOptions();
-		ingestFormatOptions.selectPlugin(format);
-
-		LocalToMapReduceToGeowaveCommand mrGw = new LocalToMapReduceToGeowaveCommand();
-
-		mrGw.setInputIndexOptions(indexOptions);
-		mrGw.setInputStoreOptions(getAccumuloStorePluginOptions(TEST_NAMESPACE));
-
-		mrGw.setPluginFormats(ingestFormatOptions);
-		mrGw.setParameters(
-				ingestFilePath,
-				hdfs,
-				hdfsBaseDirectory,
-				null,
-				null);
-		mrGw.getMapReduceOptions().setJobTrackerHostPort(
-				jobtracker);
-
-		mrGw.execute(new ManualOperationParams());
+		return singletonInstance;
 	}
 
-	@BeforeClass
-	public static void setVariables()
-			throws IOException {
-		GeoWaveTestEnvironment.setup();
+	protected static final String HDFS_BASE_DIRECTORY = "test_tmp";
+	private static final String DEFAULT_JOB_TRACKER = "local";
+	private String jobtracker;
+	private String hdfs;
+	private boolean hdfsProtocol;
+	private String hdfsBaseDirectory;
+
+	private MapReduceTestEnvironment() {}
+
+	@Override
+	public void setup()
+			throws Exception {
 		hdfs = System.getProperty("hdfs");
 		jobtracker = System.getProperty("jobtracker");
-		if (!isSet(hdfs)) {
+		if (!TestUtils.isSet(hdfs)) {
 			hdfs = "file:///";
 
-			hdfsBaseDirectory = TEMP_DIR.toURI().toURL().toString() + "/" + HDFS_BASE_DIRECTORY;
+			hdfsBaseDirectory = TestUtils.TEMP_DIR.toURI().toURL().toString() + "/" + HDFS_BASE_DIRECTORY;
+
 			hdfsProtocol = false;
 		}
 		else {
@@ -109,18 +55,18 @@ abstract public class MapReduceTestEnvironment extends
 						"hdfs://");
 			}
 		}
-		if (!isSet(jobtracker)) {
+		if (!TestUtils.isSet(jobtracker)) {
 			jobtracker = DEFAULT_JOB_TRACKER;
 		}
 	}
 
-	@AfterClass
-	public static void cleanupHdfsFiles() {
+	@Override
+	public void tearDown() {
 		if (hdfsProtocol) {
 			final Path tmpDir = new Path(
 					hdfsBaseDirectory);
 			try {
-				final FileSystem fs = FileSystem.get(getConfiguration());
+				final FileSystem fs = FileSystem.get(MapReduceTestUtils.getConfiguration());
 				fs.delete(
 						tmpDir,
 						true);
@@ -133,52 +79,45 @@ abstract public class MapReduceTestEnvironment extends
 		}
 	}
 
-	public static void filterConfiguration(
-			final Configuration conf ) {
-		// final parameters, can't be overriden
-		conf.unset("mapreduce.job.end-notification.max.retry.interval");
-		conf.unset("mapreduce.job.end-notification.max.attempts");
-
-		// deprecated parameters (added in by default since we used the
-		// Configuration() constructor (everything is set))
-		conf.unset("session.id");
-		conf.unset("mapred.jar");
-		conf.unset("fs.default.name");
-		conf.unset("mapred.map.tasks.speculative.execution");
-		conf.unset("mapred.reduce.tasks");
-		conf.unset("mapred.reduce.tasks.speculative.execution");
-		conf.unset("mapred.mapoutput.value.class");
-		conf.unset("mapred.used.genericoptionsparser");
-		conf.unset("mapreduce.map.class");
-		conf.unset("mapred.job.name");
-		conf.unset("mapreduce.inputformat.class");
-		conf.unset("mapred.input.dir");
-		conf.unset("mapreduce.outputformat.class");
-		conf.unset("mapred.map.tasks");
-		conf.unset("mapred.mapoutput.key.class");
-		conf.unset("mapred.working.dir");
+	public String getJobtracker() {
+		return jobtracker;
 	}
 
-	protected static Configuration getConfiguration() {
-		final Configuration conf = new Configuration();
-		conf.set(
-				"fs.defaultFS",
-				hdfs);
-		conf.set(
-				"fs.hdfs.impl",
-				org.apache.hadoop.hdfs.DistributedFileSystem.class.getName());
-		conf.set(
-				"mapreduce.jobtracker.address",
-				jobtracker);
-		// for travis-ci to run, we want to limit the memory consumption
-		conf.setInt(
-				MRJobConfig.IO_SORT_MB,
-				10);
+	public void setJobtracker(
+			String jobtracker ) {
+		this.jobtracker = jobtracker;
+	}
 
-		filterConfiguration(conf);
+	public String getHdfs() {
+		return hdfs;
+	}
 
-		return conf;
+	public void setHdfs(
+			String hdfs ) {
+		this.hdfs = hdfs;
+	}
 
+	public boolean isHdfsProtocol() {
+		return hdfsProtocol;
+	}
+
+	public void setHdfsProtocol(
+			boolean hdfsProtocol ) {
+		this.hdfsProtocol = hdfsProtocol;
+	}
+
+	public String getHdfsBaseDirectory() {
+		return hdfsBaseDirectory;
+	}
+
+	public void setHdfsBaseDirectory(
+			String hdfsBaseDirectory ) {
+		this.hdfsBaseDirectory = hdfsBaseDirectory;
+	}
+
+	@Override
+	public TestEnvironment[] getDependentEnvironments() {
+		return new TestEnvironment[] {};
 	}
 
 }
