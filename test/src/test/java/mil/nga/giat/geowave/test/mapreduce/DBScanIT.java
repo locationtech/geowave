@@ -115,14 +115,7 @@ public class DBScanIT
 			throws Exception {
 
 		final DBScanIterationsJobRunner jobRunner = new DBScanIterationsJobRunner();
-		// TODO should use
 		Configuration conf = MapReduceTestUtils.getConfiguration();
-		GeoWaveOutputFormat.setDataStoreName(
-				conf,
-				dataStorePluginOptions.getFactoryFamily().getDataStoreFactory().getName());
-		GeoWaveOutputFormat.setStoreConfigOptions(
-				conf,
-				ConfigUtils.populateListFromOptions(dataStorePluginOptions.getFactoryOptions()));
 		final int res = jobRunner.run(
 				conf,
 				new PropertyManagement(
