@@ -114,10 +114,6 @@ public class MapReduceTestUtils
 		conf.set(
 				"mapreduce.jobtracker.address",
 				env.getJobtracker());
-		// for travis-ci to run, we want to limit the memory consumption
-		conf.setInt(
-				MRJobConfig.IO_SORT_MB,
-				10);
 
 		filterConfiguration(conf);
 
