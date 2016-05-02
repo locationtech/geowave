@@ -6,7 +6,6 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import mil.nga.giat.geowave.test.AccumuloStoreTestEnvironment;
-import mil.nga.giat.geowave.test.HBaseStoreTestEnvironment;
 import mil.nga.giat.geowave.test.StoreTestEnvironment;
 import mil.nga.giat.geowave.test.TestUtils;
 
