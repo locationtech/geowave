@@ -7,7 +7,6 @@ import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 
-import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.IndexWriter;
@@ -54,13 +53,7 @@ public class SimpleIngestIndexWriter extends
 			System.exit(1);
 		}
 
-		if (geowaveDataStore != null) {
-			si.generateGrid(geowaveDataStore);
-		}
-		else {
-			log.error("Could not instantiate DataStore from given arguments.");
-		}
-
+		si.generateGrid(geowaveDataStore);
 		System.out.println("Finished ingesting data to namespace: " + namespace + " at datastore instance: " + instance);
 
 	}
