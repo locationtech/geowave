@@ -100,7 +100,10 @@ public class KafkaToGeowaveCommand implements
 		if (inputIndexOptions == null) {
 			IndexLoader indexLoader = new IndexLoader(
 					indexList);
-			indexLoader.loadFromConfig(configFile);
+			if (!indexLoader.loadFromConfig(configFile)) {
+				throw new ParameterException(
+						"Cannot find index(s) by name: " + indexList);
+			}
 			inputIndexOptions = indexLoader.getLoadedIndexes();
 		}
 
