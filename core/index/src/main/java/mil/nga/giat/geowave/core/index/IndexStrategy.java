@@ -18,7 +18,8 @@ public interface IndexStrategy<QueryRangeType extends QueryConstraints, EntryRan
 	 * @return a List of query ranges
 	 */
 	public List<ByteArrayRange> getQueryRanges(
-			QueryRangeType indexedRange );
+			QueryRangeType indexedRange,
+			IndexMetaData... hints );
 
 	/**
 	 * Returns a list of query ranges for an specified numeric range.
@@ -32,7 +33,8 @@ public interface IndexStrategy<QueryRangeType extends QueryConstraints, EntryRan
 	 */
 	public List<ByteArrayRange> getQueryRanges(
 			QueryRangeType indexedRange,
-			int maxEstimatedRangeDecomposition );
+			int maxEstimatedRangeDecomposition,
+			IndexMetaData... hints );
 
 	/**
 	 * Returns a list of id's for insertion. The index strategy will use a
@@ -85,5 +87,7 @@ public interface IndexStrategy<QueryRangeType extends QueryConstraints, EntryRan
 	 * @return the set of natural splits
 	 */
 	public Set<ByteArrayId> getNaturalSplits();
+
+	public List<IndexMetaData> createMetaData();
 
 }

@@ -1,9 +1,13 @@
 package mil.nga.giat.geowave.core.index;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import org.junit.Assert;
+import org.junit.Test;
 
 import mil.nga.giat.geowave.core.index.dimension.BasicDimensionDefinition;
 import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
@@ -13,9 +17,6 @@ import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericData;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericRange;
 import mil.nga.giat.geowave.core.index.sfc.tiered.TieredSFCIndexFactory;
-
-import org.junit.Assert;
-import org.junit.Test;
 
 public class CompoundIndexStrategyTest
 {
@@ -311,5 +312,55 @@ public class CompoundIndexStrategyTest
 		Assert.assertTrue(Double.compare(
 				precisionPerDim[2],
 				sfcIndexPrecision[1]) == 0);
+	}
+
+	@Test
+	public void testHints() {
+		final List<IndexMetaData> dataSimple = simpleIndexStrategy.createMetaData();
+		final List<IndexMetaData> dataSFC = sfcIndexStrategy.createMetaData();
+
+		final List<ByteArrayId> ids = compoundIndexStrategy.getInsertionIds(
+				compoundIndexedRange,
+				8);
+
+		List<IndexMetaData> metaData = compoundIndexStrategy.createMetaData();
+		for (IndexMetaData imd : metaData) {
+			imd.update(ids);
+		}
+
+		final List<ByteArrayRange> simpleIndexRanges = simpleIndexStrategy.getQueryRanges(simpleIndexedRange);
+		final List<ByteArrayRange> sfcIndexRanges = sfcIndexStrategy.getQueryRanges(sfcIndexedRange);
+		final List<ByteArrayRange> ranges = new ArrayList<>();
+		for (final ByteArrayRange r1 : simpleIndexRanges) {
+			for (final ByteArrayRange r2 : sfcIndexRanges) {
+				final ByteArrayId start = compoundIndexStrategy.composeByteArrayId(
+						r1.getStart(),
+						r2.getStart());
+				final ByteArrayId end = compoundIndexStrategy.composeByteArrayId(
+						r1.getEnd(),
+						r2.getEnd());
+				ranges.add(new ByteArrayRange(
+						start,
+						end));
+			}
+		}
+
+		final Set<ByteArrayRange> compoundIndexRangesWithoutHints = new HashSet<>(
+				compoundIndexStrategy.getQueryRanges(compoundIndexedRange));
+		final Set<ByteArrayRange> compoundIndexRangesWithHints = new HashSet<>(
+				compoundIndexStrategy.getQueryRanges(
+						compoundIndexedRange,
+						metaData.toArray(new IndexMetaData[metaData.size()])));
+		Assert.assertTrue(compoundIndexRangesWithoutHints.containsAll(compoundIndexRangesWithHints));
+		Assert.assertTrue(compoundIndexRangesWithHints.containsAll(compoundIndexRangesWithoutHints));
+
+		List<Persistable> newMetaData = PersistenceUtils.fromBinary(PersistenceUtils.toBinary(metaData));
+		final Set<ByteArrayRange> compoundIndexRangesWithHints2 = new HashSet<>(
+				compoundIndexStrategy.getQueryRanges(
+						compoundIndexedRange,
+						metaData.toArray(new IndexMetaData[newMetaData.size()])));
+		Assert.assertTrue(compoundIndexRangesWithoutHints.containsAll(compoundIndexRangesWithHints2));
+		Assert.assertTrue(compoundIndexRangesWithHints2.containsAll(compoundIndexRangesWithoutHints));
+
 	}
 }

@@ -12,12 +12,16 @@ import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.DataStore;
+import mil.nga.giat.geowave.core.store.DataStoreEntryInfo;
+import mil.nga.giat.geowave.core.store.EntryVisibilityHandler;
 import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.adapter.AbstractDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.NativeFieldHandler;
 import mil.nga.giat.geowave.core.store.adapter.NativeFieldHandler.RowBuilder;
 import mil.nga.giat.geowave.core.store.adapter.PersistentIndexFieldHandler;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
+import mil.nga.giat.geowave.core.store.adapter.statistics.StatisticsProvider;
 import mil.nga.giat.geowave.core.store.data.PersistentValue;
 import mil.nga.giat.geowave.core.store.data.field.FieldReader;
 import mil.nga.giat.geowave.core.store.data.field.FieldUtils;
@@ -310,7 +314,8 @@ public class AccumuloRangeQueryTest
 	}
 
 	protected static class TestGeometryAdapter extends
-			AbstractDataAdapter<TestGeometry>
+			AbstractDataAdapter<TestGeometry> implements
+			StatisticsProvider<TestGeometry>
 	{
 		private static final ByteArrayId GEOM = new ByteArrayId(
 				"myGeo");
@@ -498,6 +503,32 @@ public class AccumuloRangeQueryTest
 				}
 			}
 			return null;
+		}
+
+		@Override
+		public ByteArrayId[] getSupportedStatisticsIds() {
+			return new ByteArrayId[0];
+		}
+
+		@Override
+		public DataStatistics<TestGeometry> createDataStatistics(
+				ByteArrayId statisticsId ) {
+			return null;
+		}
+
+		@Override
+		public EntryVisibilityHandler<TestGeometry> getVisibilityHandler(
+				ByteArrayId statisticsId ) {
+			return new EntryVisibilityHandler<TestGeometry>() {
+
+				@Override
+				public byte[] getVisibility(
+						DataStoreEntryInfo entryInfo,
+						TestGeometry entry ) {
+					return null;
+				}
+
+			};
 		}
 
 	}

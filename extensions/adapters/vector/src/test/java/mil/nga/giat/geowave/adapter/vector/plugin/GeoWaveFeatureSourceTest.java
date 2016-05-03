@@ -149,7 +149,7 @@ public class GeoWaveFeatureSourceTest extends
 			}
 
 			assertEquals(
-					7,
+					8,
 					count);
 
 			assertEquals(

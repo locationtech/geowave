@@ -1073,6 +1073,7 @@ public class AccumuloUtils
 					null,
 					null,
 					null,
+					null,
 					new String[0]);
 			final CloseableIterator<?> iterator = accumuloQuery.query(
 					operations,
@@ -1116,6 +1117,7 @@ public class AccumuloUtils
 			final AccumuloConstraintsQuery accumuloQuery = new AccumuloConstraintsQuery(
 					null,
 					index,
+					null,
 					null,
 					null,
 					null,

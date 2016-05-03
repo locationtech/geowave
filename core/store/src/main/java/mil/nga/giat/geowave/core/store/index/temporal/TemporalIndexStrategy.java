@@ -8,6 +8,7 @@ import java.util.Set;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
+import mil.nga.giat.geowave.core.index.IndexMetaData;
 import mil.nga.giat.geowave.core.index.lexicoder.Lexicoders;
 import mil.nga.giat.geowave.core.store.DataStoreEntryInfo.FieldInfo;
 import mil.nga.giat.geowave.core.store.index.FieldIndexStrategy;
@@ -23,14 +24,16 @@ public class TemporalIndexStrategy implements
 
 	@Override
 	public List<ByteArrayRange> getQueryRanges(
-			final TemporalQueryConstraint indexedRange ) {
+			final TemporalQueryConstraint indexedRange,
+			final IndexMetaData... hints ) {
 		return indexedRange.getRange();
 	}
 
 	@Override
 	public List<ByteArrayRange> getQueryRanges(
 			final TemporalQueryConstraint indexedRange,
-			final int maxEstimatedRangeDecomposition ) {
+			final int maxEstimatedRangeDecomposition,
+			final IndexMetaData... hints ) {
 		return getQueryRanges(indexedRange);
 	}
 
@@ -80,6 +83,11 @@ public class TemporalIndexStrategy implements
 	@Override
 	public Set<ByteArrayId> getNaturalSplits() {
 		return null;
+	}
+
+	@Override
+	public List<IndexMetaData> createMetaData() {
+		return Collections.emptyList();
 	}
 
 }

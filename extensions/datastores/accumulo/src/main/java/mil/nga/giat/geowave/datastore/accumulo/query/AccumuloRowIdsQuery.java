@@ -37,6 +37,7 @@ public class AccumuloRowIdsQuery<T> extends
 				scanCallback,
 				null,
 				null,
+				null,
 				authorizations);
 		this.rows = rows;
 	}

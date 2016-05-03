@@ -48,7 +48,7 @@ public class SimpleHBaseIngestTest
 	private static final String TEST_NAMESPACE = "mil_nga_giat_geowave_test";
 	private static BasicHBaseOperations hbaseOperations;
 
-//	@BeforeClass
+	// @BeforeClass
 	public static void setUp() {
 
 		PropertyParser propertyParser = null;
@@ -141,7 +141,7 @@ public class SimpleHBaseIngestTest
 	@SuppressFBWarnings(value = {
 		"SWL_SLEEP_WITH_LOCK_HELD"
 	}, justification = "Sleep in lock while waiting for external resources")
-//	@AfterClass
+	// @AfterClass
 	public static void cleanup() {
 
 		try {
@@ -179,7 +179,7 @@ public class SimpleHBaseIngestTest
 		zookeeper = null;
 	}
 
-//	@Test
+	// @Test
 	public void TestIngestIndexWriter() {
 		final SimpleIngestIndexWriter si = new SimpleIngestIndexWriter();
 		si.generateGrid(mockDataStore);
@@ -189,7 +189,7 @@ public class SimpleHBaseIngestTest
 				null);
 	}
 
-//	@Test
+	// @Test
 	public void TestIngestProducerConsumer() {
 		final SimpleIngestProducerConsumer si = new SimpleIngestProducerConsumer();
 		si.generateGrid(mockDataStore);

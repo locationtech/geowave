@@ -70,6 +70,8 @@ public class AccumuloDataStatisticsStore extends
 
 	@Override
 	protected void addObjectToCache(
+			final ByteArrayId primaryId,
+			final ByteArrayId secondaryId,
 			final DataStatistics<?> object ) {
 		// don't use the cache at all for now
 
